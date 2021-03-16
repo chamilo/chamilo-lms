@@ -832,14 +832,14 @@ class CourseBuilder
 
         // Building normal tests (many queries)
         $sql = "SELECT * FROM $table_que
-                WHERE c_id = $courseId AND id IN ('$questionListToString')";
+                WHERE id IN ('$questionListToString')";
         $result = Database::query($sql);
 
         while ($obj = Database::fetch_object($result)) {
             // find the question category
             // @todo : need to be adapted for multi category questions in 1.10
             $question_category_id = TestCategory::getCategoryForQuestion(
-                $obj->id,
+                $obj->iid,
                 $courseId
             );
 
@@ -847,7 +847,7 @@ class CourseBuilder
 
             // build the backup resource question object
             $question = new QuizQuestion(
-                $obj->id,
+                $obj->iid,
                 $obj->question,
                 $obj->description,
                 $obj->ponderation,
@@ -861,7 +861,7 @@ class CourseBuilder
             $question->addPicture($this);
 
             $sql = 'SELECT * FROM '.$table_ans.'
-                    WHERE c_id = '.$courseId.' AND question_id = '.$obj->id;
+                    WHERE c_id = '.$courseId.' AND question_id = '.$obj->iid;
             $db_result2 = Database::query($sql);
             while ($obj2 = Database::fetch_object($db_result2)) {
                 $question->add_answer(
@@ -881,7 +881,7 @@ class CourseBuilder
                 if ($obj->type == MULTIPLE_ANSWER_TRUE_FALSE) {
                     $table_options = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
                     $sql = 'SELECT * FROM '.$table_options.'
-                            WHERE c_id = '.$courseId.' AND question_id = '.$obj->id;
+                            WHERE c_id = '.$courseId.' AND question_id = '.$obj->iid;
                     $db_result3 = Database::query($sql);
                     while ($obj3 = Database::fetch_object($db_result3)) {
                         $question_option = new QuizQuestionOption($obj3);
@@ -902,7 +902,7 @@ class CourseBuilder
             $sql = " (
                         SELECT question_id, q.* FROM $table_que q
                         INNER JOIN $table_rel r
-                        ON (q.c_id = r.c_id AND q.id = r.question_id)
+                        ON q.iid = r.question_id
                         INNER JOIN $table_qui ex
                         ON (ex.iid = r.exercice_id AND ex.c_id = r.c_id)
                         WHERE ex.c_id = $courseId AND ex.active = '-1'
@@ -911,14 +911,14 @@ class CourseBuilder
                      (
                         SELECT question_id, q.* FROM $table_que q
                         left OUTER JOIN $table_rel r
-                        ON (q.c_id = r.c_id AND q.id = r.question_id)
+                        ON q.iid = r.question_id
                         WHERE q.c_id = $courseId AND r.question_id is null
                      )
                      UNION
                      (
                         SELECT question_id, q.* FROM $table_que q
                         INNER JOIN $table_rel r
-                        ON (q.c_id = r.c_id AND q.id = r.question_id)
+                        ON q.iid = r.question_id
                         WHERE r.c_id = $courseId AND (r.exercice_id = '-1' OR r.exercice_id = '0')
                      )
                  ";
@@ -1005,12 +1005,10 @@ class CourseBuilder
         $sql = 'SELECT *
                 FROM '.$table_que.' as questions
                 LEFT JOIN '.$table_rel.' as quizz_questions
-                ON questions.id=quizz_questions.question_id
+                ON questions.iid=quizz_questions.question_id
                 LEFT JOIN '.$table_qui.' as exercises
                 ON quizz_questions.exercice_id = exercises.iid
                 WHERE
-                    questions.c_id = quizz_questions.c_id AND
-                    questions.c_id = exercises.c_id AND
                     exercises.c_id = '.$courseId.' AND
                     (quizz_questions.exercice_id IS NULL OR
                     exercises.active = -1)';
@@ -1032,7 +1030,7 @@ class CourseBuilder
             $this->course->add_resource($orphan_questions);
             while ($obj = Database::fetch_object($db_result)) {
                 $question = new QuizQuestion(
-                    $obj->id,
+                    $obj->iid,
                     $obj->question,
                     $obj->description,
                     $obj->ponderation,

@@ -440,9 +440,9 @@ class CourseRecycler
                 // If this query was ever too slow, there is an alternative here:
                 // https://github.com/beeznest/chamilo-lms-icpna/commit/a38eab725402188dffff50245ee068d79bcef779
                 $sql = " (
-                        SELECT q.id, ex.c_id FROM $table_qui_que q
+                        SELECT q.iid, ex.c_id FROM $table_qui_que q
                         INNER JOIN $table_rel r
-                        ON (q.c_id = r.c_id AND q.id = r.question_id)
+                        ON q.iid = r.question_id
 
                         INNER JOIN $table_qui ex
                         ON (ex.iid = r.exercice_id AND ex.c_id = r.c_id)
@@ -450,23 +450,23 @@ class CourseRecycler
                     )
                     UNION
                     (
-                        SELECT q.id, r.c_id FROM $table_qui_que q
+                        SELECT q.iid, r.c_id FROM $table_qui_que q
                         LEFT OUTER JOIN $table_rel r
-                        ON (q.c_id = r.c_id AND q.id = r.question_id)
+                        ON q.iid = r.question_id
                         WHERE q.c_id = ".$this->course_id." AND r.question_id is null
                     )
                     UNION
                     (
-                        SELECT q.id, r.c_id FROM $table_qui_que q
+                        SELECT q.iid, r.c_id FROM $table_qui_que q
                         INNER JOIN $table_rel r
-                        ON (q.c_id = r.c_id AND q.id = r.question_id)
+                        ON q.iid = r.question_id
                         WHERE r.c_id = ".$this->course_id." AND (r.exercice_id = '-1' OR r.exercice_id = '0')
                     )";
                 $db_result = Database::query($sql);
                 if (Database::num_rows($db_result) > 0) {
                     $orphan_ids = [];
                     while ($obj = Database::fetch_object($db_result)) {
-                        $orphan_ids[] = $obj->id;
+                        $orphan_ids[] = $obj->iid;
                     }
                     $orphan_ids = implode(',', $orphan_ids);
                     $sql = "DELETE FROM ".$table_rel."
@@ -476,7 +476,7 @@ class CourseRecycler
                             WHERE c_id = ".$this->course_id." AND question_id IN(".$orphan_ids.")";
                     Database::query($sql);
                     $sql = "DELETE FROM ".$table_qui_que."
-                            WHERE c_id = ".$this->course_id." AND id IN(".$orphan_ids.")";
+                            WHERE iid IN(".$orphan_ids.")";
                     Database::query($sql);
                 }
                 // Also delete questions categories and options

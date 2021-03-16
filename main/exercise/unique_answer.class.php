@@ -529,7 +529,7 @@ class UniqueAnswer extends Question
         if ($correct) {
             $sql = "UPDATE $tbl_quiz_question
                     SET ponderation = (ponderation + $score)
-                    WHERE c_id = $course_id AND id = ".$question_id;
+                    WHERE iid = ".$question_id;
             Database::query($sql);
         }
     }

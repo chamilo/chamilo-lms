@@ -564,11 +564,9 @@ class learnpath
                     FROM '.Database::get_course_table(TABLE_QUIZ_QUESTION).' as quiz_question
                     INNER JOIN '.Database::get_course_table(TABLE_QUIZ_TEST_QUESTION).' as quiz_rel_question
                     ON
-                        quiz_question.id = quiz_rel_question.question_id AND
-                        quiz_question.c_id = quiz_rel_question.c_id
+                        quiz_question.iid = quiz_rel_question.question_id
                     WHERE
                         quiz_rel_question.exercice_id = '.$id." AND
-                        quiz_question.c_id = $course_id AND
                         quiz_rel_question.c_id = $course_id ";
             $rsQuiz = Database::query($sql);
             $max_score = Database::result($rsQuiz, 0, 0);

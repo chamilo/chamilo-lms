@@ -108,7 +108,7 @@ function getQuestionsFromCourse($courseId, $quizId, $sessionId = 0)
             FROM $tableQuizQuestion a
             INNER JOIN $tableQuestion b ON a.question_id = b.iid
             INNER JOIN $tableQuiz q ON q.iid = a.exercice_id
-            WHERE a.c_id = $courseId AND b.c_id = a.c_id AND a.exercice_id = $quizId
+            WHERE a.c_id = $courseId AND a.exercice_id = $quizId
             AND (b.type IN (1, 2, 9, 10, 11, 12, 14))
             $conditionSession
             ORDER BY question_order ASC;";
@@ -134,8 +134,8 @@ function getInfoQuestion($courseId, $id)
     $id = (int) $id;
     $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
     $sql = "SELECT * FROM $tableQuestion
-            WHERE c_id = $courseId
-            AND iid = $id
+            WHERE
+                iid = $id
             AND (type IN (1, 2, 9, 10, 11, 12, 14))";
     $res = Database::query($sql);
     $row = Database::fetch_assoc($res);

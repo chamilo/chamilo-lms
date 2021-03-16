@@ -6095,8 +6095,7 @@ class Tracking
                 ON rq.exercice_id = q.iid AND rq.c_id = q.c_id
                 INNER JOIN $tquiz_question qq
                 ON
-                    qq.id = rq.question_id AND
-                    qq.c_id = rq.c_id AND
+                    qq.iid = rq.question_id AND
                     qq.position = rq.question_order AND
                     ta.question_id = rq.question_id
                 WHERE

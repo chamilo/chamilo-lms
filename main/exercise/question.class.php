@@ -148,7 +148,7 @@ abstract class Question
 
         $sql = "SELECT *
                 FROM $TBL_QUESTIONS
-                WHERE c_id = $course_id AND id = $id ";
+                WHERE iid = $id ";
         $result = Database::query($sql);
 
         // if the question has been found
@@ -923,7 +923,7 @@ abstract class Question
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $sql = "UPDATE $table SET
                 picture = '".Database::escape_string($picture)."'
-                WHERE c_id = $course_id AND id='".intval($questionId)."'";
+                WHERE iid='".intval($questionId)."'";
         Database::query($sql);
 
         $documentId = add_document(
@@ -1033,7 +1033,7 @@ abstract class Question
             Database::update(
                 $TBL_QUESTIONS,
                 $params,
-                ['c_id = ? AND id = ?' => [$c_id, $id]]
+                ['id = ?' => [$id]]
             );
 
             Event::addEvent(
@@ -1061,9 +1061,8 @@ abstract class Question
                     FROM $TBL_QUESTIONS as question,
                     $TBL_EXERCISE_QUESTION as test_question
                     WHERE
-                        question.id = test_question.question_id AND
+                        question.iid = test_question.question_id AND
                         test_question.exercice_id = ".$exerciseId." AND
-                        question.c_id = $c_id AND
                         test_question.c_id = $c_id ";
             $result = Database::query($sql);
             $current_position = Database::result($result, 0, 0);
@@ -1468,7 +1467,7 @@ abstract class Question
             Database::query($sql);
 
             $sql = "DELETE FROM $TBL_QUESTIONS
-                    WHERE c_id = $courseId AND id = ".$id;
+                    WHERE iid = ".$id;
             Database::query($sql);
 
             $sql = "DELETE FROM $TBL_REPONSES
@@ -2381,9 +2380,8 @@ abstract class Question
                 FROM $tbl_quiz_question q
                 INNER JOIN $tbl_quiz_rel_question r
                 ON
-                    q.id = r.question_id AND
+                    q.iid = r.question_id AND
                     exercice_id = $quiz_id AND
-                    q.c_id = $course_id AND
                     r.c_id = $course_id";
         $rs_max = Database::query($sql);
         $row_max = Database::fetch_object($rs_max);
@@ -2568,7 +2566,7 @@ abstract class Question
         Database::update(
             Database::get_course_table(TABLE_QUIZ_QUESTION),
             ['type' => $this->type],
-            ['c_id = ? AND id = ?' => [$this->course['real_id'], $this->id]]
+            ['iid = ?' => [$this->id]]
         );
         $answerClasses = [
             UNIQUE_ANSWER => 'UniqueAnswer',

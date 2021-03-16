@@ -251,7 +251,7 @@ class Answer
         $questionId = (int) $this->questionId;
 
         $sql = "SELECT type FROM $TBL_QUIZ
-                WHERE c_id = {$this->course_id} AND id = $questionId";
+                WHERE iid = $questionId";
         $result_question = Database::query($sql);
         $questionType = Database::fetch_array($result_question);
 
@@ -502,7 +502,7 @@ class Answer
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $sql = "SELECT type FROM $table
-                WHERE c_id = {$this->course_id} AND id = '".$this->questionId."'";
+                WHERE iid = '".$this->questionId."'";
         $res = Database::query($sql);
         if (Database::num_rows($res) <= 0) {
             return null;

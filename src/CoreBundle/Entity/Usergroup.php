@@ -267,6 +267,51 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this;
     }
 
+    /**
+     * @return UsergroupRelCourse[]|Collection
+     */
+    public function getCourses()
+    {
+        return $this->courses;
+    }
+
+    public function setCourses(Collection $courses)
+    {
+        $this->courses = $courses;
+
+        return $this;
+    }
+
+    /**
+     * @return UsergroupRelSession[]|Collection
+     */
+    public function getSessions()
+    {
+        return $this->sessions;
+    }
+
+    public function setSessions(Collection $sessions)
+    {
+        $this->sessions = $sessions;
+
+        return $this;
+    }
+
+    /**
+     * @return UsergroupRelQuestion[]|Collection
+     */
+    public function getQuestions()
+    {
+        return $this->questions;
+    }
+
+    public function setQuestions(Collection $questions)
+    {
+        $this->questions = $questions;
+
+        return $this;
+    }
+
     public function getPicture(): ?string
     {
         return $this->picture;

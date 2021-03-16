@@ -120,12 +120,7 @@ class Promotion
         return $this;
     }
 
-    /**
-     * Get career.
-     *
-     * @return Career
-     */
-    public function getCareer()
+    public function getCareer(): Career
     {
         return $this->career;
     }
@@ -145,5 +140,20 @@ class Promotion
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * @return Session[]|Collection
+     */
+    public function getSessions()
+    {
+        return $this->sessions;
+    }
+
+    public function setSessions(Collection $sessions): self
+    {
+        $this->sessions = $sessions;
+
+        return $this;
     }
 }

@@ -6795,6 +6795,22 @@ class Exercise
             }
         }
 
+        // BT#18165
+        $exerciseAttempts = $this->selectAttempts();
+        if ($exerciseAttempts > 0) {
+            $userId = api_get_user_id();
+            $attemptCount = Event::get_attempt_count_not_finished(
+                $userId,
+                $this->id,
+                $lpId,
+                $lpItemId,
+                $lpItemViewId
+            );
+            $message .= $this->advanceCourseList($userId, api_get_session_id());
+            if ($attemptCount >= $exerciseAttempts) {
+                $message .= $this->remedialCourseList($userId,  api_get_session_id());
+            }
+        }
         // 4. We check if the student have attempts
         if ($isVisible) {
             $exerciseAttempts = $this->selectAttempts();
@@ -6840,29 +6856,12 @@ class Exercise
                                     get_lang('ExerciseBlockBecausePercentageX'),
                                     $blockPercentage
                                 );
-                                $isVisible = false;
-                                // See BT#18165
-                                $message .= $this->remedialCourseList(api_get_user_id(), false, api_get_session_id());
+                                $isVisible = false;// See BT#18165
+                                $message .= $this->remedialCourseList(api_get_user_id(), api_get_session_id());
                             }
                         }
                     }
                 }
-            }
-        }
-        // BT#18165
-        $exerciseAttempts = $this->selectAttempts();
-        if ($exerciseAttempts > 0) {
-            $userId = api_get_user_id();
-            $attemptCount = Event::get_attempt_count_not_finished(
-                $userId,
-                $this->id,
-                $lpId,
-                $lpItemId,
-                $lpItemViewId
-            );
-            $message .= $this->advanceCourseList($userId, api_get_session_id());
-            if ($attemptCount >= $exerciseAttempts) {
-                $message .= $this->remedialCourseList($userId, false, api_get_session_id());
             }
         }
 
@@ -10830,10 +10829,11 @@ class Exercise
      * When a student takes an exam, and he gets an acceptable grade, he is enrolled in a series of courses that
      * represent the next level BT#18165.
      *
-     * @param int $userId
-     * @param int $sessionId
+     * @param int   $userId
+     * @param int   $sessionId
+     * @param array $attemps
      */
-    public function advanceCourseList($userId = 0, $sessionId = 0)
+    public function advanceCourseList($userId = 0, $sessionId = 0, $attemp = [])
     {
         $pluginRemedial = api_get_plugin_setting('remedial_course', 'enabled') === 'true';
         if (!$pluginRemedial) {
@@ -10856,12 +10856,18 @@ class Exercise
         if (!isset($bestAttempt['exe_result'])) {
             // In the case that the result is 0, get_best_attempt_exercise_results_per_user does not return data,
             // for that this block is used
-            $exerciseStatInfo = Event::getExerciseResultsByUser(
-                $userId,
-                $this->id,
-                $this->course_id,
-                $sessionId
-            );
+            if(count($attemp)==0) {
+                $exerciseStatInfo = Event::getExerciseResultsByUser(
+                    $userId,
+                    $this->id,
+                    $this->course_id,
+                    $sessionId
+                );
+            }else{
+                $exerciseStatInfo = $attemp;
+            }
+
+            unset($attemp);
             $bestAttempt['exe_result'] = 0;
             foreach ($exerciseStatInfo as $attemp) {
                 if ($attemp['exe_result'] >= $bestAttempt['exe_result']) {
@@ -10897,6 +10903,7 @@ class Exercise
 
         if (false === $canRemedial && isset($advanceCourseExcerciseField['value'])) {
             $coursesIds = explode(';', $advanceCourseExcerciseField['value']);
+            if ('' == $advanceCourseExcerciseField['value'] || count($coursesIds)==0) return null;
             $isInASession = !empty($sessionId);
             $courses = [];
             foreach ($coursesIds as $course) {
@@ -10931,12 +10938,12 @@ class Exercise
      * When a student completes the number of attempts and fails the exam, she is enrolled in a series of remedial
      * courses BT#18165.
      *
-     * @param int  $userId
-     * @param bool $review
-     * @param int  $sessionId
-     * @param bool  $blockPercentage
+     * @param int   $userId
+     * @param int   $sessionId
+     * @param array $attemps
+     * @param bool  $review
      */
-    public function remedialCourseList($userId = 0, $review = false, $sessionId = 0)
+    public function remedialCourseList($userId = 0, $sessionId = 0, $attemp = [], $review = false)
     {
         $pluginRemedial = api_get_plugin_setting('remedial_course', 'enabled') === 'true';
         if (!$pluginRemedial) {
@@ -10953,29 +10960,41 @@ class Exercise
             ORAL_EXPRESSION,
             ANNOTATION,
         ];
-        $userId = empty($userId) ? api_get_user_id() : (int) $userId;
+        $userId = empty($userId) ? api_get_user_id() : (int)$userId;
         $extraMessage = null;
-        $bestAttempt = [];
-        $exercise_stat_info = Event::getExerciseResultsByUser(
+        if(count($attemp)!= 0){
+            $exercise_stat_info = $attemp;
+        }else{
+            $exercise_stat_info = Event::getExerciseResultsByUser(
+                $userId,
+                $this->id,
+                $this->course_id,
+                $sessionId
+            );
+        }
+        $bestAttempt = Event::get_best_attempt_exercise_results_per_user(
             $userId,
-            $this->iId,
+            $this->id,
             $this->course_id,
             $sessionId
         );
-        $bestAttempt['exe_result'] = 0;
         foreach ($exercise_stat_info as $attemp) {
-            if ($attemp['exe_result'] >= $bestAttempt['exe_result']) {
+            if (!isset($bestAttempt['exe_result']) || $attemp['exe_result'] >= $bestAttempt['exe_result']) {
                 $bestAttempt = $attemp;
             }
             if (isset($attemp['question_list'])) {
                 foreach ($attemp['question_list'] as $questionId => $answer) {
                     $question = Question::read($questionId, api_get_course_info_by_id($attemp['c_id']));
                     $questionOpen = 0;
-                    for ($i = 0; $i < count($questionExcluded); $i++) {
-                        if ($question->type == (int) $questionExcluded[$i]) {
+                    $totalQuestionExcluded = count($questionExcluded);
+                    for ($i = 0; $i < $totalQuestionExcluded; $i++) {
+                        if ($question->type == (int)$questionExcluded[$i]) {
                             $questionOpen = 1;
                             break;
                         }
+                    }
+                    if($review == true){
+                        $questionOpen = 0;
                     }
                     if (1 == $questionOpen) {
                         $score = $attemp['exe_result'];
@@ -10994,7 +11013,7 @@ class Exercise
             $bestAttempt['exe_weighting']
         );
         if (0 == $percentSuccess && false == $pass) {
-            return '';
+            return null;
         }
         $canRemedial = false === $pass;
         $extraFieldValue = new ExtraFieldValue('exercise');
@@ -11006,6 +11025,7 @@ class Exercise
         // Remedial course
         if ($canRemedial) {
             $coursesIds = explode(';', $remedialExcerciseField['value']);
+            if ('' == $remedialExcerciseField['value'] || count($coursesIds)==0) return null;
             $courses = [];
             $isInASession = !empty($sessionId);
             foreach ($coursesIds as $course) {

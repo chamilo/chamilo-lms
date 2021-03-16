@@ -115,6 +115,7 @@ $learnpath_id = isset($exercise_stat_info['orig_lp_id']) ? $exercise_stat_info['
 $learnpath_item_id = isset($exercise_stat_info['orig_lp_item_id']) ? $exercise_stat_info['orig_lp_item_id'] : 0;
 $learnpath_item_view_id = isset($exercise_stat_info['orig_lp_item_view_id'])
     ? $exercise_stat_info['orig_lp_item_view_id'] : 0;
+$exerciseId = isset($exercise_stat_info['exe_exo_id'])?$exercise_stat_info['exe_exo_id']:0;
 
 $logInfo = [
     'tool' => TOOL_QUIZ,
@@ -256,28 +257,6 @@ if (!empty($learnpath_id) && $saveResults) {
     Exercise::saveExerciseInLp($learnpath_item_id, $exeId);
 }
 
-$exerciseAttempts = $objExercise->selectAttempts();
-$remedialMessage = null;
-// See BT#18165
-$advanceCourseMessage = $objExercise->advanceCourseList(api_get_user_id(), api_get_session_id());
-
-if ($exerciseAttempts > 0) {
-    if ($attempt_count >= $exerciseAttempts) {
-        $remedialMessage .= $objExercise->remedialCourseList(api_get_user_id(), false, api_get_session_id());
-    }
-    if (null != $remedialMessage) {
-        Display::addFlash(
-            Display::return_message($remedialMessage, 'warning', false)
-        );
-    }
-}
-
-if (null != $advanceCourseMessage) {
-    Display::addFlash(
-        Display::return_message($advanceCourseMessage, 'info', false)
-    );
-}
-
 ExerciseLib::sendNotification(
     api_get_user_id(),
     $objExercise,
@@ -291,7 +270,24 @@ ExerciseLib::sendNotification(
 $hookQuizEnd = HookQuizEnd::create();
 $hookQuizEnd->setEventData(['exe_id' => $exeId]);
 $hookQuizEnd->notifyQuizEnd();
-
+$exerciseStatInfo = Event::getExerciseResultsByUser(
+    api_get_user_id(),
+    $exerciseId,
+    api_get_course_int_id(),
+    api_get_session_id()
+);
+$advanceCourseMessage = $objExercise->advanceCourseList(api_get_user_id(), api_get_session_id(),$exerciseStatInfo);
+if (null != $advanceCourseMessage) {
+    Display::addFlash(
+        Display::return_message($advanceCourseMessage, 'info', false)
+    );
+}
+$remedialMessage = $objExercise->remedialCourseList(api_get_user_id(),api_get_session_id(),$exerciseStatInfo);
+if (null != $remedialMessage) {
+    Display::addFlash(
+        Display::return_message($remedialMessage, 'warning', false)
+    );
+}
 // Unset session for clock time
 ExerciseLib::exercise_time_control_delete(
     $objExercise->id,

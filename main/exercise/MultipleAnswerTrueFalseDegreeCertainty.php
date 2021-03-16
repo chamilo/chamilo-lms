@@ -1147,7 +1147,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $optionId = (int) $optionId;
         $sql = "SELECT position
                 FROM $tblAnswerOption
-                WHERE c_id = $courseId AND id = $optionId";
+                WHERE iid = $optionId";
         $res = Database::query($sql);
 
         if (Database::num_rows($res) == 0) {

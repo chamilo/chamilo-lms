@@ -2123,8 +2123,7 @@ abstract class Question
         Database::delete(
             $table,
             [
-                'c_id = ? AND question_id = ?' => [
-                    $course_id,
+                'question_id = ?' => [
                     $question_id,
                 ],
             ]
@@ -2145,7 +2144,7 @@ abstract class Question
         return Database::update(
             $table,
             $params,
-            ['c_id = ? AND id = ?' => [$course_id, $id]]
+            ['iid = ?' => [$id]]
         );
     }
 
@@ -2164,8 +2163,7 @@ abstract class Question
             $table,
             [
                 'where' => [
-                    'c_id = ? AND question_id = ?' => [
-                        $course_id,
+                    'question_id = ?' => [
                         $question_id,
                     ],
                 ],

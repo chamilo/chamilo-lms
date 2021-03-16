@@ -881,7 +881,7 @@ class CourseBuilder
                 if ($obj->type == MULTIPLE_ANSWER_TRUE_FALSE) {
                     $table_options = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
                     $sql = 'SELECT * FROM '.$table_options.'
-                            WHERE c_id = '.$courseId.' AND question_id = '.$obj->iid;
+                            WHERE question_id = '.$obj->iid;
                     $db_result3 = Database::query($sql);
                     while ($obj3 = Database::fetch_object($db_result3)) {
                         $question_option = new QuizQuestionOption($obj3);

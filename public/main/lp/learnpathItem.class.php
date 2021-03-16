@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForumForum;
 use Chamilo\CourseBundle\Entity\CForumThread;
+use Chamilo\CourseBundle\Entity\CLpItem;
 
 /**
  * Class learnpathItem
@@ -94,7 +95,7 @@ class learnpathItem
      * @param int        $id           Learning path item ID
      * @param int        $user_id      User ID
      * @param int        $courseId     Course int id
-     * @param array|null $item_content An array with the contents of the item
+     * @param CLpItem|array|null $item_content Contents of the item
      */
     public function __construct(
         $id,
@@ -116,7 +117,33 @@ class learnpathItem
             }
             $row = Database::fetch_array($res);
         } else {
-            $row = $item_content;
+            if (is_array($item_content)) {
+                $row = $item_content;
+            }
+
+            if ($item_content instanceof CLpItem) {
+                $row = [];
+                $row['lp_id'] = $item_content->getLp()->getIid();
+                $row['iid'] = $item_content->getIid();
+                $row['max_score'] = $item_content->getMaxScore();
+                $row['min_score'] = $item_content->getMinScore();
+                $row['title'] = $item_content->getTitle();
+                $row['item_type'] = $item_content->getItemType();
+                $row['ref'] = $item_content->getRef();
+                $row['description'] = $item_content->getDescription();
+                $row['path'] = $item_content->getPath();
+                $row['mastery_score'] = $item_content->getMasteryScore();
+                $row['parent_item_id'] = $item_content->getParentItemId();
+                $row['next_item_id'] = $item_content->getNextItemId();
+                $row['previous_item_id'] = $item_content->getPreviousItemId();
+                $row['display_order'] = $item_content->getDisplayOrder();
+                $row['prerequisite'] = $item_content->getPrerequisite();
+                $row['max_time_allowed'] = $item_content->getMaxTimeAllowed();
+                $row['prerequisite_max_score'] = $item_content->getPrerequisiteMaxScore();
+                $row['prerequisite_min_score'] = $item_content->getPrerequisiteMinScore();
+                $row['audio'] = $item_content->getAudio();
+                $row['launch_data'] = $item_content->getLaunchData();
+            }
         }
 
         $this->lp_id = $row['lp_id'];
@@ -161,7 +188,7 @@ class learnpathItem
             }
 
             // Get search_did.
-            if ('true' == api_get_setting('search_enabled')) {
+            if ('true' === api_get_setting('search_enabled')) {
                 $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
                 $sql = 'SELECT *
                         FROM %s
@@ -1490,7 +1517,6 @@ class learnpathItem
                 $table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
                 $sql = "SELECT status FROM $table
                         WHERE
-                            c_id = $courseId AND
                             iid = '".$this->db_item_view_id."' AND
                             view_count = '".$this->get_attempt_id()."'";
                 $res = Database::query($sql);
@@ -2947,7 +2973,6 @@ class learnpathItem
         // Get the lp_item_view with the highest view_count.
         $sql = "SELECT * FROM $item_view_table
                 WHERE
-                    c_id = $courseId AND
                     lp_item_id = $lpItemId AND
                     lp_view_id = $lp_view_id
                 ORDER BY view_count DESC";
@@ -3578,7 +3603,6 @@ class learnpathItem
         $sql = 'SELECT status, total_time
                 FROM '.$item_view_table.'
                 WHERE
-                    c_id = '.$courseId.' AND
                     lp_item_id="'.$this->db_id.'" AND
                     lp_view_id="'.$this->view_id.'" AND
                     view_count="'.$this->get_attempt_id().'" ';
@@ -3658,7 +3682,6 @@ class learnpathItem
             $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
             $sql = "SELECT * FROM $item_view_table
                     WHERE
-                        c_id = $courseId AND
                         lp_item_id = ".$this->db_id." AND
                         lp_view_id = ".$this->view_id." AND
                         view_count = ".$this->get_attempt_id();
@@ -3758,7 +3781,6 @@ class learnpathItem
                             // Process of status verified into data base.
                             $sql = 'SELECT status FROM '.$item_view_table.'
                                     WHERE
-                                        c_id = '.$courseId.' AND
                                         lp_item_id="'.$this->db_id.'" AND
                                         lp_view_id="'.$this->view_id.'" AND
                                         view_count="'.$this->get_attempt_id().'"
@@ -3865,7 +3887,6 @@ class learnpathItem
                                     suspend_data = '".Database::escape_string($this->current_data)."',
                                     lesson_location = '".$this->lesson_location."'
                                 WHERE
-                                    c_id = $courseId AND
                                     lp_item_id = ".$this->db_id." AND
                                     lp_view_id = ".$this->view_id."  AND
                                     view_count = ".$this->get_attempt_id();
@@ -3880,7 +3901,6 @@ class learnpathItem
                                     suspend_data = '".Database::escape_string($this->current_data)."',
                                     lesson_location = '".$this->lesson_location."'
                                 WHERE
-                                    c_id = $courseId AND
                                     lp_item_id = ".$this->db_id." AND
                                     lp_view_id = ".$this->view_id." AND
                                     view_count = ".$this->get_attempt_id();

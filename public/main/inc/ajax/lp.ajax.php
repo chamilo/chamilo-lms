@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../global.inc.php';
@@ -15,7 +16,6 @@ $lpId = $_REQUEST['lp_id'] ?? 0;
 
 $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
-
 
 switch ($action) {
     case 'get_lp_list_by_course':
@@ -88,16 +88,20 @@ switch ($action) {
                     break;
             }
 
-            $parentId = $_REQUEST['parent_id'] ?? '';
+            $parentId = $_REQUEST['parent_id'] ?? null;
+            $em = Database::getManager();
+            $parent = null;
+            if (!empty($parentId)) {
+                $parent = $em->getRepository(CLpItem::class)->find($parentId);
+            }
             $previousId = $_REQUEST['previous_id'] ?? '';
 
             $itemId = $learningPath->add_item(
-                $parentId,
+                $parent,
                 $previousId,
                 $type,
                 $id,
-                $title,
-                ''
+                $title
             );
 
             echo $learningPath->returnLpItemList(null);

@@ -8,6 +8,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,6 +32,12 @@ class CLpView
      * @ORM\GeneratedValue
      */
     protected int $iid;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected User $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp")
@@ -148,6 +155,18 @@ class CLpView
     public function setSession(?Session $session): self
     {
         $this->session = $session;
+
+        return $this;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

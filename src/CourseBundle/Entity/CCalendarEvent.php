@@ -56,16 +56,16 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     protected ?DateTime $endDate = null;
 
     /**
-     * @var Collection|CCalendarEvent[]
-     * @ORM\OneToMany(targetEntity="CCalendarEvent", mappedBy="parentEvent")
-     */
-    protected Collection $children;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CCalendarEvent", inversedBy="children")
      * @ORM\JoinColumn(name="parent_event_id", referencedColumnName="iid")
      */
     protected ?CCalendarEvent $parentEvent = null;
+
+    /**
+     * @var Collection|CCalendarEvent[]
+     * @ORM\OneToMany(targetEntity="CCalendarEvent", mappedBy="parentEvent")
+     */
+    protected Collection $children;
 
     /**
      * @var Collection|CCalendarEventRepeat[]

@@ -101,8 +101,6 @@ var jQueryFrameReadyConfigPath = \''.api_get_jquery_web_path().'\';
 -->
 </script>';
 
-//$htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
-//$htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
 $htmlHeadXtra[] = '<script>
 $(function() {
@@ -140,6 +138,7 @@ if (isset($zoomOptions['options']) && !in_array($origin, ['embeddable', 'noheade
 }
 
 $allowLpItemTip = false === api_get_configuration_value('hide_accessibility_label_on_lp_item');
+
 if ($allowLpItemTip) {
     $htmlHeadXtra[] = '<script>
     $(function() {
@@ -555,6 +554,7 @@ if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id()
 $template->assign('lp_accumulate_work_time', $lpMinTime);
 $template->assign('lp_mode', $lp->getDefaultViewMod());
 $template->assign('lp_title_scorm', $lp->getName());
+
 if (true === api_get_configuration_value('lp_view_accordion') && 1 == $lpType) {
     $template->assign('data_panel', $oLP->getTOCTree());
     $template->assign('data_list', null);

@@ -21,6 +21,7 @@ use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CTool;
 use ChamiloSession as Session;
+use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -219,27 +220,42 @@ class learnpath
                     'lp_id' => $lp_id,
                     'user_id' => $user_id,
                     'view_count' => 1,
-                    'session_id' => $session_id,
+                    //'session_id' => $session_id,
                     'last_item' => 0,
                 ];
+                if (!empty($session_id)) {
+                    $params['session_id'] = $session_id;
+                }
                 $this->last_item_seen = 0;
                 $this->lp_view_session_id = $session_id;
                 $this->lp_view_id = Database::insert($lp_table, $params);
             }
 
+            $criteria = Criteria::create()
+                ->orderBy(
+                    [
+                        'parent' => Criteria::ASC,
+                        'displayOrder' => Criteria::ASC,
+                    ]
+                );
+
+            $items = $this->entity->getItems()->matching($criteria);
+
             // Initialise items.
-            $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
+            /*$lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
             $sql = "SELECT * FROM $lp_item_table
                     WHERE lp_id = '".$this->lp_id."'
                     ORDER BY parent_item_id, display_order";
-            $res = Database::query($sql);
+            $res = Database::query($sql);*/
 
             $lp_item_id_list = [];
-            while ($row = Database::fetch_array($res)) {
-                $lp_item_id_list[] = $row['iid'];
+            //while ($row = Database::fetch_array($res)) {
+            foreach ($items as $item) {
+                $itemId = $item->getIid();
+                $lp_item_id_list[] = $itemId;
                 switch ($this->type) {
                     case 3: //aicc
-                        $oItem = new aiccItem('db', $row['iid'], $course_id);
+                        $oItem = new aiccItem('db', $itemId, $course_id);
                         if (is_object($oItem)) {
                             $my_item_id = $oItem->get_id();
                             $oItem->set_lp_view($this->lp_view_id, $course_id);
@@ -250,7 +266,7 @@ class learnpath
                         }
                         break;
                     case 2:
-                        $oItem = new scormItem('db', $row['iid'], $course_id);
+                        $oItem = new scormItem('db', $itemId, $course_id);
                         if (is_object($oItem)) {
                             $my_item_id = $oItem->get_id();
                             $oItem->set_lp_view($this->lp_view_id, $course_id);
@@ -262,7 +278,7 @@ class learnpath
                         break;
                     case 1:
                     default:
-                        $oItem = new learnpathItem($row['iid'], $user_id, $course_id, $row);
+                        $oItem = new learnpathItem($itemId, $user_id, $course_id, $item);
                         if (is_object($oItem)) {
                             $my_item_id = $oItem->get_id();
                             // Moved down to when we are sure the item_view exists.
@@ -285,11 +301,11 @@ class learnpath
                 }
 
                 // Setting the view in the item object.
-                if (is_object($this->items[$row['iid']])) {
-                    $this->items[$row['iid']]->set_lp_view($this->lp_view_id, $course_id);
-                    if (TOOL_HOTPOTATOES == $this->items[$row['iid']]->get_type()) {
-                        $this->items[$row['iid']]->current_start_time = 0;
-                        $this->items[$row['iid']]->current_stop_time = 0;
+                if (is_object($this->items[$itemId])) {
+                    $this->items[$itemId]->set_lp_view($this->lp_view_id, $course_id);
+                    if (TOOL_HOTPOTATOES == $this->items[$itemId]->get_type()) {
+                        $this->items[$itemId]->current_start_time = 0;
+                        $this->items[$itemId]->current_stop_time = 0;
                     }
                 }
             }
@@ -303,7 +319,6 @@ class learnpath
                     $sql = "SELECT lp_item_id, status
                             FROM $itemViewTable
                             WHERE
-                                c_id = $course_id AND
                                 lp_view_id = ".$this->get_view_id()." AND
                                 lp_item_id IN ('".$lp_item_id_list_to_string."')
                             ORDER BY view_count DESC ";
@@ -336,7 +351,7 @@ class learnpath
                                     // Add that row to the lp_item_view table so that
                                     // we have something to show in the stats page.
                                     $params = [
-                                        'c_id' => $course_id,
+                                        //'c_id' => $course_id,
                                         'lp_item_id' => $item_id,
                                         'lp_view_id' => $this->lp_view_id,
                                         'view_count' => 1,
@@ -358,11 +373,7 @@ class learnpath
                 }
             }
 
-            $this->ordered_items = self::get_flat_ordered_items_list(
-                $this->get_id(),
-                0,
-                $course_id
-            );
+            $this->ordered_items = self::get_flat_ordered_items_list($this->entity, null);
             $this->max_ordered_items = 0;
             foreach ($this->ordered_items as $index => $dummy) {
                 if ($index > $this->max_ordered_items && !empty($dummy)) {
@@ -410,25 +421,25 @@ class learnpath
      * I found it better to rewrite it. Old function is still available.
      * Added also the possibility to add a description.
      *
-     * @param int    $parent
-     * @param int    $previous
-     * @param string $type
-     * @param int    $id               resource ID (ref)
-     * @param string $title
-     * @param string $description
-     * @param int    $prerequisites
-     * @param int    $max_time_allowed
-     * @param int    $userId
+     * @param CLpItem $parent
+     * @param int     $previous
+     * @param string  $type
+     * @param int     $id resource ID (ref)
+     * @param string  $title
+     * @param string  $description
+     * @param int     $prerequisites
+     * @param int     $max_time_allowed
+     * @param int     $userId
      *
      * @return int
      */
     public function add_item(
-        $parent,
+        ?CLpItem $parent,
         $previous,
         $type,
         $id,
         $title,
-        $description,
+        $description = '',
         $prerequisites = 0,
         $max_time_allowed = 0,
         $userId = 0
@@ -443,8 +454,7 @@ class learnpath
         $userId = empty($userId) ? api_get_user_id() : $userId;
         $sessionId = api_get_session_id();
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $_course = $this->course_info;
-        $parent = (int) $parent;
+
         $previous = (int) $previous;
         $id = (int) $id;
         $max_time_allowed = (int) $max_time_allowed;
@@ -452,11 +462,18 @@ class learnpath
             $max_time_allowed = 0;
         }
         $lpId = $this->get_id();
+        $parentCondition = ' AND parent_item_id IS NULL ';
+        $parentId = 0;
+        if (!empty($parent)) {
+            $parentId = $parent->getIid();
+            $parentCondition = " AND parent_item_id = $parentId  ";
+        }
+
         $sql = "SELECT COUNT(iid) AS num
                 FROM $tbl_lp_item
                 WHERE
-                    lp_id = $lpId AND
-                    parent_item_id = $parent ";
+                    lp_id = $lpId
+                    $parentCondition ";
 
         $res_count = Database::query($sql);
         $row = Database::fetch_array($res_count);
@@ -471,9 +488,9 @@ class learnpath
                         FROM $tbl_lp_item
                         WHERE
                             lp_id = $lpId AND
-                            parent_item_id = $parent AND
-                            previous_item_id = 0 OR
-                            previous_item_id = $parent ";
+                            (previous_item_id = 0 OR
+                            previous_item_id = $parentId)
+                            $parentCondition";
                 $result = Database::query($sql);
                 $row = Database::fetch_array($result);
                 if ($row) {
@@ -529,7 +546,7 @@ class learnpath
             ->setPrerequisite($prerequisites)
             ->setDisplayOrder($display_order + 1)
             ->setNextItemId((int) $next)
-            ->setParentItemId($parent)
+            ->setParent($parent)
             ->setPreviousItemId($previous)
         ;
         $em = Database::getManager();
@@ -553,14 +570,21 @@ class learnpath
                 Database::query($sql);
             }
 
+            $parentCondition = ' AND parent_item_id IS NULL ';
+            if (!empty($lpItem->getParentItemId())) {
+                $parentId = $lpItem->getParentItemId();
+                $parentCondition = " AND parent_item_id = $parentId  ";
+            }
+
             // Update all the items after the new item.
             $sql = "UPDATE $tbl_lp_item
                         SET display_order = display_order + 1
                     WHERE
                         lp_id = $lpId AND
                         iid <> $new_item_id AND
-                        parent_item_id = $parent AND
-                        display_order > $display_order";
+                        display_order > $display_order
+                        $parentCondition
+                    ";
             Database::query($sql);
 
             // Update the item that should come after the new item.
@@ -1106,12 +1130,20 @@ class learnpath
         $sql_upd = "UPDATE $lp_item SET previous_item_id = $previous
                     WHERE iid = $next AND item_type != '".TOOL_LP_FINAL_ITEM."'";
         Database::query($sql_upd);
+
+        $parentCondition = ' AND parent_item_id IS NULL ';
+        if (!empty($parent)) {
+            $parent = (int) $parent;
+            $parentCondition = " AND parent_item_id = $parent  ";
+        }
+
         // Now update all following items with new display order.
         $sql_all = "UPDATE $lp_item SET display_order = display_order-1
                     WHERE
                         lp_id = $lp AND
-                        parent_item_id = $parent AND
-                        display_order > $display";
+                        display_order > $display
+                        $parentCondition
+                    ";
         Database::query($sql_all);
 
         //Removing prerequisites since the item will not longer exist
@@ -1677,7 +1709,7 @@ class learnpath
         try {
             $lastId = Database::getManager()
                 ->createQuery('SELECT i.iid FROM ChamiloCourseBundle:CLpItem i
-                WHERE i.lpId = :lp AND i.parentItemId = 0 AND i.itemType != :type ORDER BY i.displayOrder DESC')
+                WHERE i.lpId = :lp AND i.parent IS NULL AND i.itemType != :type ORDER BY i.displayOrder DESC')
                 ->setMaxResults(1)
                 ->setParameters(['lp' => $this->lp_id, 'type' => TOOL_LP_FINAL_ITEM])
                 ->getSingleScalarResult();
@@ -2008,8 +2040,8 @@ class learnpath
                 ON (lpi.iid = lp_view.lp_item_id)
                 WHERE
                     lp_view.iid = $itemViewId AND
-                    lpi.iid = $lpItemId AND
-                    lp_view.c_id = $course_id";
+                    lpi.iid = $lpItemId
+                ";
         $result = Database::query($sql);
         $row = Database::fetch_assoc($result);
         $output = '';
@@ -2993,26 +3025,38 @@ class learnpath
      * Gets a flat list of item IDs ordered for display (level by level ordered by order_display)
      * This method can be used as abstract and is recursive.
      *
-     * @param int $lp        Learnpath ID
+     * @param CLp $lp
      * @param int $parent    Parent ID of the items to look for
-     * @param int $course_id
      *
      * @return array Ordered list of item IDs (empty array on error)
      */
-    public static function get_flat_ordered_items_list($lp = 1, $parent = 0, $course_id = 0)
+    public static function get_flat_ordered_items_list(CLp $lp, $parent = 0)
     {
-        if (empty($course_id)) {
-            $course_id = api_get_course_int_id();
-        } else {
-            $course_id = (int) $course_id;
-        }
-        $list = [];
+        $parent = (int) $parent;
 
-        if (empty($lp)) {
-            return $list;
-        }
+        $criteria = Criteria::create()
+            ->orderBy(
+                [
+                    'displayOrder' => Criteria::ASC,
+                ]
+            );
+        $items = $lp->getItems()->matching($criteria);
+        $items = $items->filter(
+            function (CLpItem $element) use ($parent) {
+                if (empty($parent)) {
+                    $parent = null;
+                    return $element->getParent() === $parent;
+                } else {
+                    if (null !== $element->getParent()) {
+                        return $element->getParent()->getIid() === $parent;
+                    }
+                    return false;
+                }
+            }
+        );
 
-        $lp = (int) $lp;
+        /*
+         $lp = (int) $lp;
         $parent = (int) $parent;
 
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -3030,6 +3074,17 @@ class learnpath
             $list[] = $row['iid'];
             foreach ($sublist as $item) {
                 $list[] = $item;
+            }
+        }
+        */
+
+        $list = [];
+        foreach ($items as $item) {
+            $itemId = $item->getIid();
+            $sublist = self::get_flat_ordered_items_list($lp, $itemId);
+            $list[] = $itemId;
+            foreach ($sublist as $subItem) {
+                $list[] = $subItem;
             }
         }
 
@@ -9524,19 +9579,19 @@ EOD;
     /**
      * Clear LP prerequisites.
      */
-    public function clear_prerequisites()
+    public function clearPrerequisites()
     {
         $course_id = $this->get_course_int_id();
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $lp_id = $this->get_id();
         // Cleaning prerequisites
         $sql = "UPDATE $tbl_lp_item SET prerequisite = ''
-                WHERE c_id = $course_id AND lp_id = $lp_id";
+                WHERE lp_id = $lp_id";
         Database::query($sql);
 
         // Cleaning mastery score for exercises
         $sql = "UPDATE $tbl_lp_item SET mastery_score = ''
-                WHERE c_id = $course_id AND lp_id = $lp_id AND item_type = 'quiz'";
+                WHERE lp_id = $lp_id AND item_type = 'quiz'";
         Database::query($sql);
     }
 
@@ -11057,13 +11112,12 @@ EOD;
     public function getItemsForForm($addParentCondition = false)
     {
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $course_id = api_get_course_int_id();
 
         $sql = "SELECT * FROM $tbl_lp_item
                 WHERE lp_id = ".$this->lp_id;
 
         if ($addParentCondition) {
-            $sql .= ' AND parent_item_id = 0 ';
+            $sql .= ' AND parent_item_id IS NULL ';
         }
         $sql .= ' ORDER BY display_order ASC';
 
@@ -11195,16 +11249,13 @@ EOD;
             $params['display_order'] = $item->display_order;
             $params['previous_item_id'] = $item->previous_item_id;
             $params['next_item_id'] = $item->next_item_id;
-            $params['parent_item_id'] = $item->parent_item_id;
+            $params['parent_item_id'] = empty($item->parent_item_id) ? null : $item->parent_item_id;
 
             Database::update(
                 $table,
                 $params,
                 [
-                    'iid = ? AND c_id = ? ' => [
-                        (int) $item->id,
-                        (int) $courseId,
-                    ],
+                    'iid = ? ' => [(int) $item->id],
                 ]
             );
         }
@@ -11227,9 +11278,9 @@ EOD;
 
         if (0 == $parentItemId) {
             return 0;
-        } else {
-            return self::get_level_for_item($items, $parentItemId) + 1;
         }
+
+        return self::get_level_for_item($items, $parentItemId) + 1;
     }
 
     /**

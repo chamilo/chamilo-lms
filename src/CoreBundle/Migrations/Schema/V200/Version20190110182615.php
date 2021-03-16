@@ -130,6 +130,19 @@ class Version20190110182615 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX idx_c_lp_item_cid_lp_id ON c_lp_item;');
         }
 
+        $this->addSql('ALTER TABLE c_lp_item CHANGE parent_item_id parent_item_id INT DEFAULT NULL');
+        $this->addSql('UPDATE c_lp_item SET parent_item_id = NULL WHERE parent_item_id = 0');
+
+        if (!$table->hasForeignKey('FK_CCC9C1ED60272618')) {
+            $this->addSql(
+                'ALTER TABLE c_lp_item ADD CONSTRAINT FK_CCC9C1ED60272618 FOREIGN KEY (parent_item_id) REFERENCES c_lp_item (iid)'
+            );
+        }
+
+        if (!$table->hasIndex('IDX_CCC9C1ED60272618')) {
+            $this->addSql('CREATE INDEX IDX_CCC9C1ED60272618 ON c_lp_item (parent_item_id)');
+        }
+
         $table = $schema->getTable('c_lp_view');
         if ($table->hasColumn('id')) {
             $this->addSql('ALTER TABLE c_lp_view DROP id');
@@ -142,6 +155,17 @@ class Version20190110182615 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_lp_view CHANGE c_id c_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_lp_view CHANGE lp_id lp_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_lp_view CHANGE session_id session_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_lp_view CHANGE user_id user_id INT DEFAULT NULL');
+
+        if (!$table->hasForeignKey('FK_2D2F4F7DA76ED395')) {
+            $this->addSql(
+                'ALTER TABLE c_lp_view ADD CONSTRAINT FK_2D2F4F7DA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
+            );
+        }
+
+        if ($table->hasIndex('IDX_2D2F4F7DA76ED395')) {
+            $this->addSql('     CREATE INDEX IDX_2D2F4F7DA76ED395 ON c_lp_view (user_id);');
+        }
 
         if (!$table->hasForeignKey('FK_2D2F4F7D68DFD1EF')) {
             $this->addSql(

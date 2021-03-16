@@ -18,12 +18,12 @@ use ChamiloSession as Session;
 
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
-$debug = 0;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);
 
+$debug = false;
 $current_course_tool = TOOL_LEARNPATH;
 $course_id = api_get_course_int_id();
 $lpRepo = Container::getLpRepository();
@@ -531,13 +531,20 @@ switch ($action) {
                 $directoryParentId = $result->getIid();
             }
 
-            $parent = isset($_POST['parent']) ? $_POST['parent'] : '';
-            $previous = isset($_POST['previous']) ? $_POST['previous'] : '';
-            $type = isset($_POST['type']) ? $_POST['type'] : '';
-            $path = isset($_POST['path']) ? $_POST['path'] : '';
-            $description = isset($_POST['description']) ? $_POST['description'] : '';
-            $prerequisites = isset($_POST['prerequisites']) ? $_POST['prerequisites'] : '';
-            $maxTimeAllowed = isset($_POST['maxTimeAllowed']) ? $_POST['maxTimeAllowed'] : '';
+            $parent = $_POST['parent'] ?? null;
+            $em = Database::getManager();
+            if (!empty($parent)) {
+                $parent = $em->getRepository(CLpItem::class)->find($parent);
+            } else {
+                $parent = null;
+            }
+
+            $previous = $_POST['previous'] ?? '';
+            $type = $_POST['type'] ?? '';
+            $path = $_POST['path'] ?? '';
+            $description = $_POST['description'] ?? '';
+            $prerequisites = $_POST['prerequisites'] ?? '';
+            $maxTimeAllowed = $_POST['maxTimeAllowed'] ?? '';
 
             if (TOOL_DOCUMENT === $_POST['type']) {
                 if (isset($_POST['path']) && isset($_GET['id']) && !empty($_GET['id'])) {
@@ -1271,7 +1278,7 @@ switch ($action) {
         exit;
         break;
     case 'clear_prerequisites':
-        $oLP->clear_prerequisites();
+        $oLP->clearPrerequisites();
         $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id)."&".api_get_cidreq();
         Display::addFlash(Display::return_message(get_lang('ItemUpdate successful')));
         header('Location: '.$url);

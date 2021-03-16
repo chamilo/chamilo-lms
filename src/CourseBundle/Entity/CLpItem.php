@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -28,12 +30,6 @@ class CLpItem
      * @ORM\GeneratedValue
      */
     protected ?int $iid = null;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp", inversedBy="items", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="lp_id", referencedColumnName="iid")
-     */
-    protected CLp $lp;
 
     /**
      * @Assert\NotBlank()
@@ -78,21 +74,6 @@ class CLpItem
      * @ORM\Column(name="mastery_score", type="float", precision=10, scale=0, nullable=true)
      */
     protected ?float $masteryScore = null;
-
-    /**
-     * @ORM\Column(name="parent_item_id", type="integer", nullable=false)
-     */
-    protected int $parentItemId;
-
-    /**
-     * @ORM\Column(name="previous_item_id", type="integer", nullable=false)
-     */
-    protected int $previousItemId;
-
-    /**
-     * @ORM\Column(name="next_item_id", type="integer", nullable=false)
-     */
-    protected int $nextItemId;
 
     /**
      * @ORM\Column(name="display_order", type="integer", nullable=false)
@@ -144,12 +125,40 @@ class CLpItem
      */
     protected ?float $prerequisiteMaxScore = null;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp", inversedBy="items", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="lp_id", referencedColumnName="iid")
+     */
+    protected CLp $lp;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="CLpItem", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_item_id", referencedColumnName="iid")
+     */
+    protected ?CLpItem $parent = null;
+
+    /**
+     * @var Collection|CLpItem[]
+     * @ORM\OneToMany(targetEntity="CLpItem", mappedBy="parent")
+     */
+    protected Collection $children;
+
+    /**
+     * @ORM\Column(name="previous_item_id", type="integer", nullable=false)
+     */
+    protected int $previousItemId;
+
+    /**
+     * @ORM\Column(name="next_item_id", type="integer", nullable=false)
+     */
+    protected int $nextItemId;
+
     public function __construct()
     {
+        $this->children = new ArrayCollection();
         $this->path = '';
         $this->ref = '';
         $this->launchData = '';
-        $this->parentItemId = 0;
         $this->previousItemId = 0;
         $this->description = '';
         $this->minScore = 0;
@@ -309,34 +318,7 @@ class CLpItem
         return $this->masteryScore;
     }
 
-    /**
-     * Set parentItemId.
-     *
-     * @return CLpItem
-     */
-    public function setParentItemId(int $parentItemId)
-    {
-        $this->parentItemId = $parentItemId;
-
-        return $this;
-    }
-
-    /**
-     * Get parentItemId.
-     *
-     * @return int
-     */
-    public function getParentItemId()
-    {
-        return $this->parentItemId;
-    }
-
-    /**
-     * Set previousItemId.
-     *
-     * @return CLpItem
-     */
-    public function setPreviousItemId(int $previousItemId)
+    public function setPreviousItemId(int $previousItemId): self
     {
         $this->previousItemId = $previousItemId;
 
@@ -353,12 +335,7 @@ class CLpItem
         return $this->previousItemId;
     }
 
-    /**
-     * Set nextItemId.
-     *
-     * @return CLpItem
-     */
-    public function setNextItemId(int $nextItemId)
+    public function setNextItemId(int $nextItemId): self
     {
         $this->nextItemId = $nextItemId;
 
@@ -477,12 +454,7 @@ class CLpItem
         return $this->terms;
     }
 
-    /**
-     * Set searchDid.
-     *
-     * @return CLpItem
-     */
-    public function setSearchDid(int $searchDid)
+    public function setSearchDid(int $searchDid): self
     {
         $this->searchDid = $searchDid;
 
@@ -548,5 +520,44 @@ class CLpItem
     public function getPrerequisiteMaxScore()
     {
         return $this->prerequisiteMaxScore;
+    }
+
+    public function getParentItemId(): int
+    {
+        if (null === $this->parent) {
+            return 0;
+        }
+
+        return $this->getParent()->getIid();
+    }
+
+    public function getParent(): ?self
+    {
+        return $this->parent;
+    }
+
+    public function setParent(?self $parent): self
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * @return CLpItem[]|Collection
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param CLpItem[]|Collection $children
+     */
+    public function setChildren(Collection $children): self
+    {
+        $this->children = $children;
+
+        return $this;
     }
 }

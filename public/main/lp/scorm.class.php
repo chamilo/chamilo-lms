@@ -427,17 +427,20 @@ class scorm extends learnpath
                 if (empty($title)) {
                     $title = get_lang('Untitled');
                 }
+                $parentEntity = null;
+                if (!empty($parent)) {
+                    $parentEntity = $em->getRepository(CLpItem::class)->find($parent);
+                }
 
                 $lpItem = new CLpItem();
                 $lpItem
                     ->setTitle($title)
-                    ->setCId($courseId)
                     ->setItemType($type)
                     ->setRef($item['identifier'])
                     ->setPath($path)
                     ->setMinScore(0)
                     ->setMaxScore($max_score)
-                    ->setParentItemId($parent)
+                    ->setParent($parentEntity)
                     ->setPreviousItemId($previous)
                     ->setNextItemId(0)
                     ->setPrerequisite($item['prerequisites'])

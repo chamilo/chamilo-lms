@@ -19,7 +19,7 @@ $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')
 
 $tool_name = null;
 
-$action = isset($_GET['action']) ? $_GET['action'] : null;
+$action = $_GET['action'] ?? null;
 if (!in_array($extraFieldType, ExtraField::getValidExtraFieldTypes())) {
     api_not_allowed(true);
 }
@@ -39,10 +39,7 @@ $columns = $obj->getJqgridColumnNames();
 
 //Column config
 $column_model = $obj->getJqgridColumnModel();
-
-//Autowidth
 $extra_params['autowidth'] = 'true';
-//height auto
 $extra_params['height'] = 'auto';
 $extra_params['sortname'] = 'field_order';
 
@@ -103,10 +100,8 @@ $(function() {
 });
 </script>';
 
-// The header.
 Display::display_header($tool_name);
 
-// Action handling: Add
 switch ($action) {
     case 'add':
         if (0 != api_get_session_id() &&

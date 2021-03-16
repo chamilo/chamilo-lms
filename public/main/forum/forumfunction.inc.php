@@ -1000,14 +1000,14 @@ function deletePost(CForumPost $post)
                     thread_replies = thread_replies - 1,
                     thread_last_post = ".(int) ($last_post_of_thread['iid']).",
                     thread_date='".Database::escape_string($last_post_of_thread['post_date'])."'
-                WHERE c_id = $course_id AND iid = ".(int) ($_GET['thread']);
+                WHERE iid = ".(int) ($_GET['thread']);
         Database::query($sql);
         Display::addFlash(Display::return_message(get_lang('Post has been deleted')));
     }
     if (!$last_post_of_thread) {
         // We deleted the very single post of the thread so we need to delete the entry in the thread table also.
         $sql = "DELETE FROM $table_threads
-                WHERE c_id = $course_id AND iid = ".(int) ($_GET['thread']);
+                WHERE iid = ".(int) ($_GET['thread']);
         Database::query($sql);
 
         Display::addFlash(Display::return_message(get_lang('Thread deleted')));
@@ -1213,7 +1213,7 @@ function move_up_down($content, $direction, $id)
         $sort_column = 'forum_order';
         // We also need the forum_category of this forum.
         $sql = "SELECT forum_category FROM $table_forums
-                WHERE c_id = $course_id AND forum_id = ".$id;
+                WHERE forum_id = ".$id;
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $forum_category = $row['forum_category'];
@@ -1789,7 +1789,7 @@ function getThreadInfo($threadId, $cId)
 {
     $repo = Database::getManager()->getRepository(CForumThread::class);
     /** @var CForumThread $forumThread */
-    $forumThread = $repo->findOneBy(['iid' => $threadId, 'cId' => $cId]);
+    $forumThread = $repo->findOneBy(['iid' => $threadId]);
 
     $thread = [];
     if ($forumThread) {
@@ -1892,7 +1892,6 @@ function getPosts(
     foreach ($posts as $post) {
         $postInfo = [
             'iid' => $post->getIid(),
-            //'c_id' => $post->getCId(),
             'post_id' => $post->getIid(),
             'post_title' => $post->getPostTitle(),
             'post_text' => $post->getPostText(),
@@ -2106,7 +2105,7 @@ function get_thread_users_not_qualify($thread_id)
     $course_id = api_get_course_int_id();
 
     $sql1 = "SELECT user_id FROM  $t_qualify
-             WHERE c_id = $course_id AND thread_id = '".$thread_id."'";
+             WHERE thread_id = '".$thread_id."'";
     $result1 = Database::query($sql1);
     $cad = '';
     while ($row = Database::fetch_array($result1)) {
@@ -2168,7 +2167,7 @@ function count_number_of_forums_in_category($cat_id)
     $cat_id = (int) $cat_id;
     $sql = "SELECT count(*) AS number_of_forums
             FROM $table_forums
-            WHERE c_id = $course_id AND forum_category = $cat_id";
+            WHERE forum_category = $cat_id";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
 
@@ -2204,9 +2203,9 @@ function updateThread($values)
     // Simple update + set gradebook values to null
     $params = [
         'thread_title' => $values['thread_title'],
-        'thread_sticky' => isset($values['thread_sticky']) ? $values['thread_sticky'] : 0,
+        'thread_sticky' => $values['thread_sticky'] ?? 0,
     ];
-    $where = ['c_id = ? AND iid = ?' => [$courseId, $values['thread_id']]];
+    $where = ['iid = ?' => [$values['thread_id']]];
     Database::update($threadTable, $params, $where);
 
     $id = $values['thread_id'];
@@ -2237,7 +2236,7 @@ function updateThread($values)
             'thread_weight' => api_float_val($values['weight_calification']),
             'thread_peer_qualify' => $values['thread_peer_qualify'],
         ];
-        $where = ['c_id = ? AND iid = ?' => [$courseId, $values['thread_id']]];
+        $where = ['iid = ?' => [$values['thread_id']]];
         Database::update($threadTable, $params, $where);
 
         if (!$linkInfo) {
@@ -2267,7 +2266,7 @@ function updateThread($values)
             'thread_weight' => 0,
             'thread_peer_qualify' => 0,
         ];
-        $where = ['c_id = ? AND iid = ?' => [$courseId, $values['thread_id']]];
+        $where = ['iid = ?' => [$values['thread_id']]];
         Database::update($threadTable, $params, $where);
 
         if (!empty($linkInfo)) {
@@ -3067,14 +3066,12 @@ function saveThreadScore(
         if ($threadEntity->isThreadPeerQualify()) {
             $sql = "SELECT COUNT(*) FROM $table_threads_qualify
                     WHERE
-                        c_id = $course_id AND
                         user_id = $user_id AND
                         qualify_user_id = $currentUserId AND
                         thread_id = ".$thread_id;
         } else {
             $sql = "SELECT COUNT(*) FROM $table_threads_qualify
                     WHERE
-                        c_id = $course_id AND
                         user_id = $user_id AND
                         thread_id = ".$thread_id;
         }
@@ -3102,7 +3099,6 @@ function saveThreadScore(
                         qualify = '".$thread_qualify."',
                         qualify_time = '".$qualify_time."'
                     WHERE
-                        c_id = $course_id AND
                         user_id=".$user_id.' AND
                         thread_id='.$thread_id." AND
                         qualify_user_id = $currentUserId

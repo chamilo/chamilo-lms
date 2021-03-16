@@ -274,7 +274,12 @@ if ((api_is_course_admin() || api_is_session_general_coach() || api_is_course_tu
 }
 
 if (api_is_allowed_to_edit(null, true)) {
-    $form->addElement('checkbox', 'thread_sticky', '', get_lang('This is a sticky message (appears always on top and has a special sticky icon)'));
+    $form->addElement(
+        'checkbox',
+        'thread_sticky',
+        '',
+        get_lang('This is a sticky message (appears always on top and has a special sticky icon)')
+    );
 }
 
 $form->addElement('html', '</div>');

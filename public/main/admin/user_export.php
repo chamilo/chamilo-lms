@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 $cidReset = true;
@@ -76,7 +77,7 @@ if ($form->validate()) {
     }
 
     $sql = "SELECT
-                u.user_id 	AS UserId,
+                u.id 	AS UserId,
                 u.lastname 	AS LastName,
                 u.firstname 	AS FirstName,
                 u.email 		AS Email,

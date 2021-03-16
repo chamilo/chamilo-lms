@@ -2520,7 +2520,7 @@ class Exercise
                         $courseList = SessionManager::getCoursesInSession($sessionId);
                         foreach ($courseList as $course) {
                             $courseSession = api_get_course_info_by_id($course);
-                            if (isset($courseSession['real_id'])) {
+                            if (!empty($courseSession) && isset($courseSession['real_id'])) {
                                 $courseId = $courseSession['real_id'];
                                 if (api_get_course_int_id() != $courseId) {
                                     $optionRemedial[$courseId] = $courseSession['title'];
@@ -2537,7 +2537,7 @@ class Exercise
                             false
                         );
                         foreach ($courseList as $course) {
-                            if (isset($course['real_id'])) {
+                            if (!empty($course) && isset($course['real_id'])) {
                                 $courseId = $course['real_id'];
                                 if (api_get_course_int_id() != $courseId) {
                                     $optionRemedial[$courseId] = $course['title'];
@@ -10835,6 +10835,8 @@ class Exercise
      */
     public function advanceCourseList($userId = 0, $sessionId = 0, $attemp = [])
     {
+        $userId = (int) $userId;
+        $sessionId = (int) $sessionId;
         $pluginRemedial = api_get_plugin_setting('remedial_course', 'enabled') === 'true';
         if (!$pluginRemedial) {
             return null;
@@ -10906,26 +10908,35 @@ class Exercise
             if ('' == $advanceCourseExcerciseField['value'] || count($coursesIds) == 0) {
                 return null;
             }
-            $isInASession = !empty($sessionId);
+            $isInASession = (0==$sessionId)?false:true;
             $courses = [];
             foreach ($coursesIds as $course) {
                 $courseData = api_get_course_info_by_id($course);
-                $isSubscribed = CourseManager::is_user_subscribed_in_course(
-                    $userId,
-                    $courseData['code'],
-                    $isInASession,
-                    $sessionId
-                );
+                if (!empty($courseData) && isset($courseData['real_id'])) {
+                    // if session is 0, always will be true
+                    $courseExistsInSession = true;
+                    if($isInASession){
+                        $courseExistsInSession = SessionManager::sessionHasCourse($sessionId, $courseData['code']);
+                    }
+                    if($courseExistsInSession) {
+                        $isSubscribed = CourseManager::is_user_subscribed_in_course(
+                            $userId,
+                            $courseData['code'],
+                            $isInASession,
+                            $sessionId
+                        );
 
-                if (!$isSubscribed) {
-                    CourseManager::subscribeUser(
-                        $userId,
-                        $courseData['code'],
-                        STUDENT,
-                        $sessionId
-                    );
+                        if (!$isSubscribed) {
+                            CourseManager::subscribeUser(
+                                $userId,
+                                $courseData['code'],
+                                STUDENT,
+                                $sessionId
+                            );
+                        }
+                        $courses[] = $courseData['title'];
+                    }
                 }
-                $courses[] = $courseData['title'];
             }
             if (0 != count($courses)) {
                 $extraMessage .= "<br>".get_lang('AdvancedCourseInscription')." <strong>".
@@ -10947,7 +10958,10 @@ class Exercise
      */
     public function remedialCourseList($userId = 0, $sessionId = 0, $attemp = [], $review = false)
     {
+        $userId = (int) $userId;
+        $sessionId = (int) $sessionId;
         $pluginRemedial = api_get_plugin_setting('remedial_course', 'enabled') === 'true';
+        echo "<br>/*".__LINE__."*/<br> Session $sessionId. Usuario $userId. Inicio remedial<br>";
         if (!$pluginRemedial) {
             return null;
         }
@@ -11031,32 +11045,39 @@ class Exercise
                 return null;
             }
             $courses = [];
-            $isInASession = !empty($sessionId);
+            $isInASession = (0==$sessionId)?false:true;
             foreach ($coursesIds as $course) {
                 $courseData = api_get_course_info_by_id($course);
-                $isSubscribed = CourseManager::is_user_subscribed_in_course(
-                    $userId,
-                    $courseData['code'],
-                    $isInASession,
-                    $sessionId
-                );
+                if (!empty($courseData) && isset($courseData['real_id'])) {
+                    // if session is 0, always will be true
+                    $courseExistsInSession = true;
+                    if($isInASession){
+                        $courseExistsInSession = SessionManager::sessionHasCourse($sessionId, $courseData['code']);
+                    }
+                    if($courseExistsInSession) {
+                        $isSubscribed = CourseManager::is_user_subscribed_in_course(
+                            $userId,
+                            $courseData['code'],
+                            $isInASession,
+                            $sessionId
+                        );
 
-                if (!$isSubscribed) {
-                    CourseManager::subscribeUser(
-                        $userId,
-                        $courseData['code'],
-                        STUDENT,
-                        $sessionId
-                    );
-                    $courses[] = $courseData['title'];
+                        if (!$isSubscribed) {
+                            CourseManager::subscribeUser(
+                                $userId,
+                                $courseData['code'],
+                                STUDENT,
+                                $sessionId
+                            );
+                            $courses[] = $courseData['title'];
+                        }
+                    }
                 }
             }
 
             if (0 != count($courses)) {
                 $extraMessage .= "<br>".get_lang('RemedialCourseInscription')." <strong>".
                     implode(' - ', $courses)."</strong> ";
-            } else {
-                $extraMessage .= "<br>".get_lang('RemedialCourseAlreadyInscription');
             }
         }
 

@@ -115,7 +115,7 @@ $learnpath_id = isset($exercise_stat_info['orig_lp_id']) ? $exercise_stat_info['
 $learnpath_item_id = isset($exercise_stat_info['orig_lp_item_id']) ? $exercise_stat_info['orig_lp_item_id'] : 0;
 $learnpath_item_view_id = isset($exercise_stat_info['orig_lp_item_view_id'])
     ? $exercise_stat_info['orig_lp_item_view_id'] : 0;
-$exerciseId = isset($exercise_stat_info['exe_exo_id'])?$exercise_stat_info['exe_exo_id']:0;
+$exerciseId = isset($exercise_stat_info['exe_exo_id']) ? $exercise_stat_info['exe_exo_id'] : 0;
 
 $logInfo = [
     'tool' => TOOL_QUIZ,
@@ -276,13 +276,13 @@ $exerciseStatInfo = Event::getExerciseResultsByUser(
     api_get_course_int_id(),
     api_get_session_id()
 );
-$advanceCourseMessage = $objExercise->advanceCourseList(api_get_user_id(), api_get_session_id(),$exerciseStatInfo);
+$advanceCourseMessage = $objExercise->advanceCourseList(api_get_user_id(), api_get_session_id(), $exerciseStatInfo);
 if (null != $advanceCourseMessage) {
     Display::addFlash(
         Display::return_message($advanceCourseMessage, 'info', false)
     );
 }
-$remedialMessage = $objExercise->remedialCourseList(api_get_user_id(),api_get_session_id(),$exerciseStatInfo);
+$remedialMessage = $objExercise->remedialCourseList(api_get_user_id(), api_get_session_id(), $exerciseStatInfo);
 if (null != $remedialMessage) {
     Display::addFlash(
         Display::return_message($remedialMessage, 'warning', false)

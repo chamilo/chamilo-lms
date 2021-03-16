@@ -6808,7 +6808,7 @@ class Exercise
             );
             $message .= $this->advanceCourseList($userId, api_get_session_id());
             if ($attemptCount >= $exerciseAttempts) {
-                $message .= $this->remedialCourseList($userId,  api_get_session_id());
+                $message .= $this->remedialCourseList($userId, api_get_session_id());
             }
         }
         // 4. We check if the student have attempts
@@ -6856,7 +6856,7 @@ class Exercise
                                     get_lang('ExerciseBlockBecausePercentageX'),
                                     $blockPercentage
                                 );
-                                $isVisible = false;// See BT#18165
+                                $isVisible = false; // See BT#18165
                                 $message .= $this->remedialCourseList(api_get_user_id(), api_get_session_id());
                             }
                         }
@@ -10856,14 +10856,14 @@ class Exercise
         if (!isset($bestAttempt['exe_result'])) {
             // In the case that the result is 0, get_best_attempt_exercise_results_per_user does not return data,
             // for that this block is used
-            if(count($attemp)==0) {
+            if (count($attemp) == 0) {
                 $exerciseStatInfo = Event::getExerciseResultsByUser(
                     $userId,
                     $this->id,
                     $this->course_id,
                     $sessionId
                 );
-            }else{
+            } else {
                 $exerciseStatInfo = $attemp;
             }
 
@@ -10903,7 +10903,9 @@ class Exercise
 
         if (false === $canRemedial && isset($advanceCourseExcerciseField['value'])) {
             $coursesIds = explode(';', $advanceCourseExcerciseField['value']);
-            if ('' == $advanceCourseExcerciseField['value'] || count($coursesIds)==0) return null;
+            if ('' == $advanceCourseExcerciseField['value'] || count($coursesIds) == 0) {
+                return null;
+            }
             $isInASession = !empty($sessionId);
             $courses = [];
             foreach ($coursesIds as $course) {
@@ -10960,11 +10962,11 @@ class Exercise
             ORAL_EXPRESSION,
             ANNOTATION,
         ];
-        $userId = empty($userId) ? api_get_user_id() : (int)$userId;
+        $userId = empty($userId) ? api_get_user_id() : (int) $userId;
         $extraMessage = null;
-        if(count($attemp)!= 0){
+        if (count($attemp) != 0) {
             $exercise_stat_info = $attemp;
-        }else{
+        } else {
             $exercise_stat_info = Event::getExerciseResultsByUser(
                 $userId,
                 $this->id,
@@ -10988,12 +10990,12 @@ class Exercise
                     $questionOpen = 0;
                     $totalQuestionExcluded = count($questionExcluded);
                     for ($i = 0; $i < $totalQuestionExcluded; $i++) {
-                        if ($question->type == (int)$questionExcluded[$i]) {
+                        if ($question->type == (int) $questionExcluded[$i]) {
                             $questionOpen = 1;
                             break;
                         }
                     }
-                    if($review == true){
+                    if ($review == true) {
                         $questionOpen = 0;
                     }
                     if (1 == $questionOpen) {
@@ -11025,7 +11027,9 @@ class Exercise
         // Remedial course
         if ($canRemedial) {
             $coursesIds = explode(';', $remedialExcerciseField['value']);
-            if ('' == $remedialExcerciseField['value'] || count($coursesIds)==0) return null;
+            if ('' == $remedialExcerciseField['value'] || count($coursesIds) == 0) {
+                return null;
+            }
             $courses = [];
             $isInASession = !empty($sessionId);
             foreach ($coursesIds as $course) {

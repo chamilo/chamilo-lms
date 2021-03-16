@@ -628,7 +628,7 @@ function getQuestions(
         $currentExerciseCondition = "
             AND qu.iid NOT IN (
                 SELECT question_id FROM $TBL_EXERCISE_QUESTION
-                WHERE exercice_id = $fromExercise AND c_id = $currentCourseId
+                WHERE exercice_id = $fromExercise
             )";
     }
 
@@ -641,7 +641,6 @@ function getQuestions(
         if (isset($courseCategoryId) && $courseCategoryId > 0) {
             $from = ", $TBL_COURSE_REL_CATEGORY crc ";
             $where .= " AND
-                    crc.c_id = $selected_course AND
                     crc.question_id = qu.iid AND
                     crc.category_id = $courseCategoryId";
         }
@@ -677,9 +676,7 @@ function getQuestions(
                     $from
                     {$efConditions['from']}
                 WHERE
-                    qt.exercice_id = $exerciseId AND
-                    qt.c_id = $selected_course  AND
-                    qu.c_id = $selected_course
+                    qt.exercice_id = $exerciseId
                     $where
                     $currentExerciseCondition
                     {$efConditions['where']}
@@ -777,9 +774,7 @@ function getQuestions(
         $from = '';
         if (isset($courseCategoryId) && $courseCategoryId > 0) {
             $from = ", $TBL_COURSE_REL_CATEGORY crc ";
-            $filter .= " AND
-                        crc.c_id = $selected_course AND
-                        crc.question_id = qu.iid AND
+            $filter .= " AND crc.question_id = qu.iid AND
                         crc.category_id = $courseCategoryId";
         }
         if (isset($exerciseLevel) && -1 != $exerciseLevel) {
@@ -813,15 +808,13 @@ function getQuestions(
                 FROM
                 $TBL_QUESTIONS as qu
                 INNER JOIN $TBL_EXERCISE_QUESTION as qt
-                ON (qu.iid = qt.question_id AND qu.c_id = qt.c_id)
+                ON qu.iid = qt.question_id
                 INNER JOIN $TBL_EXERCISES as q
-                ON (q.c_id = qu.c_id AND q.iid = qt.exercice_id)
+                ON q.iid = qt.exercice_id
                 {$efConditions['from']}
                 $from
                 WHERE
-                    qu.c_id = $selected_course AND
-                    qt.c_id = $selected_course AND
-                    q.c_id = $selected_course
+                    qu.c_id = $selected_course
                     $sessionCondition
                     $filter
                     $currentExerciseCondition

@@ -629,8 +629,7 @@ abstract class Question
         }
         $sql = "DELETE FROM $table
                 WHERE
-                    question_id = $questionId AND
-                    c_id = ".$courseId;
+                    question_id = $questionId";
         Database::query($sql);
 
         return true;

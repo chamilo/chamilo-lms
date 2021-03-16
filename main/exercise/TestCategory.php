@@ -42,13 +42,13 @@ class TestCategory
         $id = (int) $id;
         $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
         $sql = "SELECT * FROM $table
-                WHERE id = $id AND c_id = ".$courseId;
+                WHERE iid = $id";
         $res = Database::query($sql);
 
         if (Database::num_rows($res)) {
             $row = Database::fetch_array($res);
 
-            $this->id = $row['id'];
+            $this->id = $row['iid'];
             $this->name = $row['title'];
             $this->description = $row['description'];
 
@@ -126,12 +126,12 @@ class TestCategory
 
         if ($category) {
             $sql = "DELETE FROM $table
-                    WHERE id= $id AND c_id=".$course_id;
+                    WHERE iid = $id";
             Database::query($sql);
 
             // remove link between question and category
             $sql = "DELETE FROM $tbl_question_rel_cat
-                    WHERE category_id = $id AND c_id=".$course_id;
+                    WHERE category_id = $id";
             Database::query($sql);
             // item_property update
             $courseInfo = api_get_course_info_by_id($course_id);
@@ -173,7 +173,7 @@ class TestCategory
             $sql = "UPDATE $table SET
                         title = '$name',
                         description = '$description'
-                    WHERE id = $id AND c_id = ".$courseId;
+                    WHERE iid = $id";
             Database::query($sql);
 
             api_item_property_update(
@@ -199,7 +199,7 @@ class TestCategory
         $id = (int) $this->id;
         $sql = "SELECT count(*) AS nb
                 FROM $table
-                WHERE category_id = $id AND c_id=".api_get_course_int_id();
+                WHERE category_id = $id";
         $res = Database::query($sql);
         $row = Database::fetch_array($res);
 
@@ -224,13 +224,13 @@ class TestCategory
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $categories = [];
         if (empty($field)) {
-            $sql = "SELECT id FROM $table
+            $sql = "SELECT iid FROM $table
                     WHERE c_id = $courseId
                     ORDER BY title ASC";
             $res = Database::query($sql);
             while ($row = Database::fetch_array($res)) {
                 $category = new TestCategory();
-                $categories[] = $category->getCategory($row['id'], $courseId);
+                $categories[] = $category->getCategory($row['iid'], $courseId);
             }
         } else {
             $field = Database::escape_string($field);
@@ -283,7 +283,7 @@ class TestCategory
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         $sql = "SELECT *
                 FROM $table
-                WHERE question_id = $questionId AND c_id = $courseId";
+                WHERE question_id = $questionId";
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             return Database::fetch_array($res, 'ASSOC');
@@ -309,9 +309,7 @@ class TestCategory
         $courseId = (int) $courseId;
         $categoryId = self::getCategoryForQuestion($questionId, $courseId);
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $sql = "SELECT title
-                FROM $table
-                WHERE id = $categoryId AND c_id = $courseId";
+        $sql = "SELECT title FROM $table WHERE iid = $categoryId";
         $res = Database::query($sql);
         $data = Database::fetch_array($res);
         $result = '';
@@ -540,11 +538,11 @@ class TestCategory
         $sql = "SELECT DISTINCT qrc.question_id, qrc.category_id
                 FROM $TBL_QUESTION_REL_CATEGORY qrc
                 INNER JOIN $TBL_EXERCICE_QUESTION eq
-                ON (eq.question_id = qrc.question_id AND qrc.c_id = eq.c_id)
+                ON eq.question_id = qrc.question_id
                 INNER JOIN $categoryTable c
-                ON (c.id = qrc.category_id AND c.c_id = eq.c_id)
+                ON c.iid = qrc.category_id
                 INNER JOIN $tableQuestion q
-                ON (q.iid = qrc.question_id AND q.c_id = eq.c_id)
+                ON q.iid = qrc.question_id
                 WHERE
                     exercice_id = $exerciseId AND
                     qrc.c_id = $courseId
@@ -926,7 +924,7 @@ class TestCategory
 
         $sql = "SELECT * FROM $table qc
                 LEFT JOIN $categoryTable c
-                ON (qc.c_id = c.c_id AND c.id = qc.category_id)
+                ON (c.iid = qc.category_id)
                 WHERE qc.c_id = $courseId AND exercise_id = {$exercise->id} ";
 
         if (!empty($order)) {
@@ -1137,12 +1135,12 @@ class TestCategory
         }
         $courseId = (int) $courseId;
         $tbl_cat = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $sql = "SELECT id FROM $tbl_cat
+        $sql = "SELECT iid FROM $tbl_cat
                 WHERE c_id = $courseId AND title = '".Database::escape_string($title)."'";
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $data = Database::fetch_array($res);
-            $out_res = $data['id'];
+            $out_res = $data['iid'];
         }
 
         return $out_res;
@@ -1212,9 +1210,9 @@ class TestCategory
 
         $sql = "SELECT c.* FROM $table c
                 INNER JOIN $itemProperty i
-                ON c.c_id = i.c_id AND i.ref = c.id
+                ON i.ref = c.iid
                 WHERE
-                    c.c_id = $courseId AND
+                    i.c_id = $courseId AND
                     i.tool = '".TOOL_TEST_CATEGORY."'
                     $sessionCondition
                 ORDER BY title ASC";

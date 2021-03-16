@@ -7315,7 +7315,7 @@ class Exercise
         $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         if (!empty($this->id)) {
             $sql = "SELECT * FROM $table
-                    WHERE exercise_id = {$this->id} AND c_id = {$this->course_id} ";
+                    WHERE exercise_id = {$this->id}";
             $result = Database::query($sql);
             $list = [];
             if (Database::num_rows($result)) {
@@ -7341,7 +7341,7 @@ class Exercise
         if (!empty($this->id)) {
             $sql = "SELECT SUM(count_questions) count_questions
                     FROM $table
-                    WHERE exercise_id = {$this->id} AND c_id = {$this->course_id}";
+                    WHERE exercise_id = {$this->id}";
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
@@ -7363,7 +7363,7 @@ class Exercise
         if (!empty($categories) && !empty($this->id)) {
             $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
             $sql = "DELETE FROM $table
-                    WHERE exercise_id = {$this->id} AND c_id = {$this->course_id}";
+                    WHERE exercise_id = {$this->id}";
             Database::query($sql);
             if (!empty($categories)) {
                 foreach ($categories as $categoryId => $countQuestions) {

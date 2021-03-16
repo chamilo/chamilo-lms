@@ -4197,7 +4197,7 @@ class DocumentManager
      *
      * @return array
      */
-    public static function getFormatTypeListConvertor($mode = 'from', $extension)
+    public static function getFormatTypeListConvertor($mode, $extension)
     {
         $formatTypesList = [];
         $formatTypes = ['text', 'spreadsheet', 'presentation', 'drawing'];
@@ -5138,7 +5138,7 @@ class DocumentManager
         $document_data,
         $show_as_icon = false,
         $counter = null,
-        $visibility,
+        $visibility = true,
         $size = 0,
         $isAllowedToEdit = false,
         $isCertificateMode = false
@@ -5562,7 +5562,7 @@ class DocumentManager
      *
      * @return string html img tags with hyperlinks
      */
-    public static function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, $visibility)
+    public static function build_edit_icons($document_data, $id, $is_template, $is_read_only, $visibility)
     {
         $sessionId = api_get_session_id();
         $courseParams = api_get_cidreq();
@@ -6737,7 +6737,7 @@ class DocumentManager
         $sessionId = null,
         $documentId = null,
         $groupId = 0,
-        $file
+        $file = null
     ) {
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 

@@ -4569,8 +4569,10 @@ class Exercise
                                 ORDER BY id_auto";
                         $result = Database::query($sql);
                         $options = [];
+                        $correctAnswers = [];
                         while ($row = Database::fetch_array($result, 'ASSOC')) {
                             $options[] = $row;
+                            $correctAnswers[$row['correct']] = $row['answer'];
                         }
 
                         $questionScore = 0;
@@ -4602,16 +4604,16 @@ class Exercise
                                         $questionScore += $i_answerWeighting;
                                         $totalScore += $i_answerWeighting;
                                         $user_answer = Display::label(get_lang('Correct'), 'success');
-
-                                        if ($this->showExpectedChoice()) {
+                                        if ($this->showExpectedChoice() &&!empty($i_answer_id_auto)) {
                                             $user_answer = $answerMatching[$i_answer_id_auto];
                                         }
                                         $status = Display::label(get_lang('Correct'), 'success');
                                     } else {
                                         $user_answer = Display::label(get_lang('Incorrect'), 'danger');
-                                        if ($this->showExpectedChoice()) {
-                                            $data = $options[$real_list[$s_user_answer] - 1];
-                                            $user_answer = $data['answer'];
+                                        if ($this->showExpectedChoice() && !empty($s_user_answer)) {
+                                            /*$data = $options[$real_list[$s_user_answer] - 1];
+                                            $user_answer = $data['answer'];*/
+                                            $user_answer = $correctAnswers[$s_user_answer] ?? '';
                                         }
                                     }
                                 } else {

@@ -964,14 +964,14 @@ function deletePost(CForumPost $post)
         $em
             ->createQuery('
                 UPDATE ChamiloCourseBundle:CForumPost p
-                SET p.postParentId = :parent_of_deleted_post
+                SET p.postParent = :parent_of_deleted_post
                 WHERE
-                    p.postParentId = :post AND
+                    p.postParent = :post AND
                     p.thread = :thread_of_deleted_post AND
                     p.forum = :forum_of_deleted_post
             ')
             ->execute([
-                'parent_of_deleted_post' => $post->getPostParentId(),
+                'parent_of_deleted_post' => $post->getPostParent(),
                 'post' => $post->getIid(),
                 'thread_of_deleted_post' => $post->getThread() ? $post->getThread()->getIid() : 0,
                 'forum_of_deleted_post' => $post->getForum(),
@@ -1860,7 +1860,7 @@ function getPosts(
     }
 
     if ($recursive) {
-        $criteria->andWhere(Criteria::expr()->eq('postParentId', $postId));
+        $criteria->andWhere(Criteria::expr()->eq('postParent', $postId));
     }
 
     $qb = $em->getRepository(CForumPost::class)->createQueryBuilder('p');
@@ -1898,7 +1898,7 @@ function getPosts(
             //'poster_name' => $post->getPosterName(),
             'post_date' => $post->getPostDate(),
             'post_notification' => $post->getPostNotification(),
-            'post_parent_id' => $post->getPostParentId(),
+            'post_parent_id' => $post->getPostParent() ? $post->getPostParent()->getIid() : 0,
             'visible' => $post->getVisible(),
             'status' => $post->getStatus(),
             'indent_cnt' => $depth,
@@ -3344,6 +3344,7 @@ function store_reply(CForumForum $forum, CForumThread $thread, $values, $courseI
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity();
 
+        $repo = Container::getForumPostRepository();
         $post = new CForumPost();
         $post
             //->setCId($courseId)
@@ -3353,14 +3354,16 @@ function store_reply(CForumForum $forum, CForumThread $thread, $values, $courseI
             ->setForum($forum)
             ->setUser(api_get_user_entity($userId))
             ->setPostNotification(isset($values['post_notification']) ? (bool) $values['post_notification'] : false)
-            ->setPostParentId(isset($values['post_parent_id']) ? $values['post_parent_id'] : null)
             ->setVisible($visible)
             ->setPostDate(api_get_utc_datetime(null, false, true))
             ->setParent($thread)
             ->addCourseLink($course, $session)
         ;
 
-        $repo = Container::getForumPostRepository();
+        if (isset($values['post_parent_id']) && !empty($values['post_parent_id'])) {
+            $parent = $repo->find($values['post_parent_id']);
+            $post->setPostParent($parent);
+        }
         $repo->create($post);
 
         $new_post_id = $post->getIid();
@@ -3487,7 +3490,7 @@ function show_edit_post_form(
     $form->addElement('hidden', 'thread_id', $thread->getIid());
     $form->addElement('hidden', 'id_attach', $id_attach);
 
-    if (empty($post->getPostParentId())) {
+    if (null === $post->getPostParent()) {
         $form->addElement('hidden', 'is_first_post_of_thread', '1');
     }
 
@@ -3552,9 +3555,7 @@ function show_edit_post_form(
         get_lang('Notify me by e-mail when somebody replies')
     );
 
-    if (api_is_allowed_to_edit(null, true) &&
-        empty($post->getPostParentId())
-    ) {
+    if (api_is_allowed_to_edit(null, true) && null === $post->getPostParent()) {
         // The sticky checkbox only appears when it is the first post of a thread.
         $form->addElement(
             'checkbox',

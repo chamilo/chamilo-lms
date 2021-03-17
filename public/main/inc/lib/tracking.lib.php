@@ -8421,8 +8421,9 @@ class TrackingCourseLog
             }
         }
         while ($user = Database::fetch_array($res, 'ASSOC')) {
-            $userIdList[] = $user['user_id'];
-            $userEntity = api_get_user_entity($user['user_id']);
+            $userId = $user['user_id'];
+            $userIdList[] = $userId;
+            $userEntity = api_get_user_entity($userId);
             $user['official_code'] = $user['col0'];
             $user['username'] = $user['col3'];
             $user['time'] = api_time_to_hms(
@@ -8434,7 +8435,7 @@ class TrackingCourseLog
             );
 
             $avg_student_score = Tracking::get_avg_student_score(
-                $userEntity,
+                $userId,
                 $course,
                 [],
                 $session

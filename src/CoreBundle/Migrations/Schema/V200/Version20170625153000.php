@@ -149,6 +149,16 @@ class Version20170625153000 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_forum_post DROP FOREIGN KEY FK_B5BEF559E2904019');
         }
 
+        $this->addSql('UPDATE c_forum_post SET post_parent_id = NULL WHERE post_parent_id = 0');
+
+        if (!$table->hasForeignKey('FK_B5BEF559D314B487')) {
+            $this->addSql('ALTER TABLE c_forum_post ADD CONSTRAINT FK_B5BEF559D314B487 FOREIGN KEY (post_parent_id) REFERENCES c_forum_post (iid);');
+        }
+
+        if (!$table->hasIndex('IDX_B5BEF559D314B487')) {
+            $this->addSql('CREATE INDEX IDX_B5BEF559D314B487 ON c_forum_post (post_parent_id)');
+        }
+
         if ($table->hasIndex('c_id_visible_post_date')) {
             $this->addSql('DROP INDEX c_id_visible_post_date ON c_forum_post');
         }

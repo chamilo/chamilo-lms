@@ -81,9 +81,16 @@ class CForumPost extends AbstractResource implements ResourceInterface
     protected ?bool $postNotification = null;
 
     /**
-     * @ORM\Column(name="post_parent_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost")
+     * @ORM\JoinColumn(name="post_parent_id", referencedColumnName="iid")
      */
-    protected ?int $postParentId = null;
+    protected ?CForumPost $postParent = null;
+
+    /**
+     * @var Collection|CForumPost[]
+     * @ORM\OneToMany(targetEntity="CForumPost", mappedBy="postParent")
+     */
+    protected Collection $children;
 
     /**
      * @ORM\Column(name="visible", type="boolean", nullable=false)
@@ -108,8 +115,8 @@ class CForumPost extends AbstractResource implements ResourceInterface
     public function __construct()
     {
         $this->visible = false;
-        $this->postParentId = null;
         $this->attachments = new ArrayCollection();
+        $this->children = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -117,12 +124,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
         return (string) $this->getPostTitle();
     }
 
-    /**
-     * Set postTitle.
-     *
-     * @return CForumPost
-     */
-    public function setPostTitle(string $postTitle)
+    public function setPostTitle(string $postTitle): self
     {
         $this->postTitle = $postTitle;
 
@@ -158,22 +160,12 @@ class CForumPost extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get thread.
-     *
-     * @return null|CForumThread
-     */
-    public function getThread()
+    public function getThread(): CForumThread
     {
         return $this->thread;
     }
 
-    /**
-     * Set postDate.
-     *
-     * @return CForumPost
-     */
-    public function setPostDate(DateTime $postDate)
+    public function setPostDate(DateTime $postDate): self
     {
         $this->postDate = $postDate;
 
@@ -190,12 +182,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
         return $this->postDate;
     }
 
-    /**
-     * Set postNotification.
-     *
-     * @return CForumPost
-     */
-    public function setPostNotification(bool $postNotification)
+    public function setPostNotification(bool $postNotification): self
     {
         $this->postNotification = $postNotification;
 
@@ -212,34 +199,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
         return $this->postNotification;
     }
 
-    /**
-     * Set postParentId.
-     *
-     * @return CForumPost
-     */
-    public function setPostParentId(int $postParentId)
-    {
-        $this->postParentId = $postParentId;
-
-        return $this;
-    }
-
-    /**
-     * Get postParentId.
-     *
-     * @return int
-     */
-    public function getPostParentId()
-    {
-        return $this->postParentId;
-    }
-
-    /**
-     * Set visible.
-     *
-     * @return CForumPost
-     */
-    public function setVisible(bool $visible)
+    public function setVisible(bool $visible): self
     {
         $this->visible = $visible;
 
@@ -264,10 +224,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
         return $this->status;
     }
 
-    /**
-     * @return CForumPost
-     */
-    public function setStatus(int $status)
+    public function setStatus(int $status): self
     {
         $this->status = $status;
 
@@ -317,6 +274,36 @@ class CForumPost extends AbstractResource implements ResourceInterface
     public function setUser(User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getPostParent(): ?self
+    {
+        return $this->postParent;
+    }
+
+    public function setPostParent(?self $postParent): self
+    {
+        $this->postParent = $postParent;
+
+        return $this;
+    }
+
+    /**
+     * @return CForumPost[]|Collection
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param CForumPost[]|Collection $children
+     */
+    public function setChildren(Collection $children): self
+    {
+        $this->children = $children;
 
         return $this;
     }

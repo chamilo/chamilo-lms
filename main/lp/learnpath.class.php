@@ -7536,6 +7536,8 @@ class learnpath
         // Get all the forums.
         $forums = $this->get_forums(null, $course_code);
 
+        $dir = $this->display_item_form('dir', get_lang('EnterDataNewChapter'), 'add_item');
+
         // Get the final item form (see BT#11048) .
         $finish = $this->getFinalItemForm();
 
@@ -7549,22 +7551,23 @@ class learnpath
             Display::return_icon('certificate.png', get_lang('Certificate'), [], ICON_SIZE_BIG),
         ];
 
+        $items = [
+            $documents,
+            $exercises,
+            $links,
+            $works,
+            $forums,
+            $dir,
+            $finish,
+        ];
+
         echo Display::return_message(get_lang('ClickOnTheLearnerViewToSeeYourLearningPath'), 'normal');
-        $dir = $this->display_item_form('dir', get_lang('EnterDataNewChapter'), 'add_item');
 
         $selected = isset($_REQUEST['lp_build_selected']) ? (int) $_REQUEST['lp_build_selected'] : 0;
 
         echo Display::tabs(
             $headers,
-            [
-                $documents,
-                $exercises,
-                $links,
-                $works,
-                $forums,
-                $dir,
-                $finish,
-            ],
+            $items,
             'resource_tab',
             [],
             [],

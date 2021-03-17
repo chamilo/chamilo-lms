@@ -4609,7 +4609,7 @@ class Exercise
                                         $questionScore += $i_answerWeighting;
                                         $totalScore += $i_answerWeighting;
                                         $user_answer = Display::label(get_lang('Correct'), 'success');
-                                        if ($this->showExpectedChoice() &&!empty($i_answer_id_auto)) {
+                                        if ($this->showExpectedChoice() && !empty($i_answer_id_auto)) {
                                             $user_answer = $answerMatching[$i_answer_id_auto];
                                         }
                                         $status = Display::label(get_lang('Correct'), 'success');

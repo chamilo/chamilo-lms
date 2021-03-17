@@ -446,7 +446,7 @@ class UserGroup extends Model
      * Gets all users that are part of a group or class.
      *
      * @param array $options
-     * @param int   $type        0 = classes / 1 = social groups
+     * @param int   $type    0 = classes / 1 = social groups
      *
      * @return array
      */
@@ -520,7 +520,8 @@ class UserGroup extends Model
         if ($getCount) {
             if (Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
-                return  $row['count'];
+
+                return (int) $row['count'];
             }
 
             return 0;

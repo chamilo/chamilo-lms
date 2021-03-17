@@ -1304,6 +1304,10 @@ $_configuration['required_extra_fields_in_profile'] = [
 // ALTER TABLE c_quiz ADD page_result_configuration LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)';
 //$_configuration['allow_quiz_results_page_config'] = false;
 
+// Allows you to show or hide the number of the question in the exercises
+// ALTER TABLE `c_quiz` ADD COLUMN `hide_question_number` int(0) NULL DEFAULT 0 COMMENT 'Show/Hide question number in quiz' ;
+//$_configuration['hide_question_number'] = false;
+
 // Allow multiple options for the exercise "save answer" option
 // ALTER TABLE c_quiz MODIFY COLUMN save_correct_answers INT NULL DEFAULT NULL;
 //$_configuration['allow_quiz_save_correct_options'] = false;

@@ -90,6 +90,7 @@ class Exercise
     public $autolaunch;
     public $exerciseCategoryId;
     public $pageResultConfiguration;
+    public $hideQuestionNumber;
     public $preventBackwards;
     public $currentQuestion;
     public $hideComment;
@@ -137,6 +138,7 @@ class Exercise
         $this->notifications = [];
         $this->exerciseCategoryId = null;
         $this->pageResultConfiguration;
+        $this->hideQuestionNumber = 0;
         $this->preventBackwards = 0;
         $this->hideComment = false;
         $this->hideNoAnswer = false;
@@ -223,6 +225,10 @@ class Exercise
 
             if (!empty($object->page_result_configuration)) {
                 $this->pageResultConfiguration = $object->page_result_configuration;
+            }
+
+            if (!empty($object->hide_question_number)) {
+                $this->hideQuestionNumber = $object->hide_question_number;
             }
 
             if (isset($object->show_previous_button)) {
@@ -1676,6 +1682,11 @@ class Exercise
                 }
             }
 
+            $showHideConfiguration = api_get_configuration_value('hide_question_number');
+            if ($showHideConfiguration ) {
+                $paramsExtra['hide_question_number'] = $this->hideQuestionNumber;
+            }
+
             $params = array_merge($params, $paramsExtra);
 
             Database::update(
@@ -1768,6 +1779,10 @@ class Exercise
             $pageConfig = api_get_configuration_value('allow_quiz_results_page_config');
             if ($pageConfig && !empty($this->pageResultConfiguration)) {
                 $params['page_result_configuration'] = $this->pageResultConfiguration;
+            }
+            $showHideConfiguration = api_get_configuration_value('hide_question_number');
+            if ( $showHideConfiguration ) {
+                $params['hide_question_number'] = $this->hideQuestionNumber;
             }
 
             $this->id = $this->iId = Database::insert($TBL_EXERCISES, $params);
@@ -2217,6 +2232,14 @@ class Exercise
                 ];
                 $form->addGroup($group, null, get_lang('ResultsConfigurationPage'));
             }
+            $showHide = api_get_configuration_value('hide_question_number');
+            if ( $showHideConfiguration ) {
+                $group = [
+                    $form->createElement('radio', 'hide_question_number', null, get_lang('Yes'), '1'),
+                    $form->createElement('radio', 'hide_question_number', null, get_lang('No'), '0'),
+                ];
+                $form->addGroup($group, null, get_lang('HideQuestionNumber'));
+            }
 
             $displayMatrix = 'none';
             $displayRandom = 'none';
@@ -2600,6 +2623,7 @@ class Exercise
         }
 
         $this->setPageResultConfigurationDefaults($defaults);
+        $this->setHideQuestionNumberDefaults($defaults);
         $form->setDefaults($defaults);
 
         // Freeze some elements.
@@ -2769,6 +2793,7 @@ class Exercise
         $this->setNotifications($form->getSubmitValue('notifications'));
         $this->setExerciseCategoryId($form->getSubmitValue('exercise_category_id'));
         $this->setPageResultConfiguration($form->getSubmitValues());
+        $this->setHideShowQuestionNumber($form->getSubmitValue('hide_question_number'));
         $this->preventBackwards = (int) $form->getSubmitValue('prevent_backwards');
 
         $this->start_time = null;
@@ -8340,6 +8365,31 @@ class Exercise
     }
 
     /**
+     * Set the value to hide or show the question number
+     *
+     * @param int $value
+     */
+    public function setHideShowQuestionNumber($value = 0){
+        $showHideConfiguration = api_get_configuration_value('hide_question_number');
+        if ($showHideConfiguration) {
+            $this->hideQuestionNumber = (int) $value ;
+        }
+    }
+
+    /**
+     * Gets the value to hide or show the question number. If it does not exist, it is set to 0
+     *
+     * @return int
+     */
+    public function getHideShowQuestionNumber(){
+        $showHideConfiguration = api_get_configuration_value('hide_question_number');
+        if ($showHideConfiguration) {
+            return (int) $this->hideQuestionNumber;
+        }
+        return 0;
+    }
+
+    /**
      * @param array $values
      */
     public function setPageResultConfiguration($values)
@@ -8371,6 +8421,19 @@ class Exercise
     }
 
     /**
+     * Sets the value to show or hide the question number in the default settings of the forms
+     *
+     * @param array $defaults
+     */
+    public function setHideQuestionNumberDefaults(&$defaults)
+    {
+        $configuration = $this->getHideQuestionNumberConfiguration();
+        if (!empty($configuration) && !empty($defaults)) {
+            $defaults = array_merge($defaults, $configuration);
+        }
+    }
+
+    /**
      * @return array
      */
     public function getPageResultConfiguration()
@@ -8381,6 +8444,21 @@ class Exercise
             $platform = Database::getManager()->getConnection()->getDatabasePlatform();
 
             return $type->convertToPHPValue($this->pageResultConfiguration, $platform);
+        }
+
+        return [];
+    }
+
+    /**
+     * Get the value to show or hide the question number in the default settings of the forms
+     *
+     * @return array
+     */
+    public function getHideQuestionNumberConfiguration()
+    {
+        $pageConfig = api_get_configuration_value('hide_question_number');
+        if ($pageConfig) {
+            return  ['hide_question_number'=>$this->hideQuestionNumber];
         }
 
         return [];

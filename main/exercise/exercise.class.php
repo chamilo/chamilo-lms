@@ -2232,7 +2232,7 @@ class Exercise
                 ];
                 $form->addGroup($group, null, get_lang('ResultsConfigurationPage'));
             }
-            $showHide = api_get_configuration_value('hide_question_number');
+            $showHideConfiguration = api_get_configuration_value('hide_question_number');
             if ( $showHideConfiguration ) {
                 $group = [
                     $form->createElement('radio', 'hide_question_number', null, get_lang('Yes'), '1'),

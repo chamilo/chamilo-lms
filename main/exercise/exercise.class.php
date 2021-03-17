@@ -4560,13 +4560,18 @@ class Exercise
                             $real_list[$realAnswer['id_auto']] = $realAnswer['answer'];
                         }
 
+                        $orderBy = ' ORDER BY id_auto ';
+                        if (DRAGGABLE == $answerType) {
+                            $orderBy = ' ORDER BY correct ';
+                        }
+
                         $sql = "SELECT id, answer, correct, id_auto, ponderation
                                 FROM $table_ans
                                 WHERE
                                     c_id = $course_id AND
                                     question_id = $questionId AND
                                     correct <> 0
-                                ORDER BY id_auto";
+                                $orderBy";
                         $result = Database::query($sql);
                         $options = [];
                         $correctAnswers = [];

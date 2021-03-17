@@ -220,7 +220,6 @@ class SurveyManager
      */
     public static function store_survey($values)
     {
-        $_user = api_get_user_info();
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
         $courseCode = api_get_course_id();
@@ -232,7 +231,6 @@ class SurveyManager
             // Check if the code doesn't soon exists in this language
             $sql = 'SELECT 1 FROM '.$table_survey.'
 			        WHERE
-			            c_id = '.$course_id.' AND
 			            code = "'.Database::escape_string($values['survey_code']).'" AND
 			            lang = "'.Database::escape_string($values['survey_language']).'"';
             $rs = Database::query($sql);
@@ -363,6 +361,11 @@ class SurveyManager
                 ->addCourseLink($course, $session)
             ;
 
+            if (isset($values['parent_id']) && !empty($values['parent_id'])) {
+                $parent = $repo->find($values['parent_id']);
+                $survey->setSurveyParent($parent);
+            }
+
             $repo->create($survey);
 
             $survey_id = $survey->getIid();
@@ -402,7 +405,6 @@ class SurveyManager
             // Check whether the code doesn't soon exists in this language
             $sql = 'SELECT 1 FROM '.$table_survey.'
 			        WHERE
-			            c_id = '.$course_id.' AND
 			            code = "'.Database::escape_string($values['survey_code']).'" AND
 			            lang = "'.Database::escape_string($values['survey_language']).'" AND
 			            iid !='.intval($values['survey_id']);
@@ -1223,7 +1225,7 @@ class SurveyManager
                                 WHERE iid = $question_id";
                         Database::query($sql);*/
                         $form_content['question_id'] = $question_id;
-                        $message = 'QuestionAdded';
+                        $message = 'The question has been added.';
                     }
                 } else {
                     $repo = $em->getRepository(CSurveyQuestion::class);
@@ -1270,30 +1272,8 @@ class SurveyManager
 
                     $em->persist($question);
                     $em->flush();
-                    /*Database::update(
-                        $tbl_survey_question,
-                        $params,
-                        [
-                            'c_id = ? AND iid = ?' => [
-                                $course_id,
-                                $form_content['question_id'],
-                            ],
-                        ]
-                    );*/
                     $message = 'QuestionUpdated';
                 }
-
-                if (!empty($form_content['survey_id'])) {
-                    //Updating survey
-                    /*api_item_property_update(
-                        api_get_course_info(),
-                        TOOL_SURVEY,
-                        $form_content['survey_id'],
-                        'SurveyUpdated',
-                        api_get_user_id()
-                    );*/
-                }
-
                 // Storing the options of the question
                 self::saveQuestionOptions($survey, $question, $form_content, $dataFromDatabase);
             } else {

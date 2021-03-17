@@ -68,7 +68,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
      * The entity class FQN.
      */
     protected string $className;
-
     protected Settings $settings;
     protected Template $templates;
     protected ?ResourceType $resourceType = null;
@@ -535,8 +534,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             $qb->setParameter('parentNode', $parentNode);
         }
 
-        $qb->andWhere('node.creator = :creator');
-        $qb->setParameter('creator', $user);
+        $this->addCreatorQueryBuilder($user, $qb);
 
         return $qb;
     }
@@ -937,6 +935,21 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $qb
             ->andWhere('node.title = :title')
             ->setParameter('title', $title)
+        ;
+
+        return $qb;
+    }
+
+    protected function addCreatorQueryBuilder(?User $user, QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb);
+        if (null === $user) {
+            return $qb;
+        }
+
+        $qb
+            ->andWhere('node.creator = :creator')
+            ->setParameter('creator', $user)
         ;
 
         return $qb;

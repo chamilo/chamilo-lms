@@ -3250,20 +3250,11 @@ class SurveyUtil
     {
         if (1 == $anonymous) {
             return get_lang('Yes');
-        } else {
-            return get_lang('No');
         }
+
+        return get_lang('No');
     }
 
-    /**
-     * This function handles the search restriction for the SQL statements.
-     *
-     * @return string Part of a SQL statement or false on error
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     *
-     * @version January 2007
-     */
     public static function survey_search_restriction()
     {
         if (isset($_GET['do_search'])) {
@@ -3316,9 +3307,15 @@ class SurveyUtil
      */
     public static function get_number_of_surveys_for_coach()
     {
-        $survey_tree = new SurveyTree();
+        $repo = Container::getSurveyRepository();
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
+        $qb = $repo->findAllByCourse($course, $session);
 
-        return count($survey_tree->surveylist);
+        return $repo->getCount($qb);
+
+        /*$survey_tree = new SurveyTree();
+        return count($survey_tree->surveylist);*/
     }
 
     /**
@@ -3344,7 +3341,6 @@ class SurveyUtil
         $direction,
         $isDrh = false
     ) {
-
         $repo = Container::getSurveyRepository();
         $course = api_get_course_entity();
         $session = api_get_session_entity();
@@ -3352,12 +3348,10 @@ class SurveyUtil
         /** @var CSurvey[] $surveys */
         $surveys = $qb->getQuery()->getResult();
 
-
         $table_survey = Database::get_course_table(TABLE_SURVEY);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $mandatoryAllowed = api_get_configuration_value('allow_mandatory_survey');
-        $_user = api_get_user_info();
         $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
 
         // Searching
@@ -3445,14 +3439,14 @@ class SurveyUtil
             // Dates
             $array[5] = '';
 
-            $from = $survey->getAvailFrom() ?? $survey->getAvailFrom()->format('Y-m-d H:i:s');
+            $from = $survey->getAvailFrom() ? $survey->getAvailFrom()->format('Y-m-d H:i:s') : null;
             if (null !== $from) {
                 $array[5] = api_convert_and_format_date(
                     $from,
                     $allowSurveyAvailabilityDatetime ? DATE_TIME_FORMAT_LONG : DATE_FORMAT_LONG
                 );
             }
-            $till = $survey->getAvailTill() ?? $survey->getAvailTill()->format('Y-m-d H:i:s');
+            $till = $survey->getAvailTill() ? $survey->getAvailTill()->format('Y-m-d H:i:s') : null;
             $array[6] = '';
             if (null !== $till) {
                 $array[6] = api_convert_and_format_date(
@@ -3511,18 +3505,25 @@ class SurveyUtil
     {
         $mandatoryAllowed = api_get_configuration_value('allow_mandatory_survey');
         $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
-        $survey_tree = new SurveyTree();
-        $last_version_surveys = $survey_tree->surveylist;
+        $repo = Container::getSurveyRepository();
+        $qb = $repo->findAllByCourse(
+            api_get_course_entity(),
+            api_get_session_entity(),
+            null,
+            null,
+            api_get_user_entity()
+        );
+
+        /** @var CSurvey[] $surveys */
+        $surveys = $qb->getQuery()->getResult();
         $list = [];
-        foreach ($last_version_surveys as &$survey) {
-            $list[] = $survey['id'];
+        foreach ($surveys as $survey) {
+            $list[] = $survey->getIid();
         }
+        $list_condition = '';
         if (count($list) > 0) {
             $list_condition = " AND survey.iid IN (".implode(',', $list).") ";
-        } else {
-            $list_condition = '';
         }
-
         $from = (int) $from;
         $number_of_items = (int) $number_of_items;
         $column = (int) $column;
@@ -3554,7 +3555,7 @@ class SurveyUtil
                 survey.iid AS col9
             FROM $table_survey survey
             LEFT JOIN $table_survey_question survey_question
-            ON (survey.iid = survey_question.survey_id AND survey.c_id = survey_question.c_id),
+            ON (survey.iid = survey_question.survey_id),
             $table_user user
             WHERE survey.author = user.id AND survey.c_id = $course_id $list_condition
         ";

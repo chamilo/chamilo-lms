@@ -12,11 +12,13 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CSurvey.
  *
+ * @Gedmo\Tree(type="nested")
  * @ORM\Table(
  *     name="c_survey",
  *     indexes={
@@ -49,11 +51,6 @@ class CSurvey extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="subtitle", type="text", nullable=true)
      */
     protected ?string $subtitle;
-
-    /**
-     * @ORM\Column(name="author", type="string", length=20, nullable=true)
-     */
-    protected ?string $author;
 
     /**
      * @ORM\Column(name="lang", type="string", length=20, nullable=true)
@@ -146,9 +143,36 @@ class CSurvey extends AbstractResource implements ResourceInterface
     protected string $surveyVersion;
 
     /**
-     * @ORM\Column(name="parent_id", type="integer", nullable=false)
+     * @Gedmo\TreeLeft
+     * @ORM\Column(name="lft", type="integer", nullable=true, unique=false)
      */
-    protected int $parentId;
+    protected ?int $lft = null;
+
+    /**
+     * @Gedmo\TreeRight
+     * @ORM\Column(name="rgt", type="integer", nullable=true, unique=false)
+     */
+    protected ?int $rgt = null;
+
+    /**
+     * @Gedmo\TreeLevel
+     * @ORM\Column(name="lvl", type="integer", nullable=true, unique=false)
+     */
+    protected ?int $lvl = null;
+
+    /**
+     * @Gedmo\TreeParent
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurvey")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="iid", onDelete="CASCADE")
+     */
+    protected ?CSurvey $surveyParent = null;
+
+    /**
+     * @var Collection|CSurvey[]
+     *
+     * @ORM\OneToMany(targetEntity="CSurvey", mappedBy="surveyParent")
+     */
+    protected Collection $children;
 
     /**
      * @ORM\Column(name="survey_type", type="integer", nullable=false)
@@ -188,7 +212,6 @@ class CSurvey extends AbstractResource implements ResourceInterface
         $this->invited = 0;
         $this->answered = 0;
         $this->subtitle = '';
-        $this->author = '';
         $this->inviteMail = '';
         $this->lang = '';
         $this->reminderMail = '';
@@ -196,9 +219,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         $this->shuffle = false;
         $this->oneQuestionPerPage = false;
         $this->surveyVersion = '';
-        $this->parentId = 0;
         $this->surveyType = 0;
         $this->questions = new ArrayCollection();
+        $this->children = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -255,23 +278,6 @@ class CSurvey extends AbstractResource implements ResourceInterface
     public function getSubtitle(): ?string
     {
         return $this->subtitle;
-    }
-
-    public function setAuthor(string $author): self
-    {
-        $this->author = $author;
-
-        return $this;
-    }
-
-    /**
-     * Get author.
-     *
-     * @return string
-     */
-    public function getAuthor()
-    {
-        return $this->author;
     }
 
     public function setLang(string $lang): self
@@ -570,23 +576,6 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this->surveyVersion;
     }
 
-    public function setParentId(int $parentId): self
-    {
-        $this->parentId = $parentId;
-
-        return $this;
-    }
-
-    /**
-     * Get parentId.
-     *
-     * @return int
-     */
-    public function getParentId()
-    {
-        return $this->parentId;
-    }
-
     public function setSurveyType(int $surveyType): self
     {
         $this->surveyType = $surveyType;
@@ -675,6 +664,74 @@ class CSurvey extends AbstractResource implements ResourceInterface
     public function setQuestions(Collection $questions): self
     {
         $this->questions = $questions;
+
+        return $this;
+    }
+
+    public function getSurveyParent(): ?self
+    {
+        return $this->surveyParent;
+    }
+
+    public function setSurveyParent(?self $surveyParent): self
+    {
+        $this->surveyParent = $surveyParent;
+
+        return $this;
+    }
+
+    public function getLft(): ?int
+    {
+        return $this->lft;
+    }
+
+    public function setLft(?int $lft): self
+    {
+        $this->lft = $lft;
+
+        return $this;
+    }
+
+    public function getRgt(): ?int
+    {
+        return $this->rgt;
+    }
+
+    public function setRgt(?int $rgt): self
+    {
+        $this->rgt = $rgt;
+
+        return $this;
+    }
+
+    public function getLvl(): ?int
+    {
+        return $this->lvl;
+    }
+
+    public function setLvl(?int $lvl): self
+    {
+        $this->lvl = $lvl;
+
+        return $this;
+    }
+
+    /**
+     * @return CSurvey[]|Collection
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param CSurvey[]|Collection $children
+     *
+     * @return CSurvey
+     */
+    public function setChildren(Collection $children): self
+    {
+        $this->children = $children;
 
         return $this;
     }

@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
  *  refactoring and rewriting large parts (if not all) of the code
@@ -11,7 +13,10 @@
  * @todo   only the available platform languages should be used => need an
  *  api get_languages and and api_get_available_languages (or a parameter)
  */
+
 require_once __DIR__.'/../inc/global.inc.php';
+
+$repo = Container::getSurveyRepository();
 
 $_course = api_get_course_info();
 $this_section = SECTION_COURSES;
@@ -40,14 +45,14 @@ $gradebook_link_type = 8;
 $urlname = isset($survey_data['title']) ? strip_tags($survey_data['title']) : null;
 
 // Breadcrumbs
-if ('add' == $action) {
+if ('add' === $action) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
         'name' => get_lang('Survey list'),
     ];
     $tool_name = get_lang('Create survey');
 }
-if ('edit' == $action && is_numeric($survey_id)) {
+if ('edit' === $action && is_numeric($survey_id)) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
         'name' => get_lang('Survey list'),
@@ -106,7 +111,7 @@ $form = new FormValidator(
 $form->addElement('header', $tool_name);
 
 // Setting the form elements
-if ('edit' == $action && isset($survey_id) && is_numeric($survey_id)) {
+if ('edit' === $action && isset($survey_id) && is_numeric($survey_id)) {
     $form->addElement('hidden', 'survey_id');
 }
 
@@ -117,7 +122,7 @@ $survey_code = $form->addElement(
     ['size' => '20', 'maxlength' => '20', 'autofocus' => 'autofocus']
 );
 
-if ('edit' == $action) {
+if ('edit' === $action) {
     $survey_code->freeze();
     $form->applyFilter('survey_code', 'api_strtoupper');
 }
@@ -215,10 +220,7 @@ if (Gradebook::is_active()) {
         get_lang('Grade in the assessment tool'),
         'onclick="javascript: if (this.checked) { document.getElementById(\'gradebook_options\').style.display = \'block\'; } else { document.getElementById(\'gradebook_options\').style.display = \'none\'; }"'
     );
-    $form->addElement(
-        'html',
-        '<div id="gradebook_options"'.($gradebook_link_id ? '' : ' style="display:none"').'>'
-    );
+    $form->addHtml('<div id="gradebook_options"'.($gradebook_link_id ? '' : ' style="display:none"').'>');
     $form->addElement(
         'text',
         'survey_weight',
@@ -229,7 +231,7 @@ if (Gradebook::is_active()) {
 
     // Loading Gradebook select
     GradebookUtils::load_gradebook_select_in_tool($form);
-    if ('edit' == $action) {
+    if ('edit' === $action) {
         $element = $form->getElement('category_id');
         $element->freeze();
     }
@@ -240,12 +242,15 @@ if (Gradebook::is_active()) {
 $surveytypes[0] = get_lang('Normal');
 $surveytypes[1] = get_lang('Conditional');
 
-if ('add' == $action) {
-    $form->addElement('hidden', 'survey_type', 0);
-    $survey_tree = new SurveyTree();
-    $list_surveys = $survey_tree->createList($survey_tree->surveylist);
-    $list_surveys[0] = '';
-    $form->addElement('select', 'parent_id', get_lang('Parent Survey'), $list_surveys);
+if ('add' === $action) {
+    $form->addHidden('survey_type', 0);
+    $qb = $repo->findAllByCourse(api_get_course_entity(), api_get_session_entity());
+    $surveys = $qb->getQuery()->getResult();
+    $surveyOptions[0] = '';
+    foreach ($surveys as $survey) {
+        $surveyOptions[$survey->getIid()] = implode(' > ', $repo->getPath($survey));
+    }
+    $form->addSelect('parent_id', get_lang('Parent Survey'), $surveyOptions);
     $defaults['parent_id'] = 0;
 }
 
@@ -254,7 +259,7 @@ $form->addElement('checkbox', 'shuffle', null, get_lang('Enable shuffle mode'));
 
 $input_name_list = null;
 
-if ('edit' == $action && !empty($survey_id)) {
+if ('edit' === $action && !empty($survey_id)) {
     if (0 == $survey_data['anonymous']) {
         $form->addElement(
             'checkbox',
@@ -300,7 +305,6 @@ if ('edit' == $action && !empty($survey_id)) {
 }
 
 $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_SURVEY, $survey_id);
-
 $form->addElement('html', '</div><br />');
 
 if (isset($_GET['survey_id']) && 'edit' === $action) {

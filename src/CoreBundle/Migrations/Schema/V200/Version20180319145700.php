@@ -34,6 +34,24 @@ class Version20180319145700 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_survey ADD COLUMN is_mandatory TINYINT(1) DEFAULT "0" NOT NULL');
         }
 
+        $this->addSql('UPDATE c_survey SET parent_id = NULL WHERE parent_id = 0');
+        $this->addSql('ALTER TABLE c_survey CHANGE parent_id parent_id INT DEFAULT NULL');
+
+        if (!$survey->hasColumn('lft')) {
+            $this->addSql(
+                'ALTER TABLE c_survey ADD lft INT DEFAULT NULL, ADD rgt INT DEFAULT NULL, ADD lvl INT DEFAULT NULL'
+            );
+        }
+
+        if (!$survey->hasForeignKey('FK_F246DB30727ACA70')) {
+            $this->addSql(
+                'ALTER TABLE c_survey ADD CONSTRAINT FK_F246DB30727ACA70 FOREIGN KEY (parent_id) REFERENCES c_survey (iid) ON DELETE CASCADE '
+            );
+        }
+        if (!$survey->hasIndex('IDX_F246DB30727ACA70')) {
+            $this->addSql('CREATE INDEX IDX_F246DB30727ACA70 ON c_survey (parent_id)');
+        }
+
         if (false === $survey->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE c_survey ADD resource_node_id INT DEFAULT NULL');
             $this->addSql('ALTER TABLE c_survey ADD CONSTRAINT FK_F246DB301BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');

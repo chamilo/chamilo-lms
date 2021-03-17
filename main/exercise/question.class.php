@@ -278,7 +278,9 @@ abstract class Question
         $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
         $tblQuizRelQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $showHideConfiguration = api_get_configuration_value('hide_question_number');
-        if (!$showHideConfiguration) return 0;
+        if (!$showHideConfiguration) {
+            return 0;
+        }
         // Check if the field exist
         $checkFieldSql = "SHOW COLUMNS FROM $tblQuiz WHERE Field = 'hide_question_number'";
         $res = Database::query($checkFieldSql);
@@ -297,7 +299,7 @@ abstract class Question
                 isset($result[0]) &&
                 isset($result[0]['active'])
             ) {
-                return (int)$result[0]['active'];
+                return (int) $result[0]['active'];
             }
         }
 

@@ -1683,7 +1683,7 @@ class Exercise
             }
 
             $showHideConfiguration = api_get_configuration_value('hide_question_number');
-            if ($showHideConfiguration ) {
+            if ($showHideConfiguration) {
                 $paramsExtra['hide_question_number'] = $this->hideQuestionNumber;
             }
 
@@ -1781,7 +1781,7 @@ class Exercise
                 $params['page_result_configuration'] = $this->pageResultConfiguration;
             }
             $showHideConfiguration = api_get_configuration_value('hide_question_number');
-            if ( $showHideConfiguration ) {
+            if ($showHideConfiguration) {
                 $params['hide_question_number'] = $this->hideQuestionNumber;
             }
 
@@ -2233,7 +2233,7 @@ class Exercise
                 $form->addGroup($group, null, get_lang('ResultsConfigurationPage'));
             }
             $showHideConfiguration = api_get_configuration_value('hide_question_number');
-            if ( $showHideConfiguration ) {
+            if ($showHideConfiguration) {
                 $group = [
                     $form->createElement('radio', 'hide_question_number', null, get_lang('Yes'), '1'),
                     $form->createElement('radio', 'hide_question_number', null, get_lang('No'), '0'),
@@ -8365,27 +8365,30 @@ class Exercise
     }
 
     /**
-     * Set the value to hide or show the question number
+     * Set the value to hide or show the question number.
      *
      * @param int $value
      */
-    public function setHideShowQuestionNumber($value = 0){
+    public function setHideShowQuestionNumber($value = 0)
+    {
         $showHideConfiguration = api_get_configuration_value('hide_question_number');
         if ($showHideConfiguration) {
-            $this->hideQuestionNumber = (int) $value ;
+            $this->hideQuestionNumber = (int) $value;
         }
     }
 
     /**
-     * Gets the value to hide or show the question number. If it does not exist, it is set to 0
+     * Gets the value to hide or show the question number. If it does not exist, it is set to 0.
      *
      * @return int
      */
-    public function getHideShowQuestionNumber(){
+    public function getHideShowQuestionNumber()
+    {
         $showHideConfiguration = api_get_configuration_value('hide_question_number');
         if ($showHideConfiguration) {
             return (int) $this->hideQuestionNumber;
         }
+
         return 0;
     }
 
@@ -8421,7 +8424,7 @@ class Exercise
     }
 
     /**
-     * Sets the value to show or hide the question number in the default settings of the forms
+     * Sets the value to show or hide the question number in the default settings of the forms.
      *
      * @param array $defaults
      */
@@ -8450,7 +8453,7 @@ class Exercise
     }
 
     /**
-     * Get the value to show or hide the question number in the default settings of the forms
+     * Get the value to show or hide the question number in the default settings of the forms.
      *
      * @return array
      */
@@ -8458,7 +8461,7 @@ class Exercise
     {
         $pageConfig = api_get_configuration_value('hide_question_number');
         if ($pageConfig) {
-            return  ['hide_question_number'=>$this->hideQuestionNumber];
+            return ['hide_question_number' => $this->hideQuestionNumber];
         }
 
         return [];

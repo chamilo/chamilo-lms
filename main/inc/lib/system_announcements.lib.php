@@ -708,9 +708,8 @@ class SystemAnnouncementManager
             $sql = "select user_id from $tblGroupRelUser where usergroup_id = $groupId";
             $result = Database::query($sql);
             $data = Database::store_result($result);
-            Database::free_result($result);
             $usersId = [];
-            foreach($data as $userArray){
+            foreach ($data as $userArray) {
                 $usersId[] = $userArray['user_id'];
             }
             $usersId = implode(',', $usersId);

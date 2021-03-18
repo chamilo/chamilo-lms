@@ -2528,14 +2528,7 @@ class Exercise
                             }
                         }
                     } else {
-                        $courseList = CourseManager::get_courses_list_by_user_id(
-                            $userId,
-                            false,
-                            false,
-                            true,
-                            [],
-                            false
-                        );
+                        $courseList = CourseManager::get_course_list();
                         foreach ($courseList as $course) {
                             if (!empty($course) && isset($course['real_id'])) {
                                 $courseId = $course['real_id'];
@@ -10961,7 +10954,6 @@ class Exercise
         $userId = (int) $userId;
         $sessionId = (int) $sessionId;
         $pluginRemedial = api_get_plugin_setting('remedial_course', 'enabled') === 'true';
-        echo "<br>/*".__LINE__."*/<br> Session $sessionId. Usuario $userId. Inicio remedial<br>";
         if (!$pluginRemedial) {
             return null;
         }

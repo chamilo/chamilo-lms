@@ -1016,8 +1016,12 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                 }
 
                 $table = '';
-                if ($allowTable) {
+                if ($isAllow) {
                     $table = $gradebookTable->return_table();
+                } else {
+                    if ($allowTable) {
+                        $table = $gradebookTable->return_table();
+                    }
                 }
 
                 $graph = '';

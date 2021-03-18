@@ -45,3 +45,4 @@ $strings['Terminated'] = 'Terminó';
 $strings['Completed'] = 'Completó';
 $strings['Answered'] = 'Respondió';
 $strings['Viewed'] = 'Visualizó';
+$strings['ActivityAddedToLPCannotBeAccessed'] = 'Esta actividad ha sido incluida en una secuencia de aprendizaje, por lo cual no podrá ser accesible directamente por los estudiantes desde aquí.';

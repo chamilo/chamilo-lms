@@ -14,6 +14,7 @@ use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
@@ -3590,7 +3591,7 @@ class learnpath
             // then change the lp type to thread it as a normal Chamilo LP not a SCO.
             if (in_array(
                 $lp_item_type,
-                ['quiz', 'document', 'final_item', 'link', 'forum', 'thread', 'student_publication']
+                ['quiz', 'document', 'final_item', 'link', 'forum', 'thread', 'student_publication', 'xapi']
             )
             ) {
                 $lp_type = 1;
@@ -6217,6 +6218,8 @@ class learnpath
                 } else {
                     if ($arrLP[$i]['item_type'] === TOOL_LP_FINAL_ITEM) {
                         $icon = Display::return_icon('certificate.png');
+                    } elseif (TOOL_XAPI === $arrLP[$i]['item_type']) {
+                        $icon = Display::return_icon('import_scorm.png');
                     } else {
                         $icon = Display::return_icon('folder_document.gif');
                     }
@@ -7548,7 +7551,6 @@ class learnpath
             Display::return_icon('works.png', get_lang('Works'), [], ICON_SIZE_BIG),
             Display::return_icon('forum.png', get_lang('Forums'), [], ICON_SIZE_BIG),
             Display::return_icon('add_learnpath_section.png', get_lang('NewChapter'), [], ICON_SIZE_BIG),
-            Display::return_icon('certificate.png', get_lang('Certificate'), [], ICON_SIZE_BIG),
         ];
 
         $items = [
@@ -7558,8 +7560,22 @@ class learnpath
             $works,
             $forums,
             $dir,
-            $finish,
         ];
+
+        $xApiPlugin = XApiPlugin::create();
+
+        if ($xApiPlugin->isEnabled()) {
+            $headers[] = Display::return_icon(
+                'import_scorm.png',
+                get_lang($xApiPlugin->get_lang('ToolTinCan')),
+                [],
+                ICON_SIZE_BIG
+            );
+            $items[] = $xApiPlugin->getLpResourceBlock($this->lp_id);
+        }
+
+        $headers[] = Display::return_icon('certificate.png', get_lang('Certificate'), [], ICON_SIZE_BIG);
+        $items[] = $finish;
 
         echo Display::return_message(get_lang('ClickOnTheLearnerViewToSeeYourLearningPath'), 'normal');
 
@@ -13449,6 +13465,16 @@ EOD;
                 }
 
                 return $main_dir_path.'work/work.php?'.api_get_cidreq().'&id='.$rowItem->getPath().'&'.$extraParams;
+            case TOOL_XAPI:
+                $toolLaunch = $em->find(ToolLaunch::class, $id);
+
+                if (empty($toolLaunch)) {
+                    break;
+                }
+
+                return api_get_path(WEB_PLUGIN_PATH).'xapi/'
+                    .('cmi5' === $toolLaunch->getActivityType() ? 'cmi5/view.php' : 'tincan/view.php')
+                    ."?id=$id&$extraParams";
         }
 
         return $link;

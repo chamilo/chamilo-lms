@@ -426,6 +426,60 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         return "$webPath/admin.php";
     }
 
+    public function getLpResourceBlock(int $lpId)
+    {
+        $cidReq = api_get_cidreq(true, true, 'lp');
+        $webPath = api_get_path(WEB_PLUGIN_PATH).'xapi/';
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
+
+        $tools = Database::getManager()
+            ->getRepository(ToolLaunch::class)
+            ->findByCourseAndSession($course, $session);
+
+        $importIcon = Display::return_icon('import_scorm.png');
+        $moveIcon = Display::url(
+            Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY),
+            '#',
+            ['class' => 'moved']
+        );
+
+        $return = '<ul class="lp_resource"><li class="lp_resource_element">'
+            .$importIcon
+            .Display::url(
+                get_lang('Import'),
+                $webPath."tool_import.php?$cidReq&".http_build_query(['lp_id' => $lpId])
+            )
+            .'</li>';
+
+        /** @var ToolLaunch $tool */
+        foreach ($tools as $tool) {
+            $toolAnchor = Display::url(
+                Security::remove_XSS($tool->getTitle()),
+                api_get_self()."?$cidReq&"
+                    .http_build_query(
+                        ['action' => 'add_item', 'type' => TOOL_XAPI, 'file' => $tool->getId(), 'lp_id' => $lpId]
+                    ),
+                ['class' => 'moved']
+            );
+
+            $return .= Display::tag(
+                'li',
+                $moveIcon.$importIcon.$toolAnchor,
+                [
+                    'class' => 'lp_resource_element',
+                    'data_id' => $tool->getId(),
+                    'data_type' => TOOL_XAPI,
+                    'title' => $tool->getTitle(),
+                ]
+            );
+        }
+
+        $return .= '</ul>';
+
+        return $return;
+    }
+
     /**
      * @throws \Doctrine\ORM\Tools\ToolsException
      */

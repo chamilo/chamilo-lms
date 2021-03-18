@@ -10951,7 +10951,7 @@ class Exercise
      */
     public function remedialCourseList($userId = 0, $sessionId = 0, $attemp = [], $review = false)
     {
-        $userId = (int) $userId;
+        $userId = empty($userId) ? api_get_user_id() : (int) $userId;
         $sessionId = (int) $sessionId;
         $pluginRemedial = api_get_plugin_setting('remedial_course', 'enabled') === 'true';
         if (!$pluginRemedial) {
@@ -10968,7 +10968,6 @@ class Exercise
             ORAL_EXPRESSION,
             ANNOTATION,
         ];
-        $userId = empty($userId) ? api_get_user_id() : (int) $userId;
         $extraMessage = null;
         if (count($attemp) != 0) {
             $exercise_stat_info = $attemp;
@@ -11014,6 +11013,9 @@ class Exercise
                 }
             }
         }
+        if (count($bestAttempt)==0) {
+            return null;
+        }
         $percentSuccess = $this->selectPassPercentage();
         $pass = ExerciseLib::isPassPercentageAttemptPassed(
             $this,
@@ -11045,15 +11047,21 @@ class Exercise
                     $courseExistsInSession = true;
                     if ($isInASession) {
                         $courseExistsInSession = SessionManager::sessionHasCourse($sessionId, $courseData['code']);
-                    }
-                    if ($courseExistsInSession) {
+                        if ($courseExistsInSession) {
+                            SessionManager::subscribe_users_to_session_course(
+                                [$userId],
+                                $sessionId,
+                                $courseData['code']
+                            );
+                            $courses[] = $courseData['title'];
+                        }
+                    } else {
                         $isSubscribed = CourseManager::is_user_subscribed_in_course(
                             $userId,
                             $courseData['code'],
                             $isInASession,
                             $sessionId
                         );
-
                         if (!$isSubscribed) {
                             CourseManager::subscribeUser(
                                 $userId,

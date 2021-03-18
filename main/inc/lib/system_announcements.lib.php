@@ -710,9 +710,8 @@ class SystemAnnouncementManager
             $data = Database::store_result($result);
             Database::free_result($result);
             $usersId = [];
-            $totalUsers = count($data);
-            for ($i = 0; $i < $totalUsers; $i++) {
-                $usersId[] = $data[$i]['user_id'];
+            foreach($data as $userArray){
+                $usersId[] = $userArray['user_id'];
             }
             $usersId = implode(',', $usersId);
             $whereUsersInGroup = " AND u.user_id in ($usersId) ";

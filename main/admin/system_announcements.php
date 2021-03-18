@@ -351,7 +351,7 @@ if ($action_todo) {
                     isset($values['promotion_id']) ? $values['promotion_id'] : 0,
                     $groupToSend
                 )) {
-                    if (isset($groupToSend)) {
+                    if (0 != $groupToSend) {
                         SystemAnnouncementManager::announcement_for_groups(
                             $values['id'],
                             [$groupToSend]

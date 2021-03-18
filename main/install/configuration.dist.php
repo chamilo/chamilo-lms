@@ -981,8 +981,11 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Hide announcement "sent to" label
 // $_configuration['hide_announcement_sent_to_users_info'] = false;
 
-// Hide gradebook graph
+// Hide gradebook graph.
 // $_configuration['gradebook_hide_graph'] = false;
+
+// Hide gradebook table for student.
+// $_configuration['gradebook_hide_table'] = false;
 
 // Hide gradebook "download report in PDF" button
 // $_configuration['gradebook_hide_pdf_report_button'] = false;

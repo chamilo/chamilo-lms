@@ -940,12 +940,13 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
         $model = ExerciseLib::getCourseScoreModel();
         $allowGraph = api_get_configuration_value('gradebook_hide_graph') === false;
         $isAllow = api_is_allowed_to_edit(null, true);
-
         $settings = api_get_configuration_value('gradebook_pdf_export_settings');
         $showFeedBack = true;
         if (isset($settings['hide_feedback_textarea']) && $settings['hide_feedback_textarea']) {
             $showFeedBack = false;
         }
+
+        $allowTable = api_get_configuration_value('gradebook_hide_table') === false;
 
         /** @var Category $cat */
         foreach ($cats as $cat) {
@@ -1014,7 +1015,10 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     ];
                 }
 
-                $table = $gradebookTable->return_table();
+                $table = '';
+                if ($allowTable) {
+                    $table = $gradebookTable->return_table();
+                }
 
                 $graph = '';
                 if ($allowGraph && empty($model)) {

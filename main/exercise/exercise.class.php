@@ -11013,7 +11013,7 @@ class Exercise
                 }
             }
         }
-        if (count($bestAttempt)==0) {
+        if (count($bestAttempt) == 0) {
             return null;
         }
         $percentSuccess = $this->selectPassPercentage();

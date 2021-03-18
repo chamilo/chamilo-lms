@@ -13,8 +13,6 @@
 /**
  * Defines the "OpenofficeText" child of class "learnpath".
  */
-require_once 'openoffice_document.class.php';
-
 class OpenofficeText extends OpenofficeDocument
 {
     public $split_steps;

@@ -73,7 +73,6 @@ class SurveyUtil
         $table = Database::get_course_table(TABLE_SURVEY_ANSWER);
         $sql = "DELETE FROM $table
 				WHERE
-				    c_id = $course_id AND
                     user = '".Database::escape_string($user)."' AND
                     survey_id = '".intval($survey_id)."' AND
                     question_id = '".intval($question_id)."'";
@@ -110,9 +109,6 @@ class SurveyUtil
             return false;
         }
 
-        // Table definition
-        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-
         // Make the survey anonymous
         if (1 == $survey_data['anonymous']) {
             $surveyUser = Session::read('surveyuser');
@@ -130,7 +126,6 @@ class SurveyUtil
 
         $answer = new CSurveyAnswer();
         $answer
-            ->setCId($survey_data['c_id'])
             ->setUser($user)
             ->setSurveyId($survey_id)
             ->setQuestionId($question_id)
@@ -649,7 +644,6 @@ class SurveyUtil
             // Getting the question information
             $sql = "SELECT * FROM $table_survey_question
 			        WHERE
-			            c_id = $course_id AND
                         survey_id = $surveyId AND
                         survey_question NOT LIKE '%{{%' AND
                         type <>'pagebreak'

@@ -6609,7 +6609,7 @@ class learnpath
         $course_id = api_get_course_int_id();
         $return = '';
 
-        if (empty($lpItem)) {
+        if (null === $lpItem) {
             return '';
         }
         $item_id = $lpItem->getIid();

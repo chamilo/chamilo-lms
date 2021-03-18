@@ -27,8 +27,8 @@ $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 /** @var learnpath $oLP */
-//$oLP = UnserializeApi::unserialize('lp', Session::read('lpobject'));
 $oLP = Session::read('oLP');
+//$oLP = UnserializeApi::unserialize('lp', Session::read('lpobject'));
 if (!is_object($oLP)) {
     error_log('New LP - scorm_api - Could not load oLP object', 0);
     exit;

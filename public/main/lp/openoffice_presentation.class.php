@@ -10,11 +10,6 @@
  * @license GNU/GPL
  */
 
-/**
- * Defines the "OpenofficePresentation" child of class "OpenofficeDocument".
- */
-require_once 'openoffice_document.class.php';
-
 class OpenofficePresentation extends OpenofficeDocument
 {
     public $take_slide_name;

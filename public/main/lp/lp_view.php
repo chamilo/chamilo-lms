@@ -37,10 +37,8 @@ $session = api_get_session_entity($sessionId);
 $lpRepo = Container::getLpRepository();
 
 /** @var learnpath $lp */
-//$oLP = Session::read('oLP');
+$oLP = Session::read('oLP');
 /** @var CLp $lp */
-$lp = $lp;
-
 // Check if the learning path is visible for student - (LP requisites)
 if (!api_is_platform_admin()) {
     if (!api_is_allowed_to_edit(null, true, false, false) &&
@@ -76,11 +74,7 @@ if (!$is_allowed_to_edit) {
                 }
             }
 
-            $isVisible = learnpath::categoryIsVisibleForStudent(
-                $category,
-                $user
-            );
-
+            $isVisible = learnpath::categoryIsVisibleForStudent($category, $user, $course, $session);
             if ($isVisible) {
                 $block = false;
             }
@@ -101,7 +95,7 @@ var jQueryFrameReadyConfigPath = \''.api_get_jquery_web_path().'\';
 -->
 </script>';
 
-$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
 $htmlHeadXtra[] = '<script>
 $(function() {
     $("div#log_content_cleaner").bind("click", function() {
@@ -256,7 +250,7 @@ if (!isset($src)) {
         case CLp::SCORM_TYPE:
             // save old if asset
             $oLP->stop_previous_item(); // save status manually if asset
-            $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
+            $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript"></script>';
             $preReqCheck = $oLP->prerequisites_match($lp_item_id);
             if (true === $preReqCheck) {
                 $src = $oLP->get_link('http', $lp_item_id, $get_toc_list);
@@ -267,7 +261,7 @@ if (!isset($src)) {
             break;
         case CLp::AICC_TYPE:
             $oLP->stop_previous_item(); // save status manually if asset
-            $htmlHeadXtra[] = '<script src="'.$oLP->get_js_lib().'" type="text/javascript" language="javascript"></script>';
+            $htmlHeadXtra[] = '<script src="'.$oLP->get_js_lib().'" type="text/javascript"></script>';
             $preReqCheck = $oLP->prerequisites_match($lp_item_id);
             if (true === $preReqCheck) {
                 $src = $oLP->get_link(
@@ -290,9 +284,9 @@ $autostart = 'true';
 
 if ($debug) {
     error_log('$type_quiz: '.$type_quiz);
-    error_log('$_REQUEST[exeId]: '.intval($_REQUEST['exeId'] ?? 0));
+    error_log('$_REQUEST[exeId]: '.(int) ($_REQUEST['exeId'] ?? 0));
     error_log('$lp_id: '.$lp_id);
-    error_log('$_REQUEST[lp_item_id]: '.intval($_REQUEST['lp_item_id'] ?? 0));
+    error_log('$_REQUEST[lp_item_id]: '.(int) ($_REQUEST['lp_item_id'] ?? 0));
 }
 
 if (!empty($_REQUEST['exeId']) &&
@@ -325,8 +319,8 @@ $oLP->set_previous_item($lp_item_id);
 $nameTools = Security::remove_XSS($oLP->get_name());
 
 $save_setting = api_get_setting('show_navigation_menu');
-global $_setting;
-$_setting['show_navigation_menu'] = 'false';
+/*global $_setting;
+$_setting['show_navigation_menu'] = 'false';*/
 $scorm_css_header = true;
 $lp_theme_css = $oLP->get_theme();
 // Sets the css theme of the LP this call is also use at the frames (toc, nav, message).
@@ -578,7 +572,7 @@ $template->assign('frame_ready', $frameReady);
 $template->displayTemplate('@ChamiloCore/LearnPath/view.html.twig');
 
 // Restore a global setting.
-$_setting['show_navigation_menu'] = $save_setting;
+//$_setting['show_navigation_menu'] = $save_setting;
 
 //Session::write('oLP', $lp);
 

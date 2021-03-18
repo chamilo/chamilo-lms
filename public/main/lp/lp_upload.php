@@ -121,14 +121,12 @@ if (isset($_POST) && $is_error) {
             $em->flush();
             break;
         case 'oogie':
-            require_once 'openoffice_presentation.class.php';
             $take_slide_name = empty($_POST['take_slide_name']) ? false : true;
             $o_ppt = new OpenofficePresentation($take_slide_name);
             $first_item_id = $o_ppt->convert_document($_FILES['user_file'], 'make_lp', $_POST['slide_size']);
             Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
             break;
         case 'woogie':
-            require_once 'openoffice_text.class.php';
             $split_steps = empty($_POST['split_steps']) || 'per_page' === $_POST['split_steps'] ? 'per_page' : 'per_chapter';
             $o_doc = new OpenofficeText($split_steps);
             $first_item_id = $o_doc->convert_document($_FILES['user_file']);

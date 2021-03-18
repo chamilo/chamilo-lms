@@ -96,7 +96,7 @@ class scorm extends learnpath
 
             if (!empty($xmlErrors)) {
                 if ($this->debug > 0) {
-                    error_log('In scorm::parse_manifest() - Exception thrown when loading '.$file.' in DOMDocument');
+                    error_log('In scorm::parse_manifest() - Exception thrown when loading DOMDocument');
                 }
                 // Throw exception?
                 return null;
@@ -356,7 +356,6 @@ class scorm extends learnpath
             $myname = api_utf8_decode($oOrganization->get_name());
             $lp = new CLp();
             $lp
-                ->setCId($courseId)
                 ->setLpType(CLp::SCORM_TYPE)
                 ->setName($myname)
                 ->setRef($oOrganization->get_ref())
@@ -366,7 +365,6 @@ class scorm extends learnpath
                 ->setDisplayOrder($dsp)
                 ->setUseMaxScore($userMaxScore)
                 ->setAsset($this->asset)
-                ->setSessionId($sessionId)
                 ->setParent($courseEntity)
                 ->addCourseLink($courseEntity, api_get_session_entity())
             ;

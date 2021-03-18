@@ -781,7 +781,7 @@ class FillBlanks extends Question
         $blankCharEnd = self::getEndSeparator($blankSeparatorNumber);
         $blankCharStartForRegexp = self::escapeForRegexp($blankCharStart);
         $blankCharEndForRegexp = self::escapeForRegexp($blankCharEnd);
-
+        $listWords = [];
         // Get all blanks words
         $listAnswerResults['words_count'] = api_preg_match_all(
             '/'.$blankCharStartForRegexp.'[^'.$blankCharEndForRegexp.']*'.$blankCharEndForRegexp.'/',

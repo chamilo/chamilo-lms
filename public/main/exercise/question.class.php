@@ -163,7 +163,7 @@ abstract class Question
         if ($object = Database::fetch_object($result)) {
             $objQuestion = self::getInstance($object->type);
             if (!empty($objQuestion)) {
-                $objQuestion->id = (int) $id;
+                $objQuestion->id = $id;
                 $objQuestion->iid = (int) $object->iid;
                 $objQuestion->question = $object->question;
                 $objQuestion->description = $object->description;
@@ -426,7 +426,7 @@ abstract class Question
      *                      delete any category entry for question id
      *                      delete the category for question
      *
-     * @deprecated
+     * @todo Check if deprecated
      *
      * @return bool
      */
@@ -1063,7 +1063,6 @@ abstract class Question
 
         $question = new CQuizQuestion();
         $question
-            ->setCId($course_id)
             ->setQuestion($questionText)
             ->setDescription($description)
             ->setPonderation($this->weighting)
@@ -1073,9 +1072,7 @@ abstract class Question
             ->setLevel($this->level)
             ->setFeedback($this->feedback)
             ->setParent($courseEntity)
-            ->addCourseLink(
-                $courseEntity
-            )
+            ->addCourseLink($courseEntity)
         ;
 
         $em->persist($question);
@@ -1288,7 +1285,7 @@ abstract class Question
         );
 
         if (MEDIA_QUESTION != $this->type) {
-            // Advanced parameters
+            // Advanced parameters.
             $form->addElement(
                 'select',
                 'questionLevel',
@@ -1296,8 +1293,7 @@ abstract class Question
                 self::get_default_levels()
             );
 
-            // Categories
-
+            // Categories.
             $form->addElement(
                 'select',
                 'questionCategory',
@@ -1313,8 +1309,8 @@ abstract class Question
                 );
             }
 
-            global $text;
-
+            //global $text;
+            $text = get_lang('Save the question');
             switch ($this->type) {
                 case UNIQUE_ANSWER:
                     $buttonGroup = [];
@@ -1755,10 +1751,13 @@ abstract class Question
                 ['class' => 'question_description']
             );
         } else {
-            if (true == $score['pass']) {
+            /** @var ReadingComprehension $this */
+            if (true === $score['pass']) {
                 $message = Display::div(
                     sprintf(
-                        get_lang('Congratulations, you have reached and correctly understood, at a speed of %s words per minute, a text of a total %s words.'),
+                        get_lang(
+                            'Congratulations, you have reached and correctly understood, at a speed of %s words per minute, a text of a total %s words.'
+                        ),
                         ReadingComprehension::$speeds[$this->level],
                         $this->getWordsCount()
                     )
@@ -1766,7 +1765,9 @@ abstract class Question
             } else {
                 $message = Display::div(
                     sprintf(
-                        get_lang('Sorry, it seems like a speed of %s words/minute was too fast for this text of %s words.'),
+                        get_lang(
+                            'Sorry, it seems like a speed of %s words/minute was too fast for this text of %s words.'
+                        ),
                         ReadingComprehension::$speeds[$this->level],
                         $this->getWordsCount()
                     )

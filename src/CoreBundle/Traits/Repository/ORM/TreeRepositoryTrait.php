@@ -94,8 +94,6 @@ trait TreeRepositoryTrait
      * Sets the RepositoryUtilsInterface instance
      *
      * @param \Gedmo\Tree\RepositoryUtilsInterface $repoUtils
-     *
-     * @return static
      */
     public function setRepoUtils(RepositoryUtilsInterface $repoUtils)
     {

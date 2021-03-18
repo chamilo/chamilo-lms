@@ -830,14 +830,11 @@ class Answer
         $fixed_list = [];
         $tableAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
-        if (MULTIPLE_ANSWER_TRUE_FALSE == self::getQuestionType() ||
-            MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == self::getQuestionType()
+        if (MULTIPLE_ANSWER_TRUE_FALSE === self::getQuestionType() ||
+            MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY === self::getQuestionType()
         ) {
             // Selecting origin options
-            $origin_options = Question::readQuestionOption(
-                $this->selectQuestionId(),
-                $this->course['real_id']
-            );
+            $origin_options = Question::readQuestionOption($this->selectQuestionId(), $this->course['real_id']);
 
             if (!empty($origin_options)) {
                 foreach ($origin_options as $item) {
@@ -845,10 +842,7 @@ class Answer
                 }
             }
 
-            $destination_options = Question::readQuestionOption(
-                $newQuestionId,
-                $course_info['real_id']
-            );
+            $destination_options = Question::readQuestionOption($newQuestionId, $course_info['real_id']);
             $i = 0;
             if (!empty($destination_options)) {
                 foreach ($destination_options as $item) {
@@ -857,6 +851,8 @@ class Answer
                 }
             }
         }
+
+        $repo = Container::getQuestionRepository();
 
         // if at least one answer
         if ($this->nbrAnswers) {
@@ -903,9 +899,11 @@ class Answer
                         );
                     }
 
+                    $question = $repo->find($newQuestionId);
+
                     $quizAnswer = new CQuizAnswer();
                     $quizAnswer
-                        ->setQuestionId($newQuestionId)
+                        ->setQuestion($question)
                         ->setAnswer($answer['answer'])
                         ->setCorrect($answer['correct'])
                         ->setComment($answer['comment'])
@@ -950,9 +948,10 @@ class Answer
                         $correct = $fixed_list[(int) $correct];
                     }
 
+                    $question = $repo->find($newQuestionId);
                     $quizAnswer = new CQuizAnswer();
                     $quizAnswer
-                        ->setQuestionId($newQuestionId)
+                        ->setQuestion($question)
                         ->setAnswer($this->answer[$i])
                         ->setCorrect($correct)
                         ->setComment($this->comment[$i])

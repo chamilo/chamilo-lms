@@ -10,8 +10,6 @@ use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**

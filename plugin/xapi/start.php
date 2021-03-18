@@ -64,7 +64,7 @@ $table = new SortableTable(
 $table->set_header(0, $plugin->get_lang('ActivityTitle'), true);
 $table->set_column_filter(
     0,
-    function (array $toolInfo) use ($cidReq, $session, $userInfo, $plugin, $toolLaunchRepo) {
+    function (array $toolInfo) use ($cidReq, $session, $userInfo, $plugin) {
         list($id, $title, $description, $activityType, $wasAddedInLp) = $toolInfo;
 
         $sessionStar = api_get_session_image(

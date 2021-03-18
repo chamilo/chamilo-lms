@@ -11043,8 +11043,6 @@ class Exercise
             foreach ($coursesIds as $course) {
                 $courseData = api_get_course_info_by_id($course);
                 if (!empty($courseData) && isset($courseData['real_id'])) {
-                    // if session is 0, always will be true
-                    $courseExistsInSession = true;
                     if ($isInASession) {
                         $courseExistsInSession = SessionManager::sessionHasCourse($sessionId, $courseData['code']);
                         if ($courseExistsInSession) {

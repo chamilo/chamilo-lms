@@ -14,6 +14,7 @@ $plugin = XApiPlugin::create();
 $isAllowedToEdit = api_is_allowed_to_edit();
 
 $em = Database::getManager();
+$toolLaunchRepo = $em->getRepository(ToolLaunch::class);
 
 $course = api_get_course_entity();
 $session = api_get_session_entity();
@@ -23,24 +24,30 @@ $cidReq = api_get_cidreq();
 
 $table = new SortableTable(
     'tbl_xapi',
-    function () use ($em, $course, $session) {
+    function () use ($em, $course, $session, $isAllowedToEdit) {
         return $em->getRepository(ToolLaunch::class)
-            ->countByCourseAndSession($course, $session);
+            ->countByCourseAndSession($course, $session, !$isAllowedToEdit);
     },
-    function ($start, $limit, $orderBy, $orderDir) use ($em, $course, $session, $isAllowedToEdit) {
-        $tools = $em->getRepository(ToolLaunch::class)
-            ->findByCourseAndSession($course, $session, ['title' => $orderDir], $limit, $start);
+    function ($start, $limit, $orderBy, $orderDir) use ($toolLaunchRepo, $course, $session, $isAllowedToEdit) {
+        $tools = $toolLaunchRepo->findByCourseAndSession($course, $session, ['title' => $orderDir], $limit, $start);
 
         $data = [];
 
         /** @var ToolLaunch $toolLaunch */
         foreach ($tools as $toolLaunch) {
+            $wasAddedInLp = $toolLaunchRepo->wasAddedInLp($toolLaunch);
+
+            if ($wasAddedInLp && !$isAllowedToEdit) {
+                continue;
+            }
+
             $datum = [];
             $datum[] = [
                 $toolLaunch->getId(),
                 $toolLaunch->getTitle(),
                 $toolLaunch->getDescription(),
                 $toolLaunch->getActivityType(),
+                $wasAddedInLp,
             ];
 
             if ($isAllowedToEdit) {
@@ -57,8 +64,8 @@ $table = new SortableTable(
 $table->set_header(0, $plugin->get_lang('ActivityTitle'), true);
 $table->set_column_filter(
     0,
-    function (array $toolInfo) use ($cidReq, $session, $userInfo) {
-        list($id, $title, $description, $activityType) = $toolInfo;
+    function (array $toolInfo) use ($cidReq, $session, $userInfo, $plugin, $toolLaunchRepo) {
+        list($id, $title, $description, $activityType, $wasAddedInLp) = $toolInfo;
 
         $sessionStar = api_get_session_image(
             $session ? $session->getId() : 0,
@@ -73,6 +80,13 @@ $table->set_column_filter(
 
         if ($description) {
             $data .= PHP_EOL.Display::tag('small', $description, ['class' => 'text-muted']);
+        }
+
+        if ($wasAddedInLp) {
+            $data .= Display::div(
+                $plugin->get_lang('ActivityAddedToLPCannotBeAccessed'),
+                ['class' => 'lp_content_type_label']
+            );
         }
 
         return $data;

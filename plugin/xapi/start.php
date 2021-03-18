@@ -58,7 +58,7 @@ $table->set_header(0, $plugin->get_lang('ActivityTitle'), true);
 $table->set_column_filter(
     0,
     function (array $toolInfo) use ($cidReq, $session, $userInfo) {
-        list($id, $title, $description, $ativityType) = $toolInfo;
+        list($id, $title, $description, $activityType) = $toolInfo;
 
         $sessionStar = api_get_session_image(
             $session ? $session->getId() : 0,
@@ -67,7 +67,7 @@ $table->set_column_filter(
 
         $data = Display::url(
             $title.$sessionStar,
-            ('cmi5' === $ativityType ? 'cmi5/view.php' : 'tincan/view.php')."?id=$id&$cidReq",
+            ('cmi5' === $activityType ? 'cmi5/view.php' : 'tincan/view.php')."?id=$id&$cidReq",
             ['class' => 'show']
         );
 

@@ -2793,7 +2793,10 @@ class Exercise
         $this->setNotifications($form->getSubmitValue('notifications'));
         $this->setExerciseCategoryId($form->getSubmitValue('exercise_category_id'));
         $this->setPageResultConfiguration($form->getSubmitValues());
-        $this->setHideShowQuestionNumber($form->getSubmitValue('hide_question_number'));
+        $showHideConfiguration = api_get_configuration_value('hide_question_number');
+        if ($showHideConfiguration) {
+            $this->setHideShowQuestionNumber($form->getSubmitValue('hide_question_number'));
+        }
         $this->preventBackwards = (int) $form->getSubmitValue('prevent_backwards');
 
         $this->start_time = null;

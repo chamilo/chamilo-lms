@@ -17,6 +17,7 @@ $em = Database::getManager();
 
 $course = api_get_course_entity();
 $session = api_get_session_entity();
+$userInfo = api_get_user_info();
 
 $cidReq = api_get_cidreq();
 
@@ -56,11 +57,16 @@ $table = new SortableTable(
 $table->set_header(0, $plugin->get_lang('ActivityTitle'), true);
 $table->set_column_filter(
     0,
-    function (array $toolInfo) use ($cidReq) {
+    function (array $toolInfo) use ($cidReq, $session, $userInfo) {
         list($id, $title, $description, $ativityType) = $toolInfo;
 
+        $sessionStar = api_get_session_image(
+            $session ? $session->getId() : 0,
+            $userInfo['status']
+        );
+
         $data = Display::url(
-            $title,
+            $title.$sessionStar,
             ('cmi5' === $ativityType ? 'cmi5/view.php' : 'tincan/view.php')."?id=$id&$cidReq",
             ['class' => 'show']
         );

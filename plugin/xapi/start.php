@@ -22,20 +22,13 @@ $cidReq = api_get_cidreq();
 
 $table = new SortableTable(
     'tbl_xapi',
-    function () use ($em, $course) {
-        return $em
-            ->createQuery('SELECT COUNT(tl) FROM ChamiloPluginBundle:XApi\ToolLaunch tl WHERE tl.course = :course')
-            ->setParameter('course', $course)
-            ->getSingleScalarResult();
+    function () use ($em, $course, $session) {
+        return $em->getRepository(ToolLaunch::class)
+            ->countByCourseAndSession($course, $session);
     },
-    function ($start, $limit, $orderBy, $orderDir) use ($em, $course, $isAllowedToEdit) {
-        $tools = $em->getRepository('ChamiloPluginBundle:XApi\ToolLaunch')
-            ->findBy(
-                ['course' => $course],
-                ['title' => $orderDir],
-                $limit,
-                $start
-            );
+    function ($start, $limit, $orderBy, $orderDir) use ($em, $course, $session, $isAllowedToEdit) {
+        $tools = $em->getRepository(ToolLaunch::class)
+            ->findByCourseAndSession($course, $session, ['title' => $orderDir], $limit, $start);
 
         $data = [];
 

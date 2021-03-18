@@ -25,7 +25,7 @@ if (empty($my_folder_data)) {
 $course = api_get_course_entity();
 $work_data = get_work_assignment_by_id($workId);
 
-$studentPublicationRepo = Container::getStudentPublicationRepository();
+$repo = Container::getStudentPublicationRepository();
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     api_get_user_id(),
     api_get_course_info()
@@ -115,7 +115,7 @@ switch ($action) {
         if ($result) {
             foreach ($result as $item) {
                 /** @var CStudentPublication $work */
-                $work = $studentPublicationRepo->find($item['id']);
+                $work = $repo->find($item['id']);
                 if ($work) {
                     deleteCorrection($work);
                 }
@@ -207,16 +207,8 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
     if ($count > 0) {
         $router = Container::getRouter();
         /** @var CStudentPublication $studentPublication */
-        $studentPublication = $studentPublicationRepo->find($workId);
-        $downloadUrl = $router->generate(
-            'chamilo_core_resource_download',
-            [
-                'id' => $studentPublication->getResourceNode()->getId(),
-                'tool' => 'student_publication',
-                'type' => 'student_publications',
-            ]
-        );
-
+        $studentPublication = $repo->find($workId);
+        $downloadUrl = $repo->getResourceFileDownloadUrl($studentPublication).'?'.api_get_cidreq();
         $displayOutput .= '<a class="btn-toolbar" href="'.$downloadUrl.'?'.api_get_cidreq().'">'.
             Display::return_icon(
                 'save_pack.png',

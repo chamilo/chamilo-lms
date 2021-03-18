@@ -32,14 +32,14 @@ if (null === $user || null === $course) {
 
 // Only a teachers page.
 if (!empty($group_id)) {
-    $group_properties = GroupManager::get_group_properties($group_id);
+    $group = api_get_group_entity($group_id);
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('Group area').' '.$group_properties['name'],
+        'name' => get_lang('Group area').' '.$group->getName(),
     ];
 } else {
     if (!(api_is_allowed_to_edit() || api_is_coach())) {
@@ -51,7 +51,7 @@ $action = $_GET['action'] ?? null;
 
 switch ($action) {
     case 'export_to_pdf':
-        exportAllWork($studentId, $courseInfo, 'pdf');
+        exportAllWork($user, $course, 'pdf');
         exit;
 
         break;
@@ -164,9 +164,8 @@ foreach ($works as $workData) {
         // is a text
         $url = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$itemId;
         $links .= Display::url(Display::return_icon('default.png', get_lang('View')), $url);
-
-        if (!empty($userResult['url'])) {
-            $url = api_get_path(WEB_CODE_PATH).'work/download.php?'.api_get_cidreq().'&id='.$itemId;
+        if ($userResult->getResourceNode()->hasResourceFile()) {
+            $url = $repo->getResourceFileDownloadUrl($userResult).'?'.api_get_cidreq();
             $links .= Display::url(Display::return_icon('save.png', get_lang('Download')), $url);
         }
 

@@ -126,22 +126,12 @@ function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
         return [];
     }
 
-    $router = Container::getRouter();
-
     $work = [];
     if ($studentPublication) {
         $workId = $studentPublication->getIid();
         $work['iid'] = $workId;
         $work['description'] = $studentPublication->getDescription();
-        $work['url'] = $router->generate(
-            'chamilo_core_resource_download',
-            [
-                'id' => $studentPublication->getResourceNode()->getId(),
-                'tool' => 'student_publication',
-                'type' => 'student_publications',
-            ]
-        );
-
+        $work['url'] = $repo->getResourceFileDownloadUrl($studentPublication).'?'.api_get_cidreq();
         $work['active'] = $studentPublication->getActive();
         $work['allow_text_assignment'] = $studentPublication->getAllowTextAssignment();
         //$work['c_id'] = $studentPublication->getCId();
@@ -154,14 +144,7 @@ function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
         $work['qualification'] = $studentPublication->getQualification();
         $work['contains_file'] = $studentPublication->getContainsFile();
         $work['title'] = $studentPublication->getTitle();
-        $url = $router->generate(
-            'chamilo_core_resource_download',
-            [
-                'id' => $studentPublication->getResourceNode()->getId(),
-                'tool' => 'student_publication',
-                'type' => 'student_publications',
-            ]
-        );
+        $url = $repo->getResourceFileDownloadUrl($studentPublication);
         $work['download_url'] = $url.'?'.api_get_cidreq();
         $work['view_url'] = $webCodePath.'work/view.php?id='.$workId.'&'.api_get_cidreq();
         $showUrl = $work['show_url'] = $webCodePath.'work/show_file.php?id='.$workId.'&'.api_get_cidreq();
@@ -2280,13 +2263,7 @@ function get_work_user_list(
                 $linkToDownload = '';
                 // If URL is present then there's a file to download keep BC.
                 if ($studentPublication->getContainsFile()) {
-                    $downloadUrl = $router->generate('chamilo_core_resource_download',
-                        [
-                            'id' => $assignment->getResourceNode()->getId(),
-                            'tool' => 'student_publication',
-                            'type' => 'student_publications',
-                        ]
-                    ).'?'.api_get_cidreq();
+                    $downloadUrl = $repo->getResourceFileDownloadUrl($assignment).'?'.api_get_cidreq();
                     $linkToDownload = '<a href="'.$downloadUrl.'">'.$saveIcon.'</a> ';
                 }
 
@@ -2306,13 +2283,7 @@ function get_work_user_list(
                 $hasCorrection = '';
                 $correctionEntity = $assignment->getCorrection();
                 if (null !== $correctionEntity) {
-                    $downloadUrl = $router->generate('chamilo_core_resource_download',
-                            [
-                                'id' => $assignment->getResourceNode()->getId(),
-                                'tool' => 'student_publication',
-                                'type' => 'student_publications',
-                            ]
-                        ).'?'.api_get_cidreq();
+                    $downloadUrl = $repo->getResourceFileDownloadUrl($assignment).'?'.api_get_cidreq();
                     $hasCorrection = Display::url(
                         $correctionIcon,
                         $downloadUrl
@@ -6106,34 +6077,29 @@ function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false, 
 }
 
 /**
- * @param int    $userId
- * @param array  $courseInfo
- * @param string $format
- *
  * @return bool
  */
-function exportAllWork($userId, $courseInfo, $format = 'pdf')
+function exportAllWork(User $user, Course $course, $format = 'pdf')
 {
-    $userInfo = api_get_user_info($userId);
-    if (empty($userInfo) || empty($courseInfo)) {
-        return false;
-    }
-
-    $workPerUser = getWorkPerUser($userId);
+    $repo = Container::getStudentPublicationRepository();
+    $works = $repo->getStudentPublicationByUser($user, $course, null);
 
     switch ($format) {
         case 'pdf':
-            if (!empty($workPerUser)) {
+            if (!empty($works)) {
                 $pdf = new PDF();
                 $content = null;
-                foreach ($workPerUser as $work) {
-                    $work = $work['work'];
-                    foreach ($work->user_results as $userResult) {
-                        $content .= $userResult['title'];
+                foreach ($works as $workData) {
+                    /** @var CStudentPublication $work */
+                    $work = $workData['work'];
+                    /** @var CStudentPublication[] $results */
+                    $results = $workData['results'];
+                    foreach ($results as $userResult) {
+                        $content .= $userResult->getTitle();
                         // No need to use api_get_local_time()
-                        $content .= $userResult['sent_date'];
-                        $content .= $userResult['qualification'];
-                        $content .= $userResult['description'];
+                        $content .= $userResult->getSentDate()->format('Y-m-d H:i:s');
+                        $content .= $userResult->getQualification();
+                        $content .= $userResult->getDescription();
                     }
                 }
 
@@ -6141,8 +6107,8 @@ function exportAllWork($userId, $courseInfo, $format = 'pdf')
                     $pdf->content_to_pdf(
                         $content,
                         null,
-                        api_replace_dangerous_char($userInfo['complete_name']),
-                        $courseInfo['code']
+                        api_replace_dangerous_char(UserManager::formatUserFullName($user)),
+                        $course->getCode()
                     );
                 }
             }

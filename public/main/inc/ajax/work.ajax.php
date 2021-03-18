@@ -2,18 +2,19 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * Responses to AJAX calls.
  */
 
-use Chamilo\CoreBundle\Framework\Container;
-
 require_once __DIR__.'/../global.inc.php';
 
-$action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
+$action = $_REQUEST['a'] ?? null;
 $isAllowedToEdit = api_is_allowed_to_edit();
 $courseInfo = api_get_course_info();
 $courseEntity = api_get_course_entity();
+$repo = Container::getStudentPublicationRepository();
 
 switch ($action) {
     case 'show_student_work':
@@ -114,13 +115,7 @@ switch ($action) {
 
                 $json = [];
                 if (null !== $studentPublication) {
-                    $url = $router->generate('chamilo_core_resource_download',
-                        [
-                            'id' => $studentPublication->getResourceNode()->getId(),
-                            'tool' => 'student_publication',
-                            'type' => 'student_publications',
-                        ]
-                    ).'?'.api_get_cidreq();
+                    $url = $repo->getResourceFileDownloadUrl($studentPublication).'?'.api_get_cidreq();
                     $json['name'] = api_htmlentities($studentPublication->getTitle());
                     $json['link'] = Display::url(
                         api_htmlentities($studentPublication->getTitle()),

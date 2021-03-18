@@ -12,6 +12,7 @@ $current_course_tool = TOOL_STUDENTPUBLICATION;
 
 $id = isset($_GET['id']) ? (int) $_GET['id'] : null;
 $repo = Container::getStudentPublicationRepository();
+$repoCorrection = Container::getStudentPublicationCorrectionRepository();
 /** @var CStudentPublication|null $work */
 $work = $repo->find($id);
 
@@ -205,7 +206,6 @@ if (($isDrhOfCourse || $allowEdition || $isDrhOfSession || user_is_author($id)) 
         $tpl->assign('comments', $comments);
 
         $actions = '';
-
         if ($work->getContainsFile()) {
             if ($work->getResourceNode()->hasResourceFile()) {
                 $actions = Display::url(
@@ -217,16 +217,7 @@ if (($isDrhOfCourse || $allowEdition || $isDrhOfSession || user_is_author($id)) 
                     ),
                     api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq()
                 );
-
-                $router = Container::getRouter();
-                $url = $router->generate(
-                    'chamilo_core_resource_download',
-                    [
-                        'id' => $work->getResourceNode()->getId(),
-                        'tool' => 'student_publication',
-                        'type' => 'student_publications',
-                    ]
-                );
+                $url = $repo->getResourceFileDownloadUrl($work).'?'.api_get_cidreq();
 
                 $actions .= Display::url(
                     Display::return_icon(
@@ -251,7 +242,7 @@ if (($isDrhOfCourse || $allowEdition || $isDrhOfSession || user_is_author($id)) 
                     'tool' => 'student_publication',
                     'type' => 'student_publications_corrections',
                 ]
-            ).api_get_cidreq();
+            ).'?'.api_get_cidreq();
 
             $actions .= Display::url(
                 Display::return_icon(

@@ -120,8 +120,8 @@
         "symfony/notifier": "^5.0",
         "symfony/polyfill-apcu": "*",
         "symfony/polyfill-ctype": "*",
-        "symfony/polyfill-intl-icu": "*",
         "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-intl-icu": "*",
         "symfony/polyfill-mbstring": "*",
         "symfony/polyfill-php80": "*",
         "symfony/requirements-checker": "^2.0",
@@ -141,7 +141,8 @@
         "szymach/c-pchart": "^3.0",
         "tgalopin/html-sanitizer-bundle": "^1.1",
         "twig/intl-extra": "^3.0",
-        "vich/uploader-bundle": "^1.13"
+        "vich/uploader-bundle": "^1.13",
+        "webit/eval-math": "^1.0"
     },
     "config": {
         "optimize-autoloader": true,

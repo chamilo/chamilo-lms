@@ -369,7 +369,10 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getMembers(): Collection
+    /**
+     * @return CGroupRelUser[]|Collection
+     */
+    public function getMembers()
     {
         return $this->members;
     }
@@ -407,7 +410,10 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $this->tutors->matching($criteria)->count() > 0;
     }
 
-    public function getTutors(): Collection
+    /**
+     * @return CGroupRelTutor[]|Collection
+     */
+    public function getTutors()
     {
         return $this->tutors;
     }

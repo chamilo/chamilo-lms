@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
+use League\Flysystem\Filesystem;
 use League\Flysystem\ZipArchive\ZipArchiveAdapter;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -565,8 +566,6 @@ class scorm extends learnpath
             );
         }
 
-        $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
-        $maxFilledSpace = DocumentManager::get_course_quota($courseInfo['code']);
         $zipFilePath = $zipFileInfo['tmp_name'];
         $zipFileName = $zipFileInfo['name'];
 
@@ -577,8 +576,6 @@ class scorm extends learnpath
             );
         }
 
-        //$courseRelDir = api_get_course_path($courseInfo['code']).'/scorm'; // scorm dir web path starting from /courses
-        //$courseSysDir = api_get_path(SYS_COURSE_PATH).$courseRelDir; // Absolute system path for this course.
         $currentDir = api_replace_dangerous_char(trim($currentDir)); // Current dir we are in, inside scorm/
 
         if ($this->debug > 1) {
@@ -600,7 +597,7 @@ class scorm extends learnpath
         }
 
         $zipAdapter = new ZipArchiveAdapter($zipFilePath);
-        $filesystem = new \League\Flysystem\Filesystem($zipAdapter);
+        $filesystem = new Filesystem($zipAdapter);
         $zipContentArray = $filesystem->listContents();
 
         $packageType = '';

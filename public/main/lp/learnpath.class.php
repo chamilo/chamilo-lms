@@ -6693,7 +6693,7 @@ class learnpath
      * @param CLpItem $lpItem
      *
      * @throws Exception
-     * @throws HTML_QuickForm_Error
+     *
      *
      * @return string
      */
@@ -6788,7 +6788,7 @@ class learnpath
      * could be added to the learning path.
      *
      * @throws Exception
-     * @throws HTML_QuickForm_Error
+     *
      *
      * @return bool
      */
@@ -6925,7 +6925,7 @@ class learnpath
      * @param CLink   $link
      *
      * @throws Exception
-     * @throws HTML_QuickForm_Error
+     *
      *
      * @return string HTML form
      */
@@ -7039,7 +7039,7 @@ class learnpath
      * @param string  $action
      *
      * @throws Exception
-     * @throws HTML_QuickForm_Error
+     *
      *
      * @return string HTML form
      */
@@ -7109,7 +7109,7 @@ class learnpath
      * @param string  $action (add/edit)
      * @param CLpItem $lpItem
      *
-     * @throws HTML_QuickForm_Error
+     *
      * @throws Exception
      *
      * @return string HTML form
@@ -7482,7 +7482,7 @@ class learnpath
      * @param CLpItem $lpItem
      *
      * @throws Exception
-     * @throws HTML_QuickForm_Error
+     *
      *
      * @return string HTML form
      */
@@ -7772,7 +7772,7 @@ class learnpath
      * @param bool $showInvisibleFiles
      *
      * @throws Exception
-     * @throws HTML_QuickForm_Error
+     *
      *
      * @return string
      */
@@ -9356,9 +9356,10 @@ EOD;
         $sessionId = api_get_session_id();
         $course_data = api_get_course_info($this->cc);
 
+        $lp = Container::getLpRepository()->find($lp_id);
         if (!empty($course_data)) {
             $scorm_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/scorm/'.$this->path;
-            $list = self::get_flat_ordered_items_list($lp_id);
+            $list = self::get_flat_ordered_items_list($lp);
             if (!empty($list)) {
                 foreach ($list as $item_id) {
                     $item = $this->items[$item_id];
@@ -9676,7 +9677,7 @@ EOD;
     {
         $em = Database::getManager();
         /** @var CLpCategory $item */
-        $item = $em->find('ChamiloCourseBundle:CLpCategory', $params['id']);
+        $item = $em->find(CLpCategory::class, $params['id']);
         if ($item) {
             $item->setName($params['name']);
             $em->persist($item);
@@ -9692,7 +9693,7 @@ EOD;
         $id = (int) $id;
         $em = Database::getManager();
         /** @var CLpCategory $item */
-        $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
+        $item = $em->find(CLpCategory::class, $id);
         if ($item) {
             $position = $item->getPosition() - 1;
             $item->setPosition($position);
@@ -9709,7 +9710,7 @@ EOD;
         $id = (int) $id;
         $em = Database::getManager();
         /** @var CLpCategory $item */
-        $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
+        $item = $em->find(CLpCategory::class, $id);
         if ($item) {
             $position = $item->getPosition() + 1;
             $item->setPosition($position);
@@ -10264,7 +10265,7 @@ EOD;
      * Get the LP Final Item form.
      *
      * @throws Exception
-     * @throws HTML_QuickForm_Error
+     *
      *
      * @return string
      */

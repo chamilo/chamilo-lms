@@ -150,7 +150,7 @@ if (!empty($complete_user_list)) {
 }
 
 // Group members
-$group_member_list = GroupManager::get_subscribed_users($current_group);
+$group_member_list = GroupManager::get_subscribed_users($groupEntity);
 
 $selected_users = [];
 if (!empty($group_member_list)) {
@@ -183,12 +183,12 @@ if ($form->validate()) {
     }
 
     // Returning to the group area (note: this is inconsistent with the rest of chamilo)
-    $cat = GroupManager::get_category_from_group($current_group['iid']);
+    $cat = GroupManager::get_category_from_group($group_id);
     $categoryId = 0;
     if ($cat) {
         $categoryId = $cat['iid'];
     }
-    $max_member = $current_group['max_student'];
+    $max_member = $groupEntity->getMaxStudent();
 
     if (isset($_POST['group_members']) &&
         count($_POST['group_members']) > $max_member &&

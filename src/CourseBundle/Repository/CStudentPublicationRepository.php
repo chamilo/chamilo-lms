@@ -44,8 +44,9 @@ final class CStudentPublicationRepository extends ResourceRepository
     public function getStudentAssignments(
         CStudentPublication $publication,
         Course $course,
-        Session $session = null,
-        CGroup $group = null
+        ?Session $session = null,
+        ?CGroup $group = null,
+        ?User $user = null
     ): QueryBuilder {
         $qb = $this->getResourcesByCourse($course, $session, $group);
 
@@ -56,6 +57,22 @@ final class CStudentPublicationRepository extends ResourceRepository
         ;
 
         return $qb;
+    }
+
+    public function getStudentPublicationByUser(User $user, Course $course, Session $session = null)
+    {
+        $qb = $this->findAllByCourse($course, $session);
+        /** @var CStudentPublication[] $works */
+        $works = $qb->getQuery()->getResult();
+        $list = [];
+        foreach ($works as $work) {
+            $qb = $this->getStudentAssignments($work, $course, $session, null, $user);
+            $results = $qb->getQuery()->getResult();
+            $list[$work->getIid()]['work'] = $work;
+            $list[$work->getIid()]['results'] = $results;
+        }
+
+        return $list;
     }
 
     public function countUserPublications(User $user, Course $course, Session $session = null, CGroup $group = null): int

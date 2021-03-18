@@ -1,11 +1,15 @@
 <?php
+
+use Chamilo\CoreBundle\Entity\Course;
+
 /* For licensing terms, see /license.txt */
 
-/**
+/*
  * This script checks and propose a query fix for LP items with high time values
  * Only if the total LP time is bigger than the total course time.
  */
 exit;
+
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -35,9 +39,8 @@ foreach ($sessions as $session) {
                 continue;
             }
         }
-
-        $courseInfo = api_get_course_info_by_id($courseId);
-        $courseCode = $courseInfo['code'];
+        $course = api_get_course_entity($courseId);
+        $courseCode = $course->getCode();
 
         $users = CourseManager::get_user_list_from_course_code(
             $courseCode,
@@ -48,9 +51,9 @@ foreach ($sessions as $session) {
         );
 
         foreach ($users as $user) {
-            $result = compareLpTimeAndCourseTime($user, $courseInfo, $sessionId);
+            $result = compareLpTimeAndCourseTime($user, $course, $sessionId);
             if ($result) {
-                $counter++;
+                ++$counter;
             }
 
             if ($counter > $max) {
@@ -73,22 +76,22 @@ foreach($courses as $courseInfo) {
 }*/
 
 /**
- * @param array $user
- * @param array $courseInfo
- * @param int   $sessionId
+ * @param array  $user
+ * @param Course $course
+ * @param int    $sessionId
  *
  * @return bool
  */
-function compareLpTimeAndCourseTime($user, $courseInfo, $sessionId = 0)
+function compareLpTimeAndCourseTime($user, Course $course, $sessionId = 0)
 {
     $userId = $user['user_id'];
     $defaultValue = 600; // 10 min
-    $courseCode = $courseInfo['code'];
-    $courseId = $courseInfo['real_id'];
+    $courseCode = $course->getCode();
+    $courseId = $course->getId();
 
     $totalLpTime = Tracking::get_time_spent_in_lp(
         $userId,
-        $courseCode,
+        $course,
         [],
         $sessionId
     );
@@ -108,8 +111,8 @@ function compareLpTimeAndCourseTime($user, $courseInfo, $sessionId = 0)
         $totalLpTimeFormatted = api_time_to_hms($totalLpTime);
         $diff = $totalLpTime - $totalCourseTime;
 
-        $content = PHP_EOL."User: ".$user['user_id']." - Total course: $totalCourseTimeFormatted / Total LP: $totalLpTimeFormatted".PHP_EOL;
-        $content .= PHP_EOL."Diff: ".api_time_to_hms($diff).PHP_EOL;
+        $content = PHP_EOL.'User: '.$user['user_id']." - Total course: $totalCourseTimeFormatted / Total LP: $totalLpTimeFormatted".PHP_EOL;
+        $content .= PHP_EOL.'Diff: '.api_time_to_hms($diff).PHP_EOL;
         $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$userId.'&course='.$courseCode.'&id_session='.$sessionId;
         $content .= Display::url('Check', $url, ['target' => '_blank']);
         $content .= PHP_EOL;
@@ -135,15 +138,15 @@ function compareLpTimeAndCourseTime($user, $courseInfo, $sessionId = 0)
                 $lpId = $item['lp_id'];
                 $link = api_get_path(WEB_CODE_PATH).'mySpace/lp_tracking.php?cidReq='.$courseCode.
                     '&course='.$courseCode.'&origin=&lp_id='.$lpId.'&student_id='.$userId.'&id_session='.$sessionId;
-                $content .= "total_time to be reduced = ".api_time_to_hms($item['total_time']).PHP_EOL;
+                $content .= 'total_time to be reduced = '.api_time_to_hms($item['total_time']).PHP_EOL;
                 $content .= Display::url('See report before update', $link, ['target' => '_blank']).PHP_EOL;
-                $content .= "SQL with possible fix:".PHP_EOL;
+                $content .= 'SQL with possible fix:'.PHP_EOL;
 
                 if ($item['total_time'] < $defaultValue) {
-                    $content .= "Skip because total_time is too short. total_time: ".$item['total_time'].' value to rest'.$defaultValue.PHP_EOL;
+                    $content .= 'Skip because total_time is too short. total_time: '.$item['total_time'].' value to rest'.$defaultValue.PHP_EOL;
                     continue;
                 }
-                $content .= "UPDATE c_lp_item_view SET total_time = total_time - '$defaultValue' WHERE iid = ".$item['iid'].";".PHP_EOL.PHP_EOL;
+                $content .= "UPDATE c_lp_item_view SET total_time = total_time - '$defaultValue' WHERE iid = ".$item['iid'].';'.PHP_EOL.PHP_EOL;
             }
         }
     }

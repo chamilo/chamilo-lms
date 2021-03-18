@@ -86,7 +86,6 @@ if (isset($_REQUEST['load_ajax'])) {
             }
             //}
             $user_id = (int) $_REQUEST['user_id'];
-
             $new_course_list = SessionManager::get_course_list_by_session_id($new_session_id);
 
             $course_founded = false;
@@ -123,6 +122,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 // Begin with the import process
                 $course_info = api_get_course_info($origin_course_code);
                 $course_id = $course_info['real_id'];
+                $course = api_get_course_entity($course_id);
 
                 $TABLETRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
                 $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -288,15 +288,15 @@ if (isset($_REQUEST['load_ajax'])) {
                             //Getting all information of that lp_item_id
                             $score = Tracking::get_avg_student_score(
                                 $user_id,
-                                $origin_course_code,
+                                $course,
                                 [$data['lp_id']],
-                                $origin_session_id
+                                $session
                             );
                             $progress = Tracking::get_avg_student_progress(
                                 $user_id,
-                                $origin_course_code,
+                                $course,
                                 [$data['lp_id']],
-                                $origin_session_id
+                                $session
                             );
                             $result_message['LP_VIEW'][$data['lp_id']] = [
                                 'score' => $score,

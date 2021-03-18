@@ -457,17 +457,14 @@ function WSDeleteLp($params)
     }
     */
 
-    $lp = new learnpath($courseCode, $lpId, null);
+    $lp = \Chamilo\CoreBundle\Framework\Container::getLpRepository()->find($lpId);
+    $lp = new learnpath($lp, $lpId, null);
     if ($lp) {
         if ($debug) {
             error_log("LP deleted $lpId");
         }
-
-        $course_dir = $courseInfo['directory'].'/document';
-        $sys_course_path = api_get_path(SYS_COURSE_PATH);
-        $base_work_dir = $sys_course_path.$course_dir;
-
-        $items = $lp->get_flat_ordered_items_list($lpId, 0, $courseId);
+        $base_work_dir = null;
+        $items = $lp->get_flat_ordered_items_list($lp, 0, $courseId);
 
         if (!empty($items)) {
             /** @var $item learnpathItem */
@@ -476,7 +473,6 @@ function WSDeleteLp($params)
 
                 if ($item) {
                     $documentId = $item->get_path();
-
                     if ($debug) {
                         error_log("lp item id found #$itemId");
                     }

@@ -292,14 +292,14 @@ if (!empty($users)) {
         $userInfo = api_get_user_info($userId);
         $lpTime = Tracking::get_time_spent_in_lp(
             $userId,
-            $courseCode,
+            $course,
             [$lpId],
             $sessionId
         );
 
         $lpScore = Tracking::get_avg_student_score(
             $userId,
-            $courseCode,
+            $course,
             [$lpId],
             $sessionId
         );

@@ -9,24 +9,22 @@ $current_course_tool = TOOL_STUDENTPUBLICATION;
 
 api_protect_course_script(true);
 
-
 $this_section = SECTION_COURSES;
 
 $workId = isset($_GET['id']) ? (int) $_GET['id'] : null;
 $courseInfo = api_get_course_info();
-
 if (empty($workId) || empty($courseInfo)) {
     api_not_allowed(true);
 }
+$course = api_get_course_entity();
+
 
 // Student publications are saved with the iid in a LP
 $origin = api_get_origin();
 if ('learnpath' === $origin) {
     $em = Database::getManager();
     /** @var CStudentPublication $work */
-    $work = $em->getRepository(CStudentPublication::class)->findOneBy(
-        ['iid' => $workId, 'cId' => $courseInfo['real_id']]
-    );
+    $work = $em->getRepository(CStudentPublication::class)->find($workId);
     if ($work) {
         $workId = $work->getIid();
     }
@@ -44,14 +42,14 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 $url_dir = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq();
 
 if (!empty($group_id)) {
-    $group_properties = GroupManager :: get_group_properties($group_id);
+    $group = api_get_group_entity($group_id);
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('Group area').' '.$group_properties['name'],
+        'name' => get_lang('Group area').' '.$group->getName(),
     ];
 }
 
@@ -138,7 +136,7 @@ $item_id = isset($_REQUEST['item_id']) ? (int) $_REQUEST['item_id'] : null;
 
 switch ($action) {
     case 'delete':
-        $fileDeleted = deleteWorkItem($item_id, $courseInfo);
+        $fileDeleted = deleteWorkItem($item_id, $course);
 
         if (!$fileDeleted) {
             Display::addFlash(Display::return_message(get_lang('You are not allowed to delete this document')));

@@ -22,7 +22,7 @@ $my_folder_data = get_work_data_by_id($workId);
 if (empty($my_folder_data)) {
     api_not_allowed(true);
 }
-
+$course = api_get_course_entity();
 $work_data = get_work_assignment_by_id($workId);
 
 $studentPublicationRepo = Container::getStudentPublicationRepository();
@@ -96,7 +96,7 @@ switch ($action) {
     case 'delete':
         /*	Delete document */
         if ($itemId) {
-            $fileDeleted = deleteWorkItem($itemId, $courseInfo);
+            $fileDeleted = deleteWorkItem($itemId, $course);
             if (!$fileDeleted) {
                 Display::addFlash(
                     Display::return_message(get_lang('You are not allowed to delete this document'), 'error')

@@ -3,9 +3,12 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CGroupCategory;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * This library contains some functions for group-management.
@@ -549,9 +552,10 @@ class GroupManager
             $result['chat_state'] = $db_object->chat_state;
             $result['self_registration_allowed'] = $db_object->self_registration_allowed;
             $result['self_unregistration_allowed'] = $db_object->self_unregistration_allowed;
-            $result['count_users'] = count(
+            $result['count_users'] = 0;
+            /*$result['count_users'] = count(
                 self::get_subscribed_users($result)
-            );
+            );*/
             /*$result['count_tutor'] = count(
                 self::get_subscribed_tutors($result)
             );*/
@@ -1625,60 +1629,45 @@ class GroupManager
     /**
      * Get all subscribed users (members) from a group.
      *
-     * @param array $groupInfo
-     *
      * @return array An array with information of all users from the given group.
      *               (user_id, firstname, lastname, email)
      */
-    public static function get_subscribed_users($groupInfo)
+    public static function get_subscribed_users(CGroup $group)
     {
-        if (empty($groupInfo)) {
-            return [];
+        //$order = api_sort_by_first_name() ? ' ORDER BY u.firstname, u.lastname' : ' ORDER BY u.lastname, u.firstname';
+        $order = ['lastname'=> Criteria::DESC, 'firstname'=> Criteria::ASC];
+        if (api_sort_by_first_name()) {
+            $order = ['firstname' => Criteria::ASC, 'lastname' => Criteria::ASC];
         }
-
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $table_group_user = Database::get_course_table(TABLE_GROUP_USER);
-        $order_clause = api_sort_by_first_name() ? ' ORDER BY u.firstname, u.lastname' : ' ORDER BY u.lastname, u.firstname';
         $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
         if ('true' === $orderListByOfficialCode) {
-            $order_clause = ' ORDER BY u.official_code, u.firstname, u.lastname';
+            //$order = ' ORDER BY u.official_code, u.firstname, u.lastname';
+            $order = ['officialCode' => Criteria::ASC, 'firstname' => Criteria::ASC, 'lastname' => Criteria::ASC];
         }
 
-        $group_id = (int) $groupInfo['iid'];
-
-        if (empty($group_id)) {
-            return [];
+        $users = $group->getMembers();
+        $userList = [];
+        foreach ($users as $groupRelUser) {
+            $userList[] = $groupRelUser->getUser();
         }
 
-        $course_id = api_get_course_int_id();
+        $criteria = Criteria::create();
+        $criteria->orderBy($order);
+        $users = new ArrayCollection($userList);
+        $users = $users->matching($criteria);
 
-        $sql = "SELECT
-                    ug.iid,
-                    u.id as user_id,
-                    u.lastname,
-                    u.firstname,
-                    u.email,
-                    u.username
-                FROM $table_user u
-                INNER JOIN $table_group_user ug
-                ON (ug.user_id = u.id)
-                WHERE
-                      ug.group_id = $group_id
-                $order_clause";
-
-        $db_result = Database::query($sql);
-        $users = [];
-        while ($user = Database::fetch_object($db_result)) {
-            $users[$user->user_id] = [
-                'user_id' => $user->user_id,
-                'firstname' => $user->firstname,
-                'lastname' => $user->lastname,
-                'email' => $user->email,
-                'username' => $user->username,
+        $list = [];
+        foreach ($users as $user) {
+            $list[$user->getId()] = [
+                'user_id' => $user->getId(),
+                'firstname' => $user->getFirstname(),
+                'lastname' => $user->getLastname(),
+                'email' => $user->getEmail(),
+                'username' => $user->getUsername(),
             ];
         }
 
-        return $users;
+        return $list;
     }
 
     /**

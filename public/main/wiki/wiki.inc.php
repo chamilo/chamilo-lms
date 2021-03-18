@@ -2552,7 +2552,6 @@ class Wiki
         $assignment_type = $values['assignment'];
         $session_id = $this->session_id;
         $groupId = api_get_group_id();
-        $groupInfo = GroupManager::get_group_properties($groupId);
         $group = api_get_group_entity($groupId);
 
         if (0 == $groupId) {
@@ -2570,7 +2569,7 @@ class Wiki
             }
         } else {
             //extract group members
-            $subscribed_users = GroupManager::get_subscribed_users($groupInfo);
+            $subscribed_users = GroupManager::get_subscribed_users($group);
             $tutors = $group->getTutors();
             $subscribed_tutors = [];
             foreach ($tutors as $tutor) {

@@ -48,11 +48,13 @@ switch ($action) {
             foreach ($sessionList as $session) {
                 $courses = $session['courses'];
                 $sessionId = $session['session_id'];
+                $sessionEntity = api_get_session_entity($sessionId);
                 $session['session_name'];
                 $totalCourse = 0;
                 $totalSessionAverage = 0;
                 foreach ($courses as &$course) {
-                    $average = Tracking::get_avg_student_progress($userId, $course['course_code'], [], $sessionId);
+                    $courseEntity = api_get_course_entity($course['real_id']);
+                    $average = Tracking::get_avg_student_progress($userId, $courseEntity, [], $sessionEntity);
                     $totalSessionAverage += $average;
                     $totalCourse++;
                     if (false !== $average) {

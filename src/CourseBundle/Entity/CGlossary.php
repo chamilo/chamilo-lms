@@ -78,12 +78,7 @@ class CGlossary extends AbstractResource implements ResourceInterface
         return $this->description;
     }
 
-    /**
-     * Set displayOrder.
-     *
-     * @return CGlossary
-     */
-    public function setDisplayOrder(int $displayOrder)
+    public function setDisplayOrder(int $displayOrder): self
     {
         $this->displayOrder = $displayOrder;
 

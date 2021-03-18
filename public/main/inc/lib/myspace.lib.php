@@ -347,7 +347,7 @@ class MySpace
                 //'image_small' => $courseInfo['course_image'],
                 //'image_large' => $courseInfo['course_image_large'],
                 'time_spent' => api_time_to_hms(Tracking::get_time_spent_on_the_course($userId, $courseId)),
-                'student_progress' => round(Tracking::get_avg_student_progress($userId, $courseCode)),
+                'student_progress' => round(Tracking::get_avg_student_progress($userId, $course)),
                 'student_score' => $avg_score,
                 'student_message' => Container::getForumPostRepository()->countUserForumPosts($user, $course),
                 'student_assignments' => Container::getStudentPublicationRepository()->countUserPublications($user, $course),
@@ -1574,7 +1574,7 @@ class MySpace
             $nb_progress_lp += $progress_tmp[1];
             $score_tmp = Tracking::get_avg_student_score(
                 $userId,
-                $courseCode,
+                $course,
                 [],
                 null,
                 true
@@ -1749,7 +1749,7 @@ class MySpace
                 );
                 $progress_tmp = Tracking::get_avg_student_progress(
                     $userId,
-                    $courseCode,
+                    $course,
                     [],
                     null,
                     true
@@ -1994,7 +1994,7 @@ class MySpace
                 $time_spent += Tracking::get_time_spent_on_the_course($row_user->user_id, $courseId, $session_id);
                 $progress_tmp = Tracking::get_avg_student_progress(
                     $row_user->user_id,
-                    $courseCode,
+                    $course,
                     [],
                     $session_id,
                     true

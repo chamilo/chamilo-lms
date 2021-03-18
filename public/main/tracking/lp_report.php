@@ -272,6 +272,7 @@ function getData($from, $numberOfItems, $column, $direction)
     $sessionId = api_get_session_id();
     $courseCode = api_get_course_id();
     $courseId = api_get_course_int_id();
+    $course = api_get_course_entity();
 
     $lps = Session::read('lps');
 
@@ -323,7 +324,7 @@ function getData($from, $numberOfItems, $column, $direction)
             $lpId = $lp['iid'];
             $progress = Tracking::get_avg_student_progress(
                 $userId,
-                $courseCode,
+                $course,
                 [$lpId],
                 $sessionId
             );
@@ -333,7 +334,7 @@ function getData($from, $numberOfItems, $column, $direction)
             } else {
                 $time = Tracking::get_time_spent_in_lp(
                     $userId,
-                    $courseCode,
+                    $course,
                     [$lpId],
                     $sessionId
                 );

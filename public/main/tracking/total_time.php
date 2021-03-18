@@ -285,8 +285,10 @@ if (count($a_students) > 0) {
         (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2
     );
 
-    $parameters['cidReq'] = Security::remove_XSS($_GET['cidReq']);
-    $parameters['id_session'] = $session_id;
+    $table->setDataFunctionParams(['cid' => api_get_course_int_id(), 'sid' => $session_id]);
+
+    $parameters['cid'] = api_get_course_int_id();
+    $parameters['sid'] = $session_id;
     $parameters['from'] = isset($_GET['myspace']) ? Security::remove_XSS($_GET['myspace']) : null;
 
     $table->set_additional_parameters($parameters);
@@ -308,15 +310,27 @@ if (count($a_students) > 0) {
     $table->set_header(3, get_lang('Login'), false);
     $headers['login'] = get_lang('Login');
 
-    $table->set_header(4, get_lang('Time').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('Time spent in the course'), ['align' => 'absmiddle', 'hspace' => '3px']),
+    $table->set_header(
+        4,
+        get_lang('Time').'&nbsp;'.
+        Display::return_icon(
+            'info3.gif',
+            get_lang('Time spent in the course'),
+            ['align' => 'absmiddle', 'hspace' => '3px']
+        ),
         false,
         ['style' => 'width:110px;']
     );
     $headers['training_time'] = get_lang('Time');
 
-    $table->set_header(5, get_lang('Total learnpath time').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('Total learnpath time'), ['align' => 'absmiddle', 'hspace' => '3px']),
+    $table->set_header(
+        5,
+        get_lang('Total learnpath time').'&nbsp;'.
+        Display::return_icon(
+            'info3.gif',
+            get_lang('Total learnpath time'),
+            ['align' => 'absmiddle', 'hspace' => '3px']
+        ),
         false,
         ['style' => 'width:110px;']
     );

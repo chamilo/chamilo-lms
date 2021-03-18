@@ -732,12 +732,9 @@ class Certificate extends Model
             foreach ($sessions as $session) {
                 $allCoursesApproved = [];
                 foreach ($session['courses'] as $course) {
-                    $courseInfo = api_get_course_info_by_id($course['real_id']);
-                    $courseCode = $courseInfo['code'];
-
-                    $category = $gradeBookRepo->findOneBy(
-                        ['course' => $course['real_id'], 'session' => $session['session_id']]
-                    );
+                    $course = api_get_course_entity($course['real_id']);
+                    $courseId = $course->getId();
+                    $category = $gradeBookRepo->findOneBy(['course' => $course, 'session' => $session['session_id']]);
 
                     /*$gradebookCategories = Category::load(
                         null,
@@ -758,25 +755,25 @@ class Certificate extends Model
                         // Find time spent in LP
                         $timeSpent = Tracking::get_time_spent_in_lp(
                             $this->user_id,
-                            $courseCode,
+                            $course,
                             [],
                             $session['session_id']
                         );
 
-                        if (!isset($courseList[$course['real_id']])) {
-                            $courseList[$course['real_id']]['approved'] = false;
-                            $courseList[$course['real_id']]['time_spent'] = 0;
+                        if (!isset($courseList[$courseId])) {
+                            $courseList[$courseId]['approved'] = false;
+                            $courseList[$courseId]['time_spent'] = 0;
                         }
 
                         if ($result) {
-                            $courseList[$course['real_id']]['approved'] = true;
-                            $coursesApproved[$course['real_id']] = $courseInfo['title'];
+                            $courseList[$courseId]['approved'] = true;
+                            $coursesApproved[$courseId] = $course->getTitle();
 
                             // Find time spent in LP
                             //$totalTimeInLearningPaths += $timeSpent;
                             $allCoursesApproved[] = true;
                         }
-                        $courseList[$course['real_id']]['time_spent'] += $timeSpent;
+                        $courseList[$courseId]['time_spent'] += $timeSpent;
                     }
                 }
 

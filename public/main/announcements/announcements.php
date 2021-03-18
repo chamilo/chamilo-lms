@@ -51,14 +51,13 @@ $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 $isTutor = false;
 if (!empty($group_id)) {
     $groupEntity = api_get_group_entity($group_id);
-    $groupProperties = GroupManager::get_group_properties($group_id);
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('Group area').' '.$groupProperties['name'],
+        'name' => get_lang('Group area').' '.$groupEntity->getName(),
     ];
 
     if (false === $allowToEdit) {
@@ -68,7 +67,7 @@ if (!empty($group_id)) {
             $allowToEdit = true;
         }
         // Last chance ... students can send announcements
-        if (GroupManager::TOOL_PRIVATE_BETWEEN_USERS == $groupProperties['announcements_state']) {
+        if (GroupManager::TOOL_PRIVATE_BETWEEN_USERS == $groupEntity->getAnnouncementsState()) {
             $allowStudentInGroupToSend = true;
         }
     }
@@ -488,7 +487,7 @@ switch ($action) {
             }
             $element = CourseManager::addUserGroupMultiSelect($form, []);
         } else {
-            $element = CourseManager::addGroupMultiSelect($form, $groupProperties, []);
+            $element = CourseManager::addGroupMultiSelect($form, $groupEntity, []);
         }
 
         $form->addHtml('</div>');

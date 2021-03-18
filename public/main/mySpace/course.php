@@ -309,8 +309,8 @@ function get_courses($from, $limit, $column, $direction)
             if (count($userIdList) > 0) {
                 $countStudents = count($userIdList);
                 // tracking data
-                $avgProgressInCourse = Tracking::get_avg_student_progress($userIdList, $courseCode, [], $sessionId);
-                $avgScoreInCourse = Tracking::get_avg_student_score($userIdList, $courseCode, [], $sessionId);
+                $avgProgressInCourse = Tracking::get_avg_student_progress($userIdList, $course, [], $session);
+                $avgScoreInCourse = Tracking::get_avg_student_score($userIdList, $course, [], $session);
                 $avgTimeSpentInCourse = Tracking::get_time_spent_on_the_course(
                     $userIdList,
                     $courseInfo['real_id'],

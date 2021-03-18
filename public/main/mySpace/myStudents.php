@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CStudentPublication;
 use ChamiloSession as Session;
 
 if (!isset($_GET['course'])) {
@@ -341,7 +342,7 @@ switch ($action) {
 
                     $bestScore = Tracking::get_avg_student_score(
                         $studentId,
-                        $courseCodeItem,
+                        $course,
                         [],
                         $sId,
                         false,
@@ -1615,9 +1616,9 @@ if (empty($details)) {
                 // Get progress in lp
                 $progress = Tracking::get_avg_student_progress(
                     $studentId,
-                    $courseCode,
+                    $course,
                     [$lp_id],
-                    $sessionId
+                    $session
                 );
 
                 if (null === $progress) {
@@ -1633,7 +1634,7 @@ if (empty($details)) {
                 } else {
                     $total_time = Tracking::get_time_spent_in_lp(
                         $studentId,
-                        $courseCode,
+                        $course,
                         [$lp_id],
                         $sessionId
                     );
@@ -1646,7 +1647,7 @@ if (empty($details)) {
                 // Get last connection time in lp
                 $start_time = Tracking::get_last_connection_time_in_lp(
                     $studentId,
-                    $courseCode,
+                    $course,
                     $lp_id,
                     $sessionId
                 );
@@ -1664,26 +1665,26 @@ if (empty($details)) {
                 // Quiz in lp
                 $score = Tracking::get_avg_student_score(
                     $studentId,
-                    $courseCode,
+                    $course,
                     [$lp_id],
-                    $sessionId
+                    $session
                 );
 
                 // Latest exercise results in a LP
                 $score_latest = Tracking::get_avg_student_score(
                     $studentId,
-                    $courseCode,
+                    $course,
                     [$lp_id],
-                    $sessionId,
+                    $session,
                     false,
                     true
                 );
 
                 $bestScore = Tracking::get_avg_student_score(
                     $studentId,
-                    $courseCode,
+                    $course,
                     [$lp_id],
-                    $sessionId,
+                    $session,
                     false,
                     false,
                     true
@@ -1700,9 +1701,7 @@ if (empty($details)) {
                 } else {
                     $css_class = 'row_odd';
                 }
-
                 $i++;
-
                 if (isset($score_latest) && !is_null($score_latest)) {
                     if (is_numeric($score_latest)) {
                         $score_latest = $score_latest.'%';
@@ -2089,7 +2088,6 @@ if (empty($details)) {
         }
     }
 
-    $userWorks = getWorkPerUser($studentId, $courseId, $sessionId);
     echo '
         <div class="table-responsive">
             <table class="table table-striped table-hover">
@@ -2106,32 +2104,42 @@ if (empty($details)) {
                 <tbody>
     ';
 
-    foreach ($userWorks as $work) {
-        $work = $work['work'];
+    $repo = Container::getStudentPublicationRepository();
+    $works = $repo->getStudentPublicationByUser($user, $course, $session);
+
+    //$userWorks = getWorkPerUser($studentId, $courseId, $sessionId);
+    foreach ($works as $workData) {
+        /** @var CStudentPublication $work */
+        $work = $workData['work'];
+        /** @var CStudentPublication[] $results */
+        $results = $workData['results'];
         $showOnce = true;
-        foreach ($work->user_results as $key => $results) {
-            $resultId = $results['id'];
+        $key = 1;
+        foreach ($results as $result) {
+            $resultId = $result->getIid();
+            $assignment = $work->getAssignment();
             echo '<tr>';
-            echo '<td>'.$work->title.'</td>';
+            echo '<td>'.$work->getTitle().'</td>';
             $documentNumber = $key + 1;
-            $url = api_get_path(WEB_CODE_PATH).
-                'work/view.php?cidReq='.$courseCode.'&id_session='.$sessionId.'&id='.$resultId;
+            $key++;
+            $url = api_get_path(WEB_CODE_PATH).'work/view.php?cid='.$courseId.'&sid='.$sessionId.'&id='.$resultId;
             echo '<td class="text-center"><a href="'.$url.'">('.$documentNumber.')</a></td>';
-            $qualification = !empty($results['qualification']) ? $results['qualification'] : '-';
+            $qualification = $result->getQualification();
+            $qualification = !empty($qualification) ? $qualification : '-';
             echo '<td class="text-center">'.$qualification.'</td>';
             echo '<td class="text-center">'.
-                api_convert_and_format_date($results['sent_date_from_db']).' '.$results['expiry_note'].'</td>';
-            $assignment = get_work_assignment_by_id($work->iid, $courseId);
+                api_convert_and_format_date($result->getSentDate()).' </td>';
+
 
             echo '<td class="text-center">';
-            if (!empty($assignment['expires_on'])) {
-                echo api_convert_and_format_date($assignment['expires_on']);
+            if ($assignment && !empty($assignment->getExpiresOn())) {
+                echo api_convert_and_format_date($assignment->getExpiresOn());
             }
             echo '</td>';
 
             $fieldValue = new ExtraFieldValue('work');
             $resultExtra = $fieldValue->getAllValuesForAnItem(
-                $work->iid,
+                $resultId,
                 true
             );
 
@@ -2145,12 +2153,12 @@ if (empty($details)) {
                         $showOnce = false;
                         echo '&nbsp;'.Display::url(
                                 get_lang('AddTime'),
-                                $currentUrl.'&action=add_work_time&time='.$time.'&work_id='.$work->id
+                                $currentUrl.'&action=add_work_time&time='.$time.'&work_id='.$work->getIid()
                             );
 
                         echo '&nbsp;'.Display::url(
                                 get_lang('RemoveTime'),
-                                $currentUrl.'&action=remove_work_time&time='.$time.'&work_id='.$work->id
+                                $currentUrl.'&action=remove_work_time&time='.$time.'&work_id='.$work->getIid()
                             );
                     }
                     echo '</td>';

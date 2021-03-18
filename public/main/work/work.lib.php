@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
@@ -345,39 +346,6 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null, $course_i
     }
 
     return $work_parents;
-}
-
-/**
- * @param int $userId
- * @param int $courseId
- * @param int $sessionId
- *
- * @return array
- */
-function getWorkPerUser($userId, $courseId = 0, $sessionId = 0)
-{
-    $works = getWorkList(null, null, null, $courseId, $sessionId);
-    $result = [];
-    if (!empty($works)) {
-        foreach ($works as $workData) {
-            $workId = $workData->getIid();
-            $result[$workId]['work'] = $workData;
-            $result[$workId]['work']->user_results = get_work_user_list(
-                0,
-                100,
-                null,
-                null,
-                $workId,
-                null,
-                $userId,
-                false,
-                $courseId,
-                $sessionId
-            );
-        }
-    }
-
-    return $result;
 }
 
 /**
@@ -2260,7 +2228,7 @@ function get_work_user_list(
                     $qualification_string = formatWorkScore($qualification, $qualification);
                 }
             }
-
+            $work['iid'] = $assignment->getIid();
             $work['qualification_score'] = $studentPublication->getQualification();
             $add_string = '';
             $time_expires = '';
@@ -3391,8 +3359,8 @@ function get_list_users_without_publication($task_id, $studentId = 0)
     $new_group_user_list = [];
 
     if ($group_id) {
-        $groupInfo = GroupManager::get_group_properties($group_id);
-        $group_user_list = GroupManager::get_subscribed_users($groupInfo);
+        $group = api_get_group_entity($group_id);
+        $group_user_list = GroupManager::get_subscribed_users($group);
         if (!empty($group_user_list)) {
             foreach ($group_user_list as $group_user) {
                 $new_group_user_list[] = $group_user['user_id'];
@@ -5344,23 +5312,22 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
 /**
  * Delete all work by student.
  *
- * @param int   $userId
- * @param array $courseInfo
- *
  * @return array return deleted items
  */
-function deleteAllWorkPerUser($userId, $courseInfo)
+function deleteAllWorkPerUser(User $user, Course $course)
 {
     $deletedItems = [];
-    $workPerUser = getWorkPerUser($userId);
-    if (!empty($workPerUser)) {
-        foreach ($workPerUser as $work) {
-            $work = $work['work'];
-            foreach ($work->user_results as $userResult) {
-                $result = deleteWorkItem($userResult['iid'], $courseInfo);
-                if ($result) {
-                    $deletedItems[] = $userResult;
-                }
+    //$workPerUser = getWorkPerUser($userId);
+    $repo = Container::getStudentPublicationRepository();
+    $works = $repo->getStudentPublicationByUser($user, $course);
+
+    foreach ($works as $workData) {
+        /** @var CStudentPublication[] $results */
+        $results = $workData['results'];
+        foreach ($results as $userResult) {
+            $result = deleteWorkItem($userResult->getIid(), $course);
+            if ($result) {
+                $deletedItems[] = $userResult;
             }
         }
     }
@@ -5369,16 +5336,16 @@ function deleteAllWorkPerUser($userId, $courseInfo)
 }
 
 /**
- * @param int   $item_id
- * @param array $courseInfo course info
+ * @param int    $item_id
+ * @param Course $course course info
  *
  * @return bool
  */
-function deleteWorkItem($item_id, $courseInfo)
+function deleteWorkItem($item_id, Course $course)
 {
     $item_id = (int) $item_id;
 
-    if (empty($item_id) || empty($courseInfo)) {
+    if (empty($item_id) || null === $course) {
         return false;
     }
 
@@ -5388,7 +5355,7 @@ function deleteWorkItem($item_id, $courseInfo)
     $is_author = user_is_author($item_id);
     $work_data = get_work_data_by_id($item_id);
     $locked = api_resource_is_locked_by_gradebook($work_data['parent_id'], LINK_STUDENTPUBLICATION);
-    $course_id = $courseInfo['real_id'];
+    $course_id = $course->getId();
 
     if (($is_allowed_to_edit && false == $locked) ||
         (
@@ -6158,7 +6125,6 @@ function exportAllWork($userId, $courseInfo, $format = 'pdf')
         case 'pdf':
             if (!empty($workPerUser)) {
                 $pdf = new PDF();
-
                 $content = null;
                 foreach ($workPerUser as $work) {
                     $work = $work['work'];

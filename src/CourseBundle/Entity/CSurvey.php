@@ -656,7 +656,10 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this->isMandatory;
     }
 
-    public function getQuestions(): Collection
+    /**
+     * @return CSurveyQuestion[]|Collection
+     */
+    public function getQuestions()
     {
         return $this->questions;
     }

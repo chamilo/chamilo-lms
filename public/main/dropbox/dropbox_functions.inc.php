@@ -1045,8 +1045,8 @@ function store_add_dropbox($file = [], $work = null)
             if (0 === strpos($rec, 'user_')) {
                 $new_work_recipients[] = substr($rec, strlen('user_'));
             } elseif (0 === strpos($rec, 'group_')) {
-                $groupInfo = GroupManager::get_group_properties(substr($rec, strlen('group_')));
-                $userList = GroupManager::get_subscribed_users($groupInfo);
+                $group = api_get_group_entity(substr($rec, strlen('group_')));
+                $userList = GroupManager::get_subscribed_users($group);
                 foreach ($userList as $usr) {
                     if (!in_array($usr['user_id'], $new_work_recipients) && $usr['user_id'] != $_user['user_id']) {
                         $new_work_recipients[] = $usr['user_id'];

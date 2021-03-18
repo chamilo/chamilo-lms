@@ -428,7 +428,8 @@ class CourseManager
         Database::query($sql);
 
         // Erase user student publications (works) in the course - by André Boivin
-        if (!empty($userList)) {
+        // @todo this should be handled by doctrine.
+        /*if (!empty($userList)) {
             foreach ($userList as $userId) {
                 // Getting all work from user
                 $workList = getWorkPerUser($userId);
@@ -444,7 +445,7 @@ class CourseManager
                     }
                 }
             }
-        }
+        }*/
 
         // Unsubscribe user from all blogs in the course.
         $sql = "DELETE FROM ".Database::get_course_table(TABLE_BLOGS_REL_USER)."
@@ -1282,7 +1283,7 @@ class CourseManager
      * Return user info array of all users registered in a course
      * This only returns the users that are registered in this actual course, not linked courses.
      *
-     * @param string    $course_code
+     * @param string    $courseCode
      * @param int       $sessionId
      * @param string    $limit
      * @param string    $order_by         the field to order the users by.
@@ -1303,7 +1304,7 @@ class CourseManager
      * @return array|int
      */
     public static function get_user_list_from_course_code(
-        $course_code = null,
+        $courseCode,
         $sessionId = 0,
         $limit = null,
         $order_by = null,
@@ -1323,13 +1324,17 @@ class CourseManager
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
 
         $sessionId = (int) $sessionId;
-        $course_code = Database::escape_string($course_code);
-        $courseInfo = api_get_course_info($course_code);
+        $courseCode = Database::escape_string($courseCode);
+        $courseInfo = api_get_course_info($courseCode);
         $courseId = 0;
         if (!empty($courseInfo)) {
             $courseId = $courseInfo['real_id'];
         }
-
+        $session = null;
+        if (!empty($sessionId)) {
+            $session = api_get_session_entity($sessionId);
+        }
+        $course = api_get_course_entity($courseId);
         $where = [];
         if (empty($order_by)) {
             $order_by = 'user.lastname, user.firstname';
@@ -1422,7 +1427,7 @@ class CourseManager
             if ($return_count) {
                 $sql = " SELECT COUNT(*) as count";
             } else {
-                if (empty($course_code)) {
+                if (empty($courseCode)) {
                     $sql = 'SELECT DISTINCT
                                 course.title,
                                 course.code,
@@ -1454,7 +1459,7 @@ class CourseManager
                        $sqlInjectJoins
                        ";
 
-            if (!empty($course_code)) {
+            if (!empty($courseId)) {
                 $sql .= " AND course_rel_user.c_id = $courseId";
             }
             $where[] = ' course_rel_user.c_id IS NOT NULL ';
@@ -1568,7 +1573,6 @@ class CourseManager
                 }
 
                 $sessionId = isset($user['session_id']) ? $user['session_id'] : 0;
-                $course_code = isset($user['code']) ? $user['code'] : null;
                 $sessionName = isset($user['session_name']) ? ' ('.$user['session_name'].') ' : '';
 
                 if ($add_reports) {
@@ -1628,7 +1632,7 @@ class CourseManager
                         $category = Category:: load(
                             null,
                             null,
-                            $course_code,
+                            $courseCode,
                             null,
                             null,
                             $sessionId
@@ -1643,7 +1647,7 @@ class CourseManager
                         }
 
                         foreach ($extra_fields as $extra) {
-                            if ('ruc' == $extra['1']) {
+                            if ('ruc' === $extra['1']) {
                                 continue;
                             }
 
@@ -1669,7 +1673,7 @@ class CourseManager
                         $category = Category:: load(
                             null,
                             null,
-                            $course_code,
+                            $courseCode,
                             null,
                             null,
                             $sessionId
@@ -1680,18 +1684,15 @@ class CourseManager
                             $report_info['certificate'] = Display::label(get_lang('Yes'), 'success');
                         }
 
-                        $progress = intval(
-                            Tracking::get_avg_student_progress(
-                                $user['user_id'],
-                                $course_code,
-                                [],
-                                $sessionId
-                            )
+                        $progress = (int) Tracking::get_avg_student_progress(
+                            $user['user_id'],
+                            $course,
+                            [],
+                            $session
                         );
 
                         $report_info['progress_100'] = 100 == $progress ? Display::label(get_lang('Yes'), 'success') : Display::label(get_lang('No'));
                         $report_info['progress'] = $progress."%";
-
                         foreach ($extra_fields as $extra) {
                             $user_data = UserManager::get_extra_user_data_by_field($user['user_id'], $extra['1']);
                             $report_info[$extra['1']] = $user_data[$extra['1']];
@@ -6080,17 +6081,12 @@ class CourseManager
     /**
      * Shows the form for sending a message to a specific group or user.
      *
-     * @param FormValidator $form
-     * @param array         $groupInfo
-     * @param array         $to
-     *
      * @return HTML_QuickForm_element
      */
-    public static function addGroupMultiSelect($form, $groupInfo, $to = [])
+    public static function addGroupMultiSelect(FormValidator $form, CGroup $group, $to = [])
     {
-        $groupUsers = GroupManager::get_subscribed_users($groupInfo);
-        $groupEntity = api_get_group_entity($groupInfo['iid']);
-        $array = self::buildSelectOptions([$groupEntity], $groupUsers, $to);
+        $groupUsers = GroupManager::get_subscribed_users($group);
+        $array = self::buildSelectOptions([$group], $groupUsers, $to);
 
         $result = [];
         foreach ($array as $content) {

@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CGroup;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GROUP;
@@ -10,9 +13,8 @@ $current_course_tool = TOOL_GROUP;
 api_protect_course_script(true);
 
 $group_id = api_get_group_id();
-$groupRepo = \Chamilo\CoreBundle\Framework\Container::getGroupRepository();
-/** @var \Chamilo\CourseBundle\Entity\CGroup $groupEntity */
-$groupEntity = $groupRepo->find($group_id);
+$groupRepo = Container::getGroupRepository();
+$groupEntity = api_get_group_entity($group_id);
 $current_group = GroupManager::get_group_properties($group_id);
 
 $nameTools = get_lang('Edit this group');
@@ -101,7 +103,7 @@ $complete_user_list = CourseManager::get_user_list_from_course_code(
 $possible_users = [];
 $userGroup = new UserGroup();
 
-$subscribedUsers = GroupManager::get_subscribed_users($current_group);
+$subscribedUsers = GroupManager::get_subscribed_users($groupEntity);
 if ($subscribedUsers) {
     $subscribedUsers = array_column($subscribedUsers, 'user_id');
 }
@@ -157,13 +159,13 @@ if ($form->validate()) {
     $values = $form->exportValues();
 
     // Storing the tutors (we first remove all the tutors and then add only those who were selected)
-    GroupManager::unsubscribe_all_tutors($current_group['iid']);
+    GroupManager::unsubscribe_all_tutors($group_id);
     if (isset($_POST['group_tutors']) && count($_POST['group_tutors']) > 0) {
         GroupManager::subscribeTutors($values['group_tutors'], $groupEntity);
     }
 
     // Returning to the group area (note: this is inconsistent with the rest of chamilo)
-    $cat = GroupManager::get_category_from_group($current_group['iid']);
+    $cat = GroupManager::get_category_from_group($group_id);
     $categoryId = null;
     $max_member = null;
     if (!empty($cat)) {

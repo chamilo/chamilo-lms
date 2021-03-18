@@ -179,7 +179,8 @@ class Tracking
         $user_id = (int) $user_id;
         $session_id = (int) $session_id;
         $origin = Security::remove_XSS($origin);
-        $list = learnpath::get_flat_ordered_items_list($lp_id, 0, $courseInfo['real_id']);
+        $lp = Container::getLpRepository()->find($lp_id);
+        $list = learnpath::get_flat_ordered_items_list($lp, 0, $courseInfo['real_id']);
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
         $course_id = $courseInfo['real_id'];
         $courseCode = $courseInfo['code'];
@@ -2814,7 +2815,7 @@ class Tracking
         // Compose a filter based on optional learning paths list given
         $condition_lp = '';
         if (count($lp_ids) > 0) {
-            $condition_lp = " AND iid IN(".implode(',', $lp_ids).") ";
+            $condition_lp = " iid IN(".implode(',', $lp_ids).") ";
         }
 
         // Compose a filter based on optional session id
@@ -3243,7 +3244,7 @@ class Tracking
      * This function gets time spent in learning path for a student inside a course.
      *
      * @param int|array $student_id  Student id(s)
-     * @param string    $course_code Course code
+     * @param Course    $course      Course code
      * @param array     $lp_ids      Limit average to listed lp ids
      * @param int       $session_id  Session id (optional), if param $session_id is null(default)
      *                               it'll return results including sessions, 0 = session is not filtered
@@ -3252,11 +3253,10 @@ class Tracking
      */
     public static function get_time_spent_in_lp(
         $student_id,
-        $course_code,
+        Course $course,
         $lp_ids = [],
         $session_id = 0
     ) {
-        $course = api_get_course_info($course_code);
         $student_id = (int) $student_id;
         $session_id = (int) $session_id;
         $total_time = 0;
@@ -3267,18 +3267,18 @@ class Tracking
             $lpViewTable = Database::get_course_table(TABLE_LP_VIEW);
             $lpItemViewTable = Database::get_course_table(TABLE_LP_ITEM_VIEW);
             $trackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-            $course_id = $course['real_id'];
+            $course_id = $course->getId();
 
             // Compose a filter based on optional learning paths list given
             $condition_lp = '';
             if (count($lp_ids) > 0) {
-                $condition_lp = " AND iid IN(".implode(',', $lp_ids).") ";
+                $condition_lp = " iid IN(".implode(',', $lp_ids).") ";
             }
 
             // Check the real number of LPs corresponding to the filter in the
             // database (and if no list was given, get them all)
             $sql = "SELECT DISTINCT(iid) FROM $lpTable
-                    WHERE c_id = $course_id $condition_lp";
+                    WHERE $condition_lp";
             $result = Database::query($sql);
             $session_condition = api_get_session_condition($session_id);
 
@@ -3286,10 +3286,10 @@ class Tracking
             if (Database::num_rows($result) > 0) {
                 while ($row = Database::fetch_array($result)) {
                     $lp_id = (int) $row['iid'];
-
+                    $lp = Container::getLpRepository()->find($lp_id);
                     // Start Exercise in LP total_time
                     // Get duration time from track_e_exercises.exe_duration instead of lp_view_item.total_time
-                    $list = learnpath::get_flat_ordered_items_list($lp_id, 0, $course_id);
+                    $list = learnpath::get_flat_ordered_items_list($lp, 0, $course_id);
                     foreach ($list as $itemId) {
                         $sql = "SELECT max(view_count)
                                 FROM $lpViewTable
@@ -3316,9 +3316,9 @@ class Tracking
                             path
                         FROM $lpItemTable as i
                         INNER JOIN $lpItemViewTable as iv
-                        ON (i.iid = iv.lp_item_id AND i.c_id = iv.c_id)
+                        ON (i.iid = iv.lp_item_id)
                         INNER JOIN $lpViewTable as v
-                        ON (iv.lp_view_id = v.iid AND v.c_id = iv.c_id)
+                        ON (iv.lp_view_id = v.iid)
                         WHERE
                             v.c_id = $course_id AND
                             i.iid = $itemId AND
@@ -3373,11 +3373,9 @@ class Tracking
                             FROM $lpItemViewTable AS item_view
                             INNER JOIN $lpViewTable AS view
                             ON (
-                                item_view.lp_view_id = view.iid AND
-                                item_view.c_id = view.c_id
+                                item_view.lp_view_id = view.iid
                             )
                             WHERE
-                                item_view.c_id = $course_id AND
                                 view.c_id = $course_id AND
                                 view.lp_id = $lp_id AND
                                 view.user_id = $student_id AND
@@ -3456,7 +3454,7 @@ class Tracking
             // Check the real number of LPs corresponding to the filter in the
             // database (and if no list was given, get them all)
             $sql = "SELECT iid FROM $lp_table
-                    WHERE c_id = $course_id AND iid = $lp_id ";
+                    WHERE iid = $lp_id ";
             $row = Database::query($sql);
             $count = Database::num_rows($row);
 
@@ -3465,10 +3463,9 @@ class Tracking
                 $sql = 'SELECT MAX(start_time)
                         FROM '.$t_lpiv.' AS item_view
                         INNER JOIN '.$t_lpv.' AS view
-                        ON (item_view.lp_view_id = view.iid AND item_view.c_id = view.c_id)
+                        ON (item_view.lp_view_id = view.iid)
                         WHERE
                             status != "not attempted" AND
-                            item_view.c_id = '.$course_id.' AND
                             view.c_id = '.$course_id.' AND
                             view.lp_id = '.$lp_id.' AND
                             view.user_id = '.$student_id.' AND
@@ -8669,9 +8666,12 @@ class TrackingCourseLog
         $number_of_items,
         $column,
         $direction,
-        $includeInvitedUsers = false
+        $params = []
     ) {
         global $user_ids, $course_code, $export_csv, $csv_content, $session_id;
+        $includeInvitedUsers = false;
+        $courseId = $params['cid'];
+        $sessionId = $params['sid'];
 
         $course_code = Database::escape_string($course_code);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -8683,7 +8683,7 @@ class TrackingCourseLog
             $user_ids = array_map('intval', $user_ids);
             $condition_user = " WHERE user.user_id IN (".implode(',', $user_ids).") ";
         } else {
-            $user_ids = intval($user_ids);
+            $user_ids = (int) $user_ids;
             $condition_user = " WHERE user.user_id = $user_ids ";
         }
 
@@ -8699,7 +8699,8 @@ class TrackingCourseLog
             $invitedUsersCondition = " AND user.status != ".INVITEE;
         }
 
-        $sql = "SELECT  user.user_id as user_id,
+        $sql = "SELECT
+                    user.user_id as user_id,
                     user.official_code  as col0,
                     user.lastname       as col1,
                     user.firstname      as col2,
@@ -8722,8 +8723,7 @@ class TrackingCourseLog
         $users = [];
 
         $sortByFirstName = api_sort_by_first_name();
-        $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['real_id'];
+        $course = api_get_course_entity($courseId);
 
         while ($user = Database::fetch_array($res, 'ASSOC')) {
             $user['official_code'] = $user['col0'];
@@ -8740,7 +8740,7 @@ class TrackingCourseLog
             $user['time'] = api_time_to_hms($totalCourseTime);
             $totalLpTime = Tracking::get_time_spent_in_lp(
                 $user['user_id'],
-                $course_code,
+                $course,
                 [],
                 $session_id
             );
@@ -8752,7 +8752,6 @@ class TrackingCourseLog
             }
 
             $user['total_lp_time'] = api_time_to_hms($totalLpTime).$warning;
-
             $user['first_connection'] = Tracking::get_first_connection_date_on_the_course(
                 $user['user_id'],
                 $courseId,
@@ -8765,11 +8764,13 @@ class TrackingCourseLog
                 false === $export_csv
             );
 
-            $user['link'] = '<center>
-                             <a href="../mySpace/myStudents.php?student='.$user['user_id'].'&details=true&course='.$course_code.'&origin=tracking_course&id_session='.$session_id.'">
-                             '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
-                             </a>
-                         </center>';
+            $user['link'] = '
+                <center>
+                 <a
+                    href="../mySpace/myStudents.php?student='.$user['user_id'].'&details=true&cid='.$courseId.'&origin=tracking_course&sid='.$session_id.'">
+                    '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
+                 </a>
+                </center>';
 
             // store columns in array $users
             $user_row = [];
@@ -8786,7 +8787,6 @@ class TrackingCourseLog
             $user_row['total_lp_time'] = $user['total_lp_time'];
             $user_row['first_connection'] = $user['first_connection'];
             $user_row['last_connection'] = $user['last_connection'];
-
             $user_row['link'] = $user['link'];
             $users[] = array_values($user_row);
         }

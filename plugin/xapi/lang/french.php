@@ -40,3 +40,4 @@ $strings['LrsConfiguration'] = 'Configuration LRS';
 $strings['Verb'] = 'Verbe';
 $strings['Actor'] = 'Acteur';
 $strings['ToolTinCan'] = 'Activités';
+$strings['ActivityAddedToLPCannotBeAccessed'] = 'Cet activité fait partie d\'un parcours d\'apprentissage, il n\'est donc pas accessible par les étudiants depuis cette page';

@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package Chamilo\PluginBundle\Entity\XApi
  *
  * @ORM\Table(name="xapi_tool_launch")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Chamilo\PluginBundle\Entity\XApi\Repository\ToolLaunchRepository")
  */
 class ToolLaunch
 {

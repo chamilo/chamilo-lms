@@ -10,16 +10,33 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 api_protect_course_script(true);
 api_protect_teacher_script();
 
+$httpRequest = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+
 $course = api_get_course_entity();
 $session = api_get_session_entity();
 $cidReq = api_get_cidreq();
+$origin = api_get_origin();
+$userId = api_get_user_id();
 
 $plugin = XApiPlugin::create();
 $pluginIndex = "./start.php?$cidReq";
 
+$lp = null;
+
+if ('lp' === $origin && $httpRequest->query->has('lp_id')) {
+    $lp = new learnpath('', $httpRequest->query->getInt('lp_id'), $userId);
+
+    if (!empty($lp->lp_id)) {
+        $pluginIndex = api_get_path(WEB_CODE_PATH)."lp/lp_controller.php?$cidReq&"
+            .http_build_query(['action' => 'add_item', 'type' => 'step', 'lp' => $lp->lp_id, 'lp_build_selected' => 8]);
+    }
+}
+
 $langAddActivity = $plugin->get_lang('AddActivity');
 
-$frmActivity = new FormValidator('frm_activity', 'post', api_get_self().'?'.api_get_cidreq());
+$formAction = api_get_self()."?$cidReq&".($lp ? http_build_query(['lp_id' => $lp->lp_id]) : '');
+
+$frmActivity = new FormValidator('frm_activity', 'post', $formAction);
 $frmActivity->addFile('file', $plugin->get_lang('XApiPackage'));
 $frmActivity->addButtonAdvancedSettings('advanced_params');
 $frmActivity->addHtml('<div id="advanced_params_options" style="display:none">');
@@ -129,12 +146,23 @@ $frmActivity->setDefaults(['allow_multiple_attempts' => true]);
 
 $actions = Display::url(
     Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
-    'start.php?'.api_get_cidreq()
+    $pluginIndex
 );
 
 $pageContent = $frmActivity->returnForm();
 
-$interbreadcrumb[] = ['url' => 'start.php', 'name' => $plugin->get_lang('ToolTinCan')];
+if ($lp) {
+    $interbreadcrumb[] = [
+        'url' => api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=list&'.api_get_cidreq(),
+        'name' => get_lang('LearningPaths'),
+    ];
+    $interbreadcrumb[] = [
+        'url' => $pluginIndex,
+        'name' => $lp->getNameNoTags(),
+    ];
+} else {
+    $interbreadcrumb[] = ['url' => $pluginIndex, 'name' => $plugin->get_lang('ToolTinCan')];
+}
 
 $view = new Template($langAddActivity);
 $view->assign('header', $langAddActivity);

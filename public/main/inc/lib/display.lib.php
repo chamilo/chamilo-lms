@@ -1639,13 +1639,13 @@ class Display
             if (TOOL_SURVEY == $toolName) {
                 $survey_info = SurveyManager::get_survey($notification['ref'], 0, $course_code);
                 if (!empty($survey_info)) {
-                    $invited_users = SurveyUtil::get_invited_users(
+                    /*$invited_users = SurveyUtil::get_invited_users(
                         $survey_info['code'],
                         $course_code
                     );
                     if (!in_array($user_id, $invited_users['course_users'])) {
                         continue;
-                    }
+                    }*/
                 }
             }
 

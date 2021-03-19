@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CSurvey;
 use ChamiloSession as Session;
 
 $lastQuestion = 0;
@@ -55,24 +57,39 @@ if (empty($courseInfo)) {
     api_not_allowed(true);
 }
 
+$courseId = $courseInfo['real_id'];
 $userInfo = api_get_user_info();
 $sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : api_get_session_id();
 
-// Breadcrumbs
 if (!empty($userInfo)) {
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cid='.$courseInfo['real_id'].'&sid='.$sessionId,
+        'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cid='.$courseId.'&sid='.$sessionId,
         'name' => get_lang('Survey list'),
     ];
 }
 
-$course_id = $courseInfo['real_id'];
-$surveyCode = isset($_GET['scode']) ? Database::escape_string($_GET['scode']) : '';
+// First we check if the needed parameters are present
+if ((!isset($_GET['course']) || !isset($_GET['invitationcode'])) && !isset($_GET['user_id'])) {
+    api_not_allowed(true, get_lang('There is a parameter missing in the link. Please use copy and past'));
+}
 
+$repo = Container::getSurveyRepository();
+$surveyId = isset($_GET['iid']) ? (int) $_GET['iid'] : 0;
+
+/** @var CSurvey $survey */
+$survey = $repo->find($surveyId);
+if (null === $survey) {
+    api_not_allowed(true);
+}
+
+$surveyId = $survey->getIid();
+$invitationCode = $_GET['invitationcode'] ?? null;
+
+/*$surveyCode = isset($_GET['scode']) ? Database::escape_string($_GET['scode']) : '';
 if ('' != $surveyCode) {
     // Firstly we check if this survey is ready for anonymous use:
     $sql = "SELECT anonymous FROM $table_survey
-            WHERE c_id = $course_id AND code ='".$surveyCode."'";
+            WHERE c_id = $courseId AND code ='".$surveyCode."'";
     $resultAnonymous = Database::query($sql);
     $rowAnonymous = Database::fetch_array($resultAnonymous, 'ASSOC');
     // If is anonymous and is not allowed to take the survey to anonymous users, forbid access:
@@ -83,78 +100,68 @@ if ('' != $surveyCode) {
         api_not_allowed(true);
     }
     // If is anonymous and it is allowed to take the survey as anonymous, mark survey as anonymous.
-}
+}*/
 
-// First we check if the needed parameters are present
-if ((!isset($_GET['course']) || !isset($_GET['invitationcode'])) && !isset($_GET['user_id'])) {
-    api_not_allowed(true, get_lang('There is a parameter missing in the link. Please use copy and past'));
+if ((0 == $survey->getAnonymous() && api_is_anonymous())) {
+    api_not_allowed(true);
 }
-
-$invitationcode = $_GET['invitationcode'];
 
 // Start auto-invitation feature FS#3403 (all-users-can-do-the-survey-URL handling)
-if ('auto' === $invitationcode && isset($_GET['scode'])) {
+if ('auto' === $invitationCode) {
     $userid = api_get_user_id();
     // Survey_code of the survey
-    $surveyCode = $_GET['scode'];
+    $surveyCode = $survey->getCode();
     if ($isAnonymous) {
-        $autoInvitationcode = 'auto-ANONY_'.md5(time())."-$surveyCode";
+        $autoInvitationCode = 'auto-ANONY_'.md5(time())."-$surveyCode";
     } else {
         $invitations = SurveyManager::getUserInvitationsForSurveyInCourse(
             $userid,
             $surveyCode,
-            $courseInfo['real_id'],
+            $courseId,
             $sessionId
         );
         $lastInvitation = current($invitations);
 
         if (!$lastInvitation) {
             // New invitation code from userid
-            $autoInvitationcode = "auto-$userid-$surveyCode";
+            $autoInvitationCode = "auto-$userid-$surveyCode";
         } else {
-            $autoInvitationcode = $lastInvitation->getInvitationCode();
+            $autoInvitationCode = $lastInvitation->getInvitationCode();
         }
     }
 
-    // The survey code must exist in this course, or the URL is invalid
-    $sql = "SELECT * FROM $table_survey
-            WHERE c_id = $course_id AND code = '".Database::escape_string($surveyCode)."'";
+    // Check availability.
+    SurveyManager::checkTimeAvailability($survey);
+
+    // Check for double invitation records (insert should be done once)
+    $sql = "SELECT user
+            FROM $table_survey_invitation
+            WHERE
+                c_id = $courseId AND
+                invitation_code = '".Database::escape_string($autoInvitationCode)."'";
     $result = Database::query($sql);
-    if (Database :: num_rows($result) > 0) {
-        // Check availability
-        $row = Database::fetch_array($result, 'ASSOC');
-        $tempdata = SurveyManager::get_survey($row['survey_id']);
-        SurveyManager::checkTimeAvailability($tempdata);
-        // Check for double invitation records (insert should be done once)
-        $sql = "SELECT user
-                FROM $table_survey_invitation
-                WHERE
-                    c_id = $course_id AND
-                    invitation_code = '".Database::escape_string($autoInvitationcode)."'";
-        $result = Database::query($sql);
-        $now = api_get_utc_datetime();
-        if (0 == Database :: num_rows($result)) {
-            $params = [
-                'c_id' => $course_id,
-                'survey_code' => $surveyCode,
-                'user' => $userid,
-                'invitation_code' => $autoInvitationcode,
-                'invitation_date' => $now,
-            ];
-            Database::insert($table_survey_invitation, $params);
-        }
-        // From here we use the new invitationcode auto-userid-surveycode string
-        $_GET['invitationcode'] = $autoInvitationcode;
-        Session::write('auto_invitation_code_'.$surveyCode, $autoInvitationcode);
-        $invitationcode = $autoInvitationcode;
+    $now = api_get_utc_datetime();
+    if (0 == Database::num_rows($result)) {
+        $params = [
+            'c_id' => $courseId,
+            'survey_id' => $surveyId,
+            'user' => $userid,
+            'invitation_code' => $autoInvitationCode,
+            'invitation_date' => $now,
+        ];
+        Database::insert($table_survey_invitation, $params);
     }
+    // From here we use the new invitationcode auto-userid-surveycode string
+    $_GET['invitationcode'] = $autoInvitationCode;
+    Session::write('auto_invitation_code_'.$surveyCode, $autoInvitationCode);
+    $invitationCode = $autoInvitationCode;
 }
 
 // Now we check if the invitation code is valid
 $sql = "SELECT * FROM $table_survey_invitation
         WHERE
-            c_id = $course_id AND
-            invitation_code = '".Database::escape_string($invitationcode)."'";
+            c_id = $courseId AND
+            invitation_code = '".Database::escape_string($invitationCode)."'";
 $result = Database::query($sql);
 if (Database::num_rows($result) < 1) {
     api_not_allowed(true, get_lang('Wrong invitation code'));
@@ -167,7 +174,7 @@ if (!isset($_POST['finish_survey']) &&
     (
         $isAnonymous &&
         !empty($surveyUserFromSession) &&
-        SurveyUtil::isSurveyAnsweredFlagged($survey_invitation['survey_code'], $survey_invitation['c_id'])
+        SurveyUtil::isSurveyAnsweredFlagged($survey->getCode(), $survey_invitation['c_id'])
     ) ||
     (1 == $survey_invitation['answered'] && !isset($_GET['user_id']))
 ) {
@@ -178,7 +185,7 @@ $logInfo = [
     'tool' => TOOL_SURVEY,
     'tool_id' => $survey_invitation['iid'],
     'action' => 'invitationcode',
-    'action_details' => $invitationcode,
+    'action_details' => $invitationCode,
 ];
 Event::registerLog($logInfo);
 
@@ -186,9 +193,7 @@ Event::registerLog($logInfo);
 // If this is the case there will be a language choice
 $sql = "SELECT * FROM $table_survey
         WHERE
-            c_id = $course_id AND
-            code = '".Database::escape_string($survey_invitation['survey_code'])."'";
-$sql .= api_get_session_condition($sessionId);
+            code = '".Database::escape_string($survey->getCode())."'";
 $result = Database::query($sql);
 
 if (Database::num_rows($result) > 1) {
@@ -213,49 +218,35 @@ if (Database::num_rows($result) > 1) {
         Display::display_footer();
         exit();
     }
-} else {
-    $row = Database::fetch_array($result, 'ASSOC');
-    $survey_invitation['survey_id'] = $row['iid'];
-}
-
-// Getting the survey information
-$survey_data = SurveyManager::get_survey($survey_invitation['survey_id']);
-if (empty($survey_data)) {
-    api_not_allowed(true);
 }
 
 // Checking time availability
-SurveyManager::checkTimeAvailability($survey_data);
-$survey_data['survey_id'] = $survey_invitation['survey_id'];
-
-if ('3' == $survey_data['survey_type']) {
+SurveyManager::checkTimeAvailability($survey);
+$surveyType = $survey->getSurveyType();
+if (3 === $surveyType) {
     header('Location: '.
         api_get_path(WEB_CODE_PATH).
-        'survey/meeting.php?cid='.$courseInfo['real_id'].'&sid='.$sessionId.'&invitationcode='.Security::remove_XSS($invitationcode)
+        'survey/meeting.php?cid='.$courseId.'&sid='.$sessionId.'&invitationcode='.Security::remove_XSS($invitationCode)
     );
     exit;
 }
 
-if (!empty($survey_data['anonymous'])) {
+if (!empty($survey->getAnonymous())) {
     define('USER_IN_ANON_SURVEY', true);
 }
 
 // Storing the answers
 if (count($_POST) > 0) {
-    if ('0' === $survey_data['survey_type']) {
+    if (0 === $surveyType) {
         $types = [];
         $required = [];
-        // Getting all the types of the question
-        // (because of the special treatment of the score question type
-        $sql = "SELECT * FROM $table_survey_question
-                WHERE
-                    c_id = $course_id AND
-                    survey_id = '".intval($survey_invitation['survey_id'])."'";
-        $result = Database::query($sql);
-
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
-            $types[$row['iid']] = $row['type'];
-            $required[$row['iid']] = $allowRequiredSurveyQuestions && $row['is_required'];
+        $questions = $survey->getQuestions();
+        $questionList = [];
+        foreach ($questions as $question) {
+            $id = $question->getIid();
+            $questionList[$id] = $question;
+            $types[$id] = $question->getType();
+            $required[$id] = $allowRequiredSurveyQuestions && $question->isMandatory();
         }
 
         // Looping through all the post values
@@ -274,6 +265,11 @@ if (count($_POST) > 0) {
                 }
 
                 $other = isset($_POST['other_question'.$survey_question_id]) ? $_POST['other_question'.$survey_question_id] : '';
+                $question = $questionList[$survey_question_id] ?? null;
+
+                if (null === $question) {
+                    continue;
+                }
 
                 /* If the post value is an array then we have a multiple response question or a scoring question type
                 remark: when it is a multiple response then the value of the array is the option_id
@@ -282,9 +278,8 @@ if (count($_POST) > 0) {
                 if (is_array($value)) {
                     SurveyUtil::remove_answer(
                         $survey_invitation['user'],
-                        $survey_invitation['survey_id'],
-                        $survey_question_id,
-                        $course_id
+                        $surveyId,
+                        $survey_question_id
                     );
 
                     foreach ($value as $answer_key => &$answer_value) {
@@ -296,28 +291,27 @@ if (count($_POST) > 0) {
                             $option_value = '';
                         }
 
-                        SurveyUtil::store_answer(
+                        SurveyUtil::saveAnswer(
                             $survey_invitation['user'],
-                            $survey_invitation['survey_id'],
-                            $survey_question_id,
+                            $survey,
+                            $question,
                             $option_id,
-                            $option_value,
-                            $survey_data
+                            $option_value
                         );
                     }
                 } else {
                     // All the other question types (open question, multiple choice, percentage, ...)
-                    if (isset($types[$survey_question_id]) &&
-                        'percentage' === $types[$survey_question_id]) {
+                    $option_value = 0;
+                    if (isset($types[$survey_question_id]) && 'percentage' === $types[$survey_question_id]) {
                         $sql = "SELECT * FROM $table_survey_question_option
                                 WHERE
-                                    c_id = $course_id AND
                                     iid='".intval($value)."'";
                         $result = Database::query($sql);
                         $row = Database::fetch_array($result, 'ASSOC');
-                        $option_value = $row['option_text'];
+                        if ($row) {
+                            $option_value = $row['option_text'];
+                        }
                     } else {
-                        $option_value = 0;
                         if (isset($types[$survey_question_id]) && 'open' === $types[$survey_question_id]) {
                             $option_value = $value;
                         }
@@ -326,39 +320,41 @@ if (count($_POST) > 0) {
                     $survey_question_answer = $value;
                     SurveyUtil::remove_answer(
                         $survey_invitation['user'],
-                        $survey_invitation['survey_id'],
-                        $survey_question_id,
-                        $course_id
+                        $surveyId,
+                        $survey_question_id
                     );
 
-                    SurveyUtil::store_answer(
+                    SurveyUtil::saveAnswer(
                         $survey_invitation['user'],
-                        $survey_invitation['survey_id'],
-                        $survey_question_id,
+                        $survey,
+                        $question,
                         $value,
                         $option_value,
-                        $survey_data,
                         $other
                     );
                 }
             }
         }
-    } elseif ('1' === $survey_data['survey_type']) {
+    } elseif (1 === $survey->getSurveyType()) {
         //conditional/personality-test type surveys
         // Getting all the types of the question (because of the special treatment of the score question type
         $shuffle = '';
-        if ('1' == $survey_data['shuffle']) {
+        if (1 == $survey->getShuffle()) {
             $shuffle = ' ORDER BY RAND() ';
         }
-        $sql = "SELECT * FROM $table_survey_question
+        /*$sql = "SELECT * FROM $table_survey_question
                 WHERE
-                    c_id = $course_id AND
-                    survey_id = '".intval($survey_invitation['survey_id'])."' AND
-                    survey_group_pri = '0' $shuffle";
-        $result = Database::query($sql);
+                    survey_id = $surveyId AND
+                    survey_group_pri = '0'
+                    $shuffle";
+        $result = Database::query($sql);*/
         // There is only one question type for conditional surveys
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
-            $types[$row['iid']] = $row['type'];
+        $types = [];
+        //while ($row = Database::fetch_array($result, 'ASSOC')) {
+        $questions = $survey->getQuestions();
+        $questionList = [];
+        foreach ($questions as $question) {
+            $questionList[$question->getIid()] = $question;
         }
 
         // Looping through all the post values
@@ -375,7 +371,7 @@ if (count($_POST) > 0) {
                 }
                 // We select the correct answer and the puntuacion
                 $sql = "SELECT value FROM $table_survey_question_option
-                        WHERE c_id = $course_id AND iid='".intval($value)."'";
+                        WHERE iid='".intval($value)."'";
                 $result = Database::query($sql);
                 $row = Database::fetch_array($result, 'ASSOC');
                 $option_value = $row['value'];
@@ -385,17 +381,15 @@ if (count($_POST) > 0) {
                 SurveyUtil::remove_answer(
                     $survey_invitation['user'],
                     $survey_invitation['survey_id'],
-                    $survey_question_id,
-                    $course_id
+                    $survey_question_id
                 );
 
-                SurveyUtil::store_answer(
+                SurveyUtil::saveAnswer(
                     $survey_invitation['user'],
                     $survey_invitation['survey_id'],
-                    $survey_question_id,
+                    $questionList[$survey_question_id],
                     $value,
-                    $option_value,
-                    $survey_data
+                    $option_value
                 );
             }
         }
@@ -411,11 +405,11 @@ if (0 == $user_id) {
 }
 $user_data = api_get_user_info($user_id);
 
-if ('' != $survey_data['form_fields'] &&
-    0 == $survey_data['anonymous'] &&
+if ('' != $survey->getFormFields() &&
+    0 == $survey->getAnonymous() &&
     is_array($user_data)
 ) {
-    $form_fields = explode('@', $survey_data['form_fields']);
+    $form_fields = explode('@', $survey->getFormFields());
     $list = [];
     foreach ($form_fields as $field) {
         $field_value = explode(':', $field);
@@ -427,8 +421,8 @@ if ('' != $survey_data['form_fields'] &&
         }
     }
 
-    $url = api_get_self().'?cid='.$courseInfo['real_id'].'&sid='.$sessionId;
-    $listQueryParams = preg_split('/&/', $_SERVER['QUERY_STRING']);
+    $url = api_get_self().'?cid='.$courseId.'&sid='.$sessionId;
+    $listQueryParams = explode('&', $_SERVER['QUERY_STRING']);
     foreach ($listQueryParams as $param) {
         $url .= '&'.Security::remove_XSS($param);
     }
@@ -487,8 +481,8 @@ if ('' != $survey_data['form_fields'] &&
         }
         $form->applyFilter('official_code', 'stripslashes');
         $form->applyFilter('official_code', 'trim');
-        if ('true' == api_get_setting('registration', 'officialcode') &&
-            'true' == api_get_setting('profile', 'officialcode')
+        if ('true' === api_get_setting('registration', 'officialcode') &&
+            'true' === api_get_setting('profile', 'officialcode')
         ) {
             $form->addRule('official_code', get_lang('Required field'), 'required');
         }
@@ -502,7 +496,7 @@ if ('' != $survey_data['form_fields'] &&
         }
         $form->applyFilter('email', 'stripslashes');
         $form->applyFilter('email', 'trim');
-        if ('true' == api_get_setting('registration', 'email')) {
+        if ('true' === api_get_setting('registration', 'email')) {
             $form->addRule('email', get_lang('Required field'), 'required');
         }
         $form->addEmailRule('email');
@@ -527,7 +521,7 @@ if ('' != $survey_data['form_fields'] &&
         if ('true' !== api_get_setting('profile', 'language')) {
             $form->freeze('language');
         }
-        if ('true' == api_get_setting('profile', 'language')) {
+        if ('true' === api_get_setting('profile', 'language')) {
             $form->addRule('language', get_lang('Required field'), 'required');
         }
     }
@@ -559,9 +553,9 @@ Display::display_header(get_lang('Surveys'));
 echo '<div class="survey-block">';
 echo '<div class="page-header">';
 echo '<h2>';
-echo strip_tags($survey_data['survey_title'], '<span>').'</h2></div>';
-if (!empty($survey_data['survey_subtitle'])) {
-    echo '<div class="survey_subtitle"><p>'.strip_tags($survey_data['survey_subtitle']).'</p></div>';
+echo strip_tags($survey->getTitle(), '<span>').'</h2></div>';
+if (!empty($survey->getSubtitle())) {
+    echo '<div class="survey_subtitle"><p>'.strip_tags($survey->getSubtitle()).'</p></div>';
 }
 
 // Displaying the survey introduction
@@ -572,14 +566,14 @@ if (
     Session::erase('paged_questions');
     Session::erase('page_questions_sec');
     $paged_questions_sec = [];
-    if (!empty($survey_data['survey_introduction'])) {
-        echo '<div class="survey_content">'.Security::remove_XSS($survey_data['survey_introduction']).'</div>';
+    if (!empty($survey->getIntro())) {
+        echo '<div class="survey_content">'.Security::remove_XSS($survey->getIntro()).'</div>';
     }
     $limit = 0;
 }
 
-if ($survey_data['form_fields'] &&
-    0 == $survey_data['anonymous'] &&
+if ($survey->getFormFields() &&
+    0 == $survey->getAnonymous() &&
     is_array($user_data) &&
     !isset($_GET['show'])
 ) {
@@ -616,7 +610,6 @@ if ($survey_data['form_fields'] &&
 
                 $extraFieldValue = new ExtraFieldValue('user');
                 $extraFieldValue->saveFieldValues($user_data);
-
                 echo '<div id="survey_content" class="survey_content">'.
                     get_lang('Information updated').' '.get_lang('Please fill survey').'</div>';
             }
@@ -640,18 +633,9 @@ if ($survey_data['form_fields'] &&
 // Displaying the survey thanks message
 if (isset($_POST['finish_survey'])) {
     echo Display::return_message(get_lang('You have finished this survey.'), 'confirm');
-    echo Security::remove_XSS($survey_data['survey_thanks']);
-
-    SurveyManager::update_survey_answered(
-        $survey_data,
-        $survey_invitation['user'],
-        $survey_invitation['survey_code']
-    );
-
-    SurveyUtil::flagSurveyAsAnswered(
-        $survey_invitation['survey_code'],
-        $survey_invitation['c_id']
-    );
+    echo Security::remove_XSS($survey->getSurveythanks());
+    SurveyManager::updateSurveyAnswered($survey, $survey_invitation['user']);
+    SurveyUtil::flagSurveyAsAnswered($survey->getCode(), $survey_invitation['c_id']);
 
     if ($courseInfo && !api_is_anonymous()) {
         echo '<br /><br />';
@@ -670,7 +654,7 @@ if (isset($_POST['finish_survey'])) {
 
 // Sets the random questions
 $shuffle = '';
-if (1 == $survey_data['shuffle']) {
+if (1 == $survey->getShuffle()) {
     $shuffle = ' BY RAND() ';
 }
 
@@ -691,17 +675,16 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
     }
 
     // If non-conditional survey
-    if ('0' == $survey_data['survey_type']) {
+    if (0 === $survey->getSurveyType()) {
         if (empty($paged_questions)) {
             $sql = "SELECT * FROM $table_survey_question
                     WHERE
                         survey_question NOT LIKE '%{{%' AND
-                        c_id = $course_id AND
-                        survey_id = '".intval($survey_invitation['survey_id'])."'
+                        survey_id = '".$surveyId."'
                     ORDER BY sort ASC";
             $result = Database::query($sql);
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                if (1 == $survey_data['one_question_per_page']) {
+                if (1 == $survey->getOneQuestionPerPage()) {
                     if ('pagebreak' !== $row['type']) {
                         $paged_questions[$counter][] = $row['iid'];
                         $counter++;
@@ -721,14 +704,14 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
 
         // Redefinition of variables and session ids to fix issue of survey not
         //  showing questions - see support.chamilo.org #5529
-        $course_id = $survey_invitation['c_id'];
-        Session::write('_cid', $course_id);
-        Session::write('_real_cid', $course_id);
+        $courseId = $survey_invitation['c_id'];
+        Session::write('_cid', $courseId);
+        Session::write('_real_cid', $courseId);
 
         if (array_key_exists($_GET['show'], $paged_questions)) {
             if (isset($_GET['user_id'])) {
                 // Get the user into survey answer table (user or anonymus)
-                $my_user_id = 1 == $survey_data['anonymous'] ? $surveyUserFromSession : api_get_user_id();
+                $my_user_id = 1 == $survey->getAnonymous() ? $surveyUserFromSession : api_get_user_id();
 
                 $sql = "SELECT
                             survey_question.survey_group_sec1,
@@ -748,15 +731,15 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                         FROM $table_survey_question survey_question
                         LEFT JOIN $table_survey_question_option survey_question_option
                         ON survey_question.iid = survey_question_option.question_id AND
-                        survey_question_option.c_id = $course_id
+                        survey_question_option.c_id = $courseId
                         WHERE
-                            survey_question.survey_id = '".Database::escape_string($survey_invitation['survey_id'])."' AND
+                            survey_question.survey_id = '".$surveyId."' AND
                             survey_question.iid NOT IN (
                                 SELECT sa.question_id
                                 FROM ".$table_survey_answer." sa
                                 WHERE
                                     sa.user='".$my_user_id."') AND
-                                    survey_question.c_id =  $course_id
+                                    survey_question.c_id =  $courseId
                                 ORDER BY survey_question.sort, survey_question_option.sort ASC";
             } else {
                 $sql = "SELECT
@@ -777,13 +760,11 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                             ".($allowRequiredSurveyQuestions ? ', survey_question.is_required' : '')."
                         FROM $table_survey_question survey_question
                         LEFT JOIN $table_survey_question_option survey_question_option
-                        ON survey_question.iid = survey_question_option.question_id AND
-                            survey_question_option.c_id = $course_id
+                        ON survey_question.iid = survey_question_option.question_id
                         WHERE
                             survey_question NOT LIKE '%{{%' AND
-                            survey_question.survey_id = '".intval($survey_invitation['survey_id'])."' AND
-                            survey_question.iid IN (".implode(',', $paged_questions[$_GET['show']]).") AND
-                            survey_question.c_id =  $course_id
+                            survey_question.survey_id = '".$surveyId."' AND
+                            survey_question.iid IN (".implode(',', $paged_questions[$_GET['show']]).")
                         ORDER BY survey_question.sort, survey_question_option.sort ASC";
             }
 
@@ -805,8 +786,9 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                     $questions[$sort]['maximum_score'] = $row['max_value'];
                     $questions[$sort]['sort'] = $sort;
                     $questions[$sort]['is_required'] = $allowRequiredSurveyQuestions && $row['is_required'];
-                    $questions[$sort]['parent_id'] = isset($row['parent_id']) ? $row['parent_id'] : 0;
-                    $questions[$sort]['parent_option_id'] = isset($row['parent_option_id']) ? $row['parent_option_id'] : 0;
+                    $questions[$sort]['parent_id'] = $row['parent_id'] ?? 0;
+                    $questions[$sort]['parent_option_id'] =
+                        isset($row['parent_option_id']) ? $row['parent_option_id'] : 0;
                 }
                 $counter++;
                 if (isset($_GET['show']) && (int) $_GET['show'] >= 0) {
@@ -816,7 +798,7 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                 }
             }
         }
-    } elseif ('1' === $survey_data['survey_type']) {
+    } elseif (1 === $survey->getSurveyType()) {
         $my_survey_id = (int) $survey_invitation['survey_id'];
         $current_user = Database::escape_string($survey_invitation['user']);
 
@@ -839,9 +821,7 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                     ON (survey_question.iid = survey_answer.question_id)
                     WHERE
                         survey_answer.survey_id='".$my_survey_id."' AND
-                        survey_answer.user='".$current_user."' AND
-                        survey_answer.c_id = $course_id AND
-                        survey_question.c_id = $course_id AND
+                        survey_answer.user='".$current_user."'
                     GROUP BY survey_group_pri
                     ORDER BY survey_group_pri
                     ";
@@ -866,8 +846,8 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                         ON (survey_question.iid = survey_question_option.question_id)
                         WHERE
                             survey_question.survey_id='".$my_survey_id."'  AND
-                            survey_question.c_id = $course_id AND
-                            survey_question_option.c_id = $course_id AND
+                            survey_question.c_id = $courseId AND
+                            survey_question_option.c_id = $courseId AND
                             survey_group_sec1='0' AND
                             survey_group_sec2='0'
                         GROUP BY survey_group_pri, survey_question.iid
@@ -996,17 +976,16 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                     ) {
                         $sql = "SELECT * FROM $table_survey_question
                                  WHERE
-                                    c_id = $course_id AND
                                     survey_id = '".$my_survey_id."' AND
                                     ($secondary )
                                  ORDER BY sort ASC";
                         $result = Database::query($sql);
                         $counter = 0;
                         while ($row = Database::fetch_array($result, 'ASSOC')) {
-                            if (1 == $survey_data['one_question_per_page']) {
+                            if (1 == $survey->getOneQuestionPerPage()) {
                                 $paged_questions_sec[$counter][] = $row['question_id'];
                                 $counter++;
-                            } elseif ('pagebreak' == $row['type']) {
+                            } elseif ('pagebreak' === $row['type']) {
                                 $counter++;
                                 $pageBreakText[$counter] = $row['survey_question'];
                             } else {
@@ -1041,11 +1020,9 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                                 FROM $table_survey_question survey_question
                                 LEFT JOIN $table_survey_question_option survey_question_option
                                 ON survey_question.iid = survey_question_option.question_id AND
-                                survey_question_option.c_id = $course_id
                                 WHERE
                                     survey_question NOT LIKE '%{{%' AND
-                                    survey_question.survey_id = '".$my_survey_id."' AND
-                                    survey_question.c_id = $course_id AND
+                                    survey_question.survey_id = '".$my_survey_id."'
                                     survey_question.iid IN (".implode(',', $paged_questions_sec[$val]).")
                                 ORDER  $shuffle ";
 
@@ -1056,7 +1033,7 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                         $questions = [];
                         while ($row = Database::fetch_array($result, 'ASSOC')) {
                             // If the type is not a pagebreak we store it in the $questions array
-                            if ('pagebreak' != $row['type']) {
+                            if ('pagebreak' !== $row['type']) {
                                 $questions[$row['sort']]['question_id'] = $row['question_id'];
                                 $questions[$row['sort']]['survey_id'] = $row['survey_id'];
                                 $questions[$row['sort']]['survey_question'] = $row['survey_question'];
@@ -1099,19 +1076,18 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
             if (empty($_SESSION['paged_questions'])) {
                 $sql = "SELECT * FROM $table_survey_question
                         WHERE
-                            c_id = $course_id AND
-                            survey_id = '".intval($survey_invitation['survey_id'])."' AND
+                            survey_id = '".$surveyId."' AND
                             survey_group_sec1='0' AND
                             survey_group_sec2='0'
                         ORDER ".$order_sql." ";
                 $result = Database::query($sql);
                 $counter = 0;
                 while ($row = Database::fetch_array($result, 'ASSOC')) {
-                    if (1 == $survey_data['one_question_per_page']) {
+                    if (1 == $survey->getOneQuestionPerPage()) {
                         $paged_questions[$counter][] = $row['question_id'];
                         $counter++;
                     } else {
-                        if ('pagebreak' == $row['type']) {
+                        if ('pagebreak' === $row['type']) {
                             $counter++;
                             $pageBreakText[$counter] = $row['survey_question'];
                         } else {
@@ -1153,11 +1129,11 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                             FROM $table_survey_question survey_question
                             LEFT JOIN $table_survey_question_option survey_question_option
                             ON survey_question.iid = survey_question_option.question_id AND
-                            survey_question_option.c_id = $course_id
+                            survey_question_option.c_id = $courseId
                             WHERE
                                 survey_question NOT LIKE '%{{%' AND
                                 survey_question.survey_id = '".intval($survey_invitation['survey_id'])."' AND
-                                survey_question.c_id = $course_id  AND
+                                survey_question.c_id = $courseId  AND
                                 survey_question.iid IN (".$imploded.")
                             ORDER $order_sql ";
                     $result = Database::query($sql);
@@ -1171,7 +1147,7 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                 $questions = [];
                 while ($row = Database :: fetch_array($result, 'ASSOC')) {
                     // If the type is not a pagebreak we store it in the $questions array
-                    if ('pagebreak' != $row['type']) {
+                    if ('pagebreak' !== $row['type']) {
                         $questions[$row['sort']]['question_id'] = $row['question_id'];
                         $questions[$row['sort']]['survey_id'] = $row['survey_id'];
                         $questions[$row['sort']]['survey_question'] = $row['survey_question'];
@@ -1198,7 +1174,7 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
     }
 }
 
-$numberOfPages = SurveyManager::getCountPages($survey_data);
+$numberOfPages = SurveyManager::getCountPages($survey);
 
 // Displaying the form with the questions
 $show = 0;
@@ -1228,10 +1204,12 @@ $g_ic = isset($_GET['invitationcode']) ? Security::remove_XSS($_GET['invitationc
 $g_cr = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
 $p_l = isset($_POST['language']) ? Security::remove_XSS($_POST['language']) : '';
 $add_parameters = isset($_GET['user_id']) ? '&user_id='.intval($_GET['user_id']) : '';
-$url = api_get_self().'?cid='.$courseInfo['real_id'].'&sid='.$sessionId.$add_parameters.
+$url = api_get_self().'?cid='.$courseId.'&sid='.$sessionId.$add_parameters.
     '&course='.$g_c.
     '&invitationcode='.$g_ic.
-    '&show='.$show;
+    '&show='.$show.
+    '&iid='.$surveyId
+;
 if (!empty($_GET['language'])) {
     $lang = Security::remove_XSS($_GET['language']);
     $url .= '&language='.$lang;
@@ -1247,7 +1225,7 @@ $form = new FormValidator(
 $form->addHidden('language', $p_l);
 
 $showNumber = true;
-if (SurveyManager::hasDependency($survey_data)) {
+if (SurveyManager::hasDependency($survey)) {
     $showNumber = false;
 }
 
@@ -1266,7 +1244,6 @@ if (isset($questions) && is_array($questions)) {
 
     $form->addHtml('<div class="start-survey">');
     $js = '';
-
     if (isset($pageBreakText[$originalShow]) && !empty(strip_tags($pageBreakText[$originalShow]))) {
         // Only show page-break texts if there is something there, apart from
         // HTML tags
@@ -1279,6 +1256,7 @@ if (isset($questions) && is_array($questions)) {
     }
 
     foreach ($questions as $key => &$question) {
+
         $ch_type = 'ch_'.$question['type'];
         $questionNumber = $questionCounter;
         $display = new $ch_type();
@@ -1313,12 +1291,12 @@ if (isset($questions) && is_array($questions)) {
                 case 'score':
                     $finalAnswer = [];
                     foreach ($userAnswer as $userChoice) {
-                        list($choiceId, $choiceValue) = explode('*', $userChoice);
+                        [$choiceId, $choiceValue] = explode('*', $userChoice);
                         $finalAnswer[$choiceId] = $choiceValue;
                     }
                     break;
                 case 'percentage':
-                    list($choiceId, $choiceValue) = explode('*', current($userAnswer));
+                    [$choiceId, $choiceValue] = explode('*', current($userAnswer));
                     $finalAnswer = $choiceId;
                     break;
                 default:
@@ -1335,8 +1313,8 @@ if (isset($questions) && is_array($questions)) {
 }
 
 $form->addHtml('<div class="start-survey">');
-if ('0' == $survey_data['survey_type']) {
-    if (0 == $survey_data['show_form_profile']) {
+if ('0' == $survey->getSurveyType()) {
+    if (0 == $survey->getShowFormProfile()) {
         // The normal survey as always
         if ($show < $numberOfPages) {
             if (0 == $show) {
@@ -1406,7 +1384,7 @@ if ('0' == $survey_data['survey_type']) {
             }
         }
     }
-} elseif ('1' == $survey_data['survey_type']) {
+} elseif (1 === $survey->getSurveyType()) {
     // Conditional/personality-test type survey
     if (isset($_GET['show']) || isset($_POST['personality'])) {
         $numberOfPages = count($paged_questions);
@@ -1422,7 +1400,7 @@ if ('0' == $survey_data['survey_type']) {
         if (0 == $personality) {
             if (($show <= $numberOfPages) || !$_GET['show']) {
                 $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right', 'success');
-                if (0 == $survey_data['one_question_per_page']) {
+                if (0 == $survey->getOneQuestionPerPage()) {
                     if ($personality >= 0) {
                         $form->addHidden('personality', $personality);
                     }
@@ -1441,7 +1419,7 @@ if ('0' == $survey_data['survey_type']) {
         if ($show > $numberOfPages && $_GET['show'] && 0 == $personality) {
             $form->addHidden('personality', $personality);
         } elseif ($personality > 0) {
-            if (1 == $survey_data['one_question_per_page']) {
+            if (1 == $survey->getOneQuestionPerPage()) {
                 if ($show >= $numberOfPages) {
                     $form->addButton('finish_survey', get_lang('Finish survey'), 'arrow-right', 'success');
                 } else {
@@ -1453,7 +1431,7 @@ if ('0' == $survey_data['survey_type']) {
                 $form->addButton('finish_survey', get_lang('Finish survey'), 'arrow-right');
             }
         }
-    } elseif ('' == $survey_data['form_fields']) {
+    } elseif ('' == $survey->getFormFields()) {
         // This is the case when the show_profile_form is true but there are not form_fields
         $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right', 'success');
     } elseif (!is_array($user_data)) {

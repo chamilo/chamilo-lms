@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CSurvey;
 use ChamiloSession as Session;
 
 /**
@@ -25,7 +27,6 @@ $currentUserId = api_get_user_id();
 api_protect_course_script(true);
 $action = isset($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : '';
 
-// Tracking
 Event::event_access_tool(TOOL_SURVEY);
 
 $logInfo = [
@@ -39,6 +40,8 @@ Event::registerLog($logInfo);
  */
 $courseInfo = api_get_course_info();
 $sessionId = api_get_session_id();
+$courseId = api_get_course_int_id();
+
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     $currentUserId,
     $courseInfo
@@ -78,7 +81,13 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
 }
 
 $listUrl = api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq();
-$surveyId = isset($_GET['survey_id']) ? $_GET['survey_id'] : 0;
+$surveyId = $_GET['survey_id'] ?? 0;
+$repo = Container::getSurveyRepository();
+$survey = null;
+if (!empty($surveyId)) {
+    /** @var CSurvey $survey */
+    $survey = $repo->find($surveyId);
+}
 
 // Action handling: performing the same action on multiple surveys
 if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_array($_POST['id'])) {
@@ -97,12 +106,14 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
             $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
             foreach ($_POST['id'] as $value) {
-                $surveyData = SurveyManager::get_survey($value);
-                $surveyId = $surveyData['survey_id'];
-                if (empty($surveyData)) {
+                /** @var CSurvey $survey */
+                $survey = $repo->find($value);
+                if (null === $survey) {
                     continue;
                 }
-                $surveyData['title'] = api_html_entity_decode(trim(strip_tags($surveyData['title'])));
+                $surveyId = $survey->getIid();
+
+                $surveyData['title'] = api_html_entity_decode(trim(strip_tags($survey->getTitle())));
                 $groupData = $extraFieldValue->get_values_by_handler_and_field_variable(
                     $surveyId,
                     'group_id'
@@ -149,17 +160,15 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
 					FROM $table_survey_question survey_question
 					LEFT JOIN $table_survey_question_option survey_question_option
 					ON
-					    survey_question.iid = survey_question_option.question_id AND
-					    survey_question_option.c_id = $course_id
+					    survey_question.iid = survey_question_option.question_id
 					WHERE
 					    survey_question NOT LIKE '%{{%' AND
-					    survey_question.survey_id = '".$surveyId."' AND
-                        survey_question.c_id = $course_id
+					    survey_question.survey_id = '".$surveyId."'
 					ORDER BY survey_question.sort, survey_question_option.sort ASC";
                 $result = Database::query($sql);
                 $questionsOptions = [];
                 while ($row = Database::fetch_array($result, 'ASSOC')) {
-                    if ('pagebreak' != $row['type']) {
+                    if ('pagebreak' !== $row['type']) {
                         $questionsOptions[$row['sort']]['question_id'] = $row['question_id'];
                         $questionsOptions[$row['sort']]['survey_id'] = $row['survey_id'];
                         $questionsOptions[$row['sort']]['survey_question'] = $row['survey_question'];
@@ -370,23 +379,24 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
     }
     $exportList = [];
     foreach ($_POST['id'] as $value) {
-        $surveyData = SurveyManager::get_survey($value);
-        if (empty($surveyData)) {
+        /** @var CSurvey $survey */
+        $survey = $repo->find($value);
+        if (null === $survey) {
             continue;
         }
-        $surveyData['title'] = trim(strip_tags($surveyData['title']));
+        $title = trim(strip_tags($survey->getTitle()));
 
         switch ($action) {
             case 'export_all':
-                $filename = $surveyData['code'].'.xlsx';
-                $exportList[] = @SurveyUtil::export_complete_report_xls($surveyData, $filename, 0, true);
+                $filename = $survey->getCode().'.xlsx';
+                $exportList[] = @SurveyUtil::export_complete_report_xls($survey, $filename, 0, true);
                 break;
             case 'send_to_tutors':
                 $result = SurveyManager::sendToTutors($value);
                 if ($result) {
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('InvitationHasBeenSent').': '.$surveyData['title'],
+                            get_lang('The invitation has been sent').': '.$title,
                             'confirmation',
                             false
                         )
@@ -394,7 +404,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 } else {
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('InvitationHasBeenNotSent').': '.$surveyData['title'],
+                            get_lang("The invitation hasn't been sent").': '.$title,
                             'warning',
                             false
                         )
@@ -402,12 +412,11 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 }
                 break;
             case 'multiplicate':
-                $result = SurveyManager::multiplicateQuestions($surveyData);
-                $title = $surveyData['title'];
+                $result = SurveyManager::multiplicateQuestions($survey, $courseId);
                 if ($result) {
                     Display::addFlash(
                         Display::return_message(
-                            sprintf(get_lang('SurveyXMultiplicated'), $title),
+                            sprintf(get_lang('Survey %s multiplicated'), $title),
                             'confirmation',
                             false
                         )
@@ -415,7 +424,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 } else {
                     Display::addFlash(
                         Display::return_message(
-                            sprintf(get_lang('SurveyXNotMultiplicated'), $title),
+                            sprintf(get_lang('Survey %s not multiplicated'), $title),
                             'warning',
                             false
                         )
@@ -424,14 +433,13 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 break;
             case 'delete':
                 // if the survey is shared => also delete the shared content
-                if (is_numeric($surveyData['survey_share'])) {
+                /*if (is_numeric($surveyData['survey_share'])) {
                     SurveyManager::delete_survey($surveyData['survey_share'], true);
-                }
+                }*/
 
-                // delete the actual survey
-                SurveyManager::delete_survey($value);
+                SurveyManager::deleteSurvey($survey);
                 Display::addFlash(
-                    Display::return_message(get_lang('SurveysDeleted').': '.$surveyData['title'], 'confirmation', false)
+                    Display::return_message(get_lang('Surveys deleted').': '.$title, 'confirmation', false)
                 );
                 break;
         }
@@ -473,9 +481,8 @@ switch ($action) {
         if (!api_is_allowed_to_edit()) {
             api_not_allowed(true);
         }
-        $surveyData = SurveyManager::get_survey($surveyId);
-        if (!empty($surveyData)) {
-            SurveyManager::multiplicateQuestions($surveyData);
+        if (null !== $survey) {
+            SurveyManager::multiplicateQuestions($survey, $courseId);
             Display::addFlash(Display::return_message(get_lang('Updated'), 'confirmation', false));
         }
         header('Location: '.$listUrl);
@@ -485,9 +492,8 @@ switch ($action) {
         if (!api_is_allowed_to_edit()) {
             api_not_allowed(true);
         }
-        $surveyData = SurveyManager::get_survey($surveyId);
-        if (!empty($surveyData)) {
-            SurveyManager::removeMultiplicateQuestions($surveyData);
+        if (null !== $survey) {
+            SurveyManager::removeMultiplicateQuestions($survey, $courseId);
             Display::addFlash(Display::return_message(get_lang('Updated'), 'confirmation', false));
         }
         header('Location: '.$listUrl);
@@ -502,30 +508,32 @@ switch ($action) {
         }
         break;
     case 'delete':
-        if (!empty($surveyId)) {
+        if (null !== $survey) {
             // Getting the information of the survey (used for when the survey is shared)
-            $survey_data = SurveyManager::get_survey($surveyId);
+            /*$survey_data = SurveyManager::get_survey($surveyId);
             if (api_is_session_general_coach() && $sessionId != $survey_data['session_id']) {
                 // The coach can't delete a survey not belonging to his session
                 api_not_allowed();
-            }
+            }*/
             // If the survey is shared => also delete the shared content
-            if (isset($survey_data['survey_share']) &&
+            /*if (isset($survey_data['survey_share']) &&
                 is_numeric($survey_data['survey_share'])
             ) {
                 SurveyManager::delete_survey($survey_data['survey_share'], true);
-            }
+            }*/
 
-            $return = SurveyManager::delete_survey($surveyId);
-
+            $return = SurveyManager::deleteSurvey($survey);
             if ($return) {
-                Display::addFlash(Display::return_message(get_lang('The survey has been deleted.'), 'confirmation', false));
+                Display::addFlash(
+                    Display::return_message(get_lang('The survey has been deleted.'), 'confirmation', false)
+                );
             } else {
                 Display::addFlash(Display::return_message(get_lang('An error occurred.'), 'error', false));
             }
-            header('Location: '.$listUrl);
-            exit;
         }
+
+        header('Location: '.$listUrl);
+        exit;
         break;
     case 'empty':
         $mysession = api_get_session_id();
@@ -542,7 +550,9 @@ switch ($action) {
         }
         $return = SurveyManager::empty_survey($surveyId);
         if ($return) {
-            Display::addFlash(Display::return_message(get_lang('Answers to survey successfully deleted'), 'confirmation', false));
+            Display::addFlash(
+                Display::return_message(get_lang('Answers to survey successfully deleted'), 'confirmation', false)
+            );
         } else {
             Display::addFlash(Display::return_message(get_lang('An error occurred.'), 'error', false));
         }

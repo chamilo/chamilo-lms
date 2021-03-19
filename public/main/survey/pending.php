@@ -14,7 +14,6 @@ api_block_anonymous_users();
 $em = Database::getManager();
 
 $currentUser = api_get_user_entity(api_get_user_id());
-$avatarPath = UserManager::getUserPicture($currentUser->getId());
 $pending = SurveyUtil::getUserPendingInvitations($currentUser->getId());
 
 $surveysData = [];
@@ -41,9 +40,9 @@ foreach ($pending as $i => $item) {
         'course' => $course,
         'session' => $session,
         'link' => SurveyUtil::generateFillSurveyLink(
+            $survey,
             $invitation->getInvitationCode(),
-            $courseInfo,
-            $survey->getSessionId()
+            $course
         ),
     ];
 }
@@ -52,7 +51,6 @@ $toolName = get_lang('Pending surveys');
 
 $template = new Template($toolName);
 $template->assign('user', $currentUser);
-$template->assign('user_avatar', $avatarPath);
 $template->assign('surveys', $surveysData);
 $layout = $template->get_template('survey/pending.tpl');
 $content = $template->fetch($layout);

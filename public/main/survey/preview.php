@@ -6,6 +6,10 @@
  * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author  Julio Montoya <gugli100@gmail.com>
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CSurvey;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);
@@ -21,9 +25,12 @@ if (empty($surveyId)) {
 }
 
 // Getting the survey information
-$survey_data = SurveyManager::get_survey($surveyId);
+$repo = Container::getSurveyRepository();
+$surveyId = isset($_GET['iid']) ? (int) $_GET['iid'] : 0;
 
-if (empty($survey_data)) {
+/** @var CSurvey $survey */
+$survey = $repo->find($surveyId);
+if (null === $survey) {
     api_not_allowed(true);
 }
 
@@ -42,7 +49,7 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$surveyId.'&'.api_get_cidreq(),
-    'name' => strip_tags($survey_data['title'], '<span>'),
+    'name' => strip_tags($survey->getTitle(), '<span>'),
 ];
 
 $htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
@@ -55,22 +62,22 @@ Display::display_header(get_lang('Survey preview'));
 SurveyUtil::check_first_last_question($surveyId, false);
 
 // Survey information
-echo '<div class="page-header"><h2>'.$survey_data['survey_title'].'</h2></div>';
+echo '<div class="page-header"><h2>'.$survey->getTitle().'</h2></div>';
 if (!empty($survey_data['survey_subtitle'])) {
-    echo '<div id="survey_subtitle">'.$survey_data['survey_subtitle'].'</div>';
+    echo '<div id="survey_subtitle">'.$survey->getSubtitle().'</div>';
 }
 
 // Displaying the survey introduction
 if (!isset($_GET['show'])) {
-    if (!empty($survey_data['survey_introduction'])) {
-        echo '<div class="survey_content">'.$survey_data['survey_introduction'].'</div>';
+    if (!empty($survey->getIntro())) {
+        echo '<div class="survey_content">'.$survey->getIntro().'</div>';
     }
 }
 
 // Displaying the survey thanks message
 if (isset($_POST['finish_survey'])) {
     echo Display::return_message(get_lang('You have finished this survey.'), 'confirm');
-    echo $survey_data['survey_thanks'];
+    echo $survey->getSurveythanks();
     Display::display_footer();
     exit;
 }
@@ -159,8 +166,7 @@ if (isset($_GET['show'])) {
     }
 }
 
-$numberOfPages = SurveyManager::getCountPages($survey_data);
-
+$numberOfPages = SurveyManager::getCountPages($survey);
 // Displaying the form with the questions
 if (isset($_GET['show'])) {
     $show = (int) $_GET['show'] + 1;
@@ -191,7 +197,7 @@ if (is_array($questions) && count($questions) > 0) {
     }
 
     $showNumber = true;
-    if (SurveyManager::hasDependency($survey_data)) {
+    if (SurveyManager::hasDependency($survey)) {
         $showNumber = false;
     }
 

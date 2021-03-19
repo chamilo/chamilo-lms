@@ -150,9 +150,9 @@ class survey_question
         $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : null;
         $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : null;
 
-        $actionHeader = get_lang('EditQuestion').': ';
+        $actionHeader = get_lang('Edit question').': ';
         if ('add' === $action) {
-            $actionHeader = get_lang('AddQuestion').': ';
+            $actionHeader = get_lang('Add a question').': ';
         }
 
         $questionComment = '';
@@ -164,25 +164,29 @@ class survey_question
                 $allowParent = true;
                 break;
             case 'yesno':
-                $toolName = get_lang('YesNo');
+                $toolName = get_lang('Yes / No');
                 $allowParent = true;
                 break;
             case 'multiplechoice':
-                $toolName = get_lang('UniqueSelect');
+                $toolName = get_lang('Multiple choice');
                 $allowParent = true;
                 break;
             case 'multipleresponse':
-                $toolName = get_lang('MultipleResponse');
+                $toolName = get_lang('Multiple answers');
                 $allowParent = true;
                 break;
             case 'selectivedisplay':
-                $toolName = get_lang('SurveyQuestionSelectiveDisplay');
-                $questionComment = get_lang('SurveyQuestionSelectiveDisplayComment');
+                $toolName = get_lang('Selective display');
+                $questionComment = get_lang(
+                    "This question, when located on a single survey page with a first multiple choice question, will only show if the first *option* of the first question is selected. For example, 'Did you go on holiday?' -> if answering the first option 'Yes', the selective display question will appear with a list of possible holiday locations to select from."
+                );
                 $allowParent = true;
                 break;
             case 'multiplechoiceother':
-                $toolName = get_lang('SurveyQuestionMultipleChoiceWithOther');
-                $questionComment = get_lang('SurveyQuestionMultipleChoiceWithOtherComment');
+                $toolName = get_lang('Multiple choice with free text');
+                $questionComment = get_lang(
+                    'Offer some pre-defined options, then let the user answer by text if no option matches.'
+                );
                 $allowParent = true;
                 break;
             case 'pagebreak':
@@ -206,9 +210,10 @@ class survey_question
             ).' ';
 
         $toolName = $icon.$actionHeader.$toolName;
-        $sharedQuestionId = isset($formData['shared_question_id']) ? $formData['shared_question_id'] : null;
+        $sharedQuestionId = $formData['shared_question_id'] ?? null;
 
-        $url = api_get_self().'?action='.$action.'&type='.$type.'&survey_id='.$surveyId.'&question_id='.$questionId.'&'.api_get_cidreq();
+        $url = api_get_self().
+            '?action='.$action.'&type='.$type.'&survey_id='.$surveyId.'&question_id='.$questionId.'&'.api_get_cidreq();
         $form = new FormValidator('question_form', 'post', $url);
         $form->addHeader($toolName);
         if (!empty($questionComment)) {
@@ -277,10 +282,10 @@ class survey_question
                 );
             }
 
-            $this->html .= '	<tr><td colspan="">
-			<fieldset style="border:1px solid black">
-			    <legend>'.get_lang('Condition').'</legend>
-			<b>'.get_lang('Primary').'</b><br />
+            $this->html .= '<tr><td colspan="">
+                <fieldset style="border:1px solid black">
+                    <legend>'.get_lang('Condition').'</legend>
+                <b>'.get_lang('Primary').'</b><br />
 			    <input type="radio" name="choose" value="1" '.((1 == $formData['choose']) ? 'checked' : '').'>
 			    <select name="assigned">'.$grouplist.'</select><br />';
             $this->html .= '
@@ -310,15 +315,15 @@ class survey_question
             $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
             $answersChecker = SurveyUtil::checkIfSurveyHasAnswers($surveyId);
             $allowQuestionEdit = true == api_get_configuration_value('survey_allow_answered_question_edit');
-            if ($allowQuestionEdit or !$answersChecker) {
-                $this->buttonList[] = $this->getForm()->addButtonUpdate(get_lang('ModifyQuestionSurvey'), 'save', true);
+            if ($allowQuestionEdit || !$answersChecker) {
+                $this->buttonList[] = $this->getForm()->addButtonUpdate(get_lang('Edit question'), 'save', true);
             } else {
                 $this->getForm()->addHtml('
                     <div class="form-group">
                         <label class="col-sm-2 control-label"></label>
                         <div class="col-sm-8">
                             <div class="alert alert-info">'.
-                            get_lang('YouCantNotEditThisQuestionBecauseAlreadyExistAnswers').'</div>
+                            get_lang("You can't edit this question because answers by students have already been registered").'</div>
                         </div>
                         <div class="col-sm-2"></div>
                     </div>
@@ -358,7 +363,7 @@ class survey_question
         $answerList = Session::read('answer_list');
 
         if (empty($answerList)) {
-            $answerList = isset($formData['answers']) ? $formData['answers'] : [];
+            $answerList = $formData['answers'] ?? [];
             Session::write('answer_list', $answerList);
         }
 

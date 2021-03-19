@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CSurvey;
 use ExtraField as ExtraFieldModel;
 use Monolog\Logger;
 
@@ -942,10 +943,9 @@ class SessionManager
         $date_to,
         $options
     ) {
-        //escaping vars
-        $sessionId = intval($sessionId);
-        $courseId = intval($courseId);
-        $surveyId = intval($surveyId);
+        $sessionId = (int) $sessionId;
+        $courseId = (int) $courseId;
+        $surveyId = (int) $surveyId;
 
         //tables
         $session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -983,14 +983,11 @@ class SessionManager
         while ($user = Database::fetch_array($rs)) {
             $users[$user['user_id']] = $user;
         }
-
-        //Get survey questions
-        $questions = SurveyManager::get_questions($surveyId, $courseId);
-
-        //Survey is anonymous?
-        $result = Database::query(sprintf("SELECT anonymous FROM $c_survey WHERE survey_id = %d", $surveyId));
-        $row = Database::fetch_array($result);
-        $anonymous = (1 == $row['anonymous']) ? true : false;
+        $repo = Container::getSurveyRepository();
+        /** @var CSurvey $survey */
+        $survey = $repo->find($surveyId);
+        $questions = $survey->getQuestions();
+        $anonymous = (1 == $survey->getAnonymous()) ? true : false;
 
         $table = [];
         foreach ($users as $user) {
@@ -1017,23 +1014,21 @@ class SessionManager
                       sa.user = %d
             "; //. $where_survey;
             $sql_query = sprintf($sql, $surveyId, $courseId, $user['user_id']);
-
             $result = Database::query($sql_query);
-
             $user_questions = [];
             while ($row = Database::fetch_array($result)) {
                 $user_questions[$row['question_id']] = $row;
             }
 
             //Match course lessons with user progress
-            foreach ($questions as $question_id => $question) {
+            foreach ($questions as $question) {
+                $questionId = $question->getIid();
                 $option_text = 'option_text';
-                if ('open' == $user_questions[$question_id]['type']) {
+                if ('open' === $user_questions[$questionId]['type']) {
                     $option_text = 'option_id';
                 }
-                $data[$question_id] = $user_questions[$question_id][$option_text];
+                $data[$questionId] = $user_questions[$questionId][$option_text];
             }
-
             $table[] = $data;
         }
 

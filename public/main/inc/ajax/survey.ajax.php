@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CSurvey;
+use Chamilo\CourseBundle\Entity\CSurveyQuestion;
 
 require_once __DIR__.'/../global.inc.php';
 
@@ -10,6 +11,7 @@ $current_user_id = api_get_user_id();
 $courseId = api_get_course_int_id();
 
 $repo = Container::getSurveyRepository();
+$repoQuestion = Container::getSurveyQuestionRepository();
 
 $action = $_GET['a'] ?? null;
 $surveyId = $_REQUEST['survey_id'] ?? 0;
@@ -39,6 +41,9 @@ switch ($action) {
         /** @var CSurvey $survey */
         $survey = $repo->find($surveyId);
 
+        /** @var CSurveyQuestion $survey */
+        $question = $repoQuestion->find($questionId);
+
         if (null === $survey) {
             exit;
         }
@@ -53,7 +58,7 @@ switch ($action) {
         SurveyUtil::saveAnswer(
             $userId,
             $survey,
-            $questionId,
+            $question,
             1,
             $status
         );

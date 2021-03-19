@@ -26,7 +26,7 @@ if ($isDrhOfCourse) {
     exit;
 }
 if (!api_is_allowed_to_edit(false, true) ||
-    (api_is_session_general_coach() && 'false' == $extend_rights_for_coachs)
+    (api_is_session_general_coach() && 'false' === $extend_rights_for_coachs)
 ) {
     api_not_allowed(true);
     exit;
@@ -42,11 +42,11 @@ $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
 $survey_id = (int) $_GET['survey_id'];
 $course_id = api_get_course_int_id();
-$action = isset($_GET['action']) ? $_GET['action'] : null;
+$action = $_GET['action'] ?? null;
 
 // Breadcrumbs
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
+    'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
     'name' => get_lang('Survey list'),
 ];
 
@@ -72,9 +72,9 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
     $tool_name .= '...';
 }
 
-if ($is_survey_type_1 && ('addgroup' == $action || 'deletegroup' == $action)) {
+if ($is_survey_type_1 && ('addgroup' === $action || 'deletegroup' === $action)) {
     $_POST['name'] = trim($_POST['name']);
-    if ('addgroup' == $action) {
+    if ('addgroup' === $action) {
         if (!empty($_POST['group_id'])) {
             Database::query('UPDATE '.$table_survey_question_group.' SET description = \''.Database::escape_string($_POST['description']).'\'
                              WHERE c_id = '.$course_id.' AND id = \''.Database::escape_string($_POST['group_id']).'\'');
@@ -87,7 +87,7 @@ if ($is_survey_type_1 && ('addgroup' == $action || 'deletegroup' == $action)) {
         }
     }
 
-    if ('deletegroup' == $action) {
+    if ('deletegroup' === $action) {
         $sql = 'DELETE FROM '.$table_survey_question_group.'
                 WHERE c_id = '.$course_id.' AND id = '.intval($_GET['gid']).' AND survey_id = '.$survey_id;
         Database::query($sql);

@@ -1077,6 +1077,7 @@ class MySpace
         $totalStudents = 0;
         $data['csv'] = '';
         $data['html'] = '';
+        $icon = Display::return_icon('statistics.png', get_lang('Stats'));
         foreach ($students as $student) {
             $lpSessionId = isset($student['session_id']) ? (int) $student['session_id'] : 0;
             $studentId = (int) $student['id'];
@@ -1086,7 +1087,6 @@ class MySpace
                     $url .= "&id_session=$lpSessionId";
                 }
                 $url .= "&course=$lpCourseCode";
-                $icon = Display::return_icon('statistics.png', get_lang('Stats'));
                 $reportLink = Display::url(
                     $icon,
                     $url
@@ -1115,6 +1115,18 @@ class MySpace
     public static function getStudentDataToReportByLpItem($students = [], $studentProcessed = [], $typeReport = '', $csv = false)
     {
         $totalStudent = count($students);
+        $sessionIcon =  $icon = Display::return_icon(
+            'admin_star.png',
+            get_lang('StudentInSessionCourse'),
+            [],
+            ICON_SIZE_MEDIUM
+        );
+        $classIcon = Display::return_icon(
+            'group_summary.png',
+            get_lang('UsersInsideClass'),
+            '',
+            ICON_SIZE_MEDIUM
+        );
         /* use 'for' to performance */
         for ($i = 0; $i < $totalStudent; $i++) {
             $student = $students[$i];
@@ -1127,20 +1139,10 @@ class MySpace
             $type = isset($student['type']) ? $student['type'] : null;
             $icon = null;
             if (0 != $sessionId) {
-                $icon = Display::return_icon(
-                    'admin_star.png',
-                    $studentName,
-                    [],
-                    ICON_SIZE_MEDIUM
-                );
+                $icon = $sessionIcon;
             }
             if ('class' == $typeReport) {
-                $icon = Display::return_icon(
-                    'group_summary.png',
-                    $studentName,
-                    '',
-                    ICON_SIZE_MEDIUM
-                );
+                $icon = $classIcon;
             }
             $studentString = "$icon $studentName";
             if (0 != $sessionId) {

@@ -1115,7 +1115,7 @@ class MySpace
     public static function getStudentDataToReportByLpItem($students = [], $studentProcessed = [], $typeReport = '', $csv = false)
     {
         $totalStudent = count($students);
-        $sessionIcon =  $icon = Display::return_icon(
+        $sessionIcon = Display::return_icon(
             'admin_star.png',
             get_lang('StudentInSessionCourse'),
             [],

@@ -825,7 +825,7 @@ class SystemAnnouncementManager
      *
      * @param int $userId
      */
-    public static function getAnnouncementsForGroups($userId = 0)
+    public static function getAnnouncementsForGroups($userId = 0,$visible)
     {
         $user_selected_language = Database::escape_string(api_get_interface_language());
         $tblSysAnnouncements = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
@@ -846,6 +846,7 @@ class SystemAnnouncementManager
               (sys_announcement.lang = '$user_selected_language' OR sys_announcement.lang = '') AND
               ('$now' >= sys_announcement.date_start AND '$now' <= sys_announcement.date_end)
         ";
+        $sql .= self::getVisibilityCondition($visible);
         $result = Database::query($sql);
         $data = Database::store_result($result, 'ASSOC');
         Database::free_result($result);
@@ -969,7 +970,7 @@ class SystemAnnouncementManager
         }
 
         /** Show announcement of group */
-        $announcementToGroup = self::getAnnouncementsForGroups($userId);
+        $announcementToGroup = self::getAnnouncementsForGroups($userId,$visible);
         $totalAnnouncementToGroup = count($announcementToGroup);
         for ($i = 0; $i < $totalAnnouncementToGroup; $i++) {
             $announcement = $announcementToGroup[$i];
@@ -979,8 +980,9 @@ class SystemAnnouncementManager
                 'content' => $announcement['content'],
                 'readMore' => null,
             ];
-            if (api_strlen(strip_tags($announcement->content)) > $cut_size) {
-                $announcementData['content'] = cut($announcement->content, $cut_size);
+            $content = (is_array($announcement)) ? $announcement['content'] : $announcement->content;
+            if (api_strlen(strip_tags($content)) > $cut_size) {
+                $announcementData['content'] = cut($content, $cut_size);
                 $announcementData['readMore'] = true;
             }
             $announcements[] = $announcementData;

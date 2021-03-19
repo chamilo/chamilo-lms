@@ -115,7 +115,7 @@ if ('edit' === $action && isset($survey_id) && is_numeric($survey_id)) {
     $form->addElement('hidden', 'survey_id');
 }
 
-$survey_code = $form->addElement(
+$surveyCodeElement = $form->addElement(
     'text',
     'survey_code',
     get_lang('Code'),
@@ -123,7 +123,7 @@ $survey_code = $form->addElement(
 );
 
 if ('edit' === $action) {
-    $survey_code->freeze();
+    $surveyCodeElement->freeze();
     $form->applyFilter('survey_code', 'api_strtoupper');
 }
 

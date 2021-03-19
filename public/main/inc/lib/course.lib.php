@@ -6033,7 +6033,7 @@ class CourseManager
 
                 $form->addLabel(
                     '',
-                    Display::url(get_lang('AddStudent'), '#', ['id' => 'add_students', 'class' => 'btn btn-primary'])
+                    Display::url(get_lang('Add learners'), '#', ['id' => 'add_students', 'class' => 'btn btn-primary'])
                 );
             }
         }

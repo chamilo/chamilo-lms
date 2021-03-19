@@ -53,8 +53,8 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
         $label = null,
         $attributes = null
     ) {
-        $attributes['class'] = isset($attributes['class']) ? $attributes['class'] : 'form-control';
-        $columnsSize = isset($attributes['cols-size']) ? $attributes['cols-size'] : null;
+        $attributes['class'] = $attributes['class'] ?? 'form-control';
+        $columnsSize = $attributes['cols-size'] ?? null;
         $this->setColumnsSize($columnsSize);
         parent::__construct($elementName, $label, $attributes);
 

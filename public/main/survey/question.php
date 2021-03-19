@@ -2,13 +2,13 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
  * refactoring and rewriting large parts of the code
  */
-
-use Chamilo\CoreBundle\Framework\Container;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -19,7 +19,6 @@ $(function() {
     });
 });
 </script>';
-
 $htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
@@ -55,13 +54,12 @@ if (1 == $surveyData['survey_type']) {
     }
 }
 
-// Breadcrumbs
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
+    'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
     'name' => get_lang('Survey list'),
 ];
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$surveyId,
+    'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$surveyId.'&'.api_get_cidreq(),
     'name' => strip_tags($urlname),
 ];
 
@@ -89,9 +87,8 @@ $possible_types = [
     'multiplechoiceother',
 ];
 
-// Actions
 $actions = '<div class="actions">';
-$actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']).'">'.
+$actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'.
     Display::return_icon('back.png', get_lang('Back to survey'), '', ICON_SIZE_MEDIUM).'</a>';
 $actions .= '</div>';
 // Checking if it is a valid type

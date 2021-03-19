@@ -1879,9 +1879,9 @@ switch ($action) {
             !empty($_GET['course_id']) &&
             !empty($_GET['survey_id'])
         ) {
-            $sessionId = intval($_GET['session_id']);
-            $courseId = intval($_GET['course_id']);
-            $surveyId = intval($_GET['survey_id']);
+            $sessionId = (int) $_GET['session_id'];
+            $courseId = (int) $_GET['course_id'];
+            $surveyId = (int) $_GET['survey_id'];
             $date_from = $_GET['date_from'];
             $date_to = $_GET['date_to'];
             //$course    = api_get_course_info_by_id($courseId);

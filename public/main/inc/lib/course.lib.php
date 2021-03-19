@@ -2348,9 +2348,6 @@ class CourseManager
         $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $table_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $table_course_survey = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY);
-        $table_course_survey_question = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
-        $table_course_survey_question_option = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
 
         $table_stats_hotpots = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
         $table_stats_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -2452,18 +2449,6 @@ class CourseManager
             // Already deleted because of entities.
             //$sql = "DELETE FROM $table_course_rel_url WHERE c_id = $courseId";
             //Database::query($sql);
-
-            $sql = "SELECT survey_id FROM $table_course_survey WHERE course_code = '$codeFiltered'";
-            $result_surveys = Database::query($sql);
-            while ($surveys = Database::fetch_array($result_surveys)) {
-                $survey_id = $surveys[0]; //int
-                $sql = "DELETE FROM $table_course_survey_question WHERE survey_id = $survey_id";
-                Database::query($sql);
-                $sql = "DELETE FROM $table_course_survey_question_option WHERE survey_id = $survey_id";
-                Database::query($sql);
-                $sql = "DELETE FROM $table_course_survey WHERE survey_id = $survey_id";
-                Database::query($sql);
-            }
 
             // Delete the course from the stats tables
             $sql = "DELETE FROM $table_stats_hotpots WHERE c_id = $courseId";

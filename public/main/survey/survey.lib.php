@@ -151,17 +151,11 @@ class SurveyManager
         $survey_id = (int) $survey_id;
         $table_survey = Database::get_course_table(TABLE_SURVEY);
 
-        if (0 != $shared) {
-            $table_survey = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
-            $sql = "SELECT * FROM $table_survey
-                    WHERE iid =' ".$survey_id."' ";
-        } else {
-            if (empty($courseInfo)) {
-                return [];
-            }
-            $sql = "SELECT * FROM $table_survey
-		            WHERE iid = $survey_id";
+        if (empty($courseInfo)) {
+            return [];
         }
+        $sql = "SELECT * FROM $table_survey
+                WHERE iid = $survey_id";
 
         $result = Database::query($sql);
         $return = [];
@@ -546,67 +540,6 @@ class SurveyManager
         return $return;
     }
 
-    /**
-     * This function stores a shared survey in the central database.
-     *
-     * @param array $values
-     *
-     * @return array $return the type of return message that has to be displayed and the message in it
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     *
-     * @version February 2007
-     */
-    public function store_shared_survey($values)
-    {
-        $_user = api_get_user_info();
-        $_course = api_get_course_info();
-
-        // Table definitions
-        $table_survey = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY);
-
-        if (!$values['survey_id'] ||
-            !is_numeric($values['survey_id']) ||
-            'true' == $values['survey_share']['survey_share']
-        ) {
-            $sql = "INSERT INTO $table_survey (code, title, subtitle, author, lang, template, intro, surveythanks, creation_date, course_code) VALUES (
-                    '".Database::escape_string($values['survey_code'])."',
-                    '".Database::escape_string($values['survey_title'])."',
-                    '".Database::escape_string($values['survey_subtitle'])."',
-                    '".intval($_user['user_id'])."',
-                    '".Database::escape_string($values['survey_language'])."',
-                    '".Database::escape_string('template')."',
-                    '".Database::escape_string($values['survey_introduction'])."',
-                    '".Database::escape_string($values['survey_thanks'])."',
-                    '".api_get_utc_datetime()."',
-                    '".$_course['id']."')";
-            Database::query($sql);
-            $return = Database::insert_id();
-        } else {
-            $sql = "UPDATE $table_survey SET
-                        code 			= '".Database::escape_string($values['survey_code'])."',
-                        title 			= '".Database::escape_string($values['survey_title'])."',
-                        subtitle 		= '".Database::escape_string($values['survey_subtitle'])."',
-                        author 			= '".intval($_user['user_id'])."',
-                        lang 			= '".Database::escape_string($values['survey_language'])."',
-                        template 		= '".Database::escape_string('template')."',
-                        intro			= '".Database::escape_string($values['survey_introduction'])."',
-                        surveythanks	= '".Database::escape_string($values['survey_thanks'])."'
-					WHERE survey_id = '".Database::escape_string($values['survey_share']['survey_share'])."'";
-            Database::query($sql);
-            $return = $values['survey_share']['survey_share'];
-        }
-
-        return $return;
-    }
-
-    public static function deleteSharedSurvey(SharedSurvey $survey)
-    {
-        $em = Database::getManager();
-        $em->remove($survey);
-        $em->flush();
-    }
-
     public static function deleteSurvey(CSurvey $survey)
     {
         $repo = Container::getSurveyRepository();
@@ -943,20 +876,7 @@ class SurveyManager
         $sqlOption = "  SELECT * FROM $table_survey_question_option
                         WHERE c_id = $course_id AND question_id='".$question_id."'
                         ORDER BY `sort` ";
-
-        if ($shared) {
-            $tbl_survey_question = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
-            $table_survey_question_option = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
-
-            $sql = "SELECT * FROM $tbl_survey_question
-                    WHERE iid = $question_id
-                    ORDER BY `sort` ";
-            $sqlOption = "SELECT * FROM $table_survey_question_option
-                          WHERE question_id = $question_id
-                          ORDER BY `sort` ";
-        }
         // Getting the information of the question
-
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
 
@@ -1099,12 +1019,6 @@ class SurveyManager
                 // Getting all the information of the survey
                 $survey_data = self::get_survey($surveyId);
 
-                // Storing the question in the shared database
-                if (is_numeric($survey_data['survey_share']) && 0 != $survey_data['survey_share']) {
-                    $shared_question_id = self::save_shared_question($form_content, $survey_data);
-                    $form_content['shared_question_id'] = $shared_question_id;
-                }
-
                 // Storing a new question
                 if ('' == $form_content['question_id'] || !is_numeric($form_content['question_id'])) {
                     // Finding the max sort order of the questions in the given survey
@@ -1233,67 +1147,6 @@ class SurveyManager
     }
 
     /**
-     * This function saves the question in the shared database.
-     *
-     * @param array $form_content all the information of the form
-     * @param array $survey_data  all the information of the survey
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     *
-     * @version February 2007
-     *
-     * @return int
-     *
-     * @todo editing of a shared question
-     */
-    public static function save_shared_question($form_content, $survey_data)
-    {
-        $_course = api_get_course_info();
-
-        // Table definitions
-        $tbl_survey_question = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
-
-        // Storing a new question
-        if ('' == $form_content['shared_question_id'] ||
-            !is_numeric($form_content['shared_question_id'])
-        ) {
-            // Finding the max sort order of the questions in the given survey
-            $sql = "SELECT max(sort) AS max_sort FROM $tbl_survey_question
-                    WHERE survey_id='".intval($survey_data['survey_share'])."'
-                    AND code='".Database::escape_string($_course['id'])."'";
-            $result = Database::query($sql);
-            $row = Database::fetch_array($result, 'ASSOC');
-            $max_sort = $row['max_sort'];
-
-            // Adding the question to the survey_question table
-            $sql = "INSERT INTO $tbl_survey_question (survey_id, survey_question, survey_question_comment, type, display, sort, code) VALUES (
-                    '".Database::escape_string($survey_data['survey_share'])."',
-                    '".Database::escape_string($form_content['question'])."',
-                    '".Database::escape_string($form_content['question_comment'])."',
-                    '".Database::escape_string($form_content['type'])."',
-                    '".Database::escape_string($form_content['horizontalvertical'])."',
-                    '".Database::escape_string($max_sort + 1)."',
-                    '".Database::escape_string($_course['id'])."')";
-            Database::query($sql);
-            $shared_question_id = Database::insert_id();
-        } else {
-            // Updating an existing question
-            // adding the question to the survey_question table
-            $sql = "UPDATE $tbl_survey_question SET
-                        survey_question = '".Database::escape_string($form_content['question'])."',
-                        survey_question_comment = '".Database::escape_string($form_content['question_comment'])."',
-                        display = '".Database::escape_string($form_content['horizontalvertical'])."'
-                    WHERE
-                        question_id = '".intval($form_content['shared_question_id'])."' AND
-                        code = '".Database::escape_string($_course['id'])."'";
-            Database::query($sql);
-            $shared_question_id = $form_content['shared_question_id'];
-        }
-
-        return $shared_question_id;
-    }
-
-    /**
      * This functions moves a question of a survey up or down.
      *
      * @param string $direction
@@ -1366,14 +1219,6 @@ class SurveyManager
         $course_id = api_get_course_int_id();
         $survey_id = (int) $survey_id;
 
-        // Table definitions
-        $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
-        $course_condition = " c_id = $course_id AND ";
-        if ($shared) {
-            $course_condition = '';
-            $table_survey_question = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
-        }
-
         /*$sql = "DELETE FROM $table_survey_question
 		        WHERE $course_condition survey_id = '".$survey_id."'";
 
@@ -1396,9 +1241,6 @@ class SurveyManager
         if (empty($questionId)) {
             return false;
         }
-        if ($shared) {
-            self::delete_shared_survey_question($survey_id, $questionId);
-        }
 
         $em = Database::getManager();
         $repo = Container::getSurveyQuestionRepository();
@@ -1413,37 +1255,6 @@ class SurveyManager
         return false;
     }
 
-    /**
-     * This function deletes a shared survey question from the main database and all its options.
-     *
-     * @param int $question_id the id of the question
-     *
-     * @todo delete all the options of this question
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     *
-     * @version March 2007
-     */
-    public static function delete_shared_survey_question($survey_id, $question_id)
-    {
-        // Table definitions
-        $table_survey_question = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
-        $table_survey_question_option = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
-
-        // First we have to get the shared_question_id
-        $question_data = self::get_question($question_id);
-
-        // Deleting the survey questions
-        $sql = "DELETE FROM $table_survey_question
-		        WHERE question_id='".intval($question_data['shared_question_id'])."'";
-        Database::query($sql);
-
-        // Deleting the options of the question of the survey question
-        $sql = "DELETE FROM $table_survey_question_option
-		        WHERE question_id='".intval($question_data['shared_question_id'])."'";
-        Database::query($sql);
-    }
-
     public static function saveQuestionOptions(CSurvey $survey, CSurveyQuestion $question, $form_content, $dataFromDatabase = [])
     {
         $course_id = api_get_course_int_id();
@@ -1456,11 +1267,6 @@ class SurveyManager
             }
         }
         $em = Database::getManager();
-        $shared = $survey->getIsShared();
-
-        if (is_numeric($shared) && 0 != $shared) {
-            self::saveSharedQuestionOptions($survey, $form_content);
-        }
 
         // Table definition
         $table = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
@@ -1564,32 +1370,6 @@ class SurveyManager
         }
     }
 
-    public static function saveSharedQuestionOptions(CSurvey $survey, $form_content)
-    {
-        $shared = $survey->getIsShared();
-        if (is_array($form_content) && is_array($form_content['answers'])) {
-            // Table definition
-            $table = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
-
-            // We are editing a question so we first have to remove all the existing options from the database
-            $sql = "DELETE FROM $table
-                    WHERE question_id = '".Database::escape_string($form_content['shared_question_id'])."'";
-            Database::query($sql);
-
-            $counter = 1;
-            foreach ($form_content['answers'] as &$answer) {
-                $params = [
-                    'question_id' => $form_content['shared_question_id'],
-                    'survey_id' => $shared,
-                    'option_text' => $answer,
-                    'sort' => $counter,
-                ];
-                Database::insert($table, $params);
-                $counter++;
-            }
-        }
-    }
-
     /**
      * This function deletes all the options of the questions of a given survey
      * This function is normally only called when a survey is deleted.
@@ -1608,11 +1388,6 @@ class SurveyManager
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         $course_id = api_get_course_int_id();
         $course_condition = " c_id = $course_id AND ";
-        if ($shared) {
-            $course_condition = '';
-            $table_survey_question_option = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
-        }
-
         $sql = "DELETE FROM $table_survey_question_option
                 WHERE $course_condition survey_id='".intval($survey_id)."'";
 

@@ -148,7 +148,8 @@ function getLpIdWithNotify()
 
     return $return;
 }
-function getTutorIdFromCourseRelUser($cId = 0, $lpId=0){
+function getTutorIdFromCourseRelUser($cId = 0, $lpId = 0)
+{
     $lpTable = Database::get_course_table(TABLE_LP_MAIN);
     $tblCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $sql = "
@@ -164,21 +165,22 @@ function getTutorIdFromCourseRelUser($cId = 0, $lpId=0){
         tblLp.c_id = $cId";
     $result = Database::query($sql);
     $data = Database::fetch_assoc($result);
-    foreach ($data as $usersId){
+    foreach ($data as $usersId) {
         return (int) $usersId;
     }
 
     return 0;
 }
 
-function SendToArray(&$data, &$type, &$message, $lpId = 0){
+function SendToArray(&$data, &$type, &$message, $lpId = 0)
+{
     foreach ($data as $user) {
         $userName = $user['userInfo']['complete_name'];
         $userId = $user['userInfo']['user_id'];
         $fromUser = $user['fromUser'];
         $courseName = $user['courseName'];
         $lpName = $user['lpName'];
-        $send =SendMessage(
+        $send = SendMessage(
             $user['userInfo'],
             $fromUser,
             $courseName,
@@ -186,7 +188,7 @@ function SendToArray(&$data, &$type, &$message, $lpId = 0){
             $user['link']
         );
         $sendit[$type][$userId][$fromUser][$courseName][$lpName] = $send;
-        $message.= "\n$type - Lp Id '$lpId' User Id '$userId' Sent to '$userName' Message id '$send' Lp name '$lpName'";
+        $message .= "\n$type - Lp Id '$lpId' User Id '$userId' Sent to '$userName' Message id '$send' Lp name '$lpName'";
     }
 }
 
@@ -347,7 +349,7 @@ function LearningPaths()
             $lpData = $lpsData[$lpId];
         }
         if (!isset($tutors[$row['c_id']][$row['lp_id']])) {
-            $tutors[$row['c_id']][$row['lp_id']] = getTutorIdFromCourseRelUser($row['c_id'],$row['lp_id']);
+            $tutors[$row['c_id']][$row['lp_id']] = getTutorIdFromCourseRelUser($row['c_id'], $row['lp_id']);
         }
         $courseName = isset($lpData['course_name']) ? $lpData['course_name'] : null;
         $courseCode = isset($lpData['code']) ? $lpData['code'] : null;
@@ -404,9 +406,9 @@ function LearningPaths()
         $lpName = isset($lpData['name']) ? $lpData['name'] : null;
         $toUser = (int) $row['user_id'];
         if (!isset($tutors[$row['c_id']][$row['lp_id']])) {
-            $tutors[$row['c_id']][$row['lp_id']] = getTutorIdFromCourseRelUser($row['c_id'],$row['lp_id']);
+            $tutors[$row['c_id']][$row['lp_id']] = getTutorIdFromCourseRelUser($row['c_id'], $row['lp_id']);
         }
-        $fromUser =  $tutors[$row['c_id']][$row['lp_id']];
+        $fromUser = $tutors[$row['c_id']][$row['lp_id']];
         $userInfo = api_get_user_info($toUser);
         $href = api_get_path(WEB_CODE_PATH).
             'lp/lp_controller.php?cidReq='.htmlspecialchars($courseCode).
@@ -434,10 +436,10 @@ function LearningPaths()
         foreach ($sessions as $sessionId => $types) {
             foreach ($types as $type => $users) {
                 if ('LearnpathSubscription' == $type) {
-                    SendToArray($users,$type, $message, $lpId);
+                    SendToArray($users, $type, $message, $lpId);
                 } else {
                     if (!isset($itemProcessed[$lpId][$sessionId]['LearnpathSubscription'])) {
-                        SendToArray($users,$type, $message, $lpId);
+                        SendToArray($users, $type, $message, $lpId);
                     }
                 }
             }

@@ -161,6 +161,20 @@ class CSurvey extends AbstractResource implements ResourceInterface
     protected ?int $lvl = null;
 
     /**
+     * @var Collection|CSurveyQuestion[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestion", mappedBy="survey", cascade="remove")
+     */
+    protected Collection $questions;
+
+    /**
+     * @var Collection|CSurveyInvitation[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyInvitation", mappedBy="survey", cascade="remove")
+     */
+    protected Collection $invitations;
+
+    /**
      * @Gedmo\TreeParent
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurvey")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="iid", onDelete="CASCADE")
@@ -199,13 +213,6 @@ class CSurvey extends AbstractResource implements ResourceInterface
      */
     protected bool $isMandatory = false;
 
-    /**
-     * @var Collection|CSurveyQuestion[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestion", mappedBy="survey")
-     */
-    protected Collection $questions;
-
     public function __construct()
     {
         $this->creationDate = new DateTime();
@@ -222,6 +229,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
         $this->surveyType = 0;
         $this->questions = new ArrayCollection();
         $this->children = new ArrayCollection();
+        $this->invitations = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -735,6 +743,21 @@ class CSurvey extends AbstractResource implements ResourceInterface
     public function setChildren(Collection $children): self
     {
         $this->children = $children;
+
+        return $this;
+    }
+
+    /**
+     * @return CSurveyInvitation[]|Collection
+     */
+    public function getInvitations()
+    {
+        return $this->invitations;
+    }
+
+    public function setInvitations($invitations): self
+    {
+        $this->invitations = $invitations;
 
         return $this;
     }

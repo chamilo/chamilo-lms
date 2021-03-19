@@ -40,10 +40,9 @@ class CSurveyAnswer
     protected CSurveyQuestion $question;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CSurveyQuestionOption")
-     * @ORM\JoinColumn(name="option_id", referencedColumnName="iid")
+     * @ORM\Column(name="option_id", type="text", nullable=false)
      */
-    protected CSurveyQuestionOption $option;
+    protected string $optionId;
 
     /**
      * @ORM\Column(name="value", type="integer", nullable=false)
@@ -105,18 +104,6 @@ class CSurveyAnswer
         return $this;
     }
 
-    public function getOption(): CSurveyQuestionOption
-    {
-        return $this->option;
-    }
-
-    public function setOption(CSurveyQuestionOption $option): self
-    {
-        $this->option = $option;
-
-        return $this;
-    }
-
     public function setUser(string $user): self
     {
         $this->user = $user;
@@ -132,5 +119,17 @@ class CSurveyAnswer
     public function getUser()
     {
         return $this->user;
+    }
+
+    public function getOptionId(): string
+    {
+        return $this->optionId;
+    }
+
+    public function setOptionId(string $optionId): self
+    {
+        $this->optionId = $optionId;
+
+        return $this;
     }
 }

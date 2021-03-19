@@ -18,7 +18,6 @@ use Doctrine\ORM\Mapping as ORM;
  *     name="c_survey_invitation",
  *     indexes={
  *         @ORM\Index(name="course", columns={"c_id"}),
- *         @ORM\Index(name="idx_survey_inv_code", columns={"survey_code"})
  *     }
  * )
  * @ORM\Entity
@@ -51,9 +50,10 @@ class CSurveyInvitation
     protected ?CGroup $group = null;
 
     /**
-     * @ORM\Column(name="survey_code", type="string", length=20, nullable=false)
+     * @ORM\ManyToOne(targetEntity="CSurvey", inversedBy="invitations")
+     * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid")
      */
-    protected string $surveyCode;
+    protected CSurvey $survey;
 
     /**
      * @ORM\Column(name="user", type="string", length=250, nullable=false)
@@ -85,21 +85,22 @@ class CSurveyInvitation
      */
     protected ?DateTime $answeredAt = null;
 
-    public function setSurveyCode(string $surveyCode): self
+    public function __construct()
     {
-        $this->surveyCode = $surveyCode;
-
-        return $this;
+        $this->answered = 0;
+        $this->invitationDate = new DateTime();
     }
 
-    /**
-     * Get surveyCode.
-     *
-     * @return string
-     */
-    public function getSurveyCode()
+    public function getSurvey(): CSurvey
     {
-        return $this->surveyCode;
+        return $this->survey;
+    }
+
+    public function setSurvey(CSurvey $survey): self
+    {
+        $this->survey = $survey;
+
+        return $this;
     }
 
     public function setUser(string $user): self

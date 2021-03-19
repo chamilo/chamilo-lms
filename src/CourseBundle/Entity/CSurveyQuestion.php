@@ -43,7 +43,13 @@ class CSurveyQuestion
     protected Collection $children;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestionOption", cascade="remove")
+     * @var Collection|CSurveyQuestionOption[]
+     * @ORM\OneToMany(targetEntity="CSurveyQuestionOption", mappedBy="question", cascade="remove")
+     */
+    protected Collection $options;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="CSurveyQuestionOption", cascade="remove")
      * @ORM\JoinColumn(name="parent_option_id", referencedColumnName="iid")
      */
     protected ?CSurveyQuestionOption $parentOption = null;
@@ -53,6 +59,13 @@ class CSurveyQuestion
      * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid")
      */
     protected CSurvey $survey;
+
+    /**
+     * @var Collection|CSurveyAnswer[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyAnswer", mappedBy="question", cascade="remove")
+     */
+    protected Collection $answers;
 
     /**
      * @Assert\NotBlank()
@@ -111,17 +124,11 @@ class CSurveyQuestion
      */
     protected bool $isMandatory = false;
 
-    /**
-     * @var Collection|CSurveyAnswer[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyAnswer", mappedBy="question")
-     */
-    protected Collection $answers;
-
     public function __construct()
     {
         $this->children = new ArrayCollection();
         $this->answers = new ArrayCollection();
+        $this->options = new ArrayCollection();
         $this->surveyGroupPri = 0;
         $this->surveyGroupSec1 = 0;
         $this->surveyGroupSec2 = 0;
@@ -389,5 +396,25 @@ class CSurveyQuestion
     public function getAnswers()
     {
         return $this->answers;
+    }
+
+    /**
+     * @return CSurveyQuestionOption[]|Collection
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param CSurveyQuestionOption[]|Collection $options
+     *
+     * @return CSurveyQuestion
+     */
+    public function setOptions($options)
+    {
+        $this->options = $options;
+
+        return $this;
     }
 }

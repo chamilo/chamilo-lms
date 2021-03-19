@@ -29,7 +29,7 @@ class CSurveyQuestionOption
     protected int $iid;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CSurveyQuestion")
+     * @ORM\ManyToOne(targetEntity="CSurveyQuestion", inversedBy="options")
      * @ORM\JoinColumn(name="question_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected CSurveyQuestion $question;

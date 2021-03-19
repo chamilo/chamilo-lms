@@ -79,9 +79,9 @@ class Version20180319145700 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_survey_answer ADD CONSTRAINT FK_8A897DD1E27F6BF FOREIGN KEY (question_id) REFERENCES c_survey_question (iid);');
         }
 
-        if (!$table->hasForeignKey('FK_8A897DDA7C41D6F')) {
+        /*if (!$table->hasForeignKey('FK_8A897DDA7C41D6F')) {
             $this->addSql('ALTER TABLE c_survey_answer ADD CONSTRAINT FK_8A897DDA7C41D6F FOREIGN KEY (option_id) REFERENCES c_survey_question_option (iid);');
-        }
+        }*/
 
         if (!$table->hasIndex('IDX_8A897DDB3FE509D')) {
             $this->addSql('CREATE INDEX IDX_8A897DDB3FE509D ON c_survey_answer (survey_id);');
@@ -110,8 +110,14 @@ class Version20180319145700 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_survey_invitation ADD answered_at DATETIME DEFAULT NULL;');
         }
 
-        if (!$table->hasIndex('idx_survey_inv_code')) {
-            $this->addSql('CREATE INDEX idx_survey_inv_code ON c_survey_invitation (survey_code)');
+        if (!$table->hasColumn('survey_id')) {
+            $this->addSql('ALTER TABLE c_survey_invitation ADD survey_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_survey_invitation ADD CONSTRAINT FK_D0BC7C2B3FE509D FOREIGN KEY (survey_id) REFERENCES c_survey (iid)');
+            $this->addSql('CREATE INDEX IDX_D0BC7C2B3FE509D ON c_survey_invitation (survey_id)');
+        }
+
+        if ($table->hasIndex('idx_survey_inv_code')) {
+            $this->addSql('DROP INDEX idx_survey_inv_code ON c_survey_invitation;');
         }
 
         $this->addSql('ALTER TABLE c_survey_invitation CHANGE c_id c_id INT DEFAULT NULL');
@@ -211,6 +217,34 @@ class Version20180319145700 extends AbstractMigrationChamilo
         }
 
         $em = $this->getEntityManager();
+        $sql = 'SELECT * FROM c_survey ';
+        $result = $em->getConnection()->executeQuery($sql);
+        $data = $result->fetchAllAssociative();
+        $surveyList = [];
+        if ($data) {
+            foreach ($data as $item) {
+                $surveyList[$item['c_id']][$item['code']] = $item['iid'];
+            }
+        }
+
+        // Replace survey_code with new survey_id.
+        $sql = 'SELECT * FROM c_survey_invitation ';
+        $result = $em->getConnection()->executeQuery($sql);
+        $data = $result->fetchAllAssociative();
+        if ($data) {
+            foreach ($data as $item) {
+                $id = $item['iid'];
+                $courseId = $item['c_id'];
+                $code = $item['survey_code'];
+
+                $surveyId = $surveyList[$courseId][$code] ?? null;
+                if (empty($surveyId)) {
+                    continue;
+                }
+
+                $this->addSql("UPDATE c_survey_invitation SET survey_id = $surveyId WHERE iid = $id");
+            }
+        }
 
         $sql = 'SELECT s.* FROM c_survey s
                 INNER JOIN extra_field_values efv

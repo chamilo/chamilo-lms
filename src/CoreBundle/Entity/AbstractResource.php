@@ -72,8 +72,6 @@ abstract class AbstractResource
 
     /**
      * @Groups({"resource_node:read", "document:read"})
-     *
-     * @var null|array<int, array<string, null|\Chamilo\CoreBundle\Entity\Course|\Chamilo\CoreBundle\Entity\Session|\Chamilo\CoreBundle\Entity\Usergroup|\Chamilo\CourseBundle\Entity\CGroup|int|string>>
      */
     public ?array $resourceLinkListFromEntity = null;
 
@@ -96,6 +94,11 @@ abstract class AbstractResource
     abstract public function setResourceName(string $name);
 
     //abstract public function setResourceProperties(FormInterface $form, $course, $session, $fileType);
+
+    public function getCreator()
+    {
+        return $this->getResourceNode()->getCreator();
+    }
 
     public function getResourceLinkEntityList()
     {
@@ -283,20 +286,21 @@ abstract class AbstractResource
 
     public function setResourceLinkListFromEntity(): void
     {
-        $resourceNode = $this->getResourceNode();
-        $links = $resourceNode->getResourceLinks();
         $resourceLinkList = [];
-
-        foreach ($links as $link) {
-            $resourceLinkList[] = [
-                'id' => $link->getId(),
-                'session' => $link->getSession(),
-                'course' => $link->getCourse(),
-                'visibility' => $link->getVisibility(),
-                'visibilityName' => $link->getVisibilityName(),
-                'group' => $link->getGroup(),
-                'userGroup' => $link->getUserGroup(),
-            ];
+        if ($this->hasResourceNode()) {
+            $resourceNode = $this->getResourceNode();
+            $links = $resourceNode->getResourceLinks();
+            foreach ($links as $link) {
+                $resourceLinkList[] = [
+                    'id' => $link->getId(),
+                    'session' => $link->getSession(),
+                    'course' => $link->getCourse(),
+                    'visibility' => $link->getVisibility(),
+                    'visibilityName' => $link->getVisibilityName(),
+                    'group' => $link->getGroup(),
+                    'userGroup' => $link->getUserGroup(),
+                ];
+            }
         }
         $this->resourceLinkListFromEntity = $resourceLinkList;
     }

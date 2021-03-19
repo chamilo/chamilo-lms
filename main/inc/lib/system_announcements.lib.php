@@ -825,7 +825,7 @@ class SystemAnnouncementManager
      *
      * @param int $userId
      */
-    public static function getAnnouncementsForGroups($userId = 0,$visible)
+    public static function getAnnouncementsForGroups($userId = 0, $visible)
     {
         $user_selected_language = Database::escape_string(api_get_interface_language());
         $tblSysAnnouncements = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
@@ -970,7 +970,7 @@ class SystemAnnouncementManager
         }
 
         /** Show announcement of group */
-        $announcementToGroup = self::getAnnouncementsForGroups($userId,$visible);
+        $announcementToGroup = self::getAnnouncementsForGroups($userId, $visible);
         $totalAnnouncementToGroup = count($announcementToGroup);
         for ($i = 0; $i < $totalAnnouncementToGroup; $i++) {
             $announcement = $announcementToGroup[$i];

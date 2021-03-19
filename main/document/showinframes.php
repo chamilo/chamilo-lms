@@ -237,7 +237,11 @@ if (!$playerSupported && $execute_iframe) {
         // Fixes the content height of the frame
         $(function() {
             $(\'#mainFrame\').on(\'load\', function () {
-                this.style.height = (this.contentWindow.document.body.scrollHeight + 50) + \'px\';
+                let currentHeight = this.style.height;
+                let frameHeight = this.contentWindow.document.body.scrollHeight + 50;
+                if (frameHeight > currentHeight) {
+                    this.style.height = frameHeight + \'px\';
+                }
             });
 
             '.$frameReady.'
@@ -419,10 +423,12 @@ if ($execute_iframe) {
             name="mainFrame"
             border="0"
             frameborder="0"
+            marginheight="0"
+            marginwidth="0"
             scrolling="no"
-            style="width:100%;" height="600"
+            style="width:100%; height=600px"
             src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'"
-            height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
+            allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
     }
 }
 Display::display_footer();

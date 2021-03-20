@@ -47,7 +47,7 @@ class CourseHomeController extends ToolBaseController
      */
     public function indexAction(Request $request, CToolRepository $toolRepository, CShortcutRepository $shortcutRepository, ToolChain $toolChain)
     {
-        $this->autoLaunch();
+        //$this->autoLaunch();
         $course = $this->getCourse();
         if (null === $course) {
             throw $this->createAccessDeniedException();
@@ -286,7 +286,6 @@ class CourseHomeController extends ToolBaseController
 
     private function autoLaunch(): void
     {
-        return;
         $autoLaunchWarning = '';
         $showAutoLaunchLpWarning = false;
         $course_id = api_get_course_int_id();

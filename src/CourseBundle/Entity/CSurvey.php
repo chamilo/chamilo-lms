@@ -189,6 +189,14 @@ class CSurvey extends AbstractResource implements ResourceInterface
     protected Collection $children;
 
     /**
+     * @var Collection|CSurveyQuestionOption[]
+     *
+     * @ORM\OrderBy({"sort"="ASC"})
+     * @ORM\OneToMany(targetEntity="CSurveyQuestionOption", mappedBy="survey", cascade="remove")
+     */
+    protected Collection $options;
+
+    /**
      * @ORM\Column(name="survey_type", type="integer", nullable=false)
      */
     protected int $surveyType;
@@ -230,6 +238,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
         $this->questions = new ArrayCollection();
         $this->children = new ArrayCollection();
         $this->invitations = new ArrayCollection();
+        $this->options = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -753,6 +762,21 @@ class CSurvey extends AbstractResource implements ResourceInterface
     public function getInvitations()
     {
         return $this->invitations;
+    }
+
+    /**
+     * @return CSurveyQuestionOption[]|Collection
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    public function setOptions(Collection $options): self
+    {
+        $this->options = $options;
+
+        return $this;
     }
 
     public function setInvitations($invitations): self

@@ -214,7 +214,6 @@ class SurveyManager
      */
     public static function store_survey($values)
     {
-        $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
         $courseCode = api_get_course_id();
         $table_survey = Database::get_course_table(TABLE_SURVEY);
@@ -858,7 +857,7 @@ class SurveyManager
      *
      * @todo one sql call should do the trick
      */
-    public static function get_question($question_id, $shared = false)
+    public static function get_question($question_id)
     {
         $tbl_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
@@ -870,11 +869,11 @@ class SurveyManager
         }
 
         $sql = "SELECT * FROM $tbl_survey_question
-                WHERE c_id = $course_id AND iid = $question_id
+                WHERE iid = $question_id
                 ORDER BY `sort` ";
 
         $sqlOption = "  SELECT * FROM $table_survey_question_option
-                        WHERE c_id = $course_id AND question_id='".$question_id."'
+                        WHERE question_id='".$question_id."'
                         ORDER BY `sort` ";
         // Getting the information of the question
         $result = Database::query($sql);
@@ -1234,9 +1233,8 @@ class SurveyManager
         return true;
     }
 
-    public static function deleteQuestion($survey_id, $questionId, $shared = false)
+    public static function deleteQuestion($questionId)
     {
-        $survey_id = (int) $survey_id;
         $questionId = (int) $questionId;
         if (empty($questionId)) {
             return false;
@@ -1901,11 +1899,11 @@ class SurveyManager
             return false;
         }
 
-        $questions = self::get_questions($surveyId);
+        $questions = $survey->getQuestions();
         foreach ($questions as $question) {
             // Questions marked with "geneated" were created using the "multiplicate" feature.
-            if ('generated' === $question['survey_question_comment']) {
-                self::deleteQuestion($surveyId, $question['question_id']);
+            if ('generated' === $question->getSurveyQuestionComment()) {
+                self::deleteQuestion($question->getIid());
             }
         }
     }

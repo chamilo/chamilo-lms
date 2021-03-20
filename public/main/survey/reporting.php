@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CSurvey;
+
 /**
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
@@ -12,55 +15,51 @@
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
-$survey_id = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
-$userId = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
-$action = isset($_GET['action']) ? $_GET['action'] : 'overview';
-$survey_data = SurveyManager::get_survey($survey_id);
-
-if (empty($survey_data)) {
+$surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
+$userId = $_GET['user_id'] ?? 0;
+$action = $_GET['action'] ?? 'overview';
+if (empty($surveyId)) {
     api_not_allowed(true);
 }
 
-if (0 == $survey_data['anonymous']) {
-    $people_filled_full_data = true;
-} else {
-    $people_filled_full_data = false;
+$repo = Container::getSurveyRepository();
+/** @var CSurvey $survey */
+$survey = $repo->find($surveyId);
+if (null === $survey) {
+    api_not_allowed(true);
 }
-$people_filled = SurveyManager::get_people_who_filled_survey($survey_id, $people_filled_full_data);
 
-// Checking the parameters
+$people_filled_full_data = false;
+if (0 == $survey->getAnonymous()) {
+    $people_filled_full_data = true;
+}
+
+$people_filled = SurveyManager::get_people_who_filled_survey($surveyId, $people_filled_full_data);
+
 SurveyUtil::check_parameters($people_filled);
 
-$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
-    api_get_user_id(),
-    api_get_course_info()
-);
+$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(api_get_user_id(), api_get_course_info());
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 if ($isDrhOfCourse || !api_is_allowed_to_edit(false, true)) {
     // Show error message if the survey can be seen only by tutors
-    if (SURVEY_VISIBLE_TUTOR == $survey_data['visible_results']) {
+    if (SURVEY_VISIBLE_TUTOR == $survey->getVisibleResults()) {
         api_not_allowed(true);
     }
-
     Display::display_header(get_lang('Surveys'));
-    SurveyUtil::handle_reporting_actions($survey_data, $people_filled);
+    SurveyUtil::handleReportingActions($survey, $people_filled);
     Display::display_footer();
     exit;
 }
 
-/**
- * @todo use Export::arrayToCsv($data, $filename = 'export')
- */
-$exportReport = isset($_REQUEST['export_report']) ? $_REQUEST['export_report'] : '';
-$format = isset($_REQUEST['export_format']) ? $_REQUEST['export_format'] : '';
+$exportReport = $_REQUEST['export_report'] ?? '';
+$format = $_REQUEST['export_format'] ?? '';
 if (!empty($exportReport) && !empty($format)) {
     $compact = false;
     switch ($format) {
         case 'xls':
-            $filename = 'survey_results_'.$survey_id.'.xlsx';
-
-            SurveyUtil::export_complete_report_xls($survey_data, $filename, $userId);
+            $filename = 'survey_results_'.$surveyId.'.xlsx';
+            SurveyUtil::export_complete_report_xls($survey, $filename, $userId);
             exit;
             break;
         case 'csv-compact':
@@ -68,16 +67,11 @@ if (!empty($exportReport) && !empty($format)) {
             // no break
         case 'csv':
         default:
-            $data = SurveyUtil::export_complete_report($survey_data, $userId, $compact);
-            $filename = 'survey_results_'.$survey_id.($compact ? '_compact' : '').'.csv';
+            $data = SurveyUtil::export_complete_report($survey, $userId, $compact);
+            $filename = 'survey_results_'.$surveyId.($compact ? '_compact' : '').'.csv';
             header('Content-type: application/octet-stream');
             header('Content-Type: application/force-download');
-
-            if (preg_match("/MSIE 5.5/", $_SERVER['HTTP_USER_AGENT'])) {
-                header('Content-Disposition: filename= '.$filename);
-            } else {
-                header('Content-Disposition: attachment; filename= '.$filename);
-            }
+            header('Content-Disposition: attachment; filename= '.$filename);
             if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
                 header('Pragma: ');
                 header('Cache-Control: ');
@@ -92,9 +86,9 @@ if (!empty($exportReport) && !empty($format)) {
 }
 
 $urlname = strip_tags(
-    api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40)
+    api_substr(api_html_entity_decode($survey->getTitle(), ENT_QUOTES), 0, 40)
 );
-if (api_strlen(strip_tags($survey_data['title'])) > 40) {
+if (api_strlen(strip_tags($survey->getTitle())) > 40) {
     $urlname .= '...';
 }
 
@@ -104,15 +98,15 @@ $interbreadcrumb[] = [
     'name' => get_lang('Survey list'),
 ];
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
+    'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$surveyId.'&'.api_get_cidreq(),
     'name' => $urlname,
 ];
 
-if ('overview' == $action) {
+if ('overview' === $action) {
     $tool_name = get_lang('Reporting');
 } else {
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$survey_id,
+        'url' => api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId,
         'name' => get_lang('Reporting'),
     ];
     switch ($action) {
@@ -224,14 +218,11 @@ async function exportToPdf() {
     pdf.save("reporting.pdf");
 }
 </script>';
-// Displaying the header
+
 Display::display_header($tool_name, 'Survey');
+SurveyUtil::handleReportingActions($survey, $people_filled);
 
-// Action handling
-SurveyUtil::handle_reporting_actions($survey_data, $people_filled);
-
-// Content
-if ('overview' == $action) {
+if ('overview' === $action) {
     $html = null;
     $url = api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&';
 
@@ -244,7 +235,7 @@ if ('overview' == $action) {
             null,
             ICON_SIZE_MEDIUM
         ).'<h4>'.get_lang('Questions\' overall report').'</h4><p>'.get_lang('Questions\' overall reportDetail').'</p>',
-        $url.'action=questionreport&survey_id='.$survey_id.'&single_page=1',
+        $url.'action=questionreport&survey_id='.$surveyId.'&single_page=1',
         ['class' => 'list-group-item']
     );
 
@@ -255,7 +246,7 @@ if ('overview' == $action) {
             null,
             ICON_SIZE_MEDIUM
         ).'<h4>'.get_lang('Detailed report by question').'</h4><p>'.get_lang('Detailed report by questionDetail').'</p>',
-        $url.'action=questionreport&survey_id='.$survey_id,
+        $url.'action=questionreport&survey_id='.$surveyId,
         ['class' => 'list-group-item']
     );
 
@@ -266,7 +257,7 @@ if ('overview' == $action) {
             null,
             ICON_SIZE_MEDIUM
         ).'<h4>'.get_lang('Detailed report by user').'</h4><p>'.get_lang('Detailed report by userDetail').'</p>',
-        $url.'action=userreport&survey_id='.$survey_id,
+        $url.'action=userreport&survey_id='.$surveyId,
         ['class' => 'list-group-item']
     );
 
@@ -277,7 +268,7 @@ if ('overview' == $action) {
             null,
             ICON_SIZE_MEDIUM
         ).'<h4>'.get_lang('Comparative report').'</h4><p>'.get_lang('Comparative reportDetail').'</p>',
-        $url.'action=comparativereport&survey_id='.$survey_id,
+        $url.'action=comparativereport&survey_id='.$surveyId,
         ['class' => 'list-group-item']
     );
 
@@ -288,7 +279,7 @@ if ('overview' == $action) {
             null,
             ICON_SIZE_MEDIUM
         ).'<h4>'.get_lang('Complete report').'</h4><p>'.get_lang('Complete reportDetail').'</p>',
-        $url.'action=completereport&survey_id='.$survey_id,
+        $url.'action=completereport&survey_id='.$surveyId,
         ['class' => 'list-group-item']
     );
 

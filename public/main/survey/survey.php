@@ -111,11 +111,7 @@ if (!empty($action)) {
             }
             break;
         case 'delete':
-            $result = SurveyManager::deleteQuestion(
-            $my_survey_id_survey,
-            $my_question_id_survey,
-            $survey_data['is_shared']
-        );
+            $result = SurveyManager::deleteQuestion($my_question_id_survey);
             if (false == $result) {
                 $sendmsg = 'ErrorOccured';
             } else {

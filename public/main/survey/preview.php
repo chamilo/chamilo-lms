@@ -2,14 +2,13 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CSurvey;
+
 /**
  * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author  Julio Montoya <gugli100@gmail.com>
  */
-
-use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CSurvey;
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);
@@ -24,10 +23,7 @@ if (empty($surveyId)) {
     api_not_allowed(true);
 }
 
-// Getting the survey information
 $repo = Container::getSurveyRepository();
-$surveyId = isset($_GET['iid']) ? (int) $_GET['iid'] : 0;
-
 /** @var CSurvey $survey */
 $survey = $repo->find($surveyId);
 if (null === $survey) {
@@ -63,7 +59,7 @@ SurveyUtil::check_first_last_question($surveyId, false);
 
 // Survey information
 echo '<div class="page-header"><h2>'.$survey->getTitle().'</h2></div>';
-if (!empty($survey_data['survey_subtitle'])) {
+if (!empty($survey->getSubtitle())) {
     echo '<div id="survey_subtitle">'.$survey->getSubtitle().'</div>';
 }
 
@@ -99,7 +95,7 @@ if (isset($_GET['show'])) {
     $questions_exists = true;
     if (Database::num_rows($result)) {
         while ($row = Database::fetch_array($result)) {
-            if (1 == $survey_data['one_question_per_page']) {
+            if (1 == $survey->getOneQuestionPerPage()) {
                 if ('pagebreak' !== $row['type']) {
                     $paged_questions[$counter][] = $row['iid'];
                     $counter++;
@@ -202,7 +198,6 @@ if (is_array($questions) && count($questions) > 0) {
     }
 
     $js = '';
-
     if (isset($pageBreakText[$originalShow]) && !empty(strip_tags($pageBreakText[$originalShow]))) {
         // Only show page-break texts if there is something there, apart from
         // HTML tags
@@ -282,7 +277,7 @@ $form->display();
 
 echo Display::toolbarButton(
     get_lang('Return to Course Homepage'),
-    api_get_course_url($courseInfo['code']),
+    api_get_course_url($courseInfo['real_id']),
     'home'
 );
 

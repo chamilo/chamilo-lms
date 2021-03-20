@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -235,7 +236,7 @@ if ($form->validate()) {
         }
 
         foreach ($deleteItems as $deleteId) {
-            SurveyManager::deleteQuestion($surveyData['iid'], $deleteId);
+            SurveyManager::deleteQuestion($deleteId);
         }
     }
 

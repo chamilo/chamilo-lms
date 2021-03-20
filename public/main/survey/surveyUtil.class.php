@@ -200,47 +200,25 @@ class SurveyUtil
         return true;
     }
 
-    /**
-     * This function deals with the action handling.
-     *
-     * @param array $survey_data
-     * @param array $people_filled
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     *
-     * @version February 2007
-     */
-    public static function handle_reporting_actions($survey_data, $people_filled)
+    public static function handleReportingActions(CSurvey $survey, array $people_filled = [])
     {
-        $action = isset($_GET['action']) ? $_GET['action'] : '';
-
-        // Getting the number of question
-        $questions = SurveyManager::get_questions($survey_data['iid']);
-
-        $counter = 0;
-        foreach ($questions as $key => $value) {
-            if ('pagebreak' !== $value['type']) {
-                $counter++;
-            }
-        }
-
-        $survey_data['number_of_questions'] = $counter;
+        $action = $_GET['action'] ?? '';
 
         switch ($action) {
             case 'questionreport':
-                self::display_question_report($survey_data);
+                self::display_question_report($survey);
                 break;
             case 'userreport':
-                self::displayUserReport($survey_data, $people_filled);
+                self::displayUserReport($survey, $people_filled);
                 break;
             case 'comparativereport':
                 self::display_comparative_report();
                 break;
             case 'completereport':
-                echo self::displayCompleteReport($survey_data);
+                echo self::displayCompleteReport($survey);
                 break;
             case 'deleteuserreport':
-                self::delete_user_report($_GET['survey_id'], $_GET['user']);
+                self::delete_user_report($survey, $_GET['user']);
                 break;
         }
     }
@@ -293,19 +271,11 @@ class SurveyUtil
     }
 
     /**
-     * @param array $survey_data
-     * @param array $people_filled
-     *
      * @return string
      */
-    public static function displayUserReportForm($survey_data, $people_filled)
+    public static function displayUserReportForm(CSurvey $survey, array $people_filled = [])
     {
-        $surveyId = $survey_data['iid'];
-
-        if (empty($survey_data)) {
-            return '';
-        }
-
+        $surveyId = $survey->getIid();
         // Step 1: selection of the user
         echo "<script>
         function jumpMenu(targ,selObj,restore) {
@@ -320,7 +290,7 @@ class SurveyUtil
             .get_lang('User').'</option>';
 
         foreach ($people_filled as $key => &$person) {
-            if (0 == $survey_data['anonymous']) {
+            if (0 == $survey->getAnonymous()) {
                 $name = $person['user_info']['complete_name_with_username'];
                 $id = $person['user_id'];
                 if ('' == $id) {
@@ -347,14 +317,14 @@ class SurveyUtil
      * @param array $survey_data
      * @param bool  $addMessage
      */
-    public static function displayUserReportAnswers($userId, $survey_data, $addMessage = true)
+    public static function displayUserReportAnswers($userId, CSurvey $survey, $addMessage = true)
     {
         // Database table definitions
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-        $course_id = (int) $survey_data['c_id'];
-        $surveyId = (int) $survey_data['iid'];
+        $course_id = api_get_course_int_id();
+        $surveyId = $survey->getIid();
         $userId = Database::escape_string($userId);
 
         $content = '';
@@ -383,16 +353,14 @@ class SurveyUtil
 					FROM $table_survey_question survey_question
 					LEFT JOIN $table_survey_question_option survey_question_option
 					ON
-					    survey_question.iid = survey_question_option.question_id AND
-					    survey_question_option.c_id = $course_id
+					    survey_question.iid = survey_question_option.question_id
 					WHERE
 					    survey_question NOT LIKE '%{{%' AND
-					    survey_question.survey_id = '".$surveyId."' AND
-                        survey_question.c_id = $course_id
+					    survey_question.survey_id = '".$surveyId."'
 					ORDER BY survey_question.sort, survey_question_option.sort ASC";
             $result = Database::query($sql);
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                if ('pagebreak' != $row['type']) {
+                if ('pagebreak' !== $row['type']) {
                     $questions[$row['sort']]['question_id'] = $row['question_id'];
                     $questions[$row['sort']]['survey_id'] = $row['survey_id'];
                     $questions[$row['sort']]['survey_question'] = $row['survey_question'];
@@ -406,7 +374,6 @@ class SurveyUtil
             // Getting all the answers of the user
             $sql = "SELECT * FROM $table_survey_answer
 			        WHERE
-                        c_id = $course_id AND
                         survey_id = '".$surveyId."' AND
                         user = '".$userId."'";
             $result = Database::query($sql);
@@ -463,13 +430,9 @@ class SurveyUtil
      *
      * @version February 2007 - Updated March 2008
      */
-    public static function displayUserReport($survey_data, $people_filled, $addActionBar = true)
+    public static function displayUserReport(CSurvey $survey, $people_filled, $addActionBar = true)
     {
-        if (empty($survey_data)) {
-            return '';
-        }
-
-        $surveyId = $survey_data['iid'];
+        $surveyId = $survey->getIid();
         $reportingUrl = api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq();
 
         // Actions bar
@@ -486,7 +449,8 @@ class SurveyUtil
             if (isset($_GET['user'])) {
                 if (api_is_allowed_to_edit()) {
                     // The delete link
-                    echo '<a href="'.$reportingUrl.'&action=deleteuserreport&user='.Security::remove_XSS($_GET['user']).'" >'.
+                    echo '<a
+                        href="'.$reportingUrl.'&action=deleteuserreport&user='.Security::remove_XSS($_GET['user']).'" >'.
                         Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_MEDIUM).'</a>';
                 }
 
@@ -513,9 +477,9 @@ class SurveyUtil
             echo '</div>';
         }
 
-        echo self::displayUserReportForm($survey_data, $people_filled);
+        echo self::displayUserReportForm($survey, $people_filled);
         if (isset($_GET['user'])) {
-            echo self::displayUserReportAnswers($_GET['user'], $survey_data);
+            echo self::displayUserReportAnswers($_GET['user'], $survey);
         }
     }
 
@@ -528,8 +492,6 @@ class SurveyUtil
      * persons who have answered this. You can then click on the name of the person and you will then go to the report
      * by user where you see all the answers of that user.
      *
-     * @param    array    All the survey data
-     *
      * @return string html code that displays the report by question
      *
      * @todo allow switching between horizontal and vertical.
@@ -541,21 +503,17 @@ class SurveyUtil
      *
      * @version February 2007 - Updated March 2008
      */
-    public static function display_question_report($survey_data)
+    public static function display_question_report(CSurvey $survey)
     {
         $singlePage = isset($_GET['single_page']) ? (int) $_GET['single_page'] : 0;
         // Determining the offset of the sql statement (the n-th question of the survey)
         $offset = !isset($_GET['question']) ? 0 : (int) $_GET['question'];
         $currentQuestion = isset($_GET['question']) ? (int) $_GET['question'] : 0;
-        $surveyId = (int) $survey_data['iid'];
+        $surveyId = $survey->getIid();
         $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
         $course_id = api_get_course_int_id();
-
-        // Database table definitions
-        $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-        $questions = [];
 
         echo '<div class="actions">';
         echo '<a
@@ -577,13 +535,17 @@ class SurveyUtil
             ['onclick' => 'exportToPdf();']
         );
         echo '</div>';
-        $fromUntil = sprintf(get_lang('FromXUntilY'), $survey_data['avail_from'], $survey_data['avail_till']);
+        $fromUntil = sprintf(
+            get_lang('FromXUntilY'),
+            api_get_local_time($survey->getAvailFrom()),
+            api_get_local_time($survey->getAvailTill())
+        );
         $max = 80;
         $data = [
-            get_lang('SurveyTitle') => cut(strip_tags($survey_data['title']), $max),
-            get_lang('SurveySubTitle') => cut(strip_tags($survey_data['subtitle']), $max),
+            get_lang('SurveyTitle') => cut(strip_tags($survey->getTitle()), $max),
+            get_lang('SurveySubTitle') => cut(strip_tags($survey->getSubtitle()), $max),
             get_lang('Dates') => $fromUntil,
-            get_lang('SurveyIntroduction') => cut(strip_tags($survey_data['intro']), $max),
+            get_lang('SurveyIntroduction') => cut(strip_tags($survey->getIntro()), $max),
         ];
 
         $table = new HTML_Table(['id' => 'pdf_table', 'class' => 'table']);
@@ -594,7 +556,16 @@ class SurveyUtil
             $row++;
         }
 
-        if ($survey_data['number_of_questions'] > 0) {
+        $questions = $survey->getQuestions();
+        $numberOfQuestions = 0;
+        foreach ($questions as $question) {
+            if ('pagebreak' !== $question->getType()) {
+                $numberOfQuestions++;
+            }
+        }
+
+        $newQuestionList = [];
+        if ($numberOfQuestions > 0) {
             $limitStatement = null;
             if (!$singlePage) {
                 echo '<div id="question_report_questionnumbers" class="pagination">';
@@ -604,7 +575,7 @@ class SurveyUtil
                         .get_lang('Previous question').'</a></li>';
                 }
 
-                for ($i = 1; $i <= $survey_data['number_of_questions']; $i++) {
+                for ($i = 1; $i <= $numberOfQuestions; $i++) {
                     if ($offset != $i - 1) {
                         echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action.'&'
                             .api_get_cidreq().'&survey_id='.$surveyId.'&question='.($i - 1).'">'.$i.'</a></li>';
@@ -612,7 +583,7 @@ class SurveyUtil
                         echo '<li class="disabled"s><a href="#">'.$i.'</a></li>';
                     }
                 }
-                if ($currentQuestion < ($survey_data['number_of_questions'] - 1)) {
+                if ($currentQuestion < ($numberOfQuestions - 1)) {
                     echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action.'&'
                         .api_get_cidreq().'&survey_id='.$surveyId.'&question='.($offset + 1).'">'
                         .get_lang('Next question').'</li></a>';
@@ -623,7 +594,7 @@ class SurveyUtil
             }
 
             // Getting the question information
-            $sql = "SELECT * FROM $table_survey_question
+            /*$sql = "SELECT * FROM $table_survey_question
 			        WHERE
                         survey_id = $surveyId AND
                         survey_question NOT LIKE '%{{%' AND
@@ -631,24 +602,31 @@ class SurveyUtil
                     ORDER BY sort ASC
                     $limitStatement";
             $result = Database::query($sql);
-            while ($row = Database::fetch_array($result)) {
-                $questions[$row['iid']] = $row;
+            while ($row = Database::fetch_array($result)) {*/
+            foreach ($questions as $question) {
+                if (strpos($question->getSurveyQuestion(), '%{{%') && 'pagebreak' !== $question->getType()) {
+                    continue;
+                }
+                $newQuestionList[$question->getIid()] = $question;
             }
         }
         echo '<div id="question_results">';
-        foreach ($questions as $question) {
-            echo '<div class="question-item">';
+        /** @var CSurveyQuestion $question */
+        foreach ($newQuestionList as $question) {
             $chartData = [];
             $options = [];
-            $questionId = (int) $question['iid'];
-            echo '<div class="title-question">';
-            echo strip_tags(isset($question['survey_question']) ? $question['survey_question'] : null);
-            echo '</div>';
+            $questionId = $question->getIid();
 
-            if ('score' === $question['type']) {
+            echo '<div class="question-item">';
+            echo '<div class="title-question">';
+            echo strip_tags($question->getSurveyQuestion());
+            echo '</div>';
+            $type = $question->getType();
+
+            if ('score' === $type) {
                 /** @todo This function should return the options as this is needed further in the code */
-                $options = self::display_question_report_score($survey_data, $question, $offset);
-            } elseif ('open' === $question['type'] || 'comment' === $question['type']) {
+                $options = self::display_question_report_score($survey, $question, $offset);
+            } elseif ('open' === $type || 'comment' === $type) {
                 echo '<div class="open-question">';
                 /** @todo Also get the user who has answered this */
                 $sql = "SELECT * FROM $table_survey_answer
@@ -686,7 +664,7 @@ class SurveyUtil
                         $number_of_answers[$row['question_id']] = 0;
                     }
                     $number_of_answers[$row['question_id']] += $row['total'];
-                    if ('multiplechoiceother' === $question['type']) {
+                    if ('multiplechoiceother' === $type) {
                         $parts = ch_multiplechoiceother::decodeOptionValue($row['option_id']);
                         $row['option_id'] = $parts[0];
                     }
@@ -702,7 +680,7 @@ class SurveyUtil
                     }
                     array_push($chartData, ['option' => $optionText, 'votes' => $votes]);
                 }
-                $chartContainerId = 'chartContainer'.$question['iid'];
+                $chartContainerId = 'chartContainer'.$questionId;
                 echo '<div id="'.$chartContainerId.'" style="text-align:center;">';
                 echo self::drawChart($chartData, false, $chartContainerId, false);
                 echo '</div>';
@@ -720,7 +698,7 @@ class SurveyUtil
                 // Displaying the table: the content
                 if (is_array($options)) {
                     foreach ($options as $key => &$value) {
-                        if ('multiplechoiceother' === $question['type'] && 'other' === $value['option_text']) {
+                        if ('multiplechoiceother' === $type && 'other' === $value['option_text']) {
                             $value['option_text'] = get_lang('SurveyOtherAnswer');
                         }
 
@@ -728,7 +706,7 @@ class SurveyUtil
                         if (isset($data[$value['iid']])) {
                             $absolute_number = $data[$value['iid']]['total'];
                         }
-                        if ('percentage' === $question['type'] && empty($absolute_number)) {
+                        if ('percentage' === $type && empty($absolute_number)) {
                             continue;
                         }
                         $number_of_answers[$option['question_id']] = isset($number_of_answers[$option['question_id']])
@@ -825,27 +803,26 @@ class SurveyUtil
     /**
      * Display score data about a survey question.
      *
-     * @param    array    Question info
      * @param    int    The offset of results shown
      */
-    public static function display_question_report_score($survey_data, $question, $offset)
+    public static function display_question_report_score(CSurvey $survey, CSurveyQuestion $question, $offset)
     {
         // Database table definitions
         $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
-        $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-        $course_id = api_get_course_int_id();
-        $surveyId = $survey_data['iid'];
-
+        $surveyId = $survey->getIid();
+        $questionId = $question->getIid();
+        $options = $survey->getOptions();
         // Getting the options
-        $sql = "SELECT * FROM $table_survey_question_option
+        /*$sql = "SELECT * FROM $table_survey_question_option
                 WHERE
                     survey_id= $surveyId AND
                     question_id = '".intval($question['iid'])."'
                 ORDER BY sort ASC";
         $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
-            $options[$row['iid']] = $row;
+        while ($row = Database::fetch_array($result)) {*/
+        foreach ($options as $option) {
+            $options[$option->getIid()] = $option;
         }
 
         // Getting the answers
@@ -853,7 +830,7 @@ class SurveyUtil
                 FROM $table_survey_answer
                 WHERE
                    survey_id= $surveyId AND
-                   question_id = '".Database::escape_string($question['iid'])."'
+                   question_id = '".$questionId."'
                 GROUP BY option_id, value";
         $result = Database::query($sql);
         $number_of_answers = 0;
@@ -863,13 +840,15 @@ class SurveyUtil
         }
 
         $chartData = [];
+        /** @var CSurveyQuestionOption $option */
         foreach ($options as $option) {
-            $optionText = strip_tags($option['option_text']);
+            $optionId = $option->getIid();
+            $optionText = strip_tags($option->getOptionText());
             $optionText = html_entity_decode($optionText);
-            for ($i = 1; $i <= $question['max_value']; $i++) {
+            for ($i = 1; $i <= $question->getMaxValue(); $i++) {
                 $votes = null;
-                if (isset($data[$option['iid']][$i])) {
-                    $votes = $data[$option['iid']][$i]['total'];
+                if (isset($data[$optionId][$i])) {
+                    $votes = $data[$optionId][$i]['total'];
                 }
 
                 if (empty($votes)) {
@@ -899,20 +878,21 @@ class SurveyUtil
         echo '		<th>'.get_lang('Graphic').'</th>';
         echo '	</tr>';
         // Displaying the table: the content
-        foreach ($options as $key => &$value) {
-            for ($i = 1; $i <= $question['max_value']; $i++) {
+        foreach ($options as $key => $value) {
+            $optionId = $value->getIid();
+            for ($i = 1; $i <= $question->getMaxValue(); $i++) {
                 $absolute_number = null;
-                if (isset($data[$value['iid']][$i])) {
-                    $absolute_number = $data[$value['iid']][$i]['total'];
+                if (isset($data[$optionId][$i])) {
+                    $absolute_number = $data[$optionId][$i]['total'];
                 }
 
                 echo '<tr>';
-                echo '<td>'.$value['option_text'].'</td>';
+                echo '<td>'.$value->getOptionText().'</td>';
                 echo '<td>'.$i.'</td>';
 
                 echo '<td><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action
                     .'&survey_id='.$surveyId.'&question='.Security::remove_XSS($offset)
-                    .'&viewoption='.$value['iid'].'&value='.$i.'">'.$absolute_number.'</a></td>';
+                    .'&viewoption='.$optionId.'&value='.$i.'">'.$absolute_number.'</a></td>';
 
                 $percentage = 0;
                 $size = 0;
@@ -922,9 +902,13 @@ class SurveyUtil
                 }
                 echo '<td>'.$percentage.' %</td>';
                 echo '<td>';
-
                 if ($size > 0) {
-                    echo '<div style="border:1px solid #264269; background-color:#aecaf4; height:10px; width:'.$size.'px">&nbsp;</div>';
+                    echo '<div
+                            style="border:1px solid #264269;
+                            background-color:#aecaf4;
+                            height:10px; width:'.$size.'px">
+                            &nbsp;
+                        </div>';
                 }
                 echo '		</td>';
                 echo '	</tr>';
@@ -944,7 +928,6 @@ class SurveyUtil
     /**
      * This functions displays the complete reporting.
      *
-     * @param array $survey_data
      * @param int   $userId
      * @param bool  $addActionBar
      * @param bool  $addFilters
@@ -953,7 +936,7 @@ class SurveyUtil
      * @return string
      */
     public static function displayCompleteReport(
-        $survey_data,
+        CSurvey $survey,
         $userId = 0,
         $addActionBar = true,
         $addFilters = true,
@@ -964,8 +947,8 @@ class SurveyUtil
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
-        $surveyId = (int) $survey_data['iid'];
-        $course_id = (int) $survey_data['c_id'];
+        $surveyId = $survey->getIid();
+        $course_id = api_get_course_int_id();
 
         if (empty($surveyId) || empty($course_id)) {
             return '';
@@ -1013,14 +996,15 @@ class SurveyUtil
             $content .= '</form>';
         }
 
-        $content .= '<form id="form2" name="form2" method="post" action="'.api_get_self().'?action='.$action.'&survey_id='
-            .$surveyId.'&'.api_get_cidreq().'">';
-
-        // The table
+        $content .= '<form
+            id="form2"
+            name="form2"
+            method="post"
+            action="'.api_get_self().'?action='.$action.'&survey_id='.$surveyId.'&'.api_get_cidreq().'">';
         $content .= '<br /><table class="table table-hover table-striped data_table" border="1">';
         // Getting the number of options per question
-        $content .= '	<tr>';
-        $content .= '		<th>';
+        $content .= '<tr>';
+        $content .= '<th>';
 
         if ($addFilters) {
             if ((isset($_POST['submit_question_filter']) && $_POST['submit_question_filter']) ||
@@ -1094,7 +1078,7 @@ class SurveyUtil
                 // We do not show comment and pagebreak question types
                 if ('pagebreak' !== $row['type']) {
                     $content .= ' <th';
-                    if ($row['number_of_options'] > 0 && 'percentage' != $row['type']) {
+                    if ($row['number_of_options'] > 0 && 'percentage' !== $row['type']) {
                         $content .= ' colspan="'.$row['number_of_options'].'"';
                     }
                     $content .= '>';
@@ -1193,7 +1177,6 @@ class SurveyUtil
         $answers_of_user = [];
         $sql = "SELECT * FROM $table_survey_answer
                 WHERE
-                    c_id = $course_id AND
                     survey_id = $surveyId
                     $userCondition
                 ORDER BY iid, user ASC";
@@ -1202,12 +1185,12 @@ class SurveyUtil
         while ($row = Database::fetch_array($result)) {
             if ($old_user != $row['user'] && '' != $old_user) {
                 $userParam = $old_user;
-                if (0 != $survey_data['anonymous']) {
+                if (0 != $survey->getAnonymous()) {
                     $userParam = $i;
                     $i++;
                 }
                 $content .= self::display_complete_report_row(
-                    $survey_data,
+                    $survey,
                     $possible_answers,
                     $answers_of_user,
                     $userParam,
@@ -1228,13 +1211,13 @@ class SurveyUtil
         }
 
         $userParam = $old_user;
-        if (0 != $survey_data['anonymous']) {
+        if (0 != $survey->getAnonymous()) {
             $userParam = $i;
             $i++;
         }
 
         $content .= self::display_complete_report_row(
-            $survey_data,
+            $survey,
             $possible_answers,
             $answers_of_user,
             $userParam,
@@ -1252,17 +1235,10 @@ class SurveyUtil
     /**
      * Return user answers in a row.
      *
-     * @param      $survey_data
-     * @param      $possible_options
-     * @param      $answers_of_user
-     * @param      $user
-     * @param      $questions
-     * @param bool $display_extra_user_fields
-     *
      * @return string
      */
     public static function display_complete_report_row(
-        $survey_data,
+        CSurvey $survey,
         $possible_options,
         $answers_of_user,
         $user,
@@ -1270,7 +1246,7 @@ class SurveyUtil
         $display_extra_user_fields = false
     ) {
         $user = Security::remove_XSS($user);
-        $surveyId = (int) $survey_data['iid'];
+        $surveyId = $survey->getIid();
 
         if (empty($surveyId)) {
             return '';
@@ -1278,8 +1254,8 @@ class SurveyUtil
 
         $content = '<tr>';
         $url = api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq();
-        if (0 == $survey_data['anonymous']) {
-            if (0 !== intval($user)) {
+        if (0 == $survey->getAnonymous()) {
+            if (0 !== (int) $user) {
                 $userInfo = api_get_user_info($user);
                 $user_displayed = '-';
                 if (!empty($userInfo)) {
@@ -1314,7 +1290,7 @@ class SurveyUtil
 
         if (is_array($possible_options)) {
             foreach ($possible_options as $question_id => &$possible_option) {
-                if ('open' == $questions[$question_id]['type'] || 'comment' == $questions[$question_id]['type']) {
+                if ('open' === $questions[$question_id]['type'] || 'comment' === $questions[$question_id]['type']) {
                     $content .= '<td align="center">';
                     if (isset($answers_of_user[$question_id]) && isset($answers_of_user[$question_id]['0'])) {
                         $content .= $answers_of_user[$question_id]['0']['option_id'];
@@ -1365,7 +1341,8 @@ class SurveyUtil
      *
      * @param array $survey_data The basic survey data as initially obtained by SurveyManager::get_survey()
      * @param int   $user_id     The ID of the user asking for the report
-     * @param bool  $compact     Whether to present the long (v marks with multiple columns per question) or compact (one column per question) answers format
+     * @param bool  $compact     Whether to present the long (v marks with multiple columns per question) or compact
+     *                           (one column per question) answers format
      *
      * @todo consider merging this function with display_complete_report
      *
@@ -1414,7 +1391,7 @@ class SurveyUtil
         $return .= str_repeat(';', $num);
 
         $sql = "SELECT
-                    questions.question_id,
+                    questions.iid,
                     questions.type,
                     questions.survey_question,
                     count(options.iid) as number_of_options
@@ -1426,7 +1403,7 @@ class SurveyUtil
 				    survey_question NOT LIKE '%{{%' AND
 				    questions.type <> 'pagebreak' AND
 				    questions.survey_id = $surveyId
-				GROUP BY questions.question_id
+				GROUP BY questions.iid
 				ORDER BY questions.sort ASC";
 
         $result = Database::query($sql);
@@ -1440,7 +1417,7 @@ class SurveyUtil
             if (!(isset($_POST['submit_question_filter'])) ||
                 (isset($_POST['submit_question_filter']) &&
                     is_array($_POST['questions_filter']) &&
-                    in_array($row['question_id'], $_POST['questions_filter']))
+                    in_array($row['iid'], $_POST['questions_filter']))
             ) {
                 if (0 == $row['number_of_options'] || $compact) {
                     $return .= str_replace(
@@ -1494,13 +1471,11 @@ class SurveyUtil
 				FROM $table_survey_question survey_question
 				LEFT JOIN $table_survey_question_option survey_question_option
 				ON
-				    survey_question.iid = survey_question_option.question_id AND
-				    survey_question_option.c_id = survey_question.c_id
+				    survey_question.iid = survey_question_option.question_id
 				WHERE
 				    survey_question NOT LIKE '%{{%' AND
 				    survey_question.type <> 'pagebreak' AND
-				    survey_question.survey_id = $surveyId AND
-				    survey_question.c_id = $course_id
+				    survey_question.survey_id = $surveyId
 				ORDER BY survey_question.sort ASC, survey_question_option.sort ASC";
         $result = Database::query($sql);
         $possible_answers = [];
@@ -1535,7 +1510,6 @@ class SurveyUtil
         $answers_of_user = [];
         $sql = "SELECT * FROM $table_survey_answer
 		        WHERE
-		          c_id = $course_id AND
 		          survey_id = $surveyId
 		          ";
         if (0 != $user_id) {
@@ -1594,9 +1568,11 @@ class SurveyUtil
      * @param array $survey_data               Basic survey data (we're mostly interested in the 'anonymous' index)
      * @param array $possible_options          Possible answers
      * @param array $answers_of_user           User's answers
-     * @param mixed $user                      User ID or user details as string - Used as a string in the result string
+     * @param mixed $user                      User ID or user details as string - Used as a string in the result
+     *                                         string
      * @param bool  $display_extra_user_fields Whether to display user fields or not
-     * @param bool  $compact                   Whether to show answers as different column values (true) or one column per option (false, default)
+     * @param bool  $compact                   Whether to show answers as different column values (true) or one column
+     *                                         per option (false, default)
      *
      * @return string One line of the csv file
      *
@@ -1605,7 +1581,7 @@ class SurveyUtil
      * @version February 2007
      */
     public static function export_complete_report_row(
-        $survey_data,
+        CSurvey $survey,
         $possible_options,
         $answers_of_user,
         $user,
@@ -1613,7 +1589,7 @@ class SurveyUtil
         $compact = false
     ) {
         $return = '';
-        if (0 == $survey_data['anonymous']) {
+        if (0 == $survey->getAnonymous()) {
             if (0 !== intval($user)) {
                 $userInfo = api_get_user_info($user);
                 if (!empty($userInfo)) {
@@ -1650,7 +1626,7 @@ class SurveyUtil
                         // For each option of this question, look if it matches the user's answer
                         $my_answer_of_user = !isset($answers_of_user[$question_id]) || isset($answers_of_user[$question_id]) && null == $answers_of_user[$question_id] ? [] : $answers_of_user[$question_id];
                         $key = array_keys($my_answer_of_user);
-                        if (isset($key[0]) && 'open' == substr($key[0], 0, 4)) {
+                        if (isset($key[0]) && 'open' === substr($key[0], 0, 4)) {
                             // If this is an open type question (type starts by 'open'), take whatever answer is given
                             $return .= '"'.
                                 str_replace(
@@ -2082,7 +2058,7 @@ class SurveyUtil
             $question_y = SurveyManager::get_question($yAxis);
         }
 
-        if (is_numeric($xAxis) && is_numeric($yAxis)) {
+        if (is_numeric($xAxis) && is_numeric($yAxis) && $question_x && $question_y) {
             // Getting the answers of the two questions
             $answers_x = self::get_answers_of_question_by_user($surveyId, $xAxis);
             $answers_y = self::get_answers_of_question_by_user($surveyId, $yAxis);
@@ -2348,7 +2324,8 @@ class SurveyUtil
      * and sends the invitations by email.
      *
      * @param int    $surveyId
-     * @param array  $users_array       Users array can be both a list of course uids AND a list of additional email addresses
+     * @param array  $users_array       Users array can be both a list of course uids AND a list of additional email
+     *                                  addresses
      * @param string $invitation_title  title of the mail
      * @param string $invitation_text   text of the mail has to contain a **link** string or
      *                                  this will automatically be added to the end

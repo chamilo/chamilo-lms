@@ -12,13 +12,6 @@ use Chamilo\CoreBundle\Framework\Container;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$htmlHeadXtra[] = '<script>
-$(function() {
-    $("button").click(function() {
-        $("#is_executable").attr("value",$(this).attr("name"));
-    });
-});
-</script>';
 $htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
@@ -54,12 +47,14 @@ if (1 == $surveyData['survey_type']) {
     }
 }
 
+$surveyUrl = api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$surveyId.'&'.api_get_cidreq();
+
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
     'name' => get_lang('Survey list'),
 ];
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$surveyId.'&'.api_get_cidreq(),
+    'url' => $surveyUrl,
     'name' => strip_tags($urlname),
 ];
 
@@ -88,7 +83,7 @@ $possible_types = [
 ];
 
 $actions = '<div class="actions">';
-$actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'.
+$actions .= '<a href="'.$surveyUrl.'">'.
     Display::return_icon('back.png', get_lang('Back to survey'), '', ICON_SIZE_MEDIUM).'</a>';
 $actions .= '</div>';
 // Checking if it is a valid type
@@ -138,6 +133,7 @@ if ($surveyQuestion->getForm()->validate()) {
     $values = $surveyQuestion->getForm()->getSubmitValues();
     $survey = Container::getSurveyRepository()->find($surveyId);
     $surveyQuestion->save($survey, $values, $formData);
+    api_location($surveyUrl);
 }
 
 Display::display_header($tool_name, 'Survey');

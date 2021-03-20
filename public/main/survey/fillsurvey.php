@@ -641,7 +641,7 @@ if (isset($_POST['finish_survey'])) {
         echo '<br /><br />';
         echo Display::toolbarButton(
             get_lang('Return to Course Homepage'),
-            api_get_course_url($courseInfo['code']),
+            api_get_course_url($courseInfo['real_id']),
             'home'
         );
     }

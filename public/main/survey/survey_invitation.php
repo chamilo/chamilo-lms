@@ -76,12 +76,12 @@ $url = api_get_self().'?survey_id='.$surveyId.'&'.api_get_cidreq();
 
 echo '<ul class="nav nav-tabs">';
 if ('invited' === $view) {
-    echo '<li role="presentation" class="active"><a href="#">'.get_lang('View invited');
+    echo '<li role="presentation" class="active"><a "href="#">'.get_lang('View invited');
 } else {
     echo '<li role="presentation"><a href="'.$url.'&view=invited">'.
         get_lang('View invited');
 }
-echo ' <span class="badge badge-default">'.$invitationsCount.'</span>';
+echo Display::badge($invitationsCount);
 echo '</a></li>';
 if ('answered' === $view) {
     echo '<li role="presentation" class="active"><a href="#">'.get_lang('View people who answered');
@@ -90,16 +90,18 @@ if ('answered' === $view) {
         <a href="'.$url.'&view=answered">'.
         get_lang('View people who answered');
 }
-echo ' <span class="badge badge-default">'.$answeredCount.'</span>';
+echo Display::badge($answeredCount);
 echo '</a></li>';
 
 if ('unanswered' === $view) {
-    echo '<li role="presentation" class="active"><a href="#">'.get_lang('View people who didn\'t answer');
+    echo '<li role="presentation" class="active">
+        <a href="#">'.get_lang('View people who didn\'t answer');
 } else {
-    echo '<li role="presentation"><a href="'.$url.'&view=unanswered">'.
+    echo '<li role="presentation">
+        <a href="'.$url.'&view=unanswered">'.
         get_lang('View people who didn\'t answer');
 }
-echo ' <span class="badge badge-default">'.$unAnsweredCount.'</span>';
+echo Display::badge($unAnsweredCount);
 echo '</a></li>';
 echo '</ul>';
 echo '<table class="table table-hover table-striped data_table" style="margin-top: 5px;">';

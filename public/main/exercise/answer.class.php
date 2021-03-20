@@ -469,14 +469,14 @@ class Answer
      * Returns the question type.
      *
      * @author    Yannick Warnier <ywarnier@beeznest.org>
-     *
+     * @todo remove this function use CQuizQuestion
      * @return int The type of the question this answer is bound to
      */
     public function getQuestionType()
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $sql = "SELECT type FROM $table
-                WHERE c_id = {$this->course_id} AND iid = '".$this->questionId."'";
+                WHERE iid = '".$this->questionId."'";
         $res = Database::query($sql);
         if (Database::num_rows($res) <= 0) {
             return null;

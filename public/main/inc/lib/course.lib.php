@@ -6,18 +6,13 @@ use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\SequenceResource;
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
-use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Entity\CGroup;
-use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\EntityManager;
 
 /**
  * Class CourseManager.
@@ -2997,7 +2992,6 @@ class CourseManager
             $sql = "SELECT
                         DISTINCT(course.code),
                         course.id as real_id,
-                        course.category_id AS category,
                         course.title
                     FROM $tbl_course course
                     INNER JOIN $tbl_course_user cru
@@ -3029,7 +3023,6 @@ class CourseManager
         if (true === $include_sessions) {
             $sql = "SELECT DISTINCT (c.code),
                         c.id as real_id,
-                        c.category_code AS category,
                         s.id as session_id,
                         s.name as session_name
                     FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." scu

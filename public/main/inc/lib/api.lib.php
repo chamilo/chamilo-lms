@@ -6412,7 +6412,6 @@ function api_get_course_url($courseId = null, $sessionId = null, $groupId = null
         $groupId = api_get_group_id();
     }
 
-
     // Build the URL
     if (!empty($courseId)) {
         $webCourseHome = '/course/'.$courseId.'/home';

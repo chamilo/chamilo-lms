@@ -9625,7 +9625,7 @@ EOD;
                         }
                         // now simply update the prerequisite to set it to the last non-chapter item
                         $sql = "UPDATE $tbl_lp_item SET prerequisite = '$last_item_not_dir'
-                                WHERE c_id = $course_id AND lp_id = $lp_id AND iid = $current_item_id";
+                                WHERE lp_id = $lp_id AND iid = $current_item_id";
                         Database::query($sql);
                         // record item as 'non-chapter' reference
                         $last_item_not_dir = $item->get_id();

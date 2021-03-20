@@ -671,10 +671,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         }
 
         // GradebookCertificate
-        $criteria = [
-            'userId' => $userId,
-        ];
-        $result = $em->getRepository(GradebookCertificate::class)->findBy($criteria);
+        $result = $em->getRepository(GradebookCertificate::class)->findBy(['user' => $userId]);
         $gradebookCertificate = [];
         /** @var GradebookCertificate $item */
         foreach ($result as $item) {
@@ -708,7 +705,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
         // TrackEAttempt
         $criteria = [
-            'userId' => $userId,
+            'user' => $userId,
         ];
         $result = $em->getRepository(TrackEAttempt::class)->findBy($criteria);
         $trackEAttempt = [];
@@ -729,7 +726,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
         // TrackECourseAccess
         $criteria = [
-            'userId' => $userId,
+            'user' => $userId,
         ];
         $result = $em->getRepository(TrackECourseAccess::class)->findBy($criteria);
         $trackECourseAccessList = [];
@@ -752,7 +749,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
             TrackEDefault::class => 'defaultUserId',
             TrackELastaccess::class => 'accessUserId',
             TrackEUploads::class => 'uploadUserId',
-            GradebookResult::class => 'userId',
+            GradebookResult::class => 'user',
             TrackEDownloads::class => 'downUserId',
         ];
 
@@ -791,7 +788,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
         $trackELoginList = [];
         /** @var TrackELogin $item */
-        foreach ($trackResults['ChamiloCoreBundle:TrackELogin'] as $item) {
+        foreach ($trackResults[TrackELogin::class] as $item) {
             $startDate = $item->getLoginDate()->format($dateFormat);
             $endDate = null !== $item->getLogoutDate() ? $item->getLogoutDate()->format($dateFormat) : '';
             $list = [
@@ -805,7 +802,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         // TrackEAccess
         $trackEAccessList = [];
         /** @var TrackEAccess $item */
-        foreach ($trackResults['ChamiloCoreBundle:TrackEAccess'] as $item) {
+        foreach ($trackResults[TrackEAccess::class] as $item) {
             $date = $item->getAccessDate()->format($dateFormat);
             $list = [
                 'IP: '.$item->getUserIp(),
@@ -818,7 +815,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         // TrackEOnline
         $trackEOnlineList = [];
         /** @var TrackEOnline $item */
-        foreach ($trackResults['ChamiloCoreBundle:TrackEOnline'] as $item) {
+        foreach ($trackResults[TrackEOnline::class] as $item) {
             $date = $item->getLoginDate()->format($dateFormat);
             $list = [
                 'IP: '.$item->getUserIp(),
@@ -832,7 +829,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         // TrackEDefault
         $trackEDefault = [];
         /** @var TrackEDefault $item */
-        foreach ($trackResults['ChamiloCoreBundle:TrackEDefault'] as $item) {
+        foreach ($trackResults[TrackEDefault::class] as $item) {
             $date = $item->getDefaultDate()->format($dateFormat);
             $list = [
                 'Type: '.$item->getDefaultEventType(),
@@ -848,7 +845,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         // TrackELastaccess
         $trackELastaccess = [];
         /** @var TrackELastaccess $item */
-        foreach ($trackResults['ChamiloCoreBundle:TrackELastaccess'] as $item) {
+        foreach ($trackResults[TrackELastaccess::class] as $item) {
             $date = $item->getAccessDate()->format($dateFormat);
             $list = [
                 'Course #'.$item->getCId(),
@@ -862,7 +859,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         // TrackEUploads
         $trackEUploads = [];
         /** @var TrackEUploads $item */
-        foreach ($trackResults['ChamiloCoreBundle:TrackEUploads'] as $item) {
+        foreach ($trackResults[TrackEUploads::class] as $item) {
             $date = $item->getUploadDate()->format($dateFormat);
             $list = [
                 'Course #'.$item->getCId(),
@@ -874,7 +871,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
         $gradebookResult = [];
         /** @var GradebookResult $item */
-        foreach ($trackResults['ChamiloCoreBundle:GradebookResult'] as $item) {
+        foreach ($trackResults[GradebookResult::class] as $item) {
             $date = $item->getCreatedAt()->format($dateFormat);
             $list = [
                 'Evaluation id# '.$item->getEvaluation()->getId(),
@@ -886,7 +883,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
         $trackEDownloads = [];
         /** @var TrackEDownloads $item */
-        foreach ($trackResults['ChamiloCoreBundle:TrackEDownloads'] as $item) {
+        foreach ($trackResults[TrackEDownloads::class] as $item) {
             $date = $item->getDownDate()->format($dateFormat);
             $list = [
                 'File: '.$item->getDownDocPath(),
@@ -897,7 +894,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
         // UserCourseCategory
         $criteria = [
-            'userId' => $userId,
+            'user' => $userId,
         ];
         $result = $em->getRepository(UserCourseCategory::class)->findBy($criteria);
         $userCourseCategory = [];
@@ -911,7 +908,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
         // Forum
         $criteria = [
-            'posterId' => $userId,
+            'user' => $userId,
         ];
         $result = $em->getRepository(CForumPost::class)->findBy($criteria);
         $cForumPostList = [];
@@ -927,7 +924,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
         // CForumThread
         $criteria = [
-            'threadPosterId' => $userId,
+            'user' => $userId,
         ];
         $result = $em->getRepository(CForumThread::class)->findBy($criteria);
         $cForumThreadList = [];
@@ -974,7 +971,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
         // CAttendanceSheet
         $criteria = [
-            'userId' => $userId,
+            'user' => $userId,
         ];
         $result = $em->getRepository(CAttendanceSheet::class)->findBy($criteria);
         $cAttendanceSheetList = [];
@@ -1005,7 +1002,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
         // CAttendanceResult
         $criteria = [
-            'userId' => $userId,
+            'user' => $userId,
         ];
         $result = $em->getRepository(CAttendanceResult::class)->findBy($criteria);
         $cAttendanceResult = [];
@@ -1106,7 +1103,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
         // CNotebook
         $criteria = [
-            'userId' => $userId,
+            'user' => $userId,
         ];
         $result = $em->getRepository(CNotebook::class)->findBy($criteria);
         $cNotebook = [];
@@ -1122,7 +1119,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
         // CLpView
         $criteria = [
-            'userId' => $userId,
+            'user' => $userId,
         ];
         $result = $em->getRepository(CLpView::class)->findBy($criteria);
         $cLpView = [];
@@ -1140,7 +1137,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
         // CStudentPublication
         $criteria = [
-            'userId' => $userId,
+            'user' => $userId,
         ];
         $result = $em->getRepository(CStudentPublication::class)->findBy($criteria);
         $cStudentPublication = [];
@@ -1155,7 +1152,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
         // CStudentPublicationComment
         $criteria = [
-            'userId' => $userId,
+            'user' => $userId,
         ];
         $result = $em->getRepository(CStudentPublicationComment::class)->findBy($criteria);
         $cStudentPublicationComment = [];
@@ -1239,7 +1236,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
         // UserRelCourseVote
         $criteria = [
-            'userId' => $userId,
+            'user' => $userId,
         ];
         $result = $em->getRepository(UserRelCourseVote::class)->findBy($criteria);
         $userRelCourseVote = [];
@@ -1365,6 +1362,14 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
             'completeName',
             'completeNameWithClasses',
             'salt',
+            'dropBoxSentFiles',
+            'dropBoxReceivedFiles',
+            'currentUrl',
+            'uuid',
+            'curriculumItems',
+            'currentSession',
+            'currentCourse',
+            'resourceNode'
         ];
 
         $callback = function ($dateTime) {

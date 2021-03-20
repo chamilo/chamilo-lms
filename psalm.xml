@@ -30,20 +30,18 @@
 <!--        <directory name="public/main/dropbox"/>-->
 <!--        <directory name="public/main/exercise"/>-->
         <file name="public/main/exercise/oral_expression.class.php"/>
-
         <file name="public/main/exercise/TestCategory.php"/>
-        <file name="public/main/exercise/exercise.class.php"/>
+        <file name="public/main/exercise/*.class.php"/>
 
-        <directory name="public/main/gradebook"/>
-        <directory name="public/main/group"/>
         <directory name="public/main/forum"/>
 <!--        <directory name="public/main/gamification"/>-->
         <directory name="public/main/glossary"/>
+        <directory name="public/main/gradebook"/>
         <directory name="public/main/group"/>
 <!--        <directory name="public/main/inc/ajax" />-->
 
         <directory name="public/main/link" />
-<!--        <directory name="public/main/lp"/>-->
+<!--        <directory name="public/main/lp" />-->
         <directory name="public/main/messages" />
 <!--        <directory name="public/main/mySpace" />-->
         <directory name="public/main/notebook" />
@@ -120,8 +118,6 @@
         <file name="public/main/inc/lib/ScheduledAnnouncement.php"/>
 <!--        <file name="public/main/inc/lib/security.lib.php"/>-->
 
-
-
         <file name="public/main/inc/lib/sessionmanager.lib.php"/>
         <!--        <file name="public/main/inc/lib/skill.lib.php"/>-->
         <file name="public/main/inc/lib/skill.visualizer.lib.php"/>
@@ -131,7 +127,6 @@
         <file name="public/main/inc/lib/SortableTableFromArrayConfig.php"/>
         <file name="public/main/inc/lib/specific_fields_manager.lib.php"/>
         <file name="public/main/inc/lib/statistics.lib.php"/>
-        <file name="public/main/inc/lib/SurveyTree.php"/>
         <file name="public/main/inc/lib/system_announcements.lib.php"/>
         <file name="public/main/inc/lib/table_sort.class.php"/>
         <file name="public/main/inc/lib/tablesort.lib.php"/>
@@ -173,6 +168,7 @@
             <file name="public/main/lp/openoffice_document.class.php"/>
             <file name="public/main/lp/openoffice_text.class.php"/>
             <file name="public/main/lp/openoffice_text_document.class.php"/>
+            <file name="public/main/lp/aicc.class.php"/>
 
             <file name="public/main/admin/index.php"/>
 
@@ -186,11 +182,14 @@
             <file name="public/main/admin/specific_fields.php"/>
             <file name="public/main/admin/sub_language*"/>
 
+
             <file name="public/main/admin/ldap_*"/>
             <file name="public/main/admin/special_exports.php"/>
 
             <file name="src/CoreBundle/Controller/EditorController.php"/>
             <file name="src/CoreBundle/Controller/ResourceController.php"/>
+            <file name="src/CoreBundle/Traits/Repository/ORM/TreeRepositoryTrait.php"/>
+
         </ignoreFiles>
     </projectFiles>
 

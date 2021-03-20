@@ -49,6 +49,9 @@ class CourseHomeController extends ToolBaseController
     {
         $this->autoLaunch();
         $course = $this->getCourse();
+        if (null === $course) {
+            throw $this->createAccessDeniedException();
+        }
         $session = $request->getSession();
 
         $js = '<script>'.api_get_language_translate_html().'</script>';
@@ -283,13 +286,16 @@ class CourseHomeController extends ToolBaseController
 
     private function autoLaunch(): void
     {
-        /* Auto launch code */
+        return;
         $autoLaunchWarning = '';
         $showAutoLaunchLpWarning = false;
         $course_id = api_get_course_int_id();
         $lpAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
         $session_id = api_get_session_id();
-        $allowAutoLaunchForCourseAdmins = api_is_platform_admin() || api_is_allowed_to_edit(true, true) || api_is_coach();
+        $allowAutoLaunchForCourseAdmins =
+            api_is_platform_admin() ||
+            api_is_allowed_to_edit(true, true) ||
+            api_is_coach();
 
         if (!empty($lpAutoLaunch)) {
             if (2 === $lpAutoLaunch) {
@@ -297,7 +303,7 @@ class CourseHomeController extends ToolBaseController
                 if ($allowAutoLaunchForCourseAdmins) {
                     $showAutoLaunchLpWarning = true;
                 } else {
-                    $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
+                    $session_key = 'lp_autolaunch_'.$session_id.'_'.$course_id.'_'.api_get_user_id();
                     if (!isset($_SESSION[$session_key])) {
                         // Redirecting to the LP
                         $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();

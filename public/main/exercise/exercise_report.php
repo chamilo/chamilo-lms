@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\TrackEAttemptRecording;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CLp;
 
 /**
  * Exercise list: This script shows the list of exercises for administrators and students.
@@ -354,16 +356,23 @@ if (isset($_REQUEST['comments']) &&
             $statsTeacher
         );
     }
+
     // Updating LP score here
     if (!empty($lp_id) && !empty($lpItemId)) {
+        $lpRepo = Container::getLpRepository();
+        $lp = null;
+        if (!empty($lpId)) {
+            /** @var CLp $lp */
+            $lp = $lpRepo->find($lpId);
+        }
         $statusCondition = '';
-        $item = new learnpathItem($lpItemId, api_get_user_id(), api_get_course_int_id());
+        $item = new learnpathItem($lp, $lpItemId, api_get_course_int_id());
         if ($item) {
             $prereqId = $item->get_prereq_string();
             $minScore = $item->getPrerequisiteMinScore();
             $maxScore = $item->getPrerequisiteMaxScore();
             $passed = false;
-            $lp = new learnpath(api_get_course_id(), $lp_id, $student_id);
+            $lp = new learnpath($lp, api_get_course_info(), $student_id);
             $prereqCheck = $lp->prerequisites_match($lpItemId);
             if ($prereqCheck) {
                 $passed = true;

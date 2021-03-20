@@ -24,9 +24,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
 
-/**
- * Display initialisation and security checks.
- */
 // Extra javascript functions for in html head:
 $htmlHeadXtra[] = "<script>
 function confirmation(name) {
@@ -69,7 +66,6 @@ $introduction = '';
 
 $message = '';
 $actions = '';
-
 $allowCategory = true;
 if (!empty($sessionId)) {
     $allowCategory = false;

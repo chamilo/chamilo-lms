@@ -34,7 +34,7 @@ if (!is_object($oLP)) {
     exit;
 }
 /** @var learnpathItem $oItem */
-$oItem = isset($oLP->items[$oLP->current]) ? $oLP->items[$oLP->current] : null;
+$oItem = $oLP->items[$oLP->current] ?? null;
 
 if (!is_object($oItem)) {
     error_log('New LP - scorm_api - Could not load oItem item', 0);
@@ -170,8 +170,10 @@ olms.lms_initialized = 0;
 // commands received are executed on the *previous/current* item
 // This flag is updated in LMSInitialize() and in switch_item()
 olms.switch_finished = 0;
-olms.lms_view_id = '<?php echo $oLP->get_view(null, $userId); ?>';
-if(olms.lms_view_id == ''){ olms.lms_view_id = 1;}
+olms.lms_view_id = '<?php echo $oLP->get_view(0, $userId); ?>';
+if (olms.lms_view_id == '') {
+    olms.lms_view_id = 1;
+}
 olms.lms_user_id = '<?php echo $userId; ?>';
 olms.lms_next_item = '<?php echo $oLP->get_next_item_id(); ?>';
 olms.lms_previous_item = '<?php echo $oLP->get_previous_item_id(); ?>';
@@ -288,7 +290,7 @@ function LMSInitialize() {
         };
 
         $.ajax({
-            type: "POST",
+            type: "GET",
             url: "lp_ajax_initialize.php" + courseUrl,
             data: params,
             dataType: 'script',

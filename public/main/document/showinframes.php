@@ -197,9 +197,7 @@ if (isset($document_data['parents']) && isset($document_data['parents'][0])) {
 if ($isChatFolder) {
     $htmlHeadXtra[] = api_get_js('highlight/highlight.pack.js');
     $htmlHeadXtra[] = api_get_css(api_get_path(WEB_CSS_PATH).'chat.css');
-    $htmlHeadXtra[] = api_get_css(
-        api_get_path(WEB_LIBRARY_PATH).'javascript/highlight/styles/github.css'
-    );
+    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/highlight/styles/github.css');
     $htmlHeadXtra[] = '
     <script>
         hljs.initHighlightingOnLoad();
@@ -222,14 +220,13 @@ if (!$playerSupported && $execute_iframe) {
         var jQueryFrameReadyConfigPath = \''.api_get_jquery_web_path().'\';
     -->
     </script>';
-    $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
     $htmlHeadXtra[] = '<script>
         // Fixes the content height of the frame
         $(function() {
             $(\'#mainFrame\').on(\'load\', function () {
                 this.style.height = (this.contentWindow.document.body.scrollHeight + 50) + \'px\';
             });
-            
             '.$frameReady.'
         });
     </script>';
@@ -331,14 +328,14 @@ if ($execute_iframe) {
 
         echo $toolbar = Display::toolbarAction('actions-documents', [$actionsLeft]);
 
-        echo '<iframe 
-            id="mainFrame" 
-            name="mainFrame" 
-            border="0" 
-            frameborder="0" 
-            scrolling="no" 
-            style="width:100%;" height="600" 
-            src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'" 
+        echo '<iframe
+            id="mainFrame"
+            name="mainFrame"
+            border="0"
+            frameborder="0"
+            scrolling="no"
+            style="width:100%;" height="600"
+            src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'"
             height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
     }
 }

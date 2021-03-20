@@ -4,7 +4,7 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$categoryId = isset($_GET['selectcat']) ? intval($_GET['selectcat']) : false;
+$categoryId = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : false;
 
 if (empty($categoryId)) {
     api_not_allowed(false);

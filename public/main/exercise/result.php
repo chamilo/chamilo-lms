@@ -157,7 +157,7 @@ switch ($action) {
 
 $pageBottom = '<div class="question-return">';
 $pageBottom .= Display::url(
-    get_lang('BackToAttemptList'),
+    get_lang('Back to the attempt list'),
     api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$exercise_id.'&'.api_get_cidreq(),
     ['class' => 'btn btn-primary']
 );

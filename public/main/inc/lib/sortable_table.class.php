@@ -387,10 +387,10 @@ class SortableTable extends HTML_Table
         $params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
         $table_id = 'form_'.$this->table_name.'_id';
         $html = '';
+        $form = '';
         if (false === $this->hideNavigation) {
             $form = $this->get_page_select_form();
             $nav = $this->get_navigation_html();
-
             $html = '<div class="card-action">';
             $html .= '<div class="row">';
             $html .= '<div class="col-12 col-md-4">';
@@ -769,7 +769,7 @@ class SortableTable extends HTML_Table
      * Get the HTML-code which represents a form to select how many items a page
      * should contain.
      */
-    public function get_page_select_form()
+    public function get_page_select_form(): string
     {
         $total_number_of_items = $this->get_total_number_of_items();
         if ($total_number_of_items <= $this->default_items_per_page) {

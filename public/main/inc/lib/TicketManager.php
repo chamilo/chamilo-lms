@@ -6,6 +6,8 @@ use Chamilo\CoreBundle\Entity\TicketMessageAttachment;
 use Chamilo\CoreBundle\Entity\TicketPriority;
 use Chamilo\CoreBundle\Entity\TicketProject;
 use Chamilo\CoreBundle\Entity\TicketStatus;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CLp;
 
 /**
  * Class TicketManager.
@@ -1183,6 +1185,8 @@ class TicketManager
                     ticket.id = $ticketId ";
         $result = Database::query($sql);
         $ticket = [];
+
+        $repo = Container::getLpRepository();
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_assoc($result)) {
                 $row['course'] = null;
@@ -1231,7 +1235,8 @@ class TicketManager
                     $row['lp_url'] = null;
 
                     if (!empty($row['lp_id'])) {
-                        $lpName = learnpath::getLpNameById($row['lp_id']);
+                        /** @var CLp $lp */
+                        $lp = $repo->find($row['lp_id']);
                         $dataLp = [
                             'cidReq' => $course['code'],
                             'id_session' => $sessionId,
@@ -1240,7 +1245,10 @@ class TicketManager
                         ];
                         $urlParamsLp = http_build_query($dataLp);
 
-                        $row['lp_url'] = '<a href="'.api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.$urlParamsLp.'">'.$lpName.'</a>';
+                        $row['lp_url'] = '<a
+                            href="'.api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.$urlParamsLp.'">'.
+                            $lp->getName().
+                        '</a>';
                     }
                 }
 

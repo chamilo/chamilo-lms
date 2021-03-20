@@ -414,8 +414,6 @@ class PDF
         );
 
         if (!empty($courseInfo['path'])) {
-            //$document_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/';
-
             $doc = new DOMDocument();
             @$doc->loadHTML($document_html);
 

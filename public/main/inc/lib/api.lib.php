@@ -6267,7 +6267,7 @@ function api_get_bootstrap_and_font_awesome($returnOnlyPath = false)
 {
     $url = api_get_path(WEB_PUBLIC_PATH).'build/css/bootstrap.css';
     if ($returnOnlyPath) {
-        return $url;
+        return api_get_path(SYS_PUBLIC_PATH).'build/css/bootstrap.css';
     }
 
     return '<link href="'.$url.'" rel="stylesheet" type="text/css" />'."\n";

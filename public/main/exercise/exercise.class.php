@@ -9416,7 +9416,7 @@ class Exercise
                         ) {
                             if ($num > 0) {
                                 $row_track = Database::fetch_array($qryres);
-                                $attempt_text = get_lang('LatestAttempt').' : ';
+                                $attempt_text = get_lang('Latest attempt').' : ';
                                 $attempt_text .= ExerciseLib::show_score(
                                     $row_track['score'],
                                     $row_track['max_score']

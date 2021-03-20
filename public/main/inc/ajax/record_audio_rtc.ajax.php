@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../global.inc.php';
@@ -43,7 +44,7 @@ if (!isset($_FILES['audio_blob'], $_REQUEST['audio_dir'])) {
     exit;
 }
 
-$file = isset($_FILES['audio_blob']) ? $_FILES['audio_blob'] : [];
+$file = $_FILES['audio_blob'] ?? [];
 $file['file'] = $file;
 $audioDir = Security::remove_XSS($_REQUEST['audio_dir']);
 
@@ -77,12 +78,12 @@ switch ($type) {
             $newDocId = $uploadedDocument['id'];
             $courseId = $uploadedDocument['c_id'];
 
-            /** @var learnpath $lp */
-            $lp = Session::read('oLP');
-            $lpItemId = isset($_REQUEST['lp_item_id']) && !empty($_REQUEST['lp_item_id']) ? $_REQUEST['lp_item_id'] : null;
-            if (!empty($lp) && empty($lpItemId)) {
-                $lp->set_modified_on();
+            $lpId = $_REQUEST['lp_id'] ?? null;
+            $lpItemId = $_REQUEST['lp_item_id'] ?? null;
 
+            $lpRepo = Container::getLpRepository();
+            $lp = $lpRepo->find($lpId);
+            if (!empty($lp) && empty($lpItemId)) {
                 $lpItem = new learnpathItem($lpItemId);
                 $lpItem->add_audio_from_documents($newDocId);
             }

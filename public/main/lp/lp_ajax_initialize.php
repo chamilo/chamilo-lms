@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CLp;
+
 /**
  * This script contains the server part of the xajax interaction process.
  * This script, in particular, enables the process of SCO's initialization. It
@@ -13,7 +16,6 @@
 // Flag to allow for anonymous user - needs to be set before global.inc.php
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
-
 api_protect_course_script();
 
 /**
@@ -27,12 +29,12 @@ api_protect_course_script();
  *
  * @return string
  */
-function initialize_item($lp_id, $user_id, $view_id, $next_item)
+function initialize_item($lpId, $user_id, $view_id, $next_item)
 {
     $debug = 0;
     $return = '';
     if ($debug) {
-        error_log('In initialize_item('.$lp_id.','.$user_id.','.$view_id.','.$next_item.')');
+        error_log('In initialize_item('.$lpId.','.$user_id.','.$view_id.','.$next_item.')');
     }
     /*$item_id may be one of:
      * -'next'
@@ -41,13 +43,12 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
      * -'last'
      * - a real item ID
      */
-    $mylp = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
+    $mylp = learnpath::getLpFromSession(api_get_course_id(), $lpId, $user_id);
     $mylp->set_current_item($next_item);
     if ($debug) {
         error_log('In initialize_item() - new item is '.$next_item);
     }
     $mylp->start_current_item(true);
-
     if (is_object($mylp->items[$next_item])) {
         if ($debug) {
             error_log('In initialize_item - recovering existing item object '.$next_item, 0);
@@ -96,7 +97,6 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
         $myistring = substr($myistring, 1);
     }
 
-    // Obtention des donnees d'objectifs
     $mycoursedb = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
     $course_id = api_get_course_int_id();
     $mylp_iv_id = $mylpi->db_item_view_id;
@@ -112,7 +112,6 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
         }
     }
     $myobjectives = json_encode($phpobjectives);
-
     $return .=
             "olms.score=".$myscore.";".
             "olms.max=".$mymax.";".
@@ -151,7 +150,7 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
     $myinteractions_count = $mylpi->get_interactions_count();
     $mycore_exit = $mylpi->get_core_exit();
     $return .=
-            "olms.lms_lp_id=".$lp_id.";".
+            "olms.lms_lp_id=".$lpId.";".
             "olms.lms_item_id=".$next_item.";".
             "olms.lms_old_item_id=0;".
             "olms.lms_initialized=0;".

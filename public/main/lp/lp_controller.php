@@ -25,11 +25,14 @@ api_protect_course_script(true);
 
 $debug = false;
 $current_course_tool = TOOL_LEARNPATH;
+$lpItemId = $_REQUEST['id'] ?? 0;
+$lpId = $_REQUEST['lp_id'] ?? 0;
 $course_id = api_get_course_int_id();
+$session_id = api_get_session_id();
 $lpRepo = Container::getLpRepository();
 $courseInfo = api_get_course_info();
 $course = api_get_course_entity();
-
+$userId = api_get_user_id();
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
 $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
 if ($showGlossary) {
@@ -41,27 +44,21 @@ if ($showGlossary) {
         var jQueryFrameReadyConfigPath = \''.api_get_jquery_web_path().'\';
     -->
     </script>';
-        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js" type="text/javascript" language="javascript"></script>';
-        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';
+        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
+        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"></script>';
     }
 }
-
-$htmlHeadXtra[] = '<script>
-function setFocus(){
-    $("#idTitle").focus();
-}
-$(window).on("load", function () {
-    setFocus();
-});
-</script>';
-
-$lpItemId = $_REQUEST['id'] ?? 0;
-$lpId = $_REQUEST['lp_id'] ?? 0;
 
 $ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?lp_id='.(int) $lpId.'&'.api_get_cidreq();
 $listUrl = api_get_self().'?action=list&'.api_get_cidreq();
 $htmlHeadXtra[] = '
 <script>
+    function setFocus(){
+        $("#idTitle").focus();
+    }
+    $(window).on("load", function () {
+        setFocus();
+    });
     /*
     Script to manipulate Learning Path items with Drag and drop
      */
@@ -70,7 +67,6 @@ $htmlHeadXtra[] = '
         var item_tag = in_elem.get(0).tagName;
         var item_id =  in_elem.attr("id");
         var parent_id = item_id;
-
         if (item_tag == "LI" && item_id != undefined) {
             // in_parent_id de la forme UL_x
             newOrderData += item_id+"|"+get_UL_integer_id(in_parent_id)+"^";
@@ -274,7 +270,6 @@ $htmlHeadXtra[] = '
     });
 </script>';
 
-$session_id = api_get_session_id();
 $lpfound = false;
 $myrefresh = 0;
 $myrefresh_id = 0;
@@ -292,9 +287,6 @@ $lpObject = Session::read('lpobject');
 if (!empty($lpObject)) {
     $oLP = UnserializeApi::unserialize('lp', $lpObject);
     if (isset($oLP) && is_object($oLP)) {
-        if ($debug) {
-            error_log(' oLP is object');
-        }
         if (1 == $myrefresh ||
             empty($oLP->cc) ||
             $oLP->cc != api_get_course_id() ||
@@ -341,37 +333,29 @@ if ($lpId) {
             'action' => 'lp_load',
         ];
         Event::registerLog($logInfo);
-
-        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $type = $lp->getLpType();
 
         switch ($type) {
-            case CLp::LP_TYPE:
-                $oLP = new learnpath($lp, $courseInfo, api_get_user_id());
-                if (false !== $oLP) {
-                    $lp_found = true;
-                }
-                break;
             case CLp::SCORM_TYPE:
-                $oLP = new scorm($lp, $courseInfo, api_get_user_id());
+                $oLP = new scorm($lp, $courseInfo, $userId);
                 if (false !== $oLP) {
                     $lp_found = true;
                 }
                 break;
             case CLp::AICC_TYPE:
-                $oLP = new aicc($lp, $courseInfo, api_get_user_id());
+                $oLP = new aicc($lp, $courseInfo, $userId);
                 if (false !== $oLP) {
                     $lp_found = true;
                 }
                 break;
+            case CLp::LP_TYPE:
             default:
-                $oLP = new learnpath($lp, $lpId, api_get_user_id());
+                $oLP = new learnpath($lp, $courseInfo, $userId);
                 if (false !== $oLP) {
                     $lp_found = true;
                 }
                 break;
         }
-
         Session::write('oLP', $oLP);
     }
 }
@@ -921,7 +905,7 @@ switch ($action) {
 
         // Teachers can export to PDF
         if (!$is_allowed_to_edit) {
-            if (!learnpath::is_lp_visible_for_student($oLP->getEntity(), api_get_user_id(), $course)) {
+            if (!learnpath::is_lp_visible_for_student($lp, $userId, $course)) {
                 api_not_allowed();
             }
         }

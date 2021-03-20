@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
 
 /**
@@ -14,7 +15,7 @@ $this_section = SECTION_COURSES;
 api_protect_course_script();
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $isStudentView = api_is_student_view_active();
-$learnpath_id = (int) $_REQUEST['lp_id'];
+$lpId = (int) $_REQUEST['lp_id'];
 $lp_item_id = isset($_GET['id']) ? (int) $_GET['id'] : null;
 $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 $type = isset($_GET['type']) ? $_GET['type'] : null;
@@ -22,7 +23,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 $courseInfo = api_get_course_info();
 
 if (!$is_allowed_to_edit || $isStudentView) {
-    header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
+    header('location:lp_controller.php?action=view&lp_id='.$lpId);
     exit;
 }
 
@@ -45,7 +46,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('LearningPaths'),
 ];
 $interbreadcrumb[] = [
-    'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
+    'url' => api_get_self()."?action=build&lp_id=$lpId&".api_get_cidreq(),
     'name' => $lp->getNameNoTags(),
 ];
 
@@ -72,7 +73,7 @@ switch ($type) {
         break;
     default:
         $interbreadcrumb[] = [
-            'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),
+            'url' => api_get_self()."?action=add_item&type=step&lp_id=$lpId&".api_get_cidreq(),
             'name' => get_lang('NewStep'),
         ];
         break;
@@ -88,7 +89,7 @@ $lp_item = new learnpathItem($lp_item_id);
 $form = new FormValidator(
     'add_audio',
     'post',
-    api_get_self().'?action=add_audio&id='.$lp_item_id.'&'.api_get_cidreq().'&lp_id='.$learnpath_id,
+    api_get_self().'?action=add_audio&id='.$lp_item_id.'&'.api_get_cidreq().'&lp_id='.$lpId,
     null,
     ['enctype' => 'multipart/form-data']
 );
@@ -209,7 +210,7 @@ $folders = DocumentManager::get_all_document_folders(
 $form = new FormValidator(
     'selector',
     'POST',
-    api_get_self().'?view=build&id='.$lp_item_id.'&lp_id='.$learnpath_id.'&action=add_audio&'.api_get_cidreq()
+    api_get_self().'?view=build&id='.$lp_item_id.'&lp_id='.$lpId.'&action=add_audio&'.api_get_cidreq()
 );
 
 $attributes = ['onchange' => 'javascript: document.selector.submit();'];

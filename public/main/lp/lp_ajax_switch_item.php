@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
 
 /**
@@ -24,14 +26,14 @@ require_once __DIR__.'/../inc/global.inc.php';
  * @param   int Current item ID
  * @param   int New item ID
  */
-function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_item)
+function switch_item_details($lpId, $user_id, $view_id, $current_item, $next_item)
 {
     $debug = 0;
     $return = '';
     if ($debug > 0) {
         error_log('--------------------------------------');
         error_log('SWITCH');
-        error_log('Params('.$lp_id.','.$user_id.','.$view_id.','.$current_item.','.$next_item.')');
+        error_log('Params('.$lpId.','.$user_id.','.$view_id.','.$current_item.','.$next_item.')');
     }
     //$objResponse = new xajaxResponse();
     /*$item_id may be one of:
@@ -41,7 +43,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
      * -'last'
      * - a real item ID
      */
-    $mylp = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
+    $mylp = learnpath::getLpFromSession(api_get_course_id(), $lpId, $user_id);
     $new_item_id = 0;
     switch ($next_item) {
         case 'next':
@@ -87,7 +89,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
     if (WhispeakAuthPlugin::isLpItemMarked($new_item_id)) {
         ChamiloSession::write(
             WhispeakAuthPlugin::SESSION_LP_ITEM,
-            ['lp' => $lp_id, 'lp_item' => $new_item_id, 'src' => '']
+            ['lp' => $lpId, 'lp_item' => $new_item_id, 'src' => '']
         );
     }
 
@@ -200,7 +202,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
 
     $return .=
         //"saved_lesson_status='not attempted';" .
-        "olms.lms_lp_id=".$lp_id.";".
+        "olms.lms_lp_id=".$lpId.";".
         "olms.lms_item_id=".$new_item_id.";".
         "olms.lms_old_item_id=0;".
         //"lms_been_synchronized=0;" .
@@ -240,7 +242,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
         // Minimum time for each learning path
         $time_total = intval($pl * $tc * $perc / 100) * 60;
         $lpTimeList = Tracking::getCalculateTime($user_id, api_get_course_int_id(), $sessionId);
-        $lpTime = isset($lpTimeList[TOOL_LEARNPATH][$lp_id]) ? $lpTimeList[TOOL_LEARNPATH][$lp_id] : 0;
+        $lpTime = isset($lpTimeList[TOOL_LEARNPATH][$lpId]) ? $lpTimeList[TOOL_LEARNPATH][$lpId] : 0;
 
         if ($lpTime >= $time_total) {
             $time_spent = $time_total;

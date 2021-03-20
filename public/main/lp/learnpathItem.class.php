@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForumForum;
 use Chamilo\CourseBundle\Entity\CForumThread;
+use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 
 /**
@@ -92,21 +93,18 @@ class learnpathItem
      * Don't forget to use set_lp_view() if applicable after creating the item.
      * Setting an lp_view will finalise the item_view data collection.
      *
-     * @param int        $id           Learning path item ID
-     * @param int        $user_id      User ID
-     * @param int        $courseId     Course int id
+     * @param int                $id           Learning path item ID
+     * @param int                $courseId     Course int id
      * @param CLpItem|array|null $item_content Contents of the item
      */
     public function __construct(
         $id,
-        $user_id = 0,
         $courseId = 0,
         $item_content = null
     ) {
         $items_table = Database::get_course_table(TABLE_LP_ITEM);
         $id = (int) $id;
         $this->courseId = $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
-        $this->courseInfo = api_get_course_info_by_id($this->courseId);
 
         if (empty($item_content)) {
             $sql = "SELECT * FROM $items_table
@@ -334,7 +332,7 @@ class learnpathItem
         $courseId = $this->courseId;
 
         $sql = "DELETE FROM $lp_item_view
-                WHERE c_id = $courseId AND lp_item_id = ".$this->db_id;
+                WHERE lp_item_id = ".$this->db_id;
         Database::query($sql);
 
         $sql = "SELECT * FROM $lp_item
@@ -502,9 +500,7 @@ class learnpathItem
                     $table_doc = Database::get_course_table(TABLE_DOCUMENT);
                     $sql = 'SELECT path
                             FROM '.$table_doc.'
-                            WHERE
-                                c_id = '.$courseId.' AND
-                                iid = '.$path;
+                            WHERE iid = '.$path;
                     $res = Database::query($sql);
                     $row = Database::fetch_array($res);
                     $real_path = 'document'.$row['path'];
@@ -553,7 +549,6 @@ class learnpathItem
         $tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $sql = "SELECT id FROM $tbl
                 WHERE
-                    c_id = $courseId AND
                     lp_item_id = ".$this->db_id." AND
                     lp_view_id = ".$this->view_id." AND
                     view_count = ".$this->get_view_count();
@@ -600,7 +595,6 @@ class learnpathItem
             $tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
             $sql = "SELECT iid FROM $tbl
                     WHERE
-                        c_id = $courseId AND
                         lp_item_id = ".$this->db_id." AND
                         lp_view_id = ".$this->view_id." AND
                         view_count = ".$this->get_attempt_id();
@@ -1612,7 +1606,6 @@ class learnpathItem
                 $sql = "SELECT start_time, total_time
                         FROM $table
                         WHERE
-                            c_id = $courseId AND
                             iid = '".$this->db_item_view_id."' AND
                             view_count = '".$this->get_attempt_id()."'";
                 $res = Database::query($sql);
@@ -2519,7 +2512,6 @@ class learnpathItem
 
                                                 $sql = "SELECT status FROM $lp_item_view
                                                         WHERE
-                                                            c_id = $courseId AND
                                                             lp_view_id = $my_lp_id AND
                                                             lp_item_id = $refs_list[$prereqs_string]
                                                         LIMIT 0, 1";
@@ -2691,7 +2683,7 @@ class learnpathItem
         }
         // First check if parameters passed via GET can be saved here
         // in case it's a SCORM, we should get:
-        if ('sco' == $this->type || 'au' == $this->type) {
+        if ('sco' === $this->type || 'au' === $this->type) {
             $status = $this->get_status(true);
             if (1 == $this->prevent_reinit &&
                 $status != $this->possible_status[0] && // not attempted
@@ -2806,13 +2798,13 @@ class learnpathItem
                         }
                     }
                 } else {
+                    // Do nothing, just let the local attributes be used.
                     if ($debug) {
                         error_log(
                             'learnpathItem::save() - Using inside item status',
                             0
                         );
                     }
-                    // Do nothing, just let the local attributes be used.
                 }
             }
         } else {
@@ -3233,7 +3225,7 @@ class learnpathItem
         }
 
         if ('0' == $scorm_time &&
-            'sco' != $this->type &&
+            'sco' !== $this->type &&
             0 != $this->current_start_time
         ) {
             $myTime = time() - $this->current_start_time;
@@ -3390,12 +3382,10 @@ class learnpathItem
 
         // Step 1 : get actual total time stored in db
         $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-        $courseId = $this->courseId;
 
         $sql = 'SELECT total_time, status
                 FROM '.$item_view_table.'
                 WHERE
-                    c_id = '.$courseId.' AND
                     lp_item_id = "'.$this->db_id.'" AND
                     lp_view_id = "'.$this->view_id.'" AND
                     view_count = "'.$this->get_attempt_id().'"';
@@ -3422,7 +3412,7 @@ class learnpathItem
         }
 
         // Step 2.1 : if normal mode total_time = total_time + total_sec
-        if ('sco' == $this->type && 0 != $accumulateScormTime) {
+        if ('sco' === $this->type && 0 != $accumulateScormTime) {
             if ($debug) {
                 error_log("accumulateScormTime is on. total_time modified: $total_time + $total_sec");
             }
@@ -3464,7 +3454,6 @@ class learnpathItem
             $sql = "UPDATE $item_view_table
                       SET total_time = '$total_time'
                     WHERE
-                        c_id = $courseId AND
                         lp_item_id = {$this->db_id} AND
                         lp_view_id = {$this->view_id} AND
                         view_count = {$this->get_attempt_id()}";
@@ -3499,7 +3488,6 @@ class learnpathItem
             $sql = "SELECT iid
                     FROM $tbl
                     WHERE
-                        c_id = $courseId AND
                         lp_item_id = ".$this->db_id." AND
                         lp_view_id = ".$this->view_id." AND
                         view_count = ".$this->attempt_id;
@@ -3598,7 +3586,6 @@ class learnpathItem
         $credit = $this->get_credit();
         $total_time = ' ';
         $my_status = ' ';
-
         $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $sql = 'SELECT status, total_time
                 FROM '.$item_view_table.'
@@ -3608,7 +3595,6 @@ class learnpathItem
                     view_count="'.$this->get_attempt_id().'" ';
         $rs_verified = Database::query($sql);
         $row_verified = Database::fetch_array($rs_verified);
-
         $my_case_completed = [
             'completed',
             'passed',
@@ -3665,21 +3651,14 @@ class learnpathItem
                     "lesson_location" => $this->lesson_location,
                 ];
                 if ($debug) {
-                    error_log(
-                        'learnpathItem::write_to_db() - Inserting into item_view forced: '.print_r($params, 1),
-                        0
-                    );
+                    error_log('learnpathItem::write_to_db() - Inserting into item_view forced: '.print_r($params, 1));
                 }
                 $this->db_item_view_id = Database::insert($item_view_table, $params);
                 if ($this->db_item_view_id) {
-                    $sql = "UPDATE $item_view_table SET id = iid
-                            WHERE iid = ".$this->db_item_view_id;
-                    Database::query($sql);
                     $inserted = true;
                 }
             }
 
-            $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
             $sql = "SELECT * FROM $item_view_table
                     WHERE
                         lp_item_id = ".$this->db_id." AND
@@ -3714,13 +3693,7 @@ class learnpathItem
                         0
                     );
                 }
-
                 $this->db_item_view_id = Database::insert($item_view_table, $params);
-                if ($this->db_item_view_id) {
-                    $sql = "UPDATE $item_view_table SET id = iid
-                            WHERE iid = ".$this->db_item_view_id;
-                    Database::query($sql);
-                }
             } else {
                 if ('hotpotatoes' === $this->type) {
                     $params = [
@@ -3771,7 +3744,7 @@ class learnpathItem
                         ];
 
                         // Is not multiple attempts
-                        if (1 == $this->seriousgame_mode && 'sco' == $this->type) {
+                        if (1 == $this->seriousgame_mode && 'sco' === $this->type) {
                             $total_time = " total_time = total_time +".$this->get_total_time().", ";
                             $my_status = " status = '".$this->get_status(false)."' ,";
                             if ($debug) {
@@ -3919,11 +3892,8 @@ class learnpathItem
             if (is_array($this->interactions) &&
                 count($this->interactions) > 0
             ) {
-                // Save interactions.
-                $tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-                $sql = "SELECT iid FROM $tbl
+                $sql = "SELECT iid FROM $item_view_table
                         WHERE
-                            c_id = $courseId AND
                             lp_item_id = ".$this->db_id." AND
                             lp_view_id = ".$this->view_id." AND
                             view_count = ".$this->get_attempt_id();
@@ -3966,14 +3936,14 @@ class learnpathItem
                                     ";
                         $iva_res = Database::query($iva_sql);
 
-                        $interaction[0] = isset($interaction[0]) ? $interaction[0] : '';
-                        $interaction[1] = isset($interaction[1]) ? $interaction[1] : '';
-                        $interaction[2] = isset($interaction[2]) ? $interaction[2] : '';
-                        $interaction[3] = isset($interaction[3]) ? $interaction[3] : '';
-                        $interaction[4] = isset($interaction[4]) ? $interaction[4] : '';
-                        $interaction[5] = isset($interaction[5]) ? $interaction[5] : '';
-                        $interaction[6] = isset($interaction[6]) ? $interaction[6] : '';
-                        $interaction[7] = isset($interaction[7]) ? $interaction[7] : '';
+                        $interaction[0] = $interaction[0] ?? '';
+                        $interaction[1] = $interaction[1] ?? '';
+                        $interaction[2] = $interaction[2] ?? '';
+                        $interaction[3] = $interaction[3] ?? '';
+                        $interaction[4] = $interaction[4] ?? '';
+                        $interaction[5] = $interaction[5] ?? '';
+                        $interaction[6] = $interaction[6] ?? '';
+                        $interaction[7] = $interaction[7] ?? '';
 
                         // id(0), type(1), time(2), weighting(3), correct_responses(4), student_response(5), result(6), latency(7)
                         if (Database::num_rows($iva_res) > 0) {
@@ -4471,7 +4441,6 @@ class learnpathItem
                 $lpIid = $row['iid'];
                 $sql = "SELECT status FROM $lp_item_view
                         WHERE
-                            c_id = $courseId AND
                             lp_view_id = $lpIid AND
                             lp_item_id = $refs_list[$prereqs_string]
                         LIMIT 1";

@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use ChamiloSession as Session;
 
@@ -13,6 +14,12 @@ api_protect_course_script(true);
 $debug = false;
 $action = $_REQUEST['a'] ?? '';
 $lpId = $_REQUEST['lp_id'] ?? 0;
+$lpRepo = Container::getLpRepository();
+$lp = null;
+if (!empty($lpId)) {
+    /** @var CLp $lp */
+    $lp = $lpRepo->find($lpId);
+}
 
 $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
@@ -22,15 +29,21 @@ switch ($action) {
         $course_id = (isset($_GET['course_id']) && !empty($_GET['course_id'])) ? (int) $_GET['course_id'] : 0;
         $session_id = (isset($_GET['session_id']) && !empty($_GET['session_id'])) ? (int) $_GET['session_id'] : 0;
         $onlyActiveLp = !(api_is_platform_admin(true) || api_is_course_admin());
-        $results = learnpath::getLpList($course_id, $session_id, $onlyActiveLp);
-        $data = [];
-
-        if (!empty($results)) {
-            foreach ($results as $lp) {
-                $data[] = ['id' => $lp['id'], 'text' => html_entity_decode($lp['name'])];
-            }
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
+        $active = null;
+        if ($onlyActiveLp) {
+            $active = 1;
         }
 
+        $qb = $lpRepo->findAllByCourse($course, $session, null, $active);
+        $lps = $qb->getQuery()->getResult();
+        $data = [];
+        if (!empty($lps)) {
+            foreach ($lps as $lp) {
+                $data[] = ['id' => $lp->getIid(), 'text' => html_entity_decode($lp->getName())];
+            }
+        }
         echo json_encode($data);
         break;
     case 'get_documents':
@@ -61,14 +74,10 @@ switch ($action) {
             exit;
         }
 
-        $lpRepo = Container::getLpRepository();
-        $lp = $lpRepo->find($lpId);
         if (null === $lp) {
             exit;
         }
 
-        /** @var learnpath $learningPath */
-        //$learningPath = learnpath::read('oLP');
         $learningPath = new learnpath($lp, api_get_course_info(), api_get_user_id());
         if ($learningPath) {
             $learningPath->set_modified_on();
@@ -118,7 +127,6 @@ switch ($action) {
 
             foreach ($sections as $items) {
                 [$id, $parentId] = explode('|', $items);
-
                 $orderList[$id] = $parentId;
             }
 
@@ -131,11 +139,10 @@ switch ($action) {
         if (false == api_is_allowed_to_edit(null, true)) {
             exit;
         }
-        /** @var Learnpath $lp */
-        $lp = Session::read('oLP');
-        $course_info = api_get_course_info();
 
-        $lpPathInfo = $lp->generate_lp_folder($course_info);
+        $learningPath = new learnpath($lp, api_get_course_info(), api_get_user_id());
+        $course_info = api_get_course_info();
+        $lpPathInfo = $learningPath->generate_lp_folder($course_info);
 
         if (empty($lpPathInfo)) {
             exit;
@@ -165,9 +172,7 @@ switch ($action) {
                 if (!empty($result) && is_array($result)) {
                     $newDocId = $result['id'];
                     $courseId = $result['c_id'];
-
-                    $lp->set_modified_on();
-
+                    $learningPath->set_modified_on();
                     $lpItem = new learnpathItem($_REQUEST['lp_item_id']);
                     $lpItem->add_audio_from_documents($newDocId);
                     $data = DocumentManager::get_document_data_by_id($newDocId, $course_info['code']);
@@ -185,7 +190,6 @@ switch ($action) {
         ]);
         break;
 
-        $lpId = isset($_GET['lp']) ? intval($_GET['lp']) : 0;
         $lpItemId = isset($_GET['lp_item']) ? intval($_GET['lp_item']) : 0;
         $sessionId = api_get_session_id();
 

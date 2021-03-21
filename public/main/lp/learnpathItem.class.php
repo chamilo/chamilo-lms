@@ -4140,12 +4140,12 @@ class learnpathItem
     public static function humanize_status($status, $decorate = true, $type = 'classic')
     {
         $statusList = [
-            'completed' => 'ScormCompstatus',
-            'incomplete' => 'ScormIncomplete',
-            'failed' => 'ScormFailed',
-            'passed' => 'ScormPassed',
-            'browsed' => 'ScormBrowsed',
-            'not attempted' => 'ScormNotAttempted',
+            'completed' => 'Completed',
+            'incomplete' => 'Incomplete',
+            'failed' => 'Failed',
+            'passed' => 'Passed',
+            'browsed' => 'Browsed',
+            'not attempted' => 'Not attempted',
         ];
 
         $myLessonStatus = get_lang($statusList[$status]);

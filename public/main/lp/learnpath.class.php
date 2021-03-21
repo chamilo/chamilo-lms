@@ -9858,7 +9858,6 @@ EOD;
 
             if ($evaluationResultInfo) {
                 $evaluationResult = $evaluationResultInfo['score'] * 100 / $evaluationResultInfo['max_score'];
-
                 if ($evaluationResult >= 80) {
                     $stars++;
                 }

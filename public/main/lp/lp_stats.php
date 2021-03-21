@@ -15,29 +15,28 @@ if (!isset($origin)) {
     $origin = 'learnpath';
 }
 
-$sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : api_get_session_id();
-$courseCode = isset($_GET['course']) ? $_GET['course'] : api_get_course_id();
 $userId = isset($_GET['student_id']) ? (int) $_GET['student_id'] : api_get_user_id();
-$lpId = isset($_GET['lp_id']) ? $_GET['lp_id'] : null;
-$lpItemId = isset($_GET['lp_item_id']) ? $_GET['lp_item_id'] : null;
-$extendId = isset($_GET['extend_id']) ? $_GET['extend_id'] : null;
-$extendAttemptId = isset($_GET['extend_attempt_id']) ? $_GET['extend_attempt_id'] : null;
-$extendedAttempt = isset($_GET['extend_attempt']) ? $_GET['extend_attempt'] : null;
-$extendedAll = isset($_GET['extend_all']) ? $_GET['extend_all'] : null;
+$lpId = $_GET['lp_id'] ?? null;
+$lpItemId = $_GET['lp_item_id'] ?? null;
+$extendId = $_GET['extend_id'] ?? null;
+$extendAttemptId = $_GET['extend_attempt_id'] ?? null;
+$extendedAttempt = $_GET['extend_attempt'] ?? null;
+$extendedAll = $_GET['extend_all'] ?? null;
 $export = isset($_GET['export']) && 'csv' === $_GET['export'];
-$allowExtend = isset($_GET['allow_extend']) ? $_GET['allow_extend'] : 1;
+$allowExtend = $_GET['allow_extend'] ?? 1;
 
 $lpReportType = api_get_setting('lp_show_reduced_report');
 $type = 'classic';
 if ('true' === $lpReportType) {
     $type = 'simple';
 }
-$courseInfo = api_get_course_info($courseCode);
+$course = api_get_course_entity();
+$session = api_get_session_entity();
 
 return Tracking::getLpStats(
     $userId,
-    $courseInfo,
-    $sessionId,
+    $course,
+    $session,
     $origin,
     $export,
     $lpId,

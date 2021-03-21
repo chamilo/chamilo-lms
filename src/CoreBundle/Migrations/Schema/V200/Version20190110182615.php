@@ -135,7 +135,7 @@ class Version20190110182615 extends AbstractMigrationChamilo
 
         if (!$table->hasForeignKey('FK_CCC9C1ED60272618')) {
             $this->addSql(
-                'ALTER TABLE c_lp_item ADD CONSTRAINT FK_CCC9C1ED60272618 FOREIGN KEY (parent_item_id) REFERENCES c_lp_item (iid)'
+                'ALTER TABLE c_lp_item ADD CONSTRAINT FK_CCC9C1ED60272618 FOREIGN KEY (parent_item_id) REFERENCES c_lp_item (iid) ON DELETE SET NULL'
             );
         }
 

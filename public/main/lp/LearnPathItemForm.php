@@ -15,7 +15,7 @@ class LearnPathItemForm
     {
         $arrLP = $lp->getItemsForForm();
         $lp->tree_array($arrLP);
-        $arrLP = isset($lp->arrMenu) ? $lp->arrMenu : [];
+        $arrLP = $lp->arrMenu ?? [];
 
         switch ($action) {
             case 'add':

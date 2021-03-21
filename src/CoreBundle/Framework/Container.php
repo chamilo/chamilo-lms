@@ -41,6 +41,7 @@ use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
 use Chamilo\CourseBundle\Repository\CLpCategoryRepository;
+use Chamilo\CourseBundle\Repository\CLpItemRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\CourseBundle\Repository\CNotebookRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
@@ -374,6 +375,11 @@ class Container
     public static function getLpRepository(): CLpRepository
     {
         return self::$container->get(CLpRepository::class);
+    }
+
+    public static function getLpItemRepository(): CLpItemRepository
+    {
+        return self::$container->get(CLpItemRepository::class);
     }
 
     public static function getLpCategoryRepository(): CLpCategoryRepository

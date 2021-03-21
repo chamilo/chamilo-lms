@@ -671,7 +671,9 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         }
 
         // GradebookCertificate
-        $result = $em->getRepository(GradebookCertificate::class)->findBy(['user' => $userId]);
+        $result = $em->getRepository(GradebookCertificate::class)->findBy([
+            'user' => $userId,
+        ]);
         $gradebookCertificate = [];
         /** @var GradebookCertificate $item */
         foreach ($result as $item) {
@@ -1369,7 +1371,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
             'curriculumItems',
             'currentSession',
             'currentCourse',
-            'resourceNode'
+            'resourceNode',
         ];
 
         $callback = function ($dateTime) {

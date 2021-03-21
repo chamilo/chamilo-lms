@@ -46,5 +46,6 @@ echo ScormApi::saveItem(
     (empty($_REQUEST['finish']) ? 0 : 1),
     (empty($_REQUEST['userNavigatesAway']) ? 0 : 1),
     (empty($_REQUEST['statusSignalReceived']) ? 0 : 1),
-    $_REQUEST['switch_next'] ?? 0
+    $_REQUEST['switch_next'] ?? 0,
+    $_REQUEST['load_nav'] ?? 0
 );

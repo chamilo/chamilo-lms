@@ -32,44 +32,22 @@ $autostart = 'true';
 $myLP = learnpath::getLpFromSession(api_get_course_id(), $lpId, api_get_user_id());
 $sessionId = api_get_session_id();
 if ($myLP) {
-    $lp_theme_css = $myLP->get_theme();
+    /*$lp_theme_css = $myLP->get_theme();
     $my_style = api_get_visual_theme();
 
     // Setting up the CSS theme if exists
     $myCourseLpTheme = null;
     if ('true' === api_get_setting('allow_course_theme')) {
         $myCourseLpTheme = api_get_course_setting('allow_learning_path_theme');
-    }
+    }*/
 
-    if (!empty($lp_theme_css) && !empty($myCourseLpTheme) && -1 != $myCourseLpTheme && 1 == $myCourseLpTheme) {
+    /*if (!empty($lp_theme_css) && !empty($myCourseLpTheme) && -1 != $myCourseLpTheme && 1 == $myCourseLpTheme) {
         global $lp_theme_css;
     } else {
         $lp_theme_css = $my_style;
-    }
-    $progress_bar = $myLP->getProgressBar();
-    $navigation_bar = $myLP->get_navigation_bar();
-    $mediaplayer = $myLP->get_mediaplayer($lpItemId, $autostart);
+    }*/
+    //$progress_bar = $myLP->getProgressBar();
+    //$navigation_bar = $myLP->get_navigation_bar();
 
-    if ($startTime) {
-        $now = time();
-        echo "updateTimer($now);";
-    }
-
-    $score = $myLP->getCalculateScore($sessionId);
-    $stars = $myLP->getCalculateStars($sessionId);
-    $score = sprintf(get_lang('%s points'), $score);
-    echo "updateGamification($stars, $score);";
-
-    $position = $myLP->isFirstOrLastItem($lpItemId);
-    echo "checkCurrentItemPosition($position);";
-
-    if ($mediaplayer) {
-        echo $mediaplayer;
-        echo "<script>
-            $(function() {
-                $('video:not(.skip), audio:not(.skip)').mediaelementplayer();
-            });
-        </script>";
-    }
 }
 session_write_close();

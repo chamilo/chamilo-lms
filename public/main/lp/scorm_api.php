@@ -46,8 +46,9 @@ $itemId = $oItem->get_id();
 $lpId = $oLP->get_id();
 
 header('Content-type: text/javascript');
-
-?>var scorm_logs=<?php echo (empty($oLP->scorm_debug) or (!api_is_course_admin() && !api_is_platform_admin())) ? '0' : '3'; ?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
+?>
+var scorm_logs=<?php echo (empty($oLP->scorm_debug) || (!api_is_course_admin() && !api_is_platform_admin())) ? '0' : '3'; ?>;
+//debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
 var lms_logs = 0; //debug log level for LMS actions. 0=none, 1=light, 2=a lot, 3=all
 var score_as_progress = <?php echo empty($oLP->getUseScoreAsProgress()) ? 'false' : 'true'; ?>;
 
@@ -1477,6 +1478,70 @@ function switch_item(current_item, next_item)
         return false;
     }
 
+    /**
+    * Because of SCORM 1.2's special rule about unsent commits and the fact
+    * that a SCO should be SET TO 'completed' IF NO STATUS WAS SENT (and
+    * then some checks have to be done on score), we have to force a
+    * special commit here to avoid getting to the next element with a
+    * missing prerequisite. The 'onunload' event is treated with
+    * savedata_onunload(), and doesn't need to be triggered at any
+    * particular time, but here we are in the case of switching to another
+    * item, so this is particularly important to complete the element in
+    * time.
+    * However, this cannot be initiated from the JavaScript, mainly
+    * because another onunload event can be triggered by the SCO itself,
+    * which can set, for example, the status to incomplete while the
+    * status has already been set to "completed" by the hand-made
+    * savedata() (and then the status cannot be "incompleted"
+    * anymore)
+    */
+
+    olms.execute_stats = false;
+    // Considering info_lms_item[0] is initially the oldest and info_lms_item[1]
+    // is the newest item, and considering we are done switching the items now,
+    // we need to update these markers so that the new item is loaded when
+    // changing the document in the content frame
+    olms.execute_stats = false;
+    // Considering info_lms_item[0] is initially the oldest and info_lms_item[1]
+    // is the newest item, and considering we are done switching the items now,
+    // we need to update these markers so that the new item is loaded when
+    // changing the document in the content frame
+    if (olms.info_lms_item[1]==next_item && next_item!='next' && next_item!='previous') {
+        olms.info_lms_item[0]=next_item;
+        olms.info_lms_item[1]=next_item;
+    } else {
+        if (next_item!='next' && next_item!='previous') {
+            olms.info_lms_item[0]=olms.info_lms_item[1];
+            olms.info_lms_item[1]=next_item;
+        }
+    }
+
+    if (olms.info_lms_item[0]==next_item && next_item!='next' && next_item!='previous') {
+        olms.info_lms_item[0]=next_item;
+        olms.info_lms_item[1]=next_item;
+    } else {
+        if (next_item!='next' && next_item!='previous') {
+            olms.info_lms_item[0]=olms.info_lms_item[0];
+            olms.info_lms_item[1]=next_item;
+        }
+    }
+
+    // open the new item in the content_id frame
+    switch (next_item) {
+        case 'next':
+            next_item = olms.lms_next_item;
+            olms.info_lms_item[0] = olms.info_lms_item[1];
+            olms.info_lms_item[1] = olms.lms_next_item;
+            break;
+        case 'previous':
+            next_item = olms.lms_previous_item;
+            olms.info_lms_item[0] = olms.info_lms_item[1];
+            olms.info_lms_item[1] = olms.lms_previous_item;
+            break;
+        default:
+            break;
+    }
+
     olms.switch_finished = 0; //only changed back once LMSInitialize() happens
 
     // backup these params
@@ -1536,7 +1601,8 @@ function switch_item(current_item, next_item)
             olms.finishSignalReceived,
             1,
             olms.statusSignalReceived,
-            next_item
+            next_item,
+            1
         );
 
         /*if (saveAjax) {
@@ -1550,6 +1616,9 @@ function switch_item(current_item, next_item)
                 );
             });
         }*/
+
+
+
     } else {
         if (next_item_type != 'sco') {
             logit_lms('Case 3 - current == sco but next != sco');
@@ -1592,66 +1661,6 @@ function switch_item(current_item, next_item)
             });
         }
     }
-
-    /**
-     * Because of SCORM 1.2's special rule about unsent commits and the fact
-     * that a SCO should be SET TO 'completed' IF NO STATUS WAS SENT (and
-     * then some checks have to be done on score), we have to force a
-     * special commit here to avoid getting to the next element with a
-     * missing prerequisite. The 'onunload' event is treated with
-     * savedata_onunload(), and doesn't need to be triggered at any
-     * particular time, but here we are in the case of switching to another
-     * item, so this is particularly important to complete the element in
-     * time.
-     * However, this cannot be initiated from the JavaScript, mainly
-     * because another onunload event can be triggered by the SCO itself,
-     * which can set, for example, the status to incomplete while the
-     * status has already been set to "completed" by the hand-made
-     * savedata() (and then the status cannot be "incompleted"
-     * anymore)
-    */
-
-    olms.execute_stats = false;
-    // Considering info_lms_item[0] is initially the oldest and info_lms_item[1]
-    // is the newest item, and considering we are done switching the items now,
-    // we need to update these markers so that the new item is loaded when
-    // changing the document in the content frame
-    if (olms.info_lms_item[1]==next_item && next_item!='next' && next_item!='previous') {
-        olms.info_lms_item[0]=next_item;
-        olms.info_lms_item[1]=next_item;
-    } else {
-        if (next_item!='next' && next_item!='previous') {
-            olms.info_lms_item[0]=olms.info_lms_item[1];
-            olms.info_lms_item[1]=next_item;
-        }
-    }
-
-    if (olms.info_lms_item[0]==next_item && next_item!='next' && next_item!='previous') {
-        olms.info_lms_item[0]=next_item;
-        olms.info_lms_item[1]=next_item;
-    } else {
-        if (next_item!='next' && next_item!='previous') {
-            olms.info_lms_item[0]=olms.info_lms_item[0];
-            olms.info_lms_item[1]=next_item;
-        }
-    }
-
-    //(3) open the new item in the content_id frame
-    switch (next_item) {
-        case 'next':
-            next_item = olms.lms_next_item;
-            olms.info_lms_item[0] = olms.info_lms_item[1];
-            olms.info_lms_item[1] = olms.lms_next_item;
-            break;
-        case 'previous':
-            next_item = olms.lms_previous_item;
-            olms.info_lms_item[0] = olms.info_lms_item[1];
-            olms.info_lms_item[1] = olms.lms_previous_item;
-            break;
-        default:
-            break;
-    }
-
     var mysrc = '<?php echo api_get_path(WEB_CODE_PATH); ?>lp/lp_controller.php?action=content&lp_id=' + olms.lms_lp_id +
                 '&item_id=' + next_item + '&cid=' + olms.lms_course_id + '&sid=' + olms.lms_session_id;
     var cont_f = $("#content_id");
@@ -1679,7 +1688,7 @@ function switch_item(current_item, next_item)
     }
 
     // (4) refresh the audio player if needed
-    $.ajax({
+    /*$.ajax({
         type: "POST",
         url: "lp_nav.php"+courseUrl+ "&lp_id=" + olms.lms_lp_id,
         data: {
@@ -1700,7 +1709,7 @@ function switch_item(current_item, next_item)
 
             LPViewUtils.setHeightLPToc();
         }
-    });
+    });*/
 
     // @todo add loadForumThread inside lp_nav.php to do only one request instead of 3!
     //loadForumThread(olms.lms_lp_id, next_item);
@@ -1823,7 +1832,8 @@ function xajax_save_item(
     finishSignalReceived,
     userNavigatesAway,
     statusSignalReceived,
-    switchNext = 0
+    switchNext = 0,
+    loadNav = 0
 ) {
     var params = '';
     if (typeof(finishSignalReceived) == 'undefined') {
@@ -1849,6 +1859,7 @@ function xajax_save_item(
     params += '&userNavigatesAway='+userNavigatesAway;
     params += '&statusSignalReceived='+statusSignalReceived;
     params += '&switch_next='+switchNext;
+    params += '&load_nav='+loadNav;
 
     if (olms.lms_lp_type == 1 || item_type == 'document' || item_type == 'asset') {
         logit_lms('xajax_save_item with params:' + params, 3);

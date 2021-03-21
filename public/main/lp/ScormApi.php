@@ -28,6 +28,7 @@ class ScormApi
      * @param int    $userNavigatesAway    Whether the user is moving to another item
      * @param int    $statusSignalReceived Whether the SCO called SetValue(lesson_status)
      * @param int    $nextItem             Switch to next item
+     * @param int    $loadNav
      *
      * @return bool|string|null The resulting JS string
      */
@@ -50,7 +51,8 @@ class ScormApi
         $lmsFinish = 0,
         $userNavigatesAway = 0,
         $statusSignalReceived = 0,
-        $nextItem = 0
+        $nextItem = 0,
+        $loadNav = 0
     ) {
         $debug = 0;
         $return = null;
@@ -548,6 +550,33 @@ class ScormApi
             );
         }
 
+        $loadNav = (int) $loadNav;
+        if (1 === $loadNav) {
+            $mediaplayer = $myLP->get_mediaplayer($item_id, 'true');
+
+            if ($nextItem) {
+                $now = time();
+                $return .= "updateTimer($now);\n";
+            }
+
+            $score = $myLP->getCalculateScore($sessionId);
+            $stars = $myLP->getCalculateStars($sessionId);
+            $score = sprintf(get_lang('%s points'), $score);
+            $return .= "updateGamification('$stars', '$score'); \n";
+
+            $position = $myLP->isFirstOrLastItem($item_id);
+            $return .= "checkCurrentItemPosition('$position'); \n";
+
+            if ($mediaplayer) {
+                $return .= $mediaplayer;
+                $return .= "<script>
+                    $(function() {
+                        $('video:not(.skip), audio:not(.skip)').mediaelementplayer();
+                    });
+                </script>";
+            }
+        }
+
         return $return;
     }
 
@@ -755,7 +784,7 @@ class ScormApi
             "olms.lms_item_launch_data = '".$mylaunch_data."';".
             "olms.lms_item_interactions_count = '".$myinteractions_count."';".
             "olms.lms_item_objectives_count = '".$myinteractions_count."';".
-            "olms.lms_item_core_exit = '".$mycore_exit."';".
+            "olms.lms_item_core_exit = '".$mycore_exit."';\n".
             "olms.asset_timer = 0;";
 
         $sessionId = api_get_session_id();
@@ -787,16 +816,17 @@ class ScormApi
             $hour = (intval($lpTime / 3600)) < 10 ? '0'.intval($lpTime / 3600) : intval($lpTime / 3600);
             $minute = date('i', $lpTime);
             $second = date('s', $lpTime);
-            $updateMinTime = "update_time_bar('$time_spent','$time_total','%');".
-                "update_chronometer('$hour','$minute','$second');";
+            $updateMinTime = "
+                update_time_bar('$time_spent','$time_total','%');\n
+                update_chronometer('$hour','$minute','$second');\n ";
         }
 
         $return .=
-            "update_toc('unhighlight','".$current_item."');".
-            "update_toc('highlight','".$new_item_id."');".
-            "update_toc('$mylesson_status','".$new_item_id."');".
-            "update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');".
-            $updateMinTime
+            "update_toc('unhighlight','".$current_item."');
+            update_toc('highlight','".$new_item_id."');
+            update_toc('$mylesson_status','".$new_item_id."');
+            update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');
+            $updateMinTime"
         ;
 
         //$return .= 'updateGamificationValues(); ';

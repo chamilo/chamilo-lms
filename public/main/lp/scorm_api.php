@@ -1535,10 +1535,11 @@ function switch_item(current_item, next_item)
             olms.course_id,
             olms.finishSignalReceived,
             1,
-            olms.statusSignalReceived
+            olms.statusSignalReceived,
+            next_item
         );
 
-        if (saveAjax) {
+        /*if (saveAjax) {
             $.when(saveAjax).done(function(results) {
                 xajax_switch_item_details(
                     olms.lms_lp_id,
@@ -1548,7 +1549,7 @@ function switch_item(current_item, next_item)
                     next_item
                 );
             });
-        }
+        }*/
     } else {
         if (next_item_type != 'sco') {
             logit_lms('Case 3 - current == sco but next != sco');
@@ -1821,7 +1822,8 @@ function xajax_save_item(
     course_id,
     finishSignalReceived,
     userNavigatesAway,
-    statusSignalReceived
+    statusSignalReceived,
+    switchNext = 0
 ) {
     var params = '';
     if (typeof(finishSignalReceived) == 'undefined') {
@@ -1846,6 +1848,7 @@ function xajax_save_item(
     params += '&finishSignalReceived='+finishSignalReceived;
     params += '&userNavigatesAway='+userNavigatesAway;
     params += '&statusSignalReceived='+statusSignalReceived;
+    params += '&switch_next='+switchNext;
 
     if (olms.lms_lp_type == 1 || item_type == 'document' || item_type == 'asset') {
         logit_lms('xajax_save_item with params:' + params, 3);

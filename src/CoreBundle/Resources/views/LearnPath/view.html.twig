@@ -147,17 +147,15 @@
                         <div id="flag-mobile" class="visible-xs-block" aria-hidden="true"></div>
                         {% include '@ChamiloCore/LearnPath/scorm_list.html.twig' %}
                     </div>
-                    {# end TOC layout #}
                 </div>
             </div>
-            {# end left zone #}
         {% endif %}
 
         {# Right zone #}
         <div id="learning_path_right_zone" class="{{ show_left_column == 1 ? 'content-scorm' : 'no-right-col' }}">
             <div class="lp-view-zone-container">
                 <div class="lp-view-tabs">
-                    <div id="navTabsbar" class="nav-tabs-bar">
+                    <div id="navTabBar" class="nav-tabs-bar">
                         <ul id="navTabs" class="nav nav-tabs tabs-right" role="tablist">
                             <li role="presentation" class="active">
                                 <a href="#lp-view-content" title="{{ 'Lesson'|get_lang }}"
@@ -179,7 +177,6 @@
                     {% include '@ChamiloCore/LearnPath/menubar.html.twig' %}
 
                     <div id="tab-iframe" class="tab-content">
-
                         <div role="tabpanel" class="tab-pane active" id="lp-view-content">
                             <div id="wrapper-iframe">
                                 {% if lp_mode == 'fullscreen' %}
@@ -191,7 +188,9 @@
                                         border="0"
                                         frameborder="0"
                                         allowfullscreen="true"
-                                        webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                                        webkitallowfullscreen="true"
+                                        mozallowfullscreen="true">
+                                    </iframe>
                                 {% else %}
                                     <iframe
                                         id="content_id"
@@ -201,7 +200,9 @@
                                         border="0"
                                         frameborder="0"
                                         allowfullscreen="true"
-                                        webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                                        webkitallowfullscreen="true"
+                                        mozallowfullscreen="true">
+                                    </iframe>
                                 {% endif %}
                             </div>
                         </div>
@@ -260,10 +261,10 @@
                     $(this).attr('title', '{{ "Collapse" | get_lang }}');
                 }
 
-                if($('#navTabsbar').is(':hidden')) {
-                    $('#navTabsbar').show();
+                if($('#navTabBar').is(':hidden')) {
+                    $('#navTabBar').show();
                 } else {
-                    $('#navTabsbar').hide();
+                    $('#navTabBar').hide();
                 }
             });
             {% else %}
@@ -304,22 +305,21 @@
             });
 
             $('.scorm_item_normal a, #scorm-previous, #scorm-next').on('click', function () {
-                $('.lp-view-tabs').animate({opacity: 0}, 500);
+                //$('.lp-view-tabs').animate({opacity: 0}, 500);
             });
 
             $('#learning_path_right_zone #lp-view-content iframe').on('load', function () {
                 $('.lp-view-tabs a[href="#lp-view-content"]').tab('show');
-                $('.lp-view-tabs').animate({opacity: 1}, 500);
+                //$('.lp-view-tabs').animate({opacity: 1}, 500);
             });
 
             {% if lp_mode == 'embedded' %}
-            $('.scorm_item_normal a, #scorm-previous, #scorm-next').on('click', function () {
+            /*$('.scorm_item_normal a, #scorm-previous, #scorm-next').on('click', function () {
                 $('.lp-view-tabs').animate({opacity: 0}, 500);
-
                 if ($('#flag-mobile').is(':visible') && !$('#learning_path_main').is('.lp-view-collapsed')) {
                     $('#lp-view-expand-toggle').trigger('click');
                 }
-            });
+            });*/
             {% endif %}
 
             loadForumThread({{ lp_id }}, {{ lp_current_item_id }});

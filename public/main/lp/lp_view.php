@@ -90,13 +90,6 @@ $platform_theme = api_get_setting('stylesheets');
 $my_style = $platform_theme;
 $ajaxUrl = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?a=get_item_prerequisites&'.api_get_cidreq();
 $htmlHeadXtra[] = '<script>
-<!--
-var jQueryFrameReadyConfigPath = \''.api_get_jquery_web_path().'\';
--->
-</script>';
-
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
-$htmlHeadXtra[] = '<script>
 $(function() {
     $("div#log_content_cleaner").bind("click", function() {
         $("div#log_content").empty();
@@ -167,7 +160,6 @@ if ($allowLpItemTip) {
     </script>';
 }
 
-// Impress js
 if ('impress' === $lp->getDefaultViewMod()) {
     $lp_id = $lp->getIid();
     $url = api_get_path(WEB_CODE_PATH)."lp/lp_impress.php?lp_id=$lp_id&".api_get_cidreq();
@@ -208,7 +200,7 @@ if (!isset($src)) {
     switch ($lpType) {
         case CLp::LP_TYPE:
             $oLP->stop_previous_item();
-            $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript"></script>';
+            $htmlHeadXtra[] = '<script src="scorm_api.php"></script>';
             $preReqCheck = $oLP->prerequisites_match($lp_item_id);
 
             if (true === $preReqCheck) {
@@ -250,7 +242,7 @@ if (!isset($src)) {
         case CLp::SCORM_TYPE:
             // save old if asset
             $oLP->stop_previous_item(); // save status manually if asset
-            $htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript"></script>';
+            $htmlHeadXtra[] = '<script src="scorm_api.php"></script>';
             $preReqCheck = $oLP->prerequisites_match($lp_item_id);
             if (true === $preReqCheck) {
                 $src = $oLP->get_link('http', $lp_item_id, $get_toc_list);
@@ -261,7 +253,7 @@ if (!isset($src)) {
             break;
         case CLp::AICC_TYPE:
             $oLP->stop_previous_item(); // save status manually if asset
-            $htmlHeadXtra[] = '<script src="'.$oLP->get_js_lib().'" type="text/javascript"></script>';
+            $htmlHeadXtra[] = '<script src="'.$oLP->get_js_lib().'"></script>';
             $preReqCheck = $oLP->prerequisites_match($lp_item_id);
             if (true === $preReqCheck) {
                 $src = $oLP->get_link(
@@ -567,8 +559,9 @@ $template->assign('menu_location', $menuLocation);
 $template->assign('disable_js_in_lp_view', (int) api_get_configuration_value('disable_js_in_lp_view'));
 $template->assign('lp_preview_image', '<img src="'.$lpPreviewImagePath.'" alt="'.$oLP->getNameNoTags().'" />');
 
-$frameReady = Display::getFrameReadyBlock('#content_id, #content_id_blank');
-$template->assign('frame_ready', $frameReady);
+//$frameReady = Display::getFrameReadyBlock('#content_id, #content_id_blank');
+//$template->assign('frame_ready', $frameReady);
+$template->assign('frame_ready', '');
 $template->displayTemplate('@ChamiloCore/LearnPath/view.html.twig');
 
 // Restore a global setting.

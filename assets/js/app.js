@@ -20,11 +20,18 @@ require('select2/dist/js/select2.full.min');
 require('flatpickr');
 //import('bootstrap-vue');
 import('bootstrap');
-import('webpack-jquery-ui');
-import('webpack-jquery-ui/css');
+require('webpack-jquery-ui');
+require('webpack-jquery-ui/css');
+
+// const frameReady = require('/public/main/inc/lib/javascript/jquery.frameready.js');
+//
+// global.frameReady = frameReady;
+// window.frameReady = frameReady;
+
 require('./vendor');
 import('./main');
 require('bootstrap-daterangepicker');
+import('qtip2');
 //require('bootstrap-daterangepicker/daterangepicker.js');
 
 require('blueimp-file-upload');

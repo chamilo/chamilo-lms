@@ -12,12 +12,13 @@
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-$htmlHeadXtra[] = '<script>
+/*$htmlHeadXtra[] = '<script>
     var chamilo_xajax_handler = window.parent.oxajax;
-</script>';
+</script>';*/
 
 $lpItemId = isset($_REQUEST['lp_item']) ? (int) $_REQUEST['lp_item'] : 0;
 $lpId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
+$startTime = $_REQUEST['start_time'] ?? 0;
 
 if (!$lpItemId) {
     echo '';
@@ -29,7 +30,7 @@ $navigation_bar = '';
 $autostart = 'true';
 
 $myLP = learnpath::getLpFromSession(api_get_course_id(), $lpId, api_get_user_id());
-
+$sessionId = api_get_session_id();
 if ($myLP) {
     $lp_theme_css = $myLP->get_theme();
     $my_style = api_get_visual_theme();
@@ -48,6 +49,19 @@ if ($myLP) {
     $progress_bar = $myLP->getProgressBar();
     $navigation_bar = $myLP->get_navigation_bar();
     $mediaplayer = $myLP->get_mediaplayer($lpItemId, $autostart);
+
+    if ($startTime) {
+        $now = time();
+        echo "updateTimer($now);";
+    }
+
+    $score = $myLP->getCalculateScore($sessionId);
+    $stars = $myLP->getCalculateStars($sessionId);
+    $score = sprintf(get_lang('%s points'), $score);
+    echo "updateGamification($stars, $score);";
+
+    $position = $myLP->isFirstOrLastItem($lpItemId);
+    echo "checkCurrentItemPosition($position);";
 
     if ($mediaplayer) {
         echo $mediaplayer;

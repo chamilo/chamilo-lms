@@ -1,8 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
 
 /**
@@ -265,7 +264,7 @@ function switch_item_details($lpId, $user_id, $view_id, $current_item, $next_ite
         $updateMinTime
     ;
 
-    $return .= 'updateGamificationValues(); ';
+    //$return .= 'updateGamificationValues(); ';
     $mylp->set_error_msg('');
     $mylp->prerequisites_match(); // Check the prerequisites are all complete.
     if ($debug > 1) {

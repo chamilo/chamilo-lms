@@ -459,10 +459,10 @@ function LMSGetValue(param) {
         } else {
             //result='not attempted';
         }
-    } else if(param == 'cmi.core.student_id'){
+    } else if(param == 'cmi.core.student_id' || param == 'cmi.learner_id') { // cmi.learner_id widens support for SCORM 2004
         // ---- cmi.core.student_id
         result='<?php echo learnpath::getUserIdentifierForExternalServices(); ?>';
-    } else if(param == 'cmi.core.student_name'){
+    } else if(param == 'cmi.core.student_name' || param == 'cmi.learner_name') { // cmi.learner_name widens support for SCORM 2004
         // ---- cmi.core.student_name
         <?php
           $who = addslashes(trim($user['lastname']).', '.trim($user['firstname']));
@@ -497,6 +497,7 @@ function LMSGetValue(param) {
         result = olms.lms_item_lesson_mode;
     } else if(param == 'cmi.suspend_data'){
     // ---- cmi.suspend_data
+        olms.suspend_data = get_local_suspend_data(); // check localStorage suspend data, if available
         result = olms.suspend_data;
     } else if(param == 'cmi.launch_data'){
     // ---- cmi.launch_data
@@ -682,6 +683,7 @@ function LMSSetValue(param, val) {
     } else if ( param == "cmi.suspend_data") {
         olms.suspend_data = val;
         olms.updatable_vars_list['cmi.suspend_data'] = true;
+        save_suspend_data_in_local(); // save to local storage if available
         return_value='true';
     } else if ( param == "cmi.core.exit" ) {
         olms.lms_item_core_exit = val;
@@ -919,9 +921,8 @@ function LMSCommit(val) {
     olms.G_LastErrorMessage = 'No error';
     savedata(olms.lms_item_id);
 
-    //now changes have been commited, no need to update until next SetValue()
+    //reinit_updatable_vars_list();
     logit_scorm('LMSCommit() end ', 0);
-    //commit = 'false' ;
     return('true');
 }
 
@@ -1400,24 +1401,12 @@ function update_progress_bar(nbr_complete, nbr_total, mode) {
 /**
  * Update the gamification values (number of stars and score)
  */
-function updateGamificationValues()
+function updateGamification(stars, score)
 {
-    var fetchValues = $.ajax(
-        '<?php echo api_get_path(WEB_AJAX_PATH); ?>lp.ajax.php' + courseUrl,
-        {
-        dataType: 'json',
-        data: {
-            a: 'update_gamification'
-        }
-    });
-
-    $.when(fetchValues).done(function (values) {
-        if (values.stars > 0) {
-            $('#scorm-gamification .fa-star:nth-child(' + values.stars + ')').addClass('level');
-        }
-
-        $('#scorm-gamification .col-xs-4').text(values.score);
-    });
+    if (stars > 0) {
+        $('#scorm-gamification .fa-star:nth-child(' + stars + ')').addClass('level');
+    }
+    $('#scorm-gamification .col-xs-4').text(score);
 }
 
 /**
@@ -1568,7 +1557,6 @@ function switch_item(current_item, next_item)
             logit_lms('Case 4 - current == sco and next == sco');
         }
         // Setting userNavigatesAway = 1
-        // Setting userNavigatesAway = 1
         var saveAjax = xajax_save_item_scorm(
             olms.lms_lp_id,
             olms.lms_user_id,
@@ -1624,7 +1612,6 @@ function switch_item(current_item, next_item)
     */
 
     olms.execute_stats = false;
-
     // Considering info_lms_item[0] is initially the oldest and info_lms_item[1]
     // is the newest item, and considering we are done switching the items now,
     // we need to update these markers so that the new item is loaded when
@@ -1685,8 +1672,10 @@ function switch_item(current_item, next_item)
     <?php
     } ?>
 
+    let startTime = 0;
     if (olms.lms_lp_type==1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
-        xajax_start_timer();
+        startTime = 1;
+        //xajax_start_timer();
     }
 
     // (4) refresh the audio player if needed
@@ -1694,7 +1683,8 @@ function switch_item(current_item, next_item)
         type: "POST",
         url: "lp_nav.php"+courseUrl+ "&lp_id=" + olms.lms_lp_id,
         data: {
-            lp_item: next_item
+            lp_item: next_item,
+            start_time: startTime,
         },
         beforeSend: function() {
             $.each($('audio'), function () {
@@ -1703,17 +1693,18 @@ function switch_item(current_item, next_item)
                 }
             });
         },
-        success: function(tmp_data) {
+        success: function(result) {
             if ($("#lp_media_file").length != 0) {
-                $("#lp_media_file").html(tmp_data);
+                $("#lp_media_file").html(result);
             }
 
             LPViewUtils.setHeightLPToc();
         }
     });
 
-    loadForumThread(olms.lms_lp_id, next_item);
-    checkCurrentItemPosition(olms.lms_item_id);
+    // @todo add loadForumThread inside lp_nav.php to do only one request instead of 3!
+    //loadForumThread(olms.lms_lp_id, next_item);
+    //checkCurrentItemPosition(olms.lms_item_id);
 
     return true;
 }
@@ -1721,30 +1712,20 @@ function switch_item(current_item, next_item)
 /**
  * Hide or show the navigation buttons if the current item is the First or Last
  */
-var checkCurrentItemPosition = function(lpItemId) {
-    var currentItem = $.getJSON(
-        '<?php echo api_get_path(WEB_AJAX_PATH); ?>lp.ajax.php' + courseUrl,
-    {
-        a: 'check_item_position',
-        lp_item: lpItemId
+var checkCurrentItemPosition = function(position) {
+    if (position == 'first') {
+        $("#scorm-previous").hide();
+        $("#scorm-next").show();
+    } else if (position == 'none') {
+        $("#scorm-previous").show();
+        $("#scorm-next").show();
+    } else if (position == 'last') {
+        $("#scorm-previous").show();
+        $("#scorm-next").hide();
+    } else if (position == 'both') {
+        $("#scorm-previous").hide();
+        $("#scorm-next").hide();
     }
-    ).done(function(parsedResponse,statusText,jqXhr) {
-        var position = jqXhr.responseJSON;
-        if (position == 'first') {
-            $("#scorm-previous").hide();
-            $("#scorm-next").show();
-        } else if (position == 'none') {
-            $("#scorm-previous").show();
-            $("#scorm-next").show();
-        } else if (position == 'last') {
-            $("#scorm-previous").show();
-            $("#scorm-next").hide();
-        } else if (position == 'both') {
-            $("#scorm-previous").hide();
-            $("#scorm-next").hide();
-        }
-    });
-
 }
 
 /**
@@ -1797,7 +1778,6 @@ var loadForumThread = function(lpId, lpItemId) {
 
         $('#lp-view-forum').html(forumIframe);
     });
-
 };
 
 /**
@@ -2036,14 +2016,18 @@ function xajax_start_timer() {
         dataType: "script",
         async: false,
         success: function(time) {
-            olms.asset_timer = time;
-            olms.asset_timer_total = 0;
-            logit_lms('xajax_start_timer result: ' + time,3);
-
-            var date = new Date(time * 1000);
-            logit_lms('xajax_start_timer result: ' + date.toString(),3);
+            updateTimer(time);
         }
     });
+}
+
+function updateTimer(time) {
+    olms.asset_timer = time;
+    olms.asset_timer_total = 0;
+    logit_lms('xajax_start_timer result: ' + time,3);
+
+    var date = new Date(time * 1000);
+    logit_lms('xajax_start_timer result: ' + date.toString(),3);
 }
 
 /**
@@ -2522,3 +2506,55 @@ function update_chronometer(text_hour, text_minute, text_second)
 
     return true;
 }
+/**
+ * Get suspend_data from localStorage
+ * see suspend_data case in function LMSGetValue correction bn
+ */
+function get_local_suspend_data()
+{
+    var final_suspend_data = olms.suspend_data;
+    var idSuspendData = olms.lms_item_id + 'suspenddata' +  olms.lms_view_id + 'u' + olms.lms_user_id;
+
+    if (olms.suspend_data.indexOf("ICPLAYER_") != -1) {
+        final_suspend_data = "";
+        try {
+            if (localStorage) {
+                mem_suspend_data = window.localStorage.getItem(idSuspendData);
+                if (mem_suspend_data === null||mem_suspend_data == "null") {
+                    mem_suspend_data = "";
+                }
+                if (mem_suspend_data === undefined) {
+                    mem_suspend_data = "";
+                }
+                if (typeof mem_suspend_data == 'undefined') {
+                    mem_suspend_data = "";
+                }
+                if (mem_suspend_data!="") {
+                    final_suspend_data = mem_suspend_data;
+                }
+            }
+        } catch(err) {}
+    }
+
+    return final_suspend_data;
+}
+
+/**
+ * Save suspend_data in localStorage
+ * see suspend_data case in function LMSSetValue
+ */
+function save_suspend_data_in_local()
+{
+    if (localStorage) {
+        if (olms.suspend_data) {
+            var suspend_data_local = olms.suspend_data;
+            var idSuspendData = olms.lms_item_id + 'suspenddata' +  olms.lms_view_id + 'u' + olms.lms_user_id;
+            try {
+                window.localStorage.setItem(idSuspendData,suspend_data_local);
+            } catch(err) {
+
+            }
+        }
+    }
+}
+

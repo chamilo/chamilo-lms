@@ -184,11 +184,8 @@ switch ($action) {
 
         break;
     case 'get_forum_thread':
-        // @todo fix get forum thread
-        echo json_encode([
-            'error' => true,
-        ]);
-        break;
+        // @todo move this code inside lp_nav.php.
+        exit;
 
         $lpItemId = isset($_GET['lp_item']) ? intval($_GET['lp_item']) : 0;
         $sessionId = api_get_session_id();
@@ -275,22 +272,16 @@ switch ($action) {
         ]);
         break;
     case 'update_gamification':
+        // moved inside lp_nav.php
+        exit;
         $lp = Session::read('oLP');
 
-        $jsonGamification = [
-            'stars' => 0,
-            'score' => 0,
-        ];
 
-        if ($lp) {
-            $score = $lp->getCalculateScore($sessionId);
-            $jsonGamification['stars'] = $lp->getCalculateStars($sessionId);
-            $jsonGamification['score'] = sprintf(get_lang('%s points'), $score);
-        }
-
-        echo json_encode($jsonGamification);
         break;
     case 'check_item_position':
+        // loaded in lp_nav.php
+        exit;
+        /** @var learnpath $lp */
         $lp = Session::read('oLP');
         $lpItemId = isset($_GET['lp_item']) ? intval($_GET['lp_item']) : 0;
         if ($lp) {

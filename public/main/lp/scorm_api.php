@@ -282,12 +282,18 @@ function LMSInitialize() {
         reinit_updatable_vars_list();
 
         // Get LMS values for this item
-        var params = {
+        let params = {
             'lid': olms.lms_lp_id,
             'uid': olms.lms_user_id,
             'vid': olms.lms_view_id,
-            'iid': olms.lms_item_id
+            'iid': olms.lms_item_id,
+            'start_time': 0
         };
+
+        if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
+            params['start_time'] = 1;
+            //xajax_start_timer();
+        }
 
         $.ajax({
             type: "GET",
@@ -302,7 +308,6 @@ function LMSInitialize() {
 
         olms.lms_initialized = 1;
         olms.switch_finished = 1;
-
         // log a more complete object dump when initializing, so we know what data hasn't been cleaned
         var log = '\nitem             : '+ olms.lms_item_id
                  + '\nitem_type       : '+ olms.lms_item_type
@@ -325,16 +330,10 @@ function LMSInitialize() {
                 ;
 
         logit_scorm('LMSInitialize() with params: '+log);
-
-        if(olms.lms_item_type == 'sco'){
+        if (olms.lms_item_type == 'sco'){
             $("#tab-iframe").removeClass();
             $("#tab-iframe").addClass("tab-content iframe_"+olms.lms_item_type);
         }
-
-        if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
-            xajax_start_timer();
-        }
-
         if (olms.lms_item_type == 'quiz') {
             update_toc(olms.lesson_status, olms.lms_item_id);
         }

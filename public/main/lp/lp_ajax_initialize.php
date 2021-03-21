@@ -29,7 +29,7 @@ api_protect_course_script();
  *
  * @return string
  */
-function initialize_item($lpId, $user_id, $view_id, $next_item)
+function initializeItem($lpId, $user_id, $view_id, $next_item, $startTime = 0)
 {
     $debug = 0;
     $return = '';
@@ -170,6 +170,12 @@ function initialize_item($lpId, $user_id, $view_id, $next_item)
 
     $mylp->set_error_msg('');
     $mylp->prerequisites_match(); // Check the prerequisites are all complete.
+    $startTime = (int) $startTime;
+    if (1 === $startTime) {
+        $now = time();
+        $return .= "updateTimer($now);";
+    }
+
     if ($debug) {
         error_log('Prereq_match() returned '.htmlentities($mylp->error), 0);
         error_log("return = $return ");
@@ -179,9 +185,10 @@ function initialize_item($lpId, $user_id, $view_id, $next_item)
     return $return;
 }
 
-echo initialize_item(
+echo initializeItem(
     $_REQUEST['lid'],
     $_REQUEST['uid'],
     $_REQUEST['vid'],
-    $_REQUEST['iid']
+    $_REQUEST['iid'],
+    $_REQUEST['start_time'] ?? 0
 );

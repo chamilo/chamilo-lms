@@ -14,6 +14,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Traits\TimestampableAgoTrait;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
+use Chamilo\CourseBundle\Entity\CShortcut;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -88,7 +89,7 @@ class ResourceNode
     /**
      * @ApiSubresource()
      *
-     * @var ArrayCollection|ResourceLink[]
+     * @var Collection|ResourceLink[]
      *
      * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="resourceNode", cascade={"persist", "remove"})
      */
@@ -105,7 +106,6 @@ class ResourceNode
     protected ?ResourceFile $resourceFile = null;
 
     /**
-     * @var User the creator of this node
      * @Assert\Valid()
      * @Groups({"resource_node:read", "resource_node:write", "document:write"})
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="resourceNodes")
@@ -135,7 +135,7 @@ class ResourceNode
     protected ?int $level = null;
 
     /**
-     * @var ArrayCollection|ResourceNode[]
+     * @var Collection|ResourceNode[]
      *
      * @ORM\OneToMany(
      *     targetEntity="ResourceNode",
@@ -161,7 +161,7 @@ class ResourceNode
     //protected $illustration;
 
     /**
-     * @var ArrayCollection|ResourceComment[]
+     * @var Collection|ResourceComment[]
      *
      * @ORM\OneToMany(targetEntity="ResourceComment", mappedBy="resourceNode", cascade={"persist", "remove"})
      */
@@ -187,6 +187,15 @@ class ResourceNode
     protected bool $fileEditableText;
 
     protected ?string $content = null;
+
+    /**
+     * @ORM\OneToOne(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CShortcut",
+     *     mappedBy="shortCutNode",
+     *     cascade={"persist", "remove"}
+     * )
+     */
+    protected ?CShortcut $shortCut = null;
 
     /**
      * @ORM\Column(type="uuid", unique=true)
@@ -564,6 +573,18 @@ class ResourceNode
     public function setContent(string $content): self
     {
         $this->content = $content;
+
+        return $this;
+    }
+
+    public function getShortCut(): ?CShortcut
+    {
+        return $this->shortCut;
+    }
+
+    public function setShortCut(?CShortcut $shortCut): self
+    {
+        $this->shortCut = $shortCut;
 
         return $this;
     }

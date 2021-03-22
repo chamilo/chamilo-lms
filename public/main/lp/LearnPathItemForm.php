@@ -46,24 +46,6 @@ class LearnPathItemForm
 
         $arrHide = [];
         $count = count($arrLP);
-        $sections = [];
-        for ($i = 0; $i < $count; $i++) {
-            if ('add' !== $action) {
-                if ('dir' === $arrLP[$i]['item_type'] &&
-                    !in_array($arrLP[$i]['id'], $arrHide) &&
-                    !in_array($arrLP[$i]['parent_item_id'], $arrHide)
-                ) {
-                    $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
-                    $arrHide[$arrLP[$i]['id']]['padding'] = 20 + $arrLP[$i]['depth'] * 20;
-                }
-            }
-
-            if ('dir' === $arrLP[$i]['item_type']) {
-                $sections[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
-                $sections[$arrLP[$i]['id']]['padding'] = 20 + $arrLP[$i]['depth'] * 20;
-            }
-        }
-
         // Parent
         $parentSelect = $form->addSelect(
             'parent',
@@ -74,34 +56,18 @@ class LearnPathItemForm
                 'onchange' => 'javascript:load_cbo(this.value);',
             ]
         );
-        $parentSelect->addOption($lp->name, 0);
 
-        $arrHide = [];
-        for ($i = 0; $i < $count; $i++) {
-            if ($arrLP[$i]['id'] != $itemId && 'dir' !== $arrLP[$i]['item_type']) {
-                $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
-            }
-        }
+        $lpItemRepo = Container::getLpItemRepository();
+        $itemRoot = $lpItemRepo->findOneBy(['path' => 'root', 'lp' => $lp->get_id()]);
+        $parentSelect->addOption($lp->name, $itemRoot->getIid());
+        /** @var CLpItem[] $sections */
+        $sections = $lpItemRepo->findBy(['itemType' => 'dir', 'lp' => $lp->get_id()]);
 
-        $sectionCount = 0;
         foreach ($sections as $key => $value) {
-            if (0 != $sectionCount) {
-                // The LP name is also the first section and is not in the same charset like the other sections.
-                $value['value'] = Security::remove_XSS($value['value']);
-                $parentSelect->addOption(
-                    $value['value'],
-                    $key
-                    //,'style="padding-left:'.$value['padding'].'px;"'
-                );
-            } else {
-                $value['value'] = Security::remove_XSS($value['value']);
-                $parentSelect->addOption(
-                    $value['value'],
-                    $key
-                    //'style="padding-left:'.$value['padding'].'px;"'
-                );
-            }
-            $sectionCount++;
+            $parentSelect->addOption(
+                Security::remove_XSS($value->getTitle()),
+                $value->getIid()
+            );
         }
 
         $parentSelect->setSelected($parentItemId);

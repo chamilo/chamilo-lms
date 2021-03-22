@@ -244,7 +244,7 @@ $(function() {
 
 // This code was moved inside LMSInitialize()
 if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
-    xajax_start_timer();
+    //xajax_start_timer();
 }
 
 /**

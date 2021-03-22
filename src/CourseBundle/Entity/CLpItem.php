@@ -9,11 +9,13 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CLpItem.
  *
+ * @Gedmo\Tree(type="nested")
  * @ORM\Table(
  *     name="c_lp_item",
  *     indexes={
@@ -76,6 +78,8 @@ class CLpItem
     protected ?float $masteryScore = null;
 
     /**
+     * @Gedmo\SortablePosition
+     *
      * @ORM\Column(name="display_order", type="integer", nullable=false)
      */
     protected int $displayOrder;
@@ -126,14 +130,16 @@ class CLpItem
     protected ?float $prerequisiteMaxScore = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp", inversedBy="items", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp", inversedBy="items", cascade={"persist"})
      * @ORM\JoinColumn(name="lp_id", referencedColumnName="iid")
      */
     protected CLp $lp;
 
     /**
+     * @Gedmo\SortableGroup
+     * @Gedmo\TreeParent
      * @ORM\ManyToOne(targetEntity="CLpItem", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_item_id", referencedColumnName="iid")
+     * @ORM\JoinColumn(name="parent_item_id", referencedColumnName="iid", onDelete="SET NULL")
      */
     protected ?CLpItem $parent = null;
 
@@ -144,14 +150,22 @@ class CLpItem
     protected Collection $children;
 
     /**
-     * @ORM\Column(name="previous_item_id", type="integer", nullable=false)
+     * @Gedmo\TreeLeft
+     * @ORM\Column(name="previous_item_id", type="integer", nullable=true)
      */
-    protected int $previousItemId;
+    protected ?int $previousItemId = null;
 
     /**
-     * @ORM\Column(name="next_item_id", type="integer", nullable=false)
+     * @Gedmo\TreeRight
+     * @ORM\Column(name="next_item_id", type="integer", nullable=true)
      */
-    protected int $nextItemId;
+    protected ?int $nextItemId = null;
+
+    /**
+     * @Gedmo\TreeLevel
+     * @ORM\Column(name="lvl", type="integer")
+     */
+    protected $lvl;
 
     public function __construct()
     {
@@ -159,7 +173,6 @@ class CLpItem
         $this->path = '';
         $this->ref = '';
         $this->launchData = '';
-        $this->previousItemId = 0;
         $this->description = '';
         $this->minScore = 0;
         $this->maxScore = 100.0;
@@ -557,6 +570,21 @@ class CLpItem
     public function setChildren(Collection $children): self
     {
         $this->children = $children;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLvl()
+    {
+        return $this->lvl;
+    }
+
+    public function setLvl($lvl): self
+    {
+        $this->lvl = $lvl;
 
         return $this;
     }

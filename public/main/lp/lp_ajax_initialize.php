@@ -176,6 +176,9 @@ function initializeItem($lpId, $user_id, $view_id, $next_item, $startTime = 0)
         $return .= "updateTimer($now);";
     }
 
+    // Todo add load forum thread.
+    //loadForumThread({{ lp_id }}, {{ lp_current_item_id }})
+
     if ($debug) {
         error_log('Prereq_match() returned '.htmlentities($mylp->error), 0);
         error_log("return = $return ");

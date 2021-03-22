@@ -15,6 +15,7 @@ $debug = false;
 $action = $_REQUEST['a'] ?? '';
 $lpId = $_REQUEST['lp_id'] ?? 0;
 $lpRepo = Container::getLpRepository();
+$lpItemRepo = Container::getLpItemRepository();
 $lp = null;
 if (!empty($lpId)) {
     /** @var CLp $lp */
@@ -78,6 +79,8 @@ switch ($action) {
             exit;
         }
 
+        $parent = $lpItemRepo->getItemRoot($lpId);
+
         $learningPath = new learnpath($lp, api_get_course_info(), api_get_user_id());
         if ($learningPath) {
             $learningPath->set_modified_on();
@@ -97,12 +100,12 @@ switch ($action) {
                     break;
             }
 
-            $parentId = $_REQUEST['parent_id'] ?? null;
+            $parentId = (int) ($_REQUEST['parent_id'] ?? null);
             $em = Database::getManager();
-            $parent = null;
             if (!empty($parentId)) {
-                $parent = $em->getRepository(CLpItem::class)->find($parentId);
+                $parent = $lpItemRepo->find($parentId);
             }
+
             $previousId = $_REQUEST['previous_id'] ?? '';
 
             $itemId = $learningPath->add_item(
@@ -113,24 +116,24 @@ switch ($action) {
                 $title
             );
 
-            echo $learningPath->returnLpItemList(null);
+            echo $learningPath->getBuildTree(true);
         }
         break;
     case 'update_lp_item_order':
         if (api_is_allowed_to_edit(null, true)) {
             // $new_order gets a value like "647|0^648|0^649|0^"
-            $new_order = $_POST['new_order'];
+            $new_order = $_REQUEST['new_order'] ?? [];
             $sections = explode('^', $new_order);
             $sections = array_filter($sections);
             // We have to update parent_item_id, previous_item_id, next_item_id, display_order in the database
             $orderList = [];
-
             foreach ($sections as $items) {
                 [$id, $parentId] = explode('|', $items);
                 $orderList[$id] = $parentId;
             }
 
-            learnpath::sortItemByOrderList($orderList);
+            $learningPath = new learnpath($lp, api_get_course_info(), api_get_user_id());
+            $learningPath->sortItemByOrderList($orderList);
 
             echo Display::return_message(get_lang('Saved'), 'confirm');
         }

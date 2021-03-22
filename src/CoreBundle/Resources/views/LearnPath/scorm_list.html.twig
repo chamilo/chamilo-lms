@@ -1,4 +1,56 @@
 {% autoescape false %}
+    {% macro processItem(item, lp_current_item_id, status_list) %}
+    {% import _self as self %}
+        {% set itemClass = '' %}
+        {% if 'dir' == item.itemType %}
+            {% set itemClass = 'scorm_item_section' %}
+        {% endif %}
+
+        {% if lp_current_item_id == item.iid %}
+            {% set itemClass = 'scorm_highlight' %}
+        {% endif %}
+
+        {% set itemLevel = 'level_' ~ (item.lvl - 1) %}
+        {% set itemStatusClass = status_list[item.iid] %}
+
+        <div
+            id="toc_{{ item.iid }}"
+            class=" scorm_item_normal {{ itemStatusClass }} {{ itemClass }} item-{{ item.itemType }}"
+        >
+            {% if item.itemType == 'dir' %}
+                <div
+                    class="section {{ itemLevel }}"
+                    title="{{ item.description | striptags | e('html') }}"
+                >
+                    {{ item.title }}
+                </div>
+            {% else %}
+                <div
+                    class="item {{ itemLevel }}"
+                    title="{{ item.description | striptags | e('html') }}"
+                >
+                    <a name="atoc_{{ item.iid }}"></a>
+                    <a
+                        data-type="type-{{ item.itemType }}"
+                        class="items-list"
+                        href="#"
+                        onclick="switch_item('{{ lp_current_item_id }}','{{ item.iid }}'); return false;"
+                    >
+                        {{ item.title }}
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        {% if item.itemType == 'dir' %}
+            {% if item.__children|length %}
+                {% for child in item.__children %}
+                    {{ self.processItem(child, lp_current_item_id, status_list) }}
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+    {% endmacro %}
+
     {% if data_list is not empty %}
         <div id="learning_path_toc" class="scorm-list">
             <div class="scorm-title">
@@ -6,32 +58,9 @@
             </div>
             <div class="scorm-body">
                 <div id="inner_lp_toc" class="inner_lp_toc scrollbar-light">
+                    {% from _self import processItem %}
                     {% for item in data_list %}
-                        <div id="toc_{{ item.id }}" class="{{ item.class }} item-{{ item.type }}">
-                            {% if item.type == 'dir' %}
-                                <div
-                                    class="section {{ item.css_level }}"
-                                    title="{{ item.description | striptags | e('html') }}"
-                                >
-                                    {{ item.title }}
-                                </div>
-                            {% else %}
-                                <div
-                                    class="item {{ item.css_level }}"
-                                    title="{{ item.description | striptags | e('html') }}"
-                                >
-                                    <a name="atoc_{{ item.id }}"></a>
-                                    <a
-                                        data-type="type-{{ item.type }}"
-                                        class="items-list"
-                                        href="#"
-                                        onclick="switch_item('{{ item.current_id }}','{{ item.id }}'); return false;"
-                                    >
-                                        {{ item.title }}
-                                    </a>
-                                </div>
-                            {% endif %}
-                        </div>
+                        {{ processItem(item, lp_current_item_id, status_list) }}
                     {% endfor %}
                 </div>
             </div>

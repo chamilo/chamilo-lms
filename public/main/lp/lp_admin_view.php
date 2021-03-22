@@ -178,6 +178,8 @@ $(function() {
             /*Only process elements with an id attribute (in order to skip the blank,
             unmovable <li> elements.*/
             if ($(this).attr("id")) {
+                console.log($(this).attr("id"));
+                //console.log($(this).attr("id"));
                 /*Build a string of data with the child's ID and parent ID,
                  using the "|" as a delimiter between the two IDs and the "^"
                  as a record delimiter (these delimiters were chosen in case the data
@@ -191,7 +193,6 @@ $(function() {
                     processChildren($(this).attr("id"));
                 }
             }
-
         }); //end of lp_item_list children loop
 
         //Write the newOrderData string out to the listResults form element

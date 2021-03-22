@@ -546,6 +546,8 @@ if (true === api_get_configuration_value('lp_view_accordion') && 1 == $lpType) {
     $template->assign('data_list', null);
 } else {
     $template->assign('data_panel', null);
+    //echo '<pre>';    var_dump(array_column($oLP->get_toc(), 'status_class', 'id'));
+    $template->assign('status_list', array_column($oLP->get_toc(), 'status_class', 'id'));
     $template->assign('data_list', $oLP->getListArrayToc($get_toc_list));
 }
 $template->assign('lp_id', $lp->getIid());

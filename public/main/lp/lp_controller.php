@@ -25,11 +25,12 @@ api_protect_course_script(true);
 
 $debug = false;
 $current_course_tool = TOOL_LEARNPATH;
-$lpItemId = $_REQUEST['id'] ?? 0;
-$lpId = $_REQUEST['lp_id'] ?? 0;
+$lpItemId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+$lpId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
 $course_id = api_get_course_int_id();
 $session_id = api_get_session_id();
 $lpRepo = Container::getLpRepository();
+$lpItemRepo = Container::getLpItemRepository();
 $courseInfo = api_get_course_info();
 $course = api_get_course_entity();
 $userId = api_get_user_id();
@@ -49,8 +50,10 @@ if ($showGlossary) {
     }
 }
 
-$ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?lp_id='.(int) $lpId.'&'.api_get_cidreq();
+$ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?lp_id='.$lpId.'&'.api_get_cidreq();
 $listUrl = api_get_self().'?action=list&'.api_get_cidreq();
+
+
 $htmlHeadXtra[] = '
 <script>
     function setFocus(){
@@ -66,24 +69,21 @@ $htmlHeadXtra[] = '
     function buildLPtree(in_elem, in_parent_id) {
         var item_tag = in_elem.get(0).tagName;
         var item_id =  in_elem.attr("id");
-        var parent_id = item_id;
-        if (item_tag == "LI" && item_id != undefined) {
-            // in_parent_id de la forme UL_x
-            newOrderData += item_id+"|"+get_UL_integer_id(in_parent_id)+"^";
-        }
+        //var parent_id = item_id;
 
-        in_elem.children().each(function () {
-            buildLPtree($(this), parent_id);
+        in_elem.children("li").each(function () {
+            let itemId = $(this).attr("id");
+            if (itemId && itemId != "undefined") {
+                newOrderData += itemId + "|" + in_parent_id+"^";
+                console.log(itemId);
+                console.log(newOrderData);
+                $(this).find("ul").each(function () {
+                    console.log("inside");
+                    console.log(itemId);
+                    buildLPtree($(this), itemId);
+                });
+            }
         });
-    }
-
-    // return the interge part of an UL id
-    // (0 for lp_item_list)
-    function get_UL_integer_id(in_ul_id) {
-        in_parent_integer_id = in_ul_id;
-        in_parent_integer_id = in_parent_integer_id.replace("lp_item_list", "0");
-        in_parent_integer_id = in_parent_integer_id.replace("UL_", "");
-        return in_parent_integer_id;
     }
 
     $(function() {
@@ -203,7 +203,7 @@ $htmlHeadXtra[] = '
 
             buildLPtree($("#lp_item_list"), 0);
             var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
-            $.post(
+            $.get(
                 "'.$ajax_url.'",
                 order,
                 function(reponse) {
@@ -222,7 +222,7 @@ $htmlHeadXtra[] = '
             update: function(event, ui) {
                 buildLPtree($("#lp_item_list"), 0);
                 var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
-                $.post(
+                $.get(
                     "'.$ajax_url.'",
                     order,
                     function(reponse) {
@@ -238,33 +238,36 @@ $htmlHeadXtra[] = '
                 var type = item.attr("data_type");
                 var title = item.attr("title");
                 processReceive = true;
+                   console.log(ui.item.parent().parent().attr("id"));
                 if (ui.item.parent()[0]) {
-                    var parent_id = $(ui.item.parent()[0]).attr("id");
+                    //var parent_id = $(ui.item.parent()[0]).attr("id");
                     var previous_id = $(ui.item.prev()).attr("id");
-
-                    if (parent_id) {
-                        parent_id = parent_id.split("_")[1];
-                        var params = {
-                            "a": "add_lp_item",
-                            "id": id,
-                            "parent_id": parent_id,
-                            "previous_id": previous_id,
-                            "type": type,
-                            "title" : title
-                        };
-                        console.log(params);
-
-                        $.ajax({
-                            type: "GET",
-                            url: "'.$ajax_url.'",
-                            data: params,
-                            success: function(data) {
-                                $("#lp_item_list").html(data);
-                            }
-                        });
+                    var parent_id = ui.item.parent().parent().attr("id");
+                    if (parent_id == "undefined") {
+                        parent_id = 0;
                     }
+                    console.log(parent_id);
+                    var params = {
+                        "a": "add_lp_item",
+                        "id": id,
+                        "parent_id": parent_id,
+                        "previous_id": previous_id,
+                        "type": type,
+                        "title" : title
+                    };
+                    console.log(params);
+
+                    $.ajax({
+                        type: "GET",
+                        url: "'.$ajax_url.'",
+                        data: params,
+                        success: function(data) {
+                            //$("#scorm-list .card-body").html(data);
+                            $("#lp_item_list").html(data);
+                        }
+                    });
                 }
-            } // End receive
+            }
         });
         processReceive = false;
     });
@@ -506,6 +509,22 @@ switch ($action) {
 
         Session::write('refresh', 1);
 
+        $itemRoot = $lpItemRepo->findOneBy(['path' => 'root', 'lp' => $lpId]);
+        if (null == $itemRoot) {
+            $lpItem = new CLpItem();
+            $lpItem
+                ->setTitle('root')
+                ->setPath('root')
+                ->setLp($lp)
+                ->setItemType('root')
+                //->setNextItemId((int) $next)
+                //->setPreviousItemId($previous)
+            ;
+            $em = Database::getManager();
+            $em->persist($lpItem);
+            $em->flush();
+        }
+
         if (isset($_POST['submit_button']) && !empty($post_title)) {
             Session::write('post_time', $_POST['post_time']);
             $directoryParentId = isset($_POST['directory_parent_id']) ? $_POST['directory_parent_id'] : 0;
@@ -712,7 +731,7 @@ switch ($action) {
             if (!$lp_found) {
                 require 'lp_list.php';
             } else {
-                $oLP->set_autolaunch($_GET['lp_id'], $_GET['status']);
+                $oLP->set_autolaunch($lpId, $_GET['status']);
                 require 'lp_list.php';
                 exit;
             }
@@ -831,7 +850,7 @@ switch ($action) {
                 header('Location: '.$url);
                 exit;
             }
-            if (isset($_GET['view']) && 'build' == $_GET['view']) {
+            if (isset($_GET['view']) && 'build' === $_GET['view']) {
                 require 'lp_move_item.php';
             } else {
                 // Avoids weird behaviours see CT#967.
@@ -913,7 +932,7 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            $result = $oLP->scorm_export_to_pdf($_GET['lp_id']);
+            $result = $oLP->scorm_export_to_pdf($lpId);
             if (!$result) {
                 require 'lp_list.php';
             }
@@ -926,7 +945,7 @@ switch ($action) {
             if (!$lp_found) {
                 require 'lp_list.php';
             } else {
-                $result = $oLP->exportToCourseBuildFormat($_GET['lp_id']);
+                $result = $oLP->exportToCourseBuildFormat($lpId);
                 if (!$result) {
                     require 'lp_list.php';
                 }
@@ -943,8 +962,8 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
-            $oLP->delete(null, $_GET['lp_id'], 'remove');
-            Skill::deleteSkillsFromItem($_GET['lp_id'], ITEM_TYPE_LEARNPATH);
+            $oLP->delete(null, $lpId, 'remove');
+            Skill::deleteSkillsFromItem($lpId, ITEM_TYPE_LEARNPATH);
             Display::addFlash(Display::return_message(get_lang('Deleted')));
             Session::erase('oLP');
             require 'lp_list.php';

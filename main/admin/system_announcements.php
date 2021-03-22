@@ -324,11 +324,9 @@ if ($action_todo) {
                             $announcement_id,
                             [$values['group']]
                         );
-                        echo Display::return_message(
-                            get_lang('AnnouncementAdded'),
-                            'confirmation'
-                        );
                     }
+
+                    echo Display::return_message(get_lang('AnnouncementAdded'), 'confirmation');
                 } else {
                     $show_announcement_list = false;
                     $form->display();

@@ -11021,16 +11021,18 @@ class Exercise
         if (count($bestAttempt) == 0) {
             return null;
         }
-        $percentSuccess = $this->selectPassPercentage();
-        $pass = ExerciseLib::isPassPercentageAttemptPassed(
-            $this,
-            $bestAttempt['exe_result'],
-            $bestAttempt['exe_weighting']
-        );
-        if (0 == $percentSuccess && false == $pass) {
-            return null;
+        $canRemedial = false;
+        if(isset($bestAttempt['exe_result']) && $bestAttempt['exe_result'] !=0 ) {
+            $pass = ExerciseLib::isPassPercentageAttemptPassed(
+                $this,
+                $bestAttempt['exe_result'],
+                $bestAttempt['exe_weighting']
+            );
+            $canRemedial = false === $pass;
+            if (false == $canRemedial) {
+                return null;
+            }
         }
-        $canRemedial = false === $pass;
         $extraFieldValue = new ExtraFieldValue('exercise');
         $remedialExcerciseField = $extraFieldValue->get_values_by_handler_and_field_variable(
             $this->iId,

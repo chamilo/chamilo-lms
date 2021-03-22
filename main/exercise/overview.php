@@ -215,8 +215,8 @@ $exercise_stat_info = Event::getExerciseResultsByUser(
 );
 $attempt_count = count($exercise_stat_info) + 1;
 if ($exerciseAttempts > 0) {
-    if ($attempt_count >= $exerciseAttempts) {
-        $remedialMessage .= $objExercise->remedialCourseList(api_get_user_id(), api_get_session_id());
+    if ($attempt_count > $exerciseAttempts) {
+        $remedialMessage .= $objExercise->remedialCourseList(api_get_user_id(), api_get_session_id(), $exercise_stat_info);
     }
     if (null != $remedialMessage) {
         Display::addFlash(

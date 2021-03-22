@@ -11022,7 +11022,7 @@ class Exercise
             return null;
         }
         $canRemedial = false;
-        if(isset($bestAttempt['exe_result']) && $bestAttempt['exe_result'] !=0 ) {
+        if (isset($bestAttempt['exe_result']) && $bestAttempt['exe_result'] != 0) {
             $pass = ExerciseLib::isPassPercentageAttemptPassed(
                 $this,
                 $bestAttempt['exe_result'],

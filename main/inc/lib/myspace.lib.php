@@ -1266,15 +1266,15 @@ class MySpace
             lpi.title,
             lp.id as lp_id,
             lpi.id AS lp_item_id,
-            REPLACE (efv.`value`, ';', ',') AS users_id,
+            REPLACE (efv.value, ';', ',') AS users_id,
             c.title AS course_title,
-            c.`code` AS course_code
+            c.code AS course_code
         FROM $tblExtraFieldValue AS efv
         INNER JOIN $tblExtraField AS ef
         ON (
             efv.field_id = ef.id AND
             ef.variable = 'authorlpitem' AND
-            efv.`value` != ''
+            efv.value != ''
             )
         INNER JOIN $tblLpItem AS lpi
         ON (efv.item_id = lpi.iid)
@@ -1544,13 +1544,13 @@ class MySpace
         /** Get lp items only with authors */
         $sql = " SELECT
                 efv.item_id AS lp_item_id,
-                efv.`value` AS author
+                efv.value AS author
             FROM $tblExtraFieldValue AS efv
             INNER JOIN $tblExtraField AS ef
             ON (
                 ef.variable = 'authorlpitem' AND
                 efv.field_id = ef.id AND
-                efv.`value` != ''
+                efv.value != ''
             )
             ORDER BY efv.item_id ";
         $queryResult = Database::query($sql);
@@ -1566,13 +1566,13 @@ class MySpace
                lp.name AS lp_name,
                efv.item_id AS lp_item_id,
                lpi.title AS title,
-               efv.`value` AS price
+               efv.value AS price
             FROM $tblExtraFieldValue AS efv
             INNER JOIN $tblExtraField AS ef
             ON (
                 ef.variable = 'price' AND
                 efv.field_id = ef.id AND
-                efv.`value` > 0
+                efv.value > 0
             )
             INNER JOIN $tblLpItem AS lpi
             ON (lpi.iid = efv.item_id)
@@ -1954,7 +1954,7 @@ class MySpace
             lp.id = lpi.lp_id AND
             lpi.c_id = lp.c_id
         )
-        INNER JOIN `$tblUser` AS u
+        INNER JOIN tblUser AS u
         ON (u.id = srcu.user_id)
         $accessUrlFilter
         WHERE
@@ -4309,7 +4309,7 @@ class MySpace
             $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
             $sql = "SELECT
                     extra_field_value.item_id AS userId,
-                    extra_field_value.`value` AS company
+                    extra_field_value.value AS company
                 FROM $tblExtraFieldValue AS extra_field_value
                 INNER JOIN $tblExtraField AS extra_field
                 ON (
@@ -4317,7 +4317,7 @@ class MySpace
                     extra_field.variable = 'company'
                 )
                 WHERE
-                    extra_field_value.`value` != '' AND
+                    extra_field_value.value != '' AND
                     extra_field_value.item_id = $userId ";
             $queryResult = Database::query($sql);
             $data = Database::store_result($queryResult, 'ASSOC');
@@ -4414,7 +4414,7 @@ class MySpace
                 u.firstname as firstname,
                 u.lastname as lastname
             FROM $tblItemProperty AS ip
-            INNER JOIN `$tblUser` AS u
+            INNER JOIN $tblUser AS u
             ON (u.id = ip.to_user_id)
             INNER JOIN $tblLp AS lp
             ON (lp.iid = ip.ref AND lp.c_id = ip.c_id)
@@ -4442,7 +4442,7 @@ class MySpace
                     $tblItemProperty AS ip
                 INNER JOIN $tblGroupUser AS ug
                 ON (ug.group_id = ip.to_group_id AND ip.c_id = ug.c_id)
-                INNER JOIN `$tblUser` AS u
+                INNER JOIN $tblUser AS u
                 ON (u.id = ug.user_id)
                 INNER JOIN $tblLp AS lp
                 ON (lp.iid = ip.ref AND ug.c_id = lp.c_id)

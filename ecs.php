@@ -7,8 +7,6 @@ declare(strict_types=1);
 use PHP_CodeSniffer\Standards\Generic\Sniffs\Arrays\DisallowLongArraySyntaxSniff;
 use PhpCsFixer\Fixer\ArrayNotation\TrailingCommaInMultilineArrayFixer;
 use PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer;
-
-//use SlevomatCodingStandard\Sniffs\Variables\UnusedVariableSniff;
 use PhpCsFixer\Fixer\Operator\IncrementStyleFixer;
 use SlevomatCodingStandard\Sniffs\TypeHints\PropertyTypeHintSniff;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

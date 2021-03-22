@@ -146,18 +146,6 @@ if ('1' === $lp->getSubscribeUsers()) {
     }
 }
 
-$lpInfo = Database::select(
-    '*',
-    $lpTable,
-    [
-        'where' => [
-            'c_id = ? AND ' => $courseId,
-            'iid = ?' => $lpId,
-        ],
-    ],
-    'first'
-);
-
 $groups = GroupManager::get_group_list(null, $course, null, $sessionId);
 $label = get_lang('Groups');
 $classes = [];
@@ -301,14 +289,14 @@ if (!empty($users)) {
             $userId,
             $course,
             [$lpId],
-            $sessionId
+            $session
         );
 
         $lpProgress = Tracking::get_avg_student_progress(
             $userId,
-            $courseCode,
+            $course,
             [$lpId],
-            $sessionId
+            $session
         );
 
         $lpLastConnection = Tracking::get_last_connection_time_in_lp(
@@ -461,7 +449,7 @@ $template->assign('export', (int) $export);
 $template->assign('group_form', $groupFilterForm);
 $template->assign('url', $url);
 $template->assign('url_base', $urlBase);
-$template->assign('header', $lpInfo['name']);
+$template->assign('header', $entity->getName());
 $template->assign('actions', Display::toolbarAction('lp_actions', [$actions]));
 $result = $template->fetch('@ChamiloCore/LearnPath/report.html.twig');
 $template->assign('content', $result);

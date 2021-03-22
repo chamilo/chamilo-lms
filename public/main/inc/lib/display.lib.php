@@ -2651,7 +2651,6 @@ class Display
             $ariaExpanded = $open ? 'true' : 'false';
 
             $html = <<<HTML
-
                 <div class="card" id="$id">
                     <div class="card-header">
                         $title
@@ -2776,7 +2775,6 @@ HTML;
     public static function getFrameReadyBlock($frameName)
     {
         $webPublicPath = api_get_path(WEB_PUBLIC_PATH);
-
         $videoFeatures = [
             'playpause',
             'current',

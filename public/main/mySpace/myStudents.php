@@ -1970,7 +1970,7 @@ if (empty($details)) {
                             $qualifyLink = '&action=qualify';
                         }
                         $attemptLink =
-                            '../exercise/exercise_show.php?id='.$id_last_attempt.'&cid='.$courseInfo['real_id']
+                            '../exercise/exercise_show.php?id='.$id_last_attempt.'&cid='.$courseId
                             .'&sid='.$sessionId.'&student='.$studentId.'&origin='
                             .(empty($origin) ? 'tracking' : $origin).$qualifyLink;
                         echo Display::url(
@@ -1984,7 +1984,7 @@ if (empty($details)) {
                 echo '<td>';
                 if ($count_attempts > 0) {
                     $all_attempt_url = "../exercise/exercise_report.php?id=$exercise_id&"
-                        ."cid=".$courseInfo['real_id']."&filter_by_user=$studentId&sid=$sessionId";
+                        ."cid=".$courseId."&filter_by_user=$studentId&sid=$sessionId";
                     echo Display::url(
                         Display::return_icon(
                             'test_results.png',

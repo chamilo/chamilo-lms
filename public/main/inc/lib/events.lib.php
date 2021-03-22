@@ -1073,22 +1073,22 @@ class Event
         $track_e_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $track_attempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $recording_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
-
+        $sessionCondition = api_get_session_condition($session_id);
         // Make sure we have the exact lp_view_id
-        $sql = "SELECT id FROM $lp_view_table
+        $sql = "SELECT iid FROM $lp_view_table
                 WHERE
                     c_id = $course_id AND
                     user_id = $user_id AND
-                    lp_id = $lp_id AND
-                    session_id = $session_id";
+                    lp_id = $lp_id
+                    $sessionCondition";
         $result = Database::query($sql);
 
         if (Database::num_rows($result)) {
             $view = Database::fetch_array($result, 'ASSOC');
-            $lp_view_id = $view['id'];
+            $lp_view_id = $view['iid'];
 
             $sql = "DELETE FROM $lp_item_view_table
-                    WHERE c_id = $course_id AND lp_view_id = $lp_view_id";
+                    WHERE lp_view_id = $lp_view_id";
             Database::query($sql);
 
             $sql = "DELETE FROM $lpInteraction

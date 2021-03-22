@@ -6615,8 +6615,13 @@ class Exercise
         $lpId = 0,
         $lpItemId = 0,
         $lpItemViewId = 0,
-        $filterByAdmin = true
+        $filterByAdmin = true,
+        $sessionId = 0
     ) {
+        $sessionId = (int) $sessionId;
+        if ($sessionId == 0) {
+            $sessionId = $this->sessionId;
+        }
         // 1. By default the exercise is visible
         $isVisible = true;
         $message = null;
@@ -6837,7 +6842,7 @@ class Exercise
                             api_get_user_id(),
                             $this->iId,
                             $this->course_id,
-                            $this->sessionId,
+                            $sessionId,
                             $lpId,
                             $lpItemId
                         );

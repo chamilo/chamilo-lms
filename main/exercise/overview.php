@@ -181,7 +181,8 @@ $visible_return = $objExercise->is_visible(
     $learnpath_id,
     $learnpath_item_id,
     null,
-    true
+    true,
+    $sessionId
 );
 
 // Exercise is not visible remove the button

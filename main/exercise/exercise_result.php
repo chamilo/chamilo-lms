@@ -276,13 +276,23 @@ $exerciseStatInfo = Event::getExerciseResultsByUser(
     api_get_course_int_id(),
     api_get_session_id()
 );
+$attempt_count = Event::get_attempt_count(
+    $currentUserId,
+    $exerciseId,
+    $learnpath_id,
+    $learnpath_item_id,
+    $learnpath_item_view_id
+);
 $advanceCourseMessage = $objExercise->advanceCourseList(api_get_user_id(), api_get_session_id(), $exerciseStatInfo);
 if (null != $advanceCourseMessage) {
     Display::addFlash(
         Display::return_message($advanceCourseMessage, 'info', false)
     );
 }
-$remedialMessage = $objExercise->remedialCourseList(api_get_user_id(), api_get_session_id(), $exerciseStatInfo);
+$remedialMessage = null;
+if ($attempt_count >= $objExercise->selectAttempts()) {
+    $remedialMessage = $objExercise->remedialCourseList(api_get_user_id(), api_get_session_id(), $exerciseStatInfo);
+}
 if (null != $remedialMessage) {
     Display::addFlash(
         Display::return_message($remedialMessage, 'warning', false)

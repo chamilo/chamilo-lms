@@ -825,7 +825,7 @@ class SystemAnnouncementManager
      *
      * @param int $userId
      */
-    public static function getAnnouncementsForGroups($userId = 0, $visible)
+    public static function getAnnouncementsForGroups($userId , $visible)
     {
         $user_selected_language = Database::escape_string(api_get_interface_language());
         $tblSysAnnouncements = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);

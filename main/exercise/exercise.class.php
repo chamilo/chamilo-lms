@@ -10946,20 +10946,23 @@ class Exercise
     }
 
     /**
-     * Returns true if the exercise is locked by percentage. an exercise attempt must be passed
+     * Returns true if the exercise is locked by percentage. an exercise attempt must be passed.
      *
      * @param array $attemp
      *
      * @return bool
      */
-    public function isBlockedByPercentage($attemp = []){
-        if(empty($attemp)) return false;
+    public function isBlockedByPercentage($attemp = [])
+    {
+        if (empty($attemp)) {
+            return false;
+        }
         $extraFieldValue = new ExtraFieldValue('exercise');
         $blockExercise = $extraFieldValue->get_values_by_handler_and_field_variable(
             $this->iId,
             'blocking_percentage'
         );
-        $blockPercentage= 0;
+        $blockPercentage = 0;
         if ($blockExercise && isset($blockExercise['value']) && !empty($blockExercise['value'])) {
             $blockPercentage = (int) $blockExercise['value'];
         }
@@ -10969,7 +10972,6 @@ class Exercise
 
         return false;
     }
-
 
     /**
      * When a student completes the number of attempts and fails the exam, she is enrolled in a series of remedial

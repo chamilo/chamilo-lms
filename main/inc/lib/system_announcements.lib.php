@@ -251,6 +251,7 @@ class SystemAnnouncementManager
      * @param bool   $sendEmailTest
      * @param int    $careerId
      * @param int    $promotionId
+     * @param int    $groupId
      *
      * @return mixed insert_id on success, false on failure
      */
@@ -265,7 +266,8 @@ class SystemAnnouncementManager
         $add_to_calendar = false,
         $sendEmailTest = false,
         $careerId = 0,
-        $promotionId = 0
+        $promotionId = 0,
+        $groupId = 0
     ) {
         $original_content = $content;
         $a_dateS = explode(' ', $date_start);
@@ -362,7 +364,9 @@ class SystemAnnouncementManager
                 if ($send_mail == 1) {
                     self::send_system_announcement_by_email(
                         $resultId,
-                        $visibility
+                        $visibility,
+                        false,
+                        $groupId
                     );
                 }
             }
@@ -475,7 +479,8 @@ class SystemAnnouncementManager
         $send_mail = 0,
         $sendEmailTest = false,
         $careerId = 0,
-        $promotionId = 0
+        $promotionId = 0,
+        $groupId = 0
     ) {
         $em = Database::getManager();
         $announcement = $em->find('ChamiloCoreBundle:SysAnnouncement', $id);
@@ -582,7 +587,9 @@ class SystemAnnouncementManager
             if ($send_mail == 1) {
                 self::send_system_announcement_by_email(
                     $id,
-                    $visibility
+                    $visibility,
+                    false,
+                    $groupId
                 );
             }
         }
@@ -665,6 +672,7 @@ class SystemAnnouncementManager
      * @param int   $id
      * @param array $visibility
      * @param bool  $sendEmailTest
+     * @param int   $groupId
      *
      * @return bool True if the message was sent or there was no destination matching.
      *              False on database or e-mail sending error.
@@ -672,7 +680,8 @@ class SystemAnnouncementManager
     public static function send_system_announcement_by_email(
         $id,
         $visibility,
-        $sendEmailTest = false
+        $sendEmailTest = false,
+        $groupId = 0
     ) {
         $announcement = self::get_announcement($id);
 
@@ -693,6 +702,19 @@ class SystemAnnouncementManager
 
             return true;
         }
+        $whereUsersInGroup = '';
+        if (0 != $groupId) {
+            $tblGroupRelUser = Database::get_main_table(TABLE_USERGROUP_REL_USER);
+            $sql = "select user_id from $tblGroupRelUser where usergroup_id = $groupId";
+            $result = Database::query($sql);
+            $data = Database::store_result($result);
+            $usersId = [];
+            foreach ($data as $userArray) {
+                $usersId[] = $userArray['user_id'];
+            }
+            $usersId = implode(',', $usersId);
+            $whereUsersInGroup = " AND u.user_id in ($usersId) ";
+        }
 
         $urlJoin = '';
         $urlCondition = '';
@@ -706,17 +728,17 @@ class SystemAnnouncementManager
 
         if ($teacher != 0 && $student == 0) {
             $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin
-                    WHERE status = '1' $urlCondition";
+                    WHERE status = '1' $urlCondition $whereUsersInGroup";
         }
 
         if ($teacher == 0 && $student != 0) {
             $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin
-                    WHERE status = '5' $urlCondition";
+                    WHERE status = '5' $urlCondition $whereUsersInGroup";
         }
 
         if ($teacher != 0 && $student != 0) {
             $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin
-                    WHERE 1 = 1 $urlCondition";
+                    WHERE 1 = 1 $urlCondition $whereUsersInGroup";
         }
 
         if (!isset($sql)) {
@@ -799,6 +821,40 @@ class SystemAnnouncementManager
     }
 
     /**
+     * Returns the group announcements where the user is subscribed.
+     *
+     * @param int $userId
+     */
+    public static function getAnnouncementsForGroups($userId, $visible)
+    {
+        $userSelectedLanguage = Database::escape_string(api_get_interface_language());
+        $tblSysAnnouncements = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+        $tblGrpAnnouncements = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
+        $tblUsrGrp = Database::get_main_table(TABLE_USERGROUP_REL_USER);
+        $now = api_get_utc_datetime();
+
+        $sql = "
+        SELECT
+               sys_announcement.*
+        FROM $tblSysAnnouncements AS sys_announcement
+            INNER JOIN $tblGrpAnnouncements AS announcement_rel_group ON
+                sys_announcement.id = announcement_rel_group.announcement_id
+        INNER JOIN $tblUsrGrp AS usergroup_rel_user ON
+            usergroup_rel_user.usergroup_id = announcement_rel_group.group_id
+        WHERE
+              usergroup_rel_user.user_id = $userId AND
+              (sys_announcement.lang = '$userSelectedLanguage' OR sys_announcement.lang = '') AND
+              ('$now' >= sys_announcement.date_start AND '$now' <= sys_announcement.date_end)
+        ";
+        $sql .= self::getVisibilityCondition($visible);
+        $result = Database::query($sql);
+        $data = Database::store_result($result, 'ASSOC');
+        Database::free_result($result);
+
+        return $data;
+    }
+
+    /**
      * Displays announcements as an slideshow.
      *
      * @param string $visible see self::VISIBLE_* constants
@@ -810,13 +866,22 @@ class SystemAnnouncementManager
     {
         $user_selected_language = Database::escape_string(api_get_interface_language());
         $table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+        $tblGrpAnnouncements = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
 
         $cut_size = 500;
         $now = api_get_utc_datetime();
-        $sql = "SELECT * FROM $table
-                WHERE
-                    (lang = '$user_selected_language' OR lang = '') AND
-                    ('$now' >= date_start AND '$now' <= date_end) ";
+        //Exclude announcement to groups
+        $sql = "
+        SELECT
+               sys_announcement.*
+        FROM $table as sys_announcement
+            LEFT JOIN $tblGrpAnnouncements AS announcement_rel_group ON
+                sys_announcement.id = announcement_rel_group.announcement_id
+            WHERE
+                  (sys_announcement.lang = '$user_selected_language' OR sys_announcement.lang = '') AND
+                  ('$now' >= sys_announcement.date_start AND '$now' <= sys_announcement.date_end) and
+                  announcement_rel_group.group_id is null
+	      ";
 
         $sql .= self::getVisibilityCondition($visible);
 
@@ -904,10 +969,28 @@ class SystemAnnouncementManager
             }
         }
 
+        /** Show announcement of group */
+        $announcementToGroup = self::getAnnouncementsForGroups($userId, $visible);
+        $totalAnnouncementToGroup = count($announcementToGroup);
+        for ($i = 0; $i < $totalAnnouncementToGroup; $i++) {
+            $announcement = $announcementToGroup[$i];
+            $announcementData = [
+                'id' => $announcement['id'],
+                'title' => $announcement['title'],
+                'content' => $announcement['content'],
+                'readMore' => null,
+            ];
+            $content = $announcement['content'];
+            if (api_strlen(strip_tags($content)) > $cut_size) {
+                $announcementData['content'] = cut($content, $cut_size);
+                $announcementData['readMore'] = true;
+            }
+            $announcements[] = $announcementData;
+        }
+
         if (count($announcements) === 0) {
             return null;
         }
-
         $template = new Template(null, false, false);
         $template->assign('announcements', $announcements);
         $layout = $template->get_template('announcement/slider.tpl');

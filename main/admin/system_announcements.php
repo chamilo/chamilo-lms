@@ -301,6 +301,7 @@ if ($action_todo) {
         }
 
         $sendMail = isset($values['send_mail']) ? $values['send_mail'] : null;
+        $groupToSend = isset($values['group']) ? $values['group'] : 0;
 
         switch ($values['action']) {
             case 'add':
@@ -315,14 +316,15 @@ if ($action_todo) {
                     empty($values['add_to_calendar']) ? false : true,
                     empty($values['send_email_test']) ? false : true,
                     isset($values['career_id']) ? $values['career_id'] : 0,
-                    isset($values['promotion_id']) ? $values['promotion_id'] : 0
+                    isset($values['promotion_id']) ? $values['promotion_id'] : 0,
+                    $groupToSend
                 );
 
                 if ($announcement_id !== false) {
-                    if (isset($values['group'])) {
+                    if ($groupToSend != 0) {
                         SystemAnnouncementManager::announcement_for_groups(
                             $announcement_id,
-                            [$values['group']]
+                            [$groupToSend]
                         );
                     }
 
@@ -346,12 +348,13 @@ if ($action_todo) {
                     $sendMail,
                     $sendMailTest,
                     isset($values['career_id']) ? $values['career_id'] : 0,
-                    isset($values['promotion_id']) ? $values['promotion_id'] : 0
+                    isset($values['promotion_id']) ? $values['promotion_id'] : 0,
+                    $groupToSend
                 )) {
-                    if (isset($values['group'])) {
+                    if (0 != $groupToSend) {
                         SystemAnnouncementManager::announcement_for_groups(
                             $values['id'],
-                            [$values['group']]
+                            [$groupToSend]
                         );
                         echo Display::return_message(
                             get_lang('AnnouncementUpdated'),

@@ -980,7 +980,7 @@ class SystemAnnouncementManager
                 'content' => $announcement['content'],
                 'readMore' => null,
             ];
-            $content = (is_array($announcement)) ? $announcement['content'] : $announcement->content;
+            $content = $announcement['content'];
             if (api_strlen(strip_tags($content)) > $cut_size) {
                 $announcementData['content'] = cut($content, $cut_size);
                 $announcementData['readMore'] = true;

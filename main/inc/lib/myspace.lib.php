@@ -1954,7 +1954,7 @@ class MySpace
             lp.id = lpi.lp_id AND
             lpi.c_id = lp.c_id
         )
-        INNER JOIN tblUser AS u
+        INNER JOIN $tblUser AS u
         ON (u.id = srcu.user_id)
         $accessUrlFilter
         WHERE

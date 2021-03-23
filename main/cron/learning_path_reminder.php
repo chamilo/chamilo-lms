@@ -162,7 +162,8 @@ function getTutorIdFromCourseRelUser($cId = 0, $lpId = 0)
         tblLp.c_id = $cId";
     $result = Database::query($sql);
     $data = Database::fetch_assoc($result);
-    return (isset($data['user_id']))?(int)$data['user_id']:0;
+
+    return (isset($data['user_id'])) ? (int) $data['user_id'] : 0;
 }
 
 function sendToArray(&$data, &$type, &$message, $lpId = 0)
@@ -226,7 +227,6 @@ function learningPaths()
     ";
     $result = Database::query($sql);
     $groupUsers = [];
-
 
     while ($row = Database::fetch_array($result)) {
         $lpId = (int) $row['lp_id'];

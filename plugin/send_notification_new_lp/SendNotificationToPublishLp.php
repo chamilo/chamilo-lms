@@ -146,7 +146,7 @@ class SendNotificationToPublishLp extends Plugin
                                 field_id = $notifyId";
 
                 $extraFieldOption = Database::fetch_assoc(Database::query($query));
-                $extraFieldId = isset($extraFieldOption['id']) ? (int)($extraFieldOption['id']) : 0;
+                $extraFieldId = isset($extraFieldOption['id']) ? (int) ($extraFieldOption['id']) : 0;
 
                 if (
                     $extraFieldId != 0

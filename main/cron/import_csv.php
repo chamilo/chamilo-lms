@@ -1091,7 +1091,7 @@ class ImportCsv
                     $courseCode = $row['coursecode'];
                 }
                 $courseInfo = api_get_course_info($courseCode);
-                $courseId = $courseInfo['real_id'];
+                $courseId = $courseInfo['real_id'] ?? 0;
 
                 $item = $courseExtraFieldValue->get_values_by_handler_and_field_variable(
                     $courseId,
@@ -1154,8 +1154,8 @@ class ImportCsv
                 $startTime = $row['time_start'];
                 $endTime = $row['time_end'];
                 $title = $row['title'];
-                $comment = $row['comment'];
-                $color = isset($row['color']) ? $row['color'] : '';
+                $comment = $row['comment'] ?? '';
+                $color = $row['color'] ?? '';
 
                 $startDateYear = substr($date, 0, 4);
                 $startDateMonth = substr($date, 4, 2);

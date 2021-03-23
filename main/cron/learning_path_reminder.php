@@ -187,7 +187,6 @@ function SendToArray(&$data, &$type, &$message, $lpId = 0)
             $lpName,
             $user['link']
         );
-        $sendit[$type][$userId][$fromUser][$courseName][$lpName] = $send;
         $message .= "\n$type - Lp Id '$lpId' User Id '$userId' Sent to '$userName' Message id '$send' Lp name '$lpName'";
     }
 }
@@ -208,7 +207,6 @@ function LearningPaths()
     $date = $date->format('Y-m-d');
     $itemProcessed = [];
     $lpTable = Database::get_course_table(TABLE_LP_MAIN);
-    $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
     $tblCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $tblSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
     $tblItempProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -425,7 +423,6 @@ function LearningPaths()
             $itemProcessed[$lpId][$sessionId]['NoLpSubscription'][$toUser] = $groupUsers[$lpId][$sessionId][$toUser];
         }
     }
-    $sendit = [];
 
     /**
      * Send the emails to the corresponding students and their DRHs, Bearing in mind that if they exist through

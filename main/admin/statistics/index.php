@@ -357,6 +357,7 @@ $tools = [
     get_lang('System') => [
         'report=activities' => get_lang('ImportantActivities'),
         'report=user_session' => get_lang('PortalUserSessionStats'),
+        'report=courses_usage' => get_lang('CoursesUsage'),
     ],
     get_lang('Social') => [
         'report=messagereceived' => get_lang('MessagesReceived'),
@@ -372,6 +373,168 @@ $course_categories = Statistics::getCourseCategories();
 $content = '';
 
 switch ($report) {
+    case 'courses_usage':
+        $form = new FormValidator('courses_usage', 'get');
+        $nextElement = 0;
+        $currentPage = 0;
+        $start = 0;
+        $pagged = 10;
+        $coursesList = [];
+        $op = [];
+        $today = new DateTime();
+        $reportPost = isset($_POST['report']) ? $_POST['report'] : null;
+        $endDate = $today->format('Y-m-d');
+        $pag = 0;
+        $fechas = [
+            'day' => $today->setTimestamp(strtotime('-1 day'))->format('Y-m-d'),
+            'week' => $today->setTimestamp(strtotime('-1 week'))->format('Y-m-d'),
+            'month' => $today->setTimestamp(strtotime('-1 month'))->format('Y-m-d'),
+            '6month' => $today->setTimestamp(strtotime('-6 month'))->format('Y-m-d'),
+            'year' => $today->setTimestamp(strtotime('-1 year'))->format('Y-m-d'),
+            '2year' => $today->setTimestamp(strtotime('-2 year'))->format('Y-m-d'),
+            'total' => null,
+        ];
+        $courses = CourseManager::get_course_list();
+        $coursesTotal = count($courses);
+        if (0 < $coursesTotal) {
+            $start = isset($_GET['start']) ? (int) ($_GET['start']) : 0;
+        }
+
+        $start = abs($start);
+
+        $termina = ($start + $pagged) < $pagged ? $pagged : $start + $pagged;
+        foreach ($courses as $course) {
+            $courseId = $course['id'];
+            $sessions = 0;
+            $courseTotal = 0;
+            $visit = 0;
+            $indexCourseList = count($coursesList);
+            $item = [];
+            if ($indexCourseList >= $start && $indexCourseList < $termina) {
+                foreach ($fechas as $index => $date) {
+                    $startDate = $date;
+                    $courseTotal = count(CourseManager::getAccessCourse(
+                        $courseId,
+                        0,
+                        0,
+                        $startDate,
+                        $endDate
+                    ));
+                    $sessions = count(CourseManager::getAccessCourse(
+                        $courseId,
+                        1,
+                        0,
+                        $startDate,
+                        $endDate
+                    ));
+                    $visit = count(CourseManager::getAccessCourse(
+                        $courseId,
+                        3,
+                        0,
+                        $startDate,
+                        $endDate
+                    ));
+                    $temp = [
+                        'start' => $startDate,
+                        'course' => $visit,
+                        'course_id' => $course['id'],
+                        'session' => $sessions,
+                        'count' => $sessions + $courseTotal,
+                    ];
+                    $item[$index] = $temp;
+                }
+                $coursesList[$indexCourseList] = [
+                    $course['title'],
+                    $item['day']['count'],
+                    $item['week']['count'],
+                    $item['month']['count'],
+                    $item['6month']['count'],
+                    $item['year']['count'],
+                    $item['2year']['count'],
+                    $courseTotal,
+                    $sessions,
+                    $item['total']['count'],
+                ];
+                if (0 == $nextElement) {
+                    $nextElement = $indexCourseList;
+                }
+                $op[] = $coursesList[$indexCourseList];
+            } else {
+                $coursesList[$indexCourseList] = null;
+            }
+            if ($indexCourseList >= ($termina)) {
+                break;
+            }
+
+            if (1 == count($coursesList) % $pagged) {
+                $currentPage++;
+            }
+        }
+        $headerName = [
+            [get_lang('Course'), false],
+            [get_lang('Today'), false],
+            [get_lang('ThisWeek'), false],
+            [get_lang('ThisMonth'), false],
+            ["6 ".get_lang('MinMonths'), false],
+            ["1 ".get_lang('Year'), false],
+            ["2 ".get_lang('Years'), false],
+            [get_lang('NumAccess')." (".get_lang('Course').")", false],
+            [get_lang('NumAccess')." (".get_lang('Session').")", false],
+            [get_lang('AbsoluteTotal')." (".get_lang('Visited').")", false],
+        ];
+        $query_vars = [];
+        $query_vars['start'] = $nextElement;
+        $query_vars['report'] = 'courses_usage';
+        $paging_options = [];
+        $paging_options['per_page'] = $pagged;
+        $nextCourseIndex = ($start + $pagged);
+        $previousCourseIndex = ($start - 10) < 0 ? 0 : ($start - 10);
+
+        $pag = (int) ($coursesTotal / $pagged);
+        if ($pag < ($coursesTotal / $pagged)) {
+            $pag++;
+        }
+
+        $nextLink = Display::url(
+            Display::return_icon(
+                'action_next.png',
+                get_lang('NextPage'),
+                [],
+                ICON_SIZE_MEDIUM
+            ),
+            api_get_self()."?&start=$nextCourseIndex&report=courses_usage",
+            ['class' => 'btn']
+        );
+
+        $previousLink = Display::url(
+            Display::return_icon(
+                'action_prev.png',
+                get_lang('PreviousPage'),
+                [],
+                ICON_SIZE_MEDIUM
+            ),
+            api_get_self()."?&start=$previousCourseIndex&report=courses_usage",
+            ['class' => 'btn']
+        );
+        $table = Display::return_sortable_table(
+            $headerName,
+            $op,
+            'ASC',
+            $paging_options,
+            $query_vars);
+
+        $form->addHtml(
+            $table
+        );
+        $html = "<div class='col-md-12 row'><div class='col-md-6'>&nbsp;</div><div class='col-md-6'>";
+        $html .= ($pag > 1) ? $currentPage." / ".$pag : '';
+        $html .= ($previousCourseIndex > 1) ? $previousLink : '';
+        $html .= ($nextCourseIndex < $coursesTotal) ? $nextLink : '';
+        $html .= '</div>';
+        $form->addHtml($html);
+        $content = $form->returnForm();
+
+        break;
     case 'session_by_date':
         $sessions = [];
         if ($validated) {

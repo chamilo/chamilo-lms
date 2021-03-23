@@ -10946,6 +10946,32 @@ class Exercise
     }
 
     /**
+     * Returns true if the exercise is locked by percentage. an exercise attempt must be passed
+     *
+     * @param array $attemp
+     *
+     * @return bool
+     */
+    public function isBlockedByPercentage($attemp = []){
+        if(empty($attemp)) return false;
+        $extraFieldValue = new ExtraFieldValue('exercise');
+        $blockExercise = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $this->iId,
+            'blocking_percentage'
+        );
+        $blockPercentage= 0;
+        if ($blockExercise && isset($blockExercise['value']) && !empty($blockExercise['value'])) {
+            $blockPercentage = (int) $blockExercise['value'];
+        }
+        if ($attemp['exe_result'] <= $blockPercentage && $blockPercentage != 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    /**
      * When a student completes the number of attempts and fails the exam, she is enrolled in a series of remedial
      * courses BT#18165.
      *
@@ -11022,15 +11048,19 @@ class Exercise
             return null;
         }
         $canRemedial = false;
-        if (isset($bestAttempt['exe_result']) && $bestAttempt['exe_result'] != 0) {
-            $pass = ExerciseLib::isPassPercentageAttemptPassed(
-                $this,
-                $bestAttempt['exe_result'],
-                $bestAttempt['exe_weighting']
-            );
-            $canRemedial = false === $pass;
-            if (false == $canRemedial) {
-                return null;
+        if (isset($bestAttempt['exe_result'])) {
+            $bestAttempt['exe_result'] = (int) $bestAttempt['exe_result'];
+            $canRemedial = $this->isBlockedByPercentage($bestAttempt);
+            if ($bestAttempt['exe_result'] != 0 && false == $canRemedial) {
+                $pass = ExerciseLib::isPassPercentageAttemptPassed(
+                    $this,
+                    $bestAttempt['exe_result'],
+                    $bestAttempt['exe_weighting']
+                );
+                $canRemedial = false === $pass;
+                if (false == $canRemedial) {
+                    return null;
+                }
             }
         }
         $extraFieldValue = new ExtraFieldValue('exercise');

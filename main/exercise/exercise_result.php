@@ -290,7 +290,7 @@ if (null != $advanceCourseMessage) {
     );
 }
 $remedialMessage = null;
-if ($attempt_count >= $objExercise->selectAttempts()) {
+if ($attempt_count >= $objExercise->selectAttempts() || $objExercise->isBlockedByPercentage($exercise_stat_info)) {
     $remedialMessage = $objExercise->remedialCourseList(api_get_user_id(), api_get_session_id(), $exerciseStatInfo);
 }
 if (null != $remedialMessage) {

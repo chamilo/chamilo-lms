@@ -705,7 +705,7 @@ class SystemAnnouncementManager
         $whereUsersInGroup = '';
         if (0 != $groupId) {
             $tblGroupRelUser = Database::get_main_table(TABLE_USERGROUP_REL_USER);
-            $sql = "select user_id from $tblGroupRelUser where usergroup_id = $groupId";
+            $sql = "SELECT user_id FROM $tblGroupRelUser WHERE usergroup_id = $groupId";
             $result = Database::query($sql);
             $data = Database::store_result($result);
             $usersId = [];
@@ -823,7 +823,12 @@ class SystemAnnouncementManager
     /**
      * Returns the group announcements where the user is subscribed.
      *
-     * @param int $userId
+     * @param $userId
+     * @param $visible
+     *
+     * @throws \Exception
+     *
+     * @return array
      */
     public static function getAnnouncementsForGroups($userId, $visible)
     {
@@ -833,19 +838,16 @@ class SystemAnnouncementManager
         $tblUsrGrp = Database::get_main_table(TABLE_USERGROUP_REL_USER);
         $now = api_get_utc_datetime();
 
-        $sql = "
-        SELECT
-               sys_announcement.*
+        $sql = "SELECT sys_announcement.*
         FROM $tblSysAnnouncements AS sys_announcement
-            INNER JOIN $tblGrpAnnouncements AS announcement_rel_group ON
-                sys_announcement.id = announcement_rel_group.announcement_id
-        INNER JOIN $tblUsrGrp AS usergroup_rel_user ON
-            usergroup_rel_user.usergroup_id = announcement_rel_group.group_id
+        INNER JOIN $tblGrpAnnouncements AS announcement_rel_group
+            ON sys_announcement.id = announcement_rel_group.announcement_id
+        INNER JOIN $tblUsrGrp AS usergroup_rel_user
+            ON usergroup_rel_user.usergroup_id = announcement_rel_group.group_id
         WHERE
-              usergroup_rel_user.user_id = $userId AND
-              (sys_announcement.lang = '$userSelectedLanguage' OR sys_announcement.lang = '') AND
-              ('$now' >= sys_announcement.date_start AND '$now' <= sys_announcement.date_end)
-        ";
+            usergroup_rel_user.user_id = $userId AND
+            (sys_announcement.lang = '$userSelectedLanguage' OR sys_announcement.lang = '') AND
+            ('$now' >= sys_announcement.date_start AND '$now' <= sys_announcement.date_end)";
         $sql .= self::getVisibilityCondition($visible);
         $result = Database::query($sql);
         $data = Database::store_result($result, 'ASSOC');
@@ -871,17 +873,14 @@ class SystemAnnouncementManager
         $cut_size = 500;
         $now = api_get_utc_datetime();
         //Exclude announcement to groups
-        $sql = "
-        SELECT
-               sys_announcement.*
-        FROM $table as sys_announcement
-            LEFT JOIN $tblGrpAnnouncements AS announcement_rel_group ON
-                sys_announcement.id = announcement_rel_group.announcement_id
+        $sql = "SELECT sys_announcement.*
+            FROM $table as sys_announcement
+            LEFT JOIN $tblGrpAnnouncements AS announcement_rel_group
+                ON sys_announcement.id = announcement_rel_group.announcement_id
             WHERE
-                  (sys_announcement.lang = '$user_selected_language' OR sys_announcement.lang = '') AND
-                  ('$now' >= sys_announcement.date_start AND '$now' <= sys_announcement.date_end) and
-                  announcement_rel_group.group_id is null
-	      ";
+                (sys_announcement.lang = '$user_selected_language' OR sys_announcement.lang = '') AND
+                ('$now' >= sys_announcement.date_start AND '$now' <= sys_announcement.date_end) AND
+                announcement_rel_group.group_id is null";
 
         $sql .= self::getVisibilityCondition($visible);
 

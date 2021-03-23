@@ -827,7 +827,7 @@ class SystemAnnouncementManager
      */
     public static function getAnnouncementsForGroups($userId, $visible)
     {
-        $user_selected_language = Database::escape_string(api_get_interface_language());
+        $userSelectedLanguage = Database::escape_string(api_get_interface_language());
         $tblSysAnnouncements = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
         $tblGrpAnnouncements = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
         $tblUsrGrp = Database::get_main_table(TABLE_USERGROUP_REL_USER);
@@ -843,7 +843,7 @@ class SystemAnnouncementManager
             usergroup_rel_user.usergroup_id = announcement_rel_group.group_id
         WHERE
               usergroup_rel_user.user_id = $userId AND
-              (sys_announcement.lang = '$user_selected_language' OR sys_announcement.lang = '') AND
+              (sys_announcement.lang = '$userSelectedLanguage' OR sys_announcement.lang = '') AND
               ('$now' >= sys_announcement.date_start AND '$now' <= sys_announcement.date_end)
         ";
         $sql .= self::getVisibilityCondition($visible);

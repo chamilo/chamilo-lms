@@ -44,12 +44,12 @@ class ExternalTool
     /**
      * @ORM\Column(name="consumer_key", type="string", nullable=true)
      */
-    protected string $consumerKey;
+    protected ?string $consumerKey;
 
     /**
      * @ORM\Column(name="shared_secret", type="string", nullable=true)
      */
-    protected string $sharedSecret;
+    protected ?string $sharedSecret;
 
     /**
      * @ORM\Column(name="custom_params", type="text", nullable=true)

@@ -165,7 +165,7 @@ class CLpItem
      * @Gedmo\TreeLevel
      * @ORM\Column(name="lvl", type="integer")
      */
-    protected $lvl;
+    protected ?int $lvl;
 
     public function __construct()
     {
@@ -574,10 +574,7 @@ class CLpItem
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getLvl()
+    public function getLvl(): ?int
     {
         return $this->lvl;
     }

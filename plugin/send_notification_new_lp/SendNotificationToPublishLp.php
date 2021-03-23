@@ -15,7 +15,7 @@ class SendNotificationToPublishLp extends Plugin
     /**
      * SendNotificationToPublishLp constructor.
      */
-    public function __construct()
+    protected function __construct()
     {
         $this->tblExtraFieldOption = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
         parent::__construct(
@@ -58,7 +58,7 @@ class SendNotificationToPublishLp extends Plugin
      */
     public function install()
     {
-        $this->SaveNotificationField();
+        $this->saveNotificationField();
         $this->setNotifyExtrafieldData();
     }
 
@@ -66,7 +66,7 @@ class SendNotificationToPublishLp extends Plugin
      * Save the arrangement for notify_student_and_hrm_when_available, it is adjusted internally so that the values
      * match the necessary ones.
      */
-    public function SaveNotificationField()
+    public function saveNotificationField()
     {
         $schedule = new ExtraField('lp');
         $data = $this->getDataNotificationField();
@@ -131,29 +131,28 @@ class SendNotificationToPublishLp extends Plugin
     public function setNotifyExtrafieldData()
     {
         $options = [
-            0 => 'No',
-            1 => 'Yes',
+            0 => get_lang('No'),
+            1 => get_lang('Yes'),
         ];
         $notifyId = (int) $this->notifyStudentField['id'];
         if ($notifyId != 0) {
             for ($i = 0; $i < count($options); $i++) {
                 $order = $i + 1;
                 $extraFieldOptionValue = $options[$i];
-                if ($notifyId != null) {
-                    $query = "SELECT *
-                              FROM ".$this->tblExtraFieldOption."
-                              WHERE
-                                    option_value = $i AND
-                                    field_id = $notifyId";
+                $query = "SELECT *
+                          FROM ".$this->tblExtraFieldOption."
+                          WHERE
+                                option_value = $i AND
+                                field_id = $notifyId";
 
-                    $extraFieldOption = Database::fetch_assoc(Database::query($query));
-                    $extraFieldId = isset($extraFieldOption['id']) ? (int) ($extraFieldOption['id']) : 0;
+                $extraFieldOption = Database::fetch_assoc(Database::query($query));
+                $extraFieldId = isset($extraFieldOption['id']) ? (int)($extraFieldOption['id']) : 0;
 
-                    if (
-                        $extraFieldId != 0
-                        && $extraFieldOption['field_id'] == $notifyId) {
-                        // Update?
-                        $query = "UPDATE `".$this->tblExtraFieldOption."`
+                if (
+                    $extraFieldId != 0
+                    && $extraFieldOption['field_id'] == $notifyId) {
+                    // Update?
+                    $query = "UPDATE `".$this->tblExtraFieldOption."`
                         SET
                             `option_value` = $i,
                             `option_order` = $order,
@@ -161,15 +160,14 @@ class SendNotificationToPublishLp extends Plugin
                         WHERE
                             `field_id` = $notifyId
                             AND `id` = $extraFieldId";
-                    } else {
-                        $query = "
+                } else {
+                    $query = "
                         INSERT INTO ".$this->tblExtraFieldOption."
                             (`field_id`, `option_value`, `display_text`, `priority`, `priority_message`, `option_order`) VALUES
                             ( '$notifyId', $i, '$extraFieldOptionValue', NULL, NULL, '$order');
                         ";
-                    }
-                    Database::query($query);
                 }
+                Database::query($query);
             }
         }
     }

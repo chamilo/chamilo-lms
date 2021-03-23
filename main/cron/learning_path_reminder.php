@@ -39,7 +39,7 @@ if (!isset($activeMessageNewlp['default_value'])) {
  * @param string $lpName
  * @param string $link
  */
-function SendMessage($toUser, $fromUser, $courseName, $lpName, $link)
+function sendMessage($toUser, $fromUser, $courseName, $lpName, $link)
 {
     $toUserId = $toUser['user_id'];
     $subjectTemplate = new Template(
@@ -48,7 +48,8 @@ function SendMessage($toUser, $fromUser, $courseName, $lpName, $link)
         false,
         false,
         false,
-        false);
+        false
+    );
 
     $subjectLayout = $subjectTemplate->get_template(
         'mail/learning_path_reminder_subject.tpl'
@@ -60,7 +61,8 @@ function SendMessage($toUser, $fromUser, $courseName, $lpName, $link)
         false,
         false,
         false,
-        false);
+        false
+    );
     $bodyTemplate->assign('courseName', $courseName);
     $bodyTemplate->assign('lpName', $lpName);
     $bodyTemplate->assign('link', $link);
@@ -97,7 +99,6 @@ function getLpDataByArrayId($lpid = [])
     SELECT
         tblCourse.title AS course_name,
         tblCourse.`code` AS `code`,
-        tblCourse.id AS course_id,
         tblLp.id AS lp_id,
         tblLp.c_id AS c_id,
         tblLp.`name` AS `name`
@@ -108,10 +109,8 @@ function getLpDataByArrayId($lpid = [])
         tblLp.iid IN ( ".implode(',', $lpid)." )
 	";
     $result = Database::query($sql);
-    $data = Database::store_result($result, 'ASSOC');
-    Database::free_result($result);
     $return = [];
-    foreach ($data as $element) {
+    while ($element = Database::fetch_array($result)) {
         $return[$element['lp_id']] = $element;
     }
 
@@ -139,10 +138,8 @@ function getLpIdWithNotify()
 	      tblExtraFieldValues.`value` = 1
 	";
     $result = Database::query($sql);
-    $data = Database::store_result($result, 'ASSOC');
-    Database::free_result($result);
     $return = [];
-    foreach ($data as $element) {
+    while ($element = Database::fetch_array($result)) {
         $return[] = $element['lp_id'];
     }
 
@@ -165,14 +162,10 @@ function getTutorIdFromCourseRelUser($cId = 0, $lpId = 0)
         tblLp.c_id = $cId";
     $result = Database::query($sql);
     $data = Database::fetch_assoc($result);
-    foreach ($data as $usersId) {
-        return (int) $usersId;
-    }
-
-    return 0;
+    return (isset($data['user_id']))?(int)$data['user_id']:0;
 }
 
-function SendToArray(&$data, &$type, &$message, $lpId = 0)
+function sendToArray(&$data, &$type, &$message, $lpId = 0)
 {
     foreach ($data as $user) {
         $userName = $user['userInfo']['complete_name'];
@@ -180,7 +173,7 @@ function SendToArray(&$data, &$type, &$message, $lpId = 0)
         $fromUser = $user['fromUser'];
         $courseName = $user['courseName'];
         $lpName = $user['lpName'];
-        $send = SendMessage(
+        $send = sendMessage(
             $user['userInfo'],
             $fromUser,
             $courseName,
@@ -194,7 +187,7 @@ function SendToArray(&$data, &$type, &$message, $lpId = 0)
 /**
  * @return null
  */
-function LearningPaths()
+function learningPaths()
 {
     $lpItems = getLpIdWithNotify();
     if (count($lpItems) == 0) {
@@ -232,10 +225,10 @@ function LearningPaths()
         tblLp.id in ($lpItemsString)
     ";
     $result = Database::query($sql);
-    $data = Database::store_result($result, 'ASSOC');
-    Database::free_result($result);
     $groupUsers = [];
-    foreach ($data as $row) {
+
+
+    while ($row = Database::fetch_array($result)) {
         $lpId = (int) $row['lp_id'];
         $lpData = [];
         if (isset($lpsData[$lpId])) {
@@ -289,10 +282,8 @@ function LearningPaths()
 
     ";
     $result = Database::query($sql);
-    $data = Database::store_result($result, 'ASSOC');
-    Database::free_result($result);
     $groupUsers = [];
-    foreach ($data as $row) {
+    while ($row = Database::fetch_array($result)) {
         $lpId = (int) $row['lp_id'];
         $lpData = [];
         if (isset($lpsData[$lpId])) {
@@ -338,9 +329,7 @@ function LearningPaths()
     ";
 
     $result = Database::query($sql);
-    $data = Database::store_result($result, 'ASSOC');
-    Database::free_result($result);
-    foreach ($data as $row) {
+    while ($row = Database::fetch_array($result)) {
         $lpId = (int) $row['lp_id'];
         $sessionId = 0;
         if (isset($lpsData[$lpId])) {
@@ -391,9 +380,7 @@ function LearningPaths()
     ORDER BY tblSessionRelCourseRelUser.`status`
     ";
     $result = Database::query($sql);
-    $data = Database::store_result($result, 'ASSOC');
-    Database::free_result($result);
-    foreach ($data as $row) {
+    while ($row = Database::fetch_array($result)) {
         $lpId = (int) $row['lp_id'];
         $sessionId = 0;
         if (isset($lpsData[$lpId])) {
@@ -433,10 +420,10 @@ function LearningPaths()
         foreach ($sessions as $sessionId => $types) {
             foreach ($types as $type => $users) {
                 if ('LearnpathSubscription' == $type) {
-                    SendToArray($users, $type, $message, $lpId);
+                    sendToArray($users, $type, $message, $lpId);
                 } else {
                     if (!isset($itemProcessed[$lpId][$sessionId]['LearnpathSubscription'])) {
-                        SendToArray($users, $type, $message, $lpId);
+                        sendToArray($users, $type, $message, $lpId);
                     }
                 }
             }
@@ -445,6 +432,6 @@ function LearningPaths()
     echo "$message\n\n";
 }
 
-LearningPaths();
+learningPaths();
 
 exit();

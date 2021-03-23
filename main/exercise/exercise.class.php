@@ -10967,9 +10967,9 @@ class Exercise
             $blockPercentage = (int) $blockExercise['value'];
         }
         $percentage = 0;
-        if ($blockPercentage !=0) {
-            if(isset($attemp['exe_result']) && isset($attemp['exe_weighting'])){
-                $weigh = (int)$attemp['exe_weighting'];
+        if ($blockPercentage != 0) {
+            if (isset($attemp['exe_result']) && isset($attemp['exe_weighting'])) {
+                $weigh = (int) $attemp['exe_weighting'];
                 $weigh = (0 == $weigh) ? 1 : $weigh;
                 $percentage = float_format(
                     ($attemp['exe_result'] / $weigh) * 100,

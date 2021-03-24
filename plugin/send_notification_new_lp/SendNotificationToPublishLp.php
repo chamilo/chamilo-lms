@@ -152,18 +152,18 @@ class SendNotificationToPublishLp extends Plugin
                     $extraFieldId != 0
                     && $extraFieldOption['field_id'] == $notifyId) {
                     // Update?
-                    $query = "UPDATE `".$this->tblExtraFieldOption."`
+                    $query = "UPDATE ".$this->tblExtraFieldOption."
                         SET
-                            `option_value` = $i,
-                            `option_order` = $order,
-                            `display_text` = '$extraFieldOptionValue'
+                            option_value = $i,
+                            option_order = $order,
+                            display_text = '$extraFieldOptionValue'
                         WHERE
-                            `field_id` = $notifyId
-                            AND `id` = $extraFieldId";
+                            field_id = $notifyId
+                            AND id = $extraFieldId";
                 } else {
                     $query = "
                         INSERT INTO ".$this->tblExtraFieldOption."
-                            (`field_id`, `option_value`, `display_text`, `priority`, `priority_message`, `option_order`) VALUES
+                            (field_id, option_value, display_text, priority, priority_message, option_order) VALUES
                             ( '$notifyId', $i, '$extraFieldOptionValue', NULL, NULL, '$order');
                         ";
                 }

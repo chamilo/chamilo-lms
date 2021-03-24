@@ -1,0 +1,178 @@
+<?php
+
+/* For license terms, see /license.txt */
+
+use Chamilo\PluginBundle\Entity\TopLinks\TopLink;
+use Chamilo\PluginBundle\TopLinks\Form\LinkForm as TopLinkForm;
+
+require_once __DIR__.'/../../main/inc/global.inc.php';
+
+api_protect_admin_script();
+
+$plugin = TopLinksPlugin::create();
+$httpRequest = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+
+$pageBaseUrl = api_get_self();
+$em = Database::getManager();
+$linkRepo = $em->getRepository(TopLink::class);
+
+$pageActions = Display::url(
+    Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+    $pageBaseUrl
+);
+$pageContent = '';
+
+$interbreadcrumb[] = [
+    'name' => get_lang('Administration'),
+    'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
+];
+$interbreadcrumb[] = ['name' => $plugin->get_title(), 'url' => $pageBaseUrl];
+
+switch ($httpRequest->query->getAlpha('action', 'list')) {
+    case 'list':
+    default:
+        array_pop($interbreadcrumb); // Only show link to administration in breadcrumb
+
+        $pageActions = Display::url(
+            Display::return_icon('add.png', get_lang('AddLink'), [], ICON_SIZE_MEDIUM),
+            "$pageBaseUrl?".http_build_query(['action' => 'add'])
+        );
+
+        $table = new SortableTable(
+            'toplinks',
+            function () use ($linkRepo) {
+                return $linkRepo->count([]);
+            },
+            function ($offset, $limit, $column, $direction) use ($linkRepo) {
+                $links = $linkRepo->all($offset, $limit, $column, $direction);
+
+                return array_map(
+                    function (TopLink $link) {
+                        return [
+                            [$link->getTitle(), $link->getUrl()],
+                            $link->getId(),
+                        ];
+                    },
+                    $links
+                );
+            },
+            0
+        );
+        $table->set_header(0, get_lang('LinkName'));
+        $table->set_header(1, get_lang('Actions'), false, ['class' => 'th-head text-right'], ['class' => 'text-right']);
+        $table->set_column_filter(
+            0,
+            function (array $params) {
+                [$title, $url] = $params;
+
+                return "$title<br>".Display::url($url, $url);
+            }
+        );
+        $table->set_column_filter(
+            1,
+            function (int $id) use ($pageBaseUrl) {
+                return Display::url(
+                        Display::return_icon('edit.png', get_lang('Edit')),
+                        "$pageBaseUrl?".http_build_query(['action' => 'edit', 'link' => $id])
+                    )
+                    .PHP_EOL
+                    .Display::url(
+                        Display::return_icon('delete.png', get_lang('Delete')),
+                        "$pageBaseUrl?".http_build_query(['action' => 'delete', 'link' => $id])
+                    );
+            }
+        );
+
+        $pageContent = $table->return_table();
+        break;
+    case 'add':
+        $form = new TopLinkForm();
+        $form->createElements();
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+
+            $link = new TopLink();
+            $link
+                ->setTitle($values['title'])
+                ->setUrl($values['url'])
+                ->setTarget($values['target']);
+
+            $em->persist($link);
+            $em->flush();
+
+            Display::addFlash(
+                Display::return_message(get_lang('LinkAdded'), 'success')
+            );
+
+            header("Location: $pageBaseUrl");
+            exit;
+        }
+
+        $pageContent = $form->returnForm();
+        break;
+    case 'edit':
+        $link = $em->find(TopLink::class, $httpRequest->query->getInt('link'));
+
+        if (null === $link) {
+            Display::addFlash(
+                Display::return_message(get_lang('NotFound'), 'error')
+            );
+
+            header("Location: $pageBaseUrl");
+            exit;
+        }
+
+        $form = new TopLinkForm($link);
+        $form->createElements();
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+
+            $link
+                ->setTitle($values['title'])
+                ->setUrl($values['url'])
+                ->setTarget($values['target']);
+
+            $em->persist($link);
+            $em->flush();
+
+            Display::addFlash(
+                Display::return_message(get_lang('LinkModded'), 'success')
+            );
+
+            header("Location: $pageBaseUrl");
+            exit;
+        }
+
+        $form->setDefaults();
+
+        $pageContent = $form->returnForm();
+        break;
+    case 'delete':
+        $link = $em->find(TopLink::class, $httpRequest->query->getInt('link'));
+
+        if (null === $link) {
+            Display::addFlash(
+                Display::return_message(get_lang('NotFound'), 'error')
+            );
+
+            header("Location: $pageBaseUrl");
+            exit;
+        }
+
+        $em->remove($link);
+        $em->flush();
+
+        Display::addFlash(
+            Display::return_message(get_lang('LinkDeleted'), 'success')
+        );
+
+        header("Location: $pageBaseUrl");
+        exit;
+}
+
+$view = new Template($plugin->get_title());
+$view->assign('actions', Display::toolbarAction('xapi_actions', [$pageActions]));
+$view->assign('content', $pageContent);
+$view->display_one_col_template();

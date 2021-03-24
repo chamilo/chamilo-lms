@@ -41,6 +41,11 @@ if ('myspace' === $from) {
     $from_myspace = true;
     $this_section = 'session_my_space';
 }
+if(Session::has('download_inactive_users')){
+    $csvDownloadInactiveUsers = Session::read('download_inactive_users', []);
+    Session::erase('download_inactive_users');
+    Export::arrayToCsv($csvDownloadInactiveUsers, 'reporting_inactive_users');
+}
 
 // If the user is a HR director (drh)
 if (api_is_drh()) {
@@ -127,6 +132,9 @@ $js = "<script>
                 foldup(id);
             });
         }
+        $('#reminder_form_since').change(function(){
+            $('#download-csv').prop('href','".api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq().'&csv=1&since='."'+$('#reminder_form_since').val())
+        })
     })
 </script>";
 $htmlHeadXtra[] = $js;
@@ -584,7 +592,10 @@ if ($nbStudents > 0) {
     $form->addElement('hidden', 'cidReq', $courseInfo['code']);
     $form->addElement('hidden', 'id_session', api_get_session_id());
     $form->addButtonSend(get_lang('SendNotification'));
-
+    $form->addHtml('<a id="download-csv" href="#!" class=" btn btn-default " > '.
+        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_SMALL).
+        get_lang('ExportAsCSV')
+    .' </a>');
     $extraFieldSelect = TrackingCourseLog::display_additional_profile_fields();
     if (!empty($extraFieldSelect)) {
         $html .= $extraFieldSelect;
@@ -1048,6 +1059,29 @@ if ($export_csv) {
 
     Export::arrayToCsv($csvContentInSession, 'reporting_student_list');
     exit;
+}
+if (isset($_GET['csv']) && $_GET['csv'] == 1) {
+    $since = 6;
+    if (isset($_GET['since'])) {
+        if ($_GET['since'] === 'never') {
+            $since = 'never';
+        } else {
+            $since = (int)$_GET['since'];
+        }
+    }
+    $usersId = Tracking::getInactiveStudentsInCourse(
+        api_get_course_int_id(),
+        $since,
+        $sessionId
+    );
+    if (count($usersId) != 0) {
+        $csv_content[] = [get_lang('NamesAndLastNames')];
+        foreach($usersId as $userId){
+            $user = api_get_user_info($userId);
+            $csv_content[] = [$user['complete_name']];
+        }
+        Session::write('download_inactive_users', $csv_content);
+    }
 }
 Display::display_footer();
 

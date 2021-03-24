@@ -52,7 +52,8 @@ class Asset
      * @Assert\Choice({
      *     Asset::SCORM,
      *     Asset::WATERMARK,
-     *     Asset::CSS
+     *     Asset::CSS,
+     *     Asset::EXTRA_FIELD
      * },
      * message="Choose a valid category."
      * )

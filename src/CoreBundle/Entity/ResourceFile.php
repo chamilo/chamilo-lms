@@ -203,7 +203,7 @@ class ResourceFile
         return false !== strpos($mimeType, 'video');
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -377,9 +377,9 @@ class ResourceFile
     }
 
     /**
-     * @param File|UploadedFile $file
+     * @param File|UploadedFile|null $file
      */
-    public function setFile(File $file = null): self
+    public function setFile(?File $file = null): self
     {
         $this->file = $file;
 

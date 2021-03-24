@@ -248,7 +248,7 @@ class ResourceNode
     /**
      * Returns the children resource instances.
      *
-     * @return ArrayCollection|ResourceNode[]
+     * @return Collection|ResourceNode[]
      */
     public function getChildren()
     {
@@ -296,7 +296,7 @@ class ResourceNode
     }
 
     /**
-     * @return ArrayCollection|ResourceComment[]
+     * @return Collection|ResourceComment[]
      */
     public function getComments()
     {
@@ -424,7 +424,7 @@ class ResourceNode
     }
 
     /**
-     * @return ArrayCollection|ResourceLink[]
+     * @return Collection|ResourceLink[]
      */
     public function getResourceLinks()
     {
@@ -447,7 +447,7 @@ class ResourceNode
     }
 
     /**
-     * @return ArrayCollection|ResourceLink[]
+     * @return Collection|ResourceLink[]
      */
     public function hasSession(Session $session = null)
     {

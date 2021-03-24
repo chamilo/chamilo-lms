@@ -41,7 +41,7 @@ if ('myspace' === $from) {
     $from_myspace = true;
     $this_section = 'session_my_space';
 }
-if(Session::has('download_inactive_users')){
+if (Session::has('download_inactive_users')) {
     $csvDownloadInactiveUsers = Session::read('download_inactive_users', []);
     Session::erase('download_inactive_users');
     Export::arrayToCsv($csvDownloadInactiveUsers, 'reporting_inactive_users');
@@ -1066,7 +1066,7 @@ if (isset($_GET['csv']) && $_GET['csv'] == 1) {
         if ($_GET['since'] === 'never') {
             $since = 'never';
         } else {
-            $since = (int)$_GET['since'];
+            $since = (int) $_GET['since'];
         }
     }
     $usersId = Tracking::getInactiveStudentsInCourse(
@@ -1076,7 +1076,7 @@ if (isset($_GET['csv']) && $_GET['csv'] == 1) {
     );
     if (count($usersId) != 0) {
         $csv_content[] = [get_lang('NamesAndLastNames')];
-        foreach($usersId as $userId){
+        foreach ($usersId as $userId) {
             $user = api_get_user_info($userId);
             $csv_content[] = [$user['complete_name']];
         }

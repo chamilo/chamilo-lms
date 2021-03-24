@@ -11,15 +11,12 @@ use Chamilo\CoreBundle\ToolChain;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use League\Flysystem\FilesystemInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 trait NonResourceRepository
 {
     protected EntityRepository $repository;
-
-    protected FilesystemInterface $fs;
 
     protected EntityManager $entityManager;
 

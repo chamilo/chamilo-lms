@@ -20,7 +20,6 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\ToolChain;
-use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Cocur\Slugify\SlugifyInterface;
 use DateTime;
@@ -31,7 +30,6 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Exception;
-use League\Flysystem\FilesystemInterface;
 use LogicException;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Form\FormFactory;
@@ -49,8 +47,6 @@ use Throwable;
 abstract class ResourceRepository extends ServiceEntityRepository
 {
     protected EntityRepository $repository;
-
-    protected FilesystemInterface $fs;
 
     protected EntityManager $entityManager;
 

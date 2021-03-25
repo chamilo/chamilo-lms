@@ -162,8 +162,6 @@ switch ($httpRequest->query->getAlpha('action', 'list')) {
             exit;
         }
 
-        $form->setDefaults();
-
         $pageContent = $form->returnForm();
         break;
     case 'delete':

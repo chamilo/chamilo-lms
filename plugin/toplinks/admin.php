@@ -5,6 +5,8 @@
 use Chamilo\PluginBundle\Entity\TopLinks\TopLink;
 use Chamilo\PluginBundle\TopLinks\Form\LinkForm as TopLinkForm;
 
+$cidReset = true;
+
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_protect_admin_script();
@@ -16,6 +18,7 @@ $pageBaseUrl = api_get_self();
 $em = Database::getManager();
 $linkRepo = $em->getRepository(TopLink::class);
 
+$pageTitle = $plugin->get_title();
 $pageActions = Display::url(
     Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
     $pageBaseUrl
@@ -83,9 +86,18 @@ switch ($httpRequest->query->getAlpha('action', 'list')) {
             }
         );
 
-        $pageContent = $table->return_table();
-        break;
+        if ($table->total_number_of_items) {
+            $pageContent = $table->return_table();
+        } else {
+            $pageContent = Display::return_message(
+                get_lang('NoData'),
+                'info'
+            );
+        }
+    break;
     case 'add':
+        $pageTitle = get_lang('LinkAdd');
+
         $form = new TopLinkForm();
         $form->createElements();
 
@@ -112,6 +124,8 @@ switch ($httpRequest->query->getAlpha('action', 'list')) {
         $pageContent = $form->returnForm();
         break;
     case 'edit':
+        $pageTitle = get_lang('LinkMod');
+
         $link = $em->find(TopLink::class, $httpRequest->query->getInt('link'));
 
         if (null === $link) {
@@ -173,6 +187,7 @@ switch ($httpRequest->query->getAlpha('action', 'list')) {
 }
 
 $view = new Template($plugin->get_title());
+$view->assign('header', $pageTitle);
 $view->assign('actions', Display::toolbarAction('xapi_actions', [$pageActions]));
 $view->assign('content', $pageContent);
 $view->display_one_col_template();

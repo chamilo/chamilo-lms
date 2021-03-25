@@ -58,12 +58,6 @@ class LinkForm extends FormValidator
 
     public function createElements()
     {
-        if ($this->link) {
-            $this->addHeader(get_lang('LinkMod'));
-        } else {
-            $this->addHeader(get_lang('LinkAdd'));
-        }
-
         $this->addText('title', get_lang('LinkName'));
         $this->addUrl('url', 'URL');
         $this->addRule('url', get_lang('GiveURL'), 'url');

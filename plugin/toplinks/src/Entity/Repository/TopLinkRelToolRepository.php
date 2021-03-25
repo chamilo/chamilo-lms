@@ -7,6 +7,7 @@ namespace Chamilo\PluginBundle\Entity\TopLinks\Repository;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\PluginBundle\Entity\TopLinks\TopLink;
+use Chamilo\PluginBundle\Entity\TopLinks\TopLinkRelTool;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 
@@ -53,5 +54,25 @@ class TopLinkRelToolRepository extends EntityRepository
             ->setParameter('tools', array_column($linkTools, 'iid'))
             ->getQuery()
             ->execute();
+    }
+
+    public function getMissingCoursesForTool(int $linkId)
+    {
+        $qb = $this->_em->createQueryBuilder();
+
+        $subQb = $this->_em->createQueryBuilder();
+        $subQb
+            ->select('t.cId')
+            ->from(CTool::class, 't')
+            ->innerJoin(TopLinkRelTool::class, 'tlrt', Join::WITH, $subQb->expr()->eq('t.iid', 'tlrt.tool'))
+            ->where($subQb->expr()->eq('tlrt.link', ':link_id'));
+
+        return $qb
+            ->select('c')
+            ->from(Course::class, 'c')
+            ->where($qb->expr()->notIn('c.id', $subQb->getDQL()))
+            ->setParameter('link_id', $linkId)
+            ->getQuery()
+            ->getResult();
     }
 }

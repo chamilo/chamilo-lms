@@ -2,6 +2,7 @@
 
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course as CourseEntity;
 use Chamilo\PluginBundle\Entity\TopLinks\TopLink;
 use Chamilo\PluginBundle\Entity\TopLinks\TopLinkRelTool;
 use Chamilo\PluginBundle\TopLinks\Form\LinkForm as TopLinkForm;
@@ -75,16 +76,37 @@ switch ($httpRequest->query->getAlpha('action', 'list')) {
         );
         $table->set_column_filter(
             1,
-            function (int $id) use ($pageBaseUrl) {
-                return Display::url(
-                        Display::return_icon('edit.png', get_lang('Edit')),
-                        "$pageBaseUrl?".http_build_query(['action' => 'edit', 'link' => $id])
-                    )
-                    .PHP_EOL
-                    .Display::url(
-                        Display::return_icon('delete.png', get_lang('Delete')),
-                        "$pageBaseUrl?".http_build_query(['action' => 'delete', 'link' => $id])
+            function (int $id) use ($pageBaseUrl, $em, $plugin) {
+                $missingCourses = $em->getRepository(TopLinkRelTool::class)->getMissingCoursesForTool($id);
+                $countMissingCourses = count($missingCourses);
+
+                $actions = [];
+                $actions[] = Display::url(
+                    Display::return_icon('edit.png', get_lang('Edit')),
+                    "$pageBaseUrl?".http_build_query(['action' => 'edit', 'link' => $id])
+                );
+
+                if (count($missingCourses) > 0) {
+                    $actions[] = Display::url(
+                        Display::return_icon(
+                            'view_tree.png',
+                            sprintf($plugin->get_lang('ReplicateInXMissingCourses'), $countMissingCourses)
+                        ),
+                        "$pageBaseUrl?".http_build_query(['action' => 'replicate', 'link' => $id])
                     );
+                } else {
+                    $actions[] = Display::return_icon(
+                        'view_tree_na.png',
+                        $plugin->get_lang('AlreadyReplicatedInAllCourses')
+                    );
+                }
+
+                $actions[] = Display::url(
+                    Display::return_icon('delete.png', get_lang('Delete')),
+                    "$pageBaseUrl?".http_build_query(['action' => 'delete', 'link' => $id])
+                );
+
+                return implode(PHP_EOL, $actions);
             }
         );
 
@@ -199,6 +221,31 @@ switch ($httpRequest->query->getAlpha('action', 'list')) {
 
         Display::addFlash(
             Display::return_message(get_lang('LinkDeleted'), 'success')
+        );
+
+        header("Location: $pageBaseUrl");
+        exit;
+    case 'replicate':
+        $link = $em->find(TopLink::class, $httpRequest->query->getInt('link'));
+
+        if (null === $link) {
+            Display::addFlash(
+                Display::return_message(get_lang('NotFound'), 'error')
+            );
+
+            header("Location: $pageBaseUrl");
+            exit;
+        }
+
+        $missingCourses = $em->getRepository(TopLinkRelTool::class)->getMissingCoursesForTool($link->getId());
+
+        /** @var CourseEntity $missingCourse */
+        foreach ($missingCourses as $missingCourse) {
+            $plugin->addToolInCourse($missingCourse->getId(), $link);
+        }
+
+        Display::addFlash(
+            Display::return_message($plugin->get_lang('LinkReplicated'), 'success')
         );
 
         header("Location: $pageBaseUrl");

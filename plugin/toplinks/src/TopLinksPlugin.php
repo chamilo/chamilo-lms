@@ -3,6 +3,7 @@
 /* For license terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\TopLinks\TopLink;
+use Chamilo\PluginBundle\Entity\TopLinks\TopLinkRelTool;
 use Doctrine\ORM\Tools\SchemaTool;
 
 /**
@@ -48,12 +49,24 @@ class TopLinksPlugin extends Plugin implements HookPluginInterface
 
     public function addToolInCourse(int $courseId, TopLink $link)
     {
-        $this->createLinkToCourseTool(
+        $tool = $this->createLinkToCourseTool(
             $link->getTitle(),
             $courseId,
             null,
             'toplinks/start.php?'.http_build_query(['link' => $link->getId()])
         );
+
+        if (null === $tool) {
+            return;
+        }
+
+        $tool->setTarget($link->getTarget());
+
+        $link->addTool($tool);
+
+        $em = Database::getManager();
+        $em->persist($link);
+        $em->flush();
     }
 
     public function install()
@@ -63,6 +76,7 @@ class TopLinksPlugin extends Plugin implements HookPluginInterface
 
         $tableReferences = [
             'toplinks_link' => $em->getClassMetadata(TopLink::class),
+            'toplinks_link_rel_tool' => $em->getClassMetadata(TopLinkRelTool::class),
         ];
 
         $tablesExists = $schemaManager->tablesExist(array_keys($tableReferences));
@@ -91,6 +105,7 @@ class TopLinksPlugin extends Plugin implements HookPluginInterface
 
         $tableReferences = [
             'toplinks_link' => $em->getClassMetadata(TopLink::class),
+            'toplinks_link_rel_tool' => $em->getClassMetadata(TopLinkRelTool::class),
         ];
 
         $schemaTool = new SchemaTool($em);

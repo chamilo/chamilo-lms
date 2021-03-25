@@ -35,8 +35,8 @@ class TopLinkRelTool
     /**
      * @var \Chamilo\CourseBundle\Entity\CTool
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CTool")
-     * @ORM\JoinColumn(name="tool_id", referencedColumnName="iid")
+     * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CTool", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="tool_id", referencedColumnName="iid", nullable=true, onDelete="CASCADE")
      */
     private $tool;
 

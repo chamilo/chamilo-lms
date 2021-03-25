@@ -19,11 +19,10 @@ if ('/main/course_home/course_home.php' === $httpRequest->getScriptName() && !ap
     /** @var TopLinkRelTool $linkTool */
     foreach ($linkTools as $linkTool) {
         $toolIds[] = $linkTool->getTool()->getIid();
-    }
-    ?>
+    } ?>
     <script>
         $(function () {
-            var ids = JSON.parse('<?php echo json_encode($toolIds) ?>');
+            var ids = JSON.parse('<?php echo json_encode($toolIds); ?>');
 
             $(ids).each(function (index, id) {
                 var $toolA = $('#istooldesc_' + id).parents('.course-tool').parent();

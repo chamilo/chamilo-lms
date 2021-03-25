@@ -22,8 +22,6 @@ class LinkForm extends FormValidator
 
     /**
      * LinkForm constructor.
-     *
-     * @param \Chamilo\PluginBundle\Entity\TopLinks\TopLink|null $link
      */
     public function __construct(TopLink $link = null)
     {

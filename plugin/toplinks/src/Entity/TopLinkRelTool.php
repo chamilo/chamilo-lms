@@ -40,19 +40,11 @@ class TopLinkRelTool
      */
     private $tool;
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return TopLinkRelTool
-     */
     public function setId(int $id): TopLinkRelTool
     {
         $this->id = $id;
@@ -70,8 +62,6 @@ class TopLinkRelTool
 
     /**
      * @param \Chamilo\PluginBundle\Entity\TopLinks\TopLink $link
-     *
-     * @return TopLinkRelTool
      */
     public function setLink(TopLink $link): TopLinkRelTool
     {
@@ -80,19 +70,11 @@ class TopLinkRelTool
         return $this;
     }
 
-    /**
-     * @return \Chamilo\CourseBundle\Entity\CTool
-     */
     public function getTool(): CTool
     {
         return $this->tool;
     }
 
-    /**
-     * @param \Chamilo\CourseBundle\Entity\CTool $tool
-     *
-     * @return TopLinkRelTool
-     */
     public function setTool(CTool $tool): TopLinkRelTool
     {
         $this->tool = $tool;

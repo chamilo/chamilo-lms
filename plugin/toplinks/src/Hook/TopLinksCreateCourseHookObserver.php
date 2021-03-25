@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Course as CourseEntity;
 use Chamilo\PluginBundle\Entity\TopLinks\TopLink;
 
 /**

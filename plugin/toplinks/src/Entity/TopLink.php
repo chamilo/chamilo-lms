@@ -4,10 +4,8 @@
 
 namespace Chamilo\PluginBundle\Entity\TopLinks;
 
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -66,27 +64,16 @@ class TopLink
         $this->tools = new ArrayCollection();
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $title
-     *
-     * @return TopLink
-     */
     public function setTitle(string $title): TopLink
     {
         $this->title = $title;
@@ -94,19 +81,11 @@ class TopLink
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getUrl(): string
     {
         return $this->url;
     }
 
-    /**
-     * @param string $url
-     *
-     * @return TopLink
-     */
     public function setUrl(string $url): TopLink
     {
         $this->url = $url;
@@ -114,19 +93,11 @@ class TopLink
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getTarget(): string
     {
         return $this->target;
     }
 
-    /**
-     * @param string $target
-     *
-     * @return TopLink
-     */
     public function setTarget(string $target): TopLink
     {
         $this->target = $target;
@@ -134,19 +105,11 @@ class TopLink
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getIcon(): string
     {
         return $this->icon;
     }
 
-    /**
-     * @param string $icon
-     *
-     * @return TopLink
-     */
     public function setIcon(string $icon): TopLink
     {
         $this->icon = $icon;

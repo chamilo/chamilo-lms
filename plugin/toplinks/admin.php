@@ -3,6 +3,7 @@
 /* For license terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\TopLinks\TopLink;
+use Chamilo\PluginBundle\Entity\TopLinks\TopLinkRelTool;
 use Chamilo\PluginBundle\TopLinks\Form\LinkForm as TopLinkForm;
 
 $cidReset = true;
@@ -150,6 +151,8 @@ switch ($httpRequest->query->getAlpha('action', 'list')) {
 
             $em->persist($link);
             $em->flush();
+
+            $em->getRepository(TopLinkRelTool::class)->updateTools($link);
 
             Display::addFlash(
                 Display::return_message(get_lang('LinkModded'), 'success')

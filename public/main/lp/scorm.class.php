@@ -6,8 +6,7 @@ use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
-use League\Flysystem\Filesystem;
-use League\Flysystem\ZipArchive\ZipArchiveAdapter;
+use PhpZip\ZipFile;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -48,7 +47,7 @@ class scorm extends learnpath
      * @param    int    Learnpath ID in DB
      * @param    int    User ID
      */
-    public function __construct($entity, $course_info = null, $user_id = null)
+    public function __construct($entity = null, $course_info = null, $user_id = null)
     {
         $this->items = [];
         $this->subdir = '';
@@ -596,16 +595,17 @@ class scorm extends learnpath
             error_log("base file name is : ".$fileBaseName);
         }
 
-        $zipAdapter = new ZipArchiveAdapter($zipFilePath);
-        $filesystem = new Filesystem($zipAdapter);
-        $zipContentArray = $filesystem->listContents();
+        $zipFile = new ZipFile();
+        $zipFile->openFile($zipFilePath);
+        $zipContentArray = $zipFile->getEntries();
 
         $packageType = '';
         $manifestList = [];
         // The following loop should be stopped as soon as we found the right imsmanifest.xml (how to recognize it?).
         $realFileSize = 0;
         foreach ($zipContentArray as $thisContent) {
-            $fileName = $thisContent['path'];
+            $fileName = $thisContent->getName();
+            $size = $thisContent->getUncompressedSize();
             if (preg_match('~.(php.*|phtml)$~i', $fileName)) {
                 $file = $fileName;
                 $this->set_error_msg("File $file contains a PHP script");
@@ -619,10 +619,7 @@ class scorm extends learnpath
                 $packageType = 'scorm';
                 $manifestList[] = $fileName;
             }
-
-            if (isset($thisContent['size'])) {
-                $realFileSize += $thisContent['size'];
-            }
+            $realFileSize += $size;
         }
 
         // Now get the shortest path (basically, the imsmanifest that is the closest to the root).
@@ -637,7 +634,7 @@ class scorm extends learnpath
         }
 
         $this->subdir .= '/'.dirname($shortestPath); // Do not concatenate because already done above.
-        $this->manifestToString = $filesystem->read($shortestPath);
+        $this->manifestToString = $zipFile->getEntryContents($shortestPath);
 
         if ($this->debug) {
             error_log("Package type is now: '$packageType'");
@@ -711,7 +708,7 @@ class scorm extends learnpath
 
         // 2. Unzip file
         $repo = Container::getAssetRepository();
-        $repo->unZipFile($asset, $zipAdapter);
+        $repo->unZipFile($asset, $zipFile);
         $this->asset = $asset;
 
         /*if (is_dir($courseSysDir.$newDir) ||

@@ -843,5 +843,4 @@ class ScormApi
 
         return $return;
     }
-
 }

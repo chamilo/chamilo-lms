@@ -30,6 +30,8 @@ yarn install
 yarn run encore dev
 chmod -R 777 .
 ~~~~
+Note: on Ubuntu Groovy, the `yarn` package has been replaced by `yarnpkg`. In this case, replace `yarn` by `yarnpkg` in all commands above.
+
 
 Then enter the main/install/index.php and follow the UI instructions (database, admin user settings, etc).
 

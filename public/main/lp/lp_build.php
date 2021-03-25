@@ -48,37 +48,9 @@ $interbreadcrumb[] = ['url' => '#', 'name' => $learnPath->getNameNoTags()];
 $lp_theme_css = $learnPath->get_theme();
 $show_learn_path = true;
 Display::display_header('', 'Path');
-$suredel = trim(get_lang('Are you sure to delete'));
-
-?>
-<script>
-/* <![CDATA[ */
-function stripslashes(str) {
-    str=str.replace(/\\'/g,'\'');
-    str=str.replace(/\\"/g,'"');
-    str=str.replace(/\\\\/g,'\\');
-    str=str.replace(/\\0/g,'\0');
-    return str;
-}
-function confirmation(name) {
-    name=stripslashes(name);
-    if (confirm("<?php echo $suredel; ?> " + name + " ?")) {
-        return true;
-    } else {
-        return false;
-    }
-}
-</script>
-<?php
-
-/* DISPLAY SECTION */
 echo $learnPath->build_action_menu();
-
 echo '<div class="row">';
-echo '<div class="col-md-4">';
-// Build the tree with the menu items in it.
-echo $learnPath->return_new_tree();
-echo '</div>';
+echo $learnPath->showBuildSideBar();
 echo '<div class="col-md-8">';
 
 if (isset($is_success) && true === $is_success) {

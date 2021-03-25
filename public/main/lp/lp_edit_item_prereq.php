@@ -57,34 +57,10 @@ $interbreadcrumb[] = [
 
 Display::display_header(get_lang('Prerequisites'), 'Path');
 
-$suredel = trim(get_lang('Are you sure to delete'));
-?>
-<script>
-    function stripslashes(str) {
-        str=str.replace(/\\'/g,'\'');
-        str=str.replace(/\\"/g,'"');
-        str=str.replace(/\\\\/g,'\\');
-        str=str.replace(/\\0/g,'\0');
-        return str;
-    }
-    function confirmation(name) {
-        name=stripslashes(name);
-        if (confirm("<?php echo $suredel; ?> " + name + " ?")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-</script>
-<?php
-
-/* DISPLAY SECTION */
 echo $lp->build_action_menu();
 echo '<div class="row">';
-echo '<div class="col-md-3">';
-echo $lp->return_new_tree();
-echo '</div>';
-echo '<div class="col-md-9">';
+echo $lp->showBuildSideBar();
+echo '<div class="col-md-8">';
 echo '<div class="prerequisites">';
 if (isset($is_success) && true == $is_success) {
     echo $lp->displayItemMenu($lpItem);

@@ -125,90 +125,13 @@ if ('add_item' === $action && 'document' === $type) {
     ];
 }
 
-// Theme calls.
 $show_learn_path = true;
 $lp_theme_css = $learnPath->get_theme();
 Display::display_header(null, 'Path');
-
-$suredel = trim(get_lang('Are you sure to delete'));
-?>
-<script>
-function stripslashes(str) {
-    str=str.replace(/\\'/g,'\'');
-    str=str.replace(/\\"/g,'"');
-    str=str.replace(/\\\\/g,'\\');
-    str=str.replace(/\\0/g,'\0');
-    return str;
-}
-function confirmation(name) {
-    name=stripslashes(name);
-    if (confirm("<?php echo $suredel; ?> " + name + " ?")) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-$(function() {
-    //$('.scrollbar-inner').scrollbar();
-
-    $('#subtab ').on('click', 'a:first', function() {
-        window.location.reload();
-    });
-    expandColumnToggle('#hide_bar_template', {
-        selector: '#lp_sidebar'
-    }, {
-        selector: '#doc_form'
-    });
-
-    $('.lp-btn-associate-forum').on('click', function (e) {
-        var associate = confirm('<?php echo get_lang('This action will associate a forum thread to this learning path item. Do you want to proceed?'); ?>');
-
-        if (!associate) {
-            e.preventDefault();
-        }
-    });
-
-    $('.lp-btn-dissociate-forum').on('click', function (e) {
-        var dissociate = confirm('<?php echo get_lang('This action will dissociate the forum thread of this learning path item. Do you want to proceed?'); ?>');
-
-        if (!dissociate) {
-            e.preventDefault();
-        }
-    });
-
-    // hide the current template list for new documment until it tab clicked
-    $('#frmModel').hide();
-});
-
-// document template for new document tab handler
-$(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
-    var id = e.target.id;
-    if (id == 'subtab2') {
-        $('#frmModel').show();
-    } else {
-        $('#frmModel').hide();
-    }
-})
-</script>
-<?php
-
 echo $learnPath->build_action_menu();
 echo '<div class="row">';
-echo '<div id="lp_sidebar" class="col-md-4">';
-echo $learnPath->return_new_tree(null, true);
-$message = isset($_REQUEST['message']) ? $_REQUEST['message'] : null;
-
-// Show the template list.
-if (('document' === $type || 'step' === $type) && !isset($_GET['file'])) {
-    // Show the template list.
-    echo '<div id="frmModel" class="scrollbar-inner lp-add-item">';
-    echo '</div>';
-}
-echo '</div>';
-
+echo $learnPath->showBuildSideBar(null, true, $type);
 echo '<div id="doc_form" class="col-md-8">';
-
 $learnPath->displayResources();
 
 /*

@@ -93,8 +93,6 @@ $form = new FormValidator(
     null,
     ['enctype' => 'multipart/form-data']
 );
-$suredel = trim(get_lang('AreYouSureToDeleteJS'));
-
 $lpPathInfo = $lp->generate_lp_folder($courseInfo);
 $document = DocumentManager::createDefaultAudioFolder($courseInfo);
 $currentDir = '/audio';
@@ -126,11 +124,7 @@ $page = $lp->build_action_menu(
     $action
 );
 $page .= '<div class="row" style="overflow:hidden">';
-$page .= '<div id="lp_sidebar" class="col-md-4">';
-$page .= $lp->return_new_tree(null, true);
-
-// Show the template list.
-$page .= '</div>';
+$page .= $lp->showBuildSideBar(null, true);
 
 $recordVoiceForm = '<h3 class="page-header">'.get_lang('RecordYourVoice').'</h3>';
 $page .= '<div id="doc_form" class="col-md-8">';

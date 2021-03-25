@@ -69,72 +69,12 @@ $interbreadcrumb[] = [
     'name' => get_lang('Add learning object or activity'),
 ];
 
-// Theme calls.
 $show_learn_path = true;
 $lp_theme_css = $learnPath->get_theme();
-
 Display::display_header(get_lang('Edit'), 'Path');
-$suredel = trim(get_lang('Are you sure to delete'));
-?>
-<script>
-function stripslashes(str) {
-    str=str.replace(/\\'/g,'\'');
-    str=str.replace(/\\"/g,'"');
-    str=str.replace(/\\\\/g,'\\');
-    str=str.replace(/\\0/g,'\0');
-    return str;
-}
-function confirmation(name) {
-    name=stripslashes(name);
-    if (confirm("<?php echo $suredel; ?> " + name + " ?")) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-$(function() {
-    $('.scrollbar-inner').scrollbar();
-    expandColumnToggle('#hide_bar_template', {
-        selector: '#lp_sidebar'
-    }, {
-        selector: '#doc_form'
-    });
-
-    $('.lp-btn-associate-forum').on('click', function (e) {
-        var associate = confirm('<?php echo get_lang('This action will associate a forum thread to this learning path item. Do you want to proceed?'); ?>');
-
-        if (!associate) {
-            e.preventDefault();
-        }
-    });
-
-    $('.lp-btn-dissociate-forum').on('click', function (e) {
-        var dissociate = confirm('<?php echo get_lang('This action will dissociate the forum thread of this learning path item. Do you want to proceed?'); ?>');
-        if (!dissociate) {
-            e.preventDefault();
-        }
-    });
-});
-</script>
-<?php
-
 echo $learnPath->build_action_menu();
-
 echo '<div class="row">';
-echo '<div id="lp_sidebar" class="col-md-4">';
-$documentId = isset($_GET['path_item']) ? (int) $_GET['path_item'] : 0;
-$repo = Container::getDocumentRepository();
-$document = $repo->find($documentId);
-
-if ($document) {
-    echo $learnPath->return_new_tree();
-    // Show the template list
-    echo '<div id="frmModel" class="scrollbar-inner lp-add-item"></div>';
-} else {
-    echo $learnPath->return_new_tree();
-}
-echo '</div>';
+echo $learnPath->showBuildSideBar();
 echo '<div id="doc_form" class="col-md-8">';
 $excludeExtraFields = [
     'authors',

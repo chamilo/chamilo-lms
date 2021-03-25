@@ -20,7 +20,6 @@ class LearnPathItemForm
         switch ($action) {
             case 'add':
                 $form->addHeader(get_lang('Add'));
-
                 self::setItemTitle($form);
 
                 break;
@@ -44,7 +43,6 @@ class LearnPathItemForm
         $itemType = $lpItem->getItemType();
         $previousItemId = $lpItem->getPreviousItemId();
 
-        $arrHide = [];
         $count = count($arrLP);
         // Parent
         $parentSelect = $form->addSelect(
@@ -58,7 +56,7 @@ class LearnPathItemForm
         );
 
         $lpItemRepo = Container::getLpItemRepository();
-        $itemRoot = $lpItemRepo->findOneBy(['path' => 'root', 'lp' => $lp->get_id()]);
+        $itemRoot = $lpItemRepo->getItemRoot($lp->get_id());
         $parentSelect->addOption($lp->name, $itemRoot->getIid());
         /** @var CLpItem[] $sections */
         $sections = $lpItemRepo->findBy(['itemType' => 'dir', 'lp' => $lp->get_id()]);
@@ -125,24 +123,25 @@ class LearnPathItemForm
                 $document = $repo->find($lpItem->getPath());
             }
 
-            $editorConfig = [
-                'ToolbarSet' => 'LearningPathDocuments',
-                'Width' => '100%',
-                'Height' => '500',
-                'FullPage' => true,
-                //   'CreateDocumentDir' => $relative_prefix,
-                //'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
-                //'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/'.$relative_path,
-            ];
-
-            $renderer = $form->defaultRenderer();
-            $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp');
-            $form->addElement('html', '<div class="editor-lp">');
-            $form->addHtmlEditor('content_lp', null, null, true, $editorConfig, true);
-            $form->addElement('html', '</div>');
-
             if ($document) {
                 if ($document->getResourceNode()->hasEditableTextContent()) {
+                    $editorConfig = [
+                        'ToolbarSet' => 'LearningPathDocuments',
+                        'Width' => '100%',
+                        'Height' => '500',
+                        'FullPage' => true,
+                        //   'CreateDocumentDir' => $relative_prefix,
+                        //'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
+                        //'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/'.$relative_path,
+                    ];
+
+                    $renderer = $form->defaultRenderer();
+                    $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp');
+                    $form->addElement('html', '<div class="editor-lp">');
+                    $form->addHtmlEditor('content_lp', null, null, true, $editorConfig, true);
+                    $form->addElement('html', '</div>');
+
+
                     $form->addHidden('document_id', $document->getIid());
                     $content = $lp->display_document(
                         $document,

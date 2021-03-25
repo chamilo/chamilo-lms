@@ -87,69 +87,6 @@ if ('add_item' === $action && 'document' === $type) {
 $show_learn_path = true;
 $lp_theme_css = $learnPath->get_theme();
 
-$suredel = trim(get_lang('AreYouSureToDeleteJS'));
-?>
-    <script>
-        function stripslashes(str) {
-            str = str.replace(/\\'/g, '\'');
-            str = str.replace(/\\"/g, '"');
-            str = str.replace(/\\\\/g, '\\');
-            str = str.replace(/\\0/g, '\0');
-            return str;
-        }
-
-        function confirmation(name) {
-            name = stripslashes(name);
-            if (confirm("<?php echo $suredel; ?> " + name + " ?")) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        $(function () {
-            jQuery('.scrollbar-inner').scrollbar();
-
-            $('#subtab ').on('click', 'a:first', function () {
-                window.location.reload();
-            });
-            expandColumnToggle('#hide_bar_template', {
-                selector: '#lp_sidebar'
-            }, {
-                selector: '#doc_form'
-            });
-
-            $('.lp-btn-associate-forum').on('click', function (e) {
-                var associate = confirm('<?php echo get_lang('ConfirmAssociateForumToLPItem'); ?>');
-
-                if (!associate) {
-                    e.preventDefault();
-                }
-            });
-
-            $('.lp-btn-dissociate-forum').on('click', function (e) {
-                var dissociate = confirm('<?php echo get_lang('ConfirmDissociateForumToLPItem'); ?>');
-
-                if (!dissociate) {
-                    e.preventDefault();
-                }
-            });
-
-            // hide the current template list for new documment until it tab clicked
-            $('#frmModel').hide();
-        });
-
-        // document template for new document tab handler
-        $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
-            var id = e.target.id;
-            if (id == 'subtab2') {
-                $('#frmModel').show();
-            } else {
-                $('#frmModel').hide();
-            }
-        })
-    </script>
-<?php
 $extraField = [];
 $form = new FormValidator(
     'configure_homepage_'.$action,
@@ -326,15 +263,7 @@ echo $learnPath->build_action_menu(
 );
 
 echo '<div class="row">';
-echo '<div id="lp_sidebar" class="col-md-4">';
-echo $learnPath->return_new_tree(null, false);
-// Show the template list.
-if (('document' === $type || 'step' === $type) && !isset($_GET['file'])) {
-    // Show the template list.
-    echo '<div id="frmModel" class="scrollbar-inner lp-add-item">';
-    echo '</div>';
-}
-echo '</div>';
+echo $learnPath->showBuildSideBar(null, false, $type);
 $form->display();
 echo '</div>';
 echo '</div>';

@@ -159,10 +159,10 @@ if ('true' === api_get_setting('search_enabled')) {
     }
 }
 
-$hideTableOfContents = $learnPath->getHideTableOfContents();
+$hideTableOfContents = (int) $lp->getHideTocFrame();
 $defaults['lp_encoding'] = Security::remove_XSS($learnPath->encoding);
 $defaults['lp_name'] = Security::remove_XSS($learnPath->get_name());
-$defaults['lp_author'] = Security::remove_XSS($learnPath->get_author());
+$defaults['lp_author'] = Security::remove_XSS($lp->getAuthor());
 $defaults['hide_toc_frame'] = $hideTableOfContents;
 $defaults['category_id'] = $learnPath->getCategoryId();
 $defaults['accumulate_scorm_time'] = $learnPath->getAccumulateScormTime();

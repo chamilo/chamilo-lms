@@ -18,7 +18,7 @@ not in a sub folder inside a domain.
 
 ~~~~
 # on a fresh Ubuntu, you can prepare your server by issuing an apt command like the following
-apt update && apt -y upgrade && apt install apache2 libapache2-mod-php mariadb-client mariadb-server php-pear php-dev php-gd php-curl php-intl php-mysql php-mbstring php-zip php-xml php-cli php-apcu php-bcmath git unzip npm
+apt update && apt -y upgrade && apt install apache2 libapache2-mod-php mariadb-client mariadb-server php-pear php-dev php-gd php-curl php-intl php-mysql php-mbstring php-zip php-xml php-cli php-apcu php-bcmath php-soap git unzip npm
 # otherwise, you can use the following directly:
 git clone https://github.com/chamilo/chamilo-lms.git chamilo2
 cd chamilo2

@@ -91,12 +91,12 @@ class LinkForm extends FormValidator
                 'accept' => 'image/*',
             ]
         );
-        $allowed_picture_types = api_get_supported_image_extensions(false);
+        $allowedPictureTypes = api_get_supported_image_extensions(false);
         $this->addRule(
             'picture',
-            get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowed_picture_types).')',
+            get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
             'filetype',
-            $allowed_picture_types
+            $allowedPictureTypes
         );
         $this->addButtonSave(get_lang('SaveLink'), 'submitLink');
     }

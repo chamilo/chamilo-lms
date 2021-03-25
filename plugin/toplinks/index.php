@@ -6,7 +6,7 @@ use Chamilo\PluginBundle\Entity\TopLinks\TopLinkRelTool;
 
 $httpRequest = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 
-if ('/main/course_home/course_home.php' === $httpRequest->getScriptName() && !api_is_allowed_to_edit()) {
+if ('/main/course_home/course_home.php' === $httpRequest->getScriptName()) {
     $course = api_get_course_entity();
 
     $em = Database::getManager();

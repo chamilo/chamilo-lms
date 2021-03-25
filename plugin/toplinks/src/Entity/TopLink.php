@@ -45,7 +45,7 @@ class TopLink
      */
     private $target;
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="icon", type="string", nullable=true)
      */
@@ -105,7 +105,7 @@ class TopLink
         return $this;
     }
 
-    public function getIcon(): string
+    public function getIcon(): ?string
     {
         return $this->icon;
     }

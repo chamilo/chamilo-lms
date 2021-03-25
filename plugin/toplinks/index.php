@@ -18,16 +18,28 @@ if ('/main/course_home/course_home.php' === $httpRequest->getScriptName() && !ap
 
     /** @var TopLinkRelTool $linkTool */
     foreach ($linkTools as $linkTool) {
-        $toolIds[] = $linkTool->getTool()->getIid();
+        $toolIds[] = [
+            'id' => $linkTool->getTool()->getIid(),
+            'img' => $linkTool->getLink()->getIcon()
+                ? api_get_path(WEB_UPLOAD_PATH).'plugins/toplinks/'.$linkTool->getLink()->getIcon()
+                : null,
+        ];
     } ?>
     <script>
         $(function () {
             var ids = JSON.parse('<?php echo json_encode($toolIds); ?>');
 
-            $(ids).each(function (index, id) {
-                var $toolA = $('#istooldesc_' + id).parents('.course-tool').parent();
+            $(ids).each(function (index, iconTool) {
+                var $toolA = $('#tooldesc_' + iconTool.id);
+                var $toolImg = $toolA.find('img#toolimage_' + iconTool.id);
 
-                $toolA.prependTo($toolA.parent());
+                if (iconTool.img) {
+                    $toolImg.prop('src', iconTool.img);
+                }
+
+                var $block = $toolA.parents('.course-tool').parent();
+
+                $block.prependTo($block.parent());
             });
         });
     </script>

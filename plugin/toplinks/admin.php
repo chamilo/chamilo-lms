@@ -5,6 +5,7 @@
 use Chamilo\PluginBundle\Entity\TopLinks\TopLink;
 use Chamilo\PluginBundle\Entity\TopLinks\TopLinkRelTool;
 use Chamilo\PluginBundle\TopLinks\Form\LinkForm as TopLinkForm;
+use Symfony\Component\Filesystem\Filesystem;
 
 $cidReset = true;
 
@@ -114,6 +115,14 @@ switch ($httpRequest->query->getAlpha('action', 'list')) {
             $em->persist($link);
             $em->flush();
 
+            $iconPath = $form
+                ->setLink($link)
+                ->saveImage();
+
+            $link->setIcon($iconPath);
+
+            $em->flush();
+
             Display::addFlash(
                 Display::return_message(get_lang('LinkAdded'), 'success')
             );
@@ -144,12 +153,14 @@ switch ($httpRequest->query->getAlpha('action', 'list')) {
         if ($form->validate()) {
             $values = $form->exportValues();
 
+            $iconPath = $form->saveImage();
+
             $link
                 ->setTitle($values['title'])
                 ->setUrl($values['url'])
+                ->setIcon($iconPath)
                 ->setTarget($values['target']);
 
-            $em->persist($link);
             $em->flush();
 
             $em->getRepository(TopLinkRelTool::class)->updateTools($link);
@@ -174,6 +185,13 @@ switch ($httpRequest->query->getAlpha('action', 'list')) {
 
             header("Location: $pageBaseUrl");
             exit;
+        }
+
+        if ($link->getIcon()) {
+            $fullIconPath = api_get_path(SYS_UPLOAD_PATH).'plugins/toplinks/'.$link->getIcon();
+
+            $fs = new Filesystem();
+            $fs->remove($fullIconPath);
         }
 
         $em->remove($link);

@@ -17,7 +17,6 @@ class TopLinksPlugin extends Plugin implements HookPluginInterface
     protected function __construct()
     {
         $settings = [
-            'enable' => 'boolean',
         ];
 
         parent::__construct(

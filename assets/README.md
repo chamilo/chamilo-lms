@@ -6,13 +6,17 @@ For this, we first need to install yarn.
 Yarn is a JavaScript dependencies manager similar to Bower (that we also used for development in Chamilo 1.11.x), 
 only that Bower is deprecated now.
 
-To install yarn, follow the installation instructions here https://yarnpkg.com/en/docs/install
+To install yarn v2, follow the installation instructions here https://yarnpkg.com/getting-started/install
 
 After the installation run this command in the Chamilo root:
 
 ``yarn install``
 
 yarn will read the dependencies in the **packages.json** file and save the dependencies in the 'node_modules' folder (which must **NOT** be committed** to the Chamilo repository).
+
+To upgrade packages:
+
+``yarn up``
 
 # Configuring Encore/Webpack
 

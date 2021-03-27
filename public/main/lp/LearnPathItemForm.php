@@ -60,10 +60,9 @@ class LearnPathItemForm
         $parentSelect->addOption($lp->name, $itemRoot->getIid());
         /** @var CLpItem[] $sections */
         $sections = $lpItemRepo->findBy(['itemType' => 'dir', 'lp' => $lp->get_id()]);
-
         foreach ($sections as $key => $value) {
             $parentSelect->addOption(
-                Security::remove_XSS($value->getTitle()),
+                str_repeat('&nbsp;', $value->getLvl()).Security::remove_XSS($value->getTitle()),
                 $value->getIid()
             );
         }
@@ -75,7 +74,6 @@ class LearnPathItemForm
         }
 
         $arrHide = [];
-
         // Position
         for ($i = 0; $i < $count; $i++) {
             if (($arrLP[$i]['parent_item_id'] == $parentItemId && $arrLP[$i]['id'] != $itemId) ||

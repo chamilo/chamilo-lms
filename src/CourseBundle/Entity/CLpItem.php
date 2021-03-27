@@ -78,8 +78,6 @@ class CLpItem
     protected ?float $masteryScore = null;
 
     /**
-     * @Gedmo\SortablePosition
-     *
      * @ORM\Column(name="display_order", type="integer", nullable=false)
      */
     protected int $displayOrder;
@@ -130,15 +128,15 @@ class CLpItem
     protected ?float $prerequisiteMaxScore = null;
 
     /**
+     * @Gedmo\TreeRoot
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp", inversedBy="items", cascade={"persist"})
      * @ORM\JoinColumn(name="lp_id", referencedColumnName="iid")
      */
     protected CLp $lp;
 
     /**
-     * @Gedmo\SortableGroup
      * @Gedmo\TreeParent
-     * @ORM\ManyToOne(targetEntity="CLpItem", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="CLpItem", inversedBy="children", cascade="persist")
      * @ORM\JoinColumn(name="parent_item_id", referencedColumnName="iid", onDelete="SET NULL")
      */
     protected ?CLpItem $parent = null;
@@ -174,8 +172,14 @@ class CLpItem
         $this->ref = '';
         $this->launchData = '';
         $this->description = '';
+        $this->displayOrder = 0;
         $this->minScore = 0;
         $this->maxScore = 100.0;
+    }
+
+    public function __toString(): string
+    {
+        return (string) ($this->getIid().' '.$this->getTitle());
     }
 
     public function getIid(): ?int

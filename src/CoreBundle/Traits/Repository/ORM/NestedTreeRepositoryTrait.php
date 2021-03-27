@@ -900,6 +900,41 @@ trait NestedTreeRepositoryTrait
         }
     }
 
+    public function recoverNode($node)
+    {
+        $meta = $this->getClassMetadata();
+        $em = $this->getEntityManager();
+        $config = $this->listener->getConfiguration($em, $meta->name);
+        $doRecover = function ($root, &$count, $level = 0) use ($meta, $config, $node, $em, &$doRecover) {
+            $lft = $count++;
+            foreach ($this->getChildren($root, true) as $child) {
+                $doRecover($child, $count, $level + 1);
+            }
+            $rgt = $count++;
+            $meta->getReflectionProperty($config['left'])->setValue($root, $lft);
+            $meta->getReflectionProperty($config['right'])->setValue($root, $rgt);
+            if (isset($config['level'])) {
+                $meta->getReflectionProperty($config['level'])->setValue($root, $level);
+            }
+            $em->persist($root);
+        };
+
+        $count = 1;
+        $doRecover($node, $count);
+    }
+
+    public function verifyNode($node)
+    {
+        if (!$node->childCount()) {
+            return true; // tree is empty
+        }
+
+        $errors = array();
+        $this->verifyTree($errors, $node);
+
+        return $errors ?: true;
+    }
+
     /**
      * {@inheritDoc}
      */

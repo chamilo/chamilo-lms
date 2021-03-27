@@ -116,27 +116,49 @@ switch ($action) {
                 $title
             );
 
-            echo $learningPath->getBuildTree(true);
+            echo $itemId;
+            exit;
+            //echo $learningPath->getBuildTree(true);
         }
         break;
     case 'update_lp_item_order':
         if (api_is_allowed_to_edit(null, true)) {
             // $new_order gets a value like "647|0^648|0^649|0^"
             $new_order = $_REQUEST['new_order'] ?? [];
-            $sections = explode('^', $new_order);
+            $newOrder = $_REQUEST['new_order'] ?? [];
+
+            $orderList = json_decode($newOrder);
+            /*$sections = explode('^', $new_order);
             $sections = array_filter($sections);
             // We have to update parent_item_id, previous_item_id, next_item_id, display_order in the database
             $orderList = [];
             foreach ($sections as $items) {
                 [$id, $parentId] = explode('|', $items);
                 $orderList[$id] = $parentId;
-            }
-
+            }*/
             $learningPath = new learnpath($lp, api_get_course_info(), api_get_user_id());
             $learningPath->sortItemByOrderList($orderList);
 
             echo Display::return_message(get_lang('Saved'), 'confirm');
         }
+        break;
+    case 'get_lp_item_tree':
+        if (api_is_allowed_to_edit(null, true)) {
+            $parent = $lpItemRepo->getItemRoot($lpId);
+
+            $learningPath = new learnpath($lp, api_get_course_info(), api_get_user_id());
+            if ($learningPath) {
+                echo $learningPath->getBuildTree(true);
+            }
+        }
+        exit;
+        break;
+    case 'delete_item':
+        if (api_is_allowed_to_edit(null, true)) {
+            $learningPath = new learnpath($lp, api_get_course_info(), api_get_user_id());
+            $learningPath->delete_item($_REQUEST['id']);
+        }
+        exit;
         break;
     case 'record_audio':
         if (false == api_is_allowed_to_edit(null, true)) {

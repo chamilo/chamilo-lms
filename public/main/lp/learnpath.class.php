@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
@@ -22,6 +23,7 @@ use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CTool;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
+use PhpZip\ZipFile;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -38,7 +40,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class learnpath
 {
-    public const MAX_LP_ITEM_TITLE_LENGTH = 32;
+    public const MAX_LP_ITEM_TITLE_LENGTH = 36;
     public const STATUS_CSS_CLASS_NAME = [
         'not attempted' => 'scorm_not_attempted',
         'incomplete' => 'scorm_not_attempted',
@@ -113,12 +115,15 @@ class learnpath
     public $scormUrl;
     public $entity;
 
-    public function __construct(CLp $entity, $course_info, $user_id)
+    public function __construct(CLp $entity = null, $course_info, $user_id)
     {
         $debug = $this->debug;
         $user_id = (int) $user_id;
         $this->encoding = api_get_system_encoding();
-        $lp_id = (int) $entity->getIid();
+        $lp_id = 0;
+        if (null !== $entity) {
+            $lp_id = (int) $entity->getIid();
+        }
         $course_info = empty($course_info) ? api_get_course_info() : $course_info;
         $course_id = (int) $course_info['real_id'];
         $this->course_info = $course_info;
@@ -399,7 +404,7 @@ class learnpath
      * Added also the possibility to add a description.
      *
      * @param CLpItem $parent
-     * @param int     $previous
+     * @param int     $previousId
      * @param string  $type
      * @param int     $id resource ID (ref)
      * @param string  $title
@@ -412,7 +417,7 @@ class learnpath
      */
     public function add_item(
         ?CLpItem $parent,
-        $previous,
+        $previousId,
         $type,
         $id,
         $title,
@@ -427,67 +432,12 @@ class learnpath
             $this->course_info = api_get_course_info($this->cc);
             $course_id = $this->course_info['real_id'];
         }
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-
-        $previous = (int) $previous;
         $id = (int) $id;
         $max_time_allowed = (int) $max_time_allowed;
         if (empty($max_time_allowed)) {
             $max_time_allowed = 0;
         }
         $lpId = $this->get_id();
-        $parentCondition = ' AND parent_item_id IS NULL ';
-        $parentId = 0;
-        if (!empty($parent)) {
-            $parentId = $parent->getIid();
-            $parentCondition = " AND parent_item_id = $parentId  ";
-        }
-
-        $sql = "SELECT COUNT(iid) AS num
-                FROM $tbl_lp_item
-                WHERE
-                    lp_id = $lpId
-                    $parentCondition ";
-
-        $res_count = Database::query($sql);
-        $row = Database::fetch_array($res_count);
-        $num = $row['num'];
-
-        $tmp_previous = 0;
-        $display_order = 0;
-        $next = 0;
-        if ($num > 0) {
-            if (empty($previous)) {
-                $sql = "SELECT iid, next_item_id, display_order
-                        FROM $tbl_lp_item
-                        WHERE
-                            lp_id = $lpId AND
-                            (previous_item_id = 0 OR
-                            previous_item_id = $parentId)
-                            $parentCondition";
-                $result = Database::query($sql);
-                $row = Database::fetch_array($result);
-                if ($row) {
-                    $next = $row['iid'];
-                }
-            } else {
-                $previous = (int) $previous;
-                $sql = "SELECT iid, previous_item_id, next_item_id, display_order
-						FROM $tbl_lp_item
-                        WHERE
-                            lp_id = $lpId AND
-                            iid = $previous";
-                $result = Database::query($sql);
-                $row = Database::fetch_array($result);
-                if ($row) {
-                    $tmp_previous = $row['iid'];
-                    $next = $row['next_item_id'];
-                    $display_order = $row['display_order'];
-                }
-            }
-        }
-
-        $id = (int) $id;
         $max_score = 100;
         if ('quiz' === $type && $id) {
             $sql = 'SELECT SUM(ponderation)
@@ -517,7 +467,7 @@ class learnpath
             ->setMaxScore($max_score)
             ->setMaxTimeAllowed($max_time_allowed)
             ->setPrerequisite($prerequisites)
-            ->setDisplayOrder($display_order + 1)
+            //->setDisplayOrder($display_order + 1)
             //->setNextItemId((int) $next)
             //->setPreviousItemId($previous)
         ;
@@ -531,49 +481,7 @@ class learnpath
 
         $new_item_id = $lpItem->getIid();
         if ($new_item_id) {
-            /*if (!empty($next)) {
-                $sql = "UPDATE $tbl_lp_item
-                        SET previous_item_id = $new_item_id
-                        WHERE iid = $next AND item_type != '".TOOL_LP_FINAL_ITEM."'";
-                Database::query($sql);
-            }
-
-            // Update the item that should be before the new item.
-            if (!empty($tmp_previous)) {
-                $sql = "UPDATE $tbl_lp_item
-                        SET next_item_id = $new_item_id
-                        WHERE iid = $tmp_previous";
-                Database::query($sql);
-            }
-
-            $parentCondition = ' AND parent_item_id IS NULL ';
-            if (!empty($lpItem->getParentItemId())) {
-                $parentId = $lpItem->getParentItemId();
-                $parentCondition = " AND parent_item_id = $parentId  ";
-            }
-
-            // Update all the items after the new item.
-            $sql = "UPDATE $tbl_lp_item
-                        SET display_order = display_order + 1
-                    WHERE
-                        lp_id = $lpId AND
-                        iid <> $new_item_id AND
-                        display_order > $display_order
-                        $parentCondition
-                    ";
-            Database::query($sql);
-
-            // Update the item that should come after the new item.
-            $sql = "UPDATE $tbl_lp_item
-                    SET ref = $new_item_id
-                    WHERE iid = $new_item_id";
-            Database::query($sql);
-
-            $sql = "UPDATE $tbl_lp_item
-                    SET previous_item_id = ".$this->getLastInFirstLevel()."
-                    WHERE lp_id = $lpId AND item_type = '".TOOL_LP_FINAL_ITEM."'";
-            Database::query($sql);*/
-
+            // @todo fix upload audio.
             // Upload audio.
             /*if (!empty($_FILES['mp3']['name'])) {
                 // Create the audio folder if it does not exist yet.
@@ -977,13 +885,6 @@ class learnpath
                     lp_id = {$this->lp_id}";
         Database::query($sql);
 
-        /*$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
-        $link = 'lp/lp_controller.php?action=view&lp_id='.$this->lp_id;
-        // Delete tools
-        $sql = "DELETE FROM $tbl_tool
-                WHERE c_id = $course_id AND (link LIKE '$link%' AND image='scormbuilder.gif')";
-        Database::query($sql);*/
-
         $repo = Container::getLpRepository();
         $lp = $repo->find($this->lp_id);
         Database::getManager()->remove($lp);
@@ -1067,46 +968,6 @@ class learnpath
         $repo->removeFromTree($item);
         $em->flush();
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        // First select item to get previous, next, and display order.
-        /*
-        $sql_sel = "SELECT * FROM $lp_item WHERE iid = $id";
-        $res_sel = Database::query($sql_sel);
-        if (Database::num_rows($res_sel) < 1) {
-            return false;
-        }
-        $row = Database::fetch_array($res_sel);
-        $previous = $row['previous_item_id'];
-        $next = $row['next_item_id'];
-        $display = $row['display_order'];
-        $parent = $row['parent_item_id'];
-        $lp = $row['lp_id'];
-        // Delete children items.
-        $this->delete_children_items($id);
-        // Now delete the item.
-        $sql_del = "DELETE FROM $lp_item WHERE iid = $id";
-        Database::query($sql_del);
-        // Now update surrounding items.
-        $sql_upd = "UPDATE $lp_item SET next_item_id = $next
-                    WHERE iid = $previous";
-        Database::query($sql_upd);
-        $sql_upd = "UPDATE $lp_item SET previous_item_id = $previous
-                    WHERE iid = $next AND item_type != '".TOOL_LP_FINAL_ITEM."'";
-        Database::query($sql_upd);
-
-        $parentCondition = ' AND parent_item_id IS NULL ';
-        if (!empty($parent)) {
-            $parent = (int) $parent;
-            $parentCondition = " AND parent_item_id = $parent  ";
-        }
-
-        // Now update all following items with new display order.
-        $sql_all = "UPDATE $lp_item SET display_order = display_order-1
-                    WHERE
-                        lp_id = $lp AND
-                        display_order > $display
-                        $parentCondition
-                    ";
-        Database::query($sql_all);*/
 
         //Removing prerequisites since the item will not longer exist
         $sql_all = "UPDATE $lp_item SET prerequisite = ''
@@ -1208,112 +1069,8 @@ class learnpath
         $em->flush();
         /*$repo->verify();
         $repo->recover();*/
-        /*
-        $same_parent = $item->getParentItemId() == $parent;
-        $same_previous = $item->getPreviousItemId() == $previous;
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-
-        // TODO: htmlspecialchars to be checked for encoding related problems.
-        if (!($same_parent && $same_previous)) {
-            $old_parent = $item->getParentItemId();
-            $old_previous = $item->getPreviousItemId();
-            $old_next = $item->getNextItemId();
-            $old_order = $item->getDisplayOrder();
-            //$old_prerequisite = $row_select['prerequisite'];
-            //$old_max_time_allowed = $row_select['max_time_allowed'];
-
-            if (0 != $old_previous) {
-                // Next
-                $sql = "UPDATE $tbl_lp_item
-                        SET next_item_id = $old_next
-                        WHERE iid = $old_previous";
-                Database::query($sql);
-            }
-
-            if (!empty($old_next)) {
-                // Previous
-                $sql = "UPDATE $tbl_lp_item
-                        SET previous_item_id = $old_previous
-                        WHERE iid = $old_next";
-                Database::query($sql);
-            }
-
-            // display_order - 1 for every item with a display_order
-            // bigger then the display_order of the current item.
-            $sql = "UPDATE $tbl_lp_item
-                    SET display_order = display_order - 1
-                    WHERE
-                        display_order > $old_order AND
-                        lp_id = ".$this->lp_id." AND
-                        parent_item_id = $old_parent";
-            Database::query($sql);
-            if (empty($previous)) {
-                // Select the data of the item that should come after the current item.
-                $sql = "SELECT iid, display_order
-                        FROM $tbl_lp_item
-                        WHERE
-                            lp_id = ".$this->lp_id." AND
-                            parent_item_id = $parent AND
-                            previous_item_id = $previous";
-                $res_select_old = Database::query($sql);
-                $row_select_old = Database::fetch_array($res_select_old);
-
-                // If the new parent didn't have children before.
-                if (0 == Database::num_rows($res_select_old)) {
-                    $new_next = 0;
-                    $new_order = 1;
-                } else {
-                    $new_next = $row_select_old['iid'];
-                    $new_order = $row_select_old['display_order'];
-                }
-            } else {
-                // Select the data of the item that should come before the current item.
-                $sql = "SELECT next_item_id, display_order
-                        FROM $tbl_lp_item
-                        WHERE iid = $previous";
-                $res_select_old = Database::query($sql);
-                $row_select_old = Database::fetch_array($res_select_old);
-                $new_next = $row_select_old['next_item_id'];
-                $new_order = $row_select_old['display_order'] + 1;
-            }
-
-            // TODO: htmlspecialchars to be checked for encoding related problems.
-            // Update the current item with the new data.
-            $sql = "UPDATE $tbl_lp_item
-                    SET
-                        parent_item_id = $parent,
-                        previous_item_id = $previous,
-                        next_item_id = $new_next,
-                        display_order = $new_order
-                    WHERE iid = $id";
-            Database::query($sql);
-
-            if (0 != $previous) {
-                // Update the previous item's next_item_id.
-                $sql = "UPDATE $tbl_lp_item
-                        SET next_item_id = $id
-                        WHERE iid = $previous";
-                Database::query($sql);
-            }
-
-            if (!empty($new_next)) {
-                // Update the next item's previous_item_id.
-                $sql = "UPDATE $tbl_lp_item
-                        SET previous_item_id = $id
-                        WHERE iid = $new_next";
-                Database::query($sql);
-            }
-            // Update all the items with the same or a bigger display_order than the current item.
-            $sql = "UPDATE $tbl_lp_item
-                    SET display_order = display_order + 1
-                    WHERE
-                       lp_id = ".$this->get_id()." AND
-                       iid <> $id AND
-                       parent_item_id = $parent AND
-                       display_order >= $new_order";
-            Database::query($sql);
-        }*/
         $audio_update_sql = '';
+        // @todo implement audio upload.
         /*if (is_array($audio) && !empty($audio['tmp_name']) && 0 === $audio['error']) {
             // Create the audio folder if it does not exist yet.
             //$filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
@@ -1657,7 +1414,7 @@ class learnpath
         try {
             $lastId = Database::getManager()
                 ->createQuery('SELECT i.iid FROM ChamiloCourseBundle:CLpItem i
-                WHERE i.lpId = :lp AND i.parent IS NULL AND i.itemType != :type ORDER BY i.displayOrder DESC')
+                WHERE i.lp = :lp AND i.parent IS NULL AND i.itemType != :type ORDER BY i.displayOrder DESC')
                 ->setMaxResults(1)
                 ->setParameters(['lp' => $this->lp_id, 'type' => TOOL_LP_FINAL_ITEM])
                 ->getSingleScalarResult();
@@ -1688,7 +1445,7 @@ class learnpath
         $fullScreenText = get_lang('Back to normal screen');
 
         $settings = api_get_configuration_value('lp_view_settings');
-        $display = isset($settings['display']) ? $settings['display'] : false;
+        $display = $settings['display'] ?? false;
         $reportingIcon = '
             <a class="icon-toolbar"
                 id="stats_link"
@@ -1765,7 +1522,7 @@ class learnpath
         ) {
             $index++;
             if ($index == $this->max_ordered_items) {
-                if ('dir' == $this->items[$this->ordered_items[$index]]->get_type()) {
+                if ('dir' === $this->items[$this->ordered_items[$index]]->get_type()) {
                     return $this->index;
                 }
 
@@ -1797,19 +1554,19 @@ class learnpath
     }
 
     /**
-     * Returns the package type ('scorm','aicc','scorm2004','dokeos','ppt'...).
+     * Returns the package type ('scorm','aicc','scorm2004','ppt'...).
      *
      * Generally, the package provided is in the form of a zip file, so the function
      * has been written to test a zip file. If not a zip, the function will return the
      * default return value: ''
      *
-     * @param string $file_path the path to the file
+     * @param string $filePath the path to the file
      * @param string $file_name the original name of the file
      *
-     * @return string 'scorm','aicc','scorm2004','dokeos', 'error-empty-package'
+     * @return string 'scorm','aicc','scorm2004','error-empty-package'
      *                if the package is empty, or '' if the package cannot be recognized
      */
-    public static function getPackageType($file_path, $file_name)
+    public static function getPackageType($filePath, $file_name)
     {
         // Get name of the zip file without the extension.
         $file_info = pathinfo($file_name);
@@ -1827,9 +1584,9 @@ class learnpath
             return 'woogie';
         }
 
-        $zipFile = new PclZip($file_path);
-        // Check the zip content (real size and file extension).
-        $zipContentArray = $zipFile->listContent();
+        $zipFile = new ZipFile();
+        $zipFile->openFile($filePath);
+        $zipContentArray = $zipFile->getEntries();
         $package_type = '';
         $manifest = '';
         $aicc_match_crs = 0;
@@ -1837,26 +1594,26 @@ class learnpath
         $aicc_match_des = 0;
         $aicc_match_cst = 0;
         $countItems = 0;
-
         // The following loop should be stopped as soon as we found the right imsmanifest.xml (how to recognize it?).
-        if (is_array($zipContentArray)) {
+        if ($zipContentArray) {
             $countItems = count($zipContentArray);
             if ($countItems > 0) {
                 foreach ($zipContentArray as $thisContent) {
-                    if (preg_match('~.(php.*|phtml)$~i', $thisContent['filename'])) {
+                    $fileName = basename($thisContent->getName());
+                    if (preg_match('~.(php.*|phtml)$~i', $fileName)) {
                         // New behaviour: Don't do anything. These files will be removed in scorm::import_package.
-                    } elseif (false !== stristr($thisContent['filename'], 'imsmanifest.xml')) {
-                        $manifest = $thisContent['filename']; // Just the relative directory inside scorm/
+                    } elseif (false !== stristr($fileName, 'imsmanifest.xml')) {
+                        $manifest = $fileName; // Just the relative directory inside scorm/
                         $package_type = 'scorm';
                         break; // Exit the foreach loop.
                     } elseif (
-                        preg_match('/aicc\//i', $thisContent['filename']) ||
+                        preg_match('/aicc\//i', $fileName) ||
                         in_array(
-                            strtolower(pathinfo($thisContent['filename'], PATHINFO_EXTENSION)),
+                            strtolower(pathinfo($fileName, PATHINFO_EXTENSION)),
                             ['crs', 'au', 'des', 'cst']
                         )
                     ) {
-                        $ext = strtolower(pathinfo($thisContent['filename'], PATHINFO_EXTENSION));
+                        $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
                         switch ($ext) {
                             case 'crs':
                                 $aicc_match_crs = 1;
@@ -1912,7 +1669,7 @@ class learnpath
         if (isset($this->ordered_items[$index - 1])) {
             $index--;
             while (isset($this->ordered_items[$index]) &&
-                ('dir' == $this->items[$this->ordered_items[$index]]->get_type())
+                ('dir' === $this->items[$this->ordered_items[$index]]->get_type())
             ) {
                 $index--;
                 if ($index < 0) {
@@ -1946,7 +1703,6 @@ class learnpath
      */
     public function get_mediaplayer($lpItemId, $autostart = 'true')
     {
-        $course_id = api_get_course_int_id();
         $courseInfo = api_get_course_info();
         $lpItemId = (int) $lpItemId;
 
@@ -2109,7 +1865,7 @@ class learnpath
      * of its prerequisite is completed, considering the time availability and
      * the LP visibility.
      */
-    public static function is_lp_visible_for_student(CLp $lp, $student_id, Course $course, \Chamilo\CoreBundle\Entity\Session $session = null): bool
+    public static function is_lp_visible_for_student(CLp $lp, $student_id, Course $course, SessionEntity $session = null): bool
     {
         if (null === $course) {
             return false;
@@ -2117,14 +1873,6 @@ class learnpath
 
         $sessionId = $session ? $session->getId() : 0;
         $courseId = $course->getId();
-
-        /*$itemInfo = api_get_item_property_info(
-            $courseId,
-            TOOL_LEARNPATH,
-            $lp_id,
-            $sessionId
-        );*/
-
         $visibility = $lp->isVisible($course, $session);
 
         // If the item was deleted.
@@ -2440,30 +2188,6 @@ class learnpath
         }
 
         return 0;
-    }
-
-    /**
-     * Gets the learnpath author.
-     *
-     * @return string LP's author
-     */
-    public function get_author()
-    {
-        if (!empty($this->author)) {
-            return $this->author;
-        }
-
-        return '';
-    }
-
-    /**
-     * Gets hide table of contents.
-     *
-     * @return int
-     */
-    public function getHideTableOfContents()
-    {
-        return (int) $this->hide_toc_frame;
     }
 
     /**
@@ -2815,64 +2539,6 @@ class learnpath
     }
 
     /**
-     * Generate the tree of contents for this learnpath as an associative array tree
-     * with keys id, title, status, type, description, path, parent_id, children
-     * (title and descriptions as secured)
-     * and clues for CSS class composition:
-     *  - booleans is_current, is_parent_of_current, is_chapter
-     *  - string status_css_class_name.
-     *
-     * @param $parentId int restrict returned list to children of this parent
-     *
-     * @return array TOC as a table
-     */
-    public function getTOCTree($parentId = 0)
-    {
-        $toc = [];
-        $currentItemId = $this->get_current_item_id();
-
-        foreach ($this->ordered_items as $itemId) {
-            $item = $this->items[$itemId];
-            if ($item->get_parent() == $parentId) {
-                $title = $item->get_title();
-                if (empty($title)) {
-                    $title = self::rl_get_resource_name(api_get_course_id(), $this->get_id(), $itemId);
-                }
-
-                $itemData = [
-                    'id' => $itemId,
-                    'title' => Security::remove_XSS($title),
-                    'status' => $item->get_status(),
-                    'level' => $item->get_level(), // FIXME should not be needed
-                    'type' => $item->get_type(),
-                    'description' => Security::remove_XSS($item->get_description()),
-                    'path' => $item->get_path(),
-                    'parent_id' => $item->get_parent(),
-                    'children' => $this->getTOCTree($itemId),
-                    'is_current' => ($itemId == $currentItemId),
-                    'is_parent_of_current' => false,
-                    'is_chapter' => in_array($item->get_type(), self::getChapterTypes()),
-                    'status_css_class_name' => $this->getStatusCSSClassName($item->get_status()),
-                    'current_id' => $currentItemId, // FIXME should not be needed, not a property of item
-                ];
-
-                if (!empty($itemData['children'])) {
-                    foreach ($itemData['children'] as $child) {
-                        if ($child['is_current'] || $child['is_parent_of_current']) {
-                            $itemData['is_parent_of_current'] = true;
-                            break;
-                        }
-                    }
-                }
-
-                $toc[] = $itemData;
-            }
-        }
-
-        return $toc;
-    }
-
-    /**
      * Generate and return the table of contents for this learnpath. The JS
      * table returned is used inside of scorm_api.php.
      *
@@ -3002,137 +2668,11 @@ class learnpath
         return $list;
     }
 
-    /**
-     * @return array
-     */
-    public static function getChapterTypes()
+    public static function getChapterTypes(): array
     {
         return [
             'dir',
         ];
-    }
-
-    /**
-     * Uses the table generated by get_toc() and returns an HTML-formattedstring ready to display.
-     *
-     * @param $tree
-     *
-     * @return array HTML TOC ready to display
-     */
-    public function getParentToc($tree)
-    {
-        if (empty($tree)) {
-            $tree = $this->get_toc();
-        }
-        $dirTypes = self::getChapterTypes();
-        $myCurrentId = $this->get_current_item_id();
-        $listParent = [];
-        $listChildren = [];
-        $listNotParent = [];
-        $list = [];
-        foreach ($tree as $subtree) {
-            if (in_array($subtree['type'], $dirTypes)) {
-                $listChildren = $this->getChildrenToc($tree, $subtree['id']);
-                $subtree['children'] = $listChildren;
-                if (!empty($subtree['children'])) {
-                    foreach ($subtree['children'] as $subItem) {
-                        if ($subItem['id'] == $this->current) {
-                            $subtree['parent_current'] = 'in';
-                            $subtree['current'] = 'on';
-                        }
-                    }
-                }
-                $listParent[] = $subtree;
-            }
-            if (!in_array($subtree['type'], $dirTypes) && null == $subtree['parent']) {
-                if (array_key_exists($subtree['status'], self::STATUS_CSS_CLASS_NAME)) {
-                    $cssStatus = self::STATUS_CSS_CLASS_NAME[$subtree['status']];
-                }
-
-                $title = Security::remove_XSS($subtree['title']);
-                unset($subtree['title']);
-
-                if (empty($title)) {
-                    $title = self::rl_get_resource_name(api_get_course_id(), $this->get_id(), $subtree['id']);
-                }
-                $classStyle = null;
-                if ($subtree['id'] == $this->current) {
-                    $classStyle = 'scorm_item_normal '.$classStyle.'scorm_highlight';
-                } elseif (!in_array($subtree['type'], $dirTypes)) {
-                    $classStyle = 'scorm_item_normal '.$classStyle.' ';
-                }
-                $subtree['title'] = $title;
-                $subtree['class'] = $classStyle.' '.$cssStatus;
-                $subtree['url'] = $this->get_link('http', $subtree['id'], $tree);
-                $subtree['current_id'] = $myCurrentId;
-                $listNotParent[] = $subtree;
-            }
-        }
-
-        $list['are_parents'] = $listParent;
-        $list['not_parents'] = $listNotParent;
-
-        return $list;
-    }
-
-    /**
-     * Uses the table generated by get_toc() and returns an HTML-formattedstring ready to display.
-     *
-     * @param array $tree
-     * @param int   $id
-     * @param bool  $parent
-     *
-     * @return array HTML TOC ready to display
-     */
-    public function getChildrenToc($tree, $id, $parent = true)
-    {
-        if (empty($tree)) {
-            $tree = $this->get_toc();
-        }
-
-        $dirTypes = self::getChapterTypes();
-        $currentItemId = $this->get_current_item_id();
-        $list = [];
-
-        foreach ($tree as $subtree) {
-            $subtree['tree'] = null;
-
-            if (!in_array($subtree['type'], $dirTypes) && $subtree['parent'] == $id) {
-                if ($subtree['id'] == $this->current) {
-                    $subtree['current'] = 'active';
-                } else {
-                    $subtree['current'] = null;
-                }
-                if (array_key_exists($subtree['status'], self::STATUS_CSS_CLASS_NAME)) {
-                    $cssStatus = self::STATUS_CSS_CLASS_NAME[$subtree['status']];
-                }
-
-                $title = Security::remove_XSS($subtree['title']);
-                unset($subtree['title']);
-                if (empty($title)) {
-                    $title = self::rl_get_resource_name(api_get_course_id(), $this->get_id(), $subtree['id']);
-                }
-
-                $classStyle = null;
-                if ($subtree['id'] == $this->current) {
-                    $classStyle = 'scorm_item_normal '.$classStyle.'scorm_highlight';
-                } elseif (!in_array($subtree['type'], $dirTypes)) {
-                    $classStyle = 'scorm_item_normal '.$classStyle.' ';
-                }
-
-                if (in_array($subtree['type'], $dirTypes)) {
-                    $subtree['title'] = stripslashes($title);
-                } else {
-                    $subtree['title'] = $title;
-                    $subtree['class'] = $classStyle.' '.$cssStatus;
-                    $subtree['url'] = $this->get_link('http', $subtree['id'], $tree);
-                    $subtree['current_id'] = $currentItemId;
-                }
-                $list[] = $subtree;
-            }
-        }
-
-        return $list;
     }
 
     /**
@@ -3144,7 +2684,6 @@ class learnpath
      */
     public function getListArrayToc($toc_list = [])
     {
-
         $lpItemRepo = Container::getLpItemRepository();
         $itemRoot = $lpItemRepo->getItemRoot($this->get_id());
         $options = [
@@ -3257,20 +2796,6 @@ class learnpath
         }
 
         return $html;
-    }
-
-    /**
-     * Gets the learnpath maker name - generally the editor's name.
-     *
-     * @return string Learnpath maker name
-     */
-    public function get_maker()
-    {
-        if (!empty($this->maker)) {
-            return $this->maker;
-        }
-
-        return '';
     }
 
     /**
@@ -5441,8 +4966,9 @@ class learnpath
      */
     public function overview()
     {
+        exit;
         $return = '';
-        $update_audio = isset($_GET['updateaudio']) ? $_GET['updateaudio'] : null;
+        $update_audio = $_GET['updateaudio'] ?? null;
 
         // we need to start a form when we want to update all the mp3 files
         if ('true' == $update_audio) {
@@ -5749,8 +5275,8 @@ class learnpath
                         ['class' => 'btn btn-default order_items', 'data-dir' => 'down', 'data-id' => $arrLP[$i]['id']]
                     );
                 }
-
                 $delete_icon .= ' <a
+
                     href="'.$mainUrl.'&action=delete_item&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'"
                     onclick="return confirmation(\''.addslashes($title).'\');"
                     class="btn btn-default">';
@@ -5960,13 +5486,125 @@ class learnpath
         return $html;
     }
 
+    public function showBuildSideBar($updateAudio = false, $dropElementHere = false, $type = null)
+    {
+        $sureToDelete = trim(get_lang('AreYouSureToDeleteJS'));
+
+        $ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?lp_id='.$this->get_id().'&'.api_get_cidreq();
+
+        $content = "
+        <script>
+            function confirmation(name) {
+                if (confirm('$sureToDelete' + name)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+
+            function refreshTree() {
+                var params = '&a=get_lp_item_tree';
+                $.get(
+                    '".$ajax_url."',
+                    params,
+                    function(result) {
+                        $('#lp_item_list').html(result);
+                    }
+                );
+            }
+
+
+
+            $(function () {
+                //$('.scrollbar-inner').scrollbar();
+                $('#subtab').on('click', 'a:first', function() {
+                    window.location.reload();
+                });
+                $('#subtab ').on('click', 'a:first', function () {
+                    window.location.reload();
+                });
+                expandColumnToggle('#hide_bar_template', {
+                    selector: '#lp_sidebar'
+                }, {
+                    selector: '#doc_form'
+                });
+
+                $('.lp-btn-associate-forum').on('click', function (e) {
+                    var associate = confirm('".get_lang('ConfirmAssociateForumToLPItem')."');
+                    if (!associate) {
+                        e.preventDefault();
+                    }
+                });
+
+                $('.lp-btn-dissociate-forum').on('click', function (e) {
+                    var dissociate = confirm('".get_lang('ConfirmDissociateForumToLPItem')."');
+                    if (!dissociate) {
+                        e.preventDefault();
+                    }
+                });
+
+                // hide the current template list for new documment until it tab clicked
+                $('#frmModel').hide();
+            });
+
+            // document template for new document tab handler
+            $(document).on('shown.bs.tab', 'a[data-toggle=\"tab\"]', function (e) {
+                var id = e.target.id;
+                if (id == 'subtab2') {
+                    $('#frmModel').show();
+                } else {
+                    $('#frmModel').hide();
+                }
+            });
+
+          function deleteItem(event) {
+          console.log($(event));
+            var id = $(event).attr('data-id');
+            var title = $(event).attr('data-title');
+            var params = '&a=delete_item&id=' + id;
+            if (confirmation(title)) {
+                $.get(
+                    '".$ajax_url."',
+                    params,
+                    function(result) {
+                        refreshTree();
+                    }
+                );
+            }
+        }
+        </script>";
+
+        $content .= '<div id="lp_sidebar" class="col-md-4">';
+        $content .= $this->return_new_tree($updateAudio, $dropElementHere);
+
+        $documentId = isset($_GET['path_item']) ? (int) $_GET['path_item'] : 0;
+
+        $repo = Container::getDocumentRepository();
+        $document = $repo->find($documentId);
+        if ($document) {
+            // Show the template list
+            $content .= '<div id="frmModel" class="scrollbar-inner lp-add-item"></div>';
+        }
+
+        // Show the template list.
+        if (('document' === $type || 'step' === $type) && !isset($_GET['file'])) {
+            // Show the template list.
+            $content .= '<div id="frmModel" class="scrollbar-inner lp-add-item">';
+            $content .= '</div>';
+        }
+        $content .= '</div>';
+
+        echo $content;
+    }
+
     /**
-     * @param string $update_audio
-     * @param bool   $drop_element_here
+     * @param bool  $updateAudio
+     * @param bool   $dropElement
      *
      * @return string
      */
-    public function return_new_tree($update_audio = 'false', $drop_element_here = false)
+    public function return_new_tree($updateAudio = false, $dropElement = false)
     {
         /*$result = $this->processBuildMenuElements($update_audio);
         $list = '<ul id="lp_item_list">';
@@ -5985,13 +5623,7 @@ class learnpath
         }
         $list .= '</ul>';*/
 
-
-
-        /*if ($drop_element_here) {
-            $list .= Display::return_message(get_lang('Drag and drop an element here'));
-        }*/
-
-        $list = $this->getBuildTree();
+        $list = $this->getBuildTree(false, $dropElement);
 
         $return = Display::panelCollapse(
             $this->name,
@@ -6002,14 +5634,14 @@ class learnpath
             'scorm-list-collapse'
         );
 
-        if ('true' === $update_audio) {
+        if ($updateAudio) {
             //$return = $result['return_audio'];
         }
 
         return $return;
     }
 
-    public function getBuildTree($noWrapper = false)
+    public function getBuildTree($noWrapper = false, $dropElement = false)
     {
         $mainUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();
 
@@ -6050,13 +5682,16 @@ class learnpath
                     if ($noWrapper) {
                         return '';
                     }
-                    return '<ul id="lp_item_list">';
+                    return '<ul id="lp_item_list" class="list-group nested-sortable">';
                 }
 
-                return '<ul class="record li_container">';
+                return '<ul class="list-group nested-sortable">';
             },
-            'rootClose' => function($tree) use ($noWrapper)  {
+            'rootClose' => function($tree) use ($noWrapper, $dropElement)  {
                 if ($tree[0]['lvl'] === 1) {
+                    /*if ($dropElement) {
+                        return Display::return_message(get_lang('Drag and drop an element here'));
+                    }*/
                     if ($noWrapper) {
                         return '';
                     }
@@ -6065,11 +5700,13 @@ class learnpath
                 return '</ul>';
             },
             'childOpen' => function($child) {
-                return  '<li id="'.$child['iid'].'" class="record li_container">';
+                $id = $child['iid'];
+                return '<li id="'.$id.'" data-id="'.$id.'"  class="list-group-item nested-'.$child['lvl'].'">';
             },
-            'childClose' => '</li>',
+            'childClose' => '',
             'nodeDecorator' => function ($node) use ($mainUrl, $previewImage, $upIcon, $downIcon) {
-                $title = $node['title'];
+                $fullTitle = $node['title'];
+                $title = cut($fullTitle, self::MAX_LP_ITEM_TITLE_LENGTH);
                 $itemId = $node['iid'];
                 $type = $node['itemType'];
                 $lpId = $this->get_id();
@@ -6121,7 +5758,8 @@ class learnpath
                 $editIcon = '';
                 $editIcon .= '<a
                     href="'.$mainUrl.'&action=edit_item&view=build&id='.$itemId.'&lp_id='.$lpId.'&path_item='.$node['path'].'"
-                    class="btn btn-default">';
+                    class="btn btn-default"
+                    >';
                 $editIcon .= Display::return_icon(
                     'edit.png',
                     get_lang('Edit section description/name'),
@@ -6130,7 +5768,7 @@ class learnpath
                 );
                 $editIcon .= '</a>';
                 $orderIcons = '';
-                if ('final_item' !== $type) {
+                /*if ('final_item' !== $type) {
                     $orderIcons = Display::url(
                         $upIcon,
                         'javascript:void(0)',
@@ -6141,11 +5779,13 @@ class learnpath
                         'javascript:void(0)',
                         ['class' => 'btn btn-default order_items', 'data-dir' => 'down', 'data-id' => $itemId]
                     );
-                }
+                }*/
 
                 $deleteIcon = ' <a
-                    href="'.$mainUrl.'&action=delete_item&id='.$itemId.'&lp_id='.$lpId.'"
-                    onclick="return confirmation(\''.addslashes($title).'\');"
+                    data-id = '.$itemId.'
+                    data-title = \''.addslashes($title).'\'
+                    href="javascript:void(0);"
+                    onclick="return deleteItem(this);"
                     class="btn btn-default">';
                 $deleteIcon .= Display::return_icon(
                     'delete.png',
@@ -6155,26 +5795,48 @@ class learnpath
                 );
                 $deleteIcon .= '</a>';
                 $extra = '';
-                if ('dir' === $type) {
-                    $extra = '<ul class="record li_container"><li></li></ul>';
+
+                if ('dir' === $type && empty($node['__children'])) {
+                    $level = $node['lvl'] + 1;
+                    $extra = '<ul class="list-group nested-sortable">
+                                <li class="list-group-item list-group-item-empty nested-'.$level.'"></li>
+                              </ul>';
                 }
-                return
-                    $moveIcon.' '.$icon.
-                    Display::span($node['title']).
-                    Display::tag(
-                        'div',
-                        "<div class=\"btn-group btn-group-sm\">
+                //return $title;
+                $buttons = Display::tag(
+                    'div',
+                    "<div class=\"btn-group btn-group-sm\">
                                 $editIcon
                                 $preRequisitiesIcon
                                 $orderIcons
                                 $deleteIcon
                                </div>",
-                        ['class' => 'btn-toolbar button_actions']
-                    ).$extra;
+                    ['class' => 'btn-toolbar button_actions']
+                );
+                //$buttons = '';
+                //$extra = '';
+                //Display::span($title, ['title' => $fullTitle])
+                //return $title.                $extra;
+                return
+                   // '<div class="item_data">'.
+                    $moveIcon.' '.$icon.' '.
+                    $title.
+                    $extra.
+                    $buttons
+                    //.'</div>'
+                    ;
             },
         ];
+        $tree = $lpItemRepo->childrenHierarchy($itemRoot, false, $options);
 
-        return $lpItemRepo->childrenHierarchy($itemRoot, false, $options);
+        if (empty($tree) && $dropElement) {
+            return
+                '<ul id="lp_item_list">'.
+                Display::return_message(get_lang('Drag and drop an element here')).
+                '</ul>';
+        }
+
+        return $tree;
     }
 
     /**
@@ -8028,8 +7690,8 @@ class learnpath
         $form->addButtonSearch(get_lang('Search'));
         $return = $form->returnForm();
 
-        $return .= '<ul class="lp_resource">';
-        $return .= '<li class="lp_resource_element">';
+        $return .= '<ul class=" list-group lp_resource">';
+        $return .= '<li class="list-group-item lp_resource_element disable_drag">';
         $return .= Display::return_icon('new_exercice.png');
         $return .= '<a
             href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'&lp_id='.$this->lp_id.'">'.
@@ -8053,7 +7715,7 @@ class learnpath
                 $exerciseUrl.'&exerciseId='.$exerciseId,
                 ['target' => '_blank']
             );
-            $return .= '<li class="lp_resource_element" title="'.$title.'">';
+            $return .= '<li class="list-group-item lp_resource_element" title="'.$title.'">';
             $return .= Display::url($moveIcon, '#', ['class' => 'moved']);
             $return .= $quizIcon;
             $sessionStar = '';
@@ -8068,7 +7730,7 @@ class learnpath
                 [
                     'class' => false === $visibility ? 'moved text-muted ' : 'moved link_with_id',
                     'data_type' => 'quiz',
-                    'data_id' => $exerciseId,
+                    'data-id' => $exerciseId,
                 ]
             );
             $return .= '</li>';
@@ -8130,7 +7792,6 @@ class learnpath
 
         foreach ($links as $link) {
             $categoryId = null !== $link->getCategory() ? $link->getCategory()->getIid() : 0;
-
             if (empty($categoryId)) {
                 $categories[0] = get_lang('Uncategorized');
             } else {
@@ -8153,8 +7814,8 @@ class learnpath
             }
         </script>
 
-        <ul class="lp_resource">
-            <li class="lp_resource_element">
+        <ul class="list-group lp_resource">
+            <li class="list-group-item lp_resource_element disable_drag ">
                 '.Display::return_icon('linksnew.gif').'
                 <a
                 href="'.api_get_path(WEB_CODE_PATH).'link/link.php?'.$courseIdReq.'&action=addlink&lp_id='.$this->lp_id.'"
@@ -8168,7 +7829,6 @@ class learnpath
             /** @var CLink $link */
             foreach ($links as $key => $link) {
                 $title = $link->getTitle();
-
                 $linkUrl = Display::url(
                     Display::return_icon('preview_view.png', get_lang('Preview')),
                     api_get_path(WEB_CODE_PATH).'link/link_goto.php?'.api_get_cidreq().'&link_id='.$key,
@@ -8184,13 +7844,13 @@ class learnpath
                         $url,
                         [
                             'class' => 'moved link_with_id',
-                            'data_id' => $key,
+                            'data-id' => $key,
                             'data_type' => TOOL_LINK,
                             'title' => $title,
                         ]
                     );
                     $linkNodes .=
-                        '<li class="lp_resource_element">
+                        '<li class="list-group-item lp_resource_element">
                          <a class="moved" href="#">'.
                             $moveEverywhereIcon.
                         '</a>
@@ -8199,14 +7859,17 @@ class learnpath
                 }
             }
             $linksHtmlCode .=
-                '<li>
-                <a style="cursor:hand" onclick="javascript: toggle_tool(\''.TOOL_LINK.'\','.$categoryId.')" style="vertical-align:middle">
-                    <img src="'.Display::returnIconPath('add.png').'" id="'.TOOL_LINK.'_'.$categoryId.'_opener"
-                    align="absbottom" />
-                </a>
-                <span style="vertical-align:middle">'.Security::remove_XSS($categories[$categoryId]).'</span>
-            </li>
-            <div style="display:none" id="'.TOOL_LINK.'_'.$categoryId.'_content">'.$linkNodes.'</div>';
+                '<li class="list-group-item disable_drag">
+                    <a style="cursor:hand" onclick="javascript: toggle_tool(\''.TOOL_LINK.'\','.$categoryId.')" >
+                        <img src="'.Display::returnIconPath('add.png').'" id="'.TOOL_LINK.'_'.$categoryId.'_opener"
+                        align="absbottom" />
+                    </a>
+                    <span style="vertical-align:middle">'.Security::remove_XSS($categories[$categoryId]).'</span>
+                </li>
+            '.
+                $linkNodes.
+            '';
+            //<div style="display:none" id="'.TOOL_LINK.'_'.$categoryId.'_content">'.
         }
         $linksHtmlCode .= '</ul>';
 
@@ -8220,8 +7883,8 @@ class learnpath
      */
     public function get_student_publications()
     {
-        $return = '<ul class="lp_resource">';
-        $return .= '<li class="lp_resource_element">';
+        $return = '<ul class="list-group lp_resource">';
+        $return .= '<li class="list-group-item lp_resource_element">';
         /*
         $return .= Display::return_icon('works_new.gif');
         $return .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_STUDENTPUBLICATION.'&lp_id='.$this->lp_id.'">'.
@@ -8238,7 +7901,7 @@ class learnpath
                     ['target' => '_blank']
                 );
 
-                $return .= '<li class="lp_resource_element">';
+                $return .= '<li class="list-group-item lp_resource_element">';
                 $return .= '<a class="moved" href="#">';
                 $return .= Display::return_icon(
                     'move_everywhere.png',
@@ -8254,7 +7917,7 @@ class learnpath
                     api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_STUDENTPUBLICATION.'&file='.$work['iid'].'&lp_id='.$this->lp_id,
                     [
                         'class' => 'moved link_with_id',
-                        'data_id' => $work['iid'],
+                        'data-id' => $work['iid'],
                         'data_type' => TOOL_STUDENTPUBLICATION,
                         'title' => Security::remove_XSS(cut(strip_tags($work['title']), 80)),
                     ]
@@ -8308,10 +7971,10 @@ class learnpath
             }
         }
 
-        $return = '<ul class="lp_resource">';
+        $return = '<ul class="list-group lp_resource">';
 
         // First add link
-        $return .= '<li class="lp_resource_element">';
+        $return .= '<li class="list-group-item lp_resource_element disable_drag">';
         $return .= Display::return_icon('new_forum.png');
         $return .= Display::url(
             get_lang('Create a new forum'),
@@ -8345,7 +8008,7 @@ class learnpath
                 ['target' => '_blank']
             );
 
-            $return .= '<li class="lp_resource_element">';
+            $return .= '<li class="list-group-item lp_resource_element">';
             $return .= '<a class="moved" href="#">';
             $return .= $moveIcon;
             $return .= ' </a>';
@@ -8357,7 +8020,7 @@ class learnpath
                 api_get_cidreq().'&action=add_item&type='.TOOL_FORUM.'&forum_id='.$forumId.'&lp_id='.$this->lp_id,
                 [
                     'class' => 'moved link_with_id',
-                    'data_id' => $forumId,
+                    'data-id' => $forumId,
                     'data_type' => TOOL_FORUM,
                     'title' => $title,
                     'style' => 'vertical-align:middle',
@@ -8384,14 +8047,14 @@ class learnpath
                         ['target' => '_blank']
                     );
 
-                    $return .= '<li class="lp_resource_element">';
+                    $return .= '<li class="list-group-item lp_resource_element">';
                     $return .= '&nbsp;<a class="moved" href="#">';
                     $return .= $moveIcon;
                     $return .= ' </a>';
                     $return .= Display::return_icon('forumthread.png', get_lang('Thread'), [], ICON_SIZE_TINY);
                     $return .= '<a
                         class="moved link_with_id"
-                        data_id="'.$thread->getIid().'"
+                        data-id="'.$thread->getIid().'"
                         data_type="'.TOOL_THREAD.'"
                         title="'.$thread->getThreadTitle().'"
                         href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_THREAD.'&thread_id='.$threadId.'&lp_id='.$this->lp_id.'"
@@ -11257,69 +10920,156 @@ EOD;
     public function sortItemByOrderList(array $orderList)
     {
         $lpItemRepo = Container::getLpItemRepository();
-
         $rootParent = $lpItemRepo->getItemRoot($this->get_id());
+
+        /*$previous = 2;
+        $next = 0;
+        $rootParent->setPreviousItemId(1);
+        $last = $this->updateList($orderList, $rootParent, $previous, $next);
+        $rootParent->setNextItemId($last + 1);
+*/
         $em = Database::getManager();
-        foreach ($orderList as $itemId => $parentId) {
+        echo '<pre>';
+        //var_dump($orderList);
+//        $em->persist($rootParent);
+
+        /*$node = new \Tree\Node\Node($rootParent->getIid());
+        $parentList[$rootParent->getIid()] = $node;
+
+        foreach ($orderList as $item) {
+            $itemId = $item->id ?? 0;
+            if (empty($itemId)) {
+                continue;
+            }
+            $parentId = $item->parent_id ?? 0;
+
+            if (empty($parentId)) {
+                $parent = $rootParent;
+                $parentId = $rootParent->getIid();
+            } else {
+                //$parent = $lpItemRepo->find($parentId);
+            }
+            //$parentList[$itemId] = ;
+
+            $child = new \Tree\Node\Node($itemId);
+            $parentList[$itemId] = $child;
+            $parentList[$parentId]->addChild($child);
+        }
+
+        $builder = new Tree\Builder\NodeBuilder;
+        echo '<pre>';
+        foreach ($node->getChildren() as $child) {
+            var_dump($child->getValue().'-'.$child->getDepth().'-'.$child->getSize());
+
+            var_dump("---");
+            foreach ($child->getNeighbors() as $neighbor) {
+
+                var_dump($neighbor->getValue(), $child->getSize(), $neighbor->getDepth());
+            }
+        }
+exit;*/
+
+        $counter = 2;
+        /*$rootParent->setPreviousItemId(1);
+        $rootParent->setDisplayOrder(0);
+        $rootParent->setLaunchData(1);*/
+        echo '<pre>';
+        $rootParent->setDisplayOrder(1);
+        foreach ($orderList as $item) {
+            $itemId  = $item->id ?? 0;
+            if (empty($itemId)) {
+                continue;
+            }
+            $parentId = $item->parent_id ?? 0;
             if (empty($parentId)) {
                 $parent = $rootParent;
             } else {
                 $parent = $lpItemRepo->find($parentId);
             }
 
+            if (isset($parentOrder[$parent->getIid()])) {
+                $parentOrder[$parent->getIid()]++;
+            } else {
+                $parentOrder[$parent->getIid()] = 0;
+            }
             /** @var CLpItem $item */
             $item = $lpItemRepo->find($itemId);
-            $item->setParent($parent);
-            $em->persist($item);
-        }
-        $em->flush();
-        /*
-        $itemList = new LpItemOrderList();
 
-        foreach ($orderList as $id => $parentId) {
-            $item = new LpOrderItem($id, $parentId);
-            $itemList->add($item);
-        }
-
-        $parents = $itemList->getListOfParents();
-
-        foreach ($parents as $parentId) {
-            $sameParentLpItemList = $itemList->getItemWithSameParent($parentId);
-            $previous_item_id = 0;
-            for ($i = 0; $i < count($sameParentLpItemList->list); $i++) {
-                $item_id = $sameParentLpItemList->list[$i]->id;
-                // display_order
-                $display_order = $i + 1;
-                $itemList->setParametersForId($item_id, $display_order, 'display_order');
-                // previous_item_id
-                $itemList->setParametersForId($item_id, $previous_item_id, 'previous_item_id');
-                $previous_item_id = $item_id;
-                // next_item_id
-                $next_item_id = 0;
-                if ($i < count($sameParentLpItemList->list) - 1) {
-                    $next_item_id = $sameParentLpItemList->list[$i + 1]->id;
-                }
-                $itemList->setParametersForId($item_id, $next_item_id, 'next_item_id');
+            $previousId = 2;
+            if (isset($previous[$counter - 1])) {
+                $previousId = $previous[$counter - 1];
             }
+            $previous[$counter] = $counter + 2;
+
+            $item->setParent($parent);
+            //$item->setPreviousItemId($counter);
+            //$item->setNextItemId($counter + 1);
+            //$item->setDisplayOrder($parentOrder[$parent->getIid()]);
+            var_dump($item->getIid().'-'.$counter);
+            //$item->setPreviousItemId(0);
+            //$item->setNextItemId(0);
+            $item->setDisplayOrder($counter);
+            $em->persist($item);
+            $counter++;
+        }
+        //$rootParent->setNextItemId($counter+1);
+        $em->persist($rootParent);
+        $em->flush();
+        var_dump($lpItemRepo->verify());
+        $lpItemRepo->reorder($rootParent, 'displayOrder');
+
+        var_dump($lpItemRepo->verify());
+        exit;
+        $lpItemRepo->recoverNode($rootParent);
+        var_dump($lpItemRepo->verify());
+
+        $em->flush();
+        exit;
+    }
+
+    private static function updateList($list, $parent, &$previous, &$next)
+    {
+        //echo '<pre>';        var_dump($list);exit;
+        $lpItemRepo = Container::getLpItemRepository();
+        $em = Database::getManager();
+        $counter = 0;
+        foreach ($list as $item) {
+            if (empty($item) || !isset($item->id)) {
+                continue;
+            }
+            $id = $item->id;
+            $children = $item->children;
+
+            /** @var CLpItem $lpItem */
+            $lpItem = $lpItemRepo->find($id);
+            $lpItem
+                ->setParent($parent)
+                ->setDisplayOrder($counter)
+                ->setPreviousItemId($previous);
+            ;
+            $previous++;
+            $counter++;
+            $childExists = false;
+            foreach ($children as $child) {
+                if (isset($child->id)) {
+                    $childExists = true;
+                    break;
+                }
+            }
+
+            if ($childExists) {
+                $next = self::updateList($children, $lpItem, $previous, $next);
+                $lpItem->setNextItemId($next + 1);
+                $previous++;
+            } else {
+                $next = $previous;
+                $previous++;
+                $lpItem->setNextItemId($next);
+            }
+            $em->persist($lpItem);
         }
 
-        $table = Database::get_course_table(TABLE_LP_ITEM);
-
-        foreach ($itemList->list as $item) {
-            $params = [];
-            $params['display_order'] = $item->display_order;
-            $params['previous_item_id'] = $item->previous_item_id;
-            $params['next_item_id'] = $item->next_item_id;
-            $params['parent_item_id'] = empty($item->parent_item_id) ? null : $item->parent_item_id;
-
-            Database::update(
-                $table,
-                $params,
-                [
-                    'iid = ? ' => [(int) $item->id],
-                ]
-            );
-        }*/
+        return $next;
     }
 
     /**

@@ -492,7 +492,7 @@ if (1 == $gamificationMode) {
     $template->assign('gamification_points', $oLP->getCalculateScore($sessionId));
 }
 
-$template->assign('lp_author', $oLP->get_author());
+$template->assign('lp_author', $lp->getAuthor());
 
 $lpMinTime = '';
 if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
@@ -541,15 +541,16 @@ $template->assign('lp_accumulate_work_time', $lpMinTime);
 $template->assign('lp_mode', $lp->getDefaultViewMod());
 $template->assign('lp_title_scorm', $lp->getName());
 
-if (true === api_get_configuration_value('lp_view_accordion') && 1 == $lpType) {
+// @todo Fix lp_view_accordion
+/*if (true === api_get_configuration_value('lp_view_accordion') && 1 == $lpType) {
     $template->assign('data_panel', $oLP->getTOCTree());
     $template->assign('data_list', null);
-} else {
-    $template->assign('data_panel', null);
-    //echo '<pre>';    var_dump(array_column($oLP->get_toc(), 'status_class', 'id'));
-    $template->assign('status_list', array_column($oLP->get_toc(), 'status_class', 'id'));
-    $template->assign('data_list', $oLP->getListArrayToc($get_toc_list));
-}
+} else {*/
+
+$template->assign('data_panel', null);
+$template->assign('status_list', array_column($oLP->get_toc(), 'status_class', 'id'));
+$template->assign('data_list', $oLP->getListArrayToc($get_toc_list));
+
 $template->assign('lp_id', $lp->getIid());
 $template->assign('lp_current_item_id', $oLP->get_current_item_id());
 

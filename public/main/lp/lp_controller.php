@@ -70,16 +70,11 @@ $htmlHeadXtra[] = '
         var item_tag = in_elem.get(0).tagName;
         var item_id =  in_elem.attr("id");
         //var parent_id = item_id;
-
         in_elem.children("li").each(function () {
             let itemId = $(this).attr("id");
             if (itemId && itemId != "undefined") {
                 newOrderData += itemId + "|" + in_parent_id+"^";
-                console.log(itemId);
-                console.log(newOrderData);
                 $(this).find("ul").each(function () {
-                    console.log("inside");
-                    console.log(itemId);
                     buildLPtree($(this), itemId);
                 });
             }
@@ -87,7 +82,7 @@ $htmlHeadXtra[] = '
     }
 
     $(function() {
-        $(".lp_resource").sortable({
+        $(".lp_resource2").sortable({
             items: ".lp_resource_element ",
             handle: ".moved", //only the class "moved"
             cursor: "move",
@@ -102,7 +97,7 @@ $htmlHeadXtra[] = '
             }
         });
 
-        $(".li_container .order_items").click(function(e) {
+        $(".li_container2 .order_items").click(function(e) {
             var dir = $(this).data("dir");
             var itemId = $(this).data("id");
             var jItems = $("#lp_item_list li.li_container");
@@ -214,7 +209,131 @@ $htmlHeadXtra[] = '
             );
         });
 
-        $("#lp_item_list").sortable({
+        function refreshTree() {
+            var params = "&a=get_lp_item_tree";
+            $.get(
+                "'.$ajax_url.'",
+                params,
+                function(result) {
+                    $("#lp_item_list").html(result);
+                }
+            );
+        }
+
+        const nestedQuery = ".nested-sortable";
+        const identifier = "id";
+        const root = document.getElementById("lp_item_list");
+        /*function serialize(sortable) {
+          var serialized = [];
+          var children = [].slice.call(sortable.children);
+          for (var i in children) {
+            var nested = children[i].querySelector(nestedQuery);
+            serialized.push({
+              id: children[i].dataset[identifier],
+              children: nested ? serialize(nested) : []
+            });
+          }
+          return serialized;
+        }*/
+        var serialized = [];
+        function serialize(sortable) {
+          var children = [].slice.call(sortable.children);
+          for (var i in children) {
+            var nested = children[i].querySelector(nestedQuery);
+            var parentId = $(children[i]).parent().parent().attr("id");
+            //console.log("---");
+            var id = children[i].dataset[identifier];
+            if (typeof id === "undefined") {
+                return;
+            }
+            //console.log(id);            console.log(parentId);
+            serialized.push({
+              id: children[i].dataset[identifier],
+              parent_id: parentId
+            });
+
+            if (nested) {
+                serialize(nested);
+            }
+          }
+
+          return serialized;
+        }
+
+        $(".nested-sortable").sortable({
+            group: "nested",
+            put: ["nested-sortable", ".lp_resource", ".nested-source"],
+            animation: 150,
+            fallbackOnBody: true,
+		    swapThreshold: 0.65,
+            dataIdAttr: "data-id",
+            onEnd: function(evt) {
+                let list = serialize(root);
+                let order = "&a=update_lp_item_order&new_order=" + JSON.stringify(list);
+                $.get(
+                    "'.$ajax_url.'",
+                    order,
+                    function(reponse) {
+                        $("#message").html(reponse);
+                        refreshTree();
+                    }
+                );
+            },
+        });
+
+       $(".lp_resource").sortable({
+            group: "nested",
+            put: ["nested-sortable"],
+            filter: ".disable_drag",
+            animation: 150,
+            fallbackOnBody: true,
+		    swapThreshold: 0.65,
+            dataIdAttr: "data-id",
+            onRemove: function(evt) {
+                var itemEl = evt.item;
+                var newIndex = evt.newIndex;
+                var id = $(itemEl).attr("id");
+                var parent_id = $(itemEl).parent().parent().attr("id");
+                var type =  $(itemEl).find(".link_with_id").attr("data_type");
+                var title = $(itemEl).find(".link_with_id").text();
+
+                let previousId = 0;
+                if (0 !== newIndex) {
+                    previousId = $(itemEl).prev().attr("id");
+                }
+                var params = {
+                    "a": "add_lp_item",
+                    "id": id,
+                    "parent_id": parent_id,
+                    "previous_id": previousId,
+                    "type": type,
+                    "title" : title
+                };
+                console.log(params);
+                $.ajax({
+                    type: "GET",
+                    url: "'.$ajax_url.'",
+                    data: params,
+                    success: function(itemId) {
+                        $(itemEl).attr("id", itemId);
+                        $(itemEl).attr("data-id", itemId);
+                        let list = serialize(root);
+                        let order = "&a=update_lp_item_order&new_order=" + JSON.stringify(list);
+                        $.get(
+                            "'.$ajax_url.'",
+                            order,
+                            function(reponse) {
+                                $("#message").html(reponse);
+                                refreshTree();
+                            }
+                        );
+                        //$("#lp_item_list").html(data);
+                    }
+                });
+            },
+        });
+
+        $("#lp_item_list2").sortable({
             items: "li",
             handle: ".moved", //only the class "moved"
             cursor: "move",
@@ -238,11 +357,11 @@ $htmlHeadXtra[] = '
                 var type = item.attr("data_type");
                 var title = item.attr("title");
                 processReceive = true;
-                   console.log(ui.item.parent().parent().attr("id"));
+                   //console.log(ui.item.parent().parent().attr("id"));
                 if (ui.item.parent()[0]) {
                     //var parent_id = $(ui.item.parent()[0]).attr("id");
                     var previous_id = $(ui.item.prev()).attr("id");
-                    var parent_id = ui.item.parent().parent().attr("id");
+                    var parent_id = ui.item.parent().parent().parent().attr("id");
                     if (parent_id == "undefined") {
                         parent_id = 0;
                     }
@@ -256,7 +375,6 @@ $htmlHeadXtra[] = '
                         "title" : title
                     };
                     console.log(params);
-
                     $.ajax({
                         type: "GET",
                         url: "'.$ajax_url.'",
@@ -509,7 +627,7 @@ switch ($action) {
 
         Session::write('refresh', 1);
 
-        $itemRoot = $lpItemRepo->findOneBy(['path' => 'root', 'lp' => $lpId]);
+        $itemRoot = $lpItemRepo->getItemRoot($lpId);
         if (null == $itemRoot) {
             $lpItem = new CLpItem();
             $lpItem

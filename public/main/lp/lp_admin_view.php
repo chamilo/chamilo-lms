@@ -149,7 +149,7 @@ if (isset($_POST['save_audio'])) {
 
 Display::display_header(null, 'Path');
 $suredel = trim(get_lang('Are you sure to delete'));
-
+exit;
 ?>
 <script>
 var newOrderData= "";
@@ -235,34 +235,13 @@ $(function() {
         });  //end of children loop
     } //end of processChildren function
 });
-
-/* <![CDATA[ */
-function stripslashes(str) {
-    str=str.replace(/\\'/g,'\'');
-    str=str.replace(/\\"/g,'"');
-    str=str.replace(/\\\\/g,'\\');
-    str=str.replace(/\\0/g,'\0');
-    return str;
-}
-
-function confirmation(name) {
-    name=stripslashes(name);
-    if (confirm("<?php echo $suredel; ?> " + name + " ?")) {
-        return true;
-    } else {
-        return false;
-    }
-}
 </script>
 <?php
 
 echo $learnPath->build_action_menu();
 
 echo '<div class="row">';
-echo '<div class="col-md-4">';
-echo $learnPath->return_new_tree(null, true);
-echo '</div>';
-
+echo $learnPath->showBuildSideBar(null, true);
 echo '<div class="col-md-8">';
 switch ($_GET['action']) {
     case 'edit_item':

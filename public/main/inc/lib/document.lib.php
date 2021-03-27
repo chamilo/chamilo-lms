@@ -2910,13 +2910,25 @@ class DocumentManager
 
         $options = [
             'decorate' => true,
-            'rootOpen' => '<ul class="lp_resource">',
+            'rootOpen' => '<ul class="list-group lp_resource">',
             'rootClose' => '</ul>',
-            'childOpen' => '<li class="doc_resource lp_resource_element ">',
+            //'childOpen' => '<li class="doc_resource lp_resource_element ">',
+            'childOpen' => function($child) {
+                $id =  $child['id'];
+                $disableDrag = '';
+                if (!$child['resourceFile']) {
+                    $disableDrag = ' disable_drag ';
+                }
+
+                return '<li
+                    id="'.$id.'"
+                    data-id="'.$id.'"
+                    class=" '.$disableDrag.'  list-group-item nested-'.$child['level'].'"
+                >';
+            },
             'childClose' => '</li>',
             'nodeDecorator' => function ($node) use ($icon, $folderIcon) {
                 $link = '<div class="item_data">';
-
                 $file = $node['resourceFile'];
                 $extension = '';
                 if ($file) {
@@ -2938,7 +2950,6 @@ class DocumentManager
                     >';
                 $link .= $folder.'&nbsp;'.addslashes($node['title']);
                 $link .= '</a>';
-
                 $link .= '</div>';
 
                 return $link;
@@ -2956,7 +2967,6 @@ class DocumentManager
             ->leftJoin('node.resourceFile', 'file')
             ->where('type = :type')
             ->andWhere('links.course = :course')
-            /*  ->where('node.parent = :parent') */
             ->setParameters(['type' => $type, 'course' => $course_info['entity']])
             ->orderBy('node.parent', 'ASC')
             ->addSelect('file')

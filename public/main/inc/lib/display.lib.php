@@ -2156,12 +2156,18 @@ class Display
     {
         $id = uniqid('dropdown', true);
         $html = '<div class="btn-group" role="group">
-                <button id = "'.$id.'" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button
+                    id="'.$id.'"
+                    class="btn btn-secondary dropdown-toggle"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 '.$title.'
                 </button>
                 <div class="dropdown-menu aria-labelledby="'.$id.'" '.($alignToRight ? 'dropdown-menu-right' : '').'">';
         foreach ($elements as $item) {
-            $html .= self::tag('li', self::url($item['title'], $item['href'], ['class' => 'dropdown-item']));
+            $html .= self::tag(
+                'li',
+                self::url($item['title'], $item['href'], ['class' => 'dropdown-item'])
+            );
         }
         $html .= '</div>
             </div>';

@@ -30,9 +30,9 @@ if (api_get_configuration_value('allow_htaccess_import_from_scorm') && isset($_P
  * because if the file size exceed the maximum file upload
  * size set in php.ini, all variables from POST are cleared !
  */
-$user_file = isset($_GET['user_file']) ? $_GET['user_file'] : [];
+$user_file = $_GET['user_file'] ?? [];
 $user_file = $user_file ? $user_file : [];
-$is_error = isset($user_file['error']) ? $user_file['error'] : false;
+$is_error = $user_file['error'] ?? false;
 $em = Database::getManager();
 
 if (isset($_POST) && $is_error) {
@@ -80,7 +80,7 @@ if (isset($_POST) && $is_error) {
             }
             break;
         case 'scorm':
-            $scorm = new scorm(new CLp());
+            $scorm = new scorm();
             $scorm->import_package(
                 $_FILES['user_file'],
                 $current_dir,
@@ -105,20 +105,20 @@ if (isset($_POST) && $is_error) {
             break;
         case 'aicc':
             $oAICC = new aicc();
-            $entity = $oAICC->getEntity();
+            //$entity = $oAICC->getEntity();
             $config_dir = $oAICC->import_package($_FILES['user_file']);
             if (!empty($config_dir)) {
                 $oAICC->parse_config_files($config_dir);
                 $oAICC->import_aicc(api_get_course_id());
                 Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
             }
-            $entity
+            /*$entity
                 ->setContentLocal($proximity)
                 ->setContentMaker($maker)
                 ->setJsLib('aicc_api.php')
             ;
             $em->persist($entity);
-            $em->flush();
+            $em->flush();*/
             break;
         case 'oogie':
             $take_slide_name = empty($_POST['take_slide_name']) ? false : true;

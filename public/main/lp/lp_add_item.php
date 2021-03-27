@@ -15,7 +15,7 @@ $this_section = SECTION_COURSES;
 
 api_protect_course_script();
 
-$isStudentView = isset($_REQUEST['isStudentView']) ? $_REQUEST['isStudentView'] : null;
+$isStudentView = $_REQUEST['isStudentView'] ?? null;
 $lpId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
 $submit = $_POST['submit_button'] ?? null;
 $type = isset($_GET['type']) ? $_GET['type'] : null;

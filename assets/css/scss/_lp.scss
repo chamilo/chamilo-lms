@@ -1,13 +1,5 @@
-
-#lp_item_list li {
-  border-bottom: 1px solid #dddddd;
-  width: 100%;
-  margin-bottom: 5px;
-  margin-top: 5px;
-}
-
-#lp_item_list, #lp_item_list li {
-  list-style-type: none;
+#lp_sidebar {
+  font-size: 14px
 }
 
 #lp_item_list {
@@ -15,11 +7,66 @@
   padding: 0;
 }
 
-#lp_sidebar {
-  font-size: 14px
+#lp_item_list li {
+  //border-bottom: 1px solid #dddddd;
+  //width: 100%;
+  //margin-bottom: 5px;
+  //margin-top: 5px;
+}
+
+#lp_item_list, #lp_item_list li {
+  /* list-style-type: none;*/
+}
+
+#lp_item_list .active {
+  border: 2px dotted #BDB76B;
+}
+
+#lp_item_list li:last-child {
+  //border-bottom: none;
+}
+
+#lp_item_list .item_data {
+  padding: .5em;
+}
+
+#lp_item_list .item_data span {
+  margin-left: 5px;
 }
 
 .item_data .button_actions {
   display: none;
   margin: 5px 0;
+}
+
+.item_data:hover .button_actions {
+  display: block;
+  padding-top: 5px;
+}
+
+.nested-sortable:hover .list-group-item .hidden {
+  display: block;
+}
+
+#lp_item_list .item {
+  border: none;
+}
+
+#lp_item_list .empty {
+  height: 5px;
+}
+
+#lp_item_list .ui-state-highlight {
+  height: 25px;
+  background: #EEEEEE;
+  border-radius: 5px;
+  border: 1px dashed #B0B0B0
+}
+
+.lp_resource {
+  font-size: 14px
+}
+
+.lp_resource li {
+  padding: 10px 10px 10px 20px;
 }

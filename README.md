@@ -13,13 +13,22 @@ Chamilo is an e-learning platform, also called "LMS" or "LCMS" published under G
 
 **Chamilo 2.0 is still in development stage. This installation procedure is for reference only. For a stable Chamilo, please install Chamilo 1.11.x. See the 1.11.x branch README.md for details.**
 
-We assume you have already installed "yarn 2.x" and "composer 2.x" and you're installing the portal in a domain,
-not in a sub folder inside a domain.
+We assume you already have: 
+
+- composer 2.x - https://getcomposer.org/download/
+- yarn 2.x - https://yarnpkg.com/getting-started/install
+- Configuring a virtualhost in a domain, not in a sub folder inside a domain.
+- A working LAMP server.
+
+On a fresh Ubuntu, you can prepare your server by issuing an apt command like the following:
 
 ~~~~
-# on a fresh Ubuntu, you can prepare your server by issuing an apt command like the following
-apt update && apt -y upgrade && apt install apache2 libapache2-mod-php mariadb-client mariadb-server php-pear php-dev php-gd php-curl php-intl php-mysql php-mbstring php-zip php-xml php-cli php-apcu php-bcmath git unzip npm
-# otherwise, you can use the following directly:
+apt update && apt -y upgrade && apt install apache2 libapache2-mod-php mariadb-client mariadb-server php-pear php-dev php-gd php-curl php-intl php-mysql php-mbstring php-zip php-xml php-cli php-apcu php-bcmath php-soap yarn git unzip npm
+~~~~
+
+Otherwise, you can use the following directly:
+
+~~~~
 git clone https://github.com/chamilo/chamilo-lms.git chamilo2
 cd chamilo2
 composer install
@@ -31,7 +40,9 @@ yarn run encore dev
 chmod -R 777 .
 ~~~~
 
-Then enter the main/install/index.php and follow the UI instructions (database, admin user settings, etc).
+Note: on Ubuntu Groovy, the `yarn` package has been replaced by `yarnpkg`. In this case, replace `yarn` by `yarnpkg` in all commands above.
+
+Then enter the **main/install/index.php** and follow the UI instructions (database, admin user settings, etc).
 
 After the web install process, change the permissions back to a reasonably safe state:
 ~~~~
@@ -50,7 +61,7 @@ php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_rout
 yarn up
 yarn run encore dev
 ~~~~
-This will update the JS (yarn) and PHP (composer) dependencies.
+This will update the JS (yarn) and PHP (composer) dependencies in the public/build folder.
 
 ### Quick re-install
 

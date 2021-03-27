@@ -238,7 +238,8 @@ if (!$playerSupported && $execute_iframe) {
         $(function() {
             $(\'#mainFrame\').on(\'load\', function () {
                 let currentHeight = this.style.height;
-                let frameHeight = this.contentWindow.document.body.scrollHeight + 50;
+                currentHeight = parseInt(currentHeight, 10);
+                let frameHeight = parseInt(this.contentWindow.document.body.scrollHeight) + 50;
                 if (frameHeight > currentHeight) {
                     this.style.height = frameHeight + \'px\';
                 }

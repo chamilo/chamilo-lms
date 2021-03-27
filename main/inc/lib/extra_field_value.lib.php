@@ -77,7 +77,7 @@ class ExtraFieldValue extends Model
      * In order to save this function needs a item_id (user id, course id, etc)
      * This function is used with $extraField->addElements().
      *
-     * @param array $params              array for the insertion into the *_field_values table
+     * @param array $params              array for the insertion into the *_field_values table (each label must be prefixed by 'extra_')
      * @param bool  $onlySubmittedFields Only save parameters in the $param array
      * @param bool  $showQuery
      * @param array $saveOnlyThisFields

@@ -20,8 +20,8 @@ require('select2/dist/js/select2.full.min');
 require('flatpickr');
 //import('bootstrap-vue');
 import('bootstrap');
-require('webpack-jquery-ui');
-require('webpack-jquery-ui/css');
+//require('webpack-jquery-ui');
+//require('webpack-jquery-ui/css');
 
 // const frameReady = require('/public/main/inc/lib/javascript/jquery.frameready.js');
 //
@@ -38,6 +38,8 @@ require('blueimp-file-upload');
 require('blueimp-load-image');
 import('mediaelement');
 require('multiselect-two-sides');
+
+import 'jquery-sortablejs';
 
 import Swal from 'sweetalert2';
 window.Swal = Swal;

@@ -7,6 +7,8 @@ use TheNetworg\OAuth2\Client\Provider\Azure;
  * AzureActiveDirectory plugin class.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
+ * @package chamilo.plugin.azure_active_directory
  */
 class AzureActiveDirectory extends Plugin
 {
@@ -17,6 +19,7 @@ class AzureActiveDirectory extends Plugin
     const SETTING_FORCE_LOGOUT_BUTTON = 'force_logout';
     const SETTING_MANAGEMENT_LOGIN_ENABLE = 'management_login_enable';
     const SETTING_MANAGEMENT_LOGIN_NAME = 'management_login_name';
+    const SETTING_PROVISION_USERS = 'provisioning';
 
     const URL_TYPE_AUTHORIZE = 'login';
     const URL_TYPE_LOGOUT = 'logout';
@@ -37,9 +40,10 @@ class AzureActiveDirectory extends Plugin
             self::SETTING_FORCE_LOGOUT_BUTTON => 'boolean',
             self::SETTING_MANAGEMENT_LOGIN_ENABLE => 'boolean',
             self::SETTING_MANAGEMENT_LOGIN_NAME => 'text',
+            self::SETTING_PROVISION_USERS => 'boolean',
         ];
 
-        parent::__construct('2.1', 'Angel Fernando Quiroz Campos', $settings);
+        parent::__construct('2.2', 'Angel Fernando Quiroz Campos', $settings);
     }
 
     /**

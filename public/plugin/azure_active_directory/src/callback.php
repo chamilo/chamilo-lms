@@ -94,8 +94,8 @@ try {
                 ($me['accountEnabled'] ? 1 : 0),
                 null,
                 [
-                    AzureActiveDirectory::EXTRA_FIELD_ORGANISATION_EMAIL => $me['mail'],
-                    AzureActiveDirectory::EXTRA_FIELD_AZURE_ID => $me['mailNickname'],
+                    'extra_'.AzureActiveDirectory::EXTRA_FIELD_ORGANISATION_EMAIL => $me['mail'],
+                    'extra_'.AzureActiveDirectory::EXTRA_FIELD_AZURE_ID => $me['mailNickname'],
                 ]
             );
             if (!$userId) {

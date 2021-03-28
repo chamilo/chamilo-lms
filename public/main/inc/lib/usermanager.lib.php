@@ -130,7 +130,7 @@ class UserManager
      * @param string        $expirationDate          Account expiration date (optional, defaults to null)
      * @param int           $active                  Whether the account is enabled or disabled by default
      * @param int           $hr_dept_id              The department of HR in which the user is registered (defaults to 0)
-     * @param array         $extra                   Extra fields
+     * @param array         $extra                   Extra fields (labels must be prefixed by "extra_")
      * @param string        $encrypt_method          Used if password is given encrypted. Set to an empty string by default
      * @param bool          $send_mail
      * @param bool          $isAdmin
@@ -377,8 +377,18 @@ class UserManager
 
             if (is_array($extra) && count($extra) > 0) {
                 $extra['item_id'] = $userId;
-                $courseFieldValue = new ExtraFieldValue('user');
-                $courseFieldValue->saveFieldValues($extra);
+                $userFieldValue = new ExtraFieldValue('user');
+                /* Force saving of extra fields (otherwise, if the current
+￼                user is not admin, fields not visible to the user - most
+￼                of them - are just ignored) */
+                $userFieldValue->saveFieldValues(
+                    $extra,
+                    true,
+                    null,
+                    null,
+                    null,
+                    true
+                );
             } else {
                 // Create notify settings by default
                 self::update_extra_field_value(

@@ -6200,12 +6200,6 @@ class learnpath
         $parentId = 0,
         $creatorId = 0
     ) {
-        if (!empty($courseInfo)) {
-            $course_id = $courseInfo['real_id'];
-        } else {
-            $course_id = api_get_course_int_id();
-        }
-
         $creatorId = empty($creatorId) ? api_get_user_id() : $creatorId;
         $sessionId = api_get_session_id();
 
@@ -6222,7 +6216,6 @@ class learnpath
 
         $title = disable_dangerous_file($title);
         $filename = $title;
-        $content = !empty($content) ? $content : $_POST['content_lp'];
         $tmp_filename = $filename;
         /*$i = 0;
         while (file_exists($filepath.$tmp_filename.'.'.$extension)) {
@@ -6263,8 +6256,6 @@ class learnpath
                 $content
             );
         }
-
-        //$save_file_path = $dir.$filename;
 
         $document = DocumentManager::addDocument(
             $courseInfo,

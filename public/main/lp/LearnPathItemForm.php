@@ -112,7 +112,7 @@ class LearnPathItemForm
             $position->freeze();
         }
 
-        // Content
+        // Content.
         if (in_array($itemType, [TOOL_DOCUMENT, TOOL_LP_FINAL_ITEM, TOOL_READOUT_TEXT], true)) {
             $document = null;
             if (!empty($lpItem->getPath())) {
@@ -121,25 +121,23 @@ class LearnPathItemForm
                 $document = $repo->find($lpItem->getPath());
             }
 
-            if ($document) {
-                if ($document->getResourceNode()->hasEditableTextContent()) {
-                    $editorConfig = [
-                        'ToolbarSet' => 'LearningPathDocuments',
-                        'Width' => '100%',
-                        'Height' => '500',
-                        'FullPage' => true,
-                        //   'CreateDocumentDir' => $relative_prefix,
-                        //'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
-                        //'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/'.$relative_path,
-                    ];
+            $editorConfig = [
+                'ToolbarSet' => 'LearningPathDocuments',
+                'Width' => '100%',
+                'Height' => '500',
+                'FullPage' => true,
+                //   'CreateDocumentDir' => $relative_prefix,
+                //'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
+                //'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/'.$relative_path,
+            ];
 
-                    $renderer = $form->defaultRenderer();
-                    $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp');
-                    $form->addElement('html', '<div class="editor-lp">');
-                    $form->addHtmlEditor('content_lp', null, null, true, $editorConfig, true);
-                    $form->addElement('html', '</div>');
-
-
+            if (($document && $document->getResourceNode()->hasEditableTextContent()) || 'add' === $action) {
+                $renderer = $form->defaultRenderer();
+                $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp');
+                $form->addElement('html', '<div class="editor-lp">');
+                $form->addHtmlEditor('content_lp', null, null, true, $editorConfig, true);
+                $form->addElement('html', '</div>');
+                if ($document) {
                     $form->addHidden('document_id', $document->getIid());
                     $content = $lp->display_document(
                         $document,

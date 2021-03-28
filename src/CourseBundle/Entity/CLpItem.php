@@ -179,7 +179,7 @@ class CLpItem
 
     public function __toString(): string
     {
-        return (string) ($this->getIid().' '.$this->getTitle());
+        return $this->getIid().' '.$this->getTitle();
     }
 
     public function getIid(): ?int

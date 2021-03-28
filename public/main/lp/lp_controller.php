@@ -631,7 +631,7 @@ switch ($action) {
         }
 
         Session::write('refresh', 1);
-
+        // Creates first root item.
         $itemRoot = $lpItemRepo->getItemRoot($lpId);
         if (null == $itemRoot) {
             $lpItem = new CLpItem();
@@ -640,8 +640,6 @@ switch ($action) {
                 ->setPath('root')
                 ->setLp($lp)
                 ->setItemType('root')
-                //->setNextItemId((int) $next)
-                //->setPreviousItemId($previous)
             ;
             $em = Database::getManager();
             $em->persist($lpItem);
@@ -660,7 +658,7 @@ switch ($action) {
             $parent = $_POST['parent'] ?? null;
             $em = Database::getManager();
             if (!empty($parent)) {
-                $parent = $em->getRepository(CLpItem::class)->find($parent);
+                $parent = $lpItemRepo->find($parent);
             } else {
                 $parent = null;
             }

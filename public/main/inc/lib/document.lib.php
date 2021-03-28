@@ -6105,11 +6105,10 @@ This folder contains all sessions that have been opened in the chat. Although th
 
         $em = Database::getManager();
         $title = $document->getTitle();
-
         // Only create a ResourceFile if there's a file involved
         if ('file' === $fileType) {
             $resourceFile = $resourceNode->getResourceFile();
-            if (empty($resourceFile)) {
+            if (null === $resourceFile) {
                 $resourceFile = new ResourceFile();
             }
 
@@ -6118,7 +6117,7 @@ This folder contains all sessions that have been opened in the chat. Although th
                 error_log('UploadedFile');
             } else {
                 // $path points to a file in the directory
-                if (file_exists($realPath) && !is_dir($realPath)) {
+                if (!empty($realPath) && file_exists($realPath) && !is_dir($realPath)) {
                     error_log('file_exists');
                     $mimeType = mime_content_type($realPath);
                     $file = new UploadedFile($realPath, $title, $mimeType, null, true);
@@ -6224,7 +6223,7 @@ This folder contains all sessions that have been opened in the chat. Although th
             $parentResource->getResourceNode(),
             $courseEntity,
             $session,
-            null
+            $group
         );
 
         // Document already exists
@@ -6254,7 +6253,6 @@ This folder contains all sessions that have been opened in the chat. Although th
         $em = Database::getManager();
         $em->persist($document);
         $em->flush();
-
         $document = self::addFileToDocument($document, $realPath, $content, $visibility, $group);
 
         if ($document) {

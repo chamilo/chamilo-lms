@@ -5689,9 +5689,10 @@ class learnpath
             },
             'rootClose' => function($tree) use ($noWrapper, $dropElement)  {
                 if ($tree[0]['lvl'] === 1) {
-                    /*if ($dropElement) {
-                        return Display::return_message(get_lang('Drag and drop an element here'));
-                    }*/
+                    if ($dropElement) {
+                        //return Display::return_message(get_lang('Drag and drop an element here'));
+                        //return $this->getDropElementHtml();
+                    }
                     if ($noWrapper) {
                         return '';
                     }
@@ -5830,13 +5831,25 @@ class learnpath
         $tree = $lpItemRepo->childrenHierarchy($itemRoot, false, $options);
 
         if (empty($tree) && $dropElement) {
-            return
-                '<ul id="lp_item_list">'.
-                Display::return_message(get_lang('Drag and drop an element here')).
-                '</ul>';
+            return $this->getDropElementHtml($noWrapper);
         }
 
         return $tree;
+    }
+
+    public function getDropElementHtml($noWrapper = false)
+    {
+        $li = '<li class="list-group-item">'.
+            Display::return_message(get_lang('Drag and drop an element here')).
+            '</li>';
+        if ($noWrapper) {
+            return $li;
+        }
+
+        return
+            '<ul id="lp_item_list" class="list-group nested-sortable">
+            '.$li.'
+            </ul>';
     }
 
     /**
@@ -6531,21 +6544,21 @@ class learnpath
 
         // Get the final item form (see BT#11048) .
         $finish = $this->getFinalItemForm();
-
+        $size = ICON_SIZE_MEDIUM; //ICON_SIZE_BIG
         $headers = [
-            Display::return_icon('folder_document.png', get_lang('Documents'), [], ICON_SIZE_BIG),
-            Display::return_icon('quiz.png', get_lang('Tests'), [], ICON_SIZE_BIG),
-            Display::return_icon('links.png', get_lang('Links'), [], ICON_SIZE_BIG),
-            Display::return_icon('works.png', get_lang('Assignments'), [], ICON_SIZE_BIG),
-            Display::return_icon('forum.png', get_lang('Forums'), [], ICON_SIZE_BIG),
-            Display::return_icon('add_learnpath_section.png', get_lang('Add section'), [], ICON_SIZE_BIG),
-            Display::return_icon('certificate.png', get_lang('Certificate'), [], ICON_SIZE_BIG),
+            Display::return_icon('folder_document.png', get_lang('Documents'), [], $size),
+            Display::return_icon('quiz.png', get_lang('Tests'), [], $size),
+            Display::return_icon('links.png', get_lang('Links'), [], $size),
+            Display::return_icon('works.png', get_lang('Assignments'), [], $size),
+            Display::return_icon('forum.png', get_lang('Forums'), [], $size),
+            Display::return_icon('add_learnpath_section.png', get_lang('Add section'), [], $size),
+            Display::return_icon('certificate.png', get_lang('Certificate'), [], $size),
         ];
 
-        echo Display::return_message(
+        /*echo Display::return_message(
             get_lang('Click on the [Learner view] button to see your learning path'),
             'normal'
-        );
+        );*/
         $section = $this->displayNewSectionForm();
         $selected = isset($_REQUEST['lp_build_selected']) ? (int) $_REQUEST['lp_build_selected'] : 0;
 
@@ -10917,8 +10930,11 @@ EOD;
      *
      * @param array $orderList A associative array with item ID as key and parent ID as value.
      */
-    public function sortItemByOrderList(array $orderList)
+    public function sortItemByOrderList(array $orderList = [])
     {
+        if (empty($orderList)) {
+            return true;
+        }
         $lpItemRepo = Container::getLpItemRepository();
         $rootParent = $lpItemRepo->getItemRoot($this->get_id());
 
@@ -10929,7 +10945,7 @@ EOD;
         $rootParent->setNextItemId($last + 1);
 */
         $em = Database::getManager();
-        echo '<pre>';
+        //echo '<pre>';
         //var_dump($orderList);
 //        $em->persist($rootParent);
 
@@ -10973,7 +10989,7 @@ exit;*/
         /*$rootParent->setPreviousItemId(1);
         $rootParent->setDisplayOrder(0);
         $rootParent->setLaunchData(1);*/
-        echo '<pre>';
+        //echo '<pre>';
         $rootParent->setDisplayOrder(1);
         foreach ($orderList as $item) {
             $itemId  = $item->id ?? 0;
@@ -10981,10 +10997,12 @@ exit;*/
                 continue;
             }
             $parentId = $item->parent_id ?? 0;
-            if (empty($parentId)) {
-                $parent = $rootParent;
-            } else {
-                $parent = $lpItemRepo->find($parentId);
+            $parent = $rootParent;
+            if (!empty($parentId)) {
+                $parentExists = $lpItemRepo->find($parentId);
+                if (null !== $parentExists) {
+                    $parent = $parentExists;
+                }
             }
 
             if (isset($parentOrder[$parent->getIid()])) {
@@ -11019,12 +11037,13 @@ exit;*/
         $lpItemRepo->reorder($rootParent, 'displayOrder');
 
         var_dump($lpItemRepo->verify());
-        exit;
+        return true;
+        /*
         $lpItemRepo->recoverNode($rootParent);
         var_dump($lpItemRepo->verify());
 
         $em->flush();
-        exit;
+        exit;*/
     }
 
     private static function updateList($list, $parent, &$previous, &$next)

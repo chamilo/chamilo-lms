@@ -124,10 +124,12 @@ switch ($action) {
     case 'update_lp_item_order':
         if (api_is_allowed_to_edit(null, true)) {
             // $new_order gets a value like "647|0^648|0^649|0^"
-            $new_order = $_REQUEST['new_order'] ?? [];
             $newOrder = $_REQUEST['new_order'] ?? [];
 
             $orderList = json_decode($newOrder);
+            if (empty($orderList)) {
+                exit;
+            }
             /*$sections = explode('^', $new_order);
             $sections = array_filter($sections);
             // We have to update parent_item_id, previous_item_id, next_item_id, display_order in the database
@@ -148,7 +150,7 @@ switch ($action) {
 
             $learningPath = new learnpath($lp, api_get_course_info(), api_get_user_id());
             if ($learningPath) {
-                echo $learningPath->getBuildTree(true);
+                echo $learningPath->getBuildTree(true, true);
             }
         }
         exit;

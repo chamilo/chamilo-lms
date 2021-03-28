@@ -215,6 +215,7 @@ $htmlHeadXtra[] = '
                 "'.$ajax_url.'",
                 params,
                 function(result) {
+                    serialized = [];
                     $("#lp_item_list").html(result);
                 }
             );
@@ -318,7 +319,11 @@ $htmlHeadXtra[] = '
                         $(itemEl).attr("id", itemId);
                         $(itemEl).attr("data-id", itemId);
                         let list = serialize(root);
-                        let order = "&a=update_lp_item_order&new_order=" + JSON.stringify(list);
+                        let listInString = JSON.stringify(list);
+                        if (typeof listInString === "undefined") {
+                            listInString = "";
+                        }
+                        let order = "&a=update_lp_item_order&new_order=" + listInString;
                         $.get(
                             "'.$ajax_url.'",
                             order,

@@ -1,5 +1,4 @@
 # The Azure Active Directory Plugin
-Allow authentication (with OAuth2) with Microsoft's Azure Active Directory.
 
 This plugin allows users to authenticate (with OAuth2) through Microsoft's Azure Active Directory.
 This will modify the login form to either substitute the default login form or add another option to connect through

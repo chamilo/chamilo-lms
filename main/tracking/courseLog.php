@@ -41,11 +41,6 @@ if ('myspace' === $from) {
     $from_myspace = true;
     $this_section = 'session_my_space';
 }
-if (Session::has('download_inactive_users')) {
-    $csvDownloadInactiveUsers = Session::read('download_inactive_users', []);
-    Session::erase('download_inactive_users');
-    Export::arrayToCsv($csvDownloadInactiveUsers, 'reporting_inactive_users');
-}
 
 // If the user is a HR director (drh)
 if (api_is_drh()) {
@@ -81,7 +76,7 @@ if (api_is_drh()) {
     }
 }
 
-if ($export_csv) {
+if ($export_csv || isset($_GET['csv'])) {
     if (!empty($sessionId)) {
         Session::write('id_session', $sessionId);
     }
@@ -132,9 +127,11 @@ $js = "<script>
                 foldup(id);
             });
         }
-        $('#reminder_form_since').change(function(){
-            $('#download-csv').prop('href','".api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq().'&csv=1&since='."'+$('#reminder_form_since').val())
-        })
+        $('#download-csv').on('click', function (e) {
+            e.preventDefault();
+
+            location.href = '".api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq().'&csv=1&since='."'+$('#reminder_form_since').val();
+        });
     })
 </script>";
 $htmlHeadXtra[] = $js;
@@ -1078,7 +1075,11 @@ if (isset($_GET['csv']) && $_GET['csv'] == 1) {
             $user = api_get_user_info($userId);
             $csv_content[] = [$user['complete_name']];
         }
-        Session::write('download_inactive_users', $csv_content);
+
+        ob_end_clean();
+
+        Export::arrayToCsv($csv_content, 'reporting_inactive_users');
+        exit;
     }
 }
 Display::display_footer();

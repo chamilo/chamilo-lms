@@ -234,7 +234,6 @@ $form_search = new FormValidator(
     FormValidator::LAYOUT_INLINE
 );
 $renderer = $form_search->defaultRenderer();
-$renderer->setCustomElementTemplate('<span>{element}</span>');
 $form_search->addHidden('from', Security::remove_XSS($from));
 $form_search->addHidden('session_id', $sessionId);
 $form_search->addHidden('id_session', $sessionId);
@@ -566,8 +565,7 @@ if ($nbStudents > 0) {
         'get',
         api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
         null,
-        ['style' => 'margin-bottom: 10px'],
-        FormValidator::LAYOUT_INLINE
+        ['style' => 'margin-bottom: 10px']
     );
     $options = [
         2 => sprintf($getLangXDays, 2),
@@ -592,7 +590,7 @@ if ($nbStudents > 0) {
     $form->addElement('hidden', 'cidReq', $courseInfo['code']);
     $form->addElement('hidden', 'id_session', api_get_session_id());
     $form->addButtonSend(get_lang('SendNotification'));
-    $form->addHtml('<a id="download-csv" href="#!" class=" btn btn-default " > '.
+    $form->addLabel(get_lang('Export'), '<a id="download-csv" href="#!" class=" btn btn-default " > '.
         Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_SMALL).
         get_lang('ExportAsCSV')
     .' </a>');

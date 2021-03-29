@@ -434,6 +434,8 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 $categories = [];
                 $letterList = [];
                 $highestRow = $page->getHighestRow(0); // Name list
+                // Sets $page->getColumnIterator('C')
+                $dimension = $page->getColumnDimension('C');
                 foreach ($page->getColumnIterator('C') as $col) {
                     $index = $col->getColumnIndex();
                     $cell = $page->getCellByColumnAndRow($counterColumn, 1);

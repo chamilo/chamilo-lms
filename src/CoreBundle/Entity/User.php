@@ -39,13 +39,13 @@ use UserManager;
  *     normalizationContext={"groups"={"user:read"}},
  *     denormalizationContext={"groups"={"user:write"}},
  *     collectionOperations={
- *         "get"={},
+ *         "get"={"security"="is_granted('ROLE_ADMIN')"},
  *         "post"={}
  *     },
  *     itemOperations={
- *         "get"={},
+ *         "get"={"security"="is_granted('ROLE_ADMIN')"},
  *         "put"={},
- *     }
+ *     },
  * )
  *
  * @ApiFilter(SearchFilter::class, properties={"username":"partial", "firstname":"partial"})
@@ -240,9 +240,10 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected ?DateTime $passwordRequestedAt;
 
     /**
+     * @ApiSubresource
+     *
      * @var Collection<int, CourseRelUser>|CourseRelUser[]
      *
-     * @ApiSubresource
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="user", orphanRemoval=true)
      */
     protected Collection $courses;
@@ -350,6 +351,20 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * )
      */
     protected Collection $sessionCourseSubscriptions;
+
+    /**
+     * @ApiSubresource()
+     *
+     * @var Collection<int, SessionRelUser>|SessionRelUser[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\SessionRelUser",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected Collection $sessionsRelUser;
 
     /**
      * @var Collection<int, SkillRelUser>|SkillRelUser[]
@@ -534,18 +549,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * @ORM\OneToMany(targetEntity="PersonalAgenda", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected Collection $personalAgendas;
-
-    /**
-     * @var Collection<int, SessionRelUser>|SessionRelUser[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\SessionRelUser",
-     *     mappedBy="user",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     */
-    protected Collection $sessionsRelUser;
 
     /**
      * @var CGroupRelUser[]|Collection<int, CGroupRelUser>

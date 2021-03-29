@@ -18,12 +18,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     attributes={"security"="is_granted('ROLE_USER')"},
  *     normalizationContext={"groups"={"course_rel_user:read", "user:read"}},
  *     collectionOperations={
- *         "get"={"security"="is_granted('ROLE_ADMIN') or object.user == user"},
- *         "post"={"security"="is_granted('ROLE_ADMIN') or object.user == user"}
+ *         "get"={"security"="is_granted('ROLE_ADMIN')"},
+ *         "post"={"security"="is_granted('ROLE_ADMIN')"}
  *     },
  *     itemOperations={
  *         "get"={"security"="is_granted('ROLE_ADMIN') or object.user == user"},
- *     }
+ *     },
+ *     subresourceOperations={
+ *         "api_users_courses_get_subresource"={"security"="is_granted('ROLE_USER')"},
+ *     },
  * )
  *
  * @ORM\Table(
@@ -153,17 +156,12 @@ class CourseRelUser
         return $this;
     }
 
-    /**
-     * Get sort.
-     *
-     * @return int
-     */
-    public function getSort()
+    public function getSort(): ?int
     {
         return $this->sort;
     }
 
-    public function isTutor(): bool
+    public function isTutor(): ?bool
     {
         return $this->tutor;
     }
@@ -182,12 +180,7 @@ class CourseRelUser
         return $this;
     }
 
-    /**
-     * Get userCourseCat.
-     *
-     * @return int
-     */
-    public function getUserCourseCat()
+    public function getUserCourseCat(): ?int
     {
         return $this->userCourseCat;
     }
@@ -199,14 +192,21 @@ class CourseRelUser
         return $this;
     }
 
-    /**
-     * Get legalAgreement.
-     *
-     * @return int
-     */
-    public function getLegalAgreement()
+    public function getLegalAgreement(): ?int
     {
         return $this->legalAgreement;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
     /**

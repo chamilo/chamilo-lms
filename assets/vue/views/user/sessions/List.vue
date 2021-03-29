@@ -1,12 +1,12 @@
 <template>
   <div class="course-list">
-      {{ status }}
-      <SessionCard :sessions="sessions"></SessionCard>
+    {{ status }}
+    <SessionCardList :sessions="sessions"></SessionCardList>
   </div>
 </template>
 
 <script>
-import SessionCard from './SessionCard';
+import SessionCardList from './SessionCardList';
 import ListMixin from '../../../mixins/ListMixin';
 import { ENTRYPOINT } from '../../../config/entrypoint';
 import axios from "axios";
@@ -16,7 +16,7 @@ export default {
   servicePrefix: 'Course',
   mixins: [ListMixin],
   components: {
-      SessionCard
+      SessionCardList
   },
   data() {
     return {
@@ -32,7 +32,7 @@ export default {
         this.status = 'Loading';
         let user = this.$store.getters['security/getUser'];
         if (user) {
-          axios.get(ENTRYPOINT + 'users/' + user.id + '/session_course_subscriptions.json').then(response => {
+          axios.get(ENTRYPOINT + 'users/' + user.id + '/sessions_rel_users.json').then(response => {
             this.status = '';
             if (Array.isArray(response.data)) {
               this.sessions = response.data;

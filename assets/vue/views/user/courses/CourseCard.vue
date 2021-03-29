@@ -1,13 +1,14 @@
 <template>
   <b-row no-gutters>
-    <b-col md="4">
+    <b-col md="2">
       <b-card-img
         src="/img/icons/64/course.png"
         alt="Image"
+        img-left
         class="rounded-0"
       />
     </b-col>
-    <b-col md="8">
+    <b-col md="10">
       <b-card-body :title="course.title">
         <!--              <b-card-text>-->
         <!--                Course description-->

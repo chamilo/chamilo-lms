@@ -1,46 +1,50 @@
 <template>
-  <v-container grid-list-xl fluid>
-    <v-layout row wrap>
-      <v-row dense>
-        <v-col
-              v-for="card in sessions"
-              :key="card.course.title"
-              :cols="12"
+  <b-row no-gutters>
+    <b-col md="2">
+      <b-card-img
+          src="/img/icons/64/session.png"
+          alt="Image"
+          class="mb-3"
+          img-left
+      />
+    </b-col>
+    <b-col md="10">
+      <b-card-body :title="sessionRelUser.session.name">
+        <b-card
+            v-for="course in sessionRelUser.courses"
+            :key="course.id"
+            no-body
+            class="overflow-hidden"
+            style="max-width: 540px;"
         >
-          <v-card>
-            <div class="d-flex flex-no-wrap">
-              <v-avatar
-                      class="ma-3"
-                      tile
-              >
-                <v-img src="/img/icons/48/blackboard_blue.png"></v-img>
-              </v-avatar>
-              <div >
-                <v-card-title v-text="card.course.title">
-                </v-card-title>
-              </div>
-            </div>
-            <v-card-actions>
-              <v-btn
-                      :href=" '/course/' + card.course.id + '/home'"
-                      text
-                      color="deep-purple accent-4"
-              >
-                Go
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-layout>
-  </v-container>
+          <b-card-body :title="course.course.title">
+            <!--              <b-card-text>-->
+            <!--                Course description-->
+            <!--              </b-card-text>-->
+            <b-button
+                :href=" '/course/' + course.course.id + '/home' + '?sid=' + sessionRelUser.session.id"
+                variant="primary"
+            >
+              Go
+            </b-button>
+          </b-card-body>
+        </b-card>
+      </b-card-body>
+    </b-col>
+  </b-row>
 </template>
 
 <script>
 export default {
   name: 'SessionCard',
   props: {
-    sessions: Array
+    sessionRelUser: Object,
   },
+  data() {
+    return {
+    };
+  },
+  methods: {
+  }
 };
 </script>

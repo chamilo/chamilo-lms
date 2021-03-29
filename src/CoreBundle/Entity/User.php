@@ -340,9 +340,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected Collection $resourceNodes;
 
     /**
-     * @ApiSubresource()
-     *
      * @var Collection<int, SessionRelCourseRelUser>|SessionRelCourseRelUser[]
+     *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\SessionRelCourseRelUser",
      *     mappedBy="user",

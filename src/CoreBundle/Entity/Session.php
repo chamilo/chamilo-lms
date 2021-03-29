@@ -69,7 +69,7 @@ class Session
     public const COACH = 2;
 
     /**
-     * @Groups({"session:read"})
+     * @Groups({"session:read", "session_rel_user:read"})
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
@@ -98,6 +98,8 @@ class Session
     protected Collection $users;
 
     /**
+     * @var Collection|SessionRelCourseRelUser[]
+     *
      * @ORM\OneToMany(
      *     targetEntity="SessionRelCourseRelUser",
      *     mappedBy="session",
@@ -138,7 +140,7 @@ class Session
 
     /**
      * @Assert\NotBlank()
-     * @Groups({"session:read", "session:write", "session_rel_course_rel_user:read", "document:read"})
+     * @Groups({"session:read", "session:write", "session_rel_course_rel_user:read", "document:read", "session_rel_user:read"})
      * @ORM\Column(name="name", type="string", length=150)
      */
     protected string $name;
@@ -509,11 +511,12 @@ class Session
 
     public function getUserInCourse(User $user, Course $course, $status = null): Collection
     {
-        $criteria = Criteria::create()->where(
-            Criteria::expr()->eq('course', $course)
-        )->andWhere(
-            Criteria::expr()->eq('user', $user)
-        );
+        $criteria = Criteria::create()
+            ->where(
+                Criteria::expr()->eq('course', $course)
+            )->andWhere(
+                Criteria::expr()->eq('user', $user)
+            );
 
         if (null !== $status) {
             $criteria->andWhere(
@@ -524,12 +527,24 @@ class Session
         return $this->getUserCourseSubscriptions()->matching($criteria);
     }
 
-    /**
-     * Set name.
-     *
-     * @return $this
-     */
-    public function setName(string $name)
+    public function getCoursesByUser(User $user, $status = null): Collection
+    {
+        $criteria = Criteria::create()
+            ->where(
+                Criteria::expr()->eq('user', $user)
+            )
+        ;
+
+        if (null !== $status) {
+            $criteria->andWhere(
+                Criteria::expr()->eq('status', $status)
+            );
+        }
+
+        return $this->getUserCourseSubscriptions()->matching($criteria);
+    }
+
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -565,12 +580,7 @@ class Session
         return $this;
     }
 
-    /**
-     * Get nbrCourses.
-     *
-     * @return int
-     */
-    public function getNbrCourses()
+    public function getNbrCourses(): int
     {
         return $this->nbrCourses;
     }
@@ -582,12 +592,7 @@ class Session
         return $this;
     }
 
-    /**
-     * Get nbrUsers.
-     *
-     * @return int
-     */
-    public function getNbrUsers()
+    public function getNbrUsers(): int
     {
         return $this->nbrUsers;
     }
@@ -599,12 +604,7 @@ class Session
         return $this;
     }
 
-    /**
-     * Get nbrClasses.
-     *
-     * @return int
-     */
-    public function getNbrClasses()
+    public function getNbrClasses(): int
     {
         return $this->nbrClasses;
     }
@@ -850,7 +850,7 @@ class Session
         return $this->userCourseSubscriptions;
     }
 
-    public function setUserCourseSubscriptions(ArrayCollection $userCourseSubscriptions): self
+    public function setUserCourseSubscriptions(Collection $userCourseSubscriptions): self
     {
         $this->userCourseSubscriptions = new ArrayCollection();
 

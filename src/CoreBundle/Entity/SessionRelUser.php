@@ -6,14 +6,21 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
 use DateTimeZone;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * SessionRelUser.
  *
+ * @ApiResource(
+ *     shortName="SessionSubscription",
+ *     normalizationContext={"groups"={"session_rel_user:read"}}
+ * )
  * @ORM\Table(
  *     name="session_rel_user",
  *     indexes={
@@ -42,12 +49,16 @@ class SessionRelUser
     protected int $id;
 
     /**
+     * @Groups({"session_rel_user:read"})
+     *
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="users", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
     protected Session $session;
 
     /**
+     * @Groups({"session_rel_user:read"})
+     *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="sessionsRelUser", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
@@ -83,12 +94,27 @@ class SessionRelUser
      */
     protected DateTime $registeredAt;
 
+    /**
+     * @Groups({"session_rel_user:read"})
+     */
+    protected Collection $courses;
+
     public function __construct()
     {
         $this->duration = 0;
         $this->movedTo = null;
         $this->movedStatus = null;
         $this->registeredAt = new DateTime('now', new DateTimeZone('UTC'));
+    }
+
+    public function getCourses()
+    {
+        return $this->session->getCoursesByUser($this->getUser());
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     public function setSession(Session $session): self

@@ -59,7 +59,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public const HIDDEN = 4;
 
     /**
-     * @Groups({"course:read", "course_rel_user:read"})
+     * @Groups({"course:read", "course_rel_user:read", "session_rel_user:read", "session_rel_course_rel_user:read", "session_rel_user:read"})
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -71,7 +71,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      *
      * @Assert\NotBlank(message="A Course requires a title")
      *
-     * @Groups({"course:read", "course:write", "course_rel_user:read", "session_rel_course_rel_user:read"})
+     * @Groups({"course:read", "course:write", "course_rel_user:read", "session_rel_course_rel_user:read", "session_rel_user:read"})
      *
      * @ORM\Column(name="title", type="string", length=250, nullable=true, unique=false)
      */

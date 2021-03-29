@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * Class SessionRelCourseRelUser.
  *
  * @ApiResource(
- *     shortName="SessionSubscription",
+ *     shortName="SessionCourseSubscription",
  *     normalizationContext={"groups"={"session_rel_course_rel_user:read", "user:read"}}
  * )
  * @ORM\Table(
@@ -62,7 +62,7 @@ class SessionRelCourseRelUser
     protected Session $session;
 
     /**
-     * @Groups({"session_rel_course_rel_user:read"})
+     * @Groups({"session_rel_course_rel_user:read", "session_rel_user:read"})
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="sessionUserSubscriptions", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */

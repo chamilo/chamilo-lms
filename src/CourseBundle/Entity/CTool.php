@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tool;
+use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -31,6 +32,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class CTool extends AbstractResource implements ResourceInterface
 {
+    use ShowCourseResourcesInSessionTrait;
+
     /**
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id

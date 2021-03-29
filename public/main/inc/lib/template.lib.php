@@ -1110,7 +1110,7 @@ class Template
             $url = $courseInfo['course_public_url'];
             $sessionId = api_get_session_id();
             if (!empty($sessionId)) {
-                $url .= '&sid='.$sessionId;
+                $url .= '?sid='.$sessionId;
             }
             array_unshift(
                 $interbreadcrumb,

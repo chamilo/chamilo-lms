@@ -201,36 +201,7 @@ class GlossaryManager
 
             $repo = Container::getGlossaryRepository();
             $repo->create($glossary);
-            /*
-            throw new Exception('implement resources');
 
-
-            // Database table definition
-            $table = Database::get_course_table(TABLE_GLOSSARY);
-            $params = [
-                'glossary_id' => 0,
-                'c_id' => api_get_course_int_id(),
-                'name' => $values['name'],
-                'description' => $values['description'],
-                'display_order' => $max_glossary_item + 1,
-                'session_id' => $session_id,
-            ];
-            $id = Database::insert($table, $params);
-
-            if ($id) {
-                $sql = "UPDATE $table SET glossary_id = $id WHERE iid = $id";
-                Database::query($sql);
-
-                //insert into item_property
-                /*api_item_property_update(
-                    api_get_course_info(),
-                    TOOL_GLOSSARY,
-                    $id,
-                    'GlossaryAdded',
-                    api_get_user_id()
-                );* /
-            }
-            */
             // display the feedback message
             if ($showMessage) {
                 Display::addFlash(
@@ -501,6 +472,7 @@ class GlossaryManager
         $view = self::getGlossaryView();
         // action links
         $actionsLeft = '';
+        $url = api_get_path(WEB_CODE_PATH).'glossary/index.php?'.api_get_cidreq();
         if (api_is_allowed_to_edit(null, true)) {
             $addIcon = Display::return_icon(
                 'new_glossary_term.png',
@@ -509,24 +481,24 @@ class GlossaryManager
                 ICON_SIZE_MEDIUM
             );
             $actionsLeft .= '<a
-                href="index.php?'.api_get_cidreq().'&action=addglossary&msg=add?'.api_get_cidreq().'">'.$addIcon.'</a>';
+                href="'.$url.'&action=addglossary">'.$addIcon.'</a>';
         }
 
         if (api_is_allowed_to_edit(null, true)) {
-            $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=import">'.
+            $actionsLeft .= '<a href="'.$url.'&action=import">'.
                 Display::return_icon('import.png', get_lang('Import glossary'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
         if (!api_is_anonymous()) {
-            $actionsLeft .= '<a id="export_opener" href="'.api_get_self().'?'.api_get_cidreq().'&action=export">'.
+            $actionsLeft .= '<a id="export_opener" href="'.$url.'&action=export">'.
                 Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
         if ('table' === $view || !isset($view)) {
-            $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=list">'.
+            $actionsLeft .= '<a href="'.$url.'&action=changeview&view=list">'.
                 Display::return_icon('view_detailed.png', get_lang('List view'), '', ICON_SIZE_MEDIUM).'</a>';
         } else {
-            $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=table">'.
+            $actionsLeft .= '<a href="'.$url.'&action=changeview&view=table">'.
                 Display::return_icon('view_text.png', get_lang('Table view'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
@@ -539,7 +511,7 @@ class GlossaryManager
             );
             $actionsLeft .= Display::url(
                 $exportIcon,
-                api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['action' => 'export_documents'])
+                $url.'&'.http_build_query(['action' => 'export_documents'])
             );
         }
 
@@ -551,12 +523,12 @@ class GlossaryManager
             if ('ASC' === $orderList) {
                 $actionsLeft .= Display::url(
                     Display::return_icon('falling.png', get_lang('Sort Descending'), [], ICON_SIZE_MEDIUM),
-                    api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['order' => 'DESC'])
+                    $url.'&'.http_build_query(['order' => 'DESC'])
                 );
             } else {
                 $actionsLeft .= Display::url(
                     Display::return_icon('upward.png', get_lang('Sort Ascending'), [], ICON_SIZE_MEDIUM),
-                    api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['order' => 'ASC'])
+                    $url.'&'.http_build_query(['order' => 'ASC'])
                 );
             }
         }
@@ -565,14 +537,14 @@ class GlossaryManager
         $form = new FormValidator(
             'search',
             'get',
-            api_get_self().'?'.api_get_cidreq(),
+            $url,
             '',
             [],
             FormValidator::LAYOUT_INLINE
         );
         $form->addText('keyword', '', false, ['class' => '']);
-        $form->addElement('hidden', 'cidReq', api_get_course_id());
-        $form->addElement('hidden', 'id_session', api_get_session_id());
+        $form->addElement('hidden', 'cid', api_get_course_int_id());
+        $form->addElement('hidden', 'sid', api_get_session_id());
         $form->addButtonSearch(get_lang('Search'));
         $actionsRight = $form->returnForm();
 
@@ -710,8 +682,7 @@ class GlossaryManager
         $column,
         $direction
     ) {
-        // @todo Table haven't paggination
-        // @todo Filter by keywork dont work
+        // @todo pagination.
         $repo = Container::getGlossaryRepository();
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
@@ -719,31 +690,23 @@ class GlossaryManager
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
 
-        $qb = $repo->getResourcesByCourse($course, $session);
+        $keyword = $_GET['keyword'] ?? null;
 
-        /*
-        $keyword = isset($_GET['keyword']) ? Database::escape_string($_GET['keyword']) : '';
-        if(!empty($keyword)){
-            $qb->andWhere(
-                $qb->expr()->like('resource.name',':keyword')
-
-            )->andWhere(
-                $qb->expr()->like('resource.description',':keyword')
-
-            )->setParameter('keyword', '%'.$keyword.'%');
+        if (!empty($keyword)) {
+            $glossaries = $repo->findResourcesByTitle($keyword, $course->getResourceNode(), $course, $session);
+        } else {
+            $qb = $repo->getResourcesByCourse($course, $session);
+            $glossaries = $qb->getQuery()->getResult();
         }
-        */
 
         $return = [];
         $array = [];
-        $_user = api_get_user_info();
         $view = self::getGlossaryView();
-        $glossaries = $qb->getQuery()->getResult();
 
+        /** @var CGlossary $glossary */
         foreach ($glossaries as $glossary) {
-            /** @var CGlossary $glossary */
-            $session_img = api_get_session_image($sessionId, $_user['status']);
-            $array[0] = $glossary->getName().$session_img;
+            $decoration = $repo->addTitleDecoration($glossary, $course, $session);
+            $array[0] = $glossary->getName().$decoration;
             if (!$view || 'table' === $view) {
                 $array[1] = str_replace(['<p>', '</p>'], ['', '<br />'], $glossary->getDescription());
             } else {

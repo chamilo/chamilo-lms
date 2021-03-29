@@ -395,7 +395,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
         // Check if this resource type requires to load the base course resources when using a session
         $loadBaseSessionContent = $reflectionClass->hasProperty('loadCourseResourcesInSession');
-        //$loadBaseSessionContent = true;
+
         $resourceTypeName = $this->getResourceTypeName();
         $qb = $this->createQueryBuilder('resource')
             ->select('resource')
@@ -471,6 +471,9 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb;
     }
 
+    /**
+     * Get resources only from the base course.
+     */
     public function getResourcesByCourseOnly(Course $course, ResourceNode $parentNode = null): QueryBuilder
     {
         $checker = $this->getAuthorizationChecker();
@@ -592,7 +595,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
     public function getResourceFromResourceNode(int $resourceNodeId): ?ResourceInterface
     {
-        // Include links
         $qb = $this->createQueryBuilder('resource')
             ->select('resource')
             ->addSelect('node')
@@ -862,6 +864,20 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $query = $qb->getQuery();
 
         return (int) $query->getSingleScalarResult();
+    }
+
+    public function addTitleDecoration(AbstractResource $resource, Course $course, Session $session = null): string
+    {
+        if (null === $session) {
+            return '';
+        }
+
+        $link = $resource->getFirstResourceLinkFromCourseSession($course, $session);
+        if (null === $link) {
+            return '';
+        }
+
+        return '<img title="'.$session->getName().'" src="/img/icons/22/star.png" />';
     }
 
     public function isGranted(string $subject, AbstractResource $resource): bool

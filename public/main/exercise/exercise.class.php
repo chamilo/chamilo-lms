@@ -1618,7 +1618,7 @@ class Exercise
             ->setType($type)
             ->setRandom((int) $random)
             ->setRandomAnswers((bool) $random_answers)
-            ->setActive((bool) $active)
+            ->setActive((int) $active)
             ->setResultsDisabled($results_disabled)
             ->setMaxAttempt($attempts)
             ->setFeedbackType($feedback_type)
@@ -8734,6 +8734,11 @@ class Exercise
         $myActions = null,
         $returnTable = false
     ) {
+        $is_allowedToEdit = api_is_allowed_to_edit(null, true);
+        $courseId = $courseId ? (int) $courseId : api_get_course_int_id();
+        $courseInfo = api_get_course_info_by_id($courseId);
+        $sessionId = $sessionId ? (int) $sessionId : api_get_session_id();
+
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
 
@@ -8770,9 +8775,6 @@ class Exercise
             $autoLaunchAvailable = true;
         }
 
-        $is_allowedToEdit = api_is_allowed_to_edit(null, true);
-        $courseInfo = $courseId ? api_get_course_info_by_id($courseId) : api_get_course_info();
-        $sessionId = $sessionId ? (int) $sessionId : api_get_session_id();
         $courseId = $courseInfo['real_id'];
         $tableRows = [];
         $origin = api_get_origin();
@@ -8920,7 +8922,7 @@ class Exercise
                     $alt_title = ' title = "'.$exercise->getUnformattedTitle().'" ';
                 }
 
-                // Teacher only
+                // Teacher only.
                 if ($is_allowedToEdit) {
                     $lp_blocked = null;
                     if (true == $exercise->exercise_was_added_in_lp) {
@@ -8932,7 +8934,8 @@ class Exercise
                         );
                     }
 
-                    $visibility = $exerciseEntity->isVisible($course, null);
+                    $visibility = $exerciseEntity->isVisible($course, $session);
+
                     // Get visibility in base course
                     /*$visibility = api_get_item_visibility(
                         $courseInfo,
@@ -8958,7 +8961,7 @@ class Exercise
                     }
 
                     $style = '';
-                    if (0 == $exerciseEntity->getActive() || false === $visibility) {
+                    if (0 === $exerciseEntity->getActive() || false === $visibility) {
                         $style = 'color:grey';
                         //$title = Display::tag('font', $cut_title, ['style' => 'color:grey']);
                     }
@@ -9108,7 +9111,7 @@ class Exercise
                                 ICON_SIZE_SMALL
                             );
                         } else {
-                            if (0 == $exerciseEntity->getActive() || 0 == $visibility) {
+                            if (0 === $exerciseEntity->getActive()) {
                                 $visibility = Display::url(
                                     Display::return_icon(
                                         'invisible.png',
@@ -9172,7 +9175,7 @@ class Exercise
                                 ICON_SIZE_SMALL
                             );
                         } else {
-                            if (0 == $exerciseEntity->getActive() || 0 == $visibility) {
+                            if (0 === $exerciseEntity->getActive() || 0 == $visibility) {
                                 $visibility = Display::url(
                                     Display::return_icon(
                                         'invisible.png',
@@ -9299,13 +9302,16 @@ class Exercise
                 } else {
                     // Student only.
                     $visibility = $exerciseEntity->isVisible($course, null);
+                    if (false === $visibility && !empty($sessionId)) {
+                        $visibility = $exerciseEntity->isVisible($course, $session);
+                    }
 
                     if (false === $visibility) {
                         continue;
                     }
 
-                    $url = '<a '.$alt_title.'  href="overview.php?'.api_get_cidreq(
-                        ).$mylpid.$mylpitemid.'&exerciseId='.$exerciseId.'">'.
+                    $url = '<a '.$alt_title.'
+                        href="overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$exerciseId.'">'.
                         $cut_title.'</a>';
 
                     // Link of the exercise.

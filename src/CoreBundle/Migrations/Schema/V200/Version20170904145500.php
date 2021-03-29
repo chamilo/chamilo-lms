@@ -33,6 +33,10 @@ class Version20170904145500 extends AbstractMigrationChamilo
 
         // c_quiz.
         $table = $schema->getTable('c_quiz');
+
+        $this->addSql('UPDATE c_quiz SET active = 0 WHERE active IS NULL');
+        $this->addSql('ALTER TABLE c_quiz CHANGE active active INT NOT NULL');
+
         if ($table->hasColumn('exercise_category_id')) {
             $this->addSql('ALTER TABLE c_quiz CHANGE exercise_category_id exercise_category_id BIGINT DEFAULT NULL;');
             if (false === $table->hasForeignKey('FK_B7A1C35FB48D66')) {

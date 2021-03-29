@@ -2,11 +2,14 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Controller\ExceptionController;
+use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
  * All legacy Chamilo scripts should include this important file.
@@ -34,7 +37,6 @@ try {
     $kernel = new Chamilo\Kernel($env, $debug);
     // Loading Request from Sonata. In order to use Sonata Pages Bundle.
     $request = Request::createFromGlobals();
-
     // This 'load_legacy' variable is needed to know that symfony is loaded using old style legacy mode,
     // and not called from a symfony controller from public/
     $request->request->set('load_legacy', true);
@@ -53,7 +55,7 @@ try {
         $saveFlashBag = $flashBag->all();
     }
 
-    $response = $kernel->handle($request);
+    $response = $kernel->handle($request, HttpKernelInterface::MASTER_REQUEST, false);
     $context = Container::getRouter()->getContext();
 
     $pos = strpos($currentBaseUrl, 'main');
@@ -106,11 +108,7 @@ try {
     }
     define('DEFAULT_DOCUMENT_QUOTA', $default_quota);*/
     define('DEFAULT_DOCUMENT_QUOTA', 100000000);
-} catch (Exception $e) {
-    echo $e->getMessage();
-    var_dump($e->getMessage());
-    var_dump($e->getCode());
-    var_dump($e->getLine());
-    echo $e->getTraceAsString();
-    //exit;*/
+} catch (FlattenException $e) {
+    $controller = new ExceptionController();
+    $controller->showAction($e);
 }

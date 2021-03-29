@@ -80,7 +80,6 @@ class SessionVoter extends Voter
         // $session->getCurrentCourse() is set in the class CourseListener
         /** @var Session $session */
         $session = $subject;
-
         $currentCourse = $session->getCurrentCourse();
 
         switch ($attribute) {
@@ -107,8 +106,6 @@ class SessionVoter extends Voter
                     // Student access
                     if ($userIsStudent && $session->isActiveForStudent()) {
                         $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_STUDENT);
-
-                        //$token->setUser($user);
 
                         return true;
                     }
@@ -152,10 +149,7 @@ class SessionVoter extends Voter
         return false;
     }
 
-    /**
-     * @return bool
-     */
-    private function sessionIsAvailableByDuration(Session $session, User $user)
+    private function sessionIsAvailableByDuration(Session $session, User $user): bool
     {
         $duration = $session->getDuration() * 24 * 60 * 60;
         $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser(
@@ -227,23 +221,22 @@ class SessionVoter extends Voter
         return $this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_SESSION_MANAGER');
     }
 
-    /**
-     * @return bool
-     */
-    private function allowed(User $user, Session $session)
+    private function allowed(User $user, Session $session): bool
     {
         if ($this->security->isGranted('ROLE_ADMIN')) {
             return true;
         }
 
         if ($this->security->isGranted('ROLE_SESSION_MANAGER') &&
-            'true' !== $this->settingsManager->getSetting('session.allow_session_admins_to_manage_all_sessions') && $session->getSessionAdmin()->getId() !== $user->getId()
+            'true' !== $this->settingsManager->getSetting('session.allow_session_admins_to_manage_all_sessions') &&
+            $session->getSessionAdmin()->getId() !== $user->getId()
         ) {
             return false;
         }
 
         if ($this->security->isGranted('ROLE_ADMIN') &&
-            'true' === $this->settingsManager->getSetting('session.allow_teachers_to_create_sessions') && $session->getGeneralCoach()->getId() !== $user->getId()
+            'true' === $this->settingsManager->getSetting('session.allow_teachers_to_create_sessions') &&
+            $session->getGeneralCoach()->getId() !== $user->getId()
         ) {
             return false;
         }

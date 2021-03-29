@@ -9,12 +9,12 @@ namespace Chamilo\CoreBundle\DataProvider\Extension;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 //use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
-use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
 
-final class CourseRelUserExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
+final class SessionRelUserExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
 {
     private Security $security;
 
@@ -36,7 +36,7 @@ final class CourseRelUserExtension implements QueryCollectionExtensionInterface 
 
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {
-        if (CourseRelUser::class !== $resourceClass) {
+        if (SessionRelUser::class !== $resourceClass) {
             return;
         }
 

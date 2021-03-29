@@ -25,7 +25,6 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface //, 
 
     public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null): void
     {
-        error_log('applyToCollection');
         $this->addWhere($queryBuilder, $resourceClass);
     }
 
@@ -37,7 +36,6 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface //, 
 
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {
-        error_log('addWhere');
         if (CDocument::class !== $resourceClass ||
             $this->security->isGranted('ROLE_ADMIN') ||
             null === $user = $this->security->getUser()
@@ -45,6 +43,7 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface //, 
             return;
         }
 
+        error_log('addWhere');
         error_log('here!');
         $rootAlias = $queryBuilder->getRootAliases()[0];
 

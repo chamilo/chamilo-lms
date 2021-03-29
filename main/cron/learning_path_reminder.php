@@ -297,9 +297,16 @@ function learningPaths()
         $toUser = (int) $row['user_id'];
         $fromUser = (int) $row['from_user_id'];
         $userInfo = api_get_user_info($toUser);
-        $href = api_get_path(WEB_CODE_PATH).
-            'lp/lp_controller.php?cidReq='.htmlspecialchars($courseCode).
-            "&id_session=$sessionId &action=view&lp_id=$lpId&gidReq=0&gradebook=0&origin=";
+        $href = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'
+            .api_get_cidreq_params($courseCode, $sessionId).'&'
+            .http_build_query(
+                [
+                    'gradebook' => '0',
+                    'origin' => '',
+                    'lp_id' => $lpId,
+                    'action' => 'view',
+                ]
+            );
         $link = "<a href='$href'>$href</a>";
         $groupUsers[$lpId][$sessionId][$toUser] = [
             'userInfo' => $userInfo,
@@ -344,9 +351,16 @@ function learningPaths()
         $toUser = (int) $row['user_id'];
         $fromUser = $tutors[$row['c_id']][$row['lp_id']];
         $userInfo = api_get_user_info($toUser);
-        $href = api_get_path(WEB_CODE_PATH).
-            'lp/lp_controller.php?cidReq='.htmlspecialchars($courseCode).
-            "&id_session=$sessionId &action=view&lp_id=$lpId&gidReq=0&gradebook=0&origin=";
+        $href = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'
+            .api_get_cidreq_params($courseCode, $sessionId).'&'
+            .http_build_query(
+                [
+                    'gradebook' => '0',
+                    'origin' => '',
+                    'lp_id' => $lpId,
+                    'action' => 'view',
+                ]
+            );
         $link = "<a href='$href'>$href</a>";
         if (!isset($itemProcessed[$lpId][$sessionId]['LearnpathSubscription'])) {
             $groupUsers[$lpId][$sessionId][$toUser] = [
@@ -395,9 +409,16 @@ function learningPaths()
         }
         $fromUser = $tutors[$row['c_id']][$row['lp_id']];
         $userInfo = api_get_user_info($toUser);
-        $href = api_get_path(WEB_CODE_PATH).
-            'lp/lp_controller.php?cidReq='.htmlspecialchars($courseCode).
-            "&id_session=$sessionId &action=view&lp_id=$lpId&gidReq=0&gradebook=0&origin=";
+        $href = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'
+            .api_get_cidreq_params($courseCode, $sessionId).'&'
+            .http_build_query(
+                [
+                    'gradebook' => '0',
+                    'origin' => '',
+                    'lp_id' => $lpId,
+                    'action' => 'view',
+                ]
+            );
         $link = "<a href='$href'>$href</a>";
         if (!isset($itemProcessed[$lpId][$sessionId]['LearnpathSubscription'])) {
             $groupUsers[$lpId][$sessionId][$toUser] = [

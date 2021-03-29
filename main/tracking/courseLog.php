@@ -76,7 +76,7 @@ if (api_is_drh()) {
     }
 }
 
-if ($export_csv) {
+if ($export_csv || isset($_GET['csv'])) {
     if (!empty($sessionId)) {
         Session::write('id_session', $sessionId);
     }
@@ -127,6 +127,11 @@ $js = "<script>
                 foldup(id);
             });
         }
+        $('#download-csv').on('click', function (e) {
+            e.preventDefault();
+
+            location.href = '".api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq().'&csv=1&since='."'+$('#reminder_form_since').val();
+        });
     })
 </script>";
 $htmlHeadXtra[] = $js;
@@ -226,7 +231,6 @@ $form_search = new FormValidator(
     FormValidator::LAYOUT_INLINE
 );
 $renderer = $form_search->defaultRenderer();
-$renderer->setCustomElementTemplate('<span>{element}</span>');
 $form_search->addHidden('from', Security::remove_XSS($from));
 $form_search->addHidden('session_id', $sessionId);
 $form_search->addHidden('id_session', $sessionId);
@@ -558,8 +562,7 @@ if ($nbStudents > 0) {
         'get',
         api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
         null,
-        ['style' => 'margin-bottom: 10px'],
-        FormValidator::LAYOUT_INLINE
+        ['style' => 'margin-bottom: 10px']
     );
     $options = [
         2 => sprintf($getLangXDays, 2),
@@ -584,7 +587,10 @@ if ($nbStudents > 0) {
     $form->addElement('hidden', 'cidReq', $courseInfo['code']);
     $form->addElement('hidden', 'id_session', api_get_session_id());
     $form->addButtonSend(get_lang('SendNotification'));
-
+    $form->addLabel(get_lang('Export'), '<a id="download-csv" href="#!" class=" btn btn-default " > '.
+        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_SMALL).
+        get_lang('ExportAsCSV')
+    .' </a>');
     $extraFieldSelect = TrackingCourseLog::display_additional_profile_fields();
     if (!empty($extraFieldSelect)) {
         $html .= $extraFieldSelect;
@@ -1048,6 +1054,33 @@ if ($export_csv) {
 
     Export::arrayToCsv($csvContentInSession, 'reporting_student_list');
     exit;
+}
+if (isset($_GET['csv']) && $_GET['csv'] == 1) {
+    $since = 6;
+    if (isset($_GET['since'])) {
+        if ($_GET['since'] === 'never') {
+            $since = 'never';
+        } else {
+            $since = (int) $_GET['since'];
+        }
+    }
+    $usersId = Tracking::getInactiveStudentsInCourse(
+        api_get_course_int_id(),
+        $since,
+        $sessionId
+    );
+    if (count($usersId) != 0) {
+        $csv_content[] = [get_lang('NamesAndLastNames')];
+        foreach ($usersId as $userId) {
+            $user = api_get_user_info($userId);
+            $csv_content[] = [$user['complete_name']];
+        }
+
+        ob_end_clean();
+
+        Export::arrayToCsv($csv_content, 'reporting_inactive_users');
+        exit;
+    }
 }
 Display::display_footer();
 

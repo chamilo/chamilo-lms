@@ -77,11 +77,37 @@ try {
     if (empty($userId)) {
         // If we didn't find the user
         if ($plugin->get(AzureActiveDirectory::SETTING_PROVISION_USERS) === 'true') {
+            // Get groups info, if any
+            $groups = $provider->get('me/memberOf', $token);
+            if (empty($me)) {
+                throw new Exception('Groups info not found.');
+            }
+            // If any specific group ID has been defined for a specific role, use that
+            // ID to give the user the right role
+            $givenAdminGroup = $plugin->get(AzureActiveDirectory::SETTING_GROUP_ID_ADMIN);
+            $givenSessionAdminGroup = $plugin->get(AzureActiveDirectory::SETTING_GROUP_ID_SESSION_ADMIN);
+            $givenTeacherGroup = $plugin->get(AzureActiveDirectory::SETTING_GROUP_ID_TEACHER);
+            $userRole = STUDENT;
+            $isAdmin = false;
+            foreach ($groups as $group) {
+                if ($isAdmin) {
+                    break;
+                }
+                if ($givenAdminGroup == $group['objectId']) {
+                    $userRole = COURSEMANAGER;
+                    $isAdmin = true;
+                } elseif (!$isAdmin && $givenSessionAdminGroup == $group['objectId']) {
+                    $userRole = SESSIONADMIN;
+                } elseif (!$isAdmin && $userRole != SESSIONADMIN && $givenTeacherGroup == $group['objectId']) {
+                    $userRole = COURSEMANAGER;
+                }
+            }
+
             // If the option is set to create users, create it
             $userId = UserManager::create_user(
                 $me['givenName'],
                 $me['surname'],
-                STUDENT,
+                $userRole,
                 $me['mail'],
                 $me['mailNickname'],
                 '',
@@ -96,7 +122,10 @@ try {
                 [
                     'extra_'.AzureActiveDirectory::EXTRA_FIELD_ORGANISATION_EMAIL => $me['mail'],
                     'extra_'.AzureActiveDirectory::EXTRA_FIELD_AZURE_ID => $me['mailNickname'],
-                ]
+                ],
+                null,
+                null,
+                $isAdmin
             );
             if (!$userId) {
                 throw new Exception(get_lang('UserNotAdded').' '.$me['mailNickname']);
@@ -107,6 +136,8 @@ try {
     }
 
     $userInfo = api_get_user_info($userId);
+
+    //TODO add user update management for groups
 
     if (empty($userInfo)) {
         throw new Exception('User '.$userId.' not found.');

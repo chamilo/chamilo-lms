@@ -125,6 +125,16 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
             $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
             $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
+            $userGroup = new UserGroup();
+            $options = [];
+            $options['where'] = [' usergroup.course_id = ? ' => $course_id];
+            $classes = $userGroup->getUserGroupInCourse($options, 0);
+
+            $usersInClassFullList = [];
+            foreach ($classes as $class) {
+                $usersInClassFullList[$class['id']] = $userGroup->getUserListByUserGroup($class['id'], 'u.lastname ASC');
+            }
+
             foreach ($_POST['id'] as $value) {
                 $surveyData = SurveyManager::get_survey($value);
                 $surveyId = $surveyData['survey_id'];
@@ -263,15 +273,10 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 $surveyList[] = $surveyData;
             }
 
-            $userGroup = new UserGroup();
-            $options = [];
-            $options['where'] = [' usergroup.course_id = ? ' => $course_id];
-            $classes = $userGroup->getUserGroupInCourse($options, 0);
-
             @$spreadsheet = new PHPExcel();
             $counter = 0;
             foreach ($classes as $class) {
-                $users = $userList = $userGroup->getUserListByUserGroup($class['id'], 'u.lastname ASC');
+                $users = $usersInClassFullList[$class['id']];
                 if (empty($users)) {
                     continue;
                 }

@@ -5818,7 +5818,11 @@ class Exercise
                             $quesId,
                             1,
                             $hotspotValue,
-                            $exerciseResultCoordinates[$quesId]
+                            $exerciseResultCoordinates[$quesId],
+                            false,
+                            0,
+                            $learnpath_id,
+                            $learnpath_item_id
                         );
                     } else {
                         if ($final_answer == 0) {
@@ -5832,7 +5836,11 @@ class Exercise
                                         $quesId,
                                         $idx,
                                         0,
-                                        $val
+                                        $val,
+                                        false,
+                                        0,
+                                        $learnpath_id,
+                                        $learnpath_item_id
                                     );
                                 }
                             }
@@ -5846,7 +5854,11 @@ class Exercise
                                         $quesId,
                                         $idx,
                                         $hotspotValue,
-                                        $val
+                                        $val,
+                                        false,
+                                        0,
+                                        $learnpath_id,
+                                        $learnpath_item_id
                                     );
                                 }
                             }
@@ -6111,7 +6123,9 @@ class Exercise
                             $hotspotValue,
                             $val,
                             false,
-                            $this->id
+                            $this->id,
+                            $learnpath_id,
+                            $learnpath_item_id
                         );
                     }
                 } else {

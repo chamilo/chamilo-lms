@@ -725,14 +725,15 @@ class Event
         $correct,
         $coords,
         $updateResults = false,
-        $exerciseId = 0
+        $exerciseId = 0,
+        $lpId = 0,
+        $lpItemId = 0
     ) {
         $debug = false;
-        global $safe_lp_id, $safe_lp_item_id;
 
         if ($updateResults == false) {
             // Validation in case of fraud with activated control time
-            if (!ExerciseLib::exercise_time_control_is_valid($exerciseId, $safe_lp_id, $safe_lp_item_id)) {
+            if (!ExerciseLib::exercise_time_control_is_valid($exerciseId, $lpId, $lpItemId)) {
                 if ($debug) {
                     error_log('Attempt is fraud');
                 }

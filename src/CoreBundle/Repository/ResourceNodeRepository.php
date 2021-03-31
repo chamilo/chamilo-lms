@@ -14,22 +14,22 @@ use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
-use League\Flysystem\FilesystemInterface;
-use League\Flysystem\MountManager;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Throwable;
 use Vich\UploaderBundle\Storage\FlysystemStorage;
 
 class ResourceNodeRepository extends MaterializedPathRepository
 {
-    protected MountManager $mountManager;
     protected FlysystemStorage $storage;
+    protected FilesystemOperator $filesystem;
 
-    public function __construct(EntityManagerInterface $manager, FlysystemStorage $storage, MountManager $mountManager)
+    public function __construct(EntityManagerInterface $manager, FlysystemStorage $storage, FilesystemOperator $resourceFilesystem)
     {
         parent::__construct($manager, $manager->getClassMetadata(ResourceNode::class));
         $this->storage = $storage;
-        $this->mountManager = $mountManager;
+        // Flysystem mount name is saved in config/packages/oneup_flysystem.yaml
+        $this->filesystem = $resourceFilesystem;
     }
 
     public function getFilename(ResourceFile $resourceFile): ?string
@@ -52,13 +52,9 @@ class ResourceNodeRepository extends MaterializedPathRepository
         }
     }*/
 
-    /**
-     * @return FilesystemInterface
-     */
     public function getFileSystem()
     {
-        // Flysystem mount name is saved in config/packages/oneup_flysystem.yaml @todo add it as a service.
-        return $this->mountManager->getFilesystem('resources_fs');
+        return $this->filesystem;
     }
 
     public function getResourceNodeFileContent(ResourceNode $resourceNode): string

@@ -30,8 +30,8 @@ class AssetController
     public function showFile($category, $path, AssetRepository $assetRepository)
     {
         $filePath = $category.'/'.$path;
-        $has = $assetRepository->getFileSystem()->has($filePath);
-        if ($has) {
+        $exists = $assetRepository->getFileSystem()->fileExists($filePath);
+        if ($exists) {
             $fileName = basename($filePath);
             $stream = $assetRepository->getFileSystem()->readStream($filePath);
 

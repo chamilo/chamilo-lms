@@ -2,15 +2,11 @@
 oneup_uploader:
     mappings:
         resource:
-            #frontend: dropzone # or any uploader you use in the frontend
-            #frontend: blueimp
             frontend: custom
             storage:
                 type: flysystem
-                filesystem: oneup_flysystem.resources_filesystem
+                filesystem: oneup_flysystem.resource_filesystem
             root_folder: true
             custom_frontend:
                 class: 'Chamilo\CoreBundle\Controller\ResourceUploadController'
                 name: upload
-
-#            namer: oneup_uploader.namer.urlsafe

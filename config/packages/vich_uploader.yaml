@@ -5,7 +5,7 @@ vich_uploader:
     mappings:
         resources:
             uri_prefix: ''
-            upload_destination: resources_fs
+            upload_destination: oneup_flysystem.resource_filesystem
             namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
             directory_namer:
                 service: Vich\UploaderBundle\Naming\SubdirDirectoryNamer
@@ -15,7 +15,7 @@ vich_uploader:
             delete_on_remove: true
         assets:
             uri_prefix: ''
-            upload_destination: assets_fs
+            upload_destination: asset_filesystem
             namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
             directory_namer:
                 service: Chamilo\CoreBundle\Component\Utils\AssetDirectoryNamer

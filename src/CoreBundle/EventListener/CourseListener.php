@@ -149,7 +149,6 @@ class CourseListener
                     if (!$session->hasCourse($course)) {
                         throw new AccessDeniedException($translator->trans('Course is not registered in the Session'));
                     }
-
                     //$course->setCurrentSession($session);
                     $session->setCurrentCourse($course);
                     // Check if user is allowed to this course-session
@@ -157,7 +156,6 @@ class CourseListener
                     if (false === $checker->isGranted(SessionVoter::VIEW, $session)) {
                         throw new AccessDeniedException($translator->trans('Unauthorised access to session!'));
                     }
-
                     $sessionHandler->set('session_name', $session->getName());
                     $sessionHandler->set('sid', $session->getId());
                     $sessionHandler->set('session', $session);

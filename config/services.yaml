@@ -55,7 +55,7 @@ services:
     Chamilo\CoreBundle\Component\Utils\NameConvention: ~
     Chamilo\CoreBundle\Component\Utils\Glide:
         arguments:
-            - {source: '@oneup_flysystem.resources_filesystem', cache: '@oneup_flysystem.cache_resources_filesystem'}
+            - {source: '@oneup_flysystem.resource_filesystem', cache: '@oneup_flysystem.resource_cache_filesystem'}
             - '%glide_media_filters%'
 
     # makes classes in src/ available to be used as services
@@ -80,8 +80,6 @@ services:
         class: Chamilo\LtiBundle\Util\Utils
         arguments: ['@chamilo.settings.manager']
 
-    League\Flysystem\MountManager: '@oneup_flysystem.mount_manager'
-
     Chamilo\CoreBundle\EventListener\HTTPExceptionListener:
         tags:
             - {name: kernel.event_listener, event: kernel.exception}
@@ -91,12 +89,12 @@ services:
         tags:
             - {name: kernel.event_listener, event: kernel.exception}
 
-sylius_settings:
-    driver: doctrine/orm
-
-# Course settings
-chamilo_course:
-    driver: doctrine/orm
+#sylius_settings:
+#    driver: doctrine/orm
+#
+## Course settings
+#chamilo_course:
+#    driver: doctrine/orm
 
 # gregwar_captcha:
     #     width: 200

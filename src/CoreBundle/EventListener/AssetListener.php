@@ -30,7 +30,7 @@ class AssetListener
             // Deletes scorm folder: example: assets/scorm/myABC .
             if (Asset::SCORM === $asset->getCategory() && !empty($folder)) {
                 $folder = Asset::SCORM.'/'.$folder;
-                $this->assetRepository->getFileSystem()->deleteDir($folder);
+                $this->assetRepository->getFileSystem()->deleteDirectory($folder);
             }
         }
     }

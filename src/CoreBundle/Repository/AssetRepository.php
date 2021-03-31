@@ -9,34 +9,29 @@ namespace Chamilo\CoreBundle\Repository;
 use Chamilo\CoreBundle\Entity\Asset;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use League\Flysystem\FilesystemInterface;
-use League\Flysystem\MountManager;
-use League\Flysystem\ZipArchive\ZipArchiveAdapter;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use League\Flysystem\FilesystemOperator;
+use PhpZip\ZipFile;
 use Symfony\Component\Routing\RouterInterface;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 class AssetRepository extends ServiceEntityRepository
 {
-    protected MountManager $mountManager;
     protected RouterInterface $router;
     protected UploaderHelper $uploaderHelper;
+    protected FilesystemOperator $filesystem;
 
-    public function __construct(ManagerRegistry $registry, RouterInterface $router, MountManager $mountManager, UploaderHelper $uploaderHelper)
+    public function __construct(ManagerRegistry $registry, RouterInterface $router, UploaderHelper $uploaderHelper, FilesystemOperator $assetFilesystem)
     {
         parent::__construct($registry, Asset::class);
         $this->router = $router;
-        $this->mountManager = $mountManager;
         $this->uploaderHelper = $uploaderHelper;
+        // Flysystem mount name is saved in config/packages/oneup_flysystem.yaml
+        $this->filesystem = $assetFilesystem;
     }
 
-    /**
-     * @return FilesystemInterface
-     */
     public function getFileSystem()
     {
-        // Flysystem mount name is saved in config/packages/oneup_flysystem.yaml
-        return $this->mountManager->getFilesystem('assets_fs');
+        return $this->filesystem;
     }
 
     /*public function getUploaderHelper(): UploaderHelper
@@ -44,26 +39,28 @@ class AssetRepository extends ServiceEntityRepository
         return $this->uploaderHelper;
     }*/
 
-    public function unZipFile(Asset $asset, ZipArchiveAdapter $zipArchiveAdapter): void
+    public function unZipFile(Asset $asset, ZipFile $zipFile): void
     {
         $folder = '/'.$asset->getCategory().'/'.$asset->getTitle();
 
         $fs = $this->getFileSystem();
-        if ($fs->has($folder)) {
-            $contents = $zipArchiveAdapter->listContents();
-            foreach ($contents as $data) {
-                if ($fs->has($folder.'/'.$data['path'])) {
+
+        if ($fs->fileExists($folder)) {
+            $list = $zipFile->getEntries();
+            foreach ($list as $item) {
+                $name = $item->getName();
+                if ($fs->fileExists($folder.'/'.$name)) {
                     continue;
                 }
 
-                if ('dir' === $data['type']) {
-                    $fs->createDir($folder.'/'.$data['path']);
+                if ($item->isDirectory()) {
+                    $fs->createDirectory($folder.'/'.$name);
 
                     continue;
                 }
 
-                $content = (string) $zipArchiveAdapter->read($data['path']);
-                $fs->write($folder.'/'.$data['path'], $content);
+                $content = $zipFile->getEntryContents($name);
+                $fs->write($folder.'/'.$name, $content);
             }
         }
     }
@@ -91,8 +88,7 @@ class AssetRepository extends ServiceEntityRepository
             );
         }
 
-        // Classic
-
+        // Classic.
         $helper = $this->uploaderHelper;
 
         return '/assets'.$helper->asset($asset);

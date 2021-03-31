@@ -52,14 +52,16 @@ class ResourceNodeListener
     public function preUpdate(ResourceNode $resourceNode, PreUpdateEventArgs $event)
     {
         error_log('resource node preUpdate');
-
         if ($resourceNode->hasResourceFile() && $resourceNode->hasEditableTextContent()) {
             $fileName = $this->resourceNodeRepository->getFilename($resourceNode->getResourceFile());
             error_log(sprintf('fileName: %s', $fileName));
             if ($fileName) {
                 error_log('updated');
                 $content = $resourceNode->getContent();
-                $this->resourceNodeRepository->getFileSystem()->update($fileName, $content);
+                // Skip saving null.
+                if (null !== $content) {
+                    $this->resourceNodeRepository->getFileSystem()->write($fileName, $content);
+                }
             }
         }
 

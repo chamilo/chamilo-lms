@@ -51,8 +51,8 @@ class ResourceUploadController extends BlueimpController
             $session = $doctrine->getRepository(Session::class)->find($sessionId);
         }
 
-        $token = $container->get('security.token_storage')->getToken();
-        $user = $token->getUser();
+        /*$token = $container->get('security.token_storage')->getToken();
+        $user = $token->getUser();*/
 
         // Create repository from tool and type.
         $factory = $container->get(ResourceFactory::class);

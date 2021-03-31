@@ -78,7 +78,7 @@ function get_course_usage($course, $session_id = 0)
     foreach ($tables as $tableInfo) {
         $table = $tableInfo[0];
         $title = $tableInfo[1];
-        $sql = "SELECT COUNT(*) count FROM $table 
+        $sql = "SELECT COUNT(*) count FROM $table
                 WHERE c_id = '$courseId' $conditionSession ";
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
@@ -105,8 +105,7 @@ Display::display_header($tool_name);
     </div>
 <?php
 
-echo Display::page_header(get_lang('Course usage'));
-
+/*echo Display::page_header(get_lang('Course usage'));
 $table = new SortableTableFromArray(
     get_course_usage($courseInfo, $sessionId),
     0,
@@ -117,7 +116,7 @@ $table->set_additional_parameters(['code' => $courseInfo['code']]);
 $table->set_other_tables(['user_table', 'class_table']);
 $table->set_header(0, get_lang('tool'), true);
 $table->set_header(1, get_lang('number of items'), true);
-$table->display();
+$table->display();*/
 
 /*
  * Show all users subscribed in this course.
@@ -130,7 +129,7 @@ $sql = "SELECT *, cu.status as course_status
         FROM $table_course_user cu, $table_user u";
 if (api_is_multiple_url_enabled()) {
     $sql .= " INNER JOIN ".Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER)." url_rel_user
-        ON 
+        ON
             u.id = url_rel_user.user_id AND
             url_rel_user.access_url_id = ".api_get_current_access_url_id();
 }

@@ -315,7 +315,7 @@ class Database
      *
      * @return mixed
      */
-    public static function result(Statement $resource, $row, $field = '')
+    public static function result($resource, $row, $field = '')
     {
         if ($resource->rowCount() > 0) {
             $result = $resource->fetchAll(PDO::FETCH_BOTH);

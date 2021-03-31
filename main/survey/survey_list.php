@@ -135,6 +135,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 $usersInClassFullList[$class['id']] = $userGroup->getUserListByUserGroup($class['id'], 'u.lastname ASC');
             }
 
+            $debug = false;
             foreach ($_POST['id'] as $value) {
                 $surveyData = SurveyManager::get_survey($value);
                 $surveyId = $surveyData['survey_id'];
@@ -335,6 +336,9 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                         $questionsInSurvey = 0;
                         $questionFound = false;
                         foreach ($questions as $question) {
+                            if (isset($question['answers'])) {
+                                $question['answers'] = array_map('strip_tags', (array_map('trim', $question['answers'])));
+                            }
                             $questionTitle = str_replace(
                                 '{{student_full_name}}',
                                 $completeName,
@@ -354,13 +358,20 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                                             if (is_array($answerData)) {
                                                                 $answerData = implode(', ', $answerData);
                                                             }
-                                                            $answerData = trim($answerData);
+                                                            $answerData = strip_tags(trim($answerData));
+                                                            $answerDataMissing = '';
+                                                            if (isset($question['answers']) && !in_array($answerData, $question['answers'])) {
+                                                                $answerDataMissing = 'Answer not found in list';
+                                                                $answerData = '';
+                                                            }
+                                                            if ($debug) {
+                                                                $answerData = "$answerData - $answerDataMissing -  s: $surveyId u inv: {$userAnswer['lastname']} col: $userColumn prev: $previousSurveyQuestionsCount";
+                                                            }
+                                                            // Check if answer exists in the question list.
                                                             $cell = @$page->setCellValueByColumnAndRow(
                                                                 $userColumn,
                                                                 $rowStudent,
                                                                 $answerData,
-                                                                //"s: $surveyId u inv: {$userAnswer['lastname']} col: $userColumn prev: $previousSurveyQuestionsCount",
-                                                                //"$userColumn s: $surveyId  u invite: ".$userAnswer['lastname'],
                                                                 true
                                                             );
                                                             $colCode = $cell->getColumn();
@@ -418,11 +429,14 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                             $questionId = $question['question_id'];
                             foreach ($usersWithInvitation as $userAnswer) {
                                 $userId = $userAnswer['user_id'];
+                                $title = $survey['group_title'].' - '.$userAnswer['complete_name'];
+                                if ($debug) {
+                                    $title = $userAnswer['id'].' - s:'.$surveyId.' - prev:'.$previousSurveyQuestionsCount.' '.$userAnswer['lastname'];
+                                }
                                 $cell = @$page->setCellValueByColumnAndRow(
                                     $column,
                                     2,
-                                    $survey['group_title'].' - '.$userAnswer['complete_name'],
-                                    //$userAnswer['id'].' - s:'.$surveyId.' - prev:'.$previousSurveyQuestionsCount.' '.$userAnswer['lastname'],
+                                    $title,
                                     true
                                 );
                                 $cell->getStyle()->getAlignment()->setTextRotation(90);
@@ -451,7 +465,9 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 $index = 0;
                 foreach ($page->getColumnIterator('A') as $col) {
                     if (!in_array($index, $columnsWithData)) {
-                        $page->removeColumnByIndex($index - $less);
+                        if (!$debug) {
+                            $page->removeColumnByIndex($index - $less);
+                        }
                         $less++;
                     }
                     $index++;
@@ -486,15 +502,19 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                         foreach ($categoryList as $categoryData) {
                             $col = $categoryData['col']; // D
                             $row = $categoryData['row']; // 15
-                            $data = $page->rangeToArray($col.'1:'.$col.$row);
-                            $newOrder[] = ['data' => $data, 'col' => $col];
+                            if (!$debug) {
+                                $data = $page->rangeToArray($col.'1:'.$col.$row);
+                                $newOrder[] = ['data' => $data, 'col' => $col];
+                            }
                         }
                     }
 
                     foreach ($newOrder as $index => $order) {
                         $data = $order['data'];
                         $col = $order['col'];
-                        $page->fromArray($data, '@', $letterList[$index].'1', true);
+                        if (!$debug) {
+                            $page->fromArray($data, '@', $letterList[$index].'1', true);
+                        }
                     }
                 }
 
@@ -523,15 +543,20 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
 
                 if (!empty($data)) {
                     foreach ($data as $colInfo) {
-                        $page->mergeCells($colInfo['start'].':'.$colInfo['end']);
+                        if (!$debug) {
+                            $page->mergeCells($colInfo['start'].':'.$colInfo['end']);
+                        }
                     }
                 }
 
                 $row = 3;
                 foreach ($usersInClass as $user) {
                     $columnUser = 0;
-                    //@$page->setCellValueByColumnAndRow($columnUser++, $row, $user['id'].': '.$user['lastname']);
-                    @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['lastname']);
+                    $lastname = $user['lastname'];
+                    if ($debug) {
+                        $lastname = $user['id'].': '.$user['lastname'];
+                    }
+                    @$page->setCellValueByColumnAndRow($columnUser++, $row, $lastname);
                     @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['firstname']);
                     $row++;
                 }

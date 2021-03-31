@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
@@ -113,7 +114,7 @@ class Database
      *
      * @return int
      */
-    public static function affected_rows(Statement $result)
+    public static function affected_rows($result)
     {
         return $result->rowCount();
     }
@@ -273,7 +274,7 @@ class Database
      *
      * @return array|mixed
      */
-    public static function fetch_array(Statement $result, $option = 'BOTH')
+    public static function fetch_array($result, $option = 'BOTH')
     {
         if ($result === false) {
             return [];
@@ -287,7 +288,7 @@ class Database
      *
      * @return array
      */
-    public static function fetch_assoc(Statement $result)
+    public static function fetch_assoc($result)
     {
         return $result->fetch(PDO::FETCH_ASSOC);
     }
@@ -298,7 +299,7 @@ class Database
      *
      * @return mixed
      */
-    public static function fetch_object(Statement $result)
+    public static function fetch_object($result)
     {
         return $result->fetch(PDO::FETCH_OBJ);
     }
@@ -309,7 +310,7 @@ class Database
      *
      * @return mixed
      */
-    public static function fetch_row(Statement $result)
+    public static function fetch_row($result)
     {
         if ($result === false) {
             return [];
@@ -325,7 +326,7 @@ class Database
      *                   Notes: Use this method if you are concerned about how much memory is being used for queries that return large result sets.
      *                   Anyway, all associated result memory is automatically freed at the end of the script's execution.
      */
-    public static function free_result(Statement $result)
+    public static function free_result($result)
     {
         $result->closeCursor();
     }
@@ -345,7 +346,7 @@ class Database
      *
      * @return int
      */
-    public static function num_rows(Statement $result)
+    public static function num_rows($result)
     {
         if ($result === false) {
             return 0;
@@ -363,7 +364,7 @@ class Database
      *
      * @return mixed
      */
-    public static function result(Statement $resource, $row, $field = '')
+    public static function result($resource, $row, $field = '')
     {
         if ($resource->rowCount() > 0) {
             $result = $resource->fetchAll(PDO::FETCH_BOTH);
@@ -453,7 +454,7 @@ class Database
      *
      * @return array - the value returned by the query
      */
-    public static function store_result(Statement $result, $option = 'BOTH')
+    public static function store_result($result, $option = 'BOTH')
     {
         return $result->fetchAll(self::customOptionToDoctrineOption($option));
     }

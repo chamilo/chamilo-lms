@@ -310,7 +310,9 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
 
                 $columnsWithData = [0, 1, 2];
                 $previousSurveyQuestionsCount = 0;
+                $skipThisClass = true;
                 foreach ($surveyList as $survey) {
+                    $surveyId = $survey['survey_id'];
                     $questions = $survey['questions'];
                     $questionsOriginal = $survey['questions'];
                     $usersWithInvitation = $survey['users_with_invitation'];
@@ -321,7 +323,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     $usersToShow = [];
                     $previousSurveyCount = 0;
                     $questionsInSurvey = 0;
-                    $skipThisClass = true;
+                    $userInvitationWithData = [];
                     foreach ($usersInClass as $userInClass) {
                         $userId = $userInClass['id'];
                         $completeName = $userInClass['firstname'].' '.$userInClass['lastname'];
@@ -331,6 +333,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                             $userColumn = $previousSurveyQuestionsCount;
                         }
                         $questionsInSurvey = 0;
+                        $questionFound = false;
                         foreach ($questions as $question) {
                             $questionTitle = str_replace(
                                 '{{student_full_name}}',
@@ -341,53 +344,58 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                 $questionsInSurvey++;
                                 foreach ($usersWithInvitation as $userAnswer) {
                                     $userWithInvitationId = $userAnswer['user_id'];
+                                    $addColumn = false;
                                     foreach ($questions as $questionData) {
                                         if (strpos($questionData['question'], '{{') === false) {
                                             if ($questionTitle === $questionData['question']) {
-                                                if (isset($survey['user_answers'][$userWithInvitationId][$survey['survey_id']])) {
-                                                    foreach ($survey['user_answers'][$userWithInvitationId][$survey['survey_id']] as $questionId => $answerData) {
+                                                if (isset($survey['user_answers'][$userWithInvitationId][$surveyId])) {
+                                                    foreach ($survey['user_answers'][$userWithInvitationId][$surveyId] as $questionId => $answerData) {
                                                         if ($questionData['question_id'] == $questionId) {
                                                             if (is_array($answerData)) {
                                                                 $answerData = implode(', ', $answerData);
                                                             }
                                                             $answerData = trim($answerData);
-                                                            if ($answerData != '' && !in_array($userId, $usersToShow)) {
-                                                                $usersToShow[] = $userId;
-                                                            }
-
                                                             $cell = @$page->setCellValueByColumnAndRow(
                                                                 $userColumn,
                                                                 $rowStudent,
-                                                                //$answerData,
-                                                                "$answerData s: $surveyId q: $questionId u inv: $userWithInvitationId user class: $userId",
+                                                                $answerData,
+                                                                //"s: $surveyId u inv: {$userAnswer['lastname']} col: $userColumn prev: $previousSurveyQuestionsCount",
+                                                                //"$userColumn s: $surveyId  u invite: ".$userAnswer['lastname'],
                                                                 true
                                                             );
                                                             $colCode = $cell->getColumn();
-                                                            if ($answerData != '' && !in_array($userColumn, $columnsWithData)) {
+                                                            $userInvitationWithData[$userAnswer['user_id']] = true;
+                                                            $addColumn = true;
+                                                            if (!in_array($userColumn, $columnsWithData)) {
                                                                 $columnsWithData[] = $userColumn;
-                                                                $skipThisClass = false;
                                                             }
+                                                            $skipThisClass = false;
                                                         }
                                                     }
                                                 }
                                             }
                                         }
                                     }
-                                    $userColumn++;
+                                    if ($addColumn) {
+                                        $userColumn++;
+                                    }
                                 }
                             }
                         }
                         $rowStudent++;
                     }
 
-                    if ($skipThisClass) {
+                    if (empty($userInvitationWithData)) {
                         continue;
                     }
 
                     if (empty($previousSurveyQuestionsCount)) {
                         $previousSurveyQuestionsCount = 3;
                     }
-                    $previousSurveyQuestionsCount += $questionsInSurvey;
+
+                    //$previousSurveyQuestionsCount += $questionsInSurvey;
+
+                    $questionsInSurvey = 0;
                     foreach ($questions as $question) {
                         $questionTitle = $question['question'];
                         if (strpos($question['question'], '{{')) {
@@ -409,36 +417,33 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                             $firstCoordinate = $coordinate;
                             $questionId = $question['question_id'];
                             foreach ($usersWithInvitation as $userAnswer) {
-                                // Add question title.
-                                $cell = @$page->setCellValueByColumnAndRow(
-                                    $column,
-                                    1,
-                                    $questionTitle,
-                                    true
-                                );
                                 $userId = $userAnswer['user_id'];
                                 $cell = @$page->setCellValueByColumnAndRow(
                                     $column,
                                     2,
                                     $survey['group_title'].' - '.$userAnswer['complete_name'],
-                                    //$userAnswer['id'].' - '.$userAnswer['lastname'],
+                                    //$userAnswer['id'].' - s:'.$surveyId.' - prev:'.$previousSurveyQuestionsCount.' '.$userAnswer['lastname'],
                                     true
                                 );
-
                                 $cell->getStyle()->getAlignment()->setTextRotation(90);
                                 $spreadsheet->getActiveSheet()->getRowDimension(2)->setRowHeight(250);
                                 $lastColumn = $column;
                                 $column++;
+                                $questionsInSurvey++;
                             }
-
                             $coordinate = $page->getCellByColumnAndRow($lastColumn, 1)->getCoordinate();
                             $lastCoordinate = $coordinate;
                         }
                     }
 
+                    $previousSurveyQuestionsCount += $questionsInSurvey;
                     // Remove cols with no data.
                     $less = 0;
                     $index = 0;
+                }
+
+                if ($skipThisClass) {
+                    continue;
                 }
 
                 // Remove cols with no data.
@@ -461,7 +466,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 foreach ($page->getColumnIterator('C') as $col) {
                     $index = $col->getColumnIndex();
                     $cell = $page->getCellByColumnAndRow($counterColumn, 1);
-                    //$coordinate = $page->getCellByColumnAndRow($counterColumn, 1)->getCoordinate();
+                    $coordinate = $page->getCellByColumnAndRow($counterColumn, 1)->getCoordinate();
                     $value = $cell->getValue();
                     if (!empty($value)) {
                         $categories[$value][] = [
@@ -525,6 +530,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 $row = 3;
                 foreach ($usersInClass as $user) {
                     $columnUser = 0;
+                    //@$page->setCellValueByColumnAndRow($columnUser++, $row, $user['id'].': '.$user['lastname']);
                     @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['lastname']);
                     @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['firstname']);
                     $row++;
@@ -535,6 +541,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
             $page = @$spreadsheet->createSheet($counter);
             @$page->setTitle(get_lang('Questions'));
             $row = 1;
+
             foreach ($surveyList as $survey) {
                 $questions = $survey['questions'];
                 $questionsOriginal = $survey['questions'];

@@ -694,11 +694,11 @@ class SortableTable extends HTML_Table
         $from = $offset[0] - 1;
         $table_data = $this->get_table_data($from, $this->per_page, $this->column);
         $this->processHeaders();
+        $this->addBody();
         if (is_array($table_data)) {
             $count = 1;
             foreach ($table_data as &$row) {
                 $row = $this->filter_data($row);
-
                 $newRow = [];
                 if (!empty($this->columnsToHide)) {
                     $counter = 0;

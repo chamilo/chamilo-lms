@@ -657,7 +657,7 @@ class HTML_Table extends HTML_Common
         if (PEAR::isError($ret)) {
             return $ret;
         }
-        $this->_tbodies[$body]->setHeaderContents($row, $col, $contents, $attributes);
+        $this->getHeader()->setHeaderContents($row, $col, $contents, $attributes);
     }
 
     public function setHeaders($headers)

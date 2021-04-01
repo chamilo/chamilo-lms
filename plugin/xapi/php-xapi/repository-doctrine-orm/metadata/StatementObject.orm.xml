@@ -61,7 +61,11 @@
         </one-to-one>
 
         <!-- group members -->
-        <one-to-many target-entity="XApi\Repository\Doctrine\Mapping\StatementObject" mapped-by="group" field="members" />
+        <one-to-many target-entity="XApi\Repository\Doctrine\Mapping\StatementObject" mapped-by="group" field="members">
+            <cascade>
+                <cascade-all />
+            </cascade>
+        </one-to-many>
         <many-to-one target-entity="XApi\Repository\Doctrine\Mapping\StatementObject" field="group" inversed-by="members">
             <join-column referenced-column-name="identifier" />
         </many-to-one>

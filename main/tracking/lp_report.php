@@ -10,6 +10,7 @@ api_protect_course_script();
 
 $sessionId = api_get_session_id();
 $courseId = api_get_course_int_id();
+$courseInfo = api_get_course_info();
 
 // Access restrictions.
 $is_allowedToTrack = Tracking::isAllowToTrack($sessionId);
@@ -19,8 +20,19 @@ if (!$is_allowedToTrack) {
     exit;
 }
 
-$action = isset($_GET['action']) ? $_GET['action'] : null;
-$lps = learnpath::getLpList($courseId, $sessionId);
+$action = $_GET['action'] ?? null;
+
+$lps = new LearnpathList(
+    api_get_user_id(),
+    $courseInfo,
+    $sessionId,
+    null,
+    false,
+    null,
+    true
+);
+$lps = $lps->get_flat_list();
+
 Session::write('lps', $lps);
 
 /**
@@ -320,7 +332,7 @@ function getData($from, $numberOfItems, $column, $direction)
             $lpTimeList = Tracking::getCalculateTime($userId, $courseId, $sessionId);
         }
         foreach ($lps as $lp) {
-            $lpId = $lp['id'];
+            $lpId = $lp['iid'];
             $progress = Tracking::get_avg_student_progress(
                 $userId,
                 $courseCode,
@@ -398,8 +410,9 @@ $headers = [];
 $headers[] = get_lang('FirstName');
 $headers[] = get_lang('LastName');
 $headers[] = get_lang('Username');
+
 foreach ($lps as $lp) {
-    $lpName = $lp['name'];
+    $lpName = $lp['lp_name'];
     $headers[] = get_lang('Progress').': '.$lpName;
     $headers[] = get_lang('FirstAccess').': '.$lpName;
     $headers[] = get_lang('LastAccess').': '.$lpName;
@@ -440,7 +453,6 @@ $table = new SortableTable(
 $table->set_additional_parameters($parameters);
 $column = 0;
 foreach ($headers as $header) {
-    $lpName = $lp['name'];
     $table->set_header($column++, $header, false);
 }
 

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -111,9 +112,8 @@ if (in_array(strtolower($pathinfo['extension']), $playerSupportedFiles)) {
 }
 
 $group_id = api_get_group_id();
-$current_group = GroupManager::get_group_properties($group_id);
-
-if (isset($group_id) && $group_id != '') {
+if (!empty($group_id)) {
+    $current_group = GroupManager::get_group_properties($group_id);
     if ($current_group) {
         $current_group_name = $current_group['name'];
     }
@@ -427,7 +427,7 @@ if ($execute_iframe) {
             marginheight="0"
             marginwidth="0"
             scrolling="no"
-            style="width:100%; height=600px"
+            style="width:100%; height:600px"
             src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'"
             allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
     }

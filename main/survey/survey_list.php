@@ -506,7 +506,6 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                 $coordinate = $page->getCellByColumnAndRow($lastColumn, 1)->getCoordinate();
                                 $lastCoordinate = $coordinate;
                             }
-
                         }
                     }
 

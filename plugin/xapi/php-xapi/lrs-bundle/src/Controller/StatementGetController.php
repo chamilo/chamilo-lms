@@ -91,7 +91,9 @@ class StatementGetController
                 $response = $this->buildMultiStatementsResponse($statements, $query, $includeAttachments);
             }
         } catch (NotFoundException $e) {
-            $response = $this->buildMultiStatementsResponse([], $query);
+            $response = $this->buildMultiStatementsResponse([], $query)
+                ->setStatusCode(Response::HTTP_NOT_FOUND)
+                ->setContent('');
         } catch (\Exception $exception) {
             $response = Response::create('', Response::HTTP_BAD_REQUEST);
         }

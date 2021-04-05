@@ -2546,35 +2546,34 @@ function update_chronometer(text_hour, text_minute, text_second)
 }
 
 /**
- * Get suspend_data from localStorage
+ * get_local_suspend_data()
  * see suspend_data case in function LMSGetValue correction bn
  */
 function get_local_suspend_data()
 {
     var final_suspend_data = olms.suspend_data;
     var idSuspendData = olms.lms_item_id + 'suspenddata' +  olms.lms_view_id + 'u' + olms.lms_user_id;
-
-    if (olms.suspend_data.indexOf("ICPLAYER_") != -1) {
-        final_suspend_data = "";
-        try {
-            if (localStorage) {
-                mem_suspend_data = window.localStorage.getItem(idSuspendData);
-                if (mem_suspend_data === null||mem_suspend_data == "null") {
-                    mem_suspend_data = "";
-                }
-                if (mem_suspend_data === undefined) {
-                    mem_suspend_data = "";
-                }
-                if (typeof mem_suspend_data == 'undefined') {
-                    mem_suspend_data = "";
-                }
-                if (mem_suspend_data!="") {
+    try{
+        if (localStorage) {
+            mem_suspend_data = window.localStorage.getItem(idSuspendData);
+            if (mem_suspend_data === null||mem_suspend_data == "null"){
+                mem_suspend_data = "";
+            }
+            if (mem_suspend_data === undefined) {
+                mem_suspend_data = "";
+            }
+            if (typeof mem_suspend_data == 'undefined') {
+                mem_suspend_data = "";
+            }
+            if(mem_suspend_data!=""){
+                if (olms.suspend_data.indexOf("ICPLAYER_")!=-1||mem_suspend_data.indexOf("ICPLAYER_")!=-1) {
+                    final_suspend_data = "";
                     final_suspend_data = mem_suspend_data;
+                    //console.log('recovery suspend_data' + mem_suspend_data);
                 }
             }
-        } catch(err) {}
-    }
-
+        }
+    }catch(err){}
     return final_suspend_data;
 }
 

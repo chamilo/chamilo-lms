@@ -110,7 +110,7 @@ class TopLink
         return $this->icon;
     }
 
-    public function setIcon(string $icon): TopLink
+    public function setIcon(string $icon = null): TopLink
     {
         $this->icon = $icon;
 

@@ -495,7 +495,7 @@ class UserGroup extends Model
                        ";
             } else {
                 $sql = "SELECT $select
-                        FROM {$this->usergroup_rel_course_table} usergroup
+                        FROM {$this->usergroup_rel_session_table} usergroup
                         INNER JOIN {$this->table} u
                         ON (u.id = usergroup.usergroup_id)
                         INNER JOIN {$this->session_table} s

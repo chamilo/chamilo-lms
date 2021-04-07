@@ -273,6 +273,7 @@ class AppPlugin
             'surveyexportcsv',
             'surveyexporttxt',
             'test2pdf',
+            'toplinks',
             'tour',
             'userremoteservice',
             'vchamilo',

@@ -689,6 +689,7 @@ class SystemAnnouncementManager
             return false;
         }
 
+        $groupId = (int) $groupId;
         $title = $announcement->title;
         $content = $announcement->content;
         $language = $announcement->lang;

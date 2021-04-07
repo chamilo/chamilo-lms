@@ -2,6 +2,11 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Entity\CourseCategory as CourseCategoryEntity;
+use Doctrine\Common\Collections\Criteria;
+
 /**
  * Class CourseCategory.
  */
@@ -65,16 +70,24 @@ class CourseCategory
     /**
      * @param int|null $category Optional. Parent category ID.
      *
-     * @return array
+     * @return CourseCategoryEntity[]
      */
     public static function getCategories($category = null)
     {
+        $repo = Container::getCourseCategoryRepository();
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_rel_category = Database::get_main_table(TABLE_MAIN_COURSE_REL_CATEGORY);
         $category = (int) $category;
         $conditions = null;
 
+        return $repo->findAllInAccessUrl(
+            api_get_current_access_url_id(),
+            api_get_configuration_value('allow_base_course_category'),
+            $category
+        );
+
+        /*
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
         $conditions = " INNER JOIN $table a ON (t1.id = a.course_category_id)";
         $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
@@ -119,7 +132,7 @@ class CourseCategory
 
         $result = Database::query($sql);
 
-        return Database::store_result($result, 'ASSOC');
+        return Database::store_result($result, 'ASSOC');*/
     }
 
     /**
@@ -501,32 +514,42 @@ class CourseCategory
 
             $urlId = api_get_current_access_url_id();
             foreach ($categories as $category) {
-                $editUrl = $mainUrl.'&id='.$category['code'].'&action=edit';
-                $moveUrl = $mainUrl.'&id='.$category['code'].'&action=moveUp&tree_pos='.$category['tree_pos'];
-                $deleteUrl = $mainUrl.'&id='.$category['code'].'&action=delete';
+                $code = $category->getCode();
+                $editUrl = $mainUrl.'&id='.$code.'&action=edit';
+                $moveUrl = $mainUrl.'&id='.$code.'&action=moveUp&tree_pos='.$category->getTreePos();
+                $deleteUrl = $mainUrl.'&id='.$code.'&action=delete';
 
                 $actions = [];
+                $criteria = Criteria::create();
+                $criteria->where(Criteria::expr()->eq('status', User::STUDENT));
 
-                if ($urlId == $category['access_url_id']) {
+                $inUrl = $category->getUrls()->filter( function($entry) use ($urlId) {
+                    return $entry->getUrl()->getId() === $urlId;
+                });
+
+                //if ($urlId == $category['access_url_id']) {
+                if ($inUrl->count()> 0) {
                     $actions[] = Display::url($editIcon, $editUrl);
                     $actions[] = Display::url($moveIcon, $moveUrl);
                     $actions[] = Display::url($deleteIcon, $deleteUrl);
                 }
 
-                $url = api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.$category['code'];
+                $url = api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.$code;
                 $title = Display::url(
                     Display::return_icon(
                         'folder_document.gif',
                         get_lang('Open this category'),
                         null,
                         ICON_SIZE_SMALL
-                    ).' '.$category['name'].' ('.$category['code'].')',
+                    ).' '.$category->getName().' ('.$code.')',
                     $url
                 );
-                $countCourses = self::countCoursesInCategory($category['code'], null, false);
+
+                //$countCourses = self::countCoursesInCategory($code, null, false);
+                $countCourses = $category->getCourses()->count();
                 $content = [
                     $title,
-                    $category['children_count'],
+                    $category->getChildrenCount(),
                     $countCourses,
                     implode('', $actions),
                 ];

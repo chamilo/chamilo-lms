@@ -183,12 +183,7 @@ class CourseCategory
         return $this;
     }
 
-    /**
-     * Get name.
-     *
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -317,5 +312,20 @@ class CourseCategory
     public function addCourse(Course $course): void
     {
         $this->courses[] = $course;
+    }
+
+    /**
+     * @return AccessUrlRelCourseCategory[]|Collection
+     */
+    public function getUrls()
+    {
+        return $this->urls;
+    }
+
+    public function setUrls($urls): self
+    {
+        $this->urls = $urls;
+
+        return $this;
     }
 }

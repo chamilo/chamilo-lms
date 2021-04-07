@@ -24,9 +24,9 @@ class CourseCategoryRepository extends ServiceEntityRepository
     /**
      * Get all course categories in an access url.
      *
-     * @return array
+     * @return CourseCategory[]
      */
-    public function findAllInAccessUrl(int $accessUrl, bool $allowBaseCategories = false)
+    public function findAllInAccessUrl(int $accessUrl, bool $allowBaseCategories = false, int $parentId = 0)
     {
         $qb = $this->createQueryBuilder('c');
         $qb
@@ -42,6 +42,10 @@ class CourseCategoryRepository extends ServiceEntityRepository
 
         if ($allowBaseCategories) {
             $qb->orWhere($qb->expr()->eq('a.url', 1));
+        }
+
+        if (!empty($parentId)) {
+            $qb->andWhere($qb->expr()->eq('c.parent', $parentId));
         }
 
         $query = $qb->getQuery();

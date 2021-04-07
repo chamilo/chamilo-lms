@@ -360,6 +360,12 @@ if ($action_todo) {
                             get_lang('AnnouncementUpdated'),
                             'confirmation'
                         );
+                    } else {
+                        // Deletes groups
+                        SystemAnnouncementManager::announcement_for_groups(
+                            $values['id'],
+                            []
+                        );
                     }
                 } else {
                     $show_announcement_list = false;

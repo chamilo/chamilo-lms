@@ -102,7 +102,6 @@
                 {% if item.student_info %}
                     {% if item.student_info.progress is not null or item.student_info.score is not null or item.student_info.certificate is not null %}
                         {% set one_column = item.student_info.score is null and item.student_info.certificate is null %}
-                        {{ dump(one_column)}}
                         <div class="course-student-info">
                             <div class="student-info">
                                 <div class="row">

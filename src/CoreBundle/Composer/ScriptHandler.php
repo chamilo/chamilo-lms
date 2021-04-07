@@ -228,7 +228,10 @@ class ScriptHandler
             __DIR__.'/../../../../web/assets/bootstrap/Gruntfile.js',
             __DIR__.'/../../../../web/assets/bootstrap/package.js',
             __DIR__.'/../../../../web/assets/bootstrap/package.json',
+
+            // v2
             __DIR__.'/../../../../src/CourseBundle/Entity/CQuizQuestionRelCategory.php',
+            __DIR__.'/../../../../main/inc/lib/tablesort.lib.php',
         ];
     }
 

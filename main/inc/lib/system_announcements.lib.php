@@ -967,7 +967,7 @@ class SystemAnnouncementManager
 
                 if (empty($id)) {
                     if (api_strlen(strip_tags($announcement->content)) > $cut_size) {
-                        $announcementData['content'] = cut($announcement->content, $cut_size);
+                        //$announcementData['content'] = cut($announcement->content, $cut_size);
                         $announcementData['readMore'] = true;
                     }
                 }
@@ -989,7 +989,7 @@ class SystemAnnouncementManager
             ];
             $content = $announcement['content'];
             if (api_strlen(strip_tags($content)) > $cut_size) {
-                $announcementData['content'] = cut($content, $cut_size);
+                //$announcementData['content'] = cut($content, $cut_size);
                 $announcementData['readMore'] = true;
             }
             $announcements[] = $announcementData;
@@ -998,6 +998,7 @@ class SystemAnnouncementManager
         if (count($announcements) === 0) {
             return null;
         }
+
         $template = new Template(null, false, false);
         $template->assign('announcements', $announcements);
         $layout = $template->get_template('announcement/slider.tpl');

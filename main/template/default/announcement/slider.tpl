@@ -1,3 +1,12 @@
+<style>
+    .announcement_short {
+        height: 310px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+
 <div id="carousel-announcement" class="carousel slide" data-ride="carousel">
     <!-- Indicators -->
     <ol class="carousel-indicators">
@@ -15,10 +24,12 @@
             </div>
             <div class="carousel-content">
                 {% if announcement.readMore %}
-                <div class="block-text">
-                    {{ announcement.content }}
-                    <a href="{{ _p.web }}news_list.php?id={{ announcement.id }}">{{ "More" | get_lang }}</a>
-                </div>
+                    <div class="block-text">
+                        <div class="announcement_short">
+                        {{ announcement.content }}
+                        </div>
+                        <a href="{{ _p.web }}news_list.php?id={{ announcement.id }}">{{ "More" | get_lang }}</a>
+                    </div>
                 {% else %}
                     <div class="block-image">
                         {{ announcement.content }}

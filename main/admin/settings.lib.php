@@ -266,10 +266,16 @@ function handlePlugins()
         $isMainPortal = 1 === api_get_current_access_url_id();
     }
 
+    $unknownLabel = get_lang('Unknown');
     foreach ($all_plugins as $pluginName) {
         $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
         if (file_exists($plugin_info_file)) {
-            $plugin_info = [];
+            $plugin_info = [
+                'title' => $pluginName,
+                'version' => '',
+                'comment' => '',
+                'author' => $unknownLabel,
+            ];
             require $plugin_info_file;
 
             if (in_array($pluginName, $officialPlugins)) {

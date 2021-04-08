@@ -195,7 +195,7 @@ function handlePluginUpload()
             Event::addEvent(
                 LOG_PLUGIN_CHANGE,
                 LOG_PLUGIN_UPLOAD,
-                $file['filename'],
+                $file['name'],
                 api_get_utc_datetime(),
                 $user_id
             );
@@ -266,10 +266,16 @@ function handlePlugins()
         $isMainPortal = 1 === api_get_current_access_url_id();
     }
 
+    $unknownLabel = get_lang('Unknown');
     foreach ($all_plugins as $pluginName) {
         $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
         if (file_exists($plugin_info_file)) {
-            $plugin_info = [];
+            $plugin_info = [
+                'title' => $pluginName,
+                'version' => '',
+                'comment' => '',
+                'author' => $unknownLabel,
+            ];
             require $plugin_info_file;
 
             if (in_array($pluginName, $officialPlugins)) {
@@ -786,7 +792,6 @@ function uploadPlugin($file)
             $allowedFiles = getAllowedFileTypes();
             $allowedFiles[] = 'php';
             $allowedFiles[] = 'js';
-            $allowedFiles[] = 'txt';
             $allowedFiles[] = 'tpl';
             $pluginObject = new AppPlugin();
             $officialPlugins = $pluginObject->getOfficialPlugins();
@@ -2086,6 +2091,10 @@ function getAllowedFileTypes()
         'woff',
         'woff2',
         'md',
+        'html',
+        'xml',
+        'markdown',
+        'txt',
     ];
 
     return $allowedFiles;

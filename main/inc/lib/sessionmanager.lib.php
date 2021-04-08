@@ -3672,6 +3672,16 @@ class SessionManager
                                 user_id = $userId AND
                                 relation_type =".SESSION_RELATION_TYPE_RRHH;
                     Database::query($sql);
+
+                    Event::addEvent(
+                        LOG_SESSION_DELETE_USER,
+                        LOG_USER_ID,
+                        $userId,
+                        api_get_utc_datetime(),
+                        api_get_user_id(),
+                        null,
+                        $row['session_id']
+                    );
                 }
             }
         }
@@ -3679,7 +3689,7 @@ class SessionManager
         // Inserting new sessions list.
         if (!empty($sessions_list) && is_array($sessions_list)) {
             foreach ($sessions_list as $session_id) {
-                $session_id = intval($session_id);
+                $session_id = (int) $session_id;
                 $sql = "SELECT session_id
                         FROM $tbl_session_rel_user
                         WHERE
@@ -3696,6 +3706,17 @@ class SessionManager
                                 '".api_get_utc_datetime()."'
                             )";
                     Database::query($sql);
+
+                    Event::addEvent(
+                        LOG_SESSION_ADD_USER,
+                        LOG_USER_ID,
+                        $userId,
+                        api_get_utc_datetime(),
+                        api_get_user_id(),
+                        null,
+                        $session_id
+                    );
+
                     $affected_rows++;
                 }
             }

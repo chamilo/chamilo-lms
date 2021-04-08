@@ -84,7 +84,7 @@
         "laminas/laminas-config": "~3.2",
         "laminas/laminas-feed": "~2.10",
         "laminas/laminas-filter": "~2.9",
-        "laminas/laminas-permissions-acl": "~2.7",
+        "laminas/laminas-permissions-acl": "2.8.x-dev",
         "league/csv": "^9.1",
         "league/glide-symfony": "dev-master",
         "maennchen/zipstream-php": "^2.0",

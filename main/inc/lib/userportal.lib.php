@@ -1008,15 +1008,13 @@ class IndexManager
         if (!empty($this->tpl->menu_navigation)) {
             foreach ($this->tpl->menu_navigation as $section => $navigation_info) {
                 
-                if(is_null($navigation_info)) {
-                    $navigation_info['url'] = '';
-                    $navigation_info['title'] = '';
+                if (!empty($navigation_info)) {
+                    $items[] = [
+                        'icon' => null,
+                        'link' => $navigation_info['url'],
+                        'title' => $navigation_info['title'],
+                    ];
                 }
-                $items[] = [
-                    'icon' => null,
-                    'link' => $navigation_info['url'],
-                    'title' => $navigation_info['title'],
-                ];
             }
         }
 

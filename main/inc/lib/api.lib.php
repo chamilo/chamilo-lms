@@ -9229,6 +9229,7 @@ function api_mail_html(
     $mail->CharSet = isset($platform_email['SMTP_CHARSET']) ? $platform_email['SMTP_CHARSET'] : 'UTF-8';
     // Stay far below SMTP protocol 980 chars limit.
     $mail->WordWrap = 200;
+    $mail->SMTPOptions = $platform_email['SMTPOptions'] ?? [];
 
     if ($platform_email['SMTP_AUTH']) {
         $mail->SMTPAuth = 1;
@@ -9386,19 +9387,25 @@ function api_mail_html(
     }
 
     // Send the mail message.
-    if (!$mail->Send()) {
+    $sent = $mail->Send();
+    if (!$sent) {
         error_log('ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />');
-        if ($mail->SMTPDebug) {
-            error_log(
-                "Connection details :: ".
-                "Protocol: ".$mail->Mailer.' :: '.
-                "Host/Port: ".$mail->Host.':'.$mail->Port.' :: '.
-                "Authent/Open: ".($mail->SMTPAuth ? 'Authent' : 'Open').' :: '.
-                ($mail->SMTPAuth ? "  User/Pass: ".$mail->Username.':'.$mail->Password : '').' :: '.
-                "Sender: ".$mail->Sender
-            );
-        }
+    }
 
+    if ($mail->SMTPDebug) {
+        error_log(
+            "Mail debug:: ".
+            "Protocol: ".$mail->Mailer.' :: '.
+            "Host/Port: ".$mail->Host.':'.$mail->Port.' :: '.
+            "Authent/Open: ".($mail->SMTPAuth ? 'Authent' : 'Open').' :: '.
+            ($mail->SMTPAuth ? "  User/Pass: ".$mail->Username.':'.$mail->Password : '').' :: '.
+            "Sender: ".$mail->Sender.
+            "Recipient email: ".$recipient_email.
+            "Subject: ".$subject
+        );
+    }
+
+    if (!$sent) {
         return 0;
     }
 

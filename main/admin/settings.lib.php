@@ -195,7 +195,7 @@ function handlePluginUpload()
             Event::addEvent(
                 LOG_PLUGIN_CHANGE,
                 LOG_PLUGIN_UPLOAD,
-                $file['filename'],
+                $file['name'],
                 api_get_utc_datetime(),
                 $user_id
             );
@@ -786,7 +786,6 @@ function uploadPlugin($file)
             $allowedFiles = getAllowedFileTypes();
             $allowedFiles[] = 'php';
             $allowedFiles[] = 'js';
-            $allowedFiles[] = 'txt';
             $allowedFiles[] = 'tpl';
             $pluginObject = new AppPlugin();
             $officialPlugins = $pluginObject->getOfficialPlugins();
@@ -2086,6 +2085,10 @@ function getAllowedFileTypes()
         'woff',
         'woff2',
         'md',
+        'html',
+        'xml',
+        'markdown',
+        'txt',
     ];
 
     return $allowedFiles;

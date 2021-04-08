@@ -8767,4 +8767,6 @@ $ExportMyPortfolioDataZip = "Export my portfolio data in a ZIP file";
 $PortfolioCategoryFieldHelp = "Categories are for organization only in personal portfolio.";
 $ExportMytPortfolioDataPdf = "Export my portfolio data to a PDF file";
 $ExportMytPortfolioDataZip = "Export my portfolio data to a ZIP file";
+$NewLearningPathSubject = "New learning path available";
+$NewLearningPathBody = "There is a new learning path called %s that has been added to your %s course. Go to this learning path here : %s";
 ?>

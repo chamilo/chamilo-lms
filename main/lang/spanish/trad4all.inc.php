@@ -8795,4 +8795,6 @@ $ExportMyPortfolioDataZip = "Exportar los datos de mi portafolio en un archivo Z
 $PortfolioCategoryFieldHelp = "Las categorías son sólo para organización en el portafolio personal";
 $ExportMytPortfolioDataPdf = "Exportar los datos de mi portafolio a un archivo PDF";
 $ExportMytPortfolioDataZip = "Exportar los datos de mi portafolio a un archivo ZIP";
+$NewLearningPathSubject = "Nueva lección publicada";
+$NewLearningPathBody = "Hay una nueva leccion llamada %s que ha sido agregada al curso %s. Acceder a la lección aqui: %s";
 ?>

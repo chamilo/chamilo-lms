@@ -6487,13 +6487,6 @@ div#chat-remote-video video {
     border-bottom: 1px solid #ECF0F1;
 }
 
-.grid-courses .items .course-student-info {
-    background-color: #d9edf7;
-    border: 1px solid #bce8f1;
-    padding: 5px;
-    border-radius: 5px;
-}
-
 .grid-courses .items .code-title {
     font-size: 10px;
     font-weight: bold;
@@ -6529,12 +6522,19 @@ div#chat-remote-video video {
     transition: box-shadow .3s ease, border .3s ease;
 }
 
-.grid-courses .items.my-courses .course-student-info {
-    font-size: 10px;
-    text-align: center;
-    background: none;
-    border: none;
-    padding: 0;
+.grid-courses .items .course-student-info {
+    padding-bottom: 10px;
+    font-size: 11px;
+}
+.grid-courses .items .course-student-info hr {
+    margin: 15px 0 10px;
+}
+.grid-courses .items .course-student-info .progress {
+    margin-bottom: 10px;
+}
+.course-student-info .progress-bar {
+    line-height: 15px;
+    vertical-align: middle;
 }
 
 .grid-courses .items.my-courses .title {

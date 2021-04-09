@@ -139,37 +139,7 @@
                                             {% endif %}
                                         </div>
 
-                                        {% if item.student_info %}
-                                            {% if item.student_info.progress is not null or item.student_info.score is not null or item.student_info.certificate is not null %}
-                                                {% set one_column = item.student_info.score is null and item.student_info.certificate is null %}
-                                                <div class="course-student-info">
-                                                    <div class="student-info">
-                                                        <div class="row">
-                                                            <div class="{{ one_column ? 'col-xs-12' : 'col-xs-8' }}">
-                                                                {{ 'CourseProgress'|get_lang }}
-                                                                <div class="progress">
-                                                                    <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="{{ item.student_info.progress }}"
-                                                                            aria-valuemin="0" aria-valuemax="100" style="width: {{ item.student_info.progress }}%;">
-                                                                        {{ 'XPercent'|get_lang|format(item.student_info.progress) }}
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="{{ one_column ? '' : 'col-xs-4' }}">
-                                                                {% if item.student_info.score is not null %}
-                                                                    <div>{{ "StudentCourseScoreX" | get_lang | format(item.student_info.score) }}</div>
-                                                                {% endif %}
-                                                                {% if item.student_info.certificate is not null %}
-                                                                    <div>
-                                                                        <i class="fa fa-certificate text-warning" aria-hidden="true"></i>
-                                                                        {{ "StudentCourseCertificateX" | get_lang | format(item.student_info.certificate) }}
-                                                                    </div>
-                                                                {% endif %}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            {% endif %}
-                                        {% endif %}
+                                        {% include 'user_portal/course_student_info.tpl'|get_template with { 'student_info': item.student_info } %}
                                     </div>
                                 </div>
                             </div>

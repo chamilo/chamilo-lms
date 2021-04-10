@@ -1064,11 +1064,11 @@ EOT;
         $attributes = []
     ) {
         $attributes = [];
-        $attributes['rows'] = isset($config['rows']) ? $config['rows'] : 15;
-        $attributes['cols'] = isset($config['cols']) ? $config['cols'] : 80;
-        $attributes['cols-size'] = isset($config['cols-size']) ? $config['cols-size'] : [];
-        $attributes['class'] = isset($config['class']) ? $config['class'] : [];
-        $attributes['id'] = isset($config['id']) ? $config['id'] : '';
+        $attributes['rows'] = $config['rows'] ?? 15;
+        $attributes['cols'] = $config['cols'] ?? 80;
+        $attributes['cols-size'] = $config['cols-size'] ?? [];
+        $attributes['class'] = $config['class'] ?? [];
+        $attributes['id'] = $config['id'] ?? '';
 
         if (empty($attributes['id'])) {
             $attributes['id'] = $name;
@@ -1082,7 +1082,7 @@ EOT;
 
         /** @var HtmlEditor $element */
         $element = $this->getElement($name);
-        $config['style'] = isset($config['style']) ? $config['style'] : false;
+        $config['style'] = $config['style'] ?? false;
         if ($fullPage) {
             $config['fullPage'] = true;
             // Adds editor_content.css in ckEditor

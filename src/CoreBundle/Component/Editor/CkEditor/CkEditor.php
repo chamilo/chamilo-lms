@@ -40,7 +40,6 @@ class CkEditor extends Editor
     public function createHtmlStyle($value): string
     {
         $style = '';
-
         $value = trim($value);
 
         if ('' === $value || '<html><head><title></title></head><body></body></html>' === $value) {

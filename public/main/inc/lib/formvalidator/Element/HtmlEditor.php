@@ -2,13 +2,14 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Component\Editor\Editor;
 
 /**
  * A html editor field to use with QuickForm.
  */
 class HtmlEditor extends HTML_QuickForm_textarea
 {
-    /** @var \Chamilo\CoreBundle\Component\Editor\Editor */
+    /** @var Editor */
     public $editor;
 
     /**
@@ -100,7 +101,6 @@ class HtmlEditor extends HTML_QuickForm_textarea
         $result = '';
         if ($this->editor) {
             $value = $this->getCleanValue();
-
             $this->editor->setName($this->getName());
             $this->editor->setTextareaId($this->getAttribute('id'));
             if (true === $style) {

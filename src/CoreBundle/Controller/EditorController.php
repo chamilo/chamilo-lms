@@ -224,7 +224,7 @@ class EditorController extends BaseController
 
         $params = [
             // @todo replace api_get_bootstrap_and_font_awesome
-            'bootstrap_css' => api_get_bootstrap_and_font_awesome(true),
+            'bootstrap_css' => api_get_bootstrap_and_font_awesome(true, false),
             'css_editor' => ChamiloApi::getEditorBlockStylePath(),
             'more_buttons_in_max_mode' => $moreButtonsInMaximizedMode,
             'type' => $type,

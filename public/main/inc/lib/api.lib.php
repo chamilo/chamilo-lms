@@ -6263,11 +6263,16 @@ function api_get_css($file, $media = 'screen')
     return '<link href="'.$file.'" rel="stylesheet" media="'.$media.'" type="text/css" />'."\n";
 }
 
-function api_get_bootstrap_and_font_awesome($returnOnlyPath = false)
+function api_get_bootstrap_and_font_awesome($returnOnlyPath = false, $returnFileLocation = false)
 {
     $url = api_get_path(WEB_PUBLIC_PATH).'build/css/bootstrap.css';
+
     if ($returnOnlyPath) {
-        return api_get_path(SYS_PUBLIC_PATH).'build/css/bootstrap.css';
+        if ($returnFileLocation) {
+            return api_get_path(SYS_PUBLIC_PATH).'build/css/bootstrap.css';
+        }
+
+        return $url;
     }
 
     return '<link href="'.$url.'" rel="stylesheet" type="text/css" />'."\n";

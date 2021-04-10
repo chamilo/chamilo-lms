@@ -475,7 +475,7 @@ class PDF
 
         if ($addDefaultCss) {
             $basicStyles = [
-                api_get_bootstrap_and_font_awesome(true),
+                api_get_bootstrap_and_font_awesome(true, true),
                 api_get_path(SYS_PUBLIC_PATH).'build/css/app.css',
                 api_get_path(SYS_PUBLIC_PATH).'build/css/themes/'.api_get_visual_theme().'/default.css',
             ];

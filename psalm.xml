@@ -129,7 +129,6 @@
         <file name="public/main/inc/lib/statistics.lib.php"/>
         <file name="public/main/inc/lib/system_announcements.lib.php"/>
         <file name="public/main/inc/lib/table_sort.class.php"/>
-        <file name="public/main/inc/lib/tablesort.lib.php"/>
         <file name="public/main/inc/lib/TeacherTimeReport.php"/>
 
         <file name="public/main/inc/lib/template.lib.php"/>

@@ -69,10 +69,10 @@
 import { mapActions, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 import ListMixin from '../../mixins/ListMixin';
-import ActionCell from '../../components/ActionCell';
-import CourseFilterForm from '../../components/course/Filter';
-import DataFilter from '../../components/DataFilter';
-import Toolbar from '../../components/Toolbar';
+import ActionCell from '../../components/ActionCell.vue';
+import CourseFilterForm from '../../components/course/Filter.vue';
+import DataFilter from '../../components/DataFilter.vue';
+import Toolbar from '../../components/Toolbar.vue';
 
 export default {
   name: 'CourseList',

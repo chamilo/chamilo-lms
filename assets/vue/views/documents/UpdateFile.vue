@@ -26,10 +26,10 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
-import DocumentsForm from '../../components/documents/FormNewDocument';
-import ResourceLinkForm from '../../components/documents/ResourceLinkForm';
-import Loading from '../../components/Loading';
-import Toolbar from '../../components/Toolbar';
+import DocumentsForm from '../../components/documents/FormNewDocument.vue';
+import ResourceLinkForm from '../../components/documents/ResourceLinkForm.vue';
+import Loading from '../../components/Loading.vue';
+import Toolbar from '../../components/Toolbar.vue';
 import UpdateMixin from '../../mixins/UpdateMixin';
 
 const servicePrefix = 'Documents';

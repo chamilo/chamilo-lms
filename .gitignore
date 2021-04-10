@@ -24,7 +24,6 @@ var/upload/*
 
 # Chamilo configuration
 /config/configuration.php
-
 /main/inc/conf/configuration.php
 
 # Home
@@ -87,7 +86,7 @@ yarn-error.log
 ###< squizlabs/php_codesniffer ###
 
 .yarn/*
-!.yarn/cache
+.yarn/cache
 !.yarn/releases
 !.yarn/plugins
 !.yarn/sdks

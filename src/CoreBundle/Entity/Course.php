@@ -227,13 +227,15 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected string $courseLanguage;
 
     /**
+     * @Groups({"course:read", "course_rel_user:read"})
+     *
      * @ORM\Column(name="description", type="text", nullable=true, unique=false)
      */
     protected ?string $description;
 
     /**
      * @ApiSubresource()
-     * @Groups({"course:read", "course:write"})
+     * @Groups({"course:read", "course:write", "course_rel_user:read"})
      * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="courses")
      * @ORM\JoinTable(
      *     name="course_rel_category",

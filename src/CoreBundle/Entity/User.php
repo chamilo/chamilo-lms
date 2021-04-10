@@ -75,7 +75,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public const ANONYMOUS = 6;
 
     /**
-     * @Groups({"user:read", "resource_node:read"})
+     * @Groups({"user:read", "resource_node:read", "user_json:read"})
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
@@ -90,13 +90,13 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @Assert\NotBlank()
      * @ApiProperty(iri="http://schema.org/name")
-     * @Groups({"user:read", "user:write", "resource_node:read"})
+     * @Groups({"user:read", "user:write", "resource_node:read", "user_json:read"})
      * @ORM\Column(name="firstname", type="string", length=64, nullable=true)
      */
     protected ?string $firstname = null;
 
     /**
-     * @Groups({"user:read", "user:write", "resource_node:read"})
+     * @Groups({"user:read", "user:write", "resource_node:read", "user_json:read"})
      * @ORM\Column(name="lastname", type="string", length=64, nullable=true)
      */
     protected ?string $lastname = null;
@@ -114,13 +114,13 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected ?string $biography;
 
     /**
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"user:read", "user:write", "user_json:read"})
      * @ORM\Column(name="locale", type="string", length=8)
      */
     protected string $locale;
 
     /**
-     * @Groups({"user:read", "user:write", "course:read", "resource_node:read"})
+     * @Groups({"user:read", "user:write", "course:read", "resource_node:read", "user_json:read"})
      * @Assert\NotBlank()
      * @ORM\Column(name="username", type="string", length=100, unique=true)
      */
@@ -139,7 +139,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected string $usernameCanonical;
 
     /**
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"user:read", "user:write", "user_json:read"})
      * @ORM\Column(name="timezone", type="string", length=64)
      */
     protected string $timezone;
@@ -150,7 +150,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected string $emailCanonical;
 
     /**
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"user:read", "user:write", "user_json:read"})
      * @Assert\NotBlank()
      * @Assert\Email()
      *
@@ -266,7 +266,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected Collection $dropBoxSentFiles;
 
     /**
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"user:read", "user:write", "user_json:read"})
      * @ORM\Column(type="array")
      *
      * @var mixed[]|string[]
@@ -325,6 +325,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected Collection $sessionsAsGeneralCoach;
 
     /**
+     * @Groups({"user_json:read"})
+     *
      * @ORM\OneToOne(
      *     targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", cascade={"remove"}, orphanRemoval=true
      * )

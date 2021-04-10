@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -19,6 +20,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CShortcut extends AbstractResource implements ResourceInterface
 {
     /**
+     * @Groups({"cshortcut:read"})
+     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -26,6 +29,8 @@ class CShortcut extends AbstractResource implements ResourceInterface
     protected int $id;
 
     /**
+     * @Groups({"cshortcut:read"})
+     *
      * @Assert\NotBlank
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)

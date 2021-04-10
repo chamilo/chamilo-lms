@@ -15,6 +15,7 @@ use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -35,6 +36,8 @@ class CTool extends AbstractResource implements ResourceInterface
     use ShowCourseResourcesInSessionTrait;
 
     /**
+     * @Groups({"ctool:read"})
+     *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -44,11 +47,15 @@ class CTool extends AbstractResource implements ResourceInterface
     /**
      * @Assert\NotBlank
      *
+     * @Groups({"ctool:read"})
+     *
      * @ORM\Column(name="name", type="text", nullable=false)
      */
     protected string $name;
 
     /**
+     * @Groups({"ctool:read"})
+     *
      * @ORM\Column(name="visibility", type="boolean", nullable=true)
      */
     protected ?bool $visibility = null;
@@ -66,6 +73,8 @@ class CTool extends AbstractResource implements ResourceInterface
     protected ?Session $session = null;
 
     /**
+     * @Groups({"ctool:read"})
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool")
      * @ORM\JoinColumn(name="tool_id", referencedColumnName="id", nullable=false)
      */

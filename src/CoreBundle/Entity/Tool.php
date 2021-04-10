@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -28,6 +29,8 @@ class Tool
     protected int $id;
 
     /**
+     * @Groups({"tool:read"})
+     *
      * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", nullable=false, unique=true)
      */

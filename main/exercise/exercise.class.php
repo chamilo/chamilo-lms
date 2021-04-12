@@ -11027,15 +11027,27 @@ class Exercise
         $field = new ExtraField('exercise');
         $remedialField = $field->get_handler_field_info_by_field_variable('remedialcourselist');
 
-        if (false === $remedialField) {
+        if (empty($remedialField)) {
             return null;
         }
+
+        $extraFieldValue = new ExtraFieldValue('exercise');
+        $remedialExcerciseField = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $this->iId,
+            'remedialcourselist'
+        );
+        $remedialCourseIds = explode(';', $remedialExcerciseField['value']);
+
+        if (empty($remedialExcerciseField['value']) || count($remedialCourseIds) == 0) {
+            return null;
+        }
+
         $questionExcluded = [
             FREE_ANSWER,
             ORAL_EXPRESSION,
             ANNOTATION,
         ];
-        $extraMessage = null;
+
         if (count($attemp) != 0) {
             $exercise_stat_info = $attemp;
         } else {
@@ -11087,7 +11099,7 @@ class Exercise
         if (isset($bestAttempt['exe_result'])) {
             $bestAttempt['exe_result'] = (int) $bestAttempt['exe_result'];
             $canRemedial = $this->isBlockedByPercentage($bestAttempt);
-            if ($bestAttempt['exe_result'] != 0 && false == $canRemedial) {
+            if (false == $canRemedial) {
                 $pass = ExerciseLib::isPassPercentageAttemptPassed(
                     $this,
                     $bestAttempt['exe_result'],
@@ -11099,62 +11111,52 @@ class Exercise
                 }
             }
         }
-        $extraFieldValue = new ExtraFieldValue('exercise');
-        $remedialExcerciseField = $extraFieldValue->get_values_by_handler_and_field_variable(
-            $this->iId,
-            'remedialcourselist'
-        );
 
         // Remedial course
-        if ($canRemedial) {
-            $coursesIds = explode(';', $remedialExcerciseField['value']);
-            if ('' == $remedialExcerciseField['value'] || count($coursesIds) == 0) {
-                return null;
-            }
-            $courses = [];
-            $isInASession = (0 == $sessionId) ? false : true;
-            foreach ($coursesIds as $course) {
-                $courseData = api_get_course_info_by_id($course);
-                if (!empty($courseData) && isset($courseData['real_id'])) {
-                    if ($isInASession) {
-                        $courseExistsInSession = SessionManager::sessionHasCourse($sessionId, $courseData['code']);
-                        if ($courseExistsInSession) {
-                            SessionManager::subscribe_users_to_session_course(
-                                [$userId],
-                                $sessionId,
-                                $courseData['code']
-                            );
-                            $courses[] = $courseData['title'];
-                        }
-                    } else {
-                        $isSubscribed = CourseManager::is_user_subscribed_in_course(
+        if (!$canRemedial) {
+            return null;
+        }
+
+        $courses = [];
+        $isInASession = !empty($sessionId);
+        foreach ($remedialCourseIds as $course) {
+            $courseData = api_get_course_info_by_id($course);
+            if (!empty($courseData) && isset($courseData['real_id'])) {
+                if ($isInASession) {
+                    $courseExistsInSession = SessionManager::sessionHasCourse($sessionId, $courseData['code']);
+                    if ($courseExistsInSession) {
+                        SessionManager::subscribe_users_to_session_course(
+                            [$userId],
+                            $sessionId,
+                            $courseData['code']
+                        );
+                        $courses[] = $courseData['title'];
+                    }
+                } else {
+                    $isSubscribed = CourseManager::is_user_subscribed_in_course(
+                        $userId,
+                        $courseData['code']
+                    );
+                    if (!$isSubscribed) {
+                        CourseManager::subscribeUser(
                             $userId,
                             $courseData['code'],
-                            $isInASession,
-                            $sessionId
+                            STUDENT
                         );
-                        if (!$isSubscribed) {
-                            CourseManager::subscribeUser(
-                                $userId,
-                                $courseData['code'],
-                                STUDENT,
-                                $sessionId
-                            );
-                            $courses[] = $courseData['title'];
-                        }
+                        $courses[] = $courseData['title'];
                     }
                 }
             }
-
-            if (0 != count($courses)) {
-                $extraMessage = sprintf(
-                    get_plugin_lang('SubscriptionToXRemedialCourses', RemedialCoursePlugin::class),
-                    implode(' - ', $courses)
-                );
-            }
         }
 
-        return $extraMessage;
+        if (0 != count($courses)) {
+            return sprintf(
+                get_plugin_lang('SubscriptionToXRemedialCourses', RemedialCoursePlugin::class),
+                implode(' - ', $courses)
+            );
+        }
+
+        return null;
     }
 
     /**

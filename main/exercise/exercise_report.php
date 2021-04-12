@@ -265,6 +265,21 @@ if (isset($_REQUEST['comments']) &&
             WHERE exe_id = ".$id;
     Database::query($sql);
 
+    // See BT#18165
+    $remedialMessage = $objExerciseTmp->remedialCourseList($student_id, api_get_session_id(), [], true);
+    if (null != $remedialMessage) {
+        Display::addFlash(
+            Display::return_message($remedialMessage, 'warning', false)
+        );
+    }
+    $advanceMessage = $objExerciseTmp->advancedCourseList($student_id, api_get_session_id());
+    if (!empty($advanceMessage)) {
+        $message = Display::return_message(
+            $advanceMessage,
+            'info',
+            false
+        );
+    }
     if (isset($_POST['send_notification'])) {
         //@todo move this somewhere else
         $subject = get_lang('ExamSheetVCC');

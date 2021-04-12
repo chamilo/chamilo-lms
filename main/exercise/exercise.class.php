@@ -10852,7 +10852,7 @@ class Exercise
      * @param int   $sessionId
      * @param array $attemps
      */
-    public function advancedCourseList($userId = 0, $sessionId = 0, $attemp = [])
+    public function advancedCourseList($userId = 0, $sessionId = 0, $attempt = [])
     {
         $userId = (int) $userId;
         $sessionId = (int) $sessionId;
@@ -10877,7 +10877,7 @@ class Exercise
         if (!isset($bestAttempt['exe_result'])) {
             // In the case that the result is 0, get_best_attempt_exercise_results_per_user does not return data,
             // for that this block is used
-            if (count($attemp) == 0) {
+            if (count($attempt) == 0) {
                 $exerciseStatInfo = Event::getExerciseResultsByUser(
                     $userId,
                     $this->id,
@@ -10885,14 +10885,14 @@ class Exercise
                     $sessionId
                 );
             } else {
-                $exerciseStatInfo = $attemp;
+                $exerciseStatInfo = $attempt;
             }
 
-            unset($attemp);
+            unset($attempt);
             $bestAttempt['exe_result'] = 0;
-            foreach ($exerciseStatInfo as $attemp) {
-                if ($attemp['exe_result'] >= $bestAttempt['exe_result']) {
-                    $bestAttempt = $attemp;
+            foreach ($exerciseStatInfo as $attempt) {
+                if ($attempt['exe_result'] >= $bestAttempt['exe_result']) {
+                    $bestAttempt = $attempt;
                 }
             }
         }
@@ -10971,13 +10971,13 @@ class Exercise
     /**
      * Returns true if the exercise is locked by percentage. an exercise attempt must be passed.
      *
-     * @param array $attemp
+     * @param array $attempt
      *
      * @return bool
      */
-    public function isBlockedByPercentage($attemp = [])
+    public function isBlockedByPercentage($attempt = [])
     {
-        if (empty($attemp)) {
+        if (empty($attempt)) {
             return false;
         }
         $extraFieldValue = new ExtraFieldValue('exercise');
@@ -10991,11 +10991,11 @@ class Exercise
         }
         $percentage = 0;
         if ($blockPercentage != 0) {
-            if (isset($attemp['exe_result']) && isset($attemp['exe_weighting'])) {
-                $weigh = (int) $attemp['exe_weighting'];
-                $weigh = (0 == $weigh) ? 1 : $weigh;
+            if (isset($attempt['exe_result']) && isset($attempt['exe_weighting'])) {
+                $weight = (int) $attempt['exe_weighting'];
+                $weight = (0 == $weight) ? 1 : $weight;
                 $percentage = float_format(
-                    ($attemp['exe_result'] / $weigh) * 100,
+                    ($attempt['exe_result'] / $weight) * 100,
                     1
                 );
             }
@@ -11016,7 +11016,7 @@ class Exercise
      * @param array $attemps
      * @param bool  $review
      */
-    public function remedialCourseList($userId = 0, $sessionId = 0, $attemp = [], $review = false)
+    public function remedialCourseList($userId = 0, $sessionId = 0, $attempt = [], $review = false)
     {
         $userId = empty($userId) ? api_get_user_id() : (int) $userId;
         $sessionId = (int) $sessionId;
@@ -11048,8 +11048,8 @@ class Exercise
             ANNOTATION,
         ];
 
-        if (count($attemp) != 0) {
-            $exercise_stat_info = $attemp;
+        if (count($attempt) != 0) {
+            $exercise_stat_info = $attempt;
         } else {
             $exercise_stat_info = Event::getExerciseResultsByUser(
                 $userId,
@@ -11064,13 +11064,13 @@ class Exercise
             $this->course_id,
             $sessionId
         );
-        foreach ($exercise_stat_info as $attemp) {
-            if (!isset($bestAttempt['exe_result']) || $attemp['exe_result'] >= $bestAttempt['exe_result']) {
-                $bestAttempt = $attemp;
+        foreach ($exercise_stat_info as $attempt) {
+            if (!isset($bestAttempt['exe_result']) || $attempt['exe_result'] >= $bestAttempt['exe_result']) {
+                $bestAttempt = $attempt;
             }
-            if (isset($attemp['question_list'])) {
-                foreach ($attemp['question_list'] as $questionId => $answer) {
-                    $question = Question::read($questionId, api_get_course_info_by_id($attemp['c_id']));
+            if (isset($attempt['question_list'])) {
+                foreach ($attempt['question_list'] as $questionId => $answer) {
+                    $question = Question::read($questionId, api_get_course_info_by_id($attempt['c_id']));
                     $questionOpen = 0;
                     $totalQuestionExcluded = count($questionExcluded);
                     for ($i = 0; $i < $totalQuestionExcluded; $i++) {
@@ -11083,7 +11083,7 @@ class Exercise
                         $questionOpen = 0;
                     }
                     if (1 == $questionOpen) {
-                        $score = $attemp['exe_result'];
+                        $score = $attempt['exe_result'];
                         $comments = Event::get_comments($this->id, $questionId);
                         if (empty($comments) || $score == 0) {
                             return null;

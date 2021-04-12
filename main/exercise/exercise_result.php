@@ -283,7 +283,7 @@ $attempt_count = Event::get_attempt_count(
     $learnpath_item_id,
     $learnpath_item_view_id
 );
-$advanceCourseMessage = $objExercise->advanceCourseList(api_get_user_id(), api_get_session_id(), $exerciseStatInfo);
+$advanceCourseMessage = $objExercise->advancedCourseList(api_get_user_id(), api_get_session_id(), $exerciseStatInfo);
 if (null != $advanceCourseMessage) {
     Display::addFlash(
         Display::return_message($advanceCourseMessage, 'info', false)

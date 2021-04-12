@@ -6825,7 +6825,7 @@ class Exercise
                 $lpItemId,
                 $lpItemViewId
             );
-            $message .= $this->advanceCourseList($userId, api_get_session_id());
+            $message .= $this->advancedCourseList($userId, api_get_session_id());
             if ($attemptCount >= $exerciseAttempts) {
                 $message .= $this->remedialCourseList($userId, api_get_session_id());
             }
@@ -10852,7 +10852,7 @@ class Exercise
      * @param int   $sessionId
      * @param array $attemps
      */
-    public function advanceCourseList($userId = 0, $sessionId = 0, $attemp = [])
+    public function advancedCourseList($userId = 0, $sessionId = 0, $attemp = [])
     {
         $userId = (int) $userId;
         $sessionId = (int) $sessionId;

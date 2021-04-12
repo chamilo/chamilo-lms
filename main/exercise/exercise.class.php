@@ -2501,8 +2501,8 @@ class Exercise
 
             // See BT#18165
             $remedialList = [
-                'remedialcourselist' => 'remedialCourseList',
-                'advancedcourselist' => 'advancedCoursList',
+                'remedialcourselist' => 'RemedialCourses',
+                'advancedcourselist' => 'AdvancedCourses',
             ];
             $extraFieldExercice = new ExtraField('exercise');
             $extraFieldExerciceValue = new ExtraFieldValue('exercise');
@@ -2541,7 +2541,7 @@ class Exercise
                     unset($optionRemedial[0]);
                     $form->addSelect(
                         "extra_".$item,
-                        get_lang($label),
+                        get_plugin_lang($label, RemedialCoursePlugin::class),
                         $optionRemedial,
                         [
                             'placeholder' => get_lang('SelectAnOption'),
@@ -10958,8 +10958,10 @@ class Exercise
                 }
             }
             if (0 != count($courses)) {
-                $extraMessage .= "<br>".get_lang('AdvancedCourseInscription')." <strong>".
-                    implode(' - ', $courses)."</strong> ";
+                $extraMessage = sprintf(
+                    get_plugin_lang('SubscriptionToXAdvancedCourses', RemedialCoursePlugin::class),
+                    implode(' - ', $courses)
+                );
             }
         }
 
@@ -11145,8 +11147,10 @@ class Exercise
             }
 
             if (0 != count($courses)) {
-                $extraMessage .= "<br>".get_lang('RemedialCourseInscription')." <strong>".
-                    implode(' - ', $courses)."</strong> ";
+                $extraMessage = sprintf(
+                    get_plugin_lang('SubscriptionToXRemedialCourses', RemedialCoursePlugin::class),
+                    implode(' - ', $courses)
+                );
             }
         }
 

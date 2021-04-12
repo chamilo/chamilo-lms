@@ -106,4 +106,9 @@ class RemedialCoursePlugin extends Plugin
             return;
         }
     }
+
+    public function get_name(): string
+    {
+        return 'remedial_course';
+    }
 }

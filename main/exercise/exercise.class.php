@@ -10985,23 +10985,29 @@ class Exercise
             $this->iId,
             'blocking_percentage'
         );
-        $blockPercentage = 0;
-        if ($blockExercise && isset($blockExercise['value']) && !empty($blockExercise['value'])) {
-            $blockPercentage = (int) $blockExercise['value'];
+
+        if (empty($blockExercise['value'])) {
+            return false;
         }
+
+        $blockPercentage = (int) $blockExercise['value'];
+
+        if (0 === $blockPercentage) {
+            return false;
+        }
+
         $percentage = 0;
-        if ($blockPercentage != 0) {
-            if (isset($attempt['exe_result']) && isset($attempt['exe_weighting'])) {
-                $weight = (int) $attempt['exe_weighting'];
-                $weight = (0 == $weight) ? 1 : $weight;
-                $percentage = float_format(
-                    ($attempt['exe_result'] / $weight) * 100,
-                    1
-                );
-            }
-            if ($percentage <= $blockPercentage && 0 != $percentage) {
-                return true;
-            }
+
+        if (isset($attempt['exe_result']) && isset($attempt['exe_weighting'])) {
+            $weight = (int) $attempt['exe_weighting'];
+            $weight = (0 == $weight) ? 1 : $weight;
+            $percentage = float_format(
+                ($attempt['exe_result'] / $weight) * 100,
+                1
+            );
+        }
+        if ($percentage <= $blockPercentage && 0 != $percentage) {
+            return true;
         }
 
         return false;

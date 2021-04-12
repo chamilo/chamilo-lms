@@ -1053,7 +1053,9 @@ if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
 $is_visible_return = $objExercise->is_visible(
     $learnpath_id,
     $learnpath_item_id,
-    $learnpath_item_view_id
+    $learnpath_item_view_id,
+    true,
+    $sessionId
 );
 
 if ($is_visible_return['value'] == false) {

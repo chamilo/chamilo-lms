@@ -10,7 +10,7 @@ class RemedialCoursePlugin extends Plugin
 {
     const SETTING_ENABLED = 'enabled';
 
-    public function __construct()
+    protected function __construct()
     {
         $settings = [
             self::SETTING_ENABLED => 'boolean',
@@ -20,7 +20,6 @@ class RemedialCoursePlugin extends Plugin
             'Carlos Alvarado',
             $settings
         );
-        $this->setSettings();
     }
 
     /**
@@ -28,11 +27,11 @@ class RemedialCoursePlugin extends Plugin
      *
      * @return RemedialCoursePlugin
      */
-    public static function create()
+    public static function create(): RemedialCoursePlugin
     {
         static $result = null;
 
-        return $result ? $result : $result = new self();
+        return $result ?: $result = new self();
     }
 
     /**
@@ -95,16 +94,6 @@ class RemedialCoursePlugin extends Plugin
      */
     public function uninstall()
     {
-    }
-
-    /**
-     * Set the  settings.
-     */
-    private function setSettings()
-    {
-        if ('true' !== $this->get(self::SETTING_ENABLED)) {
-            return;
-        }
     }
 
     public function get_name(): string

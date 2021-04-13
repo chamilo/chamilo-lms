@@ -1,5 +1,4 @@
 <?php
-require_once __DIR__.'/config.php';
 
 /* For licensing terms, see /license.txt */
 

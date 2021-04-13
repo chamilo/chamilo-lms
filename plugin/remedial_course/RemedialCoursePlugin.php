@@ -1,7 +1,6 @@
 <?php
 
 /* For licensing terms, see /license.txt */
-require_once __DIR__.'/../../main/inc/global.inc.php';
 
 /**
  * Class RemedialCoursePlugin.
@@ -10,6 +9,9 @@ class RemedialCoursePlugin extends Plugin
 {
     const SETTING_ENABLED = 'enabled';
 
+    /**
+     * RemedialCoursePlugin constructor.
+     */
     protected function __construct()
     {
         $settings = [

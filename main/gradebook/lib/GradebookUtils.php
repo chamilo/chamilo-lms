@@ -1535,6 +1535,7 @@ class GradebookUtils
                     'score' => $certificateInfo['score_certificate'],
                     'date' => api_format_date($certificateInfo['created_at'], DATE_FORMAT_SHORT),
                     'link' => api_get_path(WEB_PATH)."certificates/index.php?id={$certificateInfo['id']}",
+                    'pdf' => api_get_path(WEB_PATH)."certificates/index.php?id={$certificateInfo['id']}&user_id={$userId}&action=export",
                 ];
             }
         }

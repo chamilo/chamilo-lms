@@ -279,67 +279,82 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         // load the CAS system to authenticate the user
         require_once __DIR__.'/../auth/cas/cas_var.inc.php';
 
-        // redirect to CAS server if not authenticated yet and so configured
-        if (
-            is_array($cas) && array_key_exists('force_redirect', $cas) && $cas['force_redirect']
-            ||
-            array_key_exists('forceCASAuthentication', $_POST)
-            ||
-            array_key_exists('checkLoginCas', $_GET)
-            ||
-            array_key_exists('ticket', $_GET)
-        ) {
-            phpCAS::forceAuthentication();
+        $load = true;
+        if (isset($cas['skip_force_redirect_in'])) {
+            $skipCas = [
+                '/main/webservices/'
+            ];
+            foreach ($skipCas as $folder) {
+                if (false !== strpos($_SERVER['REQUEST_URI'], $folder)) {
+                    $load = false;
+                    break;
+                }
+            }
         }
-        // check whether we are authenticated
-        if (phpCAS::isAuthenticated()) {
-            // the user was successfully authenticated by the CAS server, read its CAS user identification
-            $casUser = phpCAS::getUser();
 
-            // make sure the user exists in the database
-            $login = UserManager::casUserLoginName($casUser);
-            $_user = null;
-            if (false === $login) {
-                // the CAS-authenticated user does not yet exist in internal database
-                // see whether we are supposed to create it
-                switch (api_get_setting('cas_add_user_activate')) {
-                    case PLATFORM_AUTH_SOURCE:
-                        // create the new user from its CAS user identifier
-                        $login = UserManager::createCASAuthenticatedUserFromScratch($casUser);
-                        $_user = api_get_user_info_from_username($login);
-                        UserManager::updateCasUser($_user);
-
-                        break;
-
-                    case LDAP_AUTH_SOURCE:
-                        // find the new user's LDAP record from its CAS user identifier and copy information
-                        $login = UserManager::createCASAuthenticatedUserFromLDAP($casUser);
-                        $_user = api_get_user_info_from_username($login);
-                        break;
-
-                    default:
-                        // no automatic user creation is configured, just complain about it
-                        throw new Exception(get_lang('NoUserMatched'));
-                }
-            } else {
-                $_user = api_get_user_info_from_username($login);
-                switch (api_get_setting('cas_add_user_activate')) {
-                    case PLATFORM_AUTH_SOURCE:
-                        UserManager::updateCasUser($_user);
-
-                        break;
-                }
+        if ($load) {
+            // redirect to CAS server if not authenticated yet and so configured
+            if (
+                is_array($cas) && array_key_exists('force_redirect', $cas) && $cas['force_redirect']
+                ||
+                array_key_exists('forceCASAuthentication', $_POST)
+                ||
+                array_key_exists('checkLoginCas', $_GET)
+                ||
+                array_key_exists('ticket', $_GET)
+            ) {
+                phpCAS::forceAuthentication();
             }
+            // check whether we are authenticated
+            if (phpCAS::isAuthenticated()) {
+                // the user was successfully authenticated by the CAS server, read its CAS user identification
+                $casUser = phpCAS::getUser();
 
-            // $login is set and the user exists in the database
+                // make sure the user exists in the database
+                $login = UserManager::casUserLoginName($casUser);
+                $_user = null;
+                if (false === $login) {
+                    // the CAS-authenticated user does not yet exist in internal database
+                    // see whether we are supposed to create it
+                    switch (api_get_setting('cas_add_user_activate')) {
+                        case PLATFORM_AUTH_SOURCE:
+                            // create the new user from its CAS user identifier
+                            $login = UserManager::createCASAuthenticatedUserFromScratch($casUser);
+                            $_user = api_get_user_info_from_username($login);
+                            UserManager::updateCasUser($_user);
 
-            // update the user record from LDAP if so required by settings
-            if ('true' === api_get_setting("update_user_info_cas_with_ldap")) {
-                UserManager::updateUserFromLDAP($login);
+                            break;
+
+                        case LDAP_AUTH_SOURCE:
+                            // find the new user's LDAP record from its CAS user identifier and copy information
+                            $login = UserManager::createCASAuthenticatedUserFromLDAP($casUser);
+                            $_user = api_get_user_info_from_username($login);
+                            break;
+
+                        default:
+                            // no automatic user creation is configured, just complain about it
+                            throw new Exception(get_lang('NoUserMatched'));
+                    }
+                } else {
+                    $_user = api_get_user_info_from_username($login);
+                    switch (api_get_setting('cas_add_user_activate')) {
+                        case PLATFORM_AUTH_SOURCE:
+                            UserManager::updateCasUser($_user);
+
+                            break;
+                    }
+                }
+
+                // $login is set and the user exists in the database
+
+                // update the user record from LDAP if so required by settings
+                if ('true' === api_get_setting("update_user_info_cas_with_ldap")) {
+                    UserManager::updateUserFromLDAP($login);
+                }
+
+                Session::write('_user', $_user);
+                $doNotRedirectToCourse = true; // we should already be on the right page, no need to redirect
             }
-
-            Session::write('_user', $_user);
-            $doNotRedirectToCourse = true; // we should already be on the right page, no need to redirect
         }
     } elseif (isset($_POST['login']) && isset($_POST['password'])) {
         // $login && $password are given to log in

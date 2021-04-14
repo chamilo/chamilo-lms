@@ -84,7 +84,6 @@ try {
             }
 
             $messageStatus = $action === Rest::POST_USER_MESSAGE_READ ? MESSAGE_STATUS_NEW : MESSAGE_STATUS_UNREAD;
-
             $data = array_flip($messagesId);
 
             foreach ($messagesId as $messageId) {
@@ -98,7 +97,8 @@ try {
             $restResponse->setData($data);
             break;
         case Rest::GET_USER_COURSES:
-            $courses = $restApi->getUserCourses();
+            $userId = isset($_REQUEST['user_id']) ? (int) $_REQUEST['user_id'] : 0;
+            $courses = $restApi->getUserCourses($userId);
             $restResponse->setData($courses);
             break;
         case Rest::GET_COURSE_INFO:
@@ -184,6 +184,10 @@ try {
             $data = $restApi->subscribeUserToCourse($_POST);
             $restResponse->setData($data);
             break;
+        case Rest::UNSUBSCRIBE_USER_TO_COURSE:
+            $data = $restApi->unSubscribeUserToCourse($_POST);
+            $restResponse->setData($data);
+            break;
         case Rest::CREATE_CAMPUS:
             $data = $restApi->createCampusURL($_POST);
             $restResponse->setData($data);
@@ -207,6 +211,48 @@ try {
         case Rest::GET_COURSES:
             $data = $restApi->getCoursesCampus($_POST);
             $restResponse->setData($data);
+            break;
+        case Rest::GET_COURSES_FROM_EXTRA_FIELD:
+            $variable = $_REQUEST['extra_field_variable'] ?? '';
+            $urlId = $_REQUEST['id_campus'] ?? '';
+            $extraField = new ExtraField('course');
+            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($variable);
+
+            if (empty($extraFieldInfo)) {
+                throw new Exception("$variable not found");
+            }
+
+            $extraFieldValue = new ExtraFieldValue('course');
+            $items = $extraFieldValue->getValuesByFieldId($extraFieldInfo['id']);
+            $courseList = [];
+            foreach ($items as $item) {
+                $courseId = $item['item_id'];
+                if (UrlManager::relation_url_course_exist($courseId, $urlId)) {
+                    $courseList[] = api_get_course_info($courseId);
+                }
+            }
+
+            $restResponse->setData($courseList);
+            break;
+        case Rest::DELETE_COURSE:
+            $courseCode = $_REQUEST['course_code'] ?? '';
+            $courseId = $_REQUEST['course_id'] ?? 0;
+
+            $course = [];
+            if (!empty($courseCode)) {
+                $course = api_get_course_info($courseCode);
+            }
+
+            if (empty($course) && !empty($courseId)) {
+                $course = api_get_course_info_by_id($courseId);
+            }
+
+            if (empty($course)) {
+                throw new Exception("Course doesn't exists");
+            }
+
+            $result = CourseManager::delete_course($course['code']);
+            $restResponse->setData(['status' => $result]);
             break;
         case Rest::ADD_COURSES_SESSION:
             $data = $restApi->addCoursesSession($_POST);

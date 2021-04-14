@@ -48,6 +48,7 @@ class Rest extends WebService
     const SAVE_USER = 'save_user';
     const SAVE_USER_JSON = 'save_user_json';
     const SUBSCRIBE_USER_TO_COURSE = 'subscribe_user_to_course';
+    const UNSUBSCRIBE_USER_TO_COURSE = 'unsubscribe_user_to_course';
     const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
     const GET_USER_MESSAGES_RECEIVED = 'user_messages_received';
     const GET_USER_MESSAGES_SENT = 'user_messages_sent';
@@ -59,6 +60,7 @@ class Rest extends WebService
     const SAVE_SESSION = 'save_session';
     const GET_USERS = 'get_users';
     const GET_COURSES = 'get_courses';
+    const GET_COURSES_FROM_EXTRA_FIELD = 'get_courses_from_extra_field';
     const ADD_COURSES_SESSION = 'add_courses_session';
     const ADD_USERS_SESSION = 'add_users_session';
     const CREATE_SESSION_FROM_MODEL = 'create_session_from_model';
@@ -68,6 +70,7 @@ class Rest extends WebService
     const USERNAME_EXIST = 'username_exist';
     const GET_COURSE_QUIZ_MDL_COMPAT = 'get_course_quiz_mdl_compat';
     const UPDATE_USER_PAUSE_TRAINING = 'update_user_pause_training';
+    const DELETE_COURSE = 'delete_course';
 
     /**
      * @var Session
@@ -312,16 +315,14 @@ class Rest extends WebService
 
     /**
      * Get the user courses.
-     *
-     * @throws \Doctrine\ORM\TransactionRequiredException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     *
-     * @return array
      */
-    public function getUserCourses()
+    public function getUserCourses($userId = 0): array
     {
-        $courses = CourseManager::get_courses_list_by_user_id($this->user->getId());
+        if (empty($userId)) {
+            $userId = $this->user->getId();
+        }
+
+        $courses = CourseManager::get_courses_list_by_user_id($userId);
         $data = [];
 
         foreach ($courses as $courseInfo) {
@@ -1245,12 +1246,8 @@ class Rest extends WebService
         return $out;
     }
 
-    /**
-     * @return array
-     */
-    public function addCourse(array $courseParam)
+    public function addCourse(array $courseParam): array
     {
-        $results = [];
         $idCampus = isset($courseParam['id_campus']) ? $courseParam['id_campus'] : 1;
         $title = isset($courseParam['title']) ? $courseParam['title'] : '';
         $wantedCode = isset($courseParam['wanted_code']) ? $courseParam['wanted_code'] : null;
@@ -1275,6 +1272,7 @@ class Rest extends WebService
 
         $courseInfo = CourseManager::create_course($params, $params['user_id'], $idCampus);
 
+        $results = [];
         if (!empty($courseInfo)) {
             $results['status'] = true;
             $results['code_course'] = $courseInfo['code'];
@@ -1422,24 +1420,46 @@ class Rest extends WebService
         $course_id = $params['course_id'];
         $course_code = $params['course_code'];
         $user_id = $params['user_id'];
+        $status = $params['status'] ?? STUDENT;
+
         if (!$course_id && !$course_code) {
             return [false];
         }
         if (!$course_code) {
             $course_code = CourseManager::get_course_code_from_course_id($course_id);
         }
-        if (CourseManager::subscribeUser($user_id, $course_code)) {
+
+        if (CourseManager::subscribeUser($user_id, $course_code, $status)) {
             return [true];
-        } else {
+        }
+
+        return [false];
+    }
+
+    public function unSubscribeUserToCourse(array $params): array
+    {
+        $courseId = $params['course_id'];
+        $courseCode = $params['course_code'];
+        $userId = $params['user_id'];
+
+        if (!$courseId && !$courseCode) {
             return [false];
         }
 
-        return [true];
+        if (!$courseCode) {
+            $courseCode = CourseManager::get_course_code_from_course_id($courseId);
+        }
+
+        if (CourseManager::unsubscribe_user($userId, $courseCode)) {
+            return [true];
+        }
+
+        return [false];
     }
 
     public function deleteUserMessage($messageId, $messageType)
     {
-        if ($messageType === "sent") {
+        if ($messageType === 'sent') {
             return MessageManager::delete_message_by_user_sender($this->user->getId(), $messageId);
         } else {
             return MessageManager::delete_message_by_user_receiver($this->user->getId(), $messageId);

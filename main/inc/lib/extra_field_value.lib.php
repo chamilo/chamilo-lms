@@ -832,20 +832,6 @@ class ExtraFieldValue extends Model
      * Gets the ID from the item (course, session, etc) for which
      * the given field is defined with the given value.
      *
-     * Example:
-     * <code>
-     * <?php
-     * $extraFieldValueUser = new ExtraFieldValue('user');
-     * $arrayExtraFieldValueUser =  $extraFieldValueUser->get_item_id_from_field_variable_and_field_value(
-     * 'variable',
-     * 1,
-     * true,
-     * false,
-     * true);
-     * echo "<pre>".var_export($arrayExtraFieldValueUser,true)."</pre>";
-     * ?>
-     * </code>
-     *
      * @param string $variable  Field (type of data) we want to check
      * @param string $value     Data we are looking for in the given field
      * @param bool   $transform Whether to transform the result to a human readable strings

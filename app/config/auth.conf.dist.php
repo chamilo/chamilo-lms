@@ -136,6 +136,7 @@ $langMainInfoDetail .= '<p>More information on OpenID is available at <a href="h
 $cas = [
     'force_redirect' => false,
     'replace_login_form' => false,
+    //'skip_force_redirect_in' => ['/main/webservices'],
     // 'verbose' => false,
     // 'debug' => '/var/log/cas_debug.log',
     'noCasServerValidation' => true, // set to false in production

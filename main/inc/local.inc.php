@@ -282,7 +282,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         $load = true;
         if (isset($cas['skip_force_redirect_in'])) {
             $skipCas = [
-                '/main/webservices/'
+                '/main/webservices/',
             ];
             foreach ($skipCas as $folder) {
                 if (false !== strpos($_SERVER['REQUEST_URI'], $folder)) {
@@ -294,14 +294,10 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
         if ($load) {
             // redirect to CAS server if not authenticated yet and so configured
-            if (
-                is_array($cas) && array_key_exists('force_redirect', $cas) && $cas['force_redirect']
-                ||
-                array_key_exists('forceCASAuthentication', $_POST)
-                ||
-                array_key_exists('checkLoginCas', $_GET)
-                ||
-                array_key_exists('ticket', $_GET)
+            if (is_array($cas) && array_key_exists('force_redirect', $cas) && $cas['force_redirect']
+                || array_key_exists('forceCASAuthentication', $_POST)
+                || array_key_exists('checkLoginCas', $_GET)
+                || array_key_exists('ticket', $_GET)
             ) {
                 phpCAS::forceAuthentication();
             }

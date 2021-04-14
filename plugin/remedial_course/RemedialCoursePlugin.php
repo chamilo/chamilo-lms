@@ -26,8 +26,6 @@ class RemedialCoursePlugin extends Plugin
 
     /**
      * Create a new instance of RemedialCoursePlugin.
-     *
-     * @return RemedialCoursePlugin
      */
     public static function create(): RemedialCoursePlugin
     {

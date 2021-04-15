@@ -10852,7 +10852,7 @@ class Exercise
      * @param int   $sessionId
      * @param array $attemps
      */
-    public function advancedCourseList($userId = 0, $sessionId = 0, $attempt = [])
+    public function advancedCourseList($userId = 0, $sessionId = 0)
     {
         $userId = (int) $userId;
         $sessionId = (int) $sessionId;
@@ -10877,18 +10877,12 @@ class Exercise
         if (!isset($bestAttempt['exe_result'])) {
             // In the case that the result is 0, get_best_attempt_exercise_results_per_user does not return data,
             // for that this block is used
-            if (count($attempt) == 0) {
-                $exerciseStatInfo = Event::getExerciseResultsByUser(
-                    $userId,
-                    $this->id,
-                    $this->course_id,
-                    $sessionId
-                );
-            } else {
-                $exerciseStatInfo = $attempt;
-            }
-
-            unset($attempt);
+            $exerciseStatInfo = Event::getExerciseResultsByUser(
+                $userId,
+                $this->id,
+                $this->course_id,
+                $sessionId
+            );
             $bestAttempt['exe_result'] = 0;
             foreach ($exerciseStatInfo as $attempt) {
                 if ($attempt['exe_result'] >= $bestAttempt['exe_result']) {
@@ -11017,12 +11011,13 @@ class Exercise
      * When a student completes the number of attempts and fails the exam, she is enrolled in a series of remedial
      * courses BT#18165.
      *
-     * @param int   $userId
-     * @param int   $sessionId
-     * @param array $attemps
-     * @param bool  $review
+     * @param int  $userId
+     * @param int  $sessionId
+     * @param bool $review
+     *
+     * @return string|null
      */
-    public function remedialCourseList($userId = 0, $sessionId = 0, $attempt = [], $review = false)
+    public function remedialCourseList($userId = 0, $sessionId = 0, $review = false)
     {
         $userId = empty($userId) ? api_get_user_id() : (int) $userId;
         $sessionId = (int) $sessionId;
@@ -11054,16 +11049,12 @@ class Exercise
             ANNOTATION,
         ];
 
-        if (count($attempt) != 0) {
-            $exercise_stat_info = $attempt;
-        } else {
-            $exercise_stat_info = Event::getExerciseResultsByUser(
-                $userId,
-                $this->id,
-                $this->course_id,
-                $sessionId
-            );
-        }
+        $exercise_stat_info = Event::getExerciseResultsByUser(
+            $userId,
+            $this->id,
+            $this->course_id,
+            $sessionId
+        );
         $bestAttempt = Event::get_best_attempt_exercise_results_per_user(
             $userId,
             $this->id,

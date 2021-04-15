@@ -266,7 +266,7 @@ if (isset($_REQUEST['comments']) &&
     Database::query($sql);
 
     // See BT#18165
-    $remedialMessage = $objExerciseTmp->remedialCourseList($student_id, api_get_session_id(), [], true);
+    $remedialMessage = $objExerciseTmp->remedialCourseList($student_id, api_get_session_id(), true);
     if (null != $remedialMessage) {
         Display::addFlash(
             Display::return_message($remedialMessage, 'warning', false)

@@ -2458,7 +2458,6 @@ HOTSPOT;
             }
 
             $results = [];
-            error_log($sql);
             $resx = Database::query($sql);
             while ($rowx = Database::fetch_array($resx, 'ASSOC')) {
                 $results[] = $rowx;

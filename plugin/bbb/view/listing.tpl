@@ -92,7 +92,7 @@
                     {{ 'XUsersOnLine'| get_plugin_lang('BBBPlugin') | format(users_online) }}
                 </span>
             </p>
-            {{ warning_inteface_msg }}
+            {{ warning_interface_msg }}
             {% if max_users_limit > 0 %}
                 {% if conference_manager == true %}
                     <p>{{ 'MaxXUsersWarning' | get_plugin_lang('BBBPlugin') | format(max_users_limit) }}</p>

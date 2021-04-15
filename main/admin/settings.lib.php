@@ -2057,7 +2057,7 @@ function searchSetting($search)
  *
  * @return array
  */
-function formGenerateElementsGroup($form, $values = [], $elementName)
+function formGenerateElementsGroup($form, $values, $elementName)
 {
     $group = [];
     if (is_array($values)) {

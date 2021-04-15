@@ -184,7 +184,7 @@ try {
             $data = $restApi->subscribeUserToCourse($_POST);
             $restResponse->setData($data);
             break;
-        case Rest::UNSUBSCRIBE_USER_TO_COURSE:
+        case Rest::UNSUBSCRIBE_USER_FROM_COURSE:
             $data = $restApi->unSubscribeUserToCourse($_POST);
             $restResponse->setData($data);
             break;

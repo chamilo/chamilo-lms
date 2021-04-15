@@ -567,7 +567,7 @@ class UserManager
                         $layoutContent = $tplContent->get_template('mail/new_user_first_email_confirmation.tpl');
                         $emailBody = $tplContent->fetch($layoutContent);
 
-                        if (!empty($emailBodyTemplate) &&
+                        if (!empty($emailTemplate) &&
                             isset($emailTemplate['new_user_first_email_confirmation.tpl']) &&
                             !empty($emailTemplate['new_user_first_email_confirmation.tpl'])
                         ) {
@@ -594,7 +594,7 @@ class UserManager
                         $layoutContent = $tplContent->get_template('mail/new_user_second_email_confirmation.tpl');
                         $emailBody = $tplContent->fetch($layoutContent);
 
-                        if (!empty($emailBodyTemplate) &&
+                        if (!empty($emailTemplate) &&
                             isset($emailTemplate['new_user_second_email_confirmation.tpl']) &&
                             !empty($emailTemplate['new_user_second_email_confirmation.tpl'])
                         ) {
@@ -691,7 +691,7 @@ class UserManager
                     $layoutContent = $tplContent->get_template('mail/content_registration_platform_to_admin.tpl');
                     $emailBody = $tplContent->fetch($layoutContent);
 
-                    if (!empty($emailBodyTemplate) &&
+                    if (!empty($emailTemplate) &&
                         isset($emailTemplate['content_registration_platform_to_admin.tpl']) &&
                         !empty($emailTemplate['content_registration_platform_to_admin.tpl'])
                     ) {
@@ -702,7 +702,6 @@ class UserManager
                     }
 
                     $subject = get_lang('UserAdded');
-
                     foreach ($adminList as $adminId => $data) {
                         MessageManager::send_message_simple(
                             $adminId,

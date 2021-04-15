@@ -23,8 +23,9 @@ $roomTable = Database::get_main_table('plugin_bbb_room');
 
 $htmlHeadXtra[] = api_get_js_simple(api_get_path(WEB_PLUGIN_PATH).'bbb/resources/utils.js');
 
-$action = isset($_GET['action']) ? $_GET['action'] : '';
+$action = $_GET['action'] ?? '';
 $userId = api_get_user_id();
+$groupId = api_get_group_id();
 
 $bbb = new bbb('', '', $isGlobal, $isGlobalPerUser);
 
@@ -36,7 +37,7 @@ if ($bbb->isGlobalConference()) {
 }
 
 $courseInfo = api_get_course_info();
-$courseCode = isset($courseInfo['code']) ? $courseInfo['code'] : '';
+$courseCode = $courseInfo['code'] ?? '';
 
 $message = '';
 if ($conferenceManager) {
@@ -272,7 +273,7 @@ if ($conferenceManager) {
             break;
     }
 } else {
-    if ($action == 'logout') {
+    if ($action === 'logout') {
         // Update out_at field of user
         $remoteId = Database::escape_string($_GET['remote_id']);
         $meetingData = Database::select(
@@ -334,7 +335,7 @@ if ($conferenceManager) {
 $meetings = $bbb->getMeetings(
     api_get_course_int_id(),
     api_get_session_id(),
-    api_get_group_id()
+    $groupId
 );
 if (!empty($meetings)) {
     $meetings = array_reverse($meetings);
@@ -351,6 +352,24 @@ $userCanSeeJoinButton = $conferenceManager;
 if ($bbb->isGlobalConference() && $bbb->isGlobalConferencePerUserEnabled()) {
     // Any user can see the "join button" BT#12620
     $userCanSeeJoinButton = true;
+}
+
+if (!empty($groupId) && false === $userCanSeeJoinButton) {
+    $isSubscribed = GroupManager::is_subscribed(api_get_user_id(), GroupManager::get_group_properties($groupId));
+    if ($isSubscribed) {
+        $groupEnabled = api_get_course_plugin_setting(
+                'bbb',
+                'bbb_enable_conference_in_groups',
+                $courseInfo
+            ) === '1';
+
+        $studentCanStartConference = api_get_course_plugin_setting(
+                'bbb',
+                'big_blue_button_students_start_conference_in_groups',
+                $courseInfo
+            ) === '1';
+        $userCanSeeJoinButton = $groupEnabled && $studentCanStartConference;
+    }
 }
 
 if (($meetingExists || $userCanSeeJoinButton) && ($maxUsers == 0 || $maxUsers > $usersOnline)) {
@@ -376,7 +395,6 @@ if ($bbb->isGlobalConference() === false &&
         </script>';
 
     $form = new FormValidator(api_get_self().'?'.api_get_cidreq());
-    $groupId = api_get_group_id();
     if ($conferenceManager) {
         $groups = GroupManager::get_groups();
     } else {

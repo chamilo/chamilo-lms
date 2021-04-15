@@ -38,7 +38,7 @@ if ($bbb->isGlobalConference()) {
 }
 
 $allowStudentAsConferenceManager = false;
-if (!empty($courseInfo) && !empty($groupId)) {
+if (!empty($courseInfo) && !empty($groupId) && !api_is_allowed_to_edit()) {
     $groupEnabled = api_get_course_plugin_setting(
             'bbb',
             'bbb_enable_conference_in_groups',
@@ -56,10 +56,16 @@ if (!empty($courseInfo) && !empty($groupId)) {
     }
 }
 
+$allowToEdit = $conferenceManager;
+// Disable students edit permissions.
+if ($allowStudentAsConferenceManager) {
+    $allowToEdit = false;
+}
+
 $courseCode = $courseInfo['code'] ?? '';
 
 $message = '';
-if ($conferenceManager) {
+if ($conferenceManager && $allowToEdit) {
     switch ($action) {
         case 'add_to_calendar':
             if ($bbb->isGlobalConference()) {
@@ -306,7 +312,6 @@ if ($conferenceManager) {
             error_log("meeting does not exist - remote_id: $remoteId");
         } else {
             $meetingId = $meetingData['id'];
-
             $roomData = Database::select(
                 '*',
                 $roomTable,
@@ -484,8 +489,10 @@ switch ($type) {
 
         break;
 }
+
 $tpl = new Template($tool_name);
-$tpl->assign('allow_to_edit', $conferenceManager);
+
+$tpl->assign('allow_to_edit', $allowToEdit);
 $tpl->assign('meetings', $meetings);
 $tpl->assign('conference_url', $conferenceUrl);
 $tpl->assign('users_online', $usersOnline);

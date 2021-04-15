@@ -100,19 +100,17 @@ function getLpDataByArrayId(array $lpid = []): array
     }
     $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
     $lpTable = Database::get_course_table(TABLE_LP_MAIN);
-    $sql = "
-    SELECT
-        tblCourse.title AS course_name,
-        tblCourse.code AS code,
-        tblLp.id AS lp_id,
-        tblLp.c_id AS c_id,
-        tblLp.name AS name
-    FROM
-        $lpTable AS tblLp
-        INNER JOIN $tblCourse AS tblCourse ON tblLp.c_id = tblCourse.id
-    WHERE
-        tblLp.iid IN ( ".implode(',', $lpid)." )
-	";
+    $sql = "SELECT
+            tblCourse.title AS course_name,
+            tblCourse.code AS code,
+            tblLp.id AS lp_id,
+            tblLp.c_id AS c_id,
+            tblLp.name AS name
+        FROM
+            $lpTable AS tblLp
+            INNER JOIN $tblCourse AS tblCourse ON tblLp.c_id = tblCourse.id
+        WHERE
+            tblLp.iid IN ( ".implode(',', $lpid)." )";
     $result = Database::query($sql);
     $return = [];
     while ($element = Database::fetch_array($result)) {
@@ -130,18 +128,16 @@ function getLpIdWithNotify(): array
 {
     $extraFieldValuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
     $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
-    $sql = "
-    SELECT
-	    tblExtraFieldValues.item_id as lp_id
-    FROM
-	    $extraFieldValuesTable AS tblExtraFieldValues
-	INNER JOIN $extraFieldTable AS tblExtraField ON (
-	    tblExtraFieldValues.field_id = tblExtraField.id AND
-	    tblExtraField.variable = 'notify_student_and_hrm_when_available'
-	    )
-	where
-	      tblExtraFieldValues.value = 1
-	";
+    $sql = "SELECT
+            tblExtraFieldValues.item_id as lp_id
+        FROM
+            $extraFieldValuesTable AS tblExtraFieldValues
+        INNER JOIN $extraFieldTable AS tblExtraField ON (
+            tblExtraFieldValues.field_id = tblExtraField.id AND
+            tblExtraField.variable = 'notify_student_and_hrm_when_available'
+            )
+        where
+              tblExtraFieldValues.value = 1";
     $result = Database::query($sql);
     $return = [];
     while ($element = Database::fetch_array($result)) {
@@ -435,11 +431,8 @@ function learningPaths()
             foreach ($types as $type => $users) {
                 if ('LearnpathSubscription' == $type) {
                     sendToArray($users, $type, $message, $lpId);
-                }
-                else {
-                    if (!isset($itemProcessed[$lpId][$sessionId]['LearnpathSubscription'])) {
-                        sendToArray($users, $type, $message, $lpId);
-                    }
+                } elseif (!isset($itemProcessed[$lpId][$sessionId]['LearnpathSubscription'])) {
+                    sendToArray($users, $type, $message, $lpId);
                 }
             }
         }

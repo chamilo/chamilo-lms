@@ -690,7 +690,6 @@ class bbb
             }
         }
 
-
         if (!empty($courseInfo)) {
             return api_is_course_admin();
         }

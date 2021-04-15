@@ -8,6 +8,7 @@
  *
  * @author  Carlos Alvarado <carlos.alvarado@beeznest.com>
  */
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 /**
@@ -38,8 +39,10 @@ if (!isset($activeMessageNewlp['default_value'])) {
  * @param string $courseName
  * @param string $lpName
  * @param string $link
+ *
+ * @return bool|int
  */
-function sendMessage($toUser, $fromUser, $courseName, $lpName, $link)
+function sendMessage(array $toUser, int $fromUser, string $courseName, string $lpName, string $link)
 {
     $toUserId = $toUser['user_id'];
     $subjectTemplate = new Template(
@@ -87,8 +90,10 @@ function sendMessage($toUser, $fromUser, $courseName, $lpName, $link)
  * Obtains the data of the learning path and course searched by the id of the LP.
  *
  * @param array $lpid
+ *
+ * @return array
  */
-function getLpDataByArrayId($lpid = [])
+function getLpDataByArrayId(array $lpid = []): array
 {
     if (count($lpid) == 0) {
         return [];
@@ -98,10 +103,10 @@ function getLpDataByArrayId($lpid = [])
     $sql = "
     SELECT
         tblCourse.title AS course_name,
-        tblCourse.`code` AS `code`,
+        tblCourse.code AS code,
         tblLp.id AS lp_id,
         tblLp.c_id AS c_id,
-        tblLp.`name` AS `name`
+        tblLp.name AS name
     FROM
         $lpTable AS tblLp
         INNER JOIN $tblCourse AS tblCourse ON tblLp.c_id = tblCourse.id
@@ -121,7 +126,7 @@ function getLpDataByArrayId($lpid = [])
  * Returns the id of the LPs that have the notification option active through the extra
  * field 'notify_student_and_hrm_when_available'.
  */
-function getLpIdWithNotify()
+function getLpIdWithNotify(): array
 {
     $extraFieldValuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
     $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
@@ -135,7 +140,7 @@ function getLpIdWithNotify()
 	    tblExtraField.variable = 'notify_student_and_hrm_when_available'
 	    )
 	where
-	      tblExtraFieldValues.`value` = 1
+	      tblExtraFieldValues.value = 1
 	";
     $result = Database::query($sql);
     $return = [];
@@ -145,21 +150,21 @@ function getLpIdWithNotify()
 
     return $return;
 }
-function getTutorIdFromCourseRelUser($cId = 0, $lpId = 0)
+
+function getTutorIdFromCourseRelUser($cId = 0, $lpId = 0): int
 {
     $lpTable = Database::get_course_table(TABLE_LP_MAIN);
     $tblCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $sql = "
-    SELECT DISTINCT
-        tblCourseRelUser.user_id AS user_id
-    FROM
-        $lpTable AS tblLp
-        INNER JOIN $tblCourseRelUser AS tblCourseRelUser ON ( tblCourseRelUser.c_id = tblLp.c_id)
-    WHERE
-        tblCourseRelUser.user_id  IS NOT NULL AND
-        tblCourseRelUser.status = 1 AND
-        tblLp.id = $lpId AND
-        tblLp.c_id = $cId";
+    $sql = "SELECT DISTINCT
+            tblCourseRelUser.user_id AS user_id
+        FROM
+            $lpTable AS tblLp
+            INNER JOIN $tblCourseRelUser AS tblCourseRelUser ON ( tblCourseRelUser.c_id = tblLp.c_id)
+        WHERE
+            tblCourseRelUser.user_id  IS NOT NULL AND
+            tblCourseRelUser.status = 1 AND
+            tblLp.id = $lpId AND
+            tblLp.c_id = $cId";
     $result = Database::query($sql);
     $data = Database::fetch_assoc($result);
 
@@ -185,9 +190,6 @@ function sendToArray(&$data, &$type, &$message, $lpId = 0)
     }
 }
 
-/**
- * @return null
- */
 function learningPaths()
 {
     $lpItems = getLpIdWithNotify();
@@ -205,26 +207,24 @@ function learningPaths()
     $tblSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
     $tblItempProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
     /* Gets subscribed users individually in lp's by LearnpathSubscription */
-    $sql = "
-    SELECT DISTINCT
-        tblItemProperty.session_id as session_id,
-        tblItemProperty.to_user_id as user_id,
-        tblItemProperty.insert_user_id as from_user_id,
-        tblLp.id AS lp_id,
-        tblItemProperty.lastedit_type
-    FROM
-        $tblItempProperty as tblItemProperty
-        INNER JOIN $lpTable as tblLp ON
-            (
-                tblLp.iid = tblItemProperty.ref AND
-                tblItemProperty.lastedit_type = 'LearnpathSubscription'
-            )
-    WHERE
-        publicated_on <= '$date 23:59:59' AND
-        publicated_on >= '$date 00:00:00' AND
-        tblItemProperty.to_user_id IS NOT NULL AND
-        tblLp.id in ($lpItemsString)
-    ";
+    $sql = "SELECT DISTINCT
+            tblItemProperty.session_id as session_id,
+            tblItemProperty.to_user_id as user_id,
+            tblItemProperty.insert_user_id as from_user_id,
+            tblLp.id AS lp_id,
+            tblItemProperty.lastedit_type
+        FROM
+            $tblItempProperty as tblItemProperty
+            INNER JOIN $lpTable as tblLp ON
+                (
+                    tblLp.iid = tblItemProperty.ref AND
+                    tblItemProperty.lastedit_type = 'LearnpathSubscription'
+                )
+        WHERE
+            publicated_on <= '$date 23:59:59' AND
+            publicated_on >= '$date 00:00:00' AND
+            tblItemProperty.to_user_id IS NOT NULL AND
+            tblLp.id in ($lpItemsString)";
     $result = Database::query($sql);
     $groupUsers = [];
 
@@ -234,9 +234,9 @@ function learningPaths()
         if (isset($lpsData[$lpId])) {
             $lpData = $lpsData[$lpId];
         }
-        $courseName = isset($lpData['course_name']) ? $lpData['course_name'] : null;
-        $courseCode = isset($lpData['code']) ? $lpData['code'] : null;
-        $lpName = isset($lpData['name']) ? $lpData['name'] : null;
+        $courseName = $lpData['course_name'] ?? null;
+        $courseCode = $lpData['code'] ?? null;
+        $lpName = $lpData['name'] ?? null;
 
         $sessionId = (int) $row['session_id'];
         $toUser = (int) $row['user_id'];
@@ -256,31 +256,28 @@ function learningPaths()
         $itemProcessed[$lpId][$sessionId]['LearnpathSubscription'][$toUser] = $groupUsers[$lpId][$sessionId][$toUser];
     }
     /* Gets subscribed users by classes in lp's by LearnpathSubscription */
-    $sql = "
-    SELECT DISTINCT
-         tblItemProperty.session_id as session_id,
-        tblItemProperty.to_group_id as group_id,
-        tblUsergroupRelUser.user_id as user_id,
-        tblItemProperty.insert_user_id as from_user_id,
-        tblLp.id AS lp_id,
-        tblItemProperty.lastedit_type
-    FROM
-        $tblItempProperty as tblItemProperty
-        INNER JOIN $lpTable as tblLp ON
-            (
-                tblLp.iid = tblItemProperty.ref AND
-                tblItemProperty.lastedit_type = 'LearnpathSubscription'
+    $sql = "SELECT DISTINCT
+             tblItemProperty.session_id as session_id,
+            tblItemProperty.to_group_id as group_id,
+            tblUsergroupRelUser.user_id as user_id,
+            tblItemProperty.insert_user_id as from_user_id,
+            tblLp.id AS lp_id,
+            tblItemProperty.lastedit_type
+        FROM
+            $tblItempProperty as tblItemProperty
+            INNER JOIN $lpTable as tblLp ON
+                (
+                    tblLp.iid = tblItemProperty.ref AND
+                    tblItemProperty.lastedit_type = 'LearnpathSubscription'
+                )
+        INNER JOIN usergroup_rel_user as tblUsergroupRelUser on (
+            tblItemProperty.to_group_id = tblUsergroupRelUser.usergroup_id
             )
-    INNER JOIN usergroup_rel_user as tblUsergroupRelUser on (
-        tblItemProperty.to_group_id = tblUsergroupRelUser.usergroup_id
-        )
-    WHERE
-        publicated_on <= '$date 23:59:59' AND
-        publicated_on >= '$date 00:00:00' AND
-        tblItemProperty.to_group_id IS NOT NULL AND
-        tblLp.id in ($lpItemsString)
-
-    ";
+        WHERE
+            publicated_on <= '$date 23:59:59' AND
+            publicated_on >= '$date 00:00:00' AND
+            tblItemProperty.to_group_id IS NOT NULL AND
+            tblLp.id in ($lpItemsString)";
     $result = Database::query($sql);
     $groupUsers = [];
     while ($row = Database::fetch_array($result)) {
@@ -289,9 +286,9 @@ function learningPaths()
         if (isset($lpsData[$lpId])) {
             $lpData = $lpsData[$lpId];
         }
-        $courseName = isset($lpData['course_name']) ? $lpData['course_name'] : null;
-        $courseCode = isset($lpData['code']) ? $lpData['code'] : null;
-        $lpName = isset($lpData['name']) ? $lpData['name'] : null;
+        $courseName = $lpData['course_name'] ?? null;
+        $courseCode = $lpData['code'] ?? null;
+        $lpName = $lpData['name'] ?? null;
 
         $sessionId = (int) $row['session_id'];
         $toUser = (int) $row['user_id'];
@@ -319,21 +316,19 @@ function learningPaths()
     }
     /* Get users who are enrolled in the course */
 
-    $sql = "
-    SELECT DISTINCT
-        tblCourseRelUser.user_id AS user_id,
-        tblLp.id AS lp_id,
-        tblLp.c_id AS c_id
-    FROM
-        $lpTable AS tblLp
-        INNER JOIN $tblCourseRelUser AS tblCourseRelUser ON ( tblCourseRelUser.c_id = tblLp.c_id)
-    WHERE
-        publicated_on <= '$date 23:59:59' AND
-        publicated_on >= '$date 00:00:00' AND
-        tblCourseRelUser.user_id  IS NOT NULL AND
-        tblCourseRelUser.status = 5 AND
-        tblLp.id in ($lpItemsString)
-    ";
+    $sql = "SELECT DISTINCT
+            tblCourseRelUser.user_id AS user_id,
+            tblLp.id AS lp_id,
+            tblLp.c_id AS c_id
+        FROM
+            $lpTable AS tblLp
+            INNER JOIN $tblCourseRelUser AS tblCourseRelUser ON ( tblCourseRelUser.c_id = tblLp.c_id)
+        WHERE
+            publicated_on <= '$date 23:59:59' AND
+            publicated_on >= '$date 00:00:00' AND
+            tblCourseRelUser.user_id  IS NOT NULL AND
+            tblCourseRelUser.status = 5 AND
+            tblLp.id in ($lpItemsString)";
 
     $result = Database::query($sql);
     while ($row = Database::fetch_array($result)) {
@@ -345,9 +340,9 @@ function learningPaths()
         if (!isset($tutors[$row['c_id']][$row['lp_id']])) {
             $tutors[$row['c_id']][$row['lp_id']] = getTutorIdFromCourseRelUser($row['c_id'], $row['lp_id']);
         }
-        $courseName = isset($lpData['course_name']) ? $lpData['course_name'] : null;
-        $courseCode = isset($lpData['code']) ? $lpData['code'] : null;
-        $lpName = isset($lpData['name']) ? $lpData['name'] : null;
+        $courseName = $lpData['course_name'] ?? null;
+        $courseCode = $lpData['code'] ?? null;
+        $lpName = $lpData['name'] ?? null;
         $toUser = (int) $row['user_id'];
         $fromUser = $tutors[$row['c_id']][$row['lp_id']];
         $userInfo = api_get_user_info($toUser);
@@ -374,25 +369,23 @@ function learningPaths()
         }
     }
     /** Get the users who are registered in the sessions */
-    $sql = "
-    SELECT DISTINCT
-      	tblSessionRelCourseRelUser.user_id AS user_id,
-        tblLp.id AS lp_id,
-        tblSessionRelCourseRelUser.session_id AS session_id,
-        tblLp.c_id AS c_id,
-        tblSessionRelCourseRelUser.`status` AS `status`
-    FROM
-        $lpTable AS tblLp
-        INNER JOIN $tblSessionCourseUser AS tblSessionRelCourseRelUser ON (
-            tblSessionRelCourseRelUser.c_id = tblLp.c_id)
-    WHERE
-        publicated_on <= '$date 23:59:59' AND
-        publicated_on >= '$date 00:00:00' AND
-        tblSessionRelCourseRelUser.user_id  IS NOT NULL AND
-        tblLp.id in ($lpItemsString) AND
-        tblSessionRelCourseRelUser.`status` = 0
-    ORDER BY tblSessionRelCourseRelUser.`status`
-    ";
+    $sql = "SELECT DISTINCT
+            tblSessionRelCourseRelUser.user_id AS user_id,
+            tblLp.id AS lp_id,
+            tblSessionRelCourseRelUser.session_id AS session_id,
+            tblLp.c_id AS c_id,
+            tblSessionRelCourseRelUser.status AS status
+        FROM
+            $lpTable AS tblLp
+            INNER JOIN $tblSessionCourseUser AS tblSessionRelCourseRelUser ON (
+                tblSessionRelCourseRelUser.c_id = tblLp.c_id)
+        WHERE
+            publicated_on <= '$date 23:59:59' AND
+            publicated_on >= '$date 00:00:00' AND
+            tblSessionRelCourseRelUser.user_id  IS NOT NULL AND
+            tblLp.id in ($lpItemsString) AND
+            tblSessionRelCourseRelUser.status = 0
+        ORDER BY tblSessionRelCourseRelUser.status";
     $result = Database::query($sql);
     while ($row = Database::fetch_array($result)) {
         $lpId = (int) $row['lp_id'];
@@ -400,9 +393,9 @@ function learningPaths()
         if (isset($lpsData[$lpId])) {
             $lpData = $lpsData[$lpId];
         }
-        $courseName = isset($lpData['course_name']) ? $lpData['course_name'] : null;
-        $courseCode = isset($lpData['code']) ? $lpData['code'] : null;
-        $lpName = isset($lpData['name']) ? $lpData['name'] : null;
+        $courseName = $lpData['course_name'] ?? null;
+        $courseCode = $lpData['code'] ?? null;
+        $lpName = $lpData['name'] ?? null;
         $toUser = (int) $row['user_id'];
         if (!isset($tutors[$row['c_id']][$row['lp_id']])) {
             $tutors[$row['c_id']][$row['lp_id']] = getTutorIdFromCourseRelUser($row['c_id'], $row['lp_id']);
@@ -442,7 +435,8 @@ function learningPaths()
             foreach ($types as $type => $users) {
                 if ('LearnpathSubscription' == $type) {
                     sendToArray($users, $type, $message, $lpId);
-                } else {
+                }
+                else {
                     if (!isset($itemProcessed[$lpId][$sessionId]['LearnpathSubscription'])) {
                         sendToArray($users, $type, $message, $lpId);
                     }

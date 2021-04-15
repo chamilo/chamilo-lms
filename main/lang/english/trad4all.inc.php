@@ -5832,7 +5832,7 @@ $Item = "Item";
 $ConfigureDashboardPlugin = "Configure Dashboard Plugin";
 $EditBlocks = "Edit blocks";
 $Never = "Never";
-$YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Dear user, 
+$YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Dear user,
 
 Your account has now been activated on the platform. Please login and enjoy your courses.";
 $SessionFields = "Session fields";
@@ -8006,11 +8006,11 @@ $SpecificDate = "Specific dispatch date";
 $BaseDate = "Dispatch based on the session's start/end dates";
 $AfterOrBefore = "After or before";
 $Before = "Before";
-$ScheduleAnnouncementDescription = "This form allows scheduling announcements to be sent automatically to the students who are taking a course in a session. 
+$ScheduleAnnouncementDescription = "This form allows scheduling announcements to be sent automatically to the students who are taking a course in a session.
 
-There are two types of announcements that can be sent: 
+There are two types of announcements that can be sent:
 
-Specific date: In this case a specific day is selected to make the announcement. 
+Specific date: In this case a specific day is selected to make the announcement.
 
 Based on the start / end date of the session: in this case the number of days to pass before sending the announcement must be indicated. And those days can be associated to before or after the start / end date. For example: 3 days after the start date.";
 $MandatorySurveyNoAnswered = "A mandatory survey is waiting your answer. To enter the course, you must first complete the survey.";
@@ -8703,7 +8703,7 @@ $ToInvoice = "To invoice";
 $LearningPathItemByAuthor = "LP item by author";
 $DeleteExerciseAttempts = "Delete also the exercise attempts. If not check then the exercise results will still be available in the exercise tool.";
 $ExerciseCategoriesRadarMode = "Only show a radar of scores by category, instead of a table of categories. Do not show individual scores or feedback.";
-$ExerciseBlockBecausePercentageX = "All attemps blocked because you did not reach the minimum score of %s % at one of your attemps.";
+$ExerciseBlockBecausePercentageX = "All attempts blocked because you did not reach the minimum score of %s %% at one of your attemps.";
 $RegisteredAuthors = "Authors that have been registered :";
 $Price = "Price";
 $PriceUpdated = "Price updated";
@@ -8769,4 +8769,5 @@ $ExportMytPortfolioDataPdf = "Export my portfolio data to a PDF file";
 $ExportMytPortfolioDataZip = "Export my portfolio data to a ZIP file";
 $NewLearningPathSubject = "New learning path available";
 $NewLearningPathBody = "There is a new learning path called %s that has been added to your %s course. Go to this learning path here : %s";
+$XPercentCompleted = "%s %% Completed";
 ?>

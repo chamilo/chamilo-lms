@@ -82,4 +82,3 @@ $strings['RoomClosed'] = 'Room closed';
 $strings['RoomClosedComment'] = ' ';
 $strings['meeting_duration'] = 'Meeting duration (in minutes)';
 $strings['big_blue_button_students_start_conference_in_groups'] = 'Allow students to start conference in their groups.';
-

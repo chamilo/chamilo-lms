@@ -404,8 +404,7 @@ class bbb
                 api_get_session_id()
             );
 
-            $meetingName = isset($params['meeting_name']) ? $params['meeting_name'] : $this->getCurrentVideoConferenceName(
-            );
+            $meetingName = isset($params['meeting_name']) ? $params['meeting_name'] : $this->getCurrentVideoConferenceName();
             $welcomeMessage = isset($params['welcome_msg']) ? $params['welcome_msg'] : null;
             $record = isset($params['record']) && $params['record'] ? 'true' : 'false';
             //$duration = isset($params['duration']) ? intval($params['duration']) : 0;
@@ -664,6 +663,27 @@ class bbb
         }
 
         $courseInfo = api_get_course_info();
+        $groupId = api_get_group_id();
+
+        if (!empty($groupId) && !empty($courseInfo)) {
+            $groupEnabled = api_get_course_plugin_setting('bbb', 'bbb_enable_conference_in_groups') === '1';
+            if ($groupEnabled) {
+                $studentCanStartConference = api_get_course_plugin_setting(
+                        'bbb',
+                        'big_blue_button_students_start_conference_in_groups'
+                    ) === '1';
+
+                if ($studentCanStartConference) {
+                    $isSubscribed = GroupManager::is_user_in_group(
+                        api_get_user_id(),
+                        GroupManager::get_group_properties($groupId)
+                    );
+                    if ($isSubscribed) {
+                        return true;
+                    }
+                }
+            }
+        }
 
         if (!empty($courseInfo)) {
             return api_is_course_admin();

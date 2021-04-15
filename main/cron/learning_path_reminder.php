@@ -11,6 +11,13 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+// 24-hour format of an hour without leading zeros (in UTC timezone) to execute and search learning paths
+$timeSlots = [
+    7,
+    16,
+    20,
+];
+
 /**
  * Initialization.
  */
@@ -28,6 +35,12 @@ if ($activeMessageNewlp == false) {
 if (!isset($activeMessageNewlp['default_value'])) {
     // field dont have default value
     exit();
+}
+
+$currentHour = (int) api_get_utc_datetime(null, false, true)->format('G');
+
+if (!in_array($currentHour, $timeSlots)) {
+    exit("Execution nor allowed in this hour ($currentHour).");
 }
 
 /**
@@ -186,17 +199,40 @@ function sendToArray(&$data, &$type, &$message, $lpId = 0)
     }
 }
 
-function learningPaths()
+function getCurrentTimeSlot(int $currentHour, array $timeSlots = []): ?array
+{
+    $index = array_search($currentHour, $timeSlots);
+
+    if (false === $index){
+        return null;
+    }
+
+    if (0 === $index) {
+        $index = count($timeSlots) - 1;
+    } else {
+        $index--;
+    }
+
+    $startHour = $timeSlots[$index];
+
+    $startDate = api_get_utc_datetime(null, false, true)->modify("yesterday $startHour:00");
+    $endDate = api_get_utc_datetime(null, false, true)->modify("today $currentHour:00");
+
+    return [$startDate, $endDate];
+}
+
+function learningPaths(int $currentHour, array $timeSlots = [])
 {
     $lpItems = getLpIdWithNotify();
     if (count($lpItems) == 0) {
         return null;
     }
+
+    [$startDate, $endDate] = getCurrentTimeSlot($currentHour, $timeSlots);
+
     $tutors = [];
     $lpItemsString = implode(',', $lpItems);
     $lpsData = getLpDataByArrayId($lpItems);
-    $date = new DateTime();
-    $date = $date->format('Y-m-d');
     $itemProcessed = [];
     $lpTable = Database::get_course_table(TABLE_LP_MAIN);
     $tblCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -217,8 +253,8 @@ function learningPaths()
                     tblItemProperty.lastedit_type = 'LearnpathSubscription'
                 )
         WHERE
-            publicated_on <= '$date 23:59:59' AND
-            publicated_on >= '$date 00:00:00' AND
+            publicated_on < '".$endDate->format('Y-m-d H:i:s')."' AND
+            publicated_on >= '".$startDate->format('Y-m-d H:i:s')."' AND
             tblItemProperty.to_user_id IS NOT NULL AND
             tblLp.id in ($lpItemsString)";
     $result = Database::query($sql);
@@ -270,8 +306,8 @@ function learningPaths()
             tblItemProperty.to_group_id = tblUsergroupRelUser.usergroup_id
             )
         WHERE
-            publicated_on <= '$date 23:59:59' AND
-            publicated_on >= '$date 00:00:00' AND
+            publicated_on < '".$endDate->format('Y-m-d H:i:s')."' AND
+            publicated_on >= '".$startDate->format('Y-m-d H:i:s')."' AND
             tblItemProperty.to_group_id IS NOT NULL AND
             tblLp.id in ($lpItemsString)";
     $result = Database::query($sql);
@@ -320,8 +356,8 @@ function learningPaths()
             $lpTable AS tblLp
             INNER JOIN $tblCourseRelUser AS tblCourseRelUser ON ( tblCourseRelUser.c_id = tblLp.c_id)
         WHERE
-            publicated_on <= '$date 23:59:59' AND
-            publicated_on >= '$date 00:00:00' AND
+            publicated_on < '".$endDate->format('Y-m-d H:i:s')."' AND
+            publicated_on >= '".$startDate->format('Y-m-d H:i:s')."' AND
             tblCourseRelUser.user_id  IS NOT NULL AND
             tblCourseRelUser.status = 5 AND
             tblLp.id in ($lpItemsString)";
@@ -376,8 +412,8 @@ function learningPaths()
             INNER JOIN $tblSessionCourseUser AS tblSessionRelCourseRelUser ON (
                 tblSessionRelCourseRelUser.c_id = tblLp.c_id)
         WHERE
-            publicated_on <= '$date 23:59:59' AND
-            publicated_on >= '$date 00:00:00' AND
+            publicated_on < '".$endDate->format('Y-m-d H:i:s')."' AND
+            publicated_on >= '".$startDate->format('Y-m-d H:i:s')."' AND
             tblSessionRelCourseRelUser.user_id  IS NOT NULL AND
             tblLp.id in ($lpItemsString) AND
             tblSessionRelCourseRelUser.status = 0
@@ -440,6 +476,6 @@ function learningPaths()
     echo "$message\n\n";
 }
 
-learningPaths();
+learningPaths($currentHour, $timeSlots);
 
 exit();

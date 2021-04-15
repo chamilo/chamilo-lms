@@ -495,7 +495,7 @@ $tpl->assign('show_join_button', $showJoinButton);
 $tpl->assign('message', $message);
 $tpl->assign('form', $formToString);
 $tpl->assign('enter_conference_links', $urlList);
-$tpl->assign('warning_inteface_msg', $warningInterfaceMessage);
+$tpl->assign('warning_interface_msg', $warningInterfaceMessage);
 $tpl->assign('show_client_options', $showClientOptions);
 
 $content = $tpl->fetch('bbb/view/listing.tpl');

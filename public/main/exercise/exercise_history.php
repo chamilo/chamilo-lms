@@ -49,11 +49,9 @@ if (isset($_GET['message'])) {
     }
 }
 
-echo '<div class="actions">';
-echo '<a href="exercise_report.php?'.api_get_cidreq().'&filter=2">'.
+$actions = '<a href="exercise_report.php?'.api_get_cidreq().'&filter=2">'.
     Display::return_icon('back.png', get_lang('Back to result list'), '', ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
-
+echo Display::toolbarAction('toolbar', [$actions]);
 ?>
 
 <table class="table table-hover table-striped data_table">

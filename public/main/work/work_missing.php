@@ -97,27 +97,24 @@ if (isset($_GET['list']) && 'with' === $_GET['list']) {
 
 Display::display_header(null);
 
-echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_list_all.php?id='.$workId.'&'.api_get_cidreq().'">'.
+$actions = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_list_all.php?id='.$workId.'&'.api_get_cidreq().'">'.
     Display::return_icon('back.png', get_lang('Back to Assignments list'), '', ICON_SIZE_MEDIUM).'</a>';
-$output = '';
 if (!empty($workId)) {
     if (empty($_GET['list']) or 'with' == Security::remove_XSS($_GET['list'])) {
-        $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$workId.'&list=without">'.
+        $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$workId.'&list=without">'.
             Display::return_icon('exercice_uncheck.png', get_lang('ViewLearners who didn\'t send their work'), '', ICON_SIZE_MEDIUM).
             '</a>';
     } else {
         if (!isset($_GET['action']) || (isset($_GET['action']) && 'send_mail' != $_GET['action'])) {
-            $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$workId.'&list=without&action=send_mail&sec_token='.$token.'">'.
+            $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$workId.'&list=without&action=send_mail&sec_token='.$token.'">'.
                 Display::return_icon('mail_send.png', get_lang('Send a reminder'), '', ICON_SIZE_MEDIUM).
                 '</a>';
         } else {
-            $output .= Display::return_icon('mail_send_na.png', get_lang('Send a reminder'), '', ICON_SIZE_MEDIUM);
+            $actions .= Display::return_icon('mail_send_na.png', get_lang('Send a reminder'), '', ICON_SIZE_MEDIUM);
         }
     }
 }
 
-echo $output;
-echo '</div>';
+echo Display::toolbarAction('toolbar', [$actions]);
 
 display_list_users_without_publication($workId);

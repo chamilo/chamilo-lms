@@ -253,24 +253,23 @@ function add_category_form($action)
 // Display add category button
 function displayActionBar()
 {
-    echo '<div class="actions">';
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'">'.
+    $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    echo '<a href="'.api_get_self().'?action=addcategory&'.api_get_cidreq().'">'.
+    $actions .= '<a href="'.api_get_self().'?action=addcategory&'.api_get_cidreq().'">'.
         Display::return_icon('new_folder.png', get_lang('Add category'), null, ICON_SIZE_MEDIUM).'</a>';
 
-    echo Display::url(
+    $actions .= Display::url(
         Display::return_icon('export_csv.png', get_lang('CSV export'), [], ICON_SIZE_MEDIUM),
         api_get_self().'?action=export_category&'.api_get_cidreq()
     );
 
-    echo Display::url(
+    $actions .= Display::url(
         Display::return_icon('import_csv.png', get_lang('Import from a CSV'), [], ICON_SIZE_MEDIUM),
         api_get_self().'?action=import_category&'.api_get_cidreq()
     );
 
-    echo '</div>';
-    echo '<br/>';
+    echo Display::toolbarAction('toolbar', [$actions]);
+
     echo '<fieldset><legend>'.get_lang('Questions category').'</legend></fieldset>';
 }

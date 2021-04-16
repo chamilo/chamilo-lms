@@ -72,13 +72,10 @@ $interbreadcrumb[] = [
     'name' => $my_folder_data['title'],
 ];
 
-Display :: display_header(null);
-
-echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'>'.
+Display::display_header(null);
+$actions = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'>'.
     Display::return_icon('back.png', get_lang('Back to Assignments list'), '', ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
-
+echo Display::toolbarAction('toolbar', [$actions]);
 if (!empty($my_folder_data['description'])) {
     echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.
         Security::remove_XSS($my_folder_data['description']).'</p></div></p>';

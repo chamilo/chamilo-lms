@@ -70,8 +70,7 @@ Display::display_header(
 
 Display::display_introduction_section(TOOL_GROUP);
 
-echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq().'">'.
+$actions = '<a href="'.api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq().'">'.
     Display::return_icon(
         'back.png',
         get_lang('Back to Groups list'),
@@ -101,7 +100,8 @@ if (GroupManager::is_self_unregistration_allowed($user_id, $groupEntity)) {
         onclick="javascript: if(!confirm('."'".$confirmationMessage."'".')) return false;">'.
         get_lang('Unsubscribe me from this group.').'</a>';
 }
-echo '&nbsp;</div>';
+
+echo Display::toolbarAction('toolbar', [$actions]);
 
 $edit_url = '';
 if (api_is_allowed_to_edit(false, true) ||

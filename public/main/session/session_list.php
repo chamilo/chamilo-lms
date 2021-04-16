@@ -384,7 +384,6 @@ if (api_is_platform_admin()) {
     $form->addHidden('list_type', $listType);
     $form->addButtonSearch(get_lang('Search'));
     $actionsRight .= $form->returnForm().'</div>';
-
 }
 
 echo Display::toolbarAction(

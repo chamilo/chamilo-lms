@@ -23,9 +23,7 @@ $interbreadcrumb[] = [
 ];
 $this_section = SECTION_COURSES;
 Display::display_header('');
-echo '<div class="actions">';
-api_display_tool_title(get_lang('AssessmentsQualifyLog'));
-echo '</div>';
+echo Display::toolbarAction('toolbar', [api_display_tool_title(get_lang('AssessmentsQualifyLog'))]);
 
 $t_user = Database::get_main_table(TABLE_MAIN_USER);
 $t_link_log = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);

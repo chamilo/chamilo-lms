@@ -97,17 +97,12 @@ if ($form->validate()) {
     header('Location: admin.php?exerciseId='.$values['exercise'].'&newQuestion=yes&isContent='.$values['is_content'].'&answerType='.$answer_type);
     exit;
 } else {
-    // header
     Display::display_header($nameTools);
+    $actions = '<a href="exercise.php?show=test">'.
+        Display::return_icon('back.png', get_lang('BackToTestsList'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo Display::toolbarAction('toolbar', [$actions]);
 
-    echo '<div class="actions">';
-    echo '<a href="exercise.php?show=test">'.Display::return_icon('back.png', get_lang('BackToTestsList'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo '</div>';
-
-    // displaying the form
     $form->display();
-
-    // footer
     Display::display_footer();
 }
 

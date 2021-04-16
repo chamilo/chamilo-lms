@@ -1024,19 +1024,17 @@ $headers = [
 ];
 
 Display::display_header($nameTools, 'Exercise');
-
-// Menu
-echo '<div class="actions">';
+$actions = '';
 if (isset($fromExercise) && $fromExercise > 0) {
-    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$fromExercise.'">'.
+    $actions .= '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$fromExercise.'">'.
         Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
 } else {
-    echo '<a href="exercise.php?'.api_get_cidreq().'">'.
+    $actions .= '<a href="exercise.php?'.api_get_cidreq().'">'.
         Display::return_icon('back.png', get_lang('BackToTestsList'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo "<a href='admin.php?exerciseId=0'>".
+    $actions .= "<a href='admin.php?exerciseId=0'>".
         Display::return_icon('add_question.gif', get_lang('New question'), '', ICON_SIZE_MEDIUM).'</a>';
 }
-echo '</div>';
+echo Display::toolbarAction('toolbar', [$actions]);
 
 if ('' != $displayMessage) {
     echo Display::return_message($displayMessage, 'confirm');

@@ -269,18 +269,17 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
         Display:: display_header('');
     }
 }
-?>
-    <div class="actions">
-        <a href="<?php echo Category::getUrl(); ?>selectcat=<?php echo $my_selectcat; ?>">
-            <?php echo Display::return_icon(
-                'back.png',
-                get_lang('Assessment home'),
-                '',
-                ICON_SIZE_MEDIUM
-            ); ?>
-        </a>
-    </div>
-<?php
+
+$actions = '<a href="'.Category::getUrl().'&selectcat='.$my_selectcat.'">
+            '.Display::return_icon(
+        'back.png',
+        get_lang('Assessment home'),
+        '',
+        ICON_SIZE_MEDIUM
+    ).'
+    </a>';
+
+echo Display::toolbarAction('toolbar', [$actions]);
 
 $form->display();
 

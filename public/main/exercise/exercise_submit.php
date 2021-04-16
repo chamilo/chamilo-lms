@@ -1056,15 +1056,15 @@ $show_quiz_edition = $objExercise->added_in_lp();
 
 // I'm in a preview mode
 if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
-    echo '<div class="actions">';
+    $actions = '';
     if (false == $show_quiz_edition) {
-        echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
+        $actions .= '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
             Display::return_icon('settings.png', get_lang('Edit test name and settings'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
-        echo '<a href="#">'.
+        $actions .= '<a href="#">'.
             Display::return_icon('settings_na.png', get_lang('Edit test name and settings'), '', ICON_SIZE_MEDIUM).'</a>';
     }
-    echo '</div>';
+    echo Display::toolbarAction('toolbar', [$actions]);
 }
 
 $is_visible_return = $objExercise->is_visible(

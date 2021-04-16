@@ -90,29 +90,28 @@ $interbreadcrumb[] = [
 
 Display::display_header(null);
 
-echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'">'.
+$actions = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'">'.
         Display::return_icon('back.png', get_lang('Back to Assignments list'), '', ICON_SIZE_MEDIUM).
     '</a>';
 
 if (api_is_allowed_to_edit()) {
-    echo '<a
+    $actions .= '<a
         href="'.api_get_path(WEB_CODE_PATH).'work/student_work.php?action=export_to_pdf&studentId='.$studentId.'&'.api_get_cidreq().'">'.
         Display::return_icon('pdf.png', get_lang('Export to PDF'), '', ICON_SIZE_MEDIUM).
         '</a>';
 
-    echo '<a
+    $actions .= '<a
         href="'.api_get_path(WEB_CODE_PATH).'work/student_work.php?action=download&studentId='.$studentId.'&'.api_get_cidreq().'">'.
         Display::return_icon('save.png', get_lang('Download'), '', ICON_SIZE_MEDIUM).
         '</a>';
 
-    echo '<a
+    $actions .= '<a
             onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;"
             href="'.api_get_path(WEB_CODE_PATH).'work/student_work.php?action=delete_all&studentId='.$studentId.'&'.api_get_cidreq().'">'.
         Display::return_icon('delete.png', get_lang('Delete all papers'), '', ICON_SIZE_MEDIUM).
         '</a>';
 }
-echo '</div>';
+echo Display::toolbarAction('toolbar', [$actions]);
 
 $table = new HTML_Table(['class' => 'data_table']);
 $column = 0;

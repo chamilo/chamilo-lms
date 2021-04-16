@@ -28,16 +28,18 @@ if ($allowSocial) {
 }
 $interbreadcrumb[] = ['url' => 'inbox.php', 'name' => get_lang('Messages')];
 
-$social_right_content = '<div class="actions">';
+
+$actions = '';
 if ($allowMessage) {
-    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
+    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
         Display::return_icon('new-message.png', get_lang('Compose message')).'</a>';
-    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
+    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
         Display::return_icon('inbox.png', get_lang('Inbox')).'</a>';
-    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
+    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
         Display::return_icon('outbox.png', get_lang('Outbox')).'</a>';
 }
-$social_right_content .= '</div>';
+$social_right_content = Display::toolbarAction('toolbar', [$actions]);
+
 $type = isset($_GET['type']) ? (int) $_GET['type'] : MessageManager::MESSAGE_TYPE_INBOX;
 
 $show_menu = 'messages_inbox';

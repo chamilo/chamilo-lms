@@ -225,12 +225,10 @@ if ('learnpath' === $origin) {
     Display::display_header();
 }
 
-// Action links
-echo '<div class="actions">';
-echo '<span style="float:right;">'.search_link().'</span>';
-echo '<a href="viewforum.php?forum='.(int) ($_GET['forum']).'&'.$cidreq.'">'.
+//$actions  '<span style="float:right;">'.search_link().'</span>';
+$actions = '<a href="viewforum.php?forum='.(int) ($_GET['forum']).'&'.$cidreq.'">'.
     Display::return_icon('back.png', get_lang('Back to forum'), '', ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
+echo Display::toolbarAction('toolbar', [$actions]);
 
 // Set forum attachment data into $_SESSION
 getAttachedFiles($forumEntity->getIid(), 0, 0);

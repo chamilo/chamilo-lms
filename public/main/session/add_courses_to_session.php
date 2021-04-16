@@ -119,9 +119,7 @@ if ('multiple' === $add_type) {
 
 // the form header
 $session_info = SessionManager::fetch($sessionId);
-echo '<div class="actions">';
-echo $link_add_type_unique.$link_add_type_multiple;
-echo '</div>';
+echo Display::toolbarAction('toolbar', [$link_add_type_unique.$link_add_type_multiple]);
 
 $ajax_search = 'unique' === $add_type ? true : false;
 $nosessionCourses = $sessionCourses = [];

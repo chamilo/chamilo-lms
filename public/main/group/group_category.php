@@ -432,11 +432,9 @@ if ($form->validate()) {
 // Else display the form
 Display::display_header($nameTools, 'Group');
 
-// actions bar
-echo '<div class="actions">';
-echo '<a href="group.php">'.
+$actions = '<a href="group.php">'.
     Display::return_icon('back.png', get_lang('Back to Groups list'), '', ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
+echo Display::toolbarAction('toolbar', [$actions]);
 
 $defaults = $category;
 $defaults['action'] = $action;

@@ -248,10 +248,10 @@ if ('learnpath' === $origin) {
 
 // Action links
 if ('learnpath' !== $origin) {
-    echo '<div class="actions">';
-    echo '<span style="float:right;">'.search_link().'</span>';
+    $actions = '';
+    //$actions .= '<span style="float:right;">'.search_link().'</span>';
     if ('group' === $origin) {
-        echo '<a href="../group/group_space.php?'.api_get_cidreq().'">'.
+        $actions .= '<a href="../group/group_space.php?'.api_get_cidreq().'">'.
             Display::return_icon(
                 'back.png',
                 get_lang('Back to').' '.get_lang('Groups'),
@@ -260,7 +260,7 @@ if ('learnpath' !== $origin) {
             ).
             '</a>';
     } else {
-        echo '<a href="index.php?'.api_get_cidreq().'">'.
+        $actions .= '<a href="index.php?'.api_get_cidreq().'">'.
             Display::return_icon(
                 'back.png',
                 get_lang('Back toForumOverview'),
@@ -269,7 +269,7 @@ if ('learnpath' !== $origin) {
             ).
             '</a>';
     }
-    echo '<a href="viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'">'.
+    $actions .= '<a href="viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'">'.
         Display::return_icon(
             'forum.png',
             get_lang('Back toForum'),
@@ -277,7 +277,7 @@ if ('learnpath' !== $origin) {
             ICON_SIZE_MEDIUM
         ).
         '</a>';
-    echo '</div>';
+    echo Display::toolbarAction('toolbar', [$actions]);
 }
 
 /* Display Forum Category and the Forum information */

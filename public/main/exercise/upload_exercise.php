@@ -38,11 +38,8 @@ $interbreadcrumb[] = [
 
 Display::display_header(get_lang('Import quiz from Excel'), 'Exercises');
 
-echo '<div class="actions">';
-echo lp_upload_quiz_actions();
-echo '</div>';
+echo Display::toolbarAction('toolbar', [lp_upload_quiz_actions()]);
 
-// the main content
 lp_upload_quiz_main();
 
 function lp_upload_quiz_actions()

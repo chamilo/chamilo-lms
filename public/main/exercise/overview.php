@@ -85,11 +85,10 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     Display::display_reduced_header();
 }
 
-if ('mobileapp' == $origin) {
-    echo '<div class="actions">';
-    echo '<a href="javascript:window.history.go(-1);">'.
+if ('mobileapp' === $origin) {
+    $actions = '<a href="javascript:window.history.go(-1);">'.
         Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
-    echo '</div>';
+    echo Display::toolbarAction('toolbar', [$actions]);
 }
 
 $html = '';

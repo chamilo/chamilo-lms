@@ -240,8 +240,8 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
 
     $form->addLabel(
         '',
-        '<iframe 
-            frameborder="0" height="200" width="100%" scrolling="no" 
+        '<iframe
+            frameborder="0" height="200" width="100%" scrolling="no"
             src="'.api_get_path(WEB_CODE_PATH).'messages/record_audio.php"></iframe>'
     );
 
@@ -368,10 +368,12 @@ if ($allowSocial) {
     $social_menu_block = SocialManager::show_social_menu('messages');
     $social_right_content .= '<div class="row">';
     $social_right_content .= '<div class="col-md-12">';
-    $social_right_content .= '<div class="actions">';
-    $social_right_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">'.
+
+    $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">'.
         Display::return_icon('back.png', get_lang('Back'), [], 32).'</a>';
-    $social_right_content .= '</div>';
+
+    $social_right_content .= Display::toolbarAction('toolbar', [$actions]);
+
     $social_right_content .= '</div>';
     $social_right_content .= '<div class="col-md-12">';
 }

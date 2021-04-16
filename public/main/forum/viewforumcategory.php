@@ -168,7 +168,6 @@ if ('learnpath' === $origin) {
     Display::display_header(null);
 }
 
-/* ACTIONS */
 $whatsnew_post_info = isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null;
 
 /* Is the user allowed here? */
@@ -179,23 +178,20 @@ if (!api_is_allowed_to_edit(false, true) && false === $categoryIsVisible) {
     api_not_allowed();
 }
 
-/* Action Links */
-$html = '<div class="actions">';
-$html .= '<a href="'.$url.'">'.
+$actions = '<a href="'.$url.'">'.
     Display::return_icon('back.png', get_lang('Back to forum overview'), '', ICON_SIZE_MEDIUM).'</a>';
 if (api_is_allowed_to_edit(false, true)) {
-    $html .= '<a href="'.$mainUrl.'&forumcategory='.$categoryId.'&action=add_forum"> '
+    $actions .= '<a href="'.$mainUrl.'&forumcategory='.$categoryId.'&action=add_forum"> '
         .Display::return_icon('new_forum.png', get_lang('Add a forum'), '', ICON_SIZE_MEDIUM).'</a>';
 }
-$html .= search_link();
-$html .= '</div>';
+$actions .= search_link();
 
-echo $html;
+echo Display::toolbarAction('toolbar', [$actions]);
 
 $logInfo = [
     'tool' => TOOL_FORUM,
     'action' => $action,
-    'info' => isset($_GET['content']) ? $_GET['content'] : '',
+    'info' => $_GET['content'] ?? '',
 ];
 Event::registerLog($logInfo);
 

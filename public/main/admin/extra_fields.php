@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 $cidReset = true;
@@ -122,10 +123,9 @@ switch ($action) {
             }
             $obj->display();
         } else {
-            echo '<div class="actions">';
-            echo '<a href="'.api_get_self().'?type='.$obj->type.'">'.
+            $actions = '<a href="'.api_get_self().'?type='.$obj->type.'">'.
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
-            echo '</div>';
+            echo Display::toolbarAction('toolbar', [$actions]);
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(['sec_token' => $token]);
             $form->display();
@@ -147,10 +147,9 @@ switch ($action) {
             );
             $obj->display();
         } else {
-            echo '<div class="actions">';
-            echo '<a href="'.api_get_self().'?type='.$obj->type.'">'.
+            $actions = '<a href="'.api_get_self().'?type='.$obj->type.'">'.
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
-            echo '</div>';
+            echo Display::toolbarAction('toolbar', [$actions]);
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(['sec_token' => $token]);
             $form->display();

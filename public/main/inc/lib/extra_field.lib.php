@@ -2055,25 +2055,24 @@ class ExtraField extends Model
      */
     public function display()
     {
-        // action links
-        echo '<div class="actions">';
-        echo '<a href="../admin/index.php">';
-        echo Display::return_icon(
+        $actions = '<a href="../admin/index.php">';
+        $actions .= Display::return_icon(
             'back.png',
             get_lang('Back to').' '.get_lang('Administration'),
             '',
             ICON_SIZE_MEDIUM
         );
-        echo '</a>';
-        echo '<a href="'.api_get_self().'?action=add&type='.$this->type.'">';
-        echo Display::return_icon(
+        $actions .= '</a>';
+        $actions .= '<a href="'.api_get_self().'?action=add&type='.$this->type.'">';
+        $actions .= Display::return_icon(
             'add_user_fields.png',
             get_lang('Add'),
             '',
             ICON_SIZE_MEDIUM
         );
-        echo '</a>';
-        echo '</div>';
+        $actions .= '</a>';
+
+        echo Display::toolbarAction('toolbar', [$actions]);
         echo Display::grid_html($this->type.'_fields');
     }
 

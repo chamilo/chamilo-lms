@@ -85,20 +85,18 @@ function showCareer() {
 // Displaying the header.
 Display::display_header($tool_name);
 if ('add' !== $action && 'edit' !== $action) {
-    echo '<div class="actions">';
-    echo '<a href="?action=add">'.Display::return_icon('add.png', get_lang('Add an announcement'), [], 32).'</a>';
-    echo '</div>';
+    $actions = '<a href="?action=add">'.Display::return_icon('add.png', get_lang('Add an announcement'), [], 32).'</a>';
+    echo Display::toolbarAction('toolbar', [$actions]);
 }
 
 $show_announcement_list = true;
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
+$action = $_REQUEST['action'] ?? null;
 
 // Form was posted?
 if (isset($_POST['action'])) {
     $action_todo = true;
 }
 
-// Actions
 switch ($action) {
     case 'make_visible':
     case 'make_invisible':

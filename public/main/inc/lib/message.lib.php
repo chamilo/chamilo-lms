@@ -1375,7 +1375,6 @@ class MessageManager
             $messageContent .= '<div class="row">';
             $messageContent .= '<div class="col-md-12">';
             $messageContent .= '<ul class="list-message">';
-
             if (null !== $message->getUserSender()) {
                 $messageContent .= '<li>'.$userImage.'</li>';
                 $messageContent .= '<li>';
@@ -1427,34 +1426,35 @@ class MessageManager
 		            </tr>
 		        </table>
 		        <div id="message-attach">'.(!empty($filesAttachments) ? implode('<br />', $filesAttachments) : '').'</div>
-		        <div style="padding: 15px 0px 5px 0px">';
+		        ';
         $social_link = '';
         if (isset($_GET['f']) && 'social' === $_GET['f']) {
             $social_link = 'f=social';
         }
 
+        $actions = '';
         switch ($type) {
             case self::MESSAGE_TYPE_OUTBOX:
-                $messageContent .= '<a href="outbox.php?'.$social_link.'">'.
+                $actions .= '<a href="outbox.php?'.$social_link.'">'.
                     Display::return_icon('back.png', get_lang('Return to outbox')).'</a> &nbsp';
-                $messageContent .= '<a href="outbox.php?action=deleteone&id='.$messageId.'&'.$social_link.'" >'.
+                $actions .= '<a href="outbox.php?action=deleteone&id='.$messageId.'&'.$social_link.'" >'.
                     Display::return_icon('delete.png', get_lang('Delete message')).'</a>&nbsp';
                 break;
             case self::MESSAGE_TYPE_INBOX:
-                $messageContent .= '<a href="inbox.php?'.$social_link.'">'.
+                $actions .= '<a href="inbox.php?'.$social_link.'">'.
                     Display::return_icon('back.png', get_lang('Return to inbox')).'</a> &nbsp';
-                $messageContent .= '<a href="new_message.php?re_id='.$messageId.'&'.$social_link.'">'.
+                $actions .= '<a href="new_message.php?re_id='.$messageId.'&'.$social_link.'">'.
                     Display::return_icon('message_reply.png', get_lang('Reply to this message')).'</a> &nbsp';
-                $messageContent .= '<a href="inbox.php?action=deleteone&id='.$messageId.'&'.$social_link.'" >'.
+                $actions .= '<a href="inbox.php?action=deleteone&id='.$messageId.'&'.$social_link.'" >'.
                     Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>&nbsp;';
                 if (0 != $idPrevMessage) {
-                    $messageContent .= '<a
+                    $actions .= '<a
                         title="'.get_lang('PrevMessage').'"
                         href="view_message.php?type='.$type.'&id='.$idPrevMessage.'" ">'.
                         Display::return_icon('icons/22/back.png', get_lang('ScormPrevious')).'</a> &nbsp';
                 }
                 if (0 != $idNextMessage) {
-                    $messageContent .= '<a
+                    $actions .= '<a
                         title="'.get_lang('NextMessage').'"
                         href="view_message.php?type='.$type.'&id='.$idNextMessage.'">'.
                         Display::return_icon('icons/22/move.png', get_lang('ScormNext')).'</a> &nbsp';
@@ -1462,7 +1462,8 @@ class MessageManager
                 break;
         }
 
-        $messageContent .= '</div></td>
+        $messageContent .= Display::toolbarAction('toolbar-bottom', [$actions]);
+        $messageContent .= '</td>
 		      <td width="10"></td>
 		    </tr>
 		</table>';

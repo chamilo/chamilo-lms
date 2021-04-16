@@ -327,10 +327,10 @@ class UserGroup extends Model
      */
     public function returnGrid()
     {
-        // action links
-        $html = '<div class="actions">';
+        $html = '';
+        $actions = '';
         if (api_is_platform_admin()) {
-            $html .= '<a href="../admin/index.php">'.
+            $actions .= '<a href="../admin/index.php">'.
                 Display::return_icon(
                     'back.png',
                     get_lang('Back to').' '.get_lang('Administration'),
@@ -340,18 +340,18 @@ class UserGroup extends Model
                 '</a>';
         }
 
-        $html .= '<a href="'.api_get_self().'?action=add">'.
+        $actions .= '<a href="'.api_get_self().'?action=add">'.
             Display::return_icon('new_class.png', get_lang('Add classes'), '', ICON_SIZE_MEDIUM).
             '</a>';
-        $html .= Display::url(
+        $actions .= Display::url(
             Display::return_icon('import_csv.png', get_lang('Import'), [], ICON_SIZE_MEDIUM),
             'usergroup_import.php'
         );
-        $html .= Display::url(
+        $actions .= Display::url(
             Display::return_icon('export_csv.png', get_lang('Export'), [], ICON_SIZE_MEDIUM),
             'usergroup_export.php'
         );
-        $html .= '</div>';
+        $html .= Display::toolbarAction('toolbar', [$actions]);
         $html .= Display::grid_html('usergroups');
 
         return $html;

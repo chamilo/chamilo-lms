@@ -1248,7 +1248,7 @@ if (0 == $table->get_total_number_of_items()) {
 }
 $toolbarActions = Display::toolbarAction(
     'toolbarUser',
-    [$actionsLeft, $actionsCenter, $actionsRight],
+    [$actionsLeft, $actionsCenter.$actionsRight],
     [4, 4, 4]
 );
 

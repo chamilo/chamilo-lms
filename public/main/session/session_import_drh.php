@@ -19,13 +19,12 @@ set_time_limit(0);
 
 $inserted_in_course = [];
 
-// Display the header.
 Display::display_header($tool_name);
 
-echo '<div class="actions">';
-echo '<a href="../session/session_list.php">'.
+$actions = '<a href="../session/session_list.php">'.
     Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
+
+echo Display::toolbarAction('toolbar', [$actions]);
 
 if (!empty($error_message)) {
     echo Display::return_message($error_message, 'normal', false);

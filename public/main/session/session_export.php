@@ -286,10 +286,9 @@ if (api_is_multiple_url_enabled()) {
 $result = Database::query($sql);
 $Sessions = Database::store_result($result);
 
-echo '<div class="actions">';
-echo '<a href="../session/session_list.php">'.
+$actions = '<a href="../session/session_list.php">'.
         Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Session list'), '', ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
+echo Display::toolbarAction('toolbar', [$actions]);
 
 if (!empty($errorMsg)) {
     echo Display::return_message($errorMsg, 'normal', false); //main API

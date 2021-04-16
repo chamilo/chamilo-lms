@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -104,10 +105,9 @@ switch ($action) {
             header('Location: '.api_get_self());
             exit;
         } else {
-            $content .= '<div class="actions">';
-            $content .= '<a href="'.api_get_self().'">'.
+            $actions = '<a href="'.api_get_self().'">'.
                 Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
-            $content .= '</div>';
+            $content .= Display::toolbarAction('toolbar', [$actions]);
             $token = Security::get_token();
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(['sec_token' => $token]);
@@ -152,14 +152,13 @@ switch ($action) {
             header('Location: '.api_get_self());
             exit;
         } else {
-            $content .= '<div class="actions">';
-            $content .= '<a href="'.api_get_self().'">'.Display::return_icon(
+            $actions = '<a href="'.api_get_self().'">'.Display::return_icon(
                 'back.png',
                 get_lang('Back'),
                 '',
                 ICON_SIZE_MEDIUM
             ).'</a>';
-            $content .= '</div>';
+            $content .= Display::toolbarAction('toolbar', [$actions]);
             $content .= $form->returnForm();
         }
         break;
@@ -179,7 +178,6 @@ switch ($action) {
         break;
 }
 
-// The header.
 Display::display_header();
 
 ?>

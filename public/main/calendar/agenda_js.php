@@ -7,7 +7,7 @@ $use_anonymous = true;
 $typeList = ['personal', 'course', 'admin', 'platform'];
 // Calendar type
 $type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], $typeList) ? $_REQUEST['type'] : 'personal';
-$userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
+$userId = $_REQUEST['user_id'] ?? null;
 
 if ('personal' === $type || 'admin' === $type) {
     $cidReset = true; // fixes #5162
@@ -18,8 +18,8 @@ api_block_inactive_user();
 $current_course_tool = TOOL_CALENDAR_EVENT;
 $this_section = SECTION_MYAGENDA;
 
-$htmlHeadXtra[] = api_get_asset('fullcalendar/main.js');
 $htmlHeadXtra[] = api_get_css_asset('fullcalendar/main.css');
+$htmlHeadXtra[] = api_get_asset('fullcalendar/main.js');
 
 if (api_is_platform_admin() && ('admin' === $type || 'platform' === $type)) {
     $type = 'admin';

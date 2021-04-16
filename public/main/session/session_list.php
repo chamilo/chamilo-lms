@@ -386,11 +386,7 @@ if (api_is_platform_admin()) {
     $actionsRight .= $form->returnForm().'</div>';
 }
 
-echo Display::toolbarAction(
-    'toolbar',
-    [$actionsLeft, $actionsRight]
-);
-
+echo Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]);
 echo SessionManager::getSessionListTabs($listType);
 echo '<div id="session-table" class="table-responsive">';
 echo Display::grid_html('sessions');

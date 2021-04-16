@@ -141,8 +141,7 @@ $(function() {
 
 </script>';
 
-/* Actions */
-$my_action = isset($_GET['action']) ? $_GET['action'] : '';
+$my_action = $_GET['action'] ?? '';
 
 $logInfo = [
     'tool' => TOOL_FORUM,
@@ -332,6 +331,8 @@ if (($current_forum_category &&
         }
     }
 }
+
+$actions = Display::toolbarAction('toolbar', [$actions]);
 
 $template->assign('forum_actions', $actions);
 $template->assign('origin', api_get_origin());

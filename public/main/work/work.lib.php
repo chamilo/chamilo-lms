@@ -74,9 +74,7 @@ function displayWorkActionLinks($id, $action, $isTutor)
     }
 
     if ('' !== $output) {
-        echo '<div class="actions">';
-        echo $output;
-        echo '</div>';
+        echo Display::toolbarAction('toolbar', [$output]);
     }
 }
 

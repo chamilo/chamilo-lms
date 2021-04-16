@@ -298,7 +298,7 @@ if ('learnpath' === $origin) {
     echo '<div style="height:15px">&nbsp;</div>';
 }
 
-$actions = '<div class="actions">';
+$actions = '';
 if ('learnpath' !== $origin) {
     if (!empty($groupId)) {
         $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq().'">'
@@ -331,9 +331,8 @@ if (api_is_allowed_to_edit(false, true) ||
         $actions .= get_lang('Forum blocked');
     }
 }
-$actions .= '</div>';
 
-echo $actions;
+echo Display::toolbarAction('toolbar', [$actions]);
 
 if (!empty($message)) {
     echo $message;

@@ -180,9 +180,9 @@ if ($form->validate()) {
 
     Display::display_header($nameTools, get_lang('Test'));
 
-    echo '<div class="actions">';
+    $actions = '';
     if (0 != $objExercise->getId()) {
-        echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->getId().'">'.
+        $actions .= '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->getId().'">'.
             Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
         if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {
@@ -193,16 +193,17 @@ if ($form->validate()) {
                 $lp_id = $_GET['lp_id'];
             }
             $lp_id = (int) $lp_id;
-            echo '<a
+            $actions .= '<a
                 href="../lp/lp_controller.php?'.api_get_cidreq().'&gradebook=&action=add_item&type=step&lp_id='.$lp_id.'#resource_tab-2">'.
                 Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Learning paths'), '', ICON_SIZE_MEDIUM).'</a>';
         } else {
-            echo '<a href="exercise.php?'.api_get_cidreq().'">'.
+            $actions .= '<a href="exercise.php?'.api_get_cidreq().'">'.
                 Display::return_icon('back.png', get_lang('Back to test list'), '', ICON_SIZE_MEDIUM).
                 '</a>';
         }
     }
-    echo '</div>';
+
+    echo Display::toolbarAction('toolbar', [$actions]);
 
     if (in_array($objExercise->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
         echo Display::return_message(

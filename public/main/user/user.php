@@ -584,7 +584,6 @@ $actions = '';
 $selectedTab = 1;
 
 if ($canRead) {
-    echo '<div class="actions">';
     switch ($type) {
         case STUDENT:
             $selectedTab = 1;
@@ -604,34 +603,29 @@ if ($canRead) {
             break;
     }
 
-    echo '<div class="row">';
-    echo '<div class="col-md-6">';
-
+    $actionsLeft = '';
     if ($canEdit) {
-        echo $icon;
+        $actionsLeft .= $icon;
     }
 
     if ($canRead) {
-        $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=csv&type='.$type.'">'.
+        $actionsLeft .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=csv&type='.$type.'">'.
             Display::return_icon('export_csv.png', get_lang('CSV export'), [], ICON_SIZE_MEDIUM).'</a> ';
-        $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=xls&type='.$type.'">'.
+        $actionsLeft .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=xls&type='.$type.'">'.
             Display::return_icon('export_excel.png', get_lang('Excel export'), [], ICON_SIZE_MEDIUM).'</a> ';
     }
 
     if ($canEditUsers && $canEdit) {
-        $actions .= '<a href="user_import.php?'.api_get_cidreq().'&action=import&type='.$type.'">'.
+        $actionsLeft .= '<a href="user_import.php?'.api_get_cidreq().'&action=import&type='.$type.'">'.
             Display::return_icon('import_csv.png', get_lang('Import users list'), [], ICON_SIZE_MEDIUM).'</a> ';
     }
 
     if ($canRead) {
-        $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=pdf&type='.$type.'">'.
+        $actionsLeft .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=pdf&type='.$type.'">'.
             Display::return_icon('pdf.png', get_lang('Export to PDF'), [], ICON_SIZE_MEDIUM).'</a> ';
     }
-    echo $actions;
 
-    echo '</div>';
-    echo '<div class="col-md-6">';
-    echo '<div class="pull-right">';
+
     // Build search-form
     $form = new FormValidator(
         'search_user',
@@ -645,17 +639,15 @@ if ($canRead) {
     $form->addText('keyword', '', false);
     $form->addElement('hidden', 'cidReq', api_get_course_id());
     $form->addButtonSearch(get_lang('Search'));
-    $form->display();
-    echo '</div>';
-    echo '</div>';
-    echo '</div>';
+    $actionsRight = $form->returnForm();
 
     $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
     if (api_is_allowed_to_edit() && 'true' === $allowTutors) {
-        $actions .= ' <a class="btn btn-default" href="session_list.php?'.api_get_cidreq().'">'.
+        $actionsRight .= ' <a class="btn btn-default" href="session_list.php?'.api_get_cidreq().'">'.
             get_lang('Course sessions').'</a>';
     }
-    echo '</div>';
+
+    echo Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]);
 }
 
 echo UserManager::getUserSubscriptionTab($selectedTab);

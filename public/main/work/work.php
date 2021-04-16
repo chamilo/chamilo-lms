@@ -32,7 +32,7 @@ $tool_name = get_lang('Assignments');
 
 $item_id = isset($_REQUEST['item_id']) ? (int) $_REQUEST['item_id'] : null;
 $origin = api_get_origin();
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'list';
+$action = $_REQUEST['action'] ?? 'list';
 
 $display_upload_form = false;
 if ('upload_form' === $action) {

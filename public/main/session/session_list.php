@@ -54,7 +54,7 @@ switch ($action) {
 $tool_name = get_lang('Session list');
 Display::display_header($tool_name);
 
-$courseId = isset($_GET['course_id']) ? $_GET['course_id'] : null;
+$courseId = $_GET['course_id'] ?? null;
 
 $sessionFilter = new FormValidator(
     'course_filter',
@@ -352,21 +352,25 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             });
         });
     </script>
-    <div class="actions">
 <?php
 
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.
+$actionsRight = '';
+$actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.
     Display::return_icon('new_session.png', get_lang('Add a training session'), '', ICON_SIZE_MEDIUM).'</a>';
 if (api_is_platform_admin()) {
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/add_many_session_to_category.php">'.
+    $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'session/add_many_session_to_category.php">'.
         Display::return_icon('session_to_category.png', get_lang('Add a training sessionsInCategories'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_category_list.php">'.
+    $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_category_list.php">'.
         Display::return_icon('folder.png', get_lang('Sessions categories list'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
 echo $actions;
 if (api_is_platform_admin()) {
-    echo '<div class="pull-right">';
+    $actionsRight .= '<div class="pull-right">';
+    $actionsRight .= $sessionFilter->returnForm();
+    $actionsRight .= '</div>';
+
+    $actionsRight .= '<div class="pull-right">';
     // Create a search-box
     $form = new FormValidator(
         'search_simple',
@@ -379,17 +383,16 @@ if (api_is_platform_admin()) {
     $form->addElement('text', 'keyword', null, ['aria-label' => get_lang('Search')]);
     $form->addHidden('list_type', $listType);
     $form->addButtonSearch(get_lang('Search'));
-    $form->display();
-    echo '</div>';
+    $actionsRight .= $form->returnForm().'</div>';
 
-    echo '<div class="pull-right">';
-    echo $sessionFilter->returnForm();
-    echo '</div>';
 }
-echo '</div>';
+
+echo Display::toolbarAction(
+    'toolbar',
+    [$actionsLeft, $actionsRight]
+);
 
 echo SessionManager::getSessionListTabs($listType);
-
 echo '<div id="session-table" class="table-responsive">';
 echo Display::grid_html('sessions');
 echo '</div>';

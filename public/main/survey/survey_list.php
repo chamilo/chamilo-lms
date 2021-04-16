@@ -569,21 +569,21 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     SurveyUtil::display_survey_search_form();
 }
 
-echo '<div class="actions">';
+$actions = '';
 if (!api_is_session_general_coach() || 'true' === $extend_rights_for_coachs) {
-    // Action links
-    echo '<a
+    $actions .= '<a
         href="'.api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.
         Display::return_icon('new_survey.png', get_lang('Create survey'), '', ICON_SIZE_MEDIUM).'</a> ';
     $url = api_get_path(WEB_CODE_PATH).'survey/create_meeting.php?'.api_get_cidreq();
-    echo Display::url(
+    $actions .= Display::url(
         Display::return_icon('add_doodle.png', get_lang('Create surveyDoodle'), '', ICON_SIZE_MEDIUM),
         $url
     );
 }
-echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.
+$actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.
     Display::return_icon('search.png', get_lang('Search'), '', ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
+
+echo Display::toolbarAction('toolbar', [$actions]);
 
 // Load main content
 if (api_is_session_general_coach() && 'false' === $extend_rights_for_coachs) {

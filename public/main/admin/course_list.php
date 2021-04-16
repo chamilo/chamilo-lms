@@ -515,7 +515,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
 
     $actions = Display::toolbarAction(
         'toolbar',
-        [$actions1, $actions2, $actions3, $actions4],
+        [$actions1, $actions3, $actions4.$actions2],
         [2, 4, 3, 3]
     );
 

@@ -242,16 +242,16 @@ if ('learnpath' === $origin) {
 }
 
 if ('learnpath' !== $origin) {
-    echo '<div class="actions">';
-    echo '<span style="float:right;">'.search_link().'</span>';
-    echo '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId.'">';
-    echo Display::return_icon(
+    //$actionsLeft = '<span style="float:right;">'.search_link().'</span>';
+    $actionsLeft = '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId.'">';
+    $actionsLeft .= Display::return_icon(
         'back.png',
         get_lang('Back to thread'),
         '',
         ICON_SIZE_MEDIUM
     ).'</a>';
-    echo '</div>';
+
+    echo Display::toolbarAction('toolbar', [$actionsLeft]);
 }
 /*New display forum div*/
 echo '<div class="forum_title">';

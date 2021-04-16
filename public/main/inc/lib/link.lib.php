@@ -1431,39 +1431,38 @@ Do you really want to delete this category and its links ?')."')) return false;\
 
         if ($showActionLinks) {
             /*	Action Links */
-            $content = '<div class="actions">';
+            $actions = '';
             if (api_is_allowed_to_edit(null, true)) {
-                $content .= '<a href="'.api_get_self().'?'.api_get_cidreq(
+                $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(
                     ).'&action=addlink&category_id='.$categoryId.'">'.
                     Display::return_icon('new_link.png', get_lang('Add a link'), '', ICON_SIZE_MEDIUM).'</a>';
-                $content .= '<a href="'.api_get_self().'?'.api_get_cidreq(
+                $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(
                     ).'&action=addcategory&category_id='.$categoryId.'">'.
                     Display::return_icon('new_folder.png', get_lang('Add a category'), '', ICON_SIZE_MEDIUM).'</a>';
             }
 
             if (!empty($countCategories)) {
-                $content .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=list&show=none">';
-                $content .= Display::return_icon(
+                $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=list&show=none">';
+                $actions .= Display::return_icon(
                         'forum_listview.png',
                         get_lang('List View'),
                         '',
                         ICON_SIZE_MEDIUM
                     ).' </a>';
 
-                $content .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=list&show=all">';
-                $content .= Display::return_icon(
+                $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=list&show=all">';
+                $actions .= Display::return_icon(
                         'forum_nestedview.png',
                         get_lang('Nested View'),
                         '',
                         ICON_SIZE_MEDIUM
                     ).'</a>';
             }
-
-            $content .= Display::url(
+            $actions .= Display::url(
                 Display::return_icon('pdf.png', get_lang('Export to PDF'), '', ICON_SIZE_MEDIUM),
                 api_get_self().'?'.api_get_cidreq().'&action=export'
             );
-            $content .= '</div>';
+            $content .= Display::toolbarAction('toolbar', [$actions]);
         }
 
         if (empty($countCategories)) {

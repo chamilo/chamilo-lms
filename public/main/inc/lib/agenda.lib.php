@@ -2657,16 +2657,14 @@ class Agenda
         }
 
         $actionsRight = '';
-        if ('calendar' == $view) {
+        if ('calendar' === $view) {
             $actionsRight .= $form;
         }
 
-        $toolbar = Display::toolbarAction(
+        return Display::toolbarAction(
             'toolbar-agenda',
             [$actionsLeft, $actionsRight]
         );
-
-        return $toolbar;
     }
 
     /**

@@ -213,16 +213,15 @@ $content = '';
 switch ($action) {
     case 'attendance_list':
         if ($allowToEdit) {
-            $content .= '<div class="actions">';
-            $content .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_add">';
-            $content .= Display::return_icon(
+            $actions = '<a href="index.php?'.api_get_cidreq().'&action=attendance_add">';
+            $actions .= Display::return_icon(
                 'new_attendance_list.png',
                 get_lang('Create a new attendance list'),
                 '',
                 ICON_SIZE_MEDIUM
             );
-            $content .= '</a>';
-            $content .= '</div>';
+            $actions .= '</a>';
+            $content .= Display::toolbarAction('toolbar', [$actions]);
         }
 
         if (0 === $attendance->getNumberOfAttendances()) {
@@ -647,21 +646,21 @@ switch ($action) {
         $is_locked_attendance = $attendance->is_locked_attendance($attendanceId);
 
         if (!$is_locked_attendance || api_is_platform_admin()) {
-            $content .= '<div class="actions">';
+            $actions = '';
             if ('calendar_add' === $action) {
-                $content .= '<a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendanceId.'">'.
+                $actions .= '<a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendanceId.'">'.
                     Display::return_icon('back.png', get_lang('Attendance calendar'), '', ICON_SIZE_MEDIUM).'</a>';
             } else {
-                $content .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendanceId.'">'.
+                $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendanceId.'">'.
                     Display::return_icon('back.png', get_lang('Attendance sheet'), '', ICON_SIZE_MEDIUM).'</a>';
                 if (api_is_allowed_to_edit()) {
-                    $content .= '<a href="index.php?'.api_get_cidreq().'&action=calendar_add&attendance_id='.$attendanceId.'">'.
+                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=calendar_add&attendance_id='.$attendanceId.'">'.
                         Display::return_icon('add.png', get_lang('Add a date and time'), '', ICON_SIZE_MEDIUM).'</a>';
-                    $content .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete all dates?').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_all_delete&attendance_id='.$attendanceId.'">'.
+                    $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete all dates?').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_all_delete&attendance_id='.$attendanceId.'">'.
                         Display::return_icon('clean.png', get_lang('Clean the calendar of all lists'), '', ICON_SIZE_MEDIUM).'</a>';
                 }
             }
-            $content .= '</div>';
+            $content .= Display::toolbarAction('toolbar', [$actions]);
         }
 
         $message_information = get_lang('The attendance calendar allows you to register attendance lists (one per real session the students need to attend). Add new attendance lists here.');
@@ -736,10 +735,10 @@ switch ($action) {
     case 'calendar_logins':
         if (api_is_course_admin() || api_is_drh()) {
             $result = $attendance->getAttendanceBaseInLogin(false, true);
-            $content .= '<div class="actions">';
-            $content .= '<a href="index.php?'.api_get_cidreq().'&action=calendar_list">'.
-                Display::return_icon('back.png', get_lang('AttendanceCalendar'), '', ICON_SIZE_MEDIUM).'</a>';
-            $content .= '</div>';
+            $actions = '<a href="index.php?'.api_get_cidreq().'&action=calendar_list">'.
+                Display::return_icon('back.png', get_lang('AttendanceCalendar'), '', ICON_SIZE_MEDIUM).
+                '</a>';
+            $content .= Display::toolbarAction('toolbar', [$actions]);
             $content .= $result['form'];
             $content .= $result['table'];
         }

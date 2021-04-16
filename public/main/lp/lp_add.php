@@ -220,15 +220,14 @@ if ($form->validate()) {
 
 Display::display_header(get_lang('Create new learning path'), 'Path');
 
-echo '<div class="actions">';
-echo '<a href="lp_controller.php?'.api_get_cidreq().'">'.
+$actions = '<a href="lp_controller.php?'.api_get_cidreq().'">'.
     Display::return_icon(
         'back.png',
         get_lang('ReturnToLearning paths'),
         '',
         ICON_SIZE_MEDIUM
     ).'</a>';
-echo '</div>';
+echo Display::toolbarAction('toolbar', [$actions]);
 
 echo Display::return_message(
     get_lang(

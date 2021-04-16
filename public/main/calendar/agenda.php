@@ -35,8 +35,8 @@ $logInfo = [
 Event::registerLog($logInfo);
 
 $group_id = api_get_group_id();
-$eventId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
-$type = $event_type = isset($_GET['type']) ? $_GET['type'] : null;
+$eventId = $_REQUEST['id'] ?? null;
+$type = $event_type = $_GET['type'] ?? null;
 $htmlHeadXtra[] = '<script>
 $(function() {
     var checked = $("input[name=repeat]").attr("checked");

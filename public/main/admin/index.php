@@ -1,7 +1,6 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Framework\Container;
+/* For licensing terms, see /license.txt */
 
 /**
  * Index page of the admin tools.
@@ -27,7 +26,12 @@ if (api_is_platform_admin()) {
         !is_writable(api_get_path(SYS_ARCHIVE_PATH))
     ) {
         Display::addFlash(
-            Display::return_message(get_lang('The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator.'), 'warning')
+            Display::return_message(
+                get_lang(
+                    'The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator.'
+                ),
+                'warning'
+            )
         );
     }
 
@@ -53,17 +57,17 @@ $blocks['users']['description'] = get_lang('Here you can manage registered users
 $blocks['users']['label'] = api_ucfirst(get_lang('User management'));
 $blocks['users']['class'] = 'block-admin-users';
 
-$search_form = '
-    <form method="get" class="form-inline" action="user_list.php">
-        <div class="form-group mb-2">
-            <input class="form-control" type="text" name="keyword" value=""
-             aria-label="'.get_lang('Search').'">
-        </div>
-        <button class="btn btn-primary mb-2" type="submit">
-            <em class="fa fa-search"></em> '.get_lang('Search').'
-        </button>
-    </form>';
-$blocks['users']['search_form'] = $search_form;
+$searchForm = new FormValidator(
+    'search_user',
+    'GET',
+    api_get_path(WEB_CODE_PATH).'admin/user_list.php',
+    null,
+    null,
+    FormValidator::LAYOUT_BOX_SEARCH
+);
+$searchForm->addText('keyword', get_lang('Keyword'));
+$searchForm->addButtonSearch(get_lang('Search'));
+$blocks['users']['search_form'] = $searchForm->returnForm();
 
 if (api_is_platform_admin()) {
     $blocks['users']['editable'] = true;
@@ -129,16 +133,19 @@ if (api_is_platform_admin()) {
     $blocks['courses']['description'] = get_lang('Create and manage your courses in a simple way');
     $blocks['courses']['class'] = 'block-admin-courses';
     $blocks['courses']['editable'] = true;
-    $search_form = ' <form method="get" class="form-inline" action="course_list.php">
-            <div class="form-group mb-2">
-                <input class="form-control" type="text" name="keyword" value=""
-                 aria-label="'.get_lang('Search').'">
-            </div>
-            <button class="btn btn-primary mb-2" type="submit">
-                <em class="fa fa-search"></em> '.get_lang('Search').'
-            </button>
-        </form>';
-    $blocks['courses']['search_form'] = $search_form;
+
+    $searchForm = new FormValidator(
+        'search_course',
+        'GET',
+        api_get_path(WEB_CODE_PATH).'admin/course_list.php',
+        null,
+        null,
+        FormValidator::LAYOUT_BOX_SEARCH
+    );
+    $searchForm->addText('keyword', get_lang('Keyword'));
+    $searchForm->addButtonSearch(get_lang('Search'));
+
+    $blocks['courses']['search_form'] = $searchForm->returnForm();
 
     $items = [];
     $items[] = ['url' => 'course_list.php', 'label' => get_lang('Course list')];
@@ -190,26 +197,29 @@ if (api_is_platform_admin()) {
     }
     $sessionPath = api_get_path(WEB_CODE_PATH).'session/';
 
-    $search_form = ' <form method="GET" class="form-inline" action="'.$sessionPath.'session_list.php">
-                    <div class="form-group mb-2">
-                        <input class="form-control"
-                        type="text"
-                        name="keyword"
-                        value=""
-                        aria-label="'.get_lang('Search').'">
-
-                    </div>
-                    <button class="btn btn-primary mb-2" type="submit">
-                            <em class="fa fa-search"></em> '.get_lang('Search').'
-                        </button>
-                </form>';
-    $blocks['sessions']['search_form'] = $search_form;
+    $searchForm = new FormValidator(
+        'search_session',
+        'GET',
+        api_get_path(WEB_CODE_PATH).'admin/session_list.php',
+        null,
+        null,
+        FormValidator::LAYOUT_BOX_SEARCH
+    );
+    $searchForm->addText('keyword', get_lang('Keyword'));
+    $searchForm->addButtonSearch(get_lang('Search'));
+    $blocks['sessions']['search_form'] = $searchForm->returnForm();
     $items = [];
     $items[] = ['url' => $sessionPath.'session_list.php', 'label' => get_lang('Training sessions list')];
     $items[] = ['url' => $sessionPath.'session_add.php', 'label' => get_lang('Add a training session')];
-    $items[] = ['url' => $sessionPath.'session_category_list.php', 'label' => get_lang('Training sessions listCategory')];
+    $items[] = [
+        'url' => $sessionPath.'session_category_list.php',
+        'label' => get_lang('Training sessions listCategory'),
+    ];
     $items[] = ['url' => $sessionPath.'session_import.php', 'label' => get_lang('Import sessions list')];
-    $items[] = ['url' => $sessionPath.'session_import_drh.php', 'label' => get_lang('Import list of HR directors into sessions')];
+    $items[] = [
+        'url' => $sessionPath.'session_import_drh.php',
+        'label' => get_lang('Import list of HR directors into sessions'),
+    ];
     if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
         $items[] = [
             'url' => 'ldap_import_students_to_session.php',
@@ -298,7 +308,6 @@ if (api_is_platform_admin()) {
     }
 
     /* Platform */
-
     $blocks['platform']['icon'] = Display::return_icon(
         'platform.png',
         get_lang('Platform management'),
@@ -310,18 +319,18 @@ if (api_is_platform_admin()) {
     $blocks['platform']['description'] = get_lang('Configure your platform, view reports, publish and send announcements globally');
     $blocks['platform']['class'] = 'block-admin-platform';
     $blocks['platform']['editable'] = true;
-    $search_form = ' <form method="get" action="'.api_get_path(WEB_PUBLIC_PATH).'admin/settings/search_settings'.'" class="form-inline">
-            <div class="form-group mb-2">
-                <input class="form-control"
-                type="text"
-                name="keyword" value=""
-                aria-label="'.get_lang('Search').'" >
-            </div>
-            <button class="btn btn-primary mb-2" type="submit">
-                    <em class="fa fa-search"></em> '.get_lang('Search').'
-                </button>
-        </form>';
-    $blocks['platform']['search_form'] = $search_form;
+
+    $searchForm = new FormValidator(
+        'search_setting',
+        'GET',
+        api_get_path(WEB_CODE_PATH).'admin/settings/search_settings/',
+        null,
+        null,
+        FormValidator::LAYOUT_BOX_SEARCH
+    );
+    $searchForm->addText('keyword', get_lang('Keyword'));
+    $searchForm->addButtonSearch(get_lang('Search'));
+    $blocks['platform']['search_form'] = $searchForm->returnForm();
 
     //$url = Container::getRouter()->generate('chamilo_platform_settings', ['namespace' => 'platform']);
     $url = api_get_path(WEB_PUBLIC_PATH).'admin/settings/platform';

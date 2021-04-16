@@ -445,14 +445,21 @@ if ($form->validate()) {
 
 Display::display_header($tool_name);
 
-echo '<div class="actions">';
-echo Display::url(Display::return_icon('back.png', get_lang('Back')), api_get_path(WEB_CODE_PATH).'admin/course_list.php');
-echo Display::url(Display::return_icon('course_home.png', get_lang('Course homepage')), $courseInfo['course_public_url'], ['target' => '_blank']);
-echo Display::url(
+$actions = Display::url(
+    Display::return_icon('back.png', get_lang('Back')),
+    api_get_path(WEB_CODE_PATH).'admin/course_list.php'
+);
+$actions .= Display::url(
+    Display::return_icon('course_home.png', get_lang('Course homepage')),
+    $courseInfo['course_public_url'],
+    ['target' => '_blank']
+);
+$actions .= Display::url(
     Display::return_icon('info2.png', get_lang('Information')),
     api_get_path(WEB_CODE_PATH)."admin/course_information.php?code=$courseCode"
 );
-echo '</div>';
+
+echo Display::toolbarAction('toolbar', [$actions]);
 
 echo "<script>
 function moveItem(origin , destination) {

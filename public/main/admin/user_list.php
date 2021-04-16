@@ -16,7 +16,7 @@ api_protect_session_admin_list_users();
 $urlId = api_get_current_access_url_id();
 $currentUserId = api_get_user_id();
 
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+$action = $_REQUEST['action'] ?? '';
 
 // Login as can be used by different roles
 if (isset($_GET['user_id']) && 'login_as' === $action) {
@@ -1025,11 +1025,11 @@ $actionsLeft = '';
 $actionsCenter = '';
 $actionsRight = '';
 if (api_is_platform_admin()) {
-    $actionsRight .= '<a class="pull-right" href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
+    $actionsLeft .= '<a class="pull-right" href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
          Display::return_icon('new_user.png', get_lang('Add a user'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
-$actionsLeft .= $form->returnForm();
+$actionsRight .= $form->returnForm();
 $actionsCenter .= $searchAdvanced;
 
 if (isset($_GET['keyword'])) {
@@ -1133,9 +1133,7 @@ $table = new SortableTable(
     'get_user_data',
     (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2,
     20,
-    'ASC',
-    null,
-    ['class' => 'table table-hover table-striped table-bordered table-condensed']
+    'ASC'
 );
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '', false, 'width="18px"');

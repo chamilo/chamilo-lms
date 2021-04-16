@@ -1853,6 +1853,15 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 // Show exercise report from all courses in a new page: exercise/pending.php
 //$_configuration['my_courses_show_pending_exercise_attempts'] = true;
 
+// Disables the following BBB plugin settings in the plugin form and use them in priority.
+/*$_configuration['plugin_settings'] = [
+    'bbb' => [
+        'tool_enable' => 'true', // string value
+        'host' => 'https://www.example.com',
+        'salt' => 'abc123'
+    ]
+];*/
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

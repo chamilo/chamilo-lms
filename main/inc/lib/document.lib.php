@@ -5307,6 +5307,21 @@ class DocumentManager
                     Display::return_icon('open_in_new_window.png', get_lang('OpenInANewWindow'), [], ICON_SIZE_SMALL).'&nbsp;&nbsp;</a>';
             }
 
+            $hook = HookDocumentItemView::create();
+            $hookItemViewTools = $hook->setEventData($document_data)->notifyDocumentItemView();
+
+            $rightTools = implode(
+                PHP_EOL,
+                [
+                    $force_download_html,
+                    $send_to,
+                    $copyToMyFiles,
+                    $open_in_new_window_link,
+                    $pdf_icon,
+                    $hookItemViewTools ? implode(PHP_EOL, $hookItemViewTools) : '',
+                ]
+            );
+
             if ($filetype === 'file') {
                 // Sound preview
                 if (preg_match('/mp3$/i', urldecode($checkExtension)) ||
@@ -5315,7 +5330,7 @@ class DocumentManager
                 ) {
                     return '<span style="float:left" '.$visibility_class.'>'.
                         $title.
-                        '</span>'.$force_download_html.$send_to.$copyToMyFiles.$open_in_new_window_link.$pdf_icon;
+                        '</span>'.$rightTools;
                 } elseif (
                     // Show preview
                     preg_match('/swf$/i', urldecode($checkExtension)) ||
@@ -5343,8 +5358,7 @@ class DocumentManager
                                 'style' => 'float:left;',
                             ]
                         )
-                        .$force_download_html.$send_to.$copyToMyFiles
-                        .$open_in_new_window_link.$pdf_icon;
+                        .$rightTools;
                 } else {
                     // For a "PDF Download" of the file.
                     $pdfPreview = null;
@@ -5359,11 +5373,11 @@ class DocumentManager
                     }
                     // No plugin just the old and good showinframes.php page
                     return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" style="float:left" '.$visibility_class.' >'.$title.'</a>'.
-                        $pdfPreview.$force_download_html.$send_to.$copyToMyFiles.$open_in_new_window_link.$pdf_icon;
+                        $pdfPreview.$rightTools;
                 }
             } else {
-                return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.$title.'</a>'.
-                    $force_download_html.$send_to.$copyToMyFiles.$open_in_new_window_link.$pdf_icon;
+                return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.$title.'</a>'
+                    .$rightTools;
             }
             // end copy files to users myfiles
         } else {

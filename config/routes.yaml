@@ -4,6 +4,10 @@ login_check:
 logout:
     path: /logout
 
+authentication_token:
+    path: /api/authentication_token
+    methods: ['POST']
+
 legacy_main:
     path: /main/{name}
     defaults: {_controller: 'ChamiloCoreBundle:Legacy:classic'}

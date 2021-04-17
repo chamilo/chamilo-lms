@@ -8,17 +8,10 @@ security:
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
-        users:
+        app_user_provider:
             entity:
                 class: Chamilo\CoreBundle\Entity\User
                 property: 'username'
-
-    access_control:
-        - {path: ^/administrator, role: ROLE_ADMIN}
-        - {path: ^/efconnect, role: ROLE_USER}
-        - {path: ^/elfinder, role: ROLE_USER}
-        - {path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY}
-
     role_hierarchy:
         ROLE_ADMIN:
             - ROLE_SUPER_ADMIN
@@ -54,23 +47,38 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
             anonymous: true
+        # Use to connect via a JWT token
+        api:
+            pattern: ^/api
+            stateless: true
+            anonymous: true
+            provider: app_user_provider
+            json_login:
+                check_path: /api/authentication_token
+                #                username_path: email
+                #                password_path: password
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+        # Default login via json
         admin:
             pattern: ^/
             context: admin
             anonymous: true
-            form_login:
-                csrf_token_generator: security.csrf.token_manager
-                login_path: /login
-                use_forward: false
-                check_path: /login
-                failure_path: null
+#            form_login:
+#                csrf_token_generator: security.csrf.token_manager
+#                login_path: /login
+#                use_forward: false
+#                check_path: /login
+#                failure_path: null
             guard:
                 authenticators:
                     - Chamilo\CoreBundle\Security\LoginFormAuthenticator
                     - Chamilo\CoreBundle\Security\TokenAuthenticator
 
             entry_point: Chamilo\CoreBundle\Security\AuthenticationEntryPoint
-
             remember_me:
                 secret: '%secret%'
                 lifetime: 604800 # 1 week in seconds
@@ -82,5 +90,14 @@ security:
 #            access_denied_handler: Chamilo\CoreBundle\Security\AccessDeniedHandler
             json_login:
                 check_path: /login_json
-#                username_path: security.credentials.login
-#                password_path: security.credentials.password
+                # username_path: security.credentials.login
+                # password_path: security.credentials.password
+
+
+
+    access_control:
+        #        - {path: ^/administrator, role: ROLE_ADMIN}
+        #        - {path: ^/efconnect, role: ROLE_USER}
+        #        - {path: ^/elfinder, role: ROLE_USER}
+        - {path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY}
+        - {path: ^/api/authentication_token, roles: IS_AUTHENTICATED_ANONYMOUSLY}

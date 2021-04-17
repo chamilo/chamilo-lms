@@ -105,6 +105,31 @@ Libraries
 * PHPMailer replaced with Swift Mailer
 * bower replaced by [yarn](https://yarnpkg.com)
 
+## JWT Authentication
+
+* php bin/console lexik:jwt:generate-keypair
+* In Apache setup Bearer with:
+
+`SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1`
+
+Get the token:
+
+`curl -k -X POST -H "Content-Type: application/json" https://example.com/api/authentication_token -d '{"username":"admin","password":"admin"}'`
+
+The result should be the something like:
+
+{"token":"MyTokenABC"}
+
+Go to:
+
+https://example.com/api
+
+Click in "Authorize" and write
+
+Bearer MyTokenABC
+
+Then you can make queries using the JWT token.
+
 ## Todo
 
 See https://github.com/chamilo/chamilo-lms/projects/3

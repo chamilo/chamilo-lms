@@ -67,10 +67,7 @@ if ($allowSocial) {
         $keyword = $values['keyword'];
     }
     $actionsRight = $form->returnForm();
-    $social_right_content .= Display::toolbarAction(
-        'toolbar',
-        [$actionsLeft, $actionsRight]
-    );
+    $social_right_content .= Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]);
 }
 
 $social_right_content .= MessageManager::outBoxDisplay($keyword);

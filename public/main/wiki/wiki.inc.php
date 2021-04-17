@@ -1369,10 +1369,7 @@ class Wiki
                 );
             }
 
-            echo Display::toolbarAction(
-                'toolbar-wikistudent',
-                [$actionsLeft, $actionsRight]
-            );
+            echo Display::toolbarAction('toolbar-wikistudent', [$actionsLeft, $actionsRight]);
 
             if (self::wiki_exist($title)) {
                 $pageTitle = $icon_assignment.'&nbsp;'.

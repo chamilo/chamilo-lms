@@ -1246,11 +1246,7 @@ if (0 == $table->get_total_number_of_items()) {
         }
     }
 }
-$toolbarActions = Display::toolbarAction(
-    'toolbarUser',
-    [$actionsLeft, $actionsCenter.$actionsRight],
-    [4, 4, 4]
-);
+$toolbarActions = Display::toolbarAction('toolbarUser', [$actionsLeft, $actionsCenter.$actionsRight]);
 
 $tpl = new Template($tool_name);
 $tpl->assign('actions', $toolbarActions);

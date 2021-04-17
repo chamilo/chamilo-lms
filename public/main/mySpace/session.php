@@ -374,10 +374,7 @@ if (api_is_platform_admin(true, true)) {
         );
     }
 
-    $toolbar = Display::toolbarAction(
-        'toolbar-session',
-        [$actionsLeft, $actionsRight]
-    );
+    $toolbar = Display::toolbarAction('toolbar-session', [$actionsLeft, $actionsRight]);
     echo $toolbar;
 
     echo Display::page_header(get_lang('YourCourse sessionsList'));
@@ -387,10 +384,7 @@ if (api_is_platform_admin(true, true)) {
         api_get_path(WEB_CODE_PATH).'admin/teachers_time_by_session_report.php'
     );
 
-    $toolbar = Display::toolbarAction(
-        'toolbar-session',
-        ['', $actionsRight]
-    );
+    $toolbar = Display::toolbarAction('toolbar-session', ['', $actionsRight]);
     echo $toolbar;
 
     echo Display::page_header(get_lang('YourCourse sessionsList'));

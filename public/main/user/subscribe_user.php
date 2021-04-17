@@ -205,7 +205,7 @@ $form->addText('keyword', '', false);
 $form->addElement('hidden', 'type', $type);
 $form->addElement('hidden', 'cidReq', api_get_course_id());
 $form->addButtonSearch(get_lang('Search'));
-echo Display::toolbarAction('toolbar-subscriber', [$actionsLeft, $extraForm, $form->returnForm()], [4, 4, 4]);
+echo Display::toolbarAction('toolbar-subscriber', [$actionsLeft, $extraForm, $form->returnForm()]);
 
 $option = COURSEMANAGER == $type ? 2 : 1;
 echo UserManager::getUserSubscriptionTab($option);

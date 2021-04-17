@@ -548,10 +548,7 @@ class GlossaryManager
         $form->addButtonSearch(get_lang('Search'));
         $actionsRight = $form->returnForm();
 
-        $toolbar = Display::toolbarAction(
-            'toolbar-document',
-            [$actionsLeft, $actionsRight]
-        );
+        $toolbar = Display::toolbarAction('toolbar-document', [$actionsLeft, $actionsRight]);
 
         $content = $toolbar;
 

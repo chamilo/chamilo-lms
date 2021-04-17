@@ -1168,7 +1168,7 @@ class Display
      */
     public static function tabsOnlyLink($headers, $selected = null)
     {
-        $id = uniqid();
+        $id = uniqid('tabs_');
         $i = 1;
         $lis = null;
         foreach ($headers as $item) {
@@ -1192,7 +1192,7 @@ class Display
         return self::tag(
             'ul',
             $lis,
-            ['class' => 'nav nav-tabs tabs-margin']
+            ['class' => 'nav nav-tabs']
         );
     }
 
@@ -2543,38 +2543,16 @@ class Display
         return self::url("$icon $text", $url, $attributes);
     }
 
-    /**
-     * @param string $id
-     * @param array  $content
-     * @param array  $colsWidth Optional. Columns width
-     */
-    public static function toolbarAction($id, $content, $colsWidth = []): string
+    public static function toolbarAction(string $id, array $contentList): string
     {
-        $col = count($content);
-
-        if (!$colsWidth) {
-            $width = 12 / $col;
-            array_walk($content, function () use ($width, &$colsWidth) {
-                $colsWidth[] = $width;
-            });
+        $col = count($contentList);
+        $html = ' <div id="'.$id.'" class="q-card">';
+        $html .= ' <div class="flex justify-between '.$col.'">';
+        foreach ($contentList as $item) {
+            $html .= '<div class=" flex p-3 gap-2 ">'.$item.'</div>';
         }
-
-        $html = '<ul id="'.$id.'" class="nav nav-tabs actions">';
-        for ($i = 0; $i < $col; $i++) {
-            $class = 'col-sm-'.$colsWidth[$i];
-
-            if ($col > 1) {
-                if ($i > 0 && $i < count($content) - 1) {
-                    $class .= ' text-center';
-                } elseif ($i === count($content) - 1) {
-                    $class .= ' text-right';
-                }
-            }
-
-            $html .= '<li class="nav-item '.$class.'">'.$content[$i].'</li>';
-        }
-
-        $html .= '</ul>';
+        $html .= '</div>';
+        $html .= '</div>';
 
         return $html;
     }

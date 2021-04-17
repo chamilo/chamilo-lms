@@ -637,11 +637,7 @@ $table->set_form_actions($actionsList);
 
 $table_result = $table->return_table();
 $extra_search_options = '';
-$toolbarActions = Display::toolbarAction(
-    'toolbarUser',
-    [$actionsLeft, $actionsCenter, $actionsRight],
-    [4, 4, 4]
-);
+$toolbarActions = Display::toolbarAction('toolbarUser', [$actionsLeft, $actionsCenter, $actionsRight]);
 
 $noticeMessage = sprintf(
     get_lang("You can find more information about the user's right to be forgotten through the following page: %s"),

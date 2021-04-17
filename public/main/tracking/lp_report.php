@@ -449,11 +449,7 @@ foreach ($headers as $header) {
 }
 
 $tableToString = $table->return_table();
-$toolbarActions = Display::toolbarAction(
-    'toolbarUser',
-    [$actionsLeft, $actionsCenter, $actionsRight],
-    [4, 4, 4]
-);
+$toolbarActions = Display::toolbarAction('toolbarUser', [$actionsLeft, $actionsCenter, $actionsRight]);
 
 $tpl = new Template($tool_name);
 $tpl->assign('actions', $toolbarActions);

@@ -6096,10 +6096,7 @@ class learnpath
             );
         }
 
-        $toolbar = Display::toolbarAction(
-            'actions-lp-controller',
-            [$actionsLeft, $actionsRight]
-        );
+        $toolbar = Display::toolbarAction('actions-lp-controller', [$actionsLeft, $actionsRight]);
 
         if ($returnString) {
             return $toolbar;

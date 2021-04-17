@@ -64,7 +64,7 @@ class CourseDescriptionController
                     $i++;
                 }
             }
-            $actions = Display::toolbarAction('toolbar', [0 => $actionLeft]);
+            $actions = Display::toolbarAction('toolbar', [$actionLeft]);
         }
 
         return $actions;

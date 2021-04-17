@@ -87,13 +87,13 @@ class DashboardController
                 ).'</a>';
         }
 
-        $actions = Display::toolbarAction('toolbar', [0 => $link_blocks_view.$link_list_view.$configuration_link]);
+        $actions = Display::toolbarAction('toolbar', [$link_blocks_view.$link_list_view.$configuration_link]);
         $tpl->assign('actions', $actions);
 
         // block dashboard view
         $columns = [];
         $blockList = null;
-        if (isset($view) && 'blocks' == $view) {
+        if (isset($view) && 'blocks' === $view) {
             if (isset($blocks) && count($blocks) > 0) {
                 // group content html by number of column
                 if (is_array($blocks)) {

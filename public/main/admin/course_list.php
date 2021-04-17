@@ -513,12 +513,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
         });
     </script>';
 
-    $actions = Display::toolbarAction(
-        'toolbar',
-        [$actions1, $actions3, $actions4.$actions2],
-        [2, 4, 3, 3]
-    );
-
+    $actions = Display::toolbarAction('toolbar', [$actions1, $actions3.$actions4.$actions2]);
     if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
         // Create a sortable table with the course data filtered by session
         $table = new SortableTable(

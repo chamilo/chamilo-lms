@@ -184,7 +184,7 @@ switch ($action) {
 
         $tpl->assign(
             'actions',
-            Display::toolbarAction('toolbar', [$toolbar], [12])
+            Display::toolbarAction('toolbar', [$toolbar])
         );
         $tpl->assign('content', $content);
         $tpl->display_one_col_template();

@@ -291,11 +291,7 @@ $actions[] = Display::url(
 );
 
 Display::display_header($nameTools);
-echo Display::toolbarAction(
-    'actions',
-    [implode(PHP_EOL, $actions)]
-);
-
+echo Display::toolbarAction('actions', [implode(PHP_EOL, $actions)]);
 $table_title = $session_id
     ? Display::return_icon('session.png', get_lang('Session')).PHP_EOL.api_get_session_name($session_id).PHP_EOL
     : PHP_EOL;

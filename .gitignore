@@ -91,3 +91,7 @@ yarn-error.log
 !.yarn/plugins
 !.yarn/sdks
 !.yarn/versions
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###

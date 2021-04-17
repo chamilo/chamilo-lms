@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 use ExtraField;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -25,8 +24,6 @@ class Version20191206150030 extends AbstractMigrationChamilo
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
         $em = $doctrine->getManager();
-        /** @var Connection $connection */
-        $connection = $em->getConnection();
 
         $kernel = $container->get('kernel');
         $rootPath = $kernel->getProjectDir();
@@ -57,7 +54,7 @@ class Version20191206150030 extends AbstractMigrationChamilo
                     ;
                     $em->persist($asset);
                     $em->flush();
-                    $item->setValue($asset->getId());
+                    $item->setValue((string) $asset->getId());
                     $em->persist($item);
                 }
             }

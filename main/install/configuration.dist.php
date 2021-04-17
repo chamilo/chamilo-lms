@@ -1862,6 +1862,9 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
     ]
 ];*/
 
+// Enable X-Sendfile headers on forced download files going through document/download.php
+//$_configuration['enable_x_sendfile_headers'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

@@ -131,6 +131,7 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator implements Passw
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
+        error_log('login form');
         return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
         /*$hook = $this->hookFactory->build(CheckLoginCredentialsHook::class);
 

@@ -47,10 +47,12 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
             anonymous: true
+
         # Use to connect via a JWT token
         api:
             pattern: ^/api
-            stateless: true
+            stateless: false
+            context: main
             anonymous: true
             provider: app_user_provider
             json_login:
@@ -62,21 +64,25 @@ security:
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
+
         # Default login via json
-        admin:
+        main:
             pattern: ^/
-            context: admin
+            context: main
+            provider: app_user_provider
             anonymous: true
-#            form_login:
-#                csrf_token_generator: security.csrf.token_manager
-#                login_path: /login
-#                use_forward: false
-#                check_path: /login
-#                failure_path: null
+#            login_throttling:
+#                max_attempts: 5
+            #            form_login:
+            #                csrf_token_generator: security.csrf.token_manager
+            #                login_path: /login
+            #                use_forward: false
+            #                check_path: /login
+            #                failure_path: null
             guard:
                 authenticators:
                     - Chamilo\CoreBundle\Security\LoginFormAuthenticator
-                    - Chamilo\CoreBundle\Security\TokenAuthenticator
+#                    - Chamilo\CoreBundle\Security\TokenAuthenticator
 
             entry_point: Chamilo\CoreBundle\Security\AuthenticationEntryPoint
             remember_me:
@@ -87,13 +93,11 @@ security:
                 path: /logout
                 target: /
             switch_user: true
-#            access_denied_handler: Chamilo\CoreBundle\Security\AccessDeniedHandler
+            #            access_denied_handler: Chamilo\CoreBundle\Security\AccessDeniedHandler
             json_login:
                 check_path: /login_json
                 # username_path: security.credentials.login
                 # password_path: security.credentials.password
-
-
 
     access_control:
         #        - {path: ^/administrator, role: ROLE_ADMIN}

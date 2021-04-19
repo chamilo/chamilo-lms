@@ -1714,9 +1714,9 @@ class CourseManager
         if (!empty($searchByKeyword)) {
             $searchByKeyword = Database::escape_string($searchByKeyword);
             $sql .= " AND (
-                        user.firstname LIKE '$searchByKeyword' OR
-                        user.username LIKE '$searchByKeyword' OR
-                        user.lastname LIKE '$searchByKeyword'
+                        user.firstname LIKE '$searchByKeyword%' OR
+                        user.username LIKE '$searchByKeyword%' OR
+                        user.lastname LIKE '$searchByKeyword%'
                     ) ";
         }
 

@@ -278,9 +278,9 @@ function handle_uploaded_document(
                 'error'
             )
         );
+
         return false;
     }
-
 
     // If the want to unzip, check if the file has a .zip (or ZIP,Zip,ZiP,...) extension
     if ($unzip == 1 && preg_match('/.zip$/', strtolower($uploadedFile['name']))) {

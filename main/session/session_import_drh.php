@@ -18,17 +18,6 @@ set_time_limit(0);
 
 $inserted_in_course = [];
 
-Display::display_header($tool_name);
-
-echo '<div class="actions">';
-echo '<a href="../session/session_list.php">'.
-    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
-
-if (!empty($error_message)) {
-    echo Display::return_message($error_message, 'normal', false);
-}
-
 $form = new FormValidator(
     'import_sessions',
     'post',
@@ -60,6 +49,14 @@ if ($form->validate()) {
     }
 }
 
+Display::display_header($tool_name);
+echo '<div class="actions">';
+echo '<a href="../session/session_list.php">'.
+    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).'</a>';
+echo '</div>';
+if (!empty($error_message)) {
+    echo Display::return_message($error_message, 'normal', false);
+}
 $form->display();
 
 ?>

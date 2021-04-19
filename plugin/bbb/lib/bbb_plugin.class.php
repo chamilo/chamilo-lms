@@ -37,6 +37,10 @@ class BBBPlugin extends Plugin
             'name' => 'bbb_force_record_generation',
             'type' => 'checkbox',
         ],
+        [
+            'name' => 'big_blue_button_students_start_conference_in_groups',
+            'type' => 'checkbox',
+        ],
     ];
 
     /**
@@ -70,8 +74,8 @@ class BBBPlugin extends Plugin
                 'interface' => [
                     'type' => 'select',
                     'options' => [
-                        self::INTERFACE_FLASH => 'Flash',
                         self::INTERFACE_HTML5 => 'HTML5',
+                        self::INTERFACE_FLASH => 'Flash',
                     ],
                 ],
                 'launch_type' => [

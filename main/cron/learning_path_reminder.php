@@ -8,7 +8,6 @@
  *
  * @author  Carlos Alvarado <carlos.alvarado@beeznest.com>
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 // 24-hour format of an hour without leading zeros (in UTC timezone) to execute and search learning paths
@@ -46,12 +45,6 @@ if (!in_array($currentHour, $timeSlots)) {
 /**
  * Send the message to the intended user, manage the corresponding template and send through
  * MessageManager::send_message_simple, using this for the option of human resources managers.
- *
- * @param array  $toUser
- * @param int    $fromUser
- * @param string $courseName
- * @param string $lpName
- * @param string $link
  *
  * @return bool|int
  */
@@ -101,10 +94,6 @@ function sendMessage(array $toUser, int $fromUser, string $courseName, string $l
 
 /**
  * Obtains the data of the learning path and course searched by the id of the LP.
- *
- * @param array $lpid
- *
- * @return array
  */
 function getLpDataByArrayId(array $lpid = []): array
 {
@@ -203,7 +192,7 @@ function getCurrentTimeSlot(int $currentHour, array $timeSlots = []): ?array
 {
     $index = array_search($currentHour, $timeSlots);
 
-    if (false === $index){
+    if (false === $index) {
         return null;
     }
 

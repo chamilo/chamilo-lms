@@ -4,8 +4,5 @@
 
 interface HookDocumentItemViewEventInterface extends HookEventInterface
 {
-    /**
-     * @return array
-     */
     public function notifyDocumentItemView(): array;
 }

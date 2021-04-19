@@ -1058,13 +1058,12 @@ class Plugin
     }
 
     /**
-     * Disable the settings configured in configuration.php ($configuration[plugin_settings])
+     * Disable the settings configured in configuration.php ($configuration[plugin_settings]).
      */
     public function disableSettings()
     {
         $settings = api_get_configuration_value('plugin_settings');
         if (!empty($settings) && isset($settings[$this->get_name()])) {
-
             return array_keys($settings[$this->get_name()]);
         }
 

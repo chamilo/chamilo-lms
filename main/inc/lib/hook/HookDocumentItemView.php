@@ -18,7 +18,7 @@ class HookDocumentItemView extends HookEvent implements HookDocumentItemViewEven
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function notifyDocumentItemView(): array
     {

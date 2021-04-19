@@ -180,7 +180,6 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
                         [],
                         [
                             'multiple' => 'multiple',
-                            'delay' => 1000,
                             'url' => api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users',
                         ]
                     );

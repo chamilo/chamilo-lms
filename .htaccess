@@ -12,7 +12,7 @@ RewriteEngine on
 RedirectMatch 403 ^/app/(?!courses/proxy)(cache|courses|home|logs|upload|Resources/public/css)/.*\.ph(p[3457]?|t|tml|ar)$
 RedirectMatch 403 ^/main/default_course_document/images/.*\.ph(p[3457]?|t|tml|ar)$
 RedirectMatch 403 ^/main/lang/.*\.ph(p[3457]?|t|tml|ar)$
-RedirectMatch 403 ^/web/css/.*\.ph(p[3457]?|t|tml|ar)$
+RedirectMatch 403 ^/web/.*\.ph(p[3457]?|t|tml|ar)$
 
 # http://my.chamilo.net/certificates/?id=123 to http://my.chamilo.net/certificates/index.php?id=123
 RewriteCond %{QUERY_STRING} ^id=(.*)$

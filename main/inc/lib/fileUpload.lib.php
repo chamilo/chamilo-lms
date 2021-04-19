@@ -24,7 +24,7 @@
  */
 function php2phps($file_name)
 {
-    return preg_replace('/\.(php.?|phtml.?)(\.){0,1}.*$/i', '.phps', $file_name);
+    return preg_replace('/\.(phar.?|php.?|phtml.?)(\.){0,1}.*$/i', '.phps', $file_name);
 }
 
 /**
@@ -238,7 +238,7 @@ function handle_uploaded_document(
     $sessionId = null,
     $treat_spaces_as_hyphens = true
 ) {
-    if (!$userId) {
+    if (empty($uploadedFile) || empty($userId) || empty($courseInfo) || empty($documentDir) || empty($uploadPath)) {
         return false;
     }
 
@@ -258,7 +258,6 @@ function handle_uploaded_document(
 
     // Just in case process_uploaded_file is not called
     $maxSpace = DocumentManager::get_course_quota();
-
     // Check if there is enough space to save the file
     if (!DocumentManager::enough_space($uploadedFile['size'], $maxSpace)) {
         if ($output) {
@@ -267,6 +266,21 @@ function handle_uploaded_document(
 
         return false;
     }
+
+    if ($uploadPath !== '/') {
+        $uploadPath = $uploadPath.'/';
+    }
+
+    if (!Security::check_abs_path($documentDir.$uploadPath, $documentDir.'/')) {
+        Display::addFlash(
+            Display::return_message(
+                get_lang('Forbidden'),
+                'error'
+            )
+        );
+        return false;
+    }
+
 
     // If the want to unzip, check if the file has a .zip (or ZIP,Zip,ZiP,...) extension
     if ($unzip == 1 && preg_match('/.zip$/', strtolower($uploadedFile['name']))) {
@@ -310,7 +324,7 @@ function handle_uploaded_document(
             return false;
         } else {
             // If the upload path differs from / (= root) it will need a slash at the end
-            if ($uploadPath != '/') {
+            if ($uploadPath !== '/') {
                 $uploadPath = $uploadPath.'/';
             }
 
@@ -1137,6 +1151,10 @@ function unzip_uploaded_document(
     $onlyUploadFile = false,
     $whatIfFileExists = 'overwrite'
 ) {
+    if (empty($courseInfo) || empty($userInfo) || empty($uploaded_file) || empty($uploadPath)) {
+        return false;
+    }
+
     $zip = new PclZip($uploaded_file['tmp_name']);
 
     // Check the zip content (real size and file extension)

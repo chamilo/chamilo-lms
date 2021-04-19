@@ -484,7 +484,7 @@ class learnpath
     public function add_item(
         $parent,
         $previous,
-        $type = 'dir',
+        $type,
         $id,
         $title,
         $description,

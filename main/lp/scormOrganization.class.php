@@ -26,7 +26,7 @@ class scormOrganization
      * @param    string    Type of construction needed ('db' or 'manifest', default = 'manifest')
      * @param    mixed    Depending on the type given, DB id for the lp_item or reference to the DOM element
      */
-    public function __construct($type = 'manifest', &$element, $scorm_charset = 'UTF-8')
+    public function __construct($type, &$element, $scorm_charset = 'UTF-8')
     {
         if (isset($element)) {
             // Parsing using PHP5 DOMXML methods.

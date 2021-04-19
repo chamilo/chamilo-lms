@@ -402,7 +402,9 @@ if ($count_fields > 0) {
     <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
     <blockquote>
     <pre>
-        <b>UserName</b>;LastName;FirstName;Email;NewUserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;ExpiryDate;Active;Language;Courses;ClassId;
+        <b>UserName</b>;LastName;FirstName;Email;NewUserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;ExpiryDate;Active;Language;<span style="color:red;"><?php if (count($list) > 0) {
+    echo implode(';', $list).';';
+} ?></span>Courses;ClassId;
         xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;user/teacher/drh;YYYY-MM-DD 00:00:00;0/1;xxx;<span
             style="color:red;"><?php if (count($list_reponse) > 0) {
     echo implode(';', $list_reponse).';';

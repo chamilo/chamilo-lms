@@ -6,25 +6,41 @@ import NotificationMixin from './NotificationMixin';
 
 export default {
   mixins: [NotificationMixin],
+  created() {
+    //console.log('created');
+  },
   data() {
     return {
+      pagination: {
+        sortBy: null,
+        descending: false,
+        page: 1, // page to be displayed
+        rowsPerPage: 3, // maximum displayed rows
+        rowsNumber: 10, // max number of rows
+      },
+      nextPage: null,
+      filters: {},
+      filtration: {},
+      expandedFilter: false,
       options: {
         //sortBy: [], vuetify
         //sortDesc: [], , vuetify
         page: 1,
         itemsPerPage: 20
       },
-      filters: {}
+      //filters: {}
     };
   },
-
   watch: {
     $route() {
+      console.log('watch listmixin');
       // react to route changes...
       this.resetList = true;
       this.onUpdateOptions(this.options);
       let nodeId = this.$route.params['node'];
-      this.findResourceNode('/api/resource_nodes/'+ nodeId);
+      if (!isEmpty(nodeId)) {
+        this.findResourceNode('/api/resource_nodes/'+ nodeId);
+      }
     },
 
     deletedItem(item) {
@@ -41,6 +57,27 @@ export default {
     }
   },
   methods: {
+    onRequest(props, init) {
+      const { pagination: { page, rowsPerPage: itemsPerPage, sortBy, descending }} = props;
+      this.nextPage = page;
+      let params = {
+        ...this.filtration,
+      };
+      if (itemsPerPage > 0) {
+        params = { ...params, itemsPerPage, page };
+      }
+      if (sortBy) {
+        params[`order[${sortBy}]`] = descending ? "DESC" : "ASC";
+      }
+      this.getPage({ params }).then(() => {
+        this.pagination.sortBy = sortBy;
+        this.pagination.descending = descending;
+        this.pagination.rowsPerPage = itemsPerPage;
+        if (!init) {
+          this.filters = { ...this.filtration };
+        }
+      });
+    },
     fetchNewItems({ page, itemsPerPage, sortBy, sortDesc, totalItems } = {}) {
       let params = {
         ...this.filters
@@ -61,15 +98,14 @@ export default {
 
       //this.resetList = true;
 
-      this.getPage(params).then(() => {
-        this.options.sortBy = sortBy;
-        this.options.sortDesc = sortDesc;
-        this.options.itemsPerPage = itemsPerPage;
-        this.options.totalItems = totalItems;
-      });
+      //this.getPage(params).then(() => {
+      this.options.sortBy = sortBy;
+      this.options.sortDesc = sortDesc;
+      this.options.itemsPerPage = itemsPerPage;
+      this.options.totalItems = totalItems;
+      //});
     },
-    onUpdateOptions({ page, itemsPerPage, sortBy, sortDesc, totalItems } = {}) {
-      //console.log({ page, itemsPerPage, sortBy, sortDesc, totalItems });
+    onUpdateOptions({ page, itemsPerPage, sortBy, sortDesc, totalItems, getPage } = {}) {
       let params = {
         ...this.filters
       };
@@ -88,13 +124,17 @@ export default {
       }
 
       this.resetList = true;
-
-      this.getPage(params).then(() => {
-        this.options.sortBy = sortBy;
-        this.options.sortDesc = sortDesc;
-        this.options.itemsPerPage = itemsPerPage;
-        this.options.totalItems = totalItems;
-      });
+      console.log('onUpdateOptions');
+      console.log(params);
+      if (getPage) {
+        getPage(params).then(() => {
+          this.options.sortBy = sortBy;
+          this.options.sortDesc = sortDesc;
+          this.options.itemsPerPage = itemsPerPage;
+          this.options.totalItems = totalItems;
+        });
+      }
+      //console.log('end');
     },
 
     onSendFilter() {

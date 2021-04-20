@@ -13,14 +13,13 @@
 <!--        </v-toolbar-title>-->
       </template>
     </Toolbar>
-    <br />
     <div
       v-if="item"
       class="table-documents-show"
     >
-      <h2>
+      <h5>
         {{ item['title'] }}
-      </h2>
+      </h5>
       <div v-if="item['resourceLinkListFromEntity']">
         <ul>
           <li
@@ -39,8 +38,7 @@
           </li>
         </ul>
       </div>
-      <b-table-simple>
-        <template slot="default">
+      <q-markup-table>
           <tbody>
             <tr>
               <td><strong>{{ $t('Author') }}</strong></td>
@@ -59,14 +57,14 @@
             <tr>
               <td><strong>{{ $t('Created at') }}</strong></td>
               <td>
-                {{ item['resourceNode'] && item['resourceNode'].createdAt | moment("from", "now") }}
+                {{ item['resourceNode'] ? moment(item['resourceNode'].createdAt).fromNow() : ''}}
               </td>
               <td />
             </tr>
             <tr>
               <td><strong>{{ $t('Updated at') }}</strong></td>
               <td>
-                {{ item['resourceNode'] && item['resourceNode'].updatedAt | moment("from", "now") }}
+                {{ item['resourceNode'] ? moment(item['resourceNode'].updatedAt).fromNow() : ''}}
               </td>
               <td />
             </tr>
@@ -74,7 +72,7 @@
               <td><strong>{{ $t('File') }}</strong></td>
               <td>
                 <div>
-                  <b-img
+                  <q-img
                     v-if="item['resourceNode']['resourceFile']['image']"
                     :src="item['contentUrl'] + '?w=300'"
                   />
@@ -84,20 +82,19 @@
                     </video>
                   </span>
                   <span v-else>
-                    <b-btn
+                    <q-btn
                       variant="primary"
                       :href="item['downloadUrl']"
                     >
                       {{ $t('Download file') }}
-                    </b-btn>
+                    </q-btn>
                   </span>
                 </div>
               </td>
               <td />
             </tr>
           </tbody>
-        </template>
-      </b-table-simple>
+      </q-markup-table>
     </div>
     <Loading :visible="isLoading" />
   </div>
@@ -106,10 +103,10 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
-import Loading from '../../components/Loading';
+import Loading from '../../components/Loading.vue';
 import ShowMixin from '../../mixins/ShowMixin';
-import Toolbar from '../../components/Toolbar';
-
+import Toolbar from '../../components/Toolbar.vue';
+import moment from 'moment'
 const servicePrefix = 'Documents';
 
 export default {
@@ -118,6 +115,9 @@ export default {
   components: {
       Loading,
       Toolbar
+  },
+  created: function () {
+    this.moment = moment;
   },
   mixins: [ShowMixin],
   computed: {

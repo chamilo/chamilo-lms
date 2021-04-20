@@ -1,4 +1,13 @@
-var Encore = require('@symfony/webpack-encore');
+const Encore = require('@symfony/webpack-encore');
+
+if (!Encore.isRuntimeEnvironmentConfigured()) {
+    Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
+}
+
+const PurgeCssPlugin = require('purgecss-webpack-plugin');
+const glob = require('glob-all');
+const path = require('path');
+
 const CopyPlugin = require('copy-webpack-plugin');
 
 Encore
@@ -42,13 +51,18 @@ Encore
     })
 
     .enableSassLoader()
-    .enableVueLoader(() => {}, { runtimeCompilerBuild: false })
+    .enableTypeScriptLoader(function(tsConfig) {
+        tsConfig.transpileOnly = true;
+        //tsConfig.configFile = './tsconfig.json';
+        //tsConfig.exclude = ['/node_modules(?!\\/vuex-composition-helpers)/'];
+    })
+    .enableVueLoader(() => {}, { version: 3, runtimeCompilerBuild: false})
     .autoProvidejQuery()
-    /*.enablePostCssLoader(function (options) {
-        options.config = {
+    .enablePostCssLoader(function(options) {
+        options.postcssOptions = {
             path: 'postcss.config.js'
         }
-    })*/
+    })
     .copyFiles([
         {
             from: './node_modules/fullcalendar/',
@@ -112,8 +126,39 @@ Encore
     //
     //     },
     // })
+    /*.addLoader({
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
+        options: {
+            appendTsSuffixTo: [/\.vue$/],
+        },
+        exclude: /node_modules(?!\/vuex-composition-helpers)/,
+    })*/
+    /*.addLoader({
+        test: /\.vue$/,
+        loader: 'vue-loader'
+    })
+    .addLoader({
+        test: /\.ts?/,
+        loader: 'ts-loader',
+        options: {
+            appendTsSuffixTo: [/\.vue$/],
+        },
+        exclude: /node_modules(?!\/vuex-composition-helpers)/,
+    })
+    .addLoader({
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: "babel-loader"
+    })*/
+    /*.addLoader({
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader', 'postcss-loader'],
+        exclude: /node_modules/,
+    })*/
 ;
 
+//Encore.addPlugin(new VueLoaderPlugin);
 Encore.addPlugin(new CopyPlugin({
         patterns: [
             {
@@ -141,20 +186,18 @@ Encore.addPlugin(new CopyPlugin({
     }
 ));
 
-
 // Encore.addPlugin(new CopyPlugin([{
 //     from: 'assets/css/themes/' + theme + '/images',
 //     to: 'css/themes/' + theme + '/images'
 // };
 
-var themes = [
+const themes = [
     'chamilo'
 ];
 
 // Add Chamilo themes
 themes.forEach(function (theme) {
     Encore.addStyleEntry('css/themes/' + theme + '/default', './assets/css/themes/' + theme + '/default.css');
-
     // Copy images from themes into public/build
     Encore.addPlugin(new CopyPlugin({
         patterns: [{
@@ -180,13 +223,25 @@ themes.forEach(function (theme) {
 //     }
 // }));
 
+/*Encore.configureLoaderRule('ts', rule => {
+    rule.exclude = '/node_modules(?!/vuex-composition-helpers)/'
+});*/
+
 const config = Encore.getWebpackConfig();
 
-config.resolve.alias =  {
+/*config.resolve =  {
+    extensions: [ '.ts', '.js' ],
+    extensions: ['.ts', '.js', '.vue', '.json'],
+    alias: {
+        'vue': '@vue/runtime-dom'
+    },
+};*/
+
+/*config.resolve.alias =  {
     // If using the runtime only build
     vue$: 'vue/dist/vue.runtime.esm.js' // 'vue/dist/vue.runtime.common.js' for webpack 1
     // Or if using full build of Vue (runtime + compiler)
     // vue$: 'vue/dist/vue.esm.js'      // 'vue/dist/vue.common.js' for webpack 1
-};
+};*/
 
 module.exports = config;

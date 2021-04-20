@@ -17,10 +17,10 @@
 
     var region_value = '{{ region_value }}';
 
-    $(function() {
+    document.addEventListener('DOMContentLoaded', function() {
         var cookieData = Cookies.getJSON('agenda_cookies');
         var defaultView = (cookieData && cookieData.view) || '{{ default_view }}';
-        var defaultStartDate = (cookieData && cookieData.start) || moment.now();
+        var defaultStartDate = (cookieData && cookieData.start) || luxon.now().toString();
 
         // Reset button.
         $("button[type=reset]").click(function() {
@@ -102,9 +102,12 @@
             },
             // Add event
             select: function(info) {
-                var start = moment(info.start);
-                var end = moment(info.end);
-                var diffDays = moment(end).diff(start, 'days');
+                console.log(info);
+                let start = luxon.fromJSDate(info.start);
+                let end = luxon.fromJSDate(info.end);
+                let diffDays = end.diff(start, ["days"]).days;
+
+                //var diffDays = moment(end).diff(start, 'days');
                 var allDay = info.allDay;
                 var view = info.view;
 
@@ -121,25 +124,26 @@
                 // Update chz-select
                 //$("#users_to_send").trigger("chosen:updated");
                 if ({{ can_add_events }} == 1) {
-			    var startEn = start.clone().locale('en'),
-                    endEn = end.clone().locale('en');
+			    /*var startEn = start.clone().locale('en'),
+                    endEn = end.clone().locale('en');*/
 
-				var url = '{{ web_agenda_ajax_url }}&a=add_event&start='+startEn.format("YYYY-MM-DD HH:mm:00")+'&end='+endEn.format("YYYY-MM-DD HH:mm:00")+'&all_day='+allDay+'&view='+view.name;
-                    var start_date_value = start.format('{{ js_format_date }}');
+				var url = '{{ web_agenda_ajax_url }}&a=add_event&start='+start+'&end='+end+'&all_day='+allDay+'&view='+view.name;
+                    var start_date_value = start.toFormat('{{ js_format_date }}');
                     $('#start_date').html(start_date_value);
 
-                    if (diffDays > 1) {
+                    if (diffDays > 0) {
                         $('#start_date').html('');
                         var end_date_value = '';
                         if (end) {
-                            var clone = end.clone();
-                            end_date_value = clone.subtract(1, 'days').format('{{ js_format_date }}');
+                            //var clone = end.clone();
+                            //end_date_value = clone.subtract(1, 'days').format('{{ js_format_date }}');
+                            end_date_value = end.toFormat('{{ js_format_date }}');
                         }
                         $('#end_date').html(start_date_value + " - " + end_date_value);
-                    } else if (diffDays == 0) {
-                        var start_date_value = start.format('ll');
-                        var startTime = start.format('LT');
-                        var endTime = end.format('LT');
+                    } else if (diffDays === 0) {
+                        var start_date_value = start.toFormat('ll');
+                        var startTime = start.toFormat('LT');
+                        var endTime = end.toFormat('LT');
                         $('#start_date').html('');
                         $('#end_date').html(start_date_value + " (" + startTime + " - " + endTime+") ");
                     } else {
@@ -214,21 +218,25 @@
             eventClick: function(info) {
                 var event = info.event;
                 var view = info.view;
-                var start = event.start;
-                var end = event.end;
+                /*var start = event.start;
+                var end = event.end;*/
 
-                var momentStart = moment(start);
+                /*var momentStart = moment(start);
                 var momentEnd = moment(end);
+                var diffDays = moment(end).diff(start, 'days');*/
 
-                var diffDays = moment(end).diff(start, 'days');
+                let start = luxon.fromJSDate(info.start);
+                let end = luxon.fromJSDate(info.end);
+                let diffDays = end.diff(start, ["days"]).days;
+
                 var endDateMinusOne = '';
-
                 if (end) {
                     //var clone = end.clone();
-                    var endValue = moment(end);
-                    endDateMinusOne = endValue.subtract(1, 'days').format('{{ js_format_date }}');
+                    //var endValue = moment(end);
+                    //endDateMinusOne = endValue.subtract(1, 'days').format('{{ js_format_date }}');
+                    endDateMinusOne = end.toFormat('{{ js_format_date }}');
                 }
-                var startDateToString = moment(start).format("{{ js_format_date }}");
+                var startDateToString = start.toFormat("{{ js_format_date }}");
                 var calEvent = info.event.extendedProps;
                 var editable = calEvent.resourceEditable;
                 // Edit event.
@@ -247,9 +255,9 @@
                     if (diffDays > 1) {
                         $('#simple_end_date').html(' - ' + endDateMinusOne);
                     } else if (diffDays == 0) {
-                        var start_date_value = momentStart.format('ll');
-                        var startTime = momentStart.format('LT');
-                        var endTime = momentEnd.format('LT');
+                        var start_date_value = start.toFormat('ll');
+                        var startTime = start.toFormat('LT');
+                        var endTime = start.toFormat('LT');
                         $('#simple_start_date').html('');
                         $('#simple_end_date').html(start_date_value + " (" + startTime + " - " + endTime+") ");
                     } else {
@@ -318,10 +326,11 @@
                                 calEvent.end = calEvent.end;
                                 calEvent.allDay = calEvent.allDay;
                                 calEvent.description = $("#content").val();
-                                calendar.fullCalendar('updateEvent',
+                                // @todo
+                                /*calendar.fullCalendar('updateEvent',
                                     calEvent,
                                     true // make the event "stick"
-                                );
+                                );*/
                                 //close modal
                                 $('#calendarModal').modal('toggle');
                             }

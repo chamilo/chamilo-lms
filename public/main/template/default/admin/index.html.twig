@@ -1,3 +1,5 @@
+{% import '@ChamiloCore/Macros/box.html.twig' as display %}
+
 {% set admin_chamilo_announcements_disable = 'admin_chamilo_announcements_disable'|api_get_configuration_value %}
 
 {% block content %}
@@ -11,47 +13,37 @@
             </div>
         {% endif %}
 
-        <div id="settings" >
-            <div class="row">
+        <div id="settings" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 ">
             {% for block_item in blocks_admin %}
-                <div id="tabs-{{ loop.index }}" class="col-4">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h5 class="card-title">{{ block_item.icon }} {{ block_item.label }}</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="card-search">
-                                {{ block_item.search_form }}
-                            </div>
-                            <div class="card-description mp-3 mb-3">
-                                {% if block_item.description is defined %}
-                                    {{ block_item.description }}
-                                {% endif %}
-                            </div>
-                            {% if block_item.items is not empty %}
-                                <ul class="list-group">
-                                    {% for url in block_item.items %}
-                                        {% if url.url is not empty %}
-                                            <li class="list-group-item">
-                                                <a href="{{ url.url }}">
-                                                    {{ url.label }}
-                                                </a>
-                                            </li>
-                                        {% endif %}
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
+                <div id="tabs-{{ loop.index }}" class="" >
+                    {% set list %}
+                        {% if block_item.description is defined %}
+                            {{ block_item.description }}
+                        {% endif %}
 
-                            {% if block_item.extra is not null %}
-                                <div>
-                                    {{ block_item.extra }}
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
+                        {% if block_item.items is not empty %}
+                            <ul class="list-group">
+                                {% for url in block_item.items %}
+                                    {% if url.url is not empty %}
+                                        <li class="list-group-item">
+                                            <a href="{{ url.url }}">
+                                                {{ url.label }}
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if block_item.extra is not null %}
+                            <div>
+                                {{ block_item.extra }}
+                            </div>
+                        {% endif %}
+                    {% endset %}
+
+                    {{ display.panel_box(loop.index, block_item.icon ~ block_item.label, block_item.search_form ~  list) }}
                 </div>
             {% endfor %}
-            </div>
 
 {#            <div class="row">#}
 {#                {% for role in app.user.roles %}#}

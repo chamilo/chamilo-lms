@@ -1,6 +1,6 @@
 <template>
-  <b-row>
-    <b-col
+  <v-row>
+    <v-col
       cols="12"
       sm="6"
       md="6"
@@ -23,7 +23,7 @@
                 {{ $t('Group') }}: {{ link.session.resourceNode.title }}
               </div>
 
-              <b-form-select
+              <v-select
                 v-model="link.visibility"
                 :options="visibilityList"
                 label="Status"
@@ -33,17 +33,20 @@
           </ul>
         </div>
       </div>
-    </b-col>
-  </b-row>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
 import has from 'lodash/has';
-import { validationMixin } from 'vuelidate';
-import { required } from 'vuelidate/lib/validators';
+import useVuelidate from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
 
 export default {
   name: 'ResourceLinkForm',
+  setup () {
+    return { v$: useVuelidate() }
+  },
   props: {
     values: {
       type: Object,

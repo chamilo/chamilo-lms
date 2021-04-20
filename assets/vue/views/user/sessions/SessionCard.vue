@@ -1,39 +1,32 @@
 <template>
-  <b-row no-gutters>
-    <b-col md="2">
-      <b-card-img
-          src="/img/icons/64/session.png"
-          alt="Image"
-          class="mb-3"
-          img-left
-      />
-    </b-col>
-    <b-col md="10">
-      <b-card-body :title="sessionRelUser.session.name">
-        <b-card
-            v-for="course in sessionRelUser.courses"
-            :key="course.id"
-            no-body
-            class="overflow-hidden"
-            style="max-width: 540px;"
-        >
-          <b-card-body :title="course.course.title">
-            <!--              <b-card-text>-->
-            <!--                Course description-->
-            <!--              </b-card-text>-->
-            <b-button
-                :href=" '/course/' + course.course.id + '/home' + '?sid=' + sessionRelUser.session.id"
-                variant="primary"
-            >
-              Go
-            </b-button>
-          </b-card-body>
-        </b-card>
-      </b-card-body>
-    </b-col>
-  </b-row>
+  <div class="text-h6 mt-4">{{ sessionRelUser.session.name }}</div>
+  <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+      <div
+          v-for="course in sessionRelUser.courses"
+          :key="course.id"
+          no-body
+          style="max-width: 540px;"
+      >
+        <q-card class="my-card">
+          <img src="/img/session_default.png" />
+          <q-card-section>
+            <div class="text-h7">
+<!--                  <router-link :to="'/course/' + course.course.id + '/home' + '?sid=' + sessionRelUser.session.id">-->
+              <a :href="'/course/' + course.course.id + '/home' + '?sid=' + sessionRelUser.session.id">
+                {{ course.course.title }}
+              </a>
+            </div>
+          </q-card-section>
+        </q-card>
+      </div>
+  </div>
 </template>
-
+<style scoped>
+.my-card {
+  width: 100%;
+  max-width: 370px;
+}
+</style>
 <script>
 export default {
   name: 'SessionCard',

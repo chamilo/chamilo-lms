@@ -1,34 +1,70 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-
-import i18n from '../i18n';
-Vue.use(VueRouter);
-
+import { createRouter, createWebHistory } from 'vue-router';
 import courseRoutes from './course';
-import courseCategoryRoutes from './coursecategory';
+//import courseCategoryRoutes from './coursecategory';
 import documents from './documents';
 import store from '../store';
-import Login from '../views/Login';
-//import Legacy from '../views/Legacy';
-import Home from '../views/Home';
-import MyCourseList from '../views/user/courses/List';
-import MySessionList from '../views/user/sessions/List';
+import Login from '../views/Login.vue';
+//import Legacy from '../views/Legacy.vue';
+//import Home from '../views/Home.vue';
+import MyCourseList from '../views/user/courses/List.vue';
+import MySessionList from '../views/user/sessions/List.vue';
+import UserHome from '../views/user/profile/Home.vue';
 
-let router = new VueRouter({
-    mode: 'history',
+import CatalogLayout from '../layouts/Catalog.vue';
+import MyCoursesLayout from '../layouts/MyCourses.vue';
+
+import CourseCatalog from '../views/course/Catalog.vue';
+import SessionCatalog from '../views/course/CatalogSession.vue';
+import CourseHome from '../views/course/Home.vue';
+
+import Index from '../pages/Index.vue';
+
+const router = createRouter({
+    history: createWebHistory(),
     routes: [
-        {path: '/', name: 'Index'},
+        {path: '/', name: 'Home', component: Index},
         {path: '/login', name: 'Login', component: Login},
         {
-            path: '/courses', name: 'MyCourses', component: MyCourseList,
+            path: '/course/:id/home', name: 'CourseHome', component: CourseHome
+        },
+        {
+            path: '/courses',
+            component: MyCoursesLayout,
+            children: [
+                {
+                    path: '/courses', name: 'MyCourses', component: MyCourseList,
+                    meta: {requiresAuth: true},
+                },
+
+                {
+                    path: '/sessions', name: 'MySessions', component: MySessionList,
+                    meta: {requiresAuth: true},
+                },
+            ],
+        },
+        {
+            path: '/catalog',
+            redirect: '/catalog/course',
+            name: 'Catalog',
+            component: CatalogLayout,
+            children: [
+                {
+                    path: 'course',
+                    component: CourseCatalog
+                },
+                {
+                    path: 'session',
+                    component: SessionCatalog
+                },
+            ],
             meta: {requiresAuth: true},
         },
         {
-            path: '/sessions', name: 'MySessions', component: MySessionList,
+            path: '/account/profile', name: 'Profile', component: UserHome,
             meta: {requiresAuth: true},
         },
         courseRoutes,
-        courseCategoryRoutes,
+        //courseCategoryRoutes,
         documents
     ]
 });

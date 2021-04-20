@@ -1,15 +1,101 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
-@import 'bootstrap.scss';
+// Disable bootstrap
+//@import 'bootstrap.scss';
 
+// undo
 @import "~@fortawesome/fontawesome-free/css/all.css";
 @import '~cropper/dist/cropper.css';
 @import '~flag-icon-css/sass/flag-icon.scss';
 @import "~select2/dist/css/select2.css";
 @import "~bootstrap-daterangepicker/daterangepicker.css";
-//@import "~bootstrap-select/sass/bootstrap-select";
-//@import '~pretty-checkbox/src/pretty-checkbox.scss';
-//@import '~jquery-ui/themes/base/all.css';
-@import "scss/index.scss";
+@import "~bootstrap-select/sass/bootstrap-select";
+@import '~pretty-checkbox/src/pretty-checkbox.scss';
+@import '~jquery-ui/themes/base/all.css';
+
+//@import "scss/index.scss";
+
+@layer components {
+  //ripple
+  .btn {
+    //@apply inline-block text-black px-4 py-2 text-xs font-medium leading-6 text-center bg-gray-100 uppercase transition rounded shadow hover:shadow-lg focus:outline-none;
+    //disabled:cursor-not-allowed
+    //@apply block px-4 py-2 transition duration-100 ease-in-out focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-opacity-50 disabled:opacity-50 ;
+    @apply inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
+  }
+
+  .btn-primary {
+    @apply text-white bg-blue-700 hover:bg-blue-800;
+  }
+  .btn > .fa {
+    @apply -ml-1 mr-1 h-4 w-5 fill-current ;
+  }
+
+  .help-block {
+    @apply mt-2 text-xs text-gray-500;
+  }
+
+  .has-error .ch-form-label {
+    @apply h-8 text-red-500;
+  }
+
+  .has-error .help-block {
+    @apply text-red-500 italic text-xs;
+  }
+
+  .has-error .ch-form-control {
+    @apply border-red-500;
+  }
+
+  table {
+      @apply min-w-full divide-y divide-gray-200;
+  }
+
+  table thead {
+    @apply bg-gray-50;
+  }
+
+  table tbody {
+    @apply bg-white divide-y divide-gray-200;
+  }
+
+  //.q-card {
+  //  @apply max-w-sm rounded bg-white overflow-hidden shadow-lg mt-6;
+  //}
+
+  //.ch-form-control {
+  //  @apply appearance-none block w-full text-gray-700 border-blue-500 rounded py-3 px-4 mb-3 leading-tight;
+  //}
+  //
+  ////
+  //.ch-form-label {
+  //  @apply text-gray-500 font-bold;
+  //}
+  .p-component {
+    font-size: 13px;
+  }
+
+  .p-datatable .p-datatable-tbody > tr > td {
+  }
+
+  legend {
+    float: left;
+    width: 100%;
+    padding: 0;
+    margin-bottom: 0.5rem;
+    font-size: calc(1.275rem + 0.3vw);
+    line-height: inherit;
+  }
+
+  fieldset {
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+    border: 0;
+  }
+}
 
 //@import "~jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css";
 //

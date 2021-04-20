@@ -1,8 +1,8 @@
 <template>
   <div>
-    <b-breadcrumb
+    <v-breadcrumbs
       :items="items"
-      divider="/"
+      large
       :class="layoutClass"
     />
   </div>
@@ -39,13 +39,15 @@ export default {
           href: '/course/' + this.$route.query.cid + '/home'
         });
       }*/
-      for (let i = 0, len = this.legacy.length; i < len; i += 1) {
-        //console.log(this.legacy[i]);
+      if (this.legacy) {
+        for (let i = 0, len = this.legacy.length; i < len; i += 1) {
+          //console.log(this.legacy[i]);
           items.push({
-            text: this.legacy[i]['name'] ,
+            text: this.legacy[i]['name'],
             //disabled: route.path === path || lastItem.path === route.path,
             href: this.legacy[i]['url']
           });
+        }
       }
 
 

@@ -1,58 +1,17 @@
 <template>
-  <span>
-    <b-button-group>
-      <b-button
-        rounded
-        :variant="isList()"
-        @click="changeLayout"
-      >
-        <font-awesome-icon icon="bars" />
-      </b-button>
-      <b-button
-        :variant="isDeck()"
-        rounded
-        @click="changeLayout"
-      >
-        <font-awesome-icon icon="th-large" />
-      </b-button>
-    </b-button-group>
-
-    <b-card-group
-      v-if="deck"
-      columns
+    <div
+         v-for="card in courses"
+         :key="card.course.id"
     >
-      <b-card
-        v-for="card in courses"
-        :key="card.course.id"
-        no-body
-        class="overflow-hidden"
-        style="max-width: 540px;"
-      >
-        <CourseCard
+      <CourseCard
           :course="card.course"
-        />
-      </b-card>
-    </b-card-group>
-    <span v-else>
-      <b-card
-        v-for="card in courses"
-        :key="card.course.id"
-        no-body
-        class="overflow-hidden"
-        style="max-width: 540px;"
-      >
-        <CourseCard
-          :course="card.course"
-        />
-      </b-card>
-      <span />
-    </span>
-  </span>
+      />
+    </div>
 </template>
 
 <script>
 
-import CourseCard from './CourseCard';
+import CourseCard from './CourseCard.vue';
 export default {
   name: 'CourseCardList',
   components: {

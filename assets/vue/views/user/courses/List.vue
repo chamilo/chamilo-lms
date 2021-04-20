@@ -1,33 +1,36 @@
 <template>
-  <div class="course-list">
-    {{ status }}
-    <CourseCardList
-        :courses="courses"
-    />
+  <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-2">
+      {{ status }}
+      <CourseCardList
+          :courses="courses"
+      />
   </div>
 </template>
 
 <script>
-import CourseCardList from './CourseCardList';
-import ListMixin from '../../../mixins/ListMixin';
+import CourseCardList from './CourseCardList.vue';
 import {ENTRYPOINT} from '../../../config/entrypoint';
 import axios from "axios";
 
 export default {
   name: 'CourseList',
-  servicePrefix: 'Course',
   components: {
-    CourseCardList
+    CourseCardList,
   },
-  mixins: [ListMixin],
   data() {
     return {
       status: '',
-      courses: []
+      courses: [],
+      layout: 'list',
+      sortKey: null,
+      sortOrder: null,
+      sortField: null,
     };
   },
   created: function () {
     this.load();
+  },
+  mounted: function () {
   },
   methods: {
     load: function () {
@@ -45,7 +48,7 @@ export default {
       } else {
         this.status = '';
       }
-    }
+    },
   }
 };
 </script>

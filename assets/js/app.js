@@ -14,12 +14,15 @@ global.$ = global.jQuery = $
 Routing.setRoutingData(routes);
 
 const locale = document.querySelector('html').lang;
-const moment = require('moment');
-global.moment = moment;
-require('select2/dist/js/select2.full.min');
-require('flatpickr');
+// moment
+const { DateTime } = require("luxon");
+window.luxon = global.luxon = DateTime;
+import 'select2/dist/js/select2.full.min';
+import 'select2/dist/css/select2.min.css';
+
+//require('flatpickr');
 //import('bootstrap-vue');
-import('bootstrap');
+//import('bootstrap');
 require('webpack-jquery-ui');
 require('webpack-jquery-ui/css');
 
@@ -29,7 +32,7 @@ require('webpack-jquery-ui/css');
 // window.frameReady = frameReady;
 
 require('./vendor');
-import('./main');
+import './main';
 require('bootstrap-daterangepicker');
 import('qtip2');
 //require('bootstrap-daterangepicker/daterangepicker.js');

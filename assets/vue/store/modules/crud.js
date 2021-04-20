@@ -1,7 +1,7 @@
-import Vue from 'vue';
 import { getField, updateField } from 'vuex-map-fields';
 import remove from 'lodash/remove';
 import SubmissionError from '../../error/SubmissionError';
+import isEmpty from 'lodash/isEmpty';
 
 const initialState = () => ({
   allIds: [],
@@ -15,7 +15,8 @@ const initialState = () => ({
   totalItems: 0,
   updated: null,
   view: null,
-  violations: null
+  violations: null,
+  resourceNode: null
 });
 
 const handleError = (commit, e) => {
@@ -62,6 +63,21 @@ export default function makeCrudModule({
 } = {}) {
   return {
     actions: {
+      createFile: ({ commit }, values) => {
+        commit(ACTIONS.SET_ERROR, '');
+        commit(ACTIONS.TOGGLE_LOADING);
+
+        service
+            .createFile(values)
+            .then(response => response.json())
+            .then(data => {
+              commit(ACTIONS.TOGGLE_LOADING);
+              commit(ACTIONS.ADD, data);
+
+              commit(ACTIONS.SET_CREATED, data);
+            })
+            .catch(e => handleError(commit, e));
+      },
       create: ({ commit }, values) => {
         commit(ACTIONS.SET_ERROR, '');
         commit(ACTIONS.TOGGLE_LOADING);
@@ -77,6 +93,8 @@ export default function makeCrudModule({
           .catch(e => handleError(commit, e));
       },
       del: ({ commit }, item) => {
+
+        console.log('del');
         commit(ACTIONS.TOGGLE_LOADING);
 
         service
@@ -104,7 +122,6 @@ export default function makeCrudModule({
           commit(ACTIONS.TOGGLE_LOADING);
         }
       },
-
       fetchAll: ({ commit, state }, params) => {
         if (!service) throw new Error('No service specified!');
 
@@ -114,12 +131,11 @@ export default function makeCrudModule({
           .findAll({ params })
           .then(response => response.json())
           .then(retrieved => {
-            commit(ACTIONS.TOGGLE_LOADING);
+            //console.log(retrieved['hydra:totalItems']);
+            //console.log(retrieved['hydra:view']);
 
-            commit(
-              ACTIONS.SET_TOTAL_ITEMS,
-              retrieved['hydra:totalItems']
-            );
+            commit(ACTIONS.TOGGLE_LOADING);
+            commit(ACTIONS.SET_TOTAL_ITEMS, retrieved['hydra:totalItems']);
             commit(ACTIONS.SET_VIEW, retrieved['hydra:view']);
             if (true === state.resetList) {
               commit(ACTIONS.RESET_LIST);
@@ -154,6 +170,10 @@ export default function makeCrudModule({
       load: ({ commit }, id, options = {}) => {
         if (!service) throw new Error('No service specified!');
 
+        if (isEmpty(id)) {
+          throw new Error('Incorrect id');
+        }
+
         commit(ACTIONS.TOGGLE_LOADING);
         service
           .find(id, options)
@@ -165,6 +185,7 @@ export default function makeCrudModule({
           .catch(e => handleError(commit, e));
       },
       findResourceNode: ({ commit }, id) => {
+        //console.log('findResourceNode');
         if (!service) throw new Error('No service specified!');
 
         service
@@ -219,13 +240,19 @@ export default function makeCrudModule({
     mutations: {
       updateField,
       [ACTIONS.ADD_RESOURCE_NODE]: (state, item) => {
-        Vue.set(state, 'resourceNode', item);
-        Vue.set(state, 'isLoading', false);
+        state.resourceNode = item;
+        state.isLoading = false;
+        //this.$set(state, 'resourceNode', item);
+        //this.$set(state, 'isLoading', false);
       },
       [ACTIONS.ADD]: (state, item) => {
-        Vue.set(state.byId, item['@id'], item);
-        Vue.set(state, 'isLoading', false);
-        if (state.allIds.includes(item['@id'])) return;
+        //this.$set(state.byId, item['@id'], item);
+        state.byId[item['@id']] = item;
+        state.isLoading = false;
+        //this.$set(state, 'isLoading', false);
+        if (state.allIds.includes(item['@id'])) {
+          return;
+        }
         state.allIds.push(item['@id']);
       },
       [ACTIONS.RESET_CREATE]: state => {

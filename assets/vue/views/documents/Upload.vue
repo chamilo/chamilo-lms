@@ -6,7 +6,9 @@
       :parentResourceNodeId="parentResourceNodeId"
       :resourceLinkList="resourceLinkList"
       :errors="violations"
+      :process-files="processFiles"
     />
+
     <Toolbar
       :handle-submit="onUploadForm"
     />
@@ -17,10 +19,11 @@
 <script>
 import { mapActions } from 'vuex';
 import { createHelpers } from 'vuex-map-fields';
-import DocumentsForm from '../../components/documents/FormUpload';
-import Loading from '../../components/Loading';
-import Toolbar from '../../components/Toolbar';
+import DocumentsForm from '../../components/documents/FormUpload.vue';
+import Loading from '../../components/Loading.vue';
+import Toolbar from '../../components/Toolbar.vue';
 import UploadMixin from '../../mixins/UploadMixin';
+import { ref, onMounted } from 'vue'
 
 const servicePrefix = 'Documents';
 
@@ -36,6 +39,13 @@ export default {
     Loading,
     Toolbar,
     DocumentsForm
+  },
+  setup() {
+    const createForm = ref(null);
+
+    return {
+      createForm
+    }
   },
   mixins: [UploadMixin],
   data() {
@@ -60,7 +70,57 @@ export default {
     this.files = [];
   },
   methods: {
-    ...mapActions('documents', ['uploadMany', 'create'])
+    async processFiles(files) {
+      /*this.files = [
+        ...this.files,
+        ...map(files, file => ({
+          title: file.name,
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          filetype: 'file',
+          parentResourceNodeId: this.parentResourceNodeId,
+          resourceLinkList: this.resourceLinkList,
+          uploadFile: file,
+          invalidMessage: this.validate(file),
+        }))
+      ];*/
+
+      return new Promise((resolve) => {
+        for (let i = 0; i < files.length; i++) {
+          files[i].title = files[i].name;
+          files[i].parentResourceNodeId = this.parentResourceNodeId;
+          files[i].resourceLinkList = this.resourceLinkList;
+          files[i].uploadFile = files[i];
+          this.createFile(files[i]);
+        }
+
+        resolve(files);
+        /*console.log(file);
+        file.title = file.name;
+        file.parentResourceNodeId = this.parentResourceNodeId;
+        file.resourceLinkList = this.resourceLinkList;
+        file.uploadFile = file;
+        this.create(file);
+        resolve(file);*/
+
+
+        /*for (let i = 0; i < this.files.length; i++) {
+          this.create(this.files[i]);
+        }
+        resolve(true);*/
+      }).then(() => {
+        this.files = [];
+      });
+    },
+    validate(file) {
+      if (file) {
+        return '';
+      }
+
+      return 'error';
+    },
+    ...mapActions('documents', ['uploadMany', 'create', 'createFile'])
   }
 };
 </script>

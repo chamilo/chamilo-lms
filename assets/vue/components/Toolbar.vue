@@ -1,33 +1,38 @@
 <template>
-  <div class="">
+  <q-toolbar class="q-my-md">
     <slot name="left" />
 
-    <b-button
+    <q-space />
+
+    <q-btn
       v-if="handleList"
       :loading="isLoading"
-      variant="primary"
+      color="primary"
       @click="listItem"
+      unelevated
     >
       {{ $t('List') }}
-    </b-button>
-    <b-button
+    </q-btn>
+    <q-btn
       v-if="handleEdit"
       :loading="isLoading"
-      variant="primary"
+      color="primary"
       @click="editItem"
+      unelevated
     >
       {{ $t('Edit') }}
-    </b-button>
+    </q-btn>
 
-    <b-button
+    <q-btn
       v-if="handleSubmit"
       :loading="isLoading"
-      variant="primary"
+      color="primary"
       @click="submitItem"
+      unelevated
     >
       <font-awesome-icon icon="save" />
       {{ $t('Submit') }}
-    </b-button>
+    </q-btn>
     <!--      <v-btn-->
     <!--        v-if="handleReset"-->
     <!--        color="primary"-->
@@ -36,53 +41,54 @@
     <!--      >-->
     <!--        {{ $t('Reset') }}-->
     <!--      </v-btn>-->
-    <b-button
+    <q-btn
       v-if="handleDelete"
-      variant="danger"
+      color="red"
+      unelevated
       class="ml-sm-2"
       @click="confirmDelete = true"
     >
       {{ $t('Delete') }}
-    </b-button>
+    </q-btn>
 
-    <b-button
+    <q-btn
       v-if="handleAdd"
-      variant="primary"
+      color="primary"
       rounded
       @click="addItem"
     >
       <font-awesome-icon icon="folder-plus" /> New folder
-    </b-button>
+    </q-btn>
 
-    <b-button
+    <q-btn
       v-if="handleAddDocument"
-      variant="primary"
+      color="primary"
       rounded
       @click="addDocument"
     >
       <font-awesome-icon icon="file-alt" /> New document
-    </b-button>
+    </q-btn>
 
-    <b-button
+    <q-btn
       v-if="handleUploadDocument"
-      variant="primary"
+      color="primary"
       rounded
       @click="uploadDocument"
     >
       <font-awesome-icon icon="cloud-upload-alt" /> File upload
-    </b-button>
+    </q-btn>
 
-    <DataFilter
-      v-if="filters"
-      :handle-filter="onSendFilter"
-      :handle-reset="resetFilter"
-    >
-      <DocumentsFilterForm
-        ref="filterForm"
-        slot="filter"
-        :values="filters"
-      />
-    </DataFilter>
+<!--    <DataFilter-->
+<!--      v-if="filters"-->
+<!--      :handle-filter="onSendFilter"-->
+<!--      :handle-reset="resetFilter"-->
+<!--    >-->
+<!--      <DocumentsFilterForm-->
+<!--        ref="filterForm"-->
+<!--        slot="filter"-->
+<!--        :values="filters"-->
+<!--      />-->
+<!--    </DataFilter>-->
 
     <ConfirmDelete
       v-if="handleDelete"
@@ -90,13 +96,13 @@
       :handle-delete="handleDelete"
       @close="confirmDelete = false"
     />
-  </div>
+  </q-toolbar>
 </template>
 
 <script>
-import ConfirmDelete from './ConfirmDelete';
-import DocumentsFilterForm from './documents/Filter';
-import DataFilter from './DataFilter';
+import ConfirmDelete from './ConfirmDelete.vue';
+import DocumentsFilterForm from './documents/Filter.vue';
+import DataFilter from './DataFilter.vue';
 
 export default {
   name: 'Toolbar',

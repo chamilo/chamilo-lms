@@ -1,12 +1,9 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import { createStore } from "vuex";
 import notifications from './modules/notifications';
 import SecurityModule from "./security";
 import createPersistedState from "vuex-persistedstate";
 
-Vue.use(Vuex);
-
-export default new Vuex.Store({
+export default createStore({
     plugins: [createPersistedState()],
     modules: {
         notifications,

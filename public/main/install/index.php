@@ -781,6 +781,8 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="../../build/css/app.css">
+    <link rel="stylesheet" href="../../build/vue.css">
+    <link rel="stylesheet" href="../../build/css/bootstrap.css">
     <script type="text/javascript" src="../../../build/runtime.js"></script>
     <script type="text/javascript" src="../../../build/app.js"></script>
     <script>
@@ -864,67 +866,63 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
         }
     </script>
 </head>
-<body class="bg-chamilo bg-install container">
-<div class="row justify-content-md-center">
-    <div class="col col-md-12">
-        <div class="install-box">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="logo-install">
-                        <img src="../../build/css/themes/chamilo/images/header-logo.png"
-                             class="img-fluid" alt="Chamilo" />
-                    </div>
-                    <div class="install-steps">
-                        <ol class="list-group">
-                            <li class="list-group-item <?php step_active('1'); ?>">
-                                <span class="number"> 1 </span>
-                                <?php echo $translator->trans('Installation language'); ?>
-                            </li>
-                            <li class="list-group-item <?php step_active('2'); ?>">
-                                <span class="number"> 2 </span>
-                                <?php echo $translator->trans('Requirements'); ?>
-                            </li>
-                            <li class="list-group-item <?php step_active('3'); ?>">
-                                <span class="number"> 3 </span>
-                                <?php echo $translator->trans('Licence'); ?>
-                            </li>
-                            <li class="list-group-item <?php step_active('4'); ?>">
-                                <span class="number"> 4 </span>
-                                <?php echo $translator->trans('Database settings'); ?>
-                            </li>
-                            <li class="list-group-item <?php step_active('5'); ?>">
-                                <span class="number"> 5 </span>
-                                <?php echo $translator->trans('Config settings'); ?>
-                            </li>
-                            <li class="list-group-item <?php step_active('6'); ?>">
-                                <span class="number"> 6 </span>
-                                <?php echo $translator->trans('Show Overview'); ?>
-                            </li>
-                            <li class="list-group-item <?php step_active('7'); ?>">
-                                <span class="number"> 7 </span>
-                                <?php echo $translator->trans('Install'); ?>
-                            </li>
-                        </ol>
-                    </div>
-                    <div id="note">
-                        <a class="btn btn-info btn-block" href="<?php echo $installationGuideLink; ?>" target="_blank">
-                            <em class="fa fa-file-text-o"></em> <?php echo $translator->trans('Read the installation guide'); ?>
-                        </a>
-                    </div>
+<body class="w-full justify-center bg-gradient-to-r from-blue-400 to-blue-600">
+    <div class="flex flex-col items-center justify-center ">
+        <div class="rounded p-4 m-8 w-3/5 bg-white flex">
+            <div class="w-1/3 p-6">
+                <div class="logo-install">
+                    <img src="../../build/css/themes/chamilo/images/header-logo.png"
+                         class="img-fluid" alt="Chamilo" />
                 </div>
-                <div class="col-md-8">
-                    <form
-                        class="form-horizontal" id="install_form" method="post"
-                          action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
-                        <?php echo $form; ?>
-                    </form>
+                <div class="install-steps">
+                    <ol class="list-group">
+                        <li class="list-group-item <?php step_active('1'); ?>">
+                            <span class="number"> 1 </span>
+                            <?php echo $translator->trans('Installation language'); ?>
+                        </li>
+                        <li class="list-group-item <?php step_active('2'); ?>">
+                            <span class="number"> 2 </span>
+                            <?php echo $translator->trans('Requirements'); ?>
+                        </li>
+                        <li class="list-group-item <?php step_active('3'); ?>">
+                            <span class="number"> 3 </span>
+                            <?php echo $translator->trans('Licence'); ?>
+                        </li>
+                        <li class="list-group-item <?php step_active('4'); ?>">
+                            <span class="number"> 4 </span>
+                            <?php echo $translator->trans('Database settings'); ?>
+                        </li>
+                        <li class="list-group-item <?php step_active('5'); ?>">
+                            <span class="number"> 5 </span>
+                            <?php echo $translator->trans('Config settings'); ?>
+                        </li>
+                        <li class="list-group-item <?php step_active('6'); ?>">
+                            <span class="number"> 6 </span>
+                            <?php echo $translator->trans('Show Overview'); ?>
+                        </li>
+                        <li class="list-group-item <?php step_active('7'); ?>">
+                            <span class="number"> 7 </span>
+                            <?php echo $translator->trans('Install'); ?>
+                        </li>
+                    </ol>
                 </div>
+                <div id="note">
+                    <a class="btn btn-info btn-block" href="<?php echo $installationGuideLink; ?>" target="_blank">
+                        <em class="fa fa-file-text-o"></em> <?php echo $translator->trans('Read the installation guide'); ?>
+                    </a>
+                </div>
+            </div>
+            <div class="w-2/3 p-6">
+                <form
+                    class="form-horizontal" id="install_form" method="post"
+                      action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
+                    <?php echo $form; ?>
+                </form>
             </div>
         </div>
         <footer class="install-footer">
             <?php echo $poweredBy; ?>
         </footer>
     </div>
-</div>
 </body>
 </html>

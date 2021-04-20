@@ -1,58 +1,17 @@
 <template>
-  <span>
-    <b-button-group>
-      <b-button
-        rounded
-        :variant="isList()"
-        @click="changeLayout"
-      >
-        <font-awesome-icon icon="bars" />
-      </b-button>
-      <b-button
-        :variant="isDeck()"
-        rounded
-        @click="changeLayout"
-      >
-        <font-awesome-icon icon="th-large" />
-      </b-button>
-    </b-button-group>
-
-    <b-card-group
-      v-if="deck"
-      columns
+    <div
+        v-for="card in sessions"
+        :key="card.session.id"
     >
-      <b-card
-        v-for="card in sessions"
-        :key="card.session.id"
-        no-body
-        class="overflow-hidden"
-        style="max-width: 540px;"
-      >
-        <SessionCard
-          :session="card"
-        />
-      </b-card>
-    </b-card-group>
-    <span v-else>
-      <b-card
-        v-for="card in sessions"
-        :key="card.session.id"
-        no-body
-        class="overflow-hidden"
-        style="max-width: 540px;"
-      >
-        <SessionCard
+      <SessionCard
           :sessionRelUser="card"
-        />
-      </b-card>
-      <span />
-    </span>
-  </span>
+      />
+    </div>
 </template>
 
 <script>
 
-import SessionCard from './SessionCard';
+import SessionCard from './SessionCard.vue';
 export default {
   name: 'SessionCardList',
   components: {

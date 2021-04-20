@@ -17,9 +17,9 @@ export default {
     },
     onSendForm() {
       const createForm = this.$refs.createForm;
-      createForm.$v.$touch();
-      if (!createForm.$v.$invalid) {
-        this.create(createForm.$v.item.$model);
+      createForm.v$.$touch();
+      if (!createForm.v$.$invalid) {
+        this.create(createForm.v$.item.$model);
       }
     },
     resetForm() {

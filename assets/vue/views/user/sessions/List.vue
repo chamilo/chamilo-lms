@@ -1,20 +1,17 @@
 <template>
-  <div class="course-list">
+  <div class="grid">
     {{ status }}
-    <SessionCardList :sessions="sessions"></SessionCardList>
+    <SessionCardList :sessions="sessions"/>
   </div>
 </template>
 
 <script>
-import SessionCardList from './SessionCardList';
-import ListMixin from '../../../mixins/ListMixin';
+import SessionCardList from './SessionCardList.vue';
 import { ENTRYPOINT } from '../../../config/entrypoint';
 import axios from "axios";
 
 export default {
   name: 'SessionList',
-  servicePrefix: 'Course',
-  mixins: [ListMixin],
   components: {
       SessionCardList
   },

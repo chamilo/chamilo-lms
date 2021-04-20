@@ -1,22 +1,17 @@
 <template>
-  <b-form>
-    <b-row>
-      <b-col
-        cols="12"
-        sm="6"
-        md="6"
-      >
-        <b-form-group>
-          <b-form-input
+  <div class="q-pa-md">
+    <q-form>
+<!--        @input="$v.item.title.$touch()"-->
+<!--        @blur="$v.item.title.$touch()"-->
+
+          <q-input
+            outlined
             id="item_title"
             v-model="item.title"
             :error-messages="titleErrors"
             :placeholder="$t('Title')"
             required
-            @input="$v.item.title.$touch()"
-            @blur="$v.item.title.$touch()"
           />
-        </b-form-group>
 
         <editor
           id="item_content"
@@ -63,15 +58,14 @@
           }
           "
         />
-      </b-col>
-    </b-row>
-  </b-form>
+    </q-form>
+  </div>
 </template>
 
 <script>
 import has from 'lodash/has';
-import { validationMixin } from 'vuelidate';
-import { required } from 'vuelidate/lib/validators';
+import useVuelidate from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
 //import UploadAdapter from './UploadAdapter';
 import Editor from '../Editor'
 
@@ -80,7 +74,9 @@ export default {
   components: {
     'editor': Editor
   },
-  mixins: [validationMixin],
+  setup () {
+    return { v$: useVuelidate() }
+  },
   props: {
     values: {
       type: Object,
@@ -97,6 +93,7 @@ export default {
   },
   data() {
     return {
+      v$: useVuelidate(),
       title: null,
       contentFile: null,
       parentResourceNodeId: null,
@@ -109,20 +106,22 @@ export default {
     },
     titleErrors() {
       const errors = [];
-      if (!this.$v.item.title.$dirty) return errors;
+
+      // @todo fix errors
+      /*if (!this.$v.item.title.$dirty) return errors;
       has(this.violations, 'title') && errors.push(this.violations.title);
-      !this.$v.item.title.required && errors.push(this.$t('Field is required'));
+      !this.$v.item.title.required && errors.push(this.$t('Field is required'));*/
 
       return errors;
     },
     contentFileErrors() {
       const errors = [];
 
-      if (this.item.resourceNode && this.item.resourceNode.resourceFile && this.item.resourceNode.resourceFile.text) {
+      /*if (this.item.resourceNode && this.item.resourceNode.resourceFile && this.item.resourceNode.resourceFile.text) {
         if (!this.$v.item.contentFile.$dirty) return errors;
         has(this.violations, 'contentFile') && errors.push(this.violations.contentFile);
         !this.$v.item.contentFile.required && errors.push(this.$t('Content is required'));
-      }
+      }*/
 
       return errors;
     },
@@ -149,17 +148,17 @@ export default {
           info = file.name + ' (' + fm.formatSize(file.size) + ')';
 
           // Provide file and text for the link dialog
-          if (meta.filetype == 'file') {
+          if (meta.filetype === 'file') {
             callback(url, {text: info, title: info});
           }
 
           // Provide image and alt text for the image dialog
-          if (meta.filetype == 'image') {
+          if (meta.filetype === 'image') {
             callback(url, {alt: info});
           }
 
           // Provide alternative source and posted for the media dialog
-          if (meta.filetype == 'media') {
+          if (meta.filetype === 'media') {
             callback(url);
           }
         }

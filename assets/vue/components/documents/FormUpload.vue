@@ -1,11 +1,12 @@
 <template>
-  <b-form>
-    <b-row>
-      <b-col
-        cols="12"
-        sm="6"
-        md="6"
-      >
+  <q-form>
+<!--        <q-uploader-->
+<!--            :factory="processFiles"-->
+<!--            label="Batch upload"-->
+<!--            multiple-->
+<!--            style="max-width: 800px;width: 800px"-->
+<!--        />-->
+
         <!--          v-model="item.uploadFile"-->
 <!--        <b-form-file-->
 <!--          ref="fileList"-->
@@ -14,7 +15,6 @@
 <!--        />-->
         <div class="input-group mb-3">
           <div class="custom-file">
-
             <input
                 id="file_upload"
                 type="file"
@@ -24,7 +24,6 @@
                 placeholder="File upload"
                 @change="selectFile"
             />
-
             <label
                 class="custom-file-label"
                 for="file_upload"
@@ -55,22 +54,22 @@
             </div>
           </div>
         </div>
-      </b-col>
-    </b-row>
-  </b-form>
+  </q-form>
 </template>
 
 <script>
 import has from 'lodash/has';
 import map from 'lodash/map';
-import { validationMixin } from 'vuelidate';
-import { required } from 'vuelidate/lib/validators';
+import useVuelidate from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
 import { mapActions } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 
 export default {
   name: 'DocumentsFormUpload',
-  mixins: [validationMixin],
+  setup () {
+    return { v$: useVuelidate() }
+  },
   props: {
     values: {
       type: Array,
@@ -85,7 +84,11 @@ export default {
     errors: {
       type: Object,
       default: () => {}
-    }
+    },
+    processFiles: {
+      type: Function,
+      required: false
+    },
   },
   data() {
     return {

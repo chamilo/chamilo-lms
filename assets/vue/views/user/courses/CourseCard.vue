@@ -1,30 +1,50 @@
 <template>
-  <b-row no-gutters>
-    <b-col md="2">
-      <b-card-img
-        src="/img/icons/64/course.png"
-        alt="Image"
-        img-left
-        class="rounded-0"
-      />
-    </b-col>
-    <b-col md="10">
-      <b-card-body :title="course.title">
-        <!--              <b-card-text>-->
-        <!--                Course description-->
-        <!--              </b-card-text>-->
-        <b-button
-          :href=" '/course/' + course.id + '/home'"
-          variant="primary"
-        >
-          Go
-        </b-button>
-      </b-card-body>
-    </b-col>
-  </b-row>
+<!--  <q-card class="my-card">-->
+<!--    <q-img src="https://cdn.quasar.dev/img/parallax2.jpg">-->
+<!--      <div class="absolute-bottom text-h6">-->
+<!--        Title-->
+<!--      </div>-->
+<!--    </q-img>-->
+
+<!--    <q-card-section>-->
+<!--      {{ lorem }}-->
+<!--    </q-card-section>-->
+<!--  </q-card>-->
+
+  <q-card class="my-card">
+    <img src="/img/session_default.png" />
+    <q-card-section>
+      <div class="text-h7">
+        <router-link :to="{ name: 'CourseHome', params: {id: course.id, course: course}}">
+        {{ course.title }}
+        </router-link>
+      </div>
+
+    </q-card-section>
+    <q-card-section class="q-pt-none">
+      {{ course.description }}
+    </q-card-section>
+
+<!--    <q-card-actions>-->
+<!--        <q-btn-->
+<!--            type="a"-->
+<!--            :to="{ name: 'CourseHome', params: {id: course.id, course: course}}"-->
+<!--            text-color="white"-->
+<!--            color="primary"-->
+<!--            label="Go"-->
+<!--        />-->
+<!--      </q-card-actions>-->
+  </q-card>
 </template>
 
+<style scoped>
+.my-card {
+  width: 100%;
+  max-width: 370px;
+}
+</style>
 <script>
+
 export default {
   name: 'CourseCard',
   props: {

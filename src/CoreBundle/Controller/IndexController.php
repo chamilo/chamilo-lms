@@ -20,6 +20,7 @@ class IndexController extends BaseController
      * @Route("/login", name="login", methods={"GET", "POST"}, options={"expose"=true})
      * @Route("/courses", name="courses", methods={"GET", "POST"}, options={"expose"=true})
      * @Route("/sessions", name="sessions", methods={"GET", "POST"}, options={"expose"=true})
+     * @Route("/catalog/{slug}", name="catalog", methods={"GET", "POST"}, options={"expose"=true})
      */
     public function indexAction(): Response
     {

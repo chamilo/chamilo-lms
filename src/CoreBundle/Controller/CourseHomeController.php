@@ -41,13 +41,12 @@ use UnserializeApi;
 class CourseHomeController extends ToolBaseController
 {
     /**
-     * @Route("/{cid}/home", name="chamilo_core_course_home")
+     * @Route("/{cid}/home.json", name="chamilo_core_course_home_json")
      *
      * @Entity("course", expr="repository.find(cid)")
      */
-    public function indexAction(Request $request, CToolRepository $toolRepository, CShortcutRepository $shortcutRepository, ToolChain $toolChain)
+    public function indexJsonAction(Request $request, CToolRepository $toolRepository, CShortcutRepository $shortcutRepository, ToolChain $toolChain)
     {
-        //$this->autoLaunch();
         $course = $this->getCourse();
         if (null === $course) {
             throw $this->createAccessDeniedException();
@@ -83,7 +82,9 @@ class CourseHomeController extends ToolBaseController
 
         $isSpecialCourse = CourseManager::isSpecialCourse($courseId);
 
-        if ($user && $isSpecialCourse && (isset($_GET['autoreg']) && 1 === (int) $_GET['autoreg']) && CourseManager::subscribeUser($userId, $courseCode, STUDENT)) {
+        if ($user && $isSpecialCourse && (isset($_GET['autoreg']) && 1 === (int) $_GET['autoreg']) &&
+            CourseManager::subscribeUser($userId, $courseCode, STUDENT)
+        ) {
             $session->set('is_allowed_in_course', true);
         }
 
@@ -194,7 +195,30 @@ class CourseHomeController extends ToolBaseController
             $shortcuts = $shortcutQuery->getQuery()->getResult();
         }
 
-        return $this->render(
+        $responseData = [
+            'course' => $course,
+            'shortcuts' => $shortcuts,
+            'diagram' => $diagram,
+            'tools' => $tools,
+        ];
+
+        $json = $this->get('serializer')->serialize(
+            $responseData,
+            'json',
+            [
+                'groups' => ['course:read', 'ctool:read', 'tool:read', 'cshortcut:read'],
+            ]
+        );
+
+        return new Response(
+            $json,
+            Response::HTTP_OK,
+            [
+                'Content-type' => 'application/json',
+            ]
+        );
+
+        /*return $this->render(
             '@ChamiloCore/Course/home.html.twig',
             [
                 'course' => $course,
@@ -202,7 +226,15 @@ class CourseHomeController extends ToolBaseController
                 'diagram' => $diagram,
                 'tools' => $tools,
             ]
-        );
+        );*/
+    }
+
+    /**
+     * @Route("/{cid}/home", name="chamilo_core_course_home")
+     */
+    public function indexAction()
+    {
+        return $this->render('@ChamiloCore/Index/vue.html.twig');
     }
 
     /**

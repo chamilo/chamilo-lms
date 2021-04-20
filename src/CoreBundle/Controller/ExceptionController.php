@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ExceptionController extends AbstractController
 {
-    public function showAction(FlattenException $exception)
+    public function showAction(Exception $exception)
     {
         if ('dev' === $this->getParameter('app_env')) {
             throw new HttpException($exception->getCode(), $exception->getMessage());

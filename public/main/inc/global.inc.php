@@ -108,7 +108,7 @@ try {
     }
     define('DEFAULT_DOCUMENT_QUOTA', $default_quota);*/
     define('DEFAULT_DOCUMENT_QUOTA', 100000000);
-} catch (FlattenException $e) {
+} catch (Exception $e) {
     $controller = new ExceptionController();
     $controller->showAction($e);
 }

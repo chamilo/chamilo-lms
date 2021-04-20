@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 use Twig\Environment;
 
@@ -47,8 +46,10 @@ class TwigListener
             if ($user instanceof UserInterface) {
                 /** @var User $userClone */
                 $userClone = clone $user;
-                $data = $this->serializer->serialize($userClone, 'jsonld', ['groups' => ['user_json:read']]);
-                $avatar = $this->illustrationRepository->getIllustrationUrl($user);
+                $data = $this->serializer->serialize($userClone, 'jsonld', [
+                    'groups' => ['user_json:read'],
+                ]);
+                $avatar = $this->illustrationRepository->getIllustrationUrl($userClone);
                 $isAuth = true;
             }
         }

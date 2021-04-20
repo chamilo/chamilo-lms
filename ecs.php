@@ -91,6 +91,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             //__DIR__.'/src/LtiBundle/*',
             IncrementStyleFixer::class => 'post',
             PropertyTypeHintSniff::class.'.'.PropertyTypeHintSniff::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION,
+            PropertyTypeHintSniff::class.'.'.PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT,
             \PhpCsFixer\Fixer\DoctrineAnnotation\DoctrineAnnotationArrayAssignmentFixer::class,
             \PhpCsFixer\Fixer\Comment\SingleLineCommentStyleFixer::class,
             \PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer::class,

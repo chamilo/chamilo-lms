@@ -302,32 +302,28 @@ import Breadcrumb from './components/Breadcrumb.vue';
 import axios from "axios";
 import { onMounted, onUnmounted, ref, computed } from 'vue';
 import isEmpty from 'lodash/isEmpty';
-
-//import Header from "./components/layout/Header.vue";
-//import Sidebar from "./components/layout/Sidebar.vue";
-//import Footer from "./components/layout/Footer.vue";
 import { fasGlobeAmericas, fasFlask } from '@quasar/extras/fontawesome-v5'
 import { useRouter } from 'vue-router'
 
 import useState from './hooks/useState'
-import Sidebar from './components/sidebar/Sidebar.vue'
+/*import Sidebar from './components/sidebar/Sidebar.vue'
 import Navbar from './components/navbar/Navbar.vue'
 import SettingsPanel from './components/panels/SettingsPanel.vue'
 import SearchPanel from './components/panels/SearchPanel.vue'
 import NotificationsPanel from './components/panels/NotificationsPanel.vue'
-import Button from './components/global/Button.vue'
+import Button from './components/global/Button.vue'*/
 
 const defaultLayout = "Dashboard";
 
 export default {
   name: "App",
   components: {
-    Navbar,
+    /*Navbar,
     Sidebar,
     SettingsPanel,
     SearchPanel,
     NotificationsPanel,
-    Button,
+    Button,*/
     Breadcrumb,
   },
   setup () {

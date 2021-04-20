@@ -44,6 +44,27 @@ class ItemPropertyRepository extends EntityRepository
         return $this->findBy($criteria);
     }
 
+    public function findByUserSuscribedToItem(
+        $tool,
+        $itemId,
+        User $user,
+        Course $course,
+        Session $session = null,
+        Group $group = null
+    ): ?CItemProperty {
+        $criteria = [
+            'tool' => $tool,
+            'lasteditType' => 'LearnpathSubscription',
+            'ref' => $itemId,
+            'toUser' => $user,
+            'course' => $course,
+            'session' => $session,
+            'group' => $group,
+        ];
+
+        return $this->findOneBy($criteria);
+    }
+
     /**
      * Get Groups subscribed to a item: LP, Doc, etc.
      *

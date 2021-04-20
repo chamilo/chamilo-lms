@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
+use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 use CpChart\Cache as pCache;
@@ -7714,6 +7715,50 @@ class Tracking
                 echo get_lang('NoResults');
             }
         }
+    }
+
+    public static function getStudentFollowPageLpSubscription(
+        array $lpInfo,
+        int $studentId,
+        int $courseId,
+        int $sessionId = 0
+    ) {
+        $em = Database::getManager();
+
+        if ($lpInfo['subscribe_users']) {
+            $itemRepo = $em->getRepository(CItemProperty::class);
+            $itemProperty = $itemRepo->findByUserSuscribedToItem(
+                'learnpath',
+                $lpInfo['iid'],
+                api_get_user_entity($studentId),
+                api_get_course_entity($courseId),
+                api_get_session_entity($sessionId)
+            );
+
+            if (null === $itemProperty) {
+                return '-';
+            }
+
+            return "{$itemProperty->getInsertUser()->getCompleteName()}<br>"
+                .Display::tag(
+                    'small',
+                    api_convert_and_format_date($itemProperty->getInsertDate(), DATE_TIME_FORMAT_LONG)
+                );
+        }
+
+        $subscriptionEvent = Event::findUserSubscriptionToCourse($studentId, $courseId, $sessionId);
+
+        if (empty($subscriptionEvent)) {
+            return '-';
+        }
+
+        $creator = api_get_user_entity($subscriptionEvent['default_user_id']);
+
+        return "{$creator->getCompleteName()}<br>"
+            .Display::tag(
+                'small',
+                api_convert_and_format_date($subscriptionEvent['default_date'], DATE_TIME_FORMAT_LONG)
+            );
     }
 }
 

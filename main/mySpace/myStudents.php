@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use ChamiloSession as Session;
 
@@ -50,6 +51,9 @@ $allowedToTrackUser =
     api_is_course_admin() ||
     api_is_teacher()
 ;
+
+$em = Database::getManager();
+$itemRepo = $em->getRepository(CItemProperty::class);
 
 if (false === $allowedToTrackUser && !empty($courseInfo)) {
     if (empty($sessionId)) {
@@ -1349,6 +1353,10 @@ if (empty($details)) {
             }
         }
 
+        if (true === api_get_configuration_value('student_follow_page_add_LP_subscription_info')) {
+            $columnHeaders['student_follow_page_add_LP_subscription_info'] = get_lang('Unlock');
+        }
+
         $headers = '';
         $columnHeadersToExport = [];
         // csv export headers
@@ -1564,6 +1572,18 @@ if (empty($details)) {
                     // which implies several other changes not a priority right now
                     $contentToExport[] = $start_time;
                     echo Display::tag('td', $start_time);
+                }
+
+                if (in_array('student_follow_page_add_LP_subscription_info', $columnHeadersKeys)) {
+                    echo Display::tag(
+                        'td',
+                        Tracking::getStudentFollowPageLpSubscription(
+                            $learnpath,
+                            $student_id,
+                            $courseInfo['real_id'],
+                            $sessionId
+                        )
+                    );
                 }
 
                 if ($hookLpTracking) {

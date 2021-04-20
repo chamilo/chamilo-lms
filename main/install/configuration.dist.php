@@ -379,6 +379,8 @@ $_configuration['tracking_columns'] = [
     ]
 ];
 */
+// Add column "Unlocked" in student LPs table to display info about a lp subscription
+//$_configuration['student_follow_page_add_LP_subscription_info'] = false;
 // Hide session link of course_block on index/userportal
 //$_configuration['remove_session_url']= false ;
 // Allow foldable block for session list in session category on My courses tab

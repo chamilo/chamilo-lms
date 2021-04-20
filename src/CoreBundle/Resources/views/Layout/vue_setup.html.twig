@@ -1,0 +1,12 @@
+<script>
+    window.user = {{ user_json | raw }};
+    window.userAvatar = '{{ user_avatar }}';
+</script>
+<div
+    id="app"
+    data-flashes="{{ app.flashes()|json_encode }}"
+    {%- if legacy_breadcrumb is defined %}
+        data-breadcrumb="{{ legacy_breadcrumb | json_encode() }}"
+    {% endif -%}
+>
+</div>

@@ -14,19 +14,19 @@
 </head>
 {% endblock %}
 <body
-    class="{{ section_name }}"
+    class="font-sans antialiased {{ section_name }}"
     data-course-id="{{ course ? course.id : 0 }}"
     data-course-code="{{ course ? course.code : '' }}"
     data-session-id="{{ session ? session.id : 0 }}"
 >
     <noscript>{{ "Your browser does not support Javascript" | trans }}</noscript>
-    {%- block chamilo_wrap -%}
-        {%- block page_content %}
-        {% endblock %}
-    {% endblock -%}
-    {%- block chamilo_footer -%}
-    {% endblock -%}
-    <script src="{{ url('home') ~ 'build/vue.js' }}"></script>
+{%- block chamilo_wrap -%}
+    {%- block page_content %}
+    {% endblock %}
+{% endblock -%}
+{%- block chamilo_footer -%}
+{% endblock -%}
+{#<script src="{{ url('home') ~ 'build/vue.js' }}"></script>#}
 </body>
 </html>
 {% else %}

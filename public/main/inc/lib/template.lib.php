@@ -191,6 +191,7 @@ class Template
             exit;
         }
 
+        $this->setVueParams($this->params);
         $this->returnResponse($this->params, $template);
     }
 

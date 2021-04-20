@@ -23,14 +23,14 @@
 {% set message_link = '' %}
 {%- block stylesheets %}
 {# Files app.css is generated from "assets/css/app.scss" file using the file webpack.config.js #}
-<link rel="stylesheet" href="{{ url('home') ~ 'build/css/app.css' }}"/>
 {#    {{ encore_entry_link_tags('app') }}#}
 {% if theme is defined %}
 {#    <link rel="stylesheet" href="{{ url('home') ~ 'build/css/themes/'~ theme ~'/default.css' }}"/>#}
 {% endif %}
-<link rel="stylesheet" href="{{ url('home') ~ 'build/css/print.css' }}" media="print" />
 {#    {{ encore_entry_link_tags('vue') }}#}
 <link rel="stylesheet" href="{{ url('home') ~ 'build/vue.css' }}"/>
+<link rel="stylesheet" href="{{ url('home') ~ 'build/css/app.css' }}"/>
+{#<link rel="stylesheet" href="{{ url('home') ~ 'build/css/print.css' }}" media="print" />#}
 {% endblock %}
 {# app.js is generated using the file webpack.config.js and using yarn read /assets/README.md for more info #}
 <script src="{{ url('home') ~ 'build/libs/ckeditor/ckeditor.js' }}"></script>

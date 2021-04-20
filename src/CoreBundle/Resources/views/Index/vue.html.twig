@@ -1,11 +1,7 @@
 {% extends "@ChamiloCore/Layout/no_layout.html.twig" %}
 
-{% block content %}
-    <div
-        id="app"
-        data-flashes="{{ app.flashes()|json_encode }}"
-        data-is-authenticated="{{ is_authenticated }}"
-        data-user-json="{{ user_json }}">
-    </div>
-    {{ encore_entry_script_tags('vue') }}
+{%- block content %}
+    {% include '@ChamiloCore/Layout/vue_setup.html.twig' %}
+    {#    {{ encore_entry_script_tags('vue') }}#}
+    <script src="{{ url('home') ~ 'build/vue.js' }}"></script>
 {% endblock %}

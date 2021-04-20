@@ -1,5 +1,21 @@
 {% extends '@ChamiloCore/Layout/base-layout.html.twig' %}
 {%- block page_content %}
+    {% if from_vue %}
+        <script src="{{ url('home') ~ 'build/libs/ckeditor/ckeditor.js' }}"></script>
+        <script src="{{ url('home') ~ 'build/runtime.js' }}"></script>
+        <script src="{{ url('home') ~ 'build/app.js' }}"></script>
+        <link rel="stylesheet" href="{{ url('home') ~ 'build/css/app.css' }}"/>
+        <link rel="stylesheet" href="{{ url('home') ~ 'build/vue.css' }}"/>
+
+        {# Loading legacy js using the $htmlHeadXtra array #}
+        {% autoescape false %}
+            {% for js in legacy_javascript %}
+                {{~ js }}
+            {% endfor %}
+        {% endautoescape %}
+
+    {% endif %}
+
     {%- autoescape false %}
         {% if js is defined %}
             {%- for item in js %}
@@ -25,17 +41,11 @@
             </div>
         {% endif %}
     {% endautoescape -%}
+
     {%- autoescape %}
-    <div
-        id="app"
-        data-is-authenticated="{{ is_authenticated }}"
-        data-user-json="{{ user_json }}"
-        data-flashes="{{ app.flashes()|json_encode }}"
-        {%- if legacy_breadcrumb is defined %}
-            data-breadcrumb="{{ legacy_breadcrumb | json_encode() }}"
-        {% endif -%}
-    >
-    </div>
+    {% if not from_vue %}
+        {% include '@ChamiloCore/Layout/vue_setup.html.twig' %}
+    {% endif %}
     {% endautoescape -%}
 
     {% set hideContent = 'display: none' %}
@@ -69,4 +79,9 @@
             </div>
         {% endif %}
     {% endautoescape -%}
+
+    {% if not from_vue %}
+    <script src="{{ url('home') ~ 'build/vue.js' }}"></script>
+    {% endif %}
+
 {% endblock -%}

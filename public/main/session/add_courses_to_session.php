@@ -104,15 +104,14 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && isset($_POST['SessionCour
     exit;
 }
 
-// Display the header
 Display::display_header($tool_name);
 
 if ('multiple' === $add_type) {
     $link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$sessionId.'&add='.$add.'&add_type=unique">'.
         Display::return_icon('single.gif').get_lang('Single registration').'</a>';
-    $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('Multiple registration').' ';
+    $link_add_type_multiple = Display::url(Display::return_icon('multiple.gif').get_lang('Multiple registration'), '#');
 } else {
-    $link_add_type_unique = Display::return_icon('single.gif').get_lang('Single registration').'&nbsp;&nbsp;&nbsp;';
+    $link_add_type_unique = Display::url(Display::return_icon('single.gif').get_lang('Single registration'), '#');
     $link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$sessionId.'&add='.$add.'&add_type=multiple">'.
         Display::return_icon('multiple.gif').get_lang('Multiple registration').'</a>';
 }
@@ -204,166 +203,190 @@ if (!api_is_platform_admin() && api_is_teacher()) {
 }
 
 unset($Courses);
-?>
-<form name="formulaire"
-      method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $sessionId; if (!empty($_GET['add'])) {
-    echo '&add=true';
-} ?>" style="margin:0px;" <?php if ($ajax_search) {
-    echo ' onsubmit="valide();"';
-}?>>
-    <legend><?php echo $tool_name.' ('.$session_info['name'].')'; ?></legend>
-    <input type="hidden" name="formSent" value="1" />
-    <div id="multiple-add-session" class="row">
-        <div class="col-md-4">
-            <label><?php echo get_lang('Courses list'); ?> :</label>
-            <?php
-            if (!('multiple' == $add_type)) {
-                ?>
-                <input type="text" id="course_to_add" onkeyup="xajax_search_courses(this.value, 'single', <?php echo $sessionId; ?>)" class="form-control"/>
-                <div id="ajax_list_courses_single"></div>
-            <?php
-            } else {
-                ?>
-                <div id="ajax_list_courses_multiple">
-                    <select id="origin" name="NoSessionCoursesList[]" multiple="multiple" size="20" class="form-control">
-                        <?php foreach ($nosessionCourses as $enreg) {
-                    ?>
-                            <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')', ENT_QUOTES).'"';
-                    if (in_array($enreg['code'], $CourseList)) {
-                        echo 'selected="selected"';
-                    } ?>>
-                                <?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?>
-                            </option>
-                        <?php
-                } ?>
-                    </select>
-                </div>
-            <?php
-            }
-            unset($nosessionCourses);
-            ?>
-        </div>
-        <div class="col-md-4">
-            <?php if ('multiple' == $add_type) {
-                ?>
-                <div class="code-course">
-                    <?php echo get_lang('First letter (code)'); ?> :
 
-                    <select name="firstLetterCourse" onchange = "xajax_search_courses(this.value,'multiple', <?php echo $sessionId; ?>)" class="selectpicker form-control">
-                        <option value="%">--</option>
+echo Display::page_header($tool_name.' ('.$session_info['name'].')');
+?>
+    <form name="formulaire"
+          method="post"
+          action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $sessionId;
+          if (!empty($_GET['add'])) {
+              echo '&add=true';
+          } ?>" style="margin:0px;" <?php if ($ajax_search) {
+        echo ' onsubmit="valide();"';
+    } ?>>
+        <input type="hidden" name="formSent" value="1"/>
+        <div id="multiple-add-session" class="grid grid-cols-3">
+            <div class="col-md-4">
+                <label><?php echo get_lang('Courses list'); ?> :</label>
+                <?php
+                if (!('multiple' === $add_type)) {
+                    ?>
+                    <input type="text" id="course_to_add"
+                           onkeyup="xajax_search_courses(this.value, 'single', <?php echo $sessionId; ?>)"
+                           class="w-full"/>
+                    <div id="ajax_list_courses_single"></div>
+                    <?php
+                } else {
+                    ?>
+                    <div id="ajax_list_courses_multiple">
+                        <select id="origin" name="NoSessionCoursesList[]"
+                                multiple="multiple" size="20"
+                                class="w-full">
+                            <?php foreach ($nosessionCourses as $enreg) {
+                                ?>
+                                <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars(
+                                        $enreg['title'].' ('.$enreg['visual_code'].')',
+                                        ENT_QUOTES
+                                    ).'"';
+                                if (in_array($enreg['code'], $CourseList)) {
+                                    echo 'selected="selected"';
+                                } ?>>
+                                    <?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?>
+                                </option>
+                                <?php
+                            } ?>
+                        </select>
+                    </div>
+                    <?php
+                }
+                unset($nosessionCourses);
+                ?>
+            </div>
+            <div class="col-md-4">
+                <?php if ('multiple' == $add_type) {
+                    ?>
+                    <div class="code-course">
+                        <?php echo get_lang('First letter (code)'); ?> :
+
+                        <select name="firstLetterCourse"
+                                onchange="xajax_search_courses(this.value,'multiple', <?php echo $sessionId; ?>)"
+                                class="selectpicker form-control">
+                            <option value="%">--</option>
+                            <?php
+                            echo Display:: get_alphabet_options();
+                            echo Display:: get_numeric_options(0, 9, ''); ?>
+                        </select>
+                    </div>
+                    <?php
+                } ?>
+                <div class="control-course">
+                    <?php
+                    if ($ajax_search) {
+                        ?>
+                        <div class="separate-action">
+                            <button class="btn btn-primary" type="button"
+                                    onclick="remove_item(document.getElementById('destination'))">
+                                <em class="fa fa-chevron-left"></em>
+                            </button>
+                        </div>
                         <?php
-                        echo Display :: get_alphabet_options();
-                echo Display :: get_numeric_options(0, 9, ''); ?>
-                    </select>
+                    } else {
+                        ?>
+                        <div class="separate-action">
+                            <button name="add_course" class="btn btn-primary" type="button"
+                                    onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))"
+                                    onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
+                                <em class="fa fa-chevron-right"></em>
+                            </button>
+                        </div>
+                        <div class="separate-action">
+                            <button name="remove_course" class="btn btn-primary" type="button"
+                                    onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))"
+                                    onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
+                                <em class="fa fa-chevron-left"></em>
+                            </button>
+                        </div>
+                        <?php
+                    } ?>
+                    <div class="separate-action">
+                        <label>
+                            <input type="checkbox" name="copy_evaluation">
+                            <?php echo get_lang('Import gradebook from base course'); ?>
+                        </label>
+                        <label>
+                            <input type="checkbox" name="import_teachers_as_course_coach">
+                            <?php echo get_lang('Import course teachers as course coach in the session'); ?>
+                        </label>
+                    </div>
+                    <?php
+                    echo '<div class="separate-action">';
+                    if (isset($_GET['add'])) {
+                        echo '<button name="next" class="btn btn-success" type="button" value="" onclick="valide()" >'.get_lang(
+                                'Next step'
+                            ).'</button>';
+                    } else {
+                        echo '<button name="next" class="btn btn-success" type="button" value="" onclick="valide()" >'.get_lang(
+                                'Add courses to this session'
+                            ).'</button>';
+                    }
+                    echo '</div>';
+                    ?>
                 </div>
-            <?php
-            } ?>
-            <div class="control-course">
-            <?php
-            if ($ajax_search) {
-                ?>
-                <div class="separate-action">
-                    <button class="btn btn-primary" type="button" onclick="remove_item(document.getElementById('destination'))">
-                        <em class="fa fa-chevron-left"></em>
-                    </button>
-                </div>
-            <?php
-            } else {
-                ?>
-                <div class="separate-action">
-                    <button name="add_course" class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
-                        <em class="fa fa-chevron-right"></em>
-                    </button>
-                </div>
-                <div class="separate-action">
-                    <button name="remove_course" class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
-                        <em class="fa fa-chevron-left"></em>
-                    </button>
-                </div>
-            <?php
-            } ?>
-                <div class="separate-action">
-                    <label>
-                        <input type="checkbox" name="copy_evaluation">
-                        <?php echo get_lang('Import gradebook from base course'); ?>
-                    </label>
-                    <label>
-                        <input type="checkbox" name="import_teachers_as_course_coach">
-                        <?php echo get_lang('Import course teachers as course coach in the session'); ?>
-                    </label>
-                </div>
-            <?php
-            echo '<div class="separate-action">';
-            if (isset($_GET['add'])) {
-                echo '<button name="next" class="btn btn-success" type="button" value="" onclick="valide()" >'.get_lang('Next step').'</button>';
-            } else {
-                echo '<button name="next" class="btn btn-success" type="button" value="" onclick="valide()" >'.get_lang('Add courses to this session').'</button>';
-            }
-            echo '</div>';
-            ?>
+            </div>
+            <div class="col-md-4">
+                <label><?php echo get_lang('Courses in this session'); ?> :</label>
+                <select id='destination' name="SessionCoursesList[]" multiple="multiple" size="20" class="w-full">
+                    <?php
+                    foreach ($sessionCourses as $enreg) {
+                        ?>
+                        <option value="<?php echo $enreg['id']; ?>" title="<?php echo htmlspecialchars(
+                            $enreg['title'].' ('.$enreg['visual_code'].')',
+                            ENT_QUOTES
+                        ); ?>">
+                            <?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?>
+                        </option>
+                        <?php
+                    }
+                    unset($sessionCourses);
+                    ?>
+                </select>
             </div>
         </div>
-        <div class="col-md-4">
-            <label><?php echo get_lang('Courses in this session'); ?> :</label>
-            <select id='destination' name="SessionCoursesList[]" multiple="multiple" size="20" class="form-control">
-                <?php
-                foreach ($sessionCourses as $enreg) {
-                    ?>
-                    <option value="<?php echo $enreg['id']; ?>" title="<?php echo htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')', ENT_QUOTES); ?>">
-                        <?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?>
-                    </option>
-                <?php
+    </form>
+    <script>
+        function moveItem(origin, destination) {
+            for (var i = 0; i < origin.options.length; i++) {
+                if (origin.options[i].selected) {
+                    destination.options[destination.length] = new Option(origin.options[i].text, origin.options[i].value);
+                    origin.options[i] = null;
+                    i = i - 1;
                 }
-                unset($sessionCourses);
-                ?>
-            </select>
-        </div>
-    </div>
-</form>
-<script>
-    function moveItem(origin , destination) {
-        for(var i = 0 ; i<origin.options.length ; i++) {
-            if(origin.options[i].selected) {
-                destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
-                origin.options[i]=null;
-                i = i-1;
+            }
+            destination.selectedIndex = -1;
+            sortOptions(destination.options);
+        }
+
+        function sortOptions(options) {
+            newOptions = new Array();
+            for (i = 0; i < options.length; i++) {
+                newOptions[i] = options[i];
+            }
+
+            newOptions = newOptions.sort(mysort);
+            options.length = 0;
+
+            for (i = 0; i < newOptions.length; i++) {
+                options[i] = newOptions[i];
             }
         }
-        destination.selectedIndex = -1;
-        sortOptions(destination.options);
-    }
 
-    function sortOptions(options) {
-        newOptions = new Array();
-        for (i = 0 ; i<options.length ; i++) {
-            newOptions[i] = options[i];
+        function mysort(a, b) {
+            if (a.text.toLowerCase() > b.text.toLowerCase()) {
+                return 1;
+            }
+            if (a.text.toLowerCase() < b.text.toLowerCase()) {
+                return -1;
+            }
+            return 0;
         }
 
-        newOptions = newOptions.sort(mysort);
-        options.length = 0;
+        function valide() {
+            var options = document.getElementById('destination').options;
+            for (i = 0; i < options.length; i++)
+                options[i].selected = true;
 
-        for(i = 0 ; i < newOptions.length ; i++){
-            options[i] = newOptions[i];
+            document.forms.formulaire.submit();
         }
-    }
-
-    function mysort(a, b) {
-        if (a.text.toLowerCase() > b.text.toLowerCase()){
-            return 1;
-        }
-        if (a.text.toLowerCase() < b.text.toLowerCase()){
-            return -1;
-        }
-        return 0;
-    }
-
-    function valide() {
-        var options = document.getElementById('destination').options;
-        for (i = 0 ; i<options.length ; i++)
-            options[i].selected = true;
-
-        document.forms.formulaire.submit();
-    }
-</script>
+    </script>
 <?php
 Display::display_footer();

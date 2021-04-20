@@ -21,10 +21,7 @@
       </div>
 
       <nav class="mt-2">
-
-
           <q-list v-if="isAuthenticated" padding class="text-grey-8">
-
             <q-item class="GNL__drawer-item" v-ripple v-for="link in links1" :key="link.text" :to="link.url" clickable>
               <q-item-section avatar>
 <!--                <q-icon :name="link.icon" />-->

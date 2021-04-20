@@ -123,7 +123,7 @@ class FeatureContext extends MinkContext
         $this->visit('/login');
         $this->fillField('login', $username);
         $this->fillField('password', $username);
-        $this->pressButton('Login');
+        $this->pressButton('Sign in');
         $this->waitForThePageToBeLoaded();
         //$this->waitForThePageToBeLoaded();
     }

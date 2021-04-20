@@ -151,17 +151,14 @@
                   </q-item-section>
                 </q-item>
               </q-list>
-
         </div>
-
       </div>
 
       <div v-else class="relative">
         <router-link :to="'/login'" tag="button"  class="flex items-center justify-center h-10 px-4 ml-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300">
-          Login
+          Sign in
         </router-link>
       </div>
-
     </div>
   </header>
 </template>

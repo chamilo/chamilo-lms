@@ -5,7 +5,7 @@ Feature: Login user
     Then I should see "Sign in"
     And I fill in "admin" for "login"
     And I fill in "admin" for "password"
-    Then I press "Login"
+    Then I press "Sign in"
     Then wait very long for the page to be loaded
     #Then I should see "MyCourses"
     Then I should not see an error

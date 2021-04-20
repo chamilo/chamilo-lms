@@ -1,34 +1,6 @@
-// ---------------------------------------------------------
 // IMAGE PATH
-// ---------------------------------------------------------
 $svg-path: "../../../public/img/icons/svg/";
 $img-path: "../../../public/img/";
-
-// ---------------------------------------------------------
-// BREAKPOINTS
-// ---------------------------------------------------------
-
-$breakpoint-xl : 1440px;
-$breakpoint-lg : 1200px;
-$breakpoint-md : 992px;
-$breakpoint-sm : 768px;
-$breakpoint-xs : 480px;
-
-// ---------------------------------------------------------
-// GREYSCALE COLORS
-// ---------------------------------------------------------
-
-$grey-0               : #ffffff;
-$grey-100             : #f9fafb;
-$grey-200             : #f2f3f5;
-$grey-300             : #e6eaf0;
-$grey-400             : #d3d9e3;
-$grey-500             : #b9c2d0;
-$grey-600             : #7c8695;
-$grey-700             : #72777a;
-$grey-800             : #565a5c;
-$grey-900             : #313435;
-
 
 // ---------------------------------------------------------
 // COLORS THEME DEFAULT
@@ -101,20 +73,4 @@ $warning_custom:       #ffef7d !default;
 $danger_custom:        #fb8b8b !default;
 $light_custom:         #ffffff !default;
 $dark_custom:          #607d8b !default;
-
-$theme-colors-custom: () !default;
-// stylelint-disable-next-line scss/dollar-variable-default
-$theme-colors-custom: map-merge(
-    (
-            "primary": $primary_custom,
-            "secondary": $secondary_custom,
-            "success": $success_custom,
-            "info": $info_custom,
-            "warning": $warning_custom,
-            "danger": $danger_custom,
-            "light": $light_custom,
-            "dark": $dark_custom
-    ),
-    $theme-colors-custom
-);
 

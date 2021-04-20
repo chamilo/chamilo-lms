@@ -86,6 +86,11 @@ class CTool extends AbstractResource implements ResourceInterface
      */
     protected int $position;
 
+    /**
+     * @Groups({"ctool:read"})
+     */
+    protected string $nameToTranslate;
+
     public function __construct()
     {
         $this->position = 0;
@@ -94,6 +99,11 @@ class CTool extends AbstractResource implements ResourceInterface
     public function __toString(): string
     {
         return $this->getName();
+    }
+
+    public function getNameToTranslate(): string
+    {
+        return ucfirst(str_replace('_', ' ', $this->name));
     }
 
     public function getName(): string

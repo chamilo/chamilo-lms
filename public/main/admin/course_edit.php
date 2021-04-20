@@ -509,7 +509,6 @@ function valide() {
 }
 </script>";
 
-// Display the form
 $form->display();
 
-Display :: display_footer();
+Display::display_footer();

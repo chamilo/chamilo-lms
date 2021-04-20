@@ -7848,9 +7848,7 @@ class SessionManager
                         $orderClause;
 
                 if (api_is_multiple_url_enabled()) {
-                    $userRelAccessUrlTable = Database::get_main_table(
-                        TABLE_MAIN_ACCESS_URL_REL_USER
-                    );
+                    $userRelAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
                     $accessUrlId = api_get_current_access_url_id();
                     if (-1 != $accessUrlId) {
                         $sql = "SELECT user.id as user_id, username, lastname, firstname
@@ -7872,8 +7870,7 @@ class SessionManager
                         api_get_person_name($coachItem['firstname'], $coachItem['lastname']).' ('.$coachItem['username'].')';
                 }
 
-                $form->addElement(
-                    'select',
+                $form->addSelect(
                     'coach_username',
                     get_lang('Coach name'),
                     $coachesOptions,
@@ -7883,8 +7880,7 @@ class SessionManager
                     ]
                 );
             } else {
-                $form->addElement(
-                    'select_ajax',
+                $form->addSelectAjax(
                     'coach_username',
                     get_lang('Coach name'),
                     $coachInfo ? [$coachInfo['id'] => $coachInfo['complete_name_with_username']] : [],

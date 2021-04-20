@@ -200,7 +200,7 @@ if (api_is_platform_admin()) {
     $searchForm = new FormValidator(
         'search_session',
         'GET',
-        api_get_path(WEB_CODE_PATH).'admin/session_list.php',
+        $sessionPath.'session_list.php',
         null,
         null,
         FormValidator::LAYOUT_BOX_SEARCH

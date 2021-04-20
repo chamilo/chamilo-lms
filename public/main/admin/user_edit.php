@@ -537,14 +537,8 @@ $content = Display::toolbarAction('toolbar-user-information', [implode(PHP_EOL, 
 
 $bigImage = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_ORIGINAL);
 $normalImage = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_BIG);
-$content .= '<div class="row">';
-$content .= '<div class="col-md-10">';
-// Display form
+
 $content .= $form->returnForm();
-$content .= '</div>';
-$content .= '<div class="col-md-2">';
-$content .= '<a class="thumbnail expand-image" href="'.$bigImage.'" /><img src="'.$normalImage.'" /></a>';
-$content .= '</div>';
 
 $tpl = new Template($tool_name);
 $tpl->assign('content', $content);

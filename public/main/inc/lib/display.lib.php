@@ -2547,7 +2547,7 @@ class Display
     {
         $col = count($contentList);
         $html = ' <div id="'.$id.'" class="q-card">';
-        $html .= ' <div class="flex justify-between '.$col.'">';
+        $html .= ' <div class="flex justify-between mb-3 '.$col.'">';
         foreach ($contentList as $item) {
             $html .= '<div class=" flex p-3 gap-2 ">'.$item.'</div>';
         }

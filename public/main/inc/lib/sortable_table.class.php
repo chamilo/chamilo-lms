@@ -144,7 +144,8 @@ class SortableTable extends HTML_Table
 
         if (empty($attributes)) {
             $attributes = [];
-            $attributes['class'] = 'table table-hover table-striped table-bordered data_table';
+            //$attributes['class'] = 'table table-hover table-striped table-bordered data_table';
+            $attributes['class'] = 'q-table';
             $attributes['id'] = $table_id;
         }
 
@@ -299,26 +300,33 @@ class SortableTable extends HTML_Table
             $params['urlVar'] = $this->param_prefix.'page_nr';
             $params['currentPage'] = $this->page_nr;
             $icon_attributes = ['style' => 'vertical-align: middle;'];
-            $params['prevImg'] = Display:: return_icon(
+            /*$params['prevImg'] = Display:: return_icon(
                 'action_prev.png',
                 get_lang('Previous page'),
                 $icon_attributes
-            );
-            $params['nextImg'] = Display:: return_icon(
+            );*/
+            $params['prevImg'] = Display::returnFontAwesomeIcon('caret-left');
+
+            /*$params['nextImg'] = Display:: return_icon(
                 'action_next.png',
                 get_lang('Next page'),
                 $icon_attributes
-            );
-            $params['firstPageText'] = Display:: return_icon(
+            );*/
+            $params['nextImg'] = Display::returnFontAwesomeIcon('caret-right');
+
+            /*$params['firstPageText'] = Display:: return_icon(
                 'action_first.png',
                 get_lang('First page'),
                 $icon_attributes
-            );
-            $params['lastPageText'] = Display:: return_icon(
+            );*/
+            $params['firstPageText'] = Display::returnFontAwesomeIcon('step-backward');
+
+            /*$params['lastPageText'] = Display:: return_icon(
                 'action_last.png',
                 get_lang('Last page'),
                 $icon_attributes
-            );
+            );*/
+            $params['lastPageText'] = Display::returnFontAwesomeIcon('step-forward');
             $params['firstPagePre'] = '';
             $params['lastPagePre'] = '';
             $params['firstPagePost'] = '';
@@ -391,16 +399,16 @@ class SortableTable extends HTML_Table
         if (false === $this->hideNavigation) {
             $form = $this->get_page_select_form();
             $nav = $this->get_navigation_html();
-            $html = '<div class="card-action">';
-            $html .= '<div class="row">';
-            $html .= '<div class="col-12 col-md-4">';
+            $html = '<div class="q-card">';
+            $html .= '<div class="q-pa-md fit row wrap justify-between items-start content-start">';
+            $html .= '<div class="col">';
             $html .= '<div class="page-select pb-2 pt-2">'.$form.'</div>';
             $html .= '</div>';
-            $html .= '<div class="col-12 col-md-4">';
-            $html .= '<div class="page-number pb-2 pt-2">'.$this->get_table_title().'</div>';
+            $html .= '<div class="col">';
+            $html .= '<div class="row justify-center">'.$this->get_table_title().'</div>';
             $html .= '</div>';
-            $html .= '<div class="col-12 col-md-4">';
-            $html .= '<div class="page-nav pb-2 pt-2">'.$nav.'</div>';
+            $html .= '<div class="col">';
+            $html .= '<div class="row justify-end">'.$nav.'</div>';
             $html .= '</div>';
             $html .= '</div>';
             $html .= '</div>';
@@ -416,7 +424,9 @@ class SortableTable extends HTML_Table
                 name="form_'.$this->table_name.'">';
         }
 
-        $html .= '<div class="table-responsive">'.$content.'</div>';
+        //$html .= '<div class="table-responsive">'.$content.'</div>';
+        $html .= '<div class="q-table__container q-table--horizontal-separator column no-wrap q-table__card q-table--no-wrap">'.
+            $content.'</div>';
 
         if (!empty($this->additional_parameters)) {
             foreach ($this->additional_parameters as $key => $value) {
@@ -425,19 +435,18 @@ class SortableTable extends HTML_Table
             }
         }
         $html .= '<input type="hidden" name="action">';
-        $html .= '<div class="card-action">';
-        $html .= '<div class="row">';
-        $html .= '<div class="col-12 col-md-6">';
-        $html .= '<div class="page-action pb-2 pt-2">';
+
+        $html .= '<div class="q-card">';
+        $html .= '<div class="flex p-3">';
 
         if (count($this->form_actions) > 0) {
             $html .= '<div class="btn-group" role="group">';
             $html .= '<a
-                class="btn btn-outline-primary"
+                class="btn btn-primary"
                 href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1"
                 onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'.get_lang('Select all').'</a>';
             $html .= '<a
-                class="btn btn-outline-primary"
+                class="btn btn-primary"
                 href="?'.$params.'"
                 onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'.get_lang('UnSelect all').'</a> ';
             $html .= '<div class="btn-group" role="group">
@@ -465,7 +474,7 @@ class SortableTable extends HTML_Table
         }
 
         $html .= '</div>';
-        $html .= '</div>';
+
         // Pagination
         if ($this->get_total_number_of_items() > $this->default_items_per_page) {
             $html .= '<div class="col-12 col-md-6">';
@@ -473,7 +482,6 @@ class SortableTable extends HTML_Table
             $html .= '</div>';
         }
 
-        $html .= '</div>';
         $html .= '</div>';
         if (count($this->form_actions) > 0) {
             $html .= '</form>';
@@ -694,7 +702,6 @@ class SortableTable extends HTML_Table
         $from = $offset[0] - 1;
         $table_data = $this->get_table_data($from, $this->per_page, $this->column);
         $this->processHeaders();
-        $this->addBody();
         if (is_array($table_data)) {
             $count = 1;
             foreach ($table_data as &$row) {

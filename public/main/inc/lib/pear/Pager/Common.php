@@ -847,30 +847,34 @@ class Pager_Common
             if (array_key_exists($this->_urlVar, $this->_linkData)) {
                 $onclick = str_replace('%d', $this->_linkData[$this->_urlVar], $this->_onclick);
             }
-            return sprintf('<a class="btn btn-outline-secondary" href="%s"%s%s%s%s title="%s">%s</a>',
-                           // Modified by Ivan Tcholakov, 17-OCT-2008.
-                           //htmlentities($this->_url . $href, ENT_COMPAT, 'UTF-8'),
-                           api_htmlentities($this->_url . $href),
-                           //
-                           empty($this->_classString) ? '' : ' '.$this->_classString,
-                           empty($this->_attributes)  ? '' : ' '.$this->_attributes,
-                           empty($this->_accesskey)   ? '' : ' accesskey="'.$this->_linkData[$this->_urlVar].'"',
-                           empty($onclick)            ? '' : ' onclick="'.$onclick.'"',
-                           $altText,
-                           $linkText
+
+            return sprintf(
+                '<a class="btn btn-link" href="%s"%s%s%s%s title="%s">%s</a>',
+                // Modified by Ivan Tcholakov, 17-OCT-2008.
+                //htmlentities($this->_url . $href, ENT_COMPAT, 'UTF-8'),
+                api_htmlentities($this->_url.$href),
+                //
+                empty($this->_classString) ? '' : ' '.$this->_classString,
+                empty($this->_attributes) ? '' : ' '.$this->_attributes,
+                empty($this->_accesskey) ? '' : ' accesskey="'.$this->_linkData[$this->_urlVar].'"',
+                empty($onclick) ? '' : ' onclick="'.$onclick.'"',
+                $altText,
+                $linkText
             );
-        } elseif ($this->_httpMethod == 'POST') {
+        } elseif ($this->_httpMethod === 'POST') {
             $href = $this->_url;
             if (!empty($_GET)) {
-                $href .= '?' . $this->_http_build_query_wrapper($_GET);
+                $href .= '?'.$this->_http_build_query_wrapper($_GET);
             }
-            return sprintf("<a href='javascript:void(0)' onclick='%s'%s%s%s title='%s'>%s</a>",
-                           $this->_generateFormOnClick($href, $this->_linkData),
-                           empty($this->_classString) ? '' : ' '.$this->_classString,
-                           empty($this->_attributes)  ? '' : ' '.$this->_attributes,
-                           empty($this->_accesskey)   ? '' : ' accesskey=\''.$this->_linkData[$this->_urlVar].'\'',
-                           $altText,
-                           $linkText
+
+            return sprintf(
+                "<a href='javascript:void(0)' onclick='%s'%s%s%s title='%s'>%s</a>",
+                $this->_generateFormOnClick($href, $this->_linkData),
+                empty($this->_classString) ? '' : ' '.$this->_classString,
+                empty($this->_attributes) ? '' : ' '.$this->_attributes,
+                empty($this->_accesskey) ? '' : ' accesskey=\''.$this->_linkData[$this->_urlVar].'\'',
+                $altText,
+                $linkText
             );
         }
         return '';

@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * HTML class for an <input type="button" /> elements
@@ -91,16 +90,14 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
             unset($this->_attributes['class']);
 
             $icon = $this->getIcon();
-
             if (!empty($icon)) {
                 $icon = '<em class="' . $this->getIcon() . '"></em> ';
             }
-
             $class = $this->getClass().' '.$this->getStyle().' '.$this->getSize();
 
             return
                 $this->_getTabs() . '
-                <button class="'.$class.'" ' . $this->_getAttrString($this->_attributes) . '>'.
+                <button class="'.$class.'"' . $this->_getAttrString($this->_attributes) . '>'.
                 $icon.
                 $value.
                 '</button>';
@@ -203,12 +200,7 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
         return false;
     }
 
-    /**
-     * @param string $layout
-     *
-     * @return string
-     */
-    public function getTemplate($layout)
+    public function getTemplate(string $layout): string
     {
         $size = $this->calculateSize();
         $attributes = $this->getAttributes();
@@ -223,34 +215,36 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
                         {element}
                     ';
                 } else {
-                        $template = '
-                            <div class="row form-group {error_class}">
-                                <label {label-for} class="col-sm-'.$size[0].' col-form-label" >
-                                    <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
-                                    {label}
-                                </label>
-                                <div class="col-sm-'.$size[1].'">
-                                    {icon}
-                                    {element}
+                    $template = '
+                        <div class="md:flex md:items-center mb-6 {error_class}">
+                            <label {label-for} class="ch-form-label h-4 md:w-1/4 flex justify-left md:justify-end pr-3 text-gray-600 '.$size[0].' " >
+                                <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                                {label}
+                            </label>
+                            <div class="md:w-3/4 '.$size[1].'">
+                                {icon}
+                                {element}
 
-                                    <!-- BEGIN label_2 -->
-                                        <p class="help-block">{label_2}</p>
-                                    <!-- END label_2 -->
+                                <!-- BEGIN label_2 -->
+                                    <p class="help-block">{label_2}</p>
+                                <!-- END label_2 -->
 
-                                    <!-- BEGIN error -->
-                                        <span class="help-inline help-block">{error}</span>
-                                    <!-- END error -->
-                                </div>
-                                <div class="col-sm-'.$size[2].'">
-                                    <!-- BEGIN label_3 -->
-                                        {label_3}
-                                    <!-- END label_3 -->
-                                </div>
-                            </div>';
+                                <!-- BEGIN error -->
+                                    <span class="help-inline help-block">{error}</span>
+                                <!-- END error -->
+                            </div>
+                            <div class="col-sm-'.$size[2].'">
+                                <!-- BEGIN label_3 -->
+                                    {label_3}
+                                <!-- END label_3 -->
+                            </div>
+                        </div>';
                     }
 
                 break;
             case FormValidator::LAYOUT_INLINE:
+                $template = '  {element}  ';
+                break;
             case FormValidator::LAYOUT_GRID:
             case FormValidator::LAYOUT_BOX_NO_LABEL:
             default:

@@ -1,10 +1,6 @@
 <?php
 
 /**
- * Base class for form elements
- *
- * PHP versions 4 and 5
- *
  * LICENSE: This source file is subject to version 3.01 of the PHP license
  * that is available through the world-wide-web at the following URI:
  * http://www.php.net/license/3_01.txt If you did not receive a copy of
@@ -12,7 +8,6 @@
  * send a note to license@php.net so we can mail you a copy immediately.
  *
  * @category    HTML
- * @package     HTML_QuickForm
  * @author      Adam Daniel <adaniel1@eesus.jnj.com>
  * @author      Bertrand Mansion <bmansion@mamasam.com>
  * @author      Alexey Borzov <avb@php.net>
@@ -20,15 +15,6 @@
  * @license     http://www.php.net/license/3_01.txt PHP License 3.01
  * @version     CVS: $Id: element.php,v 1.37 2009/04/04 21:34:02 avb Exp $
  * @link        http://pear.php.net/package/HTML_QuickForm
- */
-
-/**
- * Base class for form elements
- *
- * @category    HTML
- * @package     HTML_QuickForm
- * @author      Adam Daniel <adaniel1@eesus.jnj.com>
- * @author      Bertrand Mansion <bmansion@mamasam.com>
  * @author      Alexey Borzov <avb@php.net>
  * @version     Release: 3.2.11
  * @since       1.0
@@ -78,7 +64,6 @@ class HTML_QuickForm_element extends HTML_Common
      * @access    private
      */
     public $_persistantFreeze = false;
-
     protected $columnsSize;
 
     /**
@@ -623,5 +608,93 @@ class HTML_QuickForm_element extends HTML_Common
         }
 
         return $size;
+    }
+
+    public function getTemplate(string $layout): string
+    {
+        $size = $this->calculateSize();
+        $attributes = $this->getAttributes();
+
+        $hasBottomLabel = is_array($this->getLabel());
+        $height = 'h-4';
+        if ($hasBottomLabel) {
+            $height = 'h-8';
+        }
+
+        $template = '<label {label-for}>{label}</label>
+                        <div class="input-group">
+                            {icon}
+                            {element}
+                        </div>';
+
+        switch ($layout) {
+            case FormValidator::LAYOUT_BOX_SEARCH:
+            case FormValidator::LAYOUT_INLINE:
+                // <label {label-for} >
+                //         <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                //           {label}
+                //         </label>
+                $template = '{element}';
+                break;
+            case FormValidator::LAYOUT_GRID:
+                $template = '
+                <div class="form-group {error_class}">
+                    <label {label-for} >
+                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                        {label}
+                    </label>
+                    {element}
+                </div>';
+                break;
+            case FormValidator::LAYOUT_HORIZONTAL:
+                $template = '
+                <div class="md:flex md:items-center mb-6  '.$size[0].' {error_class}">
+                    <label {label-for} class="
+                        ch-form-label '.$height.'
+
+                        md:w-1/4
+                        flex justify-left
+                        text-sm font-medium text-gray-700
+                        md:justify-end pr-3
+
+                    " >
+                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                        {label}
+                    </label>
+                    <div class="md:w-3/4 '.$size[1].'">
+                        {icon}
+                        {element}
+                        <!-- BEGIN label_2 -->
+                            <p class="help-block">{label_2}</p>
+                        <!-- END label_2 -->
+
+                         <!-- BEGIN label_3 -->
+                            <p class="help-block">{label_3}</p>
+                        <!-- END label_3 -->
+
+                        <!-- BEGIN error -->
+                            <span class="help-inline help-block">{error}</span>
+                        <!-- END error -->
+                    </div>
+                </div>';
+                break;
+            case FormValidator::LAYOUT_BOX_NO_LABEL:
+                if (isset($attributes['custom']) && $attributes['custom'] == true) {
+                    $template = '
+                        <div class="input-group">
+                            {icon}
+                            {element}
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="submit">
+                                    <em class="fa fa-search"></em>
+                                </button>
+                            </div>
+                        </div>
+                    ';
+                }
+                break;
+        }
+
+        return $template;
     }
 }

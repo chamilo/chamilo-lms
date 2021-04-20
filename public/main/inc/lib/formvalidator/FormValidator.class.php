@@ -38,7 +38,7 @@ class FormValidator extends HTML_QuickForm
     ) {
         // Default form class.
         if (is_array($attributes) && !isset($attributes['class']) || empty($attributes)) {
-            $attributes['class'] = 'form-horizontal';
+            $attributes['class'] = 'form-horizontal q-pt-md';
         }
 
         if (isset($attributes['class']) && false !== strpos($attributes['class'], 'form-search')) {
@@ -52,13 +52,18 @@ class FormValidator extends HTML_QuickForm
 
         switch ($layout) {
             case self::LAYOUT_HORIZONTAL:
-                $attributes['class'] = 'form-horizontal';
+                $attributes['class'] = 'w-full ';
+                break;
+            case self::LAYOUT_BOX_SEARCH:
+                $attributes['class'] = 'w-full flex gap-2';
+                $formTemplate = $this->getInLineTemplate();
                 break;
             case self::LAYOUT_INLINE:
-                $attributes['class'] = 'form-inline';
+                $attributes['class'] = ' flex gap-1 ';
+                $formTemplate = $this->getInLineTemplate();
                 break;
             case self::LAYOUT_BOX:
-                $attributes['class'] = 'form-inline-box';
+                $attributes['class'] = 'flex gap-1 ';
                 break;
             case self::LAYOUT_GRID:
                 $attributes['class'] = 'form-grid';
@@ -70,11 +75,12 @@ class FormValidator extends HTML_QuickForm
 
         // Modify the default templates
         $renderer = &$this->defaultRenderer();
-
         $renderer->setFormTemplate($formTemplate);
 
         // Element template
-        if (isset($attributes['class']) && 'form-inline' === $attributes['class']) {
+        if ((isset($attributes['class']) && 'form-inline' === $attributes['class']) ||
+            (self::LAYOUT_INLINE === $layout || self::LAYOUT_BOX_SEARCH === $layout)
+        ) {
             $elementTemplate = ' {label}  {element} ';
             $renderer->setElementTemplate($elementTemplate);
         } elseif (isset($attributes['class']) && 'form-search' === $attributes['class']) {
@@ -97,12 +103,14 @@ class FormValidator extends HTML_QuickForm
         }
 
         //Set Header template
-        $renderer->setHeaderTemplate('<legend>{header}</legend>');
+        $renderer->setHeaderTemplate(' <h1 class="text-2xl font-small text-gray-800 mb-4">{header}<hr /></h1>');
 
-        //Set required field template
-        $this->setRequiredNote(
-            '<span class="form_required">*</span> <small>'.get_lang('Required field').'</small>'
-        );
+        $required = '<span class="form_required">*</span> <small>'.get_lang('Required field').'</small>';
+        if ((self::LAYOUT_INLINE === $layout || self::LAYOUT_BOX_SEARCH === $layout)) {
+            $required = '';
+        }
+        // Set required field template
+        $this->setRequiredNote($required);
 
         $noteTemplate = <<<EOT
 	<div class="form-group">
@@ -112,23 +120,29 @@ EOT;
         $renderer->setRequiredNoteTemplate($noteTemplate);
     }
 
-    /**
-     * @return string
-     */
-    public function getFormTemplate()
+    public function getFormTemplate(): string
+    {
+        return '
+                <div class="pt-4">
+                    <div class="q-card p-4">
+                        <form{attributes}>
+                            {content}
+                            {hidden}
+                        </form>
+                    </div>
+                </div>
+        ';
+    }
+
+    public function getInLineTemplate(): string
     {
         return '<form{attributes}>
-        <fieldset>
             {content}
-        </fieldset>
         {hidden}
         </form>';
     }
 
-    /**
-     * @return string
-     */
-    public function getGridFormTemplate()
+    public function getGridFormTemplate(): string
     {
         return '
         <style>
@@ -152,13 +166,11 @@ EOT;
 
     /**
      * @todo this function should be added in the element class
-     *
-     * @return string
      */
-    public function getDefaultElementTemplate()
+    public function getDefaultElementTemplate(): string
     {
         return '
-            <div class="form-group row {error_class}">
+            <div class="row mb-3 {error_class}">
                 <label {label-for} class="col-sm-2 col-form-label {extra_label_class}" >
                     <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                     {label}
@@ -491,7 +503,7 @@ EOT;
         return $this->addButton(
             $name,
             $label,
-            'pencil',
+            'fa fas fa-pencil-alt',
             'primary',
             null,
             null,

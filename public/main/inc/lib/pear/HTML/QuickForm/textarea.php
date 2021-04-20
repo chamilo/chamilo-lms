@@ -146,13 +146,6 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
         $this->updateAttributes(array('cols' => $cols));
     }
 
-    /**
-     * Returns the textarea element in HTML
-     *
-     * @since     1.0
-     * @access    public
-     * @return    string
-     */
     public function toHtml()
     {
         if ($this->_flagFrozen) {
@@ -185,79 +178,5 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
             $html = nl2br($value)."\n";
         }
         return $html . $this->_getPersistantData();
-    }
-
-    /**
-     * @param string $layout
-     *
-     * @return string
-     */
-    public function getTemplate($layout)
-    {
-        $size = $this->getColumnsSize();
-        $this->removeAttribute('cols-size');
-
-        if (empty($size)) {
-            $size = [2, 8, 2];
-        }
-
-        switch ($layout) {
-            case FormValidator::LAYOUT_INLINE:
-                return '
-                <div class="form-group {error_class}">
-                    <label {label-for} >
-                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
-                        {label}
-                    </label>
-                    {element}
-                </div>';
-                break;
-            case FormValidator::LAYOUT_HORIZONTAL:
-                return '
-                <div class="row form-group {error_class}">
-                    <label class="col-sm-'.$size[0].' col-form-label" >
-                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
-                        {label}
-                    </label>
-                    <div class="col-sm-'.$size[1].'">
-                        {icon}
-                        {element}
-
-                        <!-- BEGIN label_2 -->
-                            <p class="help-block">{label_2}</p>
-                        <!-- END label_2 -->
-
-                        <!-- BEGIN error -->
-                            <span class="help-inline help-block">{error}</span>
-                        <!-- END error -->
-                    </div>
-                    <div class="col-sm-'.$size[2].'">
-                        <!-- BEGIN label_3 -->
-                            {label_3}
-                        <!-- END label_3 -->
-                    </div>
-                </div>';
-
-                break;
-            case FormValidator::LAYOUT_BOX_NO_LABEL:
-                return '
-                        <label {label-for}>{label}</label>
-                        <div class="input-group">
-
-                            {icon}
-                            {element}
-                        </div>';
-                break;
-            case FormValidator::LAYOUT_GRID:
-            case FormValidator::LAYOUT_BOX:
-                return '
-                        <label {label-for}>{label}</label>
-                        <div class="input-group">
-                            {label}
-                            {icon}
-                            {element}
-                        </div>';
-                break;
-        }
     }
 }

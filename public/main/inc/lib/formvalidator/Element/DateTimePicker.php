@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -89,58 +90,6 @@ class DateTimePicker extends HTML_QuickForm_text
     {
         $value = substr($value, 0, 16);
         $this->updateAttributes(['value' => $value]);
-    }
-
-    /**
-     * @param string $layout
-     *
-     * @return string
-     */
-    public function getTemplate($layout)
-    {
-        $size = $this->calculateSize();
-
-        switch ($layout) {
-            case FormValidator::LAYOUT_INLINE:
-                return '
-                <div class="form-group {error_class}">
-                    <label {label-for} >
-                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
-                        {label}
-                    </label>
-
-                    {element}
-                </div>';
-                break;
-            case FormValidator::LAYOUT_HORIZONTAL:
-                return '
-                <div class="form-group row {error_class}">
-                    <label {label-for} class="col-sm-'.$size[0].' col-form-label {extra_label_class}" >
-                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
-                        {label}
-                    </label>
-                    <div class="col-sm-'.$size[1].'">
-                        {icon}
-                        {element}
-                        <!-- BEGIN label_2 -->
-                            <p class="help-block">{label_2}</p>
-                        <!-- END label_2 -->
-
-                        <!-- BEGIN error -->
-                            <span class="help-inline help-block">{error}</span>
-                        <!-- END error -->
-                    </div>
-                    <div class="col-sm-'.$size[2].'">
-                        <!-- BEGIN label_3 -->
-                            {label_3}
-                        <!-- END label_3 -->
-                    </div>
-                </div>';
-                break;
-            case FormValidator::LAYOUT_BOX_NO_LABEL:
-                return '{element}';
-                break;
-        }
     }
 
     /**

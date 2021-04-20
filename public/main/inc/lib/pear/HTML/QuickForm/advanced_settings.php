@@ -5,12 +5,6 @@
  */
 class HTML_QuickForm_advanced_settings extends HTML_QuickForm_static
 {
-    /**
-     * Class constructor
-     *
-     * @param string $name
-     * @param string $label
-     */
     public function __construct($name = '', $label = '')
     {
         if (empty($label)) {
@@ -46,14 +40,15 @@ class HTML_QuickForm_advanced_settings extends HTML_QuickForm_static
         $text = $this->getAttribute('label');
         $label = is_array($text) ? $text[0] : $text;
 
-        $html = '<div class="form-group row"><label class="col-sm-2 col-form-label"></label>';
+        $html = '<div class="md:flex md:items-center mb-6">
+                    <label class="ch-form-label h-4 md:w-1/4 flex justify-left md:justify-end pr-3 text-gray-600"></label>';
 
         if (is_array($text) && isset($text[1])) {
             $html .= '<span class="clearfix">'.$text[1].'</span>';
         }
 
-        $html .= '  
-            <div class="col-sm-10">         
+        $html .= '
+            <div class="md:w-3/4 ">
             <button id="'.$name.'" type="button" class="btn btn-secondary advanced_options"
                     data-toggle="button" aria-pressed="false" autocomplete="off">
                 <em class="fa fa-bars"></em> '.$label.'

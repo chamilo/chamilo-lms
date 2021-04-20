@@ -1,10 +1,6 @@
 <?php
 
 /**
- * Class to dynamically create an HTML SELECT
- *
- * PHP versions 4 and 5
- *
  * LICENSE: This source file is subject to version 3.01 of the PHP license
  * that is available through the world-wide-web at the following URI:
  * http://www.php.net/license/3_01.txt If you did not receive a copy of
@@ -20,15 +16,6 @@
  * @license     http://www.php.net/license/3_01.txt PHP License 3.01
  * @version     CVS: $Id: select.php,v 1.34 2009/04/04 21:34:04 avb Exp $
  * @link        http://pear.php.net/package/HTML_QuickForm
- */
-
-/**
- * Class to dynamically create an HTML SELECT
- *
- * @category    HTML
- * @package     HTML_QuickForm
- * @author      Adam Daniel <adaniel1@eesus.jnj.com>
- * @author      Bertrand Mansion <bmansion@mamasam.com>
  * @author      Alexey Borzov <avb@php.net>
  * @version     Release: 3.2.11
  * @since       1.0
@@ -79,7 +66,8 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
             if (empty($attributes)) {
                 $attributes = []; // Initialize variable to avoid warning in PHP 7.1
             }
-            $attributes['class'] = $oldClass . ' selectpicker form-control';
+            //selectpicker
+            $attributes['class'] = $oldClass . '  form-control mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-indigo-500 sm:text-sm';
             $attributes['data-live-search'] = 'true';
 
             if (isset($attributes['disable_js']) && $attributes['disable_js']) {
@@ -553,70 +541,5 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                 });
             </script>'
         );
-    }
-
-    /**
-     * @param string $layout
-     *
-     * @return string
-     */
-    public function getTemplate($layout)
-    {
-        $size = $this->calculateSize();
-
-        switch ($layout) {
-            case FormValidator::LAYOUT_INLINE:
-                return '
-                <div class="row mb-3  {error_class}">
-                    <label {label-for} >
-                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
-                        {label}
-                    </label>
-                    {element}
-                </div>';
-                break;
-            case FormValidator::LAYOUT_HORIZONTAL:
-                return '
-                <div class="row form-group {error_class}">
-                    <label {label-for}  class="col-sm-'.$size[0].' col-form-label  {extra_label_class}" >
-                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
-                        {label}
-                    </label>
-                    <div class="col-sm-'.$size[1].'">
-                        {icon}
-                        {element}
-
-                        <!-- BEGIN label_2 -->
-                            <p class="help-block">{label_2}</p>
-                        <!-- END label_2 -->
-
-                        <!-- BEGIN error -->
-                            <span class="help-inline help-block">{error}</span>
-                        <!-- END error -->
-                    </div>
-                    <div class="col-sm-'.$size[2].'">
-                        <!-- BEGIN label_3 -->
-                            {label_3}
-                        <!-- END label_3 -->
-                    </div>
-                </div>';
-                break;
-            case FormValidator::LAYOUT_BOX_NO_LABEL:
-                return '
-                        <div class="input-group">
-                            {icon}
-                            {element}
-                        </div>';
-                break;
-            case FormValidator::LAYOUT_GRID:
-            case FormValidator::LAYOUT_BOX:
-                return '
-                        <div class="input-group" style="z-index: auto">
-                            <label>{label}</label>
-                            {icon}
-                            {element}
-                        </div>';
-                break;
-        }
     }
 }

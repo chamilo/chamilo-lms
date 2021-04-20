@@ -56,8 +56,8 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
         $value = null,
         $attributes = []
     ) {
-        $this->labelClass = isset($attributes['label-class']) ? $attributes['label-class'] : '';
-        $this->radioClass = isset($attributes['radio-class']) ? $attributes['radio-class'] : 'form-check';
+        $this->labelClass = $attributes['label-class'] ?? '';
+        $this->radioClass = $attributes['radio-class'] ?? 'form-check';
 
         if (isset($attributes['label-class'])) {
             unset($attributes['label-class']);
@@ -68,7 +68,7 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
         }
         $attributes['class'] = ' form-check-input';
 
-        $columnsSize = isset($attributes['cols-size']) ? $attributes['cols-size'] : null;
+        $columnsSize = $attributes['cols-size'] ?? null;
         $this->setColumnsSize($columnsSize);
 
         parent::__construct($elementName, $elementLabel, $attributes);
@@ -103,12 +103,10 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
             $radioClass = $this->radioClass;
             $id = $this->getAttribute('id');
 
-            $label = '<div class="'.$radioClass.'">
+            return '<div class="'.$radioClass.'">
                 '.HTML_QuickForm_input::toHtml().'
                 <label for="'.$id.'" class="form-check-label '.$labelClass.'">'.$this->_text.'</label>
             </div>';
-
-            return $label;
         }
 
         return parent::toHtml().$label;

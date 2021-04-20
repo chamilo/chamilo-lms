@@ -1,8 +1,6 @@
 {% block content %}
+{#    deprecated#}
     {% autoescape false %}
-{#        <div id="app" data-resource="{{ resource.resourceNode.id }}" >#}
-{#        </div>#}
-
         <div id="app">
             <resource :id="{{ resource.resourceNode.id }}"></resource>
         </div>

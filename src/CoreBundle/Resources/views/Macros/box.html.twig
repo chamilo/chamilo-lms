@@ -245,18 +245,21 @@
 
 {% macro panel_box(id, title, content, subtitle) %}
     {% autoescape false %}
-        <div id="box-{{ id }}" class="card card-{{ id }}">
-            <div class="card-body">
+        <div id="box-{{ id }}" class="q-card card-{{ id }}">
+            <div class="q-card__section q-card__section--vert">
+                <div class="text-h6">
                 {% if title %}
                     {{ title }}
                 {% endif %}
+                </div>
+            </div>
 
+            <div class="q-card__section q-card__section--vert">
                 {{ content }}
 
                 {% if subtitle %}
                     {{ subtitle }}
                 {% endif %}
-
             </div>
         </div>
     {% endautoescape %}
@@ -430,6 +433,32 @@
         </div>
     </div>
 {% endmacro %}
+
+{% macro card_widget(name, content, icon, extra) %}
+    <div class="card card-first-date">
+        <div class="card-body">
+            <div class="stat-widget-five">
+                <div class="stat-icon">
+                    <i class="fa fa-{{ icon }}" aria-hidden="true"></i>
+                    {% if extra %}
+                        <span class="active-icon">{{ extra }}</span>
+                    {% endif %}
+                </div>
+                <div class="stat-content">
+                    <div class="text-left">
+                        <div class="stat-text">
+                            {{ content }}
+                        </div>
+                        <div class="stat-heading">
+                            {{ name }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
 
 {% macro reporting_user_details(user) %}
     {% autoescape false %}

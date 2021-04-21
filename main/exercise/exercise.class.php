@@ -666,7 +666,7 @@ class Exercise
             if (!empty($sidx) && !empty($sord)) {
                 if ('question' === $sidx) {
                     if (in_array(strtolower($sord), ['desc', 'asc'])) {
-                        $orderCondition = " ORDER BY q.$sidx $sord";
+                        $orderCondition = " ORDER BY `q.$sidx` $sord";
                     }
                 }
             }

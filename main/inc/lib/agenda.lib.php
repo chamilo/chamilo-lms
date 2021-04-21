@@ -1240,9 +1240,7 @@ class Agenda
                         if (!empty($sessionList)) {
                             foreach ($sessionList as $sessionItem) {
                                 $sessionId = $sessionItem['id'];
-                                $courses = SessionManager::get_course_list_by_session_id(
-                                    $sessionId
-                                );
+                                $courses = SessionManager::get_course_list_by_session_id($sessionId);
                                 $sessionInfo = [
                                     'session_id' => $sessionId,
                                     'courses' => $courses,
@@ -3404,9 +3402,14 @@ class Agenda
 
         $current_access_url_id = api_get_current_access_url_id();
 
-        if ($type == "month_view" or $type == "") {
+        if ($type == "month_view" || $type == "") {
             // We are in month view
-            $sql = "SELECT * FROM ".$tbl_global_agenda." WHERE MONTH(start_date) = ".$month." AND YEAR(start_date) = ".$year."  AND access_url_id = $current_access_url_id ORDER BY start_date ASC";
+            $sql = "SELECT * FROM ".$tbl_global_agenda."
+                    WHERE
+                        MONTH(start_date) = ".$month." AND
+                        YEAR(start_date) = ".$year."  AND
+                        access_url_id = $current_access_url_id
+                    ORDER BY start_date ASC";
         }
         // 2. creating the SQL statement for getting the personal agenda items in WEEK view
         if ($type == "week_view") { // we are in week view
@@ -3537,9 +3540,14 @@ class Agenda
         $user_id = intval($user_id);
 
         // 1. creating the SQL statement for getting the personal agenda items in MONTH view
-        if ($type == "month_view" or $type == "") {
+        if ($type === "month_view" || $type === "") {
             // we are in month view
-            $sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$user_id."' and MONTH(date)='".$month."' AND YEAR(date) = '".$year."'  ORDER BY date ASC";
+            $sql = "SELECT * FROM $tbl_personal_agenda
+                    WHERE
+                        user='".$user_id."' AND
+                        MONTH(date)='".$month."' AND
+                        YEAR(date) = '".$year."'
+                     ORDER BY date ASC";
         }
 
         // 2. creating the SQL statement for getting the personal agenda items in WEEK view

@@ -552,7 +552,7 @@ class MySpace
             }
         }
         if (!empty($order[$tracking_column])) {
-            $sqlCoachs .= ' ORDER BY '.$order[$tracking_column].' '.$tracking_direction;
+            $sqlCoachs .= " ORDER BY `".$order[$tracking_column]."` ".$tracking_direction;
         }
 
         $result_coaches = Database::query($sqlCoachs);
@@ -3041,9 +3041,10 @@ class MySpace
             $direction = 'ASC';
         }
 
-        $column = intval($column);
-        $from = intval($from);
-        $number_of_items = intval($number_of_items);
+        $column = (int) $column;
+        $from = (int) $from;
+        $number_of_items = (int) $number_of_items;
+
         $sql .= " ORDER BY col$column $direction ";
         $sql .= " LIMIT $from,$number_of_items";
 
@@ -3173,7 +3174,7 @@ class MySpace
         }
 
         $order = [
-            "$column $direction",
+            " `$column` $direction",
         ];
         $userList = UserManager::get_user_list([], $order, $from, $numberItems);
         $return = [];
@@ -3874,6 +3875,7 @@ class MySpace
         $numberItems = (int) $numberItems;
         $column = (int) $column;
         $orderDirection = Database::escape_string($orderDirection);
+        $orderDirection = !in_array(strtolower(trim($orderDirection)), ['asc', 'desc']) ? 'asc' : $orderDirection;
 
         $user = Database::get_main_table(TABLE_MAIN_USER);
         $course = Database::get_main_table(TABLE_MAIN_COURSE);

@@ -803,7 +803,7 @@ class SessionManager
         $options
     ) {
         //escaping vars
-        $sessionId = $sessionId == 'T' ? 'T' : intval($sessionId);
+        $sessionId = $sessionId === 'T' ? 'T' : intval($sessionId);
         $courseId = intval($courseId);
 
         //tables
@@ -813,7 +813,7 @@ class SessionManager
 
         $course = api_get_course_info_by_id($courseId);
         $sessionCond = 'and session_id = %s';
-        if ($sessionId == 'T') {
+        if ($sessionId === 'T') {
             $sessionCond = '';
         }
 
@@ -830,7 +830,7 @@ class SessionManager
 
         $order = null;
         if (!empty($options['order'])) {
-            $order = " ORDER BY ".$options['order'];
+            $order = " ORDER BY ".$options['order']." ";
         }
 
         $sql = "SELECT u.id as user_id, u.lastname, u.firstname, u.username, u.email, s.c_id
@@ -3347,7 +3347,7 @@ class SessionManager
             }
 
             if (!empty($order)) {
-                $sql_query .= " ORDER BY $order $direction ";
+                $sql_query .= " ORDER BY `$order` $direction ";
             }
         }
 
@@ -6286,7 +6286,7 @@ class SessionManager
 
         if (!empty($column) && !empty($direction)) {
             $column = str_replace('u.', '', $column);
-            $sql .= " ORDER BY $column $direction ";
+            $sql .= " ORDER BY `$column` $direction ";
         }
 
         $limitCondition = '';

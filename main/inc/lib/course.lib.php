@@ -239,7 +239,7 @@ class CourseManager
         }
 
         if (!empty($orderby)) {
-            $sql .= " ORDER BY ".Database::escape_string($orderby)." ";
+            $sql .= " ORDER BY `".Database::escape_string($orderby)."` ";
         } else {
             $sql .= ' ORDER BY 1 ';
         }
@@ -247,11 +247,11 @@ class CourseManager
         if (!in_array($orderdirection, ['ASC', 'DESC'])) {
             $sql .= 'ASC';
         } else {
-            $sql .= ($orderdirection == 'ASC' ? 'ASC' : 'DESC');
+            $sql .= ($orderdirection === 'ASC' ? 'ASC' : 'DESC');
         }
 
         if (!empty($howmany) && is_int($howmany) and $howmany > 0) {
-            $sql .= ' LIMIT '.Database::escape_string($howmany);
+            $sql .= ' LIMIT '.(int) $howmany;
         } else {
             $sql .= ' LIMIT 1000000'; //virtually no limit
         }
@@ -1534,7 +1534,7 @@ class CourseManager
         // we have to check if it is a valid field that can be sorted on
         if (!strstr($order_by, 'ORDER BY')) {
             if (!empty($order_by)) {
-                $order_by = "ORDER BY $order_by";
+                $order_by = "ORDER BY $order_by ";
             } else {
                 $order_by = '';
             }

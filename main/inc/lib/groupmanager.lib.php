@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
@@ -1233,9 +1234,9 @@ class GroupManager
                     g.id = $group_id";
 
         if (!empty($column) && !empty($direction)) {
-            $column = Database::escape_string($column, null, false);
-            $direction = ('ASC' == $direction ? 'ASC' : 'DESC');
-            $sql .= " ORDER BY $column $direction";
+            $column = Database::escape_string($column);
+            $direction = ('ASC' === $direction ? 'ASC' : 'DESC');
+            $sql .= " ORDER BY `$column` $direction";
         }
 
         if (!empty($start) && !empty($limit)) {

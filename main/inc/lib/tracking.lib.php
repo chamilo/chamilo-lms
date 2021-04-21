@@ -3784,7 +3784,7 @@ class Tracking
             if (in_array($orderByName, ['name', 'access_start_date'])) {
                 $orderByDirection = in_array(strtolower($orderByDirection), ['asc', 'desc']) ? $orderByDirection : 'asc';
                 $orderByName = Database::escape_string($orderByName);
-                $orderBy .= " ORDER BY $orderByName $orderByDirection";
+                $orderBy .= " ORDER BY `$orderByName` $orderByDirection";
             }
         }
 
@@ -7780,7 +7780,8 @@ class TrackingCourseLog
         $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $table_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $session_id = intval($session_id);
+        $column = (int) $column;
+        $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
 
         $sql = "SELECT
                     tool as col0,

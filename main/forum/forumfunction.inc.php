@@ -6128,6 +6128,7 @@ function get_thread_user_post_limit($course_code, $thread_id, $user_id, $limit =
 
     $course_info = api_get_course_info($course_code);
     $course_id = $course_info['real_id'];
+    $limit = (int) $limit;
 
     $sql = "SELECT * FROM $table_posts posts
             LEFT JOIN  $table_users users
@@ -6136,7 +6137,8 @@ function get_thread_user_post_limit($course_code, $thread_id, $user_id, $limit =
                 posts.c_id = $course_id AND
                 posts.thread_id='".Database::escape_string($thread_id)."' AND
                 posts.poster_id='".Database::escape_string($user_id)."'
-            ORDER BY posts.post_id DESC LIMIT $limit ";
+            ORDER BY posts.post_id DESC
+            LIMIT $limit ";
     $result = Database::query($sql);
     $post_list = [];
     while ($row = Database::fetch_array($result)) {

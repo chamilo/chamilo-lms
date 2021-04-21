@@ -1272,7 +1272,7 @@ function getWorkListStudent(
                 $where_condition
             ";
 
-    $sql .= " ORDER BY $column $direction ";
+    $sql .= " ORDER BY `$column` $direction ";
 
     if (!empty($start) && !empty($limit)) {
         $sql .= " LIMIT $start, $limit";
@@ -1469,7 +1469,7 @@ function getAllWorkListStudent(
                 $where
             ";
 
-    $sql .= " ORDER BY $column $direction ";
+    $sql .= " ORDER BY `$column` $direction ";
 
     if (!empty($start) && !empty($limit)) {
         $sql .= " LIMIT $start, $limit";
@@ -1628,7 +1628,7 @@ function getWorkListTeacher(
                     parent_id = 0 AND
                     post_group_id = $groupIid
                     $where_condition
-                ORDER BY $column $direction
+                ORDER BY `$column` $direction
                 LIMIT $start, $limit";
 
         $result = Database::query($sql);
@@ -1876,7 +1876,7 @@ function get_work_user_list_from_documents(
         return $result['count'];
     }
 
-    $sql .= " ORDER BY $column $direction";
+    $sql .= " ORDER BY `$column` $direction";
     $sql .= " LIMIT $start, $limit";
 
     $result = Database::query($sql);
@@ -2157,7 +2157,7 @@ function get_work_user_list(
                     $whereCondition
                     $condition_session
                     AND u.status != ".INVITEE."
-                ORDER BY $column $direction";
+                ORDER BY `$column` $direction";
 
         if (!empty($start) && !empty($limit)) {
             $sql .= " LIMIT $start, $limit";
@@ -2686,7 +2686,7 @@ function getAllWork(
                 $statusCondition
                 AND u.status != ".INVITEE;
 
-    $sql .= " ORDER BY $column $direction ";
+    $sql .= " ORDER BY `$column` $direction ";
 
     if (!empty($start) && !empty($limit)) {
         $sql .= " LIMIT $start, $limit";
@@ -5765,10 +5765,9 @@ function getWorkUserList($courseCode, $sessionId, $groupId, $start, $limit, $sid
         }
 
         $orderBy = null;
-
         if (!empty($sidx) && !empty($sord)) {
             if (in_array($sidx, ['firstname', 'lastname'])) {
-                $orderBy = "ORDER BY $sidx $sord";
+                $orderBy = "ORDER BY `$sidx` $sord";
             }
         }
 

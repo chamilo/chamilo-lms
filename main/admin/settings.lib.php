@@ -1279,6 +1279,11 @@ function getTemplateData($from, $number_of_items, $column, $direction)
     // Database table definition.
     $table_system_template = Database::get_main_table('system_template');
 
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+    $column = (int) $column;
+    $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
+
     // The sql statement.
     $sql = "SELECT image as col0, title as col1, id as col2 FROM $table_system_template";
     $sql .= " ORDER BY col$column $direction ";

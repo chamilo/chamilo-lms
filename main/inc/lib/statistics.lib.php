@@ -977,7 +977,7 @@ class Statistics
                    HAVING t.c_id <> ''
                    AND DATEDIFF( '".api_get_utc_datetime()."' , access_date ) <= ".$date_diff;
         }
-        $sql .= ' ORDER BY '.$columns[$column].' '.$sql_order[$direction];
+        $sql .= ' ORDER BY `'.$columns[$column].'` '.$sql_order[$direction];
         $from = ($page_nr - 1) * $per_page;
         $sql .= ' LIMIT '.$from.','.$per_page;
 

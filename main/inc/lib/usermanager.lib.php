@@ -2874,7 +2874,7 @@ class UserManager
             $field_filter = (int) $field_filter;
             $sqlf .= " AND filter = $field_filter ";
         }
-        $sqlf .= " ORDER BY ".$columns[$column]." $sort_direction ";
+        $sqlf .= " ORDER BY `".$columns[$column]."` $sort_direction ";
         if ($number_of_items != 0) {
             $sqlf .= " LIMIT ".intval($from).','.intval($number_of_items);
         }
@@ -4468,7 +4468,9 @@ class UserManager
 
         // all the information of the field
         $sql = "SELECT DISTINCT id, tag from $table_user_tag
-                WHERE field_id = $field_id AND tag LIKE '$tag%' ORDER BY tag LIMIT $limit";
+                WHERE field_id = $field_id AND tag LIKE '$tag%'
+                ORDER BY tag
+                LIMIT $limit";
         $result = Database::query($sql);
         $return = [];
         if (Database::num_rows($result) > 0) {
@@ -5487,7 +5489,6 @@ class UserManager
                             $userConditions
                     )
                     $teacherSelect
-
                 ) as t1";
 
         if ($getSql) {
@@ -5511,7 +5512,7 @@ class UserManager
             if (!empty($column) && !empty($direction)) {
                 // Fixing order due the UNIONs
                 $column = str_replace('u.', '', $column);
-                $orderBy = " ORDER BY $column $direction ";
+                $orderBy = " ORDER BY `$column` $direction ";
             }
         }
 

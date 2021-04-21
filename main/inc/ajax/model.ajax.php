@@ -1015,7 +1015,7 @@ switch ($action) {
 
         $result = $manager->get_all([
             'where' => ['c_id = ? ' => $courseId],
-            'order' => "$sidx $sord",
+            'order' => "`$sidx` $sord",
             'LIMIT' => "$start , $limit",
         ]);
         break;
@@ -1068,7 +1068,7 @@ switch ($action) {
             $object->table,
             [
                 'where' => ['session_id = ? ' => $sessionId],
-                'order' => "$sidx $sord",
+                'order' => "`$sidx` $sord",
                 'LIMIT' => "$start , $limit", ]
         );
         if ($result) {
@@ -1231,7 +1231,7 @@ switch ($action) {
                 null,
                 null,
                 "LIMIT $start, $limit",
-                " $sidx $sord",
+                " `$sidx` $sord",
                 null,
                 null,
                 true,
@@ -1251,7 +1251,7 @@ switch ($action) {
             null,
             null,
             "LIMIT $start, $limit",
-            " $sidx $sord",
+            " `$sidx` $sord",
             null,
             null,
             true,
@@ -1909,7 +1909,7 @@ switch ($action) {
                 $result = SessionManager::get_sessions_admin_complete(
                     [
                         'where' => $whereCondition,
-                        'order' => "$sidx $sord, s.name",
+                        'order' => "`$sidx` $sord, s.name",
                         'extra' => $extra_fields,
                         'limit' => "$start , $limit",
                     ]
@@ -1922,7 +1922,7 @@ switch ($action) {
                 $result = SessionManager::formatSessionsAdminForGrid(
                     [
                         'where' => $whereCondition,
-                        'order' => "$sidx $sord, s.name",
+                        'order' => "`$sidx` $sord, s.name",
                         'extra' => $extra_fields,
                         'limit' => "$start , $limit",
                     ],
@@ -1964,7 +1964,7 @@ switch ($action) {
             $date_to,
             [
                 'where' => $whereCondition,
-                'order' => "$sidx $sord",
+                'order' => "`$sidx` $sord",
                 'limit' => "$start , $limit",
             ]
         );
@@ -2000,7 +2000,7 @@ switch ($action) {
             $date_to,
             [
                 'where' => $whereCondition,
-                'order' => "$sidx $sord",
+                'order' => "`$sidx` $sord",
                 'limit' => "$start , $limit",
             ]
         );
@@ -2041,7 +2041,7 @@ switch ($action) {
             $date_to,
             [
                 'where' => $whereCondition,
-                'order' => "$sidx $sord",
+                'order' => "`$sidx` $sord",
                 'limit' => "$start , $limit",
             ]
         );
@@ -2104,7 +2104,7 @@ switch ($action) {
             null,
             [
                 'where' => $whereCondition,
-                'order' => "$sidx $sord",
+                'order' => "`$sidx` $sord",
                 'limit' => "$start , $limit",
             ]
         );
@@ -2139,7 +2139,7 @@ switch ($action) {
             $date_from,
             [
                 'where' => $whereCondition,
-                'order' => "$sidx $sord",
+                'order' => "`$sidx` $sord",
                 'limit' => "$start , $limit",
             ]
         );
@@ -2158,7 +2158,7 @@ switch ($action) {
                 'where' => [
                     'parent_id = ? AND c_id = ?' => ['0', $course_id],
                 ],
-                'order' => "$sidx $sord",
+                'order' => "`$sidx` $sord",
                 'LIMIT' => "$start , $limit",
             ]
         );
@@ -2184,7 +2184,7 @@ switch ($action) {
         $result = Database::select(
             '*',
             $obj->table,
-            ['order' => "$sidx $sord", 'LIMIT' => "$start , $limit"]
+            ['order' => "`$sidx` $sord", 'LIMIT' => "$start , $limit"]
         );
         $new_result = [];
         foreach ($result as $item) {
@@ -2239,7 +2239,7 @@ switch ($action) {
         $result = Database::select(
             '*',
             $obj->table,
-            ['order' => "$sidx $sord", 'LIMIT' => "$start , $limit"]
+            ['order' => "`$sidx` $sord", 'LIMIT' => "$start , $limit"]
         );
         $new_result = [];
         foreach ($result as $item) {
@@ -2265,7 +2265,7 @@ switch ($action) {
         $result = Database::select(
             '*',
             $obj->table,
-            ['order' => "$sidx $sord", 'LIMIT' => "$start , $limit"]
+            ['order' => "`$sidx` $sord", 'LIMIT' => "$start , $limit"]
         );
         $new_result = [];
         foreach ($result as $item) {
@@ -2285,7 +2285,7 @@ switch ($action) {
         $result = Database::select(
             'p.id,p.name, p.description, c.name as career, p.status',
             "$obj->table p LEFT JOIN ".Database::get_main_table(TABLE_CAREER)." c  ON c.id = p.career_id ",
-            ['order' => "$sidx $sord", 'LIMIT' => "$start , $limit"]
+            ['order' => "`$sidx` $sord", 'LIMIT' => "$start , $limit"]
         );
 
         $new_result = [];
@@ -2312,7 +2312,7 @@ switch ($action) {
             $obj->table,
             [
                 'where' => ['url_id = ? ' => api_get_current_access_url_id()],
-                'order' => "$sidx $sord",
+                'order' => "`$sidx` $sord",
                 'LIMIT' => "$start , $limit",
             ]
         );
@@ -2331,7 +2331,7 @@ switch ($action) {
         $result = Database::select(
             '*',
             "$obj->table ",
-            ['order' => "$sidx $sord", 'LIMIT' => "$start , $limit"]
+            ['order' => "`$sidx` $sord", 'LIMIT' => "$start , $limit"]
         );
         $new_result = [];
         foreach ($result as $item) {
@@ -2491,7 +2491,7 @@ switch ($action) {
         $columns = ['display_text', 'option_value', 'option_order'];
         $result = $obj->get_all([
             'where' => ['field_id = ? ' => $field_id],
-            'order' => "$sidx $sord",
+            'order' => "`$sidx` $sord",
             'LIMIT' => "$start , $limit",
         ]);
         break;
@@ -2516,10 +2516,7 @@ switch ($action) {
                 );
                 break;
             case 'registered':
-                $result = $obj->getUserGroupInCourse(
-                    $options,
-                    $groupFilter
-                );
+                $result = $obj->getUserGroupInCourse($options, $groupFilter);
                 break;
         }
 

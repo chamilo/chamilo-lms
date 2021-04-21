@@ -1357,6 +1357,10 @@ if (empty($details)) {
             $columnHeaders['student_follow_page_add_LP_subscription_info'] = get_lang('Unlock');
         }
 
+        if (true === api_get_configuration_value('student_follow_page_add_LP_acquisition_info')) {
+            $columnHeaders['student_follow_page_add_LP_acquisition_info'] = get_lang('Acquisition');
+        }
+
         $headers = '';
         $columnHeadersToExport = [];
         // csv export headers
@@ -1578,6 +1582,18 @@ if (empty($details)) {
                     echo Display::tag(
                         'td',
                         Tracking::getStudentFollowPageLpSubscription(
+                            $learnpath,
+                            $student_id,
+                            $courseInfo['real_id'],
+                            $sessionId
+                        )
+                    );
+                }
+
+                if (in_array('student_follow_page_add_LP_acquisition_info', $columnHeadersKeys)) {
+                    echo Display::tag(
+                        'td',
+                        StudentFollowPage::getLpAcquisition(
                             $learnpath,
                             $student_id,
                             $courseInfo['real_id'],

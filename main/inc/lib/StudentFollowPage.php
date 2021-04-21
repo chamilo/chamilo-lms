@@ -102,17 +102,20 @@ class StudentFollowPage
 
                 $return .= $optionSelected['display_text'].'<br>'
                     .Display::tag('small', $register->getCompleteName()).'<br>'
-                    .Display::tag('small', api_convert_and_format_date($valueComment['datetime'], DATE_TIME_FORMAT_LONG));
+                    .Display::tag(
+                        'small',
+                        api_convert_and_format_date($valueComment['datetime'], DATE_TIME_FORMAT_LONG)
+                    ).'<br>';
             }
         }
 
-        $return .= Display::toolbarButton(
-            get_lang('Edit'),
-            api_get_path(WEB_AJAX_PATH).'student_follow_page.ajax.php?'
-            .http_build_query(['lp_view' => $lpView['iid'], 'a' => 'form_adquisition']),
-            'refresh',
-            'info',
-            ['class' => 'btn-sm ajax', 'data-title' => $lpInfo['lp_name']]
+        $editUrl = api_get_path(WEB_AJAX_PATH).'student_follow_page.ajax.php?'
+            .http_build_query(['lp_view' => $lpView['iid'], 'a' => 'form_adquisition']);
+
+        $return .= Display::url(
+            Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_TINY),
+            $editUrl,
+            ['class' => 'ajax', 'data-title' => $lpInfo['lp_name']]
         );
 
         return '<div id="acquisition-'.$lpView['iid'].'">'.$return.'</div>';

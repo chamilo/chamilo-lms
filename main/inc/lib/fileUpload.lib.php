@@ -1095,7 +1095,6 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
             error_log('Could not create directory '.$base_work_dir.$upload_path.' to unzip files');
         }
         chdir($save_dir); // Back to previous dir position
-
     }
 
     return true;

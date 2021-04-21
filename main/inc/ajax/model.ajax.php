@@ -1013,9 +1013,11 @@ switch ($action) {
         $columns = ['name', 'actions'];
         $manager = new ExerciseCategoryManager();
 
+        $sidx = in_array($sidx, $columns) ? $sidx : 'name';
+
         $result = $manager->get_all([
             'where' => ['c_id = ? ' => $courseId],
-            'order' => "`$sidx` $sord",
+            'order' => "$sidx $sord",
             'LIMIT' => "$start , $limit",
         ]);
         break;
@@ -1041,6 +1043,7 @@ switch ($action) {
         break;
     case 'get_learning_path_calendars':
         $columns = ['title', 'total_hours', 'minutes_per_day', 'actions'];
+        $sidx = in_array($sidx, $columns) ? $sidx : 'title';
         $result = $calendarPlugin->getCalendars(
             $start,
             $limit,
@@ -1050,6 +1053,7 @@ switch ($action) {
         break;
     case 'course_log_events':
         $columns = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+        $sidx = in_array($sidx, $columns) ? $sidx : '0';
         $result = Statistics::getActivitiesData(
             $start,
             $limit,
@@ -1062,13 +1066,13 @@ switch ($action) {
     case 'get_programmed_announcements':
         $columns = ['subject', 'date', 'sent', 'actions'];
         $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : 0;
-
+        $sidx = in_array($sidx, $columns) ? $sidx : 'subject';
         $result = Database::select(
             '*',
             $object->table,
             [
                 'where' => ['session_id = ? ' => $sessionId],
-                'order' => "`$sidx` $sord",
+                'order' => "$sidx $sord",
                 'LIMIT' => "$start , $limit", ]
         );
         if ($result) {
@@ -1080,6 +1084,7 @@ switch ($action) {
         break;
     case 'get_group_reporting':
         $columns = ['name', 'time', 'progress', 'score', 'works', 'messages', 'actions'];
+        $sidx = in_array($sidx, $columns) ? $sidx : 'name';
 
         $result = Tracking::get_group_reporting(
             $course_id,
@@ -1095,6 +1100,7 @@ switch ($action) {
         break;
     case 'get_course_exercise_medias':
         $columns = ['question'];
+        $sidx = in_array($sidx, $columns) ? $sidx : 'question';
         $result = Question::get_course_medias(
             $course_id,
             $start,
@@ -1151,7 +1157,7 @@ switch ($action) {
             null,
             null,
             "LIMIT $start, $limit",
-            null, //" $sidx $sord",
+            null,
             null,
             null,
             true,
@@ -1231,7 +1237,7 @@ switch ($action) {
                 null,
                 null,
                 "LIMIT $start, $limit",
-                " `$sidx` $sord",
+                " $sidx $sord",
                 null,
                 null,
                 true,
@@ -1251,7 +1257,7 @@ switch ($action) {
             null,
             null,
             "LIMIT $start, $limit",
-            " `$sidx` $sord",
+            " $sidx $sord",
             null,
             null,
             true,
@@ -1290,6 +1296,7 @@ switch ($action) {
         if (trim($whereCondition) === '1 = 1') {
             $whereCondition = '';
         }
+        $sidx = in_array($sidx, $columns) ? $sidx : 'firstname';
         $result = $skill->getUserListSkillRanking(
             $start,
             $limit,
@@ -1330,7 +1337,7 @@ switch ($action) {
 
         $titleToSearch = isset($_REQUEST['title_to_search']) ? $_REQUEST['title_to_search'] : '';
         $userIdToSearch = isset($_REQUEST['user_id_to_search']) ? $_REQUEST['user_id_to_search'] : 0;
-
+        $sidx = in_array($sidx, $columns) ? $sidx : 'title';
         $result = AnnouncementManager::getAnnouncements(
             null,
             null,
@@ -1353,6 +1360,7 @@ switch ($action) {
             'amount',
             'actions',
         ];
+        $sidx = in_array($sidx, $columns) ? $sidx : 'title';
         $result = getWorkListTeacher(
             $start,
             $limit,
@@ -1370,6 +1378,8 @@ switch ($action) {
             'last_upload',
             'others',
         ];
+
+        $sidx = in_array($sidx, $columns) ? $sidx : 'title';
         $result = getWorkListStudent(
             $start,
             $limit,
@@ -1389,6 +1399,7 @@ switch ($action) {
             $columns[] = 'feedback';
             $columns[] = 'last_upload';
         }
+        $sidx = in_array($sidx, $columns) ? $sidx : 'title';
         $result = getAllWorkListStudent(
             $start,
             $limit,
@@ -1429,6 +1440,8 @@ switch ($action) {
 
         $whereCondition = " AND $whereCondition ";
 
+        $sidx = in_array($sidx, $columns) ? $sidx : 'title';
+
         $result = get_work_user_list(
             $start,
             $limit,
@@ -1459,6 +1472,9 @@ switch ($action) {
         ];
         $columns = array_merge($columns, $plagiarismColumns);
         $columns[] = 'actions';
+
+        $sidx = in_array($sidx, $columns) ? $sidx : 'work_name';
+
         $result = getAllWork(
             $start,
             $limit,
@@ -1493,6 +1509,9 @@ switch ($action) {
         }
 
         $whereCondition .= " AND u.user_id <> ".api_get_user_id();
+
+        $sidx = in_array($sidx, $columns) ? $sidx : 'firstname';
+
         $result = get_work_user_list(
             $start,
             $limit,
@@ -1523,6 +1542,8 @@ switch ($action) {
         if (trim($whereCondition) === '1 = 1') {
             $whereCondition = '';
         }
+
+        $sidx = in_array($sidx, $columns) ? $sidx : 'title';
 
         if (empty($documents)) {
             $whereCondition .= ' AND u.user_id = '.api_get_user_id();
@@ -1565,6 +1586,8 @@ switch ($action) {
         if ($officialCodeInList === 'true') {
             $columns = array_merge(['official_code'], $columns);
         }
+
+        $sidx = in_array($sidx, $columns) ? $sidx : 'course';
 
         $result = ExerciseLib::get_exam_results_data(
             $start,
@@ -1611,6 +1634,8 @@ switch ($action) {
                 $columns = array_merge(['official_code'], $columns);
             }
         }
+
+        $sidx = in_array($sidx, $columns) ? $sidx : 'firstname';
 
         $result = ExerciseLib::get_exam_results_data(
             $start,
@@ -1701,6 +1726,8 @@ switch ($action) {
 
         $whereCondition .= " AND te.status = '' ";
 
+        $sidx = in_array($sidx, $columns) ? $sidx : 'firstname';
+
         $result = ExerciseLib::get_exam_results_data(
             $start,
             $limit,
@@ -1725,6 +1752,7 @@ switch ($action) {
         } else {
             $columns = ['exe_date', 'score', 'actions'];
         }
+        $sidx = in_array($sidx, $columns) ? $sidx : 'firstname';
         $result = ExerciseLib::get_exam_results_hotpotatoes_data(
             $start,
             $limit,
@@ -1742,6 +1770,8 @@ switch ($action) {
         $columns = [
             'student', 'works',
         ];
+
+        $sidx = in_array($sidx, $columns) ? $sidx : 'student';
 
         $result = getWorkUserListData(
             $workId,
@@ -1763,6 +1793,9 @@ switch ($action) {
         } else {
             $columns = ['exe_date', 'score', 'actions'];
         }
+
+        $sidx = in_array($sidx, $columns) ? $sidx : 'exe_date';
+
         $result = ExerciseLib::get_exam_results_hotpotatoes_data(
             $start,
             $limit,
@@ -1773,6 +1806,9 @@ switch ($action) {
         );
         break;
     case 'get_sessions_tracking':
+        $sessionColumns = SessionManager::getGridColumns('my_space');
+        $columns = $sessionColumns['simple_column_name'];
+
         if (api_is_drh()) {
             $orderByName = Database::escape_string($sidx);
             $orderByName = in_array($orderByName, ['name', 'access_start_date']) ? $orderByName : 'name';
@@ -1807,6 +1843,8 @@ switch ($action) {
                 ['where' => $whereCondition, 'extra' => $extra_fields]
             );
         } else {
+            $sidx = in_array($sidx, $columns) ? $sidx : 'name';
+
             // Sessions for the coach
             $sessions = Tracking::get_sessions_coached_by_user(
                 api_get_user_id(),
@@ -1820,9 +1858,6 @@ switch ($action) {
                 ['where' => $whereCondition, 'extra' => $extra_fields]
             );
         }
-
-        $sessionColumns = SessionManager::getGridColumns('my_space');
-        $columns = $sessionColumns['simple_column_name'];
 
         $result = [];
         if (!empty($sessions)) {
@@ -1904,12 +1939,14 @@ switch ($action) {
         $sessionColumns = SessionManager::getGridColumns($listType);
         $columns = $sessionColumns['simple_column_name'];
 
+        $sidx = in_array($sidx, $columns) ? $sidx : 'name';
+
         switch ($listType) {
             case 'complete':
                 $result = SessionManager::get_sessions_admin_complete(
                     [
                         'where' => $whereCondition,
-                        'order' => "`$sidx` $sord, s.name",
+                        'order' => "$sidx $sord, s.name",
                         'extra' => $extra_fields,
                         'limit' => "$start , $limit",
                     ]
@@ -1922,7 +1959,7 @@ switch ($action) {
                 $result = SessionManager::formatSessionsAdminForGrid(
                     [
                         'where' => $whereCondition,
-                        'order' => "`$sidx` $sord, s.name",
+                        'order' => "$sidx $sord, s.name",
                         'extra' => $extra_fields,
                         'limit' => "$start , $limit",
                     ],
@@ -1955,6 +1992,7 @@ switch ($action) {
             'answer',
             'correct',
         ];
+        $sidx = in_array($sidx, $columns) ? $sidx : 'quiz_title';
 
         $result = Tracking::get_exercise_progress(
             $sessionId,
@@ -1964,7 +2002,7 @@ switch ($action) {
             $date_to,
             [
                 'where' => $whereCondition,
-                'order' => "`$sidx` $sord",
+                'order' => "$sidx $sord",
                 'limit' => "$start , $limit",
             ]
         );
@@ -1985,14 +2023,14 @@ switch ($action) {
             'firstname',
             'lastname',
         ];
-        $lessons = LearnpathList::get_course_lessons(
-            $course['code'],
-            $sessionId
-        );
+        $lessons = LearnpathList::get_course_lessons($course['code'], $sessionId);
         foreach ($lessons as $lesson_id => $lesson) {
             $columns[] = $lesson_id;
         }
         $columns[] = 'total';
+
+        $sidx = in_array($sidx, $columns) ? $sidx : 'username';
+
         $result = SessionManager::get_session_lp_progress(
             $sessionId,
             $courseId,
@@ -2000,7 +2038,7 @@ switch ($action) {
             $date_to,
             [
                 'where' => $whereCondition,
-                'order' => "`$sidx` $sord",
+                'order' => "$sidx $sord",
                 'limit' => "$start , $limit",
             ]
         );
@@ -2016,8 +2054,8 @@ switch ($action) {
             $surveyId = intval($_GET['survey_id']);
             $date_from = $_GET['date_from'];
             $date_to = $_GET['date_to'];
-            //$course    = api_get_course_info_by_id($courseId);
         }
+
         /**
          * Add lessons of course.
          */
@@ -2033,6 +2071,8 @@ switch ($action) {
             $columns[] = $question_id;
         }
 
+        $sidx = in_array($sidx, $columns) ? $sidx : 'username';
+
         $result = SessionManager::get_survey_overview(
             $sessionId,
             $courseId,
@@ -2041,7 +2081,7 @@ switch ($action) {
             $date_to,
             [
                 'where' => $whereCondition,
-                'order' => "`$sidx` $sord",
+                'order' => "$sidx $sord",
                 'limit' => "$start , $limit",
             ]
         );
@@ -2097,6 +2137,9 @@ switch ($action) {
             $sessionId = intval($_GET['session_id']);
             $courseId = intval($_GET['course_id']);
         }
+
+        $sidx = in_array($sidx, $columns) ? $sidx : 'username';
+
         $result = SessionManager::get_session_progress(
             $sessionId,
             $courseId,
@@ -2104,7 +2147,7 @@ switch ($action) {
             null,
             [
                 'where' => $whereCondition,
-                'order' => "`$sidx` $sord",
+                'order' => "$sidx $sord",
                 'limit' => "$start , $limit",
             ]
         );
@@ -2130,6 +2173,8 @@ switch ($action) {
             $date_to = intval($_GET['date_to']);
         }
 
+        $sidx = in_array($sidx, $columns) ? $sidx : 'logindate';
+
         $result = SessionManager::get_user_data_access_tracking_overview(
             $sessionId,
             $courseId,
@@ -2139,7 +2184,7 @@ switch ($action) {
             $date_from,
             [
                 'where' => $whereCondition,
-                'order' => "`$sidx` $sord",
+                'order' => "$sidx $sord",
                 'limit' => "$start , $limit",
             ]
         );
@@ -2150,6 +2195,9 @@ switch ($action) {
         if (!in_array($sidx, $columns)) {
             $sidx = 'headline';
         }
+
+        $sidx = in_array($sidx, $columns) ? $sidx : 'headline';
+
         $course_id = api_get_course_int_id();
         $result = Database::select(
             '*',
@@ -2158,7 +2206,7 @@ switch ($action) {
                 'where' => [
                     'parent_id = ? AND c_id = ?' => ['0', $course_id],
                 ],
-                'order' => "`$sidx` $sord",
+                'order' => "$sidx $sord",
                 'LIMIT' => "$start , $limit",
             ]
         );
@@ -2167,10 +2215,22 @@ switch ($action) {
             if (!$item['status']) {
                 $item['name'] = '<font style="color:#AAA">'.$item['name'].'</font>';
             }
-            $item['headline'] = Display::url($item['headline'], api_get_path(WEB_CODE_PATH).'timeline/view.php?id='.$item['id']);
-            $item['actions'] = Display::url(Display::return_icon('add.png', get_lang('AddItems')), api_get_path(WEB_CODE_PATH).'timeline/?action=add_item&parent_id='.$item['id']);
-            $item['actions'] .= Display::url(Display::return_icon('edit.png', get_lang('Edit')), api_get_path(WEB_CODE_PATH).'timeline/?action=edit&id='.$item['id']);
-            $item['actions'] .= Display::url(Display::return_icon('delete.png', get_lang('Delete')), api_get_path(WEB_CODE_PATH).'timeline/?action=delete&id='.$item['id']);
+            $item['headline'] = Display::url(
+                $item['headline'],
+                api_get_path(WEB_CODE_PATH).'timeline/view.php?id='.$item['id']
+            );
+            $item['actions'] = Display::url(
+                Display::return_icon('add.png', get_lang('AddItems')),
+                api_get_path(WEB_CODE_PATH).'timeline/?action=add_item&parent_id='.$item['id']
+            );
+            $item['actions'] .= Display::url(
+                Display::return_icon('edit.png', get_lang('Edit')),
+                api_get_path(WEB_CODE_PATH).'timeline/?action=edit&id='.$item['id']
+            );
+            $item['actions'] .= Display::url(
+                Display::return_icon('delete.png', get_lang('Delete')),
+                api_get_path(WEB_CODE_PATH).'timeline/?action=delete&id='.$item['id']
+            );
 
             $new_result[] = $item;
         }
@@ -2184,7 +2244,7 @@ switch ($action) {
         $result = Database::select(
             '*',
             $obj->table,
-            ['order' => "`$sidx` $sord", 'LIMIT' => "$start , $limit"]
+            ['order' => "$sidx $sord", 'LIMIT' => "$start , $limit"]
         );
         $new_result = [];
         foreach ($result as $item) {
@@ -2239,7 +2299,7 @@ switch ($action) {
         $result = Database::select(
             '*',
             $obj->table,
-            ['order' => "`$sidx` $sord", 'LIMIT' => "$start , $limit"]
+            ['order' => "$sidx $sord", 'LIMIT' => "$start , $limit"]
         );
         $new_result = [];
         foreach ($result as $item) {
@@ -2265,7 +2325,7 @@ switch ($action) {
         $result = Database::select(
             '*',
             $obj->table,
-            ['order' => "`$sidx` $sord", 'LIMIT' => "$start , $limit"]
+            ['order' => "$sidx $sord", 'LIMIT' => "$start , $limit"]
         );
         $new_result = [];
         foreach ($result as $item) {
@@ -2285,7 +2345,7 @@ switch ($action) {
         $result = Database::select(
             'p.id,p.name, p.description, c.name as career, p.status',
             "$obj->table p LEFT JOIN ".Database::get_main_table(TABLE_CAREER)." c  ON c.id = p.career_id ",
-            ['order' => "`$sidx` $sord", 'LIMIT' => "$start , $limit"]
+            ['order' => "$sidx $sord", 'LIMIT' => "$start , $limit"]
         );
 
         $new_result = [];
@@ -2312,7 +2372,7 @@ switch ($action) {
             $obj->table,
             [
                 'where' => ['url_id = ? ' => api_get_current_access_url_id()],
-                'order' => "`$sidx` $sord",
+                'order' => "$sidx $sord",
                 'LIMIT' => "$start , $limit",
             ]
         );
@@ -2331,7 +2391,7 @@ switch ($action) {
         $result = Database::select(
             '*',
             "$obj->table ",
-            ['order' => "`$sidx` $sord", 'LIMIT' => "$start , $limit"]
+            ['order' => "$sidx $sord", 'LIMIT' => "$start , $limit"]
         );
         $new_result = [];
         foreach ($result as $item) {
@@ -2342,6 +2402,7 @@ switch ($action) {
     case 'get_usergroups':
         $obj->protectScript();
         $columns = ['name', 'users', 'courses', 'sessions', 'group_type', 'actions'];
+        $sidx = in_array($sidx, $columns) ? $sidx : 'name';
         $result = $obj->getUsergroupsPagination($sidx, $sord, $start, $limit, $whereCondition);
         break;
     case 'get_extra_fields':
@@ -2356,6 +2417,9 @@ switch ($action) {
             'filter',
             'field_order',
         ];
+
+        $sidx = in_array($sidx, $columns) ? $sidx : 'display_text';
+
         $result = $obj->getAllGrid($sidx, $sord, $start, $limit);
         $new_result = [];
         if (!empty($result)) {
@@ -2384,10 +2448,7 @@ switch ($action) {
         break;
     case 'get_exercise_grade':
         $objExercise = new Exercise();
-        $exercises = $objExercise->getExercisesByCourseSession(
-            $_GET['course_id'],
-            $_GET['session_id']
-        );
+        $exercises = $objExercise->getExercisesByCourseSession($_GET['course_id'], $_GET['session_id']);
         $cntExer = 4;
         if (!empty($exercises)) {
             $cntExer += count($exercises);
@@ -2489,9 +2550,10 @@ switch ($action) {
     case 'get_extra_field_options':
         $obj = new ExtraFieldOption($type);
         $columns = ['display_text', 'option_value', 'option_order'];
+        $sidx = in_array($sidx, $columns) ? $sidx : 'display_text';
         $result = $obj->get_all([
             'where' => ['field_id = ? ' => $field_id],
-            'order' => "`$sidx` $sord",
+            'order' => "$sidx $sord",
             'LIMIT' => "$start , $limit",
         ]);
         break;

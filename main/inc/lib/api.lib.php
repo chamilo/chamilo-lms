@@ -6838,7 +6838,11 @@ function api_is_in_group($groupIdParam = null, $courseCodeParam = null)
  */
 function api_is_valid_secret_key($original_key_secret, $security_key)
 {
-    return $original_key_secret == sha1($security_key);
+    if (empty($original_key_secret) || empty($security_key)) {
+        return false;
+    }
+
+    return $original_key_secret === sha1($security_key);
 }
 
 /**

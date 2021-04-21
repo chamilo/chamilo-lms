@@ -1068,48 +1068,34 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
         }
 
         /*	Uncompressing phase */
-
-        /*
-            The first version, using OS unzip, is not used anymore
-            because it does not return enough information.
-            We need to process each individual file in the zip archive to
-            - add it to the database
-            - parse & change relative html links
-        */
-        if (PHP_OS == 'Linux' && !get_cfg_var('safe_mode') && false) { // *** UGent, changed by OC ***
-            // Shell Method - if this is possible, it gains some speed
-            exec("unzip -d \"".$base_work_dir.$upload_path."/\"".$uploaded_file['name']." ".$uploaded_file['tmp_name']);
-        } else {
-            // PHP method - slower...
-            $save_dir = getcwd();
-            chdir($base_work_dir.$upload_path);
-            $unzippingState = $zip_file->extract();
-            for ($j = 0; $j < count($unzippingState); $j++) {
-                $state = $unzippingState[$j];
-
-                // Fix relative links in html files
-                $extension = strrchr($state['stored_filename'], '.');
-            }
-            if ($dir = @opendir($base_work_dir.$upload_path)) {
-                while ($file = readdir($dir)) {
-                    if ($file != '.' && $file != '..') {
-                        $filetype = 'file';
-                        if (is_dir($base_work_dir.$upload_path.'/'.$file)) {
-                            $filetype = 'folder';
-                        }
-
-                        $safe_file = api_replace_dangerous_char($file);
-                        @rename($base_work_dir.$upload_path.'/'.$file, $base_work_dir.$upload_path.'/'.$safe_file);
-                        set_default_settings($upload_path, $safe_file, $filetype);
-                    }
-                }
-
-                closedir($dir);
-            } else {
-                error_log('Could not create directory '.$base_work_dir.$upload_path.' to unzip files');
-            }
-            chdir($save_dir); // Back to previous dir position
+        $save_dir = getcwd();
+        chdir($base_work_dir.$upload_path);
+        $unzippingState = $zip_file->extract();
+        for ($j = 0; $j < count($unzippingState); $j++) {
+            $state = $unzippingState[$j];
+            // Fix relative links in html files
+            $extension = strrchr($state['stored_filename'], '.');
         }
+        if ($dir = @opendir($base_work_dir.$upload_path)) {
+            while ($file = readdir($dir)) {
+                if ($file != '.' && $file != '..') {
+                    $filetype = 'file';
+                    if (is_dir($base_work_dir.$upload_path.'/'.$file)) {
+                        $filetype = 'folder';
+                    }
+
+                    $safe_file = api_replace_dangerous_char($file);
+                    @rename($base_work_dir.$upload_path.'/'.$file, $base_work_dir.$upload_path.'/'.$safe_file);
+                    set_default_settings($upload_path, $safe_file, $filetype);
+                }
+            }
+
+            closedir($dir);
+        } else {
+            error_log('Could not create directory '.$base_work_dir.$upload_path.' to unzip files');
+        }
+        chdir($save_dir); // Back to previous dir position
+
     }
 
     return true;

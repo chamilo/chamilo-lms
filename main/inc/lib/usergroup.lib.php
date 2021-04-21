@@ -1870,7 +1870,6 @@ class UserGroup extends Model
         $style = ''
     ) {
         $picture = [];
-        //$picture['style'] = $style;
         if ($picture_file === 'unknown.jpg') {
             $picture['file'] = Display::returnIconPath($picture_file);
 
@@ -1899,7 +1898,6 @@ class UserGroup extends Model
         $file = $image_array_sys['dir'].$size_picture.$picture_file;
         if (file_exists($file)) {
             $picture['file'] = $image_array['dir'].$size_picture.$picture_file;
-            //$picture['style'] = '';
             if ($height > 0) {
                 $dimension = api_getimagesize($picture['file']);
                 $margin = ($height - $dimension['width']) / 2;

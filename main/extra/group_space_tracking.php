@@ -164,14 +164,14 @@ $tbl_group_course_info = Database:: get_course_table(TABLE_GROUP);
 $course_id = api_get_course_int_id();
 
 //on trouve le vrai groupID
-$sql = "SELECT iid FROM ".$tbl_group_course_info."  
+$sql = "SELECT iid FROM ".$tbl_group_course_info."
         WHERE c_id=".$course_id." and id=".$current_group['id'];
 $current_group_result = Database::query($sql);
 $current_group = Database::fetch_assoc($current_group_result)['iid'];
 //on trouve les user dans le groupe
 $sql = "SELECT *
-        FROM ".$table_user." user, ".$table_group_user." group_rel_user 
-        WHERE group_rel_user.c_id = $course_id AND group_rel_user.user_id = user.user_id 
+        FROM ".$table_user." user, ".$table_group_user." group_rel_user
+        WHERE group_rel_user.c_id = $course_id AND group_rel_user.user_id = user.user_id
         AND group_rel_user.group_id = ".$current_group." order by lastname
   ";
 $result = Database::query($sql);
@@ -254,7 +254,7 @@ while ($resulta = Database::fetch_array($result)) {
         //on sort le temps passé dans chaque cours
         $sql = "SELECT  SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) as nb_seconds
                 FROM track_e_course_access
-                WHERE UNIX_TIMESTAMP(logout_course_date) > UNIX_TIMESTAMP(login_course_date) AND c_id = $course_id AND user_id = '$user_in_groupe' 
+                WHERE UNIX_TIMESTAMP(logout_course_date) > UNIX_TIMESTAMP(login_course_date) AND c_id = $course_id AND user_id = '$user_in_groupe'
                 ";
         //echo($sql);
         $rs = Database::query($sql);
@@ -283,7 +283,7 @@ while ($resulta = Database::fetch_array($result)) {
             $lp_id_view = $result3['id'];
             $c_id_view = $result3['c_id'];
 
-            $Req4 = "SELECT id, lp_id ,title ,item_type 
+            $Req4 = "SELECT id, lp_id ,title ,item_type
                     FROM  c_lp_item
                  WHERE lp_id =  '$lp_id'
                  AND title LIKE '(+)%'
@@ -335,9 +335,9 @@ while ($resulta = Database::fetch_array($result)) {
         $tour++;
         $date = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d") - $tour, date("Y")));
         $sql4 = "SELECT *  FROM $tbl_personal_agenda
-                 WHERE user = '$user_in_groupe' AND 
+                 WHERE user = '$user_in_groupe' AND
                  text='Pour le calendrier, ne pas effacer'
-                 AND date like '".$date." %:%'       
+                 AND date like '".$date." %:%'
                   ";
         $result4 = Database::query($sql4);
         $res4 = Database::fetch_array($result4);

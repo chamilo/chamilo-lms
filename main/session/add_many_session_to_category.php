@@ -136,7 +136,11 @@ if (empty($rows_session_category)) {
 if (api_get_multiple_access_url()) {
     $table_access_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
     $access_url_id = api_get_current_access_url_id();
-    $sql = "SELECT s.id, s.name  FROM $tbl_session s INNER JOIN $table_access_url_rel_session u ON s.id = u.session_id $where AND u.access_url_id = $access_url_id ORDER BY name";
+    $sql = "SELECT s.id, s.name
+            FROM $tbl_session s
+            INNER JOIN $table_access_url_rel_session u
+            ON s.id = u.session_id $where AND u.access_url_id = $access_url_id
+            ORDER BY name";
 } else {
     $sql = "SELECT id, name  FROM $tbl_session $where ORDER BY name";
 }

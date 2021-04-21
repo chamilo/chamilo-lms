@@ -1259,11 +1259,11 @@ class Link extends Model
         $sessionId = intval($sessionId);
         $thiscatlinkId = intval($catlinkid);
 
-        if ($action == 'down') {
+        if ($action === 'down') {
             $sortDirection = 'DESC';
         }
 
-        if ($action == 'up') {
+        if ($action === 'up') {
             $sortDirection = 'ASC';
         }
 

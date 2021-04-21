@@ -2884,11 +2884,10 @@ JAVASCRIPT;
         if (!empty($options['where'])) {
             $where .= ' AND '.$options['where'];
         }
-        //}
 
         $order = '';
         if (!empty($options['order'])) {
-            $order = ' ORDER BY '.$options['order'];
+            $order = " ORDER BY ".$options['order']." ";
         }
         $limit = '';
         if (!empty($options['limit'])) {

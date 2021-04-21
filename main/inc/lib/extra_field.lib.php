@@ -162,6 +162,8 @@ class ExtraField extends Model
             case 'portfolio':
                 $this->extraFieldType = EntityExtraField::PORTFOLIO_TYPE;
                 break;
+            case 'lp_view':
+                $this->extraFieldType = EntityExtraField::LP_VIEW_TYPE;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;

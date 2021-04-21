@@ -384,7 +384,7 @@ $_configuration['tracking_columns'] = [
 // Add column "Acquisition" in student LPs table to display info about a lo adquisition. Requires DB changes:
 /*
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES
-(0, 3, 'acquisition', 'Acquisition', '', 0, 1, 0, 0, 0, NOW());
+(20, 3, 'acquisition', 'Acquisition', '', 0, 1, 0, 0, 0, NOW());
 SET @ef_id = LAST_INSERT_ID();
 INSERT INTO extra_field_options (field_id, option_value, display_text, priority, priority_message, option_order) VALUES
 (@ef_id, '1', 'Acquired', NULL, NULL, 1),

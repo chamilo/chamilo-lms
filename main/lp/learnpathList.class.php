@@ -203,6 +203,7 @@ class LearnpathList
                 'lp_old_id' => $row->getId(),
                 'iid' => $row->getIid(),
                 'prerequisite' => $row->getPrerequisite(),
+                'category_id' => $row->getCategoryId(),
             ];
             $names[$row->getName()] = $row->getIid();
         }

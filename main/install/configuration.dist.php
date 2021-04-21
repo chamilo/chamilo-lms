@@ -393,6 +393,12 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 
 */
 //$_configuration['student_follow_page_add_LP_acquisition_info'] = false;
+// Prepend a column in student LPs table to display a checkbox to select the LP category and its LPs. Requires DB changes:
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES
+(20, 13, 'invisible', 'Invisible', '', 0, 1, 0, 0, 0, NOW());
+*/
+//$_configuration['student_follow_page_add_LP_invisible_checkbox'] = false;
 // Hide session link of course_block on index/userportal
 //$_configuration['remove_session_url']= false ;
 // Allow foldable block for session list in session category on My courses tab

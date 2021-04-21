@@ -20,6 +20,12 @@ switch ($httpRequest->get('a')) {
             $httpRequest->query->getInt('lp_view')
         );
         break;
+    case 'views_invisible':
+        processViewsInvisible(
+            $httpRequest->request->get('chkb_view') ?: [],
+            $httpRequest->request->getBoolean('state')
+        );
+        break;
 }
 
 function displayForm(int $lpViewId)
@@ -104,4 +110,27 @@ function displayForm(int $lpViewId)
                 });
             })
         })</script>";
+}
+
+function processViewsInvisible(array $lpViewsIds, bool $state)
+{
+    $lpViewsIds = array_map('intval', $lpViewsIds);
+    $lpViewsIds = array_filter($lpViewsIds);
+
+    if (empty($lpViewsIds)) {
+        return;
+    }
+
+    foreach ($lpViewsIds as $lpViewId) {
+        $extraFieldValue = new ExtraFieldValue('lp_view');
+        $extraFieldValue->save(
+            [
+                'variable' => StudentFollowPage::VARIABLE_INVISIBLE,
+                'item_id' => $lpViewId,
+                'comment' => json_encode(['user' => api_get_user_id(), 'datetime' => api_get_utc_datetime()]),
+                'value' => !$state,
+            ]
+        );
+    }
+
 }

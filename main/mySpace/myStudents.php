@@ -1353,6 +1353,17 @@ if (empty($details)) {
             }
         }
 
+        if (true === api_get_configuration_value('student_follow_page_add_LP_invisible_checkbox')) {
+            echo StudentFollowPage::getLpVisibleScript();
+
+            $chkb = Display::input('checkbox', 'chkb_category[]', '');
+
+            $columnHeaders = array_merge(
+                ['student_follow_page_add_LP_invisible_checkbox' => $chkb],
+                $columnHeaders
+            );
+        }
+
         if (true === api_get_configuration_value('student_follow_page_add_LP_subscription_info')) {
             $columnHeaders['student_follow_page_add_LP_subscription_info'] = get_lang('Unlock');
         }
@@ -1371,6 +1382,8 @@ if (empty($details)) {
                 $columnName
             );
         }
+
+        unset($columnHeadersToExport['student_follow_page_add_LP_invisible_checkbox']);
 
         $hookLpTracking = HookMyStudentsLpTracking::create();
         if ($hookLpTracking) {
@@ -1544,6 +1557,19 @@ if (empty($details)) {
 
                 echo '<tr class="'.$css_class.'">';
                 $contentToExport = [];
+
+                if (in_array('student_follow_page_add_LP_invisible_checkbox', $columnHeadersKeys)) {
+                    echo Display::tag(
+                        'td',
+                        StudentFollowPage::getLpVisibleField(
+                            $learnpath,
+                            $student_id,
+                            $courseInfo['real_id'],
+                            $sessionId
+                        )
+                    );
+                }
+
                 if (in_array('lp', $columnHeadersKeys)) {
                     $contentToExport[] = api_html_entity_decode(
                         stripslashes($lp_name),

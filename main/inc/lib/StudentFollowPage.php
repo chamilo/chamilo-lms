@@ -10,6 +10,7 @@ use Chamilo\CourseBundle\Entity\CItemProperty;
 class StudentFollowPage
 {
     const VARIABLE_ACQUISITION = 'acquisition';
+    const VARIABLE_INVISIBLE = 'invisible';
 
     public static function getLpSubscription(
         array $lpInfo,
@@ -61,14 +62,7 @@ class StudentFollowPage
         int $courseId,
         int $sessionId = 0
     ): string {
-        $tblLpView = Database::get_course_table(TABLE_LP_VIEW);
-
-        $sessionCondition = api_get_session_condition($sessionId);
-
-        $sql = "SELECT iid FROM $tblLpView
-            WHERE c_id = $courseId AND lp_id = {$lpInfo['iid']} AND user_id = $studentId $sessionCondition
-            ORDER BY view_count DESC";
-        $lpView = Database::fetch_assoc(Database::query($sql));
+        $lpView = learnpath::findLastView($lpInfo['iid'], $studentId, $courseId, $sessionId);
 
         if (empty($lpView)) {
             return '-';
@@ -119,5 +113,64 @@ class StudentFollowPage
         );
 
         return '<div id="acquisition-'.$lpView['iid'].'">'.$return.'</div>';
+    }
+
+    public static function getLpVisibleScript()
+    {
+        $url = api_get_path(WEB_AJAX_PATH).'student_follow_page.ajax.php?'.http_build_query(['a' => 'views_invisible']);
+
+        return "<script>$(function () {
+            var chkbView = $('[name=\"chkb_view[]\"]');
+
+            function doRequest(element, state) {
+                element.prop('disabled', true);
+
+                var views = $.makeArray(element).map(function (input) { return input.value; });
+
+                return $.post('$url', { 'chkb_view[]': views, 'state': state }, function () { element.prop('disabled', false); });
+            }
+
+            $('[name=\"chkb_category[]\"]').on('change', function () {
+                var checked = this.checked;
+                var chkbs = $(this).parents('table').find('td :checkbox').each(function () { this.checked = checked; });
+
+                doRequest(chkbs, checked);
+            }).prop('checked', true);
+
+            chkbView.on('change', function () {
+                doRequest($(this), this.checked);
+
+                $(this).parents('table').find('th :checkbox').prop(
+                    'checked',
+                    $.makeArray($(this).parents('table').find('td :checkbox'))
+                        .map(function (input) { return input.checked; })
+                        .reduce(function (acc, cur) { return acc && cur; })
+                );
+            }).each(function () {
+                if (!this.checked) {
+                    $(this).parents('table').find('th :checkbox').prop('checked', false);
+                }
+            });
+        });</script>";
+    }
+
+    public static function getLpVisibleField(array $lpInfo, int $studentId, int $courseId, int $sessionId = 0)
+    {
+        $lpView = learnpath::findLastView($lpInfo['iid'], $studentId, $courseId, $sessionId);
+
+        if (empty($lpView)) {
+            return '-';
+        }
+
+        $attrs = [];
+
+        $extraFieldValue = new ExtraFieldValue('lp_view');
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($lpView['iid'], self::VARIABLE_INVISIBLE);
+
+        if (empty($value) || empty($value['value'])) {
+            $attrs['checked'] = 'checked';
+        }
+
+        return Display::input('checkbox', 'chkb_view[]', $lpView['iid'], $attrs);
     }
 }

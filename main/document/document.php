@@ -873,7 +873,7 @@ function convertModal (id, format) {
         var formatTarget = $(this).val();
         window.location.href = "'
             .api_get_self().'?'.api_get_cidreq()
-            .'&curdirpath='.$curdirpath
+            .'&curdirpath='.$curdirpathurl
             .'&action=convertToPdf&formatTarget='
             .'" + formatTarget + "&id=" + id + "&'
             .api_get_cidreq().'&formatType=" + format;

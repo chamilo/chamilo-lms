@@ -235,7 +235,7 @@ foreach ($teachers as $key => $value) {
 }
 
 $form->addSelect('authorItemSelect', get_lang('Authors'), $options, ['multiple' => 'multiple']);
-$form->addNumeric('price', get_lang('Price'));
+$form->addFloat('price', get_lang('Price'));
 $form->addHtml('</div>');
 $form->addButtonCreate(get_lang('Send'));
 $form->setDefaults($default);

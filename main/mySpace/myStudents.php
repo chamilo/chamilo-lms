@@ -1581,7 +1581,7 @@ if (empty($details)) {
                 if (in_array('student_follow_page_add_LP_subscription_info', $columnHeadersKeys)) {
                     echo Display::tag(
                         'td',
-                        Tracking::getStudentFollowPageLpSubscription(
+                        StudentFollowPage::getLpSubscription(
                             $learnpath,
                             $student_id,
                             $courseInfo['real_id'],

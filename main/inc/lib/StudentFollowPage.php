@@ -2,12 +2,58 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CItemProperty;
+
 /**
  * Class StudentFollowPage.
  */
 class StudentFollowPage
 {
     const VARIABLE_ACQUISITION = 'acquisition';
+
+    public static function getLpSubscription(
+        array $lpInfo,
+        int $studentId,
+        int $courseId,
+        int $sessionId = 0
+    ): string {
+        $em = Database::getManager();
+
+        if ($lpInfo['subscribe_users']) {
+            $itemRepo = $em->getRepository(CItemProperty::class);
+            $itemProperty = $itemRepo->findByUserSuscribedToItem(
+                'learnpath',
+                $lpInfo['iid'],
+                api_get_user_entity($studentId),
+                api_get_course_entity($courseId),
+                api_get_session_entity($sessionId)
+            );
+
+            if (null === $itemProperty) {
+                return '-';
+            }
+
+            return "{$itemProperty->getInsertUser()->getCompleteName()}<br>"
+                .Display::tag(
+                    'small',
+                    api_convert_and_format_date($itemProperty->getInsertDate(), DATE_TIME_FORMAT_LONG)
+                );
+        }
+
+        $subscriptionEvent = Event::findUserSubscriptionToCourse($studentId, $courseId, $sessionId);
+
+        if (empty($subscriptionEvent)) {
+            return '-';
+        }
+
+        $creator = api_get_user_entity($subscriptionEvent['default_user_id']);
+
+        return "{$creator->getCompleteName()}<br>"
+            .Display::tag(
+                'small',
+                api_convert_and_format_date($subscriptionEvent['default_date'], DATE_TIME_FORMAT_LONG)
+            );
+    }
 
     public static function getLpAcquisition(
         array $lpInfo,

@@ -762,6 +762,9 @@ class wsdl extends nusoap_base
 			$this->setError("Neither _SERVER nor HTTP_SERVER_VARS is available");
 		}
 
+		$url = '<a href="'.$PHP_SELF.'?wsdl">WSDL</a>';
+        $url = Security::remove_XSS($url);
+
 		$b = '
 		<html><head><title>NuSOAP: '.$this->serviceName.'</title>
 		<style type="text/css">
@@ -842,7 +845,7 @@ class wsdl extends nusoap_base
 			<br><br>
 			<div class=title>'.$this->serviceName.'</div>
 			<div class=nav>
-				<p>View the <a href="'.$PHP_SELF.'?wsdl">WSDL</a> for the service.
+				<p>View the '.$url.' for the service.
 				Click on an operation name to view it&apos;s details.</p>
 				<ul>';
 				foreach($this->getOperations() as $op => $data){

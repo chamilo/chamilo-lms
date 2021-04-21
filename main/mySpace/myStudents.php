@@ -1579,27 +1579,25 @@ if (empty($details)) {
                 }
 
                 if (in_array('student_follow_page_add_LP_subscription_info', $columnHeadersKeys)) {
-                    echo Display::tag(
-                        'td',
-                        StudentFollowPage::getLpSubscription(
-                            $learnpath,
-                            $student_id,
-                            $courseInfo['real_id'],
-                            $sessionId
-                        )
+                    $lpSubscription = StudentFollowPage::getLpSubscription(
+                        $learnpath,
+                        $student_id,
+                        $courseInfo['real_id'],
+                        $sessionId
                     );
+                    $contentToExport[] = strip_tags(str_replace('<br>', "\n", $lpSubscription));
+                    echo Display::tag('td', $lpSubscription);
                 }
 
                 if (in_array('student_follow_page_add_LP_acquisition_info', $columnHeadersKeys)) {
-                    echo Display::tag(
-                        'td',
-                        StudentFollowPage::getLpAcquisition(
-                            $learnpath,
-                            $student_id,
-                            $courseInfo['real_id'],
-                            $sessionId
-                        )
+                    $lpAcquisition = StudentFollowPage::getLpAcquisition(
+                        $learnpath,
+                        $student_id,
+                        $courseInfo['real_id'],
+                        $sessionId
                     );
+                    $contentToExport[] = strip_tags(str_replace('<br>', "\n", $lpAcquisition));
+                    echo Display::tag('td', $lpAcquisition);
                 }
 
                 if ($hookLpTracking) {

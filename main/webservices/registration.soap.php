@@ -867,7 +867,7 @@ function WSCreateUsersPasswordCrypted($params)
         $count_row = Database::num_rows($res);
         if ($count_row > 0) {
             // Check if user is not active.
-            $sql = "SELECT user_id FROM $table_user 
+            $sql = "SELECT user_id FROM $table_user
                     WHERE user_id ='".$row[1]."' AND active= '0'";
             $resu = Database::query($sql);
             $r_check_user = Database::fetch_row($resu);
@@ -1389,7 +1389,7 @@ function WSCreateUserPasswordCrypted($params)
                     phone='".Database::escape_string($phone)."',
                     expiration_date='".Database::escape_string($expiration_date)."',
                     active='1',
-                    hr_dept_id=".intval($hr_dept_id)." 
+                    hr_dept_id=".intval($hr_dept_id)."
                 WHERE user_id='".$r_check_user[0]."'";
 
             Database::query($sql);
@@ -1459,7 +1459,7 @@ function WSCreateUserPasswordCrypted($params)
             phone               = '".Database::escape_string($phone)."',
             language            = '".Database::escape_string($language)."',
             registration_date   = '".api_get_utc_datetime()."',
-            roles = 'a:0:{}', 
+            roles = 'a:0:{}',
             ".$queryExpirationDate."
             hr_dept_id          = '".Database::escape_string($hr_dept_id)."',
             active              = '".Database::escape_string($active)."'";
@@ -2078,13 +2078,20 @@ $server->register(
 // Define the method WSEditUserWithPicture
 function WSEditUserWithPicture($params)
 {
+    if (ini_get('allow_url_fopen')) {
+        return new soap_fault(
+            'Server',
+            '',
+            'WSEditUserWithPicture is disabled because allow_url_fopen is enabled in the server.'
+        );
+    }
+
     if (!WSHelperVerifyKey($params)) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
 
     $userManager = UserManager::getManager();
     $userRepository = UserManager::getRepository();
-
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
     $original_user_id_value = $params['original_user_id_value'];
@@ -2118,34 +2125,38 @@ function WSEditUserWithPicture($params)
         $original_user_id_name
     );
 
-    // Get picture and generate uri.
-    $filename = basename($picture_url);
-    $tempDir = api_get_path(SYS_ARCHIVE_PATH);
-    // Make sure the file download was OK by checking the HTTP headers for OK
-    if (strpos(get_headers($picture_url)[0], "OK")) {
-        file_put_contents($tempDir.$filename, file_get_contents($picture_url));
-        $pictureUri = UserManager::update_user_picture($user_id, $filename, $tempDir.$filename);
+    if (empty($user_id)) {
+        return 0;
     }
 
-    if ($user_id == 0) {
+    $sql = "SELECT id FROM $table_user WHERE id =$user_id AND active= 0";
+    $resu = Database::query($sql);
+    $r_check_user = Database::fetch_row($resu);
+    if (!empty($r_check_user[0])) {
         return 0;
-    } else {
-        $sql = "SELECT id FROM $table_user WHERE id =$user_id AND active= 0";
-        $resu = Database::query($sql);
-        $r_check_user = Database::fetch_row($resu);
-        if (!empty($r_check_user[0])) {
-            return 0;
-        }
     }
 
     // Check whether username already exits.
-    $sql = "SELECT username FROM $table_user 
+    $sql = "SELECT username FROM $table_user
             WHERE username = '$username' AND id <> $user_id";
     $res_un = Database::query($sql);
     $r_username = Database::fetch_row($res_un);
 
     if (!empty($r_username[0])) {
         return 0;
+    }
+
+    // Get picture and generate uri.
+    $filename = basename($picture_url);
+    $tempDir = api_get_path(SYS_ARCHIVE_PATH);
+    // Make sure the file download was OK by checking the HTTP headers for OK
+    if (strpos(get_headers($picture_url)[0], "OK")) {
+        $tempFile = $tempDir.uniqid('user_image', true);
+        file_put_contents($tempFile, file_get_contents($picture_url));
+        $pictureUri = UserManager::update_user_picture($user_id, $filename, $tempFile);
+        if (file_exists($tempFile)) {
+            unlink($tempFile);
+        }
     }
 
     /** @var User $user */
@@ -2190,7 +2201,8 @@ function WSEditUserWithPicture($params)
         ->setExpirationDate($expiration_date)
         ->setHrDeptId($hr_dept_id)
         ->setActive(true)
-        ->setPictureUri($pictureUri);
+        ->setPictureUri($pictureUri)
+    ;
 
     if (!is_null($creator_id)) {
         $user->setCreatorId($creator_id);
@@ -4768,7 +4780,7 @@ function WSSubscribeUserToCourseSimple($params)
                 error_log('Try to register: user_id= '.$user_id.' to course: '.$course_data['code']);
             }
             if (!CourseManager::subscribeUser($user_id, $course_data['code'], $status, 0, false, false)) {
-                $result = 'User was not registered possible reasons: User already registered to the course, 
+                $result = 'User was not registered possible reasons: User already registered to the course,
                            Course visibility doesnt allow user subscriptions ';
                 if ($debug) {
                     error_log($result);

@@ -543,16 +543,16 @@ switch ($action) {
         break;
     case 'get_work_teacher':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
-        $count = getWorkListTeacher(0, $limit, $sidx, $sord, $whereCondition, true);
+        $count = getWorkListTeacher(0, $limit, null, null, $whereCondition, true);
         break;
     case 'get_work_student':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
-        $count = getWorkListStudent(0, $limit, $sidx, $sord, $whereCondition, true);
+        $count = getWorkListStudent(0, $limit, null, null, $whereCondition, true);
         break;
     case 'get_all_work_student':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $withResults = isset($_REQUEST['with_results']) ? (int) $_REQUEST['with_results'] : 0;
-        $count = getAllWorkListStudent(0, $limit, $sidx, $sord, $whereCondition, true, $withResults);
+        $count = getAllWorkListStudent(0, $limit, null, null, $whereCondition, true, $withResults);
         break;
     case 'get_work_user_list_all':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
@@ -594,8 +594,8 @@ switch ($action) {
             $count = get_work_user_list(
                 0,
                 $limit,
-                $sidx,
-                $sord,
+                null,
+                null,
                 $work_id,
                 $whereCondition,
                 null,
@@ -605,8 +605,8 @@ switch ($action) {
             $count = get_work_user_list_from_documents(
                 0,
                 $limit,
-                $sidx,
-                $sord,
+                null,
+                null,
                 $work_id,
                 api_get_user_id(),
                 $whereCondition,
@@ -1361,6 +1361,7 @@ switch ($action) {
             'actions',
         ];
         $sidx = in_array($sidx, $columns) ? $sidx : 'title';
+
         $result = getWorkListTeacher(
             $start,
             $limit,

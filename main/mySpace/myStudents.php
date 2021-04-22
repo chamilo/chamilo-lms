@@ -751,7 +751,7 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
         $legalTime = null;
 
         if (isset($value['value']) && !empty($value['value'])) {
-            list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
+            [$legalId, $legalLanguageId, $legalTime] = explode(':', $value['value']);
             $icon = Display::return_icon('accept.png');
             $btn = Display::url(
                 get_lang('DeleteLegal'),
@@ -1376,14 +1376,15 @@ if (empty($details)) {
         $columnHeadersToExport = [];
         // csv export headers
         foreach ($columnHeaders as $key => $columnName) {
-            $columnHeadersToExport[] = strip_tags($columnName);
+            if ('student_follow_page_add_LP_invisible_checkbox' !== $key) {
+                $columnHeadersToExport[] = strip_tags($columnName);
+            }
+
             $headers .= Display::tag(
                 'th',
                 $columnName
             );
         }
-
-        unset($columnHeadersToExport['student_follow_page_add_LP_invisible_checkbox']);
 
         $hookLpTracking = HookMyStudentsLpTracking::create();
         if ($hookLpTracking) {

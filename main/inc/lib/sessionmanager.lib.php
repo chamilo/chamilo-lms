@@ -3917,7 +3917,9 @@ class SessionManager
                 break;
             case SESSIONADMIN:
                 $sessionQuery = '';
-                $sqlInjectJoins .= " AND s.session_admin_id = $userId ";
+                if (api_get_setting('allow_session_admins_to_manage_all_sessions') != 'true') {
+                    $sqlInjectJoins .= " AND s.session_admin_id = $userId ";
+                }
                 break;
             default:
                 $sessionQuery = "SELECT sru.session_id

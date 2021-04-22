@@ -36,17 +36,15 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
         }
         if (is_array($attributes) || empty($attributes)) {
             $classFromAttributes = $attributes['class'] ?? '';
+            //focus:outline-none            focus:shadow-outline
             //w-1/2
+            //focus:border            focus:border-blue-100
             $attributes['class'] = $classFromAttributes.'
-
-
             sm:text-sm
             text-gray-600
-            focus:outline-none
-            focus:border
-            focus:border-blue-700
-            bg-white font-normal
-            flex items-center pl-3 border-gray-300 rounded-md border shadow';
+            bg-white
+            font-normal
+            flex items-center pl-3 ';
         }
         $inputSize = $attributes['input-size'] ?? null;
         $this->setInputSize($inputSize);

@@ -11,44 +11,38 @@
 import CourseCardList from './CourseCardList.vue';
 import {ENTRYPOINT} from '../../../config/entrypoint';
 import axios from "axios";
+import {ref, computed} from "vue";
+import { useStore } from 'vuex';
 
 export default {
   name: 'CourseList',
   components: {
     CourseCardList,
   },
-  data() {
+  setup() {
+    const courses = ref([]);
+    const status = ref('Loading');
+
+    const store = useStore();
+    let user = computed(() => store.getters['security/getUser']);
+
+    if (user.value) {
+      let userId = user.value.id;
+      axios.get(ENTRYPOINT + 'users/' + userId + '/courses.json').then(response => {
+        if (Array.isArray(response.data)) {
+          courses.value = response.data;
+        }
+      }).catch(function (error) {
+        console.log(error);
+      }).finally(() =>
+          status.value = ''
+      );
+    }
+
     return {
-      status: '',
-      courses: [],
-      layout: 'list',
-      sortKey: null,
-      sortOrder: null,
-      sortField: null,
-    };
-  },
-  created: function () {
-    this.load();
-  },
-  mounted: function () {
-  },
-  methods: {
-    load: function () {
-      this.status = 'Loading';
-      let user = this.$store.getters['security/getUser'];
-      if (user) {
-        axios.get(ENTRYPOINT + 'users/' + user.id + '/courses.json').then(response => {
-          this.status = '';
-          if (Array.isArray(response.data)) {
-            this.courses = response.data;
-          }
-        }).catch(function (error) {
-          console.log(error);
-        });
-      } else {
-        this.status = '';
-      }
-    },
+      courses,
+      status
+    }
   }
 };
 </script>

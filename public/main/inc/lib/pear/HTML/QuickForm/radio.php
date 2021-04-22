@@ -103,10 +103,12 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
             $radioClass = $this->radioClass;
             $id = $this->getAttribute('id');
 
-            return '<div class="'.$radioClass.'">
-                '.HTML_QuickForm_input::toHtml().'
-                <label for="'.$id.'" class="form-check-label '.$labelClass.'">'.$this->_text.'</label>
-            </div>';
+            return '<div class="'.$radioClass.' flex items-center ">
+                        '.HTML_QuickForm_input::toHtml().'
+                        <label for="'.$id.'" class="form-check-label '.$labelClass.' ml-2 ">
+                            '.$this->_text.'
+                        </label>
+                    </div>';
         }
 
         return parent::toHtml().$label;

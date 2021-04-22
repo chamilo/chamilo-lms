@@ -52,21 +52,21 @@ class FormValidator extends HTML_QuickForm
 
         switch ($layout) {
             case self::LAYOUT_HORIZONTAL:
-                $attributes['class'] = 'w-full ';
+                $attributes['class'] = 'ch w-full ';
                 break;
             case self::LAYOUT_BOX_SEARCH:
-                $attributes['class'] = 'w-full flex gap-2';
+                $attributes['class'] = 'ch w-full flex gap-2';
                 $formTemplate = $this->getInLineTemplate();
                 break;
             case self::LAYOUT_INLINE:
-                $attributes['class'] = ' flex gap-1 ';
+                $attributes['class'] = 'ch flex gap-1 ';
                 $formTemplate = $this->getInLineTemplate();
                 break;
             case self::LAYOUT_BOX:
-                $attributes['class'] = 'flex gap-1 ';
+                $attributes['class'] = 'ch flex gap-1 ';
                 break;
             case self::LAYOUT_GRID:
-                $attributes['class'] = 'form-grid';
+                $attributes['class'] = 'ch form-grid';
                 $formTemplate = $this->getGridFormTemplate();
                 break;
         }

@@ -1,17 +1,11 @@
 <?php
 
 /**
- * HTML class for a checkbox type field.
- *
- * PHP versions 4 and 5
- *
  * LICENSE: This source file is subject to version 3.01 of the PHP license
  * that is available through the world-wide-web at the following URI:
  * http://www.php.net/license/3_01.txt If you did not receive a copy of
  * the PHP License and are unable to obtain it through the web, please
  * send a note to license@php.net so we can mail you a copy immediately.
- *
- * @category    HTML
  *
  * @author      Adam Daniel <adaniel1@eesus.jnj.com>
  * @author      Bertrand Mansion <bmansion@mamasam.com>
@@ -20,21 +14,7 @@
  * @license     http://www.php.net/license/3_01.txt PHP License 3.01
  *
  * @version     CVS: $Id: checkbox.php,v 1.23 2009/04/04 21:34:02 avb Exp $
- *
- * @see        http://pear.php.net/package/HTML_QuickForm
- */
-
-/**
- * HTML class for a checkbox type field.
- *
- * @category    HTML
- *
- * @author      Adam Daniel <adaniel1@eesus.jnj.com>
- * @author      Bertrand Mansion <bmansion@mamasam.com>
- * @author      Alexey Borzov <avb@php.net>
- *
  * @version     Release: 3.2.11
- *
  * @since       1.0
  */
 class HTML_QuickForm_checkbox extends HTML_QuickForm_input
@@ -80,6 +60,7 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
             unset($attributes['checkbox-class']);
         }
 
+        $attributes['class'] = '  ';
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->_persistantFreeze = true;
         $this->_text = $text;
@@ -141,14 +122,15 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
             $labelClass = $this->labelClass;
             $checkClass = $this->checkboxClass;
             $name = $this->_attributes['name'];
-            $label = '<div id="'.$name.'" class="'.$checkClass.'">
-                <label class="'.$labelClass.'">'.
-                    HTML_QuickForm_input::toHtml().' '.$this->_text.
-                '</label>
-                </div>
-            ';
+            $id = $this->getAttribute('id');
 
-            return $label;
+            return '<div id="'.$name.'" class="'.$checkClass.' flex items-center  ">
+                        '.HTML_QuickForm_input::toHtml().'
+                        <label for="'.$id.'" class="'.$labelClass.' ml-2 ">
+                            '.$this->_text.
+                        '</label>
+                      </div>
+            ';
         }
 
         return HTML_QuickForm_input::toHtml().$label;

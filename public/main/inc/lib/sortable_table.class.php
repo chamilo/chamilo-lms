@@ -400,7 +400,7 @@ class SortableTable extends HTML_Table
             $form = $this->get_page_select_form();
             $nav = $this->get_navigation_html();
             $html = '<div class="q-card">';
-            $html .= '<div class="q-pa-md fit row wrap justify-between items-start content-start">';
+            $html .= '<div class="flex flex-row justify-between">';
             $html .= '<div class="col">';
             $html .= '<div class="page-select pb-2 pt-2">'.$form.'</div>';
             $html .= '</div>';
@@ -437,10 +437,10 @@ class SortableTable extends HTML_Table
         $html .= '<input type="hidden" name="action">';
 
         $html .= '<div class="q-card">';
-        $html .= '<div class="flex p-3">';
+        $html .= '<div class="flex flex-row justify-between">';
 
         if (count($this->form_actions) > 0) {
-            $html .= '<div class="btn-group" role="group">';
+            $html .= '<div class="flex flex-row justify-between" role="group">';
             $html .= '<a
                 class="btn btn-primary"
                 href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1"
@@ -467,7 +467,6 @@ class SortableTable extends HTML_Table
                     onclick="javascript:action_click(this, \''.$table_id.'\');">'.$label.'</a>';
             }
             $html .= '</div>';
-            $html .= '</div>'; //btn-group
             $html .= '</div>';
         } else {
             $html .= $form;
@@ -482,6 +481,7 @@ class SortableTable extends HTML_Table
             $html .= '</div>';
         }
 
+        $html .= '</div>'; //btn-group
         $html .= '</div>';
         if (count($this->form_actions) > 0) {
             $html .= '</form>';

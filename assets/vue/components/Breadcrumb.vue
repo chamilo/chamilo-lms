@@ -1,10 +1,16 @@
 <template>
-  <div>
-    <v-breadcrumbs
-      :items="items"
-      large
-      :class="layoutClass"
-    />
+  <div class="q-card p-4">
+    <q-breadcrumbs
+        active-color="primary"
+        large
+    >
+<!--      <q-breadcrumbs-el v-for ="item in items" :label="item.text" :to="item.href" />-->
+      <q-breadcrumbs-el v-for="item in items" :label="item.text" :to="item.href" />
+
+
+<!--      <q-item class="GNL__drawer-item" v-ripple v-for="link in links1" :key="link.text" :to="link.url" clickable>-->
+
+    </q-breadcrumbs>
   </div>
 </template>
 
@@ -41,7 +47,7 @@ export default {
       }*/
       if (this.legacy) {
         for (let i = 0, len = this.legacy.length; i < len; i += 1) {
-          //console.log(this.legacy[i]);
+          console.log(this.legacy[i]);
           items.push({
             text: this.legacy[i]['name'],
             //disabled: route.path === path || lastItem.path === route.path,
@@ -111,7 +117,10 @@ export default {
             });
           }
         }
+
+        console.log('BREADCRUMB');
       console.log(items);
+
       }
 
       return items;

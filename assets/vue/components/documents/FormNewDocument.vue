@@ -5,8 +5,7 @@
 <!--        @blur="$v.item.title.$touch()"-->
 
           <q-input
-            outlined
-            id="item_title"
+              id="item_title"
             v-model="item.title"
             :error-messages="titleErrors"
             :placeholder="$t('Title')"

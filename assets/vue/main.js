@@ -31,7 +31,7 @@ library.add(fas);
 //Vue.use(VueApollo);
 
 import Toast from 'vue-toastification';
-import 'vue-toastification/dist/index.css';
+//import 'vue-toastification/dist/index.css';
 const toastOptions = {
     transition: 'Vue-Toastification__fade',
     maxToasts: 20,
@@ -43,7 +43,7 @@ const toastOptions = {
 
 
 import VueFlatPickr from 'vue-flatpickr-component';
-import 'flatpickr/dist/flatpickr.css';
+//import 'flatpickr/dist/flatpickr.css';
 
 store.registerModule(
     'course',
@@ -135,12 +135,10 @@ import Button from 'primevue/button';
 import Column from 'primevue/column';
 import ColumnGroup from 'primevue/columngroup';
 
-import 'primevue/resources/themes/mdc-light-indigo/theme.css';
-//import 'primevue/resources/themes/bootstrap4-light-blue/theme.css';
-import 'primevue/resources/primevue.min.css';
-import 'primeflex/primeflex.css';
-import "primeicons/primeicons.css";
-//import './mdb/scss/index.free.scss';
+// import 'primevue/resources/themes/mdc-light-indigo/theme.css';
+// import 'primevue/resources/primevue.min.css';
+// import 'primeflex/primeflex.css';
+// import "primeicons/primeicons.css";
 
 app.component('Dialog', Dialog);
 app.component('DataView', DataView);
@@ -151,9 +149,7 @@ app.component('InputText', InputText);
 app.component('Button', Button);
 app.component('Column', Column);
 app.component('ColumnGroup', ColumnGroup);
-
 app.component('font-awesome-icon', FontAwesomeIcon);
-
 app.component('DashboardLayout', DashboardLayout)
 app.component('EmptyLayout', EmptyLayout)
 

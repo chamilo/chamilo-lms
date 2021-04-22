@@ -57,3 +57,7 @@
   outline: 0 none;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
 }
+
+.question_menu {
+  @apply p-4 flex flex-row gap-1;
+}

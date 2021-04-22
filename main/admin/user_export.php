@@ -174,7 +174,6 @@ if ($form->validate()) {
             if ($expirationDate < $now) {
                 $user['Active'] = -1;
             }
-            unset($user['expiration_date']);
         }
 
         $studentData = UserManager:: get_extra_user_data(

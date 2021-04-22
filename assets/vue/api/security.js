@@ -7,5 +7,8 @@ export default {
             password: password,
             csrf_token: token
         });
+    },
+    logout() {
+        return axios.get("/logout");
     }
 }

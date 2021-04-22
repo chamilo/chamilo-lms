@@ -33,7 +33,7 @@ class SecurityController extends AbstractController
         //$lastUsername = $authenticationUtils->getLastUsername();
 
         /** @var User $user */
-        $user = $this->getUser();
+        /*$user = $this->getUser();
         $data = [];
         if ($user) {
             $userClone = clone $user;
@@ -41,7 +41,7 @@ class SecurityController extends AbstractController
             $data = $this->serializer->serialize($userClone, JsonEncoder::FORMAT);
         }
 
-        return new JsonResponse($data, Response::HTTP_OK, [], true);
+        return new JsonResponse($data, Response::HTTP_OK, [], true);*/
     }
 
     /**

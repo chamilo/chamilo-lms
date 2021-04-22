@@ -87,12 +87,14 @@ export default {
         }),
     },
     created() {
+        console.log('Login created');
         let redirect = this.$route.query.redirect;
         if (this.$store.getters["security/isAuthenticated"]) {
+              console.log(redirect);
             if (typeof redirect !== "undefined") {
                 this.$router.push({path: redirect});
             } else {
-                this.$router.push({path: "/courses"});
+                this.$router.push({path: "/"});
             }
         }
     },
@@ -102,6 +104,7 @@ export default {
           this.performLogin();
         },
         async performLogin() {
+            console.log('performLogin');
             let payload = {login: this.$data.login, password: this.$data.password};
             let redirect = this.$route.query.redirect;
             await this.$store.dispatch("security/login", payload);

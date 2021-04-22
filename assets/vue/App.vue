@@ -1,5 +1,6 @@
 <template>
   <component :is="layout">
+<!--    <Breadcrumb :legacy="this.breadcrumb"/>-->
     <router-view />
     <div  id="legacy_content"
           v-html="legacyContent"
@@ -457,8 +458,10 @@ export default {
       var n = url.indexOf("main/");
       if (n > 0) {
         if (this.firstTime) {
+          console.log('firstTime: 1.');
           let content = document.querySelector("#sectionMainContent");
           if (content) {
+            console.log('legacyContent updated');
             content.style.display = 'block';
             document.querySelector("#sectionMainContent").remove();
             this.legacyContent = content.outerHTML;
@@ -468,6 +471,8 @@ export default {
             document.querySelector("#sectionMainContent").remove();
             console.log('remove');
           }
+
+          console.log('Replace URL', url);
 
           window.location.replace(url);
 
@@ -494,13 +499,16 @@ export default {
         }
       } else {
         if (this.firstTime) {
+          console.log('firstTime 2.');
           let content = document.querySelector("#sectionMainContent");
           if (content) {
+            console.log('legacyContent updated');
             content.style.display = 'block';
             document.querySelector("#sectionMainContent").remove();
             this.legacyContent = content.outerHTML;
           }
         } else {
+          console.log('legacyContent cleaned');
           let content = document.querySelector("#sectionMainContent");
           if (content) {
             document.querySelector("#sectionMainContent").remove();
@@ -518,24 +526,13 @@ export default {
   },
   created() {
     console.log('created');
-    // @todo
-    if (this.isAuthenticated) {
-      this.links1.unshift({icon: 'user-circle', url: '/account/profile', text: this.currentUser.username});
-    }
     let app = document.getElementById('app');
     this.legacyContent = '';
     console.log('updated empty created');
+
     let isAuthenticated = false;
-    /*if (app && app.attributes['data-is-authenticated'].value) {
-      isAuthenticated = JSON.parse(app.attributes['data-is-authenticated'].value);
-    }*/
-
-    console.log('isAuthenticated');
-    console.log(isAuthenticated);
-    console.log(window.user);
-
     if (!isEmpty(window.user)) {
-    //  console.log('is logged in as ' + window.user.username);
+      console.log('is logged in as ' + window.user.username);
       this.user = window.user;
       this.userAvatar = window.userAvatar;
       isAuthenticated = true;
@@ -548,6 +545,10 @@ export default {
     console.log(this.user);
     let payload = {isAuthenticated: isAuthenticated, user: this.user};
     this.$store.dispatch("security/onRefresh", payload);
+
+    if (isAuthenticated) {
+      this.links1.unshift({icon: 'user-circle', url: '/account/profile', text: this.currentUser.username});
+    }
 
     if (app && app.attributes["data-flashes"]) {
       let flashes = JSON.parse(app.attributes["data-flashes"].value);
@@ -565,11 +566,16 @@ export default {
     }
 
     axios.interceptors.response.use(undefined, (err) => {
+      console.log('interceptor');
+      console.log(err.response.status);
+
       return new Promise(() => {
         // Unauthorized.
         if (401 === err.response.status) {
           // Redirect to the login if status 401.
-          this.$router.push({path: "/login"}).catch(()=>{});
+          //this.$router.replace({path: "/login"}).catch(()=>{});
+          // Real redirect to avoid loops with Login.vue page.
+          window.location.href = '/login';
         } else if (500 === err.response.status) {
           if (err.response) {
             // Request made and server responded

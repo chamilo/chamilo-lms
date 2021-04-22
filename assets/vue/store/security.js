@@ -3,6 +3,7 @@ import SecurityAPI from "../api/security";
 const AUTHENTICATING = "AUTHENTICATING",
     AUTHENTICATING_SUCCESS = "AUTHENTICATING_SUCCESS",
     AUTHENTICATING_ERROR = "AUTHENTICATING_ERROR",
+    AUTHENTICATING_LOGOUT = "AUTHENTICATING_LOGOUT",
     PROVIDING_DATA_ON_REFRESH_SUCCESS = "PROVIDING_DATA_ON_REFRESH_SUCCESS";
 
 export default {
@@ -64,6 +65,13 @@ export default {
             state.isAuthenticated = false;
             state.user = null;
         },
+        [AUTHENTICATING_LOGOUT](state, error) {
+            console.log('AUTHENTICATING_LOGOUT');
+            state.isLoading = false;
+            state.error = error;
+            state.isAuthenticated = false;
+            state.user = null;
+        },
         [PROVIDING_DATA_ON_REFRESH_SUCCESS](state, payload) {
             state.isLoading = false;
             state.error = null;
@@ -76,6 +84,16 @@ export default {
             commit(AUTHENTICATING);
             await SecurityAPI.login(payload.login, payload.password).then(response => {
                 commit(AUTHENTICATING_SUCCESS, response.data);
+                return response.data;
+            }).catch(error => {
+                commit(AUTHENTICATING_ERROR, error);
+            });
+        },
+
+        async logout({commit}) {
+            console.log('logout store/security');
+            await SecurityAPI.logout().then(response => {
+                commit(AUTHENTICATING_LOGOUT);
                 return response.data;
             }).catch(error => {
                 commit(AUTHENTICATING_ERROR, error);

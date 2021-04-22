@@ -6845,7 +6845,7 @@ function api_is_valid_secret_key($original_key_secret, $security_key)
         return false;
     }
 
-    return $original_key_secret === sha1($security_key);
+    return (string) $original_key_secret === sha1($security_key);
 }
 
 /**

@@ -855,13 +855,13 @@ class wsdl extends nusoap_base
 				    <a href='#' onclick='popout()'><font color='#ffffff'>Close</font></a><br><br>";
 				    foreach($data as $donnie => $marie){ // loop through opdata
 						if($donnie == 'input' || $donnie == 'output'){ // show input/output data
-						    $b .= "<font color='white'>".ucfirst($donnie).':</font><br>';
+						    $b .= Security::remove_XSS("<font color='white'>".ucfirst($donnie).':</font><br>');
 						    foreach($marie as $captain => $tenille){ // loop through data
 								if($captain == 'parts'){ // loop thru parts
 								    $b .= "&nbsp;&nbsp;$captain:<br>";
 					                //if(is_array($tenille)){
 								    	foreach($tenille as $joanie => $chachi){
-											$b .= "&nbsp;&nbsp;&nbsp;&nbsp;$joanie: $chachi<br>";
+											$b .= Security::remove_XSS("&nbsp;&nbsp;&nbsp;&nbsp;$joanie: $chachi<br>");
 								    	}
 					        		//}
 								} else {
@@ -869,7 +869,7 @@ class wsdl extends nusoap_base
 								}
 						    }
 						} else {
-						    $b .= "<font color='white'>".ucfirst($donnie).":</font> $marie<br>";
+						    $b .= Security::remove_XSS("<font color='white'>".ucfirst($donnie).":</font> $marie<br>");
 						}
 				    }
 					$b .= '</div>';

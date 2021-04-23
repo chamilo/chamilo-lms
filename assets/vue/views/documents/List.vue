@@ -40,6 +40,7 @@
 
      <Toolbar class="p-mb-4">
        <template #left>
+         <div class="flex flex-row gap-2">
 <!--         <Button label="New" icon="pi pi-plus" class="p-button-primary p-button-sm p-mr-2" @click="openNew" />-->
          <Button label="New" icon="pi pi-plus" class="btn btn-primary" @click="openNew" />
 
@@ -49,6 +50,7 @@
 
          <Button label="Upload" icon="pi pi-plus" class="btn btn-primary" @click="uploadDocumentHandler()" />
          <Button label="Delete" icon="pi pi-trash" class="btn btn-danger " @click="confirmDeleteSelected" :disabled="!selectedItems || !selectedItems.length" />
+         </div>
        </template>
 
 <!--       <template #right>-->
@@ -75,7 +77,30 @@
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
      >
        <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
-       <Column field="resourceNode.title" :header="$t('Title')" :sortable="true"></Column>
+       <Column field="resourceNode.title" :header="$t('Title')" :sortable="true">
+         <template #body="slotProps">
+
+           <div v-if="slotProps.data.resourceNode.resourceFile">
+             <a
+                 data-fancybox="gallery"
+                 :href="slotProps.data.contentUrl"
+             >
+               <ResourceFileIcon :file="slotProps.data" />
+               {{ slotProps.data.title }}
+             </a>
+           </div>
+           <div v-else>
+             <a @click="handleClick(slotProps.data)" class="cursor-pointer" >
+               <font-awesome-icon
+                   icon="folder"
+                   size="lg"
+               />
+               {{ slotProps.data.resourceNode.title }}
+             </a>
+           </div>
+         </template>
+
+       </Column>
        <Column field="resourceNode.updatedAt" :header="$t('Modified')" :sortable="true">
          <template #body="slotProps">
            {{$luxonDateTime.fromISO(slotProps.data.resourceNode.updatedAt).toRelative() }}
@@ -92,9 +117,11 @@
 
        <Column :exportable="false">
          <template #body="slotProps">
-           <Button label="Show" class="p-button-sm p-button p-button-success p-mr-2" @click="showHandler(slotProps.data)" />
-           <Button label="Edit" icon="pi pi-pencil" class="p-button-sm p-button p-button-success p-mr-2" @click="editHandler(slotProps.data)" />
-           <Button label="Delete" icon="pi pi-trash" class="p-button-sm p-button p-button-danger" @click="confirmDeleteSelected(slotProps.data)" />
+           <div class="flex flex-row gap-2">
+             <Button label="Show" class="p-button-sm p-button p-button-success p-mr-2" @click="showHandler(slotProps.data)" />
+             <Button label="Edit" icon="pi pi-pencil" class="p-button-sm p-button p-button-success p-mr-2" @click="editHandler(slotProps.data)" />
+             <Button label="Delete" icon="pi pi-trash" class="p-button-sm p-button p-button-danger" @click="confirmDeleteSelected(slotProps.data)" />
+           </div>
          </template>
        </Column>
 

@@ -83,7 +83,8 @@ function displayForm(int $lpViewId)
             ],
             $lpView->getUserId(),
             $lpView->getCId(),
-            $lpView->getSessionId()
+            $lpView->getSessionId(),
+            true
         );
         exit;
     }

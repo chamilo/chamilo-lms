@@ -60,7 +60,8 @@ class StudentFollowPage
         array $lpInfo,
         int $studentId,
         int $courseId,
-        int $sessionId = 0
+        int $sessionId = 0,
+        bool $allowEdit = false
     ): string {
         $lpView = learnpath::findLastView($lpInfo['iid'], $studentId, $courseId, $sessionId);
 
@@ -106,11 +107,13 @@ class StudentFollowPage
         $editUrl = api_get_path(WEB_AJAX_PATH).'student_follow_page.ajax.php?'
             .http_build_query(['lp_view' => $lpView['iid'], 'a' => 'form_adquisition']);
 
-        $return .= Display::url(
-            Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_TINY),
-            $editUrl,
-            ['class' => 'ajax', 'data-title' => $lpInfo['lp_name']]
-        );
+        if ($allowEdit) {
+            $return .= Display::url(
+                Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_TINY),
+                $editUrl,
+                ['class' => 'ajax', 'data-title' => $lpInfo['lp_name']]
+            );
+        }
 
         return '<div id="acquisition-'.$lpView['iid'].'">'.$return.'</div>';
     }
@@ -164,13 +167,26 @@ class StudentFollowPage
 
         $attrs = [];
 
-        $extraFieldValue = new ExtraFieldValue('lp_view');
-        $value = $extraFieldValue->get_values_by_handler_and_field_variable($lpView['iid'], self::VARIABLE_INVISIBLE);
+        $isVisible = self::isViewVisible($lpInfo['iid'], $studentId, $courseId, $sessionId);
 
-        if (empty($value) || empty($value['value'])) {
+        if ($isVisible) {
             $attrs['checked'] = 'checked';
         }
 
         return Display::input('checkbox', 'chkb_view[]', $lpView['iid'], $attrs);
+    }
+
+    public static function isViewVisible(int $lpId, int $studentId, int $courseId, int $sessionId): bool
+    {
+        $lpView = learnpath::findLastView($lpId, $studentId, $courseId, $sessionId);
+
+        if (empty($lpView)) {
+            return false;
+        }
+
+        $extraFieldValue = new ExtraFieldValue('lp_view');
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($lpView['iid'], self::VARIABLE_INVISIBLE);
+
+        return empty($value) || empty($value['value']) ? true : false;
     }
 }

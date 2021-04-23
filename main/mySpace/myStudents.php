@@ -1629,7 +1629,8 @@ if (empty($details)) {
                         $learnpath,
                         $student_id,
                         $courseInfo['real_id'],
-                        $sessionId
+                        $sessionId,
+                        true
                     );
                     $contentToExport[] = strip_tags(str_replace('<br>', "\n", $lpAcquisition));
                     echo Display::tag('td', $lpAcquisition);

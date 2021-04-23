@@ -7,8 +7,10 @@
 
     <div v-for="categories in tools" class="grid gap-4 grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
       <div v-for="tool in categories" class="bg-gray-100 rounded-xl p-4 shadow-md">
-        <div class="flex flex-col flex-center">
-          <q-avatar rounded>
+        <a  :href="goToCourse(course, tool)" class="flex flex-col flex-center">
+
+
+          <q-avatar rounded >
             <img
                 :alt="tool.name"
                 :src="'/img/tools/' + tool.name + '.png'"
@@ -23,7 +25,7 @@
               </a>
             </div>
           </q-item-section>
-        </div>
+        </a>
       </div>
     </div>
   </div>

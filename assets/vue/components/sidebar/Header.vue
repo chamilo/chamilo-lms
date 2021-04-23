@@ -4,18 +4,29 @@
   >
 
     <div class="flex items-center" v-if="isAuthenticated">
-      <q-tabs align="center" dense inline-label no-caps>
-        <q-route-tab to="/" label="Home" />
-        <q-route-tab to="/courses" label="My courses" />
-        <q-route-tab to="/main/calendar/agenda_js.php?type=personal" label="Agenda" />
-      </q-tabs>
-<!--      <router-link :to="{name: 'Home'}" tag="button" class="flex items-center justify-center h-10 px-4 ml-auto text-sm font-medium rounded hover:bg-gray-300">-->
-<!--        Home-->
-<!--      </router-link>-->
+<!--      <q-tabs align="center" dense inline-label no-caps>-->
+<!--        <q-route-tab to="/" label="Home" />-->
+<!--        <q-route-tab to="/courses" label="My courses" />-->
+<!--        <q-route-tab to="/main/calendar/agenda_js.php?type=personal" label="Agenda" />-->
+<!--      </q-tabs>-->
 
-<!--      <router-link :to="{name: 'MyCourses'}" tag="button"  class="flex items-center justify-center h-10 px-4 ml-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300">-->
-<!--        My courses-->
-<!--      </router-link>-->
+      <div class="w-full hidden md:flex items-center">
+        <router-link
+            :to="{name: 'Home'}"
+           tag="a"
+           class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent pr-6"
+        >
+          Home
+        </router-link>
+
+        <router-link
+            :to="{name: 'MyCourses'}"
+            tag="a"
+            class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent pr-6"
+        >
+          My courses
+        </router-link>
+      </div>
     </div>
 
     <div class="flex items-center">
@@ -145,7 +156,11 @@
                 <q-item href="/account/edit" tag="a"  class="">
                   <q-item-section>Settings</q-item-section>
                 </q-item>
-                <q-item href="/logout" tag="a" clickable class="">
+<!--                href="/logout"-->
+                <q-item
+                    @click.prevent="logoutAction"
+
+                        tag="a" clickable class="">
                   <q-item-section>
                     Sign out
                   </q-item-section>
@@ -155,7 +170,10 @@
       </div>
 
       <div v-else class="relative">
-        <router-link :to="'/login'" tag="button"  class="flex items-center justify-center h-10 px-4 ml-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300">
+        <router-link
+            :to="'/login'"
+            tag="button"
+           class="btn btn-primary">
           Sign in
         </router-link>
       </div>
@@ -164,16 +182,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, toRefs } from "vue";
+import {computed, defineComponent, ref, toRefs} from "vue";
 import { useSidebar } from "../../hooks/useSidebar";
 import isEmpty from "lodash";
 import {mapGetters} from "vuex";
+import TabMenu from 'primevue/tabmenu';
+import axios from "axios";
+import { useStore } from 'vuex';
+import {useRouter} from "vue-router";
 
 export default defineComponent({
+  components: {
+    TabMenu
+  },
   setup() {
     const dropdownOpen = ref(false);
     const { isOpen } = useSidebar();
     const userAvatar = ref(window.userAvatar);
+
 
     console.log('defineComponent window.user');
     console.log(window.user);
@@ -184,10 +210,71 @@ export default defineComponent({
       userAvatar.value = window.userAvatar;
       //isAuthenticated = true;
     }
+    const store = useStore();
+    //const user = computed(() => store.getters['security/getUser']);
+    const router = useRouter();
 
-    console.log(userAvatar.value);
+    async function logoutAction() {
+      console.log('logout');
+      await store.dispatch('security/logout');
+      router.push({path: '/'});
+
+      /*axios.get('/logout').then(response => {
+        console.log(response);
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('vuex');
+
+        // remove any other authenticated user data you put in local storage
+
+        // Assuming that you set this earlier for subsequent Ajax request at some point like so:
+        // axios.defaults.headers.common['Authorization'] = 'Bearer ' + auth_token ;
+        delete axios.defaults.headers.common['Authorization'];
+
+        // If using 'vue-router' redirect to login page
+        //this.$router.go('/login');
+      })
+          .catch(error => {
+            // If the api request failed then you still might want to remove
+            // the same data from localStorage anyways
+            // perhaps this code should go in a finally method instead of then and catch
+            // methods to avoid duplication.
+            localStorage.removeItem('auth_token');
+            delete axios.defaults.headers.common['Authorization'];
+            //this.$router.go('/login');
+          });*/
+    }
+
+    const items = ref([
+      {
+        label: 'Home',
+        icon: 'pi pi-fw pi-home',
+        to: '/'
+      },
+      {
+        label: 'Calendar',
+        icon: 'pi pi-fw pi-calendar',
+        to: '/calendar'
+      },
+      {
+        label: 'Edit',
+        icon: 'pi pi-fw pi-pencil',
+        to: '/edit'
+      },
+      {
+        label: 'Documentation',
+        icon: 'pi pi-fw pi-file',
+        to: '/documentation'
+      },
+      {
+        label: 'Settings',
+        icon: 'pi pi-fw pi-cog',
+        to: '/settings'
+      }
+    ]);
 
     return {
+      logoutAction,
+      items,
       userAvatar,
       isOpen,
       dropdownOpen,
@@ -198,6 +285,7 @@ export default defineComponent({
       'isAuthenticated': 'security/isAuthenticated',
       'isAdmin': 'security/isAdmin',
       'currentUser': 'security/getUser',
+      'logout': 'security/logout',
     }),
   },
 });

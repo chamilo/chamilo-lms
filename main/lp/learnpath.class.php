@@ -12414,9 +12414,9 @@ EOD;
     /**
      * @param int $courseId
      *
-     * @return CLpCategory[]
+     * @return array|CLpCategory[]
      */
-    public static function getCategories($courseId)
+    public static function getCategories($courseId, $withNoneCategory = false)
     {
         $em = Database::getManager();
 
@@ -12424,7 +12424,18 @@ EOD;
         /** @var SortableRepository $repo */
         $repo = $em->getRepository('ChamiloCourseBundle:CLpCategory');
 
-        return $repo->getBySortableGroupsQuery(['cId' => $courseId])->getResult();
+        $categories = $repo->getBySortableGroupsQuery(['cId' => $courseId])->getResult();
+
+        if ($withNoneCategory) {
+            $categoryTest = new CLpCategory();
+            $categoryTest->setId(0)
+                ->setName(get_lang('WithOutCategory'))
+                ->setPosition(0);
+
+            array_unshift($categories, $categoryTest);
+        }
+
+        return $categories;
     }
 
     public static function getCategorySessionId($id)

@@ -492,6 +492,14 @@ echo '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING'
 echo '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&export=xls">'
     .Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a> ';
 
+if (!empty($student_id) && empty($courseCode)) {
+    echo Display::url(
+        Display::return_icon('export_pdf.png', get_lang('ExportToPDF'), [], ICON_SIZE_MEDIUM),
+        'student_follow_export.php?'.http_build_query(['student' => $student_id]),
+        ['class' => 'ajax', 'data-title' => get_lang('ExportToPDF')]
+    );
+}
+
 echo Display::url(
     Display::return_icon('activity_monitor.png', get_lang('AccessDetails'), '', ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'mySpace/access_details_session.php?user_id='.$student_id

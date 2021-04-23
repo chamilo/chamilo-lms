@@ -14183,6 +14183,20 @@ EOD;
         }
     }
 
+    public static function findLastView(int $lpId, int $studentId, int $courseId, int $sessionId = 0)
+    {
+        $tblLpView = Database::get_course_table(TABLE_LP_VIEW);
+
+        $sessionCondition = api_get_session_condition($sessionId);
+
+        $sql = "SELECT iid FROM $tblLpView
+            WHERE c_id = $courseId AND lp_id = $lpId AND user_id = $studentId $sessionCondition
+            ORDER BY view_count DESC";
+        $result = Database::query($sql);
+
+        return Database::fetch_assoc($result);
+    }
+
     /**
      * Get the depth level of LP item.
      *
@@ -14320,19 +14334,5 @@ EOD;
             }
             $author->setOptions($options);
         }
-    }
-
-    public static function findLastView(int $lpId, int $studentId, int $courseId, int $sessionId = 0)
-    {
-        $tblLpView = Database::get_course_table(TABLE_LP_VIEW);
-
-        $sessionCondition = api_get_session_condition($sessionId);
-
-        $sql = "SELECT iid FROM $tblLpView
-            WHERE c_id = $courseId AND lp_id = $lpId AND user_id = $studentId $sessionCondition
-            ORDER BY view_count DESC";
-        $result = Database::query($sql);
-
-        return Database::fetch_assoc($result);
     }
 }

@@ -128,7 +128,7 @@ function generateForm(int $studentId, array $coursesInSessions): FormValidator
 
 function generateHtmlForLearningPaths(User $student, array $courseInfo, int $sessionId): string
 {
-    $html = Display::page_subheader2(get_lang('ToolLearnpath'));;
+    $html = Display::page_subheader2(get_lang('ToolLearnpath'));
 
     $columnHeaders = [];
     $columnHeaders['lp'] = get_lang('LearningPath');
@@ -228,7 +228,7 @@ function generateHtmlForLearningPaths(User $student, array $courseInfo, int $ses
                     true
                 );
 
-                $contentToExport[] = empty($bestScore) ? '': "$bestScore %";
+                $contentToExport[] = empty($bestScore) ? '' : "$bestScore %";
             }
 
             if (in_array('latest_attempt_avg_score', $columnHeadersKeys)) {
@@ -304,7 +304,7 @@ function generateHtmlForLearningPaths(User $student, array $courseInfo, int $ses
 
 function generateHtmlForQuizzes(int $studentId, array $courseInfo, int $sessionId): string
 {
-    $html = Display::page_subheader2(get_lang('ToolQuiz'));;
+    $html = Display::page_subheader2(get_lang('ToolQuiz'));
 
     $columnHeaders = [];
     $columnHeaders[] = get_lang('Exercises');

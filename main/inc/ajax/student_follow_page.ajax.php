@@ -72,7 +72,7 @@ function displayForm(int $lpViewId)
                 'variable' => StudentFollowPage::VARIABLE_ACQUISITION,
                 'item_id' => $lpViewId,
                 'comment' => json_encode(['user' => api_get_user_id(), 'datetime' => api_get_utc_datetime()]),
-                'value' => $values[StudentFollowPage::VARIABLE_ACQUISITION]
+                'value' => $values[StudentFollowPage::VARIABLE_ACQUISITION],
             ]
         );
 
@@ -133,5 +133,4 @@ function processViewsInvisible(array $lpViewsIds, bool $state)
             ]
         );
     }
-
 }

@@ -885,7 +885,7 @@ class Event
 
     public static function findUserSubscriptionToCourse(int $userId, int $courseId, int $sessionId = 0)
     {
-        $tblTrackEDefault = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);;
+        $tblTrackEDefault = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
 
         return Database::select(
             '*',
@@ -897,7 +897,7 @@ class Event
                     'default_value LIKE ? AND ' => '%s:2:\\\\"id\\\\";i:'.$userId.'%',
                     'c_id = ? AND ' => $courseId,
                     'session_id = ?' => $sessionId,
-                ]
+                ],
             ],
             'first'
         );

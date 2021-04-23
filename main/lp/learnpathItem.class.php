@@ -4536,4 +4536,21 @@ class learnpathItem
             return $resultFromOtherSessions;
         }
     }
+
+    public static function isLpItemAutoComplete($lpItemId): bool
+    {
+        $extraFieldValue = new ExtraFieldValue('lp_item');
+        $saveAutomatic = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $lpItemId,
+            'no_automatic_validation'
+        );
+
+        if (false !== $saveAutomatic && is_array($saveAutomatic) && isset($saveAutomatic['value'])) {
+            if (1 === (int) $saveAutomatic['value']) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

@@ -2574,6 +2574,7 @@ class learnpath
         // path, then the rules are completely different: we assume only one
         // item exists and the progress of the LP depends on the score
         $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
+
         if ($scoreAsProgressSetting === true) {
             $scoreAsProgress = $this->getUseScoreAsProgress();
             if ($scoreAsProgress) {
@@ -2605,6 +2606,7 @@ class learnpath
         if ($completeItems > $total_items) {
             $completeItems = $total_items;
         }
+
         if ($mode == '%') {
             if ($total_items > 0) {
                 $percentage = ((float) $completeItems / (float) $total_items) * 100;
@@ -5596,10 +5598,14 @@ class learnpath
                 if ($debug) {
                     error_log('start_current_item will save item with prereq: '.$prereq_check);
                 }
-                $this->items[$this->current]->save(false, $prereq_check);
+
+                $saveStatus = learnpathItem::isLpItemAutoComplete($this->current);
+                if ($saveStatus) {
+                    $this->items[$this->current]->save(false, $prereq_check);
+                }
             }
             // If sco, then it is supposed to have been updated by some other call.
-            if ($item_type == 'sco') {
+            if ($item_type === 'sco') {
                 $this->items[$this->current]->restart();
             }
         }

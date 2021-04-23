@@ -34,6 +34,8 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
         error_log('In switch_item_toc('.$lpId.','.$userId.','.$viewId.','.$currentItem.','.$nextItem.')', 0);
     }
     $myLP = learnpath::getLpFromSession(api_get_course_id(), $lpId, $userId);
+    $saveStatus = learnpathItem::isLpItemAutoComplete($currentItem);
+
     $newItemId = 0;
     $oldItemId = 0;
     switch ($nextItem) {
@@ -79,7 +81,8 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
             break;
     }
     $myLP->start_current_item(true);
-    if ($myLP->force_commit) {
+
+    if ($myLP->force_commit && $saveStatus) {
         $myLP->save_current();
     }
     if (is_object($myLP->items[$newItemId])) {

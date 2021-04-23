@@ -217,10 +217,8 @@ $form->addGroup($group, 'password', get_lang('Password'));
 $form->addElement(
     'checkbox',
     'showPassword',
-    '<label for="showPassword" style="cursor: pointer;">'.
     get_lang('ShowOrHide')." ".get_lang('Password')." ".
-    Display::returnFontAwesomeIcon('eye', null, true, 'showPasswordEye')
-    .'</label> ',
+    Display::returnFontAwesomeIcon('eye', null, true, 'showPasswordEye'),
     '',
     [
         'id' => 'showPassword',
@@ -316,21 +314,16 @@ if ($allowEmailTemplate) {
 $jquery_ready_content = $returnParams['jquery_ready_content'];
 
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 $(function () {
     '.$jquery_ready_content.'
-    if($(\'#showPassword\').prop(\'checked\')){
-        $(\'.showPasswordEye\').removeClass(\'fa-eye\').addClass(\'fa-eye-slash\');
-    }else{
-        $(\'.showPasswordEye\').addClass(\'fa-eye\').removeClass(\'fa-eye-slash\');
-    }
 });
-function ShowHidePassword(){
+function ShowHidePassword() {
 
-        if($(\'#showPassword\').prop(\'checked\')){
+        if ($(\'#showPassword\').prop(\'checked\')) {
             $(\'#password\').attr(\'type\',\'text\');
             $(\'.showPasswordEye\').removeClass(\'fa-eye\').addClass(\'fa-eye-slash\');
-        }else{
+        } else {
             $(\'#password\').attr(\'type\',\'password\');
             $(\'.showPasswordEye\').addClass(\'fa-eye\').removeClass(\'fa-eye-slash\');
         }

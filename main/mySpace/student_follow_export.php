@@ -183,7 +183,7 @@ function generateHtmlForLearningPaths(User $student, array $courseInfo, int $ses
             true
         );
 
-        $flat_list = $lpList->get_flat_list();
+        $flatList = $lpList->get_flat_list();
 
         if (count($lpCategories) > 1) {
             $html .= Display::page_subheader3($item->getName());
@@ -191,7 +191,7 @@ function generateHtmlForLearningPaths(User $student, array $courseInfo, int $ses
 
         $lpTable = [$columnHeaders];
 
-        foreach ($flat_list as $learnpath) {
+        foreach ($flatList as $learnpath) {
             $lpId = $learnpath['lp_old_id'];
 
             $contentToExport = [];

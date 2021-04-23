@@ -2384,7 +2384,10 @@ class Tracking
                         ";
                         $result = Database::query($sql);
                         $row_lp = Database::fetch_row($result);
-                        $lp_name = $row_lp[0];
+                        $lp_name = null;
+                        if ($row_lp && isset($row_lp[0])) {
+                            $lp_name = $row_lp[0];
+                        }
 
                         return [$quiz_avg_score, $lp_name];
                     } else {

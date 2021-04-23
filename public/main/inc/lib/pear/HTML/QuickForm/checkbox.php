@@ -33,7 +33,7 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
     /**
      * Class constructor.
      *
-     * @param string $elementName  (optional)Input field name attribute
+     * @param string $elementName  Input field name attribute
      * @param string $elementLabel (optional)Input field value
      * @param string $text         (optional)Checkbox display text
      * @param mixed  $attributes   (optional)Either a typical HTML attribute string
@@ -47,7 +47,7 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
         $elementName = null,
         $elementLabel = null,
         $text = '',
-        $attributes = null
+        ?array $attributes = []
     ) {
         $this->labelClass = isset($attributes['label-class']) ? $attributes['label-class'] : '';
         $this->checkboxClass = isset($attributes['checkbox-class']) ? $attributes['checkbox-class'] : 'checkbox';

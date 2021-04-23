@@ -2755,27 +2755,22 @@ class GroupManager
         }
 
         $url = api_get_path(WEB_CODE_PATH).'group/%s?'.api_get_cidreq();
-
-        echo '
-            <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <a class="nav-link '.$activeSettings.'"
-                        id="group_settings_tab" href="'.sprintf($url, 'settings.php').'">
-                    '.Display::return_icon('settings.png').' '.get_lang('Settings').'
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link '.$activeMember.'"
-                        id="group_members_tab" href="'.sprintf($url, 'member_settings.php').'">
-                    '.Display::return_icon('user.png').' '.get_lang('Group members').'</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link  '.$activeTutor.'"
-                        id="group_tutors_tab" href="'.sprintf($url, 'tutor_settings.php').'">
+        $items = [
+            '<a class="nav-link '.$activeSettings.'"
+                id="group_settings_tab" href="'.sprintf($url, 'settings.php').'">
+                '.Display::return_icon('settings.png').' '.get_lang('Settings').'
+            </a>'.
+            '<a class="nav-link '.$activeMember.'"
+                    id="group_members_tab" href="'.sprintf($url, 'member_settings.php').'">
+                    '.Display::return_icon('user.png').' '.get_lang('Group members').
+            '</a>'.
+            '<a class="nav-link  '.$activeTutor.'"
+                    id="group_tutors_tab" href="'.sprintf($url, 'tutor_settings.php').'">
                     '.Display::return_icon('teacher.png').' '.get_lang('Group tutors').'
-                    </a>
-                </li>
-            </ul>';
+            </a>',
+        ];
+
+        echo Display::toolbarAction('group', $items);
     }
 
     public static function groupOverview($group, $url)

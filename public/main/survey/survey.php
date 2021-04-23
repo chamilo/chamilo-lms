@@ -185,59 +185,58 @@ if (3 != $survey_data['survey_type']) {
 }
 
 $survey_actions .= SurveyUtil::getAdditionalTeacherActions($survey_id, ICON_SIZE_MEDIUM);
-
-echo '<div class="actions">'.$survey_actions.'</div>';
+echo Display::toolbarAction('survey', [$survey_actions]);
 
 $urlQuestion = api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&action=add';
 if (0 == $survey_data['survey_type']) {
-    echo '<div class="well">';
-    echo Display::url(
+    $questions = Display::url(
         Display::return_icon('yesno.png', get_lang('Yes / No'), null, ICON_SIZE_BIG),
         $urlQuestion.'&type=yesno&survey_id='.$survey_id
     );
-    echo Display::url(
+    $questions .= Display::url(
         Display::return_icon('mcua.png', get_lang('Multiple choice'), null, ICON_SIZE_BIG),
         $urlQuestion.'&type=multiplechoice&survey_id='.$survey_id
     );
-    echo Display::url(
+    $questions .= Display::url(
         Display::return_icon('mcma.png', get_lang('Multiple answers'), null, ICON_SIZE_BIG),
         $urlQuestion.'&type=multipleresponse&survey_id='.$survey_id
     );
-    echo Display::url(
+    $questions .= Display::url(
         Display::return_icon('open_answer.png', get_lang('Open'), null, ICON_SIZE_BIG),
         $urlQuestion.'&type=open&survey_id='.$survey_id
     );
-    echo Display::url(
+    $questions .= Display::url(
         Display::return_icon('dropdown.png', get_lang('Dropdown'), null, ICON_SIZE_BIG),
         $urlQuestion.'&type=dropdown&survey_id='.$survey_id
     );
-    echo Display::url(
+    $questions .= Display::url(
         Display::return_icon('percentagequestion.png', get_lang('Percentage'), null, ICON_SIZE_BIG),
         $urlQuestion.'&type=percentage&survey_id='.$survey_id
     );
-    echo Display::url(
+    $questions .= Display::url(
         Display::return_icon('scorequestion.png', get_lang('Score'), null, ICON_SIZE_BIG),
         $urlQuestion.'&type=score&survey_id='.$survey_id
     );
-    echo Display::url(
+    $questions .= Display::url(
         Display::return_icon('commentquestion.png', get_lang('Comment'), null, ICON_SIZE_BIG),
         $urlQuestion.'&type=comment&survey_id='.$survey_id
     );
-    echo Display::url(
+    $questions .= Display::url(
         Display::return_icon('mcua.png', get_lang('SurveyMultipleAnswerWithOther'), null, ICON_SIZE_BIG),
         $urlQuestion.'&type=multiplechoiceother&survey_id='.$survey_id
     );
     if (0 == $survey_data['one_question_per_page']) {
-        echo Display::url(
+        $questions .= Display::url(
             Display::return_icon('yesno.png', get_lang('SurveyQuestionSelectiveDisplay'), null, ICON_SIZE_BIG),
             $urlQuestion.'&type=selectivedisplay&survey_id='.$survey_id
         );
-        echo Display::url(
+        $questions .= Display::url(
             Display::return_icon('page_end.png', get_lang('Pagebreak'), null, ICON_SIZE_BIG),
             $urlQuestion.'&type=pagebreak&survey_id='.$survey_id
         );
     }
-    echo '</div>';
+
+    echo Display::toolbarAction('questions', [$questions]);
 } else {
     if (3 != $survey_data['survey_type']) {
         echo '<div class="well">';

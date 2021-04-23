@@ -286,13 +286,14 @@ if ('true' === api_get_setting('allow_group_categories')) {
             }
         }
 
-        echo Display::page_header(
-            Security::remove_XSS($category['title'].' '.$label.' ').$actions,
+        $header = Display::page_header(
+            Security::remove_XSS($category['title'].' '.$label.' '),
             null,
             'h4',
             false
         );
 
+        echo Display::toolbarAction('category_'.$categoryId, [$header.$actions]);
         echo $category['description'];
         echo $groupToShow;
     }

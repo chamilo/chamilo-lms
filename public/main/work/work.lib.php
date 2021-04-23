@@ -5496,7 +5496,7 @@ function getFormWork($form, $defaults = [], $workId = 0)
     }
 
     // ScoreOfAssignment
-    $form->addElement('text', 'qualification', get_lang('ScoreNumeric'));
+    $form->addText('qualification', get_lang('ScoreNumeric'));
 
     if (0 != $sessionId && Gradebook::is_active() || 0 == $sessionId) {
         $form->addElement(
@@ -5511,7 +5511,7 @@ function getFormWork($form, $defaults = [], $workId = 0)
         );
     } else {
         // QualificationOfAssignment
-        $form->addElement('hidden', 'make_calification', false);
+        $form->addHidden('make_calification', false);
     }
 
     if (!empty($defaults) && isset($defaults['category_id'])) {
@@ -5526,7 +5526,12 @@ function getFormWork($form, $defaults = [], $workId = 0)
     $form->addElement('text', 'weight', get_lang('Weight inside assessment'));
     $form->addHtml('</div>');
 
-    $form->addElement('checkbox', 'enableExpiryDate', null, get_lang('Enable handing over deadline (visible to learners)'), 'id="expiry_date"');
+    $form->addCheckBox(
+        'enableExpiryDate',
+        null,
+        get_lang('Enable handing over deadline (visible to learners)'),
+        ['id' => 'expiry_date']
+    );
     if (isset($defaults['enableExpiryDate']) && $defaults['enableExpiryDate']) {
         $form->addHtml('<div id="option2" style="display: block;">');
     } else {
@@ -5542,7 +5547,12 @@ function getFormWork($form, $defaults = [], $workId = 0)
 
     $form->addElement('date_time_picker', 'expires_on', get_lang('Posted sending deadline'));
     $form->addHtml('</div>');
-    $form->addElement('checkbox', 'enableEndDate', null, get_lang('Enable final acceptance date (invisible to learners)'), 'id="end_date"');
+    $form->addCheckBox(
+        'enableEndDate',
+        null,
+        get_lang('Enable final acceptance date (invisible to learners)'),
+        ['id' => 'end_date']
+    );
 
     if (!isset($defaults['ends_on'])) {
         $nextDay = substr(api_get_local_time($timeNextWeek + 86400), 0, 10);
@@ -5558,8 +5568,8 @@ function getFormWork($form, $defaults = [], $workId = 0)
     $form->addElement('date_time_picker', 'ends_on', get_lang('Ends at (completely closed)'));
     $form->addHtml('</div>');
 
-    $form->addElement('checkbox', 'add_to_calendar', null, get_lang('Add to calendar'));
-    $form->addElement('select', 'allow_text_assignment', get_lang('Document type'), getUploadDocumentType());
+    $form->addCheckBox('add_to_calendar', null, get_lang('Add to calendar'));
+    $form->addSelect('allow_text_assignment', get_lang('Document type'), getUploadDocumentType());
 
     // Extra fields
     $extraField = new ExtraField('work');

@@ -1150,14 +1150,12 @@ class Display
         $attributes['id'] = $id;
         $attributes['class'] = 'tab_wrapper';
 
-        $html = self::tag(
+        return self::tag(
             'div',
             $ul.
             self::tag('div', $divs, ['class' => 'tab-content']),
             $attributes
         );
-
-        return $html;
     }
 
     /**
@@ -1170,7 +1168,7 @@ class Display
     {
         $id = uniqid('tabs_');
         $i = 1;
-        $lis = null;
+        $list = '';
         foreach ($headers as $item) {
             $class = null;
             if ($i == $selected) {
@@ -1185,15 +1183,11 @@ class Display
                     'class' => 'nav-link '.$class,
                 ]
             );
-            $lis .= self::tag('li', $item, ['class' => 'nav-item']);
+            $list .= $item;
             $i++;
         }
 
-        return self::tag(
-            'ul',
-            $lis,
-            ['class' => 'nav nav-tabs']
-        );
+        return self::toolbarAction($id, [$list]);
     }
 
     /**

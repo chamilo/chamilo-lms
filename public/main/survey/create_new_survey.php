@@ -213,19 +213,22 @@ $form->addElement('html', '<div id="advanced_params_options" style="display:none
 
 if (Gradebook::is_active()) {
     // An option: Qualify the fact that survey has been answered in the gradebook
-    $form->addElement(
-        'checkbox',
+    $form->addCheckBox(
         'survey_qualify_gradebook',
         null,
         get_lang('Grade in the assessment tool'),
-        'onclick="javascript: if (this.checked) { document.getElementById(\'gradebook_options\').style.display = \'block\'; } else { document.getElementById(\'gradebook_options\').style.display = \'none\'; }"'
+        ['onclick' => 'javascript: if (this.checked) { document.getElementById(\'gradebook_options\').style.display = \'block\'; } else { document.getElementById(\'gradebook_options\').style.display = \'none\'; }'],
     );
     $form->addHtml('<div id="gradebook_options"'.($gradebook_link_id ? '' : ' style="display:none"').'>');
-    $form->addElement(
-        'text',
+    $form->addText(
         'survey_weight',
         get_lang('Weight in Report'),
-        'value="0.00" style="width: 40px;" onfocus="javascript: this.select();"'
+        false,
+        [
+            'value' => "0.00",
+            'style' => "width: 40px;",
+            'onfocus' => 'javascript: this.select();',
+        ]
     );
     $form->applyFilter('survey_weight', 'html_filter');
 

@@ -559,7 +559,7 @@ class Category implements GradebookItem
             $category->setUser(api_get_user_entity($this->user_id));
             $category->setCourse($course);
             $category->setParent($parent);
-            $category->setWeight($this->weight);
+            $category->setWeight(api_float_val($this->weight));
             $category->setVisible($this->visible ? true : false);
             $category->setCertifMinScore($this->certificate_min_score);
             $category->setSession(api_get_session_entity($this->session_id));

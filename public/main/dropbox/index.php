@@ -231,47 +231,47 @@ if ('add' != $action) {
     }
 
     // ACTIONS
-    if ('received' == $view || !$showSentReceivedTabs) {
+    if ('received' === $view || !$showSentReceivedTabs) {
         // This is for the categories
         if (isset($viewReceivedCategory) && '' != $viewReceivedCategory) {
             $view_dropbox_category_received = $viewReceivedCategory;
         } else {
             $view_dropbox_category_received = 0;
         }
-        /* Menu Received */
 
+        /* Menu Received */
+        $actions = '';
         if (0 == api_get_session_id()) {
-            echo '<div class="actions">';
             if (0 != $view_dropbox_category_received && api_is_allowed_to_session_edit(false, true)) {
-                echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&view_sent_category='.$viewSentCategory.'&view='.$view.'">'.
+                $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&view_sent_category='.$viewSentCategory.'&view='.$view.'">'.
                     Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('root'), '', ICON_SIZE_MEDIUM).
                     "</a>";
-                echo get_lang('Category').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_received]['cat_name']).'</strong> ';
+                $actions .= get_lang('Category').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_received]['cat_name']).'</strong> ';
                 $movelist[0] = 'Root'; // move_received selectbox content
             } else {
-                echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory&view='.$view.'">'.
+                $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory&view='.$view.'">'.
                     Display::return_icon('new_folder.png', get_lang('Add a new folder'), '', ICON_SIZE_MEDIUM).'</a>';
             }
-            echo '</div>';
+            echo Display::toolbarAction('dropbox', [$actions]);
         } else {
             if (api_is_allowed_to_session_edit(false, true)) {
-                echo '<div class="actions">';
                 if (0 != $view_dropbox_category_received && api_is_allowed_to_session_edit(false, true)) {
-                    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&view_sent_category='.$viewSentCategory.'&view='.$view.'">'.
+                    $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&view_sent_category='.$viewSentCategory.'&view='.$view.'">'.
                         Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('root'), '', ICON_SIZE_MEDIUM)."</a>";
-                    echo get_lang('Category').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_received]['cat_name']).'</strong> ';
+                    $actions .= get_lang('Category').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_received]['cat_name']).'</strong> ';
                     $movelist[0] = 'Root'; // move_received selectbox content
                 } else {
-                    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory&view='.$view.'">'.
+                    $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory&view='.$view.'">'.
                         Display::return_icon('new_folder.png', get_lang('Add a new folder'), '', ICON_SIZE_MEDIUM).
                         '</a>';
                 }
-                echo '</div>';
+                echo Display::toolbarAction('dropbox', [$actions]);
             }
         }
     }
 
-    if (!$view || 'sent' == $view || !$showSentReceivedTabs) {
+    $actions = '';
+    if (!$view || 'sent' === $view || !$showSentReceivedTabs) {
         // This is for the categories
         if (isset($viewSentCategory) && '' != $viewSentCategory) {
             $view_dropbox_category_sent = $viewSentCategory;
@@ -281,40 +281,38 @@ if ('add' != $action) {
 
         /* Menu Sent */
         if (0 == api_get_session_id()) {
-            echo '<div class="actions">';
             if (empty($viewSentCategory)) {
-                echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=add\">".
+                $actions .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=add\">".
                     Display::return_icon('upload_file.png', get_lang('Share a new file'), '', ICON_SIZE_MEDIUM).
                     "</a>";
             }
             if (0 != $view_dropbox_category_sent) {
-                echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category=0&view='.$view.'">'.
+                $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category=0&view='.$view.'">'.
                     Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('root'), '', ICON_SIZE_MEDIUM).
                     "</a>";
-                echo get_lang('Category').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_sent]['cat_name']).'</strong> ';
+                $actions .= get_lang('Category').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_sent]['cat_name']).'</strong> ';
             } else {
-                echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=addsentcategory\">".
+                $actions .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=addsentcategory\">".
                     Display::return_icon('new_folder.png', get_lang('Add a new folder'), '', ICON_SIZE_MEDIUM)."</a>\n";
             }
-            echo '</div>';
+            echo Display::toolbarAction('dropbox', [$actions]);
         } else {
             if (api_is_allowed_to_session_edit(false, true)) {
-                echo '<div class="actions">';
                 if (empty($viewSentCategory)) {
-                    echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=add\">".
+                    $actions .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=add\">".
                         Display::return_icon('upload_file.png', get_lang('Share a new file'), '', ICON_SIZE_MEDIUM).
                     "</a>";
                 }
                 if (0 != $view_dropbox_category_sent) {
-                    echo get_lang('You are in folder').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_sent]['cat_name']).'</strong> ';
-                    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category=0&view='.$view.'">'.
+                    $actions .= get_lang('You are in folder').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_sent]['cat_name']).'</strong> ';
+                    $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category=0&view='.$view.'">'.
                         Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('root'), '', ICON_SIZE_MEDIUM).
                         "</a>";
                 } else {
-                    echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=addsentcategory\">".
+                    $actions .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=addsentcategory\">".
                         Display::return_icon('new_folder.png', get_lang('Add a new folder'), '', ICON_SIZE_MEDIUM)."</a>\n";
                 }
-                echo '</div>';
+                echo Display::toolbarAction('dropbox', [$actions]);
             }
         }
     }
@@ -339,7 +337,7 @@ if ('add' != $action) {
 <?php
     }
     /*	RECEIVED FILES */
-    if ('received' == $view || !$showSentReceivedTabs) {
+    if ('received' === $view || !$showSentReceivedTabs) {
         // This is for the categories
         if (isset($viewReceivedCategory) && '' != $viewReceivedCategory) {
             $view_dropbox_category_received = $viewReceivedCategory;
@@ -455,7 +453,7 @@ if ('add' != $action) {
                 if ('viewfeedback' == $action && isset($_GET['id']) && is_numeric($_GET['id']) && $dropbox_file->id == $_GET['id']) {
                     $action_icons .= "</td></tr>"; // Ending the normal row of the sortable table
                     $url = api_get_path(WEB_CODE_PATH).'dropbox/index.php?"'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory."&view_sent_category=".$viewSentCategory."&view=".$view.'&'.$sort_params;
-                    $action_icons .= "        
+                    $action_icons .= "
                         <tr>
                         <td colspan=\"9\">".
                         feedback($dropbox_file->feedback2, $url).
@@ -628,10 +626,10 @@ if ('add' != $action) {
                 $action_icons = check_number_feedback($dropbox_file->id, $number_feedback).' '.get_lang('Feedback').'
                     <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=viewfeedback&id='.$dropbox_file->id.'&'.$sort_params.'">'.
                         Display::return_icon('discuss.png', get_lang('Comment'), '', ICON_SIZE_SMALL).
-                    '</a>                    
+                    '</a>
                     <a href="'.api_get_path(WEB_CODE_PATH).'dropbox/update.php?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=update&id='.$dropbox_file->id.'&'.$sort_params.'">'.
                         Display::return_icon('upload_file.png', get_lang('Update'), '', ICON_SIZE_SMALL).
-                    '</a>                    
+                    '</a>
                     <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=movesent&move_id='.$dropbox_file->id.'&'.$sort_params.'">'.
                         Display::return_icon('move.png', get_lang('Move'), '', ICON_SIZE_SMALL).'
                     </a>

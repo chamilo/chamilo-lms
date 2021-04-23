@@ -14,8 +14,8 @@ SessionManager::protectSession(null, false);
 // Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
-$idChecked = isset($_REQUEST['idChecked']) ? $_REQUEST['idChecked'] : null;
+$action = $_REQUEST['action'] ?? null;
+$idChecked = $_REQUEST['idChecked'] ?? null;
 $listType = isset($_REQUEST['list_type']) ? Security::remove_XSS($_REQUEST['list_type']) : SessionManager::getDefaultSessionTab();
 
 switch ($action) {

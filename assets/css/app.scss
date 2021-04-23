@@ -134,6 +134,14 @@
     border: 0;
   }
 
+  .list-group {
+    @apply flex flex-col mr-4;
+  }
+
+  .list-group-item {
+    @apply flex flex-row justify-start gap-2 border rounded-sm px-3 py-3;
+  }
+
   @import "scss/index.scss";
 }
 

@@ -38,8 +38,6 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
     public $radioClass;
 
     /**
-     * Class constructor
-     *
      * @param string    Input field name attribute
      * @param mixed     Label(s) for a field
      * @param string    Text to display near the radio
@@ -54,7 +52,7 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
         $elementLabel = null,
         $text = null,
         $value = null,
-        $attributes = []
+        ?array $attributes = []
     ) {
         $this->labelClass = $attributes['label-class'] ?? '';
         $this->radioClass = $attributes['radio-class'] ?? 'form-check';

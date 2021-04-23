@@ -166,9 +166,13 @@ $group = [
         'self_reg_allowed',
         get_lang('Registration'),
         get_lang('Learners are allowed to self-register in groups'),
-        1
     ),
-    $form->createElement('checkbox', 'self_unreg_allowed', null, get_lang('Learners are allowed to unregister themselves from groups'), 1),
+    $form->createElement(
+        'checkbox',
+        'self_unreg_allowed',
+        null,
+        get_lang('Learners are allowed to unregister themselves from groups')
+    ),
 ];
 $form->addGroup(
     $group,

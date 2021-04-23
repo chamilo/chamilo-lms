@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -41,17 +42,12 @@ class DateTimeRangePicker extends DateRangePicker
                         <span class="fa fa-trash text-danger" aria-hidden="true"></span>
                         <span class="sr-only">'.sprintf(get_lang('Reset %s'), $this->_label).'</span>
                     </button>
-                </span>                
-            </div>            
+                </span>
+            </div>
         '.$this->getElementJS();
     }
 
-    /**
-     * @param string $layout
-     *
-     * @return string
-     */
-    public function getTemplate($layout)
+    public function getTemplate(string $layout): string
     {
         $size = $this->calculateSize();
         $id = $this->getAttribute('id');
@@ -91,31 +87,31 @@ class DateTimeRangePicker extends DateRangePicker
                         <!-- BEGIN label_3 -->
                             {label_3}
                         <!-- END label_3 -->
-                    </div>            
-                </div>                
+                    </div>
+                </div>
                 <div class="form-group {error_class}">
                     <label class="col-sm-'.$size[0].' control-label" >
                         <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                         '.get_lang('Hour').'
                     </label>
-                    <div class="col-sm-'.$size[1].'"> 
-                        <div class="input-group"> 
-                            <p id="'.$id.'_time_range">                    
-                                <input type="text" id="'.$id.'_time_range_start" name="'.$id.'_time_range_start" class="time start" autocomplete="off"> 
+                    <div class="col-sm-'.$size[1].'">
+                        <div class="input-group">
+                            <p id="'.$id.'_time_range">
+                                <input type="text" id="'.$id.'_time_range_start" name="'.$id.'_time_range_start" class="time start" autocomplete="off">
                                 '.get_lang('To').'
                                 <input type="text" id="'.$id.'_time_range_end" name="'.$id.'_time_range_end" class="time end " autocomplete="off">
                             </p>
-                        </div>                   
+                        </div>
                     </div>
-                </div> 
-                </span>                   
+                </div>
+                </span>
                 ';
                 break;
             case FormValidator::LAYOUT_BOX_NO_LABEL:
                 return '
                         <label {label-for}>{label}</label>
                         <div class="input-group">
-                            
+
                             {icon}
                             {element}
                         </div>';
@@ -182,13 +178,13 @@ class DateTimeRangePicker extends DateRangePicker
             $endTime = $dates['end_time'];
         }
 
-        $js .= "<script>                    
+        $js .= "<script>
             $(function() {
                 var txtDate = $('#$id'),
                     inputGroup = txtDate.parents('.input-group'),
                     txtDateAlt = $('#{$id}_alt'),
                     txtDateAltText = $('#{$id}_alt_text');
-                    
+
                 txtDate
                     .hide()
                     .datepicker({
@@ -207,11 +203,11 @@ class DateTimeRangePicker extends DateRangePicker
                     .on('change', function (e) {
                         txtDateAltText.text(txtDateAlt.val());
                     });
-                                        
+
                 txtDateAltText.on('click', function () {
                     txtDate.datepicker('show');
                 });
-                
+
                 inputGroup
                     .find('button')
                     .on('click', function (e) {
@@ -219,18 +215,18 @@ class DateTimeRangePicker extends DateRangePicker
                         $('#$id, #{$id}_alt').val('');
                         $('#{$id}_alt_text').html('');
                     });
-                
+
                 $('#".$id."_time_range .time').timepicker({
                     'showDuration': true,
                     'timeFormat': 'H:i:s',
-                    'scrollDefault': 'now',                    
+                    'scrollDefault': 'now',
                 });
-                
+
                 $('#".$id."_time_range_start').timepicker('setTime', new Date('".$startTime."'));
                 $('#".$id."_time_range_end').timepicker('setTime', new Date('".$endTime."'));
-                
+
                 var timeOnlyExampleEl = document.getElementById('".$id."_time_range');
-                var timeOnlyDatepair = new Datepair(timeOnlyExampleEl);                
+                var timeOnlyDatepair = new Datepair(timeOnlyExampleEl);
             });
         </script>";
 

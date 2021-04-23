@@ -187,6 +187,6 @@ class StudentFollowPage
         $extraFieldValue = new ExtraFieldValue('lp_view');
         $value = $extraFieldValue->get_values_by_handler_and_field_variable($lpView['iid'], self::VARIABLE_INVISIBLE);
 
-        return empty($value) || empty($value['value']) ? true : false;
+        return empty($value) || empty($value['value']);
     }
 }

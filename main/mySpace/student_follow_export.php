@@ -83,11 +83,11 @@ function generateForm(int $studentId, array $coursesInSessions): FormValidator
         if ($sId) {
             $sessionInfo = api_get_session_info($sId);
 
-            $date_session = empty($sessionInfo['duration'])
+            $dateSession = empty($sessionInfo['duration'])
                 ? '('.SessionManager::parseSessionDates($sessionInfo, true)['display'].')'
                 : '';
 
-            $fieldTitle = $sessionInfo['name'].PHP_EOL.Display::tag('small', $date_session);
+            $fieldTitle = $sessionInfo['name'].PHP_EOL.Display::tag('small', $dateSession);
         } else {
             $fieldTitle = get_lang('Courses');
         }
@@ -192,7 +192,7 @@ function generateHtmlForLearningPaths(User $student, array $courseInfo, int $ses
         $lpTable = [$columnHeaders];
 
         foreach ($flat_list as $learnpath) {
-            $lp_id = $learnpath['lp_old_id'];
+            $lpId = $learnpath['lp_old_id'];
 
             $contentToExport = [];
 
@@ -204,24 +204,24 @@ function generateHtmlForLearningPaths(User $student, array $courseInfo, int $ses
                 // Get time in lp
                 if (!empty($timeCourse)) {
                     $lpTime = $timeCourse[TOOL_LEARNPATH] ?? 0;
-                    $total_time = isset($lpTime[$lp_id]) ? (int) $lpTime[$lp_id] : 0;
+                    $totalTime = isset($lpTime[$lpId]) ? (int) $lpTime[$lpId] : 0;
                 } else {
-                    $total_time = Tracking::get_time_spent_in_lp(
+                    $totalTime = Tracking::get_time_spent_in_lp(
                         $student->getId(),
                         $courseInfo['code'],
-                        [$lp_id],
+                        [$lpId],
                         $sessionId
                     );
                 }
 
-                $contentToExport[] = api_time_to_hms($total_time);
+                $contentToExport[] = api_time_to_hms($totalTime);
             }
 
             if (in_array('best_score', $columnHeadersKeys)) {
                 $bestScore = Tracking::get_avg_student_score(
                     $student->getId(),
                     $courseInfo['code'],
-                    [$lp_id],
+                    [$lpId],
                     $sessionId,
                     false,
                     false,
@@ -232,27 +232,27 @@ function generateHtmlForLearningPaths(User $student, array $courseInfo, int $ses
             }
 
             if (in_array('latest_attempt_avg_score', $columnHeadersKeys)) {
-                $score_latest = Tracking::get_avg_student_score(
+                $scoreLatest = Tracking::get_avg_student_score(
                     $student->getId(),
                     $courseInfo['code'],
-                    [$lp_id],
+                    [$lpId],
                     $sessionId,
                     false,
                     true
                 );
 
-                if (isset($score_latest) && is_numeric($score_latest)) {
-                    $score_latest = "$score_latest %";
+                if (isset($scoreLatest) && is_numeric($scoreLatest)) {
+                    $scoreLatest = "$scoreLatest %";
                 }
 
-                $contentToExport[] = $score_latest;
+                $contentToExport[] = $scoreLatest;
             }
 
             if (in_array('progress', $columnHeadersKeys)) {
                 $progress = Tracking::get_avg_student_progress(
                     $student->getId(),
                     $courseInfo['code'],
-                    [$lp_id],
+                    [$lpId],
                     $sessionId
                 );
 
@@ -261,16 +261,16 @@ function generateHtmlForLearningPaths(User $student, array $courseInfo, int $ses
 
             if (in_array('last_connection', $columnHeadersKeys)) {
                 // Get last connection time in lp
-                $start_time = Tracking::get_last_connection_time_in_lp(
+                $startTime = Tracking::get_last_connection_time_in_lp(
                     $student->getId(),
                     $courseInfo['code'],
-                    $lp_id,
+                    $lpId,
                     $sessionId
                 );
 
-                $contentToExport[] = empty($start_time)
+                $contentToExport[] = empty($startTime)
                     ? '-'
-                    : api_convert_and_format_date($start_time, DATE_TIME_FORMAT_LONG);
+                    : api_convert_and_format_date($startTime, DATE_TIME_FORMAT_LONG);
             }
 
             if (in_array('student_follow_page_add_LP_subscription_info', $columnHeadersKeys)) {
@@ -324,10 +324,10 @@ function generateHtmlForQuizzes(int $studentId, array $courseInfo, int $sessionI
             AND active IN (0, 1)
             $sessionCondition
         ORDER BY quiz.title ASC";
-    $result_exercices = Database::query($sql);
+    $resultExercices = Database::query($sql);
 
-    if (Database::num_rows($result_exercices) > 0) {
-        while ($exercices = Database::fetch_array($result_exercices)) {
+    if (Database::num_rows($resultExercices) > 0) {
+        while ($exercices = Database::fetch_array($resultExercices)) {
             $exerciseId = (int) $exercices['id'];
             $countAttempts = Tracking::count_student_exercise_attempts(
                 $studentId,
@@ -459,11 +459,11 @@ if ($form->validate()) {
             if ($sessionId) {
                 $sessionInfo = api_get_session_info($sessionId);
 
-                $date_session = empty($sessionInfo['duration'])
+                $dateSession = empty($sessionInfo['duration'])
                     ? '('.SessionManager::parseSessionDates($sessionInfo, true)['display'].')'
                     : '';
 
-                $courseHtml .= Display::page_header($sessionInfo['name'].PHP_EOL.Display::tag('small', $date_session))
+                $courseHtml .= Display::page_header($sessionInfo['name'].PHP_EOL.Display::tag('small', $dateSession))
                     .Display::page_subheader($courseInfo['title']);
             } else {
                 $courseHtml .= Display::page_header($courseInfo['title']);

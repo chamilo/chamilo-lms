@@ -444,11 +444,9 @@ if (!empty($return)) {
     echo Display::return_message($return, 'error', false);
 }
 
-echo '<div class="actions">';
-echo '<a href="../session/session_list.php">'.
+$actions = '<a href="../session/session_list.php">'.
     Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
-
+echo Display::toolbarAction('session', [$actions]);
 $form->display();
 
 Display::display_footer();

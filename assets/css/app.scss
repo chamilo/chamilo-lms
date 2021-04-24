@@ -40,9 +40,8 @@
 //@import "~bootstrap-select/sass/bootstrap-select";
 //@import '~pretty-checkbox/src/pretty-checkbox.scss';
 //@import '~jquery-ui/themes/base/all.css';
-
+/*
 @layer components {
-
   .card {
     @apply bg-white rounded shadow-lg;
   }
@@ -111,13 +110,6 @@
   //.ch-form-label {
   //  @apply text-gray-500 font-bold;
   //}
-  .p-component {
-    font-size: 13px;
-  }
-
-  .p-datatable .p-datatable-tbody > tr > td {
-  }
-
   legend {
     float: left;
     width: 100%;
@@ -143,16 +135,16 @@
   }
 
   @import "scss/index.scss";
-}
+}*/
 
 a.router-link-exact-active {
   //@apply border-b-2 bg-gray-100 border-gray-500 text-gray-500 rounded-t;
 }
 
-@import 'primevue-md-light-indigo/theme.css';
-@import '~primevue/resources/primevue.min.css';
+//@import 'primevue-md-light-indigo/theme.css';
+//@import '~primevue/resources/primevue.min.css';
 //@import '~primeflex/primeflex.css';
-@import "~primeicons/primeicons.css";
+//@import "~primeicons/primeicons.css";
 
 //@import "~jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css";
 @import "~@fancyapps/fancybox/dist/jquery.fancybox.css";

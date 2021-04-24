@@ -39,7 +39,10 @@ export default function(id, options = {}) {
       options.headers.set('Content-Type', MIME_TYPE);*/
 
     if (options.params) {
+        console.log('params');
+        console.log(options.params);
         const params = normalize(options.params);
+        //const params = options.params;
         let queryString = Object.keys(params)
             .map(key =>
                 Array.isArray(params[key])
@@ -48,6 +51,9 @@ export default function(id, options = {}) {
             )
             .join('&');
         id = `${id}?${queryString}`;
+
+
+        console.log(id, 'id');
     }
 
     const entryPoint = ENTRYPOINT + (ENTRYPOINT.endsWith('/') ? '' : '/');

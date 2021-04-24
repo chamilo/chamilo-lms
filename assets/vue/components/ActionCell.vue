@@ -1,63 +1,31 @@
 <template>
-<!--  <div>-->
-<!--    <b-button-toolbar>-->
-<!--      <b-button-->
-<!--        v-if="handleShow"-->
-<!--        variant="info"-->
-<!--        size="sm"-->
-<!--        class="mr-2"-->
-<!--        @click="handleShow"-->
-<!--      >{{ $t('Info') }}-->
-<!--      </b-button>-->
-<!--      <b-button-->
-<!--        v-if="handleEdit"-->
-<!--        size="sm"-->
-<!--        class="mr-2"-->
-<!--        @click="handleEdit"-->
-<!--      >{{ $t('Edit') }}-->
-<!--      </b-button>-->
-<!--      <b-button-->
-<!--        v-if="handleDelete"-->
-<!--        variant="danger"-->
-<!--        size="sm"-->
-<!--        @click="confirmDelete = true"-->
-<!--      >{{ $t('Delete') }}-->
-<!--      </b-button>-->
-<!--    </b-button-toolbar>-->
-
-<!--    <ConfirmDelete-->
-<!--      v-if="handleDelete"-->
-<!--      :visible="confirmDelete"-->
-<!--      :handle-delete="handleDelete"-->
-<!--      @close="confirmDelete = false"-->
-<!--    />-->
-<!--  </div>-->
-
   <q-td slot="body-cell-action" auto-width>
     <q-btn
         v-if="handleShow"
-        flat
-        round
         dense
         color="secondary"
         @click="handleShow"
-        icon="format_align_justify"
+        label="Show"
     />
-    <q-btn v-if="handleEdit" flat round dense color="secondary" @click="handleEdit" icon="edit" />
+    <q-btn
+        v-if="handleEdit"
+           dense
+           color="secondary"
+           @click="handleEdit"
+        label="Edit"
+    />
     <q-btn
         v-if="handleDelete"
-        icon="delete"
-        flat
-        round
+        label="Delete"
         dense
-        color="secondary"
-        @click="confirmDelete = true"
+        color="red"
+        @click="confirmDeleteClick = true"
     />
     <ConfirmDelete
         v-if="handleDelete"
-        :show="confirmDelete"
+        :show="confirmDeleteClick"
         :handle-delete="handleDelete"
-        :handle-cancel="() => (confirmDelete = false)"
+        :handle-cancel="() => (confirmDeleteClick = false)"
     />
   </q-td>
 </template>
@@ -72,7 +40,7 @@ export default {
   },
   data() {
     return {
-      confirmDelete: false
+      confirmDeleteClick: false
     };
   },
   props: {

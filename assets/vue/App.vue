@@ -10,7 +10,7 @@
             aria-label="Menu"
             icon="menu"
             class="q-mr-sm"
-        />
+        />        
         <q-toolbar-title v-if="$q.screen.gt.xs" shrink class="row items-center no-wrap">
           <img style="width:200px" src="/build/css/themes/chamilo/images/header-logo.png" />
           <!--          <span class="q-ml-sm">News</span>-->
@@ -419,6 +419,7 @@ export default {
     let isAuthenticated = false;
     if (!isEmpty(window.user)) {
       console.log('is logged in as ' + window.user.username);
+      console.log('userAvatar ' + window.userAvatar);
       this.user = window.user;
       this.userAvatar = window.userAvatar;
       isAuthenticated = true;

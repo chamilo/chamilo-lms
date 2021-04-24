@@ -12,7 +12,7 @@ export default {
   data() {
     return {
       pagination: {
-        sortBy: null,
+        sortBy: 'resourceNode.title',
         descending: false,
         page: 1, // page to be displayed
         rowsPerPage: 3, // maximum displayed rows
@@ -26,7 +26,7 @@ export default {
         //sortBy: [], vuetify
         //sortDesc: [], , vuetify
         page: 1,
-        itemsPerPage: 20
+        itemsPerPage: 3
       },
       //filters: {}
     };
@@ -36,7 +36,10 @@ export default {
       console.log('watch listmixin');
       // react to route changes...
       this.resetList = true;
-      this.onUpdateOptions(this.options);
+
+      this.onRequest({
+        pagination: this.pagination,
+      });
       let nodeId = this.$route.params['node'];
       if (!isEmpty(nodeId)) {
         this.findResourceNode('/api/resource_nodes/'+ nodeId);
@@ -53,30 +56,52 @@ export default {
     },
 
     items() {
-      this.options.totalItems = this.totalItems;
+      this.pagination.page = this.nextPage;
+      this.pagination.rowsNumber = this.totalItems;
+      this.nextPage = null;
+      //this.options.totalItems = this.totalItems;
     }
   },
   methods: {
-    onRequest(props, init) {
-      const { pagination: { page, rowsPerPage: itemsPerPage, sortBy, descending }} = props;
+    onRequest(props) {
+      console.log('onRequest');
+      console.log(props);
+      const {  page, rowsPerPage: itemsPerPage, sortBy, descending } = props.pagination;
+      const filter = props.filter;
+
       this.nextPage = page;
-      let params = {
-        ...this.filtration,
-      };
+
+      let params = {};
       if (itemsPerPage > 0) {
         params = { ...params, itemsPerPage, page };
       }
+
       if (sortBy) {
-        params[`order[${sortBy}]`] = descending ? "DESC" : "ASC";
+        params[`order[${sortBy}]`] = descending ? "desc" : "asc";
       }
-      this.getPage({ params }).then(() => {
+
+      if (this.$route.params.node) {
+        params[`resourceNode.parent`] = this.$route.params.node;
+      }
+
+      console.log(params);
+      this.resetList = true;
+      this.getPage(params).then(() => {
+        //this.options.sortBy = sortBy;
+        //this.options.sortDesc = sortDesc;
+        //this.options.itemsPerPage = itemsPerPage;
+        //this.options.totalItems = totalItems;
         this.pagination.sortBy = sortBy;
         this.pagination.descending = descending;
         this.pagination.rowsPerPage = itemsPerPage;
-        if (!init) {
-          this.filters = { ...this.filtration };
-        }
       });
+
+      /*this.getPage({ params }).then(() => {
+        this.pagination.sortBy = sortBy;
+        this.pagination.descending = descending;
+        this.pagination.rowsPerPage = itemsPerPage;
+        //this.filters = { ...this.filter };
+      });*/
     },
     fetchNewItems({ page, itemsPerPage, sortBy, sortDesc, totalItems } = {}) {
       let params = {
@@ -104,37 +129,6 @@ export default {
       this.options.itemsPerPage = itemsPerPage;
       this.options.totalItems = totalItems;
       //});
-    },
-    onUpdateOptions({ page, itemsPerPage, sortBy, sortDesc, totalItems, getPage } = {}) {
-      let params = {
-        ...this.filters
-      };
-
-      if (itemsPerPage > 0) {
-        params = { ...params, itemsPerPage, page };
-      }
-
-      if (this.$route.params.node) {
-        params[`resourceNode.parent`] = this.$route.params.node;
-      }
-
-      if (isString(sortBy) && isBoolean(sortDesc)) {
-        //params[`order[${sortBy[0]}]`] = sortDesc[0] ? 'desc' : 'asc'
-        params[`order[${sortBy}]`] = sortDesc ? 'desc' : 'asc'
-      }
-
-      this.resetList = true;
-      console.log('onUpdateOptions');
-      console.log(params);
-      if (getPage) {
-        getPage(params).then(() => {
-          this.options.sortBy = sortBy;
-          this.options.sortDesc = sortDesc;
-          this.options.itemsPerPage = itemsPerPage;
-          this.options.totalItems = totalItems;
-        });
-      }
-      //console.log('end');
     },
 
     onSendFilter() {
@@ -221,6 +215,7 @@ export default {
       }
     },
     deleteHandler(item) {
+      console.log(item);
       this.deleteItem(item).then(() => this.onUpdateOptions(this.options));
     },
     formatDateTime

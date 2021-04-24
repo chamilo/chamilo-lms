@@ -1,225 +1,84 @@
 <template>
-   <div>
-<!--    <Toolbar-->
-<!--           :handle-add="addHandler"-->
-<!--           :handle-add-document="addDocumentHandler"-->
-<!--           :handle-upload-document="uploadDocumentHandler"-->
+   <div class="q-pa-md">
+    <Toolbar
+       :handle-add="addHandler"
+       :handle-add-document="addDocumentHandler"
+       :handle-upload-document="uploadDocumentHandler"
+       :filters="filters"
+       :on-send-filter="onSendFilter"
+       :reset-filter="resetFilter"
+     />
 
-<!--           :filters="filters"-->
-<!--           :on-send-filter="onSendFilter"-->
-<!--           :reset-filter="resetFilter"-->
-<!--         />-->
+      <q-table
+          dense
+          flat
+          :rows="items"
+          :columns="columns"
+          row-key="@id"
+          :filter="filter"
+          @request="onRequest"
+          v-model:pagination="pagination"
+          :no-data-label="$t('Data unavailable')"
+          :no-results-label="$t('No results')"
+          :loading-label="$t('Loading...')"
+          :rows-per-page-label="$t('Records per page:')"
+          :loading="isLoading"
+          selection="multiple"
+          v-model:selected="selectedItems"
+      >
+         <template v-slot:body="props">
+            <q-tr :props="props">
+              <q-td auto-width>
+                <q-checkbox dense v-model="props.selected" />
+              </q-td>
 
+              <q-td key="resourceNode.title" :props="props">
+                <div v-if="props.row.resourceNode.resourceFile">
+                  <a
+                      data-fancybox="gallery"
+                      :href="props.row.contentUrl"
+                  >
+                    <ResourceFileIcon :file="props.row" />
+                    {{ props.row.title }}
+                  </a>
+                </div>
+                <div v-else>
+                  <a @click="handleClick(props.row)" class="cursor-pointer" >
+                    <font-awesome-icon
+                        icon="folder"
+                        size="lg"
+                    />
+                    {{ props.row.resourceNode.title }}
+                  </a>
+                </div>
+              </q-td>
 
-<!--        <q-table-->
-<!--            id="documents"-->
-<!--            ref="selectableTable"-->
-<!--            title="Documents"-->
-<!--            :rows="items"-->
-<!--            :columns="fields"-->
-<!--            row-key="iid"-->
-<!--        />-->
-<!--        :pagination.sync="pagination"-->
-<!--            @request="onRequest"-->
-<!--:loading="isLoading"-->
-<!--        <q-table-->
-<!--            :rows="items"-->
-<!--            :columns="columns"-->
-<!--            row-key="iid"-->
-<!--            @request="onRequest"-->
-<!--            :no-data-label="$t('Data unavailable')"-->
-<!--            :no-results-label="$t('No results')"-->
-<!--            :loading-label="$t('Loading...')"-->
-<!--            :rows-per-page-label="$t('Records per page:')"-->
-<!--            :loading="isLoading"-->
-<!--        >-->
-<!--     { label: this.$i18n.t('Title'), field: 'title', name: 'title', sortable: true},-->
-<!--     { label: this.$i18n.t('Modified'), field: 'resourceNode.updatedAt', name: 'updatedAt', sortable: true},-->
-<!--     { label: this.$i18n.t('Size'), field: 'resourceNode.resourceFile.size', name: 'size', sortable: true},-->
-<!--     { label: this.$i18n.t('Actions'), name: 'action', sortable: false}-->
+              <q-td key="resourceNode.updatedAt" :props="props">
+                {{$luxonDateTime.fromISO(props.row.resourceNode.updatedAt).toRelative() }}
+              </q-td>
 
-     <Toolbar class="p-mb-4">
-       <template #left>
-         <div class="flex flex-row gap-2">
-<!--         <Button label="New" icon="pi pi-plus" class="p-button-primary p-button-sm p-mr-2" @click="openNew" />-->
-         <Button label="New" icon="pi pi-plus" class="btn btn-primary" @click="openNew" />
+              <q-td key="resourceNode.resourceFile.size" :props="props">
+                <span v-if="props.row.resourceNode.resourceFile">
+                {{
+                  $filters.prettyBytes(props.row.resourceNode.resourceFile.size)
+                }}
+                </span>
+              </q-td>
 
-<!--         <Button label="New folder" icon="pi pi-plus" class="p-button-success p-mr-2" @click="addHandler()" />-->
-<!--         <Button label="New document" icon="pi pi-plus" class="p-button-sm p-button-primary p-mr-2" @click="addDocumentHandler()" />-->
-         <Button label="New document" icon="pi pi-plus" class="btn btn-primary" @click="addDocumentHandler()" />
-
-         <Button label="Upload" icon="pi pi-plus" class="btn btn-primary" @click="uploadDocumentHandler()" />
-         <Button label="Delete" icon="pi pi-trash" class="btn btn-danger " @click="confirmDeleteSelected" :disabled="!selectedItems || !selectedItems.length" />
-         </div>
-       </template>
-
-<!--       <template #right>-->
-<!--         <FileUpload mode="basic" accept="image/*" :maxFileSize="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-d-inline-block" />-->
-<!--         <Button label="Export" icon="pi pi-upload" class="p-button-help" @click="exportCSV($event)"  />-->
-<!--       </template>-->
-     </Toolbar>
-
-     <DataTable
-         :value="items"
-         v-model:selection="selectedItems"
-         dataKey="iid"
-         :filters="filters"
-         :lazy="true"
-         :paginator="true"
-         :rows="10"
-         :totalRecords="totalItems"
-         :loading="isLoading"
-         @page="onPage($event)"
-         @sort="sortingChanged($event)"
-        paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-        :rowsPerPageOptions="[5, 10, 20, 50]"
-        responsiveLayout="scroll"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-     >
-       <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
-       <Column field="resourceNode.title" :header="$t('Title')" :sortable="true">
-         <template #body="slotProps">
-
-           <div v-if="slotProps.data.resourceNode.resourceFile">
-             <a
-                 data-fancybox="gallery"
-                 :href="slotProps.data.contentUrl"
-             >
-               <ResourceFileIcon :file="slotProps.data" />
-               {{ slotProps.data.title }}
-             </a>
-           </div>
-           <div v-else>
-             <a @click="handleClick(slotProps.data)" class="cursor-pointer" >
-               <font-awesome-icon
-                   icon="folder"
-                   size="lg"
-               />
-               {{ slotProps.data.resourceNode.title }}
-             </a>
-           </div>
-         </template>
-
-       </Column>
-       <Column field="resourceNode.updatedAt" :header="$t('Modified')" :sortable="true">
-         <template #body="slotProps">
-           {{$luxonDateTime.fromISO(slotProps.data.resourceNode.updatedAt).toRelative() }}
-         </template>
-       </Column>
-
-       <Column field="resourceNode.resourceFile.size" :header="$t('Size')" :sortable="true">
-         <template #body="slotProps">
-            {{
-             slotProps.data.resourceNode.resourceFile ? $filters.prettyBytes(slotProps.data.resourceNode.resourceFile.size) : ''
-           }}
-         </template>
-       </Column>
-
-       <Column :exportable="false">
-         <template #body="slotProps">
-           <div class="flex flex-row gap-2">
-             <Button label="Show" class="p-button-sm p-button p-button-success p-mr-2" @click="showHandler(slotProps.data)" />
-             <Button label="Edit" icon="pi pi-pencil" class="p-button-sm p-button p-button-success p-mr-2" @click="editHandler(slotProps.data)" />
-             <Button label="Delete" icon="pi pi-trash" class="p-button-sm p-button p-button-danger" @click="confirmDeleteSelected(slotProps.data)" />
-           </div>
-         </template>
-       </Column>
-
-       <template #paginatorLeft>
-         <Button type="button" icon="pi pi-refresh" class="p-button-text" />
-       </template>
-       <template #paginatorRight>
-         <Button type="button" icon="pi pi-cloud" class="p-button-text" />
-       </template>
-     </DataTable>
-
-     <Dialog v-model:visible="itemDialog" :style="{width: '450px'}" :header="$t('New folder')" :modal="true" class="p-fluid">
-       <div class="p-field">
-         <label for="name">{{ $t('Name') }}</label>
-         <InputText
-             autocomplete="off"
-            id="title"
-             v-model.trim="item.title"
-             required="true"
-             autofocus
-             :class="{'p-invalid': submitted && !item.title}"
-         />
-         <small class="p-error" v-if="submitted && !item.title">$t('Title is required')</small>
-       </div>
-
-       <template #footer>
-         <Button label="Cancel" icon="pi pi-times" class="p-button-text" @click="hideDialog"/>
-         <Button label="Save" icon="pi pi-check" class="p-button-text" @click="saveItem" />
-       </template>
-     </Dialog>
-
-     <Dialog v-model:visible="deleteItemDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
-       <div class="confirmation-content">
-         <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem" />
-         <span v-if="item">Are you sure you want to delete <b>{{item.title}}</b>?</span>
-       </div>
-       <template #footer>
-         <Button label="No" icon="pi pi-times" class="p-button-text" @click="deleteItemDialog = false"/>
-         <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteItem" />
-       </template>
-     </Dialog>
-
-     <Dialog v-model:visible="deleteItemsDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
-       <div class="confirmation-content">
-         <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem" />
-         <span v-if="item">Are you sure you want to delete the selected products?</span>
-       </div>
-       <template #footer>
-         <Button label="No" icon="pi pi-times" class="p-button-text" @click="deleteItemsDialog = false"/>
-         <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteSelectedItems" />
-       </template>
-     </Dialog>
-
-     <!--          <template v-slot:body="props">-->
-<!--            <q-tr :props="props">-->
-<!--              <q-td key="title" :props="props">-->
-<!--                {{ props.row.title }}-->
-<!--              </q-td>-->
-<!--              <q-td key="resourceNode.updatedAt" :props="props">-->
-<!--                {{ props.row.resourceNode.updatedAt }}-->
-<!--              </q-td>-->
-<!--              <q-td key="resourceNode.resourceFile.size" :props="props">-->
-<!--                {{ props.row.resourceNode.resourceFile.size }}-->
-<!--              </q-td>-->
-<!--            </q-tr>-->
-<!--          </template>-->
-
-<!--          <template v-slot:body-cell-updatedAt="props">-->
-<!--            <q-td slot="body-cell-updatedAt" auto-width>-->
-<!--              {{-->
-<!--                  moment(props.row.resourceNode.updatedAt).fromNow()-->
-<!--              }}-->
-<!--            </q-td>-->
-<!--          </template>-->
-
-<!--          <template v-slot:body-cell-size="props">-->
-<!--            <q-td slot="body-cell-updatedAt" auto-width>-->
-<!--              <span v-if="props.row.resourceNode.resourceFile">-->
-<!--                 {{ $filters.prettyBytes(props.row.resourceNode.resourceFile.size)  }}-->
-<!--              </span>-->
-<!--            </q-td>-->
-<!--          </template>-->
-
-<!--          <template v-slot:body-cell-action="props">-->
-<!--            <ActionCell-->
-<!--                slot="body-cell-action"-->
-<!--                slot-scope="props"-->
-<!--                :handle-show="() => showHandler(props.row)"-->
-<!--                :handle-edit="() => editHandler(props.row)"-->
-<!--                :handle-delete="() => deleteHandler(props.row)"-->
-<!--            />-->
-<!--          </template>-->
-<!--        </q-table>-->
+              <q-td key="action" :props="props">
+              <ActionCell
+                  :handle-show="() => showHandler(props.row)"
+                  :handle-edit="() => editHandler(props.row)"
+                  :handle-delete="() => deleteHandler(props.row)"
+              />
+              </q-td>
+            </q-tr>
+          </template>
+        </q-table>
    </div>
 </template>
 
 <script>
-//import { list } from '../../utils/vuexer';
 import { mapActions, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 import ListMixin from '../../mixins/ListMixin';
@@ -227,12 +86,10 @@ import ActionCell from '../../components/ActionCell.vue';
 import Toolbar from '../../components/Toolbar.vue';
 import ResourceFileIcon from './ResourceFileIcon.vue';
 import { useRoute } from 'vue-router'
-import moment from 'moment'
 
 //import { useToast } from 'primevue/usetoast';
 import { ref, reactive, onMounted, computed } from 'vue';
 import { useStore } from 'vuex';
-
 /*const servicePrefix = 'documents';
 const { getters, actions } = list(servicePrefix);*/
 
@@ -252,38 +109,28 @@ export default {
       sortBy: 'title',
       sortDesc: false,
       columns: [
-        //{ name: 'action' },
-        //{ name: 'id', field: '@id', label: this.$t('iid') },
-        { label: this.$i18n.t('Title'), field: 'title', name: 'title', sortable: true},
-        { label: this.$i18n.t('Modified'), field: 'resourceNode.updatedAt', name: 'updatedAt', sortable: true},
-        { label: this.$i18n.t('Size'), field: 'resourceNode.resourceFile.size', name: 'size', sortable: true},
-        { label: this.$i18n.t('Actions'), name: 'action', sortable: false}
+        {align: 'left', name: 'resourceNode.title', label: this.$i18n.t('Title'), field: 'resourceNode.title', sortable: true},
+        {align: 'left', name: 'resourceNode.updatedAt', label: this.$i18n.t('Modified'), field: 'resourceNode.updatedAt', sortable: true},
+        {name: 'resourceNode.resourceFile.size', label: this.$i18n.t('Size'), field: 'resourceNode.resourceFile.size', sortable: true},
+        {name: 'action', label: this.$i18n.t('Actions'), field: 'action', sortable: false}
       ],
       pageOptions: [5, 10, 15, 20, this.$i18n.t('All')],
       selected: [],
-      selectMode: 'multi',
       isBusy: false,
       options: [],
-      // prime vue
-      itemDialog: false,
-      deleteItemDialog: false,
-      deleteItemsDialog: false,
-      item: {},
-      selectedItems: null,
-      filters: {},
-      submitted: false,
     };
   },
   created() {
     console.log('vue/views/documents/List.vue');
-    this.moment = moment;
     const route = useRoute()
     let nodeId = route.params['node'];
     if (!isEmpty(nodeId)) {
       this.findResourceNode('/api/resource_nodes/' + nodeId);
     }
-    this.options.getPage = this.getPage;
-    this.onUpdateOptions(this.options);
+
+    this.onRequest({
+      pagination: this.pagination,
+    });
   },
   mounted() {
     // Detect when scrolled to bottom.
@@ -335,19 +182,6 @@ export default {
     }),
   },
   methods: {
-    onPage(event) {
-      console.log(event);
-      console.log(event.page);
-      console.log(event.sortField);
-      console.log(event.sortOrder);
-
-      this.options.itemsPerPage = event.rows;
-      this.options.page = event.page + 1;
-      this.options.sortBy = event.sortField;
-      this.options.sortDesc = event.sortOrder === -1;
-
-      this.onUpdateOptions(this.options);
-    },
     openNew() {
       this.item = {};
       this.submitted = false;
@@ -362,7 +196,6 @@ export default {
 
       if (this.item.title.trim()) {
         if (this.item.id) {
-          //this.products[this.findIndexById(this.product.id)] = this.product;
           //this.$toast.add({severity:'success', summary: 'Successful', detail: 'Product Updated', life: 3000});
         } else {
           //this.products.push(this.product);
@@ -383,43 +216,25 @@ export default {
         this.item = {};
       }
     },
-    editItem(product) {
-      this.product = {...product};
+    editItem(item) {
+      this.item = {...item};
       this.itemDialog = true;
     },
-    confirmDeleteItem(product) {
-      this.product = product;
-      this.deleteProductDialog = true;
+    confirmDeleteItem(item) {
+      this.item = item;
+      this.deleteItemDialog = true;
     },
-    deleteItem() {
-      console.log('deleteItem');
-      this.deleteItemAction(this.item);
-      this.items = this.items.filter(val => val.iid !== this.item.iid);
-      this.deleteProductDialog = false;
-      this.item = {};
+    confirmDeleteMultiple() {
+      this.deleteMultipleDialog = true;
     },
-    findIndexById(id) {
-      let index = -1;
-      for (let i = 0; i < this.products.length; i++) {
-        if (this.products[i].id === id) {
-          index = i;
-          break;
-        }
-      }
-
-      return index;
-    },
-    exportCSV() {
-      this.$refs.dt.exportCSV();
-    },
-    confirmDeleteSelected() {
-      this.deleteItemsDialog = true;
-    },
-    deleteSelectedItems() {
+    deleteMultipleItems() {
+      console.log('deleteMultipleItems');
+      console.log(this.selectedItems);
       this.deleteMultipleAction(this.selectedItems);
-      this.onUpdateOptions(this.options);
-      /*this.products = this.products.filter(val => !this.selectedProducts.includes(val));*/
-      this.deleteItemsDialog = false;
+      this.onRequest({
+        pagination: this.pagination,
+      });
+      this.deleteMultipleDialog = false;
       this.selectedItems = null;
       //this.$toast.add({severity:'success', summary: 'Successful', detail: 'Products Deleted', life: 3000});*/
     },
@@ -463,10 +278,6 @@ export default {
     clearSelected() {
       this.$refs.selectableTable.clearSelected()
     },
-    allSelected() {
-    },
-    toggleSelected() {
-    },
     async deleteSelected() {
       console.log('deleteSelected');
       /*for (let i = 0; i < this.selected.length; i++) {
@@ -476,7 +287,9 @@ export default {
       }*/
 
       this.deleteMultipleAction(this.selected);
-      this.onUpdateOptions(this.options);
+      this.onRequest({
+        pagination: this.pagination,
+      });
 
       /*const promises = this.selected.map(async item => {
         const result = await this.deleteItem(item);
@@ -495,21 +308,12 @@ export default {
 */
       console.log('end -- deleteSelected');
     },
-    sortingChanged(event) {
-      console.log('sortingChanged');
-      this.options.sortBy = event.sortField;
-      this.options.sortDesc = event.sortOrder === -1;
-
-      this.onUpdateOptions(this.options);
-      // ctx.sortBy   ==> Field key for sorting by (or null for no sorting)
-      // ctx.sortDesc ==> true if sorting descending, false otherwise
-    },
     //...actions,
     // From ListMixin
     ...mapActions('documents', {
       getPage: 'fetchAll',
       create: 'create',
-      deleteItemAction: 'del',
+      deleteItem: 'del',
       deleteMultipleAction: 'delMultiple'
     }),
     ...mapActions('resourcenode', {

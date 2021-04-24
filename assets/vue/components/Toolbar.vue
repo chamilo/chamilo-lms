@@ -1,7 +1,6 @@
 <template>
   <q-toolbar class="q-my-md">
     <slot name="left" />
-
     <q-space />
 
     <q-btn
@@ -54,7 +53,6 @@
     <q-btn
       v-if="handleAdd"
       color="primary"
-      rounded
       @click="addItem"
     >
       <font-awesome-icon icon="folder-plus" /> New folder
@@ -63,7 +61,6 @@
     <q-btn
       v-if="handleAddDocument"
       color="primary"
-      rounded
       @click="addDocument"
     >
       <font-awesome-icon icon="file-alt" /> New document
@@ -72,7 +69,6 @@
     <q-btn
       v-if="handleUploadDocument"
       color="primary"
-      rounded
       @click="uploadDocument"
     >
       <font-awesome-icon icon="cloud-upload-alt" /> File upload

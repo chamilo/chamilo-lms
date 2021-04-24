@@ -1,5 +1,6 @@
 import { getField, updateField } from 'vuex-map-fields';
 import remove from 'lodash/remove';
+import map from 'lodash/map';
 import SubmissionError from '../../error/SubmissionError';
 import isEmpty from 'lodash/isEmpty';
 
@@ -126,9 +127,9 @@ export default function makeCrudModule({
         if (!service) throw new Error('No service specified!');
 
         commit(ACTIONS.TOGGLE_LOADING);
-
         service
           .findAll({ params })
+          //.findAll( params )
           .then(response => response.json())
           .then(retrieved => {
             //console.log(retrieved['hydra:totalItems']);

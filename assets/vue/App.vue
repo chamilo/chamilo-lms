@@ -1,28 +1,32 @@
 <template>
   <q-layout view="hHh LpR lff" class="bg-grey-1">
     <q-header bordered class="bg-white text-grey-8" height-hint="64">
-      <q-toolbar class="GNL__toolbar">
+      <q-toolbar>
         <q-btn
             flat
             dense
             round
-            @click="leftDrawerOpen = !leftDrawerOpen"
+            @click="isSidebarOpen = !isSidebarOpen"
             aria-label="Menu"
             icon="menu"
             class="q-mr-sm"
         />        
         <q-toolbar-title v-if="$q.screen.gt.xs" shrink class="row items-center no-wrap">
           <img style="width:200px" src="/build/css/themes/chamilo/images/header-logo.png" />
-          <!--          <span class="q-ml-sm">News</span>-->
         </q-toolbar-title>
 
         <q-space />
 
         <div v-if="isAuthenticated"  class="GPLAY__toolbar-input-container row no-wrap">
-          <q-tabs align="center" dense inline-label>
-            <q-route-tab icon="home"  to="/" label="Home" />
-            <q-route-tab to="/courses" label="My courses" />
-            <q-route-tab to="/main/calendar/agenda_js.php?type=personal" label="Agenda" />
+          <q-tabs v-if="$q.screen.gt.xs" align="center" dense inline-label>
+            <q-route-tab dense no-caps icon="home"  to="/" label="Home" />
+            <q-route-tab no-caps icon="book" to="/courses" label="My courses" />
+            <q-route-tab no-caps icon="event" to="/main/calendar/agenda_js.php?type=personal" label="Agenda" />
+          </q-tabs>
+          <q-tabs v-else align="center" dense inline-label>
+            <q-route-tab dense no-caps icon="home"  to="/"  />
+            <q-route-tab no-caps icon="book" to="/courses" />
+            <q-route-tab no-caps icon="event" to="/main/calendar/agenda_js.php?type=personal" />
           </q-tabs>
         </div>
 
@@ -104,11 +108,12 @@
     </q-header>
 
     <q-drawer
-        v-model="leftDrawerOpen"
+        v-model="isSidebarOpen"
         show-if-above
         bordered
         content-class="bg-white"
         :width="280"
+        :breakpoint="500"
     >
       <q-scroll-area class="fit">
         <q-list v-if="isAuthenticated" padding class="text-grey-8">
@@ -214,43 +219,25 @@ export default {
     Breadcrumb,
   },
   setup () {
-    const { isSidebarOpen, isSettingsPanelOpen, isSearchPanelOpen, isNotificationsPanelOpen } = useState()
-
-    isSidebarOpen.value = true;
+    const { isSidebarOpen, isSettingsPanelOpen, isSearchPanelOpen, isNotificationsPanelOpen } = useState();
 
     const { currentRoute } = useRouter();
     const layout = computed(
         () => `${currentRoute.value.meta.layout || defaultLayout}Layout`
     );
 
-    /*const checkScreen = () => {
-      if (window.innerWidth <= 1024) {
-        isSidebarOpen.value = false
-      }
-    }*/
 
-    onMounted(() => {
-      //window.addEventListener('resize', checkScreen)
-    })
+    const rightDrawerOpen = ref(false);
 
-    onUnmounted(() => {
-      //window.removeEventListener('resize', checkScreen)
-    })
-
-    const leftDrawerOpen = ref(false)
-    const rightDrawerOpen = ref(false)
+    console.log('isSidebarOpen');
+    console.log(isSidebarOpen.value);
 
     return {
       layout,
-      isSidebarOpen,
       isSettingsPanelOpen,
       isSearchPanelOpen,
       isNotificationsPanelOpen,
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      },
-
+      isSidebarOpen,
       rightDrawerOpen,
       toggleRightDrawer () {
         rightDrawerOpen.value = !rightDrawerOpen.value
@@ -313,19 +300,10 @@ export default {
       'isAdmin': 'security/isAdmin',
       'currentUser': 'security/getUser',
     }),
-    showMenu() {
-      return this.$route.path !== '/login';
-    }
   },
   watch: {
     $route() {
       console.log('App.vue watch $route');
-      if ('Login' === this.$route.name) {
-        this.leftDrawerOpen = false;
-      } else {
-        this.leftDrawerOpen = true;
-      }
-
       console.log(this.$route.name);
       //let content = document.getElementById("sectionMainContent");
       this.legacyContent = '';

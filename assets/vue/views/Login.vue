@@ -63,9 +63,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import {mapGetters, useStore} from 'vuex';
 import ErrorMessage from "../components/ErrorMessage.vue";
 import { LockClosedIcon } from '@heroicons/vue/solid'
+import useState from "../hooks/useState";
+import {ref} from "vue";
+import {useRoute, useRouter} from "vue-router";
 
 export default {
     name: "Login",
@@ -73,11 +76,53 @@ export default {
       ErrorMessage,
       LockClosedIcon
     },
-    data() {
-        return {
-            login: "",
-            password: "",
-        };
+    setup() {
+      const { isSidebarOpen } = useState();
+      const route = useRoute();
+      const router = useRouter();
+
+      const store = useStore();
+
+      const login = ref('');
+      const password = ref('');
+
+      let redirect = route.query.redirect;
+      if (store.getters["security/isAuthenticated"]) {
+        console.log(redirect);
+        if (typeof redirect !== "undefined") {
+          router.push({path: redirect});
+        } else {
+          router.push({path: "/"});
+        }
+      }
+
+      isSidebarOpen.value = false;
+
+      function onSubmit(evt) {
+        evt.preventDefault()
+        performLogin();
+      }
+
+      async function performLogin() {
+        console.log('performLogin');
+        let payload = {login: login.value, password: password.value};
+        let redirect = route.query.redirect;
+        await store.dispatch("security/login", payload);
+        if (!store.getters["security/hasError"]) {
+          isSidebarOpen.value = true;
+          if (typeof redirect !== "undefined") {
+            router.push({path: redirect});
+          } else {
+            router.push({path: "/courses"});
+          }
+        }
+      }
+
+      return {
+        onSubmit,
+        login,
+        password
+      }
     },
     computed: {
         ...mapGetters({
@@ -85,37 +130,6 @@ export default {
             'hasError': 'security/hasError',
             'error': 'security/error',
         }),
-    },
-    created() {
-        console.log('Login created');
-        let redirect = this.$route.query.redirect;
-        if (this.$store.getters["security/isAuthenticated"]) {
-              console.log(redirect);
-            if (typeof redirect !== "undefined") {
-                this.$router.push({path: redirect});
-            } else {
-                this.$router.push({path: "/"});
-            }
-        }
-    },
-    methods: {
-        onSubmit(evt) {
-          evt.preventDefault()
-          this.performLogin();
-        },
-        async performLogin() {
-            console.log('performLogin');
-            let payload = {login: this.$data.login, password: this.$data.password};
-            let redirect = this.$route.query.redirect;
-            await this.$store.dispatch("security/login", payload);
-            if (!this.$store.getters["security/hasError"]) {
-                if (typeof redirect !== "undefined") {
-                    this.$router.push({path: redirect});
-                } else {
-                    this.$router.push({path: "/courses"});
-                }
-            }
-        }
     }
 }
 </script>

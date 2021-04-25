@@ -19,12 +19,12 @@
 <!--    />-->
 <!--  </DataFilter>-->
 
+<!--  :filter="filter"-->
     <q-table
         dense
         :rows="items"
         :columns="columns"
         row-key="@id"
-        :filter="filter"
         @request="onRequest"
         v-model:pagination="pagination"
         :no-data-label="$t('Data unavailable')"
@@ -131,6 +131,9 @@ export default {
     };
   },
   created() {
+
+  },
+  mounted() {
     console.log('vue/views/documents/List.vue');
     const route = useRoute()
     let nodeId = route.params['node'];
@@ -141,8 +144,6 @@ export default {
     this.onRequest({
       pagination: this.pagination,
     });
-  },
-  mounted() {
     // Detect when scrolled to bottom.
     /*const listElm = document.querySelector('#documents');
     listElm.addEventListener('scroll', e => {
@@ -206,7 +207,6 @@ export default {
 
       if (this.item.title.trim()) {
         if (this.item.id) {
-          //this.$toast.add({severity:'success', summary: 'Successful', detail: 'Product Updated', life: 3000});
         } else {
           //this.products.push(this.product);
           this.item.parentResourceNodeId = this.$route.params.node;
@@ -218,7 +218,6 @@ export default {
           }]);
 
           this.create(this.item);
-          //this.$toast.add({severity:'success', summary: 'Successful', detail: 'Product Created', life: 3000});
           this.showMessage('Saved');
         }
 

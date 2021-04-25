@@ -42,7 +42,6 @@ export default {
     ResourceLinkForm
   },
   mixins: [UpdateMixin],
-
   computed: {
     ...mapFields('documents', {
       deleteLoading: 'isLoading',

@@ -23,7 +23,7 @@ const makeParamArray = (key, arr) =>
 
 export default function(id, options = {}) {
     console.log('fetch');
-    console.log(options.method);
+    console.log(options.method, 'method');
 
     if ('undefined' === typeof options.headers) options.headers = new Headers();
 
@@ -123,8 +123,6 @@ export default function(id, options = {}) {
     }*/
 
   return global.fetch(new URL(id, entryPoint), options).then(response => {
-    console.log(response);
-
     if (response.ok) return response;
 
     return response.json().then(json => {

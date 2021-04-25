@@ -14,13 +14,17 @@ export default {
       },
     };
   },
-  created() {
+  mounted() {
+    console.log('mounted');
     // Changed
     let id = this.$route.params.id;
     if (isEmpty(id)) {
       id = this.$route.query.id;
     }
-    this.retrieve(decodeURIComponent(id));
+    if (!isEmpty(id)) {
+      // Ajax call
+      this.retrieve(decodeURIComponent(id));
+    }
     // default
     //this.retrieve(decodeURIComponent(this.$route.params.id));
   },
@@ -29,27 +33,32 @@ export default {
   },
   computed: {
     retrieved() {
-
-      console.log('retrieved');
+      // call from list
+      console.log('update mixin retrieved');
       let id = this.$route.params.id;
+      console.log('first');
       console.log(id);
       if (isEmpty(id)) {
+        console.log('second');
         id = this.$route.query.id;
+        console.log(id);
       }
+
       let item = this.find(decodeURIComponent(id));
+      console.log(item);
 
       return item;
+
       //return this.find(decodeURIComponent(this.$route.params.id));
     }
   },
   methods: {
     del() {
-      console.log('del');
       console.log(this.retrieved);
 
       this.deleteItem(this.retrieved).then(() => {
         let folderParams = this.$route.query;
-        this.showMessage(`${this.item['@id']} deleted.`);
+        //this.showMessage(`${this.item['@id']} deleted.`);
         this.$router
           .push({
             name: `${this.$options.servicePrefix}List`,
@@ -65,23 +74,24 @@ export default {
       this.delReset();
       this.createReset();
     },
-
     onSendForm() {
+      console.log('onSendForm');
       const updateForm = this.$refs.updateForm;
       updateForm.v$.$touch();
-      console.log('onSendForm');
       if (!updateForm.v$.$invalid) {
         this.update(updateForm.v$.item.$model);
       }
     },
 
     resetForm() {
+      console.log('resetForm');
       this.$refs.updateForm.v$.$reset();
       this.item = { ...this.retrieved };
     }
   },
   watch: {
     deleted(deleted) {
+      console.log('deleted');
       if (!deleted) {
         return;
       }
@@ -96,19 +106,25 @@ export default {
     },
 
     error(message) {
+      console.log('error');
       message && this.showError(message);
     },
 
     deleteError(message) {
+      console.log('deleteError');
       message && this.showError(message);
     },
 
     updated(val) {
+      console.log('updated');
       this.showMessage(`${val['@id']} updated.`);
     },
 
     retrieved(val) {
-      this.item = { ...val };
+      console.log('retrieved(val)');
+      if (!isEmpty(val)) {
+        this.item = {...val};
+      }
     }
   }
 };

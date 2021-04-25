@@ -1,10 +1,5 @@
 <template>
-  <v-row>
-    <v-col
-      cols="12"
-      sm="6"
-      md="6"
-    >
+  <div class="q-card">
       <div v-if="item">
         <div v-if="item['resourceLinkListFromEntity']">
           <ul>
@@ -23,9 +18,10 @@
                 {{ $t('Group') }}: {{ link.session.resourceNode.title }}
               </div>
 
-              <v-select
+              <q-select
                 v-model="link.visibility"
                 :options="visibilityList"
+                emit-value
                 label="Status"
                 persistent-hint
               />
@@ -33,8 +29,7 @@
           </ul>
         </div>
       </div>
-    </v-col>
-  </v-row>
+  </div>
 </template>
 
 <script>
@@ -65,8 +60,8 @@ export default {
         return {
             // See ResourceLink entity constants.
             visibilityList: [
-                {value: 2, text: 'Published'},
-                {value: 0, text: 'Draft'},
+                {value: 2, label: 'Published'},
+                {value: 0, label: 'Draft'},
             ],
         };
     },
@@ -85,9 +80,6 @@ export default {
       violations() {
       return this.errors || {};
     }
-  },
-  methods: {
-
   },
   validations: {
     item: {

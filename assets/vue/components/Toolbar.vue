@@ -1,6 +1,6 @@
 <template>
   <div class="q-card">
-    <slot name="left" />
+<!--    <slot name="left" />-->
 <!--    <q-space />-->
     <div class="p-4 flex flex-row gap-1">
       <q-btn

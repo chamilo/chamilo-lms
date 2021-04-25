@@ -37,7 +37,7 @@ export default {
       this.deleteItem(this.item).then(() => {
         let folderParams = this.$route.query;
         folderParams['id'] = '';
-        this.showMessage(`${this.item['@id']} deleted.`);
+        //this.showMessage(`${this.item['@id']} deleted.`);
         this.$router
           .push(
               {

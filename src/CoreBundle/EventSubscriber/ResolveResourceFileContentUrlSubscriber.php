@@ -91,10 +91,10 @@ class ResolveResourceFileContentUrlSubscriber implements EventSubscriberInterfac
                     'type' => $resourceNode->getResourceType()->getName(),
                 ];
 
-                if ($getFile) {
-                    // Get all links from resource.
-                    $mediaObject->setResourceLinkListFromEntity();
-                }
+                //if ($getFile) {
+                // Get all links from resource.
+                $mediaObject->setResourceLinkListFromEntity();
+                //}
 
                 $mediaObject->contentUrl = $this->generator->generate('chamilo_core_resource_view', $params);
                 $mediaObject->downloadUrl = $this->generator->generate('chamilo_core_resource_download', $params);

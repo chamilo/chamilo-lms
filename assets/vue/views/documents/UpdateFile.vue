@@ -58,7 +58,6 @@ export default {
     }),
     ...mapGetters('documents', ['find'])
   },
-
   methods: {
     ...mapActions('documents', {
       createReset: 'resetCreate',

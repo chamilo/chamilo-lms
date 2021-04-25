@@ -36,10 +36,9 @@ export default {
       console.log('watch listmixin');
       // react to route changes...
       this.resetList = true;
-
-      this.onRequest({
+      /*this.onRequest({
         pagination: this.pagination,
-      });
+      });*/
       let nodeId = this.$route.params['node'];
       if (!isEmpty(nodeId)) {
         this.findResourceNode('/api/resource_nodes/'+ nodeId);
@@ -47,23 +46,26 @@ export default {
     },
 
     deletedItem(item) {
+      console.log('deletedItem');
       this.showMessage(this.$i18n.t('{resource} deleted', {'resource': item['resourceNode'].title}));
-      // this.showMessage(`${item['@id']} deleted.`);
     },
 
     error(message) {
+      console.log('error');
       message && this.showError(message);
     },
 
-    items() {
+    /*items() {
+      console.log('items');
       this.pagination.page = this.nextPage;
       if (isEmpty(this.pagination.page)) {
         this.pagination.page = 1;
       }
+      console.log(this.pagination.page );
       this.pagination.rowsNumber = this.totalItems;
       this.nextPage = null;
       //this.options.totalItems = this.totalItems;
-    }
+    }*/
   },
   methods: {
     onRequest(props) {
@@ -101,15 +103,9 @@ export default {
         this.pagination.descending = descending;
         this.pagination.rowsPerPage = itemsPerPage;
       });
-
-      /*this.getPage({ params }).then(() => {
-        this.pagination.sortBy = sortBy;
-        this.pagination.descending = descending;
-        this.pagination.rowsPerPage = itemsPerPage;
-        //this.filters = { ...this.filter };
-      });*/
     },
     fetchNewItems({ page, itemsPerPage, sortBy, sortDesc, totalItems } = {}) {
+      console.log('fetchNewItems');
       let params = {
         ...this.filters
       };
@@ -127,29 +123,29 @@ export default {
         params[`order[${sortBy}]`] = sortDesc ? 'desc' : 'asc'
       }
 
-      //this.resetList = true;
-
-      //this.getPage(params).then(() => {
       this.options.sortBy = sortBy;
       this.options.sortDesc = sortDesc;
       this.options.itemsPerPage = itemsPerPage;
       this.options.totalItems = totalItems;
-      //});
+
     },
 
     onSendFilter() {
+      console.log('onSendFilter');
       this.resetList = true;
       this.pagination.page = 1;
       this.onRequest({pagination: this.pagination})
     },
 
     resetFilter() {
+      console.log('resetFilter');
       this.filters = {};
       this.pagination.page = 1;
       this.onRequest({pagination: this.pagination})
     },
 
     addHandler() {
+      console.log('addHandler');
       let folderParams = this.$route.query;
       this.$router.push({name: `${this.$options.servicePrefix}Create`, query: folderParams});
     },
@@ -165,6 +161,7 @@ export default {
     },
 
     showHandler(item) {
+      console.log('showHandler');
       let folderParams = this.$route.query;
       folderParams['id'] = item['@id'];
 
@@ -195,6 +192,7 @@ export default {
       this.onUpdateOptions(this.options);*/
     },
     editHandler(item) {
+      console.log('editHandler');
       let folderParams = this.$route.query;
       folderParams['id'] = item['@id'];
 
@@ -207,12 +205,11 @@ export default {
       }
 
       if ('file' === item.filetype) {
-        folderParams['getFile'] = false;
-
+        folderParams['getFile'] = true;
         if (item.resourceNode.resourceFile &&
             item.resourceNode.resourceFile.mimeType &&
             'text/html' === item.resourceNode.resourceFile.mimeType) {
-          folderParams['getFile'] = true;
+          //folderParams['getFile'] = true;
         }
 
         this.$router.push({
@@ -223,6 +220,7 @@ export default {
       }
     },
     deleteHandler(item) {
+      console.log('deleteHandler');
       console.log(item);
       this.pagination.page = 1;
       this.deleteItem(item).then(() =>

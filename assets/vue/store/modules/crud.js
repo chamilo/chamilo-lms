@@ -74,7 +74,6 @@ export default function makeCrudModule({
             .then(data => {
               commit(ACTIONS.TOGGLE_LOADING);
               commit(ACTIONS.ADD, data);
-
               commit(ACTIONS.SET_CREATED, data);
             })
             .catch(e => handleError(commit, e));
@@ -152,7 +151,6 @@ export default function makeCrudModule({
         { params = { properties: ['@id', 'name'] } } = {}
       ) => {
         commit(ACTIONS.TOGGLE_LOADING);
-
         if (!service) throw new Error('No service specified!');
 
         service
@@ -166,7 +164,6 @@ export default function makeCrudModule({
           })
           .catch(e => handleError(commit, e));
       },
-
       load: ({ commit }, id, options = {}) => {
         if (!service) throw new Error('No service specified!');
 
@@ -185,7 +182,8 @@ export default function makeCrudModule({
           .catch(e => handleError(commit, e));
       },
       findResourceNode: ({ commit }, id) => {
-        //console.log('findResourceNode');
+        console.log('findResourceNode');
+        console.log(id);
         if (!service) throw new Error('No service specified!');
 
         service
@@ -212,6 +210,7 @@ export default function makeCrudModule({
         commit(ACTIONS.RESET_UPDATE);
       },
       update: ({ commit }, item) => {
+        console.log('crud update');
         commit(ACTIONS.SET_ERROR, '');
         commit(ACTIONS.TOGGLE_LOADING);
 
@@ -246,6 +245,7 @@ export default function makeCrudModule({
         //this.$set(state, 'isLoading', false);
       },
       [ACTIONS.ADD]: (state, item) => {
+        console.log('ACTIONS.ADD');
         //this.$set(state.byId, item['@id'], item);
         state.byId[item['@id']] = item;
         state.isLoading = false;
@@ -297,6 +297,7 @@ export default function makeCrudModule({
         Object.assign(state, { created });
       },
       [ACTIONS.SET_DELETED]: (state, deleted) => {
+        console.log('SET_DELETED');
         if (!state.allIds.includes(deleted['@id'])) {
           return;
         }
@@ -307,6 +308,7 @@ export default function makeCrudModule({
         });
       },
       [ACTIONS.SET_DELETED_MULTIPLE]: (state, deleted) => {
+        console.log('SET_DELETED_MULTIPLE');
         //console.log(deleted['@id']);
         /*if (!state.allIds.includes(deleted['@id'])) {
           return;
@@ -331,6 +333,8 @@ export default function makeCrudModule({
         Object.assign(state, { totalItems });
       },
       [ACTIONS.SET_UPDATED]: (state, updated) => {
+        console.log('SET_UPDATED');
+        console.log(updated);
         Object.assign(state, {
           byId: {
             [updated['@id']]: updated

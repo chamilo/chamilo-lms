@@ -225,12 +225,8 @@ export default {
     const layout = computed(
         () => `${currentRoute.value.meta.layout || defaultLayout}Layout`
     );
-
-
     const rightDrawerOpen = ref(false);
-
-    console.log('isSidebarOpen');
-    console.log(isSidebarOpen.value);
+    //console.log('isSidebarOpen');console.log(isSidebarOpen.value);
 
     return {
       layout,
@@ -308,7 +304,6 @@ export default {
       //let content = document.getElementById("sectionMainContent");
       this.legacyContent = '';
       /*if (content && false === this.contentLoaded) {
-
         console.log('updated ok ');
         content.style.display = 'block';
         this.legacyContent = content.outerHTML;
@@ -333,11 +328,10 @@ export default {
         } else {
           if (document.querySelector("#sectionMainContent")) {
             document.querySelector("#sectionMainContent").remove();
-            console.log('remove');
+            //console.log('remove');
           }
 
-          console.log('Replace URL', url);
-
+          //console.log('Replace URL', url);
           window.location.replace(url);
 
           /*axios.get(url, {

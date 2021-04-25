@@ -46,7 +46,6 @@ export default {
     },
     titleErrors() {
       const errors = [];
-
       if (!this.v$.item.title.$dirty) return errors;
       has(this.violations, 'title') && errors.push(this.violations.title);
 

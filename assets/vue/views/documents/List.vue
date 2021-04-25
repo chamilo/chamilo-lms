@@ -1,81 +1,80 @@
 <template>
-   <div class="q-pa-md">
-    <Toolbar
-       :handle-add="addHandler"
-       :handle-add-document="addDocumentHandler"
-       :handle-upload-document="uploadDocumentHandler"
-       :filters="filters"
-       :on-send-filter="onSendFilter"
-       :reset-filter="resetFilter"
-     />
+  <Toolbar
+     :handle-add="addHandler"
+     :handle-add-document="addDocumentHandler"
+     :handle-upload-document="uploadDocumentHandler"
+     :filters="filters"
+     :on-send-filter="onSendFilter"
+     :reset-filter="resetFilter"
+   />
 
-      <q-table
-          dense
-          flat
-          :rows="items"
-          :columns="columns"
-          row-key="@id"
-          :filter="filter"
-          @request="onRequest"
-          v-model:pagination="pagination"
-          :no-data-label="$t('Data unavailable')"
-          :no-results-label="$t('No results')"
-          :loading-label="$t('Loading...')"
-          :rows-per-page-label="$t('Records per page:')"
-          :loading="isLoading"
-          selection="multiple"
-          v-model:selected="selectedItems"
-      >
-         <template v-slot:body="props">
-            <q-tr :props="props">
-              <q-td auto-width>
-                <q-checkbox dense v-model="props.selected" />
-              </q-td>
+    <q-table
+        dense
+        :rows="items"
+        :columns="columns"
+        row-key="@id"
+        :filter="filter"
+        @request="onRequest"
+        v-model:pagination="pagination"
+        :no-data-label="$t('Data unavailable')"
+        :no-results-label="$t('No results')"
+        :loading-label="$t('Loading...')"
+        :rows-per-page-label="$t('Records per page:')"
+        :rows-per-page-options="[10, 20, 50, 0]"
+        :loading="isLoading"
+        selection="multiple"
+        v-model:selected="selectedItems"
+    >
+       <template v-slot:body="props">
+          <q-tr :props="props">
+            <q-td auto-width>
+              <q-checkbox dense v-model="props.selected" />
+            </q-td>
 
-              <q-td key="resourceNode.title" :props="props">
-                <div v-if="props.row.resourceNode.resourceFile">
-                  <a
-                      data-fancybox="gallery"
-                      :href="props.row.contentUrl"
-                  >
-                    <ResourceFileIcon :file="props.row" />
-                    {{ props.row.title }}
-                  </a>
-                </div>
-                <div v-else>
-                  <a @click="handleClick(props.row)" class="cursor-pointer" >
-                    <font-awesome-icon
-                        icon="folder"
-                        size="lg"
-                    />
-                    {{ props.row.resourceNode.title }}
-                  </a>
-                </div>
-              </q-td>
+            <q-td key="resourceNode.title" :props="props">
+              <div v-if="props.row.resourceNode.resourceFile">
+                <a
+                    data-fancybox="gallery"
+                    :href="props.row.contentUrl"
+                >
+                  <ResourceFileIcon :file="props.row" />
+                  {{ props.row.title }}
+                </a>
+              </div>
+              <div v-else>
+                <a @click="handleClick(props.row)" class="cursor-pointer" >
+                  <font-awesome-icon
+                      icon="folder"
+                      size="lg"
+                  />
+                  {{ props.row.resourceNode.title }}
+                </a>
+              </div>
+            </q-td>
 
-              <q-td key="resourceNode.updatedAt" :props="props">
-                {{$luxonDateTime.fromISO(props.row.resourceNode.updatedAt).toRelative() }}
-              </q-td>
+            <q-td key="resourceNode.updatedAt" :props="props">
+              {{$luxonDateTime.fromISO(props.row.resourceNode.updatedAt).toRelative() }}
+            </q-td>
 
-              <q-td key="resourceNode.resourceFile.size" :props="props">
-                <span v-if="props.row.resourceNode.resourceFile">
-                {{
-                  $filters.prettyBytes(props.row.resourceNode.resourceFile.size)
-                }}
-                </span>
-              </q-td>
+            <q-td key="resourceNode.resourceFile.size" :props="props">
+              <span v-if="props.row.resourceNode.resourceFile">
+              {{
+                $filters.prettyBytes(props.row.resourceNode.resourceFile.size)
+              }}
+              </span>
+            </q-td>
 
-              <q-td key="action" :props="props">
-              <ActionCell
-                  :handle-show="() => showHandler(props.row)"
-                  :handle-edit="() => editHandler(props.row)"
-                  :handle-delete="() => deleteHandler(props.row)"
-              />
-              </q-td>
-            </q-tr>
-          </template>
-        </q-table>
-   </div>
+            <q-td key="action" :props="props">
+            <ActionCell
+                :handle-show="() => showHandler(props.row)"
+                :handle-edit="() => editHandler(props.row)"
+                :handle-delete="() => deleteHandler(props.row)"
+            />
+            </q-td>
+          </q-tr>
+        </template>
+      </q-table>
+
 </template>
 
 <script>
@@ -87,12 +86,8 @@ import Toolbar from '../../components/Toolbar.vue';
 import ResourceFileIcon from './ResourceFileIcon.vue';
 import { useRoute } from 'vue-router'
 
-//import { useToast } from 'primevue/usetoast';
 import { ref, reactive, onMounted, computed } from 'vue';
 import { useStore } from 'vuex';
-/*const servicePrefix = 'documents';
-const { getters, actions } = list(servicePrefix);*/
-
 import isEmpty from 'lodash/isEmpty';
 
 export default {
@@ -114,7 +109,7 @@ export default {
         {name: 'resourceNode.resourceFile.size', label: this.$i18n.t('Size'), field: 'resourceNode.resourceFile.size', sortable: true},
         {name: 'action', label: this.$i18n.t('Actions'), field: 'action', sortable: false}
       ],
-      pageOptions: [5, 10, 15, 20, this.$i18n.t('All')],
+      //pageOptions: [5, 10, 15, 20, this.$i18n.t('All')],
       selected: [],
       isBusy: false,
       options: [],

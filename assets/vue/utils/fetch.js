@@ -52,7 +52,6 @@ export default function(id, options = {}) {
             .join('&');
         id = `${id}?${queryString}`;
 
-
         console.log(id, 'id');
     }
 
@@ -124,6 +123,8 @@ export default function(id, options = {}) {
     }*/
 
   return global.fetch(new URL(id, entryPoint), options).then(response => {
+    console.log(response);
+
     if (response.ok) return response;
 
     return response.json().then(json => {

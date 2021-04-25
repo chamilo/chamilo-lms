@@ -40,7 +40,7 @@
 //@import "~bootstrap-select/sass/bootstrap-select";
 //@import '~pretty-checkbox/src/pretty-checkbox.scss';
 //@import '~jquery-ui/themes/base/all.css';
-/*
+
 @layer components {
   .card {
     @apply bg-white rounded shadow-lg;
@@ -60,6 +60,10 @@
 
   .btn-primary {
     @apply text-white bg-blue-700 hover:bg-blue-800;
+  }
+
+  .btn-success {
+    @apply text-white bg-green-700 hover:bg-green-800;
   }
 
   .btn-danger {
@@ -135,7 +139,7 @@
   }
 
   @import "scss/index.scss";
-}*/
+}
 
 a.router-link-exact-active {
   //@apply border-b-2 bg-gray-100 border-gray-500 text-gray-500 rounded-t;

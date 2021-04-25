@@ -15,7 +15,7 @@ export default {
         sortBy: 'resourceNode.title',
         descending: false,
         page: 1, // page to be displayed
-        rowsPerPage: 3, // maximum displayed rows
+        rowsPerPage: 10, // maximum displayed rows
         rowsNumber: 10, // max number of rows
       },
       nextPage: null,
@@ -26,7 +26,7 @@ export default {
         //sortBy: [], vuetify
         //sortDesc: [], , vuetify
         page: 1,
-        itemsPerPage: 3
+        itemsPerPage: 10
       },
       //filters: {}
     };
@@ -66,10 +66,13 @@ export default {
     onRequest(props) {
       console.log('onRequest');
       console.log(props);
-      const {  page, rowsPerPage: itemsPerPage, sortBy, descending } = props.pagination;
+      const { page, rowsPerPage: itemsPerPage, sortBy, descending } = props.pagination;
       const filter = props.filter;
 
       this.nextPage = page;
+      if (isEmpty(this.nextPage)) {
+        this.nextPage = 1;
+      }
 
       let params = {};
       if (itemsPerPage > 0) {
@@ -133,12 +136,14 @@ export default {
 
     onSendFilter() {
       this.resetList = true;
-      this.onUpdateOptions(this.options);
+      this.pagination.page = 1;
+      this.onRequest({pagination: this.pagination})
     },
 
     resetFilter() {
       this.filters = {};
-      this.onUpdateOptions(this.options);
+      this.pagination.page = 1;
+      this.onRequest({pagination: this.pagination})
     },
 
     addHandler() {
@@ -216,7 +221,10 @@ export default {
     },
     deleteHandler(item) {
       console.log(item);
-      this.deleteItem(item).then(() => this.onUpdateOptions(this.options));
+      this.pagination.page = 1;
+      this.deleteItem(item).then(() =>
+          this.onRequest({pagination: this.pagination})
+      );
     },
     formatDateTime
   }

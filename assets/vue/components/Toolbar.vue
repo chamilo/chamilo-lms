@@ -1,98 +1,109 @@
 <template>
-  <q-toolbar class="q-my-md">
+  <div class="q-card">
     <slot name="left" />
-    <q-space />
+<!--    <q-space />-->
+    <div class="p-4 flex flex-row gap-1">
+      <q-btn
+        v-if="handleList"
+        :loading="isLoading"
+        color="primary"
+        @click="listItem"
+        unelevated
+      >
+        {{ $t('List') }}
+      </q-btn>
 
-    <q-btn
-      v-if="handleList"
-      :loading="isLoading"
-      color="primary"
-      @click="listItem"
-      unelevated
-    >
-      {{ $t('List') }}
-    </q-btn>
-    <q-btn
-      v-if="handleEdit"
-      :loading="isLoading"
-      color="primary"
-      @click="editItem"
-      unelevated
-    >
-      {{ $t('Edit') }}
-    </q-btn>
+      <q-btn
+        v-if="handleEdit"
+        no-caps
+        class="btn btn-primary"
+        :loading="isLoading"
+        @click="editItem"
+        unelevated
+      >
+        {{ $t('Edit') }}
+      </q-btn>
 
-    <q-btn
-      v-if="handleSubmit"
-      :loading="isLoading"
-      color="primary"
-      @click="submitItem"
-      unelevated
-    >
-      <font-awesome-icon icon="save" />
-      {{ $t('Submit') }}
-    </q-btn>
-    <!--      <v-btn-->
-    <!--        v-if="handleReset"-->
-    <!--        color="primary"-->
-    <!--        class="ml-sm-2"-->
-    <!--        @click="resetItem"-->
-    <!--      >-->
-    <!--        {{ $t('Reset') }}-->
-    <!--      </v-btn>-->
-    <q-btn
-      v-if="handleDelete"
-      color="red"
-      unelevated
-      class="ml-sm-2"
-      @click="confirmDelete = true"
-    >
-      {{ $t('Delete') }}
-    </q-btn>
+      <q-btn
+        v-if="handleSubmit"
+        no-caps
+        class="btn btn-primary"
+        :loading="isLoading"
+        @click="submitItem"
+        unelevated
+      >
+        <font-awesome-icon icon="save" />
+        {{ $t('Submit') }}
+      </q-btn>
+      <!--      <v-btn-->
+      <!--        v-if="handleReset"-->
+      <!--        color="primary"-->
+      <!--        class="ml-sm-2"-->
+      <!--        @click="resetItem"-->
+      <!--      >-->
+      <!--        {{ $t('Reset') }}-->
+      <!--      </v-btn>-->
+      <q-btn
+        v-if="handleDelete"
+        no-caps
+        class="btn btn-danger"
+        unelevated
+        @click="confirmDelete = true"
+      >
+        {{ $t('Delete') }}
+      </q-btn>
 
-    <q-btn
-      v-if="handleAdd"
-      color="primary"
-      @click="addItem"
-    >
-      <font-awesome-icon icon="folder-plus" /> New folder
-    </q-btn>
 
-    <q-btn
-      v-if="handleAddDocument"
-      color="primary"
-      @click="addDocument"
-    >
-      <font-awesome-icon icon="file-alt" /> New document
-    </q-btn>
+<!--      color="primary"-->
 
-    <q-btn
-      v-if="handleUploadDocument"
-      color="primary"
-      @click="uploadDocument"
-    >
-      <font-awesome-icon icon="cloud-upload-alt" /> File upload
-    </q-btn>
+      <q-btn
+        v-if="handleAdd"
+        no-caps
+        class="btn btn-primary"
+        @click="addItem"
+      >
+        <font-awesome-icon icon="folder-plus" />
+        New folder
+      </q-btn>
 
-<!--    <DataFilter-->
-<!--      v-if="filters"-->
-<!--      :handle-filter="onSendFilter"-->
-<!--      :handle-reset="resetFilter"-->
-<!--    >-->
-<!--      <DocumentsFilterForm-->
-<!--        ref="filterForm"-->
-<!--        slot="filter"-->
-<!--        :values="filters"-->
-<!--      />-->
-<!--    </DataFilter>-->
+      <q-btn
+        no-caps
+        class="btn btn-primary"
+        v-if="handleAddDocument"
+        @click="addDocument"
+      >
+        <font-awesome-icon icon="file-alt" /> New document
+      </q-btn>
 
-    <ConfirmDelete
-      v-if="handleDelete"
-      :visible="confirmDelete"
-      :handle-delete="handleDelete"
-      @close="confirmDelete = false"
-    />
-  </q-toolbar>
+      <q-btn
+        no-caps
+        class="btn btn-primary"
+        v-if="handleUploadDocument"
+        @click="uploadDocument"
+      >
+        <font-awesome-icon icon="cloud-upload-alt" /> File upload
+      </q-btn>
+
+  <!--    <DataFilter-->
+  <!--      v-if="filters"-->
+  <!--      :handle-filter="onSendFilter"-->
+  <!--      :handle-reset="resetFilter"-->
+  <!--    >-->
+  <!--      <DocumentsFilterForm-->
+  <!--        ref="filterForm"-->
+  <!--        slot="filter"-->
+  <!--        :values="filters"-->
+  <!--      />-->
+  <!--    </DataFilter>-->
+
+      <ConfirmDelete
+        v-if="handleDelete"
+        :visible="confirmDelete"
+        :handle-delete="handleDelete"
+        @close="confirmDelete = false"
+      />
+    </div>
+  </div>
 </template>
 
 <script>

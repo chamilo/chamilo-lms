@@ -94,7 +94,6 @@ export default function makeCrudModule({
           .catch(e => handleError(commit, e));
       },
       del: ({ commit }, item) => {
-
         console.log('del');
         commit(ACTIONS.TOGGLE_LOADING);
 

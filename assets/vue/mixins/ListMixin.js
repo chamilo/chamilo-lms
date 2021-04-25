@@ -57,6 +57,9 @@ export default {
 
     items() {
       this.pagination.page = this.nextPage;
+      if (isEmpty(this.pagination.page)) {
+        this.pagination.page = 1;
+      }
       this.pagination.rowsNumber = this.totalItems;
       this.nextPage = null;
       //this.options.totalItems = this.totalItems;

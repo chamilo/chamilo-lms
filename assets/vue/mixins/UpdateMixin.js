@@ -29,7 +29,10 @@ export default {
   },
   computed: {
     retrieved() {
+
+      console.log('retrieved');
       let id = this.$route.params.id;
+      console.log(id);
       if (isEmpty(id)) {
         id = this.$route.query.id;
       }
@@ -41,6 +44,9 @@ export default {
   },
   methods: {
     del() {
+      console.log('del');
+      console.log(this.retrieved);
+
       this.deleteItem(this.retrieved).then(() => {
         let folderParams = this.$route.query;
         this.showMessage(`${this.item['@id']} deleted.`);

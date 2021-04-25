@@ -48,7 +48,7 @@
         no-caps
         class="btn btn-danger"
         unelevated
-        @click="confirmDelete = true"
+        @click="confirmDeleteClick = true"
       >
         {{ $t('Delete') }}
       </q-btn>
@@ -98,9 +98,9 @@
 
       <ConfirmDelete
         v-if="handleDelete"
-        :visible="confirmDelete"
+        :show="confirmDeleteClick"
         :handle-delete="handleDelete"
-        @close="confirmDelete = false"
+        :handle-cancel="() => (confirmDeleteClick = false)"
       />
     </div>
   </div>
@@ -178,7 +178,7 @@ export default {
   },
   data() {
     return {
-      confirmDelete: false
+      confirmDeleteClick: false
     };
   },
   methods: {

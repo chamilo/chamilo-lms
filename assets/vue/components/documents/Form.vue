@@ -1,21 +1,19 @@
 <template>
-<!--  @input="$v.item.title.$touch()"-->
-<!--  @blur="$v.item.title.$touch()"-->
-        <q-input
-          id="item_title"
-          v-model="item.title"
-          :error-messages="titleErrors"
-          :placeholder="$t('Title')"
-          required
-        />
+  <q-input
+    id="item_title"
+    v-model="item.title"
+    :placeholder="$t('Title')"
+    :error="v$.item.title.$error"
+    @input="v$.item.title.$touch()"
+    @blur="v$.item.title.$touch()"
+    :error-message="titleErrors"
+  />
 </template>
 
 <script>
 import has from 'lodash/has';
 import useVuelidate from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
-//import { mapActions } from 'vuex';
-//import { mapFields } from 'vuex-map-fields';
 
 export default {
   name: 'DocumentsForm',
@@ -49,19 +47,18 @@ export default {
     titleErrors() {
       const errors = [];
 
-      /*if (!this.$v.item.title.$dirty) return errors;
+      if (!this.v$.item.title.$dirty) return errors;
       has(this.violations, 'title') && errors.push(this.violations.title);
-      !this.$v.item.title.required && errors.push(this.$t('Field is required'));*/
+
+      if (this.v$.item.title.required) {
+        return this.$t('Field is required')
+      }
 
       return errors;
     },
     violations() {
       return this.errors || {};
     }
-  },
-  created () {
-  },
-  methods: {
   },
   validations: {
     item: {

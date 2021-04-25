@@ -8,6 +8,17 @@
      :reset-filter="resetFilter"
    />
 
+<!--  <DataFilter-->
+<!--      :handle-filter="onSendFilter"-->
+<!--      :handle-reset="resetFilter"-->
+<!--  >-->
+<!--    <DocumentsFilterForm-->
+<!--        ref="filterForm"-->
+<!--        slot="filter"-->
+<!--        :values="filters"-->
+<!--    />-->
+<!--  </DataFilter>-->
+
     <q-table
         dense
         :rows="items"
@@ -85,7 +96,8 @@ import ActionCell from '../../components/ActionCell.vue';
 import Toolbar from '../../components/Toolbar.vue';
 import ResourceFileIcon from './ResourceFileIcon.vue';
 import { useRoute } from 'vue-router'
-
+import DataFilter from '../../components/DataFilter';
+import DocumentsFilterForm from '../../components/documents/Filter';
 import { ref, reactive, onMounted, computed } from 'vue';
 import { useStore } from 'vuex';
 import isEmpty from 'lodash/isEmpty';
@@ -97,6 +109,8 @@ export default {
     Toolbar,
     ActionCell,
     ResourceFileIcon,
+    DocumentsFilterForm,
+    DataFilter
   },
   mixins: [ListMixin],
   data() {
@@ -113,6 +127,7 @@ export default {
       selected: [],
       isBusy: false,
       options: [],
+      selectedItems: [],
     };
   },
   created() {

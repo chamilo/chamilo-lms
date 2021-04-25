@@ -62,15 +62,15 @@ export default {
 
     onSendForm() {
       const updateForm = this.$refs.updateForm;
-      updateForm.$v.$touch();
+      updateForm.v$.$touch();
       console.log('onSendForm');
-      if (!updateForm.$v.$invalid) {
-        this.update(updateForm.$v.item.$model);
+      if (!updateForm.v$.$invalid) {
+        this.update(updateForm.v$.item.$model);
       }
     },
 
     resetForm() {
-      this.$refs.updateForm.$v.$reset();
+      this.$refs.updateForm.v$.$reset();
       this.item = { ...this.retrieved };
     }
   },

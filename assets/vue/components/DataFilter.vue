@@ -1,37 +1,37 @@
 <template>
   <span>
-    <b-button
+    <q-btn
       v-b-toggle.collapse-1
       variant="primary"
     >
       <font-awesome-icon icon="search" />
       {{ $t('Search') }}
-    </b-button>
-    <b-collapse
-      id="collapse-1"
-      class="mt-2"
-    >
-      <b-card>
+    </q-btn>
+<!--    <b-collapse-->
+<!--      id="collapse-1"-->
+<!--      class="mt-2"-->
+<!--    >-->
+      <q-card>
         <p class="card-text">
           <slot name="filter" />
           <br>
-          <b-button
+          <q-btn
             variant="primary"
             @click="handleFilter"
           >
             {{ $t('Filter') }}
-          </b-button>
-          <b-button
+          </q-btn>
+          <q-btn
             variant="secondary"
             class="ml-2"
             text
             @click="handleReset"
           >
             {{ $t('Reset') }}
-          </b-button>
+          </q-btn>
         </p>
-      </b-card>
-    </b-collapse>
+      </q-card>
+<!--    </b-collapse>-->
 
 
     <!--    <v-expansion-panels v-model="filtersExpanded">-->

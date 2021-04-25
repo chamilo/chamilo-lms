@@ -316,7 +316,7 @@ class AddCourse
         Database::getManager()->persist($groupCategory);
 
         $now = api_get_utc_datetime();
-        $files = [
+        /*$files = [
             ['path' => '/shared_folder', 'title' => get_lang('Folders of users'), 'filetype' => 'folder', 'size' => 0],
             [
                 'path' => '/chat_files',
@@ -331,7 +331,7 @@ class AddCourse
         foreach ($files as $file) {
             self::insertDocument($courseInfo, $counter, $file, $authorId);
             $counter++;
-        }
+        }*/
 
         $certificateId = 'NULL';
         /*    Documents   */

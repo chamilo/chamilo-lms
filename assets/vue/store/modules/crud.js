@@ -150,6 +150,7 @@ export default function makeCrudModule({
         { commit },
         { params = { properties: ['@id', 'name'] } } = {}
       ) => {
+        console.log('fetchSelectItems');
         commit(ACTIONS.TOGGLE_LOADING);
         if (!service) throw new Error('No service specified!');
 

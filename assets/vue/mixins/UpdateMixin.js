@@ -14,7 +14,7 @@ export default {
       },
     };
   },
-  mounted() {
+  created() {
     console.log('mounted');
     // Changed
     let id = this.$route.params.id;
@@ -35,6 +35,7 @@ export default {
     retrieved() {
       // call from list
       console.log('update mixin retrieved');
+
       let id = this.$route.params.id;
       console.log('first');
       console.log(id);
@@ -44,10 +45,16 @@ export default {
         console.log(id);
       }
 
-      let item = this.find(decodeURIComponent(id));
-      console.log(item);
+      if (!isEmpty(id)) {
+        let item = this.find(decodeURIComponent(id));
 
-      return item;
+        if (isEmpty(item)) {
+          this.retrieve(decodeURIComponent(id));
+        }
+
+        return item;
+      }
+
 
       //return this.find(decodeURIComponent(this.$route.params.id));
     }
@@ -57,6 +64,7 @@ export default {
       console.log(this.retrieved);
 
       this.deleteItem(this.retrieved).then(() => {
+        console.log('deleteItem resykt');
         let folderParams = this.$route.query;
         //this.showMessage(`${this.item['@id']} deleted.`);
         this.$router
@@ -80,6 +88,7 @@ export default {
       updateForm.v$.$touch();
       if (!updateForm.v$.$invalid) {
         this.update(updateForm.v$.item.$model);
+        this.item = { ...this.retrieved };
       }
     },
 

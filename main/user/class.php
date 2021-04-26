@@ -103,8 +103,7 @@ if (api_is_allowed_to_edit()) {
             if (!empty($id)) {
                 $usergroup->unsubscribe_courses_from_usergroup(
                     $id,
-                    [api_get_course_int_id()],
-                    $sessionId
+                    [api_get_course_int_id()]
                 );
                 Display::addFlash(Display::return_message(get_lang('Deleted')));
                 $user_list = $usergroup->get_users_by_usergroup($id);

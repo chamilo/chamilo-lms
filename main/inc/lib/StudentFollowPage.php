@@ -159,21 +159,20 @@ class StudentFollowPage
 
     public static function getLpVisibleField(array $lpInfo, int $studentId, int $courseId, int $sessionId = 0)
     {
-        $lpView = learnpath::findLastView($lpInfo['iid'], $studentId, $courseId, $sessionId);
-
-        if (empty($lpView)) {
-            return '-';
-        }
-
         $attrs = [];
 
         $isVisible = self::isViewVisible($lpInfo['iid'], $studentId, $courseId, $sessionId);
 
-        if ($isVisible) {
+        if (!$isVisible) {
             $attrs['checked'] = 'checked';
         }
 
-        return Display::input('checkbox', 'chkb_view[]', $lpView['iid'], $attrs);
+        return Display::input(
+            'checkbox',
+            'chkb_view[]',
+            implode('_', [$lpInfo['iid'], $studentId, $courseId, $sessionId]),
+            $attrs
+        );
     }
 
     public static function isViewVisible(int $lpId, int $studentId, int $courseId, int $sessionId): bool
@@ -181,7 +180,7 @@ class StudentFollowPage
         $lpView = learnpath::findLastView($lpId, $studentId, $courseId, $sessionId);
 
         if (empty($lpView)) {
-            return false;
+            return true;
         }
 
         $extraFieldValue = new ExtraFieldValue('lp_view');

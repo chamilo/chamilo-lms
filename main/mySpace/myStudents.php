@@ -1364,7 +1364,8 @@ if (empty($details)) {
         if (true === api_get_configuration_value('student_follow_page_add_LP_invisible_checkbox')) {
             echo StudentFollowPage::getLpVisibleScript();
 
-            $chkb = Display::input('checkbox', 'chkb_category[]', '');
+            $chkb = Display::input('checkbox', 'chkb_category[]', '')
+                .PHP_EOL.get_lang('Invisible');
 
             $columnHeaders = array_merge(
                 ['student_follow_page_add_LP_invisible_checkbox' => $chkb],

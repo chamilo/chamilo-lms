@@ -8,8 +8,6 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 require_once __DIR__.'/../global.inc.php';
 
-api_protect_course_script(true);
-
 $httpRequest = HttpRequest::createFromGlobals();
 
 $isAllowedToEdit = api_is_allowed_to_edit();
@@ -113,23 +111,40 @@ function displayForm(int $lpViewId)
         })</script>";
 }
 
-function processViewsInvisible(array $lpViewsIds, bool $state)
+function processViewsInvisible(array $lpViews, bool $state)
 {
-    $lpViewsIds = array_map('intval', $lpViewsIds);
-    $lpViewsIds = array_filter($lpViewsIds);
+    foreach ($lpViews as $lpViewData) {
+        $parts = explode('_', $lpViewData);
 
-    if (empty($lpViewsIds)) {
-        return;
-    }
+        [$lpId, $userId, $courseId, $sessionId] = array_map('intval', $parts);
 
-    foreach ($lpViewsIds as $lpViewId) {
+        $lpView = learnpath::findLastView($lpId, $userId, $courseId, $sessionId);
+
+        if (empty($lpView)) {
+            $tblLpView = Database::get_course_table(TABLE_LP_VIEW);
+
+            $lpViewId = Database::insert(
+                $tblLpView,
+                [
+                    'c_id' => $courseId,
+                    'lp_id' => $lpId,
+                    'user_id' => $userId,
+                    'view_count' => 1,
+                    'session_id' => $sessionId,
+                ]
+            );
+            Database::update($tblLpView, ['id' => $lpViewId], ['iid = ?' => $lpViewId]);
+        } else {
+            $lpViewId = $lpView['iid'];
+        }
+
         $extraFieldValue = new ExtraFieldValue('lp_view');
         $extraFieldValue->save(
             [
                 'variable' => StudentFollowPage::VARIABLE_INVISIBLE,
                 'item_id' => $lpViewId,
                 'comment' => json_encode(['user' => api_get_user_id(), 'datetime' => api_get_utc_datetime()]),
-                'value' => !$state,
+                'value' => $state,
             ]
         );
     }

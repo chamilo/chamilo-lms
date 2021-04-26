@@ -1246,6 +1246,10 @@ $_configuration['required_extra_fields_in_profile'] = [
 // Requires new forum_category and forum_post "language" extra fields (multiple select)
 //$_configuration['allow_forum_post_revisions'] = false;
 
+// Allow forum category filter on language
+// Requires new forum_category "language" extra fields (multiple select) 
+//$_configuration['allow_forum_category_language_filter'] = false;
+
 // Allow to show users in a map, users need to have a coordinates extra field BT#15176
 //$_configuration['allow_social_map_fields'] = ['fields' => ['terms_villedustage', 'terms_ville']];
 

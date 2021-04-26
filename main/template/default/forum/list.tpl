@@ -2,7 +2,7 @@
 {% extends 'layout/layout_1_col.tpl'|get_template %}
 
 {% block content %}
-    {% if 'translate_html'|api_get_configuration_value %}
+    {% if 'allow_forum_category_language_filter'|api_get_configuration_value %}
         <script>
             $(function () {
                 // default

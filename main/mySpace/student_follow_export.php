@@ -158,6 +158,8 @@ function generateHtmlForLearningPaths(User $student, array $courseInfo, int $ses
 
     $columnHeadersKeys = array_keys($columnHeaders);
 
+    $hideInvisibleViews = api_get_configuration_value('student_follow_page_add_LP_invisible_checkbox');
+
     $timeCourse = Tracking::minimumTimeAvailable($sessionId, $courseInfo['real_id'])
         ? Tracking::getCalculateTime($student->getId(), $courseInfo['real_id'], $sessionId)
         : null;
@@ -193,6 +195,12 @@ function generateHtmlForLearningPaths(User $student, array $courseInfo, int $ses
 
         foreach ($flatList as $learnpath) {
             $lpId = $learnpath['lp_old_id'];
+
+            if ($hideInvisibleViews
+                && !StudentFollowPage::isViewVisible($lpId, $student->getId(), $courseInfo['real_id'], $sessionId)
+            ) {
+                continue;
+            }
 
             $contentToExport = [];
 

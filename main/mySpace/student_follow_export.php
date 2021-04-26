@@ -182,7 +182,8 @@ function generateHtmlForLearningPaths(User $student, array $courseInfo, int $ses
             false,
             $categoryId,
             false,
-            true
+            false,
+            false
         );
 
         $flatList = $lpList->get_flat_list();

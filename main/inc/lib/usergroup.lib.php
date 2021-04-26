@@ -1032,13 +1032,11 @@ class UserGroup extends Model
      * @param int   $usergroup_id
      * @param array $delete_items
      */
-    public function unsubscribe_courses_from_usergroup($usergroup_id, $delete_items, $sessionId = 0)
+    public function unsubscribe_courses_from_usergroup($usergroup_id, $delete_items)
     {
-        $sessionId = (int) $sessionId;
         // Deleting items.
         if (!empty($delete_items)) {
             $user_list = $this->get_users_by_usergroup($usergroup_id);
-            $groupId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
             foreach ($delete_items as $course_id) {
                 $course_info = api_get_course_info_by_id($course_id);
                 if ($course_info) {
@@ -1046,26 +1044,20 @@ class UserGroup extends Model
                         foreach ($user_list as $user_id) {
                             CourseManager::unsubscribe_user(
                                 $user_id,
-                                $course_info['code'],
-                                $sessionId
+                                $course_info['code']
                             );
                         }
                     }
 
                     Database::delete(
-                            $this->usergroup_rel_course_table,
-                            [
-                                'usergroup_id = ? AND course_id = ?' => [
-                                    $usergroup_id,
-                                    $course_id,
-                                ],
-                            ]
-                        );
-                }
-                if ($sessionId != 0 && $groupId != 0) {
-                    $this->subscribe_sessions_to_usergroup($groupId, [0]);
-                } else {
-                    $s = $sessionId;
+                        $this->usergroup_rel_course_table,
+                        [
+                            'usergroup_id = ? AND course_id = ?' => [
+                                $usergroup_id,
+                                $course_id,
+                            ],
+                        ]
+                    );
                 }
             }
         }

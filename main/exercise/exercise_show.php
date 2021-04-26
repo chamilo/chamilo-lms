@@ -953,6 +953,9 @@ if ('export' === $action) {
     if (ob_get_contents()) {
         ob_clean();
     }
+
+    $content = Security::remove_XSS($content);
+
     $params = [
         'filename' => api_replace_dangerous_char(
             $objExercise->name.' '.

@@ -217,7 +217,7 @@ if ($value && isset($value['value']) && !empty($value['value'])) {
 
 // Create a search-box
 $searchFilter = '';
-$translate = api_get_configuration_value('translate_html');
+$translate = api_get_configuration_value('allow_forum_category_language_filter');
 if ($translate) {
     $form = new FormValidator('search_simple', 'get', api_get_self().'?'.api_get_cidreq(), null, null, 'inline');
     $form->addHidden('cidReq', api_get_course_id());

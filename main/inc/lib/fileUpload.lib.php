@@ -267,10 +267,6 @@ function handle_uploaded_document(
         return false;
     }
 
-    if ($uploadPath !== '/') {
-        $uploadPath = $uploadPath.'/';
-    }
-
     if (!Security::check_abs_path($documentDir.$uploadPath, $documentDir.'/')) {
         Display::addFlash(
             Display::return_message(

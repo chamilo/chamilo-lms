@@ -5108,11 +5108,13 @@ class Tracking
                     $my_results_final[] = $my_results[$key];
                     $final_all_exercise_graph_list[] = $all_exercise_graph_list[$key];
                 }
-                $main_session_graph = self::generate_session_exercise_graph(
-                    $final_all_exercise_graph_name_list,
-                    $my_results_final,
-                    $final_all_exercise_graph_list
-                );
+                $main_session_graph = '<div class="row"><div class="col-md-10 col-md-offset-1">'
+                    .self::generate_session_exercise_graph(
+                        $final_all_exercise_graph_name_list,
+                        $my_results_final,
+                        $final_all_exercise_graph_list
+                    )
+                    .'</div></div>';
             }
 
             $sessionIcon = Display::return_icon(
@@ -5236,7 +5238,6 @@ class Tracking
                 [
                     'id' => 'session_graph',
                     'class' => 'chart-session',
-                    'style' => 'position:relative; text-align: center;',
                 ]
             );
 

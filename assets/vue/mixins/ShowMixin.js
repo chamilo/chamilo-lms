@@ -6,6 +6,7 @@ import {mapActions, mapGetters} from "vuex";
 export default {
   mixins: [NotificationMixin],
   created() {
+    console.log('show mixin created');
     // Changed
     let id = this.$route.params.id;
     if (isEmpty(id)) {
@@ -16,12 +17,29 @@ export default {
   },
   computed: {
     item() {
+      console.log('show mixin computed');
       // Changed
       let id = this.$route.params.id;
       if (isEmpty(id)) {
         id = this.$route.query.id;
       }
+
       let item = this.find(decodeURIComponent(id));
+
+      if (isEmpty(item)) {
+        console.log('error item is emnpty');
+        let folderParams = this.$route.query;
+        delete folderParams['id'];
+        this.$router
+            .push(
+                {
+                  name: `${this.$options.servicePrefix}List`,
+                  query: folderParams
+                }
+            )
+            .catch(() => {});
+      }
+
 
       return item;
       //return this.find(decodeURIComponent(this.$route.params.id));
@@ -29,11 +47,13 @@ export default {
   },
   methods: {
     list() {
+      console.log('show mixin list');
       this.$router
           .push({ name: `${this.$options.servicePrefix}List` })
           .catch(() => {});
     },
     del() {
+      console.log('show mixin del');
       this.deleteItem(this.item).then(() => {
         let folderParams = this.$route.query;
         folderParams['id'] = '';
@@ -50,8 +70,11 @@ export default {
     },
     formatDateTime,
     editHandler() {
+      console.log('show mixin editHandler');
       let folderParams = this.$route.query;
-      folderParams['id'] = this.item['@id'];
+      if (!isEmpty(this.item)) {
+        folderParams['id'] = this.item['@id'];
+      }
 
       this.$router.push({
         name: `${this.$options.servicePrefix}Update`,

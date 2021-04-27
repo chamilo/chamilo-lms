@@ -127,6 +127,7 @@ import PrimeVue from 'primevue/config'
 import DataView from 'primevue/dataview';
 import DataTable from 'primevue/datatable';
 import Dropdown from 'primevue/dropdown';
+import Toolbar from 'primevue/toolbar';
 import DataViewLayoutOptions from 'primevue/dataviewlayoutoptions';
 
 import Dialog from 'primevue/dialog';
@@ -135,10 +136,10 @@ import Button from 'primevue/button';
 import Column from 'primevue/column';
 import ColumnGroup from 'primevue/columngroup';
 
-// import 'primevue/resources/themes/mdc-light-indigo/theme.css';
-// import 'primevue/resources/primevue.min.css';
+import 'primevue/resources/themes/mdc-light-indigo/theme.css';
+import 'primevue/resources/primevue.min.css';
 // import 'primeflex/primeflex.css';
-// import "primeicons/primeicons.css";
+import "primeicons/primeicons.css";
 
 app.component('Dialog', Dialog);
 app.component('DataView', DataView);
@@ -149,6 +150,7 @@ app.component('InputText', InputText);
 app.component('Button', Button);
 app.component('Column', Column);
 app.component('ColumnGroup', ColumnGroup);
+app.component('Toolbar', Toolbar);
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.component('DashboardLayout', DashboardLayout)
 app.component('EmptyLayout', EmptyLayout)

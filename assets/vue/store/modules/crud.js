@@ -220,7 +220,6 @@ export default function makeCrudModule({
       },
       update: ({ commit }, item) => {
         console.log('crud update');
-        commit(ACTIONS.SET_ERROR, '');
         commit(ACTIONS.TOGGLE_LOADING);
 
         service

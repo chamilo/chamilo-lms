@@ -331,7 +331,7 @@ export default {
             //console.log('remove');
           }
 
-          //console.log('Replace URL', url);
+          console.log('Replace URL', url);
           window.location.replace(url);
 
           /*axios.get(url, {
@@ -446,7 +446,7 @@ export default {
     });
   },
   mounted() {
-    console.log('mounted');
+    console.log('app.vue mounted');
     this.firstTime = true;
   },
   methods: {

@@ -7,6 +7,7 @@ import { normalize } from './hydra';
 const MIME_TYPE = 'application/ld+json';
 
 const transformRelationToIri = (payload) => {
+    console.log('transformRelationToIri');
     forEach(payload, (value, property) => {
         if (isObject(value) && !isUndefined(value['@id'])) {
             payload[property] = value['@id'];
@@ -52,15 +53,16 @@ export default function(id, options = {}) {
             .join('&');
         id = `${id}?${queryString}`;
 
-        console.log(id, 'id');
+        console.log('URL', id);
     }
 
     const entryPoint = ENTRYPOINT + (ENTRYPOINT.endsWith('/') ? '' : '/');
 
+    console.log('entryPoint', entryPoint);
     /*let useAxios = false;
     let originalBody = options.body;*/
-    let formData = new FormData();
     if ('POST' === options.method) {
+        let formData = new FormData();
         if (options.body) {
             Object.keys(options.body).forEach(function (key) {
                 /*if (key === 'uploadFile') {
@@ -123,6 +125,8 @@ export default function(id, options = {}) {
     }*/
 
   return global.fetch(new URL(id, entryPoint), options).then(response => {
+
+      console.log(response, 'response');
     if (response.ok) return response;
 
     return response.json().then(json => {
@@ -131,7 +135,12 @@ export default function(id, options = {}) {
           json['hydra:title'] ||
           'An error occurred.';
 
+        console.log(error, 'fetch error');
+
         if (!json.violations) throw Error(error);
+
+
+        console.log(error, 'fetch error2');
 
         let errors = { _error: error };
         json.violations.forEach(violation =>

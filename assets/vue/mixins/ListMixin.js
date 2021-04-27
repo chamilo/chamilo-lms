@@ -6,9 +6,6 @@ import NotificationMixin from './NotificationMixin';
 
 export default {
   mixins: [NotificationMixin],
-  created() {
-    //console.log('created');
-  },
   data() {
     return {
       pagination: {
@@ -36,13 +33,15 @@ export default {
       console.log('watch listmixin');
       // react to route changes...
       this.resetList = true;
-      /*this.onRequest({
-        pagination: this.pagination,
-      });*/
       let nodeId = this.$route.params['node'];
       if (!isEmpty(nodeId)) {
         this.findResourceNode('/api/resource_nodes/'+ nodeId);
       }
+      /*this.onRequest({
+        pagination: this.pagination,
+      });*/
+
+      this.onUpdateOptions(this.options);
     },
 
     deletedItem(item) {
@@ -55,7 +54,11 @@ export default {
       message && this.showError(message);
     },
 
-    /*items() {
+    items() {
+      //this.pagination.rowsNumber = this.totalItems;
+      //this.onUpdateOptions(this.options);
+
+      /*
       console.log('items');
       this.pagination.page = this.nextPage;
       if (isEmpty(this.pagination.page)) {
@@ -63,9 +66,9 @@ export default {
       }
       console.log(this.pagination.page );
       this.pagination.rowsNumber = this.totalItems;
-      this.nextPage = null;
+      this.nextPage = null;*/
       //this.options.totalItems = this.totalItems;
-    }*/
+    }
   },
   methods: {
     onRequest(props) {
@@ -104,6 +107,39 @@ export default {
         this.pagination.rowsPerPage = itemsPerPage;
       });
     },
+    onUpdateOptions({ page, itemsPerPage, sortBy, sortDesc, totalItems } = {}) {
+      console.log('onUpdateOptions');
+      let params = {
+        ...this.filters
+      };
+      if (itemsPerPage > 0) {
+        params = { ...params, itemsPerPage, page };
+      }
+
+      if (this.$route.params.node) {
+        params[`resourceNode.parent`] = this.$route.params.node;
+      }
+
+      // prime
+      if (!isEmpty(sortBy)) {
+        params[`order[${sortBy}]`] = sortDesc ? 'desc' : 'asc'
+      }
+
+      // vuetify
+      /*if (!isEmpty(sortBy) && !isEmpty(sortDesc)) {
+        params[`order[${sortBy[0]}]`] = sortDesc[0] ? 'desc' : 'asc'
+      }*/
+      console.log(params);
+
+      this.resetList = true;
+      this.getPage(params).then(() => {
+        this.options.sortBy = sortBy;
+        this.options.sortDesc = sortDesc;
+        this.options.itemsPerPage = itemsPerPage;
+        this.options.totalItems = totalItems;
+      });
+    },
+
     fetchNewItems({ page, itemsPerPage, sortBy, sortDesc, totalItems } = {}) {
       console.log('fetchNewItems');
       let params = {
@@ -163,7 +199,9 @@ export default {
     showHandler(item) {
       console.log('showHandler');
       let folderParams = this.$route.query;
-      folderParams['id'] = item['@id'];
+      if (item) {
+        folderParams['id'] = item['@id'];
+      }
 
       this.$router.push({
         name: `${this.$options.servicePrefix}Show`,
@@ -175,11 +213,14 @@ export default {
     handleClick(item) {
       let folderParams = this.$route.query;
       this.resetList = true;
-      this.$route.params.node = item['resourceNode']['id'];
+      let resourceId = item['resourceNode']['id'];
+      this.$route.params.node = resourceId;
+
+      this.onUpdateOptions(this.options);
 
       this.$router.push({
         name: `${this.$options.servicePrefix}List`,
-        params: {node: item['resourceNode']['id']},
+        params: {node: resourceId},
         query: folderParams,
       });
 

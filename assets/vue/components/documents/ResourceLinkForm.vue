@@ -1,34 +1,32 @@
 <template>
-  <div class="q-card">
-      <div v-if="item">
-        <div v-if="item['resourceLinkListFromEntity']">
-          <ul>
-            <li
-              v-for="link in item['resourceLinkListFromEntity']"
-            >
-              <div v-if="link['course']">
-                {{ $t('Course') }}:  {{ link.course.resourceNode.title }}
-              </div>
-
-              <div v-if="link['session']">
-                {{ $t('Session') }}:  {{ link.session.name }}
-              </div>
-
-              <div v-if="link['group']">
-                {{ $t('Group') }}: {{ link.session.resourceNode.title }}
-              </div>
-
-              <q-select
-                v-model="link.visibility"
-                :options="visibilityList"
-                emit-value
-                label="Status"
-                persistent-hint
-              />
-            </li>
-          </ul>
+  <div v-if="item && item['resourceLinkListFromEntity']">
+    <ul>
+      <li
+        v-for="link in item['resourceLinkListFromEntity']"
+      >
+        <div v-if="link['course']">
+          {{ $t('Course') }}:  {{ link.course.resourceNode.title }}
         </div>
-      </div>
+
+        <div v-if="link['session']">
+          {{ $t('Session') }}:  {{ link.session.name }}
+        </div>
+
+        <div v-if="link['group']">
+          {{ $t('Group') }}: {{ link.session.resourceNode.title }}
+        </div>
+
+        <q-separator />
+
+        <q-select
+          v-model="link.visibility"
+          :options="visibilityList"
+          emit-value
+          label="Status"
+          persistent-hint
+        />
+      </li>
+    </ul>
   </div>
 </template>
 

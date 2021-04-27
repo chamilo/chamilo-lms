@@ -1,24 +1,23 @@
 <template>
   <div>
+    <!--    :handle-delete="del"-->
+    <Toolbar
+        v-if="item && !isLoading"
+        :handle-submit="onSendForm"
+        :handle-reset="resetForm"
+    />
     <DocumentsForm
       v-if="item && !isLoading"
       ref="updateForm"
       :values="item"
       :errors="violations"
-    />
-
-    <ResourceLinkForm
-      v-if="item && !isLoading"
-      ref="resourceLinkForm"
-      :values="item"
-    />
-
-    <Toolbar
-      v-if="item && !isLoading"
-      :handle-submit="onSendForm"
-      :handle-reset="resetForm"
-      :handle-delete="del"
-    />
+    >
+      <ResourceLinkForm
+          v-if="item && !isLoading"
+          ref="resourceLinkForm"
+          :values="item"
+      />
+    </DocumentsForm>
     <Loading :visible="isLoading || deleteLoading" />
   </div>
 </template>

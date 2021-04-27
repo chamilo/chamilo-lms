@@ -15,15 +15,17 @@ export default {
     };
   },
   created() {
-    console.log('mounted');
+    console.log('mixin update created');
     // Changed
     let id = this.$route.params.id;
     if (isEmpty(id)) {
       id = this.$route.query.id;
     }
+    console.log(id);
     if (!isEmpty(id)) {
       // Ajax call
       this.retrieve(decodeURIComponent(id));
+      console.log(this.item);
     }
     // default
     //this.retrieve(decodeURIComponent(this.$route.params.id));
@@ -61,11 +63,18 @@ export default {
   },
   methods: {
     del() {
-      console.log(this.retrieved);
+      console.log('mixin del');
+      //let item = this.retrieved;
 
-      this.deleteItem(this.retrieved).then(() => {
+      console.log(this.item);
+
+      this.deleteItem(this.item).then(() => {
         console.log('deleteItem resykt');
         let folderParams = this.$route.query;
+
+        delete folderParams['id'];
+        delete folderParams['getFile'];
+
         //this.showMessage(`${this.item['@id']} deleted.`);
         this.$router
           .push({
@@ -74,10 +83,11 @@ export default {
           })
           .catch(() => {});
       });
+      console.log('end mixin del()');
     },
     formatDateTime,
     reset() {
-      this.$refs.updateForm.$v.$reset();
+      this.$refs.updateForm.v$.$reset();
       this.updateReset();
       this.delReset();
       this.createReset();

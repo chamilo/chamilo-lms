@@ -13,88 +13,109 @@
 <!--        </v-toolbar-title>-->
       </template>
     </Toolbar>
-    <div
-      v-if="item"
-      class="table-documents-show"
-    >
-      <h5>
-        {{ item['title'] }}
-      </h5>
-      <div v-if="item['resourceLinkListFromEntity']">
-        <ul>
-          <li
-              v-for="link in item['resourceLinkListFromEntity']"
-          >
-            {{ $t('Status') }}: {{ link.visibilityName }}
-            <div v-if="link['course']">
-              {{ $t('Course') }}: {{ link.course.resourceNode.title }}
-            </div>
-            <div v-if="link['session']">
-              {{ $t('Session') }}: {{ link.session.name }}
-            </div>
-            <div v-if="link['group']">
-              {{ $t('Group') }}: {{ link.group.resourceNode.title }}
-            </div>
-          </li>
-        </ul>
+
+    <p class="text-lg" v-if="item">
+      {{ item['title'] }}
+    </p>
+
+    <div v-if="item" class="flex flex-row">
+      <div class="w-1/2">
+        <div class ="flex justify-center" v-if="item['resourceNode']['resourceFile']">
+          <div class="w-64">
+            <q-img
+                spinner-color="primary"
+                v-if="item['resourceNode']['resourceFile']['image']"
+                :src="item['contentUrl'] + '&w=300'"
+            />
+            <span v-else-if="item['resourceNode']['resourceFile']['video']">
+              <video controls>
+                <source :src="item['contentUrl']" />
+              </video>
+            </span>
+            <span v-else>
+                <q-btn
+                    class="btn btn-primary"
+                    :to="item['downloadUrl']"
+                >
+                  {{ $t('Download file') }}
+                </q-btn>
+              </span>
+          </div>
+        </div>
+        <div class ="flex justify-center" v-else>
+              <font-awesome-icon
+                  icon="folder"
+                  size="7x"
+              />
+        </div>
       </div>
-      <q-markup-table>
+
+      <div class="w-1/2">
+        <div v-if="item['resourceLinkListFromEntity']">
+          <ul>
+            <li
+                v-for="link in item['resourceLinkListFromEntity']"
+            >
+              {{ $t('Status') }}: {{ link.visibilityName }}
+              <div v-if="link['course']">
+                {{ $t('Course') }}: {{ link.course.resourceNode.title }}
+              </div>
+              <div v-if="link['session']">
+                {{ $t('Session') }}: {{ link.session.name }}
+              </div>
+              <div v-if="link['group']">
+                {{ $t('Group') }}: {{ link.group.resourceNode.title }}
+              </div>
+            </li>
+          </ul>
+        </div>
+        <q-markup-table>
           <tbody>
-            <tr>
-              <td><strong>{{ $t('Author') }}</strong></td>
-              <td>
-                {{ item['resourceNode'].creator.username }}
-              </td>
-              <td></td>
-              <td />
-            </tr>
-            <tr>
-              <td><strong>{{ $t('Comment') }}</strong></td>
-              <td>
-                {{ item['comment'] }}
-              </td>
-            </tr>
-            <tr>
-              <td><strong>{{ $t('Created at') }}</strong></td>
-              <td>
-                {{ item['resourceNode'] ? moment(item['resourceNode'].createdAt).fromNow() : ''}}
-              </td>
-              <td />
-            </tr>
-            <tr>
-              <td><strong>{{ $t('Updated at') }}</strong></td>
-              <td>
-                {{ item['resourceNode'] ? moment(item['resourceNode'].updatedAt).fromNow() : ''}}
-              </td>
-              <td />
-            </tr>
-            <tr v-if="item['resourceNode']['resourceFile']">
-              <td><strong>{{ $t('File') }}</strong></td>
-              <td>
-                <div>
-                  <q-img
-                    v-if="item['resourceNode']['resourceFile']['image']"
-                    :src="item['contentUrl'] + '?w=300'"
-                  />
-                  <span v-else-if="item['resourceNode']['resourceFile']['video']">
-                    <video controls>
-                      <source :src="item['contentUrl']" />
-                    </video>
-                  </span>
-                  <span v-else>
-                    <q-btn
-                      variant="primary"
-                      :href="item['downloadUrl']"
-                    >
-                      {{ $t('Download file') }}
-                    </q-btn>
-                  </span>
-                </div>
-              </td>
-              <td />
-            </tr>
+          <tr>
+            <td><strong>{{ $t('Author') }}</strong></td>
+            <td>
+              {{ item['resourceNode'].creator.username }}
+            </td>
+            <td></td>
+            <td />
+          </tr>
+          <tr>
+            <td><strong>{{ $t('Comment') }}</strong></td>
+            <td>
+              {{ item['comment'] }}
+            </td>
+          </tr>
+          <tr>
+            <td><strong>{{ $t('Created at') }}</strong></td>
+            <td>
+              {{ item['resourceNode'] ? $luxonDateTime.fromISO(item['resourceNode'].createdAt).toRelative() : ''}}
+            </td>
+            <td />
+          </tr>
+          <tr>
+            <td><strong>{{ $t('Updated at') }}</strong></td>
+            <td>
+              {{ item['resourceNode'] ? $luxonDateTime.fromISO(item['resourceNode'].updatedAt).toRelative() : ''}}
+            </td>
+            <td />
+          </tr>
+          <tr v-if="item['resourceNode']['resourceFile']">
+            <td><strong>{{ $t('File') }}</strong></td>
+            <td>
+              <div>
+                <a
+                    class="btn btn-primary"
+                    :href="item['downloadUrl']"
+                >
+                  {{ $t('Download file') }}
+                </a>
+              </div>
+            </td>
+            <td />
+          </tr>
           </tbody>
-      </q-markup-table>
+        </q-markup-table>
+      </div>
     </div>
     <Loading :visible="isLoading" />
   </div>
@@ -106,7 +127,6 @@ import { mapFields } from 'vuex-map-fields';
 import Loading from '../../components/Loading.vue';
 import ShowMixin from '../../mixins/ShowMixin';
 import Toolbar from '../../components/Toolbar.vue';
-import moment from 'moment'
 const servicePrefix = 'Documents';
 
 export default {
@@ -117,7 +137,6 @@ export default {
       Toolbar
   },
   created: function () {
-    this.moment = moment;
   },
   mixins: [ShowMixin],
   computed: {

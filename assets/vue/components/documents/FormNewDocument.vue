@@ -1,24 +1,22 @@
 <template>
-  <div class="q-pa-md">
-    <q-form>
+      <q-form>
+        <q-input
+            id="item_title"
+            v-model="item.title"
+            :error="v$.item.title.$error"
+            :error-message="titleErrors"
+            :placeholder="$t('Title')"
+            @input="v$.item.title.$touch()"
+            @blur="v$.item.title.$touch()"
+        />
 
-      <q-input
-          id="item_title"
-        v-model="item.title"
-        :error="v$.item.title.$error"
-        :error-message="titleErrors"
-        :placeholder="$t('Title')"
-        @input="v$.item.title.$touch()"
-        @blur="v$.item.title.$touch()"
-      />
-
-      <editor
-        id="item_content"
-        v-if="(item.resourceNode && item.resourceNode.resourceFile && item.resourceNode.resourceFile.text) || item.newDocument"
-        v-model="item.contentFile"
-        :error-message="contentFileErrors"
-        required
-        :init="{
+        <editor
+            id="item_content"
+            v-if="(item.resourceNode && item.resourceNode.resourceFile && item.resourceNode.resourceFile.text) || item.newDocument"
+            v-model="item.contentFile"
+            :error-message="contentFileErrors"
+            required
+            :init="{
           skin_url: '/build/libs/tinymce/skins/ui/oxide',
           content_css: '/build/libs/tinymce/skins/content/default/content.css',
           branding:false,
@@ -56,9 +54,11 @@
           toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor code codesample | ltr rtl',
         }
         "
-      />
-    </q-form>
-  </div>
+        />
+
+        <!-- For extra content-->
+        <slot></slot>
+      </q-form>
 </template>
 
 <script>

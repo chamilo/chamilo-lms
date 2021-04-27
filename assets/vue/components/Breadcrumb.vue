@@ -30,6 +30,7 @@ export default {
       resourceNode: 'getResourceNode',
     }),
     items() {
+      console.log('Breadcrumb.vue');
       const items = [
         {
           text: this.$t('Home'),

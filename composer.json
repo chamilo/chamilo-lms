@@ -116,9 +116,8 @@
         "zendframework/zend-feed": "~2.6|^3.0",
         "zendframework/zend-http": "~2.6|^3.0",
         "zendframework/zend-soap": "~2.6|^3.0",
-        "php-xapi/model": "dev-master as 1.2",
         "php-xapi/symfony-serializer": "2.1.0 as 2.0",
-        "php-xapi/client": "dev-master",
+        "php-xapi/client": "0.6.0",
         "php-http/guzzle6-adapter": "^2.0",
         "php-xapi/repository-doctrine": "dev-master"
     },

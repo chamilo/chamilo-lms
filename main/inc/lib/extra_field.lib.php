@@ -162,6 +162,8 @@ class ExtraField extends Model
             case 'portfolio':
                 $this->extraFieldType = EntityExtraField::PORTFOLIO_TYPE;
                 break;
+            case 'lp_view':
+                $this->extraFieldType = EntityExtraField::LP_VIEW_TYPE;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
@@ -192,6 +194,7 @@ class ExtraField extends Model
             'forum_post',
             'exercise',
             'track_exercise',
+            'lp_view',
         ];
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {

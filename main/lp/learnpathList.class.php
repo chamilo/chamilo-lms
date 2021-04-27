@@ -44,7 +44,8 @@ class LearnpathList
         $check_publication_dates = false,
         $categoryId = null,
         $ignoreCategoryFilter = false,
-        $ignoreLpVisibility = false
+        $ignoreLpVisibility = false,
+        $ignoreLpSubscription = true
     ) {
         if (empty($courseInfo)) {
             $courseInfo = api_get_course_info();
@@ -174,6 +175,19 @@ class LearnpathList
                 }
             }
 
+            if (!$ignoreLpSubscription && $row->getSubscribeUsers()) {
+                $isSubscribedToLp = learnpath::isUserSubscribedToLp(
+                    ['subscribe_users' => $row->getSubscribeUsers(), 'id' => $row->getIid()],
+                    (int) $this->user_id,
+                    $courseInfo,
+                    (int) $session_id
+                );
+
+                if (!$isSubscribedToLp) {
+                    continue;
+                }
+            }
+
             $this->list[$row->getIid()] = [
                 'lp_type' => $row->getLpType(),
                 'lp_session' => $row->getSessionId(),
@@ -203,6 +217,7 @@ class LearnpathList
                 'lp_old_id' => $row->getId(),
                 'iid' => $row->getIid(),
                 'prerequisite' => $row->getPrerequisite(),
+                'category_id' => $row->getCategoryId(),
             ];
             $names[$row->getName()] = $row->getIid();
         }

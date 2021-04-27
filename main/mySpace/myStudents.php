@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use ChamiloSession as Session;
 
@@ -50,6 +51,9 @@ $allowedToTrackUser =
     api_is_course_admin() ||
     api_is_teacher()
 ;
+
+$em = Database::getManager();
+$itemRepo = $em->getRepository(CItemProperty::class);
 
 if (false === $allowedToTrackUser && !empty($courseInfo)) {
     if (empty($sessionId)) {
@@ -488,6 +492,14 @@ echo '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING'
 echo '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&export=xls">'
     .Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a> ';
 
+if (!empty($student_id) && empty($courseCode)) {
+    echo Display::url(
+        Display::return_icon('export_pdf.png', get_lang('ExportToPDF'), [], ICON_SIZE_MEDIUM),
+        'student_follow_export.php?'.http_build_query(['student' => $student_id]),
+        ['class' => 'ajax', 'data-title' => get_lang('ExportToPDF')]
+    );
+}
+
 echo Display::url(
     Display::return_icon('activity_monitor.png', get_lang('AccessDetails'), '', ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'mySpace/access_details_session.php?user_id='.$student_id
@@ -747,7 +759,7 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
         $legalTime = null;
 
         if (isset($value['value']) && !empty($value['value'])) {
-            list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
+            [$legalId, $legalLanguageId, $legalTime] = explode(':', $value['value']);
             $icon = Display::return_icon('accept.png');
             $btn = Display::url(
                 get_lang('DeleteLegal'),
@@ -1349,11 +1361,34 @@ if (empty($details)) {
             }
         }
 
+        if (true === api_get_configuration_value('student_follow_page_add_LP_invisible_checkbox')) {
+            echo StudentFollowPage::getLpVisibleScript();
+
+            $chkb = Display::input('checkbox', 'chkb_category[]', '')
+                .PHP_EOL.get_lang('Invisible');
+
+            $columnHeaders = array_merge(
+                ['student_follow_page_add_LP_invisible_checkbox' => $chkb],
+                $columnHeaders
+            );
+        }
+
+        if (true === api_get_configuration_value('student_follow_page_add_LP_subscription_info')) {
+            $columnHeaders['student_follow_page_add_LP_subscription_info'] = get_lang('Unlock');
+        }
+
+        if (true === api_get_configuration_value('student_follow_page_add_LP_acquisition_info')) {
+            $columnHeaders['student_follow_page_add_LP_acquisition_info'] = get_lang('Acquisition');
+        }
+
         $headers = '';
         $columnHeadersToExport = [];
         // csv export headers
         foreach ($columnHeaders as $key => $columnName) {
-            $columnHeadersToExport[] = strip_tags($columnName);
+            if ('student_follow_page_add_LP_invisible_checkbox' !== $key) {
+                $columnHeadersToExport[] = strip_tags($columnName);
+            }
+
             $headers .= Display::tag(
                 'th',
                 $columnName
@@ -1532,6 +1567,19 @@ if (empty($details)) {
 
                 echo '<tr class="'.$css_class.'">';
                 $contentToExport = [];
+
+                if (in_array('student_follow_page_add_LP_invisible_checkbox', $columnHeadersKeys)) {
+                    echo Display::tag(
+                        'td',
+                        StudentFollowPage::getLpVisibleField(
+                            $learnpath,
+                            $student_id,
+                            $courseInfo['real_id'],
+                            $sessionId
+                        )
+                    );
+                }
+
                 if (in_array('lp', $columnHeadersKeys)) {
                     $contentToExport[] = api_html_entity_decode(
                         stripslashes($lp_name),
@@ -1564,6 +1612,29 @@ if (empty($details)) {
                     // which implies several other changes not a priority right now
                     $contentToExport[] = $start_time;
                     echo Display::tag('td', $start_time);
+                }
+
+                if (in_array('student_follow_page_add_LP_subscription_info', $columnHeadersKeys)) {
+                    $lpSubscription = StudentFollowPage::getLpSubscription(
+                        $learnpath,
+                        $student_id,
+                        $courseInfo['real_id'],
+                        $sessionId
+                    );
+                    $contentToExport[] = strip_tags(str_replace('<br>', "\n", $lpSubscription));
+                    echo Display::tag('td', $lpSubscription);
+                }
+
+                if (in_array('student_follow_page_add_LP_acquisition_info', $columnHeadersKeys)) {
+                    $lpAcquisition = StudentFollowPage::getLpAcquisition(
+                        $learnpath,
+                        $student_id,
+                        $courseInfo['real_id'],
+                        $sessionId,
+                        true
+                    );
+                    $contentToExport[] = strip_tags(str_replace('<br>', "\n", $lpAcquisition));
+                    echo Display::tag('td', $lpAcquisition);
                 }
 
                 if ($hookLpTracking) {

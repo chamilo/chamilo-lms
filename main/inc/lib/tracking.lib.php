@@ -5729,6 +5729,16 @@ class Tracking
                 }
             }
 
+            if (true === api_get_configuration_value('student_follow_page_add_LP_subscription_info')) {
+                $columnHeaders['student_follow_page_add_LP_subscription_info'] = get_lang('Unlock');
+            }
+
+            if (true === api_get_configuration_value('student_follow_page_add_LP_acquisition_info')) {
+                $columnHeaders['student_follow_page_add_LP_acquisition_info'] = get_lang('Acquisition');
+            }
+
+            $addLpInvisibleCheckbox = api_get_configuration_value('student_follow_page_add_LP_invisible_checkbox');
+
             $columnHeadersKeys = array_keys($columnHeaders);
             foreach ($columnHeaders as $key => $columnName) {
                 $headers .= Display::tag(
@@ -5760,6 +5770,12 @@ class Tracking
                 foreach ($lp_list as $lp_id => $learnpath) {
                     if (!$learnpath['lp_visibility']) {
                         continue;
+                    }
+
+                    if ($addLpInvisibleCheckbox) {
+                        if (!StudentFollowPage::isViewVisible($lp_id, $user_id, $course_info['real_id'], $session_id)) {
+                            continue;
+                        }
                     }
 
                     $progress = self::get_avg_student_progress(
@@ -5864,6 +5880,28 @@ class Tracking
                     if (in_array('last_connection', $columnHeadersKeys)) {
                         $html .= Display::tag('td', $last_connection, ['width' => '180px']);
                     }
+
+                    if (in_array('student_follow_page_add_LP_subscription_info', $columnHeadersKeys)) {
+                        $lpSubscription = StudentFollowPage::getLpSubscription(
+                            $learnpath,
+                            $user_id,
+                            $course_info['real_id'],
+                            $session_id
+                        );
+                        $html .= Display::tag('td', $lpSubscription);
+                    }
+
+                    if (in_array('student_follow_page_add_LP_acquisition_info', $columnHeadersKeys)) {
+                        $lpAcquisition = StudentFollowPage::getLpAcquisition(
+                            $learnpath,
+                            $user_id,
+                            $course_info['real_id'],
+                            $session_id
+                        );
+
+                        $html .= Display::tag('td', $lpAcquisition);
+                    }
+
                     $html .= '</tr>';
                 }
             } else {

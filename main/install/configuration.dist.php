@@ -379,6 +379,26 @@ $_configuration['tracking_columns'] = [
     ]
 ];
 */
+// Add column "Unlocked" in student LPs table to display info about a lp subscription
+//$_configuration['student_follow_page_add_LP_subscription_info'] = false;
+// Add column "Acquisition" in student LPs table to display info about a lo adquisition. Requires DB changes:
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES
+(20, 3, 'acquisition', 'Acquisition', '', 0, 1, 0, 0, 0, NOW());
+SET @ef_id = LAST_INSERT_ID();
+INSERT INTO extra_field_options (field_id, option_value, display_text, priority, priority_message, option_order) VALUES
+(@ef_id, '1', 'Acquired', NULL, NULL, 1),
+(@ef_id, '2', 'In the process of acquisition', NULL, NULL, 2),
+(@ef_id, '3', 'Not acquired', NULL, NULL, 3);
+
+*/
+//$_configuration['student_follow_page_add_LP_acquisition_info'] = false;
+// Prepend a column in student LPs table to display a checkbox to select the LP category and its LPs. Requires DB changes:
+/*
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, default_value, field_order, visible_to_self, visible_to_others, changeable, filter, created_at) VALUES
+(20, 13, 'invisible', 'Invisible', '', 0, 1, 0, 0, 0, NOW());
+*/
+//$_configuration['student_follow_page_add_LP_invisible_checkbox'] = false;
 // Hide session link of course_block on index/userportal
 //$_configuration['remove_session_url']= false ;
 // Allow foldable block for session list in session category on My courses tab
@@ -1247,7 +1267,7 @@ $_configuration['required_extra_fields_in_profile'] = [
 //$_configuration['allow_forum_post_revisions'] = false;
 
 // Allow forum category filter on language
-// Requires new forum_category "language" extra fields (multiple select) 
+// Requires new forum_category "language" extra fields (multiple select)
 //$_configuration['allow_forum_category_language_filter'] = false;
 
 // Allow to show users in a map, users need to have a coordinates extra field BT#15176

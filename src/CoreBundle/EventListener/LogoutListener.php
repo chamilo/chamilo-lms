@@ -12,7 +12,6 @@ use Doctrine\DBAL\Cache\ArrayStatement;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -92,7 +91,6 @@ class LogoutListener
         $login = $this->router->generate('home');
 
         return new RedirectResponse($login);
-
         //return new JsonResponse('logout out', 200);
     }
 }

@@ -29,19 +29,19 @@ class SecurityController extends AbstractController
      */
     //public function login(AuthenticationUtils $authenticationUtils): Response
     //{
-        //$error = $authenticationUtils->getLastAuthenticationError();
-        //$lastUsername = $authenticationUtils->getLastUsername();
+    //$error = $authenticationUtils->getLastAuthenticationError();
+    //$lastUsername = $authenticationUtils->getLastUsername();
 
-        /** @var User $user */
-        /*$user = $this->getUser();
-        $data = [];
-        if ($user) {
-            $userClone = clone $user;
-            $userClone->setPassword('');
-            $data = $this->serializer->serialize($userClone, JsonEncoder::FORMAT);
-        }
+    /** @var User */
+    /*$user = $this->getUser();
+    $data = [];
+    if ($user) {
+        $userClone = clone $user;
+        $userClone->setPassword('');
+        $data = $this->serializer->serialize($userClone, JsonEncoder::FORMAT);
+    }
 
-        return new JsonResponse($data, Response::HTTP_OK, [], true);*/
+    return new JsonResponse($data, Response::HTTP_OK, [], true);*/
     //}
 
     /**

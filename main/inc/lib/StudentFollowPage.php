@@ -25,10 +25,28 @@ class StudentFollowPage
             $itemProperty = $itemRepo->findByUserSuscribedToItem(
                 'learnpath',
                 $lpInfo['iid'],
-                api_get_user_entity($studentId),
-                api_get_course_entity($courseId),
-                api_get_session_entity($sessionId)
+                $studentId,
+                $courseId,
+                $sessionId
             );
+
+            if (null === $itemProperty) {
+                $userGroups = GroupManager::getAllGroupPerUserSubscription($studentId, $courseId);
+
+                foreach ($userGroups as $groupInfo) {
+                    $itemProperty = $itemRepo->findByGroupSuscribedToLp(
+                        'learnpath',
+                        $lpInfo['iid'],
+                        $groupInfo['iid'],
+                        $courseId,
+                        $sessionId
+                    );
+
+                    if (null !== $itemProperty) {
+                        break;
+                    }
+                }
+            }
 
             if (null === $itemProperty) {
                 return '-';

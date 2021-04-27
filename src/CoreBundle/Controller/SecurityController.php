@@ -27,8 +27,8 @@ class SecurityController extends AbstractController
     /**
      * Route("/login", name="login").
      */
-    public function login(AuthenticationUtils $authenticationUtils): Response
-    {
+    //public function login(AuthenticationUtils $authenticationUtils): Response
+    //{
         //$error = $authenticationUtils->getLastAuthenticationError();
         //$lastUsername = $authenticationUtils->getLastUsername();
 
@@ -42,7 +42,7 @@ class SecurityController extends AbstractController
         }
 
         return new JsonResponse($data, Response::HTTP_OK, [], true);*/
-    }
+    //}
 
     /**
      * @Route("/login_json", name="login_json")

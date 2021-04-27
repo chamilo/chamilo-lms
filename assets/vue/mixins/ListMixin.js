@@ -47,6 +47,7 @@ export default {
     deletedItem(item) {
       console.log('deletedItem');
       this.showMessage(this.$i18n.t('{resource} deleted', {'resource': item['resourceNode'].title}));
+      this.onUpdateOptions(this.options);
     },
 
     error(message) {

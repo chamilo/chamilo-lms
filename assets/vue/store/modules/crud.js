@@ -25,6 +25,7 @@ const handleError = (commit, e) => {
   commit(ACTIONS.TOGGLE_LOADING);
   console.log(e);
   if (e instanceof SubmissionError) {
+    console.log('SubmissionError');
     commit(ACTIONS.SET_VIOLATIONS, e.errors);
     // eslint-disable-next-line
     commit(ACTIONS.SET_ERROR, e.errors._error);

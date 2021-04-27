@@ -125,36 +125,41 @@ export default function(id, options = {}) {
     }*/
 
   return global.fetch(new URL(id, entryPoint), options).then(response => {
+    console.log(response, 'global.fetch');
 
-      console.log(response, 'response');
-    if (response.ok) return response;
+    if (response.ok) {
+        return response;
+    }
 
     return response.json().then(json => {
-        const error =
+
+        let error =
           json['hydra:description'] ||
           json['hydra:title'] ||
           'An error occurred.';
 
+        if (json['code'] && 401 === json['code']) {
+            error = 'Not allowed';
+        }
+
         console.log(error, 'fetch error');
 
-        if (!json.violations) throw Error(error);
-
-
-        console.log(error, 'fetch error2');
+        if (!json.violations) {
+            console.log('violations');
+            throw Error(error);
+        }
 
         let errors = { _error: error };
-        json.violations.forEach(violation =>
-          errors[violation.propertyPath]
-            ? (errors[violation.propertyPath] +=
-            '\n' + errors[violation.propertyPath])
-            : (errors[violation.propertyPath] = violation.message)
+        json.violations.map(
+            violation => (errors[violation.propertyPath] = violation.message)
         );
 
         throw new SubmissionError(errors);
       },
       () => {
+        console.log('error3');
         throw new Error(response.statusText || 'An error occurred.');
       }
     );
-  }).catch(error => console.error('Error:', error));
+  });
 }

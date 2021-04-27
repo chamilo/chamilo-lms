@@ -21,8 +21,9 @@ const initialState = () => ({
 });
 
 const handleError = (commit, e) => {
+  console.log('handleError');
   commit(ACTIONS.TOGGLE_LOADING);
-
+  console.log(e);
   if (e instanceof SubmissionError) {
     commit(ACTIONS.SET_VIOLATIONS, e.errors);
     // eslint-disable-next-line
@@ -94,6 +95,7 @@ export default function makeCrudModule({
       },
       del: ({ commit }, item) => {
         console.log('del');
+        commit(ACTIONS.SET_ERROR, '');
         commit(ACTIONS.TOGGLE_LOADING);
 
         service
@@ -124,22 +126,21 @@ export default function makeCrudModule({
       fetchAll: ({ commit, state }, params) => {
         if (!service) throw new Error('No service specified!');
 
+        console.log('crud.js fetchAll');
+
         commit(ACTIONS.TOGGLE_LOADING);
-        service
+        return service
           .findAll({ params })
           //.findAll( params )
           .then(response => response.json())
           .then(retrieved => {
-            //console.log(retrieved['hydra:totalItems']);
-            //console.log(retrieved['hydra:view']);
-
+            console.log('result of retrieved');
             commit(ACTIONS.TOGGLE_LOADING);
             commit(ACTIONS.SET_TOTAL_ITEMS, retrieved['hydra:totalItems']);
             commit(ACTIONS.SET_VIEW, retrieved['hydra:view']);
             if (true === state.resetList) {
               commit(ACTIONS.RESET_LIST);
             }
-
             retrieved['hydra:member'].forEach(item => {
               commit(ACTIONS.ADD, normalizeRelations(item));
             });
@@ -175,7 +176,13 @@ export default function makeCrudModule({
         commit(ACTIONS.TOGGLE_LOADING);
         service
           .find(id, options)
-          .then(response => response.json())
+          .then(response => {
+            if (response) {
+              return response.json();
+            } else {
+              throw new Error(response.error);
+            }
+          })
           .then(item => {
             commit(ACTIONS.TOGGLE_LOADING);
             commit(ACTIONS.ADD, normalizeRelations(item));
@@ -187,12 +194,13 @@ export default function makeCrudModule({
         console.log(id);
         if (!service) throw new Error('No service specified!');
 
-        service
+        //commit(ACTIONS.TOGGLE_LOADING);
+        return service
             .find(id)
             .then(response => response.json())
             .then(item => {
-              commit(ACTIONS.TOGGLE_LOADING);
-              commit(ACTIONS.ADD_RESOURCE_NODE, normalizeRelations(item));
+              //commit(ACTIONS.TOGGLE_LOADING);
+              //commit(ACTIONS.ADD_RESOURCE_NODE, item);
 
               return item;
             })
@@ -336,12 +344,15 @@ export default function makeCrudModule({
       [ACTIONS.SET_UPDATED]: (state, updated) => {
         console.log('SET_UPDATED');
         console.log(updated);
-        Object.assign(state, {
+        state.byId[updated['@id']] = updated;
+        state.isLoading = false;
+        state.updated = updated;
+        /*Object.assign(state, {
           byId: {
             [updated['@id']]: updated
           },
           updated
-        });
+        });*/
       },
       [ACTIONS.SET_VIEW]: (state, view) => {
         Object.assign(state, { view });

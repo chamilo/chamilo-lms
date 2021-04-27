@@ -131,8 +131,7 @@ export default function makeCrudModule({
 
         commit(ACTIONS.TOGGLE_LOADING);
         return service
-          .findAll({ params })
-          //.findAll( params )
+          .findAll({params})
           .then(response => response.json())
           .then(retrieved => {
             console.log('result of retrieved');
@@ -160,10 +159,8 @@ export default function makeCrudModule({
           .findAll({ params })
           .then(response => response.json())
           .then(retrieved => {
-            commit(
-              ACTIONS.SET_SELECT_ITEMS,
-              retrieved['hydra:member']
-            );
+            commit(ACTIONS.TOGGLE_LOADING);
+            commit(ACTIONS.SET_SELECT_ITEMS, retrieved['hydra:member']);
           })
           .catch(e => handleError(commit, e));
       },
@@ -179,6 +176,9 @@ export default function makeCrudModule({
           .find(id, options)
           .then(response => {
             if (response) {
+
+              commit(ACTIONS.TOGGLE_LOADING);
+
               return response.json();
             } else {
               throw new Error(response.error);
@@ -195,12 +195,12 @@ export default function makeCrudModule({
         console.log(id);
         if (!service) throw new Error('No service specified!');
 
-        //commit(ACTIONS.TOGGLE_LOADING);
+        commit(ACTIONS.TOGGLE_LOADING);
         return service
             .find(id)
             .then(response => response.json())
             .then(item => {
-              //commit(ACTIONS.TOGGLE_LOADING);
+              commit(ACTIONS.TOGGLE_LOADING);
               //commit(ACTIONS.ADD_RESOURCE_NODE, item);
 
               return item;

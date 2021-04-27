@@ -8,10 +8,10 @@ export default function makeService(endpoint) {
       let options = {params: {getFile: true}};
       return fetch(`${id}`, options);
     },
-    async findAll(params) {
+    findAll(params) {
       console.log('api.js findAll');
       console.log(params);
-      return await fetch(endpoint, params);
+      return fetch(endpoint, params);
     },
     async createFile(payload) {
       console.log('api.js createFile');

@@ -216,7 +216,7 @@ export default {
       let resourceId = item['resourceNode']['id'];
       this.$route.params.node = resourceId;
 
-      this.onUpdateOptions(this.options);
+      //this.onUpdateOptions(this.options);
 
       this.$router.push({
         name: `${this.$options.servicePrefix}List`,

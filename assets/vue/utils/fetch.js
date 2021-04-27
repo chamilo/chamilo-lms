@@ -132,7 +132,6 @@ export default function(id, options = {}) {
     }
 
     return response.json().then(json => {
-
         let error =
           json['hydra:description'] ||
           json['hydra:title'] ||

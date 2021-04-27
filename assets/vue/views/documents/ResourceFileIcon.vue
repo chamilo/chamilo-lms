@@ -21,10 +21,8 @@
 </template>
 
 <script>
-const servicePrefix = 'Documents';
 export default {
   name: 'ResourceFileIcon',
-  servicePrefix,
   props: {
     file: Object
   },

@@ -136,13 +136,7 @@
     <Column field="resourceNode.title" :header="$t('Title')" :sortable="true">
       <template #body="slotProps">
         <div v-if="slotProps.data && slotProps.data.resourceNode && slotProps.data.resourceNode.resourceFile">
-          <a
-              data-fancybox="gallery"
-              :href="slotProps.data.contentUrl"
-          >
-            <ResourceFileIcon :file="slotProps.data" />
-            {{ slotProps.data.title }}
-          </a>
+          <ResourceFileLink :resource="slotProps.data" />
         </div>
         <div v-else>
           <a v-if="slotProps.data" @click="handleClick(slotProps.data)" class="cursor-pointer" >
@@ -153,6 +147,7 @@
             {{ slotProps.data.resourceNode.title }}
           </a>
         </div>
+
       </template>
 
       <!--         <template #filter="{filterModel}">-->
@@ -294,6 +289,8 @@ import ListMixin from '../../mixins/ListMixin';
 import ActionCell from '../../components/ActionCell.vue';
 //import Toolbar from '../../components/Toolbar.vue';
 import ResourceFileIcon from './ResourceFileIcon.vue';
+import ResourceFileLink from './ResourceFileLink.vue';
+
 import { useRoute } from 'vue-router'
 import DataFilter from '../../components/DataFilter';
 import DocumentsFilterForm from '../../components/documents/Filter';
@@ -309,6 +306,7 @@ export default {
     //8Toolbar,
     ActionCell,
     ResourceFileIcon,
+    ResourceFileLink,
     DocumentsFilterForm,
     DataFilter
   },

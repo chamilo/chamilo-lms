@@ -20,7 +20,7 @@ set_time_limit(0);
 $course_list = CourseManager::get_courses_list(
     0,
     0,
-    1,
+    'title',
     'ASC',
     -1,
     '',

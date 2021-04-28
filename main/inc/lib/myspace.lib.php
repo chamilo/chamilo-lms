@@ -2027,6 +2027,14 @@ class MySpace
         $column,
         $direction
     ) {
+        switch ($column) {
+            default:
+            case 1:
+                $column = 'title';
+                break;
+
+        }
+
         $courses = CourseManager::get_courses_list(
             $from,
             $numberItems,
@@ -2101,8 +2109,11 @@ class MySpace
                 null,
                 true
             );
-            $progress += $progress_tmp[0];
-            $nb_progress_lp += $progress_tmp[1];
+
+            if ($progress_tmp) {
+                $progress += $progress_tmp[0];
+                $nb_progress_lp += $progress_tmp[1];
+            }
             $score_tmp = Tracking::get_avg_student_score(
                 $row->user_id,
                 $course_code,
@@ -3520,7 +3531,7 @@ class MySpace
             $sql_select = "SELECT COUNT(user_id) as nbUsers FROM $tbl_session_rel_course_rel_user
                            WHERE session_id='$id_session' AND c_id='$enreg_course'";
             $rs = Database::query($sql_select);
-            list($nbr_users) = Database::fetch_array($rs);
+            [$nbr_users] = Database::fetch_array($rs);
             $sql_update = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users
                            WHERE session_id='$id_session' AND c_id='$enreg_course'";
             Database::query($sql_update);

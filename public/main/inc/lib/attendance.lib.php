@@ -2383,15 +2383,14 @@ class Attendance
         // Advanced Parameters
         if ((0 != $sessionId && Gradebook::is_active()) || 0 == $sessionId) {
             $form->addButtonAdvancedSettings('id_qualify');
-            $form->addElement('html', '<div id="id_qualify_options" style="display:none">');
+            $form->addHtml('<div id="id_qualify_options" style="display:none">');
 
             // Qualify Attendance for gradebook option
-            $form->addElement(
-                'checkbox',
+            $form->addCheckBox(
                 'attendance_qualify_gradebook',
                 '',
                 get_lang('Grade the attendance list in the assessment tool'),
-                'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"'
+                ['onclick' => '"javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"']
             );
             $form->addElement('html', '<div id="options_field" style="display:none">');
 

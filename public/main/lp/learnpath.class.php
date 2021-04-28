@@ -5514,8 +5514,6 @@ class learnpath
                 );
             }
 
-
-
             $(function () {
                 //$('.scrollbar-inner').scrollbar();
                 $('#subtab').on('click', 'a:first', function() {
@@ -7028,7 +7026,7 @@ class learnpath
         $itemType = $lpItem->getItemType();
         $path = $lpItem->getPath();
 
-        $return = '<div class="actions">';
+        $return = '';
         $audio_player = null;
         // We display an audio player if needed.
         if (!empty($audio)) {
@@ -7111,7 +7109,7 @@ class learnpath
             $return .= $audio_player;
         }
 
-        return $return;
+        return Display::toolbarAction('lp_item', [$return]);
     }
 
     /**

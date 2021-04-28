@@ -44,7 +44,7 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
             text-gray-600
             bg-white
             font-normal
-            flex items-center pl-3 ';
+            flex items-center pl-3 h-10';
         }
         $inputSize = $attributes['input-size'] ?? null;
         $this->setInputSize($inputSize);

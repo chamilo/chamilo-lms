@@ -1252,14 +1252,13 @@ switch ($action) {
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Thematic advance').' ('.$cleanThematicTitle.')'];
 
         // thematic advance list
-        $content = '<div class="actions">';
-        $content .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=thematic_details">'.
+        $actions = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=thematic_details">'.
             Display::return_icon('back.png', get_lang('Back to'), '', ICON_SIZE_MEDIUM).'</a>';
         if (api_is_allowed_to_edit(false, true)) {
-            $content .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=thematic_advance_add&thematic_id='.$thematicId.'"> '.
+            $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=thematic_advance_add&thematic_id='.$thematicId.'"> '.
                 Display::return_icon('add.png', get_lang('New thematic advance'), '', ICON_SIZE_MEDIUM).'</a>';
         }
-        $content .= '</div>';
+        $content = Display::toolbarAction('thematic', [$actions]);
 
         $table = new SortableTable(
             'thematic_advance_list',

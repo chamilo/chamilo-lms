@@ -2539,6 +2539,12 @@ class Display
 
     public static function toolbarAction(string $id, array $contentList): string
     {
+        $contentList = array_filter($contentList);
+
+        if (empty($contentList)) {
+            return '';
+        }
+
         $col = count($contentList);
         $html = ' <div id="'.$id.'" class="q-card p-2 mb-4">';
         $html .= ' <div class="flex justify-between '.$col.'">';

@@ -258,20 +258,20 @@ class CourseCategory
         Database::query($sql);
     }
 
-    /**
-     * @param string $node
-     *
-     * @return bool
-     */
-    public static function deleteNode($node)
+    public static function delete($categoryId): bool
     {
-        $category = self::getCategory($node);
-
-        if (empty($category)) {
+        $repo = Container::getCourseCategoryRepository();
+        $category = $repo->find($categoryId);
+        if (null === $category) {
             return false;
         }
 
-        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $repo->delete($category);
+
+        return true;
+
+        // @todo check that doctrine deletes all the connections.
+        /*$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $node = Database::escape_string($node);
         $result = Database::query("SELECT parent_id, tree_pos FROM $tbl_category WHERE code='$node'");
@@ -299,7 +299,7 @@ class CourseCategory
             }
 
             return true;
-        }
+        }*/
     }
 
     /**
@@ -466,12 +466,7 @@ class CourseCategory
         return null;
     }
 
-    /**
-     * @param array
-     *
-     * @return string
-     */
-    public static function listCategories(array $categorySource = [])
+    public static function listCategories(array $categorySource = []): string
     {
         $categories = self::getCategories($categorySource ? $categorySource['id'] : null);
         $categoryCode = $categorySource ? Security::remove_XSS($categorySource['code']) : '';
@@ -517,7 +512,7 @@ class CourseCategory
                 $code = $category->getCode();
                 $editUrl = $mainUrl.'&id='.$code.'&action=edit';
                 $moveUrl = $mainUrl.'&id='.$code.'&action=moveUp&tree_pos='.$category->getTreePos();
-                $deleteUrl = $mainUrl.'&id='.$code.'&action=delete';
+                $deleteUrl = $mainUrl.'&id='.$category->getId().'&action=delete';
 
                 $actions = [];
                 $criteria = Criteria::create();

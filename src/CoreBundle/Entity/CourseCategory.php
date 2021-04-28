@@ -148,7 +148,7 @@ class CourseCategory
         return $this->id;
     }
 
-    public function getParent(): self
+    public function getParent(): ?self
     {
         return $this->parent;
     }

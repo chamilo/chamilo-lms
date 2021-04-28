@@ -5122,7 +5122,7 @@ class Tracking
                     get_lang('PublishedExercises'),
                     get_lang('NewExercises'),
                     get_lang('AverageExerciseResult'),
-                    get_lang('Details')
+                    get_lang('Details'),
                 ]
             );
 
@@ -5199,7 +5199,7 @@ class Tracking
                                 get_lang('Details')
                             ),
                             api_get_self().'?session_id='.$my_session_id.'#course_session_list'
-                        )
+                        ),
                     ],
                     ['style' => $filterBySession ? 'background-color: #FBF09D;' : '']
                 );
@@ -5416,7 +5416,7 @@ class Tracking
 
                     $sessionCoursesTable->addRow(
                         array_values($data),
-                        ['style' => $filterByCourse ? 'background-color: #FBF09D;' :  '']
+                        ['style' => $filterByCourse ? 'background-color: #FBF09D;' : '']
                     );
                 }
 
@@ -5483,376 +5483,6 @@ class Tracking
         }
 
         return $html;
-    }
-
-    private static function generateQuizzesTable(array $courseInfo, int $sessionId = 0): string
-    {
-        if (empty($sessionId)) {
-            $userList = CourseManager::get_user_list_from_course_code(
-                $courseInfo['code'],
-                $sessionId,
-                null,
-                null,
-                STUDENT
-            );
-        } else {
-            $userList = CourseManager::get_user_list_from_course_code($courseInfo['code'], $sessionId, null, null, 0);
-        }
-
-        $exerciseList = ExerciseLib::get_all_exercises($courseInfo, $sessionId, false, null);
-
-        if (empty($exerciseList)) {
-            return Display::return_message(get_lang('NoEx'));
-        }
-
-        $toGraphExerciseResult = [];
-
-        $quizzesTable = new SortableTableFromArray([], 0, 0, 'quizzes');
-        $quizzesTable->setHeaders(
-            [
-                get_lang('Exercises'),
-                get_lang('Attempts'),
-                get_lang('BestAttempt'),
-                get_lang('Ranking'),
-                get_lang('BestResultInCourse'),
-                get_lang('Statistics').Display::return_icon('info3.gif', get_lang('OnlyBestResultsPerStudent'))
-            ]
-        );
-
-        $webCodePath = api_get_path(WEB_CODE_PATH);
-
-        foreach ($exerciseList as $exercices) {
-            $objExercise = new Exercise($courseInfo['real_id']);
-            $objExercise->read($exercices['id']);
-            $visibleReturn = $objExercise->is_visible();
-
-            // Getting count of attempts by user
-            $attempts = Event::count_exercise_attempts_by_user(
-                api_get_user_id(),
-                $exercices['id'],
-                $courseInfo['real_id'],
-                $sessionId
-            );
-
-            $url = $webCodePath.'exercise/overview.php?'
-                .http_build_query(
-                    ['cidReq' => $courseInfo['code'], 'id_session' => $sessionId, 'exerciseId' => $exercices['id']]
-                );
-
-            if ($visibleReturn['value'] == true) {
-                $exercices['title'] = Display::url(
-                    $exercices['title'],
-                    $url,
-                    ['target' => SESSION_LINK_TARGET]
-                );
-            } elseif ($exercices['active'] == -1) {
-                $exercices['title'] = sprintf(get_lang('XParenthesisDeleted'), $exercices['title']);
-            }
-
-            $quizData = [
-                $exercices['title'],
-                $attempts,
-                '-',
-                '-',
-                '-',
-                '-',
-            ];
-
-            // Exercise configuration show results or show only score
-            if (!in_array($exercices['results_disabled'], [0, 2])
-                || empty($attempts)
-            ) {
-                $quizzesTable->addRow($quizData);
-
-                continue;
-            }
-
-            //For graphics
-            $bestExerciseAttempts = Event::get_best_exercise_results_by_user(
-                $exercices['id'],
-                $courseInfo['real_id'],
-                $sessionId
-            );
-
-            $toGraphExerciseResult[$exercices['id']] = [
-                'title' => $exercices['title'],
-                'data' => $bestExerciseAttempts,
-            ];
-
-            // Getting best results
-            $bestScoreData = ExerciseLib::get_best_attempt_in_course(
-                $exercices['id'],
-                $courseInfo['real_id'],
-                $sessionId
-            );
-
-            if (!empty($bestScoreData)) {
-                $quizData[5] = ExerciseLib::show_score(
-                    $bestScoreData['exe_result'],
-                    $bestScoreData['exe_weighting']
-                );
-            }
-
-            $exerciseAttempt = ExerciseLib::get_best_attempt_by_user(
-                api_get_user_id(),
-                $exercices['id'],
-                $courseInfo['real_id'],
-                $sessionId
-            );
-
-            if (!empty($exerciseAttempt)) {
-                // Always getting the BEST attempt
-                $score = $exerciseAttempt['exe_result'];
-                $weighting = $exerciseAttempt['exe_weighting'];
-                $exeId = $exerciseAttempt['exe_id'];
-
-                $latestAttemptUrl = $webCodePath.'exercise/result.php?'
-                    .http_build_query(
-                        [
-                            'id' => $exeId,
-                            'cidReq' => $courseInfo['code'],
-                            'show_headers' => 1,
-                            'id_session' => $sessionId,
-                        ]
-                    );
-
-                $quizData[3] = Display::url(
-                    ExerciseLib::show_score($score, $weighting),
-                    $latestAttemptUrl
-                );
-
-                $myScore = !empty($weighting) && intval($weighting) != 0 ? $score / $weighting : 0;
-
-                //@todo this function slows the page
-                if (is_int($userList)) {
-                    $userList = [$userList];
-                }
-
-                $quizData[4] = ExerciseLib::get_exercise_result_ranking(
-                    $myScore,
-                    $exeId,
-                    $exercices['id'],
-                    $courseInfo['code'],
-                    $sessionId,
-                    $userList
-                );
-                $graph = self::generate_exercise_result_thumbnail_graph($toGraphExerciseResult[$exercices['id']]);
-                $normalGraph = self::generate_exercise_result_graph($toGraphExerciseResult[$exercices['id']]);
-
-                $quizData[6] = Display::url(
-                    Display::img($graph, '', [], false),
-                    $normalGraph,
-                    ['id' => $exercices['id'], 'class' => 'expand-image']
-                );
-            }
-
-            $quizzesTable->addRow($quizData);
-        }
-
-        return Display::div(
-            $quizzesTable->toHtml(),
-            ['class' => 'table-responsive']
-        );
-    }
-
-    private static function generateLearningPathsTable(int $userId, array $courseInfo, int $sessionId = 0): string
-    {
-        $columnHeaders = [
-            'lp' => get_lang('LearningPath'),
-            'time' => get_lang('LatencyTimeSpent'),
-            'progress' => get_lang('Progress'),
-            'score' => get_lang('Score'),
-            'best_score' => get_lang('BestScore'),
-            'last_connection' => get_lang('LastConnexion'),
-        ];
-
-        $trackingColumns = api_get_configuration_value('tracking_columns');
-
-        if (isset($trackingColumns['my_progress_lp'])) {
-            $columnHeaders = array_filter(
-                $columnHeaders,
-                function ($columHeader, $key) use ($trackingColumns) {
-                    if (!isset($trackingColumns['my_progress_lp'][$key])
-                        || $trackingColumns['my_progress_lp'][$key] == false
-                    ) {
-                        return false;
-                    }
-
-                    return true;
-                },
-                ARRAY_FILTER_USE_BOTH
-            );
-        }
-
-        if (true === api_get_configuration_value('student_follow_page_add_LP_subscription_info')) {
-            $columnHeaders['student_follow_page_add_LP_subscription_info'] = get_lang('Unlock');
-        }
-
-        if (true === api_get_configuration_value('student_follow_page_add_LP_acquisition_info')) {
-            $columnHeaders['student_follow_page_add_LP_acquisition_info'] = get_lang('Acquisition');
-        }
-
-        $addLpInvisibleCheckbox = api_get_configuration_value('student_follow_page_add_LP_invisible_checkbox');
-
-        $columnHeadersKeys = array_keys($columnHeaders);
-
-        $learningpathsTable = new SortableTableFromArray([], 0, 0, 'learningpaths');
-        $learningpathsTable->setHeaders($columnHeaders);
-
-        // LP table results
-        $list = new LearnpathList(
-            api_get_user_id(),
-            $courseInfo,
-            $sessionId,
-            'lp.publicatedOn ASC',
-            true,
-            null,
-            true
-        );
-
-        $lpList = $list->get_flat_list();
-
-        if (empty($lpList)) {
-            return Display::return_message(get_lang('NoLearnpath'));
-        }
-
-        $webCodePath = api_get_path(WEB_CODE_PATH);
-
-        foreach ($lpList as $lpId => $learnpath) {
-            $learningpathData = [];
-
-            if (!$learnpath['lp_visibility']) {
-                continue;
-            }
-
-            if ($addLpInvisibleCheckbox) {
-                if (!StudentFollowPage::isViewVisible($lpId, $userId, $courseInfo['real_id'], $sessionId)) {
-                    continue;
-                }
-            }
-
-            $url = $webCodePath.'lp/lp_controller.php?'
-                .http_build_query(
-                    ['cidReq' => $courseInfo['code'], 'id_session' => $sessionId, 'lp_id' => $lpId, 'action' => 'view']
-                );
-
-            if (in_array('lp', $columnHeadersKeys)) {
-                if ($learnpath['lp_visibility'] == 0) {
-                    $learningpathData[] = $learnpath['lp_name'];
-                } else {
-                    $learningpathData[] = Display::url(
-                        $learnpath['lp_name'],
-                        $url,
-                        ['target' => SESSION_LINK_TARGET]
-                    );
-                }
-            }
-
-            if (in_array('time', $columnHeadersKeys)) {
-                $time_spent_in_lp = self::get_time_spent_in_lp(
-                    $userId,
-                    $courseInfo['code'],
-                    [$lpId],
-                    $sessionId
-                );
-
-                $learningpathData[] = api_time_to_hms($time_spent_in_lp);
-            }
-
-            if (in_array('progress', $columnHeadersKeys)) {
-                $progress = self::get_avg_student_progress(
-                    $userId,
-                    $courseInfo['code'],
-                    [$lpId],
-                    $sessionId
-                );
-
-                if (is_numeric($progress)) {
-                    $progress = sprintf(get_lang('XPercent'), $progress);
-                }
-
-                $learningpathData[] = $progress;
-            }
-
-            if (in_array('score', $columnHeadersKeys)) {
-                $percentage_score = self::get_avg_student_score(
-                    $userId,
-                    $courseInfo['code'],
-                    [$lpId],
-                    $sessionId
-                );
-
-                if (is_numeric($percentage_score)) {
-                    $percentage_score = sprintf(get_lang('XPercent'), $percentage_score);
-                } else {
-                    $percentage_score = sprintf(get_lang('XPercent'), 0);
-                }
-
-                $learningpathData[] = $percentage_score;
-            }
-
-            if (in_array('best_score', $columnHeadersKeys)) {
-                $bestScore = self::get_avg_student_score(
-                    $userId,
-                    $courseInfo['code'],
-                    [$lpId],
-                    $sessionId,
-                    false,
-                    false,
-                    true
-                );
-
-                if (is_numeric($bestScore)) {
-                    $bestScore = sprintf(get_lang('XPercent'), $bestScore);
-                } else {
-                    $bestScore = '-';
-                }
-
-                $learningpathData[] = $bestScore;
-            }
-
-            if (in_array('last_connection', $columnHeadersKeys)) {
-                $lastConnectionInLp = self::get_last_connection_time_in_lp(
-                    $userId,
-                    $courseInfo['code'],
-                    $lpId,
-                    $sessionId
-                );
-
-                $lastConnection = '-';
-
-                if (!empty($lastConnectionInLp)) {
-                    $lastConnection = api_convert_and_format_date($lastConnectionInLp, DATE_TIME_FORMAT_LONG);
-                }
-
-                $learningpathData[] = $lastConnection;
-            }
-
-            if (in_array('student_follow_page_add_LP_subscription_info', $columnHeadersKeys)) {
-                $learningpathData[] = StudentFollowPage::getLpSubscription(
-                    $learnpath,
-                    $userId,
-                    $courseInfo['real_id'],
-                    $sessionId
-                );
-            }
-
-            if (in_array('student_follow_page_add_LP_acquisition_info', $columnHeadersKeys)) {
-                $learningpathData[] = StudentFollowPage::getLpAcquisition(
-                    $learnpath,
-                    $userId,
-                    $courseInfo['real_id'],
-                    $sessionId
-                );
-            }
-
-            $learningpathsTable->addRow($learningpathData);
-        }
-
-        return Display::div(
-            $learningpathsTable->toHtml(),
-            ['class' => 'table-responsive']
-        );
     }
 
     /**
@@ -7439,12 +7069,12 @@ class Tracking
                         if ($update_database && $new_parent_id) {
                             $assignment_data = Database::fetch_array($rest_select, 'ASSOC');
                             $sql_add_publication = "INSERT INTO ".$TBL_STUDENT_PUBLICATION_ASSIGNMENT." SET
-                                    	c_id = '$course_id',
-                                       expires_on          = '".$assignment_data['expires_on']."',
-                                       ends_on              = '".$assignment_data['ends_on']."',
-                                       add_to_calendar      = '".$assignment_data['add_to_calendar']."',
-                                       enable_qualification = '".$assignment_data['enable_qualification']."',
-                                       publication_id       = '".$new_parent_id."'";
+                                c_id = '$course_id',
+                                expires_on = '".$assignment_data['expires_on']."',
+                                ends_on = '".$assignment_data['ends_on']."',
+                                add_to_calendar = '".$assignment_data['add_to_calendar']."',
+                                enable_qualification = '".$assignment_data['enable_qualification']."',
+                                publication_id = '".$new_parent_id."'";
                             if ($debug) {
                                 echo $sql_add_publication;
                             }
@@ -7452,9 +7082,9 @@ class Tracking
                             $id = (int) Database::insert_id();
                             if ($id) {
                                 $sql_update = "UPDATE $TBL_STUDENT_PUBLICATION
-                                               SET  has_properties = '".$id."',
-                                                    view_properties = '1'
-                                               WHERE id = ".$new_parent_id;
+                                    SET  has_properties = '".$id."',
+                                        view_properties = '1'
+                                    WHERE id = ".$new_parent_id;
                                 if ($debug) {
                                     echo $sql_update;
                                 }
@@ -7688,6 +7318,376 @@ class Tracking
                 echo get_lang('NoResults');
             }
         }
+    }
+
+    private static function generateQuizzesTable(array $courseInfo, int $sessionId = 0): string
+    {
+        if (empty($sessionId)) {
+            $userList = CourseManager::get_user_list_from_course_code(
+                $courseInfo['code'],
+                $sessionId,
+                null,
+                null,
+                STUDENT
+            );
+        } else {
+            $userList = CourseManager::get_user_list_from_course_code($courseInfo['code'], $sessionId, null, null, 0);
+        }
+
+        $exerciseList = ExerciseLib::get_all_exercises($courseInfo, $sessionId, false, null);
+
+        if (empty($exerciseList)) {
+            return Display::return_message(get_lang('NoEx'));
+        }
+
+        $toGraphExerciseResult = [];
+
+        $quizzesTable = new SortableTableFromArray([], 0, 0, 'quizzes');
+        $quizzesTable->setHeaders(
+            [
+                get_lang('Exercises'),
+                get_lang('Attempts'),
+                get_lang('BestAttempt'),
+                get_lang('Ranking'),
+                get_lang('BestResultInCourse'),
+                get_lang('Statistics').Display::return_icon('info3.gif', get_lang('OnlyBestResultsPerStudent')),
+            ]
+        );
+
+        $webCodePath = api_get_path(WEB_CODE_PATH);
+
+        foreach ($exerciseList as $exercices) {
+            $objExercise = new Exercise($courseInfo['real_id']);
+            $objExercise->read($exercices['id']);
+            $visibleReturn = $objExercise->is_visible();
+
+            // Getting count of attempts by user
+            $attempts = Event::count_exercise_attempts_by_user(
+                api_get_user_id(),
+                $exercices['id'],
+                $courseInfo['real_id'],
+                $sessionId
+            );
+
+            $url = $webCodePath.'exercise/overview.php?'
+                .http_build_query(
+                    ['cidReq' => $courseInfo['code'], 'id_session' => $sessionId, 'exerciseId' => $exercices['id']]
+                );
+
+            if ($visibleReturn['value'] == true) {
+                $exercices['title'] = Display::url(
+                    $exercices['title'],
+                    $url,
+                    ['target' => SESSION_LINK_TARGET]
+                );
+            } elseif ($exercices['active'] == -1) {
+                $exercices['title'] = sprintf(get_lang('XParenthesisDeleted'), $exercices['title']);
+            }
+
+            $quizData = [
+                $exercices['title'],
+                $attempts,
+                '-',
+                '-',
+                '-',
+                '-',
+            ];
+
+            // Exercise configuration show results or show only score
+            if (!in_array($exercices['results_disabled'], [0, 2])
+                || empty($attempts)
+            ) {
+                $quizzesTable->addRow($quizData);
+
+                continue;
+            }
+
+            //For graphics
+            $bestExerciseAttempts = Event::get_best_exercise_results_by_user(
+                $exercices['id'],
+                $courseInfo['real_id'],
+                $sessionId
+            );
+
+            $toGraphExerciseResult[$exercices['id']] = [
+                'title' => $exercices['title'],
+                'data' => $bestExerciseAttempts,
+            ];
+
+            // Getting best results
+            $bestScoreData = ExerciseLib::get_best_attempt_in_course(
+                $exercices['id'],
+                $courseInfo['real_id'],
+                $sessionId
+            );
+
+            if (!empty($bestScoreData)) {
+                $quizData[5] = ExerciseLib::show_score(
+                    $bestScoreData['exe_result'],
+                    $bestScoreData['exe_weighting']
+                );
+            }
+
+            $exerciseAttempt = ExerciseLib::get_best_attempt_by_user(
+                api_get_user_id(),
+                $exercices['id'],
+                $courseInfo['real_id'],
+                $sessionId
+            );
+
+            if (!empty($exerciseAttempt)) {
+                // Always getting the BEST attempt
+                $score = $exerciseAttempt['exe_result'];
+                $weighting = $exerciseAttempt['exe_weighting'];
+                $exeId = $exerciseAttempt['exe_id'];
+
+                $latestAttemptUrl = $webCodePath.'exercise/result.php?'
+                    .http_build_query(
+                        [
+                            'id' => $exeId,
+                            'cidReq' => $courseInfo['code'],
+                            'show_headers' => 1,
+                            'id_session' => $sessionId,
+                        ]
+                    );
+
+                $quizData[3] = Display::url(
+                    ExerciseLib::show_score($score, $weighting),
+                    $latestAttemptUrl
+                );
+
+                $myScore = !empty($weighting) && intval($weighting) != 0 ? $score / $weighting : 0;
+
+                //@todo this function slows the page
+                if (is_int($userList)) {
+                    $userList = [$userList];
+                }
+
+                $quizData[4] = ExerciseLib::get_exercise_result_ranking(
+                    $myScore,
+                    $exeId,
+                    $exercices['id'],
+                    $courseInfo['code'],
+                    $sessionId,
+                    $userList
+                );
+                $graph = self::generate_exercise_result_thumbnail_graph($toGraphExerciseResult[$exercices['id']]);
+                $normalGraph = self::generate_exercise_result_graph($toGraphExerciseResult[$exercices['id']]);
+
+                $quizData[6] = Display::url(
+                    Display::img($graph, '', [], false),
+                    $normalGraph,
+                    ['id' => $exercices['id'], 'class' => 'expand-image']
+                );
+            }
+
+            $quizzesTable->addRow($quizData);
+        }
+
+        return Display::div(
+            $quizzesTable->toHtml(),
+            ['class' => 'table-responsive']
+        );
+    }
+
+    private static function generateLearningPathsTable(int $userId, array $courseInfo, int $sessionId = 0): string
+    {
+        $columnHeaders = [
+            'lp' => get_lang('LearningPath'),
+            'time' => get_lang('LatencyTimeSpent'),
+            'progress' => get_lang('Progress'),
+            'score' => get_lang('Score'),
+            'best_score' => get_lang('BestScore'),
+            'last_connection' => get_lang('LastConnexion'),
+        ];
+
+        $trackingColumns = api_get_configuration_value('tracking_columns');
+
+        if (isset($trackingColumns['my_progress_lp'])) {
+            $columnHeaders = array_filter(
+                $columnHeaders,
+                function ($columHeader, $key) use ($trackingColumns) {
+                    if (!isset($trackingColumns['my_progress_lp'][$key])
+                        || $trackingColumns['my_progress_lp'][$key] == false
+                    ) {
+                        return false;
+                    }
+
+                    return true;
+                },
+                ARRAY_FILTER_USE_BOTH
+            );
+        }
+
+        if (true === api_get_configuration_value('student_follow_page_add_LP_subscription_info')) {
+            $columnHeaders['student_follow_page_add_LP_subscription_info'] = get_lang('Unlock');
+        }
+
+        if (true === api_get_configuration_value('student_follow_page_add_LP_acquisition_info')) {
+            $columnHeaders['student_follow_page_add_LP_acquisition_info'] = get_lang('Acquisition');
+        }
+
+        $addLpInvisibleCheckbox = api_get_configuration_value('student_follow_page_add_LP_invisible_checkbox');
+
+        $columnHeadersKeys = array_keys($columnHeaders);
+
+        $learningpathsTable = new SortableTableFromArray([], 0, 0, 'learningpaths');
+        $learningpathsTable->setHeaders($columnHeaders);
+
+        // LP table results
+        $list = new LearnpathList(
+            api_get_user_id(),
+            $courseInfo,
+            $sessionId,
+            'lp.publicatedOn ASC',
+            true,
+            null,
+            true
+        );
+
+        $lpList = $list->get_flat_list();
+
+        if (empty($lpList)) {
+            return Display::return_message(get_lang('NoLearnpath'));
+        }
+
+        $webCodePath = api_get_path(WEB_CODE_PATH);
+
+        foreach ($lpList as $lpId => $learnpath) {
+            $learningpathData = [];
+
+            if (!$learnpath['lp_visibility']) {
+                continue;
+            }
+
+            if ($addLpInvisibleCheckbox) {
+                if (!StudentFollowPage::isViewVisible($lpId, $userId, $courseInfo['real_id'], $sessionId)) {
+                    continue;
+                }
+            }
+
+            $url = $webCodePath.'lp/lp_controller.php?'
+                .http_build_query(
+                    ['cidReq' => $courseInfo['code'], 'id_session' => $sessionId, 'lp_id' => $lpId, 'action' => 'view']
+                );
+
+            if (in_array('lp', $columnHeadersKeys)) {
+                if ($learnpath['lp_visibility'] == 0) {
+                    $learningpathData[] = $learnpath['lp_name'];
+                } else {
+                    $learningpathData[] = Display::url(
+                        $learnpath['lp_name'],
+                        $url,
+                        ['target' => SESSION_LINK_TARGET]
+                    );
+                }
+            }
+
+            if (in_array('time', $columnHeadersKeys)) {
+                $time_spent_in_lp = self::get_time_spent_in_lp(
+                    $userId,
+                    $courseInfo['code'],
+                    [$lpId],
+                    $sessionId
+                );
+
+                $learningpathData[] = api_time_to_hms($time_spent_in_lp);
+            }
+
+            if (in_array('progress', $columnHeadersKeys)) {
+                $progress = self::get_avg_student_progress(
+                    $userId,
+                    $courseInfo['code'],
+                    [$lpId],
+                    $sessionId
+                );
+
+                if (is_numeric($progress)) {
+                    $progress = sprintf(get_lang('XPercent'), $progress);
+                }
+
+                $learningpathData[] = $progress;
+            }
+
+            if (in_array('score', $columnHeadersKeys)) {
+                $percentage_score = self::get_avg_student_score(
+                    $userId,
+                    $courseInfo['code'],
+                    [$lpId],
+                    $sessionId
+                );
+
+                if (is_numeric($percentage_score)) {
+                    $percentage_score = sprintf(get_lang('XPercent'), $percentage_score);
+                } else {
+                    $percentage_score = sprintf(get_lang('XPercent'), 0);
+                }
+
+                $learningpathData[] = $percentage_score;
+            }
+
+            if (in_array('best_score', $columnHeadersKeys)) {
+                $bestScore = self::get_avg_student_score(
+                    $userId,
+                    $courseInfo['code'],
+                    [$lpId],
+                    $sessionId,
+                    false,
+                    false,
+                    true
+                );
+
+                if (is_numeric($bestScore)) {
+                    $bestScore = sprintf(get_lang('XPercent'), $bestScore);
+                } else {
+                    $bestScore = '-';
+                }
+
+                $learningpathData[] = $bestScore;
+            }
+
+            if (in_array('last_connection', $columnHeadersKeys)) {
+                $lastConnectionInLp = self::get_last_connection_time_in_lp(
+                    $userId,
+                    $courseInfo['code'],
+                    $lpId,
+                    $sessionId
+                );
+
+                $lastConnection = '-';
+
+                if (!empty($lastConnectionInLp)) {
+                    $lastConnection = api_convert_and_format_date($lastConnectionInLp, DATE_TIME_FORMAT_LONG);
+                }
+
+                $learningpathData[] = $lastConnection;
+            }
+
+            if (in_array('student_follow_page_add_LP_subscription_info', $columnHeadersKeys)) {
+                $learningpathData[] = StudentFollowPage::getLpSubscription(
+                    $learnpath,
+                    $userId,
+                    $courseInfo['real_id'],
+                    $sessionId
+                );
+            }
+
+            if (in_array('student_follow_page_add_LP_acquisition_info', $columnHeadersKeys)) {
+                $learningpathData[] = StudentFollowPage::getLpAcquisition(
+                    $learnpath,
+                    $userId,
+                    $courseInfo['real_id'],
+                    $sessionId
+                );
+            }
+
+            $learningpathsTable->addRow($learningpathData);
+        }
+
+        return Display::div(
+            $learningpathsTable->toHtml(),
+            ['class' => 'table-responsive']
+        );
     }
 }
 

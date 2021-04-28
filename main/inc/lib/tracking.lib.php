@@ -4852,7 +4852,7 @@ class Tracking
         // Course list
         if ($show_courses) {
             if (!empty($courses)) {
-                $html .= Display::page_subheader(
+                $html .= Display::page_header(
                     Display::return_icon('course.png', get_lang('MyCourses')).PHP_EOL.get_lang('MyCourses')
                 );
 
@@ -5103,16 +5103,11 @@ class Tracking
                     .'</div></div>';
             }
 
-            $sessionIcon = Display::return_icon(
-                'session.png',
-                get_lang('Sessions'),
-                [],
-                ICON_SIZE_SMALL
-            );
+            $sessionIcon = Display::return_icon('session.png', get_lang('Sessions'));
 
             $anchor = Display::url('', '', ['name' => 'course_session_header']);
-            $html .= $anchor.Display::page_subheader(
-                $sessionIcon.' '.get_lang('Sessions')
+            $html .= $anchor.Display::page_header(
+                $sessionIcon.PHP_EOL.get_lang('Sessions')
             );
 
             $sessionsTable = new SortableTableFromArray([], 0, 0, 'sessions');
@@ -5220,10 +5215,8 @@ class Tracking
                 $session_data = $course_in_session[$session_id_from_get];
                 $course_list = $session_data['course_list'];
 
-                $sessionCoursesTable = new SortableTableFromArray([], 0, 0, 'session_courses');
-
                 $html .= '<a name="course_session_list"></a>';
-                $html .= Display::tag('h3', $session_data['name'].' - '.get_lang('CourseList'));
+                $html .= Display::page_subheader($session_data['name'], get_lang('CourseList'));
 
                 $columnHeaders = array_filter(
                     [
@@ -5253,6 +5246,7 @@ class Tracking
                     ARRAY_FILTER_USE_BOTH
                 );
 
+                $sessionCoursesTable = new SortableTableFromArray([], 0, 0, 'session_courses');
                 $sessionCoursesTable->setHeaders($columnHeaders);
 
                 foreach ($course_list as $course_data) {
@@ -5455,7 +5449,7 @@ class Tracking
             }
 
             $html .= '<a name="course_session_data"></a>';
-            $html .= Display::page_subheader($course_info['title']);
+            $html .= Display::page_subheader2($course_info['title']);
 
             // Course details
 

@@ -257,7 +257,7 @@ class SkillRelSkill extends Model
     public function getDirectParents($skillId)
     {
         $skillId = (int) $skillId;
-        $sql = 'SELECT parent_id as skill_id 
+        $sql = 'SELECT parent_id as skill_id
                 FROM '.$this->table.'
                 WHERE skill_id = '.$skillId;
         $result = Database::query($sql);
@@ -1458,9 +1458,8 @@ class Skill extends Model
         }
 
         if ($addTitle) {
-            $tableResult .= '<h3 class="section-title">'.get_lang('AchievedSkills').'</h3>
-                    <div class="skills-badges">
-                   ';
+            $tableResult .= Display::page_subheader2(get_lang('AchievedSkills'));
+            $tableResult .= '<div class="skills-badges">';
         }
 
         if (!empty($skillParents)) {
@@ -1823,7 +1822,7 @@ class Skill extends Model
     public function getUserSkillRanking($user_id)
     {
         $user_id = (int) $user_id;
-        $sql = "SELECT count(skill_id) count 
+        $sql = "SELECT count(skill_id) count
                 FROM {$this->table} s
                 INNER JOIN {$this->table_skill_rel_user} su
                 ON (s.id = su.skill_id)
@@ -2569,8 +2568,8 @@ class Skill extends Model
                                 success: function(result) {
                                     $("#" +skillId+ ".user_skill").html(result);
                                 }
-                            });                            
-                        });                        
+                            });
+                        });
                     });
                 </script>
                 ';

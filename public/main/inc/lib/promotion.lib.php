@@ -162,9 +162,7 @@ class Promotion extends Model
      */
     public function display()
     {
-        // Action links
-        echo '<div class="actions" style="margin-bottom:20px">';
-        echo '<a href="career_dashboard.php">'.
+        $actions = '<a href="career_dashboard.php">'.
             Display::return_icon(
                 'back.png',
                 get_lang('Back'),
@@ -172,21 +170,22 @@ class Promotion extends Model
                 '32'
             )
             .'</a>';
-        echo '<a href="'.api_get_self().'?action=add">'.
+        $actions .= '<a href="'.api_get_self().'?action=add">'.
             Display::return_icon(
                 'new_promotion.png',
                 get_lang('Add'),
                 '',
                 '32'
             ).'</a>';
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.
+        $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.
             Display::return_icon(
                 'new_session.png',
                 get_lang('Add a training session'),
                 '',
                 '32'
             ).'</a>';
-        echo '</div>';
+
+        echo Display::toolbarAction('promotion_actions', [$actions]);
         echo Display::grid_html('promotions');
     }
 

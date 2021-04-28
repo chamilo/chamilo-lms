@@ -23,7 +23,7 @@ $myCourseListAsCategory = api_get_configuration_value('my_courses_list_as_catego
 
 if (!empty($action)) {
     if ('delete' === $action) {
-        CourseCategory::deleteNode($categoryId);
+        CourseCategory::delete($categoryId);
         Display::addFlash(Display::return_message(get_lang('Deleted')));
         header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
         exit();
@@ -86,18 +86,18 @@ Display::display_header($tool_name);
 $urlId = api_get_current_access_url_id();
 
 if ('add' === $action || 'edit' === $action) {
-    echo '<div class="actions">';
-    echo Display::url(
+    $actions = Display::url(
         Display::return_icon('folder_up.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.Security::remove_XSS($category)
     );
-    echo '</div>';
+    echo Display::toolbarAction('categories', [$actions]);
 
     $form_title = 'add' === $action ? get_lang('Add category') : get_lang('Edit this category');
     if (!empty($category)) {
         $form_title .= ' '.get_lang('Into').' '.Security::remove_XSS($category);
     }
-    $url = api_get_self().'?action='.Security::remove_XSS($action).'&category='.Security::remove_XSS($category).'&id='.Security::remove_XSS($categoryId);
+    $url = api_get_self().'?action='.Security::remove_XSS($action).
+        '&category='.Security::remove_XSS($category).'&id='.Security::remove_XSS($categoryId);
     $form = new FormValidator('course_category', 'post', $url);
     $form->addElement('header', '', $form_title);
     $form->addElement('hidden', 'formSent', 1);
@@ -174,15 +174,19 @@ if ('add' === $action || 'edit' === $action) {
 } else {
     // If multiple URLs and not main URL, prevent deletion and inform user
     if ('delete' == $action && api_get_multiple_access_url() && 1 != $urlId) {
-        echo Display::return_message(get_lang('Course categories are global over multiple portals configurations. Changes are only allowed in the main administrative portal.'), 'warning');
+        echo Display::return_message(
+            get_lang(
+                'Course categories are global over multiple portals configurations. Changes are only allowed in the main administrative portal.'
+            ),
+            'warning'
+        );
     }
-    echo '<div class="actions">';
+    $actions = '';
     $link = null;
     if (!empty($parentInfo)) {
         $realParentInfo = $parentInfo['parent_id'] ? CourseCategory::getCategoryById($parentInfo['parent_id']) : [];
         $realParentCode = $realParentInfo ? $realParentInfo['code'] : '';
-
-        echo Display::url(
+        $actions .= Display::url(
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.$realParentCode
         );
@@ -197,9 +201,9 @@ if ('add' === $action || 'edit' === $action) {
         if (!empty($parentInfo) && $parentInfo['access_url_id'] != $urlId) {
             $newCategoryLink = '';
         }
-        echo $newCategoryLink;
+        $actions .= $newCategoryLink;
     }
-    echo '</div>';
+    echo Display::toolbarAction('categories', [$actions]);
     if (!empty($parentInfo)) {
         echo Display::page_subheader($parentInfo['name'].' ('.$parentInfo['code'].')');
     }

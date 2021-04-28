@@ -23,7 +23,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Careers and promotions'),
 ];
 
-$action = isset($_GET['action']) ? $_GET['action'] : null;
+$action = $_GET['action'] ?? null;
 
 $check = Security::check_token('request');
 $token = Security::get_token();
@@ -76,7 +76,9 @@ $extra_params['height'] = 'auto';
 $diagramLink = '';
 $allow = api_get_configuration_value('allow_career_diagram');
 if ($allow) {
-    $diagramLink = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/career_diagram.php?id=\'+options.rowId+\'">'.get_lang('Diagram').'</a>';
+    $diagramLink = '<a
+        href="'.api_get_path(WEB_CODE_PATH).'admin/career_diagram.php?id=\'+options.rowId+\'">'.
+        get_lang('Diagram').'</a>';
 }
 
 // With this function we can add actions to the jgrid (edit, delete, etc)
@@ -126,12 +128,12 @@ switch ($action) {
             header('Location: '.$listUrl);
             exit;
         } else {
-            $content .= '<div class="actions">';
-            $content .= '<a href="'.api_get_self().'">'.
-                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
-            $content .= '</div>';
+            $actions = '<a href="'.api_get_self().'">'.
+                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).
+                '</a>';
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(['sec_token' => $token]);
+            $content .= Display::toolbarAction('career_actions', [$actions]);
             $content .= $form->returnForm();
         }
 
@@ -185,11 +187,13 @@ switch ($action) {
             header('Location: '.$listUrl);
             exit;
         } else {
-            $content .= '<div class="actions">';
-            $content .= '<a href="'.api_get_self().'">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
-            $content .= '</div>';
+            $actions = '<a href="'.api_get_self().'">'.
+                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).
+                '</a>';
+
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(['sec_token' => $token]);
+            $content .= Display::toolbarAction('career_actions', [$actions]);
             $content .= $form->returnForm();
         }
 
@@ -256,5 +260,4 @@ Display::display_header($tool_name);
 <?php
 
 echo $content;
-
 Display::display_footer();

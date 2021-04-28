@@ -51,7 +51,7 @@ Display::display_header('', 'Path');
 echo $learnPath->build_action_menu();
 echo '<div class="row">';
 echo $learnPath->showBuildSideBar();
-echo '<div class="col-md-8">';
+echo '<div class="flex flex-row">';
 
 if (isset($is_success) && true === $is_success) {
     echo Display::return_message(get_lang('The learning object has been removed'), 'confirmation');

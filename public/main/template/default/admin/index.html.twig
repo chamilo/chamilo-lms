@@ -5,7 +5,7 @@
 {% block content %}
     {% autoescape false %}
         {% if not admin_chamilo_announcements_disable %}
-            <div class="alert alert-info alert-dismissible fade show d-none" role="alert">
+            <div class="alert alert-info alert-dismissible fade d-none" role="alert" style="display: none">
                 <button type="button" class="close" data-dismiss="alert" aria-label="{{ 'Close'|trans }}">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -72,10 +72,11 @@
                                 if (!response.length) {
                                     return;
                                 }
-
+                                $('#chamilo-news-content').parent().show();
                                 $(this).parent().removeClass('d-none');
                             }
                         );
+
                     {% endif %}
                 });
             </script>

@@ -457,10 +457,10 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 }
 
 Display::display_header($tool_name);
-echo '<div class="actions">';
-echo '<a href="../session/session_list.php">'.
-    Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
+$actions  = '<a href="../session/session_list.php">'.
+    Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', ICON_SIZE_MEDIUM).
+    '</a>';
+echo Display::toolbarAction('session_import', [$actions]);
 
 if (!empty($error_message)) {
     echo Display::return_message($error_message, 'normal', false);

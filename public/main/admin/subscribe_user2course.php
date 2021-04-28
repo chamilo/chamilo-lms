@@ -41,7 +41,7 @@ Display :: display_header($tool_name);
 
 $link_add_group = '<a href="usergroups.php">'.
     Display::return_icon('multiple.gif', get_lang('Enrolment by classes')).get_lang('Enrolment by classes').'</a>';
-echo '<div class="actions">'.$link_add_group.'</div>';
+echo Display::toolbarAction('subscribe', [$link_add_group]);
 
 $form = new FormValidator('subscribe_user2course');
 $form->addElement('header', '', $tool_name);

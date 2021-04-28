@@ -569,12 +569,17 @@ $newLinks .= Display::url(
     api_get_path(WEB_CODE_PATH).'session/add_students_to_session.php?id='.$id_session
 );
 
-echo '<div class="actions">';
-echo $link_add_type_unique;
-echo $link_add_type_multiple;
-echo $link_add_group;
-echo $newLinks;
-echo '</div>';
+echo Display::toolbarAction(
+    'session_actions',
+    [
+        $link_add_type_unique.
+        $link_add_type_multiple.
+        $link_add_group.
+        $newLinks,
+    ]
+);
+
+echo '<h2>'.$tool_name.' ('.$session_info['name'].') </h2>';
 
 ?>
     <form name="formulaire" method="post"
@@ -584,7 +589,6 @@ echo '</div>';
           } ?>" <?php if ($ajax_search) {
               echo ' onsubmit="valide();"';
           } ?>>
-        <?php echo '<legend>'.$tool_name.' ('.$session_info['name'].') </legend>'; ?>
         <?php
         if ('multiple' === $add_type) {
             if (is_array($extra_field_list)) {

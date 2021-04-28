@@ -2540,7 +2540,7 @@ class Display
     public static function toolbarAction(string $id, array $contentList): string
     {
         $col = count($contentList);
-        $html = ' <div id="'.$id.'" class="q-card p-2">';
+        $html = ' <div id="'.$id.'" class="q-card p-2 mb-4">';
         $html .= ' <div class="flex justify-between '.$col.'">';
         foreach ($contentList as $item) {
             $html .= '<div class=" flex p-2 gap-2 ">'.$item.'</div>';

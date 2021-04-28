@@ -4853,12 +4853,7 @@ class Tracking
         if ($show_courses) {
             if (!empty($courses)) {
                 $html .= Display::page_subheader(
-                    Display::return_icon(
-                        'course.png',
-                        get_lang('MyCourses'),
-                        [],
-                        ICON_SIZE_SMALL
-                    ).' '.get_lang('MyCourses')
+                    Display::return_icon('course.png', get_lang('MyCourses')).PHP_EOL.get_lang('MyCourses')
                 );
 
                 $columns = [
@@ -4874,18 +4869,21 @@ class Tracking
                 if (isset($trackingColumns['my_progress_courses'])) {
                     $availableColumns = $trackingColumns['my_progress_courses'];
                 }
-                $html .= '<div class="table-responsive">';
-                $html .= '<table class="table table-striped table-hover">';
-                $html .= '<thead><tr>';
-                foreach ($columns as $columnKey => $name) {
-                    if (!empty($availableColumns)) {
+
+                $columns = array_filter(
+                    $columns,
+                    function ($column, $columnKey) use ($availableColumns) {
                         if (isset($availableColumns[$columnKey]) && $availableColumns[$columnKey] == false) {
-                            continue;
+                            return false;
                         }
-                    }
-                    $html .= Display::tag('th', $name);
-                }
-                $html .= '</tr></thead><tbody>';
+
+                        return true;
+                    },
+                    ARRAY_FILTER_USE_BOTH
+                );
+
+                $coursesTable = new SortableTableFromArray([], 0, 0, 'courses');
+                $coursesTable->setHeaders($columns);
 
                 foreach ($courses as $course_code => $course_title) {
                     $courseInfo = api_get_course_info($course_code);
@@ -4955,34 +4953,18 @@ class Tracking
                         $progress = $progress.'%';
                     }
 
-                    if (isset($_GET['course']) &&
-                        $course_code == $_GET['course'] &&
-                        empty($_GET['session_id'])
-                    ) {
-                        $html .= '<tr class="row_odd" style="background-color:#FBF09D">';
-                    } else {
-                        $html .= '<tr class="row_even">';
-                    }
+                    $filterByCourse = isset($_GET['course']) && $course_code == $_GET['course'] &&
+                        empty($_GET['session_id']);
+
                     $url = api_get_course_url($course_code, $session_id);
                     $course_url = Display::url($course_title, $url, ['target' => SESSION_LINK_TARGET]);
-                    $bestScoreResult = '';
-                    if (empty($bestScore)) {
-                        $bestScoreResult = '-';
-                    } else {
-                        $bestScoreResult = $bestScore.'%';
-                    }
-                    $bestScoreNotInLP = '';
-                    if (empty($bestScoreAverageNotInLP)) {
-                        $bestScoreNotInLP = '-';
-                    } else {
-                        $bestScoreNotInLP = $bestScoreAverageNotInLP.'%';
-                    }
+                    $bestScoreResult = empty($bestScore) ? '-' : sprintf(get_lang('XPercent'), $bestScore);
+                    $bestScoreNotInLP = empty($bestScoreAverageNotInLP)
+                        ? '-'
+                        : sprintf(get_lang('XPercent'), $bestScoreAverageNotInLP);
 
                     $detailsLink = '';
-                    if (isset($_GET['course']) &&
-                        $course_code == $_GET['course'] &&
-                        empty($_GET['session_id'])
-                    ) {
+                    if ($filterByCourse) {
                         $detailsLink .= '<a href="#course_session_header">';
                         $detailsLink .= Display::return_icon('2rightarrow_na.png', get_lang('Details'));
                         $detailsLink .= '</a>';
@@ -4992,29 +4974,33 @@ class Tracking
                         $detailsLink .= '</a>';
                     }
 
-                    $result = [
-                        'course_title' => $course_url,
-                        'time_spent' => $time,
-                        'progress' => $progress,
-                        'best_score_in_lp' => $bestScoreResult,
-                        'best_score_not_in_lp' => $bestScoreNotInLP,
-                        'latest_login' => $last_connection,
-                        'details' => $detailsLink,
-                    ];
-
-                    foreach ($result as $columnKey => $data) {
-                        if (!empty($availableColumns)) {
+                    $result = array_filter(
+                        [
+                            'course_title' => $course_url,
+                            'time_spent' => $time,
+                            'progress' => $progress,
+                            'best_score_in_lp' => $bestScoreResult,
+                            'best_score_not_in_lp' => $bestScoreNotInLP,
+                            'latest_login' => $last_connection,
+                            'details' => $detailsLink,
+                        ],
+                        function ($data, $columnKey) {
                             if (isset($availableColumns[$columnKey]) && $availableColumns[$columnKey] == false) {
-                                continue;
+                                return false;
                             }
-                        }
-                        $html .= '<td>'.$data.'</td>';
-                    }
 
-                    $html .= '</tr>';
+                            return true;
+                        },
+                        ARRAY_FILTER_USE_BOTH
+                    );
+
+                    $coursesTable->addRow(
+                        array_values($result),
+                        ['style' => $filterByCourse ? 'background-color: #FBF09D;' : '']
+                    );
                 }
-                $html .= '</tbody></table>';
-                $html .= '</div>';
+
+                $html .= Display::div($coursesTable->toHtml(), ['class' => 'table-responsive']);
             }
         }
 
@@ -5129,18 +5115,16 @@ class Tracking
                 $sessionIcon.' '.get_lang('Sessions')
             );
 
-            $html .= '<div class="table-responsive">';
-            $html .= '<table class="table table-striped table-hover">';
-            $html .= '<thead>';
-            $html .= '<tr>
-                  '.Display::tag('th', get_lang('Session'), ['width' => '300px']).'
-                  '.Display::tag('th', get_lang('PublishedExercises'), ['width' => '300px']).'
-                  '.Display::tag('th', get_lang('NewExercises')).'
-                  '.Display::tag('th', get_lang('AverageExerciseResult')).'
-                  '.Display::tag('th', get_lang('Details')).'
-                  </tr>';
-            $html .= '</thead>';
-            $html .= '<tbody>';
+            $sessionsTable = new SortableTableFromArray([], 0, 0, 'sessions');
+            $sessionsTable->setHeaders(
+                [
+                    get_lang('Session'),
+                    get_lang('PublishedExercises'),
+                    get_lang('NewExercises'),
+                    get_lang('AverageExerciseResult'),
+                    get_lang('Details')
+                ]
+            );
 
             foreach ($course_in_session as $my_session_id => $session_data) {
                 $course_list = $session_data['course_list'];
@@ -5199,40 +5183,29 @@ class Tracking
                     $all_average = $all_average / count($course_list);
                 }
 
-                if (isset($_GET['session_id']) && $my_session_id == $_GET['session_id']) {
-                    $html .= '<tr style="background-color:#FBF09D">';
-                } else {
-                    $html .= '<tr>';
-                }
+                $filterBySession = isset($_GET['session_id']) && $my_session_id == $_GET['session_id'];
+
                 $url = api_get_path(WEB_CODE_PATH)."session/index.php?session_id={$my_session_id}";
 
-                $html .= Display::tag('td', Display::url($session_name, $url, ['target' => SESSION_LINK_TARGET]));
-                $html .= Display::tag('td', $all_exercises);
-                $html .= Display::tag('td', $all_unanswered_exercises_by_user);
-                $html .= Display::tag('td', ExerciseLib::convert_to_percentage($all_average));
-
-                if (isset($_GET['session_id']) && $my_session_id == $_GET['session_id']) {
-                    $icon = Display::url(
-                        Display::return_icon(
-                            '2rightarrow_na.png',
-                            get_lang('Details')
-                        ),
-                        api_get_self().'?session_id='.$my_session_id.'#course_session_list'
-                    );
-                } else {
-                    $icon = Display::url(
-                        Display::return_icon(
-                            '2rightarrow.png',
-                            get_lang('Details')
-                        ),
-                        api_get_self().'?session_id='.$my_session_id.'#course_session_list'
-                    );
-                }
-                $html .= Display::tag('td', $icon);
-                $html .= '</tr>';
+                $sessionsTable->addRow(
+                    [
+                        Display::url($session_name, $url, ['target' => SESSION_LINK_TARGET]),
+                        $all_exercises,
+                        $all_unanswered_exercises_by_user,
+                        ExerciseLib::convert_to_percentage($all_average),
+                        Display::url(
+                            Display::return_icon(
+                                $filterBySession ? '2rightarrow_na.png' : '2rightarrow.png',
+                                get_lang('Details')
+                            ),
+                            api_get_self().'?session_id='.$my_session_id.'#course_session_list'
+                        )
+                    ],
+                    ['style' => $filterBySession ? 'background-color: #FBF09D;' : '']
+                );
             }
-            $html .= '</tbody>';
-            $html .= '</table></div><br />';
+
+            $html .= Display::div($sessionsTable->toHtml(), ['class' => 'table-responsive']);
             $html .= Display::div(
                 $main_session_graph,
                 [
@@ -5247,72 +5220,40 @@ class Tracking
                 $session_data = $course_in_session[$session_id_from_get];
                 $course_list = $session_data['course_list'];
 
-                $html .= '<a name= "course_session_list"></a>';
+                $sessionCoursesTable = new SortableTableFromArray([], 0, 0, 'session_courses');
+
+                $html .= '<a name="course_session_list"></a>';
                 $html .= Display::tag('h3', $session_data['name'].' - '.get_lang('CourseList'));
 
-                $html .= '<div class="table-responsive">';
-                $html .= '<table class="table table-hover table-striped">';
+                $columnHeaders = array_filter(
+                    [
+                        'course_title' => get_lang('Course'),
+                        'published_exercises' => get_lang('PublishedExercises'),
+                        'new_exercises' => get_lang('NewExercises'),
+                        'my_average' => get_lang('MyAverage'),
+                        'average_exercise_result' => get_lang('AverageExerciseResult'),
+                        'time_spent' => get_lang('TimeSpentInTheCourse'),
+                        'lp_progress' => get_lang('LPProgress'),
+                        'score' => get_lang('Score')
+                            .Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage')),
+                        'best_score' => get_lang('BestScore'),
+                        'last_connection' => get_lang('LastConnexion'),
+                        'details' => get_lang('Details'),
+                    ],
+                    function ($column, $key) use ($trackingColumns) {
+                        if (isset($trackingColumns['course_session']) &&
+                            in_array($key, $trackingColumns['course_session']) &&
+                            $trackingColumns['course_session'][$key]
+                        ) {
+                            return true;
+                        }
 
-                $columnHeaders = [
-                    'course_title' => [
-                        get_lang('Course'),
-                        ['width' => '300px'],
-                    ],
-                    'published_exercises' => [
-                        get_lang('PublishedExercises'),
-                    ],
-                    'new_exercises' => [
-                        get_lang('NewExercises'),
-                    ],
-                    'my_average' => [
-                        get_lang('MyAverage'),
-                    ],
-                    'average_exercise_result' => [
-                        get_lang('AverageExerciseResult'),
-                    ],
-                    'time_spent' => [
-                        get_lang('TimeSpentInTheCourse'),
-                    ],
-                    'lp_progress' => [
-                        get_lang('LPProgress'),
-                    ],
-                    'score' => [
-                        get_lang('Score').
-                        Display::return_icon(
-                            'info3.gif',
-                            get_lang('ScormAndLPTestTotalAverage'),
-                            ['align' => 'absmiddle', 'hspace' => '3px']
-                        ),
-                    ],
-                    'best_score' => [
-                        get_lang('BestScore'),
-                    ],
-                    'last_connection' => [
-                        get_lang('LastConnexion'),
-                    ],
-                    'details' => [
-                        get_lang('Details'),
-                    ],
-                ];
+                        return false;
+                    },
+                    ARRAY_FILTER_USE_BOTH
+                );
 
-                $html .= '<thead><tr>';
-                foreach ($columnHeaders as $key => $columnSetting) {
-                    if (isset($trackingColumns['course_session']) &&
-                        in_array($key, $trackingColumns['course_session']) &&
-                        $trackingColumns['course_session'][$key]
-                    ) {
-                        $settings = isset($columnSetting[1]) ? $columnSetting[1] : [];
-                        $html .= Display::tag(
-                             'th',
-                             $columnSetting[0],
-                             $settings
-                         );
-                    }
-                }
-
-                $html .= '</tr>
-                    </thead>
-                    <tbody>';
+                $sessionCoursesTable->setHeaders($columnHeaders);
 
                 foreach ($course_list as $course_data) {
                     $course_code = $course_data['code'];
@@ -5399,13 +5340,9 @@ class Tracking
                         [],
                         $session_id_from_get
                     );
-                    $courseCodeFromGet = isset($_GET['course']) ? $_GET['course'] : null;
+                    $courseCodeFromGet = $_GET['course'] ?? null;
 
-                    if ($course_code == $courseCodeFromGet && $_GET['session_id'] == $session_id_from_get) {
-                        $html .= '<tr class="row_odd" style="background-color:#FBF09D" >';
-                    } else {
-                        $html .= '<tr class="row_even">';
-                    }
+                    $filterByCourse = $course_code == $courseCodeFromGet && $_GET['session_id'] == $session_id_from_get;
 
                     $url = api_get_course_url($course_code, $session_id_from_get);
                     $course_url = Display::url(
@@ -5454,30 +5391,37 @@ class Tracking
                     }
                     $details .= '</a>';
 
-                    $data = [
-                        'course_title' => $course_url,
-                        'published_exercises' => $stats_array[$course_code]['exercises'], // exercise available
-                        'new_exercises' => $stats_array[$course_code]['unanswered_exercises_by_user'],
-                        'my_average' => ExerciseLib::convert_to_percentage($stats_array[$course_code]['my_average']),
-                        'average_exercise_result' => $stats_array[$course_code]['average'] == 0 ? '-' : '('.ExerciseLib::convert_to_percentage($stats_array[$course_code]['average']).')',
-                        'time_spent' => $time,
-                        'lp_progress' => $progress,
-                        'score' => $percentage_score,
-                        'best_score' => $bestScore,
-                        'last_connection' => $last_connection,
-                        'details' => $details,
-                    ];
+                    $data = array_filter(
+                        [
+                            'course_title' => $course_url,
+                            'published_exercises' => $stats_array[$course_code]['exercises'], // exercise available
+                            'new_exercises' => $stats_array[$course_code]['unanswered_exercises_by_user'],
+                            'my_average' => ExerciseLib::convert_to_percentage($stats_array[$course_code]['my_average']),
+                            'average_exercise_result' => $stats_array[$course_code]['average'] == 0 ? '-' : '('.ExerciseLib::convert_to_percentage($stats_array[$course_code]['average']).')',
+                            'time_spent' => $time,
+                            'lp_progress' => $progress,
+                            'score' => $percentage_score,
+                            'best_score' => $bestScore,
+                            'last_connection' => $last_connection,
+                            'details' => $details,
+                        ],
+                        function ($value, $key) use ($trackingColumns) {
+                            if (in_array($key, $trackingColumns['course_session']) && $trackingColumns['course_session'][$key]) {
+                                return true;
+                            }
 
-                    foreach ($data as $key => $value) {
-                        if (in_array($key, $trackingColumns['course_session'])
-                            && $trackingColumns['course_session'][$key]
-                        ) {
-                            $html .= Display::tag('td', $value);
-                        }
-                    }
-                    $html .= '</tr>';
+                            return false;
+                        },
+                        ARRAY_FILTER_USE_BOTH
+                    );
+
+                    $sessionCoursesTable->addRow(
+                        array_values($data),
+                        ['style' => $filterByCourse ? 'background-color: #FBF09D;' :  '']
+                    );
                 }
-                $html .= '</tbody></table></div>';
+
+                $html .= Display::div($sessionCoursesTable->toHtml(), ['class' => 'table-responsive']);
             }
         }
 

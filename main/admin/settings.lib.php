@@ -13,8 +13,6 @@ use Symfony\Component\Filesystem\Filesystem;
  * @author Guillaume Viguier <guillaume@viguierjust.com>
  *
  * @since Chamilo 1.8.7
- *
- * @package chamilo.admin
  */
 define('CSS_UPLOAD_PATH', api_get_path(SYS_APP_PATH).'Resources/public/css/themes/');
 
@@ -44,7 +42,7 @@ function handleRegions()
     $installed_plugins = $plugin_obj->getInstalledPlugins();
 
     echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
-    echo '<table class="data_table">';
+    echo '<table class="table table-hover table-striped data_table">';
     echo '<tr>';
     echo '<th width="400px">';
     echo get_lang('Plugin');
@@ -1026,6 +1024,10 @@ function getTemplateData($from, $number_of_items, $column, $direction)
     // Database table definition.
     $table_system_template = Database::get_main_table('system_template');
 
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+    $column = (int) $column;
+    $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
     // The sql statement.
     $sql = "SELECT image as col0, title as col1, id as col2 FROM $table_system_template";
     $sql .= " ORDER BY col$column $direction ";
@@ -1370,10 +1372,6 @@ function select_gradebook_default_grade_model_id()
 /**
  * @param array $settings
  * @param array $settings_by_access_list
- *
- * @throws \Doctrine\ORM\ORMException
- * @throws \Doctrine\ORM\OptimisticLockException
- * @throws \Doctrine\ORM\TransactionRequiredException
  *
  * @return FormValidator
  */
@@ -1839,6 +1837,11 @@ function getAllowedFileTypes()
         'webp',
         'woff',
         'woff2',
+        'md',
+        'html',
+        'xml',
+        'markdown',
+        'txt',
     ];
 
     return $allowedFiles;

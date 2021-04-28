@@ -107,13 +107,16 @@ class WSCMInbox extends WSCM
         $from,
         $number_of_items
     ) {
+        $from = (int) $from;
+        $number_of_items = (int) $number_of_items;
         if ($this->verifyUserPass($username, $password) == "valid") {
             $user_id = UserManager::get_user_id_from_username($username);
 
             $table_message = Database::get_main_table(TABLE_MESSAGE);
             $sql_query = "SELECT id FROM $table_message 
                           WHERE user_sender_id=".$user_id." AND msg_status=".MESSAGE_STATUS_OUTBOX." 					 
-                          ORDER BY send_date LIMIT $from,$number_of_items";
+                          ORDER BY send_date
+                          LIMIT $from,$number_of_items";
 
             $sql_result = Database::query($sql_query);
             $message = "#";

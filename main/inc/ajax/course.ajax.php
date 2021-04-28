@@ -145,14 +145,14 @@ switch ($action) {
                 //TODO change this function to search not only courses STARTING with $_GET['q']
                 if (api_is_platform_admin()) {
                     $courseList = CourseManager::get_courses_list(
-                        0, //offset
-                        0, //howMany
-                        1, //$orderby = 1
+                        0,
+                        0,
+                        'title',
                         'ASC',
-                        -1, //visibility
+                        -1,
                         $_GET['q'],
-                        null, //$urlId
-                        true //AlsoSearchCode
+                        null,
+                        true
                     );
                 } elseif (api_is_teacher()) {
                     $courseList = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id(), $_GET['q']);

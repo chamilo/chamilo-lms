@@ -154,6 +154,7 @@ class Agenda
      */
     public function setType($type)
     {
+        $type = (string) trim($type);
         $typeList = $this->getTypes();
         if (in_array($type, $typeList)) {
             $this->type = $type;
@@ -528,7 +529,6 @@ class Agenda
 
             // @todo remove comment code
             $startDateInLocal = new DateTime($newStartDate, new DateTimeZone($timeZone));
-            //$originalOffset = $startDate->getOffset();
             if ($startDateInLocal->format('I') == 0) {
                 // Is saving time? Then fix UTC time to add time
                 $seconds = $startDateInLocal->getOffset();
@@ -543,7 +543,6 @@ class Agenda
                 $startDateInLocalFixed = new DateTime($startDateFixed, new DateTimeZone($timeZone));
                 $newStartDate = $startDateInLocalFixed->format('Y-m-d H:i:s');*/
             }
-            //var_dump($newStartDate.' - '.$startDateInLocal->format('I'));
             $endDateInLocal = new DateTime($newEndDate, new DateTimeZone($timeZone));
 
             if ($endDateInLocal->format('I') == 0) {
@@ -1068,16 +1067,13 @@ class Agenda
                 $isAllowToEdit = $this->getIsAllowedToEdit();
 
                 if (!empty($courseId) && $isAllowToEdit) {
-                    // Delete
                     $eventInfo = $this->get_event($id);
                     if ($deleteAllItemsFromSerie) {
                         /* This is one of the children.
                            Getting siblings and delete 'Em all + the father! */
                         if (isset($eventInfo['parent_event_id']) && !empty($eventInfo['parent_event_id'])) {
                             // Removing items.
-                            $events = $this->getAllRepeatEvents(
-                                $eventInfo['parent_event_id']
-                            );
+                            $events = $this->getAllRepeatEvents($eventInfo['parent_event_id']);
                             if (!empty($events)) {
                                 foreach ($events as $event) {
                                     $this->deleteEvent($event['id']);
@@ -1245,9 +1241,7 @@ class Agenda
                         if (!empty($sessionList)) {
                             foreach ($sessionList as $sessionItem) {
                                 $sessionId = $sessionItem['id'];
-                                $courses = SessionManager::get_course_list_by_session_id(
-                                    $sessionId
-                                );
+                                $courses = SessionManager::get_course_list_by_session_id($sessionId);
                                 $sessionInfo = [
                                     'session_id' => $sessionId,
                                     'courses' => $courses,
@@ -1496,9 +1490,7 @@ class Agenda
                         );
 
                         if (!empty($event['parent_event_id'])) {
-                            $event['parent_info'] = $this->get_event(
-                                $event['parent_event_id']
-                            );
+                            $event['parent_info'] = $this->get_event($event['parent_event_id']);
                         }
 
                         $event['attachment'] = $this->getAttachmentList(
@@ -2990,7 +2982,7 @@ class Agenda
             }
         }
 
-        if ($this->type == 'personal' && !api_is_anonymous()) {
+        if ($this->type === 'personal' && !api_is_anonymous()) {
             $actionsLeft .= Display::url(
                 Display::return_icon('1day.png', get_lang('SessionsPlanCalendar'), [], ICON_SIZE_MEDIUM),
                 $codePath.'calendar/planification.php'
@@ -3409,9 +3401,14 @@ class Agenda
 
         $current_access_url_id = api_get_current_access_url_id();
 
-        if ($type == "month_view" or $type == "") {
+        if ($type == "month_view" || $type == "") {
             // We are in month view
-            $sql = "SELECT * FROM ".$tbl_global_agenda." WHERE MONTH(start_date) = ".$month." AND YEAR(start_date) = ".$year."  AND access_url_id = $current_access_url_id ORDER BY start_date ASC";
+            $sql = "SELECT * FROM ".$tbl_global_agenda."
+                    WHERE
+                        MONTH(start_date) = ".$month." AND
+                        YEAR(start_date) = ".$year."  AND
+                        access_url_id = $current_access_url_id
+                    ORDER BY start_date ASC";
         }
         // 2. creating the SQL statement for getting the personal agenda items in WEEK view
         if ($type == "week_view") { // we are in week view
@@ -3542,9 +3539,14 @@ class Agenda
         $user_id = intval($user_id);
 
         // 1. creating the SQL statement for getting the personal agenda items in MONTH view
-        if ($type == "month_view" or $type == "") {
+        if ($type === "month_view" || $type === "") {
             // we are in month view
-            $sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$user_id."' and MONTH(date)='".$month."' AND YEAR(date) = '".$year."'  ORDER BY date ASC";
+            $sql = "SELECT * FROM $tbl_personal_agenda
+                    WHERE
+                        user='".$user_id."' AND
+                        MONTH(date)='".$month."' AND
+                        YEAR(date) = '".$year."'
+                     ORDER BY date ASC";
         }
 
         // 2. creating the SQL statement for getting the personal agenda items in WEEK view

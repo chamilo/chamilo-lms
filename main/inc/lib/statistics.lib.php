@@ -267,9 +267,9 @@ class Statistics
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $urlId = api_get_current_access_url_id();
-        $column = intval($column);
-        $from = intval($from);
-        $numberOfItems = intval($numberOfItems);
+        $column = (int) $column;
+        $from = (int) $from;
+        $numberOfItems = (int) $numberOfItems;
         $direction = strtoupper($direction);
 
         if (!in_array($direction, ['ASC', 'DESC'])) {
@@ -946,7 +946,7 @@ class Statistics
                    HAVING t.c_id <> ''
                    AND DATEDIFF( '".api_get_utc_datetime()."' , access_date ) <= ".$date_diff;
         }
-        $sql .= ' ORDER BY '.$columns[$column].' '.$sql_order[$direction];
+        $sql .= ' ORDER BY `'.$columns[$column].'` '.$sql_order[$direction];
         $from = ($page_nr - 1) * $per_page;
         $sql .= ' LIMIT '.$from.','.$per_page;
 

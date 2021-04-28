@@ -148,9 +148,11 @@ class CourseManager
      * @param int    $orderby            The column we want to order it by. Optional, defaults to first column.
      * @param string $orderdirection     The direction of the order (ASC or DESC). Optional, defaults to ASC.
      * @param int    $visibility         the visibility of the course, or all by default
-     * @param string $startwith          If defined, only return results for which the course *title* begins with this string
+     * @param string $startwith          If defined, only return results for which the course *title* begins with this
+     *                                   string
      * @param string $urlId              The Access URL ID, if using multiple URLs
-     * @param bool   $alsoSearchCode     An extension option to indicate that we also want to search for course codes (not *only* titles)
+     * @param bool   $alsoSearchCode     An extension option to indicate that we also want to search for course codes
+     *                                   (not *only* titles)
      * @param array  $conditionsLike
      * @param array  $onlyThisCourseList
      *
@@ -159,7 +161,7 @@ class CourseManager
     public static function get_courses_list(
         $from = 0,
         $howmany = 0,
-        $orderby = 1,
+        $orderby = 'title',
         $orderdirection = 'ASC',
         $visibility = -1,
         $startwith = '',
@@ -233,20 +235,25 @@ class CourseManager
             }
         }
 
-        if (!empty($orderby)) {
-            $sql .= " ORDER BY ".Database::escape_string($orderby)." ";
+        if (empty($orderby)) {
+            $sql .= ' ORDER BY title ';
         } else {
-            $sql .= ' ORDER BY 1 ';
+            if (in_array($orderby, ['title'])) {
+                $sql .= " ORDER BY `".Database::escape_string($orderby)."` ";
+            } else {
+                $sql .= ' ORDER BY title ';
+            }
         }
 
+        $orderdirection = strtoupper($orderdirection);
         if (!in_array($orderdirection, ['ASC', 'DESC'])) {
             $sql .= 'ASC';
         } else {
-            $sql .= ($orderdirection == 'ASC' ? 'ASC' : 'DESC');
+            $sql .= $orderdirection === 'ASC' ? 'ASC' : 'DESC';
         }
 
         if (!empty($howmany) && is_int($howmany) and $howmany > 0) {
-            $sql .= ' LIMIT '.Database::escape_string($howmany);
+            $sql .= ' LIMIT '.(int) $howmany;
         } else {
             $sql .= ' LIMIT 1000000'; //virtually no limit
         }
@@ -349,8 +356,8 @@ class CourseManager
      */
     public static function get_tutor_in_course_status($userId, $courseId)
     {
-        $userId = intval($userId);
-        $courseId = intval($courseId);
+        $userId = (int) $userId;
+        $courseId = (int) $courseId;
         $result = Database::fetch_array(
             Database::query(
                 "SELECT is_tutor
@@ -1301,7 +1308,7 @@ class CourseManager
         // we have to check if it is a valid field that can be sorted on
         if (!strstr($order_by, 'ORDER BY')) {
             if (!empty($order_by)) {
-                $order_by = "ORDER BY $order_by";
+                $order_by = "ORDER BY $order_by ";
             } else {
                 $order_by = '';
             }

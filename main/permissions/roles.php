@@ -1,8 +1,6 @@
 <?php
-/**
- * @package chamilo.permissions
- */
 require '../inc/global.inc.php';
+api_protect_course_script();
 require_once 'permissions_functions.inc.php';
 require_once 'all_permissions.inc.php';
 

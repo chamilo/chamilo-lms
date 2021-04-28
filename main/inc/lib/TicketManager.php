@@ -917,7 +917,7 @@ class TicketManager
                      )
             )";
         }
-        $sql .= " ORDER BY $column $direction";
+        $sql .= " ORDER BY `$column` $direction";
         $sql .= " LIMIT $from, $number_of_items";
 
         $result = Database::query($sql);

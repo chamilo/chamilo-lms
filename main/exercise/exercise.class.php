@@ -12,8 +12,6 @@ use Doctrine\DBAL\Types\Type;
  *
  * Allows to instantiate an object of type Exercise
  *
- * @package chamilo.exercise
- *
  * @todo use getters and setters correctly
  *
  * @author Olivier Brouckaert
@@ -657,9 +655,9 @@ class Exercise
             $orderCondition = ' ORDER BY question_order ';
 
             if (!empty($sidx) && !empty($sord)) {
-                if ($sidx === 'question') {
+                if ('question' === $sidx) {
                     if (in_array(strtolower($sord), ['desc', 'asc'])) {
-                        $orderCondition = " ORDER BY q.$sidx $sord";
+                        $orderCondition = " ORDER BY `q.$sidx` $sord";
                     }
                 }
             }

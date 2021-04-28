@@ -24,7 +24,7 @@
  */
 function php2phps($file_name)
 {
-    return preg_replace('/\.(php.?|phtml.?)(\.){0,1}.*$/i', '.phps', $file_name);
+    return preg_replace('/\.(phar.?|php.?|phtml.?)(\.){0,1}.*$/i', '.phps', $file_name);
 }
 
 /**
@@ -238,7 +238,7 @@ function handle_uploaded_document(
     $sessionId = null,
     $treat_spaces_as_hyphens = true
 ) {
-    if (!$userId) {
+    if (empty($uploadedFile) || empty($userId) || empty($courseInfo) || empty($documentDir) || empty($uploadPath)) {
         return false;
     }
 
@@ -268,6 +268,16 @@ function handle_uploaded_document(
         return false;
     }
 
+    if (!Security::check_abs_path($documentDir.$uploadPath, $documentDir.'/')) {
+        Display::addFlash(
+            Display::return_message(
+                get_lang('Forbidden'),
+                'error'
+            )
+        );
+
+        return false;
+    }
     // If the want to unzip, check if the file has a .zip (or ZIP,Zip,ZiP,...) extension
     if ($unzip == 1 && preg_match('/.zip$/', strtolower($uploadedFile['name']))) {
         return unzip_uploaded_document(
@@ -310,7 +320,7 @@ function handle_uploaded_document(
             return false;
         } else {
             // If the upload path differs from / (= root) it will need a slash at the end
-            if ($uploadPath != '/') {
+            if ($uploadPath !== '/') {
                 $uploadPath = $uploadPath.'/';
             }
 
@@ -1055,47 +1065,34 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
 
         /*	Uncompressing phase */
 
-        /*
-            The first version, using OS unzip, is not used anymore
-            because it does not return enough information.
-            We need to process each individual file in the zip archive to
-            - add it to the database
-            - parse & change relative html links
-        */
-        if (PHP_OS == 'Linux' && !get_cfg_var('safe_mode') && false) { // *** UGent, changed by OC ***
-            // Shell Method - if this is possible, it gains some speed
-            exec("unzip -d \"".$base_work_dir.$upload_path."/\"".$uploaded_file['name']." ".$uploaded_file['tmp_name']);
-        } else {
-            // PHP method - slower...
-            $save_dir = getcwd();
-            chdir($base_work_dir.$upload_path);
-            $unzippingState = $zip_file->extract();
-            for ($j = 0; $j < count($unzippingState); $j++) {
-                $state = $unzippingState[$j];
+        $save_dir = getcwd();
+        chdir($base_work_dir.$upload_path);
+        $unzippingState = $zip_file->extract();
+        for ($j = 0; $j < count($unzippingState); $j++) {
+            $state = $unzippingState[$j];
 
-                // Fix relative links in html files
-                $extension = strrchr($state['stored_filename'], '.');
-            }
-            if ($dir = @opendir($base_work_dir.$upload_path)) {
-                while ($file = readdir($dir)) {
-                    if ($file != '.' && $file != '..') {
-                        $filetype = 'file';
-                        if (is_dir($base_work_dir.$upload_path.'/'.$file)) {
-                            $filetype = 'folder';
-                        }
-
-                        $safe_file = api_replace_dangerous_char($file);
-                        @rename($base_work_dir.$upload_path.'/'.$file, $base_work_dir.$upload_path.'/'.$safe_file);
-                        set_default_settings($upload_path, $safe_file, $filetype);
-                    }
-                }
-
-                closedir($dir);
-            } else {
-                error_log('Could not create directory '.$base_work_dir.$upload_path.' to unzip files');
-            }
-            chdir($save_dir); // Back to previous dir position
+            // Fix relative links in html files
+            $extension = strrchr($state['stored_filename'], '.');
         }
+        if ($dir = @opendir($base_work_dir.$upload_path)) {
+            while ($file = readdir($dir)) {
+                if ($file != '.' && $file != '..') {
+                    $filetype = 'file';
+                    if (is_dir($base_work_dir.$upload_path.'/'.$file)) {
+                        $filetype = 'folder';
+                    }
+
+                    $safe_file = api_replace_dangerous_char($file);
+                    @rename($base_work_dir.$upload_path.'/'.$file, $base_work_dir.$upload_path.'/'.$safe_file);
+                    set_default_settings($upload_path, $safe_file, $filetype);
+                }
+            }
+
+            closedir($dir);
+        } else {
+            error_log('Could not create directory '.$base_work_dir.$upload_path.' to unzip files');
+        }
+        chdir($save_dir); // Back to previous dir position
     }
 
     return true;
@@ -1137,6 +1134,9 @@ function unzip_uploaded_document(
     $onlyUploadFile = false,
     $whatIfFileExists = 'overwrite'
 ) {
+    if (empty($courseInfo) || empty($userInfo) || empty($uploaded_file) || empty($uploadPath)) {
+        return false;
+    }
     $zip = new PclZip($uploaded_file['tmp_name']);
 
     // Check the zip content (real size and file extension)
@@ -1221,6 +1221,26 @@ function clean_up_files_in_zip($p_event, &$p_header)
     return 1;
 }
 
+function cleanZipFilesNoRename($p_event, &$p_header)
+{
+    $originalStoredFileName = $p_header['stored_filename'];
+    $baseName = basename($originalStoredFileName);
+    // Skip files
+    $skipFiles = [
+        '__MACOSX',
+        '.Thumbs.db',
+        'Thumbs.db',
+    ];
+
+    if (in_array($baseName, $skipFiles)) {
+        return 0;
+    }
+    $modifiedStoredFileName = clean_up_path($originalStoredFileName, false);
+    $p_header['filename'] = str_replace($originalStoredFileName, $modifiedStoredFileName, $p_header['filename']);
+
+    return 1;
+}
+
 /**
  * Allow .htaccess file.
  *
@@ -1260,13 +1280,14 @@ function cleanZipFilesAllowHtaccess($p_event, &$p_header)
  * by eliminating dangerous file names and cleaning them.
  *
  * @param string $path
+ * @param bool   $replaceName
  *
  * @return string
  *
  * @see disable_dangerous_file()
  * @see api_replace_dangerous_char()
  */
-function clean_up_path($path)
+function clean_up_path($path, $replaceName = true)
 {
     // Split the path in folders and files
     $path_array = explode('/', $path);
@@ -1274,7 +1295,10 @@ function clean_up_path($path)
     foreach ($path_array as $key => &$val) {
         // We don't want to lose the dots in ././folder/file (cfr. zipfile)
         if ($val != '.') {
-            $val = disable_dangerous_file(api_replace_dangerous_char($val));
+            if ($replaceName) {
+                $val = api_replace_dangerous_char($val);
+            }
+            $val = disable_dangerous_file($val);
         }
     }
     // Join the "cleaned" path (modified in-place as passed by reference)
@@ -1596,10 +1620,10 @@ function search_img_from_html($html_file)
         $buffer = fread($fp, $size_file);
         if (strlen($buffer) >= 0 && $buffer !== false) {
         } else {
-            die('<center>Can not read file.</center>');
+            exit('<center>Can not read file.</center>');
         }
     } else {
-        die('<center>Can not read file.</center>');
+        exit('<center>Can not read file.</center>');
     }
     $matches = [];
     if (preg_match_all('~<[[:space:]]*img[^>]*>~i', $buffer, $matches)) {
@@ -1707,7 +1731,7 @@ function create_unexisting_directory(
     }
 
     if (!is_dir($base_work_dir.$systemFolderName)) {
-        $result = mkdir(
+        $result = @mkdir(
             $base_work_dir.$systemFolderName,
             api_get_permissions_for_new_directories(),
             true

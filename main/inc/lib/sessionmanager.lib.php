@@ -315,16 +315,6 @@ class SessionManager
                     $sessionFieldValue = new ExtraFieldValue('session');
                     $sessionFieldValue->saveFieldValues($extraFields);
 
-                    /*
-                      Sends a message to the user_id = 1
-
-                      $user_info = api_get_user_info(1);
-                      $complete_name = $user_info['firstname'].' '.$user_info['lastname'];
-                      $subject = api_get_setting('siteName').' - '.get_lang('ANewSessionWasCreated');
-                      $message = get_lang('ANewSessionWasCreated')." <br /> ".get_lang('NameOfTheSession').' : '.$name;
-                      api_mail_html($complete_name, $user_info['email'], $subject, $message);
-                     *
-                     */
                     // Adding to the correct URL
                     UrlManager::add_session_to_url($session_id, $accessUrlId);
 
@@ -335,7 +325,7 @@ class SessionManager
                         LOG_SESSION_ID,
                         $session_id,
                         api_get_utc_datetime(),
-                        $user_id
+                        api_get_user_id()
                     );
                 }
 
@@ -3590,7 +3580,7 @@ class SessionManager
             }
 
             if (!empty($order)) {
-                $sql_query .= " ORDER BY $order $direction ";
+                $sql_query .= " ORDER BY `$order` $direction ";
             }
         }
 
@@ -3949,7 +3939,7 @@ class SessionManager
         // Inserting new sessions list.
         if (!empty($sessions_list) && is_array($sessions_list)) {
             foreach ($sessions_list as $session_id) {
-                $session_id = intval($session_id);
+                $session_id = (int) $session_id;
                 $sql = "SELECT session_id
                         FROM $tbl_session_rel_user
                         WHERE
@@ -4211,8 +4201,11 @@ class SessionManager
 
         if ($getCount) {
             $row = Database::fetch_array($result);
+            if ($row) {
+                return (int) $row['count'];
+            }
 
-            return $row['count'];
+            return 0;
         }
 
         $sessions = [];
@@ -4588,8 +4581,11 @@ class SessionManager
         $result = Database::query($sql);
         if ($getCount) {
             $count = Database::fetch_assoc($result);
+            if ($count) {
+                return (int) $count['count'];
+            }
 
-            return $count['count'];
+            return 0;
         }
 
         $return = [];
@@ -6546,7 +6542,7 @@ SQL;
 
         if (!empty($column) && !empty($direction)) {
             $column = str_replace('u.', '', $column);
-            $sql .= " ORDER BY $column $direction ";
+            $sql .= " ORDER BY `$column` $direction ";
         }
         $sql .= $limitCondition;
         $result = Database::query($sql);

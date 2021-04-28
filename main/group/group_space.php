@@ -5,8 +5,6 @@
  * This script shows the group space for one specific group, possibly displaying
  * a list of users in the group, subscribe or unsubscribe option, tutors...
  *
- * @package chamilo.group
- *
  * @todo    Display error message if no group ID specified
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -116,8 +114,6 @@ echo Display::page_header(
 if (!empty($current_group['description'])) {
     echo '<p>'.Security::remove_XSS($current_group['description']).'</p>';
 }
-
-//if (GroupManager::userHasAccessToBrowse($user_id, $this_group, $session_id)) {
 
 // If the user is subscribed to the group or the user is a tutor of the group then
 if (api_is_allowed_to_edit(false, true) ||
@@ -422,8 +418,10 @@ function get_number_of_group_users()
  */
 function get_group_user_data($from, $number_of_items, $column, $direction)
 {
+    $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
     $groupInfo = GroupManager::get_group_properties(api_get_group_id());
     $course_id = api_get_course_int_id();
+    $column = (int) $column;
 
     if (empty($groupInfo) || empty($course_id)) {
         return 0;

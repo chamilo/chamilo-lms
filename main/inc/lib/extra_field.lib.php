@@ -483,7 +483,8 @@ class ExtraField extends Model
      * @param FormValidator $form                            The form object to which to attach this element
      * @param int           $itemId                          The item (course, user, session, etc) this extra_field is linked to
      * @param array         $exclude                         Variables of extra field to exclude
-     * @param bool          $filter                          Whether to get only the fields with the "filter" flag set to 1 (true) or not (false)
+     * @param bool          $filter                          Whether to get only the fields with the "filter" flag set to 1 (true)
+     *                                                       or not (false)
      * @param bool          $useTagAsSelect                  Whether to show tag fields as select drop-down or not
      * @param array         $showOnlyTheseFields             Limit the extra fields shown to just the list given here
      * @param array         $orderFields                     An array containing the names of the fields shown, in the right order
@@ -2977,8 +2978,8 @@ JAVASCRIPT;
     {
         $skillTable = Database::get_main_table(TABLE_MAIN_SKILL);
         $tagRelExtraTable = Database::get_main_table(TABLE_MAIN_EXTRA_FIELD_REL_TAG);
-        $fieldId = intval($fieldId);
-        $tagId = intval($tagId);
+        $fieldId = (int) $fieldId;
+        $tagId = (int) $tagId;
 
         $sql = "SELECT s.id
                 FROM $skillTable s INNER JOIN $tagRelExtraTable t
@@ -3024,6 +3025,7 @@ JAVASCRIPT;
         $tagRelExtraTable = Database::get_main_table(TABLE_MAIN_EXTRA_FIELD_REL_TAG);
         $tagTable = Database::get_main_table(TABLE_MAIN_TAG);
         $optionsTable = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
+        $value = Database::escape_string(implode("','", $options));
 
         $sql = "SELECT DISTINCT t.*, v.value, o.display_text
                 FROM $tagRelExtraTable te 
@@ -3033,7 +3035,7 @@ JAVASCRIPT;
                 ON (te.item_id = v.item_id AND v.field_id = $id)
                 INNER JOIN $optionsTable o
                 ON (o.option_value = v.value)
-                WHERE v.value IN ('".implode("','", $options)."')                           
+                WHERE v.value IN ('".$value."')
                 ORDER BY o.option_order, t.tag
                ";
 

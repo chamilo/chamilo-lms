@@ -5461,12 +5461,26 @@ class Tracking
             // Course details
 
             // Show exercise results of invisible exercises? see BT#4091
-            $html .= self::generateQuizzesTable($course_info, $session_id);
-
+            $quizzesHtml = self::generateQuizzesTable($course_info, $session_id);
             // LP table results
-            $html .= self::generateLearningPathsTable($user_id, $course_info, $session_id);
+            $learningPathsHtml = self::generateLearningPathsTable($user_id, $course_info, $session_id);
+            $skillsHtml = self::displayUserSkills($user_id, $course_info['id'], $session_id);
 
-            $html .= self::displayUserSkills($user_id, $course_info['id'], $session_id);
+            $toolsHtml = [
+                'quizzes' => $quizzesHtml,
+                'learning_paths' => $learningPathsHtml,
+                'skills' => $skillsHtml,
+            ];
+
+            $toolsOrder = api_get_configuration_value('my_progress_course_tools_order');
+
+            if (empty($toolsOrder)) {
+                $html .= implode(PHP_EOL, $toolsHtml);
+            } else {
+                foreach ($toolsOrder['order'] as $tool) {
+                    $html .= $toolsHtml[$tool].PHP_EOL;
+                }
+            }
         }
 
         return $html;

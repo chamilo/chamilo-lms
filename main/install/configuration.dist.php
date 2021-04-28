@@ -399,6 +399,10 @@ INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, d
 (20, 13, 'invisible', 'Invisible', '', 0, 1, 0, 0, 0, NOW());
 */
 //$_configuration['student_follow_page_add_LP_invisible_checkbox'] = false;
+// Allow change the order to show the tools in "My progress" page.
+/*$_configuration['my_progress_course_tools_order'] = [
+    'order' => ['quizzes', 'learning_paths', 'skills'],
+];*/
 // Hide session link of course_block on index/userportal
 //$_configuration['remove_session_url']= false ;
 // Allow foldable block for session list in session category on My courses tab

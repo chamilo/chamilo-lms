@@ -158,7 +158,7 @@ switch ($action) {
                     $courseList = CourseManager::get_courses_list(
                         0,
                         0,
-                        1,
+                        'title',
                         'ASC',
                         -1,
                         $_GET['q'],

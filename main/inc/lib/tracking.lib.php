@@ -4965,11 +4965,11 @@ class Tracking
 
                     $detailsLink = '';
                     if ($filterByCourse) {
-                        $detailsLink .= '<a href="#course_session_header">';
+                        $detailsLink .= '<a href="#course_session_data">';
                         $detailsLink .= Display::return_icon('2rightarrow_na.png', get_lang('Details'));
                         $detailsLink .= '</a>';
                     } else {
-                        $detailsLink .= '<a href="'.api_get_self().'?course='.$course_code.$extra_params.'#course_session_header">';
+                        $detailsLink .= '<a href="'.api_get_self().'?course='.$course_code.$extra_params.'#course_session_data">';
                         $detailsLink .= Display::return_icon('2rightarrow.png', get_lang('Details'));
                         $detailsLink .= '</a>';
                     }

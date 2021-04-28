@@ -403,6 +403,8 @@ INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, d
 /*$_configuration['my_progress_course_tools_order'] = [
     'order' => ['quizzes', 'learning_paths', 'skills'],
 ];*/
+// Allow show all details of each course in session when clicking on session details
+//$_configuration['my_progress_session_show_all_courses'] = false;
 // Hide session link of course_block on index/userportal
 //$_configuration['remove_session_url']= false ;
 // Allow foldable block for session list in session category on My courses tab

@@ -5389,7 +5389,6 @@ class Tracking
                             $url
                         );
                     }
-                    $details .= '</a>';
 
                     $data = array_filter(
                         [

@@ -175,7 +175,7 @@ function generateHtmlForLearningPaths(User $student, array $courseInfo, int $ses
         }
 
         $lpList = new LearnpathList(
-            api_get_user_id(),
+            $student->getUserId(),
             $courseInfo,
             $sessionId,
             null,

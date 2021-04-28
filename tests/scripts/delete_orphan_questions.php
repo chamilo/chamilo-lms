@@ -19,7 +19,7 @@ foreach ($data as $row) {
     $courseInfo = api_get_course_info_by_id($row['c_id']);
     $question = Question::read($row['iid'], $courseInfo);
     if (empty($question->exerciseList)) {
-        $question->delete(1);
+        $question->delete();
     }
     echo 'Deleting question '.$counter.'/'.$totalQuestions.' -  #'.$row['iid'].
         ' - Course: '.$row['c_id'].' Title: '.$row['question'].PHP_EOL;

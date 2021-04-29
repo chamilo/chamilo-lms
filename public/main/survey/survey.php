@@ -266,14 +266,14 @@ echo '</thead>';
 
 // Displaying the table contents with all the questions
 $question_counter = 1;
-$sql = "SELECT * FROM $table_survey_question_group
+/*$sql = "SELECT * FROM $table_survey_question_group
         WHERE c_id = $course_id AND survey_id = $survey_id
         ORDER BY iid";
 $result = Database::query($sql);
 $groups = [];
 while ($row = Database::fetch_array($result)) {
     $groups[$row['id']] = $row['name'];
-}
+}*/
 $sql = "SELECT survey_question.*, count(survey_question_option.iid) as number_of_options
         FROM $table_survey_question survey_question
         LEFT JOIN $table_survey_question_option survey_question_option

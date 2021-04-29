@@ -2399,8 +2399,8 @@ class SurveyUtil
                 );
                 if (empty($invitationExists)) {
                     self::saveInvitation(
-                        null,
-                        null,
+                        '',
+                        '',
                         api_get_utc_datetime(time(), false, true),
                         $survey,
                         $course,

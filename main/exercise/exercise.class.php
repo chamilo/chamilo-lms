@@ -6827,7 +6827,7 @@ class Exercise
                 $lpItemId,
                 $lpItemViewId
             );
-            $message .= RemedialCoursePlugin::create()->getAdvacedCourseList($this, $userId, api_get_session_id());
+            $message .= RemedialCoursePlugin::create()->getAdvancedCourseList($this, $userId, api_get_session_id());
             if ($attemptCount >= $exerciseAttempts) {
                 $message .= $remedialCoursePlugin->getRemedialCourseList($this, $userId, api_get_session_id());
             }

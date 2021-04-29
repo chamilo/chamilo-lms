@@ -259,7 +259,7 @@ class RemedialCoursePlugin extends Plugin
      *
      * @return string|null
      */
-    public function getAdvacedCourseList(Exercise $objExercise, int $userId = 0, int $sessionId = 0): ?string
+    public function getAdvancedCourseList(Exercise $objExercise, int $userId = 0, int $sessionId = 0): ?string
     {
         if ('true' !== $this->get(self::SETTING_ENABLED)) {
             return null;

@@ -197,7 +197,7 @@ if ($visible_return['value'] == false) {
         $exercise_url_button = null;
     }
 }
-$advanceMessage = RemedialCoursePlugin::create()->getAdvacedCourseList(
+$advanceMessage = RemedialCoursePlugin::create()->getAdvancedCourseList(
     $objExercise,
     api_get_user_id(),
     api_get_session_id()

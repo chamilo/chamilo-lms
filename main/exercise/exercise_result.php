@@ -271,7 +271,7 @@ $hookQuizEnd = HookQuizEnd::create();
 $hookQuizEnd->setEventData(['exe_id' => $exeId]);
 $hookQuizEnd->notifyQuizEnd();
 
-$advanceCourseMessage = RemedialCoursePlugin::create()->getAdvacedCourseList(
+$advanceCourseMessage = RemedialCoursePlugin::create()->getAdvancedCourseList(
     $objExercise,
     api_get_user_id(),
     api_get_session_id()

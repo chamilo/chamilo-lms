@@ -278,7 +278,11 @@ if (null != $advanceCourseMessage) {
     );
 }
 
-$remedialMessage = $objExercise->remedialCourseList(api_get_user_id(), api_get_session_id());
+$remedialMessage = RemedialCoursePlugin::create()->getRemedialCourseList(
+    $objExercise,
+    api_get_user_id(),
+    api_get_session_id()
+);
 
 if (null != $remedialMessage) {
     Display::addFlash(

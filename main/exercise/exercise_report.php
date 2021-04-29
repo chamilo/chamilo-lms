@@ -160,7 +160,7 @@ if (isset($_REQUEST['comments']) &&
     if (empty($track_exercise_info)) {
         api_not_allowed();
     }
-    $student_id = $track_exercise_info['exe_user_id'];
+    $student_id = (int) $track_exercise_info['exe_user_id'];
     $session_id = $track_exercise_info['session_id'];
     $lp_id = $track_exercise_info['orig_lp_id'];
     $lpItemId = $track_exercise_info['orig_lp_item_id'];
@@ -266,7 +266,12 @@ if (isset($_REQUEST['comments']) &&
     Database::query($sql);
 
     // See BT#18165
-    $remedialMessage = $objExerciseTmp->remedialCourseList($student_id, api_get_session_id(), true);
+    $remedialMessage = RemedialCoursePlugin::create()->getRemedialCourseList(
+        $objExerciseTmp,
+        $student_id,
+        api_get_session_id(),
+        true
+    );
     if (null != $remedialMessage) {
         Display::addFlash(
             Display::return_message($remedialMessage, 'warning', false)

@@ -271,7 +271,11 @@ $hookQuizEnd = HookQuizEnd::create();
 $hookQuizEnd->setEventData(['exe_id' => $exeId]);
 $hookQuizEnd->notifyQuizEnd();
 
-$advanceCourseMessage = $objExercise->advancedCourseList(api_get_user_id(), api_get_session_id());
+$advanceCourseMessage = RemedialCoursePlugin::create()->getAdvacedCourseList(
+    $objExercise,
+    api_get_user_id(),
+    api_get_session_id()
+);
 if (null != $advanceCourseMessage) {
     Display::addFlash(
         Display::return_message($advanceCourseMessage, 'info', false)

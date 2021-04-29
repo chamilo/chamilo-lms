@@ -6827,7 +6827,7 @@ class Exercise
                 $lpItemId,
                 $lpItemViewId
             );
-            $message .= $this->advancedCourseList($userId, api_get_session_id());
+            $message .= RemedialCoursePlugin::create()->getAdvacedCourseList($this, $userId, api_get_session_id());
             if ($attemptCount >= $exerciseAttempts) {
                 $message .= $remedialCoursePlugin->getRemedialCourseList($this, $userId, api_get_session_id());
             }
@@ -10848,124 +10848,6 @@ class Exercise
                     });
                 </script>
                 ";
-    }
-
-    /**
-     * When a student takes an exam, and he gets an acceptable grade, he is enrolled in a series of courses that
-     * represent the next level BT#18165.
-     *
-     * @param int   $userId
-     * @param int   $sessionId
-     * @param array $attemps
-     */
-    public function advancedCourseList($userId = 0, $sessionId = 0)
-    {
-        $userId = (int) $userId;
-        $sessionId = (int) $sessionId;
-        $pluginRemedial = api_get_plugin_setting('remedial_course', 'enabled') === 'true';
-        if (!$pluginRemedial) {
-            return null;
-        }
-        $field = new ExtraField('exercise');
-        $advancedCourseField = $field->get_handler_field_info_by_field_variable('advancedcourselist');
-
-        if (false === $advancedCourseField) {
-            return null;
-        }
-        $userId = empty($userId) ? api_get_user_id() : (int) $userId;
-        $extraMessage = null;
-        $bestAttempt = Event::get_best_attempt_exercise_results_per_user(
-            $userId,
-            $this->id,
-            $this->course_id,
-            $sessionId
-        );
-        if (!isset($bestAttempt['exe_result'])) {
-            // In the case that the result is 0, get_best_attempt_exercise_results_per_user does not return data,
-            // for that this block is used
-            $exerciseStatInfo = Event::getExerciseResultsByUser(
-                $userId,
-                $this->id,
-                $this->course_id,
-                $sessionId
-            );
-            $bestAttempt['exe_result'] = 0;
-            foreach ($exerciseStatInfo as $attempt) {
-                if ($attempt['exe_result'] >= $bestAttempt['exe_result']) {
-                    $bestAttempt = $attempt;
-                }
-            }
-        }
-        if (
-            !isset($bestAttempt['exe_result'])
-            || !isset($bestAttempt['exe_id'])
-            || !isset($bestAttempt['exe_weighting'])
-        ) {
-            // No try, No exercise id, no defined total
-            return null;
-        }
-
-        $percentSuccess = $this->selectPassPercentage();
-        $pass = ExerciseLib::isPassPercentageAttemptPassed(
-            $this,
-            $bestAttempt['exe_result'],
-            $bestAttempt['exe_weighting']
-        );
-        if (0 == $percentSuccess && false == $pass) {
-            return null;
-        }
-        $canRemedial = false === $pass;
-        // Advance Course
-        $extraFieldValue = new ExtraFieldValue('exercise');
-        $advanceCourseExcerciseField = $extraFieldValue->get_values_by_handler_and_field_variable(
-            $this->iId,
-            'advancedcourselist'
-        );
-
-        if (false === $canRemedial && isset($advanceCourseExcerciseField['value'])) {
-            $coursesIds = explode(';', $advanceCourseExcerciseField['value']);
-            if ('' == $advanceCourseExcerciseField['value'] || count($coursesIds) == 0) {
-                return null;
-            }
-            $isInASession = (0 == $sessionId) ? false : true;
-            $courses = [];
-            foreach ($coursesIds as $course) {
-                $courseData = api_get_course_info_by_id($course);
-                if (!empty($courseData) && isset($courseData['real_id'])) {
-                    // if session is 0, always will be true
-                    $courseExistsInSession = true;
-                    if ($isInASession) {
-                        $courseExistsInSession = SessionManager::sessionHasCourse($sessionId, $courseData['code']);
-                    }
-                    if ($courseExistsInSession) {
-                        $isSubscribed = CourseManager::is_user_subscribed_in_course(
-                            $userId,
-                            $courseData['code'],
-                            $isInASession,
-                            $sessionId
-                        );
-
-                        if (!$isSubscribed) {
-                            CourseManager::subscribeUser(
-                                $userId,
-                                $courseData['code'],
-                                STUDENT,
-                                $sessionId
-                            );
-                        }
-                        $courses[] = $courseData['title'];
-                    }
-                }
-            }
-            if (0 != count($courses)) {
-                $extraMessage = sprintf(
-                    get_plugin_lang('SubscriptionToXAdvancedCourses', RemedialCoursePlugin::class),
-                    implode(' - ', $courses)
-                );
-            }
-        }
-
-        return $extraMessage;
     }
 
     /**

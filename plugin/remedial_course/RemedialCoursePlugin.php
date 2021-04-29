@@ -9,6 +9,7 @@ class RemedialCoursePlugin extends Plugin
 {
     const SETTING_ENABLED = 'enabled';
     const EXTRAFIELD_REMEDIAL_VARIABLE = 'remedialcourselist';
+    const EXTRAFIELD_ADVACED_VARIABLE = 'advancedcourselist';
 
     /**
      * RemedialCoursePlugin constructor.
@@ -74,11 +75,13 @@ class RemedialCoursePlugin extends Plugin
     public function saveAdvanceRemedialField()
     {
         $extraField = new ExtraField('exercise');
-        $advancedcourselist = $extraField->get_handler_field_info_by_field_variable('advancedcourselist');
+        $advancedcourselist = $extraField->get_handler_field_info_by_field_variable(
+            self::EXTRAFIELD_ADVACED_VARIABLE
+        );
         if (false === $advancedcourselist) {
             $extraField->save([
                 'field_type' => ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
-                'variable' => 'advancedcourselist',
+                'variable' => self::EXTRAFIELD_ADVACED_VARIABLE,
                 'display_text' => 'advancedCourseList',
                 'default_value' => 1,
                 'field_order' => 0,
@@ -233,5 +236,132 @@ class RemedialCoursePlugin extends Plugin
         }
 
         return sprintf($this->get_lang('SubscriptionToXRemedialCourses'), implode(' - ', $courses));
+    }
+
+    public function getAdvacedCourseList(Exercise $objExercise, int $userId = 0, int $sessionId = 0): ?string
+    {
+        if ('true' !== $this->get(self::SETTING_ENABLED)) {
+            return null;
+        }
+
+        $field = new ExtraField('exercise');
+        $advancedCourseField = $field->get_handler_field_info_by_field_variable(self::EXTRAFIELD_ADVACED_VARIABLE);
+
+        if (false === $advancedCourseField) {
+            return null;
+        }
+
+        $userId = empty($userId) ? api_get_user_id() : $userId;
+        $bestAttempt = Event::get_best_attempt_exercise_results_per_user(
+            $userId,
+            $objExercise->iId,
+            $objExercise->course_id,
+            $sessionId
+        );
+
+        if (!isset($bestAttempt['exe_result'])) {
+            // In the case that the result is 0, get_best_attempt_exercise_results_per_user does not return data,
+            // for that this block is used
+            $exerciseStatInfo = Event::getExerciseResultsByUser(
+                $userId,
+                $objExercise->iId,
+                $objExercise->course_id,
+                $sessionId
+            );
+            $bestAttempt['exe_result'] = 0;
+
+            foreach ($exerciseStatInfo as $attempt) {
+                if ($attempt['exe_result'] >= $bestAttempt['exe_result']) {
+                    $bestAttempt = $attempt;
+                }
+            }
+        }
+
+        if (
+            !isset($bestAttempt['exe_result'])
+            || !isset($bestAttempt['exe_id'])
+            || !isset($bestAttempt['exe_weighting'])
+        ) {
+            // No try, No exercise id, no defined total
+            return null;
+        }
+
+        $percentSuccess = $objExercise->selectPassPercentage();
+        $pass = ExerciseLib::isPassPercentageAttemptPassed(
+            $objExercise,
+            $bestAttempt['exe_result'],
+            $bestAttempt['exe_weighting']
+        );
+
+        if (0 == $percentSuccess && false == $pass) {
+            return null;
+        }
+
+        $canRemedial = false === $pass;
+        // Advance Course
+        $extraFieldValue = new ExtraFieldValue('exercise');
+        $advanceCourseExcerciseField = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $objExercise->iId,
+            self::EXTRAFIELD_ADVACED_VARIABLE
+        );
+
+        if ($canRemedial || !isset($advanceCourseExcerciseField['value'])) {
+            return null;
+        }
+
+        $coursesIds = explode(';', $advanceCourseExcerciseField['value']);
+
+        if (empty($advanceCourseExcerciseField['value']) || count($coursesIds) == 0) {
+            return null;
+        }
+
+        $isInASession = !empty($sessionId);
+        $courses = [];
+
+        foreach ($coursesIds as $course) {
+            $courseData = api_get_course_info_by_id($course);
+
+            if (empty($courseData) || !isset($courseData['real_id'])) {
+                continue;
+            }
+
+            // if session is 0, always will be true
+            $courseExistsInSession = true;
+
+            if ($isInASession) {
+                $courseExistsInSession = SessionManager::sessionHasCourse($sessionId, $courseData['code']);
+            }
+
+            if (!$courseExistsInSession) {
+                continue;
+            }
+
+            $isSubscribed = CourseManager::is_user_subscribed_in_course(
+                $userId,
+                $courseData['code'],
+                $isInASession,
+                $sessionId
+            );
+
+            if (!$isSubscribed) {
+                CourseManager::subscribeUser(
+                    $userId,
+                    $courseData['code'],
+                    STUDENT,
+                    $sessionId
+                );
+            }
+
+            $courses[] = $courseData['title'];
+        }
+
+        if (empty($courses)) {
+            return null;
+        }
+
+        return sprintf(
+            $this->get_lang('SubscriptionToXAdvancedCourses'),
+            implode(' - ', $courses)
+        );
     }
 }

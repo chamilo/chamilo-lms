@@ -105,6 +105,17 @@ class RemedialCoursePlugin extends Plugin
         return 'remedial_course';
     }
 
+    /**
+     * When a student completes the number of attempts and fails the exam, she is enrolled in a series of remedial
+     * courses BT#18165.
+     *
+     * @param Exercise $objExercise
+     * @param int      $userId
+     * @param int      $sessionId
+     * @param bool     $review
+     *
+     * @return string|null
+     */
     public function getRemedialCourseList(
         Exercise $objExercise,
         int $userId = 0,
@@ -238,6 +249,16 @@ class RemedialCoursePlugin extends Plugin
         return sprintf($this->get_lang('SubscriptionToXRemedialCourses'), implode(' - ', $courses));
     }
 
+    /**
+     * When a student takes an exam, and he gets an acceptable grade, he is enrolled in a series of courses that
+     * represent the next level BT#18165.
+     *
+     * @param Exercise $objExercise
+     * @param int      $userId
+     * @param int      $sessionId
+     *
+     * @return string|null
+     */
     public function getAdvacedCourseList(Exercise $objExercise, int $userId = 0, int $sessionId = 0): ?string
     {
         if ('true' !== $this->get(self::SETTING_ENABLED)) {

@@ -2,10 +2,19 @@ import fetch from '../utils/fetch';
 
 export default function makeService(endpoint) {
   return {
-    find(id) {
+    find(id, params) {
       console.log('api.js find');
+      if (params) {
+        params['getFile'] = true;
+      } else {
+        params = {getFile: true};
+      }
+
       console.log(id);
-      let options = {params: {getFile: true}};
+      console.log(params);
+
+      //let options = {params: {getFile: true}};
+      let options = {params: params};
       return fetch(`${id}`, options);
     },
     findAll(params) {

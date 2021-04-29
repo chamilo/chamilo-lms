@@ -31,7 +31,15 @@ export default {
             return getters.isAuthenticated && (getters.hasRole('ROLE_SUPER_ADMIN') || getters.hasRole('ROLE_ADMIN'));
         },
         isCurrentTeacher(state, getters) {
-            return getters.isAuthenticated && (getters.hasRole('ROLE_CURRENT_COURSE_TEACHER'));
+            if (!getters.isAuthenticated) {
+                return false;
+            }
+
+            if (getters.hasRole('ROLE_SUPER_ADMIN') || getters.hasRole('ROLE_ADMIN')) {
+                return true
+            }
+
+            return getters.hasRole('ROLE_CURRENT_COURSE_TEACHER');
         },
         getUser(state) {
             return state.user;

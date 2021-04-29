@@ -1,6 +1,8 @@
 import isEmpty from 'lodash/isEmpty';
 import isString from 'lodash/isString';
 import isBoolean from 'lodash/isBoolean';
+import toInteger from 'lodash/toInteger';
+
 import { formatDateTime } from '../utils/dates';
 import NotificationMixin from './NotificationMixin';
 
@@ -35,7 +37,15 @@ export default {
       this.resetList = true;
       let nodeId = this.$route.params['node'];
       if (!isEmpty(nodeId)) {
-        this.findResourceNode('/api/resource_nodes/'+ nodeId);
+        let cid = toInteger(this.$route.query.cid);
+        let sid = toInteger(this.$route.query.sid);
+        let gid = toInteger(this.$route.query.gid);
+        let id = '/api/resource_nodes/'+ nodeId;
+        const params = {id, cid, sid, gid};
+
+        console.log(params);
+
+        this.findResourceNode(params);
       }
       /*this.onRequest({
         pagination: this.pagination,
@@ -112,7 +122,8 @@ export default {
       console.log('onUpdateOptions');
       let params = {
         ...this.filters
-      };
+      }
+
       if (itemsPerPage > 0) {
         params = { ...params, itemsPerPage, page };
       }
@@ -125,6 +136,12 @@ export default {
       if (!isEmpty(sortBy)) {
         params[`order[${sortBy}]`] = sortDesc ? 'desc' : 'asc'
       }
+
+      let cid = toInteger(this.$route.query.cid);
+      let sid = toInteger(this.$route.query.sid);
+      let gid = toInteger(this.$route.query.gid);
+
+      params = { ...params, cid, sid, gid };
 
       // vuetify
       /*if (!isEmpty(sortBy) && !isEmpty(sortDesc)) {
@@ -198,15 +215,28 @@ export default {
     },
 
     showHandler(item) {
-      console.log('showHandler');
+      console.log('listmixin showHandler');
       let folderParams = this.$route.query;
+      console.log(folderParams, 'folderParams');
+      console.log(this.$route.params, 'params');
       if (item) {
         folderParams['id'] = item['@id'];
       }
 
+      /*let cid = toInteger(this.$route.query.cid);
+      let sid = toInteger(this.$route.query.sid);
+      let gid = toInteger(this.$route.query.gid);
+
+      folderParams['cid'] = cid;
+      folderParams['sid'] = sid;
+      folderParams['gid'] = gid;*/
+
+      console.log(folderParams);
+
       this.$router.push({
         name: `${this.$options.servicePrefix}Show`,
         //params: { id: item['@id'] },
+        //params: folderParams,
         query: folderParams
       });
     },

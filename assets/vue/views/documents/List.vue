@@ -91,7 +91,7 @@
 
   <Toolbar class="p-mb-4">
     <template #left>
-      <div class="flex flex-row gap-2">
+      <div v-if="isAuthenticated && isCurrentTeacher" class="flex flex-row gap-2" >
         <!--         <Button label="New" icon="pi pi-plus" class="p-button-primary p-button-sm p-mr-2" @click="openNew" />-->
         <Button label="New" icon="pi pi-plus" class="btn btn-primary" @click="openNew" />
 
@@ -183,18 +183,18 @@
       <template #body="slotProps">
         <div class="flex flex-row gap-2">
           <Button label="Show" class="p-button-sm p-button p-button-success p-mr-2" @click="showHandler(slotProps.data)" />
-          <Button label="Edit" icon="pi pi-pencil" class="p-button-sm p-button p-button-success p-mr-2" @click="editHandler(slotProps.data)" />
-          <Button label="Delete" icon="pi pi-trash" class="p-button-sm p-button p-button-danger" @click="confirmDeleteItem(slotProps.data)" />
+          <Button v-if="isAuthenticated && isCurrentTeacher" label="Edit" icon="pi pi-pencil" class="p-button-sm p-button p-button-success p-mr-2" @click="editHandler(slotProps.data)" />
+          <Button v-if="isAuthenticated && isCurrentTeacher" label="Delete" icon="pi pi-trash" class="p-button-sm p-button p-button-danger" @click="confirmDeleteItem(slotProps.data)" />
         </div>
       </template>
     </Column>
 
-    <template #paginatorLeft>
-      <Button type="button" icon="pi pi-refresh" class="p-button-text" />
-    </template>
-    <template #paginatorRight>
-      <Button type="button" icon="pi pi-cloud" class="p-button-text" />
-    </template>
+<!--    <template #paginatorLeft>-->
+<!--      <Button type="button" icon="pi pi-refresh" class="p-button-text" />-->
+<!--    </template>-->
+<!--    <template #paginatorRight>-->
+<!--      <Button type="button" icon="pi pi-cloud" class="p-button-text" />-->
+<!--    </template>-->
   </DataTable>
 
   <Dialog v-model:visible="itemDialog" :style="{width: '450px'}" :header="$t('New folder')" :modal="true" class="p-fluid">
@@ -361,10 +361,10 @@ export default {
   mounted() {
     console.log('mounted - vue/views/documents/List.vue');
     const route = useRoute()
-    let nodeId = route.params['node'];
+    /*let nodeId = route.params['node'];
     if (!isEmpty(nodeId)) {
       this.findResourceNode('/api/resource_nodes/' + nodeId);
-    }
+    }*/
     this.onUpdateOptions(this.options);
 
     /*this.onRequest({

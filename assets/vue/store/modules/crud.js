@@ -164,8 +164,15 @@ export default function makeCrudModule({
           })
           .catch(e => handleError(commit, e));
       },
-      load: ({ commit }, id, options = {}) => {
+      loadWithQuery: ({ commit }, params= {}) => {
         if (!service) throw new Error('No service specified!');
+
+        console.log('crud loadWithQuery');
+        const id = params['id'];
+        delete params['id'];
+
+        console.log(id, 'id');
+        console.log(commit, 'commit');
 
         if (isEmpty(id)) {
           throw new Error('Incorrect id');
@@ -173,7 +180,34 @@ export default function makeCrudModule({
 
         commit(ACTIONS.TOGGLE_LOADING);
         service
-          .find(id, options)
+            .find(id, params)
+            .then(response => {
+              if (response) {
+
+                commit(ACTIONS.TOGGLE_LOADING);
+
+                return response.json();
+              } else {
+                throw new Error(response.error);
+              }
+            })
+            .then(item => {
+              commit(ACTIONS.TOGGLE_LOADING);
+              commit(ACTIONS.ADD, normalizeRelations(item));
+            })
+            .catch(e => handleError(commit, e));
+      },
+      load: ({ commit }, id) => {
+        if (!service) throw new Error('No service specified!');
+        console.log('crud load');
+
+        if (isEmpty(id)) {
+          throw new Error('Incorrect id');
+        }
+
+        commit(ACTIONS.TOGGLE_LOADING);
+        service
+          .find(id)
           .then(response => {
             if (response) {
 
@@ -190,18 +224,22 @@ export default function makeCrudModule({
           })
           .catch(e => handleError(commit, e));
       },
-      findResourceNode: ({ commit }, id) => {
+      findResourceNode: ({ commit }, params) => {
+        const id = params['id'];
+        delete params['id'];
         console.log('findResourceNode');
         console.log(id);
+        console.log(params);
         if (!service) throw new Error('No service specified!');
 
         commit(ACTIONS.TOGGLE_LOADING);
+
         return service
-            .find(id)
+            .find(id, params)
             .then(response => response.json())
             .then(item => {
               commit(ACTIONS.TOGGLE_LOADING);
-              //commit(ACTIONS.ADD_RESOURCE_NODE, item);
+              commit(ACTIONS.ADD_RESOURCE_NODE, item);
 
               return item;
             })

@@ -39,7 +39,6 @@ export default {
     },
     {
       name: 'DocumentsShow',
-      //path: ':id',
       path: 'show',
       component: () => import('../views/documents/Show.vue')
     }

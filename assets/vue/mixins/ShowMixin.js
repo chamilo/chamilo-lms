@@ -2,6 +2,7 @@ import isEmpty from 'lodash/isEmpty';
 import NotificationMixin from './NotificationMixin';
 import { formatDateTime } from '../utils/dates';
 import {mapActions, mapGetters} from "vuex";
+import toInteger from "lodash/toInteger";
 
 export default {
   mixins: [NotificationMixin],
@@ -12,7 +13,14 @@ export default {
     if (isEmpty(id)) {
       id = this.$route.query.id;
     }
-    this.retrieve(decodeURIComponent(id));
+
+    let cid = toInteger(this.$route.query.cid);
+    let sid = toInteger(this.$route.query.sid);
+    let gid = toInteger(this.$route.query.gid);
+    id = decodeURIComponent(id);
+    const params = {id, cid, sid, gid};
+
+    this.retrieve(params);
     //this.retrieve(decodeURIComponent(this.$route.params.id));
   },
   computed: {
@@ -27,7 +35,7 @@ export default {
       let item = this.find(decodeURIComponent(id));
 
       if (isEmpty(item)) {
-        console.log('error item is emnpty');
+        console.log('error item is empty');
         let folderParams = this.$route.query;
         delete folderParams['id'];
         this.$router

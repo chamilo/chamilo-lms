@@ -149,7 +149,7 @@ export default {
     ...mapActions('documents', {
       deleteItem: 'del',
       reset: 'resetShow',
-      retrieve: 'load'
+      retrieve: 'loadWithQuery'
     }),
   }
 };

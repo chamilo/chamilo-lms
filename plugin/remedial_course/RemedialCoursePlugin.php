@@ -181,28 +181,23 @@ class RemedialCoursePlugin extends Plugin
             return null;
         }
 
-        $canRemedial = false;
+        $bestAttempt['exe_result'] = (int) $bestAttempt['exe_result'];
 
-        if (isset($bestAttempt['exe_result'])) {
-            $bestAttempt['exe_result'] = (int) $bestAttempt['exe_result'];
-            $canRemedial = $objExercise->isBlockedByPercentage($bestAttempt);
+        $isPassedPercentage = ExerciseLib::isPassPercentageAttemptPassed(
+            $objExercise,
+            $bestAttempt['exe_result'],
+            $bestAttempt['exe_weighting']
+        );
 
-            if (false == $canRemedial) {
-                $pass = ExerciseLib::isPassPercentageAttemptPassed(
-                    $objExercise,
-                    $bestAttempt['exe_result'],
-                    $bestAttempt['exe_weighting']
-                );
-                $canRemedial = !$pass;
-
-                if (false == $canRemedial) {
-                    return null;
-                }
-            }
+        if ($isPassedPercentage) {
+            return null;
         }
 
-        // Remedial course
-        if (!$canRemedial) {
+        $hasAttempts = count($exerciseStatInfo) < $objExercise->selectAttempts();
+
+        $doSubscriptionToRemedial = !$hasAttempts || $objExercise->isBlockedByPercentage($bestAttempt);
+
+        if (!$doSubscriptionToRemedial) {
             return null;
         }
 
@@ -233,13 +228,10 @@ class RemedialCoursePlugin extends Plugin
             }
         }
 
-        if (0 != count($courses)) {
-            return sprintf(
-                $this->get_lang('SubscriptionToXRemedialCourses'),
-                implode(' - ', $courses)
-            );
+        if (empty($courses)) {
+            return null;
         }
 
-        return null;
+        return sprintf($this->get_lang('SubscriptionToXRemedialCourses'), implode(' - ', $courses));
     }
 }

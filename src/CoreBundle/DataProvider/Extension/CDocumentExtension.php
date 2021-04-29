@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
 
 /**
- * CDocumentExtension is called when calling the api/documents.json
+ * CDocumentExtension is called when calling the api/documents.json.
  */
 final class CDocumentExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
 {
@@ -101,9 +101,9 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface //, 
         } else {
             $queryBuilder
                 ->andWhere('links.session = :session')
-                ->setParameter('session', $sessionId);
+                ->setParameter('session', $sessionId)
+            ;
         }
-
 
         /*$queryBuilder->
             andWhere('node.creator = :current_user')

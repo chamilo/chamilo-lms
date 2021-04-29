@@ -97,37 +97,37 @@ use Symfony\Component\Validator\Constraints as Assert;
  *             }
  *         },
  *         "get" = {
- *              "openapi_context" = {
- *                  "parameters" = {
- *                      {
- *                          "name" = "resourceNode.parent",
- *                          "in" = "query",
- *                          "required" = true,
- *                          "description" = "Resource node Parent",
- *                          "schema" = {
- *                              "type" = "integer"
- *                          }
- *                      },
- *                      {
- *                          "name" = "cid",
- *                          "in" = "query",
- *                          "required" = true,
- *                          "description" = "Course id",
- *                          "schema" = {
- *                              "type" = "integer"
- *                          }
- *                      },
- *                      {
- *                          "name" = "sid",
- *                          "in" = "query",
- *                          "required" = false,
- *                          "description" = "Session id",
- *                          "schema" = {
- *                              "type" = "integer"
- *                          }
- *                      }
- *                  }
- *               }
+ *             "openapi_context" = {
+ *                 "parameters" = {
+ *                     {
+ *                         "name" = "resourceNode.parent",
+ *                         "in" = "query",
+ *                         "required" = true,
+ *                         "description" = "Resource node Parent",
+ *                         "schema" = {
+ *                             "type" = "integer"
+ *                         }
+ *                     },
+ *                     {
+ *                         "name" = "cid",
+ *                         "in" = "query",
+ *                         "required" = true,
+ *                         "description" = "Course id",
+ *                         "schema" = {
+ *                             "type" = "integer"
+ *                         }
+ *                     },
+ *                     {
+ *                         "name" = "sid",
+ *                         "in" = "query",
+ *                         "required" = false,
+ *                         "description" = "Session id",
+ *                         "schema" = {
+ *                             "type" = "integer"
+ *                         }
+ *                     }
+ *                 }
+ *             }
  *         }
  *     },
  * )

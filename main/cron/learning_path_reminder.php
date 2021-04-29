@@ -191,6 +191,7 @@ function sendToArray(&$data, &$type, &$message, $lpId = 0)
 function getCurrentTimeSlot(int $currentHour, array $timeSlots = []): ?array
 {
     $index = array_search($currentHour, $timeSlots);
+    $yesterday = false;
 
     if (false === $index) {
         return null;
@@ -198,13 +199,18 @@ function getCurrentTimeSlot(int $currentHour, array $timeSlots = []): ?array
 
     if (0 === $index) {
         $index = count($timeSlots) - 1;
+        $yesterday = true;
     } else {
         $index--;
     }
 
     $startHour = $timeSlots[$index];
 
-    $startDate = api_get_utc_datetime(null, false, true)->modify("yesterday $startHour:00");
+    if ($yesterday) {
+        $startDate = api_get_utc_datetime(null, false, true)->modify("yesterday $startHour:00");
+    } else {
+        $startDate = api_get_utc_datetime(null, false, true)->modify("today $startHour:00");
+    }
     $endDate = api_get_utc_datetime(null, false, true)->modify("today $currentHour:00");
 
     return [$startDate, $endDate];

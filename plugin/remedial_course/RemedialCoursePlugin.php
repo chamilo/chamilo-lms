@@ -136,8 +136,7 @@ class RemedialCoursePlugin extends Plugin
             ANNOTATION,
         ];
 
-        $userId = empty($userId) ? api_get_user_id() : (int) $userId;
-        $sessionId = (int) $sessionId;
+        $userId = empty($userId) ? api_get_user_id() : $userId;
 
         $exerciseStatInfo = Event::getExerciseResultsByUser(
             $userId,
@@ -157,36 +156,28 @@ class RemedialCoursePlugin extends Plugin
                 $bestAttempt = $attempt;
             }
 
-            if (isset($attempt['question_list'])) {
-                foreach ($attempt['question_list'] as $questionId => $answer) {
-                    $question = Question::read($questionId, api_get_course_info_by_id($attempt['c_id']));
-                    $questionOpen = 0;
-                    $totalQuestionExcluded = count($questionExcluded);
+            if (!isset($attempt['question_list'])) {
+                continue;
+            }
 
-                    for ($i = 0; $i < $totalQuestionExcluded; $i++) {
-                        if ($question->type == (int) $questionExcluded[$i]) {
-                            $questionOpen = 1;
-                            break;
-                        }
-                    }
+            foreach ($attempt['question_list'] as $questionId => $answer) {
+                $question = Question::read($questionId, api_get_course_info_by_id($attempt['c_id']));
+                $questionOpen = in_array($question->type, $questionExcluded) && !$review;
 
-                    if ($review == true) {
-                        $questionOpen = 0;
-                    }
+                if (!$questionOpen) {
+                    continue;
+                }
 
-                    if (1 == $questionOpen) {
-                        $score = $attempt['exe_result'];
-                        $comments = Event::get_comments($objExercise->iId, $questionId);
+                $score = $attempt['exe_result'];
+                $comments = Event::get_comments($objExercise->iId, $questionId);
 
-                        if (empty($comments) || $score == 0) {
-                            return null;
-                        }
-                    }
+                if (empty($comments) || $score == 0) {
+                    return null;
                 }
             }
         }
 
-        if (count($bestAttempt) == 0) {
+        if (empty($bestAttempt)) {
             return null;
         }
 
@@ -202,7 +193,7 @@ class RemedialCoursePlugin extends Plugin
                     $bestAttempt['exe_result'],
                     $bestAttempt['exe_weighting']
                 );
-                $canRemedial = false === $pass;
+                $canRemedial = !$pass;
 
                 if (false == $canRemedial) {
                     return null;
@@ -218,24 +209,26 @@ class RemedialCoursePlugin extends Plugin
         $courses = [];
         $isInASession = !empty($sessionId);
 
-        foreach ($remedialCourseIds as $course) {
-            $courseData = api_get_course_info_by_id($course);
+        foreach ($remedialCourseIds as $courseId) {
+            $courseData = api_get_course_info_by_id($courseId);
 
-            if (!empty($courseData) && isset($courseData['real_id'])) {
-                if ($isInASession) {
-                    $courseExistsInSession = SessionManager::sessionHasCourse($sessionId, $courseData['code']);
+            if (empty($courseData)) {
+                continue;
+            }
 
-                    if ($courseExistsInSession) {
-                        SessionManager::subscribe_users_to_session_course([$userId], $sessionId, $courseData['code']);
-                        $courses[] = $courseData['title'];
-                    }
-                } else {
-                    $isSubscribed = CourseManager::is_user_subscribed_in_course($userId, $courseData['code']);
+            if ($isInASession) {
+                $courseExistsInSession = SessionManager::sessionHasCourse($sessionId, $courseData['code']);
 
-                    if (!$isSubscribed) {
-                        CourseManager::subscribeUser($userId, $courseData['code']);
-                        $courses[] = $courseData['title'];
-                    }
+                if ($courseExistsInSession) {
+                    SessionManager::subscribe_users_to_session_course([$userId], $sessionId, $courseData['code']);
+                    $courses[] = $courseData['title'];
+                }
+            } else {
+                $isSubscribed = CourseManager::is_user_subscribed_in_course($userId, $courseData['code']);
+
+                if (!$isSubscribed) {
+                    CourseManager::subscribeUser($userId, $courseData['code']);
+                    $courses[] = $courseData['title'];
                 }
             }
         }

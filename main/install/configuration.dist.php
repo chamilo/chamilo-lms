@@ -1511,6 +1511,9 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // ALTER TABLE session ADD COLUMN status INT DEFAULT 0;
 // $_configuration['allow_session_status'] = false;
 
+// Sets the sender id when using the script tests/scripts/disable_user_conditions.php
+// $_configuration['disable_user_conditions_sender_id'] = 0;
+
 // Set the default tab in the admin session list. Values: all, close, active, custom.
 //$_configuration['default_session_list_view'] = 'all';
 

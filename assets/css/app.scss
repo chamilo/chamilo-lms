@@ -150,8 +150,12 @@
     @apply text-yellow-700 bg-yellow-100;
   }
 
+  .alert-success {
+    @apply text-white bg-green-400;
+  }
+
   .alert-danger {
-    @apply text-white bg-red-600;
+    @apply text-white bg-red-500;
   }
 
   .tab_wrapper nav {
@@ -160,6 +164,10 @@
 
   .tab_wrapper nav a {
     @apply p-4;
+  }
+
+  #calendar .fc-toolbar-chunk {
+    @apply flex flex-row;
   }
 
   @import "scss/index.scss";

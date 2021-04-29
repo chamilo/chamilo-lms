@@ -50,7 +50,7 @@ abstract class AbstractResource
      *     targetEntity="Chamilo\CoreBundle\Entity\ResourceNode",
      *     cascade={"persist", "remove"},
      *     orphanRemoval=true
-     * )AbstractResource
+     * )
      * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
      */
     public ?ResourceNode $resourceNode = null;

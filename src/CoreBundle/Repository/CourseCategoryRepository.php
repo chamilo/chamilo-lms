@@ -133,7 +133,7 @@ class CourseCategoryRepository extends ServiceEntityRepository
         $em->flush();
     }
 
-    public function delete(CourseCategory $category)
+    public function delete(CourseCategory $category): void
     {
         $em = $this->getEntityManager();
         $em->remove($category);

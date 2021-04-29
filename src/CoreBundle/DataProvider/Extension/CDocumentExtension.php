@@ -12,15 +12,22 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
 
+/**
+ * CDocumentExtension is called when calling the api/documents.json
+ */
 final class CDocumentExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
 {
     private Security $security;
+    private RequestStack $requestStack;
 
-    public function __construct(Security $security)
+    public function __construct(Security $security, RequestStack $request)
     {
         $this->security = $security;
+        $this->requestStack = $request;
     }
 
     public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null): void
@@ -36,11 +43,33 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface //, 
 
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {
-        if (CDocument::class !== $resourceClass ||
-            $this->security->isGranted('ROLE_ADMIN') ||
-            null === $user = $this->security->getUser()
-        ) {
+        if (CDocument::class !== $resourceClass) {
             return;
+        }
+
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return;
+        }
+
+        if (null === $user = $this->security->getUser()) {
+            return;
+        }
+
+        $request = $this->requestStack->getCurrentRequest();
+
+        // Listing documents must contain the resource node parent (resourceNode.parent) and the course (cid)
+        // At least the cid so the CourseListener can be called.
+        $resourceParentId = $request->query->get('resourceNode_parent');
+        $courseId = $request->query->get('cid');
+        $sessionId = $request->query->get('sid');
+        $groupId = $request->query->get('gid');
+
+        if (empty($resourceParentId)) {
+            throw new AccessDeniedException('resourceNode.parent is required');
+        }
+
+        if (empty($courseId)) {
+            throw new AccessDeniedException('cid is required');
         }
 
         error_log('addWhere');
@@ -61,6 +90,20 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface //, 
             ->andWhere('links.visibility != :visibilityDraft')
             ->setParameter('visibilityDraft', ResourceLink::VISIBILITY_DRAFT)
         ;
+
+        $queryBuilder
+            ->andWhere('links.course = :course')
+            ->setParameter('course', $courseId)
+        ;
+
+        if (empty($sessionId)) {
+            $queryBuilder->andWhere('links.session IS NULL');
+        } else {
+            $queryBuilder
+                ->andWhere('links.session = :session')
+                ->setParameter('session', $sessionId);
+        }
+
 
         /*$queryBuilder->
             andWhere('node.creator = :current_user')

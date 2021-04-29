@@ -96,9 +96,44 @@ use Symfony\Component\Validator\Constraints as Assert;
  *                 }
  *             }
  *         },
- *         "get"
+ *         "get" = {
+ *              "openapi_context" = {
+ *                  "parameters" = {
+ *                      {
+ *                          "name" = "resourceNode.parent",
+ *                          "in" = "query",
+ *                          "required" = true,
+ *                          "description" = "Resource node Parent",
+ *                          "schema" = {
+ *                              "type" = "integer"
+ *                          }
+ *                      },
+ *                      {
+ *                          "name" = "cid",
+ *                          "in" = "query",
+ *                          "required" = true,
+ *                          "description" = "Course id",
+ *                          "schema" = {
+ *                              "type" = "integer"
+ *                          }
+ *                      },
+ *                      {
+ *                          "name" = "sid",
+ *                          "in" = "query",
+ *                          "required" = false,
+ *                          "description" = "Session id",
+ *                          "schema" = {
+ *                              "type" = "integer"
+ *                          }
+ *                      }
+ *                  }
+ *               }
+ *         }
  *     },
  * )
+ *
+ * //resourceNode.resourceLinks.course can be used but instead cid/sid/gid is used
+ *
  * @ApiFilter(SearchFilter::class, properties={"title": "partial", "resourceNode.parent": "exact"})
  * @ApiFilter(PropertyFilter::class)
  * @ApiFilter(
@@ -136,7 +171,7 @@ class CDocument extends AbstractResource implements ResourceInterface
 
     /**
      * @Assert\NotBlank
-     * @Groups({"document:read", "document:write"})
+     * @Groups({"document:read", "document:write", "document:browse"})
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
     protected string $title;

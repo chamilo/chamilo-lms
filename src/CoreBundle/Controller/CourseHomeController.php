@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Career;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CTool;
@@ -51,6 +52,9 @@ class CourseHomeController extends ToolBaseController
         if (null === $course) {
             throw $this->createAccessDeniedException();
         }
+
+        $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
+
         $session = $request->getSession();
 
         $js = '<script>'.api_get_language_translate_html().'</script>';
@@ -217,7 +221,6 @@ class CourseHomeController extends ToolBaseController
                 'Content-type' => 'application/json',
             ]
         );
-
         /*return $this->render(
             '@ChamiloCore/Course/home.html.twig',
             [

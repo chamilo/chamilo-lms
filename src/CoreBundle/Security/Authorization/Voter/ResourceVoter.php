@@ -7,7 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -61,11 +63,20 @@ class ResourceVoter extends Voter
             self::DELETE,
             self::EXPORT,
         ];
+
         //error_log('resource supports');
         // if the attribute isn't one we support, return false
         if (!in_array($attribute, $options, true)) {
             return false;
         }
+
+        // Course/CGroup/ are AbstractResource but it's checked with the CourseVoter
+        if ($subject instanceof Course ||
+            $subject instanceof CGroup
+        ) {
+            return false;
+        }
+
         // only vote on ResourceNode objects inside this voter
         return $subject instanceof AbstractResource;
     }

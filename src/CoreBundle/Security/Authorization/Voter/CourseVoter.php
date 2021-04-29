@@ -85,7 +85,7 @@ class CourseVoter extends Voter
                 }
 
                 // User should be instance of UserInterface.
-                if (!$user instanceof UserInterface) {
+                if (!($user instanceof UserInterface)) {
                     return false;
                 }
 

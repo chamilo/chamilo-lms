@@ -2260,6 +2260,14 @@ class UserManager
             $filename = $user_id.'_'.$filename;
         }
 
+        if (!file_exists($source_file)) {
+            return false;
+        }
+
+        $mimeContentType = mime_content_type($source_file);
+        if (false === strpos($mimeContentType, 'image')) {
+            return false;
+        }
         //Crop the image to adjust 1:1 ratio
         $image = new Image($source_file);
         $image->crop($cropParameters);

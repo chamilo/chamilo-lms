@@ -256,7 +256,7 @@ $hideCertificateExport = api_get_setting('hide_certificate_export_link');
 
 if (count($certificate_list) > 0 && $hideCertificateExport !== 'true') {
     if ($allowCustomCertificate) {
-        $actions = Display::url(
+        $actions .= Display::url(
             Display::return_icon('pdf.png', get_lang('ExportAllCertificatesToPDF'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_PLUGIN_PATH)
                 .'customcertificate/src/print_certificate.php?'.api_get_cidreq().'&'

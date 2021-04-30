@@ -150,7 +150,7 @@ class CourseManager
     public static function get_courses_list(
         $from = 0,
         $howmany = 0,
-        $orderby = 1,
+        $orderby = 'title',
         $orderdirection = 'ASC',
         $visibility = -1,
         $startwith = '',
@@ -160,8 +160,6 @@ class CourseManager
         $onlyThisCourseList = []
     ) {
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        //$tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        // @todo fix , course_category.code AS category_code
         $sql = "SELECT course.*, course.id as real_id
                 FROM $courseTable course  ";
 
@@ -170,7 +168,6 @@ class CourseManager
             $sql .= " INNER JOIN $table url ON (url.c_id = course.id) ";
         }
 
-        //$sql .= " LEFT JOIN $tblCourseCategory ON course.category_id = course_category.id ";
 
         $visibility = (int) $visibility;
 
@@ -228,26 +225,31 @@ class CourseManager
             }
         }
 
-        if (!empty($orderby)) {
-            $sql .= " ORDER BY ".Database::escape_string($orderby)." ";
+        if (empty($orderby)) {
+            $sql .= ' ORDER BY title ';
         } else {
-            $sql .= ' ORDER BY 1 ';
+            if (in_array($orderby, ['title'])) {
+                $sql .= " ORDER BY `".Database::escape_string($orderby)."` ";
+            } else {
+                $sql .= ' ORDER BY title ';
+            }
         }
 
+        $orderdirection = strtoupper($orderdirection);
         if (!in_array($orderdirection, ['ASC', 'DESC'])) {
             $sql .= 'ASC';
         } else {
-            $sql .= ('ASC' === $orderdirection ? 'ASC' : 'DESC');
+            $sql .= $orderdirection === 'ASC' ? 'ASC' : 'DESC';
         }
 
         if (!empty($howmany) && is_int($howmany) and $howmany > 0) {
-            $sql .= ' LIMIT '.Database::escape_string($howmany);
+            $sql .= ' LIMIT '.(int) $howmany;
         } else {
             $sql .= ' LIMIT 1000000'; //virtually no limit
         }
         if (!empty($from)) {
-            $from = (int) $from;
-            $sql .= ' OFFSET '.$from;
+            $from = intval($from);
+            $sql .= ' OFFSET '.intval($from);
         } else {
             $sql .= ' OFFSET 0';
         }

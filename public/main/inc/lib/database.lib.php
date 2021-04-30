@@ -617,7 +617,7 @@ class Database
 
                     if (!empty($order_array)) {
                         // 'order' => 'id desc, name desc'
-                        $order_array = self::escape_string($order_array, null, false);
+                        $order_array = self::escape_string($order_array);
                         $new_order_array = explode(',', $order_array);
                         $temp_value = [];
 
@@ -632,10 +632,10 @@ class Database
                                 if (in_array($element[1], ['desc', 'asc'])) {
                                     $order = $element[1];
                                 }
-                                $temp_value[] = $element[0].' '.$order.' ';
+                                $temp_value[] = ' `'.$element[0].'` '.$order.' ';
                             } else {
                                 //by default DESC
-                                $temp_value[] = $element[0].' DESC ';
+                                $temp_value[] = ' `'.$element[0].'` DESC ';
                             }
                         }
                         if (!empty($temp_value)) {

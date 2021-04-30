@@ -151,6 +151,7 @@ define('TOOL_ATTENDANCE', 'attendance');
 define('TOOL_COURSE_PROGRESS', 'course_progress');
 define('TOOL_PORTFOLIO', 'portfolio');
 define('TOOL_PLAGIARISM', 'compilatio');
+define('TOOL_XAPI', 'xapi');
 
 // CONSTANTS defining Chamilo interface sections
 define('SECTION_CAMPUS', 'mycampus');
@@ -388,6 +389,7 @@ define('LINK_FORUM_THREAD', 5);
 define('LINK_ATTENDANCE', 7);
 define('LINK_SURVEY', 8);
 define('LINK_HOTPOTATOES', 9);
+define('LINK_PORTFOLIO', 10);
 
 // Score display types constants
 define('SCORE_DIV', 1); // X / Y
@@ -527,6 +529,7 @@ define('ITEM_TYPE_STUDENT_PUBLICATION', 6);
 define('ITEM_TYPE_ATTENDANCE', 8);
 define('ITEM_TYPE_SURVEY', 9);
 define('ITEM_TYPE_FORUM_THREAD', 10);
+define('ITEM_TYPE_PORTFOLIO', 11);
 
 // Course description blocks.
 define('ADD_BLOCK', 8);
@@ -5099,11 +5102,12 @@ function api_get_access_urls($from = 0, $to = 1000000, $order = 'url', $directio
     $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
     $from = (int) $from;
     $to = (int) $to;
-    $order = Database::escape_string($order, null, false);
-    $direction = Database::escape_string($direction, null, false);
+    $order = Database::escape_string($order);
+    $direction = Database::escape_string($direction);
+    $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
     $sql = "SELECT id, url, description, active, created_by, tms
             FROM $table
-            ORDER BY $order $direction
+            ORDER BY `$order` $direction
             LIMIT $to OFFSET $from";
     $res = Database::query($sql);
 
@@ -5679,7 +5683,11 @@ function api_is_in_group($groupIdParam = null, $courseCodeParam = null)
  */
 function api_is_valid_secret_key($original_key_secret, $security_key)
 {
-    return $original_key_secret == sha1($security_key);
+    if (empty($original_key_secret) || empty($security_key)) {
+        return false;
+    }
+
+    return (string) $original_key_secret === sha1($security_key);
 }
 
 /**

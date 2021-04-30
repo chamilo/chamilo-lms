@@ -2435,9 +2435,7 @@ class Display
      */
     public static function getVCardUserLink($userId)
     {
-        $vCardUrl = api_get_path(WEB_PATH).'main/social/vcard_export.php?userId='.intval($userId);
-
-        return $vCardUrl;
+        return api_get_path(WEB_PATH).'main/social/vcard_export.php?userId='.intval($userId);
     }
 
     /**

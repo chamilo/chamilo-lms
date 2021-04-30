@@ -2154,9 +2154,10 @@ HOTSPOT;
         $column = !empty($column) ? Database::escape_string($column) : null;
         $from = (int) $from;
         $number_of_items = (int) $number_of_items;
+            $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
 
         if (!empty($column)) {
-            $sql .= " ORDER BY $column $direction ";
+            $sql .= " ORDER BY `$column` $direction ";
         }
 
         if (!$getOnyIds) {

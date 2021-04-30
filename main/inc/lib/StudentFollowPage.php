@@ -52,7 +52,11 @@ class StudentFollowPage
                 return '-';
             }
 
-            return "{$itemProperty->getInsertUser()->getCompleteName()}<br>"
+            $insertUser = $itemProperty->getInsertUser()->getIid() !== $studentId
+                ? $itemProperty->getInsertUser()->getCompleteName()
+                : '-';
+
+            return "$insertUser<br>"
                 .Display::tag(
                     'small',
                     api_convert_and_format_date($itemProperty->getInsertDate(), DATE_TIME_FORMAT_LONG)

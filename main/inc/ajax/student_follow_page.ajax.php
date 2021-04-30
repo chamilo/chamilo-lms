@@ -50,7 +50,7 @@ function displayForm(int $lpViewId)
     $options = [];
 
     foreach ($field['options'] as $option) {
-        $options[$option['option_value']] = $option['display_text'];
+        $options[$option['option_value']] = ExtraFieldOption::translateDisplayName($option['display_text']);
     }
 
     $frmId = 'frm_lp_acquisition_'.$lpView->getLpId();

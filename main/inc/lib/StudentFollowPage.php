@@ -113,7 +113,7 @@ class StudentFollowPage
 
                 $register = api_get_user_entity($valueComment['user']);
 
-                $return .= $optionSelected['display_text'].'<br>'
+                $return .= ExtraFieldOption::translateDisplayName($optionSelected['display_text']).'<br>'
                     .Display::tag('small', $register->getCompleteName()).'<br>'
                     .Display::tag(
                         'small',

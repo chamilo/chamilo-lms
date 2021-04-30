@@ -2,12 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class Model
+ * Class Model.
  * This class provides basic methods to implement a CRUD for a new table in the
  * database see examples in: career.lib.php and promotion.lib.php
  * Include/require it in your code to use its features.
- *
- * @package chamilo.library
  */
 class Model
 {
@@ -65,7 +63,7 @@ class Model
 
         // Database table definition
         $result = Database::delete($this->table, $params);
-        if ($result != 1) {
+        if (1 != $result) {
             return false;
         }
 

@@ -6,8 +6,6 @@ use Chamilo\CourseBundle\Entity\CForumPost;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com> UI Improvements + lots of bugfixes
- *
- * @package chamilo.forum
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_FORUM;
@@ -151,7 +149,7 @@ if (!empty($groupId)) {
     ];
 } else {
     $my_search = isset($_GET['search']) ? $_GET['search'] : '';
-    if ($origin != 'learnpath') {
+    if ($origin !== 'learnpath') {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&search='.Security::remove_XSS(
                     urlencode($my_search)
@@ -187,14 +185,14 @@ if (!api_is_allowed_to_edit(false, true) &&
 // this increases the number of times the thread has been viewed
 increase_thread_view($threadId);
 
-if ($origin == 'learnpath') {
+if ($origin === 'learnpath') {
     $template = new Template('', false, false, true, true, false);
 } else {
     $template = new Template();
 }
 
 $actions = '<span style="float:right;">'.search_link().'</span>';
-if ($origin != 'learnpath') {
+if ($origin !== 'learnpath') {
     $actions .= '<a href="'.$forumUrl.'viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'">'
         .Display::return_icon('back.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM).'</a>';
 }
@@ -307,7 +305,7 @@ foreach ($posts as $post) {
     }
 
     $post['user_data'] = '';
-    if ($origin != 'learnpath') {
+    if ($origin !== 'learnpath') {
         if ($allowUserImageForum) {
             $post['user_data'] = '<div class="thumbnail">'.
                 display_user_image($posterId, $name, $origin).'</div>';
@@ -338,7 +336,7 @@ foreach ($posts as $post) {
         );
     }
 
-    if ($origin != 'learnpath') {
+    if ($origin !== 'learnpath') {
         $post['user_data'] .= Display::tag(
             'p',
             Display::dateToStringAgoAndLongDate($post['post_date']),
@@ -685,10 +683,17 @@ if ($current_forum['forum_of_group'] != 0) {
 }
 
 if ($showForm) {
+    $values = [
+        'post_title' => Security::remove_XSS($current_thread['thread_title']),
+        'post_text' => '',
+        'post_notification' => '',
+        'thread_sticky' => '',
+        'thread_peer_qualify' => '',
+    ];
     $form = show_add_post_form(
         $current_forum,
         'replythread',
-        null,
+        $values,
         false
     );
     $formToString = $form->returnForm();

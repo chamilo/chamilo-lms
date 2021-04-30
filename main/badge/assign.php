@@ -8,8 +8,6 @@ use Skill as SkillManager;
  * Page for assign skills to a user.
  *
  * @author: Jose Loguercio <jose.loguercio@beeznest.com>
- *
- * @package chamilo.badge
  */
 require_once __DIR__.'/../inc/global.inc.php';
 

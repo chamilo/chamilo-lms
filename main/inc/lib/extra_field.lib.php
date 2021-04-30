@@ -604,14 +604,14 @@ class ExtraField extends Model
         $fields = $this->get_all();
         $field_values = new ExtraFieldValue($this->type);
 
-        if (!empty($fields) > 0) {
+        if (!empty($fields)) {
             foreach ($fields as $field) {
                 $field_value = $field_values->get_values_by_handler_and_field_id(
                     $itemId,
                     $field['id']
                 );
 
-                if ($field['field_type'] == self::FIELD_TYPE_TAG) {
+                if (self::FIELD_TYPE_TAG == $field['field_type']) {
                     $tags = UserManager::get_user_tags_to_string(
                         $itemId,
                         $field['id'],

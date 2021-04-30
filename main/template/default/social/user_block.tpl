@@ -98,27 +98,31 @@
                             {% set linkedin_url = '' %}
                             {% for extra in user.extra %}
                                 {% if extra.value.getField().getVariable() == 'skype' %}
-                                    {% set skype_account = extra.value.getValue() %}
+                                    {% set skype_account %}
+                                    <a href="skype:{{ extra.value.getValue() }}?chat">
+                                        <span class="fa fa-skype fa-fw" aria-hidden="true"></span> {{ 'Skype'|get_lang }}
+                                    </a>
+                                    {% endset %}
                                 {% endif %}
 
                                 {% if extra.value.getField().getVariable() == 'linkedin_url' %}
-                                    {% set linkedin_url = extra.value.getValue() %}
+                                    {% set linkedin_url %}
+                                        <a href="{{ extra.value.getValue() }}" target="_blank">
+                                            <span class="fa fa-linkedin fa-fw" aria-hidden="true"></span> {{ 'LinkedIn'|get_lang }}
+                                        </a>
+                                    {% endset %}
                                 {% endif %}
                             {% endfor %}
 
                             {% if 'allow_show_skype_account'|api_get_setting == 'true' and not skype_account is empty %}
                                 <li class="item">
-                                    <a href="skype:{{ skype_account }}?chat">
-                                        <span class="fa fa-skype fa-fw" aria-hidden="true"></span> {{ 'Skype'|get_lang }}
-                                    </a>
+                                    {{ skype_account | remove_xss}}
                                 </li>
                             {% endif %}
 
                             {% if 'allow_show_linkedin_url'|api_get_setting == 'true' and not linkedin_url is empty %}
                                 <li class="item">
-                                    <a href="{{ linkedin_url }}" target="_blank">
-                                        <span class="fa fa-linkedin fa-fw" aria-hidden="true"></span> {{ 'LinkedIn'|get_lang }}
-                                    </a>
+                                    {{ linkedin_url | remove_xss}}
                                 </li>
                             {% endif %}
                         {% endif %}
@@ -140,7 +144,7 @@
                                 {% for item in extra_info %}
                                     {% if item.variable != 'langue_cible' %}
                                     <dt>{{ item.label }}:</dt>
-                                    <dd>{{ item.value }}</dd>
+                            <dd>{{ item.value | remove_xss }}</dd>
                                     {% endif %}
                                 {% endfor %}
                             </dl>

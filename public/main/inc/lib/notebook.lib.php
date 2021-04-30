@@ -216,7 +216,7 @@ class NotebookManager
 
         // Database table definition
         $table = Database::get_course_table(TABLE_NOTEBOOK);
-        $order_by = ' ORDER BY '.$notebookView." $sort_direction ";
+        $order_by = " ORDER BY `$notebookView` $sort_direction ";
 
         // Condition for the session
         $condition_session = api_get_session_condition($sessionId);

@@ -2163,8 +2163,8 @@ class UserManager
             $field_filter = (int) $field_filter;
             $sqlf .= " AND filter = $field_filter ";
         }
-        $sqlf .= " ORDER BY ".$columns[$column]." $sort_direction ";
-        if (0 != $number_of_items) {
+        $sqlf .= " ORDER BY `".$columns[$column]."` $sort_direction ";
+        if ($number_of_items != 0) {
             $sqlf .= " LIMIT ".intval($from).','.intval($number_of_items);
         }
         $resf = Database::query($sqlf);
@@ -4650,7 +4650,7 @@ class UserManager
             if (!empty($column) && !empty($direction)) {
                 // Fixing order due the UNIONs
                 $column = str_replace('u.', '', $column);
-                $orderBy = " ORDER BY $column $direction ";
+                $orderBy = " ORDER BY `$column` $direction ";
             }
         }
 

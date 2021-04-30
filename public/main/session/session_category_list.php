@@ -84,7 +84,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
                 ) as nbr_session
 	 			FROM $tbl_session_category sc
 	 			$where
-	 			ORDER BY $sort $order
+	 			ORDER BY `$sort` $order
 	 			LIMIT $from,".($limit + 1);
 
     $query_rows = "SELECT count(*) as total_rows

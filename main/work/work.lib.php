@@ -1783,7 +1783,7 @@ function get_work_user_list(
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
 
-    $session_id = $sessionId ? $sessionId : api_get_session_id();
+    $session_id = $sessionId ? (int) $sessionId : api_get_session_id();
     $group_id = api_get_group_id();
     $course_info = api_get_course_info();
     $course_info = empty($course_info) ? api_get_course_info_by_id($courseId) : $course_info;
@@ -2122,7 +2122,6 @@ function get_work_user_list(
                         $('#file_upload_".$item_id."').fileupload({
                             add: function (e, data) {
                                 $('#progress_$item_id').html();
-                                //$('#file_$item_id').remove();
                                 data.context = $('#progress_$item_id').html('$loadingText <br /> <em class=\"fa fa-spinner fa-pulse fa-fw\"></em>');
                                 data.submit();
                                 $(this).removeClass('hover');
@@ -2440,6 +2439,7 @@ function is_work_exist_by_url($url)
  */
 function user_is_author($itemId, $userId = null, $courseId = 0, $sessionId = 0)
 {
+    $userId = (int) $userId;
     if (empty($itemId)) {
         return false;
     }
@@ -2503,7 +2503,7 @@ function get_list_users_without_publication($task_id, $studentId = 0)
     // Condition for the session
     $session_id = api_get_session_id();
     $course_id = api_get_course_int_id();
-    $task_id = intval($task_id);
+    $task_id = (int) $task_id;
     $sessionCondition = api_get_session_condition($session_id);
 
     if ($session_id == 0) {
@@ -2541,7 +2541,7 @@ function get_list_users_without_publication($task_id, $studentId = 0)
     }
 
     if (!empty($studentId)) {
-        $sql_users .= " AND u.user_id = ".intval($studentId);
+        $sql_users .= ' AND u.user_id = '.(int) $studentId;
     }
 
     $group_id = api_get_group_id();
@@ -2616,7 +2616,7 @@ function display_list_users_without_publication($task_id, $studentId = null)
         $my_params['list'] = Security::remove_XSS($_GET['list']);
     }
     $my_params['origin'] = $origin;
-    $my_params['id'] = intval($_GET['id']);
+    $my_params['id'] = (int) ($_GET['id']);
 
     //$column_show
     $column_show[] = 1;

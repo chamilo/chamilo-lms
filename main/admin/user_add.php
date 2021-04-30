@@ -16,7 +16,7 @@ api_protect_limit_for_session_admin();
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 
 $message = null;
-$htmlHeadXtra[] = api_get_password_checker_js('#username', '#password');
+$htmlHeadXtra[] = api_get_password_checker_js('#username', '#add-user__input-password');
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $htmlHeadXtra[] = '
@@ -54,16 +54,6 @@ function updateStatus(){
         if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="none";
     }
-}
-function ShowHidePassword() {
-
-        if ($(\'#showPassword\').prop(\'checked\')) {
-            $(\'#password\').attr(\'type\',\'text\');
-            $(\'.showPasswordEye\').removeClass(\'fa-eye\').addClass(\'fa-eye-slash\');
-        } else {
-            $(\'#password\').attr(\'type\',\'password\');
-            $(\'.showPasswordEye\').addClass(\'fa-eye\').removeClass(\'fa-eye-slash\');
-        }
 }
 </script>';
 
@@ -219,22 +209,12 @@ $group[] = $form->createElement(
         'id' => 'password',
         'autocomplete' => 'new-password',
         'onkeydown' => 'javascript: password_switch_radio_button();',
+        'show_hide' => true,
         //'required' => 'required'
     ]
 );
 
 $form->addGroup($group, 'password', get_lang('Password'));
-$form->addElement(
-    'checkbox',
-    'showPassword',
-    get_lang('ShowOrHide')." ".get_lang('Password')." ".
-    Display::returnFontAwesomeIcon('eye', null, true, 'showPasswordEye'),
-    '',
-    [
-        'id' => 'showPassword',
-        'onchange' => 'javascript: ShowHidePassword();',
-    ]
-);
 $form->addPasswordRule('password', 'password');
 $form->addGroupRule('password', get_lang('EnterPassword'), 'required', null, 1);
 

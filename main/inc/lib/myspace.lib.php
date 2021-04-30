@@ -1617,12 +1617,13 @@ class MySpace
                 $endDate,
                 $whereInLp
             );
-            $registeredUsers = self::getCompanyLearnpathSubscription(
+            $registeredUsersInCourse = self::getUserSubscribedInCourseByDateAndLp($startDate, $endDate, $whereInLp);
+            $registeredUsersInLp = self::getCompanyLearnpathSubscription(
                 $startDate,
                 $endDate,
                 $whereInLp
             );
-            $registeredUsersGroups = self::getCompanyLearnpathSubscription(
+            $registeredGroupsInLp = self::getCompanyLearnpathSubscription(
                 $startDate,
                 $endDate,
                 $whereInLp,
@@ -1634,9 +1635,10 @@ class MySpace
                 $lpItemId = $lpItem['lp_item_id'];
                 $author = str_replace(';', ',', $lpItem['author']);
                 $tempArrayAuthor = explode(',', $author);
-                $byCourse = isset($registeredUsers[$lpItemId]) ? $registeredUsers[$lpItemId] : [];
-                $byCourseGroups = isset($registeredUsersGroups[$lpItemId]) ? $registeredUsersGroups[$lpItemId] : [];
-                $bySession = isset($registeredUsersBySession[$lpItemId]) ? $registeredUsersBySession[$lpItemId] : [];
+                $byCourse = $registeredUsersInLp[$lpItemId] ?? [];
+                $byCourseGroups = $registeredGroupsInLp[$lpItemId] ?? [];
+                $bySession = $registeredUsersBySession[$lpItemId] ?? [];
+                $byUserInCourse = $registeredUsersInCourse[$lpItemId] ?? [];
                 if (is_array($tempArrayAuthor)) {
                     $totalAuthors = count($tempArrayAuthor);
                     for ($j = 0; $j < $totalAuthors; $j++) {
@@ -1648,6 +1650,7 @@ class MySpace
                             'courseGroups' => $byCourseGroups,
                             'session' => $bySession,
                             'lp_item' => $lpItem,
+                            'course_user' => $byUserInCourse,
                         ];
                     }
                 } else {
@@ -1659,6 +1662,7 @@ class MySpace
                         'courseGroups' => $byCourseGroups,
                         'session' => $bySession,
                         'lp_item' => $lpItem,
+                        'course_user' => $byUserInCourse,
                     ];
                 }
             }
@@ -1695,6 +1699,7 @@ class MySpace
                         $byCourse = $lpItem['course'];
                         $byCourseGroups = $lpItem['courseGroups'];
                         $bySession = $lpItem['session'];
+                        $byUserInCourse = $lpItem['course_user'];
                         $hide = "class='author_$authorId hidden' ";
                         $tableTemp = '';
                         if ($lastAuthor != $authorTemp) {
@@ -1706,12 +1711,15 @@ class MySpace
                         $studentRegister = count($byCourse);
                         $studentGroupsRegister = count($byCourseGroups);
                         $studentRegisterBySession = count($bySession);
+                        $usersInCourseCount = count($byUserInCourse);
 
                         $hiddenField = 'student_show_'.$index;
                         $hiddenFieldLink = 'student_show_'.$index.'_';
                         if (0 != $studentRegister ||
                             0 != $studentRegisterBySession ||
-                            0 != $studentGroupsRegister) {
+                            0 != $studentGroupsRegister ||
+                            0 != $usersInCourseCount
+                        ) {
                             $tableTemp .= "<td>
                                 <a href='#!' id='$hiddenFieldLink' onclick='showHideStudent(\"$hiddenField\")'>
                                 <div class='icon_add'>$iconAdd</div>
@@ -1725,6 +1733,8 @@ class MySpace
                             $studentProcessed = self::getStudentDataToReportByLpItem($byCourseGroups, $studentProcessed, 'class');
                             /* Student by sessions*/
                             $studentProcessed = self::getStudentDataToReportByLpItem($bySession, $studentProcessed);
+                            // Students in course*/
+                            $studentProcessed = self::getStudentDataToReportByLpItem($byUserInCourse, $studentProcessed);
                             $index++;
                             foreach ($studentProcessed as $lpItemId => $item) {
                                 foreach ($item as $type => $student) {
@@ -1839,6 +1849,8 @@ class MySpace
                     $byCourse = $lpItem['course'];
                     $bySession = $lpItem['session'];
                     $byCourseGroups = $lpItem['courseGroups'];
+                    $byUserInCourse = $lpItem['course_user'];
+
                     $csv_row = [];
                     $csv_row[] = $authorTemp['complete_name'];
                     $csv_row[] = $title;
@@ -1859,6 +1871,8 @@ class MySpace
                         $studentProcessed = self::getStudentDataToReportByLpItem($byCourseGroups, $studentProcessed, 'class', true);
                         /* Student by sessions*/
                         $studentProcessed = self::getStudentDataToReportByLpItem($bySession, $studentProcessed, '', true);
+                        // Students in course*/
+                        $studentProcessed = self::getStudentDataToReportByLpItem($byUserInCourse, $studentProcessed, '', true);
 
                         $index++;
                         foreach ($studentProcessed as $lpItemId => $item) {
@@ -1968,6 +1982,77 @@ class MySpace
         foreach ($dataTrack as $item) {
             $item['complete_name'] = api_get_person_name($item['firstname'], $item['lastname']);
             $item['company'] = self::getCompanyOfUser($item['id']);
+            $data[$item['lp_item_id']][] = $item;
+        }
+
+        return $data;
+    }
+
+    public static function getUserSubscribedInCourseByDateAndLp(
+        $startDate = null,
+        $endDate = null,
+        $whereInLp = null
+    ): array {
+        $whereInLp = Database::escape_string($whereInLp);
+        $tblTrackDefault = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+        $tblCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $tblLp = Database::get_course_table(TABLE_LP_MAIN);
+        $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tblAccessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $accessUrlFilter = '';
+
+        if (api_is_multiple_url_enabled()) {
+            $urlId = api_get_current_access_url_id();
+            $accessUrlFilter = " INNER JOIN $tblAccessUrlUser auru
+                ON (u.id = auru.user_id AND auru.access_url_id = $urlId)";
+        }
+
+        $startDate = !empty($startDate) ? new DateTime($startDate) : new DateTime();
+        $endDate = !empty($endDate) ? new DateTime($endDate) : new DateTime();
+
+        $startDate = api_get_utc_datetime($startDate->setTime(0, 0)->format('Y-m-d H:i:s'));
+        $endDate = api_get_utc_datetime($endDate->setTime(0, 0)->format('Y-m-d H:i:s'));
+
+        $extra = '';
+
+        if (!empty($whereInLp)) {
+            $extra = " AND lpi.lp_id in ($whereInLp) ";
+        }
+
+        $sql = "SELECT DISTINCT
+                lp.iid AS lp,
+                lpi.iid AS lp_item,
+                lpi.iid AS lp_item_id,
+                u.id AS id,
+                u.username AS username,
+                td.default_date AS default_date,
+                td.default_event_type AS type,
+                u.firstname as firstname,
+                u.lastname as lastname
+            FROM $tblTrackDefault AS td
+            INNER JOIN $tblCourseRelUser AS cru ON td.c_id = cru.c_id
+            INNER JOIN $tblLp AS lp ON lp.c_id = cru.c_id
+            INNER JOIN $tblLpItem AS lpi
+                ON (lpi.c_id = cru.c_id AND lp.id = lpi.lp_id AND lpi.c_id = lp.c_id)
+            INNER JOIN $tblUser AS u ON u.id = cru.user_id
+            $accessUrlFilter
+            WHERE
+                td.default_event_type = '".LOG_SUBSCRIBE_USER_TO_COURSE."'
+                AND td.default_date >= '$startDate'
+                AND td.default_date <= '$endDate'
+                AND td.default_value LIKE CONCAT('%s:2:\\\\\\\\\\\"id\\\\\\\\\";i:', cru.user_id, ';%')
+                $extra
+            ORDER BY u.id";
+
+        $result = Database::query($sql);
+
+        $data = [];
+
+        while ($item = Database::fetch_assoc($result)) {
+            $item['complete_name'] = api_get_person_name($item['firstname'], $item['lastname']);
+            $item['company'] = self::getCompanyOfUser($item['id']);
+
             $data[$item['lp_item_id']][] = $item;
         }
 
@@ -4389,7 +4474,7 @@ class MySpace
         if (!empty($endDate)) {
             $endDate = new DateTime($endDate);
         }
-        if (!empty($startDate) and !empty($endDate)) {
+        if (!empty($startDate) && !empty($endDate)) {
             if ($startDate > $endDate) {
                 $dateTemp = $endDate;
                 $endDate = $startDate;

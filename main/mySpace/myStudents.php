@@ -6,16 +6,23 @@ use Chamilo\CourseBundle\Entity\CLpCategory;
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../inc/global.inc.php';
+require_once '../work/work.lib.php';
 
 api_block_anonymous_users();
 
-$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH)
+    .'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
 
 $export = isset($_GET['export']) ? $_GET['export'] : false;
 $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
+$action = isset($_GET['action']) ? $_GET['action'] : '';
 $origin = api_get_origin();
 $course_code = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : '';
 $courseInfo = api_get_course_info($course_code);
+$courseCode = '';
+if ($courseInfo) {
+    $courseCode = $courseInfo['code'];
+}
 $student_id = isset($_GET['student']) ? (int) $_GET['student'] : 0;
 $coachId = isset($_GET['id_coach']) ? (int) $_GET['id_coach'] : 0;
 $details = isset($_GET['details']) ? Security::remove_XSS($_GET['details']) : '';
@@ -850,6 +857,25 @@ $userGroups = $userGroupManager->getNameListByUser(
     $user_info['user_id'],
     UserGroup::NORMAL_CLASS
 );
+
+$userInfo = [
+    'id' => $student_id,
+    'complete_name' => $user_info['complete_name'],
+    'complete_name_link' => $user_info['complete_name_with_message_link'],
+    'phone' => $user_info['phone'],
+    'code' => $user_info['official_code'],
+    'username' => $user_info['username'],
+    'registration_date' => $user_info['registration_date'],
+    'email' => $user_info['email'],
+    'has_certificates' => $user_info['has_certificates'],
+    'last_login' => $user_info['last_login'],
+    'profile_url' => $user_info['profile_url'],
+    'groups' => $userGroupManager,
+    'avatar' => $userPicture,
+    'online' => $online,
+];
+
+
 ?>
     <div class="row">
         <div class="col-sm-2">

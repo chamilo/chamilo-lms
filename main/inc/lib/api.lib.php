@@ -8487,8 +8487,19 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
     $(function() {
         var lang = ".json_encode($translations).";
         var options = {
-            onLoad : function () {
-                //$('#messages').text('Start typing password');
+            common: {
+                onLoad: function () {
+                    //$('#messages').text('Start typing password');
+
+                    var inputGroup = $('".$passwordInputId."').parents('.input-group');
+
+                    if (inputGroup.length > 0) {
+                        inputGroup.find('.progress').insertAfter(inputGroup);
+                    }
+                }
+            },
+            ui: {
+                showVerdictsInsideProgressBar: true
             },
             onKeyUp: function (evt) {
                 $(evt.target).pwstrength('outputErrorList');

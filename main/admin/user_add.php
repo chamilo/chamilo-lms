@@ -16,7 +16,7 @@ api_protect_limit_for_session_admin();
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 
 $message = null;
-$htmlHeadXtra[] = api_get_password_checker_js('#username', '#add-user__input-password');
+$htmlHeadXtra[] = api_get_password_checker_js('#username', '#password');
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $htmlHeadXtra[] = '

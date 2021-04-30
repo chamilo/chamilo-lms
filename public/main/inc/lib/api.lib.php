@@ -7358,7 +7358,7 @@ function api_get_protocol()
  */
 function api_get_origin()
 {
-    return isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : '';
+    return isset($_REQUEST['origin']) ? urlencode(Security::remove_XSS(urlencode($_REQUEST['origin']))) : '';
 }
 
 /**

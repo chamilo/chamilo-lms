@@ -5599,6 +5599,7 @@ function get_thread_user_post_limit($courseId, $thread_id, $user_id, $limit = 10
     $table_users = Database::get_main_table(TABLE_MAIN_USER);
 
     $courseId = (int) $courseId;
+    $limit = (int) $limit;
 
     $sql = "SELECT * FROM $table_posts posts
             LEFT JOIN $table_users users

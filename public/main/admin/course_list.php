@@ -39,6 +39,14 @@ function get_number_of_courses()
 function get_course_data($from, $number_of_items, $column, $direction, $dataFunctions = [], $getCount = false)
 {
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+    $column = (int) $column;
+
+    if (!in_array(strtolower($direction), ['asc', 'desc'])) {
+        $direction = 'desc';
+    }
+
     $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
     $tblCourseRelCategory = Database::get_main_table(TABLE_MAIN_COURSE_REL_CATEGORY);
 
@@ -224,7 +232,13 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
     $session = Database::get_main_table(TABLE_MAIN_SESSION);
-    $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+    $column = (int) $column;
+
+    if (!in_array(strtolower($direction), ['asc', 'desc'])) {
+        $direction = 'desc';
+    }
 
     $sql = "SELECT
                 c.code AS col0,

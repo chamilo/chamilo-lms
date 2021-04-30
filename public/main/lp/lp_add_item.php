@@ -18,8 +18,8 @@ api_protect_course_script();
 $isStudentView = $_REQUEST['isStudentView'] ?? null;
 $lpId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
 $submit = $_POST['submit_button'] ?? null;
-$type = isset($_GET['type']) ? $_GET['type'] : null;
-$action = isset($_GET['action']) ? $_GET['action'] : null;
+$type = $_GET['type'] ?? null;
+$action = $_GET['action'] ?? null;
 $is_allowed_to_edit = api_is_allowed_to_edit(null, false);
 
 $listUrl = api_get_path(WEB_CODE_PATH).

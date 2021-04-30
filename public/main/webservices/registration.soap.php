@@ -2065,6 +2065,13 @@ $server->register(
 // Define the method WSEditUserWithPicture
 function WSEditUserWithPicture($params)
 {
+    if (ini_get('allow_url_fopen')) {
+        return new soap_fault(
+            'Server',
+            '',
+            'WSEditUserWithPicture is disabled because allow_url_fopen is enabled in the server.'
+        );
+    }
     if (!WSHelperVerifyKey($params)) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
@@ -2105,24 +2112,15 @@ function WSEditUserWithPicture($params)
         $original_user_id_name
     );
 
-    // Get picture and generate uri.
-    $filename = basename($picture_url);
-    $tempDir = api_get_path(SYS_ARCHIVE_PATH);
-    // Make sure the file download was OK by checking the HTTP headers for OK
-    if (strpos(get_headers($picture_url)[0], "OK")) {
-        file_put_contents($tempDir.$filename, file_get_contents($picture_url));
-        $pictureUri = UserManager::update_user_picture($user_id, $filename, $tempDir.$filename);
+    if (empty($user_id)) {
+        return 0;
     }
 
-    if (0 == $user_id) {
+    $sql = "SELECT id FROM $table_user WHERE id =$user_id AND active= 0";
+    $resu = Database::query($sql);
+    $r_check_user = Database::fetch_row($resu);
+    if (!empty($r_check_user[0])) {
         return 0;
-    } else {
-        $sql = "SELECT id FROM $table_user WHERE id =$user_id AND active= 0";
-        $resu = Database::query($sql);
-        $r_check_user = Database::fetch_row($resu);
-        if (!empty($r_check_user[0])) {
-            return 0;
-        }
     }
 
     // Check whether username already exits.
@@ -2133,6 +2131,19 @@ function WSEditUserWithPicture($params)
 
     if (!empty($r_username[0])) {
         return 0;
+    }
+
+    // Get picture and generate uri.
+    $filename = basename($picture_url);
+    $tempDir = api_get_path(SYS_ARCHIVE_PATH);
+    // Make sure the file download was OK by checking the HTTP headers for OK
+    if (strpos(get_headers($picture_url)[0], "OK")) {
+        $tempFile = $tempDir.uniqid('user_image', true);
+        file_put_contents($tempFile, file_get_contents($picture_url));
+        $pictureUri = UserManager::update_user_picture($user_id, $filename, $tempFile);
+        if (file_exists($tempFile)) {
+            unlink($tempFile);
+        }
     }
 
     /** @var User $user */
@@ -2177,7 +2188,8 @@ function WSEditUserWithPicture($params)
         ->setExpirationDate($expiration_date)
         ->setHrDeptId($hr_dept_id)
         ->setActive(true)
-        ->setPictureUri($pictureUri);
+        ->setPictureUri($pictureUri)
+    ;
 
     if (!is_null($creator_id)) {
         $user->setCreatorId($creator_id);

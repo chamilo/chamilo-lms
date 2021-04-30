@@ -1111,8 +1111,8 @@ class MySpace
             case 1:
                 $column = 'title';
                 break;
-
         }
+
         $courses = CourseManager::get_courses_list(
             $from,
             $numberItems,

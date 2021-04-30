@@ -94,6 +94,14 @@ function get_course_data($from, $number_of_items, $column, $direction)
 {
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+    $column = (int) $column;
+
+    if (!in_array(strtolower($direction), ['asc', 'desc'])) {
+        $direction = 'desc';
+    }
+
     $sql = "SELECT  
                 code AS col0,
                 title AS col1,

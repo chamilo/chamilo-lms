@@ -1084,7 +1084,7 @@ class SessionManager
 
         $course = api_get_course_info_by_id($courseId);
         $sessionCond = 'and session_id = %s';
-        if ($sessionId == 'T') {
+        if ($sessionId === 'T') {
             $sessionCond = '';
         }
 

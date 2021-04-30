@@ -154,7 +154,8 @@ class langstats
     {
         $num = (int) $num;
         $res = $this->db->query(
-            'SELECT * FROM lang_freq ORDER BY term_count DESC LIMIT '.$num
+            'SELECT * FROM lang_freq
+                  ORDER BY term_count DESC LIMIT '.$num
         );
         $list = [];
         while ($row = $res->fetchArray()) {

@@ -258,6 +258,77 @@ class MySpace
     /**
      * Creates a small table in the last column of the table with the user overview.
      *
+     * @param int $user_id the id of the user
+     *
+     * @return array List course
+     */
+    public static function returnCourseTracking($user_id)
+    {
+        $user_id = (int) $user_id;
+
+        if (empty($user_id)) {
+            return [];
+        }
+
+        $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        // getting all the courses of the user
+        $sql = "SELECT * FROM $tbl_course_user
+                WHERE
+                    user_id = $user_id AND
+                    relation_type <> ".COURSE_RELATION_TYPE_RRHH;
+        $result = Database::query($sql);
+
+        $list = [];
+
+        while ($row = Database::fetch_array($result)) {
+            $courseInfo = api_get_course_info_by_id($row['c_id']);
+            $courseId = $courseInfo['real_id'];
+            $courseCode = $courseInfo['code'];
+
+            if (empty($courseInfo)) {
+                continue;
+            }
+
+            $avg_score = Tracking::get_avg_student_score($user_id, $courseCode);
+            if (is_numeric($avg_score)) {
+                $avg_score = round($avg_score, 2);
+            } else {
+                $avg_score = '-';
+            }
+
+            // Student exercises results (obtained score, maximum score, number of exercises answered, score percentage)
+            $exercisesResults = self::exercises_results($user_id, $courseCode);
+
+            $resultToString = '';
+            if (!is_null($exercisesResults['percentage'])) {
+                $resultToString = $exercisesResults['score_obtained'].'/'.$exercisesResults['score_possible'].' ( '.$exercisesResults['percentage'].'% )';
+            }
+
+            $item = [
+                'code' => $courseInfo['code'],
+                'real_id' => $courseInfo['real_id'],
+                'title' => $courseInfo['title'],
+                'category' => $courseInfo['categoryName'],
+                'image_small' => $courseInfo['course_image'],
+                'image_large' => $courseInfo['course_image_large'],
+                'time_spent' => api_time_to_hms(Tracking::get_time_spent_on_the_course($user_id, $courseId)),
+                'student_progress' => round(Tracking::get_avg_student_progress($user_id, $courseCode)),
+                'student_score' => $avg_score,
+                'student_message' => Tracking::count_student_messages($user_id, $courseCode),
+                'student_assignments' => Tracking::count_student_assignments($user_id, $courseCode),
+                'student_exercises' => $resultToString,
+                'questions_answered' => $exercisesResults['questions_answered'],
+                'last_connection' => Tracking::get_last_connection_date_on_the_course($user_id, $courseInfo),
+            ];
+            $list[] = $item;
+        }
+
+        return $list;
+    }
+
+    /**
+     * Creates a small table in the last column of the table with the user overview.
+     *
      * @param int   $user_id    the id of the user
      * @param array $url_params additional url parameters
      * @param array $row        the row information (the other columns)

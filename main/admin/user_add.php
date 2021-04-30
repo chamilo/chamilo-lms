@@ -55,6 +55,16 @@ function updateStatus(){
             document.getElementById("id_platform_admin").style.display="none";
     }
 }
+function ShowHidePassword() {
+
+        if ($(\'#showPassword\').prop(\'checked\')) {
+            $(\'#password\').attr(\'type\',\'text\');
+            $(\'.showPasswordEye\').removeClass(\'fa-eye\').addClass(\'fa-eye-slash\');
+        } else {
+            $(\'#password\').attr(\'type\',\'password\');
+            $(\'.showPasswordEye\').addClass(\'fa-eye\').removeClass(\'fa-eye-slash\');
+        }
+}
 </script>';
 
 if (!empty($_GET['message'])) {
@@ -214,6 +224,17 @@ $group[] = $form->createElement(
 );
 
 $form->addGroup($group, 'password', get_lang('Password'));
+$form->addElement(
+    'checkbox',
+    'showPassword',
+    get_lang('ShowOrHide')." ".get_lang('Password')." ".
+    Display::returnFontAwesomeIcon('eye', null, true, 'showPasswordEye'),
+    '',
+    [
+        'id' => 'showPassword',
+        'onchange' => 'javascript: ShowHidePassword();',
+    ]
+);
 $form->addPasswordRule('password', 'password');
 $form->addGroupRule('password', get_lang('EnterPassword'), 'required', null, 1);
 
@@ -302,7 +323,6 @@ if ($allowEmailTemplate) {
 
 $jquery_ready_content = $returnParams['jquery_ready_content'];
 
-// the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
 $htmlHeadXtra[] = '<script>
 $(function () {
     '.$jquery_ready_content.'

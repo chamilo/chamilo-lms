@@ -43,7 +43,7 @@ const toastOptions = {
 
 
 import VueFlatPickr from 'vue-flatpickr-component';
-//import 'flatpickr/dist/flatpickr.css';
+import 'flatpickr/dist/flatpickr.css';
 
 store.registerModule(
     'course',

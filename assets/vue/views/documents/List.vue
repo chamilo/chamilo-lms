@@ -113,7 +113,11 @@
   <!--      :filter-change="filterCallback"-->
   <!--      :filter-apply="filterCallback"-->
   <!--      :onLazyLoad ="filterCallback($event)"-->
+
+<!--  :scrollable="true"-->
+<!--  scrollHeight="height:100%"-->
   <DataTable
+      class="p-datatable-sm"
       :value="items"
       v-model:selection="selectedItems"
       dataKey="iid"
@@ -139,7 +143,10 @@
           <ResourceFileLink :resource="slotProps.data" />
         </div>
         <div v-else>
-          <a v-if="slotProps.data" @click="handleClick(slotProps.data)" class="cursor-pointer" >
+          <a
+              v-if="slotProps.data"
+              @click="handleClick(slotProps.data)"
+              class="cursor-pointer " >
             <font-awesome-icon
                 icon="folder"
                 size="lg"

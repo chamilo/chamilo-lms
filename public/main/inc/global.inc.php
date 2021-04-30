@@ -18,56 +18,54 @@ define('USERNAME_MAX_LENGTH', 100);
 
 require_once __DIR__.'/../../../vendor/autoload.php';
 
-try {
-    // Get settings from .env.local file created.
-    $envFile = __DIR__.'/../../../.env.local';
-    if (file_exists($envFile)) {
-        (new Dotenv())->load($envFile);
-    } else {
-        throw new \RuntimeException('APP_ENV environment variable is not defined.
+// Get settings from .env.local file created.
+$envFile = __DIR__.'/../../../.env.local';
+if (file_exists($envFile)) {
+    (new Dotenv())->load($envFile);
+} else {
+    throw new \RuntimeException('APP_ENV environment variable is not defined.
         You need to define environment variables for configuration to load variables from a .env.local file.');
-    }
+}
 
-    $env = $_SERVER['APP_ENV'] ?? 'dev';
-    $debug = 'dev' === $env;
-    if ($debug) {
-        Debug::enable();
-    }
+$env = $_SERVER['APP_ENV'] ?? 'dev';
+$debug = 'dev' === $env;
+if ($debug) {
+    Debug::enable();
+}
 
-    $kernel = new Chamilo\Kernel($env, $debug);
-    // Loading Request from Sonata. In order to use Sonata Pages Bundle.
-    $request = Request::createFromGlobals();
-    // This 'load_legacy' variable is needed to know that symfony is loaded using old style legacy mode,
-    // and not called from a symfony controller from public/
-    $request->request->set('load_legacy', true);
+$kernel = new Chamilo\Kernel($env, $debug);
+// Loading Request from Sonata. In order to use Sonata Pages Bundle.
+$request = Request::createFromGlobals();
+// This 'load_legacy' variable is needed to know that symfony is loaded using old style legacy mode,
+// and not called from a symfony controller from public/
+$request->request->set('load_legacy', true);
+$currentBaseUrl = $request->getBaseUrl();
+$kernel->boot();
 
-    $currentBaseUrl = $request->getBaseUrl();
-    $kernel->boot();
-    $container = $kernel->getContainer();
-    $router = $container->get('router');
-    $context = $router->getContext();
-    $router->setContext($context);
+$container = $kernel->getContainer();
+$router = $container->get('router');
+$context = $router->getContext();
+$router->setContext($context);
+/** @var FlashBag $flashBag */
+$saveFlashBag = null;
+$flashBag = $container->get('session')->getFlashBag();
+if (!empty($flashBag->keys())) {
+    $saveFlashBag = $flashBag->all();
+}
 
-    /** @var FlashBag $flashBag */
-    $saveFlashBag = null;
-    $flashBag = $container->get('session')->getFlashBag();
-    if (!empty($flashBag->keys())) {
-        $saveFlashBag = $flashBag->all();
-    }
+$response = $kernel->handle($request, HttpKernelInterface::MASTER_REQUEST, false);
+$context = Container::getRouter()->getContext();
 
-    $response = $kernel->handle($request, HttpKernelInterface::MASTER_REQUEST, false);
-    $context = Container::getRouter()->getContext();
+$pos = strpos($currentBaseUrl, 'main');
+if (false === $pos) {
+    echo 'Cannot load current URL';
+    exit;
+}
+$newBaseUrl = substr($currentBaseUrl, 0, $pos - 1);
+$context->setBaseUrl($newBaseUrl);
+$container = $kernel->getContainer();
 
-    $pos = strpos($currentBaseUrl, 'main');
-    if (false === $pos) {
-        echo 'Cannot load current URL';
-        exit;
-    }
-    $newBaseUrl = substr($currentBaseUrl, 0, $pos - 1);
-    $context->setBaseUrl($newBaseUrl);
-
-    $container = $kernel->getContainer();
-
+try {
     // Load legacy configuration.php
     if ($kernel->isInstalled()) {
         require_once $kernel->getConfigurationFile();

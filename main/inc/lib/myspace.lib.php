@@ -325,6 +325,39 @@ class MySpace
      * reporting progress of all users and all courses the user is subscribed to.
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+     *          Alex Aragon <alex.aragon@beeznest.com>, BeezNest, Perú
+     *
+     * @version Chamilo 1.11.8
+     *
+     * @since April 2019
+     */
+    public static function returnTrackingUserOverviewFilter($user_id)
+    {
+        $tpl = new Template('', false, false, false, false, false, false);
+        $userInfo = api_get_user_info($user_id);
+
+        $avatar = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_SMALL);
+        $user = [
+            'id' => $user_id,
+            'code_user' => $userInfo['official_code'],
+            'complete_name' => $userInfo['complete_name'],
+            'username' => $userInfo['username'],
+            'course' => self::returnCourseTracking($user_id),
+            'avatar' => $avatar,
+        ];
+
+        $tpl->assign('item', $user);
+        $templateName = $tpl->get_template('my_space/partials/tracking_user_overview.tpl');
+        $content = $tpl->fetch($templateName);
+
+        return $content;
+    }
+
+    /**
+     * Display a sortable table that contains an overview off all the
+     * reporting progress of all users and all courses the user is subscribed to.
+     *
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
      *
      * @version Dokeos 1.8.6
      *

@@ -277,14 +277,14 @@ if (isset($_REQUEST['comments']) &&
             Display::return_message($remedialMessage, 'warning', false)
         );
     }
-    $advanceMessage = RemedialCoursePlugin::create()->getAdvancedCourseList(
+    $advancedMessage = RemedialCoursePlugin::create()->getAdvancedCourseList(
         $objExerciseTmp,
         $student_id,
         api_get_session_id()
     );
-    if (!empty($advanceMessage)) {
+    if (!empty($advancedMessage)) {
         $message = Display::return_message(
-            $advanceMessage,
+            $advancedMessage,
             'info',
             false
         );

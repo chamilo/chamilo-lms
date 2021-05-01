@@ -42,6 +42,7 @@ class ExtraField
     public const EXERCISE_FIELD_TYPE = 17;
     public const TRACK_EXERCISE_FIELD_TYPE = 18;
     public const PORTFOLIO_TYPE = 19;
+    public const LP_VIEW_TYPE = 20;
 
     /**
      * @ORM\Column(name="id", type="integer")

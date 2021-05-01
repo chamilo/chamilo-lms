@@ -231,6 +231,7 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
 {
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+    $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
     $session = Database::get_main_table(TABLE_MAIN_SESSION);
     $from = (int) $from;
     $number_of_items = (int) $number_of_items;

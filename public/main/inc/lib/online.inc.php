@@ -284,11 +284,11 @@ function who_is_online(
         }
     }
 
-
+    $direction = strtolower($direction);
     if (empty($direction)) {
         $direction = 'DESC';
     } else {
-        if (!in_array(strtolower($direction), ['asc', 'desc'])) {
+        if (!in_array($direction, ['asc', 'desc'])) {
             $direction = 'DESC';
         }
     }

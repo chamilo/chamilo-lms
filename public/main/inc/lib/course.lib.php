@@ -134,7 +134,7 @@ class CourseManager
      *
      * @param int    $from               Offset (from the 7th = '6'). Optional.
      * @param int    $howmany            Number of results we want. Optional.
-     * @param int    $orderby            The column we want to order it by. Optional, defaults to first column.
+     * @param string $orderby            The column we want to order it by. Optional, defaults to first column.
      * @param string $orderdirection     The direction of the order (ASC or DESC). Optional, defaults to ASC.
      * @param int    $visibility         the visibility of the course, or all by default
      * @param string $startwith          If defined, only return results for which the course *title* begins with this
@@ -242,8 +242,9 @@ class CourseManager
             $sql .= $orderdirection === 'ASC' ? 'ASC' : 'DESC';
         }
 
-        if (!empty($howmany) && is_int($howmany) and $howmany > 0) {
-            $sql .= ' LIMIT '.(int) $howmany;
+        $howmany = (int) $howmany;
+        if (!empty($howmany)) {
+            $sql .= ' LIMIT '.$howmany;
         } else {
             $sql .= ' LIMIT 1000000'; //virtually no limit
         }

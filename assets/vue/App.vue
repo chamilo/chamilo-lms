@@ -10,7 +10,7 @@
             aria-label="Menu"
             icon="menu"
             class="q-mr-sm"
-        />        
+        />
         <q-toolbar-title v-if="$q.screen.gt.xs" shrink class="row items-center no-wrap">
           <img style="width:200px" src="/build/css/themes/chamilo/images/header-logo.png" />
         </q-toolbar-title>

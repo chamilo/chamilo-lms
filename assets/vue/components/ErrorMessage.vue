@@ -1,7 +1,7 @@
 <template>
     <div
-            class="alert alert-danger"
-            role="alert"
+      class="alert alert-danger"
+      role="alert"
     >
         {{ error.response.data.error }}
         {{ error.response.data.message }}

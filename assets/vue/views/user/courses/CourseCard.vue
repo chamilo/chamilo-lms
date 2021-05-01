@@ -21,10 +21,6 @@
       </div>
 
     </q-card-section>
-    <q-card-section class="q-pt-none">
-      {{ course.description }}
-    </q-card-section>
-
 <!--    <q-card-actions>-->
 <!--        <q-btn-->
 <!--            type="a"-->

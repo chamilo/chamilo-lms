@@ -27,7 +27,7 @@ use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
-use Psr\Container\ContainerInterface;
+use Chamilo\CourseBundle\Repository\CToolRepository;
 use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -70,6 +70,7 @@ trait ControllerTrait
         $services[] = CForumAttachmentRepository::class;
         $services[] = CLpRepository::class;
         $services[] = CLpCategoryRepository::class;
+        $services[] = CToolRepository::class;
         $services[] = CQuizQuestionRepository::class;
         $services[] = CQuizQuestionCategoryRepository::class;
         $services[] = CStudentPublicationRepository::class;

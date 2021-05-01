@@ -1000,18 +1000,20 @@ abstract class ResourceRepository extends ServiceEntityRepository
                 $link->setVisibility($visibility);
                 if (ResourceLink::VISIBILITY_DRAFT === $visibility) {
                     $editorMask = ResourceNodeVoter::getEditorMask();
-                    $rights = [];
+                    //$rights = [];
                     $resourceRight = new ResourceRight();
                     $resourceRight
                         ->setMask($editorMask)
                         ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
                         ->setResourceLink($link)
                     ;
-                    $rights[] = $resourceRight;
+                    //$rights[] = $resourceRight;
 
-                    if (!empty($rights)) {
+                    $link->addResourceRight($resourceRight);
+
+                    /*if (!empty($rights)) {
                         $link->setResourceRights($rights);
-                    }
+                    }*/
                 } else {
                     $link->setResourceRights(new ArrayCollection());
                 }

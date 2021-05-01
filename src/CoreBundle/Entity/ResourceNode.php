@@ -56,7 +56,7 @@ class ResourceNode
     public const PATH_SEPARATOR = '/';
 
     /**
-     * @Groups({"resource_node:read", "document:read"})
+     * @Groups({"resource_node:read", "document:read", "ctool:read"})
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -88,7 +88,7 @@ class ResourceNode
 
     /**
      * @ApiSubresource()
-     *
+     * @Groups({"ctool:read"})
      * @var Collection|ResourceLink[]
      *
      * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="resourceNode", cascade={"persist", "remove"})

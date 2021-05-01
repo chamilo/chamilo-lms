@@ -375,7 +375,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      */
     public function changeVisibilityAction(Request $request): Response
     {
-        $id = $request->get('id');
+        $id = (int) $request->get('id');
 
         $repository = $this->getRepositoryFromRequest($request);
 
@@ -396,17 +396,16 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $link = $resource->getFirstResourceLink();
         }
 
-        $icon = 'fa-eye';
         // Use repository to change settings easily.
         if ($link && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
             $repository->setVisibilityDraft($resource);
-            $icon = 'fa-eye-slash';
         } else {
             $repository->setVisibilityPublished($resource);
         }
 
         $result = [
-            'icon' => $icon,
+            'visibility' => $link->getVisibility(),
+            'ok' => true,
         ];
 
         return new JsonResponse($result);

@@ -57,8 +57,8 @@ class CourseHomeController extends ToolBaseController
 
         $session = $request->getSession();
 
-        $js = '<script>'.api_get_language_translate_html().'</script>';
-        $htmlHeadXtra[] = $js;
+        /*$js = '<script>'.api_get_language_translate_html().'</script>';
+        $htmlHeadXtra[] = $js;*/
 
         $userId = 0;
         $user = $this->getUser();
@@ -70,7 +70,7 @@ class CourseHomeController extends ToolBaseController
         $courseId = $course->getId();
         $sessionId = $this->getSessionId();
 
-        if ($user && api_is_invitee()) {
+        if ($user && INVITEE === $user->getStatus()) {
             $isInASession = $sessionId > 0;
             $isSubscribed = CourseManager::is_user_subscribed_in_course(
                 $userId,
@@ -80,7 +80,7 @@ class CourseHomeController extends ToolBaseController
             );
 
             if (!$isSubscribed) {
-                api_not_allowed(true);
+                throw $this->createAccessDeniedException();
             }
         }
 
@@ -92,7 +92,7 @@ class CourseHomeController extends ToolBaseController
             $session->set('is_allowed_in_course', true);
         }
 
-        $action = empty($_GET['action']) ? '' : Security::remove_XSS($_GET['action']);
+        /*$action = empty($_GET['action']) ? '' : Security::remove_XSS($_GET['action']);
         if ('subscribe' === $action && Security::check_token('get')) {
             Security::clear_token();
             $result = CourseManager::autoSubscribeToCourse($courseCode);
@@ -107,17 +107,11 @@ class CourseHomeController extends ToolBaseController
             'tool' => 'course-main',
             'action' => $action,
         ];
+        Event::registerLog($logInfo);*/
+        $logInfo = [
+            'tool' => 'course-main',
+        ];
         Event::registerLog($logInfo);
-
-        /*	Introduction section (editable by course admins) */
-        /*$introduction = Display::return_introduction_section(
-            TOOL_COURSE_HOMEPAGE,
-            [
-                'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
-                'CreateDocumentDir' => 'document/',
-                'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/',
-            ]
-        );*/
 
         $qb = $toolRepository->getResourcesByCourse($course, $this->getSession());
         $qb->addSelect('tool');
@@ -125,6 +119,7 @@ class CourseHomeController extends ToolBaseController
 
         $result = $qb->getQuery()->getResult();
         $tools = [];
+        $isCourseTeacher = $this->isGranted('ROLE_CURRENT_COURSE_TEACHER');
         /** @var CTool $item */
         foreach ($result as $item) {
             if ('course_tool' === $item->getName()) {
@@ -132,7 +127,7 @@ class CourseHomeController extends ToolBaseController
             }
             $toolModel = $toolChain->getToolFromName($item->getTool()->getName());
 
-            if ('admin' === $toolModel->getCategory() && !$this->isGranted('ROLE_CURRENT_COURSE_TEACHER')) {
+            if (!$isCourseTeacher && 'admin' === $toolModel->getCategory()) {
                 continue;
             }
             $tools[$toolModel->getCategory()][] = $item;
@@ -140,7 +135,7 @@ class CourseHomeController extends ToolBaseController
 
         // Get session-career diagram
         $diagram = '';
-        $allow = api_get_configuration_value('allow_career_diagram');
+        /*$allow = api_get_configuration_value('allow_career_diagram');
         if (true === $allow) {
             $htmlHeadXtra[] = api_get_js('jsplumb2.js');
             $extra = new ExtraFieldValue('session');
@@ -175,14 +170,14 @@ class CourseHomeController extends ToolBaseController
                         );
 
                         if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
-                            /** @var Graph $graph */
+                            // @var Graph $graph
                             $graph = UnserializeApi::unserialize('career', $item['value']);
                             $diagram = Career::renderDiagram($careerInfo, $graph);
                         }
                     }
                 }
             }
-        }
+        }*/
 
         // Deleting the objects
         $session->remove('toolgroup');
@@ -230,14 +225,6 @@ class CourseHomeController extends ToolBaseController
                 'tools' => $tools,
             ]
         );*/
-    }
-
-    /**
-     * @Route("/{cid}/home", name="chamilo_core_course_home")
-     */
-    public function indexAction()
-    {
-        return $this->render('@ChamiloCore/Index/vue.html.twig');
     }
 
     /**

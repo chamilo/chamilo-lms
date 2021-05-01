@@ -181,18 +181,3 @@ app
 ;
 
 app.mount('#app');
-
-/*
-new Vue({
-    vuetify,
-    i18n,
-    components: {App},
-    //apolloProvider,
-    data: {},
-    store,
-    router,
-    mounted() {
-    },
-    render: h => h(App)
-}).$mount('#app');*/
-

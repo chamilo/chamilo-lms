@@ -82,6 +82,7 @@ class ResourceLink
     protected Collection $resourceRights;
 
     /**
+     * @Groups({"ctool:read"})
      * @ORM\Column(name="visibility", type="integer", nullable=false)
      */
     protected int $visibility;
@@ -148,8 +149,10 @@ class ResourceLink
 
     public function addResourceRight(ResourceRight $right): self
     {
-        $right->setResourceLink($this);
-        $this->resourceRights[] = $right;
+        if (!$this->resourceRights->contains($right)) {
+            $right->setResourceLink($this);
+            $this->resourceRights->add($right);
+        }
 
         return $this;
     }

@@ -45,7 +45,7 @@ abstract class AbstractResource
     /**
      * @Assert\Valid()
      * @ApiSubresource()
-     * @Groups({"resource_node:read", "resource_node:write", "document:write" })
+     * @Groups({"resource_node:read", "resource_node:write", "document:write", "ctool:read"})
      * @ORM\OneToOne(
      *     targetEntity="Chamilo\CoreBundle\Entity\ResourceNode",
      *     cascade={"persist", "remove"},

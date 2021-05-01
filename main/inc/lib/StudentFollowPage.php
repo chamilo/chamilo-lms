@@ -52,7 +52,7 @@ class StudentFollowPage
                 return '-';
             }
 
-            $insertUser = $itemProperty->getInsertUser()->getIid() !== $studentId
+            $insertUser = $itemProperty->getInsertUser()->getId() !== $studentId
                 ? $itemProperty->getInsertUser()->getCompleteName()
                 : '-';
 

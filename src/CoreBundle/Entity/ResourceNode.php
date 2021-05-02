@@ -89,6 +89,7 @@ class ResourceNode
     /**
      * @ApiSubresource()
      * @Groups({"ctool:read"})
+     *
      * @var Collection|ResourceLink[]
      *
      * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="resourceNode", cascade={"persist", "remove"})

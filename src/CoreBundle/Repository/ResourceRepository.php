@@ -1011,9 +1011,9 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
                     $link->addResourceRight($resourceRight);
 
-                    /*if (!empty($rights)) {
-                        $link->setResourceRights($rights);
-                    }*/
+                /*if (!empty($rights)) {
+                    $link->setResourceRights($rights);
+                }*/
                 } else {
                     $link->setResourceRights(new ArrayCollection());
                 }

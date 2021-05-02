@@ -2519,6 +2519,7 @@ function update_chronometer(text_hour, text_minute, text_second)
 
     return true;
 }
+
 /**
  * Get suspend_data from localStorage
  * see suspend_data case in function LMSGetValue correction bn
@@ -2541,13 +2542,15 @@ function get_local_suspend_data()
                 mem_suspend_data = "";
             }
             if (mem_suspend_data!="") {
-                if (olms.suspend_data.indexOf("ICPLAYER_")!=-1||mem_suspend_data.indexOf("ICPLAYER_")!=-1) {
-                final_suspend_data = "";
-                final_suspend_data = mem_suspend_data;
-                //console.log('recovery suspend_data' + mem_suspend_data);
+                if ( olms.suspend_data.indexOf("ICPLAYER_") != -1 || mem_suspend_data.indexOf("ICPLAYER_") != -1) {
+                    final_suspend_data = "";
+                    final_suspend_data = mem_suspend_data;
+                    //console.log('recovery suspend_data' + mem_suspend_data);
+                }
             }
         }
-    } catch(err) {}
+    } catch(err) {
+    }
     return final_suspend_data;
 }
 
@@ -2569,4 +2572,3 @@ function save_suspend_data_in_local()
         }
     }
 }
-

@@ -17,7 +17,7 @@ class ExceptionController extends AbstractController
 {
     public function showAction(Exception $exception)
     {
-        if ('dev' === $this->getParameter('app_env')) {
+        if ('dev' === (string) $this->getParameter('app_env')) {
             throw new HttpException($exception->getCode(), $exception->getMessage());
         }
 

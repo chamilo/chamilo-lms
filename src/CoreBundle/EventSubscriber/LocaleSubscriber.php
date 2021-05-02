@@ -36,7 +36,11 @@ class LocaleSubscriber implements EventSubscriberInterface
         if (!$request->hasPreviousSession()) {
             return;
         }
-        $installed = 1 === (int) $this->parameterBag->get('installed');
+
+        $installed = false;
+        if ($this->parameterBag->has('installed')) {
+            $installed = 1 === (int) $this->parameterBag->get('installed');
+        }
 
         if (!$installed) {
             return;

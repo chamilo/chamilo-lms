@@ -21,7 +21,7 @@
 
     [type='checkbox'],
     [type='radio'] {
-      @apply rounded border-gray-300 text-blue-600 focus:ring-blue-500;
+      @apply border-gray-300 text-blue-600 focus:ring-blue-500;
     }
 }
 
@@ -46,11 +46,7 @@
     @apply bg-white rounded shadow-lg;
   }
 
-  .card-body {
-    //@apply p-2;
-  }
-
-  //ripple
+  // Buttons
   .btn {
     //@apply inline-block text-black px-4 py-2 text-xs font-medium leading-6 text-center bg-gray-100 uppercase transition rounded shadow hover:shadow-lg focus:outline-none;
     //disabled:cursor-not-allowed
@@ -60,6 +56,10 @@
 
   .btn-primary {
     @apply text-white bg-blue-700 hover:bg-blue-800 focus:ring-indigo-500;
+  }
+
+  .btn-warning {
+    @apply text-white bg-yellow-400 hover:bg-yellow-800 focus:ring-yellow-500;
   }
 
   .btn-success {
@@ -73,6 +73,8 @@
   .btn > .fa {
     @apply -ml-1 mr-1 h-4 w-5 fill-current ;
   }
+
+  // Forms
 
   .help-block {
     @apply mt-2 text-xs text-gray-500;
@@ -90,30 +92,6 @@
     @apply border-red-500;
   }
 
-  table {
-      @apply min-w-full divide-y divide-gray-200;
-  }
-
-  table thead {
-    @apply bg-gray-50;
-  }
-
-  table tbody {
-    @apply bg-white divide-y divide-gray-200;
-  }
-
-  //.q-card {
-  //  @apply max-w-sm rounded bg-white overflow-hidden shadow-lg mt-6;
-  //}
-
-  //.ch-form-control {
-  //  @apply appearance-none block w-full text-gray-700 border-blue-500 rounded py-3 px-4 mb-3 leading-tight;
-  //}
-  //
-  ////
-  //.ch-form-label {
-  //  @apply text-gray-500 font-bold;
-  //}
   legend {
     float: left;
     width: 100%;
@@ -130,6 +108,25 @@
     border: 0;
   }
 
+  // Tables
+  table {
+      @apply min-w-full divide-y divide-gray-200;
+  }
+
+  table thead {
+    @apply bg-gray-50;
+  }
+
+  table tbody {
+    @apply bg-white divide-y divide-gray-200;
+  }
+
+  .table td img {
+    display: inline-block;
+  }
+
+  // List
+
   .list-group {
     @apply flex flex-col mr-4;
   }
@@ -137,6 +134,8 @@
   .list-group-item {
     @apply flex flex-row justify-start gap-2 border rounded-sm px-3 py-3;
   }
+
+  // Alert
 
   .alert {
     @apply px-6 py-4 border-0 rounded relative mb-4;
@@ -158,6 +157,8 @@
     @apply text-white bg-red-500;
   }
 
+  // Tabs
+
   .tab_wrapper nav {
     @apply card flex flex-row justify-between gap-4;
   }
@@ -166,8 +167,16 @@
     @apply p-4;
   }
 
+  // Calendar
+
   #calendar .fc-toolbar-chunk {
     @apply flex flex-row;
+  }
+
+  // Page header
+
+  .page-header {
+    @apply text-gray-500 text-2xl flex flex-row gap-2;
   }
 
   @import "scss/index.scss";
@@ -181,11 +190,6 @@
   > .active {
     display: block;
   }
-}
-
-
-a.router-link-exact-active {
-  //@apply border-b-2 bg-gray-100 border-gray-500 text-gray-500 rounded-t;
 }
 
 //@import 'primevue-md-light-indigo/theme.css';

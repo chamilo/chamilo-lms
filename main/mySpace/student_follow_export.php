@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CLpCategory;
-use Chamilo\UserBundle\Entity\User;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 require_once __DIR__.'/../inc/global.inc.php';
 require_once '../work/work.lib.php';
@@ -22,12 +22,12 @@ if (!$allowedToTrackUser) {
     api_not_allowed();
 }
 
-$studentId = isset($_GET['student']) ? (int) $_GET['student'] : 0;
+$httpRequest = HttpRequest::createFromGlobals();
 
-$student = api_get_user_entity($studentId);
+$studentInfo = api_get_user_info($httpRequest->query->getInt('student'));
 
-if (empty($student)) {
-    api_not_allowed(true);
+if (empty($studentInfo)) {
+    api_not_allowed();
 }
 
 function getCoursesInSession(int $studentId): array
@@ -126,8 +126,10 @@ function generateForm(int $studentId, array $coursesInSessions): FormValidator
     return $form;
 }
 
-function generateHtmlForLearningPaths(User $student, array $courseInfo, int $sessionId): string
+function generateHtmlForLearningPaths(int $studentId, array $courseInfo, int $sessionId): string
 {
+    $student = api_get_user_entity($studentId);
+
     $html = Display::page_subheader2(get_lang('ToolLearnpath'));
 
     $columnHeaders = [];
@@ -175,7 +177,7 @@ function generateHtmlForLearningPaths(User $student, array $courseInfo, int $ses
         }
 
         $lpList = new LearnpathList(
-            $student->getUserId(),
+            $student->getId(),
             $courseInfo,
             $sessionId,
             null,
@@ -351,9 +353,7 @@ function generateHtmlForQuizzes(int $studentId, array $courseInfo, int $sessionI
                 $studentId,
                 $courseInfo['code'],
                 $exerciseId,
-                $sessionId,
-                1,
-                0
+                $sessionId
             );
 
             $lpName = '-';
@@ -370,6 +370,7 @@ function generateHtmlForQuizzes(int $studentId, array $courseInfo, int $sessionI
                 $scorePercentage = $lpScores[0];
                 $lpName = $lpScores[1];
             }
+
             $lpName = !empty($lpName) ? $lpName : get_lang('NoLearnpath');
 
             $contentToExport = [];
@@ -444,9 +445,9 @@ function generateHtmlForTasks(int $studentId, array $courseInfo, int $sessionId)
         .Export::convert_array_to_html($taskTable);
 }
 
-$coursesInSessions = getCoursesInSession($studentId);
+$coursesInSessions = getCoursesInSession($studentInfo['id']);
 
-$form = generateForm($studentId, $coursesInSessions);
+$form = generateForm($studentInfo['id'], $coursesInSessions);
 
 if ($form->validate()) {
     $values = $form->exportValues();
@@ -478,9 +479,9 @@ if ($form->validate()) {
                 $courseHtml .= Display::page_header($courseInfo['title']);
             }
 
-            $courseHtml .= generateHtmlForLearningPaths($student, $courseInfo, $sessionId);
-            $courseHtml .= generateHtmlForQuizzes($studentId, $courseInfo, $sessionId);
-            $courseHtml .= generateHtmlForTasks($studentId, $courseInfo, $sessionId);
+            $courseHtml .= generateHtmlForLearningPaths($studentInfo['id'], $courseInfo, $sessionId);
+            $courseHtml .= generateHtmlForQuizzes($studentInfo['id'], $courseInfo, $sessionId);
+            $courseHtml .= generateHtmlForTasks($studentInfo['id'], $courseInfo, $sessionId);
 
             $pdfHtml[] = $courseHtml;
         }
@@ -488,7 +489,7 @@ if ($form->validate()) {
 
     $params = [
         'filename' => get_lang('StudentFollow'),
-        'pdf_title' => $student->getCompleteNameWithUsername(),
+        'pdf_title' => $studentInfo['complete_name_with_username'],
         'format' => 'A4',
         'orientation' => 'P',
     ];
@@ -499,5 +500,5 @@ if ($form->validate()) {
     exit;
 }
 
-echo Display::page_subheader($student->getCompleteNameWithUsername());
+echo Display::page_subheader($studentInfo['complete_name_with_username']);
 $form->display();

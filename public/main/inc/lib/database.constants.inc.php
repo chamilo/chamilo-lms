@@ -128,7 +128,7 @@ define('TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING', 'track_e_attempt_recording')
 define('TABLE_STATISTIC_TRACK_E_DEFAULT', 'track_e_default');
 define('TABLE_STATISTIC_TRACK_E_UPLOADS', 'track_e_uploads');
 define('TABLE_STATISTIC_TRACK_E_HOTSPOT', 'track_e_hotspot');
-define('TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY', 'track_e_item_property');
+//define('TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY', 'track_e_item_property');
 define('TABLE_STATISTIC_TRACK_FILTERED_TERMS', 'track_filtered_terms');
 
 // Course catalog stats see #4191
@@ -145,7 +145,7 @@ define('TABLE_ANNOUNCEMENT_ATTACHMENT', 'announcement_attachment');
 define('TABLE_CHAT_CONNECTED', 'chat_connected');
 define('TABLE_COURSE_DESCRIPTION', 'course_description');
 define('TABLE_DOCUMENT', 'document');
-define('TABLE_ITEM_PROPERTY', 'item_property');
+//define('TABLE_ITEM_PROPERTY', 'item_property');
 define('TABLE_LINK', 'link');
 define('TABLE_LINK_CATEGORY', 'link_category');
 define('TABLE_TOOL_LIST', 'tool');

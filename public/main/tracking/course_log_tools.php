@@ -100,19 +100,15 @@ $nbStudents = count($a_students);
 $student_ids = array_keys($a_students);
 $studentCount = count($student_ids);
 
-/* MAIN CODE */
-
-echo '<div class="actions">';
 echo TrackingCourseLog::actionsLeft('courses', api_get_session_id());
+
 echo '<span style="float:right; padding-top:0px;">';
 echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
     Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
 
 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&id_session='.api_get_session_id().'&export=csv">
 	'.Display::return_icon('export_csv.png', get_lang('CSV export'), '', ICON_SIZE_MEDIUM).'</a>';
-
 echo '</span>';
-echo '</div>';
 
 $course_code = api_get_course_id();
 $course_id = api_get_course_int_id();
@@ -132,7 +128,7 @@ if ($lpReporting) {
         );
         echo '<table class="data_table">';
         if ($export_csv) {
-            $temp = [get_lang('Progress in courses', ''), ''];
+            $temp = [get_lang('Progress in courses'), ''];
             $csv_content[] = ['', ''];
             $csv_content[] = $temp;
         }
@@ -143,9 +139,9 @@ if ($lpReporting) {
                 // get the progress in learning pathes
                 $lp_avg_progress += Tracking::get_avg_student_progress(
                     $student_id,
-                    $course_code,
+                    $course,
                     [$lp_id],
-                    $session_id
+                    $session
                 );
             }
 
@@ -169,7 +165,7 @@ if ($lpReporting) {
         echo '</table></div>';
     } else {
         if ($export_csv) {
-            $temp = [get_lang('NoLearningPath', ''), ''];
+            $temp = [get_lang('NoLearningPath'), ''];
             $csv_content[] = $temp;
         }
     }

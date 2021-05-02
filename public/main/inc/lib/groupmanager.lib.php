@@ -102,8 +102,9 @@ class GroupManager
      * @param int    $sessionId
      * @param bool   $getCount
      * @param bool   $notInGroup Get groups not in a category
+     * @param bool   $returnEntityList
      *
-     * @return array an array with all information about the groups
+     * @return array|CGroup[] an array with all information about the groups
      */
     public static function get_group_list(
         $categoryId = null,

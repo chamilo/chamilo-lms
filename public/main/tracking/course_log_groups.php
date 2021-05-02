@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -11,7 +12,7 @@ $course_code = api_get_course_id();
 $sessionId = api_get_session_id();
 
 $this_section = SECTION_COURSES;
-if ('myspace' == $from) {
+if ('myspace' === $from) {
     $from_myspace = true;
     $this_section = "session_my_space";
 }
@@ -91,9 +92,7 @@ $column_model = [
     ],
 ];
 
-// Autowidth
 $extra_params['autowidth'] = 'true';
-// height auto
 $extra_params['height'] = 'auto';
 
 $action_links = '
@@ -121,11 +120,7 @@ $(function() {
 </script>';
 
 Display::display_header();
-
-echo '<div class="actions">';
 echo TrackingCourseLog::actionsLeft('groups', $sessionId);
-echo '</div>';
-
 echo Display::grid_html('group_users');
 
 Display::display_footer();

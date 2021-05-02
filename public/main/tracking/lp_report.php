@@ -273,6 +273,7 @@ function getData($from, $numberOfItems, $column, $direction, $params)
     $courseCode = api_get_course_id();
     $courseId = api_get_course_int_id();
     $course = api_get_course_entity();
+    $session = api_get_session_entity();
 
     /** @var CLp[] $lps */
     $lps = $params['lps'];
@@ -327,7 +328,7 @@ function getData($from, $numberOfItems, $column, $direction, $params)
                 $userId,
                 $course,
                 [$lpId],
-                $sessionId
+                $session
             );
 
             if ($useNewTable) {
@@ -444,7 +445,7 @@ $table->setDataFunctionParams(['lps' => $lps]);
 $table->set_additional_parameters($parameters);
 $column = 0;
 foreach ($headers as $header) {
-    $lpName = $lp['name'];
+    $lpName = $lp->getName();
     $table->set_header($column++, $header, false);
 }
 

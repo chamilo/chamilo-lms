@@ -678,20 +678,19 @@ Display::display_header($nameTools);
 $token = Security::get_token();
 
 // Actions bar
-echo '<div class="actions">';
-echo '<a href="javascript: window.history.go(-1);">'
+$actions = '<a href="javascript: window.history.go(-1);">'
     .Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
 
-echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'
+$actions .= '<a href="javascript: void(0);" onclick="javascript: window.print();">'
     .Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
 
-echo '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&export=csv">'
+$actions .= '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&export=csv">'
     .Display::return_icon('export_csv.png', get_lang('CSV export'), '', ICON_SIZE_MEDIUM).'</a> ';
 
-echo '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&export=xls">'
+$actions .= '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&export=xls">'
     .Display::return_icon('export_excel.png', get_lang('Excel export'), '', ICON_SIZE_MEDIUM).'</a> ';
 
-echo Display::url(
+$actions .= Display::url(
     Display::return_icon('attendance.png', get_lang('Access details'), '', ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'mySpace/access_details_session.php?user_id='.$studentId
 );
@@ -702,10 +701,10 @@ if (!empty($email)) {
 } else {
     $send_mail = Display::return_icon('mail_send_na.png', get_lang('Send message mail'), '', ICON_SIZE_MEDIUM);
 }
-echo $send_mail;
+$actions .= $send_mail;
 if (!empty($studentId) && !empty($courseCode)) {
     // Only show link to connection details if course and student were defined in the URL
-    echo '<a href="access_details.php?student='.$studentId.'&course='.$courseCode.'&origin='.$origin.'&cid='
+    $actions .= '<a href="access_details.php?student='.$studentId.'&course='.$courseCode.'&origin='.$origin.'&cid='
         .$courseId.'&id_session='.$sessionId.'">'
         .Display::return_icon('statistics.png', get_lang('Access details'), '', ICON_SIZE_MEDIUM)
         .'</a>';
@@ -715,19 +714,19 @@ $notebookTeacherEnable = 'true' === api_get_plugin_setting('notebookteacher', 'e
 if ($notebookTeacherEnable && !empty($studentId) && !empty($courseCode)) {
     // link notebookteacher
     $optionsLink = 'student_id='.$studentId.'&origin='.$origin.'&cid='.$courseId.'&id_session='.$sessionId;
-    echo '<a href="'.api_get_path(WEB_PLUGIN_PATH).'notebookteacher/src/index.php?'.$optionsLink.'">'
+    $actions .= '<a href="'.api_get_path(WEB_PLUGIN_PATH).'notebookteacher/src/index.php?'.$optionsLink.'">'
         .Display::return_icon('notebookteacher.png', get_lang('Notebook'), '', ICON_SIZE_MEDIUM)
         .'</a>';
 }
 
 if (api_can_login_as($studentId)) {
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$studentId
+    $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$studentId
         .'&sec_token='.$token.'">'
         .Display::return_icon('login_as.png', get_lang('Login as'), null, ICON_SIZE_MEDIUM).'</a>&nbsp;&nbsp;';
 }
 
 if (Skill::isAllowed($studentId, false)) {
-    echo Display::url(
+    $actions .= Display::url(
         Display::return_icon(
             'skill-badges.png',
             get_lang('Assign skill'),
@@ -739,7 +738,7 @@ if (Skill::isAllowed($studentId, false)) {
 }
 
 if (Skill::isAllowed($studentId, false)) {
-    echo Display::url(
+    $actions .= Display::url(
         Display::return_icon(
             'attendance.png',
             get_lang('CountDoneAttendance'),
@@ -757,7 +756,7 @@ $permissions = StudentFollowUpPlugin::getPermissions(
 
 $isAllow = $permissions['is_allow'];
 if ($isAllow) {
-    echo Display::url(
+    $actions .= Display::url(
         Display::return_icon(
             'blog.png',
             get_lang('Blog'),
@@ -767,7 +766,8 @@ if ($isAllow) {
         api_get_path(WEB_PLUGIN_PATH).'studentfollowup/posts.php?student_id='.$studentId
     );
 }
-echo '</div>';
+
+echo Display::toolbarAction('my_students', [$actions]);
 
 // is the user online ?
 $online = get_lang('No');

@@ -198,8 +198,7 @@ Display::display_header($nameTools, 'Tracking');
 
 $actionsLeft = TrackingCourseLog::actionsLeft('users', $sessionId);
 
-$actionsRight = '<div class="pull-right">';
-$actionsRight .= '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
+$actionsRight = '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
     Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
 
 $additionalParams = '';
@@ -217,7 +216,6 @@ if (isset($_GET['users_tracking_per_page'])) {
 $actionsRight .= '<a
     href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$additionalParams.$users_tracking_per_page.'">
      '.Display::return_icon('export_csv.png', get_lang('CSV export'), '', ICON_SIZE_MEDIUM).'</a>';
-$actionsRight .= '</div>';
 // Create a search-box.
 $form_search = new FormValidator(
     'search_simple',

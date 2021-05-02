@@ -193,7 +193,7 @@ if (0 === $session->getNbrCourses()) {
             );
         }
 
-        $courseUrl = api_get_course_url($courseCode, $sessionId);
+        $courseUrl = api_get_course_url($courseId, $sessionId);
 
         // hide_course_breadcrumb the parameter has been added to hide the name
         // of the course, that appeared in the default $interbreadcrumb

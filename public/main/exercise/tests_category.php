@@ -270,6 +270,5 @@ function displayActionBar()
     );
 
     echo Display::toolbarAction('toolbar', [$actions]);
-
-    echo '<fieldset><legend>'.get_lang('Questions category').'</legend></fieldset>';
+    echo Display::page_header(get_lang('Questions category'));
 }

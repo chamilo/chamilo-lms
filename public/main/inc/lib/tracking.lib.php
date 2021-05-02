@@ -56,18 +56,17 @@ class Tracking
             return null;
         }
         $course = api_get_course_entity($courseId);
-        $courseCode = $course->getCode();
 
         $session = api_get_session_entity($sessionId);
         if ('count' === $type) {
             return GroupManager::get_group_list(null, $course, null, $sessionId, true);
         }
 
-        $groupList = GroupManager::get_group_list(null, $course, null, $sessionId);
+        $groupList = GroupManager::get_group_list(null, $course, null, $sessionId, false, null, true);
         $parsedResult = [];
         if (!empty($groupList)) {
             foreach ($groupList as $group) {
-                $users = GroupManager::get_users($group['iid'], true, null, null, false, $courseId);
+                $users = GroupManager::get_users($group->getIid(), true, null, null, false, $courseId);
                 $time = 0;
                 $avg_student_score = 0;
                 $avg_student_progress = 0;
@@ -108,8 +107,8 @@ class Tracking
                 $averageScore = empty($countUsers) ? 0 : round($avg_student_score / $countUsers, 2);
 
                 $groupItem = [
-                    'id' => $group['id'],
-                    'name' => $group['name'],
+                    'id' => $group->getIid(),
+                    'name' => $group->getName(),
                     'time' => api_time_to_hms($time),
                     'progress' => $averageProgress,
                     'score' => $averageScore,
@@ -3179,7 +3178,7 @@ class Tracking
         if (!empty($course_code)) {
             $course = api_get_course_info($course_code);
             $courseId = $course['real_id'];
-            $conditions[] = " lp.c_id = $courseId";
+            //$conditions[] = " lp.c_id = $courseId";
         }
 
         // Get course tables names
@@ -3213,13 +3212,12 @@ class Tracking
                     SUM(lp_i.max_score) sum_max_score
                 FROM $lp_table as lp
                 INNER JOIN $lp_item_table as lp_i
-                ON lp.iid = lp_id AND lp.c_id = lp_i.c_id
+                ON lp.iid = lp_i.lp_id
                 INNER JOIN $lp_view_table as lp_view
-                ON lp_view.lp_id = lp_i.lp_id AND lp_view.c_id = lp_i.c_id
+                ON lp_view.lp_id = lp_i.lp_id
                 INNER JOIN $lp_item_view_table as lp_iv
                 ON
                     lp_i.iid = lp_iv.lp_item_id AND
-                    lp_view.c_id = lp_iv.c_id AND
                     lp_iv.lp_view_id = lp_view.iid
                 WHERE (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."') AND
                 $conditionsToString
@@ -3495,7 +3493,7 @@ class Tracking
             // Check the real number of LPs corresponding to the filter in the
             // database (and if no list was given, get them all)
             $sql = "SELECT iid FROM $lp_table
-                    WHERE c_id = $courseId AND iid = $lp_id ";
+                    WHERE iid = $lp_id ";
             $row = Database::query($sql);
             $count = Database::num_rows($row);
 
@@ -3504,10 +3502,9 @@ class Tracking
                 $sql = 'SELECT MIN(start_time)
                         FROM '.$t_lpiv.' AS item_view
                         INNER JOIN '.$t_lpv.' AS view
-                        ON (item_view.lp_view_id = view.iid AND item_view.c_id = view.c_id)
+                        ON (item_view.lp_view_id = view.iid)
                         WHERE
                             status != "not attempted" AND
-                            item_view.c_id = '.$courseId.' AND
                             view.c_id = '.$courseId.' AND
                             view.lp_id = '.$lp_id.' AND
                             view.user_id = '.$student_id.' AND
@@ -8911,6 +8908,6 @@ class TrackingCourseLog
             $attendanceLink,
         ];
 
-        return implode('', $items).'&nbsp;';
+        return Display::toolbarAction('tracking', $items);
     }
 }

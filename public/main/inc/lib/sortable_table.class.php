@@ -144,8 +144,8 @@ class SortableTable extends HTML_Table
 
         if (empty($attributes)) {
             $attributes = [];
-            //$attributes['class'] = 'table table-hover table-striped table-bordered data_table';
-            $attributes['class'] = 'q-table';
+            $attributes['class'] = 'table table-hover table-striped table-bordered data_table';
+            //$attributes['class'] = 'q-table';
             $attributes['id'] = $table_id;
         }
 
@@ -425,8 +425,8 @@ class SortableTable extends HTML_Table
         }
 
         //$html .= '<div class="table-responsive">'.$content.'</div>';
-        $html .= '<div class="q-table__container q-table--horizontal-separator column no-wrap q-table__card q-table--no-wrap">'.
-            $content.'</div>';
+        $html .= '<div class="">';
+        $html .= $content.'</div>';
 
         if (!empty($this->additional_parameters)) {
             foreach ($this->additional_parameters as $key => $value) {

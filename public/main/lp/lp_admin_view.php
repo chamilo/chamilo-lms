@@ -147,116 +147,21 @@ if (isset($_POST['save_audio'])) {
     exit;
 }
 
-Display::display_header(null, 'Path');
-$suredel = trim(get_lang('Are you sure to delete'));
-exit;
-?>
-<script>
-var newOrderData= "";
-//source code found in http://www.swartzfager.org/blog/dspNestedList.cfm
-$(function() {
-    <?php
-    if (!isset($_REQUEST['updateaudio'])) {
-        ?>
-    $("#lp_item_list").sortable({
-        items: "li",
-        handle: ".moved", //only the class "moved"
-        cursor: "move",
-        placeholder: "ui-state-highlight" //defines the yellow highlight
-    });
-
-    $("#listSubmit").click(function () {
-        //Disable the submit button to prevent a double-click
-        $(this).attr("disabled","disabled");
-        //Initialize the variable that will contain the data to submit to the form
-        newOrderData= "";
-        //All direct descendants of the lp_item_list will have a parentId of 0
-        var parentId= 0;
-
-        //Walk through the direct descendants of the lp_item_list <ul>
-        $("#lp_item_list").children().each(function () {
-            /*Only process elements with an id attribute (in order to skip the blank,
-            unmovable <li> elements.*/
-            if ($(this).attr("id")) {
-                console.log($(this).attr("id"));
-                //console.log($(this).attr("id"));
-                /*Build a string of data with the child's ID and parent ID,
-                 using the "|" as a delimiter between the two IDs and the "^"
-                 as a record delimiter (these delimiters were chosen in case the data
-                 involved includes more common delimiters like commas within the content)
-                */
-                newOrderData= newOrderData + $(this).attr("id") + "|" + "0" + "^";
-
-                //Determine if this child is a containter
-                if ($(this).is(".li_container")) {
-                      //Process the child elements of the container
-                    processChildren($(this).attr("id"));
-                }
-            }
-        }); //end of lp_item_list children loop
-
-        //Write the newOrderData string out to the listResults form element
-        //$("#listResults").val(newOrderData);
-        var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
-        $.post("<?php echo api_get_path(WEB_AJAX_PATH); ?>lp.ajax.php", order, function(reponse) {
-            $("#message").html(reponse);
-        });
-
-        setTimeout(function() {
-            $("#message").html('');
-        }, 3000);
-
-        return false;
-
-    }); //end of lp_item_list event assignment
-    <?php
-    } ?>
-
-    function processChildren(parentId) {
-        //Loop through the children of the UL element defined by the parentId
-        var ulParentID= "UL_" + parentId;
-        $("#" + ulParentID).children().each(function () {
-            /*Only process elements with an id attribute (in order to skip the blank,
-                unmovable <li> elements.*/
-            if ($(this).attr("id")) {
-                /*Build a string of data with the child's ID and parent ID,
-                    using the "|" as a delimiter between the two IDs and the "^"
-                    as a record delimiter (these delimiters were chosen in case the data
-                    involved includes more common delimiters like commas within the content)
-                */
-                newOrderData= newOrderData + $(this).attr("id") + "|" + parentId + "^";
-
-                //Determine if this child is a containter
-                if ($(this).is(".container")) {
-                    //Process the child elements of the container
-                    processChildren($(this).attr("id"));
-                }
-            }
-        });  //end of children loop
-    } //end of processChildren function
-});
-</script>
-<?php
-
-echo $learnPath->build_action_menu();
-
-echo '<div class="row">';
-echo $learnPath->showBuildSideBar(null, true);
-echo '<div class="col-md-8">';
+$right = '';
 switch ($_GET['action']) {
     case 'edit_item':
         if (isset($is_success) && true === $is_success) {
-            echo Display::return_message(
+            $right .= Display::return_message(
                 get_lang('The learning object has been edited'),
                 'confirm'
             );
         } else {
-            echo $learnPath->display_edit_item($lpItem);
+            $right .= $learnPath->display_edit_item($lpItem);
         }
         break;
     case 'delete_item':
         if (isset($is_success) && true === $is_success) {
-            echo Display::return_message(
+            $right .= Display::return_message(
                 get_lang('The learning object has been deleted'),
                 'confirm'
             );
@@ -265,10 +170,11 @@ switch ($_GET['action']) {
 }
 if (!empty($_GET['updateaudio'])) {
     // list of items to add audio files
-    echo $learnPath->overview();
+    $right .= $learnPath->overview();
 }
 
-echo '</div>';
-echo '</div>';
-
-Display::display_footer();
+$tpl = new Template(get_lang('Prerequisites'));
+$tpl->assign('actions', $learnPath->build_action_menu(true));
+$tpl->assign('left', $learnPath->showBuildSideBar());
+$tpl->assign('right', $right);
+$tpl->displayTwoColTemplate();

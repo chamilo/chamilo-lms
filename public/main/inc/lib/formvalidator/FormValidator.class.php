@@ -138,7 +138,7 @@ EOT;
     {
         return '<form{attributes}>
             {content}
-        {hidden}
+            {hidden}
         </form>';
     }
 
@@ -1215,7 +1215,6 @@ EOT;
     public function returnForm()
     {
         $returnValue = '';
-
         /** @var HTML_QuickForm_element $element */
         foreach ($this->_elements as &$element) {
             $element->setLayout($this->getLayout());

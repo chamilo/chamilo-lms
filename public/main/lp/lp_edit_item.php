@@ -71,11 +71,7 @@ $interbreadcrumb[] = [
 
 $show_learn_path = true;
 $lp_theme_css = $learnPath->get_theme();
-Display::display_header(get_lang('Edit'), 'Path');
-echo $learnPath->build_action_menu();
-echo '<div class="row">';
-echo $learnPath->showBuildSideBar();
-echo '<div id="doc_form" class="col-md-8">';
+
 $excludeExtraFields = [
     'authors',
     'authorlp',
@@ -86,21 +82,24 @@ if (api_is_platform_admin()) {
     // Only admins can edit this items
     $excludeExtraFields = [];
 }
+$right = '';
 if (isset($is_success) && true === $is_success) {
-    $msg = '<div class="lp_message" style="margin-bottom:10px;">';
-    $msg .= 'The item has been edited.';
-    $msg .= '</div>';
-    echo $learnPath->display_item($lpItem, $msg);
+    $right = '<div class="lp_message" style="margin-bottom:10px;">';
+    $right .= 'The item has been edited.';
+    $right .= '</div>';
+    $right .= $learnPath->display_item($lpItem, $msg);
 } else {
-    echo $learnPath->display_edit_item($lpItem, $excludeExtraFields);
+    $right .= $learnPath->display_edit_item($lpItem, $excludeExtraFields);
     $finalItem = Session::read('finalItem');
     if ($finalItem) {
-        echo '<script>$("#frmModel").remove()</script>';
+        $right .= '<script>$("#frmModel").remove()</script>';
     }
     Session::erase('finalItem');
 }
 
-echo '</div>';
-echo '</div>';
 
-Display::display_footer();
+$tpl = new Template();
+$tpl->assign('actions', $learnPath->build_action_menu(true));
+$tpl->assign('left', $learnPath->showBuildSideBar());
+$tpl->assign('right', $right);
+$tpl->displayTwoColTemplate();

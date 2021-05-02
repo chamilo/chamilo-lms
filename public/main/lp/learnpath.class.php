@@ -2775,7 +2775,7 @@ class learnpath
         if ($isAllow && false == $hideIcons) {
             if ($this->get_lp_session_id() == api_get_session_id()) {
                 $html .= '<div id="actions_lp" class="actions_lp"><hr>';
-                $html .= '<div class="btn-group">';
+                $html .= '<div class="flex flex-row justify-center">';
                 $html .= "<a
                     class='btn btn-sm btn-default'
                     href='lp_controller.php?".api_get_cidreq()."&action=build&lp_id=".$this->lp_id."&isStudentView=false'
@@ -2785,7 +2785,7 @@ class learnpath
                     class='btn btn-sm btn-default'
                     href='lp_controller.php?".api_get_cidreq()."&action=add_item&type=step&lp_id=".$this->lp_id."&isStudentView=false'
                     target='_parent'>".
-                    Display::returnFontAwesomeIcon('pencil').get_lang('Edit')."</a>";
+                    Display::returnFontAwesomeIcon('pencil-alt').get_lang('Edit')."</a>";
                 $html .= '<a
                     class="btn btn-sm btn-default"
                     href="lp_controller.php?'.api_get_cidreq()."&action=edit&lp_id=".$this->lp_id.'&isStudentView=false">'.
@@ -4966,17 +4966,25 @@ class learnpath
      */
     public function overview()
     {
-        exit;
         $return = '';
         $update_audio = $_GET['updateaudio'] ?? null;
 
         // we need to start a form when we want to update all the mp3 files
         if ('true' == $update_audio) {
-            $return .= '<form action="'.api_get_self().'?'.api_get_cidreq().'&updateaudio='.Security::remove_XSS($_GET['updateaudio']).'&action='.Security::remove_XSS($_GET['action']).'&lp_id='.$_SESSION['oLP']->lp_id.'" method="post" enctype="multipart/form-data" name="updatemp3" id="updatemp3">';
+            $return .= '<form action="'.api_get_self().'?'.api_get_cidreq().'&updateaudio='.Security::remove_XSS(
+                    $_GET['updateaudio']
+                ).'&action='.Security::remove_XSS(
+                    $_GET['action']
+                ).'&lp_id='.$_SESSION['oLP']->lp_id.'" method="post" enctype="multipart/form-data" name="updatemp3" id="updatemp3">';
         }
         $return .= '<div id="message"></div>';
         if (0 == count($this->items)) {
-            $return .= Display::return_message(get_lang('You should add some items to your learning path, otherwise you won\'t be able to attach audio files to them'), 'normal');
+            $return .= Display::return_message(
+                get_lang(
+                    'You should add some items to your learning path, otherwise you won\'t be able to attach audio files to them'
+                ),
+                'normal'
+            );
         } else {
             $return_audio = '<table class="table table-hover table-striped data_table">';
             $return_audio .= '<tr>';
@@ -4985,15 +4993,15 @@ class learnpath
             $return_audio .= '</tr>';
 
             if ('true' != $update_audio) {
-                $return .= '<div class="col-md-12">';
+                /*$return .= '<div class="col-md-12">';
                 $return .= self::return_new_tree($update_audio);
-                $return .= '</div>';
+                $return .= '</div>';*/
                 $return .= Display::div(
                     Display::url(get_lang('Save'), '#', ['id' => 'listSubmit', 'class' => 'btn btn-primary']),
                     ['style' => 'float:left; margin-top:15px;width:100%']
                 );
             } else {
-                $return_audio .= self::return_new_tree($update_audio);
+                //$return_audio .= self::return_new_tree($update_audio);
                 $return .= $return_audio.'</table>';
             }
 
@@ -5489,11 +5497,360 @@ class learnpath
     public function showBuildSideBar($updateAudio = false, $dropElementHere = false, $type = null)
     {
         $sureToDelete = trim(get_lang('AreYouSureToDeleteJS'));
-
         $ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?lp_id='.$this->get_id().'&'.api_get_cidreq();
 
-        $content = "
+        $content = '
         <script>
+            /*
+            Script to manipulate Learning Path items with Drag and drop
+             */
+            var newOrderData = "";
+            function buildLPtree(in_elem, in_parent_id) {
+                var item_tag = in_elem.get(0).tagName;
+                var item_id =  in_elem.attr("id");
+                //var parent_id = item_id;
+                in_elem.children("li").each(function () {
+                    let itemId = $(this).attr("id");
+                    if (itemId && itemId != "undefined") {
+                        newOrderData += itemId + "|" + in_parent_id+"^";
+                        $(this).find("ul").each(function () {
+                            buildLPtree($(this), itemId);
+                        });
+                    }
+                });
+            }
+
+            $(function() {
+                $(".lp_resource6").sortable({
+                    items: ".lp_resource_element ",
+                    handle: ".moved", //only the class "moved"
+                    cursor: "move",
+                    connectWith: "#lp_item_list",
+                    placeholder: "ui-state-highlight", //defines the yellow highlight
+                    start: function(event, ui) {
+                        $(ui.item).css("width", "350px");
+                        $(ui.item).find(".item_data").attr("style", "");
+                    },
+                    stop: function(event, ui) {
+                        $(ui.item).css("width", "100%");
+                    }
+                });
+
+                $(".li_container2 .order_items").click(function(e) {
+                    var dir = $(this).data("dir");
+                    var itemId = $(this).data("id");
+                    var jItems = $("#lp_item_list li.li_container");
+                    var jItem = $("#"+ itemId);
+                    var index = jItems.index(jItem);
+                    var total = jItems.length;
+
+                    switch (dir) {
+                        case "up":
+                            if (index != 0 && jItems[index - 1]) {
+                                /*var subItems = $(jItems[index - 1]).find("li.sub_item");
+                                if (subItems.length >= 0) {
+                                    index = index - 1;
+                                }*/
+                                var subItems = $(jItems[index - 1]).find("li.sub_item");
+                                var parentClass = $(jItems[index - 1]).parent().parent().attr("class");
+                                var parentId = $(jItems[index]).parent().parent().attr("id");
+                                var myParentId = $(jItems[index - 1]).parent().parent().attr("id");
+
+                                // We are brothers!
+                                if (parentId == myParentId) {
+                                    if (subItems.length > 0) {
+                                        var lastItem = $(jItems[index - 1]).find("li.sub_item");
+                                        parentIndex = jItems.index(lastItem);
+                                        jItem.detach().insertAfter(lastItem);
+                                    } else {
+                                        jItem.detach().insertBefore(jItems[index - 1]);
+                                    }
+                                    break;
+                                }
+
+                                if (parentClass == "record li_container") {
+                                    // previous is a chapter
+                                    var lastItem = $(jItems[index - 1]).parent().parent().find("li.li_container").last();
+                                    parentIndex = jItems.index(lastItem);
+                                    jItem.detach().insertAfter(jItems[parentIndex]);
+                                } else {
+                                    jItem.detach().insertBefore(jItems[index - 1]);
+                                }
+                            }
+                            break;
+                        case "down":
+                             if (index != total - 1) {
+                                const originIndex = index;
+                                // The element is a chapter with items
+                                var subItems = jItem.find("li.li_container");
+                                if (subItems.length > 0) {
+                                    index = subItems.length + index;
+                                }
+
+                                var subItems = $(jItems[index + 1]).find("li.sub_item");
+                                // This is an element entering in a chapter
+                                if (subItems.length > 0) {
+                                    // Check if im a child
+                                    var parentClass = jItem.parent().parent().attr("class");
+                                    if (parentClass == "record li_container") {
+                                        // Parent position
+                                        var parentIndex = jItems.index(jItem.parent().parent());
+                                        jItem.detach().insertAfter(jItems[parentIndex]);
+                                    } else {
+                                        jItem.detach().insertAfter(subItems);
+                                    }
+                                    break;
+                                }
+
+                                var currentSubItems = $(jItems[index]).parent().find("li.sub_item");
+                                var parentId = $(jItems[originIndex]).parent().parent().attr("id");
+                                var myParentId = $(jItems[index + 1]).parent().parent().attr("id");
+
+                                // We are brothers!
+                                if (parentId == myParentId) {
+                                    if ((index + 1) < total) {
+                                        jItem.detach().insertAfter(jItems[index + 1]);
+                                    }
+                                    break;
+                                }
+
+                                if (currentSubItems.length > 0) {
+                                    var parentIndex = jItems.index(jItem.parent().parent());
+                                    if (parentIndex >= 0) {
+                                        jItem.detach().insertAfter(jItems[parentIndex]);
+                                        break;
+                                    }
+                                    //jItem.detach().insertAfter($(jItems[index]).parent().parent());
+                                }
+
+                                //var lastItem = $(jItems[index + 1]).parent().parent().find("li.li_container").last();
+                                if (subItems.length > 0) {
+                                    index = originIndex;
+                                }
+
+                                if ((index + 1) < total) {
+                                    jItem.detach().insertAfter(jItems[index + 1]);
+                                }
+                             }
+                             break;
+                    }
+
+                    buildLPtree($("#lp_item_list"), 0);
+                    var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
+                    $.get(
+                        "'.$ajax_url.'",
+                        order,
+                        function(reponse) {
+                            $("#message").html(reponse);
+                            order = "";
+                            newOrderData = "";
+                        }
+                    );
+                });
+
+                function refreshTree() {
+                    var params = "&a=get_lp_item_tree";
+                    $.get(
+                        "'.$ajax_url.'",
+                        params,
+                        function(result) {
+                            serialized = [];
+                            $("#lp_item_list").html(result);
+                        }
+                    );
+                }
+
+                const nestedQuery = ".nested-sortable";
+                const identifier = "id";
+                const root = document.getElementById("lp_item_list");
+                /*function serialize(sortable) {
+                  var serialized = [];
+                  var children = [].slice.call(sortable.children);
+                  for (var i in children) {
+                    var nested = children[i].querySelector(nestedQuery);
+                    serialized.push({
+                      id: children[i].dataset[identifier],
+                      children: nested ? serialize(nested) : []
+                    });
+                  }
+                  return serialized;
+                }*/
+                var serialized = [];
+                function serialize(sortable) {
+                  var children = [].slice.call(sortable.children);
+                  for (var i in children) {
+                    var nested = children[i].querySelector(nestedQuery);
+                    var parentId = $(children[i]).parent().parent().attr("id");
+                    //console.log("---");
+                    var id = children[i].dataset[identifier];
+                    if (typeof id === "undefined") {
+                        return;
+                    }
+                    //console.log(id);            console.log(parentId);
+                    serialized.push({
+                      id: children[i].dataset[identifier],
+                      parent_id: parentId
+                    });
+
+                    if (nested) {
+                        serialize(nested);
+                    }
+                  }
+
+                  return serialized;
+                }
+
+                let tree = document.getElementById("lp_item_list");
+                Sortable.create(tree, {
+                    group: "nested",
+                    put: ["nested-sortable", ".lp_resource", ".nested-source"],
+                    animation: 150,
+                    //fallbackOnBody: true,
+                    swapThreshold: 0.65,
+                    dataIdAttr: "data-id",
+                    store: {
+                        set: function (sortable) {
+                            var order = sortable.toArray();
+                            console.log(order);
+                        }
+                    },
+                    onEnd: function(evt) {
+                        console.log("onEnd");
+                        let list = serialize(root);
+                        let order = "&a=update_lp_item_order&new_order=" + JSON.stringify(list);
+                        $.get(
+                            "'.$ajax_url.'",
+                            order,
+                            function(reponse) {
+                                $("#message").html(reponse);
+                                refreshTree();
+                            }
+                        );
+                    },
+                });
+
+                let docs = document.getElementById("doc_list");
+                Sortable.create(docs, {
+               //$(".lp_resource").sortable({
+                    group: "nested",
+                    put: ["nested-sortable"],
+                    filter: ".disable_drag",
+                    animation: 150,
+                    fallbackOnBody: true,
+                    swapThreshold: 0.65,
+                    dataIdAttr: "data-id",
+                    onRemove: function(evt) {
+                        console.log("onRemove");
+                        var itemEl = evt.item;
+                        var newIndex = evt.newIndex;
+                        var id = $(itemEl).attr("id");
+                        var parent_id = $(itemEl).parent().parent().attr("id");
+                        var type =  $(itemEl).find(".link_with_id").attr("data_type");
+                        var title = $(itemEl).find(".link_with_id").text();
+
+                        let previousId = 0;
+                        if (0 !== newIndex) {
+                            previousId = $(itemEl).prev().attr("id");
+                        }
+                        var params = {
+                            "a": "add_lp_item",
+                            "id": id,
+                            "parent_id": parent_id,
+                            "previous_id": previousId,
+                            "type": type,
+                            "title" : title
+                        };
+                        console.log(params);
+                        $.ajax({
+                            type: "GET",
+                            url: "'.$ajax_url.'",
+                            data: params,
+                            success: function(itemId) {
+                                $(itemEl).attr("id", itemId);
+                                $(itemEl).attr("data-id", itemId);
+                                let list = serialize(root);
+                                let listInString = JSON.stringify(list);
+                                if (typeof listInString === "undefined") {
+                                    listInString = "";
+                                }
+                                let order = "&a=update_lp_item_order&new_order=" + listInString;
+                                $.get(
+                                    "'.$ajax_url.'",
+                                    order,
+                                    function(reponse) {
+                                        $("#message").html(reponse);
+                                        refreshTree();
+                                    }
+                                );
+                                //$("#lp_item_list").html(data);
+                            }
+                        });
+                    },
+                });
+
+                $("#lp_item_list2").sortable({
+                    items: "li",
+                    handle: ".moved", //only the class "moved"
+                    cursor: "move",
+                    placeholder: "ui-state-highlight", //defines the yellow highlight
+                    update: function(event, ui) {
+                        buildLPtree($("#lp_item_list"), 0);
+                        var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
+                        $.get(
+                            "'.$ajax_url.'",
+                            order,
+                            function(reponse) {
+                                $("#message").html(reponse);
+                                order = "";
+                                newOrderData = "";
+                            }
+                        );
+                    },
+                    receive: function(event, ui) {
+                        var item = $(ui.item).find(".link_with_id");
+                        var id = item.attr("data_id");
+                        var type = item.attr("data_type");
+                        var title = item.attr("title");
+                        processReceive = true;
+                           //console.log(ui.item.parent().parent().attr("id"));
+                        if (ui.item.parent()[0]) {
+                            //var parent_id = $(ui.item.parent()[0]).attr("id");
+                            var previous_id = $(ui.item.prev()).attr("id");
+                            var parent_id = ui.item.parent().parent().parent().attr("id");
+                            if (parent_id == "undefined") {
+                                parent_id = 0;
+                            }
+                            console.log(parent_id);
+                            var params = {
+                                "a": "add_lp_item",
+                                "id": id,
+                                "parent_id": parent_id,
+                                "previous_id": previous_id,
+                                "type": type,
+                                "title" : title
+                            };
+                            console.log(params);
+                            $.ajax({
+                                type: "GET",
+                                url: "'.$ajax_url.'",
+                                data: params,
+                                success: function(data) {
+                                    //$("#scorm-list .card-body").html(data);
+                                    $("#lp_item_list").html(data);
+                                }
+                            });
+                        }
+                    }
+                });
+                processReceive = false;
+            });
+        </script>';
+
+        $content .= "
+        <script>
+
+
+
             function confirmation(name) {
                 if (confirm('$sureToDelete' + name)) {
                     return true;
@@ -5501,8 +5858,6 @@ class learnpath
                     return false;
                 }
             }
-
-
             function refreshTree() {
                 var params = '&a=get_lp_item_tree';
                 $.get(
@@ -5573,7 +5928,6 @@ class learnpath
         }
         </script>";
 
-        $content .= '<div id="lp_sidebar" class="col-md-4">';
         $content .= $this->return_new_tree($updateAudio, $dropElementHere);
 
         $documentId = isset($_GET['path_item']) ? (int) $_GET['path_item'] : 0;
@@ -5588,12 +5942,10 @@ class learnpath
         // Show the template list.
         if (('document' === $type || 'step' === $type) && !isset($_GET['file'])) {
             // Show the template list.
-            $content .= '<div id="frmModel" class="scrollbar-inner lp-add-item">';
-            $content .= '</div>';
+            $content .= '<div id="frmModel" class="scrollbar-inner lp-add-item"></div>';
         }
-        $content .= '</div>';
 
-        echo $content;
+        return $content;
     }
 
     /**
@@ -5700,7 +6052,7 @@ class learnpath
             },
             'childOpen' => function($child) {
                 $id = $child['iid'];
-                return '<li id="'.$id.'" data-id="'.$id.'"  class="list-group-item nested-'.$child['lvl'].'">';
+                return '<li id="'.$id.'" data-id="'.$id.'"  class=" flex flex-col list-group-item nested-'.$child['lvl'].'">';
             },
             'childClose' => '',
             'nodeDecorator' => function ($node) use ($mainUrl, $previewImage, $upIcon, $downIcon) {
@@ -5754,8 +6106,8 @@ class learnpath
                     ['class' => 'btn btn-default']
                 );
 
-                $editIcon = '';
-                $editIcon .= '<a
+                //$editIcon = '';
+                $editIcon = '<a
                     href="'.$mainUrl.'&action=edit_item&view=build&id='.$itemId.'&lp_id='.$lpId.'&path_item='.$node['path'].'"
                     class="btn btn-default"
                     >';
@@ -5818,11 +6170,11 @@ class learnpath
                 //return $title.                $extra;
                 return
                    // '<div class="item_data">'.
-                    $moveIcon.' '.$icon.' '.
-                    $title.
-                    $extra.
+                    "<div class='flex flex-row'> $moveIcon  $icon <div>$title </div></div>
+
+                    $extra
                     $buttons
-                    //.'</div>'
+                    "
                     ;
             },
         ];
@@ -6005,7 +6357,7 @@ class learnpath
 
         if ((false === strpos($request, 'build') &&
             false === strpos($request, 'add_item')) ||
-            in_array($action, ['add_audio'])
+            in_array($action, ['add_audio'], true)
         ) {
             $actionsLeft .= Display::url(
                 Display::return_icon(
@@ -6420,11 +6772,9 @@ class learnpath
     public function display_edit_item($lpItem, $excludeExtraFields = [])
     {
         $return = '';
-
         if (empty($lpItem)) {
             return '';
         }
-        $item_id = $lpItem->getIid();
         $itemType = $lpItem->getItemType();
         $path = $lpItem->getPath();
 
@@ -6434,15 +6784,9 @@ class learnpath
             case 'sco':
                 if (isset($_GET['view']) && 'build' === $_GET['view']) {
                     $return .= $this->displayItemMenu($lpItem);
-                    $return .= $this->display_item_form(
-                        $lpItem,
-                        'edit'
-                    );
+                    $return .= $this->display_item_form($lpItem, 'edit');
                 } else {
-                    $return .= $this->display_item_form(
-                        $lpItem,
-                        'edit_item'
-                    );
+                    $return .= $this->display_item_form($lpItem, 'edit_item');
                 }
                 break;
             case TOOL_LP_FINAL_ITEM:
@@ -6541,14 +6885,14 @@ class learnpath
             Display::return_icon('certificate.png', get_lang('Certificate'), [], $size),
         ];
 
-        echo Display::return_message(
+        $content = Display::return_message(
             get_lang('Click on the [Learner view] button to see your learning path'),
             'normal'
         );
         $section = $this->displayNewSectionForm();
         $selected = isset($_REQUEST['lp_build_selected']) ? (int) $_REQUEST['lp_build_selected'] : 0;
 
-        echo Display::tabs(
+        $content .= Display::tabs(
             $headers,
             [
                 $documents,
@@ -6565,7 +6909,7 @@ class learnpath
             $selected
         );
 
-        return true;
+        return $content;
     }
 
     /**
@@ -7102,8 +7446,6 @@ class learnpath
                 $return .= get_lang('File').': '.$documentData['absolute_path_from_document'];
             }
         }*/
-
-        $return .= '</div>';
 
         if (!empty($audio_player)) {
             $return .= $audio_player;
@@ -7689,7 +8031,7 @@ class learnpath
         $form->addButtonSearch(get_lang('Search'));
         $return = $form->returnForm();
 
-        $return .= '<ul class=" list-group lp_resource">';
+        $return .= '<ul id="doc_list" class=" list-group lp_resource">';
         $return .= '<li class="list-group-item lp_resource_element disable_drag">';
         $return .= Display::return_icon('new_exercice.png');
         $return .= '<a

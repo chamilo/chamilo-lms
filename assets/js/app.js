@@ -22,7 +22,7 @@ import 'select2/dist/css/select2.min.css';
 
 //require('flatpickr');
 //import('bootstrap-vue');
-//import('bootstrap');
+import('bootstrap');
 require('webpack-jquery-ui');
 require('webpack-jquery-ui/css');
 
@@ -42,7 +42,10 @@ require('blueimp-load-image');
 import('mediaelement');
 require('multiselect-two-sides');
 
-import 'jquery-sortablejs';
+//import 'jquery-sortablejs';
+
+import Sortable from 'sortablejs';
+window.Sortable = Sortable;
 
 import Swal from 'sweetalert2';
 window.Swal = Swal;

@@ -127,12 +127,12 @@ if ('add_item' === $action && 'document' === $type) {
 
 $show_learn_path = true;
 $lp_theme_css = $learnPath->get_theme();
-Display::display_header(null, 'Path');
-echo $learnPath->build_action_menu();
-echo '<div class="row">';
-echo $learnPath->showBuildSideBar(null, true, $type);
-echo '<div id="doc_form" class="col-md-8">';
-$learnPath->displayResources();
+
+$tpl = new Template();
+$tpl->assign('actions', $learnPath->build_action_menu(true));
+$tpl->assign('left', $learnPath->showBuildSideBar(null, true, $type));
+$tpl->assign('right', $learnPath->displayResources());
+$tpl->displayTwoColTemplate();
 
 /*
 switch ($type) {
@@ -173,7 +173,4 @@ switch ($type) {
     case 'step':
         break;
 }*/
-echo '</div>';
-echo '</div>';
 
-Display::display_footer();

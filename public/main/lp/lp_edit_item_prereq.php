@@ -55,20 +55,18 @@ $interbreadcrumb[] = [
     'name' => get_lang('Add learning object or activity'),
 ];
 
-Display::display_header(get_lang('Prerequisites'), 'Path');
-
-echo $lp->build_action_menu();
-echo '<div class="row">';
-echo $lp->showBuildSideBar();
-echo '<div class="col-md-8">';
-echo '<div class="prerequisites">';
+$right = '';
 if (isset($is_success) && true == $is_success) {
-    echo $lp->displayItemMenu($lpItem);
-    echo Display::return_message(get_lang('Prerequisites to the current learning object have been added.'));
+    $right .= $lp->displayItemMenu($lpItem);
+    $right .= Display::return_message(get_lang('Prerequisites to the current learning object have been added.'));
 } else {
-    echo $lp->displayItemMenu($lpItem);
-    echo $lp->display_item_prerequisites_form($lpItem);
+    $right .= $lp->displayItemMenu($lpItem);
+    $right .= $lp->display_item_prerequisites_form($lpItem);
 }
-echo '</div>';
-echo '</div>';
-Display::display_footer();
+
+$tpl = new Template(get_lang('Prerequisites'));
+$tpl->assign('actions', $lp->build_action_menu(true));
+$tpl->assign('left', $lp->showBuildSideBar());
+$tpl->assign('right', $right);
+$tpl->displayTwoColTemplate();
+

@@ -2154,7 +2154,7 @@ class Display
                     id="'.$id.'"
                     class="btn btn-secondary dropdown-toggle"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                '.$title.'
+                    '.$title.'
                 </button>
                 <div class="dropdown-menu aria-labelledby="'.$id.'" '.($alignToRight ? 'dropdown-menu-right' : '').'">';
         foreach ($elements as $item) {
@@ -2547,7 +2547,7 @@ class Display
         $html = ' <div id="'.$id.'" class="q-card p-2 mb-4">';
         $html .= ' <div class="flex justify-between '.$col.'">';
         foreach ($contentList as $item) {
-            $html .= '<div class=" flex p-2 gap-2 ">'.$item.'</div>';
+            $html .= '<div class="flex p-2 gap-2 ">'.$item.'</div>';
         }
         $html .= '</div>';
         $html .= '</div>';

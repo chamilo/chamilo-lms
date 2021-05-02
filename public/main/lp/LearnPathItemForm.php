@@ -134,9 +134,9 @@ class LearnPathItemForm
             if (($document && $document->getResourceNode()->hasEditableTextContent()) || 'add' === $action) {
                 $renderer = $form->defaultRenderer();
                 $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp');
-                $form->addElement('html', '<div class="editor-lp">');
+                $form->addHtml('<div class="editor-lp">');
                 $form->addHtmlEditor('content_lp', null, null, true, $editorConfig, true);
-                $form->addElement('html', '</div>');
+                $form->addHtml('</div>');
                 if ($document) {
                     $form->addHidden('document_id', $document->getIid());
                     $content = $lp->display_document(

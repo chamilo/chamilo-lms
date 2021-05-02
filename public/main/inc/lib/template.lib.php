@@ -221,6 +221,14 @@ class Template
         $this->returnResponse($this->params, $template);
     }
 
+    public function displayTwoColTemplate()
+    {
+        $this->loadLegacyParams();
+        $template = '@ChamiloCore/Layout/layout_two_col.html.twig';
+        $this->setVueParams($this->params);
+        $this->returnResponse($this->params, $template);
+    }
+
     /**
      * Displays an empty template.
      */

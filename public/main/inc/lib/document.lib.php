@@ -2910,7 +2910,7 @@ class DocumentManager
 
         $options = [
             'decorate' => true,
-            'rootOpen' => '<ul class="list-group lp_resource">',
+            'rootOpen' => '<ul id="doc_list" class="list-group lp_resource">',
             'rootClose' => '</ul>',
             //'childOpen' => '<li class="doc_resource lp_resource_element ">',
             'childOpen' => function($child) {
@@ -2928,7 +2928,7 @@ class DocumentManager
             },
             'childClose' => '</li>',
             'nodeDecorator' => function ($node) use ($icon, $folderIcon) {
-                $link = '<div class="item_data">';
+                $link = '<div class="flex flex-row item_data">';
                 $file = $node['resourceFile'];
                 $extension = '';
                 if ($file) {
@@ -2948,8 +2948,9 @@ class DocumentManager
                     data_type="document"
                     class="moved ui-sortable-handle link_with_id"
                     >';
-                $link .= $folder.'&nbsp;'.addslashes($node['title']);
+                $link .= $folder.'&nbsp;';
                 $link .= '</a>';
+                $link .= addslashes($node['title']);
                 $link .= '</div>';
 
                 return $link;
@@ -6573,7 +6574,7 @@ This folder contains all sessions that have been opened in the chat. Although th
             $return .= '<li class="doc_resource lp_resource_element '.$visibilityClass.' " data_id="'.$documentId.'" data_type="document" title="'.$my_file_title.'" >';
         }
 
-        $return .= '<div class="item_data" style="margin-left:'.($num * 5).'px;margin-right:5px;">';
+        $return .= '<div class="flex flex-row item_data" style="margin-left:'.($num * 5).'px;margin-right:5px;">';
         if ($add_move_button) {
             $return .= '<a class="moved" href="#">';
             $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY);

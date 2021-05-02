@@ -489,13 +489,26 @@ if ($form->validate()) {
 
     $params = [
         'filename' => get_lang('StudentFollow'),
-        'pdf_title' => $studentInfo['complete_name_with_username'],
         'format' => 'A4',
         'orientation' => 'P',
     ];
 
+    $sysCssPath = api_get_path(SYS_CSS_PATH);
+    $cssFilepath = $sysCssPath.'themes/'.api_get_visual_theme().'/print.css';
+
+    if (!file_exists($cssFilepath)) {
+        $cssFilepath = $sysCssPath.'/print.css';
+    }
+
+    $css = file_get_contents($cssFilepath);
+
     $pdf = new PDF($params['format'], $params['orientation'], $params);
-    $pdf->html_to_pdf_with_template(implode('<pagebreak>', $pdfHtml));
+
+    try {
+        $pdf->content_to_pdf(implode('<pagebreak>', $pdfHtml), $css);
+    } catch (MpdfException $e) {
+        echo Display::return_message(get_lang('ErrorWhileBuildingReport'), 'error');
+    }
 
     exit;
 }

@@ -827,7 +827,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
                 if (!empty($values['group_forum'])) {
                     $toGroupId = $values['group_forum'];
                 }
-                $tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+                //$tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
                 foreach ($threads as $thread) {
                     /*$sql = "UPDATE $tableItemProperty
                             SET to_group_id = $toGroupId
@@ -1571,6 +1571,7 @@ function get_forums(
  */
 function get_last_post_information($forum_id, $show_invisibles = false, $course_id = null, $sessionId = 0)
 {
+    throw new Exception('@todo get_last_post_information');
     if (!isset($course_id)) {
         $course_id = api_get_course_int_id();
     } else {
@@ -1579,7 +1580,7 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
     $sessionId = $sessionId ? (int) $sessionId : api_get_session_id();
 
     $table_posts = Database::get_course_table(TABLE_FORUM_POST);
-    $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
+    //$table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $table_users = Database::get_main_table(TABLE_MAIN_USER);
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
 

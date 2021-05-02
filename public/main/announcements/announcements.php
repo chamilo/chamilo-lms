@@ -46,7 +46,6 @@ if (!empty($sessionId) && $drhHasAccessToSessionContent) {
 
 // Database Table Definitions
 $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-$tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 $isTutor = false;
 if (!empty($group_id)) {
@@ -94,6 +93,7 @@ $thisAnnouncementId = null;
 
 switch ($action) {
     case 'move':
+        throw new Exception('@todo move');
         if (!$allowToEdit) {
             api_not_allowed(true);
         }
@@ -103,7 +103,7 @@ switch ($action) {
             $thisAnnouncementId = (int) ($_GET['down']);
             $sortDirection = 'DESC';
         }
-
+        /*
         if (!empty($_GET['up'])) {
             $thisAnnouncementId = (int) ($_GET['up']);
             $sortDirection = 'ASC';
@@ -150,7 +150,7 @@ switch ($action) {
             Display::addFlash(Display::return_message(get_lang('The announcement has been moved')));
             header('Location: '.$homeUrl);
             exit;
-        }
+        }*/
 
         break;
     case 'view':

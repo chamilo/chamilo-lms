@@ -2831,6 +2831,7 @@ class Agenda
     }
 
     /**
+     * @deprecated
      *    This function retrieves all the agenda items of all the courses the user is subscribed to.
      */
     public static function get_myagendaitems(
@@ -2843,7 +2844,9 @@ class Agenda
 
         $items = [];
         $my_list = [];
+        throw new Exception('@todo get_myagendaitems');
 
+        /*
         // get agenda-items for every course
         foreach ($courses_dbs as $key => $array_course_info) {
             //databases of the courses
@@ -2947,7 +2950,7 @@ class Agenda
             foreach ($tmpitems as $val) {
                 $agendaitems[$agendaday] .= $val;
             }
-        }
+        }*/
 
         return $my_list;
     }

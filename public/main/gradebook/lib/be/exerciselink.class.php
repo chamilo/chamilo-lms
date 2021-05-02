@@ -524,7 +524,6 @@ class ExerciseLink extends AbstractLink
      */
     public function get_exercise_data()
     {
-        $tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         if (1 == $this->is_hp) {
             $table = Database::get_course_table(TABLE_DOCUMENT);
         } else {

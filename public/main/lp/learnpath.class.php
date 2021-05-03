@@ -5504,150 +5504,7 @@ class learnpath
             /*
             Script to manipulate Learning Path items with Drag and drop
              */
-            var newOrderData = "";
-            function buildLPtree(in_elem, in_parent_id) {
-                var item_tag = in_elem.get(0).tagName;
-                var item_id =  in_elem.attr("id");
-                //var parent_id = item_id;
-                in_elem.children("li").each(function () {
-                    let itemId = $(this).attr("id");
-                    if (itemId && itemId != "undefined") {
-                        newOrderData += itemId + "|" + in_parent_id+"^";
-                        $(this).find("ul").each(function () {
-                            buildLPtree($(this), itemId);
-                        });
-                    }
-                });
-            }
-
             $(function() {
-                $(".lp_resource6").sortable({
-                    items: ".lp_resource_element ",
-                    handle: ".moved", //only the class "moved"
-                    cursor: "move",
-                    connectWith: "#lp_item_list",
-                    placeholder: "ui-state-highlight", //defines the yellow highlight
-                    start: function(event, ui) {
-                        $(ui.item).css("width", "350px");
-                        $(ui.item).find(".item_data").attr("style", "");
-                    },
-                    stop: function(event, ui) {
-                        $(ui.item).css("width", "100%");
-                    }
-                });
-
-                $(".li_container2 .order_items").click(function(e) {
-                    var dir = $(this).data("dir");
-                    var itemId = $(this).data("id");
-                    var jItems = $("#lp_item_list li.li_container");
-                    var jItem = $("#"+ itemId);
-                    var index = jItems.index(jItem);
-                    var total = jItems.length;
-
-                    switch (dir) {
-                        case "up":
-                            if (index != 0 && jItems[index - 1]) {
-                                /*var subItems = $(jItems[index - 1]).find("li.sub_item");
-                                if (subItems.length >= 0) {
-                                    index = index - 1;
-                                }*/
-                                var subItems = $(jItems[index - 1]).find("li.sub_item");
-                                var parentClass = $(jItems[index - 1]).parent().parent().attr("class");
-                                var parentId = $(jItems[index]).parent().parent().attr("id");
-                                var myParentId = $(jItems[index - 1]).parent().parent().attr("id");
-
-                                // We are brothers!
-                                if (parentId == myParentId) {
-                                    if (subItems.length > 0) {
-                                        var lastItem = $(jItems[index - 1]).find("li.sub_item");
-                                        parentIndex = jItems.index(lastItem);
-                                        jItem.detach().insertAfter(lastItem);
-                                    } else {
-                                        jItem.detach().insertBefore(jItems[index - 1]);
-                                    }
-                                    break;
-                                }
-
-                                if (parentClass == "record li_container") {
-                                    // previous is a chapter
-                                    var lastItem = $(jItems[index - 1]).parent().parent().find("li.li_container").last();
-                                    parentIndex = jItems.index(lastItem);
-                                    jItem.detach().insertAfter(jItems[parentIndex]);
-                                } else {
-                                    jItem.detach().insertBefore(jItems[index - 1]);
-                                }
-                            }
-                            break;
-                        case "down":
-                             if (index != total - 1) {
-                                const originIndex = index;
-                                // The element is a chapter with items
-                                var subItems = jItem.find("li.li_container");
-                                if (subItems.length > 0) {
-                                    index = subItems.length + index;
-                                }
-
-                                var subItems = $(jItems[index + 1]).find("li.sub_item");
-                                // This is an element entering in a chapter
-                                if (subItems.length > 0) {
-                                    // Check if im a child
-                                    var parentClass = jItem.parent().parent().attr("class");
-                                    if (parentClass == "record li_container") {
-                                        // Parent position
-                                        var parentIndex = jItems.index(jItem.parent().parent());
-                                        jItem.detach().insertAfter(jItems[parentIndex]);
-                                    } else {
-                                        jItem.detach().insertAfter(subItems);
-                                    }
-                                    break;
-                                }
-
-                                var currentSubItems = $(jItems[index]).parent().find("li.sub_item");
-                                var parentId = $(jItems[originIndex]).parent().parent().attr("id");
-                                var myParentId = $(jItems[index + 1]).parent().parent().attr("id");
-
-                                // We are brothers!
-                                if (parentId == myParentId) {
-                                    if ((index + 1) < total) {
-                                        jItem.detach().insertAfter(jItems[index + 1]);
-                                    }
-                                    break;
-                                }
-
-                                if (currentSubItems.length > 0) {
-                                    var parentIndex = jItems.index(jItem.parent().parent());
-                                    if (parentIndex >= 0) {
-                                        jItem.detach().insertAfter(jItems[parentIndex]);
-                                        break;
-                                    }
-                                    //jItem.detach().insertAfter($(jItems[index]).parent().parent());
-                                }
-
-                                //var lastItem = $(jItems[index + 1]).parent().parent().find("li.li_container").last();
-                                if (subItems.length > 0) {
-                                    index = originIndex;
-                                }
-
-                                if ((index + 1) < total) {
-                                    jItem.detach().insertAfter(jItems[index + 1]);
-                                }
-                             }
-                             break;
-                    }
-
-                    buildLPtree($("#lp_item_list"), 0);
-                    var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
-                    $.get(
-                        "'.$ajax_url.'",
-                        order,
-                        function(reponse) {
-                            $("#message").html(reponse);
-                            order = "";
-                            newOrderData = "";
-                        }
-                    );
-                });
-
                 function refreshTree() {
                     var params = "&a=get_lp_item_tree";
                     $.get(
@@ -5656,6 +5513,7 @@ class learnpath
                         function(result) {
                             serialized = [];
                             $("#lp_item_list").html(result);
+                            nestedSortable();
                         }
                     );
                 }
@@ -5663,25 +5521,13 @@ class learnpath
                 const nestedQuery = ".nested-sortable";
                 const identifier = "id";
                 const root = document.getElementById("lp_item_list");
-                /*function serialize(sortable) {
-                  var serialized = [];
-                  var children = [].slice.call(sortable.children);
-                  for (var i in children) {
-                    var nested = children[i].querySelector(nestedQuery);
-                    serialized.push({
-                      id: children[i].dataset[identifier],
-                      children: nested ? serialize(nested) : []
-                    });
-                  }
-                  return serialized;
-                }*/
+
                 var serialized = [];
                 function serialize(sortable) {
                   var children = [].slice.call(sortable.children);
                   for (var i in children) {
                     var nested = children[i].querySelector(nestedQuery);
                     var parentId = $(children[i]).parent().parent().attr("id");
-                    //console.log("---");
                     var id = children[i].dataset[identifier];
                     if (typeof id === "undefined") {
                         return;
@@ -5700,39 +5546,45 @@ class learnpath
                   return serialized;
                 }
 
-                let tree = document.getElementById("lp_item_list");
-                Sortable.create(tree, {
-                    group: "nested",
-                    put: ["nested-sortable", ".lp_resource", ".nested-source"],
-                    animation: 150,
-                    //fallbackOnBody: true,
-                    swapThreshold: 0.65,
-                    dataIdAttr: "data-id",
-                    store: {
-                        set: function (sortable) {
-                            var order = sortable.toArray();
-                            console.log(order);
-                        }
-                    },
-                    onEnd: function(evt) {
-                        console.log("onEnd");
-                        let list = serialize(root);
-                        let order = "&a=update_lp_item_order&new_order=" + JSON.stringify(list);
-                        $.get(
-                            "'.$ajax_url.'",
-                            order,
-                            function(reponse) {
-                                $("#message").html(reponse);
-                                refreshTree();
-                            }
-                        );
-                    },
-                });
+                function nestedSortable() {
+                    let left = document.getElementsByClassName("nested-sortable");
+                    console.log(left);
+                    Array.prototype.forEach.call(left, function(resource) {
+                        Sortable.create(resource, {
+                            group: "nested",
+                            put: ["nested-sortable", ".lp_resource", ".nested-source"],
+                            animation: 150,
+                            //fallbackOnBody: true,
+                            swapThreshold: 0.65,
+                            dataIdAttr: "data-id",
+                            store: {
+                                set: function (sortable) {
+                                    var order = sortable.toArray();
+                                    console.log(order);
+                                }
+                            },
+                            onEnd: function(evt) {
+                                console.log("onEnd");
+                                let list = serialize(root);
+                                let order = "&a=update_lp_item_order&new_order=" + JSON.stringify(list);
+                                $.get(
+                                    "'.$ajax_url.'",
+                                    order,
+                                    function(reponse) {
+                                        $("#message").html(reponse);
+                                        refreshTree();
+                                    }
+                                );
+                            },
+                        });
+                    });
+                }
+
+                nestedSortable();
 
                 let resources = document.getElementsByClassName("lp_resource");
                 Array.prototype.forEach.call(resources, function(resource) {
                     Sortable.create(resource, {
-                   //$(".lp_resource").sortable({
                         group: "nested",
                         put: ["nested-sortable"],
                         filter: ".disable_drag",
@@ -5783,68 +5635,12 @@ class learnpath
                                             refreshTree();
                                         }
                                     );
-                                    //$("#lp_item_list").html(data);
                                 }
                             });
                         },
                     });
                 });
 
-                $("#lp_item_list2").sortable({
-                    items: "li",
-                    handle: ".moved", //only the class "moved"
-                    cursor: "move",
-                    placeholder: "ui-state-highlight", //defines the yellow highlight
-                    update: function(event, ui) {
-                        buildLPtree($("#lp_item_list"), 0);
-                        var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
-                        $.get(
-                            "'.$ajax_url.'",
-                            order,
-                            function(reponse) {
-                                $("#message").html(reponse);
-                                order = "";
-                                newOrderData = "";
-                            }
-                        );
-                    },
-                    receive: function(event, ui) {
-                        var item = $(ui.item).find(".link_with_id");
-                        var id = item.attr("data_id");
-                        var type = item.attr("data_type");
-                        var title = item.attr("title");
-                        processReceive = true;
-                           //console.log(ui.item.parent().parent().attr("id"));
-                        if (ui.item.parent()[0]) {
-                            //var parent_id = $(ui.item.parent()[0]).attr("id");
-                            var previous_id = $(ui.item.prev()).attr("id");
-                            var parent_id = ui.item.parent().parent().parent().attr("id");
-                            if (parent_id == "undefined") {
-                                parent_id = 0;
-                            }
-                            console.log(parent_id);
-                            var params = {
-                                "a": "add_lp_item",
-                                "id": id,
-                                "parent_id": parent_id,
-                                "previous_id": previous_id,
-                                "type": type,
-                                "title" : title
-                            };
-                            console.log(params);
-                            $.ajax({
-                                type: "GET",
-                                url: "'.$ajax_url.'",
-                                data: params,
-                                success: function(data) {
-                                    //$("#scorm-list .card-body").html(data);
-                                    $("#lp_item_list").html(data);
-                                }
-                            });
-                        }
-                    }
-                });
-                processReceive = false;
             });
         </script>';
 
@@ -5928,7 +5724,6 @@ class learnpath
         </script>";
 
         $content .= $this->return_new_tree($updateAudio, $dropElementHere);
-
         $documentId = isset($_GET['path_item']) ? (int) $_GET['path_item'] : 0;
 
         $repo = Container::getDocumentRepository();
@@ -6881,11 +6676,11 @@ class learnpath
             Display::return_icon('add_learnpath_section.png', get_lang('Add section'), [], $size),
             Display::return_icon('certificate.png', get_lang('Certificate'), [], $size),
         ];
-
-        $content = Display::return_message(
+        $content = '';
+        /*$content = Display::return_message(
             get_lang('Click on the [Learner view] button to see your learning path'),
             'normal'
-        );
+        );*/
         $section = $this->displayNewSectionForm();
         $selected = isset($_REQUEST['lp_build_selected']) ? (int) $_REQUEST['lp_build_selected'] : 0;
 

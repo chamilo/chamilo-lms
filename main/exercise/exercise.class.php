@@ -10857,7 +10857,7 @@ class Exercise
      *
      * @return bool
      */
-    public function isBlockedByPercentage($attempt = [])
+    public function isBlockedByPercentage(array $attempt = []): bool
     {
         if (empty($attempt)) {
             return false;
@@ -10878,17 +10878,17 @@ class Exercise
             return false;
         }
 
-        $percentage = 0;
+        $resultPercentage = 0;
 
         if (isset($attempt['exe_result']) && isset($attempt['exe_weighting'])) {
             $weight = (int) $attempt['exe_weighting'];
             $weight = (0 == $weight) ? 1 : $weight;
-            $percentage = float_format(
+            $resultPercentage = float_format(
                 ($attempt['exe_result'] / $weight) * 100,
                 1
             );
         }
-        if ($percentage <= $blockPercentage && 0 != $percentage) {
+        if ($resultPercentage <= $blockPercentage) {
             return true;
         }
 

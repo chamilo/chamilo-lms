@@ -196,13 +196,10 @@ class RemedialCoursePlugin extends Plugin
             $bestAttempt['exe_weighting']
         );
 
-        if ($isPassedPercentage) {
-            return null;
-        }
-
         $hasAttempts = count($exerciseStatInfo) < $objExercise->selectAttempts();
+        $isBlockedByPercentage = $objExercise->isBlockedByPercentage($bestAttempt);
 
-        $doSubscriptionToRemedial = !$hasAttempts || $objExercise->isBlockedByPercentage($bestAttempt);
+        $doSubscriptionToRemedial = $isBlockedByPercentage  || (!$isPassedPercentage && !$hasAttempts);
 
         if (!$doSubscriptionToRemedial) {
             return null;

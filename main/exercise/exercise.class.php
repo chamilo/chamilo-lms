@@ -10935,10 +10935,6 @@ class Exercise
 
     /**
      * Returns true if the exercise is locked by percentage. an exercise attempt must be passed.
-     *
-     * @param array $attempt
-     *
-     * @return bool
      */
     public function isBlockedByPercentage(array $attempt = []): bool
     {

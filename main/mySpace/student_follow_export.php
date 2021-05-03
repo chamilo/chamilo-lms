@@ -493,14 +493,7 @@ if ($form->validate()) {
         'orientation' => 'P',
     ];
 
-    $sysCssPath = api_get_path(SYS_CSS_PATH);
-    $cssFilepath = $sysCssPath.'themes/'.api_get_visual_theme().'/print.css';
-
-    if (!file_exists($cssFilepath)) {
-        $cssFilepath = $sysCssPath.'/print.css';
-    }
-
-    $css = file_get_contents($cssFilepath);
+    $css = api_get_print_css();
 
     $pdf = new PDF($params['format'], $params['orientation'], $params);
 

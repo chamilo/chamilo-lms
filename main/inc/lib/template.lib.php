@@ -704,13 +704,10 @@ class Template
         if (!$disable_js_and_css_files) {
             $this->assign('css_custom_file_to_string', $css_file_to_string);
 
-            $style_print = '';
-            if (is_readable(api_get_path(SYS_CSS_PATH).$this->theme.'/print.css')) {
-                $style_print = api_get_css(
-                    api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/print.css'),
-                    'print'
-                );
-            }
+            $style_print = api_get_css(
+                api_get_print_css(false, true),
+                'print'
+            );
             $this->assign('css_style_print', $style_print);
         }
 

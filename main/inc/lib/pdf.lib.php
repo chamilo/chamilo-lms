@@ -154,11 +154,7 @@ class PDF
             return $html;
         }
 
-        $css_file = api_get_path(SYS_CSS_PATH).'themes/'.$tpl->theme.'/print.css';
-        if (!file_exists($css_file)) {
-            $css_file = api_get_path(SYS_CSS_PATH).'/print.css';
-        }
-        $css = file_get_contents($css_file);
+        $css = api_get_print_css();
 
         self::content_to_pdf(
             $html,
@@ -289,7 +285,7 @@ class PDF
                     api_get_path(SYS_PATH).'web/assets/bootstrap/dist/css/bootstrap.min.css',
                     api_get_path(SYS_PATH).'web/css/base.css',
                     api_get_path(SYS_PATH).'web/css/themes/'.api_get_visual_theme().'/default.css',
-                    api_get_path(SYS_PATH).'web/css/themes/'.api_get_visual_theme().'/print.css',
+                    api_get_print_css(false),
                 ];
                 foreach ($basicStyles as $style) {
                     if (file_exists($style)) {
@@ -522,11 +518,7 @@ class PDF
 
         $cssBootstrap = file_get_contents(api_get_path(SYS_PATH).'web/assets/bootstrap/dist/css/bootstrap.min.css');
         if ($addDefaultCss) {
-            $css_file = api_get_path(SYS_CSS_PATH).'themes/'.$theme.'/print.css';
-            if (!file_exists($css_file)) {
-                $css_file = api_get_path(SYS_CSS_PATH).'/print.css';
-            }
-            $cssContent = file_get_contents($css_file);
+            $cssContent = api_get_print_css();
             try {
                 @$this->pdf->WriteHTML($cssBootstrap, 1);
                 @$this->pdf->WriteHTML($cssContent, 1);
@@ -860,15 +852,9 @@ class PDF
     {
         $this->template = $this->template ?: new Template('', false, false, false, false, false, false);
 
-        $cssFile = api_get_path(SYS_CSS_PATH).'themes/'.$this->template->theme.'/print.css';
-
-        if (!file_exists($cssFile)) {
-            $cssFile = api_get_path(SYS_CSS_PATH).'print.css';
-        }
-
         $pdfPath = self::content_to_pdf(
             $html,
-            file_get_contents($cssFile),
+            api_get_print_css(),
             $fileName,
             $this->params['course_code'],
             'F'

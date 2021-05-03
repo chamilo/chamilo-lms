@@ -10133,3 +10133,27 @@ function api_get_filtered_multilingual_HTML_string($htmlString, $language = null
     // Could not find pattern. Just return the whole string. We shouldn't get here.
     return $htmlString;
 }
+
+/**
+ * Get the print.css file for current theme.
+ * Only the file path or the file contents when $getFileContents is true.
+ */
+function api_get_print_css(bool $getFileContents = true, bool $useWebPath = false): string
+{
+    $sysCssPath = api_get_path(SYS_CSS_PATH);
+    $cssFile = $sysCssPath.'themes/'.api_get_visual_theme().'/print.css';
+
+    if (!file_exists($cssFile)) {
+        $cssFile = $sysCssPath.'print.css';
+    }
+
+    if ($getFileContents) {
+        return file_get_contents($cssFile);
+    }
+
+    if ($useWebPath) {
+        return str_replace($sysCssPath, api_get_path(WEB_CSS_PATH), $cssFile);
+    }
+
+    return $cssFile;
+}

@@ -6949,10 +6949,6 @@ div#chat-remote-video video {
 }
 
 #registration .progress {
-    width: 100%;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    height: 10px;
 }
 
 #registration input[name='status'] {
@@ -8044,9 +8040,15 @@ a.sessionView {
 }
 
 .progress {
-    border: 1px solid #c5c5c5;
     background: #E9E9E9;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
+}
+
+.radio + .input-group,
+.input-group + .progress,
+input + .progress {
+    margin-top: 5px;
+    margin-bottom: 0;
 }
 
 .wami-container {
@@ -8588,7 +8590,6 @@ ul#toolnavbox-two li a.btn {
 }
 
 #lp-accordion .lp-item .progress {
-    border: none;
     background: #D7E3E6;
     margin-bottom: 10px;
 }

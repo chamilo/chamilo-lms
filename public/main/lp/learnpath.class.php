@@ -5532,7 +5532,6 @@ class learnpath
                     if (typeof id === "undefined") {
                         return;
                     }
-                    //console.log(id);            console.log(parentId);
                     serialized.push({
                       id: children[i].dataset[identifier],
                       parent_id: parentId
@@ -5548,7 +5547,6 @@ class learnpath
 
                 function nestedSortable() {
                     let left = document.getElementsByClassName("nested-sortable");
-                    console.log(left);
                     Array.prototype.forEach.call(left, function(resource) {
                         Sortable.create(resource, {
                             group: "nested",

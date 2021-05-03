@@ -277,7 +277,7 @@ abstract class Question
     {
         $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
         $tblQuizRelQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $showHideConfiguration = api_get_configuration_value('hide_question_number');
+        $showHideConfiguration = api_get_configuration_value('quiz_hide_question_number');
         if (!$showHideConfiguration) {
             return 0;
         }
@@ -288,18 +288,18 @@ abstract class Question
         if (count($result) != 0) {
             $sql = "
                 SELECT
-                    q.hide_question_number AS `active`
+                    q.hide_question_number AS hide_num
                 FROM
-                      $tblQuiz as q
+                    $tblQuiz as q
                 INNER JOIN  $tblQuizRelQuestion AS qrq ON qrq.exercice_id = q.id
                 WHERE qrq.question_id = ".$this->id;
             $res = Database::query($sql);
             $result = Database::store_result($res);
             if (is_array($result) &&
                 isset($result[0]) &&
-                isset($result[0]['active'])
+                isset($result[0]['hide_num'])
             ) {
-                return (int) $result[0]['active'];
+                return (int) $result[0]['hide_num'];
             }
         }
 

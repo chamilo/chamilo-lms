@@ -335,7 +335,7 @@ class CLpItem
         return $this->masteryScore;
     }
 
-    public function setPreviousItemId(int $previousItemId): self
+    public function setPreviousItemId(?int $previousItemId): self
     {
         $this->previousItemId = $previousItemId;
 
@@ -352,7 +352,7 @@ class CLpItem
         return $this->previousItemId;
     }
 
-    public function setNextItemId(int $nextItemId): self
+    public function setNextItemId(?int $nextItemId): self
     {
         $this->nextItemId = $nextItemId;
 

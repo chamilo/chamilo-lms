@@ -437,21 +437,22 @@ class learnpath
         if (empty($max_time_allowed)) {
             $max_time_allowed = 0;
         }
-        $lpId = $this->get_id();
         $max_score = 100;
         if ('quiz' === $type && $id) {
-            $sql = 'SELECT SUM(ponderation)
+            /*$sql = 'SELECT SUM(ponderation)
                     FROM '.Database::get_course_table(TABLE_QUIZ_QUESTION).' as q
                     INNER JOIN '.Database::get_course_table(TABLE_QUIZ_TEST_QUESTION).' as quiz_rel_question
                     ON q.iid = quiz_rel_question.question_id
                     WHERE
                         quiz_rel_question.quiz_id = '.$id;
             $rsQuiz = Database::query($sql);
-            $max_score = Database::result($rsQuiz, 0, 0);
+            $max_score = Database::result($rsQuiz, 0, 0);*/
 
             // Disabling the exercise if we add it inside a LP
             $exercise = new Exercise($course_id);
             $exercise->read($id);
+            $max_score = $exercise->get_max_score();
+
             $exercise->disable();
             $exercise->save();
             $title = $exercise->get_formated_title();
@@ -11303,6 +11304,7 @@ EOD;
         if (empty($orderList)) {
             return true;
         }
+        //echo '<pre>';        var_dump($orderList);
         $lpItemRepo = Container::getLpItemRepository();
         $rootParent = $lpItemRepo->getItemRoot($this->get_id());
 
@@ -11359,6 +11361,8 @@ exit;*/
         $rootParent->setLaunchData(1);*/
         //echo '<pre>';
         $rootParent->setDisplayOrder(1);
+        //$rootParent->setNextItemId(null);
+        //$rootParent->setPreviousItemId(null);
         foreach ($orderList as $item) {
             $itemId  = $item->id ?? 0;
             if (empty($itemId)) {
@@ -11388,23 +11392,36 @@ exit;*/
             $previous[$counter] = $counter + 2;
 
             $item->setParent($parent);
-            //$item->setPreviousItemId($counter);
+            //$item->setPreviousItemId($previousId);
             //$item->setNextItemId($counter + 1);
             //$item->setDisplayOrder($parentOrder[$parent->getIid()]);
-            var_dump($item->getIid().'-'.$counter);
-            //$item->setPreviousItemId(0);
-            //$item->setNextItemId(0);
+            //var_dump($item->getIid().'-'.$counter);
+            //$item->setPreviousItemId(null);
+            //$item->setNextItemId(null);
+            //$item->setPreviousItemId($previousId);
             $item->setDisplayOrder($counter);
+            //var_dump($parent->getIid(), $parent->getTitle());
+//            $lpItemRepo->persistAsLastChildOf($item, $parent);
+            //$lpItemRepo->persistAs();
+            //$lpItemRepo->persistAsFirstChildOf($item, $parent);
+            //$em->flush();
+            //$lpItemRepo->moveDown($item, true);
             $em->persist($item);
             $counter++;
         }
+
         //$rootParent->setNextItemId($counter+1);
         $em->persist($rootParent);
         $em->flush();
-        var_dump($lpItemRepo->verify());
-        $lpItemRepo->reorder($rootParent, 'displayOrder');
+        //var_dump($lpItemRepo->verify());
+        //$lpItemRepo->reorder($rootParent, 'displayOrder', 'ASC', false);
+        //$lpItemRepo->reorder($rootParent);
+        //$em->flush();
+        //var_dump($lpItemRepo->verify());
+        $lpItemRepo->recoverNode($rootParent, 'displayOrder');
+        $em->flush();
+        //var_dump($lpItemRepo->verify());
 
-        var_dump($lpItemRepo->verify());
         return true;
         /*
         $lpItemRepo->recoverNode($rootParent);

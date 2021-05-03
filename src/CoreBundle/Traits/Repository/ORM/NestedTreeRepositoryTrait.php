@@ -900,14 +900,17 @@ trait NestedTreeRepositoryTrait
         }
     }
 
-    public function recoverNode($node)
+    /**
+     * Added in Chamilo.
+     */
+    public function recoverNode($node, $sortByField = null)
     {
         $meta = $this->getClassMetadata();
         $em = $this->getEntityManager();
         $config = $this->listener->getConfiguration($em, $meta->name);
-        $doRecover = function ($root, &$count, $level = 0) use ($meta, $config, $node, $em, &$doRecover) {
+        $doRecover = function ($root, &$count, $level = 0) use ($meta, $config, $node, $em, $sortByField, &$doRecover) {
             $lft = $count++;
-            foreach ($this->getChildren($root, true) as $child) {
+            foreach ($this->getChildren($root, true, $sortByField) as $child) {
                 $doRecover($child, $count, $level + 1);
             }
             $rgt = $count++;

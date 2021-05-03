@@ -106,7 +106,7 @@ switch ($action) {
                 $parent = $lpItemRepo->find($parentId);
             }
 
-            $previousId = $_REQUEST['previous_id'] ?? '';
+            $previousId = $_REQUEST['previous_id'] ?? 0;
 
             $itemId = $learningPath->add_item(
                 $parent,

@@ -175,12 +175,7 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get status.
-     *
-     * @return bool
-     */
-    public function getStatus()
+    public function getStatus(): bool
     {
         return $this->status;
     }

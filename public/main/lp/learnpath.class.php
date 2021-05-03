@@ -2984,7 +2984,6 @@ class learnpath
                                 $lp_view_id = (int) $lp_view_id;
                                 $sql = "SELECT count(*) FROM $lp_item_view_table
                                         WHERE
-                                            c_id = $course_id AND
                                             lp_item_id='".$lp_item_id."' AND
                                             lp_view_id ='".$lp_view_id."' AND
                                             status='completed'";
@@ -5496,7 +5495,7 @@ class learnpath
 
     public function showBuildSideBar($updateAudio = false, $dropElementHere = false, $type = null)
     {
-        $sureToDelete = trim(get_lang('AreYouSureToDeleteJS'));
+        $sureToDelete = trim(get_lang('Are you sure to delete?'));
         $ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?lp_id='.$this->get_id().'&'.api_get_cidreq();
 
         $content = '
@@ -5729,63 +5728,65 @@ class learnpath
                     },
                 });
 
-                let docs = document.getElementById("doc_list");
-                Sortable.create(docs, {
-               //$(".lp_resource").sortable({
-                    group: "nested",
-                    put: ["nested-sortable"],
-                    filter: ".disable_drag",
-                    animation: 150,
-                    fallbackOnBody: true,
-                    swapThreshold: 0.65,
-                    dataIdAttr: "data-id",
-                    onRemove: function(evt) {
-                        console.log("onRemove");
-                        var itemEl = evt.item;
-                        var newIndex = evt.newIndex;
-                        var id = $(itemEl).attr("id");
-                        var parent_id = $(itemEl).parent().parent().attr("id");
-                        var type =  $(itemEl).find(".link_with_id").attr("data_type");
-                        var title = $(itemEl).find(".link_with_id").text();
+                let resources = document.getElementsByClassName("lp_resource");
+                Array.prototype.forEach.call(resources, function(resource) {
+                    Sortable.create(resource, {
+                   //$(".lp_resource").sortable({
+                        group: "nested",
+                        put: ["nested-sortable"],
+                        filter: ".disable_drag",
+                        animation: 150,
+                        fallbackOnBody: true,
+                        swapThreshold: 0.65,
+                        dataIdAttr: "data-id",
+                        onRemove: function(evt) {
+                            console.log("onRemove");
+                            var itemEl = evt.item;
+                            var newIndex = evt.newIndex;
+                            var id = $(itemEl).attr("id");
+                            var parent_id = $(itemEl).parent().parent().attr("id");
+                            var type =  $(itemEl).find(".link_with_id").attr("data_type");
+                            var title = $(itemEl).find(".link_with_id").text();
 
-                        let previousId = 0;
-                        if (0 !== newIndex) {
-                            previousId = $(itemEl).prev().attr("id");
-                        }
-                        var params = {
-                            "a": "add_lp_item",
-                            "id": id,
-                            "parent_id": parent_id,
-                            "previous_id": previousId,
-                            "type": type,
-                            "title" : title
-                        };
-                        console.log(params);
-                        $.ajax({
-                            type: "GET",
-                            url: "'.$ajax_url.'",
-                            data: params,
-                            success: function(itemId) {
-                                $(itemEl).attr("id", itemId);
-                                $(itemEl).attr("data-id", itemId);
-                                let list = serialize(root);
-                                let listInString = JSON.stringify(list);
-                                if (typeof listInString === "undefined") {
-                                    listInString = "";
-                                }
-                                let order = "&a=update_lp_item_order&new_order=" + listInString;
-                                $.get(
-                                    "'.$ajax_url.'",
-                                    order,
-                                    function(reponse) {
-                                        $("#message").html(reponse);
-                                        refreshTree();
-                                    }
-                                );
-                                //$("#lp_item_list").html(data);
+                            let previousId = 0;
+                            if (0 !== newIndex) {
+                                previousId = $(itemEl).prev().attr("id");
                             }
-                        });
-                    },
+                            var params = {
+                                "a": "add_lp_item",
+                                "id": id,
+                                "parent_id": parent_id,
+                                "previous_id": previousId,
+                                "type": type,
+                                "title" : title
+                            };
+                            console.log(params);
+                            $.ajax({
+                                type: "GET",
+                                url: "'.$ajax_url.'",
+                                data: params,
+                                success: function(itemId) {
+                                    $(itemEl).attr("id", itemId);
+                                    $(itemEl).attr("data-id", itemId);
+                                    let list = serialize(root);
+                                    let listInString = JSON.stringify(list);
+                                    if (typeof listInString === "undefined") {
+                                        listInString = "";
+                                    }
+                                    let order = "&a=update_lp_item_order&new_order=" + listInString;
+                                    $.get(
+                                        "'.$ajax_url.'",
+                                        order,
+                                        function(reponse) {
+                                            $("#message").html(reponse);
+                                            refreshTree();
+                                        }
+                                    );
+                                    //$("#lp_item_list").html(data);
+                                }
+                            });
+                        },
+                    });
                 });
 
                 $("#lp_item_list2").sortable({
@@ -5848,11 +5849,8 @@ class learnpath
 
         $content .= "
         <script>
-
-
-
             function confirmation(name) {
-                if (confirm('$sureToDelete' + name)) {
+                if (confirm('$sureToDelete ' + name)) {
                     return true;
                 } else {
                     return false;
@@ -6052,7 +6050,10 @@ class learnpath
             },
             'childOpen' => function($child) {
                 $id = $child['iid'];
-                return '<li id="'.$id.'" data-id="'.$id.'"  class=" flex flex-col list-group-item nested-'.$child['lvl'].'">';
+                return '<li
+                    id="'.$id.'"
+                    data-id="'.$id.'"
+                    class=" flex flex-col list-group-item nested-'.$child['lvl'].'">';
             },
             'childClose' => '',
             'nodeDecorator' => function ($node) use ($mainUrl, $previewImage, $upIcon, $downIcon) {
@@ -6169,9 +6170,7 @@ class learnpath
                 //Display::span($title, ['title' => $fullTitle])
                 //return $title.                $extra;
                 return
-                   // '<div class="item_data">'.
                     "<div class='flex flex-row'> $moveIcon  $icon <div>$title </div></div>
-
                     $extra
                     $buttons
                     "
@@ -6323,7 +6322,7 @@ class learnpath
             ])
         );
 
-        $actionsLeft .= Display::url(
+        /*$actionsLeft .= Display::url(
             Display::return_icon(
                 'upload_audio.png',
                 get_lang('Add audio'),
@@ -6335,7 +6334,7 @@ class learnpath
                 'lp_id' => $lpId,
                 'updateaudio' => 'true',
             ])
-        );
+        );*/
 
         $subscriptionSettings = self::getSubscriptionSettings();
 
@@ -6851,11 +6850,8 @@ class learnpath
      * could be added to the learning path.
      *
      * @throws Exception
-     *
-     *
-     * @return bool
      */
-    public function displayResources()
+    public function displayResources(): string
     {
         // Get all the docs.
         $documents = $this->get_documents(true);
@@ -7614,12 +7610,11 @@ class learnpath
     public function display_item_prerequisites_form(CLpItem $lpItem)
     {
         $course_id = api_get_course_int_id();
-        $prerequisiteId = $lpItem->getPrerequisite();
+        $preRequisiteId = $lpItem->getPrerequisite();
         $itemId = $lpItem->getIid();
 
-        $return = '<legend>';
-        $return .= get_lang('Add/edit prerequisites');
-        $return .= '</legend>';
+        $return = Display::page_header(get_lang('Add/edit prerequisites').' '.$lpItem->getTitle());
+
         $return .= '<form method="POST">';
         $return .= '<div class="table-responsive">';
         $return .= '<table class="table table-hover">';
@@ -7640,6 +7635,7 @@ class learnpath
         $return .= get_lang('none').'</label>';
         $return .= '</div>';
         $return .= '</tr>';
+
         // @todo use entitites
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $sql = "SELECT * FROM $tbl_lp_item
@@ -7657,122 +7653,161 @@ class learnpath
             $masteryScore[$row['iid']] = $row['mastery_score'];
         }
 
-        $arrLP = $this->getItemsForForm();
-        $this->tree_array($arrLP);
-        $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
-        unset($this->arrMenu);
+        $displayOrder = $lpItem->getDisplayOrder();
+        $lpItemRepo = Container::getLpItemRepository();
+        $itemRoot = $lpItemRepo->getItemRoot($this->get_id());
+        $em = Database::getManager();
 
-        for ($i = 0; $i < count($arrLP); $i++) {
-            $item = $arrLP[$i];
+        $currentItemId = $itemId;
+        $options = [
+            'decorate' => true,
+            'rootOpen' => function() {
+                return '';
+            },
+            'rootClose' => function() {
+                return '';
+            },
+            'childOpen' => function() {
+                return '';
+            },
+            'childClose' => '',
+            'nodeDecorator' => function ($item) use (
+                $currentItemId,
+                $preRequisiteId,
+                $course_id,
+                $selectedMaxScore,
+                $selectedMinScore,
+                $displayOrder,
+                $lpItemRepo,
+                $em
+            ) {
+                $mainUrl = '';
+                $fullTitle = $item['title'];
+                $title = cut($fullTitle, self::MAX_LP_ITEM_TITLE_LENGTH);
+                $itemId = $item['iid'];
+                $type = $item['itemType'];
+                $lpId = $this->get_id();
+                $iconName = str_replace(' ', '', $type);
+                $icon = Display::return_icon(
+                    'lp_'.$iconName.'.png',
+                    '',
+                    [],
+                    ICON_SIZE_TINY
+                );
+                $url = $mainUrl.'&view=build&id='.$itemId.'&lp_id='.$lpId;
 
-            if ($item['id'] == $itemId) {
-                break;
-            }
-
-            $selectedMaxScoreValue = isset($selectedMaxScore[$item['id']]) ? $selectedMaxScore[$item['id']] : $item['max_score'];
-            $selectedMinScoreValue = isset($selectedMinScore[$item['id']]) ? $selectedMinScore[$item['id']] : 0;
-            $masteryScoreAsMinValue = isset($masteryScore[$item['id']]) ? $masteryScore[$item['id']] : 0;
-
-            $return .= '<tr>';
-            $return .= '<td '.((TOOL_QUIZ != $item['item_type'] && TOOL_HOTPOTATOES != $item['item_type']) ? ' colspan="3"' : '').'>';
-            $return .= '<div style="margin-left:'.($item['depth'] * 20).'px;" class="radio learnpath">';
-            $return .= '<label for="id'.$item['id'].'">';
-
-            $checked = '';
-            if (null !== $prerequisiteId) {
-                $checked = in_array($prerequisiteId, [$item['id'], $item['ref']]) ? ' checked="checked" ' : '';
-            }
-
-            $disabled = 'dir' === $item['item_type'] ? ' disabled="disabled" ' : '';
-
-            $return .= '<input '.$checked.' '.$disabled.' id="id'.$item['id'].'" name="prerequisites" type="radio" value="'.$item['id'].'" />';
-
-            $icon_name = str_replace(' ', '', $item['item_type']);
-            if (file_exists('../img/lp_'.$icon_name.'.png')) {
-                $return .= Display::return_icon('lp_'.$icon_name.'.png');
-            } else {
-                if (file_exists('../img/lp_'.$icon_name.'.png')) {
-                    $return .= Display::return_icon('lp_'.$icon_name.'.png');
-                } else {
-                    $return .= Display::return_icon('folder_document.png');
-                }
-            }
-
-            $return .= $item['title'].'</label>';
-            $return .= '</div>';
-            $return .= '</td>';
-
-            if (TOOL_QUIZ == $item['item_type']) {
-                // lets update max_score Tests information depending of the Tests Advanced properties
-                $lpItemObj = new LpItem($course_id, $item['id']);
-                $exercise = new Exercise($course_id);
-                $exercise->read($lpItemObj->path);
-                $lpItemObj->max_score = $exercise->get_max_score();
-                $lpItemObj->update();
-                $item['max_score'] = $lpItemObj->max_score;
-
-                if (empty($selectedMinScoreValue) && !empty($masteryScoreAsMinValue)) {
-                    // Backwards compatibility with 1.9.x use mastery_score as min value
-                    $selectedMinScoreValue = $masteryScoreAsMinValue;
+                if ($itemId == $currentItemId) {
+                    return '';
                 }
 
-                $return .= '<td>';
-                $return .= '<input
-                    class="form-control"
-                    size="4" maxlength="3"
-                    name="min_'.$item['id'].'"
-                    type="number"
-                    min="0"
-                    step="any"
-                    max="'.$item['max_score'].'"
-                    value="'.$selectedMinScoreValue.'"
-                />';
-                $return .= '</td>';
-                $return .= '<td>';
-                $return .= '<input
-                    class="form-control"
-                    size="4"
-                    maxlength="3"
-                    name="max_'.$item['id'].'"
-                    type="number"
-                    min="0"
-                    step="any"
-                    max="'.$item['max_score'].'"
-                    value="'.$selectedMaxScoreValue.'"
-                />';
-                $return .= '</td>';
-            }
+                if ($displayOrder < $item['displayOrder']) {
+                    return '';
+                }
 
-            if (TOOL_HOTPOTATOES == $item['item_type']) {
-                $return .= '<td>';
+                $selectedMaxScoreValue = isset($selectedMaxScore[$itemId]) ? $selectedMaxScore[$itemId] : $item['maxScore'];
+                $selectedMinScoreValue = $selectedMinScore[$itemId] ?? 0;
+                $masteryScoreAsMinValue = $masteryScore[$itemId] ?? 0;
+
+                $return = '<tr>';
+                $return .= '<td '.((TOOL_QUIZ != $type && TOOL_HOTPOTATOES != $type) ? ' colspan="3"' : '').'>';
+                $return .= '<div style="margin-left:'.($item['lvl'] * 20).'px;" class="radio learnpath">';
+                $return .= '<label for="id'.$itemId.'">';
+
+                $checked = '';
+                if (null !== $preRequisiteId) {
+                    $checked = in_array($preRequisiteId, [$itemId, $item['ref']]) ? ' checked="checked" ' : '';
+                }
+
+                $disabled = 'dir' === $type ? ' disabled="disabled" ' : '';
+
                 $return .= '<input
-                    size="4"
-                    maxlength="3"
-                    name="min_'.$item['id'].'"
-                    type="number"
-                    min="0"
-                    step="any"
-                    max="'.$item['max_score'].'"
-                    value="'.$selectedMinScoreValue.'"
-                />';
+                    '.$checked.' '.$disabled.'
+                    id="id'.$itemId.'"
+                    name="prerequisites"
+                    type="radio"
+                    value="'.$itemId.'" />';
+
+                $return .= $icon.'&nbsp;&nbsp;'.$item['title'].'</label>';
+                $return .= '</div>';
                 $return .= '</td>';
-                $return .= '<td>';
-                $return .= '<input
-                    size="4"
-                    maxlength="3"
-                    name="max_'.$item['id'].'"
-                    type="number"
-                    min="0"
-                    step="any"
-                    max="'.$item['max_score'].'"
-                    value="'.$selectedMaxScoreValue.'"
-                />';
-                $return .= '</td>';
-            }
-            $return .= '</tr>';
-        }
-        $return .= '<tr>';
-        $return .= '</tr>';
+
+                if (TOOL_QUIZ == $type) {
+                    // lets update max_score Tests information depending of the Tests Advanced properties
+                    $exercise = new Exercise($course_id);
+                    /** @var CLpItem $itemEntity */
+                    $itemEntity = $lpItemRepo->find($itemId);
+                    $exercise->read($item['path']);
+                    $itemEntity->setMaxScore($exercise->get_max_score());
+                    $em->persist($itemEntity);
+                    $em->flush($itemEntity);
+
+                    $item['maxScore'] = $exercise->get_max_score();
+
+                    if (empty($selectedMinScoreValue) && !empty($masteryScoreAsMinValue)) {
+                        // Backwards compatibility with 1.9.x use mastery_score as min value
+                        $selectedMinScoreValue = $masteryScoreAsMinValue;
+                    }
+                    $return .= '<td>';
+                    $return .= '<input
+                        class="form-control"
+                        size="4" maxlength="3"
+                        name="min_'.$itemId.'"
+                        type="number"
+                        min="0"
+                        step="any"
+                        max="'.$item['maxScore'].'"
+                        value="'.$selectedMinScoreValue.'"
+                    />';
+                    $return .= '</td>';
+                    $return .= '<td>';
+                    $return .= '<input
+                        class="form-control"
+                        size="4"
+                        maxlength="3"
+                        name="max_'.$itemId.'"
+                        type="number"
+                        min="0"
+                        step="any"
+                        max="'.$item['maxScore'].'"
+                        value="'.$selectedMaxScoreValue.'"
+                    />';
+                        $return .= '</td>';
+                    }
+
+                if (TOOL_HOTPOTATOES == $type) {
+                    $return .= '<td>';
+                    $return .= '<input
+                        size="4"
+                        maxlength="3"
+                        name="min_'.$itemId.'"
+                        type="number"
+                        min="0"
+                        step="any"
+                        max="'.$item['maxScore'].'"
+                        value="'.$selectedMinScoreValue.'"
+                    />';
+                        $return .= '</td>';
+                        $return .= '<td>';
+                        $return .= '<input
+                        size="4"
+                        maxlength="3"
+                        name="max_'.$itemId.'"
+                        type="number"
+                        min="0"
+                        step="any"
+                        max="'.$item['maxScore'].'"
+                        value="'.$selectedMaxScoreValue.'"
+                    />';
+                    $return .= '</td>';
+                }
+                $return .= '</tr>';
+
+                return $return;
+            },
+        ];
+
+        $tree = $lpItemRepo->childrenHierarchy($itemRoot, false, $options);
+        $return .= $tree;
         $return .= '</tbody>';
         $return .= '</table>';
         $return .= '</div>';
@@ -7786,10 +7821,8 @@ class learnpath
 
     /**
      * Return HTML list to allow prerequisites selection for lp.
-     *
-     * @return string HTML form
      */
-    public function display_lp_prerequisites_list()
+    public function display_lp_prerequisites_list(FormValidator $form)
     {
         $lp_id = $this->lp_id;
         $prerequisiteId = $this->entity->getPrerequisite();
@@ -7805,24 +7838,22 @@ class learnpath
                 WHERE c_id = $course_id $session_condition
                 ORDER BY display_order ";
         $rs = Database::query($sql);*/
-        $return = '';
-        $return .= '<select name="prerequisites" class="form-control">';
-        $return .= '<option value="0">'.get_lang('none').'</option>';
 
+        $items = [get_lang('none')];
         foreach ($lps as $lp) {
             $myLpId = $lp->getIid();
             if ($myLpId == $lp_id) {
                 continue;
             }
-            $return .= '<option
+            $items[$myLpId] = $lp->getName();
+            /*$return .= '<option
                 value="'.$myLpId.'" '.(($myLpId == $prerequisiteId) ? ' selected ' : '').'>'.
                 $lp->getName().
-                '</option>';
+                '</option>';*/
         }
 
-        $return .= '</select>';
-
-        return $return;
+        $select = $form->addSelect('prerequisites', get_lang('Prerequisites'), $items);
+        $select->setSelected($prerequisiteId);
     }
 
     /**
@@ -7999,7 +8030,7 @@ class learnpath
         $currentUrl = api_get_self().'?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.$this->lp_id.'#resource_tab-2';
 
         // Create a search-box
-        $form = new FormValidator('search_simple', 'get', $currentUrl);
+        /*$form = new FormValidator('search_simple', 'get', $currentUrl);
         $form->addHidden('action', 'add_item');
         $form->addHidden('type', 'step');
         $form->addHidden('lp_id', $this->lp_id);
@@ -8029,9 +8060,9 @@ class learnpath
         }
 
         $form->addButtonSearch(get_lang('Search'));
-        $return = $form->returnForm();
+        $return = $form->returnForm();*/
 
-        $return .= '<ul id="doc_list" class=" list-group lp_resource">';
+        $return = '<ul class = "list-group lp_resource">';
         $return .= '<li class="list-group-item lp_resource_element disable_drag">';
         $return .= Display::return_icon('new_exercice.png');
         $return .= '<a
@@ -8056,7 +8087,11 @@ class learnpath
                 $exerciseUrl.'&exerciseId='.$exerciseId,
                 ['target' => '_blank']
             );
-            $return .= '<li class="list-group-item lp_resource_element" title="'.$title.'">';
+            $return .= '<li
+                class="list-group-item lp_resource_element"
+                id="'.$exerciseId.'"
+                data-id="'.$exerciseId.'"
+                title="'.$title.'">';
             $return .= Display::url($moveIcon, '#', ['class' => 'moved']);
             $return .= $quizIcon;
             $sessionStar = '';
@@ -8170,6 +8205,7 @@ class learnpath
             /** @var CLink $link */
             foreach ($links as $key => $link) {
                 $title = $link->getTitle();
+                $id = $link->getIid();
                 $linkUrl = Display::url(
                     Display::return_icon('preview_view.png', get_lang('Preview')),
                     api_get_path(WEB_CODE_PATH).'link/link_goto.php?'.api_get_cidreq().'&link_id='.$key,
@@ -8191,12 +8227,16 @@ class learnpath
                         ]
                     );
                     $linkNodes .=
-                        '<li class="list-group-item lp_resource_element">
-                         <a class="moved" href="#">'.
-                            $moveEverywhereIcon.
-                        '</a>
-                        '.$linkIcon.$link.'
-                        </li>';
+                        "<li
+                            class='list-group-item lp_resource_element'
+                            id= $id
+                            data-id= $id
+                            >
+                         <a class='moved' href='#'>
+                            $moveEverywhereIcon
+                        </a>
+                        $linkIcon $link
+                        </li>";
                 }
             }
             $linksHtmlCode .=
@@ -8236,13 +8276,18 @@ class learnpath
         if (!empty($works)) {
             $icon = Display::return_icon('works.png', '', [], ICON_SIZE_TINY);
             foreach ($works as $work) {
+                $workId = $work['iid'];
                 $link = Display::url(
                     Display::return_icon('preview_view.png', get_lang('Preview')),
-                    api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$work['iid'],
+                    api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId,
                     ['target' => '_blank']
                 );
 
-                $return .= '<li class="list-group-item lp_resource_element">';
+                $return .= '<li
+                    class="list-group-item lp_resource_element"
+                    id="'.$workId.'"
+                    data-id="'.$workId.'"
+                    >';
                 $return .= '<a class="moved" href="#">';
                 $return .= Display::return_icon(
                     'move_everywhere.png',
@@ -8263,7 +8308,6 @@ class learnpath
                         'title' => Security::remove_XSS(cut(strip_tags($work['title']), 80)),
                     ]
                 );
-
                 $return .= '</li>';
             }
         }
@@ -8349,7 +8393,11 @@ class learnpath
                 ['target' => '_blank']
             );
 
-            $return .= '<li class="list-group-item lp_resource_element">';
+            $return .= '<li
+                    class="list-group-item lp_resource_element"
+                    id="'.$forumId.'"
+                    data-id="'.$forumId.'"
+                    >';
             $return .= '<a class="moved" href="#">';
             $return .= $moveIcon;
             $return .= ' </a>';
@@ -8388,14 +8436,18 @@ class learnpath
                         ['target' => '_blank']
                     );
 
-                    $return .= '<li class="list-group-item lp_resource_element">';
+                    $return .= '<li
+                        class="list-group-item lp_resource_element"
+                      id="'.$threadId.'"
+                        data-id="'.$threadId.'"
+                    >';
                     $return .= '&nbsp;<a class="moved" href="#">';
                     $return .= $moveIcon;
                     $return .= ' </a>';
                     $return .= Display::return_icon('forumthread.png', get_lang('Thread'), [], ICON_SIZE_TINY);
                     $return .= '<a
                         class="moved link_with_id"
-                        data-id="'.$thread->getIid().'"
+                        data-id="'.$threadId.'"
                         data_type="'.TOOL_THREAD.'"
                         title="'.$thread->getThreadTitle().'"
                         href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_THREAD.'&thread_id='.$threadId.'&lp_id='.$this->lp_id.'"
@@ -9865,12 +9917,14 @@ EOD;
      * @param int  $courseId
      * @param bool $addSelectOption
      *
-     * @return mixed
+     * @return array
      */
     public static function getCategoryFromCourseIntoSelect($courseId, $addSelectOption = false)
     {
         $repo = Container::getLpCategoryRepository();
-        $items = $repo->getResourcesByCourse(api_get_course_entity($courseId));
+        $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId));
+        $items = $qb->getQuery()->getResult();
+
         $cats = [];
         if ($addSelectOption) {
             $cats = [get_lang('Select a category')];
@@ -10496,20 +10550,6 @@ EOD;
             'lp' => $learningPathId,
             'iid' => $id_in_path,
         ]);
-
-        if (!$rowItem) {
-            // Try one more time with "id"
-            /** @var CLpItem $rowItem */
-            $rowItem = $lpItemRepo->findOneBy([
-                'lp' => $learningPathId,
-                'id' => $id_in_path,
-            ]);
-
-            if (!$rowItem) {
-                return -1;
-            }
-        }
-
         $type = $rowItem->getItemType();
         $id = empty($rowItem->getPath()) ? '0' : $rowItem->getPath();
         $main_dir_path = api_get_path(WEB_CODE_PATH);
@@ -10539,7 +10579,7 @@ EOD;
                 $learnpathItemViewResult = $em
                     ->getRepository('ChamiloCourseBundle:CLpItemView')
                     ->findBy(
-                        ['cId' => $course_id, 'lpItemId' => $rowItem->getIid(), 'lpViewId' => $lpViewId],
+                        ['item' => $rowItem->getIid(), 'view' => $lpViewId],
                         ['viewCount' => 'DESC'],
                         1
                     );

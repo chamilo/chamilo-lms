@@ -175,7 +175,7 @@ class Exercise
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
 
         $id = (int) $id;
-        if (empty($this->course_id)) {
+        if (empty($this->course_id) || empty($id)) {
             return false;
         }
 
@@ -1062,8 +1062,10 @@ class Exercise
      */
     public function selectQuestionList($fromDatabase = false, $adminView = false)
     {
+        //var_dump($this->getId());exit;
         if ($fromDatabase && !empty($this->getId())) {
             $nbQuestions = $this->getQuestionCount();
+
             $questionSelectionType = $this->getQuestionSelectionType();
 
             switch ($questionSelectionType) {

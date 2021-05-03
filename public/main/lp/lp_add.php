@@ -37,8 +37,8 @@ function activate_end_date() {
 /* Constants and variables */
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-$isStudentView = isset($_REQUEST['isStudentView']) ? $_REQUEST['isStudentView'] : null;
-$lpId = isset($_REQUEST['lp_id']) ? $_REQUEST['lp_id'] : null;
+$isStudentView = $_REQUEST['isStudentView'] ?? null;
+$lpId = $_REQUEST['lp_id'] ?? null;
 
 if ((!$is_allowed_to_edit) || $isStudentView) {
     header('location:lp_controller.php?action=view&lp_id='.$lpId.'&'.api_get_cidreq());
@@ -97,19 +97,22 @@ $items = learnpath::getCategoryFromCourseIntoSelect(
     api_get_course_int_id(),
     true
 );
-$form->addElement('select', 'category_id', get_lang('Category'), $items);
+$form->addSelect('category_id', get_lang('Category'), $items);
 
 // accumulate_scorm_time
-$form->addElement(
-    'checkbox',
+$form->addCheckBox(
     'accumulate_scorm_time',
-    [null, get_lang('When enabled, the session time for SCORM Learning Paths will be cumulative, otherwise, it will only be counted from the last update time.')],
+    [
+        null,
+        get_lang(
+            'When enabled, the session time for SCORM Learning Paths will be cumulative, otherwise, it will only be counted from the last update time.'
+        ),
+    ],
     get_lang('Accumulate SCORM session time')
 );
 
 // Start date
-$form->addElement(
-    'checkbox',
+$form->addCheckBox(
     'activate_start_date_check',
     null,
     get_lang('Enable start time'),
@@ -120,8 +123,7 @@ $form->addDatePicker('publicated_on', get_lang('Publication date'));
 $form->addElement('html', '</div>');
 
 //End date
-$form->addElement(
-    'checkbox',
+$form->addCheckBox(
     'activate_end_date_check',
     null,
     get_lang('Enable end time'),

@@ -129,7 +129,7 @@ if ($lp->getResourceNode()->hasResourceFile()) {
     $form->addElement('checkbox', 'remove_picture', null, get_lang('Remove picture'));
 }
 
-$form->addElement('file', 'lp_preview_image', [$label, get_lang('Trainer picture will resize if needed')]);
+$form->addFile('lp_preview_image', [$label, get_lang('Trainer picture will resize if needed')]);
 $form->addRule(
     'lp_preview_image',
     get_lang('Only PNG, JPG or GIF images allowed'),
@@ -171,11 +171,8 @@ $expired_on = $learnPath->expired_on;
 $publicated_on = $learnPath->publicated_on;
 
 // Prerequisites
-$form->addElement('html', '<div class="row form-group ">');
-$items = $learnPath->display_lp_prerequisites_list();
-$form->addElement('html', '<label class="col-md-2">'.get_lang('Prerequisites').'</label>');
-$form->addElement('html', '<div class="col-md-8">');
-$form->addElement('html', $items);
+$learnPath->display_lp_prerequisites_list($form);
+
 $form->addHtml(
     '<div class="help-block">'.
     get_lang(
@@ -183,9 +180,7 @@ $form->addHtml(
     ).
     '</div>'
 );
-$form->addElement('html', '</div>');
-$form->addElement('html', '<div class="col-md-2"></div>');
-$form->addElement('html', '</div>');
+
 // Time Control
 if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
     $form->addText(
@@ -215,8 +210,7 @@ $form->addDateTimePicker('publicated_on', get_lang('Publication date'));
 $form->addElement('html', '</div>');
 
 //End date
-$form->addElement(
-    'checkbox',
+$form->addCheckBox(
     'activate_end_date_check',
     null,
     get_lang('Enable end time'),

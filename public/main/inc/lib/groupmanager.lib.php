@@ -2098,10 +2098,10 @@ class GroupManager
                WHERE
                   (gu.user_id = $user_id OR tu.user_id = $user_id) ";
 
-        if (null !== $sessionId) {
+        /*if (null !== $sessionId) {
             $sessionId = (int) $sessionId;
             $sql .= " AND g.session_id = $sessionId ";
-        }
+        }*/
 
         $res = Database::query($sql);
         $groups = [];

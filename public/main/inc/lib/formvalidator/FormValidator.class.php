@@ -962,7 +962,7 @@ EOT;
 
     /**
      * @param string $name
-     * @param string $label
+     * @param string|array $label
      * @param array  $attributes
      *
      * @throws Exception if the file doesn't have an id

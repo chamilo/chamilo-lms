@@ -253,13 +253,57 @@ abstract class Question
         }
 
         $title .= $showQuestionTitleHtml ? '' : '<strong>';
-        $title .= $itemNumber.'. '.$this->selectTitle();
+        $checkIfShowNumberQuestion = $this->getShowHideConfiguration();
+        if ($checkIfShowNumberQuestion != 1) {
+            $title .= $itemNumber.'. ';
+        }
+        $title .= $this->selectTitle();
+
         $title .= $showQuestionTitleHtml ? '' : '</strong>';
 
         return Display::div(
             $title,
             ['class' => 'question_title']
         );
+    }
+
+    /**
+     * Gets the respective value to show or hide the number of a question in the exam.
+     * If the field does not exist in the database, it will return 0.
+     *
+     * @return int
+     */
+    public function getShowHideConfiguration()
+    {
+        $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+        $tblQuizRelQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $showHideConfiguration = api_get_configuration_value('quiz_hide_question_number');
+        if (!$showHideConfiguration) {
+            return 0;
+        }
+        // Check if the field exist
+        $checkFieldSql = "SHOW COLUMNS FROM $tblQuiz WHERE Field = 'hide_question_number'";
+        $res = Database::query($checkFieldSql);
+        $result = Database::store_result($res);
+        if (count($result) != 0) {
+            $sql = "
+                SELECT
+                    q.hide_question_number AS hide_num
+                FROM
+                    $tblQuiz as q
+                INNER JOIN  $tblQuizRelQuestion AS qrq ON qrq.exercice_id = q.id
+                WHERE qrq.question_id = ".$this->id;
+            $res = Database::query($sql);
+            $result = Database::store_result($res);
+            if (is_array($result) &&
+                isset($result[0]) &&
+                isset($result[0]['hide_num'])
+            ) {
+                return (int) $result[0]['hide_num'];
+            }
+        }
+
+        return 0;
     }
 
     /**

@@ -23,7 +23,14 @@ const router = createRouter({
     history: createWebHistory(),
     routes: [
         {path: '/', name: 'Home', component: Index},
-        {path: '/login', name: 'Login', component: Login},
+        {
+            path: '/login',
+            name: 'Login',
+            component: Login,
+            meta: {
+                layout: 'Empty'
+            }
+        },
         {
             path: '/course/:id/home', name: 'CourseHome', component: CourseHome
         },

@@ -24,7 +24,6 @@
             >
               {{ tool.nameToTranslate }}
             </a>
-<!--            <q-btn flat icon="visibility"></q-btn>-->
             <button @click="changeVisibility(course, tool)">
               <font-awesome-icon
                   v-if="tool.resourceNode.resourceLinks[0].visibility === 2"
@@ -38,7 +37,6 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -82,8 +80,6 @@ export default {
     }
 
     function changeVisibility(course, tool) {
-      console.log(tool);
-      //r/course_tool/links/
       axios.post(ENTRYPOINT + '../r/course_tool/links/' + tool.resourceNode.id + '/change_visibility').then(response => {
         if (response.data.ok) {
           tool.resourceNode.resourceLinks[0].visibility = response.data.visibility;

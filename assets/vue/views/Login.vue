@@ -69,6 +69,7 @@ import { LockClosedIcon } from '@heroicons/vue/solid'
 import useState from "../hooks/useState";
 import {ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
+import isEmpty from "lodash/isEmpty";
 
 export default {
     name: "Login",
@@ -80,7 +81,6 @@ export default {
       const { isSidebarOpen } = useState();
       const route = useRoute();
       const router = useRouter();
-
       const store = useStore();
 
       const login = ref('');
@@ -124,6 +124,7 @@ export default {
         password
       }
     },
+
     computed: {
         ...mapGetters({
             'isLoading': 'security/isLoading',

@@ -1,94 +1,4 @@
 <template>
-<!--  <Toolbar-->
-<!--     :handle-add="addHandler"-->
-<!--     :handle-add-document="addDocumentHandler"-->
-<!--     :handle-upload-document="uploadDocumentHandler"-->
-<!--     :filters="filters"-->
-<!--     :on-send-filter="onSendFilter"-->
-<!--     :reset-filter="resetFilter"-->
-<!--   />-->
-
-<!--  <DataFilter-->
-<!--      :handle-filter="onSendFilter"-->
-<!--      :handle-reset="resetFilter"-->
-<!--  >-->
-<!--    <DocumentsFilterForm-->
-<!--        ref="filterForm"-->
-<!--        slot="filter"-->
-<!--        :values="filters"-->
-<!--    />-->
-<!--  </DataFilter>-->
-
-<!--  :filter="filter"-->
-<!--  :no-data-label="$t('Data unavailable')"-->
-
-<!--  <div class="q-pa-md" >-->
-<!--    <q-table-->
-<!--        dense-->
-<!--        :rows="items"-->
-<!--        :columns="columns"-->
-<!--        row-key="@id"-->
-<!--        @request="onRequest"-->
-<!--        v-model:pagination="pagination"-->
-<!--        :no-results-label="$t('No results')"-->
-<!--        :loading-label="$t('Loading...')"-->
-<!--        :rows-per-page-label="$t('Records per page:')"-->
-<!--        :rows-per-page-options="[10, 20, 50, 0]"-->
-<!--        :loading="isLoading"-->
-<!--        selection="multiple"-->
-<!--        v-model:selected="selectedItems"-->
-<!--    >-->
-<!--       <template v-slot:body="props">-->
-<!--          <q-tr :props="props">-->
-<!--            <q-td auto-width>-->
-<!--              <q-checkbox dense v-model="props.selected" />-->
-<!--            </q-td>-->
-
-<!--            <q-td key="resourceNode.title" :props="props">-->
-<!--              <div v-if="props.row.resourceNode.resourceFile">-->
-<!--                <a-->
-<!--                    data-fancybox="gallery"-->
-<!--                    :href="props.row.contentUrl"-->
-<!--                >-->
-<!--                  <ResourceFileIcon :file="props.row" />-->
-<!--                  {{ props.row.title }}-->
-<!--                </a>-->
-<!--              </div>-->
-<!--              <div v-else>-->
-<!--                <a @click="handleClick(props.row)" class="cursor-pointer" >-->
-<!--                  <font-awesome-icon-->
-<!--                      icon="folder"-->
-<!--                      size="lg"-->
-<!--                  />-->
-<!--                  {{ props.row.resourceNode.title }}-->
-<!--                </a>-->
-<!--              </div>-->
-<!--            </q-td>-->
-
-<!--            <q-td key="resourceNode.updatedAt" :props="props">-->
-<!--              {{$luxonDateTime.fromISO(props.row.resourceNode.updatedAt).toRelative() }}-->
-<!--            </q-td>-->
-
-<!--            <q-td key="resourceNode.resourceFile.size" :props="props">-->
-<!--              <span v-if="props.row.resourceNode.resourceFile">-->
-<!--              {{-->
-<!--                $filters.prettyBytes(props.row.resourceNode.resourceFile.size)-->
-<!--              }}-->
-<!--              </span>-->
-<!--            </q-td>-->
-
-<!--            <q-td key="action" :props="props">-->
-<!--            <ActionCell-->
-<!--                :handle-show="() => showHandler(props.row)"-->
-<!--                :handle-edit="() => editHandler(props.row)"-->
-<!--                :handle-delete="() => deleteHandler(props.row)"-->
-<!--            />-->
-<!--            </q-td>-->
-<!--          </q-tr>-->
-<!--        </template>-->
-<!--      </q-table>-->
-<!--  </div>-->
-
   <Toolbar class="p-mb-4">
     <template #left>
       <div v-if="isAuthenticated && isCurrentTeacher" class="flex flex-row gap-2" >
@@ -100,22 +10,10 @@
         <Button label="New document" icon="pi pi-plus" class="btn btn-primary" @click="addDocumentHandler()" />
 
         <Button label="Upload" icon="pi pi-plus" class="btn btn-primary" @click="uploadDocumentHandler()" />
-        <Button label="Delete" icon="pi pi-trash" class="btn btn-danger " @click="confirmDeleteMultiple" :disabled="!selectedItems || !selectedItems.length" />
       </div>
     </template>
-
-    <!--       <template #right>-->
-    <!--         <FileUpload mode="basic" accept="image/*" :maxFileSize="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-d-inline-block" />-->
-    <!--         <Button label="Export" icon="pi pi-upload" class="p-button-help" @click="exportCSV($event)"  />-->
-    <!--       </template>-->
   </Toolbar>
 
-  <!--      :filter-change="filterCallback"-->
-  <!--      :filter-apply="filterCallback"-->
-  <!--      :onLazyLoad ="filterCallback($event)"-->
-
-<!--  :scrollable="true"-->
-<!--  scrollHeight="height:100%"-->
   <DataTable
       class="p-datatable-sm"
       :value="items"
@@ -134,9 +32,9 @@
       :rowsPerPageOptions="[5, 10, 20, 50]"
       responsiveLayout="scroll"
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-      :globalFilterFields="['resourceNode.title', 'resourceNode.updatedAt']">
+      :globalFilterFields="['resourceNode.title', 'resourceNode.updatedAt']"
+  >
 
-    <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
     <Column field="resourceNode.title" :header="$t('Title')" :sortable="true">
       <template #body="slotProps">
         <div v-if="slotProps.data && slotProps.data.resourceNode && slotProps.data.resourceNode.resourceFile">
@@ -157,20 +55,6 @@
 
       </template>
 
-      <!--         <template #filter="{filterModel}">-->
-      <!--           <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by name"/>-->
-      <!--         </template>-->
-      <!--         -->
-
-<!--      <template #filter="{filterModel}">-->
-<!--        <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by title"/>-->
-<!--      </template>-->
-<!--      <template #filterclear="{filterCallback}">-->
-<!--        <Button type="button" icon="pi pi-times" @click="filterCallback()" class="p-button-secondary"></Button>-->
-<!--      </template>-->
-<!--      <template #filterapply="{filterCallback}">-->
-<!--        <Button type="button" icon="pi pi-check" @click="filterCallback()" class="p-button-success"></Button>-->
-<!--      </template>-->
     </Column>
     <Column field="resourceNode.updatedAt" :header="$t('Modified')" :sortable="true">
       <template #body="slotProps">
@@ -189,19 +73,10 @@
     <Column :exportable="false">
       <template #body="slotProps">
         <div class="flex flex-row gap-2">
-          <Button label="Show" class="p-button-sm p-button p-mr-2" @click="showHandler(slotProps.data)" />
-          <Button v-if="isAuthenticated && isCurrentTeacher" label="Edit" icon="pi pi-pencil" class="p-button-sm p-button p-mr-2" @click="editHandler(slotProps.data)" />
-          <Button v-if="isAuthenticated && isCurrentTeacher" label="Delete" icon="pi pi-trash" class="p-button-sm p-button p-button-danger" @click="confirmDeleteItem(slotProps.data)" />
+          <Button label="Select" class="p-button-sm p-button p-mr-2" @click="returnToEditor(slotProps.data)" />
         </div>
       </template>
     </Column>
-
-<!--    <template #paginatorLeft>-->
-<!--      <Button type="button" icon="pi pi-refresh" class="p-button-text" />-->
-<!--    </template>-->
-<!--    <template #paginatorRight>-->
-<!--      <Button type="button" icon="pi pi-cloud" class="p-button-text" />-->
-<!--    </template>-->
   </DataTable>
 
   <Dialog v-model:visible="itemDialog" :style="{width: '450px'}" :header="$t('New folder')" :modal="true" class="p-fluid">
@@ -223,69 +98,6 @@
       <Button label="Save" icon="pi pi-check" class="p-button-text" @click="saveItem" />
     </template>
   </Dialog>
-
-  <Dialog v-model:visible="deleteItemDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
-    <div class="confirmation-content">
-      <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem" />
-      <span v-if="item">Are you sure you want to delete <b>{{item.title}}</b>?</span>
-    </div>
-    <template #footer>
-      <Button label="No" icon="pi pi-times" class="p-button-text" @click="deleteItemDialog = false"/>
-      <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteItemButton" />
-    </template>
-  </Dialog>
-
-  <Dialog v-model:visible="deleteMultipleDialog" :style="{width: '450px'}" header="Confirm" :modal="true">
-    <div class="confirmation-content">
-      <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem" />
-      <span v-if="item">Are you sure you want to delete the selected items?</span>
-    </div>
-    <template #footer>
-      <Button label="No" icon="pi pi-times" class="p-button-text" @click="deleteMultipleDialog = false"/>
-      <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteMultipleItems" />
-    </template>
-  </Dialog>
-
-  <!--          <template v-slot:body="props">-->
-  <!--            <q-tr :props="props">-->
-  <!--              <q-td key="title" :props="props">-->
-  <!--                {{ props.row.title }}-->
-  <!--              </q-td>-->
-  <!--              <q-td key="resourceNode.updatedAt" :props="props">-->
-  <!--                {{ props.row.resourceNode.updatedAt }}-->
-  <!--              </q-td>-->
-  <!--              <q-td key="resourceNode.resourceFile.size" :props="props">-->
-  <!--                {{ props.row.resourceNode.resourceFile.size }}-->
-  <!--              </q-td>-->
-  <!--            </q-tr>-->
-  <!--          </template>-->
-
-  <!--          <template v-slot:body-cell-updatedAt="props">-->
-  <!--            <q-td slot="body-cell-updatedAt" auto-width>-->
-  <!--              {{-->
-  <!--                  moment(props.row.resourceNode.updatedAt).fromNow()-->
-  <!--              }}-->
-  <!--            </q-td>-->
-  <!--          </template>-->
-
-  <!--          <template v-slot:body-cell-size="props">-->
-  <!--            <q-td slot="body-cell-updatedAt" auto-width>-->
-  <!--              <span v-if="props.row.resourceNode.resourceFile">-->
-  <!--                 {{ $filters.prettyBytes(props.row.resourceNode.resourceFile.size)  }}-->
-  <!--              </span>-->
-  <!--            </q-td>-->
-  <!--          </template>-->
-
-  <!--          <template v-slot:body-cell-action="props">-->
-  <!--            <ActionCell-->
-  <!--                slot="body-cell-action"-->
-  <!--                slot-scope="props"-->
-  <!--                :handle-show="() => showHandler(props.row)"-->
-  <!--                :handle-edit="() => editHandler(props.row)"-->
-  <!--                :handle-delete="() => deleteHandler(props.row)"-->
-  <!--            />-->
-  <!--          </template>-->
-  <!--        </q-table>-->
 
 </template>
 
@@ -322,15 +134,7 @@ export default {
     return {
       sortBy: 'title',
       sortDesc: false,
-      columnsQua: [
-        {align: 'left', name: 'resourceNode.title', label: this.$i18n.t('Title'), field: 'resourceNode.title', sortable: true},
-        {align: 'left', name: 'resourceNode.updatedAt', label: this.$i18n.t('Modified'), field: 'resourceNode.updatedAt', sortable: true},
-        {name: 'resourceNode.resourceFile.size', label: this.$i18n.t('Size'), field: 'resourceNode.resourceFile.size', sortable: true},
-        {name: 'action', label: this.$i18n.t('Actions'), field: 'action', sortable: false}
-      ],
       columns: [
-        //{ name: 'action' },
-        //{ name: 'id', field: '@id', label: this.$t('iid') },
         { label: this.$i18n.t('Title'), field: 'title', name: 'title', sortable: true},
         { label: this.$i18n.t('Modified'), field: 'resourceNode.updatedAt', name: 'updatedAt', sortable: true},
         { label: this.$i18n.t('Size'), field: 'resourceNode.resourceFile.size', name: 'size', sortable: true},
@@ -508,6 +312,13 @@ export default {
       this.selectedItems = null;
       //this.$toast.add({severity:'success', summary: 'Successful', detail: 'Products Deleted', life: 3000});*/
     },
+    returnToEditor(item) {
+      console.log(item.contentUrl);
+      window.parent.postMessage({
+        url: item.contentUrl
+      }, '*');
+      parent.tinymce.activeEditor.windowManager.close();
+    },
     deleteItemButton() {
       console.log('deleteItem');
       this.deleteItem(this.item);
@@ -568,22 +379,6 @@ export default {
       this.onRequest({
         pagination: this.pagination,
       });
-
-      /*const promises = this.selected.map(async item => {
-        const result = await this.deleteItem(item);
-
-        console.log('item');
-        return result;
-      });
-
-      const result = await Promise.all(promises);
-
-      console.log(result);
-      if (result) {
-        console.log(result);
-        //this.onUpdateOptions(this.options);
-      }
-*/
       console.log('end -- deleteSelected');
     },
     //...actions,

@@ -11,6 +11,14 @@ export default {
       component: () => import('../views/documents/List.vue')
     },
     {
+      name: 'DocumentManager',
+      path: 'manager',
+      component: () => import('../views/documents/DocumentManager.vue'),
+      meta: {
+        layout: 'Empty'
+      }
+    },
+    {
       name: 'DocumentsCreate',
       path: 'new',
       component: () => import('../views/documents/Create.vue')

@@ -42,7 +42,6 @@ const router = createRouter({
                     path: '/courses', name: 'MyCourses', component: MyCourseList,
                     meta: {requiresAuth: true},
                 },
-
                 {
                     path: '/sessions', name: 'MySessions', component: MySessionList,
                     meta: {requiresAuth: true},

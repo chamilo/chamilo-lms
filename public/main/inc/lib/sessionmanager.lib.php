@@ -7902,7 +7902,7 @@ class SessionManager
         if (empty($sessionId)) {
             $form->addSelectAjax(
                 'session_template',
-                get_lang('SessionTemplate'),
+                get_lang('Session template'),
                 [],
                 [
                     'url' => api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_template_session',

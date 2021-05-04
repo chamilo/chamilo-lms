@@ -40,19 +40,17 @@ class HTML_QuickForm_advanced_settings extends HTML_QuickForm_static
         $text = $this->getAttribute('label');
         $label = is_array($text) ? $text[0] : $text;
 
-        $html = '<div class="md:flex md:items-center mb-6">
-                    <label class="ch-form-label h-4 md:w-1/4 flex justify-left md:justify-end pr-3 text-gray-600"></label>';
-
+        $html = '<div class="mb-6">';
         if (is_array($text) && isset($text[1])) {
             $html .= '<span class="clearfix">'.$text[1].'</span>';
         }
 
         $html .= '
-            <div class="md:w-3/4 ">
-            <button id="'.$name.'" type="button" class="btn btn-secondary advanced_options"
-                    data-toggle="button" aria-pressed="false" autocomplete="off">
-                <em class="fa fa-bars"></em> '.$label.'
-            </button>
+            <div class="">
+                <button id="'.$name.'" type="button" class="btn btn-secondary advanced_options"
+                        data-toggle="button" aria-pressed="false" autocomplete="off">
+                    <em class="fa fa-bars"></em> '.$label.'
+                </button>
             </div>
         ';
 

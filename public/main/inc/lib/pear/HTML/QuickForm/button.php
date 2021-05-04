@@ -200,7 +200,7 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
         return false;
     }
 
-    public function getTemplate(string $layout): string
+    /*public function getTemplate(string $layout): string
     {
         $size = $this->calculateSize();
         $attributes = $this->getAttributes();
@@ -216,7 +216,7 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
                     ';
                 } else {
                     $template = '
-                        <div class="md:flex md:items-center mb-6 {error_class}">
+                        <div class="mb-6 {error_class}">
                             <label {label-for} class="ch-form-label h-4 md:w-1/4 flex justify-left md:justify-end pr-3 text-gray-600 '.$size[0].' " >
                                 <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                                 {label}
@@ -253,5 +253,5 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
         }
 
         return $template;
-    }
+    }*/
 }

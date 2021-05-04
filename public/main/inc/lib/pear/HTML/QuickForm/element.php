@@ -622,10 +622,10 @@ class HTML_QuickForm_element extends HTML_Common
         }
 
         $template = '<label {label-for}>{label}</label>
-                        <div class="input-group">
-                            {icon}
-                            {element}
-                        </div>';
+                     <div class="input-group">
+                         {icon}
+                         {element}
+                     </div>';
 
         switch ($layout) {
             case FormValidator::LAYOUT_BOX_SEARCH:

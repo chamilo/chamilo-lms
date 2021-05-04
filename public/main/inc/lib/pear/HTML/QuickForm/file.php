@@ -11,8 +11,6 @@
  * the PHP License and are unable to obtain it through the web, please
  * send a note to license@php.net so we can mail you a copy immediately.
  *
- * @category    HTML
- * @package     HTML_QuickForm
  * @author      Adam Daniel <adaniel1@eesus.jnj.com>
  * @author      Bertrand Mansion <bmansion@mamasam.com>
  * @author      Alexey Borzov <avb@php.net>
@@ -20,16 +18,6 @@
  * @license     http://www.php.net/license/3_01.txt PHP License 3.01
  * @version     CVS: $Id: file.php,v 1.25 2009/04/04 21:34:02 avb Exp $
  * @link        http://pear.php.net/package/HTML_QuickForm
- */
-
-/**
- * HTML class for a file upload field
- *
- * @category    HTML
- * @package     HTML_QuickForm
- * @author      Adam Daniel <adaniel1@eesus.jnj.com>
- * @author      Bertrand Mansion <bmansion@mamasam.com>
- * @author      Alexey Borzov <avb@php.net>
  * @version     Release: 3.2.11
  * @since       1.0
  */
@@ -377,7 +365,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
         if ($this->isFrozen()) {
             return $this->getFrozenHtml();
         } else {
-            $class = '';
+            $class = 'mt-1';
             if (isset($this->_attributes['custom']) && $this->_attributes['custom']) {
                 $class = 'input-file';
         }

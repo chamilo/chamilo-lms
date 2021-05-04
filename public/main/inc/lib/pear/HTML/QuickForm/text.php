@@ -34,19 +34,13 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
         if (is_string($attributes) && empty($attributes)) {
             $attributes = [];
         }
+
         if (is_array($attributes) || empty($attributes)) {
             $classFromAttributes = $attributes['class'] ?? '';
-            //focus:outline-none            focus:shadow-outline
-            //w-1/2
-            //focus:border            focus:border-blue-100
-            $attributes['class'] = $classFromAttributes.'
-            sm:text-sm
-            text-gray-600
-            mt-1 w-full
-            bg-white
-            font-normal
-            h-10';
+
+            $attributes['class'] = $classFromAttributes;
         }
+
         $inputSize = $attributes['input-size'] ?? null;
         $this->setInputSize($inputSize);
         $columnsSize = $attributes['cols-size'] ?? null;
@@ -117,6 +111,24 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
     {
         if ($this->isFrozen()) {
             return $this->getFrozenHtml();
+        }
+        $layout = $this->getLayout();
+        $class = '';
+        if (FormValidator::LAYOUT_HORIZONTAL === $layout) {
+            $class = 'w-full mt-1';
+        }
+        $extraClass = "
+            sm:text-sm
+            text-gray-600
+            bg-white
+            font-normal
+            h-10
+            $class
+        ";
+        if (isset($this->_attributes['class'])) {
+            $this->_attributes['class'] .= $extraClass;
+        } else {
+            $this->_attributes['class'] = $extraClass;
         }
 
         return '<input '.$this->_getAttrString($this->_attributes).' />';

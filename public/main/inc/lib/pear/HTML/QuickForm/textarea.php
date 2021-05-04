@@ -11,23 +11,12 @@
  * the PHP License and are unable to obtain it through the web, please
  * send a note to license@php.net so we can mail you a copy immediately.
  *
- * @category    HTML
- * @package     HTML_QuickForm
  * @author      Adam Daniel <adaniel1@eesus.jnj.com>
  * @author      Bertrand Mansion <bmansion@mamasam.com>
  * @copyright   2001-2009 The PHP Group
  * @license     http://www.php.net/license/3_01.txt PHP License 3.01
  * @version     CVS: $Id: textarea.php,v 1.13 2009/04/04 21:34:04 avb Exp $
  * @link        http://pear.php.net/package/HTML_QuickForm
- */
-
-/**
- * HTML class for a textarea type field
- *
- * @category    HTML
- * @package     HTML_QuickForm
- * @author      Adam Daniel <adaniel1@eesus.jnj.com>
- * @author      Bertrand Mansion <bmansion@mamasam.com>
  * @version     Release: 3.2.11
  * @since       1.0
  */
@@ -53,7 +42,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
         $label = null,
         $attributes = null
     ) {
-        $attributes['class'] = $attributes['class'] ?? 'form-control';
+        $attributes['class'] = $attributes['class'] ?? ' mt-1';
         $columnsSize = $attributes['cols-size'] ?? null;
         $this->setColumnsSize($columnsSize);
         parent::__construct($elementName, $label, $attributes);
@@ -73,22 +62,23 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     /**
      * Sets the input field name
      *
-     * @param     string    $name   Input field name attribute
+     * @param string $name Input field name attribute
+     *
+     * @return    void
      * @since     1.0
      * @access    public
-     * @return    void
      */
     public function setName($name)
     {
-        $this->updateAttributes(array('name' => $name));
+        $this->updateAttributes(['name' => $name]);
     }
 
     /**
      * Returns the element name
      *
+     * @return    string
      * @since     1.0
      * @access    public
-     * @return    string
      */
     public function getName()
     {
@@ -96,24 +86,11 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     }
 
     /**
-     * Sets value for textarea element
-     *
-     * @param     string    $value  Value for textarea element
-     * @since     1.0
-     * @access    public
-     * @return    void
-     */
-    public function setValue($value)
-    {
-        $this->_value = $value;
-    }
-
-    /**
      * Returns the value of the form element
      *
+     * @return    string
      * @since     1.0
      * @access    public
-     * @return    string
      */
     public function getValue()
     {
@@ -121,29 +98,45 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     }
 
     /**
-     * Sets height in rows for textarea element
+     * Sets value for textarea element
      *
-     * @param     string    $rows  Height expressed in rows
+     * @param string $value Value for textarea element
+     *
+     * @return    void
      * @since     1.0
      * @access    public
+     */
+    public function setValue($value)
+    {
+        $this->_value = $value;
+    }
+
+    /**
+     * Sets height in rows for textarea element
+     *
+     * @param string $rows Height expressed in rows
+     *
      * @return    void
+     * @since     1.0
+     * @access    public
      */
     public function setRows($rows)
     {
-        $this->updateAttributes(array('rows' => $rows));
+        $this->updateAttributes(['rows' => $rows]);
     }
 
     /**
      * Sets width in cols for textarea element
      *
-     * @param     string    $cols  Width expressed in cols
+     * @param string $cols Width expressed in cols
+     *
+     * @return    void
      * @since     1.0
      * @access    public
-     * @return    void
      */
     public function setCols($cols)
     {
-        $this->updateAttributes(array('cols' => $cols));
+        $this->updateAttributes(['cols' => $cols]);
     }
 
     public function toHtml()
@@ -152,31 +145,28 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
             return $this->getFrozenHtml();
         } else {
             return $this->_getTabs().
-                   '<textarea' . $this->_getAttrString($this->_attributes) . '>' .
-                   // because we wrap the form later we don't want the text indented
-                   // Modified by Ivan Tcholakov, 16-MAR-2010.
-                   //preg_replace("/(\r\n|\n|\r)/", '&#010;', htmlspecialchars($this->_value)) .
-                   preg_replace("/(\r\n|\n|\r)/", '&#010;', $this->getCleanValue()) .
-                   //
-                   '</textarea>';
+                '<textarea'.$this->_getAttrString($this->_attributes).'>'.
+                // because we wrap the form later we don't want the text indented
+                // Modified by Ivan Tcholakov, 16-MAR-2010.
+                //preg_replace("/(\r\n|\n|\r)/", '&#010;', htmlspecialchars($this->_value)) .
+                preg_replace("/(\r\n|\n|\r)/", '&#010;', $this->getCleanValue()).
+                //
+                '</textarea>';
         }
     }
 
     /**
      * Returns the value of field without HTML tags (in this case, value is changed to a mask)
-     *
-     * @since     1.0
-     * @access    public
-     * @return    string
      */
     public function getFrozenHtml()
     {
         $value = $this->getCleanValue();
-        if ($this->getAttribute('wrap') == 'off') {
-            $html = $this->_getTabs() . '<pre>' . $value."</pre>\n";
+        if ($this->getAttribute('wrap') === 'off') {
+            $html = $this->_getTabs().'<pre>'.$value."</pre>\n";
         } else {
             $html = nl2br($value)."\n";
         }
-        return $html . $this->_getPersistantData();
+
+        return $html.$this->_getPersistantData();
     }
 }

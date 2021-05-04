@@ -2183,8 +2183,8 @@ abstract class Question
      * Shows question title an description.
      *
      * @param Exercise $exercise The current exercise object
-     * @param int   $counter A counter for the current question
-     * @param array $score Array of optional info ['pass', 'revised', 'score', 'weight', 'user_answered']
+     * @param int      $counter  A counter for the current question
+     * @param array    $score    Array of optional info ['pass', 'revised', 'score', 'weight', 'user_answered']
      *
      * @return string HTML string with the header of the question (before the answers table)
      */

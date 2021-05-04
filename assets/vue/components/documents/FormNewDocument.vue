@@ -67,7 +67,7 @@ import useVuelidate from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 //import UploadAdapter from './UploadAdapter';
 import Editor from '../Editor'
-import {useRouter} from "vue-router";
+import { useRouter, useRoute } from 'vue-router'
 
 export default {
   name: 'DocumentsForm',
@@ -133,7 +133,13 @@ export default {
   },
   methods: {
     browser (callback, value, meta) {
-      let url = '/resources/document/4/manager?cid=1&sid=0&gid=0';
+      //const route = useRoute();
+      let nodeId = this.$route.params['node'];
+      let folderParams = this.$route.query;
+      let url = this.$router.resolve({ name: 'DocumentManager', params: { id: nodeId }, query: folderParams })
+      url = url.fullPath;
+      console.log(url);
+
       if (meta.filetype === 'image') {
         url = url + "&type=images";
       } else {

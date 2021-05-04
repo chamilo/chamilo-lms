@@ -89,7 +89,7 @@
 <!--      </q-table>-->
 <!--  </div>-->
 
-  <Toolbar class="p-mb-4">
+  <Toolbar class="pb-4">
     <template #left>
       <div v-if="isAuthenticated && isCurrentTeacher" class="flex flex-row gap-2" >
         <!--         <Button label="New" icon="pi pi-plus" class="p-button-primary p-button-sm p-mr-2" @click="openNew" />-->
@@ -189,9 +189,9 @@
     <Column :exportable="false">
       <template #body="slotProps">
         <div class="flex flex-row gap-2">
-          <Button label="Show" class="p-button-sm p-button p-mr-2" @click="showHandler(slotProps.data)" />
-          <Button v-if="isAuthenticated && isCurrentTeacher" label="Edit" icon="pi pi-pencil" class="p-button-sm p-button p-mr-2" @click="editHandler(slotProps.data)" />
-          <Button v-if="isAuthenticated && isCurrentTeacher" label="Delete" icon="pi pi-trash" class="p-button-sm p-button p-button-danger" @click="confirmDeleteItem(slotProps.data)" />
+          <Button label="Show" class="btn btn-primary p-mr-2" @click="showHandler(slotProps.data)" />
+          <Button v-if="isAuthenticated && isCurrentTeacher" label="Edit" icon="pi pi-pencil" class="btn btn-primary p-mr-2" @click="editHandler(slotProps.data)" />
+          <Button v-if="isAuthenticated && isCurrentTeacher" label="Delete" icon="pi pi-trash" class="btn btn-danger" @click="confirmDeleteItem(slotProps.data)" />
         </div>
       </template>
     </Column>

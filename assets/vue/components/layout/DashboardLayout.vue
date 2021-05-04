@@ -113,7 +113,7 @@
         bordered
         content-class="bg-white"
         :width="280"
-        :breakpoint="500"
+        :breakpoint="850"
     >
       <q-scroll-area class="fit">
         <q-list v-if="isAuthenticated" padding class="text-grey-8">

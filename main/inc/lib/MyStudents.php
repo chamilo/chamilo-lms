@@ -60,11 +60,11 @@ class MyStudents
         return Tracking::displayUserSkills($studentId, $courseId, $sessionId);
     }
 
-    public static function getBlockForClasses($student_id): ?string
+    public static function getBlockForClasses($studentId): ?string
     {
         $userGroupManager = new UserGroup();
         $userGroups = $userGroupManager->getNameListByUser(
-            $student_id,
+            $studentId,
             UserGroup::NORMAL_CLASS
         );
 

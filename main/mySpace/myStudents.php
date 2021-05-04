@@ -943,62 +943,17 @@ $content = $tpl->fetch($templateName);
 echo $content;
 
 // Careers.
-if (api_get_configuration_value('allow_career_users')) {
-    $careers = UserManager::getUserCareers($student_id);
-    if (!empty($careers)) {
-        echo '<br /><br />';
-        echo Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
-        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
-        $table->setHeaderContents(0, 0, get_lang('Career'));
-        $table->setHeaderContents(0, 1, get_lang('Diagram'));
-        $row = 1;
-        foreach ($careers as $careerData) {
-            $table->setCellContents($row, 0, $careerData['name']);
-            $url = api_get_path(WEB_CODE_PATH).'user/career_diagram.php?career_id='.$careerData['id'];
-            $diagram = Display::url(get_lang('Diagram'), $url);
-            $table->setCellContents($row, 1, $diagram);
-            $row++;
-        }
-        echo $table->toHtml();
-    }
-}
+echo MyStudents::getBlockForCareers($student_id);
 
-$allowAll = api_get_configuration_value('allow_teacher_access_student_skills');
-if ($allowAll) {
-    // Show all skills
-    echo Tracking::displayUserSkills(
-        $student_id,
-        0,
-        0,
-        true
-    );
-} else {
-    // Default behaviour - Show all skills depending the course and session id
-    echo Tracking::displayUserSkills(
-        $student_id,
-        $courseInfo ? $courseInfo['real_id'] : 0,
-        $sessionId
-    );
-}
+echo MyStudents::getBlockForSkills(
+    $student_id,
+    $courseInfo ? $courseInfo['real_id'] : 0,
+    $sessionId
+);
 
 echo '<br /><br />';
-echo '<div class="row">
-        <div class="col-sm-5">';
-if (!empty($userGroups)) {
-    echo '<table class="table table-striped table-hover">
-           <thead>
-            <tr>
-            <th>';
-    echo get_lang('Classes');
-    echo '</th>
-                    </tr>
-                    </thead>
-                    <tbody>';
-    foreach ($userGroups as $class) {
-        echo '<tr><td>'.$class.'</td></tr>';
-    }
-    echo '</tbody></table>';
-}
+echo '<div class="row"><div class="col-sm-5">';
+echo MyStudents::getBlockForClasses($student_id);
 echo '</div></div>';
 
 $exportCourseList = [];

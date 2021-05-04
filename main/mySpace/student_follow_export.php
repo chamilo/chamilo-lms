@@ -506,6 +506,9 @@ if ($form->validate()) {
 
     $view = new Template('', false, false, false, true, false, false);
     $view->assign('user_info', $studentInfo);
+    $view->assign('carrers', MyStudents::getBlockForCareers($studentInfo['id']));
+    $view->assign('skills', Tracking::displayUserSkills($studentInfo['id']));
+    $view->assign('classes', MyStudents::getBlockForClasses($studentInfo['id']));
     $view->assign('courses_info', $coursesInfo);
 
     $template = $view->get_template('my_space/student_follow_pdf.tpl');
@@ -517,7 +520,7 @@ if ($form->validate()) {
     ];
 
     $css = api_get_print_css();
-    $css .= '
+    $css = '
         .user-info { clear: both; }
         .user-info__col { float: left; width: 33.33%; }
     ';
@@ -527,7 +530,14 @@ if ($form->validate()) {
     try {
         $pdf->content_to_pdf(
             $view->fetch($template),
-            $css
+            $css,
+            get_lang('StudentDetails'),
+            null,
+            'D',
+            false,
+            null,
+            false,
+            true
         );
     } catch (MpdfException $e) {
         echo Display::return_message(get_lang('ErrorWhileBuildingReport'), 'error');

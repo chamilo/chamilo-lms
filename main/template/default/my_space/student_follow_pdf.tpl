@@ -35,6 +35,14 @@
     <hr>
 </div>
 
+{{ carrers }}
+
+{{ skills }}
+
+<br><br>
+
+{{ classes }}
+
 {% for course_info in courses_info %}
     <pagebreak>
 

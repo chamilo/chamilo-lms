@@ -2850,7 +2850,7 @@ class Exercise
         $this->setPageResultConfiguration($form->getSubmitValues());
         $showHideConfiguration = api_get_configuration_value('quiz_hide_question_number');
         if ($showHideConfiguration) {
-            $this->setHideShowQuestionNumber($form->getSubmitValue('hide_question_number'));
+            $this->setHideQuestionNumber($form->getSubmitValue('hide_question_number'));
         }
         $this->preventBackwards = (int) $form->getSubmitValue('prevent_backwards');
 
@@ -8472,11 +8472,11 @@ class Exercise
     }
 
     /**
-     * Set the value to hide or show the question number.
+     * Set the value to 1 to hide the question number.
      *
      * @param int $value
      */
-    public function setHideShowQuestionNumber($value = 0)
+    public function setHideQuestionNumber($value = 0)
     {
         $showHideConfiguration = api_get_configuration_value('quiz_hide_question_number');
         if ($showHideConfiguration) {
@@ -8487,9 +8487,9 @@ class Exercise
     /**
      * Gets the value to hide or show the question number. If it does not exist, it is set to 0.
      *
-     * @return int
+     * @return int 1 if the question number must be hidden
      */
-    public function getHideShowQuestionNumber()
+    public function getHideQuestionNumber()
     {
         $showHideConfiguration = api_get_configuration_value('quiz_hide_question_number');
         if ($showHideConfiguration) {

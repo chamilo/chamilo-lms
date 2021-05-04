@@ -89,8 +89,6 @@
         "sonata-project/timeline-bundle": "~3.0",
         "sonata-project/classification-bundle": "~3.0",
         "sonata-project/comment-bundle": "~3",
-        "sonata-project/sonata-composer": "dev-master",
-
         "friendsofsymfony/comment-bundle": "~2.0@dev",
 
         "stof/doctrine-extensions-bundle": "~1.0",

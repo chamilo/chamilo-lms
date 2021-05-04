@@ -48,7 +48,7 @@
               <a @click.prevent="files.splice(index, 1)"
                  class="delete"
               >
-                <font-awesome-icon icon="trash" />
+                <FontAwesomeIcon icon="trash" />
               </a>
             </span>
             </div>

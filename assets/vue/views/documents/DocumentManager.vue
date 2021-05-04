@@ -45,7 +45,7 @@
               v-if="slotProps.data"
               @click="handleClick(slotProps.data)"
               class="cursor-pointer " >
-            <font-awesome-icon
+            <FontAwesomeIcon
                 icon="folder"
                 size="lg"
             />

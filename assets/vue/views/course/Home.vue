@@ -25,11 +25,11 @@
               {{ tool.nameToTranslate }}
             </a>
             <button @click="changeVisibility(course, tool)">
-              <font-awesome-icon
+              <FontAwesomeIcon
                   v-if="tool.resourceNode.resourceLinks[0].visibility === 2"
                   icon="eye" size="lg"
               />
-              <font-awesome-icon
+              <FontAwesomeIcon
                   v-else
                   icon="eye-slash" size="lg"
               />

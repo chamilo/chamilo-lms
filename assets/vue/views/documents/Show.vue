@@ -43,7 +43,7 @@
           </div>
         </div>
         <div class ="flex justify-center" v-else>
-              <font-awesome-icon
+              <FontAwesomeIcon
                   icon="folder"
                   size="7x"
               />

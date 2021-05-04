@@ -56,7 +56,7 @@
 <!--              </div>-->
 <!--              <div v-else>-->
 <!--                <a @click="handleClick(props.row)" class="cursor-pointer" >-->
-<!--                  <font-awesome-icon-->
+<!--                  <FontAwesomeIcon-->
 <!--                      icon="folder"-->
 <!--                      size="lg"-->
 <!--                  />-->
@@ -147,7 +147,7 @@
               v-if="slotProps.data"
               @click="handleClick(slotProps.data)"
               class="cursor-pointer " >
-            <font-awesome-icon
+            <FontAwesomeIcon
                 icon="folder"
                 size="lg"
             />

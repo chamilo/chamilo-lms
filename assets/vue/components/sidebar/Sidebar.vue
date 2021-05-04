@@ -32,7 +32,7 @@
                 :to="link.url">
                 <span class="inline-flex justify-center items-center ml-4">
                 <span class="w-5 h-5">
-                 <font-awesome-icon :icon="link.icon" />
+                 <FontAwesomeIcon :icon="link.icon" />
                 </span>
                 <span class="ml-2 text-sm tracking-wide truncate">{{ link.text }}</span>
                   </span>
@@ -136,7 +136,7 @@
                 :to="link.url">
                 <span class="inline-flex justify-center items-center ml-4">
                 <span class="w-5 h-5">
-                 <font-awesome-icon :icon="link.icon" />
+                 <FontAwesomeIcon :icon="link.icon" />
                 </span>
                 <span class="ml-2 text-sm tracking-wide truncate">{{ link.text }}</span>
                   </span>
@@ -155,7 +155,7 @@
                   :to="link.url">
                 <span class="inline-flex justify-center items-center ml-4">
                 <span class="w-5 h-5">
-                 <font-awesome-icon :icon="link.icon" />
+                 <FontAwesomeIcon :icon="link.icon" />
                 </span>
                 <span class="ml-2 text-sm tracking-wide truncate">{{ link.text }}</span>
                   </span>

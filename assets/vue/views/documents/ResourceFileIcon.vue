@@ -1,18 +1,18 @@
 <template>
   <span>
-    <font-awesome-icon
+    <FontAwesomeIcon
       v-if="file.image"
       icon="file-image"
       size="lg"
     />
 
-    <font-awesome-icon
+    <FontAwesomeIcon
       v-else-if="file.video"
       icon="file-video"
       size="lg"
     />
 
-    <font-awesome-icon
+    <FontAwesomeIcon
       v-else
       icon="file-alt"
       size="lg"

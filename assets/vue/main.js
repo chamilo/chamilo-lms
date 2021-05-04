@@ -151,7 +151,7 @@ app.component('Button', Button);
 app.component('Column', Column);
 app.component('ColumnGroup', ColumnGroup);
 app.component('Toolbar', Toolbar);
-app.component('font-awesome-icon', FontAwesomeIcon);
+app.component('FontAwesomeIcon', FontAwesomeIcon);
 app.component('DashboardLayout', DashboardLayout)
 app.component('EmptyLayout', EmptyLayout)
 

@@ -32,7 +32,7 @@
         @click="submitItem"
         unelevated
       >
-        <font-awesome-icon icon="save" />
+        <FontAwesomeIcon icon="save" />
         {{ $t('Submit') }}
       </q-btn>
       <!--      <v-btn-->
@@ -62,7 +62,7 @@
         class="btn btn-primary"
         @click="addItem"
       >
-        <font-awesome-icon icon="folder-plus" />
+        <FontAwesomeIcon icon="folder-plus" />
         New folder
       </q-btn>
 
@@ -72,7 +72,7 @@
         v-if="handleAddDocument"
         @click="addDocument"
       >
-        <font-awesome-icon icon="file-alt" /> New document
+        <FontAwesomeIcon icon="file-alt" /> New document
       </q-btn>
 
       <q-btn
@@ -81,7 +81,7 @@
         v-if="handleUploadDocument"
         @click="uploadDocument"
       >
-        <font-awesome-icon icon="cloud-upload-alt" /> File upload
+        <FontAwesomeIcon icon="cloud-upload-alt" /> File upload
       </q-btn>
 
   <!--    <DataFilter-->

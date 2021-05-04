@@ -196,7 +196,7 @@ class WSCMUser extends WSCM
         }
         $order = '';
         foreach ($order_by as $orderByItem) {
-            $order .= Database::escape_string($orderByItem, null, false).', ';
+            $order .= Database::escape_string($orderByItem).', ';
         }
         $order = substr($order, 0, -2);
         if (count($order_by) > 0) {

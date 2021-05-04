@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Teacher report.
- *
- * @package chamilo.reporting
  */
 $cidReset = true;
 
@@ -17,7 +15,7 @@ if (!$allowToTrack) {
     api_not_allowed(true);
 }
 
-$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+$export_csv = isset($_GET['export']) && 'csv' == $_GET['export'] ? true : false;
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 $active = isset($_GET['active']) ? intval($_GET['active']) : 1;
 $sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;

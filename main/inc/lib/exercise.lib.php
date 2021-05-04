@@ -138,9 +138,9 @@ class ExerciseLib
                                <table class="data_table">';
                     }
 
-                    // Iterate through answers
+                    // Iterate through answers.
                     $x = 1;
-                    //mark letters for each answer
+                    // Mark letters for each answer.
                     $letter = 'A';
                     $answer_matching = [];
                     $cpt1 = [];
@@ -151,9 +151,7 @@ class ExerciseLib
                             // options (A, B, C, ...) that will be put into the list-box
                             // have the "correct" field set to 0 because they are answer
                             $cpt1[$x] = $letter;
-                            $answer_matching[$x] = $objAnswerTmp->selectAnswerByAutoId(
-                                $numAnswer
-                            );
+                            $answer_matching[$x] = $objAnswerTmp->selectAnswerByAutoId($numAnswer);
                             $x++;
                             $letter++;
                         }
@@ -1838,8 +1836,9 @@ HOTSPOT;
         }
         $in_hotpot_path = Database::escape_string($in_hotpot_path);
         $in_direction = Database::escape_string($in_direction);
+        $in_direction = !in_array(strtolower(trim($in_direction)), ['asc', 'desc']) ? 'asc' : $in_direction;
         $in_column = Database::escape_string($in_column);
-        $in_number_of_items = intval($in_number_of_items);
+        $in_number_of_items = (int) $in_number_of_items;
         $in_from = (int) $in_from;
 
         $TBL_TRACK_HOTPOTATOES = Database::get_main_table(
@@ -1863,7 +1862,7 @@ HOTSPOT;
         }
         // get a number of sorted results
         $sql .= " $where_condition
-            ORDER BY $in_column $in_direction
+            ORDER BY `$in_column` $in_direction
             LIMIT $in_from, $in_number_of_items";
 
         $res = Database::query($sql);
@@ -2239,9 +2238,10 @@ HOTSPOT;
             $column = !empty($column) ? Database::escape_string($column) : null;
             $from = (int) $from;
             $number_of_items = (int) $number_of_items;
+            $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
 
             if (!empty($column)) {
-                $sql .= " ORDER BY $column $direction ";
+                $sql .= " ORDER BY `$column` $direction ";
             }
             $sql .= " LIMIT $from, $number_of_items";
 

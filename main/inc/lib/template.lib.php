@@ -148,6 +148,7 @@ class Template
             'api_get_user_info',
             'api_get_configuration_value',
             'api_get_setting',
+            'api_get_course_setting',
             'api_get_plugin_setting',
             [
                 'name' => 'return_message',
@@ -262,6 +263,9 @@ class Template
             $this->assign('language_form', api_display_language_form());
         }
 
+        if (api_get_configuration_value('notification_event')) {
+            $this->assign('notification_event', '1');
+        }
         // Chamilo plugins
         if ($this->show_header) {
             if ($this->load_plugins) {
@@ -576,6 +580,7 @@ class Template
             'system_version' => api_get_configuration_value('system_version'),
             'site_name' => api_get_setting('siteName'),
             'institution' => api_get_setting('Institution'),
+            'institution_url' => api_get_setting('InstitutionUrl'),
             'date' => api_format_date('now', DATE_FORMAT_LONG),
             'timezone' => api_get_timezone(),
             'gamification_mode' => api_get_setting('gamification_mode'),
@@ -814,7 +819,7 @@ class Template
         }
 
         foreach ($bowerJsFiles as $file) {
-            $js_file_to_string .= '<script type="text/javascript" src="'.api_get_cdn_path(api_get_path(WEB_PUBLIC_PATH).'assets/'.$file).'"></script>'."\n";
+            $js_file_to_string .= '<script src="'.api_get_cdn_path(api_get_path(WEB_PUBLIC_PATH).'assets/'.$file).'"></script>'."\n";
         }
 
         foreach ($js_files as $file) {
@@ -1169,7 +1174,7 @@ class Template
 
                 // Minimum options using all defaults (including defaults for Image_Text):
                 //$options = array('callback' => 'qfcaptcha_image.php');
-                $captcha_question = $form->addElement('CAPTCHA_Image', 'captcha_question', '', $options);
+                $captchaQuestion = $form->addElement('CAPTCHA_Image', 'captcha_question', '', $options);
                 $form->addHtml(get_lang('ClickOnTheImageForANewOne'));
 
                 $form->addElement(
@@ -1188,7 +1193,7 @@ class Template
                     'captcha',
                     get_lang('TheTextYouEnteredDoesNotMatchThePicture'),
                     'CAPTCHA',
-                    $captcha_question
+                    $captchaQuestion
                 );
             }
         }
@@ -1253,9 +1258,10 @@ class Template
         return implode(CourseManager::USER_SEPARATOR, $names);
     }
 
-    /*s
+    /**
      * Returns the teachers name for the current course
-     * Function to use in Twig templates
+     * Function to use in Twig templates.
+     *
      * @return string
      */
     public static function returnTeachersNames()
@@ -1291,9 +1297,6 @@ class Template
         $this->responseCode = $code;
     }
 
-    /**
-     * @param string $code
-     */
     public function getResponseCode()
     {
         return $this->responseCode;

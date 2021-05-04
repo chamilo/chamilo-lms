@@ -228,7 +228,7 @@ switch ($action) {
                     GROUP BY exe_user_id
                 ) as aa
                 ON aa.exe_user_id = user_id
-                ORDER BY $sidx $sord
+                ORDER BY `$sidx` $sord
                 LIMIT $start, $limit";
 
         $result = Database::query($sql);

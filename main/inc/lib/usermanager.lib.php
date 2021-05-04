@@ -2260,6 +2260,14 @@ class UserManager
             $filename = $user_id.'_'.$filename;
         }
 
+        if (!file_exists($source_file)) {
+            return false;
+        }
+
+        $mimeContentType = mime_content_type($source_file);
+        if (false === strpos($mimeContentType, 'image')) {
+            return false;
+        }
         //Crop the image to adjust 1:1 ratio
         $image = new Image($source_file);
         $image->crop($cropParameters);
@@ -2536,7 +2544,7 @@ class UserManager
             $field_filter = (int) $field_filter;
             $sqlf .= " AND filter = $field_filter ";
         }
-        $sqlf .= " ORDER BY ".$columns[$column]." $sort_direction ";
+        $sqlf .= " ORDER BY `".$columns[$column]."` $sort_direction ";
         if ($number_of_items != 0) {
             $sqlf .= " LIMIT ".intval($from).','.intval($number_of_items);
         }
@@ -2841,7 +2849,9 @@ class UserManager
         return $extra_data;
     }
 
-    /** Get extra user data by field
+    /**
+     * Get extra user data by field.
+     *
      * @param int    user ID
      * @param string the internal variable name of the field
      *
@@ -5189,7 +5199,7 @@ class UserManager
             if (!empty($column) && !empty($direction)) {
                 // Fixing order due the UNIONs
                 $column = str_replace('u.', '', $column);
-                $orderBy = " ORDER BY $column $direction ";
+                $orderBy = " ORDER BY `$column` $direction ";
             }
         }
 

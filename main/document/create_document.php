@@ -506,14 +506,10 @@ if ($form->validate()) {
     // Setting the title
     $title = $values['title'];
 
-    // Setting the extension
     $extension = 'html';
 
     $content = Security::remove_XSS($values['content'], COURSEMANAGERLOWSECURITY);
 
-    /*if (strpos($content, '/css/frames.css') == false) {
-        $content = str_replace('</head>', '<link rel="stylesheet" href="./css/frames.css" type="text/css" /><style> body{margin:50px;}</style></head>', $content);
-    }*/
 
     // Don't create file with the same name.
 
@@ -631,7 +627,6 @@ if ($form->validate()) {
     }
 
     Display :: display_header($nameTools, "Doc");
-    // actions
     // link back to the documents overview
     if ($is_certificate_mode) {
         $actionsLeft = '<a href="document.php?certificate=true&id='.$folder_id.'&selectcat='.Security::remove_XSS($_GET['selectcat']).'">'.

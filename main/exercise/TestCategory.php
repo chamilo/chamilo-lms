@@ -158,7 +158,7 @@ class TestCategory
     public function modifyCategory($courseId = 0)
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $id = intval($this->id);
+        $id = (int) $this->id;
         $name = Database::escape_string($this->name);
         $description = Database::escape_string($this->description);
         $cat = $this->getCategory($id, $courseId);
@@ -175,7 +175,6 @@ class TestCategory
                     WHERE id = $id AND c_id = ".$courseId;
             Database::query($sql);
 
-            // item_property update
             api_item_property_update(
                 $courseInfo,
                 TOOL_TEST_CATEGORY,
@@ -236,7 +235,7 @@ class TestCategory
             $field = Database::escape_string($field);
             $sql = "SELECT $field FROM $table
                     WHERE c_id = $courseId
-                    ORDER BY $field ASC";
+                    ORDER BY `$field` ASC";
             $res = Database::query($sql);
             while ($row = Database::fetch_array($res)) {
                 $categories[] = $row[$field];
@@ -330,9 +329,7 @@ class TestCategory
     }
 
     /**
-     * Return the list of differents categories ID for a test in the current course
-     * input : test_id
-     * return : array of category id (integer)
+     * Return the list of different categories ID for a test in the current course
      * hubert.borderiou 07-04-2011.
      *
      * @param int $exerciseId
@@ -342,7 +339,7 @@ class TestCategory
      */
     public static function getListOfCategoriesIDForTest($exerciseId, $courseId = 0)
     {
-        // parcourir les questions d'un test, recup les categories uniques dans un tableau
+        // Check test questions, obtaining unique categories in a table
         $exercise = new Exercise($courseId);
         $exercise->read($exerciseId, false);
         $categoriesInExercise = $exercise->getQuestionWithCategories();
@@ -358,13 +355,11 @@ class TestCategory
     }
 
     /**
-     * @param Exercise $exercise
-     *
      * @return array
      */
     public static function getListOfCategoriesIDForTestObject(Exercise $exercise)
     {
-        // parcourir les questions d'un test, recup les categories uniques dans un tableau
+        // Check the categories of a test, obtaining unique categories in table
         $categories_in_exercise = [];
         $question_list = $exercise->getQuestionOrderedListByName();
 
@@ -418,8 +413,6 @@ class TestCategory
     }
 
     /**
-     * @param Exercise $exercise
-     *
      * @return array
      */
     public static function getListOfCategoriesForTest(Exercise $exercise)

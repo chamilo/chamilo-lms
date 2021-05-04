@@ -9,8 +9,6 @@ use ChamiloSession as Session;
  *  It is / will be used to provide a service layer to all document-using tools.
  *  and eliminate code duplication fro group documents, scorm documents, main documents.
  *  Include/require it in your code to use its functionality.
- *
- * @package chamilo.library
  */
 class DocumentManager
 {
@@ -1069,7 +1067,7 @@ class DocumentManager
 
         // Deleting from the DB
         $user_id = api_get_user_id();
-        $document_id = intval($document_id);
+        $document_id = (int) $document_id;
 
         if (empty($course_info)) {
             $course_info = api_get_course_info();
@@ -1135,12 +1133,13 @@ class DocumentManager
     ) {
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 
-        $groupId = intval($groupId);
+        $documentId = (int) $documentId;
+        $groupId = (int) $groupId;
         if (empty($groupId)) {
             $groupId = api_get_group_id();
         }
 
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
         if (empty($sessionId)) {
             $sessionId = api_get_session_id();
         }
@@ -1176,8 +1175,6 @@ class DocumentManager
             }
             $path = $docInfo['path'];
         }
-
-        $documentId = intval($documentId);
 
         if (empty($path) || empty($docInfo) || empty($documentId)) {
             return false;
@@ -1359,7 +1356,7 @@ class DocumentManager
      *
      * @return int id of document / false if no doc found
      */
-    public static function get_document_id($courseInfo, $path, $sessionId = null)
+    public static function get_document_id($courseInfo, $path, $sessionId = null, $forceFileTypeFolder = false)
     {
         $table = Database::get_course_table(TABLE_DOCUMENT);
         $courseId = $courseInfo['real_id'];
@@ -1372,11 +1369,16 @@ class DocumentManager
 
         $path = Database::escape_string($path);
         if (!empty($courseId) && !empty($path)) {
+            $folderCondition = '';
+            if ($forceFileTypeFolder) {
+                $folderCondition = ' AND filetype = "folder" ';
+            }
             $sql = "SELECT id FROM $table
                     WHERE
                         c_id = $courseId AND
                         path LIKE BINARY '$path' AND
                         session_id = $sessionId
+                        $folderCondition
                     LIMIT 1";
 
             $result = Database::query($sql);
@@ -1595,8 +1597,8 @@ class DocumentManager
         $course_id = $course['real_id'];
         // note the extra / at the end of doc_path to match every path in
         // the document table that is part of the document path
+        $session_id = (int) $session_id;
 
-        $session_id = intval($session_id);
         $condition = "AND d.session_id IN  ('$session_id', '0') ";
         // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198
 
@@ -1876,7 +1878,8 @@ class DocumentManager
         $sessionId,
         $is_preview = false
     ) {
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
+        $sessionId = (int) $sessionId;
         $course_info = api_get_course_info($course_code);
         $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
         $course_id = $course_info['real_id'];

@@ -35,6 +35,9 @@ switch ($action) {
         if (!$agenda->getIsAllowedToEdit()) {
             break;
         }
+        if (false === Security::check_token('get')) {
+            exit;
+        }
         $add_as_announcement = isset($_REQUEST['add_as_annonuncement']) ? $_REQUEST['add_as_annonuncement'] : null;
         $title = isset($_REQUEST['title']) ? $_REQUEST['title'] : null;
         $content = isset($_REQUEST['content']) ? $_REQUEST['content'] : null;
@@ -49,15 +52,18 @@ switch ($action) {
             $content,
             $userToSend,
             $add_as_announcement,
-            null, //$parentEventId = null,
-            [], //$attachmentArray = array(),
-            null, //$attachmentComment = null,
+            null,
+            [],
+            null,
             $comment
         );
         break;
     case 'edit_event':
         if (!$agenda->getIsAllowedToEdit()) {
             break;
+        }
+        if (false === Security::check_token('get')) {
+            exit;
         }
         $id_list = explode('_', $_REQUEST['id']);
         $id = $id_list[1];
@@ -74,6 +80,9 @@ switch ($action) {
         if (!$agenda->getIsAllowedToEdit()) {
             break;
         }
+        if (false === Security::check_token('get')) {
+            exit;
+        }
         $id_list = explode('_', $_REQUEST['id']);
         $id = $id_list[1];
         $deleteAllEventsFromSerie = isset($_REQUEST['delete_all_events']) ? true : false;
@@ -83,6 +92,9 @@ switch ($action) {
         if (!$agenda->getIsAllowedToEdit()) {
             break;
         }
+        if (false === Security::check_token('get')) {
+            exit;
+        }
         $minute_delta = $_REQUEST['minute_delta'];
         $id = explode('_', $_REQUEST['id']);
         $id = $id[1];
@@ -91,6 +103,9 @@ switch ($action) {
     case 'move_event':
         if (!$agenda->getIsAllowedToEdit()) {
             break;
+        }
+        if (false === Security::check_token('get')) {
+            exit;
         }
         $minute_delta = $_REQUEST['minute_delta'];
         $allDay = $_REQUEST['all_day'];
@@ -124,7 +139,7 @@ switch ($action) {
         echo $events;
         break;
     case 'get_user_agenda':
-        //Used in the admin user list
+        // Used in the admin user list.
         api_protect_admin_script();
 
         if (api_is_allowed_to_edit(null, true)) {

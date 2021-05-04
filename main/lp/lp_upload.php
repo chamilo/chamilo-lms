@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
@@ -6,8 +7,6 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 
 /**
  * Script managing the learnpath upload. To best treat the uploaded file, make sure we can identify it.
- *
- * @package chamilo.learnpath
  *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
@@ -42,7 +41,7 @@ if (isset($_POST) && $is_error) {
 
     return false;
     unset($_FILES['user_file']);
-} elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES['user_file']['name'])) {
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && count($_FILES) > 0 && !empty($_FILES['user_file']['name'])) {
     // A file upload has been detected, now deal with the file...
     // Directory creation.
     $stopping_error = false;

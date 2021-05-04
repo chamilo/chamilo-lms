@@ -1,7 +1,6 @@
 <?php
 /* See license terms in /license.txt */
 
-//use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use ChamiloSession as Session;
 

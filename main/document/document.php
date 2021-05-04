@@ -25,8 +25,6 @@ use ChamiloSession as Session;
  * 2) Define the directory to display
  * 3) Read files and directories from the directory defined in part 2
  * 4) Display all of that on an HTML page
- *
- * @package chamilo.document
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -796,7 +794,7 @@ function convertModal (id, format) {
         var formatTarget = $(this).val();
         window.location.href = "'
             .api_get_self().'?'.api_get_cidreq()
-            .'&curdirpath='.$curdirpath
+            .'&curdirpath='.$curdirpathurl
             .'&action=convertToPdf&formatTarget='
             .'" + formatTarget + "&id=" + id + "&'
             .api_get_cidreq().'&formatType=" + format;

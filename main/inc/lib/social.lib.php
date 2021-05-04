@@ -12,8 +12,6 @@ use Zend\Feed\Reader\Reader;
  *
  * This class provides methods for the social network management.
  * Include/require it in your code to use its features.
- *
- * @package chamilo.social
  */
 class SocialManager extends UserManager
 {
@@ -293,13 +291,19 @@ class SocialManager extends UserManager
         } else {
             // invitation already exist
             $sql = 'SELECT COUNT(*) AS count, id FROM '.$tbl_message.'
-                    WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status = 7';
+                    WHERE
+                        user_sender_id='.$user_id.' AND
+                        user_receiver_id='.$friend_id.' AND
+                        msg_status = 7';
             $res_if_exist = Database::query($sql);
             $row_if_exist = Database::fetch_array($res_if_exist, 'ASSOC');
             if ($row_if_exist['count'] == 1) {
                 $sql = 'UPDATE '.$tbl_message.' SET
                         msg_status=5, content = "'.$clean_message_content.'"
-                        WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status = 7 ';
+                        WHERE
+                            user_sender_id='.$user_id.' AND
+                            user_receiver_id='.$friend_id.' AND
+                            msg_status = 7 ';
                 Database::query($sql);
 
                 return true;
@@ -583,7 +587,7 @@ class SocialManager extends UserManager
             return '';
         }
         $feeds = explode(';', $feed['rssfeeds']);
-        if (count($feeds) == 0) {
+        if (0 == count($feeds)) {
             return '';
         }
         $res = '';
@@ -864,9 +868,7 @@ class SocialManager extends UserManager
             );
         }
 
-        $skillBlock = $template->get_template('social/avatar_block.tpl');
-
-        return $template->fetch($skillBlock);
+        return $template->fetch($template->get_template('social/avatar_block.tpl'));
     }
 
     /**
@@ -2564,7 +2566,7 @@ class SocialManager extends UserManager
      */
     public static function getCountWallMessagesByUser($userId, $groupList = [], $friendList = [], $threadList = [])
     {
-        $count = self::getWallMessages(
+        return self::getWallMessages(
             $userId,
             0,
             $groupList,
@@ -2575,8 +2577,6 @@ class SocialManager extends UserManager
             true,
             $threadList
         );
-
-        return $count;
     }
 
     /**

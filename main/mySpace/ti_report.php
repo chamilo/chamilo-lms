@@ -62,8 +62,11 @@ $form->addButtonFilter(get_lang('Search'));
 $weekFormat = 'oW';
 
 if ($form->validate()) {
-    $startDate = Database::escape_string($_REQUEST['daterange_start']);
-    $endDate = Database::escape_string($_REQUEST['daterange_end']);
+    $values = $form->getSubmitValues();
+    $startDate = Database::escape_string($values['daterange_start']);
+    $endDate = Database::escape_string($values['daterange_end']);
+    //$startDate = Database::escape_string($_REQUEST['daterange_start']);
+    //$endDate = Database::escape_string($_REQUEST['daterange_end']);
 
     $date = new DateTime($startDate);
     $weekStart = $date->format($weekFormat);
@@ -107,12 +110,11 @@ if ($form->validate()) {
             $coachList[$coachId]['week'][$week]['sessions'][] = $row;
         }
 
-        $coachList[$coachId]['session_count'] += 1;
+        $coachList[$coachId]['session_count']++;
         $coachList[$coachId]['data'] = $row;
     }
 
     $table = new HTML_Table(['class' => 'table table-responsive']);
-    //$table = new HTML_Table();
     $headers = [
         get_lang('Coach'),
         get_lang('Sessions'),
@@ -171,7 +173,7 @@ if ($form->validate()) {
                         $sessionAdded[] = $session['session_id'];
                     }
 
-                    if ($showName === false) {
+                    if (false === $showName) {
                         $name = '';
                     }
                     $sessionArray[] = Display::url(

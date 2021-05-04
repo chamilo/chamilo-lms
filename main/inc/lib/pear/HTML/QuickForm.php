@@ -63,6 +63,7 @@ class HTML_QuickForm extends HTML_Common
 {
     const MAX_ELEMENT_ARGUMENT = 10;
     private $dateTimePickerLibraryAdded;
+    private $token;
 
     /**
      * Array containing the form fields
@@ -214,7 +215,8 @@ class HTML_QuickForm extends HTML_Common
      * @param    string      $action            (optional)Form's action
      * @param    string      $target            (optional)Form's target defaults to '_self'
      * @param    mixed       $attributes        (optional)Extra attributes for <form> tag
-     * @param    bool        $trackSubmit       (optional)Whether to track if the form was submitted by adding a special hidden field
+     * @param    bool        $trackSubmit       (optional)Whether to track if the form was submitted by adding a
+     *                                          special hidden field
      * @access   public
      */
     public function __construct(
@@ -225,6 +227,7 @@ class HTML_QuickForm extends HTML_Common
         $attributes = null,
         $trackSubmit = false
     ) {
+        $this->token = null;
         parent::__construct($attributes);
         $method = (strtoupper($method) == 'GET') ? 'get' : 'post';
         $action = ($action == '') ? api_get_self() : $action;
@@ -237,7 +240,7 @@ class HTML_QuickForm extends HTML_Common
             'action' => $action,
             'method' => $method,
             'name' => $formName,
-            'id' => $form_id
+            'id' => $form_id,
         ) + $target;
         $this->updateAttributes($attributes);
         if (!$trackSubmit || isset($_REQUEST['_qf__' . $formName])) {
@@ -266,6 +269,28 @@ class HTML_QuickForm extends HTML_Common
                     $this->_maxFileSize = $matches['1'];
             }
         }
+    }
+
+    public function protect()
+    {
+        $token = $this->getSubmitValue('protect_token');
+        if (null === $token) {
+            $token = Security::get_token();
+        } else {
+            $token = Security::get_existing_token();
+        }
+        $this->addHidden('protect_token', $token);
+        $this->setToken($token);
+    }
+
+    public function setToken($token)
+    {
+        $this->token = $token;
+    }
+
+    public function getToken()
+    {
+        return $this->token;
     }
 
     /**
@@ -1066,7 +1091,8 @@ class HTML_QuickForm extends HTML_Common
      * @param    string     $format        (optional)Required for extra rule data
      * @param    int        $howmany       (optional)How many valid elements should be in the group
      * @param    string     $validation    (optional)Where to perform validation: "server", "client"
-     * @param    bool       $reset         Client-side: whether to reset the element's value to its original state if validation failed.
+     * @param    bool       $reset         Client-side: whether to reset the element's value to its original state if
+     *                                     validation failed.
      * @since    2.5
      * @access   public
      * @throws   HTML_QuickForm_Error
@@ -1396,6 +1422,14 @@ class HTML_QuickForm extends HTML_Common
             return false;
         }
 
+        if (null !== $this->getToken()) {
+            $check = Security::check_token('form', $this);
+            Security::clear_token();
+            if (false === $check) {
+                return false;
+            }
+        }
+
         $registry =& HTML_QuickForm_RuleRegistry::singleton();
 
         foreach ($this->_rules as $target => $rules) {
@@ -1638,7 +1672,7 @@ class HTML_QuickForm extends HTML_Common
             "\t"    => '\t',
             "'"     => "\\'",
             '"'     => '\"',
-            '\\'    => '\\\\'
+            '\\'    => '\\\\',
         );
 
         foreach ($this->_rules as $elementName => $rules) {

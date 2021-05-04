@@ -3,8 +3,6 @@
 
 /**
  * This tool allows platform admins to export courses to CSV file.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 
@@ -18,16 +16,24 @@ $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')]
 
 set_time_limit(0);
 
-$course_list = CourseManager::get_courses_list();
+$course_list = CourseManager::get_courses_list(
+    0,
+    0,
+    'title',
+    'ASC',
+    -1,
+    '',
+    api_get_current_access_url_id()
+);
 $formSent = null;
 $courses = $selected_courses = [];
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     $formSent = $_POST['formSent'];
-    $select_type = intval($_POST['select_type']);
+    $select_type = (int) ($_POST['select_type']);
     $file_type = $_POST['file_type'];
 
-    if ($select_type == 2) {
+    if (2 == $select_type) {
         // Get selected courses from courses list in form sent
         $selected_courses = $_POST['course_code'];
         if (is_array($selected_courses)) {

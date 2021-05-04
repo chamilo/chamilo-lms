@@ -11,8 +11,6 @@ use ChamiloSession as Session;
  * Class ExtraFieldValue
  * Declaration for the ExtraFieldValue class, managing the values in extra
  * fields for any data type.
- *
- * @package chamilo.library
  */
 class ExtraFieldValue extends Model
 {

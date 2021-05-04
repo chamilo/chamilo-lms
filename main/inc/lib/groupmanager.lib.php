@@ -8,8 +8,6 @@ use Chamilo\CourseBundle\Entity\CGroupRelUser;
  *
  * @author Bart Mollet
  *
- * @package chamilo.library
- *
  * @todo Add $course_code parameter to all functions. So this GroupManager can
  * be used outside a session.
  */
@@ -90,6 +88,7 @@ class GroupManager
      * @param int   $status      group status
      * @param int   $sessionId
      * @param bool  $getCount
+     * @param bool  $notInGroup  Get groups not in a category
      *
      * @return array an array with all information about the groups
      */
@@ -645,18 +644,17 @@ class GroupManager
      */
     public static function getGroupListFilterByName($name, $categoryId, $courseId)
     {
-        $name = trim($name);
+        $name = Database::escape_string(trim($name));
+        $categoryId = (int) $categoryId;
+        $courseId = (int) $courseId;
         if (empty($name)) {
             return [];
         }
-        $name = Database::escape_string($name);
-        $courseId = (int) $courseId;
-        $table_group = Database::get_course_table(TABLE_GROUP);
-        $sql = "SELECT * FROM $table_group
+        $table = Database::get_course_table(TABLE_GROUP);
+        $sql = "SELECT * FROM $table
                 WHERE c_id = $courseId AND name LIKE '%$name%'";
 
         if (!empty($categoryId)) {
-            $categoryId = intval($categoryId);
             $sql .= " AND category_id = $categoryId";
         }
         $sql .= " ORDER BY name";
@@ -866,7 +864,7 @@ class GroupManager
         $table_group = Database::get_course_table(TABLE_GROUP);
         $table_group_cat = Database::get_course_table(TABLE_GROUP_CATEGORY);
 
-        $group_id = intval($group_id);
+        $group_id = (int) $group_id;
 
         if (empty($group_id)) {
             return [];
@@ -1131,7 +1129,7 @@ class GroupManager
 				WHERE g.c_id = '.$course_info['real_id'].'
 				AND gu.c_id = g.c_id
 				AND gu.group_id = g.iid ';
-        if ($category_id != null) {
+        if (null != $category_id) {
             $category_id = intval($category_id);
             $sql .= ' AND g.category_id = '.$category_id;
         }
@@ -1221,14 +1219,14 @@ class GroupManager
                     g.id = $group_id";
 
         if (!empty($column) && !empty($direction)) {
-            $column = Database::escape_string($column, null, false);
-            $direction = ($direction == 'ASC' ? 'ASC' : 'DESC');
-            $sql .= " ORDER BY $column $direction";
+            $column = Database::escape_string($column);
+            $direction = ('ASC' === $direction ? 'ASC' : 'DESC');
+            $sql .= " ORDER BY `$column` $direction";
         }
 
         if (!empty($start) && !empty($limit)) {
-            $start = intval($start);
-            $limit = intval($limit);
+            $start = (int) $start;
+            $limit = (int) $limit;
             $sql .= " LIMIT $start, $limit";
         }
         $res = Database::query($sql);
@@ -1466,11 +1464,10 @@ class GroupManager
     public static function number_of_students($group_id, $course_id = null)
     {
         $table = Database::get_course_table(TABLE_GROUP_USER);
-        $group_id = intval($group_id);
+        $group_id = (int) $group_id;
+        $course_id = (int) $course_id;
         if (empty($course_id)) {
             $course_id = api_get_course_int_id();
-        } else {
-            $course_id = intval($course_id);
         }
         $sql = "SELECT COUNT(*) AS number_of_students
                 FROM $table
@@ -1491,7 +1488,7 @@ class GroupManager
     public static function maximum_number_of_students($group_id)
     {
         $table = Database::get_course_table(TABLE_GROUP);
-        $group_id = intval($group_id);
+        $group_id = (int) $group_id;
         $course_id = api_get_course_int_id();
         $sql = "SELECT max_student FROM $table 
                 WHERE c_id = $course_id AND iid = $group_id";
@@ -1620,8 +1617,8 @@ class GroupManager
             return false;
         }
         $table = Database::get_course_table(TABLE_GROUP_USER);
-        $group_id = intval($groupInfo['id']);
-        $user_id = intval($user_id);
+        $group_id = (int) $groupInfo['id'];
+        $user_id = (int) $user_id;
 
         $sql = "SELECT 1 FROM $table
                 WHERE

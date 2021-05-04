@@ -151,7 +151,6 @@ switch ($action) {
                             dataType: "json",
                             data: "values="+save,
                             success: function(data) {
-                                console.log(data);
                             }
                         });
                         

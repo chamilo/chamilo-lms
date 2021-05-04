@@ -1,8 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- *   @package chamilo.admin
- */
 
 // Resetting the course id.
 $cidReset = true;
@@ -145,7 +142,7 @@ function search($needle, $type)
             $list = CourseManager::get_courses_list(
                 0,
                 0,
-                2,
+                'title',
                 'ASC',
                 -1,
                 $needle

@@ -10,8 +10,6 @@ use ChamiloSession as Session;
  *
  * This class provides methods for messages management.
  * Include/require it in your code to use its features.
- *
- * @package chamilo.library
  */
 class MessageManager
 {

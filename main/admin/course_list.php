@@ -94,6 +94,14 @@ function get_course_data($from, $number_of_items, $column, $direction)
 {
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+    $column = (int) $column;
+
+    if (!in_array(strtolower($direction), ['asc', 'desc'])) {
+        $direction = 'desc';
+    }
+
     $sql = "SELECT  
                 code AS col0,
                 title AS col1,
@@ -244,6 +252,13 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
     $session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
     $session = Database::get_main_table(TABLE_MAIN_SESSION);
 
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+    $column = (int) $column;
+
+    if (!in_array(strtolower($direction), ['asc', 'desc'])) {
+        $direction = 'desc';
+    }
     $sql = "SELECT
                 c.code AS col0,
                 c.title AS col1,
@@ -264,7 +279,7 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
             ";
 
     if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
-        $sessionId = intval($_GET['session_id']);
+        $sessionId = (int) $_GET['session_id'];
         $sql .= " WHERE s.id = ".$sessionId;
     }
 

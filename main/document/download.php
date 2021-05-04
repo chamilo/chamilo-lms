@@ -3,15 +3,12 @@
 /**
  * This file is responsible for passing requested documents to the browser.
  * Many functions updated and moved to lib/document.lib.php.
- *
- * @package chamilo.document
  */
 session_cache_limiter('none');
 
 require_once __DIR__.'/../inc/global-min.inc.php';
 $this_section = SECTION_COURSES;
 
-// Protection
 api_protect_course_script();
 
 $_course = api_get_course_info();
@@ -38,9 +35,7 @@ foreach ($docUrlParts as $docUrlPart) {
 }
 
 if (empty($doc_url)) {
-    api_not_allowed(
-        !empty($_GET['origin']) && $_GET['origin'] === 'learnpath'
-    );
+    api_not_allowed(!empty($_GET['origin']) && $_GET['origin'] === 'learnpath');
 }
 
 // Dealing with image included into survey: when users receive a link towards a
@@ -84,7 +79,7 @@ if (substr($refer_script, 0, 15) == '/fillsurvey.php') {
 $path_info = pathinfo($doc_url);
 
 $fix_file_name = false;
-if (isset($path_info['extension']) && $path_info['extension'] == 'swf') {
+if (isset($path_info['extension']) && $path_info['extension'] === 'swf') {
     $fixed_url = str_replace('-', '_', $doc_url);
     $doc_id = DocumentManager::get_document_id(api_get_course_info(), $doc_url);
     if (!$doc_id) {

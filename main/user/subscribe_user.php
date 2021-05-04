@@ -7,8 +7,6 @@ use ExtraField as ExtraFieldModel;
 /**
  * This script allows teachers to subscribe existing users
  * to their course.
- *
- * @package chamilo.user
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_USER;
@@ -660,6 +658,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
     }
 
     $sql .= " AND u.status != ".ANONYMOUS." ";
+    $column = (int) $column;
+    $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
     // Sorting and pagination (used by the sortable table)
     $sql .= " ORDER BY col$column $direction ";
     $from = (int) $from;

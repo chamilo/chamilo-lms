@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * List sessions categories.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 
@@ -87,7 +85,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
                 ) as nbr_session
 	 			FROM $tbl_session_category sc
 	 			$where
-	 			ORDER BY $sort $order
+	 			ORDER BY `$sort` $order
 	 			LIMIT $from,".($limit + 1);
 
     $query_rows = "SELECT count(*) as total_rows 

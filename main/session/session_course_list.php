@@ -1,8 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- *	@package chamilo.admin
- */
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -34,7 +31,7 @@ if (!list($session_name) = Database::fetch_row($result)) {
     exit;
 }
 
-if ($action == 'delete') {
+if ($action === 'delete') {
     $idChecked = $_REQUEST['idChecked'];
     if (is_array($idChecked) && count($idChecked) > 0) {
         $my_temp = [];
@@ -58,7 +55,7 @@ $from = $page * $limit;
 $sql = "SELECT c.id, c.code, c.title, nbr_users
 		FROM $tbl_session_rel_course, $tbl_course c
 		WHERE c_id = c.id AND session_id='$id_session'
-		ORDER BY $sort
+		ORDER BY `$sort`
 		LIMIT $from,".($limit + 1);
 $result = Database::query($sql);
 $Courses = Database::store_result($result);

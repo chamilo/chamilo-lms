@@ -13,8 +13,6 @@ use Symfony\Component\Finder\Finder;
  * This library is in process of being transferred to src/Chamilo/CoreBundle/Component/Utils/ChamiloApi.
  * Whenever a function is transferred to the ChamiloApi class, the places where it is used should include
  * the "use Chamilo\CoreBundle\Component\Utils\ChamiloApi;" statement.
- *
- * @package chamilo.library
  */
 
 // PHP version requirement.
@@ -147,6 +145,7 @@ define('TOOL_ATTENDANCE', 'attendance');
 define('TOOL_COURSE_PROGRESS', 'course_progress');
 define('TOOL_PORTFOLIO', 'portfolio');
 define('TOOL_PLAGIARISM', 'compilatio');
+define('TOOL_XAPI', 'xapi');
 
 // CONSTANTS defining Chamilo interface sections
 define('SECTION_CAMPUS', 'mycampus');
@@ -163,6 +162,7 @@ define('SECTION_DASHBOARD', 'dashboard');
 define('SECTION_REPORTS', 'reports');
 define('SECTION_GLOBAL', 'global');
 define('SECTION_INCLUDE', 'include');
+define('SECTION_CUSTOMPAGE', 'custompage');
 
 // CONSTANT name for local authentication source
 define('PLATFORM_AUTH_SOURCE', 'platform');
@@ -228,6 +228,7 @@ define('LOG_EXERCISE_RESULT_DELETE', 'exe_result_deleted');
 define('LOG_EXERCISE_ATTEMPT_DELETE', 'exe_attempt_deleted');
 define('LOG_LP_ATTEMPT_DELETE', 'lp_attempt_deleted');
 define('LOG_QUESTION_RESULT_DELETE', 'qst_attempt_deleted');
+define('LOG_QUESTION_SCORE_UPDATE', 'score_attempt_updated');
 
 define('LOG_MY_FOLDER_CREATE', 'my_folder_created');
 define('LOG_MY_FOLDER_CHANGE', 'my_folder_changed');
@@ -283,6 +284,10 @@ define('LOG_QUESTION_UPDATED', 'question_updated');
 define('LOG_QUESTION_DELETED', 'question_deleted');
 define('LOG_QUESTION_REMOVED_FROM_QUIZ', 'question_removed_from_quiz');
 
+define('LOG_SURVEY_ID', 'survey_id');
+define('LOG_SURVEY_CREATED', 'survey_created');
+define('LOG_SURVEY_DELETED', 'survey_deleted');
+define('LOG_SURVEY_CLEAN_RESULTS', 'survey_clean_results');
 define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.-]/');
 
 //used when login_is_email setting is true
@@ -392,6 +397,7 @@ define('LINK_FORUM_THREAD', 5);
 define('LINK_ATTENDANCE', 7);
 define('LINK_SURVEY', 8);
 define('LINK_HOTPOTATOES', 9);
+define('LINK_PORTFOLIO', 10);
 
 // Score display types constants
 define('SCORE_DIV', 1); // X / Y
@@ -480,6 +486,8 @@ define('RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAY
 define('RESULT_DISABLE_RANKING', 6);
 define('RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER', 7);
 define('RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING', 8);
+define('RESULT_DISABLE_RADAR', 9);
+define('RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK', 10);
 
 define('EXERCISE_MAX_NAME_SIZE', 80);
 
@@ -535,6 +543,7 @@ define('ITEM_TYPE_STUDENT_PUBLICATION', 6);
 define('ITEM_TYPE_ATTENDANCE', 8);
 define('ITEM_TYPE_SURVEY', 9);
 define('ITEM_TYPE_FORUM_THREAD', 10);
+define('ITEM_TYPE_PORTFOLIO', 11);
 
 // one big string with all question types, for the validator in pear/HTML/QuickForm/Rule/QuestionType
 define(
@@ -1177,19 +1186,19 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
             default:
             case COURSE_VISIBILITY_CLOSED:
                 // Completely closed: the course is only accessible to the teachers. - 0
-                if (api_get_user_id() && !api_is_anonymous() && $isAllowedInCourse) {
+                if ($isAllowedInCourse && api_get_user_id() && !api_is_anonymous()) {
                     $is_visible = true;
                 }
                 break;
             case COURSE_VISIBILITY_REGISTERED:
                 // Private - access authorized to course members only - 1
-                if (api_get_user_id() && !api_is_anonymous() && $isAllowedInCourse) {
+                if ($isAllowedInCourse && api_get_user_id() && !api_is_anonymous()) {
                     $is_visible = true;
                 }
                 break;
             case COURSE_VISIBILITY_OPEN_PLATFORM:
                 // Open - access allowed for users registered on the platform - 2
-                if (api_get_user_id() && !api_is_anonymous() && $isAllowedInCourse) {
+                if ($isAllowedInCourse && api_get_user_id() && !api_is_anonymous()) {
                     $is_visible = true;
                 }
                 break;
@@ -2062,8 +2071,8 @@ function api_get_cidreq_params($courseCode, $sessionId = 0, $groupId = 0)
 function api_get_cidreq($addSessionId = true, $addGroupId = true, $origin = '')
 {
     $courseCode = api_get_course_id();
-    $url = empty($courseCode) ? '' : 'cidReq='.htmlspecialchars($courseCode);
-    $origin = empty($origin) ? api_get_origin() : Security::remove_XSS($origin);
+    $url = empty($courseCode) ? '' : 'cidReq='.urlencode(htmlspecialchars($courseCode));
+    $origin = empty($origin) ? api_get_origin() : urlencode(Security::remove_XSS($origin));
 
     if ($addSessionId) {
         if (!empty($url)) {
@@ -3422,9 +3431,9 @@ function api_is_allowed_to_edit(
         //The student preview was on
         if ($check_student_view && api_is_student_view_active()) {
             return false;
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     $sessionId = api_get_session_id();
@@ -3689,6 +3698,8 @@ function api_is_allowed($tool, $action, $task_id = 0)
             return false;
         }
     }
+
+    return false;
 }
 
 /**
@@ -4911,7 +4922,8 @@ function api_get_languages()
 function api_get_languages_to_array()
 {
     $tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-    $sql = "SELECT * FROM $tbl_language WHERE available='1' ORDER BY original_name ASC";
+    $sql = "SELECT * FROM $tbl_language
+            WHERE available='1' ORDER BY original_name ASC";
     $result = Database::query($sql);
     $languages = [];
     while ($row = Database::fetch_array($result)) {
@@ -6008,11 +6020,12 @@ function api_get_access_urls($from = 0, $to = 1000000, $order = 'url', $directio
     $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
     $from = (int) $from;
     $to = (int) $to;
-    $order = Database::escape_string($order, null, false);
-    $direction = Database::escape_string($direction, null, false);
+    $order = Database::escape_string($order);
+    $direction = Database::escape_string($direction);
+    $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
     $sql = "SELECT id, url, description, active, created_by, tms
             FROM $table
-            ORDER BY $order $direction
+            ORDER BY `$order` $direction
             LIMIT $to OFFSET $from";
     $res = Database::query($sql);
 
@@ -6599,7 +6612,11 @@ function api_is_in_group($groupIdParam = null, $courseCodeParam = null)
  */
 function api_is_valid_secret_key($original_key_secret, $security_key)
 {
-    return $original_key_secret == sha1($security_key);
+    if (empty($original_key_secret) || empty($security_key)) {
+        return false;
+    }
+
+    return (string) $original_key_secret === sha1($security_key);
 }
 
 /**
@@ -8578,9 +8595,7 @@ function convert_double_quote_to_single($in_text)
  */
 function api_get_origin()
 {
-    $origin = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : '';
-
-    return $origin;
+    return isset($_REQUEST['origin']) ? urlencode(Security::remove_XSS(urlencode($_REQUEST['origin']))) : '';
 }
 
 /**

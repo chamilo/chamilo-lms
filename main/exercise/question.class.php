@@ -2182,8 +2182,9 @@ abstract class Question
     /**
      * Shows question title an description.
      *
-     * @param int   $counter
-     * @param array $score
+     * @param Exercise $exercise The current exercise object
+     * @param int   $counter A counter for the current question
+     * @param array $score Array of optional info ['pass', 'revised', 'score', 'weight', 'user_answered']
      *
      * @return string HTML string with the header of the question (before the answers table)
      */
@@ -2273,7 +2274,16 @@ abstract class Question
             'used' => isset($score['score']) ? $score['score'] : '',
             'missing' => isset($score['weight']) ? $score['weight'] : '',
         ];
-        $header .= Display::page_subheader2($counterLabel.'. '.$this->question);
+
+        // Check whether we need to hide the question ID
+        // (quiz_hide_question_number config + quiz field)
+        $title = '';
+        if ($exercise->getHideQuestionNumber()) {
+            $title = Display::page_subheader2($this->question);
+        } else {
+            $title = Display::page_subheader2($counterLabel.'. '.$this->question);
+        }
+        $header .= $title;
 
         $showRibbon = true;
         // dont display score for certainty degree questions

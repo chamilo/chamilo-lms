@@ -399,16 +399,16 @@ $my_exercise_list['-1'] = get_lang('OrphanQuestions');
 $titleSavedAsHtml = api_get_configuration_value('save_titles_as_html');
 if (is_array($exercise_list)) {
     foreach ($exercise_list as $row) {
-        $my_exercise_list[$row['id']] = '';
-        if ($row['id'] == $fromExercise && $selected_course == api_get_course_int_id()) {
-            $my_exercise_list[$row['id']] = ">&nbsp;&nbsp;&nbsp;&nbsp;";
+        $my_exercise_list[$row['iid']] = '';
+        if ($row['iid'] == $fromExercise && $selected_course == api_get_course_int_id()) {
+            $my_exercise_list[$row['iid']] = ">&nbsp;&nbsp;&nbsp;&nbsp;";
         }
 
         $exerciseTitle = $row['title'];
         if ($titleSavedAsHtml) {
             $exerciseTitle = strip_tags(api_html_entity_decode(trim($exerciseTitle)));
         }
-        $my_exercise_list[$row['id']] .= $exerciseTitle;
+        $my_exercise_list[$row['iid']] .= $exerciseTitle;
     }
 }
 
@@ -725,7 +725,7 @@ function getQuestions(
                     INNER JOIN $TBL_EXERCISE_QUESTION r
                     ON (qu.c_id = r.c_id AND qu.id = r.question_id)
                     INNER JOIN $TBL_EXERCISES ex
-                    ON (ex.id = r.exercice_id AND ex.c_id = r.c_id)
+                    ON (ex.iid = r.exercice_id AND ex.c_id = r.c_id)
                     $from
                     {$efConditions['from']}
                     WHERE
@@ -815,7 +815,7 @@ function getQuestions(
                 INNER JOIN $TBL_EXERCISE_QUESTION as qt
                 ON (qu.id = qt.question_id AND qu.c_id = qt.c_id)
                 INNER JOIN $TBL_EXERCISES as q
-                ON (q.c_id = qu.c_id AND q.id = qt.exercice_id)
+                ON (q.c_id = qu.c_id AND q.iid = qt.exercice_id)
                 {$efConditions['from']}
                 $from
                 WHERE

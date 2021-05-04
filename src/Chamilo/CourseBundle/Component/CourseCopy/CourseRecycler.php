@@ -324,7 +324,7 @@ class CourseRecycler
                   f.c_id = $courseId AND
                   i.c_id = f.c_id AND
                   i.tool = 'forum' AND
-        	      f.iid = i.ref AND 
+        	      f.iid = i.ref AND
                   i.visibility = 1";
         $sql = "DELETE FROM $forumCategoryTable
                     WHERE c_id = $courseId AND cat_id NOT IN ($subQuery)";
@@ -351,7 +351,7 @@ class CourseRecycler
                   l.c_id = $courseId AND
                   i.c_id = l.c_id AND
                   i.tool = 'link' AND
-        	      l.iid = i.ref AND 
+        	      l.iid = i.ref AND
                   i.visibility = 1";
         $sql = "DELETE FROM $linkCategoryTable
                     WHERE c_id = $courseId AND id NOT IN ($subQuery)";
@@ -428,7 +428,7 @@ class CourseRecycler
                 // Deletion of the tests first. Questions in these tests are
                 //   not deleted and become orphan at this point
                 $sql = "DELETE FROM ".$table_qui."
-                        WHERE c_id = ".$this->course_id." AND id IN(".$ids.")";
+                        WHERE iid IN(".$ids.")";
                 Database::query($sql);
                 $sql = "DELETE FROM ".$table_rel."
                         WHERE c_id = ".$this->course_id." AND exercice_id IN(".$ids.")";
@@ -443,9 +443,9 @@ class CourseRecycler
                         SELECT q.id, ex.c_id FROM $table_qui_que q
                         INNER JOIN $table_rel r
                         ON (q.c_id = r.c_id AND q.id = r.question_id)
-                        
+
                         INNER JOIN $table_qui ex
-                        ON (ex.id = r.exercice_id AND ex.c_id = r.c_id)
+                        ON (ex.iid = r.exercice_id AND ex.c_id = r.c_id)
                         WHERE ex.c_id = ".$this->course_id." AND (ex.active = '-1' OR ex.id = '-1')
                     )
                     UNION

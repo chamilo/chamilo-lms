@@ -1761,7 +1761,7 @@ HOTSPOT;
             $sql = " SELECT q.*, tee.*
                 FROM $quizTable as q
                 INNER JOIN $trackExerciseTable as tee
-                ON q.id = tee.exe_exo_id
+                ON q.iid = tee.exe_exo_id
                 INNER JOIN $courseTable c
                 ON c.id = tee.c_id
                 WHERE tee.exe_id = $exeId
@@ -1799,7 +1799,7 @@ HOTSPOT;
         $exercise_id = (int) $exercise_id;
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
         $sql = "SELECT expired_time FROM $table
-                WHERE c_id = $course_id AND id = $exercise_id";
+                WHERE iid = $exercise_id";
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
         if (!empty($row['expired_time'])) {
@@ -2372,7 +2372,7 @@ HOTSPOT;
             $sql = " $sql_select
                 FROM $TBL_EXERCICES AS ce
                 INNER JOIN $sql_inner_join_tbl_track_exercices AS te
-                ON (te.exe_exo_id = ce.id)
+                ON (te.exe_exo_id = ce.iid)
                 INNER JOIN $sql_inner_join_tbl_user AS user
                 ON (user.user_id = exe_user_id)
                 WHERE

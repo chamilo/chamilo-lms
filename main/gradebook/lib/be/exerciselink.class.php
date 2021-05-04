@@ -69,7 +69,7 @@ class ExerciseLink extends AbstractLink
         $sqlLp = "SELECT e.iid, e.title, lp.name lp_name
                   FROM $exerciseTable e
                   INNER JOIN $lpItemTable i
-                  ON (e.c_id = i.c_id AND e.id = i.path)
+                  ON (e.c_id = i.c_id AND e.iid = i.path)
                   INNER JOIN $lpTable lp
                   ON (lp.c_id = e.c_id AND lp.id = i.lp_id)
 				  WHERE
@@ -640,7 +640,6 @@ class ExerciseLink extends AbstractLink
                 // Try with iid
                 $sql = 'SELECT * FROM '.$table.'
                         WHERE
-                            c_id = '.$this->course_id.' AND
                             iid = '.$exerciseId;
                 $result = Database::query($sql);
                 $rows = Database::num_rows($result);
@@ -651,8 +650,7 @@ class ExerciseLink extends AbstractLink
                     // Try wit id
                     $sql = 'SELECT * FROM '.$table.'
                             WHERE
-                                c_id = '.$this->course_id.' AND
-                                id = '.$exerciseId;
+                                iid = '.$exerciseId;
                     $result = Database::query($sql);
                     $this->exercise_data = Database::fetch_array($result);
                 }

@@ -113,10 +113,10 @@ if ($is_allowedToEdit) {
                 $quantity_results_deleted = 0;
                 foreach ($exerciseList as $exeItem) {
                     // delete result for test, if not in a gradebook
-                    $exercise_action_locked = api_resource_is_locked_by_gradebook($exeItem['id'], LINK_EXERCISE);
+                    $exercise_action_locked = api_resource_is_locked_by_gradebook($exeItem['iid'], LINK_EXERCISE);
                     if ($exercise_action_locked == false) {
                         $objExerciseTmp = new Exercise();
-                        if ($objExerciseTmp->read($exeItem['id'])) {
+                        if ($objExerciseTmp->read($exeItem['iid'])) {
                             $quantity_results_deleted += $objExerciseTmp->cleanResults(true);
                         }
                     }

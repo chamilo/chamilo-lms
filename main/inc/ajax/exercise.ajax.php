@@ -34,7 +34,7 @@ switch ($action) {
 
         if (!empty($results)) {
             foreach ($results as $exercise) {
-                $data[] = ['id' => $exercise['id'], 'text' => html_entity_decode($exercise['title'])];
+                $data[] = ['id' => $exercise['iid'], 'text' => html_entity_decode($exercise['title'])];
             }
         }
 

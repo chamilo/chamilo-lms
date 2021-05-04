@@ -798,7 +798,7 @@ class CourseBuilder
 
             $quiz = new Quiz($obj);
             $sql = 'SELECT * FROM '.$table_rel.'
-                    WHERE c_id = '.$courseId.' AND exercice_id = '.$obj->id;
+                    WHERE c_id = '.$courseId.' AND exercice_id = '.$obj->iid;
             $db_result2 = Database::query($sql);
             while ($obj2 = Database::fetch_object($db_result2)) {
                 $quiz->add_question($obj2->question_id, $obj2->question_order);
@@ -904,7 +904,7 @@ class CourseBuilder
                         INNER JOIN $table_rel r
                         ON (q.c_id = r.c_id AND q.id = r.question_id)
                         INNER JOIN $table_qui ex
-                        ON (ex.id = r.exercice_id AND ex.c_id = r.c_id)
+                        ON (ex.iid = r.exercice_id AND ex.c_id = r.c_id)
                         WHERE ex.c_id = $courseId AND ex.active = '-1'
                     )
                     UNION
@@ -1007,7 +1007,7 @@ class CourseBuilder
                 LEFT JOIN '.$table_rel.' as quizz_questions
                 ON questions.id=quizz_questions.question_id
                 LEFT JOIN '.$table_qui.' as exercises
-                ON quizz_questions.exercice_id = exercises.id
+                ON quizz_questions.exercice_id = exercises.iid
                 WHERE
                     questions.c_id = quizz_questions.c_id AND
                     questions.c_id = exercises.c_id AND

@@ -2492,7 +2492,7 @@ switch ($action) {
         $quizIds = [];
         if (!empty($exercises)) {
             foreach ($exercises as $exercise) {
-                $quizIds[] = $exercise['id'];
+                $quizIds[] = $exercise['iid'];
             }
         }
 

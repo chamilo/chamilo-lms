@@ -32,7 +32,7 @@ if (empty($track_exercise_info)) {
     api_not_allowed($printHeaders);
 }
 
-$exercise_id = $track_exercise_info['id'];
+$exercise_id = $track_exercise_info['iid'];
 $student_id = $track_exercise_info['exe_user_id'];
 $learnpath_id = $track_exercise_info['orig_lp_id'];
 $learnpath_item_id = $track_exercise_info['orig_lp_item_id'];

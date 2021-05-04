@@ -187,7 +187,7 @@ abstract class Question
                     $sql = "SELECT DISTINCT q.exercice_id
                             FROM $TBL_EXERCISE_QUESTION q
                             INNER JOIN $tblQuiz e
-                            ON e.c_id = q.c_id AND e.id = q.exercice_id
+                            ON e.c_id = q.c_id AND e.iid = q.exercice_id
                             WHERE
                                 q.c_id = $course_id AND
                                 q.question_id = $id AND

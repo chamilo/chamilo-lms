@@ -179,7 +179,7 @@ class Exercise
         }
 
         $sql = "SELECT * FROM $table
-                WHERE c_id = ".$this->course_id." AND id = ".$id;
+                WHERE iid = ".$id;
         $result = Database::query($sql);
 
         // if the exercise has been found
@@ -1792,7 +1792,7 @@ class Exercise
 
                 $sql = "UPDATE $TBL_EXERCISES
                         SET question_selection_type= ".$this->getQuestionSelectionType()."
-                        WHERE id = ".$this->id." AND c_id = ".$this->course_id;
+                        WHERE iid = ".$this->id;
                 Database::query($sql);
 
                 // insert into the item_property table
@@ -1944,7 +1944,7 @@ class Exercise
 
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
         $sql = "UPDATE $table SET active='-1'
-                WHERE c_id = ".$this->course_id." AND id = ".intval($this->id);
+                WHERE iid = ".intval($this->id);
         Database::query($sql);
 
         api_item_property_update(
@@ -8175,7 +8175,7 @@ class Exercise
                     cq.c_id = %s AND
                     (cq.session_id = %s OR cq.session_id = 0) AND
                     cq.active = 0
-                ORDER BY cq.id";
+                ORDER BY cq.iid";
         $sql = sprintf($sql, $courseId, $sessionId);
 
         $result = Database::query($sql);
@@ -9105,7 +9105,7 @@ class Exercise
                 $invisibleSql = "SELECT e.iid
                                   FROM $TBL_EXERCISES e
                                   INNER JOIN $TBL_ITEM_PROPERTY ip
-                                  ON (e.id = ip.ref AND e.c_id = ip.c_id)
+                                  ON (e.iid = ip.ref AND e.c_id = ip.c_id)
                                   WHERE
                                         ip.tool = '".TOOL_QUIZ."' AND
                                         e.c_id = $courseId AND
@@ -9243,7 +9243,7 @@ class Exercise
                 $mylpitemid = empty($learnpath_item_id) ? '' : '&learnpath_item_id='.$learnpath_item_id;
                 foreach ($exerciseList as $row) {
                     $currentRow = [];
-                    $my_exercise_id = $row['id'];
+                    $my_exercise_id = $row['iid'];
                     $attempt_text = '';
                     $actions = '';
                     $exercise = new Exercise($returnData ? $courseId : 0);
@@ -9373,8 +9373,8 @@ class Exercise
                             '<a
                                 '.$alt_title.'
                                 class="'.$class_tip.'"
-                                id="tooltip_'.$row['id'].'"
-                                href="'.$overviewUrl.'?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'"
+                                id="tooltip_'.$row['iid'].'"
+                                href="'.$overviewUrl.'?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$row['iid'].'"
                             >
                              '.Display::return_icon('quiz.png', $row['title']).'
                              '.$title.'
@@ -9397,13 +9397,13 @@ class Exercise
                             // Questions list
                             $actions = Display::url(
                                 Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL),
-                                'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']
+                                'admin.php?'.api_get_cidreq().'&exerciseId='.$row['iid']
                             );
 
                             // Test settings
                             $settings = Display::url(
                                 Display::return_icon('settings.png', get_lang('Configure'), '', ICON_SIZE_SMALL),
-                                'exercise_admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']
+                                'exercise_admin.php?'.api_get_cidreq().'&exerciseId='.$row['iid']
                             );
 
                             if ($limitTeacherAccess && !api_is_platform_admin()) {
@@ -9412,7 +9412,7 @@ class Exercise
                             $actions .= $settings;
 
                             // Exercise results
-                            $resultsLink = '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
+                            $resultsLink = '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['iid'].'">'.
                                 Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
 
                             if ($limitTeacherAccess) {
@@ -9435,7 +9435,7 @@ class Exercise
                                             '',
                                             ICON_SIZE_SMALL
                                         ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=enable_launch&sec_token='.$token.'&exerciseId='.$row['id']
+                                        'exercise.php?'.api_get_cidreq().'&choice=enable_launch&sec_token='.$token.'&exerciseId='.$row['iid']
                                     );
                                 } else {
                                     $actions .= Display::url(
@@ -9445,7 +9445,7 @@ class Exercise
                                             '',
                                             ICON_SIZE_SMALL
                                         ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=disable_launch&sec_token='.$token.'&exerciseId='.$row['id']
+                                        'exercise.php?'.api_get_cidreq().'&choice=disable_launch&sec_token='.$token.'&exerciseId='.$row['iid']
                                     );
                                 }
                             }
@@ -9456,7 +9456,7 @@ class Exercise
                                 '',
                                 [
                                     'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;",
-                                    'href' => 'exercise.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id'],
+                                    'href' => 'exercise.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['iid'],
                                 ]
                             );
 
@@ -9481,7 +9481,7 @@ class Exercise
                                                     )
                                                 )." ".addslashes($row['title'])."?"."')) return false;",
                                             'href' => 'exercise.php?'.api_get_cidreq(
-                                                ).'&choice=clean_results&sec_token='.$token.'&exerciseId='.$row['id'],
+                                                ).'&choice=clean_results&sec_token='.$token.'&exerciseId='.$row['iid'],
                                         ]
                                     );
                                 } else {
@@ -9514,7 +9514,7 @@ class Exercise
                                             '',
                                             ICON_SIZE_SMALL
                                         ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&exerciseId='.$row['id']
+                                        'exercise.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&exerciseId='.$row['iid']
                                     );
                                 } else {
                                     // else if not active
@@ -9525,7 +9525,7 @@ class Exercise
                                             '',
                                             ICON_SIZE_SMALL
                                         ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&exerciseId='.$row['id']
+                                        'exercise.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&exerciseId='.$row['iid']
                                     );
                                 }
                             }
@@ -9544,7 +9544,7 @@ class Exercise
                                     '',
                                     ICON_SIZE_SMALL
                                 ),
-                                'exercise.php?action=exportqti2&exerciseId='.$row['id'].'&'.api_get_cidreq()
+                                'exercise.php?action=exportqti2&exerciseId='.$row['iid'].'&'.api_get_cidreq()
                             );
 
                             if ($limitTeacherAccess && !api_is_platform_admin()) {
@@ -9576,7 +9576,7 @@ class Exercise
                                             '',
                                             ICON_SIZE_SMALL
                                         ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&exerciseId='.$row['id']
+                                        'exercise.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&exerciseId='.$row['iid']
                                     );
                                 } else {
                                     // else if not active
@@ -9587,7 +9587,7 @@ class Exercise
                                             '',
                                             ICON_SIZE_SMALL
                                         ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&exerciseId='.$row['id']
+                                        'exercise.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&exerciseId='.$row['iid']
                                     );
                                 }
                             }
@@ -9597,14 +9597,14 @@ class Exercise
                             }
 
                             $actions .= $visibility;
-                            $actions .= '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
+                            $actions .= '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['iid'].'">'.
                                 Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
                             $actions .= Display::url(
                                 Display::return_icon('cd.gif', get_lang('CopyExercise')),
                                 '',
                                 [
                                     'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;",
-                                    'href' => 'exercise.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id'],
+                                    'href' => 'exercise.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['iid'],
                                 ]
                             );
                         }
@@ -9623,7 +9623,7 @@ class Exercise
                                     '',
                                     [
                                         'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDeleteJS'), ENT_QUOTES, $charset))." ".addslashes($exercise->getUnformattedTitle())."?"."')) return false;",
-                                        'href' => 'exercise.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$row['id'],
+                                        'href' => 'exercise.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$row['iid'],
                                     ]
                                 );
                             } else {
@@ -9694,7 +9694,7 @@ class Exercise
                             continue;
                         }
 
-                        $url = '<a '.$alt_title.'  href="overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">'.
+                        $url = '<a '.$alt_title.'  href="overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$row['iid'].'">'.
                             $cut_title.'</a>';
 
                         // Link of the exercise.
@@ -9708,7 +9708,7 @@ class Exercise
                         // Don't remove this marker: note-query-exe-results
                         $sql = "SELECT * FROM $TBL_TRACK_EXERCISES
                                 WHERE
-                                    exe_exo_id = ".$row['id']." AND
+                                    exe_exo_id = ".$row['iid']." AND
                                     exe_user_id = $userId AND
                                     c_id = ".api_get_course_int_id()." AND
                                     status <> 'incomplete' AND
@@ -9829,7 +9829,7 @@ class Exercise
                     $currentRow['attempt'] = $attempt_text;
 
                     if ($is_allowedToEdit) {
-                        $additionalActions = ExerciseLib::getAdditionalTeacherActions($row['id']);
+                        $additionalActions = ExerciseLib::getAdditionalTeacherActions($row['iid']);
 
                         if (!empty($additionalActions)) {
                             $actions .= $additionalActions.PHP_EOL;
@@ -9841,7 +9841,7 @@ class Exercise
                         }
 
                         $currentRow = [
-                            $row['id'],
+                            $row['iid'],
                             $currentRow['title'],
                             $currentRow['count_questions'],
                             $actions,
@@ -9853,7 +9853,7 @@ class Exercise
                         ];
 
                         if ($isDrhOfCourse) {
-                            $currentRow[] = '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
+                            $currentRow[] = '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['iid'].'">'.
                                 Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
                         }
 
@@ -9861,7 +9861,7 @@ class Exercise
                             $currentRow['id'] = $exercise->id;
                             $currentRow['url'] = $webPath.'exercise/overview.php?'
                                 .api_get_cidreq_params($courseInfo['code'], $sessionId).'&'
-                                ."$mylpid$mylpitemid&exerciseId={$row['id']}";
+                                ."$mylpid$mylpitemid&exerciseId={$row['iid']}";
                             $currentRow['name'] = $currentRow[0];
                         }
                     }

@@ -42,9 +42,10 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
             $attributes['class'] = $classFromAttributes.'
             sm:text-sm
             text-gray-600
+            mt-1 w-full
             bg-white
             font-normal
-            flex items-center pl-3 h-10';
+            h-10';
         }
         $inputSize = $attributes['input-size'] ?? null;
         $this->setInputSize($inputSize);

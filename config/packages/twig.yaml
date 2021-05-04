@@ -5,8 +5,10 @@ twig:
         - '%kernel.project_dir%/var/templates'
         - '%kernel.project_dir%/public/main/template'
         - '%kernel.project_dir%/public/plugin'
+        - '%kernel.project_dir%/src/CoreBundle/Resources/views/Layout'
     form_themes:
-        - 'bootstrap_4_layout.html.twig'
+        - 'form-theme.html.twig'
+#        - 'bootstrap_4_layout.html.twig'
 
     globals:
         show_toolbar: true

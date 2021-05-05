@@ -148,7 +148,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
     public function getClassName(): string
     {
-        $class = get_class($this);
+        $class = static::class;
         //Chamilo\CoreBundle\Repository\Node\IllustrationRepository
         $class = str_replace('\\Repository\\', '\\Entity\\', $class);
         $class = str_replace('Repository', '', $class);
@@ -385,7 +385,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
     public function getResourceTypeName(): string
     {
-        return $this->toolChain->getResourceTypeNameFromRepository(get_class($this));
+        return $this->toolChain->getResourceTypeNameFromRepository(static::class);
     }
 
     public function getResourcesByCourse(Course $course, Session $session = null, CGroup $group = null, ResourceNode $parentNode = null): QueryBuilder

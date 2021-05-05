@@ -29,6 +29,8 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
                     'language_priority_4' => 'platform_lang',
                     'hide_dltt_markup' => 'false',
                     'show_language_selector_in_menu' => 'true',
+                    'user_name_order' => '',
+                    'user_name_sort' => '',
                 ]
             )
         ;
@@ -38,6 +40,8 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
             'allow_use_sub_language' => ['string'],
             'auto_detect_language_custom_pages' => ['string'],
             'show_different_course_language' => ['string'],
+            'user_name_order' => ['string'],
+            'user_name_sort' => ['string'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
@@ -87,5 +91,28 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
             ->add('hide_dltt_markup')
             ->add('show_language_selector_in_menu', YesNoType::class)
         ;
+
+        $choices = [
+            'last_name, first_name' => 'last_name-first_name',
+            'first_name, last_name' => 'first_name-last_name',
+        ];
+        $builder->add(
+            'user_name_order',
+            ChoiceType::class,
+            [
+                'choices' => $choices,
+            ]
+        );
+        $choices = [
+            'First name' => 'first_name',
+            'Last name' => 'last_name',
+        ];
+        $builder->add(
+            'user_name_sort',
+            ChoiceType::class,
+            [
+                'choices' => $choices,
+            ]
+        );
     }
 }

@@ -152,8 +152,7 @@ abstract class AbstractResource
             $resourceNode = $this->getResourceNode();
             $exists = $resourceNode->getResourceLinks()->exists(
                 function ($key, $element) use ($course, $session, $group) {
-                    return
-                        $course === $element->getCourse() &&
+                    return $course === $element->getCourse() &&
                         $session === $element->getSession() &&
                         $group === $element->getGroup();
                 }

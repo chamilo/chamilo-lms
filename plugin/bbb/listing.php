@@ -26,6 +26,7 @@ $htmlHeadXtra[] = api_get_js_simple(api_get_path(WEB_PLUGIN_PATH).'bbb/resources
 $action = $_GET['action'] ?? '';
 $userId = api_get_user_id();
 $groupId = api_get_group_id();
+$sessionId = api_get_session_id();
 $courseInfo = api_get_course_info();
 
 $bbb = new bbb('', '', $isGlobal, $isGlobalPerUser);
@@ -402,7 +403,7 @@ if ($bbb->isGlobalConference() === false &&
 
     $form = new FormValidator(api_get_self().'?'.api_get_cidreq());
     if ($conferenceManager && false === $allowStudentAsConferenceManager) {
-        $groups = GroupManager::get_groups();
+        $groups = GroupManager::get_group_list(null, $courseInfo, null, $sessionId);
     } else {
         if (!empty($groupId)) {
             $groupInfo = GroupManager::get_group_properties($groupId);

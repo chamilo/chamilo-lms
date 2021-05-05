@@ -116,10 +116,11 @@
         "zendframework/zend-feed": "~2.6|^3.0",
         "zendframework/zend-http": "~2.6|^3.0",
         "zendframework/zend-soap": "~2.6|^3.0",
-        "php-xapi/symfony-serializer": "2.1.0 as 2.0",
-        "php-xapi/client": "0.6.0",
         "php-http/guzzle6-adapter": "^2.0",
-        "php-xapi/repository-doctrine": "dev-master"
+        "php-xapi/client": "0.7.x-dev",
+        "php-xapi/repository-api": "dev-master as 0.3.1",
+        "php-xapi/repository-doctrine": "dev-master",
+        "php-xapi/symfony-serializer": "2.1.0 as 2.0"
     },
     "require-dev": {
         "behat/behat": "~3.5",

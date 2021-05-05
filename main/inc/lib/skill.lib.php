@@ -1458,7 +1458,7 @@ class Skill extends Model
         }
 
         if ($addTitle) {
-            $tableResult .= Display::page_subheader2(get_lang('AchievedSkills'));
+            $tableResult .= Display::page_subheader(get_lang('AchievedSkills'));
             $tableResult .= '<div class="skills-badges">';
         }
 

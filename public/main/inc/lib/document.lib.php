@@ -2905,7 +2905,7 @@ class DocumentManager
         $repo = Container::getDocumentRepository();
         $nodeRepository = $repo->getResourceNodeRepository();
         $move = get_lang('Move');
-        $icon = Display::return_icon('move_everywhere.png', $move);
+        $icon = Display::return_icon('move_everywhere.png', $move, null, ICON_SIZE_TINY);
         $folderIcon = Display::return_icon('lp_folder.png');
 
         $options = [
@@ -2923,12 +2923,17 @@ class DocumentManager
                 return '<li
                     id="'.$id.'"
                     data-id="'.$id.'"
-                    class=" '.$disableDrag.'  list-group-item nested-'.$child['level'].'"
+                    class=" '.$disableDrag.' list-group-item nested-'.$child['level'].'"
                 >';
             },
             'childClose' => '</li>',
             'nodeDecorator' => function ($node) use ($icon, $folderIcon) {
-                $link = '<div class="flex flex-row item_data">';
+                $disableDrag = '';
+                if (!$node['resourceFile']) {
+                    $disableDrag = ' disable_drag ';
+                }
+
+                $link = '<div class="flex flex-row gap-1 h-4 item_data '.$disableDrag.' ">';
                 $file = $node['resourceFile'];
                 $extension = '';
                 if ($file) {
@@ -2936,7 +2941,8 @@ class DocumentManager
                 }
 
                 $folder = $folderIcon;
-                if (!empty($extension)) {
+
+                if ($node['resourceFile']) {
                     $link .= '<a class="moved ui-sortable-handle" href="#">';
                     $link .= $icon;
                     $link .= '</a>';
@@ -2947,10 +2953,10 @@ class DocumentManager
                     data_id="'.$node['id'].'"
                     data_type="document"
                     class="moved ui-sortable-handle link_with_id"
-                    >';
+                >';
                 $link .= $folder.'&nbsp;';
                 $link .= '</a>';
-                $link .= addslashes($node['title']);
+                $link .= cut(addslashes($node['title']), 30);
                 $link .= '</div>';
 
                 return $link;
@@ -6569,9 +6575,17 @@ This folder contains all sessions that have been opened in the chat. Although th
         $return = null;
 
         if (false == $lp_id) {
-            $return .= '<li class="doc_resource '.$visibilityClass.' " data_id="'.$documentId.'" data_type="document" title="'.$my_file_title.'" >';
+            $return .= '<li
+                class="doc_resource '.$visibilityClass.' "
+                data_id="'.$documentId.'"
+                data_type="document"
+                title="'.$my_file_title.'" >';
         } else {
-            $return .= '<li class="doc_resource lp_resource_element '.$visibilityClass.' " data_id="'.$documentId.'" data_type="document" title="'.$my_file_title.'" >';
+            $return .= '<li
+                class="doc_resource lp_resource_element '.$visibilityClass.' "
+                data_id="'.$documentId.'"
+                data_type="document"
+                title="'.$my_file_title.'" >';
         }
 
         $return .= '<div class="flex flex-row item_data" style="margin-left:'.($num * 5).'px;margin-right:5px;">';

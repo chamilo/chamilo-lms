@@ -6682,7 +6682,7 @@ class learnpath
         $section = $this->displayNewSectionForm();
         $selected = isset($_REQUEST['lp_build_selected']) ? (int) $_REQUEST['lp_build_selected'] : 0;
 
-        $content .= Display::tabs(
+        return Display::tabs(
             $headers,
             [
                 $documents,
@@ -6698,8 +6698,6 @@ class learnpath
             [],
             $selected
         );
-
-        return $content;
     }
 
     /**

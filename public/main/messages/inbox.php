@@ -87,7 +87,7 @@ if ($actions) {
 // Block Social Avatar
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 
-if ($allowSocial) {
+/*if ($allowSocial) {
     $tpl->assign('social_menu_block', $social_menu_block);
     $tpl->assign('social_right_content', $social_right_content);
     $social_layout = $tpl->get_template('social/inbox.tpl');
@@ -95,4 +95,6 @@ if ($allowSocial) {
 } else {
     $tpl->assign('content', $social_right_content);
     $tpl->display_one_col_template();
-}
+}*/
+    $tpl->assign('content', $social_right_content);
+    $tpl->display_one_col_template();

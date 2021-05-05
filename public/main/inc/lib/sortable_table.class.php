@@ -435,8 +435,7 @@ class SortableTable extends HTML_Table
             }
         }
         $html .= '<input type="hidden" name="action">';
-
-        $html .= '<div class="q-card">';
+        $html .= '<div class="q-card p-2 mb-4">';
         $html .= '<div class="flex flex-row justify-between">';
 
         if (count($this->form_actions) > 0) {
@@ -444,30 +443,24 @@ class SortableTable extends HTML_Table
             $html .= '<a
                 class="btn btn-primary"
                 href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1"
-                onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'.get_lang('Select all').'</a>';
+                onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'.
+                get_lang('Select all').'</a>';
             $html .= '<a
                 class="btn btn-primary"
                 href="?'.$params.'"
-                onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'.get_lang('UnSelect all').'</a> ';
-            $html .= '<div class="btn-group" role="group">
-                        <button
-                            id="'.$table_id.'_actions"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                            class="btn btn-outline-primary dropdown-toggle"
-                            onclick="javascript:return false;">'.
-                            get_lang('Detail').'
-                        </button>
-                      ';
-            $html .= '<div class="dropdown-menu" aria-labelledby="'.$table_id.'_actions" >';
-            foreach ($this->form_actions as $action => &$label) {
-                $html .= '<a
-                    class="dropdown-item"
-                    data-action ="'.$action.'"
-                    href="#"
-                    onclick="javascript:action_click(this, \''.$table_id.'\');">'.$label.'</a>';
+                onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'.
+                get_lang('Deselect all').'</a> ';
+
+            $items = [];
+            foreach ($this->form_actions as $action => $label) {
+                $items[] = [
+                    'href' => 'javascript:void();',
+                    'onclick' => "javascript:action_click(this, '$table_id');",
+                    'title' => $label,
+                    'data-action' => $action,
+                ];
             }
-            $html .= '</div>';
-            $html .= '</div>';
+            $html .= Display::groupButtonWithDropDown(get_lang('Detail'), $items);
         } else {
             $html .= $form;
         }

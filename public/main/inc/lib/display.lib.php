@@ -2172,13 +2172,18 @@ class Display
                 tabindex="-1"
             >
             <div class="py-1" role="none">';
-        foreach ($elements as $item) {
-            $html .= self::url(
-                $item['title'],
-                $item['href'],
-                ['class' => 'text-gray-700 block px-4 py-2 text-sm', 'role' => 'menuitem']
-            );
-        }
+            foreach ($elements as $item) {
+                $html .= self::url(
+                    $item['title'],
+                    $item['href'],
+                    [
+                        'class' => 'text-gray-700 block px-4 py-2 text-sm',
+                        'role' => 'menuitem',
+                        'onclick' => $item['onclick'] ?? '',
+                        'data-action' => $item['data-action'] ?? '',
+                    ]
+                );
+            }
         $html .= '
             </div>
             </div>
@@ -2887,19 +2892,6 @@ HTML;
     public static function get_image($image, $size = ICON_SIZE_SMALL, $name = '')
     {
         return self::return_icon($image, $name, [], $size);
-    }
-
-    public static function dropdownMenu($items = [], array $attr = [])
-    {
-        $links = null;
-        $url = null;
-        foreach ($items as $row) {
-            $url = self::url($row['icon'].$row['item'], $row['url'], ['class' => 'dropdown-item']);
-            $links .= self::tag('li', $url);
-        }
-        $html = self::tag('ul', $links, $attr);
-
-        return $html;
     }
 
     /**

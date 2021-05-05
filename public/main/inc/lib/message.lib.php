@@ -2152,7 +2152,6 @@ class MessageManager
         $success_read = get_lang('Selected messages have been marked as read');
         $success_unread = get_lang('Selected messages have been marked as unread');
         $currentUserId = api_get_user_id();
-
         if (isset($_REQUEST['action'])) {
             switch ($_REQUEST['action']) {
                 case 'mark_as_unread':

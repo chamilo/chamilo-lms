@@ -17,18 +17,18 @@
 
         <q-space />
 
-        <div v-if="isAuthenticated"  class="GPLAY__toolbar-input-container row no-wrap">
-          <q-tabs v-if="$q.screen.gt.xs" align="center" dense inline-label>
-            <q-route-tab dense no-caps icon="home"  to="/" label="Home" />
-            <q-route-tab no-caps icon="book" to="/courses" label="My courses" />
-            <q-route-tab no-caps icon="event" to="/main/calendar/agenda_js.php?type=personal" label="Agenda" />
-          </q-tabs>
-          <q-tabs v-else align="center" dense inline-label>
-            <q-route-tab dense no-caps icon="home"  to="/"  />
-            <q-route-tab no-caps icon="book" to="/courses" />
-            <q-route-tab no-caps icon="event" to="/main/calendar/agenda_js.php?type=personal" />
-          </q-tabs>
-        </div>
+<!--        <div v-if="isAuthenticated"  class="GPLAY__toolbar-input-container row no-wrap">-->
+<!--          <q-tabs v-if="$q.screen.gt.xs" align="center" dense inline-label>-->
+<!--            <q-route-tab dense no-caps icon="home"  to="/" label="Home" />-->
+<!--            <q-route-tab no-caps icon="book" to="/courses" label="My courses" />-->
+<!--            <q-route-tab no-caps icon="event" to="/main/calendar/agenda_js.php?type=personal" label="Agenda" />-->
+<!--          </q-tabs>-->
+<!--          <q-tabs v-else align="center" dense inline-label>-->
+<!--            <q-route-tab dense no-caps icon="home"  to="/"  />-->
+<!--            <q-route-tab no-caps icon="book" to="/courses" />-->
+<!--            <q-route-tab no-caps icon="event" to="/main/calendar/agenda_js.php?type=personal" />-->
+<!--          </q-tabs>-->
+<!--        </div>-->
 
         <q-space />
 
@@ -116,6 +116,21 @@
         :breakpoint="850"
     >
       <q-scroll-area class="fit">
+
+        <q-list class="text-grey-8">
+          <q-item class="GNL__drawer-item" v-ripple v-for="link in linksAnon" :key="link.text" :to="link.url" clickable>
+            <q-item-section avatar>
+<!--              <q-icon :name="link.icon" />-->
+              <FontAwesomeIcon :icon="link.icon" size="lg" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ link.text }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+
+        <q-separator inset class="q-my-sm" />
+
         <q-list v-if="isAuthenticated && isAdmin" padding class="text-grey-8">
           <q-item class="GNL__drawer-item" v-ripple v-for="link in links1" :key="link.text" :to="link.url" clickable>
             <q-item-section avatar>
@@ -155,17 +170,6 @@
               <a class="GNL__drawer-footer-link" href="javascript:void(0)" aria-label="About">Chamilo</a>
             </div>
           </div>
-        </q-list>
-
-        <q-list v-else padding class="text-grey-8">
-          <q-item class="GNL__drawer-item" v-ripple v-for="link in linksAnon" :key="link.text" :to="link.url" clickable>
-            <q-item-section avatar>
-              <q-icon :name="link.icon" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>{{ link.text }}</q-item-label>
-            </q-item-section>
-          </q-item>
         </q-list>
       </q-scroll-area>
     </q-drawer>
@@ -218,10 +222,13 @@ export default {
     userAvatar: '',
     moved: true,
     links1: [
-      // { icon: 'person', url: '/courses', text: 'My courses' },
-      // { icon: 'star_border', url: '/sessions', text: 'Sessions' },
+       //{ icon: 'home', url: '/', text: 'Home' },
+       //{ icon: 'star_border', url: '/', text: 'News' },
+       { icon: 'book', url: '/courses', text: 'My courses' },
+       { icon: 'calendar-alt', url: '/main/calendar/agenda_js.php?type=personal', text: 'Events' },
+      //{ icon: 'star_border', url: '/sessions', text: 'My Sessions' },
       //{ icon: 'star_border', url: '/calendar', text: 'My calendar' },
-      { icon: 'compass', url: '/catalog', text: 'Explore' },
+      //{ icon: 'compass', url: '/catalog', text: 'Explore' },
       // { icon: 'star_border', url: '/news', text: 'News' },
     ],
     links2: [
@@ -237,6 +244,7 @@ export default {
     ],
     linksAnon: [
       { icon: 'home', url: '/', text: 'Home' },
+      { icon: 'compass', url: '/catalog', text: 'Explore' },
     ],
     drawer: true,
     breadcrumb: [],

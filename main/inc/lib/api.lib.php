@@ -5278,7 +5278,7 @@ function api_get_visual_theme()
         $course_id = api_get_course_id();
         if (!empty($course_id)) {
             if ($courseThemeAvailable) {
-                $course_theme = api_get_course_setting('course_theme', api_get_course_info($course_id));
+                $course_theme = api_get_course_setting('course_theme', api_get_course_info());
 
                 if (!empty($course_theme) && $course_theme != -1) {
                     if (!empty($course_theme)) {

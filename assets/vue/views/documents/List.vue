@@ -92,13 +92,12 @@
     <div class="p-4 flex flex-row gap-1 mb-2">
       <div v-if="isAuthenticated && isCurrentTeacher" class="flex flex-row gap-2" >
         <!--         <Button label="New" icon="pi pi-plus" class="p-button-primary p-button-sm p-mr-2" @click="openNew" />-->
-        <Button label="New folder" icon="pi pi-plus" class="btn btn-primary" @click="openNew" />
+        <Button label="New folder" icon="fa fa-folder-plus" class="btn btn-primary" @click="openNew" />
 
         <!--         <Button label="New folder" icon="pi pi-plus" class="p-button-success p-mr-2" @click="addHandler()" />-->
         <!--         <Button label="New document" icon="pi pi-plus" class="p-button-sm p-button-primary p-mr-2" @click="addDocumentHandler()" />-->
-        <Button label="New document" icon="pi pi-plus" class="btn btn-primary" @click="addDocumentHandler()" />
-
-        <Button label="Upload" icon="pi pi-plus" class="btn btn-primary" @click="uploadDocumentHandler()" />
+        <Button label="New document" icon="fa fa-file-alt" class="btn btn-primary" @click="addDocumentHandler()" />
+        <Button label="Upload" icon="fa fa-file-upload" class="btn btn-primary" @click="uploadDocumentHandler()" />
         <Button label="Delete" icon="pi pi-trash" class="btn btn-danger " @click="confirmDeleteMultiple" :disabled="!selectedItems || !selectedItems.length" />
       </div>
     </div>

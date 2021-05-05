@@ -1,13 +1,14 @@
 <template>
   <div>
+    <Toolbar
+        :handle-submit="onSendForm"
+        :handle-reset="resetForm"
+    />
+
     <DocumentsForm
       ref="createForm"
       :values="item"
       :errors="violations"
-    />
-    <Toolbar
-      :handle-submit="onSendForm"
-      :handle-reset="resetForm"
     />
     <Loading :visible="isLoading" />
   </div>

@@ -46,7 +46,8 @@
     @apply bg-white rounded shadow-lg;
   }
 
-  // Buttons
+  // Buttons.
+
   .btn {
     //@apply inline-block text-black px-4 py-2 text-xs font-medium leading-6 text-center bg-gray-100 uppercase transition rounded shadow hover:shadow-lg focus:outline-none;
     //disabled:cursor-not-allowed
@@ -74,7 +75,7 @@
     @apply -ml-1 mr-1 h-4 w-5 fill-current ;
   }
 
-  // Forms
+  // Forms.
 
   .help-block {
     @apply mt-2 text-xs text-gray-500;
@@ -135,7 +136,7 @@
     @apply flex flex-row justify-start gap-2 border rounded-sm px-3 py-3;
   }
 
-  // Alert
+  // Alerts
 
   .alert {
     @apply px-6 py-4 border-0 rounded relative mb-4;
@@ -177,6 +178,10 @@
 
   .page-header {
     @apply text-gray-500 text-2xl flex flex-row gap-2;
+  }
+
+  #no-data-view {
+    @apply flex flex-col items-center justify-center p-4 space-y-4 antialiased text-gray-900;
   }
 
   @import "scss/index.scss";

@@ -231,9 +231,11 @@ class EditorController extends BaseController
         $tool = $request->get('tool');
         //$node = $request->get('nodeId');        var_dump($node);exit;
 
-        $course = api_get_course_entity();
-
-        $nodeId = $course->getResourceNode()->getId();
+        $course = $this->getCourse();
+        $nodeId = 0;
+        if (null !== $course) {
+            $nodeId = $course->getResourceNode()->getId();
+        }
 
         $params = [
             // @todo replace api_get_bootstrap_and_font_awesome

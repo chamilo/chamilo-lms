@@ -1,7 +1,7 @@
 <template>
   <div>
     <Toolbar
-      v-if="item"
+      v-if="item && isCurrentTeacher"
       :handle-edit="editHandler"
       :handle-delete="del"
     >
@@ -144,6 +144,11 @@ export default {
       isLoading: 'isLoading'
     }),
     ...mapGetters('documents', ['find']),
+    ...mapGetters({
+      'isAuthenticated': 'security/isAuthenticated',
+      'isAdmin': 'security/isAdmin',
+      'isCurrentTeacher': 'security/isCurrentTeacher',
+    }),
   },
   methods: {
     ...mapActions('documents', {

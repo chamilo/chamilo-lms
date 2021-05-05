@@ -2,7 +2,7 @@
   <div class="q-card">
 <!--    <slot name="left" />-->
 <!--    <q-space />-->
-    <div class="p-4 flex flex-row gap-1">
+    <div class="p-4 flex flex-row gap-1 mb-2">
       <q-btn
         v-if="handleList"
         :loading="isLoading"

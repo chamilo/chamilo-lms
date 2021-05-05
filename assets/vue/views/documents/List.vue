@@ -88,9 +88,8 @@
 <!--        </template>-->
 <!--      </q-table>-->
 <!--  </div>-->
-
-  <Toolbar class="pb-4">
-    <template #left>
+  <div class="q-card">
+    <div class="p-4 flex flex-row gap-1 mb-2">
       <div v-if="isAuthenticated && isCurrentTeacher" class="flex flex-row gap-2" >
         <!--         <Button label="New" icon="pi pi-plus" class="p-button-primary p-button-sm p-mr-2" @click="openNew" />-->
         <Button label="New folder" icon="pi pi-plus" class="btn btn-primary" @click="openNew" />
@@ -102,13 +101,13 @@
         <Button label="Upload" icon="pi pi-plus" class="btn btn-primary" @click="uploadDocumentHandler()" />
         <Button label="Delete" icon="pi pi-trash" class="btn btn-danger " @click="confirmDeleteMultiple" :disabled="!selectedItems || !selectedItems.length" />
       </div>
-    </template>
+    </div>
 
     <!--       <template #right>-->
     <!--         <FileUpload mode="basic" accept="image/*" :maxFileSize="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-d-inline-block" />-->
     <!--         <Button label="Export" icon="pi pi-upload" class="p-button-help" @click="exportCSV($event)"  />-->
     <!--       </template>-->
-  </Toolbar>
+  </div>
 
   <!--      :filter-change="filterCallback"-->
   <!--      :filter-apply="filterCallback"-->
@@ -136,7 +135,10 @@
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
       :globalFilterFields="['resourceNode.title', 'resourceNode.updatedAt']">
 
-    <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
+    <span v-if="isCurrentTeacher">
+      <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
+    </span>
+
     <Column field="resourceNode.title" :header="$t('Title')" :sortable="true">
       <template #body="slotProps">
         <div v-if="slotProps.data && slotProps.data.resourceNode && slotProps.data.resourceNode.resourceFile">
@@ -154,7 +156,6 @@
             {{ slotProps.data.resourceNode.title }}
           </a>
         </div>
-
       </template>
 
       <!--         <template #filter="{filterModel}">-->

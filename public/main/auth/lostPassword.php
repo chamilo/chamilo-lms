@@ -25,6 +25,11 @@ if ('false' === api_get_setting('allow_lostpassword')) {
     api_not_allowed(true);
 }
 
+if (!api_is_anonymous()) {
+    header('Location: '.api_get_path(WEB_PATH));
+    exit;
+}
+
 $reset = $_REQUEST['reset'] ?? '';
 $userId = $_REQUEST['id'] ?? '';
 

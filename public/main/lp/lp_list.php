@@ -75,8 +75,7 @@ if (!empty($sessionId)) {
 }
 
 if ($is_allowed_to_edit) {
-    $actionLeft = '';
-    $actionLeft .= Display::url(
+    $actionLeft = Display::url(
         Display::return_icon(
             'new_learnpath.png',
             get_lang('Create new learning path'),
@@ -1008,5 +1007,16 @@ $template->assign('data', $data);
 $template->assign('lp_is_shown', $lpIsShown);
 $template->assign('filtered_category', $filteredCategoryId);
 $template->assign('allow_min_time', $allowMinTime);
+
+$template->assign('no_data', '');
+if (false === $lpIsShown && api_is_allowed_to_edit()) {
+    $noData = Display::noDataView(
+        get_lang('Learning paths'),
+        Display::return_icon('scorms.png', '', [], 64),
+        get_lang('Create new learning path'),
+        api_get_self().'?'.api_get_cidreq().'&action=add_lp'
+    );
+    $template->assign('no_data', $noData);
+}
 
 $template->displayTemplate('@ChamiloCore/LearnPath/list.html.twig');

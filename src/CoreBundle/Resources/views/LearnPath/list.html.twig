@@ -578,15 +578,7 @@
         </div>
     {% endif %}
     {% if is_allowed_to_edit and not lp_is_shown %}
-        <div id="no-data-view" class="tool-view">
-            <h2>{{ "Learning paths"|trans }}</h2>
-            <img src="{{ "scorms.png"|icon(64) }}" width="64" height="64">
-            <div class="controls">
-                <a href="{{ url('legacy_main', {name: 'lp/lp_controller.php'}) ~ "?" ~ course_url_params ~ "&action=add_lp" }}" class="btn btn-default">
-                    {{ "Create new learning path"|trans }}
-                </a>
-            </div>
-        </div>
+        {{ no_data }}
     {% endif %}
 {% endautoescape %}
 {% endblock %}

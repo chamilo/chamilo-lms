@@ -3,12 +3,10 @@
     <template #left>
       <div v-if="isAuthenticated && isCurrentTeacher" class="flex flex-row gap-2" >
         <!--         <Button label="New" icon="pi pi-plus" class="p-button-primary p-button-sm p-mr-2" @click="openNew" />-->
-        <Button label="New" icon="pi pi-plus" class="btn btn-primary" @click="openNew" />
+        <Button label="New folder" icon="pi pi-plus" class="btn btn-primary" @click="openNew" />
 
         <!--         <Button label="New folder" icon="pi pi-plus" class="p-button-success p-mr-2" @click="addHandler()" />-->
         <!--         <Button label="New document" icon="pi pi-plus" class="p-button-sm p-button-primary p-mr-2" @click="addDocumentHandler()" />-->
-        <Button label="New document" icon="pi pi-plus" class="btn btn-primary" @click="addDocumentHandler()" />
-
         <Button label="Upload" icon="pi pi-plus" class="btn btn-primary" @click="uploadDocumentHandler()" />
       </div>
     </template>
@@ -171,39 +169,7 @@ export default {
   },
   mounted() {
     console.log('mounted - vue/views/documents/List.vue');
-    const route = useRoute()
-    /*let nodeId = route.params['node'];
-    if (!isEmpty(nodeId)) {
-      this.findResourceNode('/api/resource_nodes/' + nodeId);
-    }*/
     this.onUpdateOptions(this.options);
-
-    /*this.onRequest({
-      pagination: this.pagination,
-    });*/
-
-
-    // Detect when scrolled to bottom.
-    /*const listElm = document.querySelector('#documents');
-    listElm.addEventListener('scroll', e => {
-      console.log('aaa');
-      if(listElm.scrollTop + listElm.clientHeight >= listElm.scrollHeight) {
-        this.onScroll();
-      }
-    });*/
-    //const tableScrollBody = this.$refs['selectableTable'].$el;
-    /* Consider debouncing the event call */
-    //tableScrollBody.addEventListener("scroll", this.onScroll);
-    //window.addEventListener('scroll', this.onScroll)
-    window.addEventListener('scroll', () =>{
-      /*if(window.top.scrollY > window.outerHeight){
-        if (!this.isBusy) {
-          this.fetchItems();
-        }
-      }*/
-    });
-    /*const tableScrollBody = this.$refs['documents'];
-    tableScrollBody.addEventListener("scroll", this.onScroll);*/
   },
   computed: {
     // From crud.js list function
@@ -233,20 +199,6 @@ export default {
     }),
   },
   methods: {
-    // prime
-    onPage(event) {
-      console.log(event);
-      console.log(event.page);
-      console.log(event.sortField);
-      console.log(event.sortOrder);
-
-      this.options.itemsPerPage = event.rows;
-      this.options.page = event.page + 1;
-      this.options.sortBy = event.sortField;
-      this.options.sortDesc = event.sortOrder === -1;
-
-      this.onUpdateOptions(this.options);
-    },
     sortingChanged(event) {
       console.log('sortingChanged');
       console.log(event);
@@ -257,7 +209,6 @@ export default {
       // ctx.sortBy   ==> Field key for sorting by (or null for no sorting)
       // ctx.sortDesc ==> true if sorting descending, false otherwise
     },
-
     openNew() {
       this.item = {};
       this.submitted = false;
@@ -294,38 +245,31 @@ export default {
       this.item = {...item};
       this.itemDialog = true;
     },
-    confirmDeleteItem(item) {
-      this.item = item;
-      this.deleteItemDialog = true;
-    },
-    confirmDeleteMultiple() {
-      this.deleteMultipleDialog = true;
-    },
-    deleteMultipleItems() {
-      console.log('deleteMultipleItems');
-      console.log(this.selectedItems);
-      this.deleteMultipleAction(this.selectedItems);
-      this.onRequest({
-        pagination: this.pagination,
-      });
-      this.deleteMultipleDialog = false;
-      this.selectedItems = null;
-      //this.$toast.add({severity:'success', summary: 'Successful', detail: 'Products Deleted', life: 3000});*/
-    },
     returnToEditor(item) {
-      console.log(item.contentUrl);
+      const url = item.contentUrl;
+
+      // Tiny mce
+      console.log(url);
       window.parent.postMessage({
-        url: item.contentUrl
+        url: url
       }, '*');
-      parent.tinymce.activeEditor.windowManager.close();
-    },
-    deleteItemButton() {
-      console.log('deleteItem');
-      this.deleteItem(this.item);
-      //this.items = this.items.filter(val => val.iid !== this.item.iid);
-      this.deleteItemDialog = false;
-      this.item = {};
-      this.onUpdateOptions(this.options);
+
+      if (parent.tinymce) {
+        parent.tinymce.activeEditor.windowManager.close();
+      }
+
+      // Ckeditor
+      function getUrlParam(paramName) {
+        var reParam = new RegExp('(?:[\?&]|&amp;)' + paramName + '=([^&]+)', 'i');
+        var match = window.location.search.match(reParam);
+        return (match && match.length > 1) ? match[1] : '';
+      }
+
+      var funcNum = getUrlParam('CKEditorFuncNum');
+      if (window.opener.CKEDITOR) {
+        window.opener.CKEDITOR.tools.callFunction(funcNum, url);
+        window.close();
+      }
     },
     async fetchItems() {
       console.log('fetchItems');
@@ -366,20 +310,6 @@ export default {
     },
     clearSelected() {
       this.$refs.selectableTable.clearSelected()
-    },
-    async deleteSelected() {
-      console.log('deleteSelected');
-      /*for (let i = 0; i < this.selected.length; i++) {
-        let item = this.selected[i];
-        //this.deleteHandler(item);
-        this.deleteItem(item);
-      }*/
-
-      this.deleteMultipleAction(this.selected);
-      this.onRequest({
-        pagination: this.pagination,
-      });
-      console.log('end -- deleteSelected');
     },
     //...actions,
     // From ListMixin

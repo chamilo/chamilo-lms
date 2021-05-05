@@ -24,6 +24,7 @@ class IndexController extends BaseController
      *
      * @Route("/sessions", name="sessions", methods={"GET", "POST"}, options={"expose"=true})
      * @Route("/catalog/{slug}", name="catalog", methods={"GET", "POST"}, options={"expose"=true})
+     * @Route("/resources/document/{nodeId}/manager", methods={"GET"}, name="resources_filemanager")
      */
     public function indexAction(): Response
     {

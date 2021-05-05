@@ -153,7 +153,7 @@ class Basic extends Toolbar
         }
 
         $config['customConfig'] = api_get_path(WEB_PUBLIC_PATH).'editor/config?'.api_get_cidreq().'&tool=document&type=files';
-        $config['flash_flvPlayer'] = api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/plugins/flash/swf/player.swf';
+        //$config['flash_flvPlayer'] = api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/plugins/flash/swf/player.swf';
 
         /*filebrowserFlashBrowseUrl
         filebrowserFlashUploadUrl

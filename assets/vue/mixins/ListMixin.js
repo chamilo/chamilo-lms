@@ -140,8 +140,9 @@ export default {
       let cid = toInteger(this.$route.query.cid);
       let sid = toInteger(this.$route.query.sid);
       let gid = toInteger(this.$route.query.gid);
+      let type = this.$route.query.type;
 
-      params = { ...params, cid, sid, gid };
+      params = { ...params, cid, sid, gid, type };
 
       // vuetify
       /*if (!isEmpty(sortBy) && !isEmpty(sortDesc)) {

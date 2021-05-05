@@ -24,22 +24,6 @@
           height: 500,
           toolbar_mode: 'sliding',
           file_picker_callback : browser,
-          /*file_picker_callback: function(callback, value, meta) {
-              // Provide file and text for the link dialog
-              if (meta.filetype == 'file') {
-                callback('mypage.html', {text: 'My text'});
-              }
-
-              // Provide image and alt text for the image dialog
-              if (meta.filetype == 'image') {
-                callback('myimage.jpg', {alt: 'My alt text'});
-              }
-
-              // Provide alternative source and posted for the media dialog
-              if (meta.filetype == 'media') {
-                callback('movie.mp4', {source2: 'alt.ogg', poster: 'image.jpg'});
-              }
-            },*/
       /*images_upload_handler: (blobInfo, success, failure) => {
               const img = 'data:image/jpeg;base64,' + blobInfo.base64();
               //console.log(img);
@@ -50,9 +34,9 @@
           plugins: [
             'fullpage advlist autolink lists link image charmap print preview anchor',
             'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table paste wordcount'
+            'insertdatetime media table paste wordcount emoticons'
           ],
-          toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor code codesample | ltr rtl',
+          toolbar: 'undo redo | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl',
         }
         "
     />
@@ -154,7 +138,6 @@ export default {
           url = data.url;
           console.log(meta); // {filetype: "image", fieldname: "src"}
           callback(url);
-
         }
       });
 

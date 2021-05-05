@@ -101,7 +101,7 @@ class Editor
      */
     public function getConfigAttribute($key)
     {
-        return isset($this->config[$key]) ? $this->config[$key] : null;
+        return $this->config[$key] ?? null;
     }
 
     /**

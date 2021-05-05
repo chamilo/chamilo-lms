@@ -71,7 +71,15 @@ class EditorController extends BaseController
     }
 
     /**
-     * @Route("/resources/{tool}/{type}/{parentId}", methods={"GET"}, name="resources_filemanager")
+     * Route("/resources/document/{nodeId}/manager", methods={"GET"}, name="resources_filemanager")
+     */
+//    public function documentsFileManager(): Response
+//    {
+//        return $this->render('@ChamiloCore/Index/vue.html.twig');
+//    }
+
+    /**
+     * @Route("/resources/{tool}/{type}/{parentId}", methods={"GET"}, name="resources_filemanager_temp")
      */
     public function customEditorFileManager(ResourceFactory $resourceFactory, Request $request, $tool, $type, int $parentId = 0): Response
     {
@@ -221,6 +229,11 @@ class EditorController extends BaseController
 
         $type = $request->get('type');
         $tool = $request->get('tool');
+        //$node = $request->get('nodeId');        var_dump($node);exit;
+
+        $course = api_get_course_entity();
+
+        $nodeId = $course->getResourceNode()->getId();
 
         $params = [
             // @todo replace api_get_bootstrap_and_font_awesome
@@ -229,6 +242,7 @@ class EditorController extends BaseController
             'more_buttons_in_max_mode' => $moreButtonsInMaximizedMode,
             'type' => $type,
             'tool' => $tool,
+            'nodeId' => $nodeId,
         ];
 
         $renderedView = $this->renderView('@ChamiloCore/Editor/config_js.html.twig', $params);

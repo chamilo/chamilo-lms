@@ -20,18 +20,19 @@
 
           <div class="flex flex-row gap-2 text-gray-500">
             <a
-                :href="goToCourse(course, tool)"
+              :href="goToCourse(course, tool)"
             >
               {{ tool.nameToTranslate }}
             </a>
-            <button @click="changeVisibility(course, tool)">
+            <button v-if="isCurrentTeacher" @click="changeVisibility(course, tool)">
               <FontAwesomeIcon
                   v-if="tool.resourceNode.resourceLinks[0].visibility === 2"
                   icon="eye" size="lg"
               />
               <FontAwesomeIcon
                   v-else
-                  icon="eye-slash" size="lg"
+                  icon="eye-slash"
+                  size="lg"
               />
             </button>
           </div>
@@ -48,6 +49,7 @@ import { useRoute } from 'vue-router'
 import axios from "axios";
 import { ENTRYPOINT } from '../../config/entrypoint';
 import { reactive, toRefs} from 'vue'
+import {mapGetters} from "vuex";
 
 // @todo use suspense
 // @
@@ -90,6 +92,11 @@ export default {
     }
 
     return toRefs(state);
-  }
+  },
+  computed: {
+    ...mapGetters({
+      'isCurrentTeacher': 'security/isCurrentTeacher',
+    }),
+  },
 };
 </script>

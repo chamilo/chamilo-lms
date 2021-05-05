@@ -28,7 +28,6 @@ parameters:
 		- public/main/admin/sub_language*
 		- public/main/admin/special_exports.php
 
-		- public/main/inc/lib/elfinder/*
 		- public/main/inc/lib/javascript/*
 		- public/main/inc/lib/kses-0.2.2/*
 		- public/main/inc/lib/mimetex/*

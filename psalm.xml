@@ -151,7 +151,6 @@
             <directory name="src/CourseBundle/Component/CourseCopy"/>
             <directory name="src/LtiBundle"/>
 
-            <directory name="public/main/inc/lib/elfinder" />
             <directory name="public/main/inc/lib/javascript" />
             <directory name="public/main/inc/lib/kses-0.2.2" />
             <directory name="public/main/inc/lib/mimetex" />

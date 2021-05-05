@@ -584,6 +584,7 @@ switch ($action) {
         $list = [];
         $listThematic = [];
         $extra = [];
+        $noData = '';
         // Display thematic data
         if (!empty($thematic_data)) {
             /** @var CThematic $thematic */
@@ -673,10 +674,20 @@ switch ($action) {
                 $extra[$thematic->getIid()]['last_done'] = $last_done_thematic_advance;
                 $listThematic[] = $thematic;
             }
+        } else {
+            if (api_is_allowed_to_edit(null, true)) {
+                $noData = Display::noDataView(
+                    get_lang('Educational programming'),
+                    Display::return_icon('course_progress.png', '', [], 64),
+                    get_lang('Add thematic'),
+                    api_get_path(WEB_CODE_PATH).'course_progress/index.php?'.api_get_cidreq().'&action=thematic_add'
+                );
+            }
         }
 
         $tpl->assign('extra', $extra);
         $tpl->assign('data', $listThematic);
+        $tpl->assign('no_data', $noData);
         $thematicLayout = $tpl->get_template('course_progress/progress.html.twig');
         $content = $tpl->fetch($thematicLayout);
         break;

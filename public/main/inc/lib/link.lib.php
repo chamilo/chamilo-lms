@@ -1433,11 +1433,11 @@ Do you really want to delete this category and its links ?')."')) return false;\
             /*	Action Links */
             $actions = '';
             if (api_is_allowed_to_edit(null, true)) {
-                $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(
-                    ).'&action=addlink&category_id='.$categoryId.'">'.
+                $actions .= '<a
+                    href="'.api_get_self().'?'.api_get_cidreq().'&action=addlink&category_id='.$categoryId.'">'.
                     Display::return_icon('new_link.png', get_lang('Add a link'), '', ICON_SIZE_MEDIUM).'</a>';
-                $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(
-                    ).'&action=addcategory&category_id='.$categoryId.'">'.
+                $actions .= '<a
+                    href="'.api_get_self().'?'.api_get_cidreq().'&action=addcategory&category_id='.$categoryId.'">'.
                     Display::return_icon('new_folder.png', get_lang('Add a category'), '', ICON_SIZE_MEDIUM).'</a>';
             }
 
@@ -1516,7 +1516,8 @@ Do you really want to delete this category and its links ?')."')) return false;\
                 $header .= Display::return_icon('forum_nestedview.png');
             } else {
                 $header .= '<a
-                    class="'.$visibilityClass.'" href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$categoryItemId.'">';
+                    class="'.$visibilityClass.'"
+                    href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$categoryItemId.'">';
                 $header .= Display::return_icon('forum_listview.png');
             }
             $header .= Security::remove_XSS($category->getCategoryTitle()).'</a>';
@@ -1545,6 +1546,15 @@ Do you really want to delete this category and its links ?')."')) return false;\
 
             $content .= Display::panel($category->getDescription().$childrenContent, $header);
             $counter++;
+        }
+
+        if (empty($counter) && api_is_allowed_to_edit()) {
+            $content .= Display::noDataView(
+                get_lang('Links'),
+                Display::return_icon('links.png', '', [], 64),
+                get_lang('Add links'),
+                api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['action' => 'addlink'])
+            );
         }
 
         return $content;

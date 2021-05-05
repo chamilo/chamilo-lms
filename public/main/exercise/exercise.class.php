@@ -9483,17 +9483,12 @@ class Exercise
 
         if (empty($tableRows) && empty($categoryId)) {
             if ($is_allowedToEdit && 'learnpath' !== $origin) {
-                $content .= '<div id="no-data-view">';
-                $content .= '<h3>'.get_lang('Quiz').'</h3>';
-                $content .= Display::return_icon('quiz.png', '', [], 64);
-                $content .= '<div class="controls">';
-                $content .= Display::url(
-                    '<em class="fa fa-plus"></em> '.get_lang('Create a new test'),
-                    'exercise_admin.php?'.api_get_cidreq(),
-                    ['class' => 'btn btn-primary']
+                $content .= Display::noDataView(
+                    get_lang('Quiz'),
+                    Display::return_icon('quiz.png', '', [], 64),
+                    get_lang('Create a new test'),
+                    'exercise_admin.php?'.api_get_cidreq()
                 );
-                $content .= '</div>';
-                $content .= '</div>';
             }
         } else {
             if (empty($tableRows)) {

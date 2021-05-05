@@ -2934,4 +2934,21 @@ HTML;
             return $result; // example: #fc443a
         }
     }
+
+    public static function noDataView(string $title, string $icon, string $buttonTitle, string $url): string
+    {
+        $content = '<div id="no-data-view">';
+        $content .= '<h3>'.$title.'</h3>';
+        $content .= $icon;
+        $content .= '<div class="controls">';
+        $content .= self::url(
+            '<em class="fa fa-plus"></em> '.$buttonTitle,
+            $url,
+            ['class' => 'btn btn-primary']
+        );
+        $content .= '</div>';
+        $content .= '</div>';
+
+        return $content;
+    }
 }

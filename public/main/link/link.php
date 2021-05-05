@@ -67,7 +67,6 @@ if ('editlink' === $action) {
     $interbreadcrumb[] = ['url' => 'link.php', 'name' => get_lang('Links')];
 }
 
-// Statistics
 Event::event_access_tool(TOOL_LINK);
 
 /*	Action Handling */

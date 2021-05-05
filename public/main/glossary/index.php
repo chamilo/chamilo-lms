@@ -467,7 +467,7 @@ switch ($action) {
         break;
     default:
         $tool_name = get_lang('List');
-        $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?add_ready=1&'.api_get_cidreq().'"></script>';
+        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?add_ready=1&'.api_get_cidreq().'"></script>';
         $htmlHeadXtra[] = api_get_js('jquery.highlight.js');
         $content = GlossaryManager::display_glossary();
 
@@ -475,7 +475,6 @@ switch ($action) {
 }
 
 Display::display_header($tool_name);
-
 Display::display_introduction_section(TOOL_GLOSSARY);
 
 echo $content;

@@ -440,12 +440,9 @@ class GlossaryManager
         return true;
     }
 
-    /**
-     * @return string
-     */
-    public static function getGlossaryView()
+    public static function getGlossaryView(): string
     {
-        $view = Session::read('glossary_view');
+        $view = Session::read('glossary_view', '');
         if (empty($view)) {
             $defaultView = api_get_configuration_value('default_glossary_view');
             if (empty($defaultView)) {
@@ -480,8 +477,7 @@ class GlossaryManager
                 '',
                 ICON_SIZE_MEDIUM
             );
-            $actionsLeft .= '<a
-                href="'.$url.'&action=addglossary">'.$addIcon.'</a>';
+            $actionsLeft .= '<a href="'.$url.'&action=addglossary">'.$addIcon.'</a>';
         }
 
         if (api_is_allowed_to_edit(null, true)) {
@@ -547,31 +543,38 @@ class GlossaryManager
         $form->addElement('hidden', 'sid', api_get_session_id());
         $form->addButtonSearch(get_lang('Search'));
         $actionsRight = $form->returnForm();
-
         $toolbar = Display::toolbarAction('toolbar-document', [$actionsLeft, $actionsRight]);
-
         $content = $toolbar;
 
         $items = self::get_number_glossary_terms();
-        if (0 != $items && (!$view || 'table' === $view)) {
-            // @todo Table haven't paggination
-            $table = new SortableTable(
-                'glossary',
-                ['GlossaryManager', 'get_number_glossary_terms'],
-                ['GlossaryManager', 'get_glossary_data'],
-                0
-            );
-            $table->set_header(0, get_lang('Term'), true);
-            $table->set_header(1, get_lang('Term definition'), true);
-            if (api_is_allowed_to_edit(null, true)) {
-                $table->set_header(2, get_lang('Detail'), false, 'width=90px', ['class' => 'td_actions']);
-                $table->set_column_filter(2, ['GlossaryManager', 'actions_filter']);
+        if (!empty($items)) {
+            if ('table' === $view) {
+                // @todo Table haven't pagination
+                $table = new SortableTable(
+                    'glossary',
+                    ['GlossaryManager', 'get_number_glossary_terms'],
+                    ['GlossaryManager', 'get_glossary_data'],
+                    0
+                );
+                $table->set_header(0, get_lang('Term'), true);
+                $table->set_header(1, get_lang('Term definition'), true);
+                if (api_is_allowed_to_edit(null, true)) {
+                    $table->set_header(2, get_lang('Detail'), false, 'width=90px', ['class' => 'td_actions']);
+                    $table->set_column_filter(2, ['GlossaryManager', 'actions_filter']);
+                }
+                $content .= $table->return_table();
+            } else {
+                $content .= self::displayGlossaryList();
             }
-            $content .= $table->return_table();
-        }
-
-        if ('list' === $view) {
-            $content .= self::displayGlossaryList();
+        } else {
+            if (api_is_allowed_to_edit(true, true)) {
+                $content .= Display::noDataView(
+                    get_lang('Glossary'),
+                    Display::return_icon('glossary.png', '', [], 64),
+                    get_lang('Add glossary'),
+                    $url.'&'.http_build_query(['action' => 'addglossary'])
+                );
+            }
         }
 
         return $content;
@@ -579,14 +582,12 @@ class GlossaryManager
 
     /**
      * Display the glossary terms in a list.
-     *
-     * @return bool true
      */
-    public static function displayGlossaryList()
+    public static function displayGlossaryList(): string
     {
         $glossaryList = self::get_glossary_data(0, 1000, 0, 'ASC');
         $content = '';
-        foreach ($glossaryList as $key => $glossary_item) {
+        foreach ($glossaryList as $glossary_item) {
             $actions = '';
             if (api_is_allowed_to_edit(null, true)) {
                 $actions = '<div class="pull-right">'.

@@ -288,17 +288,12 @@ switch ($action) {
             if (($allowToEdit || $allowStudentInGroupToSend) &&
                 (empty($_GET['origin']) || 'learnpath' !== $_GET['origin'])
             ) {
-                $html .= '<div id="no-data-view">';
-                $html .= '<h3>'.get_lang('Announcements').'</h3>';
-                $html .= Display::return_icon('valves.png', '', [], 64);
-                $html .= '<div class="controls">';
-                $html .= Display::url(
+                $html .= Display::noDataView(
+                    get_lang('Announcements'),
+                    Display::return_icon('valves.png', '', [], 64),
                     get_lang('Add an announcement'),
-                    api_get_self().'?'.api_get_cidreq().'&action=add',
-                    ['class' => 'btn btn-primary']
+                    api_get_self().'?'.api_get_cidreq().'&action=add'
                 );
-                $html .= '</div>';
-                $html .= '</div>';
             } else {
                 $html = Display::return_message(get_lang('There are no announcements.'), 'warning');
             }

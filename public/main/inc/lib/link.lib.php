@@ -1425,6 +1425,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
     ) {
         $categoryId = (int) $categoryId;
         $content = '';
+        $toolbar = '';
         $categories = self::getLinkCategories($courseId, $sessionId);
         $countCategories = count($categories);
         $linksPerCategory = self::showLinksPerCategory(0, $courseId, $sessionId, $showActionLinks);
@@ -1462,7 +1463,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
                 Display::return_icon('pdf.png', get_lang('Export to PDF'), '', ICON_SIZE_MEDIUM),
                 api_get_self().'?'.api_get_cidreq().'&action=export'
             );
-            $content .= Display::toolbarAction('toolbar', [$actions]);
+            $toolbar = Display::toolbarAction('toolbar', [$actions]);
         }
 
         if (empty($countCategories)) {
@@ -1548,7 +1549,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
             $counter++;
         }
 
-        if (empty($counter) && api_is_allowed_to_edit()) {
+        if (empty($content) && api_is_allowed_to_edit()) {
             $content .= Display::noDataView(
                 get_lang('Links'),
                 Display::return_icon('links.png', '', [], 64),
@@ -1557,7 +1558,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
             );
         }
 
-        return $content;
+        return $toolbar.$content;
     }
 
     /**

@@ -1214,7 +1214,7 @@ class Exercise
         $sql = "SELECT q.iid
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
-                ON e.question_id = q.id
+                ON e.question_id = q.iid
                 WHERE
                     q.iid = $questionId AND
                     e.c_id = {$this->course_id} AND
@@ -4648,7 +4648,7 @@ class Exercise
                             $orderBy = ' ORDER BY correct ';
                         }
 
-                        $sql = "SELECT iId, answer, correct, id_auto, ponderation
+                        $sql = "SELECT iid, answer, correct, id_auto, ponderation
                                 FROM $table_ans
                                 WHERE
                                     c_id = $course_id AND

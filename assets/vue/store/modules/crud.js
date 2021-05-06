@@ -71,6 +71,8 @@ export default function makeCrudModule({
         if (200 === response.status) {
           return response.json();
         }
+
+        return response;
       },
       createFile: ({ commit }, values) => {
         commit(ACTIONS.SET_ERROR, '');
@@ -79,7 +81,11 @@ export default function makeCrudModule({
         service
             .createFile(values)
             //.then(response => response.json())
-            .then(response => this.checkResponse(response))
+            .then(response => {
+              if (200 === response.status) {
+                return response.json();
+              }
+            })
             .then(data => {
               commit(ACTIONS.TOGGLE_LOADING);
               commit(ACTIONS.ADD, data);
@@ -188,7 +194,12 @@ export default function makeCrudModule({
         commit(ACTIONS.TOGGLE_LOADING);
         service
             .find(id, params)
-            .then(response => this.checkResponse(response))
+            //.then(response => service.checkResponse(response))
+            .then(response => {
+              if (200 === response.status) {
+                return response.json();
+              }
+            })
             .then(item => {
               commit(ACTIONS.TOGGLE_LOADING);
               commit(ACTIONS.ADD, normalizeRelations(item));
@@ -206,7 +217,12 @@ export default function makeCrudModule({
         commit(ACTIONS.TOGGLE_LOADING);
         service
           .find(id)
-          .then(response => this.checkResponse(response))
+          //.then(response => service.checkResponse(response))
+            .then(response => {
+              if (200 === response.status) {
+                return response.json();
+              }
+            })
           .then(item => {
             commit(ACTIONS.TOGGLE_LOADING);
             commit(ACTIONS.ADD, normalizeRelations(item));
@@ -225,7 +241,13 @@ export default function makeCrudModule({
 
         return service
             .find(id, params)
-            .then(response => this.checkResponse(response))
+            //.then(response => service.checkResponse(response))
+            .then(response => {
+              if (200 === response.status) {
+                return response.json();
+              }
+            })
+
             .then(item => {
               commit(ACTIONS.TOGGLE_LOADING);
               commit(ACTIONS.ADD_RESOURCE_NODE, item);
@@ -281,7 +303,6 @@ export default function makeCrudModule({
         //this.$set(state, 'isLoading', false);
       },
       [ACTIONS.ADD]: (state, item) => {
-        console.log('ACTIONS.ADD');
         //this.$set(state.byId, item['@id'], item);
         state.byId[item['@id']] = item;
         state.isLoading = false;

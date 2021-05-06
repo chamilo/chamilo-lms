@@ -1,43 +1,46 @@
 <template>
   <div class="grid gap-4">
     <q-card-section>
-      <div class="text-h6">{{ course.title }}</div>
-      <div class="text-subtitle2">{{ course.description }}</div>
+      <div class="text-h6">
+        {{ course.title }}
+      </div>
+      <div class="text-subtitle2">
+        {{ course.description }}
+      </div>
     </q-card-section>
 
-    <div v-for="categories in tools" class="grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-6">
-      <div v-for="tool in categories" class="bg-gray-100 rounded-xl p-2 shadow-md">
-        <div class="flex flex-col flex-center">
-          <div class="mx-auto" >
-            <a :href="goToCourse(course, tool)">
-            <img
-                :alt="tool.name"
-                :src="'/img/tools/' + tool.name + '.png'"
-                class="w-32 h-32 object-contain"
-            />
-            </a>
-          </div>
+    <div
+      class="grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-6"
+    >
+        <HomeCourseCard
+          v-for="tool in tools.authoring"
+          :course="course"
+          :tool="tool"
+          :go-to-course-tool="goToCourseTool"
+          :change-visibility="changeVisibility"
+        />
 
-          <div class="flex flex-row gap-2 text-gray-500">
-            <a
-              :href="goToCourse(course, tool)"
-            >
-              {{ tool.nameToTranslate }}
-            </a>
-            <button v-if="isCurrentTeacher" @click="changeVisibility(course, tool)">
-              <FontAwesomeIcon
-                  v-if="tool.resourceNode.resourceLinks[0].visibility === 2"
-                  icon="eye" size="lg"
-              />
-              <FontAwesomeIcon
-                  v-else
-                  icon="eye-slash"
-                  size="lg"
-              />
-            </button>
-          </div>
-        </div>
-      </div>
+      <HomeCourseCard
+          v-for="tool in tools.interaction"
+          :course="course"
+          :tool="tool"
+          :go-to-course-tool="goToCourseTool"
+          :change-visibility="changeVisibility"
+      />
+    </div>
+
+    <h2 v-if="isCurrentTeacher">Settings</h2>
+    <div
+        v-if="isCurrentTeacher"
+        class="grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-6"
+    >
+      <HomeCourseCard
+          v-for="tool in tools.admin"
+
+          :course="course"
+          :tool="tool"
+          :go-to-course-tool="goToCourseTool"
+      />
     </div>
   </div>
 </template>
@@ -45,24 +48,24 @@
 <script>
 import Loading from '../../components/Loading.vue';
 import Toolbar from '../../components/Toolbar.vue';
+import HomeCourseCard from '../../components/course/HomeCourseCard.vue';
+
 import { useRoute } from 'vue-router'
 import axios from "axios";
 import { ENTRYPOINT } from '../../config/entrypoint';
 import { reactive, toRefs} from 'vue'
 import {mapGetters} from "vuex";
 
-// @todo use suspense
-// @
-
 export default {
   name: 'Home',
   servicePrefix: 'Courses',
   components: {
     Loading,
-    Toolbar
+    Toolbar,
+    HomeCourseCard
   },
   setup() {
-    const state = reactive({course: [], tools: [], shortcuts:[], goToCourse, changeVisibility});
+    const state = reactive({course: [], tools: [], shortcuts:[], goToCourseTool, changeVisibility});
     const route = useRoute()
     let id = route.params.id;
 
@@ -74,8 +77,8 @@ export default {
       console.log(error);
     });
 
-    function goToCourse(course, tool) {
-      let sessionId = this.$route.query.sid ?? 0;
+    function goToCourseTool(course, tool) {
+      let sessionId = route.query.sid ?? 0;
       let url = '/course/' + course.id + '/tool/' + tool.name + '?sid=' + sessionId;
 
       return url;

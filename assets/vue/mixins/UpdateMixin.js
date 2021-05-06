@@ -7,11 +7,6 @@ export default {
   data() {
     return {
       item: {},
-      options: {
-        sortBy: [],
-        page: 1,
-        itemsPerPage: 15
-      },
     };
   },
   created() {
@@ -27,8 +22,6 @@ export default {
       this.retrieve(decodeURIComponent(id));
       console.log(this.item);
     }
-    // default
-    //this.retrieve(decodeURIComponent(this.$route.params.id));
   },
   beforeDestroy() {
     this.reset();
@@ -51,14 +44,11 @@ export default {
         let item = this.find(decodeURIComponent(id));
 
         if (isEmpty(item)) {
-          this.retrieve(decodeURIComponent(id));
+          //this.retrieve(decodeURIComponent(id));
         }
 
         return item;
       }
-
-
-      //return this.find(decodeURIComponent(this.$route.params.id));
     }
   },
   methods: {
@@ -101,7 +91,6 @@ export default {
         this.item = { ...this.retrieved };
       }
     },
-
     resetForm() {
       console.log('resetForm');
       this.$refs.updateForm.v$.$reset();

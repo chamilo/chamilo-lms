@@ -37,6 +37,7 @@
                     class="btn btn-primary"
                     :to="item['downloadUrl']"
                 >
+                  <FontAwesomeIcon icon="file-download" />
                   {{ $t('Download file') }}
                 </q-btn>
               </span>
@@ -50,25 +51,7 @@
         </div>
       </div>
 
-      <div class="w-1/2">
-        <div v-if="item['resourceLinkListFromEntity']">
-          <ul>
-            <li
-                v-for="link in item['resourceLinkListFromEntity']"
-            >
-              {{ $t('Status') }}: {{ link.visibilityName }}
-              <div v-if="link['course']">
-                {{ $t('Course') }}: {{ link.course.resourceNode.title }}
-              </div>
-              <div v-if="link['session']">
-                {{ $t('Session') }}: {{ link.session.name }}
-              </div>
-              <div v-if="link['group']">
-                {{ $t('Group') }}: {{ link.group.resourceNode.title }}
-              </div>
-            </li>
-          </ul>
-        </div>
+      <span class="w-1/2">
         <q-markup-table>
           <tbody>
           <tr>
@@ -107,6 +90,7 @@
                     class="btn btn-primary"
                     :href="item['downloadUrl']"
                 >
+                  <FontAwesomeIcon icon="file-download" />
                   {{ $t('Download file') }}
                 </a>
               </div>
@@ -115,8 +99,58 @@
           </tr>
           </tbody>
         </q-markup-table>
-      </div>
+
+        <hr />
+
+        <span v-if="item['resourceLinkListFromEntity']">
+           <h2>{{ $t('Shared') }}</h2>
+            <span
+                v-for="link in item['resourceLinkListFromEntity']"
+            >
+             <q-markup-table>
+              <tbody>
+              <tr>
+                 <td>
+                   {{ $t('Status') }}
+                 </td>
+                 <td>
+                   {{ link.visibilityName }}
+                 </td>
+              </tr>
+
+              <tr v-if="link['course']">
+                 <td>
+                   {{ $t('Course') }}
+                 </td>
+                <td>
+                  {{ link.course.resourceNode.title }}
+                 </td>
+              </tr>
+
+              <tr v-if="link['session']">
+                 <td>
+                   {{ $t('Session') }}
+                 </td>
+                <td>
+                 {{ link.session.name }}
+                 </td>
+              </tr>
+
+              <tr v-if="link['group']">
+                 <td>
+                   {{ $t('Group') }}
+                 </td>
+                <td>
+                 {{ link.group.resourceNode.title }}
+                 </td>
+              </tr>
+              </tbody>
+            </q-markup-table>
+            </span>
+        </span>
+      </span>
     </div>
+
     <Loading :visible="isLoading" />
   </div>
 </template>
@@ -135,8 +169,6 @@ export default {
   components: {
       Loading,
       Toolbar
-  },
-  created: function () {
   },
   mixins: [ShowMixin],
   computed: {

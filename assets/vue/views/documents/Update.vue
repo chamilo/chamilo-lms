@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="item && isCurrentTeacher">
     <!--      :handle-delete="del"-->
     <Toolbar
         v-if="item && !isLoading"
@@ -52,9 +52,11 @@ export default {
       updated: 'updated',
       violations: 'violations'
     }),
-    ...mapGetters('documents', ['find'])
+    ...mapGetters('documents', ['find']),
+    ...mapGetters({
+      'isCurrentTeacher': 'security/isCurrentTeacher',
+    }),
   },
-
   methods: {
     ...mapActions('documents', {
       createReset: 'resetCreate',

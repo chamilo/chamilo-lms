@@ -131,8 +131,8 @@
 
         <q-separator inset class="q-my-sm" />
 
-        <q-list v-if="isAuthenticated && isAdmin" padding class="text-grey-8">
-          <q-item class="GNL__drawer-item" v-ripple v-for="link in links1" :key="link.text" :to="link.url" clickable>
+        <q-list v-if="isAuthenticated" padding class="text-grey-8">
+          <q-item class="GNL__drawer-item" v-ripple v-for="link in linksUser" :key="link.text" :to="link.url" clickable>
             <q-item-section avatar>
               <!--              <q-icon :name="link.icon" />-->
               <FontAwesomeIcon :icon="link.icon" size="lg" />
@@ -144,7 +144,7 @@
 
           <q-separator inset class="q-my-sm" />
 
-          <q-item class="GNL__drawer-item" v-ripple v-for="link in links2" :key="link.text" :to="link.url"  clickable>
+          <q-item v-if="isAdmin" class="GNL__drawer-item" v-ripple v-for="link in linksAdmin" :key="link.text" :to="link.url"  clickable>
             <q-item-section avatar>
               <!--              <q-icon :name="link.icon" />-->
               <FontAwesomeIcon :icon="link.icon" size="lg" />
@@ -221,7 +221,7 @@ export default {
     user: {},
     userAvatar: '',
     moved: true,
-    links1: [
+    linksUser: [
        //{ icon: 'home', url: '/', text: 'Home' },
        //{ icon: 'star_border', url: '/', text: 'News' },
        { icon: 'book', url: '/courses', text: 'My courses' },
@@ -231,7 +231,7 @@ export default {
       //{ icon: 'compass', url: '/catalog', text: 'Explore' },
       // { icon: 'star_border', url: '/news', text: 'News' },
     ],
-    links2: [
+    linksAdmin: [
       { icon: 'users', url: '/main/admin/user_list.php', text: 'Users' },
       { icon: 'book', url: '/main/admin/course_list.php', text: 'Courses' },
       { icon: 'book-open',  url: '/main/session/session_list.php', text: 'Sessions' },
@@ -276,7 +276,7 @@ export default {
     //let payload = {isAuthenticated: isAuthenticated, user: this.user};
     //this.$store.dispatch("security/onRefresh", payload);
     if (isAuthenticated) {
-      this.links1.unshift({icon: 'user-circle', url: '/account/profile', text: this.currentUser.username});
+      this.linksUser.unshift({icon: 'user-circle', url: '/account/home', text: this.currentUser.username});
     }
   },
   computed: {

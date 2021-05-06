@@ -1839,33 +1839,29 @@ class Display
     /**
      * @param array  $items
      * @param string $class
-     *
-     * @return string|null
      */
-    public static function actions($items, $class = 'new_actions')
+    public static function actions($items, $class = 'new_actions'): string
     {
-        $html = null;
-        if (!empty($items)) {
-            $html = '<div class="'.$class.'"><ul class="nav nav-pills">';
-            foreach ($items as $value) {
-                $class = null;
-                if (isset($value['active']) && $value['active']) {
-                    $class = 'class ="active"';
-                }
-
-                if (basename($_SERVER['REQUEST_URI']) == basename($value['url'])) {
-                    $class = 'class ="active"';
-                }
-                $html .= "<li $class >";
-                $attributes = isset($value['url_attributes']) ? $value['url_attributes'] : [];
-                $html .= self::url($value['content'], $value['url'], $attributes);
-                $html .= '</li>';
+        if (empty($items)) {
+            return '';
+        }
+        $links = '';
+        foreach ($items as $value) {
+            /*$class = '';
+            if (isset($value['active']) && $value['active']) {
+                $class = 'class ="active"';
             }
-            $html .= '</ul></div>';
-            $html .= '<br />';
+
+            if (basename($_SERVER['REQUEST_URI']) == basename($value['url'])) {
+                $class = 'class ="active"';
+            }
+            $html .= "<li $class >";*/
+
+            $attributes = $value['url_attributes'] ?? [];
+            $links .= self::url($value['content'], $value['url'], $attributes);
         }
 
-        return $html;
+        return self::toolbarAction(uniqid('toolbar', false), [$links]);
     }
 
     /**

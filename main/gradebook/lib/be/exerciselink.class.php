@@ -638,9 +638,9 @@ class ExerciseLink extends AbstractLink
                 $this->exercise_data = Database::fetch_array($result);
             } else {
                 // Try with iid
-                $sql = 'SELECT * FROM '.$table.'
-                        WHERE
-                            iid = '.$exerciseId;
+                $sql = "SELECT * FROM $table
+                    WHERE
+                        iid = $exerciseId";
                 $result = Database::query($sql);
                 $rows = Database::num_rows($result);
 
@@ -648,9 +648,9 @@ class ExerciseLink extends AbstractLink
                     $this->exercise_data = Database::fetch_array($result);
                 } else {
                     // Try wit id
-                    $sql = 'SELECT * FROM '.$table.'
-                            WHERE
-                                iid = '.$exerciseId;
+                    $sql = "SELECT * FROM $table
+                        WHERE
+                            iid = $exerciseId";
                     $result = Database::query($sql);
                     $this->exercise_data = Database::fetch_array($result);
                 }

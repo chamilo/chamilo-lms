@@ -797,8 +797,8 @@ class CourseBuilder
             $this->findAndSetDocumentsInText($obj->description);
 
             $quiz = new Quiz($obj);
-            $sql = 'SELECT * FROM '.$table_rel.'
-                    WHERE c_id = '.$courseId.' AND exercice_id = '.$obj->iid;
+            $sql = "SELECT * FROM $table_rel
+                WHERE c_id = $courseId AND exercice_id = {$obj->iid}";
             $db_result2 = Database::query($sql);
             while ($obj2 = Database::fetch_object($db_result2)) {
                 $quiz->add_question($obj2->question_id, $obj2->question_order);
@@ -860,8 +860,8 @@ class CourseBuilder
             );
             $question->addPicture($this);
 
-            $sql = 'SELECT * FROM '.$table_ans.'
-                    WHERE question_id = '.$obj->iid;
+            $sql = "SELECT * FROM $table_ans
+                WHERE question_id = {$obj->iid}";
             $db_result2 = Database::query($sql);
             while ($obj2 = Database::fetch_object($db_result2)) {
                 $question->add_answer(
@@ -880,8 +880,8 @@ class CourseBuilder
 
                 if ($obj->type == MULTIPLE_ANSWER_TRUE_FALSE) {
                     $table_options = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
-                    $sql = 'SELECT * FROM '.$table_options.'
-                            WHERE question_id = '.$obj->iid;
+                    $sql = "SELECT * FROM $table_options
+                        WHERE question_id = {$obj->iid}";
                     $db_result3 = Database::query($sql);
                     while ($obj3 = Database::fetch_object($db_result3)) {
                         $question_option = new QuizQuestionOption($obj3);
@@ -951,7 +951,7 @@ class CourseBuilder
                         );
                         $question->addPicture($this);
                         $sql = "SELECT * FROM $table_ans
-                                WHERE question_id = ".$obj->id;
+                                WHERE question_id = {$obj->id}";
                         $db_result2 = Database::query($sql);
                         if (Database::num_rows($db_result2)) {
                             while ($obj2 = Database::fetch_object($db_result2)) {

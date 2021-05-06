@@ -125,7 +125,7 @@ class Answer
 
         $sql = "SELECT * FROM $table
                 WHERE
-                    question_id ='".$questionId."'
+                    question_id = $questionId
                 ORDER BY position";
 
         $result = Database::query($sql);
@@ -210,7 +210,7 @@ class Answer
 
         $sql = "SELECT id FROM
               $table
-              WHERE question_id ='".$questionId."'";
+              WHERE question_id = $questionId";
 
         $result = Database::query($sql);
         $id = [];
@@ -394,7 +394,7 @@ class Answer
         $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $auto_id = (int) $auto_id;
         $sql = "SELECT iid, answer, id_auto FROM $table
-                WHERE id_auto='$auto_id'";
+                WHERE id_auto = $auto_id";
         $rs = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {
@@ -501,7 +501,7 @@ class Answer
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $sql = "SELECT type FROM $table
-                WHERE iid = '".$this->questionId."'";
+                WHERE iid = {$this->questionId}";
         $res = Database::query($sql);
         if (Database::num_rows($res) <= 0) {
             return null;

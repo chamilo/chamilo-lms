@@ -384,11 +384,11 @@ class Tracking
                     $result_disabled_ext_all = false;
                     if ('quiz' === $row['item_type']) {
                         // Check results_disabled in quiz table.
-                        $my_path = Database::escape_string($row['path']);
+                        $lpItemPath = (int) $row['path'];
                         $sql = "SELECT results_disabled
                                 FROM $TBL_QUIZ
                                 WHERE
-                                    iid ='".$my_path."'";
+                                    iid = $lpItemPath";
                         $res_result_disabled = Database::query($sql);
                         $row_result_disabled = Database::fetch_row($res_result_disabled);
 
@@ -686,14 +686,13 @@ class Tracking
                     $my_id = $row['myid'];
                     $my_lp_id = $row['mylpid'];
                     $my_lp_view_id = $row['mylpviewid'];
-                    $my_path = $row['path'];
+                    $lpItemPath = (int) $row['path'];
                     $result_disabled_ext_all = false;
                     if ($row['item_type'] === 'quiz') {
                         // Check results_disabled in quiz table.
-                        $my_path = Database::escape_string($my_path);
                         $sql = "SELECT results_disabled
                                 FROM $TBL_QUIZ
-                                WHERE iid = '$my_path' ";
+                                WHERE iid = $lpItemPath";
                         $res_result_disabled = Database::query($sql);
                         $row_result_disabled = Database::fetch_row($res_result_disabled);
 
@@ -2982,7 +2981,7 @@ class Tracking
                         $num = Database::num_rows($result_last_attempt);
                         if ($num > 0) {
                             $attemptResult = Database::fetch_array($result_last_attempt, 'ASSOC');
-                            $id_last_attempt = $attemptResult['exe_id'];
+                            $id_last_attempt = (int) $attemptResult['exe_id'];
                             // We overwrite the score with the best one not the one saved in the LP (latest)
                             if ($getOnlyBestAttempt && $get_only_latest_attempt_results == false) {
                                 if ($debug) {
@@ -3007,7 +3006,7 @@ class Tracking
                                         INNER JOIN $tbl_quiz_questions AS q
                                         ON q.iid = at.question_id
                                         WHERE
-                                            exe_id ='$id_last_attempt' AND
+                                            exe_id = $id_last_attempt AND
                                             at.c_id = $course_id
                                     )
                                     AS t";

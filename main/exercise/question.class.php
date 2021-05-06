@@ -869,7 +869,7 @@ abstract class Question
      *
      * @return bool - true if copied, otherwise false
      */
-    public function exportPicture($questionId, $courseInfo)
+    public function exportPicture(int $questionId, array $courseInfo)
     {
         if (empty($questionId) || empty($courseInfo)) {
             return false;
@@ -919,7 +919,7 @@ abstract class Question
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $sql = "UPDATE $table SET
                 picture = '".Database::escape_string($picture)."'
-                WHERE iid='".intval($questionId)."'";
+                WHERE iid = $questionId";
         Database::query($sql);
 
         $documentId = add_document(

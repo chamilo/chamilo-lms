@@ -82,8 +82,8 @@ if ($form->validate()) {
     $answer_type = $values['question_type_hidden'];
 
     // check feedback_type from current exercise for type of question delineation
-    $exercise_id = intval($values['exercise']);
-    $sql = "SELECT feedback_type FROM $tbl_exercises WHERE iid = '$exercise_id'";
+    $exercise_id = (int) $values['exercise'];
+    $sql = "SELECT feedback_type FROM $tbl_exercises WHERE iid = $exercise_id";
     $rs_feedback_type = Database::query($sql);
     $row_feedback_type = Database::fetch_row($rs_feedback_type);
     $feedback_type = $row_feedback_type[0];

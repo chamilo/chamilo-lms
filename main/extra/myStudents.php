@@ -1119,7 +1119,7 @@ if (!empty($studentId)) {
 
             $sql = "SELECT quiz.title, iid FROM $t_quiz AS quiz
                             WHERE
-                                quiz.c_id = ".$courseInfo['real_id']." AND
+                                quiz.c_id = {$courseInfo['real_id']} AND
                                 active IN (0, 1)
                                 $sessionCondition
                             ORDER BY quiz.title ASC ";
@@ -2231,7 +2231,7 @@ if (empty($_GET['details'])) {
         ];
 
     $t_quiz = Database:: get_course_table(TABLE_QUIZ_TEST);
-    $sql = "SELECT quiz.title, iid FROM ".$t_quiz." AS quiz
+    $sql = "SELECT quiz.title, iid FROM $t_quiz AS quiz
                 WHERE
                     quiz.c_id = $c_id AND
                     (quiz.session_id = $session_id OR quiz.session_id = 0) AND

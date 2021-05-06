@@ -485,7 +485,7 @@ class UniqueAnswer extends Question
         $tbl_quiz_answer = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $course_id = api_get_course_int_id();
-        $question_id = intval($question_id);
+        $question_id = (int) $question_id;
         $score = floatval($score);
         $correct = intval($correct);
         $title = Database::escape_string($title);
@@ -528,7 +528,7 @@ class UniqueAnswer extends Question
         if ($correct) {
             $sql = "UPDATE $tbl_quiz_question
                     SET ponderation = (ponderation + $score)
-                    WHERE iid = ".$question_id;
+                    WHERE iid = $question_id";
             Database::query($sql);
         }
     }

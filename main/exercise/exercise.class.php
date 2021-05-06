@@ -179,7 +179,7 @@ class Exercise
         }
 
         $sql = "SELECT * FROM $table
-                WHERE iid = ".$id;
+                WHERE iid = $id";
         $result = Database::query($sql);
 
         // if the exercise has been found
@@ -665,14 +665,14 @@ class Exercise
                     FROM $TBL_EXERCICE_QUESTION e
                     INNER JOIN $TBL_QUESTIONS  q
                     ON e.question_id = q.iid
-					WHERE e.exercice_id	= '".$this->id."' AND e.c_id = {$this->course_id}";
+					WHERE e.exercice_id	= {$this->id} AND e.c_id = {$this->course_id}";
 
             $orderCondition = ' ORDER BY question_order ';
 
             if (!empty($sidx) && !empty($sord)) {
                 if ('question' === $sidx) {
                     if (in_array(strtolower($sord), ['desc', 'asc'])) {
-                        $orderCondition = " ORDER BY `q.$sidx` $sord";
+                        $orderCondition = " ORDER BY q.$sidx $sord";
                     }
                 }
             }

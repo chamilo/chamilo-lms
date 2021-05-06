@@ -87,11 +87,11 @@
                 <q-item replace :to="'/main/messages/index.php'"  clickable class="">
                   <q-item-section>Inbox</q-item-section>
                 </q-item>
-                <q-item href="/account/home" tag="a" class="">
-                  <q-item-section>
-                    Your profile
-                  </q-item-section>
-                </q-item>
+<!--                <q-item href="/account/home" tag="a" class="">-->
+<!--                  <q-item-section>-->
+<!--                    Your profile-->
+<!--                  </q-item-section>-->
+<!--                </q-item>-->
                 <q-item href="/account/edit" tag="a"  class="">
                   <q-item-section>Settings</q-item-section>
                 </q-item>

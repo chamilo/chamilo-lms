@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import courseRoutes from './course';
+import accountRoutes from './account';
+
 //import courseCategoryRoutes from './coursecategory';
 import documents from './documents';
 import store from '../store';
@@ -8,7 +10,6 @@ import Login from '../views/Login.vue';
 //import Home from '../views/Home.vue';
 import MyCourseList from '../views/user/courses/List.vue';
 import MySessionList from '../views/user/sessions/List.vue';
-import UserHome from '../views/user/profile/Home.vue';
 
 import CatalogLayout from '../layouts/Catalog.vue';
 import MyCoursesLayout from '../layouts/MyCourses.vue';
@@ -65,18 +66,17 @@ const router = createRouter({
             ],
             meta: {requiresAuth: true},
         },
-        {
-            path: '/account/profile', name: 'Profile', component: UserHome,
-            meta: {requiresAuth: true},
-        },
         courseRoutes,
         //courseCategoryRoutes,
-        documents
+        documents,
+        accountRoutes
     ]
 });
 
 router.beforeEach((to, from, next) => {
+    console.log('beforeEach');
     if (to.matched.some(record => record.meta.requiresAuth)) {
+        console.log('requiresAuth');
         // this route requires auth, check if logged in
         // if not, redirect to login page.
         if (store.getters['security/isAuthenticated']) {
@@ -88,6 +88,7 @@ router.beforeEach((to, from, next) => {
             });
         }
     } else {
+        console.log('next');
         next(); // make sure to always call next()!
     }
 });

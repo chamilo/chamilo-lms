@@ -5,7 +5,7 @@
         <h2>{{ 'Profile' | trans }}</h2>
         <h3> {{ user.firstname }} {{ user.lastname }} ({{ user.username }})</h3>
 
-        <img src="{{ user | illustration }}?w=300&h=300&fit=crop">
+        <img src="{{ user | illustration }}?w=300&h=300&fit=crop" />
         <br />
 
         <a href="{{ url('chamilo_core_account_edit') }}" class="btn btn-primary">

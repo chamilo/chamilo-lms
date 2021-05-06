@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import CourseCardList from './CourseCardList.vue';
+import CourseCardList from '../../../components/course/CourseCardList.vue';
 import {ENTRYPOINT} from '../../../config/entrypoint';
 import axios from "axios";
 import {ref, computed} from "vue";

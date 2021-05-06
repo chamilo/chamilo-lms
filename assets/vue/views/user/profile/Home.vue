@@ -41,7 +41,5 @@ export default {
       'currentUser': 'security/getUser',
     }),
   },
-  methods: {
-  },
 };
 </script>

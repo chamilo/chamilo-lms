@@ -1,46 +1,48 @@
 <template>
   <div class="grid">
     {{ status }}
-    <SessionCardList :sessions="sessions"/>
+    <SessionCardList :sessions="sessions" />
   </div>
 </template>
 
 <script>
-import SessionCardList from './SessionCardList.vue';
+import SessionCardList from '../../../components/session/SessionCardList.vue';
 import { ENTRYPOINT } from '../../../config/entrypoint';
 import axios from "axios";
+import {computed, ref} from "vue";
+import {useStore} from "vuex";
 
 export default {
   name: 'SessionList',
   components: {
-      SessionCardList
+    SessionCardList,
   },
-  data() {
-    return {
-        status: '',
-        sessions: []
-    };
-  },
-  created: function () {
-    this.load();
-  },
-  methods: {
-    load: function() {
-        this.status = 'Loading';
-        let user = this.$store.getters['security/getUser'];
-        if (user) {
-          axios.get(ENTRYPOINT + 'users/' + user.id + '/sessions_rel_users.json').then(response => {
-            this.status = '';
-            if (Array.isArray(response.data)) {
-              this.sessions = response.data;
-            }
-          }).catch(function (error) {
-            this.status = error;
-          });
-        } else {
-          this.status = '';
+  setup() {
+    const sessions = ref([]);
+    const status = ref('Loading');
+
+    const store = useStore();
+    let user = computed(() => store.getters['security/getUser']);
+
+    if (user.value) {
+      let userId = user.value.id;
+      axios.get(ENTRYPOINT + 'users/' + userId + '/sessions_rel_users.json').then(response => {
+        if (Array.isArray(response.data)) {
+          sessions.value = response.data;
         }
+      }).catch(function (error) {
+        status.value = error;
+        console.log(error);
+      }).finally(() =>
+          status.value = ''
+      );
+    }
+
+    return {
+      sessions,
+      status
     }
   }
-};
+}
+
 </script>

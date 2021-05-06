@@ -761,31 +761,30 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public static function getPasswordConstraints(): array
     {
-        return
-            [
-                new Assert\Length([
-                    'min' => 5,
-                ]),
-                // Alpha numeric + "_" or "-"
-                new Assert\Regex(
-                    [
-                        'pattern' => '/^[a-z\-_0-9]+$/i',
-                        'htmlPattern' => '/^[a-z\-_0-9]+$/i',
-                    ]
-                ),
-                // Min 3 letters - not needed
-                /*new Assert\Regex(array(
+        return [
+            new Assert\Length([
+                'min' => 5,
+            ]),
+            // Alpha numeric + "_" or "-"
+            new Assert\Regex(
+                [
+                    'pattern' => '/^[a-z\-_0-9]+$/i',
+                    'htmlPattern' => '/^[a-z\-_0-9]+$/i',
+                ]
+            ),
+            // Min 3 letters - not needed
+            /*new Assert\Regex(array(
                     'pattern' => '/[a-z]{3}/i',
                     'htmlPattern' => '/[a-z]{3}/i')
                 ),*/
-                // Min 2 numbers
-                new Assert\Regex(
-                    [
-                        'pattern' => '/[0-9]{2}/',
-                        'htmlPattern' => '/[0-9]{2}/',
-                    ]
-                ),
-            ];
+            // Min 2 numbers
+            new Assert\Regex(
+                [
+                    'pattern' => '/[0-9]{2}/',
+                    'htmlPattern' => '/[0-9]{2}/',
+                ]
+            ),
+        ];
     }
 
     public static function loadValidatorMetadata(ClassMetadata $metadata): void

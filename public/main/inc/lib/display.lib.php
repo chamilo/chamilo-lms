@@ -27,10 +27,6 @@ class Display
     public static $global_template;
     public static $preview_style = null;
     public static $legacyTemplate;
-
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
     }
@@ -187,6 +183,8 @@ class Display
         $tool,
         $editor_config = null
     ) {
+        // @todo replace introduction section with a vue page.
+        return;
         echo self::return_introduction_section($tool, $editor_config);
     }
 
@@ -1053,9 +1051,6 @@ class Display
      * in the $htmlHeadXtra variable before the display_header
      * Add this script.
      *
-     * @example
-     * <script>
-                </script>
      * @param array  $headers       list of the tab titles
      * @param array  $items
      * @param string $id            id of the container of the tab in the example "tabs"
@@ -1213,20 +1208,6 @@ class Display
         $table .= self::tag('div', '', ['id' => $div_id.'_pager']);
 
         return $table;
-    }
-
-    /**
-     * @param string $label
-     * @param string $form_item
-     *
-     * @return string
-     */
-    public static function form_row($label, $form_item)
-    {
-        $label = self::tag('label', $label, ['class' => 'col-sm-2 control-label']);
-        $form_item = self::div($form_item, ['class' => 'col-sm-10']);
-
-        return self::div($label.$form_item, ['class' => 'form-group']);
     }
 
     /**
@@ -1510,181 +1491,8 @@ class Display
      */
     public static function show_notification($courseInfo, $loadAjax = true)
     {
-        if (empty($courseInfo)) {
-            return '';
-        }
-
+        // @todo
         return '';
-
-        $t_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-        $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
-        $tool_edit_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $course_code = Database::escape_string($courseInfo['code']);
-
-        $user_id = api_get_user_id();
-        $course_id = (int) $courseInfo['real_id'];
-        $sessionId = (int) $courseInfo['id_session'];
-        $status = (int) $courseInfo['status'];
-
-        $loadNotificationsByAjax = api_get_configuration_value('user_portal_load_notification_by_ajax');
-
-        if ($loadNotificationsByAjax) {
-            if ($loadAjax) {
-                $id = 'notification_'.$course_id.'_'.$sessionId.'_'.$status;
-                Session::write($id, true);
-
-                return '<span id ="'.$id.'" class="course_notification"></span>';
-            }
-        }
-
-        // Get the user's last access dates to all tools of this course
-        $sql = "SELECT *
-                FROM $t_track_e_access
-                WHERE
-                    c_id = $course_id AND
-                    access_user_id = '$user_id' AND
-                    access_session_id ='".$sessionId."'
-                ORDER BY access_date DESC
-                LIMIT 1
-                ";
-        $result = Database::query($sql);
-
-        // latest date by default is the creation date
-        $latestDate = $courseInfo['creation_date'];
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_array($result, 'ASSOC');
-            $latestDate = $row['access_date'];
-        }
-
-        $sessionCondition = api_get_session_condition(
-            $sessionId,
-            true,
-            false,
-            'session_id'
-        );
-
-        $hideTools = [TOOL_NOTEBOOK, TOOL_CHAT];
-        // Get current tools in course
-        $sql = "SELECT name
-                FROM $course_tool_table
-                WHERE
-                    c_id = $course_id AND
-                    visibility = '1' AND
-                    name NOT IN ('".implode("','", $hideTools)." ')
-                ";
-        $result = Database::query($sql);
-        $tools = Database::store_result($result);
-
-        $group_ids = GroupManager::get_group_ids($courseInfo['real_id'], $user_id);
-        $group_ids[] = 0; //add group 'everyone'
-        $notifications = [];
-        if ($tools) {
-            foreach ($tools as $tool) {
-                $toolName = $tool['name'];
-                $toolName = Database::escape_string($toolName);
-                // Fix to get student publications
-                $toolCondition = " tool = '$toolName' AND ";
-                if ('student_publication' == $toolName || 'work' == $toolName) {
-                    $toolCondition = " (tool = 'work' OR tool = 'student_publication') AND ";
-                }
-
-                $toolName = addslashes($toolName);
-
-                $sql = "SELECT * FROM $tool_edit_table
-                        WHERE
-                            c_id = $course_id AND
-                            $toolCondition
-                            lastedit_type NOT LIKE '%Deleted%' AND
-                            lastedit_type NOT LIKE '%deleted%' AND
-                            lastedit_type NOT LIKE '%DocumentInvisible%' AND
-                            lastedit_date > '$latestDate' AND
-                            lastedit_user_id != $user_id $sessionCondition AND
-                            visibility != 2 AND
-                            (to_user_id IN ('$user_id', '0') OR to_user_id IS NULL) AND
-                            (to_group_id IN ('".implode("','", $group_ids)."') OR to_group_id IS NULL)
-                        ORDER BY lastedit_date DESC
-                        LIMIT 1";
-                $result = Database::query($sql);
-
-                $latestChange = Database::fetch_array($result, 'ASSOC');
-
-                if ($latestChange) {
-                    $latestChange['link'] = $tool['link'];
-                    $latestChange['image'] = $tool['image'];
-                    $latestChange['tool'] = $tool['name'];
-                    $notifications[$toolName] = $latestChange;
-                }
-            }
-        }
-
-        // Show all tool icons where there is something new.
-        $return = '';
-        foreach ($notifications as $notification) {
-            $toolName = $notification['tool'];
-            if (!(
-                    '1' == $notification['visibility'] ||
-                    ('1' == $status && '0' == $notification['visibility']) ||
-                    !isset($notification['visibility'])
-                )
-            ) {
-                continue;
-            }
-
-            if (TOOL_SURVEY == $toolName) {
-                $survey_info = SurveyManager::get_survey($notification['ref'], 0, $course_code);
-                if (!empty($survey_info)) {
-                    /*$invited_users = SurveyUtil::get_invited_users(
-                        $survey_info['code'],
-                        $course_code
-                    );
-                    if (!in_array($user_id, $invited_users['course_users'])) {
-                        continue;
-                    }*/
-                }
-            }
-
-            if (TOOL_LEARNPATH == $notification['tool']) {
-                if (!learnpath::is_lp_visible_for_student($notification['ref'], $user_id, $courseInfo)) {
-                    continue;
-                }
-            }
-
-            if (TOOL_DROPBOX == $notification['tool']) {
-                $notification['link'] = 'dropbox/dropbox_download.php?id='.$notification['ref'];
-            }
-
-            if ('work' == $notification['tool'] &&
-                'DirectoryCreated' == $notification['lastedit_type']
-            ) {
-                $notification['lastedit_type'] = 'WorkAdded';
-            }
-
-            $lastDate = api_get_local_time($notification['lastedit_date']);
-            $type = $notification['lastedit_type'];
-            if ('CalendareventVisible' == $type) {
-                $type = 'Visible';
-            }
-            $label = get_lang('Since your latest visit').": ".get_lang($type)." ($lastDate)";
-
-            if (false === strpos($notification['link'], '?')) {
-                $notification['link'] = $notification['link'].'?notification=1';
-            } else {
-                $notification['link'] = $notification['link'].'&notification=1';
-            }
-
-            $image = substr($notification['image'], 0, -4).'.png';
-
-            $return .= self::url(
-                self::return_icon($image, $label),
-                api_get_path(WEB_CODE_PATH).
-                $notification['link'].'&cidReq='.$course_code.
-                '&ref='.$notification['ref'].
-                '&gid='.$notification['to_group_id'].
-                '&sid='.$sessionId
-            ).PHP_EOL;
-        }
-
-        return $return;
     }
 
     /**
@@ -1715,8 +1523,8 @@ class Display
             $session['coach'] = get_lang('General coach').': '.$coachInfo['complete_name'];
         }
         $active = false;
-        if (('0000-00-00 00:00:00' == $session_info['access_end_date'] &&
-            '0000-00-00 00:00:00' == $session_info['access_start_date']) ||
+        if (('0000-00-00 00:00:00' === $session_info['access_end_date'] &&
+            '0000-00-00 00:00:00' === $session_info['access_start_date']) ||
             (empty($session_info['access_end_date']) && empty($session_info['access_start_date']))
         ) {
             if (isset($session_info['duration']) && !empty($session_info['duration'])) {

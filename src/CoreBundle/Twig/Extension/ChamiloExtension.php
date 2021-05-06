@@ -96,10 +96,8 @@ class ChamiloExtension extends AbstractExtension
 
     /**
      * Returns the name of the extension.
-     *
-     * @return string The extension name
      */
-    public function getName()
+    public function getName(): string
     {
         return 'chamilo_extension';
     }

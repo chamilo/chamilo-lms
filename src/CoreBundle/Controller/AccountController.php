@@ -28,22 +28,6 @@ class AccountController extends BaseController
     use ControllerTrait;
 
     /**
-     * @Route("/home", methods={"GET"}, name="chamilo_core_account_home")
-     */
-    public function homeAction()
-    {
-        $user = $this->getUser();
-
-        if (!is_object($user) || !$user instanceof UserInterface) {
-            throw $this->createAccessDeniedException('This user does not have access to this section');
-        }
-
-        return $this->render('@ChamiloCore/Account/home.html.twig', [
-            'user' => $user,
-        ]);
-    }
-
-    /**
      * @Route("/edit", methods={"GET", "POST"}, name="chamilo_core_account_edit")
      */
     public function editAction(Request $request, UserRepository $userRepository, IllustrationRepository $illustrationRepo)

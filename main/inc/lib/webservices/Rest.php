@@ -1180,7 +1180,7 @@ class Rest extends WebService
     {
         $idCampus = $params['id_campus'];
 
-        $courseList = CourseManager::get_courses_list(
+        return CourseManager::get_courses_list(
             0, //offset
             0, //howMany
             1, //$orderby = 1
@@ -1190,8 +1190,6 @@ class Rest extends WebService
             $idCampus, //$urlId
             true //AlsoSearchCode
         );
-
-        return $courseList;
     }
 
     /**
@@ -1253,6 +1251,7 @@ class Rest extends WebService
         $wantedCode = isset($courseParam['wanted_code']) ? $courseParam['wanted_code'] : null;
         $diskQuota = isset($courseParam['disk_quota']) ? $courseParam['disk_quota'] : '100';
         $visibility = isset($courseParam['visibility']) ? (int) $courseParam['visibility'] : null;
+        $removeCampusId = $courseParam['remove_campus_id_from_wanted_code'] ?? 0;
 
         if (isset($courseParam['visibility'])) {
             if ($courseParam['visibility'] &&
@@ -1266,6 +1265,9 @@ class Rest extends WebService
         $params = [];
         $params['title'] = $title;
         $params['wanted_code'] = 'CAMPUS_'.$idCampus.'_'.$wantedCode;
+        if (1 === (int) $removeCampusId) {
+            $params['wanted_code'] = $wantedCode;
+        }
         $params['user_id'] = $this->user->getId();
         $params['visibility'] = $visibility;
         $params['disk_quota'] = $diskQuota;
@@ -1306,12 +1308,10 @@ class Rest extends WebService
         $language = '';
         $phone = '';
         $picture_uri = '';
-        $auth_source = PLATFORM_AUTH_SOURCE;
+        $auth_source = $userParam['auth_source'] ?? PLATFORM_AUTH_SOURCE;
         $expiration_date = '';
         $active = 1;
         $hr_dept_id = 0;
-        $extra = null;
-
         $original_user_id_name = $userParam['original_user_id_name'];
         $original_user_id_value = $userParam['original_user_id_value'];
 

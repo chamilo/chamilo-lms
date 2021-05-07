@@ -2424,6 +2424,8 @@ class ImportCsv
                 if (empty($sessionInfo)) {
                     $this->logger->addError('Session does not exists: '.$chamiloSessionId);
                     continue;
+                } else {
+                    $this->logger->addInfo("Session id: ".$sessionInfo['id']);
                 }
 
                 $sessionId = $sessionInfo['id'];
@@ -2439,6 +2441,7 @@ class ImportCsv
                 ) {
                     $careerItem = '['.implode(',', $finalCareerIdList).']';
                     $params = ['item_id' => $sessionId, 'extra_careerid' => $careerItem];
+                    $this->logger->addInfo("Saving career: $careerItem to session: $sessionId");
                     $sessionExtraFieldValue->saveFieldValues($params, true);
                 } else {
                     /*foreach ($finalCareerIdList as $careerId) {
@@ -2458,6 +2461,7 @@ class ImportCsv
                     }
 
                     foreach ($finalCareerIdList as $careerId) {
+                        $this->logger->addInfo("Adding Career $careerId: To user $username");
                         UserManager::addUserCareer($userInfo['id'], $careerId);
                     }
                 }

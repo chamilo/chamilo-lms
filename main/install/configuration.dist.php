@@ -1902,12 +1902,12 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 // Enable X-Sendfile headers on forced download files going through document/download.php
 //$_configuration['enable_x_sendfile_headers'] = false;
 
-// Extra settings for the agenda (FullCalendar)
+// Extra settings for the agenda (FullCalendar v3)
 /*$_configuration['fullcalendar_settings'] = [
     'settings' => [
         'businessHours' => [
             // days of week. an array of zero-based day of week integers (0=Sunday)
-            'dow' => [0, 1, 2, 3, 4], // Monday - Friday
+            'dow' => [0, 1, 2, 3, 4], // Sunday - Thursday
             'start'  => '10:00',
             'end' => '18:00',
         ],

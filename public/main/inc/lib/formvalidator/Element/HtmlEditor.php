@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -103,7 +104,7 @@ class HtmlEditor extends HTML_QuickForm_textarea
             $value = $this->getCleanValue();
             $this->editor->setName($this->getName());
             $this->editor->setTextareaId($this->getAttribute('id'));
-            if (true === $style) {
+            if ($style) {
                 $result = $this->editor->createHtmlStyle($value);
             } else {
                 $result = $this->editor->createHtml($value);

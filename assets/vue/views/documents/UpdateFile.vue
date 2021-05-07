@@ -1,25 +1,23 @@
 <template>
-  <div v-if="item && isCurrentTeacher">
-    <!--    :handle-delete="del"-->
-    <Toolbar
-        v-if="!isLoading"
-        :handle-submit="onSendForm"
-        :handle-reset="resetForm"
-    />
-    <DocumentsForm
-      v-if="!isLoading"
-      ref="updateForm"
-      :values="item"
-      :errors="violations"
-    >
-      <ResourceLinkForm
-          v-if="item && !isLoading"
-          ref="resourceLinkForm"
-          :values="item"
+    <div v-if="!isLoading && item && isCurrentTeacher">
+      <!--    :handle-delete="del"-->
+      <Toolbar
+          :handle-submit="onSendForm"
+          :handle-reset="resetForm"
       />
-    </DocumentsForm>
-    <Loading :visible="isLoading || deleteLoading" />
-  </div>
+      <DocumentsForm
+          ref="updateForm"
+          :values="item"
+          :errors="violations"
+      >
+        <ResourceLinkForm
+            v-if="item && !isLoading"
+            ref="resourceLinkForm"
+            :values="item"
+        />
+      </DocumentsForm>
+      <Loading :visible="isLoading || deleteLoading" />
+    </div>
 </template>
 
 <script>

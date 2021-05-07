@@ -172,17 +172,18 @@
 <!--        <Button type="button" icon="pi pi-check" @click="filterCallback()" class="p-button-success"></Button>-->
 <!--      </template>-->
     </Column>
-    <Column field="resourceNode.updatedAt" :header="$t('Modified')" :sortable="true">
-      <template #body="slotProps">
-        {{$luxonDateTime.fromISO(slotProps.data.resourceNode.updatedAt).toRelative() }}
-      </template>
-    </Column>
 
     <Column field="resourceNode.resourceFile.size" :header="$t('Size')" :sortable="true">
       <template #body="slotProps">
         {{
           slotProps.data.resourceNode.resourceFile ? $filters.prettyBytes(slotProps.data.resourceNode.resourceFile.size) : ''
         }}
+      </template>
+    </Column>
+
+    <Column field="resourceNode.updatedAt" :header="$t('Modified')" :sortable="true">
+      <template #body="slotProps">
+        {{$luxonDateTime.fromISO(slotProps.data.resourceNode.updatedAt).toRelative() }}
       </template>
     </Column>
 

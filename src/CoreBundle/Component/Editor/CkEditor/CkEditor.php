@@ -55,10 +55,7 @@ class CkEditor extends Editor
         return $html;
     }
 
-    /**
-     * @return string
-     */
-    public function editorReplace()
+    public function editorReplace(): string
     {
         $toolbar = new Toolbar\Basic(
             $this->urlGenerator,
@@ -71,11 +68,19 @@ class CkEditor extends Editor
         $config = $toolbar->getConfig();
         $javascript = $this->toJavascript($config);
 
+        /*CKEDITOR.replace('".$this->getTextareaId()."',
+                   {$javascript}
+               );*/
+
         return "<script>
             $(function () {
-               CKEDITOR.replace('".$this->getTextareaId()."',
-                   {$javascript}
-               );
+                tinymce.init({
+                    skin: 'oxide',
+                    skin_url: '/build/libs/tinymce/skins/ui/oxide',
+                    content_css: '/build/libs/tinymce/skins/content/default/content.css',
+                    selector: '#".$this->getTextareaId()."'
+                });
+
            });
 
            </script>";
@@ -83,13 +88,11 @@ class CkEditor extends Editor
 
     /**
      * @param array $templates
-     *
-     * @return string
      */
-    public function formatTemplates($templates)
+    public function formatTemplates($templates): string
     {
         if (empty($templates)) {
-            return null;
+            return '';
         }
         $templateList = [];
         $cssTheme = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/';

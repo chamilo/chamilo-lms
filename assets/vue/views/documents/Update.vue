@@ -1,14 +1,11 @@
-<template>
-  <div v-if="item && isCurrentTeacher">
+<template>2222
+  <div v-if="!isLoading && item && isCurrentTeacher">
     <!--      :handle-delete="del"-->
     <Toolbar
-        v-if="item && !isLoading"
         :handle-submit="onSendForm"
         :handle-reset="resetForm"
     />
-
     <DocumentsForm
-      v-if="item && !isLoading"
       ref="updateForm"
       :values="item"
       :errors="violations"

@@ -138,7 +138,6 @@ class ImportCsv
                     $preMethod = ucwords($parts[1]);
                     $preMethod = str_replace('-static', 'Static', $preMethod);
                     $method = 'import'.$preMethod;
-
                     $isStatic = strpos($method, 'Static');
 
                     if ($method == 'importSessionsextidStatic') {
@@ -165,9 +164,14 @@ class ImportCsv
                         $method = 'importOpenSessions';
                     }
 
-                    if ($method == 'importSubsessionsextidStatic') {
+                    if ($method === 'importSessionsall') {
+                        $method = 'importSessionsUsersCareers';
+                    }
+
+                    if ($method === 'importSubsessionsextidStatic') {
                         $method = 'importSubscribeUserToCourseSessionExtStatic';
                     }
+
                     if (method_exists($this, $method)) {
                         if ((
                                 $method == 'importSubscribeStatic' ||
@@ -207,6 +211,7 @@ class ImportCsv
                 'teachers',
                 'courses',
                 'sessions',
+                'sessionsall',
                 'opensessions',
                 'subscribe-static',
                 'courseinsert-static',
@@ -2365,6 +2370,93 @@ class ImportCsv
         &$groupBackup = []
     ) {
         $this->importSessions($file, $moveFile, $teacherBackup, $groupBackup);
+    }
+
+    private function importSessionsUsersCareers(
+        $file,
+        $moveFile = false,
+        &$teacherBackup = [],
+        &$groupBackup = []
+    ) {
+        $data = Import::csvToArray($file);
+        if (!empty($data)) {
+            $extraFieldValueCareer = new ExtraFieldValue('career');
+            $sessionExtraFieldValue = new ExtraFieldValue('session');
+            $career = new Career();
+
+            $this->logger->addInfo(count($data)." records found.");
+            foreach ($data as $row) {
+                $users = $row['Users'];
+                if (empty($users)) {
+                    $this->logger->addError('No users found');
+                    continue;
+                }
+
+                $users = explode('|', $users);
+                $careerList = str_replace(['[', ']'], '', $row['extra_careerid']);
+                $careerList = explode(',', $careerList);
+
+                $finalCareerIdList = [];
+                foreach ($careerList as $careerId) {
+                    $realCareerIdList = $extraFieldValueCareer->get_item_id_from_field_variable_and_field_value(
+                        'external_career_id',
+                        $careerId
+                    );
+                    if (isset($realCareerIdList['item_id'])) {
+                        $finalCareerIdList[] = $realCareerIdList['item_id'];
+                    }
+                }
+
+                if (empty($finalCareerIdList)) {
+                    $this->logger->addError('Careers not found: '.print_r($finalCareerIdList, 1));
+                    continue;
+                }
+
+                $chamiloSessionId = $row['SessionID'];
+                $sessionInfo = api_get_session_info($chamiloSessionId);
+
+                if (empty($sessionInfo)) {
+                    $this->logger->addError('Session does not exists: '.$chamiloSessionId);
+                    continue;
+                }
+
+                $sessionId = $sessionInfo['id'];
+
+                // Add career to session.
+                $externalCareerIdList = $sessionExtraFieldValue->get_values_by_handler_and_field_variable(
+                    $sessionId,
+                    'careerid'
+                );
+
+                if (empty($externalCareerIdList) ||
+                    (isset($externalCareerIdList['value']) && empty($externalCareerIdList['value']))
+                ) {
+                    $careerItem = '['.implode(',', $externalCareerIdList).']';
+                    $params = ['item_id' => $sessionId, 'extra_careerid' => $careerItem];
+                    $sessionExtraFieldValue->saveFieldValues($params, true);
+                } else {
+                    /*foreach ($finalCareerIdList as $careerId) {
+                        if (empty($externalCareerIdList)) {
+                            $params = ['item_id' => $sessionId, 'extra_careerid' => $careerId];
+                            $sessionExtraFieldValue->saveFieldValues($params, true);
+                        }
+                    }*/
+                }
+
+                // Add career to users.
+                foreach ($users as $username) {
+                    $userInfo = api_get_user_info_from_username($username);
+                    if (empty($userInfo)) {
+                        $this->logger->addError('username not found: '.$username);
+                        continue;
+                    }
+
+                    foreach ($finalCareerIdList as $careerId) {
+                        UserManager::addUserCareer($userInfo['id'], $careerId);
+                    }
+                }
+            }
+        }
     }
 
     /**

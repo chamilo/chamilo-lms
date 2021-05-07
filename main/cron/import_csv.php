@@ -2397,12 +2397,14 @@ class ImportCsv
                 $careerList = explode(',', $careerList);
 
                 $finalCareerIdList = [];
+                $careerListValidated = [];
                 foreach ($careerList as $careerId) {
                     $realCareerIdList = $extraFieldValueCareer->get_item_id_from_field_variable_and_field_value(
                         'external_career_id',
                         $careerId
                     );
                     if (isset($realCareerIdList['item_id'])) {
+                        $careerListValidated[] = $careerId;
                         $finalCareerIdList[] = $realCareerIdList['item_id'];
                     }
                 }
@@ -2439,7 +2441,7 @@ class ImportCsv
                 if (empty($externalCareerIdList) ||
                     (isset($externalCareerIdList['value']) && empty($externalCareerIdList['value']))
                 ) {
-                    $careerItem = '['.implode(',', $finalCareerIdList).']';
+                    $careerItem = '['.implode(',', $careerListValidated).']';
                     $params = ['item_id' => $sessionId, 'extra_careerid' => $careerItem];
                     $this->logger->addInfo("Saving career: $careerItem to session: $sessionId");
                     $sessionExtraFieldValue->saveFieldValues($params, true);

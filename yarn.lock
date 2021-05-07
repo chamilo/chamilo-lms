@@ -17818,9 +17818,9 @@ fsevents@~2.3.1:
   linkType: hard
 
 "tinymce@npm:^5.7":
-  version: 5.7.1
-  resolution: "tinymce@npm:5.7.1"
-  checksum: 5abbaf08d7fa6b74530d7f043eb6ea7d881a92b008f7d8eb575e9408bfe8b1830da37998bc0cd435067bcc5100ad34cf5880730b3081cb9603d28885629fc4a1
+  version: 5.8.0
+  resolution: "tinymce@npm:5.8.0"
+  checksum: 9fb7e76c78969a964133219bf9b9ce8893035f657bef0f27847aa60013d48ee597186c91a9cc8aa36e3c2d1add781a279939cebb1de907385afa9386ee54b64b
   languageName: node
   linkType: hard
 

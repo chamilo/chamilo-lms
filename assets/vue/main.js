@@ -23,6 +23,7 @@ const apolloClient = new ApolloClient({
     uri: '/api/graphql/'
 });*/
 
+// Font awesome
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -122,6 +123,12 @@ const app = createApp(App);
 import { Quasar } from 'quasar'
 import quasarUserOptions from './quasar-user-options'
 
+
+// Tinymce
+import Editor from './components/Editor';
+//window.tinymce = Editor;
+
+
 // Prime
 import PrimeVue from 'primevue/config'
 import DataView from 'primevue/dataview';
@@ -152,8 +159,12 @@ app.component('Column', Column);
 app.component('ColumnGroup', ColumnGroup);
 app.component('Toolbar', Toolbar);
 app.component('FontAwesomeIcon', FontAwesomeIcon);
-app.component('DashboardLayout', DashboardLayout)
-app.component('EmptyLayout', EmptyLayout)
+app.component('DashboardLayout', DashboardLayout);
+app.component('EmptyLayout', EmptyLayout);
+app.component('TinyEditor', Editor);
+
+
+
 
 app.config.globalProperties.axios = axios;
 

@@ -2412,7 +2412,13 @@ class ImportCsv
                     continue;
                 }
 
-                $chamiloSessionId = $row['SessionID'];
+                //$chamiloSessionId = $row['SessionID'];
+
+                $chamiloSessionId = SessionManager::getSessionIdFromOriginalId(
+                    $row['SessionID'],
+                    $this->extraFieldIdNameList['session']
+                );
+
                 $sessionInfo = api_get_session_info($chamiloSessionId);
 
                 if (empty($sessionInfo)) {
@@ -2431,7 +2437,7 @@ class ImportCsv
                 if (empty($externalCareerIdList) ||
                     (isset($externalCareerIdList['value']) && empty($externalCareerIdList['value']))
                 ) {
-                    $careerItem = '['.implode(',', $externalCareerIdList).']';
+                    $careerItem = '['.implode(',', $finalCareerIdList).']';
                     $params = ['item_id' => $sessionId, 'extra_careerid' => $careerItem];
                     $sessionExtraFieldValue->saveFieldValues($params, true);
                 } else {

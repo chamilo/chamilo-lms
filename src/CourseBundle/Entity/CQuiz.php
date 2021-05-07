@@ -156,6 +156,11 @@ class CQuiz extends AbstractResource implements ResourceInterface
     protected ?int $questionSelectionType = null;
 
     /**
+     * @ORM\Column(name="hide_question_number", type="integer", nullable=false, options={"default":0})
+     */
+    protected int $hideQuestionNumber;
+
+    /**
      * @ORM\Column(name="hide_question_title", type="boolean", nullable=false)
      */
     protected bool $hideQuestionTitle;
@@ -205,6 +210,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         $this->questions = new ArrayCollection();
         $this->questionsCategories = new ArrayCollection();
         $this->hideQuestionTitle = false;
+        $this->hideQuestionNumber = 0;
         $this->type = self::ONE_PER_PAGE;
         $this->showPreviousButton = true;
         $this->notifications = '';
@@ -761,6 +767,18 @@ class CQuiz extends AbstractResource implements ResourceInterface
     public function getAutoLaunch(): ?bool
     {
         return $this->autoLaunch;
+    }
+
+    public function getHideQuestionNumber(): ?int
+    {
+        return $this->hideQuestionNumber;
+    }
+
+    public function setHideQuestionNumber(int $hideQuestionNumber): CQuiz
+    {
+        $this->hideQuestionNumber = $hideQuestionNumber;
+
+        return $this;
     }
 
     /**

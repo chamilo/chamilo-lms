@@ -51,6 +51,10 @@ class Version20170904145500 extends AbstractMigrationChamilo
             );
         }
 
+        if (!$table->hasColumn('hide_question_number')) {
+            $this->addSql('ALTER TABLE c_quiz ADD hide_question_number INT DEFAULT 0 NOT NULL;');
+        }
+
         if (!$table->hasColumn('autolaunch')) {
             $this->addSql('ALTER TABLE c_quiz ADD autolaunch TINYINT(1) DEFAULT 0');
         }

@@ -235,12 +235,7 @@ abstract class Question
         return Display::div($this->question, ['style' => 'display: inline-block;']);
     }
 
-    /**
-     * @param int $itemNumber
-     *
-     * @return string
-     */
-    public function getTitleToDisplay($itemNumber)
+    public function getTitleToDisplay(Exercise $exercise, int $itemNumber): string
     {
         $showQuestionTitleHtml = api_get_configuration_value('save_titles_as_html');
         $title = '';
@@ -249,7 +244,10 @@ abstract class Question
         }
 
         $title .= $showQuestionTitleHtml ? '' : '<strong>';
-        $title .= $itemNumber.'. '.$this->selectTitle();
+        if (1 !== $exercise->getHideQuestionNumber()) {
+            $title .= $itemNumber.'. ';
+        }
+        $title .= $this->selectTitle();
         $title .= $showQuestionTitleHtml ? '' : '</strong>';
 
         return Display::div(

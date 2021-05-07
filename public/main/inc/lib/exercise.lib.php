@@ -86,7 +86,7 @@ class ExerciseLib
                     if ($exercise->display_category_name) {
                         TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
                     }
-                    $titleToDisplay = $objQuestionTmp->getTitleToDisplay($current_item);
+                    $titleToDisplay = $objQuestionTmp->getTitleToDisplay($exercise, $current_item);
                     if (READING_COMPREHENSION == $answerType) {
                         // In READING_COMPREHENSION, the title of the question
                         // contains the question itself, which can only be
@@ -1514,7 +1514,7 @@ HTML;
                     if ($exercise->display_category_name) {
                         TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
                     }
-                    echo $objQuestionTmp->getTitleToDisplay($current_item);
+                    echo $objQuestionTmp->getTitleToDisplay($exercise, $current_item);
                 }
                 if ($questionRequireAuth) {
                     WhispeakAuthPlugin::quizQuestionAuthentify($questionId, $exercise);
@@ -1579,7 +1579,7 @@ HOTSPOT;
                     if ($exercise->display_category_name) {
                         TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
                     }
-                    echo $objQuestionTmp->getTitleToDisplay($current_item);
+                    echo $objQuestionTmp->getTitleToDisplay($exercise, $current_item);
                 }
 
                 if ($questionRequireAuth) {

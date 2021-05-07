@@ -68,7 +68,6 @@
         "endroid/qr-code": "~3.7",
         "essence/essence": "~3.0",
         "ezyang/htmlpurifier": "~4.13",
-        "friendsofsymfony/ckeditor-bundle": "^2.2",
         "friendsofsymfony/jsrouting-bundle": "~2.0",
         "graphp/algorithms": "~0.8",
         "graphp/graphviz": "~0.2",

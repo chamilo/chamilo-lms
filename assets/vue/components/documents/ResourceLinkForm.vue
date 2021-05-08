@@ -19,11 +19,12 @@
         <q-separator />
 
         <q-select
+          filled
           v-model="link.visibility"
           :options="visibilityList"
-          emit-value
           label="Status"
-          persistent-hint
+          emit-value
+          map-options
         />
       </li>
     </ul>
@@ -38,7 +39,11 @@ import { required } from '@vuelidate/validators';
 export default {
   name: 'ResourceLinkForm',
   setup () {
-    return { v$: useVuelidate() }
+    const visibilityList = [
+      {value: 2, label: 'Published'},
+      {value: 0, label: 'Draft'},
+    ];
+    return {v$: useVuelidate(), visibilityList};
   },
   props: {
     values: {
@@ -54,34 +59,10 @@ export default {
       default: () => {}
     },
   },
-    data() {
-        return {
-            // See ResourceLink entity constants.
-            visibilityList: [
-                {value: 2, label: 'Published'},
-                {value: 0, label: 'Draft'},
-            ],
-        };
-    },
   computed: {
     item() {
       return this.initialValues || this.values;
     },
-    titleErrors() {
-      const errors = [];
-      if (!this.$v.item.title.$dirty) return errors;
-      has(this.violations, 'title') && errors.push(this.violations.title);
-      !this.$v.item.title.required && errors.push(this.$t('Field is required'));
-
-      return errors;
-    },
-      violations() {
-      return this.errors || {};
-    }
   },
-  validations: {
-    item: {
-    }
-  }
 };
 </script>

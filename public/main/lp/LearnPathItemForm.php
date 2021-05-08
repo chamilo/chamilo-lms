@@ -14,8 +14,8 @@ class LearnPathItemForm
     public static function setForm(FormValidator $form, $action, learnpath $lp, CLpItem $lpItem)
     {
         $arrLP = $lp->getItemsForForm();
-        $lp->tree_array($arrLP);
-        $arrLP = $lp->arrMenu ?? [];
+        //$lp->tree_array($arrLP);
+        //$arrLP = $lp->arrMenu ?? [];
 
         switch ($action) {
             case 'add':
@@ -60,7 +60,7 @@ class LearnPathItemForm
         $parentSelect->addOption($lp->name, $itemRoot->getIid());
         /** @var CLpItem[] $sections */
         $sections = $lpItemRepo->findBy(['itemType' => 'dir', 'lp' => $lp->get_id()]);
-        foreach ($sections as $key => $value) {
+        foreach ($sections as $value) {
             $parentSelect->addOption(
                 str_repeat('&nbsp;', $value->getLvl()).Security::remove_XSS($value->getTitle()),
                 $value->getIid()
@@ -75,7 +75,7 @@ class LearnPathItemForm
 
         $arrHide = [];
         // Position
-        for ($i = 0; $i < $count; $i++) {
+        /*for ($i = 0; $i < $count; $i++) {
             if (($arrLP[$i]['parent_item_id'] == $parentItemId && $arrLP[$i]['id'] != $itemId) ||
                 TOOL_LP_FINAL_ITEM == $arrLP[$i]['item_type']
             ) {
@@ -105,11 +105,11 @@ class LearnPathItemForm
 
         if (is_array($arrLP)) {
             reset($arrLP);
-        }
+        }*/
 
         if (TOOL_LP_FINAL_ITEM == $itemType) {
             $parentSelect->freeze();
-            $position->freeze();
+            //$position->freeze();
         }
 
         // Content.

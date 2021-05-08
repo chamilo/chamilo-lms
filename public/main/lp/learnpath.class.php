@@ -372,14 +372,6 @@ class learnpath
     }
 
     /**
-     * @return string
-     */
-    public function getCourseCode()
-    {
-        return $this->cc;
-    }
-
-    /**
      * @return int
      */
     public function get_course_int_id()
@@ -3701,20 +3693,6 @@ class learnpath
         }
 
         return true;
-
-        /*$action = 'visible';
-        if (1 != $set_visibility) {
-            $action = 'invisible';
-            self::toggle_publish($lp_id, 'i');
-        }
-
-        return api_item_property_update(
-            api_get_course_info(),
-            TOOL_LEARNPATH,
-            $lp_id,
-            $action,
-            api_get_user_id()
-        );*/
     }
 
     /**
@@ -3745,20 +3723,6 @@ class learnpath
         }
 
         return false;
-        /*
-        $action = 'visible';
-        if (1 != $visibility) {
-            self::toggleCategoryPublish($id, 0);
-            $action = 'invisible';
-        }
-
-        return api_item_property_update(
-            api_get_course_info(),
-            TOOL_LEARNPATH_CATEGORY,
-            $id,
-            $action,
-            api_get_user_id()
-        );*/
     }
 
     /**
@@ -3792,88 +3756,6 @@ class learnpath
         }
 
         return true;
-
-        /*
-        $course_id = api_get_course_int_id();
-        $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = (int) $lp_id;
-        $sql = "SELECT * FROM $tbl_lp
-                WHERE iid = $lp_id";
-        $result = Database::query($sql);
-
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_array($result);
-            $name = Database::escape_string($row['name']);
-            if ($set_visibility == 'i') {
-                $v = 0;
-            }
-            if ($set_visibility == 'v') {
-                $v = 1;
-            }
-
-            $session_id = api_get_session_id();
-            $session_condition = api_get_session_condition($session_id);
-
-            $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
-            $link = 'lp/lp_controller.php?action=view&lp_id='.$lp_id.'&id_session='.$session_id;
-            $oldLink = 'newscorm/lp_controller.php?action=view&lp_id='.$lp_id.'&id_session='.$session_id;
-
-            $sql = "SELECT * FROM $tbl_tool
-                    WHERE
-                        c_id = $course_id AND
-                        (link = '$link' OR link = '$oldLink') AND
-                        image = 'scormbuilder.gif' AND
-                        (
-                            link LIKE '$link%' OR
-                            link LIKE '$oldLink%'
-                        )
-                        $session_condition
-                    ";
-
-            $result = Database::query($sql);
-            $num = Database::num_rows($result);
-            if ($set_visibility == 'i' && $num > 0) {
-                $sql = "DELETE FROM $tbl_tool
-                        WHERE
-                            c_id = $course_id AND
-                            (link = '$link' OR link = '$oldLink') AND
-                            image='scormbuilder.gif'
-                            $session_condition";
-                Database::query($sql);
-            } elseif ($set_visibility == 'v' && $num == 0) {
-                $sql = "INSERT INTO $tbl_tool (category, c_id, name, link, image, visibility, admin, address, added_tool, session_id) VALUES
-                        ('authoring', $course_id, '$name', '$link', 'scormbuilder.gif', '$v', '0','pastillegris.gif', 0, $session_id)";
-                Database::query($sql);
-                $insertId = Database::insert_id();
-                if ($insertId) {
-                    $sql = "UPDATE $tbl_tool SET id = iid WHERE iid = $insertId";
-                    Database::query($sql);
-                }
-            } elseif ($set_visibility == 'v' && $num > 0) {
-                $sql = "UPDATE $tbl_tool SET
-                            c_id = $course_id,
-                            name = '$name',
-                            link = '$link',
-                            image = 'scormbuilder.gif',
-                            visibility = '$v',
-                            admin = '0',
-                            address = 'pastillegris.gif',
-                            added_tool = 0,
-                            session_id = $session_id
-                        WHERE
-                            c_id = ".$course_id." AND
-                            (link = '$link' OR link = '$oldLink') AND
-                            image='scormbuilder.gif'
-                            $session_condition
-                        ";
-                Database::query($sql);
-            } else {
-                // Parameter and database incompatible, do nothing, exit.
-                return false;
-            }
-        } else {
-            return false;
-        }*/
     }
 
     /**
@@ -3928,15 +3810,7 @@ class learnpath
             return true;
         }
 
-        $repo = Container::getLpCategoryRepository();
         $categoryVisibility = $category->isVisible($course, $session);
-
-        /*$categoryVisibility = api_get_item_visibility(
-            $courseInfo,
-            TOOL_LEARNPATH_CATEGORY,
-            $category->getId(),
-            $sessionId
-        );*/
 
         if (1 !== $categoryVisibility && -1 != $categoryVisibility) {
             return false;
@@ -4309,31 +4183,6 @@ class learnpath
     }
 
     /**
-     * Sets the JS lib setting in the database directly.
-     * This is the JavaScript library file this lp needs to load on startup.
-     *
-     * @param string $lib Proximity setting
-     *
-     * @return bool True on update success. False otherwise.
-     */
-    public function set_jslib($lib = '')
-    {
-        $lp = $this->get_id();
-
-        if (0 != $lp) {
-            $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $lib = Database::escape_string($lib);
-            $sql = "UPDATE $tbl_lp SET js_lib = '$lib'
-                    WHERE iid = $lp";
-            $res = Database::query($sql);
-
-            return $res;
-        }
-
-        return false;
-    }
-
-    /**
      * Set index specified prefix terms for all items in this path.
      *
      * @param string $terms_string Comma-separated list of terms
@@ -4422,27 +4271,6 @@ class learnpath
             error_log('In learnpath::set_previous_item()', 0);
         }
         $this->last = $id;
-    }
-
-    /**
-     * Sets use_max_score.
-     *
-     * @param int $use_max_score Optional string giving the new location of this learnpath
-     *
-     * @return bool True on success / False on error
-     */
-    public function set_use_max_score($use_max_score = 1)
-    {
-        $use_max_score = (int) $use_max_score;
-        $this->use_max_score = $use_max_score;
-        $table = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = $this->get_id();
-        $sql = "UPDATE $table SET
-                    use_max_score = '".$this->use_max_score."'
-                WHERE iid = $lp_id";
-        Database::query($sql);
-
-        return true;
     }
 
     /**
@@ -5023,475 +4851,6 @@ class learnpath
         }
 
         return $return;
-    }
-
-    /**
-     * @param string $update_audio
-     *
-     * @return array
-     */
-    public function processBuildMenuElements($update_audio = 'false')
-    {
-        $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-        $arrLP = $this->getItemsForForm();
-
-        $this->tree_array($arrLP);
-        $arrLP = $this->arrMenu ?? [];
-        $default_data = null;
-        $default_content = null;
-        $elements = [];
-        $return_audio = null;
-        $iconPath = api_get_path(SYS_PUBLIC_PATH).'img/';
-        $mainUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();
-        $countItems = count($arrLP);
-
-        $upIcon = Display::return_icon(
-            'up.png',
-            get_lang('Up'),
-            [],
-            ICON_SIZE_TINY
-        );
-
-        $disableUpIcon = Display::return_icon(
-            'up_na.png',
-            get_lang('Up'),
-            [],
-            ICON_SIZE_TINY
-        );
-
-        $downIcon = Display::return_icon(
-            'down.png',
-            get_lang('Down'),
-            [],
-            ICON_SIZE_TINY
-        );
-
-        $disableDownIcon = Display::return_icon(
-            'down_na.png',
-            get_lang('Down'),
-            [],
-            ICON_SIZE_TINY
-        );
-
-        $show = api_get_configuration_value('show_full_lp_item_title_in_edition');
-
-        $pluginCalendar = 'true' === api_get_plugin_setting('learning_calendar', 'enabled');
-        $plugin = null;
-        if ($pluginCalendar) {
-            $plugin = LearningCalendarPlugin::create();
-        }
-
-        for ($i = 0; $i < $countItems; $i++) {
-            $parent_id = $arrLP[$i]['parent_item_id'];
-            $title = $arrLP[$i]['title'];
-            $title_cut = $arrLP[$i]['title_raw'];
-            if (false === $show) {
-                $title_cut = cut($arrLP[$i]['title'], self::MAX_LP_ITEM_TITLE_LENGTH);
-            }
-            // Link for the documents
-            if ('document' === $arrLP[$i]['item_type'] || TOOL_READOUT_TEXT === $arrLP[$i]['item_type']) {
-                $url = $mainUrl.'&action=view_item&mode=preview_document&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
-                $title_cut = Display::url(
-                    $title_cut,
-                    $url,
-                    [
-                        'class' => 'ajax moved',
-                        'data-title' => $title,
-                        'title' => $title,
-                    ]
-                );
-            }
-
-            // Detect if type is FINAL_ITEM to set path_id to SESSION
-            if (TOOL_LP_FINAL_ITEM === $arrLP[$i]['item_type']) {
-                Session::write('pathItem', $arrLP[$i]['path']);
-            }
-
-            $oddClass = 'row_even';
-            if (0 == ($i % 2)) {
-                $oddClass = 'row_odd';
-            }
-            $return_audio .= '<tr id ="lp_item_'.$arrLP[$i]['id'].'" class="'.$oddClass.'">';
-            $icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
-
-            if (file_exists($iconPath.'lp_'.$icon_name.'.png')) {
-                $icon = Display::return_icon('lp_'.$icon_name.'.png');
-            } else {
-                if (file_exists($iconPath.'lp_'.$icon_name.'.gif')) {
-                    $icon = Display::return_icon('lp_'.$icon_name.'.gif');
-                } else {
-                    if (TOOL_LP_FINAL_ITEM === $arrLP[$i]['item_type']) {
-                        $icon = Display::return_icon('certificate.png');
-                    } else {
-                        $icon = Display::return_icon('folder_document.png');
-                    }
-                }
-            }
-
-            // The audio column.
-            $return_audio .= '<td align="left" style="padding-left:10px;">';
-            $audio = '';
-            if (!$update_audio || 'true' != $update_audio) {
-                if (empty($arrLP[$i]['audio'])) {
-                    $audio .= '';
-                }
-            } else {
-                $types = self::getChapterTypes();
-                if (!in_array($arrLP[$i]['item_type'], $types)) {
-                    $audio .= '<input type="file" name="mp3file'.$arrLP[$i]['id'].'" id="mp3file" />';
-                    if (!empty($arrLP[$i]['audio'])) {
-                        $audio .= '<br />'.Security::remove_XSS($arrLP[$i]['audio']).'<br />
-                        <input type="checkbox" name="removemp3'.$arrLP[$i]['id'].'" id="checkbox'.$arrLP[$i]['id'].'" />'.get_lang('Remove audio');
-                    }
-                }
-            }
-
-            $return_audio .= Display::span($icon.' '.$title).
-                Display::tag(
-                    'td',
-                    $audio,
-                    ['style' => '']
-                );
-            $return_audio .= '</td>';
-            $move_icon = '';
-            $move_item_icon = '';
-            $edit_icon = '';
-            $delete_icon = '';
-            $audio_icon = '';
-            $prerequisities_icon = '';
-            $forumIcon = '';
-            $previewIcon = '';
-            $pluginCalendarIcon = '';
-            $orderIcons = '';
-            $pluginUrl = api_get_path(WEB_PLUGIN_PATH).'learning_calendar/start.php?';
-
-            if ($is_allowed_to_edit) {
-                if (!$update_audio || 'true' != $update_audio) {
-                    if (TOOL_LP_FINAL_ITEM !== $arrLP[$i]['item_type']) {
-                        $move_icon .= '<a class="moved" href="#">';
-                        $move_icon .= Display::return_icon(
-                            'move_everywhere.png',
-                            get_lang('Move'),
-                            [],
-                            ICON_SIZE_TINY
-                        );
-                        $move_icon .= '</a>';
-                    }
-                }
-
-                // No edit for this item types
-                if (!in_array($arrLP[$i]['item_type'], ['sco', 'asset', 'final_item'])) {
-                    if ('dir' != $arrLP[$i]['item_type']) {
-                        $edit_icon .= '<a href="'.$mainUrl.'&action=edit_item&view=build&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'&path_item='.$arrLP[$i]['path'].'" class="btn btn-default">';
-                        $edit_icon .= Display::return_icon(
-                            'edit.png',
-                            get_lang('Edit section description/name'),
-                            [],
-                            ICON_SIZE_TINY
-                        );
-                        $edit_icon .= '</a>';
-
-                        if (!in_array($arrLP[$i]['item_type'], ['forum', 'thread'])) {
-                            $forumThread = null;
-                            if (isset($this->items[$arrLP[$i]['id']])) {
-                                $forumThread = $this->items[$arrLP[$i]['id']]->getForumThread(
-                                    $this->course_int_id,
-                                    $this->lp_session_id
-                                );
-                            }
-                            if ($forumThread) {
-                                $forumIconUrl = $mainUrl.'&'.http_build_query([
-                                        'action' => 'dissociate_forum',
-                                        'id' => $arrLP[$i]['id'],
-                                        'lp_id' => $this->lp_id,
-                                    ]);
-                                $forumIcon = Display::url(
-                                    Display::return_icon(
-                                        'forum.png',
-                                        get_lang('Dissociate the forum of this learning path item'),
-                                        [],
-                                        ICON_SIZE_TINY
-                                    ),
-                                    $forumIconUrl,
-                                    ['class' => 'btn btn-default lp-btn-dissociate-forum']
-                                );
-                            } else {
-                                $forumIconUrl = $mainUrl.'&'.http_build_query([
-                                        'action' => 'create_forum',
-                                        'id' => $arrLP[$i]['id'],
-                                        'lp_id' => $this->lp_id,
-                                    ]);
-                                $forumIcon = Display::url(
-                                    Display::return_icon(
-                                        'forum.png',
-                                        get_lang('Associate a forum to this learning path item'),
-                                        [],
-                                        ICON_SIZE_TINY
-                                    ),
-                                    $forumIconUrl,
-                                    ['class' => 'btn btn-default lp-btn-associate-forum']
-                                );
-                            }
-                        }
-                    } else {
-                        $edit_icon .= '<a href="'.$mainUrl.'&action=edit_item&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'&path_item='.$arrLP[$i]['path'].'" class="btn btn-default">';
-                        $edit_icon .= Display::return_icon(
-                            'edit.png',
-                            get_lang('Edit section description/name'),
-                            [],
-                            ICON_SIZE_TINY
-                        );
-                        $edit_icon .= '</a>';
-                    }
-                } else {
-                    if (TOOL_LP_FINAL_ITEM == $arrLP[$i]['item_type']) {
-                        $edit_icon .= '<a href="'.$mainUrl.'&action=edit_item&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'" class="btn btn-default">';
-                        $edit_icon .= Display::return_icon(
-                            'edit.png',
-                            get_lang('Edit'),
-                            [],
-                            ICON_SIZE_TINY
-                        );
-                        $edit_icon .= '</a>';
-                    }
-                }
-
-                if ($pluginCalendar) {
-                    $pluginLink = $pluginUrl.
-                        '&action=toggle_visibility&lp_item_id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
-                    $iconCalendar = Display::return_icon('agenda_na.png', get_lang('1 day'), [], ICON_SIZE_TINY);
-                    $itemInfo = $plugin->getItemVisibility($arrLP[$i]['id']);
-                    if ($itemInfo && 1 == $itemInfo['value']) {
-                        $iconCalendar = Display::return_icon('agenda.png', get_lang('1 day'), [], ICON_SIZE_TINY);
-                    }
-                    $pluginCalendarIcon = Display::url(
-                        $iconCalendar,
-                        $pluginLink,
-                        ['class' => 'btn btn-default']
-                    );
-                }
-
-                if ('final_item' != $arrLP[$i]['item_type']) {
-                    $orderIcons = Display::url(
-                        $upIcon,
-                        'javascript:void(0)',
-                        ['class' => 'btn btn-default order_items', 'data-dir' => 'up', 'data-id' => $arrLP[$i]['id']]
-                    );
-                    $orderIcons .= Display::url(
-                        $downIcon,
-                        'javascript:void(0)',
-                        ['class' => 'btn btn-default order_items', 'data-dir' => 'down', 'data-id' => $arrLP[$i]['id']]
-                    );
-                }
-                $delete_icon .= ' <a
-
-                    href="'.$mainUrl.'&action=delete_item&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'"
-                    onclick="return confirmation(\''.addslashes($title).'\');"
-                    class="btn btn-default">';
-                $delete_icon .= Display::return_icon(
-                    'delete.png',
-                    get_lang('Delete section'),
-                    [],
-                    ICON_SIZE_TINY
-                );
-                $delete_icon .= '</a>';
-
-                $url = $mainUrl.'&view=build&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
-                $previewImage = Display::return_icon(
-                    'preview_view.png',
-                    get_lang('Preview'),
-                    [],
-                    ICON_SIZE_TINY
-                );
-
-                switch ($arrLP[$i]['item_type']) {
-                    case TOOL_DOCUMENT:
-                    case TOOL_LP_FINAL_ITEM:
-                    case TOOL_READOUT_TEXT:
-                        $urlPreviewLink = $mainUrl.'&action=view_item&mode=preview_document&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
-                        $previewIcon = Display::url(
-                            $previewImage,
-                            $urlPreviewLink,
-                            [
-                                'target' => '_blank',
-                                'class' => 'btn btn-default',
-                                'data-title' => $arrLP[$i]['title'],
-                                'title' => $arrLP[$i]['title'],
-                            ]
-                        );
-                        break;
-                    case TOOL_THREAD:
-                    case TOOL_FORUM:
-                    case TOOL_QUIZ:
-                    case TOOL_STUDENTPUBLICATION:
-                    case TOOL_LINK:
-                        $class = 'btn btn-default';
-                        $target = '_blank';
-                        $link = self::rl_get_resource_link_for_learnpath(
-                            $this->course_int_id,
-                            $this->lp_id,
-                            $arrLP[$i]['id'],
-                            0
-                        );
-                        $previewIcon = Display::url(
-                            $previewImage,
-                            $link,
-                            [
-                                'class' => $class,
-                                'data-title' => $arrLP[$i]['title'],
-                                'title' => $arrLP[$i]['title'],
-                                'target' => $target,
-                            ]
-                        );
-                        break;
-                    default:
-                        $previewIcon = Display::url(
-                            $previewImage,
-                            $url.'&action=view_item',
-                            ['class' => 'btn btn-default', 'target' => '_blank']
-                        );
-                        break;
-                }
-
-                if ('dir' != $arrLP[$i]['item_type']) {
-                    $prerequisities_icon = Display::url(
-                        Display::return_icon(
-                            'accept.png',
-                            get_lang('Prerequisites'),
-                            [],
-                            ICON_SIZE_TINY
-                        ),
-                        $url.'&action=edit_item_prereq',
-                        ['class' => 'btn btn-default']
-                    );
-                    if ('final_item' != $arrLP[$i]['item_type']) {
-                        /*$move_item_icon = Display::url(
-                            Display::return_icon(
-                                'move.png',
-                                get_lang('Move'),
-                                [],
-                                ICON_SIZE_TINY
-                            ),
-                            $url.'&action=move_item',
-                            ['class' => 'btn btn-default']
-                        );*/
-                    }
-                    $audio_icon = Display::url(
-                        Display::return_icon(
-                            'audio.png',
-                            get_lang('Upload'),
-                            [],
-                            ICON_SIZE_TINY
-                        ),
-                        $url.'&action=add_audio',
-                        ['class' => 'btn btn-default']
-                    );
-                }
-            }
-            if ('true' != $update_audio) {
-                $row = $move_icon.' '.$icon.
-                    Display::span($title_cut).
-                    Display::tag(
-                        'div',
-                        "<div class=\"btn-group btn-group-xs\">
-                                    $previewIcon
-                                    $audio
-                                    $edit_icon
-                                    $pluginCalendarIcon
-                                    $forumIcon
-                                    $prerequisities_icon
-                                    $move_item_icon
-                                    $audio_icon
-                                    $orderIcons
-                                    $delete_icon
-                                </div>",
-                        ['class' => 'btn-toolbar button_actions']
-                    );
-            } else {
-                $row =
-                    Display::span($title.$icon).
-                    Display::span($audio, ['class' => 'button_actions']);
-            }
-
-            $default_data[$arrLP[$i]['id']] = $row;
-            $default_content[$arrLP[$i]['id']] = $arrLP[$i];
-
-            if (empty($parent_id)) {
-                $elements[$arrLP[$i]['id']]['data'] = $row;
-                $elements[$arrLP[$i]['id']]['type'] = $arrLP[$i]['item_type'];
-            } else {
-                $parent_arrays = [];
-                if ($arrLP[$i]['depth'] > 1) {
-                    // Getting list of parents
-                    for ($j = 0; $j < $arrLP[$i]['depth']; $j++) {
-                        foreach ($arrLP as $item) {
-                            if ($item['id'] == $parent_id) {
-                                if (0 == $item['parent_item_id']) {
-                                    $parent_id = $item['id'];
-                                    break;
-                                } else {
-                                    $parent_id = $item['parent_item_id'];
-                                    if (empty($parent_arrays)) {
-                                        $parent_arrays[] = intval($item['id']);
-                                    }
-                                    $parent_arrays[] = $parent_id;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (!empty($parent_arrays)) {
-                    $parent_arrays = array_reverse($parent_arrays);
-                    $val = '$elements';
-                    $x = 0;
-                    foreach ($parent_arrays as $item) {
-                        if ($x != count($parent_arrays) - 1) {
-                            $val .= '["'.$item.'"]["children"]';
-                        } else {
-                            $val .= '["'.$item.'"]["children"]';
-                        }
-                        $x++;
-                    }
-                    $val .= "";
-                    $code_str = $val."[".$arrLP[$i]['id']."][\"load_data\"] = '".$arrLP[$i]['id']."' ; ";
-                    eval($code_str);
-                } else {
-                    $elements[$parent_id]['children'][$arrLP[$i]['id']]['data'] = $row;
-                    $elements[$parent_id]['children'][$arrLP[$i]['id']]['type'] = $arrLP[$i]['item_type'];
-                }
-            }
-        }
-
-        return [
-            'elements' => $elements,
-            'default_data' => $default_data,
-            'default_content' => $default_content,
-            'return_audio' => $return_audio,
-        ];
-    }
-
-    /**
-     * @param string $updateAudio true/false strings
-     *
-     * @return string
-     */
-    public function returnLpItemList($updateAudio)
-    {
-        $result = $this->processBuildMenuElements($updateAudio);
-
-        $html = self::print_recursive(
-            $result['elements'],
-            $result['default_data'],
-            $result['default_content']
-        );
-
-        if (!empty($html)) {
-            $html .= Display::return_message(get_lang('Drag and drop an element here'));
-        }
-
-        return $html;
     }
 
     public function showBuildSideBar($updateAudio = false, $dropElementHere = false, $type = null)
@@ -7017,10 +6376,6 @@ class learnpath
      * @param string $title
      * @param int    $parentId
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
-     *
      * @return int
      */
     public function createReadOutText($courseInfo, $content = '', $title = '', $parentId = 0)
@@ -7774,10 +7129,6 @@ class learnpath
     {
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
-        $userInfo = api_get_user_info();
-
-        $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
-        $condition_session = api_get_session_condition($session_id, true, true);
         $setting = 'true' === api_get_setting('lp.show_invisible_exercise_in_lp_toc');
 
         //$activeCondition = ' active <> -1 ';
@@ -7936,25 +7287,6 @@ class learnpath
             ICON_SIZE_TINY
         );
 
-        /*$condition_session = api_get_session_condition(
-            $session_id,
-            true,
-            true,
-            'link.session_id'
-        );
-
-        $sql = "SELECT
-                    link.id as link_id,
-                    link.title as link_title,
-                    link.session_id as link_session_id,
-                    link.category_id as category_id,
-                    link_category.category_title as category_title
-                FROM $tbl_link as link
-                LEFT JOIN $linkCategoryTable as link_category
-                ON (link.category_id = link_category.id AND link.c_id = link_category.c_id)
-                WHERE link.c_id = $course_id $condition_session
-                ORDER BY link_category.category_title ASC, link.title ASC";
-        $result = Database::query($sql);*/
         $categorizedLinks = [];
         $categories = [];
 
@@ -8058,12 +7390,6 @@ class learnpath
     {
         $return = '<ul class="list-group lp_resource">';
         $return .= '<li class="list-group-item lp_resource_element">';
-        /*
-        $return .= Display::return_icon('works_new.gif');
-        $return .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_STUDENTPUBLICATION.'&lp_id='.$this->lp_id.'">'.
-            get_lang('Add the Assignments tool to the course').'</a>';
-        $return .= '</li>';*/
-
         $works = getWorkListTeacher(0, 100, null, null, null);
         if (!empty($works)) {
             $icon = Display::return_icon('works.png', '', [], ICON_SIZE_TINY);
@@ -8092,7 +7418,8 @@ class learnpath
                 $return .= $icon;
                 $return .= Display::url(
                     Security::remove_XSS(cut(strip_tags($work['title']), 80)).' '.$link,
-                    api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_STUDENTPUBLICATION.'&file='.$work['iid'].'&lp_id='.$this->lp_id,
+                    api_get_self().'?'.
+                    api_get_cidreq().'&action=add_item&type='.TOOL_STUDENTPUBLICATION.'&file='.$work['iid'].'&lp_id='.$this->lp_id,
                     [
                         'class' => 'moved link_with_id',
                         'data-id' => $work['iid'],
@@ -9626,7 +8953,7 @@ EOD;
     /**
      * @param int $courseId
      *
-     * @return int|mixed
+     * @return int
      */
     public static function getCountCategories($courseId)
     {
@@ -9637,7 +8964,7 @@ EOD;
         $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId));
         $qb->addSelect('count(resource)');
 
-        return $qb->getSingleScalarResult();
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -9647,15 +8974,11 @@ EOD;
      */
     public static function getCategories($courseId)
     {
-        $em = Database::getManager();
-
         // Using doctrine extensions
         $repo = Container::getLpCategoryRepository();
         $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId));
 
         return $qb->getQuery()->getResult();
-
-        //return $repo->getBySortableGroupsQuery(['cId' => $courseId])->getResult();
     }
 
     public static function getCategorySessionId($id)
@@ -9921,7 +9244,7 @@ EOD;
     {
         $exercises = [];
         foreach ($this->items as $item) {
-            if ('quiz' != $item->type) {
+            if ('quiz' !== $item->type) {
                 continue;
             }
             $exercises[] = $item;
@@ -10423,13 +9746,16 @@ EOD;
             case TOOL_DOCUMENT:
                 $repo = Container::getDocumentRepository();
                 $document = $repo->find($rowItem->getPath());
-                $params = [
-                    'cid' => $course_id,
-                    'sid' => $session_id,
-                ];
-                $file = $repo->getResourceFileUrl($document, $params, UrlGeneratorInterface::ABSOLUTE_URL);
+                if ($document) {
+                    $params = [
+                        'cid' => $course_id,
+                        'sid' => $session_id,
+                    ];
 
-                return $file;
+                    return $repo->getResourceFileUrl($document, $params, UrlGeneratorInterface::ABSOLUTE_URL);
+                }
+
+                return null;
 
                 $documentPathInfo = pathinfo($document->getPath());
                 $mediaSupportedFiles = ['mp3', 'mp4', 'ogv', 'ogg', 'flv', 'm4v'];
@@ -11220,51 +10546,6 @@ exit;*/
 
         $em->flush();
         exit;*/
-    }
-
-    private static function updateList($list, $parent, &$previous, &$next)
-    {
-        //echo '<pre>';        var_dump($list);exit;
-        $lpItemRepo = Container::getLpItemRepository();
-        $em = Database::getManager();
-        $counter = 0;
-        foreach ($list as $item) {
-            if (empty($item) || !isset($item->id)) {
-                continue;
-            }
-            $id = $item->id;
-            $children = $item->children;
-
-            /** @var CLpItem $lpItem */
-            $lpItem = $lpItemRepo->find($id);
-            $lpItem
-                ->setParent($parent)
-                ->setDisplayOrder($counter)
-                ->setPreviousItemId($previous);
-            ;
-            $previous++;
-            $counter++;
-            $childExists = false;
-            foreach ($children as $child) {
-                if (isset($child->id)) {
-                    $childExists = true;
-                    break;
-                }
-            }
-
-            if ($childExists) {
-                $next = self::updateList($children, $lpItem, $previous, $next);
-                $lpItem->setNextItemId($next + 1);
-                $previous++;
-            } else {
-                $next = $previous;
-                $previous++;
-                $lpItem->setNextItemId($next);
-            }
-            $em->persist($lpItem);
-        }
-
-        return $next;
     }
 
     /**

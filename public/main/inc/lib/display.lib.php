@@ -127,10 +127,12 @@ class Display
                 $url .= '?sid='.$sessionId;
             }
 
-            array_unshift(
-                $interbreadcrumb,
-                ['name' => $courseInfo['title'], 'url' => $url]
-            );
+            if (!empty($interbreadcrumb)) {
+                array_unshift(
+                    $interbreadcrumb,
+                    ['name' => $courseInfo['title'], 'url' => $url]
+                );
+            }
         }
 
         $params['legacy_javascript'] = $htmlHeadXtra;

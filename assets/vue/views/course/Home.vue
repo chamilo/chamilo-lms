@@ -1,5 +1,5 @@
 <template>
-  <div class="grid gap-4">
+  <div v-if="course" class="grid gap-4">
     <q-card-section>
       <div class="text-h6">
         {{ course.title }}
@@ -19,24 +19,30 @@
           :go-to-course-tool="goToCourseTool"
           :change-visibility="changeVisibility"
         />
+        <HomeCourseCard
+            v-for="tool in tools.interaction"
+            :course="course"
+            :tool="tool"
+            :go-to-course-tool="goToCourseTool"
+            :change-visibility="changeVisibility"
+        />
 
-      <HomeCourseCard
-          v-for="tool in tools.interaction"
-          :course="course"
-          :tool="tool"
-          :go-to-course-tool="goToCourseTool"
-          :change-visibility="changeVisibility"
-      />
+        <HomeShortCutCard
+            v-for="shortcut in shortcuts"
+            :shortcut="shortcut"
+            :go-to-short-cut="goToShortCut"
+            :change-visibility="changeVisibility"
+        />
     </div>
 
     <h2 v-if="isCurrentTeacher">Settings</h2>
+
     <div
         v-if="isCurrentTeacher"
         class="grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-6"
     >
       <HomeCourseCard
           v-for="tool in tools.admin"
-
           :course="course"
           :tool="tool"
           :go-to-course-tool="goToCourseTool"
@@ -49,6 +55,7 @@
 import Loading from '../../components/Loading.vue';
 import Toolbar from '../../components/Toolbar.vue';
 import HomeCourseCard from '../../components/course/HomeCourseCard.vue';
+import HomeShortCutCard from '../../components/course/HomeShortCutCard.vue';
 
 import { useRoute } from 'vue-router'
 import axios from "axios";
@@ -62,14 +69,16 @@ export default {
   components: {
     Loading,
     Toolbar,
-    HomeCourseCard
+    HomeCourseCard,
+    HomeShortCutCard
   },
   setup() {
-    const state = reactive({course: [], tools: [], shortcuts:[], goToCourseTool, changeVisibility});
+    const state = reactive({course: [], tools: [], shortcuts:[], goToCourseTool, changeVisibility, goToShortCut });
     const route = useRoute()
-    let id = route.params.id;
+    let courseId = route.params.id;
+    let sessionId = route.query.sid ?? 0;
 
-    axios.get(ENTRYPOINT + '../course/' + id + '/home.json').then(response => {
+    axios.get(ENTRYPOINT + '../course/' + courseId + '/home.json').then(response => {
       state.course = response.data.course;
       state.tools = response.data.tools;
       state.shortcuts = response.data.shortcuts;
@@ -78,10 +87,18 @@ export default {
     });
 
     function goToCourseTool(course, tool) {
-      let sessionId = route.query.sid ?? 0;
-      let url = '/course/' + course.id + '/tool/' + tool.name + '?sid=' + sessionId;
+      let url = '/course/' + courseId + '/tool/' + tool.name + '?sid=' + sessionId;
 
       return url;
+    }
+
+    function goToShortCut(shortcut) {
+      var url = new URLSearchParams('?');
+      //let url = new URL(shortcut.url);
+      url.append('cid', courseId);
+      url.append('sid', sessionId);
+
+      return shortcut.url + '?' + url;
     }
 
     function changeVisibility(course, tool) {

@@ -256,6 +256,31 @@ class CourseHomeController extends ToolBaseController
         return $this->redirect($url);
     }
 
+    public function redirectToShortCut(string $toolName, CToolRepository $repo, ToolChain $toolChain)
+    {
+        /** @var null|CTool $tool */
+        $tool = $repo->findOneBy([
+            'name' => $toolName,
+        ]);
+
+        if (null === $tool) {
+            throw new NotFoundHttpException($this->trans('Tool not found'));
+        }
+
+        $tool = $toolChain->getToolFromName($tool->getTool()->getName());
+        $link = $tool->getLink();
+
+        if (strpos($link, 'nodeId')) {
+            $nodeId = (string) $this->getCourse()->getResourceNode()->getId();
+            $link = str_replace(':nodeId', $nodeId, $link);
+        }
+
+        $url = $link.'?'.$this->getCourseUrlQuery();
+
+        return $this->redirect($url);
+    }
+
+
     /**
      * Edit configuration with given namespace.
      *

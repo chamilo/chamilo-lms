@@ -20,8 +20,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CShortcut extends AbstractResource implements ResourceInterface
 {
     /**
-     * @Groups({"cshortcut:read"})
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -43,6 +41,21 @@ class CShortcut extends AbstractResource implements ResourceInterface
      */
     protected ResourceNode $shortCutNode;
 
+    /**
+    * @Groups({"cshortcut:read"})
+    */
+    protected string $url;
+
+    /**
+     * @Groups({"cshortcut:read"})
+     */
+    protected string $tool;
+
+    /**
+     * @Groups({"cshortcut:read"})
+     */
+    protected string $type;
+
     public function __toString(): string
     {
         return $this->getName();
@@ -51,6 +64,25 @@ class CShortcut extends AbstractResource implements ResourceInterface
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getUrl()
+    {
+        return
+            '/r/'.$this->getShortCutNode()->getResourceType()->getTool()->getName().
+            '/'.$this->getShortCutNode()->getResourceType()->getName().
+            '/'.$this->getShortCutNode()->getId().
+            '/link';
+    }
+
+    public function getTool()
+    {
+        return $this->getShortCutNode()->getResourceType()->getTool()->getName();
+    }
+
+    public function getType()
+    {
+        return $this->getShortCutNode()->getResourceType()->getName();
     }
 
     public function setName(string $name): self
@@ -75,6 +107,11 @@ class CShortcut extends AbstractResource implements ResourceInterface
         $this->shortCutNode = $shortCutNode;
 
         return $this;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     public function getResourceName(): string

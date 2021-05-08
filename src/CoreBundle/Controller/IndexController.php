@@ -25,7 +25,7 @@ class IndexController extends BaseController
      * @Route("/sessions", name="sessions", methods={"GET", "POST"}, options={"expose"=true})
      * @Route("/catalog/{slug}", name="catalog", methods={"GET", "POST"}, options={"expose"=true})
      * @Route("/resources/document/{nodeId}/manager", methods={"GET"}, name="resources_filemanager")
-     * @Route("/account/home", name="account", options={"expose"=true})
+     * @Route("/account/home", name="account", options={"expose"=true}, name="chamilo_core_account_home")
      */
     public function indexAction(): Response
     {

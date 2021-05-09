@@ -85,7 +85,7 @@ class FillBlanks extends Question
                     var field = document.getElementById("answer");
                     answer = field.value;
                 } else {
-                    answer = CKEDITOR.instances["answer"].getData();
+                    answer = getContentFromEditor("answer");
                 }
 
                 // disable the save button, if not blanks have been created
@@ -220,7 +220,7 @@ class FillBlanks extends Question
                     var field = document.getElementById("answer");
                     answer = field.value;
                 } else {
-                    answer = CKEDITOR.instances["answer"].getData();
+                    answer = getContentFromEditor("answer");
                 }
 
                 var blanks = answer.match(eval(blanksRegexp));

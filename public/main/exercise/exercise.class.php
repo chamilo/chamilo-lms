@@ -3404,7 +3404,7 @@ class Exercise
      *
      * @return string
      */
-    public function showTimeControlJS($timeLeft)
+    public function showTimeControlJS($timeLeft, $redirectToUrl = '')
     {
         $timeLeft = (int) $timeLeft;
         $script = 'redirectExerciseToResult();';
@@ -10707,14 +10707,14 @@ class Exercise
 
             if (!empty($question) && !empty($answer) && FREE_ANSWER == $answer_type) {
                 $open_question_list .=
-                    '<tr>'
-                    .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>'
-                    .'<td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>'
-                    .'</tr>'
-                    .'<tr>'
-                    .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>'
-                    .'<td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>'
-                    .'</tr>';
+                    '<tr>
+                    <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>
+                    <td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>
+                    </tr>
+                    <tr>
+                    <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>
+                    <td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>
+                    </tr>';
             }
         }
 
@@ -10734,7 +10734,7 @@ class Exercise
                 $msg
             );
 
-            if ('learnpath' != $origin) {
+            if ('learnpath' !== $origin) {
                 $msg .= '<br /><a href="#url#">'.get_lang(
                         'Click this link to check the answer and/or give feedback'
                     ).'</a>';

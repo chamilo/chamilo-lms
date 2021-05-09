@@ -1,4 +1,4 @@
-<template>2222
+<template>
   <div v-if="!isLoading && item && isCurrentTeacher">
     <!--      :handle-delete="del"-->
     <Toolbar

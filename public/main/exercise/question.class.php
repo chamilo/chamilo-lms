@@ -1192,12 +1192,11 @@ abstract class Question
             $file = api_get_path(SYS_PATH).$filePart;
             $includeFile = '';
             if (file_exists($file)) {
-                $includeFile = '<script type="text/javascript" src="'.api_get_path(WEB_PATH).$filePart.'"></script>';
+                $includeFile = '<script src="'.api_get_path(WEB_PATH).$filePart.'"></script>';
                 $language = $iso;
             }
             echo $includeFile;
-
-            echo '<script type="text/javascript" charset="utf-8">
+            echo '<script>
             $(function() {
                 $(".create_img_link").click(function(e){
                     e.preventDefault();

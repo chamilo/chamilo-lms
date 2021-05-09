@@ -1075,17 +1075,17 @@ EOT;
         $config = [],
         $attributes = []
     ) {
-        $attributes = [];
         $attributes['rows'] = $config['rows'] ?? 15;
         $attributes['cols'] = $config['cols'] ?? 80;
         $attributes['cols-size'] = $config['cols-size'] ?? [];
         $attributes['class'] = $config['class'] ?? [];
         $cleanName = str_replace(['[', ']', '#'], '', $name);
-        $attributes['id'] = $config['id'] ?? uniqid('answer_'.$cleanName, false);
 
         if (empty($attributes['id'])) {
-            $attributes['id'] = $name;
+            $attributes['id'] = $cleanName;
         }
+
+        //$attributes['id'] = $config['id'] ?? 'editor_'.$cleanName;
 
         $this->addElement('html_editor', $name, $label, $attributes, $config);
         $this->applyFilter($name, 'trim');

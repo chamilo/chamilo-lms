@@ -343,7 +343,7 @@ $actions .= Display::url(
     Display::return_icon('pdf.png', get_lang('ExportToPDF'), [], ICON_SIZE_MEDIUM),
     'stats.php?exerciseId='.$exerciseId.'&export_pdf=1&'.api_get_cidreq()
 );
-$actions = Display::div($actions, ['class' => 'actions']);
+$actions = Display::toolbarAction('exercise_report', [$actions]);
 $content = $actions.$content;
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

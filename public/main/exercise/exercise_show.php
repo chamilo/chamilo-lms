@@ -227,8 +227,9 @@ if ('export' != $action) {
                 var oHidden = document.createElement("input");
                 oHidden.type = "hidden";
                 oHidden.name = "comments_" + ids[k];
-                if (CKEDITOR.instances[oHidden.name]) {
-                    oHidden.value = CKEDITOR.instances[oHidden.name].getData();
+                const content = getContentFromEditor(oHidden.name);
+                if (content) {
+                    oHidden.value = content;
                 } else {
                     oHidden.value = $("textarea[name='" + oHidden.name + "']").val();
                 }

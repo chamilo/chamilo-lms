@@ -190,9 +190,9 @@
     <Column :exportable="false">
       <template #body="slotProps">
         <div class="flex flex-row gap-2">
-          <Button label="Show" class="btn btn-primary p-mr-2" @click="showHandler(slotProps.data)" />
-          <Button v-if="isAuthenticated && isCurrentTeacher" label="Edit" icon="pi pi-pencil" class="btn btn-primary p-mr-2" @click="editHandler(slotProps.data)" />
-          <Button v-if="isAuthenticated && isCurrentTeacher" label="Delete" icon="pi pi-trash" class="btn btn-danger" @click="confirmDeleteItem(slotProps.data)" />
+          <Button icon="fa fa-info-circle"  class="btn btn-primary " @click="showHandler(slotProps.data)" />
+          <Button v-if="isAuthenticated && isCurrentTeacher" icon="pi pi-pencil" class="btn btn-primary p-mr-2" @click="editHandler(slotProps.data)" />
+          <Button v-if="isAuthenticated && isCurrentTeacher" icon="pi pi-trash" class="btn btn-danger" @click="confirmDeleteItem(slotProps.data)" />
         </div>
       </template>
     </Column>

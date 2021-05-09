@@ -51,7 +51,7 @@ if ('learnpath' === $origin) {
     $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
 }
 if ($showGlossary) {
-    $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?add_ready=1&'.api_get_cidreq().'"></script>';
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?add_ready=1&'.api_get_cidreq().'"></script>';
     $htmlHeadXtra[] = api_get_js('jquery.highlight.js');
 }
 
@@ -1241,7 +1241,9 @@ if ($objExercise->review_answers) {
         echo '<a
             href="../document/download.php?doc_url=%2Faudio%2F'.Security::remove_XSS($exercise_sound).'"
             target="_blank">';
-        echo '<img src="../img/sound.gif" border="0" align="absmiddle" alt=', get_lang('Audio or video file').'" /></a>';
+        echo '<img
+            src="../img/sound.gif" border="0"
+            align="absmiddle" alt=', get_lang('Audio or video file').'" /></a>';
     }
     // Get number of hotspot questions for javascript validation
     $number_of_hotspot_questions = 0;
@@ -1353,14 +1355,11 @@ $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
                 }
             });
 
-
             $(".main_question").mouseout(function() {
                 $(this).removeClass("question_highlight");
             });
 
             $(".no_remind_highlight").hide();
-
-
             $("form#exercise_form").prepend($("#exercise-description"));
 
             $(\'button[name="previous_question_and_save"]\').on("touchstart click", function (e) {
@@ -1387,44 +1386,11 @@ $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
             e.preventDefault();
             e.stopPropagation();
             var $this = $(this);
-            var urlExtra = $this.data(\'url\') || null;
             var questionId = parseInt($this.data(\'question\')) || 0;
 
             save_now(questionId, "check_answers");
-
-            var checkUrl = "'.$checkAnswersUrl.'";
-
-            $("#global-modal").attr("data-keyboard", "false");
-            $("#global-modal").attr("data-backdrop", "static");
-            $("#global-modal").find(".close").hide();
-
-            $("#global-modal .modal-body").load(checkUrl, function() {
-                $("#global-modal .modal-body").append("<div class=\"btn-group\"></div>");
-                var continueTest = $("<a>",{
-                    text: "'.addslashes(get_lang('ContinueTest')).'",
-                    title: "'.addslashes(get_lang('ContinueTest')).'",
-                    href: "javascript:void(0);",
-                    click: function(){
-                        $(this).attr("disabled", "disabled");
-                        $("#global-modal").modal("hide");
-                        $("#global-modal .modal-body").html("");
-                    }
-                }).addClass("btn btn-default").appendTo("#global-modal .modal-body .btn-group");
-
-                 $("<a>",{
-                    text: "'.addslashes(get_lang('EndTest')).'",
-                    title: "'.addslashes(get_lang('EndTest')).'",
-                    href: "javascript:void(0);",
-                    click: function() {
-                        $(this).attr("disabled", "disabled");
-                        continueTest.attr("disabled", "disabled");
-                        save_now(questionId, urlExtra);
-                        $("#global-modal .modal-body").html("<span style=\"text-align:center\">'.addslashes($loading).addslashes(get_lang('Loading')).'</span>");
-                    }
-                }).addClass("btn btn-primary").appendTo("#global-modal .modal-body .btn-group");
-            });
-            $("#global-modal").modal("show");
         });
+
             $(\'button[name="save_now"]\').on(\'touchstart click\', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -1494,12 +1460,12 @@ $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
             // 4. choice for degree of certainty
             var my_choiceDc = $(\'*[name*="choiceDegreeCertainty[\'+question_id+\']"]\').serialize();
 
-            // Checking CkEditor
+            // Checking Editor
             if (question_id) {
-                if (CKEDITOR.instances["choice["+question_id+"]"]) {
-                    var ckContent = CKEDITOR.instances["choice["+question_id+"]"].getData();
+                const content = getContentFromEditor("choice"+question_id);
+                if (content) {
                     my_choice = {};
-                    my_choice["choice["+question_id+"]"] = ckContent;
+                    my_choice["choice["+question_id+"]"] = content;
                     my_choice = $.param(my_choice);
                 }
             }
@@ -1523,13 +1489,13 @@ $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
                 url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=save_exercise_by_now",
                 data: dataparam,
                 success: function(return_value) {
-                    if (return_value == "ok") {
+                    if (return_value.ok) {
                         $("#save_for_now_"+question_id).html(\''.
                         Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
-                    } else if (return_value == "error") {
+                } else if (return_value.error) {
                         $("#save_for_now_"+question_id).html(\''.
                             Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_SMALL).'\');
-                    } else if (return_value == "one_per_page") {
+                } else if (return_value.type == "one_per_page") {
                         var url = "";
                         if ('.$reminder.' == 1 ) {
                             url = "exercise_reminder.php?'.$params.'&num='.$current_question.'";
@@ -1551,9 +1517,45 @@ $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
                         }
 
                         $("#save_for_now_"+question_id).html(\''.
-                            Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
+                        Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\' + return_value.savedAnswerMessage);
 
+                    // Show popup
                     if ("check_answers" === url_extra) {
+                        var button = $(\'button[name="check_answers"]\');
+                        var questionId = parseInt(button.data(\'question\')) || 0;
+                        var urlExtra = button.data(\'url\') || null;
+                        var checkUrl = "'.$checkAnswersUrl.'";
+
+                        $("#global-modal").attr("data-keyboard", "false");
+                        $("#global-modal").attr("data-backdrop", "static");
+                        $("#global-modal").find(".close").hide();
+
+                        $("#global-modal .modal-body").load(checkUrl, function() {
+                            $("#global-modal .modal-body").append("<div class=\"btn-group\"></div>");
+                            var continueTest = $("<a>",{
+                                text: "'.addslashes(get_lang('ContinueTest')).'",
+                                title: "'.addslashes(get_lang('ContinueTest')).'",
+                                href: "javascript:void(0);",
+                                click: function(){
+                                    $(this).attr("disabled", "disabled");
+                                    $("#global-modal").modal("hide");
+                                    $("#global-modal .modal-body").html("");
+                                }
+                            }).addClass("btn btn-default").appendTo("#global-modal .modal-body .btn-group");
+
+                             $("<a>",{
+                                text: "'.addslashes(get_lang('EndTest')).'",
+                                title: "'.addslashes(get_lang('EndTest')).'",
+                                href: "javascript:void(0);",
+                                click: function() {
+                                    $(this).attr("disabled", "disabled");
+                                    continueTest.attr("disabled", "disabled");
+                                    save_now(questionId, urlExtra);
+                                    $("#global-modal .modal-body").html("<span style=\"text-align:center\">'.addslashes($loading).addslashes(get_lang('Loading')).'</span>");
+                                }
+                            }).addClass("btn btn-primary").appendTo("#global-modal .modal-body .btn-group");
+                        });
+                        $("#global-modal").modal("show");
                         return true;
                     }
                         // window.quizTimeEnding will be reset in exercise.class.php
@@ -1585,11 +1587,11 @@ $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
             var question_list = ['.implode(',', $questionList).'];
             var free_answers = {};
             $.each(question_list, function(index, my_question_id) {
-                // Checking Ckeditor
+                // Checking editor
                 if (my_question_id) {
-                    if (CKEDITOR.instances["choice["+my_question_id+"]"]) {
-                        var ckContent = CKEDITOR.instances["choice["+my_question_id+"]"].getData();
-                        free_answers["free_choice["+my_question_id+"]"] = ckContent;
+                    const content = getContentFromEditor("choice"+my_question_id);
+                    if (content) {
+                        free_answers["free_choice["+my_question_id+"]"] = content;
                     }
                 }
             });
@@ -1608,8 +1610,9 @@ $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
                 url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=save_exercise_by_now",
                 data: requestData,
                 success: function(return_value) {
-                    if (return_value == "ok") {
+                if (return_value.ok) {
                         if (validate == "validate") {
+                            $("#save_all_response").html(return_value.savedAnswerMessage);
                             window.location = "'.$script_php.'?'.$params.'";
                         } else {
                             $("#save_all_response").html(\''.Display::return_icon('accept.png').'\');
@@ -1803,7 +1806,11 @@ $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
                         Display::button(
                             'save_now',
                             get_lang('Save and continue'),
-                            ['type' => 'button', 'class' => 'btn btn-info', 'data-question' => $questionId]
+                            [
+                                'type' => 'button',
+                                'class' => 'btn btn-info',
+                                'data-question' => $questionId,
+                            ]
                         ),
                         '<span id="save_for_now_'.$questionId.'"></span>&nbsp;',
                     ];
@@ -1846,7 +1853,7 @@ $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
             break;
         }
     }
-    // end foreach()
+
     if (ALL_ON_ONE_PAGE == $objExercise->type) {
         $exerciseActions = $objExercise->show_button(
             $questionId,

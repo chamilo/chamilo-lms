@@ -194,7 +194,6 @@ class ExerciseLib
                     $form = new FormValidator('free_choice_'.$questionId);
                     $config = [
                         'ToolbarSet' => 'TestFreeAnswer',
-                        'id' => 'choice['.$questionId.']',
                     ];
                     $form->addHtmlEditor(
                         'choice['.$questionId.']',
@@ -361,7 +360,7 @@ class ExerciseLib
                         if ('Answers' === $item) {
                             $properties['colspan'] = 2;
                             $properties['style'] = 'background-color: #F56B2A; color: #ffffff;';
-                        } elseif ('DegreeOfCertaintyThatMyAnswerIsCorrect' == $item) {
+                        } elseif ('DegreeOfCertaintyThatMyAnswerIsCorrect' === $item) {
                             $properties['colspan'] = 6;
                             $properties['style'] = 'background-color: #330066; color: #ffffff;';
                         }

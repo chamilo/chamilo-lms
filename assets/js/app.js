@@ -20,6 +20,16 @@ window.luxon = global.luxon = DateTime;
 import 'select2/dist/js/select2.full.min';
 import 'select2/dist/css/select2.min.css';
 
+// Gets HTML content from tinymce
+window.getContentFromEditor = function (id) {
+  let content = '';
+  if (tinymce.get(id)) {
+    content = tinymce.get(id).getContent();
+  }
+
+  return content;
+};
+
 //require('flatpickr');
 //import('bootstrap-vue');
 import('bootstrap');

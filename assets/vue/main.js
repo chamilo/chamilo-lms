@@ -123,11 +123,8 @@ const app = createApp(App);
 import { Quasar } from 'quasar'
 import quasarUserOptions from './quasar-user-options'
 
-
 // Tinymce
 import Editor from './components/Editor';
-//window.tinymce = Editor;
-
 
 // Prime
 import PrimeVue from 'primevue/config'

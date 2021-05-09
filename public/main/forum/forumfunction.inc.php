@@ -225,11 +225,11 @@ function show_add_forumcategory_form($lp_id)
     // Setting the form elements.
     $form->addElement('header', get_lang('Add forum category'));
     $form->addElement('text', 'forum_category_title', get_lang('Title'), ['autofocus']);
-    $form->addElement(
-        'html_editor',
+    $form->addHtmlEditor(
         'forum_category_comment',
         get_lang('Description'),
-        null,
+        false,
+        false,
         ['ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200']
     );
 
@@ -297,11 +297,11 @@ function forumForm(CForumForum $forum = null, $lp_id)
     $form->addElement('text', 'forum_title', get_lang('Title'), ['autofocus']);
 
     // The comment of the forum.
-    $form->addElement(
-        'html_editor',
+    $form->addHtmlEditor(
         'forum_comment',
         get_lang('Description'),
-        null,
+        false,
+        false,
         ['ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200']
     );
 

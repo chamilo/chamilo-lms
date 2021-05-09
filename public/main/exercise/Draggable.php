@@ -12,9 +12,6 @@ class Draggable extends Question
     public $typePicture = 'ordering.png';
     public $explanationLangVar = 'Sequence ordering';
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         parent::__construct();

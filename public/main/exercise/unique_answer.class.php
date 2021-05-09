@@ -19,9 +19,6 @@ class UniqueAnswer extends Question
     public $typePicture = 'mcua.png';
     public $explanationLangVar = 'Multiple choice';
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -89,7 +86,7 @@ class UniqueAnswer extends Question
                 $nb_answers = $answer->nbrAnswers;
             }
         }
-        $form->addElement('hidden', 'nb_answers');
+        $form->addHidden('nb_answers', $nb_answers);
 
         $obj_ex->setQuestionList(true);
         $question_list = $obj_ex->getQuestionList();
@@ -120,9 +117,7 @@ class UniqueAnswer extends Question
         $temp_scenario = [];
         if ($nb_answers < 1) {
             $nb_answers = 1;
-            echo Display::return_message(
-                get_lang('You have to create at least one answer')
-            );
+            echo Display::return_message(get_lang('You have to create at least one answer'));
         }
 
         for ($i = 1; $i <= $nb_answers; $i++) {
@@ -191,13 +186,14 @@ class UniqueAnswer extends Question
                 'weighting['.$i.']'
             );
 
-            $answer_number = $form->addElement(
-                'text',
+            $answerNumber = $form->addText(
                 'counter['.$i.']',
                 null,
-                ' value = "'.$i.'"'
+                false,
+                ['value' => $i]
             );
-            $answer_number->freeze();
+            $answerNumber->freeze();
+
             $form->addElement(
                 'radio',
                 'correct',

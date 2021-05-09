@@ -14,9 +14,6 @@ class UniqueAnswerImage extends UniqueAnswer
     public $typePicture = 'uaimg.png';
     public $explanationLangVar = 'Unique answer image';
 
-    /**
-     * UniqueAnswerImage constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -24,9 +21,6 @@ class UniqueAnswerImage extends UniqueAnswer
         $this->isContent = $this->getIsContent();
     }
 
-    /**
-     * @throws Exception
-     */
     public function createAnswersForm($form)
     {
         $objExercise = Session::read('objExercise');
@@ -278,7 +272,6 @@ class UniqueAnswerImage extends UniqueAnswer
 
             $form->addElement('radio', 'correct', null, null, $i, ['class' => 'checkbox']);
             $form->addHtmlEditor('answer['.$i.']', null, null, false, $editorConfig);
-
             $form->addRule('answer['.$i.']', get_lang('Required field'), 'required');
 
             switch ($objExercise->getFeedbackType()) {

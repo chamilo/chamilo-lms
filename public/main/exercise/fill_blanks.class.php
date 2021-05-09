@@ -327,17 +327,18 @@ class FillBlanks extends Question
             get_lang('and').' '.
             get_lang('use square brackets [...] to define one or more blanks')
         );
-        $form->addElement(
-            'html_editor',
+        $form->addHtmlEditor(
             'answer',
             Display::return_icon('fill_field.png'),
+            true,
+            false,
+            ['ToolbarSet' => 'TestQuestionDescription'],
             ['id' => 'answer'],
-            ['ToolbarSet' => 'TestQuestionDescription']
         );
         $form->addRule('answer', get_lang('Please type the text'), 'required');
 
         //added multiple answers
-        $form->addElement('checkbox', 'multiple_answer', '', get_lang('Allow answers order switches'));
+        $form->addCheckBox('multiple_answer', '', get_lang('Allow answers order switches'));
         $form->addElement(
             'select',
             'select_separator',

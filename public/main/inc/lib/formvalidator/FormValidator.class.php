@@ -1080,7 +1080,8 @@ EOT;
         $attributes['cols'] = $config['cols'] ?? 80;
         $attributes['cols-size'] = $config['cols-size'] ?? [];
         $attributes['class'] = $config['class'] ?? [];
-        $attributes['id'] = $config['id'] ?? '';
+        $cleanName = str_replace(['[', ']', '#'], '', $name);
+        $attributes['id'] = $config['id'] ?? uniqid('answer_'.$cleanName, false);
 
         if (empty($attributes['id'])) {
             $attributes['id'] = $name;

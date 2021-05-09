@@ -14,9 +14,6 @@ class FreeAnswer extends Question
     public $typePicture = 'open_answer.png';
     public $explanationLangVar = 'Open question';
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct();

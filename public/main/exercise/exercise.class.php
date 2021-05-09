@@ -2263,7 +2263,7 @@ class Exercise
             );
 
             $form->addElement('html', '<div class="clear">&nbsp;</div>');
-            $form->addElement('checkbox', 'review_answers', null, get_lang('Review my answers'));
+            $form->addCheckBox('review_answers', null, get_lang('Review my answers'));
             $form->addElement('html', '<div id="divtimecontrol"  style="display:'.$display.';">');
 
             // Timer control
@@ -2296,11 +2296,7 @@ class Exercise
                 ]
             );
             $form->addElement('html', '</div>');
-            $form->addCheckBox(
-                'prevent_backwards',
-                null,
-                get_lang('QuizPreventBackwards')
-            );
+            $form->addCheckBox('prevent_backwards', null, get_lang('QuizPreventBackwards'));
             $form->addElement(
                 'text',
                 'pass_percentage',
@@ -2337,15 +2333,11 @@ class Exercise
                 $form->addGroup($group, '', [get_lang('E-mail notifications')]);
             }
 
-            $form->addCheckBox(
-                'update_title_in_lps',
-                null,
-                get_lang('Update this title in learning paths')
-            );
+            $form->addCheckBox('update_title_in_lps', null, get_lang('Update this title in learning paths'));
 
             $defaults = [];
             if ('true' === api_get_setting('search_enabled')) {
-                $form->addElement('checkbox', 'index_document', '', get_lang('Index document text?'));
+                $form->addCheckBox('index_document', '', get_lang('Index document text?'));
                 $form->addSelectLanguage('language', get_lang('Document language for indexation'));
                 $specific_fields = get_specific_field_list();
 
@@ -3235,12 +3227,14 @@ class Exercise
                 $endReminderValue = true;
             }
         }
+        $endTest = false;
         if (ALL_ON_ONE_PAGE == $this->type || $nbrQuestions == $questionNum || $endReminderValue) {
             if ($this->review_answers) {
                 $label = get_lang('ReviewQuestions');
                 $class = 'btn btn-success';
             } else {
-                $label = get_lang('End test');
+                $endTest = true;
+                $label = get_lang('End Test');
                 $class = 'btn btn-warning';
             }
         } else {

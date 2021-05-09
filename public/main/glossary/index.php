@@ -99,11 +99,11 @@ switch ($action) {
             $form->addElement('text', 'name', get_lang('Term'), ['id' => 'glossary_title']);
         }
 
-        $form->addElement(
-            'html_editor',
+        $form->addHtmlEditor(
             'description',
             get_lang('Term definition'),
-            null,
+            true,
+            false,
             ['ToolbarSet' => 'Glossary', 'Height' => '300']
         );
         $form->addButtonCreate(get_lang('Save term'), 'SubmitGlossary');

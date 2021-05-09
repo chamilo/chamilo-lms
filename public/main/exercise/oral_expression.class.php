@@ -24,9 +24,6 @@ class OralExpression extends Question
     private $fileName;
     private $filePath;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct();

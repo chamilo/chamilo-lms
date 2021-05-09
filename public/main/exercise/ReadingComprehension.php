@@ -17,8 +17,6 @@ class ReadingComprehension extends UniqueAnswer
      * Defines the different speeds of scrolling for the reading window,
      * in words per minute. If 300 words text in 50w/m, then the moving
      * window will progress from top to bottom in 6 minutes.
-     *
-     * @var array
      */
     public static $speeds = [
         1 => 50,
@@ -58,9 +56,6 @@ class ReadingComprehension extends UniqueAnswer
      */
     private $exerciseType = 2;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -141,10 +136,9 @@ class ReadingComprehension extends UniqueAnswer
             $form->addHtmlEditor(
                 'questionName',
                 get_lang('Question'),
-                false,
+                true,
                 false,
                 $editorConfig,
-                true
             );
         } else {
             $form->addText('questionName', get_lang('Question'), false);

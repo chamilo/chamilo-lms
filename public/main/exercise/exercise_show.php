@@ -644,16 +644,17 @@ foreach ($questionList as $questionId) {
             $default = [$textareaId => $comnt];
 
             if ($useAdvancedEditor) {
-                $feedback_form->addElement(
-                    'html_editor',
+                $feedback_form->addHtmlEditor(
                     $textareaId,
                     null,
-                    ['id' => $textareaId],
+                    true,
+                    false,
                     [
                         'ToolbarSet' => 'TestAnswerFeedback',
                         'Width' => '100%',
                         'Height' => '120',
-                    ]
+                    ],
+                    ['id' => $textareaId],
                 );
             } else {
                 $feedback_form->addElement('textarea', $textareaId, ['id' => $textareaId]);

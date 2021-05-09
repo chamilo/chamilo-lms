@@ -12,9 +12,6 @@ class GlobalMultipleAnswer extends Question
     public $typePicture = 'mcmagl.png';
     public $explanationLangVar = 'Global multiple answer';
 
-    /**
-     * GlobalMultipleAnswer constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -113,14 +110,14 @@ class GlobalMultipleAnswer extends Question
             );
             $answer_number->freeze();
 
-            $form->addElement('checkbox', 'correct['.$i.']', null, null, 'class="checkbox"');
+            $form->addCheckBox('correct['.$i.']', null);
             $boxes_names[] = 'correct['.$i.']';
 
-            $form->addElement(
-                'html_editor',
+            $form->addHtmlEditor(
                 'answer['.$i.']',
                 null,
-                [],
+                true,
+                false,
                 [
                     'ToolbarSet' => 'TestProposedAnswer',
                     'Width' => '100%',
@@ -128,11 +125,11 @@ class GlobalMultipleAnswer extends Question
                 ]
             );
             $form->addRule('answer['.$i.']', get_lang('Required field'), 'required');
-            $form->addElement(
-                'html_editor',
+            $form->addHtmlEditor(
                 'comment['.$i.']',
                 null,
-                [],
+                true,
+                false,
                 [
                     'ToolbarSet' => 'TestProposedAnswer',
                     'Width' => '100%',
@@ -155,8 +152,8 @@ class GlobalMultipleAnswer extends Question
         $form->addElement('text', 'weighting[1]', get_lang('Score'));
 
         //--------- Creation coche pour ne pas prendre en compte les n�gatifs
-        $form->addElement('checkbox', 'pts', '', get_lang('No negative score'));
-        $form->addElement('html', '<br />');
+        $form->addCheckBox('pts', '', get_lang('No negative score'));
+        $form->addHtml('html', '<br />');
 
         // Affiche un message si le score n'est pas renseign�
         $form->addRule('weighting[1]', get_lang('Required field'), 'required');

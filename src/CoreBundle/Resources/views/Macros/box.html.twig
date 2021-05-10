@@ -71,6 +71,14 @@
     {% endautoescape %}
 {% endmacro %}
 
+{% macro avatar(image, size) %}
+    <div class="q-avatar" style="font-size: {{ size }}px;">
+        <div class="q-avatar__content row flex-center overflow-hidden">
+        {{ image }}
+        </div>
+    </div>
+{% endmacro %}
+
 {% macro box_widget(name, content, icon) %}
     <div class="card">
         <div class="card-body">

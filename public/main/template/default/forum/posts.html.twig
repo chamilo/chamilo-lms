@@ -15,12 +15,19 @@
 
     {% for post in posts %}
         {% set post_data %}
-            <div class="row">
-                <div class="col-md-2">
-                    <div class="thumbnail">
-                        <img src="{{ post.author | illustration }}?w=100&h=100&fit=crop">
+            <div class="flex flex-row">
+                <div class="w-1/5">
+                    {% set image %}
+                        <img src="{{ post.author | illustration }}?w=80&h=80&fit=crop" />
+                    {% endset %}
+                    {{ display.avatar(image, 80) }}
+
+                    {{ post.post_date_to_display }}
+
+                    <div class='flex flex-row'>
+                        {{ post.tool_icons }}
                     </div>
-                    {{ post.user_data }}
+
                 </div>
                 {% set highlight = '' %}
                 {% if post.current %}
@@ -32,7 +39,7 @@
                     {% set highlight_revision = 'forum_revision' %}
                 {% endif %}
 
-                <div class="col-md-10 {{ highlight }} ">
+                <div class="w-4/5 {{ highlight }} ">
                     {{ post.post_title }}
 
                     {% if post.is_a_revision %}

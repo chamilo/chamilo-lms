@@ -6,13 +6,15 @@
         {{ header }}
 
         {% for thread in threads %}
-
             {% set panel_title %}
-                <div>{{ thread.title }}</div>
-                <div>{{ thread.icon_edit }}</div>
+                <div class="text-h6 p-4 flex flex-row justify-between">
+                    {{ thread.title }}
+                </div>
+
+                <div class="text-h6 p-4 flex flex-row justify-between">
+                    {{ thread.icon_edit }}
+                </div>
             {% endset %}
-
-
             {{ display.panel(panel_title) }}
 
         {% endfor %}

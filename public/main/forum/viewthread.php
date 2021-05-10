@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CForumAttachment;
 use Chamilo\CourseBundle\Entity\CForumForum;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
@@ -435,13 +436,13 @@ foreach ($posts as $post) {
     }*/
 
     if ('learnpath' !== $origin) {
-        $post['user_data'] .= Display::tag(
+        $post['post_date_to_display'] = Display::tag(
             'p',
             Display::dateToStringAgoAndLongDate($post['post_date']),
             ['class' => 'post-date']
         );
     } else {
-        $post['user_data'] .= Display::tag(
+        $post['post_date_to_display'] = Display::tag(
             'p',
             Display::dateToStringAgoAndLongDate($post['post_date']),
             ['class' => 'text-muted']
@@ -603,11 +604,12 @@ foreach ($posts as $post) {
     }
 
     $statusIcon = getPostStatus($forumEntity, $post);
+    $post['tool_icons'] = '';
     if (!empty($iconEdit)) {
-        $post['user_data'] .= "<div class='tools-icons'> $iconEdit $statusIcon </div>";
+        $post['tool_icons'] = "$iconEdit $statusIcon";
     } else {
         if (!empty(strip_tags($statusIcon))) {
-            $post['user_data'] .= "<div class='tools-icons'> $statusIcon </div>";
+            $post['tool_icons'] = $statusIcon;
         }
     }
 
@@ -728,7 +730,7 @@ foreach ($posts as $post) {
     $attachments = $postEntity->getAttachments();
     if ($attachments) {
         $repo = Container::getForumAttachmentRepository();
-        /** @var \Chamilo\CourseBundle\Entity\CForumAttachment $attachment */
+        /** @var CForumAttachment $attachment */
         foreach ($attachments as $attachment) {
             $post['post_attachments'] .= Display::returnFontAwesomeIcon('paperclip');
             $url = $repo->getResourceFileDownloadUrl($attachment).'?'.api_get_cidreq();

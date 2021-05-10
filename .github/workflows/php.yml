@@ -29,8 +29,10 @@ jobs:
 
             - name: Setup apache
               run: |
-                sudo apt update
-                sudo apt install apache2 php${{ matrix.php-versions }} php${{ matrix.php-versions }}-common php${{ matrix.php-versions }}-cli libapache2-mod-php${{ matrix.php-versions }}
+                sudo apt-get install software-properties-common
+                sudo add-apt-repository ppa:ondrej/php
+                sudo apt-get update
+                sudo apt-get install apache2 php${{ matrix.php-versions }} php${{ matrix.php-versions }}-common php${{ matrix.php-versions }}-cli libapache2-mod-php${{ matrix.php-versions }}
                 sudo a2enmod rewrite actions
                 sudo cp -f tests/travis/gh-apache /etc/apache2/sites-available/000-default.conf
                 sudo chmod 777 -R $HOME
@@ -92,7 +94,7 @@ jobs:
 
             - name: Start chrome
               run: |
-                sudo apt install google-chrome-stable
+                sudo apt-get install google-chrome-stable
                 google-chrome --version
                 google-chrome-stable --version
                 google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &

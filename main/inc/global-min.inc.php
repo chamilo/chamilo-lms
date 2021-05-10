@@ -330,7 +330,7 @@ require $includePath.'/local.inc.php';
 
 // Update of the logout_date field in the table track_e_login
 // (needed for the calculation of the total connection time)
-if (!isset($_SESSION['login_as']) && isset($_user)) {
+if (!isset($_SESSION['login_as']) && isset($_user) && isset($_user["user_id"])) {
     // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
     $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
     $sql = "SELECT login_id, login_date

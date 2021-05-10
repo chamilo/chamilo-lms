@@ -100,15 +100,16 @@ $nbStudents = count($a_students);
 $student_ids = array_keys($a_students);
 $studentCount = count($student_ids);
 
-echo TrackingCourseLog::actionsLeft('courses', api_get_session_id());
+$left = TrackingCourseLog::actionsLeft('courses', api_get_session_id(), false);
 
-echo '<span style="float:right; padding-top:0px;">';
-echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
+$right = '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
     Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
 
-echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&id_session='.api_get_session_id().'&export=csv">
+$right .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id_session='.api_get_session_id().'&export=csv">
 	'.Display::return_icon('export_csv.png', get_lang('CSV export'), '', ICON_SIZE_MEDIUM).'</a>';
-echo '</span>';
+$right .= '</span>';
+
+echo Display::toolbarAction('tools', [$left, $right]);
 
 $course_code = api_get_course_id();
 $course_id = api_get_course_int_id();

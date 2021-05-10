@@ -135,7 +135,7 @@ class LearnPathItemForm
                 $renderer = $form->defaultRenderer();
                 $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp');
                 $form->addHtml('<div class="editor-lp">');
-                $form->addHtmlEditor('content_lp', null, null, true, $editorConfig, true);
+                $form->addHtmlEditor('content_lp', null, null, true, $editorConfig);
                 $form->addHtml('</div>');
                 if ($document) {
                     $form->addHidden('document_id', $document->getIid());

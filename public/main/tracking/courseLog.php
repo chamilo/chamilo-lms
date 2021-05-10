@@ -196,7 +196,7 @@ Session::write('extra_field_info', $extra_info);
 
 Display::display_header($nameTools, 'Tracking');
 
-$actionsLeft = TrackingCourseLog::actionsLeft('users', $sessionId);
+$actionsLeft = TrackingCourseLog::actionsLeft('users', $sessionId, false);
 
 $actionsRight = '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
     Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -234,7 +234,7 @@ $form_search->addHidden('cid', $courseId);
 $form_search->addElement('text', 'user_keyword');
 $form_search->addButtonSearch(get_lang('Search users'));
 echo Display::toolbarAction(
-    'toolbar-courselog',
+    'course_log',
     [$actionsLeft, $form_search->returnForm(), $actionsRight]
 );
 

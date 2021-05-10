@@ -122,8 +122,7 @@ if (!$exportToXLS) {
             }
         }
     } else {
-        $actionsLeft = TrackingCourseLog::actionsLeft('exams', api_get_session_id());
-
+        $actionsLeft = TrackingCourseLog::actionsLeft('exams', api_get_session_id(), false);
         $actionsRight .= Display::url(
             Display::return_icon('export_excel.png', get_lang('Excel export'), [], 32),
             api_get_self().'?'.api_get_cidreq().'&export=1&score='.$filter_score.'&exercise_id='.$exerciseId

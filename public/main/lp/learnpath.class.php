@@ -9536,8 +9536,7 @@ EOD;
             null,
             true,
             false,
-            $editorConfig,
-            true
+            $editorConfig
         );
         $form->addHidden('action', 'add_final_item');
         $form->addHidden('path', Session::read('pathItem'));

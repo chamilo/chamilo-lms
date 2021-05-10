@@ -93,10 +93,8 @@ $nametools = get_lang('Reporting');
 
 Display::display_header($nametools, 'Reporting');
 
-echo '<div class="actions">';
-echo TrackingCourseLog::actionsLeft('resources', api_get_session_id());
-echo '<span style="float:right; padding-top:0px;">';
-echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
+$left = TrackingCourseLog::actionsLeft('resources', api_get_session_id(), false);
+$right = '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
     Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).
 '</a>';
 
@@ -110,12 +108,12 @@ if (isset($_GET['users_tracking_per_page'])) {
     $users_tracking_per_page = '&users_tracking_per_page='.intval($_GET['users_tracking_per_page']);
 }
 
-echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$addional_param.$users_tracking_per_page.'">
+$right .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$addional_param.$users_tracking_per_page.'">
 '.Display::return_icon('export_csv.png', get_lang('CSV export'), '', ICON_SIZE_MEDIUM).'</a>';
-echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=xls&'.$addional_param.$users_tracking_per_page.'">
+$right .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=xls&'.$addional_param.$users_tracking_per_page.'">
 '.Display::return_icon('export_excel.png', get_lang('Excel export'), '', ICON_SIZE_MEDIUM).'</a>';
-echo '</span>';
-echo '</div>';
+
+echo Display::toolbarAction('log_resource', [$left, $right]);
 
 // Create a search-box.
 $form = new FormValidator(

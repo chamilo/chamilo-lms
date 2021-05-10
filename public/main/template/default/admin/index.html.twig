@@ -41,7 +41,7 @@
                         {% endif %}
                     {% endset %}
 
-                    {{ display.panel_box(loop.index, block_item.icon ~ block_item.label, block_item.search_form ~  list) }}
+                    {{ display.panel(block_item.icon ~ block_item.label, block_item.search_form ~  list) }}
                 </div>
             {% endfor %}
 

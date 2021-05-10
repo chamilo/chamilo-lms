@@ -42,7 +42,7 @@
 
 @layer components {
   .card {
-    @apply bg-white rounded shadow-lg;
+    @apply bg-white rounded shadow-lg w-full;
   }
 
   // Buttons.

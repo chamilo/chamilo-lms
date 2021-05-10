@@ -1,135 +1,3 @@
-{% block box_collapse %}
-    <button class="btn btn-{{ type|default('info') }} btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
-{% endblock %}
-{% block box_remove %}
-    <button class="btn btn-{{ type|default('info') }} btn-sm" data-widget="remove"><i class="fa fa-times"></i></button>
-{% endblock %}
-
-{% block box_header_buttons %}
-    {% if collapse or remove %}
-        <div class="box-tools pull-right">
-            {% if collapse %}
-                {{ block('box_collapse') }}
-            {% endif %}
-            {% if remove %}
-                {{ block('box_remove') }}
-            {% endif %}
-        </div>
-    {% endif %}
-{% endblock %}
-
-{% macro box_header(title, buttons) %}
-    <div class="box-header">
-        {% if buttons %}
-        <div class="float-right">
-            {{ buttons }}
-        </div>
-        {% endif %}
-        <h5 class="box-title">{{ title }}</h5>
-    </div>
-{% endmacro %}
-
-{% macro menu_item(item) %}
-    <li id="{{ item.identifier }}" class=" {{ item.isActive ? 'active' : '' }} {{ item.hasChildren? 'treeview' : '' }}">
-        <a href="{{ item.hasChildren ? '#': '/' in item.route ? item.route : path(item.route, item.routeArgs) }}">
-            {% if item.icon %} <i class="{{ item.icon }}"></i> {% endif %}
-            <span>{{ item.label }}</span>
-            {% if item.badge %}
-                <small class="badge pull-right bg-{{ item.badgeColor }}">{{ item.badge }}</small>
-            {% endif %}
-        </a>
-
-        {% if item.hasChildren %}
-            <ul class="treeview-menu">
-                {% for child in item.children %}
-                    <li class="{{ child.isActive ? 'active':'' }}" id="{{ child.identifier }}">
-                        <a href="{{ '/' in child.route ? child.route : path(child.route, child.routeArgs) }}">
-                            <i class="fa fa-angle-double-right"></i>
-                            {{ child.label }}
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    </li>
-{% endmacro %}
-
-{% macro card_collapse(name, item, expanded = 'true') %}
-    {% autoescape false %}
-    <div class="card">
-        <h5 class="card-header" id="heading-{{ item.id }}">
-            <div class="float-actions">
-                {{ item.tools }}
-            </div>
-            <a href="#" data-toggle="collapse" class="btn btn-link" data-target="#collapse-{{ item.id }}" aria-expanded="{{ expanded }}" aria-controls="collapse-{{ item.id }}">
-                {{ 'forum_blue.png'|img(32) }}
-            </a>
-            <a href="{{ item.url }}" title="{{ item.title }}">{{ item.title }}{{ item.icon_session }}</a>
-        </h5>
-        <div id="collapse-{{ item.id }}" class="collapse {{  expanded == 'true' ? 'show' : '' }}" aria-labelledby="heading-{{ item.id }}" data-parent="#{{ name }}">
-            <div class="card-body">
-                <div class="forum-description">
-                    {{ item.description }}
-                </div>
-                <div class="list-forum">
-                {% for subitem in item.forums %}
-                    <div id="box-{{ subitem.id }}" class="card card-{{ subitem.id }}">
-                        <div class="card-body">
-                            <div class="d-flex flex-row bd-highlight mb-3">
-                                <div class="p-2 bd-highlight">
-                                    <div class="avatar">
-                                        <img src="{{ subitem.avatar }}" width="32px" class="rounded-circle">
-                                    </div>
-                                </div>
-                                <div class="p-2 bd-highlight">
-                                    <h4 class="title">
-                                        <a href="{{ subitem.url }}" title="{{ subitem.title }}" class="{{ subitem.visibility != '1' ? 'text-muted': '' }}">{{ subitem.title }}</a>
-                                        {% if subitem.forum_of_group != 0 %}
-                                            <a class="forum-goto" href="../group/group_space.php?cid={{ course.id }}&gid={{ subitem.forum_of_group }}">
-                                                {{ "forum.png"|img(22) }} {{ "Go to"|trans }} {{ subitem.forum_group_title }}
-                                            </a>
-                                        {% endif %}
-                                        {{ subitem.icon_session }}
-                                        <div class="float-right">
-                                            <div class="toolbar">
-                                                {{ subitem.tools }}
-                                            </div>
-                                        </div>
-                                    </h4>
-                                    <ul class="forum-threads">
-                                        <li class="threads">{{ 'Forum threads'| trans }}: {{ subitem.number_threads }} </li>
-                                        {% if subitem.last_poster_id is not empty %}
-                                            <li class="date">
-                                                <i class="fa fa-comments" aria-hidden="true"></i>
-                                                {{ subitem.last_poster_date }}
-                                                « {{ subitem.last_post_title }} »
-                                                {{ "By"|trans }}
-                                                {{ subitem.last_poster_user }}
-                                            </li>
-                                        {% endif %}
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="description">
-                                {{ subitem.description }}
-                                {{ subitem.last_post_text }}
-                            </div>
-                            {{ subitem.alert }}
-                            {% if subitem.moderation is not empty %}
-                                <span class="label label-warning">
-                                    {{ "PostsPendingModeration"|trans }}: {{ subitem.moderation }}
-                                </span>
-                            {% endif %}
-                        </div>
-                    </div>
-                {% endfor %}
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endautoescape %}
-{% endmacro %}
-
 {% macro collapse(name, title, content, list = false, expanded = 'true', title_right = '', title_icons = '') %}
     {% autoescape false %}
     <div class="panel-group" id="{{ name }}" role="tablist" aria-multiselectable="true">
@@ -141,7 +9,12 @@
                 {% endif %}
 
                 <h4 class="panel-title">
-                    <a role="button" data-toggle="collapse" data-parent="#{{ name }}" href="#{{ name }}Collapse" aria-expanded="{{ expanded }}" aria-controls="{{ name }}Collapse">
+                    <a role="button"
+                       data-toggle="collapse"
+                       data-parent="#{{ name }}"
+                       href="#{{ name }}Collapse"
+                       aria-expanded="{{ expanded }}"
+                       aria-controls="{{ name }}Collapse">
                         {{ title }}
                     </a>
                 </h4>
@@ -152,7 +25,11 @@
                     </div>
                 {% endif %}
             </div>
-            <div style="" aria-expanded="{{ expanded }}" id="{{ name }}Collapse" class="panel-collapse collapse {{  expanded == 'true' ? 'in' : '' }}" role="tabpanel">
+            <div
+                aria-expanded="{{ expanded }}"
+                id="{{ name }}Collapse"
+                class="panel-collapse collapse {{  expanded == 'true' ? 'in' : '' }}"
+                role="tabpanel">
                 <div class="panel-body">
                     {% if list %}
                         <ul class="nav nav-pills nav-stacked">
@@ -168,113 +45,16 @@
     {% endautoescape %}
 {% endmacro %}
 
-{% macro collapseFor(name, title, array) %}
-    {% autoescape false %}
-        <div class="panel-group" id="{{ name }}" role="tablist" aria-multiselectable="true">
-            <div class="panel panel-default" id="{{ name }}_block">
-                <div class="panel-heading" role="tab">
-                    <h4 class="panel-title">
-                        <a role="button" data-toggle="collapse" data-parent="#{{ name }}" href="#{{ name }}Collapse" aria-expanded="true" aria-controls="{{ name }}Collapse">
-                            {{ title }}
-                        </a>
-                    </h4>
-                </div>
-                <div style="" aria-expanded="true" id="{{ name }}Collapse" class="panel-collapse collapse in" role="tabpanel">
-                    <div class="panel-body">
-                        <ul class="nav nav-pills nav-stacked">
-                            {% for item in array %}
-                                <li>
-                                    <a href="{{ item.link }}">{{ item.title }}</a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endautoescape %}
-{% endmacro %}
-
-{% macro collapseMenu(name, title, array) %}
-    {% autoescape false %}
-        <div class="panel-group" id="{{ name }}" role="tablist" aria-multiselectable="true">
-            <div class="panel panel-default" id="{{ name }}_block">
-                <div class="panel-heading" role="tab">
-                    <h4 class="panel-title">
-                        <a role="button" data-toggle="collapse" data-parent="#{{ name }}" href="#{{ name }}Collapse" aria-expanded="true" aria-controls="{{ name }}Collapse">
-                            {{ title }}
-                        </a>
-                    </h4>
-                </div>
-                <div aria-expanded="true" id="{{ name }}Collapse" class="panel-collapse collapse in" role="tabpanel">
-                    <div class="panel-body">
-                        <ul class="list-group">
-                            {% for item in array %}
-                                <li class="list-group-item {{ item.class }}">
-                                    <span class="item-icon">{{ item.icon }}</span>
-                                    <a href="{{ item.link }}">{{ item.title }}</a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endautoescape %}
-{% endmacro %}
-
-{% macro pluginSidebar(name, content) %}
-    {% autoescape false %}
-        <div id="{{ name }}" class="plugin plugin_{{ name }}">
-            {{ content }}
-        </div>
-    {% endautoescape %}
-{% endmacro %}
-
-{% macro pluginPanel(name, content) %}
-    {% autoescape false %}
-        <div id="{{ name }}" class="plugin plugin_{{ name }}">
-            <div class="row">
-                <div class="col-md-12">
-                    {{ content }}
-                </div>
-            </div>
-        </div>
-    {% endautoescape %}
-{% endmacro %}
-
-{% macro panel_box(id, title, content, subtitle) %}
-    {% autoescape false %}
-        <div id="box-{{ id }}" class="q-card card-{{ id }}">
-            <div class="q-card__section q-card__section--vert">
-                <div class="text-h6">
-                {% if title %}
-                    {{ title }}
-                {% endif %}
-                </div>
-            </div>
-
-            <div class="q-card__section q-card__section--vert">
-                {{ content }}
-
-                {% if subtitle %}
-                    {{ subtitle }}
-                {% endif %}
-            </div>
-        </div>
-    {% endautoescape %}
-{% endmacro %}
-
 {% macro panel(header, content, title, footer, subtitle, top_image) %}
     {% autoescape false %}
-        <div class="card mt-3 mb-3">
+        <div class="card">
             {% if header %}
-                <div class="card-header"> {{ header }} </div>
+                <div class="text-h6 p-4 flex"> {{ header }} </div>
             {% endif %}
             {% if top_image %}
                 {{ top_image }}
             {% endif %}
-            <div class="card-body">
+            <div class="p-4">
                 {% if title %}
                     <h5 class="card-title">{{ title }}</h5>
                 {% endif %}
@@ -283,120 +63,18 @@
                 {% endif %}
 
                 {{ content }}
-
             </div>
             {% if footer %}
                 <div class="card-footer">
                     {{ footer }}
                 </div>
             {% endif %}
-        </div>
-    {% endautoescape %}
-{% endmacro %}
-
-{% macro panel_course(id, header, content, title, footer, subtitle, top_image) %}
-    {% autoescape false %}
-        <div class="card card-course course-{{ id }} mt-3 mb-3">
-            {% if header %}
-                <div class="card-header"> {{ header }} </div>
-            {% endif %}
-            {% if top_image %}
-                <div class="card-image">
-                    {{ top_image }}
-                </div>
-            {% endif %}
-            <div class="card-body p-3">
-                {% if title %}
-                    <h5 class="card-title">{{ title }}</h5>
-                {% endif %}
-                {% if subtitle %}
-                    <h5 class="card-subtitle mb-2 text-muted">{{ subtitle }}</h5>
-                {% endif %}
-
-                {{ content }}
-
-            </div>
-            {% if footer %}
-                <div class="card-footer">
-                    {{ footer }}
-                </div>
-            {% endif %}
-        </div>
-    {% endautoescape %}
-{% endmacro %}
-
-{% macro box_category_course(id, title, image) %}
-    {% autoescape false %}
-        {% set values = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']%}
-        <div class="card card-{{ id }}" style="border-bottom-color: {{ '#' ~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)~ random(values)~'80'  }}">
-            <div class="card-body">
-                <div class="image-container">
-                    <div class="thumbnail">
-                        {% if image %}
-                            {{ image }}
-                        {% endif %}
-                    </div>
-                    <div class="image-content">
-                        {% if title %}
-                            {{ title }}
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endautoescape %}
-{% endmacro %}
-
-{% macro box_course_classic(id, title, content, image,special) %}
-    {% autoescape false %}
-        {% if special %}
-            {% set card_special = "card-special" %}
-        {% endif %}
-
-        <div id="course-{{ id }}" class="card card-course-classic {{ card_special }}">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-5">
-                        {{ image }}
-                    </div>
-                    <div class="col-md-7">
-                        <div class="card-inside">
-                            {{ title }}
-                            {{ content }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endautoescape %}
-{% endmacro %}
-
-{% macro box_session(id, title, content, image) %}
-    {% autoescape false %}
-        <div id="session-{{ id }}" class="card card-session">
-            <div class="card-body">
-                <div class="card-info">
-                    <div class="row">
-                        <div class="col-md-5">
-                            {{ image }}
-                        </div>
-                        <div class="col-md-7">
-                            <div class="card-inside">
-                                {{ title }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-list">
-                    {{ content }}
-                </div>
-            </div>
         </div>
     {% endautoescape %}
 {% endmacro %}
 
 {% macro box_widget(name, content, icon) %}
-    <div class="card box-widget">
+    <div class="card">
         <div class="card-body">
             <div class="stat-widget-five">
                 <i class="fa fa-{{ icon }}" aria-hidden="true"></i>
@@ -433,32 +111,6 @@
         </div>
     </div>
 {% endmacro %}
-
-{% macro card_widget(name, content, icon, extra) %}
-    <div class="card card-first-date">
-        <div class="card-body">
-            <div class="stat-widget-five">
-                <div class="stat-icon">
-                    <i class="fa fa-{{ icon }}" aria-hidden="true"></i>
-                    {% if extra %}
-                        <span class="active-icon">{{ extra }}</span>
-                    {% endif %}
-                </div>
-                <div class="stat-content">
-                    <div class="text-left">
-                        <div class="stat-text">
-                            {{ content }}
-                        </div>
-                        <div class="stat-heading">
-                            {{ name }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-{% endmacro %}
-
 
 {% macro reporting_user_details(user) %}
     {% autoescape false %}

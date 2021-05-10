@@ -123,7 +123,7 @@
     "deepmerge": "^4.2.2",
     "filemanager-webpack-plugin": "^4.0",
     "free-jqgrid": "https://github.com/chamilo/jqGrid.git#bs4",
-    "node-sass": "^5.0",
+    "node-sass": "^6.0",
     "popper.js": "^1.14.7",
     "postcss-rtl": "^1.2.3",
     "sass": "^1.29.0",

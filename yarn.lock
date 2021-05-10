@@ -5880,7 +5880,7 @@ __metadata:
     mini-css-extract-plugin: ^1.6
     multiselect-two-sides: ^2.5.5
     mxgraph: ^4.0
-    node-sass: ^5.0
+    node-sass: ^6.0
     optimize-css-assets-webpack-plugin: ^5.0.3
     path: ^0.12.7
     popper.js: ^1.14.7
@@ -13222,9 +13222,9 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"node-sass@npm:^5.0":
-  version: 5.0.0
-  resolution: "node-sass@npm:5.0.0"
+"node-sass@npm:^6.0":
+  version: 6.0.0
+  resolution: "node-sass@npm:6.0.0"
   dependencies:
     async-foreach: ^0.1.3
     chalk: ^1.1.1
@@ -13244,7 +13244,7 @@ fsevents@~2.3.1:
     true-case-path: ^1.0.2
   bin:
     node-sass: bin/node-sass
-  checksum: fd24d918bad979380a3f952926a9b45587d74fada01562a78a6ca5da431a8cc11c5a9ae4d3842e31e362c30602aa2eaf29106219f2ceb8c5cafe293167a1d84c
+  checksum: 982c26d182c289964fc9ccd2cbcbcd69d5e770fe7ff540a0cefe98392727ca8987d56c24dc05bec81fd8cea935e2caa63ddc514aa4af43630737c1ab74221a5a
   languageName: node
   linkType: hard
 

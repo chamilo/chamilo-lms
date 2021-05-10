@@ -1,0 +1,22 @@
+{% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
+{% import '@ChamiloCore/Macros/box.html.twig' as display %}
+
+{% block content %}
+    {% autoescape false %}
+        {{ header }}
+
+        {% for thread in threads %}
+
+            {% set panel_title %}
+                <div>{{ thread.title }}</div>
+                <div>{{ thread.icon_edit }}</div>
+            {% endset %}
+
+
+            {{ display.panel(panel_title) }}
+
+        {% endfor %}
+
+        {{ qualification_block }}
+    {% endautoescape %}
+{% endblock %}

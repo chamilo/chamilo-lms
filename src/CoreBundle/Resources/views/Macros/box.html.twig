@@ -3,11 +3,9 @@
     <div class="panel-group" id="{{ name }}" role="tablist" aria-multiselectable="true">
         <div class="panel panel-default" id="{{ name }}_block">
             <div class="panel-heading" role="tab">
-
                 {% if title_icons %}
                     {{ title_icons }}
                 {% endif %}
-
                 <h4 class="panel-title">
                     <a role="button"
                        data-toggle="collapse"
@@ -49,7 +47,7 @@
     {% autoescape false %}
         <div class="card">
             {% if header %}
-                <div class="text-h6 p-4 flex"> {{ header }} </div>
+                <div class="text-h6 p-4 flex flex-row justify-between"> {{ header }} </div>
             {% endif %}
             {% if top_image %}
                 {{ top_image }}

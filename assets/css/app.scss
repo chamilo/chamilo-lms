@@ -188,6 +188,10 @@
     @apply flex flex-col items-center justify-center p-4 space-y-4 antialiased text-gray-900;
   }
 
+  .pull-right {
+    @apply flex flex-row;
+  }
+
   @import "scss/index.scss";
 }
 

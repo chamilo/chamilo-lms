@@ -197,7 +197,7 @@ if ('learnpath' === $origin) {
             'name' => $nameTools,
         ];
         $interbreadcrumb[] = [
-            'url' => 'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.$category->getIid().'&search='.$search,
+            'url' => 'index.php?'.api_get_cidreq().'&forumcategory='.$category->getIid().'&search='.$search,
             'name' => prepare4display($category->getCatTitle()),
         ];
         $interbreadcrumb[] = [

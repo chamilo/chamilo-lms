@@ -1235,8 +1235,10 @@ class GroupManager
 
         if (!empty($column) && !empty($direction)) {
             $column = Database::escape_string($column);
+            $columns = ['id', 'firstname', 'lastname'];
+            $column = in_array($column, $columns) ? $column : 'lastname';
             $direction = ('ASC' === $direction ? 'ASC' : 'DESC');
-            $sql .= " ORDER BY `$column` $direction";
+            $sql .= " ORDER BY $column $direction";
         }
 
         if (!empty($start) && !empty($limit)) {

@@ -30,9 +30,6 @@ $MonthsLong = api_get_months_long();
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
-/*
-    PROCESSING
-*/
 
 $safe_post_file_comment = isset($_POST['post_file_comment']) ? Security::remove_XSS($_POST['post_file_comment']) : null;
 $safe_comment_text = isset($_POST['comment_text']) ? Security::remove_XSS($_POST['comment_text']) : null;
@@ -266,7 +263,6 @@ $searchBlog = isset($_GET['q']) ? Security::remove_XSS($_GET['q']) : '';
 $month = isset($_GET['month']) ? (int) $_GET['month'] : (int) date('m');
 $year = isset($_GET['year']) ? (int) $_GET['year'] : date('Y');
 $calendarBlog = Blog::displayMiniMonthCalendar($month, $year, $blog_id);
-//task blogs
 $taskBlog = Blog::getPersonalTasksList();
 
 if (isset($flag) && '1' == $flag) {
@@ -369,19 +365,19 @@ switch ($action) {
     case 'manage_tasks':
         if (api_is_allowed('BLOG_'.$blog_id, 'task_management')) {
             $task = null;
-            if (isset($_GET['do']) && 'add' == $_GET['do']) {
+            if (isset($_GET['do']) && 'add' === $_GET['do']) {
                 $task .= Blog::displayTaskCreateForm($blog_id);
             }
-            if (isset($_GET['do']) && 'assign' == $_GET['do']) {
+            if (isset($_GET['do']) && 'assign' === $_GET['do']) {
                 $task .= Blog::displayTaskAssignmentForm($blog_id);
             }
-            if (isset($_GET['do']) && 'edit' == $_GET['do']) {
+            if (isset($_GET['do']) && 'edit' === $_GET['do']) {
                 $task .= Blog::displayTaskEditForm(
                     $blog_id,
                     intval($_GET['task_id'])
                 );
             }
-            if (isset($_GET['do']) && 'edit_assignment' == $_GET['do']) {
+            if (isset($_GET['do']) && 'edit_assignment' === $_GET['do']) {
                 $task .= Blog::displayAssignedTaskEditForm(
                     $blog_id,
                     intval($_GET['task_id']),

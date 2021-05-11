@@ -9287,18 +9287,16 @@ class learnpath
     /**
      * Save the new order for learning path items.
      *
-     * We have to update parent_item_id, previous_item_id, next_item_id, display_order in the database.
-     *
-     * @param array $orderList A associative array with item ID as key and parent ID as value.
+     * @param array $orderList A associative array with id and parent_id keys.
      */
-    public function sortItemByOrderList(array $orderList = [])
+    public static function sortItemByOrderList(int $lpId, array $orderList = [])
     {
         if (empty($orderList)) {
             return true;
         }
         //echo '<pre>';        var_dump($orderList);
         $lpItemRepo = Container::getLpItemRepository();
-        $rootParent = $lpItemRepo->getItemRoot($this->get_id());
+        $rootParent = $lpItemRepo->getItemRoot($lpId);
 
         /*$previous = 2;
         $next = 0;

@@ -42,8 +42,8 @@ class CShortcut extends AbstractResource implements ResourceInterface
     protected ResourceNode $shortCutNode;
 
     /**
-    * @Groups({"cshortcut:read"})
-    */
+     * @Groups({"cshortcut:read"})
+     */
     protected string $url;
 
     /**
@@ -68,8 +68,7 @@ class CShortcut extends AbstractResource implements ResourceInterface
 
     public function getUrl()
     {
-        return
-            '/r/'.$this->getShortCutNode()->getResourceType()->getTool()->getName().
+        return '/r/'.$this->getShortCutNode()->getResourceType()->getTool()->getName().
             '/'.$this->getShortCutNode()->getResourceType()->getName().
             '/'.$this->getShortCutNode()->getId().
             '/link';

@@ -208,7 +208,7 @@ class SessionController extends AbstractController
         $redirectToSession = $redirectToSession ? '?s='.$sessionId : false;
 
         $coursesInThisSession = SessionManager::get_course_list_by_session_id($sessionId);
-        $coursesCount = count($coursesInThisSession);
+        $coursesCount = \count($coursesInThisSession);
         $redirectToSession = 1 === $coursesCount && $redirectToSession
             ? ($redirectToSession.'&cr='.array_values($coursesInThisSession)[0]['directory'])
             : $redirectToSession;

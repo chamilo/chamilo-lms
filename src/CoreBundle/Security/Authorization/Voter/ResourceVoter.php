@@ -66,7 +66,7 @@ class ResourceVoter extends Voter
 
         //error_log('resource supports');
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, $options, true)) {
+        if (!\in_array($attribute, $options, true)) {
             return false;
         }
 

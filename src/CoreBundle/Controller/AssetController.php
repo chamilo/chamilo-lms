@@ -37,7 +37,7 @@ class AssetController
 
             $response = new StreamedResponse(
                 function () use ($stream): void {
-                    stream_copy_to_stream($stream, fopen('php://output', 'wb'));
+                    stream_copy_to_stream($stream, fopen('php://output', 'w'));
                 }
             );
             $disposition = $response->headers->makeDisposition(

@@ -1397,7 +1397,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function hasGroup(string $name): bool
     {
-        return in_array($name, $this->getGroupNames(), true);
+        return \in_array($name, $this->getGroupNames(), true);
     }
 
     public function getGroupNames(): array
@@ -1711,7 +1711,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function hasRole(string $role): bool
     {
-        return in_array(strtoupper($role), $this->getRoles(), true);
+        return \in_array(strtoupper($role), $this->getRoles(), true);
     }
 
     /**
@@ -1751,7 +1751,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
             return $this;
         }
 
-        if (!in_array($role, $this->roles, true)) {
+        if (!\in_array($role, $this->roles, true)) {
             $this->roles[] = $role;
         }
 

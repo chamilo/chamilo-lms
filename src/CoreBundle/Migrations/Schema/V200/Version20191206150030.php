@@ -36,7 +36,7 @@ class Version20191206150030 extends AbstractMigrationChamilo
 
         /** @var ExtraFieldValues $item */
         foreach ($q->toIterable() as $item) {
-            if (in_array($item->getField()->getFieldType(), $fieldWithFiles, true)) {
+            if (\in_array($item->getField()->getFieldType(), $fieldWithFiles, true)) {
                 $path = $item->getValue();
                 if (empty($path)) {
                     continue;

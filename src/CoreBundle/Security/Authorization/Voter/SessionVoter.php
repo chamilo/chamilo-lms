@@ -53,7 +53,7 @@ class SessionVoter extends Voter
             self::DELETE,
         ];
 
-        return $subject instanceof Session && in_array($attribute, $options, true);
+        return $subject instanceof Session && \in_array($attribute, $options, true);
     }
 
     /**
@@ -159,7 +159,7 @@ class SessionVoter extends Voter
 
         // If there is a session duration but there is no previous
         // access by the user, then the session is still available
-        if (0 === count($courseAccess)) {
+        if (0 === \count($courseAccess)) {
             return true;
         }
 

@@ -143,7 +143,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
 
         $this->getEntityManager()->persist($setting);
 
-        if (count($options) > 0) {
+        if (\count($options) > 0) {
             foreach ($options as $option) {
                 if (empty($option['text'])) {
                     if ('true' === $option['value']) {
@@ -198,7 +198,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         $description = ''
     ): void {
         if (!is_dir($filePath)) {
-            $class = get_class($resource);
+            $class = \get_class($resource);
             $documentPath = basename($filePath);
             if (file_exists($filePath)) {
                 $mimeType = mime_content_type($filePath);

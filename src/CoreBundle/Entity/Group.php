@@ -71,7 +71,7 @@ class Group
 
     public function hasRole(string $role): bool
     {
-        return in_array(strtoupper($role), $this->roles, true);
+        return \in_array(strtoupper($role), $this->roles, true);
     }
 
     public function getRoles(): array

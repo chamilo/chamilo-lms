@@ -77,7 +77,16 @@ if ($global) {
         $form->addElement('select', 'exercise_id', get_lang('Exercise'), $exerciseList);
     }
 }
-$form->addButton('filter', get_lang('Filter'), 'filter', 'primary', null, null, ['style' => 'margin-top: 5px; margin-left: 15px;']);
+
+$form->addButton(
+    'filter',
+    get_lang('Filter'),
+    'filter',
+    'primary',
+    null,
+    null,
+    ['style' => 'margin-top: 5px; margin-left: 15px;']
+);
 
 $filter_score = isset($_REQUEST['score']) ? intval($_REQUEST['score']) : 70;
 $exerciseId = isset($_REQUEST['exercise_id']) ? intval($_REQUEST['exercise_id']) : 0;

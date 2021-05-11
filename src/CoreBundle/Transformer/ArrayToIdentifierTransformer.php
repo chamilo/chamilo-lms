@@ -17,7 +17,7 @@ class ArrayToIdentifierTransformer implements DataTransformerInterface
 {
     public function transform($value)
     {
-        if (!is_array($value)) {
+        if (!\is_array($value)) {
             return '';
         }
 

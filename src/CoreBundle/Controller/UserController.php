@@ -28,7 +28,7 @@ class UserController extends AbstractController
     {
         $user = $userRepository->findByUsername($username);
 
-        if (!is_object($user) || !$user instanceof UserInterface) {
+        if (!\is_object($user) || !$user instanceof UserInterface) {
             throw $this->createAccessDeniedException('This user does not have access to this section');
         }
 

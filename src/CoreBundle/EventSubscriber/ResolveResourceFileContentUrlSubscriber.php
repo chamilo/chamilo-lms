@@ -47,7 +47,7 @@ class ResolveResourceFileContentUrlSubscriber implements EventSubscriberInterfac
 
         if (!($attributes = RequestAttributesExtractor::extractAttributes($request)) ||
             //!\is_a($attributes['resource_class'], ResourceFile::class, true)
-            !\is_a($attributes['resource_class'], AbstractResource::class, true)
+            !is_a($attributes['resource_class'], AbstractResource::class, true)
         ) {
             return;
         }

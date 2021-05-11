@@ -14,6 +14,7 @@ use DateTimeZone;
 use Display;
 use Exception;
 use Template;
+use const PHP_SAPI;
 
 class ChamiloApi
 {
@@ -41,7 +42,7 @@ class ChamiloApi
     public static function getConfigurationValue(string $variable)
     {
         $configuration = self::getConfigurationArray();
-        if (array_key_exists($variable, $configuration)) {
+        if (\array_key_exists($variable, $configuration)) {
             return $configuration[$variable];
         }
 
@@ -258,7 +259,7 @@ class ChamiloApi
                 'first'
             );
 
-            if (is_array($row) && isset($row['id'])) {
+            if (\is_array($row) && isset($row['id'])) {
                 return $row['id'];
             }
 
@@ -367,7 +368,7 @@ class ChamiloApi
             }
         }
         // If we want more colors, loop through existing colors
-        $count = count($palette);
+        $count = \count($palette);
         if (isset($fillUpTo) && $fillUpTo > $count) {
             for ($i = $count; $i < $fillUpTo; $i++) {
                 $palette[$i] = $palette[$i % $count];

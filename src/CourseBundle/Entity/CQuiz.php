@@ -774,7 +774,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->hideQuestionNumber;
     }
 
-    public function setHideQuestionNumber(int $hideQuestionNumber): CQuiz
+    public function setHideQuestionNumber(int $hideQuestionNumber): self
     {
         $this->hideQuestionNumber = $hideQuestionNumber;
 

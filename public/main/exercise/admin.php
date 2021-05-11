@@ -375,7 +375,7 @@ if ($inATest) {
     if (false === $showPagination) {
         if ($objExercise->questionSelectionType >= EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED) {
             $alert .= sprintf(
-                '<br>'.get_lang('XQuestionsSelectedWithTotalScoreY'),
+                '<br>'.get_lang('Only %d questions will be selected based on the test configuration, for a total score of %s.'),
                 count($questionList),
                 $maxScoreAllQuestions
             );

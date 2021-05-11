@@ -606,7 +606,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $qb->addCriteria($criteria);
         /** @var ArrayCollection|ResourceNode[] $children */
         $children = $qb->getQuery()->getResult();
-        $count = count($children);
+        $count = \count($children);
         if (0 === $count) {
             $params = $this->getResourceParams($request);
             $params['id'] = $id;
@@ -733,7 +733,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $response = new StreamedResponse(
             function () use ($stream): void {
-                stream_copy_to_stream($stream, fopen('php://output', 'wb'));
+                stream_copy_to_stream($stream, fopen('php://output', 'w'));
             }
         );
         $disposition = $response->headers->makeDisposition(

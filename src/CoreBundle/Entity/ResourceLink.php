@@ -267,7 +267,7 @@ class ResourceLink
 
     public function setVisibility(int $visibility): self
     {
-        if (!in_array($visibility, self::getVisibilityList(), true)) {
+        if (!\in_array($visibility, self::getVisibilityList(), true)) {
             throw new LogicException('The visibility is not valid');
         }
 

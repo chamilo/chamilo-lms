@@ -23,7 +23,7 @@ class ScriptHandler
         $fs = new Filesystem();
         $fs->mirror($appCss, $newPath, null, ['override' => true]);*/
 
-        if (function_exists('opcache_reset')) {
+        if (\function_exists('opcache_reset')) {
             opcache_reset();
         }
     }
@@ -282,7 +282,7 @@ class ScriptHandler
         // Loop through the folder.
         $dir = dir($dirname);
         // A sanity check.
-        $is_object_dir = is_object($dir);
+        $is_object_dir = \is_object($dir);
         if ($is_object_dir) {
             while (false !== $entry = $dir->read()) {
                 // Skip pointers.

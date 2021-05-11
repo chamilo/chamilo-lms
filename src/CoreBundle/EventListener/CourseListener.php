@@ -219,7 +219,7 @@ class CourseListener
     {
         $controllerList = $event->getController();
 
-        if (!is_array($controllerList)) {
+        if (!\is_array($controllerList)) {
             return;
         }
 
@@ -246,7 +246,7 @@ class CourseListener
         //$cidReset = $sessionHandler->get('cid_reset', false);
 
         // This controller implements ToolInterface? Then set the course/session
-        if (is_array($controllerList) &&
+        if (\is_array($controllerList) &&
             (
                 $controllerList[0] instanceof CourseControllerInterface ||
                 $controllerList[0] instanceof EditorController

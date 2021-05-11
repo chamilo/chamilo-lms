@@ -39,7 +39,7 @@ class AssetDirectoryNamer implements DirectoryNamerInterface, ConfigurableInterf
 
         $this->propertyPath = $options['property'];
 
-        $options = \array_merge([
+        $options = array_merge([
             'chars_per_dir' => $this->charsPerDir,
             'dirs' => $this->dirs,
         ], $options);
@@ -57,12 +57,12 @@ class AssetDirectoryNamer implements DirectoryNamerInterface, ConfigurableInterf
 
         if (Asset::EXTRA_FIELD === $category) {
             for ($i = 0, $start = 0; $i < $this->dirs; $i++, $start += $this->charsPerDir) {
-                $parts[] = \substr($fileName, $start, $this->charsPerDir);
+                $parts[] = substr($fileName, $start, $this->charsPerDir);
             }
         } else {
             $parts[] = $fileName;
         }
 
-        return \implode('/', $parts);
+        return implode('/', $parts);
     }
 }

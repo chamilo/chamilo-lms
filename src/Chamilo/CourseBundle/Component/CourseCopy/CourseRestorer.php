@@ -1839,6 +1839,12 @@ class CourseRestorer
             $table_rel = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $table_doc = Database::get_course_table(TABLE_DOCUMENT);
             $resources = $this->course->resources;
+            // Check if the "id" column still exists
+            $idColumn = true;
+            $columns = Database::listTableColumns($table_qui);
+            if (!in_array('id', $columns)) {
+                $idColumn = false;
+            }
 
             foreach ($resources[RESOURCE_QUIZ] as $id => $quiz) {
                 if (isset($quiz->obj)) {
@@ -1929,7 +1935,7 @@ class CourseRestorer
                     }
                     $new_id = Database::insert($table_qui, $params);
 
-                    if ($new_id) {
+                    if ($new_id && $idColumn) {
                         $sql = "UPDATE $table_qui SET id = iid WHERE iid = $new_id";
                         Database::query($sql);
                     }
@@ -1943,7 +1949,7 @@ class CourseRestorer
                 $order = 0;
                 if (!empty($quiz->question_ids)) {
                     foreach ($quiz->question_ids as $index => $question_id) {
-                        $qid = $this->restore_quiz_question($question_id);
+                        $qid = $this->restore_quiz_question($question_id, $idColumn);
                         $question_order = $quiz->question_orders[$index] ? $quiz->question_orders[$index] : ++$order;
                         $sql = "INSERT IGNORE INTO $table_rel SET
                                 c_id = ".$this->destination_course_id.",
@@ -1960,9 +1966,10 @@ class CourseRestorer
     /**
      * Restore quiz-questions.
      *
-     * @params int $id question id
+     * @param int $id question id
+     * @param bool $idColumn Whether the 'id' column still exists in this table
      */
-    public function restore_quiz_question($id)
+    public function restore_quiz_question($id, $idColumn = true)
     {
         $em = Database::getManager();
         $resources = $this->course->resources;
@@ -2019,7 +2026,7 @@ class CourseRestorer
 
             $new_id = Database::insert($table_que, $params);
 
-            if ($new_id) {
+            if ($new_id && $idColumn) {
                 $sql = "UPDATE $table_que SET id = iid WHERE iid = $new_id";
                 Database::query($sql);
             } else {
@@ -2084,7 +2091,7 @@ class CourseRestorer
                     $em->persist($quizAnswer);
                     $em->flush();
 
-                    $answerId = $quizAnswer->getIid();
+                    $answerId = $quizAnswer->getId();
 
                     if ($answerId) {
                         $quizAnswer
@@ -2133,8 +2140,13 @@ class CourseRestorer
                     $answerId = Database::insert($table_ans, $params);
 
                     if ($answerId) {
-                        $sql = "UPDATE $table_ans SET id = iid, id_auto = iid WHERE iid = $answerId";
-                        Database::query($sql);
+                        if ($idColumn) {
+                            $sql = "UPDATE $table_ans SET id = iid, id_auto = iid WHERE iid = $answerId";
+                            Database::query($sql);
+                        } else {
+                            $sql = "UPDATE $table_ans SET id_auto = iid WHERE iid = $answerId";
+                            Database::query($sql);
+                        }
                     }
 
                     $correctAnswers[$answerId] = $answer['correct'];
@@ -2153,15 +2165,18 @@ class CourseRestorer
                 if ($question_option_list) {
                     $old_option_ids = [];
                     foreach ($question_option_list as $item) {
-                        $old_id = $item['id'];
-                        unset($item['id']);
                         if (isset($item['iid'])) {
+                            $old_id = $item['iid'];
                             unset($item['iid']);
+                            unset($item['id']);
+                        } else {
+                            $old_id = $item['id'];
+                            unset($item['id']);
                         }
                         $item['question_id'] = $new_id;
                         $item['c_id'] = $this->destination_course_id;
                         $question_option_id = Database::insert($table_options, $item);
-                        if ($question_option_id) {
+                        if ($question_option_id && $idColumn) {
                             $old_option_ids[$old_id] = $question_option_id;
                             $sql = "UPDATE $table_options SET id = iid WHERE iid = $question_option_id";
                             Database::query($sql);
@@ -2223,7 +2238,7 @@ class CourseRestorer
                                 $table_ans,
                                 $params,
                                 [
-                                    'id = ? AND c_id = ? AND question_id = ? ' => [
+                                    'iid = ? AND c_id = ? AND question_id = ? ' => [
                                         $answer_id,
                                         $this->destination_course_id,
                                         $new_id,
@@ -2255,7 +2270,7 @@ class CourseRestorer
                             $table_ans,
                             $params,
                             [
-                                'id = ? AND c_id = ? AND question_id = ? ' => [
+                                'iid = ? AND c_id = ? AND question_id = ? ' => [
                                     $answer_id,
                                     $this->destination_course_id,
                                     $new_id,

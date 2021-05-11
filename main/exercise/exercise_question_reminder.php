@@ -37,7 +37,7 @@ if (empty($objExercise) || empty($questionCategoryId) || empty($exeId) || empty(
     api_not_allowed(true);
 }
 
-$categoryId = (int) $categoryObj->id;
+$categoryId = (int) $categoryObj->iid;
 $params = "exe_id=$exeId&exerciseId=$exerciseId&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq();
 $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.$params;
 $validateUrl = api_get_path(WEB_CODE_PATH).'exercise/exercise_question_reminder.php?'.
@@ -45,7 +45,7 @@ $validateUrl = api_get_path(WEB_CODE_PATH).'exercise/exercise_question_reminder.
 
 $time_control = false;
 $clock_expired_time = ExerciseLib::get_session_time_control_key(
-    $objExercise->id,
+    $objExercise->iid,
     $learnpath_id,
     $learnpath_item_id
 );
@@ -104,9 +104,9 @@ if (!$hideHeaderAndFooter) {
 // I'm in a preview mode as course admin. Display the action menu.
 if (!$hideHeaderAndFooter && api_is_course_admin()) {
     echo '<div class="actions">';
-    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->iId.'">'.
+    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->iid.'">'.
         Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
-    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->iId.'">'.
+    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->iid.'">'.
         Display::return_icon('edit.png', get_lang('ModifyExercise'), [], 32).'</a>';
     echo '</div>';
 }

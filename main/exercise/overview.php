@@ -55,7 +55,7 @@ $interbreadcrumb[] = [
 $interbreadcrumb[] = ['url' => '#', 'name' => $objExercise->selectTitle(true)];
 
 $time_control = false;
-$clock_expired_time = ExerciseLib::get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
+$clock_expired_time = ExerciseLib::get_session_time_control_key($objExercise->iid, $learnpath_id, $learnpath_item_id);
 
 if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
     $time_control = true;
@@ -66,7 +66,7 @@ if (isset($_GET['preview'])) {
     $extra_params = '&preview=1';
 }
 $exercise_url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.
-    api_get_cidreq().'&exerciseId='.$objExercise->id.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpathItemViewId.$extra_params;
+    api_get_cidreq().'&exerciseId='.$objExercise->iid.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpathItemViewId.$extra_params;
 
 if ($time_control) {
     // Get time left for expiring time
@@ -107,12 +107,12 @@ if ($is_allowed_to_edit) {
     if ($objExercise->sessionId == $sessionId) {
         $editLink = Display::url(
             Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
-            api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
+            api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->iid
         );
     }
     $editLink .= Display::url(
         Display::return_icon('test_results.png', get_lang('Results'), [], ICON_SIZE_SMALL),
-        api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id,
+        api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->iid,
         ['title' => get_lang('Results')]
     );
 }
@@ -226,7 +226,7 @@ if (!api_is_allowed_to_session_edit()) {
 
 $attempts = Event::getExerciseResultsByUser(
     api_get_user_id(),
-    $objExercise->id,
+    $objExercise->iid,
     api_get_course_int_id(),
     api_get_session_id(),
     $learnpath_id,

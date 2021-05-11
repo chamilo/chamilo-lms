@@ -34,7 +34,7 @@ switch ($action) {
 
         if (!empty($results)) {
             foreach ($results as $exercise) {
-                $data[] = ['id' => $exercise['id'], 'text' => html_entity_decode($exercise['title'])];
+                $data[] = ['id' => $exercise['iid'], 'text' => html_entity_decode($exercise['title'])];
             }
         }
 
@@ -91,7 +91,7 @@ switch ($action) {
             exit;
         }
 
-        if ($exerciseInSession->id != $exerciseId) {
+        if ($exerciseInSession->iid != $exerciseId) {
             if ($debug) {
                 error_log("Cannot update, exercise are different.");
             }
@@ -575,7 +575,7 @@ switch ($action) {
                 // Check if time is over.
                 if ($objExercise->expired_time != 0) {
                     $clockExpiredTime = ExerciseLib::get_session_time_control_key(
-                        $objExercise->id,
+                        $objExercise->iid,
                         $learnpath_id,
                         $learnpath_item_id
                     );
@@ -809,7 +809,7 @@ switch ($action) {
                     [
                         'exe_id' => (int) $exeId,
                         'quiz' => [
-                            'id' => (int) $objExercise->id,
+                            'id' => (int) $objExercise->iid,
                             'title' => $objExercise->selectTitle(true),
                         ],
                         'question' => [

@@ -80,8 +80,8 @@ class UniqueAnswerNoOption extends Question
         $defaults = [];
         $correct = 0;
         $answer = false;
-        if (!empty($this->id)) {
-            $answer = new Answer($this->id);
+        if (!empty($this->iid)) {
+            $answer = new Answer($this->iid);
             $answer->read();
             if ($answer->nbrAnswers > 0 && !$form->isSubmitted()) {
                 $nb_answers = $answer->nbrAnswers;
@@ -100,7 +100,7 @@ class UniqueAnswerNoOption extends Question
             $count = 1;
             if (isset($_POST['lessAnswers'])) {
                 if (!isset($_SESSION['less_answer'])) {
-                    $_SESSION['less_answer'] = $this->id;
+                    $_SESSION['less_answer'] = $this->iid;
                     $nb_answers--;
                 }
             }
@@ -198,12 +198,12 @@ class UniqueAnswerNoOption extends Question
             $i++;
         }
 
-        if (empty($this->id)) {
+        if (empty($this->iid)) {
             $form->addElement('hidden', 'new_question', 1);
         }
 
         //Adding the "I don't know" question answer
-        //if (empty($this -> id)) {
+        //if (empty($this -> iid)) {
         $i = 666;
         $form->addHtml('<tr>');
 
@@ -254,7 +254,7 @@ class UniqueAnswerNoOption extends Question
         global $text;
         //ie6 fix
         if ($obj_ex->edit_exercise_in_lp == true ||
-            (empty($this->exerciseList) && empty($obj_ex->id))
+            (empty($this->exerciseList) && empty($obj_ex->iid))
         ) {
             //setting the save button here and not in the question class.php
             $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
@@ -270,7 +270,7 @@ class UniqueAnswerNoOption extends Question
         }
         $defaults['correct'] = $correct;
 
-        if (!empty($this->id)) {
+        if (!empty($this->iid)) {
             $form->setDefaults($defaults);
         } else {
             $form->setDefaults($defaults);
@@ -287,7 +287,7 @@ class UniqueAnswerNoOption extends Question
     {
         $questionWeighting = $nbrGoodAnswers = 0;
         $correct = $form->getSubmitValue('correct');
-        $objAnswer = new Answer($this->id);
+        $objAnswer = new Answer($this->iid);
         $nb_answers = $form->getSubmitValue('nb_answers');
         $minus = 1;
         if ($form->getSubmitValue('new_question')) {

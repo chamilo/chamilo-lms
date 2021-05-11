@@ -134,7 +134,8 @@ class Answer
 
         // while a record is found
         while ($object = Database::fetch_object($result)) {
-            $this->id[$i] = $object->id;
+            $this->id[$i] = $object->iid;
+            $this->iid[$i] = $object->iid;
             $this->answer[$i] = $object->answer;
             $this->correct[$i] = $object->correct;
             $this->comment[$i] = $object->comment;
@@ -144,7 +145,6 @@ class Answer
             $this->hotspot_type[$i] = $object->hotspot_type;
             $this->destination[$i] = $object->destination;
             $this->autoId[$i] = $object->id_auto;
-            $this->iid[$i] = $object->iid;
             $i++;
         }
         $this->nbrAnswers = $i - 1;
@@ -394,7 +394,7 @@ class Answer
     {
         $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $auto_id = (int) $auto_id;
-        $sql = "SELECT id, answer, id_auto FROM $table
+        $sql = "SELECT iid, answer, id_auto FROM $table
                 WHERE c_id = {$this->course_id} AND id_auto='$auto_id'";
         $rs = Database::query($sql);
 
@@ -457,7 +457,7 @@ class Answer
                 }
 
                 $list[] = [
-                    'id' => $i,
+                    'iid' => $i,
                     'answer' => $this->answer[$i],
                     'comment' => $this->comment[$i],
                     'grade' => $this->weighting[$i],
@@ -502,7 +502,7 @@ class Answer
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $sql = "SELECT type FROM $table
-                WHERE c_id = {$this->course_id} AND id = '".$this->questionId."'";
+                WHERE iid = {$this->questionId}";
         $res = Database::query($sql);
         if (Database::num_rows($res) <= 0) {
             return null;
@@ -728,7 +728,7 @@ class Answer
                 $em->persist($quizAnswer);
                 $em->flush();
 
-                $iid = $quizAnswer->getIid();
+                $iid = $quizAnswer->getId();
 
                 if ($iid) {
                     $quizAnswer
@@ -821,7 +821,7 @@ class Answer
                 $sql = "DELETE FROM $answerTable
                         WHERE
                             c_id = {$this->course_id} AND
-                            question_id = '".$questionId."' AND
+                            question_id = {$questionId} AND
                             position ='$position'";
                 Database::query($sql);
                 $i++;
@@ -852,7 +852,7 @@ class Answer
      */
     public function duplicate($newQuestion, $course_info = null)
     {
-        $newQuestionId = $newQuestion->id;
+        $newQuestionId = $newQuestion->iid;
 
         if (empty($course_info)) {
             $course_info = $this->course;
@@ -872,7 +872,7 @@ class Answer
 
             if (!empty($origin_options)) {
                 foreach ($origin_options as $item) {
-                    $new_option_list[] = $item['id'];
+                    $new_option_list[] = $item['iid'];
                 }
             }
 
@@ -883,7 +883,7 @@ class Answer
             $i = 0;
             if (!empty($destination_options)) {
                 foreach ($destination_options as $item) {
-                    $fixed_list[$new_option_list[$i]] = $item['id'];
+                    $fixed_list[$new_option_list[$i]] = $item['iid'];
                     $i++;
                 }
             }
@@ -903,7 +903,7 @@ class Answer
                 $temp = [];
                 for ($i = 1; $i <= $this->nbrAnswers; $i++) {
                     $answer = [
-                        'id' => $this->id[$i],
+                        'iid' => $this->iid[$i],
                         'answer' => $this->answer[$i],
                         'correct' => $this->correct[$i],
                         'comment' => $this->comment[$i],
@@ -915,7 +915,7 @@ class Answer
                         'destination' => $this->destination[$i],
                     ];
                     $temp[$answer['position']] = $answer;
-                    $allAnswers[$this->id[$i]] = $this->answer[$i];
+                    $allAnswers[$this->iid[$i]] = $this->answer[$i];
                 }
 
                 foreach ($temp as $answer) {
@@ -950,7 +950,7 @@ class Answer
                     $em->persist($quizAnswer);
                     $em->flush();
 
-                    $answerId = $quizAnswer->getIid();
+                    $answerId = $quizAnswer->getId();
 
                     if ($answerId) {
                         $quizAnswer
@@ -1002,7 +1002,7 @@ class Answer
                     $em->persist($quizAnswer);
                     $em->flush();
 
-                    $answerId = $quizAnswer->getIid();
+                    $answerId = $quizAnswer->getId();
                     $quizAnswer
                         ->setId($answerId)
                         ->setIdAuto($answerId);
@@ -1012,7 +1012,7 @@ class Answer
 
                     $correctAnswers[$answerId] = $correct;
                     $onlyAnswers[$answerId] = $this->answer[$i];
-                    $allAnswers[$this->id[$i]] = $this->answer[$i];
+                    $allAnswers[$this->iid[$i]] = $this->answer[$i];
                 }
             }
 
@@ -1029,7 +1029,7 @@ class Answer
                             $tableAnswer,
                             $params,
                             [
-                                'id = ? AND c_id = ? AND question_id = ? ' => [
+                                'iid = ? AND c_id = ? AND question_id = ? ' => [
                                     $answer_id,
                                     $courseId,
                                     $newQuestionId,

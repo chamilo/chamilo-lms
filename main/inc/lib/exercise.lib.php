@@ -49,7 +49,7 @@ class ExerciseLib
         $show_icon = false
     ) {
         $course_id = $exercise->course_id;
-        $exerciseId = $exercise->iId;
+        $exerciseId = $exercise->iid;
 
         if (empty($course_id)) {
             return '';
@@ -82,7 +82,7 @@ class ExerciseLib
                 $questionDescription = $objQuestionTmp->selectDescription();
                 if ($show_title) {
                     if ($exercise->display_category_name) {
-                        TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
+                        TestCategory::displayCategoryAndTitle($objQuestionTmp->iid);
                     }
                     $titleToDisplay = $objQuestionTmp->getTitleToDisplay($current_item);
                     if ($answerType == READING_COMPREHENSION) {
@@ -1467,7 +1467,7 @@ HTML;
                 $answers = $objAnswerTmp->selectAnswerByAutoId(
                     $objAnswerTmp->selectAutoId($answerId)
                 );
-                $answers_hotspot[$answers['id']] = $objAnswerTmp->selectAnswer(
+                $answers_hotspot[$answers['iid']] = $objAnswerTmp->selectAnswer(
                     $answerId
                 );
             }
@@ -1515,7 +1515,7 @@ HTML;
                     <script>
                         new ".($answerType == HOT_SPOT ? "HotspotQuestion" : "DelineationQuestion")."({
                             questionId: $questionId,
-                            exerciseId: {$exercise->id},
+                            exerciseId: {$exercise->iid},
                             exeId: 0,
                             selector: '#hotspot-preview-$questionId',
                             'for': 'preview',
@@ -1530,7 +1530,7 @@ HTML;
             if (!$only_questions) {
                 if ($show_title) {
                     if ($exercise->display_category_name) {
-                        TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
+                        TestCategory::displayCategoryAndTitle($objQuestionTmp->iid);
                     }
                     echo $objQuestionTmp->getTitleToDisplay($current_item);
                 }
@@ -1557,7 +1557,7 @@ HOTSPOT;
                         $(function() {
                             new ".($answerType == HOT_SPOT_DELINEATION ? 'DelineationQuestion' : 'HotspotQuestion')."({
                                 questionId: $questionId,
-                                exerciseId: {$exercise->id},
+                                exerciseId: {$exercise->iid},
                                 exeId: 0,
                                 selector: '#question_div_' + $questionId + ' .hotspot-image',
                                 'for': 'user',
@@ -1608,7 +1608,7 @@ HOTSPOT;
             if (!$only_questions) {
                 if ($show_title) {
                     if ($exercise->display_category_name) {
-                        TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
+                        TestCategory::displayCategoryAndTitle($objQuestionTmp->iid);
                     }
                     echo $objQuestionTmp->getTitleToDisplay($current_item);
                 }
@@ -1763,7 +1763,7 @@ HOTSPOT;
             $sql = " SELECT q.*, tee.*
                 FROM $quizTable as q
                 INNER JOIN $trackExerciseTable as tee
-                ON q.id = tee.exe_exo_id
+                ON q.iid = tee.exe_exo_id
                 INNER JOIN $courseTable c
                 ON c.id = tee.c_id
                 WHERE tee.exe_id = $exeId
@@ -1801,7 +1801,7 @@ HOTSPOT;
         $exercise_id = (int) $exercise_id;
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
         $sql = "SELECT expired_time FROM $table
-                WHERE c_id = $course_id AND id = $exercise_id";
+                WHERE c_id = $course_id AND iid = $exercise_id";
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
         if (!empty($row['expired_time'])) {
@@ -2374,7 +2374,7 @@ HOTSPOT;
             $sql = " $sql_select
                 FROM $TBL_EXERCICES AS ce
                 INNER JOIN $sql_inner_join_tbl_track_exercices AS te
-                ON (te.exe_exo_id = ce.id)
+                ON (te.exe_exo_id = ce.iid)
                 INNER JOIN $sql_inner_join_tbl_user AS user
                 ON (user.user_id = exe_user_id)
                 WHERE
@@ -3551,7 +3551,7 @@ EOT;
         } else {
             // All exercises
             $conditions = [
-                'where' => ["$sql_active_exercises (session_id = 0 OR session_id IS NULL OR session_id = ? ) AND c_id=?" => $params],
+                'where' => ["$sql_active_exercises (session_id = 0 OR session_id IS NULL OR session_id = ? ) AND c_id = ?" => $params],
                 'order' => 'title',
             ];
         }
@@ -4589,13 +4589,13 @@ EOT;
             $tabCategory = GroupManager::get_category_from_group(
                 $tabGroups[$i]['iid']
             );
-            if ($tabCategory["id"] != $currentCatId) {
-                $res .= "<option value='-1' disabled='disabled'>".$tabCategory["title"]."</option>";
-                $currentCatId = $tabCategory["id"];
+            if ($tabCategory['iid'] != $currentCatId) {
+                $res .= "<option value='-1' disabled='disabled'>".$tabCategory['title']."</option>";
+                $currentCatId = $tabCategory['iid'];
             }
-            $res .= "<option ".$tabSelected[$tabGroups[$i]["id"]]."style='margin-left:40px' value='".
-                $tabGroups[$i]["id"]."'>".
-                $tabGroups[$i]["name"].
+            $res .= "<option ".$tabSelected[$tabGroups[$i]['iid']]."style='margin-left:40px' value='".
+                $tabGroups[$i]['iid']."'>".
+                $tabGroups[$i]['name'].
                 "</option>";
         }
         $res .= "</select>";
@@ -4681,7 +4681,7 @@ EOT;
             }
 
             if (!empty($objExercise->getResultAccess())) {
-                $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id;
+                $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&exerciseId='.$objExercise->iid;
                 echo $objExercise->returnTimeLeftDiv();
                 echo $objExercise->showSimpleTimeControl(
                     $objExercise->getResultAccessTimeDiff($exercise_stat_info),
@@ -4747,7 +4747,7 @@ EOT;
             if ($objExercise->attempts > 0) {
                 $attempts = Event::getExerciseResultsByUser(
                     api_get_user_id(),
-                    $objExercise->id,
+                    $objExercise->iid,
                     $courseId,
                     $sessionId,
                     $exercise_stat_info['orig_lp_id'],
@@ -4867,7 +4867,7 @@ EOT;
             $exerciseResult = Session::read('exerciseResult');
             $exerciseResultCoordinates = Session::read('exerciseResultCoordinates');
             $delineationResults = Session::read('hotspot_delineation_result');
-            $delineationResults = isset($delineationResults[$objExercise->id]) ? $delineationResults[$objExercise->id] : null;
+            $delineationResults = isset($delineationResults[$objExercise->iid]) ? $delineationResults[$objExercise->iid] : null;
         }
 
         $countPendingQuestions = 0;
@@ -5291,7 +5291,7 @@ EOT;
      */
     public static function displayResultsInRanking($exercise, $currentUserId, $courseId, $sessionId = 0)
     {
-        $exerciseId = $exercise->iId;
+        $exerciseId = $exercise->iid;
         $data = self::exerciseResultsInRanking($exerciseId, $courseId, $sessionId);
 
         $table = new HTML_Table(['class' => 'table table-hover table-striped table-bordered']);
@@ -6024,7 +6024,7 @@ EOT;
         $sql = "SELECT q.question, question_id, count(q.iid) count
                 FROM $attemptTable t
                 INNER JOIN $questionTable q
-                ON (q.c_id = t.c_id AND q.id = t.question_id)
+                ON (q.iid = t.question_id)
                 INNER JOIN $trackTable te
                 ON (te.c_id = q.c_id AND t.exe_id = te.exe_id)
                 WHERE
@@ -6161,7 +6161,7 @@ EOT;
         // If there are no pending questions (Open questions).
         if (0 === $countPendingQuestions) {
             /*$extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
-                $objExercise->iId,
+                $objExercise->iid,
                 'signature_mandatory'
             );
 
@@ -6176,7 +6176,7 @@ EOT;
 
             // Notifications.
             $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
-                $objExercise->iId,
+                $objExercise->iid,
                 'notifications'
             );
             $exerciseNotification = '';
@@ -6191,19 +6191,19 @@ EOT;
 
             if ($exercisePassed) {
                 $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
-                    $objExercise->iId,
+                    $objExercise->iid,
                     'MailSuccess'
                 );
             } else {
                 $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
-                    $objExercise->iId,
+                    $objExercise->iid,
                     'MailAttempt'.$attemptCountToSend
                 );
             }
 
             // Blocking exercise.
             $blockPercentageExtra = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
-                $objExercise->iId,
+                $objExercise->iid,
                 'blocking_percentage'
             );
             $blockPercentage = false;
@@ -6214,7 +6214,7 @@ EOT;
                 $passBlock = $stats['total_percentage'] > $blockPercentage;
                 if (false === $passBlock) {
                     $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
-                        $objExercise->iId,
+                        $objExercise->iid,
                         'MailIsBlockByPercentage'
                     );
                 }
@@ -6357,7 +6357,7 @@ EOT;
                                 if (isset($attempt['add_pdf']) && $attempt['add_pdf']) {
                                     // Get pdf content
                                     $pdfExtraData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
-                                        $objExercise->iId,
+                                        $objExercise->iid,
                                         $attempt['add_pdf']
                                     );
 
@@ -6391,7 +6391,7 @@ EOT;
                                 $content = isset($attempt['content_default']) ? $attempt['content_default'] : '';
                                 if (isset($attempt['content'])) {
                                     $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
-                                        $objExercise->iId,
+                                        $objExercise->iid,
                                         $attempt['content']
                                     );
                                     if ($extraFieldData && isset($extraFieldData['value']) && !empty($extraFieldData['value'])) {

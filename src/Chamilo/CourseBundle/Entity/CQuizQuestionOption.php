@@ -37,13 +37,6 @@ class CQuizQuestionOption
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */
     protected $questionId;
@@ -137,13 +130,13 @@ class CQuizQuestionOption
     /**
      * Set id.
      *
-     * @param int $id
+     * @param int $iid
      *
      * @return CQuizQuestionOption
      */
-    public function setId($id)
+    public function setId($iid)
     {
-        $this->id = $id;
+        $this->iid = $iid;
 
         return $this;
     }
@@ -155,7 +148,7 @@ class CQuizQuestionOption
      */
     public function getId()
     {
-        return $this->id;
+        return $this->iid;
     }
 
     /**
@@ -180,25 +173,5 @@ class CQuizQuestionOption
     public function getCId()
     {
         return $this->cId;
-    }
-
-    /**
-     * @return int
-     */
-    public function getIid()
-    {
-        return $this->iid;
-    }
-
-    /**
-     * @param int $iid
-     *
-     * @return CQuizQuestionOption
-     */
-    public function setIid($iid)
-    {
-        $this->iid = $iid;
-
-        return $this;
     }
 }

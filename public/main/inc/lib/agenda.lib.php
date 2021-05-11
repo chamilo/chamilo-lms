@@ -168,7 +168,7 @@ class Agenda
      */
     public function setType($type)
     {
-        $type = (string) trim($type);
+        $type = trim($type);
         $typeList = $this->getTypes();
         if (in_array($type, $typeList, true)) {
             $this->type = $type;

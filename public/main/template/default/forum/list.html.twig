@@ -63,7 +63,7 @@
                 {% endset %}
             {% else %}
                 {% set panel_title %}
-                    <a href="{{ item.url }}" title="{{ item.title }}">
+                    <a href="{{ item.url }}" title="{{ item.title }}" class="flex flex-row gap-2">
                         <span class="open">{{ 'forum_blue.png'|img(32) }}</span>
                         {{ item.title }}{{ item.icon_session }}
                     </a>

@@ -615,7 +615,7 @@ function display_language_selection()
         <div class="install-icon">
             <img width="150px;" src="chamilo-install.svg"/>
         </div>
-        <h2 class="install-title">
+        <h2 class="text-2xl">
             <?php echo display_step_sequence(); ?>
             <?php echo get_lang('Installation Language'); ?>
         </h2>
@@ -1469,7 +1469,7 @@ function display_database_settings_form(
     echo '</div></div>';
     if (INSTALL_TYPE_UPDATE != $installType) { ?>
         <button type="submit" class="btn btn-primary" name="step3" value="step3">
-            <em class="fa fa-refresh"> </em>
+            <em class="fa fa-sync"> </em>
             <?php echo get_lang('Check database connection'); ?>
         </button>
         <?php
@@ -1553,7 +1553,7 @@ function display_database_settings_form(
 
    <div class="btn-group" role="group">
        <button type="submit" name="step2"
-               class="btn btn-secondary float-right" value="&lt; <?php echo get_lang('Previous'); ?>" >
+               class="btn btn-secondary" value="&lt; <?php echo get_lang('Previous'); ?>" >
            <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
        </button>
        <input type="hidden" name="is_executable" id="is_executable" value="-" />
@@ -1902,7 +1902,7 @@ function display_configuration_settings_form(
     <div class='btn-group'>
         <button
             type="submit"
-            class="btn btn-secondary pull-right"
+            class="btn btn-secondary "
             name="step3" value="&lt; <?php echo get_lang('Previous'); ?>" >
                 <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
         </button>

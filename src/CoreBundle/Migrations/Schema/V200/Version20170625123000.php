@@ -66,10 +66,12 @@ class Version20170625123000 extends AbstractMigrationChamilo
         }
 
         $this->addSql('UPDATE c_attendance_sheet SET attendance_calendar_id = NULL WHERE attendance_calendar_id = 0;');
+        $this->addSql('UPDATE c_attendance_sheet SET attendance_calendar_id = NULL WHERE attendance_calendar_id = 0;');
         $this->addSql('ALTER TABLE c_attendance_sheet CHANGE user_id user_id INT DEFAULT NULL, CHANGE attendance_calendar_id attendance_calendar_id INT DEFAULT NULL');
 
         //ALTER TABLE c_attendance_sheet DROP c_id
 
+        $this->addSql('DELETE FROM c_attendance_sheet WHERE user_id NOT IN (SELECT id FROM user)');
         if (false === $table->hasForeignKey('FK_AD1394FAA76ED395')) {
             $this->addSql('ALTER TABLE c_attendance_sheet ADD CONSTRAINT FK_AD1394FAA76ED395 FOREIGN KEY (user_id) REFERENCES user (id);');
         }
@@ -135,6 +137,8 @@ class Version20170625123000 extends AbstractMigrationChamilo
 
         $this->addSql('UPDATE c_attendance_result SET attendance_id = NULL WHERE attendance_id = 0');
         $this->addSql('UPDATE c_attendance_result SET user_id = NULL WHERE user_id = 0');
+
+        $this->addSql('DELETE FROM c_attendance_result WHERE user_id NOT IN (SELECT id FROM user)');
 
         //ALTER TABLE c_attendance_result DROP c_id, ;
         $this->addSql('ALTER TABLE c_attendance_result CHANGE user_id user_id INT DEFAULT NULL, CHANGE attendance_id attendance_id INT DEFAULT NULL ');

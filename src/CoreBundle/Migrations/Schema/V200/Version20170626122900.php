@@ -134,6 +134,7 @@ class Version20170626122900 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('user_rel_course_vote');
         $this->addSql('ALTER TABLE user_rel_course_vote CHANGE user_id user_id INT DEFAULT NULL');
+        $this->addSql('DELETE FROM user_rel_course_vote WHERE user_id NOT IN (SELECT id FROM user)');
         if (!$table->hasForeignKey('FK_4038AA47A76ED395')) {
             $this->addSql(
                 'ALTER TABLE user_rel_course_vote ADD CONSTRAINT FK_4038AA47A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
@@ -170,6 +171,8 @@ class Version20170626122900 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('user_rel_tag');
         $this->addSql('ALTER TABLE user_rel_tag CHANGE user_id user_id INT DEFAULT NULL');
+        $this->addSql('DELETE FROM user_rel_tag WHERE user_id NOT IN (SELECT id FROM user)');
+
         if (!$table->hasForeignKey('FK_D5CB75B6A76ED395')) {
             $this->addSql(
                 'ALTER TABLE user_rel_tag ADD CONSTRAINT FK_D5CB75B6A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'

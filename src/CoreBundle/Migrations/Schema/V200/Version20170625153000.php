@@ -73,9 +73,10 @@ class Version20170625153000 extends AbstractMigrationChamilo
 
         $this->addSql('ALTER TABLE c_forum_forum CHANGE lp_id lp_id INT DEFAULT NULL');
         $this->addSql('UPDATE c_forum_forum SET lp_id = NULL WHERE lp_id = 0');
-        if (false === $table->hasIndex('UNIQ_47A9C9968DFD1EF')) {
+
+        /*if (false === $table->hasIndex('UNIQ_47A9C9968DFD1EF')) {
             $this->addSql('ALTER TABLE c_forum_forum ADD UNIQUE INDEX UNIQ_47A9C9968DFD1EF (lp_id)');
-        }
+        }*/
 
         if ($table->hasForeignKey('FK_47A9C9921BF9426')) {
             $this->addSql('ALTER TABLE c_forum_forum DROP FOREIGN KEY FK_47A9C9921BF9426');
@@ -97,7 +98,7 @@ class Version20170625153000 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_5DA7884CDBF72317 ON c_forum_thread (lp_item_id)');
         }
 
-        $this->addSql('UPDATE c_forum_thread SET thread_date = NOW() WHERE thread_date = "" OR thread_date is NULL OR thread_date = 0');
+        $this->addSql('UPDATE c_forum_thread SET thread_date = NOW() WHERE thread_date is NULL OR thread_date = 0');
         $this->addSql('ALTER TABLE c_forum_thread CHANGE thread_date thread_date DATETIME NOT NULL');
 
         if (false === $table->hasColumn('resource_node_id')) {
@@ -181,7 +182,7 @@ class Version20170625153000 extends AbstractMigrationChamilo
             $this->addSql('CREATE UNIQUE INDEX UNIQ_B5BEF5591BAD783F ON c_forum_post (resource_node_id)');
         }
 
-        $this->addSql('UPDATE c_forum_post SET post_date = NOW() WHERE post_date = "" OR post_date is NULL OR post_date = 0');
+        $this->addSql('UPDATE c_forum_post SET post_date = NOW() WHERE post_date is NULL OR post_date = 0');
         $this->addSql('ALTER TABLE c_forum_post CHANGE post_date post_date DATETIME NOT NULL');
     }
 }

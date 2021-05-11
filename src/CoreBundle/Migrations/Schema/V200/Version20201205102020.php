@@ -40,7 +40,6 @@ final class Version20201205102020 extends AbstractMigrationChamilo
         }
 
         $table = $schema->getTable('skill_rel_course');
-
         if (!$table->hasForeignKey('FK_E7CEC7FA5585C142')) {
             $this->addSql(
                 'ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA5585C142 FOREIGN KEY (skill_id) REFERENCES skill (id) ON DELETE CASCADE'

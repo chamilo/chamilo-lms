@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Chamilo\CourseBundle\Repository\CLpCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
@@ -41,6 +42,8 @@ final class Version20201216122012 extends AbstractMigrationChamilo
         $sessionRepo = $container->get(SessionRepository::class);
         $groupRepo = $container->get(CGroupRepository::class);
         $userRepo = $container->get(UserRepository::class);
+
+        $lpItemRepo = $container->get(CLpItem::class);
 
         $admin = $this->getAdmin();
 
@@ -87,12 +90,12 @@ final class Version20201216122012 extends AbstractMigrationChamilo
             $sql = "SELECT * FROM c_lp WHERE c_id = {$courseId}
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            foreach ($items as $itemData) {
-                $id = $itemData['iid'];
+            $lps = $result->fetchAllAssociative();
+            foreach ($lps as $lp) {
+                $lpId = $lp['iid'];
 
                 /** @var CLp $resource */
-                $resource = $lpRepo->find($id);
+                $resource = $lpRepo->find($lpId);
                 if ($resource->hasResourceNode()) {
                     continue;
                 }
@@ -114,6 +117,37 @@ final class Version20201216122012 extends AbstractMigrationChamilo
 
                 $em->persist($resource);
                 $em->flush();
+
+                $itemRoot = $lpItemRepo->getItemRoot($lpId);
+
+                if (!empty($itemRoot)) {
+                    continue;
+                }
+
+                $lpItem = new CLpItem();
+                $lpItem
+                    ->setTitle('root')
+                    ->setPath('root')
+                    ->setLp($resource)
+                    ->setItemType('root');
+                $em->persist($lpItem);
+                $em->flush();
+
+                // Migrate c_lp_item
+                $sql = "SELECT * FROM c_lp_item WHERE lp_id = $lpId
+                        ORDER BY display_order";
+
+                $resultItems = $connection->executeQuery($sql);
+                $lpItems = $resultItems->fetchAllAssociative();
+                $orderList = [];
+                foreach ($lpItems as $item) {
+                    $object = new \stdClass();
+                    $object->id = $item['iid'];
+                    $object->parent_id = $item['parentId'];
+                    $orderList[] = $object;
+                }
+
+                \learnpath::sortItemByOrderList($lpId, $orderList);
             }
         }
     }

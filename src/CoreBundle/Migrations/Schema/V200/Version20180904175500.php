@@ -34,7 +34,8 @@ class Version20180904175500 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX idx_default_user_id ON track_e_default (default_user_id)');
         }
 
-        $this->addSql('UPDATE track_e_default SET default_date = NOW() WHERE default_date = "" OR default_date is NULL OR default_date = 0');
+        $this->addSql('UPDATE track_e_default SET default_date = NOW() WHERE default_date is NULL OR default_date = 0');
+        $this->addSql('DELETE FROM track_e_default WHERE default_user_id NOT IN (SELECT id FROM user)');
         $this->addSql('ALTER TABLE track_e_default CHANGE default_date default_date DATETIME NOT NULL');
 
         $table = $schema->getTable('track_e_course_access');
@@ -43,6 +44,8 @@ class Version20180904175500 extends AbstractMigrationChamilo
                 'CREATE INDEX user_course_session_date ON track_e_course_access (user_id, c_id, session_id, login_course_date)'
             );
         }
+
+        $this->addSql('DELETE FROM track_e_course_access WHERE user_id NOT IN (SELECT id FROM user)');
         $this->addSql('ALTER TABLE track_e_course_access CHANGE user_id user_id INT DEFAULT NULL');
         if (!$table->hasForeignKey('FK_E8C05DC5A76ED395')) {
             $this->addSql(
@@ -81,6 +84,9 @@ class Version20180904175500 extends AbstractMigrationChamilo
         }
 
         $table = $schema->getTable('track_e_hotspot');
+
+        $this->addSql('DELETE FROM track_e_hotspot WHERE c_id NOT IN (SELECT id FROM course)');
+
         if (false === $table->hasForeignKey('FK_A89CC3B691D79BD3')) {
             $this->addSql(
                 'ALTER TABLE track_e_hotspot ADD CONSTRAINT FK_A89CC3B691D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)'
@@ -91,6 +97,10 @@ class Version20180904175500 extends AbstractMigrationChamilo
         }
 
         $table = $schema->getTable('track_e_attempt');
+
+        $this->addSql('DELETE FROM track_e_attempt WHERE c_id NOT IN (SELECT id FROM course)');
+        $this->addSql('DELETE FROM track_e_attempt WHERE user_id NOT IN (SELECT id FROM user)');
+
         $this->addSql('ALTER TABLE track_e_attempt CHANGE c_id c_id INT DEFAULT NULL');
         $this->addSql('UPDATE track_e_attempt SET tms = NOW() WHERE tms = "" OR tms is NULL OR tms = 0');
         $this->addSql('ALTER TABLE track_e_attempt CHANGE tms tms DATETIME NOT NULL');

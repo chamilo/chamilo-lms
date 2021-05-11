@@ -13,19 +13,18 @@ class Version20180904190000 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Migrate ';
+        return 'Migrate sys_announcement';
     }
 
     public function up(Schema $schema): void
     {
         $table = $schema->getTable('sys_announcement');
 
-        $this->addSql('');
         if (!$table->hasForeignKey('FK_E4A3EAD473444FD5')) {
-            $this->addSql('');
+            //$this->addSql('');
         }
         if (!$table->hasIndex('IDX_E4A3EAD473444FD5')) {
-            $this->addSql('');
+            //$this->addSql('');
         }
     }
 

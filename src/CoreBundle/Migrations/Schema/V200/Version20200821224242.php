@@ -27,6 +27,8 @@ final class Version20200821224242 extends AbstractMigrationChamilo
 
         $this->addSql('UPDATE message SET parent_id = NULL WHERE parent_id = 0');
 
+        $this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id NOT IN (SELECT id FROM message)');
+
         if (false === $table->hasForeignKey('FK_B6BD307F727ACA70')) {
             $this->addSql(
                 'ALTER TABLE message ADD CONSTRAINT FK_B6BD307F727ACA70 FOREIGN KEY (parent_id) REFERENCES message (id);'
@@ -36,6 +38,10 @@ final class Version20200821224242 extends AbstractMigrationChamilo
         $this->addSql('DELETE FROM message WHERE user_sender_id IS NULL OR user_sender_id = 0');
         $this->addSql('ALTER TABLE message CHANGE user_receiver_id user_receiver_id INT DEFAULT NULL');
         $this->addSql('UPDATE message SET user_receiver_id = NULL WHERE user_receiver_id = 0');
+
+        $this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id in (select id FROM message WHERE user_sender_id NOT IN (SELECT id FROM user))');
+        $this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id in (select id FROM message WHERE user_receiver_id NOT IN (SELECT id FROM user))');
+
         $this->addSql('DELETE FROM message WHERE user_sender_id NOT IN (SELECT id FROM user)');
         $this->addSql('DELETE FROM message WHERE user_receiver_id IS NOT NULL AND user_receiver_id NOT IN (SELECT id FROM user)');
 
@@ -77,6 +83,8 @@ final class Version20200821224242 extends AbstractMigrationChamilo
                 'ALTER TABLE message_feedback ADD CONSTRAINT FK_DB0F8049A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;'
             );
         }
+
+        $this->addSql('DELETE FROM message_attachment WHERE message_id NOT IN (SELECT id FROM message)');
 
         $table = $schema->getTable('message_attachment');
         if (false === $table->hasIndex('IDX_B68FF524537A1329')) {

@@ -827,11 +827,9 @@ class CourseManager
                 $sessionId,
                 $courseCode
             );
-
-            return true;
         } else {
             // Check whether the user has not been already subscribed to the course.
-            $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
+            $sql = "SELECT * FROM $courseUserTable
                     WHERE
                         user_id = $userId AND
                         relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
@@ -883,78 +881,52 @@ class CourseManager
                 }
             }
 
-            $maxSort = api_max_sort_value('0', $userId);
-            $params = [
-                'c_id' => $courseId,
-                'user_id' => $userId,
-                'status' => $status,
-                'sort' => $maxSort + 1,
-                'relation_type' => 0,
-                'user_course_cat' => (int) $userCourseCategoryId,
-            ];
-            $insertId = Database::insert($courseUserTable, $params);
+            $maxSort = api_max_sort_value('0', $userId) + 1;
 
-            if ($insertId) {
-                Display::addFlash(
-                    Display::return_message(
-                        sprintf(
-                            get_lang('UserXAddedToCourseX'),
-                            $userInfo['complete_name_with_username'],
-                            $courseInfo['title']
-                        )
+            self::insertUserInCourse(
+                $userId,
+                $courseId,
+                ['status' => $status, 'sort' => $maxSort, 'user_course_cat' => $userCourseCategoryId]
+            );
+
+            Display::addFlash(
+                Display::return_message(
+                    sprintf(
+                        get_lang('UserXAddedToCourseX'),
+                        $userInfo['complete_name_with_username'],
+                        $courseInfo['title']
                     )
+                )
+            );
+
+            $send = api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $courseInfo);
+
+            if ($send == 1) {
+                self::email_to_tutor(
+                    $userId,
+                    $courseInfo['real_id'],
+                    false
                 );
-
-                $send = api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $courseInfo);
-
-                if ($send == 1) {
-                    self::email_to_tutor(
-                        $userId,
-                        $courseInfo['real_id'],
-                        false
-                    );
-                } elseif ($send == 2) {
-                    self::email_to_tutor(
-                        $userId,
-                        $courseInfo['real_id'],
-                        true
-                    );
-                }
-
-                $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $courseInfo);
-                if ($subscribe === 1) {
-                    require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
-                    $forums = get_forums(0, $courseCode, true, $sessionId);
-                    foreach ($forums as $forum) {
-                        $forumId = $forum['iid'];
-                        set_notification('forum', $forumId, false, $userInfo, $courseInfo);
-                    }
-                }
-
-                // Add event to the system log
-                Event::addEvent(
-                    LOG_SUBSCRIBE_USER_TO_COURSE,
-                    LOG_COURSE_CODE,
-                    $courseCode,
-                    api_get_utc_datetime(),
-                    api_get_user_id(),
-                    $courseId
+            } elseif ($send == 2) {
+                self::email_to_tutor(
+                    $userId,
+                    $courseInfo['real_id'],
+                    true
                 );
-
-                Event::addEvent(
-                    LOG_SUBSCRIBE_USER_TO_COURSE,
-                    LOG_USER_OBJECT,
-                    $userInfo,
-                    api_get_utc_datetime(),
-                    api_get_user_id(),
-                    $courseId
-                );
-
-                return true;
             }
 
-            return false;
+            $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $courseInfo);
+            if ($subscribe === 1) {
+                require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+                $forums = get_forums(0, $courseCode, true, $sessionId);
+                foreach ($forums as $forum) {
+                    $forumId = $forum['iid'];
+                    set_notification('forum', $forumId, false, $userInfo, $courseInfo);
+                }
+            }
         }
+
+        return true;
     }
 
     /**
@@ -7165,6 +7137,30 @@ class CourseManager
         }
 
         return '';
+    }
+
+    public static function insertUserInCourse(int $studentId, int $courseId, array $relationInfo = [])
+    {
+        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
+        $relationInfo = array_merge(
+            ['relation_type' => 0, 'status' => STUDENT, 'sort' => 0, 'user_course_cat' => 0],
+            $relationInfo
+        );
+
+        Database::insert(
+            $courseUserTable,
+            [
+                'c_id' => $courseId,
+                'user_id' => $studentId,
+                'status' => $relationInfo['status'],
+                'sort' => $relationInfo['sort'],
+                'relation_type' => $relationInfo['relation_type'],
+                'user_course_cat' => $relationInfo['user_course_cat'],
+            ]
+        );
+
+        Event::insertedUserInCourse($studentId, $courseId);
     }
 
     /**

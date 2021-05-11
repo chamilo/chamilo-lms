@@ -2698,6 +2698,30 @@ class Event
         return $now - $time;
     }
 
+    public static function insertedUserInCourse(int $subscribedId, int $courseId)
+    {
+        $dateTime = api_get_utc_datetime();
+        $registrantId = api_get_user_id();
+
+        Event::addEvent(
+            LOG_SUBSCRIBE_USER_TO_COURSE,
+            LOG_COURSE_CODE,
+            api_get_course_entity($courseId)->getCode(),
+            $dateTime,
+            $registrantId,
+            $courseId
+        );
+
+        Event::addEvent(
+            LOG_SUBSCRIBE_USER_TO_COURSE,
+            LOG_USER_OBJECT,
+            api_get_user_info($subscribedId),
+            $dateTime,
+            $registrantId,
+            $courseId
+        );
+    }
+
     public static function insertedUserInCourseSession(int $subscribedId, int $courseId, int $sessionId)
     {
         $dateTime = api_get_utc_datetime();

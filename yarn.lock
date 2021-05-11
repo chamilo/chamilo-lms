@@ -1847,6 +1847,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tailwindcss/typography@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "@tailwindcss/typography@npm:0.4.0"
+  dependencies:
+    lodash.castarray: ^4.4.0
+    lodash.isplainobject: ^4.0.6
+    lodash.merge: ^4.6.2
+    lodash.uniq: ^4.5.0
+  peerDependencies:
+    tailwindcss: 2.0.0-alpha.24 || ^2.0.0
+  checksum: 1d5748dbbcb376927c1c880c91560c48c7a260aeeb5507fe07df1e9f6610d9d7cc943b1e878aec9e6a480f21d28f2ec291fb4d213dfe798e08f8760051fd6ade
+  languageName: node
+  linkType: hard
+
 "@tailwindcss/ui@npm:^0.7.2":
   version: 0.7.2
   resolution: "@tailwindcss/ui@npm:0.7.2"
@@ -5822,6 +5836,7 @@ __metadata:
     "@quasar/extras": latest
     "@symfony/webpack-encore": ^1.1.1
     "@tailwindcss/forms": ^0.3.2
+    "@tailwindcss/typography": ^0.4.0
     "@tailwindcss/ui": ^0.7.2
     "@tinymce/tinymce-vue": ^4.0
     "@types/lodash": ^4.14.168
@@ -11995,6 +12010,13 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
+"lodash.castarray@npm:^4.4.0":
+  version: 4.4.0
+  resolution: "lodash.castarray@npm:4.4.0"
+  checksum: 45fb788a2e5a8550aab10ad1e057bbaf2c411734b06b249e87ad1243d39fa28543f249207fbf9c6e66f78a57cef0b187bbd3e2f84d7767593b5d944e6e6f5bcf
+  languageName: node
+  linkType: hard
+
 "lodash.clonedeep@npm:^4.5.0":
   version: 4.5.0
   resolution: "lodash.clonedeep@npm:4.5.0"
@@ -12065,7 +12087,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"lodash.merge@npm:^4.6.1":
+"lodash.merge@npm:^4.6.1, lodash.merge@npm:^4.6.2":
   version: 4.6.2
   resolution: "lodash.merge@npm:4.6.2"
   checksum: 4e2bb42a87a148991458d7c384bc197e96f7115e9536fc8e2c86ae9e99ce1c1f693ff15eb85761952535f48d72253aed8e673d9f32dde3e671cd91e3fde220a7

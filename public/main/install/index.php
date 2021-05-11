@@ -544,7 +544,7 @@ if (isset($_POST['step2'])) {
                         class="btn btn-success"
                         type="submit"
                         name="button_step6" value="<?php echo get_lang('Install Chamilo'); ?>">
-                    <em class="fa fa-floppy-o"> </em>
+                    <em class="fa fa-check"> </em>
                     <?php echo get_lang('Install chamilo'); ?>
                 </button>
                 <button class="btn btn-save" id="button_please_wait"></button>
@@ -869,10 +869,12 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
 <body class="w-full justify-center bg-gradient-to-r from-blue-400 to-blue-600">
     <div class="flex flex-col items-center justify-center ">
         <div class="rounded p-4 m-8 w-3/5 bg-white flex">
-            <div class="w-1/3 p-6">
-                <div class="logo-install">
+            <div class="w-1/3 p-4">
+                <div class="logo-install mb-4">
+                    <a href="index.php">
                     <img src="../../build/css/themes/chamilo/images/header-logo.png"
                          class="img-fluid" alt="Chamilo" />
+                    </a>
                 </div>
                 <div class="install-steps">
                     <ol class="list-group">
@@ -908,11 +910,12 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
                 </div>
                 <div id="note">
                     <a class="btn btn-info btn-block" href="<?php echo $installationGuideLink; ?>" target="_blank">
-                        <em class="fa fa-file-text-o"></em> <?php echo $translator->trans('Read the installation guide'); ?>
+                        <em class="fa fa-file-alt"></em>
+                        <?php echo $translator->trans('Read the installation guide'); ?>
                     </a>
                 </div>
             </div>
-            <div class="w-2/3 p-6">
+            <div class="w-2/3 p-4 prose">
                 <form
                     class="form-horizontal" id="install_form" method="post"
                       action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">

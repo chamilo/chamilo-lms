@@ -1294,7 +1294,7 @@ function get_contact_registration_form()
                 class="btn btn-default"
                 onclick="javascript:send_contact_information();"
                 value="'.get_lang('Send information').'" >
-                <em class="fa fa-floppy-o"></em> '.get_lang('Send information').'
+                <em class="fa fa-check"></em> '.get_lang('Send information').'
             </button>
             <span id="loader-button"></span></div>
         </div>

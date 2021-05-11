@@ -6110,7 +6110,7 @@ class SessionManager
         $getCount = false,
         $from = null,
         $numberItems = null,
-        $column = 1,
+        $column = '',
         $direction = 'asc',
         $keyword = null,
         $active = null,
@@ -6121,6 +6121,13 @@ class SessionManager
     ) {
         $filterByStatus = (int) $filterByStatus;
         $userId = (int) $userId;
+
+        if (empty($column)) {
+            $column = 'u.lastname';
+            if (api_is_western_name_order()) {
+                $column = 'u.firstname';
+            }
+        }
 
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);

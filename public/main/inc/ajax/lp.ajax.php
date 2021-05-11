@@ -130,14 +130,6 @@ switch ($action) {
             if (empty($orderList)) {
                 exit;
             }
-            /*$sections = explode('^', $new_order);
-            $sections = array_filter($sections);
-            // We have to update parent_item_id, previous_item_id, next_item_id, display_order in the database
-            $orderList = [];
-            foreach ($sections as $items) {
-                [$id, $parentId] = explode('|', $items);
-                $orderList[$id] = $parentId;
-            }*/
             $learningPath = new learnpath($lp, api_get_course_info(), api_get_user_id());
             $learningPath->sortItemByOrderList($orderList);
 

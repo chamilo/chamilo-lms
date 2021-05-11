@@ -216,6 +216,7 @@ if ($installType == 'update' && in_array($my_old_version, $update_from_version_8
 }
 
 $session_lifetime = 360000;
+$institutionUrlForm = 'http://www.chamilo.org';
 
 if (!isset($_GET['running'])) {
     $dbHostForm = 'localhost';
@@ -435,6 +436,14 @@ if (empty($installationProfile)) {
         $installationProfile = api_htmlentities($_POST['installationProfile']);
     }
 }
+
+$institutionUrlFormResult = '';
+if (api_stristr($institutionUrlForm, 'http://') || api_stristr($institutionUrlForm, 'https://')) {
+    $institutionUrlFormResult = api_htmlentities($institutionUrlForm, ENT_QUOTES);
+} else {
+    $institutionUrlFormResult = api_htmlentities($institutionUrlForm, ENT_QUOTES);
+}
+
     ?>
     <input type="hidden" name="updatePath"         value="<?php if (!$badUpdatePath) {
         echo api_htmlentities($proposedUpdatePath, ENT_QUOTES);
@@ -459,7 +468,7 @@ if (empty($installationProfile)) {
     <input type="hidden" name="campusForm"         value="<?php echo api_htmlentities($campusForm, ENT_QUOTES); ?>" />
     <input type="hidden" name="educationForm"      value="<?php echo api_htmlentities($educationForm, ENT_QUOTES); ?>" />
     <input type="hidden" name="institutionForm"    value="<?php echo api_htmlentities($institutionForm, ENT_QUOTES); ?>" />
-    <input type="hidden" name="institutionUrlForm" value="<?php echo api_stristr($institutionUrlForm, 'http://', false) ? api_htmlentities($institutionUrlForm, ENT_QUOTES) : api_stristr($institutionUrlForm, 'https://', false) ? api_htmlentities($institutionUrlForm, ENT_QUOTES) : 'http://'.api_htmlentities($institutionUrlForm, ENT_QUOTES); ?>" />
+    <input type="hidden" name="institutionUrlForm" value="<?php echo $institutionUrlFormResult; ?>" />
     <input type="hidden" name="checkEmailByHashSent" value="<?php echo api_htmlentities($checkEmailByHashSent, ENT_QUOTES); ?>" />
     <input type="hidden" name="ShowEmailNotCheckedToStudent" value="<?php echo api_htmlentities($ShowEmailNotCheckedToStudent, ENT_QUOTES); ?>" />
     <input type="hidden" name="userMailCanBeEmpty" value="<?php echo api_htmlentities($userMailCanBeEmpty, ENT_QUOTES); ?>" />

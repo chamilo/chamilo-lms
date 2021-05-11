@@ -1440,8 +1440,8 @@ switch ($action) {
         }
 
         $whereCondition = " AND $whereCondition ";
-
-        $sidx = in_array($sidx, $columns) ? $sidx : 'title';
+        $columnOrderValidList = array_merge(['firstname', 'lastname'], $columns);
+        $sidx = in_array($sidx, $columnOrderValidList) ? $sidx : 'title';
 
         $result = get_work_user_list(
             $start,

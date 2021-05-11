@@ -828,26 +828,6 @@ class CourseManager
                 $courseCode
             );
 
-            // Add event to the system log
-            Event::addEvent(
-                LOG_SUBSCRIBE_USER_TO_COURSE,
-                LOG_COURSE_CODE,
-                $courseCode,
-                api_get_utc_datetime(),
-                api_get_user_id(),
-                $courseId,
-                $sessionId
-            );
-            Event::addEvent(
-                LOG_SUBSCRIBE_USER_TO_COURSE,
-                LOG_USER_OBJECT,
-                $userInfo,
-                api_get_utc_datetime(),
-                api_get_user_id(),
-                $courseId,
-                $sessionId
-            );
-
             return true;
         } else {
             // Check whether the user has not been already subscribed to the course.

@@ -2471,7 +2471,7 @@ class Event
         // format returned by SQL for a subtraction of two datetime values
         // @todo make sure this is portable between DBMSes
         if (preg_match('/:/', $virtualTime)) {
-            list($h, $m, $s) = preg_split('/:/', $virtualTime);
+            [$h, $m, $s] = preg_split('/:/', $virtualTime);
             $virtualTime = $h * 3600 + $m * 60 + $s;
         } else {
             $virtualTime *= 3600;
@@ -2696,5 +2696,39 @@ class Event
         }
 
         return $now - $time;
+    }
+
+    public static function insertedUserInCourseSession(int $subscribedId, int $courseId, int $sessionId)
+    {
+        $dateTime = api_get_utc_datetime();
+        $registrantId = api_get_user_id();
+
+        self::addEvent(
+            LOG_SESSION_ADD_USER_COURSE,
+            LOG_USER_ID,
+            $subscribedId,
+            $dateTime,
+            $registrantId,
+            $courseId,
+            $sessionId
+        );
+        self::addEvent(
+            LOG_SUBSCRIBE_USER_TO_COURSE,
+            LOG_COURSE_CODE,
+            api_get_course_entity($courseId)->getCode(),
+            $dateTime,
+            $registrantId,
+            $courseId,
+            $sessionId
+        );
+        self::addEvent(
+            LOG_SUBSCRIBE_USER_TO_COURSE,
+            LOG_USER_OBJECT,
+            api_get_user_info($subscribedId),
+            $dateTime,
+            $registrantId,
+            $courseId,
+            $sessionId
+        );
     }
 }

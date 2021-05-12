@@ -3002,6 +3002,7 @@ class DocumentManager
      * @param int    $sessionId               Optional. Session ID
      * @param int    $groupId                 Optional. Group ID
      * @param bool   $recordAudio
+     *
      * @return array|bool
      */
     public static function upload_document(

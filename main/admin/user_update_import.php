@@ -2,8 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Symfony\Component\DomCrawler\Crawler;
-
 /**
  * This tool allows platform admins to add users by uploading a CSV or XML file.
  */

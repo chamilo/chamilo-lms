@@ -256,8 +256,7 @@ function parse_csv_data($file)
 
 function parse_xml_data($file)
 {
-    $crawler = new Crawler();
-    $crawler->addXmlContent(file_get_contents($file));
+    $crawler = Import::xml($file);
     $crawler = $crawler->filter('Contacts > Contact ');
     $array = [];
     foreach ($crawler as $domElement) {

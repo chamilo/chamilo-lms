@@ -95,8 +95,9 @@ class scorm extends learnpath
             // UTF-8 is supported by DOMDocument class, this is for sure.
             $xml = api_utf8_encode_xml($xml, $this->manifest_encoding);
 
-            $crawler = new Crawler();
-            $crawler->addXmlContent($xml);
+            /*$crawler = new Crawler();
+            $crawler->addXmlContent($xml);*/
+            $crawler = Import::xml($xml);
 
             $xmlErrors = libxml_get_errors();
 

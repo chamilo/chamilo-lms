@@ -7,7 +7,12 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script();
+$allowSessionAdmin = false;
+if (api_get_configuration_value('allow_session_admin_extra_access')) {
+    $allowSessionAdmin = true;
+}
+
+api_protect_admin_script($allowSessionAdmin);
 
 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 $user_table = Database::get_main_table(TABLE_MAIN_USER);

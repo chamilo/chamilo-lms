@@ -3001,6 +3001,7 @@ class DocumentManager
      * @param array  $courseInfo              Optional. Course info
      * @param int    $sessionId               Optional. Session ID
      * @param int    $groupId                 Optional. Group ID
+     * @param bool   $recordAudio
      *
      * @return array|bool
      */
@@ -3018,7 +3019,8 @@ class DocumentManager
         $userId = 0,
         array $courseInfo = [],
         $sessionId = 0,
-        $groupId = 0
+        $groupId = 0,
+        $recordAudio = false
     ) {
         $course_info = $courseInfo ?: api_get_course_info();
         $sessionId = $sessionId ?: api_get_session_id();
@@ -3027,6 +3029,11 @@ class DocumentManager
         $base_work_dir = $sys_course_path.$course_dir;
         $userId = $userId ?: api_get_user_id();
         $groupId = $groupId ?: api_get_group_id();
+
+        if ($recordAudio) {
+            $base_work_dir = $sys_course_path.$course_info['path'].'/exercises';
+            $path = str_replace('/../exercises/', '/', $path);
+        }
 
         if (isset($files[$fileKey])) {
             $uploadOk = process_uploaded_file($files[$fileKey], $show_output);

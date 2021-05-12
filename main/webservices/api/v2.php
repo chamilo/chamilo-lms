@@ -289,6 +289,10 @@ try {
             $courses = $restApi->getUserSessions();
             $restResponse->setData($courses);
             break;
+        case Rest::GET_USERS_SUBSCRIBED_TO_COURSE:
+            $users = $restApi->getUsersSubscribedToCourse();
+            $restResponse->setData($users);
+            break;
         case Rest::SAVE_USER_MESSAGE:
             $receivers = isset($_POST['receivers']) ? $_POST['receivers'] : [];
             $subject = !empty($_POST['subject']) ? $_POST['subject'] : null;

@@ -3558,11 +3558,6 @@ class MySpace
      */
     public static function save_data($users, $course_list, $id_session)
     {
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-
         $id_session = (int) $id_session;
         $sendMail = $_POST['sendMail'] ? 1 : 0;
 
@@ -3596,45 +3591,19 @@ class MySpace
         $users = $new_users;
 
         // Inserting users.
-        foreach ($course_list as $enreg_course) {
-            $nbr_users = 0;
-            $new_users = [];
-            $enreg_course = Database::escape_string($enreg_course);
-            foreach ($users as $index => $user) {
-                $userid = (int) $user['id'];
-                $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(session_id, c_id, user_id)
-                        VALUES('$id_session','$enreg_course','$userid')";
-                $result = Database::query($sql);
-                if (Database::affected_rows($result)) {
-                    $nbr_users++;
-                }
-                $new_users[] = $user;
+        SessionManager::insertUsersInCourses(
+            array_column($users, 'id'),
+            $course_list,
+            $id_session
+        );
+
+        array_walk(
+            $users,
+            function (array &$user) {
+                $user['added_at_session'] = 1;
             }
+        );
 
-            //update the nbr_users field
-            $sql_select = "SELECT COUNT(user_id) as nbUsers FROM $tbl_session_rel_course_rel_user
-                           WHERE session_id='$id_session' AND c_id='$enreg_course'";
-            $rs = Database::query($sql_select);
-            [$nbr_users] = Database::fetch_array($rs);
-            $sql_update = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users
-                           WHERE session_id='$id_session' AND c_id='$enreg_course'";
-            Database::query($sql_update);
-
-            $sql_update = "UPDATE $tbl_session SET nbr_users= '$nbr_users' WHERE id='$id_session'";
-            Database::query($sql_update);
-        }
-
-        $new_users = [];
-        foreach ($users as $index => $user) {
-            $userid = $user['id'];
-            $sql_insert = "INSERT IGNORE INTO $tbl_session_rel_user(session_id, user_id, registered_at)
-                           VALUES ('$id_session','$userid', '".api_get_utc_datetime()."')";
-            Database::query($sql_insert);
-            $user['added_at_session'] = 1;
-            $new_users[] = $user;
-        }
-
-        $users = $new_users;
         $registered_users = get_lang('FileImported').'<br /> Import file results : <br />';
         // Sending emails.
         $addedto = '';
@@ -3727,8 +3696,7 @@ class MySpace
      */
     public static function parse_xml_data($file)
     {
-        $crawler = new \Symfony\Component\DomCrawler\Crawler();
-        $crawler->addXmlContent(file_get_contents($file));
+        $crawler = Import::xml($file);
         $crawler = $crawler->filter('Contacts > Contact ');
         $array = [];
         foreach ($crawler as $domElement) {

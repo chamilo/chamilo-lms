@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
@@ -13,7 +14,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 // Set this option to true to enforce strict purification for usenames.
 $purification_option_for_usernames = false;
 $userId = api_get_user_id();
-
 api_protect_admin_script(true, null);
 api_protect_limit_for_session_admin();
 set_time_limit(0);
@@ -220,7 +220,6 @@ function save_data($users, $sendMail = false)
     if (!isset($inserted_in_course)) {
         $inserted_in_course = [];
     }
-
     $usergroup = new UserGroup();
     if (is_array($users)) {
         $efo = new ExtraFieldOption('user');
@@ -433,10 +432,9 @@ function parse_csv_data($users, $fileName, $sendEmail = 0, $checkUniqueEmail = t
  *
  * @return array All user information read from the file
  */
-function parse_xml_data($file)
+function parse_xml_data($file, $sendEmail = 0, $checkUniqueEmail = true)
 {
-    $crawler = new \Symfony\Component\DomCrawler\Crawler();
-    $crawler->addXmlContent(file_get_contents($file));
+    $crawler = Import::xml($file);
     $crawler = $crawler->filter('Contacts > Contact ');
     $array = [];
     foreach ($crawler as $domElement) {
@@ -450,6 +448,16 @@ function parse_xml_data($file)
             $array[] = $row;
         }
     }
+
+    Session::write(
+        'user_import_data_'.api_get_user_id(),
+        [
+            'check_unique_email' => $checkUniqueEmail,
+            'send_email' => $sendEmail,
+            'date' => api_get_utc_datetime(),
+            'log_messages' => '',
+        ]
+    );
 
     return $array;
 }
@@ -548,7 +556,11 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
             $users = validate_data($users, $checkUniqueEmail);
             $error_kind_file = false;
         } elseif (strcmp($file_type, 'xml') === 0 && $ext_import_file == $allowed_file_mimetype[1]) {
-            $users = parse_xml_data($_FILES['import_file']['tmp_name']);
+            $users = parse_xml_data(
+                $_FILES['import_file']['tmp_name'],
+                $sendMail,
+                $checkUniqueEmail
+            );
             $users = validate_data($users, $checkUniqueEmail);
             $error_kind_file = false;
         }
@@ -590,7 +602,7 @@ $importData = Session::read('user_import_data_'.$userId);
 $formContinue = false;
 $resumeStop = true;
 if (!empty($importData)) {
-    $isResume = $importData['resume'];
+    $isResume = $importData['resume'] ?? false;
 
     $formContinue = new FormValidator('user_import_continue', 'post', api_get_self());
     $label = get_lang('Results');
@@ -598,7 +610,9 @@ if (!empty($importData)) {
         $label = get_lang('ContinueLastImport');
     }
     $formContinue->addHeader($label);
-    $formContinue->addLabel(get_lang('File'), $importData['filename']);
+    if (isset($importData['filename'])) {
+        $formContinue->addLabel(get_lang('File'), $importData['filename'] ?? '');
+    }
 
     $resumeStop = true;
     if ($isResume) {
@@ -614,10 +628,12 @@ if (!empty($importData)) {
             $importData['counter'].' / '.count($importData['complete_list'])
         );
     } else {
-        $formContinue->addLabel(
-            get_lang('Users'),
-            count($importData['complete_list'])
-        );
+        if (!empty($importData['complete_list'])) {
+            $formContinue->addLabel(
+                get_lang('Users'),
+                count($importData['complete_list'])
+            );
+        }
     }
 
     $formContinue->addLabel(

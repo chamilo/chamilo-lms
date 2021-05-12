@@ -84,7 +84,6 @@ $csv_content = [];
 // Database table definitions.
 //@todo remove this calls
 $TABLETRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-$TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLECOURSE = Database::get_main_table(TABLE_MAIN_COURSE);
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $TABLEQUIZ = Database::get_course_table(TABLE_QUIZ_TEST);

@@ -2,8 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Symfony\Component\DomCrawler\Crawler;
-
 /**
  * This tool allows platform admins to add users by uploading a CSV or XML file.
  */
@@ -256,8 +254,7 @@ function parse_csv_data($file)
 
 function parse_xml_data($file)
 {
-    $crawler = new Crawler();
-    $crawler->addXmlContent(file_get_contents($file));
+    $crawler = Import::xml($file);
     $crawler = $crawler->filter('Contacts > Contact ');
     $array = [];
     foreach ($crawler as $domElement) {

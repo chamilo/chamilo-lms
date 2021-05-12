@@ -7101,7 +7101,12 @@ SQL;
         }
 
         if (self::userHasCareer($userId, $careerId) === false) {
-            $params = ['user_id' => $userId, 'career_id' => $careerId, 'created_at' => api_get_utc_datetime(), 'updated_at' => api_get_utc_datetime()];
+            $params = [
+                'user_id' => $userId,
+                'career_id' => $careerId,
+                'created_at' => api_get_utc_datetime(),
+                'updated_at' => api_get_utc_datetime(),
+            ];
             $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
             Database::insert($table, $params);
         }

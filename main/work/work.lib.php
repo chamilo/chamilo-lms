@@ -26,13 +26,12 @@ use ChamiloSession as Session;
 function displayWorkActionLinks($id, $action, $isTutor)
 {
     $id = $my_back_id = (int) $id;
-    if ('list' == $action) {
+    if ('list' === $action) {
         $my_back_id = 0;
     }
 
     $output = '';
     $origin = api_get_origin();
-
     if (!empty($id)) {
         $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_back_id.'">'.
             Display::return_icon('back.png', get_lang('BackToWorksList'), '', ICON_SIZE_MEDIUM).
@@ -40,7 +39,7 @@ function displayWorkActionLinks($id, $action, $isTutor)
     }
 
     if (($isTutor || api_is_allowed_to_edit(null, true)) &&
-        'learnpath' != $origin
+        'learnpath' !== $origin
     ) {
         // Create dir
         if (empty($id)) {
@@ -55,7 +54,7 @@ function displayWorkActionLinks($id, $action, $isTutor)
         }
     }
 
-    if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath' && $action == 'list') {
+    if (api_is_allowed_to_edit(null, true) && $origin !== 'learnpath' && $action === 'list') {
         $output .= '<a id="open-view-list" href="#">'.
             Display::return_icon(
                 'listwork.png',
@@ -620,6 +619,8 @@ function showTeacherWorkGrid()
         'multiselect' => true,
         'autowidth' => 'true',
         'height' => 'auto',
+        'sortname' => 'sent_date',
+        'sortorder' => 'asc',
     ];
 
     $html = '<script>

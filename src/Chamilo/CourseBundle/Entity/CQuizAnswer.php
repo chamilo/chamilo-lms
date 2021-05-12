@@ -44,6 +44,13 @@ class CQuizAnswer
 
     /**
      * @var int
+     * @deprecated Now using iid
+     * @ORM\Column(name="id", type="integer", nullable=true)
+     */
+    protected $id;
+
+    /**
+     * @var int
      *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */

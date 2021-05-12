@@ -36,6 +36,13 @@ class CQuizQuestion
     protected $cId;
 
     /**
+     * @var int
+     * @deprecated Now using iid
+     * @ORM\Column(name="id", type="integer", nullable=true)
+     */
+    protected $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="question", type="text", nullable=false)

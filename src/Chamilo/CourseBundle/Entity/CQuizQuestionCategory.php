@@ -35,6 +35,13 @@ class CQuizQuestionCategory
     protected $cId;
 
     /**
+     * @var int
+     * @deprecated Now using iid
+     * @ORM\Column(name="id", type="integer", nullable=true)
+     */
+    protected $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)

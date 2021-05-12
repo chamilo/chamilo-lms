@@ -56,7 +56,10 @@ switch ($type) {
             0,
             'overwrite',
             false,
-            in_array($tool, ['document', 'exercise'])
+            in_array($tool, ['document', 'exercise']),
+            'file',
+            true,
+            true
         );
 
         $error = empty($uploadedDocument) || !is_array($uploadedDocument);

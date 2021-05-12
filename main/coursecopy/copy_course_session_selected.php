@@ -52,13 +52,6 @@ $interbreadcrumb[] = [
     'name' => get_lang('Maintenance'),
 ];
 
-// Database Table Definitions
-$tbl_session_rel_course_rel_user = Database::get_main_table(
-    TABLE_MAIN_SESSION_COURSE_USER
-);
-$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-
 /**
  * @param string $name
  */

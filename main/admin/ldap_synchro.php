@@ -24,14 +24,7 @@ $interbreadcrumb[] = array('url' => api_get_self(), "name" => "Liste des session
 
 // Database Table Definitions
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_rel_class = Database::get_main_table(TABLE_MAIN_SESSION_CLASS);
 $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_class = Database::get_main_table(TABLE_MAIN_CLASS);
-$tbl_class_user = Database::get_main_table(TABLE_MAIN_CLASS_USER);
 
 $tbl_session_rel_etape = "session_rel_etape";
 
@@ -159,34 +152,6 @@ foreach ($Sessions as $session) {
 			$CourseList[] = $row['c_id'];
 		}
 
-		foreach ($CourseList as $enreg_course) {
-			// On ajoute la relation entre l'utilisateur et le cours
-			foreach ($UserList as $enreg_user) {
-				$sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(session_id,c_id,user_id)
-						VALUES('$id_session','$enreg_course','$enreg_user')";
-				Database::query($sql);
-			}
-			$sql = "SELECT COUNT(user_id) as nbUsers ".
-					"FROM $tbl_session_rel_course_rel_user ".
-					"WHERE session_id='$id_session' AND c_id='$enreg_course'";
-			$rs = Database::query($sql);
-			list($nbr_users) = Database::fetch_array($rs);
-			$sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users
-					WHERE session_id='$id_session' AND c_id = '$enreg_course'";
-			Database::query($sql);
-		}
-		// On ajoute la relation entre l'utilisateur et la session
-		foreach ($UserList as $enreg_user) {
-			$sql = "INSERT IGNORE INTO $tbl_session_rel_user(session_id, user_id, registered_at) ".
-					"VALUES('$id_session','$enreg_user', '".api_get_utc_datetime()."')";
-			Database::query($sql);
-		}
-		$sql = "SELECT COUNT(user_id) as nbUsers ".
-				"FROM $tbl_session_rel_user ".
-				"WHERE session_id='$id_session' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
-		$rs = Database::query($sql);
-		list($nbr_users) = Database::fetch_array($rs);
-		$sql = "UPDATE $tbl_session SET nbr_users=$nbr_users WHERE id='$id_session'";
-		Database::query($sql);
+		SessionManager::insertUsersInCourses($UserList, $CourseList, $id_session);
 	}
 }

@@ -9596,7 +9596,7 @@ class SessionManager
                 Database::insert($tblSessionUser, $sessionUser);
             }
 
-            Event::insertedUserInCourseSession($studentId, $courseId, $sessionId);
+            Event::logUserSubscribedInCourseSession($studentId, $courseId, $sessionId);
         }
 
         Database::query(

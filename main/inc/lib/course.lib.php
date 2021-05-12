@@ -7160,7 +7160,7 @@ class CourseManager
             ]
         );
 
-        Event::insertedUserInCourse($studentId, $courseId);
+        Event::logSubscribedUserInCourse($studentId, $courseId);
     }
 
     /**

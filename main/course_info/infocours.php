@@ -50,6 +50,8 @@ if (api_get_setting('pdf_export_watermark_by_course') === 'true') {
     }
 }
 
+$allowPortfolioTool = api_get_configuration_value('allow_portfolio_tool');
+
 $categories = CourseCategory::getCategoriesCanBeAddedInCourse($_course['categoryCode']);
 
 // Build the form
@@ -493,6 +495,25 @@ $group[] = $form->createElement(
 );
 $form->addGroup($group, '', [get_lang("EmailToTeachersWhenNewWorkFeedback")]);
 
+if ($allowPortfolioTool) {
+    $group = [];
+    $group[] = $form->createElement(
+        'radio',
+        'email_alert_teachers_new_post',
+        get_lang('EmailToTeachersWhenNewPost'),
+        get_lang('Yes'),
+        1
+    );
+    $group[] = $form->createElement(
+        'radio',
+        'email_alert_teachers_new_post',
+        null,
+        get_lang('No'),
+        2
+    );
+    $form->addGroup($group, '', [get_lang("EmailToTeachersWhenNewPost")]);
+}
+
 $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
 
 $form->addHtml('
@@ -922,7 +943,7 @@ $form->addPanelOption(
     $globalGroup
 );
 
-if (api_get_configuration_value('allow_portfolio_tool')) {
+if ($allowPortfolioTool) {
     $globalGroup = [
         get_lang('QualifyPortfolioItems') => [
             $form->createElement('radio', 'qualify_portfolio_item', null, get_lang('Yes'), 1),

@@ -2110,13 +2110,12 @@ function migrate(EntityManager $manager)
     $debug = true;
     $connection = $manager->getConnection();
     $to = null; // if $to == null then schema will be migrated to latest version
-    //echo '<pre>';
-    //try {
+
     // Loading migration configuration.
     $config = new PhpFile('./migrations.php');
     $dependency = DependencyFactory::fromConnection($config, new ExistingConnection($connection));
 
-    // Check if version table exists, use new version.
+    // Check if old "version" table exists from 1.11.x, use new version.
     $schema = $manager->getConnection()->getSchemaManager();
     $dropOldVersionTable = false;
     if ($schema->tablesExist('version')) {
@@ -2143,9 +2142,12 @@ function migrate(EntityManager $manager)
     $planCalculator = $dependency->getMigrationPlanCalculator();
     $migrations = $planCalculator->getMigrations();
     $lastVersion = $migrations->getLast();
+    //var_dump($lastVersion->getVersion());
+
     $plan = $dependency->getMigrationPlanCalculator()->getPlanUntilVersion($lastVersion->getVersion());
 
     foreach ($plan->getItems() as $item) {
+        error_log("Version to be executed: ".$item->getVersion());
         $item->getMigration()->setEntityManager($manager);
         $item->getMigration()->setContainer(Container::$container);
     }

@@ -634,6 +634,8 @@ if (isset($_POST['step2'])) {
         $container = $kernel->getContainer();
 
         Container::setContainer($container);
+        Container::setLegacyServices($container, false);
+
         $manager = $container->get('doctrine')->getManager();
         migrateSwitch($my_old_version, $manager);
         upgradeWithContainer($container);

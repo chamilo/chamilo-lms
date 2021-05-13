@@ -10,9 +10,6 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 
-/**
- * Class Database.
- */
 class Database
 {
     /**
@@ -22,7 +19,7 @@ class Database
     private static $connection;
 
     /**
-     *  Setup doctrine for the installation.
+     * Setup doctrine only for the installation.
      *
      * @param array  $params
      * @param string $entityRootPath
@@ -355,7 +352,7 @@ class Database
             exit;
         } else {
             error_log($e->getMessage());
-            api_not_allowed(false, get_lang('An error has occured. Please contact your system administrator.'));
+            api_not_allowed(false, get_lang('An error has occurred. Please contact your system administrator.'));
             exit;
         }
     }

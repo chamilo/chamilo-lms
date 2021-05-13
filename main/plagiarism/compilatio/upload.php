@@ -88,7 +88,16 @@ if (isset($_REQUEST['type']) && 'multi' === $_REQUEST['type']) {
 
 function sendDocument($documentId, $courseInfo)
 {
-    $courseId = $courseInfo['real_id'];
+    if (empty($courseInfo)) {
+        return false;
+    }
+
+    $courseId = $courseInfo['real_id'] ?? 0;
+    $documentId = (int) $documentId;
+
+    if (empty($courseId) || empty($documentId)) {
+        return false;
+    }
 
     compilatioUpdateWorkDocument($documentId, $courseId);
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);

@@ -80,7 +80,6 @@ class ResourceListener
         $em = $event->getEntityManager();
         $request = $this->request;
 
-        $url = null;
         if ($resource instanceof ResourceWithAccessUrlInterface) {
             $url = $this->getAccessUrl($em);
             $resource->addUrl($url);

@@ -41,7 +41,7 @@ class ResourceNodeListener
 
     public function prePersist(ResourceNode $resourceNode, LifecycleEventArgs $event)
     {
-        error_log('resource node prePersist');
+        //error_log('resource node prePersist');
 
         return true;
     }
@@ -70,6 +70,6 @@ class ResourceNodeListener
 
     public function postUpdate(ResourceNode $resourceNode, LifecycleEventArgs $event): void
     {
-        error_log('ResourceNode postUpdate');
+        //error_log('ResourceNode postUpdate');
     }
 }

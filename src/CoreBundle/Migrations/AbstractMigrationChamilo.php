@@ -55,7 +55,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         $connection = $em->getConnection();
         $userRepo = $container->get(UserRepository::class);
 
-        $sql = 'SELECT id, user_id FROM admin ORDER BY id LIMIT 1';
+        $sql = 'SELECT user_id FROM admin ORDER BY id LIMIT 1';
         $result = $connection->executeQuery($sql);
         $adminRow = $result->fetchAssociative();
         $adminId = $adminRow['user_id'];
@@ -219,7 +219,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
 
     public function fixItemProperty(
         $tool,
-        $repo,
+        ResourceRepository $repo,
         $course,
         $admin,
         ResourceInterface $resource,
@@ -281,10 +281,17 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
                     break;
             }
 
+            // If c_item_property.insert_user_id doens't exist we use the first admin id.
+            $user = null;
             if (isset($userList[$userId])) {
                 $user = $userList[$userId];
             } else {
-                $user = $userList[$userId] = $userRepo->find($userId);
+                if (!empty($userId)) {
+                    $userFound = $userRepo->find($userId);
+                    if ($userFound) {
+                        $user = $userList[$userId] = $userRepo->find($userId);
+                    }
+                }
             }
 
             if (null === $user) {

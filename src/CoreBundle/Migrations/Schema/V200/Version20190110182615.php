@@ -112,9 +112,16 @@ class Version20190110182615 extends AbstractMigrationChamilo
 
         $this->addSql('ALTER TABLE c_lp_item CHANGE previous_item_id previous_item_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_lp_item CHANGE next_item_id next_item_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_lp_item CHANGE c_id c_id INT DEFAULT NULL');
 
         $this->addSql('UPDATE c_lp_item SET previous_item_id = NULL WHERE previous_item_id = 0');
         $this->addSql('UPDATE c_lp_item SET next_item_id = NULL WHERE next_item_id = 0');
+
+        $this->addSql('UPDATE c_lp_item SET next_item_id = NULL WHERE next_item_id = 0');
+
+        if (!$table->hasColumn('lvl')) {
+            $this->addSql('ALTER TABLE c_lp_item ADD COLUMN lvl INT DEFAULT NULL');
+        }
 
         if ($table->hasColumn('id')) {
             $this->addSql('ALTER TABLE c_lp_item DROP id');

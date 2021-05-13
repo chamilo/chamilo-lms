@@ -9,19 +9,21 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * c_student_publication.
- */
 class Version20170625144000 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'c_student_publication changes';
+    }
+
     public function up(Schema $schema): void
     {
         $table = $schema->getTable('c_student_publication');
 
         $this->addSql('UPDATE c_student_publication SET user_id = NULL WHERE user_id = 0');
         $this->addSql('ALTER TABLE c_student_publication CHANGE user_id user_id INT DEFAULT NULL');
-        $this->addSql('UPDATE c_student_publication SET parent_id = NULL WHERE parent_id = 0');
         $this->addSql('ALTER TABLE c_student_publication CHANGE parent_id parent_id INT DEFAULT NULL');
+        $this->addSql('UPDATE c_student_publication SET parent_id = NULL WHERE parent_id = 0 OR parent_id = "" ');
 
         if ($table->hasIndex('course')) {
             $this->addSql('DROP INDEX course ON c_student_publication');

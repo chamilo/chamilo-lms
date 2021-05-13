@@ -26,9 +26,6 @@ final class Version20201205102020 extends AbstractMigrationChamilo
                 'CREATE TABLE skill_rel_item (id INT AUTO_INCREMENT NOT NULL, skill_id INT DEFAULT NULL, item_type INT NOT NULL, item_id INT NOT NULL, obtain_conditions VARCHAR(255) DEFAULT NULL, requires_validation TINYINT(1) NOT NULL, is_real TINYINT(1) NOT NULL, c_id INT DEFAULT NULL, session_id INT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, created_by INT NOT NULL, updated_by INT NOT NULL, INDEX IDX_EB5B2A0D5585C142 (skill_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;'
             );
             $this->addSql(
-                'CREATE TABLE skill_rel_course (id INT AUTO_INCREMENT NOT NULL, skill_id INT DEFAULT NULL, c_id INT NOT NULL, session_id INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_E7CEC7FA5585C142 (skill_id), INDEX IDX_E7CEC7FA91D79BD3 (c_id), INDEX IDX_E7CEC7FA613FECDF (session_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;'
-            );
-            $this->addSql(
                 'ALTER TABLE skill_rel_item_rel_user ADD CONSTRAINT FK_D1133E0DFD4B12DC FOREIGN KEY (skill_rel_item_id) REFERENCES skill_rel_item (id);'
             );
             $this->addSql(
@@ -39,23 +36,38 @@ final class Version20201205102020 extends AbstractMigrationChamilo
             );
         }
 
-        $table = $schema->getTable('skill_rel_course');
-        if (!$table->hasForeignKey('FK_E7CEC7FA5585C142')) {
+        if (!$schema->hasTable('skill_rel_course')) {
+            $this->addSql(
+                'CREATE TABLE skill_rel_course (id INT AUTO_INCREMENT NOT NULL, skill_id INT DEFAULT NULL, c_id INT NOT NULL, session_id INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_E7CEC7FA5585C142 (skill_id), INDEX IDX_E7CEC7FA91D79BD3 (c_id), INDEX IDX_E7CEC7FA613FECDF (session_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;'
+            );
             $this->addSql(
                 'ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA5585C142 FOREIGN KEY (skill_id) REFERENCES skill (id) ON DELETE CASCADE'
             );
-        }
-
-        if (!$table->hasForeignKey('FK_E7CEC7FA91D79BD3')) {
             $this->addSql(
                 'ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE'
             );
-        }
-
-        if (!$table->hasForeignKey('FK_E7CEC7FA613FECDF')) {
             $this->addSql(
                 'ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE'
             );
+        } else {
+            $table = $schema->getTable('skill_rel_course');
+            if (!$table->hasForeignKey('FK_E7CEC7FA5585C142')) {
+                $this->addSql(
+                    'ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA5585C142 FOREIGN KEY (skill_id) REFERENCES skill (id) ON DELETE CASCADE'
+                );
+            }
+
+            if (!$table->hasForeignKey('FK_E7CEC7FA91D79BD3')) {
+                $this->addSql(
+                    'ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE'
+                );
+            }
+
+            if (!$table->hasForeignKey('FK_E7CEC7FA613FECDF')) {
+                $this->addSql(
+                    'ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE'
+                );
+            }
         }
 
         $table = $schema->getTable('skill_rel_user');

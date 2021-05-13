@@ -9,11 +9,13 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * Quiz changes.
- */
 class Version20170904145500 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'c_quiz changes';
+    }
+
     public function up(Schema $schema): void
     {
         if (false === $schema->hasTable('c_exercise_category')) {
@@ -95,6 +97,9 @@ class Version20170904145500 extends AbstractMigrationChamilo
         } else {
             $this->addSql(
                 "ALTER TABLE c_quiz ADD COLUMN page_result_configuration LONGTEXT NOT NULL COMMENT '(DC2Type:array)';"
+            );
+            $this->addSql(
+                'UPDATE c_quiz SET page_result_configuration = "a:0:{}"'
             );
         }
 
@@ -228,7 +233,9 @@ class Version20170904145500 extends AbstractMigrationChamilo
         }
 
         $table = $schema->getTable('c_quiz_rel_question');
-        $this->addSql('DELETE FROM c_quiz_rel_question WHERE quiz_id = -1 ');
+        if ($table->hasColumn('exercice_id')) {
+            $this->addSql('DELETE FROM c_quiz_rel_question WHERE exercice_id = -1 ');
+        }
 
         if ($table->hasIndex('exercise')) {
             $this->addSql('ALTER TABLE c_quiz_rel_question DROP KEY exercise');

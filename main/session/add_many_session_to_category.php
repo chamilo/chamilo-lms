@@ -20,7 +20,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
 
 // Database Table Definitions
-$tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);

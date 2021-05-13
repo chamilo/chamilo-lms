@@ -62,7 +62,6 @@ $userIdViewed = Security::remove_XSS($_REQUEST['uInfo']);
  * Connection layer between Chamilo and the current script.
  */
 $courseCode = api_get_course_id();
-$tbl_coursUser = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $userIdViewer = api_get_user_id(); // id fo the user currently online
 $allowedToEditContent = ($userIdViewer == $userIdViewed) || $is_platformAdmin;
 $allowedToEditDef = api_is_allowed_to_edit(null, true);

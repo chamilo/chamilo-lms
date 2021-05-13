@@ -157,7 +157,6 @@ $table_user = Database:: get_main_table(TABLE_MAIN_USER);
 //  $tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
 $tbl_personal_agenda = Database:: get_main_table(TABLE_PERSONAL_AGENDA);
 $tbl_course = Database:: get_main_table(TABLE_MAIN_COURSE);
-$tbl_course_user = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_stats_exercices = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 $tbl_stats_exercices_temp = Database:: get_main_table(track_e_exercices_temp);
 $tbl_group_course_info = Database:: get_course_table(TABLE_GROUP);

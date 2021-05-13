@@ -1333,15 +1333,18 @@ class AddCourse
                         $code
                     );
                     if (!empty($user_id)) {
-                        $sql = "INSERT INTO $TABLECOURSUSER SET
-                                c_id = $course_id,
-                                user_id         = '".intval($user_id)."',
-                                status          = '1',
-                                is_tutor        = '0',
-                                sort            = '".($i_course_sort)."',
-                                relation_type = 0,
-                                user_course_cat = '0'";
-                        Database::query($sql);
+                        Database::insert(
+                            $TABLECOURSUSER,
+                            [
+                                'c_id' => $course_id,
+                                'user_id' => $user_id,
+                                'status' => 1,
+                                'is_tutor' => 0,
+                                'sort' => $i_course_sort,
+                                'relation_type' => 0,
+                                'user_course_cat' => 0,
+                            ]
+                        );
                     }
                 }
 

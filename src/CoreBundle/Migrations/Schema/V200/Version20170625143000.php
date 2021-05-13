@@ -9,11 +9,13 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * c_thematic.
- */
 class Version20170625143000 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'c_thematic changes';
+    }
+
     public function up(Schema $schema): void
     {
         $table = $schema->getTable('c_thematic');

@@ -13,11 +13,13 @@ use Doctrine\DBAL\Schema\Schema;
 use ExtraField;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-/**
- * Extra fields.
- */
 class Version20191206150030 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'ExtraFieldValues changes';
+    }
+
     public function up(Schema $schema): void
     {
         // Migrate extra field fields

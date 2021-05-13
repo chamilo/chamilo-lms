@@ -9,11 +9,13 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * Settings changes.
- */
 class Version20170627122900 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'settings_current changes';
+    }
+
     public function up(Schema $schema): void
     {
         $this->addSql('ALTER TABLE settings_current CHANGE access_url access_url INT DEFAULT NULL');

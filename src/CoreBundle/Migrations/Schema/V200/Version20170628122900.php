@@ -9,11 +9,13 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * Access url.
- */
 class Version20170628122900 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'Access url changes';
+    }
+
     public function up(Schema $schema): void
     {
         // access_url_rel_user.

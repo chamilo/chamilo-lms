@@ -9,11 +9,13 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * User.
- */
 class Version20170626122900 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'User changes';
+    }
+
     public function up(Schema $schema): void
     {
         $table = $schema->getTable('user');
@@ -207,10 +209,5 @@ class Version20170626122900 extends AbstractMigrationChamilo
 
     public function down(Schema $schema): void
     {
-    }
-
-    public function getDescription(): string
-    {
-        return 'User changes';
     }
 }

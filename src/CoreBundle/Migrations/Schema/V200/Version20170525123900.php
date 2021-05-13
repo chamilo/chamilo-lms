@@ -11,6 +11,11 @@ use Doctrine\DBAL\Schema\Schema;
 
 class Version20170525123900 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'usergroup changes';
+    }
+
     public function up(Schema $schema): void
     {
         $table = $schema->getTable('usergroup');
@@ -96,10 +101,5 @@ class Version20170525123900 extends AbstractMigrationChamilo
 
     public function down(Schema $schema): void
     {
-    }
-
-    public function getDescription(): string
-    {
-        return 'Resources changes';
     }
 }

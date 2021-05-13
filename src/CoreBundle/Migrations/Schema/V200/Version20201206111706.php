@@ -11,6 +11,11 @@ use Doctrine\DBAL\Schema\Schema;
 
 final class Version20201206111706 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'Change title format';
+    }
+
     public function up(Schema $schema): void
     {
         // From configuration.dist.php 1.11.x

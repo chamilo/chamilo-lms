@@ -36,21 +36,15 @@ use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
     $parameters = $containerConfigurator->parameters();
 
-    $parameters->set(
-        Option::SETS,
-        [
-            SetList::COMMON,
-            SetList::CLEAN_CODE,
-            //SetList::SYMFONY,
-            SetList::PSR_12,
-            //SetList::PHP_CS_FIXER,
-            SetList::DOCTRINE_ANNOTATIONS,
-            SetList::SYMFONY_RISKY,
-        ]
-    );
+    $containerConfigurator->import(SetList::COMMON);
+    $containerConfigurator->import(SetList::CLEAN_CODE);
+    $containerConfigurator->import(SetList::SYMFONY);
+    $containerConfigurator->import(SetList::PSR_12);
+    $containerConfigurator->import(SetList::PHP_CS_FIXER);
+    //$containerConfigurator->import(SetList::DOCTRINE_ANNOTATIONS);
+    $containerConfigurator->import(SetList::SYMFONY_RISKY);
 
     $services->set(DisallowLongArraySyntaxSniff::class);
     $services->set(TrailingCommaInMultilineFixer::class);

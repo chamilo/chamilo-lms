@@ -11,9 +11,12 @@
                             {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
                                 <img src="{{ item.image }}" class="img-responsive">
                             {% else %}
+                                {% set title %}
                                 <a title="{{ item.title }}" href="{{ item.link }}">
                                     <img src="{{ item.image }}" alt="{{ item.title }}" class="img-responsive">
                                 </a>
+                                {% endset %}
+                                {{ title |  remove_xss }}
                             {% endif %}
                             {% if item.category != '' %}
                                 <span class="category">{{ item.category }}</span>
@@ -38,6 +41,7 @@
                         </div>
                         <div class="description">
                             <div class="block-title">
+                                {% set title %}
                                 <h4 class="title" title="{{ item.title }}">
                                     {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
                                         {{ item.title_cut }}
@@ -47,10 +51,15 @@
                                         <span class="code-title">{{ item.code_course }}</span>{{ item.url_marker }}
                                     {% endif %}
                                 </h4>
+                                {% endset %}
+                                {{ title |  remove_xss }}
                             </div>
                             <div class="block-author">
                                 {% if item.teachers | length > 6 %}
-                                    <a id="plist-{{ loop.index }}" data-trigger="focus" tabindex="0" role="button" class="btn btn-default panel_popover" data-toggle="popover" title="{{ 'CourseTeachers' | get_lang }}" data-html="true">
+                                    <a id="plist-{{ loop.index }}"
+                                        data-trigger="focus" tabindex="0" role="button"
+                                       class="btn btn-default panel_popover" data-toggle="popover"
+                                       title="{{ 'CourseTeachers' | get_lang }}" data-html="true">
                                         <i class="fa fa-graduation-cap" aria-hidden="true"></i>
                                     </a>
                                     <div id="popover-content-plist-{{ loop.index }}" class="hide">

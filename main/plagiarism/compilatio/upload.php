@@ -10,6 +10,8 @@ ini_set('default_socket_timeout', '1000');
 
 api_set_more_memory_and_time_limits();
 
+api_protect_course_script();
+
 $courseId = api_get_course_int_id();
 $courseInfo = api_get_course_info();
 $compilatio = new Compilatio();

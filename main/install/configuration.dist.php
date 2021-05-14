@@ -1918,6 +1918,9 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 // Allow session admin access to main/admin/user_update_import.php and main/admin/user_export.php
 //$_configuration['allow_session_admin_extra_access'] = true;
 
+// Replace the Chamilo logo URL.
+//$_configuration['platform_logo_url'] = 'https://chamilo.org';
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

@@ -2724,11 +2724,11 @@ function api_get_session_id()
 /**
  * Gets the current Chamilo (not social network) group ID.
  *
- * @return int O if no active session, the session ID otherwise
+ * @return int O if no active group, the group id otherwise
  */
 function api_get_group_id()
 {
-    return Session::read('_gid', 0);
+    return (int) Session::read('_gid', 0);
 }
 
 /**
@@ -6824,7 +6824,7 @@ function api_is_in_group($groupIdParam = null, $courseCodeParam = null)
 
     $groupId = api_get_group_id();
 
-    if (isset($groupId) && $groupId != '') {
+    if (!empty($groupId)) {
         if (!empty($groupIdParam)) {
             return $groupIdParam == $groupId;
         } else {

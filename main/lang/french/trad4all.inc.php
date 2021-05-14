@@ -8703,6 +8703,6 @@ $NewLearningPathSubject = "Nouveau parcours disponible";
 $NewLearningPathBody = "Un nouveau parcours nommé %s a été ajouté à votre cours %s. Consulter ce parcours ici : %s";
 $XPercentCompleted = "%s %% Complété";
 $EmailToTeachersWhenNewPost = "E-mail aux enseignants quand il y a un nouveau post dans l'outil portfolio";
-$PortfolioAlertNewPostContent = "Il y a un nouveau post de %s dans le portfolio du cours %s. Pour le voir <a href=/\"%s/\"> cliquer ici</a>.";
+$PortfolioAlertNewPostContent = "Il y a un nouveau post de %s dans le portfolio du cours %s. Pour le voir <a href='%s'> cliquer ici</a>.";
 $PortfolioAlertNewPostSubject = "[Portfolio] Nouveau post dans le cours %s";
 ?>

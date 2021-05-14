@@ -10,13 +10,13 @@
                         <div class="col-md-2">
                             {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
                                 <span class="thumbnail">
-                                        {% if item.thumbnails != '' %}
-                                            <img src="{{ item.thumbnails }}" title="{{ item.title }}"
-                                                 alt="{{ item.title }}"/>
-                                        {% else %}
-                                            {{ 'blackboard.png' | img(48, item.title ) }}
-                                        {% endif %}
-                                    </span>
+                                    {% if item.thumbnails != '' %}
+                                        <img src="{{ item.thumbnails }}" title="{{ item.title }}"
+                                             alt="{{ item.title }}"/>
+                                    {% else %}
+                                        {{ 'blackboard.png' | img(48, item.title ) }}
+                                    {% endif %}
+                                </span>
                             {% else %}
                                 <a href="{{ item.link }}" class="thumbnail">
                                     {% if item.thumbnails != '' %}
@@ -46,14 +46,17 @@
                                 </div>
                             {% endif %}
                             <h4 class="course-items-title">
-                                {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
-                                    {{ item.title }} {{ item.code_course }} {{ item.url_marker }}
-                                {% else %}
-                                    <a href="{{ item.link }}">
+                                {% set title %}
+                                    {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
                                         {{ item.title }} {{ item.code_course }} {{ item.url_marker }}
-                                    </a>
-                                    {{ item.notifications }}
-                                {% endif %}
+                                    {% else %}
+                                        <a href="{{ item.link }}">
+                                            {{ item.title }} {{ item.code_course }} {{ item.url_marker }}
+                                        </a>
+                                        {{ item.notifications }}
+                                    {% endif %}
+                                {% endset %}
+                                {{ title |  remove_xss }}
                             </h4>
                             <div class="course-items-session">
                                 <div class="list-teachers">

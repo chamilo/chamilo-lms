@@ -438,17 +438,6 @@ if (empty($exercise_stat_info)) {
         if (!empty($resolvedQuestions) &&
             !empty($exercise_stat_info['data_tracking'])
         ) {
-            /*$last = current(end($resolvedQuestions));
-            $attemptQuestionList = explode(',', $exercise_stat_info['data_tracking']);
-            $count = 1;
-            foreach ($attemptQuestionList as $question) {
-                if ($last['question_id'] == $question) {
-                    break;
-                }
-                $count++;
-            }
-            $current_question = $count;
-            */
             // Get current question based in data_tracking question list, instead of track_e_attempt order BT#17789.
             $resolvedQuestionsQuestionIds = array_keys($resolvedQuestions);
             $count = 0;

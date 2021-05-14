@@ -45,8 +45,8 @@ function handleForum($url)
     if (api_is_allowed_to_edit(false, true)) {
         //if is called from a learning path lp_id
         $lp_id = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : null;
-        $content = isset($_REQUEST['content']) ? $_REQUEST['content'] : '';
-        $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
+        $content = $_REQUEST['content'] ?? '';
+        $action = $_REQUEST['action'] ?? null;
         $repo = null;
         switch ($content) {
             case 'forumcategory':
@@ -220,16 +220,16 @@ function show_add_forumcategory_form($lp_id)
         'index.php?'.api_get_cidreq().'&action=add_category'
     );
     // hidden field if from learning path
-    $form->addElement('hidden', 'lp_id', $lp_id);
-    $form->addElement('hidden', 'action', 'add_category');
+    $form->addHidden('lp_id', $lp_id);
+    $form->addHidden('action', 'add_category');
     // Setting the form elements.
-    $form->addElement('header', get_lang('Add forum category'));
-    $form->addElement('text', 'forum_category_title', get_lang('Title'), ['autofocus']);
-    $form->addElement(
-        'html_editor',
+    $form->addHeader(get_lang('Add forum category'));
+    $form->addText('forum_category_title', get_lang('Title'), true, ['autofocus']);
+    $form->addHtmlEditor(
         'forum_category_comment',
         get_lang('Description'),
-        null,
+        false,
+        false,
         ['ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200']
     );
 
@@ -286,22 +286,22 @@ function forumForm(CForumForum $forum = null, $lp_id)
 
     // We have a hidden field if we are editing.
     if ($forum) {
-        $form->addElement('hidden', 'forum_id', $id);
+        $form->addHidden( 'forum_id', $id);
     }
     $lp_id = (int) $lp_id;
 
     // hidden field if from learning path
-    $form->addElement('hidden', 'lp_id', $lp_id);
+    $form->addHidden('lp_id', $lp_id);
 
     // The title of the forum
-    $form->addElement('text', 'forum_title', get_lang('Title'), ['autofocus']);
+    $form->addText('forum_title', get_lang('Title'), true, ['autofocus']);
 
     // The comment of the forum.
-    $form->addElement(
-        'html_editor',
+    $form->addHtmlEditor(
         'forum_comment',
         get_lang('Description'),
-        null,
+        false,
+        false,
         ['ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200']
     );
 
@@ -311,8 +311,7 @@ function forumForm(CForumForum $forum = null, $lp_id)
     foreach ($forum_categories as $value) {
         $forum_categories_titles[$value->getIid()] = $value->getCatTitle();
     }
-    $form->addElement(
-        'select',
+    $form->addSelect(
         'forum_category',
         get_lang('Create in category'),
         $forum_categories_titles
@@ -328,11 +327,14 @@ function forumForm(CForumForum $forum = null, $lp_id)
     }
 
     $form->addButtonAdvancedSettings('advanced_params');
-    $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
+    $form->addHtml('<div id="advanced_params_options" style="display:none">');
 
     $form->addDateTimePicker(
         'start_time',
-        [get_lang('Public access (access authorized to any member of the course)ation date'), get_lang('Public access (access authorized to any member of the course)ation dateComment')],
+        [
+            get_lang('Public access (access authorized to any member of the course)ation date'),
+            get_lang('Public access (access authorized to any member of the course)ation dateComment'),
+        ],
         ['id' => 'start_time']
     );
 
@@ -381,16 +383,34 @@ function forumForm(CForumForum $forum = null, $lp_id)
     // Drop down list: Groups
     $groups = GroupManager::get_group_list();
     $groups_titles[0] = get_lang('Not a group forum');
-    foreach ($groups as $key => $value) {
+    foreach ($groups as $value) {
         $groups_titles[$value['iid']] = $value['name'];
     }
-    $form->addElement('select', 'group_forum', get_lang('For Group'), $groups_titles);
+    $form->addSelect('group_forum', get_lang('For Group'), $groups_titles);
 
     // Public or private group forum
     $group = [];
-    $group[] = $form->createElement('radio', 'public_private_group_forum', null, get_lang('Public access (access authorized to any member of the course)'), 'public');
-    $group[] = $form->createElement('radio', 'public_private_group_forum', null, get_lang('Private access (access authorized to group members only)'), 'private');
-    $form->addGroup($group, 'public_private_group_forum_group', get_lang('Public access (access authorized to any member of the course)Private access (access authorized to group members only)GroupForum'));
+    $group[] = $form->createElement(
+        'radio',
+        'public_private_group_forum',
+        null,
+        get_lang('Public access (access authorized to any member of the course)'),
+        'public'
+    );
+    $group[] = $form->createElement(
+        'radio',
+        'public_private_group_forum',
+        null,
+        get_lang('Private access (access authorized to group members only)'),
+        'private'
+    );
+    $form->addGroup(
+        $group,
+        'public_private_group_forum_group',
+        get_lang(
+            'Public access (access authorized to any member of the course)Private access (access authorized to group members only)GroupForum'
+        )
+    );
 
     // Forum image
     $form->addProgress();
@@ -1094,14 +1114,16 @@ function return_lock_unlock_icon($content, $id, $current_lock_status, $additiona
     $html = '';
     $id = (int) $id;
     //check if the forum is blocked due
-    if ('thread' == $content) {
+    if ('thread' === $content) {
         if (api_resource_is_locked_by_gradebook($id, LINK_FORUM_THREAD)) {
             return $html.Display::return_icon(
-                'lock_na.png',
-                get_lang('This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.'),
-                [],
-                ICON_SIZE_SMALL
-            );
+                    'lock_na.png',
+                    get_lang(
+                        'This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.'
+                    ),
+                    [],
+                    ICON_SIZE_SMALL
+                );
         }
     }
     if ('1' == $current_lock_status) {
@@ -1157,17 +1179,27 @@ function return_up_down_icon($content, $id, $list)
     }
 
     if ($position > 1) {
-        $return_value = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&direction=up&content='.$content.'&forumcategory='.$forumCategory.'&id='.$id.'" title="'.get_lang('Move up').'">'.
+        $return_value = '<a
+                href="'.api_get_self().'?'.api_get_cidreq().'&action=move&direction=up&content='.$content.'&forumcategory='.$forumCategory.'&id='.$id.'"
+                title="'.get_lang('Move up').'">'.
             Display::return_icon('up.png', get_lang('Move up'), [], ICON_SIZE_SMALL).'</a>';
     } else {
-        $return_value = Display::return_icon('up_na.png', '-', [], ICON_SIZE_SMALL);
+        $return_value = Display::url(
+            Display::return_icon('up_na.png', '-', [], ICON_SIZE_SMALL),
+            'javascript:void(0)'
+        );
     }
 
     if ($position < $total_items) {
-        $return_value .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&direction=down&content='.$content.'&forumcategory='.$forumCategory.'&id='.$id.'" title="'.get_lang('Move down').'" >'.
+        $return_value .= '<a
+            href="'.api_get_self().'?'.api_get_cidreq().'&action=move&direction=down&content='.$content.'&forumcategory='.$forumCategory.'&id='.$id.'"
+            title="'.get_lang('Move down').'" >'.
             Display::return_icon('down.png', get_lang('Move down'), [], ICON_SIZE_SMALL).'</a>';
     } else {
-        $return_value .= Display::return_icon('down_na.png', '-', [], ICON_SIZE_SMALL);
+        $return_value = Display::url(
+            Display::return_icon('down_na.png', '-', [], ICON_SIZE_SMALL),
+            'javascript:void(0)'
+        );
     }
 
     return $return_value;
@@ -2856,12 +2888,11 @@ function newThread(CForumForum $forum, $form_values = '', $showPreview = true)
         if (Gradebook::is_active()) {
             //Loading gradebook select
             GradebookUtils::load_gradebook_select_in_tool($form);
-            $form->addElement(
-                'checkbox',
+            $form->addCheckBox(
                 'thread_qualify_gradebook',
                 '',
                 get_lang('Grade this thread'),
-                'onclick="javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"'
+                ['onclick' => 'javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}']
             );
         } else {
             $form->addElement('hidden', 'thread_qualify_gradebook', false);

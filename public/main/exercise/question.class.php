@@ -235,12 +235,7 @@ abstract class Question
         return Display::div($this->question, ['style' => 'display: inline-block;']);
     }
 
-    /**
-     * @param int $itemNumber
-     *
-     * @return string
-     */
-    public function getTitleToDisplay($itemNumber)
+    public function getTitleToDisplay(Exercise $exercise, int $itemNumber): string
     {
         $showQuestionTitleHtml = api_get_configuration_value('save_titles_as_html');
         $title = '';
@@ -249,7 +244,10 @@ abstract class Question
         }
 
         $title .= $showQuestionTitleHtml ? '' : '<strong>';
-        $title .= $itemNumber.'. '.$this->selectTitle();
+        if (1 !== $exercise->getHideQuestionNumber()) {
+            $title .= $itemNumber.'. ';
+        }
+        $title .= $this->selectTitle();
         $title .= $showQuestionTitleHtml ? '' : '</strong>';
 
         return Display::div(
@@ -1176,10 +1174,6 @@ abstract class Question
      */
     public function createForm(&$form, $exercise)
     {
-        echo '<style>
-                .media { display:none;}
-            </style>';
-
         $zoomOptions = api_get_configuration_value('quiz_image_zoom');
         if (isset($zoomOptions['options'])) {
             $finderFolder = api_get_path(WEB_PATH).'vendor/studio-42/elfinder/';
@@ -1188,7 +1182,7 @@ abstract class Question
             echo '<link rel="stylesheet" type="text/css" media="screen" href="'.$finderFolder.'css/theme.css">';
 
             echo '<!-- elFinder JS (REQUIRED) -->';
-            echo '<script type="text/javascript" src="'.$finderFolder.'js/elfinder.full.js"></script>';
+            echo '<script src="'.$finderFolder.'js/elfinder.full.js"></script>';
 
             echo '<!-- elFinder translation (OPTIONAL) -->';
             $language = 'en';
@@ -1198,12 +1192,11 @@ abstract class Question
             $file = api_get_path(SYS_PATH).$filePart;
             $includeFile = '';
             if (file_exists($file)) {
-                $includeFile = '<script type="text/javascript" src="'.api_get_path(WEB_PATH).$filePart.'"></script>';
+                $includeFile = '<script src="'.api_get_path(WEB_PATH).$filePart.'"></script>';
                 $language = $iso;
             }
             echo $includeFile;
-
-            echo '<script type="text/javascript" charset="utf-8">
+            echo '<script>
             $(function() {
                 $(".create_img_link").click(function(e){
                     e.preventDefault();
@@ -1240,11 +1233,10 @@ abstract class Question
                 get_lang('Question'),
                 false,
                 false,
-                $editorConfig,
-                true
+                $editorConfig
             );
         } else {
-            $form->addElement('text', 'questionName', get_lang('Question'));
+            $form->addText('questionName', get_lang('Question'));
         }
 
         $form->addRule('questionName', get_lang('Please type the question'), 'required');
@@ -1254,7 +1246,7 @@ abstract class Question
 
         // Question type
         $answerType = isset($_REQUEST['answerType']) ? (int) $_REQUEST['answerType'] : null;
-        $form->addElement('hidden', 'answerType', $answerType);
+        $form->addHidden('answerType', $answerType);
 
         // html editor
         $editorConfig = [
@@ -1272,7 +1264,6 @@ abstract class Question
         if (isset($zoomOptions['options'])) {
             $form->addElement('text', 'imageZoom', get_lang('ImageURL'));
             $form->addElement('text', 'imageWidth', get_lang('PixelWidth'));
-
             $form->addButton('btn_create_img', get_lang('AddToEditor'), 'plus', 'info', 'small', 'create_img_link');
         }
 
@@ -1286,16 +1277,14 @@ abstract class Question
 
         if (MEDIA_QUESTION != $this->type) {
             // Advanced parameters.
-            $form->addElement(
-                'select',
+            $form->addSelect(
                 'questionLevel',
                 get_lang('Difficulty'),
                 self::get_default_levels()
             );
 
             // Categories.
-            $form->addElement(
-                'select',
+            $form->addSelect(
                 'questionCategory',
                 get_lang('Category'),
                 TestCategory::getCategoriesIdAndName()
@@ -1303,10 +1292,7 @@ abstract class Question
             if (EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM == $exercise->getQuestionSelectionType() &&
                 api_get_configuration_value('allow_mandatory_question_in_category')
             ) {
-                $form->addCheckBox(
-                    'mandatory',
-                    get_lang('IsMandatory')
-                );
+                $form->addCheckBox('mandatory', get_lang('IsMandatory'));
             }
 
             //global $text;
@@ -1453,12 +1439,12 @@ abstract class Question
     }
 
     /**
-     * abstract function which creates the form to create / edit the answers of the question.
+     * Creates the form to create / edit the answers of the question.
      */
     abstract public function createAnswersForm(FormValidator $form);
 
     /**
-     * abstract function which process the creation of answers.
+     * Process the creation of answers.
      *
      * @param FormValidator $form
      * @param Exercise      $exercise

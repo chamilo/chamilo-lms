@@ -109,7 +109,7 @@ class Editor
      */
     public function processConfig($config): void
     {
-        if (is_array($config)) {
+        if (\is_array($config)) {
             foreach ($config as $key => $value) {
                 switch ($key) {
                     case 'ToolbarSet':
@@ -166,7 +166,7 @@ class Editor
      */
     protected function toJavascript($var)
     {
-        switch (gettype($var)) {
+        switch (\gettype($var)) {
             case 'boolean':
                 return $var ? 'true' : 'false'; // Lowercase necessary!
             case 'integer':
@@ -185,7 +185,7 @@ class Editor
                 // Arrays in JSON can't be associative. If the array is empty or if it
                 // has sequential whole number keys starting with 0, it's not associative
                 // so we can go ahead and convert it as an array.
-                if (empty($var) || array_keys($var) === range(0, count($var) - 1)) {
+                if (empty($var) || array_keys($var) === range(0, \count($var) - 1)) {
                     $output = [];
                     foreach ($var as $v) {
                         $output[] = $this->toJavascript($v);

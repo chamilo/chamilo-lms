@@ -39,7 +39,7 @@ class UpdateResourceNodeFileAction
             $resourceNode = $document->getResourceNode();
             if ($resourceNode->hasResourceFile()) {
                 $resourceNode->setContent($content);
-                $resourceNode->getResourceFile()->setSize(strlen($content));
+                $resourceNode->getResourceFile()->setSize(\strlen($content));
             }
             $resourceNode->setUpdatedAt(new DateTime());
             $resourceNode->getResourceFile()->setUpdatedAt(new DateTime());

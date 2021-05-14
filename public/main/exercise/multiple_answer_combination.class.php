@@ -18,9 +18,6 @@ class MultipleAnswerCombination extends Question
     public $typePicture = 'mcmac.png';
     public $explanationLangVar = 'Exact Selection';
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -30,7 +27,7 @@ class MultipleAnswerCombination extends Question
 
     public function createAnswersForm($form)
     {
-        $nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 2;
+        $nb_answers = $_POST['nb_answers'] ?? 2;
         $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
         $obj_ex = Session::read('objExercise');
 
@@ -109,43 +106,37 @@ class MultipleAnswerCombination extends Question
             $answer_number = $form->addElement('text', 'counter['.$i.']', null, 'value="'.$i.'"');
             $answer_number->freeze();
 
-            $form->addElement(
-                'checkbox',
-                'correct['.$i.']',
-                null,
-                null,
-                'class="checkbox" style="margin-left: 0em;"'
-            );
+            $form->addCheckBox('correct['.$i.']', null);
             $boxes_names[] = 'correct['.$i.']';
 
-            $form->addElement(
-                'html_editor',
+            $form->addHtmlEditor(
                 'answer['.$i.']',
                 null,
-                [],
+                true,
+                false,
                 ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']
             );
             $form->addRule('answer['.$i.']', get_lang('Required field'), 'required');
 
-            $form->addElement(
-                'html_editor',
+            $form->addHtmlEditor(
                 'comment['.$i.']',
                 null,
-                [],
+                true,
+                false,
                 ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']
             );
 
             $form->addHtml('</tr>');
         }
 
-        $form->addElement('html', '</tbody></table>');
+        $form->addHtml('</tbody></table>');
         $form->add_multiple_required_rule(
             $boxes_names,
             get_lang('Choose at least one good answer'),
             'multiple_required'
         );
 
-        //only 1 answer the all deal ...
+        // only 1 answer the all deal ...
         $form->addText('weighting[1]', get_lang('Score'), false, ['value' => 10]);
 
         global $text;
@@ -158,7 +149,6 @@ class MultipleAnswerCombination extends Question
                 $form->addButtonCreate(get_lang('Add answer option'), 'moreAnswers', true),
                 $form->addButtonSave($text, 'submitQuestion', true),
             ];
-
             $form->addGroup($buttonGroup);
         }
 

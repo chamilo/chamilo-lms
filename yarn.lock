@@ -1518,12 +1518,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@headlessui/vue@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@headlessui/vue@npm:1.0.0"
+"@headlessui/vue@npm:^1.0":
+  version: 1.1.1
+  resolution: "@headlessui/vue@npm:1.1.1"
   peerDependencies:
     vue: ^3.0.0
-  checksum: 40284d097912fda7012b3d70447b7b1318d7df67835c1b2bcd049a2306887dc5f9eca760cc1b880f0370ca249ab72aa5c579887e71698e3282e6da3e0fdfb8ae
+  checksum: 988858933199f43f6fff66d78d2b2540e7baf3710df2979ee3759f7e5b71e8f9412c9e77d6c7274a48af6cd05721685569fdf6fd0544de3ba8759eefe5090d96
   languageName: node
   linkType: hard
 
@@ -1844,6 +1844,20 @@ __metadata:
   peerDependencies:
     tailwindcss: ^1.5.0
   checksum: 07b12319171e62151e7212fdf3aeeaff64d282934d6fa37b7c668bc00cb652930ef6841b1a88a927d3c459ab2a0df67a9e94f386a069efd8efa0b6c7b451aec6
+  languageName: node
+  linkType: hard
+
+"@tailwindcss/typography@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "@tailwindcss/typography@npm:0.4.0"
+  dependencies:
+    lodash.castarray: ^4.4.0
+    lodash.isplainobject: ^4.0.6
+    lodash.merge: ^4.6.2
+    lodash.uniq: ^4.5.0
+  peerDependencies:
+    tailwindcss: 2.0.0-alpha.24 || ^2.0.0
+  checksum: 1d5748dbbcb376927c1c880c91560c48c7a260aeeb5507fe07df1e9f6610d9d7cc943b1e878aec9e6a480f21d28f2ec291fb4d213dfe798e08f8760051fd6ade
   languageName: node
   linkType: hard
 
@@ -2942,12 +2956,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vuelidate/core@npm:^2.0.0-alpha.15":
-  version: 2.0.0-alpha.15
-  resolution: "@vuelidate/core@npm:2.0.0-alpha.15"
+"@vuelidate/core@npm:^2.0.0-alpha.16":
+  version: 2.0.0-alpha.16
+  resolution: "@vuelidate/core@npm:2.0.0-alpha.16"
   dependencies:
     vue-demi: ^0.6.0
-  checksum: 13179eff489c22e140aa10654ca77d077f2761ce65e7a85febaec7e2f264703760ae83a07a3cdaf34352d5b10055b4b48f22c2b680bac697bfeb526d19a2e920
+  checksum: af314af8ccc5c2c24d2bde9d3ee4958d3d32a3dbc6666cf690f7110a250afb48b8ef9b7c343360147efc53d50abfa6bc376c721bb474e105af07d7674c6632be
   languageName: node
   linkType: hard
 
@@ -3986,13 +4000,6 @@ __metadata:
   version: 1.1.1
   resolution: "array-flatten@npm:1.1.1"
   checksum: de7a056451ff7891bb1bcda6ce2a50448ca70f63cd0fa7aa90430d288b6dc2931517b6853ce16c473a7f40fa6eaa874e20b6151616db93375471d1ffadfb1d3d
-  languageName: node
-  linkType: hard
-
-"array-flatten@npm:3.0.0":
-  version: 3.0.0
-  resolution: "array-flatten@npm:3.0.0"
-  checksum: babaee814eb77dac4c402b4bb7584118f50d73caa808c67f5ae4ef3fc34385dcbbf8ed66e0e00b083d2a27c087f826557de76d39108da5c6dab3eaae353b3399
   languageName: node
   linkType: hard
 
@@ -5822,13 +5829,14 @@ __metadata:
     "@fortawesome/fontawesome-svg-core": ^1.2.30
     "@fortawesome/free-solid-svg-icons": ^5.14.0
     "@fortawesome/vue-fontawesome": prerelease
-    "@headlessui/vue": ^1.0.0
+    "@headlessui/vue": ^1.0
     "@heroicons/vue": ^1.0.1
     "@mdi/font": ^5.9.55
     "@popperjs/core": ^2.9.2
     "@quasar/extras": latest
     "@symfony/webpack-encore": ^1.1.1
     "@tailwindcss/forms": ^0.3.2
+    "@tailwindcss/typography": ^0.4.0
     "@tailwindcss/ui": ^0.7.2
     "@tinymce/tinymce-vue": ^4.0
     "@types/lodash": ^4.14.168
@@ -5837,7 +5845,7 @@ __metadata:
     "@vue/cli-plugin-eslint": ~4.5
     "@vue/cli-service": ~4.5
     "@vue/compiler-sfc": ^3.0.10
-    "@vuelidate/core": ^2.0.0-alpha.15
+    "@vuelidate/core": ^2.0.0-alpha.16
     "@vuelidate/validators": ^2.0.0-alpha.13
     autoprefixer: latest
     axios: ^0.21
@@ -5851,12 +5859,11 @@ __metadata:
     bootstrap-daterangepicker: ^3.0
     bootstrap-select: ^1.13.17
     chart.js: ^3.0
-    ckeditor4: ^4.16
     copy-webpack-plugin: ^8.0
     cropper: ^4.0
     datepair.js: ^0.4.16
     deepmerge: ^4.2.2
-    dotenv: ^8.2.0
+    dotenv: ^9.0
     dropzone: ^5.8
     easy-pie-chart: ^2.1.7
     easytimer.js: ^1.1.1
@@ -5885,13 +5892,12 @@ __metadata:
     mathjax: ^2.7
     mediaelement: ^4.2
     mediaelement-plugins: "https://github.com/chamilo/mediaelement-plugins"
-    mini-css-extract-plugin: 1.3.9
+    mini-css-extract-plugin: ^1.6
     multiselect-two-sides: ^2.5.5
     mxgraph: ^4.0
-    node-sass: ^5.0
+    node-sass: ^6.0
     optimize-css-assets-webpack-plugin: ^5.0.3
     path: ^0.12.7
-    perfect-scrollbar: ^1.4
     popper.js: ^1.14.7
     portal-vue: ^2.1.7
     postcss: ^8.2.10
@@ -5899,7 +5905,6 @@ __metadata:
     postcss-prefix-selector: ^1.9.0
     postcss-rtl: ^1.2.3
     pretty-bytes: ^5.6
-    pretty-checkbox: ^3.0.3
     primeflex: ^2.0.0
     primeicons: ^4.1.0
     primevue: ^3.3.5
@@ -5908,7 +5913,6 @@ __metadata:
     qtip2: ^3.0.3
     quasar: next
     readmore-js: ^2.2.1
-    router: ^1.3.5
     sass: ^1.29.0
     sass-loader: ^10.1
     select2: ^4.0
@@ -5941,7 +5945,6 @@ __metadata:
     vuex-composition-helpers: next
     vuex-map-fields: ^1.4.0
     vuex-persistedstate: 4.0.0-beta.3
-    webcamjs: ^1.0
     webpack-jquery-ui: ^2.0.1
     webpack-notifier: ^1.13
   languageName: unknown
@@ -6047,13 +6050,6 @@ __metadata:
     inherits: ^2.0.1
     safe-buffer: ^5.0.1
   checksum: ec80001ec91dbb7c5c08facc00ffc9c75fed7abd6d720c7a9c62c260aa2e5cb2655c183e011b50b8b711f755b1753c7fdd2ca44c091ee78d81c377ca74ed83c9
-  languageName: node
-  linkType: hard
-
-"ckeditor4@npm:^4.16":
-  version: 4.16.0
-  resolution: "ckeditor4@npm:4.16.0"
-  checksum: e7a1a0ff4e549a142cfde77fb5f3c0119022c2158328a498eeb920829554e7a338456a39ab5225b4e8a1ae14c2b87ad583e9665593e861d91acea789c617210f
   languageName: node
   linkType: hard
 
@@ -7756,6 +7752,13 @@ __metadata:
   version: 8.2.0
   resolution: "dotenv@npm:8.2.0"
   checksum: 16cb89cbd7b98b053899b8aba8c5044c8fb61a2db8a81fe70360b75035fce5fed53bd7a34d772be717d0880c0321122a4c09423f518025e1b52d96791521b1a7
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:^9.0":
+  version: 9.0.0
+  resolution: "dotenv@npm:9.0.0"
+  checksum: 8111fb99a12a8da9fedc90d855d734bbf026f3257d67b611b2517d393b027ca5774c1f9dd5aa0887f339f4e7c711f99bdd8bc82fa076e572f3eb6000b2c09343
   languageName: node
   linkType: hard
 
@@ -12007,6 +12010,13 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
+"lodash.castarray@npm:^4.4.0":
+  version: 4.4.0
+  resolution: "lodash.castarray@npm:4.4.0"
+  checksum: 45fb788a2e5a8550aab10ad1e057bbaf2c411734b06b249e87ad1243d39fa28543f249207fbf9c6e66f78a57cef0b187bbd3e2f84d7767593b5d944e6e6f5bcf
+  languageName: node
+  linkType: hard
+
 "lodash.clonedeep@npm:^4.5.0":
   version: 4.5.0
   resolution: "lodash.clonedeep@npm:4.5.0"
@@ -12077,7 +12087,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"lodash.merge@npm:^4.6.1":
+"lodash.merge@npm:^4.6.1, lodash.merge@npm:^4.6.2":
   version: 4.6.2
   resolution: "lodash.merge@npm:4.6.2"
   checksum: 4e2bb42a87a148991458d7c384bc197e96f7115e9536fc8e2c86ae9e99ce1c1f693ff15eb85761952535f48d72253aed8e673d9f32dde3e671cd91e3fde220a7
@@ -12629,19 +12639,6 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"mini-css-extract-plugin@npm:1.3.9":
-  version: 1.3.9
-  resolution: "mini-css-extract-plugin@npm:1.3.9"
-  dependencies:
-    loader-utils: ^2.0.0
-    schema-utils: ^3.0.0
-    webpack-sources: ^1.1.0
-  peerDependencies:
-    webpack: ^4.4.0 || ^5.0.0
-  checksum: 3899410d7655bf7b10578c8810dd915ed816c8940ec3476de3b9fcc25a0ffcc14c2ece6a7ed2f4fb881a7ed102593512438274189088ad47227b9d13599ea70a
-  languageName: node
-  linkType: hard
-
 "mini-css-extract-plugin@npm:^0.9.0":
   version: 0.9.0
   resolution: "mini-css-extract-plugin@npm:0.9.0"
@@ -12666,6 +12663,19 @@ fsevents@~2.3.1:
   peerDependencies:
     webpack: ^4.4.0 || ^5.0.0
   checksum: 081612504f579a3d49b31b2358a27185efbfc3c28f9b8240dfd27def92a840d3f7eb254b3997565fb9690f29b21b598a0027a99ac87cd6f19a81e9211cec2ec0
+  languageName: node
+  linkType: hard
+
+"mini-css-extract-plugin@npm:^1.6":
+  version: 1.6.0
+  resolution: "mini-css-extract-plugin@npm:1.6.0"
+  dependencies:
+    loader-utils: ^2.0.0
+    schema-utils: ^3.0.0
+    webpack-sources: ^1.1.0
+  peerDependencies:
+    webpack: ^4.4.0 || ^5.0.0
+  checksum: c9c50bed4ffa0ce0099c26184ed6f5b8675be068252fb2a68b790d8afa58c896e0c36aae0e0601e5036fdc04ecad761e884ce4d27a75c8bd3fb69ff7b4c52f91
   languageName: node
   linkType: hard
 
@@ -13234,9 +13244,9 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"node-sass@npm:^5.0":
-  version: 5.0.0
-  resolution: "node-sass@npm:5.0.0"
+"node-sass@npm:^6.0":
+  version: 6.0.0
+  resolution: "node-sass@npm:6.0.0"
   dependencies:
     async-foreach: ^0.1.3
     chalk: ^1.1.1
@@ -13256,7 +13266,7 @@ fsevents@~2.3.1:
     true-case-path: ^1.0.2
   bin:
     node-sass: bin/node-sass
-  checksum: fd24d918bad979380a3f952926a9b45587d74fada01562a78a6ca5da431a8cc11c5a9ae4d3842e31e362c30602aa2eaf29106219f2ceb8c5cafe293167a1d84c
+  checksum: 982c26d182c289964fc9ccd2cbcbcd69d5e770fe7ff540a0cefe98392727ca8987d56c24dc05bec81fd8cea935e2caa63ddc514aa4af43630737c1ab74221a5a
   languageName: node
   linkType: hard
 
@@ -14159,13 +14169,6 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"perfect-scrollbar@npm:^1.4":
-  version: 1.5.0
-  resolution: "perfect-scrollbar@npm:1.5.0"
-  checksum: e34178e95aa3e0e5c83a73faa206b3e6f253c5d60edfffad9439ba4b27cea51b6cfaf9e7896f4e1d5b2fd77918ab36e517688d169f4542c8639a0404785c5b80
-  languageName: node
-  linkType: hard
-
 "performance-now@npm:^2.1.0":
   version: 2.1.0
   resolution: "performance-now@npm:2.1.0"
@@ -14981,13 +14984,6 @@ fsevents@~2.3.1:
   version: 5.6.0
   resolution: "pretty-bytes@npm:5.6.0"
   checksum: 2a2db3daaee5c7271dbc68cc875118f4e2b6697e9e4e73b4ea5d5639f50cff2c1f1f7db4775119974eff86fdbd1fac2a5d9f16bc41d90626821a9f6a0e6e26cf
-  languageName: node
-  linkType: hard
-
-"pretty-checkbox@npm:^3.0.3":
-  version: 3.0.3
-  resolution: "pretty-checkbox@npm:3.0.3"
-  checksum: ff6b9317c6d7e4507ada3de5925715f27fce091371c595de016881dc4e6719e5ead00dc87932dd82ddd5e505fb88c9c6e148ae23ea8db5877b4056600b7e08c9
   languageName: node
   linkType: hard
 
@@ -16096,21 +16092,6 @@ fsevents@~2.3.1:
   dependencies:
     estree-walker: ^0.6.1
   checksum: 6922c1a26df033cc3da4650106244fb2211b5ddf72a93be5010cbe51a0817c9abcab08f61cbc3f5fc906b2701df123d8c9b0dae0a34e69dd07218e34e5d357b8
-  languageName: node
-  linkType: hard
-
-"router@npm:^1.3.5":
-  version: 1.3.5
-  resolution: "router@npm:1.3.5"
-  dependencies:
-    array-flatten: 3.0.0
-    debug: 2.6.9
-    methods: ~1.1.2
-    parseurl: ~1.3.3
-    path-to-regexp: 0.1.7
-    setprototypeof: 1.2.0
-    utils-merge: 1.0.1
-  checksum: 6bffe031df8876f155a484e561c955fc77eddd8e1576af4666263be7084175d95c61e92cce91d762712b0399bee2aab3d852fdb757da3fdbfdea60a90e78fcdd
   languageName: node
   linkType: hard
 
@@ -17859,9 +17840,9 @@ fsevents@~2.3.1:
   linkType: hard
 
 "tinymce@npm:^5.7":
-  version: 5.7.1
-  resolution: "tinymce@npm:5.7.1"
-  checksum: 5abbaf08d7fa6b74530d7f043eb6ea7d881a92b008f7d8eb575e9408bfe8b1830da37998bc0cd435067bcc5100ad34cf5880730b3081cb9603d28885629fc4a1
+  version: 5.8.0
+  resolution: "tinymce@npm:5.8.0"
+  checksum: 9fb7e76c78969a964133219bf9b9ce8893035f657bef0f27847aa60013d48ee597186c91a9cc8aa36e3c2d1add781a279939cebb1de907385afa9386ee54b64b
   languageName: node
   linkType: hard
 
@@ -18976,13 +18957,6 @@ typescript@~4.1.5:
   dependencies:
     defaults: ^1.0.3
   checksum: abf8ba432dd19a95af63895de6af932900a9451e175745551aeca0fd2d46604bc72ff80aa83adc3f67fb8389191329340e2864aefcf20655ffe91f0dbee5d953
-  languageName: node
-  linkType: hard
-
-"webcamjs@npm:^1.0":
-  version: 1.0.26
-  resolution: "webcamjs@npm:1.0.26"
-  checksum: 5b9d5594f17d77f3f1d97d64d8ec9b549a28ebb72447c274235ff86d1b2fcd4781bf6ee9f6acf49be1b875b4250ee0e794b855b5aee5f537f1c63f7f8b3302e3
   languageName: node
   linkType: hard
 

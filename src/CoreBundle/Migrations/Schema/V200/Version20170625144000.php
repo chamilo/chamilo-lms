@@ -9,17 +9,33 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * c_student_publication.
- */
 class Version20170625144000 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'c_student_publication changes';
+    }
+
     public function up(Schema $schema): void
     {
         $table = $schema->getTable('c_student_publication');
 
         $this->addSql('UPDATE c_student_publication SET user_id = NULL WHERE user_id = 0');
         $this->addSql('ALTER TABLE c_student_publication CHANGE user_id user_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_student_publication CHANGE parent_id parent_id INT DEFAULT NULL');
+        $this->addSql('UPDATE c_student_publication SET parent_id = NULL WHERE parent_id = 0 OR parent_id = "" ');
+
+        if ($table->hasIndex('course')) {
+            $this->addSql('DROP INDEX course ON c_student_publication');
+        }
+
+        if ($table->hasForeignKey('FK_5246F746613FECDF')) {
+            $this->addSql('ALTER TABLE c_student_publication DROP FOREIGN KEY FK_5246F746613FECDF');
+        }
+
+        if ($table->hasIndex('idx_csp_u')) {
+            $this->addSql('DROP INDEX idx_csp_u ON c_student_publication');
+        }
 
         if (false === $table->hasForeignKey('FK_5246F746A76ED395')) {
             $this->addSql(
@@ -27,16 +43,9 @@ class Version20170625144000 extends AbstractMigrationChamilo
             );
         }
 
-        if ($table->hasIndex('idx_csp_u')) {
-            $this->addSql('DROP INDEX idx_csp_u ON c_student_publication');
-        }
-
         if (false === $table->hasIndex('IDX_5246F746A76ED395')) {
             $this->addSql('CREATE INDEX IDX_5246F746A76ED395 ON c_student_publication (user_id);');
         }
-
-        $this->addSql('UPDATE c_student_publication SET parent_id = NULL WHERE parent_id = 0');
-        $this->addSql('ALTER TABLE c_student_publication CHANGE parent_id parent_id INT DEFAULT NULL');
 
         if (false === $table->hasForeignKey('FK_5246F746727ACA70')) {
             $this->addSql(
@@ -50,14 +59,6 @@ class Version20170625144000 extends AbstractMigrationChamilo
 
         if (false === $table->hasColumn('filesize')) {
             $this->addSql('ALTER TABLE c_student_publication ADD filesize INT DEFAULT NULL');
-        }
-
-        if ($table->hasForeignKey('FK_5246F746613FECDF')) {
-            $this->addSql('ALTER TABLE c_student_publication DROP FOREIGN KEY FK_5246F746613FECDF;');
-        }
-
-        if ($table->hasIndex('course')) {
-            $this->addSql('DROP INDEX course ON c_student_publication;');
         }
 
         $this->addSql('ALTER TABLE c_student_publication CHANGE url url VARCHAR(500) DEFAULT NULL');
@@ -137,7 +138,17 @@ class Version20170625144000 extends AbstractMigrationChamilo
         $this->addSql('UPDATE c_student_publication_comment SET user_id = NULL WHERE user_id = 0');
 
         $this->addSql('ALTER TABLE c_student_publication_comment CHANGE work_id work_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE c_student_publication_comment CHANGE user_id user_id INT DEFAULT NULL;');
+        $this->addSql('ALTER TABLE c_student_publication_comment CHANGE user_id user_id INT DEFAULT NULL');
+
+        $this->addSql('DELETE FROM c_student_publication_comment WHERE work_id NOT IN (SELECT iid FROM c_student_publication)');
+
+        if ($table->hasIndex('work')) {
+            $this->addSql('DROP INDEX work ON c_student_publication_comment');
+        }
+
+        if ($table->hasIndex('user')) {
+            $this->addSql('DROP INDEX user ON c_student_publication_comment');
+        }
 
         if (!$table->hasForeignKey('FK_35C509F6BB3453DB')) {
             $this->addSql(
@@ -151,13 +162,6 @@ class Version20170625144000 extends AbstractMigrationChamilo
             );
         }
 
-        if ($table->hasIndex('work')) {
-            $this->addSql('DROP INDEX work ON c_student_publication_comment;');
-        }
-
-        if ($table->hasIndex('user')) {
-            $this->addSql('DROP INDEX user ON c_student_publication_comment;');
-        }
 
         if (!$table->hasIndex('IDX_35C509F6BB3453DB')) {
             $this->addSql('CREATE INDEX IDX_35C509F6BB3453DB ON c_student_publication_comment (work_id);');

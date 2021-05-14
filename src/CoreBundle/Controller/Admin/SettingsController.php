@@ -81,7 +81,7 @@ class SettingsController extends BaseController
                 $form = $this->getSettingsFormFactory()->create($schemaAlias);
 
                 foreach (array_keys($settings->getParameters()) as $name) {
-                    if (!in_array($name, $list, true)) {
+                    if (!\in_array($name, $list, true)) {
                         $form->remove($name);
                         $settings->remove($name);
                     }
@@ -152,7 +152,7 @@ class SettingsController extends BaseController
         if (!empty($keyword)) {
             $params = $settings->getParameters();
             foreach (array_keys($params) as $name) {
-                if (!array_key_exists($name, $settingsFromKeyword)) {
+                if (!\array_key_exists($name, $settingsFromKeyword)) {
                     $form->remove($name);
                 }
             }

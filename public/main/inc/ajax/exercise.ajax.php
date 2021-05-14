@@ -448,7 +448,6 @@ switch ($action) {
         $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
         $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
 
-        // Attempt id.
         if ($debug) {
             error_log("exe_id = $exeId");
             error_log("type = $type");
@@ -458,7 +457,6 @@ switch ($action) {
             error_log('--------------------------------');
         }
 
-        // Exercise information.
         /** @var Exercise $objExercise */
         $objExercise = Session::read('objExercise');
 
@@ -832,12 +830,12 @@ switch ($action) {
 
         if ($savedAnswersCount !== $questionsCount) {
             $savedQuestionsMessage = Display::span(
-                sprintf(get_lang('XAnswersSavedByUsersFromXTotal'), $savedAnswersCount, $questionsCount),
+                sprintf(get_lang('%d / %d answers saved.'), $savedAnswersCount, $questionsCount),
                 ['class' => 'text-warning']
             );
         } else {
             $savedQuestionsMessage = Display::span(
-                sprintf(get_lang('XAnswersSavedByUsersFromXTotal'), $savedAnswersCount, $questionsCount),
+                sprintf(get_lang('%d / %d answers saved.'), $savedAnswersCount, $questionsCount),
                 ['class' => 'text-success']
             );
         }

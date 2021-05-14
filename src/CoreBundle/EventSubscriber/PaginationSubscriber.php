@@ -15,16 +15,16 @@ class PaginationSubscriber implements EventSubscriberInterface
 {
     public function items(ItemsEvent $event): void
     {
-        if (is_array($event->target)) {
+        if (\is_array($event->target)) {
             $event->items = $event->target;
-            $event->count = count($event->target);
+            $event->count = \count($event->target);
             $event->stopPropagation();
         }
     }
 
     public function pagination(PaginationEvent $event): void
     {
-        if (is_array($event->target)) {
+        if (\is_array($event->target)) {
             $event->setPagination(new SlidingPagination());
         }
 

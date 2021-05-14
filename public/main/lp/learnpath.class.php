@@ -24,7 +24,6 @@ use Chamilo\CourseBundle\Entity\CTool;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use PhpZip\ZipFile;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -372,14 +371,6 @@ class learnpath
     }
 
     /**
-     * @return string
-     */
-    public function getCourseCode()
-    {
-        return $this->cc;
-    }
-
-    /**
      * @return int
      */
     public function get_course_int_id()
@@ -614,7 +605,7 @@ class learnpath
                 break;
         }
 
-        $id = null;
+        $lpItemRepo = Database::getManager()->getRepository(CLpItem::class);
         $sessionEntity = api_get_session_entity();
         $courseEntity = api_get_course_entity($courseInfo['real_id']);
         $lp = null;
@@ -656,6 +647,21 @@ class learnpath
                 $em = Database::getManager();
                 $em->persist($lp);
                 $em->flush();
+                $lpId = $lp->getIid();
+
+                if ($lpId) {
+                    // Creates first root item, so all items will be parent of this item.
+                    $lpItem = new CLpItem();
+                    $lpItem
+                        ->setTitle('root')
+                        ->setPath('root')
+                        ->setLp($lp)
+                        ->setItemType('root');
+                    $em = Database::getManager();
+                    $em->persist($lpItem);
+                    $em->flush();
+                }
+
                 break;
         }
 
@@ -1058,57 +1064,11 @@ class learnpath
         if (!empty($previous)) {
             $previous = $repo->find($previous);
             $repo->persistAsNextSiblingOf( $item, $previous);
-            //$repo->reorder($item, 'parent');
-            //$repo->persistAsNextSiblingOf()
         } else {
-            //$previous = $repo->find($this->get_first_item_id());
-            //$repo->persistAsPrevSibling($previous);
-            //$repo->persistAsPrevSiblingOf()
             $em->persist($item);
         }
 
         $em->flush();
-        /*$repo->verify();
-        $repo->recover();*/
-        $audio_update_sql = '';
-        // @todo implement audio upload.
-        /*if (is_array($audio) && !empty($audio['tmp_name']) && 0 === $audio['error']) {
-            // Create the audio folder if it does not exist yet.
-            //$filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
-            if (!is_dir($filepath.'audio')) {
-                //mkdir($filepath.'audio', api_get_permissions_for_new_directories());
-                $audio_id = DocumentManager::addDocument(
-                    $_course,
-                    '/audio',
-                    'folder',
-                    0,
-                    'audio'
-                );
-            }
-
-            // Upload file in documents.
-            $pi = pathinfo($audio['name']);
-            if ('mp3' === $pi['extension']) {
-                $c_det = api_get_course_info($this->cc);
-                //$bp = api_get_path(SYS_COURSE_PATH).$c_det['path'].'/document';
-                $path = handle_uploaded_document(
-                    $c_det,
-                    $audio,
-                    $bp,
-                    '/audio',
-                    api_get_user_id(),
-                    0,
-                    null,
-                    0,
-                    'rename',
-                    false,
-                    0
-                );
-                $path = substr($path, 7);
-                // Update reference in lp_item - audio path is the path from inside de document/audio/ dir.
-                $audio_update_sql = ", audio = '".Database::escape_string($path)."' ";
-            }
-        }*/
 
         if ('link' === $item->getItemType()) {
             $link = new Link();
@@ -3701,20 +3661,6 @@ class learnpath
         }
 
         return true;
-
-        /*$action = 'visible';
-        if (1 != $set_visibility) {
-            $action = 'invisible';
-            self::toggle_publish($lp_id, 'i');
-        }
-
-        return api_item_property_update(
-            api_get_course_info(),
-            TOOL_LEARNPATH,
-            $lp_id,
-            $action,
-            api_get_user_id()
-        );*/
     }
 
     /**
@@ -3745,20 +3691,6 @@ class learnpath
         }
 
         return false;
-        /*
-        $action = 'visible';
-        if (1 != $visibility) {
-            self::toggleCategoryPublish($id, 0);
-            $action = 'invisible';
-        }
-
-        return api_item_property_update(
-            api_get_course_info(),
-            TOOL_LEARNPATH_CATEGORY,
-            $id,
-            $action,
-            api_get_user_id()
-        );*/
     }
 
     /**
@@ -3792,88 +3724,6 @@ class learnpath
         }
 
         return true;
-
-        /*
-        $course_id = api_get_course_int_id();
-        $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = (int) $lp_id;
-        $sql = "SELECT * FROM $tbl_lp
-                WHERE iid = $lp_id";
-        $result = Database::query($sql);
-
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_array($result);
-            $name = Database::escape_string($row['name']);
-            if ($set_visibility == 'i') {
-                $v = 0;
-            }
-            if ($set_visibility == 'v') {
-                $v = 1;
-            }
-
-            $session_id = api_get_session_id();
-            $session_condition = api_get_session_condition($session_id);
-
-            $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
-            $link = 'lp/lp_controller.php?action=view&lp_id='.$lp_id.'&id_session='.$session_id;
-            $oldLink = 'newscorm/lp_controller.php?action=view&lp_id='.$lp_id.'&id_session='.$session_id;
-
-            $sql = "SELECT * FROM $tbl_tool
-                    WHERE
-                        c_id = $course_id AND
-                        (link = '$link' OR link = '$oldLink') AND
-                        image = 'scormbuilder.gif' AND
-                        (
-                            link LIKE '$link%' OR
-                            link LIKE '$oldLink%'
-                        )
-                        $session_condition
-                    ";
-
-            $result = Database::query($sql);
-            $num = Database::num_rows($result);
-            if ($set_visibility == 'i' && $num > 0) {
-                $sql = "DELETE FROM $tbl_tool
-                        WHERE
-                            c_id = $course_id AND
-                            (link = '$link' OR link = '$oldLink') AND
-                            image='scormbuilder.gif'
-                            $session_condition";
-                Database::query($sql);
-            } elseif ($set_visibility == 'v' && $num == 0) {
-                $sql = "INSERT INTO $tbl_tool (category, c_id, name, link, image, visibility, admin, address, added_tool, session_id) VALUES
-                        ('authoring', $course_id, '$name', '$link', 'scormbuilder.gif', '$v', '0','pastillegris.gif', 0, $session_id)";
-                Database::query($sql);
-                $insertId = Database::insert_id();
-                if ($insertId) {
-                    $sql = "UPDATE $tbl_tool SET id = iid WHERE iid = $insertId";
-                    Database::query($sql);
-                }
-            } elseif ($set_visibility == 'v' && $num > 0) {
-                $sql = "UPDATE $tbl_tool SET
-                            c_id = $course_id,
-                            name = '$name',
-                            link = '$link',
-                            image = 'scormbuilder.gif',
-                            visibility = '$v',
-                            admin = '0',
-                            address = 'pastillegris.gif',
-                            added_tool = 0,
-                            session_id = $session_id
-                        WHERE
-                            c_id = ".$course_id." AND
-                            (link = '$link' OR link = '$oldLink') AND
-                            image='scormbuilder.gif'
-                            $session_condition
-                        ";
-                Database::query($sql);
-            } else {
-                // Parameter and database incompatible, do nothing, exit.
-                return false;
-            }
-        } else {
-            return false;
-        }*/
     }
 
     /**
@@ -3928,15 +3778,7 @@ class learnpath
             return true;
         }
 
-        $repo = Container::getLpCategoryRepository();
         $categoryVisibility = $category->isVisible($course, $session);
-
-        /*$categoryVisibility = api_get_item_visibility(
-            $courseInfo,
-            TOOL_LEARNPATH_CATEGORY,
-            $category->getId(),
-            $sessionId
-        );*/
 
         if (1 !== $categoryVisibility && -1 != $categoryVisibility) {
             return false;
@@ -4309,31 +4151,6 @@ class learnpath
     }
 
     /**
-     * Sets the JS lib setting in the database directly.
-     * This is the JavaScript library file this lp needs to load on startup.
-     *
-     * @param string $lib Proximity setting
-     *
-     * @return bool True on update success. False otherwise.
-     */
-    public function set_jslib($lib = '')
-    {
-        $lp = $this->get_id();
-
-        if (0 != $lp) {
-            $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $lib = Database::escape_string($lib);
-            $sql = "UPDATE $tbl_lp SET js_lib = '$lib'
-                    WHERE iid = $lp";
-            $res = Database::query($sql);
-
-            return $res;
-        }
-
-        return false;
-    }
-
-    /**
      * Set index specified prefix terms for all items in this path.
      *
      * @param string $terms_string Comma-separated list of terms
@@ -4422,27 +4239,6 @@ class learnpath
             error_log('In learnpath::set_previous_item()', 0);
         }
         $this->last = $id;
-    }
-
-    /**
-     * Sets use_max_score.
-     *
-     * @param int $use_max_score Optional string giving the new location of this learnpath
-     *
-     * @return bool True on success / False on error
-     */
-    public function set_use_max_score($use_max_score = 1)
-    {
-        $use_max_score = (int) $use_max_score;
-        $this->use_max_score = $use_max_score;
-        $table = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = $this->get_id();
-        $sql = "UPDATE $table SET
-                    use_max_score = '".$this->use_max_score."'
-                WHERE iid = $lp_id";
-        Database::query($sql);
-
-        return true;
     }
 
     /**
@@ -5025,475 +4821,6 @@ class learnpath
         return $return;
     }
 
-    /**
-     * @param string $update_audio
-     *
-     * @return array
-     */
-    public function processBuildMenuElements($update_audio = 'false')
-    {
-        $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-        $arrLP = $this->getItemsForForm();
-
-        $this->tree_array($arrLP);
-        $arrLP = $this->arrMenu ?? [];
-        $default_data = null;
-        $default_content = null;
-        $elements = [];
-        $return_audio = null;
-        $iconPath = api_get_path(SYS_PUBLIC_PATH).'img/';
-        $mainUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();
-        $countItems = count($arrLP);
-
-        $upIcon = Display::return_icon(
-            'up.png',
-            get_lang('Up'),
-            [],
-            ICON_SIZE_TINY
-        );
-
-        $disableUpIcon = Display::return_icon(
-            'up_na.png',
-            get_lang('Up'),
-            [],
-            ICON_SIZE_TINY
-        );
-
-        $downIcon = Display::return_icon(
-            'down.png',
-            get_lang('Down'),
-            [],
-            ICON_SIZE_TINY
-        );
-
-        $disableDownIcon = Display::return_icon(
-            'down_na.png',
-            get_lang('Down'),
-            [],
-            ICON_SIZE_TINY
-        );
-
-        $show = api_get_configuration_value('show_full_lp_item_title_in_edition');
-
-        $pluginCalendar = 'true' === api_get_plugin_setting('learning_calendar', 'enabled');
-        $plugin = null;
-        if ($pluginCalendar) {
-            $plugin = LearningCalendarPlugin::create();
-        }
-
-        for ($i = 0; $i < $countItems; $i++) {
-            $parent_id = $arrLP[$i]['parent_item_id'];
-            $title = $arrLP[$i]['title'];
-            $title_cut = $arrLP[$i]['title_raw'];
-            if (false === $show) {
-                $title_cut = cut($arrLP[$i]['title'], self::MAX_LP_ITEM_TITLE_LENGTH);
-            }
-            // Link for the documents
-            if ('document' === $arrLP[$i]['item_type'] || TOOL_READOUT_TEXT === $arrLP[$i]['item_type']) {
-                $url = $mainUrl.'&action=view_item&mode=preview_document&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
-                $title_cut = Display::url(
-                    $title_cut,
-                    $url,
-                    [
-                        'class' => 'ajax moved',
-                        'data-title' => $title,
-                        'title' => $title,
-                    ]
-                );
-            }
-
-            // Detect if type is FINAL_ITEM to set path_id to SESSION
-            if (TOOL_LP_FINAL_ITEM === $arrLP[$i]['item_type']) {
-                Session::write('pathItem', $arrLP[$i]['path']);
-            }
-
-            $oddClass = 'row_even';
-            if (0 == ($i % 2)) {
-                $oddClass = 'row_odd';
-            }
-            $return_audio .= '<tr id ="lp_item_'.$arrLP[$i]['id'].'" class="'.$oddClass.'">';
-            $icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
-
-            if (file_exists($iconPath.'lp_'.$icon_name.'.png')) {
-                $icon = Display::return_icon('lp_'.$icon_name.'.png');
-            } else {
-                if (file_exists($iconPath.'lp_'.$icon_name.'.gif')) {
-                    $icon = Display::return_icon('lp_'.$icon_name.'.gif');
-                } else {
-                    if (TOOL_LP_FINAL_ITEM === $arrLP[$i]['item_type']) {
-                        $icon = Display::return_icon('certificate.png');
-                    } else {
-                        $icon = Display::return_icon('folder_document.png');
-                    }
-                }
-            }
-
-            // The audio column.
-            $return_audio .= '<td align="left" style="padding-left:10px;">';
-            $audio = '';
-            if (!$update_audio || 'true' != $update_audio) {
-                if (empty($arrLP[$i]['audio'])) {
-                    $audio .= '';
-                }
-            } else {
-                $types = self::getChapterTypes();
-                if (!in_array($arrLP[$i]['item_type'], $types)) {
-                    $audio .= '<input type="file" name="mp3file'.$arrLP[$i]['id'].'" id="mp3file" />';
-                    if (!empty($arrLP[$i]['audio'])) {
-                        $audio .= '<br />'.Security::remove_XSS($arrLP[$i]['audio']).'<br />
-                        <input type="checkbox" name="removemp3'.$arrLP[$i]['id'].'" id="checkbox'.$arrLP[$i]['id'].'" />'.get_lang('Remove audio');
-                    }
-                }
-            }
-
-            $return_audio .= Display::span($icon.' '.$title).
-                Display::tag(
-                    'td',
-                    $audio,
-                    ['style' => '']
-                );
-            $return_audio .= '</td>';
-            $move_icon = '';
-            $move_item_icon = '';
-            $edit_icon = '';
-            $delete_icon = '';
-            $audio_icon = '';
-            $prerequisities_icon = '';
-            $forumIcon = '';
-            $previewIcon = '';
-            $pluginCalendarIcon = '';
-            $orderIcons = '';
-            $pluginUrl = api_get_path(WEB_PLUGIN_PATH).'learning_calendar/start.php?';
-
-            if ($is_allowed_to_edit) {
-                if (!$update_audio || 'true' != $update_audio) {
-                    if (TOOL_LP_FINAL_ITEM !== $arrLP[$i]['item_type']) {
-                        $move_icon .= '<a class="moved" href="#">';
-                        $move_icon .= Display::return_icon(
-                            'move_everywhere.png',
-                            get_lang('Move'),
-                            [],
-                            ICON_SIZE_TINY
-                        );
-                        $move_icon .= '</a>';
-                    }
-                }
-
-                // No edit for this item types
-                if (!in_array($arrLP[$i]['item_type'], ['sco', 'asset', 'final_item'])) {
-                    if ('dir' != $arrLP[$i]['item_type']) {
-                        $edit_icon .= '<a href="'.$mainUrl.'&action=edit_item&view=build&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'&path_item='.$arrLP[$i]['path'].'" class="btn btn-default">';
-                        $edit_icon .= Display::return_icon(
-                            'edit.png',
-                            get_lang('Edit section description/name'),
-                            [],
-                            ICON_SIZE_TINY
-                        );
-                        $edit_icon .= '</a>';
-
-                        if (!in_array($arrLP[$i]['item_type'], ['forum', 'thread'])) {
-                            $forumThread = null;
-                            if (isset($this->items[$arrLP[$i]['id']])) {
-                                $forumThread = $this->items[$arrLP[$i]['id']]->getForumThread(
-                                    $this->course_int_id,
-                                    $this->lp_session_id
-                                );
-                            }
-                            if ($forumThread) {
-                                $forumIconUrl = $mainUrl.'&'.http_build_query([
-                                        'action' => 'dissociate_forum',
-                                        'id' => $arrLP[$i]['id'],
-                                        'lp_id' => $this->lp_id,
-                                    ]);
-                                $forumIcon = Display::url(
-                                    Display::return_icon(
-                                        'forum.png',
-                                        get_lang('Dissociate the forum of this learning path item'),
-                                        [],
-                                        ICON_SIZE_TINY
-                                    ),
-                                    $forumIconUrl,
-                                    ['class' => 'btn btn-default lp-btn-dissociate-forum']
-                                );
-                            } else {
-                                $forumIconUrl = $mainUrl.'&'.http_build_query([
-                                        'action' => 'create_forum',
-                                        'id' => $arrLP[$i]['id'],
-                                        'lp_id' => $this->lp_id,
-                                    ]);
-                                $forumIcon = Display::url(
-                                    Display::return_icon(
-                                        'forum.png',
-                                        get_lang('Associate a forum to this learning path item'),
-                                        [],
-                                        ICON_SIZE_TINY
-                                    ),
-                                    $forumIconUrl,
-                                    ['class' => 'btn btn-default lp-btn-associate-forum']
-                                );
-                            }
-                        }
-                    } else {
-                        $edit_icon .= '<a href="'.$mainUrl.'&action=edit_item&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'&path_item='.$arrLP[$i]['path'].'" class="btn btn-default">';
-                        $edit_icon .= Display::return_icon(
-                            'edit.png',
-                            get_lang('Edit section description/name'),
-                            [],
-                            ICON_SIZE_TINY
-                        );
-                        $edit_icon .= '</a>';
-                    }
-                } else {
-                    if (TOOL_LP_FINAL_ITEM == $arrLP[$i]['item_type']) {
-                        $edit_icon .= '<a href="'.$mainUrl.'&action=edit_item&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'" class="btn btn-default">';
-                        $edit_icon .= Display::return_icon(
-                            'edit.png',
-                            get_lang('Edit'),
-                            [],
-                            ICON_SIZE_TINY
-                        );
-                        $edit_icon .= '</a>';
-                    }
-                }
-
-                if ($pluginCalendar) {
-                    $pluginLink = $pluginUrl.
-                        '&action=toggle_visibility&lp_item_id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
-                    $iconCalendar = Display::return_icon('agenda_na.png', get_lang('1 day'), [], ICON_SIZE_TINY);
-                    $itemInfo = $plugin->getItemVisibility($arrLP[$i]['id']);
-                    if ($itemInfo && 1 == $itemInfo['value']) {
-                        $iconCalendar = Display::return_icon('agenda.png', get_lang('1 day'), [], ICON_SIZE_TINY);
-                    }
-                    $pluginCalendarIcon = Display::url(
-                        $iconCalendar,
-                        $pluginLink,
-                        ['class' => 'btn btn-default']
-                    );
-                }
-
-                if ('final_item' != $arrLP[$i]['item_type']) {
-                    $orderIcons = Display::url(
-                        $upIcon,
-                        'javascript:void(0)',
-                        ['class' => 'btn btn-default order_items', 'data-dir' => 'up', 'data-id' => $arrLP[$i]['id']]
-                    );
-                    $orderIcons .= Display::url(
-                        $downIcon,
-                        'javascript:void(0)',
-                        ['class' => 'btn btn-default order_items', 'data-dir' => 'down', 'data-id' => $arrLP[$i]['id']]
-                    );
-                }
-                $delete_icon .= ' <a
-
-                    href="'.$mainUrl.'&action=delete_item&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'"
-                    onclick="return confirmation(\''.addslashes($title).'\');"
-                    class="btn btn-default">';
-                $delete_icon .= Display::return_icon(
-                    'delete.png',
-                    get_lang('Delete section'),
-                    [],
-                    ICON_SIZE_TINY
-                );
-                $delete_icon .= '</a>';
-
-                $url = $mainUrl.'&view=build&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
-                $previewImage = Display::return_icon(
-                    'preview_view.png',
-                    get_lang('Preview'),
-                    [],
-                    ICON_SIZE_TINY
-                );
-
-                switch ($arrLP[$i]['item_type']) {
-                    case TOOL_DOCUMENT:
-                    case TOOL_LP_FINAL_ITEM:
-                    case TOOL_READOUT_TEXT:
-                        $urlPreviewLink = $mainUrl.'&action=view_item&mode=preview_document&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
-                        $previewIcon = Display::url(
-                            $previewImage,
-                            $urlPreviewLink,
-                            [
-                                'target' => '_blank',
-                                'class' => 'btn btn-default',
-                                'data-title' => $arrLP[$i]['title'],
-                                'title' => $arrLP[$i]['title'],
-                            ]
-                        );
-                        break;
-                    case TOOL_THREAD:
-                    case TOOL_FORUM:
-                    case TOOL_QUIZ:
-                    case TOOL_STUDENTPUBLICATION:
-                    case TOOL_LINK:
-                        $class = 'btn btn-default';
-                        $target = '_blank';
-                        $link = self::rl_get_resource_link_for_learnpath(
-                            $this->course_int_id,
-                            $this->lp_id,
-                            $arrLP[$i]['id'],
-                            0
-                        );
-                        $previewIcon = Display::url(
-                            $previewImage,
-                            $link,
-                            [
-                                'class' => $class,
-                                'data-title' => $arrLP[$i]['title'],
-                                'title' => $arrLP[$i]['title'],
-                                'target' => $target,
-                            ]
-                        );
-                        break;
-                    default:
-                        $previewIcon = Display::url(
-                            $previewImage,
-                            $url.'&action=view_item',
-                            ['class' => 'btn btn-default', 'target' => '_blank']
-                        );
-                        break;
-                }
-
-                if ('dir' != $arrLP[$i]['item_type']) {
-                    $prerequisities_icon = Display::url(
-                        Display::return_icon(
-                            'accept.png',
-                            get_lang('Prerequisites'),
-                            [],
-                            ICON_SIZE_TINY
-                        ),
-                        $url.'&action=edit_item_prereq',
-                        ['class' => 'btn btn-default']
-                    );
-                    if ('final_item' != $arrLP[$i]['item_type']) {
-                        /*$move_item_icon = Display::url(
-                            Display::return_icon(
-                                'move.png',
-                                get_lang('Move'),
-                                [],
-                                ICON_SIZE_TINY
-                            ),
-                            $url.'&action=move_item',
-                            ['class' => 'btn btn-default']
-                        );*/
-                    }
-                    $audio_icon = Display::url(
-                        Display::return_icon(
-                            'audio.png',
-                            get_lang('Upload'),
-                            [],
-                            ICON_SIZE_TINY
-                        ),
-                        $url.'&action=add_audio',
-                        ['class' => 'btn btn-default']
-                    );
-                }
-            }
-            if ('true' != $update_audio) {
-                $row = $move_icon.' '.$icon.
-                    Display::span($title_cut).
-                    Display::tag(
-                        'div',
-                        "<div class=\"btn-group btn-group-xs\">
-                                    $previewIcon
-                                    $audio
-                                    $edit_icon
-                                    $pluginCalendarIcon
-                                    $forumIcon
-                                    $prerequisities_icon
-                                    $move_item_icon
-                                    $audio_icon
-                                    $orderIcons
-                                    $delete_icon
-                                </div>",
-                        ['class' => 'btn-toolbar button_actions']
-                    );
-            } else {
-                $row =
-                    Display::span($title.$icon).
-                    Display::span($audio, ['class' => 'button_actions']);
-            }
-
-            $default_data[$arrLP[$i]['id']] = $row;
-            $default_content[$arrLP[$i]['id']] = $arrLP[$i];
-
-            if (empty($parent_id)) {
-                $elements[$arrLP[$i]['id']]['data'] = $row;
-                $elements[$arrLP[$i]['id']]['type'] = $arrLP[$i]['item_type'];
-            } else {
-                $parent_arrays = [];
-                if ($arrLP[$i]['depth'] > 1) {
-                    // Getting list of parents
-                    for ($j = 0; $j < $arrLP[$i]['depth']; $j++) {
-                        foreach ($arrLP as $item) {
-                            if ($item['id'] == $parent_id) {
-                                if (0 == $item['parent_item_id']) {
-                                    $parent_id = $item['id'];
-                                    break;
-                                } else {
-                                    $parent_id = $item['parent_item_id'];
-                                    if (empty($parent_arrays)) {
-                                        $parent_arrays[] = intval($item['id']);
-                                    }
-                                    $parent_arrays[] = $parent_id;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (!empty($parent_arrays)) {
-                    $parent_arrays = array_reverse($parent_arrays);
-                    $val = '$elements';
-                    $x = 0;
-                    foreach ($parent_arrays as $item) {
-                        if ($x != count($parent_arrays) - 1) {
-                            $val .= '["'.$item.'"]["children"]';
-                        } else {
-                            $val .= '["'.$item.'"]["children"]';
-                        }
-                        $x++;
-                    }
-                    $val .= "";
-                    $code_str = $val."[".$arrLP[$i]['id']."][\"load_data\"] = '".$arrLP[$i]['id']."' ; ";
-                    eval($code_str);
-                } else {
-                    $elements[$parent_id]['children'][$arrLP[$i]['id']]['data'] = $row;
-                    $elements[$parent_id]['children'][$arrLP[$i]['id']]['type'] = $arrLP[$i]['item_type'];
-                }
-            }
-        }
-
-        return [
-            'elements' => $elements,
-            'default_data' => $default_data,
-            'default_content' => $default_content,
-            'return_audio' => $return_audio,
-        ];
-    }
-
-    /**
-     * @param string $updateAudio true/false strings
-     *
-     * @return string
-     */
-    public function returnLpItemList($updateAudio)
-    {
-        $result = $this->processBuildMenuElements($updateAudio);
-
-        $html = self::print_recursive(
-            $result['elements'],
-            $result['default_data'],
-            $result['default_content']
-        );
-
-        if (!empty($html)) {
-            $html .= Display::return_message(get_lang('Drag and drop an element here'));
-        }
-
-        return $html;
-    }
-
     public function showBuildSideBar($updateAudio = false, $dropElementHere = false, $type = null)
     {
         $sureToDelete = trim(get_lang('Are you sure to delete?'));
@@ -5993,55 +5320,6 @@ class learnpath
             '<ul id="lp_item_list" class="list-group nested-sortable">
             '.$li.'
             </ul>';
-    }
-
-    /**
-     * @param array $elements
-     * @param array $default_data
-     * @param array $default_content
-     *
-     * @return string
-     */
-    public function print_recursive($elements, $default_data, $default_content)
-    {
-        $return = '';
-        foreach ($elements as $key => $item) {
-            if (isset($item['load_data']) || empty($item['data'])) {
-                $item['data'] = $default_data[$item['load_data']];
-                $item['type'] = $default_content[$item['load_data']]['item_type'];
-            }
-            $sub_list = '';
-            if (isset($item['type']) && 'dir' === $item['type']) {
-                // empty value
-                $sub_list = Display::tag('li', '', ['class' => 'sub_item empty']);
-            }
-            if (empty($item['children'])) {
-                $sub_list = Display::tag('ul', $sub_list, ['id' => 'UL_'.$key, 'class' => 'record li_container']);
-                $active = null;
-                if (isset($_REQUEST['id']) && $key == $_REQUEST['id']) {
-                    $active = 'active';
-                }
-                $return .= Display::tag(
-                    'li',
-                    Display::div($item['data'], ['class' => "item_data $active"]).$sub_list,
-                    ['id' => $key, 'class' => 'record li_container']
-                );
-            } else {
-                // Sections
-                $data = '';
-                if (isset($item['children'])) {
-                    $data = self::print_recursive($item['children'], $default_data, $default_content);
-                }
-                $sub_list = Display::tag('ul', $sub_list.$data, ['id' => 'UL_'.$key, 'class' => 'record li_container']);
-                $return .= Display::tag(
-                    'li',
-                    Display::div($item['data'], ['class' => 'item_data']).$sub_list,
-                    ['id' => $key, 'class' => 'record li_container']
-                );
-            }
-        }
-
-        return $return;
     }
 
     /**
@@ -7017,10 +6295,6 @@ class learnpath
      * @param string $title
      * @param int    $parentId
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
-     *
      * @return int
      */
     public function createReadOutText($courseInfo, $content = '', $title = '', $parentId = 0)
@@ -7774,10 +7048,6 @@ class learnpath
     {
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
-        $userInfo = api_get_user_info();
-
-        $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
-        $condition_session = api_get_session_condition($session_id, true, true);
         $setting = 'true' === api_get_setting('lp.show_invisible_exercise_in_lp_toc');
 
         //$activeCondition = ' active <> -1 ';
@@ -7936,25 +7206,6 @@ class learnpath
             ICON_SIZE_TINY
         );
 
-        /*$condition_session = api_get_session_condition(
-            $session_id,
-            true,
-            true,
-            'link.session_id'
-        );
-
-        $sql = "SELECT
-                    link.id as link_id,
-                    link.title as link_title,
-                    link.session_id as link_session_id,
-                    link.category_id as category_id,
-                    link_category.category_title as category_title
-                FROM $tbl_link as link
-                LEFT JOIN $linkCategoryTable as link_category
-                ON (link.category_id = link_category.id AND link.c_id = link_category.c_id)
-                WHERE link.c_id = $course_id $condition_session
-                ORDER BY link_category.category_title ASC, link.title ASC";
-        $result = Database::query($sql);*/
         $categorizedLinks = [];
         $categories = [];
 
@@ -8058,12 +7309,6 @@ class learnpath
     {
         $return = '<ul class="list-group lp_resource">';
         $return .= '<li class="list-group-item lp_resource_element">';
-        /*
-        $return .= Display::return_icon('works_new.gif');
-        $return .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_STUDENTPUBLICATION.'&lp_id='.$this->lp_id.'">'.
-            get_lang('Add the Assignments tool to the course').'</a>';
-        $return .= '</li>';*/
-
         $works = getWorkListTeacher(0, 100, null, null, null);
         if (!empty($works)) {
             $icon = Display::return_icon('works.png', '', [], ICON_SIZE_TINY);
@@ -8092,7 +7337,8 @@ class learnpath
                 $return .= $icon;
                 $return .= Display::url(
                     Security::remove_XSS(cut(strip_tags($work['title']), 80)).' '.$link,
-                    api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_STUDENTPUBLICATION.'&file='.$work['iid'].'&lp_id='.$this->lp_id,
+                    api_get_self().'?'.
+                    api_get_cidreq().'&action=add_item&type='.TOOL_STUDENTPUBLICATION.'&file='.$work['iid'].'&lp_id='.$this->lp_id,
                     [
                         'class' => 'moved link_with_id',
                         'data-id' => $work['iid'],
@@ -8274,1055 +7520,12 @@ class learnpath
      */
     public function scormExport()
     {
-        api_set_more_memory_and_time_limits();
-
-        $_course = api_get_course_info();
-        $course_id = $_course['real_id'];
-        // Create the zip handler (this will remain available throughout the method).
-        $archivePath = api_get_path(SYS_ARCHIVE_PATH);
-        $sys_course_path = api_get_path(SYS_COURSE_PATH);
-        $temp_dir_short = uniqid('scorm_export', true);
-        $temp_zip_dir = $archivePath.'/'.$temp_dir_short;
-        $temp_zip_file = $temp_zip_dir.'/'.md5(time()).'.zip';
-        $zip_folder = new PclZip($temp_zip_file);
-        $current_course_path = api_get_path(SYS_COURSE_PATH).api_get_course_path();
-        $root_path = $main_path = api_get_path(SYS_PATH);
-        $files_cleanup = [];
-
-        // Place to temporarily stash the zip file.
-        // create the temp dir if it doesn't exist
-        // or do a cleanup before creating the zip file.
-        if (!is_dir($temp_zip_dir)) {
-            mkdir($temp_zip_dir, api_get_permissions_for_new_directories());
-        } else {
-            // Cleanup: Check the temp dir for old files and delete them.
-            $handle = opendir($temp_zip_dir);
-            while (false !== ($file = readdir($handle))) {
-                if ('.' != $file && '..' != $file) {
-                    unlink("$temp_zip_dir/$file");
-                }
-            }
-            closedir($handle);
-        }
-        $zip_files = $zip_files_abs = $zip_files_dist = [];
-        if (is_dir($current_course_path.'/scorm/'.$this->path) &&
-            is_file($current_course_path.'/scorm/'.$this->path.'/imsmanifest.xml')
-        ) {
-            // Remove the possible . at the end of the path.
-            $dest_path_to_lp = '.' == substr($this->path, -1) ? substr($this->path, 0, -1) : $this->path;
-            $dest_path_to_scorm_folder = str_replace('//', '/', $temp_zip_dir.'/scorm/'.$dest_path_to_lp);
-            mkdir(
-                $dest_path_to_scorm_folder,
-                api_get_permissions_for_new_directories(),
-                true
-            );
-            copyr(
-                $current_course_path.'/scorm/'.$this->path,
-                $dest_path_to_scorm_folder,
-                ['imsmanifest'],
-                $zip_files
-            );
-        }
-
-        // Build a dummy imsmanifest structure.
-        // Do not add to the zip yet (we still need it).
-        // This structure is developed following regulations for SCORM 1.2 packaging in the SCORM 1.2 Content
-        // Aggregation Model official document, section "2.3 Content Packaging".
-        // We are going to build a UTF-8 encoded manifest.
-        // Later we will recode it to the desired (and supported) encoding.
-        $xmldoc = new DOMDocument('1.0');
-        $root = $xmldoc->createElement('manifest');
-        $root->setAttribute('identifier', 'SingleCourseManifest');
-        $root->setAttribute('version', '1.1');
-        $root->setAttribute('xmlns', 'http://www.imsproject.org/xsd/imscp_rootv1p1p2');
-        $root->setAttribute('xmlns:adlcp', 'http://www.adlnet.org/xsd/adlcp_rootv1p2');
-        $root->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
-        $root->setAttribute(
-            'xsi:schemaLocation',
-            'http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd http://www.imsglobal.org/xsd/imsmd_rootv1p2p1 imsmd_rootv1p2p1.xsd http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd'
-        );
-        // Build mandatory sub-root container elements.
-        $metadata = $xmldoc->createElement('metadata');
-        $md_schema = $xmldoc->createElement('schema', 'ADL SCORM');
-        $metadata->appendChild($md_schema);
-        $md_schemaversion = $xmldoc->createElement('schemaversion', '1.2');
-        $metadata->appendChild($md_schemaversion);
-        $root->appendChild($metadata);
-
-        $organizations = $xmldoc->createElement('organizations');
-        $resources = $xmldoc->createElement('resources');
-
-        // Build the only organization we will use in building our learnpaths.
-        $organizations->setAttribute('default', 'chamilo_scorm_export');
-        $organization = $xmldoc->createElement('organization');
-        $organization->setAttribute('identifier', 'chamilo_scorm_export');
-        // To set the title of the SCORM entity (=organization), we take the name given
-        // in Chamilo and convert it to HTML entities using the Chamilo charset (not the
-        // learning path charset) as it is the encoding that defines how it is stored
-        // in the database. Then we convert it to HTML entities again as the "&" character
-        // alone is not authorized in XML (must be &amp;).
-        // The title is then decoded twice when extracting (see scorm::parse_manifest).
-        $org_title = $xmldoc->createElement('title', api_utf8_encode($this->get_name()));
-        $organization->appendChild($org_title);
-        $folder_name = 'document';
-
-        // Removes the learning_path/scorm_folder path when exporting see #4841
-        $path_to_remove = '';
-        $path_to_replace = '';
-        $result = $this->generate_lp_folder($_course);
-        if (isset($result['dir']) && strpos($result['dir'], 'learning_path')) {
-            $path_to_remove = 'document'.$result['dir'];
-            $path_to_replace = $folder_name.'/';
-        }
-
-        // Fixes chamilo scorm exports
-        if ('chamilo_scorm_export' === $this->ref) {
-            $path_to_remove = 'scorm/'.$this->path.'/document/';
-        }
-
-        // For each element, add it to the imsmanifest structure, then add it to the zip.
-        $link_updates = [];
-        $links_to_create = [];
-        foreach ($this->ordered_items as $index => $itemId) {
-            /** @var learnpathItem $item */
-            $item = $this->items[$itemId];
-            if (!in_array($item->type, [TOOL_QUIZ, TOOL_FORUM, TOOL_THREAD, TOOL_LINK, TOOL_STUDENTPUBLICATION])) {
-                // Get included documents from this item.
-                if ('sco' === $item->type) {
-                    $inc_docs = $item->get_resources_from_source(
-                        null,
-                        $current_course_path.'/scorm/'.$this->path.'/'.$item->get_path()
-                    );
-                } else {
-                    $inc_docs = $item->get_resources_from_source();
-                }
-
-                // Give a child element <item> to the <organization> element.
-                $my_item_id = $item->get_id();
-                $my_item = $xmldoc->createElement('item');
-                $my_item->setAttribute('identifier', 'ITEM_'.$my_item_id);
-                $my_item->setAttribute('identifierref', 'RESOURCE_'.$my_item_id);
-                $my_item->setAttribute('isvisible', 'true');
-                // Give a child element <title> to the <item> element.
-                $my_title = $xmldoc->createElement(
-                    'title',
-                    htmlspecialchars(
-                        api_utf8_encode($item->get_title()),
-                        ENT_QUOTES,
-                        'UTF-8'
-                    )
-                );
-                $my_item->appendChild($my_title);
-                // Give a child element <adlcp:prerequisites> to the <item> element.
-                $my_prereqs = $xmldoc->createElement(
-                    'adlcp:prerequisites',
-                    $this->get_scorm_prereq_string($my_item_id)
-                );
-                $my_prereqs->setAttribute('type', 'aicc_script');
-                $my_item->appendChild($my_prereqs);
-                // Give a child element <adlcp:maxtimeallowed> to the <item> element - not yet supported.
-                //$xmldoc->createElement('adlcp:maxtimeallowed','');
-                // Give a child element <adlcp:timelimitaction> to the <item> element - not yet supported.
-                //$xmldoc->createElement('adlcp:timelimitaction','');
-                // Give a child element <adlcp:datafromlms> to the <item> element - not yet supported.
-                //$xmldoc->createElement('adlcp:datafromlms','');
-                // Give a child element <adlcp:masteryscore> to the <item> element.
-                $my_masteryscore = $xmldoc->createElement('adlcp:masteryscore', $item->get_mastery_score());
-                $my_item->appendChild($my_masteryscore);
-
-                // Attach this item to the organization element or hits parent if there is one.
-                if (!empty($item->parent) && 0 != $item->parent) {
-                    $children = $organization->childNodes;
-                    $possible_parent = $this->get_scorm_xml_node($children, 'ITEM_'.$item->parent);
-                    if (is_object($possible_parent)) {
-                        $possible_parent->appendChild($my_item);
-                    } else {
-                        if ($this->debug > 0) {
-                            error_log('Parent ITEM_'.$item->parent.' of item ITEM_'.$my_item_id.' not found');
-                        }
-                    }
-                } else {
-                    if ($this->debug > 0) {
-                        error_log('No parent');
-                    }
-                    $organization->appendChild($my_item);
-                }
-
-                // Get the path of the file(s) from the course directory root.
-                $my_file_path = $item->get_file_path('scorm/'.$this->path.'/');
-                $my_xml_file_path = $my_file_path;
-                if (!empty($path_to_remove)) {
-                    // From docs
-                    $my_xml_file_path = str_replace($path_to_remove, $path_to_replace, $my_file_path);
-
-                    // From quiz
-                    if ('chamilo_scorm_export' === $this->ref) {
-                        $path_to_remove = 'scorm/'.$this->path.'/';
-                        $my_xml_file_path = str_replace($path_to_remove, '', $my_file_path);
-                    }
-                }
-
-                $my_sub_dir = dirname($my_file_path);
-                $my_sub_dir = str_replace('\\', '/', $my_sub_dir);
-                $my_xml_sub_dir = $my_sub_dir;
-                // Give a <resource> child to the <resources> element
-                $my_resource = $xmldoc->createElement('resource');
-                $my_resource->setAttribute('identifier', 'RESOURCE_'.$item->get_id());
-                $my_resource->setAttribute('type', 'webcontent');
-                $my_resource->setAttribute('href', $my_xml_file_path);
-                // adlcp:scormtype can be either 'sco' or 'asset'.
-                if ('sco' === $item->type) {
-                    $my_resource->setAttribute('adlcp:scormtype', 'sco');
-                } else {
-                    $my_resource->setAttribute('adlcp:scormtype', 'asset');
-                }
-                // xml:base is the base directory to find the files declared in this resource.
-                $my_resource->setAttribute('xml:base', '');
-                // Give a <file> child to the <resource> element.
-                $my_file = $xmldoc->createElement('file');
-                $my_file->setAttribute('href', $my_xml_file_path);
-                $my_resource->appendChild($my_file);
-
-                // Dependency to other files - not yet supported.
-                $i = 1;
-                if ($inc_docs) {
-                    foreach ($inc_docs as $doc_info) {
-                        if (count($doc_info) < 1 || empty($doc_info[0])) {
-                            continue;
-                        }
-                        $my_dep = $xmldoc->createElement('resource');
-                        $res_id = 'RESOURCE_'.$item->get_id().'_'.$i;
-                        $my_dep->setAttribute('identifier', $res_id);
-                        $my_dep->setAttribute('type', 'webcontent');
-                        $my_dep->setAttribute('adlcp:scormtype', 'asset');
-                        $my_dep_file = $xmldoc->createElement('file');
-                        // Check type of URL.
-                        if ('remote' == $doc_info[1]) {
-                            // Remote file. Save url as is.
-                            $my_dep_file->setAttribute('href', $doc_info[0]);
-                            $my_dep->setAttribute('xml:base', '');
-                        } elseif ('local' === $doc_info[1]) {
-                            switch ($doc_info[2]) {
-                                case 'url':
-                                    // Local URL - save path as url for now, don't zip file.
-                                    $abs_path = api_get_path(SYS_PATH).
-                                        str_replace(api_get_path(WEB_PATH), '', $doc_info[0]);
-                                    $current_dir = dirname($abs_path);
-                                    $current_dir = str_replace('\\', '/', $current_dir);
-                                    $file_path = realpath($abs_path);
-                                    $file_path = str_replace('\\', '/', $file_path);
-                                    $my_dep_file->setAttribute('href', $file_path);
-                                    $my_dep->setAttribute('xml:base', '');
-                                    if (false !== strstr($file_path, $main_path)) {
-                                        // The calculated real path is really inside Chamilo's root path.
-                                        // Reduce file path to what's under the DocumentRoot.
-                                        $replace = $file_path;
-                                        $file_path = substr($file_path, strlen($root_path) - 1);
-                                        $destinationFile = $file_path;
-
-                                        if (false !== strstr($file_path, 'upload/users')) {
-                                            $pos = strpos($file_path, 'my_files/');
-                                            if (false !== $pos) {
-                                                $onlyDirectory = str_replace(
-                                                    'upload/users/',
-                                                    '',
-                                                    substr($file_path, $pos, strlen($file_path))
-                                                );
-                                            }
-                                            $replace = $onlyDirectory;
-                                            $destinationFile = $replace;
-                                        }
-                                        $zip_files_abs[] = $file_path;
-                                        $link_updates[$my_file_path][] = [
-                                            'orig' => $doc_info[0],
-                                            'dest' => $destinationFile,
-                                            'replace' => $replace,
-                                        ];
-                                        $my_dep_file->setAttribute('href', $file_path);
-                                        $my_dep->setAttribute('xml:base', '');
-                                    } elseif (empty($file_path)) {
-                                        $file_path = $_SERVER['DOCUMENT_ROOT'].$abs_path;
-                                        $file_path = str_replace('//', '/', $file_path);
-                                        if (file_exists($file_path)) {
-                                            // We get the relative path.
-                                            $file_path = substr($file_path, strlen($current_dir));
-                                            $zip_files[] = $my_sub_dir.'/'.$file_path;
-                                            $link_updates[$my_file_path][] = [
-                                                'orig' => $doc_info[0],
-                                                'dest' => $file_path,
-                                            ];
-                                            $my_dep_file->setAttribute('href', $file_path);
-                                            $my_dep->setAttribute('xml:base', '');
-                                        }
-                                    }
-                                    break;
-                                case 'abs':
-                                    // Absolute path from DocumentRoot. Save file and leave path as is in the zip.
-                                    $my_dep_file->setAttribute('href', $doc_info[0]);
-                                    $my_dep->setAttribute('xml:base', '');
-
-                                    // The next lines fix a bug when using the "subdir" mode of Chamilo, whereas
-                                    // an image path would be constructed as /var/www/subdir/subdir/img/foo.bar
-                                    $abs_img_path_without_subdir = $doc_info[0];
-                                    $relp = api_get_path(REL_PATH); // The url-append config param.
-                                    $pos = strpos($abs_img_path_without_subdir, $relp);
-                                    if (0 === $pos) {
-                                        $abs_img_path_without_subdir = trim('/'.substr($abs_img_path_without_subdir, strlen($relp)));
-                                    }
-
-                                    $file_path = realpath(api_get_path(SYS_APP_PATH).$abs_img_path_without_subdir);
-                                    $file_path = str_replace(['\\', '//'], '/', $file_path);
-
-                                    // Prepare the current directory path (until just under 'document') with a trailing slash.
-                                    $cur_path = '/' == substr($current_course_path, -1) ? $current_course_path : $current_course_path.'/';
-                                    // Check if the current document is in that path.
-                                    if (false !== strstr($file_path, $cur_path)) {
-                                        $destinationFile = substr($file_path, strlen($cur_path));
-                                        $filePathNoCoursePart = substr($file_path, strlen($cur_path));
-
-                                        $fileToTest = $cur_path.$my_file_path;
-                                        if (!empty($path_to_remove)) {
-                                            $fileToTest = str_replace(
-                                                $path_to_remove.'/',
-                                                $path_to_replace,
-                                                $cur_path.$my_file_path
-                                            );
-                                        }
-
-                                        $relative_path = api_get_relative_path($fileToTest, $file_path);
-
-                                        // Put the current document in the zip (this array is the array
-                                        // that will manage documents already in the course folder - relative).
-                                        $zip_files[] = $filePathNoCoursePart;
-                                        // Update the links to the current document in the
-                                        // containing document (make them relative).
-                                        $link_updates[$my_file_path][] = [
-                                            'orig' => $doc_info[0],
-                                            'dest' => $destinationFile,
-                                            'replace' => $relative_path,
-                                        ];
-
-                                        $my_dep_file->setAttribute('href', $file_path);
-                                        $my_dep->setAttribute('xml:base', '');
-                                    } elseif (false !== strstr($file_path, $main_path)) {
-                                        // The calculated real path is really inside Chamilo's root path.
-                                        // Reduce file path to what's under the DocumentRoot.
-                                        $file_path = substr($file_path, strlen($root_path));
-                                        $zip_files_abs[] = $file_path;
-                                        $link_updates[$my_file_path][] = ['orig' => $doc_info[0], 'dest' => $file_path];
-                                        $my_dep_file->setAttribute('href', 'document/'.$file_path);
-                                        $my_dep->setAttribute('xml:base', '');
-                                    } elseif (empty($file_path)) {
-                                        // Probably this is an image inside "/main" directory
-                                        $file_path = api_get_path(SYS_PATH).$abs_img_path_without_subdir;
-                                        $abs_path = api_get_path(SYS_PATH).str_replace(api_get_path(WEB_PATH), '', $doc_info[0]);
-
-                                        if (file_exists($file_path)) {
-                                            if (false !== strstr($file_path, 'main/default_course_document')) {
-                                                // We get the relative path.
-                                                $pos = strpos($file_path, 'main/default_course_document/');
-                                                if (false !== $pos) {
-                                                    $onlyDirectory = str_replace(
-                                                        'main/default_course_document/',
-                                                        '',
-                                                        substr($file_path, $pos, strlen($file_path))
-                                                    );
-                                                }
-
-                                                $destinationFile = 'default_course_document/'.$onlyDirectory;
-                                                $fileAbs = substr($file_path, strlen(api_get_path(SYS_PATH)));
-                                                $zip_files_abs[] = $fileAbs;
-                                                $link_updates[$my_file_path][] = [
-                                                    'orig' => $doc_info[0],
-                                                    'dest' => $destinationFile,
-                                                ];
-                                                $my_dep_file->setAttribute('href', 'document/'.$file_path);
-                                                $my_dep->setAttribute('xml:base', '');
-                                            }
-                                        }
-                                    }
-                                    break;
-                                case 'rel':
-                                    // Path relative to the current document.
-                                    // Save xml:base as current document's directory and save file in zip as subdir.file_path
-                                    if ('..' === substr($doc_info[0], 0, 2)) {
-                                        // Relative path going up.
-                                        $current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
-                                        $current_dir = str_replace('\\', '/', $current_dir);
-                                        $file_path = realpath($current_dir.$doc_info[0]);
-                                        $file_path = str_replace('\\', '/', $file_path);
-                                        if (false !== strstr($file_path, $main_path)) {
-                                            // The calculated real path is really inside Chamilo's root path.
-                                            // Reduce file path to what's under the DocumentRoot.
-                                            $file_path = substr($file_path, strlen($root_path));
-                                            $zip_files_abs[] = $file_path;
-                                            $link_updates[$my_file_path][] = ['orig' => $doc_info[0], 'dest' => $file_path];
-                                            $my_dep_file->setAttribute('href', 'document/'.$file_path);
-                                            $my_dep->setAttribute('xml:base', '');
-                                        }
-                                    } else {
-                                        $zip_files[] = $my_sub_dir.'/'.$doc_info[0];
-                                        $my_dep_file->setAttribute('href', $doc_info[0]);
-                                        $my_dep->setAttribute('xml:base', $my_xml_sub_dir);
-                                    }
-                                    break;
-                                default:
-                                    $my_dep_file->setAttribute('href', $doc_info[0]);
-                                    $my_dep->setAttribute('xml:base', '');
-                                    break;
-                            }
-                        }
-                        $my_dep->appendChild($my_dep_file);
-                        $resources->appendChild($my_dep);
-                        $dependency = $xmldoc->createElement('dependency');
-                        $dependency->setAttribute('identifierref', $res_id);
-                        $my_resource->appendChild($dependency);
-                        $i++;
-                    }
-                }
-                $resources->appendChild($my_resource);
-                $zip_files[] = $my_file_path;
-            } else {
-                // If the item is a quiz or a link or whatever non-exportable, we include a step indicating it.
-                switch ($item->type) {
-                    case TOOL_LINK:
-                        $my_item = $xmldoc->createElement('item');
-                        $my_item->setAttribute('identifier', 'ITEM_'.$item->get_id());
-                        $my_item->setAttribute('identifierref', 'RESOURCE_'.$item->get_id());
-                        $my_item->setAttribute('isvisible', 'true');
-                        // Give a child element <title> to the <item> element.
-                        $my_title = $xmldoc->createElement(
-                            'title',
-                            htmlspecialchars(
-                                api_utf8_encode($item->get_title()),
-                                ENT_QUOTES,
-                                'UTF-8'
-                            )
-                        );
-                        $my_item->appendChild($my_title);
-                        // Give a child element <adlcp:prerequisites> to the <item> element.
-                        $my_prereqs = $xmldoc->createElement('adlcp:prerequisites', $item->get_prereq_string());
-                        $my_prereqs->setAttribute('type', 'aicc_script');
-                        $my_item->appendChild($my_prereqs);
-                        // Give a child element <adlcp:maxtimeallowed> to the <item> element - not yet supported.
-                        //$xmldoc->createElement('adlcp:maxtimeallowed', '');
-                        // Give a child element <adlcp:timelimitaction> to the <item> element - not yet supported.
-                        //$xmldoc->createElement('adlcp:timelimitaction', '');
-                        // Give a child element <adlcp:datafromlms> to the <item> element - not yet supported.
-                        //$xmldoc->createElement('adlcp:datafromlms', '');
-                        // Give a child element <adlcp:masteryscore> to the <item> element.
-                        $my_masteryscore = $xmldoc->createElement('adlcp:masteryscore', $item->get_mastery_score());
-                        $my_item->appendChild($my_masteryscore);
-
-                        // Attach this item to the organization element or its parent if there is one.
-                        if (!empty($item->parent) && 0 != $item->parent) {
-                            $children = $organization->childNodes;
-                            for ($i = 0; $i < $children->length; $i++) {
-                                $item_temp = $children->item($i);
-                                if ('item' == $item_temp->nodeName) {
-                                    if ($item_temp->getAttribute('identifier') == 'ITEM_'.$item->parent) {
-                                        $item_temp->appendChild($my_item);
-                                    }
-                                }
-                            }
-                        } else {
-                            $organization->appendChild($my_item);
-                        }
-
-                        $my_file_path = 'link_'.$item->get_id().'.html';
-                        $sql = 'SELECT url, title FROM '.Database::get_course_table(TABLE_LINK).'
-                                WHERE c_id = '.$course_id.' AND id = '.$item->path;
-                        $rs = Database::query($sql);
-                        if ($link = Database::fetch_array($rs)) {
-                            $url = $link['url'];
-                            $title = stripslashes($link['title']);
-                            $links_to_create[$my_file_path] = ['title' => $title, 'url' => $url];
-                            $my_xml_file_path = $my_file_path;
-                            $my_sub_dir = dirname($my_file_path);
-                            $my_sub_dir = str_replace('\\', '/', $my_sub_dir);
-                            $my_xml_sub_dir = $my_sub_dir;
-                            // Give a <resource> child to the <resources> element.
-                            $my_resource = $xmldoc->createElement('resource');
-                            $my_resource->setAttribute('identifier', 'RESOURCE_'.$item->get_id());
-                            $my_resource->setAttribute('type', 'webcontent');
-                            $my_resource->setAttribute('href', $my_xml_file_path);
-                            // adlcp:scormtype can be either 'sco' or 'asset'.
-                            $my_resource->setAttribute('adlcp:scormtype', 'asset');
-                            // xml:base is the base directory to find the files declared in this resource.
-                            $my_resource->setAttribute('xml:base', '');
-                            // give a <file> child to the <resource> element.
-                            $my_file = $xmldoc->createElement('file');
-                            $my_file->setAttribute('href', $my_xml_file_path);
-                            $my_resource->appendChild($my_file);
-                            $resources->appendChild($my_resource);
-                        }
-                        break;
-                    case TOOL_QUIZ:
-                        $exe_id = $item->path;
-                        // Should be using ref when everything will be cleaned up in this regard.
-                        $exe = new Exercise();
-                        $exe->read($exe_id);
-                        $my_item = $xmldoc->createElement('item');
-                        $my_item->setAttribute('identifier', 'ITEM_'.$item->get_id());
-                        $my_item->setAttribute('identifierref', 'RESOURCE_'.$item->get_id());
-                        $my_item->setAttribute('isvisible', 'true');
-                        // Give a child element <title> to the <item> element.
-                        $my_title = $xmldoc->createElement(
-                            'title',
-                            htmlspecialchars(
-                                api_utf8_encode($item->get_title()),
-                                ENT_QUOTES,
-                                'UTF-8'
-                            )
-                        );
-                        $my_item->appendChild($my_title);
-                        $my_max_score = $xmldoc->createElement('max_score', $item->get_max());
-                        $my_item->appendChild($my_max_score);
-                        // Give a child element <adlcp:prerequisites> to the <item> element.
-                        $my_prereqs = $xmldoc->createElement('adlcp:prerequisites', $item->get_prereq_string());
-                        $my_prereqs->setAttribute('type', 'aicc_script');
-                        $my_item->appendChild($my_prereqs);
-                        // Give a child element <adlcp:masteryscore> to the <item> element.
-                        $my_masteryscore = $xmldoc->createElement('adlcp:masteryscore', $item->get_mastery_score());
-                        $my_item->appendChild($my_masteryscore);
-
-                        // Attach this item to the organization element or hits parent if there is one.
-                        if (!empty($item->parent) && 0 != $item->parent) {
-                            $children = $organization->childNodes;
-                            $possible_parent = $this->get_scorm_xml_node($children, 'ITEM_'.$item->parent);
-                            if ($possible_parent) {
-                                if ($possible_parent->getAttribute('identifier') === 'ITEM_'.$item->parent) {
-                                    $possible_parent->appendChild($my_item);
-                                }
-                            }
-                        } else {
-                            $organization->appendChild($my_item);
-                        }
-
-                        // Get the path of the file(s) from the course directory root
-                        //$my_file_path = $item->get_file_path('scorm/'.$this->path.'/');
-                        $my_file_path = 'quiz_'.$item->get_id().'.html';
-                        // Write the contents of the exported exercise into a (big) html file
-                        // to later pack it into the exported SCORM. The file will be removed afterwards.
-                        $scormExercise = new ScormExercise($exe, true);
-                        $contents = $scormExercise->export();
-
-                        $tmp_file_path = $archivePath.$temp_dir_short.'/'.$my_file_path;
-                        $res = file_put_contents($tmp_file_path, $contents);
-                        if (false === $res) {
-                            error_log('Could not write into file '.$tmp_file_path.' '.__FILE__.' '.__LINE__, 0);
-                        }
-                        $files_cleanup[] = $tmp_file_path;
-                        $my_xml_file_path = $my_file_path;
-                        $my_sub_dir = dirname($my_file_path);
-                        $my_sub_dir = str_replace('\\', '/', $my_sub_dir);
-                        $my_xml_sub_dir = $my_sub_dir;
-                        // Give a <resource> child to the <resources> element.
-                        $my_resource = $xmldoc->createElement('resource');
-                        $my_resource->setAttribute('identifier', 'RESOURCE_'.$item->get_id());
-                        $my_resource->setAttribute('type', 'webcontent');
-                        $my_resource->setAttribute('href', $my_xml_file_path);
-                        // adlcp:scormtype can be either 'sco' or 'asset'.
-                        $my_resource->setAttribute('adlcp:scormtype', 'sco');
-                        // xml:base is the base directory to find the files declared in this resource.
-                        $my_resource->setAttribute('xml:base', '');
-                        // Give a <file> child to the <resource> element.
-                        $my_file = $xmldoc->createElement('file');
-                        $my_file->setAttribute('href', $my_xml_file_path);
-                        $my_resource->appendChild($my_file);
-
-                        // Get included docs.
-                        $inc_docs = $item->get_resources_from_source(null, $tmp_file_path);
-
-                        // Dependency to other files - not yet supported.
-                        $i = 1;
-                        foreach ($inc_docs as $doc_info) {
-                            if (count($doc_info) < 1 || empty($doc_info[0])) {
-                                continue;
-                            }
-                            $my_dep = $xmldoc->createElement('resource');
-                            $res_id = 'RESOURCE_'.$item->get_id().'_'.$i;
-                            $my_dep->setAttribute('identifier', $res_id);
-                            $my_dep->setAttribute('type', 'webcontent');
-                            $my_dep->setAttribute('adlcp:scormtype', 'asset');
-                            $my_dep_file = $xmldoc->createElement('file');
-                            // Check type of URL.
-                            if ('remote' == $doc_info[1]) {
-                                // Remote file. Save url as is.
-                                $my_dep_file->setAttribute('href', $doc_info[0]);
-                                $my_dep->setAttribute('xml:base', '');
-                            } elseif ('local' == $doc_info[1]) {
-                                switch ($doc_info[2]) {
-                                    case 'url': // Local URL - save path as url for now, don't zip file.
-                                        // Save file but as local file (retrieve from URL).
-                                        $abs_path = api_get_path(SYS_PATH).
-                                            str_replace(api_get_path(WEB_PATH), '', $doc_info[0]);
-                                        $current_dir = dirname($abs_path);
-                                        $current_dir = str_replace('\\', '/', $current_dir);
-                                        $file_path = realpath($abs_path);
-                                        $file_path = str_replace('\\', '/', $file_path);
-                                        $my_dep_file->setAttribute('href', 'document/'.$file_path);
-                                        $my_dep->setAttribute('xml:base', '');
-                                        if (false !== strstr($file_path, $main_path)) {
-                                            // The calculated real path is really inside the chamilo root path.
-                                            // Reduce file path to what's under the DocumentRoot.
-                                            $file_path = substr($file_path, strlen($root_path));
-                                            $zip_files_abs[] = $file_path;
-                                            $link_updates[$my_file_path][] = [
-                                                'orig' => $doc_info[0],
-                                                'dest' => 'document/'.$file_path,
-                                            ];
-                                            $my_dep_file->setAttribute('href', 'document/'.$file_path);
-                                            $my_dep->setAttribute('xml:base', '');
-                                        } elseif (empty($file_path)) {
-                                            $file_path = $_SERVER['DOCUMENT_ROOT'].$abs_path;
-                                            $file_path = str_replace('//', '/', $file_path);
-                                            if (file_exists($file_path)) {
-                                                $file_path = substr($file_path, strlen($current_dir));
-                                                // We get the relative path.
-                                                $zip_files[] = $my_sub_dir.'/'.$file_path;
-                                                $link_updates[$my_file_path][] = [
-                                                    'orig' => $doc_info[0],
-                                                    'dest' => 'document/'.$file_path,
-                                                ];
-                                                $my_dep_file->setAttribute('href', 'document/'.$file_path);
-                                                $my_dep->setAttribute('xml:base', '');
-                                            }
-                                        }
-                                        break;
-                                    case 'abs':
-                                        // Absolute path from DocumentRoot. Save file and leave path as is in the zip.
-                                        $current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
-                                        $current_dir = str_replace('\\', '/', $current_dir);
-                                        $file_path = realpath($doc_info[0]);
-                                        $file_path = str_replace('\\', '/', $file_path);
-                                        $my_dep_file->setAttribute('href', $file_path);
-                                        $my_dep->setAttribute('xml:base', '');
-
-                                        if (false !== strstr($file_path, $main_path)) {
-                                            // The calculated real path is really inside the chamilo root path.
-                                            // Reduce file path to what's under the DocumentRoot.
-                                            $file_path = substr($file_path, strlen($root_path));
-                                            $zip_files_abs[] = $file_path;
-                                            $link_updates[$my_file_path][] = [
-                                                'orig' => $doc_info[0],
-                                                'dest' => $file_path,
-                                            ];
-                                            $my_dep_file->setAttribute('href', 'document/'.$file_path);
-                                            $my_dep->setAttribute('xml:base', '');
-                                        } elseif (empty($file_path)) {
-                                            $docSysPartPath = str_replace(
-                                                api_get_path(REL_COURSE_PATH),
-                                                '',
-                                                $doc_info[0]
-                                            );
-
-                                            $docSysPartPathNoCourseCode = str_replace(
-                                                $_course['directory'].'/',
-                                                '',
-                                                $docSysPartPath
-                                            );
-
-                                            $docSysPath = api_get_path(SYS_COURSE_PATH).$docSysPartPath;
-                                            if (file_exists($docSysPath)) {
-                                                $file_path = $docSysPartPathNoCourseCode;
-                                                $zip_files[] = $my_sub_dir.'/'.$file_path;
-                                                $link_updates[$my_file_path][] = [
-                                                    'orig' => $doc_info[0],
-                                                    'dest' => $file_path,
-                                                ];
-                                                $my_dep_file->setAttribute('href', 'document/'.$file_path);
-                                                $my_dep->setAttribute('xml:base', '');
-                                            }
-                                        }
-                                        break;
-                                    case 'rel':
-                                        // Path relative to the current document. Save xml:base as current document's
-                                        // directory and save file in zip as subdir.file_path
-                                        if ('..' === substr($doc_info[0], 0, 2)) {
-                                            // Relative path going up.
-                                            $current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
-                                            $current_dir = str_replace('\\', '/', $current_dir);
-                                            $file_path = realpath($current_dir.$doc_info[0]);
-                                            $file_path = str_replace('\\', '/', $file_path);
-                                            if (false !== strstr($file_path, $main_path)) {
-                                                // The calculated real path is really inside Chamilo's root path.
-                                                // Reduce file path to what's under the DocumentRoot.
-
-                                                $file_path = substr($file_path, strlen($root_path));
-                                                $file_path_dest = $file_path;
-
-                                                // File path is courses/CHAMILO/document/....
-                                                $info_file_path = explode('/', $file_path);
-                                                if ('courses' == $info_file_path[0]) {
-                                                    // Add character "/" in file path.
-                                                    $file_path_dest = 'document/'.$file_path;
-                                                }
-                                                $zip_files_abs[] = $file_path;
-
-                                                $link_updates[$my_file_path][] = [
-                                                    'orig' => $doc_info[0],
-                                                    'dest' => $file_path_dest,
-                                                ];
-                                                $my_dep_file->setAttribute('href', 'document/'.$file_path);
-                                                $my_dep->setAttribute('xml:base', '');
-                                            }
-                                        } else {
-                                            $zip_files[] = $my_sub_dir.'/'.$doc_info[0];
-                                            $my_dep_file->setAttribute('href', $doc_info[0]);
-                                            $my_dep->setAttribute('xml:base', $my_xml_sub_dir);
-                                        }
-                                        break;
-                                    default:
-                                        $my_dep_file->setAttribute('href', $doc_info[0]); // ../../courses/
-                                        $my_dep->setAttribute('xml:base', '');
-                                        break;
-                                }
-                            }
-                            $my_dep->appendChild($my_dep_file);
-                            $resources->appendChild($my_dep);
-                            $dependency = $xmldoc->createElement('dependency');
-                            $dependency->setAttribute('identifierref', $res_id);
-                            $my_resource->appendChild($dependency);
-                            $i++;
-                        }
-                        $resources->appendChild($my_resource);
-                        $zip_files[] = $my_file_path;
-                        break;
-                    default:
-                        // Get the path of the file(s) from the course directory root
-                        $my_file_path = 'non_exportable.html';
-                        //$my_xml_file_path = api_htmlentities(api_utf8_encode($my_file_path), ENT_COMPAT, 'UTF-8');
-                        $my_xml_file_path = $my_file_path;
-                        $my_sub_dir = dirname($my_file_path);
-                        $my_sub_dir = str_replace('\\', '/', $my_sub_dir);
-                        //$my_xml_sub_dir = api_htmlentities(api_utf8_encode($my_sub_dir), ENT_COMPAT, 'UTF-8');
-                        $my_xml_sub_dir = $my_sub_dir;
-                        // Give a <resource> child to the <resources> element.
-                        $my_resource = $xmldoc->createElement('resource');
-                        $my_resource->setAttribute('identifier', 'RESOURCE_'.$item->get_id());
-                        $my_resource->setAttribute('type', 'webcontent');
-                        $my_resource->setAttribute('href', $folder_name.'/'.$my_xml_file_path);
-                        // adlcp:scormtype can be either 'sco' or 'asset'.
-                        $my_resource->setAttribute('adlcp:scormtype', 'asset');
-                        // xml:base is the base directory to find the files declared in this resource.
-                        $my_resource->setAttribute('xml:base', '');
-                        // Give a <file> child to the <resource> element.
-                        $my_file = $xmldoc->createElement('file');
-                        $my_file->setAttribute('href', 'document/'.$my_xml_file_path);
-                        $my_resource->appendChild($my_file);
-                        $resources->appendChild($my_resource);
-                        break;
-                }
-            }
-        }
-        $organizations->appendChild($organization);
-        $root->appendChild($organizations);
-        $root->appendChild($resources);
-        $xmldoc->appendChild($root);
-
-        $copyAll = api_get_configuration_value('add_all_files_in_lp_export');
-
-        // then add the file to the zip, then destroy the file (this is done automatically).
-        // http://www.reload.ac.uk/scormplayer.html - once done, don't forget to close FS#138
-        foreach ($zip_files as $file_path) {
-            if (empty($file_path)) {
-                continue;
-            }
-
-            $filePath = $sys_course_path.$_course['path'].'/'.$file_path;
-            $dest_file = $archivePath.$temp_dir_short.'/'.$file_path;
-
-            if (!empty($path_to_remove) && !empty($path_to_replace)) {
-                $dest_file = str_replace($path_to_remove, $path_to_replace, $dest_file);
-            }
-
-            $this->create_path($dest_file);
-            @copy($filePath, $dest_file);
-
-            // Check if the file needs a link update.
-            if (in_array($file_path, array_keys($link_updates))) {
-                $string = file_get_contents($dest_file);
-                unlink($dest_file);
-                foreach ($link_updates[$file_path] as $old_new) {
-                    // This is an ugly hack that allows .flv files to be found by the flv player that
-                    // will be added in document/main/inc/lib/flv_player/flv_player.swf and that needs
-                    // to find the flv to play in document/main/, so we replace main/ in the flv path by
-                    // ../../.. to return from inc/lib/flv_player to the document/main path.
-                    if ('flv' === substr($old_new['dest'], -3) &&
-                        'main/' === substr($old_new['dest'], 0, 5)
-                    ) {
-                        $old_new['dest'] = str_replace('main/', '../../../', $old_new['dest']);
-                    } elseif ('flv' === substr($old_new['dest'], -3) &&
-                        'video/' === substr($old_new['dest'], 0, 6)
-                    ) {
-                        $old_new['dest'] = str_replace('video/', '../../../../video/', $old_new['dest']);
-                    }
-
-                    // Fix to avoid problems with default_course_document
-                    if (false === strpos('main/default_course_document', $old_new['dest'])) {
-                        $newDestination = $old_new['dest'];
-                        if (isset($old_new['replace']) && !empty($old_new['replace'])) {
-                            $newDestination = $old_new['replace'];
-                        }
-                    } else {
-                        $newDestination = str_replace('document/', '', $old_new['dest']);
-                    }
-                    $string = str_replace($old_new['orig'], $newDestination, $string);
-
-                    // Add files inside the HTMLs
-                    $new_path = str_replace(api_get_path(REL_COURSE_PATH), '', $old_new['orig']);
-                    $destinationFile = $archivePath.$temp_dir_short.'/'.$old_new['dest'];
-                    if (file_exists($sys_course_path.$new_path) && is_file($sys_course_path.$new_path)) {
-                        copy(
-                            $sys_course_path.$new_path,
-                            $destinationFile
-                        );
-                    }
-                }
-                file_put_contents($dest_file, $string);
-            }
-
-            if (file_exists($filePath) && $copyAll) {
-                $extension = $this->get_extension($filePath);
-                if (in_array($extension, ['html', 'html'])) {
-                    $containerOrigin = dirname($filePath);
-                    $containerDestination = dirname($dest_file);
-
-                    $finder = new Finder();
-                    $finder->files()->in($containerOrigin)
-                        ->notName('*_DELETED_*')
-                        ->exclude('share_folder')
-                        ->exclude('chat_files')
-                        ->exclude('certificates')
-                    ;
-
-                    if (is_dir($containerOrigin) &&
-                        is_dir($containerDestination)
-                    ) {
-                        $fs = new Filesystem();
-                        $fs->mirror(
-                            $containerOrigin,
-                            $containerDestination,
-                            $finder
-                        );
-                    }
-                }
-            }
-        }
-
-        foreach ($zip_files_abs as $file_path) {
-            if (empty($file_path)) {
-                continue;
-            }
-
-            if (!is_file($main_path.$file_path) || !is_readable($main_path.$file_path)) {
-                continue;
-            }
-
-            $dest_file = $archivePath.$temp_dir_short.'/document/'.$file_path;
-            if (false !== strstr($file_path, 'upload/users')) {
-                $pos = strpos($file_path, 'my_files/');
-                if (false !== $pos) {
-                    $onlyDirectory = str_replace(
-                        'upload/users/',
-                        '',
-                        substr($file_path, $pos, strlen($file_path))
-                    );
-                    $dest_file = $archivePath.$temp_dir_short.'/document/'.$onlyDirectory;
-                }
-            }
-
-            if (false !== strstr($file_path, 'default_course_document/')) {
-                $replace = str_replace('/main', '', $file_path);
-                $dest_file = $archivePath.$temp_dir_short.'/document/'.$replace;
-            }
-
-            if (empty($dest_file)) {
-                continue;
-            }
-
-            $this->create_path($dest_file);
-            copy($main_path.$file_path, $dest_file);
-            // Check if the file needs a link update.
-            if (in_array($file_path, array_keys($link_updates))) {
-                $string = file_get_contents($dest_file);
-                unlink($dest_file);
-                foreach ($link_updates[$file_path] as $old_new) {
-                    // This is an ugly hack that allows .flv files to be found by the flv player that
-                    // will be added in document/main/inc/lib/flv_player/flv_player.swf and that needs
-                    // to find the flv to play in document/main/, so we replace main/ in the flv path by
-                    // ../../.. to return from inc/lib/flv_player to the document/main path.
-                    if ('flv' == substr($old_new['dest'], -3) &&
-                        'main/' == substr($old_new['dest'], 0, 5)
-                    ) {
-                        $old_new['dest'] = str_replace('main/', '../../../', $old_new['dest']);
-                    }
-                    $string = str_replace($old_new['orig'], $old_new['dest'], $string);
-                }
-                file_put_contents($dest_file, $string);
-            }
-        }
-
-        if (is_array($links_to_create)) {
-            foreach ($links_to_create as $file => $link) {
-                $content = '<!DOCTYPE html><head>
-                            <meta charset="'.api_get_language_isocode().'" />
-                            <title>'.$link['title'].'</title>
-                            </head>
-                            <body dir="'.api_get_text_direction().'">
-                            <div style="text-align:center">
-                            <a href="'.$link['url'].'">'.$link['title'].'</a></div>
-                            </body>
-                            </html>';
-                file_put_contents($archivePath.$temp_dir_short.'/'.$file, $content);
-            }
-        }
-
-        // Add non exportable message explanation.
-        $lang_not_exportable = get_lang('This learning object or activity is not SCORM compliant. That\'s why it is not exportable.');
-        $file_content = '<!DOCTYPE html><head>
-                        <meta charset="'.api_get_language_isocode().'" />
-                        <title>'.$lang_not_exportable.'</title>
-                        <meta http-equiv="Content-Type" content="text/html; charset='.api_get_system_encoding().'" />
-                        </head>
-                        <body dir="'.api_get_text_direction().'">';
-        $file_content .=
-            <<<EOD
-                    <style>
-            .error-message {
-                font-family: arial, verdana, helvetica, sans-serif;
-                border-width: 1px;
-                border-style: solid;
-                left: 50%;
-                margin: 10px auto;
-                min-height: 30px;
-                padding: 5px;
-                right: 50%;
-                width: 500px;
-                background-color: #FFD1D1;
-                border-color: #FF0000;
-                color: #000;
-            }
-        </style>
-    <body>
-        <div class="error-message">
-            $lang_not_exportable
-        </div>
-    </body>
-</html>
-EOD;
-        if (!is_dir($archivePath.$temp_dir_short.'/document')) {
-            @mkdir($archivePath.$temp_dir_short.'/document', api_get_permissions_for_new_directories());
-        }
-        file_put_contents($archivePath.$temp_dir_short.'/document/non_exportable.html', $file_content);
-
-        // Add the extra files that go along with a SCORM package.
-        $main_code_path = api_get_path(SYS_CODE_PATH).'lp/packaging/';
-
-        $fs = new Filesystem();
-        $fs->mirror($main_code_path, $archivePath.$temp_dir_short);
-
-        // Finalize the imsmanifest structure, add to the zip, then return the zip.
-        $manifest = @$xmldoc->saveXML();
-        $manifest = api_utf8_decode_xml($manifest); // The manifest gets the system encoding now.
-        file_put_contents($archivePath.'/'.$temp_dir_short.'/imsmanifest.xml', $manifest);
-        $zip_folder->add(
-            $archivePath.'/'.$temp_dir_short,
-            PCLZIP_OPT_REMOVE_PATH,
-            $archivePath.'/'.$temp_dir_short.'/'
-        );
-
-        // Clean possible temporary files.
-        foreach ($files_cleanup as $file) {
-            $res = unlink($file);
-            if (false === $res) {
-                error_log(
-                    'Could not delete temp file '.$file.' '.__FILE__.' '.__LINE__,
-                    0
-                );
-            }
-        }
-        $name = api_replace_dangerous_char($this->get_name()).'.zip';
-        DocumentManager::file_send_for_download($temp_zip_file, true, $name);
+        ScormExport::export($this);
     }
 
-    /**
-     * @param int $lp_id
-     *
-     * @return bool
-     */
-    public function scorm_export_to_pdf($lp_id)
+    public function scorm_export_to_pdf($lpId)
     {
-        $lp_id = (int) $lp_id;
-        $files_to_export = [];
-
-        $sessionId = api_get_session_id();
-        $course_data = api_get_course_info($this->cc);
-
-        $lp = Container::getLpRepository()->find($lp_id);
-        if (!empty($course_data)) {
-            $scorm_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/scorm/'.$this->path;
-            $list = self::get_flat_ordered_items_list($lp);
-            if (!empty($list)) {
-                foreach ($list as $item_id) {
-                    $item = $this->items[$item_id];
-                    switch ($item->type) {
-                        case 'document':
-                            // Getting documents from a LP with chamilo documents
-                            $file_data = DocumentManager::get_document_data_by_id($item->path, $this->cc);
-                            // Try loading document from the base course.
-                            if (empty($file_data) && !empty($sessionId)) {
-                                $file_data = DocumentManager::get_document_data_by_id(
-                                    $item->path,
-                                    $this->cc,
-                                    false,
-                                    0
-                                );
-                            }
-                            $file_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document'.$file_data['path'];
-                            if (file_exists($file_path)) {
-                                $files_to_export[] = [
-                                    'title' => $item->get_title(),
-                                    'path' => $file_path,
-                                ];
-                            }
-                            break;
-                        case 'asset': //commes from a scorm package generated by chamilo
-                        case 'sco':
-                            $file_path = $scorm_path.'/'.$item->path;
-                            if (file_exists($file_path)) {
-                                $files_to_export[] = [
-                                    'title' => $item->get_title(),
-                                    'path' => $file_path,
-                                ];
-                            }
-                            break;
-                        case 'dir':
-                            $files_to_export[] = [
-                                'title' => $item->get_title(),
-                                'path' => null,
-                            ];
-                            break;
-                    }
-                }
-            }
-
-            $pdf = new PDF();
-            $result = $pdf->html_to_pdf(
-                $files_to_export,
-                $this->name,
-                $this->cc,
-                true,
-                true,
-                true,
-                $this->get_name()
-            );
-
-            return $result;
-        }
-
-        return false;
+        ScormExport::exportToPdf($lpId, api_get_course_info());
     }
 
     /**
@@ -9626,7 +7829,7 @@ EOD;
     /**
      * @param int $courseId
      *
-     * @return int|mixed
+     * @return int
      */
     public static function getCountCategories($courseId)
     {
@@ -9637,7 +7840,7 @@ EOD;
         $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId));
         $qb->addSelect('count(resource)');
 
-        return $qb->getSingleScalarResult();
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -9647,15 +7850,11 @@ EOD;
      */
     public static function getCategories($courseId)
     {
-        $em = Database::getManager();
-
         // Using doctrine extensions
         $repo = Container::getLpCategoryRepository();
         $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId));
 
         return $qb->getQuery()->getResult();
-
-        //return $repo->getBySortableGroupsQuery(['cId' => $courseId])->getResult();
     }
 
     public static function getCategorySessionId($id)
@@ -9921,7 +8120,7 @@ EOD;
     {
         $exercises = [];
         foreach ($this->items as $item) {
-            if ('quiz' != $item->type) {
+            if ('quiz' !== $item->type) {
                 continue;
             }
             $exercises[] = $item;
@@ -10213,8 +8412,7 @@ EOD;
             null,
             true,
             false,
-            $editorConfig,
-            true
+            $editorConfig
         );
         $form->addHidden('action', 'add_final_item');
         $form->addHidden('path', Session::read('pathItem'));
@@ -10423,13 +8621,16 @@ EOD;
             case TOOL_DOCUMENT:
                 $repo = Container::getDocumentRepository();
                 $document = $repo->find($rowItem->getPath());
-                $params = [
-                    'cid' => $course_id,
-                    'sid' => $session_id,
-                ];
-                $file = $repo->getResourceFileUrl($document, $params, UrlGeneratorInterface::ABSOLUTE_URL);
+                if ($document) {
+                    $params = [
+                        'cid' => $course_id,
+                        'sid' => $session_id,
+                    ];
 
-                return $file;
+                    return $repo->getResourceFileUrl($document, $params, UrlGeneratorInterface::ABSOLUTE_URL);
+                }
+
+                return null;
 
                 $documentPathInfo = pathinfo($document->getPath());
                 $mediaSupportedFiles = ['mp3', 'mp4', 'ogv', 'ogg', 'flv', 'm4v'];
@@ -11086,18 +9287,16 @@ EOD;
     /**
      * Save the new order for learning path items.
      *
-     * We have to update parent_item_id, previous_item_id, next_item_id, display_order in the database.
-     *
-     * @param array $orderList A associative array with item ID as key and parent ID as value.
+     * @param array $orderList A associative array with id and parent_id keys.
      */
-    public function sortItemByOrderList(array $orderList = [])
+    public static function sortItemByOrderList(int $lpId, array $orderList = [])
     {
         if (empty($orderList)) {
             return true;
         }
         //echo '<pre>';        var_dump($orderList);
         $lpItemRepo = Container::getLpItemRepository();
-        $rootParent = $lpItemRepo->getItemRoot($this->get_id());
+        $rootParent = $lpItemRepo->getItemRoot($lpId);
 
         /*$previous = 2;
         $next = 0;
@@ -11220,51 +9419,6 @@ exit;*/
 
         $em->flush();
         exit;*/
-    }
-
-    private static function updateList($list, $parent, &$previous, &$next)
-    {
-        //echo '<pre>';        var_dump($list);exit;
-        $lpItemRepo = Container::getLpItemRepository();
-        $em = Database::getManager();
-        $counter = 0;
-        foreach ($list as $item) {
-            if (empty($item) || !isset($item->id)) {
-                continue;
-            }
-            $id = $item->id;
-            $children = $item->children;
-
-            /** @var CLpItem $lpItem */
-            $lpItem = $lpItemRepo->find($id);
-            $lpItem
-                ->setParent($parent)
-                ->setDisplayOrder($counter)
-                ->setPreviousItemId($previous);
-            ;
-            $previous++;
-            $counter++;
-            $childExists = false;
-            foreach ($children as $child) {
-                if (isset($child->id)) {
-                    $childExists = true;
-                    break;
-                }
-            }
-
-            if ($childExists) {
-                $next = self::updateList($children, $lpItem, $previous, $next);
-                $lpItem->setNextItemId($next + 1);
-                $previous++;
-            } else {
-                $next = $previous;
-                $previous++;
-                $lpItem->setNextItemId($next);
-            }
-            $em->persist($lpItem);
-        }
-
-        return $next;
     }
 
     /**

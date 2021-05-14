@@ -17,9 +17,6 @@ class UniqueAnswerNoOption extends Question
     public $typePicture = 'mcuao.png';
     public $explanationLangVar = 'Unique answer with unknown';
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -115,7 +112,7 @@ class UniqueAnswerNoOption extends Question
 
         foreach ($new_list as $key) {
             $i = $key;
-            $form->addElement('html', '<tr>');
+            $form->addHtml('<tr>');
             if (is_object($answer)) {
                 if (666 == $answer->position[$i]) {
                     //we set nothing
@@ -183,8 +180,8 @@ class UniqueAnswerNoOption extends Question
                 'weighting['.$i.']'
             );
 
-            $answer_number = $form->addElement('text', 'counter['.$i.']', null, 'value="'.$i.'"');
-            $answer_number->freeze();
+            $answerNumber = $form->addText('counter['.$i.']', null, false, ['value' => $i]);
+            $answerNumber->freeze();
 
             $form->addElement(
                 'radio',
@@ -194,15 +191,15 @@ class UniqueAnswerNoOption extends Question
                 $i,
                 ['class' => 'checkbox', 'style' => 'margin-left: 0em;']
             );
-            $form->addElement('html_editor', 'answer['.$i.']', null, [], $editor_config);
-            $form->addElement('html_editor', 'comment['.$i.']', null, [], $editor_config);
-            $form->addElement('text', 'weighting['.$i.']', null, ['style' => 'width: 60px;', 'value' => '0']);
-            $form->addElement('html', '</tr>');
+            $form->addHtmlEditor('answer['.$i.']', null, [], $editor_config);
+            $form->addHtmlEditor('comment['.$i.']', null, [], $editor_config);
+            $form->addText('weighting['.$i.']', null, false, ['style' => 'width: 60px;', 'value' => '0']);
+            $form->addHtml('</tr>');
             $i++;
         }
 
         if (empty($this->id)) {
-            $form->addElement('hidden', 'new_question', 1);
+            $form->addHidden('new_question', 1);
         }
 
         //Adding the "I don't know" question answer
@@ -241,12 +238,12 @@ class UniqueAnswerNoOption extends Question
             ->addElement('text', 'counter['.$i.']', null)
             ->freeze();
 
-        $form->addElement('hidden', 'position['.$i.']', '666');
+        $form->addHidden('position['.$i.']', '666');
         $form->addElement('radio', 'correct', null, null, $i, ['class' => 'checkbox', 'disabled' => true]);
-        $form->addElement('html_editor', 'answer['.$i.']', null, [], $editor_config);
+        $form->addHtmlEditor('answer['.$i.']', null, true, [], $editor_config);
 
         $form->addRule('answer['.$i.']', get_lang('Required field'), 'required');
-        $form->addElement('html_editor', 'comment['.$i.']', null, [], $editor_config);
+        $form->addHtmlEditor('comment['.$i.']', null, true, [], $editor_config);
         $form->addElement('text', "weighting[$i]", null)->freeze();
 
         $form->addHTml('</tr>');

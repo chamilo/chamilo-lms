@@ -1,10 +1,22 @@
 doctrine_migrations:
+    # Sync this changes with the public/main/install/migrations.php file
     migrations_paths:
-        'Chamilo\CoreBundle\Migrations\Schema\V200': 'src/CoreBundle/Migrations/Schema/V200'
+        'Chamilo\CoreBundle\Migrations\Schema\V200': '%kernel.project_dir%/src/CoreBundle/Migrations/Schema/V200'
+
+    connection: default
 
     # Run all migrations in a transaction.
-    all_or_nothing: true
+    all_or_nothing: false
 
     # Adds an extra check in the generated migrations to ensure that is executed on the same database type.
     check_database_platform: true
-    connection: default
+
+    storage:
+        # Default (SQL table) metadata storage configuration
+        table_storage:
+            table_name: 'version'
+            version_column_name: 'version'
+            version_column_length: 1024
+            executed_at_column_name: 'executed_at'
+
+

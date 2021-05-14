@@ -5,9 +5,27 @@
 declare(strict_types=1);
 
 use PHP_CodeSniffer\Standards\Generic\Sniffs\Arrays\DisallowLongArraySyntaxSniff;
-use PhpCsFixer\Fixer\ArrayNotation\TrailingCommaInMultilineArrayFixer;
+use PhpCsFixer\Fixer\Casing\ConstantCaseFixer;
+use PhpCsFixer\Fixer\CastNotation\ModernizeTypesCastingFixer;
+use PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer;
+use PhpCsFixer\Fixer\ClassNotation\OrderedClassElementsFixer;
+use PhpCsFixer\Fixer\Comment\SingleLineCommentStyleFixer;
+use PhpCsFixer\Fixer\ControlStructure\NoUselessElseFixer;
+use PhpCsFixer\Fixer\ControlStructure\TrailingCommaInMultilineFixer;
+use PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer;
+use PhpCsFixer\Fixer\DoctrineAnnotation\DoctrineAnnotationArrayAssignmentFixer;
+use PhpCsFixer\Fixer\FunctionNotation\VoidReturnFixer;
 use PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer;
+use PhpCsFixer\Fixer\Operator\ConcatSpaceFixer;
 use PhpCsFixer\Fixer\Operator\IncrementStyleFixer;
+use PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer;
+use PhpCsFixer\Fixer\Phpdoc\NoEmptyPhpdocFixer;
+use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
+use PhpCsFixer\Fixer\Phpdoc\PhpdocNoPackageFixer;
+use PhpCsFixer\Fixer\ReturnNotation\NoUselessReturnFixer;
+use PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer;
+use Rector\CodingStyle\Rector\Encapsed\WrapEncapsedVariableInCurlyBracesRector;
+use SlevomatCodingStandard\Sniffs\Commenting\UselessFunctionDocCommentSniff;
 use SlevomatCodingStandard\Sniffs\TypeHints\PropertyTypeHintSniff;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\EasyCodingStandard\ValueObject\Option;
@@ -18,38 +36,33 @@ use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
     $parameters = $containerConfigurator->parameters();
-    $parameters->set(
-        Option::SETS,
-        [
-            SetList::COMMON,
-            SetList::CLEAN_CODE,
-            SetList::SYMFONY,
-            SetList::PSR_12,
-            SetList::PHP_CS_FIXER,
-            SetList::DOCTRINE_ANNOTATIONS,
-            //SetList::SYMFONY_RISKY,
-        ]
-    );
+
+    $containerConfigurator->import(SetList::COMMON);
+    $containerConfigurator->import(SetList::CLEAN_CODE);
+    $containerConfigurator->import(SetList::SYMFONY);
+    $containerConfigurator->import(SetList::PSR_12);
+    $containerConfigurator->import(SetList::PHP_CS_FIXER);
+    //$containerConfigurator->import(SetList::DOCTRINE_ANNOTATIONS);
+    $containerConfigurator->import(SetList::SYMFONY_RISKY);
 
     $services->set(DisallowLongArraySyntaxSniff::class);
-    $services->set(TrailingCommaInMultilineArrayFixer::class);
-    $services->set(\PhpCsFixer\Fixer\Phpdoc\PhpdocNoPackageFixer::class);
-    $services->set(\SlevomatCodingStandard\Sniffs\Commenting\UselessFunctionDocCommentSniff::class);
+    $services->set(TrailingCommaInMultilineFixer::class);
+    $services->set(PhpdocNoPackageFixer::class);
+    $services->set(UselessFunctionDocCommentSniff::class);
     $services->set(PropertyTypeHintSniff::class);
-    $services->set(\SlevomatCodingStandard\Sniffs\Namespaces\FullyQualifiedClassNameAfterKeywordSniff::class);
-    $services->set(\PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer::class);
-    $services->set(\PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer::class);
-    $services->set(\PhpCsFixer\Fixer\FunctionNotation\VoidReturnFixer::class);
-    $services->set(\PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer::class);
-    $services->set(\PhpCsFixer\Fixer\Phpdoc\NoEmptyPhpdocFixer::class);
-    $services->set(\PhpCsFixer\Fixer\ControlStructure\NoUselessElseFixer::class);
-    $services->set(\PhpCsFixer\Fixer\ReturnNotation\NoUselessReturnFixer::class);
-    $services->set(\PhpCsFixer\Fixer\CastNotation\ModernizeTypesCastingFixer::class);
-    $services->set(\PhpCsFixer\Fixer\Casing\ConstantCaseFixer::class);
-    $services->set(\PhpCsFixer\Fixer\ClassNotation\OrderedClassElementsFixer::class);
-    $services->set(\PhpCsFixer\Fixer\Operator\ConcatSpaceFixer::class)
+    //$services->set(\SlevomatCodingStandard\Sniffs\Namespaces\FullyQualifiedClassNameAfterKeywordSniff::class);
+    $services->set(YodaStyleFixer::class);
+    $services->set(NoSuperfluousPhpdocTagsFixer::class);
+    $services->set(VoidReturnFixer::class);
+    $services->set(DeclareStrictTypesFixer::class);
+    $services->set(NoEmptyPhpdocFixer::class);
+    $services->set(NoUselessElseFixer::class);
+    $services->set(NoUselessReturnFixer::class);
+    $services->set(ModernizeTypesCastingFixer::class);
+    $services->set(ConstantCaseFixer::class);
+    $services->set(OrderedClassElementsFixer::class);
+    $services->set(ConcatSpaceFixer::class)
         ->call(
             'configure',
             [
@@ -88,18 +101,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__.'/src/CoreBundle/Menu/*',
             __DIR__.'/src/CourseBundle/Component/*',
             __DIR__.'/src/DataFixtures/*',
-            //__DIR__.'/src/LtiBundle/*',
             IncrementStyleFixer::class => 'post',
             PropertyTypeHintSniff::class.'.'.PropertyTypeHintSniff::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION,
             PropertyTypeHintSniff::class.'.'.PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT,
-            \PhpCsFixer\Fixer\DoctrineAnnotation\DoctrineAnnotationArrayAssignmentFixer::class,
-            \PhpCsFixer\Fixer\Comment\SingleLineCommentStyleFixer::class,
-            \PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer::class,
+            DoctrineAnnotationArrayAssignmentFixer::class,
+            SingleLineCommentStyleFixer::class,
+            NotOperatorWithSuccessorSpaceFixer::class,
             //\PhpCsFixer\Fixer\Phpdoc\PhpdocOrderFixer::class,
             PhpCsFixer\Fixer\Phpdoc\PhpdocTypesOrderFixer::class,
             PhpCsFixer\Fixer\DoctrineAnnotation\DoctrineAnnotationSpacesFixer::class,
             PhpCsFixer\Fixer\StringNotation\ExplicitStringVariableFixer::class,
-            \Rector\CodingStyle\Rector\Encapsed\WrapEncapsedVariableInCurlyBracesRector::class,
+            WrapEncapsedVariableInCurlyBracesRector::class,
+            ClassAttributesSeparationFixer::class,
             //UnusedVariableSniff::class . '.ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach' => true,
             //UnusedVariableSniff::class => 'ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach',
         ]

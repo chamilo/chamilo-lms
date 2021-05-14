@@ -86,7 +86,7 @@ class ExerciseLib
                     if ($exercise->display_category_name) {
                         TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
                     }
-                    $titleToDisplay = $objQuestionTmp->getTitleToDisplay($current_item);
+                    $titleToDisplay = $objQuestionTmp->getTitleToDisplay($exercise, $current_item);
                     if (READING_COMPREHENSION == $answerType) {
                         // In READING_COMPREHENSION, the title of the question
                         // contains the question itself, which can only be
@@ -194,7 +194,6 @@ class ExerciseLib
                     $form = new FormValidator('free_choice_'.$questionId);
                     $config = [
                         'ToolbarSet' => 'TestFreeAnswer',
-                        'id' => 'choice['.$questionId.']',
                     ];
                     $form->addHtmlEditor(
                         'choice['.$questionId.']',
@@ -361,7 +360,7 @@ class ExerciseLib
                         if ('Answers' === $item) {
                             $properties['colspan'] = 2;
                             $properties['style'] = 'background-color: #F56B2A; color: #ffffff;';
-                        } elseif ('DegreeOfCertaintyThatMyAnswerIsCorrect' == $item) {
+                        } elseif ('DegreeOfCertaintyThatMyAnswerIsCorrect' === $item) {
                             $properties['colspan'] = 6;
                             $properties['style'] = 'background-color: #330066; color: #ffffff;';
                         }
@@ -1514,7 +1513,7 @@ HTML;
                     if ($exercise->display_category_name) {
                         TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
                     }
-                    echo $objQuestionTmp->getTitleToDisplay($current_item);
+                    echo $objQuestionTmp->getTitleToDisplay($exercise, $current_item);
                 }
                 if ($questionRequireAuth) {
                     WhispeakAuthPlugin::quizQuestionAuthentify($questionId, $exercise);
@@ -1579,7 +1578,7 @@ HOTSPOT;
                     if ($exercise->display_category_name) {
                         TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
                     }
-                    echo $objQuestionTmp->getTitleToDisplay($current_item);
+                    echo $objQuestionTmp->getTitleToDisplay($exercise, $current_item);
                 }
 
                 if ($questionRequireAuth) {

@@ -193,7 +193,7 @@ class SettingsManager implements SettingsManagerInterface
                 $settings = new Settings();
                 $parameters = isset($all[$name]) ? $all[$name] : [];
                 foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
-                    if (array_key_exists($parameter, $parameters)) {
+                    if (\array_key_exists($parameter, $parameters)) {
                         if ('course_creation_use_template' === $parameter) {
                             if (empty($parameters[$parameter])) {
                                 $parameters[$parameter] = null;
@@ -243,7 +243,7 @@ class SettingsManager implements SettingsManagerInterface
         }
 
         foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
-            if (array_key_exists($parameter, $parameters)) {
+            if (\array_key_exists($parameter, $parameters)) {
                 if ('course_creation_use_template' === $parameter) {
                     if (empty($parameters[$parameter])) {
                         $parameters[$parameter] = null;
@@ -276,7 +276,7 @@ class SettingsManager implements SettingsManagerInterface
         // 3. Add transformer for that variable "ArrayToIdentifierTransformer"
         // 4. Here we recover the transformer and convert the array to string
         foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
-            if (array_key_exists($parameter, $parameters)) {
+            if (\array_key_exists($parameter, $parameters)) {
                 $parameters[$parameter] = $transformer->transform($parameters[$parameter]);
             }
         }
@@ -344,7 +344,7 @@ class SettingsManager implements SettingsManagerInterface
         // 3. Add transformer for that variable "ArrayToIdentifierTransformer"
         // 4. Here we recover the transformer and convert the array to string
         foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
-            if (array_key_exists($parameter, $parameters)) {
+            if (\array_key_exists($parameter, $parameters)) {
                 $parameters[$parameter] = $transformer->transform($parameters[$parameter]);
             }
         }

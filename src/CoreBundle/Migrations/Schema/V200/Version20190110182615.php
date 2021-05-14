@@ -62,11 +62,8 @@ class Version20190110182615 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_lp DROP id');
         }
 
-        if (false === $table->hasIndex('course')) {
-            $this->addSql('DROP INDEX course ON c_lp');
-        }
         if (false === $table->hasIndex('session')) {
-            $this->addSql('DROP INDEX session ON c_lp');
+            //$this->addSql('DROP INDEX session ON c_lp');
         }
 
         $this->addSql('UPDATE c_lp SET category_id = NULL WHERE category_id = 0');
@@ -115,9 +112,16 @@ class Version20190110182615 extends AbstractMigrationChamilo
 
         $this->addSql('ALTER TABLE c_lp_item CHANGE previous_item_id previous_item_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_lp_item CHANGE next_item_id next_item_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_lp_item CHANGE c_id c_id INT DEFAULT NULL');
 
         $this->addSql('UPDATE c_lp_item SET previous_item_id = NULL WHERE previous_item_id = 0');
         $this->addSql('UPDATE c_lp_item SET next_item_id = NULL WHERE next_item_id = 0');
+
+        $this->addSql('UPDATE c_lp_item SET next_item_id = NULL WHERE next_item_id = 0');
+
+        if (!$table->hasColumn('lvl')) {
+            $this->addSql('ALTER TABLE c_lp_item ADD COLUMN lvl INT DEFAULT NULL');
+        }
 
         if ($table->hasColumn('id')) {
             $this->addSql('ALTER TABLE c_lp_item DROP id');
@@ -164,6 +168,8 @@ class Version20190110182615 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_lp_view CHANGE session_id session_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_lp_view CHANGE user_id user_id INT DEFAULT NULL');
 
+        $this->addSql('DELETE FROM c_lp_view WHERE user_id NOT IN (SELECT id FROM user)');
+
         if (!$table->hasForeignKey('FK_2D2F4F7DA76ED395')) {
             $this->addSql(
                 'ALTER TABLE c_lp_view ADD CONSTRAINT FK_2D2F4F7DA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
@@ -173,6 +179,11 @@ class Version20190110182615 extends AbstractMigrationChamilo
         if ($table->hasIndex('IDX_2D2F4F7DA76ED395')) {
             $this->addSql('     CREATE INDEX IDX_2D2F4F7DA76ED395 ON c_lp_view (user_id);');
         }
+
+        $this->addSql('DELETE FROM c_lp_view WHERE lp_id NOT IN (SELECT iid FROM c_lp)');
+        $this->addSql('DELETE FROM c_lp_view WHERE c_id NOT IN (SELECT id FROM course)');
+        $this->addSql('UPDATE c_lp_view SET session_id = NULL WHERE session_id = 0');
+        $this->addSql('DELETE FROM c_lp_view WHERE session_id IS NOT NULL AND session_id NOT IN (SELECT id FROM session)');
 
         if (!$table->hasForeignKey('FK_2D2F4F7D68DFD1EF')) {
             $this->addSql(
@@ -192,7 +203,7 @@ class Version20190110182615 extends AbstractMigrationChamilo
         }
 
         if (!$table->hasIndex('IDX_2D2F4F7DFE54D947')) {
-            $this->addSql('CREATE INDEX IDX_2D2F4F7DFE54D947 ON c_lp_view (group_id)');
+            //$this->addSql('CREATE INDEX IDX_2D2F4F7DFE54D947 ON c_lp_view (group_id)');
         }
 
         $table = $schema->getTable('c_lp_item_view');
@@ -212,6 +223,8 @@ class Version20190110182615 extends AbstractMigrationChamilo
 
         $this->addSql('ALTER TABLE c_lp_item_view CHANGE lp_item_id lp_item_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_lp_item_view CHANGE lp_view_id lp_view_id INT DEFAULT NULL');
+        $this->addSql('DELETE FROM c_lp_item_view WHERE lp_view_id NOT IN (SELECT iid FROM c_lp_view)');
+        $this->addSql('DELETE FROM c_lp_item_view WHERE lp_item_id NOT IN (SELECT iid FROM c_lp_item)');
 
         if (!$table->hasForeignKey('FK_445C6415DBF72317')) {
             $this->addSql(

@@ -68,6 +68,8 @@ class Version20181025064351 extends AbstractMigrationChamilo
         $this->addSql('UPDATE gradebook_category SET session_id = NULL WHERE session_id = 0');
         $this->addSql('UPDATE gradebook_category SET parent_id = NULL WHERE parent_id = 0');
 
+        $this->addSql('DELETE FROM gradebook_category WHERE session_id IS NOT NULL AND session_id NOT IN (SELECT id FROM session)');
+
         if (false === $table->hasForeignKey('FK_96A4C705727ACA70')) {
             $this->addSql('ALTER TABLE gradebook_category ADD CONSTRAINT FK_96A4C705727ACA70 FOREIGN KEY (parent_id) REFERENCES gradebook_category (id);');
         }
@@ -111,6 +113,8 @@ class Version20181025064351 extends AbstractMigrationChamilo
         if (false === $table->hasIndex('IDX_96A4C705A76ED395')) {
             $this->addSql('CREATE INDEX IDX_96A4C705A76ED395 ON gradebook_category (user_id)');
         }
+
+        $this->addSql('UPDATE gradebook_category SET grade_model_id = NULL WHERE grade_model_id = 0');
 
         if (!$table->hasForeignKey('FK_96A4C705378B7921')) {
             $this->addSql('ALTER TABLE gradebook_category ADD CONSTRAINT FK_96A4C705378B7921 FOREIGN KEY (grade_model_id) REFERENCES grade_model (id) ON DELETE CASCADE;');
@@ -287,6 +291,8 @@ class Version20181025064351 extends AbstractMigrationChamilo
 
         $this->addSql('ALTER TABLE gradebook_certificate CHANGE user_id user_id INT DEFAULT NULL');
 
+        $this->addSql('DELETE FROM gradebook_certificate WHERE user_id NOT IN (SELECT id FROM user)');
+
         if (false === $table->hasForeignKey('FK_650669DA76ED395')) {
             $this->addSql(
                 'ALTER TABLE gradebook_certificate ADD CONSTRAINT FK_650669DA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
@@ -339,6 +345,9 @@ class Version20181025064351 extends AbstractMigrationChamilo
 
         $this->addSql('ALTER TABLE gradebook_score_log CHANGE user_id user_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE gradebook_score_log CHANGE category_id category_id INT DEFAULT NULL;');
+
+        $this->addSql('DELETE FROM gradebook_score_log WHERE user_id NOT IN (SELECT id FROM user)');
+        $this->addSql('DELETE FROM gradebook_score_log WHERE category_id NOT IN (SELECT id FROM gradebook_category)');
 
         if (false === $table->hasForeignKey('FK_640C6449A76ED395')) {
             $this->addSql(

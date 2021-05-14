@@ -837,7 +837,7 @@ class Session
         $relCourse = $this->getCourseSubscription($course);
         if (null !== $relCourse) {
             $this->courses->removeElement($relCourse);
-            $this->setNbrCourses(count($this->courses));
+            $this->setNbrCourses(\count($this->courses));
 
             return true;
         }

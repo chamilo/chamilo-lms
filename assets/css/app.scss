@@ -37,12 +37,11 @@
 @import "~select2/dist/css/select2.css";
 @import "~bootstrap-daterangepicker/daterangepicker.css";
 //@import "~bootstrap-select/sass/bootstrap-select";
-//@import '~pretty-checkbox/src/pretty-checkbox.scss';
 //@import '~jquery-ui/themes/base/all.css';
 
 @layer components {
   .card {
-    @apply bg-white rounded shadow-lg;
+    @apply bg-white rounded shadow-lg w-full;
   }
 
   // Buttons.
@@ -70,7 +69,12 @@
     @apply text-white bg-red-700 hover:bg-red-800;
   }
 
+  // Buttons with icons.
   .btn > .fa {
+    @apply -ml-1 mr-1 h-4 w-5 fill-current ;
+  }
+
+  .btn > .svg {
     @apply -ml-1 mr-1 h-4 w-5 fill-current ;
   }
 
@@ -183,6 +187,10 @@
     @apply flex flex-col items-center justify-center p-4 space-y-4 antialiased text-gray-900;
   }
 
+  .pull-right {
+    @apply flex flex-row;
+  }
+
   @import "scss/index.scss";
 }
 
@@ -204,4 +212,3 @@
 //@import "~jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css";
 @import "~@fancyapps/fancybox/dist/jquery.fancybox.css";
 //@import "~jquery-contextmenu/dist/jquery.contextMenu.css";
-//@import '~pretty-checkbox/src/pretty-checkbox.scss';

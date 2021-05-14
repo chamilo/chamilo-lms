@@ -14,9 +14,6 @@ class FreeAnswer extends Question
     public $typePicture = 'open_answer.png';
     public $explanationLangVar = 'Open question';
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -26,7 +23,7 @@ class FreeAnswer extends Question
 
     public function createAnswersForm($form)
     {
-        $form->addElement('text', 'weighting', get_lang('Score'));
+        $form->addText('weighting', get_lang('Score'));
         global $text;
         // setting the save button here and not in the question class.php
         $form->addButtonSave($text, 'submitQuestion');

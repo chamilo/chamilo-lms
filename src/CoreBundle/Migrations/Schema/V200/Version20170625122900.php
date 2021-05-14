@@ -10,11 +10,13 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\ToolChain;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * c_document.
- */
 class Version20170625122900 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'c_document changes';
+    }
+
     public function up(Schema $schema): void
     {
         // Install tools.

@@ -1,14 +1,11 @@
 <template>
-  <div>
+  <div v-if="!isLoading && item && isCurrentTeacher">
     <!--      :handle-delete="del"-->
     <Toolbar
-        v-if="item && !isLoading"
         :handle-submit="onSendForm"
         :handle-reset="resetForm"
     />
-
     <DocumentsForm
-      v-if="item && !isLoading"
       ref="updateForm"
       :values="item"
       :errors="violations"
@@ -52,9 +49,11 @@ export default {
       updated: 'updated',
       violations: 'violations'
     }),
-    ...mapGetters('documents', ['find'])
+    ...mapGetters('documents', ['find']),
+    ...mapGetters({
+      'isCurrentTeacher': 'security/isCurrentTeacher',
+    }),
   },
-
   methods: {
     ...mapActions('documents', {
       createReset: 'resetCreate',

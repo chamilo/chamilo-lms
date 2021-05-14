@@ -49,6 +49,7 @@ $htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
 // Recover Thread ID, will be used to generate delete attachment URL to do ajax
 $threadId = isset($_REQUEST['thread']) ? (int) ($_REQUEST['thread']) : 0;
 $forumId = isset($_REQUEST['forum']) ? (int) ($_REQUEST['forum']) : 0;
+$forumCategoryId = isset($_REQUEST['forumcategory']) ? (int) ($_REQUEST['forumcategory']) : 0;
 
 $ajaxUrl = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq();
 // The next javascript script is to delete file by ajax
@@ -309,6 +310,12 @@ $forumCategoryInfo = [];
 if (is_array($forumCategories)) {
     foreach ($forumCategories as $forumCategory) {
         $categoryId = $forumCategory->getIid();
+
+        if (!empty($forumCategoryId)) {
+            if ($categoryId !== $forumCategoryId) {
+                continue;
+            }
+        }
         //$categorySessionId = $forumCategory->getSessionId();
         $categorySessionId = 0;
         $forumCategoryInfo['id'] = $categoryId;
@@ -330,7 +337,7 @@ if (is_array($forumCategories)) {
         }
 
         $tools = null;
-        $forumCategoryInfo['url'] = 'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.$categoryId;
+        $forumCategoryInfo['url'] = 'index.php?'.api_get_cidreq().'&forumcategory='.$categoryId;
         $visibility = $forumCategory->isVisible($courseEntity, $sessionEntity);
 
         if (!empty($categoryId)) {
@@ -622,7 +629,7 @@ $isTeacher = api_is_allowed_to_edit(false, true);
 $tpl = new Template($nameTools);
 $tpl->assign('introduction', $introduction);
 $tpl->assign('actions', $actions);
-$tpl->assign('data', $listForumCategory);
+$tpl->assign('categories', $listForumCategory);
 $tpl->assign('form_content', $formContent);
 $tpl->assign('search_filter', $searchFilter);
 $tpl->assign('default_user_language', $defaultUserLanguage);

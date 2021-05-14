@@ -110,7 +110,7 @@ class LoginSuccessHandler
                 }
             }
 
-            $count_of_sessions = count($my_session_list);
+            $count_of_sessions = \count($my_session_list);
             if (1 === $count_of_sessions && 0 === $count_of_courses_no_sessions) {
                 $key = array_keys($personal_course_list);
                 $course_info = $personal_course_list[$key[0]]['course_info'];

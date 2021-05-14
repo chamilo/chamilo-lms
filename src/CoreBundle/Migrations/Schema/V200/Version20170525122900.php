@@ -9,11 +9,13 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * Resources.
- */
 class Version20170525122900 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'Resources changes';
+    }
+
     public function up(Schema $schema): void
     {
         if (false === $schema->hasTable('resource_file')) {
@@ -176,10 +178,5 @@ class Version20170525122900 extends AbstractMigrationChamilo
 
     public function down(Schema $schema): void
     {
-    }
-
-    public function getDescription(): string
-    {
-        return 'Resources changes';
     }
 }

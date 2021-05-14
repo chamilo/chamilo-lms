@@ -83,7 +83,7 @@ if (is_object($objQuestion)) {
                 exit;
             }
         } else {
-            echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&page='.$page.'&hotspotadmin='.$objQuestion->id.'&'.api_get_cidreq().'"</script>';
+            echo '<script>window.location.href="admin.php?exerciseId='.$exerciseId.'&page='.$page.'&hotspotadmin='.$objQuestion->id.'&'.api_get_cidreq().'"</script>';
         }
     } else {
         if (isset($questionName)) {

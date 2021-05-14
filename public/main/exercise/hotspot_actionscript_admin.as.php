@@ -43,7 +43,7 @@ $data['lang'] = HotSpot::getLangVariables();
 $data['image'] = $imagePath;
 $data['image_width'] = $pictureWidth;
 $data['image_height'] = $pictureHeight;
-$data['courseCode'] = $_course['path'];
+//$data['courseCode'] = $_course['path'];
 $data['hotspots'] = [];
 
 $i = 0;

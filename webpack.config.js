@@ -94,11 +94,11 @@ Encore
             pattern: /(js.cookie.js)$/,
             to: 'libs/js-cookie/src/js.cookie.js'
         },
-        {from: './node_modules/ckeditor4/', to: 'libs/ckeditor/[path][name].[ext]', pattern: /\.(js|css)$/, includeSubdirectories: false},
-        {from: './node_modules/ckeditor4/adapters', to: 'libs/ckeditor/adapters/[path][name].[ext]'},
-        {from: './node_modules/ckeditor4/lang', to: 'libs/ckeditor/lang/[path][name].[ext]'},
-        {from: './node_modules/ckeditor4/plugins', to: 'libs/ckeditor/plugins/[path][name].[ext]'},
-        {from: './node_modules/ckeditor4/skins', to: 'libs/ckeditor/skins/[path][name].[ext]'},
+        //{from: './node_modules/ckeditor4/', to: 'libs/ckeditor/[path][name].[ext]', pattern: /\.(js|css)$/, includeSubdirectories: false},
+        //{from: './node_modules/ckeditor4/adapters', to: 'libs/ckeditor/adapters/[path][name].[ext]'},
+        //{from: './node_modules/ckeditor4/lang', to: 'libs/ckeditor/lang/[path][name].[ext]'},
+        //{from: './node_modules/ckeditor4/plugins', to: 'libs/ckeditor/plugins/[path][name].[ext]'},
+        //{from: './node_modules/ckeditor4/skins', to: 'libs/ckeditor/skins/[path][name].[ext]'},
         /*,
         {
             from: './node_modules/mathjax/',

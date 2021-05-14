@@ -133,7 +133,7 @@ class Container
     }
 
     /**
-     * @return string
+     * @return bool
      */
     public static function isInstalled()
     {

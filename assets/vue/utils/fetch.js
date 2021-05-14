@@ -141,6 +141,10 @@ export default function(id, options = {}) {
             error = 'Not allowed';
         }
 
+        if (json['error']) {
+            error = json['error'];
+        }
+
         console.log(error, 'fetch error');
 
         if (!json.violations) {

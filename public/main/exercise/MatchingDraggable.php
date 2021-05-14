@@ -12,9 +12,6 @@ class MatchingDraggable extends Question
     public $typePicture = 'matchingdrag.png';
     public $explanationLangVar = 'Match by dragging';
 
-    /**
-     * Class constructor.
-     */
     public function __construct()
     {
         parent::__construct();

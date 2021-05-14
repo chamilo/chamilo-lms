@@ -43,7 +43,7 @@ class CourseVoter extends Voter
         ];
 
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, $options, true)) {
+        if (!\in_array($attribute, $options, true)) {
             return false;
         }
         // only vote on Post objects inside this voter

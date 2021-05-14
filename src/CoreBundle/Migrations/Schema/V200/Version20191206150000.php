@@ -9,11 +9,13 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * Extra fields.
- */
 class Version20191206150000 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'Extra field changes';
+    }
+
     public function up(Schema $schema): void
     {
         $table = $schema->getTable('extra_field');

@@ -75,12 +75,12 @@ final class Version20201212203625 extends AbstractMigrationChamilo
 
                 $resourceNode = null;
                 $parent = null;
-                if ('.' !== dirname($documentPath)) {
+                if ('.' !== \dirname($documentPath)) {
                     $parentId = DocumentManager::get_document_id(
                         [
                             'real_id' => $courseId,
                         ],
-                        dirname($documentPath)
+                        \dirname($documentPath)
                     );
                     $parent = $documentRepo->find($parentId);
                 }

@@ -126,11 +126,7 @@ $(function() {
 </script>';
 
 Display::display_header();
-
-echo '<div class="actions">';
 echo TrackingCourseLog::actionsLeft('logs', api_get_session_id());
-
-echo '</div>';
 
 $form = new FormValidator(
     'search_simple',

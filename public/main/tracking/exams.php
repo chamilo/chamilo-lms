@@ -77,7 +77,16 @@ if ($global) {
         $form->addElement('select', 'exercise_id', get_lang('Exercise'), $exerciseList);
     }
 }
-$form->addButton('filter', get_lang('Filter'), 'filter', 'primary', null, null, ['style' => 'margin-top: 5px; margin-left: 15px;']);
+
+$form->addButton(
+    'filter',
+    get_lang('Filter'),
+    'filter',
+    'primary',
+    null,
+    null,
+    ['style' => 'margin-top: 5px; margin-left: 15px;']
+);
 
 $filter_score = isset($_REQUEST['score']) ? intval($_REQUEST['score']) : 70;
 $exerciseId = isset($_REQUEST['exercise_id']) ? intval($_REQUEST['exercise_id']) : 0;
@@ -122,8 +131,7 @@ if (!$exportToXLS) {
             }
         }
     } else {
-        $actionsLeft = TrackingCourseLog::actionsLeft('exams', api_get_session_id());
-
+        $actionsLeft = TrackingCourseLog::actionsLeft('exams', api_get_session_id(), false);
         $actionsRight .= Display::url(
             Display::return_icon('export_excel.png', get_lang('Excel export'), [], 32),
             api_get_self().'?'.api_get_cidreq().'&export=1&score='.$filter_score.'&exercise_id='.$exerciseId

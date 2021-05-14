@@ -188,7 +188,7 @@ if (!empty($groupId)) {
     $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.$cidreq, 'name' => $nameTools];
     if ($current_forum_category) {
         $interbreadcrumb[] = [
-            'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?'.$cidreq.'&forumcategory='.$current_forum_category->getIid(),
+            'url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.$cidreq.'&forumcategory='.$current_forum_category->getIid(),
             'name' => $current_forum_category->getCatTitle(),
         ];
     }

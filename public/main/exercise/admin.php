@@ -65,7 +65,6 @@ if (!$is_allowedToEdit) {
 }
 
 $exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : 0;
-
 $newQuestion = isset($_GET['newQuestion']) ? $_GET['newQuestion'] : 0;
 $modifyAnswers = isset($_GET['modifyAnswers']) ? $_GET['modifyAnswers'] : 0;
 $editQuestion = isset($_GET['editQuestion']) ? $_GET['editQuestion'] : 0;
@@ -277,22 +276,12 @@ if ('thisExercise' === $modifyIn) {
     }
 }
 
-//$htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js');
-//$htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
 $htmlHeadXtra[] = api_get_build_js('exercise.js');
 
 $template = new Template();
 $templateName = $template->get_template('exercise/submit.js.tpl');
 $htmlHeadXtra[] = $template->fetch($templateName);
-//$htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
-//$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
-
-if (isset($_GET['message'])) {
-    if (in_array($_GET['message'], ['ExerciseStored', 'ItemUpdated', 'ItemAdded'])) {
-        //  Display::addFlash(Display::return_message(get_lang($_GET['message']), 'confirmation'));
-    }
-}
 
 Display::display_header($nameTools, 'Exercise');
 
@@ -386,7 +375,7 @@ if ($inATest) {
     if (false === $showPagination) {
         if ($objExercise->questionSelectionType >= EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED) {
             $alert .= sprintf(
-                '<br>'.get_lang('XQuestionsSelectedWithTotalScoreY'),
+                '<br>'.get_lang('Only %d questions will be selected based on the test configuration, for a total score of %s.'),
                 count($questionList),
                 $maxScoreAllQuestions
             );
@@ -459,7 +448,12 @@ if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspot
 // if we are in question authoring, display warning to user is feedback not shown at the end of the test -ref #6619
 // this test to display only message in the question authoring page and not in the question list page too
 if (EXERCISE_FEEDBACK_TYPE_EXAM == $objExercise->getFeedbackType()) {
-    echo Display::return_message(get_lang('This test is configured not to display feedback to learners. Comments will not be seen at the end of the test, but may be useful for you, as teacher, when reviewing the question details.'), 'normal');
+    echo Display::return_message(
+        get_lang(
+            'This test is configured not to display feedback to learners. Comments will not be seen at the end of the test, but may be useful for you, as teacher, when reviewing the question details.'
+        ),
+        'normal'
+    );
 }
 
 Session::write('objQuestion', $objQuestion);

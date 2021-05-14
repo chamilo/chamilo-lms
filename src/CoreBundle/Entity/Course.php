@@ -1015,7 +1015,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
             self::OPEN_WORLD,
         ];
 
-        return in_array($this->visibility, $activeVisibilityList, true);
+        return \in_array($this->visibility, $activeVisibilityList, true);
     }
 
     /**

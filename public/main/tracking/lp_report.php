@@ -423,7 +423,7 @@ if (!empty($action)) {
     }
 }
 
-$actionsLeft = TrackingCourseLog::actionsLeft('lp');
+$actionsLeft = TrackingCourseLog::actionsLeft('lp', api_get_session_id(), false);
 $actionsCenter = '';
 $actionsRight = Display::url(
     Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), null, ICON_SIZE_MEDIUM),

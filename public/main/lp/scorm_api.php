@@ -186,7 +186,7 @@ olms.lms_item_launch_data = '<?php echo addslashes($oItem->get_launch_data()); ?
 olms.lms_item_core_exit = '<?php echo $oItem->get_core_exit(); ?>';
 olms.lms_course_id = '<?php echo $oLP->get_course_int_id(); ?>';
 olms.lms_session_id = '<?php echo api_get_session_id(); ?>';
-olms.lms_course_code = '<?php echo $oLP->getCourseCode(); ?>';
+olms.lms_course_code = '<?php echo api_get_course_id(); ?>';
 <?php echo $oLP->get_items_details_as_js('olms.lms_item_types'); ?>
 
 // Following definition of cmi.core.score.raw in SCORM 1.2, "LMS should

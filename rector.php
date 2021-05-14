@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
+use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Set\ValueObject\SetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -22,7 +23,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SetList::CODING_STYLE,
         SetList::CODE_QUALITY,
         SetList::PHP_74,
-        SetList::DOCTRINE_CODE_QUALITY,
+        DoctrineSetList::DOCTRINE_CODE_QUALITY,
     ]);
 
     // register single rule
@@ -39,8 +40,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(Rector\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector::class);
     $services->set(\Rector\Php52\Rector\Property\VarToPublicPropertyRector::class);
     //$services->set(\Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector::class);
-
-
 
     //$services->set(Rector\DoctrineCodeQuality\Rector\ClassMethod\MakeEntitySetterNullabilityInSyncWithPropertyRector::class);
     //$services->set(\Rector\DoctrineCodeQuality\Rector\Property\CorrectDefaultTypesOnEntityPropertyRector::class);
@@ -75,11 +74,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             \Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector::class,
             \Rector\CodeQuality\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector::class,
             \Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector::class,
-            Rector\DoctrineCodeQuality\Rector\Property\CorrectDefaultTypesOnEntityPropertyRector::class,
+            \Rector\Doctrine\Rector\Property\CorrectDefaultTypesOnEntityPropertyRector::class,
             Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector::class,
-            Rector\DoctrineCodeQuality\Rector\Property\RemoveRedundantDefaultPropertyAnnotationValuesRector::class,
-            Rector\DoctrineCodeQuality\Rector\Property\ImproveDoctrineCollectionDocTypeInEntityRector::class,
-            Rector\DoctrineCodeQuality\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector::class,
+            \Rector\Doctrine\Rector\Property\RemoveRedundantDefaultPropertyAnnotationValuesRector::class,
+            \Rector\Doctrine\Rector\Property\ImproveDoctrineCollectionDocTypeInEntityRector::class,
+            \Rector\Doctrine\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector::class,
             Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector::class,
             Rector\CodingStyle\Rector\ClassConst\VarConstantCommentRector::class,
             Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector::class,

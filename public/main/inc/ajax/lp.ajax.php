@@ -18,6 +18,7 @@ $lpRepo = Container::getLpRepository();
 $lpItemRepo = Container::getLpItemRepository();
 $lp = null;
 if (!empty($lpId)) {
+    $lpId = (int) $lpId;
     /** @var CLp $lp */
     $lp = $lpRepo->find($lpId);
 }
@@ -123,23 +124,13 @@ switch ($action) {
         break;
     case 'update_lp_item_order':
         if (api_is_allowed_to_edit(null, true)) {
-            // $new_order gets a value like "647|0^648|0^649|0^"
             $newOrder = $_REQUEST['new_order'] ?? [];
-
             $orderList = json_decode($newOrder);
             if (empty($orderList)) {
                 exit;
             }
-            /*$sections = explode('^', $new_order);
-            $sections = array_filter($sections);
-            // We have to update parent_item_id, previous_item_id, next_item_id, display_order in the database
-            $orderList = [];
-            foreach ($sections as $items) {
-                [$id, $parentId] = explode('|', $items);
-                $orderList[$id] = $parentId;
-            }*/
-            $learningPath = new learnpath($lp, api_get_course_info(), api_get_user_id());
-            $learningPath->sortItemByOrderList($orderList);
+
+            learnpath::sortItemByOrderList($lpId, $orderList);
 
             echo Display::return_message(get_lang('Saved'), 'confirm');
         }

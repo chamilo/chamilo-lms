@@ -714,7 +714,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         if ($resourceNode->hasResourceFile()) {
             $resourceNode->setContent($content);
             error_log('updated');
-            $resourceNode->getResourceFile()->setSize(strlen($content));
+            $resourceNode->getResourceFile()->setSize(\strlen($content));
             /*
             error_log('has file');
             $resourceFile = $resourceNode->getResourceFile();
@@ -797,7 +797,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             $slug = $this->slugify->slugify($resourceName);
         } else {
             $originalExtension = pathinfo($resourceName, PATHINFO_EXTENSION);
-            $originalBasename = \basename($resourceName, $originalExtension);
+            $originalBasename = basename($resourceName, $originalExtension);
             $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);
         }
 

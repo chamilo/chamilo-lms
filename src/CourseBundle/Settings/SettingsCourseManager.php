@@ -60,7 +60,7 @@ class SettingsCourseManager extends SettingsManager
         }
 
         foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
-            if (array_key_exists($parameter, $parameters)) {
+            if (\array_key_exists($parameter, $parameters)) {
                 $parameters[$parameter] = $transformer->reverseTransform($parameters[$parameter]);
             }
         }
@@ -88,7 +88,7 @@ class SettingsCourseManager extends SettingsManager
         // 3. Add transformer for that variable "ArrayToIdentifierTransformer"
         // 4. Here we recover the transformer and convert the array to string
         foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
-            if (array_key_exists($parameter, $parameters)) {
+            if (\array_key_exists($parameter, $parameters)) {
                 $parameters[$parameter] = $transformer->transform($parameters[$parameter]);
             }
         }

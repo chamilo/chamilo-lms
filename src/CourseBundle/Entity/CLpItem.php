@@ -170,6 +170,7 @@ class CLpItem
         $this->children = new ArrayCollection();
         $this->path = '';
         $this->ref = '';
+        $this->lvl = 0;
         $this->launchData = '';
         $this->description = '';
         $this->displayOrder = 0;

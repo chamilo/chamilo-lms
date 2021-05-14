@@ -9,11 +9,13 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * sys_announcement.
- */
 final class Version20200922224343 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'sys_announcement changes';
+    }
+
     public function up(Schema $schema): void
     {
         $table = $schema->getTable('sys_announcement');

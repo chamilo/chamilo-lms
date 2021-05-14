@@ -513,7 +513,6 @@ class Certificate extends Model
      */
     public function generateQRImage($text, $path)
     {
-        // Make sure HTML certificate is generated
         if (!empty($text) && !empty($path)) {
             $qrCode = new QrCode($text);
             //$qrCode->setEncoding('UTF-8');

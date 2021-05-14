@@ -192,7 +192,7 @@ class ToolChain
 
         /** @var AbstractTool $tool */
         foreach ($tools as $tool) {
-            $visibility = in_array($tool->getName(), $toolVisibility, true);
+            $visibility = \in_array($tool->getName(), $toolVisibility, true);
             $criteria = [
                 'name' => $tool->getName(),
             ];
@@ -225,7 +225,7 @@ class ToolChain
     {
         $tools = $this->getTools();
 
-        if (array_key_exists($name, $tools)) {
+        if (\array_key_exists($name, $tools)) {
             return $tools[$name];
         }
 

@@ -9,11 +9,13 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * Course.
- */
 class Version20191101132000 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'course changes';
+    }
+
     public function up(Schema $schema): void
     {
         $table = $schema->getTable('course');

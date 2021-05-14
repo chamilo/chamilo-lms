@@ -76,11 +76,10 @@ class ResourceListener
 
     public function prePersist(AbstractResource $resource, LifecycleEventArgs $event)
     {
-        error_log('Resource listener prePersist for obj: '.get_class($resource));
+        error_log('Resource listener prePersist for obj: '.\get_class($resource));
         $em = $event->getEntityManager();
         $request = $this->request;
 
-        $url = null;
         if ($resource instanceof ResourceWithAccessUrlInterface) {
             $url = $this->getAccessUrl($em);
             $resource->addUrl($url);
@@ -112,7 +111,7 @@ class ResourceListener
 
         // @todo use static table instead of Doctrine
         $repo = $em->getRepository(ResourceType::class);
-        $entityClass = get_class($event->getEntity());
+        $entityClass = \get_class($event->getEntity());
         $repoClass = str_replace('Entity', 'Repository', $entityClass).'Repository';
         if (strpos($repoClass, 'CoreBundle')) {
             $repoClass = str_replace('Entity', 'Repository\Node', $entityClass).'Repository';

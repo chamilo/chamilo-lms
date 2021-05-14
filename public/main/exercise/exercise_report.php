@@ -546,7 +546,7 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
 
 // Security token to protect deletion
 $token = Security::get_token();
-$actions = Display::div($actions, ['class' => 'actions']);
+$actions = Display::toolbarAction('exercise_report', [$actions]);
 
 $extra = '<script>
     $(function() {
@@ -589,41 +589,30 @@ $form = new FormValidator(
     null,
     ['class' => 'form-vertical']
 );
-$form->addElement(
-    'radio',
+$form->addRadio(
     'export_format',
-    null,
     get_lang('CSV export'),
-    'csv',
+    ['csv'],
     ['id' => 'export_format_csv_label']
 );
-$form->addElement(
-    'radio',
+$form->addRadio(
     'export_format',
-    null,
     get_lang('Excel export'),
-    'xls',
+    ['xls'],
     ['id' => 'export_format_xls_label']
 );
-$form->addElement(
-    'checkbox',
+$form->addCheckBox(
     'load_extra_data',
-    null,
     get_lang('Load extra user fields data (have to be marked as \'Filter\' to appear).'),
     '0',
     ['id' => 'export_format_xls_label']
 );
-$form->addElement(
-    'checkbox',
+$form->addCheckBox(
     'include_all_users',
-    null,
     get_lang('Include all users'),
-    '0'
 );
-$form->addElement(
-    'checkbox',
+$form->addCheckBox(
     'only_best_attempts',
-    null,
     get_lang('Only best attempts'),
     '0'
 );

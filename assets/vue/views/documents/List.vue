@@ -88,9 +88,9 @@
 <!--        </template>-->
 <!--      </q-table>-->
 <!--  </div>-->
-  <div class="q-card">
+  <div v-if="isAuthenticated && isCurrentTeacher"  class="q-card">
     <div class="p-4 flex flex-row gap-1 mb-2">
-      <div v-if="isAuthenticated && isCurrentTeacher" class="flex flex-row gap-2" >
+      <div class="flex flex-row gap-2" >
         <!--         <Button label="New" icon="pi pi-plus" class="p-button-primary p-button-sm p-mr-2" @click="openNew" />-->
         <Button label="New folder" icon="fa fa-folder-plus" class="btn btn-primary" @click="openNew" />
 
@@ -172,11 +172,6 @@
 <!--        <Button type="button" icon="pi pi-check" @click="filterCallback()" class="p-button-success"></Button>-->
 <!--      </template>-->
     </Column>
-    <Column field="resourceNode.updatedAt" :header="$t('Modified')" :sortable="true">
-      <template #body="slotProps">
-        {{$luxonDateTime.fromISO(slotProps.data.resourceNode.updatedAt).toRelative() }}
-      </template>
-    </Column>
 
     <Column field="resourceNode.resourceFile.size" :header="$t('Size')" :sortable="true">
       <template #body="slotProps">
@@ -186,12 +181,18 @@
       </template>
     </Column>
 
+    <Column field="resourceNode.updatedAt" :header="$t('Modified')" :sortable="true">
+      <template #body="slotProps">
+        {{$luxonDateTime.fromISO(slotProps.data.resourceNode.updatedAt).toRelative() }}
+      </template>
+    </Column>
+
     <Column :exportable="false">
       <template #body="slotProps">
         <div class="flex flex-row gap-2">
-          <Button label="Show" class="btn btn-primary p-mr-2" @click="showHandler(slotProps.data)" />
-          <Button v-if="isAuthenticated && isCurrentTeacher" label="Edit" icon="pi pi-pencil" class="btn btn-primary p-mr-2" @click="editHandler(slotProps.data)" />
-          <Button v-if="isAuthenticated && isCurrentTeacher" label="Delete" icon="pi pi-trash" class="btn btn-danger" @click="confirmDeleteItem(slotProps.data)" />
+          <Button icon="fa fa-info-circle"  class="btn btn-primary " @click="showHandler(slotProps.data)" />
+          <Button v-if="isAuthenticated && isCurrentTeacher" icon="pi pi-pencil" class="btn btn-primary p-mr-2" @click="editHandler(slotProps.data)" />
+          <Button v-if="isAuthenticated && isCurrentTeacher" icon="pi pi-trash" class="btn btn-danger" @click="confirmDeleteItem(slotProps.data)" />
         </div>
       </template>
     </Column>
@@ -329,8 +330,6 @@ export default {
         {name: 'action', label: this.$i18n.t('Actions'), field: 'action', sortable: false}
       ],
       columns: [
-        //{ name: 'action' },
-        //{ name: 'id', field: '@id', label: this.$t('iid') },
         { label: this.$i18n.t('Title'), field: 'title', name: 'title', sortable: true},
         { label: this.$i18n.t('Modified'), field: 'resourceNode.updatedAt', name: 'updatedAt', sortable: true},
         { label: this.$i18n.t('Size'), field: 'resourceNode.resourceFile.size', name: 'size', sortable: true},

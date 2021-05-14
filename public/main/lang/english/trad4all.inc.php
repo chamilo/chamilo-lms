@@ -8703,7 +8703,7 @@ $ToInvoice = "To invoice";
 $LearningPathItemByAuthor = "LP item by author";
 $DeleteExerciseAttempts = "Delete also the exercise attempts. If not check then the exercise results will still be available in the exercise tool.";
 $ExerciseCategoriesRadarMode = "Only show a radar of scores by category, instead of a table of categories. Do not show individual scores or feedback.";
-$ExerciseBlockBecausePercentageX = "All attemps blocked because you did not reach the minimum score of %s % at one of your attemps.";
+$ExerciseBlockBecausePercentageX = "All attempts blocked because you did not reach the minimum score of %s %% at one of your attemps.";
 $RegisteredAuthors = "Authors that have been registered :";
 $Price = "Price";
 $PriceUpdated = "Price updated";
@@ -8767,4 +8767,7 @@ $ExportMyPortfolioDataZip = "Export my portfolio data in a ZIP file";
 $PortfolioCategoryFieldHelp = "Categories are for organization only in personal portfolio.";
 $ExportMytPortfolioDataPdf = "Export my portfolio data to a PDF file";
 $ExportMytPortfolioDataZip = "Export my portfolio data to a ZIP file";
+$NewLearningPathSubject = "New learning path available";
+$NewLearningPathBody = "There is a new learning path called %s that has been added to your %s course. Go to this learning path here : %s";
+$XPercentCompleted = "%s %% Completed";
 ?>

@@ -8789,7 +8789,7 @@ class TrackingCourseLog
     /**
      * @param string $current
      */
-    public static function actionsLeft($current, $sessionId = 0)
+    public static function actionsLeft($current, $sessionId = 0, $addWrapper = true)
     {
         $usersLink = Display::url(
             Display::return_icon('user.png', get_lang('Report on learners'), [], ICON_SIZE_MEDIUM),
@@ -8897,17 +8897,21 @@ class TrackingCourseLog
                 break;
         }
 
-        $items = [
-            $usersLink,
-            $groupsLink,
-            $courseLink,
-            $resourcesLink,
-            $examLink,
-            $eventsLink,
-            $lpLink,
-            $attendanceLink,
-        ];
+        $links =
+            $usersLink.
+            $groupsLink.
+            $courseLink.
+            $resourcesLink.
+            $examLink.
+            $eventsLink.
+            $lpLink.
+            $attendanceLink
+        ;
 
-        return Display::toolbarAction('tracking', $items);
+        if ($addWrapper) {
+            return Display::toolbarAction('tracking', [$links]);
+        }
+
+        return $links;
     }
 }

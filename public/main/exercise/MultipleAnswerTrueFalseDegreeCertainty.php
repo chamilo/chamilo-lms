@@ -48,8 +48,6 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
      * @uses \globals $text and $class, defined in the calling script
      *
      * @param FormValidator $form
-     *
-     * @throws Exception
      */
     public function createAnswersForm($form)
     {
@@ -76,10 +74,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             $html .= '<th width="50%">'.get_lang('Comment').'</th>';
         }
         $html .= '</tr>';
-
         $form->addHtml($html);
-
-        $correct = 0;
         $answer = null;
         if (!empty($this->id)) {
             $answer = new Answer($this->id);
@@ -90,15 +85,13 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         }
 
         $form->addElement('hidden', 'nb_answers');
-        $boxesNames = [];
-
         if ($nbAnswers < 1) {
             $nbAnswers = 1;
             echo Display::return_message(get_lang('You have to create at least one answer'));
         }
 
         // Can be more options
-        $optionData = Question::readQuestionOption($this->id, $courseId);
+        $optionData = Question::readQuestionOption($this->id);
 
         for ($i = 1; $i <= $nbAnswers; $i++) {
             $renderer->setElementTemplate(
@@ -137,7 +130,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 }
 
                 $defaults['weighting['.$i.']'] = isset($answer->weighting[$i]) ? float_format($answer->weighting[$i], 1) : '';
-                $correct = isset($answer->correct[$i]) ? $answer->correct[$i] : '';
+                $correct = $answer->correct[$i] ?? '';
                 $defaults['correct['.$i.']'] = $correct;
                 if (isset($_POST['correct']) && isset($_POST['correct'][$i])) {
                     $defaults['correct['.$i.']'] = Security::remove_XSS($_POST['correct'][$i]);
@@ -162,13 +155,13 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 $form->addElement('radio', 'correct['.$i.']', null, null, 2);
             }
 
-            $boxesNames[] = 'correct['.$i.']';
-            $txtAnswer = $form->addElement(
-                'html_editor',
+            $txtAnswer = $form->addHtmlEditor(
                 'answer['.$i.']',
                 null,
+                true,
+                false,
+                ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'],
                 ['style' => 'vertical-align:middle;'],
-                ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']
             );
             $form->addRule('answer['.$i.']', get_lang('Required field'), 'required');
 
@@ -177,12 +170,13 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             }
             // show comment when feedback is enable
             if (EXERCISE_FEEDBACK_TYPE_EXAM != $objEx->getFeedbackType()) {
-                $txtComment = $form->addElement(
-                    'html_editor',
+                $txtComment = $form->addHtmlEditor(
                     'comment['.$i.']',
                     null,
+                    false,
+                    false,
+                    ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'],
                     ['style' => 'vertical-align:middle;'],
-                    ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']
                 );
                 if (isset($_POST['comment']) && isset($_POST['comment'][$i])) {
                     $txtComment->setValue(Security::remove_XSS($_POST['comment'][$i]));

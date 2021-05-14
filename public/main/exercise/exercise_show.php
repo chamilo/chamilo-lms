@@ -227,8 +227,9 @@ if ('export' != $action) {
                 var oHidden = document.createElement("input");
                 oHidden.type = "hidden";
                 oHidden.name = "comments_" + ids[k];
-                if (CKEDITOR.instances[oHidden.name]) {
-                    oHidden.value = CKEDITOR.instances[oHidden.name].getData();
+                const content = getContentFromEditor(oHidden.name);
+                if (content) {
+                    oHidden.value = content;
                 } else {
                     oHidden.value = $("textarea[name='" + oHidden.name + "']").val();
                 }
@@ -644,16 +645,17 @@ foreach ($questionList as $questionId) {
             $default = [$textareaId => $comnt];
 
             if ($useAdvancedEditor) {
-                $feedback_form->addElement(
-                    'html_editor',
+                $feedback_form->addHtmlEditor(
                     $textareaId,
                     null,
-                    ['id' => $textareaId],
+                    true,
+                    false,
                     [
                         'ToolbarSet' => 'TestAnswerFeedback',
                         'Width' => '100%',
                         'Height' => '120',
-                    ]
+                    ],
+                    ['id' => $textareaId],
                 );
             } else {
                 $feedback_form->addElement('textarea', $textareaId, ['id' => $textareaId]);

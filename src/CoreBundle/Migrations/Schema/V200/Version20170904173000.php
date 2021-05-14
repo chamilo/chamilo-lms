@@ -9,11 +9,13 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-/**
- * Group changes.
- */
 class Version20170904173000 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'c_group_info changes';
+    }
+
     public function up(Schema $schema): void
     {
         $table = $schema->getTable('c_group_info');

@@ -167,7 +167,7 @@ if ('group' === $origin && $group_id) {
         'name' => $nameTools,
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?forumcategory='.$category->getIid().'&'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/index.php?forumcategory='.$category->getIid().'&'.api_get_cidreq(),
         'name' => prepare4display($category->getCatTitle()),
     ];
     $interbreadcrumb[] = [

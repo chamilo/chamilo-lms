@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * This script displays a list of the users of the current course.
  * Course admins can change user permissions, subscribe and unsubscribe users...
@@ -11,6 +13,7 @@
  * @author Roan Embrechts
  * @author Julio Montoya, Several fixes
  */
+
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_USER;
@@ -63,7 +66,9 @@ if (api_is_allowed_to_edit(null, true)) {
                     if (count($user_ids) > 0) {
                         CourseManager::unsubscribe_user($user_ids, $courseCode);
                         Display::addFlash(
-                            Display::return_message(get_lang('The selected users have been unsubscribed from the course'))
+                            Display::return_message(
+                                get_lang('The selected users have been unsubscribed from the course')
+                            )
                         );
                     }
                 }
@@ -463,7 +468,7 @@ if (api_is_allowed_to_edit(null, true)) {
     }
 } else {
     // If student can unsubscribe
-    if (isset($_REQUEST['unregister']) && 'yes' == $_REQUEST['unregister']) {
+    if (isset($_REQUEST['unregister']) && 'yes' === $_REQUEST['unregister']) {
         if (1 == $course_info['unsubscribe']) {
             $user_id = api_get_user_id();
             CourseManager::unsubscribe_user($user_id, $course_info['code']);
@@ -478,7 +483,6 @@ if (!api_is_allowed_in_course()) {
     api_not_allowed(true);
 }
 
-// Statistics
 Event::event_access_tool(TOOL_USER);
 
 $default_column = 3;
@@ -561,7 +565,6 @@ if (api_is_allowed_to_edit(null, true)) {
     }
 }
 
-/*	Header */
 if (isset($origin) && 'learnpath' === $origin) {
     Display::display_reduced_header();
 } else {
@@ -578,7 +581,6 @@ if (isset($origin) && 'learnpath' === $origin) {
     Display::display_header($tool_name, 'User');
 }
 
-// Tool introduction
 Display::display_introduction_section(TOOL_USER, 'left');
 $actions = '';
 $selectedTab = 1;
@@ -658,7 +660,7 @@ if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
     echo '<br/>'.get_lang('Search resultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
 }
 
-if (!isset($origin) || 'learnpath' != $origin) {
+if (!isset($origin) || 'learnpath' !== $origin) {
     Display::display_footer();
 }
 
@@ -818,19 +820,18 @@ function get_user_data($from, $number_of_items, $column, $direction)
             break;
     }
 
-    $active = isset($_GET['active']) ? $_GET['active'] : null;
+    $active = $_GET['active'] ?? null;
 
     if (empty($sessionId)) {
         $status = $type;
     } else {
+        $status = 0;
         if (COURSEMANAGER == $type) {
             $status = 2;
-        } else {
-            $status = 0;
         }
     }
 
-    $users = CourseManager :: get_user_list_from_course_code(
+    $users = CourseManager::get_user_list_from_course_code(
         $course_code,
         $sessionId,
         $limit,
@@ -844,6 +845,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
         [],
         $active
     );
+
+    $illustrationRepo = Container::getIllustrationRepository();
 
     foreach ($users as $user_id => $userData) {
         if ((
@@ -864,9 +867,11 @@ function get_user_data($from, $number_of_items, $column, $direction)
             }
 
             $temp = [];
+            $user = api_get_user_entity($user_id);
+            $url = $illustrationRepo->getIllustrationUrl($user, 'user_picture_small', ICON_SIZE_BIG);
+            $photo = Display::img($url, '', [], false);
+
             if (api_is_allowed_to_edit(null, true)) {
-                $userInfo = api_get_user_info($user_id);
-                $photo = Display::img($userInfo['avatar_small'], $userInfo['complete_name'], [], false);
                 $temp[] = $user_id;
                 $temp[] = $photo;
                 $temp[] = $userData['official_code'];
@@ -909,9 +914,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
                         );
                         if (isset($data['value'])) {
                             $optionList = $extraFieldOption->get_field_option_by_field_and_option(
-                            $extraField['id'],
-                            $data['value']
-                        );
+                                $extraField['id'],
+                                $data['value']
+                            );
                             if (!empty($optionList)) {
                                 $options = implode(', ', array_column($optionList, 'display_text'));
                                 $temp[] = Security::remove_XSS($options);
@@ -926,14 +931,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
                 // User id for actions
                 $temp[] = $user_id;
-                $temp['is_tutor'] = isset($userData['is_tutor']) ? $userData['is_tutor'] : '';
-                $temp['user_status_in_course'] = isset($userData['status_rel']) ? $userData['status_rel'] : '';
+                $temp['is_tutor'] = $userData['is_tutor'] ?? '';
+                $temp['user_status_in_course'] = $userData['status_rel'] ?? '';
             } else {
-                $userInfo = api_get_user_info($user_id);
-                $userPicture = $userInfo['avatar'];
-
-                $photo = '<img src="'.$userPicture.'" alt="'.$userInfo['complete_name'].'" width="22" height="22" title="'.$userInfo['complete_name'].'" />';
-
                 $temp[] = '';
                 $temp[] = $photo;
                 $temp[] = $userData['official_code'];

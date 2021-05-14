@@ -16,9 +16,6 @@ class HotSpot extends Question
     public $typePicture = 'hotspot.png';
     public $explanationLangVar = 'Image zones';
 
-    /**
-     * HotSpot constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -42,12 +39,11 @@ class HotSpot extends Question
                 false,
                 true
             );
-            $form->addElement(
-                'file',
+            $form->addFile(
                 'imageUpload',
+                get_lang('Upload image (jpg, png or gif) to apply hotspots.'),
                 [
-                    '<img src="'.$icon.'" />',
-                    get_lang('Upload image (jpg, png or gif) to apply hotspots.'),
+                    //'<img src="'.$icon.'" />',
                 ]
             );
 

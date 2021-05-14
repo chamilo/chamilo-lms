@@ -33,7 +33,7 @@ class LegalRepository extends ServiceEntityRepository
             ->groupBy('l.languageId')
         ;
 
-        return count($qb->getQuery()->getResult());
+        return \count($qb->getQuery()->getResult());
     }
 
     /**

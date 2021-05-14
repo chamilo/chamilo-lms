@@ -10,7 +10,7 @@
         @blur="v$.item.title.$touch()"
     />
 
-    <editor
+    <TinyEditor
         id="item_content"
         v-if="(item.resourceNode && item.resourceNode.resourceFile && item.resourceNode.resourceFile.text) || item.newDocument"
         v-model="item.contentFile"
@@ -49,15 +49,10 @@
 import has from 'lodash/has';
 import useVuelidate from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
-//import UploadAdapter from './UploadAdapter';
-import Editor from '../Editor'
 import { useRouter, useRoute } from 'vue-router'
 
 export default {
   name: 'DocumentsForm',
-  components: {
-    'editor': Editor
-  },
   setup () {
     return { v$: useVuelidate() }
   },

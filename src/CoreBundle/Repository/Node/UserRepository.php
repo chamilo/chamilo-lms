@@ -1386,7 +1386,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
                 'memberSince' => $callback,
             ],
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
-                return get_class($object);
+                return \get_class($object);
             },
         ];
 

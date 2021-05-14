@@ -16,7 +16,7 @@ parameters:
     #    router.request_context.base_url: '%env(APP_URL_APPEND)%'
     #    asset.request_context.base_path: '%env(APP_URL_APPEND)%'
 
-    # See https://glide.thephpleague.com/1.0/api/quick-reference/
+    # See https://glide.thephpleague.com/2.0/api/quick-reference/
     glide_media_filters:
         editor_thumbnail:
             w: 64

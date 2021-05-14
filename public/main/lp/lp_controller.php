@@ -287,20 +287,6 @@ switch ($action) {
         }
 
         Session::write('refresh', 1);
-        // Creates first root item.
-        $itemRoot = $lpItemRepo->getItemRoot($lpId);
-        if (null == $itemRoot) {
-            $lpItem = new CLpItem();
-            $lpItem
-                ->setTitle('root')
-                ->setPath('root')
-                ->setLp($lp)
-                ->setItemType('root')
-            ;
-            $em = Database::getManager();
-            $em->persist($lpItem);
-            $em->flush();
-        }
 
         if (isset($_POST['submit_button']) && !empty($post_title)) {
             Session::write('post_time', $_POST['post_time']);

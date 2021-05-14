@@ -1,5 +1,7 @@
 <?php
 
+// Sync this changes with the config/packages/doctrine_migrations.yaml file
+
 return [
     'table_storage' => [
         'table_name' => 'version',
@@ -11,6 +13,6 @@ return [
     'migrations_paths' => [
         'Chamilo\CoreBundle\Migrations\Schema\V200' => '../../../src/CoreBundle/Migrations/Schema/V200',
     ],
-    'all_or_nothing' => true,
+    'all_or_nothing' => false,
     'check_database_platform' => true,
 ];

@@ -21,7 +21,6 @@ use Chamilo\CoreBundle\Traits\ResourceControllerTrait;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -243,7 +242,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $form = $repository->getForm($this->container->get('form.factory'), $resource);
 
         if ($resourceNode->hasEditableTextContent() && $settings->isAllowToSaveEditorToResourceFile()) {
-            $form->add(
+            /*$form->add(
                 $this->fileContentName,
                 CKEditorType::class,
                 [
@@ -255,7 +254,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 ]
             );
             $content = $repository->getResourceNodeFileContent($resourceNode);
-            $form->get($this->fileContentName)->setData($content);
+            $form->get($this->fileContentName)->setData($content);*/
         }
 
         $form->handleRequest($request);
@@ -607,7 +606,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $qb->addCriteria($criteria);
         /** @var ArrayCollection|ResourceNode[] $children */
         $children = $qb->getQuery()->getResult();
-        $count = count($children);
+        $count = \count($children);
         if (0 === $count) {
             $params = $this->getResourceParams($request);
             $params['id'] = $id;
@@ -734,7 +733,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $response = new StreamedResponse(
             function () use ($stream): void {
-                stream_copy_to_stream($stream, fopen('php://output', 'wb'));
+                stream_copy_to_stream($stream, fopen('php://output', 'w'));
             }
         );
         $disposition = $response->headers->makeDisposition(
@@ -771,7 +770,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $settings = $repository->getResourceSettings();
 
         if ('file' === $fileType && $settings->isAllowToSaveEditorToResourceFile()) {
-            $resourceParams = $this->getResourceParams($request);
+            /*$resourceParams = $this->getResourceParams($request);
             $form->add(
                 $this->fileContentName,
                 CKEditorType::class,
@@ -783,7 +782,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                         'fullPage' => true,
                     ],
                 ]
-            );
+            );*/
         }
 
         $form->handleRequest($request);

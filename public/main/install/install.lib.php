@@ -615,7 +615,7 @@ function display_language_selection()
         <div class="install-icon">
             <img width="150px;" src="chamilo-install.svg"/>
         </div>
-        <h2 class="install-title">
+        <h2 class="text-2xl">
             <?php echo display_step_sequence(); ?>
             <?php echo get_lang('Installation Language'); ?>
         </h2>
@@ -1294,7 +1294,7 @@ function get_contact_registration_form()
                 class="btn btn-default"
                 onclick="javascript:send_contact_information();"
                 value="'.get_lang('Send information').'" >
-                <em class="fa fa-floppy-o"></em> '.get_lang('Send information').'
+                <em class="fa fa-check"></em> '.get_lang('Send information').'
             </button>
             <span id="loader-button"></span></div>
         </div>
@@ -1469,7 +1469,7 @@ function display_database_settings_form(
     echo '</div></div>';
     if (INSTALL_TYPE_UPDATE != $installType) { ?>
         <button type="submit" class="btn btn-primary" name="step3" value="step3">
-            <em class="fa fa-refresh"> </em>
+            <em class="fa fa-sync"> </em>
             <?php echo get_lang('Check database connection'); ?>
         </button>
         <?php
@@ -1553,7 +1553,7 @@ function display_database_settings_form(
 
    <div class="btn-group" role="group">
        <button type="submit" name="step2"
-               class="btn btn-secondary float-right" value="&lt; <?php echo get_lang('Previous'); ?>" >
+               class="btn btn-secondary" value="&lt; <?php echo get_lang('Previous'); ?>" >
            <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
        </button>
        <input type="hidden" name="is_executable" id="is_executable" value="-" />
@@ -1902,7 +1902,7 @@ function display_configuration_settings_form(
     <div class='btn-group'>
         <button
             type="submit"
-            class="btn btn-secondary pull-right"
+            class="btn btn-secondary "
             name="step3" value="&lt; <?php echo get_lang('Previous'); ?>" >
                 <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
         </button>
@@ -2110,13 +2110,12 @@ function migrate(EntityManager $manager)
     $debug = true;
     $connection = $manager->getConnection();
     $to = null; // if $to == null then schema will be migrated to latest version
-    //echo '<pre>';
-    //try {
+
     // Loading migration configuration.
     $config = new PhpFile('./migrations.php');
     $dependency = DependencyFactory::fromConnection($config, new ExistingConnection($connection));
 
-    // Check if version table exists, use new version.
+    // Check if old "version" table exists from 1.11.x, use new version.
     $schema = $manager->getConnection()->getSchemaManager();
     $dropOldVersionTable = false;
     if ($schema->tablesExist('version')) {
@@ -2143,9 +2142,12 @@ function migrate(EntityManager $manager)
     $planCalculator = $dependency->getMigrationPlanCalculator();
     $migrations = $planCalculator->getMigrations();
     $lastVersion = $migrations->getLast();
+    //var_dump($lastVersion->getVersion());
+
     $plan = $dependency->getMigrationPlanCalculator()->getPlanUntilVersion($lastVersion->getVersion());
 
     foreach ($plan->getItems() as $item) {
+        error_log("Version to be executed: ".$item->getVersion());
         $item->getMigration()->setEntityManager($manager);
         $item->getMigration()->setContainer(Container::$container);
     }

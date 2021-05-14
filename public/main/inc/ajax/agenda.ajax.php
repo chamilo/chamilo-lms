@@ -157,15 +157,15 @@ switch ($action) {
             }
             $today = getdate();
             $year = (!empty($_GET['year']) ? (int) $_GET['year'] : null);
-            if (null == $year) {
+            if (null === $year) {
                 $year = $today['year'];
             }
             $month = (!empty($_GET['month']) ? (int) $_GET['month'] : null);
-            if (null == $month) {
+            if (null === $month) {
                 $month = $today['mon'];
             }
             $day = (!empty($_GET['day']) ? (int) $_GET['day'] : null);
-            if (null == $day) {
+            if (null === $day) {
                 $day = $today['mday'];
             }
             $monthName = $MonthsLong[$month - 1];

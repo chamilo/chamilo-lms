@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Text_CAPTCHA - creates a CAPTCHA for Turing tests.
  * Base class file for using Text_CAPTCHA.
@@ -11,7 +12,6 @@
  * @license  http://www.opensource.org/licenses/bsd-license.php BSD License
  * @link     http://pear.php.net/package/Text_CAPTCHA
  */
-//require_once 'Text/Password.php';
 
 /**
  * Text_CAPTCHA - creates a CAPTCHA for Turing tests.

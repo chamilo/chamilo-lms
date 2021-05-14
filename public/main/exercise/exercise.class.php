@@ -93,6 +93,7 @@ class Exercise
     public $autolaunch;
     public $exerciseCategoryId;
     public $pageResultConfiguration;
+    public $hideQuestionNumber;
     public $preventBackwards;
     public $currentQuestion;
     public $hideComment;
@@ -140,6 +141,7 @@ class Exercise
         $this->notifications = [];
         $this->exerciseCategoryId = 0;
         $this->pageResultConfiguration = null;
+        $this->hideQuestionNumber = 0;
         $this->preventBackwards = 0;
         $this->hideComment = false;
         $this->hideNoAnswer = false;
@@ -226,6 +228,8 @@ class Exercise
             if (!empty($object->page_result_configuration)) {
                 //$this->pageResultConfiguration = $object->page_result_configuration;
             }
+
+            $this->hideQuestionNumber = $object->hide_question_number == 1;
 
             if (isset($object->show_previous_button)) {
                 $this->showPreviousButton = 1 == $object->show_previous_button ? true : false;
@@ -1633,7 +1637,9 @@ class Exercise
             ->setSaveCorrectAnswers($saveCorrectAnswers)
             ->setPropagateNeg($propagate_neg)
             ->setHideQuestionTitle(1 === (int) $this->getHideQuestionTitle())
-            ->setQuestionSelectionType($this->getQuestionSelectionType());
+            ->setQuestionSelectionType($this->getQuestionSelectionType())
+            ->setHideQuestionNumber((int) $this->hideQuestionNumber)
+        ;
 
         $allow = api_get_configuration_value('allow_exercise_categories');
         if (true === $allow && !empty($this->getExerciseCategoryId())) {
@@ -2102,6 +2108,13 @@ class Exercise
                 ),
             ];
             $form->addGroup($group, null, get_lang('Results and feedback page configuration'));
+
+            $group = [
+                $form->createElement('radio', 'hide_question_number', null, get_lang('Yes'), '1'),
+                $form->createElement('radio', 'hide_question_number', null, get_lang('No'), '0'),
+            ];
+            $form->addGroup($group, null, get_lang('HideQuestionNumber'));
+
             $displayMatrix = 'none';
             $displayRandom = 'none';
             $selectionType = $this->getQuestionSelectionType();
@@ -2250,7 +2263,7 @@ class Exercise
             );
 
             $form->addElement('html', '<div class="clear">&nbsp;</div>');
-            $form->addElement('checkbox', 'review_answers', null, get_lang('Review my answers'));
+            $form->addCheckBox('review_answers', null, get_lang('Review my answers'));
             $form->addElement('html', '<div id="divtimecontrol"  style="display:'.$display.';">');
 
             // Timer control
@@ -2283,11 +2296,7 @@ class Exercise
                 ]
             );
             $form->addElement('html', '</div>');
-            $form->addCheckBox(
-                'prevent_backwards',
-                null,
-                get_lang('QuizPreventBackwards')
-            );
+            $form->addCheckBox('prevent_backwards', null, get_lang('QuizPreventBackwards'));
             $form->addElement(
                 'text',
                 'pass_percentage',
@@ -2324,15 +2333,11 @@ class Exercise
                 $form->addGroup($group, '', [get_lang('E-mail notifications')]);
             }
 
-            $form->addCheckBox(
-                'update_title_in_lps',
-                null,
-                get_lang('Update this title in learning paths')
-            );
+            $form->addCheckBox('update_title_in_lps', null, get_lang('Update this title in learning paths'));
 
             $defaults = [];
             if ('true' === api_get_setting('search_enabled')) {
-                $form->addElement('checkbox', 'index_document', '', get_lang('Index document text?'));
+                $form->addCheckBox('index_document', '', get_lang('Index document text?'));
                 $form->addSelectLanguage('language', get_lang('Document language for indexation'));
                 $specific_fields = get_specific_field_list();
 
@@ -2422,6 +2427,7 @@ class Exercise
                 $defaults['show_previous_button'] = $this->showPreviousButton();
                 $defaults['exercise_category_id'] = $this->getExerciseCategoryId();
                 $defaults['prevent_backwards'] = $this->getPreventBackwards();
+                $defaults['hide_question_number'] = $this->getHideQuestionNumber();
 
                 if (!empty($this->start_time)) {
                     $defaults['activate_start_date_check'] = 1;
@@ -2503,6 +2509,11 @@ class Exercise
     {
         // Feedback type.
         $feedback = [];
+        $warning = sprintf(
+            get_lang('TheSettingXWillChangeToX'),
+            get_lang('ShowResultsToStudents'),
+            get_lang('ShowScoreAndRightAnswer')
+        );
         $endTest = $form->createElement(
             'radio',
             'exerciseFeedbackType',
@@ -2511,7 +2522,8 @@ class Exercise
             EXERCISE_FEEDBACK_TYPE_END,
             [
                 'id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_END,
-                'onclick' => 'check_feedback()',
+                //'onclick' => 'if confirm() check_feedback()',
+                'onclick' => 'javascript:if(confirm('."'".addslashes($warning)."'".')) { check_feedback(); } else { return false;} ',
             ]
         );
 
@@ -2640,6 +2652,7 @@ class Exercise
         $this->setNotifications($form->getSubmitValue('notifications'));
         $this->setExerciseCategoryId($form->getSubmitValue('exercise_category_id'));
         $this->setPageResultConfiguration($form->getSubmitValues());
+        $this->setHideQuestionNumber($form->getSubmitValue('hide_question_number'));
         $this->preventBackwards = (int) $form->getSubmitValue('prevent_backwards');
 
         $this->start_time = null;
@@ -3214,12 +3227,14 @@ class Exercise
                 $endReminderValue = true;
             }
         }
+        $endTest = false;
         if (ALL_ON_ONE_PAGE == $this->type || $nbrQuestions == $questionNum || $endReminderValue) {
             if ($this->review_answers) {
                 $label = get_lang('ReviewQuestions');
                 $class = 'btn btn-success';
             } else {
-                $label = get_lang('End test');
+                $endTest = true;
+                $label = get_lang('End Test');
                 $class = 'btn btn-warning';
             }
         } else {
@@ -3282,10 +3297,15 @@ class Exercise
                     ]
                 );
             } else {
+                $attributes = ['type' => 'button', 'class' => $class, 'data-question' => $question_id];
+                $name = 'save_now';
+                if ($endTest && api_get_configuration_value('quiz_check_all_answers_before_end_test')) {
+                    $name = 'check_answers';
+                }
                 $buttonList[] = Display::button(
-                    'save_now',
+                    $name,
                     $label,
-                    ['type' => 'button', 'class' => $class, 'data-question' => $question_id]
+                    $attributes
                 );
             }
             $buttonList[] = '<span id="save_for_now_'.$question_id.'" class="exercise_save_mini_message"></span>';
@@ -3380,10 +3400,11 @@ class Exercise
      * So the time control will work.
      *
      * @param int $timeLeft
+     * @param string $redirectToUrl
      *
      * @return string
      */
-    public function showTimeControlJS($timeLeft)
+    public function showTimeControlJS($timeLeft, $redirectToUrl = '')
     {
         $timeLeft = (int) $timeLeft;
         $script = 'redirectExerciseToResult();';
@@ -3394,6 +3415,10 @@ class Exercise
                 $(\'[name="save_now"]\').trigger(\'click\');';
         }
 
+        $exerciseSubmitRedirect = '';
+        if (!empty($redirectToUrl)) {
+            $exerciseSubmitRedirect = "window.location = '$redirectToUrl'";
+        }
         return "<script>
             function openClockWarning() {
                 $('#clock_warning').dialog({
@@ -3426,6 +3451,7 @@ class Exercise
                 if ($('#exercise_form').length) {
                     $script
                 } else {
+                    $exerciseSubmitRedirect
                     // In exercise_reminder.php
                     final_submit();
                 }
@@ -4436,16 +4462,23 @@ class Exercise
                             $real_list[$realAnswer['iid']] = $realAnswer['answer'];
                         }
 
+                        $orderBy = ' ORDER BY iid ';
+                        if (DRAGGABLE == $answerType) {
+                            $orderBy = ' ORDER BY correct ';
+                        }
+
                         $sql = "SELECT iid, answer, correct, ponderation
                                 FROM $table_ans
                                 WHERE
                                     question_id = $questionId AND
                                     correct <> 0
-                                ORDER BY iid";
+                                $orderBy";
                         $result = Database::query($sql);
                         $options = [];
+                        $correctAnswers = [];
                         while ($row = Database::fetch_array($result, 'ASSOC')) {
                             $options[] = $row;
+                            $correctAnswers[$row['correct']] = $row['answer'];
                         }
 
                         $questionScore = 0;
@@ -4477,15 +4510,16 @@ class Exercise
                                         $questionScore += $i_answerWeighting;
                                         $totalScore += $i_answerWeighting;
                                         $user_answer = Display::label(get_lang('Correct'), 'success');
-                                        if ($this->showExpectedChoice()) {
+                                        if ($this->showExpectedChoice() && !empty($i_answer_id_auto)) {
                                             $user_answer = $answerMatching[$i_answer_id_auto];
                                         }
                                         $status = Display::label(get_lang('Correct'), 'success');
                                     } else {
                                         $user_answer = Display::label(get_lang('Incorrect'), 'danger');
-                                        if ($this->showExpectedChoice()) {
-                                            $data = $options[$real_list[$s_user_answer] - 1];
-                                            $user_answer = $data['answer'];
+                                        if ($this->showExpectedChoice() && !empty($s_user_answer)) {
+                                            /*$data = $options[$real_list[$s_user_answer] - 1];
+                                            $user_answer = $data['answer'];*/
+                                            $user_answer = $correctAnswers[$s_user_answer] ?? '';
                                         }
                                     }
                                 } else {
@@ -5737,7 +5771,11 @@ class Exercise
                             $quesId,
                             1,
                             $hotspotValue,
-                            $exerciseResultCoordinates[$quesId]
+                            $exerciseResultCoordinates[$quesId],
+                            false,
+                            0,
+                            $learnpath_id,
+                            $learnpath_item_id
                         );
                     } else {
                         if (0 == $final_answer) {
@@ -5752,7 +5790,11 @@ class Exercise
                                         $quesId,
                                         $idx,
                                         0,
-                                        $val
+                                        $val,
+                                        false,
+                                        0,
+                                        $learnpath_id,
+                                        $learnpath_item_id
                                     );
                                 }
                             }
@@ -5767,7 +5809,11 @@ class Exercise
                                         $quesId,
                                         $idx,
                                         $hotspotValue,
-                                        $val
+                                        $val,
+                                        false,
+                                        0,
+                                        $learnpath_id,
+                                        $learnpath_item_id
                                     );
                                 }
                             }
@@ -6053,7 +6099,10 @@ class Exercise
                             $idx,
                             $hotspotValue,
                             $val,
-                            false
+                            false,
+                            $this->id,
+                            $learnpath_id,
+                            $learnpath_item_id
                         );
                     }
                 } else {
@@ -8301,6 +8350,26 @@ class Exercise
         }
     }
 
+    /**
+     * Set the value to 1 to hide the question number.
+     *
+     * @param int $value
+     */
+    public function setHideQuestionNumber($value = 0)
+    {
+        $this->hideQuestionNumber = (int) $value;
+    }
+
+    /**
+     * Gets the value to hide or show the question number. If it does not exist, it is set to 0.
+     *
+     * @return int 1 if the question number must be hidden
+     */
+    public function getHideQuestionNumber()
+    {
+        return (int) $this->hideQuestionNumber;
+    }
+
     public function setPageResultConfiguration(array $values)
     {
         $pageConfig = api_get_configuration_value('allow_quiz_results_page_config');
@@ -8310,6 +8379,7 @@ class Exercise
                 'hide_question_score' => $values['hide_question_score'] ?? '',
                 'hide_total_score' => $values['hide_total_score'] ?? '',
                 'hide_category_table' => $values['hide_category_table'] ?? '',
+                'hide_correct_answered_questions' => $values['hide_correct_answered_questions'] ?? '',
             ];
             $this->pageResultConfiguration = $params;
         }
@@ -8396,6 +8466,9 @@ class Exercise
      */
     public function showExpectedChoiceColumn()
     {
+        if (true === $this->forceShowExpectedChoiceColumn) {
+            return true;
+        }
         if ($this->hideExpectedAnswer) {
             return false;
         }
@@ -8562,8 +8635,6 @@ class Exercise
      * @param int   $exerciseId
      * @param array $courseInfo
      * @param int   $sessionId
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
      *
      * @return bool
      */
@@ -10003,11 +10074,12 @@ class Exercise
         return $lpList;
     }
 
-    public function getReminderTable($questionList, $exercise_stat_info)
+    public function getReminderTable($questionList, $exercise_stat_info, $disableCheckBoxes = false)
     {
         $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
         $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
         $learnpath_item_view_id = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
+        $categoryId = isset($_REQUEST['category_id']) ? (int) $_REQUEST['category_id'] : 0;
 
         if (empty($exercise_stat_info)) {
             return '';
@@ -10028,7 +10100,11 @@ class Exercise
         foreach ($questionList as $questionId) {
             $objQuestionTmp = Question::read($questionId);
             $check_id = 'remind_list['.$questionId.']';
-            $attributes = ['id' => $check_id, 'onclick' => "save_remind_item(this, '$questionId');"];
+            $attributes = [
+                'id' => $check_id,
+                'onclick' => "save_remind_item(this, '$questionId');",
+                'data-question-id' => $questionId,
+            ];
             if (in_array($questionId, $remindList)) {
                 $attributes['checked'] = 1;
             }
@@ -10052,7 +10128,9 @@ class Exercise
 
             $label_attributes = [];
             $label_attributes['for'] = $check_id;
-            $questionTitle = Display::tag('label', $checkbox.$questionTitle, $label_attributes);
+            if (false === $disableCheckBoxes) {
+                $questionTitle = Display::tag('label', $checkbox.$questionTitle, $label_attributes);
+            }
             $table .= Display::div($questionTitle, ['class' => 'exercise_reminder_item ']);
         }
 
@@ -10068,8 +10146,21 @@ class Exercise
 
         function final_submit() {
             // Normal inputs.
-            window.location = "'.api_get_path(WEB_CODE_PATH).'exercise/exercise_result.php?'.api_get_cidreq(
-            ).'&exe_id='.$exeId.'&" + lp_data;
+            window.location = "'.api_get_path(WEB_CODE_PATH).'exercise/exercise_result.php?'.api_get_cidreq().'&exe_id='.$exeId.'&" + lp_data;
+        }
+
+        function selectAll() {
+            $("input[type=checkbox]").each(function () {
+                $(this).prop("checked", 1);
+                var question_id = $(this).data("question-id");
+                var action = "add";
+                $.ajax({
+                    url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=add_question_to_reminder",
+                    data: "question_id="+question_id+"&exe_id='.$exeId.'&action="+action,
+                    success: function(returnValue) {
+                    }
+                });
+            });
         }
 
         function changeOptionStatus(status)
@@ -10079,19 +10170,19 @@ class Exercise
             });
 
             var action = "";
-            var extraOption = "remove_all";
+            var option = "remove_all";
             if (status == 1) {
-                extraOption = "add_all";
+                option = "add_all";
             }
             $.ajax({
                 url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=add_question_to_reminder",
-                data: "option="+extraOption+"&exe_id='.$exeId.'&action="+action,
+                data: "option="+option+"&exe_id='.$exeId.'&action="+action,
                 success: function(returnValue) {
                 }
             });
         }
 
-        function review_questions() {
+        function reviewQuestions() {
             var isChecked = 1;
             $("input[type=checkbox]").each(function () {
                 if ($(this).prop("checked")) {
@@ -10104,7 +10195,7 @@ class Exercise
                 $("#message").addClass("warning-message");
                 $("#message").html("'.addslashes(get_lang('SelectAQuestionToReview')).'");
             } else {
-                window.location = "exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&reminder=2&" + lp_data;
+                window.location = "exercise_submit.php?'.api_get_cidreq().'&category_id='.$categoryId.'&exerciseId='.$exerciseId.'&reminder=2&" + lp_data;
             }
         }
 
@@ -10265,23 +10356,18 @@ class Exercise
 
         $labels = json_encode($labels);
 
-        // Default preset, after that colors are generated randomly. @todo improve colors. Use a js lib?
         $colorList = ChamiloApi::getColorPalette(true, true);
 
         $dataSetToJson = [];
         $counter = 0;
         foreach ($dataSet as $index => $resultsArray) {
-            $color = isset($colorList[$counter]) ? $colorList[$counter] : 'rgb('.rand(0, 255).', '.rand(
-                    0,
-                    255
-                ).', '.rand(0, 255).', 1.0)';
+            $color = isset($colorList[$counter]) ? $colorList[$counter] : 'rgb('.rand(0, 255).', '.rand(0, 255).', '.rand(0, 255).', 1.0)';
 
             $label = isset($dataSetLabels[$index]) ? $dataSetLabels[$index] : '';
             $background = str_replace('1.0', '0.2', $color);
             $dataSetToJson[] = [
                 'fill' => false,
                 'label' => $label,
-                //'label' =>  '".get_lang('Categories')."',
                 'backgroundColor' => $background,
                 'borderColor' => $color,
                 'pointBackgroundColor' => $color,
@@ -10346,26 +10432,46 @@ class Exercise
                 ";
     }
 
+
     /**
-     * Get number of questions in exercise by user attempt.
-     *
-     * @return int
+     * Returns true if the exercise is locked by percentage. an exercise attempt must be passed.
      */
-    private function countQuestionsInExercise()
+    public function isBlockedByPercentage(array $attempt = []): bool
     {
-        $lpId = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
-        $lpItemId = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
-        $lpItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
+        if (empty($attempt)) {
+            return false;
+        }
+        $extraFieldValue = new ExtraFieldValue('exercise');
+        $blockExercise = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $this->iId,
+            'blocking_percentage'
+        );
 
-        $trackInfo = $this->get_stat_track_exercise_info($lpId, $lpItemId, $lpItemViewId);
-
-        if (!empty($trackInfo)) {
-            $questionIds = explode(',', $trackInfo['data_tracking']);
-
-            return count($questionIds);
+        if (empty($blockExercise['value'])) {
+            return false;
         }
 
-        return $this->getQuestionCount();
+        $blockPercentage = (int) $blockExercise['value'];
+
+        if (0 === $blockPercentage) {
+            return false;
+        }
+
+        $resultPercentage = 0;
+
+        if (isset($attempt['exe_result']) && isset($attempt['exe_weighting'])) {
+            $weight = (int) $attempt['exe_weighting'];
+            $weight = (0 == $weight) ? 1 : $weight;
+            $resultPercentage = float_format(
+                ($attempt['exe_result'] / $weight) * 100,
+                1
+            );
+        }
+        if ($resultPercentage <= $blockPercentage) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -10375,7 +10481,7 @@ class Exercise
      *
      * @return array
      */
-    private function getQuestionOrderedList($adminView = false)
+    public function getQuestionOrderedList($adminView = false)
     {
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
@@ -10431,6 +10537,28 @@ class Exercise
         }
 
         return $questionList;
+    }
+
+    /**
+     * Get number of questions in exercise by user attempt.
+     *
+     * @return int
+     */
+    private function countQuestionsInExercise()
+    {
+        $lpId = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
+        $lpItemId = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
+        $lpItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
+
+        $trackInfo = $this->get_stat_track_exercise_info($lpId, $lpItemId, $lpItemViewId);
+
+        if (!empty($trackInfo)) {
+            $questionIds = explode(',', $trackInfo['data_tracking']);
+
+            return count($questionIds);
+        }
+
+        return $this->getQuestionCount();
     }
 
     /**
@@ -10579,14 +10707,14 @@ class Exercise
 
             if (!empty($question) && !empty($answer) && FREE_ANSWER == $answer_type) {
                 $open_question_list .=
-                    '<tr>'
-                    .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>'
-                    .'<td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>'
-                    .'</tr>'
-                    .'<tr>'
-                    .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>'
-                    .'<td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>'
-                    .'</tr>';
+                    '<tr>
+                    <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>
+                    <td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>
+                    </tr>
+                    <tr>
+                    <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>
+                    <td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>
+                    </tr>';
             }
         }
 
@@ -10606,7 +10734,7 @@ class Exercise
                 $msg
             );
 
-            if ('learnpath' != $origin) {
+            if ('learnpath' !== $origin) {
                 $msg .= '<br /><a href="#url#">'.get_lang(
                         'Click this link to check the answer and/or give feedback'
                     ).'</a>';
@@ -10780,13 +10908,22 @@ class Exercise
             ['id' => 'result_disabled_0']
         );
 
+        $warning = sprintf(
+            get_lang('TheSettingXWillChangeToX'),
+            get_lang('FeedbackType'),
+            get_lang('NoFeedback')
+        );
         $resultDisabledGroup[] = $form->createElement(
             'radio',
             'results_disabled',
             null,
             get_lang('Exam mode: Do not show score nor answers'),
             RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS,
-            ['id' => 'result_disabled_1', 'onclick' => 'check_results_disabled()']
+            [
+                'id' => 'result_disabled_1',
+                //'onclick' => 'check_results_disabled()'
+                'onclick' => 'javascript:if(confirm('."'".addslashes($warning)."'".')) { check_results_disabled(); } else { return false;} ',
+            ]
         );
 
         $resultDisabledGroup[] = $form->createElement(
@@ -10795,7 +10932,11 @@ class Exercise
             null,
             get_lang('Practice mode: Show score only, by category if at least one is used'),
             RESULT_DISABLE_SHOW_SCORE_ONLY,
-            ['id' => 'result_disabled_2', 'onclick' => 'check_results_disabled()']
+            [
+                'id' => 'result_disabled_2',
+                //'onclick' => 'check_results_disabled()'
+                'onclick' => 'javascript:if(confirm('."'".addslashes($warning)."'".')) { check_results_disabled(); } else { return false;} ',
+            ]
         );
 
         if (in_array($this->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
@@ -10827,7 +10968,11 @@ class Exercise
                 'Do not show the score (only when user finishes all attempts) but show feedback for each attempt.'
             ),
             RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
-            ['id' => 'result_disabled_5', 'onclick' => 'check_results_disabled()']
+            [
+                'id' => 'result_disabled_5',
+                //'onclick' => 'check_results_disabled()'
+                'onclick' => 'javascript:if(confirm('."'".addslashes($warning)."'".')) { check_results_disabled(); } else { return false;} ',
+            ]
         );
 
         $resultDisabledGroup[] = $form->createElement(

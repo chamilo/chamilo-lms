@@ -39,6 +39,7 @@ $courseUserList = CourseManager::get_courses_list_by_user_id($user_id);
 $dates = $issues = '';
 $sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
 $courseCode = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : null;
+$allowCareerUser = api_get_configuration_value('allow_career_users');
 
 if (!empty($courseUserList)) {
     $items = MySpace::get_connections_from_course_list(
@@ -79,14 +80,18 @@ if (!empty($courseUserList)) {
 }
 
 $content = Tracking::show_user_progress($user_id, $sessionId);
-
 $showAllSessionCourses = api_get_configuration_value('my_progress_session_show_all_courses');
 
 if ($showAllSessionCourses && !empty($sessionId) && empty($courseCode)) {
     $userSessionCourses = UserManager::get_courses_list_by_session($user_id, $sessionId);
 
     foreach ($userSessionCourses as $userSessionCourse) {
-        $content .= Tracking::show_course_detail($user_id, $userSessionCourse['course_code'], $sessionId);
+        $content .= Tracking::show_course_detail(
+            $user_id,
+            $userSessionCourse['course_code'],
+            $sessionId,
+            $allowCareerUser
+        );
     }
 } else {
     $content .= Tracking::show_course_detail($user_id, $courseCode, $sessionId);
@@ -123,9 +128,7 @@ if (empty($content)) {
     $message = Display::return_message(get_lang('NoDataAvailable'), 'warning');
 }
 
-$show = api_get_configuration_value('allow_career_users');
-
-if ($show) {
+if ($allowCareerUser) {
     $careers = UserManager::getUserCareers($user_id);
 
     if (!empty($careers)) {

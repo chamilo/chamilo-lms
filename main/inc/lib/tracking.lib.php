@@ -5434,10 +5434,11 @@ class Tracking
      * @param int    $user_id
      * @param string $course_code
      * @param int    $session_id
+     * @param bool   $showDiagram
      *
      * @return string html code
      */
-    public static function show_course_detail($user_id, $course_code, $session_id)
+    public static function show_course_detail($user_id, $course_code, $session_id, $showDiagram = false)
     {
         $html = '';
         if (isset($course_code)) {
@@ -5450,6 +5451,13 @@ class Tracking
 
             $html .= '<a name="course_session_data"></a>';
             $html .= Display::page_subheader2($course_info['title']);
+
+            if ($showDiagram && !empty($session_id)) {
+                $visibility = api_get_session_visibility($session_id);
+                if (SESSION_AVAILABLE === $visibility) {
+                    $html .= Display::page_subheader2($course_info['title']);
+                }
+            }
 
             // Course details
 

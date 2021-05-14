@@ -866,7 +866,7 @@ class Career extends Model
      *
      * @return string
      */
-    public static function parseVertexList($groupCourseList, $vertexList, $addRow = 0, &$graph, $group, &$connections, $userResult)
+    public static function parseVertexList($groupCourseList, $vertexList, $addRow, &$graph, $group, &$connections, $userResult)
     {
         if (empty($vertexList)) {
             return '';

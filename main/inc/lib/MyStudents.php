@@ -20,7 +20,7 @@ class MyStudents
         }
 
         $webCodePath = api_get_path(WEB_CODE_PATH);
-        $langDiagram = get_lang('Diagram');
+        $iconDiagram = Display::return_icon('multiplicate_survey.png', get_lang('Diagram'));
 
         $headers = [
             get_lang('Career'),
@@ -28,12 +28,12 @@ class MyStudents
         ];
 
         $data = array_map(
-            function (array $careerData) use ($webCodePath, $langDiagram) {
+            function (array $careerData) use ($webCodePath, $iconDiagram) {
                 $url = $webCodePath.'user/career_diagram.php?career_id='.$careerData['id'];
 
                 return [
                     $careerData['name'],
-                    Display::url($langDiagram, $url),
+                    Display::url($iconDiagram, $url),
                 ];
             },
             $careers

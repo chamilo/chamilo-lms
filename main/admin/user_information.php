@@ -693,11 +693,13 @@ if (DRH == $user['status']) {
 }
 $socialTool = api_get_setting('allow_social_tool');
 $tpl->assign('social_tool', $socialTool);
-
 $tpl->assign('user', $userInfo);
 $layoutTemplate = $tpl->get_template('admin/user_information.tpl');
 $content = $tpl->fetch($layoutTemplate);
 echo $content;
+if (api_get_configuration_value('allow_career_users')) {
+    echo MyStudents::getBlockForCareers($userId);
+}
 
 echo Display::page_subheader(get_lang('SessionList'), null, 'h3', ['class' => 'section-title']);
 echo $sessionInformation;
@@ -711,19 +713,5 @@ echo Tracking::displayUserSkills(
     0,
     0
 );
-if (api_get_configuration_value('allow_career_users')) {
-    $careers = UserManager::getUserCareers($userId);
-    if (!empty($careers)) {
-        echo Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
-        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
-        $table->setHeaderContents(0, 0, get_lang('Career'));
-        $row = 1;
-        foreach ($careers as $careerData) {
-            $table->setCellContents($row, 0, $careerData['name']);
-            $row++;
-        }
-        echo $table->toHtml();
-    }
-}
 
 Display::display_footer();

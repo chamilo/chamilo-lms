@@ -311,6 +311,37 @@ class PortfolioController
             $hook->setEventData(['portfolio' => $portfolio]);
             $hook->notifyItemAdded();
 
+            if (1 == api_get_course_setting('email_alert_teachers_new_post')) {
+                if ($this->session) {
+                    $messageCourseTitle = "{$this->course->getTitle()} ({$this->session->getName()})";
+
+                    $teachers = SessionManager::getCoachesByCourseSession(
+                        $this->session->getId(),
+                        $this->course->getId()
+                    );
+                    $userIdListToSend = array_values($teachers);
+                } else {
+                    $messageCourseTitle = $this->course->getTitle();
+
+                    $teachers = CourseManager::get_teacher_list_from_course_code($this->course->getCode());
+
+                    $userIdListToSend = array_keys($teachers);
+                }
+
+                $messageSubject = sprintf(get_lang('PortfolioAlertNewPostSubject'), $messageCourseTitle);
+
+                foreach ($userIdListToSend as $userIdToSend) {
+                    $messageContent = sprintf(
+                        get_lang('PortfolioAlertNewPostContent'),
+                        $this->owner->getCompleteName(),
+                        $messageCourseTitle,
+                        $this->baseUrl.http_build_query(['action' => 'view', 'id' => $portfolio->getId()])
+                    );
+
+                    MessageManager::send_message_simple($userIdToSend, $messageSubject, $messageContent, 0, false, false, [], false);
+                }
+            }
+
             Display::addFlash(
                 Display::return_message(get_lang('PortfolioItemAdded'), 'success')
             );

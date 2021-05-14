@@ -1,4 +1,6 @@
 @import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 @layer base {
     [type='text'],
@@ -24,9 +26,6 @@
       @apply border-gray-300 text-blue-600 focus:ring-blue-500;
     }
 }
-
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
 
 // Disable bootstrap
 //@import 'bootstrap.scss';

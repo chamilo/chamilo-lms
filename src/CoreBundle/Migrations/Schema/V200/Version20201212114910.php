@@ -38,6 +38,8 @@ final class Version20201212114910 extends AbstractMigrationChamilo
 
         $adminId = $admin->getId();
         $userList[$adminId] = $admin;
+
+        $this->write('Adding admin user');
         if (false === $admin->hasResourceNode()) {
             $resourceNode = $userRepo->addUserToResourceNode($adminId, $adminId);
             $em->persist($resourceNode);
@@ -58,11 +60,17 @@ final class Version20201212114910 extends AbstractMigrationChamilo
         $batchSize = self::BATCH_SIZE;
         $counter = 1;
         $q = $em->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\User u');
+
+        $this->write('Migrating users');
         /** @var User $userEntity */
         foreach ($q->toIterable() as $userEntity) {
             if ($userEntity->hasResourceNode()) {
                 continue;
             }
+
+            $userId = $userEntity->getId();
+            $this->write("Migrating user: #$userId");
+
             $userEntity->setUuid(Uuid::v4());
             $creatorId = $userEntity->getCreatorId();
             $creator = null;
@@ -76,8 +84,9 @@ final class Version20201212114910 extends AbstractMigrationChamilo
                 $creator = $admin;
             }
 
-            $resourceNode = $userRepo->addUserToResourceNode($adminId, $creator->getId());
+            $resourceNode = $userRepo->addUserToResourceNode($userId, $creator->getId());
             $em->persist($resourceNode);
+
             if (0 === $counter % $batchSize) {
                 $em->flush();
                 $em->clear(); // Detaches all objects from Doctrine!

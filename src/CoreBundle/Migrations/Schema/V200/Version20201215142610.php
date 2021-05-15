@@ -151,7 +151,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
             $em->flush();
             $em->clear();
 
-            $courseAdmin = $userRepo->find($courseAdmin->getId());
+            //$courseAdmin = $userRepo->find($courseAdmin->getId());
 
             $sql = "SELECT * FROM c_quiz_question WHERE c_id = {$courseId}
                     ORDER BY iid";

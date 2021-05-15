@@ -51,7 +51,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
         $groupList = [];
         $sessionList = [];
         $batchSize = self::BATCH_SIZE;
-        $admin = $this->getAdmin();
+
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
@@ -73,7 +73,6 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     continue;
                 }
 
-                $resourceNode = null;
                 $parent = null;
                 if ('.' !== \dirname($documentPath)) {
                     $parentId = DocumentManager::get_document_id(
@@ -88,6 +87,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                 if (null === $parent) {
                     $parent = $course;
                 }
+                $admin = $this->getAdmin();
 
                 $result = $this->fixItemProperty('document', $documentRepo, $course, $admin, $document, $parent);
 
@@ -97,8 +97,8 @@ final class Version20201212203625 extends AbstractMigrationChamilo
 
                 $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/document/'.$documentPath;
                 $this->addLegacyFileToResource($filePath, $documentRepo, $document, $documentId);
-
                 $em->persist($document);
+
                 if (0 === $counter % $batchSize) {
                     $em->flush();
                     $em->clear();

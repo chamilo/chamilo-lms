@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
@@ -15,9 +16,22 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20 extends AbstractMigrationChamilo
 {
+    public function getDescription(): string
+    {
+        return 'Basic changes';
+    }
+
     public function up(Schema $schema): void
     {
         $this->addSql('set sql_mode=""');
+
+        $container = $this->getContainer();
+        $doctrine = $container->get('doctrine');
+        $em = $doctrine->getManager();
+        /** @var Connection $connection */
+        /*$connection = $em->getConnection();
+        $sql = "SELECT * FROM c_quiz WHERE iid <> id";
+        $result = $connection->executeQuery($sql);*/
 
         $table = $schema->getTable('user');
         if (false === $table->hasColumn('uuid')) {
@@ -104,10 +118,10 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('UPDATE c_forum_post SET visible = 0 WHERE visible IS NULL');
         $this->addSql('ALTER TABLE c_forum_post CHANGE visible visible TINYINT(1) NOT NULL');
 
-        $this->addSql('UPDATE c_link SET title = "No name" WHERE title IS NULL');
+        $this->addSql('UPDATE c_link SET title = "No title" WHERE title IS NULL OR title = "" OR title = "/" ');
         $this->addSql('ALTER TABLE c_link CHANGE title title VARCHAR(255) NOT NULL');
 
-        $this->addSql('UPDATE c_document SET title = "No name" WHERE title IS NULL');
+        $this->addSql('UPDATE c_document SET title = "No title" WHERE title IS NULL OR title = "" OR title = "/" ');
         $this->addSql('ALTER TABLE c_document CHANGE title title VARCHAR(255) NOT NULL');
 
         $this->addSql('UPDATE c_forum_thread SET thread_title = "No name" WHERE thread_title IS NULL');

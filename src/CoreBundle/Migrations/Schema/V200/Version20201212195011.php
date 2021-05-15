@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CToolRepository;
@@ -32,21 +33,26 @@ final class Version20201212195011 extends AbstractMigrationChamilo
         $em = $doctrine->getManager();
         /** @var Connection $connection */
         $connection = $em->getConnection();
+
         $courseRepo = $container->get(CourseRepository::class);
         $sessionRepo = $container->get(SessionRepository::class);
         $toolRepo = $container->get(CToolRepository::class);
         $urlRepo = $em->getRepository(AccessUrl::class);
+        $userRepo = $container->get(UserRepository::class);
 
         $batchSize = self::BATCH_SIZE;
         $admin = $this->getAdmin();
+        $adminId = $admin->getId();
 
         // Adding courses to the resource node tree.
         $urls = $urlRepo->findAll();
+
         /** @var AccessUrl $url */
         foreach ($urls as $url) {
             $counter = 1;
-            $url = $urlRepo->find($url->getId());
-            $accessUrlRelCourses = $url->getCourses();
+            /** @var AccessUrl $urlEntity */
+            $urlEntity = $urlRepo->find($url->getId());
+            $accessUrlRelCourses = $urlEntity->getCourses();
             /** @var AccessUrlRelCourse $accessUrlRelCourse */
             foreach ($accessUrlRelCourses as $accessUrlRelCourse) {
                 $course = $accessUrlRelCourse->getCourse();
@@ -54,7 +60,9 @@ final class Version20201212195011 extends AbstractMigrationChamilo
                 if ($course->hasResourceNode()) {
                     continue;
                 }
-                $courseRepo->addResourceNode($course, $admin, $url);
+                $urlEntity = $urlRepo->find($url->getId());
+                $adminEntity = $userRepo->find($adminId);
+                $courseRepo->addResourceNode($course, $adminEntity, $urlEntity);
                 $em->persist($course);
 
                 // Add groups.
@@ -66,6 +74,7 @@ final class Version20201212195011 extends AbstractMigrationChamilo
                 $counter++;
             }
         }
+
         $em->flush();
         $em->clear();
 

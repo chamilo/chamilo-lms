@@ -2179,17 +2179,6 @@ function migrate(EntityManager $manager)
     }
 
     return true;
-    /*} catch (Exception $ex) {
-        if ($debug) {
-            echo "ERROR: {$ex->getMessage()}<br>";
-
-            return false;
-        }
-    }*/
-
-//    echo '</pre>';
-
-    return false;
 }
 
 /**

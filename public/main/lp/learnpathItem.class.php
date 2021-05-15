@@ -595,7 +595,7 @@ class learnpathItem
                 $iva_table = Database::get_course_table(TABLE_LP_IV_INTERACTION);
                 $sql = "SELECT count(iid) as count
                         FROM $iva_table
-                        WHERE c_id = $courseId AND lp_iv_id = $lp_iv_id ";
+                        WHERE lp_iv_id = $lp_iv_id ";
                 $res_sql = Database::query($sql);
                 if (Database::num_rows($res_sql) > 0) {
                     $row = Database::fetch_array($res_sql);

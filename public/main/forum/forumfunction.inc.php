@@ -5416,12 +5416,12 @@ function count_number_of_post_in_thread($thread_id)
 function count_number_of_post_for_user_thread($thread_id, $user_id)
 {
     $table_posts = Database::get_course_table(TABLE_FORUM_POST);
-    $course_id = api_get_course_int_id();
     $sql = "SELECT count(iid) as count
             FROM $table_posts
-            WHERE c_id = $course_id AND
+            WHERE
                   thread_id=".(int) $thread_id.' AND
-                  poster_id = '.(int) $user_id.' AND visible = 1 ';
+                  poster_id = '.(int) $user_id.' AND
+                  visible = 1 ';
     $result = Database::query($sql);
     $count = 0;
     if (Database::num_rows($result) > 0) {

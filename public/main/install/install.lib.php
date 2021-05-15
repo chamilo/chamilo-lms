@@ -2142,7 +2142,6 @@ function migrate(EntityManager $manager)
     $planCalculator = $dependency->getMigrationPlanCalculator();
     $migrations = $planCalculator->getMigrations();
     $lastVersion = $migrations->getLast();
-    //var_dump($lastVersion->getVersion());
 
     $plan = $dependency->getMigrationPlanCalculator()->getPlanUntilVersion($lastVersion->getVersion());
 

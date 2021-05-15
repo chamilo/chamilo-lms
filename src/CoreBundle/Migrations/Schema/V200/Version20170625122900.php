@@ -43,6 +43,11 @@ class Version20170625122900 extends AbstractMigrationChamilo
             //$this->addSql('ALTER TABLE c_document DROP id, DROP c_id, DROP path, DROP size, DROP session_id');
         }
 
+        $this->addSql('ALTER TABLE c_document CHANGE c_id c_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_document CHANGE path path VARCHAR(255) DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_document CHANGE size size INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_document CHANGE session_id session_id INT DEFAULT NULL');
+
         if (false === $table->hasIndex('idx_cdoc_type')) {
             $this->addSql('CREATE INDEX idx_cdoc_type ON c_document (filetype)');
         }

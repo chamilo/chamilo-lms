@@ -16,6 +16,7 @@ use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Chamilo\CourseBundle\Repository\CLpCategoryRepository;
+use Chamilo\CourseBundle\Repository\CLpItemRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
@@ -42,9 +43,9 @@ final class Version20201216122012 extends AbstractMigrationChamilo
         $sessionRepo = $container->get(SessionRepository::class);
         $groupRepo = $container->get(CGroupRepository::class);
         $userRepo = $container->get(UserRepository::class);
+        $lpItemRepo = $container->get(CLpItemRepository::class);
 
-        $lpItemRepo = $container->get(CLpItem::class);
-
+        $batchSize = self::BATCH_SIZE;
         $admin = $this->getAdmin();
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
@@ -86,21 +87,26 @@ final class Version20201216122012 extends AbstractMigrationChamilo
             $em->flush();
             $em->clear();
 
+            // AND iid = 242 with error
             // c_lp.
             $sql = "SELECT * FROM c_lp WHERE c_id = {$courseId}
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $lps = $result->fetchAllAssociative();
+            $counter = 1;
+
+            $course = $courseRepo->find($courseId);
+            $admin = $this->getAdmin();
+
             foreach ($lps as $lp) {
-                $lpId = $lp['iid'];
+                $lpId = (int) $lp['iid'];
+                error_log("LP #$lpId");
 
                 /** @var CLp $resource */
                 $resource = $lpRepo->find($lpId);
                 if ($resource->hasResourceNode()) {
                     continue;
                 }
-
-                $course = $courseRepo->find($courseId);
 
                 $result = $this->fixItemProperty(
                     'learnpath',
@@ -116,11 +122,11 @@ final class Version20201216122012 extends AbstractMigrationChamilo
                 }
 
                 $em->persist($resource);
-                $em->flush();
+                //$em->flush();
 
-                $itemRoot = $lpItemRepo->getItemRoot($lpId);
+                $rootItem = $lpItemRepo->getRootItem($lpId);
 
-                if (!empty($itemRoot)) {
+                if (null === $rootItem) {
                     continue;
                 }
 
@@ -131,23 +137,29 @@ final class Version20201216122012 extends AbstractMigrationChamilo
                     ->setLp($resource)
                     ->setItemType('root');
                 $em->persist($lpItem);
-                $em->flush();
 
                 // Migrate c_lp_item
-                $sql = "SELECT * FROM c_lp_item WHERE lp_id = $lpId
+                $sql = "SELECT * FROM c_lp_item WHERE lp_id = $lpId AND path <> 'root'
                         ORDER BY display_order";
-
                 $resultItems = $connection->executeQuery($sql);
                 $lpItems = $resultItems->fetchAllAssociative();
                 $orderList = [];
                 foreach ($lpItems as $item) {
+                    var_dump($item);
                     $object = new \stdClass();
                     $object->id = $item['iid'];
-                    $object->parent_id = $item['parentId'];
+                    $object->parent_id = (int) $item['parent_item_id'];
                     $orderList[] = $object;
                 }
 
-                \learnpath::sortItemByOrderList($lpId, $orderList);
+                \learnpath::sortItemByOrderList($lpItem, $orderList, false);
+
+                if (0 === $counter % $batchSize) {
+                    $em->flush();
+                    $em->clear(); // Detaches all objects from Doctrine!
+                }
+                $counter++;
+                $em->flush();
             }
         }
     }

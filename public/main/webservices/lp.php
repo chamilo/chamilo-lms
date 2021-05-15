@@ -471,7 +471,7 @@ function WSDeleteLp($params)
         if (!empty($items)) {
             /** @var $item learnpathItem */
             foreach ($items as $itemId) {
-                $item = new learnpathItem($lp, $itemId, $courseId);
+                $item = new learnpathItem($itemId);
 
                 if ($item) {
                     $documentId = $item->get_path();

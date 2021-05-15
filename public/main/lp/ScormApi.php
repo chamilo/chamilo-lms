@@ -667,7 +667,7 @@ class ScormApi
             if ($debug > 1) {
                 error_log('In switch_item_details - generating new item object', 0);
             }
-            $mylpi = new learnpathItem($new_item_id, $user_id);
+            $mylpi = new learnpathItem($new_item_id);
             $mylpi->set_lp_view($view_id);
         }
         /*

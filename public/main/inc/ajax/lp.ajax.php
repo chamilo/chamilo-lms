@@ -80,7 +80,7 @@ switch ($action) {
             exit;
         }
 
-        $parent = $lpItemRepo->getItemRoot($lpId);
+        $parent = $lpItemRepo->getRootItem($lpId);
 
         $learningPath = new learnpath($lp, api_get_course_info(), api_get_user_id());
         if ($learningPath) {
@@ -130,15 +130,16 @@ switch ($action) {
                 exit;
             }
 
-            learnpath::sortItemByOrderList($lpId, $orderList);
+            $lpItemRepo = Container::getLpItemRepository();
+            $rootItem = $lpItemRepo->getRootItem($lpId);
+            learnpath::sortItemByOrderList($rootItem, $orderList);
 
             echo Display::return_message(get_lang('Saved'), 'confirm');
         }
         break;
     case 'get_lp_item_tree':
         if (api_is_allowed_to_edit(null, true)) {
-            $parent = $lpItemRepo->getItemRoot($lpId);
-
+            $parent = $lpItemRepo->getRootItem($lpId);
             $learningPath = new learnpath($lp, api_get_course_info(), api_get_user_id());
             if ($learningPath) {
                 echo $learningPath->getBuildTree(true, true);

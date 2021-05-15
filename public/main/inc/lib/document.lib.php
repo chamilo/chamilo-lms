@@ -4571,7 +4571,7 @@ class DocumentManager
                     WHERE
                         l.c_id = $course_id AND
                         docs.filetype = 'folder' AND
-                        path IN ('".$folder_sql."') AND
+                        n.path IN ('".$folder_sql."') AND
                         l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."')
                          ";
 

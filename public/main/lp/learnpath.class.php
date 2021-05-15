@@ -263,7 +263,7 @@ class learnpath
                         break;
                     case 1:
                     default:
-                        $oItem = new learnpathItem($itemId, $course_id, $item);
+                        $oItem = new learnpathItem(null, $item);
                         if (is_object($oItem)) {
                             $my_item_id = $oItem->get_id();
                             // Moved down to when we are sure the item_view exists.
@@ -2646,7 +2646,7 @@ class learnpath
     public function getListArrayToc($toc_list = [])
     {
         $lpItemRepo = Container::getLpItemRepository();
-        $itemRoot = $lpItemRepo->getItemRoot($this->get_id());
+        $itemRoot = $lpItemRepo->getRootItem($this->get_id());
         $options = [
             'decorate' => false,
         ];
@@ -5142,7 +5142,7 @@ class learnpath
             ICON_SIZE_TINY
         );
         $lpItemRepo = Container::getLpItemRepository();
-        $itemRoot = $lpItemRepo->getItemRoot($this->get_id());
+        $itemRoot = $lpItemRepo->getRootItem($this->get_id());
 
         $options = [
             'decorate' => true,
@@ -6721,7 +6721,7 @@ class learnpath
 
         $displayOrder = $lpItem->getDisplayOrder();
         $lpItemRepo = Container::getLpItemRepository();
-        $itemRoot = $lpItemRepo->getItemRoot($this->get_id());
+        $itemRoot = $lpItemRepo->getRootItem($this->get_id());
         $em = Database::getManager();
 
         $currentItemId = $itemId;
@@ -9289,28 +9289,26 @@ class learnpath
      *
      * @param array $orderList A associative array with id and parent_id keys.
      */
-    public static function sortItemByOrderList(int $lpId, array $orderList = [])
+    public static function sortItemByOrderList(CLpItem $rootItem, array $orderList = [], $flush = true)
     {
         if (empty($orderList)) {
             return true;
         }
-        //echo '<pre>';        var_dump($orderList);
         $lpItemRepo = Container::getLpItemRepository();
-        $rootParent = $lpItemRepo->getItemRoot($lpId);
-
+        echo '<pre>';
         /*$previous = 2;
         $next = 0;
-        $rootParent->setPreviousItemId(1);
-        $last = $this->updateList($orderList, $rootParent, $previous, $next);
-        $rootParent->setNextItemId($last + 1);
+        $rootItem->setPreviousItemId(1);
+        $last = $this->updateList($orderList, $rootItem, $previous, $next);
+        $rootItem->setNextItemId($last + 1);
 */
         $em = Database::getManager();
         //echo '<pre>';
         //var_dump($orderList);
-//        $em->persist($rootParent);
+//        $em->persist($rootItem);
 
-        /*$node = new \Tree\Node\Node($rootParent->getIid());
-        $parentList[$rootParent->getIid()] = $node;
+        /*$node = new \Tree\Node\Node($rootItem->getIid());
+        $parentList[$rootItem->getIid()] = $node;
 
         foreach ($orderList as $item) {
             $itemId = $item->id ?? 0;
@@ -9320,8 +9318,8 @@ class learnpath
             $parentId = $item->parent_id ?? 0;
 
             if (empty($parentId)) {
-                $parent = $rootParent;
-                $parentId = $rootParent->getIid();
+                $parent = $rootItem;
+                $parentId = $rootItem->getIid();
             } else {
                 //$parent = $lpItemRepo->find($parentId);
             }
@@ -9346,20 +9344,23 @@ class learnpath
 exit;*/
 
         $counter = 2;
-        /*$rootParent->setPreviousItemId(1);
-        $rootParent->setDisplayOrder(0);
-        $rootParent->setLaunchData(1);*/
+        /*$rootItem->setPreviousItemId(1);
+        $rootItem->setDisplayOrder(0);
+        $rootItem->setLaunchData(1);*/
         //echo '<pre>';
-        $rootParent->setDisplayOrder(1);
-        //$rootParent->setNextItemId(null);
-        //$rootParent->setPreviousItemId(null);
+        $rootItem->setDisplayOrder(1);
+        $rootItem->setPreviousItemId(0);
+        $em->persist($rootItem);
+
+        //$rootItem->setNextItemId(null);
+        //$rootItem->setPreviousItemId(null);
         foreach ($orderList as $item) {
-            $itemId  = $item->id ?? 0;
+            $itemId = $item->id ?? 0;
             if (empty($itemId)) {
                 continue;
             }
             $parentId = $item->parent_id ?? 0;
-            $parent = $rootParent;
+            $parent = $rootItem;
             if (!empty($parentId)) {
                 $parentExists = $lpItemRepo->find($parentId);
                 if (null !== $parentExists) {
@@ -9367,21 +9368,31 @@ exit;*/
                 }
             }
 
-            if (isset($parentOrder[$parent->getIid()])) {
+            /*if (isset($parentOrder[$parent->getIid()])) {
                 $parentOrder[$parent->getIid()]++;
             } else {
                 $parentOrder[$parent->getIid()] = 0;
-            }
-            /** @var CLpItem $item */
-            $item = $lpItemRepo->find($itemId);
+            }*/
+            /** @var CLpItem $itemEntity */
+            $itemEntity = $lpItemRepo->find($itemId);
 
-            $previousId = 2;
+            /*$previousId = 2;
             if (isset($previous[$counter - 1])) {
                 $previousId = $previous[$counter - 1];
             }
-            $previous[$counter] = $counter + 2;
+            $previous[$counter] = $counter + 2;*/
 
-            $item->setParent($parent);
+            $itemEntity->setParent($parent);
+            $previousId = $itemEntity->getPreviousItemId();
+            if (null === $previousId) {
+                $itemEntity->setPreviousItemId(0);
+            }
+
+            $nextId = $itemEntity->getNextItemId();
+            if (null === $nextId) {
+                $itemEntity->setNextItemId(0);
+            }
+
             //$item->setPreviousItemId($previousId);
             //$item->setNextItemId($counter + 1);
             //$item->setDisplayOrder($parentOrder[$parent->getIid()]);
@@ -9389,36 +9400,38 @@ exit;*/
             //$item->setPreviousItemId(null);
             //$item->setNextItemId(null);
             //$item->setPreviousItemId($previousId);
-            $item->setDisplayOrder($counter);
+            $itemEntity->setDisplayOrder($counter);
             //var_dump($parent->getIid(), $parent->getTitle());
 //            $lpItemRepo->persistAsLastChildOf($item, $parent);
             //$lpItemRepo->persistAs();
             //$lpItemRepo->persistAsFirstChildOf($item, $parent);
             //$em->flush();
             //$lpItemRepo->moveDown($item, true);
-            $em->persist($item);
+            $em->persist($itemEntity);
+            if ($flush) {
+                $em->flush();
+            }
+            //$em->flush();
             $counter++;
         }
 
-        //$rootParent->setNextItemId($counter+1);
-        $em->persist($rootParent);
-        $em->flush();
-        //var_dump($lpItemRepo->verify());
-        //$lpItemRepo->reorder($rootParent, 'displayOrder', 'ASC', false);
-        //$lpItemRepo->reorder($rootParent);
+        //$rootItem->setNextItemId($counter+1);
+
         //$em->flush();
         //var_dump($lpItemRepo->verify());
-        $lpItemRepo->recoverNode($rootParent, 'displayOrder');
-        $em->flush();
+        //$lpItemRepo->reorder($rootItem, 'displayOrder', 'ASC', false);
+        //$lpItemRepo->reorder($rootItem);
+        //$em->flush();
+        var_dump($lpItemRepo->verify());
+        $lpItemRepo->recoverNode($rootItem, 'displayOrder');
+        $em->persist($rootItem);
+        if ($flush) {
+            $em->flush();
+        }
+        //$em->flush();
         //var_dump($lpItemRepo->verify());
 
         return true;
-        /*
-        $lpItemRepo->recoverNode($rootParent);
-        var_dump($lpItemRepo->verify());
-
-        $em->flush();
-        exit;*/
     }
 
     /**

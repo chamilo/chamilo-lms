@@ -94,19 +94,13 @@ class learnpathItem
      * Setting an lp_view will finalise the item_view data collection.
      *
      * @param int                $id           Learning path item ID
-     * @param int                $courseId     Course int id
      * @param CLpItem|array|null $item_content Contents of the item
      */
-    public function __construct(
-        $id,
-        $courseId = 0,
-        $item_content = null
-    ) {
+    public function __construct(        $id   , $item_content = null) {
         $items_table = Database::get_course_table(TABLE_LP_ITEM);
         $id = (int) $id;
-        $this->courseId = $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
 
-        if (empty($item_content)) {
+        if (!empty($id)) {
             $sql = "SELECT * FROM $items_table
                     WHERE iid = $id";
             $res = Database::query($sql);
@@ -115,10 +109,6 @@ class learnpathItem
             }
             $row = Database::fetch_array($res);
         } else {
-            if (is_array($item_content)) {
-                $row = $item_content;
-            }
-
             if ($item_content instanceof CLpItem) {
                 $row = [];
                 $row['lp_id'] = $item_content->getLp()->getIid();

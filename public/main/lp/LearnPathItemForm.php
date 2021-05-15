@@ -56,8 +56,8 @@ class LearnPathItemForm
         );
 
         $lpItemRepo = Container::getLpItemRepository();
-        $itemRoot = $lpItemRepo->getItemRoot($lp->get_id());
-        $parentSelect->addOption($lp->name, $itemRoot->getIid());
+        $rootItem = $lpItemRepo->getRootItem($lp->get_id());
+        $parentSelect->addOption($lp->name, $rootItem->getIid());
         /** @var CLpItem[] $sections */
         $sections = $lpItemRepo->findBy(['itemType' => 'dir', 'lp' => $lp->get_id()]);
         foreach ($sections as $value) {

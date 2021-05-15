@@ -58,7 +58,7 @@ function initializeItem($lpId, $user_id, $view_id, $next_item, $startTime = 0)
         if ($debug) {
             error_log('In initialize_item - generating new item object '.$next_item, 0);
         }
-        $mylpi = new learnpathItem($next_item, $user_id);
+        $mylpi = new learnpathItem($next_item);
     }
 
     if ($mylpi) {

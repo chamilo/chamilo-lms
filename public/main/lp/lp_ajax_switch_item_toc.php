@@ -90,7 +90,7 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
         if ($debug > 1) {
             error_log('In switch_item_details - generating new item object', 0);
         }
-        $myLPI = new learnpathItem($newItemId, $userId);
+        $myLPI = new learnpathItem($newItemId);
         $myLPI->set_lp_view($viewId);
     }
     /*

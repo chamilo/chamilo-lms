@@ -366,7 +366,7 @@ if (isset($_REQUEST['comments']) &&
             $lp = $lpRepo->find($lpId);
         }
         $statusCondition = '';
-        $item = new learnpathItem($lp, $lpItemId, api_get_course_int_id());
+        $item = new learnpathItem($lpItemId);
         if ($item) {
             $prereqId = $item->get_prereq_string();
             $minScore = $item->getPrerequisiteMinScore();

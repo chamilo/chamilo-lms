@@ -18,7 +18,7 @@ use Chamilo\Kernel;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 
-final class Version20201216132719 extends AbstractMigrationChamilo
+final class Version20201218132719 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {

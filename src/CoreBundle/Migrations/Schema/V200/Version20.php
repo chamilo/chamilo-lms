@@ -29,8 +29,7 @@ class Version20 extends AbstractMigrationChamilo
         //$doctrine = $container->get('doctrine');
 
         // Basic checks.
-        $admin = $this->getAdmin();
-        $this->abortIf(null === $admin, 'Admin not found in the system');
+        $this->abortIf(!$this->adminExist(), 'Admin not found in the system');
 
         //$em = $doctrine->getManager();
         /** @var Connection $connection */

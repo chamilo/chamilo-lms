@@ -48,6 +48,23 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         return $this->container;
     }
 
+    public function adminExist(): bool
+    {
+        $em = $this->getEntityManager();
+        $connection = $em->getConnection();
+
+        $sql = 'SELECT user_id FROM admin WHERE user_id IN (SELECT id FROM user) ORDER BY id LIMIT 1';
+        $result = $connection->executeQuery($sql);
+        $adminRow = $result->fetchAssociative();
+
+        if (empty($adminRow)) {
+            return false;
+        }
+
+        return true;
+    }
+
+
     public function getAdmin(): User
     {
         $container = $this->getContainer();

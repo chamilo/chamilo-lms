@@ -23,7 +23,7 @@ use Chamilo\Kernel;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 
-final class Version20201216124011 extends AbstractMigrationChamilo
+final class Version20201217124011 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {

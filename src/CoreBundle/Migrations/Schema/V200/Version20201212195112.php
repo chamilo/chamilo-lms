@@ -71,7 +71,7 @@ final class Version20201212195112 extends AbstractMigrationChamilo
                 $newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
                 $category->addCourseLink($course, $session, null, $newVisibility);
                 $em->persist($category);
-                if (0 === $counter % $batchSize) {
+                if (($counter % $batchSize) === 0) {
                     $em->flush();
                     $em->clear();
                 }
@@ -111,7 +111,7 @@ final class Version20201212195112 extends AbstractMigrationChamilo
                 }
                 $group->addCourseLink($course, $session, null, $newVisibility);
                 $em->persist($group);
-                if (0 === $counter % $batchSize) {
+                if (($counter % $batchSize) === 0) {
                     $em->flush();
                     $em->clear();
                 }

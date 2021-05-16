@@ -64,7 +64,7 @@ final class Version20210205082253 extends AbstractMigrationChamilo
                 $illustrationRepo->addIllustration($userEntity, $userEntity, $file);
             }
 
-            if (0 === $counter % $batchSize) {
+            if (($counter % $batchSize) === 0) {
                 $em->flush();
                 $em->clear(); // Detaches all objects from Doctrine!
             }
@@ -97,7 +97,7 @@ final class Version20210205082253 extends AbstractMigrationChamilo
                 $illustrationRepo->addIllustration($userGroup, $admin, $file);
             }
 
-            if (0 === $counter % $batchSize) {
+            if (($counter % $batchSize) === 0) {
                 $em->flush();
                 $em->clear(); // Detaches all objects from Doctrine!
             }

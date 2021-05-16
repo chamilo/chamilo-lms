@@ -34,8 +34,6 @@ final class Version20201212114910 extends AbstractMigrationChamilo
         // Adding first admin as main creator also adding to the resource node tree.
         $admin = $this->getAdmin();
 
-        $this->abortIf(null === $admin, 'Admin not found in the system');
-
         $adminId = $admin->getId();
         $userList[$adminId] = $admin;
 
@@ -87,7 +85,7 @@ final class Version20201212114910 extends AbstractMigrationChamilo
             $resourceNode = $userRepo->addUserToResourceNode($userId, $creator->getId());
             $em->persist($resourceNode);
 
-            if (0 === $counter % $batchSize) {
+            if (($counter % $batchSize) === 0) {
                 $em->flush();
                 $em->clear(); // Detaches all objects from Doctrine!
             }

@@ -38,9 +38,6 @@ final class Version20201215072918 extends AbstractMigrationChamilo
         $eventRepo = $container->get(CCalendarEventRepository::class);
         $eventAttachmentRepo = $container->get(CCalendarEventAttachmentRepository::class);
         $courseRepo = $container->get(CourseRepository::class);
-        $sessionRepo = $container->get(SessionRepository::class);
-        $groupRepo = $container->get(CGroupRepository::class);
-        $userRepo = $container->get(UserRepository::class);
 
         /** @var Kernel $kernel */
         $kernel = $container->get('kernel');

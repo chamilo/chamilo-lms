@@ -9,19 +9,13 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
-use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
-use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Chamilo\Kernel;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 use DocumentManager;
 
-/**
- * Auto-generated Migration: Please modify to your needs!
- */
 final class Version20201212203625 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
@@ -39,17 +33,11 @@ final class Version20201212203625 extends AbstractMigrationChamilo
 
         $documentRepo = $container->get(CDocumentRepository::class);
         $courseRepo = $container->get(CourseRepository::class);
-        $sessionRepo = $container->get(SessionRepository::class);
-        $groupRepo = $container->get(CGroupRepository::class);
-        $userRepo = $container->get(UserRepository::class);
 
         /** @var Kernel $kernel */
         $kernel = $container->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
-        $userList = [];
-        $groupList = [];
-        $sessionList = [];
         $batchSize = self::BATCH_SIZE;
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
@@ -88,7 +76,6 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     $parent = $course;
                 }
                 $admin = $this->getAdmin();
-
                 $result = $this->fixItemProperty('document', $documentRepo, $course, $admin, $document, $parent);
 
                 if (false === $result) {
@@ -99,7 +86,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                 $this->addLegacyFileToResource($filePath, $documentRepo, $document, $documentId);
                 $em->persist($document);
 
-                if (0 === $counter % $batchSize) {
+                if (($counter % $batchSize) === 0) {
                     $em->flush();
                     $em->clear();
                 }
@@ -113,6 +100,5 @@ final class Version20201212203625 extends AbstractMigrationChamilo
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
     }
 }

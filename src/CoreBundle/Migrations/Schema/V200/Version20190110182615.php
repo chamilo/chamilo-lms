@@ -221,6 +221,7 @@ class Version20190110182615 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX course ON c_lp_item_view');
         }
 
+        $this->addSql('ALTER TABLE c_lp_item_view CHANGE c_id c_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_lp_item_view CHANGE lp_item_id lp_item_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_lp_item_view CHANGE lp_view_id lp_view_id INT DEFAULT NULL');
         $this->addSql('DELETE FROM c_lp_item_view WHERE lp_view_id NOT IN (SELECT iid FROM c_lp_view)');

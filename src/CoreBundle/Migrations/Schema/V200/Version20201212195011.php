@@ -67,7 +67,7 @@ final class Version20201212195011 extends AbstractMigrationChamilo
 
                 // Add groups.
                 //$course = $course->getGroups();
-                if (0 === $counter % $batchSize) {
+                if (($counter % $batchSize) === 0) {
                     $em->flush();
                     $em->clear(); // Detaches all objects from Doctrine!
                 }
@@ -108,7 +108,7 @@ final class Version20201212195011 extends AbstractMigrationChamilo
                 $newVisibility = 1 === $toolData['visibility'] ? ResourceLink::VISIBILITY_PUBLISHED : ResourceLink::VISIBILITY_PENDING;
                 $tool->addCourseLink($course, $session, null, $newVisibility);
                 $em->persist($tool);
-                if (0 === $counter % $batchSize) {
+                if (($counter % $batchSize) === 0) {
                     $em->flush();
                     $em->clear(); // Detaches all objects from Doctrine!
                 }

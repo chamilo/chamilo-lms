@@ -26,8 +26,13 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('set sql_mode=""');
 
         $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-        $em = $doctrine->getManager();
+        //$doctrine = $container->get('doctrine');
+
+        // Basic checks.
+        $admin = $this->getAdmin();
+        $this->abortIf(null === $admin, 'Admin not found in the system');
+
+        //$em = $doctrine->getManager();
         /** @var Connection $connection */
         /*$connection = $em->getConnection();
         $sql = "SELECT * FROM c_quiz WHERE iid <> id";

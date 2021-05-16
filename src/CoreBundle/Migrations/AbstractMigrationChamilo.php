@@ -125,6 +125,8 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         $accessUrlLocked = true,
         $options = []
     ): void {
+
+        $em = $this->getEntityManager();
         $setting = new SettingsCurrent();
         $setting
             ->setVariable($variable)
@@ -141,7 +143,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
             ->setAccessUrlLocked($accessUrlLocked)
         ;
 
-        $this->getEntityManager()->persist($setting);
+        $em->persist($setting);
 
         if (\count($options) > 0) {
             foreach ($options as $option) {
@@ -160,10 +162,10 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
                     ->setDisplayText($option['text'])
                 ;
 
-                $this->getEntityManager()->persist($settingOption);
+                $em->persist($settingOption);
             }
         }
-        $this->getEntityManager()->flush();
+        $em->flush();
     }
 
     /**
@@ -247,9 +249,6 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
             return false;
         }
 
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-        $em = $doctrine->getManager();
         $sessionRepo = $container->get(SessionRepository::class);
         $groupRepo = $container->get(CGroupRepository::class);
         $userRepo = $container->get(UserRepository::class);
@@ -266,6 +265,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
             $groupId = $item['to_group_id'] ?? 0;
 
             $newVisibility = ResourceLink::VISIBILITY_PENDING;
+            // Old visibility (item property) is based in this switch:
             switch ($visibility) {
                 case 0:
                     $newVisibility = ResourceLink::VISIBILITY_PENDING;
@@ -281,7 +281,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
                     break;
             }
 
-            // If c_item_property.insert_user_id doens't exist we use the first admin id.
+            // If c_item_property.insert_user_id doesn't exist we use the first admin id.
             $user = null;
             if (isset($userList[$userId])) {
                 $user = $userList[$userId];

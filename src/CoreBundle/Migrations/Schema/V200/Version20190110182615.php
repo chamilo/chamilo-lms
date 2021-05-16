@@ -56,6 +56,10 @@ class Version20190110182615 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_lp ADD accumulate_work_time INT DEFAULT 0 NOT NULL');
         }
 
+        $this->addSql('ALTER TABLE c_lp CHANGE c_id c_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_lp CHANGE session_id session_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE c_lp CHANGE preview_image preview_image varchar(255) DEFAULT NULL');
+
         $this->addSql('ALTER TABLE c_lp CHANGE category_id category_id INT DEFAULT NULL');
 
         if (false === $table->hasColumn('id')) {

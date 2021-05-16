@@ -226,7 +226,9 @@ class learnpath
                 $this->lp_view_id = Database::insert($lp_table, $params);
             }
 
-            $criteria = Criteria::create()
+            $criteria = new Criteria();
+            $criteria
+                ->where($criteria->expr()->neq('path', 'root'))
                 ->orderBy(
                     [
                         'parent' => Criteria::ASC,
@@ -238,11 +240,11 @@ class learnpath
             foreach ($items as $item) {
                 $itemId = $item->getIid();
                 $lp_item_id_list[] = $itemId;
+
                 switch ($this->type) {
                     case 3: //aicc
                         $oItem = new aiccItem('db', $itemId, $course_id);
                         if (is_object($oItem)) {
-                            $my_item_id = $oItem->get_id();
                             $oItem->set_lp_view($this->lp_view_id, $course_id);
                             $oItem->set_prevent_reinit($this->prevent_reinit);
                             // Don't use reference here as the next loop will make the pointed object change.
@@ -253,25 +255,23 @@ class learnpath
                     case 2:
                         $oItem = new scormItem('db', $itemId, $course_id);
                         if (is_object($oItem)) {
-                            $my_item_id = $oItem->get_id();
                             $oItem->set_lp_view($this->lp_view_id, $course_id);
                             $oItem->set_prevent_reinit($this->prevent_reinit);
                             // Don't use reference here as the next loop will make the pointed object change.
-                            $this->items[$my_item_id] = $oItem;
-                            $this->refs_list[$oItem->ref] = $my_item_id;
+                            $this->items[$itemId] = $oItem;
+                            $this->refs_list[$oItem->ref] = $itemId;
                         }
                         break;
                     case 1:
                     default:
                         $oItem = new learnpathItem(null, $item);
                         if (is_object($oItem)) {
-                            $my_item_id = $oItem->get_id();
                             // Moved down to when we are sure the item_view exists.
                             //$oItem->set_lp_view($this->lp_view_id);
                             $oItem->set_prevent_reinit($this->prevent_reinit);
                             // Don't use reference here as the next loop will make the pointed object change.
-                            $this->items[$my_item_id] = $oItem;
-                            $this->refs_list[$my_item_id] = $my_item_id;
+                            $this->items[$itemId] = $oItem;
+                            $this->refs_list[$itemId] = $itemId;
                         }
                         break;
                 }
@@ -283,7 +283,7 @@ class learnpath
                 }
 
                 // Setting the view in the item object.
-                if (is_object($this->items[$itemId])) {
+                if (isset($this->items[$itemId]) && is_object($this->items[$itemId])) {
                     $this->items[$itemId]->set_lp_view($this->lp_view_id, $course_id);
                     if (TOOL_HOTPOTATOES == $this->items[$itemId]->get_type()) {
                         $this->items[$itemId]->current_start_time = 0;
@@ -309,7 +309,7 @@ class learnpath
                     while ($row = Database:: fetch_array($res)) {
                         $status_list[$row['lp_item_id']] = $row['status'];
                     }
-
+                    //echo '<pre>';                    var_dump($this->items);                    echo '</pre>';
                     foreach ($lp_item_id_list as $item_id) {
                         if (isset($status_list[$item_id])) {
                             $status = $status_list[$item_id];
@@ -323,7 +323,7 @@ class learnpath
                             }
                         } else {
                             if (!api_is_invitee()) {
-                                if (is_object($this->items[$item_id])) {
+                                if (isset($this->items[$item_id]) && is_object($this->items[$item_id])) {
                                     $this->items[$item_id]->set_status(
                                         $this->default_status
                                     );
@@ -1258,7 +1258,7 @@ class learnpath
 
         if (!empty($this->last_item_seen) &&
             !empty($this->items[$this->last_item_seen]) &&
-            'dir' != $this->items[$this->last_item_seen]->get_type()
+            'dir' !== $this->items[$this->last_item_seen]->get_type()
             //with this change (below) the LP will NOT go to the next item, it will take lp item we left
             //&& !$this->items[$this->last_item_seen]->is_done()
         ) {
@@ -1299,7 +1299,8 @@ class learnpath
                 (
                     'dir' === $this->items[$this->ordered_items[$index]]->get_type() ||
                     true === $this->items[$this->ordered_items[$index]]->is_done()
-                ) && $index < $this->max_ordered_items) {
+                ) && $index < $this->max_ordered_items
+            ) {
                 $index++;
             }
 
@@ -2571,8 +2572,15 @@ class learnpath
     public static function get_flat_ordered_items_list(CLp $lp, $parent = 0)
     {
         $parent = (int) $parent;
+        $lpItemRepo = Container::getLpItemRepository();
+        if (empty($parent)) {
+            $rootItem = $lpItemRepo->getRootItem($lp->getIid());
+            $parent = $rootItem->getIid() ;
+        }
 
-        $criteria = Criteria::create()
+        $criteria = new Criteria();
+        $criteria
+            ->where($criteria->expr()->neq('path', 'root'))
             ->orderBy(
                 [
                     'displayOrder' => Criteria::ASC,
@@ -2581,15 +2589,15 @@ class learnpath
         $items = $lp->getItems()->matching($criteria);
         $items = $items->filter(
             function (CLpItem $element) use ($parent) {
-                if (empty($parent)) {
-                    $parent = null;
-                    return $element->getParent() === $parent;
-                } else {
-                    if (null !== $element->getParent()) {
-                        return $element->getParent()->getIid() === $parent;
-                    }
+                if ('root' === $element->getPath()) {
                     return false;
                 }
+
+                if (null !== $element->getParent()) {
+                    return $element->getParent()->getIid() === $parent;
+                }
+                return false;
+
             }
         );
 
@@ -9295,7 +9303,6 @@ class learnpath
             return true;
         }
         $lpItemRepo = Container::getLpItemRepository();
-        echo '<pre>';
         /*$previous = 2;
         $next = 0;
         $rootItem->setPreviousItemId(1);
@@ -9349,8 +9356,11 @@ exit;*/
         $rootItem->setLaunchData(1);*/
         //echo '<pre>';
         $rootItem->setDisplayOrder(1);
-        $rootItem->setPreviousItemId(0);
+        $rootItem->setPreviousItemId(null);
         $em->persist($rootItem);
+        if ($flush) {
+            $em->flush();
+        }
 
         //$rootItem->setNextItemId(null);
         //$rootItem->setPreviousItemId(null);
@@ -9383,15 +9393,15 @@ exit;*/
             $previous[$counter] = $counter + 2;*/
 
             $itemEntity->setParent($parent);
-            $previousId = $itemEntity->getPreviousItemId();
-            if (null === $previousId) {
-                $itemEntity->setPreviousItemId(0);
-            }
+            $previousId = (int) $itemEntity->getPreviousItemId();
+            //if (0 === $previousId) {
+                $itemEntity->setPreviousItemId(null);
+            //}
 
-            $nextId = $itemEntity->getNextItemId();
-            if (null === $nextId) {
-                $itemEntity->setNextItemId(0);
-            }
+            $nextId = (int) $itemEntity->getNextItemId();
+            //if (0 === $nextId) {
+                $itemEntity->setNextItemId(null);
+            //}
 
             //$item->setPreviousItemId($previousId);
             //$item->setNextItemId($counter + 1);
@@ -9407,6 +9417,7 @@ exit;*/
             //$lpItemRepo->persistAsFirstChildOf($item, $parent);
             //$em->flush();
             //$lpItemRepo->moveDown($item, true);
+            //var_dump($itemEntity->getIid());            var_dump("parent: ".$parent->getIid());
             $em->persist($itemEntity);
             if ($flush) {
                 $em->flush();
@@ -9417,12 +9428,12 @@ exit;*/
 
         //$rootItem->setNextItemId($counter+1);
 
-        //$em->flush();
+        $em->flush();
         //var_dump($lpItemRepo->verify());
         //$lpItemRepo->reorder($rootItem, 'displayOrder', 'ASC', false);
         //$lpItemRepo->reorder($rootItem);
         //$em->flush();
-        var_dump($lpItemRepo->verify());
+        //var_dump($lpItemRepo->verifyNode($rootItem));exit;
         $lpItemRepo->recoverNode($rootItem, 'displayOrder');
         $em->persist($rootItem);
         if ($flush) {

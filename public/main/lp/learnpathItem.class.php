@@ -96,7 +96,8 @@ class learnpathItem
      * @param int                $id           Learning path item ID
      * @param CLpItem|array|null $item_content Contents of the item
      */
-    public function __construct(        $id   , $item_content = null) {
+    public function __construct($id, $item_content = null)
+    {
         $items_table = Database::get_course_table(TABLE_LP_ITEM);
         $id = (int) $id;
 
@@ -134,8 +135,8 @@ class learnpathItem
             }
         }
 
-        $this->lp_id = $row['lp_id'];
         $this->iId = $row['iid'];
+        $this->lp_id = $row['lp_id'];
         $this->max_score = $row['max_score'];
         $this->min_score = $row['min_score'];
         $this->name = $row['title'];
@@ -160,7 +161,7 @@ class learnpathItem
         $this->audio = $row['audio'];
         $this->launch_data = $row['launch_data'];
         $this->save_on_close = true;
-        $this->db_id = $id;
+        $this->db_id = $row['iid'];
 
         // Load children list
         if (!empty($this->lp_id)) {
@@ -3592,13 +3593,15 @@ class learnpathItem
             'failed',
         ];
 
-        $oldTotalTime = $row_verified['total_time'];
-        $this->oldTotalTime = $oldTotalTime;
-
         $save = true;
-        if (isset($row_verified) && isset($row_verified['status'])) {
-            if (in_array($row_verified['status'], $my_case_completed)) {
-                $save = false;
+
+        if (!empty($row_verified)) {
+            $oldTotalTime = $row_verified['total_time'];
+            $this->oldTotalTime = $oldTotalTime;
+            if (isset($row_verified['status'])) {
+                if (in_array($row_verified['status'], $my_case_completed)) {
+                    $save = false;
+                }
             }
         }
 

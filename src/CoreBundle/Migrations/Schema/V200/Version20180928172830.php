@@ -26,6 +26,8 @@ class Version20180928172830 extends AbstractMigrationChamilo
         }
         $this->addSql('UPDATE c_tool SET name = "blog" WHERE name = "blog_management" ');
         $this->addSql('UPDATE c_tool SET name = "agenda" WHERE name = "calendar_event" ');
+        $this->addSql('UPDATE c_tool SET name = "member" WHERE link = "user/user.php" ');
+
         //$this->addSql('UPDATE c_tool SET name = "maintenance" WHERE name = "course_maintenance" ');
         //$this->addSql('UPDATE c_tool SET name = "assignment" WHERE name = "student_publication" ');
         //$this->addSql('UPDATE c_tool SET name = "settings" WHERE name = "course_setting" ');
@@ -67,7 +69,6 @@ class Version20180928172830 extends AbstractMigrationChamilo
 
             // @todo remove/move LP/Link shortcuts.
             $this->addSql('DELETE FROM c_tool WHERE tool_id = 0 OR tool_id IS NULL');
-
 
             $this->addSql('ALTER TABLE c_tool ADD CONSTRAINT FK_84566580613FECDF FOREIGN KEY (session_id) REFERENCES session (id)');
             $this->addSql('ALTER TABLE c_tool ADD CONSTRAINT FK_845665808F7B22CC FOREIGN KEY (tool_id) REFERENCES tool (id)');

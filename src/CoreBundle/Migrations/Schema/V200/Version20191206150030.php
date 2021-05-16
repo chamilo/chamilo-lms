@@ -67,5 +67,7 @@ class Version20191206150030 extends AbstractMigrationChamilo
             }
             $counter++;
         }
+        $em->flush();
+        $em->clear();
     }
 }

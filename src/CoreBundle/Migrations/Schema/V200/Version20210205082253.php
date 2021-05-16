@@ -71,6 +71,9 @@ final class Version20210205082253 extends AbstractMigrationChamilo
             $counter++;
         }
 
+        $em->flush();
+        $em->clear();
+
         // Migrate Usergroup images.
         $counter = 1;
         $q = $em->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\Usergroup u');
@@ -103,5 +106,8 @@ final class Version20210205082253 extends AbstractMigrationChamilo
             }
             $counter++;
         }
+
+        $em->flush();
+        $em->clear();
     }
 }

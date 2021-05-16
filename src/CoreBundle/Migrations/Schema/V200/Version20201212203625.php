@@ -92,6 +92,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                 }
                 $counter++;
             }
+            $em->flush();
             $em->clear();
         }
         $em->flush();

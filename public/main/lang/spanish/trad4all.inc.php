@@ -8153,7 +8153,7 @@ $RegistrationRoleWhatDoYouWantToDo = "¿Qué deseas hacer?";
 $RegistrationRoleFollowCourses = "Seguir cursos";
 $RegistrationRoleTeachCourses = "Dictar cursos";
 $EditPortfolioItem = "Editar elemento del portafolio";
-$PortfolioItemAdded = "Elemento del portafolio editado";
+$PortfolioItemAdded = "Elemento del portafolio agregado";
 $ExploreMoreCourses = "Explorar más cursos";
 $LinksOfInterest = "Enlaces de interés";
 $ExportToChamiloFormat = "Exportación de la lección";
@@ -8798,4 +8798,7 @@ $ExportMytPortfolioDataZip = "Exportar los datos de mi portafolio a un archivo Z
 $NewLearningPathSubject = "Nueva lección publicada";
 $NewLearningPathBody = "Hay una nueva leccion llamada %s que ha sido agregada al curso %s. Acceder a la lección aqui: %s";
 $XPercentCompleted = "%s %% Completado";
+$EmailToTeachersWhenNewPost = "Enviar correo electrónico a los profesores sobre los nuevos artículos en la herramienta de portafolio";
+$PortfolioAlertNewPostContent = "Hay un nuevo artículo por %s en el portafolio del curso %s. Para verlo haga <a href='%s'>click aquí</a>.";
+$PortfolioAlertNewPostSubject = "[Portfolio] Nuevo artículo en el curso %s";
 ?>

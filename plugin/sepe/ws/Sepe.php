@@ -276,7 +276,7 @@ class Sepe
             'duration' => $duration,
             'start_date' => $startDate,
             'end_date' => $endDate,
-            'full_itinerary_indicator' =>$fullItineraryIndicator,
+            'full_itinerary_indicator' => $fullItineraryIndicator,
             'financing_type' => $financingType,
             'attendees_count' => $attendeesCount,
             'action_name' => $actionName,
@@ -286,7 +286,7 @@ class Sepe
             'contact_actio' => $contactAction,
         ];
 
-        $actionId = Database::insert( $table, $params);
+        $actionId = Database::insert($table, $params);
 
         if (!empty($actionId)) {
             return [
@@ -717,7 +717,7 @@ class Sepe
                                 $params = [
                                     'participant_specialty_id' => $participantSpecialtyId,
                                     'center_origin' => $centerOrigin,
-                                    'center_code' =>$centerCode ,
+                                    'center_code' => $centerCode,
                                     'start_date' => $startDate,
                                     'end_date' => $endDate,
                                 ];

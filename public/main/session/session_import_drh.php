@@ -64,17 +64,16 @@ if ($form->validate()) {
 
 $form->display();
 
-?>
-<p><?php echo get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
-
+$content = '
+<p>'.get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').') :</p>
 <blockquote>
 <pre>
 Username;SessionName;
 drh1;Session 1;
 drh2;Session 2;
 </pre>
-</blockquote>
-<?php
+</blockquote>';
 
-/* FOOTER */
+echo Display::prose($content);
+
 Display::display_footer();

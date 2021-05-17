@@ -127,15 +127,14 @@ $form->addElement(
 );
 $form->addElement('radio', 'sendMail', get_lang('Send a mail to users'), get_lang('Yes'), 1);
 $form->addElement('radio', 'sendMail', null, get_lang('No'), 0);
-$form->addElement('submit', 'submit', get_lang('Validate'));
+$form->addButtonSave(get_lang('Validate'));
 $defaults['formSent'] = 1;
 $defaults['sendMail'] = 0;
 $defaults['file_type'] = 'xml';
 $form->setDefaults($defaults);
 $form->display();
-?>
-<p><?php echo get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
 
+$content = '<p>'.get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').') :</p>
 <blockquote>
 <pre>
 <b>LastName</b>;<b>FirstName</b>;<b>Email</b>;UserName;Password;OfficialCode;PhoneNumber;
@@ -143,11 +142,10 @@ $form->display();
 <b>Doewing</b>;<b>Johny</b>;<b>info@localhost</b>;jdoewing;123456789;code2;3141516
 </pre>
 </blockquote>
-
-<p><?php echo get_lang('The XML file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
+<p>'.get_lang('The XML file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').') :</p>
 <blockquote>
 <pre>
-&lt;?xml version=&quot;1.0&quot; encoding=&quot;<?php echo api_refine_encoding_id(api_get_system_encoding()); ?>&quot;?&gt;
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;'.api_refine_encoding_id(api_get_system_encoding()).'&quot;?&gt;
 &lt;Contacts&gt;
     &lt;Contact&gt;
         <b>&lt;LastName&gt;Montoya&lt;/LastName&gt;</b>
@@ -160,6 +158,7 @@ $form->display();
     &lt;/Contact&gt;
 &lt;/Contacts&gt;
 </pre>
-</blockquote>
-<?php
-Display :: display_footer();
+</blockquote>';
+
+echo Display::prose($content);
+Display::display_footer();

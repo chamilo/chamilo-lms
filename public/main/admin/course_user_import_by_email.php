@@ -78,7 +78,7 @@ function save_data($users_courses)
 
     foreach ($csv_data as $email => $csv_subscriptions) {
         $sql = "SELECT * FROM $user_table u
-                WHERE u.email = '".Database::escape_string($email)."' 
+                WHERE u.email = '".Database::escape_string($email)."'
                 LIMIT 1";
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
@@ -211,22 +211,22 @@ if (0 != count($errors)) {
     echo Display::return_message($error_message, 'error', false);
 }
 
-// Displaying the form.
 $form->display();
-?>
-<p><?php echo get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
+
+$content = '<p>'.get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').') :</p>
 <blockquote>
 <pre>
 <b>Email</b>;<b>CourseCode</b>;<b>Status</b>
-example1@example.org;course01;<?php echo COURSEMANAGER; ?>
-
-example2@example.org;course01;<?php echo STUDENT; ?>
+example1@example.org;course01;;'.COURSEMANAGER.'
+example2@example.org;course01;'.STUDENT.'
 </pre>
-<?php
-echo COURSEMANAGER.': '.get_lang('Trainer').'<br />';
-echo STUDENT.': '.get_lang('Learner').'<br />';
-?>
+'.COURSEMANAGER.': '.get_lang('Trainer').'<br />
+'.STUDENT.': '.get_lang('Learner').'<br />
 </blockquote>
-<?php
+';
+
+echo Display::prose($content);
+
+
 
 Display::display_footer();

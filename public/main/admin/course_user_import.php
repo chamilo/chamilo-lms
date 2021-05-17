@@ -212,20 +212,20 @@ if (0 != count($errors)) {
 
 // Displaying the form.
 $form->display();
-?>
-    <p><?php echo get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
-    <blockquote>
+
+$content = '
+<p>'.get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').') :</p>
+<blockquote>
 <pre>
 <b>UserName</b>;<b>CourseCode</b>;<b>Status</b>
 jdoe;course01;<?php echo COURSEMANAGER; ?>
-
 adam;course01;<?php echo STUDENT; ?>
 </pre>
-        <?php
-        echo COURSEMANAGER.': '.get_lang('Trainer').'<br />';
-        echo STUDENT.': '.get_lang('Learner').'<br />';
-        ?>
-    </blockquote>
-<?php
+'.COURSEMANAGER.': '.get_lang('Trainer').'<br />
+'.STUDENT.': '.get_lang('Learner').'<br />
+</blockquote>
+';
 
-Display :: display_footer();
+echo Display::prose($content);
+
+Display::display_footer();

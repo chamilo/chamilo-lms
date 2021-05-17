@@ -86,8 +86,7 @@ $form->addButtonImport(get_lang('Import'));
 
 $form->display();
 
-?>
-<p><?php echo get_lang('The CSV file must look like this'); ?> :</p>
+$content = '<p>'.get_lang('The CSV file must look like this').':</p>
 <blockquote>
 <pre>
 username;
@@ -95,6 +94,8 @@ admin;
 teacher;
 jmontoya;
 </pre>
-</blockquote>
-<?php
+</blockquote>';
+
+echo Display::prose($content);
+
 Display::display_footer();

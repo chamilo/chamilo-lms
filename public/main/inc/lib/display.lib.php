@@ -2749,4 +2749,15 @@ HTML;
 
         return $content;
     }
+
+    public static function prose($contents)
+    {
+        return "
+            <div class=''>
+                <div class='prose prose-blue'>
+                $contents
+                </div>
+            </div>
+            ";
+    }
 }

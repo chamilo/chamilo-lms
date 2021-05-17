@@ -386,17 +386,21 @@ if ($count_fields > 0) {
     }
 }
 
-?>
-    <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
+
+$content = '<p>'.get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').') :</p>
     <blockquote>
     <pre>
         <b>UserName</b>;LastName;FirstName;Email;NewUserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;ExpiryDate;Active;Language;Courses;ClassId;
-        xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;user/teacher/drh;YYYY-MM-DD 00:00:00;0/1;xxx;<span
-            style="color:red;"><?php if (count($list_reponse) > 0) {
-    echo implode(';', $list_reponse).';';
-} ?></span>xxx1|xxx2|xxx3;1;<br/>
+        xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;user/teacher/drh;YYYY-MM-DD 00:00:00;0/1;xxx;
+        <span style="color:red;">';
+if (count($list_reponse) > 0) {
+    $content .= implode(';', $list_reponse).';';
+} else {
+    $content .= '</span>xxx1|xxx2|xxx3;1;<br/>
     </pre>
     </blockquote>
     <p>
-<?php
+    ';
+}
+echo Display::prose($content);
 Display::display_footer();

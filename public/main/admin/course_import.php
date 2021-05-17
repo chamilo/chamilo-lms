@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -227,18 +228,17 @@ $form->addButtonImport(get_lang('Import'), 'save');
 $form->addElement('hidden', 'formSent', 1);
 $form->display();
 
-?>
+$content = '
 <div style="clear: both;"></div>
-<p><?php echo get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
-
+<p>'.get_lang('The CSV file must look like this').' ('.get_lang('Fields in <b>bold</b> are mandatory.').') :</p>
 <blockquote>
 <pre>
-<strong>Code</strong>;<strong>Title</strong>;<strong>CourseCategory</strong>;<strong>CourseCategoryName</strong>;Teacher;Language
+<b>Code</b>;<b>Title</b>;<b>CourseCategory</b>;<b>CourseCategoryName</b>;Teacher;Language
 BIO0015;Biology;BIO;Science;teacher1;english
 BIO0016;Maths;MATH;Engineerng;teacher2|teacher3;english
 BIO0017;Language;LANG;;;english
 </pre>
-</blockquote>
+</blockquote>';
+echo Display::prose($content);
 
-<?php
 Display::display_footer();

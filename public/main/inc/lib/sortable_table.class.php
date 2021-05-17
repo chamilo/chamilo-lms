@@ -397,21 +397,24 @@ class SortableTable extends HTML_Table
         $html = '';
         $form = '';
         if (false === $this->hideNavigation) {
-            $form = $this->get_page_select_form();
-            $nav = $this->get_navigation_html();
-            $html = '<div class="q-card">';
-            $html .= '<div class="flex flex-row justify-between">';
-            $html .= '<div class="col">';
-            $html .= '<div class="page-select pb-2 pt-2">'.$form.'</div>';
-            $html .= '</div>';
-            $html .= '<div class="col">';
-            $html .= '<div class="row justify-center">'.$this->get_table_title().'</div>';
-            $html .= '</div>';
-            $html .= '<div class="col">';
-            $html .= '<div class="row justify-end">'.$nav.'</div>';
-            $html .= '</div>';
-            $html .= '</div>';
-            $html .= '</div>';
+            // Only show pagination if there are more than 1 page.
+            if ($this->get_pager()->numPages() > 1) {
+                $form = $this->get_page_select_form();
+                $nav = $this->get_navigation_html();
+                $html = '<div class="q-card">';
+                $html .= '<div class="flex flex-row justify-between">';
+                $html .= '<div class="col">';
+                $html .= '<div class="page-select pb-2 pt-2">'.$form.'</div>';
+                $html .= '</div>';
+                $html .= '<div class="col">';
+                $html .= '<div class="row justify-center">'.$this->get_table_title().'</div>';
+                $html .= '</div>';
+                $html .= '<div class="col">';
+                $html .= '<div class="row justify-end">'.$nav.'</div>';
+                $html .= '</div>';
+                $html .= '</div>';
+                $html .= '</div>';
+            }
         }
 
         if (count($this->form_actions) > 0) {
@@ -789,7 +792,7 @@ class SortableTable extends HTML_Table
             $param = array_merge($param, $this->additional_parameters);
         }
 
-        foreach ($param as $key => &$value) {
+        foreach ($param as $key => $value) {
             $result[] = '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
         }
         $result[] = '<select style="width: auto;" class="form-control" name="'.$this->param_prefix
@@ -812,15 +815,14 @@ class SortableTable extends HTML_Table
         $result[] = '<option value="'.$total_number_of_items.'" '
             .($total_number_of_items == $this->per_page ? 'selected="selected"' : '')
             .'>'.api_ucfirst(get_lang('All')).'</option>';
-        //}
+
         $result[] = '</select>';
         $result[] = '<noscript>';
         $result[] = '<button class="btn btn-success" type="submit">'.get_lang('Save').'</button>';
         $result[] = '</noscript>';
         $result[] = '</form>';
-        $result = implode("\n", $result);
 
-        return $result;
+        return implode("\n", $result);
     }
 
     /**

@@ -116,9 +116,9 @@ Get the token:
 
 `curl -k -X POST -H "Content-Type: application/json" https://example.com/api/authentication_token -d '{"username":"admin","password":"admin"}'`
 
-The result should be the something like:
+The response should return something like:
 
-{"token":"MyTokenABC"}
+`{"token":"MyTokenABC"}`
 
 Go to:
 
@@ -126,7 +126,7 @@ https://example.com/api
 
 Click in "Authorize" and write
 
-Bearer MyTokenABC
+`Bearer MyTokenABC`
 
 Then you can make queries using the JWT token.
 

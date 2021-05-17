@@ -49,16 +49,27 @@ if ($form->validate()) {
     $htaccess = @file_get_contents($archive_path.'.htaccess');
     $result = rmdirr($archive_path, true, true);
     if (false === $result) {
-        Display::addFlash(Display::return_message(get_lang('Cleanup of cache and temporary filesFailed'), 'error'));
+        Display::addFlash(Display::return_message(get_lang('Cleanup of cache and temporary files'), 'error'));
     } else {
-        Display::addFlash(Display::return_message(get_lang('The app/cache/ directory cleanup has been executed successfully.')));
+        Display::addFlash(
+            Display::return_message(get_lang('The app/cache/ directory cleanup has been executed successfully.'))
+        );
     }
 
     try {
         \Chamilo\CoreBundle\Composer\ScriptHandler::dumpCssFiles();
-        Display::addFlash(Display::return_message(get_lang('The styles and assets in the web/ folder have been refreshed.')));
+        Display::addFlash(
+            Display::return_message(get_lang('The styles and assets in the web/ folder have been refreshed.'))
+        );
     } catch (Exception $e) {
-        Display::addFlash(Display::return_message(get_lang('The styles and assets in the web/ folder could not be refreshed, probably due to a permissions problem. Make sure the web/ folder is writeable by your web server.'), 'error'));
+        Display::addFlash(
+            Display::return_message(
+                get_lang(
+                    'The styles and assets in the web/ folder could not be refreshed, probably due to a permissions problem. Make sure the web/ folder is writeable by your web server.'
+                ),
+                'error'
+            )
+        );
         error_log($e->getMessage());
     }
 
@@ -71,6 +82,11 @@ if ($form->validate()) {
 }
 
 Display::display_header(get_lang('Cleanup of cache and temporary files'));
-echo Display::return_message(get_lang('Cleanup of cache and temporary filesDescr'), 'warning');
+echo Display::return_message(
+    get_lang(
+        'Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its app/cache/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory.'
+    ),
+    'warning'
+);
 $form->display();
 Display::display_footer();

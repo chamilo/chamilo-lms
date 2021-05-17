@@ -1,5 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * This tool allows platform admins to add skills by uploading a CSV or XML file.
  *
@@ -209,12 +211,13 @@ $defaults['file_type'] = 'csv';
 $form->setDefaults($defaults);
 $form->display();
 
-?>
-<p><?php echo get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
-
+$contents = '
+<p>'.get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').') :</p>
 <pre>
     <b>id</b>;<b>parent_id</b>;<b>name</b>;<b>description</b>
     <b>2</b>;<b>1</b>;<b>Chamilo Expert</b>;Chamilo is an open source LMS;<br />
 </pre>
-<?php
-Display :: display_footer();
+';
+echo Display::prose($contents);
+
+Display::display_footer();

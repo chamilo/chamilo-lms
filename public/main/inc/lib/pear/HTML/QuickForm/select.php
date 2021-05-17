@@ -16,7 +16,6 @@
  * @license     http://www.php.net/license/3_01.txt PHP License 3.01
  * @version     CVS: $Id: select.php,v 1.34 2009/04/04 21:34:04 avb Exp $
  * @link        http://pear.php.net/package/HTML_QuickForm
- * @author      Alexey Borzov <avb@php.net>
  * @version     Release: 3.2.11
  * @since       1.0
  */
@@ -59,15 +58,15 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
     ) {
         $addBlank = '';
         if (is_array($attributes) || empty($attributes)) {
-            $oldClass = '';
-            if (!empty($attributes['class'])) {
-                $oldClass = $attributes['class'];
-            }
             if (empty($attributes)) {
-                $attributes = []; // Initialize variable to avoid warning in PHP 7.1
+                $attributes = [];
             }
             //selectpicker
-            $attributes['class'] = $oldClass . '  form-control mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-indigo-500 sm:text-sm';
+
+            $layout = $this->getLayout();
+            if (FormValidator::LAYOUT_HORIZONTAL === $layout) {
+                $attributes['class'] = 'form-control mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-indigo-500 sm:text-sm';
+            }
             $attributes['data-live-search'] = 'true';
 
             if (isset($attributes['disable_js']) && $attributes['disable_js']) {
@@ -370,10 +369,6 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
 
     /**
      * Returns the SELECT in HTML
-     *
-     * @since     1.0
-     * @access    public
-     * @return    string
      */
     public function toHtml()
     {
@@ -444,7 +439,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                 }
             }
         }
-        $html = empty($value)? '&nbsp;': join('<br />', $value);
+        $html = empty($value) ? '&nbsp;': implode('<br />', $value);
         if ($this->_persistantFreeze) {
             $name = $this->getPrivateName();
             // Only use id attribute if doing single hidden input

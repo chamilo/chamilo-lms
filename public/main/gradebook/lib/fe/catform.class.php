@@ -85,7 +85,7 @@ class CatForm extends FormValidator
             }
             $line = '';
         }
-        $this->addElement('submit', null, get_lang('Validate'));
+        $this->addButtonSave(get_lang('Validate'));
     }
 
     /**
@@ -206,7 +206,7 @@ class CatForm extends FormValidator
         ]);
         $this->addElement('hidden', 'hid_user_id');
         $this->addElement('hidden', 'hid_parent_id');
-        $this->addElement('submit', null, get_lang('Validate'));
+        $this->addButtonSave(get_lang('Validate'));
     }
 
     private function build_basic_form()

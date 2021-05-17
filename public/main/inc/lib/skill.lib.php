@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\SkillRelItem;
 use Chamilo\CoreBundle\Entity\SkillRelItemRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUser as SkillRelUserEntity;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CourseBundle\Entity\CQuiz;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 
@@ -2468,9 +2469,8 @@ class Skill extends Model
             ),
             api_get_path(WEB_CODE_PATH).'admin/skill_list.php'
         );
-        $actions = '<div class="actions">'.$toolbar.'</div>';
 
-        return $actions;
+        return Display::toolbarAction('skills_toolbar', [$toolbar]);
     }
 
     /**
@@ -2509,12 +2509,18 @@ class Skill extends Model
      * @param int $itemId
      * @param int $userId
      */
-    public static function addSkillsToUserForm(FormValidator $form, $typeId, $itemId, $userId, $resultId = 0, $addHeader = false)
-    {
+    public static function addSkillsToUserForm(
+        FormValidator $form,
+        $typeId,
+        $itemId,
+        $userId,
+        $resultId = 0,
+        $addHeader = false
+    ) {
         $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
         if ($allowSkillInTools && !empty($typeId) && !empty($itemId) && !empty($userId)) {
             $em = Database::getManager();
-            $items = $em->getRepository('ChamiloCoreBundle:SkillRelItem')->findBy(
+            $items = $em->getRepository(SkillRelItem::class)->findBy(
                 ['itemId' => $itemId, 'itemType' => $typeId]
             );
 
@@ -2664,8 +2670,8 @@ class Skill extends Model
 
         switch ($itemType) {
             case ITEM_TYPE_EXERCISE:
-                /** @var \Chamilo\CourseBundle\Entity\CQuiz $item */
-                $item = $em->getRepository('ChamiloCourseBundle:CQuiz')->find($itemId);
+                /** @var CQuiz $item */
+                $item = $em->getRepository(CQuiz::class)->find($itemId);
                 if ($item) {
                     $itemInfo['name'] = $item->getTitle();
                 }

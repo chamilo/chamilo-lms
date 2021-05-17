@@ -59,7 +59,7 @@ class FormValidator extends HTML_QuickForm
                 $formTemplate = $this->getInLineTemplate();
                 break;
             case self::LAYOUT_INLINE:
-                $attributes['class'] = 'ch flex gap-1 ';
+                $attributes['class'] = 'ch flex gap-2 ';
                 $formTemplate = $this->getInLineTemplate();
                 break;
             case self::LAYOUT_BOX:
@@ -881,10 +881,10 @@ EOT;
     }
 
     /**
-     * @param string $name
-     * @param string $label
-     * @param array  $options
-     * @param array  $attributes
+     * @param string       $name
+     * @param string|array $label
+     * @param array        $options
+     * @param array        $attributes
      *
      * @return HTML_QuickForm_select
      */

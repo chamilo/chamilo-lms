@@ -175,7 +175,8 @@ if ('true' === api_get_setting('search_enabled')) {
  * $form -> addElement ('radio', 'split_steps',null, get_lang('A section, a learning object'),'per_chapter');
  */
 $form->addElement('hidden', 'split_steps', 'per_page');
-$form->addElement('submit', 'convert', get_lang('Convert to course'), 'class="convert_button"');
+//$form->addElement('submit', 'convert', get_lang('Convert to course'), 'class="convert_button"');
+$this->addButtonSave(get_lang('Convert to course'), 'convert');
 $form->addElement('hidden', 'woogie', 'true');
 $form->addProgress();
 $defaults = ['split_steps' => 'per_page', 'index_document' => 'checked="checked"'];

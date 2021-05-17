@@ -62,11 +62,6 @@ symfony.lock
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
-
-###> friendsofphp/php-cs-fixer ###
-.php_cs.cache
-###< friendsofphp/php-cs-fixer ###
-
 ###> symfony/phpunit-bridge ###
 .phpunit
 /phpunit.xml
@@ -79,12 +74,6 @@ symfony.lock
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
-
-###> squizlabs/php_codesniffer ###
-/.phpcs-cache
-/phpcs.xml
-###< squizlabs/php_codesniffer ###
-
 .yarn/*
 .yarn/cache
 !.yarn/releases

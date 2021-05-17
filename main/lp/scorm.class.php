@@ -1,7 +1,6 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-use Symfony\Component\DomCrawler\Crawler;
+/* For licensing terms, see /license.txt */
 
 /**
  * Defines the scorm class, which is meant to contain the scorm items (nuclear elements).

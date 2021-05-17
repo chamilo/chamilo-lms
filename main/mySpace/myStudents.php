@@ -996,6 +996,7 @@ if (empty($details)) {
 
         if (api_get_configuration_value('allow_career_users')) {
             $visibility = api_get_session_visibility($sId);
+
             if (SESSION_AVAILABLE === $visibility) {
                 $value = $extraFieldValueSession->get_values_by_handler_and_field_variable($sId, 'careerid');
                 if (isset($value['value']) && !empty($value['value'])) {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Functions.
  *
@@ -51,9 +52,9 @@ function checkIdentificationData()
     $result = Database::query($sql);
     if (Database::affected_rows($result) > 0) {
         return true;
-    } else {
-        return false;
     }
+
+    return false;
 }
 
 function getActionId($courseId)
@@ -142,9 +143,9 @@ function getInfoSpecialtyClassroom($classroomId)
     global $tableSepeSpecialtyClassroom;
     global $tableCenters;
     $classroomId = (int) $classroomId;
-    $sql = "SELECT a.*, center_origin, center_code 
-            FROM $tableSepeSpecialtyClassroom a 
-            LEFT JOIN $tableCenters b ON a.center_id = b.id 
+    $sql = "SELECT a.*, center_origin, center_code
+            FROM $tableSepeSpecialtyClassroom a
+            LEFT JOIN $tableCenters b ON a.center_id = b.id
             WHERE a.id = $classroomId";
     $res = Database::query($sql);
     $row = false;
@@ -163,7 +164,6 @@ function getInfoSpecialtyTutorial($tutorialId)
     $tutorialId = (int) $tutorialId;
     $sql = "SELECT * FROM $tableSepeParticipantsSpecialtyTutorials WHERE id = $tutorialId";
     $res = Database::query($sql);
-    $aux = [];
     if (Database::num_rows($res) > 0) {
         $row = Database::fetch_assoc($res);
     } else {
@@ -235,8 +235,8 @@ function getTutorsSpecialty($specialtyId)
     while ($tmp = Database::fetch_assoc($rs)) {
         $tutorsList[] = $tmp['tutor_id'];
     }
-    $sql = "SELECT a.*, b.firstname AS firstname, b.lastname AS lastname 
-            FROM $tableSepeTutors AS a 
+    $sql = "SELECT a.*, b.firstname AS firstname, b.lastname AS lastname
+            FROM $tableSepeTutors AS a
             LEFT JOIN $tableUser AS b ON a.platform_user_id=b.user_id;";
     $res = Database::query($sql);
     $aux = [];
@@ -261,12 +261,11 @@ function getInfoSpecialtyTutor($tutorId)
     global $tableSepeSpecialtyTutors;
     global $tableSepeTutors;
     $tutorId = (int) $tutorId;
-    $sql = "SELECT a.*,platform_user_id,document_type, document_number,document_letter 
+    $sql = "SELECT a.*,platform_user_id,document_type, document_number,document_letter
             FROM $tableSepeSpecialtyTutors a
-            INNER JOIN $tableSepeTutors b ON a.tutor_id=b.id 
+            INNER JOIN $tableSepeTutors b ON a.tutor_id=b.id
             WHERE a.id = $tutorId;";
     $res = Database::query($sql);
-    $aux = [];
     if (Database::num_rows($res) > 0) {
         $row['tutor_accreditation'] = Security::remove_XSS(stripslashes($row['tutor_accreditation']));
         $row['teaching_competence'] = Security::remove_XSS(stripslashes($row['teaching_competence']));
@@ -393,7 +392,7 @@ function participantList($actionId)
     global $tableUser;
     $actionId = (int) $actionId;
     $sql = "SELECT $tableSepeParticipants.id AS id, document_type, document_number, document_letter, firstname, lastname
-            FROM $tableSepeParticipants 
+            FROM $tableSepeParticipants
             LEFT JOIN $tableUser ON $tableSepeParticipants.platform_user_id=$tableUser.user_id
             WHERE action_id = $actionId";
     $res = Database::query($sql);
@@ -434,8 +433,8 @@ function classroomList($specialtyId)
     global $tableCenters;
     $specialtyId = (int) $specialtyId;
     $sql = "SELECT a.*, center_origin, center_code
-            FROM $tableSepeSpecialtyClassroom a 
-            LEFT JOIN $tableCenters b ON a.center_id=b.id 
+            FROM $tableSepeSpecialtyClassroom a
+            LEFT JOIN $tableCenters b ON a.center_id=b.id
             WHERE specialty_id = $specialtyId";
     $res = Database::query($sql);
     $aux = [];
@@ -453,10 +452,10 @@ function tutorsList($specialtyId)
     global $tableUser;
     $specialtyId = (int) $specialtyId;
     $aux = [];
-    $sql = "SELECT a.*,document_type,document_number,document_letter, firstname, lastname 
-            FROM $tableSepeSpecialtyTutors a 
-            INNER JOIN $tableSepeTutors b ON a.tutor_id=b.id 
-            LEFT JOIN $tableUser c ON b.platform_user_id=c.user_id 
+    $sql = "SELECT a.*,document_type,document_number,document_letter, firstname, lastname
+            FROM $tableSepeSpecialtyTutors a
+            INNER JOIN $tableSepeTutors b ON a.tutor_id=b.id
+            LEFT JOIN $tableUser c ON b.platform_user_id=c.user_id
             WHERE a.specialty_id = $specialtyId";
     $res = Database::query($sql);
     while ($row = Database::fetch_assoc($res)) {
@@ -470,7 +469,7 @@ function getListSpecialtyTutorial($specialtyId)
 {
     global $tableSepeParticipantsSpecialtyTutorials;
     $specialtyId = (int) $specialtyId;
-    $sql = "SELECT * FROM $tableSepeParticipantsSpecialtyTutorials 
+    $sql = "SELECT * FROM $tableSepeParticipantsSpecialtyTutorials
             WHERE participant_specialty_id = $specialtyId";
     $res = Database::query($sql);
     $aux = [];
@@ -489,9 +488,12 @@ function listCourseAction()
     global $tableSepeActions;
     global $tableSepeCourseActions;
 
-    $sql = "SELECT $tableSepeCourseActions.*, course.title AS title, $tableSepeActions.action_origin AS action_origin, $tableSepeActions.action_code AS action_code 
-            FROM $tableSepeCourseActions, course, $tableSepeActions 
-            WHERE $tableSepeCourseActions.course_id=course.id 
+    $sql = "SELECT
+            $tableSepeCourseActions.*, course.title AS title,
+            $tableSepeActions.action_origin AS action_origin,
+            $tableSepeActions.action_code AS action_code
+            FROM $tableSepeCourseActions, course, $tableSepeActions
+            WHERE $tableSepeCourseActions.course_id=course.id
             AND $tableSepeActions.id=$tableSepeCourseActions.action_id";
     $res = Database::query($sql);
     $aux = [];
@@ -508,7 +510,7 @@ function listCourseFree()
     global $tableSepeCourseActions;
     $sql = "SELECT id, title FROM $tableCourse
             WHERE NOT EXISTS (
-                SELECT * FROM $tableSepeCourseActions 
+                SELECT * FROM $tableSepeCourseActions
                 WHERE $tableCourse.id = $tableSepeCourseActions.course_id)
             ;";
     $res = Database::query($sql);
@@ -544,8 +546,8 @@ function getSpecialtyTutorId($specialtyId, $tutorId)
     $specialtyId = (int) $specialtyId;
     $tutorId = (int) $tutorId;
 
-    $sql = "SELECT id 
-            FROM $tableSepeSpecialtyTutors 
+    $sql = "SELECT id
+            FROM $tableSepeSpecialtyTutors
             WHERE specialty_id = $specialtyId AND tutor_id = $tutorId";
     $res = Database::query($sql);
     $row = Database::fetch_assoc($res);
@@ -558,7 +560,8 @@ function checkInsertNewLog($platformUserId, $actionId)
     global $tableSepeLogParticipant;
     $platformUserId = (int) $platformUserId;
     $actionId = (int) $actionId;
-    $sql = "SELECT * FROM $tableSepeLogParticipant WHERE platform_user_id = $platformUserId AND action_id = $actionId";
+    $sql = "SELECT * FROM $tableSepeLogParticipant
+            WHERE platform_user_id = $platformUserId AND action_id = $actionId";
     $res = Database::query($sql);
     if (Database::num_rows($res) > 0) {
         return false;

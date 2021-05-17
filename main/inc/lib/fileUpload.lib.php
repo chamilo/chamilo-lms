@@ -1081,6 +1081,8 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
                     }
 
                     $safe_file = api_replace_dangerous_char($file);
+                    $safe_file = disable_dangerous_file($safe_file);
+
                     @rename($base_work_dir.$upload_path.'/'.$file, $base_work_dir.$upload_path.'/'.$safe_file);
                     set_default_settings($upload_path, $safe_file, $filetype);
                 }

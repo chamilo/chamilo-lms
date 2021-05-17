@@ -1025,7 +1025,7 @@ $actionsLeft = '';
 $actionsCenter = '';
 $actionsRight = '';
 if (api_is_platform_admin()) {
-    $actionsLeft .= '<a class="pull-right" href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
+    $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
          Display::return_icon('new_user.png', get_lang('Add a user'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
@@ -1063,7 +1063,6 @@ $form = new FormValidator(
     FormValidator::LAYOUT_HORIZONTAL
 );
 
-$form->addElement('html', '<div id="advanced_search_form" style="display:none;">');
 $form->addElement('header', get_lang('Advanced search'));
 $form->addText('keyword_firstname', get_lang('First name'), false);
 $form->addText('keyword_lastname', get_lang('Last name'), false);
@@ -1123,9 +1122,8 @@ $defaults = [];
 $defaults['keyword_active'] = 1;
 $defaults['keyword_inactive'] = 1;
 $form->setDefaults($defaults);
-$form->addElement('html', '</div>');
 
-$form = $form->returnForm();
+$form = '<div id="advanced_search_form" style="display:none;">'.$form->returnForm().'</div>';
 
 $table = new SortableTable(
     'users',

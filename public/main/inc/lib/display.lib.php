@@ -1177,7 +1177,7 @@ class Display
                 [
                     'id' => $id.'-'.$i,
                     'href' => $item['url'],
-                    'class' => 'nav-link '.$class,
+                    'class' => 'btn '.$class,
                 ]
             );
             $list .= $item;

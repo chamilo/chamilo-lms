@@ -92,10 +92,20 @@ class Import
      */
     public static function xml($file)
     {
+        return self::xmlFromString(file_get_contents($file));
+    }
+
+    /**
+     * @param string $contents
+     *
+     * @return Crawler
+     */
+    public static function xmlFromString($contents)
+    {
         @libxml_disable_entity_loader(true);
 
         $crawler = new Crawler();
-        $crawler->addXmlContent(file_get_contents($file));
+        $crawler->addXmlContent($contents);
 
         return $crawler;
     }

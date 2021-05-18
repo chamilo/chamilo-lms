@@ -17,8 +17,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CLpCategory.
- *
  * @ORM\Table(
  *     name="c_lp_category",
  * )

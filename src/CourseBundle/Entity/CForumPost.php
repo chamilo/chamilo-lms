@@ -53,6 +53,26 @@ class CForumPost extends AbstractResource implements ResourceInterface
     protected ?string $postText = null;
 
     /**
+     * @ORM\Column(name="post_date", type="datetime", nullable=false)
+     */
+    protected DateTime $postDate;
+
+    /**
+     * @ORM\Column(name="post_notification", type="boolean", nullable=true)
+     */
+    protected ?bool $postNotification = null;
+
+    /**
+     * @ORM\Column(name="visible", type="boolean", nullable=false)
+     */
+    protected bool $visible;
+
+    /**
+     * @ORM\Column(name="status", type="integer", nullable=true)
+     */
+    protected ?int $status = null;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumThread", inversedBy="posts")
      * @ORM\JoinColumn(name="thread_id", referencedColumnName="iid", nullable=true, onDelete="SET NULL")
      */
@@ -71,18 +91,8 @@ class CForumPost extends AbstractResource implements ResourceInterface
     protected ?User $user = null;
 
     /**
-     * @ORM\Column(name="post_date", type="datetime", nullable=false)
-     */
-    protected DateTime $postDate;
-
-    /**
-     * @ORM\Column(name="post_notification", type="boolean", nullable=true)
-     */
-    protected ?bool $postNotification = null;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", inversedBy="children")
-     * @ORM\JoinColumn(name="post_parent_id", referencedColumnName="iid")
+     * @ORM\JoinColumn(name="post_parent_id", referencedColumnName="iid", onDelete="SET NULL")
      */
     protected ?CForumPost $postParent = null;
 
@@ -91,16 +101,6 @@ class CForumPost extends AbstractResource implements ResourceInterface
      * @ORM\OneToMany(targetEntity="CForumPost", mappedBy="postParent")
      */
     protected Collection $children;
-
-    /**
-     * @ORM\Column(name="visible", type="boolean", nullable=false)
-     */
-    protected bool $visible;
-
-    /**
-     * @ORM\Column(name="status", type="integer", nullable=true)
-     */
-    protected ?int $status = null;
 
     /**
      * @var Collection|CForumAttachment[]
@@ -121,7 +121,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
 
     public function __toString(): string
     {
-        return (string) $this->getPostTitle();
+        return $this->getPostTitle();
     }
 
     public function setPostTitle(string $postTitle): self
@@ -131,11 +131,6 @@ class CForumPost extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get postTitle.
-     *
-     * @return string
-     */
     public function getPostTitle()
     {
         return $this->postTitle;
@@ -263,10 +258,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * @return User
-     */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }

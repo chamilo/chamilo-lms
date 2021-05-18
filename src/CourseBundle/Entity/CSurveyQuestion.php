@@ -32,7 +32,7 @@ class CSurveyQuestion
 
     /**
      * @ORM\ManyToOne(targetEntity="CSurveyQuestion", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="iid")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="iid", onDelete="SET NULL")
      */
     protected ?CSurveyQuestion $parent = null;
 
@@ -44,26 +44,26 @@ class CSurveyQuestion
 
     /**
      * @var Collection|CSurveyQuestionOption[]
-     * @ORM\OneToMany(targetEntity="CSurveyQuestionOption", mappedBy="question", cascade="remove")
+     * @ORM\OneToMany(targetEntity="CSurveyQuestionOption", mappedBy="question", cascade={"remove"})
      */
     protected Collection $options;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CSurveyQuestionOption", cascade="remove")
+     * @ORM\ManyToOne(targetEntity="CSurveyQuestionOption", cascade={"remove"})
      * @ORM\JoinColumn(name="parent_option_id", referencedColumnName="iid")
      */
     protected ?CSurveyQuestionOption $parentOption = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CSurvey", inversedBy="questions")
-     * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid")
+     * @ORM\ManyToOne(targetEntity="CSurvey", inversedBy="questions", cascade={"remove"})
+     * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected CSurvey $survey;
 
     /**
      * @var Collection|CSurveyAnswer[]
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyAnswer", mappedBy="question", cascade="remove")
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyAnswer", mappedBy="question", cascade={"remove"})
      */
     protected Collection $answers;
 
@@ -146,12 +146,7 @@ class CSurveyQuestion
         return $this;
     }
 
-    /**
-     * Get surveyQuestion.
-     *
-     * @return string
-     */
-    public function getSurveyQuestion()
+    public function getSurveyQuestion(): string
     {
         return $this->surveyQuestion;
     }
@@ -408,10 +403,8 @@ class CSurveyQuestion
 
     /**
      * @param CSurveyQuestionOption[]|Collection $options
-     *
-     * @return CSurveyQuestion
      */
-    public function setOptions($options)
+    public function setOptions($options): self
     {
         $this->options = $options;
 

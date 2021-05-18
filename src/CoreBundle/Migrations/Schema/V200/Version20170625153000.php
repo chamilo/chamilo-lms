@@ -153,7 +153,7 @@ class Version20170625153000 extends AbstractMigrationChamilo
         $this->addSql('UPDATE c_forum_post SET post_parent_id = NULL WHERE post_parent_id = 0');
 
         if (!$table->hasForeignKey('FK_B5BEF559D314B487')) {
-            $this->addSql('ALTER TABLE c_forum_post ADD CONSTRAINT FK_B5BEF559D314B487 FOREIGN KEY (post_parent_id) REFERENCES c_forum_post (iid);');
+            $this->addSql('ALTER TABLE c_forum_post ADD CONSTRAINT FK_B5BEF559D314B487 FOREIGN KEY (post_parent_id) REFERENCES c_forum_post (iid) ON DELETE SET NULL');
         }
 
         if (!$table->hasIndex('IDX_B5BEF559D314B487')) {

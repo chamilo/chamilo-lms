@@ -46,12 +46,7 @@ class CAttendanceSheet
      */
     protected CAttendanceCalendar $attendanceCalendar;
 
-    /**
-     * Set presence.
-     *
-     * @return CAttendanceSheet
-     */
-    public function setPresence(bool $presence)
+    public function setPresence(bool $presence): self
     {
         $this->presence = $presence;
 

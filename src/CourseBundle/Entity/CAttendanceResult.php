@@ -50,9 +50,6 @@ class CAttendanceResult
         return $this->user;
     }
 
-    /**
-     * @return CAttendanceResult
-     */
     public function setUser(User $user): self
     {
         $this->user = $user;
@@ -79,12 +76,7 @@ class CAttendanceResult
         return $this;
     }
 
-    /**
-     * Get score.
-     *
-     * @return int
-     */
-    public function getScore()
+    public function getScore(): int
     {
         return $this->score;
     }

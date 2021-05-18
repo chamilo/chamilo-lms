@@ -72,18 +72,14 @@ class CAttendance extends AbstractResource implements ResourceInterface
     /**
      * @var Collection|CAttendanceCalendar[]
      *
-     * @ORM\OneToMany(
-     *     targetEntity="CAttendanceCalendar", mappedBy="attendance", cascade={"persist", "remove"}, orphanRemoval=true
-     * )
+     * @ORM\OneToMany(targetEntity="CAttendanceCalendar", mappedBy="attendance", cascade={"persist", "remove"})
      */
     protected Collection $calendars;
 
     /**
      * @var Collection|CAttendanceSheetLog[]
      *
-     * @ORM\OneToMany(
-     *     targetEntity="CAttendanceSheetLog", mappedBy="attendance", cascade={"persist", "remove"}, orphanRemoval=true
-     * )
+     * @ORM\OneToMany(targetEntity="CAttendanceSheetLog", mappedBy="attendance", cascade={"persist", "remove"})
      */
     protected Collection $logs;
 
@@ -109,12 +105,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get name.
-     *
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -143,24 +134,14 @@ class CAttendance extends AbstractResource implements ResourceInterface
         return $this->active;
     }
 
-    /**
-     * Set attendanceQualifyTitle.
-     *
-     * @return CAttendance
-     */
-    public function setAttendanceQualifyTitle(string $attendanceQualifyTitle)
+    public function setAttendanceQualifyTitle(string $attendanceQualifyTitle): self
     {
         $this->attendanceQualifyTitle = $attendanceQualifyTitle;
 
         return $this;
     }
 
-    /**
-     * Get attendanceQualifyTitle.
-     *
-     * @return string
-     */
-    public function getAttendanceQualifyTitle()
+    public function getAttendanceQualifyTitle(): string
     {
         return $this->attendanceQualifyTitle;
     }

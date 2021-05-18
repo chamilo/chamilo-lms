@@ -10,8 +10,6 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CAttendanceCalendar.
- *
  * @ORM\Table(
  *     name="c_attendance_calendar",
  *     indexes={
@@ -30,8 +28,8 @@ class CAttendanceCalendar
     protected int $iid;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAttendance", inversedBy="calendars")
-     * @ORM\JoinColumn(name="attendance_id", referencedColumnName="iid")
+     * @ORM\ManyToOne(targetEntity="CAttendance", inversedBy="calendars", cascade={"remove"})
+     * @ORM\JoinColumn(name="attendance_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected CAttendance $attendance;
 
@@ -79,24 +77,14 @@ class CAttendanceCalendar
         return $this->dateTime;
     }
 
-    /**
-     * Set doneAttendance.
-     *
-     * @return CAttendanceCalendar
-     */
-    public function setDoneAttendance(bool $doneAttendance)
+    public function setDoneAttendance(bool $doneAttendance): self
     {
         $this->doneAttendance = $doneAttendance;
 
         return $this;
     }
 
-    /**
-     * Get doneAttendance.
-     *
-     * @return bool
-     */
-    public function getDoneAttendance()
+    public function getDoneAttendance(): bool
     {
         return $this->doneAttendance;
     }

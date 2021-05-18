@@ -2928,7 +2928,6 @@ class CourseManager
 
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_user_course_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $tableCourseUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
@@ -2972,15 +2971,13 @@ class CourseManager
                             LEFT JOIN $tbl_course course
                             ON course.id = course_rel_user.c_id
                             LEFT JOIN $tblCourseCategory ON course_category.id = course.category_id
-                            LEFT JOIN $tbl_user_course_category user_course_category
-                            ON course_rel_user.user_course_cat = user_course_category.id
                             INNER JOIN $tableCourseUrl url
                             ON (course.id = url.c_id)
                             WHERE url.access_url_id = $urlId
                             $withSpecialCourses
                             $languageCondition
                             GROUP BY course.code
-                            ORDER BY user_course_category.sort, course.title, course_rel_user.sort ASC
+                            ORDER BY course.title, course_rel_user.sort ASC
                     ";
                     $result = Database::query($sql);
                     if (Database::num_rows($result) > 0) {
@@ -3912,62 +3909,6 @@ class CourseManager
     }
 
     /**
-     * Retrieves the user defined course categories.
-     *
-     * @param int $userId
-     * @deprecated
-     * @return array
-     */
-    public static function get_user_course_categories($userId = 0)
-    {
-        $userId = empty($userId) ? api_get_user_id() : (int) $userId;
-        $table = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
-        $sql = "SELECT * FROM $table
-                WHERE user_id = $userId
-                ORDER BY sort ASC
-                ";
-        $result = Database::query($sql);
-        $output = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
-            $output[$row['id']] = $row;
-        }
-
-        return $output;
-    }
-
-    /**
-     * Return an array the user_category id and title for the course $courseId for user $userId.
-     *
-     * @param $userId
-     * @param $courseId
-     *
-     * @return array
-     */
-    public static function getUserCourseCategoryForCourse($userId, $courseId)
-    {
-        $tblCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $tblUserCategory = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
-        $courseId = intval($courseId);
-        $userId = intval($userId);
-
-        $sql = "SELECT user_course_cat, title
-                FROM $tblCourseRelUser cru
-                LEFT JOIN $tblUserCategory ucc
-                ON cru.user_course_cat = ucc.id
-                WHERE
-                    cru.user_id = $userId AND c_id = $courseId ";
-
-        $res = Database::query($sql);
-
-        $data = [];
-        if (Database::num_rows($res) > 0) {
-            $data = Database::fetch_assoc($res);
-        }
-
-        return $data;
-    }
-
-    /**
      * Get the course id based on the original id and field name in the extra fields.
      * Returns 0 if course was not found.
      *
@@ -3985,9 +3926,7 @@ class CourseManager
         );
 
         if (!empty($result)) {
-            $courseInfo = api_get_course_info_by_id($result['item_id']);
-
-            return $courseInfo;
+            return api_get_course_info_by_id($result['item_id']);
         }
 
         return [];

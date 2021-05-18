@@ -1155,11 +1155,12 @@ class IndexManager
             );
 
             // Display courses.
-            $courses = CourseManager::returnCourses(
+            /*$courses = CourseManager::returnCourses(
                 $user_id,
                 $this->load_directories_preview,
                 $useUserLanguageFilterIfAvailable
-            );
+            );*/
+            $courses = [];
 
             // Course option (show student progress)
             // This code will add new variables (Progress, Score, Certificate)
@@ -1875,184 +1876,6 @@ class IndexManager
     public function return_hot_courses()
     {
         return CourseManager::return_hot_courses(30, 6);
-    }
-
-    /**
-     * UserPortal view for session, return the HTML of the course list.
-     *
-     * @param $user_id
-     *
-     * @return string
-     */
-    public function returnCoursesAndSessionsViewBySession($user_id)
-    {
-        $sessionCount = 0;
-        $courseCount = 0;
-        $load_history = isset($_GET['history']) && 1 == intval($_GET['history']) ? true : false;
-
-        if ($load_history) {
-            // Load sessions in category in *history*
-            $sessionCategories = UserManager::get_sessions_by_category($user_id, true);
-        } else {
-            // Load sessions in category
-            $sessionCategories = UserManager::get_sessions_by_category($user_id, false);
-        }
-
-        $html = '';
-        $loadDirs = $this->load_directories_preview;
-
-        // If we're not in the history view...
-        $listCoursesInfo = [];
-        if (!isset($_GET['history'])) {
-            // Display special courses
-            $specialCoursesResult = CourseManager::returnSpecialCourses(
-                $user_id,
-                $loadDirs
-            );
-            $specialCourses = $specialCoursesResult;
-
-            if ($specialCourses) {
-                $this->tpl->assign('courses', $specialCourses);
-                $html = $this->tpl->fetch(
-                    $this->tpl->get_template('/user_portal/classic_courses_without_category.tpl')
-                );
-            }
-
-            // Display courses
-            // [code=>xxx, real_id=>000]
-            $listCourses = CourseManager::get_courses_list_by_user_id(
-                $user_id,
-                false
-            );
-
-            foreach ($listCourses as $i => $listCourseCodeId) {
-                if (isset($listCourseCodeId['special_course'])) {
-                    continue;
-                }
-                $courseCategory = CourseManager::getUserCourseCategoryForCourse(
-                    $user_id,
-                    $listCourseCodeId['real_id']
-                );
-
-                $userCatTitle = '';
-                $userCategoryId = 0;
-                if ($courseCategory) {
-                    $userCategoryId = $courseCategory['user_course_cat'];
-                    $userCatTitle = $courseCategory['title'];
-                }
-
-                $listCourse = api_get_course_info_by_id($listCourseCodeId['real_id']);
-                $listCoursesInfo[] = [
-                    'course' => $listCourse,
-                    'code' => $listCourseCodeId['code'],
-                    'id' => $listCourseCodeId['real_id'],
-                    'title' => $listCourse['title'],
-                    'userCatId' => $userCategoryId,
-                    'userCatTitle' => $userCatTitle,
-                ];
-                $courseCount++;
-            }
-            usort($listCoursesInfo, 'self::compareByCourse');
-        }
-
-        $listCoursesInSession = [];
-        if (is_array($sessionCategories)) {
-            // all courses that are in a session
-            $listCoursesInSession = SessionManager::getNamedSessionCourseForCoach($user_id);
-        }
-
-        // we got all courses
-        // for each user category, sorted alphabetically, display courses
-        $listUserCategories = CourseManager::get_user_course_categories($user_id);
-        $listCoursesAlreadyDisplayed = [];
-        uasort($listUserCategories, "self::compareListUserCategory");
-        $listUserCategories[0] = '';
-
-        $html .= '<div class="session-view-block">';
-        foreach ($listUserCategories as $userCategoryId => $userCat) {
-            // add user category
-            $userCategoryHtml = '';
-            if (0 != $userCategoryId) {
-                $userCategoryHtml = '<div class="session-view-well ">';
-                $userCategoryHtml .= self::getHtmlForUserCategory($userCategoryId, $userCat['title']);
-            }
-            // look for course in this userCat in session courses : $listCoursesInSession
-            $htmlCategory = '';
-            if (isset($listCoursesInSession[$userCategoryId])) {
-                // list of courses in this user cat
-                foreach ($listCoursesInSession[$userCategoryId]['courseInUserCatList'] as $i => $listCourse) {
-                    // add course
-                    $listCoursesAlreadyDisplayed[$listCourse['courseId']] = 1;
-                    $coursesInfo = $listCourse['course'];
-                    $htmlCategory .= self::getHtmlForCourse(
-                        $coursesInfo,
-                        $userCategoryId,
-                        1,
-                        $loadDirs
-                    );
-                    // list of session category
-                    $htmlSessionCategory = '<div class="session-view-row" style="display:none;" id="courseblock-'.$coursesInfo['real_id'].'">';
-                    foreach ($listCourse['sessionCatList'] as $listCategorySession) {
-                        // add session category
-                        $htmlSessionCategory .= self::getHtmlSessionCategory(
-                            $listCategorySession['catSessionId'],
-                            $listCategorySession['catSessionName']
-                        );
-                        // list of session
-                        $htmlSession = ''; // start
-                        foreach ($listCategorySession['sessionList'] as $listSession) {
-                            // add session
-                            $htmlSession .= '<div class="session-view-row">';
-                            $htmlSession .= self::getHtmlForSession(
-                                $listSession['sessionId'],
-                                $listSession['sessionName'],
-                                $listCategorySession['catSessionId'],
-                                $coursesInfo
-                            );
-                            $htmlSession .= '</div>';
-                            $sessionCount++;
-                        }
-                        $htmlSession .= ''; // end session block
-                        $htmlSessionCategory .= $htmlSession;
-                    }
-                    $htmlSessionCategory .= '</div>'; // end session cat block
-                    $htmlCategory .= Display::panel($htmlSessionCategory, '');
-                }
-                $userCategoryHtml .= $htmlCategory;
-            }
-
-            // look for courses in this userCat in not in session courses : $listCoursesInfo
-            // if course not already added
-            $htmlCategory = '';
-            foreach ($listCoursesInfo as $i => $listCourse) {
-                if ($listCourse['userCatId'] == $userCategoryId &&
-                    !isset($listCoursesAlreadyDisplayed[$listCourse['id']])
-                ) {
-                    $body = self::getHtmlForCourse(
-                        $listCourse['course'],
-                        $userCategoryId,
-                        0,
-                        $loadDirs
-                    );
-                    $htmlCategory .= Display::panel($body, '');
-                }
-            }
-            $htmlCategory .= '';
-            $userCategoryHtml .= $htmlCategory; // end user cat block
-            if (0 != $userCategoryId) {
-                $userCategoryHtml .= '</div>';
-            }
-            $html .= $userCategoryHtml;
-        }
-        $html .= '</div>';
-
-        return [
-            'html' => $html,
-            'sessions' => $sessionCategories,
-            'courses' => $listCoursesInfo,
-            'session_count' => $sessionCount,
-            'course_count' => $courseCount,
-        ];
     }
 
     /**

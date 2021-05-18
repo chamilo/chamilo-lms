@@ -232,7 +232,7 @@ define('TABLE_COURSE_SETTING', 'course_setting');
 define('TABLE_PERSONAL_AGENDA', 'personal_agenda');
 define('TABLE_PERSONAL_AGENDA_REPEAT', 'personal_agenda_repeat');
 define('TABLE_PERSONAL_AGENDA_REPEAT_NOT', 'personal_agenda_repeat_not');
-define('TABLE_USER_COURSE_CATEGORY', 'user_course_category');
+//define('TABLE_USER_COURSE_CATEGORY', 'user_course_category');
 
 // Survey
 // @TODO: Are these MAIN tables or course tables?

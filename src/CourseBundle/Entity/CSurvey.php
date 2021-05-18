@@ -176,7 +176,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
 
     /**
      * @Gedmo\TreeParent
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurvey")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurvey", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected ?CSurvey $surveyParent = null;

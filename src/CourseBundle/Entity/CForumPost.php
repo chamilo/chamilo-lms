@@ -81,7 +81,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
     protected ?bool $postNotification = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", inversedBy="children")
      * @ORM\JoinColumn(name="post_parent_id", referencedColumnName="iid")
      */
     protected ?CForumPost $postParent = null;

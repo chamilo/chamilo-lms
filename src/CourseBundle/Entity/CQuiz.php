@@ -365,12 +365,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->resultsDisabled;
     }
 
-    /**
-     * Set accessCondition.
-     *
-     * @return CQuiz
-     */
-    public function setAccessCondition(string $accessCondition)
+    public function setAccessCondition(string $accessCondition): self
     {
         $this->accessCondition = $accessCondition;
 
@@ -421,12 +416,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->startTime;
     }
 
-    /**
-     * Set endTime.
-     *
-     * @return CQuiz
-     */
-    public function setEndTime(?DateTime $endTime)
+    public function setEndTime(?DateTime $endTime): self
     {
         $this->endTime = $endTime;
 
@@ -443,12 +433,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->endTime;
     }
 
-    /**
-     * Set feedbackType.
-     *
-     * @return CQuiz
-     */
-    public function setFeedbackType(int $feedbackType)
+    public function setFeedbackType(int $feedbackType): self
     {
         $this->feedbackType = $feedbackType;
 
@@ -465,12 +450,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->feedbackType;
     }
 
-    /**
-     * Set expiredTime.
-     *
-     * @return CQuiz
-     */
-    public function setExpiredTime(int $expiredTime)
+    public function setExpiredTime(int $expiredTime): self
     {
         $this->expiredTime = $expiredTime;
 
@@ -487,12 +467,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->expiredTime;
     }
 
-    /**
-     * Set propagateNeg.
-     *
-     * @return CQuiz
-     */
-    public function setPropagateNeg(int $propagateNeg)
+    public function setPropagateNeg(int $propagateNeg): self
     {
         $this->propagateNeg = $propagateNeg;
 
@@ -509,10 +484,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->propagateNeg;
     }
 
-    /**
-     * @return CQuiz
-     */
-    public function setSaveCorrectAnswers(int $saveCorrectAnswers)
+    public function setSaveCorrectAnswers(int $saveCorrectAnswers): self
     {
         $this->saveCorrectAnswers = $saveCorrectAnswers;
 
@@ -527,12 +499,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->saveCorrectAnswers;
     }
 
-    /**
-     * Set reviewAnswers.
-     *
-     * @return CQuiz
-     */
-    public function setReviewAnswers(int $reviewAnswers)
+    public function setReviewAnswers(int $reviewAnswers): self
     {
         $this->reviewAnswers = $reviewAnswers;
 
@@ -549,12 +516,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->reviewAnswers;
     }
 
-    /**
-     * Set randomByCategory.
-     *
-     * @return CQuiz
-     */
-    public function setRandomByCategory(int $randomByCategory)
+    public function setRandomByCategory(int $randomByCategory): self
     {
         $this->randomByCategory = $randomByCategory;
 
@@ -571,12 +533,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->randomByCategory;
     }
 
-    /**
-     * Set textWhenFinished.
-     *
-     * @return CQuiz
-     */
-    public function setTextWhenFinished(string $textWhenFinished)
+    public function setTextWhenFinished(string $textWhenFinished): self
     {
         $this->textWhenFinished = $textWhenFinished;
 
@@ -593,12 +550,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->textWhenFinished;
     }
 
-    /**
-     * Set displayCategoryName.
-     *
-     * @return CQuiz
-     */
-    public function setDisplayCategoryName(int $displayCategoryName)
+    public function setDisplayCategoryName(int $displayCategoryName): self
     {
         $this->displayCategoryName = $displayCategoryName;
 
@@ -615,12 +567,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->displayCategoryName;
     }
 
-    /**
-     * Set passPercentage.
-     *
-     * @return CQuiz
-     */
-    public function setPassPercentage(int $passPercentage)
+    public function setPassPercentage(int $passPercentage): self
     {
         $this->passPercentage = $passPercentage;
 

@@ -177,10 +177,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
         return false;
     }
 
-    /**
-     * @return $this
-     */
-    public function removeUsers(CLpCategoryUser $user)
+    public function removeUsers(CLpCategoryUser $user): self
     {
         $this->users->removeElement($user);
 

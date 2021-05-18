@@ -83,12 +83,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    /**
-     * Set catTitle.
-     *
-     * @return CForumCategory
-     */
-    public function setCatTitle(string $catTitle)
+    public function setCatTitle(string $catTitle): self
     {
         $this->catTitle = $catTitle;
 
@@ -117,12 +112,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface
         return $this->catComment;
     }
 
-    /**
-     * Set catOrder.
-     *
-     * @return CForumCategory
-     */
-    public function setCatOrder(int $catOrder)
+    public function setCatOrder(int $catOrder): self
     {
         $this->catOrder = $catOrder;
 
@@ -139,12 +129,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface
         return $this->catOrder;
     }
 
-    /**
-     * Set locked.
-     *
-     * @return CForumCategory
-     */
-    public function setLocked(int $locked)
+    public function setLocked(int $locked): self
     {
         $this->locked = $locked;
 

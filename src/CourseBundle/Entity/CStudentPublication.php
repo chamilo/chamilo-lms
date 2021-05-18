@@ -355,12 +355,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this->viewProperties;
     }
 
-    /**
-     * Set qualification.
-     *
-     * @return CStudentPublication
-     */
-    public function setQualification(float $qualification)
+    public function setQualification(float $qualification): self
     {
         $this->qualification = $qualification;
 
@@ -377,12 +372,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this->qualification;
     }
 
-    /**
-     * Set dateOfQualification.
-     *
-     * @return CStudentPublication
-     */
-    public function setDateOfQualification(DateTime $dateOfQualification)
+    public function setDateOfQualification(DateTime $dateOfQualification): self
     {
         $this->dateOfQualification = $dateOfQualification;
 
@@ -416,12 +406,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this->qualificatorId;
     }
 
-    /**
-     * Set weight.
-     *
-     * @return CStudentPublication
-     */
-    public function setWeight(float $weight)
+    public function setWeight(float $weight): self
     {
         $this->weight = $weight;
 

@@ -129,12 +129,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    /**
-     * Set title.
-     *
-     * @return CGroupCategory
-     */
-    public function setTitle(string $title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -158,12 +153,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this->description;
     }
 
-    /**
-     * Set docState.
-     *
-     * @return CGroupCategory
-     */
-    public function setDocState(bool $docState)
+    public function setDocState(bool $docState): self
     {
         $this->docState = $docState;
 
@@ -180,12 +170,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this->docState;
     }
 
-    /**
-     * Set calendarState.
-     *
-     * @return CGroupCategory
-     */
-    public function setCalendarState(bool $calendarState)
+    public function setCalendarState(bool $calendarState): self
     {
         $this->calendarState = $calendarState;
 
@@ -202,12 +187,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this->calendarState;
     }
 
-    /**
-     * Set workState.
-     *
-     * @return CGroupCategory
-     */
-    public function setWorkState(bool $workState)
+    public function setWorkState(bool $workState): self
     {
         $this->workState = $workState;
 
@@ -224,12 +204,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this->workState;
     }
 
-    /**
-     * Set announcementsState.
-     *
-     * @return CGroupCategory
-     */
-    public function setAnnouncementsState(bool $announcementsState)
+    public function setAnnouncementsState(bool $announcementsState): self
     {
         $this->announcementsState = $announcementsState;
 
@@ -246,12 +221,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this->announcementsState;
     }
 
-    /**
-     * Set forumState.
-     *
-     * @return CGroupCategory
-     */
-    public function setForumState(bool $forumState)
+    public function setForumState(bool $forumState): self
     {
         $this->forumState = $forumState;
 
@@ -268,12 +238,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this->forumState;
     }
 
-    /**
-     * Set wikiState.
-     *
-     * @return CGroupCategory
-     */
-    public function setWikiState(bool $wikiState)
+    public function setWikiState(bool $wikiState): self
     {
         $this->wikiState = $wikiState;
 
@@ -290,12 +255,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this->wikiState;
     }
 
-    /**
-     * Set chatState.
-     *
-     * @return CGroupCategory
-     */
-    public function setChatState(bool $chatState)
+    public function setChatState(bool $chatState): self
     {
         $this->chatState = $chatState;
 
@@ -312,12 +272,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this->chatState;
     }
 
-    /**
-     * Set maxStudent.
-     *
-     * @return CGroupCategory
-     */
-    public function setMaxStudent(int $maxStudent)
+    public function setMaxStudent(int $maxStudent): self
     {
         $this->maxStudent = $maxStudent;
 
@@ -334,12 +289,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this->maxStudent;
     }
 
-    /**
-     * Set selfRegAllowed.
-     *
-     * @return CGroupCategory
-     */
-    public function setSelfRegAllowed(bool $selfRegAllowed)
+    public function setSelfRegAllowed(bool $selfRegAllowed): self
     {
         $this->selfRegAllowed = $selfRegAllowed;
 
@@ -356,12 +306,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this->selfRegAllowed;
     }
 
-    /**
-     * Set selfUnregAllowed.
-     *
-     * @return CGroupCategory
-     */
-    public function setSelfUnregAllowed(bool $selfUnregAllowed)
+    public function setSelfUnregAllowed(bool $selfUnregAllowed): self
     {
         $this->selfUnregAllowed = $selfUnregAllowed;
 
@@ -378,12 +323,7 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         return $this->selfUnregAllowed;
     }
 
-    /**
-     * Set groupsPerUser.
-     *
-     * @return CGroupCategory
-     */
-    public function setGroupsPerUser(int $groupsPerUser)
+    public function setGroupsPerUser(int $groupsPerUser): self
     {
         $this->groupsPerUser = $groupsPerUser;
 

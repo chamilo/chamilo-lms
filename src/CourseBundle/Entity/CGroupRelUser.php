@@ -59,12 +59,7 @@ class CGroupRelUser
      */
     protected string $role;
 
-    /**
-     * Set group.
-     *
-     * @return CGroupRelUser
-     */
-    public function setGroup(CGroup $group)
+    public function setGroup(CGroup $group): self
     {
         $this->group = $group;
 
@@ -81,12 +76,7 @@ class CGroupRelUser
         return $this->group;
     }
 
-    /**
-     * Set status.
-     *
-     * @return CGroupRelUser
-     */
-    public function setStatus(int $status)
+    public function setStatus(int $status): self
     {
         $this->status = $status;
 
@@ -103,12 +93,7 @@ class CGroupRelUser
         return $this->status;
     }
 
-    /**
-     * Set role.
-     *
-     * @return CGroupRelUser
-     */
-    public function setRole(string $role)
+    public function setRole(string $role): self
     {
         $this->role = $role;
 

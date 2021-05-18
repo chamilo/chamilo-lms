@@ -94,12 +94,7 @@ class CLink extends AbstractResource implements ResourceInterface
         return $this->title;
     }
 
-    /**
-     * Set description.
-     *
-     * @return CLink
-     */
-    public function setDescription(string $description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -111,12 +106,7 @@ class CLink extends AbstractResource implements ResourceInterface
         return $this->description;
     }
 
-    /**
-     * Set displayOrder.
-     *
-     * @return CLink
-     */
-    public function setDisplayOrder(int $displayOrder)
+    public function setDisplayOrder(int $displayOrder): self
     {
         $this->displayOrder = $displayOrder;
 

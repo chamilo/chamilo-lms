@@ -47,7 +47,6 @@ Display::display_header($nameTools);
 $result = '';
 if (count($output) > 0) {
     $result = '<div class="filler-report">'."\n";
-    $result .= '<h3>'.$output[0]['title'].'</h3>'."\n";
     $result .= '<table>';
     foreach ($output as $line) {
         $result .= '<tr>';
@@ -57,7 +56,8 @@ if (count($output) > 0) {
     }
     $result .= '</table>';
     $result .= '</div>';
-    echo Display::return_message($result, 'normal', false);
+    echo Display::return_message($output[0]['title'], 'normal', false);
+    echo $result;
 }
 ?>
 <div id="datafiller" class="card">

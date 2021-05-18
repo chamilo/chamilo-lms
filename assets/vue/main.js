@@ -160,9 +160,6 @@ app.component('DashboardLayout', DashboardLayout);
 app.component('EmptyLayout', EmptyLayout);
 app.component('TinyEditor', Editor);
 
-
-
-
 app.config.globalProperties.axios = axios;
 
 const prettyBytes = require('pretty-bytes');

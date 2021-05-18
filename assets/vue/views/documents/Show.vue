@@ -165,7 +165,6 @@ const servicePrefix = 'Documents';
 
 export default {
   name: 'DocumentsShow',
-  servicePrefix,
   components: {
       Loading,
       Toolbar
@@ -188,6 +187,7 @@ export default {
       reset: 'resetShow',
       retrieve: 'loadWithQuery'
     }),
-  }
+  },
+  servicePrefix
 };
 </script>

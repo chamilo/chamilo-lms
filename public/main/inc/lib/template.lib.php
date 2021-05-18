@@ -1123,7 +1123,7 @@ class Template
             );
         }
 
-        $this->params['legacy_breadcrumb'] = $interbreadcrumb;
+        $this->params['legacy_breadcrumb'] = json_encode($interbreadcrumb);
 
         global $htmlHeadXtra;
         $this->params['legacy_javascript'] = $htmlHeadXtra;

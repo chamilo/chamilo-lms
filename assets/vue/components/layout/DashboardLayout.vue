@@ -181,6 +181,8 @@
       <q-page
           class="q-layout-padding"
       >
+        <Breadcrumb :legacy="this.breadcrumb"/>
+
         <router-view />
         <slot></slot>
 
@@ -197,9 +199,11 @@ import {useRouter} from "vue-router";
 import {computed, ref} from "vue";
 import axios from "axios";
 
+import Breadcrumb from '../../components/Breadcrumb.vue';
 export default {
   name: "DashboardLayout",
   components: {
+    Breadcrumb
   },
   setup () {
     const { isSidebarOpen, isSettingsPanelOpen, isSearchPanelOpen, isNotificationsPanelOpen } = useState();
@@ -266,6 +270,14 @@ export default {
       this.user = window.user;
       this.userAvatar = window.userAvatar;
       isAuthenticated = true;
+    }
+
+    try {
+      if (window.breadcrumb) {
+        this.breadcrumb = window.breadcrumb;
+      }
+    } catch (e) {
+      console.log(e.message);
     }
 
     /*if (app && app.attributes["data-user-json"].value) {

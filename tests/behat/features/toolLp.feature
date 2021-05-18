@@ -30,7 +30,7 @@ Feature: LP tool
     And wait the page to be loaded when ready
     When I fill in the following:
       | idTitle | Document 1 |
-    And I fill in ckeditor field "content_lp" with "Sample HTML text"
+    And I fill in editor field "content_lp" with "Sample HTML text"
     And I press "submit_button"
     And wait very long for the page to be loaded
     Then I should see "Document 1"

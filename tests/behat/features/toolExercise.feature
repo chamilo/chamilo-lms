@@ -11,7 +11,7 @@ Feature: Exercise tool
     And wait for the page to be loaded
     When I fill in the following:
       | category_name | Category 1 |
-    And I fill in ckeditor field "category_description" with "Category 1 description"
+    And I fill in editor field "category_description" with "Category 1 description"
     And I press "SubmitNote"
     And wait for the page to be loaded
     Then I should see "Category added"
@@ -21,7 +21,7 @@ Feature: Exercise tool
     And wait for the page to be loaded
     When I fill in the following:
       | category_name | Category 2 |
-    And I fill in ckeditor field "category_description" with "Category 2 description"
+    And I fill in editor field "category_description" with "Category 2 description"
     And I press "SubmitNote"
     And wait for the page to be loaded
     Then I should see "Category added"
@@ -31,7 +31,7 @@ Feature: Exercise tool
     And I press advanced settings
     When I fill in the following:
       | exercise_title | Exercise 1 |
-    And I fill in ckeditor field "exerciseDescription" with "Exercise description"
+    And I fill in editor field "exerciseDescription" with "Exercise description"
     And I press "submitExercise"
     And wait for the page to be loaded
     Then I should see "Test added"
@@ -53,15 +53,15 @@ Feature: Exercise tool
     When I fill in the following:
       | questionName | Multiple choice |
       | weighting[1] | 10 |
-    Then I fill in ckeditor field "answer[1]" with "Answer true"
-    Then I fill in ckeditor field "answer[2]" with "Answer false"
-    Then I fill in ckeditor field "answer[3]" with "Answer false"
-    Then I fill in ckeditor field "answer[4]" with "Answer false"
+    Then I fill in editor field "answer1" with "Answer true"
+    Then I fill in editor field "answer2" with "Answer false"
+    Then I fill in editor field "answer3" with "Answer false"
+    Then I fill in editor field "answer4" with "Answer false"
 
-    Then I fill in ckeditor field "comment[1]" with "Comment true"
-    Then I fill in ckeditor field "comment[2]" with "Comment false"
-    Then I fill in ckeditor field "comment[3]" with "Comment false"
-    Then I fill in ckeditor field "comment[4]" with "Comment false"
+    Then I fill in editor field "comment1" with "Comment true"
+    Then I fill in editor field "comment2" with "Comment false"
+    Then I fill in editor field "comment3" with "Comment false"
+    Then I fill in editor field "comment4" with "Comment false"
     And I press "submit-question"
     And wait for the page to be loaded
     Then I should see "Item added"
@@ -75,15 +75,15 @@ Feature: Exercise tool
       | questionName | Multiple answers |
       | weighting[1] | 10 |
     Then I check the "correct[1]" radio button
-    Then I fill in ckeditor field "answer[1]" with "Answer true"
-    Then I fill in ckeditor field "answer[2]" with "Answer false"
-    Then I fill in ckeditor field "answer[3]" with "Answer false"
-    Then I fill in ckeditor field "answer[4]" with "Answer false"
+    Then I fill in editor field "answer1" with "Answer true"
+    Then I fill in editor field "answer2" with "Answer false"
+    Then I fill in editor field "answer3" with "Answer false"
+    Then I fill in editor field "answer4" with "Answer false"
 
-    Then I fill in ckeditor field "comment[1]" with "Comment true"
-    Then I fill in ckeditor field "comment[2]" with "Comment false"
-    Then I fill in ckeditor field "comment[3]" with "Comment false"
-    Then I fill in ckeditor field "comment[4]" with "Comment false"
+    Then I fill in editor field "comment1" with "Comment true"
+    Then I fill in editor field "comment2" with "Comment false"
+    Then I fill in editor field "comment3" with "Comment false"
+    Then I fill in editor field "comment4" with "Comment false"
     And I press "submit-question"
     And wait for the page to be loaded
     Then I should see "Item added"
@@ -95,7 +95,7 @@ Feature: Exercise tool
     And I follow "Fill blanks or form"
     When I fill in the following:
       | questionName | Fill blanks |
-    Then I fill in ckeditor field "answer" with "Romeo and [Juliet] [Hätten||Haetten] [möchte||moechte] [wäre||waere] [können||koennen] [Könnten||Koennten] [Ärger] [voilà] [müssen] [l'été] [cherchent à] [Übung]  [Ärger|Möglichkeit]"
+    Then I fill in editor field "answer" with "Romeo and [Juliet] [Hätten||Haetten] [möchte||moechte] [wäre||waere] [können||koennen] [Könnten||Koennten] [Ärger] [voilà] [müssen] [l'été] [cherchent à] [Übung]  [Ärger|Möglichkeit]"
     And I press "submitQuestion"
     And wait for the page to be loaded
     Then I should see "Item added"
@@ -107,10 +107,10 @@ Feature: Exercise tool
     And I follow "Matching"
     When I fill in the following:
       | questionName | Matching |
-    And I fill in ckeditor field "answer[1]" with "Answer A"
-    And I fill in ckeditor field "answer[2]" with "Answer B"
-    And I fill in ckeditor field "option[1]" with "Option A"
-    And I fill in ckeditor field "option[2]" with "Option B"
+    And I fill in editor field "answer1" with "Answer A"
+    And I fill in editor field "answer2" with "Answer B"
+    And I fill in editor field "option1" with "Option A"
+    And I fill in editor field "option2" with "Option B"
     And I fill in select bootstrap static input "#matches_2" select "2"
     And I press "submitQuestion"
     And wait for the page to be loaded
@@ -147,11 +147,10 @@ Feature: Exercise tool
     When I fill in the following:
       | questionName | Exact answers combination |
     Then I check the "correct[1]" radio button
-    Then I fill in ckeditor field "answer[1]" with "Answer true"
-    Then I fill in ckeditor field "answer[2]" with "Answer false"
-
-    Then I fill in ckeditor field "comment[1]" with "Comment true"
-    Then I fill in ckeditor field "comment[2]" with "Comment false"
+    Then I fill in editor field "answer1" with "Answer true"
+    Then I fill in editor field "answer2" with "Answer false"
+    Then I fill in editor field "comment1" with "Comment true"
+    Then I fill in editor field "comment2" with "Comment false"
     And I press "submitQuestion"
     And wait for the page to be loaded
     Then I should see "Item added"
@@ -165,13 +164,13 @@ Feature: Exercise tool
         | questionName | Unique answer with unknown |
         | weighting[1] | 10 |
       Then I check the "correct" radio button
-      Then I fill in ckeditor field "answer[1]" with "Answer true"
-      Then I fill in ckeditor field "answer[2]" with "Answer false"
-      Then I fill in ckeditor field "answer[3]" with "Answer false"
+      Then I fill in editor field "answer1" with "Answer true"
+      Then I fill in editor field "answer2" with "Answer false"
+      Then I fill in editor field "answer3" with "Answer false"
 
-      Then I fill in ckeditor field "comment[1]" with "Comment true"
-      Then I fill in ckeditor field "comment[2]" with "Comment false"
-      Then I fill in ckeditor field "comment[3]" with "Comment false"
+      Then I fill in editor field "comment1" with "Comment true"
+      Then I fill in editor field "comment2" with "Comment false"
+      Then I fill in editor field "comment3" with "Comment false"
       And I press "submitQuestion"
       And wait for the page to be loaded
       Then I should see "Item added"
@@ -189,15 +188,15 @@ Feature: Exercise tool
     Then I check the "correct[3]" radio button
     Then I check the "correct[4]" radio button
 
-    Then I fill in ckeditor field "answer[1]" with "Answer true"
-    Then I fill in ckeditor field "answer[2]" with "Answer true"
-    Then I fill in ckeditor field "answer[3]" with "Answer true"
-    Then I fill in ckeditor field "answer[4]" with "Answer true"
+    Then I fill in editor field "answer1" with "Answer true"
+    Then I fill in editor field "answer2" with "Answer true"
+    Then I fill in editor field "answer3" with "Answer true"
+    Then I fill in editor field "answer4" with "Answer true"
 
-    Then I fill in ckeditor field "comment[1]" with "Comment true"
-    Then I fill in ckeditor field "comment[2]" with "Comment true"
-    Then I fill in ckeditor field "comment[3]" with "Comment true"
-    Then I fill in ckeditor field "comment[4]" with "Comment true"
+    Then I fill in editor field "comment1" with "Comment true"
+    Then I fill in editor field "comment2" with "Comment true"
+    Then I fill in editor field "comment3" with "Comment true"
+    Then I fill in editor field "comment4" with "Comment true"
     And I press "submitQuestion"
     And wait for the page to be loaded
     Then I should see "Item added"
@@ -212,11 +211,11 @@ Feature: Exercise tool
 
     Then I check the "correct[1]" radio button
 
-    Then I fill in ckeditor field "answer[1]" with "Answer true"
-    Then I fill in ckeditor field "answer[2]" with "Answer false"
+    Then I fill in editor field "answer1" with "Answer true"
+    Then I fill in editor field "answer2" with "Answer false"
 
-    Then I fill in ckeditor field "comment[1]" with "Comment true"
-    Then I fill in ckeditor field "comment[2]" with "Comment false"
+    Then I fill in editor field "comment1" with "Comment true"
+    Then I fill in editor field "comment2" with "Comment false"
     And I press "submitQuestion"
     And wait for the page to be loaded
     Then I should see "Item added"
@@ -232,15 +231,15 @@ Feature: Exercise tool
 
     Then I check the "correct[1]" radio button
 
-    Then I fill in ckeditor field "answer[1]" with "Answer true"
-    Then I fill in ckeditor field "answer[2]" with "Answer false"
-    Then I fill in ckeditor field "answer[3]" with "Answer false"
-    Then I fill in ckeditor field "answer[4]" with "Answer false"
+    Then I fill in editor field "answer1" with "Answer true"
+    Then I fill in editor field "answer2" with "Answer false"
+    Then I fill in editor field "answer3" with "Answer false"
+    Then I fill in editor field "answer4" with "Answer false"
 
-    Then I fill in ckeditor field "comment[1]" with "Comment true"
-    Then I fill in ckeditor field "comment[2]" with "Comment false"
-    Then I fill in ckeditor field "comment[3]" with "Comment false"
-    Then I fill in ckeditor field "comment[4]" with "Comment false"
+    Then I fill in editor field "comment1" with "Comment true"
+    Then I fill in editor field "comment2" with "Comment false"
+    Then I fill in editor field "comment3" with "Comment false"
+    Then I fill in editor field "comment4" with "Comment false"
 
     And I press "submitQuestion"
     And wait for the page to be loaded

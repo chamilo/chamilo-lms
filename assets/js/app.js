@@ -30,6 +30,15 @@ window.getContentFromEditor = function (id) {
   return content;
 };
 
+window.setContentFromEditor = function (id, content) {
+  if (tinymce.get(id)) {
+    tinymce.get(id).setContent(content);
+    return true;
+  }
+
+  return false;
+};
+
 //require('flatpickr');
 //import('bootstrap-vue');
 import('bootstrap');

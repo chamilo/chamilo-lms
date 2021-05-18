@@ -7,7 +7,7 @@ Feature: Attendance tool
     Given I am on "/main/attendance/index.php?cid=1&action=attendance_add"
     Then I fill in the following:
       | title |Attendance 1|
-    Then I fill in ckeditor field "description" with "Description for attendance"
+    Then I fill in editor field "description" with "Description for attendance"
     Then wait for the page to be loaded
     And I press "Save"
     And wait the page to be loaded when ready
@@ -24,7 +24,7 @@ Feature: Attendance tool
     Then I should see "Edit"
     When I fill in the following:
       | title | Attendance 1 edited |
-    Then I fill in ckeditor field "description" with "Description edited"
+    Then I fill in editor field "description" with "Description edited"
     Then I press "Update"
     Then I should see "Attendance 1 edited"
 

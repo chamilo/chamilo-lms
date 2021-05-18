@@ -70,7 +70,7 @@ Feature: Group tool
 #    Then I should see "Create a rich media page"
 #    Then I fill in the following:
 #      | title | html test |
-#    And I fill in ckeditor field "content" with "My first HTML!!"
+#    And I fill in editor field "content" with "My first HTML!!"
 #    Then I press "create_document_submit"
 #    And wait the page to be loaded when ready
 #    Then I should see "Item added"
@@ -246,7 +246,7 @@ Feature: Group tool
     Then I should see "Add an announcement"
     Then I fill in the following:
       | title | Announcement for all users inside Group 0001 |
-    And I fill in ckeditor field "content" with "Announcement description in Group 0001"
+    And I fill in editor field "content" with "Announcement description in Group 0001"
     Then I follow "announcement_preview"
     And wait for the page to be loaded
     Then I should see "Announcement will be sent to"
@@ -268,7 +268,7 @@ Feature: Group tool
     Then I press "users_rightSelected"
     Then I fill in the following:
       | title |Announcement for user fapple inside Group 0001|
-    And I fill in ckeditor field "content" with "Announcement description for user fapple inside Group 0001"
+    And I fill in editor field "content" with "Announcement description for user fapple inside Group 0001"
     Then I follow "announcement_preview"
     And wait for the page to be loaded
     Then I should see "Announcement will be sent to"
@@ -288,7 +288,7 @@ Feature: Group tool
     Then I should see "Add an announcement"
     Then I fill in the following:
       | title | Announcement for all users inside Group 0003 |
-    And I fill in ckeditor field "content" with "Announcement description in Group 0003"
+    And I fill in editor field "content" with "Announcement description in Group 0003"
     Then I follow "announcement_preview"
     And wait for the page to be loaded
     Then I should see "Announcement will be sent to"
@@ -311,7 +311,7 @@ Feature: Group tool
     Then I press "users_rightSelected"
     Then I fill in the following:
       | title | Announcement for user fapple inside Group 0003 |
-    And I fill in ckeditor field "content" with "Announcement description for user fapple inside Group 0003"
+    And I fill in editor field "content" with "Announcement description for user fapple inside Group 0003"
     Then I follow "announcement_preview"
     And wait for the page to be loaded
     Then I should see "Announcement will be sent to"
@@ -337,7 +337,7 @@ Feature: Group tool
     Then I press "users_rightSelected"
     Then I fill in the following:
       | title | Announcement only for fapple Group 0005 |
-    And I fill in ckeditor field "content" with "Announcement description only for fapple Group 0005"
+    And I fill in editor field "content" with "Announcement description only for fapple Group 0005"
     Then I follow "announcement_preview"
     And wait for the page to be loaded
     Then I should see "Announcement will be sent to"

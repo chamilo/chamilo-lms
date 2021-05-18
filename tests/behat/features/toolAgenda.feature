@@ -9,7 +9,7 @@ Feature: Agenda tool
     Given I am on "/main/calendar/agenda.php?action=add&type=personal"
     When I fill in the following:
       | title | Event 1 |
-    Then I fill in ckeditor field "content" with "Description event"
+    Then I fill in editor field "content" with "Description event"
     Then wait for the page to be loaded
     And I focus "date_range"
     And I fill in "date_range" with "2017-03-07 12:15 / 2017-03-07 12:15"
@@ -21,7 +21,7 @@ Feature: Agenda tool
     Given I am on "/main/calendar/agenda.php?action=add&type=course&cid=1"
     When I fill in the following:
       | title | Event in course |
-    Then I fill in ckeditor field "content" with "Description event"
+    Then I fill in editor field "content" with "Description event"
 #    And I fill in select bootstrap input "users_to_send[]" with "Everyone" and select "Everyone"
     Then wait for the page to be loaded
     And I focus "date_range"

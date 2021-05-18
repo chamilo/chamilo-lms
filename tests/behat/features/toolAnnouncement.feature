@@ -13,7 +13,7 @@ Feature: Announcement tool
     And I press "choose_recipients"
     And I select "John Doe" from "users"
     And I press "add"
-    And I fill in ckeditor field "content" with "Announcement description"
+    And I fill in editor field "content" with "Announcement description"
     And I follow "Preview"
     And wait for the page to be loaded
     Then I should see "Announcement will be sent to"
@@ -25,7 +25,7 @@ Feature: Announcement tool
     Given I am on "/main/announcements/announcements.php?action=add&cid=1"
     When I fill in the following:
       | title   | Announcement test                       |
-    And I fill in ckeditor field "content" with "Announcement description"
+    And I fill in editor field "content" with "Announcement description"
     And I follow "Preview"
     And wait for the page to be loaded
     Then I should see "Announcement will be sent to"

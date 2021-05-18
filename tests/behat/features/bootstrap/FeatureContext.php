@@ -268,7 +268,7 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @Then /^I fill in ckeditor field "([^"]*)" with "([^"]*)"$/
+     * @Then /^I fill in editor field "([^"]*)" with "([^"]*)"$/
      */
     public function iFillInWysiwygOnFieldWith($locator, $value)
     {
@@ -285,7 +285,7 @@ class FeatureContext extends MinkContext
         }
 
         $this->getSession()->executeScript(
-            "CKEDITOR.instances[\"$fieldId\"].setData(\"$value\");"
+            "setContentFromEditor(\"$fieldId\", \"$value\");"
         );
     }
 

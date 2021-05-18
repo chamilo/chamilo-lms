@@ -8,7 +8,7 @@ Feature: Classes
       And I am on "/main/admin/usergroups.php?action=add"
       When I fill in the following:
           | name          | Class 1               |
-      Then I fill in ckeditor field "description" with "description"
+      Then I fill in editor field "description" with "description"
       And I press "submit"
       And wait for the page to be loaded
       Then I should see "Item added"

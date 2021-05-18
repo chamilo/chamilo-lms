@@ -96,12 +96,7 @@ class GradebookCertificate
         return $this->createdAt;
     }
 
-    /**
-     * Set pathCertificate.
-     *
-     * @return GradebookCertificate
-     */
-    public function setPathCertificate(string $pathCertificate)
+    public function setPathCertificate(string $pathCertificate): self
     {
         $this->pathCertificate = $pathCertificate;
 

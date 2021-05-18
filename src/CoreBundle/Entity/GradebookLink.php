@@ -110,24 +110,14 @@ class GradebookLink
         $this->locked = 0;
     }
 
-    /**
-     * Set type.
-     *
-     * @return GradebookLink
-     */
-    public function setType(int $type)
+    public function setType(int $type): self
     {
         $this->type = $type;
 
         return $this;
     }
 
-    /**
-     * Get type.
-     *
-     * @return int
-     */
-    public function getType()
+    public function getType(): int
     {
         return $this->type;
     }

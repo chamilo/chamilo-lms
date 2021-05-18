@@ -930,10 +930,8 @@ class Session
 
     /**
      * currentCourse is set in CourseListener.
-     *
-     * @return $this
      */
-    public function setCurrentCourse(Course $course)
+    public function setCurrentCourse(Course $course): self
     {
         // If the session is registered in the course session list.
         $exists = $this->getCourses()->exists(

@@ -231,12 +231,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get url.
-     *
-     * @return string
-     */
-    public function getUrl()
+    public function getUrl(): string
     {
         return $this->url;
     }
@@ -248,12 +243,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get description.
-     *
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }

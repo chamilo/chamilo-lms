@@ -46,12 +46,7 @@ class GradebookScoreDisplay
      */
     protected float $scoreColorPercent;
 
-    /**
-     * Set score.
-     *
-     * @return GradebookScoreDisplay
-     */
-    public function setScore(float $score)
+    public function setScore(float $score): self
     {
         $this->score = $score;
 

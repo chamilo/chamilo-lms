@@ -125,12 +125,7 @@ class SessionCategory
         return $this->dateStart;
     }
 
-    /**
-     * Set dateEnd.
-     *
-     * @return SessionCategory
-     */
-    public function setDateEnd(DateTime $dateEnd)
+    public function setDateEnd(DateTime $dateEnd): self
     {
         $this->dateEnd = $dateEnd;
 

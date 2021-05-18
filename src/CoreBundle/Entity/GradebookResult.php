@@ -55,12 +55,7 @@ class GradebookResult
      */
     protected DateTime $createdAt;
 
-    /**
-     * Set createdAt.
-     *
-     * @return GradebookResult
-     */
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -77,12 +72,7 @@ class GradebookResult
         return $this->createdAt;
     }
 
-    /**
-     * Set score.
-     *
-     * @return GradebookResult
-     */
-    public function setScore(float $score)
+    public function setScore(float $score): self
     {
         $this->score = $score;
 

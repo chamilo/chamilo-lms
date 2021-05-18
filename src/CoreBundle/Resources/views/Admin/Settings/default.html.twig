@@ -3,13 +3,14 @@
 {% set namespace = app.request.get('namespace') %}
 
 {% block content %}
-    <div class="flex ">
+    <div class="flex">
         <div class="w-1/5">
         {% include '@ChamiloCore/Admin/Settings/menu.html.twig' %}
         </div>
         <div class="w-4/5">
             <div class="q-card p-4">
-                <form class="w-full "
+
+                <form class="w-full form-horizontal"
                       action="{{ path('chamilo_platform_settings_search', {'keyword': keyword}) }}"
                       method="post"
                 >

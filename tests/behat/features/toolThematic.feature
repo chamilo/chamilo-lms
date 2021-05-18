@@ -18,7 +18,7 @@ Feature: Thematic tool
     Then I should see "Title"
     Then I fill in the following:
       | title[1] | Objective |
-    Then I fill in editor field "description[1]" with "Objective 1"
+    Then I fill in editor field "description1" with "Objective 1"
     Then I press "Save"
     Then I should see "Objective 1"
 

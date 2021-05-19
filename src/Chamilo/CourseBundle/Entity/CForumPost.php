@@ -135,7 +135,7 @@ class CForumPost
      */
     public function setPostTitle($postTitle)
     {
-        $this->postTitle = $postTitle;
+        $this->postTitle = Security::remove_XSS($postTitle);
 
         return $this;
     }
@@ -159,7 +159,7 @@ class CForumPost
      */
     public function setPostText($postText)
     {
-        $this->postText = $postText;
+        $this->postText = Security::remove_XSS($postText);
 
         return $this;
     }

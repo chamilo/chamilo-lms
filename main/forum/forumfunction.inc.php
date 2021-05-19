@@ -3830,8 +3830,8 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
             $table_posts,
             [
                 'c_id' => $courseId,
-                'post_title' => $values['post_title'],
-                'post_text' => isset($values['post_text']) ? ($values['post_text']) : null,
+                'post_title' => Security::remove_XSS($values['post_title']),
+                'post_text' => isset($values['post_text']) ? Security::remove_XSS($values['post_text']) : null,
                 'thread_id' => $values['thread_id'],
                 'forum_id' => $values['forum_id'],
                 'poster_id' => $userId,
@@ -4155,8 +4155,8 @@ function store_edit_post($forumInfo, $values)
 
     // Update the post_title and the post_text.
     $params = [
-        'post_title' => $values['post_title'],
-        'post_text' => $values['post_text'],
+        'post_title' => Security::remove_XSS($values['post_title']),
+        'post_text' => Security::remove_XSS($values['post_text']),
         'post_notification' => isset($values['post_notification']) ? $values['post_notification'] : '',
     ];
 

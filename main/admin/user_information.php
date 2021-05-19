@@ -698,8 +698,8 @@ $content = $tpl->fetch($layoutTemplate);
 echo $content;
 if (api_get_configuration_value('allow_career_users')) {
     if (!empty($sessions)) {
-        foreach ($sessions as $sessionId) {
-            echo SessionManager::getCareerDiagramPerSession($sessionId, $userId);
+        foreach ($sessions as $session) {
+            echo SessionManager::getCareerDiagramPerSession($session['session_id'], $userId);
         }
     }
     echo MyStudents::getBlockForCareers($userId);

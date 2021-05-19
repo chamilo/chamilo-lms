@@ -995,8 +995,7 @@ if (empty($details)) {
         }
 
         if (api_get_configuration_value('allow_career_users')) {
-            $visibility = api_get_session_visibility($sId);
-            echo SessionManager::getCareerDiagramPerSession($sId, $visibility);
+            echo SessionManager::getCareerDiagramPerSession($sId, $student_id);
         }
 
         // Courses

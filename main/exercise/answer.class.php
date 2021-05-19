@@ -777,6 +777,8 @@ class Answer
                         // Continue to avoid matching question bug if $correctAnswerId returns false
                         // See : https://support.chamilo.org/issues/8334
                         if ($questionType == MATCHING && !$correctAnswerId) {
+                            $em->merge($quizAnswer);
+                            $em->flush();
                             continue;
                         }
                         $correctAnswerAutoId = $answer->selectAutoId($correct);

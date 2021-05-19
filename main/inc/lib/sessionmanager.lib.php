@@ -9665,6 +9665,10 @@ class SessionManager
             }
         }
 
+        if (!empty($content)) {
+            $content = Display::page_subheader(get_lang('OnGoingTraining')).$content;
+        }
+
         return $content;
     }
 

@@ -8,7 +8,7 @@ Feature: Social Group
       And I am on "/main/social/group_add.php"
       When I fill in the following:
           | name          | Behat Test Group                  |
-      Then I fill in ckeditor field "description" with "This is a group created by Behat"
+      Then I fill in editor field "description" with "This is a group created by Behat"
       And I press "submit"
       And wait very long for the page to be loaded
       Then I should see "Group added"

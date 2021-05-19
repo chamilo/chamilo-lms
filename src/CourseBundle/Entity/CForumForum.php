@@ -230,12 +230,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
         return $this->threads->contains($thread);
     }
 
-    /**
-     * Set forumPosts.
-     *
-     * @return CForumForum
-     */
-    public function setForumPosts(int $forumPosts)
+    public function setForumPosts(int $forumPosts): self
     {
         $this->forumPosts = $forumPosts;
 
@@ -252,12 +247,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
         return $this->forumPosts;
     }
 
-    /**
-     * Set forumCategory.
-     *
-     * @return CForumForum
-     */
-    public function setForumCategory(CForumCategory $forumCategory = null)
+    public function setForumCategory(CForumCategory $forumCategory = null): self
     {
         $this->forumCategory = $forumCategory;
 
@@ -274,12 +264,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
         return $this->forumCategory;
     }
 
-    /**
-     * Set allowAnonymous.
-     *
-     * @return CForumForum
-     */
-    public function setAllowAnonymous(int $allowAnonymous)
+    public function setAllowAnonymous(int $allowAnonymous): self
     {
         $this->allowAnonymous = $allowAnonymous;
 
@@ -313,12 +298,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
         return $this->allowEdit;
     }
 
-    /**
-     * Set approvalDirectPost.
-     *
-     * @return CForumForum
-     */
-    public function setApprovalDirectPost(string $approvalDirectPost)
+    public function setApprovalDirectPost(string $approvalDirectPost): self
     {
         $this->approvalDirectPost = $approvalDirectPost;
 
@@ -335,12 +315,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
         return $this->approvalDirectPost;
     }
 
-    /**
-     * Set allowAttachments.
-     *
-     * @return CForumForum
-     */
-    public function setAllowAttachments(int $allowAttachments)
+    public function setAllowAttachments(int $allowAttachments): self
     {
         $this->allowAttachments = $allowAttachments;
 
@@ -357,12 +332,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
         return $this->allowAttachments;
     }
 
-    /**
-     * Set allowNewThreads.
-     *
-     * @return CForumForum
-     */
-    public function setAllowNewThreads(int $allowNewThreads)
+    public function setAllowNewThreads(int $allowNewThreads): self
     {
         $this->allowNewThreads = $allowNewThreads;
 
@@ -379,12 +349,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
         return $this->allowNewThreads;
     }
 
-    /**
-     * Set defaultView.
-     *
-     * @return CForumForum
-     */
-    public function setDefaultView(string $defaultView)
+    public function setDefaultView(string $defaultView): self
     {
         $this->defaultView = $defaultView;
 
@@ -401,12 +366,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
         return $this->defaultView;
     }
 
-    /**
-     * Set forumOfGroup.
-     *
-     * @return CForumForum
-     */
-    public function setForumOfGroup(string $forumOfGroup)
+    public function setForumOfGroup(string $forumOfGroup): self
     {
         $this->forumOfGroup = $forumOfGroup;
 
@@ -438,12 +398,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Set forumOrder.
-     *
-     * @return CForumForum
-     */
-    public function setForumOrder(int $forumOrder)
+    public function setForumOrder(int $forumOrder): self
     {
         $this->forumOrder = $forumOrder;
 
@@ -460,12 +415,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
         return $this->forumOrder;
     }
 
-    /**
-     * Set locked.
-     *
-     * @return CForumForum
-     */
-    public function setLocked(int $locked)
+    public function setLocked(int $locked): self
     {
         $this->locked = $locked;
 
@@ -482,12 +432,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
         return $this->locked;
     }
 
-    /**
-     * Set sessionId.
-     *
-     * @return CForumForum
-     */
-    public function setSessionId(int $sessionId)
+    public function setSessionId(int $sessionId): self
     {
         $this->sessionId = $sessionId;
 
@@ -504,12 +449,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
         return $this->sessionId;
     }
 
-    /**
-     * Set forumImage.
-     *
-     * @return CForumForum
-     */
-    public function setForumImage(string $forumImage)
+    public function setForumImage(string $forumImage): self
     {
         $this->forumImage = $forumImage;
 

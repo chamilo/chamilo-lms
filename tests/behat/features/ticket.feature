@@ -26,7 +26,7 @@ Feature: Ticket
     Then I should see "Compose message"
     When I fill in the following:
       | subject | First ticket |
-    And I fill in ckeditor field "content" with "Ticket description"
+    And I fill in editor field "content" with "Ticket description"
     And I fill in select bootstrap static input "#category_id" select "1"
     #category id = 1 => Enrollment: Tickets about enrollment
     And I press "Send message"
@@ -37,7 +37,7 @@ Feature: Ticket
 #    Given I am on "/main/ticket/projects.php?action=add"
 #    When I fill in the following:
 #      | name | Project 2 |
-#    And I fill in ckeditor field "description" with "Project description"
+#    And I fill in editor field "description" with "Project description"
 #    And I press "Save"
 #    Then I should see "Added"
 #
@@ -45,7 +45,7 @@ Feature: Ticket
 #    Given I am on "/main/ticket/status.php?action=add"
 #    When I fill in the following:
 #      | name | Status 1 |
-#    And I fill in ckeditor field "description" with "Status"
+#    And I fill in editor field "description" with "Status"
 #    And I press "Save"
 #    Then I should see "Added"
 #
@@ -53,6 +53,6 @@ Feature: Ticket
 #    Given I am on "/main/ticket/priorities.php?action=add"
 #    When I fill in the following:
 #      | name | Priority 1 |
-#    And I fill in ckeditor field "description" with "Priority"
+#    And I fill in editor field "description" with "Priority"
 #    And I press "Save"
 #    Then I should see "Added"

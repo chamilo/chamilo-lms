@@ -135,8 +135,12 @@ class Display
             }
         }
 
+        if (empty($interbreadcrumb)) {
+            $interbreadcrumb = [];
+        }
+
         $params['legacy_javascript'] = $htmlHeadXtra;
-        $params['legacy_breadcrumb'] = $interbreadcrumb;
+        $params['legacy_breadcrumb'] = json_encode($interbreadcrumb);
 
         Template::setVueParams($params);
         $content = Container::getTwig()->render($tpl, $params);
@@ -150,6 +154,8 @@ class Display
      */
     public static function display_reduced_footer()
     {
+        return self::display_footer();
+
         $contents = ob_get_contents();
         if (ob_get_length()) {
             ob_end_clean();

@@ -89,18 +89,6 @@ services:
         tags:
             - {name: kernel.event_listener, event: kernel.exception}
 
-#sylius_settings:
-#    driver: doctrine/orm
-#
-## Course settings
-#chamilo_course:
-#    driver: doctrine/orm
-
-# gregwar_captcha:
-    #     width: 200
-    #     height: 50
-    #   length: 6
-
 cocur_slugify:
     lowercase: true
 

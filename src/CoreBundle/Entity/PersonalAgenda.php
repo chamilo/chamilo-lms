@@ -130,11 +130,6 @@ class PersonalAgenda
         return $this->date;
     }
 
-    /**
-     * Set enddate.
-     *
-     * @return PersonalAgenda
-     */
     public function setEndDate(DateTime $value): self
     {
         $this->endDate = $value;
@@ -150,11 +145,6 @@ class PersonalAgenda
         return $this->endDate;
     }
 
-    /**
-     * Set parentEventId.
-     *
-     * @return PersonalAgenda
-     */
     public function setParentEventId(int $parentEventId): self
     {
         $this->parentEventId = $parentEventId;
@@ -172,11 +162,6 @@ class PersonalAgenda
         return $this->parentEventId;
     }
 
-    /**
-     * Set allDay.
-     *
-     * @return PersonalAgenda
-     */
     public function setAllDay(int $allDay): self
     {
         $this->allDay = $allDay;
@@ -202,9 +187,6 @@ class PersonalAgenda
         return $this->color;
     }
 
-    /**
-     * @return PersonalAgenda
-     */
     public function setColor(string $color): self
     {
         $this->color = $color;

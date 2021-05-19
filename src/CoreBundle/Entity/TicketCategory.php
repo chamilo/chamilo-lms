@@ -92,10 +92,7 @@ class TicketCategory
         return $this->name;
     }
 
-    /**
-     * @return TicketCategory
-     */
-    public function setName(string $name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -110,10 +107,7 @@ class TicketCategory
         return $this->description;
     }
 
-    /**
-     * @return TicketCategory
-     */
-    public function setDescription(string $description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -128,10 +122,7 @@ class TicketCategory
         return $this->totalTickets;
     }
 
-    /**
-     * @return TicketCategory
-     */
-    public function setTotalTickets(int $totalTickets)
+    public function setTotalTickets(int $totalTickets): self
     {
         $this->totalTickets = $totalTickets;
 
@@ -143,10 +134,7 @@ class TicketCategory
         return $this->courseRequired;
     }
 
-    /**
-     * @return TicketCategory
-     */
-    public function setCourseRequired(bool $courseRequired)
+    public function setCourseRequired(bool $courseRequired): self
     {
         $this->courseRequired = $courseRequired;
 
@@ -161,10 +149,7 @@ class TicketCategory
         return $this->project;
     }
 
-    /**
-     * @return TicketCategory
-     */
-    public function setProject(TicketProject $project)
+    public function setProject(TicketProject $project): self
     {
         $this->project = $project;
 
@@ -197,10 +182,7 @@ class TicketCategory
         return $this->insertDateTime;
     }
 
-    /**
-     * @return TicketCategory
-     */
-    public function setInsertDateTime(DateTime $insertDateTime)
+    public function setInsertDateTime(DateTime $insertDateTime): self
     {
         $this->insertDateTime = $insertDateTime;
 

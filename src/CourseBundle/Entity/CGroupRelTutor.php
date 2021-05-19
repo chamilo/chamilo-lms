@@ -46,12 +46,7 @@ class CGroupRelTutor
      */
     protected CGroup $group;
 
-    /**
-     * Set userId.
-     *
-     * @return CGroupRelTutor
-     */
-    public function setUser(User $user)
+    public function setUser(User $user): self
     {
         $this->user = $user;
 
@@ -68,12 +63,7 @@ class CGroupRelTutor
         return $this->user;
     }
 
-    /**
-     * Set group.
-     *
-     * @return CGroupRelTutor
-     */
-    public function setGroup(CGroup $group)
+    public function setGroup(CGroup $group): self
     {
         $this->group = $group;
 

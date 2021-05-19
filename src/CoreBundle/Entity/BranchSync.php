@@ -176,12 +176,7 @@ class BranchSync
         return $this->id;
     }
 
-    /**
-     * Set branchName.
-     *
-     * @return BranchSync
-     */
-    public function setBranchName(string $branchName)
+    public function setBranchName(string $branchName): self
     {
         $this->branchName = $branchName;
 
@@ -198,12 +193,7 @@ class BranchSync
         return $this->branchName;
     }
 
-    /**
-     * Set branchIp.
-     *
-     * @return BranchSync
-     */
-    public function setBranchIp(string $branchIp)
+    public function setBranchIp(string $branchIp): self
     {
         $this->branchIp = $branchIp;
 
@@ -220,12 +210,7 @@ class BranchSync
         return $this->branchIp;
     }
 
-    /**
-     * Set latitude.
-     *
-     * @return BranchSync
-     */
-    public function setLatitude(float $latitude)
+    public function setLatitude(float $latitude): self
     {
         $this->latitude = $latitude;
 
@@ -242,12 +227,7 @@ class BranchSync
         return $this->latitude;
     }
 
-    /**
-     * Set longitude.
-     *
-     * @return BranchSync
-     */
-    public function setLongitude(float $longitude)
+    public function setLongitude(float $longitude): self
     {
         $this->longitude = $longitude;
 

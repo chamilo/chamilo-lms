@@ -8,7 +8,7 @@ Feature: Career
       And I am on "/main/admin/careers.php?action=add"
       When I fill in the following:
           | name          | Developer               |
-      And I fill in ckeditor field "description" with "Description"
+      And I fill in editor field "description" with "Description"
       And I press "submit"
       And wait for the page to be loaded
       Then I should see "Item added"

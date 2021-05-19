@@ -58,10 +58,12 @@ class CourseRepository extends ResourceRepository
         // Deleting all nodes connected to the course:
         $node = $course->getResourceNode();
         $children = $node->getChildren();
-        /** @var ResourceNode $child */
-        foreach ($children as $child) {
+        ///* var ResourceNode $child
+        /*foreach ($children as $child) {
+            var_dump($child->getId().'-'.$child->getTitle().'<br />');
+            var_dump(get_class($child));
             $em->remove($child);
-        }
+        }*/
 
         $em->remove($course);
         $em->flush();

@@ -112,12 +112,7 @@ class MessageAttachment extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get message.
-     *
-     * @return Message
-     */
-    public function getMessage()
+    public function getMessage(): Message
     {
         return $this->message;
     }

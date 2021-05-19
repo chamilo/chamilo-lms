@@ -123,17 +123,10 @@ class ResourceNode
      *     inversedBy="children"
      * )
      * @ORM\JoinColumns({
-     *     @ORM\JoinColumn(onDelete="CASCADE")
+     *     @ORM\JoinColumn(name="parent_id", onDelete="CASCADE")
      * })
      */
     protected ?ResourceNode $parent = null;
-
-    /**
-     * @Gedmo\TreeLevel
-     *
-     * @ORM\Column(name="level", type="integer", nullable=true)
-     */
-    protected ?int $level = null;
 
     /**
      * @var Collection|ResourceNode[]
@@ -145,6 +138,13 @@ class ResourceNode
      * @ORM\OrderBy({"id"="ASC"})
      */
     protected Collection $children;
+
+    /**
+     * @Gedmo\TreeLevel
+     *
+     * @ORM\Column(name="level", type="integer", nullable=true)
+     */
+    protected ?int $level = null;
 
     /**
      * @Groups({"resource_node:read", "document:read"})

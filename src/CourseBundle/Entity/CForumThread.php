@@ -144,7 +144,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
 
     public function __toString(): string
     {
-        return (string) $this->getThreadTitle();
+        return $this->getThreadTitle();
     }
 
     public function isThreadPeerQualify(): bool
@@ -166,11 +166,6 @@ class CForumThread extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get threadTitle.
-     *
-     * @return string
-     */
     public function getThreadTitle()
     {
         return $this->threadTitle;

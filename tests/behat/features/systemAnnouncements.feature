@@ -11,7 +11,7 @@ Feature: System Announcements
     And wait for the page to be loaded
     When I fill in the following:
       | title   | Announcement system test                       |
-    And I fill in ckeditor field "content" with "Announcement system description"
+    And I fill in editor field "content" with "Announcement system description"
     And I press "Add news"
     And wait very long for the page to be loaded
     Then I should see "Announcement has been added"

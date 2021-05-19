@@ -71,18 +71,12 @@ class MessageFeedback
         return $this->id;
     }
 
-    /**
-     * @return Message
-     */
-    public function getMessage()
+    public function getMessage(): Message
     {
         return $this->message;
     }
 
-    /**
-     * @return MessageFeedback
-     */
-    public function setMessage(Message $message)
+    public function setMessage(Message $message): self
     {
         $this->message = $message;
 
@@ -94,10 +88,7 @@ class MessageFeedback
         return $this->liked;
     }
 
-    /**
-     * @return MessageFeedback
-     */
-    public function setLiked(bool $liked)
+    public function setLiked(bool $liked): self
     {
         $this->liked = $liked;
 
@@ -109,10 +100,7 @@ class MessageFeedback
         return $this->disliked;
     }
 
-    /**
-     * @return MessageFeedback
-     */
-    public function setDisliked(bool $disliked)
+    public function setDisliked(bool $disliked): self
     {
         $this->disliked = $disliked;
 
@@ -127,10 +115,7 @@ class MessageFeedback
         return $this->updatedAt;
     }
 
-    /**
-     * @return MessageFeedback
-     */
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 

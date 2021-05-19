@@ -18,9 +18,6 @@ class Version20170625123000 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $em = $this->getEntityManager();
-        $container = $this->getContainer();
-
         // CAttendance
         $table = $schema->getTable('c_attendance');
         if ($table->hasIndex('course')) {
@@ -50,7 +47,7 @@ class Version20170625123000 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_attendance_calendar CHANGE attendance_id attendance_id INT DEFAULT NULL;');
 
         if (false === $table->hasForeignKey('FK_AA3A9AB8163DDA15')) {
-            $this->addSql('ALTER TABLE c_attendance_calendar ADD CONSTRAINT FK_AA3A9AB8163DDA15 FOREIGN KEY (attendance_id) REFERENCES c_attendance (iid);');
+            $this->addSql('ALTER TABLE c_attendance_calendar ADD CONSTRAINT FK_AA3A9AB8163DDA15 FOREIGN KEY (attendance_id) REFERENCES c_attendance (iid) ON DELETE CASCADE');
         }
 
         if (false === $table->hasIndex('IDX_AA3A9AB8163DDA15')) {

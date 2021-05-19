@@ -163,20 +163,20 @@ class CSurvey extends AbstractResource implements ResourceInterface
     /**
      * @var Collection|CSurveyQuestion[]
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestion", mappedBy="survey", cascade="remove")
+     * @ORM\OneToMany(targetEntity="CSurveyQuestion", mappedBy="survey", cascade={"remove"})
      */
     protected Collection $questions;
 
     /**
      * @var Collection|CSurveyInvitation[]
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyInvitation", mappedBy="survey", cascade="remove")
+     * @ORM\OneToMany(targetEntity="CSurveyInvitation", mappedBy="survey", cascade={"remove"})
      */
     protected Collection $invitations;
 
     /**
      * @Gedmo\TreeParent
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurvey")
+     * @ORM\ManyToOne(targetEntity="CSurvey", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected ?CSurvey $surveyParent = null;
@@ -192,7 +192,7 @@ class CSurvey extends AbstractResource implements ResourceInterface
      * @var Collection|CSurveyQuestionOption[]
      *
      * @ORM\OrderBy({"sort"="ASC"})
-     * @ORM\OneToMany(targetEntity="CSurveyQuestionOption", mappedBy="survey", cascade="remove")
+     * @ORM\OneToMany(targetEntity="CSurveyQuestionOption", mappedBy="survey", cascade={"remove"})
      */
     protected Collection $options;
 

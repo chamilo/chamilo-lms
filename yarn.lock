@@ -5890,7 +5890,7 @@ __metadata:
     bootstrap-daterangepicker: ^3.0
     bootstrap-select: ^1.13.17
     chart.js: ^3.0
-    copy-webpack-plugin: ^8.0
+    copy-webpack-plugin: ^8.1.1
     cropper: ^4.0
     datepair.js: ^0.4.16
     deepmerge: ^4.2.2
@@ -5970,7 +5970,7 @@ __metadata:
     vue-router: ^4.0
     vue-sidebar-menu: ^4.7.1
     vue-toastification: ^2.0.0-rc.1
-    vuetify: next
+    vuetify: ^3.0.0-alpha.4
     vuex: ^4.0.0
     vuex-composition-helpers: next
     vuex-map-fields: ^1.4.0
@@ -6664,7 +6664,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"copy-webpack-plugin@npm:^8.0":
+"copy-webpack-plugin@npm:^8.1.1":
   version: 8.1.1
   resolution: "copy-webpack-plugin@npm:8.1.1"
   dependencies:
@@ -19204,12 +19204,12 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"vuetify@npm:next":
-  version: 3.0.0-alpha.3
-  resolution: "vuetify@npm:3.0.0-alpha.3"
+"vuetify@npm:^3.0.0-alpha.4":
+  version: 3.0.0-alpha.4
+  resolution: "vuetify@npm:3.0.0-alpha.4"
   peerDependencies:
     vue: ^3.0.7
-  checksum: abdd5c26d9b16e52f74aa284141c88edf1c3e5c73bad87dbb7cbd969c6e0d097376eef6be5eaf147c72d7e4ce8a03d111bd75f397e2096a19c41c496a7769844
+  checksum: ea855b402e9c2c76ea55fe24c43f0ed0415d9b0b1725ccca173a2e84ac73e668d9a43108b30e1c90cbbc97559007ff79756e795f151cf292cea4b000f87ca34b
   languageName: node
   linkType: hard
 

@@ -2368,9 +2368,12 @@ class CourseManager
             return false;
         }
 
-        $codeFiltered = $course['code'];
         $courseId = $course['real_id'];
         $courseEntity = api_get_course_entity($courseId);
+
+        if (null === $courseEntity) {
+            return false;
+        }
 
         /** @var SequenceResourceRepository $repo */
         $repo = Database::getManager()->getRepository(SequenceResource::class);
@@ -2401,7 +2404,7 @@ class CourseManager
         }
 
         if (0 === $count) {
-            self::create_database_dump($code);
+            //self::create_database_dump($code);
 
             // Cleaning group categories
             $groupCategories = GroupManager::get_categories($courseEntity);
@@ -2410,7 +2413,6 @@ class CourseManager
                     GroupManager::delete_category($category['iid'], $course['code']);
                 }
             }
-
             // Cleaning groups
             // @todo should be cleaned by the resource.
             /*$groups = GroupManager::get_groups($courseId);
@@ -2498,8 +2500,9 @@ class CourseManager
                     WHERE course_id = $courseId";
             Database::query($sql);
 
-            $sql = "DELETE FROM skill_rel_course WHERE c_id = $courseId";
-            Database::query($sql);
+            // Should be deleted by doctrine
+            //$sql = "DELETE FROM skill_rel_course WHERE c_id = $courseId";
+            //Database::query($sql);
 
             // Deletes all groups, group-users, group-tutors information
             // To prevent fK mix up on some tables
@@ -2508,8 +2511,8 @@ class CourseManager
             $appPlugin = new AppPlugin();
             $appPlugin->performActionsWhenDeletingItem('course', $courseId);
 
-            $repo = Container::getQuizRepository();
-            $repo->deleteAllByCourse($courseEntity);
+            //$repo = Container::getQuizRepository();
+            //$repo->deleteAllByCourse($courseEntity);
 
             // Delete the course from the database
             $repo = Container::getCourseRepository();
@@ -2925,7 +2928,6 @@ class CourseManager
 
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_user_course_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $tableCourseUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
@@ -2969,15 +2971,13 @@ class CourseManager
                             LEFT JOIN $tbl_course course
                             ON course.id = course_rel_user.c_id
                             LEFT JOIN $tblCourseCategory ON course_category.id = course.category_id
-                            LEFT JOIN $tbl_user_course_category user_course_category
-                            ON course_rel_user.user_course_cat = user_course_category.id
                             INNER JOIN $tableCourseUrl url
                             ON (course.id = url.c_id)
                             WHERE url.access_url_id = $urlId
                             $withSpecialCourses
                             $languageCondition
                             GROUP BY course.code
-                            ORDER BY user_course_category.sort, course.title, course_rel_user.sort ASC
+                            ORDER BY course.title, course_rel_user.sort ASC
                     ";
                     $result = Database::query($sql);
                     if (Database::num_rows($result) > 0) {
@@ -3695,93 +3695,6 @@ class CourseManager
     }
 
     /**
-     * Display courses (without special courses) as several HTML divs
-     * of course categories, as class userportal-catalog-item.
-     *
-     * @uses \displayCoursesInCategory() to display the courses themselves
-     *
-     * @param int  $user_id
-     * @param bool $load_dirs                        Whether to show the document quick-loader or not
-     * @param bool $useUserLanguageFilterIfAvailable
-     *
-     * @return array
-     */
-    public static function returnCourses(
-        $user_id,
-        $load_dirs = false,
-        $useUserLanguageFilterIfAvailable = true
-    ) {
-        $user_id = (int) $user_id;
-        if (empty($user_id)) {
-            $user_id = api_get_user_id();
-        }
-        // Step 1: We get all the categories of the user
-        $table = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
-        $sql = "SELECT * FROM $table
-                WHERE user_id = $user_id
-                ORDER BY sort ASC";
-
-        $result = Database::query($sql);
-        $listItems = [
-            'in_category' => [],
-            'not_category' => [],
-        ];
-        $collapsable = api_get_configuration_value('allow_user_course_category_collapsable');
-        $stok = Security::get_existing_token();
-        while ($row = Database::fetch_array($result)) {
-            // We simply display the title of the category.
-            $courseInCategory = self::returnCoursesCategories(
-                $row['id'],
-                $load_dirs,
-                $user_id,
-                $useUserLanguageFilterIfAvailable
-            );
-
-            $collapsed = 0;
-            $collapsableLink = '';
-            if ($collapsable) {
-                $url = api_get_path(WEB_CODE_PATH).
-                    'auth/sort_my_courses.php?categoryid='.$row['id'].'&sec_token='.$stok.'&redirect=home';
-                $collapsed = isset($row['collapsed']) && $row['collapsed'] ? 1 : 0;
-                if (0 === $collapsed) {
-                    $collapsableLink = Display::url(
-                        '<i class="fa fa-folder-open"></i>',
-                        $url.'&action=set_collapsable&option=1'
-                    );
-                } else {
-                    $collapsableLink = Display::url(
-                        '<i class="fa fa-folder"></i>',
-                        $url.'&action=set_collapsable&option=0'
-                    );
-                }
-            }
-
-            $params = [
-                'id_category' => $row['id'],
-                'title_category' => $row['title'],
-                'collapsed' => $collapsed,
-                'collapsable_link' => $collapsableLink,
-                'courses' => $courseInCategory,
-            ];
-            $listItems['in_category'][] = $params;
-        }
-
-        // Step 2: We display the course without a user category.
-        $coursesNotCategory = self::returnCoursesCategories(
-            0,
-            $load_dirs,
-            $user_id,
-            $useUserLanguageFilterIfAvailable
-        );
-
-        if ($coursesNotCategory) {
-            $listItems['not_category'] = $coursesNotCategory;
-        }
-
-        return $listItems;
-    }
-
-    /**
      *  Display courses inside a category (without special courses) as HTML dics of
      *  class userportal-course-item.
      *
@@ -3996,62 +3909,6 @@ class CourseManager
     }
 
     /**
-     * Retrieves the user defined course categories.
-     *
-     * @param int $userId
-     *
-     * @return array
-     */
-    public static function get_user_course_categories($userId = 0)
-    {
-        $userId = empty($userId) ? api_get_user_id() : (int) $userId;
-        $table = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
-        $sql = "SELECT * FROM $table
-                WHERE user_id = $userId
-                ORDER BY sort ASC
-                ";
-        $result = Database::query($sql);
-        $output = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
-            $output[$row['id']] = $row;
-        }
-
-        return $output;
-    }
-
-    /**
-     * Return an array the user_category id and title for the course $courseId for user $userId.
-     *
-     * @param $userId
-     * @param $courseId
-     *
-     * @return array
-     */
-    public static function getUserCourseCategoryForCourse($userId, $courseId)
-    {
-        $tblCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $tblUserCategory = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
-        $courseId = intval($courseId);
-        $userId = intval($userId);
-
-        $sql = "SELECT user_course_cat, title
-                FROM $tblCourseRelUser cru
-                LEFT JOIN $tblUserCategory ucc
-                ON cru.user_course_cat = ucc.id
-                WHERE
-                    cru.user_id = $userId AND c_id = $courseId ";
-
-        $res = Database::query($sql);
-
-        $data = [];
-        if (Database::num_rows($res) > 0) {
-            $data = Database::fetch_assoc($res);
-        }
-
-        return $data;
-    }
-
-    /**
      * Get the course id based on the original id and field name in the extra fields.
      * Returns 0 if course was not found.
      *
@@ -4069,9 +3926,7 @@ class CourseManager
         );
 
         if (!empty($result)) {
-            $courseInfo = api_get_course_info_by_id($result['item_id']);
-
-            return $courseInfo;
+            return api_get_course_info_by_id($result['item_id']);
         }
 
         return [];

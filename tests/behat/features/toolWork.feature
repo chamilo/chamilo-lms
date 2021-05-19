@@ -8,7 +8,7 @@ Feature: Work tool
     And I am on "/main/work/work.php?action=create_dir&cid=1"
     When I fill in the following:
       | new_dir | Work 1 |
-    And I fill in ckeditor field "description" with "Work description"
+    And I fill in editor field "description" with "Work description"
     And I press "submit"
     And I wait for the page to be loaded
     Then I should see "Directory created"
@@ -63,7 +63,7 @@ Feature: Work tool
 #    Then I should see "Work description"
 #    And wait for the page to be loaded
 #    Then I follow "Correct and rate"
-#    Then I fill in ckeditor field "comment" with "This is a comment"
+#    Then I fill in editor field "comment" with "This is a comment"
 #    Then I attach the file "web/css/base.css" to "attachment"
 #    And I press "Send message"
 #    Then I should see "You comment has been added"

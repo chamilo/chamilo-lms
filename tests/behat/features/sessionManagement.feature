@@ -36,7 +36,7 @@ Feature: Session management tool
     And I press "advanced_params"
     And I fill in select2 input "#coach_username" with id "1" and value "admin"
     And wait for the page to be loaded
-    And I fill in ckeditor field "description" with "Description for Temp Session"
+    And I fill in editor field "description" with "Description for Temp Session"
     And I press "submit"
     Then wait for the page to be loaded
     Then I should see "Add courses to this session (Temp Session)"

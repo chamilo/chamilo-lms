@@ -8,7 +8,7 @@ Feature: Promotions
       And I am on "/main/admin/promotions.php?action=add"
       When I fill in the following:
           | name          | Promotion 2030               |
-      And I fill in ckeditor field "description" with "Promotion description"
+      And I fill in editor field "description" with "Promotion description"
       And I fill in select bootstrap static input "#career_id" select "1"
       And I press "submit"
       Then I should see "Item added"

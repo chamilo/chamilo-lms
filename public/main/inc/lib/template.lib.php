@@ -616,10 +616,6 @@ class Template
             }
         }
 
-        if (CHAMILO_LOAD_WYSIWYG === true) {
-            $bowerJsFiles[] = 'ckeditor/ckeditor.js';
-        }
-
         if ('true' === api_get_setting('include_asciimathml_script')) {
             $bowerJsFiles[] = 'MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML';
         }
@@ -1127,7 +1123,7 @@ class Template
             );
         }
 
-        $this->params['legacy_breadcrumb'] = $interbreadcrumb;
+        $this->params['legacy_breadcrumb'] = json_encode($interbreadcrumb);
 
         global $htmlHeadXtra;
         $this->params['legacy_javascript'] = $htmlHeadXtra;

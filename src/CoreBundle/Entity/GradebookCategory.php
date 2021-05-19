@@ -56,23 +56,23 @@ class GradebookCategory
     protected Course $course;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory", inversedBy="subCategories")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
     protected ?GradebookCategory $parent = null;
+
+    /**
+     * @var GradebookCategory[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory", mappedBy="parent")
+     */
+    protected Collection $subCategories;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected ?Session $session = null;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory", mappedBy="parent")
-     *
-     * @var GradebookCategory[]|Collection
-     */
-    protected Collection $subCategories;
 
     /**
      * @var SkillRelGradebook[]|Collection

@@ -129,8 +129,8 @@ class CLpItem
 
     /**
      * @Gedmo\TreeRoot
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp", inversedBy="items", cascade={"persist"})
-     * @ORM\JoinColumn(name="lp_id", referencedColumnName="iid")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp", inversedBy="items", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="lp_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected CLp $lp;
 

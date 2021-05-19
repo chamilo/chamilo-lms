@@ -63,7 +63,6 @@ if (false === $pos) {
 }
 $newBaseUrl = substr($currentBaseUrl, 0, $pos - 1);
 $context->setBaseUrl($newBaseUrl);
-$container = $kernel->getContainer();
 
 try {
     // Load legacy configuration.php

@@ -14,6 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Environment;
 
@@ -40,9 +41,19 @@ class LegacyListener
 
         $request = $event->getRequest();
         $session = $request->getSession();
+        $baseUrl = $request->getBaseUrl();
 
-        /** @var ContainerInterface $container */
         $container = $this->container;
+
+        // Fixes the router when loading in legacy mode (public/main)
+        if (!empty($baseUrl)) {
+            // We are inside main/
+            /** @var RouterInterface $router */
+            $router = $container->get('router');
+            $context = $router->getContext();
+            $context->setBaseUrl('');
+            $router->setContext($context);
+        }
 
         // Setting container
         Container::setRequest($request);

@@ -7,7 +7,7 @@ Feature: Thematic tool
     Given I am on "/main/course_progress/index.php?cid=1&action=thematic_add"
     Then I fill in the following:
       | title | Thematic 1 |
-    Then I fill in ckeditor field "content" with "Description for thematic"
+    Then I fill in editor field "content" with "Description for thematic"
     And I press "Save"
     Then I should see "Thematic 1"
 
@@ -18,7 +18,7 @@ Feature: Thematic tool
     Then I should see "Title"
     Then I fill in the following:
       | title[1] | Objective |
-    Then I fill in ckeditor field "description[1]" with "Objective 1"
+    Then I fill in editor field "description1" with "Objective 1"
     Then I press "Save"
     Then I should see "Objective 1"
 
@@ -27,7 +27,7 @@ Feature: Thematic tool
     Then I should see "Edit thematic section"
     Then I fill in the following:
       | title | Thematic 1 edited |
-    Then I fill in ckeditor field "content" with "Description edited"
+    Then I fill in editor field "content" with "Description edited"
     Then I press "Save"
     Then I should see "Thematic 1 edited"
 

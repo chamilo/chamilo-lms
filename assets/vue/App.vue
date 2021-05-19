@@ -11,7 +11,6 @@
 <script>
 import {mapGetters} from 'vuex';
 import NotificationMixin from './mixins/NotificationMixin';
-import Breadcrumb from './components/Breadcrumb.vue';
 import axios from "axios";
 import { onMounted, onUnmounted, ref, computed, watch } from 'vue';
 import isEmpty from 'lodash/isEmpty';
@@ -31,13 +30,6 @@ const defaultLayout = "Dashboard";
 export default {
   name: "App",
   components: {
-    /*Navbar,
-    Sidebar,
-    SettingsPanel,
-    SearchPanel,
-    NotificationsPanel,
-    Button,*/
-    Breadcrumb,
   },
   setup () {
     const { currentRoute } = useRouter();
@@ -185,10 +177,6 @@ export default {
           }
         }
       }
-    }
-
-    if (app && app.attributes["data-breadcrumb"]) {
-      this.breadcrumb = JSON.parse(app.attributes["data-breadcrumb"].value);
     }
 
     axios.interceptors.response.use(undefined, (err) => {

@@ -777,11 +777,6 @@ class UserManager
             RedirectionPlugin::deleteUserRedirection($user_id);
         }
 
-        // Delete the personal course categories
-        $course_cat_table = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
-        $sql = "DELETE FROM $course_cat_table WHERE user_id = '".$user_id."'";
-        Database::query($sql);
-
         // Delete user from the admin table
         $sql = "DELETE FROM $table_admin WHERE user_id = '".$user_id."'";
         Database::query($sql);
@@ -2896,7 +2891,6 @@ class UserManager
         }
 
         // Courses in which we subscribed out of any session
-        $tbl_user_course_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
 
         $sql = "SELECT
                     course.code,
@@ -2906,17 +2900,14 @@ class UserManager
                  FROM $tbl_course_user course_rel_user
                  LEFT JOIN $tbl_course course
                  ON course.id = course_rel_user.c_id
-                 LEFT JOIN $tbl_user_course_category user_course_category
-                 ON course_rel_user.user_course_cat = user_course_category.id
                  $join_access_url
                  WHERE
                     course_rel_user.user_id = '".$user_id."' AND
                     course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
                     $where_access_url
-                 ORDER BY user_course_category.sort, course_rel_user.sort, course.title ASC";
+                 ORDER BY course_rel_user.sort, course.title ASC";
 
         $course_list_sql_result = Database::query($sql);
-
         $personal_course_list = [];
         if (Database::num_rows($course_list_sql_result) > 0) {
             while ($result_row = Database::fetch_array($course_list_sql_result, 'ASSOC')) {

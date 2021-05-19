@@ -10,8 +10,6 @@ use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * AccessUrlRelUser.
- *
  * @ORM\Table(
  *     name="access_url_rel_user",
  *     indexes={

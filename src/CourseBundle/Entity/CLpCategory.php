@@ -17,8 +17,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CLpCategory.
- *
  * @ORM\Table(
  *     name="c_lp_category",
  * )
@@ -179,10 +177,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
         return false;
     }
 
-    /**
-     * @return $this
-     */
-    public function removeUsers(CLpCategoryUser $user)
+    public function removeUsers(CLpCategoryUser $user): self
     {
         $this->users->removeElement($user);
 

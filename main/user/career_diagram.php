@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /*
@@ -31,7 +32,7 @@ if (empty($careerInfo)) {
 }
 
 $userId = api_get_user_id();
-$allow = UserManager::userHasCareer($userId, $careerId) || api_is_platform_admin();
+$allow = UserManager::userHasCareer($userId, $careerId) || api_is_platform_admin() || api_is_drh();
 
 if ($allow === false) {
     api_not_allowed(true);

@@ -939,7 +939,13 @@ $content = $tpl->fetch($templateName);
 echo $content;
 
 // Careers.
-echo MyStudents::getBlockForCareers($student_id);
+if (api_get_configuration_value('allow_career_users')) {
+    foreach ($courses_in_session as $sId => $courses) {
+        echo SessionManager::getCareerDiagramPerSession($sId, $student_id);
+    }
+    echo MyStudents::getBlockForCareers($student_id);
+}
+
 echo MyStudents::getBlockForSkills(
     $student_id,
     $courseInfo ? $courseInfo['real_id'] : 0,
@@ -992,10 +998,6 @@ if (empty($details)) {
             }
             $title = Display::return_icon('session.png', get_lang('Session'))
                 .' '.$session_name.($date_session ? ' ('.$date_session.')' : '');
-        }
-
-        if (api_get_configuration_value('allow_career_users')) {
-            echo SessionManager::getCareerDiagramPerSession($sId, $student_id);
         }
 
         // Courses

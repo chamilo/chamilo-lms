@@ -287,7 +287,6 @@ if (api_get_setting('allow_social_tool') === 'true') {
 $sessions = SessionManager::get_sessions_by_user($userId, true);
 $personal_course_list = [];
 $sessionInformation = '';
-$sessionVisibility = [];
 if (count($sessions) > 0) {
     $header = [
         [get_lang('Code'), true],
@@ -310,7 +309,6 @@ if (count($sessions) > 0) {
         $data = [];
         $personal_course_list = [];
         $id_session = $session_item['session_id'];
-        $sessionVisibility[$id_session] = $session_item['visibility'];
         $csvContent[] = [$session_item['session_name']];
         $csvContent[] = $headerList;
         $courseToolInformationTotal = '';
@@ -699,11 +697,9 @@ $layoutTemplate = $tpl->get_template('admin/user_information.tpl');
 $content = $tpl->fetch($layoutTemplate);
 echo $content;
 if (api_get_configuration_value('allow_career_users')) {
-    if (!empty($sessionVisibility)) {
-        foreach ($sessionVisibility as $sessionId => $visibility) {
-            if (SESSION_VISIBLE == $visibility) {
-                echo SessionManager::getCareerDiagramPerSession($sessionId, $visibility);
-            }
+    if (!empty($sessions)) {
+        foreach ($sessions as $sessionId) {
+            echo SessionManager::getCareerDiagramPerSession($sessionId, $userId);
         }
     }
     echo MyStudents::getBlockForCareers($userId);

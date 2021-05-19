@@ -9766,10 +9766,12 @@ class SessionManager
         }
     }
 
-    public static function getCareerDiagramPerSession($sessionId, $visibility)
+    public static function getCareerDiagramPerSession($sessionId, $userId): string
     {
         $extraFieldValueSession = new ExtraFieldValue('session');
         $extraFieldValueCareer = new ExtraFieldValue('career');
+
+        $visibility = api_get_session_visibility($sessionId, null, false, $userId);
 
         $content = '';
         if (SESSION_AVAILABLE === $visibility) {

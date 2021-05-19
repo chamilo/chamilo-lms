@@ -3716,7 +3716,6 @@ class UserManager
                 'collapsed' => $collapsed,
                 'collapsable_link' => $collapsedAction,
                 'duration' => $row['duration'],
-                'visibility' => $visibility,
             ];
         }
 

@@ -5395,12 +5395,35 @@ class UserManager
 
         if (!empty($keyword)) {
             $keyword = Database::escape_string($keyword);
+
+            $keywordParts = explode(' ', $keyword);
+            $extraConditions = '';
+            if (!empty($keywordParts)) {
+                $keywordParts = array_filter($keywordParts);
+                foreach ($keywordParts as $part) {
+                    if (empty($part)) {
+                        continue;
+                    }
+                    $part = Database::escape_string($part);
+                    $extraConditions .= "
+                        OR
+                        (u.username LIKE '%$part%' OR
+                        u.firstname LIKE '%$part%' OR
+                        u.lastname LIKE '%$part%' OR
+                        u.official_code LIKE '%$part%'
+                        )
+                    ";
+                }
+            }
+
             $userConditions .= " AND (
                 u.username LIKE '%$keyword%' OR
                 u.firstname LIKE '%$keyword%' OR
                 u.lastname LIKE '%$keyword%' OR
                 u.official_code LIKE '%$keyword%' OR
                 u.email LIKE '%$keyword%'
+
+                $extraConditions
             )";
         }
 

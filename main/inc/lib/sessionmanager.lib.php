@@ -6221,7 +6221,7 @@ class SessionManager
         }
 
         $sql .= $limitCondition;
-        var_dump($sql);
+
         $result = Database::query($sql);
 
         return Database::store_result($result);

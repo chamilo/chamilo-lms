@@ -286,8 +286,8 @@ if (api_get_setting('allow_social_tool') === 'true') {
  */
 $sessions = SessionManager::get_sessions_by_user($userId, true);
 $personal_course_list = [];
-$courseToolInformationTotal = null;
 $sessionInformation = '';
+$sessionVisibility = [];
 if (count($sessions) > 0) {
     $header = [
         [get_lang('Code'), true],
@@ -310,9 +310,10 @@ if (count($sessions) > 0) {
         $data = [];
         $personal_course_list = [];
         $id_session = $session_item['session_id'];
-
+        $sessionVisibility[$id_session] = $session_item['visibility'];
         $csvContent[] = [$session_item['session_name']];
         $csvContent[] = $headerList;
+        $courseToolInformationTotal = '';
         foreach ($session_item['courses'] as $my_course) {
             $courseInfo = api_get_course_info_by_id($my_course['real_id']);
             $sessionStatus = SessionManager::get_user_status_in_course_session(
@@ -341,7 +342,8 @@ if (count($sessions) > 0) {
                 Display::return_icon('course_home.png', get_lang('CourseHomepage')).'</a>';
 
             if (!empty($my_course['status']) && $my_course['status'] == STUDENT) {
-                $tools .= '<a href="user_information.php?action=unsubscribe_session_course&course_id='.$courseInfo['real_id'].'&user_id='.$userId.'&id_session='.$id_session.'">'.
+                $tools .= '<a
+                    href="user_information.php?action=unsubscribe_session_course&course_id='.$courseInfo['real_id'].'&user_id='.$userId.'&id_session='.$id_session.'">'.
                     Display::return_icon('delete.png', get_lang('Delete')).'</a>';
             }
 
@@ -419,7 +421,6 @@ if (count($sessions) > 0) {
 } else {
     $sessionInformation = '<p>'.get_lang('NoSessionsForThisUser').'</p>';
 }
-$courseToolInformationTotal = '';
 
 /**
  * Show the courses in which this user is subscribed.
@@ -449,7 +450,7 @@ if (Database::num_rows($res) > 0) {
     $csvContent[] = $headerList;
 
     $data = [];
-    $courseToolInformationTotal = null;
+    $courseToolInformationTotal = '';
     while ($course = Database::fetch_object($res)) {
         $courseInfo = api_get_course_info_by_id($course->c_id);
         $courseCode = $courseInfo['code'];
@@ -698,6 +699,13 @@ $layoutTemplate = $tpl->get_template('admin/user_information.tpl');
 $content = $tpl->fetch($layoutTemplate);
 echo $content;
 if (api_get_configuration_value('allow_career_users')) {
+    if (!empty($sessionVisibility)) {
+        foreach ($sessionVisibility as $sessionId => $visibility) {
+            if (SESSION_VISIBLE == $visibility) {
+                echo SessionManager::getCareerDiagramPerSession($sessionId, $visibility);
+            }
+        }
+    }
     echo MyStudents::getBlockForCareers($userId);
 }
 

@@ -6,13 +6,14 @@ use Chamilo\CourseBundle\Entity\CQuizAnswer;
 
 /**
  * Class Answer
- * Allows to instantiate an object of type Answer
+ * Allows to instantiate an object of type Answer, as a *list* of answers for one question
  * 5 arrays are created to receive the attributes of each answer belonging to a specified question.
  *
  * @author Olivier Brouckaert
  */
 class Answer
 {
+    /* The question of which we want the possible answers */
     public $questionId;
 
     // these are arrays
@@ -124,9 +125,7 @@ class Answer
         $questionId = $this->questionId;
 
         $sql = "SELECT * FROM $table
-                WHERE
-                    c_id = {$this->course_id} AND
-                    question_id ='".$questionId."'
+                WHERE question_id = $questionId
                 ORDER BY position";
 
         $result = Database::query($sql);
@@ -161,8 +160,7 @@ class Answer
         $questionId = $this->questionId;
 
         $sql = "SELECT * FROM $table
-                WHERE c_id = {$this->course_id}
-                    AND question_id = $questionId
+                WHERE question_id = $questionId
                 ORDER BY position";
 
         $result = Database::query($sql);
@@ -209,16 +207,14 @@ class Answer
         $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $questionId = $this->questionId;
 
-        $sql = "SELECT id FROM
-              $table
-              WHERE c_id = {$this->course_id} AND question_id ='".$questionId."'";
+        $sql = "SELECT iid FROM $table WHERE question_id = $questionId";
 
         $result = Database::query($sql);
         $id = [];
         // while a record is found
         if (Database::num_rows($result) > 0) {
             while ($object = Database::fetch_array($result)) {
-                $id[] = $object['id'];
+                $id[] = $object['iid'];
             }
         }
 
@@ -247,11 +243,11 @@ class Answer
         }
 
         $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
-        $TBL_QUIZ = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $TBL_QUESTION = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $questionId = (int) $this->questionId;
 
-        $sql = "SELECT type FROM $TBL_QUIZ
-                WHERE c_id = {$this->course_id} AND id = $questionId";
+        $sql = "SELECT type FROM $TBL_QUESTION
+                WHERE iid = $questionId";
         $result_question = Database::query($sql);
         $questionType = Database::fetch_array($result_question);
 
@@ -275,7 +271,6 @@ class Answer
                     iid
                 FROM $TBL_ANSWER
                 WHERE
-                    c_id = {$this->course_id} AND
                     question_id='".$questionId."'
                 ORDER BY $field $order";
         $result = Database::query($sql);
@@ -324,11 +319,21 @@ class Answer
      *
      * @author Juan Carlos Ra�a
      *
-     * @return int - answer num
+     * @return int Answer num
      */
     public function selectAutoId($id)
     {
         return isset($this->autoId[$id]) ? $this->autoId[$id] : 0;
+    }
+
+    /**
+     * Returns the unique ID (iid field).
+     *
+     * @return int Answer ID
+     */
+    public function selectId($id)
+    {
+        return isset($this->iid[$id]) ? $this->iid[$id] : 0;
     }
 
     /**
@@ -396,6 +401,31 @@ class Answer
         $auto_id = (int) $auto_id;
         $sql = "SELECT iid, answer, id_auto FROM $table
                 WHERE c_id = {$this->course_id} AND id_auto='$auto_id'";
+        $rs = Database::query($sql);
+
+        if (Database::num_rows($rs) > 0) {
+            return Database::fetch_array($rs, 'ASSOC');
+        }
+
+        return false;
+    }
+
+    /**
+     * return array answer by iid. Else return a bool.
+     *
+     * @param int $iid
+     *
+     * @return array
+     */
+    public function selectAnswerById($id)
+    {
+        if (empty($id)) {
+            return false;
+        }
+        $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $id = (int) $id;
+        $sql = "SELECT iid, answer, id_auto FROM $table
+                WHERE iid = $id";
         $rs = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {
@@ -736,7 +766,6 @@ class Answer
                         ->setIdAuto($iid);
 
                     $questionType = $this->getQuestionType();
-
                     if (in_array(
                         $questionType,
                         [MATCHING, MATCHING_DRAGGABLE]

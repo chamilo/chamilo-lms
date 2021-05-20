@@ -2448,7 +2448,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@videojs/vhs-utils@npm:^3.0.0":
+"@videojs/http-streaming@npm:2.8.1":
+  version: 2.8.1
+  resolution: "@videojs/http-streaming@npm:2.8.1"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+    "@videojs/vhs-utils": ^3.0.1
+    aes-decrypter: 3.1.2
+    global: ^4.4.0
+    m3u8-parser: 4.7.0
+    mpd-parser: 0.16.0
+    mux.js: 5.11.0
+    video.js: ^6 || ^7
+  peerDependencies:
+    video.js: ^6 || ^7
+  checksum: 71163252cae1a548d5b9eaaf6d79fdef3e40943e02b4366df9b5d9a193edb7a628d9e2108d43bb7fb5e6172e443d470435acc4815508ecfb32b01670f4023415
+  languageName: node
+  linkType: hard
+
+"@videojs/vhs-utils@npm:^3.0.0, @videojs/vhs-utils@npm:^3.0.1":
   version: 3.0.1
   resolution: "@videojs/vhs-utils@npm:3.0.1"
   dependencies:
@@ -5899,7 +5917,7 @@ __metadata:
     easy-pie-chart: ^2.1.7
     easytimer.js: ^1.1.1
     eslint: ^7.20.0
-    eslint-plugin-vue: ^7.8
+    eslint-plugin-vue: ^7.9
     file-loader: ^6.0
     filemanager-webpack-plugin: ^4.0
     flag-icon-css: ^3.5
@@ -5919,7 +5937,7 @@ __metadata:
     jspdf: ^2.3
     jsplumb: ^2.12
     linkifyjs: ^2.1
-    luxon: ^1.26.0
+    luxon: ^1.27.0
     mathjax: ^2.7
     mediaelement: ^4.2
     mediaelement-plugins: "https://github.com/chamilo/mediaelement-plugins"
@@ -5958,7 +5976,7 @@ __metadata:
     tinymce: ^5.7
     ts-loader: ^8.1.0
     typescript: ^3.8.3
-    video.js: ^7.11.4
+    video.js: ^7.11.8
     vue: ^3.0
     vue-cli-plugin-quasar: next
     vue-cli-plugin-vuetify: ~2.3.1
@@ -8327,7 +8345,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-vue@npm:^7.8":
+"eslint-plugin-vue@npm:^7.9":
   version: 7.9.0
   resolution: "eslint-plugin-vue@npm:7.9.0"
   dependencies:
@@ -12353,7 +12371,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"luxon@npm:^1.26.0":
+"luxon@npm:^1.27.0":
   version: 1.27.0
   resolution: "luxon@npm:1.27.0"
   checksum: c60f73b6b94bdd4e43c731133aa746388b907a26a5a426478c2520b263bec1dae4dc6e269a3410374789551309c65af5d245fae4cef61b72c3ad64a4c3e8b2b9
@@ -12368,6 +12386,17 @@ fsevents@~2.3.1:
     "@videojs/vhs-utils": ^3.0.0
     global: ^4.4.0
   checksum: 8aaf82706fbde05e53e15b345ffff3381bd7c57c27bc46cb3ab121760b7c2423847161edbb6ef3018c2594e70011f84571b2d4c05162c4f47c6d0f0ebc9361a7
+  languageName: node
+  linkType: hard
+
+"m3u8-parser@npm:4.7.0":
+  version: 4.7.0
+  resolution: "m3u8-parser@npm:4.7.0"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+    "@videojs/vhs-utils": ^3.0.0
+    global: ^4.4.0
+  checksum: 5e5400b4b0be64178c32695894f79de39904c7d514e0a136b2bff0c2a9d3ad4354725f62e06d294bdc2770d5d33a82462f4c2b75154414d1f420e90a0ead0606
   languageName: node
   linkType: hard
 
@@ -18952,7 +18981,23 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"video.js@npm:7.12.1, video.js@npm:^6 || ^7, video.js@npm:^7.11.4":
+"video.js@npm:7.12.2, video.js@npm:^7.11.8":
+  version: 7.12.2
+  resolution: "video.js@npm:7.12.2"
+  dependencies:
+    "@babel/runtime": ^7.9.2
+    "@videojs/http-streaming": 2.8.1
+    "@videojs/xhr": 2.5.1
+    global: ^4.4.0
+    keycode: ^2.2.0
+    safe-json-parse: 4.0.0
+    videojs-font: 3.2.0
+    videojs-vtt.js: ^0.15.3
+  checksum: 778fa214b28da29969d406abd44c7998d56f96fae86cd2c4100f96236a69d8d84942adf7079d0475b637b8e1cb8080764c36054edef8f1542ab8d72dee3c6a1f
+  languageName: node
+  linkType: hard
+
+"video.js@npm:^6 || ^7":
   version: 7.12.1
   resolution: "video.js@npm:7.12.1"
   dependencies:

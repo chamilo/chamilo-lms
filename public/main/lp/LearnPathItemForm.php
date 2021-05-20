@@ -14,8 +14,6 @@ class LearnPathItemForm
     public static function setForm(FormValidator $form, $action, learnpath $lp, CLpItem $lpItem)
     {
         $arrLP = $lp->getItemsForForm();
-        //$lp->tree_array($arrLP);
-        //$arrLP = $lp->arrMenu ?? [];
 
         switch ($action) {
             case 'add':

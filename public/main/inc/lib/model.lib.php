@@ -14,9 +14,6 @@ class Model
     public $required;
     public $is_course_model = false;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
     }

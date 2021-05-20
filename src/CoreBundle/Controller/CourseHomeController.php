@@ -280,7 +280,6 @@ class CourseHomeController extends ToolBaseController
         return $this->redirect($url);
     }
 
-
     /**
      * Edit configuration with given namespace.
      *

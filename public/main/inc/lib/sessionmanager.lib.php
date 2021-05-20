@@ -6033,7 +6033,7 @@ class SessionManager
      * @param bool   $getCount
      * @param int    $from
      * @param int    $numberItems
-     * @param int    $column
+     * @param string $column
      * @param string $direction
      * @param string $keyword
      * @param string $active

@@ -2575,7 +2575,7 @@ class learnpath
         $lpItemRepo = Container::getLpItemRepository();
         if (empty($parent)) {
             $rootItem = $lpItemRepo->getRootItem($lp->getIid());
-            $parent = $rootItem->getIid() ;
+            $parent = $rootItem->getIid();
         }
 
         $criteria = new Criteria();
@@ -2651,83 +2651,15 @@ class learnpath
      *
      * @return array HTML TOC ready to display
      */
-    public function getListArrayToc($toc_list = [])
+    public function getListArrayToc()
     {
         $lpItemRepo = Container::getLpItemRepository();
         $itemRoot = $lpItemRepo->getRootItem($this->get_id());
         $options = [
             'decorate' => false,
         ];
-        $list = $lpItemRepo->childrenHierarchy($itemRoot, false, $options);
 
-        return $list;
-
-
-        if (empty($toc_list)) {
-            $toc_list = $this->get_toc();
-        }
-        // Temporary variables.
-        $currentItemId = $this->get_current_item_id();
-        $list = [];
-        $arrayList = [];
-
-        foreach ($toc_list as $item) {
-            $list['id'] = $item['id'];
-            $list['status'] = $item['status'];
-            $cssStatus = null;
-
-            if (array_key_exists($item['status'], self::STATUS_CSS_CLASS_NAME)) {
-                $cssStatus = self::STATUS_CSS_CLASS_NAME[$item['status']];
-            }
-
-            $classStyle = ' ';
-            $dirTypes = self::getChapterTypes();
-
-            if (in_array($item['type'], $dirTypes)) {
-                $classStyle = 'scorm_item_section ';
-            }
-            if ($item['id'] == $this->current) {
-                $classStyle = 'scorm_item_normal '.$classStyle.'scorm_highlight';
-            } elseif (!in_array($item['type'], $dirTypes)) {
-                $classStyle = 'scorm_item_normal '.$classStyle.' ';
-            }
-            $title = $item['title'];
-            if (empty($title)) {
-                $title = self::rl_get_resource_name(
-                    api_get_course_id(),
-                    $this->get_id(),
-                    $item['id']
-                );
-            }
-            $title = Security::remove_XSS($item['title']);
-
-            if (empty($item['description'])) {
-                $list['description'] = $title;
-            } else {
-                $list['description'] = $item['description'];
-            }
-
-            $list['class'] = $classStyle.' '.$cssStatus;
-            $list['level'] = $item['level'];
-            $list['type'] = $item['type'];
-
-            if (in_array($item['type'], $dirTypes)) {
-                $list['css_level'] = 'level_'.$item['level'];
-            } else {
-                $list['css_level'] = 'level_'.$item['level'].' scorm_type_'.self::format_scorm_type_item($item['type']);
-            }
-
-            if (in_array($item['type'], $dirTypes)) {
-                $list['title'] = stripslashes($title);
-            } else {
-                $list['title'] = stripslashes($title);
-                $list['url'] = $this->get_link('http', $item['id'], $toc_list);
-                $list['current_id'] = $currentItemId;
-            }
-            $arrayList[] = $list;
-        }
-
-        return $arrayList;
+        return $lpItemRepo->childrenHierarchy($itemRoot, false, $options);
     }
 
     /**
@@ -3236,266 +3168,6 @@ class learnpath
     }
 
     /**
-     * Moves an item up and down at its level.
-     *
-     * @param int    $id        Item to move up and down
-     * @param string $direction Direction 'up' or 'down'
-     *
-     * @return bool|int
-     */
-    public function move_item($id, $direction)
-    {
-        $course_id = api_get_course_int_id();
-        if (empty($id) || empty($direction)) {
-            return false;
-        }
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $sql_sel = "SELECT *
-                    FROM $tbl_lp_item
-                    WHERE
-                        iid = $id
-                    ";
-        $res_sel = Database::query($sql_sel);
-        // Check if elem exists.
-        if (Database::num_rows($res_sel) < 1) {
-            return false;
-        }
-        // Gather data.
-        $row = Database::fetch_array($res_sel);
-        $previous = $row['previous_item_id'];
-        $next = $row['next_item_id'];
-        $display = $row['display_order'];
-        $parent = $row['parent_item_id'];
-        $lp = $row['lp_id'];
-        // Update the item (switch with previous/next one).
-        switch ($direction) {
-            case 'up':
-                if ($display > 1) {
-                    $sql_sel2 = "SELECT * FROM $tbl_lp_item
-                                 WHERE iid = $previous";
-                    $res_sel2 = Database::query($sql_sel2);
-                    if (Database::num_rows($res_sel2) < 1) {
-                        $previous_previous = 0;
-                    }
-                    // Gather data.
-                    $row2 = Database::fetch_array($res_sel2);
-                    $previous_previous = $row2['previous_item_id'];
-                    // Update previous_previous item (switch "next" with current).
-                    if (0 != $previous_previous) {
-                        $sql_upd2 = "UPDATE $tbl_lp_item SET
-                                        next_item_id = $id
-                                    WHERE iid = $previous_previous";
-                        Database::query($sql_upd2);
-                    }
-                    // Update previous item (switch with current).
-                    if (0 != $previous) {
-                        $sql_upd2 = "UPDATE $tbl_lp_item SET
-                                    next_item_id = $next,
-                                    previous_item_id = $id,
-                                    display_order = display_order +1
-                                    WHERE iid = $previous";
-                        Database::query($sql_upd2);
-                    }
-
-                    // Update current item (switch with previous).
-                    if (0 != $id) {
-                        $sql_upd2 = "UPDATE $tbl_lp_item SET
-                                        next_item_id = $previous,
-                                        previous_item_id = $previous_previous,
-                                        display_order = display_order-1
-                                    WHERE c_id = ".$course_id." AND id = $id";
-                        Database::query($sql_upd2);
-                    }
-                    // Update next item (new previous item).
-                    if (!empty($next)) {
-                        $sql_upd2 = "UPDATE $tbl_lp_item SET previous_item_id = $previous
-                                     WHERE iid = $next";
-                        Database::query($sql_upd2);
-                    }
-                    $display = $display - 1;
-                }
-                break;
-            case 'down':
-                if (0 != $next) {
-                    $sql_sel2 = "SELECT * FROM $tbl_lp_item
-                                 WHERE iid = $next";
-                    $res_sel2 = Database::query($sql_sel2);
-                    if (Database::num_rows($res_sel2) < 1) {
-                        $next_next = 0;
-                    }
-                    // Gather data.
-                    $row2 = Database::fetch_array($res_sel2);
-                    $next_next = $row2['next_item_id'];
-                    // Update previous item (switch with current).
-                    if (0 != $previous) {
-                        $sql_upd2 = "UPDATE $tbl_lp_item
-                                     SET next_item_id = $next
-                                     WHERE iid = $previous";
-                        Database::query($sql_upd2);
-                    }
-                    // Update current item (switch with previous).
-                    if (0 != $id) {
-                        $sql_upd2 = "UPDATE $tbl_lp_item SET
-                                     previous_item_id = $next,
-                                     next_item_id = $next_next,
-                                     display_order = display_order + 1
-                                     WHERE iid = $id";
-                        Database::query($sql_upd2);
-                    }
-
-                    // Update next item (new previous item).
-                    if (0 != $next) {
-                        $sql_upd2 = "UPDATE $tbl_lp_item SET
-                                     previous_item_id = $previous,
-                                     next_item_id = $id,
-                                     display_order = display_order-1
-                                     WHERE iid = $next";
-                        Database::query($sql_upd2);
-                    }
-
-                    // Update next_next item (switch "previous" with current).
-                    if (0 != $next_next) {
-                        $sql_upd2 = "UPDATE $tbl_lp_item SET
-                                     previous_item_id = $id
-                                     WHERE iid = $next_next";
-                        Database::query($sql_upd2);
-                    }
-                    $display = $display + 1;
-                }
-                break;
-            default:
-                return false;
-        }
-
-        return $display;
-    }
-
-    /**
-     * Move a LP up (display_order).
-     *
-     * @param int $lp_id      Learnpath ID
-     * @param int $categoryId Category ID
-     *
-     * @return bool
-     */
-    public static function move_up($lp_id, $categoryId = 0)
-    {
-        $courseId = api_get_course_int_id();
-        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-
-        $categoryCondition = '';
-        if (!empty($categoryId)) {
-            $categoryId = (int) $categoryId;
-            $categoryCondition = " AND category_id = $categoryId";
-        }
-        $sql = "SELECT * FROM $lp_table
-                WHERE c_id = $courseId
-                $categoryCondition
-                ORDER BY display_order";
-        $res = Database::query($sql);
-        if (false === $res) {
-            return false;
-        }
-
-        $lps = [];
-        $lp_order = [];
-        $num = Database::num_rows($res);
-        // First check the order is correct, globally (might be wrong because
-        // of versions < 1.8.4)
-        if ($num > 0) {
-            $i = 1;
-            while ($row = Database::fetch_array($res)) {
-                if ($row['display_order'] != $i) { // If we find a gap in the order, we need to fix it.
-                    $sql = "UPDATE $lp_table SET display_order = $i
-                            WHERE iid = ".$row['iid'];
-                    Database::query($sql);
-                }
-                $row['display_order'] = $i;
-                $lps[$row['iid']] = $row;
-                $lp_order[$i] = $row['iid'];
-                $i++;
-            }
-        }
-        if ($num > 1) { // If there's only one element, no need to sort.
-            $order = $lps[$lp_id]['display_order'];
-            if ($order > 1) { // If it's the first element, no need to move up.
-                $sql = "UPDATE $lp_table SET display_order = $order
-                        WHERE iid = ".$lp_order[$order - 1];
-                Database::query($sql);
-                $sql = "UPDATE $lp_table SET display_order = ".($order - 1)."
-                        WHERE iid = $lp_id";
-                Database::query($sql);
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Move a learnpath down (display_order).
-     *
-     * @param int $lp_id      Learnpath ID
-     * @param int $categoryId Category ID
-     *
-     * @return bool
-     */
-    public static function move_down($lp_id, $categoryId = 0)
-    {
-        $courseId = api_get_course_int_id();
-        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-
-        $categoryCondition = '';
-        if (!empty($categoryId)) {
-            $categoryId = (int) $categoryId;
-            $categoryCondition = " AND category_id = $categoryId";
-        }
-
-        $sql = "SELECT * FROM $lp_table
-                WHERE c_id = $courseId
-                $categoryCondition
-                ORDER BY display_order";
-        $res = Database::query($sql);
-        if (false === $res) {
-            return false;
-        }
-        $lps = [];
-        $lp_order = [];
-        $num = Database::num_rows($res);
-        $max = 0;
-        // First check the order is correct, globally (might be wrong because
-        // of versions < 1.8.4).
-        if ($num > 0) {
-            $i = 1;
-            while ($row = Database::fetch_array($res)) {
-                $max = $i;
-                if ($row['display_order'] != $i) {
-                    // If we find a gap in the order, we need to fix it.
-                    $sql = "UPDATE $lp_table SET display_order = $i
-                              WHERE iid = ".$row['iid'];
-                    Database::query($sql);
-                }
-                $row['display_order'] = $i;
-                $lps[$row['iid']] = $row;
-                $lp_order[$i] = $row['iid'];
-                $i++;
-            }
-        }
-        if ($num > 1) { // If there's only one element, no need to sort.
-            $order = $lps[$lp_id]['display_order'];
-            if ($order < $max) { // If it's the first element, no need to move up.
-                $sql = "UPDATE $lp_table SET display_order = $order
-                        WHERE iid = ".$lp_order[$order + 1];
-                Database::query($sql);
-                $sql = "UPDATE $lp_table SET display_order = ".($order + 1)."
-                        WHERE iid = $lp_id";
-                Database::query($sql);
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * Updates learnpath attributes to point to the next element
      * The last part is similar to set_current_item but processing the other way around.
      */
@@ -3717,7 +3389,7 @@ class learnpath
             $addShortcut = true;
         }
         $repo = Container::getLpRepository();
-        /** @var CLp $lp */
+        /** @var CLp|null $lp */
         $lp = $repo->find($id);
         if (null === $lp) {
             return false;
@@ -3751,7 +3423,7 @@ class learnpath
         }
 
         $repo = Container::getLpCategoryRepository();
-        /** @var CLpCategory $lp */
+        /** @var CLpCategory|null $lp */
         $category = $repo->find($id);
 
         if (null === $category) {
@@ -3788,13 +3460,13 @@ class learnpath
 
         $categoryVisibility = $category->isVisible($course, $session);
 
-        if (1 !== $categoryVisibility && -1 != $categoryVisibility) {
+        if (!$categoryVisibility) {
             return false;
         }
 
         $subscriptionSettings = self::getSubscriptionSettings();
 
-        if (false == $subscriptionSettings['allow_add_users_to_lp_category']) {
+        if (false === $subscriptionSettings['allow_add_users_to_lp_category']) {
             return true;
         }
 
@@ -4674,94 +4346,6 @@ class learnpath
     }
 
     /**
-     * Function that makes a call to the function sort_tree_array and create_tree_array.
-     *
-     * @author Kevin Van Den Haute
-     *
-     * @param  array
-     */
-    public function tree_array($array)
-    {
-        $array = $this->sort_tree_array($array);
-        $this->create_tree_array($array);
-    }
-
-    /**
-     * Creates an array with the elements of the learning path tree in it.
-     *
-     * @author Kevin Van Den Haute
-     *
-     * @param array $array
-     * @param int   $parent
-     * @param int   $depth
-     * @param array $tmp
-     */
-    public function create_tree_array($array, $parent = 0, $depth = -1, $tmp = [])
-    {
-        if (is_array($array)) {
-            for ($i = 0; $i < count($array); $i++) {
-                if ($array[$i]['parent_item_id'] == $parent) {
-                    if (!in_array($array[$i]['parent_item_id'], $tmp)) {
-                        $tmp[] = $array[$i]['parent_item_id'];
-                        $depth++;
-                    }
-                    $preq = (empty($array[$i]['prerequisite']) ? '' : $array[$i]['prerequisite']);
-                    $audio = isset($array[$i]['audio']) ? $array[$i]['audio'] : null;
-                    $path = isset($array[$i]['path']) ? $array[$i]['path'] : null;
-                    $prerequisiteMinScore = isset($array[$i]['prerequisite_min_score']) ? $array[$i]['prerequisite_min_score'] : null;
-                    $prerequisiteMaxScore = isset($array[$i]['prerequisite_max_score']) ? $array[$i]['prerequisite_max_score'] : null;
-                    $ref = isset($array[$i]['ref']) ? $array[$i]['ref'] : '';
-                    $this->arrMenu[] = [
-                        'id' => $array[$i]['id'],
-                        'ref' => $ref,
-                        'item_type' => $array[$i]['item_type'],
-                        'title' => $array[$i]['title'],
-                        'title_raw' => $array[$i]['title_raw'],
-                        'path' => $path,
-                        'description' => $array[$i]['description'],
-                        'parent_item_id' => $array[$i]['parent_item_id'],
-                        'previous_item_id' => $array[$i]['previous_item_id'],
-                        'next_item_id' => $array[$i]['next_item_id'],
-                        'min_score' => $array[$i]['min_score'],
-                        'max_score' => $array[$i]['max_score'],
-                        'mastery_score' => $array[$i]['mastery_score'],
-                        'display_order' => $array[$i]['display_order'],
-                        'prerequisite' => $preq,
-                        'depth' => $depth,
-                        'audio' => $audio,
-                        'prerequisite_min_score' => $prerequisiteMinScore,
-                        'prerequisite_max_score' => $prerequisiteMaxScore,
-                    ];
-                    $this->create_tree_array($array, $array[$i]['id'], $depth, $tmp);
-                }
-            }
-        }
-    }
-
-    /**
-     * Sorts a multi dimensional array by parent id and display order.
-     *
-     * @author Kevin Van Den Haute
-     *
-     * @param array $array (array with al the learning path items in it)
-     *
-     * @return array
-     */
-    public function sort_tree_array($array)
-    {
-        foreach ($array as $key => $row) {
-            $parent[$key] = $row['parent_item_id'];
-            $position[$key] = $row['display_order'];
-        }
-
-        if (count($array) > 0) {
-            array_multisort($parent, SORT_ASC, $position, SORT_ASC, $array);
-        }
-
-        return $array;
-    }
-
-    /**
      * Function that creates a html list of learning path items so that we can add audio files to them.
      *
      * @author Kevin Van Den Haute
@@ -5584,7 +5168,6 @@ class learnpath
         $dir = $dir.$title;
 
         // Creating LP folder
-        $documentId = null;
         $folder = null;
         if ($parent) {
             $folder = create_unexisting_directory(
@@ -5829,9 +5412,6 @@ class learnpath
                 $document = $repo->find($lpItem->getPath());
                 $return .= $this->display_document($document, true, true);
                 break;
-            case TOOL_HOTPOTATOES:
-                $return .= $this->display_document($document, false, true);
-                break;
         }
         $return .= '</div>';
 
@@ -5892,10 +5472,6 @@ class learnpath
                 $return .= $this->displayItemMenu($lpItem);
                 $return .= $this->display_quiz_form('edit', $lpItem, $resource);
                 break;
-            /*case TOOL_HOTPOTATOES:
-                $return .= $this->displayItemMenu($lpItem);
-                $return .= $this->display_hotpotatoes_form('edit', $item_id, $row);
-                break;*/
             case TOOL_STUDENTPUBLICATION:
                 if (!empty($path)) {
                     $repo = Container::getStudentPublicationRepository();
@@ -6037,7 +5613,6 @@ class learnpath
 
         // TODO: Add a path filter.
         if ($iframe) {
-            //$url = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.str_replace('%2F', '/', urlencode($row_doc['path'])).'?'.api_get_cidreq();
             $url = $repo->getResourceFileUrl($document);
 
             $return .= '<iframe
@@ -6226,7 +5801,7 @@ class learnpath
         $item_type = 'dir';
 
         $lpItem = new CLpItem();
-        $lpItem->setTitle('dir');
+        $lpItem->setTitle('');
         $lpItem->setItemType('dir');
 
         $url = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&type='.$item_type.'&lp_id='.$this->lp_id;
@@ -6401,7 +5976,7 @@ class learnpath
             $creatorId
         );
 
-        $documentId = $document->getId();
+        $documentId = $document->getIid();
 
         if (!$document) {
             return 0;
@@ -6531,7 +6106,6 @@ class learnpath
      */
     public function get_js_dropdown_array()
     {
-        $course_id = api_get_course_int_id();
         $return = 'var child_name = new Array();'."\n";
         $return .= 'var child_value = new Array();'."\n\n";
         $return .= 'child_name[0] = new Array();'."\n";
@@ -7510,33 +7084,6 @@ class learnpath
     }
 
     /**
-     * // TODO: The output encoding should be equal to the system encoding.
-     *
-     * Exports the learning path as a SCORM package. This is the main function that
-     * gathers the content, transforms it, writes the imsmanifest.xml file, zips the
-     * whole thing and returns the zip.
-     *
-     * This method needs to be called in PHP5, as it will fail with non-adequate
-     * XML package (like the ones for PHP4), and it is *not* a static method, so
-     * you need to call it on a learnpath object.
-     *
-     * @TODO The method might be redefined later on in the scorm class itself to avoid
-     * creating a SCORM structure if there is one already. However, if the initial SCORM
-     * path has been modified, it should use the generic method here below.
-     *
-     * @return string Returns the zip package string, or null if error
-     */
-    public function scormExport()
-    {
-        ScormExport::export($this);
-    }
-
-    public function scorm_export_to_pdf($lpId)
-    {
-        ScormExport::exportToPdf($lpId, api_get_course_info());
-    }
-
-    /**
      * Temp function to be moved in main_api or the best place around for this.
      * Creates a file path if it doesn't exist.
      *
@@ -8445,7 +7992,6 @@ class learnpath
                     'final_item',
                     $documentId,
                     $values['title'],
-                    ''
                 );
 
                 Display::addFlash(

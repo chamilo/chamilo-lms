@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
@@ -22,9 +23,6 @@ class SkillProfile extends Model
 {
     public $columns = ['id', 'name', 'description'];
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->table = Database::get_main_table(TABLE_MAIN_SKILL_PROFILE);
@@ -40,9 +38,8 @@ class SkillProfile extends Model
                 INNER JOIN $this->table_rel_profile sp
                 ON (p.id = sp.profile_id) ";
         $result = Database::query($sql);
-        $profiles = Database::store_result($result, 'ASSOC');
-
-        return $profiles;
+        
+        return Database::store_result($result, 'ASSOC');
     }
 
     /**

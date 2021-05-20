@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <h6>Hello {{ user.username }}</h6>
+    <h6>{{ user.firstname }} {{ user.lastname }} </h6>
     <q-tabs align="left" dense inline-label no-caps>
       <q-route-tab to="/courses" label="Inbox" />
       <q-route-tab to="/courses" label="Posts" />

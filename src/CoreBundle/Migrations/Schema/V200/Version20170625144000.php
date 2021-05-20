@@ -162,7 +162,6 @@ class Version20170625144000 extends AbstractMigrationChamilo
             );
         }
 
-
         if (!$table->hasIndex('IDX_35C509F6BB3453DB')) {
             $this->addSql('CREATE INDEX IDX_35C509F6BB3453DB ON c_student_publication_comment (work_id);');
         }

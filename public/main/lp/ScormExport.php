@@ -9,6 +9,23 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class ScormExport
 {
+    /**
+     * // TODO: The output encoding should be equal to the system encoding.
+     *
+     * Exports the learning path as a SCORM package. This is the main function that
+     * gathers the content, transforms it, writes the imsmanifest.xml file, zips the
+     * whole thing and returns the zip.
+     *
+     * This method needs to be called in PHP5, as it will fail with non-adequate
+     * XML package (like the ones for PHP4), and it is *not* a static method, so
+     * you need to call it on a learnpath object.
+     *
+     * @TODO The method might be redefined later on in the scorm class itself to avoid
+     * creating a SCORM structure if there is one already. However, if the initial SCORM
+     * path has been modified, it should use the generic method here below.
+     *
+     * @return string Returns the zip package string, or null if error
+     */
     public static function export(learnpath $lp)
     {
         // @todo fix export

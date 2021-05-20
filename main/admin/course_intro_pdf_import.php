@@ -20,7 +20,7 @@ $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')]
 
 set_time_limit(0);
 
-if ($_POST['formSent']) {
+if (isset($_POST['formSent'])) {
     if (empty($_FILES['import_file']['tmp_name'])) {
         $error_message = get_lang('UplUploadFailed');
         Display::addFlash(Display::return_message($error_message, 'error', false));
@@ -51,7 +51,7 @@ if (count($errors) != 0) {
     }
     $error_message .= '</ul>';
     Display::addFlash(Display::return_message($error_message, 'normal', false));
-} elseif ($_POST['formSent']) {
+} elseif (isset($_POST['formSent'])) {
     Display::addFlash(
         Display::return_message(
             get_lang('CourseIntroductionsAllImportedSuccessfully'),

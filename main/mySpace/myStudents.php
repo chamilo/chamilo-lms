@@ -939,7 +939,13 @@ $content = $tpl->fetch($templateName);
 echo $content;
 
 // Careers.
-echo MyStudents::getBlockForCareers($student_id);
+if (api_get_configuration_value('allow_career_users')) {
+    foreach ($courses_in_session as $sId => $courses) {
+        echo SessionManager::getCareerDiagramPerSession($sId, $student_id);
+    }
+    echo MyStudents::getBlockForCareers($student_id);
+}
+
 echo MyStudents::getBlockForSkills(
     $student_id,
     $courseInfo ? $courseInfo['real_id'] : 0,
@@ -992,39 +998,6 @@ if (empty($details)) {
             }
             $title = Display::return_icon('session.png', get_lang('Session'))
                 .' '.$session_name.($date_session ? ' ('.$date_session.')' : '');
-        }
-
-        if (api_get_configuration_value('allow_career_users')) {
-            $visibility = api_get_session_visibility($sId);
-
-            if (SESSION_AVAILABLE === $visibility) {
-                $value = $extraFieldValueSession->get_values_by_handler_and_field_variable($sId, 'careerid');
-                if (isset($value['value']) && !empty($value['value'])) {
-                    $careerList = str_replace(['[', ']'], '', $value['value']);
-                    $careerList = explode(',', $careerList);
-
-                    foreach ($careerList as $career) {
-                        $careerIdValue = $extraFieldValueCareer->get_item_id_from_field_variable_and_field_value(
-                            'external_career_id',
-                            $career
-                        );
-                        if (isset($careerIdValue['item_id']) && !empty($careerIdValue['item_id'])) {
-                            $finalCareerId = $careerIdValue['item_id'];
-                            $career = new Career();
-                            $careerInfo = $career->get($finalCareerId);
-                            if (!empty($careerInfo)) {
-                                $careerUrl = api_get_path(WEB_PATH).
-                                    'main/user/career_diagram.php?iframe=1&career_id='.$finalCareerId;
-                                echo '<iframe
-                                style="width:100%; height:500px"
-                                border="0"
-                                frameborder="0"
-                                src="'.$careerUrl.'"></iframe>';
-                            }
-                        }
-                    }
-                }
-            }
         }
 
         // Courses

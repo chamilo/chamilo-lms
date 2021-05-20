@@ -20,7 +20,7 @@ $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')]
 
 set_time_limit(0);
 
-if ($_POST['formSent']) {
+if (isset($_POST['formSent'])) {
     if (empty($_FILES['import_file']['tmp_name'])) {
         $error_message = get_lang('UplUploadFailed');
         Display::addFlash(Display::return_message($error_message, 'error', false));
@@ -37,28 +37,17 @@ if ($_POST['formSent']) {
             );
         } else {
             $errors = import_pdfs($subDir);
-            if (count($errors) == 0) {
-                error_log('Course intros imported successfully in '.__FILE__.', line '.__LINE__);
-            }
         }
     }
 }
 
-if (count($errors) != 0) {
+if (!empty($errors)) {
     $error_message = '<ul>';
     foreach ($errors as $index => $error_course) {
         $error_message .= '<li>'.get_lang('Course').': '.$error_course['Title'].' ('.$error_course['Code'].')</li>';
     }
     $error_message .= '</ul>';
     Display::addFlash(Display::return_message($error_message, 'normal', false));
-} elseif ($_POST['formSent']) {
-    Display::addFlash(
-        Display::return_message(
-            get_lang('CourseIntroductionsAllImportedSuccessfully'),
-            'confirmation',
-            false
-        )
-    );
 }
 
 Display::display_header($tool_name);
@@ -101,7 +90,7 @@ Display::display_footer();
  *
  * @param string $subDir The subdirectory in which to put the files in each course
  *
- * @return array List of possible errors found
+ * @return bool|array List of possible errors found
  */
 function import_pdfs($subDir = '/')
 {
@@ -112,9 +101,7 @@ function import_pdfs($subDir = '/')
         @mkdir($baseDir.$uploadPath);
     }
     if (!unzip_uploaded_file($_FILES['import_file'], $uploadPath, $baseDir, 1024 * 1024 * 1024)) {
-        error_log('Could not unzip uploaded file in '.__FILE__.', line '.__LINE__);
-
-        return $errors;
+        return false;
     }
     $list = scandir($baseDir.$uploadPath);
     $i = 0;
@@ -174,13 +161,22 @@ function import_pdfs($subDir = '/')
                 $course_description->insert();
             }
         } else {
-            error_log($parts[0].' is not a course, apparently');
             $errors[] = ['Line' => 0, 'Code' => $parts[0], 'Title' => $parts[0].' - '.get_lang('CodeDoesNotExists')];
         }
         $i++; //found at least one entry that is not a dir or a .
     }
     if ($i == 0) {
         $errors[] = ['Line' => 0, 'Code' => '.', 'Title' => get_lang('NoPDFFoundAtRoot')];
+    }
+
+    if (empty($errors)) {
+        Display::addFlash(
+            Display::return_message(
+                get_lang('CourseIntroductionsAllImportedSuccessfully'),
+                'confirmation',
+                false
+            )
+        );
     }
 
     return $errors;

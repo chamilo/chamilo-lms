@@ -7,15 +7,14 @@ declare(strict_types=1);
 namespace Chamilo\LtiBundle\Controller;
 
 use Category;
-use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\LtiBundle\Entity\ExternalTool;
 use Chamilo\LtiBundle\Form\ExternalToolType;
 use Chamilo\LtiBundle\Util\Utils;
-use DateTime;
 use Display;
 use EvalForm;
 use Evaluation;
@@ -31,7 +30,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use UserManager;
 
-class CourseController extends BaseController
+/**
+ * Class CourseController
+ *
+ * @package Chamilo\LtiBundle\Controller
+ *
+ * @Route("/courses/{course_code}/lti");
+ */
+class CourseController extends ToolBaseController
 {
     /**
      * @Route("/edit/{id}", name="chamilo_lti_edit", requirements={"id"="\d+"})
@@ -42,7 +48,7 @@ class CourseController extends BaseController
     {
         $em = $this->getDoctrine()->getManager();
         /** @var ExternalTool $tool */
-        $tool = $em->find('ChamiloLtiBundle:ExternalTool', $id);
+        $tool = $em->find(ExternalTool::class, $id);
 
         if (empty($tool)) {
             throw $this->createNotFoundException('External tool not found');
@@ -57,7 +63,6 @@ class CourseController extends BaseController
         $form->handleRequest($request);
 
         if (!$form->isSubmitted() || !$form->isValid()) {
-            $this->setConfigureBreadcrumb($course);
 
             return $this->render(
                 '@ChamiloCore/Lti/course_configure.twig',
@@ -77,7 +82,7 @@ class CourseController extends BaseController
         $em->persist($tool);
 
         if (!$tool->isActiveDeepLinking()) {
-            $courseTool = $em->getRepository('ChamiloCourseBundle:CTool')
+            $courseTool = $em->getRepository(CTool::class)
                 ->findOneBy(
                     [
                         'course' => $course,
@@ -434,7 +439,6 @@ class CourseController extends BaseController
         $form->handleRequest($request);
 
         if (!$form->isSubmitted() || !$form->isValid()) {
-            $this->setConfigureBreadcrumb($course);
 
             $categories = Category::load(null, null, $course->getCode());
             $actions = '';
@@ -446,10 +450,9 @@ class CourseController extends BaseController
                         'chamilo_lti_grade',
                         [
                             'catId' => $categories[0]->get_id(),
-                            'code' => $course->getCode(),
+                            'course_code' => $course->getCode(),
                         ]
                     )
-                    //'./gradebook/add_eval.php?selectcat='.$categories[0]->get_id().'&'.api_get_cidreq()
                 );
             }
 
@@ -584,7 +587,6 @@ class CourseController extends BaseController
         }
 
         if (!$form->validate()) {
-            $this->setConfigureBreadcrumb($course);
 
             return $this->render(
                 '@ChamiloCore/Lti/gradebook.html.twig',
@@ -631,25 +633,6 @@ class CourseController extends BaseController
         $this->addFlash('success', $this->trans('Evaluation for external tool added'));
 
         return $this->redirect(api_get_course_url());
-    }
-
-    private function setConfigureBreadcrumb(Course $course): void
-    {
-        $breadcrumb = $this->get('chamilo_core.block.breadcrumb');
-        $breadcrumb->addChild(
-            $course->getTitle(),
-            [
-                'uri' => $this->generateUrl(
-                    'chamilo_course_home_home_index',
-                    [
-                        'course' => $course->getCode(),
-                    ]
-                ),
-            ]
-        );
-        $breadcrumb->addChild(
-            $this->trans('Configure external tool')
-        );
     }
 
     private function variableSubstitution(
@@ -757,10 +740,10 @@ class CourseController extends BaseController
             '$CourseSection.numberofStudents' => false,
             '$CourseSection.dept' => false,
             '$CourseSection.timeFrame.begin' => $session && $session->getDisplayStartDate()
-                ? $session->getDisplayStartDate()->format(DateTime::ATOM)
+                ? $session->getDisplayStartDate()->format('Y-m-d\TH:i:sP')
                 : false,
             '$CourseSection.timeFrame.end' => $session && $session->getDisplayEndDate()
-                ? $session->getDisplayEndDate()->format(DateTime::ATOM)
+                ? $session->getDisplayEndDate()->format('Y-m-d\TH:i:sP')
                 : false,
             '$CourseSection.enrollControl.accept' => false,
             '$CourseSection.enrollControl.allowed' => false,

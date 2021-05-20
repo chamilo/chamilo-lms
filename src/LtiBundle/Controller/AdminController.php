@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\LtiBundle\Controller;
 
 use Chamilo\CoreBundle\Controller\BaseController;
+use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\LtiBundle\Entity\ExternalTool;
 use Chamilo\LtiBundle\Form\ExternalToolType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -14,16 +15,24 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Class AdminController
+ *
+ * @package Chamilo\LtiBundle\Controller
+ *
+ * @Route("/admin/lti")
+ * @Security("is_granted('ROLE_ADMIN')")
+ */
 class AdminController extends BaseController
 {
+    use ControllerTrait;
+
     /**
      * @Route("/", name="chamilo_lti_admin")
-     *
-     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function adminAction(): Response
     {
-        $repo = $this->getDoctrine()->getRepository('ChamiloLtiBundle:ExternalTool');
+        $repo = $this->getDoctrine()->getRepository(ExternalTool::class);
         $tools = $repo->findAll();
 
         return $this->render('@ChamiloCore/Lti/admin.html.twig', [
@@ -33,8 +42,6 @@ class AdminController extends BaseController
 
     /**
      * @Route("/add", name="chamilo_lti_admin_add")
-     *
-     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function adminAddAction(Request $request): Response
     {
@@ -54,21 +61,6 @@ class AdminController extends BaseController
             return $this->redirectToRoute('chamilo_lti_admin');
         }
 
-        $breadcrumb = $this->get('chamilo_core.block.breadcrumb');
-        $breadcrumb->addChild(
-            $this->trans('Administration'),
-            [
-                'route' => 'administration',
-            ]
-        );
-        $breadcrumb->addChild(
-            $this->trans('External tools'),
-            [
-                'route' => 'chamilo_lti_admin',
-            ]
-        );
-        $breadcrumb->addChild('Add external tool');
-
         return $this->render(
             '@ChamiloCore/Lti/admin_form.html.twig',
             [
@@ -80,17 +72,17 @@ class AdminController extends BaseController
     /**
      * @Route("/edit/{toolId}", name="chamilo_lti_admin_edit", requirements={"toolId"="\d+"})
      *
-     * @Security("is_granted('ROLE_ADMIN')")
-     *
-     * @param int $toolId
+     * @param int     $toolId
+     * @param Request $request
      *
      * @return Response
      */
-    public function adminEditAction($toolId, Request $request)
+    public function adminEditAction(int $toolId, Request $request): Response
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()
+            ->getManager();
         /** @var ExternalTool $tool */
-        $tool = $em->find('ChamiloLtiBundle:ExternalTool', $toolId);
+        $tool = $em->find(ExternalTool::class, $toolId);
 
         if (empty($tool)) {
             throw $this->createNotFoundException();
@@ -114,21 +106,6 @@ class AdminController extends BaseController
             return $this->redirectToRoute('chamilo_lti_admin');
         }
 
-        $breadcrumb = $this->get('chamilo_core.block.breadcrumb');
-        $breadcrumb->addChild(
-            $this->trans('Administration'),
-            [
-                'route' => 'administration',
-            ]
-        );
-        $breadcrumb->addChild(
-            $this->trans('External tools'),
-            [
-                'route' => 'chamilo_lti_admin',
-            ]
-        );
-        $breadcrumb->addChild('Edit external tool');
-
         return $this->render(
             '@ChamiloCore/Lti/admin_form.html.twig',
             [
@@ -140,17 +117,15 @@ class AdminController extends BaseController
     /**
      * @Route("/delete/{toolId}", name="chamilo_lti_admin_delete", requirements={"toolId"="\d+"})
      *
-     * @Security("is_granted('ROLE_ADMIN')")
-     *
      * @param int $toolId
      *
      * @return Response
      */
-    public function adminDeleteAction($toolId)
+    public function adminDeleteAction(int $toolId): Response
     {
         $em = $this->getDoctrine()->getManager();
         /** @var ExternalTool $tool */
-        $tool = $em->find('ChamiloLtiBundle:ExternalTool', $toolId);
+        $tool = $em->find(ExternalTool::class, $toolId);
 
         if (empty($tool)) {
             throw $this->createNotFoundException();

@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\LtiBundle\Component;
 
-use SimpleXMLElement;
+use \SimpleXMLElement;
 
 class OutcomeReplaceResponse extends OutcomeResponse
 {

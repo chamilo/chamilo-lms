@@ -14,6 +14,7 @@ use Chamilo\LtiBundle\Component\OutcomeUnsupportedRequest;
 use Chamilo\LtiBundle\Entity\ExternalTool;
 use OAuthUtil;
 use SimpleXMLElement;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -22,14 +23,14 @@ class ServiceController extends BaseController
     /**
      * @Route("/lti/os", name="chamilo_lti_os")
      */
-    public function outcomeServiceAction(): Response
+    public function outcomeServiceAction(Request $request): Response
     {
         $em = $this->getDoctrine()->getManager();
-        $toolRepo = $em->getRepository('ChamiloLtiBundle:ExternalTool');
+        $toolRepo = $em->getRepository(ExternalTool::class);
 
-        $headers = OAuthUtil::get_headers();
+        $headers = $request->headers;
 
-        if (empty($headers['Authorization'])) {
+        if (empty($headers->get('authorization'))) {
             throw $this->createAccessDeniedException();
         }
 

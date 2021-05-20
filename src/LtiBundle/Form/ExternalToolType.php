@@ -100,7 +100,7 @@ class ExternalToolType extends AbstractType
         ;
 
         $builder->add(
-            empty($tool->getId()) ? 'save' : 'edit',
+            'save',
             SubmitType::class,
             [
                 'attr' => [

@@ -53,6 +53,3 @@ web_ajax:
 
 web_main:
     path: main/
-
-chamilo_lti:
-    resource: "@ChamiloLtiBundle/Resources/config/routing.yml"

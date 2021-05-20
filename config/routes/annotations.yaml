@@ -5,3 +5,7 @@ core_controllers:
 course_controllers:
     resource: '../../src/CourseBundle/Controller/'
     type: annotation
+
+lti_controllers:
+    resource: '../../src/LtiBundle/Controller/'
+    type: annotation

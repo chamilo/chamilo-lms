@@ -1013,8 +1013,12 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
         $zip_content_array = $zip_file->listContent();
         $ok_scorm = false;
         $realFileSize = 0;
-        foreach ($zip_content_array as &$this_content) {
-            if (preg_match('~.(php.*|phtml)$~i', $this_content['filename'])) {
+        $ok_plantyn_scorm1 = false;
+        $ok_plantyn_scorm2 = false;
+        $ok_plantyn_scorm3 = false;
+        $ok_aicc_scorm = false;
+        foreach ($zip_content_array as $this_content) {
+            if (preg_match('~.(php.*|phtml|phar|htaccess)$~i', $this_content['filename'])) {
                 Display::addFlash(
                     Display::return_message(get_lang('ZipNoPhp'))
                 );

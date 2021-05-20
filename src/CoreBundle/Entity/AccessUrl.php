@@ -211,7 +211,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
 
     public function __toString(): string
     {
-        return (string) $this->getUrl();
+        return $this->getUrl();
     }
 
     /**

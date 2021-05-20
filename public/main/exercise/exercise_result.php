@@ -228,14 +228,16 @@ $stats = ExerciseLib::displayQuestionListByAttempt(
 $pageContent .= ob_get_contents();
 ob_end_clean();
 
+// Change settings for teacher access.
 $oldResultDisabled = $objExercise->results_disabled;
 $objExercise->results_disabled = RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS;
 $objExercise->forceShowExpectedChoiceColumn = true;
+$objExercise->disableHideCorrectAnsweredQuestions = true;
 ob_start();
 $statsTeacher = ExerciseLib::displayQuestionListByAttempt(
     $objExercise,
     $exeId,
-    $saveResults,
+    false,
     $remainingMessage,
     $allowSignature,
     api_get_configuration_value('quiz_results_answers_report'),
@@ -243,8 +245,10 @@ $statsTeacher = ExerciseLib::displayQuestionListByAttempt(
 );
 ob_end_clean();
 
+// Restore settings.
 $objExercise->results_disabled = $oldResultDisabled;
 $objExercise->forceShowExpectedChoiceColumn = false;
+$objExercise->disableHideCorrectAnsweredQuestions = false;
 
 // Save here LP status
 if (!empty($learnpath_id) && $saveResults) {

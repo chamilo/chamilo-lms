@@ -22,13 +22,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class DocumentManager
 {
     /**
-     * Construct.
-     */
-    private function __construct()
-    {
-    }
-
-    /**
      * @param string $course_code
      *
      * @return int the document folder quota for the current course in bytes

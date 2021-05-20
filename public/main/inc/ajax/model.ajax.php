@@ -1774,6 +1774,9 @@ switch ($action) {
         );
         break;
     case 'get_sessions_tracking':
+        $sessionColumns = SessionManager::getGridColumns('my_space');
+        $columns = $sessionColumns['simple_column_name'];
+
         if (api_is_drh()) {
             $orderByName = Database::escape_string($sidx);
             $orderByName = in_array($orderByName, ['name', 'access_start_date']) ? $orderByName : 'name';
@@ -1822,9 +1825,6 @@ switch ($action) {
                 ['where' => $whereCondition, 'extra' => $extra_fields]
             );
         }
-
-        $sessionColumns = SessionManager::getGridColumns('my_space');
-        $columns = $sessionColumns['simple_column_name'];
 
         $result = [];
         if (!empty($sessions)) {
@@ -1989,10 +1989,7 @@ switch ($action) {
             'firstname',
             'lastname',
         ];
-        $lessons = LearnpathList::get_course_lessons(
-            $course['code'],
-            $sessionId
-        );
+        $lessons = LearnpathList::get_course_lessons($course['code'], $sessionId);
         foreach ($lessons as $lesson_id => $lesson) {
             $columns[] = $lesson_id;
         }
@@ -2382,10 +2379,7 @@ switch ($action) {
         break;
     case 'get_exercise_grade':
         $objExercise = new Exercise();
-        $exercises = $objExercise->getExercisesByCourseSession(
-            $_GET['course_id'],
-            $_GET['session_id']
-        );
+        $exercises = $objExercise->getExercisesByCourseSession($_GET['course_id'], $_GET['session_id']);
         $cntExer = 4;
         if (!empty($exercises)) {
             $cntExer += count($exercises);
@@ -2488,13 +2482,11 @@ switch ($action) {
         $obj = new ExtraFieldOption($type);
         $columns = ['display_text', 'option_value', 'option_order'];
         $sidx = in_array($sidx, $columns) ? $sidx : 'display_text';
-        $result = $obj->get_all(
-            [
+        $result = $obj->get_all([
                 'where' => ['field_id = ? ' => $field_id],
                 'order' => "$sidx $sord",
                 'LIMIT' => "$start , $limit",
-            ]
-        );
+        ]);
         break;
     case 'get_usergroups_teacher':
         $columns = ['name', 'users', 'status', 'group_type', 'actions'];

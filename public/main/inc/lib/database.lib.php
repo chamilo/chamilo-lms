@@ -519,24 +519,39 @@ class Database
         $option = 'ASSOC',
         $debug = false
     ) {
+        if ($type_result === 'count') {
+            $conditions['LIMIT'] = null;
+            $conditions['limit'] = null;
+        }
         $conditions = self::parse_conditions($conditions);
 
         //@todo we could do a describe here to check the columns ...
         if (is_array($columns)) {
             $clean_columns = implode(',', $columns);
         } else {
-            if ('*' == $columns) {
+            if ('*' === $columns) {
                 $clean_columns = '*';
             } else {
                 $clean_columns = (string) $columns;
             }
         }
 
+        if ($type_result === 'count') {
+            $clean_columns = ' count(*) count ';
+        }
         $sql = "SELECT $clean_columns FROM $table_name $conditions";
         if ($debug) {
             var_dump($sql);
         }
         $result = self::query($sql);
+        if ($type_result === 'count') {
+            $row = self::fetch_array($result, $option);
+            if ($row) {
+                return (int) $row['count'];
+            }
+
+            return 0;
+        }
         $array = [];
 
         if ('all' === $type_result) {

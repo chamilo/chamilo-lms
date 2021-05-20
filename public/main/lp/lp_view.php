@@ -548,8 +548,10 @@ $template->assign('lp_title_scorm', $lp->getName());
 } else {*/
 
 $template->assign('data_panel', null);
+//echo '<pre>';var_dump($oLP->get_toc(), array_column($oLP->get_toc(), 'status_class', 'id'));
 $template->assign('status_list', array_column($oLP->get_toc(), 'status_class', 'id'));
 $template->assign('data_list', $oLP->getListArrayToc($get_toc_list));
+//var_dump($oLP->getListArrayToc($get_toc_list));
 
 $template->assign('lp_id', $lp->getIid());
 $template->assign('lp_current_item_id', $oLP->get_current_item_id());

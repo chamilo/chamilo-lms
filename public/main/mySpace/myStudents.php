@@ -19,6 +19,7 @@ api_block_anonymous_users();
 $htmlHeadXtra[] = null;
 $export = $_GET['export'] ?? false;
 $sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : 0;
+$action = $_GET['action'] ?? '';
 $origin = api_get_origin();
 $courseId = isset($_GET['cid']) ? (int) $_GET['cid'] : '';
 $course = api_get_course_entity($courseId);
@@ -211,7 +212,6 @@ if (!empty($details)) {
 // Database Table Definitions
 $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_stats_exercices = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-$action = $_GET['action'] ?? '';
 
 switch ($action) {
     case 'add_work_time':

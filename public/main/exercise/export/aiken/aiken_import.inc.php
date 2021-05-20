@@ -75,7 +75,8 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
             null,
             1,
             'overwrite',
-            false
+            false,
+            true
         )
     ) {
         if (!function_exists('gzopen')) {
@@ -115,11 +116,11 @@ function aiken_import_exercise($file)
     $archive_path = api_get_path(SYS_ARCHIVE_PATH).'aiken/';
     $baseWorkDir = $archive_path;
 
-    if (!is_dir($baseWorkDir)) {
-        mkdir($baseWorkDir, api_get_permissions_for_new_directories(), true);
+    $uploadPath = 'aiken_'.api_get_unique_id();
+    if (!is_dir($baseWorkDir.$uploadPath)) {
+        mkdir($baseWorkDir.$uploadPath, api_get_permissions_for_new_directories(), true);
     }
 
-    $uploadPath = 'aiken_'.api_get_unique_id().'/';
 
     // set some default values for the new exercise
     $exercise_info = [];
@@ -133,7 +134,7 @@ function aiken_import_exercise($file)
 
     // unzip the uploaded file in a tmp directory
     if (preg_match('/.(zip|txt)$/i', $file)) {
-        if (!get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)) {
+        if (!get_and_unzip_uploaded_exercise($baseWorkDir.$uploadPath, '/')) {
             return 'ThereWasAProblemWithYourFile';
         }
     }
@@ -182,10 +183,9 @@ function aiken_import_exercise($file)
     $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
     $tableAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
     if (!empty($last_exercise_id)) {
-        // For each question found...
         $courseId = api_get_course_int_id();
         foreach ($exercise_info['question'] as $key => $question_array) {
-            // 2.create question
+            // 2. Create question.
             $question = new Aiken2Question();
             $question->type = $question_array['type'];
             $question->setAnswer();
@@ -260,8 +260,6 @@ function aiken_import_exercise($file)
                 $max_score = $scoreFromFile;
             }
 
-            //$answer->save();
-
             $params = ['ponderation' => $max_score];
             Database::update(
                 $tableQuestion,
@@ -315,7 +313,6 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
     foreach ($data as $line => $info) {
         $info = trim($info);
         if (empty($info)) {
-            // double empty line
             continue;
         }
         //make sure it is transformed from iso-8859-1 to utf-8 if in that form
@@ -339,6 +336,9 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
                 continue;
             }
 
+            if (false !== strpos($data[$next], 'DESCRIPTION:')) {
+                continue;
+            }
             // Check if next has score, otherwise loop too next question.
             if (false === strpos($data[$next], 'SCORE:')) {
                 $answers_array = [];
@@ -352,6 +352,17 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
             continue;
         } elseif (preg_match('/^DESCRIPTION:\s?(.*)/', $info, $matches)) {
             $exercise_info['question'][$question_index]['description'] = $matches[1];
+            $next = $line + 1;
+
+            if (false !== strpos($data[$next], 'ANSWER_EXPLANATION:')) {
+                continue;
+            }
+            // Check if next has score, otherwise loop too next question.
+            if (false === strpos($data[$next], 'SCORE:')) {
+                $answers_array = [];
+                $question_index++;
+                continue;
+            }
         } elseif (preg_match('/^ANSWER_EXPLANATION:\s?(.*)/', $info, $matches)) {
             //Comment of correct answer
             $correct_answer_index = array_search($matches[1], $answers_array);

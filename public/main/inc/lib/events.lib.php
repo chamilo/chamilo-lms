@@ -560,12 +560,11 @@ class Event
             return false;
         }
 
+        if (null === $answer) {
+            $answer = '';
+        }
         if (null === $score) {
             $score = 0;
-        }
-
-        if (null != $answer) {
-            $answer = (int) $answer;
         }
 
         $attempt = [
@@ -694,14 +693,16 @@ class Event
         $answerId,
         $correct,
         $coords,
-        $updateResults = false
+        $updateResults = false,
+        $exerciseId = 0,
+        $lpId = 0,
+        $lpItemId = 0
     ) {
         $debug = false;
-        global $safe_lp_id, $safe_lp_item_id;
 
-        if (false == $updateResults) {
+        if ($updateResults == false) {
             // Validation in case of fraud with activated control time
-            if (!ExerciseLib::exercise_time_control_is_valid($exercise, $safe_lp_id, $safe_lp_item_id)) {
+            if (!ExerciseLib::exercise_time_control_is_valid($exerciseId, $lpId, $lpItemId)) {
                 if ($debug) {
                     error_log('Attempt is fraud');
                 }
@@ -848,6 +849,26 @@ class Event
         Database::insert($table, $params);
 
         return true;
+    }
+
+    public static function findUserSubscriptionToCourse(int $userId, int $courseId, int $sessionId = 0)
+    {
+        $tblTrackEDefault = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+
+        return Database::select(
+            '*',
+            $tblTrackEDefault,
+            [
+                'where' => [
+                    'default_event_type = ? AND ' => LOG_SUBSCRIBE_USER_TO_COURSE,
+                    'default_value_type = ? AND ' => LOG_USER_OBJECT,
+                    'default_value LIKE ? AND ' => '%s:2:\\\\"id\\\\";i:'.$userId.'%',
+                    'c_id = ? AND ' => $courseId,
+                    'session_id = ?' => $sessionId,
+                ],
+            ],
+            'first'
+        );
     }
 
     /**

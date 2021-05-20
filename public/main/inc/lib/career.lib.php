@@ -951,7 +951,7 @@ class Career extends Model
 
             $originalRow--;
             $column--;
-            //$title = "$originalRow / $column";
+
             $graphHtml .= Display::panel(
                 $content,
                 $title,

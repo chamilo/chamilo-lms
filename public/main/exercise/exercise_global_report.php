@@ -48,7 +48,6 @@ $objExercise = new Exercise();
 
 foreach ($students as $studentInfo) {
     $studentId = $studentInfo['user_id'];
-    //$userExtra = UserManager::get_extra_user_data($studentId);
 
     $data = [];
     $data[] = $studentInfo['username'];
@@ -56,7 +55,6 @@ foreach ($students as $studentInfo) {
     $data[] = $studentInfo['firstname'];
     $data[] = $studentInfo['email'];
     $data[] = $studentInfo['official_code'];
-    //$data[] = isset($userExtra['extra_nif']) ? $userExtra['extra_nif'] : '';
 
     $userExerciseData = [];
     $categoryData = [];

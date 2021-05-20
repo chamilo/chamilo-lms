@@ -6050,7 +6050,7 @@ class SessionManager
         $getCount = false,
         $from = null,
         $numberItems = null,
-        $column = 1,
+        $column = '',
         $direction = 'asc',
         $keyword = null,
         $active = null,
@@ -6062,6 +6062,12 @@ class SessionManager
         $filterByStatus = (int) $filterByStatus;
         $userId = (int) $userId;
 
+        if (empty($column)) {
+            $column = 'u.lastname';
+            if (api_is_western_name_order()) {
+                $column = 'u.firstname';
+            }
+        }
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -6735,15 +6741,32 @@ class SessionManager
         if (!empty($list)) {
             $userSessionList = [];
             foreach ($list as $data) {
-                $userInfo = api_get_user_info_from_username($data['Username']);
-                $sessionInfo = self::get_session_by_name($data['SessionName']);
-
-                if (empty($sessionInfo)) {
-                    Display::addFlash(Display::return_message(get_lang('The session was not identified').' - '.$data['SessionName'], 'warning'));
+                $sessionInfo = [];
+                if (isset($data['SessionId'])) {
+                    $sessionInfo = api_get_session_info($data['SessionId']);
                 }
 
+                if (isset($data['SessionName']) && empty($sessionInfo)) {
+                $sessionInfo = self::get_session_by_name($data['SessionName']);
+                }
+
+                if (empty($sessionInfo)) {
+                    $sessionData = isset($data['SessionName']) ? $data['SessionName'] : $data['SessionId'];
+                    Display::addFlash(
+                        Display::return_message(get_lang('SessionNotFound').' - '.$sessionData, 'warning')
+                    );
+                    continue;
+                }
+                $userList = explode(',', $data['Username']);
+
+                foreach ($userList as $username) {
+                    $userInfo = api_get_user_info_from_username($username);
+
                 if (empty($userInfo)) {
-                    Display::addFlash(Display::return_message(get_lang('This user doesn\'t exist').' - '.$data['Username'], 'warning'));
+                        Display::addFlash(
+                            Display::return_message(get_lang('UserDoesNotExist').' - '.$username, 'warning')
+                        );
+                        continue;
                 }
 
                 if (!empty($userInfo) && !empty($sessionInfo)) {
@@ -6752,6 +6775,7 @@ class SessionManager
                         'session_info' => $sessionInfo,
                     ];
                     $userSessionList[$userInfo['user_id']]['user_info'] = $userInfo;
+                    }
                 }
             }
 
@@ -9558,6 +9582,137 @@ class SessionManager
                 Display::return_message(get_lang('SessionIsReadOnly'), 'warning')
             );
         }
+    }
+
+    public static function insertUsersInCourses(array $studentIds, array $courseIds, int $sessionId)
+    {
+        $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
+
+        foreach ($courseIds as $courseId) {
+            self::insertUsersInCourse($studentIds, $courseId, $sessionId, [], false);
+        }
+
+        foreach ($studentIds as $studentId) {
+            Database::query(
+                "INSERT IGNORE INTO $tblSessionUser (session_id, user_id, registered_at)
+                VALUES ($sessionId, $studentId, '".api_get_utc_datetime()."')"
+            );
+        }
+
+        Database::query(
+            "UPDATE $tblSession s
+            SET s.nbr_users = (
+                SELECT COUNT(1) FROM session_rel_user sru
+                WHERE sru.session_id = $sessionId AND sru.relation_type <> ".Session::DRH."
+            )
+            WHERE s.id = $sessionId"
+        );
+    }
+
+    public static function insertUsersInCourse(
+        array $studentIds,
+        int $courseId,
+        int $sessionId,
+        array $relationInfo = [],
+        bool $updateSession = true
+    ) {
+        $tblSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tblSessionCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
+
+        $relationInfo = array_merge(['visiblity' => 0, 'status' => Session::STUDENT], $relationInfo);
+
+        $sessionCourseUser = [
+            'session_id' => $sessionId,
+            'c_id' => $courseId,
+            'visibility' => $relationInfo['visibility'],
+            'status' => $relationInfo['status'],
+        ];
+        $sessionUser = [
+            'session_id' => $sessionId,
+            'registered_at' => api_get_utc_datetime(),
+        ];
+
+        foreach ($studentIds as $studentId) {
+            $sessionCourseUser['user_id'] = $studentId;
+
+            Database::insert($tblSessionCourseUser, $sessionCourseUser);
+
+            if ($updateSession) {
+                $sessionUser['user_id'] = $studentId;
+
+                Database::insert($tblSessionUser, $sessionUser);
+            }
+
+            Event::logUserSubscribedInCourseSession($studentId, $courseId, $sessionId);
+        }
+
+        Database::query(
+            "UPDATE $tblSessionCourse src
+            SET src.nbr_users = (
+                SELECT COUNT(1) FROM $tblSessionCourseUser srcru
+                WHERE
+                    srcru.session_id = $sessionId AND srcru.c_id = $courseId AND srcru.status <> ".Session::COACH."
+            )
+            WHERE src.session_id = $sessionId AND src.c_id = $courseId"
+        );
+
+        if ($updateSession) {
+            Database::query(
+                "UPDATE $tblSession s
+                SET s.nbr_users = (
+                    SELECT COUNT(1) FROM session_rel_user sru
+                    WHERE sru.session_id = $sessionId AND sru.relation_type <> ".Session::DRH."
+                )
+                WHERE s.id = $sessionId"
+            );
+        }
+    }
+
+    public static function getCareerDiagramPerSession($sessionId, $userId): string
+    {
+        $extraFieldValueSession = new ExtraFieldValue('session');
+        $extraFieldValueCareer = new ExtraFieldValue('career');
+
+        $visibility = api_get_session_visibility($sessionId, null, false, $userId);
+
+        $content = '';
+        if (SESSION_AVAILABLE === $visibility) {
+            $value = $extraFieldValueSession->get_values_by_handler_and_field_variable($sessionId, 'careerid');
+            if (isset($value['value']) && !empty($value['value'])) {
+                $careerList = str_replace(['[', ']'], '', $value['value']);
+                $careerList = explode(',', $careerList);
+
+                foreach ($careerList as $career) {
+                    $careerIdValue = $extraFieldValueCareer->get_item_id_from_field_variable_and_field_value(
+                        'external_career_id',
+                        $career
+                    );
+                    if (isset($careerIdValue['item_id']) && !empty($careerIdValue['item_id'])) {
+                        $finalCareerId = $careerIdValue['item_id'];
+                        $career = new Career();
+                        $careerInfo = $career->get($finalCareerId);
+                        if (!empty($careerInfo)) {
+                            $careerUrl = api_get_path(WEB_CODE_PATH).
+                                'user/career_diagram.php?iframe=1&career_id='.$finalCareerId;
+                            $content .= '<iframe
+                                style="width:100%; height:500px"
+                                border="0"
+                                frameborder="0"
+                                src="'.$careerUrl.'"></iframe>';
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!empty($content)) {
+            $content = Display::page_subheader(get_lang('OngoingTraining')).$content;
+        }
+
+        return $content;
     }
 
     private static function allowed(?Session $session = null): bool

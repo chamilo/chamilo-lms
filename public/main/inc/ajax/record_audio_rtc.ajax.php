@@ -69,7 +69,8 @@ switch ($type) {
             api_get_user_id(),
             $courseInfo,
             api_get_session_id(),
-            api_get_group_id()
+            api_get_group_id(),
+            true
         );
 
         $error = empty($uploadedDocument) || !is_array($uploadedDocument);

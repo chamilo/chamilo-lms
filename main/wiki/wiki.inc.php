@@ -622,7 +622,7 @@ class Wiki
 
         // cleaning the variables
         $values['content'] = Security::remove_XSS($values['content']);
-        
+
         //re-check after strip_tags if the title is empty
         if (empty($_clean['title']) || empty($_clean['reflink'])) {
             return false;

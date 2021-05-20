@@ -309,14 +309,18 @@ class Auth
         // protect variables
         $current_user_id = api_get_user_id();
         $course_code = Database::escape_string($course_code);
-        $result = true;
 
         $courseInfo = api_get_course_info($course_code);
 
-        // Check if course can be unsubscribe
+        if (empty($courseInfo) || empty($current_user_id)) {
+            return false;
+        }
+
+        // Check if course can be unsubscribe.
         if ('1' !== $courseInfo['unsubscribe']) {
             return false;
         }
+
         $courseId = $courseInfo['real_id'];
 
         // we check (once again) if the user is not course administrator
@@ -329,6 +333,8 @@ class Auth
                     status='1' ";
         $result_check = Database::query($sql);
         $number_of_rows = Database::num_rows($result_check);
+
+        $result = true;
         if ($number_of_rows > 0) {
             $result = false;
         }

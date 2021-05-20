@@ -20,10 +20,14 @@ class Rest extends WebService
 
     const GET_AUTH = 'authenticate';
     const GET_USER_MESSAGES = 'user_messages';
+    const GET_USER_COURSES = 'user_courses';
+    const GET_USER_SESSIONS = 'user_sessions';
+    const GET_USERS_SUBSCRIBED_TO_COURSE = 'get_users_subscribed_to_course';
+    const GET_USER_MESSAGES_RECEIVED = 'user_messages_received';
+    const GET_USER_MESSAGES_SENT = 'user_messages_sent';
     const POST_USER_MESSAGE_READ = 'user_message_read';
     const POST_USER_MESSAGE_UNREAD = 'user_message_unread';
     const SAVE_GCM_ID = 'gcm_id';
-    const GET_USER_COURSES = 'user_courses';
     const GET_PROFILE = 'user_profile';
     const GET_COURSE_INFO = 'course_info';
     const GET_COURSE_DESCRIPTIONS = 'course_descriptions';
@@ -39,7 +43,6 @@ class Rest extends WebService
     const GET_COURSE_LEARNPATH = 'course_learnpath';
     const GET_COURSE_LP_PROGRESS = 'course_lp_progress';
     const SAVE_FORUM_POST = 'save_forum_post';
-    const GET_USER_SESSIONS = 'user_sessions';
     const SAVE_USER_MESSAGE = 'save_user_message';
     const GET_MESSAGE_USERS = 'message_users';
     const SAVE_COURSE_NOTEBOOK = 'save_course_notebook';
@@ -48,9 +51,8 @@ class Rest extends WebService
     const SAVE_USER = 'save_user';
     const SAVE_USER_JSON = 'save_user_json';
     const SUBSCRIBE_USER_TO_COURSE = 'subscribe_user_to_course';
+    const UNSUBSCRIBE_USER_FROM_COURSE = 'unsubscribe_user_from_course';
     const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
-    const GET_USER_MESSAGES_RECEIVED = 'user_messages_received';
-    const GET_USER_MESSAGES_SENT = 'user_messages_sent';
     const DELETE_USER_MESSAGE = 'delete_user_message';
     const SET_MESSAGE_READ = 'set_message_read';
     const CREATE_CAMPUS = 'add_campus';
@@ -59,6 +61,7 @@ class Rest extends WebService
     const SAVE_SESSION = 'save_session';
     const GET_USERS = 'get_users';
     const GET_COURSES = 'get_courses';
+    const GET_COURSES_FROM_EXTRA_FIELD = 'get_courses_from_extra_field';
     const ADD_COURSES_SESSION = 'add_courses_session';
     const ADD_USERS_SESSION = 'add_users_session';
     const CREATE_SESSION_FROM_MODEL = 'create_session_from_model';
@@ -68,6 +71,7 @@ class Rest extends WebService
     const USERNAME_EXIST = 'username_exist';
     const GET_COURSE_QUIZ_MDL_COMPAT = 'get_course_quiz_mdl_compat';
     const UPDATE_USER_PAUSE_TRAINING = 'update_user_pause_training';
+    const DELETE_COURSE = 'delete_course';
 
     /**
      * @var Session
@@ -312,16 +316,14 @@ class Rest extends WebService
 
     /**
      * Get the user courses.
-     *
-     * @throws \Doctrine\ORM\TransactionRequiredException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     *
-     * @return array
      */
-    public function getUserCourses()
+    public function getUserCourses($userId = 0): array
     {
-        $courses = CourseManager::get_courses_list_by_user_id($this->user->getId());
+        if (empty($userId)) {
+            $userId = $this->user->getId();
+        }
+
+        $courses = CourseManager::get_courses_list_by_user_id($userId);
         $data = [];
 
         foreach ($courses as $courseInfo) {
@@ -1059,6 +1061,24 @@ class Rest extends WebService
         return $data;
     }
 
+    public function getUsersSubscribedToCourse()
+    {
+        $users = CourseManager::get_user_list_from_course_code($this->course->getCode());
+
+        $userList = [];
+        foreach ($users as $user) {
+            $userList[] = [
+                'user_id' => $user['user_id'],
+                'username' => $user['username'],
+                'firstname' => $user['firstname'],
+                'lastname' => $user['lastname'],
+                'status_rel' => $user['status_rel'],
+            ];
+        }
+
+        return $userList;
+    }
+
     /**
      * @param string $subject
      * @param string $text
@@ -1179,7 +1199,7 @@ class Rest extends WebService
     {
         $idCampus = $params['id_campus'];
 
-        $courseList = CourseManager::get_courses_list(
+        return CourseManager::get_courses_list(
             0, //offset
             0, //howMany
             1, //$orderby = 1
@@ -1189,8 +1209,6 @@ class Rest extends WebService
             $idCampus, //$urlId
             true //AlsoSearchCode
         );
-
-        return $courseList;
     }
 
     /**
@@ -1245,17 +1263,14 @@ class Rest extends WebService
         return $out;
     }
 
-    /**
-     * @return array
-     */
-    public function addCourse(array $courseParam)
+    public function addCourse(array $courseParam): array
     {
-        $results = [];
         $idCampus = isset($courseParam['id_campus']) ? $courseParam['id_campus'] : 1;
         $title = isset($courseParam['title']) ? $courseParam['title'] : '';
         $wantedCode = isset($courseParam['wanted_code']) ? $courseParam['wanted_code'] : null;
         $diskQuota = isset($courseParam['disk_quota']) ? $courseParam['disk_quota'] : '100';
         $visibility = isset($courseParam['visibility']) ? (int) $courseParam['visibility'] : null;
+        $removeCampusId = $courseParam['remove_campus_id_from_wanted_code'] ?? 0;
 
         if (isset($courseParam['visibility'])) {
             if ($courseParam['visibility'] &&
@@ -1269,16 +1284,28 @@ class Rest extends WebService
         $params = [];
         $params['title'] = $title;
         $params['wanted_code'] = 'CAMPUS_'.$idCampus.'_'.$wantedCode;
+        if (1 === (int) $removeCampusId) {
+            $params['wanted_code'] = $wantedCode;
+        }
         $params['user_id'] = $this->user->getId();
         $params['visibility'] = $visibility;
         $params['disk_quota'] = $diskQuota;
 
-        $courseInfo = CourseManager::create_course($params, $params['user_id'], $idCampus);
+        foreach ($courseParam as $key => $value) {
+            if (substr($key, 0, 6) === 'extra_') { //an extra field
+                $params[$key] = $value;
+            }
+        }
 
+        $courseInfo = CourseManager::create_course($params, $params['user_id'], $idCampus);
+        $results = [];
         if (!empty($courseInfo)) {
             $results['status'] = true;
             $results['code_course'] = $courseInfo['code'];
             $results['title_course'] = $courseInfo['title'];
+            $extraFieldValues = new ExtraFieldValue('course');
+            $extraFields = $extraFieldValues->getAllValuesByItem($courseInfo['real_id']);
+            $results['extra_fields'] = $extraFields;
             $results['message'] = sprintf(get_lang('CourseXAdded'), $courseInfo['code']);
         } else {
             $results['status'] = false;
@@ -1308,12 +1335,10 @@ class Rest extends WebService
         $language = '';
         $phone = '';
         $picture_uri = '';
-        $auth_source = PLATFORM_AUTH_SOURCE;
+        $auth_source = $userParam['auth_source'] ?? PLATFORM_AUTH_SOURCE;
         $expiration_date = '';
         $active = 1;
         $hr_dept_id = 0;
-        $extra = null;
-
         $original_user_id_name = $userParam['original_user_id_name'];
         $original_user_id_value = $userParam['original_user_id_value'];
 
@@ -1422,24 +1447,46 @@ class Rest extends WebService
         $course_id = $params['course_id'];
         $course_code = $params['course_code'];
         $user_id = $params['user_id'];
+        $status = $params['status'] ?? STUDENT;
+
         if (!$course_id && !$course_code) {
             return [false];
         }
         if (!$course_code) {
             $course_code = CourseManager::get_course_code_from_course_id($course_id);
         }
-        if (CourseManager::subscribeUser($user_id, $course_code)) {
+
+        if (CourseManager::subscribeUser($user_id, $course_code, $status)) {
             return [true];
-        } else {
+        }
+
+        return [false];
+    }
+
+    public function unSubscribeUserToCourse(array $params): array
+    {
+        $courseId = $params['course_id'];
+        $courseCode = $params['course_code'];
+        $userId = $params['user_id'];
+
+        if (!$courseId && !$courseCode) {
             return [false];
         }
 
-        return [true];
+        if (!$courseCode) {
+            $courseCode = CourseManager::get_course_code_from_course_id($courseId);
+        }
+
+        if (CourseManager::unsubscribe_user($userId, $courseCode)) {
+            return [true];
+        }
+
+        return [false];
     }
 
     public function deleteUserMessage($messageId, $messageType)
     {
-        if ($messageType === "sent") {
+        if ($messageType === 'sent') {
             return MessageManager::delete_message_by_user_sender($this->user->getId(), $messageId);
         } else {
             return MessageManager::delete_message_by_user_receiver($this->user->getId(), $messageId);

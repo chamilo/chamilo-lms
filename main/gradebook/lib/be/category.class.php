@@ -268,8 +268,10 @@ class Category implements GradebookItem
     public function setCourseListDependency($value)
     {
         $this->courseDependency = [];
-
-        $unserialized = UnserializeApi::unserialize('not_allowed_classes', $value, true);
+        $unserialized = false;
+        if (!empty($value)) {
+            $unserialized = UnserializeApi::unserialize('not_allowed_classes', $value, true);
+        }
 
         if (false !== $unserialized) {
             $this->courseDependency = $unserialized;
@@ -2265,11 +2267,21 @@ class Category implements GradebookItem
     }
 
     /**
-     * @param int   $catId
-     * @param array $userList
+     * @param int         $catId
+     * @param array       $userList
+     * @param string|null $courseCode
+     * @param bool        $generateToFile
+     * @param string      $pdfName
+     *
+     * @throws \MpdfException
      */
-    public static function exportAllCertificates($catId, $userList = [])
-    {
+    public static function exportAllCertificates(
+        $catId,
+        $userList = [],
+        $courseCode = null,
+        $generateToFile = false,
+        $pdfName = ''
+    ) {
         $orientation = api_get_configuration_value('certificate_pdf_orientation');
 
         $params['orientation'] = 'landscape';
@@ -2281,8 +2293,8 @@ class Category implements GradebookItem
         $params['right'] = 0;
         $params['top'] = 0;
         $params['bottom'] = 0;
-        $page_format = $params['orientation'] === 'landscape' ? 'A4-L' : 'A4';
-        $pdf = new PDF($page_format, $params['orientation'], $params);
+        $pageFormat = $params['orientation'] === 'landscape' ? 'A4-L' : 'A4';
+        $pdf = new PDF($pageFormat, $params['orientation'], $params);
         if (api_get_configuration_value('add_certificate_pdf_footer')) {
             $pdf->setCertificateFooter();
         }
@@ -2310,10 +2322,13 @@ class Category implements GradebookItem
             //  stuff) and return as one multiple-pages PDF
             $pdf->html_to_pdf(
                 $certificate_path_list,
-                get_lang('Certificates'),
-                null,
+                empty($pdfName) ? get_lang('Certificates') : $pdfName,
+                $courseCode,
                 false,
-                false
+                false,
+                true,
+                '',
+                $generateToFile
             );
         }
     }

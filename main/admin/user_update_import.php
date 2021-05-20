@@ -5,9 +5,6 @@
 /**
  * This tool allows platform admins to add users by uploading a CSV or XML file.
  */
-
-use Symfony\Component\DomCrawler\Crawler;
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -94,6 +91,7 @@ function updateUsers(
     $sendEmail = false)
 {
     $usergroup = new UserGroup();
+    $extraFieldValue = new ExtraFieldValue('user');
     if (is_array($users)) {
         foreach ($users as $user) {
             if (isset($user['Status'])) {
@@ -134,7 +132,15 @@ function updateUsers(
             $phone = isset($user['PhoneNumber']) ? $user['PhoneNumber'] : $userInfo['phone'];
             $pictureUrl = isset($user['PictureUri']) ? $user['PictureUri'] : $userInfo['picture_uri'];
             $expirationDate = isset($user['ExpiryDate']) ? $user['ExpiryDate'] : $userInfo['expiration_date'];
-            $active = isset($user['Active']) ? $user['Active'] : $userInfo['active'];
+            $active = $userInfo['active'];
+            if (isset($user['Active'])) {
+                $user['Active'] = (int) $user['Active'];
+                if (-1 === $user['Active']) {
+                    $user['Active'] = 0;
+                }
+                $active = $user['Active'];
+            }
+
             $creatorId = $userInfo['creator_id'];
             $hrDeptId = $userInfo['hr_dept_id'];
             $language = isset($user['Language']) ? $user['Language'] : $userInfo['language'];
@@ -193,16 +199,20 @@ function updateUsers(
             global $extra_fields;
 
             // We are sure that the extra field exists.
+            $userExtraFields = [
+                'item_id' => $user_id,
+            ];
+            $add = false;
             foreach ($extra_fields as $extras) {
                 if (isset($user[$extras[1]])) {
                     $key = $extras[1];
                     $value = $user[$extras[1]];
-                    UserManager::update_extra_field_value(
-                        $user_id,
-                        $key,
-                        $value
-                    );
+                    $userExtraFields["extra_$key"] = $value;
+                    $add = true;
                 }
+            }
+            if ($add) {
+                $extraFieldValue->saveFieldValues($userExtraFields, true);
             }
 
             $userUpdated = api_get_user_info($user_id);
@@ -244,8 +254,7 @@ function parse_csv_data($file)
 
 function parse_xml_data($file)
 {
-    $crawler = new Crawler();
-    $crawler->addXmlContent(file_get_contents($file));
+    $crawler = Import::xml($file);
     $crawler = $crawler->filter('Contacts > Contact ');
     $array = [];
     foreach ($crawler as $domElement) {
@@ -390,7 +399,9 @@ if ($count_fields > 0) {
     <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
     <blockquote>
     <pre>
-        <b>UserName</b>;LastName;FirstName;Email;NewUserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;ExpiryDate;Active;Language;Courses;ClassId;
+        <b>UserName</b>;LastName;FirstName;Email;NewUserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;ExpiryDate;Active;Language;<span style="color:red;"><?php if (count($list) > 0) {
+    echo implode(';', $list).';';
+} ?></span>Courses;ClassId;
         xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;user/teacher/drh;YYYY-MM-DD 00:00:00;0/1;xxx;<span
             style="color:red;"><?php if (count($list_reponse) > 0) {
     echo implode(';', $list_reponse).';';

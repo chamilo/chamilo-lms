@@ -1,7 +1,6 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-use Symfony\Component\DomCrawler\Crawler;
+/* For licensing terms, see /license.txt */
 
 /**
  * Defines the scorm class, which is meant to contain the scorm items (nuclear elements).
@@ -95,8 +94,7 @@ class scorm extends learnpath
             // UTF-8 is supported by DOMDocument class, this is for sure.
             $xml = api_utf8_encode_xml($xml, $this->manifest_encoding);
 
-            $crawler = new Crawler();
-            $crawler->addXmlContent($xml);
+            $crawler = Import::xmlFromString($xml);
 
             $xmlErrors = libxml_get_errors();
 

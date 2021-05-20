@@ -2509,12 +2509,7 @@ class Wiki
 
         mpdf-->'.$content_pdf;
 
-        $css_file = api_get_path(SYS_CSS_PATH).'themes/'.api_get_setting('stylesheets').'/print.css';
-        if (file_exists($css_file)) {
-            $css = @file_get_contents($css_file);
-        } else {
-            $css = '';
-        }
+        $css = api_get_print_css();
 
         $pdf = new PDF();
         $pdf->content_to_pdf($html, $css, $title_pdf, $course_code);

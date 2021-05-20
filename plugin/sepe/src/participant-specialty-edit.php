@@ -44,19 +44,19 @@ if (!empty($_POST)) {
         $endDate = $yearEnd."-".$monthEnd."-".$dayEnd;
 
         if (isset($newSpecialty) && $newSpecialty != 1) {
-            $sql = "UPDATE $tableSepeParticipantsSpecialty SET 
-                        specialty_origin = '".$specialtyOrigin."', 
-                        professional_area = '".$professionalArea."', 
-                        specialty_code = '".$specialtyCode."', 
-                        registration_date = '".$registrationDate."', 
-                        leaving_date = '".$leavingDate."', 
-                        center_origin = '".$centerOrigin."', 
-                        center_code = '".$centerCode."', 
-                        start_date = '".$startDate."', 
-                        end_date = '".$endDate."', 
-                        final_result = '".$finalResult."', 
-                        final_qualification = '".$finalQualification."', 
-                        final_score = '".$finalScore."' 
+            $sql = "UPDATE $tableSepeParticipantsSpecialty SET
+                        specialty_origin = '".$specialtyOrigin."',
+                        professional_area = '".$professionalArea."',
+                        specialty_code = '".$specialtyCode."',
+                        registration_date = '".$registrationDate."',
+                        leaving_date = '".$leavingDate."',
+                        center_origin = '".$centerOrigin."',
+                        center_code = '".$centerCode."',
+                        start_date = '".$startDate."',
+                        end_date = '".$endDate."',
+                        final_result = '".$finalResult."',
+                        final_qualification = '".$finalQualification."',
+                        final_score = '".$finalScore."'
                     WHERE id = $specialtyId";
         } else {
             $sql = "INSERT INTO $tableSepeParticipantsSpecialty (
@@ -119,7 +119,7 @@ if (!empty($_POST)) {
                         );";
             } else {
                 if ($finalResult == "1" || $finalResult == "2") {
-                    $sql = "UPDATE $tableSepeLogParticipant 
+                    $sql = "UPDATE $tableSepeLogParticipant
                             SET leaving_date = '".date("Y-m-d H:i:s")."'
                             WHERE platform_user_id = '".$platformUserId."' AND action_id = '".$actionId."';";
                 } else {
@@ -156,17 +156,27 @@ if (!empty($_POST)) {
 }
 
 if (api_is_platform_admin()) {
-    $actionId = intval($_GET['action_id']);
+    $actionId = (int) $_GET['action_id'];
     $courseId = getCourse($actionId);
-    $interbreadcrumb[] = ["url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe')];
+    $participantId = (int) $_GET['participant_id'];
+    $interbreadcrumb[] = [
+        "url" => "/plugin/sepe/src/sepe-administration-menu.php",
+        "name" => $plugin->get_lang('MenuSepe'),
+    ];
     $interbreadcrumb[] = ["url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList')];
-    $interbreadcrumb[] = ["url" => "formative-action.php?cid=".$courseId, "name" => $plugin->get_lang('FormativeAction')];
-    $interbreadcrumb[] = ["url" => "participant-action-edit.php?new_participant=0&participant_id=".intval($_GET['participant_id'])."&action_id=".$_GET['action_id'], "name" => $plugin->get_lang('FormativeActionParticipant')];
+    $interbreadcrumb[] = [
+        "url" => "formative-action.php?cid=".$courseId,
+        "name" => $plugin->get_lang('FormativeAction'),
+    ];
+    $interbreadcrumb[] = [
+        "url" => "participant-action-edit.php?new_participant=0&participant_id=".$participantId."&action_id=".$actionId,
+        "name" => $plugin->get_lang('FormativeActionParticipant'),
+    ];
     if (isset($_GET['new_specialty']) && intval($_GET['new_specialty']) == 1) {
         $templateName = $plugin->get_lang('NewSpecialtyParticipant');
         $tpl = new Template($templateName);
         $tpl->assign('action_id', $actionId);
-        $tpl->assign('participant_id', intval($_GET['participant_id']));
+        $tpl->assign('participant_id', $participantId);
         $info = [];
         $tpl->assign('info', $info);
         $tpl->assign('new_specialty', '1');
@@ -177,7 +187,7 @@ if (api_is_platform_admin()) {
         $tpl = new Template($templateName);
         $tpl->assign('action_id', $actionId);
         $tpl->assign('specialty_id', intval($_GET['specialty_id']));
-        $tpl->assign('participant_id', intval($_GET['participant_id']));
+        $tpl->assign('participant_id', $participantId);
         $info = getInfoSpecialtyParticipant($_GET['specialty_id']);
         $tpl->assign('info', $info);
         $tpl->assign('new_specialty', '0');

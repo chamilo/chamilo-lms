@@ -151,13 +151,10 @@ switch ($action) {
         api_protect_course_script(true);
         // User access same as upload.php
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-        $itemId = isset($_GET['item_id']) ? intval($_GET['item_id']) : '';
-
+        $itemId = isset($_GET['item_id']) ? (int) $_GET['item_id'] : '';
         $result = [];
-
         if (!empty($_FILES) && !empty($itemId)) {
             $file = $_FILES['file'];
-
             $courseInfo = api_get_course_info();
             $workInfo = get_work_data_by_id($itemId);
             $workInfoParent = get_work_data_by_id($workInfo['parent_id']);
@@ -166,9 +163,7 @@ switch ($action) {
                 echo 'false';
                 break;
             }
-            $work_table = Database::get_course_table(
-                TABLE_STUDENT_PUBLICATION
-            );
+            $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
             if (isset($resultUpload['url']) && !empty($resultUpload['url'])) {
                 $title = isset($resultUpload['filename']) && !empty($resultUpload['filename']) ? $resultUpload['filename'] : get_lang('Untitled');

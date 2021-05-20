@@ -13,6 +13,8 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script(true);
+
 if (isset($_POST['convert'])) {
     $cwdir = getcwd();
     if (isset($_FILES['user_file'])) {

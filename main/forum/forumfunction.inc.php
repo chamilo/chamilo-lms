@@ -111,7 +111,7 @@ function handle_forum_and_forumcategories($lp_id = null)
 
     // Adding a forum category
     if (($action_forum_cat === 'add' && $get_content === 'forumcategory') || $post_submit_cat) {
-        $content = show_add_forumcategory_form([], $lp_id); //$lp_id when is called from learning path
+        $content = show_add_forumcategory_form($lp_id); //$lp_id when is called from learning path
     }
 
     // Adding a forum
@@ -189,7 +189,7 @@ function handle_forum_and_forumcategories($lp_id = null)
  *
  * @version may 2011, Chamilo 1.8.8
  */
-function show_add_forumcategory_form($inputvalues = [], $lp_id)
+function show_add_forumcategory_form($lp_id)
 {
     $form = new FormValidator(
         'forumcategory',
@@ -254,7 +254,7 @@ function show_add_forumcategory_form($inputvalues = [], $lp_id)
  *
  * @version may 2011, Chamilo 1.8.8
  */
-function show_add_forum_form($inputvalues = [], $lp_id)
+function show_add_forum_form($inputvalues = [], $lp_id = 0)
 {
     $_course = api_get_course_info();
     $form = new FormValidator('forumcategory', 'post', 'index.php?'.api_get_cidreq());
@@ -3508,16 +3508,19 @@ function saveThreadScore(
     $threadInfo,
     $user_id,
     $thread_id,
-    $thread_qualify = 0,
+    $thread_qualify,
     $qualify_time,
-    $session_id = 0
+    $session_id
 ) {
     $table_threads_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
 
     $course_id = api_get_course_int_id();
-    $session_id = intval($session_id);
+    $session_id = (int) $session_id;
+    $thread_id = (int) $thread_id;
+    $user_id = (int) $user_id;
     $currentUserId = api_get_user_id();
+    $qualify_time = Database::escape_string($qualify_time);
 
     if ($user_id == strval(intval($user_id)) &&
         $thread_id == strval(intval($thread_id)) &&
@@ -3713,7 +3716,9 @@ function saveThreadScoreHistory(
     $table_threads_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
     $table_threads_qualify_log = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY_LOG);
 
-    $course_id = intval($course_id);
+    $thread_id = (int) $thread_id;
+    $course_id = (int) $course_id;
+    $user_id = (int) $user_id;
     $qualify_user_id = api_get_user_id();
 
     if ($user_id == strval(intval($user_id)) &&
@@ -6123,6 +6128,7 @@ function get_thread_user_post_limit($course_code, $thread_id, $user_id, $limit =
 
     $course_info = api_get_course_info($course_code);
     $course_id = $course_info['real_id'];
+    $limit = (int) $limit;
 
     $sql = "SELECT * FROM $table_posts posts
             LEFT JOIN  $table_users users
@@ -6131,7 +6137,8 @@ function get_thread_user_post_limit($course_code, $thread_id, $user_id, $limit =
                 posts.c_id = $course_id AND
                 posts.thread_id='".Database::escape_string($thread_id)."' AND
                 posts.poster_id='".Database::escape_string($user_id)."'
-            ORDER BY posts.post_id DESC LIMIT $limit ";
+            ORDER BY posts.post_id DESC
+            LIMIT $limit ";
     $result = Database::query($sql);
     $post_list = [];
     while ($row = Database::fetch_array($result)) {

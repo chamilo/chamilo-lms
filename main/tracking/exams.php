@@ -46,8 +46,15 @@ if (empty($sessionId)) {
     $sessionCondition = api_get_session_condition($sessionId, true, true);
 }
 
-$form = new FormValidator('search_simple', 'POST', '', '', null, false);
-$form->addElement('text', 'score', get_lang('Percentage'));
+$form = new FormValidator(
+    'search_simple',
+    'POST',
+    api_get_self().'?'.api_get_cidreq(),
+    '',
+    null,
+    false
+);
+$form->addElement('number', 'score', get_lang('Percentage'));
 if ($global) {
     $form->addElement('hidden', 'view', 'admin');
 } else {
@@ -61,15 +68,16 @@ if ($global) {
                 $sessionCondition
             ORDER BY quiz.title ASC";
     $result = Database::query($sql);
-
-    $exerciseList = [get_lang('All')];
-    while ($row = Database::fetch_array($result)) {
-        $exerciseList[$row['id']] = $row['title'];
+    // Only show select bar if there is more than one test
+    if (Database::num_rows($result) > 0) {
+        $exerciseList = [get_lang('All')];
+        while ($row = Database::fetch_array($result)) {
+            $exerciseList[$row['id']] = $row['title'];
+        }
+        $form->addElement('select', 'exercise_id', get_lang('Exercise'), $exerciseList);
     }
-    $form->addElement('select', 'exercise_id', get_lang('Exercise'), $exerciseList);
 }
-
-$form->addButtonFilter(get_lang('Filter'));
+$form->addButton('filter', get_lang('Filter'), 'filter', 'primary', null, null, ['style' => 'margin-top: 5px; margin-left: 15px;']);
 
 $filter_score = isset($_REQUEST['score']) ? intval($_REQUEST['score']) : 70;
 $exerciseId = isset($_REQUEST['exercise_id']) ? intval($_REQUEST['exercise_id']) : 0;

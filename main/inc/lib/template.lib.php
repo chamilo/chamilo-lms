@@ -149,6 +149,7 @@ class Template
             'api_get_user_info',
             'api_get_configuration_value',
             'api_get_setting',
+            'api_get_course_setting',
             'api_get_plugin_setting',
             [
                 'name' => 'return_message',
@@ -446,9 +447,10 @@ class Template
 
         // Only if course is available
         $courseToolBar = '';
+        $origin = api_get_origin();
         $show_course_navigation_menu = '';
         if (!empty($this->course_id) && $this->user_is_logged_in) {
-            if (api_get_setting('show_toolshortcuts') != 'false') {
+            if ($origin !== 'embeddable' && api_get_setting('show_toolshortcuts') !== 'false') {
                 // Course toolbar
                 $courseToolBar = CourseHome::show_navigation_tool_shortcuts();
             }
@@ -702,13 +704,10 @@ class Template
         if (!$disable_js_and_css_files) {
             $this->assign('css_custom_file_to_string', $css_file_to_string);
 
-            $style_print = '';
-            if (is_readable(api_get_path(SYS_CSS_PATH).$this->theme.'/print.css')) {
-                $style_print = api_get_css(
-                    api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/print.css'),
-                    'print'
-                );
-            }
+            $style_print = api_get_css(
+                api_get_print_css(false, true),
+                'print'
+            );
             $this->assign('css_style_print', $style_print);
         }
 
@@ -1107,7 +1106,6 @@ class Template
 
     public static function displayCASLoginButton($label = null)
     {
-        $course = api_get_course_id();
         $form = new FormValidator(
             'form-cas-login',
             'POST',

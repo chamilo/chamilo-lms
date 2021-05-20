@@ -1216,8 +1216,8 @@ class Blog
      * @return array
      */
     public static function getThreadedComments(
-        $current = 0,
-        $current_level = 0,
+        $current,
+        $current_level,
         $blog_id,
         $post_id,
         $task_id = 0

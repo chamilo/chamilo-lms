@@ -138,7 +138,7 @@ $(function() {
     // Delete modal
     $('#confirm-delete').on('show.bs.modal', function(e) {
         $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-        var message = '{{ 'AreYouSureToDeleteJS' | get_lang | escape('js')}}: <strong>' + $(e.relatedTarget).data('item-title') + '</strong>';
+        var message = '{{ 'AreYouSureToDeleteJS' | get_lang | escape('js')}} <strong>' + $(e.relatedTarget).data('item-title') + '</strong>';
 
         if ($(e.relatedTarget).data('item-question')) {
             message = $(e.relatedTarget).data('item-question');
@@ -194,12 +194,6 @@ $(function() {
             });
         });
     };
-
-    $(".black-shadow").mouseenter(function() {
-        $(this).addClass('hovered-course');
-    }).mouseleave(function() {
-         $(this).removeClass('hovered-course');
-    });
 
     $("[data-toggle=popover]").each(function(i, obj) {
         $(this).popover({

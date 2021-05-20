@@ -747,7 +747,7 @@ class Evaluation implements GradebookItem
      *
      * @return array
      */
-    public static function get_evaluations_with_result_for_student($cat_id = null, $stud_id)
+    public static function get_evaluations_with_result_for_student($cat_id, $stud_id)
     {
         $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $tbl_grade_results = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);

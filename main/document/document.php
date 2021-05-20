@@ -873,7 +873,7 @@ function convertModal (id, format) {
         var formatTarget = $(this).val();
         window.location.href = "'
             .api_get_self().'?'.api_get_cidreq()
-            .'&curdirpath='.$curdirpath
+            .'&curdirpath='.$curdirpathurl
             .'&action=convertToPdf&formatTarget='
             .'" + formatTarget + "&id=" + id + "&'
             .api_get_cidreq().'&formatType=" + format;
@@ -1995,7 +1995,7 @@ if (!empty($documentAndFolders)) {
             );
 
             // Document title with link and comment
-            $titleWithLink = $link.$session_img.'<br />'.$invisibility_span_open;
+            $titleWithLink = Security::remove_XSS($link.$session_img.'<br />'.$invisibility_span_open);
             $commentText = nl2br(htmlspecialchars($document_data['comment'], ENT_QUOTES, $charset));
             if (!empty($commentText)) {
                 $titleWithLink .= '<em>'.$commentText.'</em>';

@@ -41,6 +41,13 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
 {
     $addTeacherColumn = api_get_configuration_value('add_teachers_in_course_list');
     $table = Database::get_main_table(TABLE_MAIN_COURSE);
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+    $column = (int) $column;
+
+    if (!in_array(strtolower($direction), ['asc', 'desc'])) {
+        $direction = 'desc';
+    }
 
     $teachers = '';
     if ($addTeacherColumn) {
@@ -249,6 +256,14 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
     $session = Database::get_main_table(TABLE_MAIN_SESSION);
+
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+    $column = (int) $column;
+
+    if (!in_array(strtolower($direction), ['asc', 'desc'])) {
+        $direction = 'desc';
+    }
 
     $sql = "SELECT
                 c.code AS col0,

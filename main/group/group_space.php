@@ -424,6 +424,7 @@ function get_number_of_group_users()
  */
 function get_group_user_data($from, $number_of_items, $column, $direction)
 {
+    $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
     $groupInfo = GroupManager::get_group_properties(api_get_group_id());
     $course_id = api_get_course_int_id();
     $column = (int) $column;

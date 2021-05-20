@@ -20,7 +20,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
 
 // Database Table Definitions
-$tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
@@ -136,7 +135,11 @@ if (empty($rows_session_category)) {
 if (api_get_multiple_access_url()) {
     $table_access_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
     $access_url_id = api_get_current_access_url_id();
-    $sql = "SELECT s.id, s.name  FROM $tbl_session s INNER JOIN $table_access_url_rel_session u ON s.id = u.session_id $where AND u.access_url_id = $access_url_id ORDER BY name";
+    $sql = "SELECT s.id, s.name
+            FROM $tbl_session s
+            INNER JOIN $table_access_url_rel_session u
+            ON s.id = u.session_id $where AND u.access_url_id = $access_url_id
+            ORDER BY name";
 } else {
     $sql = "SELECT id, name  FROM $tbl_session $where ORDER BY name";
 }

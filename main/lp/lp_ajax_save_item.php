@@ -58,7 +58,8 @@ function save_item(
     $courseId = null,
     $lmsFinish = 0,
     $userNavigatesAway = 0,
-    $statusSignalReceived = 0
+    $statusSignalReceived = 0,
+    $forceIframeSave = 0
 ) {
     $debug = 0;
     $return = null;
@@ -107,6 +108,15 @@ function save_item(
 
     // This functions sets the $this->db_item_view_id variable needed in get_status() see BT#5069
     $myLPI->set_lp_view($view_id);
+    $my_type = $myLPI->get_type();
+
+    $saveStatus = true;
+    if ('document' === $my_type) {
+        $saveStatus = learnpathItem::isLpItemAutoComplete($myLPI->getIid());
+        if ($forceIframeSave) {
+            $saveStatus = true;
+        }
+    }
 
     // Launch the prerequisites check and set error if needed
     if (true !== $prerequisitesCheck) {
@@ -171,16 +181,22 @@ function save_item(
         }
 
         $statusIsSet = false;
-        // Default behaviour.
-        if (isset($status) && $status != '' && $status != 'undefined') {
-            if ($debug > 1) {
-                error_log('Calling set_status('.$status.')');
-            }
+        if ($saveStatus) {
+            // Default behaviour.
+            if (isset($status) && $status != '' && $status != 'undefined') {
+                if ($debug > 1) {
+                    error_log('Calling set_status('.$status.')');
+                }
 
-            $myLPI->set_status($status);
-            $statusIsSet = true;
-            if ($debug > 1) {
-                error_log('Done calling set_status: checking from memory: '.$myLPI->get_status(false));
+                $myLPI->set_status($status);
+                $statusIsSet = true;
+                if ($debug > 1) {
+                    error_log('Done calling set_status: checking from memory: '.$myLPI->get_status(false));
+                }
+            } else {
+                if ($debug > 1) {
+                    error_log('Status not updated');
+                }
             }
         } else {
             if ($debug > 1) {
@@ -188,7 +204,6 @@ function save_item(
             }
         }
 
-        $my_type = $myLPI->get_type();
         // Set status to completed for hotpotatoes if score > 80%.
         if ($my_type === 'hotpotatoes') {
             if ((empty($status) || $status == 'undefined' || $status == 'not attempted') && $max > 0) {
@@ -370,24 +385,29 @@ function save_item(
             // End of type=='sco'
         }
 
-        // If no previous condition changed the SCO status, proceed with a
-        // generic behaviour
-        if (!$statusIsSet && !$statusSignalReceived) {
-            // Default behaviour
-            if (isset($status) && $status != '' && $status != 'undefined') {
-                if ($debug > 1) {
-                    error_log('Calling set_status('.$status.')');
-                }
+        // If no previous condition changed the SCO status, proceed with a generic behaviour
+        if ($saveStatus) {
+            if (!$statusIsSet && !$statusSignalReceived) {
+                // Default behaviour
+                if (isset($status) && $status != '' && $status != 'undefined') {
+                    if ($debug > 1) {
+                        error_log('Calling set_status('.$status.')');
+                    }
 
-                $myLPI->set_status($status);
+                    $myLPI->set_status($status);
 
-                if ($debug > 1) {
-                    error_log('Done calling set_status: checking from memory: '.$myLPI->get_status(false));
+                    if ($debug > 1) {
+                        error_log('Done calling set_status: checking from memory: '.$myLPI->get_status(false));
+                    }
+                } else {
+                    if ($debug > 1) {
+                        error_log("Status not updated");
+                    }
                 }
-            } else {
-                if ($debug > 1) {
-                    error_log("Status not updated");
-                }
+            }
+        } else {
+            if ($debug > 1) {
+                error_log("Status not updated");
             }
         }
 
@@ -440,7 +460,10 @@ function save_item(
         if ($core_exit != 'undefined') {
             $myLPI->set_core_exit($core_exit);
         }
-        $myLP->save_item($item_id, false);
+
+        if ($saveStatus) {
+            $myLP->save_item($item_id, false);
+        }
     }
 
     $myStatusInDB = $myLPI->get_status(true);
@@ -478,37 +501,39 @@ function save_item(
         error_log("progress: $myComplete / $myTotal");
     }
 
-    if ($myLPI->get_type() !== 'sco') {
-        // If this object's JS status has not been updated by the SCORM API, update now.
-        $return .= "olms.lesson_status='".$myStatus."';";
-    }
-    $return .= "update_toc('".$myStatus."','".$item_id."');";
-    $update_list = $myLP->get_update_queue();
-
-    foreach ($update_list as $my_upd_id => $my_upd_status) {
-        if ($my_upd_id != $item_id) {
-            /* Only update the status from other items (i.e. parents and brothers),
-            do not update current as we just did it already. */
-            $return .= "update_toc('".$my_upd_status."','".$my_upd_id."');";
+    if ($saveStatus) {
+        if ($myLPI->get_type() !== 'sco') {
+            // If this object's JS status has not been updated by the SCORM API, update now.
+            $return .= "olms.lesson_status='".$myStatus."';";
         }
-    }
-    $progressBarSpecial = false;
-    $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
-    if ($scoreAsProgressSetting === true) {
-        $scoreAsProgress = $myLP->getUseScoreAsProgress();
-        if ($scoreAsProgress) {
-            // Only update score if it was set by scorm.
-            if (isset($score) && $score != -1) {
-                $score = $myLPI->get_score();
-                $maxScore = $myLPI->get_max();
-                $return .= "update_progress_bar('$score', '$maxScore', '$myProgressMode');";
+        $return .= "update_toc('".$myStatus."','".$item_id."');";
+        $update_list = $myLP->get_update_queue();
+        foreach ($update_list as $my_upd_id => $my_upd_status) {
+            if ($my_upd_id != $item_id) {
+                /* Only update the status from other items (i.e. parents and brothers),
+                do not update current as we just did it already. */
+                $return .= "update_toc('".$my_upd_status."','".$my_upd_id."');";
             }
-            $progressBarSpecial = true;
         }
-    }
 
-    if (!$progressBarSpecial) {
-        $return .= "update_progress_bar('$myComplete', '$myTotal', '$myProgressMode');";
+        $progressBarSpecial = false;
+        $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
+        if ($scoreAsProgressSetting === true) {
+            $scoreAsProgress = $myLP->getUseScoreAsProgress();
+            if ($scoreAsProgress) {
+                // Only update score if it was set by scorm.
+                if (isset($score) && $score != -1) {
+                    $score = $myLPI->get_score();
+                    $maxScore = $myLPI->get_max();
+                    $return .= "update_progress_bar('$score', '$maxScore', '$myProgressMode');";
+                }
+                $progressBarSpecial = true;
+            }
+        }
+
+        if (!$progressBarSpecial) {
+            $return .= "update_progress_bar('$myComplete', '$myTotal', '$myProgressMode');";
+        }
     }
 
     if (!Session::read('login_as')) {
@@ -537,15 +562,17 @@ function save_item(
         $return .= 'update_stats();';
     }
 
-    // To be sure progress is updated.
-    $myLP->save_last($score);
+    if ($saveStatus) {
+        // To be sure progress is updated.
+        $myLP->save_last($score);
+        HookLearningPathItemViewed::create()
+            ->setEventData(['item_view_id' => $myLPI->db_item_view_id])
+            ->notifyLearningPathItemViewed();
 
-    HookLearningPathItemViewed::create()
-        ->setEventData(['item_view_id' => $myLPI->db_item_view_id])
-        ->notifyLearningPathItemViewed();
+        Session::write('lpobject', serialize($myLP));
+        Session::write('oLP', $myLP);
+    }
 
-    Session::write('lpobject', serialize($myLP));
-    Session::write('oLP', $myLP);
     if ($debug > 0) {
         error_log("lp_view_session_id :".$myLP->lp_view_session_id);
         error_log('---------------- lp_ajax_save_item.php : save_item end ----- ');
@@ -593,5 +620,6 @@ echo save_item(
     (!empty($_REQUEST['course_id']) ? $_REQUEST['course_id'] : ''),
     (empty($_REQUEST['finish']) ? 0 : 1),
     (empty($_REQUEST['userNavigatesAway']) ? 0 : 1),
-    (empty($_REQUEST['statusSignalReceived']) ? 0 : 1)
+    (empty($_REQUEST['statusSignalReceived']) ? 0 : 1),
+    isset($_REQUEST['forceIframeSave']) ? (int) $_REQUEST['forceIframeSave'] : 0
 );

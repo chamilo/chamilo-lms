@@ -129,14 +129,11 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
     }
 
     if (!is_null($gradebook)) {
-        $exportAllLink = api_get_path(WEB_CODE_PATH)."gradebook/gradebook_display_certificate.php?";
-        $exportAllLink .= http_build_query([
-            "action" => "export_all_certificates",
-            "cidReq" => $selectedCourseInfo['code'],
-            "id_session" => 0,
-            "gidReq" => 0,
-            "cat_id" => $gradebook->get_id(),
-        ]);
+        $exportAllLink = GradebookUtils::returnJsExportAllCertificates(
+            '#btn-export-all',
+            $gradebook->get_id(),
+            $selectedCourseInfo['code']
+        );
 
         $sessionName = api_get_session_name($selectedSession);
         $courseName = api_get_course_info($selectedCourseInfo['code'])['title'];

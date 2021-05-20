@@ -28,16 +28,16 @@ class GradeBookResult
     public function exportCompleteReportCSV($dato)
     {
         $filename = 'gradebook_results_'.gmdate('YmdGis').'.csv';
-
         $data = '';
-        //build the results
-        //titles
-
         foreach ($dato[0] as $header_col) {
             if (!empty($header_col)) {
                 if (is_array($header_col)) {
                     if (isset($header_col['header'])) {
-                        $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($header_col['header']))).';';
+                        $data .= str_replace(
+                                "\r\n",
+                                '  ',
+                                api_html_entity_decode(strip_tags($header_col['header']))
+                            ).';';
                     }
                 } else {
                     $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($header_col))).';';
@@ -47,9 +47,7 @@ class GradeBookResult
 
         $data .= "\r\n";
         $cant_students = count($dato[1]);
-
         for ($i = 0; $i < $cant_students; $i++) {
-            $column = 0;
             foreach ($dato[1][$i] as $col_name) {
                 $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($col_name))).';';
             }
@@ -93,23 +91,24 @@ class GradeBookResult
         $spreadsheet = new PHPExcel();
         $spreadsheet->setActiveSheetIndex(0);
         $worksheet = $spreadsheet->getActiveSheet();
-
         $line = 1;
         $column = 0;
-
-        //headers
-        foreach ($data[0] as $header_col) {
+        // headers.
+        foreach ($data[0] as $headerData) {
+            $title = $headerData;
+            if (isset($headerData['header'])) {
+                $title = $headerData['header'];
+            }
+            $title = html_entity_decode(strip_tags($title));
             $worksheet->SetCellValueByColumnAndRow(
                 $column,
                 $line,
-                html_entity_decode(strip_tags($header_col))
+                $title
             );
             $column++;
         }
         $line++;
-
         $cant_students = count($data[1]);
-
         for ($i = 0; $i < $cant_students; $i++) {
             $column = 0;
             foreach ($data[1][$i] as $col_name) {
@@ -147,12 +146,16 @@ class GradeBookResult
         $table->addRow();
 
         for ($i = 0; $i < count($data[0]); $i++) {
-            $table->addCell(1750)->addText(strip_tags($data[0][$i]));
+            $title = $data[0][$i];
+            if (isset($data[0][$i]['header'])) {
+                $title = $data[0][$i]['header'];
+            }
+            $title = strip_tags($title);
+            $table->addCell(1750)->addText($title);
         }
 
         foreach ($data[1] as $dataLine) {
             $table->addRow();
-
             for ($i = 0; $i < count($dataLine); $i++) {
                 $table->addCell(1750)->addText(strip_tags($dataLine[$i]));
             }

@@ -14,6 +14,7 @@ if (!api_is_allowed_to_edit(false, true)) {
 }
 
 $currentUrl = api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq();
+$sessionId = api_get_session_id();
 
 /*	Create the groups */
 if (isset($_POST['action'])) {
@@ -295,7 +296,13 @@ EOT;
     /*
      * Show form to generate groups from classes subscribed to the course
      */
-    $options['where'] = [' usergroup.course_id = ? ' => api_get_course_int_id()];
+    if (empty($sessionId)) {
+        $options['where'] = [' usergroup.course_id = ? ' => api_get_course_int_id()];
+    } else {
+        $options['session_id'] = $sessionId;
+        $options['where'] = [' usergroup.session_id = ? ' => $sessionId];
+    }
+
     $obj = new UserGroup();
     $classes = $obj->getUserGroupInCourse($options);
     if (count($classes) > 0) {
@@ -316,7 +323,6 @@ EOT;
             api_get_self().'?'.api_get_cidreq()
         );
         $classForm->addHeader(get_lang('GroupsFromClasses'));
-
         $classForm->addHtml($description);
         $classForm->addElement('hidden', 'action');
         if (api_get_setting('allow_group_categories') === 'true') {

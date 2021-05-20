@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+exit;
+
 /**
  * Process part of the document sub-process for upload. This script MUST BE included by upload/index.php
  * as it prepares most of the variables needed here.

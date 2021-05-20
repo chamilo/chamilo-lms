@@ -274,12 +274,12 @@ class NotebookManager
 
         // Database table definition
         $table = Database::get_course_table(TABLE_NOTEBOOK);
-        $order_by = ' ORDER BY '.$notebookView." $sort_direction ";
+        $order_by = " ORDER BY `$notebookView` $sort_direction ";
 
         // Condition for the session
         $condition_session = api_get_session_condition($sessionId);
 
-        $cond_extra = $notebookView == 'update_date' ? " AND update_date <> ''" : ' ';
+        $cond_extra = $notebookView === 'update_date' ? " AND update_date <> ''" : ' ';
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT * FROM $table

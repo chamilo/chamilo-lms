@@ -210,6 +210,7 @@ $courseSettingsDisableIcon = Display::return_icon(
 
 $enableAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
 $gameMode = api_get_setting('gamification_mode');
+$allowDatesForStudent = api_get_configuration_value('lp_start_and_end_date_visible_in_student_view');
 
 $data = [];
 $tableCategory = Database::get_course_table(TABLE_LP_CATEGORY);
@@ -235,7 +236,6 @@ foreach ($categories as $item) {
                 continue;
             }
         }
-
         if ($allowCategory && !empty($sessionId)) {
             // Check base course
             if (0 === $item->getSessionId()) {
@@ -316,14 +316,14 @@ foreach ($categories as $item) {
             }
 
             $start_time = $end_time = '';
-            if ($is_allowed_to_edit) {
-                if (!empty($details['publicated_on'])) {
-                    $start_time = api_convert_and_format_date($details['publicated_on'], DATE_TIME_FORMAT_LONG_24H);
-                }
-                if (!empty($details['expired_on'])) {
-                    $end_time = api_convert_and_format_date($details['expired_on'], DATE_TIME_FORMAT_LONG_24H);
-                }
-            } else {
+            if (!empty($details['publicated_on'])) {
+                $start_time = api_convert_and_format_date($details['publicated_on'], DATE_TIME_FORMAT_LONG_24H);
+            }
+            if (!empty($details['expired_on'])) {
+                $end_time = api_convert_and_format_date($details['expired_on'], DATE_TIME_FORMAT_LONG_24H);
+            }
+
+            if (!$is_allowed_to_edit) {
                 $time_limits = false;
                 // This is an old LP (from a migration 1.8.7) so we do nothing
                 if (empty($details['created_on']) && empty($details['modified_on'])) {
@@ -414,7 +414,6 @@ foreach ($categories as $item) {
             $dsp_default_view = '';
             $dsp_debug = '';
             $dsp_order = '';
-
             $progress = 0;
             if (!$isInvitee) {
                 $progress = isset($progressList[$id]) && !empty($progressList[$id]) ? $progressList[$id] : 0;
@@ -1028,6 +1027,8 @@ $template->assign('data', $data);
 $template->assign('lp_is_shown', $lpIsShown);
 $template->assign('filtered_category', $filteredCategoryId);
 $template->assign('allow_min_time', $allowMinTime);
+$template->assign('allow_dates_for_student', $allowDatesForStudent);
+
 $templateName = $template->get_template('learnpath/list.tpl');
 $content = $template->fetch($templateName);
 $template->assign('content', $content);

@@ -162,30 +162,11 @@ if (isset($_GET['details'])) {
 }
 
 // Database Table Definitions
-//$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-//$tbl_stats_exercices = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-$tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
-$tbl_session_user = Database:: get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_session = Database:: get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_course = Database:: get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session_course_user = Database:: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_course = Database:: get_main_table(TABLE_MAIN_COURSE);
 $tbl_course_user = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_stats_access = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 $tbl_stats_exercices = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-$tbl_stats_exercices_attempts = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 $tbl_personal_agenda = Database:: get_main_table(TABLE_PERSONAL_AGENDA);
-$tbl_course_lp_item = Database:: get_course_table(TABLE_LP_ITEM);
 
-$tbl_course_lp_view = 'lp_view';
-$tbl_course_lp_view_item = 'lp_item_view';
-$tbl_course_lp_item = 'lp_item';
-$tbl_course_lp = 'lp';
-$tbl_course_quiz = 'quiz';
-$course_quiz_question = 'quiz_question';
-$course_quiz_rel_question = 'quiz_rel_question';
-$course_quiz_answer = 'quiz_answer';
-$course_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 $TABLECALHORAIRE = Database:: get_course_table(TABLE_CAL_HORAIRE);
 
 if (isset($_GET['user_id']) && $_GET['user_id'] != '') {

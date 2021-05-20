@@ -176,7 +176,7 @@ class UserManager
      * @param string        $expirationDate          Account expiration date (optional, defaults to null)
      * @param int           $active                  Whether the account is enabled or disabled by default
      * @param int           $hr_dept_id              The department of HR in which the user is registered (defaults to 0)
-     * @param array         $extra                   Extra fields
+     * @param array         $extra                   Extra fields (prefix labels with "extra_")
      * @param string        $encrypt_method          Used if password is given encrypted. Set to an empty string by default
      * @param bool          $send_mail
      * @param bool          $isAdmin
@@ -436,8 +436,18 @@ class UserManager
             $extra['item_id'] = $userId;
 
             if (is_array($extra) && count($extra) > 0) {
-                $courseFieldValue = new ExtraFieldValue('user');
-                $courseFieldValue->saveFieldValues($extra);
+                $userFieldValue = new ExtraFieldValue('user');
+                // Force saving of extra fields (otherwise, if the current
+                // user is not admin, fields not visible to the user - most
+                // of them - are just ignored)
+                $userFieldValue->saveFieldValues(
+                    $extra,
+                    true,
+                    null,
+                    null,
+                    null,
+                    true
+                );
             } else {
                 // Create notify settings by default
                 self::update_extra_field_value(
@@ -557,7 +567,7 @@ class UserManager
                         $layoutContent = $tplContent->get_template('mail/new_user_first_email_confirmation.tpl');
                         $emailBody = $tplContent->fetch($layoutContent);
 
-                        if (!empty($emailBodyTemplate) &&
+                        if (!empty($emailTemplate) &&
                             isset($emailTemplate['new_user_first_email_confirmation.tpl']) &&
                             !empty($emailTemplate['new_user_first_email_confirmation.tpl'])
                         ) {
@@ -584,7 +594,7 @@ class UserManager
                         $layoutContent = $tplContent->get_template('mail/new_user_second_email_confirmation.tpl');
                         $emailBody = $tplContent->fetch($layoutContent);
 
-                        if (!empty($emailBodyTemplate) &&
+                        if (!empty($emailTemplate) &&
                             isset($emailTemplate['new_user_second_email_confirmation.tpl']) &&
                             !empty($emailTemplate['new_user_second_email_confirmation.tpl'])
                         ) {
@@ -681,7 +691,7 @@ class UserManager
                     $layoutContent = $tplContent->get_template('mail/content_registration_platform_to_admin.tpl');
                     $emailBody = $tplContent->fetch($layoutContent);
 
-                    if (!empty($emailBodyTemplate) &&
+                    if (!empty($emailTemplate) &&
                         isset($emailTemplate['content_registration_platform_to_admin.tpl']) &&
                         !empty($emailTemplate['content_registration_platform_to_admin.tpl'])
                     ) {
@@ -692,7 +702,6 @@ class UserManager
                     }
 
                     $subject = get_lang('UserAdded');
-
                     foreach ($adminList as $adminId => $data) {
                         MessageManager::send_message_simple(
                             $adminId,
@@ -1460,8 +1469,8 @@ class UserManager
         $firstname,
         $lastname,
         $username,
-        $password = null,
-        $auth_source = null,
+        $password,
+        $auth_source,
         $email,
         $status,
         $official_code,
@@ -2589,6 +2598,15 @@ class UserManager
             $filename = $user_id.'_'.$filename;
         }
 
+        if (!file_exists($source_file)) {
+            return false;
+        }
+
+        $mimeContentType = mime_content_type($source_file);
+        if (false === strpos($mimeContentType, 'image')) {
+            return false;
+        }
+
         //Crop the image to adjust 1:1 ratio
         $image = new Image($source_file);
         $image->crop($cropParameters);
@@ -2865,7 +2883,7 @@ class UserManager
             $field_filter = (int) $field_filter;
             $sqlf .= " AND filter = $field_filter ";
         }
-        $sqlf .= " ORDER BY ".$columns[$column]." $sort_direction ";
+        $sqlf .= " ORDER BY `".$columns[$column]."` $sort_direction ";
         if ($number_of_items != 0) {
             $sqlf .= " LIMIT ".intval($from).','.intval($number_of_items);
         }
@@ -3575,6 +3593,7 @@ class UserManager
             $categoryStart = $row['session_category_date_start'] ? $row['session_category_date_start']->format('Y-m-d') : '';
             $categoryEnd = $row['session_category_date_end'] ? $row['session_category_date_end']->format('Y-m-d') : '';
             $courseList = self::get_courses_list_by_session($user_id, $session_id);
+
             $daysLeft = SessionManager::getDayLeftInSession($row, $user_id);
 
             // User portal filters:
@@ -4077,9 +4096,19 @@ class UserManager
             $checkPosition = array_filter(array_column($myCourseList, 'position'));
             if (empty($checkPosition)) {
                 // The session course list doesn't have any position,
-                // then order the course list by course code
-                $list = array_column($myCourseList, 'course_code');
-                array_multisort($myCourseList, SORT_ASC, $list);
+                // then order the course list by course code.
+                $orderByCode = array_column($myCourseList, 'course_code');
+                sort($orderByCode, SORT_NATURAL);
+                $newCourseList = [];
+                foreach ($orderByCode as $code) {
+                    foreach ($myCourseList as $course) {
+                        if ($code === $course['course_code']) {
+                            $newCourseList[] = $course;
+                            break;
+                        }
+                    }
+                }
+                $myCourseList = $newCourseList;
             }
         }
 
@@ -4448,7 +4477,9 @@ class UserManager
 
         // all the information of the field
         $sql = "SELECT DISTINCT id, tag from $table_user_tag
-                WHERE field_id = $field_id AND tag LIKE '$tag%' ORDER BY tag LIMIT $limit";
+                WHERE field_id = $field_id AND tag LIKE '$tag%'
+                ORDER BY tag
+                LIMIT $limit";
         $result = Database::query($sql);
         $return = [];
         if (Database::num_rows($result) > 0) {
@@ -5364,12 +5395,35 @@ class UserManager
 
         if (!empty($keyword)) {
             $keyword = Database::escape_string($keyword);
+
+            $keywordParts = explode(' ', $keyword);
+            $extraConditions = '';
+            if (!empty($keywordParts)) {
+                $keywordParts = array_filter($keywordParts);
+                foreach ($keywordParts as $part) {
+                    if (empty($part)) {
+                        continue;
+                    }
+                    $part = Database::escape_string($part);
+                    $extraConditions .= "
+                        OR
+                        (u.username LIKE '%$part%' OR
+                        u.firstname LIKE '%$part%' OR
+                        u.lastname LIKE '%$part%' OR
+                        u.official_code LIKE '%$part%'
+                        )
+                    ";
+                }
+            }
+
             $userConditions .= " AND (
                 u.username LIKE '%$keyword%' OR
                 u.firstname LIKE '%$keyword%' OR
                 u.lastname LIKE '%$keyword%' OR
                 u.official_code LIKE '%$keyword%' OR
                 u.email LIKE '%$keyword%'
+
+                $extraConditions
             )";
         }
 
@@ -5467,7 +5521,6 @@ class UserManager
                             $userConditions
                     )
                     $teacherSelect
-
                 ) as t1";
 
         if ($getSql) {
@@ -5491,7 +5544,7 @@ class UserManager
             if (!empty($column) && !empty($direction)) {
                 // Fixing order due the UNIONs
                 $column = str_replace('u.', '', $column);
-                $orderBy = " ORDER BY $column $direction ";
+                $orderBy = " ORDER BY `$column` $direction ";
             }
         }
 
@@ -7071,7 +7124,12 @@ SQL;
         }
 
         if (self::userHasCareer($userId, $careerId) === false) {
-            $params = ['user_id' => $userId, 'career_id' => $careerId, 'created_at' => api_get_utc_datetime(), 'updated_at' => api_get_utc_datetime()];
+            $params = [
+                'user_id' => $userId,
+                'career_id' => $careerId,
+                'created_at' => api_get_utc_datetime(),
+                'updated_at' => api_get_utc_datetime(),
+            ];
             $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
             Database::insert($table, $params);
         }

@@ -352,4 +352,3 @@ if ($allowUserGroups) {
 $tabs = Display::tabs($headers, $items);
 $tpl->assign('content', $tabs);
 $tpl->display_one_col_template();
-

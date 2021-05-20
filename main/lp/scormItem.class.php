@@ -35,7 +35,7 @@ class scormItem extends learnpathItem
      * @param mixed  $element   Depending on the type given, DB id for the lp_item or reference to the DOM element
      * @param int    $course_id
      */
-    public function __construct($type = 'manifest', &$element, $course_id = 0)
+    public function __construct($type, &$element, $course_id = 0)
     {
         if (isset($element)) {
             // Parsing using PHP5 DOMXML methods.

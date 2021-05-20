@@ -38,13 +38,6 @@ $orig_param = '&origin=resume_session';
 // Database Table Definitions
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_rel_class = Database::get_main_table(TABLE_MAIN_SESSION_CLASS);
-$tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-$table_access_url_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
 $em = Database::getManager();
 $sessionInfo = api_get_session_info($sessionId);
@@ -165,12 +158,41 @@ if ($session->getNbrCourses() === 0) {
 } else {
     $count = 0;
     $courseItem = '';
-    $courses = $sessionRepository->getCoursesOrderedByPosition($session);
+    //$courses = $sessionRepository->getCoursesOrderedByPosition($session);
+
+    $courses = $session->getCourses();
+    $iterator = $courses->getIterator();
+    // define ordering closure, using preferred comparison method/field
+    $iterator->uasort(function ($first, $second) {
+        return (int) $first->getPosition() > (int) $second->getPosition() ? 1 : -1;
+    });
+    $courseList = [];
+    $positionList = [];
+    $courseListByCode = [];
+    /** @var \Chamilo\CoreBundle\Entity\SessionRelCourse $sessionRelCourse */
+    foreach ($iterator as $sessionRelCourse) {
+        $courseList[] = $sessionRelCourse->getCourse();
+        $courseListByCode[$sessionRelCourse->getCourse()->getCode()] = $sessionRelCourse->getCourse();
+        $positionList[] = $sessionRelCourse->getPosition();
+    }
+
+    $checkPosition = array_filter($positionList);
+    if (empty($checkPosition)) {
+        // The session course list doesn't have any position,
+        // then order the course list by course code.
+        $orderByCode = array_keys($courseListByCode);
+        sort($orderByCode, SORT_NATURAL);
+        $newCourseList = [];
+        foreach ($orderByCode as $code) {
+            $newCourseList[] = $courseListByCode[$code];
+        }
+        $courseList = $newCourseList;
+    }
 
     $allowSkills = api_get_configuration_value('allow_skill_rel_items');
 
     /** @var Course $course */
-    foreach ($courses as $course) {
+    foreach ($courseList as $course) {
         // Select the number of users
         $numberOfUsers = SessionManager::getCountUsersInCourseSession($course, $session);
 

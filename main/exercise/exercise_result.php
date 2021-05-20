@@ -82,6 +82,7 @@ if (!empty($objExercise->getResultAccess())) {
 
 $showHeader = false;
 $showFooter = false;
+$showLearnPath = true;
 $pageActions = '';
 $pageTop = '';
 $pageBottom = '';
@@ -90,6 +91,7 @@ $courseInfo = api_get_course_info();
 if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     // So we are not in learnpath tool
     $showHeader = true;
+    $showLearnPath = false;
 }
 
 // I'm in a preview mode as course admin. Display the action menu.
@@ -113,6 +115,7 @@ $learnpath_id = isset($exercise_stat_info['orig_lp_id']) ? $exercise_stat_info['
 $learnpath_item_id = isset($exercise_stat_info['orig_lp_item_id']) ? $exercise_stat_info['orig_lp_item_id'] : 0;
 $learnpath_item_view_id = isset($exercise_stat_info['orig_lp_item_view_id'])
     ? $exercise_stat_info['orig_lp_item_view_id'] : 0;
+$exerciseId = isset($exercise_stat_info['exe_exo_id']) ? $exercise_stat_info['exe_exo_id'] : 0;
 
 $logInfo = [
     'tool' => TOOL_QUIZ,
@@ -202,7 +205,7 @@ if (!empty($exercise_stat_info)) {
 
 $max_score = $objExercise->get_max_score();
 
-if ($origin === 'embeddable') {
+if ('embeddable' === $origin) {
     $pageTop .= showEmbeddableFinishButton();
 } else {
     Display::addFlash(
@@ -224,6 +227,30 @@ $stats = ExerciseLib::displayQuestionListByAttempt(
 );
 $pageContent .= ob_get_contents();
 ob_end_clean();
+
+// Change settings for teacher access.
+$oldResultDisabled = $objExercise->results_disabled;
+$objExercise->results_disabled = RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS;
+$objExercise->forceShowExpectedChoiceColumn = true;
+$objExercise->disableHideCorrectAnsweredQuestions = true;
+
+ob_start();
+$statsTeacher = ExerciseLib::displayQuestionListByAttempt(
+    $objExercise,
+    $exeId,
+    false,
+    $remainingMessage,
+    $allowSignature,
+    api_get_configuration_value('quiz_results_answers_report'),
+    false
+);
+ob_end_clean();
+
+// Restore settings.
+$objExercise->results_disabled = $oldResultDisabled;
+$objExercise->forceShowExpectedChoiceColumn = false;
+$objExercise->disableHideCorrectAnsweredQuestions = false;
+
 // Save here LP status
 if (!empty($learnpath_id) && $saveResults) {
     // Save attempt in lp
@@ -236,19 +263,43 @@ ExerciseLib::sendNotification(
     $exercise_stat_info,
     $courseInfo,
     $attempt_count++,
-    $stats
+    $stats,
+    $statsTeacher
 );
 
 $hookQuizEnd = HookQuizEnd::create();
 $hookQuizEnd->setEventData(['exe_id' => $exeId]);
 $hookQuizEnd->notifyQuizEnd();
 
+$advancedCourseMessage = RemedialCoursePlugin::create()->getAdvancedCourseList(
+    $objExercise,
+    api_get_user_id(),
+    api_get_session_id()
+);
+if (null != $advancedCourseMessage) {
+    Display::addFlash(
+        Display::return_message($advancedCourseMessage, 'info', false)
+    );
+}
+
+$remedialMessage = RemedialCoursePlugin::create()->getRemedialCourseList(
+    $objExercise,
+    api_get_user_id(),
+    api_get_session_id()
+);
+
+if (null != $remedialMessage) {
+    Display::addFlash(
+        Display::return_message($remedialMessage, 'warning', false)
+    );
+}
 // Unset session for clock time
 ExerciseLib::exercise_time_control_delete(
     $objExercise->id,
     $learnpath_id,
     $learnpath_item_id
 );
+
 ExerciseLib::delete_chat_exercise_session($exeId);
 
 if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
@@ -289,7 +340,7 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     $showFooter = false;
 }
 
-$template = new Template($nameTools, $showHeader, $showFooter);
+$template = new Template($nameTools, $showHeader, $showFooter, $showLearnPath);
 $template->assign('page_top', $pageTop);
 $template->assign('page_content', $pageContent);
 $template->assign('page_bottom', $pageBottom);

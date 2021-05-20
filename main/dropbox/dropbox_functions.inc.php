@@ -190,8 +190,8 @@ function delete_category($action, $id, $user_id = null)
 function display_move_form(
     $part,
     $id,
-    $target = [],
-    $extra_params = [],
+    $target,
+    $extra_params,
     $viewReceivedCategory,
     $viewSentCategory,
     $view

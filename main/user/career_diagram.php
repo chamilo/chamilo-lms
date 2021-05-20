@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /*
@@ -31,7 +32,7 @@ if (empty($careerInfo)) {
 }
 
 $userId = api_get_user_id();
-$allow = UserManager::userHasCareer($userId, $careerId) || api_is_platform_admin();
+$allow = UserManager::userHasCareer($userId, $careerId) || api_is_platform_admin() || api_is_drh();
 
 if ($allow === false) {
     api_not_allowed(true);
@@ -79,7 +80,8 @@ if (!empty($itemUrls) && !empty($itemUrls['value'])) {
     }
 }
 
-$tpl = new Template(get_lang('Diagram'));
+$showFullPage = isset($_REQUEST['iframe']) && 1 === (int) $_REQUEST['iframe'] ? false : true;
+$tpl = new Template(get_lang('Diagram'), $showFullPage, $showFullPage, !$showFullPage);
 $html = Display::page_subheader2($careerInfo['name'].$urlToString);
 $diagram = Career::renderDiagramByColumn($careerInfo, $tpl, $userId);
 

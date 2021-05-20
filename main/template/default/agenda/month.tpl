@@ -239,7 +239,10 @@ $(function() {
         defaultDate: defaultStartDate,
         firstHour: 8,
         firstDay: 1,
-		selectable	: true,
+        {% if fullcalendar_settings %}
+            {{ fullcalendar_settings  }}
+        {% endif %}
+        selectable	: true,
 		selectHelper: true,
         viewDisplay: function(view) {
             /* When changing the view update the qtips */

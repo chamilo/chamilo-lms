@@ -342,7 +342,7 @@ ANSWER_EXPLANATION: C'est un commentaire facultatif de retour qui apparaîtra à
 SCORE: 20";
 $ImportAikenQuizExplanation = "Le format Aiken est un fichier (.txt) avec un texte simple, avec plusieurs blocs de questions, chacune séparée par une ligne blanche. La première ligne est la question, les lignes de réponse sont préfixés par une lettre et un point, et la bonne réponse vient avec le préfixe 'ANSWER'.
 Voir l'exemple ci-dessous.";
-$ExerciseAikenErrorNoAnswerOptionGiven = "Le fichier importé comporte au moins une question sans réponse (ou les réponses ne comprennent pas la lettre de préfixe requis). Assurez-vous que chaque question a au moins une réponse et qu'elle est précédée par une lettre et un point ou une parenthèse, comme ceci:
+$ExerciseAikenErrorNoAnswerOptionGiven = "Le fichier importé comporte au moins une question sans réponse (ou les réponses ne comprennent pas la lettre de préfixe requis). Assurez-vous que chaque question a au moins une réponse et qu'elle est précédée par une lettre et un point ou une parenthèse, comme ceci: 
 A. Réponse 1";
 $ExerciseAikenErrorNoCorrectAnswerDefined = "Le fichier importé comporte au moins une question sans réponse correcte définie. Assurez-vous que toutes les questions comprennent la réponse: [Lettre] ligne.";
 $SearchCourseBySession = "Recherche de cours par session";
@@ -607,7 +607,7 @@ $Stats = "Suivi";
 $UplPage = "Déposer page et lier à l'accueil";
 $LinkSite = "Ajouter un lien sur la page d'accueil";
 $HasDel = "a été supprimé";
-$ByDel = "En supprimant ce cours, vous supprimerez tous les documents qu'il contient et désinscrirez tous les membres qui y sont inscrits. <p>Voulez-vous réellement supprimer ce cours ?";
+$ByDel = "En supprimant ce cours, vous supprimerez tous les documents qu'il contient et désinscrirez tous les membres qui y sont inscrits.";
 $Y = "OUI";
 $N = "NON";
 $DepartmentUrl = "URL du département";
@@ -2637,7 +2637,7 @@ $MailCronCourseExpirationReminderBody = "Cher/Chère %s,
 
 Nous avons remarqué que vous n'avez pas terminé le cours %s alors que sa date de fin a été établie au %s, vous laissant %s jour(s) pour le terminer. Nous vous rappelons que vous ne disposez de la possibilité de suivre ce cours qu'une fois par an. Nous vous invitons donc avec insistance à le compléter dans le délai qu'il vous reste. Vous pouvez retrouver le cours en vous connectant à la plate-forme à cette adresse: %s
 
---
+-- 
 
 Cordialement,
 
@@ -6662,7 +6662,7 @@ $NewExercises = "Nouveaux exercices";
 $MyAverage = "Ma moyenne";
 $AllAttempts = "Toutes les tentatives";
 $QuestionsToReview = "Questions à revoir";
-$QuestionWithNoAnswer = "Questions sans réponses";
+$QuestionWithNoAnswer = "Questions sans réponses surlignées en rouge ci-dessous";
 $ValidateAnswers = "Finaliser l'exercice";
 $ReviewQuestions = "Revoir les questions sélectionnées";
 $YouTriedToResolveThisExerciseEarlier = "Vous avez essayé de résoudre cet exercice plus tôt";
@@ -6929,7 +6929,7 @@ $DatabaseXWillBeCreated = "La base de donnée %s va être créée";
 $ADatabaseWithTheSameNameAlreadyExists = "Une base de donnée du même nom existe déjà. Si vous utilisez cette base, son contenu actuel sera écrasé.";
 $UserXCantHaveAccessInTheDatabaseX = "L'utilisateur %s n'a pas accès à la base de donnée %s";
 $DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions = "La base de donnée %s ne peut pas être crée, l'utilisateur %s n'a pas suffisamment de permissions.";
-$CopyOnlySessionItems = "Copier seulement les élémenents de la session";
+$CopyOnlySessionItems = "Copier seulement les éléments de la session";
 $FirstLetterCourseTitle = "Première lettre (title)";
 $NumberOfPublishedExercises = "# d'exerices publiés";
 $NumberOfPublishedLps = "# de parcours publiés";
@@ -7462,7 +7462,7 @@ $FieldTypeLettersSpaces = "Texte lettres et espaces";
 $CronRemindCourseFinishedActivateTitle = "Envoyer un avis de fin de cours";
 $FieldTypeAlphanumericSpaces = "Texte alphanumérique et espaces";
 $CronRemindCourseFinishedActivateComment = "Envoyer un courriel aux étudiants lorsque leur cours (au sein de la session) se termine. Cette fonctionnalité exige la configuration d'une tâche cron sur le serveur (voir répertoire main/cron/)";
-$ThanksForRegisteringToSite = "Merci de vous êtes inscrit à %s.";
+$ThanksForRegisteringToSite = "Merci de vous être inscrit à %s.";
 $AllowCoachFeedbackExercisesTitle = "Permettre aux tuteurs de commenter les réponses aux exercices";
 $AllowCoachFeedbackExercisesComment = "Permettre aux tuteurs d'éditer les commentaires lors de la révision des exercices";
 $PreventMultipleSimultaneousLoginTitle = "Empêcher les logins simultanés";
@@ -7524,7 +7524,7 @@ $Convert = "Convertir";
 $PortalLimitType = "Type de limite du portail";
 $PortalName = "Nom du portail";
 $BestScore = "Meilleur score";
-$AreYouSureToDeleteJS = "Êtes-vous certain de vouloir supprimer";
+$AreYouSureToDeleteJS = "Êtes-vous certain de vouloir supprimer ?";
 $ConversionToSameFileFormat = "Conversion au format original bloquée. Veuillez choisir un autre format.";
 $FileFormatNotSupported = "Format de fichier non supporté.";
 $FileConvertedFromXToY = "Fichier converti de %s à %s";
@@ -8635,7 +8635,7 @@ $ToInvoice = "À facturer";
 $LearningPathItemByAuthor = "Éléménts de parcours par auteur";
 $DeleteExerciseAttempts = "Supprimer également les tentatives des exercices concernés";
 $ExerciseCategoriesRadarMode = "Afficher uniquement un radar des scores par catégorie, au lieu d'un tableau de catégories. Ne montre pas les scores ou les commentaires individuels.";
-$ExerciseBlockBecausePercentageX = "Toutes les tentatives ont été bloquées car vous n’avez pas atteint le score minimum de %s % à l’une de vos tentatives.";
+$ExerciseBlockBecausePercentageX = "Toutes les tentatives ont été bloquées car vous n’avez pas atteint le score minimum de %s %% à l’une de vos tentatives.";
 $RegisteredAuthors = "Auteurs qui ont été enregistrés :";
 $Price = "Prix";
 $PriceUpdated = "Prix mis à jour";
@@ -8652,4 +8652,58 @@ $ShowScoreEveryAttemptShowAnswersLastAttemptNoFeedback = "Montrer le score, le c
 $AddGradebookComment = "Commentaire";
 $LatestLoginInAnyCourse = "Dernier accès à un cours";
 $The = "Le";
+$MultiplicateQuestionsByClass = "Multiplier les questions par classe";
+$MultiplicateQuestionsByUser = "Multiplier les questions par utilisateur";
+$QuestionForNextUser = "Questions concernant l'apprenant suivant";
+$CourseCodeToEnteredCapitalLettersToConfirmDeletionX = "Code du cours à saisir en majuscules pour confirmer la suppression : %s";
+$BadgeXTitle = "Badge : %s";
+$PortfolioCommentFromXUser = "Commenté par %s";
+$PortfolioItemFromXUser = "Item de Portfolio de %s";
+$CopyToMyPortfolio = "Copier dans mon portfolio";
+$CopyToStudentPortfolio = "Copier dans le portfolio de l'étudiant";
+$OriginallyPublishedAsXTitleByYUser = "Publier à l'origine comme %s par %s";
+$OriginallyCommentedByXUserInYItem = "Commenté à l'origine par %s dans %s";
+$PortfolioItemAddedToStudents = "Item rajouter dans le portfolio de l'apprenant";
+$MarkCommentAsImportant = "Marquer le commentaire comme important";
+$UnmarkCommentAsImportant = "Enlever la marque d'importance sur le commentaire";
+$CommentMarkedAsImportant = "Item de portfolio marqué comme important";
+$SelectLearnerPortfolio = "Choisir le portfolio d'un apprenant";
+$SeeMyPortfolio = "Voir mon portfolio dans ce cours";
+$PortfolioDetails = "Détails du portfolio";
+$PortfolioItemTitle = "Titre de l'item";
+$CreationDateXDate = "Date de création : %s";
+$UpdateDateXDate = "Date de mise à jour : %s";
+$CategoryXName = "Catégorie : %s";
+$DateXDate = "Date : %s";
+$PortfolioItemTitleXName = "Titre de l'item : %s";
+$NoItemsInYourPortfolio = "Aucun item dans votre portfolio";
+$YouHaveNotCommented = "Vous n'avez pas commenté";
+$PortfolioItems = "Items de portfolio";
+$PortfolioComments = "Commentaires de portfolio";
+$PortfolioCommentsMade = "Commentaires réalisés";
+$QualifyThisPortfolioItem = "Noter cet item";
+$PortfolioItemGraded = "L'item de portfolio a été noté";
+$ContextForCommentToBeGrade = "Context pour le commentaire à noter";
+$QualifyThisPortfolioComment = "Noter ce commentaire";
+$PortfolioCommentGraded = "Le commentaire du portfolio a été noté";
+$QualifyPortfolioItems = "Noter les items";
+$QualifyPortfolioComments = "Évaluer les commentaires";
+$HideCorrectAnsweredQuestions = "Cacher les questions qui ont eu une réponse correcte";
+$TheSettingXWillChangeToX = "Le paramètre \"%s\" sera modifié avec \"%s\"";
+$VerificationOfAnsweredQuestions = "Vérification des réponses aux questions";
+$StudentPublicationToCorrect = "Travaux d'étudiant à corriger";
+$StudentPublicationCorrectionWarning = "Vous trouverez ci-dessous tous les travaux qui ont été soumis par des étudiants dans l'un de vos cours (cela peut être dans le cours de base ou dans un cours en session). Vous pouvez filtrer la liste en sélectionnant un cours spécifique ou un statut de travail.";
+$BackToMainPortfolio = "Retour au portfolio principal du cours";
+$ExportMyPortfolioDataPdf = "Exporter mon portfolio au format PDF";
+$ExportMyPortfolioDataZip = "Exporter mon portfolio au format ZIP";
+$PortfolioCategoryFieldHelp = "Les catégories sont pour l'organisation du portfolio personnel  uniquement.";
+$ExportMytPortfolioDataPdf = "Exporter mon portfolio au format PDF";
+$ExportMytPortfolioDataZip = "Exporter mon portfolio au format ZIP";
+$NewLearningPathSubject = "Nouveau parcours disponible";
+$NewLearningPathBody = "Un nouveau parcours nommé %s a été ajouté à votre cours %s. Consulter ce parcours ici : %s";
+$XPercentCompleted = "%s %% Complété";
+$EmailToTeachersWhenNewPost = "E-mail aux enseignants quand il y a un nouveau post dans l'outil portfolio";
+$PortfolioAlertNewPostContent = "Il y a un nouveau post de %s dans le portfolio du cours %s. Pour le voir <a href='%s'> cliquer ici</a>.";
+$PortfolioAlertNewPostSubject = "[Portfolio] Nouveau post dans le cours %s";
+$OngoingTraining = "Formation(s) en cours";
 ?>

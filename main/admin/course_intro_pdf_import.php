@@ -1,10 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * This tool allows platform admins to upload a massive amount of PDFs to be
  * uploaded in each course.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -160,7 +160,7 @@ function import_pdfs($subDir = '/')
                 api_set_default_visibility($docId, TOOL_DOCUMENT);
                 $errors[] = ['Line' => 0, 'Code' => $course['code'], 'Title' => $course['title']];
                 // Now add a link to the file from the Course description tool
-                $link = '<p>Sílabo de la asignatura 
+                $link = '<p>Sílabo de la asignatura
                  <a href="'.api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq_params($course['code']).'&action=download&id='.$docId.'" target="_blank">
                       '.Display::return_icon('pdf.png').'
                  </a></p>';

@@ -19,6 +19,8 @@ api_protect_course_script(true);
 
 $request = HttpRequest::createFromGlobals();
 
+$originIsLearnpath = api_get_origin() === 'learnpath';
+
 $user = api_get_user_entity(api_get_user_id());
 
 $em = Database::getManager();
@@ -72,12 +74,14 @@ try {
     exit;
 }
 
+$formTarget = $originIsLearnpath ? '_self' : '_blank';
+
 $frmNewRegistration = new FormValidator(
     'launch_new',
     'post',
     "launch.php?$cidReq",
     '',
-    ['target' => '_blank'],
+    ['target' => $formTarget],
     FormValidator::LAYOUT_INLINE
 );
 $frmNewRegistration->addHidden('attempt_id', Uuid::uuid4());
@@ -116,7 +120,7 @@ if ($stateDocument) {
             'post',
             "launch.php?$cidReq",
             '',
-            ['target' => '_blank'],
+            ['target' => $formTarget],
             FormValidator::LAYOUT_INLINE
         );
         $frmLaunch->addHidden('attempt_id', $attemptId);
@@ -163,19 +167,26 @@ if ($stateDocument) {
     $pageContent .= $table->toHtml();
 }
 
-$actions = Display::url(
-    Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
-    '../start.php?'.api_get_cidreq()
-);
+$actions = '';
+
+if (!$originIsLearnpath) {
+    $actions = Display::url(
+        Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+        '../start.php?'.api_get_cidreq()
+    );
+}
 
 $view = new Template($pageTitle);
 $view->assign('header', $pageTitle);
-$view->assign(
-    'actions',
-    Display::toolbarAction(
-        'xapi_actions',
-        [$actions]
-    )
-);
+
+if ($actions) {
+    $view->assign(
+        'actions',
+        Display::toolbarAction(
+            'xapi_actions',
+            [$actions]
+        )
+    );
+}
 $view->assign('content', $pageContent);
 $view->display_one_col_template();

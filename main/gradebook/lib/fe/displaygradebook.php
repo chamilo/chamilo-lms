@@ -162,6 +162,12 @@ class DisplayGradebook
             'selectcat' => $catobj->get_id(),
         ]);
 
+        $scoreRanking = ScoreDisplay::instance()->get_custom_score_display_settings();
+        $attributes = [];
+        if (!empty($scoreRanking)) {
+            $attributes = ['class' => 'export_opener'];
+        }
+
         $header .= Display::url(
             Display::return_icon(
                 'export_csv.png',
@@ -169,7 +175,8 @@ class DisplayGradebook
                 '',
                 ICON_SIZE_MEDIUM
             ),
-            $exportCsvUrl
+            $exportCsvUrl,
+            $attributes
         );
 
         $exportXlsUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
@@ -185,7 +192,8 @@ class DisplayGradebook
                 '',
                 ICON_SIZE_MEDIUM
             ),
-            $exportXlsUrl
+            $exportXlsUrl,
+            $attributes
         );
 
         $exportDocUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
@@ -201,7 +209,8 @@ class DisplayGradebook
                 '',
                 ICON_SIZE_MEDIUM
             ),
-            $exportDocUrl
+            $exportDocUrl,
+            $attributes
         );
 
         $exportPrintUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
@@ -239,7 +248,27 @@ class DisplayGradebook
         );
 
         $header .= '</div>';
-        echo $header;
+
+        $dialog = '';
+        if (!empty($scoreRanking)) {
+            $dialog = '<div id="dialog-confirm" style="display:none" title="'.get_lang('ConfirmYourChoice').'">';
+            $form = new FormValidator(
+                'report',
+                'post',
+                null,
+                null,
+                ['class' => 'form-vertical']
+            );
+            $form->addCheckBox(
+                'only_score',
+                null,
+                get_lang('OnlyNumbers')
+            );
+            $dialog .= $form->returnForm();
+            $dialog .= '</div>';
+        }
+
+        echo $header.$dialog;
     }
 
     /**

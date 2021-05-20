@@ -236,7 +236,7 @@ class TestCategory
             $field = Database::escape_string($field);
             $sql = "SELECT $field FROM $table
                     WHERE c_id = $courseId
-                    ORDER BY $field ASC";
+                    ORDER BY `$field` ASC";
             $res = Database::query($sql);
             while ($row = Database::fetch_array($res)) {
                 $categories[] = $row[$field];

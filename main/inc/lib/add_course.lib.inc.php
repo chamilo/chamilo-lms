@@ -662,6 +662,7 @@ class AddCourse
             'documents_default_visibility' => ['default' => 'visible', 'category' => 'document'],
             'show_course_in_user_language' => ['default' => 2, 'category' => null],
             'email_to_teachers_on_new_work_feedback' => ['default' => 1, 'category' => null],
+            'email_alert_teachers_new_post' => ['default' => 2, 'category' => 'portfolio'],
         ];
 
         $counter = 1;
@@ -1333,15 +1334,18 @@ class AddCourse
                         $code
                     );
                     if (!empty($user_id)) {
-                        $sql = "INSERT INTO $TABLECOURSUSER SET
-                                c_id = $course_id,
-                                user_id         = '".intval($user_id)."',
-                                status          = '1',
-                                is_tutor        = '0',
-                                sort            = '".($i_course_sort)."',
-                                relation_type = 0,
-                                user_course_cat = '0'";
-                        Database::query($sql);
+                        Database::insert(
+                            $TABLECOURSUSER,
+                            [
+                                'c_id' => $course_id,
+                                'user_id' => $user_id,
+                                'status' => 1,
+                                'is_tutor' => 0,
+                                'sort' => $i_course_sort,
+                                'relation_type' => 0,
+                                'user_course_cat' => 0,
+                            ]
+                        );
                     }
                 }
 

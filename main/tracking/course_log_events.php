@@ -140,6 +140,8 @@ $form = new FormValidator(
     [],
     FormValidator::LAYOUT_INLINE
 );
+$renderer = $form->defaultRenderer();
+$renderer->setCustomElementTemplate('<span>{element}</span>');
 $form->addHidden('report', 'activities');
 $form->addHidden('activities_direction', 'DESC');
 $form->addElement('text', 'keyword', get_lang('Keyword'));

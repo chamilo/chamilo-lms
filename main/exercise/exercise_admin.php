@@ -196,7 +196,8 @@ if ($form->validate()) {
                 $lp_id = $_GET['lp_id'];
             }
             $lp_id = (int) $lp_id;
-            echo "<a href=\"../lp/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-2\">".
+            echo "<a
+                href=\"../lp/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-2\">".
                 Display::return_icon('back.png', get_lang("BackTo").' '.get_lang('LearningPaths'), '', ICON_SIZE_MEDIUM)."</a>";
         } else {
             echo '<a href="exercise.php?'.api_get_cidreq().'">'.

@@ -725,14 +725,15 @@ class Event
         $correct,
         $coords,
         $updateResults = false,
-        $exerciseId = 0
+        $exerciseId = 0,
+        $lpId = 0,
+        $lpItemId = 0
     ) {
         $debug = false;
-        global $safe_lp_id, $safe_lp_item_id;
 
         if ($updateResults == false) {
             // Validation in case of fraud with activated control time
-            if (!ExerciseLib::exercise_time_control_is_valid($exerciseId, $safe_lp_id, $safe_lp_item_id)) {
+            if (!ExerciseLib::exercise_time_control_is_valid($exerciseId, $lpId, $lpItemId)) {
                 if ($debug) {
                     error_log('Attempt is fraud');
                 }
@@ -880,6 +881,26 @@ class Event
         Database::insert($table, $params);
 
         return true;
+    }
+
+    public static function findUserSubscriptionToCourse(int $userId, int $courseId, int $sessionId = 0)
+    {
+        $tblTrackEDefault = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+
+        return Database::select(
+            '*',
+            $tblTrackEDefault,
+            [
+                'where' => [
+                    'default_event_type = ? AND ' => LOG_SUBSCRIBE_USER_TO_COURSE,
+                    'default_value_type = ? AND ' => LOG_USER_OBJECT,
+                    'default_value LIKE ? AND ' => '%s:2:\\\\"id\\\\";i:'.$userId.'%',
+                    'c_id = ? AND ' => $courseId,
+                    'session_id = ?' => $sessionId,
+                ],
+            ],
+            'first'
+        );
     }
 
     /**
@@ -2429,7 +2450,7 @@ class Event
     public static function eventRemoveVirtualCourseTime(
         $courseId,
         $userId,
-        $sessionId = 0,
+        $sessionId,
         $virtualTime,
         $workId
     ) {
@@ -2437,19 +2458,20 @@ class Event
             return false;
         }
 
-        $originalVirtualTime = $virtualTime;
-
-        $courseTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $platformTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $courseId = (int) $courseId;
         $userId = (int) $userId;
         $sessionId = (int) $sessionId;
+        $originalVirtualTime = Database::escape_string($virtualTime);
+        $workId = (int) $workId;
+
+        $courseTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $platformTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
         // Change $virtualTime format from hh:mm:ss to hhmmss which is the
         // format returned by SQL for a subtraction of two datetime values
         // @todo make sure this is portable between DBMSes
         if (preg_match('/:/', $virtualTime)) {
-            list($h, $m, $s) = preg_split('/:/', $virtualTime);
+            [$h, $m, $s] = preg_split('/:/', $virtualTime);
             $virtualTime = $h * 3600 + $m * 60 + $s;
         } else {
             $virtualTime *= 3600;
@@ -2495,7 +2517,6 @@ class Event
         }
 
         if (Tracking::minimumTimeAvailable($sessionId, $courseId)) {
-            $workId = (int) $workId;
             $sql = "SELECT id FROM track_e_access_complete
                     WHERE
                         tool = '".TOOL_STUDENTPUBLICATION."' AND
@@ -2675,5 +2696,63 @@ class Event
         }
 
         return $now - $time;
+    }
+
+    public static function logSubscribedUserInCourse(int $subscribedId, int $courseId)
+    {
+        $dateTime = api_get_utc_datetime();
+        $registrantId = api_get_user_id();
+
+        self::addEvent(
+            LOG_SUBSCRIBE_USER_TO_COURSE,
+            LOG_COURSE_CODE,
+            api_get_course_entity($courseId)->getCode(),
+            $dateTime,
+            $registrantId,
+            $courseId
+        );
+
+        self::addEvent(
+            LOG_SUBSCRIBE_USER_TO_COURSE,
+            LOG_USER_OBJECT,
+            api_get_user_info($subscribedId),
+            $dateTime,
+            $registrantId,
+            $courseId
+        );
+    }
+
+    public static function logUserSubscribedInCourseSession(int $subscribedId, int $courseId, int $sessionId)
+    {
+        $dateTime = api_get_utc_datetime();
+        $registrantId = api_get_user_id();
+
+        self::addEvent(
+            LOG_SESSION_ADD_USER_COURSE,
+            LOG_USER_ID,
+            $subscribedId,
+            $dateTime,
+            $registrantId,
+            $courseId,
+            $sessionId
+        );
+        self::addEvent(
+            LOG_SUBSCRIBE_USER_TO_COURSE,
+            LOG_COURSE_CODE,
+            api_get_course_entity($courseId)->getCode(),
+            $dateTime,
+            $registrantId,
+            $courseId,
+            $sessionId
+        );
+        self::addEvent(
+            LOG_SUBSCRIBE_USER_TO_COURSE,
+            LOG_USER_OBJECT,
+            api_get_user_info($subscribedId),
+            $dateTime,
+            $registrantId,
+            $courseId,
+            $sessionId
+        );
     }
 }

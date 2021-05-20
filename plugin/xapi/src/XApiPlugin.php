@@ -32,27 +32,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     const SETTING_LRS_LP_ACTIVE = 'lrs_lp_end_active';
     const SETTING_LRS_QUIZ_ACTIVE = 'lrs_quiz_active';
     const SETTING_LRS_QUIZ_QUESTION_ACTIVE = 'lrs_quiz_question_active';
-
-    const VERB_TERMINATED = 'http://adlnet.gov/expapi/verbs/terminated';
-    const VERB_COMPLETED = 'http://adlnet.gov/expapi/verbs/completed';
-    const VERB_ANSWERED = 'http://adlnet.gov/expapi/verbs/answered';
-    const VERB_VIEWED = 'http://id.tincanapi.com/verb/viewed';
-
-    const IRI_QUIZ = 'http://adlnet.gov/expapi/activities/assessment';
-    const IRI_QUIZ_QUESTION = 'http://adlnet.gov/expapi/activities/question';
-    const IRI_LESSON = 'http://adlnet.gov/expapi/activities/lesson';
-    const IRI_RESOURCE = 'http://id.tincanapi.com/activitytype/resource';
-    const IRI_INTERACTION = 'http://adlnet.gov/expapi/activities/cmi.interaction';
-
-    const DATA_TYPE_ATTEMPT = 'e_attempt';
-    const DATA_TYPE_EXERCISE = 'e_exercise';
-    const DATA_TYPE_LP_ITEM_VIEW = 'lp_item_view';
-    const DATA_TYPE_LP_VIEW = 'lp_view';
-
-    const TYPE_QUIZ = 'quiz';
-    const TYPE_QUIZ_QUESTION = 'quiz_question';
-    const TYPE_LP = 'lp';
-    const TYPE_LP_ITEM = 'lp_item';
+    const SETTING_LRS_PORTFOLIO_ACTIVE = 'lrs_portfolio_active';
 
     const STATE_FIRST_LAUNCH = 'first_launch';
     const STATE_LAST_LAUNCH = 'last_launch';
@@ -77,6 +57,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             self::SETTING_LRS_LP_ACTIVE => 'boolean',
             self::SETTING_LRS_QUIZ_ACTIVE => 'boolean',
             self::SETTING_LRS_QUIZ_QUESTION_ACTIVE => 'boolean',
+            self::SETTING_LRS_PORTFOLIO_ACTIVE => 'boolean',
         ];
 
         parent::__construct(
@@ -151,12 +132,16 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $quizQuestionAnsweredHook = XApiQuizQuestionAnsweredHookObserver::create();
         $quizEndHook = XApiQuizEndHookObserver::create();
         $createCourseHook = XApiCreateCourseHookObserver::create();
+        $portfolioItemAddedHook = XApiPortfolioItemAddedHookObserver::create();
+        $portfolioItemCommentedHook = XApiPortfolioItemCommentedHookObserver::create();
 
         HookLearningPathItemViewed::create()->detach($learningPathItemViewedHook);
         HookLearningPathEnd::create()->detach($learningPathEndHook);
         HookQuizQuestionAnswered::create()->detach($quizQuestionAnsweredHook);
         HookQuizEnd::create()->detach($quizEndHook);
         HookCreateCourse::create()->detach($createCourseHook);
+        HookPortfolioItemAdded::create()->detach($portfolioItemAddedHook);
+        HookPortfolioItemCommented::create()->detach($portfolioItemCommentedHook);
 
         return 1;
     }
@@ -224,11 +209,15 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $learningPathEndHook = XApiLearningPathEndHookObserver::create();
         $quizQuestionAnsweredHook = XApiQuizQuestionAnsweredHookObserver::create();
         $quizEndHook = XApiQuizEndHookObserver::create();
+        $portfolioItemAddedHook = XApiPortfolioItemAddedHookObserver::create();
+        $portfolioItemCommentedHook = XApiPortfolioItemCommentedHookObserver::create();
 
         $learningPathItemViewedEvent = HookLearningPathItemViewed::create();
         $learningPathEndEvent = HookLearningPathEnd::create();
         $quizQuestionAnsweredEvent = HookQuizQuestionAnswered::create();
         $quizEndEvent = HookQuizEnd::create();
+        $portfolioItemAddedEvent = HookPortfolioItemAdded::create();
+        $portfolioItemCommentedEvent = HookPortfolioItemCommented::create();
 
         if ('true' === $this->get(self::SETTING_LRS_LP_ITEM_ACTIVE)) {
             $learningPathItemViewedEvent->attach($learningPathItemViewedHook);
@@ -252,6 +241,14 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             $quizEndEvent->attach($quizEndHook);
         } else {
             $quizEndEvent->detach($quizEndHook);
+        }
+
+        if ('true' === $this->get(self::SETTING_LRS_PORTFOLIO_ACTIVE)) {
+            $portfolioItemAddedEvent->attach($portfolioItemAddedHook);
+            $portfolioItemCommentedEvent->attach($portfolioItemCommentedHook);
+        } else {
+            $portfolioItemAddedEvent->detach($portfolioItemAddedHook);
+            $portfolioItemCommentedEvent->attach($portfolioItemCommentedHook);
         }
 
         return $this;
@@ -427,6 +424,60 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $webPath = api_get_path(WEB_PLUGIN_PATH).$this->get_name();
 
         return "$webPath/admin.php";
+    }
+
+    public function getLpResourceBlock(int $lpId)
+    {
+        $cidReq = api_get_cidreq(true, true, 'lp');
+        $webPath = api_get_path(WEB_PLUGIN_PATH).'xapi/';
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
+
+        $tools = Database::getManager()
+            ->getRepository(ToolLaunch::class)
+            ->findByCourseAndSession($course, $session);
+
+        $importIcon = Display::return_icon('import_scorm.png');
+        $moveIcon = Display::url(
+            Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY),
+            '#',
+            ['class' => 'moved']
+        );
+
+        $return = '<ul class="lp_resource"><li class="lp_resource_element">'
+            .$importIcon
+            .Display::url(
+                get_lang('Import'),
+                $webPath."tool_import.php?$cidReq&".http_build_query(['lp_id' => $lpId])
+            )
+            .'</li>';
+
+        /** @var ToolLaunch $tool */
+        foreach ($tools as $tool) {
+            $toolAnchor = Display::url(
+                Security::remove_XSS($tool->getTitle()),
+                api_get_self()."?$cidReq&"
+                    .http_build_query(
+                        ['action' => 'add_item', 'type' => TOOL_XAPI, 'file' => $tool->getId(), 'lp_id' => $lpId]
+                    ),
+                ['class' => 'moved']
+            );
+
+            $return .= Display::tag(
+                'li',
+                $moveIcon.$importIcon.$toolAnchor,
+                [
+                    'class' => 'lp_resource_element',
+                    'data_id' => $tool->getId(),
+                    'data_type' => TOOL_XAPI,
+                    'title' => $tool->getTitle(),
+                ]
+            );
+        }
+
+        $return .= '</ul>';
+
+        return $return;
     }
 
     /**

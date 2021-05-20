@@ -373,7 +373,7 @@
         {% endif %}
         {% if disable_js_in_lp_view == 0 %}
             $(function() {
-                var arr = ['link', 'sco'];
+                var arr = ['link', 'sco', 'xapi'];
                 if ($.inArray(olms.lms_item_type, arr) == -1) {
                     {{ frame_ready }}
                 }

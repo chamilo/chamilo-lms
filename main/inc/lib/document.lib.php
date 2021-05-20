@@ -3001,6 +3001,7 @@ class DocumentManager
      * @param array  $courseInfo              Optional. Course info
      * @param int    $sessionId               Optional. Session ID
      * @param int    $groupId                 Optional. Group ID
+     * @param bool   $recordAudio
      *
      * @return array|bool
      */
@@ -3018,7 +3019,8 @@ class DocumentManager
         $userId = 0,
         array $courseInfo = [],
         $sessionId = 0,
-        $groupId = 0
+        $groupId = 0,
+        $recordAudio = false
     ) {
         $course_info = $courseInfo ?: api_get_course_info();
         $sessionId = $sessionId ?: api_get_session_id();
@@ -3027,6 +3029,11 @@ class DocumentManager
         $base_work_dir = $sys_course_path.$course_dir;
         $userId = $userId ?: api_get_user_id();
         $groupId = $groupId ?: api_get_group_id();
+
+        if ($recordAudio) {
+            $base_work_dir = $sys_course_path.$course_info['path'].'/exercises';
+            $path = str_replace('/../exercises/', '/', $path);
+        }
 
         if (isset($files[$fileKey])) {
             $uploadOk = process_uploaded_file($files[$fileKey], $show_output);
@@ -3531,10 +3538,16 @@ class DocumentManager
 
         // If you want to debug it, I advise you to do "echo" on the eval statements.
         $newResources = [];
+        $added = [];
         if (!empty($resources) && $user_in_course) {
             foreach ($resources as $resource) {
+                $docId = $resource['id'];
+                if (in_array($docId, $added)) {
+                    continue;
+                }
+
                 $is_visible = self::is_visible_by_id(
-                    $resource['id'],
+                    $docId,
                     $course_info,
                     $session_id,
                     api_get_user_id()
@@ -3545,7 +3558,7 @@ class DocumentManager
                         continue;
                     }
                 }
-
+                $added[] = $docId;
                 $newResources[] = $resource;
             }
         }
@@ -4191,7 +4204,7 @@ class DocumentManager
      *
      * @return array
      */
-    public static function getFormatTypeListConvertor($mode = 'from', $extension)
+    public static function getFormatTypeListConvertor($mode, $extension)
     {
         $formatTypesList = [];
         $formatTypes = ['text', 'spreadsheet', 'presentation', 'drawing'];
@@ -5132,7 +5145,7 @@ class DocumentManager
         $document_data,
         $show_as_icon = false,
         $counter = null,
-        $visibility,
+        $visibility = true,
         $size = 0,
         $isAllowedToEdit = false,
         $isCertificateMode = false
@@ -5158,7 +5171,6 @@ class DocumentManager
         $filetype = $document_data['filetype'];
         $path = $document_data['path'];
         $url_path = urlencode($document_data['path']);
-
         $basePageUrl = api_get_path(WEB_CODE_PATH).'document/';
         $pageUrl = $basePageUrl.'document.php';
 
@@ -5171,19 +5183,19 @@ class DocumentManager
 
         if (!$show_as_icon) {
             // Build download link (icon)
-            $forcedownload_link = $filetype == 'folder'
+            $forcedownload_link = $filetype === 'folder'
                 ? $pageUrl.'?'.$courseParams.'&action=downloadfolder&id='.$document_data['id']
                 : $pageUrl.'?'.$courseParams.'&amp;action=download&amp;id='.$document_data['id'];
             // Folder download or file download?
-            $forcedownload_icon = $filetype == 'folder' ? 'save_pack.png' : 'save.png';
+            $forcedownload_icon = $filetype === 'folder' ? 'save_pack.png' : 'save.png';
             // Prevent multiple clicks on zipped folder download
-            $prevent_multiple_click = $filetype == 'folder' ? " onclick=\"javascript: if(typeof clic_$dbl_click_id == 'undefined' || !clic_$dbl_click_id) { clic_$dbl_click_id=true; window.setTimeout('clic_".($dbl_click_id++)."=false;',10000); } else { return false; }\"" : '';
+            $prevent_multiple_click = $filetype === 'folder' ? " onclick=\"javascript: if(typeof clic_$dbl_click_id == 'undefined' || !clic_$dbl_click_id) { clic_$dbl_click_id=true; window.setTimeout('clic_".($dbl_click_id++)."=false;',10000); } else { return false; }\"" : '';
         }
 
         $target = '_self';
         $is_browser_viewable_file = false;
 
-        if ($filetype == 'file') {
+        if ($filetype === 'file') {
             // Check the extension
             $ext = explode('.', $path);
             $ext = strtolower($ext[count($ext) - 1]);
@@ -5191,11 +5203,7 @@ class DocumentManager
             // HTML-files an some other types are shown in a frameset by default.
             $is_browser_viewable_file = self::isBrowserViewable($ext);
             if ($is_browser_viewable_file) {
-                if ($ext == 'pdf' || in_array($ext, $webODFList)) {
-                    $url = $pageUrl.'?'.$courseParams.'&amp;action=download&amp;id='.$document_data['id'];
-                } else {
-                    $url = $basePageUrl.'showinframes.php?'.$courseParams.'&id='.$document_data['id'];
-                }
+                $url = $basePageUrl.'showinframes.php?'.$courseParams.'&id='.$document_data['id'];
             } else {
                 // url-encode for problematic characters (we may not call them dangerous characters...)
                 //$path = str_replace('%2F', '/', $url_path).'?'.$courseParams;
@@ -5213,12 +5221,12 @@ class DocumentManager
         $tooltip_title = $title;
         $tooltip_title_alt = $tooltip_title;
 
-        if ($filetype == 'link') {
+        if ($filetype === 'link') {
             $tooltip_title_alt = $title;
             $url = $document_data['comment'].'" target="_blank';
         }
 
-        if ($path == '/shared_folder') {
+        if ($path === '/shared_folder') {
             $tooltip_title_alt = get_lang('UserFolders');
         } elseif (strstr($path, 'shared_folder_session_')) {
             $tooltip_title_alt = get_lang('UserFolders').' ('.api_get_session_name(api_get_session_id()).')';
@@ -5306,6 +5314,21 @@ class DocumentManager
                     Display::return_icon('open_in_new_window.png', get_lang('OpenInANewWindow'), [], ICON_SIZE_SMALL).'&nbsp;&nbsp;</a>';
             }
 
+            $hook = HookDocumentItemView::create();
+            $hookItemViewTools = $hook->setEventData($document_data)->notifyDocumentItemView();
+
+            $rightTools = implode(
+                PHP_EOL,
+                [
+                    $force_download_html,
+                    $send_to,
+                    $copyToMyFiles,
+                    $open_in_new_window_link,
+                    $pdf_icon,
+                    $hookItemViewTools ? implode(PHP_EOL, $hookItemViewTools) : '',
+                ]
+            );
+
             if ($filetype === 'file') {
                 // Sound preview
                 if (preg_match('/mp3$/i', urldecode($checkExtension)) ||
@@ -5314,7 +5337,7 @@ class DocumentManager
                 ) {
                     return '<span style="float:left" '.$visibility_class.'>'.
                         $title.
-                        '</span>'.$force_download_html.$send_to.$copyToMyFiles.$open_in_new_window_link.$pdf_icon;
+                        '</span>'.$rightTools;
                 } elseif (
                     // Show preview
                     preg_match('/swf$/i', urldecode($checkExtension)) ||
@@ -5342,8 +5365,7 @@ class DocumentManager
                                 'style' => 'float:left;',
                             ]
                         )
-                        .$force_download_html.$send_to.$copyToMyFiles
-                        .$open_in_new_window_link.$pdf_icon;
+                        .$rightTools;
                 } else {
                     // For a "PDF Download" of the file.
                     $pdfPreview = null;
@@ -5358,11 +5380,11 @@ class DocumentManager
                     }
                     // No plugin just the old and good showinframes.php page
                     return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" style="float:left" '.$visibility_class.' >'.$title.'</a>'.
-                        $pdfPreview.$force_download_html.$send_to.$copyToMyFiles.$open_in_new_window_link.$pdf_icon;
+                        $pdfPreview.$rightTools;
                 }
             } else {
-                return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.$title.'</a>'.
-                    $force_download_html.$send_to.$copyToMyFiles.$open_in_new_window_link.$pdf_icon;
+                return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.$title.'</a>'
+                    .$rightTools;
             }
             // end copy files to users myfiles
         } else {
@@ -5561,7 +5583,7 @@ class DocumentManager
      *
      * @return string html img tags with hyperlinks
      */
-    public static function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, $visibility)
+    public static function build_edit_icons($document_data, $id, $is_template, $is_read_only, $visibility)
     {
         $sessionId = api_get_session_id();
         $courseParams = api_get_cidreq();
@@ -5633,7 +5655,7 @@ class DocumentManager
             $parent_id
         );
 
-        if (!$is_read_only /* or ($session_id!=api_get_session_id()) */) {
+        if (!$is_read_only) {
             // Add action to covert to PDF, will create a new document whit same filename but .pdf extension
             // @TODO: add prompt to select a format target
             if (!in_array($path, self::get_system_folders())) {
@@ -6553,7 +6575,7 @@ class DocumentManager
             // checking
             $table = Database::get_course_table(TABLE_DOCUMENT);
             $courseId = $courseInfo['real_id'];
-            echo $sql = "SELECT * FROM $table WHERE id = $documentId AND c_id = $courseId";
+            $sql = "SELECT * FROM $table WHERE id = $documentId AND c_id = $courseId";
             $result = Database::query($sql);
             $exists = Database::num_rows($result) > 0;
             $fileDeletedFromDb = !$exists;
@@ -6647,6 +6669,12 @@ class DocumentManager
      */
     public static function getFileHostingWhiteList()
     {
+        $links = api_get_configuration_value('documents_custom_cloud_link_list');
+
+        if (!empty($links) && isset($links['links'])) {
+            return $links['links'];
+        }
+
         return [
             'asuswebstorage.com',
             'box.com',
@@ -6730,7 +6758,7 @@ class DocumentManager
         $sessionId = null,
         $documentId = null,
         $groupId = 0,
-        $file
+        $file = null
     ) {
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 

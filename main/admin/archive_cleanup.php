@@ -46,7 +46,7 @@ if ($form->validate()) {
     }
 
     $archive_path = api_get_path(SYS_ARCHIVE_PATH);
-    $htaccess = @file_get_contents($archive_path.'.htaccess');
+    $htaccess = 'php_flag engine off';
     $result = rmdirr($archive_path, true, true);
     if (false === $result) {
         Display::addFlash(Display::return_message(get_lang('ArchiveDirCleanupFailed'), 'error'));

@@ -138,7 +138,6 @@ class ImportCsv
                     $preMethod = ucwords($parts[1]);
                     $preMethod = str_replace('-static', 'Static', $preMethod);
                     $method = 'import'.$preMethod;
-
                     $isStatic = strpos($method, 'Static');
 
                     if ($method == 'importSessionsextidStatic') {
@@ -165,9 +164,14 @@ class ImportCsv
                         $method = 'importOpenSessions';
                     }
 
-                    if ($method == 'importSubsessionsextidStatic') {
+                    if ($method === 'importSessionsall') {
+                        $method = 'importSessionsUsersCareers';
+                    }
+
+                    if ($method === 'importSubsessionsextidStatic') {
                         $method = 'importSubscribeUserToCourseSessionExtStatic';
                     }
+
                     if (method_exists($this, $method)) {
                         if ((
                                 $method == 'importSubscribeStatic' ||
@@ -207,6 +211,7 @@ class ImportCsv
                 'teachers',
                 'courses',
                 'sessions',
+                'sessionsall',
                 'opensessions',
                 'subscribe-static',
                 'courseinsert-static',
@@ -1091,9 +1096,10 @@ class ImportCsv
                     $courseCode = $row['coursecode'];
                 }
                 $courseInfo = api_get_course_info($courseCode);
+                $courseId = $courseInfo['real_id'] ?? 0;
 
                 $item = $courseExtraFieldValue->get_values_by_handler_and_field_variable(
-                    $courseInfo['real_id'],
+                    $courseId,
                     'disable_import_calendar'
                 );
 
@@ -1108,7 +1114,7 @@ class ImportCsv
                     $this->logger->addInfo("Course '$courseCode' does not exists");
                 } else {
                     if ($courseInfo['visibility'] == COURSE_VISIBILITY_HIDDEN) {
-                        $this->logger->addInfo("Course '".$courseInfo['code']."' has hidden visiblity. Skip");
+                        $this->logger->addInfo("Course '".$courseInfo['code']."' has hidden visibility. Skip");
                         $errorFound = true;
                     }
                 }
@@ -1120,10 +1126,7 @@ class ImportCsv
                 $sessionInfo = [];
                 if (!empty($sessionId) && !empty($courseInfo)) {
                     $sessionInfo = api_get_session_info($sessionId);
-                    $courseIncluded = SessionManager::relation_session_course_exist(
-                        $sessionId,
-                        $courseInfo['real_id']
-                    );
+                    $courseIncluded = SessionManager::relation_session_course_exist($sessionId, $courseId);
 
                     if ($courseIncluded == false) {
                         $this->logger->addInfo(
@@ -1131,10 +1134,7 @@ class ImportCsv
                         );
                         $errorFound = true;
                     } else {
-                        $teachers = CourseManager::get_coach_list_from_course_code(
-                            $courseInfo['code'],
-                            $sessionId
-                        );
+                        $teachers = CourseManager::get_coach_list_from_course_code($courseInfo['code'], $sessionId);
 
                         // Getting first teacher.
                         if (!empty($teachers)) {
@@ -1159,8 +1159,8 @@ class ImportCsv
                 $startTime = $row['time_start'];
                 $endTime = $row['time_end'];
                 $title = $row['title'];
-                $comment = $row['comment'];
-                $color = isset($row['color']) ? $row['color'] : '';
+                $comment = $row['comment'] ?? '';
+                $color = $row['color'] ?? '';
 
                 $startDateYear = substr($date, 0, 4);
                 $startDateMonth = substr($date, 4, 2);
@@ -1170,11 +1170,11 @@ class ImportCsv
                 $endDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$endTime.':00';
 
                 if (!api_is_valid_date($startDate) || !api_is_valid_date($endDate)) {
-                    $this->logger->addInfo("Verify your dates:  '$startDate' : '$endDate' ");
+                    $this->logger->addInfo("Verify your dates: '$startDate' : '$endDate' ");
                     $errorFound = true;
                 }
 
-                // Check session dates
+                // Check session dates.
                 if ($sessionInfo && !empty($sessionInfo['access_start_date'])) {
                     $date = new \DateTime($sessionInfo['access_start_date']);
                     $interval = new \DateInterval('P7D');
@@ -1189,6 +1189,12 @@ class ImportCsv
                     }
                 }
 
+                $sendAnnouncement = false;
+                if (isset($row['sendmail']) && 1 === (int) $row['sendmail']) {
+                    $sendAnnouncement = true;
+                }
+
+                // New condition.
                 if ($errorFound == false) {
                     $eventsToCreate[] = [
                         'start' => $startDate,
@@ -1199,6 +1205,7 @@ class ImportCsv
                         'session_id' => $sessionId,
                         'comment' => $comment,
                         'color' => $color,
+                        'send_announcement' => $sendAnnouncement,
                         $this->extraFieldIdNameList['calendar_event'] => $row['external_calendar_itemID'],
                     ];
                 }
@@ -1236,6 +1243,7 @@ class ImportCsv
                 'mail_sent' => 0,
                 'mail_not_sent_announcement_exists' => 0,
                 'mail_not_sent_because_date' => 0,
+                'mail_not_sent_because_setting' => 0,
             ];
 
             $eventsToCreateFinal = [];
@@ -1402,7 +1410,7 @@ class ImportCsv
                     $eventAlreadySent[$courseInfo['real_id']][$event['session_id']] = true;
                 }
 
-                // Working days (Mon-Fri)see BT#12156#note-16
+                // Working days (Mon-Fri) see BT#12156#note-16
                 $days = 3;
                 $startDatePlusDays = api_strtotime("$days weekdays");
 
@@ -1415,168 +1423,180 @@ class ImportCsv
                     'startDatePlusDays: '.api_get_utc_datetime($startDatePlusDays).' - First date: '.$firstDate
                 );
 
-                // Send
+                // Send.
                 $sendMail = false;
                 if ($startDatePlusDays > api_strtotime($firstDate)) {
                     $sendMail = true;
                 }
 
+                $allowAnnouncementSendEmail = false;
+                if ($event['send_announcement']) {
+                    $allowAnnouncementSendEmail = true;
+                }
+
                 // Send announcement to users
-                if ($sendMail && $alreadyAdded == false) {
-                    $start = $firstDate;
-                    $end = $firstEndDate;
+                if ($allowAnnouncementSendEmail) {
+                    if ($sendMail && $alreadyAdded == false) {
+                        $start = $firstDate;
+                        $end = $firstEndDate;
 
-                    if (!empty($end) &&
-                        api_format_date($start, DATE_FORMAT_LONG) ==
-                        api_format_date($end, DATE_FORMAT_LONG)
-                    ) {
-                        $date = api_format_date($start, DATE_FORMAT_LONG).' ('.
-                            api_format_date($start, TIME_NO_SEC_FORMAT).' '.
-                            api_format_date($end, TIME_NO_SEC_FORMAT).')';
-                    } else {
-                        $date = api_format_date($start, DATE_TIME_FORMAT_LONG_24H).' - '.
+                        if (!empty($end) &&
+                            api_format_date($start, DATE_FORMAT_LONG) ==
+                            api_format_date($end, DATE_FORMAT_LONG)
+                        ) {
+                            $date = api_format_date($start, DATE_FORMAT_LONG).' ('.
+                                api_format_date($start, TIME_NO_SEC_FORMAT).' '.
+                                api_format_date($end, TIME_NO_SEC_FORMAT).')';
+                        } else {
+                            $date = api_format_date($start, DATE_TIME_FORMAT_LONG_24H).' - '.
                                 api_format_date($end, DATE_TIME_FORMAT_LONG_24H);
-                    }
-
-                    $sessionName = '';
-                    $sessionId = isset($event['session_id']) && !empty($event['session_id']) ? $event['session_id'] : 0;
-                    if (!empty($sessionId)) {
-                        $sessionName = api_get_session_name($sessionId);
-                    }
-
-                    $courseTitle = $courseInfo['title'];
-
-                    // Get the value of the "careerid" extra field of this
-                    // session
-                    $sessionExtraFieldValue = new ExtraFieldValue('session');
-                    $externalCareerIdList = $sessionExtraFieldValue->get_values_by_handler_and_field_variable(
-                        $event['session_id'],
-                        'careerid'
-                    );
-                    $externalCareerIdList = $externalCareerIdList['value'];
-                    if (substr($externalCareerIdList, 0, 1) === '[') {
-                        $externalCareerIdList = substr($externalCareerIdList, 1, -1);
-                        $externalCareerIds = preg_split('/,/', $externalCareerIdList);
-                    } else {
-                        $externalCareerIds = [$externalCareerIdList];
-                    }
-
-                    $careerExtraFieldValue = new ExtraFieldValue('career');
-                    $career = new Career();
-                    $careerName = '';
-
-                    // Concat the names of each career linked to this session
-                    foreach ($externalCareerIds as $externalCareerId) {
-                        // Using the external_career_id field (from above),
-                        // find the career ID
-                        $careerValue = $careerExtraFieldValue->get_item_id_from_field_variable_and_field_value(
-                            'external_career_id',
-                            $externalCareerId
-                        );
-                        $career = $career->find($careerValue['item_id']);
-                        $careerName .= $career['name'].', ';
-                    }
-                    // Remove trailing comma
-                    $careerName = substr($careerName, 0, -2);
-
-                    $subject = sprintf(
-                        get_lang('WelcomeToPortalXInCourseSessionX'),
-                        api_get_setting('Institution'),
-                        $courseInfo['title']
-                    );
-
-                    $tpl->assign('course_title', $courseTitle);
-                    $tpl->assign('career_name', $careerName);
-                    $tpl->assign('first_lesson', $date);
-                    $tpl->assign('location', $eventComment);
-                    $tpl->assign('session_name', $sessionName);
-
-                    if (empty($sessionId)) {
-                        $teachersToString = CourseManager::getTeacherListFromCourseCodeToString($courseInfo['code'], ',');
-                    } else {
-                        $teachersToString = SessionManager::getCoachesByCourseSessionToString(
-                            $sessionId,
-                            $courseInfo['real_id'],
-                            ','
-                        );
-                    }
-
-                    $tpl->assign('teachers', $teachersToString);
-
-                    $templateName = $tpl->get_template('mail/custom_calendar_welcome.tpl');
-                    $emailBody = $tpl->fetch($templateName);
-
-                    $coaches = SessionManager::getCoachesByCourseSession(
-                        $event['session_id'],
-                        $courseInfo['real_id']
-                    );
-
-                    // Search if an announcement exists:
-                    $announcementsWithTitleList = AnnouncementManager::getAnnouncementsByTitle(
-                        $subject,
-                        $courseInfo['real_id'],
-                        $event['session_id'],
-                        1
-                    );
-
-                    if (count($announcementsWithTitleList) === 0) {
-                        $this->logger->addInfo(
-                            'Mail to be sent because start date: '.$event['start'].' and no announcement found.'
-                        );
-
-                        $senderId = $this->defaultAdminId;
-                        if (!empty($coaches) && isset($coaches[0]) && !empty($coaches[0])) {
-                            $senderId = $coaches[0];
                         }
 
-                        $announcementId = AnnouncementManager::add_announcement(
-                            $courseInfo,
+                        $sessionName = '';
+                        $sessionId = isset($event['session_id']) && !empty($event['session_id']) ? $event['session_id'] : 0;
+                        if (!empty($sessionId)) {
+                            $sessionName = api_get_session_name($sessionId);
+                        }
+
+                        $courseTitle = $courseInfo['title'];
+
+                        // Get the value of the "careerid" extra field of this
+                        // session
+                        $sessionExtraFieldValue = new ExtraFieldValue('session');
+                        $externalCareerIdList = $sessionExtraFieldValue->get_values_by_handler_and_field_variable(
                             $event['session_id'],
-                            $subject,
-                            $emailBody,
-                            [
-                                'everyone',
-                                'users' => $coaches,
-                            ],
-                            [],
-                            null,
-                            null,
-                            false,
-                            $senderId
+                            'careerid'
+                        );
+                        $externalCareerIdList = $externalCareerIdList['value'];
+                        if (substr($externalCareerIdList, 0, 1) === '[') {
+                            $externalCareerIdList = substr($externalCareerIdList, 1, -1);
+                            $externalCareerIds = preg_split('/,/', $externalCareerIdList);
+                        } else {
+                            $externalCareerIds = [$externalCareerIdList];
+                        }
+
+                        $careerExtraFieldValue = new ExtraFieldValue('career');
+                        $career = new Career();
+                        $careerName = '';
+
+                        // Concat the names of each career linked to this session
+                        foreach ($externalCareerIds as $externalCareerId) {
+                            // Using the external_career_id field (from above),
+                            // find the career ID
+                            $careerValue = $careerExtraFieldValue->get_item_id_from_field_variable_and_field_value(
+                                'external_career_id',
+                                $externalCareerId
+                            );
+                            $career = $career->find($careerValue['item_id']);
+                            $careerName .= $career['name'].', ';
+                        }
+                        // Remove trailing comma
+                        $careerName = substr($careerName, 0, -2);
+                        $subject = sprintf(
+                            get_lang('WelcomeToPortalXInCourseSessionX'),
+                            api_get_setting('Institution'),
+                            $courseInfo['title']
                         );
 
-                        if ($announcementId) {
-                            $this->logger->addInfo("Announcement added: $announcementId in $info");
-                            $this->logger->addInfo("<<--SENDING MAIL Sender id: $senderId-->>");
-                            $report['mail_sent']++;
-                            AnnouncementManager::sendEmail(
-                                $courseInfo,
-                                $event['session_id'],
-                                $announcementId,
-                                false,
-                                false,
-                                $this->logger,
-                                $senderId,
-                                true
+                        $tpl->assign('course_title', $courseTitle);
+                        $tpl->assign('career_name', $careerName);
+                        $tpl->assign('first_lesson', $date);
+                        $tpl->assign('location', $eventComment);
+                        $tpl->assign('session_name', $sessionName);
+
+                        if (empty($sessionId)) {
+                            $teachersToString = CourseManager::getTeacherListFromCourseCodeToString(
+                                $courseInfo['code'],
+                                ','
                             );
                         } else {
-                            $this->logger->addError(
-                                "Error when trying to add announcement with title $subject here: $info and SenderId = $senderId"
+                            $teachersToString = SessionManager::getCoachesByCourseSessionToString(
+                                $sessionId,
+                                $courseInfo['real_id'],
+                                ','
+                            );
+                        }
+
+                        $tpl->assign('teachers', $teachersToString);
+
+                        $templateName = $tpl->get_template('mail/custom_calendar_welcome.tpl');
+                        $emailBody = $tpl->fetch($templateName);
+
+                        $coaches = SessionManager::getCoachesByCourseSession(
+                            $event['session_id'],
+                            $courseInfo['real_id']
+                        );
+
+                        // Search if an announcement exists:
+                        $announcementsWithTitleList = AnnouncementManager::getAnnouncementsByTitle(
+                            $subject,
+                            $courseInfo['real_id'],
+                            $event['session_id'],
+                            1
+                        );
+
+                        if (count($announcementsWithTitleList) === 0) {
+                            $this->logger->addInfo(
+                                'Mail to be sent because start date: '.$event['start'].' and no announcement found.'
+                            );
+
+                            $senderId = $this->defaultAdminId;
+                            if (!empty($coaches) && isset($coaches[0]) && !empty($coaches[0])) {
+                                $senderId = $coaches[0];
+                            }
+
+                            $announcementId = AnnouncementManager::add_announcement(
+                                $courseInfo,
+                                $event['session_id'],
+                                $subject,
+                                $emailBody,
+                                [
+                                    'everyone',
+                                    'users' => $coaches,
+                                ],
+                                [],
+                                null,
+                                null,
+                                false,
+                                $senderId
+                            );
+
+                            if ($announcementId) {
+                                $this->logger->addInfo("Announcement added: $announcementId in $info");
+                                $this->logger->addInfo("<<--SENDING MAIL Sender id: $senderId-->>");
+                                $report['mail_sent']++;
+                                AnnouncementManager::sendEmail(
+                                    $courseInfo,
+                                    $event['session_id'],
+                                    $announcementId,
+                                    false,
+                                    false,
+                                    $this->logger,
+                                    $senderId,
+                                    true
+                                );
+                            } else {
+                                $this->logger->addError(
+                                    "Error when trying to add announcement with title $subject here: $info and SenderId = $senderId"
+                                );
+                            }
+                        } else {
+                            $report['mail_not_sent_announcement_exists']++;
+                            $this->logger->addInfo(
+                                "Mail NOT sent. An announcement seems to be already saved in '$info'"
                             );
                         }
                     } else {
-                        $report['mail_not_sent_announcement_exists']++;
                         $this->logger->addInfo(
-                            "Mail NOT sent. An announcement seems to be already saved in '$info'"
+                            "Send Mail: ".intval($sendMail).' - Already added: '.intval($alreadyAdded)
                         );
+                        if ($sendMail == false) {
+                            $report['mail_not_sent_because_date']++;
+                        }
                     }
                 } else {
-                    $this->logger->addInfo(
-                        "Send Mail: ".intval($sendMail).' - Already added: '.intval($alreadyAdded)
-                    );
-                    if ($sendMail == false) {
-                        $report['mail_not_sent_because_date']++;
-                    }
+                    $this->logger->addInfo("Announcement not sent because config 'sendmail' in CSV");
+                    $report['mail_not_sent_because_setting']++;
                 }
 
                 $content = '';
@@ -2350,6 +2370,105 @@ class ImportCsv
         &$groupBackup = []
     ) {
         $this->importSessions($file, $moveFile, $teacherBackup, $groupBackup);
+    }
+
+    private function importSessionsUsersCareers(
+        $file,
+        $moveFile = false,
+        &$teacherBackup = [],
+        &$groupBackup = []
+    ) {
+        $data = Import::csvToArray($file);
+        if (!empty($data)) {
+            $extraFieldValueCareer = new ExtraFieldValue('career');
+            $sessionExtraFieldValue = new ExtraFieldValue('session');
+            $career = new Career();
+
+            $this->logger->addInfo(count($data)." records found.");
+            foreach ($data as $row) {
+                $users = $row['Users'];
+                if (empty($users)) {
+                    $this->logger->addError('No users found');
+                    continue;
+                }
+
+                $users = explode('|', $users);
+                $careerList = str_replace(['[', ']'], '', $row['extra_careerid']);
+                $careerList = explode(',', $careerList);
+
+                $finalCareerIdList = [];
+                $careerListValidated = [];
+                foreach ($careerList as $careerId) {
+                    $realCareerIdList = $extraFieldValueCareer->get_item_id_from_field_variable_and_field_value(
+                        'external_career_id',
+                        $careerId
+                    );
+                    if (isset($realCareerIdList['item_id'])) {
+                        $careerListValidated[] = $careerId;
+                        $finalCareerIdList[] = $realCareerIdList['item_id'];
+                    }
+                }
+
+                if (empty($finalCareerIdList)) {
+                    $this->logger->addError('Careers not found: '.print_r($finalCareerIdList, 1));
+                    continue;
+                }
+
+                //$chamiloSessionId = $row['SessionID'];
+
+                $chamiloSessionId = SessionManager::getSessionIdFromOriginalId(
+                    $row['SessionID'],
+                    $this->extraFieldIdNameList['session']
+                );
+
+                $sessionInfo = api_get_session_info($chamiloSessionId);
+
+                if (empty($sessionInfo)) {
+                    $this->logger->addError('Session does not exists: '.$chamiloSessionId);
+                    continue;
+                } else {
+                    $this->logger->addInfo("Session id: ".$sessionInfo['id']);
+                }
+
+                $sessionId = $sessionInfo['id'];
+
+                // Add career to session.
+                $externalCareerIdList = $sessionExtraFieldValue->get_values_by_handler_and_field_variable(
+                    $sessionId,
+                    'careerid'
+                );
+
+                if (empty($externalCareerIdList) ||
+                    (isset($externalCareerIdList['value']) && empty($externalCareerIdList['value']))
+                ) {
+                    $careerItem = '['.implode(',', $careerListValidated).']';
+                    $params = ['item_id' => $sessionId, 'extra_careerid' => $careerItem];
+                    $this->logger->addInfo("Saving career: $careerItem to session: $sessionId");
+                    $sessionExtraFieldValue->saveFieldValues($params, true);
+                } else {
+                    /*foreach ($finalCareerIdList as $careerId) {
+                        if (empty($externalCareerIdList)) {
+                            $params = ['item_id' => $sessionId, 'extra_careerid' => $careerId];
+                            $sessionExtraFieldValue->saveFieldValues($params, true);
+                        }
+                    }*/
+                }
+
+                // Add career to users.
+                foreach ($users as $username) {
+                    $userInfo = api_get_user_info_from_username($username);
+                    if (empty($userInfo)) {
+                        $this->logger->addError('username not found: '.$username);
+                        continue;
+                    }
+
+                    foreach ($finalCareerIdList as $careerId) {
+                        $this->logger->addInfo("Adding Career $careerId: To user $username");
+                        UserManager::addUserCareer($userInfo['id'], $careerId);
+                    }
+                }
+            }
+        }
     }
 
     /**

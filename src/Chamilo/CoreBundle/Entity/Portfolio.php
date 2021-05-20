@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,7 +24,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  }
  * )
  * Add @ to the next line if api_get_configuration_value('allow_portfolio_tool') is true
- * ORM\Entity()
+ * ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\PortfolioRepository")
  */
 class Portfolio
 {
@@ -124,6 +125,13 @@ class Portfolio
      * @ORM\Column(name="origin_type", type="integer", nullable=true)
      */
     private $originType;
+
+    /**
+     * @var float|null
+     *
+     * @ORM\Column(name="score", type="float", nullable=true)
+     */
+    private $score;
 
     /**
      * Portfolio constructor.
@@ -353,6 +361,16 @@ class Portfolio
         return $this->comments;
     }
 
+    public function getLastComments(int $number = 3): Collection
+    {
+        $criteria = Criteria::create();
+        $criteria
+            ->orderBy(['date' => 'DESC'])
+            ->setMaxResults($number);
+
+        return $this->comments->matching($criteria);
+    }
+
     public function getOrigin(): ?int
     {
         return $this->origin;
@@ -385,10 +403,16 @@ class Portfolio
 
     public function getExcerpt(int $count = 380): string
     {
-        $excerpt = strip_tags($this->content);
-        $excerpt = substr($excerpt, 0, $count);
-        $excerpt = substr($excerpt, 0, strripos($excerpt, " "));
+        return api_get_short_text_from_html($this->content, $count);
+    }
 
-        return $excerpt;
+    public function getScore(): ?float
+    {
+        return $this->score;
+    }
+
+    public function setScore(?float $score): void
+    {
+        $this->score = $score;
     }
 }

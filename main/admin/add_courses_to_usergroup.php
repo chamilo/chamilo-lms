@@ -142,7 +142,7 @@ function search($needle, $type)
             $list = CourseManager::get_courses_list(
                 0,
                 0,
-                2,
+                'title',
                 'ASC',
                 -1,
                 $needle

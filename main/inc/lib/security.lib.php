@@ -58,6 +58,8 @@ class Security
             return false;
         }
 
+        // Clean $abs_path.
+        $abs_path = str_replace(['//', '../'], ['/', ''], $abs_path);
         $true_path = str_replace("\\", '/', realpath($abs_path));
         $checker_path = str_replace("\\", '/', realpath($checker_path));
 

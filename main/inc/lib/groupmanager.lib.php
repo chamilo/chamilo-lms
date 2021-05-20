@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
@@ -399,7 +400,15 @@ class GroupManager
      */
     public static function create_class_groups($categoryId)
     {
-        $options['where'] = [' usergroup.course_id = ? ' => api_get_course_int_id()];
+        $options = [];
+        $sessionId = api_get_session_id();
+        if (empty($sessionId)) {
+            $options['where'] = [' usergroup.course_id = ? ' => api_get_course_int_id()];
+        } else {
+            $options['session_id'] = $sessionId;
+            $options['where'] = [' usergroup.session_id = ? ' => $sessionId];
+        }
+
         $obj = new UserGroup();
         $classes = $obj->getUserGroupInCourse($options);
         $group_ids = [];
@@ -1225,8 +1234,10 @@ class GroupManager
                     g.id = $group_id";
 
         if (!empty($column) && !empty($direction)) {
-            $column = Database::escape_string($column, null, false);
-            $direction = ('ASC' == $direction ? 'ASC' : 'DESC');
+            $column = Database::escape_string($column);
+            $columns = ['id', 'firstname', 'lastname'];
+            $column = in_array($column, $columns) ? $column : 'lastname';
+            $direction = ('ASC' === $direction ? 'ASC' : 'DESC');
             $sql .= " ORDER BY $column $direction";
         }
 
@@ -2474,7 +2485,7 @@ class GroupManager
         );
         $table->set_additional_parameters(['category' => $category_id]);
         $column = 0;
-        if (api_is_allowed_to_edit(false, true) and count($group_list) > 1) {
+        if (api_is_allowed_to_edit(false, true) && count($group_list) > 1) {
             $table->set_header($column++, '', false);
         }
         $table->set_header($column++, get_lang('Groups'));

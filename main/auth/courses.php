@@ -284,6 +284,7 @@ switch ($action) {
                 $categoryCode,
                 $searchTerm,
                 true,
+                true,
                 $conditions
             );
         }

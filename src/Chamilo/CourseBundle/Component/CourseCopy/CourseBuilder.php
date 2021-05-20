@@ -1494,6 +1494,13 @@ class CourseBuilder
                     $visibility = '1';
                 }
 
+                $accumulateWorkTime = 0;
+                if (api_get_configuration_value('lp_minimum_time')) {
+                    if (isset($obj->accumulate_work_time) && !empty($obj->accumulate_work_time)) {
+                        $accumulateWorkTime = $obj->accumulate_work_time;
+                    }
+                }
+
                 $lp = new CourseCopyLearnpath(
                     $obj->id,
                     $obj->lp_type,
@@ -1522,12 +1529,13 @@ class CourseBuilder
                     $obj->expired_on,
                     $obj->session_id,
                     $obj->category_id,
-                    $items
+                    $obj->subscribe_users,
+                    $obj->hide_toc_frame,
+                    $items,
+                    $accumulateWorkTime
                 );
-
                 $extraFieldValue = new \ExtraFieldValue('lp');
                 $lp->extraFields = $extraFieldValue->getAllValuesByItem($obj->id);
-
                 $this->course->add_resource($lp);
 
                 if (!empty($obj->preview_image)) {

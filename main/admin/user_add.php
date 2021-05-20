@@ -209,6 +209,7 @@ $group[] = $form->createElement(
         'id' => 'password',
         'autocomplete' => 'new-password',
         'onkeydown' => 'javascript: password_switch_radio_button();',
+        'show_hide' => true,
         //'required' => 'required'
     ]
 );
@@ -302,7 +303,6 @@ if ($allowEmailTemplate) {
 
 $jquery_ready_content = $returnParams['jquery_ready_content'];
 
-// the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
 $htmlHeadXtra[] = '<script>
 $(function () {
     '.$jquery_ready_content.'

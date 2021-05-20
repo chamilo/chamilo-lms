@@ -253,13 +253,57 @@ abstract class Question
         }
 
         $title .= $showQuestionTitleHtml ? '' : '<strong>';
-        $title .= $itemNumber.'. '.$this->selectTitle();
+        $checkIfShowNumberQuestion = $this->getShowHideConfiguration();
+        if ($checkIfShowNumberQuestion != 1) {
+            $title .= $itemNumber.'. ';
+        }
+        $title .= $this->selectTitle();
+
         $title .= $showQuestionTitleHtml ? '' : '</strong>';
 
         return Display::div(
             $title,
             ['class' => 'question_title']
         );
+    }
+
+    /**
+     * Gets the respective value to show or hide the number of a question in the exam.
+     * If the field does not exist in the database, it will return 0.
+     *
+     * @return int
+     */
+    public function getShowHideConfiguration()
+    {
+        $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+        $tblQuizRelQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $showHideConfiguration = api_get_configuration_value('quiz_hide_question_number');
+        if (!$showHideConfiguration) {
+            return 0;
+        }
+        // Check if the field exist
+        $checkFieldSql = "SHOW COLUMNS FROM $tblQuiz WHERE Field = 'hide_question_number'";
+        $res = Database::query($checkFieldSql);
+        $result = Database::store_result($res);
+        if (count($result) != 0) {
+            $sql = "
+                SELECT
+                    q.hide_question_number AS hide_num
+                FROM
+                    $tblQuiz as q
+                INNER JOIN  $tblQuizRelQuestion AS qrq ON qrq.exercice_id = q.id
+                WHERE qrq.question_id = ".$this->id;
+            $res = Database::query($sql);
+            $result = Database::store_result($res);
+            if (is_array($result) &&
+                isset($result[0]) &&
+                isset($result[0]['hide_num'])
+            ) {
+                return (int) $result[0]['hide_num'];
+            }
+        }
+
+        return 0;
     }
 
     /**
@@ -1921,10 +1965,16 @@ abstract class Question
 
         //Save normal question if NOT media
         if (MEDIA_QUESTION != $this->type) {
+            $creationMode = empty($this->id);
             $this->save($exercise);
-            // modify the exercise
             $exercise->addToList($this->id);
-            $exercise->update_question_positions();
+
+            // Only update position in creation and when using ordered or random types.
+            if ($creationMode &&
+                in_array($exercise->questionSelectionType, [EX_Q_SELECTION_ORDERED, EX_Q_SELECTION_RANDOM])
+            ) {
+                $exercise->update_question_positions();
+            }
 
             $params = $form->exportValues();
             $params['item_id'] = $this->id;
@@ -2132,8 +2182,9 @@ abstract class Question
     /**
      * Shows question title an description.
      *
-     * @param int   $counter
-     * @param array $score
+     * @param Exercise $exercise The current exercise object
+     * @param int      $counter  A counter for the current question
+     * @param array    $score    Array of optional info ['pass', 'revised', 'score', 'weight', 'user_answered']
      *
      * @return string HTML string with the header of the question (before the answers table)
      */
@@ -2223,7 +2274,16 @@ abstract class Question
             'used' => isset($score['score']) ? $score['score'] : '',
             'missing' => isset($score['weight']) ? $score['weight'] : '',
         ];
-        $header .= Display::page_subheader2($counterLabel.'. '.$this->question);
+
+        // Check whether we need to hide the question ID
+        // (quiz_hide_question_number config + quiz field)
+        $title = '';
+        if ($exercise->getHideQuestionNumber()) {
+            $title = Display::page_subheader2($this->question);
+        } else {
+            $title = Display::page_subheader2($counterLabel.'. '.$this->question);
+        }
+        $header .= $title;
 
         $showRibbon = true;
         // dont display score for certainty degree questions

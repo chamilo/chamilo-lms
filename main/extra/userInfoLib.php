@@ -173,7 +173,7 @@ function move_cat_rank_by_rank($rank, $direction) // up & down.
         return false;
     }
 
-    if ($direction == "down") {
+    if ($direction === "down") {
         // thus increase rank ...
         $sort = "ASC";
         $compOp = ">=";
@@ -184,7 +184,7 @@ function move_cat_rank_by_rank($rank, $direction) // up & down.
     }
 
     // this request find the 2 line to be switched (on rank value)
-    $sql = "SELECT id, rank FROM $TBL_USERINFO_DEF 
+    $sql = "SELECT id, rank FROM $TBL_USERINFO_DEF
             WHERE rank $compOp $rank
             ORDER BY rank $sort LIMIT 2";
 
@@ -232,7 +232,7 @@ function update_user_course_properties($user_id, $course_code, $properties, $hor
     }
 
     $sql = "UPDATE $tbl_coursUser
-            SET $sqlChangeStatus 
+            SET $sqlChangeStatus
                 is_tutor = '$tutor'
             WHERE user_id = $user_id AND c_id = $course_id";
     Database::query($sql);
@@ -246,11 +246,11 @@ function update_user_course_properties($user_id, $course_code, $properties, $hor
     $tbl_personal_agenda = Database:: get_main_table(TABLE_PERSONAL_AGENDA);
     $TABLECALDATES = Database:: get_course_table(cal_dates);
     $jour = 0;
-    $sql3 = "SELECT date FROM $TABLECALDATES 
-             WHERE 
-                horaire_name = '$horaire_name' AND 
-                status = 'C' AND    
-                c_id = $course_id 
+    $sql3 = "SELECT date FROM $TABLECALDATES
+             WHERE
+                horaire_name = '$horaire_name' AND
+                status = 'C' AND
+                c_id = $course_id
              ORDER BY date ";
     $result3 = Database::query($sql3);
 
@@ -260,7 +260,7 @@ function update_user_course_properties($user_id, $course_code, $properties, $hor
 
     //on efface ce qui est déjà inscrit
     $sql4 = "DELETE FROM $tbl_personal_agenda
-         WHERE user = $user_id 
+         WHERE user = $user_id
          AND text = 'Pour le calendrier, ne pas effacer'";
     Database::query($sql4);
 
@@ -274,14 +274,14 @@ function update_user_course_properties($user_id, $course_code, $properties, $hor
         $date = api_get_utc_datetime($date);
         $jour = $jour + 1;
         //on réinsère le nouvel horaire
-        $sql = "INSERT ".$tbl_personal_agenda." (user,title,text,date) 
+        $sql = "INSERT ".$tbl_personal_agenda." (user,title,text,date)
                 VALUES ($user_id, $jour, 'Pour le calendrier, ne pas effacer', '$date')";
         Database::query($sql);
         // pour les inscrire examens dans agenda
-        $sql5 = "SELECT date FROM $TABLECALDATES 
+        $sql5 = "SELECT date FROM $TABLECALDATES
                   WHERE horaire_name = '$horaire_name' AND status = 'E'
-                  AND    c_id = '$course_id' 
-                  ORDER BY date 
+                  AND    c_id = '$course_id'
+                  ORDER BY date
                   ";
         $result5 = Database::query($sql5);
     }

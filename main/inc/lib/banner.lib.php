@@ -864,7 +864,10 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         }
 
         if ($sessionId &&
-            (api_is_platform_admin() || CourseManager::is_course_teacher($user_id, $courseInfo['code']))
+            (
+                api_is_platform_admin()
+                || ($courseInfo && CourseManager::is_course_teacher($user_id, $courseInfo['code']))
+            )
         ) {
             $url = Display::url(
                 Display::return_icon('course.png', get_lang('Course')),

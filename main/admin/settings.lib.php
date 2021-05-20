@@ -195,7 +195,7 @@ function handlePluginUpload()
             Event::addEvent(
                 LOG_PLUGIN_CHANGE,
                 LOG_PLUGIN_UPLOAD,
-                $file['filename'],
+                $file['name'],
                 api_get_utc_datetime(),
                 $user_id
             );
@@ -266,10 +266,16 @@ function handlePlugins()
         $isMainPortal = 1 === api_get_current_access_url_id();
     }
 
+    $unknownLabel = get_lang('Unknown');
     foreach ($all_plugins as $pluginName) {
         $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
         if (file_exists($plugin_info_file)) {
-            $plugin_info = [];
+            $plugin_info = [
+                'title' => $pluginName,
+                'version' => '',
+                'comment' => '',
+                'author' => $unknownLabel,
+            ];
             require $plugin_info_file;
 
             if (in_array($pluginName, $officialPlugins)) {
@@ -786,7 +792,6 @@ function uploadPlugin($file)
             $allowedFiles = getAllowedFileTypes();
             $allowedFiles[] = 'php';
             $allowedFiles[] = 'js';
-            $allowedFiles[] = 'txt';
             $allowedFiles[] = 'tpl';
             $pluginObject = new AppPlugin();
             $officialPlugins = $pluginObject->getOfficialPlugins();
@@ -1273,6 +1278,11 @@ function getTemplateData($from, $number_of_items, $column, $direction)
 {
     // Database table definition.
     $table_system_template = Database::get_main_table('system_template');
+
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+    $column = (int) $column;
+    $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
 
     // The sql statement.
     $sql = "SELECT image as col0, title as col1, id as col2 FROM $table_system_template";
@@ -2052,7 +2062,7 @@ function searchSetting($search)
  *
  * @return array
  */
-function formGenerateElementsGroup($form, $values = [], $elementName)
+function formGenerateElementsGroup($form, $values, $elementName)
 {
     $group = [];
     if (is_array($values)) {
@@ -2086,6 +2096,10 @@ function getAllowedFileTypes()
         'woff',
         'woff2',
         'md',
+        'html',
+        'xml',
+        'markdown',
+        'txt',
     ];
 
     return $allowedFiles;

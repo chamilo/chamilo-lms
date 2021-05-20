@@ -24,7 +24,7 @@
  */
 function php2phps($file_name)
 {
-    return preg_replace('/\.(php.?|phtml.?)(\.){0,1}.*$/i', '.phps', $file_name);
+    return preg_replace('/\.(phar.?|php.?|phtml.?)(\.){0,1}.*$/i', '.phps', $file_name);
 }
 
 /**
@@ -238,7 +238,7 @@ function handle_uploaded_document(
     $sessionId = null,
     $treat_spaces_as_hyphens = true
 ) {
-    if (!$userId) {
+    if (empty($uploadedFile) || empty($userId) || empty($courseInfo) || empty($documentDir) || empty($uploadPath)) {
         return false;
     }
 
@@ -258,12 +258,22 @@ function handle_uploaded_document(
 
     // Just in case process_uploaded_file is not called
     $maxSpace = DocumentManager::get_course_quota();
-
     // Check if there is enough space to save the file
     if (!DocumentManager::enough_space($uploadedFile['size'], $maxSpace)) {
         if ($output) {
             Display::addFlash(Display::return_message(get_lang('UplNotEnoughSpace'), 'error'));
         }
+
+        return false;
+    }
+
+    if (!Security::check_abs_path($documentDir.$uploadPath, $documentDir.'/')) {
+        Display::addFlash(
+            Display::return_message(
+                get_lang('Forbidden'),
+                'error'
+            )
+        );
 
         return false;
     }
@@ -310,7 +320,7 @@ function handle_uploaded_document(
             return false;
         } else {
             // If the upload path differs from / (= root) it will need a slash at the end
-            if ($uploadPath != '/') {
+            if ($uploadPath !== '/') {
                 $uploadPath = $uploadPath.'/';
             }
 
@@ -1054,48 +1064,35 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
         }
 
         /*	Uncompressing phase */
-
-        /*
-            The first version, using OS unzip, is not used anymore
-            because it does not return enough information.
-            We need to process each individual file in the zip archive to
-            - add it to the database
-            - parse & change relative html links
-        */
-        if (PHP_OS == 'Linux' && !get_cfg_var('safe_mode') && false) { // *** UGent, changed by OC ***
-            // Shell Method - if this is possible, it gains some speed
-            exec("unzip -d \"".$base_work_dir.$upload_path."/\"".$uploaded_file['name']." ".$uploaded_file['tmp_name']);
-        } else {
-            // PHP method - slower...
-            $save_dir = getcwd();
-            chdir($base_work_dir.$upload_path);
-            $unzippingState = $zip_file->extract();
-            for ($j = 0; $j < count($unzippingState); $j++) {
-                $state = $unzippingState[$j];
-
-                // Fix relative links in html files
-                $extension = strrchr($state['stored_filename'], '.');
-            }
-            if ($dir = @opendir($base_work_dir.$upload_path)) {
-                while ($file = readdir($dir)) {
-                    if ($file != '.' && $file != '..') {
-                        $filetype = 'file';
-                        if (is_dir($base_work_dir.$upload_path.'/'.$file)) {
-                            $filetype = 'folder';
-                        }
-
-                        $safe_file = api_replace_dangerous_char($file);
-                        @rename($base_work_dir.$upload_path.'/'.$file, $base_work_dir.$upload_path.'/'.$safe_file);
-                        set_default_settings($upload_path, $safe_file, $filetype);
-                    }
-                }
-
-                closedir($dir);
-            } else {
-                error_log('Could not create directory '.$base_work_dir.$upload_path.' to unzip files');
-            }
-            chdir($save_dir); // Back to previous dir position
+        $save_dir = getcwd();
+        chdir($base_work_dir.$upload_path);
+        $unzippingState = $zip_file->extract();
+        for ($j = 0; $j < count($unzippingState); $j++) {
+            $state = $unzippingState[$j];
+            // Fix relative links in html files
+            $extension = strrchr($state['stored_filename'], '.');
         }
+        if ($dir = @opendir($base_work_dir.$upload_path)) {
+            while ($file = readdir($dir)) {
+                if ($file != '.' && $file != '..') {
+                    $filetype = 'file';
+                    if (is_dir($base_work_dir.$upload_path.'/'.$file)) {
+                        $filetype = 'folder';
+                    }
+
+                    $safe_file = api_replace_dangerous_char($file);
+                    $safe_file = disable_dangerous_file($safe_file);
+
+                    @rename($base_work_dir.$upload_path.'/'.$file, $base_work_dir.$upload_path.'/'.$safe_file);
+                    set_default_settings($upload_path, $safe_file, $filetype);
+                }
+            }
+
+            closedir($dir);
+        } else {
+            error_log('Could not create directory '.$base_work_dir.$upload_path.' to unzip files');
+        }
+        chdir($save_dir); // Back to previous dir position
     }
 
     return true;
@@ -1137,6 +1134,10 @@ function unzip_uploaded_document(
     $onlyUploadFile = false,
     $whatIfFileExists = 'overwrite'
 ) {
+    if (empty($courseInfo) || empty($userInfo) || empty($uploaded_file) || empty($uploadPath)) {
+        return false;
+    }
+
     $zip = new PclZip($uploaded_file['tmp_name']);
 
     // Check the zip content (real size and file extension)

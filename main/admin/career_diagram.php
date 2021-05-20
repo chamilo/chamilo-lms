@@ -53,10 +53,10 @@ $interbreadcrumb[] = [
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
-if ($action == 'add') {
+if ($action === 'add') {
     $interbreadcrumb[] = ['url' => 'careers.php', 'name' => get_lang('Careers')];
     $toolName = get_lang('Add');
-} elseif ($action == 'edit') {
+} elseif ($action === 'edit') {
     $interbreadcrumb[] = ['url' => 'careers.php', 'name' => get_lang('Careers')];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
     $toolName = get_lang('Edit');

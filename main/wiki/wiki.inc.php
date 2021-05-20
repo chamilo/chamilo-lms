@@ -317,10 +317,7 @@ class Wiki
         // are not made here, but through the interce buttons
 
         // cleaning the variables
-        if (api_get_setting('htmlpurifier_wiki') == 'true') {
-            //$purifier = new HTMLPurifier();
-            $values['content'] = Security::remove_XSS($values['content']);
-        }
+        $values['content'] = Security::remove_XSS($values['content']);
         $version = intval($values['version']) + 1;
         $linkTo = self::links_to($values['content']); //and check links content
 
@@ -623,11 +620,9 @@ class Wiki
         $_clean['title'] = trim($values['title']);
         $_clean['content'] = $values['content'];
 
-        if (api_get_setting('htmlpurifier_wiki') === 'true') {
-            $purifier = new HTMLPurifier();
-            $_clean['content'] = $purifier->purify($_clean['content']);
-        }
-
+        // cleaning the variables
+        $values['content'] = Security::remove_XSS($values['content']);
+        
         //re-check after strip_tags if the title is empty
         if (empty($_clean['title']) || empty($_clean['reflink'])) {
             return false;

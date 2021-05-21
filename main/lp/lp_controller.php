@@ -490,47 +490,6 @@ if ($debug > 0) {
     error_log('action "'.$action.'" triggered');
 }
 
-function SendReminderLp($toUser, $fromUser, $courseName, $lpName, $link)
-{
-    $toUserId = $toUser['user_id'];
-    $subjectTemplate = new Template(
-        null,
-        false,
-        false,
-        false,
-        false,
-        false
-    );
-    $subjectLayout = $subjectTemplate->get_template(
-        'mail/learning_path_reminder_subject.tpl'
-    );
-    $bodyTemplate = new Template(
-        null,
-        false,
-        false,
-        false,
-        false,
-        false
-    );
-    $bodyTemplate->assign('courseName', $courseName);
-    $bodyTemplate->assign('lpName', $lpName);
-    $bodyTemplate->assign('link', $link);
-    $bodyLayout = $bodyTemplate->get_template(
-        'mail/learning_path_reminder_body.tpl'
-    );
-    $tittle = $subjectTemplate->fetch($subjectLayout);
-    $content = $bodyTemplate->fetch($bodyLayout);
-    MessageManager::send_message_simple(
-        $toUserId,
-        $tittle,
-        $content,
-        $fromUser,
-        true
-    );
-
-    return null;
-}
-
 $lpListUrl = api_get_self().'?action=list&'.api_get_cidreq();
 
 switch ($action) {

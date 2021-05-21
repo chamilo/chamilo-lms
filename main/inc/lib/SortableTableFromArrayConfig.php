@@ -66,7 +66,7 @@ class SortableTableFromArrayConfig extends SortableTable
             $itemsPerPage,
             $direction
         );
-        $this->table_data = $data;        
+        $this->table_data = $data;
     }
 
     /**

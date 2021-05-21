@@ -82,7 +82,7 @@ export default {
       if (typeof redirect !== "undefined") {
         router.push({path: redirect});
       } else {
-        router.push({path: "/"});
+        router.push({path: "/home"});
       }
     }
 
@@ -103,7 +103,7 @@ export default {
         if (typeof redirect !== "undefined") {
           router.push({path: redirect});
         } else {
-          router.push({path: "/courses"});
+          router.push({path: "/home"});
         }
       }
     }

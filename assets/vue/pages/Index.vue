@@ -18,11 +18,11 @@
         <div class="grid grid-cols-1 md:grid-cols-2">
 
           <!-- Form-->
-          <div class="md:row-start-1 md:col-start-2 md:col-end-2 p-12">
-            <div class="mt-10 lg:mt-16 flex justify-center">
+          <div class="md:row-start-1 md:col-start-2 md:col-end-2 xl:p-12">
+            <div class="md:mt-10 lg:mt-16 flex justify-center">
               <div class="max-w-sm">
                 <div>
-                  <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                  <h2 class="text-center text-3xl font-extrabold text-gray-900">
                     Sign in
                   </h2>
                 </div>

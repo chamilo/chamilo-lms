@@ -13,11 +13,20 @@
 
 <script>
 import Login from '../components/Login';
-
+import {useRouter} from "vue-router";
+import {useStore} from "vuex";
 export default {
   components: {
     Login
   },
-  name: "LoginPage"
+  name: "LoginPage",
+  setup() {
+    const router = useRouter();
+    const store = useStore();
+    // If user is already logged in redirect to home.
+    if (store.getters["security/isAuthenticated"]) {
+        router.push({path: "/home"});
+    }
+  }
 }
 </script>

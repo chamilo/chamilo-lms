@@ -620,7 +620,7 @@ $(function() {
 $courseCode = isset($_GET['course']) ? $_GET['course'] : null;
 $reportingTab = '';
 if (!api_is_anonymous()) {
-    $reportingTab = Tracking::show_user_progress(
+    $reportingTab = Tracking::showUserProgress(
         api_get_user_id(),
         $session_id,
         '#tabs-5',

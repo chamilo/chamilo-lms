@@ -6125,35 +6125,15 @@ class SessionManager
         }
 
         if (!empty($keyword)) {
-            $keyword = Database::escape_string($keyword);
-
-            $keywordParts = explode(' ', $keyword);
-            $extraConditions = '';
-            if (!empty($keywordParts)) {
-                $keywordParts = array_filter($keywordParts);
-                foreach ($keywordParts as $part) {
-                    if (empty($part)) {
-                        continue;
-                    }
-                    $part = Database::escape_string($part);
-                    $extraConditions .= "
-                        OR
-                        (u.username LIKE '%$part%' OR
-                        u.firstname LIKE '%$part%' OR
-                        u.lastname LIKE '%$part%' OR
-                        u.official_code LIKE '%$part%'
-                        )
-                    ";
-                }
-            }
-
+            $keyword = trim(Database::escape_string($keyword));
             $userConditions .= " AND (
                 u.username LIKE '%$keyword%' OR
                 u.firstname LIKE '%$keyword%' OR
                 u.lastname LIKE '%$keyword%' OR
                 u.official_code LIKE '%$keyword%' OR
-                u.email LIKE '%$keyword%'
-                $extraConditions
+                u.email LIKE '%$keyword%' OR
+                CONCAT(u.firstname, ' ', u.lastname) LIKE '%$keyword%' OR
+                CONCAT(u.lastname, ' ', u.firstname) LIKE '%$keyword%'
             )";
         }
 
@@ -9651,41 +9631,72 @@ class SessionManager
         }
     }
 
-    public static function getCareerDiagramPerSession($sessionId, $userId): string
+    public static function getCareersFromSession(int $sessionId): array
     {
         $extraFieldValueSession = new ExtraFieldValue('session');
         $extraFieldValueCareer = new ExtraFieldValue('career');
 
-        $visibility = api_get_session_visibility($sessionId, null, false, $userId);
-
-        $content = '';
-        if (SESSION_AVAILABLE === $visibility) {
-            $value = $extraFieldValueSession->get_values_by_handler_and_field_variable($sessionId, 'careerid');
-            if (isset($value['value']) && !empty($value['value'])) {
-                $careerList = str_replace(['[', ']'], '', $value['value']);
-                $careerList = explode(',', $careerList);
-
-                foreach ($careerList as $career) {
-                    $careerIdValue = $extraFieldValueCareer->get_item_id_from_field_variable_and_field_value(
-                        'external_career_id',
-                        $career
-                    );
-                    if (isset($careerIdValue['item_id']) && !empty($careerIdValue['item_id'])) {
-                        $finalCareerId = $careerIdValue['item_id'];
-                        $career = new Career();
-                        $careerInfo = $career->get($finalCareerId);
-                        if (!empty($careerInfo)) {
-                            $careerUrl = api_get_path(WEB_CODE_PATH).
-                                'user/career_diagram.php?iframe=1&career_id='.$finalCareerId;
-                            $content .= '<iframe
-                                style="width:100%; height:500px"
-                                border="0"
-                                frameborder="0"
-                                src="'.$careerUrl.'"></iframe>';
-                        }
+        $value = $extraFieldValueSession->get_values_by_handler_and_field_variable($sessionId, 'careerid');
+        $careers = [];
+        if (isset($value['value']) && !empty($value['value'])) {
+            $careerList = str_replace(['[', ']'], '', $value['value']);
+            $careerList = explode(',', $careerList);
+            $careerManager = new Career();
+            foreach ($careerList as $career) {
+                $careerIdValue = $extraFieldValueCareer->get_item_id_from_field_variable_and_field_value(
+                    'external_career_id',
+                    $career
+                );
+                if (isset($careerIdValue['item_id']) && !empty($careerIdValue['item_id'])) {
+                    $finalCareerId = $careerIdValue['item_id'];
+                    $careerInfo = $careerManager->get($finalCareerId);
+                    if (!empty($careerInfo)) {
+                        $careers[] = $careerInfo;
                     }
                 }
             }
+        }
+
+        return $careers;
+    }
+
+    public static function getCareerDiagramPerSession($sessionId, $userId): string
+    {
+        $sessionId = (int) $sessionId;
+        $userId = (int) $userId;
+
+        $visibility = api_get_session_visibility($sessionId, null, false, $userId);
+        $content = '';
+        if (SESSION_AVAILABLE === $visibility) {
+            $careerList = self::getCareersFromSession($sessionId);
+
+            if (empty($careerList)) {
+                return '';
+            }
+
+            foreach ($careerList as $career) {
+                $careerUrl = api_get_path(WEB_CODE_PATH).'user/career_diagram.php?iframe=1&career_id='.$career['id'].'&user_id='.$userId;
+                $content .= '
+                    <iframe
+                        onload="resizeIframe(this)"
+                        style="width:100%;"
+                        border="0"
+                        frameborder="0"
+                        scrolling="no"
+                        src="'.$careerUrl.'"
+                    ></iframe>';
+            }
+        }
+
+        if (!empty($content)) {
+            $content .= '
+               <script>
+                resizeIframe = function(iFrame) {
+                    //iFrame.width  = iFrame.contentWindow.document.body.scrollWidth;
+                    iFrame.height = iFrame.contentWindow.document.body.scrollHeight + 20;
+                }
+                </script>
+            ';
         }
 
         if (!empty($content)) {

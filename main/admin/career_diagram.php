@@ -107,5 +107,5 @@ if (!empty($diagram)) {
 }
 
 $tpl->assign('content', $html);
-$layout = $tpl->get_template('career/diagram.tpl');
+$layout = $tpl->get_template('career/diagram_full.tpl');
 $tpl->display($layout);

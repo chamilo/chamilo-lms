@@ -503,10 +503,10 @@ if ($form->validate()) {
             $coursesInfo[] = generateHtmlForCourse($studentInfo['id'], $coursesInSessions, $courseId, $sessionId);
         }
     }
-
+    $title = Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
     $view = new Template('', false, false, false, true, false, false);
     $view->assign('user_info', $studentInfo);
-    $view->assign('carrers', MyStudents::getBlockForCareers($studentInfo['id']));
+    $view->assign('careers', $title.MyStudents::userCareersTable($studentInfo['id']));
     $view->assign('skills', Tracking::displayUserSkills($studentInfo['id']));
     $view->assign('classes', MyStudents::getBlockForClasses($studentInfo['id']));
     $view->assign('courses_info', $coursesInfo);
@@ -519,7 +519,6 @@ if ($form->validate()) {
         'orientation' => 'P',
     ];
 
-    $css = api_get_print_css();
     $css = '
         .user-info { clear: both; }
         .user-info__col { float: left; width: 33.33%; }

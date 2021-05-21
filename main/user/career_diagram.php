@@ -17,9 +17,12 @@ if (api_get_configuration_value('allow_career_diagram') == false) {
     api_not_allowed(true);
 }
 
+api_block_anonymous_users();
+
 $this_section = SECTION_COURSES;
 
 $careerId = isset($_GET['career_id']) ? $_GET['career_id'] : 0;
+$userId = isset($_GET['user_id']) ? $_GET['user_id'] : api_get_user_id();
 
 if (empty($careerId)) {
     api_not_allowed(true);
@@ -30,8 +33,6 @@ $careerInfo = $career->get($careerId);
 if (empty($careerInfo)) {
     api_not_allowed(true);
 }
-
-$userId = api_get_user_id();
 $allow = UserManager::userHasCareer($userId, $careerId) || api_is_platform_admin() || api_is_drh();
 
 if ($allow === false) {
@@ -97,5 +98,10 @@ if (!empty($diagram)) {
 }
 
 $tpl->assign('content', $html);
-$layout = $tpl->get_template('career/diagram.tpl');
+if ($showFullPage) {
+    $layout = $tpl->get_template('career/diagram_full.tpl');
+} else {
+    $layout = $tpl->get_template('career/diagram_iframe.tpl');
+}
+
 $tpl->display($layout);

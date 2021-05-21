@@ -146,7 +146,6 @@
 
         <ignoreFiles>
             <directory name="vendor/*"/>
-            <directory name="src/CoreBundle/Menu"/>
             <directory name="src/CoreBundle/Component/Editor"/>
             <directory name="src/CourseBundle/Component/CourseCopy"/>
             <directory name="src/LtiBundle"/>

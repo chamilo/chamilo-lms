@@ -98,7 +98,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__.'/src/CoreBundle/Hook/*',
             __DIR__.'/src/CoreBundle/Component/HTMLPurifier/Filter/AllowIframes.php',
             __DIR__.'/src/CoreBundle/Traits/*',
-            __DIR__.'/src/CoreBundle/Menu/*',
             __DIR__.'/src/CourseBundle/Component/*',
             __DIR__.'/src/DataFixtures/*',
             IncrementStyleFixer::class => 'post',

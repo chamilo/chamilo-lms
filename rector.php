@@ -57,7 +57,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         Option::SKIP,
         [
             __DIR__.'/public/*',
-            __DIR__.'/src/CoreBundle/Menu/*',
             __DIR__.'/src/CoreBundle/Component/Editor/*',
             __DIR__.'/src/CourseBundle/Component/CourseCopy/*',
             __DIR__.'/src/CoreBundle/Component/HTMLPurifier/*',

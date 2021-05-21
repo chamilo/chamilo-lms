@@ -59,7 +59,6 @@ parameters:
 		- public/main/wiki/*
 
 		- src/CoreBundle/Hook/*
-		- src/CoreBundle/Menu/*
 		- src/CoreBundle/Migrations/*
 		- src/CoreBundle/Twig/SettingsHelper.php
 		- src/CoreBundle/Settings/SettingsResolver.php

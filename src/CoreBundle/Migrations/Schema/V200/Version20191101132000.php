@@ -13,7 +13,7 @@ class Version20191101132000 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'course changes';
+        return 'Course changes';
     }
 
     public function up(Schema $schema): void
@@ -66,6 +66,11 @@ class Version20191101132000 extends AbstractMigrationChamilo
         }
 
         $table = $schema->getTable('course_rel_user');
+
+        if (!$table->hasColumn('course_rel_user')) {
+            $this->addSql('ALTER TABLE course_rel_user ADD progress INT NOT NULL;');
+        }
+
         if (false === $table->hasIndex('course_rel_user_user_id')) {
             $this->addSql('CREATE INDEX course_rel_user_user_id ON course_rel_user (id, user_id)');
         }

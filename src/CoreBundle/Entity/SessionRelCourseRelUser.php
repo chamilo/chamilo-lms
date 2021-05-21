@@ -10,6 +10,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class SessionRelCourseRelUser.
@@ -83,8 +84,20 @@ class SessionRelCourseRelUser
      */
     protected int $legalAgreement;
 
+    /**
+     * @Assert\Range(
+     *      min = 0,
+     *      max = 100,
+     *      notInRangeMessage = "Progress from {{ min }} to {{ max }} only",
+     * )
+     *
+     * @ORM\Column(name="progress", type="integer")
+     */
+    protected int $progress;
+
     public function __construct()
     {
+        $this->progress = 0;
         $this->visibility = 1;
         $this->legalAgreement = 0;
         $this->status = self::STATUS_STUDENT;
@@ -158,5 +171,17 @@ class SessionRelCourseRelUser
     public function getLegalAgreement(): int
     {
         return $this->legalAgreement;
+    }
+
+    public function getProgress(): int
+    {
+        return $this->progress;
+    }
+
+    public function setProgress(int $progress): self
+    {
+        $this->progress = $progress;
+
+        return $this;
     }
 }

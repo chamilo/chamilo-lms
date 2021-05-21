@@ -43,6 +43,11 @@ class Version20190210182615 extends AbstractMigrationChamilo
         $this->addSql('UPDATE session_category SET date_end = NULL WHERE date_end = "0000-00-00"');
 
         $table = $schema->getTable('session_rel_course_rel_user');
+
+        if (!$table->hasColumn('progress')) {
+            $this->addSql('ALTER TABLE session_rel_course_rel_user ADD progress INT NOT NULL');
+        }
+
         if ($table->hasForeignKey('FK_720167E91D79BD3')) {
             $this->addSql('ALTER TABLE session_rel_course_rel_user DROP FOREIGN KEY FK_720167E91D79BD3');
             $this->addSql('ALTER TABLE session_rel_course_rel_user ADD CONSTRAINT FK_720167E91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE');

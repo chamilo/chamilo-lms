@@ -946,10 +946,9 @@ echo $content;
 
 // Careers.
 if (api_get_configuration_value('allow_career_users')) {
-    foreach ($courses_in_session as $sId => $courses) {
-        echo SessionManager::getCareerDiagramPerSession($sId, $student_id);
+    if (!empty($courses_in_session)) {
+        echo SessionManager::getCareerDiagramPerSessionList(array_keys($courses_in_session), $student_id);
     }
-    echo Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
     echo MyStudents::userCareersTable($student_id);
 }
 

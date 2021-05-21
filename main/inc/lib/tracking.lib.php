@@ -4703,7 +4703,8 @@ class Tracking
         $extra_params = '',
         $show_courses = true,
         $showAllSessions = true,
-        $returnArray = false
+        $returnArray = false,
+        $showGraph = true
     ) {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -5004,6 +5005,7 @@ class Tracking
         $allowCareerUser = api_get_configuration_value('allow_career_users');
 
         // Session list.
+        $visibleSessions = [];
         if (!empty($course_in_session)) {
             $main_session_graph = '';
             // Load graphics only when calling to an specific session
@@ -5011,7 +5013,6 @@ class Tracking
             $my_results = [];
             $all_exercise_graph_list = [];
             $all_exercise_start_time = [];
-            $allCareers = [];
             foreach ($course_in_session as $my_session_id => $session_data) {
                 $course_list = $session_data['course_list'];
                 $user_count = count(SessionManager::get_users_by_session($my_session_id));
@@ -5021,10 +5022,7 @@ class Tracking
                 $visibility = api_get_session_visibility($my_session_id, null, false, $user_id);
 
                 if (SESSION_AVAILABLE === $visibility) {
-                    $careers = SessionManager::getCareersFromSession($my_session_id);
-                    if (!empty($careers)) {
-                        $allCareers = array_merge($allCareers, $careers);
-                    }
+                    $visibleSessions[] = $my_session_id;
                 }
 
                 foreach ($course_list as $course_data) {
@@ -5103,13 +5101,15 @@ class Tracking
                     $my_results_final[] = $my_results[$key];
                     $final_all_exercise_graph_list[] = $all_exercise_graph_list[$key];
                 }
-                $main_session_graph = '<div class="row"><div class="col-md-10 col-md-offset-1">'
-                    .self::generate_session_exercise_graph(
-                        $final_all_exercise_graph_name_list,
-                        $my_results_final,
-                        $final_all_exercise_graph_list
-                    )
-                    .'</div></div>';
+                if ($showGraph) {
+                    $main_session_graph = '<div class="row"><div class="col-md-10 col-md-offset-1">'
+                        .self::generate_session_exercise_graph(
+                            $final_all_exercise_graph_name_list,
+                            $my_results_final,
+                            $final_all_exercise_graph_list
+                        )
+                        .'</div></div>';
+                }
             }
 
             $sessionIcon = Display::return_icon('session.png', get_lang('Sessions'));
@@ -5209,24 +5209,25 @@ class Tracking
                 );
             }
 
-            if ($allowCareerUser && !empty($allCareers)) {
-                $careers = [];
-                foreach ($allCareers as $career) {
-                    $careers[$career['id']] = $career;
+            if ($allowCareerUser) {
+                $diagrams = '';
+                if (!empty($visibleSessions)) {
+                    $diagrams .= SessionManager::getCareerDiagramPerSessionList($visibleSessions, $user_id);
                 }
-
-                $title = Display::page_subheader(get_lang('OngoingTraining'));
-                $html .= $title.MyStudents::getCareersTable($careers);
+                $html .= $diagrams.MyStudents::userCareersTable($user_id);
             }
 
             $html .= Display::div($sessionsTable->toHtml(), ['class' => 'table-responsive']);
-            $html .= Display::div(
-                $main_session_graph,
-                [
-                    'id' => 'session_graph',
-                    'class' => 'chart-session',
-                ]
-            );
+
+            if ($showGraph) {
+                $html .= Display::div(
+                    $main_session_graph,
+                    [
+                        'id' => 'session_graph',
+                        'class' => 'chart-session',
+                    ]
+                );
+            }
 
             // Checking selected session.
             if (isset($_GET['session_id'])) {

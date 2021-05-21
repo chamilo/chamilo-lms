@@ -16,7 +16,9 @@ class MyStudents
             return '';
         }
 
-        return self::getCareersTable($careers);
+        $title = Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
+
+        return $title.self::getCareersTable($careers);
     }
 
     public static function getCareersTable(array $careers): string
@@ -52,13 +54,11 @@ class MyStudents
         return $table->toHtml();
     }
 
-
     public static function getBlockForSkills(int $studentId, int $courseId, int $sessionId): string
     {
         $allowAll = api_get_configuration_value('allow_teacher_access_student_skills');
 
         if ($allowAll) {
-            // Show all skills
             return Tracking::displayUserSkills($studentId, 0, 0, true);
         }
 

@@ -9660,47 +9660,46 @@ class SessionManager
         return $careers;
     }
 
-    public static function getCareerDiagramPerSession($sessionId, $userId): string
+    public static function getCareerDiagramPerSessionList($sessionList, $userId)
     {
-        $sessionId = (int) $sessionId;
+        if (empty($sessionList) || empty($userId)) {
+            return '';
+        }
+
         $userId = (int) $userId;
-
-        $visibility = api_get_session_visibility($sessionId, null, false, $userId);
-        $content = '';
-        if (SESSION_AVAILABLE === $visibility) {
-            $careerList = self::getCareersFromSession($sessionId);
-
-            if (empty($careerList)) {
-                return '';
+        $content = Display::page_subheader(get_lang('OngoingTraining'));
+        $content .= '
+           <script>
+            resizeIframe = function(iFrame) {
+                iFrame.height = iFrame.contentWindow.document.body.scrollHeight + 20;
             }
-
-            foreach ($careerList as $career) {
-                $careerUrl = api_get_path(WEB_CODE_PATH).'user/career_diagram.php?iframe=1&career_id='.$career['id'].'&user_id='.$userId;
-                $content .= '
-                    <iframe
-                        onload="resizeIframe(this)"
-                        style="width:100%;"
-                        border="0"
-                        frameborder="0"
-                        scrolling="no"
-                        src="'.$careerUrl.'"
-                    ></iframe>';
-            }
-        }
-
-        if (!empty($content)) {
-            $content .= '
-               <script>
-                resizeIframe = function(iFrame) {
-                    //iFrame.width  = iFrame.contentWindow.document.body.scrollWidth;
-                    iFrame.height = iFrame.contentWindow.document.body.scrollHeight + 20;
+            </script>
+        ';
+        $careersAdded = [];
+        foreach ($sessionList as $sessionId) {
+            $visibility = api_get_session_visibility($sessionId, null, false, $userId);
+            if (SESSION_AVAILABLE === $visibility) {
+                $careerList = self::getCareersFromSession($sessionId);
+                if (empty($careerList)) {
+                    continue;
                 }
-                </script>
-            ';
-        }
-
-        if (!empty($content)) {
-            $content = Display::page_subheader(get_lang('OngoingTraining')).$content;
+                foreach ($careerList as $career) {
+                    $careerId = $career['id'];
+                    if (!in_array($careerId, $careersAdded)) {
+                        $careersAdded[] = $careerId;
+                        $careerUrl = api_get_path(WEB_CODE_PATH).'user/career_diagram.php?iframe=1&career_id='.$career['id'].'&user_id='.$userId;
+                        $content .= '
+                            <iframe
+                                onload="resizeIframe(this)"
+                                style="width:100%;"
+                                border="0"
+                                frameborder="0"
+                                scrolling="no"
+                                src="'.$careerUrl.'"
+                            ></iframe>';
+                    }
+                }
+            }
         }
 
         return $content;

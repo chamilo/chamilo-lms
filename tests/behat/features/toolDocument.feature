@@ -12,7 +12,7 @@ Feature: Document tool
     Then I should see "New folder"
     Then I press "New folder"
     Then I fill in the following:
-      | item_title | My new directory |
+      | title | My new directory |
     And I press "Submit"
     And wait for the page to be loaded
     Then I should see "created"

@@ -352,15 +352,19 @@ if (!empty($user_course_categories)) {
                 <?php
                     if ($course['status'] != 1) {
                         if ($course['unsubscr'] == 1) {
+                            $unsubscribe_button = Display::url(
+                                get_lang('Unreg').' '.
+                                Display::returnFontAwesomeIcon('sign-out'),
+                                api_get_path(WEB_CODE_PATH).'auth/courses.php?action=unsubscribe&course_code='.$course['code']
+                                .'&sec_token='.$stok.'&category_code='.$categoryCode,
+                                [
+                                    'class' => 'btn btn-danger btn-sm',
+                                    'title' => get_lang('Unreg'),
+                                    'aria-label' => get_lang('Unreg'),
+                                ]
+                            );
+                            echo $unsubscribe_button;
                             ?>
-
-                <form action="<?php echo api_get_self(); ?>" method="post" onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES, api_get_system_encoding())); ?>')) return false">
-                    <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
-                    <input type="hidden" name="unsubscribe" value="<?php echo $course['code']; ?>" />
-                     <button class="btn btn-default" value="<?php echo get_lang('Unsubscribe'); ?>" name="unsub">
-                    <?php echo get_lang('Unsubscribe'); ?>
-                    </button>
-                </form>
               </div>
                   <?php
                         }
@@ -440,17 +444,19 @@ if (!empty($courses_without_category)) {
             <?php
                 if ($course['status'] != 1) {
                     if ($course['unsubscr'] == 1) {
-                        ?>
-                <!-- changed link to submit to avoid action by the search tool indexer -->
-                <form action="<?php echo api_get_self(); ?>"
-                      method="post"
-                      onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES, api_get_system_encoding())); ?>')) return false;">
-                    <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
-                    <input type="hidden" name="unsubscribe" value="<?php echo $course['code']; ?>" />
-                    <button class="btn btn-default" value="<?php echo get_lang('Unsubscribe'); ?>" name="unsub">
-                        <?php echo get_lang('Unsubscribe'); ?>
-                    </button>
-                </form>
+                        $unsubscribe_button = Display::url(
+                            get_lang('Unreg').' '.
+                            Display::returnFontAwesomeIcon('sign-out'),
+                            api_get_path(WEB_CODE_PATH).'auth/courses.php?action=unsubscribe&course_code='.$course['code']
+                            .'&sec_token='.$stok.'&category_code='.$categoryCode,
+                            [
+                                'class' => 'btn btn-danger btn-sm',
+                                'title' => get_lang('Unreg'),
+                                'aria-label' => get_lang('Unreg'),
+                            ]
+                        );
+                        echo $unsubscribe_button;
+                        ?>                
                 </div>
               <?php
                     }

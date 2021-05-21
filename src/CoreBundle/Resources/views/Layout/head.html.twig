@@ -2,8 +2,8 @@
 <link href="https://chamilo.org/chamilo-lms/" rel="help"/>
 <link href="https://chamilo.org/the-association/" rel="author"/>
 <link href="https://chamilo.org/the-association/" rel="copyright"/>
-<link rel="apple-touch-icon" href="{{ url('home') ~ 'apple-touch-icon.png' }}"/>
-{#<link rel="shortcut icon" href="{{ url('home') ~  favico}}" type="image/x-icon" />#}
+<link rel="apple-touch-icon" href="{{ url('index') ~ 'apple-touch-icon.png' }}"/>
+{#<link rel="shortcut icon" href="{{ url('index') ~  favico}}" type="image/x-icon" />#}
 <title>
 {%- block title %}
 {{ chamilo_settings_get('platform.institution') }} - {{ chamilo_settings_get('platform.site_name') }}
@@ -25,21 +25,21 @@
 {# Files app.css is generated from "assets/css/app.scss" file using the file webpack.config.js #}
 {#    {{ encore_entry_link_tags('app') }}#}
 {% if theme is defined %}
-{#    <link rel="stylesheet" href="{{ url('home') ~ 'build/css/themes/'~ theme ~'/default.css' }}"/>#}
+{#    <link rel="stylesheet" href="{{ url('index') ~ 'build/css/themes/'~ theme ~'/default.css' }}"/>#}
 {% endif %}
 {#    {{ encore_entry_link_tags('vue') }}#}
-<link rel="stylesheet" href="{{ url('home') ~ 'build/vue.css' }}"/>
-<link rel="stylesheet" href="{{ url('home') ~ 'build/css/app.css' }}"/>
-{#<link rel="stylesheet" href="{{ url('home') ~ 'build/css/print.css' }}" media="print" />#}
+<link rel="stylesheet" href="{{ url('index') ~ 'build/vue.css' }}"/>
+<link rel="stylesheet" href="{{ url('index') ~ 'build/css/app.css' }}"/>
+{#<link rel="stylesheet" href="{{ url('index') ~ 'build/css/print.css' }}" media="print" />#}
 {% endblock %}
 {# app.js is generated using the file webpack.config.js and using yarn read /assets/README.md for more info #}
-{#<script src="{{ url('home') ~ 'build/libs/ckeditor/ckeditor.js' }}"></script>#}
-<script src="{{ url('home') ~ 'build/runtime.js' }}"></script>
-<script src="{{ url('home') ~ 'build/app.js' }}"></script>
+{#<script src="{{ url('index') ~ 'build/libs/ckeditor/ckeditor.js' }}"></script>#}
+<script src="{{ url('index') ~ 'build/runtime.js' }}"></script>
+<script src="{{ url('index') ~ 'build/app.js' }}"></script>
 {#{{ encore_entry_script_tags('app') }}#}
 {# Add third party js libraries that can't be loaded using webpack #}
 {#<script src="{{ asset('libs/readmore-js/readmore.js') }}"></script>#}
-<script src="{{ url('home') ~ 'build/libs/js-cookie/src/js.cookie.js' }}"></script>
+<script src="{{ url('index') ~ 'build/libs/js-cookie/src/js.cookie.js' }}"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 {# Check chamilo_js key in assetic.yml #}
 {% block javascripts %}

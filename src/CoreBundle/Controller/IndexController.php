@@ -14,9 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class IndexController extends BaseController
 {
     /**
-     * Index home page.
-     *
-     * @Route("/", name="home", methods={"GET", "POST"}, options={"expose"=true})
+     * @Route("/", name="index", methods={"GET", "POST"}, options={"expose"=true})
+     * @Route("/home", name="home", methods={"GET", "POST"}, options={"expose"=true})
      * @Route("/login", name="login", methods={"GET", "POST"}, options={"expose"=true})
      *
      * @Route("/course/{cid}/home", name="chamilo_core_course_home")

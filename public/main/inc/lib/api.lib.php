@@ -787,7 +787,7 @@ function api_get_path($path = '', $configuration = [])
     }*/
     if (isset(Container::$container)) {
         $root_web = Container::$container->get('router')->generate(
-            'home',
+            'index',
             [],
             UrlGeneratorInterface::ABSOLUTE_URL
         );

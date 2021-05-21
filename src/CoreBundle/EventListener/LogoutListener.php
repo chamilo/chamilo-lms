@@ -88,7 +88,7 @@ class LogoutListener
             $connection->executeQuery($sql);
         }
 
-        $login = $this->router->generate('home');
+        $login = $this->router->generate('index');
 
         return new RedirectResponse($login);
         //return new JsonResponse('logout out', 200);

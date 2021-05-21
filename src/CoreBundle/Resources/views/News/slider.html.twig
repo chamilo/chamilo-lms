@@ -4,7 +4,7 @@
 {% set content %}
     {% if is_granted('ROLE_ADMIN') %}
         <div class="announcement-edit d-block text-right">
-            <a  href="{{ url('home') }}main/admin/system_announcements.php" class="btn btn-primary btn-sm" >
+            <a  href="{{ url('index') }}main/admin/system_announcements.php" class="btn btn-primary btn-sm" >
                 <i class="fas fa-pencil-alt"></i> {{ "Edit this section"|trans }}
             </a>
         </div>

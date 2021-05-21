@@ -1,7 +1,7 @@
 {% extends '@ChamiloCore/Layout/no_layout.html.twig' %}
 {% block content %}
 {% autoescape false %}
-    <link rel="stylesheet" href="{{ url('home') ~ 'build/css/scorm.css' }}"/>
+    <link rel="stylesheet" href="{{ url('index') ~ 'build/css/scorm.css' }}"/>
     <div id="learning_path_main" class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' : '' }}">
         {% if show_left_column == 1 %}
             <div id="learning_path_left_zone" class="sidebar-scorm">

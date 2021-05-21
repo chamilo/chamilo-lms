@@ -1,6 +1,6 @@
 {% autoescape false %}
 
-{% set finderFolder = url('home') ~ 'assets/elfinder/dist/' %}
+{% set finderFolder = url('index') ~ 'assets/elfinder/dist/' %}
 <!-- elFinder CSS (REQUIRED) -->
 <link rel="stylesheet" type="text/css" media="screen" href="{{ finderFolder }}css/elfinder.min.css">
 <link rel="stylesheet" type="text/css" media="screen" href="{{ finderFolder }}css/theme.css">
@@ -30,7 +30,7 @@
         var funcNum = getUrlParam('CKEditorFuncNum');
 
         var elf = $('#elfinder').elfinder({
-            url : '{{ url('home') }}editor/connector{{ course_condition }}',
+            url : '{{ url('index') }}editor/connector{{ course_condition }}',
             getFileCallback : function(file) {
                 if (window.opener) {
                     window.opener.CKEDITOR.tools.callFunction(funcNum, file.url);

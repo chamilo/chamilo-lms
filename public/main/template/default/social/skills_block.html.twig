@@ -12,7 +12,9 @@ $(function () {
         {% else %}
             <p>{{ 'WithoutAchievedSkills'|get_lang }}</p>
             <p>
-                <a href="{{ url('home') ~ 'main/social/skills_wheel.php' }}">{{ 'SkillsWheel'|get_lang }}</a>
+                <a href="{{ url('index') ~ 'main/social/skills_wheel.php' }}">
+                    {{ 'SkillsWheel'|get_lang }}
+                </a>
             </p>
         {% endif %}
     {% endset %}

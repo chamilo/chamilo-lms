@@ -12,7 +12,7 @@
                         <div class="pull-right">
                             <a class="btn btn-default btn-sm btn-social-edit"
                                title="{{ "Edit"|get_lang }}"
-                               href="{{ url('home') }}main/admin/user_edit.php?user_id={{ user.id }}"
+                               href="{{ url('index') }}main/admin/user_edit.php?user_id={{ user.id }}"
                             >
                                 <i class="fa fa-pencil" aria-hidden="true"></i>
                             </a>
@@ -83,7 +83,7 @@
                         {% if show_full_profile %}
                             {% if user.email %}
                                 <li class="item">
-                                    <a href="{{ url('home') }}main/messages/new_message.php">
+                                    <a href="{{ url('index') }}main/messages/new_message.php">
                                         {{ "sn-message.png"|img(22, "Email" | get_lang) }}
                                         <div class="email-overflow">{{ user.email }}</div>
                                     </a>

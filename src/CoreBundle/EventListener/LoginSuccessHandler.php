@@ -68,7 +68,7 @@ class LoginSuccessHandler
         /* Possible values: index.php, user_portal.php, main/auth/courses.php */
         $pageAfterLogin = $this->settingsManager->getSetting('registration.page_after_login');
 
-        $legacyIndex = $this->router->generate('home', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $legacyIndex = $this->router->generate('index', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
         // Default redirect:
         $url = $legacyIndex;

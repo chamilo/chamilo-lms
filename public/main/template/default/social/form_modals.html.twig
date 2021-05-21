@@ -35,7 +35,7 @@
             e.preventDefault();
 
             var $frmSendInvitation = $sendInvitationModal.find('.modal-body form'),
-                url = '{{ url('home') }}main/inc/ajax/message.ajax.php?a=send_invitation&user_id=' + sendToUser;
+                url = '{{ url('index') }}main/inc/ajax/message.ajax.php?a=send_invitation&user_id=' + sendToUser;
 
             $.get(url, $frmSendInvitation.serialize(), function() {
                 $frmSendInvitation[0].reset();

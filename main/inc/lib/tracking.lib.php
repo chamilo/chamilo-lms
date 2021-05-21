@@ -7369,7 +7369,7 @@ class Tracking
         $quizzesTable = new SortableTableFromArray([], 0, 0, 'quizzes');
         $quizzesTable->setHeaders(
             [
-                get_lang('Exercises'),
+                get_lang('Title'),
                 get_lang('Attempts'),
                 get_lang('BestAttempt'),
                 get_lang('Ranking'),
@@ -7508,10 +7508,11 @@ class Tracking
             $quizzesTable->addRow($quizData);
         }
 
-        return Display::div(
-            $quizzesTable->toHtml(),
-            ['class' => 'table-responsive']
-        );
+        return Display::page_subheader2(get_lang('Exercises'))
+            .Display::div(
+                $quizzesTable->toHtml(),
+                ['class' => 'table-responsive']
+            );
     }
 
     private static function generateLearningPathsTable(User $user, array $courseInfo, int $sessionId = 0): string

@@ -70,15 +70,12 @@ import Swal from 'sweetalert2';
 window.Swal = Swal;
 
 // @todo rework url naming
-const homePublicUrl = Routing.generate('home');
+//const homePublicUrl = Routing.generate('index');
+const homePublicUrl = '/';
 const mainUrl = homePublicUrl + 'main/';
 const webAjax = homePublicUrl + 'main/inc/ajax/';
 
 var ajax_url = webAjax + 'chat.ajax.php';
-var online_button = '<img src="' + homePublicUrl + 'img/statusonline.png">';
-var offline_button = '<img src="' + homePublicUrl + 'img/statusoffline.png">';
-var connect_lang = 'ChatConnected';
-var disconnect_lang = 'ChatDisconnected';
 
 $(function () {
   let courseId = $('body').attr('data-course-id');

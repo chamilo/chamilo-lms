@@ -41,6 +41,8 @@ $sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
 $courseCode = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : null;
 $allowCareerUser = api_get_configuration_value('allow_career_users');
 
+$showGraph = false === api_get_configuration_value('hide_session_graph_in_my_progress');
+
 if (!empty($courseUserList)) {
     $items = MySpace::get_connections_from_course_list(
         $user_id,
@@ -81,12 +83,19 @@ if (!empty($courseUserList)) {
     }
 }
 
-$content = Tracking::showUserProgress($user_id, $sessionId);
+$content = Tracking::showUserProgress(
+    $user_id,
+    $sessionId,
+    '',
+    true,
+    true,
+    false,
+    $showGraph
+);
 $showAllSessionCourses = api_get_configuration_value('my_progress_session_show_all_courses');
 
 if ($showAllSessionCourses && !empty($sessionId) && empty($courseCode)) {
     $userSessionCourses = UserManager::get_courses_list_by_session($user_id, $sessionId);
-
     foreach ($userSessionCourses as $userSessionCourse) {
         $content .= Tracking::show_course_detail(
             $user_id,
@@ -102,19 +111,19 @@ if ($showAllSessionCourses && !empty($sessionId) && empty($courseCode)) {
 if (!empty($dates)) {
     $content .= Display::page_subheader(get_lang('Timeline'));
     $content .= '
-        <div class="row">
-          <div class="col-md-12">
-              <div id="my_timeline">
-                  <ul id="dates">'.$dates.'</ul>
-                  <ul id="issues">'.$issues.'</ul>
-                  <div id="grad_left"></div>
-                  <div id="grad_right"></div>
-                  <a href="#" id="prev"></a>
-                  <a href="#" id="next"></a>
-              </div>
-           </div>
-        </div>
-  ';
+    <div class="row">
+      <div class="col-md-12">
+          <div id="my_timeline">
+              <ul id="dates">'.$dates.'</ul>
+              <ul id="issues">'.$issues.'</ul>
+              <div id="grad_left"></div>
+              <div id="grad_right"></div>
+              <a href="#" id="prev"></a>
+              <a href="#" id="next"></a>
+          </div>
+       </div>
+    </div>
+    ';
 }
 
 if (api_get_configuration_value('private_messages_about_user_visible_to_user') === true) {

@@ -9682,6 +9682,7 @@ class SessionManager
                         style="width:100%;"
                         border="0"
                         frameborder="0"
+                        scrolling="no"
                         src="'.$careerUrl.'"
                     ></iframe>';
             }

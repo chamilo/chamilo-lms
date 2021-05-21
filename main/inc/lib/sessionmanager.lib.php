@@ -9699,10 +9699,6 @@ class SessionManager
             ';
         }
 
-        if (!empty($content)) {
-            $content = Display::page_subheader(get_lang('OngoingTraining')).$content;
-        }
-
         return $content;
     }
 

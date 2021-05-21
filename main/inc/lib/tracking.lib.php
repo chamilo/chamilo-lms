@@ -5004,6 +5004,7 @@ class Tracking
         $allowCareerUser = api_get_configuration_value('allow_career_users');
 
         // Session list.
+        $visibleSessions = [];
         if (!empty($course_in_session)) {
             $main_session_graph = '';
             // Load graphics only when calling to an specific session
@@ -5011,7 +5012,6 @@ class Tracking
             $my_results = [];
             $all_exercise_graph_list = [];
             $all_exercise_start_time = [];
-            $allCareers = [];
             foreach ($course_in_session as $my_session_id => $session_data) {
                 $course_list = $session_data['course_list'];
                 $user_count = count(SessionManager::get_users_by_session($my_session_id));
@@ -5021,10 +5021,7 @@ class Tracking
                 $visibility = api_get_session_visibility($my_session_id, null, false, $user_id);
 
                 if (SESSION_AVAILABLE === $visibility) {
-                    $careers = SessionManager::getCareersFromSession($my_session_id);
-                    if (!empty($careers)) {
-                        $allCareers = array_merge($allCareers, $careers);
-                    }
+                    $visibleSessions[] = $my_session_id;
                 }
 
                 foreach ($course_list as $course_data) {
@@ -5209,14 +5206,16 @@ class Tracking
                 );
             }
 
-            if ($allowCareerUser && !empty($allCareers)) {
-                $careers = [];
-                foreach ($allCareers as $career) {
-                    $careers[$career['id']] = $career;
+            if ($allowCareerUser) {
+                $diagrams = '';
+                if (!empty($visibleSessions)) {
+                    $diagrams .= Display::page_subheader(get_lang('OngoingTraining'));
+                    foreach ($visibleSessions as $sessionId) {
+                        $diagrams .= SessionManager::getCareerDiagramPerSession($sessionId, $user_id);
+                    }
                 }
 
-                $title = Display::page_subheader(get_lang('OngoingTraining'));
-                $html .= $title.MyStudents::getCareersTable($careers);
+                $html .= $diagrams.MyStudents::userCareersTable($user_id);
             }
 
             $html .= Display::div($sessionsTable->toHtml(), ['class' => 'table-responsive']);

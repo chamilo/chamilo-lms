@@ -16,7 +16,9 @@ class MyStudents
             return '';
         }
 
-        return self::getCareersTable($careers);
+        $title = Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
+
+        return $title.self::getCareersTable($careers);
     }
 
     public static function getCareersTable(array $careers): string

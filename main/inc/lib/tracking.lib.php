@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
+use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 use CpChart\Cache as pCache;
@@ -2258,7 +2259,8 @@ class Tracking
      * @param string code
      * @param int id (optional), filtered by exercise
      * @param int id (optional), if param $session_id is null
-     *                                                it'll return results including sessions, 0 = session is not filtered
+     *                                                it'll return results including sessions, 0 = session is not
+     *                                                filtered
      *
      * @return string value (number %) Which represents a round integer about the score average
      */
@@ -4025,7 +4027,8 @@ class Tracking
      *
      * @param int|array  Student id
      * @param string     Course code
-     * @param int        Session id if null(default) return count of messages including sessions, 0 = session is not filtered
+     * @param int        Session id if null(default) return count of messages including sessions, 0 = session is not
+     *                           filtered
      *
      * @return int Count of messages
      */
@@ -5468,6 +5471,7 @@ class Tracking
         }
 
         $user_id = (int) $user_id;
+        $user = api_get_user_entity($user_id);
         $session_id = (int) $session_id;
 
         $html = '<a name="course_session_data"></a>';
@@ -5483,7 +5487,7 @@ class Tracking
         // Show exercise results of invisible exercises? see BT#4091
         $quizzesHtml = self::generateQuizzesTable($course_info, $session_id);
         // LP table results
-        $learningPathsHtml = self::generateLearningPathsTable($user_id, $course_info, $session_id);
+        $learningPathsHtml = self::generateLearningPathsTable($user, $course_info, $session_id);
         $skillsHtml = self::displayUserSkills($user_id, $course_info['id'], $session_id);
 
         $toolsHtml = [
@@ -7365,7 +7369,7 @@ class Tracking
         $quizzesTable = new SortableTableFromArray([], 0, 0, 'quizzes');
         $quizzesTable->setHeaders(
             [
-                get_lang('Exercises'),
+                get_lang('Title'),
                 get_lang('Attempts'),
                 get_lang('BestAttempt'),
                 get_lang('Ranking'),
@@ -7504,14 +7508,17 @@ class Tracking
             $quizzesTable->addRow($quizData);
         }
 
-        return Display::div(
-            $quizzesTable->toHtml(),
-            ['class' => 'table-responsive']
-        );
+        return Display::page_subheader2(get_lang('Exercises'))
+            .Display::div(
+                $quizzesTable->toHtml(),
+                ['class' => 'table-responsive']
+            );
     }
 
-    private static function generateLearningPathsTable(int $userId, array $courseInfo, int $sessionId = 0): string
+    private static function generateLearningPathsTable(User $user, array $courseInfo, int $sessionId = 0): string
     {
+        $html = [];
+
         $columnHeaders = [
             'lp' => get_lang('LearningPath'),
             'time' => get_lang('LatencyTimeSpent'),
@@ -7548,166 +7555,183 @@ class Tracking
         }
 
         $addLpInvisibleCheckbox = api_get_configuration_value('student_follow_page_add_LP_invisible_checkbox');
+        $showInvisibleLp = api_get_configuration_value('student_follow_page_show_invisible_lp_students');
+
+        if ($addLpInvisibleCheckbox && $showInvisibleLp) {
+            $addLpInvisibleCheckbox = false;
+        }
 
         $columnHeadersKeys = array_keys($columnHeaders);
 
-        $learningpathsTable = new SortableTableFromArray([], 0, 0, 'learningpaths');
-        $learningpathsTable->setHeaders($columnHeaders);
-
-        // LP table results
-        $list = new LearnpathList(
-            api_get_user_id(),
-            $courseInfo,
-            $sessionId,
-            'lp.publicatedOn ASC',
-            true,
-            null,
-            true
-        );
-
-        $lpList = $list->get_flat_list();
-
-        if (empty($lpList)) {
-            return Display::return_message(get_lang('NoLearnpath'));
-        }
+        $categories = learnpath::getCategories($courseInfo['real_id'], true);
+        $countCategories = count($categories);
 
         $webCodePath = api_get_path(WEB_CODE_PATH);
 
-        foreach ($lpList as $lpId => $learnpath) {
-            $learningpathData = [];
+        /** @var CLpCategory $category */
+        foreach ($categories as $category) {
+            // LP table results
+            $objLearnpathList = new LearnpathList(
+                $user->getId(),
+                $courseInfo,
+                $sessionId,
+                'lp.publicatedOn ASC',
+                true,
+                $category->getId(),
+                false,
+                $showInvisibleLp
+            );
+            $lpList = $objLearnpathList->get_flat_list();
 
-            if (!$learnpath['lp_visibility']) {
+            $learningpathsTable = new SortableTableFromArray([], 0, 0, 'learningpaths');
+            $learningpathsTable->setHeaders($columnHeaders);
+
+            foreach ($lpList as $lpId => $learnpath) {
+                $learningpathData = [];
+
+                if (!$learnpath['lp_visibility']) {
+                    continue;
+                }
+
+                if ($addLpInvisibleCheckbox) {
+                    if (!StudentFollowPage::isViewVisible($lpId, $user->getId(), $courseInfo['real_id'], $sessionId)) {
+                        continue;
+                    }
+                }
+
+                $url = $webCodePath.'lp/lp_controller.php?'
+                    .http_build_query(
+                        ['cidReq' => $courseInfo['code'], 'id_session' => $sessionId, 'lp_id' => $lpId, 'action' => 'view']
+                    );
+
+                if (in_array('lp', $columnHeadersKeys)) {
+                    if ($learnpath['lp_visibility'] == 0) {
+                        $learningpathData[] = $learnpath['lp_name'];
+                    } else {
+                        $learningpathData[] = Display::url(
+                            $learnpath['lp_name'],
+                            $url,
+                            ['target' => SESSION_LINK_TARGET]
+                        );
+                    }
+                }
+
+                if (in_array('time', $columnHeadersKeys)) {
+                    $time_spent_in_lp = self::get_time_spent_in_lp(
+                        $user->getId(),
+                        $courseInfo['code'],
+                        [$lpId],
+                        $sessionId
+                    );
+
+                    $learningpathData[] = api_time_to_hms($time_spent_in_lp);
+                }
+
+                if (in_array('progress', $columnHeadersKeys)) {
+                    $progress = self::get_avg_student_progress(
+                        $user->getId(),
+                        $courseInfo['code'],
+                        [$lpId],
+                        $sessionId
+                    );
+
+                    if (is_numeric($progress)) {
+                        $progress = sprintf(get_lang('XPercent'), $progress);
+                    }
+
+                    $learningpathData[] = $progress;
+                }
+
+                if (in_array('score', $columnHeadersKeys)) {
+                    $percentage_score = self::get_avg_student_score(
+                        $user->getId(),
+                        $courseInfo['code'],
+                        [$lpId],
+                        $sessionId
+                    );
+
+                    if (is_numeric($percentage_score)) {
+                        $percentage_score = sprintf(get_lang('XPercent'), $percentage_score);
+                    } else {
+                        $percentage_score = sprintf(get_lang('XPercent'), 0);
+                    }
+
+                    $learningpathData[] = $percentage_score;
+                }
+
+                if (in_array('best_score', $columnHeadersKeys)) {
+                    $bestScore = self::get_avg_student_score(
+                        $user->getId(),
+                        $courseInfo['code'],
+                        [$lpId],
+                        $sessionId,
+                        false,
+                        false,
+                        true
+                    );
+
+                    if (is_numeric($bestScore)) {
+                        $bestScore = sprintf(get_lang('XPercent'), $bestScore);
+                    } else {
+                        $bestScore = '-';
+                    }
+
+                    $learningpathData[] = $bestScore;
+                }
+
+                if (in_array('last_connection', $columnHeadersKeys)) {
+                    $lastConnectionInLp = self::get_last_connection_time_in_lp(
+                        $user->getId(),
+                        $courseInfo['code'],
+                        $lpId,
+                        $sessionId
+                    );
+
+                    $lastConnection = '-';
+
+                    if (!empty($lastConnectionInLp)) {
+                        $lastConnection = api_convert_and_format_date($lastConnectionInLp, DATE_TIME_FORMAT_LONG);
+                    }
+
+                    $learningpathData[] = $lastConnection;
+                }
+
+                if (in_array('student_follow_page_add_LP_subscription_info', $columnHeadersKeys)) {
+                    $learningpathData[] = StudentFollowPage::getLpSubscription(
+                        $learnpath,
+                        $user->getId(),
+                        $courseInfo['real_id'],
+                        $sessionId
+                    );
+                }
+
+                if (in_array('student_follow_page_add_LP_acquisition_info', $columnHeadersKeys)) {
+                    $learningpathData[] = StudentFollowPage::getLpAcquisition(
+                        $learnpath,
+                        $user->getId(),
+                        $courseInfo['real_id'],
+                        $sessionId
+                    );
+                }
+
+                $learningpathsTable->addRow($learningpathData);
+            }
+
+            if ($learningpathsTable->getRowCount() < 2) {
                 continue;
             }
 
-            if ($addLpInvisibleCheckbox) {
-                if (!StudentFollowPage::isViewVisible($lpId, $userId, $courseInfo['real_id'], $sessionId)) {
-                    continue;
-                }
+            if ($countCategories > 1) {
+                $html[] = Display::tag('h5', $category->getName());
             }
 
-            $url = $webCodePath.'lp/lp_controller.php?'
-                .http_build_query(
-                    ['cidReq' => $courseInfo['code'], 'id_session' => $sessionId, 'lp_id' => $lpId, 'action' => 'view']
-                );
-
-            if (in_array('lp', $columnHeadersKeys)) {
-                if ($learnpath['lp_visibility'] == 0) {
-                    $learningpathData[] = $learnpath['lp_name'];
-                } else {
-                    $learningpathData[] = Display::url(
-                        $learnpath['lp_name'],
-                        $url,
-                        ['target' => SESSION_LINK_TARGET]
-                    );
-                }
-            }
-
-            if (in_array('time', $columnHeadersKeys)) {
-                $time_spent_in_lp = self::get_time_spent_in_lp(
-                    $userId,
-                    $courseInfo['code'],
-                    [$lpId],
-                    $sessionId
-                );
-
-                $learningpathData[] = api_time_to_hms($time_spent_in_lp);
-            }
-
-            if (in_array('progress', $columnHeadersKeys)) {
-                $progress = self::get_avg_student_progress(
-                    $userId,
-                    $courseInfo['code'],
-                    [$lpId],
-                    $sessionId
-                );
-
-                if (is_numeric($progress)) {
-                    $progress = sprintf(get_lang('XPercent'), $progress);
-                }
-
-                $learningpathData[] = $progress;
-            }
-
-            if (in_array('score', $columnHeadersKeys)) {
-                $percentage_score = self::get_avg_student_score(
-                    $userId,
-                    $courseInfo['code'],
-                    [$lpId],
-                    $sessionId
-                );
-
-                if (is_numeric($percentage_score)) {
-                    $percentage_score = sprintf(get_lang('XPercent'), $percentage_score);
-                } else {
-                    $percentage_score = sprintf(get_lang('XPercent'), 0);
-                }
-
-                $learningpathData[] = $percentage_score;
-            }
-
-            if (in_array('best_score', $columnHeadersKeys)) {
-                $bestScore = self::get_avg_student_score(
-                    $userId,
-                    $courseInfo['code'],
-                    [$lpId],
-                    $sessionId,
-                    false,
-                    false,
-                    true
-                );
-
-                if (is_numeric($bestScore)) {
-                    $bestScore = sprintf(get_lang('XPercent'), $bestScore);
-                } else {
-                    $bestScore = '-';
-                }
-
-                $learningpathData[] = $bestScore;
-            }
-
-            if (in_array('last_connection', $columnHeadersKeys)) {
-                $lastConnectionInLp = self::get_last_connection_time_in_lp(
-                    $userId,
-                    $courseInfo['code'],
-                    $lpId,
-                    $sessionId
-                );
-
-                $lastConnection = '-';
-
-                if (!empty($lastConnectionInLp)) {
-                    $lastConnection = api_convert_and_format_date($lastConnectionInLp, DATE_TIME_FORMAT_LONG);
-                }
-
-                $learningpathData[] = $lastConnection;
-            }
-
-            if (in_array('student_follow_page_add_LP_subscription_info', $columnHeadersKeys)) {
-                $learningpathData[] = StudentFollowPage::getLpSubscription(
-                    $learnpath,
-                    $userId,
-                    $courseInfo['real_id'],
-                    $sessionId
-                );
-            }
-
-            if (in_array('student_follow_page_add_LP_acquisition_info', $columnHeadersKeys)) {
-                $learningpathData[] = StudentFollowPage::getLpAcquisition(
-                    $learnpath,
-                    $userId,
-                    $courseInfo['real_id'],
-                    $sessionId
-                );
-            }
-
-            $learningpathsTable->addRow($learningpathData);
+            $html[] = Display::div(
+                $learningpathsTable->toHtml(),
+                ['class' => 'table-responsive']
+            );
         }
 
-        return Display::div(
-            $learningpathsTable->toHtml(),
-            ['class' => 'table-responsive']
-        );
+        return implode(PHP_EOL, $html);
     }
 }
 

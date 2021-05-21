@@ -194,7 +194,7 @@ function generateHtmlForLearningPaths(int $studentId, array $courseInfo, int $se
             $html .= Display::page_subheader3($item->getName());
         }
 
-        $lpTable = [$columnHeaders];
+        $lpTable = [];
 
         foreach ($flatList as $learnpath) {
             $lpId = $learnpath['lp_old_id'];
@@ -306,6 +306,12 @@ function generateHtmlForLearningPaths(int $studentId, array $courseInfo, int $se
 
             $lpTable[] = $contentToExport;
         }
+
+        if (empty($lpTable)) {
+            continue;
+        }
+
+        array_unshift($lpTable, [$columnHeaders]);
 
         $html .= Export::convert_array_to_html($lpTable);
     }

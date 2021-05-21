@@ -9637,7 +9637,6 @@ class SessionManager
         $extraFieldValueCareer = new ExtraFieldValue('career');
 
         $visibility = api_get_session_visibility($sessionId, null, false, $userId);
-
         $content = '';
         if (SESSION_AVAILABLE === $visibility) {
             $value = $extraFieldValueSession->get_values_by_handler_and_field_variable($sessionId, 'careerid');
@@ -9655,17 +9654,37 @@ class SessionManager
                         $career = new Career();
                         $careerInfo = $career->get($finalCareerId);
                         if (!empty($careerInfo)) {
+                            $id = uniqid('career_diagram', false);
                             $careerUrl = api_get_path(WEB_CODE_PATH).
                                 'user/career_diagram.php?iframe=1&career_id='.$finalCareerId;
-                            $content .= '<iframe
-                                style="width:100%; height:500px"
-                                border="0"
-                                frameborder="0"
-                                src="'.$careerUrl.'"></iframe>';
+                            $content .= '
+                                <iframe
+                                    style="width:100%; height:500px"
+                                    border="0"
+                                    frameborder="0"
+                                    src="'.$careerUrl.'"
+                                />';
                         }
                     }
                 }
             }
+        }
+
+        if (!empty($content)) {
+            $content .= '
+               <script>
+                resizeIframe = function(iFrame) {
+                    //iFrame.width  = iFrame.contentWindow.document.body.scrollWidth;
+                    iFrame.height = iFrame.contentWindow.document.body.scrollHeight;
+                }
+                window.addEventListener("DOMContentLoaded", function(e) {
+                    var iframes = document.querySelectorAll("iframe");
+                    for( var i = 0; i < iframes.length; i++) {
+                        resizeIFrame(iframes[i]);
+                    }
+                } );
+                </script>
+            ';
         }
 
         if (!empty($content)) {

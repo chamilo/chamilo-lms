@@ -1,6 +1,6 @@
-{% extends 'layout/blank_no_header.tpl'|get_template %}
+{% extends 'layout/no_layout.tpl'|get_template %}
 
 {% block body %}
-    {% include 'diagram.tpl'%}
+    {% include 'career/diagram.tpl' |get_template %}
     {{ content }}
 {% endblock %}

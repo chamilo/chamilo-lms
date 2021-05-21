@@ -241,7 +241,9 @@ if (0 === $session->getNbrCourses()) {
             Display::return_icon('teacher.png', get_lang('Edit coach')),
             $codePath."session/session_course_edit.php?id_session=$sessionId&page=resume_session.php&course_code={$courseCode}$orig_param"
         );
-        $courseItem .= Display::url(
+
+        // @todo
+        /*$courseItem .= Display::url(
             Display::return_icon('folder_document.png', get_lang('File upload')),
             '#',
             [
@@ -249,7 +251,7 @@ if (0 === $session->getNbrCourses()) {
                 'data-session' => $sessionId,
                 'data-course' => $courseId,
             ]
-        );
+        );*/
         $courseItem .= Display::url(
             Display::return_icon('delete.png', get_lang('Delete')),
             api_get_self()."?id_session=$sessionId&action=delete&idChecked[]={$courseCode}",
@@ -278,7 +280,7 @@ $url .= Display::url(
     $codePath."user/user_export.php?file_type=csv&session=$sessionId&addcsvheader=1"
 );
 
-$userListToShow = Display::page_subheader(get_lang('User list').$url);
+$userListToShow = Display::page_subheader(get_lang('User list').Display::toolbarAction('users', [$url]));
 $sessionRelUsers = Container::getSessionRepository()->getUsersByAccessUrl($session, api_get_url_entity());
 
 if (!empty($sessionRelUsers)) {

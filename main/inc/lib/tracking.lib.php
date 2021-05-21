@@ -7555,6 +7555,11 @@ class Tracking
         }
 
         $addLpInvisibleCheckbox = api_get_configuration_value('student_follow_page_add_LP_invisible_checkbox');
+        $showInvisibleLp = api_get_configuration_value('student_follow_page_show_invisible_lp_students');
+
+        if ($addLpInvisibleCheckbox && $showInvisibleLp) {
+            $addLpInvisibleCheckbox = false;
+        }
 
         $columnHeadersKeys = array_keys($columnHeaders);
 
@@ -7573,7 +7578,8 @@ class Tracking
                 'lp.publicatedOn ASC',
                 true,
                 $category->getId(),
-                false
+                false,
+                $showInvisibleLp
             );
             $lpList = $objLearnpathList->get_flat_list();
 

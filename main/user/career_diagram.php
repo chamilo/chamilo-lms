@@ -97,5 +97,10 @@ if (!empty($diagram)) {
 }
 
 $tpl->assign('content', $html);
-$layout = $tpl->get_template('career/diagram.tpl');
+if ($showFullPage) {
+    $layout = $tpl->get_template('career/diagram_full.tpl');
+} else {
+    $layout = $tpl->get_template('career/diagram_iframe.tpl');
+}
+
 $tpl->display($layout);

@@ -9661,7 +9661,8 @@ class Exercise
                                 [
                                     'href' => '#!',
                                     'onclick' => 'showUserToSendNotificacion(this)',
-                                    'data-link' => 'exercise.php?'.api_get_cidreq().'&choice=send_reminder&sec_token='.$token.'&exerciseId='.$row['id'],
+                                    'data-link' => 'exercise.php?'.api_get_cidreq()
+                                        .'&choice=send_reminder&sec_token='.$token.'&exerciseId='.$row['id'],
                                 ]
                             );
                         }
@@ -10967,81 +10968,69 @@ class Exercise
         $toUsers = [],
         $withSelectAll = true
     ) {
-        $data = [];
         $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
         $courseId = empty($courseId) ? api_get_course_id() : (int) $courseId;
         $exerciseId = (int) $exerciseId;
         if ((0 == $sessionId && 0 == $courseId) || 0 == $exerciseId) {
-            return $data;
+            return [];
         }
         $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
         $tblCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+
+        $data = [];
+
         $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
-        $countSelect = " count(*) as total";
+        $countSelect = " COUNT(*) AS total ";
         $sqlToUsers = '';
         if (0 == $sessionId) {
             // Courses
             if (false === $count) {
-                $countSelect = "
-                cq.title as quiz_title,
-                cq.iid as quiz_id,
-                cru.c_id as course_id,
-                cru.user_id as user_id,
-                c.title as title,
-                c.`code` as 'code',
-                cq.active as active,
-                cq.session_id as session_id
-                ";
+                $countSelect = " cq.title AS quiz_title,
+                    cq.iid AS quiz_id,
+                    cru.c_id AS course_id,
+                    cru.user_id AS user_id,
+                    c.title AS title,
+                    c.code AS 'code',
+                    cq.active AS active,
+                    cq.session_id AS session_id ";
             }
 
-            $sql = "
-            SELECT
-                $countSelect
-            FROM
-                $tblCourseRelUser as cru
-                INNER JOIN $tblCourse as c ON ( cru.c_id = c.id )
-                INNER JOIN $tblQuiz as cq ON ( cq.c_id = c.id )
-            WHERE
-                cru.is_tutor is null
-                AND ( cq.session_id = 0 or cq.session_id is null)
-                AND cq.active > 0
-                AND cq.c_id = $courseId
-                AND cq.iid = $exerciseId
-            ";
+            $sql = "SELECT $countSelect
+                FROM $tblCourseRelUser AS cru
+                INNER JOIN $tblCourse AS c ON ( cru.c_id = c.id )
+                INNER JOIN $tblQuiz AS cq ON ( cq.c_id = c.id )
+                WHERE cru.is_tutor IS NULL
+                    AND ( cq.session_id = 0 OR cq.session_id IS NULL)
+                    AND cq.active > 0
+                    AND cq.c_id = $courseId
+                    AND cq.iid = $exerciseId ";
             if (!empty($toUsers)) {
                 $sqlToUsers = ' AND cru.user_id IN ('.implode(',', $toUsers).') ';
             }
         } else {
             //Sessions
             if (false === $count) {
-                $countSelect = "
-                cq.title as quiz_title,
-                cq.iid as quiz_id,
-                sru.user_id as user_id,
-                cq.c_id as course_id,
-                sru.session_id as session_id,
-                c.title as title,
-                c.`code` as 'code',
-                cq.active as active
-                ";
+                $countSelect = " cq.title AS quiz_title,
+                    cq.iid AS quiz_id,
+                    sru.user_id AS user_id,
+                    cq.c_id AS course_id,
+                    sru.session_id AS session_id,
+                    c.title AS title,
+                    c.code AS 'code',
+                    cq.active AS active ";
             }
             if (!empty($toUsers)) {
                 $sqlToUsers = ' AND sru.user_id IN ('.implode(',', $toUsers).') ';
             }
-            $sql = "
-            SELECT
-                   $countSelect
-            FROM
-                $tblSessionRelUser AS sru
-                INNER JOIN $tblQuiz AS cq ON ( sru.session_id = sru.session_id )
-                INNER JOIN $tblCourse AS c ON ( c.id = cq.c_id )
-            WHERE
-                  cq.active > 0
-              AND cq.c_id = $courseId
-              AND sru.session_id = $sessionId
-              AND cq.iid = $exerciseId
-           ";
+            $sql = " SELECT $countSelect
+                FROM $tblSessionRelUser AS sru
+                    INNER JOIN $tblQuiz AS cq ON ( sru.session_id = sru.session_id )
+                    INNER JOIN $tblCourse AS c ON ( c.id = cq.c_id )
+                WHERE cq.active > 0
+                  AND cq.c_id = $courseId
+                  AND sru.session_id = $sessionId
+                  AND cq.iid = $exerciseId ";
         }
         $sql .= " $sqlToUsers ORDER BY cq.c_id ";
 
@@ -11133,14 +11122,9 @@ class Exercise
         $teachersName = [];
         $teachersPrint = [];
         if (0 == $sessionId) {
-            $sql = "
-            SELECT
-               course_user.user_id as user_id
-            FROM
-                $tblCourseUser as course_user
-            WHERE
-                course_user.status='1' AND
-                course_user.c_id ='".$courseId."'";
+            $sql = "SELECT course_user.user_id AS user_id
+                FROM $tblCourseUser AS course_user
+                WHERE course_user.status = 1 AND course_user.c_id ='".$courseId."'";
             $result = Database::query($sql);
             $data = Database::store_result($result);
             Database::free_result($result);
@@ -11154,14 +11138,9 @@ class Exercise
             }
         } else {
             // general tutor
-            $sql = "
-            SELECT
-                   sesion.id_coach AS user_id
-            FROM
-                `$tblSession` AS sesion
-            WHERE
-                 sesion.id = $sessionId
-            ";
+            $sql = "SELECT sesion.id_coach AS user_id
+                FROM $tblSession AS sesion
+                WHERE sesion.id = $sessionId";
             $result = Database::query($sql);
             $data = Database::store_result($result);
             Database::free_result($result);
@@ -11174,16 +11153,11 @@ class Exercise
                 $teachersPrint[] = $teacherData['complete_name'];
             }
             // Teacher into sessions course
-            $sql = "
-            SELECT
-                session_rel_course_rel_user.user_id
-            FROM
-                $tblSessionUserRelCourse AS session_rel_course_rel_user
-            WHERE
-                  session_rel_course_rel_user.session_id = $sessionId AND
-                  session_rel_course_rel_user.c_id = $courseId AND
-                  session_rel_course_rel_user.status = 2
-            ";
+            $sql = "SELECT session_rel_course_rel_user.user_id
+                FROM $tblSessionUserRelCourse AS session_rel_course_rel_user
+                WHERE session_rel_course_rel_user.session_id = $sessionId AND
+                      session_rel_course_rel_user.c_id = $courseId AND
+                      session_rel_course_rel_user.status = 2";
             $result = Database::query($sql);
             $data = Database::store_result($result);
             Database::free_result($result);
@@ -11202,7 +11176,8 @@ class Exercise
         foreach ($usersArray as $userId => $userData) {
             $studentName = $userData['complete_name'];
             $title = sprintf(get_lang('QuizRemindSubject'), $teacherName);
-            $content = sprintf(get_lang('QuizFirstRemindBody'),
+            $content = sprintf(
+                get_lang('QuizFirstRemindBody'),
                 $studentName,
                 $quizTitle,
                 $courseTitle,
@@ -11210,25 +11185,20 @@ class Exercise
                 $quizTitle
             );
             if (!empty($minutes)) {
-                $content .= sprintf(get_lang('QuizRemindDuration'),
-                    $minutes
-                );
+                $content .= sprintf(get_lang('QuizRemindDuration'), $minutes);
             }
             if (!empty($start)) {
                 // api_get_utc_datetime
                 $start = api_format_date(($start), $formatDate);
 
-                $content .= sprintf(get_lang('QuizRemindStartDate'),
-                    $start
-                );
+                $content .= sprintf(get_lang('QuizRemindStartDate'), $start);
             }
             if (!empty($end)) {
                 $end = api_format_date(($end), $formatDate);
-                $content .= sprintf(get_lang('QuizRemindEndDate'),
-                    $end
-                );
+                $content .= sprintf(get_lang('QuizRemindEndDate'), $end);
             }
-            $content .= sprintf(get_lang('QuizLastRemindBody'),
+            $content .= sprintf(
+                get_lang('QuizLastRemindBody'),
                 $link,
                 $link,
                 $teacherName
@@ -11238,7 +11208,8 @@ class Exercise
                 foreach ($drhList as $drhUser) {
                     $drhUserData = api_get_user_info($drhUser['id']);
                     $drhName = $drhUserData['complete_name'];
-                    $contentDHR = sprintf(get_lang('QuizDhrRemindBody'),
+                    $contentDHR = sprintf(
+                        get_lang('QuizDhrRemindBody'),
                         $drhName,
                         $studentName,
                         $quizTitle,
@@ -11248,23 +11219,17 @@ class Exercise
                         $quizTitle
                     );
                     if (!empty($minutes)) {
-                        $contentDHR .= sprintf(get_lang('QuizRemindDuration'),
-                            $minutes
-                        );
+                        $contentDHR .= sprintf(get_lang('QuizRemindDuration'), $minutes);
                     }
                     if (!empty($start)) {
                         // api_get_utc_datetime
                         $start = api_format_date(($start), $formatDate);
 
-                        $contentDHR .= sprintf(get_lang('QuizRemindStartDate'),
-                            $start
-                        );
+                        $contentDHR .= sprintf(get_lang('QuizRemindStartDate'), $start);
                     }
                     if (!empty($end)) {
                         $end = api_format_date(($end), $formatDate);
-                        $contentDHR .= sprintf(get_lang('QuizRemindEndDate'),
-                            $end
-                        );
+                        $contentDHR .= sprintf(get_lang('QuizRemindEndDate'), $end);
                     }
                     MessageManager::send_message(
                         $drhUser['id'],

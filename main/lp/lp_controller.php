@@ -499,7 +499,8 @@ function SendReminderLp($toUser, $fromUser, $courseName, $lpName, $link)
         false,
         false,
         false,
-        false);
+        false
+    );
     $subjectLayout = $subjectTemplate->get_template(
         'mail/learning_path_reminder_subject.tpl'
     );
@@ -509,7 +510,8 @@ function SendReminderLp($toUser, $fromUser, $courseName, $lpName, $link)
         false,
         false,
         false,
-        false);
+        false
+    );
     $bodyTemplate->assign('courseName', $courseName);
     $bodyTemplate->assign('lpName', $lpName);
     $bodyTemplate->assign('link', $link);

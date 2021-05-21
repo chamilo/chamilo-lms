@@ -19,47 +19,40 @@ $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
-$htmlHeadXtra[] = "
-<div class=\"modal fade\" id=\"NotificarUsuarios\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\">
-    <div class=\"modal-dialog\" role=\"document\">
-        <div class=\"modal-content\">
-            <div class=\"modal-header\">
-                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
-                <span aria-hidden=\"true\">&times;</span></button>
-                <h4 class=\"modal-title\" id=\"myModalLabel\">
-
-                </h4>
+$htmlHeadXtra[] = '
+<div class="modal fade" id="NotificarUsuarios" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="'.get_lang('Close').'">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class=\"modal-body\">
-                <form action=\"#\" class=\"form-horizontal\">
-                    <div class='col-md-6'>
-                        ".get_lang('EmailNotifySubscription')."
+            <div class="modal-body">
+                <form action="#" class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-6" id="myModalLabel">'.get_lang('EmailNotifySubscription').'</div>
+                        <div class="col-md-6">
+                            <select class="selectpicker form-control" multiple="multiple" id="toUsers" name="toUsers">
+                                <option value="">-</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class='col-md-6'>
-                        <select
-                            class=\"selectpicker form-control\"
-                            multiple=\"multiple\"
-                            id=\"toUsers\"
-                            name=\"toUsers\"
-                        >
-                            <option value=\"\">-</option>
-                        </select>
-                    </div>
-                    <input class='hidden' id='urlTo' type='hidden'>
+                    <input class="hidden" id="urlTo" type="hidden">
                </form>
-               <div class='clearfix clear-fix'></div>
+               <div class="clearfix clear-fix"></div>
             </div>
-            <div class=\"modal-footer\">
-              <button type=\"button\" class=\"btn btn-default\" onclick='sendNotificationToUsers()' data-dismiss=\"modal\">".get_lang('SendMailToUsers')."
-              </button>
-              <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">".get_lang('Close')."
-              </button>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" onclick="sendNotificationToUsers()" data-dismiss="modal">'
+                    .get_lang('SendMailToUsers').'
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">'.get_lang('Close').'</button>
             </div>
         </div>
     </div>
-</div>";
+</div>';
 $htmlHeadXtra[] = '<script>
-function sendNotificationToUsers(){
+function sendNotificationToUsers() {
    var sendTo = $("#toUsers").val().join(",");
    var url = $("#urlTo").val() + sendTo;
    $("#toUsers").find("option").remove().end().selectpicker("refresh");
@@ -73,7 +66,7 @@ function sendNotificationToUsers(){
         $("#urlTo").val("");
     });
 }
-function showUserToSendNotificacion(element){
+function showUserToSendNotificacion(element) {
     var url = $(element).data("link");
     $("#toUsers").find("option").remove().end().selectpicker("refresh");
     $("#urlTo").val("");
@@ -487,13 +480,10 @@ if ($is_allowedToEdit) {
                         ));
                         break;
                     case 'send_reminder_to':
-                        $toUsers = isset($_GET['users']) ? $_GET['users'] : null;
-                        if (
-                            !empty($toUsers) &&
-                            !empty($exerciseId)
-                        ) {
+                        $toUsers = $_GET['users'] ?? null;
+                        if (!empty($toUsers) && !empty($exerciseId)) {
                             $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
-                            $courseCode = isset($_GET['cidReq']) ? $_GET['cidReq'] : null;
+                            $courseCode = $_GET['cidReq'] ?? null;
                             $courseId = api_get_course_int_id($courseCode);
                             $temo = [];
                             if (is_int(strpos($toUsers, 'X'))) {
@@ -519,15 +509,15 @@ if ($is_allowedToEdit) {
                                 $sessionId,
                                 $toUsers
                             );
-                            echo json_encode([
-                                'message' => Display::return_message(
-                                get_lang('AnnounceSentByEmail'),
-                                'confirmation'
-                            ),
-                                ]);
+                            echo json_encode(
+                                [
+                                    'message' => Display::return_message(
+                                        get_lang('AnnounceSentByEmail'), 'confirmation'
+                                    ),
+                                ]
+                            );
                         }
                         exit();
-                        break;
                     case 'send_reminder':
                         $users = Exercise::getUsersInExercise(
                             $objExerciseTmp->id,
@@ -536,8 +526,6 @@ if ($is_allowedToEdit) {
                         );
                         echo json_encode($users);
                         exit();
-
-                        break;
                 }
                 header('Location: '.$currentUrl);
                 exit;

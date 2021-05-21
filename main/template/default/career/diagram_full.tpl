@@ -2,5 +2,4 @@
 
 {% block content %}
     {% include 'career/diagram.tpl' |get_template %}
-    {{ content }}
 {% endblock %}

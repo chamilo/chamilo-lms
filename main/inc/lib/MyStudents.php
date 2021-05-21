@@ -54,13 +54,11 @@ class MyStudents
         return $table->toHtml();
     }
 
-
     public static function getBlockForSkills(int $studentId, int $courseId, int $sessionId): string
     {
         $allowAll = api_get_configuration_value('allow_teacher_access_student_skills');
 
         if ($allowAll) {
-            // Show all skills
             return Tracking::displayUserSkills($studentId, 0, 0, true);
         }
 

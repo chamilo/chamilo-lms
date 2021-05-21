@@ -9678,8 +9678,6 @@ class SessionManager
         $careersAdded = [];
         foreach ($sessionList as $sessionId) {
             $visibility = api_get_session_visibility($sessionId, null, false, $userId);
-            $content = '';
-
             if (SESSION_AVAILABLE === $visibility) {
                 $careerList = self::getCareersFromSession($sessionId);
                 if (empty($careerList)) {

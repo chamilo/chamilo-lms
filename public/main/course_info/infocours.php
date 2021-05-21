@@ -234,7 +234,10 @@ $group[] = $form->createElement(
     get_lang(' Open - access allowed for users registered on the platform'),
     COURSE_VISIBILITY_OPEN_PLATFORM
 );
-$group[] = $form->createElement('radio', 'visibility', null, get_lang('Private access (access authorized to group members only)'), COURSE_VISIBILITY_REGISTERED);
+$group[] = $form->createElement(
+    'radio', 'visibility', null, get_lang('Private access (access authorized to group members only)'),
+    COURSE_VISIBILITY_REGISTERED
+);
 $group[] = $form->createElement(
     'radio',
     'visibility',
@@ -269,7 +272,13 @@ $label = $form->addLabel(get_lang('Direct link'), sprintf(get_lang('Course setti
 
 $group2 = [];
 $group2[] = $form->createElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
-$group2[] = $form->createElement('radio', 'subscribe', null, get_lang('This function is only available to trainers'), 0);
+$group2[] = $form->createElement(
+    'radio',
+    'subscribe',
+    null,
+    get_lang('This function is only available to trainers'),
+    0
+);
 
 $myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
 
@@ -280,7 +289,13 @@ $group3[] = $form->createElement(
     get_lang('Users are allowed to unsubscribe from this course'),
     1
 );
-$group3[] = $form->createElement('radio', 'unsubscribe', null, get_lang('NotUsers are allowed to unsubscribe from this course'), 0);
+$group3[] = $form->createElement(
+    'radio',
+    'unsubscribe',
+    null,
+    get_lang('NotUsers are allowed to unsubscribe from this course'),
+    0
+);
 
 $text = $form->createElement(
     'text',
@@ -330,9 +345,9 @@ if ('true' == api_get_setting('documents_default_visibility_defined_in_course'))
 
 if ('true' == api_get_setting('show_default_folders')) {
     $group = [
-    $form->createElement('radio', 'show_system_folders', null, get_lang('Yes'), 1),
-    $form->createElement('radio', 'show_system_folders', null, get_lang('No'), 2),
-];
+        $form->createElement('radio', 'show_system_folders', null, get_lang('Yes'), 1),
+        $form->createElement('radio', 'show_system_folders', null, get_lang('No'), 2),
+    ];
 
     $globalGroup[get_lang('Show system folders.')] = $group;
 
@@ -513,7 +528,13 @@ $group[] = $form->createElement(
     get_lang('Allow learners to edit the agendaActivate'),
     1
 );
-$group[] = $form->createElement('radio', 'allow_user_edit_agenda', null, get_lang('Allow learners to edit the agendaDeactivate'), 0);
+$group[] = $form->createElement(
+    'radio',
+    'allow_user_edit_agenda',
+    null,
+    get_lang('Allow learners to edit the agendaDeactivate'),
+    0
+);
 
 $group2 = [];
 $group2[] = $form->createElement(
@@ -539,7 +560,13 @@ $group3[] = $form->createElement(
     get_lang('User picture in forumActivate'),
     1
 );
-$group3[] = $form->createElement('radio', 'allow_user_image_forum', null, get_lang('User picture in forumDeactivate'), 0);
+$group3[] = $form->createElement(
+    'radio',
+    'allow_user_image_forum',
+    null,
+    get_lang('User picture in forumDeactivate'),
+    0
+);
 
 $group4 = [];
 $group4[] = $form->createElement(
@@ -584,7 +611,13 @@ $group[] = $form->createElement(
     get_lang('Activate open the chat in a new window'),
     1
 );
-$group[] = $form->createElement('radio', 'allow_open_chat_window', null, get_lang('Deactivate open the chat in a new window'), 0);
+$group[] = $form->createElement(
+    'radio',
+    'allow_open_chat_window',
+    null,
+    get_lang('Deactivate open the chat in a new window'),
+    0
+);
 $myButton = $form->addButtonSave(get_lang('Save settings'), 'submit_save', true);
 
 $globalGroup = [
@@ -1042,8 +1075,7 @@ if ($form->validate() && $isEditable) {
         ->setLegal($updateValues['legal'])
         ->setActivateLegal($activeLegal)
         ->setRegistrationCode($updateValues['course_registration_password'])
-        ->setShowScore($updateValues['show_score'])
-    ;
+        ->setShowScore($updateValues['show_score']);
 
     $em->persist($courseEntity);
     $em->flush();

@@ -9,6 +9,7 @@ namespace Chamilo\LtiBundle\Entity;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -87,7 +88,7 @@ class ExternalTool
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\LtiBundle\Entity\ExternalTool", mappedBy="parent")
      */
-    protected ArrayCollection $children;
+    protected Collection $children;
 
     public function __construct()
     {
@@ -111,7 +112,7 @@ class ExternalTool
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -381,17 +382,25 @@ class ExternalTool
     {
         $unserialize = $this->unserializePrivacy();
 
+        if (!$unserialize) {
+            return false;
+        }
+
         return (bool) $unserialize['share_name'];
     }
 
     public function unserializePrivacy()
     {
-        return unserialize($this->privacy);
+        return unserialize((string) $this->privacy);
     }
 
     public function isSharingEmail(): bool
     {
         $unserialize = $this->unserializePrivacy();
+
+        if (!$unserialize) {
+            return false;
+        }
 
         return (bool) $unserialize['share_email'];
     }
@@ -399,6 +408,10 @@ class ExternalTool
     public function isSharingPicture(): bool
     {
         $unserialize = $this->unserializePrivacy();
+
+        if (!$unserialize) {
+            return false;
+        }
 
         return (bool) $unserialize['share_picture'];
     }
@@ -424,15 +437,17 @@ class ExternalTool
         return $this;
     }
 
-    public function getChildren(): ArrayCollection
+    public function getChildren(): Collection
     {
         return $this->children;
     }
 
     /**
+     * @param Collection $children
+     *
      * @return ExternalTool
      */
-    public function setChildren(ArrayCollection $children): self
+    public function setChildren(Collection $children): self
     {
         $this->children = $children;
 

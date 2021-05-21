@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\LtiBundle\Component;
 
 use Doctrine\ORM\EntityManager;
-use SimpleXMLElement;
+use \SimpleXMLElement;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 
 abstract class OutcomeRequest

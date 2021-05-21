@@ -94,3 +94,4 @@ cocur_slugify:
 
 imports:
     - {resource: ../src/CoreBundle/Resources/config/services.yml}
+    - {resource: ../src/LtiBundle/Resources/config/services.yml}

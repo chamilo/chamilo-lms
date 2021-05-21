@@ -2,21 +2,27 @@
 
 /* For licensing terms, see /license.txt */
 
-/**
- * Class MyStudents.
- */
 class MyStudents
 {
-    public static function getBlockForCareers(int $studentId): ?string
+    public static function userCareersTable(int $studentId): string
     {
         if (!api_get_configuration_value('allow_career_users')) {
-            return null;
+            return '';
         }
 
         $careers = UserManager::getUserCareers($studentId);
 
         if (empty($careers)) {
-            return null;
+            return '';
+        }
+
+        return self::getCareersTable($careers);
+    }
+
+    public static function getCareersTable(array $careers): string
+    {
+        if (empty($careers)) {
+            return '';
         }
 
         $webCodePath = api_get_path(WEB_CODE_PATH);
@@ -28,11 +34,11 @@ class MyStudents
         ];
 
         $data = array_map(
-            function (array $careerData) use ($webCodePath, $iconDiagram) {
-                $url = $webCodePath.'user/career_diagram.php?career_id='.$careerData['id'];
+            function (array $careerInfo) use ($webCodePath, $iconDiagram) {
+                $url = $webCodePath.'user/career_diagram.php?career_id='.$careerInfo['id'];
 
                 return [
-                    $careerData['name'],
+                    $careerInfo['name'],
                     Display::url($iconDiagram, $url),
                 ];
             },
@@ -43,9 +49,9 @@ class MyStudents
         $table->setHeaders($headers);
         $table->setData($data);
 
-        return Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title'])
-            .$table->toHtml();
+        return $table->toHtml();
     }
+
 
     public static function getBlockForSkills(int $studentId, int $courseId, int $sessionId): string
     {

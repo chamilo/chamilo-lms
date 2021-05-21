@@ -427,10 +427,16 @@ while ($row = Database::fetch_array($rs)) {
     }
 }
 
+$sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
+
 // Get the list of sessions where the user is subscribed as student
-$sql = 'SELECT session_id, c_id
-        FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).'
-        WHERE user_id='.$student_id;
+$sql = 'SELECT scu.session_id, scu.c_id
+        FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' scu
+        INNER JOIN '.$sessionTable.' as s
+        ON (s.id = scu.session_id)
+        WHERE user_id = '.$student_id.'
+        ORDER BY display_end_date DESC
+        ';
 $rs = Database::query($sql);
 $tmp_sessions = [];
 while ($row = Database::fetch_array($rs, 'ASSOC')) {
@@ -943,7 +949,8 @@ if (api_get_configuration_value('allow_career_users')) {
     foreach ($courses_in_session as $sId => $courses) {
         echo SessionManager::getCareerDiagramPerSession($sId, $student_id);
     }
-    echo MyStudents::getBlockForCareers($student_id);
+    echo Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
+    echo MyStudents::userCareersTable($student_id);
 }
 
 echo MyStudents::getBlockForSkills(

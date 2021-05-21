@@ -702,7 +702,8 @@ if (api_get_configuration_value('allow_career_users')) {
             echo SessionManager::getCareerDiagramPerSession($session['session_id'], $userId);
         }
     }
-    echo MyStudents::getBlockForCareers($userId);
+    echo Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
+    echo MyStudents::userCareersTable($userId);
 }
 
 echo Display::page_subheader(get_lang('SessionList'), null, 'h3', ['class' => 'section-title']);

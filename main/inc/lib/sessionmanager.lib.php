@@ -9631,45 +9631,59 @@ class SessionManager
         }
     }
 
+    public static function getCareersFromSession(int $sessionId): array
+    {
+        $extraFieldValueSession = new ExtraFieldValue('session');
+        $extraFieldValueCareer = new ExtraFieldValue('career');
+
+        $value = $extraFieldValueSession->get_values_by_handler_and_field_variable($sessionId, 'careerid');
+        $careers = [];
+        if (isset($value['value']) && !empty($value['value'])) {
+            $careerList = str_replace(['[', ']'], '', $value['value']);
+            $careerList = explode(',', $careerList);
+            $careerManager = new Career();
+            foreach ($careerList as $career) {
+                $careerIdValue = $extraFieldValueCareer->get_item_id_from_field_variable_and_field_value(
+                    'external_career_id',
+                    $career
+                );
+                if (isset($careerIdValue['item_id']) && !empty($careerIdValue['item_id'])) {
+                    $finalCareerId = $careerIdValue['item_id'];
+                    $careerInfo = $careerManager->get($finalCareerId);
+                    if (!empty($careerInfo)) {
+                        $careers[] = $careerInfo;
+                    }
+                }
+            }
+        }
+
+        return $careers;
+    }
+
     public static function getCareerDiagramPerSession($sessionId, $userId): string
     {
         $sessionId = (int) $sessionId;
         $userId = (int) $userId;
 
-        $extraFieldValueSession = new ExtraFieldValue('session');
-        $extraFieldValueCareer = new ExtraFieldValue('career');
-
         $visibility = api_get_session_visibility($sessionId, null, false, $userId);
         $content = '';
         if (SESSION_AVAILABLE === $visibility) {
-            $value = $extraFieldValueSession->get_values_by_handler_and_field_variable($sessionId, 'careerid');
-            if (isset($value['value']) && !empty($value['value'])) {
-                $careerList = str_replace(['[', ']'], '', $value['value']);
-                $careerList = explode(',', $careerList);
+            $careerList = self::getCareersFromSession($sessionId);
 
-                foreach ($careerList as $career) {
-                    $careerIdValue = $extraFieldValueCareer->get_item_id_from_field_variable_and_field_value(
-                        'external_career_id',
-                        $career
-                    );
-                    if (isset($careerIdValue['item_id']) && !empty($careerIdValue['item_id'])) {
-                        $finalCareerId = $careerIdValue['item_id'];
-                        $career = new Career();
-                        $careerInfo = $career->get($finalCareerId);
-                        if (!empty($careerInfo)) {
-                            $careerUrl = api_get_path(WEB_CODE_PATH).
-                                'user/career_diagram.php?iframe=1&career_id='.$finalCareerId.'&user_id='.$userId;
-                            $content .= '
-                                <iframe
-                                    onload="resizeIFrame(this)"
-                                    style="width:100%;"
-                                    border="0"
-                                    frameborder="0"
-                                    src="'.$careerUrl.'"
-                                ></iframe>';
-                        }
-                    }
-                }
+            if (empty($careerList)) {
+                return '';
+            }
+
+            foreach ($careerList as $career) {
+                $careerUrl = api_get_path(WEB_CODE_PATH).'user/career_diagram.php?iframe=1&career_id='.$career['id'].'&user_id='.$userId;
+                $content .= '
+                    <iframe
+                        onload="resizeIframe(this)"
+                        style="width:100%;"
+                        border="0"
+                        frameborder="0"
+                        src="'.$careerUrl.'"
+                    ></iframe>';
             }
         }
 
@@ -9680,12 +9694,6 @@ class SessionManager
                     //iFrame.width  = iFrame.contentWindow.document.body.scrollWidth;
                     iFrame.height = iFrame.contentWindow.document.body.scrollHeight + 20;
                 }
-                /*window.addEventListener("DOMContentLoaded", function(e) {
-                    var iframes = document.querySelectorAll("iframe");
-                    for( var i = 0; i < iframes.length; i++) {
-                        resizeIFrame(iframes[i]);
-                    }
-                });*/
                 </script>
             ';
         }

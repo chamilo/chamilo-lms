@@ -5209,12 +5209,8 @@ class Tracking
             if ($allowCareerUser) {
                 $diagrams = '';
                 if (!empty($visibleSessions)) {
-                    $diagrams .= Display::page_subheader(get_lang('OngoingTraining'));
-                    foreach ($visibleSessions as $sessionId) {
-                        $diagrams .= SessionManager::getCareerDiagramPerSession($sessionId, $user_id);
-                    }
+                    $diagrams .= SessionManager::getCareerDiagramPerSessionList($visibleSessions, $user_id);
                 }
-
                 $html .= $diagrams.MyStudents::userCareersTable($user_id);
             }
 

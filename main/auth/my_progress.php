@@ -111,8 +111,8 @@ if (!empty($dates)) {
                   <div id="grad_right"></div>
                   <a href="#" id="prev"></a>
                   <a href="#" id="next"></a>
-                </div>
-            </div>
+              </div>
+           </div>
         </div>
   ';
 }

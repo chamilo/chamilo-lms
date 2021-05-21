@@ -698,10 +698,8 @@ $content = $tpl->fetch($layoutTemplate);
 echo $content;
 if (api_get_configuration_value('allow_career_users')) {
     if (!empty($sessions)) {
-        echo Display::page_subheader(get_lang('OngoingTraining'));
-        foreach ($sessions as $session) {
-            echo SessionManager::getCareerDiagramPerSession($session['session_id'], $userId);
-        }
+        $sessions = array_column($sessions, 'session_id');
+        echo SessionManager::getCareerDiagramPerSessionList($sessions, $userId);
     }
     echo MyStudents::userCareersTable($userId);
 }

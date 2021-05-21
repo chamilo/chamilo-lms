@@ -1,5 +1,8 @@
 <?php
 
+// @deprecated? not used
+exit;
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;

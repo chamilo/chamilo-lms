@@ -9,13 +9,13 @@
 </template>
 
 <script>
-    export default {
-        name: "ErrorMessage",
-        props: {
-            error: {
-                type: Error,
-                required: true
-            }
-        },
+export default {
+  name: "ErrorMessage",
+  props: {
+    error: {
+      type: Error,
+      required: true
     }
+  },
+}
 </script>

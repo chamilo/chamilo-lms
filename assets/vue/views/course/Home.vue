@@ -35,7 +35,7 @@
         />
     </div>
 
-    <h2 v-if="isCurrentTeacher">Settings</h2>
+    <h2 v-if="isCurrentTeacher && tools && course">Settings</h2>
 
     <div
         v-if="isCurrentTeacher"

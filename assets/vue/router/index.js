@@ -5,7 +5,6 @@ import accountRoutes from './account';
 //import courseCategoryRoutes from './coursecategory';
 import documents from './documents';
 import store from '../store';
-import Login from '../views/Login.vue';
 //import Legacy from '../views/Legacy.vue';
 //import Home from '../views/Home.vue';
 import MyCourseList from '../views/user/courses/List.vue';
@@ -19,11 +18,30 @@ import SessionCatalog from '../views/course/CatalogSession.vue';
 import CourseHome from '../views/course/Home.vue';
 
 import Index from '../pages/Index.vue';
+import Home from '../pages/Home.vue';
+import Login from '../pages/Login.vue';
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
-        {path: '/', name: 'Home', component: Index},
+        {
+            path: '/',
+            name: 'Index',
+            component: Index,
+            props: { showBreadcrumb: false },
+            meta: {
+                requiresAuth: false,
+            }
+        },
+        {
+            path: '/home',
+            name: 'Home',
+            component: Home,
+            props: { showBreadcrumb: false },
+            meta: {
+                requiresAuth: true
+            }
+        },
         {
             path: '/login',
             name: 'Login',

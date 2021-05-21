@@ -29,13 +29,24 @@
 <!--            <q-route-tab no-caps icon="event" to="/main/calendar/agenda_js.php?type=personal" />-->
 <!--          </q-tabs>-->
 <!--        </div>-->
-
         <q-space />
 
         <div class="q-gutter-sm row items-center no-wrap">
           <!--          <q-btn v-if="$q.screen.gt.sm" round dense flat color="text-grey-7" icon="apps">-->
           <!--            <q-tooltip>Google Apps</q-tooltip>-->
           <!--          </q-btn>-->
+
+          <q-btn v-if="isAuthenticated" round dense flat color="grey-8" icon="person">
+            <q-tooltip>Account</q-tooltip>
+          </q-btn>
+
+          <q-btn v-if="isAuthenticated" round dense flat color="grey-8" icon="inbox">
+            <q-badge color="red" text-color="white" floating>
+              2
+            </q-badge>
+            <q-tooltip>Inbox</q-tooltip>
+          </q-btn>
+
           <q-btn v-if="isAuthenticated" round dense flat color="grey-8" icon="notifications">
             <q-badge color="red" text-color="white" floating>
               2
@@ -181,7 +192,8 @@
       <q-page
           class="q-layout-padding"
       >
-        <Breadcrumb :legacy="this.breadcrumb"/>
+
+        <Breadcrumb v-if="this.showBreadcrumb" :legacy="this.breadcrumb"/>
 
         <router-view />
         <slot></slot>
@@ -196,20 +208,24 @@ import {mapGetters} from "vuex";
 import isEmpty from "lodash/isEmpty";
 import useState from "../../hooks/useState";
 import {useRouter} from "vue-router";
-import {computed, ref} from "vue";
+import {computed, ref, toRefs} from "vue";
 import axios from "axios";
 
 import Breadcrumb from '../../components/Breadcrumb.vue';
+
 export default {
   name: "DashboardLayout",
   components: {
     Breadcrumb
   },
-  setup () {
+  setup (props) {
     const { isSidebarOpen, isSettingsPanelOpen, isSearchPanelOpen, isNotificationsPanelOpen } = useState();
     const rightDrawerOpen = ref(false);
 
+    const { showBreadcrumb } = toRefs(props);
+
     return {
+      showBreadcrumb,
       isSettingsPanelOpen,
       isSearchPanelOpen,
       isNotificationsPanelOpen,
@@ -225,6 +241,7 @@ export default {
     user: {},
     userAvatar: '',
     moved: true,
+    showBreadcrumb: true,
     linksUser: [
        //{ icon: 'home', url: '/', text: 'Home' },
        //{ icon: 'star_border', url: '/', text: 'News' },
@@ -247,7 +264,7 @@ export default {
       // { icon: 'open_in_new', text: 'open in new' },
     ],
     linksAnon: [
-      { icon: 'home', url: '/', text: 'Home' },
+      { icon: 'home', url: '/home', text: 'Home' },
       { icon: 'compass', url: '/catalog', text: 'Explore' },
     ],
     drawer: true,

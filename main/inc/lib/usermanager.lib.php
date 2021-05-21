@@ -5394,13 +5394,16 @@ class UserManager
         }
 
         if (!empty($keyword)) {
-            $keyword = Database::escape_string($keyword);
+            $keyword = trim(Database::escape_string($keyword));
+
             $userConditions .= " AND (
                 u.username LIKE '%$keyword%' OR
                 u.firstname LIKE '%$keyword%' OR
                 u.lastname LIKE '%$keyword%' OR
                 u.official_code LIKE '%$keyword%' OR
-                u.email LIKE '%$keyword%'
+                u.email LIKE '%$keyword%' OR
+                CONCAT(u.firstname, ' ', u.lastname) LIKE '%$keyword%' OR
+                CONCAT(u.lastname, ' ', u.firstname) LIKE '%$keyword%'
             )";
         }
 

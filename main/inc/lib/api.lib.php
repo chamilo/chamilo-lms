@@ -2788,13 +2788,16 @@ function api_get_session_info($id)
 function api_get_session_visibility(
     $session_id,
     $courseId = null,
-    $ignore_visibility_for_admins = true
+    $ignore_visibility_for_admins = true,
+    $userId = 0
 ) {
     if (api_is_platform_admin()) {
         if ($ignore_visibility_for_admins) {
             return SESSION_AVAILABLE;
         }
     }
+
+    $userId = empty($userId) ? api_get_user_id() : (int) $userId;
 
     $now = time();
     if (empty($session_id)) {
@@ -2818,7 +2821,7 @@ function api_get_session_visibility(
         // Session duration per student.
         if (isset($row['duration']) && !empty($row['duration'])) {
             $duration = $row['duration'] * 24 * 60 * 60;
-            $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser($session_id, api_get_user_id());
+            $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser($session_id, $userId);
 
             // If there is a session duration but there is no previous
             // access by the user, then the session is still available
@@ -2830,10 +2833,7 @@ function api_get_session_visibility(
             $firstAccess = isset($courseAccess['login_course_date'])
                 ? api_strtotime($courseAccess['login_course_date'], 'UTC')
                 : 0;
-            $userDurationData = SessionManager::getUserSession(
-                api_get_user_id(),
-                $session_id
-            );
+            $userDurationData = SessionManager::getUserSession($userId, $session_id);
             $userDuration = isset($userDurationData['duration'])
                 ? (intval($userDurationData['duration']) * 24 * 60 * 60)
                 : 0;
@@ -2862,7 +2862,7 @@ function api_get_session_visibility(
     }
 
     // If I'm a coach the visibility can change in my favor depending in the coach dates.
-    $isCoach = api_is_coach($session_id, $courseId);
+    $isCoach = api_is_coach($session_id, $courseId, $userId);
 
     if ($isCoach) {
         // Test start date.
@@ -3250,12 +3250,13 @@ function api_is_course_session_coach($user_id, $courseId, $session_id)
  * @param int $session_id
  * @param int $courseId
  * @param bool  Check whether we are in student view and, if we are, return false
+ * @param int $userId
  *
  * @return bool True if current user is a course or session coach
  */
-function api_is_coach($session_id = 0, $courseId = null, $check_student_view = true)
+function api_is_coach($session_id = 0, $courseId = null, $check_student_view = true, $userId = 0)
 {
-    $userId = api_get_user_id();
+    $userId = empty($userId) ? api_get_user_id() : (int) $userId;
 
     if (!empty($session_id)) {
         $session_id = (int) $session_id;

@@ -15,7 +15,6 @@ api_protect_course_script(true);
 $lib_path = api_get_path(LIBRARY_PATH);
 $main_path = api_get_path(SYS_CODE_PATH);
 
-// including additional libraries
 require_once $main_path.'exercise/export/aiken/aiken_import.inc.php';
 require_once $main_path.'exercise/export/aiken/aiken_classes.php';
 
@@ -27,13 +26,12 @@ if (!api_is_allowed_to_edit(null, true)) {
     api_not_allowed();
 }
 
-// the breadcrumbs
 $interbreadcrumb[] = [
     'url' => 'exercise.php?'.api_get_cidreq(),
     'name' => get_lang('Exercises'),
 ];
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
-// import file
+
 if ((api_is_allowed_to_edit(null, true))) {
     if (isset($_POST['submit'])) {
         $id = aiken_import_file($_FILES['userFile']);
@@ -44,11 +42,6 @@ if ((api_is_allowed_to_edit(null, true))) {
     }
 }
 
-// display header
 Display::display_header(get_lang('ImportAikenQuiz'), 'Exercises');
-
-// display Aiken form
 aiken_display_form();
-
-// display the footer
 Display::display_footer();

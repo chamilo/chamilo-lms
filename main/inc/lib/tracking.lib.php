@@ -4700,13 +4700,14 @@ class Tracking
      *
      * @return string|array
      */
-    public static function show_user_progress(
+    public static function showUserProgress(
         $user_id,
         $session_id = 0,
         $extra_params = '',
         $show_courses = true,
         $showAllSessions = true,
-        $returnArray = false
+        $returnArray = false,
+        $showGraph = true
     ) {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -4770,7 +4771,7 @@ class Tracking
             $courseIdList[] = $row['id'];
         }
 
-        $orderBy = ' ORDER BY name ';
+        $orderBy = ' ORDER BY display_end_date DESC, name ';
         $extraInnerJoin = null;
 
         if (SessionManager::orderCourseIsEnabled() && !empty($session_id)) {
@@ -4852,7 +4853,7 @@ class Tracking
         }
 
         $html = '';
-        // Course list
+        // Course list.
         if ($show_courses) {
             if (!empty($courses)) {
                 $html .= Display::page_header(
@@ -4945,10 +4946,7 @@ class Tracking
                         $bestScoreAverageNotInLP = round($bestScoreAverageNotInLP / count($exerciseList) * 100, 2);
                     }
 
-                    $last_connection = self::get_last_connection_date_on_the_course(
-                        $user_id,
-                        $courseInfo
-                    );
+                    $last_connection = self::get_last_connection_date_on_the_course($user_id, $courseInfo);
 
                     if (is_null($progress) || empty($progress)) {
                         $progress = '0%';
@@ -5007,7 +5005,10 @@ class Tracking
             }
         }
 
-        // Session list
+        $allowCareerUser = api_get_configuration_value('allow_career_users');
+
+        // Session list.
+        $visibleSessions = [];
         if (!empty($course_in_session)) {
             $main_session_graph = '';
             // Load graphics only when calling to an specific session
@@ -5020,6 +5021,12 @@ class Tracking
                 $user_count = count(SessionManager::get_users_by_session($my_session_id));
                 $exercise_graph_name_list = [];
                 $exercise_graph_list = [];
+
+                $visibility = api_get_session_visibility($my_session_id, null, false, $user_id);
+
+                if (SESSION_AVAILABLE === $visibility) {
+                    $visibleSessions[] = $my_session_id;
+                }
 
                 foreach ($course_list as $course_data) {
                     $exercise_list = ExerciseLib::get_all_exercises(
@@ -5097,13 +5104,15 @@ class Tracking
                     $my_results_final[] = $my_results[$key];
                     $final_all_exercise_graph_list[] = $all_exercise_graph_list[$key];
                 }
-                $main_session_graph = '<div class="row"><div class="col-md-10 col-md-offset-1">'
-                    .self::generate_session_exercise_graph(
-                        $final_all_exercise_graph_name_list,
-                        $my_results_final,
-                        $final_all_exercise_graph_list
-                    )
-                    .'</div></div>';
+                if ($showGraph) {
+                    $main_session_graph = '<div class="row"><div class="col-md-10 col-md-offset-1">'
+                        .self::generate_session_exercise_graph(
+                            $final_all_exercise_graph_name_list,
+                            $my_results_final,
+                            $final_all_exercise_graph_list
+                        )
+                        .'</div></div>';
+                }
             }
 
             $sessionIcon = Display::return_icon('session.png', get_lang('Sessions'));
@@ -5203,14 +5212,25 @@ class Tracking
                 );
             }
 
+            if ($allowCareerUser) {
+                $diagrams = '';
+                if (!empty($visibleSessions)) {
+                    $diagrams .= SessionManager::getCareerDiagramPerSessionList($visibleSessions, $user_id);
+                }
+                $html .= $diagrams.MyStudents::userCareersTable($user_id);
+            }
+
             $html .= Display::div($sessionsTable->toHtml(), ['class' => 'table-responsive']);
-            $html .= Display::div(
-                $main_session_graph,
-                [
-                    'id' => 'session_graph',
-                    'class' => 'chart-session',
-                ]
-            );
+
+            if ($showGraph) {
+                $html .= Display::div(
+                    $main_session_graph,
+                    [
+                        'id' => 'session_graph',
+                        'class' => 'chart-session',
+                    ]
+                );
+            }
 
             // Checking selected session.
             if (isset($_GET['session_id'])) {
@@ -5438,53 +5458,51 @@ class Tracking
      * @param string $course_code
      * @param int    $session_id
      * @param bool   $showDiagram
-     *
-     * @return string html code
      */
-    public static function show_course_detail($user_id, $course_code, $session_id, $showDiagram = false)
+    public static function show_course_detail($user_id, $course_code, $session_id, $showDiagram = false): string
     {
-        $html = '';
-        if (isset($course_code)) {
-            $user_id = (int) $user_id;
-            $user = api_get_user_entity($user_id);
-            $session_id = (int) $session_id;
-            $course_info = api_get_course_info($course_code);
-            if (empty($course_info)) {
-                return '';
+        if (empty($user_id) || empty($course_code)) {
+            return '';
+        }
+
+        $course_info = api_get_course_info($course_code);
+        if (empty($course_info)) {
+            return '';
+        }
+
+        $user_id = (int) $user_id;
+        $user = api_get_user_entity($user_id);
+        $session_id = (int) $session_id;
+
+        $html = '<a name="course_session_data"></a>';
+        $html .= Display::page_subheader2($course_info['title']);
+
+        if ($showDiagram && !empty($session_id)) {
+            $visibility = api_get_session_visibility($session_id);
+            if (SESSION_AVAILABLE === $visibility) {
+                $html .= Display::page_subheader2($course_info['title']);
             }
+        }
 
-            $html .= '<a name="course_session_data"></a>';
-            $html .= Display::page_subheader2($course_info['title']);
+        // Show exercise results of invisible exercises? see BT#4091
+        $quizzesHtml = self::generateQuizzesTable($course_info, $session_id);
+        // LP table results
+        $learningPathsHtml = self::generateLearningPathsTable($user, $course_info, $session_id);
+        $skillsHtml = self::displayUserSkills($user_id, $course_info['id'], $session_id);
 
-            if ($showDiagram && !empty($session_id)) {
-                $visibility = api_get_session_visibility($session_id);
-                if (SESSION_AVAILABLE === $visibility) {
-                    $html .= Display::page_subheader2($course_info['title']);
-                }
-            }
+        $toolsHtml = [
+            'quizzes' => $quizzesHtml,
+            'learning_paths' => $learningPathsHtml,
+            'skills' => $skillsHtml,
+        ];
 
-            // Course details
+        $toolsOrder = api_get_configuration_value('my_progress_course_tools_order');
 
-            // Show exercise results of invisible exercises? see BT#4091
-            $quizzesHtml = self::generateQuizzesTable($course_info, $session_id);
-            // LP table results
-            $learningPathsHtml = self::generateLearningPathsTable($user, $course_info, $session_id);
-            $skillsHtml = self::displayUserSkills($user_id, $course_info['id'], $session_id);
-
-            $toolsHtml = [
-                'quizzes' => $quizzesHtml,
-                'learning_paths' => $learningPathsHtml,
-                'skills' => $skillsHtml,
-            ];
-
-            $toolsOrder = api_get_configuration_value('my_progress_course_tools_order');
-
-            if (empty($toolsOrder)) {
-                $html .= implode(PHP_EOL, $toolsHtml);
-            } else {
-                foreach ($toolsOrder['order'] as $tool) {
-                    $html .= $toolsHtml[$tool].PHP_EOL;
-                }
+        if (empty($toolsOrder)) {
+            $html .= implode(PHP_EOL, $toolsHtml);
+        } else {
+            foreach ($toolsOrder['order'] as $tool) {
+                $html .= $toolsHtml[$tool].PHP_EOL;
             }
         }
 

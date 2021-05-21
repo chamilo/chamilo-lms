@@ -6125,13 +6125,15 @@ class SessionManager
         }
 
         if (!empty($keyword)) {
-            $keyword = Database::escape_string($keyword);
+            $keyword = trim(Database::escape_string($keyword));
             $userConditions .= " AND (
                 u.username LIKE '%$keyword%' OR
                 u.firstname LIKE '%$keyword%' OR
                 u.lastname LIKE '%$keyword%' OR
                 u.official_code LIKE '%$keyword%' OR
-                u.email LIKE '%$keyword%'
+                u.email LIKE '%$keyword%' OR
+                CONCAT(u.firstname, ' ', u.lastname) LIKE '%$keyword%' OR
+                CONCAT(u.lastname, ' ', u.firstname) LIKE '%$keyword%'
             )";
         }
 
@@ -6199,6 +6201,7 @@ class SessionManager
         }
 
         $sql .= $limitCondition;
+
         $result = Database::query($sql);
 
         return Database::store_result($result);
@@ -9626,6 +9629,80 @@ class SessionManager
                 WHERE s.id = $sessionId"
             );
         }
+    }
+
+    public static function getCareersFromSession(int $sessionId): array
+    {
+        $extraFieldValueSession = new ExtraFieldValue('session');
+        $extraFieldValueCareer = new ExtraFieldValue('career');
+
+        $value = $extraFieldValueSession->get_values_by_handler_and_field_variable($sessionId, 'careerid');
+        $careers = [];
+        if (isset($value['value']) && !empty($value['value'])) {
+            $careerList = str_replace(['[', ']'], '', $value['value']);
+            $careerList = explode(',', $careerList);
+            $careerManager = new Career();
+            foreach ($careerList as $career) {
+                $careerIdValue = $extraFieldValueCareer->get_item_id_from_field_variable_and_field_value(
+                    'external_career_id',
+                    $career
+                );
+                if (isset($careerIdValue['item_id']) && !empty($careerIdValue['item_id'])) {
+                    $finalCareerId = $careerIdValue['item_id'];
+                    $careerInfo = $careerManager->get($finalCareerId);
+                    if (!empty($careerInfo)) {
+                        $careers[] = $careerInfo;
+                    }
+                }
+            }
+        }
+
+        return $careers;
+    }
+
+    public static function getCareerDiagramPerSessionList($sessionList, $userId)
+    {
+        if (empty($sessionList) || empty($userId)) {
+            return '';
+        }
+
+        $userId = (int) $userId;
+        $content = Display::page_subheader(get_lang('OngoingTraining'));
+        $content .= '
+           <script>
+            resizeIframe = function(iFrame) {
+                iFrame.height = iFrame.contentWindow.document.body.scrollHeight + 20;
+            }
+            </script>
+        ';
+        $careersAdded = [];
+        foreach ($sessionList as $sessionId) {
+            $visibility = api_get_session_visibility($sessionId, null, false, $userId);
+            if (SESSION_AVAILABLE === $visibility) {
+                $careerList = self::getCareersFromSession($sessionId);
+                if (empty($careerList)) {
+                    continue;
+                }
+                foreach ($careerList as $career) {
+                    $careerId = $career['id'];
+                    if (!in_array($careerId, $careersAdded)) {
+                        $careersAdded[] = $careerId;
+                        $careerUrl = api_get_path(WEB_CODE_PATH).'user/career_diagram.php?iframe=1&career_id='.$career['id'].'&user_id='.$userId;
+                        $content .= '
+                            <iframe
+                                onload="resizeIframe(this)"
+                                style="width:100%;"
+                                border="0"
+                                frameborder="0"
+                                scrolling="no"
+                                src="'.$careerUrl.'"
+                            ></iframe>';
+                    }
+                }
+            }
+        }
+
+        return $content;
     }
 
     /**

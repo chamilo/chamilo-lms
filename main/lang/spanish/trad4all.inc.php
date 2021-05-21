@@ -8801,4 +8801,5 @@ $XPercentCompleted = "%s %% Completado";
 $EmailToTeachersWhenNewPost = "Enviar correo electrónico a los profesores sobre los nuevos artículos en la herramienta de portafolio";
 $PortfolioAlertNewPostContent = "Hay un nuevo artículo por %s en el portafolio del curso %s. Para verlo haga <a href='%s'>click aquí</a>.";
 $PortfolioAlertNewPostSubject = "[Portfolio] Nuevo artículo en el curso %s";
+$OngoingTraining = "Formación(es) en curso";
 ?>

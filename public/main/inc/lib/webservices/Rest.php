@@ -313,7 +313,7 @@ class Rest extends WebService
                 'id' => $course->getId(),
                 'title' => $course->getTitle(),
                 'code' => $course->getCode(),
-                'directory' => $course->getDirectory(),
+                //'directory' => $course->getDirectory(),
                 'urlPicture' => $picturePath,
                 'teachers' => $teachers,
                 'isSpecial' => !empty($courseInfo['special_course']),
@@ -341,7 +341,7 @@ class Rest extends WebService
             'id' => $this->course->getId(),
             'title' => $this->course->getTitle(),
             'code' => $this->course->getCode(),
-            'directory' => $this->course->getDirectory(),
+            //'directory' => $this->course->getDirectory(),
             'urlPicture' => CourseManager::getPicturePath($this->course, true),
             'teachers' => $teachers,
             'tools' => array_map(

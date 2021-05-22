@@ -2052,9 +2052,9 @@ function api_get_course_int_id($code = null)
 /**
  * Gets a course setting from the current course_setting table. Try always using integer values.
  *
- * @param string $settingName The name of the setting we want from the table
- * @param Course|array  $courseInfo
- * @param bool   $force       force checking the value in the database
+ * @param string       $settingName The name of the setting we want from the table
+ * @param Course|array $courseInfo
+ * @param bool         $force       force checking the value in the database
  *
  * @return mixed The value of that setting in that table. Return -1 if not found.
  */

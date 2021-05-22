@@ -87,7 +87,7 @@ class CourseHomeController extends ToolBaseController
         $isSpecialCourse = CourseManager::isSpecialCourse($courseId);
 
         if ($user && $isSpecialCourse && (isset($_GET['autoreg']) && 1 === (int) $_GET['autoreg']) &&
-            CourseManager::subscribeUser($userId, $courseCode, STUDENT)
+            CourseManager::subscribeUser($userId, $courseId, STUDENT)
         ) {
             $session->set('is_allowed_in_course', true);
         }

@@ -54,12 +54,9 @@ class CourseRelUserCatalogue
     {
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
-        return (string) $this->getCourse()->getCode();
+        return $this->getCourse()->getCode();
     }
 
     /**
@@ -70,10 +67,7 @@ class CourseRelUserCatalogue
         return $this->id;
     }
 
-    /**
-     * @return $this
-     */
-    public function setCourse(Course $course)
+    public function setCourse(Course $course): self
     {
         $this->course = $course;
 

@@ -196,12 +196,9 @@ $sessionTitleLink = api_get_configuration_value('courses_list_session_title_link
 if (2 == $sessionTitleLink && 1 === $session->getNbrCourses()) {
     $sessionCourses = $session->getCourses();
     $sessionCourse = $sessionCourses[0]->getCourse();
-    $courseUrl = $sessionCourse->getDirectory().'/index.php?';
-    $courseUrl .= http_build_query([
-        'id_session' => $session->getId(),
-    ]);
+    $url = api_get_course_url($sessionCourse->getId(), $session->getId());
 
-    header('Location: '.api_get_path(WEB_COURSE_PATH).$courseUrl);
+    header('Location: '.$url);
     exit;
 }
 

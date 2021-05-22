@@ -239,7 +239,6 @@ class CkEditor extends Editor
 
         foreach ($courseTemplates as $templateData) {
             $template = $templateData[0];
-            $courseDirectory = $course->getDirectory();
 
             $templateItem = [];
             $templateItem['title'] = $template->getTitle();

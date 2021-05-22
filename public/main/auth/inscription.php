@@ -792,7 +792,7 @@ if ($form->validate()) {
                     ) {
                         CourseManager::subscribeUser(
                             $user_id,
-                            $course_info['code']
+                            $course_info['real_id']
                         );
                     }
                 }
@@ -1048,7 +1048,7 @@ if ($form->validate()) {
                 ) {
                     CourseManager::subscribeUser(
                         api_get_user_id(),
-                        $course_info['code']
+                        $course_info['real_id']
                     );
                 }
             }

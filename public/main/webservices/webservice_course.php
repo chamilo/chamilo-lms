@@ -714,7 +714,7 @@ class WSCourse extends WS
                     // Subscribe user
                     if (CourseManager::subscribeUser(
                         $user_id,
-                        $course_code,
+                        $course_id,
                         $status
                     )
                     ) {

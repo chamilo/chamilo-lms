@@ -137,7 +137,8 @@ if (empty($annee) && empty($course)) {
     }
     if (!empty($_POST['course'])) {
         foreach ($UserList as $user_id) {
-            CourseManager::subscribeUser($user_id, $_POST['course']);
+            $courseInfo = api_get_course_info($_POST['course']);
+            CourseManager::subscribeUser($user_id, $courseInfo['real_id']);
         }
         header('Location: course_information.php?code='.Security::remove_XSS($_POST['course']));
         exit;

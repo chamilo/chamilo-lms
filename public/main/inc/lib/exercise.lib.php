@@ -5997,7 +5997,11 @@ EOT;
                                         switch ($action) {
                                             case 'subscribe_student_to_courses':
                                                 foreach ($params as $code) {
-                                                    CourseManager::subscribeUser($currentUserId, $code);
+                                                    $courseInfo = api_get_course_info($code);
+                                                    CourseManager::subscribeUser(
+                                                        $currentUserId,
+                                                        $courseInfo['real_id']
+                                                    );
                                                     break;
                                                 }
                                                 break;

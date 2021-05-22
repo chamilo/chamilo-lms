@@ -2508,7 +2508,7 @@ class ImportCsv
 
                 $result = CourseManager::subscribeUser(
                     $userId,
-                    $courseInfo['code'],
+                    $courseInfo['real_id'],
                     $status,
                     0,
                     $userCourseCategory

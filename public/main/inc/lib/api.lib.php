@@ -2053,12 +2053,12 @@ function api_get_course_int_id($code = null)
  * Gets a course setting from the current course_setting table. Try always using integer values.
  *
  * @param string $settingName The name of the setting we want from the table
- * @param array  $courseInfo
+ * @param Course|array  $courseInfo
  * @param bool   $force       force checking the value in the database
  *
  * @return mixed The value of that setting in that table. Return -1 if not found.
  */
-function api_get_course_setting($settingName, $courseInfo = [], $force = false)
+function api_get_course_setting($settingName, $courseInfo = null, $force = false)
 {
     if (empty($courseInfo)) {
         $courseInfo = api_get_course_info();
@@ -2068,7 +2068,11 @@ function api_get_course_setting($settingName, $courseInfo = [], $force = false)
         return -1;
     }
 
-    $courseId = isset($courseInfo['real_id']) && !empty($courseInfo['real_id']) ? $courseInfo['real_id'] : 0;
+    if ($courseInfo instanceof Course) {
+        $courseId = $courseInfo->getId();
+    } else {
+        $courseId = isset($courseInfo['real_id']) && !empty($courseInfo['real_id']) ? $courseInfo['real_id'] : 0;
+    }
 
     if (empty($courseId)) {
         return -1;

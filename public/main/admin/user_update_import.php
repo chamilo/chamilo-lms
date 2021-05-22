@@ -174,7 +174,8 @@ function updateUsers(
             if (!empty($user['Courses']) && is_array($user['Courses'])) {
                 foreach ($user['Courses'] as $course) {
                     if (CourseManager::course_exists($course)) {
-                        CourseManager::subscribeUser($user_id, $course, $user['Status']);
+                        $courseInfo = api_get_course_info($course);
+                        CourseManager::subscribeUser($user_id, $courseInfo['real_id'], $user['Status']);
                     }
                 }
             }

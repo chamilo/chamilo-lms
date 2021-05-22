@@ -96,7 +96,8 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
                 foreach ($users as $user_id) {
                     $user = api_get_user_info($user_id);
                     if (DRH != $user['status']) {
-                        CourseManager::subscribeUser($user_id, $course_code);
+                        $courseInfo = api_get_course_info($course_code);
+                        CourseManager::subscribeUser($user_id, $courseInfo['real_id']);
                     } else {
                         $errorDrh = 1;
                     }

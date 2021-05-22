@@ -1116,7 +1116,7 @@ class UserGroup extends Model
                         foreach ($user_list as $user_id) {
                             CourseManager::subscribeUser(
                                 $user_id,
-                                $course_info['code']
+                                $course_id
                             );
                         }
                     }
@@ -1268,11 +1268,10 @@ class UserGroup extends Model
             }
 
             foreach ($new_items as $user_id) {
-                // Adding courses
+                // Adding courses.
                 if (!empty($course_list)) {
                     foreach ($course_list as $course_id) {
-                        $course_info = api_get_course_info_by_id($course_id);
-                        CourseManager::subscribeUser($user_id, $course_info['code']);
+                        CourseManager::subscribeUser($user_id, $course_id);
                     }
                 }
                 $params = [

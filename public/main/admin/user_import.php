@@ -260,9 +260,10 @@ function save_data($users, $sendMail = false)
                 if (isset($user['Courses']) && is_array($user['Courses'])) {
                     foreach ($user['Courses'] as $course) {
                         if (CourseManager::course_exists($course)) {
-                            $result = CourseManager::subscribeUser($user_id, $course, $user['Status']);
+                            $course_info = api_get_course_info($course);
+
+                            $result = CourseManager::subscribeUser($user_id, $course_info['real_id'], $user['Status']);
                             if ($result) {
-                                $course_info = api_get_course_info($course);
                                 $inserted_in_course[$course] = $course_info['title'];
                             }
                         }

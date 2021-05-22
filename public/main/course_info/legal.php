@@ -84,7 +84,7 @@ if ($form->validate()) {
             COURSE_VISIBILITY_REGISTERED == $course_info['visibility'] &&
             1 == $course_info['subscribe']
         ) {
-            CourseManager::subscribeUser($user_id, $course_info['code'], STUDENT, 0);
+            CourseManager::subscribeUser($user_id, $course_info['real_id'], STUDENT, 0);
         }
 
         CourseManager::save_user_legal($user_id, $course_info, $session_id);

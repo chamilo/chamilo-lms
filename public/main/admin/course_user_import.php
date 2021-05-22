@@ -103,10 +103,9 @@ function save_data($users_courses)
         if (isset($_POST['subscribe']) && $_POST['subscribe']) {
             foreach ($to_subscribe as $courseId) {
                 $courseInfo = $courseListById[$courseId];
-                $courseCode = $courseInfo['code'];
                 $result = CourseManager::subscribeUser(
                     $user_id,
-                    $courseCode,
+                    $courseId,
                     $csv_subscriptions[$courseId]
                 );
                 if ($result) {

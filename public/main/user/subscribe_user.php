@@ -71,14 +71,14 @@ if (isset($_REQUEST['Registerister'])) {
             } else {
                 CourseManager::subscribeUser(
                     $_REQUEST['user_id'],
-                    $courseInfo['code'],
+                    $courseInfo['real_id'],
                     COURSEMANAGER
                 );
             }
         } else {
             CourseManager::subscribeUser(
                 $_REQUEST['user_id'],
-                $courseInfo['code']
+                $courseInfo['real_id']
             );
         }
     }
@@ -106,10 +106,10 @@ if (isset($_POST['action'])) {
                                     $isSuscribe[] = $message;
                                 }
                             } else {
-                                CourseManager::subscribeUser($user_id, $courseInfo['code'], COURSEMANAGER);
+                                CourseManager::subscribeUser($user_id, $courseInfo['real_id'], COURSEMANAGER);
                             }
                         } else {
-                            CourseManager::subscribeUser($user_id, $courseInfo['code']);
+                            CourseManager::subscribeUser($user_id, $courseInfo['real_id']);
                         }
                     }
                 }

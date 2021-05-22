@@ -125,7 +125,7 @@ function save_courses_data($courses)
         $params['course_category'] = $course['CourseCategory'];
         $params['course_language'] = $course_language;
         $params['user_id'] = $creatorId;
-        $addMeAsTeacher = isset($_POST['add_me_as_teacher']) ? $_POST['add_me_as_teacher'] : false;
+        $addMeAsTeacher = $_POST['add_me_as_teacher'] ?? false;
         $params['add_user_as_teacher'] = $addMeAsTeacher;
         $courseInfo = CourseManager::create_course($params);
 
@@ -134,7 +134,7 @@ function save_courses_data($courses)
                 foreach ($teacherList as $teacher) {
                     CourseManager::subscribeUser(
                         $teacher['user_id'],
-                        $courseInfo['code'],
+                        $courseInfo['real_id'],
                         COURSEMANAGER
                     );
                 }

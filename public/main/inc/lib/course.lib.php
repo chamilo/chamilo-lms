@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Framework\Container;
@@ -701,7 +702,7 @@ class CourseManager
             return true;
         }
 
-        return self::subscribeUser($userId, $course->getCode(), $status, 0);
+        return self::subscribeUser($userId, $course->getId(), $status, 0);
     }
 
     /**
@@ -709,7 +710,7 @@ class CourseManager
      * course subscription is allowed.
      *
      * @param int    $userId
-     * @param string $courseCode
+     * @param int $courseId
      * @param int    $status                 (STUDENT, COURSEMANAGER, COURSE_ADMIN, NORMAL_COURSE_MEMBER)
      * @param int    $sessionId
      * @param int    $userCourseCategoryId
@@ -721,7 +722,7 @@ class CourseManager
      */
     public static function subscribeUser(
         $userId,
-        $courseCode,
+        $courseId,
         $status = STUDENT,
         $sessionId = 0,
         $userCourseCategoryId = 0,
@@ -730,28 +731,27 @@ class CourseManager
         $userId = (int) $userId;
         $status = (int) $status;
 
-        if (empty($userId) || empty($courseCode)) {
+        if (empty($userId) || empty($courseId)) {
             return false;
         }
 
-        $courseInfo = api_get_course_info($courseCode);
+        $course = api_get_course_entity($courseId);
 
-        if (empty($courseInfo)) {
+        if (null === $course) {
             Display::addFlash(Display::return_message(get_lang('This course doesn\'t exist'), 'warning'));
 
             return false;
         }
 
-        $userInfo = api_get_user_info($userId);
+        $user = api_get_user_entity($userId);
 
-        if (empty($userInfo)) {
+        if (null === $user) {
             Display::addFlash(Display::return_message(get_lang('This user doesn\'t exist'), 'warning'));
 
             return false;
         }
 
-        $courseId = $courseInfo['real_id'];
-        $courseCode = $courseInfo['code'];
+        $courseCode = $course->getCode();
         $userCourseCategoryId = (int) $userCourseCategoryId;
         $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
         $status = STUDENT === $status || COURSEMANAGER === $status ? $status : STUDENT;
@@ -777,7 +777,7 @@ class CourseManager
             Event::addEvent(
                 LOG_SUBSCRIBE_USER_TO_COURSE,
                 LOG_USER_OBJECT,
-                $userInfo,
+                $user,
                 api_get_utc_datetime(),
                 api_get_user_id(),
                 $courseId,
@@ -801,7 +801,7 @@ class CourseManager
 
             if ($checkTeacherPermission && !api_is_course_admin()) {
                 // Check in advance whether subscription is allowed or not for this course.
-                if (SUBSCRIBE_NOT_ALLOWED === (int) $courseInfo['subscribe']) {
+                if (SUBSCRIBE_NOT_ALLOWED === (int) $course->getSubscribe()) {
                     Display::addFlash(Display::return_message(get_lang('SubscriptionNotAllowed'), 'warning'));
 
                     return false;
@@ -811,74 +811,87 @@ class CourseManager
             if (STUDENT === $status) {
                 // Check if max students per course extra field is set
                 $extraFieldValue = new ExtraFieldValue('course');
-                $value = $extraFieldValue->get_values_by_handler_and_field_variable($courseId, 'max_subscribed_students');
-                if (!empty($value) && isset($value['value'])) {
-                    $maxStudents = $value['value'];
-                    if ('' !== $maxStudents) {
-                        $maxStudents = (int) $maxStudents;
-                        $count = self::get_user_list_from_course_code(
-                            $courseCode,
-                            0,
-                            null,
-                            null,
-                            STUDENT,
-                            true,
-                            false
+                $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+                    $courseId,
+                    'max_subscribed_students'
+                );
+                if (!empty($value) && isset($value['value']) && '' !== $value['value']) {
+                    $maxStudents = (int) $value['value'];
+                    $count = self::get_user_list_from_course_code(
+                        $courseCode,
+                        0,
+                        null,
+                        null,
+                        STUDENT,
+                        true,
+                        false
+                    );
+
+                    if ($count >= $maxStudents) {
+                        Display::addFlash(
+                            Display::return_message(
+                                get_lang(
+                                    'The maximum number of student has already been reached, it is not possible to subscribe more student.'
+                                ),
+                                'warning'
+                            )
                         );
 
-                        if ($count >= $maxStudents) {
-                            Display::addFlash(Display::return_message(get_lang('The maximum number of student has already been reached, it is not possible to subscribe more student.'), 'warning'));
-
-                            return false;
-                        }
+                        return false;
                     }
                 }
             }
 
             $maxSort = api_max_sort_value('0', $userId);
-            $params = [
-                'c_id' => $courseId,
-                'user_id' => $userId,
-                'status' => $status,
-                'sort' => $maxSort + 1,
-                'relation_type' => 0,
-                'user_course_cat' => $userCourseCategoryId,
-            ];
-            $insertId = Database::insert($courseUserTable, $params);
+
+            $courseRelUser = new CourseRelUser();
+            $courseRelUser
+                ->setCourse($course)
+                ->setUser($user)
+                ->setStatus($status)
+                ->setSort($maxSort + 1)
+                ->setUserCourseCat($userCourseCategoryId)
+            ;
+
+            $em = Database::getManager();
+            $em->persist($courseRelUser);
+            $em->flush();
+
+            $insertId = $courseRelUser->getId();
 
             if ($insertId) {
                 Display::addFlash(
                     Display::return_message(
                         sprintf(
                             get_lang('User %s has been registered to course %s'),
-                            $userInfo['complete_name_with_username'],
-                            $courseInfo['title']
+                            UserManager::formatUserFullName($user),
+                            $course->getTitle()
                         )
                     )
                 );
 
-                $send = api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $courseInfo);
+                $send = api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $course);
 
                 if (1 == $send) {
                     self::email_to_tutor(
                         $userId,
-                        $courseInfo['real_id'],
+                        $courseId,
                         false
                     );
                 } elseif (2 == $send) {
                     self::email_to_tutor(
                         $userId,
-                        $courseInfo['real_id'],
+                        $courseId,
                         true
                     );
                 }
 
-                $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $courseInfo);
+                $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $course);
                 if (1 === $subscribe) {
-                    $forums = get_forums(0, $courseCode, true, $sessionId);
+                    /*$forums = get_forums(0,  true, $sessionId);
                     foreach ($forums as $forum) {
                         set_notification('forum', $forum->getIid(), false, $userInfo, $courseInfo);
-                    }
+                    }*/
                 }
 
                 // Add event to the system log
@@ -894,7 +907,7 @@ class CourseManager
                 Event::addEvent(
                     LOG_SUBSCRIBE_USER_TO_COURSE,
                     LOG_USER_OBJECT,
-                    $userInfo,
+                    $user,
                     api_get_utc_datetime(),
                     api_get_user_id(),
                     $courseId

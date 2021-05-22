@@ -5656,7 +5656,7 @@ class SessionManager
 
                                     CourseManager::subscribeUser(
                                         $teacherToAdd,
-                                        $course_code,
+                                        $courseId,
                                         COURSEMANAGER,
                                         0,
                                         $userCourseCategory
@@ -5777,7 +5777,7 @@ class SessionManager
 
                                         CourseManager::subscribeUser(
                                             $teacherId,
-                                            $course_code,
+                                            $courseInfo['real_id'],
                                             COURSEMANAGER,
                                             0,
                                             $userCourseCategory

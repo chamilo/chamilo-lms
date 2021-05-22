@@ -115,6 +115,7 @@ class CourseRelUser
         $this->sort = 0;
         $this->tutor = false;
         $this->status = User::STUDENT;
+        $this->relationType = 0;
     }
 
     public function __toString(): string

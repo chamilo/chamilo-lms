@@ -453,7 +453,7 @@ class WSCMCourse extends WSCM
             $condition_msg_status = ' msg_status = 1 '; // define('MESSAGE_STATUS_UNREAD', '1');
 
             $sql_query = "SELECT COUNT(*) as number_messages
-                          FROM $table_message 
+                          FROM $table_message
                           WHERE $condition_msg_status AND user_receiver_id=".$user_id;
 
             $sql_result = Database::query($sql_query);
@@ -694,10 +694,10 @@ class WSCMCourse extends WSCM
                     return true;
                 } else {
                     // Subscribe user
-                    if (CourseManager::subscribeUser($user_id, $course_code, $status)) {
+                    if (CourseManager::subscribeUser($user_id, $course_id, $status)) {
                         return true;
                     } else {
-                        return new WSError(203, 'An error occured subscribing to this course');
+                        return new WSError(203, 'An error occurred subscribing to this course');
                     }
                 }
             }

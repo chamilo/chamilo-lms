@@ -1127,8 +1127,7 @@ class BuyCoursesPlugin extends Plugin
         $saleIsCompleted = false;
         switch ($sale['product_type']) {
             case self::PRODUCT_TYPE_COURSE:
-                $course = api_get_course_info_by_id($sale['product_id']);
-                $saleIsCompleted = CourseManager::subscribeUser($sale['user_id'], $course['code']);
+                $saleIsCompleted = CourseManager::subscribeUser($sale['user_id'], $sale['product_id']);
                 break;
             case self::PRODUCT_TYPE_SESSION:
                 SessionManager::subscribeUsersToSession(

@@ -95,7 +95,7 @@ function complete_missing_data($user)
 function save_data($users)
 {
     if (is_array($users)) {
-        foreach ($users as $index => $user) {
+        foreach ($users as $user) {
             $user = complete_missing_data($user);
             $user['Status'] = api_status_key($user['Status']);
             $user_id = UserManager:: create_user(
@@ -115,9 +115,10 @@ function save_data($users)
             if (!empty($user['Courses'])) {
                 foreach ($user['Courses'] as $course) {
                     if (CourseManager::course_exists($course)) {
+                        $courseInfo = api_get_course_info($course);
                         CourseManager::subscribeUser(
                             $user_id,
-                            $course,
+                            $courseInfo['real_id'],
                             $user['Status']
                         );
                     }

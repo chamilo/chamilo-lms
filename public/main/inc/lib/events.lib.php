@@ -60,7 +60,8 @@ class Event
             $autoSubscribe = explode('|', $autoSubscribe);
             foreach ($autoSubscribe as $code) {
                 if (CourseManager::course_exists($code)) {
-                    CourseManager::subscribeUser($userId, $code);
+                    $courseInfo = api_get_course_info($code);
+                    CourseManager::subscribeUser($userId, $courseInfo['real_id']);
                 }
             }
         }
@@ -816,6 +817,17 @@ class Event
                 unset($event_value['last_login']);
                 unset($event_value['picture_uri']);
                 $event_value = serialize($event_value);
+            }
+
+            if ($event_value instanceof \Chamilo\CoreBundle\Entity\User) {
+                $event_value = serialize(
+                    [
+                        'id' => $event_value->getId(),
+                        'username' => $event_value->getUsername(),
+                        'firstname' => $event_value->getFirstName(),
+                        'lastname' => $event_value->getLastname(),
+                    ]
+                );
             }
         }
         // If event is an array then the $event_value_type should finish with

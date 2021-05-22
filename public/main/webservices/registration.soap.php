@@ -4640,9 +4640,9 @@ function WSSubscribeUserToCourse($params)
                 $original_course_id['original_course_id_name']
             );
 
-            $courseCode = isset($courseInfo['code']) ? $courseInfo['code'] : '';
+            $courseId = isset($courseInfo['real_id']) ? $courseInfo['real_id'] : '';
 
-            if (empty($courseCode)) {
+            if (empty($courseId)) {
                 if ($debug) {
                     error_log('WSSubscribeUserToCourse course not found');
                 }
@@ -4650,9 +4650,9 @@ function WSSubscribeUserToCourse($params)
                 $resultValue = 0;
             } else {
                 if ($debug) {
-                    error_log('WSSubscribeUserToCourse courseCode: '.$courseCode);
+                    error_log('WSSubscribeUserToCourse $courseId: '.$courseId);
                 }
-                $result = CourseManager::subscribeUser($user_id, $courseCode, $status, 0, 0, false);
+                $result = CourseManager::subscribeUser($user_id, $courseId, $status, 0, 0, false);
                 if ($result) {
                     $resultValue = 1;
                     if ($debug) {
@@ -4766,7 +4766,7 @@ function WSSubscribeUserToCourseSimple($params)
             if ($debug) {
                 error_log('Try to register: user_id= '.$user_id.' to course: '.$course_data['code']);
             }
-            if (!CourseManager::subscribeUser($user_id, $course_data['code'], $status, 0, false, false)) {
+            if (!CourseManager::subscribeUser($user_id, $course_data['real_id'], $status, 0, false, false)) {
                 $result = 'User was not registered possible reasons: User already registered to the course,
                            Course visibility doesnt allow user subscriptions ';
                 if ($debug) {

@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Admin.
+ * Admin list.
  *
  * @ORM\Table(name="admin")
  * @ORM\Entity

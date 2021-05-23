@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class SessionRelCourseRelUser.
+ * User subscriptions to a session course.
  *
  * @ApiResource(
  *     shortName="SessionCourseSubscription",

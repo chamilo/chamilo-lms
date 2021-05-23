@@ -9,7 +9,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CourseRelClass.
+ * Course subscriptions to a class.
  *
  * @ORM\Table(name="course_rel_class")
  * @ORM\Entity

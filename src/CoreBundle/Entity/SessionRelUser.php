@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * SessionRelUser.
+ * User subscriptions to a session see also SessionRelCourseRelUser.php for a more detail subscription.
  *
  * @ApiResource(
  *     shortName="SessionSubscription",

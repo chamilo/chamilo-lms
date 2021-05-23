@@ -9,7 +9,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SessionRelCourse.
+ * Course subscriptions to a session.
  *
  * @ORM\Table(name="session_rel_course", indexes={
  *     @ORM\Index(name="idx_session_rel_course_course_id", columns={"c_id"})

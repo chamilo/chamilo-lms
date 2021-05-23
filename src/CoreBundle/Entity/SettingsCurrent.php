@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * SettingsCurrent.
+ * Platform settings
  *
  * @ORM\Table(
  *     name="settings_current",

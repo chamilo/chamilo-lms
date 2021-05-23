@@ -12,12 +12,12 @@ use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Entity\CForumCategory;
-use Chamilo\CourseBundle\Entity\CForumForum;
+use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CForumCategoryRepository;
-use Chamilo\CourseBundle\Repository\CForumForumRepository;
+use Chamilo\CourseBundle\Repository\CForumRepository;
 use Chamilo\CourseBundle\Repository\CForumPostRepository;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
@@ -41,7 +41,7 @@ final class Version20201215160445 extends AbstractMigrationChamilo
         $connection = $em->getConnection();
 
         $forumCategoryRepo = $container->get(CForumCategoryRepository::class);
-        $forumRepo = $container->get(CForumForumRepository::class);
+        $forumRepo = $container->get(CForumRepository::class);
         $forumAttachmentRepo = $container->get(CForumAttachmentRepository::class);
         $forumThreadRepo = $container->get(CForumThreadRepository::class);
         $forumPostRepo = $container->get(CForumPostRepository::class);
@@ -102,7 +102,7 @@ final class Version20201215160445 extends AbstractMigrationChamilo
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
-                /** @var CForumForum $resource */
+                /** @var CForum $resource */
                 $resource = $forumRepo->find($id);
                 if ($resource->hasResourceNode()) {
                     continue;
@@ -160,7 +160,7 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                 }
 
                 $course = $courseRepo->find($courseId);
-                /** @var CForumForum $resource */
+                /** @var CForum $resource */
                 $forum = $forumRepo->find($forumId);
 
                 $result = $this->fixItemProperty(

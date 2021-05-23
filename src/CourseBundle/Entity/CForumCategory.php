@@ -55,9 +55,9 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     protected int $locked;
 
     /**
-     * @var Collection|CForumForum[]
+     * @var Collection|CForum[]
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumForum", mappedBy="forumCategory")
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForum", mappedBy="forumCategory")
      */
     protected Collection $forums;
 
@@ -149,7 +149,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     /**
      * Get forums.
      *
-     * @return Collection|CForumForum[]
+     * @return Collection|CForum[]
      */
     public function getForums()
     {

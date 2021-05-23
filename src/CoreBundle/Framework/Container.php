@@ -32,7 +32,7 @@ use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CExerciseCategoryRepository;
 use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CForumCategoryRepository;
-use Chamilo\CourseBundle\Repository\CForumForumRepository;
+use Chamilo\CourseBundle\Repository\CForumRepository;
 use Chamilo\CourseBundle\Repository\CForumPostRepository;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
@@ -312,9 +312,9 @@ class Container
         return self::$container->get(CExerciseCategoryRepository::class);
     }
 
-    public static function getForumRepository(): CForumForumRepository
+    public static function getForumRepository(): CForumRepository
     {
-        return self::$container->get(CForumForumRepository::class);
+        return self::$container->get(CForumRepository::class);
     }
 
     public static function getForumCategoryRepository(): CForumCategoryRepository

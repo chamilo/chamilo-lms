@@ -207,9 +207,9 @@ class CLp extends AbstractResource implements ResourceInterface
     protected Collection $items;
 
     /**
-     * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumForum", mappedBy="lp")
+     * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CForum", mappedBy="lp")
      */
-    protected ?CForumForum $forum = null;
+    protected ?CForum $forum = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Asset", cascade={"persist", "remove"})
@@ -757,7 +757,7 @@ class CLp extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getForum(): ?CForumForum
+    public function getForum(): ?CForum
     {
         return $this->forum;
     }
@@ -767,7 +767,7 @@ class CLp extends AbstractResource implements ResourceInterface
         return null !== $this->forum;
     }
 
-    public function setForum(CForumForum $forum): self
+    public function setForum(CForum $forum): self
     {
         $this->forum = $forum;
 

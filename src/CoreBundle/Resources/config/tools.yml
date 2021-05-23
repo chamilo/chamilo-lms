@@ -222,7 +222,7 @@ services:
             - '@chamilo_course.settings.forum'
             -
                 forums:
-                    repository: Chamilo\CourseBundle\Repository\CForumForumRepository
+                    repository: Chamilo\CourseBundle\Repository\CForumRepository
                 forum_attachments:
                     repository: Chamilo\CourseBundle\Repository\CForumAttachmentRepository
                 forum_categories:

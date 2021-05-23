@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CForumForum;
+use Chamilo\CourseBundle\Entity\CForum;
 
 /**
  * These files are a complete rework of the forum. The database structure is
@@ -86,7 +86,7 @@ $(function () {
 
 $forumId = isset($_GET['forum']) ? (int) ($_GET['forum']) : 0;
 $repo = Container::getForumRepository();
-/** @var CForumForum $forumEntity */
+/** @var CForum $forumEntity */
 $forumEntity = $repo->find($forumId);
 
 // Are we in a lp ?

@@ -79,10 +79,10 @@ class CForumPost extends AbstractResource implements ResourceInterface
     protected ?CForumThread $thread = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumForum", inversedBy="posts")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForum", inversedBy="posts")
      * @ORM\JoinColumn(name="forum_id", referencedColumnName="iid", nullable=true, onDelete="SET NULL")
      */
-    protected ?CForumForum $forum = null;
+    protected ?CForum $forum = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
@@ -246,12 +246,12 @@ class CForumPost extends AbstractResource implements ResourceInterface
         $this->attachments->removeElement($attachment);
     }
 
-    public function getForum(): ?CForumForum
+    public function getForum(): ?CForum
     {
         return $this->forum;
     }
 
-    public function setForum(?CForumForum $forum): self
+    public function setForum(?CForum $forum): self
     {
         $this->forum = $forum;
 

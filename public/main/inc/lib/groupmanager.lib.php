@@ -457,7 +457,7 @@ class GroupManager
 
         $em
             ->createQuery(
-                'DELETE FROM ChamiloCourseBundle:CForumForum f WHERE f.forumOfGroup = :group'
+                'DELETE FROM ChamiloCourseBundle:CForum f WHERE f.forumOfGroup = :group'
             )
             ->execute(['group' => $groupIid]);
 

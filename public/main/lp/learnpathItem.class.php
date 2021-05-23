@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CForumForum;
+use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -4325,7 +4325,7 @@ class learnpathItem
      *
      * @return int The forum thread if was created. Otherwise return false
      */
-    public function createForumThread(CForumForum $forum)
+    public function createForumThread(CForum $forum)
     {
         $em = Database::getManager();
         $threadRepo = Container::getForumThreadRepository();

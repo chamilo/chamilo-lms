@@ -42,10 +42,10 @@ class CForumThread extends AbstractResource implements ResourceInterface
     protected string $threadTitle;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumForum", inversedBy="threads")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForum", inversedBy="threads")
      * @ORM\JoinColumn(name="forum_id", referencedColumnName="iid", nullable=true, onDelete="SET NULL")
      */
-    protected ?CForumForum $forum = null;
+    protected ?CForum $forum = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
@@ -171,7 +171,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
         return $this->threadTitle;
     }
 
-    public function setForum(CForumForum $forum = null): self
+    public function setForum(CForum $forum = null): self
     {
         $this->forum = $forum;
 
@@ -181,7 +181,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
     /**
      * Get forumId.
      *
-     * @return null|CForumForum
+     * @return null|CForum
      */
     public function getForum()
     {

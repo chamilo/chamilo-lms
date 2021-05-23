@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CForumForum;
+use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumThread;
 
 /**
@@ -83,7 +83,7 @@ $allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 $repo = Container::getForumRepository();
 $repoThread = Container::getForumThreadRepository();
-/** @var CForumForum $forumEntity */
+/** @var CForum $forumEntity */
 $forumEntity = $repo->find($forumId);
 /** @var CForumThread $threadEntity */
 $threadEntity = $repoThread->find($threadId);

@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CForumForum;
+use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumThread;
 
 /**
@@ -86,7 +86,7 @@ $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
 $threadId = isset($_GET['thread']) ? (int) $_GET['thread'] : 0;
 
 $repo = Container::getForumRepository();
-/** @var CForumForum $forum */
+/** @var CForum $forum */
 $forum = $repo->find($forumId);
 
 if (empty($forum)) {

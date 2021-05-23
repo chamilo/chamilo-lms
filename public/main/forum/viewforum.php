@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CForumForum;
+use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumPost;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -74,7 +74,7 @@ $courseId = api_get_course_int_id();
 $isAllowedToEdit = api_is_allowed_to_edit(false, true) && api_is_allowed_to_session_edit(false, true);
 $repo = Container::getForumRepository();
 
-/** @var CForumForum $forumEntity */
+/** @var CForum $forumEntity */
 $forumEntity = $repo->find($forumId);
 $courseEntity = api_get_course_entity(api_get_course_int_id());
 $sessionEntity = api_get_session_entity(api_get_session_id());

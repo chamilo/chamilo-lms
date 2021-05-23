@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CForumForum;
+use Chamilo\CourseBundle\Entity\CForum;
 
 /**
  * Edit a Forum Thread.
@@ -82,7 +82,7 @@ $origin = api_get_origin();
 $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
 
 $repo = Container::getForumRepository();
-/** @var CForumForum $forum */
+/** @var CForum $forum */
 $forum = $repo->find($forumId);
 if (empty($forum)) {
     api_not_allowed();

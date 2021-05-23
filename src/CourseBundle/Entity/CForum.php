@@ -25,7 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity
  */
-class CForumForum extends AbstractResource implements ResourceInterface
+class CForum extends AbstractResource implements ResourceInterface
 {
     /**
      * @ORM\Column(name="iid", type="integer")

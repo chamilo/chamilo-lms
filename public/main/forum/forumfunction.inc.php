@@ -8,7 +8,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForumAttachment;
 use Chamilo\CourseBundle\Entity\CForumCategory;
-use Chamilo\CourseBundle\Entity\CForumForum;
+use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumNotification;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
@@ -267,7 +267,7 @@ function show_add_forumcategory_form($lp_id)
     }
 }
 
-function forumForm(CForumForum $forum = null, $lp_id)
+function forumForm(CForum $forum = null, $lp_id)
 {
     $_course = api_get_course_info();
     // The header for the form
@@ -779,10 +779,10 @@ function store_forum($values, $courseInfo = [], $returnId = false)
     $repo = Container::getForumRepository();
 
     if (!isset($values['forum_id'])) {
-        $forum = new CForumForum();
+        $forum = new CForum();
         $forum->setForumOrder($new_max ?? null);
     } else {
-        /** @var CForumForum $forum */
+        /** @var CForum $forum */
         $forum = $repo->find($values['forum_id']);
     }
 
@@ -1296,7 +1296,7 @@ function move_up_down($content, $direction, $id)
 
     if ('forum' === $content && $next_sort) {
         $repo = Container::getForumRepository();
-        /** @var CForumForum $forum */
+        /** @var CForum $forum */
         $forum = $repo->find($id);
         $forum->setForumOrder($next_sort);
         $repo->update($forum);
@@ -1344,7 +1344,7 @@ function get_forum_categories($courseId = 0, $sessionId = 0)
  * @param int $categoryId the id of the forum category
  * @param int $courseId   Optional. The course ID
  *
- * @return CForumForum[] containing all the information about the forums (regardless of their category)
+ * @return CForum[] containing all the information about the forums (regardless of their category)
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *
@@ -1374,7 +1374,7 @@ function get_forums_in_category($categoryId, $courseId = 0)
  * @param bool $includeGroupsForum
  * @param int  $sessionId
  *
- * @return CForumForum[]
+ * @return CForum[]
  */
 function get_forums(
     $courseId = '',
@@ -1854,7 +1854,7 @@ function getThreadInfo($threadId, $cId)
  * @return array containing all the information about the posts of a given thread
  */
 function getPosts(
-    CForumForum $forum,
+    CForum $forum,
     $threadId,
     $orderDirection = 'ASC',
     $recursive = false,
@@ -2312,7 +2312,7 @@ function updateThread($values)
 }
 
 function saveThread(
-    CForumForum $forum,
+    CForum $forum,
     array $values,
     array $courseInfo = [],
     $showMessage = true,
@@ -2548,7 +2548,7 @@ function saveThread(
  *
  * @return FormValidator
  */
-function show_add_post_form(CForumForum $forum, CForumThread $thread, CForumPost $post = null, $action, $form_values, $showPreview = true)
+function show_add_post_form(CForum $forum, CForumThread $thread, CForumPost $post = null, $action, $form_values, $showPreview = true)
 {
     $_user = api_get_user_info();
     $action = isset($action) ? Security::remove_XSS($action) : '';
@@ -2814,7 +2814,7 @@ function show_add_post_form(CForumForum $forum, CForumThread $thread, CForumPost
     }
 }
 
-function newThread(CForumForum $forum, $form_values = '', $showPreview = true)
+function newThread(CForum $forum, $form_values = '', $showPreview = true)
 {
     $_user = api_get_user_info();
     $forumId = $forum->getIid();
@@ -3344,7 +3344,7 @@ function current_qualify_of_thread($threadId, $sessionId, $userId)
  *
  * @return int post id
  */
-function store_reply(CForumForum $forum, CForumThread $thread, $values, $courseId = 0, $userId = 0)
+function store_reply(CForum $forum, CForumThread $thread, $values, $courseId = 0, $userId = 0)
 {
     $courseId = !empty($courseId) ? $courseId : api_get_course_int_id();
     $_course = api_get_course_info_by_id($courseId);
@@ -3496,7 +3496,7 @@ function store_reply(CForumForum $forum, CForumThread $thread, $values, $courseI
  *
  * @param CForumPost   $post        contains all the information about the current post
  * @param CForumThread $thread      contains all the information about the current thread
- * @param CForumForum  $forum       contains all info about the current forum (to check if attachments are allowed)
+ * @param CForum  $forum       contains all info about the current forum (to check if attachments are allowed)
  * @param array        $form_values contains the default values to fill the form
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -3658,7 +3658,7 @@ function show_edit_post_form(
  *
  * @version february 2006, dokeos 1.8
  */
-function store_edit_post(CForumForum $forum, $values)
+function store_edit_post(CForum $forum, $values)
 {
     $logInfo = [
         'tool' => TOOL_FORUM,
@@ -3940,7 +3940,7 @@ function get_unaproved_messages($forum_id)
  * This function sends the notification mails to everybody who stated that they wanted to be informed when a new post
  * was added to a given thread.
  */
-function send_notification_mails(CForumForum $forum, CForumThread $thread, $reply_info)
+function send_notification_mails(CForum $forum, CForumThread $thread, $reply_info)
 {
     $courseEntity = api_get_course_entity();
     $courseId = $courseEntity->getId();
@@ -4093,7 +4093,7 @@ function handle_mail_cue($content, $id)
 /**
  * This function sends the mails for the mail notification.
  */
-function send_mail($userInfo, CForumForum $forum, CForumThread $thread, CForumPost $postInfo = null)
+function send_mail($userInfo, CForum $forum, CForumThread $thread, CForumPost $postInfo = null)
 {
     if (empty($userInfo) || empty($forum) || empty($thread)) {
         return false;
@@ -5003,7 +5003,7 @@ function delete_attachment($postId, $attachmentId)
  *
  * @param array $groupInfo the id of the group we need the fora of (see forum.forum_of_group)
  *
- * @return CForumForum[]
+ * @return CForum[]
  *
  * @todo this is basically the same code as the get_forums function. Consider merging the two.
  */
@@ -5294,7 +5294,7 @@ function get_notifications($content, $id)
  *
  * @since May 2008, dokeos 1.8.5
  */
-function send_notifications(CForumForum $forum, CForumThread $thread, $post_id = 0)
+function send_notifications(CForum $forum, CForumThread $thread, $post_id = 0)
 {
     if (!$forum) {
         return false;
@@ -5679,7 +5679,7 @@ function getForumCreatedByUser($userId, $courseInfo, $sessionId)
 
     $forumList = [];
     if (!empty($items)) {
-        /** @var CForumForum $forum */
+        /** @var CForum $forum */
         foreach ($items as $forum) {
             $forumList[] = [
                 $forum->getForumTitle(),
@@ -6105,7 +6105,7 @@ function getForumCategoryByTitle($title, $courseId, $sessionId = 0)
     return $resultData;*/
 }
 
-function getPostStatus(CForumForum $forum, array $row, bool $addWrapper = true): string
+function getPostStatus(CForum $forum, array $row, bool $addWrapper = true): string
 {
     $statusIcon = '';
     if ($forum->isModerated()) {
@@ -6174,7 +6174,7 @@ function getPostStatus(CForumForum $forum, array $row, bool $addWrapper = true):
 }
 
 /**
- * @param CForumForum $forum
+ * @param CForum $forum
  * @param int         $threadId
  * @param int         $status
  */
@@ -6200,7 +6200,7 @@ function getCountPostsWithStatus($status, $forum, $threadId = null)
 }
 
 /**
- * @param CForumForum $forum
+ * @param CForum $forum
  * @param CForumPost  $post
  *
  * @return bool

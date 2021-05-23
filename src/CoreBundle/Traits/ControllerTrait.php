@@ -19,7 +19,7 @@ use Chamilo\CourseBundle\Repository\CBlogRepository;
 use Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
-use Chamilo\CourseBundle\Repository\CForumForumRepository;
+use Chamilo\CourseBundle\Repository\CForumRepository;
 use Chamilo\CourseBundle\Repository\CLpCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
@@ -66,7 +66,7 @@ trait ControllerTrait
         $services[] = CBlogRepository::class;
         $services[] = CCalendarEventAttachmentRepository::class;
         $services[] = CDocumentRepository::class;
-        $services[] = CForumForumRepository::class;
+        $services[] = CForumRepository::class;
         $services[] = CForumAttachmentRepository::class;
         $services[] = CLpRepository::class;
         $services[] = CLpCategoryRepository::class;

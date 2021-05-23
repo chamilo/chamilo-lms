@@ -12,7 +12,7 @@
 import {mapGetters} from 'vuex';
 import NotificationMixin from './mixins/NotificationMixin';
 import axios from "axios";
-import { onMounted, onUnmounted, ref, computed, watch } from 'vue';
+import { onMounted, onUnmounted, ref, computed, watch, provide } from 'vue';
 import isEmpty from 'lodash/isEmpty';
 import { fasGlobeAmericas, fasFlask } from '@quasar/extras/fontawesome-v5'
 import { useRouter, useRoute } from 'vue-router'
@@ -27,6 +27,25 @@ import Button from './components/global/Button.vue'*/
 
 const defaultLayout = "Dashboard";
 
+import { DefaultApolloClient } from '@vue/apollo-composable'
+
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core'
+
+// HTTP connection to the API
+const httpLink = createHttpLink({
+  // You should use an absolute URL here
+  uri: '/api/graphql',
+})
+
+// Cache implementation
+const cache = new InMemoryCache()
+
+// Create the apollo client
+const apolloClient = new ApolloClient({
+  link: httpLink,
+  cache,
+});
+
 export default {
   name: "App",
   components: {
@@ -37,6 +56,8 @@ export default {
         () => `${currentRoute.value.meta.layout || defaultLayout}Layout`
     );
     const route = useRoute();
+
+    provide(DefaultApolloClient, apolloClient)
 
     watch(
         () => route.meta,

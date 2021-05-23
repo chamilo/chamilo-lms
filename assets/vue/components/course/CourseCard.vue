@@ -15,7 +15,7 @@
     <img src="/img/session_default.png" />
     <q-card-section>
       <div class="text-h7">
-        <router-link :to="{ name: 'CourseHome', params: {id: course.id, course: course}}">
+        <router-link :to="{ name: 'CourseHome', params: {id: course._id, course: course}}">
         {{ course.title }}
         </router-link>
       </div>

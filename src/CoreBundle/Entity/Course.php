@@ -26,8 +26,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class Course.
- *
  * @ApiResource(
  *     attributes={"security"="is_granted('ROLE_ADMIN')"},
  *     iri="https://schema.org/Course",
@@ -98,7 +96,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * @var Collection|CourseRelUser[]
      *
      * @ApiSubresource()
-     * Groups({"course:read"})
+     * @Groups({"course:read", "user:read"})
      * "orphanRemoval" is needed to delete the CourseRelUser relation
      * in the CourseAdmin class. The setUsers, getUsers, removeUsers and
      * addUsers methods need to be added.
@@ -591,21 +589,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this;
     }
 
-    /**
-     * Get code.
-     *
-     * @return string
-     */
-    public function getCode()
+    public function getCode(): string
     {
         return $this->code;
-    }
-
-    public function setDirectory(string $directory): self
-    {
-        $this->directory = $directory;
-
-        return $this;
     }
 
     /**

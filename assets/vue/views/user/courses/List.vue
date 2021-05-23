@@ -1,6 +1,6 @@
 <template>
+<!--  {{ loading }}-->
   <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-2">
-      {{ status }}
       <CourseCardList
           :courses="courses"
       />
@@ -13,6 +13,8 @@ import {ENTRYPOINT} from '../../../config/entrypoint';
 import axios from "axios";
 import {ref, computed} from "vue";
 import { useStore } from 'vuex';
+import gql from "graphql-tag";
+import { useQuery, useResult } from '@vue/apollo-composable'
 
 export default {
   name: 'CourseList',
@@ -20,7 +22,7 @@ export default {
     CourseCardList,
   },
   setup() {
-    const courses = ref([]);
+    //const courses = ref([]);
     const status = ref('Loading');
 
     const store = useStore();
@@ -28,7 +30,7 @@ export default {
 
     if (user.value) {
       let userId = user.value.id;
-      axios.get(ENTRYPOINT + 'users/' + userId + '/courses.json').then(response => {
+      /*axios.get(ENTRYPOINT + 'users/' + userId + '/courses.json').then(response => {
         if (Array.isArray(response.data)) {
           courses.value = response.data;
         }
@@ -36,12 +38,37 @@ export default {
         console.log(error);
       }).finally(() =>
           status.value = ''
-      );
-    }
+      );*/
 
-    return {
-      courses,
-      status
+      const GET_COURSE_REL_USER = gql`
+          query getCourses($user: String!){
+            courseRelUsers(user: $user) {
+              edges {
+                node {
+                  course {
+                    _id
+                    title
+                  }
+                }
+              }
+            }
+        }
+      `;
+
+      const {result, loading, error} = useQuery(GET_COURSE_REL_USER, {
+        user: "/api/users/" + userId
+      }, );
+
+      const courses = useResult(result, null, (data) => {
+        return data.courseRelUsers.edges.map(function(edge) {
+          return edge.node.course;
+        });
+      });
+
+      return {
+        courses,
+        loading
+      }
     }
   }
 };

@@ -1,10 +1,10 @@
 <template>
     <div
-         v-for="card in courses"
-         :key="card.course.id"
+         v-for="course in courses"
+         :key="course.id"
     >
       <CourseCard
-          :course="card.course"
+          :course="course"
       />
     </div>
 </template>

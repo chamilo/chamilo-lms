@@ -75,8 +75,6 @@ const homePublicUrl = '/';
 const mainUrl = homePublicUrl + 'main/';
 const webAjax = homePublicUrl + 'main/inc/ajax/';
 
-var ajax_url = webAjax + 'chat.ajax.php';
-
 $(function () {
   let courseId = $('body').attr('data-course-id');
   let webCidReq = '&cid=' + courseId + '&sid=' + $('body').attr('data-session-id');

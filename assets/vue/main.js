@@ -15,21 +15,12 @@ import makeCrudModule from './store/modules/crud';
 //require('@fancyapps/fancybox');
 //require('@fancyapps/fancybox/dist/jquery.fancybox.css');
 
-/*
-import VueApollo from 'vue-apollo';
-import ApolloClient from 'apollo-boost';
-const apolloClient = new ApolloClient({
-    // You should use an absolute URL here
-    uri: '/api/graphql/'
-});*/
-
 // Font awesome
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 library.add(fas);
 //Vue.use(Vuelidate);
-//Vue.use(VueApollo);
 
 import Toast from 'vue-toastification';
 //import 'vue-toastification/dist/index.css';
@@ -38,11 +29,6 @@ const toastOptions = {
     maxToasts: 20,
     newestOnTop: true
 };
-/*const apolloProvider = new VueApollo({
-    defaultClient: apolloClient,
-});*/
-
-
 import VueFlatPickr from 'vue-flatpickr-component';
 import 'flatpickr/dist/flatpickr.css';
 
@@ -161,12 +147,10 @@ app.component('EmptyLayout', EmptyLayout);
 app.component('TinyEditor', Editor);
 
 app.config.globalProperties.axios = axios;
-
 const prettyBytes = require('pretty-bytes');
-
 const { DateTime } = require("luxon");
-app.config.globalProperties.$luxonDateTime = DateTime;
 
+app.config.globalProperties.$luxonDateTime = DateTime;
 app.config.globalProperties.$filters = {
     prettyBytes(num) {
         return prettyBytes(num);

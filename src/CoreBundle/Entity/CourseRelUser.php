@@ -6,7 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -51,7 +53,7 @@ class CourseRelUser
     protected int $id;
 
     /**
-     * @Groups({"course:read"})
+     * @Groups({"course:read", "user:read"})
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="courses", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
@@ -97,13 +99,12 @@ class CourseRelUser
     protected ?int $legalAgreement = null;
 
     /**
-     * @Groups({"course:read"})
+     * @Groups({"course:read", "user:read"})
      * @Assert\Range(
      *      min = 0,
      *      max = 100,
      *      notInRangeMessage = "Progress from {{ min }} to {{ max }} only",
      * )
-     *
      * @ORM\Column(name="progress", type="integer")
      */
     protected int $progress;
@@ -120,7 +121,7 @@ class CourseRelUser
 
     public function __toString(): string
     {
-        return (string) $this->getCourse()->getCode();
+        return $this->getCourse()->getCode();
     }
 
     public function getId(): int
@@ -246,6 +247,7 @@ class CourseRelUser
             //User::DRH => 'DRH'
         ];
     }
+
     public function getProgress(): int
     {
         return $this->progress;

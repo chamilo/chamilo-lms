@@ -17,6 +17,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * Learning paths categories.
+ *
  * @ORM\Table(
  *     name="c_lp_category",
  * )

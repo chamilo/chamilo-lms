@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CGroupCategory.
+ * Group categories inside a course.
  *
  * @ORM\Table(
  *     name="c_group_category",

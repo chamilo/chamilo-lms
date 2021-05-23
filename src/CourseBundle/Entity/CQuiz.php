@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CQuiz.
+ * Course quizzes.
  *
  * @ORM\Table(
  *     name="c_quiz",

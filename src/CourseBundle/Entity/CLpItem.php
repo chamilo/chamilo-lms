@@ -13,7 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CLpItem.
+ * Items from a learning path (LP).
  *
  * @Gedmo\Tree(type="nested")
  * @ORM\Table(

@@ -12,8 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CLink.
- *
  * @ORM\Table(name="c_link")
  * @ORM\Entity
  */

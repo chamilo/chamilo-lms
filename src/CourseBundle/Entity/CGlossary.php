@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CGlossary.
+ * Course glossary.
  *
  * @ORM\Table(
  *     name="c_glossary"

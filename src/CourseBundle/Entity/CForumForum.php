@@ -16,7 +16,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CForumForum.
+ * Course forums.
  *
  * @ORM\Table(
  *     name="c_forum_forum",

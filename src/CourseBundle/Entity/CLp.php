@@ -17,6 +17,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * Course learning paths (LPs).
+ *
  * @ORM\Table(
  *     name="c_lp"
  * )

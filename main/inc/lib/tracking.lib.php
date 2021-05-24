@@ -5455,9 +5455,8 @@ class Tracking
      * @param int    $user_id
      * @param string $course_code
      * @param int    $session_id
-     * @param bool   $showDiagram
      */
-    public static function show_course_detail($user_id, $course_code, $session_id, $showDiagram = false): string
+    public static function show_course_detail($user_id, $course_code, $session_id): string
     {
         if (empty($user_id) || empty($course_code)) {
             return '';
@@ -5474,14 +5473,6 @@ class Tracking
 
         $html = '<a name="course_session_data"></a>';
         $html .= Display::page_subheader2($course_info['title']);
-
-        if ($showDiagram && !empty($session_id)) {
-            $visibility = api_get_session_visibility($session_id);
-            if (SESSION_AVAILABLE === $visibility) {
-                $html .= Display::page_subheader2($course_info['title']);
-            }
-        }
-
         // Show exercise results of invisible exercises? see BT#4091
         $quizzesHtml = self::generateQuizzesTable($course_info, $session_id);
         // LP table results

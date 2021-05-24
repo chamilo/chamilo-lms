@@ -100,8 +100,7 @@ if ($showAllSessionCourses && !empty($sessionId) && empty($courseCode)) {
         $content .= Tracking::show_course_detail(
             $user_id,
             $userSessionCourse['course_code'],
-            $sessionId,
-            $allowCareerUser
+            $sessionId
         );
     }
 } else {

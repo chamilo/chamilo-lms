@@ -5319,7 +5319,7 @@ class UserManager
      * Get users followed by human resource manager.
      *
      * @param int    $userId
-     * @param int    $userStatus         Filter users by status (STUDENT, COURSEMANAGER, etc)
+     * @param int    $userStatus             Filter users by status (STUDENT, COURSEMANAGER, etc)
      * @param bool   $getOnlyUserId
      * @param bool   $getSql
      * @param bool   $getCount
@@ -5329,7 +5329,7 @@ class UserManager
      * @param string $direction
      * @param int    $active
      * @param string $lastConnectionDate
-     * @param int    $status             the function is called by who? COURSEMANAGER, DRH?
+     * @param int    $status                 the function is called by who? COURSEMANAGER, DRH?
      * @param string $keyword
      * @param bool   $checkSessionVisibility
      *

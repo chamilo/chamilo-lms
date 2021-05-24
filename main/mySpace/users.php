@@ -246,7 +246,7 @@ if (api_is_drh()) {
         Display::return_icon('user_na.png', get_lang('Students'), [], ICON_SIZE_MEDIUM),
         '#'
     );
-    $actions .= Display::url(
+    $actionsLeft .= Display::url(
         Display::return_icon('skills.png', get_lang('Skills'), [], ICON_SIZE_MEDIUM),
         $webCodePath.'social/my_skills_report.php'
     );

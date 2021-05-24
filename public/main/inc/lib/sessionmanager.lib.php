@@ -7974,7 +7974,7 @@ class SessionManager
             'session_visibility',
             null,
             [
-                SESSION_VISIBLE_READ_ONLY => get_lang('SessionRead only'),
+                SESSION_VISIBLE_READ_ONLY => get_lang('Read only'),
                 SESSION_VISIBLE => get_lang('Accessible'),
                 SESSION_INVISIBLE => api_ucfirst(get_lang('Not accessible')),
             ]
@@ -8016,13 +8016,13 @@ class SessionManager
         // Dates
         $form->addDateTimePicker(
             'access_start_date',
-            [get_lang('Access start date'), get_lang('Access start dateComment')],
+            [get_lang('Access start date'), get_lang('Date on which the session is made available to all')],
             ['id' => 'access_start_date']
         );
 
         $form->addDateTimePicker(
             'access_end_date',
-            [get_lang('Access end date'), get_lang('Access end dateComment')],
+            [get_lang('Access end date'), get_lang('Date on which the session is closed')],
             ['id' => 'access_end_date']
         );
 
@@ -8037,7 +8037,7 @@ class SessionManager
             'display_start_date',
             [
                 get_lang('Start date to display'),
-                get_lang('Start date to displayComment'),
+                get_lang('Date that will be shown in the session information as the date on which the session starts'),
             ],
             ['id' => 'display_start_date']
         );
@@ -8046,7 +8046,7 @@ class SessionManager
             'display_end_date',
             [
                 get_lang('End date to display'),
-                get_lang('End date to displayComment'),
+                get_lang('Date that will be shown in the session information as the date on which the session ends'),
             ],
             ['id' => 'display_end_date']
         );
@@ -8062,7 +8062,7 @@ class SessionManager
             'coach_access_start_date',
             [
                 get_lang('Access start date for coaches'),
-                get_lang('Access start date for coachesComment'),
+                get_lang('Date on which the session is made available to coaches, so they can prepare it before the students get connected'),
             ],
             ['id' => 'coach_access_start_date']
         );
@@ -8071,7 +8071,7 @@ class SessionManager
             'coach_access_end_date',
             [
                 get_lang('Access end date for coaches'),
-                get_lang('Access end date for coachesComment'),
+                get_lang('Date on which the session is closed to coaches. The additional delay will allow them to export all relevant tracking information'),
             ],
             ['id' => 'coach_access_end_date']
         );
@@ -8088,9 +8088,9 @@ class SessionManager
         $form->addCheckBox(
             'send_subscription_notification',
             [
-                get_lang('Send mail notification to students to inform of subscription'),
-                get_lang('Send an email when a user being subscribed to session'),
-            ]
+                //get_lang('Send mail notification to students to inform of subscription'),
+            ],
+            get_lang('Send an email when a user being subscribed to session'),
         );
 
         // Extra fields
@@ -9579,7 +9579,7 @@ class SessionManager
     {
         if (api_get_session_id() && !api_is_allowed_to_session_edit()) {
             Display::addFlash(
-                Display::return_message(get_lang('SessionIsReadOnly'), 'warning')
+                Display::return_message(get_lang('The session is read only'), 'warning')
             );
         }
     }

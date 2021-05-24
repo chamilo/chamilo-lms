@@ -15,10 +15,9 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 $_SESSION['this_section'] = $this_section;
 
-$action = isset($_GET['action']) ? $_GET['action'] : null;
+$action = $_GET['action'] ?? null;
 $action_todo = false;
 
-// Access restrictions
 api_protect_admin_script(true);
 
 $allowCareers = api_get_configuration_value('allow_careers_in_global_announcements');
@@ -41,13 +40,13 @@ if (!empty($action)) {
         "url" => "system_announcements.php",
         "name" => get_lang('Portal news'),
     ];
-    if ('add' == $action) {
+    if ('add' === $action) {
         $interbreadcrumb[] = [
             "url" => '#',
             "name" => get_lang('Add an announcement'),
         ];
     }
-    if ('edit' == $action) {
+    if ('edit' === $action) {
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
     }
 } else {
@@ -82,10 +81,10 @@ function showCareer() {
 }
 </script>';
 
-// Displaying the header.
 Display::display_header($tool_name);
 if ('add' !== $action && 'edit' !== $action) {
-    $actions = '<a href="?action=add">'.Display::return_icon('add.png', get_lang('Add an announcement'), [], 32).'</a>';
+    $actions = '<a href="?action=add">'.
+        Display::return_icon('add.png', get_lang('Add an announcement'), [], 32).'</a>';
     echo Display::toolbarAction('toolbar', [$actions]);
 }
 
@@ -166,10 +165,10 @@ switch ($action) {
 }
 
 if ($action_todo) {
-    if (isset($_REQUEST['action']) && 'add' == $_REQUEST['action']) {
+    if ('add' === $action) {
         $form_title = get_lang('Add news');
         $url = api_get_self();
-    } elseif (isset($_REQUEST['action']) && 'edit' == $_REQUEST['action']) {
+    } elseif ('edit' === $action) {
         $form_title = get_lang('Edit News');
         $url = api_get_self().'?id='.intval($_GET['id']);
     }
@@ -199,7 +198,7 @@ if ($action_todo) {
     );
     $form->addDateRangePicker(
         'range',
-        get_lang('StartTimeWindow'),
+        get_lang('Start'),
         true,
         ['id' => 'range']
     );
@@ -213,7 +212,11 @@ if ($action_todo) {
             'career_id',
             get_lang('Career'),
             $list,
-            ['onchange' => 'javascript: showCareer();', 'placeholder' => get_lang('SelectAnOption'), 'id' => 'career_id']
+            [
+                'onchange' => 'javascript: showCareer();',
+                'placeholder' => get_lang('SelectAnOption'),
+                'id' => 'career_id',
+            ]
         );
 
         $display = 'none;';
@@ -273,12 +276,6 @@ if ($action_todo) {
         error_log($e);
     }
 
-    $form->addDateRangePicker(
-        'range',
-        get_lang('Start'),
-        true,
-        ['id' => 'range']
-    );
 
     $group = [];
     foreach ($visibleList as $key => $name) {
@@ -309,12 +306,12 @@ if ($action_todo) {
     $values['group'] = isset($values['group']) ? $values['group'] : '0';
     $form->addElement('checkbox', 'send_mail', null, get_lang('Send mail'));
 
-    if (isset($_REQUEST['action']) && 'add' == $_REQUEST['action']) {
+    if ('add' === $action) {
         $form->addElement('checkbox', 'add_to_calendar', null, get_lang('Add to calendar'));
         $text = get_lang('Add news');
         $class = 'add';
         $form->addElement('hidden', 'action', 'add');
-    } elseif (isset($_REQUEST['action']) && 'edit' == $_REQUEST['action']) {
+    } elseif ('edit' === $action) {
         $text = get_lang('Edit News');
         $class = 'save';
         $form->addElement('hidden', 'action', 'edit');
@@ -459,7 +456,13 @@ if ($show_announcement_list) {
         $row[] = "<a href=\"?id=".$announcement->id."&person=".SystemAnnouncementManager::VISIBLE_GUEST."&action=".($announcement->visible_guest ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_guest ? 'eyes.png' : 'eyes-close.png'), get_lang('Show/Hide'))."</a>";*/
 
         $row[] = $announcement->lang;
-        $row[] = "<a href=\"?action=edit&id=".$announcement->id."\">".Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL)."</a> <a href=\"?action=delete&id=".$announcement->id."\" title=".addslashes(api_htmlentities(get_lang('Please confirm your choice')))." class='delete-swal' >".Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL)."</a>";
+        $row[] = "<a href=\"?action=edit&id=".$announcement->id."\">".
+            Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL)."</a>
+            <a
+                href=\"?action=delete&id=".$announcement->id."\"
+                title=".addslashes(api_htmlentities(get_lang('Please confirm your choice')))." class='delete-swal' >".
+            Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).
+            "</a>";
         $announcement_data[] = $row;
     }
     $table = new SortableTableFromArray($announcement_data);
@@ -483,4 +486,4 @@ if ($show_announcement_list) {
     $table->display();
 }
 
-Display :: display_footer();
+Display::display_footer();

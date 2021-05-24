@@ -20,17 +20,10 @@
  * @license     http://www.php.net/license/3_01.txt PHP License 3.01
  * @version     CVS: $Id: QuickForm.php,v 1.166 2009/04/04 21:34:02 avb Exp $
  * @link        http://pear.php.net/package/HTML_QuickForm
- */
-
-
-/**
  * Validation rules known to HTML_QuickForm
  * @see HTML_QuickForm::registerRule(), HTML_QuickForm::getRegisteredRules(),
  *      HTML_QuickForm::isRuleRegistered()
  * @global array $GLOBALS['_HTML_QuickForm_registered_rules']
- */
-
-/**
  * Error codes for HTML_QuickForm
  *
  * Codes are mapped to textual messages by errorMessage() method, if you add a
@@ -49,21 +42,9 @@ define('QUICKFORM_INVALID_PROCESS', -7);
 define('QUICKFORM_DEPRECATED', -8);
 define('QUICKFORM_INVALID_DATASOURCE', -9);
 
-/**
- * Class HTML_QuickForm
- * Create, validate and process HTML forms
- *
- * @category    HTML
- * @package     HTML_QuickForm
- * @author      Adam Daniel <adaniel1@eesus.jnj.com>
- * @author      Bertrand Mansion <bmansion@mamasam.com>
- * @author      Alexey Borzov <avb@php.net>
- * @version     Release: 3.2.11
- */
 class HTML_QuickForm extends HTML_Common
 {
     const MAX_ELEMENT_ARGUMENT = 10;
-    private $dateTimePickerLibraryAdded;
     private $token;
 
     /**
@@ -829,20 +810,20 @@ class HTML_QuickForm extends HTML_Common
 
         } elseif (false !== ($pos = strpos($elementName, '['))) {
             $base = str_replace(
-                array('\\', '\''),
-                array('\\\\', '\\\''),
+                ['\\', '\''],
+                ['\\\\', '\\\''],
                 substr($elementName, 0, $pos)
             );
             $idx = "['".str_replace(
-                    array('\\', '\'', ']', '['),
-                    array('\\\\', '\\\'', '', "']['"),
+                    ['\\', '\'', ']', '['],
+                    ['\\\\', '\\\'', '', "']['"],
                     substr($elementName, $pos + 1, -1)
                 )."']";
             if (isset($this->_submitValues[$base])) {
-                $value = eval("return (isset(\$this->_submitValues['{$base}']{$idx})) ? \$this->_submitValues['{$base}']{$idx} : null;");
+                $value = isset($this->_submitValues[$base][$idx]) ? $this->_submitValues[$base][$idx] : null;
             }
 
-            if ((is_array($value) || null === $value) && isset($this->_submitFiles[$base])) {
+            /*if ((is_array($value) || null === $value) && isset($this->_submitFiles[$base])) {
                 $props = array('name', 'type', 'size', 'tmp_name', 'error');
                 $code  = "if (!isset(\$this->_submitFiles['{$base}']['name']{$idx})) {\n" .
                          "    return null;\n" .
@@ -855,11 +836,11 @@ class HTML_QuickForm extends HTML_Common
                 if (null !== $fileValue) {
                     $value = null === $value? $fileValue: HTML_QuickForm::arrayMerge($value, $fileValue);
                 }
-            }
+            }*/
         }
 
         // This is only supposed to work for groups with appendName = false
-        if (null === $value && 'group' == $this->getElementType($elementName)) {
+        if (null === $value && 'group' === $this->getElementType($elementName)) {
             $group    =& $this->getElement($elementName);
             $elements =& $group->getElements();
             foreach (array_keys($elements) as $key) {
@@ -1229,7 +1210,7 @@ class HTML_QuickForm extends HTML_Common
         if (!is_callable($filter)) {
             throw new \Exception("Callback function does not exist in QuickForm::applyFilter()");
         }
-        if ($element == '__ALL__') {
+        if ($element === '__ALL__') {
             $this->_submitValues = $this->_recursiveFilter($filter, $this->_submitValues);
         } else {
             if (!is_array($element)) {
@@ -1241,11 +1222,12 @@ class HTML_QuickForm extends HTML_Common
                     if (false === strpos($elName, '[')) {
                         $this->_submitValues[$elName] = $this->_recursiveFilter($filter, $value);
                     } else {
-                        $idx  = "['" . str_replace(
-                                    array('\\', '\'', ']', '['), array('\\\\', '\\\'', '', "']['"),
-                                    $elName
-                                ) . "']";
-                        eval("\$this->_submitValues{$idx} = \$this->_recursiveFilter(\$filter, \$value);");
+                        $idx = "['".str_replace(
+                                ['\\', '\'', ']', '['],
+                                ['\\\\', '\\\'', '', "']['"],
+                                $elName
+                            )."']";
+                        $this->_submitValues[$idx] = $this->_recursiveFilter($filter, $value);
                     }
                 }
             }
@@ -1476,14 +1458,16 @@ class HTML_QuickForm extends HTML_Common
                             $isUpload = !empty($this->_submitFiles[$target]);
                         } else {
                             $base = str_replace(
-                                        array('\\', '\''), array('\\\\', '\\\''),
-                                        substr($target, 0, $pos)
-                                    );
-                            $idx  = "['" . str_replace(
-                                        array('\\', '\'', ']', '['), array('\\\\', '\\\'', '', "']['"),
-                                        substr($target, $pos + 1, -1)
-                                    ) . "']";
-                            eval("\$isUpload = isset(\$this->_submitFiles['{$base}']['name']{$idx});");
+                                ['\\', '\''],
+                                ['\\\\', '\\\''],
+                                substr($target, 0, $pos)
+                            );
+                            $idx = "['".str_replace(
+                                    ['\\', '\'', ']', '['],
+                                    ['\\\\', '\\\'', '', "']['"],
+                                    substr($target, $pos + 1, -1)
+                                )."']";
+                            $isUpload = isset($this->_submitFiles[$base]['name'][$idx]);
                         }
                         if ($isUpload && (!isset($submitValue['error']) || UPLOAD_ERR_NO_FILE == $submitValue['error'])) {
                             continue 2;
@@ -1750,7 +1734,7 @@ class HTML_QuickForm extends HTML_Common
                 "  var errFlag = new Array();\n" .
                 "  var _qfGroups = {};\n" .
                 "  _qfMsg = '';\n\n" .
-                join("\n", $test) .
+                implode("\n", $test) .
                 "\n  if (_qfMsg != '') {\n" .
                 "    _qfMsg = '" . strtr($this->_jsPrefix, $js_escape) . "' + _qfMsg;\n" .
                 "    _qfMsg = _qfMsg + '\\n" . strtr($this->_jsPostfix, $js_escape) . "';\n" .

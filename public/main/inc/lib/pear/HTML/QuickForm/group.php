@@ -52,7 +52,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
      *
      * @since     2.5
      */
-    private $_required = [];
+    public $_required = [];
 
     /**
      * Whether to change elements' names to $groupName[$elementName] or leave them as is.

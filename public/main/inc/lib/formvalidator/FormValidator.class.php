@@ -28,16 +28,20 @@ class FormValidator extends HTML_QuickForm
      * @param bool        $trackSubmit Whether to track if the form was submitted by adding a special hidden field
      */
     public function __construct(
-        $name,
-        $method = 'post',
-        $action = '',
-        $target = '',
-        $attributes = [],
-        $layout = self::LAYOUT_HORIZONTAL,
-        $trackSubmit = true
+        string $name,
+        string $method = 'post',
+        string $action = '',
+        ?string $target = '',
+        ?array $attributes = [],
+        string $layout = self::LAYOUT_HORIZONTAL,
+        bool $trackSubmit = true
     ) {
+        if (null === $attributes) {
+            $attributes = [];
+        }
+
         // Default form class.
-        if (is_array($attributes) && !isset($attributes['class']) || empty($attributes)) {
+        if (!isset($attributes['class']) || empty($attributes)) {
             $attributes['class'] = 'form-horizontal q-pt-md';
         }
 

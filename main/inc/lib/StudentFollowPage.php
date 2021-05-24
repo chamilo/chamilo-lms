@@ -52,15 +52,7 @@ class StudentFollowPage
                 return '-';
             }
 
-            $insertUser = $itemProperty->getInsertUser()->getId() !== $studentId
-                ? $itemProperty->getInsertUser()->getCompleteName()
-                : '-';
-
-            return "$insertUser<br>"
-                .Display::tag(
-                    'small',
-                    api_convert_and_format_date($itemProperty->getInsertDate(), DATE_TIME_FORMAT_LONG)
-                );
+            return api_convert_and_format_date($itemProperty->getInsertDate(), DATE_TIME_FORMAT_LONG);
         }
 
         $subscriptionEvent = Event::findUserSubscriptionToCourse($studentId, $courseId, $sessionId);
@@ -69,13 +61,7 @@ class StudentFollowPage
             return '-';
         }
 
-        $creator = api_get_user_entity($subscriptionEvent['default_user_id']);
-
-        return "{$creator->getCompleteName()}<br>"
-            .Display::tag(
-                'small',
-                api_convert_and_format_date($subscriptionEvent['default_date'], DATE_TIME_FORMAT_LONG)
-            );
+        return api_convert_and_format_date($subscriptionEvent['default_date'], DATE_TIME_FORMAT_LONG);
     }
 
     public static function getLpAcquisition(

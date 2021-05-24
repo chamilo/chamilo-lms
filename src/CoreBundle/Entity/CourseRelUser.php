@@ -31,6 +31,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         "api_users_courses_get_subresource"={"security"="is_granted('ROLE_USER')"},
  *     },
  * )
+ * @ApiFilter(SearchFilter::class, properties={"status":"exact", "user":"exact"})
  *
  * @ORM\Table(
  *     name="course_rel_user",

@@ -349,5 +349,4 @@ $tpl->assign('social_forum', $socialForum);
 $tpl->assign('social_right_content', $social_right_content);
 $tpl->assign('list_members', $listMembers);
 $tpl->assign('list_topic', $listTopic);
-$social_layout = $tpl->get_template('social/group_view.tpl');
-$tpl->display($social_layout);
+$tpl->display($tpl->get_template('social/group_view.html.twig'));

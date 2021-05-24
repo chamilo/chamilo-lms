@@ -319,7 +319,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
     } else {
         $my_group_content = '<span class="muted">'.get_lang('(none)').'</span>';
     }
-    if ('true' == api_get_setting('allow_students_to_create_groups_in_social')) {
+    if ('true' === api_get_setting('allow_students_to_create_groups_in_social')) {
         $create_group_item =
             '<a class="btn btn-default" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.
             get_lang('Create a social group').'</a>';
@@ -377,11 +377,9 @@ if (isset($_GET['view']) && 'mygroups' == $_GET['view']) {
     $show_menu = $_GET['view'];
 }
 
-$social_menu_block = SocialManager::show_social_menu($show_menu);
-$templateName = 'social/groups.tpl';
+//$social_menu_block = SocialManager::show_social_menu($show_menu);
 
 $tpl->setHelp('Groups');
-$tpl->assign('social_menu_block', $social_menu_block);
+//$tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
-$social_layout = $tpl->get_template($templateName);
-$tpl->display($social_layout);
+$tpl->display($tpl->get_template('social/groups.html.twig'));

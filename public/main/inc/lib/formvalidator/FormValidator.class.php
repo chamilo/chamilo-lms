@@ -30,7 +30,7 @@ class FormValidator extends HTML_QuickForm
     public function __construct(
         string $name,
         string $method = 'post',
-        string $action = '',
+        ?string $action = '',
         ?string $target = '',
         ?array $attributes = [],
         string $layout = self::LAYOUT_HORIZONTAL,

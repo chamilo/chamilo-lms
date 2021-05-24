@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Usergroup as UserGroupEntity;
 use Chamilo\CoreBundle\Framework\Container;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class UserGroup.
@@ -1599,14 +1600,7 @@ class UserGroup extends Model
         return true;
     }
 
-    /**
-     * @param UserGroupEntity $groupId
-     * @param string          $picture
-     * @param string          $cropParameters
-     *
-     * @return bool
-     */
-    public function manageFileUpload($userGroup, $picture, $cropParameters = '')
+    public function manageFileUpload(UserGroupEntity $userGroup, UploadedFile $picture, string $cropParameters = ''): bool
     {
         if ($userGroup) {
             $illustrationRepo = Container::getIllustrationRepository();

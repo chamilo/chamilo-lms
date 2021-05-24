@@ -4,12 +4,6 @@
 {% block content %}
 {% autoescape false %}
 <div class="row">
-    <div class="col-md-4">
-        {% set avatar %}
-            {% include '@ChamiloCore/Social/user_block.html.twig' %}
-        {% endset %}
-        {{ macro.panel('', avatar ) }}
-    </div>
     <div class="col-md-8">
         <div class="sm-groups-content">
             {{ create_link }}

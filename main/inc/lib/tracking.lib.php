@@ -1312,10 +1312,8 @@ class Tracking
         $assignedCourses = [];
         $drhCount = 0;
         $teachersCount = 0;
-        $studentsCount = 0;
         $studentBossCount = 0;
         $courseCount = 0;
-        $sessionCount = 0;
         $assignedCourseCount = 0;
 
         if (api_is_drh() && api_drh_can_access_all_session_content()) {

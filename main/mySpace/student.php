@@ -120,7 +120,8 @@ function get_users($from, $limit, $column, $direction)
             $active,
             $lastConnectionDate,
             api_is_student_boss() ? STUDENT_BOSS : COURSEMANAGER,
-            $keyword
+            $keyword,
+            true
         );
     }
 

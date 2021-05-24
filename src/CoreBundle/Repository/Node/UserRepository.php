@@ -145,9 +145,11 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
                 'r'
             )
         ;
-        $qb->where('r.creator = u');
-        $qb->andWhere('r.parent IS NULL');
-        $qb->getFirstResult();
+        $qb
+            ->where('r.creator = u')
+            ->andWhere('r.parent IS NULL')
+            ->getFirstResult()
+        ;
 
         $rootUser = $qb->getQuery()->getSingleResult();
 

@@ -48,10 +48,9 @@ use UserManager;
  *     },
  * )
  *
- * @ApiFilter(SearchFilter::class, properties={"username":"partial", "firstname":"partial"})
+ * @ApiFilter(SearchFilter::class, properties={"username":"partial", "firstname":"partial", "lastname":"partial"})
  * @ApiFilter(BooleanFilter::class, properties={"isActive"})
  *
- * @ORM\HasLifecycleCallbacks
  * @ORM\Table(
  *     name="user",
  *     indexes={
@@ -60,6 +59,7 @@ use UserManager;
  * )
  * @UniqueEntity("username")
  * @ORM\Entity
+ * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\UserListener"})
  */
 class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface
 {
@@ -126,6 +126,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      */
     protected string $username;
 
+    /**
+     * @Groups({"user:write"})
+     */
     protected ?string $plainPassword = null;
 
     /**
@@ -222,7 +225,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected ?string $gender = null;
 
     /**
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"user:read"})
      * @ORM\Column(name="last_login", type="datetime", nullable=true)
      */
     protected ?DateTime $lastLogin;
@@ -266,6 +269,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected Collection $dropBoxSentFiles;
 
     /**
+     * An array of roles. Example: ROLE_USER, ROLE_TEACHER, ROLE_ADMIN
      * @Groups({"user:read", "user:write", "user_json:read"})
      * @ORM\Column(type="array")
      *
@@ -855,13 +859,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->resourceNodes = $resourceNodes;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PostPersist()
-     */
-    public function postPersist(LifecycleEventArgs $args): void
-    {
     }
 
     public function getDropBoxSentFiles(): Collection

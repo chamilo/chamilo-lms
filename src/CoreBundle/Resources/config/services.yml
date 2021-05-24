@@ -121,11 +121,17 @@ services:
         tags:
             - {name: kernel.event_listener, event: chamilo_course.course.session, method: onSessionAccessEvent}
 
-    # When Course entity is loaded
+    # When the Course entity is created/updated
     Chamilo\CoreBundle\Entity\Listener\CourseListener:
         arguments: ['@Chamilo\CoreBundle\ToolChain', '@chamilo.settings.manager']
         tags:
             - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
+
+    # When the User entity is created/updated        -
+    Chamilo\CoreBundle\Entity\Listener\UserListener:
+        arguments: [ '@Chamilo\CoreBundle\Repository\Node\UserRepository']
+        tags:
+            - { name: doctrine.orm.entity_listener, entity_manager: default, lazy: true }
 
     # Setting user
     Chamilo\CoreBundle\EventListener\LegacyListener:

@@ -6444,7 +6444,8 @@ class SessionManager
                 $active,
                 $lastConnectionDate,
                 api_is_student_boss() ? STUDENT_BOSS : COURSEMANAGER,
-                $keyword
+                $keyword,
+                true
             );
         }
 

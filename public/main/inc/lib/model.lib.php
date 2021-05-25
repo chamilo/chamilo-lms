@@ -86,19 +86,18 @@ class Model
         if (empty($id)) {
             return [];
         }
-        $params = ['id = ?' => intval($id)];
+        $params = ['id = ?' => (int) $id];
         if ($this->is_course_model) {
             $course_id = api_get_course_int_id();
             $params = ['id = ? AND c_id = ?' => [$id, $course_id]];
         }
-        $result = Database::select(
+
+        return Database::select(
             '*',
             $this->table,
             ['where' => $params],
             'first'
         );
-
-        return $result;
     }
 
     /**

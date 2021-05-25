@@ -119,6 +119,10 @@ switch ($action) {
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
 
         $defaults = $usergroup->get($userGroupId);
+        if (empty($defaults)) {
+            api_not_allowed(true);
+        }
+
         $usergroup->protectScript($defaults);
 
         $form = new FormValidator(

@@ -1559,8 +1559,8 @@ class UserGroup extends Model
                     );
                 }
                 $request = Container::getRequest();
-                if ($request->files->has('picture')) {
-                    $file = $request->files->get('picture');
+                $file = $request->files->get('picture');
+                if (null !== $file) {
                     $this->manageFileUpload($userGroup, $file);
                 }
             }
@@ -1589,8 +1589,8 @@ class UserGroup extends Model
         $picture = $_FILES['picture'] ?? null;
         if (!empty($picture)) {
             $request = Container::getRequest();
-            if ($request->files->has('picture')) {
-                $file = $request->files->get('picture');
+            $file = $request->files->get('picture');
+            if (null !== $file) {
                 $this->manageFileUpload($userGroup, $file, $cropImage);
             }
         }

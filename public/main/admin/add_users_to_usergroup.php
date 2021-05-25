@@ -26,7 +26,6 @@ $tool_name = get_lang('Subscribe users to class');
 
 $htmlHeadXtra[] = '
 <script>
-
 $(function () {
     $("#relation").change(function() {
         window.location = "add_users_to_usergroup.php?id='.$id.'" +"&relation=" + $(this).val();
@@ -133,7 +132,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     }
 }
 
-if (isset($_GET['action']) && 'export' == $_GET['action']) {
+if (isset($_GET['action']) && 'export' === $_GET['action']) {
     $users = $usergroup->getUserListByUserGroup($id);
     if (!empty($users)) {
         $data = [
@@ -321,29 +320,34 @@ if (!empty($user_list)) {
 
 Display::display_header($tool_name);
 
-echo '<div class="actions">';
-echo '<a href="usergroups.php">'.
+$actions = '<a href="usergroups.php">'.
     Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM).'</a>';
 
-echo Display::url(get_lang('Advanced search'), '#', ['class' => 'advanced_options', 'id' => 'advanced_search']);
+$actions .= Display::url(
+    get_lang('Advanced search'),
+    '#',
+    ['class' => 'advanced_options btn', 'id' => 'advanced_search']
+);
 
-echo '<a href="usergroup_user_import.php">'.
+$actions .= '<a href="usergroup_user_import.php">'.
     Display::return_icon('import_csv.png', get_lang('Import'), [], ICON_SIZE_MEDIUM).'</a>';
 
-echo '<a href="'.api_get_self().'?id='.$id.'&action=export">'.
-    Display::return_icon('export_csv.png', get_lang('Export'), [], ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
+$actions .= '<a href="'.api_get_self().'?id='.$id.'&action=export">'.
+    Display::return_icon('export_csv.png', get_lang('Export'), [], ICON_SIZE_MEDIUM).
+    '</a>';
+
+echo Display::toolbarAction('add_users', [$actions]);
 
 echo '<div id="advanced_search_options" style="display:none">';
 $searchForm->display();
 echo '</div>';
+echo Display::page_header($tool_name.': '.$data['name']);
+
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if (!empty($_GET['add'])) {
     echo '&add=true';
-} ?>" style="margin:0px;">
+} ?>">
 <?php
-echo '<legend>'.$tool_name.': '.$data['name'].'</legend>';
-
 if (is_array($extra_field_list)) {
     if (is_array($new_field_list) && count($new_field_list) > 0) {
         echo '<h3>'.get_lang('Filter by user').'</h3>';

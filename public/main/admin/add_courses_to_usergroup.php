@@ -1,10 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 // Resetting the course id.
 $cidReset = true;
 
-// Including some necessary files.
 require_once __DIR__.'/../inc/global.inc.php';
 
 $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
@@ -167,7 +167,7 @@ function search($needle, $type)
 $xajax->processRequests();
 Display::display_header($tool_name);
 
-if ('multiple' == $add_type) {
+if ('multiple' === $add_type) {
     $link_add_type_unique = '<a href="'.api_get_self().'?add='.$add.'&add_type=unique">'.
         Display::return_icon('single.gif').get_lang('Single registration').'</a>';
     $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('Multiple registration');
@@ -177,11 +177,14 @@ if ('multiple' == $add_type) {
         Display::return_icon('multiple.gif').get_lang('Multiple registration').'</a>';
 }
 
-echo '<div class="actions">';
-echo '<a href="usergroups.php">';
-echo Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM).'</a>';
-echo Display::url(get_lang('Advanced search'), '#', ['class' => 'advanced_options', 'id' => 'advanced_search']);
-echo '</div>';
+$actions = Display::url(
+    Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+    'usergroups.php'
+);
+$actions .= Display::url(get_lang('Advanced search'), '#', ['class' => 'advanced_options btn', 'id' => 'advanced_search']);
+
+echo Display::toolbarAction('add_users', [$actions]);
+echo Display::page_header($data['name'].': '.$tool_name);
 
 echo '<div id="advanced_search_options" style="display:none">';
 $searchForm->display();
@@ -192,7 +195,7 @@ echo '</div>';
 } ?>" style="margin:0px;" <?php if ($ajax_search) {
     echo ' onsubmit="valide();"';
 }?>>
-<?php echo '<legend>'.$data['name'].': '.$tool_name.'</legend>';
+<?php
 echo Display::input('hidden', 'id', $id);
 echo Display::input('hidden', 'form_sent', '1');
 echo Display::input('hidden', 'add_type', null);

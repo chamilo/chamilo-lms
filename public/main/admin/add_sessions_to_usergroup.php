@@ -5,7 +5,6 @@
 // resetting the course id
 $cidReset = true;
 
-// including some necessary files
 require_once __DIR__.'/../inc/global.inc.php';
 
 $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
@@ -150,7 +149,7 @@ $xajax->processRequests();
 Display::display_header($tool_name);
 
 $add = (empty($_GET['add']) ? '' : Security::remove_XSS($_GET['add']));
-if ('multiple' == $add_type) {
+if ('multiple' === $add_type) {
     $link_add_type_unique = '<a href="'.api_get_self().'?add='.$add.'&add_type=unique">'.
         Display::return_icon('single.gif').get_lang('Single registration').'</a>';
     $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('Multiple registration');
@@ -160,22 +159,35 @@ if ('multiple' == $add_type) {
         Display::return_icon('multiple.gif').get_lang('Multiple registration').'</a>';
 }
 
-echo '<div class="actions">';
-echo '<a href="usergroups.php">'.
+
+$actions = '<a href="usergroups.php">'.
     Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
-echo '<a href="javascript://" class="advanced_parameters" style="margin-top: 8px" onclick="display_advanced_search();"><span id="img_plus_and_minus">&nbsp;'.
-    Display::return_icon('div_show.gif', get_lang('Show'), ['style' => 'vertical-align:middle']).' '.get_lang('Advanced search').'</span></a>';
-echo '</div>';
-echo '<div id="advancedSearch" style="display: none">'.get_lang('Session Search'); ?> :
-     <input name="SearchSession" onchange = "xajax_search_usergroup_sessions(this.value,'searchbox')" onkeyup="this.onchange()">
-     </div>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if (!empty($_GET['add'])) {
-    echo '&add=true';
-} ?>" style="margin:0px;" <?php if ($ajax_search) {
-    echo ' onsubmit="valide();"';
-}?>>
-<?php
-echo '<legend>'.$data['name'].': '.$tool_name.'</legend>';
+
+$actions .= '<a href="javascript://" class="advanced_parameters btn"  onclick="display_advanced_search();">
+                '.get_lang('Advanced search').'
+             </a>';
+
+echo Display::toolbarAction('add_sessions', [$actions]);
+
+echo '<div id="advancedSearch" style="display: none">
+        '.get_lang('Session Search').' :
+        <input
+            type="text"
+            name="SearchSession"
+            onchange="xajax_search_usergroup_sessions(this.value,\'searchbox\')" onkeyup="this.onchange()">
+     </div>';
+
+echo Display::page_header($data['name'].': '.$tool_name);
+
+$extra = '';
+if (!empty($_GET['add'])) {
+    $extra = '&add=true';
+}
+if ($ajax_search) {
+    $extra .= ' onsubmit="valide();" ';
+}
+
+echo '<form name="formulaire" method="post" action="'.api_get_self().'?id='.$id.'"  '.$extra.' >';
 echo Display::input('hidden', 'id', $id);
 echo Display::input('hidden', 'form_sent', '1');
 echo Display::input('hidden', 'add_type', null);

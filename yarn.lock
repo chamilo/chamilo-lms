@@ -6024,10 +6024,10 @@ __metadata:
     dropzone: ^5.9.2
     easy-pie-chart: ^2.1.7
     easytimer.js: ^1.3.2
-    eslint: ^7.20.0
-    eslint-plugin-vue: ^7.9
+    eslint: ^7.27.0
+    eslint-plugin-vue: ^7.9.0
     file-loader: ^6.2.0
-    filemanager-webpack-plugin: ^4.0
+    filemanager-webpack-plugin: ^4.0.0
     flag-icon-css: ^3.5.0
     free-jqgrid: "https://github.com/chamilo/jqGrid.git#bs4"
     full-icu: ^1.3.4
@@ -6050,11 +6050,11 @@ __metadata:
     litepicker: ^2.0.11
     luxon: ^1.27.0
     mathjax: ^2.7.9
-    mediaelement: ^4.2
+    mediaelement: ^4.2.16
     mediaelement-plugins: "https://github.com/chamilo/mediaelement-plugins"
-    mini-css-extract-plugin: ^1.6
-    multiselect-two-sides: ^2.5.5
-    mxgraph: ^4.0
+    mini-css-extract-plugin: ^1.6.0
+    multiselect-two-sides: ^2.5.7
+    mxgraph: ^4.2.2
     node-sass: ^6.0
     optimize-css-assets-webpack-plugin: ^5.0.3
     path: ^0.12.7
@@ -6077,23 +6077,23 @@ __metadata:
     select2: ^4.0.13
     signature_pad: ^3.0.0-beta.4
     sortablejs: ^1.13.0
-    sweetalert2: ^10.16.9
+    sweetalert2: ^11.0.11
     tailwindcss: latest
     tempusdominus-bootstrap-4: ^5.39.0
     tempusdominus-core: ^5.19.0
     textcomplete: ^0.18.1
     timeago: ^1.6.7
-    timepicker: ^1.13
-    tinymce: ^5.7
-    ts-loader: ^8.1.0
-    typescript: ^3.8.3
+    timepicker: ^1.13.18
+    tinymce: ^5.8.1
+    ts-loader: ^8.3.0
+    typescript: ^3.9.9
     video.js: ^7.11.8
     vue: 3.1.0-beta.3
     vue-cli-plugin-quasar: next
     vue-eslint-parser: ^7.6.0
-    vue-flatpickr-component: ^9.0
+    vue-flatpickr-component: ^9.0.3
     vue-i18n: ^9.1.6
-    vue-loader: ^16.0
+    vue-loader: ^16.2.0
     vue-perfect-scrollbar: ^0.2.1
     vue-router: ^4.0.8
     vue-sidebar-menu: ^4.7.4
@@ -6101,7 +6101,7 @@ __metadata:
     vuetify: ^3.0.0-alpha.4
     vuex: ^4.0.1
     vuex-composition-helpers: next
-    vuex-map-fields: ^1.4.0
+    vuex-map-fields: ^1.4.1
     vuex-persistedstate: 4.0.0-beta.3
     webpack-jquery-ui: ^2.0.1
     webpack-notifier: ^1.13.0
@@ -8461,7 +8461,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-vue@npm:^7.9":
+"eslint-plugin-vue@npm:^7.9.0":
   version: 7.9.0
   resolution: "eslint-plugin-vue@npm:7.9.0"
   dependencies:
@@ -8518,7 +8518,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^7.20.0":
+"eslint@npm:^7.27.0":
   version: 7.27.0
   resolution: "eslint@npm:7.27.0"
   dependencies:
@@ -9183,7 +9183,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"filemanager-webpack-plugin@npm:^4.0":
+"filemanager-webpack-plugin@npm:^4.0.0":
   version: 4.0.0
   resolution: "filemanager-webpack-plugin@npm:4.0.0"
   dependencies:
@@ -12656,7 +12656,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"mediaelement@npm:^4.0.7, mediaelement@npm:^4.2":
+"mediaelement@npm:^4.0.7, mediaelement@npm:^4.2.16":
   version: 4.2.16
   resolution: "mediaelement@npm:4.2.16"
   dependencies:
@@ -12894,7 +12894,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"mini-css-extract-plugin@npm:^1.5.0, mini-css-extract-plugin@npm:^1.6":
+"mini-css-extract-plugin@npm:^1.5.0, mini-css-extract-plugin@npm:^1.6.0":
   version: 1.6.0
   resolution: "mini-css-extract-plugin@npm:1.6.0"
   dependencies:
@@ -13169,7 +13169,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"multiselect-two-sides@npm:^2.5.5":
+"multiselect-two-sides@npm:^2.5.7":
   version: 2.5.7
   resolution: "multiselect-two-sides@npm:2.5.7"
   dependencies:
@@ -13196,7 +13196,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"mxgraph@npm:^4.0":
+"mxgraph@npm:^4.2.2":
   version: 4.2.2
   resolution: "mxgraph@npm:4.2.2"
   checksum: 7a36040ea29a424415ab4072fbbca68debfd7216ec22ad564d470c125abbd64ec6fbab02e85924de770359e61535dedbc25a6b0fbaf94a7ccbe7ff678bd4a17e
@@ -17946,10 +17946,10 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"sweetalert2@npm:^10.16.9":
-  version: 10.16.9
-  resolution: "sweetalert2@npm:10.16.9"
-  checksum: e905c4df8eb36378d7b7eadb7567a0884ee35c405210dde2d5447bd126dab3b9051cff78597395363627fdcacd0f279a0c0d6e2e07f822ae74081ab98e26a9b3
+"sweetalert2@npm:^11.0.11":
+  version: 11.0.11
+  resolution: "sweetalert2@npm:11.0.11"
+  checksum: 301be8a58a8ec6eb5ace1b78f7fd5f3f51747520e73f51e621038999c6d07b16f7660118da9248dcb8dd9beb74237815fc8eecef4d5b634d9dda43129d0dd597
   languageName: node
   linkType: hard
 
@@ -18314,7 +18314,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"timepicker@npm:^1.13":
+"timepicker@npm:^1.13.18":
   version: 1.13.18
   resolution: "timepicker@npm:1.13.18"
   dependencies:
@@ -18346,7 +18346,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"tinymce@npm:^5.7":
+"tinymce@npm:^5.8.1":
   version: 5.8.1
   resolution: "tinymce@npm:5.8.1"
   checksum: c5312a3a7e00e1a5d1a27c2901c7387763e2e99924f47025cbb982f7710a60128d390851a0411c327d5ee6ad8ccc489002477a80d57702de5a92523cfbed1a4b
@@ -18520,7 +18520,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"ts-loader@npm:^8.1.0":
+"ts-loader@npm:^8.3.0":
   version: 8.3.0
   resolution: "ts-loader@npm:8.3.0"
   dependencies:
@@ -18651,7 +18651,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-typescript@^3.8.3:
+typescript@^3.9.9:
   version: 3.9.9
   resolution: "typescript@npm:3.9.9"
   bin:
@@ -18661,7 +18661,7 @@ typescript@^3.8.3:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^3.8.3#builtin<compat/typescript>":
+"typescript@patch:typescript@^3.9.9#builtin<compat/typescript>":
   version: 3.9.9
   resolution: "typescript@patch:typescript@npm%3A3.9.9#builtin<compat/typescript>::version=3.9.9&hash=a45b0e"
   bin:
@@ -19204,7 +19204,7 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"vue-flatpickr-component@npm:^9.0":
+"vue-flatpickr-component@npm:^9.0.3":
   version: 9.0.3
   resolution: "vue-flatpickr-component@npm:9.0.3"
   dependencies:
@@ -19236,7 +19236,7 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"vue-loader-v16@npm:vue-loader@^16.1.0, vue-loader@npm:^16.0":
+"vue-loader-v16@npm:vue-loader@^16.1.0, vue-loader@npm:^16.2.0":
   version: 16.2.0
   resolution: "vue-loader@npm:16.2.0"
   dependencies:
@@ -19359,7 +19359,7 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"vuex-map-fields@npm:^1.4.0":
+"vuex-map-fields@npm:^1.4.1":
   version: 1.4.1
   resolution: "vuex-map-fields@npm:1.4.1"
   checksum: 6f4e4879180d44868ae93e35f3cebff7714293d30ac7accf526f52247a270ca56ac6b349615375eaf5bbca672f96a6ad18888fb4f72c22c7a16992835ff9ed3f

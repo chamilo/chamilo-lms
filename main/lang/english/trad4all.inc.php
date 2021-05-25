@@ -8774,4 +8774,11 @@ $EmailToTeachersWhenNewPost = "E-mail to teachers on new user's post in the port
 $PortfolioAlertNewPostContent = "There is a new post by %s in the portfolio of course %s. To view it <a href='%s'>go here</a>.";
 $PortfolioAlertNewPostSubject = "[Portfolio] New post in course %s";
 $OngoingTraining = "Ongoing training";
+$QuizRemindSubject = "You have a new message from %s";
+$QuizFirstRemindBody = "Dear %s,<br /><br /> A new test/quiz %s has been added to course %s.<br /><br />Course: %s <br />Test/Quiz name: %s <br />";
+$QuizLastRemindBody = "Visit the test/quiz page <a href=\\"%s\\">%s</a><br />";
+$QuizDhrRemindBody = "Dear %s,<br /><br />As his/her parent, you are receiving this e-mail to let you know that %s just got a new test/quiz %s in course %s.<br /><br />Learner: %s<br /> Course: %s<br />Test/Quiz name: %s<br />";
+$QuizRemindDuration = "Test duration: %s <br />";
+$QuizRemindStartDate = "Test start date: %s <br />";
+$QuizRemindEndDate = "Test end date: %s <br />";
 ?>

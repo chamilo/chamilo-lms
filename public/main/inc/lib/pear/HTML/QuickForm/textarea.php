@@ -3,8 +3,6 @@
 /**
  * HTML class for a textarea type field
  *
- * PHP versions 4 and 5
- *
  * LICENSE: This source file is subject to version 3.01 of the PHP license
  * that is available through the world-wide-web at the following URI:
  * http://www.php.net/license/3_01.txt If you did not receive a copy of
@@ -25,14 +23,10 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     /**
      * Field value
      * @var       string
-     * @since     1.0
-     * @access    private
      */
     public $_value;
 
     /**
-     * Class constructor
-     *
      * @param string       $elementName Input field name attribute
      * @param string|array $label       Label(s) for a field
      * @param mixed        $attributes  Either a typical HTML attribute string or an associative array
@@ -51,7 +45,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
 
         if (empty($id)) {
             $name = $this->getAttribute('name');
-            $this->setAttribute('id', uniqid($name.'_'));
+            $this->setAttribute('id', uniqid($name.'_', false));
         }
 
         $this->_persistantFreeze = true;
@@ -66,7 +60,6 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
      *
      * @return    void
      * @since     1.0
-     * @access    public
      */
     public function setName($name)
     {
@@ -78,7 +71,6 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
      *
      * @return    string
      * @since     1.0
-     * @access    public
      */
     public function getName()
     {
@@ -90,7 +82,6 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
      *
      * @return    string
      * @since     1.0
-     * @access    public
      */
     public function getValue()
     {
@@ -104,7 +95,6 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
      *
      * @return    void
      * @since     1.0
-     * @access    public
      */
     public function setValue($value)
     {
@@ -118,7 +108,6 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
      *
      * @return    void
      * @since     1.0
-     * @access    public
      */
     public function setRows($rows)
     {
@@ -132,7 +121,6 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
      *
      * @return    void
      * @since     1.0
-     * @access    public
      */
     public function setCols($cols)
     {
@@ -143,16 +131,16 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     {
         if ($this->_flagFrozen) {
             return $this->getFrozenHtml();
-        } else {
-            return $this->_getTabs().
-                '<textarea'.$this->_getAttrString($this->_attributes).'>'.
-                // because we wrap the form later we don't want the text indented
-                // Modified by Ivan Tcholakov, 16-MAR-2010.
-                //preg_replace("/(\r\n|\n|\r)/", '&#010;', htmlspecialchars($this->_value)) .
-                preg_replace("/(\r\n|\n|\r)/", '&#010;', $this->getCleanValue()).
-                //
-                '</textarea>';
         }
+
+        return $this->_getTabs().
+            '<textarea'.$this->_getAttrString($this->_attributes).'>'.
+            // because we wrap the form later we don't want the text indented
+            // Modified by Ivan Tcholakov, 16-MAR-2010.
+            //preg_replace("/(\r\n|\n|\r)/", '&#010;', htmlspecialchars($this->_value)) .
+            preg_replace("/(\r\n|\n|\r)/", '&#010;', $this->getCleanValue()).
+            //
+            '</textarea>';
     }
 
     /**

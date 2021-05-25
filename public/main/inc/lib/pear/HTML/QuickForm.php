@@ -796,7 +796,7 @@ class HTML_QuickForm extends HTML_Common
     {
         $value = null;
         if (isset($this->_submitValues[$elementName]) || isset($this->_submitFiles[$elementName])) {
-            $value = isset($this->_submitValues[$elementName])? $this->_submitValues[$elementName]: array();
+            $value = isset($this->_submitValues[$elementName]) ? $this->_submitValues[$elementName] : [];
             if (is_array($value) && isset($this->_submitFiles[$elementName])) {
                 foreach ($this->_submitFiles[$elementName] as $k => $v) {
                     $value = HTML_QuickForm::arrayMerge(
@@ -805,7 +805,7 @@ class HTML_QuickForm extends HTML_Common
                     );
                 }
             }
-        } elseif ('file' == $this->getElementType($elementName)) {
+        } elseif ('file' === $this->getElementType($elementName)) {
             return $this->getElementValue($elementName);
 
         } elseif (false !== ($pos = strpos($elementName, '['))) {
@@ -814,13 +814,21 @@ class HTML_QuickForm extends HTML_Common
                 ['\\\\', '\\\''],
                 substr($elementName, 0, $pos)
             );
-            $idx = "['".str_replace(
+            /*$idx = "['".str_replace(
                     ['\\', '\'', ']', '['],
                     ['\\\\', '\\\'', '', "']['"],
                     substr($elementName, $pos + 1, -1)
-                )."']";
+                )."']";*/
+
+            $cleanId = str_replace(
+                ['\\', '\'', ']', '['],
+                ['\\\\', '\\\'', '', "']['"],
+                substr($elementName, $pos + 1, -1)
+            );
+
+            // Will work only with elements with one level example answer[1] but not answer[1][2]
             if (isset($this->_submitValues[$base])) {
-                $value = isset($this->_submitValues[$base][$idx]) ? $this->_submitValues[$base][$idx] : null;
+                $value = isset($this->_submitValues[$base][$cleanId]) ? $this->_submitValues[$base][$cleanId] : null;
             }
 
             /*if ((is_array($value) || null === $value) && isset($this->_submitFiles[$base])) {
@@ -1417,7 +1425,7 @@ class HTML_QuickForm extends HTML_Common
     public function validate()
     {
         if (count($this->_rules) == 0 && count($this->_formRules) == 0 && $this->isSubmitted()) {
-            return (0 == count($this->_errors));
+            return 0 === count($this->_errors);
         } elseif (!$this->isSubmitted()) {
 
             return false;
@@ -1438,7 +1446,8 @@ class HTML_QuickForm extends HTML_Common
 
             foreach ($rules as $rule) {
                 if ((isset($rule['group']) && isset($this->_errors[$rule['group']])) ||
-                     isset($this->_errors[$target])) {
+                    isset($this->_errors[$target])
+                ) {
                     continue 2;
                 }
                 // If element is not required and is empty, we shouldn't validate it

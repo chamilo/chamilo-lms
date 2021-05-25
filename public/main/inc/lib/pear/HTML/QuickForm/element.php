@@ -67,14 +67,9 @@ class HTML_QuickForm_element extends HTML_Common
     protected $columnsSize;
 
     /**
-     * Class constructor
-     *
      * @param string     Name of the element
      * @param string|array      Label(s) for the element
      * @param mixed      Associative array of tag attributes or HTML attributes name="value" pairs
-     *
-     * @return   void
-     * @since    1.0
      */
     public function __construct($elementName = null, $elementLabel = null, $attributes = null)
     {
@@ -168,7 +163,6 @@ class HTML_QuickForm_element extends HTML_Common
      * Returns element type
      *
      * @since     1.0
-     * @access    public
      * @return    string
      */
     public function getType()
@@ -181,7 +175,6 @@ class HTML_QuickForm_element extends HTML_Common
      *
      * @param     string    $name   Input field name attribute
      * @since     1.0
-     * @access    public
      * @return    void
      */
     public function setName($name)
@@ -192,7 +185,6 @@ class HTML_QuickForm_element extends HTML_Common
      * Returns the element name
      *
      * @since     1.0
-     * @access    public
      * @return    string
      */
     public function getName()
@@ -204,7 +196,6 @@ class HTML_QuickForm_element extends HTML_Common
      *
      * @param     string    $value      Default value of the form element
      * @since     1.0
-     * @access    public
      * @return    void
      */
     public function setValue($value)
@@ -226,26 +217,21 @@ class HTML_QuickForm_element extends HTML_Common
     /**
      * @return string
      */
-    public function getCleanValue()
+    public function getCleanValue(): string
     {
         return $this->cleanValueFromParameter($this->getValue());
     }
 
     /**
      * @param string $value
-     *
-     * @return string
      */
-    public function cleanValueFromParameter($value)
+    public function cleanValueFromParameter($value): string
     {
         return @htmlspecialchars($value, ENT_COMPAT, HTML_Common::charset());
     }
 
     /**
      * Freeze the element so that only its value is returned
-     *
-     * @access    public
-     * @return    void
      */
     public function freeze()
     {
@@ -255,8 +241,6 @@ class HTML_QuickForm_element extends HTML_Common
    /**
     * Unfreezes the element so that it becomes editable
     *
-    * @access public
-    * @return void
     * @since  3.2.4
     */
     public function unfreeze()
@@ -372,10 +356,9 @@ class HTML_QuickForm_element extends HTML_Common
      * Tries to find the element value from the values array
      *
      * @since     2.7
-     * @access    private
      * @return    mixed
      */
-    function _findValue(&$values)
+    protected function _findValue(&$values)
     {
         if (empty($values)) {
             return null;
@@ -403,10 +386,11 @@ class HTML_QuickForm_element extends HTML_Common
                 $elementName
             );
             $myVar = "['$replacedName']";
-            return eval("return (isset(\$values$myVar)) ? \$values$myVar : null;");
-        } else {
-            return null;
+
+            return isset($values[$myVar]) ? $values[$myVar] : null;
         }
+
+        return null;
     }
 
     /**
@@ -416,8 +400,6 @@ class HTML_QuickForm_element extends HTML_Common
      * @param     mixed     $arg    event arguments
      * @param     object    &$caller calling object
      * @since     1.0
-     * @access    public
-     * @return    void
      */
     public function onQuickFormEvent($event, $arg, &$caller)
     {
@@ -432,8 +414,7 @@ class HTML_QuickForm_element extends HTML_Common
                 break;
             case 'updateValue':
                 // constant values override both default and submitted ones
-                // default values are overriden by submitted
-
+                // default values are overridden by submitted.
                 $value = $this->_findValue($caller->_constantValues);
 
                 if (null === $value) {
@@ -459,10 +440,9 @@ class HTML_QuickForm_element extends HTML_Common
     * @param HTML_QuickForm_Renderer    renderer object
     * @param bool                       Whether an element is required
     * @param string                     An error message associated with an element
-    * @access public
     * @return void
     */
-    public function accept(&$renderer, $required=false, $error=null)
+    public function accept(&$renderer, $required = false, $error = null)
     {
         $renderer->renderElement($this, $required, $error);
     }
@@ -481,7 +461,7 @@ class HTML_QuickForm_element extends HTML_Common
         static $idx = 1;
 
         if (!$this->getAttribute('id')) {
-            $this->updateAttributes(array('id' => 'qf_' . substr(md5(microtime() . $idx++), 0, 6)));
+            $this->updateAttributes(['id' => 'qf_'.substr(md5(microtime().$idx++), 0, 6)]);
         }
     }
 

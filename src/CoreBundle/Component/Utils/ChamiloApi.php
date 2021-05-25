@@ -13,8 +13,8 @@ use DateTime;
 use DateTimeZone;
 use Display;
 use Exception;
-use Template;
 use const PHP_SAPI;
+use Template;
 
 class ChamiloApi
 {

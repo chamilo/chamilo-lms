@@ -51,11 +51,11 @@ class UserListener
                 $resourceNode
                     ->setTitle($user->getUsername())
                     ->setCreator($this->security->getUser())
-                    ->setResourceType($this->userRepository->getResourceType());
+                    ->setResourceType($this->userRepository->getResourceType())
+                ;
                 $em->persist($resourceNode);
                 $user->setResourceNode($resourceNode);
             }
-
         }
     }
 

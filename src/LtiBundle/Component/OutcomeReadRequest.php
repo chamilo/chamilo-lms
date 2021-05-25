@@ -9,7 +9,7 @@ namespace Chamilo\LtiBundle\Component;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\User;
 use Result;
-use \SimpleXMLElement;
+use SimpleXMLElement;
 
 class OutcomeReadRequest extends OutcomeRequest
 {

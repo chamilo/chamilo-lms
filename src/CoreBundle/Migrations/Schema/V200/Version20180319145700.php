@@ -127,7 +127,6 @@ class Version20180319145700 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_survey_invitation CHANGE group_id group_id INT DEFAULT NULL');
         $this->addSql('DELETE FROM c_survey_invitation WHERE session_id NOT IN (SELECT id FROM session)');
 
-
         if (!$table->hasForeignKey('FK_D0BC7C291D79BD3')) {
             $this->addSql(
                 'ALTER TABLE c_survey_invitation ADD CONSTRAINT FK_D0BC7C291D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE'

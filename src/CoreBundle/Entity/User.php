@@ -18,7 +18,6 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -269,7 +268,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected Collection $dropBoxSentFiles;
 
     /**
-     * An array of roles. Example: ROLE_USER, ROLE_TEACHER, ROLE_ADMIN
+     * An array of roles. Example: ROLE_USER, ROLE_TEACHER, ROLE_ADMIN.
+     *
      * @Groups({"user:read", "user:write", "user_json:read"})
      * @ORM\Column(type="array")
      *

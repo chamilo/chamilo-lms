@@ -100,10 +100,8 @@ class Version20180927172830 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX course ON c_forum_thread');
         }
 
-
         $this->addSql('UPDATE c_forum_thread SET thread_last_post = NULL WHERE thread_last_post NOT IN (SELECT iid from c_forum_post)');
         $this->addSql('UPDATE c_forum_thread SET thread_poster_id = NULL WHERE thread_poster_id NOT IN (SELECT id from user)');
-
 
         if (false === $table->hasForeignKey('FK_5DA7884C43CB876D')) {
             $this->addSql('ALTER TABLE c_forum_thread ADD CONSTRAINT FK_5DA7884C43CB876D FOREIGN KEY (thread_last_post) REFERENCES c_forum_post (iid) ON DELETE SET NULL;');

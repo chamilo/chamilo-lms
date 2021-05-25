@@ -13,7 +13,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
-use PhpCsFixer\Fixer\ControlStructure\TrailingCommaInMultilineFixer;
 
 class CourseCategoryRepository extends ServiceEntityRepository
 {

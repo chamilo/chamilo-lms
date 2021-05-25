@@ -16,9 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class AdminController
- *
- * @package Chamilo\LtiBundle\Controller
+ * Class AdminController.
  *
  * @Route("/admin/lti")
  * @Security("is_granted('ROLE_ADMIN')")
@@ -71,16 +69,12 @@ class AdminController extends BaseController
 
     /**
      * @Route("/edit/{toolId}", name="chamilo_lti_admin_edit", requirements={"toolId"="\d+"})
-     *
-     * @param int     $toolId
-     * @param Request $request
-     *
-     * @return Response
      */
     public function adminEditAction(int $toolId, Request $request): Response
     {
         $em = $this->getDoctrine()
-            ->getManager();
+            ->getManager()
+        ;
         /** @var ExternalTool $tool */
         $tool = $em->find(ExternalTool::class, $toolId);
 
@@ -116,10 +110,6 @@ class AdminController extends BaseController
 
     /**
      * @Route("/delete/{toolId}", name="chamilo_lti_admin_delete", requirements={"toolId"="\d+"})
-     *
-     * @param int $toolId
-     *
-     * @return Response
      */
     public function adminDeleteAction(int $toolId): Response
     {

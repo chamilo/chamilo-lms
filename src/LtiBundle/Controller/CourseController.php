@@ -31,9 +31,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use UserManager;
 
 /**
- * Class CourseController
- *
- * @package Chamilo\LtiBundle\Controller
+ * Class CourseController.
  *
  * @Route("/courses/{course_code}/lti");
  */
@@ -63,7 +61,6 @@ class CourseController extends ToolBaseController
         $form->handleRequest($request);
 
         if (!$form->isSubmitted() || !$form->isValid()) {
-
             return $this->render(
                 '@ChamiloCore/Lti/course_configure.twig',
                 [
@@ -328,7 +325,7 @@ class CourseController extends ToolBaseController
         $supportedItemTypes = ['LtiLinkItem'];
 
         foreach ($contentItems as $contentItem) {
-            if (!in_array($contentItem['@type'], $supportedItemTypes, true)) {
+            if (!\in_array($contentItem['@type'], $supportedItemTypes, true)) {
                 continue;
             }
 
@@ -439,7 +436,6 @@ class CourseController extends ToolBaseController
         $form->handleRequest($request);
 
         if (!$form->isSubmitted() || !$form->isValid()) {
-
             $categories = Category::load(null, null, $course->getCode());
             $actions = '';
 
@@ -587,7 +583,6 @@ class CourseController extends ToolBaseController
         }
 
         if (!$form->validate()) {
-
             return $this->render(
                 '@ChamiloCore/Lti/gradebook.html.twig',
                 [
@@ -646,16 +641,16 @@ class CourseController extends ToolBaseController
         $variables = array_keys($replaceable);
 
         foreach ($customParams as $customKey => $customValue) {
-            if (!in_array($customValue, $variables, true)) {
+            if (!\in_array($customValue, $variables, true)) {
                 continue;
             }
 
             $val = $replaceable[$customValue];
 
-            if (is_array($val)) {
+            if (\is_array($val)) {
                 $val = current($val);
 
-                if (array_key_exists($val, $params)) {
+                if (\array_key_exists($val, $params)) {
                     $customParams[$customKey] = $params[$val];
 
                     continue;

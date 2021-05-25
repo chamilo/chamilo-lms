@@ -11,6 +11,8 @@ use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Repository\CLpItemRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
+use learnpath;
+use stdClass;
 
 final class Version20201216132000 extends AbstractMigrationChamilo
 {
@@ -41,7 +43,8 @@ final class Version20201216132000 extends AbstractMigrationChamilo
             /** @var CLp $resource */
             //$resource = $lpRepo->find($lpId);
             if (!$lp->hasResourceNode()) {
-                error_log("no resource node");
+                error_log('no resource node');
+
                 continue;
             }
 
@@ -49,7 +52,8 @@ final class Version20201216132000 extends AbstractMigrationChamilo
             $rootItem = $lpItemRepo->getRootItem($lpId);
 
             if (null === $rootItem) {
-                error_log("no root item");
+                error_log('no root item');
+
                 continue;
             }
 
@@ -60,13 +64,14 @@ final class Version20201216132000 extends AbstractMigrationChamilo
             $lpItems = $resultItems->fetchAllAssociative();
 
             if (empty($lpItems)) {
-                error_log("no items");
+                error_log('no items');
+
                 continue;
             }
 
             $orderList = [];
             foreach ($lpItems as $item) {
-                $object = new \stdClass();
+                $object = new stdClass();
                 $object->id = $item['iid'];
                 $object->parent_id = (int) $item['parent_item_id'];
                 $orderList[] = $object;
@@ -75,8 +80,8 @@ final class Version20201216132000 extends AbstractMigrationChamilo
             echo '<pre>';
             var_dump($lpId, $lpItems);
             echo '</pre>';
-            error_log("save new order");
-            \learnpath::sortItemByOrderList($rootItem, $orderList, true);
+            error_log('save new order');
+            learnpath::sortItemByOrderList($rootItem, $orderList, true);
             if (($counter % $batchSize) === 0) {
                 $em->flush();
                 $em->clear(); // Detaches all objects from Doctrine!

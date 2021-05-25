@@ -64,7 +64,6 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         return true;
     }
 
-
     public function getAdmin(): User
     {
         $container = $this->getContainer();
@@ -142,7 +141,6 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         $accessUrlLocked = true,
         $options = []
     ): void {
-
         $em = $this->getEntityManager();
         $setting = new SettingsCurrent();
         $setting

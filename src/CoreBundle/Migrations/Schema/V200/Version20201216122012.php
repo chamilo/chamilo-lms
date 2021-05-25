@@ -125,7 +125,8 @@ final class Version20201216122012 extends AbstractMigrationChamilo
                     ->setTitle('root')
                     ->setPath('root')
                     ->setLp($resource)
-                    ->setItemType('root');
+                    ->setItemType('root')
+                ;
                 $em->persist($rootItem);
                 //$em->flush();
 

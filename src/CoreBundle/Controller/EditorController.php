@@ -71,7 +71,7 @@ class EditorController extends BaseController
     }
 
     /**
-     * Route("/resources/document/{nodeId}/manager", methods={"GET"}, name="resources_filemanager")
+     * Route("/resources/document/{nodeId}/manager", methods={"GET"}, name="resources_filemanager").
      */
 //    public function documentsFileManager(): Response
 //    {

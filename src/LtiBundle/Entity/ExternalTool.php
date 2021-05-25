@@ -109,9 +109,6 @@ class ExternalTool
         $this->id = 0;
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
@@ -443,8 +440,6 @@ class ExternalTool
     }
 
     /**
-     * @param Collection $children
-     *
      * @return ExternalTool
      */
     public function setChildren(Collection $children): self

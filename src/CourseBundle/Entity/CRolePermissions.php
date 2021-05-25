@@ -14,8 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *     name="c_role_permissions",
  *     indexes={
- *         @ORM\Index(name="course", columns="c_id"),
- *         @ORM\Index(name="role", columns="role_id")
+ *         @ORM\Index(name="course", columns={"c_id"}),
+ *         @ORM\Index(name="role", columns={"role_id"})
  *     }
  * )
  * @ORM\Entity

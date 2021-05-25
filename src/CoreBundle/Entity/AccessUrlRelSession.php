@@ -11,10 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * AccessUrlRelSession.
  *
- * @ORM\Table(name="access_url_rel_session",
- *     indexes={
- *     }))
- *     @ORM\Entity
+ * @ORM\Table(name="access_url_rel_session")
+ * @ORM\Entity
  */
 class AccessUrlRelSession
 {

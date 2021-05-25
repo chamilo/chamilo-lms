@@ -31,6 +31,7 @@ class Asset
     public const WATERMARK = 'watermark';
     public const CSS = 'css';
     public const EXTRA_FIELD = 'ef';
+    public const COURSE_CATEGORY = 'course_category';
 
     /**
      * @ORM\Id

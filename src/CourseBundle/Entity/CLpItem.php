@@ -136,7 +136,7 @@ class CLpItem
 
     /**
      * @Gedmo\TreeParent
-     * @ORM\ManyToOne(targetEntity="CLpItem", inversedBy="children", cascade="persist")
+     * @ORM\ManyToOne(targetEntity="CLpItem", inversedBy="children", cascade={"persist"})
      * @ORM\JoinColumn(name="parent_item_id", referencedColumnName="iid", onDelete="SET NULL")
      */
     protected ?CLpItem $parent = null;

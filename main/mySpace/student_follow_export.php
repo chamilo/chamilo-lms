@@ -130,7 +130,7 @@ function generateHtmlForLearningPaths(int $studentId, array $courseInfo, int $se
 {
     $student = api_get_user_entity($studentId);
 
-    $html = Display::page_subheader2(get_lang('ToolLearnpath'));
+    $html = '';
 
     $columnHeaders = [];
     $columnHeaders['lp'] = get_lang('LearningPath');
@@ -189,10 +189,6 @@ function generateHtmlForLearningPaths(int $studentId, array $courseInfo, int $se
         );
 
         $flatList = $lpList->get_flat_list();
-
-        if (count($lpCategories) > 1) {
-            $html .= Display::page_subheader3($item->getName());
-        }
 
         $lpTable = [];
 
@@ -311,9 +307,17 @@ function generateHtmlForLearningPaths(int $studentId, array $courseInfo, int $se
             continue;
         }
 
+        if (count($lpCategories) > 1) {
+            $html .= Display::page_subheader3($item->getName());
+        }
+
         array_unshift($lpTable, [$columnHeaders]);
 
         $html .= Export::convert_array_to_html($lpTable);
+    }
+
+    if (!empty($html)) {
+        $html = Display::page_subheader2(get_lang('ToolLearnpath')).PHP_EOL.$html;
     }
 
     return $html;

@@ -7544,11 +7544,7 @@ class Tracking
         }
 
         $addLpInvisibleCheckbox = api_get_configuration_value('student_follow_page_add_LP_invisible_checkbox');
-        $showInvisibleLp = api_get_configuration_value('student_follow_page_show_invisible_lp_students');
-
-        if ($addLpInvisibleCheckbox && $showInvisibleLp) {
-            $addLpInvisibleCheckbox = false;
-        }
+        $includeNotsubscribedLp = api_get_configuration_value('student_follow_page_include_not_subscribed_lp_students');
 
         $columnHeadersKeys = array_keys($columnHeaders);
 
@@ -7568,7 +7564,8 @@ class Tracking
                 true,
                 $category->getId(),
                 false,
-                $showInvisibleLp
+                false,
+                $includeNotsubscribedLp === false
             );
             $lpList = $objLearnpathList->get_flat_list();
 

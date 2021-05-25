@@ -2299,6 +2299,7 @@ class learnpath
      * @param int   $student_id
      * @param array $courseInfo
      * @param int   $sessionId
+     * @param bool  $checkSubscription Optional. Allow don't check if user is subscribed to the LP.
      *
      * @return bool
      */
@@ -2306,7 +2307,8 @@ class learnpath
         $lp_id,
         $student_id,
         $courseInfo = [],
-        $sessionId = 0
+        $sessionId = 0,
+        bool $checkSubscription = true
     ) {
         $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
         $lp_id = (int) $lp_id;
@@ -2390,7 +2392,7 @@ class learnpath
                 }
             }
 
-            if ($is_visible) {
+            if ($is_visible && $checkSubscription) {
                 $is_visible = self::isUserSubscribedToLp(
                     $row,
                     (int) $student_id,

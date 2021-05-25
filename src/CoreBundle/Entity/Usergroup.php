@@ -14,6 +14,8 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * Classes and social groups.
+ *
  * @ApiResource(
  *     attributes={"security"="is_granted('ROLE_ADMIN')"},
  *     normalizationContext={"groups"={"usergroup:read"}}

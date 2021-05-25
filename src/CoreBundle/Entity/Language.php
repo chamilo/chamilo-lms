@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Language.
+ * Platform languages.
  *
  * @ORM\Table(
  *     name="language",

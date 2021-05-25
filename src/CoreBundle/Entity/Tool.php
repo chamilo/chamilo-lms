@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Tool.
+ * Platform tools.
  *
  * @ORM\Table(name="tool")
  * @ORM\Entity

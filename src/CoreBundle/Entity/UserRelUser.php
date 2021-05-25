@@ -11,7 +11,7 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * UserRelUser.
+ * Associations between users (friends).
  *
  * @ORM\Table(name="user_rel_user", indexes={
  *     @ORM\Index(name="idx_user_rel_user__user", columns={"user_id"}),

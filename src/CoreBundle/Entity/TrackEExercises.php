@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * TrackEExercises.
+ * Quiz user attempts.
  *
  * @ORM\Table(name="track_e_exercises", indexes={
  *     @ORM\Index(name="idx_tee_user_id", columns={"exe_user_id"}),

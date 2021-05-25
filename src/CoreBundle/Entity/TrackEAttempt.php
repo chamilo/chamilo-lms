@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * TrackEAttempt.
+ * Questions per quiz user attempts.
  *
  * @ORM\Table(
  *     name="track_e_attempt",

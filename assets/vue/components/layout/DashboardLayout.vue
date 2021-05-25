@@ -41,7 +41,7 @@
             <q-tooltip>Account</q-tooltip>
           </q-btn>
 
-          <q-btn v-if="isAuthenticated" round dense flat color="grey-8" icon="inbox">
+          <q-btn v-if="isAuthenticated" round dense flat color="grey-8" icon="inbox" :to="'/main/messages/inbox.php'" >
             <q-badge color="red" text-color="white" floating>
               2
             </q-badge>
@@ -96,9 +96,9 @@
                 <!--                  </q-item-section>-->
                 <!--                </q-item>-->
                 <q-separator />
-                <q-item replace :to="'/main/messages/index.php'"  clickable class="">
-                  <q-item-section>Inbox</q-item-section>
-                </q-item>
+<!--                <q-item replace :to="'/main/messages/index.php'"  clickable class="">-->
+<!--                  <q-item-section>Inbox</q-item-section>-->
+<!--                </q-item>-->
 <!--                <q-item href="/account/home" tag="a" class="">-->
 <!--                  <q-item-section>-->
 <!--                    Your profile-->

@@ -8707,8 +8707,8 @@ $PortfolioAlertNewPostContent = "Il y a un nouveau post de %s dans le portfolio 
 $PortfolioAlertNewPostSubject = "[Portfolio] Nouveau post dans le cours %s";
 $OngoingTraining = "Formation(s) en cours";
 $QuizRemindSubject = "Vous avez un nouveau message de %s";
-$QuizFirstRemindBody = "Cher \%s,<br /><br /> Un nouvel exercice %s a été rajouté au cours %s.<br /><br />Cours : %s <br />Exercice : %s <br />";
-$QuizLastRemindBody = "Voir la page de l'exercice : <a href=\\"%s\\">%s</a><br />";
+$QuizFirstRemindBody = "Bonjour %s,<br /><br /> Un nouvel exercice %s a été rajouté au cours %s.<br /><br />Cours : %s <br />Exercice : %s <br />";
+$QuizLastRemindBody = "Voir la page de l'exercice : <a href=\"%s\">%s</a><br />";
 $QuizDhrRemindBody = "Bonjour %s,<br /><br />Comme parent, vous recevez ce message pour vous informer que %s a eu un nouvel exercice %s publié dans le cours %s.<br /><br />Apprenant : %s<br /> Cours : %s<br />Exercice : %s<br />";
 $QuizRemindDuration = "Durée de l'exercice : %s <br />";
 $QuizRemindStartDate = "Date de début de l'exercice : %s <br />";

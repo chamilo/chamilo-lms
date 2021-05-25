@@ -212,9 +212,9 @@ class HTML_QuickForm extends HTML_Common
         $this->token = null;
         parent::__construct($attributes);
 
-        $method = (strtoupper($method) == 'GET') ? 'get' : 'post';
-        $action = ($action == '') ? api_get_self() : $action;
-        $target = empty($target) ? array() : array('target' => $target);
+        $method = strtoupper($method) === 'GET' ? 'get' : 'post';
+        $action = $action == '' ? api_get_self() : $action;
+        $target = empty($target) ? [] : ['target' => $target];
         $form_id = $formName;
         if (isset($attributes['id']) && !empty($attributes['id'])) {
             $form_id = Security::remove_XSS($attributes['id']);
@@ -227,7 +227,7 @@ class HTML_QuickForm extends HTML_Common
         ) + $target;
         $this->updateAttributes($attributes);
         if (!$trackSubmit || isset($_REQUEST['_qf__' . $formName])) {
-            $this->_submitValues = 'get' == $method ? $_GET : $_POST;
+            $this->_submitValues = 'get' === $method ? $_GET : $_POST;
             $this->_submitFiles = $_FILES;
             $this->_flagSubmitted = count($this->_submitValues) > 0 || count($this->_submitFiles) > 0;
         }

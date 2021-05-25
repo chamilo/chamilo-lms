@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CDocument;
+
 /**
  * Class CatForm.
  *
@@ -9,10 +11,11 @@
  */
 class CatForm extends FormValidator
 {
-    const TYPE_ADD = 1;
-    const TYPE_EDIT = 2;
-    const TYPE_MOVE = 3;
-    const TYPE_SELECT_COURSE = 4;
+    public const TYPE_ADD = 1;
+    public const TYPE_EDIT = 2;
+    public const TYPE_MOVE = 3;
+    public const TYPE_SELECT_COURSE = 4;
+
     /** @var Category */
     private $category_object;
 
@@ -403,7 +406,7 @@ class CatForm extends FormValidator
         $documentId = $this->category_object->getDocumentId();
         if (!empty($documentId)) {
             $repo = \Chamilo\CoreBundle\Framework\Container::getDocumentRepository();
-            /** @var \Chamilo\CourseBundle\Entity\CDocument $documentData */
+            /** @var CDocument $documentData */
             $documentData = $repo->find($documentId);
 
             if (!empty($documentData)) {

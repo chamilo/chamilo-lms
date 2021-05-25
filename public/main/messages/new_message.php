@@ -112,7 +112,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
 
     $form = new FormValidator(
         'compose_message',
-        null,
+        'post',
         api_get_self(),
         null,
         ['enctype' => 'multipart/form-data']
@@ -131,7 +131,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
                 ]
             );
             $form->addRule('id_text_name', get_lang('Required field'), 'required');
-            $form->addElement('html', '<div id="id_div_search" style="padding:0px" class="message-select-box" >&nbsp;</div>');
+            $form->addHtml('<div id="id_div_search" style="padding:0px" class="message-select-box" >&nbsp;</div>');
             $form->addElement('hidden', 'user_list', 0, ['id' => 'user_list']);
         } else {
             if (!empty($sent_to)) {
@@ -301,7 +301,9 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
                 }
                 MessageManager::cleanAudioMessage();
             } else {
-                Display::addFlash(Display::return_message('There was an error while trying to send the message.', 'error'));
+                Display::addFlash(
+                    Display::return_message('There was an error while trying to send the message.', 'error')
+                );
             }
         }
         Security::clear_token();

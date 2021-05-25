@@ -19,11 +19,11 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = [
     'url' => 'gradebook_showlog_link.php?visiblelink='.Security::remove_XSS($_GET['visiblelink']).'&selectcat='.$selectCat,
-    'name' => get_lang('AssessmentsQualifyLog'),
+    'name' => get_lang('Assessment history'),
 ];
 $this_section = SECTION_COURSES;
 Display::display_header('');
-echo Display::toolbarAction('toolbar', [api_display_tool_title(get_lang('AssessmentsQualifyLog'))]);
+echo Display::toolbarAction('toolbar', [api_display_tool_title(get_lang('Assessment history'))]);
 
 $t_user = Database::get_main_table(TABLE_MAIN_USER);
 $t_link_log = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);

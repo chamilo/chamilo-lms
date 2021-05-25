@@ -69,17 +69,6 @@ if (empty($message)) {
 $social_right_content .= $message;
 
 $tpl = new Template(get_lang('View'));
-// Block Social Avatar
-SocialManager::setSocialUserBlock($tpl, api_get_user_id(), $show_menu);
 
-if ('true' === api_get_setting('allow_social_tool')) {
-    $tpl->assign('social_menu_block', $social_menu_block);
-    $tpl->assign('social_right_content', $social_right_content);
-    $social_layout = $tpl->get_template('social/inbox.tpl');
-    $tpl->display($social_layout);
-} else {
-    $content = $social_right_content;
-
-    $tpl->assign('content', $content);
-    $tpl->display_one_col_template();
-}
+$tpl->assign('content', $social_right_content);
+$tpl->display_one_col_template();

@@ -96,5 +96,5 @@ SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
     $tpl->assign('content', $social_right_content);
     $tpl->display_one_col_template();
 }*/
-    $tpl->assign('content', $social_right_content);
-    $tpl->display_one_col_template();
+$tpl->assign('content', $social_right_content);
+$tpl->display_one_col_template();

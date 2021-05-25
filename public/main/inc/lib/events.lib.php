@@ -703,7 +703,7 @@ class Event
 
         if ($updateResults == false) {
             // Validation in case of fraud with activated control time
-            if (!ExerciseLib::exercise_time_control_is_valid($exerciseId, $lpId, $lpItemId)) {
+            if (!ExerciseLib::exercise_time_control_is_valid($exercise, $lpId, $lpItemId)) {
                 if ($debug) {
                     error_log('Attempt is fraud');
                 }

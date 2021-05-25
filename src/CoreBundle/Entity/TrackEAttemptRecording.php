@@ -70,7 +70,7 @@ class TrackEAttemptRecording
     /**
      * @ORM\Column(name="answer", type="text", nullable=true)
      */
-    protected ?int $answer;
+    protected ?string $answer;
 
     public function __construct()
     {
@@ -124,12 +124,7 @@ class TrackEAttemptRecording
         return $this->questionId;
     }
 
-    /**
-     * Set marks.
-     *
-     * @return TrackEAttemptRecording
-     */
-    public function setMarks(int $marks)
+    public function setMarks(int $marks): self
     {
         $this->marks = $marks;
 
@@ -146,12 +141,7 @@ class TrackEAttemptRecording
         return $this->marks;
     }
 
-    /**
-     * Set insertDate.
-     *
-     * @return TrackEAttemptRecording
-     */
-    public function setInsertDate(DateTime $insertDate)
+    public function setInsertDate(DateTime $insertDate): self
     {
         $this->insertDate = $insertDate;
 
@@ -190,12 +180,7 @@ class TrackEAttemptRecording
         return $this->author;
     }
 
-    /**
-     * Set teacherComment.
-     *
-     * @return TrackEAttemptRecording
-     */
-    public function setTeacherComment(string $teacherComment)
+    public function setTeacherComment(string $teacherComment): self
     {
         $this->teacherComment = $teacherComment;
 
@@ -244,15 +229,12 @@ class TrackEAttemptRecording
         return $this->id;
     }
 
-    /**
-     * @return int
-     */
-    public function getAnswer()
+    public function getAnswer(): ?string
     {
         return $this->answer;
     }
 
-    public function setAnswer(int $answer): self
+    public function setAnswer(?string $answer): self
     {
         $this->answer = $answer;
 

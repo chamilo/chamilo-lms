@@ -5319,7 +5319,7 @@ class UserManager
      * Get users followed by human resource manager.
      *
      * @param int    $userId
-     * @param int    $userStatus         Filter users by status (STUDENT, COURSEMANAGER, etc)
+     * @param int    $userStatus             Filter users by status (STUDENT, COURSEMANAGER, etc)
      * @param bool   $getOnlyUserId
      * @param bool   $getSql
      * @param bool   $getCount
@@ -5329,8 +5329,9 @@ class UserManager
      * @param string $direction
      * @param int    $active
      * @param string $lastConnectionDate
-     * @param int    $status             the function is called by who? COURSEMANAGER, DRH?
+     * @param int    $status                 the function is called by who? COURSEMANAGER, DRH?
      * @param string $keyword
+     * @param bool   $checkSessionVisibility
      *
      * @return mixed Users list (array) or the SQL query if $getSQL was set to true
      */
@@ -5347,7 +5348,8 @@ class UserManager
         $active = null,
         $lastConnectionDate = null,
         $status = null,
-        $keyword = null
+        $keyword = null,
+        $checkSessionVisibility = false
     ) {
         // Database Table Definitions
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -5417,6 +5419,8 @@ class UserManager
         $drhConditions = null;
         $teacherSelect = null;
 
+        $urlId = api_get_current_access_url_id();
+
         switch ($status) {
             case DRH:
                 $drhConditions .= " AND
@@ -5438,6 +5442,20 @@ class UserManager
                     (scu.status = 2 AND scu.user_id = '$userId')
                 ";
 
+                if ($checkSessionVisibility) {
+                    $today = api_strtotime('now', 'UTC');
+                    $today = date('Y-m-d', $today);
+                    $sessionConditionsTeacher .= "
+                        AND
+                        (
+                            (s.access_start_date <= '$today' AND '$today' <= s.access_end_date) OR
+                            (s.access_start_date IS NULL AND s.access_end_date IS NULL) OR
+                            (s.access_start_date <= '$today' AND s.access_end_date IS NULL) OR
+                            ('$today' <= s.access_end_date AND s.access_start_date IS NULL)
+                        )
+					";
+                }
+
                 $teacherSelect =
                 "UNION ALL (
                         $select
@@ -5449,7 +5467,7 @@ class UserManager
                                     SELECT DISTINCT(s.id) FROM $tbl_session s INNER JOIN
                                     $tbl_session_rel_access_url session_rel_access_rel_user
                                     ON session_rel_access_rel_user.session_id = s.id
-                                    WHERE access_url_id = ".api_get_current_access_url_id()."
+                                    WHERE access_url_id = ".$urlId."
                                     $sessionConditionsCoach
                                 ) OR sru.session_id IN (
                                     SELECT DISTINCT(s.id) FROM $tbl_session s
@@ -5457,7 +5475,7 @@ class UserManager
                                     ON (url.session_id = s.id)
                                     INNER JOIN $tbl_session_rel_course_rel_user scu
                                     ON (scu.session_id = s.id)
-                                    WHERE access_url_id = ".api_get_current_access_url_id()."
+                                    WHERE access_url_id = ".$urlId."
                                     $sessionConditionsTeacher
                                 )
                             )
@@ -5496,7 +5514,7 @@ class UserManager
                         LEFT JOIN $tbl_user_rel_access_url a ON (a.user_id = u.id)
                         $join
                         WHERE
-                            access_url_id = ".api_get_current_access_url_id()."
+                            access_url_id = ".$urlId."
                             $drhConditions
                             $userConditions
                     )

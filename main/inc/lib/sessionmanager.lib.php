@@ -416,7 +416,7 @@ class SessionManager
                 SELECT DISTINCT
                  IF (
 					(s.access_start_date <= '$today' AND '$today' <= s.access_end_date) OR
-                    (s.access_start_date IS NULL AND s.access_end_date  = IS NULL ) OR
+                    (s.access_start_date IS NULL AND s.access_end_date IS NULL ) OR
 					(s.access_start_date <= '$today' AND s.access_end_date IS NULL) OR
 					('$today' <= s.access_end_date AND s.access_start_date IS NULL)
 				, 1, 0) as session_active,
@@ -6444,7 +6444,8 @@ class SessionManager
                 $active,
                 $lastConnectionDate,
                 api_is_student_boss() ? STUDENT_BOSS : COURSEMANAGER,
-                $keyword
+                $keyword,
+                true
             );
         }
 

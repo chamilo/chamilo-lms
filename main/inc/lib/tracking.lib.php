@@ -1313,10 +1313,8 @@ class Tracking
         $assignedCourses = [];
         $drhCount = 0;
         $teachersCount = 0;
-        $studentsCount = 0;
         $studentBossCount = 0;
         $courseCount = 0;
-        $sessionCount = 0;
         $assignedCourseCount = 0;
 
         if (api_is_drh() && api_drh_can_access_all_session_content()) {
@@ -5457,9 +5455,8 @@ class Tracking
      * @param int    $user_id
      * @param string $course_code
      * @param int    $session_id
-     * @param bool   $showDiagram
      */
-    public static function show_course_detail($user_id, $course_code, $session_id, $showDiagram = false): string
+    public static function show_course_detail($user_id, $course_code, $session_id, $isAllowedToEdit = true): string
     {
         if (empty($user_id) || empty($course_code)) {
             return '';
@@ -5476,18 +5473,10 @@ class Tracking
 
         $html = '<a name="course_session_data"></a>';
         $html .= Display::page_subheader2($course_info['title']);
-
-        if ($showDiagram && !empty($session_id)) {
-            $visibility = api_get_session_visibility($session_id);
-            if (SESSION_AVAILABLE === $visibility) {
-                $html .= Display::page_subheader2($course_info['title']);
-            }
-        }
-
         // Show exercise results of invisible exercises? see BT#4091
         $quizzesHtml = self::generateQuizzesTable($course_info, $session_id);
         // LP table results
-        $learningPathsHtml = self::generateLearningPathsTable($user, $course_info, $session_id);
+        $learningPathsHtml = self::generateLearningPathsTable($user, $course_info, $session_id, $isAllowedToEdit);
         $skillsHtml = self::displayUserSkills($user_id, $course_info['id'], $session_id);
 
         $toolsHtml = [
@@ -7515,8 +7504,12 @@ class Tracking
             );
     }
 
-    private static function generateLearningPathsTable(User $user, array $courseInfo, int $sessionId = 0): string
-    {
+    private static function generateLearningPathsTable(
+        User $user,
+        array $courseInfo,
+        int $sessionId = 0,
+        bool $isAllowedToEdit = true
+    ) : string {
         $html = [];
 
         $columnHeaders = [
@@ -7555,11 +7548,7 @@ class Tracking
         }
 
         $addLpInvisibleCheckbox = api_get_configuration_value('student_follow_page_add_LP_invisible_checkbox');
-        $showInvisibleLp = api_get_configuration_value('student_follow_page_show_invisible_lp_students');
-
-        if ($addLpInvisibleCheckbox && $showInvisibleLp) {
-            $addLpInvisibleCheckbox = false;
-        }
+        $includeNotsubscribedLp = api_get_configuration_value('student_follow_page_include_not_subscribed_lp_students');
 
         $columnHeadersKeys = array_keys($columnHeaders);
 
@@ -7579,7 +7568,8 @@ class Tracking
                 true,
                 $category->getId(),
                 false,
-                $showInvisibleLp
+                false,
+                $includeNotsubscribedLp === false
             );
             $lpList = $objLearnpathList->get_flat_list();
 
@@ -7701,7 +7691,8 @@ class Tracking
                         $learnpath,
                         $user->getId(),
                         $courseInfo['real_id'],
-                        $sessionId
+                        $sessionId,
+                        $isAllowedToEdit
                     );
                 }
 

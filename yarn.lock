@@ -1531,7 +1531,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/free-solid-svg-icons@npm:^5.15":
+"@fortawesome/free-solid-svg-icons@npm:^5.15.3":
   version: 5.15.3
   resolution: "@fortawesome/free-solid-svg-icons@npm:5.15.3"
   dependencies:
@@ -4132,7 +4132,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"archiver@npm:^5.2.0":
+"archiver@npm:^5.3.0":
   version: 5.3.0
   resolution: "archiver@npm:5.3.0"
   dependencies:
@@ -5982,7 +5982,7 @@ __metadata:
     "@fancyapps/fancybox": ^3.5.7
     "@fortawesome/fontawesome-free": ^5.15.3
     "@fortawesome/fontawesome-svg-core": ^1.2.35
-    "@fortawesome/free-solid-svg-icons": ^5.15
+    "@fortawesome/free-solid-svg-icons": ^5.15.3
     "@fortawesome/vue-fontawesome": prerelease
     "@headlessui/vue": ^1.2.0
     "@heroicons/vue": ^1.0.1
@@ -6027,7 +6027,7 @@ __metadata:
     eslint: ^7.27.0
     eslint-plugin-vue: ^7.9.0
     file-loader: ^6.2.0
-    filemanager-webpack-plugin: ^4.0.0
+    filemanager-webpack-plugin: ^5.0.0
     flag-icon-css: ^3.5.0
     free-jqgrid: "https://github.com/chamilo/jqGrid.git#bs4"
     full-icu: ^1.3.4
@@ -6055,8 +6055,8 @@ __metadata:
     mini-css-extract-plugin: ^1.6.0
     multiselect-two-sides: ^2.5.7
     mxgraph: ^4.2.2
-    node-sass: ^6.0
-    optimize-css-assets-webpack-plugin: ^5.0.3
+    node-sass: ^6.0.0
+    optimize-css-assets-webpack-plugin: ^6.0.0
     path: ^0.12.7
     popper.js: ^1.16.1
     postcss: ^8.3.0
@@ -6074,20 +6074,20 @@ __metadata:
     readmore-js: ^2.2.1
     sass: ^1.34.0
     sass-loader: ^10.2.0
-    select2: ^4.0.13
+    select2: ^4.1.0-rc.0
     signature_pad: ^3.0.0-beta.4
     sortablejs: ^1.13.0
     sweetalert2: ^11.0.11
     tailwindcss: latest
     tempusdominus-bootstrap-4: ^5.39.0
     tempusdominus-core: ^5.19.0
-    textcomplete: ^0.18.1
+    textcomplete: ^0.18.2
     timeago: ^1.6.7
     timepicker: ^1.13.18
     tinymce: ^5.8.1
     ts-loader: ^8.3.0
     typescript: ^3.9.9
-    video.js: ^7.11.8
+    video.js: ^7.12.3
     vue: 3.1.0-beta.3
     vue-cli-plugin-quasar: next
     vue-eslint-parser: ^7.6.0
@@ -7419,7 +7419,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cssnano@npm:^5.0.0":
+"cssnano@npm:^5.0.0, cssnano@npm:^5.0.2":
   version: 5.0.4
   resolution: "cssnano@npm:5.0.4"
   dependencies:
@@ -9183,19 +9183,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"filemanager-webpack-plugin@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "filemanager-webpack-plugin@npm:4.0.0"
+"filemanager-webpack-plugin@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "filemanager-webpack-plugin@npm:5.0.0"
   dependencies:
-    archiver: ^5.2.0
+    archiver: ^5.3.0
     cpy: ^8.1.2
     del: ^6.0.0
-    fs-extra: ^9.1.0
+    fs-extra: ^10.0.0
     is-glob: ^4.0.1
     schema-utils: ^3.0.0
   peerDependencies:
     webpack: ^5.0.0
-  checksum: 32a477e3025315703b0214eca6942d931dca9f125c7a15ad3acab95cd5d93c12ed183e925063ddbf123cdba62d13d45ff7e91594e816c82dd1cb8eee69eeaa33
+  checksum: c0dc5dc36e9ba1f351502b507f7d399d58e7f59630ebd4b3e2e5b42ea637359efc7e56ca6d17241c6acdd605ec99d18de9c7b0ce908b018e42f9377ee4e06c5a
   languageName: node
   linkType: hard
 
@@ -9516,6 +9516,17 @@ __metadata:
   version: 0.1.0
   resolution: "fs-exists-sync@npm:0.1.0"
   checksum: 770773ab9edfe10007cd5cf98188e9a39ccae78756c00157ec2b9ca1cfd61812ad20d12def060b9e0910697b2dcad8eb87b1bb7c388c8e96fcc344aa2fee0436
+  languageName: node
+  linkType: hard
+
+"fs-extra@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "fs-extra@npm:10.0.0"
+  dependencies:
+    graceful-fs: ^4.2.0
+    jsonfile: ^6.0.1
+    universalify: ^2.0.0
+  checksum: 84632d143fe3125b8c3c2b1fedbbdfcfb84fc3e087522b4e138cc07edf574619925713a6609f6d5e53ede2e31ab319c7d528ea4a4a770ba6622a16bf4447cd8b
   languageName: node
   linkType: hard
 
@@ -13476,7 +13487,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"node-sass@npm:^6.0":
+"node-sass@npm:^6.0.0":
   version: 6.0.0
   resolution: "node-sass@npm:6.0.0"
   dependencies:
@@ -13884,15 +13895,16 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"optimize-css-assets-webpack-plugin@npm:^5.0.3":
-  version: 5.0.6
-  resolution: "optimize-css-assets-webpack-plugin@npm:5.0.6"
+"optimize-css-assets-webpack-plugin@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "optimize-css-assets-webpack-plugin@npm:6.0.0"
   dependencies:
-    cssnano: ^4.1.10
+    cssnano: ^5.0.2
     last-call-webpack-plugin: ^3.0.0
+    postcss: ^8.2.1
   peerDependencies:
     webpack: ^4.0.0
-  checksum: 781973cb00a9e5a024deaa8f5aabd70fb421f5af2f084fcc475a44d05f631b3b4363a62d6885cce2c903295787c0252ee275ba73a5ee6d80eedce46a37b622a6
+  checksum: 5d02e1263ede7c6a78f1bdac9cd52beb824dd8f64c9822818be713b4c6a1c669047a6e3c92855aa93aceb2ab2e20f3388cd49a9ba72854a63c8137fb6063b02d
   languageName: node
   linkType: hard
 
@@ -16850,10 +16862,10 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"select2@npm:^4.0.13":
-  version: 4.0.13
-  resolution: "select2@npm:4.0.13"
-  checksum: 680a5296c37bdb6992d8b50f8c44dfe92c0252aa227769577980a028dd363a6c413f15f540a871364a6c5323f1beee4ed9da30dab8879470a42206c45d838da1
+"select2@npm:^4.1.0-rc.0":
+  version: 4.1.0-rc.0
+  resolution: "select2@npm:4.1.0-rc.0"
+  checksum: cc76792d82f73ef12b12398fa9f3a0ff5373a55c900d1f780e8855699f238341d011de7b69a8aaadee6d524ea4a27173be6c50a98844c83e93425f1c13502151
   languageName: node
   linkType: hard
 
@@ -18225,7 +18237,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"textcomplete@npm:^0.18.1":
+"textcomplete@npm:^0.18.2":
   version: 0.18.2
   resolution: "textcomplete@npm:0.18.2"
   dependencies:
@@ -19094,7 +19106,7 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"video.js@npm:7.12.3, video.js@npm:^6 || ^7, video.js@npm:^7.11.8":
+"video.js@npm:7.12.3, video.js@npm:^6 || ^7, video.js@npm:^7.12.3":
   version: 7.12.3
   resolution: "video.js@npm:7.12.3"
   dependencies:

@@ -27,6 +27,13 @@ session_start();
 require_once api_get_path(LIBRARY_PATH).'database.constants.inc.php';
 require_once 'install.lib.php';
 
+// A protection measure for already installed systems.
+if (isAlreadyInstalledSystem()) {
+    // The system has already been installed, so block re-installation.
+    echo "Chamilo has already been installed";
+    exit;
+}
+
 $action = isset($_POST['a']) ? $_POST['a'] : null;
 
 $dbHost = isset($_POST['db_host']) ? $_POST['db_host'] : 'localhost';

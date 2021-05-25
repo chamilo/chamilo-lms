@@ -11,6 +11,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use League\Flysystem\FilesystemOperator;
 use PhpZip\ZipFile;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Routing\RouterInterface;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
@@ -92,6 +93,19 @@ class AssetRepository extends ServiceEntityRepository
         $helper = $this->uploaderHelper;
 
         return '/assets'.$helper->asset($asset);
+    }
+
+    public function createFromRequest(Asset $asset, $file): Asset
+    {
+        if (isset($file['tmp_name']) && !empty($file['tmp_name'])) {
+            $mimeType = mime_content_type($file['tmp_name']);
+            $file = new UploadedFile($file['tmp_name'], $asset->getTitle(), $mimeType, null, true);
+            $asset->setFile($file);
+            $this->getEntityManager()->persist($asset);
+            $this->getEntityManager()->flush();
+        }
+
+        return $asset;
     }
 
     /*public function getFileContent(Asset $asset): string

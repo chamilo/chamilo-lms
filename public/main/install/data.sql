@@ -74,10 +74,10 @@ UPDATE language SET parent_id = 18 WHERE english_name = 'occitan';
 UPDATE language SET parent_id = 40 WHERE english_name = 'brazilian';
 UPDATE language SET parent_id = 45 WHERE english_name = 'trad_chinese';
 
-INSERT INTO course_category (name, code, parent_id, tree_pos, children_count, auth_course_child, auth_cat_child) VALUES
-('Language skills','LANG',NULL,1,0,'TRUE','TRUE'),
-('PC Skills','PC',NULL,2,0,'TRUE','TRUE'),
-('Projects','PROJ',NULL,3,0,'TRUE','TRUE');
+-- INSERT INTO course_category (name, code, parent_id, tree_pos, children_count, auth_course_child, auth_cat_child) VALUES
+-- ('Language skills','LANG',NULL,1,0,'TRUE','TRUE'),
+-- ('PC Skills','PC',NULL,2,0,'TRUE','TRUE'),
+-- ('Projects','PROJ',NULL,3,0,'TRUE','TRUE');
 
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at) VALUES (1, 1, 'legal_accept','Legal',0,0, NOW());
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at) VALUES (1, 1, 'already_logged_in','Already logged in',0,0, NOW());

@@ -119,7 +119,7 @@ class Version20170628122900 extends AbstractMigrationChamilo
         }
         if (false === $table->hasForeignKey('FK_3545C2A66628AD36')) {
             $this->addSql(
-                'ALTER TABLE access_url_rel_course_category ADD CONSTRAINT FK_3545C2A66628AD36 FOREIGN KEY (course_category_id) REFERENCES course_category (id)'
+                'ALTER TABLE access_url_rel_course_category ADD CONSTRAINT FK_3545C2A66628AD36 FOREIGN KEY (course_category_id) REFERENCES course_category (id) ON DELETE CASCADE'
             );
         }
         if (false === $table->hasIndex('IDX_3545C2A673444FD5')) {

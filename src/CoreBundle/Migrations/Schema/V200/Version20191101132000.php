@@ -101,7 +101,7 @@ class Version20191101132000 extends AbstractMigrationChamilo
         $table = $schema->getTable('course_category');
         if (false === $table->hasForeignKey('FK_AFF87497727ACA70')) {
             $this->addSql(
-                'ALTER TABLE course_category ADD CONSTRAINT FK_AFF87497727ACA70 FOREIGN KEY (parent_id) REFERENCES course_category (id);'
+                'ALTER TABLE course_category ADD CONSTRAINT FK_AFF87497727ACA70 FOREIGN KEY (parent_id) REFERENCES course_category (id) ON DELETE CASCADE'
             );
         }
         if (!$table->hasColumn('image')) {

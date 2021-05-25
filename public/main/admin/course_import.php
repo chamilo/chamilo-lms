@@ -63,11 +63,10 @@ function validate_courses_data($courses)
         if (!empty($course['CourseCategory'])) {
             $categoryInfo = CourseCategory::getCategory($course['CourseCategory']);
             if (empty($categoryInfo)) {
-                CourseCategory::addNode(
+                CourseCategory::add(
                     $course['CourseCategory'],
                     $course['CourseCategoryName'] ?: $course['CourseCategory'],
-                    'TRUE',
-                    null
+                    'TRUE'
                 );
             }
         } else {

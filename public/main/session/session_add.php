@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Asset;
+use Chamilo\CoreBundle\Framework\Container;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -400,8 +403,8 @@ if ($form->validate()) {
         );
 
         if ($extraFieldValueData) {
-            $repo = \Chamilo\CoreBundle\Framework\Container::getAssetRepository();
-            /** @var \Chamilo\CoreBundle\Entity\Asset $asset */
+            $repo = Container::getAssetRepository();
+            /** @var Asset $asset */
             $asset = $repo->find($extraFieldValueData);
             if ($asset) {
                 $extraFields['extra_image']['id'] = $extraFieldValueData;

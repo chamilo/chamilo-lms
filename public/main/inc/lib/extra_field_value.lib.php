@@ -279,23 +279,19 @@ class ExtraFieldValue extends Model
                     }*/
                     $fileName = ExtraField::FIELD_TYPE_FILE_IMAGE."_{$params['item_id']}.png";
                     if (!empty($value['tmp_name']) && isset($value['error']) && 0 == $value['error']) {
-                        $mimeType = mime_content_type($value['tmp_name']);
-                        $file = new UploadedFile($value['tmp_name'], $fileName, $mimeType, null, true);
+                        $repo = Container::getAssetRepository();
                         $asset = new Asset();
                         $asset
                             ->setCategory(Asset::EXTRA_FIELD)
                             ->setTitle($fileName)
-                            ->setFile($file)
                         ;
                         $cropVariable = 'extra_'.$field_variable.'_crop_result';
                         if (isset($params[$cropVariable])) {
                             $asset->setCrop($params[$cropVariable]);
                         }
-                        $em->persist($asset);
-                        $em->flush();
-                        $assetId = $asset->getId();
-                        //$repo = Container::getAssetRepository();
-                        if ($assetId) {
+                        $asset = $repo->createFromRequest($asset, $value);
+                        if ($asset) {
+                            $assetId = $asset->getId();
                             // Crop the image to adjust 16:9 ratio
                             /*$imageExtraField = new Image($value['tmp_name']);
                             $imageExtraField->resize(400);
@@ -337,9 +333,6 @@ class ExtraFieldValue extends Model
 
                     $cleanedName = api_replace_dangerous_char($value['name']);
                     $fileName = ExtraField::FIELD_TYPE_FILE."_{$params['item_id']}_$cleanedName";
-                    /*if (!file_exists($fileDir)) {
-                        mkdir($fileDir, $dirPermissions, true);
-                    }*/
 
                     if (!empty($value['tmp_name']) && isset($value['error']) && 0 == $value['error']) {
                         /*$cleanedName = api_replace_dangerous_char($value['name']);

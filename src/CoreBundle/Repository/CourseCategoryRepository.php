@@ -13,6 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
+use PhpCsFixer\Fixer\ControlStructure\TrailingCommaInMultilineFixer;
 
 class CourseCategoryRepository extends ServiceEntityRepository
 {
@@ -46,6 +47,8 @@ class CourseCategoryRepository extends ServiceEntityRepository
 
         if (!empty($parentId)) {
             $qb->andWhere($qb->expr()->eq('c.parent', $parentId));
+        } else {
+            $qb->andWhere($qb->expr()->isNull('c.parent'));
         }
 
         $query = $qb->getQuery();
@@ -137,6 +140,13 @@ class CourseCategoryRepository extends ServiceEntityRepository
     {
         $em = $this->getEntityManager();
         $em->remove($category);
+        $em->flush();
+    }
+
+    public function save(CourseCategory $category): void
+    {
+        $em = $this->getEntityManager();
+        $em->persist($category);
         $em->flush();
     }
 }

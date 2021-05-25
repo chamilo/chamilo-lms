@@ -31,7 +31,7 @@ class AccessUrlRelCourseCategory
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="urls", cascade={"persist"})
-     * @ORM\JoinColumn(name="course_category_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="course_category_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected CourseCategory $courseCategory;
 

@@ -2,78 +2,95 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-$category = isset($_GET['category']) ? $_GET['category'] : null;
-$action = isset($_GET['action']) ? $_GET['action'] : null;
+$category = $_GET['category'] ?? null;
+$action = $_GET['action'] ?? null;
 $categoryId = isset($_GET['id']) ? Security::remove_XSS($_GET['id']) : null;
+$assetRepo = Container::getAssetRepository();
 
+$urlId = api_get_current_access_url_id();
+$categoryInfo = [];
 $parentInfo = [];
-if (!empty($category)) {
-    $parentInfo = CourseCategory::getCategory($category);
-}
 if (!empty($categoryId)) {
-    $categoryInfo = CourseCategory::getCategory($categoryId);
+    $categoryInfo = $parentInfo = CourseCategory::getCategoryById($categoryId);
 }
+$parentId = $parentInfo ? $parentInfo['id'] : null;
 
-$myCourseListAsCategory = api_get_configuration_value('my_courses_list_as_category');
+switch ($action) {
+    case 'delete':
+        // If multiple URLs and not main URL, prevent deletion and inform user
+        if (api_get_multiple_access_url() && 1 != $urlId) {
+            echo Display::return_message(
+                get_lang(
+                    'Course categories are global over multiple portals configurations. Changes are only allowed in the main administrative portal.'
+                ),
+                'warning'
+            );
+        }
 
-if (!empty($action)) {
-    if ('delete' === $action) {
         CourseCategory::delete($categoryId);
         Display::addFlash(Display::return_message(get_lang('Deleted')));
         header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
         exit();
-    } elseif (('add' === $action || 'edit' === $action) && isset($_POST['formSent']) && $_POST['formSent']) {
-        if ('add' === $action) {
-            $ret = CourseCategory::addNode(
-                $_POST['code'],
-                $_POST['name'],
-                $_POST['auth_course_child'],
-                $parentInfo ? $parentInfo['id'] : null
-            );
-            $errorMsg = Display::return_message(get_lang('Created'));
-        } else {
-            $ret = CourseCategory::editNode(
-                $_POST['code'],
-                $_POST['name'],
-                $_POST['auth_course_child'],
-                $categoryId
-            );
-            $categoryInfo = CourseCategory::getCategory($_POST['code']);
-            $ret = $categoryInfo['id'];
-
-            //Delete Picture Category
-            /*$deletePicture = isset($_POST['delete_picture']) ? $_POST['delete_picture'] : '';
-            if ($deletePicture) {
-                CourseCategory::deletePictureCategory($ret);
-            }*/
-
-            $errorMsg = Display::return_message(get_lang('Update successful'));
-        }
-        if (!$ret) {
-            $errorMsg = Display::return_message(get_lang('This category is already used'), 'error');
-        } else {
-            if ($myCourseListAsCategory) {
-                /*if (isset($_FILES['image'])) {
-                    CourseCategory::saveImage($ret, $_FILES['image']);
-                }*/
-                CourseCategory::saveDescription($ret, $_POST['description']);
-            }
-        }
-
-        Display::addFlash($errorMsg);
-        header('Location: '.api_get_path(WEB_CODE_PATH).'admin/course_category.php');
-        exit;
-    } elseif ('moveUp' === $action) {
+        break;
+    case 'moveUp':
         CourseCategory::moveNodeUp($categoryId, $_GET['tree_pos'], $category);
         header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
         Display::addFlash(Display::return_message(get_lang('Update successful')));
         exit();
-    }
+        break;
+    case 'add':
+        if (isset($_POST['formSent']) && $_POST['formSent']) {
+            $categoryEntity = CourseCategory::add(
+                $_POST['code'],
+                $_POST['name'],
+                $_POST['auth_course_child'],
+                $_POST['description'],
+                $parentId,
+            );
+
+            if (isset($_FILES['image']) && $categoryEntity) {
+                CourseCategory::saveImage($categoryEntity, $_FILES['image']);
+            }
+            $message = Display::return_message(get_lang('Created'));
+            Display::addFlash($message);
+            header('Location: '.api_get_path(WEB_CODE_PATH).'admin/course_category.php?id='.$parentId);
+            exit;
+        }
+        break;
+    case 'edit':
+        if (isset($_POST['formSent']) && $_POST['formSent']) {
+            $categoryEntity = CourseCategory::edit(
+                $categoryId,
+                $_REQUEST['name'],
+                $_REQUEST['auth_course_child'],
+                $_REQUEST['code'],
+                $_REQUEST['description']
+            );
+
+            // Delete Picture Category
+            $deletePicture = $_POST['delete_picture'] ?? '';
+            if ($deletePicture) {
+                CourseCategory::deleteImage($categoryEntity);
+            }
+
+            if (isset($_FILES['image']) && $categoryEntity) {
+                CourseCategory::saveImage($categoryEntity, $_FILES['image']);
+            }
+
+            $message = Display::return_message(get_lang('Update successful'));
+
+            Display::addFlash($message);
+            header('Location: '.api_get_path(WEB_CODE_PATH).'admin/course_category.php?id='.$parentId);
+            exit;
+        }
+        break;
 }
 
 $tool_name = get_lang('Courses categories');
@@ -83,21 +100,19 @@ $interbreadcrumb[] = [
 ];
 
 Display::display_header($tool_name);
-$urlId = api_get_current_access_url_id();
 
 if ('add' === $action || 'edit' === $action) {
     $actions = Display::url(
         Display::return_icon('folder_up.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.Security::remove_XSS($category)
+        api_get_path(WEB_CODE_PATH).'admin/course_category.php?id='.$categoryId
     );
     echo Display::toolbarAction('categories', [$actions]);
 
     $form_title = 'add' === $action ? get_lang('Add category') : get_lang('Edit this category');
-    if (!empty($category)) {
-        $form_title .= ' '.get_lang('Into').' '.Security::remove_XSS($category);
+    if (!empty($categoryInfo)) {
+        $form_title .= ' '.get_lang('Into').' '.$categoryInfo['name'];
     }
-    $url = api_get_self().'?action='.Security::remove_XSS($action).
-        '&category='.Security::remove_XSS($category).'&id='.Security::remove_XSS($categoryId);
+    $url = api_get_self().'?action='.Security::remove_XSS($action).'&id='.Security::remove_XSS($categoryId);
     $form = new FormValidator('course_category', 'post', $url);
     $form->addElement('header', '', $form_title);
     $form->addElement('hidden', 'formSent', 1);
@@ -135,31 +150,28 @@ if ('add' === $action || 'edit' === $action) {
     ];
     $form->addGroup($group, null, get_lang('Allow adding courses in this category?'));
 
-    if ($myCourseListAsCategory) {
-        $form->addHtmlEditor(
-            'description',
-            get_lang('Description'),
-            false,
-            false,
-            ['ToolbarSet' => 'Minimal']
-        );
-        /*$form->addFile('image', get_lang('Image'), ['id' => 'picture', 'class' => 'picture-form', 'accept' => 'image/*', 'crop_image' => true]);
-        if ('edit' === $action && !empty($categoryInfo['image'])) {
-            $form->addElement('checkbox', 'delete_picture', null, get_lang('Delete picture'));
-            $form->addHtml('
-                <div class="form-group row">
-                    <div class="offset-md-2 col-sm-8">'.
-                Display::img(
-                    api_get_path(WEB_UPLOAD_PATH).$categoryInfo['image'],
-                    get_lang('Image'),
-                    ['width' => 256, 'class' => 'img-thumbnail']
-                ).'</div>
-                </div>
-            ');
-        }*/
+    $form->addHtmlEditor(
+        'description',
+        get_lang('Description'),
+        false,
+        false,
+        ['ToolbarSet' => 'Minimal']
+    );
+    $form->addFile(
+        'image',
+        get_lang('Image'),
+        ['id' => 'picture', 'class' => 'picture-form', 'accept' => 'image/*', 'crop_image' => true]
+    );
+    if ('edit' === $action && !empty($categoryInfo['image'])) {
+        $form->addElement('checkbox', 'delete_picture', null, get_lang('Delete picture'));
+
+        $asset = $assetRepo->find($categoryInfo['image']);
+        $image = $assetRepo->getAssetUrl($asset);
+
+        $form->addLabel(get_lang('Image'), "<img src=$image />");
     }
 
-    if (!empty($categoryInfo)) {
+    if ('edit' === $action  && !empty($categoryInfo)) {
         $class = 'save';
         $text = get_lang('Save');
         $form->setDefaults($categoryInfo);
@@ -172,30 +184,21 @@ if ('add' === $action || 'edit' === $action) {
     }
     $form->display();
 } else {
-    // If multiple URLs and not main URL, prevent deletion and inform user
-    if ('delete' == $action && api_get_multiple_access_url() && 1 != $urlId) {
-        echo Display::return_message(
-            get_lang(
-                'Course categories are global over multiple portals configurations. Changes are only allowed in the main administrative portal.'
-            ),
-            'warning'
-        );
-    }
     $actions = '';
     $link = null;
     if (!empty($parentInfo)) {
         $realParentInfo = $parentInfo['parent_id'] ? CourseCategory::getCategoryById($parentInfo['parent_id']) : [];
-        $realParentCode = $realParentInfo ? $realParentInfo['code'] : '';
+        $realParentCode = $realParentInfo ? $realParentInfo['id'] : 0;
         $actions .= Display::url(
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.$realParentCode
+            api_get_path(WEB_CODE_PATH).'admin/course_category.php?id='.$realParentCode
         );
     }
 
-    if (empty($parentInfo) || 'TRUE' == $parentInfo['auth_cat_child']) {
+    if (empty($parentInfo) || 'TRUE' === $parentInfo['auth_cat_child']) {
         $newCategoryLink = Display::url(
             Display::return_icon('new_folder.png', get_lang('Add category'), '', ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH).'admin/course_category.php?action=add&category='.Security::remove_XSS($category)
+            api_get_path(WEB_CODE_PATH).'admin/course_category.php?action=add&id='.$categoryId
         );
 
         if (!empty($parentInfo) && $parentInfo['access_url_id'] != $urlId) {
@@ -207,9 +210,8 @@ if ('add' === $action || 'edit' === $action) {
     if (!empty($parentInfo)) {
         echo Display::page_subheader($parentInfo['name'].' ('.$parentInfo['code'].')');
     }
-    echo CourseCategory::listCategories(
-        CourseCategory::getCategory($category)
-    );
+
+    echo CourseCategory::listCategories($categoryInfo);
 }
 
 Display::display_footer();

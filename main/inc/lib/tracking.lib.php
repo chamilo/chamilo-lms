@@ -5456,7 +5456,7 @@ class Tracking
      * @param string $course_code
      * @param int    $session_id
      */
-    public static function show_course_detail($user_id, $course_code, $session_id): string
+    public static function show_course_detail($user_id, $course_code, $session_id, $isAllowedToEdit = true): string
     {
         if (empty($user_id) || empty($course_code)) {
             return '';
@@ -5476,7 +5476,7 @@ class Tracking
         // Show exercise results of invisible exercises? see BT#4091
         $quizzesHtml = self::generateQuizzesTable($course_info, $session_id);
         // LP table results
-        $learningPathsHtml = self::generateLearningPathsTable($user, $course_info, $session_id);
+        $learningPathsHtml = self::generateLearningPathsTable($user, $course_info, $session_id, $isAllowedToEdit);
         $skillsHtml = self::displayUserSkills($user_id, $course_info['id'], $session_id);
 
         $toolsHtml = [
@@ -7504,8 +7504,12 @@ class Tracking
             );
     }
 
-    private static function generateLearningPathsTable(User $user, array $courseInfo, int $sessionId = 0): string
-    {
+    private static function generateLearningPathsTable(
+        User $user,
+        array $courseInfo,
+        int $sessionId = 0,
+        bool $isAllowedToEdit = true
+    ) : string {
         $html = [];
 
         $columnHeaders = [
@@ -7687,7 +7691,8 @@ class Tracking
                         $learnpath,
                         $user->getId(),
                         $courseInfo['real_id'],
-                        $sessionId
+                        $sessionId,
+                        $isAllowedToEdit
                     );
                 }
 

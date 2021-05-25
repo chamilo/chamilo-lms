@@ -43,6 +43,8 @@ $allowCareerUser = api_get_configuration_value('allow_career_users');
 
 $showGraph = false === api_get_configuration_value('hide_session_graph_in_my_progress');
 
+$isAllowedToEdit = api_is_allowed_to_edit();
+
 if (!empty($courseUserList)) {
     $items = MySpace::get_connections_from_course_list(
         $user_id,
@@ -100,11 +102,12 @@ if ($showAllSessionCourses && !empty($sessionId) && empty($courseCode)) {
         $content .= Tracking::show_course_detail(
             $user_id,
             $userSessionCourse['course_code'],
-            $sessionId
+            $sessionId,
+            $isAllowedToEdit
         );
     }
 } else {
-    $content .= Tracking::show_course_detail($user_id, $courseCode, $sessionId);
+    $content .= Tracking::show_course_detail($user_id, $courseCode, $sessionId, $isAllowedToEdit);
 }
 
 if (!empty($dates)) {

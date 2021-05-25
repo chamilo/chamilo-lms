@@ -10,6 +10,8 @@ default:
                 capabilities:
                     extra_capabilities:
                         chromeOptions:
+                            args:
+                                - "--ignore-certificate-errors"
                             w3c: false
             default_session: selenium2
             javascript_session: selenium2

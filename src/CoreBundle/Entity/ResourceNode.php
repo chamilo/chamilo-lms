@@ -58,7 +58,7 @@ class ResourceNode
     /**
      * @Groups({"resource_node:read", "document:read", "ctool:read"})
      * @ORM\Id
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="bigint")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected ?int $id = null;
@@ -131,10 +131,7 @@ class ResourceNode
     /**
      * @var Collection|ResourceNode[]
      *
-     * @ORM\OneToMany(
-     *     targetEntity="ResourceNode",
-     *     mappedBy="parent"
-     * )
+     * @ORM\OneToMany(targetEntity="ResourceNode", mappedBy="parent")
      * @ORM\OrderBy({"id"="ASC"})
      */
     protected Collection $children;

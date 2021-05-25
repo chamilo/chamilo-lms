@@ -76,7 +76,7 @@ class ResourceFile
     /**
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Id
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="bigint")
      * @ORM\GeneratedValue
      */
     protected ?int $id = null;

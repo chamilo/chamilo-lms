@@ -36,7 +36,7 @@ class ResourceComment
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="bigint")
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Groups({"comment:read"})
      */
@@ -44,14 +44,14 @@ class ResourceComment
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", inversedBy="comments")
-     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected ResourceNode $resourceNode;
 
     /**
      * @Groups({"comment:read"})
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected User $author;
 

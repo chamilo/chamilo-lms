@@ -20,13 +20,13 @@ class Version20170525122900 extends AbstractMigrationChamilo
     {
         if (false === $schema->hasTable('resource_file')) {
             $this->addSql(
-                'CREATE TABLE resource_file (id INT AUTO_INCREMENT NOT NULL,name VARCHAR(255) NOT NULL, original_name LONGTEXT DEFAULT NULL, size INT NOT NULL, dimensions LONGTEXT DEFAULT NULL COMMENT "(DC2Type:simple_array)",crop VARCHAR(255) DEFAULT NULL, mime_type LONGTEXT DEFAULT NULL, description longtext DEFAULT NULL, metadata LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:array)\',  created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
+                'CREATE TABLE resource_file (id BIGINT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, original_name LONGTEXT DEFAULT NULL, size INT NOT NULL, dimensions LONGTEXT DEFAULT NULL COMMENT "(DC2Type:simple_array)",crop VARCHAR(255) DEFAULT NULL, mime_type LONGTEXT DEFAULT NULL, description longtext DEFAULT NULL, metadata LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:array)\',  created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
             );
         }
 
         if (false === $schema->hasTable('resource_node')) {
             $this->addSql(
-                'CREATE TABLE IF NOT EXISTS resource_node (id INT AUTO_INCREMENT NOT NULL, resource_type_id INT NOT NULL, resource_file_id INT DEFAULT NULL, creator_id INT NOT NULL, parent_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, level INT DEFAULT NULL, path VARCHAR(3000) DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_8A5F48FF98EC6B7B (resource_type_id), UNIQUE INDEX UNIQ_8A5F48FFCE6B9E84 (resource_file_id), INDEX IDX_8A5F48FF61220EA6 (creator_id), INDEX IDX_8A5F48FF727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
+                'CREATE TABLE IF NOT EXISTS resource_node (BIGINT INT AUTO_INCREMENT NOT NULL, resource_type_id INT NOT NULL, resource_file_id INT DEFAULT NULL, creator_id INT NOT NULL, parent_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, level INT DEFAULT NULL, path VARCHAR(3000) DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_8A5F48FF98EC6B7B (resource_type_id), UNIQUE INDEX UNIQ_8A5F48FFCE6B9E84 (resource_file_id), INDEX IDX_8A5F48FF61220EA6 (creator_id), INDEX IDX_8A5F48FF727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
             );
 
             $this->addSql(
@@ -37,13 +37,13 @@ class Version20170525122900 extends AbstractMigrationChamilo
 
         if (false === $schema->hasTable('resource_link')) {
             $this->addSql(
-                'CREATE TABLE resource_link (id INT AUTO_INCREMENT NOT NULL, resource_node_id INT DEFAULT NULL, session_id INT DEFAULT NULL, user_id INT DEFAULT NULL, c_id INT DEFAULT NULL, group_id INT DEFAULT NULL, usergroup_id INT DEFAULT NULL, visibility INT NOT NULL, start_visibility_at DATETIME DEFAULT NULL, end_visibility_at DATETIME DEFAULT NULL, INDEX IDX_398C394B1BAD783F (resource_node_id), INDEX IDX_398C394B613FECDF (session_id), INDEX IDX_398C394BA76ED395 (user_id), INDEX IDX_398C394B91D79BD3 (c_id), INDEX IDX_398C394BFE54D947 (group_id), INDEX IDX_398C394BD2112630 (usergroup_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
+                'CREATE TABLE resource_link (id BIGINT AUTO_INCREMENT NOT NULL, resource_node_id INT DEFAULT NULL, session_id INT DEFAULT NULL, user_id INT DEFAULT NULL, c_id INT DEFAULT NULL, group_id INT DEFAULT NULL, usergroup_id INT DEFAULT NULL, visibility INT NOT NULL, start_visibility_at DATETIME DEFAULT NULL, end_visibility_at DATETIME DEFAULT NULL, INDEX IDX_398C394B1BAD783F (resource_node_id), INDEX IDX_398C394B613FECDF (session_id), INDEX IDX_398C394BA76ED395 (user_id), INDEX IDX_398C394B91D79BD3 (c_id), INDEX IDX_398C394BFE54D947 (group_id), INDEX IDX_398C394BD2112630 (usergroup_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
             );
         }
 
         if (false === $schema->hasTable('resource_comment')) {
             $this->addSql(
-                'CREATE TABLE resource_comment (id INT AUTO_INCREMENT NOT NULL, resource_node_id INT DEFAULT NULL, author_id INT DEFAULT NULL, parent_id INT DEFAULT NULL, content VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, root INT DEFAULT NULL, lvl INT NOT NULL, lft INT NOT NULL, rgt INT NOT NULL, INDEX IDX_C9D4B5841BAD783F (resource_node_id), INDEX IDX_C9D4B584F675F31B (author_id), INDEX IDX_C9D4B584727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
+                'CREATE TABLE resource_comment (id BIGINT AUTO_INCREMENT NOT NULL, resource_node_id INT DEFAULT NULL, author_id INT DEFAULT NULL, parent_id INT DEFAULT NULL, content VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, root INT DEFAULT NULL, lvl INT NOT NULL, lft INT NOT NULL, rgt INT NOT NULL, INDEX IDX_C9D4B5841BAD783F (resource_node_id), INDEX IDX_C9D4B584F675F31B (author_id), INDEX IDX_C9D4B584727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
             );
             $this->addSql(
                 'ALTER TABLE resource_comment ADD CONSTRAINT FK_C9D4B5841BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE SET NULL'
@@ -58,7 +58,7 @@ class Version20170525122900 extends AbstractMigrationChamilo
 
         if (false === $schema->hasTable('resource_tag')) {
             $this->addSql(
-                'CREATE TABLE IF NOT EXISTS resource_tag (id INT AUTO_INCREMENT NOT NULL, author_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_23D039CAF675F31B (author_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
+                'CREATE TABLE IF NOT EXISTS resource_tag (id BIGINT AUTO_INCREMENT NOT NULL, author_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_23D039CAF675F31B (author_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
             );
             $this->addSql(
                 'ALTER TABLE resource_tag ADD CONSTRAINT FK_23D039CAF675F31B FOREIGN KEY (author_id) REFERENCES user (id) ON DELETE SET NULL;'
@@ -67,7 +67,7 @@ class Version20170525122900 extends AbstractMigrationChamilo
 
         if (false === $schema->hasTable('resource_user_tag')) {
             $this->addSql(
-                'CREATE TABLE IF NOT EXISTS resource_user_tag (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, tag_id INT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_46131CA5A76ED395 (user_id), INDEX IDX_46131CA5BAD26311 (tag_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
+                'CREATE TABLE IF NOT EXISTS resource_user_tag (id BIGINT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, tag_id INT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_46131CA5A76ED395 (user_id), INDEX IDX_46131CA5BAD26311 (tag_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
             );
             $this->addSql(
                 'ALTER TABLE resource_user_tag ADD CONSTRAINT FK_46131CA5A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE SET NULL;'
@@ -120,7 +120,7 @@ class Version20170525122900 extends AbstractMigrationChamilo
 
         if (false === $schema->hasTable('resource_right')) {
             $this->addSql(
-                'CREATE TABLE IF NOT EXISTS resource_right (id INT AUTO_INCREMENT NOT NULL, resource_link_id INT DEFAULT NULL, role VARCHAR(255) NOT NULL, mask INT NOT NULL, INDEX IDX_9F710F26F004E599 (resource_link_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
+                'CREATE TABLE IF NOT EXISTS resource_right (id BIGINT AUTO_INCREMENT NOT NULL, resource_link_id INT DEFAULT NULL, role VARCHAR(255) NOT NULL, mask INT NOT NULL, INDEX IDX_9F710F26F004E599 (resource_link_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
             );
             $this->addSql(
                 'ALTER TABLE resource_right ADD CONSTRAINT FK_9F710F26F004E599 FOREIGN KEY (resource_link_id) REFERENCES resource_link (id) ON DELETE CASCADE'
@@ -156,7 +156,7 @@ class Version20170525122900 extends AbstractMigrationChamilo
 
         if (false === $schema->hasTable('illustration')) {
             $this->addSql(
-                'CREATE TABLE illustration (id INT AUTO_INCREMENT NOT NULL, resource_node_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_D67B9A421BAD783F (resource_node_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
+                'CREATE TABLE illustration (id BIGINT AUTO_INCREMENT NOT NULL, resource_node_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_D67B9A421BAD783F (resource_node_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
             );
             $this->addSql(
                 'ALTER TABLE illustration ADD CONSTRAINT FK_D67B9A421BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'

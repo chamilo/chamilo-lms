@@ -30,7 +30,7 @@ class ResourceLink
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="bigint")
      * @ORM\GeneratedValue
      */
     protected ?int $id = null;

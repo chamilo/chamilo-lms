@@ -19,10 +19,8 @@ class CkEditor extends Editor
      * Return the HTML code required to run editor.
      *
      * @param string $value
-     *
-     * @return string
      */
-    public function createHtml($value)
+    public function createHtml($value): string
     {
         $html = '<textarea id="'.$this->getTextareaId().'" name="'.$this->getName().'" >
                  '.$value.'
@@ -68,21 +66,15 @@ class CkEditor extends Editor
         $config = $toolbar->getConfig();
         $javascript = $this->toJavascript($config);
 
-        /*CKEDITOR.replace('".$this->getTextareaId()."',
-                   {$javascript}
-               );*/
-
         return "<script>
-            $(function () {
+            document.addEventListener('DOMContentLoaded', function() {
                 tinymce.init({
                     skin: 'oxide',
                     skin_url: '/build/libs/tinymce/skins/ui/oxide',
                     content_css: '/build/libs/tinymce/skins/content/default/content.css',
                     selector: '#".$this->getTextareaId()."'
                 });
-
            });
-
            </script>";
     }
 

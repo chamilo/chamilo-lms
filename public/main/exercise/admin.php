@@ -16,14 +16,10 @@ use ChamiloSession as Session;
  * - exercise.lib.php : functions used in the exercise tool
  * - exercise_admin.inc.php : management of the exercise
  * - question_admin.inc.php : management of a question (statement & answers)
- * - statement_admin.inc.php : management of a statement
  * - question_list_admin.inc.php : management of the question list
  *
  * Main variables used in this script :
  *
- * - $is_allowedToEdit : set to 1 if the user is allowed to manage the exercise
- * - $objExercise : exercise object
- * - $objQuestion : question object
  * - $objAnswer : answer object
  * - $exerciseId : the exercise ID
  * - $picturePath : the path of question pictures
@@ -65,7 +61,7 @@ if (!$is_allowedToEdit) {
 }
 
 $exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : 0;
-$newQuestion = isset($_GET['newQuestion']) ? $_GET['newQuestion'] : 0;
+$newQuestion = $_GET['newQuestion'] ?? 0;
 $modifyAnswers = isset($_GET['modifyAnswers']) ? $_GET['modifyAnswers'] : 0;
 $editQuestion = isset($_GET['editQuestion']) ? $_GET['editQuestion'] : 0;
 $page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
@@ -291,7 +287,8 @@ $inATest = isset($exerciseId) && $exerciseId > 0;
 if ($inATest) {
     $actions = '';
     if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion'])) {
-        $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'">'.
+        $actions .= '<a
+        href="'.api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
     }
 
@@ -299,7 +296,8 @@ if ($inATest) {
         $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('BackToTestsList'), '', ICON_SIZE_MEDIUM).'</a>';
     }
-    $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&exerciseId='.$objExercise->getId().'&preview=1">'.
+    $actions .= '<a
+        href="'.api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&exerciseId='.$objExercise->getId().'&preview=1">'.
         Display::return_icon('preview_view.png', get_lang('Preview'), '', ICON_SIZE_MEDIUM).'</a>';
 
     $actions .= Display::url(
@@ -375,7 +373,9 @@ if ($inATest) {
     if (false === $showPagination) {
         if ($objExercise->questionSelectionType >= EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED) {
             $alert .= sprintf(
-                '<br>'.get_lang('Only %d questions will be selected based on the test configuration, for a total score of %s.'),
+                '<br>'.get_lang(
+                    'Only %d questions will be selected based on the test configuration, for a total score of %s.'
+                ),
                 count($questionList),
                 $maxScoreAllQuestions
             );

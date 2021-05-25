@@ -11,18 +11,11 @@ use Chamilo\CourseBundle\Entity\CExerciseCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestionCategory;
 use ChamiloSession as Session;
-use Doctrine\DBAL\Types\Type;
 
 /**
- * Class Exercise.
- *
- * Allows to instantiate an object of type Exercise
- *
- * @todo   use getters and setters correctly
- *
  * @author Olivier Brouckaert
  * @author Julio Montoya Cleaning exercises
- * Modified by Hubert Borderiou #294
+ * @author Hubert Borderiou #294
  */
 class Exercise
 {
@@ -103,11 +96,7 @@ class Exercise
     public $disableHideCorrectAnsweredQuestions;
 
     /**
-     * Constructor of the class.
-     *
      * @param int $courseId
-     *
-     * @author Olivier Brouckaert
      */
     public function __construct($courseId = 0)
     {
@@ -169,8 +158,6 @@ class Exercise
      * @param bool $parseQuestionList
      *
      * @return bool - true if exercise exists, otherwise false
-     *
-     * @author Olivier Brouckaert
      */
     public function read($id, $parseQuestionList = true)
     {
@@ -282,10 +269,7 @@ class Exercise
         return false;
     }
 
-    /**
-     * @return string
-     */
-    public function getCutTitle()
+    public function getCutTitle(): string
     {
         $title = $this->getUnformattedTitle();
 
@@ -303,8 +287,6 @@ class Exercise
      * @param bool $unformattedText Optional. Get the title without HTML tags
      *
      * @return string - exercise title
-     *
-     * @author Olivier Brouckaert
      */
     public function selectTitle($unformattedText = false)
     {
@@ -350,8 +332,6 @@ class Exercise
      * returns the exercise description.
      *
      * @return string - exercise description
-     *
-     * @author Olivier Brouckaert
      */
     public function selectDescription()
     {
@@ -360,12 +340,8 @@ class Exercise
 
     /**
      * returns the exercise sound file.
-     *
-     * @return string - exercise description
-     *
-     * @author Olivier Brouckaert
      */
-    public function selectSound()
+    public function getSound()
     {
         return $this->sound;
     }
@@ -1061,8 +1037,6 @@ class Exercise
      *                           just a list limited by the max number of random questions
      *
      * @return array - question ID list
-     *
-     * @author Olivier Brouckaert
      */
     public function selectQuestionList($fromDatabase = false, $adminView = false)
     {
@@ -1108,8 +1082,6 @@ class Exercise
      * returns the number of questions in this exercise.
      *
      * @return int - number of questions
-     *
-     * @author Olivier Brouckaert
      */
     public function selectNbrQuestions()
     {

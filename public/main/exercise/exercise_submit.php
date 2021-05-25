@@ -202,7 +202,7 @@ if ('true' === api_get_plugin_setting('positioning', 'tool_enable')) {
 
 // if the user has submitted the form.
 $exercise_title = $objExercise->selectTitle();
-$exercise_sound = $objExercise->selectSound();
+$exercise_sound = $objExercise->getSound();
 
 // If reminder ends we jump to the exercise_reminder
 if ($objExercise->review_answers) {

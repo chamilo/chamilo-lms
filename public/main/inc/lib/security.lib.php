@@ -298,7 +298,7 @@ class Security
      * @param int The user status,constant allowed (STUDENT, COURSEMANAGER, ANONYMOUS, COURSEMANAGERLOWSECURITY)
      * @param bool $filter_terms
      *
-     * @return mixed Filtered string or array
+     * @return string|array Filtered string or array
      */
     public static function remove_XSS($var, $user_status = null, $filter_terms = false)
     {

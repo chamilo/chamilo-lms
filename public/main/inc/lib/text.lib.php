@@ -739,10 +739,8 @@ function _split_str_by_whitespace($string, $goal)
  * @param string    The text to "cut"
  * @param int       Count of chars
  * @param bool      Whether to embed in a <span title="...">...</span>
- *
- * @return string
  * */
-function cut($text, $maxchar, $embed = false)
+function cut($text, $maxchar, $embed = false): string
 {
     if (api_strlen($text) > $maxchar) {
         if ($embed) {

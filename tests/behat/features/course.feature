@@ -10,7 +10,6 @@ Feature: Course tools basic testing
 
   Scenario: See the courses list
     Given I am on "/main/admin/course_list.php"
-    Then I should see "Course list"
     And I should not see "not authorized"
 
   Scenario: See the course creation link on the admin page
@@ -31,8 +30,7 @@ Feature: Course tools basic testing
     When I fill in "title" with "TEMP"
     And I press "submit"
     Then wait for the page to be loaded
-    Then I should see "Course list"
-    And I should see "TEMP"
+    Then I should see "TEMP"
 
 #  Scenario: Make sure the course exists
 #    Given course "TEMP" exists

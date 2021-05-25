@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\Usergroup as UserGroupEntity;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -1558,8 +1559,10 @@ class UserGroup extends Model
                     );
                 }
                 $request = Container::getRequest();
-                $file = $request->files->get('picture');
-                $this->manageFileUpload($userGroup, $file);
+                if ($request->files->has('picture')) {
+                    $file = $request->files->get('picture');
+                    $this->manageFileUpload($userGroup, $file);
+                }
             }
 
             return $id;
@@ -1582,15 +1585,16 @@ class UserGroup extends Model
             ->setGroupType(isset($params['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS)
             ->setAllowMembersToLeaveGroup(isset($params['allow_members_leave_group']) ? 1 : 0)
         ;
-        $cropImage = isset($params['picture_crop_result']) ? $params['picture_crop_result'] : null;
-        $picture = isset($_FILES['picture']) ? $_FILES['picture'] : null;
+        $cropImage = $params['picture_crop_result'] ?? null;
+        $picture = $_FILES['picture'] ?? null;
         if (!empty($picture)) {
             $request = Container::getRequest();
-            $file = $request->files->get('picture');
-            $this->manageFileUpload($userGroup, $file, $cropImage);
+            if ($request->files->has('picture')) {
+                $file = $request->files->get('picture');
+                $this->manageFileUpload($userGroup, $file, $cropImage);
+            }
         }
 
-        //parent::update($params, $showQuery);
         $repo->update($userGroup);
 
         if (isset($params['delete_picture'])) {
@@ -1600,16 +1604,14 @@ class UserGroup extends Model
         return true;
     }
 
-    public function manageFileUpload(UserGroupEntity $userGroup, UploadedFile $picture, string $cropParameters = ''): bool
-    {
-        if ($userGroup) {
-            $illustrationRepo = Container::getIllustrationRepository();
-            $illustrationRepo->addIllustration($userGroup, api_get_user_entity(), $picture, $cropParameters);
+    public function manageFileUpload(
+        UserGroupEntity $userGroup,
+        UploadedFile $picture,
+        string $cropParameters = ''
+    ): ?ResourceFile {
+        $illustrationRepo = Container::getIllustrationRepository();
 
-            return true;
-        }
-
-        return false;
+        return $illustrationRepo->addIllustration($userGroup, api_get_user_entity(), $picture, $cropParameters);
     }
 
     /**
@@ -1659,7 +1661,6 @@ class UserGroup extends Model
                 WHERE usergroup_id = $id";
         Database::query($sql);
 
-        //parent::delete($id);
         $repo = Container::getUsergroupRepository();
         $userGroup = $repo->find($id);
         $repo->delete($userGroup);

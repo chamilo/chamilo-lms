@@ -135,7 +135,7 @@ class CourseCategory
      * @param string $canHaveCourses
      * @param null|int    $parentId
      */
-    public static function add($code, $name, $canHaveCourses, $description, $parentId = null): ?CourseCategoryEntity
+    public static function add($code, $name, $canHaveCourses, $description = '', $parentId = null): ?CourseCategoryEntity
     {
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $code = trim($code);

@@ -6173,10 +6173,8 @@ SQL;
 
     /**
      * Return the user's full name. Optionally with the username.
-     *
-     * @param bool $includeUsername Optional. By default username is not included.
      */
-    public static function formatUserFullName(User $user, $includeUsername = false): string
+    public static function formatUserFullName(User $user, bool $includeUsername = false): string
     {
         $fullName = api_get_person_name($user->getFirstname(), $user->getLastname());
 

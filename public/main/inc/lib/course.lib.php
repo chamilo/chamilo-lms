@@ -755,7 +755,6 @@ class CourseManager
         $userCourseCategoryId = (int) $userCourseCategoryId;
         $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
         $status = STUDENT === $status || COURSEMANAGER === $status ? $status : STUDENT;
-        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
         if (!empty($sessionId)) {
             SessionManager::subscribe_users_to_session_course(
@@ -802,7 +801,7 @@ class CourseManager
             if ($checkTeacherPermission && !api_is_course_admin()) {
                 // Check in advance whether subscription is allowed or not for this course.
                 if (SUBSCRIBE_NOT_ALLOWED === (int) $course->getSubscribe()) {
-                    Display::addFlash(Display::return_message(get_lang('SubscriptionNotAllowed'), 'warning'));
+                    Display::addFlash(Display::return_message(get_lang('Subscription not allowed'), 'warning'));
 
                     return false;
                 }
@@ -864,21 +863,21 @@ class CourseManager
                     Display::return_message(
                         sprintf(
                             get_lang('User %s has been registered to course %s'),
-                            UserManager::formatUserFullName($user),
+                            UserManager::formatUserFullName($user, true),
                             $course->getTitle()
                         )
                     )
                 );
 
-                $send = api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $course);
+                $send = (int) api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $course);
 
-                if (1 == $send) {
+                if (1 === $send) {
                     self::email_to_tutor(
                         $userId,
                         $courseId,
                         false
                     );
-                } elseif (2 == $send) {
+                } elseif (2 === $send) {
                     self::email_to_tutor(
                         $userId,
                         $courseId,

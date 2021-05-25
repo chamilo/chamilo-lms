@@ -36,7 +36,7 @@ $keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword
 $courseInfo = api_get_course_info();
 
 if (COURSEMANAGER == $type) {
-    $tool_name = get_lang('Enroll users to courseAsTeacher');
+    $tool_name = get_lang('Enroll teachers');
 }
 
 //extra entries in breadcrumb
@@ -61,7 +61,7 @@ if (isset($_REQUEST['Registerister'])) {
     if ($userInfo) {
         if (COURSEMANAGER === $type) {
             if (!empty($sessionId)) {
-                $message = $userInfo['complete_name_with_username'].' '.get_lang('has been Registeristered to your course');
+                $message = $userInfo['complete_name_with_username'].' '.get_lang('has been registered to your course');
                 SessionManager::set_coach_to_course_session(
                     $_REQUEST['user_id'],
                     $sessionId,
@@ -96,7 +96,7 @@ if (isset($_POST['action'])) {
                     if ($userInfo) {
                         if (COURSEMANAGER === $type) {
                             if (!empty($sessionId)) {
-                                $message = $userInfo['complete_name_with_username'].' '.get_lang('has been Registeristered to your course');
+                                $message = $userInfo['complete_name_with_username'].' '.get_lang('has been registered to your course');
                                 $result = SessionManager::set_coach_to_course_session(
                                     $user_id,
                                     $sessionId,

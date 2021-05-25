@@ -2470,7 +2470,7 @@ function finishInstallationWithContainer(
     // Inserting default data
     $data = file_get_contents($sysPath.'public/main/install/data.sql');
     $result = $manager->getConnection()->prepare($data);
-    $executeResult = $result->execute();
+    $executeResult = $result->executeQuery();
 
     if ($executeResult) {
         error_log('data.sql Ok');

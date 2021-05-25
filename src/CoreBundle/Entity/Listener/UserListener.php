@@ -15,8 +15,8 @@ use Symfony\Component\Security\Core\Security;
 
 class UserListener
 {
-    protected UserRepository $userRepository;
-    protected Security $security;
+    private UserRepository $userRepository;
+    private Security $security;
 
     public function __construct(UserRepository $userRepository, Security $security)
     {
@@ -30,21 +30,32 @@ class UserListener
     public function prePersist(User $user, LifecycleEventArgs $args): void
     {
         error_log('User listener prePersist');
+
         if ($user) {
             $this->userRepository->updateCanonicalFields($user);
             $this->userRepository->updatePassword($user);
 
-            if (!$user->hasResourceNode()) {
+            $addResourceNode = true;
+            if (0 === $user->getCreatorId()) {
+                $addResourceNode = false;
+            }
+
+            if ($addResourceNode && !$user->hasResourceNode()) {
+                $token = $this->security->getToken();
+                if (null === $token) {
+                    throw new Exception('A user creator is needed');
+                }
+
                 $em = $args->getEntityManager();
                 $resourceNode = new ResourceNode();
                 $resourceNode
                     ->setTitle($user->getUsername())
                     ->setCreator($this->security->getUser())
-                    ->setResourceType($this->userRepository->getResourceType())
-                ;
+                    ->setResourceType($this->userRepository->getResourceType());
                 $em->persist($resourceNode);
                 $user->setResourceNode($resourceNode);
             }
+
         }
     }
 

@@ -140,7 +140,7 @@ class UserManager
      * @param int           $creatorId
      * @param array         $emailTemplate
      * @param string        $redirectToURLAfterLogin
-     * @param bool          $addUserToNode
+     * @param bool          $addUserToNode               Only needed during installation.
      *
      * @return mixed new user id - if the new user creation succeeds, false otherwise
      * @desc The function tries to retrieve user id from the session.
@@ -178,10 +178,18 @@ class UserManager
     ) {
         $authSource = !empty($authSource) ? $authSource : PLATFORM_AUTH_SOURCE;
         $creatorId = empty($creatorId) ? api_get_user_id() : 0;
+
+        if ($addUserToNode && 0 === $creatorId) {
+            Display::addFlash(
+                Display::return_message(get_lang('A user creator is needed'))
+            );
+            return false;
+        }
+
         $creatorInfo = api_get_user_info($creatorId);
         $creatorEmail = isset($creatorInfo['email']) ? $creatorInfo['email'] : '';
 
-        // First check wether the login already exists
+        // First check if the login exists.
         if (!self::is_username_available($loginName)) {
             Display::addFlash(
                 Display::return_message(get_lang('This login is already taken !'))
@@ -279,7 +287,7 @@ class UserManager
 
         if (empty($expirationDate) || '0000-00-00 00:00:00' === $expirationDate) {
             $expirationDate = null;
-        // Default expiration date
+            // Default expiration date
             // if there is a default duration of a valid account then
             // we have to change the expiration_date accordingly
             // Accept 0000-00-00 00:00:00 as a null value to avoid issues with

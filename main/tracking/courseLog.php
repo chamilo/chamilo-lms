@@ -1018,6 +1018,8 @@ if ($export_csv) {
     }
     $csv_headers[] = get_lang('Student_publication');
     $csv_headers[] = get_lang('Messages');
+    $csv_headers[] = get_lang('Classes');
+
     if (empty($sessionId)) {
         $csv_headers[] = get_lang('Survey');
     } else {
@@ -1065,14 +1067,12 @@ if (isset($_GET['csv']) && $_GET['csv'] == 1) {
         $sessionId
     );
     if (count($usersId) != 0) {
-        $csv_content[] = [get_lang('NamesAndLastNames')];
+        $csv_content[] = [get_lang('NamesAndLastNames'), get_lang('Classes')];
         foreach ($usersId as $userId) {
             $user = api_get_user_info($userId);
-            $csv_content[] = [$user['complete_name']];
+            $csv_content[] = [$user['complete_name'], $user['classes']];
         }
-
         ob_end_clean();
-
         Export::arrayToCsv($csv_content, 'reporting_inactive_users');
         exit;
     }

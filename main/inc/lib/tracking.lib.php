@@ -7509,7 +7509,7 @@ class Tracking
         array $courseInfo,
         int $sessionId = 0,
         bool $isAllowedToEdit = true
-    ) : string {
+    ): string {
         $html = [];
 
         $columnHeaders = [

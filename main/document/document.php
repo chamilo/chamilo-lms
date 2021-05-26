@@ -1894,7 +1894,7 @@ $userIsSubscribed = CourseManager::is_user_subscribed_in_course(
     $courseInfo['code']
 );
 
-$getSizeURL = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=get_dir_size&'.api_get_cidreq();
+$getSizesURL = api_get_path(WEB_AJAX_PATH) . 'document.ajax.php?a=get_dirs_size&' . api_get_cidreq();
 
 if (!empty($documentAndFolders)) {
     if ($groupId == 0 || $userAccess) {
@@ -2005,7 +2005,7 @@ if (!empty($documentAndFolders)) {
 
             if ($document_data['filetype'] == 'folder') {
                 $displaySize = '<span id="document_size_'.$document_data['id']
-                    .'" data-path= "'.$document_data['path']
+                    . '" data-id= "' . $document_data['id']
                     .'" class="document_size"></span>';
             } else {
                 $displaySize = format_file_size($document_data['size']);
@@ -2273,17 +2273,23 @@ if (false === $disableQuotaMessage && count($documentAndFolders) > 1) {
 
     echo '<script>
     $(function() {
+        let requests = [];
         $(".document_size").each(function(i, obj) {
-            var path = obj.getAttribute("data-path");
-
-            $.ajax({
-                url:"'.$getSizeURL.'&path="+path,
-                success:function(data){
-                    $(obj).html(data);
-                }
-            });
+            requests.push(obj.getAttribute("data-id"));
         });
+        getPathsSizes(requests)
     });
+    function getPathsSizes(requests){
+        $.ajax({
+            url:"' . $getSizesURL . '&requests="+requests,
+            success:function(data){
+                const response = JSON.parse(data)
+                response.forEach(function(data) {
+                      $("#document_size_"+data.id).html(data.size);
+                });
+            }
+        });
+    }
     </script>';
     echo '<span id="course_quota"></span>';
 }

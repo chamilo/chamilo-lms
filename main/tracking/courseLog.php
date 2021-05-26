@@ -337,8 +337,6 @@ $conditions = [];
 $groupList = GroupManager::get_group_list(null, $courseInfo, 1, $sessionId);
 
 $class = new UserGroup();
-//$options['where'] = [' usergroup.course_id = ? ' => $courseId];
-//$classes = $class->getUserGroupInCourse($options);
 $classes = $class->get_all();
 
 // Show the charts part only if there are students subscribed to this course/session
@@ -355,7 +353,6 @@ if ($nbStudents > 0) {
     $select = $formClass->addSelect('class_id', get_lang('Class').'/'.get_lang('Group'), $groupIdList);
     $groupIdList = [];
     foreach ($classes as $class) {
-        //$groupIdList['class_'.$class['id']] = $class['name'];
         $groupIdList[] = ['text' => $class['name'], 'value' => 'class_'.$class['id']];
     }
     $select->addOptGroup($groupIdList, get_lang('Class'));
@@ -393,7 +390,6 @@ if ($nbStudents > 0) {
         foreach ($_GET['additional_profile_field'] as $fieldId) {
             $fieldId = Security::remove_XSS($fieldId);
             $formExtraField->addHidden('additional_profile_field[]', $fieldId);
-            //$formGroup->addHidden('additional_profile_field[]', $fieldId);
             $formClass->addHidden('additional_profile_field[]', $fieldId);
         }
     }

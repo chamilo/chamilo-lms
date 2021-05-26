@@ -8690,10 +8690,10 @@ class TrackingCourseLog
 
             if ($export_csv) {
                 if (empty($session_id)) {
-                    unset($user_row['classes']);
+                    //unset($user_row['classes']);
                     unset($user_row['link']);
                 } else {
-                    unset($user_row['classes']);
+                    //unset($user_row['classes']);
                     unset($user_row['link']);
                 }
 

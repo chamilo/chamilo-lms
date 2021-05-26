@@ -6485,6 +6485,71 @@ class DocumentManager
      * Calculates the total size of a directory by adding the sizes (that
      * are stored in the database) of all files & folders in this directory.
      *
+     * @param int $id
+     * @param bool $can_see_invisible
+     *
+     * @return int Total size
+     */
+    public static function getTotalFolderSizeById($id, $can_see_invisible = false)
+    {
+        $id = (int)$id;
+        $table_itemproperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $table_document = Database::get_course_table(TABLE_DOCUMENT);
+        $tool_document = TOOL_DOCUMENT;
+
+        $course_id = api_get_course_int_id();
+        $session_id = api_get_session_id();
+        $session_condition = api_get_session_condition(
+            $session_id,
+            true,
+            true,
+            'props.session_id'
+        );
+
+        if (empty($course_id)) {
+            return 0;
+        }
+
+        $visibility_rule = ' props.visibility ' . ($can_see_invisible ? '<> 2' : '= 1');
+
+        $query = "SELECT path FROM $table_document WHERE id = $id";
+        $result1 = Database::query($query);
+        $path = null;
+        if ($result1 && Database::num_rows($result1) != 0) {
+            $row = Database::fetch_row($result1);
+
+            $path = $row[0];
+        }
+
+        if ($path) {
+            $sql = "SELECT SUM(table1.size) FROM (
+                SELECT props.ref, size
+                FROM $table_itemproperty AS props
+                INNER JOIN $table_document AS docs
+                ON (docs.id = props.ref AND docs.c_id = props.c_id)
+                WHERE
+                    docs.c_id = $course_id AND
+                    docs.path LIKE '$path/%' AND
+                    props.c_id = $course_id AND
+                    props.tool = '$tool_document' AND
+                    $visibility_rule
+                    $session_condition
+                GROUP BY ref
+            ) as table1";
+
+            $result = Database::query($sql);
+            if ($result && Database::num_rows($result) != 0) {
+                $row = Database::fetch_row($result);
+
+                return $row[0];
+            }
+        }
+        return 0;
+    }
+    /**
+     * Calculates the total size of a directory by adding the sizes (that
+     * are stored in the database) of all files & folders in this directory.
+     *
      * @param string $path
      * @param bool   $can_see_invisible
      *

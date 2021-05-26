@@ -5397,6 +5397,16 @@ class UserManager
 
         if (!empty($keyword)) {
             $keyword = trim(Database::escape_string($keyword));
+            $keywordParts = array_filter(explode(' ', $keyword));
+            $extraKeyword = '';
+            if (!empty($keywordParts)) {
+                $keywordPartsFixed = Database::escape_string(implode('%', $keywordParts));
+                if (!empty($keywordPartsFixed)) {
+                    $extraKeyword .= " OR
+                        CONCAT(u.firstname, ' ', u.lastname) LIKE '%$keywordPartsFixed%' OR
+                        CONCAT(u.lastname, ' ', u.firstname) LIKE '%$keywordPartsFixed%' ";
+                }
+            }
 
             $userConditions .= " AND (
                 u.username LIKE '%$keyword%' OR
@@ -5406,6 +5416,7 @@ class UserManager
                 u.email LIKE '%$keyword%' OR
                 CONCAT(u.firstname, ' ', u.lastname) LIKE '%$keyword%' OR
                 CONCAT(u.lastname, ' ', u.firstname) LIKE '%$keyword%'
+                $extraKeyword
             )";
         }
 
@@ -5415,7 +5426,7 @@ class UserManager
         }
 
         $sessionConditionsCoach = null;
-        $sessionConditionsTeacher = null;
+        $dateCondition = '';
         $drhConditions = null;
         $teacherSelect = null;
 
@@ -5438,14 +5449,14 @@ class UserManager
                     (s.id_coach = '$userId')
                 ";
 
-                $sessionConditionsTeacher .= " AND
+                $sessionConditionsTeacher = " AND
                     (scu.status = 2 AND scu.user_id = '$userId')
                 ";
 
                 if ($checkSessionVisibility) {
                     $today = api_strtotime('now', 'UTC');
                     $today = date('Y-m-d', $today);
-                    $sessionConditionsTeacher .= "
+                    $dateCondition = "
                         AND
                         (
                             (s.access_start_date <= '$today' AND '$today' <= s.access_end_date) OR
@@ -5456,6 +5467,12 @@ class UserManager
 					";
                 }
 
+                // Use $tbl_session_rel_course_rel_user instead of $tbl_session_rel_user
+                /*
+                INNER JOIN $tbl_session_rel_user sru
+                ON (sru.user_id = u.id)
+                INNER JOIN $tbl_session_rel_course_rel_user scu
+                ON (scu.user_id = u.id AND scu.c_id IS NOT NULL AND visibility = 1)*/
                 $teacherSelect =
                 "UNION ALL (
                         $select
@@ -5477,6 +5494,7 @@ class UserManager
                                     ON (scu.session_id = s.id)
                                     WHERE access_url_id = ".$urlId."
                                     $sessionConditionsTeacher
+                                    $dateCondition
                                 )
                             )
                             $userConditions

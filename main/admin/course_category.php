@@ -18,11 +18,33 @@ $categoryId = isset($_GET['id']) ? Security::remove_XSS($_GET['id']) : null;
 if (!empty($categoryId)) {
     $categoryInfo = CourseCategory::getCategory($categoryId);
 }
-$action = isset($_GET['action']) ? $_GET['action'] : null;
+$action = $_GET['action'] ?? null;
 
 $myCourseListAsCategory = api_get_configuration_value('my_courses_list_as_category');
 
 if (!empty($action)) {
+    if ('export' === $action) {
+        $categoryInfo = CourseCategory::getCategoryById($categoryId);
+        if (!empty($categoryInfo)) {
+            $courses = CourseCategory::getCoursesInCategory($categoryInfo['code']);
+            if (!empty($courses)) {
+                $name = api_get_local_time().'_'.$categoryInfo['code'];
+                $courseList = array_map(
+                    function ($value) {
+                        return [$value];
+                    },
+                    array_column($courses, 'title')
+                );
+                Export::arrayToCsv($courseList, $name);
+            }
+        }
+
+        Display::addFlash(Display::return_message(get_lang('HaveNoCourse')));
+
+        header('Location: '.api_get_self());
+        exit;
+    }
+
     if ($action === 'delete') {
         CourseCategory::deleteNode($categoryId);
         Display::addFlash(Display::return_message(get_lang('Deleted')));

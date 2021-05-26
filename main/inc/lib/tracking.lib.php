@@ -8658,7 +8658,6 @@ class TrackingCourseLog
                 );
             }
 
-
             if (empty($session_id)) {
                 $user_row['survey'] = $user['survey'];
             } else {
@@ -8707,7 +8706,6 @@ class TrackingCourseLog
                     //unset($user_row['classes']);
                     unset($user_row['link']);
                 }
-
                 $csv_content[] = $user_row;
             }
             $users[] = array_values($user_row);

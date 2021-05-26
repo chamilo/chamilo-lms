@@ -9613,15 +9613,33 @@ class SessionManager
         foreach ($studentIds as $studentId) {
             $sessionCourseUser['user_id'] = $studentId;
 
-            Database::insert($tblSessionCourseUser, $sessionCourseUser);
+            $count = Database::select(
+                'COUNT(1) as nbr',
+                $tblSessionCourseUser,
+                ['where' => ['session_id = ? AND c_id = ? AND user_id = ?' => [$sessionId, $courseId, $studentId]]],
+                'first'
+            );
+
+            if (empty($count['nbr'])) {
+                Database::insert($tblSessionCourseUser, $sessionCourseUser);
+
+                Event::logUserSubscribedInCourseSession($studentId, $courseId, $sessionId);
+            }
 
             if ($updateSession) {
                 $sessionUser['user_id'] = $studentId;
 
-                Database::insert($tblSessionUser, $sessionUser);
-            }
+                $count = Database::select(
+                    'COUNT(1) as nbr',
+                    $tblSessionUser,
+                    ['where' => ['session_id = ? AND user_id = ?' => [$sessionId, $studentId]]],
+                    'first'
+                );
 
-            Event::logUserSubscribedInCourseSession($studentId, $courseId, $sessionId);
+                if (empty($count['nbr'])) {
+                    Database::insert($tblSessionUser, $sessionUser);
+                }
+            }
         }
 
         Database::query(

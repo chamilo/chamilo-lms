@@ -143,7 +143,6 @@ if ($lpReporting) {
                 );
             }
 
-            $lp_avg_progress = null;
             if ($studentCount > 0) {
                 $lp_avg_progress = $lp_avg_progress / $studentCount;
             }

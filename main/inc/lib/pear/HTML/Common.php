@@ -147,7 +147,7 @@ class HTML_Common
                     continue;
                 }
             	// Modified by Ivan Tcholakov, 16-MAR-2010
-                $value = @htmlspecialchars($value, ENT_COMPAT, $charset);
+                $value = @htmlspecialchars(html_entity_decode($value), ENT_COMPAT, $charset);
                 $strAttr .= ' ' . $key . '="' . $value. '"';
             }
         }

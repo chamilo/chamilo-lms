@@ -6430,7 +6430,9 @@ class SessionManager
             }
         }
 
-        if ($drhLoaded == false) {
+        $checkSessionVisibility = api_get_configuration_value('show_users_in_active_sessions_in_tracking');
+
+        if (false === $drhLoaded) {
             $count = UserManager::getUsersFollowedByUser(
                 $userId,
                 $filterUserStatus,
@@ -6445,7 +6447,7 @@ class SessionManager
                 $lastConnectionDate,
                 api_is_student_boss() ? STUDENT_BOSS : COURSEMANAGER,
                 $keyword,
-                true
+                $checkSessionVisibility
             );
         }
 

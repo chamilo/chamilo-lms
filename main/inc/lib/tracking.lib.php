@@ -1316,6 +1316,7 @@ class Tracking
         $studentBossCount = 0;
         $courseCount = 0;
         $assignedCourseCount = 0;
+        $checkSessionVisibility = api_get_configuration_value('show_users_in_active_sessions_in_tracking');
 
         if (api_is_drh() && api_drh_can_access_all_session_content()) {
             $studentList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -1457,7 +1458,9 @@ class Tracking
                 null,
                 null,
                 null,
-                COURSEMANAGER
+                COURSEMANAGER,
+                null,
+                $checkSessionVisibility
             );
 
             $students = [];
@@ -1479,7 +1482,9 @@ class Tracking
                 null,
                 null,
                 null,
-                COURSEMANAGER
+                COURSEMANAGER,
+                null,
+                $checkSessionVisibility
             );
 
             if ($getCount) {
@@ -1505,7 +1510,9 @@ class Tracking
                 null,
                 null,
                 null,
-                COURSEMANAGER
+                COURSEMANAGER,
+                null,
+                $checkSessionVisibility
             );
 
             if ($getCount) {
@@ -1529,7 +1536,9 @@ class Tracking
                 null,
                 null,
                 null,
-                COURSEMANAGER
+                COURSEMANAGER,
+                null,
+                $checkSessionVisibility
             );
 
             if ($getCount) {

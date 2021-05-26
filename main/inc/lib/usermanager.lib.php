@@ -5524,6 +5524,7 @@ class UserManager
         if ($getSql) {
             return $sql;
         }
+
         if ($getCount) {
             $result = Database::query($sql);
             $row = Database::fetch_array($result);

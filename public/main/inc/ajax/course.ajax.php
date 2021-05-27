@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
@@ -30,22 +31,6 @@ switch ($action) {
             false
         );
         echo $rating;
-        break;
-    case 'get_course_image':
-        $courseId = ChamiloApi::getCourseIdByDirectory($_REQUEST['code']);
-        $courseInfo = api_get_course_info_by_id($courseId);
-        $image = isset($_REQUEST['image']) && in_array($_REQUEST['image'], ['course_image_large_source', 'course_image_source']) ? $_REQUEST['image'] : '';
-        if ($courseInfo && $image) {
-            // Arbitrarily set a cache of 10' for the course image to
-            // avoid hammering the server with otherwise unfrequently
-            // changed images that can have some weight
-            $now = time() + 600; //time must be in GMT anyway
-            $headers = [
-              'Expires' => gmdate('D, d M Y H:i:s ', $now).'GMT',
-              'Cache-Control' => 'max-age=600',
-            ];
-            DocumentManager::file_send_for_download($courseInfo[$image], null, null, null, $headers);
-        }
         break;
     case 'get_user_courses':
         // Only search my courses
@@ -214,10 +199,10 @@ switch ($action) {
                 foreach ($results as $item) {
                     $item2 = [];
                     foreach ($item as $id => $internal) {
-                        if ('id' == $id) {
+                        if ('id' === $id) {
                             $item2[$id] = $internal;
                         }
-                        if ('title' == $id) {
+                        if ('title' === $id) {
                             $item2['text'] = $internal;
                         }
                     }
@@ -231,7 +216,7 @@ switch ($action) {
         break;
     case 'search_course_by_session_all':
         if (api_is_platform_admin()) {
-            if ('TODOS' == $_GET['session_id'] || 'T' == $_GET['session_id']) {
+            if ('TODOS' === $_GET['session_id'] || 'T' === $_GET['session_id']) {
                 $_GET['session_id'] = '%';
             }
 
@@ -310,36 +295,6 @@ switch ($action) {
             echo json_encode($json);
         }
         break;
-    case 'search_exercise_by_course':
-        if (api_is_platform_admin()) {
-            $course = api_get_course_entity($_GET['course_id']);
-            $session_id = !empty($_GET['session_id']) ? $_GET['session_id'] : 0;
-            $session = api_get_session_entity($session_id);
-
-            $qb = Container::getQuizRepository()->findAllByCourse($course, $session, $_GET['q'], 2, false);
-            /** @var CQuiz[] $exercises */
-            $exercises = $qb->getQuery()->getResult();
-
-            /*$exercises = ExerciseLib::get_all_exercises(
-                $course,
-                $session_id,
-                false,
-                $_GET['q'],
-                true,
-                3
-            );*/
-
-            foreach ($exercises as $exercise) {
-                $data[] = ['id' => $exercise->getIid(), 'text' => html_entity_decode($exercise->getTitle())];
-            }
-            if (!empty($data)) {
-                $data[] = ['id' => 'T', 'text' => 'TODOS'];
-                echo json_encode($data);
-            } else {
-                echo json_encode([['id' => 'T', 'text' => 'TODOS']]);
-            }
-        }
-        break;
     case 'search_survey_by_course':
         if (api_is_platform_admin()) {
             $survey = Database::get_course_table(TABLE_SURVEY);
@@ -410,8 +365,6 @@ switch ($action) {
 
         $logInfo = [
             'tool' => 'close-window',
-            'tool_id' => 0,
-            'tool_id_detail' => 0,
             'action' => 'exit',
         ];
         Event::registerLog($logInfo);

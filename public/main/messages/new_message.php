@@ -433,16 +433,16 @@ if ($allowSocial) {
 }
 
 // Block Social Avatar
-SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
+//SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 
 MessageManager::cleanAudioMessage();
-if ($allowSocial) {
+/*if ($allowSocial) {
     $tpl->assign('social_menu_block', $social_menu_block);
     $tpl->assign('social_right_content', $social_right_content);
     $social_layout = $tpl->get_template('social/inbox.tpl');
     $tpl->display($social_layout);
 } else {
-    $content = $social_right_content;
-    $tpl->assign('content', $content);
-    $tpl->display_one_col_template();
-}
+}*/
+$content = $social_right_content;
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

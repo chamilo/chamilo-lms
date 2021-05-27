@@ -74,21 +74,22 @@ $social_right_content .= MessageManager::outBoxDisplay($keyword);
 
 $tpl = new Template(get_lang('Outbox'));
 // Block Social Avatar
-SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
+//SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 
-if ($allowSocial) {
+/*if ($allowSocial) {
     $tpl->assign('social_menu_block', $social_menu_block);
     $tpl->assign('social_right_content', $social_right_content);
     $social_layout = $tpl->get_template('social/inbox.tpl');
     $tpl->display($social_layout);
 } else {
-    $content = $social_right_content;
-    if ($actions) {
-        $tpl->assign(
-            'actions',
-            Display::toolbarAction('toolbar', [$actions])
-        );
-    }
-    $tpl->assign('content', $content);
-    $tpl->display_one_col_template();
+
+}*/
+$content = $social_right_content;
+if ($actions) {
+    $tpl->assign(
+        'actions',
+        Display::toolbarAction('toolbar', [$actions])
+    );
 }
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

@@ -1,5 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Class UrlManager
@@ -16,24 +20,28 @@ class UrlManager
      * @param string $url         The URL of the site
      * @param string $description The description of the site
      * @param int    $active      is active or not
-     *
-     * @return int
      */
-    public static function add($url, $description, $active)
+    public static function add($url, $description, $active): ?AccessUrl
     {
-        $tms = time();
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        $sql = "INSERT INTO $table
-                SET url 	= '".Database::escape_string($url)."',
-                description = '".Database::escape_string($description)."',
-                active 		= '".intval($active)."',
-                created_by 	= '".api_get_user_id()."',
-                tms = FROM_UNIXTIME(".$tms.")";
-        Database::query($sql);
+        $repo = Container::getAccessUrlRepository();
 
-        $id = Database::insert_id();
+        $num = self::url_exist($url);
 
-        return $id;
+        if (0 !== $num) {
+            return null;
+        }
+
+        $accessUrl = new AccessUrl();
+        $accessUrl
+            ->setDescription($description)
+            ->setActive($active)
+            ->setUrl($url)
+            ->setCreatedBy(api_get_user_id())
+        ;
+
+        $repo->create($accessUrl);
+
+        return $accessUrl;
     }
 
     /**
@@ -115,9 +123,7 @@ class UrlManager
         $sql = "SELECT id FROM $table
                 WHERE url = '".Database::escape_string($url)."' ";
         $res = Database::query($sql);
-        $num = Database::num_rows($res);
-
-        return $num;
+        return (int) Database::num_rows($res);
     }
 
     /**
@@ -201,9 +207,8 @@ class UrlManager
                 FROM $table
                 WHERE id = ".$urlId;
         $res = Database::query($sql);
-        $row = Database::fetch_array($res);
 
-        return $row;
+        return Database::fetch_array($res);
     }
 
     /**

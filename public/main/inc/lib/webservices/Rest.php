@@ -1445,27 +1445,24 @@ class Rest extends WebService
     {
         $urlCampus = Security::remove_XSS($params['url']);
         $description = Security::remove_XSS($params['description']);
+        $active = isset($params['active']) ? (int) $params['active'] : 0;
 
-        $active = isset($params['active']) ? intval($params['active']) : 0;
-        $num = UrlManager::url_exist($urlCampus);
-        if (0 == $num) {
-            // checking url
-            if ('/' == substr($urlCampus, strlen($urlCampus) - 1, strlen($urlCampus))) {
-                $idCampus = UrlManager::add($urlCampus, $description, $active, true);
-            } else {
-                //create
-                $idCampus = UrlManager::add($urlCampus.'/', $description, $active, true);
-            }
+        if ('/' == substr($urlCampus, strlen($urlCampus) - 1, strlen($urlCampus))) {
+            $url = UrlManager::add($urlCampus, $description, $active, true);
+        } else {
+            $url = UrlManager::add($urlCampus.'/', $description, $active, true);
+        }
 
+        if (null === $url) {
             return [
-                'status' => true,
-                'id_campus' => $idCampus,
+                'status' => false,
+                'id_campus' => 0,
             ];
         }
 
         return [
-            'status' => false,
-            'id_campus' => 0,
+            'status' => true,
+            'id_campus' => $url->getId(),
         ];
     }
 

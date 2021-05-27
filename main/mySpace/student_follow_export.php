@@ -161,6 +161,7 @@ function generateHtmlForLearningPaths(int $studentId, array $courseInfo, int $se
     $columnHeadersKeys = array_keys($columnHeaders);
 
     $hideInvisibleViews = api_get_configuration_value('student_follow_page_add_LP_invisible_checkbox');
+    $includeNotsubscribedLp = api_get_configuration_value('student_follow_page_include_not_subscribed_lp_students');
 
     $timeCourse = Tracking::minimumTimeAvailable($sessionId, $courseInfo['real_id'])
         ? Tracking::getCalculateTime($student->getId(), $courseInfo['real_id'], $sessionId)
@@ -185,7 +186,7 @@ function generateHtmlForLearningPaths(int $studentId, array $courseInfo, int $se
             $categoryId,
             false,
             false,
-            false
+            $includeNotsubscribedLp === true
         );
 
         $flatList = $lpList->get_flat_list();

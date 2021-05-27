@@ -4409,21 +4409,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"autoprefixer@npm:^10.2.5":
-  version: 10.2.5
-  resolution: "autoprefixer@npm:10.2.5"
+"autoprefixer@npm:^10.2.6":
+  version: 10.2.6
+  resolution: "autoprefixer@npm:10.2.6"
   dependencies:
-    browserslist: ^4.16.3
-    caniuse-lite: ^1.0.30001196
+    browserslist: ^4.16.6
+    caniuse-lite: ^1.0.30001230
     colorette: ^1.2.2
-    fraction.js: ^4.0.13
+    fraction.js: ^4.1.1
     normalize-range: ^0.1.2
     postcss-value-parser: ^4.1.0
   peerDependencies:
     postcss: ^8.1.0
   bin:
     autoprefixer: bin/autoprefixer
-  checksum: bd346dd75b7cb3bc8edca6e36edf1f4e0ae5bf0a51b2ac6d07523efd21d272d8932643f9a9410b4ee2ff36936531f7b6fa9d30d87b044579612f249fb96b9c78
+  checksum: 805414d4efe4f25c6162edc65ad999235ea28cf11b6a1ed838b055ef1f777368dd16c978b44d0b48bb96a3420948d26da27066d5caa4f81bcee1946e9a269532
   languageName: node
   linkType: hard
 
@@ -5535,7 +5535,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"browserslist@npm:^4.0.0, browserslist@npm:^4.12.0, browserslist@npm:^4.14.5, browserslist@npm:^4.16.0, browserslist@npm:^4.16.3, browserslist@npm:^4.16.6":
+"browserslist@npm:^4.0.0, browserslist@npm:^4.12.0, browserslist@npm:^4.14.5, browserslist@npm:^4.16.0, browserslist@npm:^4.16.6":
   version: 4.16.6
   resolution: "browserslist@npm:4.16.6"
   dependencies:
@@ -5881,10 +5881,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30000844, caniuse-lite@npm:^1.0.30001109, caniuse-lite@npm:^1.0.30001196, caniuse-lite@npm:^1.0.30001219":
+"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30000844, caniuse-lite@npm:^1.0.30001109, caniuse-lite@npm:^1.0.30001219":
   version: 1.0.30001228
   resolution: "caniuse-lite@npm:1.0.30001228"
   checksum: a4eb04288e9b7f7bda158126f37e8dab97a5fc851dab192083f36906d8bf76e0526afa0692a662267ea4b3df0b0ba13f847457ac2be0f1ea209ec3013b7caabe
+  languageName: node
+  linkType: hard
+
+"caniuse-lite@npm:^1.0.30001230":
+  version: 1.0.30001230
+  resolution: "caniuse-lite@npm:1.0.30001230"
+  checksum: bb319bedf33722a2d16e28a7e0d13fabde59be4fccd48d80939254228c7a49059b74bd99b313596f75c997480f9097cc3e7cda7c7687e5a096bb9c75260c145d
   languageName: node
   linkType: hard
 
@@ -6004,7 +6011,7 @@ __metadata:
     "@vue/compiler-sfc": ^3.0.11
     "@vuelidate/core": ^2.0.0-alpha.18
     "@vuelidate/validators": ^2.0.0-alpha.15
-    autoprefixer: ^10.2.5
+    autoprefixer: ^10.2.6
     axios: ^0.21.1
     babel: ^6.23.0
     babel-plugin-transform-builtin-extend: ^1.1.2
@@ -6098,7 +6105,7 @@ __metadata:
     vue-router: ^4.0.8
     vue-sidebar-menu: ^4.7.4
     vue-toastification: ^2.0.0-rc.1
-    vuetify: ^3.0.0-alpha.4
+    vuetify: ^3.0.0-alpha.5
     vuex: ^4.0.1
     vuex-composition-helpers: next
     vuex-map-fields: ^1.4.1
@@ -9458,7 +9465,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fraction.js@npm:^4.0.13":
+"fraction.js@npm:^4.1.1":
   version: 4.1.1
   resolution: "fraction.js@npm:4.1.1"
   checksum: 3667dfc48804ba4623f43e8d284a30f9abcb546f59c44dbcb51722e114d77fb06f0fe9bf051db816db6b2679c55dfccb633c4841c3436b2239c5dffcef0a8ccf
@@ -19352,12 +19359,12 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"vuetify@npm:^3.0.0-alpha.4":
-  version: 3.0.0-alpha.4
-  resolution: "vuetify@npm:3.0.0-alpha.4"
+"vuetify@npm:^3.0.0-alpha.5":
+  version: 3.0.0-alpha.5
+  resolution: "vuetify@npm:3.0.0-alpha.5"
   peerDependencies:
     vue: ^3.0.7
-  checksum: ea855b402e9c2c76ea55fe24c43f0ed0415d9b0b1725ccca173a2e84ac73e668d9a43108b30e1c90cbbc97559007ff79756e795f151cf292cea4b000f87ca34b
+  checksum: 7c6a981696e9f0e89ea28eee272b58fc7f07874e651b3cc9b4cd5ff981b077a56fbe020b1aeba66e2198ebe40112b4f09cbcc19a0879fc3151522643ee3e510f
   languageName: node
   linkType: hard
 

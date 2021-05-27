@@ -39,10 +39,24 @@ switch ($action) {
         header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
         exit;
         break;
+    case 'export':
+        $courses = CourseCategory::getCoursesInCategory($categoryId);
+        if (!empty($courses)) {
+            $name = api_get_local_time().'_'.$categoryInfo['code'];
+            $courseList = [];
+            foreach ($courses as $course) {
+                $courseList[] = $course->getTitle();
+            }
+            Export::arrayToCsv($courseList, $name);
+        }
+
+        header('Location: '.api_get_self());
+        exit;
+        break;
     case 'moveUp':
         CourseCategory::moveNodeUp($categoryId, $_GET['tree_pos'], $category);
-        header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
         Display::addFlash(Display::return_message(get_lang('Update successful')));
+        header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
         exit;
         break;
     case 'add':
@@ -100,7 +114,7 @@ Display::display_header($tool_name);
 
 if ('add' === $action || 'edit' === $action) {
     $actions = Display::url(
-        Display::return_icon('folder_up.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
+        Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH).'admin/course_category.php?id='.$categoryId
     );
     echo Display::toolbarAction('categories', [$actions]);

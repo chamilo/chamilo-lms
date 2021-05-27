@@ -7,14 +7,9 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Entity\CourseCategory as CourseCategoryEntity;
 use Doctrine\Common\Collections\Criteria;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-/**
- * Class CourseCategory.
- */
 class CourseCategory
 {
-
     /**
      * Get category details from a simple category code.
      *
@@ -432,13 +427,14 @@ class CourseCategory
 
             $editIcon = Display::return_icon(
                 'edit.png',
-                get_lang('Edit this category'),
+                get_lang('Edit'),
                 null,
                 ICON_SIZE_SMALL
             );
+            $exportIcon = Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '');
             $deleteIcon = Display::return_icon(
                 'delete.png',
-                get_lang('Delete this category'),
+                get_lang('Delete'),
                 null,
                 ICON_SIZE_SMALL
             );
@@ -456,6 +452,7 @@ class CourseCategory
                 $editUrl = $mainUrl.'&id='.$categoryId.'&action=edit';
                 $moveUrl = $mainUrl.'&id='.$categoryId.'&action=moveUp&tree_pos='.$category->getTreePos();
                 $deleteUrl = $mainUrl.'&id='.$categoryId.'&action=delete';
+                $exportUrl = $mainUrl.'&id='.$categoryId.'&action=export';
 
                 $actions = [];
                 $criteria = Criteria::create();
@@ -470,7 +467,12 @@ class CourseCategory
                 if ($inUrl->count() > 0) {
                     $actions[] = Display::url($editIcon, $editUrl);
                     $actions[] = Display::url($moveIcon, $moveUrl);
-                    $actions[] = Display::url($deleteIcon, $deleteUrl);
+                    $actions[] = Display::url($exportIcon, $exportUrl);
+                    $actions[] = Display::url(
+                        $deleteIcon,
+                        $deleteUrl,
+                        ['onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('Please confirm your choice')), ENT_QUOTES)).'\')) return false;',]
+                    );
                 }
 
                 $url = api_get_path(WEB_CODE_PATH).'admin/course_category.php?id='.$categoryId;
@@ -637,13 +639,24 @@ class CourseCategory
         return self::getCoursesInCategory($category_code, $keyword, $avoidCourses, $conditions, true);
     }
 
+    /**
+     * @return \Chamilo\CoreBundle\Entity\Course[]
+     */
     public static function getCoursesInCategory(
-        $category_code = '',
+        $categoryId,
         $keyword = '',
         $avoidCourses = true,
         $conditions = [],
         $getCount = false
     ) {
+        $repo = Container::getCourseCategoryRepository();
+        /** @var CourseCategoryEntity $category */
+        $category = $repo->find($categoryId);
+
+        // @todo add filters
+
+        return $category->getCourses();
+
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $keyword = Database::escape_string($keyword);
@@ -1008,47 +1021,5 @@ class CourseCategory
             $repo = Container::getCourseCategoryRepository();
             $repo->save($category);
         }
-
-        /*
-        $categoryInfo = self::getCategoryById($categoryId);
-        if (empty($categoryInfo)) {
-            return;
-        }
-
-        if (!empty($fileData['error'])) {
-            return;
-        }
-
-        $extension = getextension($fileData['name']);
-        $dirName = 'course_category/';
-        $fileDir = api_get_path(SYS_UPLOAD_PATH).$dirName;
-        $fileName = "cc_$categoryId.{$extension[0]}";
-
-        if (!file_exists($fileDir)) {
-            mkdir($fileDir, api_get_permissions_for_new_directories(), true);
-        }
-
-        $image = new Image($fileData['tmp_name']);
-        $image->send_image($fileDir.$fileName);
-
-        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        Database::update(
-            $table,
-            ['image' => $dirName.$fileName],
-            ['id = ?' => $categoryId]
-        );*/
-    }
-
-    /**
-     * @param        $category
-     * @param string $description
-     *
-     * @return string
-     */
-    public static function saveDescription(CourseCategoryEntity $category, $description)
-    {
-        $repo = Container::getCourseCategoryRepository();
-        $category->setDescription($description);
-        $repo->save($category);
     }
 }

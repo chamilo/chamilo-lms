@@ -514,7 +514,7 @@ class CourseCategory
                     $actions[] = Display::url(
                         $deleteIcon,
                         $deleteUrl,
-                        ['onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('ConfirmYourChoice')), ENT_QUOTES)).'\')) return false;',]
+                        ['onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('ConfirmYourChoice')), ENT_QUOTES)).'\')) return false;']
                     );
                 }
 

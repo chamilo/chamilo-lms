@@ -30,14 +30,17 @@ $tool_name = get_lang('Add courses to an URL');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 $interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('Multiple access URL / Branding')];
 
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
-echo '<div class="actions">';
-echo Display::url(
-    Display::return_icon('edit.png', get_lang('Edit courses of an URL'), ''),
-    api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php'
+echo Display::toolbarAction(
+    'url',
+    [
+        Display::url(
+            Display::return_icon('edit.png', get_lang('Edit courses of an URL'), ''),
+            api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php'
+        ),
+    ]
 );
-echo '</div>';
 
 api_display_tool_title($tool_name);
 
@@ -64,8 +67,8 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 $first_letter_course_lower = Database::escape_string(api_strtolower($first_letter_course));
 
 $sql = "SELECT code, title FROM $tbl_course
-		WHERE 
-            title LIKE '".$first_letter_course_lower."%' OR 
+		WHERE
+            title LIKE '".$first_letter_course_lower."%' OR
 		    title LIKE '".$first_letter_course_lower."%'
 		ORDER BY title, code DESC ";
 

@@ -255,11 +255,6 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get active.
-     *
-     * @return int
-     */
     public function getActive()
     {
         return $this->active;

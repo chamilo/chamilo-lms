@@ -24,19 +24,21 @@ $users = [];
 $tbl_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
-/*	Header	*/
 $tool_name = get_lang('Add users to an URL');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 $interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('Multiple access URL / Branding')];
 
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
-echo '<div class="actions">';
-echo Display::url(
-    Display::return_icon('edit.png', get_lang('Edit users and URLs'), ''),
-    api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php'
+echo Display::toolbarAction(
+    'url',
+    [
+        Display::url(
+            Display::return_icon('edit.png', get_lang('Edit users and URLs'), ''),
+            api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php'
+        ),
+    ]
 );
-echo '</div>';
 
 api_display_tool_title($tool_name);
 

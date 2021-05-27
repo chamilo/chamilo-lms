@@ -1948,7 +1948,7 @@ class UserManager
      *              When deletion is requested returns empty string.
      *              In case of internal error or negative validation returns FALSE.
      */
-    public static function update_user_picture($userId, UploadedFile $file, $crop = '')
+    public static function update_user_picture($userId, UploadedFile $file, string $crop = '')
     {
         if (empty($userId) || empty($file)) {
             return false;

@@ -5,7 +5,6 @@
 use Chamilo\CoreBundle\Framework\Container;
 
 $cidReset = true;
-// Including necessary libraries.
 require_once __DIR__.'/../inc/global.inc.php';
 
 // Section for the tabs
@@ -341,8 +340,7 @@ $form->addGroup($html_results_enabled);
 if ($form->validate()) {
     $check = Security::check_token('post');
     if (true) {
-        $user = $form->exportValues();
-
+        $user = $form->getSubmitValues();
         $lastname = $user['lastname'];
         $firstname = $user['firstname'];
         $official_code = $user['official_code'];
@@ -352,8 +350,15 @@ if ($form->validate()) {
         $status = (int) $user['status'];
         $language = $user['language'];
         $picture = $_FILES['picture'];
-        $platform_admin = (int) $user['admin']['platform_admin'];
-        $send_mail = (int) $user['mail']['send_mail'];
+        $platform_admin = 0;
+        if (isset($user['admin']) && isset($user['admin']['platform_admin'])) {
+            $platform_admin = (int) $user['admin']['platform_admin'];
+        }
+        $send_mail = 0;
+        if (isset($user['mail']) && isset($user['mail']['send_mail'])) {
+            $send_mail = (int) $user['mail']['send_mail'];
+        }
+
         $hr_dept_id = isset($user['hr_dept_id']) ? (int) $user['hr_dept_id'] : 0;
 
         if (isset($extAuthSource) && count($extAuthSource) > 0 &&
@@ -363,11 +368,11 @@ if ($form->validate()) {
             $password = 'PLACEHOLDER';
         } else {
             $auth_source = PLATFORM_AUTH_SOURCE;
-            $password = '1' == $user['password']['password_auto'] ? api_generate_password() : $user['password']['password'];
+            $password = '1' === $user['password']['password_auto'] ? api_generate_password() : $user['password']['password'];
         }
 
         $expiration_date = null;
-        if ('1' == $user['radio_expiration_date']) {
+        if ('1' === $user['radio_expiration_date']) {
             $expiration_date = $user['expiration_date'];
         }
 

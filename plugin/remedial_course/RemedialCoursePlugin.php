@@ -113,7 +113,9 @@ class RemedialCoursePlugin extends Plugin
         Exercise $objExercise,
         int $userId = 0,
         int $sessionId = 0,
-        bool $review = false
+        bool $review = false,
+        int $lpId = 0,
+        int $lpItemId = 0
     ): ?string {
         if ('true' !== $this->get(self::SETTING_ENABLED)) {
             return null;
@@ -149,7 +151,9 @@ class RemedialCoursePlugin extends Plugin
             $userId,
             $objExercise->iId,
             $objExercise->course_id,
-            $sessionId
+            $sessionId,
+            $lpId,
+            $lpItemId
         );
         $bestAttempt = Event::get_best_attempt_exercise_results_per_user(
             $userId,
@@ -243,8 +247,13 @@ class RemedialCoursePlugin extends Plugin
      * When a student takes an exam, and he gets an acceptable grade, he is enrolled in a series of courses that
      * represent the next level BT#18165.
      */
-    public function getAdvancedCourseList(Exercise $objExercise, int $userId = 0, int $sessionId = 0): ?string
-    {
+    public function getAdvancedCourseList(
+        Exercise $objExercise,
+        int $userId = 0,
+        int $sessionId = 0,
+        int $lpId = 0,
+        int $lpItemId = 0
+    ): ?string {
         if ('true' !== $this->get(self::SETTING_ENABLED)) {
             return null;
         }
@@ -271,7 +280,9 @@ class RemedialCoursePlugin extends Plugin
                 $userId,
                 $objExercise->iId,
                 $objExercise->course_id,
-                $sessionId
+                $sessionId,
+                $lpId,
+                $lpItemId
             );
             $bestAttempt['exe_result'] = 0;
 

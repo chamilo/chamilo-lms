@@ -274,7 +274,9 @@ if (isset($_REQUEST['comments']) &&
         $objExerciseTmp,
         $student_id,
         api_get_session_id(),
-        true
+        true,
+        $lp_id,
+        $lpItemId
     );
     if (null != $remedialMessage) {
         Display::addFlash(
@@ -284,7 +286,9 @@ if (isset($_REQUEST['comments']) &&
     $advancedMessage = RemedialCoursePlugin::create()->getAdvancedCourseList(
         $objExerciseTmp,
         $student_id,
-        api_get_session_id()
+        api_get_session_id(),
+        $lp_id,
+        $lpItemId
     );
     if (!empty($advancedMessage)) {
         $message = Display::return_message(

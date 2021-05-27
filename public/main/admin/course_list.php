@@ -123,7 +123,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
     }
 
     if ($getCount) {
-        $sql .= "GROUP BY course.code";
+        $sql .= " GROUP BY course.code";
         $res = Database::query($sql);
         $row = Database::fetch_array($res);
         if ($row) {
@@ -133,7 +133,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
         return 0;
     }
 
-    $sql .= "GROUP BY course.code";
+    $sql .= " GROUP BY course.code";
     $sql .= " ORDER BY col$column $direction ";
     $sql .= " LIMIT $from, $number_of_items";
 

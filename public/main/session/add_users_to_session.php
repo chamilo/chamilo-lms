@@ -9,7 +9,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 $xajax = new xajax();
 $xajax->registerFunction('search_users');
 
-// setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
 $id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;

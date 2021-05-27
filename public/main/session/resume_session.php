@@ -127,7 +127,7 @@ if ($isMultipleUrl) {
 }
 
 $url = Display::url(
-    Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
+    Display::return_icon('add.png', get_lang('Add'), [], ICON_SIZE_SMALL),
     "add_courses_to_session.php?page=resume_session.php&id_session=$sessionId"
 );
 $courseListToShow = Display::page_subheader(get_lang('Course list').$url);
@@ -268,7 +268,7 @@ if (0 === $session->getNbrCourses()) {
 $courseListToShow .= '</table><br />';
 
 $url = '&nbsp;'.Display::url(
-    Display::return_icon('user_subscribe_session.png', get_lang('Add')),
+    Display::return_icon('add.png', get_lang('Add')),
     $codePath."session/add_users_to_session.php?page=resume_session.php&id_session=$sessionId"
 );
 $url .= Display::url(

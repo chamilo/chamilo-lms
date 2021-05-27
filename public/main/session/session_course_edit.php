@@ -166,3 +166,4 @@ $form->setDefaults(['id_coach' => $selected]);
 $form->display();
 
 Display::display_footer();
+

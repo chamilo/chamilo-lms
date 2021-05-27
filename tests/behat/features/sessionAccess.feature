@@ -11,14 +11,11 @@ Feature: Session access
     And I fill in select2 input "#coach_username" with id "1" and value "admin"
     And I press "submit"
     Then I should see "Add courses to this session (Session1)"
-    Then I select "TEMP_PRIVATE (TEMPPRIVATE)" from "NoSessionCoursesList[]"
-    And I press "add_course"
-    And I press "next"
+    Then I fill in select2 input "#courses" with id "1" and value "TEMPPRIVATE"
+    And I press "submit"
     And wait very long for the page to be loaded
     Then I should see "Update successful"
     Then I should see "Subscribe users to this session"
-    Then I follow "Multiple registration"
-    And wait the page to be loaded when ready
     Then I select "Apple Maggart Fiona (fapple)" from "nosessionUsersList[]"
     And I press "add_user"
     And I press "next"

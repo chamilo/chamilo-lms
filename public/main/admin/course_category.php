@@ -37,13 +37,13 @@ switch ($action) {
         CourseCategory::delete($categoryId);
         Display::addFlash(Display::return_message(get_lang('Deleted')));
         header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
-        exit();
+        exit;
         break;
     case 'moveUp':
         CourseCategory::moveNodeUp($categoryId, $_GET['tree_pos'], $category);
         header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
         Display::addFlash(Display::return_message(get_lang('Update successful')));
-        exit();
+        exit;
         break;
     case 'add':
         if (isset($_POST['formSent']) && $_POST['formSent']) {
@@ -58,8 +58,7 @@ switch ($action) {
             if (isset($_FILES['image']) && $categoryEntity) {
                 CourseCategory::saveImage($categoryEntity, $_FILES['image']);
             }
-            $message = Display::return_message(get_lang('Created'));
-            Display::addFlash($message);
+            Display::addFlash(Display::return_message(get_lang('Item added')));
             header('Location: '.api_get_path(WEB_CODE_PATH).'admin/course_category.php?id='.$parentId);
             exit;
         }
@@ -84,9 +83,7 @@ switch ($action) {
                 CourseCategory::saveImage($categoryEntity, $_FILES['image']);
             }
 
-            $message = Display::return_message(get_lang('Update successful'));
-
-            Display::addFlash($message);
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
             header('Location: '.api_get_path(WEB_CODE_PATH).'admin/course_category.php?id='.$parentId);
             exit;
         }
@@ -210,7 +207,6 @@ if ('add' === $action || 'edit' === $action) {
     if (!empty($parentInfo)) {
         echo Display::page_subheader($parentInfo['name'].' ('.$parentInfo['code'].')');
     }
-
     echo CourseCategory::listCategories($categoryInfo);
 }
 

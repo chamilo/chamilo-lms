@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
@@ -31,7 +32,7 @@ function validate_data($users, $checkUniqueEmail = false)
 
     // 1. Check if mandatory fields are set.
     $mandatory_fields = ['LastName', 'FirstName'];
-    if ('true' == api_get_setting('registration', 'email') || $checkUniqueEmail) {
+    if ('true' === api_get_setting('registration', 'email') || $checkUniqueEmail) {
         $mandatory_fields[] = 'Email';
     }
 
@@ -81,7 +82,10 @@ function validate_data($users, $checkUniqueEmail = false)
         if (isset($user['Email'])) {
             $result = api_valid_email($user['Email']);
             if (false === $result) {
-                $user['message'] .= Display::return_message(get_lang('Please enter a valid e-mail address !'), 'warning');
+                $user['message'] .= Display::return_message(
+                    get_lang('Please enter a valid e-mail address !'),
+                    'warning'
+                );
                 $user['has_error'] = true;
             }
         }
@@ -781,7 +785,7 @@ $content .= '
         <b>&lt;FirstName&gt;xxx&lt;/FirstName&gt;</b>
         &lt;UserName&gt;xxx&lt;/UserName&gt;
         &lt;Password&gt;xxx&lt;/Password&gt;
-        &lt;AuthSource&gt;<?php echo implode(' / ', $defined_auth_sources); ?>&lt;/AuthSource&gt;
+        &lt;AuthSource&gt;'.implode(' / ', $defined_auth_sources).'&lt;/AuthSource&gt;
         <b>&lt;Email&gt;xxx&lt;/Email&gt;</b>
         &lt;OfficialCode&gt;xxx&lt;/OfficialCode&gt;
         &lt;language&gt;english/spanish/(other)&lt;/language&gt;

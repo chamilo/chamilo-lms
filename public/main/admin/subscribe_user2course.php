@@ -105,9 +105,17 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             }
 
             if (0 == $errorDrh) {
-                echo Display::return_message(get_lang('The selected users are subscribed to the selected course'), 'confirm');
+                echo Display::return_message(
+                    get_lang('The selected users are subscribed to the selected course'),
+                    'confirm'
+                );
             } else {
-                echo Display::return_message(get_lang('Human resources managers should not be registered to courses. The corresponding users you selected have not been subscribed.'), 'error');
+                echo Display::return_message(
+                    get_lang(
+                        'Human resources managers should not be registered to courses. The corresponding users you selected have not been subscribed.'
+                    ),
+                    'error'
+                );
             }
         }
     }

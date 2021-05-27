@@ -445,7 +445,6 @@ $table->setDataFunctionParams(['lps' => $lps]);
 $table->set_additional_parameters($parameters);
 $column = 0;
 foreach ($headers as $header) {
-    $lpName = $lp->getName();
     $table->set_header($column++, $header, false);
 }
 

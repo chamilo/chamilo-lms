@@ -303,7 +303,7 @@ class CourseLegalPlugin extends Plugin
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT *
                 FROM $table s INNER JOIN $userTable u
-                ON u.user_id = s.user_id
+                ON u.id = s.user_id
                 WHERE c_id = $courseId AND session_id = $sessionId ";
 
         if (!empty($order)) {

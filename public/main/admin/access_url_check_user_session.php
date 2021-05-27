@@ -67,12 +67,12 @@ foreach ($session_list as $session_item) {
         $access_where = '(access_url_id is null)';
     }
 
-    $sql = "SELECT u.user_id, lastname, firstname, username, access_url_id
+    $sql = "SELECT u.id as user_id, lastname, firstname, username, access_url_id
             FROM $tbl_user u
             INNER JOIN $tbl_session_rel_user su
-            ON u.user_id = su.user_id AND su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+            ON u.id = su.user_id AND su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
             LEFT OUTER JOIN $table_access_url_user uu
-            ON (uu.user_id = u.user_id)
+            ON (uu.user_id = u.id)
             WHERE su.session_id = $session_id AND $access_where
             $order_clause";
 

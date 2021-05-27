@@ -15,9 +15,12 @@ if (api_is_platform_admin()) {
     $tUser = Database::get_main_table(TABLE_MAIN_USER);
     $tApi = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
     $login = 'SEPE';
-    $sql = "SELECT a.api_key AS api 
-            FROM $tUser u, $tApi a 
-            WHERE u.username='".$login."' and u.user_id = a.user_id AND a.api_service = 'dokeos';";
+    $sql = "SELECT a.api_key AS api
+            FROM $tUser u, $tApi a
+            WHERE
+                u.username='".$login."' AND
+                u.id = a.user_id AND
+                .api_service = 'dokeos';";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $tmp = Database::fetch_assoc($result);

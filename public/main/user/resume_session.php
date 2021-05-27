@@ -314,18 +314,18 @@ if ('true' === $allowTutors) {
         $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 
         if ($multiple_url_is_on) {
-            $sql = "SELECT u.user_id, lastname, firstname, username, access_url_id
+            $sql = "SELECT u.id as user_id, lastname, firstname, username, access_url_id
                     FROM $tbl_user u
                     INNER JOIN $tbl_session_rel_user su
-                    ON u.user_id = su.user_id AND su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
-                    LEFT OUTER JOIN $table_access_url_user uu ON (uu.user_id = u.user_id)
+                    ON u.id = su.user_id AND su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                    LEFT OUTER JOIN $table_access_url_user uu ON (uu.user_id = u.id)
                     WHERE su.session_id = $id_session AND (access_url_id = $url_id OR access_url_id is null )
                     $order_clause";
         } else {
-            $sql = "SELECT u.user_id, lastname, firstname, username
+            $sql = "SELECT u.id as user_id, lastname, firstname, username
                     FROM $tbl_user u
                     INNER JOIN $tbl_session_rel_user su
-                    ON u.user_id = su.user_id AND su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                    ON u.id = su.user_id AND su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
                     AND su.session_id = ".$id_session.$order_clause;
         }
 
@@ -336,7 +336,8 @@ if ('true' === $allowTutors) {
         foreach ($users as $user) {
             $user_link = '';
             if (!empty($user['user_id'])) {
-                $user_link = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.intval($user['user_id']).'">'.
+                $user_link = '<a
+                    href="'.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.intval($user['user_id']).'">'.
                     api_htmlentities(api_get_person_name($user['firstname'], $user['lastname']), ENT_QUOTES, $charset).' ('.$user['username'].')</a>';
             }
 

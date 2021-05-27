@@ -100,7 +100,7 @@ if ($form->validate()) {
     if (strlen($course_code) > 0) {
         $sql .= " FROM $user_table u, $course_user_table cu
                     WHERE
-                        u.user_id = cu.user_id AND
+                        u.id = cu.user_id AND
                         cu.c_id = $courseId AND
                         cu.relation_type<>".COURSE_RELATION_TYPE_RRHH."
                     ORDER BY lastname,firstname";
@@ -108,7 +108,7 @@ if ($form->validate()) {
     } elseif (strlen($courseSessionCode) > 0) {
         $sql .= " FROM $user_table u, $session_course_user_table scu
                     WHERE
-                        u.user_id = scu.user_id AND
+                        u.id = scu.user_id AND
                         scu.c_id = $courseSessionId AND
                         scu.session_id = $sessionId
                     ORDER BY lastname,firstname";

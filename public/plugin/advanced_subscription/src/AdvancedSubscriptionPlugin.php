@@ -1217,7 +1217,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         }
         $queueTable = Database::get_main_table(TABLE_ADVANCED_SUBSCRIPTION_QUEUE);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
-        $userJoinTable = $queueTable.' q INNER JOIN '.$userTable.' u ON q.user_id = u.user_id';
+        $userJoinTable = $queueTable.' q INNER JOIN '.$userTable.' u ON q.user_id = u.id';
         $where = [
             'where' => [
                 'q.session_id = ?' => [

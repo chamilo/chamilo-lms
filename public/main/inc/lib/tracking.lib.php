@@ -4660,11 +4660,11 @@ class Tracking
                     ORDER BY title";
         } else {
             $sql = "SELECT c.id, c.code, title
-                    FROM $tbl_course_user u
+                    FROM $tbl_course_user cu
                     INNER JOIN $tbl_course c
-                    ON (c_id = c.id)
+                    ON (cu.c_id = c.id)
                     WHERE
-                        u.user_id= $user_id AND
+                        cu.user_id = $user_id AND
                         relation_type <> ".COURSE_RELATION_TYPE_RRHH."
                     ORDER BY title";
         }

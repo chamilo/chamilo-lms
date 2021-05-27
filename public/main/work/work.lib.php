@@ -1495,7 +1495,7 @@ function getAllWorkListStudent(
         }
 
         if ($withResults) {
-            $whereCondition = " AND u.user_id = $userId ";
+            $whereCondition = " AND u.id = $userId ";
             $workList = get_work_user_list(
                 0,
                 1000,

@@ -1100,7 +1100,7 @@ class SessionManager
                     $where $order $limit";
         } else {
             $sql = "SELECT
-                        u.user_id, u.lastname, u.firstname, u.username,
+                        u.id as user_id, u.lastname, u.firstname, u.username,
                         u.email, s.c_id, s.session_id
                     FROM $session_course_user s
                     INNER JOIN $user u ON u.id = s.user_id

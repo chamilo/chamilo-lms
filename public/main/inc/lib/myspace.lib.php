@@ -1979,10 +1979,10 @@ class MySpace
             //$users = Container::getSessionRepository()->getUsersByCourse($session, $course, $url);
 
             // get the users in the course
-            $sql = "SELECT u.user_id
+            $sql = "SELECT u.id as user_id
                     FROM $tbl_user AS u
                     INNER JOIN $tbl_session_rel_course_rel_user AS scu
-                    ON u.user_id = scu.user_id
+                    ON u.id = scu.user_id
                     WHERE scu.session_id = '".$session_id."' AND scu.c_id = '".$courseId."'";
             $result_users = Database::query($sql);
             $time_spent = 0;
@@ -2161,7 +2161,7 @@ class MySpace
                 $sql = "SELECT scu.user_id
                         FROM $tbl_user AS u
                         INNER JOIN $tbl_session_rel_course_rel_user AS scu
-                        ON u.user_id = scu.user_id
+                        ON u.id = scu.user_id
                         WHERE scu.session_id = '".$session_id."' AND scu.c_id = '".$courseId."'";
                 $result_users = Database::query($sql);
                 $time_spent = 0;
@@ -2771,9 +2771,9 @@ class MySpace
         $username = Database::escape_string($username);
         foreach ($course_list as $courseId) {
             $courseId = (int) $courseId;
-            $sql = " SELECT u.user_id FROM $tbl_session_rel_course_rel_user rel
+            $sql = " SELECT u.id as user_id FROM $tbl_session_rel_course_rel_user rel
                      INNER JOIN $table_user u
-                     ON (rel.user_id = u.user_id)
+                     ON (rel.user_id = u.id)
                      WHERE
                         rel.session_id='$id_session' AND
                         u.status='5' AND
@@ -3904,7 +3904,7 @@ class MySpace
 
         if (isset($_GET['student_id']) && !empty($_GET['student_id'])) {
             $userId = (int) $_GET['student_id'];
-            $sql .= " AND u.user_id = ".$userId;
+            $sql .= " AND u.id = ".$userId;
         }
 
         $sql .= " AND u.status <> ".ANONYMOUS;

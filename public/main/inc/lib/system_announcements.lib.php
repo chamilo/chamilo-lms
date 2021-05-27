@@ -823,7 +823,7 @@ class SystemAnnouncementManager
         if (api_is_multiple_url_enabled()) {
             $current_access_url_id = api_get_current_access_url_id();
             $url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-            $urlJoin = " INNER JOIN $url_rel_user uu ON uu.user_id = u.user_id ";
+            $urlJoin = " INNER JOIN $url_rel_user uu ON uu.user_id = u.id ";
             $urlCondition = " AND access_url_id = '".$current_access_url_id."' ";
         }
 

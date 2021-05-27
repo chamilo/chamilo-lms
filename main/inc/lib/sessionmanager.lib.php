@@ -9597,7 +9597,7 @@ class SessionManager
         $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        $relationInfo = array_merge(['visiblity' => 0, 'status' => Session::STUDENT], $relationInfo);
+        $relationInfo = array_merge(['visibility' => 0, 'status' => Session::STUDENT], $relationInfo);
 
         $sessionCourseUser = [
             'session_id' => $sessionId,

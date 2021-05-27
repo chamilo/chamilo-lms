@@ -224,14 +224,20 @@ class RemedialCoursePlugin extends Plugin
 
                 if ($courseExistsInSession) {
                     SessionManager::subscribe_users_to_session_course([$userId], $sessionId, $courseData['code']);
-                    $courses[] = $courseData['title'];
+                    $courses[] = Display::url(
+                        $courseData['title'],
+                        api_get_course_url($courseData['code'], $sessionId)
+                    );
                 }
             } else {
                 $isSubscribed = CourseManager::is_user_subscribed_in_course($userId, $courseData['code']);
 
                 if (!$isSubscribed) {
                     CourseManager::subscribeUser($userId, $courseData['code']);
-                    $courses[] = $courseData['title'];
+                    $courses[] = Display::url(
+                        $courseData['title'],
+                        api_get_course_url($courseData['code'])
+                    );
                 }
             }
         }
@@ -368,7 +374,10 @@ class RemedialCoursePlugin extends Plugin
                 );
             }
 
-            $courses[] = $courseData['title'];
+            $courses[] = Display::url(
+                $courseData['title'],
+                api_get_course_url($courseData['code'], $sessionId)
+            );
         }
 
         if (empty($courses)) {

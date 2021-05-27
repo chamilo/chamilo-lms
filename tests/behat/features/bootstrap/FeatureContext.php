@@ -348,6 +348,17 @@ class FeatureContext extends MinkContext
     }
 
     /**
+     * @When /^(?:|I )fill in ajax select2 input "(?P<field>(?:[^"]|\\")*)" with id "(?P<id>(?:[^"]|\\")*)" and value "(?P<value>(?:[^"]|\\")*)"$/
+     */
+    public function iFillInAjaxSelectInputWithAndSelect($field, $id, $value)
+    {
+        $this->getSession()->executeScript("
+            var newOption = new Option('$value', $id, true, true);
+            $('$field').append(newOption).trigger('change');
+        ");
+    }
+
+    /**
      * @When /^(?:|I )confirm the popup$/
      */
     public function confirmPopup()

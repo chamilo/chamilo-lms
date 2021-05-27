@@ -40,26 +40,26 @@ $form = new FormValidator(
 );
 $form->addHidden('id_session', $sessionId);
 $form->addHidden('add', $add);
-
 $form->addSelectAjax(
     'courses',
     get_lang('Course'),
-    null,
+    [],
     [
+        'id' => 'courses',
         'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
-        'multiple' => 'multiple'
+        'multiple' => 'multiple',
     ]
 );
 
-$form->addCheckBox('copy_evaluation', null, get_lang('Import gradebook from base course'));
+$form->addCheckBox('copy_evaluation', '', get_lang('Import gradebook from base course'));
 $form->addCheckBox(
     'import_teachers_as_course_coach',
-    null,
+    '',
     get_lang('Import course teachers as course coach in the session')
 );
 $form->addCheckBox(
     'import_assignments',
-    null,
+    '',
     get_lang('Import assignments from base course')
 );
 $form->addButtonSave(get_lang('Add'));
@@ -67,21 +67,24 @@ $form->addButtonSave(get_lang('Add'));
 $contentForm = $form->returnForm();
 if ($form->validate()) {
     $data = $form->getSubmitValues();
-    $courseList = $data['courses'];
-    $copyEvaluation = isset($data['copy_evaluation']);
-    $copyCourseTeachersAsCoach = isset($data['import_teachers_as_course_coach']);
-    $importAssignments = isset($data['import_assignments']);
+    $courseList = $data['courses'] ?? [];
 
-    SessionManager::add_courses_to_session(
-        $sessionId,
-        $courseList,
-        false,
-        $copyEvaluation,
-        $copyCourseTeachersAsCoach,
-        $importAssignments
-    );
+    if (!empty($courseList)) {
+        $copyEvaluation = isset($data['copy_evaluation']);
+        $copyCourseTeachersAsCoach = isset($data['import_teachers_as_course_coach']);
+        $importAssignments = isset($data['import_assignments']);
 
-    Display::addFlash(Display::return_message(get_lang('Update successful')));
+        SessionManager::add_courses_to_session(
+            $sessionId,
+            $courseList,
+            false,
+            $copyEvaluation,
+            $copyCourseTeachersAsCoach,
+            $importAssignments
+        );
+
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
+    }
 
     $url = api_get_path(WEB_CODE_PATH).'session/';
     if ($add) {
@@ -98,8 +101,6 @@ if (!api_is_platform_admin() && api_is_teacher()) {
         COURSEMANAGER
     );
 }
-
-unset($Courses);
 
 echo Display::page_header($tool_name.' ('.$session->getName().')');
 echo $contentForm;

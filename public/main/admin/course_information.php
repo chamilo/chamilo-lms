@@ -97,13 +97,16 @@ $interbreadcrumb[] = ['url' => 'course_list.php', 'name' => get_lang('Courses')]
 $courseId = $courseInfo['real_id'];
 $tool_name = $courseInfo['title'].' ('.$courseInfo['visual_code'].')';
 Display::display_header($tool_name);
-?>
-    <div class="actions">
-        <a href="<?php echo $courseInfo['course_public_url']; ?>">
-            <?php Display::display_icon('home.png', get_lang('Course home'), [], ICON_SIZE_MEDIUM); ?>
-        </a>
-    </div>
-<?php
+
+echo Display::toolbarAction(
+    'info',
+    [
+        Display::url(
+            Display::return_icon('home.png', get_lang('Course home'), [], ICON_SIZE_MEDIUM),
+            $courseInfo['course_public_url']
+        ),
+    ]
+);
 
 /*echo Display::page_header(get_lang('Course usage'));
 $table = new SortableTableFromArray(

@@ -835,6 +835,6 @@ class Database
 
     public static function escapeField($field)
     {
-        return self::escape_string(preg_replace("/[^a-zA-Z0-9_]/", '', $field));
+        return self::escape_string(preg_replace("/[^a-zA-Z0-9_.]/", '', $field));
     }
 }

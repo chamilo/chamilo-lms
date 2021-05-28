@@ -107,6 +107,8 @@ function getWhereClause($col, $oper, $val)
         'nc' => 'NOT LIKE',  //doesn't contain
     ];
 
+    $col = Database::escapeField($col);
+
     if (empty($col)) {
         return '';
     }

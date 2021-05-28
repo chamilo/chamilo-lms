@@ -266,9 +266,9 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
             $file_comments = $_POST['legend'];
             $title = $default['title'];
             $content = $default['content'];
-            $group_id = isset($default['group_id']) ? $default['group_id'] : null;
-            $parent_id = isset($default['parent_id']) ? $default['parent_id'] : null;
-            $forwardId = isset($_POST['forward_id']) ? $_POST['forward_id'] : false;
+            $group_id = $default['group_id'] ?? null;
+            $parent_id = $default['parent_id'] ?? null;
+            $forwardId = $_POST['forward_id'] ?? false;
 
             if (is_array($user_list) && count($user_list) > 0) {
                 // All is well, send the message
@@ -375,12 +375,10 @@ if ($allowSocial) {
         Display::return_icon('back.png', get_lang('Back'), [], 32).'</a>';
 
     $social_right_content .= Display::toolbarAction('toolbar', [$actions]);
-
     $social_right_content .= '</div>';
     $social_right_content .= '<div class="col-md-12">';
 }
 
-// MAIN CONTENT
 if (!isset($_POST['compose'])) {
     if (isset($_GET['re_id'])) {
         $social_right_content .= show_compose_reply_to_message(
@@ -422,7 +420,10 @@ if (!isset($_POST['compose'])) {
             }
             $social_right_content .= manageForm($default, null, null, $tpl);
         } else {
-            $social_right_content .= Display::return_message(get_lang('There was an error while trying to send the message.'), 'error');
+            $social_right_content .= Display::return_message(
+                get_lang('There was an error while trying to send the message.'),
+                'error'
+            );
         }
     }
 }

@@ -12,8 +12,6 @@ use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
- * Class MessageManager.
- *
  * This class provides methods for messages management.
  * Include/require it in your code to use its features.
  */
@@ -497,7 +495,7 @@ class MessageManager
         }
 
         // Disabling messages for inactive users.
-        if (0 == $userRecipient->getActive()) {
+        if (!$userRecipient->getActive()) {
             return false;
         }
 
@@ -537,8 +535,7 @@ class MessageManager
                         'end_pause_date'
                     );
 
-                    if (
-                        !empty($startDate) && isset($startDate['value']) && !empty($startDate['value']) &&
+                    if (!empty($startDate) && isset($startDate['value']) && !empty($startDate['value']) &&
                         !empty($endDate) && isset($endDate['value']) && !empty($endDate['value'])
                     ) {
                         $now = time();
@@ -558,8 +555,8 @@ class MessageManager
         if (is_array($attachments)) {
             $counter = 0;
             foreach ($attachments as $attachment) {
-                $attachment['comment'] = isset($fileCommentList[$counter]) ? $fileCommentList[$counter] : '';
-                $fileSize = isset($attachment['size']) ? $attachment['size'] : 0;
+                $attachment['comment'] = $fileCommentList[$counter] ?? '';
+                $fileSize = $attachment['size'] ?? 0;
                 if (is_array($fileSize)) {
                     foreach ($fileSize as $size) {
                         $totalFileSize += $size;
@@ -574,21 +571,11 @@ class MessageManager
 
         if ($checkCurrentAudioId) {
             // Add the audio file as an attachment
-            $audioId = Session::read('current_audio_id');
-            if (!empty($audioId)) {
-                $file = api_get_uploaded_file('audio_message', api_get_user_id(), $audioId);
-                if (!empty($file)) {
-                    $audioAttachment = [
-                        'name' => basename($file),
-                        'comment' => 'audio_message',
-                        'size' => filesize($file),
-                        'tmp_name' => $file,
-                        'error' => 0,
-                        'type' => DocumentManager::file_get_mime_type(basename($file)),
-                    ];
-                    // create attachment from audio message
-                    $attachmentList[] = $audioAttachment;
-                }
+            $audio = Session::read('current_audio');
+            if (!empty($audio) && isset($audio['name']) && !empty($audio['name'])) {
+                $audio['comment'] = 'audio_message';
+                // create attachment from audio message
+                $attachmentList[] = $audio;
             }
         }
 
@@ -613,9 +600,6 @@ class MessageManager
             return false;
         }
 
-        $now = api_get_utc_datetime();
-        $table = Database::get_main_table(TABLE_MESSAGE);
-
         $em = Database::getManager();
         $repo = $em->getRepository(Message::class);
         $parent = null;
@@ -624,17 +608,17 @@ class MessageManager
         }
 
         $message = null;
-
         // Just in case we replace the and \n and \n\r while saving in the DB
         if (!empty($receiverUserId) || !empty($group_id)) {
             // message for user friend
             //@todo it's possible to edit a message? yes, only for groups
             if (!empty($editMessageId)) {
-                $query = " UPDATE $table SET
-                              update_date = '".$now."',
-                              content = '".Database::escape_string($content)."'
-                           WHERE id = '$editMessageId' ";
-                Database::query($query);
+                $message = $repo->find($editMessageId);
+                if (null !== $message) {
+                    $message->setContent($content);
+                    $em->persist($message);
+                    $em->flush();
+                }
                 $messageId = $editMessageId;
             } else {
                 $message = new Message();
@@ -668,15 +652,11 @@ class MessageManager
             // Save attachment file for inbox messages
             if (is_array($attachmentList)) {
                 foreach ($attachmentList as $attachment) {
-                    if (0 == $attachment['error']) {
-                        $comment = $attachment['comment'];
+                    if (0 === $attachment['error']) {
                         self::saveMessageAttachmentFile(
                             $attachment,
-                            $comment,
+                            $attachment['comment'] ?? '',
                             $message,
-                            null,
-                            $receiverUserId,
-                            $group_id
                         );
                     }
                 }
@@ -976,7 +956,7 @@ class MessageManager
         $new_file_name = add_ext_on_mime(stripslashes($file['name']), $type);
 
         // user's file name
-        $file_name = $file['name'];
+        $fileName = $file['name'];
         if (!filter_extension($new_file_name)) {
             Display::addFlash(
                 Display::return_message(
@@ -984,38 +964,56 @@ class MessageManager
                     'error'
                 )
             );
-        } else {
-            $em = Database::getManager();
-            $attachmentRepo = Container::getMessageAttachmentRepository();
 
-            $attachment = new MessageAttachment();
-            $attachment
-                ->setSize($file['size'])
-                ->setPath($file_name)
-                ->setFilename($file_name)
-                ->setComment($comment)
-                ->setParent($message->getUserSender())
-                ->setMessage($message)
-            ;
+            return false;
+        }
 
-            $request = Container::getRequest();
-            $fileToUpload = null;
-            /** @var UploadedFile $fileRequest */
+        $em = Database::getManager();
+        $attachmentRepo = Container::getMessageAttachmentRepository();
+
+        $attachment = new MessageAttachment();
+        $attachment
+            ->setSize($file['size'])
+            ->setPath($fileName)
+            ->setFilename($fileName)
+            ->setComment($comment)
+            ->setParent($message->getUserSender())
+            ->setMessage($message)
+        ;
+
+        $request = Container::getRequest();
+        $fileToUpload = null;
+
+        // Search for files inside the $_FILES, when uploading several files from the form.
+        if ($request->files->count()) {
+            /** @var UploadedFile|null $fileRequest */
             foreach ($request->files->all() as $fileRequest) {
+                if (null === $fileRequest) {
+                    continue;
+                }
                 if ($fileRequest->getClientOriginalName() === $file['name']) {
                     $fileToUpload = $fileRequest;
                     break;
                 }
             }
+        }
 
+        // If no found file, try with $file['content'].
+        if (null === $fileToUpload && isset($file['content'])) {
+            $handle = tmpfile();
+            fwrite($handle, $file['content']);
+            $meta = stream_get_meta_data($handle);
+            $fileToUpload = new UploadedFile($meta['uri'], $fileName, $file['type'], null, true);
+        }
+
+        if (null !== $fileToUpload) {
             $em->persist($attachment);
-
-            if (null !== $fileToUpload) {
-                $attachmentRepo->addFile($attachment, $fileToUpload);
-                $attachment->addUserLink($message->getUserSender());
-                $attachment->addUserLink($message->getUserReceiver());
-            }
+            $attachmentRepo->addFile($attachment, $fileToUpload);
+            $attachment->addUserLink($message->getUserSender());
+            $attachment->addUserLink($message->getUserReceiver());
             $em->flush();
+
+            return true;
         }
 
         return false;
@@ -1361,12 +1359,6 @@ class MessageManager
         $userImage = '';
         if (null !== $message->getUserSender()) {
             $name = UserManager::formatUserFullName($message->getUserSender());
-            /*$userImage = Display::img(
-                $fromUser['avatar_small'],
-                $name,
-                ['title' => $name, 'class' => 'img-responsive img-circle', 'style' => 'max-width:35px'],
-                false
-            );*/
         }
 
         $messageContent = Display::page_subheader(str_replace("\\", '', $title));
@@ -2000,7 +1992,6 @@ class MessageManager
      */
     public static function getAttachmentLinkList(Message $message)
     {
-        //$files = self::getAttachmentList($message);
         $files = $message->getAttachments();
         // get file attachments by message id
         $list = [];
@@ -2927,11 +2918,7 @@ class MessageManager
      */
     public static function cleanAudioMessage()
     {
-        $audioId = Session::read('current_audio_id');
-        if (!empty($audioId)) {
-            api_remove_uploaded_file_by_id('audio_message', api_get_user_id(), $audioId);
-            Session::erase('current_audio_id');
-        }
+        Session::erase('current_audio');
     }
 
     /**

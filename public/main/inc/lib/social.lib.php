@@ -1512,7 +1512,7 @@ class SocialManager extends UserManager
         $allowedTypes[] = 'ogg';
 
         if (in_array($extension, $allowedTypes)) {
-            return MessageManager::saveMessageAttachmentFile($fileAttach, $fileComment, $message, $userId);
+            return MessageManager::saveMessageAttachmentFile($fileAttach, $fileComment, $message);
         }
 
         return false;

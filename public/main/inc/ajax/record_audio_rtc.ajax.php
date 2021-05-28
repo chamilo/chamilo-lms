@@ -98,8 +98,6 @@ switch ($type) {
                     //'message' => Display::getFlashToString(),
                     'fileUrl' => $data['document_url'],
                 ]);
-
-                //Display::cleanFlashMessages();
                 exit;
             }
 
@@ -108,8 +106,10 @@ switch ($type) {
 
         break;
     case 'message':
-        Session::write('current_audio_id', $file['name']);
-        api_upload_file('audio_message', $file, api_get_user_id());
-
+        if (isset($_FILES['audio_blob']['tmp_name'])) {
+            $file['content'] = file_get_contents($_FILES['audio_blob']['tmp_name']);
+            Session::write('current_audio', $file);
+            echo 1;
+        }
         break;
 }

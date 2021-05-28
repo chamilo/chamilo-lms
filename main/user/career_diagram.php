@@ -13,7 +13,7 @@ ALTER TABLE extra_field_values modify column value longtext null;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (api_get_configuration_value('allow_career_diagram') === false) {
+if (false === api_get_configuration_value('allow_career_diagram')) {
     api_not_allowed(true);
 }
 

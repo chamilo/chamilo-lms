@@ -6,7 +6,7 @@
         min-width: 100% !important;
     }
 </style>
-<script type="text/javascript" src="{{ _p.web_lib }}mxgraph/src/js/mxClient.js"></script>
+<script src="{{ _p.web_lib }}mxgraph/src/js/mxClient.js"></script>
 <script>
     // Overridden to define per-shape connection points
     mxGraph.prototype.getAllConnectionConstraints = function(terminal, source) {

@@ -38,7 +38,6 @@ api_protect_admin_script($allowCareer);
 
 $htmlHeadXtra[] = api_get_js('jsplumb2.js');
 
-
 $career = new Career();
 $careerInfo = $career->get($careerId);
 if (empty($careerInfo)) {

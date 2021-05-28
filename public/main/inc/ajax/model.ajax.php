@@ -109,6 +109,8 @@ function getWhereClause($col, $oper, $val)
         'nc' => 'NOT LIKE',  //doesn't contain
     ];
 
+    $col = Database::escapeField($col);
+
     if (empty($col)) {
         return '';
     }
@@ -1442,8 +1444,9 @@ switch ($action) {
         }
 
         $whereCondition = " AND $whereCondition ";
+        $columnOrderValidList = array_merge(['firstname', 'lastname'], $columns);
+        $sidx = in_array($sidx, $columnOrderValidList) ? $sidx : 'title';
 
-        $sidx = in_array($sidx, $columns) ? $sidx : 'title';
         $result = get_work_user_list(
             $start,
             $limit,
@@ -2505,18 +2508,11 @@ switch ($action) {
                 }
                 $result = $obj->getUserGroupNotInCourse(
                     $options,
-                    $groupFilter,
-                    false,
-                    true
+                    $groupFilter
                 );
                 break;
             case 'registered':
-                $result = $obj->getUserGroupInCourse(
-                    $options,
-                    $groupFilter,
-                    false,
-                    true
-                );
+                $result = $obj->getUserGroupInCourse($options, $groupFilter);
                 break;
         }
 

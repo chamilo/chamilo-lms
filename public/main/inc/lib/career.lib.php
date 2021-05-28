@@ -917,6 +917,10 @@ class Career extends Model
                         $iconData['Description'] = 'Result Id = '.$resultId;
                     }
 
+                    if ('Joe Anonymous' === $iconData['TeacherUsername']) {
+                        $iconData['TeacherUsername'] = '';
+                    }
+
                     if (!empty($icon)) {
                         $params = [
                             'id' => 'course_'.$id.'_'.$resultId,

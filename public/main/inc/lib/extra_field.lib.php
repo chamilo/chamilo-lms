@@ -8,9 +8,6 @@ use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Framework\Container;
 
-/**
- * Class ExtraField.
- */
 class ExtraField extends Model
 {
     public const FIELD_TYPE_TEXT = 1;
@@ -1584,7 +1581,7 @@ class ExtraField extends Model
                         if ($freezeElement) {
                             $form->freeze('extra_'.$variable);
                         }
-                        break;                        
+                        break;
                     case self::FIELD_TYPE_FILE:
                         $fieldVariable = "extra_{$variable}";
                         $fieldTexts = [
@@ -3195,9 +3192,7 @@ JAVASCRIPT;
             }
         }
 
-        /** @var \HTML_QuickForm_select $slct */
-        $slct = $form->addElement(
-            'select',
+        $select = $form->addSelect(
             'extra_'.$fieldDetails['variable'],
             $fieldDetails['display_text'],
             [],
@@ -3205,19 +3200,19 @@ JAVASCRIPT;
         );
 
         if (empty($defaultValueId)) {
-            $slct->addOption(get_lang('Please select an option'));
+            $select->addOption(get_lang('Please select an option'), '');
         }
 
         foreach ($options as $value => $text) {
             if (empty($value)) {
-                $slct->addOption($text, $value);
+                $select->addOption($text, $value);
                 continue;
             }
 
             $valueParts = explode('#', $text);
             $dataValue = count($valueParts) > 1 ? array_shift($valueParts) : '';
 
-            $slct->addOption(implode('', $valueParts), $value, ['data-value' => $dataValue]);
+            $select->addOption(implode('', $valueParts), $value, ['data-value' => $dataValue]);
         }
 
         if ($freezeElement) {

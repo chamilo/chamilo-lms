@@ -6666,6 +6666,44 @@ class CourseManager
         return Display::tabsOnlyLink($tabs, $default);
     }
 
+    public static function getUrlMarker($courseId)
+    {
+        if (UrlManager::getCountAccessUrlFromCourse($courseId) > 1) {
+            return '&nbsp;'.Display::returnFontAwesomeIcon(
+                'link',
+                null,
+                null,
+                null,
+                get_lang('CourseUsedInOtherURL')
+            );
+        }
+
+        return '';
+    }
+
+    public static function insertUserInCourse(int $studentId, int $courseId, array $relationInfo = [])
+    {
+        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
+        $relationInfo = array_merge(
+            ['relation_type' => 0, 'status' => STUDENT, 'sort' => 0, 'user_course_cat' => 0],
+            $relationInfo
+        );
+
+        Database::insert(
+            $courseUserTable,
+            [
+                'c_id' => $courseId,
+                'user_id' => $studentId,
+                'status' => $relationInfo['status'],
+                'sort' => $relationInfo['sort'],
+                'relation_type' => $relationInfo['relation_type'],
+                'user_course_cat' => $relationInfo['user_course_cat'],
+            ]
+        );
+
+        Event::logSubscribedUserInCourse($studentId, $courseId);
+    }
     /**
      * Check if a specific access-url-related setting is a problem or not.
      *

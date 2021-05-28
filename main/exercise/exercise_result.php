@@ -275,8 +275,8 @@ $advancedCourseMessage = RemedialCoursePlugin::create()->getAdvancedCourseList(
     $objExercise,
     api_get_user_id(),
     api_get_session_id(),
-    $learnpath_id,
-    $learnpath_item_id
+    $learnpath_id ?: 0,
+    $learnpath_item_id ?: 0
 );
 if (null != $advancedCourseMessage) {
     Display::addFlash(
@@ -289,8 +289,8 @@ $remedialMessage = RemedialCoursePlugin::create()->getRemedialCourseList(
     api_get_user_id(),
     api_get_session_id(),
     false,
-    $learnpath_id,
-    $learnpath_item_id
+    $learnpath_id ?: 0,
+    $learnpath_item_id ?: 0
 );
 
 if (null != $remedialMessage) {

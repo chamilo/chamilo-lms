@@ -275,8 +275,8 @@ if (isset($_REQUEST['comments']) &&
         $student_id,
         api_get_session_id(),
         true,
-        $lp_id,
-        $lpItemId
+        $lp_id ?: 0,
+        $lpItemId ?: 0
     );
     if (null != $remedialMessage) {
         Display::addFlash(
@@ -287,8 +287,8 @@ if (isset($_REQUEST['comments']) &&
         $objExerciseTmp,
         $student_id,
         api_get_session_id(),
-        $lp_id,
-        $lpItemId
+        $lp_id ?: 0,
+        $lpItemId ?: 0
     );
     if (!empty($advancedMessage)) {
         $message = Display::return_message(

@@ -6858,8 +6858,8 @@ class Exercise
                 $this,
                 $userId,
                 api_get_session_id(),
-                $lpId,
-                $lpItemId
+                $lpId ?: 0,
+                $lpItemId ?: 0
             );
             if ($attemptCount >= $exerciseAttempts) {
                 $message .= $remedialCoursePlugin->getRemedialCourseList(
@@ -6867,8 +6867,8 @@ class Exercise
                     $userId,
                     api_get_session_id(),
                     false,
-                    $lpId,
-                    $lpItemId
+                    $lpId ?: 0,
+                    $lpItemId ?: 0
                 );
             }
         }

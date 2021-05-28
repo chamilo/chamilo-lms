@@ -23,6 +23,15 @@ Feature: Session access
     Then I should see "TEMPPRIVATE"
     Then I should see "fapple"
 
+  Scenario: Check if same session exists.
+    Given I am a platform administrator
+    And I am on "/main/session/session_add.php"
+    When I fill in the following:
+      | name | Session1 |
+    And I fill in select2 input "#coach_username" with id "1" and value "admin"
+    And I press "submit"
+    Then I should see "Session name already exists"
+
   @javascript
   Scenario: Create session 2
     Given I am a platform administrator

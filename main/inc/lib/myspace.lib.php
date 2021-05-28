@@ -1514,10 +1514,6 @@ class MySpace
 
     /**
      *  Displays a list as a table of teachers who are set authors of lp's item by a extra_field authors.
-     *
-     * @param string|null $startDate
-     * @param string|null $endDate
-     * @param bool        $csv
      */
     public static function displayResumeLpByItem(string $startDate = null, string $endDate = null, bool $csv = false)
     {

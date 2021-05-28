@@ -14,8 +14,21 @@ ALTER TABLE extra_field_values modify column value longtext null;
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (false == api_get_configuration_value('allow_career_diagram')) {
+if (false === api_get_configuration_value('allow_career_diagram')) {
     api_not_allowed(true);
+}
+
+$careerId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+//$userId = isset($_GET['user_id']) ? $_GET['user_id'] : api_get_user_id();
+
+if (empty($careerId)) {
+    api_not_allowed(true);
+}
+
+// Redirect to user/career_diagram.php if not admin/drh BT#18720
+if (!(api_is_platform_admin() || api_is_drh())) {
+    $url = api_get_path(WEB_CODE_PATH).'user/career_diagram.php?career_id='.$careerId;
+    api_location($url);
 }
 
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -24,11 +37,6 @@ $allowCareer = api_get_configuration_value('allow_session_admin_read_careers');
 api_protect_admin_script($allowCareer);
 
 $htmlHeadXtra[] = api_get_js('jsplumb2.js');
-
-$careerId = isset($_GET['id']) ? $_GET['id'] : 0;
-if (empty($careerId)) {
-    api_not_allowed(true);
-}
 
 $career = new Career();
 $careerInfo = $career->get($careerId);

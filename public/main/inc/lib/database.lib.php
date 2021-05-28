@@ -752,8 +752,8 @@ class Database
         return self::getManager()->getConnection()->getSchemaManager()->listTableColumns($table);
     }
 
-    public static function escapeField($field)
+    public static function escapeField($field): string
     {
-        return self::escape_string(preg_replace("/[^a-zA-Z0-9_]/", '', $field));
+        return self::escape_string(preg_replace("/[^a-zA-Z0-9_.]/", '', $field));
     }
 }

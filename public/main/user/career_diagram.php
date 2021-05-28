@@ -13,13 +13,15 @@ ALTER TABLE extra_field_values modify column value longtext null;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (false == api_get_configuration_value('allow_career_diagram')) {
+if (false === api_get_configuration_value('allow_career_diagram')) {
     api_not_allowed(true);
 }
+api_block_anonymous_users();
 
 $this_section = SECTION_COURSES;
 
 $careerId = isset($_GET['career_id']) ? $_GET['career_id'] : 0;
+$userId = isset($_GET['user_id']) ? $_GET['user_id'] : api_get_user_id();
 
 if (empty($careerId)) {
     api_not_allowed(true);
@@ -30,11 +32,9 @@ $careerInfo = $career->get($careerId);
 if (empty($careerInfo)) {
     api_not_allowed(true);
 }
+$allow = UserManager::userHasCareer($userId, $careerId) || api_is_platform_admin() || api_is_drh();
 
-$userId = api_get_user_id();
-$allow = UserManager::userHasCareer($userId, $careerId) || api_is_platform_admin();
-
-if (false === $allow) {
+if ($allow === false) {
     api_not_allowed(true);
 }
 
@@ -80,7 +80,8 @@ if (!empty($itemUrls) && !empty($itemUrls['value'])) {
     }
 }
 
-$tpl = new Template(get_lang('Diagram'));
+$showFullPage = isset($_REQUEST['iframe']) && 1 === (int) $_REQUEST['iframe'] ? false : true;
+$tpl = new Template(get_lang('Diagram'), $showFullPage, $showFullPage, !$showFullPage);
 $html = Display::page_subheader2($careerInfo['name'].$urlToString);
 $diagram = Career::renderDiagramByColumn($careerInfo, $tpl, $userId);
 
@@ -96,5 +97,9 @@ if (!empty($diagram)) {
 }
 
 $tpl->assign('content', $html);
-$layout = $tpl->get_template('career/diagram.tpl');
+if ($showFullPage) {
+    $layout = $tpl->get_template('career/diagram_full.tpl');
+} else {
+    $layout = $tpl->get_template('career/diagram_iframe.tpl');
+}
 $tpl->display($layout);

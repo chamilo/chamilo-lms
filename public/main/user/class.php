@@ -7,7 +7,7 @@ $this_section = SECTION_COURSES;
 
 api_protect_course_script(true, false, 'user');
 
-if ('false' == api_get_setting('allow_user_course_subscription_by_course_admin')) {
+if ('false' === api_get_setting('allow_user_course_subscription_by_course_admin')) {
     if (!api_is_platform_admin()) {
         api_not_allowed(true);
     }
@@ -17,7 +17,6 @@ $tool_name = get_lang('Classes');
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
-// Extra entries in breadcrumb
 $interbreadcrumb[] = [
     'url' => 'user.php?'.api_get_cidreq(),
     'name' => get_lang('Users'),
@@ -105,20 +104,9 @@ if (api_is_allowed_to_edit()) {
             if (!empty($id)) {
                 $usergroup->unsubscribe_courses_from_usergroup(
                     $id,
-                    [api_get_course_int_id()],
-                    $sessionId
+                    [api_get_course_int_id()]
                 );
                 Display::addFlash(Display::return_message(get_lang('Deleted')));
-                $user_list = $usergroup->get_users_by_usergroup($id);
-                if (!empty($user_list)) {
-                    foreach ($user_list as $user_id) {
-                        SessionManager::unsubscribe_user_from_session($id, $user_id);
-                    }
-                }
-                Database::delete(
-                    $usergroup->usergroup_rel_session_table,
-                    ['usergroup_id = ? AND session_id = ?' => [$id, $sessionId]]
-                );
             }
             break;
     }

@@ -6881,4 +6881,5 @@ Deze module maakt deel uit van de opleiding %s.";
 $YourNextModule = "Jouw eerstvolgende lesmoment voor de module";
 $FirstLesson = "Eerste lesmoment";
 $UserGuides = "Gidsen voor gebruikers";
+$OngoingTraining = "Lopende opleiding(en)";
 ?>

@@ -22,10 +22,14 @@ class Rest extends WebService
 
     public const GET_AUTH = 'authenticate';
     public const GET_USER_MESSAGES = 'user_messages';
+    public const GET_USER_COURSES = 'user_courses';
+    public const GET_USER_SESSIONS = 'user_sessions';
+    public const GET_USERS_SUBSCRIBED_TO_COURSE = 'get_users_subscribed_to_course';
+    public const GET_USER_MESSAGES_RECEIVED = 'user_messages_received';
+    public const GET_USER_MESSAGES_SENT = 'user_messages_sent';
     public const POST_USER_MESSAGE_READ = 'user_message_read';
     public const POST_USER_MESSAGE_UNREAD = 'user_message_unread';
     public const SAVE_GCM_ID = 'gcm_id';
-    public const GET_USER_COURSES = 'user_courses';
     public const GET_PROFILE = 'user_profile';
     public const GET_COURSE_INFO = 'course_info';
     public const GET_COURSE_DESCRIPTIONS = 'course_descriptions';
@@ -41,7 +45,6 @@ class Rest extends WebService
     public const GET_COURSE_LEARNPATH = 'course_learnpath';
     public const GET_COURSE_LP_PROGRESS = 'course_lp_progress';
     public const SAVE_FORUM_POST = 'save_forum_post';
-    public const GET_USER_SESSIONS = 'user_sessions';
     public const SAVE_USER_MESSAGE = 'save_user_message';
     public const GET_MESSAGE_USERS = 'message_users';
     public const SAVE_COURSE_NOTEBOOK = 'save_course_notebook';
@@ -52,8 +55,6 @@ class Rest extends WebService
     public const SUBSCRIBE_USER_TO_COURSE = 'subscribe_user_to_course';
     public const UNSUBSCRIBE_USER_FROM_COURSE = 'unsubscribe_user_from_course';
     public const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
-    public const GET_USER_MESSAGES_RECEIVED = 'user_messages_received';
-    public const GET_USER_MESSAGES_SENT = 'user_messages_sent';
     public const DELETE_USER_MESSAGE = 'delete_user_message';
     public const SET_MESSAGE_READ = 'set_message_read';
     public const CREATE_CAMPUS = 'add_campus';
@@ -1028,6 +1029,23 @@ class Rest extends WebService
         return $data;
     }
 
+    public function getUsersSubscribedToCourse()
+    {
+        $users = CourseManager::get_user_list_from_course_code($this->course->getCode());
+
+        $userList = [];
+        foreach ($users as $user) {
+            $userList[] = [
+                'user_id' => $user['user_id'],
+                'username' => $user['username'],
+                'firstname' => $user['firstname'],
+                'lastname' => $user['lastname'],
+                'status_rel' => $user['status_rel'],
+            ];
+        }
+
+        return $userList;
+    }
     /**
      * @param string $subject
      * @param string $text
@@ -1219,6 +1237,7 @@ class Rest extends WebService
         $diskQuota = isset($courseParam['disk_quota']) ? $courseParam['disk_quota'] : '100';
         $visibility = isset($courseParam['visibility']) ? (int) $courseParam['visibility'] : null;
         $removeCampusId = $courseParam['remove_campus_id_from_wanted_code'] ?? 0;
+        $language = $courseParam['language'] ?? '';
 
         if (isset($courseParam['visibility'])) {
             if ($courseParam['visibility'] &&
@@ -1238,6 +1257,13 @@ class Rest extends WebService
         $params['user_id'] = $this->user->getId();
         $params['visibility'] = $visibility;
         $params['disk_quota'] = $diskQuota;
+        $params['course_language'] = $language;
+
+        foreach ($courseParam as $key => $value) {
+            if (substr($key, 0, 6) === 'extra_') { //an extra field
+                $params[$key] = $value;
+            }
+        }
 
         $courseInfo = CourseManager::create_course($params, $params['user_id'], $idCampus);
 
@@ -1246,6 +1272,9 @@ class Rest extends WebService
             $results['status'] = true;
             $results['code_course'] = $courseInfo['code'];
             $results['title_course'] = $courseInfo['title'];
+            $extraFieldValues = new ExtraFieldValue('course');
+            $extraFields = $extraFieldValues->getAllValuesByItem($courseInfo['real_id']);
+            $results['extra_fields'] = $extraFields;
             $results['message'] = sprintf(get_lang('CourseXAdded'), $courseInfo['code']);
         } else {
             $results['status'] = false;
@@ -1392,7 +1421,11 @@ class Rest extends WebService
         if (!$course_id && !$course_code) {
             return [false];
         }
-        if (CourseManager::subscribeUser($user_id, $course_id, $status)) {
+        if (!$course_code) {
+            $course_code = CourseManager::get_course_code_from_course_id($course_id);
+        }
+
+        if (CourseManager::subscribeUser($user_id, $course_code, $status, 0, 0, false)) {
             return [true];
         }
 

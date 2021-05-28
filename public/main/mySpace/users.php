@@ -105,6 +105,7 @@ function get_users($from, $limit, $column, $direction)
     }
 
     if (false === $drhLoaded) {
+        $checkSessionVisibility = api_get_configuration_value('show_users_in_active_sessions_in_tracking');
         $students = UserManager::getUsersFollowedByUser(
             api_get_user_id(),
             $status,
@@ -118,7 +119,8 @@ function get_users($from, $limit, $column, $direction)
             $active,
             $lastConnectionDate,
             COURSEMANAGER,
-            $keyword
+            $keyword,
+            $checkSessionVisibility
         );
     }
 

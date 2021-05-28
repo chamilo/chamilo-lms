@@ -4458,6 +4458,7 @@ class UserManager
      * @param string $lastConnectionDate
      * @param int    $status             the function is called by who? COURSEMANAGER, DRH?
      * @param string $keyword
+     * @param bool   $checkSessionVisibility
      *
      * @return mixed Users list (array) or the SQL query if $getSQL was set to true
      */
@@ -4474,7 +4475,8 @@ class UserManager
         $active = null,
         $lastConnectionDate = null,
         $status = null,
-        $keyword = null
+        $keyword = null,
+        $checkSessionVisibility = false
     ) {
         // Database Table Definitions
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -4521,13 +4523,26 @@ class UserManager
         }
 
         if (!empty($keyword)) {
-            $keyword = Database::escape_string($keyword);
+            $keyword = trim(Database::escape_string($keyword));
+            $keywordParts = array_filter(explode(' ', $keyword));
+            $extraKeyword = '';
+            if (!empty($keywordParts)) {
+                $keywordPartsFixed = Database::escape_string(implode('%', $keywordParts));
+                if (!empty($keywordPartsFixed)) {
+                    $extraKeyword .= " OR
+                        CONCAT(u.firstname, ' ', u.lastname) LIKE '%$keywordPartsFixed%' OR
+                        CONCAT(u.lastname, ' ', u.firstname) LIKE '%$keywordPartsFixed%' ";
+                }
+            }
             $userConditions .= " AND (
                 u.username LIKE '%$keyword%' OR
                 u.firstname LIKE '%$keyword%' OR
                 u.lastname LIKE '%$keyword%' OR
                 u.official_code LIKE '%$keyword%' OR
-                u.email LIKE '%$keyword%'
+                u.email LIKE '%$keyword%' OR
+                CONCAT(u.firstname, ' ', u.lastname) LIKE '%$keyword%' OR
+                CONCAT(u.lastname, ' ', u.firstname) LIKE '%$keyword%'
+                $extraKeyword
             )";
         }
 
@@ -4537,9 +4552,10 @@ class UserManager
         }
 
         $sessionConditionsCoach = null;
-        $sessionConditionsTeacher = null;
+        $dateCondition = '';
         $drhConditions = null;
         $teacherSelect = null;
+        $urlId = api_get_current_access_url_id();
 
         switch ($status) {
             case DRH:
@@ -4558,10 +4574,30 @@ class UserManager
                     (s.id_coach = '$userId')
                 ";
 
-                $sessionConditionsTeacher .= " AND
+                $sessionConditionsTeacher = " AND
                     (scu.status = 2 AND scu.user_id = '$userId')
                 ";
 
+                if ($checkSessionVisibility) {
+                    $today = api_strtotime('now', 'UTC');
+                    $today = date('Y-m-d', $today);
+                    $dateCondition = "
+                        AND
+                        (
+                            (s.access_start_date <= '$today' AND '$today' <= s.access_end_date) OR
+                            (s.access_start_date IS NULL AND s.access_end_date IS NULL) OR
+                            (s.access_start_date <= '$today' AND s.access_end_date IS NULL) OR
+                            ('$today' <= s.access_end_date AND s.access_start_date IS NULL)
+                        )
+					";
+                }
+
+                // Use $tbl_session_rel_course_rel_user instead of $tbl_session_rel_user
+                /*
+                INNER JOIN $tbl_session_rel_user sru
+                ON (sru.user_id = u.id)
+                INNER JOIN $tbl_session_rel_course_rel_user scu
+                ON (scu.user_id = u.id AND scu.c_id IS NOT NULL AND visibility = 1)*/
                 $teacherSelect =
                 "UNION ALL (
                         $select
@@ -4573,7 +4609,7 @@ class UserManager
                                     SELECT DISTINCT(s.id) FROM $tbl_session s INNER JOIN
                                     $tbl_session_rel_access_url session_rel_access_rel_user
                                     ON session_rel_access_rel_user.session_id = s.id
-                                    WHERE access_url_id = ".api_get_current_access_url_id()."
+                                    WHERE access_url_id = ".$urlId."
                                     $sessionConditionsCoach
                                 ) OR sru.session_id IN (
                                     SELECT DISTINCT(s.id) FROM $tbl_session s
@@ -4581,8 +4617,9 @@ class UserManager
                                     ON (url.session_id = s.id)
                                     INNER JOIN $tbl_session_rel_course_rel_user scu
                                     ON (scu.session_id = s.id)
-                                    WHERE access_url_id = ".api_get_current_access_url_id()."
+                                    WHERE access_url_id = ".$urlId."
                                     $sessionConditionsTeacher
+                                    $dateCondition
                                 )
                             )
                             $userConditions
@@ -4620,7 +4657,7 @@ class UserManager
                         LEFT JOIN $tbl_user_rel_access_url a ON (a.user_id = u.id)
                         $join
                         WHERE
-                            access_url_id = ".api_get_current_access_url_id()."
+                            access_url_id = ".$urlId."
                             $drhConditions
                             $userConditions
                     )
@@ -5095,15 +5132,18 @@ class UserManager
      *
      * @param int   $bossId  The boss id
      * @param array $usersId The users array
+     * @param bool  $deleteOtherAssignedUsers
      *
      * @return int Affected rows
      */
-    public static function subscribeBossToUsers($bossId, $usersId)
+    public static function subscribeBossToUsers($bossId, $usersId, $deleteOtherAssignedUsers = true)
     {
         return self::subscribeUsersToUser(
             $bossId,
             $usersId,
-            USER_RELATION_TYPE_BOSS
+            USER_RELATION_TYPE_BOSS,
+            false,
+            $deleteOtherAssignedUsers
         );
     }
 
@@ -5383,7 +5423,7 @@ class UserManager
 
         if ($userId > 0) {
             $userRelTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-            $result = Database::select(
+            return Database::select(
                 'DISTINCT friend_user_id AS boss_id',
                 $userRelTable,
                 [
@@ -5395,8 +5435,6 @@ class UserManager
                     ],
                 ]
             );
-
-            return $result;
         }
 
         return [];

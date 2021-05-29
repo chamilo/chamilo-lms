@@ -6854,9 +6854,22 @@ class Exercise
                 $lpItemId,
                 $lpItemViewId
             );
-            $message .= RemedialCoursePlugin::create()->getAdvancedCourseList($this, $userId, api_get_session_id());
+            $message .= $remedialCoursePlugin->getAdvancedCourseList(
+                $this,
+                $userId,
+                api_get_session_id(),
+                $lpId ?: 0,
+                $lpItemId ?: 0
+            );
             if ($attemptCount >= $exerciseAttempts) {
-                $message .= $remedialCoursePlugin->getRemedialCourseList($this, $userId, api_get_session_id());
+                $message .= $remedialCoursePlugin->getRemedialCourseList(
+                    $this,
+                    $userId,
+                    api_get_session_id(),
+                    false,
+                    $lpId ?: 0,
+                    $lpItemId ?: 0
+                );
             }
         }
         // 4. We check if the student have attempts
@@ -6908,7 +6921,10 @@ class Exercise
                                 $message .= $remedialCoursePlugin->getRemedialCourseList(
                                     $this,
                                     api_get_user_id(),
-                                    api_get_session_id()
+                                    api_get_session_id(),
+                                    false,
+                                    $lpId,
+                                    $lpItemId
                                 );
                             }
                         }

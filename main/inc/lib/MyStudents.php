@@ -18,10 +18,10 @@ class MyStudents
 
         $title = Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
 
-        return $title.self::getCareersTable($careers);
+        return $title.self::getCareersTable($careers, $studentId);
     }
 
-    public static function getCareersTable(array $careers): string
+    public static function getCareersTable(array $careers, int $studentId): string
     {
         if (empty($careers)) {
             return '';
@@ -36,8 +36,8 @@ class MyStudents
         ];
 
         $data = array_map(
-            function (array $careerInfo) use ($webCodePath, $iconDiagram) {
-                $url = $webCodePath.'user/career_diagram.php?career_id='.$careerInfo['id'];
+            function (array $careerInfo) use ($webCodePath, $iconDiagram, $studentId) {
+                $url = $webCodePath.'user/career_diagram.php?career_id='.$careerInfo['id'].'&user_id='.$studentId;
 
                 return [
                     $careerInfo['name'],

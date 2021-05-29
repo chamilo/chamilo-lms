@@ -1926,6 +1926,9 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 // Hides the session graph in the main/auth/my_progress.php page.
 //$_configuration['hide_session_graph_in_my_progress'] = true;
 
+// Shows only users from active sessions in tracking.
+//$_configuration['show_users_in_active_sessions_in_tracking'] = true;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

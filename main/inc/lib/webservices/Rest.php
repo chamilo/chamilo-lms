@@ -1271,6 +1271,7 @@ class Rest extends WebService
         $diskQuota = isset($courseParam['disk_quota']) ? $courseParam['disk_quota'] : '100';
         $visibility = isset($courseParam['visibility']) ? (int) $courseParam['visibility'] : null;
         $removeCampusId = $courseParam['remove_campus_id_from_wanted_code'] ?? 0;
+        $language = $courseParam['language'] ?? '';
 
         if (isset($courseParam['visibility'])) {
             if ($courseParam['visibility'] &&
@@ -1290,6 +1291,7 @@ class Rest extends WebService
         $params['user_id'] = $this->user->getId();
         $params['visibility'] = $visibility;
         $params['disk_quota'] = $diskQuota;
+        $params['course_language'] = $language;
 
         foreach ($courseParam as $key => $value) {
             if (substr($key, 0, 6) === 'extra_') { //an extra field

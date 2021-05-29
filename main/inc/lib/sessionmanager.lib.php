@@ -6126,6 +6126,17 @@ class SessionManager
 
         if (!empty($keyword)) {
             $keyword = trim(Database::escape_string($keyword));
+            $keywordParts = array_filter(explode(' ', $keyword));
+            $extraKeyword = '';
+            if (!empty($keywordParts)) {
+                $keywordPartsFixed = Database::escape_string(implode('%', $keywordParts));
+                if (!empty($keywordPartsFixed)) {
+                    $extraKeyword .= " OR
+                        CONCAT(u.firstname, ' ', u.lastname) LIKE '%$keywordPartsFixed%' OR
+                        CONCAT(u.lastname, ' ', u.firstname) LIKE '%$keywordPartsFixed%' ";
+                }
+            }
+
             $userConditions .= " AND (
                 u.username LIKE '%$keyword%' OR
                 u.firstname LIKE '%$keyword%' OR
@@ -6134,6 +6145,7 @@ class SessionManager
                 u.email LIKE '%$keyword%' OR
                 CONCAT(u.firstname, ' ', u.lastname) LIKE '%$keyword%' OR
                 CONCAT(u.lastname, ' ', u.firstname) LIKE '%$keyword%'
+                $extraKeyword
             )";
         }
 
@@ -6430,7 +6442,9 @@ class SessionManager
             }
         }
 
-        if ($drhLoaded == false) {
+        $checkSessionVisibility = api_get_configuration_value('show_users_in_active_sessions_in_tracking');
+
+        if (false === $drhLoaded) {
             $count = UserManager::getUsersFollowedByUser(
                 $userId,
                 $filterUserStatus,
@@ -6445,7 +6459,7 @@ class SessionManager
                 $lastConnectionDate,
                 api_is_student_boss() ? STUDENT_BOSS : COURSEMANAGER,
                 $keyword,
-                true
+                $checkSessionVisibility
             );
         }
 
@@ -9583,7 +9597,7 @@ class SessionManager
         $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        $relationInfo = array_merge(['visiblity' => 0, 'status' => Session::STUDENT], $relationInfo);
+        $relationInfo = array_merge(['visibility' => 0, 'status' => Session::STUDENT], $relationInfo);
 
         $sessionCourseUser = [
             'session_id' => $sessionId,
@@ -9599,15 +9613,33 @@ class SessionManager
         foreach ($studentIds as $studentId) {
             $sessionCourseUser['user_id'] = $studentId;
 
-            Database::insert($tblSessionCourseUser, $sessionCourseUser);
+            $count = Database::select(
+                'COUNT(1) as nbr',
+                $tblSessionCourseUser,
+                ['where' => ['session_id = ? AND c_id = ? AND user_id = ?' => [$sessionId, $courseId, $studentId]]],
+                'first'
+            );
+
+            if (empty($count['nbr'])) {
+                Database::insert($tblSessionCourseUser, $sessionCourseUser);
+
+                Event::logUserSubscribedInCourseSession($studentId, $courseId, $sessionId);
+            }
 
             if ($updateSession) {
                 $sessionUser['user_id'] = $studentId;
 
-                Database::insert($tblSessionUser, $sessionUser);
-            }
+                $count = Database::select(
+                    'COUNT(1) as nbr',
+                    $tblSessionUser,
+                    ['where' => ['session_id = ? AND user_id = ?' => [$sessionId, $studentId]]],
+                    'first'
+                );
 
-            Event::logUserSubscribedInCourseSession($studentId, $courseId, $sessionId);
+                if (empty($count['nbr'])) {
+                    Database::insert($tblSessionUser, $sessionUser);
+                }
+            }
         }
 
         Database::query(

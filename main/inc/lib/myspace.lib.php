@@ -1514,12 +1514,8 @@ class MySpace
 
     /**
      *  Displays a list as a table of teachers who are set authors of lp's item by a extra_field authors.
-     *
-     * @param string|null $startDate
-     * @param string|null $endDate
-     * @param bool        $csv
      */
-    public static function displayResumeLpByItem($startDate = null, $endDate = null, $csv = false)
+    public static function displayResumeLpByItem(string $startDate = null, string $endDate = null, bool $csv = false)
     {
         $tableHtml = '';
         $table = '';
@@ -1859,11 +1855,14 @@ class MySpace
                     $studentRegister = count($byCourse);
                     $studentRegisterBySession = count($bySession);
                     $studentGroupsRegister = count($byCourseGroups);
+                    $usersInCourseCount = count($byUserInCourse);
 
                     $studentsName = '';
                     if (0 != $studentRegister ||
                         0 != $studentRegisterBySession ||
-                        0 != $studentGroupsRegister) {
+                        0 != $studentGroupsRegister ||
+                        0 != $usersInCourseCount
+                    ) {
                         $studentProcessed = [];
                         /* Student by course*/
                         $studentProcessed = self::getStudentDataToReportByLpItem($byCourse, $studentProcessed, '', true);

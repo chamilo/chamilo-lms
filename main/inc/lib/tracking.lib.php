@@ -1316,6 +1316,7 @@ class Tracking
         $studentBossCount = 0;
         $courseCount = 0;
         $assignedCourseCount = 0;
+        $checkSessionVisibility = api_get_configuration_value('show_users_in_active_sessions_in_tracking');
 
         if (api_is_drh() && api_drh_can_access_all_session_content()) {
             $studentList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -1457,7 +1458,9 @@ class Tracking
                 null,
                 null,
                 null,
-                COURSEMANAGER
+                COURSEMANAGER,
+                null,
+                $checkSessionVisibility
             );
 
             $students = [];
@@ -1479,7 +1482,9 @@ class Tracking
                 null,
                 null,
                 null,
-                COURSEMANAGER
+                COURSEMANAGER,
+                null,
+                $checkSessionVisibility
             );
 
             if ($getCount) {
@@ -1505,7 +1510,9 @@ class Tracking
                 null,
                 null,
                 null,
-                COURSEMANAGER
+                COURSEMANAGER,
+                null,
+                $checkSessionVisibility
             );
 
             if ($getCount) {
@@ -1529,7 +1536,9 @@ class Tracking
                 null,
                 null,
                 null,
-                COURSEMANAGER
+                COURSEMANAGER,
+                null,
+                $checkSessionVisibility
             );
 
             if ($getCount) {
@@ -7509,7 +7518,7 @@ class Tracking
         array $courseInfo,
         int $sessionId = 0,
         bool $isAllowedToEdit = true
-    ) : string {
+    ): string {
         $html = [];
 
         $columnHeaders = [
@@ -8637,7 +8646,17 @@ class TrackingCourseLog
             $user_row['count_messages'] = $user['count_messages'];
 
             $userGroupManager = new UserGroup();
-            $user_row['classes'] = $userGroupManager->getLabelsFromNameList($user['user_id'], UserGroup::NORMAL_CLASS);
+            if ($export_csv) {
+                $user_row['classes'] = implode(
+                    ',',
+                    $userGroupManager->getNameListByUser($user['user_id'], UserGroup::NORMAL_CLASS)
+                );
+            } else {
+                $user_row['classes'] = $userGroupManager->getLabelsFromNameList(
+                    $user['user_id'],
+                    UserGroup::NORMAL_CLASS
+                );
+            }
 
             if (empty($session_id)) {
                 $user_row['survey'] = $user['survey'];
@@ -8681,13 +8700,12 @@ class TrackingCourseLog
 
             if ($export_csv) {
                 if (empty($session_id)) {
-                    unset($user_row['classes']);
+                    //unset($user_row['classes']);
                     unset($user_row['link']);
                 } else {
-                    unset($user_row['classes']);
+                    //unset($user_row['classes']);
                     unset($user_row['link']);
                 }
-
                 $csv_content[] = $user_row;
             }
             $users[] = array_values($user_row);

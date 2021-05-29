@@ -2,12 +2,15 @@
 
 <script>
     $(document).ready(function () {
-        $.ajax({
-            url: '{{ web_admin_ajax_url }}?a=version',
-            success: function (version) {
-                $(".admin-block-version").html(version);
-            }
-        });
+    
+        setTimeout(function(){
+            $.ajax({
+                url: '{{ web_admin_ajax_url }}?a=version',
+                success: function (version) {
+                    $(".admin-block-version").html(version);
+                }
+            });
+        }, 3000);
 
         {% if _u.is_admin %}
             (function (CKEDITOR) {

@@ -151,9 +151,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/eslint-parser@npm:^7.14.3":
-  version: 7.14.3
-  resolution: "@babel/eslint-parser@npm:7.14.3"
+"@babel/eslint-parser@npm:^7.14.4":
+  version: 7.14.4
+  resolution: "@babel/eslint-parser@npm:7.14.4"
   dependencies:
     eslint-scope: ^5.1.0
     eslint-visitor-keys: ^2.1.0
@@ -161,7 +161,7 @@ __metadata:
   peerDependencies:
     "@babel/core": ">=7.11.0"
     eslint: ">=7.5.0"
-  checksum: faab714c777344ef0d6e96e3a6286766ce4c38a93a974c41d5f05fb778a7492e02fa79e1e3160abef9d935c95f9e46ade984411df73f68b114f9d79bcfe9a918
+  checksum: bf78b967270369342a0b94dd78147ceed7ad016b9599bd257b96c099bef0618a3395ed0a76811754825394d7d11eda42d0c86f066e7cca32df6b03d8f8116223
   languageName: node
   linkType: hard
 
@@ -5975,7 +5975,7 @@ __metadata:
   resolution: "chamilo@workspace:."
   dependencies:
     "@apollo/client": ^3.3.19
-    "@babel/eslint-parser": ^7.14.3
+    "@babel/eslint-parser": ^7.14.4
     "@babel/plugin-transform-runtime": ^7.14.3
     "@fancyapps/fancybox": ^3.5.7
     "@fortawesome/fontawesome-free": ^5.15.3
@@ -6022,7 +6022,7 @@ __metadata:
     easy-pie-chart: ^2.1.7
     easytimer.js: ^1.3.2
     eslint: ^7.27.0
-    eslint-plugin-vue: ^7.9.0
+    eslint-plugin-vue: ^7.10.0
     file-loader: ^6.2.0
     filemanager-webpack-plugin: ^5.0.0
     flag-icon-css: ^3.5.0
@@ -6042,7 +6042,7 @@ __metadata:
     jquery-ui-touch-punch: ^0.2.3
     js-cookie: ^2.2.1
     jspdf: ^2.3.1
-    jsplumb: ^2.15.5
+    jsplumb: ^2.15.6
     linkifyjs: 3.0.0-beta.3
     litepicker: ^2.0.11
     luxon: ^1.27.0
@@ -8458,9 +8458,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-vue@npm:^7.9.0":
-  version: 7.9.0
-  resolution: "eslint-plugin-vue@npm:7.9.0"
+"eslint-plugin-vue@npm:^7.10.0":
+  version: 7.10.0
+  resolution: "eslint-plugin-vue@npm:7.10.0"
   dependencies:
     eslint-utils: ^2.1.0
     natural-compare: ^1.4.0
@@ -8468,7 +8468,7 @@ __metadata:
     vue-eslint-parser: ^7.6.0
   peerDependencies:
     eslint: ^6.2.0 || ^7.0.0
-  checksum: 1773e6a9bfd43ace9548323cfc16e7ed8bd9728ac62b9a6b71bebc3ea1c8b6dd8f48931f07557d96c8ce0e7d70ae13871d3deb3c83874796ff4ca85f2560ce5f
+  checksum: 6a02b4e6898fa3be5497ee21eec136bad9fecc071d05e68d64fd1aef3e9e3f3d897009e42bc9ec8f4012cc6d8dadfea84e1fe37e78d32ca6245b94d1ded2c96b
   languageName: node
   linkType: hard
 
@@ -11983,10 +11983,10 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"jsplumb@npm:^2.15.5":
-  version: 2.15.5
-  resolution: "jsplumb@npm:2.15.5"
-  checksum: 1de7bd9ff4adbace3f318347d414e2cde305b61eea213e922f69f457cea13d8cf3b7d2bec5733c90d2f0886ff71103fd2db0ffe47026aaaabb666eec7ef87327
+"jsplumb@npm:^2.15.6":
+  version: 2.15.6
+  resolution: "jsplumb@npm:2.15.6"
+  checksum: 48e0d67f7741aa1d2b931432eabe61d97c18449e13773a7a89aa0ffb83684d6bad83c2f7483ebbb87adf69a67492409b113aab87ced1348d9f7d420e408db830
   languageName: node
   linkType: hard
 

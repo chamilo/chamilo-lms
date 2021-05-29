@@ -123,9 +123,9 @@ class PersonalFile extends AbstractResource implements ResourceInterface
 
     /**
      * @Assert\NotBlank()
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
-    protected string $name;
+    protected string $title;
 
     public function __construct()
     {
@@ -133,7 +133,7 @@ class PersonalFile extends AbstractResource implements ResourceInterface
 
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     public function getId(): int
@@ -141,14 +141,14 @@ class PersonalFile extends AbstractResource implements ResourceInterface
         return $this->id;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
@@ -160,11 +160,11 @@ class PersonalFile extends AbstractResource implements ResourceInterface
 
     public function getResourceName(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setName($name);
+        return $this->setTitle($name);
     }
 }

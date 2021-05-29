@@ -79,7 +79,7 @@ class Version20170525122900 extends AbstractMigrationChamilo
 
         if (false === $schema->hasTable('personal_file')) {
             $this->addSql(
-                'CREATE TABLE IF NOT EXISTS personal_file (id INT AUTO_INCREMENT NOT NULL, resource_node_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_BD95312D1BAD783F (resource_node_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
+                'CREATE TABLE IF NOT EXISTS personal_file (id INT AUTO_INCREMENT NOT NULL, resource_node_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_BD95312D1BAD783F (resource_node_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
             );
             $this->addSql(
                 'ALTER TABLE personal_file ADD CONSTRAINT FK_BD95312D1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'

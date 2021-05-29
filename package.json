@@ -6,7 +6,7 @@
     "start": "vue-cli-service serve --open"
   },
   "dependencies": {
-    "@apollo/client": "^3.3.19",
+    "@apollo/client": "^3.4.0-rc.2",
     "@babel/plugin-transform-runtime": "^7.14.3",
     "@fancyapps/fancybox": "^3.5.7",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
@@ -98,7 +98,7 @@
     "tinymce": "^5.8.1",
     "ts-loader": "^8.3.0",
     "video.js": "^7.12.3",
-    "vue": "3.1.0-beta.5",
+    "vue": "3.1.0-beta.6",
     "vue-eslint-parser": "^7.6.0",
     "vue-flatpickr-component": "^9.0.3",
     "vue-i18n": "^9.1.6",

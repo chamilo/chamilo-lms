@@ -14,23 +14,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:^3.3.19":
-  version: 3.3.19
-  resolution: "@apollo/client@npm:3.3.19"
+"@apollo/client@npm:^3.4.0-rc.2":
+  version: 3.4.0-rc.2
+  resolution: "@apollo/client@npm:3.4.0-rc.2"
   dependencies:
     "@graphql-typed-document-node/core": ^3.0.0
-    "@types/zen-observable": ^0.8.0
     "@wry/context": ^0.6.0
     "@wry/equality": ^0.4.0
-    fast-json-stable-stringify: ^2.0.0
-    graphql-tag: ^2.12.0
+    "@wry/trie": ^0.3.0
+    graphql-tag: ^2.12.3
     hoist-non-react-statics: ^3.3.2
-    optimism: ^0.16.0
+    optimism: ^0.16.1
     prop-types: ^15.7.2
-    symbol-observable: ^2.0.0
-    ts-invariant: ^0.7.0
-    tslib: ^1.10.0
-    zen-observable: ^0.8.14
+    symbol-observable: ^4.0.0
+    ts-invariant: ^0.7.3
+    tslib: ^2.1.0
+    zen-observable-ts: ^1.0.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0
     react: ^16.8.0 || ^17.0.0
@@ -40,7 +39,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: a7266cfdff900ef71adece4d24c853fc6179dfe3d3b89905b468b0a487959a435ef84219fb1266c86e2edb0747ff0e52b6ac49dba72bdac7cdbc55e1d0a2e357
+  checksum: 48e24c3c6ad810dd3b08687ab4409fe38d6a81c66751fd8ad65bda5f9ed889c39f9dce5022b292f47dc7c9896341009fe665a82fafd38833e7afa77f40dd43f6
   languageName: node
   linkType: hard
 
@@ -2463,7 +2462,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/zen-observable@npm:^0.8.0":
+"@types/zen-observable@npm:^0.8.2":
   version: 0.8.2
   resolution: "@types/zen-observable@npm:0.8.2"
   checksum: f48643c09a5fb00503d5b5c156779870bc5c96c4cc7f3d0f643619752a04eed784de6a37c9121e284d2cdd8ec70e3e00a73613797f009f37dbe6795ffb9607c5
@@ -2983,16 +2982,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/compiler-core@npm:3.1.0-beta.5":
-  version: 3.1.0-beta.5
-  resolution: "@vue/compiler-core@npm:3.1.0-beta.5"
+"@vue/compiler-core@npm:3.1.0-beta.6":
+  version: 3.1.0-beta.6
+  resolution: "@vue/compiler-core@npm:3.1.0-beta.6"
   dependencies:
     "@babel/parser": ^7.12.0
     "@babel/types": ^7.12.0
-    "@vue/shared": 3.1.0-beta.5
+    "@vue/shared": 3.1.0-beta.6
     estree-walker: ^2.0.1
     source-map: ^0.6.1
-  checksum: fced85bb824cf0f656ea4d792f78c542770db2d614d10fa085ee41354d7c7c15f43f6e39804857b023f128d4a34b404b44cef42972daaf8aac6931dc2c14652a
+  checksum: 8377afc6d54979d2c52bd28034f1c8693b444e4312d0488b9ea3159c15dd32efc8ac7218b95b9a65d7a215cac2f93235911642fe8aff4ec4bad37cc65baefe66
   languageName: node
   linkType: hard
 
@@ -3006,13 +3005,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/compiler-dom@npm:3.1.0-beta.5":
-  version: 3.1.0-beta.5
-  resolution: "@vue/compiler-dom@npm:3.1.0-beta.5"
+"@vue/compiler-dom@npm:3.1.0-beta.6":
+  version: 3.1.0-beta.6
+  resolution: "@vue/compiler-dom@npm:3.1.0-beta.6"
   dependencies:
-    "@vue/compiler-core": 3.1.0-beta.5
-    "@vue/shared": 3.1.0-beta.5
-  checksum: 6fec54f0b4f25f745cc9a07267008d47d3886b62819e47be966a221a8b7e2aa34395bccc61b4fb0ca66a11b9a249ee1d47da56dd6c38ffdb769cea329e7c8357
+    "@vue/compiler-core": 3.1.0-beta.6
+    "@vue/shared": 3.1.0-beta.6
+  checksum: aaaf764d90ae71394ebaf05d5add78de5a8fc08c9bc75838c0e59abf910faa554ad93f33e6b51260178b3e856bdbab80ca3d7fb1027dcecd5197aff4fb3393cc
   languageName: node
   linkType: hard
 
@@ -3089,33 +3088,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/reactivity@npm:3.1.0-beta.5":
-  version: 3.1.0-beta.5
-  resolution: "@vue/reactivity@npm:3.1.0-beta.5"
+"@vue/reactivity@npm:3.1.0-beta.6":
+  version: 3.1.0-beta.6
+  resolution: "@vue/reactivity@npm:3.1.0-beta.6"
   dependencies:
-    "@vue/shared": 3.1.0-beta.5
-  checksum: fa1397eb1472c499f97881d8c8e679a86fbd3f466a6c350e6fc9aa87b32e1cb6c7e699ab13e1a0e96545557ab34dc54fbddcf1aef08889479e85e0766b8b9fb6
+    "@vue/shared": 3.1.0-beta.6
+  checksum: e3f1f54efe3ca4d6bc9048d048b7d63d535f7fc2ac764e36f13ee236dd7bbadb2bd9f393324168c12c6cf6832486b35a0238f2f193cd2170fac398cbc7165e3c
   languageName: node
   linkType: hard
 
-"@vue/runtime-core@npm:3.1.0-beta.5":
-  version: 3.1.0-beta.5
-  resolution: "@vue/runtime-core@npm:3.1.0-beta.5"
+"@vue/runtime-core@npm:3.1.0-beta.6":
+  version: 3.1.0-beta.6
+  resolution: "@vue/runtime-core@npm:3.1.0-beta.6"
   dependencies:
-    "@vue/reactivity": 3.1.0-beta.5
-    "@vue/shared": 3.1.0-beta.5
-  checksum: 866188b14a443969dcfbcfb2e464028ce2e3a3473cda4f6de47c4b2e9cdc092dc2eff915f995e19f1ba31c6b54305505f4402122faaa6ad1da634f8ca8d6ed77
+    "@vue/reactivity": 3.1.0-beta.6
+    "@vue/shared": 3.1.0-beta.6
+  checksum: 9fbd3b6c964df3f7edca4dde69dcfc0dbeef857c9de3ebc8b8c19d465d4d6e156d357b849b4239181c09ef03239edd35ed24167e66e5af2faff720fb21d4094f
   languageName: node
   linkType: hard
 
-"@vue/runtime-dom@npm:3.1.0-beta.5":
-  version: 3.1.0-beta.5
-  resolution: "@vue/runtime-dom@npm:3.1.0-beta.5"
+"@vue/runtime-dom@npm:3.1.0-beta.6":
+  version: 3.1.0-beta.6
+  resolution: "@vue/runtime-dom@npm:3.1.0-beta.6"
   dependencies:
-    "@vue/runtime-core": 3.1.0-beta.5
-    "@vue/shared": 3.1.0-beta.5
+    "@vue/runtime-core": 3.1.0-beta.6
+    "@vue/shared": 3.1.0-beta.6
     csstype: ^2.6.8
-  checksum: ff7836817e1f4544564a5e2a1690e5ccba9cd62b0ff1dc54a556c40a026318e611de0199e93cc3ae00cdfbf8ae4106389afffbc5151c1ddfaa36cf08faac4194
+  checksum: bff1c014b74f1963d9ab0ee60ebbbc9a632bb81ddda3f9444dfae43456beb481795e7ce68bb07f70602d0a782356cca12764f676364ca93f3f45250cd0358dc8
   languageName: node
   linkType: hard
 
@@ -3126,10 +3125,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/shared@npm:3.1.0-beta.5":
-  version: 3.1.0-beta.5
-  resolution: "@vue/shared@npm:3.1.0-beta.5"
-  checksum: af859d89ab0df939436d8bd208ea9b4acf7dbcdef03ad8c785b26cd91bfd5b944615e43106d771b47716891edf6556102af3a14ced4e6f90208990d408b03572
+"@vue/shared@npm:3.1.0-beta.6":
+  version: 3.1.0-beta.6
+  resolution: "@vue/shared@npm:3.1.0-beta.6"
+  checksum: 7861da378d9b9930e01256a5606397069393ade694c46fea7494b51c73cfde9c95c479ee7974411881aa98b74c5e8de245d67bf0cea93c8f2b77faa5a89ec2e2
   languageName: node
   linkType: hard
 
@@ -5974,7 +5973,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "chamilo@workspace:."
   dependencies:
-    "@apollo/client": ^3.3.19
+    "@apollo/client": ^3.4.0-rc.2
     "@babel/eslint-parser": ^7.14.4
     "@babel/plugin-transform-runtime": ^7.14.3
     "@fancyapps/fancybox": ^3.5.7
@@ -6085,7 +6084,7 @@ __metadata:
     ts-loader: ^8.3.0
     typescript: ^3.9.9
     video.js: ^7.12.3
-    vue: 3.1.0-beta.5
+    vue: 3.1.0-beta.6
     vue-cli-plugin-quasar: next
     vue-eslint-parser: ^7.6.0
     vue-flatpickr-component: ^9.0.3
@@ -10098,7 +10097,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"graphql-tag@npm:^2.10.3, graphql-tag@npm:^2.11.0, graphql-tag@npm:^2.12.0, graphql-tag@npm:^2.12.4":
+"graphql-tag@npm:^2.10.3, graphql-tag@npm:^2.11.0, graphql-tag@npm:^2.12.3, graphql-tag@npm:^2.12.4":
   version: 2.12.4
   resolution: "graphql-tag@npm:2.12.4"
   dependencies:
@@ -13882,7 +13881,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"optimism@npm:^0.16.0":
+"optimism@npm:^0.16.1":
   version: 0.16.1
   resolution: "optimism@npm:0.16.1"
   dependencies:
@@ -17969,10 +17968,10 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"symbol-observable@npm:^2.0.0":
-  version: 2.0.3
-  resolution: "symbol-observable@npm:2.0.3"
-  checksum: c022177891e0aa3169bbaaed68d928ff7a2b5f5b1b2bf655b99804ecfabe280a6f1042dd3bda609475e637c57141d39b33e692b6f6b5fdb29ce7f61cf77be57f
+"symbol-observable@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "symbol-observable@npm:4.0.0"
+  checksum: 6d184cd370270ab53279d2737c6880d64bbe854dbdf3d759600efbc11bba3d006a9f805070c81c84fae949067c069cd001a1440295ca3b36f705b05293bf8e1e
   languageName: node
   linkType: hard
 
@@ -18520,7 +18519,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"ts-invariant@npm:^0.7.0":
+"ts-invariant@npm:^0.7.3":
   version: 0.7.3
   resolution: "ts-invariant@npm:0.7.3"
   dependencies:
@@ -19331,14 +19330,14 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"vue@npm:3.1.0-beta.5":
-  version: 3.1.0-beta.5
-  resolution: "vue@npm:3.1.0-beta.5"
+"vue@npm:3.1.0-beta.6":
+  version: 3.1.0-beta.6
+  resolution: "vue@npm:3.1.0-beta.6"
   dependencies:
-    "@vue/compiler-dom": 3.1.0-beta.5
-    "@vue/runtime-dom": 3.1.0-beta.5
-    "@vue/shared": 3.1.0-beta.5
-  checksum: e57dd328069a64ba3a9d3ac4ba6787d42913e82765b0fc3d8aacbfa384362d1f584d9e8811407c04f81e252200ce17be1bce197a174fbde6ca0f2485a97ea847
+    "@vue/compiler-dom": 3.1.0-beta.6
+    "@vue/runtime-dom": 3.1.0-beta.6
+    "@vue/shared": 3.1.0-beta.6
+  checksum: 49205410b465b05f81d9dd9e61a919978e95185927710b05a4905c02b4a2de17fbd8f67df6c597bb847e5fb1cfbd7b8574106c93c413e72fa8cd94d1aab3507f
   languageName: node
   linkType: hard
 
@@ -20198,7 +20197,17 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"zen-observable@npm:^0.8.0, zen-observable@npm:^0.8.14":
+"zen-observable-ts@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "zen-observable-ts@npm:1.0.0"
+  dependencies:
+    "@types/zen-observable": ^0.8.2
+    zen-observable: ^0.8.15
+  checksum: 285d473b5aefeabdeb434fedbcf4698f286d807bb1aece10a6e6372f30f996fb169fd8a8ee729b24a0ea0f723fde967dd2459f0396bdd377d3d101f846ccf45e
+  languageName: node
+  linkType: hard
+
+"zen-observable@npm:^0.8.0, zen-observable@npm:^0.8.15":
   version: 0.8.15
   resolution: "zen-observable@npm:0.8.15"
   checksum: 7d155f8a75b9314f9f31e70a31edcd897b0e8a1313737502ab84a573e49d2c333b738e415c156334a6e910c363ce546b59fa7921eff61440285caa99c843df74

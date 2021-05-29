@@ -11,8 +11,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
-use Chamilo\CoreBundle\Controller\Api\CreateResourceNodeFileAction;
-use Chamilo\CoreBundle\Controller\Api\UpdateResourceNodeFileAction;
+use Chamilo\CoreBundle\Controller\Api\UpdateDocumentFileAction;
+use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
@@ -27,7 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     denormalizationContext={"groups"={"document:write"}},
  *     itemOperations={
  *         "put" ={
- *             "controller"=UpdateResourceNodeFileAction::class,
+ *             "controller"=UpdateDocumentFileAction::class,
  *             "deserialize"=false,
  *             "security" = "is_granted('EDIT', object.resourceNode)",
  *             "validation_groups"={"media_object_create", "document:write"},
@@ -41,7 +41,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     },
  *     collectionOperations={
  *         "post"={
- *             "controller"=CreateResourceNodeFileAction::class,
+ *             "controller"=CreateDocumentFileAction::class,
  *             "deserialize"=false,
  *             "security"="is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
  *             "validation_groups"={"Default", "media_object_create", "document:write"},

@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
+use Chamilo\CoreBundle\Repository\Node\PersonalFileRepository;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
@@ -242,6 +243,11 @@ class Container
         return Database::getManager();
     }
 
+    public static function getAssetRepository(): AssetRepository
+    {
+        return self::$container->get(AssetRepository::class);
+    }
+
     public static function getAttendanceRepository(): CAttendanceRepository
     {
         return self::$container->get(CAttendanceRepository::class);
@@ -262,14 +268,14 @@ class Container
         return self::$container->get(CAnnouncementAttachmentRepository::class);
     }
 
+    public static function getBlogRepository(): CBlogRepository
+    {
+        return self::$container->get(CBlogRepository::class);
+    }
+
     public static function getCourseRepository(): CourseRepository
     {
         return self::$container->get(CourseRepository::class);
-    }
-
-    public static function getSessionRepository(): SessionRepository
-    {
-        return self::$container->get(SessionRepository::class);
     }
 
     public static function getCourseCategoryRepository(): CourseCategoryRepository
@@ -280,11 +286,6 @@ class Container
     public static function getCourseDescriptionRepository(): CCourseDescriptionRepository
     {
         return self::$container->get(CCourseDescriptionRepository::class);
-    }
-
-    public static function getGlossaryRepository(): CGlossaryRepository
-    {
-        return self::$container->get(CGlossaryRepository::class);
     }
 
     public static function getCalendarEventRepository(): CCalendarEventRepository
@@ -302,14 +303,29 @@ class Container
         return self::$container->get(CDocumentRepository::class);
     }
 
-    public static function getQuizRepository(): CQuizRepository
-    {
-        return self::$container->get(CQuizRepository::class);
-    }
-
     public static function getExerciseCategoryRepository(): CExerciseCategoryRepository
     {
         return self::$container->get(CExerciseCategoryRepository::class);
+    }
+
+    public static function getGlossaryRepository(): CGlossaryRepository
+    {
+        return self::$container->get(CGlossaryRepository::class);
+    }
+
+    public static function getGradeBookCategoryRepository(): GradeBookCategoryRepository
+    {
+        return self::$container->get(GradeBookCategoryRepository::class);
+    }
+
+    public static function getGroupRepository(): CGroupRepository
+    {
+        return self::$container->get(CGroupRepository::class);
+    }
+
+    public static function getGroupCategoryRepository(): CGroupCategoryRepository
+    {
+        return self::$container->get(CGroupCategoryRepository::class);
     }
 
     public static function getForumRepository(): CForumRepository
@@ -337,19 +353,14 @@ class Container
         return self::$container->get(CForumThreadRepository::class);
     }
 
-    public static function getGradeBookCategoryRepository(): GradeBookCategoryRepository
+    public static function getIllustrationRepository(): IllustrationRepository
     {
-        return self::$container->get(GradeBookCategoryRepository::class);
+        return self::$container->get(IllustrationRepository::class);
     }
 
-    public static function getGroupRepository(): CGroupRepository
+    public static function getQuizRepository(): CQuizRepository
     {
-        return self::$container->get(CGroupRepository::class);
-    }
-
-    public static function getGroupCategoryRepository(): CGroupCategoryRepository
-    {
-        return self::$container->get(CGroupCategoryRepository::class);
+        return self::$container->get(CQuizRepository::class);
     }
 
     public static function getQuestionRepository(): CQuizQuestionRepository
@@ -397,6 +408,11 @@ class Container
         return self::$container->get(CNotebookRepository::class);
     }
 
+    public static function getPersonalFileRepository(): PersonalFileRepository
+    {
+        return self::$container->get(PersonalFileRepository::class);
+    }
+
     public static function getUserRepository(): UserRepository
     {
         return self::$container->get(UserRepository::class);
@@ -405,11 +421,6 @@ class Container
     public static function getUsergroupRepository(): UsergroupRepository
     {
         return self::$container->get(UsergroupRepository::class);
-    }
-
-    public static function getIllustrationRepository(): IllustrationRepository
-    {
-        return self::$container->get(IllustrationRepository::class);
     }
 
     public static function getShortcutRepository(): CShortcutRepository
@@ -447,6 +458,11 @@ class Container
         return self::$container->get(SequenceRepository::class);
     }
 
+    public static function getSessionRepository(): SessionRepository
+    {
+        return self::$container->get(SessionRepository::class);
+    }
+
     public static function getSurveyRepository(): CSurveyRepository
     {
         return self::$container->get(CSurveyRepository::class);
@@ -470,11 +486,6 @@ class Container
     public static function getThematicAdvanceRepository(): CThematicAdvanceRepository
     {
         return self::$container->get(CThematicAdvanceRepository::class);
-    }
-
-    public static function getBlogRepository(): CBlogRepository
-    {
-        return self::$container->get(CBlogRepository::class);
     }
 
     public static function getWikiRepository(): CWikiRepository
@@ -504,11 +515,6 @@ class Container
     public static function getToolChain(): ToolChain
     {
         return self::$container->get(ToolChain::class);
-    }
-
-    public static function getAssetRepository(): AssetRepository
-    {
-        return self::$container->get(AssetRepository::class);
     }
 
     public static function setLegacyServices(ContainerInterface $container, bool $setSession = true): void

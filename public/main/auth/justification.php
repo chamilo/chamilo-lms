@@ -1,5 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Entity\PersonalFile;
+use Chamilo\CoreBundle\Framework\Container;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -11,8 +15,9 @@ $allowJustification = 'true' === api_get_plugin_setting('justification', 'tool_e
 if (!$allowJustification) {
     api_not_allowed(true);
 }
-
-$user_data = api_get_user_info(api_get_user_id());
+$personalRepo = Container::getPersonalFileRepository();
+$userId = api_get_user_id();
+$user = api_get_user_entity();
 
 $justification = '';
 $plugin = Justification::create();
@@ -34,8 +39,10 @@ if ($formValidator->validate() && isset($_FILES)) {
         $fieldId = $field['id'];
 
         $days = $field['validity_duration'];
+        $fileNameKey = '';
         if (isset($_FILES[$field['code'].'_file']) && !empty($_FILES[$field['code'].'_file']['tmp_name'])) {
             $file = $_FILES[$field['code'].'_file'];
+            $fileNameKey = $field['code'].'_file';
         } else {
             continue;
         }
@@ -60,7 +67,9 @@ if ($formValidator->validate() && isset($_FILES)) {
         $id = Database::insert('justification_document_rel_users', $params);
 
         if ($id) {
-            api_upload_file('justification', $file, $id);
+            $personalFile = new PersonalFile();
+            $personalFile->setTitle($fileName);
+            $personalRepo->addFileFromFileRequest($personalFile, $fileNameKey, true);
             Display::addFlash(Display::return_message($plugin->get_lang('JustificationSaved')));
         }
     }
@@ -71,7 +80,7 @@ if ($formValidator->validate() && isset($_FILES)) {
 
 $userJustifications = $plugin->getUserJustificationList(api_get_user_id());
 $userJustificationList = '';
-$action = isset($_REQUEST['a']) ? $_REQUEST['a'] : '';
+$action = $_REQUEST['a'] ?? '';
 
 $justificationContent = '';
 switch ($action) {
@@ -82,7 +91,11 @@ switch ($action) {
         if (0 == $justification['date_manual_on']) {
             api_not_allowed(true);
         }
-        $formEdit = new FormValidator('edit', 'post', api_get_self().'?a=edit_justification&justification_id='.$justificationId);
+        $formEdit = new FormValidator(
+            'edit',
+            'post',
+            api_get_self().'?a=edit_justification&justification_id='.$justificationId
+        );
         $formEdit->addHeader($justification['name']);
         $element = $formEdit->addDatePicker('date_validity', $plugin->get_lang('ValidityDate'));
         $element->setValue($userJustification['date_validity']);
@@ -93,7 +106,7 @@ switch ($action) {
             $values = $formEdit->getSubmitValues();
             $date = Database::escape_string($values['date_validity']);
             $sql = "UPDATE justification_document_rel_users SET date_validity = '$date'
-                    WHERE id = $justificationId AND user_id = ".$user_data['id'];
+                    WHERE id = $justificationId AND user_id = ".$userId;
             Database::query($sql);
             Display::addFlash(Display::return_message(get_lang('Updated')));
             header('Location: '.api_get_self());
@@ -104,9 +117,17 @@ switch ($action) {
         $justificationId = isset($_REQUEST['justification_id']) ? (int) $_REQUEST['justification_id'] : '';
         $userJustification = $plugin->getUserJustification($justificationId);
         if ($userJustification && $userJustification['user_id'] == api_get_user_id()) {
-            api_remove_uploaded_file_by_id('justification', $justificationId, $userJustification['file_path']);
+            $personalFile = $personalRepo->getResourceByCreatorFromTitle(
+                $userJustification['file_path'],
+                $user,
+                $user->getResourceNode()
+            );
+            if (null !== $personalFile) {
+                $personalRepo->delete($personalFile);
+            }
+
             $sql = "DELETE FROM justification_document_rel_users
-                    WHERE id = $justificationId AND user_id = ".$user_data['id'];
+                    WHERE id = $justificationId AND user_id = ".$userId;
             Database::query($sql);
             Display::addFlash(Display::return_message(get_lang('Deleted')));
         }
@@ -134,7 +155,14 @@ if (!empty($userJustifications)) {
     $row = 1;
     foreach ($userJustifications as $userJustification) {
         $justification = $plugin->getJustification($userJustification['justification_document_id']);
-        $url = api_get_uploaded_web_url('justification', $userJustification['id'], $userJustification['file_path']);
+
+        $personalFile = $personalRepo->findResourceByTitle(
+            $userJustification['file_path'],
+            $user->getResourceNode()
+        );
+
+        $url = $personalRepo->getResourceFileUrl($personalFile);
+        //$url = api_get_uploaded_web_url('justification', $userJustification['id'], $userJustification['file_path']);
         $link = Display::url($userJustification['file_path'], $url);
         $col = 0;
         $table->setCellContents($row, $col++, $justification['name']);
@@ -147,9 +175,17 @@ if (!empty($userJustifications)) {
         $actions = '';
 
         if (1 == $justification['date_manual_on']) {
-            $actions .= Display::url(get_lang('Edit'), api_get_self().'?a=edit_justification&justification_id='.$userJustification['id'], ['class' => 'btn btn-primary']);
+            $actions .= Display::url(
+                get_lang('Edit'),
+                api_get_self().'?a=edit_justification&justification_id='.$userJustification['id'],
+                ['class' => 'btn btn-primary']
+            );
         }
-        $actions .= '&nbsp;'.Display::url(get_lang('Delete'), api_get_self().'?a=delete_justification&justification_id='.$userJustification['id'], ['class' => 'btn btn-danger']);
+        $actions .= '&nbsp;'.Display::url(
+                get_lang('Delete'),
+                api_get_self().'?a=delete_justification&justification_id='.$userJustification['id'],
+                ['class' => 'btn btn-danger']
+            );
         $table->setCellContents($row, $col++, $actions);
         $row++;
     }

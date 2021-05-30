@@ -7931,138 +7931,6 @@ function api_is_student_view_active()
 }
 
 /**
- * Adds a file inside the upload/$type/id.
- *
- * @param string $type
- * @param array  $file
- * @param int    $itemId
- * @param string $cropParameters
- *
- * @return array|bool
- */
-function api_upload_file($type, $file, $itemId, $cropParameters = '')
-{
-    throw new Exception('api_upload_file not implemented');
-    $upload = process_uploaded_file($file);
-    if ($upload) {
-        $name = api_replace_dangerous_char($file['name']);
-
-        // No "dangerous" files
-        $name = disable_dangerous_file($name);
-
-        $pathId = '/'.substr((string) $itemId, 0, 1).'/'.$itemId.'/';
-        $path = api_get_path(SYS_UPLOAD_PATH).$type.$pathId;
-
-        if (!is_dir($path)) {
-            mkdir($path, api_get_permissions_for_new_directories(), true);
-        }
-
-        $pathToSave = $path.$name;
-        $result = moveUploadedFile($file, $pathToSave);
-
-        if ($result) {
-            if (!empty($cropParameters)) {
-                $image = new Image($pathToSave);
-                $image->crop($cropParameters);
-            }
-
-            return ['path_to_save' => $pathId.$name];
-        }
-    }
-
-    return false;
-}
-
-/**
- * @param string $type
- * @param int    $itemId
- * @param string $file
- *
- * @return bool
- */
-function api_get_uploaded_web_url($type, $itemId, $file)
-{
-    return api_get_uploaded_file($type, $itemId, $file, true);
-}
-
-/**
- * @param string $type
- * @param int    $itemId
- * @param string $file
- * @param bool   $getUrl
- *
- * @return bool
- */
-function api_get_uploaded_file($type, $itemId, $file, $getUrl = false)
-{
-    $itemId = (int) $itemId;
-    $pathId = '/'.substr((string) $itemId, 0, 1).'/'.$itemId.'/';
-    $path = api_get_path(SYS_UPLOAD_PATH).$type.$pathId;
-    $file = basename($file);
-    $file = $path.'/'.$file;
-    if (Security::check_abs_path($file, $path) && is_file($file) && file_exists($file)) {
-        if ($getUrl) {
-            return str_replace(api_get_path(SYS_UPLOAD_PATH), api_get_path(WEB_UPLOAD_PATH), $file);
-        }
-
-        return $file;
-    }
-
-    return false;
-}
-
-/**
- * @param string $type
- * @param int    $itemId
- * @param string $file
- * @param string $title
- */
-function api_download_uploaded_file($type, $itemId, $file, $title = '')
-{
-    $file = api_get_uploaded_file($type, $itemId, $file);
-    if ($file) {
-        if (Security::check_abs_path($file, api_get_path(SYS_UPLOAD_PATH).$type)) {
-            DocumentManager::file_send_for_download($file, true, $title);
-            exit;
-        }
-    }
-    api_not_allowed(true);
-}
-
-/**
- * @param string $type
- * @param string $file
- */
-function api_remove_uploaded_file($type, $file)
-{
-    $typePath = api_get_path(SYS_UPLOAD_PATH).$type;
-    $path = $typePath.'/'.$file;
-    if (Security::check_abs_path($path, $typePath) && file_exists($path) && is_file($path)) {
-        unlink($path);
-    }
-}
-
-/**
- * @param string $type
- * @param int    $itemId
- * @param string $file
- *
- * @return bool
- */
-function api_remove_uploaded_file_by_id($type, $itemId, $file)
-{
-    $file = api_get_uploaded_file($type, $itemId, $file, false);
-    $typePath = api_get_path(SYS_UPLOAD_PATH).$type;
-    if (Security::check_abs_path($file, $typePath) && file_exists($file) && is_file($file)) {
-        unlink($file);
-
-        return true;
-    }
-
-    return false;
-}
-
-/**
  * Converts string value to float value.
  *
  * 3.141516 => 3.141516
@@ -8076,9 +7944,7 @@ function api_remove_uploaded_file_by_id($type, $itemId, $file)
  */
 function api_float_val($number)
 {
-    $number = (float) str_replace(',', '.', trim($number));
-
-    return $number;
+    return (float) str_replace(',', '.', trim($number));
 }
 
 /**

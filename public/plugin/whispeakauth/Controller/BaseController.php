@@ -39,9 +39,10 @@ abstract class BaseController
      */
     protected function uploadAudioFile(User $user)
     {
+        throw new Exception('@todo uploadAudioFile');
         $pluginName = $this->plugin->get_name();
 
-        $path = api_upload_file($pluginName, $_FILES['audio'], $user->getId());
+        //$path = api_upload_file($pluginName, $_FILES['audio'], $user->getId());
 
         if (false === $path) {
             throw new \Exception(get_lang('UploadError'));

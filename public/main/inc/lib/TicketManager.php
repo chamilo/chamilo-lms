@@ -741,7 +741,9 @@ class TicketManager
                 'error'
             );
         } else {
-            $result = api_upload_file('ticket_attachment', $file_attach, $ticketId);
+            throw new Exception('@todo file upload ticket_attachment');
+
+            //$result = api_upload_file('ticket_attachment', $file_attach, $ticketId);
             if ($result) {
                 $safe_file_name = Database::escape_string($new_file_name);
                 $safe_new_file_name = Database::escape_string($result['path_to_save']);

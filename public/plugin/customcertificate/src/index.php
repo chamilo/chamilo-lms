@@ -84,7 +84,7 @@ $htmlHeadXtra[] = '<script>
                     success: function (response) {
                         window.location.reload();
                     }
-                }); 
+                });
             }
         });
 
@@ -171,6 +171,8 @@ if ($form->validate()) {
                     $field
                 );
             }
+
+            throw new Exception('@todo custom certificate upload');
 
             if ($_FILES[$field]['size']) {
                 $newPicture = api_upload_file(
@@ -431,7 +433,7 @@ $form->addHtml('<div class="form-group" style="padding-top: 10px;">
         <div class="col-sm-10">
         <div class="radio" style="margin-top: -25px;">
             <span style="margin: 0 10px; font-style: italic;">'.get_lang('From').'</span>
-            <input 
+            <input
                 size="20"
                 autofocus="autofocus"
                 class="form-control-cert text-center datepicker"

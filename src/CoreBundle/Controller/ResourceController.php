@@ -295,9 +295,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @deprecated Use Vue
+     * @deprecated use Vue
      *
-     * Shows a resource information.
+     * Shows a resource information
      *
      * @Route("/{tool}/{type}/{id}/info", methods={"GET", "POST"}, name="chamilo_core_resource_info")
      */

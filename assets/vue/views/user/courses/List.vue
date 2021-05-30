@@ -30,7 +30,8 @@ export default {
 
     if (user.value) {
       let userId = user.value.id;
-      /*axios.get(ENTRYPOINT + 'users/' + userId + '/courses.json').then(response => {
+      /*
+      axios.get(ENTRYPOINT + 'users/' + userId + '/courses.json').then(response => {
         if (Array.isArray(response.data)) {
           courses.value = response.data;
         }

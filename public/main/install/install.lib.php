@@ -2478,68 +2478,63 @@ function finishInstallationWithContainer(
     $result->free();
 
     UserManager::setPasswordEncryption($encryptPassForm);
+    $timezone = api_get_timezone();
 
     error_log('user creation - admin');
 
-    // Create admin user.
-    $adminId = UserManager::create_user(
-        $adminFirstName,
-        $adminLastName,
-        1,
-        $emailForm,
-        $loginForm,
-        $passForm,
-        'ADMIN',
-        $languageForm,
-        $adminPhoneForm,
-        '',
-        PLATFORM_AUTH_SOURCE,
-        '',
-        1,
-        0,
-        [],
-        '',
-        false,
-        true,
-        '',
-        false,
-        '',
-        0,
-        [],
-        '',
-        false,
-        false
-    );
+    $now = new DateTime();
+    // Creating admin user.
+    $admin = new User();
+    $admin
+        ->setSkipResourceNode(true)
+        ->setLastname($adminFirstName)
+        ->setFirstname($adminLastName)
+        ->setUsername($loginForm)
+        ->setStatus(1)
+        ->setPlainPassword($passForm)
+        ->setEmail($emailForm)
+        ->setOfficialCode('ADMIN')
+        ->setCreatorId(1)
+        ->setAuthSource(PLATFORM_AUTH_SOURCE)
+        ->setPhone($adminPhoneForm)
+        ->setLocale($languageForm)
+        ->setRegistrationDate($now)
+        ->setActive(1)
+        ->setEnabled(1)
+        ->setTimezone($timezone)
+    ;
+
+    $repo = Container::getUserRepository();
+    $repo->updateUser($admin);
+    UserManager::addUserAsAdmin($admin);
+
+    $adminId = $admin->getId();
+
     error_log('user creation - anon');
-    // Create anonymous user.
-    $anonId = UserManager::create_user(
-        'Joe',
-        'Anonymous',
-        6,
-        'anonymous@localhost',
-        'anon',
-        'anon',
-        'anonymous',
-        $languageForm,
-        '',
-        '',
-        PLATFORM_AUTH_SOURCE,
-        '',
-        1,
-        0,
-        null,
-        '',
-        false,
-        false,
-        '',
-        false,
-        '',
-        $adminId,
-        [],
-        '',
-        false,
-        false
-    );
+
+    $anon = new User();
+    $anon
+        ->setSkipResourceNode(true)
+        ->setLastname('Joe')
+        ->setFirstname('Anonymous')
+        ->setUsername('anon')
+        ->setStatus(ANONYMOUS)
+        ->setPlainPassword('anon')
+        ->setEmail('anonymous@localhost')
+        ->setOfficialCode('anonymous')
+        ->setCreatorId(1)
+        ->setAuthSource(PLATFORM_AUTH_SOURCE)
+        ->setLocale($languageForm)
+        ->setRegistrationDate($now)
+        ->setActive(1)
+        ->setEnabled(1)
+        ->setTimezone($timezone)
+    ;
+
+    $repo->updateUser($anon);
+
+    $anonId = $anon->getId();
+
     $userRepo = $container->get(UserRepository::class);
     $urlRepo = $container->get(AccessUrlRepository::class);
 
@@ -2561,6 +2556,9 @@ function finishInstallationWithContainer(
 
     $userRepo->addUserToResourceNode($adminId, $adminId);
     $userRepo->addUserToResourceNode($anonId, $adminId);
+
+    $manager->persist($anon);
+
     $manager->flush();
 
     installSchemas($container);

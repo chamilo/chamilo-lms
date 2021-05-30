@@ -35,15 +35,15 @@ class UserListener
             $this->userRepository->updateCanonicalFields($user);
             $this->userRepository->updatePassword($user);
 
-            $addResourceNode = true;
-            if (0 === $user->getCreatorId()) {
-                $addResourceNode = false;
+            if ($user->isSkipResourceNode()) {
+                return;
             }
 
-            if ($addResourceNode && !$user->hasResourceNode()) {
+            if (!$user->hasResourceNode()) {
+                // @todo use the creator id.
                 $token = $this->security->getToken();
                 if (null === $token) {
-                    throw new Exception('A user creator is needed');
+                    throw new Exception('A user creator is needed, to adding the user in a ResourceNode');
                 }
 
                 $em = $args->getEntityManager();

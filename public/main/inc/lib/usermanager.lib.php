@@ -140,7 +140,6 @@ class UserManager
      * @param int           $creatorId
      * @param array         $emailTemplate
      * @param string        $redirectToURLAfterLogin
-     * @param bool          $addUserToNode               Only needed during installation.
      *
      * @return mixed new user id - if the new user creation succeeds, false otherwise
      * @desc The function tries to retrieve user id from the session.
@@ -172,14 +171,12 @@ class UserManager
         $form = null,
         $creatorId = 0,
         $emailTemplate = [],
-        $redirectToURLAfterLogin = '',
-        $addUserToNode = true,
-        $addUserToUrl = true
+        $redirectToURLAfterLogin = ''
     ) {
         $authSource = !empty($authSource) ? $authSource : PLATFORM_AUTH_SOURCE;
         $creatorId = empty($creatorId) ? api_get_user_id() : 0;
 
-        if ($addUserToNode && 0 === $creatorId) {
+        if (0 === $creatorId) {
             Display::addFlash(
                 Display::return_message(get_lang('A user creator is needed'))
             );
@@ -187,7 +184,7 @@ class UserManager
         }
 
         $creatorInfo = api_get_user_info($creatorId);
-        $creatorEmail = isset($creatorInfo['email']) ? $creatorInfo['email'] : '';
+        $creatorEmail = $creatorInfo['email'] ?? '';
 
         // First check if the login exists.
         if (!self::is_username_available($loginName)) {
@@ -331,19 +328,6 @@ class UserManager
         $em = Database::getManager();
         $repo = Container::getUserRepository();
         $repo->updateUser($user, false);
-
-        // Add user as a node
-        if ($addUserToNode) {
-            $resourceNode = new ResourceNode();
-            $resourceNode
-                ->setTitle($loginName)
-                ->setCreator(api_get_user_entity($creatorId))
-                ->setResourceType($repo->getResourceType())
-            ;
-            $em->persist($resourceNode);
-            $user->setResourceNode($resourceNode);
-        }
-
         $em->persist($user);
         $em->flush();
 
@@ -374,13 +358,11 @@ class UserManager
                 self::addUserAsAdmin($user);
             }
 
-            if ($addUserToUrl) {
-                if (api_get_multiple_access_url()) {
-                    UrlManager::add_user_to_url($userId, api_get_current_access_url_id());
-                } else {
-                    //we are adding by default the access_url_user table with access_url_id = 1
-                    UrlManager::add_user_to_url($userId, 1);
-                }
+            if (api_get_multiple_access_url()) {
+                UrlManager::add_user_to_url($userId, api_get_current_access_url_id());
+            } else {
+                //we are adding by default the access_url_user table with access_url_id = 1
+                UrlManager::add_user_to_url($userId, 1);
             }
 
             if (is_array($extra) && count($extra) > 0) {
@@ -5084,18 +5066,16 @@ class UserManager
 
     public static function addUserAsAdmin(User $user)
     {
-        if ($user) {
-            $userId = $user->getId();
+        $userId = $user->getId();
 
-            if (!self::is_admin($userId)) {
-                $table = Database::get_main_table(TABLE_MAIN_ADMIN);
-                $sql = "INSERT INTO $table SET user_id = $userId";
-                Database::query($sql);
-            }
-
-            $user->addRole('ROLE_SUPER_ADMIN');
-            self::getRepository()->updateUser($user, true);
+        if (!self::is_admin($userId)) {
+            $table = Database::get_main_table(TABLE_MAIN_ADMIN);
+            $sql = "INSERT INTO $table SET user_id = $userId";
+            Database::query($sql);
         }
+
+        $user->addRole('ROLE_SUPER_ADMIN');
+        self::getRepository()->updateUser($user, true);
     }
 
     public static function removeUserAdmin(User $user)

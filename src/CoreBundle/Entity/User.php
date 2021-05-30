@@ -690,6 +690,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      */
     protected $uuid;
 
+    // Property used only during installation.
+    protected bool $skipResourceNode;
+
     public function __construct()
     {
         $this->uuid = Uuid::v4();
@@ -702,6 +705,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->active = true;
         $this->registrationDate = new DateTime();
         $this->authSource = 'platform';
+        $this->skipResourceNode = false;
         $this->courses = new ArrayCollection();
         //$this->items = new ArrayCollection();
         $this->classes = new ArrayCollection();
@@ -2134,6 +2138,18 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function getSessionsRelUser()
     {
         return $this->sessionsRelUser;
+    }
+
+    public function isSkipResourceNode(): bool
+    {
+        return $this->skipResourceNode;
+    }
+
+    public function setSkipResourceNode(bool $skipResourceNode): self
+    {
+        $this->skipResourceNode = $skipResourceNode;
+
+        return $this;
     }
 
     /**

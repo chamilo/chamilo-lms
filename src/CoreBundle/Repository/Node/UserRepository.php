@@ -523,6 +523,8 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
     /**
      * Find potential users to send a message.
      *
+     * @todo remove  api_is_platform_admin
+     *
      * @param int    $currentUserId The current user ID
      * @param string $searchFilter  Optional. The search text to filter the user list
      * @param int    $limit         Optional. Sets the maximum number of results to retrieve

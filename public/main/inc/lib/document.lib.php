@@ -6094,7 +6094,7 @@ This folder contains all sessions that have been opened in the chat. Although th
      * @param int                 $visibility
      * @param CGroup              $group
      *
-     * @return CDocument
+     * @return CDocument|null
      */
     public static function addFileToDocument(CDocument $document, $realPath, $content, $visibility, $group)
     {
@@ -6110,31 +6110,20 @@ This folder contains all sessions that have been opened in the chat. Although th
         $title = $document->getTitle();
         // Only create a ResourceFile if there's a file involved
         if ('file' === $fileType) {
-            $resourceFile = $resourceNode->getResourceFile();
-            if (null === $resourceFile) {
-                $resourceFile = new ResourceFile();
-            }
-
             if ($content instanceof UploadedFile) {
-                $resourceFile->setFile($content);
+                $documentRepo->addFile($document, $content);
                 error_log('UploadedFile');
             } else {
                 // $path points to a file in the directory
                 if (!empty($realPath) && file_exists($realPath) && !is_dir($realPath)) {
                     error_log('file_exists');
-                    $mimeType = mime_content_type($realPath);
-                    $file = new UploadedFile($realPath, $title, $mimeType, null, true);
-                    $resourceFile->setFile($file);
+                    $documentRepo->addFileFromPath($document, $title, $realPath, false);
                 } else {
                     // We get the content and create a file
                     error_log('From content');
                     $documentRepo->addFileFromString($document, $title, 'text/html', $content, false);
                 }
             }
-
-            $resourceFile->setName($title);
-            $em->persist($resourceFile);
-            $resourceNode->setResourceFile($resourceFile);
             $em->persist($resourceNode);
         }
         $em->persist($document);
@@ -6146,7 +6135,7 @@ This folder contains all sessions that have been opened in the chat. Although th
             return $document;
         }
 
-        return false;
+        return null;
     }
 
     /**

@@ -247,6 +247,21 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * @todo clean path
+     */
+    public function addFileFromPath(ResourceInterface $resource, string $fileName, string $path, bool $flush = true)
+    {
+        if (!empty($path) && file_exists($path) && !is_dir($path)) {
+            $mimeType = mime_content_type($path);
+            $file = new UploadedFile($path, $fileName, $mimeType, null, true);
+
+            return $this->addFile($resource, $file, '', $flush);
+        }
+
+        return null;
+    }
+
     public function addFileFromString(ResourceInterface $resource, string $fileName, string $mimeType, string $content, bool $flush = true): ?ResourceFile
     {
         $handle = tmpfile();
@@ -460,7 +475,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
     public function getResourceByCreatorFromTitle(
         string $title,
         User $user,
-        ResourceNode $parentNode,
+        ResourceNode $parentNode
     ): ?ResourceInterface {
         $qb = $this->getResourcesByCreator($user, $parentNode);
         $this->addTitleQueryBuilder($title, $qb);

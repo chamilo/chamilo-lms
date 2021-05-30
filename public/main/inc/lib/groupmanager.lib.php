@@ -308,7 +308,7 @@ class GroupManager
             if ($forumState >= 0) {
                 $forumName = get_lang('Group forums');
                 $repo = Container::getForumCategoryRepository();
-                $category = $repo->findResourceByTitle($forumName, $course->getResourceNode(), $course);
+                $category = $repo->findCourseResourceByTitle($forumName, $course->getResourceNode(), $course);
                 /*$criteria = ['cId' => $course_id, 'catTitle' => $forumName];
                 $category = $repo->findOneBy($criteria);*/
 

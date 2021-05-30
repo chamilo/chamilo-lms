@@ -77,7 +77,7 @@ class TestCategory
 
         $course = api_get_course_entity($courseId);
         $repo = Container::getQuestionCategoryRepository();
-        $category = $repo->findResourceByTitle($this->name, $course->getResourceNode(), $course);
+        $category = $repo->findCourseResourceByTitle($this->name, $course->getResourceNode(), $course);
 
         if (null === $category) {
             $category = new CQuizQuestionCategory();
@@ -1036,7 +1036,7 @@ class TestCategory
     {
         $repo = Container::getQuestionCategoryRepository();
         $courseEntity = api_get_course_entity($courseId);
-        $resource = $repo->findResourceByTitle($name, $courseEntity->getResourceNode(), $courseEntity);
+        $resource = $repo->findCourseResourceByTitle($name, $courseEntity->getResourceNode(), $courseEntity);
 
         return null !== $resource;
     }

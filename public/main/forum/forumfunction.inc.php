@@ -6054,7 +6054,7 @@ function getForumCategoryByTitle($title, $courseId, $sessionId = 0)
     $course = api_get_course_entity($courseId);
     $session = api_get_session_entity($sessionId);
 
-    return $repo->findResourceByTitle(
+    return $repo->findCourseResourceByTitle(
         $title,
         $course->getResourceNode(),
         $course,

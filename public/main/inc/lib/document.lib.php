@@ -6087,6 +6087,8 @@ This folder contains all sessions that have been opened in the chat. Although th
     }
 
     /**
+     * @deprecated use CDocumentRepository
+     *
      * @param string              $realPath
      * @param string|UploadedFile $content
      * @param int                 $visibility
@@ -6100,6 +6102,7 @@ This folder contains all sessions that have been opened in the chat. Although th
             return $document;
         }
 
+        $documentRepo = Container::getDocumentRepository();
         $fileType = $document->getFiletype();
         $resourceNode = $document->getResourceNode();
 
@@ -6125,11 +6128,7 @@ This folder contains all sessions that have been opened in the chat. Although th
                 } else {
                     // We get the content and create a file
                     error_log('From content');
-                    $handle = tmpfile();
-                    fwrite($handle, $content);
-                    $meta = stream_get_meta_data($handle);
-                    $file = new UploadedFile($meta['uri'], $title, null, null, true);
-                    $resourceFile->setFile($file);
+                    $documentRepo->addFileFromString($document, $title, 'text/html', $content, false);
                 }
             }
 
@@ -6218,7 +6217,7 @@ This folder contains all sessions that have been opened in the chat. Although th
             }
         }
 
-        $document = $documentRepo->findResourceByTitle(
+        $document = $documentRepo->findCourseResourceByTitle(
             $title,
             $parentResource->getResourceNode(),
             $courseEntity,

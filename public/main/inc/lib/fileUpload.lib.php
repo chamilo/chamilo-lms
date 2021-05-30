@@ -230,6 +230,8 @@ function process_uploaded_file($uploadedFileData, $show_output = true)
  * @param int    $parentId
  * @param $content
  *
+ * @deprecated
+ *
  * So far only use for unzip_uploaded_document function.
  * If no output wanted on success, set to false.
  *
@@ -400,7 +402,7 @@ function handle_uploaded_document(
                 }
             }
 
-            $document = $documentRepo->findResourceByTitle(
+            $document = $documentRepo->findCourseResourceByTitle(
                 $documentTitle,
                 $parentResource->getResourceNode(),
                 $courseEntity,

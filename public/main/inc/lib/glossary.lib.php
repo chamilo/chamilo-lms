@@ -691,7 +691,7 @@ class GlossaryManager
         $keyword = $_GET['keyword'] ?? null;
 
         if (!empty($keyword)) {
-            $glossaries = $repo->findResourcesByTitle($keyword, $course->getResourceNode(), $course, $session);
+            $glossaries = $repo->findCourseResourcesByTitle($keyword, $course->getResourceNode(), $course, $session);
         } else {
             $qb = $repo->getResourcesByCourse($course, $session);
             $glossaries = $qb->getQuery()->getResult();

@@ -620,13 +620,8 @@ abstract class Question
                     LOG_QUESTION_ID,
                     $this->id
                 );
-                $request = Container::getRequest();
-                if ($request->files->has('imageUpload')) {
-                    $file = $request->files->get('imageUpload');
-                    $questionRepo->addFile($question, $file);
 
-                    $em->flush();
-                }
+                $questionRepo->addFileFromFileRequest($question, 'imageUpload');
 
                 // If hotspot, create first answer
                 if (HOT_SPOT == $type || HOT_SPOT_ORDER == $type) {

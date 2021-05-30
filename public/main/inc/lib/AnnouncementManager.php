@@ -1207,16 +1207,7 @@ class AnnouncementManager
                 $em->persist($attachment);
                 $em->flush();
 
-                $request = Container::getRequest();
-                $file = $request->files->get('user_upload');
-
-                if (!empty($file)) {
-                    $repo->addFile($attachment, $file);
-                    $em->persist($attachment);
-                    $em->flush();
-
-                    return 1;
-                }
+                $repo->addFileFromFileRequest($attachment, 'user_upload');
 
                 $return = 1;
             }

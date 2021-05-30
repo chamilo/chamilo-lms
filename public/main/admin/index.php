@@ -151,7 +151,7 @@ if (api_is_platform_admin()) {
     $items[] = ['url' => 'course_list.php', 'label' => get_lang('Course list')];
     $items[] = ['url' => 'course_add.php', 'label' => get_lang('Add course')];
 
-    if ('true' == api_get_setting('course_validation')) {
+    if ('true' === api_get_setting('course_validation')) {
         $items[] = ['url' => 'course_request_review.php', 'label' => get_lang('Review incoming course requests')];
         $items[] = ['url' => 'course_request_accepted.php', 'label' => get_lang('Accepted course requests')];
         $items[] = ['url' => 'course_request_rejected.php', 'label' => get_lang('Rejected course requests')];
@@ -163,7 +163,7 @@ if (api_is_platform_admin()) {
     $items[] = ['url' => 'subscribe_user2course.php', 'label' => get_lang('Add a user to a course')];
     $items[] = ['url' => 'course_user_import.php', 'label' => get_lang('Import users list')];
 
-    if ('true' == api_get_setting('gradebook_enable_grade_model')) {
+    if ('true' === api_get_setting('gradebook_enable_grade_model')) {
         $items[] = ['url' => 'grade_models.php', 'label' => get_lang('Grading model')];
     }
 
@@ -213,7 +213,7 @@ if (api_is_platform_admin()) {
     $items[] = ['url' => $sessionPath.'session_add.php', 'label' => get_lang('Add a training session')];
     $items[] = [
         'url' => $sessionPath.'session_category_list.php',
-        'label' => get_lang('Training sessions listCategory'),
+        'label' => get_lang('Sessions categories list'),
     ];
     $items[] = ['url' => $sessionPath.'session_import.php', 'label' => get_lang('Import sessions list')];
     $items[] = [

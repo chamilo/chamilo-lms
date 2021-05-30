@@ -10,8 +10,6 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * MessageAttachment.
- *
  * @ORM\Table(name="ticket_message_attachments")
  * @ORM\Entity
  */

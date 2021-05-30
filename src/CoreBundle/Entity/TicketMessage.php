@@ -8,9 +8,10 @@ namespace Chamilo\CoreBundle\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Message.
+ * Ticket messages.
  *
  * @ORM\Table(name="ticket_message")
  * @ORM\Entity
@@ -56,16 +57,18 @@ class TicketMessage
     protected int $insertUserId;
 
     /**
-     * @ORM\Column(name="sys_insert_datetime", type="datetime")
-     */
-    protected DateTime $insertDateTime;
-
-    /**
      * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
     protected ?int $lastEditUserId = null;
 
     /**
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="sys_insert_datetime", type="datetime")
+     */
+    protected DateTime $insertDateTime;
+
+    /**
+     * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
      */
     protected ?DateTime $lastEditDateTime = null;
@@ -86,10 +89,7 @@ class TicketMessage
         return $this->subject;
     }
 
-    /**
-     * @return TicketMessage
-     */
-    public function setSubject(string $subject)
+    public function setSubject(string $subject): self
     {
         $this->subject = $subject;
 
@@ -104,10 +104,7 @@ class TicketMessage
         return $this->message;
     }
 
-    /**
-     * @return TicketMessage
-     */
-    public function setMessage(string $message)
+    public function setMessage(string $message): self
     {
         $this->message = $message;
 
@@ -122,10 +119,7 @@ class TicketMessage
         return $this->status;
     }
 
-    /**
-     * @return TicketMessage
-     */
-    public function setStatus(string $status)
+    public function setStatus(string $status): self
     {
         $this->status = $status;
 
@@ -140,10 +134,7 @@ class TicketMessage
         return $this->ipAddress;
     }
 
-    /**
-     * @return TicketMessage
-     */
-    public function setIpAddress(string $ipAddress)
+    public function setIpAddress(string $ipAddress): self
     {
         $this->ipAddress = $ipAddress;
 
@@ -158,10 +149,7 @@ class TicketMessage
         return $this->ticket;
     }
 
-    /**
-     * @return TicketMessage
-     */
-    public function setTicket(Ticket $ticket)
+    public function setTicket(Ticket $ticket): self
     {
         $this->ticket = $ticket;
 
@@ -194,10 +182,7 @@ class TicketMessage
         return $this->insertDateTime;
     }
 
-    /**
-     * @return TicketMessage
-     */
-    public function setInsertDateTime(DateTime $insertDateTime)
+    public function setInsertDateTime(DateTime $insertDateTime): self
     {
         $this->insertDateTime = $insertDateTime;
 
@@ -230,10 +215,7 @@ class TicketMessage
         return $this->lastEditDateTime;
     }
 
-    /**
-     * @return TicketMessage
-     */
-    public function setLastEditDateTime(DateTime $lastEditDateTime)
+    public function setLastEditDateTime(DateTime $lastEditDateTime): self
     {
         $this->lastEditDateTime = $lastEditDateTime;
 

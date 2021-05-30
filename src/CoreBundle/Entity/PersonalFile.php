@@ -11,8 +11,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
-use Chamilo\CoreBundle\Controller\Api\CreateResourceNodeFileAction;
-use Chamilo\CoreBundle\Controller\Api\UpdateResourceNodeFileAction;
+use Chamilo\CoreBundle\Controller\Api\CreatePersonalFileAction;
+use Chamilo\CoreBundle\Controller\Api\UpdatePersonalFileAction;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -20,11 +20,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
- *     normalizationContext={"groups"={"personal_file:read"}},
+ *     normalizationContext={"groups"={"personal_file:read", "resource_node:read"}},
  *     denormalizationContext={"groups"={"personal_file:write"}},
  *     itemOperations={
  *         "put"={
- *             "controller"=UpdateResourceNodeFileAction::class,
+ *             "controller"=UpdatePersonalFileAction::class,
  *             "deserialize"=false,
  *             "security"="is_granted('EDIT', object.resourceNode)",
  *         },
@@ -37,7 +37,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     },
  *     collectionOperations={
  *         "post"={
- *             "controller"=CreateResourceNodeFileAction::class,
+ *             "controller"=CreatePersonalFileAction::class,
  *             "deserialize"=false,
  *             "security"="is_granted('ROLE_USER')",
  *             "validation_groups"={"Default", "media_object_create", "personal_file:write"},
@@ -115,6 +115,7 @@ class PersonalFile extends AbstractResource implements ResourceInterface
     use TimestampableEntity;
 
     /**
+     * @Groups({"personal_file:read"})
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -122,6 +123,7 @@ class PersonalFile extends AbstractResource implements ResourceInterface
     protected int $id;
 
     /**
+     * @Groups({"personal_file:read"})
      * @Assert\NotBlank()
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */

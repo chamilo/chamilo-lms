@@ -51,7 +51,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     private string $fileContentName = 'file_content';
 
     /**
-     * @deprecated in favor of vue CRUD methods
+     * @deprecated Use Vue
      *
      * @Route("/{tool}/{type}", name="chamilo_core_resource_index")
      *
@@ -85,7 +85,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @deprecated in favor of vue CRUD methods
+     * @deprecated Use Vue
+     *
      * @Route("/{tool}/{type}/{id}/list", name="chamilo_core_resource_list")
      *
      * If node has children show it
@@ -118,7 +119,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @deprecated in favor of vue CRUD methods
+     * @deprecated Use Vue
      *
      * @Route("/{tool}/{type}/{id}/new_folder", methods={"GET", "POST"}, name="chamilo_core_resource_new_folder")
      */
@@ -128,7 +129,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @deprecated in favor of vue CRUD methods
+     * @deprecated Use Vue
      *
      * @Route("/{tool}/{type}/{id}/new", methods={"GET", "POST"}, name="chamilo_core_resource_new")
      */
@@ -213,7 +214,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @deprecated in favor of vue CRUD methods
+     * @deprecated Use Vue
      *
      * @Route("/{tool}/{type}/{id}/edit", methods={"GET", "POST"})
      */
@@ -294,6 +295,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
+     * @deprecated Use Vue
+     *
      * Shows a resource information.
      *
      * @Route("/{tool}/{type}/{id}/info", methods={"GET", "POST"}, name="chamilo_core_resource_info")
@@ -411,6 +414,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
+     * @deprecated Use Vue + api platform
+     *
      * @Route("/{tool}/{type}/{id}/delete", name="chamilo_core_resource_delete")
      */
     public function deleteAction(Request $request): Response
@@ -447,6 +452,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
+     * @deprecated Use Vue + api platform
+     *
      * @Route("/{tool}/{type}/{id}/delete_mass", methods={"DELETE"}, name="chamilo_core_resource_delete_mass")
      */
     public function deleteMassAction($primaryKeys, $allPrimaryKeys, Request $request): Response

@@ -6,19 +6,17 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
-use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Symfony\Component\HttpFoundation\Request;
 
-class UpdateDocumentFileAction extends BaseResourceFileAction
+class UpdatePersonalFileAction extends BaseResourceFileAction
 {
-    public function __invoke(CDocument $document, Request $request, CDocumentRepository $repo): CDocument
+    public function __invoke(PersonalFile $document, Request $request, CDocumentRepository $repo): PersonalFile
     {
-        error_log('UpdateDocumentFileAction __invoke');
+        error_log('UpdatePersonalFileAction __invoke');
 
         $this->handleUpdateRequest($document, $repo, $request);
-
-        //$document->setComment($comment);
 
         error_log('Finish update resource node file action');
 

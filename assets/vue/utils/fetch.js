@@ -124,6 +124,8 @@ export default function(id, options = {}) {
             });
     }*/
 
+  console.log('ready to fetch');
+
   return global.fetch(new URL(id, entryPoint), options).then(response => {
     console.log(response, 'global.fetch');
 

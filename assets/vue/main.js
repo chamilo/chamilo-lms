@@ -7,6 +7,7 @@ import axios from 'axios'
 import courseCategoryService from './services/coursecategory';
 import documentsService from './services/documents';
 import courseService from './services/course';
+import personalFileService from './services/personalfile';
 import resourceLinkService from './services/resourcelink';
 import resourceNodeService from './services/resourcenode';
 import makeCrudModule from './store/modules/crud';
@@ -32,24 +33,11 @@ const toastOptions = {
 import VueFlatPickr from 'vue-flatpickr-component';
 import 'flatpickr/dist/flatpickr.css';
 
+// @todo move in a file:
 store.registerModule(
     'course',
     makeCrudModule({
         service: courseService
-    })
-);
-
-store.registerModule(
-    'resourcelink',
-    makeCrudModule({
-        service: resourceLinkService
-    })
-);
-
-store.registerModule(
-    'resourcenode',
-    makeCrudModule({
-        service: resourceNodeService
     })
 );
 
@@ -64,6 +52,27 @@ store.registerModule(
     'documents',
     makeCrudModule({
         service: documentsService
+    })
+);
+
+store.registerModule(
+    'personalfile',
+    makeCrudModule({
+        service: personalFileService
+    })
+);
+
+store.registerModule(
+    'resourcelink',
+    makeCrudModule({
+        service: resourceLinkService
+    })
+);
+
+store.registerModule(
+    'resourcenode',
+    makeCrudModule({
+        service: resourceNodeService
     })
 );
 

@@ -56,7 +56,7 @@ class ResourceNode
     public const PATH_SEPARATOR = '/';
 
     /**
-     * @Groups({"resource_node:read", "document:read", "ctool:read"})
+     * @Groups({"resource_node:read", "document:read", "ctool:read", "user_json:read"})
      * @ORM\Id
      * @ORM\Column(type="bigint")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -210,9 +210,6 @@ class ResourceNode
         $this->fileEditableText = false;
     }
 
-    /**
-     * @return string
-     */
     public function __toString()
     {
         return (string) $this->getPathForDisplay();

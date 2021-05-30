@@ -101,11 +101,13 @@ export default {
         }
       }*/
 
+      // This code below will handle the legacy content to be loaded.
+
       let url = window.location.href;
       var n = url.indexOf("main/");
       if (n > 0) {
         if (this.firstTime) {
-          console.log('firstTime: 1.');
+          console.log('App.vue: firstTime: 1.');
           let content = document.querySelector("#sectionMainContent");
           if (content) {
             console.log('legacyContent updated');
@@ -145,7 +147,7 @@ export default {
         }
       } else {
         if (this.firstTime) {
-          console.log('firstTime 2.');
+          console.log('App.vue: firstTime 2');
           let content = document.querySelector("#sectionMainContent");
           if (content) {
             console.log('legacyContent updated');
@@ -172,15 +174,15 @@ export default {
   },
 
   created() {
-    console.log('APP created');
+    console.log('App.vue created');
     this.legacyContent = '';
-    console.log('updated empty created');
+    console.log('App.vue legacyContent cleaned');
     let app = document.getElementById('app');
 
     let isAuthenticated = false;
     if (!isEmpty(window.user)) {
-      console.log('is logged in as ' + window.user.username);
-      console.log('userAvatar ' + window.userAvatar);
+      console.log('APP.vue: is logged in as ' + window.user.username);
+      console.log('APP.vue: userAvatar ' + window.userAvatar);
       this.user = window.user;
       this.userAvatar = window.userAvatar;
       isAuthenticated = true;
@@ -222,7 +224,7 @@ export default {
     });
   },
   mounted() {
-    console.log('app.vue mounted');
+    console.log('App.vue mounted');
     this.firstTime = true;
   },
   mixins: [NotificationMixin],

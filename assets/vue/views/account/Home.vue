@@ -6,7 +6,7 @@
       <q-route-tab to="/courses" label="Posts" />
       <q-route-tab to="/courses" label="Friends" />
       <q-route-tab to="/" label="Posts" />
-      <q-route-tab to="/sessions" label="My files" />
+      <q-route-tab to="/resources/personal_files" label="My files" />
     </q-tabs>
 
     <a href="/account/edit" class="btn btn-primary">

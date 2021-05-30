@@ -8,7 +8,7 @@ namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceLink;
-use Chamilo\CourseBundle\Entity\CDocument;
+use Exception;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class BaseResourceFileAction
 {
-    protected function handleCreateRequest(AbstractResource $resource, Request $request)
+    protected function handleCreateRequest(AbstractResource $resource, Request $request): void
     {
         error_log('handleCreateRequest');
         $contentData = $request->getContent();
@@ -36,13 +36,13 @@ class BaseResourceFileAction
         }
 
         if (empty($fileType)) {
-            throw new \Exception('filetype needed: folder or file');
+            throw new Exception('filetype needed: folder or file');
         }
 
         $nodeId = (int) $request->get('parentResourceNodeId');
 
         if (0 === $nodeId) {
-            throw new \Exception('parentResourceNodeId int value needed');
+            throw new Exception('parentResourceNodeId int value needed');
         }
 
         $resource->setParentResourceNode($nodeId);

@@ -119,7 +119,7 @@ export default {
       });
     },
     onUpdateOptions({ page, itemsPerPage, sortBy, sortDesc, totalItems } = {}) {
-      console.log('onUpdateOptions');
+      console.log('ListMixin.js: onUpdateOptions');
       let params = {
         ...this.filters
       }
@@ -247,8 +247,7 @@ export default {
       this.resetList = true;
       let resourceId = item['resourceNode']['id'];
       this.$route.params.node = resourceId;
-
-      //this.onUpdateOptions(this.options);
+      //folderParams['node'] = resourceId;
 
       this.$router.push({
         name: `${this.$options.servicePrefix}List`,
@@ -269,7 +268,7 @@ export default {
       let folderParams = this.$route.query;
       folderParams['id'] = item['@id'];
 
-      if ('folder' === item.filetype) {
+      if ('folder' === item.filetype || isEmpty(item.filetype)) {
         this.$router.push({
           name: `${this.$options.servicePrefix}Update`,
           params: { id: item['@id'] },

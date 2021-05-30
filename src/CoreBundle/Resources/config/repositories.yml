@@ -22,6 +22,7 @@ services:
             - setSlugify: ['@cocur_slugify']
             - setToolChain: ['@Chamilo\CoreBundle\ToolChain']
             - setResourceNodeRepository: ['@Chamilo\CoreBundle\Repository\ResourceNodeRepository']
+            - setRequestStack: ['@request_stack']
         tags: ['doctrine.repository_service']
 
     # User repository
@@ -33,3 +34,4 @@ services:
             - setSlugify: ['@cocur_slugify']
             - setToolChain: ['@Chamilo\CoreBundle\ToolChain']
             - setResourceNodeRepository: ['@Chamilo\CoreBundle\Repository\ResourceNodeRepository']
+            - setRequestStack: ['@request_stack']

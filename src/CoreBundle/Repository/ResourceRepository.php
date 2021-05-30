@@ -19,14 +19,12 @@ use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
-use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Entity\CGroup;
-use Cocur\Slugify\SlugifyInterface;
+use Chamilo\CourseBundle\Traits\NonResourceRepository;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Exception;
@@ -36,91 +34,18 @@ use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Throwable;
 
 /**
- * Class ResourceRepository.
  * Extends EntityRepository is needed to process settings.
  */
 abstract class ResourceRepository extends ServiceEntityRepository
 {
-    protected EntityRepository $repository;
+    use NonResourceRepository;
 
-    protected EntityManager $entityManager;
-
-    protected ?RouterInterface $router = null;
-
-    protected ?ResourceNodeRepository $resourceNodeRepository = null;
-
-    protected ?AuthorizationCheckerInterface $authorizationChecker = null;
-
-    protected ?SlugifyInterface $slugify = null;
-
-    protected ?ToolChain $toolChain = null;
-
-    /**
-     * The entity class FQN.
-     */
-    protected string $className;
     protected Settings $settings;
     protected Template $templates;
     protected ?ResourceType $resourceType = null;
-
-    /*public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker,
-        EntityManager $entityManager,
-        RouterInterface $router,
-        SlugifyInterface $slugify,
-        ToolChain $toolChain,
-        ResourceNodeRepository $resourceNodeRepository
-    ) {
-        $className = $this->getClassName();
-        $this->repository = $entityManager->getRepository($className);
-        $this->authorizationChecker = $authorizationChecker;
-        $this->router = $router;
-        $this->resourceNodeRepository = $resourceNodeRepository;
-        $this->slugify = $slugify;
-        $this->toolChain = $toolChain;
-        $this->settings = new Settings();
-        $this->templates = new Template();
-    }*/
-
-    public function setResourceNodeRepository(ResourceNodeRepository $resourceNodeRepository): self
-    {
-        $this->resourceNodeRepository = $resourceNodeRepository;
-
-        return $this;
-    }
-
-    public function setRouter(RouterInterface $router): self
-    {
-        $this->router = $router;
-
-        return $this;
-    }
-
-    public function setAuthorizationChecker(AuthorizationCheckerInterface $authorizationChecker): self
-    {
-        $this->authorizationChecker = $authorizationChecker;
-
-        return $this;
-    }
-
-    public function setSlugify(SlugifyInterface $slugify): self
-    {
-        $this->slugify = $slugify;
-
-        return $this;
-    }
-
-    public function setToolChain(ToolChain $toolChain): self
-    {
-        $this->toolChain = $toolChain;
-
-        return $this;
-    }
 
     public function setSettings(Settings $settings): self
     {
@@ -159,22 +84,12 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $class;
     }
 
-    public function getAuthorizationChecker(): AuthorizationCheckerInterface
+    public function getCount(QueryBuilder $qb): int
     {
-        return $this->authorizationChecker;
-    }
+        $qb->select('count(resource)');
+        $qb->setMaxResults(1);
 
-    public function getRouter(): RouterInterface
-    {
-        return $this->router;
-    }
-
-    /**
-     * @return ResourceNodeRepository
-     */
-    public function getResourceNodeRepository()
-    {
-        return $this->resourceNodeRepository;
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -253,6 +168,10 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
     public function update(AbstractResource $resource, bool $andFlush = true): void
     {
+        if (!$resource->hasResourceNode()) {
+            throw new Exception('Resource needs a resource node');
+        }
+
         $resource->getResourceNode()->setUpdatedAt(new DateTime());
         $resource->getResourceNode()->setTitle($resource->getResourceName());
         $this->getEntityManager()->persist($resource);
@@ -301,7 +220,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $resourceNode;
     }
 
-    public function findResourceByTitle(
+    public function findCourseResourceByTitle(
         string $title,
         ResourceNode $parentNode,
         Course $course,
@@ -315,15 +234,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-    public function getCount(QueryBuilder $qb): int
-    {
-        $qb->select('count(resource)');
-        $qb->setMaxResults(1);
-
-        return (int) $qb->getQuery()->getSingleScalarResult();
-    }
-
-    public function findResourcesByTitle(
+    public function findCourseResourcesByTitle(
         string $title,
         ResourceNode $parentNode,
         Course $course,
@@ -336,7 +247,35 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function addFile(ResourceInterface $resource, UploadedFile $file, string $description = ''): ?ResourceFile
+    public function addFileFromString(ResourceInterface $resource, string $fileName, string $mimeType, string $content, bool $flush = true): ?ResourceFile
+    {
+        $handle = tmpfile();
+        fwrite($handle, $content);
+        $meta = stream_get_meta_data($handle);
+        $file = new UploadedFile($meta['uri'], $fileName, $mimeType, null, true);
+
+        return $this->addFile($resource, $file, '', $flush);
+    }
+
+    public function addFileFromFileRequest(ResourceInterface $resource, string $fileKey, bool $flush = true): ?ResourceFile
+    {
+        $request = $this->getRequest();
+        if ($request->files->has($fileKey)) {
+            $file = $request->files->get($fileKey);
+            if (null !== $file) {
+                $resourceFile = $this->addFile($resource, $file);
+                if ($flush) {
+                    $this->getEntityManager()->flush();
+                }
+
+                return $resourceFile;
+            }
+        }
+
+        return null;
+    }
+
+    public function addFile(ResourceInterface $resource, UploadedFile $file, string $description = '', bool $flush = false): ?ResourceFile
     {
         $resourceNode = $resource->getResourceNode();
 
@@ -359,6 +298,10 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $em->persist($resourceFile);
         $resourceNode->setResourceFile($resourceFile);
         $em->persist($resourceNode);
+
+        if ($flush) {
+            $em->flush();
+        }
 
         return $resourceFile;
     }
@@ -512,6 +455,18 @@ abstract class ResourceRepository extends ServiceEntityRepository
         }
 
         return $qb;
+    }
+
+    public function getResourceByCreatorFromTitle(
+        string $title,
+        User $user,
+        ResourceNode $parentNode,
+    ): ?ResourceInterface {
+        $qb = $this->getResourcesByCreator($user, $parentNode);
+        $this->addTitleQueryBuilder($title, $qb);
+        $qb->setMaxResults(1);
+
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     public function getResourcesByCreator(User $user, ResourceNode $parentNode = null): QueryBuilder
@@ -1007,13 +962,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
                         ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
                         ->setResourceLink($link)
                     ;
-                    //$rights[] = $resourceRight;
-
                     $link->addResourceRight($resourceRight);
-
-                /*if (!empty($rights)) {
-                    $link->setResourceRights($rights);
-                }*/
                 } else {
                     $link->setResourceRights(new ArrayCollection());
                 }

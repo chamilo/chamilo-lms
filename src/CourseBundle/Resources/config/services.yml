@@ -35,4 +35,5 @@ services:
             - setSlugify: ['@cocur_slugify']
             - setToolChain: ['@Chamilo\CoreBundle\ToolChain']
             - setResourceNodeRepository: ['@Chamilo\CoreBundle\Repository\ResourceNodeRepository']
+            - setRequestStack: ['@request_stack']
         exclude: '../../Repository/CCourseSettingRepository.php'

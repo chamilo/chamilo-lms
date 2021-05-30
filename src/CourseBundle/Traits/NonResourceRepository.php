@@ -11,6 +11,8 @@ use Chamilo\CoreBundle\ToolChain;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
@@ -30,11 +32,23 @@ trait NonResourceRepository
 
     protected ?ToolChain $toolChain = null;
 
+    protected ?RequestStack $requestStack;
+
+    public function getAuthorizationChecker(): AuthorizationCheckerInterface
+    {
+        return $this->authorizationChecker;
+    }
+
     public function setAuthorizationChecker(AuthorizationCheckerInterface $authorizationChecker): self
     {
         $this->authorizationChecker = $authorizationChecker;
 
         return $this;
+    }
+
+    public function getRouter(): RouterInterface
+    {
+        return $this->router;
     }
 
     public function setRouter(RouterInterface $router): self
@@ -58,10 +72,29 @@ trait NonResourceRepository
         return $this;
     }
 
+    /**
+     * @return ResourceNodeRepository
+     */
+    public function getResourceNodeRepository()
+    {
+        return $this->resourceNodeRepository;
+    }
+
     public function setResourceNodeRepository(ResourceNodeRepository $resourceNodeRepository): self
     {
         $this->resourceNodeRepository = $resourceNodeRepository;
 
         return $this;
+    }
+    public function setRequestStack(RequestStack $requestStack): self
+    {
+        $this->requestStack = $requestStack;
+
+        return $this;
+    }
+
+    public function getRequest(): Request
+    {
+        return $this->requestStack->getCurrentRequest();
     }
 }

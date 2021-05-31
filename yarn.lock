@@ -2002,12 +2002,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tinymce/tinymce-vue@npm:^4.0.2":
-  version: 4.0.2
-  resolution: "@tinymce/tinymce-vue@npm:4.0.2"
+"@tinymce/tinymce-vue@npm:^4.0.3":
+  version: 4.0.3
+  resolution: "@tinymce/tinymce-vue@npm:4.0.3"
   peerDependencies:
     vue: ^3.0.0
-  checksum: c87ec5cf73f5efe0afaad53b3b64be0cc019113c11ffbefe263912d3c9cd8074226aac3cd5535af5c91017c2cd5eb2c38c35f9ba04e6a5967ba33de240471603
+  checksum: 873e2af8cf3570de0d9a80fbd30cbb853d1f2849a74d6f516a09bbadc6a8973aeee435e733c448760ab33ff8bff20d8bc43ed14b2e72d7dc34033aa5114950d1
   languageName: node
   linkType: hard
 
@@ -5990,7 +5990,7 @@ __metadata:
     "@tailwindcss/forms": ^0.3.2
     "@tailwindcss/typography": ^0.4.1
     "@tailwindcss/ui": ^0.7.2
-    "@tinymce/tinymce-vue": ^4.0.2
+    "@tinymce/tinymce-vue": ^4.0.3
     "@types/lodash": ^4.14.170
     "@vue/apollo-composable": ^4.0.0-alpha.12
     "@vue/apollo-option": ^4.0.0-alpha.11
@@ -6011,7 +6011,7 @@ __metadata:
     blueimp-load-image: ^5.14.0
     bootstrap-daterangepicker: ^3.1
     bootstrap-select: ^1.13.18
-    chart.js: ^3.3.0
+    chart.js: ^3.3.2
     copy-webpack-plugin: ^9.0.0
     cropper: ^4.1.0
     datepair.js: ^0.4.17
@@ -6073,7 +6073,7 @@ __metadata:
     select2: ^4.1.0-rc.0
     signature_pad: ^3.0.0-beta.4
     sortablejs: ^1.13.0
-    sweetalert2: ^11.0.12
+    sweetalert2: ^11.0.16
     tailwindcss: latest
     tempusdominus-bootstrap-4: ^5.39.0
     tempusdominus-core: ^5.19.0
@@ -6111,10 +6111,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chart.js@npm:^3.3.0":
-  version: 3.3.0
-  resolution: "chart.js@npm:3.3.0"
-  checksum: 0d1dfbe496d85ba9adfc6fcaa8ff58a9e0e1e27755940791c5fe146246fdc725e31753a0a74688252fcaa3e8d81b2a0718be94d04aad98306ef6632bd9e4e223
+"chart.js@npm:^3.3.2":
+  version: 3.3.2
+  resolution: "chart.js@npm:3.3.2"
+  checksum: f776eb9d92dc5f8f73c7a6685bd86ad2827c7f50a2d4c83ed56b2f3e10bb4aef651347f35c3424104764bd17d9925b69ea5eacd056a9c91fb9c75cc97cdd2456
   languageName: node
   linkType: hard
 
@@ -17954,10 +17954,10 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"sweetalert2@npm:^11.0.12":
-  version: 11.0.12
-  resolution: "sweetalert2@npm:11.0.12"
-  checksum: 3aff4f0cbb3f2164c309fced4896521c92ed79d9c37cff229588e356439abb3f6f83298d100339425913929f665cbf40272cbbd99f43df8682692b3b4f9c02ac
+"sweetalert2@npm:^11.0.16":
+  version: 11.0.16
+  resolution: "sweetalert2@npm:11.0.16"
+  checksum: b4fa3d72ca7d3a4c0812ae1497f9c30bb9912c84a7043978ed8a3eea8786df9ce392a7a1489cb9e7ae78fa2bdac1f90395d9c4bb9b27115f3dc299366104b7ca
   languageName: node
   linkType: hard
 

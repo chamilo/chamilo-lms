@@ -22,7 +22,7 @@ switch ($action) {
         $response = [];
         $requests = explode(',', $requests);
         foreach ($requests as $request) {
-            $fileSize = DocumentManager::getTotalFolderSizeById($request, $isAllowedToEdit);
+            $fileSize = DocumentManager::getTotalFolderSize($request, $isAllowedToEdit);
             $data = [
                 "id" => $request,
                 "size" => format_file_size($fileSize),

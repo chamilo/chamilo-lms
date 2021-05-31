@@ -22,7 +22,7 @@ class ExceptionListener
 
     public function onKernelException(ExceptionEvent $event): void
     {
-        if ('dev' === $_ENV['APP_ENV']) {
+        if (isset($_ENV['APP_ENV']) && 'dev' === $_ENV['APP_ENV']) {
             return;
         }
 

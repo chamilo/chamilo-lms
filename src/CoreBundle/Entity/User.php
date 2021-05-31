@@ -1249,6 +1249,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->username;
     }
 
+    public function getUserIdentifier(): string
+    {
+        return $this->username;
+    }
+
     public function setUsername(string $username): self
     {
         $this->username = $username;
@@ -1640,7 +1645,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
             return false;
         }
 
-        if ($this->username !== $user->getUsername()) {
+        if ($this->username !== $user->getUserIdentifier()) {
             return false;
         }
 

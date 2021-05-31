@@ -53,7 +53,7 @@ if (!empty($flashBag->keys())) {
     $saveFlashBag = $flashBag->all();
 }
 
-$response = $kernel->handle($request, HttpKernelInterface::MASTER_REQUEST, false);
+$response = $kernel->handle($request, HttpKernelInterface::MAIN_REQUEST, false);
 $context = Container::getRouter()->getContext();
 
 $pos = strpos($currentBaseUrl, 'main');

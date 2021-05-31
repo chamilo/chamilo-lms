@@ -127,7 +127,7 @@ class ResourceNodeVoter extends Voter
         $creator = $resourceNode->getCreator();
         if ($creator instanceof UserInterface &&
             $user instanceof UserInterface &&
-            $user->getUsername() === $creator->getUsername()
+            $user->getUserIdentifier() === $creator->getUserIdentifier()
         ) {
             return true;
         }

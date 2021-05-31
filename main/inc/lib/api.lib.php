@@ -291,7 +291,7 @@ define('LOG_SURVEY_CREATED', 'survey_created');
 define('LOG_SURVEY_DELETED', 'survey_deleted');
 define('LOG_SURVEY_CLEAN_RESULTS', 'survey_clean_results');
 
-define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.-]/');
+define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.\$-]/');
 
 //used when login_is_email setting is true
 define('USERNAME_PURIFIER_MAIL', '/[^0-9A-Za-z_\.@]/');

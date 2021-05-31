@@ -60,7 +60,7 @@ use Chamilo\CourseBundle\Repository\CThematicPlanRepository;
 use Chamilo\CourseBundle\Repository\CThematicRepository;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
-use CourseManager;
+use Chamilo\LtiBundle\Repository\ExternalToolRepository;
 use Database;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -496,6 +496,11 @@ class Container
     public static function getFormFactory(): FormFactory
     {
         return self::$container->get('form.factory');
+    }
+
+    public static function getExternalToolRepository(): ExternalToolRepository
+    {
+        return self::$container->get(ExternalToolRepository::class);
     }
 
     /**

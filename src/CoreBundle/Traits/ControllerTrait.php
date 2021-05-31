@@ -28,6 +28,7 @@ use Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use Chamilo\CourseBundle\Repository\CToolRepository;
+use Chamilo\LtiBundle\Repository\ExternalToolRepository;
 use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -76,6 +77,7 @@ trait ControllerTrait
         $services[] = CStudentPublicationRepository::class;
         $services[] = CStudentPublicationCommentRepository::class;
         $services[] = CStudentPublicationCorrectionRepository::class;
+        $services[] = ExternalToolRepository::class;
 
         $services[] = IllustrationRepository::class;
 

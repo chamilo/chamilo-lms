@@ -935,7 +935,7 @@ $form->addPanelOption(
 
 $button = Display::toolbarButton(
     get_lang('Configure external tools'),
-    api_get_path(WEB_PUBLIC_PATH)."courses/$course_code/lti/",
+    $router->generate('chamilo_lti_configure', ['cid' => $courseId]).'?'.api_get_cidreq(),
     'cog',
     'primary'
 );

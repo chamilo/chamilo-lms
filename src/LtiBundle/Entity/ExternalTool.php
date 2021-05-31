@@ -6,8 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\LtiBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,9 +18,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Class ExternalTool.
  *
  * @ORM\Table(name="lti_external_tool")
- * @ORM\Entity()
+ * @ORM\Entity
  */
-class ExternalTool
+class ExternalTool extends AbstractResource implements ResourceInterface
 {
     /**
      * @ORM\Column(name="id", type="integer")
@@ -416,15 +418,12 @@ class ExternalTool
     /**
      * @return null|ExternalTool
      */
-    public function getParent()
+    public function getToolParent(): ?ExternalTool
     {
         return $this->parent;
     }
 
-    /**
-     * @return ExternalTool
-     */
-    public function setParent(self $parent)
+    public function setToolParent(self $parent): ExternalTool
     {
         $this->parent = $parent;
         $this->sharedSecret = $parent->getSharedSecret();
@@ -473,5 +472,25 @@ class ExternalTool
         }
 
         return $newKey;
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getName();
+    }
+
+    public function setResourceName(string $name): ExternalTool
+    {
+        return $this->setName($name);
+    }
+
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
+
+    public function getResourceIdentifier(): int
+    {
+        return $this->getId();
     }
 }

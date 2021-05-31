@@ -266,7 +266,7 @@ class ExerciseResult
                             $return[$i]['lastname'] = $student['lastname'];
                             $return[$i]['user_id'] = $student['user_id'];
                             $return[$i]['email'] = $student['email'];
-                            $return[$i]['username'] = $student[$i]['username'];
+                            $return[$i]['username'] = $student['username'];
                         }
                         $return[$i]['title'] = null;
                         $return[$i]['start_date'] = null;

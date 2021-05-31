@@ -92,6 +92,33 @@ if (!empty($action)) {
         exit();
     }
 }
+$htmlHeadXtra[] = '
+<script>
+    function showCourses(button, categoryId) {
+        event.preventDefault();
+        let url = button.getAttribute("href");
+        let tableId = "cat_" + categoryId;
+        let exists = button.parentNode.parentNode.parentNode.querySelector("#" + tableId);
+        if (exists !== null) {
+            button.parentNode.parentNode.parentNode.removeChild(exists);
+            return ;
+        }
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function(result) {
+                let row = document.createElement("tr");
+                row.setAttribute("id", tableId);
+                let cell = document.createElement("td");
+                cell.setAttribute("colspan", "4");
+                cell.innerHTML= result;
+                row.appendChild(cell);
+                button.parentNode.parentNode.parentNode.insertBefore(row, button.parentNode.parentNode.nextSibling);
+            }
+        });
+    }
+</script>';
 
 $tool_name = get_lang('AdminCategories');
 $interbreadcrumb[] = [

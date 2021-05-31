@@ -1894,7 +1894,7 @@ $userIsSubscribed = CourseManager::is_user_subscribed_in_course(
     $courseInfo['code']
 );
 
-$getSizesURL = api_get_path(WEB_AJAX_PATH) . 'document.ajax.php?a=get_dirs_size&' . api_get_cidreq();
+$getSizesURL = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=get_dirs_size&'.api_get_cidreq();
 
 if (!empty($documentAndFolders)) {
     if ($groupId == 0 || $userAccess) {
@@ -2005,7 +2005,7 @@ if (!empty($documentAndFolders)) {
 
             if ($document_data['filetype'] == 'folder') {
                 $displaySize = '<span id="document_size_'.$document_data['id']
-                    . '" data-id= "' . $document_data['id']
+                    .'" data-id= "'.$document_data['id']
                     .'" class="document_size"></span>';
             } else {
                 $displaySize = format_file_size($document_data['size']);
@@ -2273,7 +2273,7 @@ if (false === $disableQuotaMessage && count($documentAndFolders) > 1) {
 
     echo '<script>
     $(function() {
-        let requests = [];
+        var requests = [];
         $(".document_size").each(function(i, obj) {
             requests.push(obj.getAttribute("data-id"));
         });
@@ -2281,9 +2281,9 @@ if (false === $disableQuotaMessage && count($documentAndFolders) > 1) {
     });
     function getPathsSizes(requests){
         $.ajax({
-            url:"' . $getSizesURL . '&requests="+requests,
+            url:"'.$getSizesURL.'&requests="+requests,
             success:function(data){
-                const response = JSON.parse(data)
+                var response = JSON.parse(data)
                 response.forEach(function(data) {
                       $("#document_size_"+data.id).html(data.size);
                 });

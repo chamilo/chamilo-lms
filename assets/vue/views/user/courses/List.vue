@@ -48,7 +48,18 @@ export default {
                 node {
                   course {
                     _id
-                    title
+                    title,
+                     users(status: 1, first: 4) {
+                      edges {
+                        node {
+                          id
+                          status
+                          user {
+                            username
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }

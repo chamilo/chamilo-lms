@@ -61,7 +61,7 @@ class CourseRelUser
     protected User $user;
 
     /**
-     * @Groups({"course:read", "user:read"})
+     * @Groups({"user:read"})
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="users", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */

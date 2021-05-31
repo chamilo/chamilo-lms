@@ -16,10 +16,14 @@
     <q-card-section>
       <div class="text-h7">
         <router-link :to="{ name: 'CourseHome', params: {id: course._id, course: course}}">
-        {{ course.title }}
+          {{ course.title }}
+          <span v-if="course.users.edges.length">
+            <div v-for="courseRelUser in course.users.edges">
+              {{ courseRelUser.node.user.username }}
+            </div>
+          </span>
         </router-link>
       </div>
-
     </q-card-section>
 <!--    <q-card-actions>-->
 <!--        <q-btn-->

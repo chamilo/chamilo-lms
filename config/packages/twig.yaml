@@ -8,13 +8,9 @@ twig:
         - '%kernel.project_dir%/src/CoreBundle/Resources/views/Layout'
     form_themes:
         - 'form-theme.html.twig'
-#        - 'bootstrap_4_layout.html.twig'
 
     globals:
-        show_toolbar: true
-        show_footer: true
         software_name: Chamilo
-        version: 2
         messages_count:
         message_link:
         execution_stats:

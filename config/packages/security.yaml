@@ -1,7 +1,7 @@
 # To get started with security, check out the documentation:
 # http://symfony.com/doc/current/book/security.html
 security:
-    encoders:
+    password_hashers:
         Chamilo\CoreBundle\Entity\User:
             algorithm: auto
             cost: 14

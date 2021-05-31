@@ -305,7 +305,7 @@ if (isset($fromExercise) && $fromExercise > 0) {
 } else {
     echo '<a href="exercise.php?'.api_get_cidreq().'">'.
         Display::return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo "<a href='admin.php?exerciseId=0'>".
+    echo "<a href='question_create.php?". api_get_cidreq()."'>".
         Display::return_icon('add_question.gif', get_lang('NewQu'), '', ICON_SIZE_MEDIUM).'</a>';
     $titleAdd = get_lang('ManageAllQuestions');
 }

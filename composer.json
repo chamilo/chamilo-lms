@@ -153,7 +153,6 @@
     "require-dev": {
         "behat/behat": "@stable",
         "behat/mink": "dev-master",
-        "behat/mink-goutte-driver": "@stable",
         "behat/mink-selenium2-driver": "@stable",
         "friends-of-behat/mink-extension": "dev-master",
         "phpstan/phpstan": "^0.12",
@@ -163,7 +162,7 @@
         "psalm/plugin-symfony": "^2.0",
         "rector/rector": "^0.10",
         "slevomat/coding-standard": "^7.0",
-        "symfony/browser-kit": "^4.0|^5.0",
+        "symfony/browser-kit": "^5.0",
         "symfony/css-selector": "^5.0",
         "symfony/debug-pack": "*",
         "symfony/maker-bundle": "1.30",

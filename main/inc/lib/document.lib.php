@@ -6458,9 +6458,9 @@ class DocumentManager
      * Calculates the total size of a directory by adding the sizes (that
      * are stored in the database) of all files & folders in this directory.
      *
-     * @param string $value = document path or document id
+     * @param string $value             = document path or document id
      * @param bool   $can_see_invisible
-     * @param bool   $by_id = default true, if is getting size by document id or false if getting by path
+     * @param bool   $by_id             = default true, if is getting size by document id or false if getting by path
      *
      * @return int Total size
      */

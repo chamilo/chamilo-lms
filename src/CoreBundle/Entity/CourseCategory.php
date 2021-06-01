@@ -13,6 +13,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -46,7 +47,7 @@ class CourseCategory
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\OneToMany(targetEntity="CourseCategory", mappedBy="parent")
@@ -127,6 +128,8 @@ class CourseCategory
         $this->childrenCount = 0;
         $this->children = new ArrayCollection();
         $this->courses = new ArrayCollection();
+        $this->authCatChild = 'TRUE';
+        $this->authCourseChild = 'TRUE';
     }
 
     public function __toString(): string
@@ -151,6 +154,13 @@ class CourseCategory
         return $this->parent;
     }
 
+    public function setParent(self $parent): self
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
     /**
      * @return Collection
      */
@@ -163,13 +173,6 @@ class CourseCategory
     {
         $this->children[] = $child;
         $child->setParent($this);
-
-        return $this;
-    }
-
-    public function setParent(self $parent): self
-    {
-        $this->parent = $parent;
 
         return $this;
     }
@@ -325,5 +328,32 @@ class CourseCategory
         $this->urls = $urls;
 
         return $this;
+    }
+
+    public function addUrl(AccessUrl $accessUrl): self
+    {
+        if (!$this->hasUrl($accessUrl)) {
+            $item = (new AccessUrlRelCourseCategory())
+                ->setCourseCategory($this)
+                ->setUrl($accessUrl)
+            ;
+            $this->urls->add($item);
+        }
+
+        return $this;
+    }
+
+    public function hasUrl(AccessUrl $accessUrl): bool
+    {
+        if (0 !== $this->urls->count()) {
+            $criteria = Criteria::create()->where(
+                Criteria::expr()->eq('url', $accessUrl)
+            );
+            $relation = $this->urls->matching($criteria);
+
+            return $relation->count() > 0;
+        }
+
+        return false;
     }
 }

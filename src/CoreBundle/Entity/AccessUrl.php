@@ -10,6 +10,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -56,7 +57,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
      *
      * @var AccessUrlRelUser[]|Collection<int, AccessUrlRelUser>
      */
-    protected Collection $user;
+    protected Collection $users;
 
     /**
      * @ORM\OneToMany(targetEntity="SettingsCurrent", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
@@ -202,7 +203,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         $this->createdBy = 1;
         $this->courses = new ArrayCollection();
         $this->sessions = new ArrayCollection();
-        $this->user = new ArrayCollection();
+        $this->users = new ArrayCollection();
         $this->settings = new ArrayCollection();
         $this->sessionCategories = new ArrayCollection();
         $this->courseCategory = new ArrayCollection();
@@ -480,9 +481,36 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * @return AccessUrlRelUser[]|Collection
      */
-    public function getUser()
+    public function getUsers()
     {
-        return $this->user;
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->hasUser($user)) {
+            $accessUrlRelUser = (new AccessUrlRelUser())
+                ->setUser($user)
+                ->setUrl($this)
+            ;
+            $this->users->add($accessUrlRelUser);
+        }
+
+        return $this;
+    }
+
+    public function hasUser(User $user): bool
+    {
+        if (0 !== $this->users->count()) {
+            $criteria = Criteria::create()->where(
+                Criteria::expr()->eq('user', $user)
+            );
+            $relation = $this->users->matching($criteria);
+
+            return $relation->count() > 0;
+        }
+
+        return false;
     }
 
     public function getParent(): ?self

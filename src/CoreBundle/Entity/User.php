@@ -79,7 +79,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\Column(name="api_token", type="string", unique=true, nullable=true)
@@ -681,7 +681,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @ORM\OneToOne(targetEntity="Admin", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
-    protected Admin $admin;
+    protected ?Admin $admin = null;
 
     /**
      * @var null|NilUuid|UuidV4
@@ -707,7 +707,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->authSource = 'platform';
         $this->skipResourceNode = false;
         $this->courses = new ArrayCollection();
-        //$this->items = new ArrayCollection();
         $this->classes = new ArrayCollection();
         $this->curriculumItems = new ArrayCollection();
         $this->portals = new ArrayCollection();
@@ -1234,7 +1233,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->getId();
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -2231,7 +2230,31 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return sprintf('/img/icons/%s/unknown.png', $size);
     }
 
+    public function getAdmin(): ?Admin
+    {
+        return $this->admin;
+    }
+
+    public function setAdmin(?Admin $admin): self
+    {
+        $this->admin = $admin;
+
+        return $this;
+    }
+
+    public function addUserAsAdmin(): self
+    {
+        if (null === $this->admin) {
+            $admin = new Admin();
+            $admin->setUser($this);
+            $this->setAdmin($admin);
+        }
+
+        return $this;
+    }
+
     /**
+     * @todo move in a repo
      * Find the largest sort value in a given UserCourseCategory
      * This method is used when we are moving a course to a different category
      * and also when a user subscribes to courses (the new course is added at the end of the main category).

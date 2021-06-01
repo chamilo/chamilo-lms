@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -45,18 +44,25 @@ class Skill
     protected ?Profile $profile = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="skill", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="SkillRelUser", mappedBy="skill", cascade={"persist"})
      *
      * @var SkillRelUser[]|Collection
      */
     protected Collection $issuedSkills;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelItem", mappedBy="skill", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="SkillRelItem", mappedBy="skill", cascade={"persist"})
      *
      * @var Collection|SkillRelItem[]
      */
     protected Collection $items;
+
+    /**
+     * @ORM\OneToMany(targetEntity="SkillRelSkill", mappedBy="skill", cascade={"persist"})
+     *
+     * @var Collection|SkillRelSkill[]
+     */
+    protected Collection $skills;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelCourse", mappedBy="skill", cascade={"persist"})
@@ -160,7 +166,6 @@ class Skill
 
         return $this;
     }
-
 
     public function setDescription(string $description): self
     {

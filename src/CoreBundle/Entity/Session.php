@@ -374,10 +374,7 @@ class Session
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasUser(SessionRelUser $subscription)
+    public function hasUser(SessionRelUser $subscription): bool
     {
         if (0 !== $this->getUsers()->count()) {
             $criteria = Criteria::create()->where(

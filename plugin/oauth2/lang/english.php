@@ -26,6 +26,12 @@ $strings['authorize_url'] = 'Authorize URL';
 $strings['authorize_url_help'] = 'The <em>OAuth2</em> server URL to request authorization.
 <br/>Required.';
 
+$strings['scopes'] = 'Scopes';
+$strings['scopes_help'] = 'Scope is a mechanism in <em>OAuth2</em> to limit an application\'s access to a user\'s account.
+An application can request one or more scopes, this information is then presented to the user in the consent screen,
+and the access token issued to the application will be limited to the scopes granted.
+Multiple scopes should be set separeted with <code>,</code>.';
+
 $strings['access_token_url'] = 'Access Token URL';
 $strings['access_token_url_help'] = 'The <em>OAuth2</em> server URL to request an access token.
 <br/>Required.';

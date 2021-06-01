@@ -24,8 +24,8 @@ class OAuth2 extends Plugin
     const SETTING_CLIENT_SECRET = 'client_secret';
 
     const SETTING_AUTHORIZE_URL = 'authorize_url';
-    // const SETTING_SCOPES = 'scopes';
-    // const SETTING_SCOPE_SEPARATOR = 'scope_separator';
+    const SETTING_SCOPES = 'scopes';
+    const SETTING_SCOPE_SEPARATOR = 'scope_separator';
 
     const SETTING_ACCESS_TOKEN_URL = 'access_token_url';
     const SETTING_ACCESS_TOKEN_METHOD = 'access_token_method';
@@ -68,8 +68,8 @@ class OAuth2 extends Plugin
                 self::SETTING_CLIENT_SECRET => 'text',
 
                 self::SETTING_AUTHORIZE_URL => 'text',
-                // self::SETTING_SCOPES => 'text',
-                // self::SETTING_SCOPE_SEPARATOR => 'text',
+                self::SETTING_SCOPES => 'text',
+                self::SETTING_SCOPE_SEPARATOR => 'text',
 
                 self::SETTING_ACCESS_TOKEN_URL => 'text',
                 self::SETTING_ACCESS_TOKEN_METHOD => [
@@ -131,13 +131,15 @@ class OAuth2 extends Plugin
             'urlResourceOwnerDetails' => $this->get(self::SETTING_RESOURCE_OWNER_DETAILS_URL),
         ];
 
-//        if ('' !== $scopeSeparator = (string) $this->get(self::SETTING_SCOPE_SEPARATOR)) {
-//            $options['scopeSeparator'] = $scopeSeparator;
-//        }
-//
-//        if ('' !== $scopes = (string) $this->get(self::SETTING_SCOPES)) {
-//            $options['scopes'] = explode($scopeSeparator, $scopes);
-//        }
+        if ('' === $scopeSeparator = (string) $this->get(self::SETTING_SCOPE_SEPARATOR)) {
+            $scopeSeparator = ' ';
+        }
+
+        $options['scopeSeparator'] = $scopeSeparator;
+
+        if ('' !== $scopes = (string) $this->get(self::SETTING_SCOPES)) {
+            $options['scopes'] = explode($scopeSeparator, $scopes);
+        }
 
         if ('' !== $urlAccessToken = (string) $this->get(self::SETTING_ACCESS_TOKEN_URL)) {
             $options['urlAccessToken'] = $urlAccessToken;

@@ -75,7 +75,7 @@ class Finder extends \elFinder
         !defined('ELFINDER_IMAGEMAGICK_PS') && define('ELFINDER_IMAGEMAGICK_PS', false);
 
         // for backward compat
-        $this->version = (string)self::$ApiVersion;
+        $this->version = (string) self::$ApiVersion;
 
         // set error handler of WARNING, NOTICE
         $errLevel = E_WARNING | E_NOTICE | E_USER_WARNING | E_USER_NOTICE | E_STRICT | E_RECOVERABLE_ERROR;

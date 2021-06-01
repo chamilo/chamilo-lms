@@ -1,6 +1,6 @@
 {% if search_skill_list is not null %}
     <div class="skills-skills">
-        <h3>{{"Skills"|get_lang}}</h3>
+        <h3>{{"Skills"|trans}}</h3>
         <ul class="holder">
             {% for search_skill_id in search_skill_list %}
                 <li class="bit-box">
@@ -10,14 +10,14 @@
             {% endfor %}
         </ul>
         <a id="add_profile" class="btn btn-default" href="#">
-            <em class="fa fa-floppy-o"></em> {{"SaveThisSearch"|get_lang}}
+            <em class="fa fa-floppy-o"></em> {{"SaveThisSearch"|trans}}
         </a>
     </div>
 {% endif %}
 
 {% if profiles is not null %}
     <div class="skills-profiles">
-        <h3>{{"SkillProfiles"|get_lang}}</h3>
+        <h3>{{"SkillProfiles"|trans}}</h3>
         <ul class="holder">
             {%for profile in profiles %}
                 <li class="bit-box">
@@ -34,12 +34,12 @@
             <div class="col-md-12">
                 <h4 class="page-header">
                     {% if count == total_search_skills %}
-                        {{ "CompleteMatch"|get_lang }}
+                        {{ "CompleteMatch"|trans }}
                     {% else %}
                         {% if (total_search_skills - count) == 1 %}
-                            {{ "MissingOneStepToMatch"|get_lang }}
+                            {{ "MissingOneStepToMatch"|trans }}
                         {% else %}
-                            {{ "MissingXStepsToMatch"|get_lang | format(total_search_skills - count)}}
+                            {{ "MissingXStepsToMatch"|trans | format(total_search_skills - count)}}
                         {% endif %}
                     {% endif %}
                 </h4>
@@ -61,7 +61,7 @@
                                 </a>
                             </p>
                             <p class="text-center">
-                                <em class="fa fa-graduation-cap"></em> {{ "AchievedSkills"|get_lang }} {{ user.total_found_skills }} / {{ total_search_skills }}
+                                <em class="fa fa-graduation-cap"></em> {{ "AchievedSkills"|trans }} {{ user.total_found_skills }} / {{ total_search_skills }}
                             </p>
                         </div>
                         <ul class="list-group">
@@ -89,7 +89,7 @@
     {% endfor %}
 {% else %}
     {% if search_skill_list is null %}
-        <div class="warning-message">{{"NoResults"|get_lang}}</div>
+        <div class="warning-message">{{"NoResults"|trans}}</div>
     {% endif %}
 {% endif %}
 </div>
@@ -97,13 +97,13 @@
     <form id="save_profile_form" class="form-horizontal" name="form">
         <fieldset>
             <div class="control-group">
-                <label class="control-label" for="name">{{"Name"|get_lang}}</label>
+                <label class="control-label" for="name">{{"Name"|trans}}</label>
                 <div class="controls">
                     <input type="text" name="name" id="name" size="40" />
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="name">{{"Description"|get_lang}}</label>
+                <label class="control-label" for="name">{{"Description"|trans}}</label>
                 <div class="controls">
                     <textarea name="description" id="description" class="span2"  rows="7"></textarea>
                 </div>

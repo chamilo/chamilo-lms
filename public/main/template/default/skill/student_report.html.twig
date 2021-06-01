@@ -2,20 +2,20 @@
 {% if allow_skill_tool %}
     <div class="btn-group">
         <a class="btn btn-default" href="{{ _p.web_main }}social/skills_wheel.php">
-            {{ 'SkillsWheel' | get_lang }}
+            {{ 'SkillsWheel' | trans }}
         </a>
     </div>
 {% endif %}
 
 {% if rows %}
-    <h1 class="page-header">{{ 'SkillsAcquired' | get_lang }}</h1>
+    <h1 class="page-header">{{ 'SkillsAcquired' | trans }}</h1>
     <table class="table">
         <thead>
             <tr>
-                <th>{{ 'Badge' | get_lang }}</th>
-                <th>{{ 'Skill' | get_lang }}</th>
-                <th>{{ 'Date' | get_lang }}</th>
-                <th>{{ 'Course' | get_lang }}</th>
+                <th>{{ 'Badge' | trans }}</th>
+                <th>{{ 'Skill' | trans }}</th>
+                <th>{{ 'Date' | trans }}</th>
+                <th>{{ 'Course' | trans }}</th>
             </tr>
         </thead>
         <tbody>

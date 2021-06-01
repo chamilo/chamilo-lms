@@ -45,9 +45,9 @@
             </legend>
             <fieldset>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label" for="image">{{ 'Image' | get_lang }}</label>
+                    <label class="col-sm-2 control-label" for="image">{{ 'Image' | trans }}</label>
                     <div class="col-sm-10">
-                        <input data-placement="left" data-toggle="tooltip" title="{{ "BadgeMeasuresXPixelsInPNG" | get_lang }}" type="file" name="image" id="image" class="help-badges-img" accept="image/*">
+                        <input data-placement="left" data-toggle="tooltip" title="{{ "BadgeMeasuresXPixelsInPNG" | trans }}" type="file" name="image" id="image" class="help-badges-img" accept="image/*">
                     </div>
                 </div>
                 <div class="form-group collapse" id="badge-studio-frame">
@@ -58,35 +58,35 @@
                             <div id="input">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <h3 class="label"><label for="studio-mask">{{ "Templates" | get_lang }}</label></h3>
+                                        <h3 class="label"><label for="studio-mask">{{ "Templates" | trans }}</label></h3>
                                         <select name="template" class="form-control" id="studio-template" data-path="{{ badge_studio.templates }}">
-                                            <option value="template-1">{{ "Template" | get_lang }} 1</option>
-                                            <option value="template-2">{{ "Template" | get_lang }} 2</option>
-                                            <option value="template-3">{{ "Template" | get_lang }} 3</option>
+                                            <option value="template-1">{{ "Template" | trans }} 1</option>
+                                            <option value="template-2">{{ "Template" | trans }} 2</option>
+                                            <option value="template-3">{{ "Template" | trans }} 3</option>
                                         </select>
-                                        <h3 class="label"><label for="studio-mask">{{ "Palettes" | get_lang }}</label></h3>
+                                        <h3 class="label"><label for="studio-mask">{{ "Palettes" | trans }}</label></h3>
                                         <select name="palette" class="form-control" id="studio-palette">
                                             <option value="palette-1"
                                                     data-color-background="#CE001F"
                                                     data-color-stitching="#FFF"
                                                     data-color-border="#4C4F53"
                                                     data-color-detail="#999"
-                                                    data-color-glyph="#FFF">{{ "Palette" | get_lang }} 1</option>
+                                                    data-color-glyph="#FFF">{{ "Palette" | trans }} 1</option>
                                             <option value="palette-2"
                                                     data-color-background="#04A"
                                                     data-color-stitching="#0AE"
                                                     data-color-border="#0AE"
                                                     data-color-detail="#FFF"
-                                                    data-color-glyph="#FFF">{{ "Palette" | get_lang }} 2</option>
+                                                    data-color-glyph="#FFF">{{ "Palette" | trans }} 2</option>
                                             <option value="palette-3"
                                                     data-color-background="#11458B"
                                                     data-color-stitching="#3EB48D"
                                                     data-color-border="#3EB48D"
                                                     data-color-detail="#FFF"
-                                                    data-color-glyph="#FFF">{{ "Palette" | get_lang }} 3</option>
+                                                    data-color-glyph="#FFF">{{ "Palette" | trans }} 3</option>
                                         </select>
                                         <br />
-                                        <h3 class="label"><label for="studio-mask">{{ "Colors" | get_lang }}</label></h3>
+                                        <h3 class="label"><label for="studio-mask">{{ "Colors" | trans }}</label></h3>
                                         <div id="custom-palette"></div>
                                     </div>
                                     <div class="col-md-8">
@@ -95,22 +95,22 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <h3 class="label"><label for="studio-mask">{{ "Mask" | get_lang }}</label></h3>
+                                        <h3 class="label"><label for="studio-mask">{{ "Mask" | trans }}</label></h3>
                                         <p class="item">
                                             <select name="mask" class="form-control" id="studio-mask" data-path="{{ badge_studio.masks }}">
-                                                <option value="">{{ "None" | get_lang }}</option>
-                                                <option value="lines">{{ "Lines" | get_lang }}</option>
+                                                <option value="">{{ "None" | trans }}</option>
+                                                <option value="lines">{{ "Lines" | trans }}</option>
                                             </select>
                                         </p>
                                     </div>
                                     <div class="col-md-3">
-                                        <h3 class="label"><label for="studio-options">{{ "Options" | get_lang }}</label></h3>
+                                        <h3 class="label"><label for="studio-options">{{ "Options" | trans }}</label></h3>
                                         <p class="item" id="options">
                                             <i>None</i>
                                         </p>
                                     </div>
                                     <div class="col-md-6">
-                                        <h3 class="label"><label for="studio-glyph">{{ "Icon" | get_lang }}</label></h3>
+                                        <h3 class="label"><label for="studio-glyph">{{ "Icon" | trans }}</label></h3>
                                         <p class="item">
                                             <select name="glyph" class="form-control" id="studio-glyph">
                                                 <option value="">None</option>
@@ -613,17 +613,17 @@
                                                 <option value="youtube-square">Youtube (Square)</option>
                                             </select>
                                         </p>
-                                        <h3 class="label"><label for="size-glyph">{{ "Size" | get_lang }}</label></h3>
+                                        <h3 class="label"><label for="size-glyph">{{ "Size" | trans }}</label></h3>
                                         <p class="item">
                                             <select name="size-glyph" class="form-control" id="size-glyph">
-                                                <option value="big">{{ "Big" | get_lang }}</option>
-                                                <option value="medium" selected>{{ "Medium" | get_lang }}</option>
-                                                <option value="small">{{ "Small" | get_lang }}</option>
+                                                <option value="big">{{ "Big" | trans }}</option>
+                                                <option value="medium" selected>{{ "Medium" | trans }}</option>
+                                                <option value="small">{{ "Small" | trans }}</option>
                                             </select>
                                         </p>
                                     </div>
                                     <div class="col-md-12 text-center">
-                                        <a id="set-custom-badge" class="btn btn-primary"><em class="fa fa-check"></em> {{ 'UseThisBadge' | get_lang }}</a>
+                                        <a id="set-custom-badge" class="btn btn-primary"><em class="fa fa-check"></em> {{ 'UseThisBadge' | trans }}</a>
                                         <input type="hidden" id="badge_studio_image" name="badge_studio_image" >
                                     </div>
                                 </div>
@@ -672,7 +672,7 @@
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <button type="submit" class="btn btn-primary btn-large"><em class="fa fa-plus"></em>
-                        {{ 'SaveBadge'| get_lang }}
+                        {{ 'SaveBadge'| trans }}
                     </button>
                 </div>
             </div>
@@ -680,17 +680,17 @@
     </div>
     <div class="col-md-3">
         <div class="openbadges-img" id="badge-container">
-            <img id="badge-preview" class="img-fluid" alt="{{ 'BadgePreview' | get_lang }}" src="{{ skill.icon_big }}">
+            <img id="badge-preview" class="img-fluid" alt="{{ 'BadgePreview' | trans }}" src="{{ skill.icon_big }}">
         </div>
 
         <div class="create-openbadges">
-            <button id="btn-open-designer" class="help-badges btn btn-primary btn-large btn-block" data-toggle="tooltip" data-placement="bottom" title="{{ 'DesignANewBadgeComment' | get_lang }}" type="button">
-                <em class="fas fa-pencil-alt"></em> {{ 'DesignNewBadge' | get_lang }}
+            <button id="btn-open-designer" class="help-badges btn btn-primary btn-large btn-block" data-toggle="tooltip" data-placement="bottom" title="{{ 'DesignANewBadgeComment' | trans }}" type="button">
+                <em class="fas fa-pencil-alt"></em> {{ 'DesignNewBadge' | trans }}
             </button>
         </div>
         <div class="create-openbadges">
-            <button id="btn-open-badge-studio" class="help-badges btn btn-outline-primary btn-large btn-block" data-toggle="collapse" data-target="#badge-studio-frame" aria-expanded="false" aria-controls="badge-studio-frame" title="{{ 'DesignWithBadgeStudioComment' | get_lang }}" type="button">
-                <em class="fa fa-cogs"></em> {{ 'DesignWithBadgeStudio' | get_lang }}
+            <button id="btn-open-badge-studio" class="help-badges btn btn-outline-primary btn-large btn-block" data-toggle="collapse" data-target="#badge-studio-frame" aria-expanded="false" aria-controls="badge-studio-frame" title="{{ 'DesignWithBadgeStudioComment' | trans }}" type="button">
+                <em class="fa fa-cogs"></em> {{ 'DesignWithBadgeStudio' | trans }}
             </button>
         </div>
 

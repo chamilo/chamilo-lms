@@ -2,10 +2,10 @@
 
         <ul class="nav nav-tabs">
             <li>
-                <a href="{{ _p.web_main }}admin/skill_badge.php">{{ 'Home' | get_lang }}</a>
+                <a href="{{ _p.web_main }}admin/skill_badge.php">{{ 'Home' | trans }}</a>
             </li>
             <li class="active">
-                <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ "CurrentBadges" | get_lang }}</a>
+                <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ "CurrentBadges" | trans }}</a>
             </li>
         </ul>
 
@@ -15,10 +15,10 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>{{ 'Badges' | get_lang }}</th>
-                                <th>{{ 'Name' | get_lang }}</th>
-                                <th>{{ 'Description' | get_lang }}</th>
-                                <th>{{ 'Actions' | get_lang }}</th>
+                                <th>{{ 'Badges' | trans }}</th>
+                                <th>{{ 'Name' | trans }}</th>
+                                <th>{{ 'Description' | trans }}</th>
+                                <th>{{ 'Actions' | trans }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -32,7 +32,7 @@
                                 </td>
                                 <td>{{ skill.description }}</td>
                                 <td>
-                                    <a href="{{ _p.web_main }}admin/skill_badge_create.php?id={{ skill.id }}" class="btn btn-primary btn-sm" title="{{ "CreateBadge" | get_lang }}">
+                                    <a href="{{ _p.web_main }}admin/skill_badge_create.php?id={{ skill.id }}" class="btn btn-primary btn-sm" title="{{ "CreateBadge" | trans }}">
                                         <em class="fa fa-shield fa-fw"></em>
                                     </a>
                                 </td>

@@ -100,7 +100,7 @@ class Gradebook extends Model
         $skill_list,
         $deleteSkillNotInList = true
     ) {
-        $skill_gradebook = new SkillRelGradebook();
+        $skill_gradebook = new SkillRelGradebookModel();
         $skill_gradebooks_source = $skill_gradebook->get_all(
             ['where' => ['gradebook_id = ?' => $gradebook_id]]
         );
@@ -172,7 +172,7 @@ class Gradebook extends Model
         $form->addHeader($header);
         $form->addElement('hidden', 'id', $id);
 
-        $skill = new Skill();
+        $skill = new SkillModel();
         $skills = $skill->get_all();
         $clean_skill_list = [];
         foreach ($skills as $skill) {

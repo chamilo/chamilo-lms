@@ -307,7 +307,7 @@ if ('edit' === $action && !empty($survey_id)) {
     }
 }
 
-$skillList = Skill::addSkillsToForm($form, ITEM_TYPE_SURVEY, $survey_id);
+$skillList = SkillModel::addSkillsToForm($form, ITEM_TYPE_SURVEY, $survey_id);
 $form->addElement('html', '</div><br />');
 
 if (isset($_GET['survey_id']) && 'edit' === $action) {
@@ -342,7 +342,7 @@ if ($form->validate()) {
     $values = $form->getSubmitValues();
     // Storing the survey
     $return = SurveyManager::store_survey($values);
-    Skill::saveSkills($form, ITEM_TYPE_SURVEY, $return['id']);
+    SkillModel::saveSkills($form, ITEM_TYPE_SURVEY, $return['id']);
 
     $values['item_id'] = $return['id'];
     $extraFieldValue = new ExtraFieldValue('survey');

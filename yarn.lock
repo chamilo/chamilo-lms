@@ -1907,9 +1907,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@symfony/webpack-encore@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "@symfony/webpack-encore@npm:1.3.0"
+"@symfony/webpack-encore@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "@symfony/webpack-encore@npm:1.4.0"
   dependencies:
     "@babel/core": ^7.7.0
     "@babel/plugin-syntax-dynamic-import": ^7.0.0
@@ -1937,7 +1937,7 @@ __metadata:
     yargs-parser: ^20.2.4
   bin:
     encore: bin/encore.js
-  checksum: c12304e11e704812f84b8c6f6b7f96097fa615ba7099ec6fdf76e635a288d40e190d3f854d272f7d4d660f235d180f2d4ae9413b25247f7de3753d5c65f2f336
+  checksum: a740f0f5e47d65032a9334923daf8dcddb8facec4039339b0ae87a6403542bbb26192c54ae77d2af5d8568a07c35dc7359f8251ed25b02a92edbec9fe8b2411a
   languageName: node
   linkType: hard
 
@@ -5986,7 +5986,7 @@ __metadata:
     "@mdi/font": ^5.9.55
     "@popperjs/core": ^2.9.2
     "@quasar/extras": latest
-    "@symfony/webpack-encore": ^1.3.0
+    "@symfony/webpack-encore": ^1.4.0
     "@tailwindcss/forms": ^0.3.2
     "@tailwindcss/typography": ^0.4.1
     "@tailwindcss/ui": ^0.7.2

@@ -1801,7 +1801,7 @@ class Exercise
 
         $repo->softDelete($exercise);
 
-        Skill::deleteSkillsFromItem($exerciseId, ITEM_TYPE_EXERCISE);
+        SkillModel::deleteSkillsFromItem($exerciseId, ITEM_TYPE_EXERCISE);
 
         if ('true' === api_get_setting('search_enabled') &&
             extension_loaded('xapian')
@@ -2332,7 +2332,7 @@ class Exercise
                 }
             }
 
-            $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_EXERCISE, $this->iId);
+            $skillList = SkillModel::addSkillsToForm($form, ITEM_TYPE_EXERCISE, $this->iId);
 
             $extraField = new ExtraField('exercise');
             $extraField->addElements(
@@ -2680,7 +2680,7 @@ class Exercise
             $extraFieldValue = new ExtraFieldValue('exercise');
             $extraFieldValue->saveFieldValues($values);
 
-            Skill::saveSkills($form, ITEM_TYPE_EXERCISE, $iId);
+            SkillModel::saveSkills($form, ITEM_TYPE_EXERCISE, $iId);
         }
     }
 

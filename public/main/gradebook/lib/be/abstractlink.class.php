@@ -703,7 +703,7 @@ abstract class AbstractLink implements GradebookItem
                 break;
         }
 
-        $skillToString = Skill::getSkillRelItemsToString($toolType, $this->get_ref_id());
+        $skillToString = SkillModel::getSkillRelItemsToString($toolType, $this->get_ref_id());
 
         return $skillToString;
     }

@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -45,18 +44,25 @@ class Skill
     protected ?Profile $profile = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="skill", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="SkillRelUser", mappedBy="skill", cascade={"persist"})
      *
      * @var SkillRelUser[]|Collection
      */
     protected Collection $issuedSkills;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelItem", mappedBy="skill", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="SkillRelItem", mappedBy="skill", cascade={"persist"})
      *
      * @var Collection|SkillRelItem[]
      */
     protected Collection $items;
+
+    /**
+     * @ORM\OneToMany(targetEntity="SkillRelSkill", mappedBy="skill", cascade={"persist"})
+     *
+     * @var Collection|SkillRelSkill[]
+     */
+    protected Collection $skills;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelCourse", mappedBy="skill", cascade={"persist"})
@@ -127,6 +133,7 @@ class Skill
         $this->issuedSkills = new ArrayCollection();
         $this->items = new ArrayCollection();
         $this->courses = new ArrayCollection();
+        $this->icon = '';
         $this->description = '';
         $this->status = self::STATUS_ENABLED;
     }
@@ -136,11 +143,6 @@ class Skill
         return (string) $this->getName();
     }
 
-    /**
-     * Set name.
-     *
-     * @return Skill
-     */
     public function setName(string $name)
     {
         $this->name = $name;
@@ -148,22 +150,14 @@ class Skill
         return $this;
     }
 
-    /**
-     * Get name.
-     *
-     * @param bool $translated Optional. Get the name translated when is it exists in a sub-language. By default is true
-     *
-     * @return string
-     */
-    public function getName(bool $translated = true)
+    public function getName()
     {
-        if ($translated) {
-            $variable = ChamiloApi::getLanguageVar($this->name, \Skill::class);
-
-            return isset($GLOBALS[$variable]) ? $GLOBALS[$variable] : $this->name;
-        }
-
         return $this->name;
+    }
+
+    public function getShortCode()
+    {
+        return $this->shortCode;
     }
 
     public function setShortCode(string $shortCode): self
@@ -173,24 +167,6 @@ class Skill
         return $this;
     }
 
-    /**
-     * Get shortCode.
-     *
-     * @param bool $translated Optional. Get the code translated when is it exists in a sub-language. By default is true
-     *
-     * @return string
-     */
-    public function getShortCode(bool $translated = true)
-    {
-        if ($translated && !empty($this->shortCode)) {
-            $variable = ChamiloApi::getLanguageVar($this->shortCode, 'SkillCode');
-
-            return isset($GLOBALS[$variable]) ? $GLOBALS[$variable] : $this->shortCode;
-        }
-
-        return $this->shortCode;
-    }
-
     public function setDescription(string $description): self
     {
         $this->description = $description;
@@ -198,11 +174,6 @@ class Skill
         return $this;
     }
 
-    /**
-     * Get description.
-     *
-     * @return string
-     */
     public function getDescription()
     {
         return $this->description;
@@ -230,12 +201,7 @@ class Skill
         return $this->accessUrlId;
     }
 
-    /**
-     * Set icon.
-     *
-     * @return Skill
-     */
-    public function setIcon(string $icon)
+    public function setIcon(string $icon): self
     {
         $this->icon = $icon;
 
@@ -252,12 +218,7 @@ class Skill
         return $this->icon;
     }
 
-    /**
-     * Set criteria.
-     *
-     * @return Skill
-     */
-    public function setCriteria(string $criteria)
+    public function setCriteria(string $criteria): self
     {
         $this->criteria = $criteria;
 
@@ -274,12 +235,7 @@ class Skill
         return $this->criteria;
     }
 
-    /**
-     * Set status.
-     *
-     * @return Skill
-     */
-    public function setStatus(int $status)
+    public function setStatus(int $status): self
     {
         $this->status = $status;
 
@@ -338,10 +294,7 @@ class Skill
         return $this->profile;
     }
 
-    /**
-     * @return Skill
-     */
-    public function setProfile(Profile $profile)
+    public function setProfile(Profile $profile): self
     {
         $this->profile = $profile;
 
@@ -366,10 +319,7 @@ class Skill
         return $this->items;
     }
 
-    /**
-     * @return Skill
-     */
-    public function setItems(ArrayCollection $items)
+    public function setItems(ArrayCollection $items): self
     {
         $this->items = $items;
 
@@ -409,10 +359,7 @@ class Skill
         return $this->courses;
     }
 
-    /**
-     * @return Skill
-     */
-    public function setCourses(ArrayCollection $courses)
+    public function setCourses(ArrayCollection $courses): self
     {
         $this->courses = $courses;
 

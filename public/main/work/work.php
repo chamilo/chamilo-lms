@@ -170,7 +170,7 @@ switch ($action) {
             );
 
             if ($result) {
-                Skill::saveSkills($form, ITEM_TYPE_STUDENT_PUBLICATION, $result);
+                SkillModel::saveSkills($form, ITEM_TYPE_STUDENT_PUBLICATION, $result);
 
                 $message = Display::return_message(get_lang('Directory created'), 'success');
             } else {

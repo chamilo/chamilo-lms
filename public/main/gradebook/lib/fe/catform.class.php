@@ -252,7 +252,7 @@ class CatForm extends FormValidator
         }
 
         if ($allowSkillEdit) {
-            if (Skill::isToolAvailable()) {
+            if (SkillModel::isToolAvailable()) {
                 $skillSelect = $this->addSelectAjax(
                     'skills',
                     [

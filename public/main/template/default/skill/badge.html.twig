@@ -1,10 +1,10 @@
 <div class="col-md-12">
     <ul class="nav nav-tabs">
         <li class="active">
-            <a href="{{ _p.web_main }}admin/skill_badge.php">{{ 'Home' | get_lang }}</a>
+            <a href="{{ _p.web_main }}admin/skill_badge.php">{{ 'Home' | trans }}</a>
         </li>
         <li>
-            <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ "CurrentBadges" | get_lang }}</a>
+            <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ "CurrentBadges" | trans }}</a>
         </li>
     </ul>
 
@@ -12,15 +12,15 @@
         <div class="tab-pane active">
             <div class="openbadges-introduction">
                 <h1 class="title">
-                    <img src="{{ 'badges.png' | icon(64) }}" width="64" height="64">{{ 'OpenBadgesTitle' | get_lang }}
+                    <img src="{{ 'badges.png' | icon(64) }}" width="64" height="64">{{ 'OpenBadgesTitle' | trans }}
                 </h1>
                 <div class="row">
                     <div class="col-xs-12 col-md-6">
                         <p class="lead">
-                            {{ 'OpenBadgesBannerText' | get_lang }}
+                            {{ 'OpenBadgesBannerText' | trans }}
                         </p>
                         <p class="lead">
-                            {{ 'OpenBadgesIntroduction' | get_lang }}
+                            {{ 'OpenBadgesIntroduction' | trans }}
                         </p>
                     </div>
                     <div class="col-xs-12 col-md-6">
@@ -28,14 +28,14 @@
                     </div>
                 </div>
 
-                <h3 class="sub-title">{{ 'OpenBadgesActionCall' | get_lang }}</h3>
+                <h3 class="sub-title">{{ 'OpenBadgesActionCall' | trans }}</h3>
                 <div class="block-content">
-                    <div class="block-title">{{ 'IssuerDetails' | get_lang }}</div>
-                    <p>{{ 'Name' | get_lang }} : {{ _s.institution }}</p>
+                    <div class="block-title">{{ 'IssuerDetails' | trans }}</div>
+                    <p>{{ 'Name' | trans }} : {{ _s.institution }}</p>
                     <p>URL: {{ _p.web }}</p>
-                    <div class="block-title">{{ 'BackpackDetails' | get_lang }}</div>
+                    <div class="block-title">{{ 'BackpackDetails' | trans }}</div>
                     <p>URL: {{ backpack }}</p>
-                    <p>{{ 'TheBadgesWillBeSentToThatBackpack' | get_lang }}</p>
+                    <p>{{ 'TheBadgesWillBeSentToThatBackpack' | trans }}</p>
 
                 </div>
             </div>

@@ -15,11 +15,11 @@ $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 
 api_block_anonymous_users();
 
-Skill::isAllowed(api_get_user_id());
+SkillModel::isAllowed(api_get_user_id());
 
-$skill = new Skill();
+$skill = new SkillModel();
 $gradebook = new Gradebook();
-$skillGradeBook = new SkillRelGradebook();
+$skillGradeBook = new SkillRelGradebookModel();
 $userId = api_get_user_id();
 
 switch ($action) {
@@ -120,7 +120,7 @@ switch ($action) {
     case 'get_skills':
         $loadUserData = isset($_REQUEST['load_user_data']) ? $_REQUEST['load_user_data'] : null;
         $id = intval($_REQUEST['id']);
-        $skills = $skill->get_all($loadUserData, false, $id);
+        $skills = $skill->getAllSkills($loadUserData, false, $id);
         echo json_encode($skills);
         break;
     case 'get_skill_info':
@@ -454,7 +454,7 @@ switch ($action) {
                     $em->flush();
                 }
             }
-            echo Skill::getUserSkillStatusLabel($skillRelItem, $skillRelItemRelUser, false);
+            echo SkillModel::getUserSkillStatusLabel($skillRelItem, $skillRelItemRelUser, false);
         }
         break;
     case 'assign_user_to_skill':

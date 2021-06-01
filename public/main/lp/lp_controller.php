@@ -726,7 +726,7 @@ switch ($action) {
         } else {
             Session::write('refresh', 1);
             $oLP->delete(null, $lpId, 'remove');
-            Skill::deleteSkillsFromItem($lpId, ITEM_TYPE_LEARNPATH);
+            SkillModel::deleteSkillsFromItem($lpId, ITEM_TYPE_LEARNPATH);
             Display::addFlash(Display::return_message(get_lang('Deleted')));
             Session::erase('oLP');
             require 'lp_list.php';

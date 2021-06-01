@@ -290,7 +290,7 @@ switch ($action) {
             $attendanceId = $attendance->attendance_add($link_to_gradebook);
 
             if ($attendanceId) {
-                Skill::saveSkills($form, ITEM_TYPE_ATTENDANCE, $attendanceId);
+                SkillModel::saveSkills($form, ITEM_TYPE_ATTENDANCE, $attendanceId);
                 header('Location: '.$currentUrl.'&action=calendar_add&attendance_id='.$attendanceId);
                 exit;
             }
@@ -334,7 +334,7 @@ switch ($action) {
             }
             $attendance->attendance_edit($attendanceEntity, $link_to_gradebook);
 
-            Skill::saveSkills($form, ITEM_TYPE_ATTENDANCE, $attendanceId);
+            SkillModel::saveSkills($form, ITEM_TYPE_ATTENDANCE, $attendanceId);
             Display::addFlash(Display::return_message(get_lang('Update successful')));
 
             Security::clear_token();

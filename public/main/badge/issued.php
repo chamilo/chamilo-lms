@@ -49,7 +49,7 @@ if (!$user || !$skill) {
     exit;
 }
 
-if (!Skill::isToolAvailable()) {
+if (!SkillModel::isToolAvailable()) {
     api_not_allowed(true);
 }
 
@@ -61,7 +61,7 @@ $skillInfo = [
     'short_code' => $skill->getShortCode(),
     'description' => $skill->getDescription(),
     'criteria' => $skill->getCriteria(),
-    'badge_image' => Skill::getWebIconPath($skill),
+    'badge_image' => SkillModel::getWebIconPath($skill),
     'courses' => [],
 ];
 
@@ -80,7 +80,7 @@ $currentUserId = api_get_user_id();
 $currentUser = api_get_user_entity($currentUserId);
 $allowExport = $currentUser ? $currentUser->getId() === $user->getId() : false;
 
-$allowComment = $currentUser ? Skill::userCanAddFeedbackToUser($currentUser, $user) : false;
+$allowComment = $currentUser ? SkillModel::userCanAddFeedbackToUser($currentUser, $user) : false;
 $skillIssueDate = api_get_local_time($skillIssue->getAcquiredSkillAt());
 $currentSkillLevel = get_lang('No level acquired yet');
 if ($skillIssue->getAcquiredLevel()) {
@@ -100,12 +100,12 @@ $skillIssueInfo = [
     'user_id' => $skillIssue->getUser()->getId(),
     'user_complete_name' => UserManager::formatUserFullName($skillIssue->getUser()),
     'skill_id' => $skillIssue->getSkill()->getId(),
-    'skill_badge_image' => Skill::getWebIconPath($skillIssue->getSkill()),
+    'skill_badge_image' => SkillModel::getWebIconPath($skillIssue->getSkill()),
     'skill_name' => $skillIssue->getSkill()->getName(),
     'skill_short_code' => $skillIssue->getSkill()->getShortCode(),
     'skill_description' => $skillIssue->getSkill()->getDescription(),
     'skill_criteria' => $skillIssue->getSkill()->getCriteria(),
-    'badge_assertion' => SkillRelUserManager::getAssertionUrl($skillIssue),
+    'badge_assertion' => SkillRelUserModel::getAssertionUrl($skillIssue),
     'comments' => [],
     'feedback_average' => $skillIssue->getAverage(),
 ];
@@ -170,7 +170,7 @@ if ($profile) {
     }
 }
 
-$allowToEdit = Skill::isAllowed($user->getId(), false);
+$allowToEdit = SkillModel::isAllowed($user->getId(), false);
 
 if ($showLevels && $allowToEdit) {
     $formAcquiredLevel = new FormValidator('acquired_level');
@@ -242,7 +242,7 @@ if ($allowExport) {
     }
 
     $htmlHeadXtra[] = '<script src="'.$backpack.'issuer.js"></script>';
-    $objSkill = new Skill();
+    $objSkill = new SkillModel();
     $assertionUrl = $skillIssueInfo['badge_assertion'];
     $skills = $objSkill->get($skillId);
     $unbakedBadge = api_get_path(SYS_UPLOAD_PATH).'badges/'.$skills['icon'];

@@ -103,7 +103,7 @@ if (api_is_platform_admin()) {
         api_get_path(WEB_CODE_PATH).'admin/add_drh_to_user.php?u='.$userId
     );
 
-    if (Skill::isAllowed($userId, false)) {
+    if (SkillModel::isAllowed($userId, false)) {
         $actions[] = Display::url(
             Display::return_icon(
                 'skill-badges.png',

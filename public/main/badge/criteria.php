@@ -25,7 +25,7 @@ if ($skill) {
         'short_code' => $skill->getShortCode(),
         'description' => $skill->getDescription(),
         'criteria' => $skill->getCriteria(),
-        'badge_image' => Skill::getWebIconPath($skill),
+        'badge_image' => SkillModel::getWebIconPath($skill),
     ];
 
     $template = new Template();

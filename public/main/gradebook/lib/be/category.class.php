@@ -2053,12 +2053,12 @@ class Category implements GradebookItem
             return false;
         }
 
-        $skillToolEnabled = Skill::hasAccessToUserSkill(api_get_user_id(), $user_id);
+        $skillToolEnabled = SkillModel::hasAccessToUserSkill(api_get_user_id(), $user_id);
         $userHasSkills = false;
         if ($skillToolEnabled) {
-            $skill = new Skill();
+            $skill = new SkillModel();
             $skill->addSkillToUser($user_id, $category, $courseId, $sessionId);
-            $objSkillRelUser = new SkillRelUser();
+            $objSkillRelUser = new SkillRelUserModel();
             $userSkills = $objSkillRelUser->getUserSkills($user_id, $courseId, $sessionId);
             $userHasSkills = !empty($userSkills);
         }

@@ -2,8 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Skill as SkillManager;
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 ini_set('memory_limit', -1);
@@ -457,7 +455,7 @@ function WSAssignSkill($params)
     }
 
     $em = Database::getManager();
-    $skillManager = new SkillManager();
+    $skillManager = new SkillModel();
 
     $skillId = isset($params['skill_id']) ? $params['skill_id'] : 0;
     $skillRepo = $em->getRepository('ChamiloCoreBundle:Skill');

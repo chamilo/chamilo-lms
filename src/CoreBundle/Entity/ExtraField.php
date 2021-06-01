@@ -140,6 +140,7 @@ class ExtraField
         $this->description = '';
         $this->visibleToOthers = false;
         $this->visibleToSelf = false;
+        $this->changeable = false;
     }
 
     /**

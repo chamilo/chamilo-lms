@@ -118,8 +118,15 @@
 <!--        <file name="public/main/inc/lib/security.lib.php"/>-->
 
         <file name="public/main/inc/lib/sessionmanager.lib.php"/>
-        <!--        <file name="public/main/inc/lib/skill.lib.php"/>-->
         <file name="public/main/inc/lib/skill.visualizer.lib.php"/>
+
+        <file name="public/main/inc/lib/SkillModel.php"/>
+        <file name="public/main/inc/lib/SkillProfileModel.php"/>
+        <file name="public/main/inc/lib/SkillRelGradebookModel.php"/>
+        <file name="public/main/inc/lib/SkillRelProfileModel.php"/>
+        <file name="public/main/inc/lib/SkillRelSkillModel.php"/>
+        <file name="public/main/inc/lib/SkillRelUserModel.php"/>
+
         <file name="public/main/inc/lib/social.lib.php"/>
         <file name="public/main/inc/lib/sortable_table.class.php"/>
         <file name="public/main/inc/lib/SortableTableFromArray.php"/>

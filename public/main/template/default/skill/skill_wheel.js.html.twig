@@ -457,7 +457,7 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
     /* Add a small label to help the user */
     div.append("p")
     .attr("id", "intro")
-    .text("{{ "ClickToZoom"|get_lang }}");
+    .text("{{ "ClickToZoom"|trans }}");
 
     /* Generate the partition layout */
     var partition = d3.layout.partition()

@@ -542,7 +542,7 @@ switch ($action) {
         $count = Question::get_count_course_medias($course_id);
         break;
     case 'get_user_skill_ranking':
-        $skill = new Skill();
+        $skill = new SkillModel();
         $count = $skill->getUserListSkillRankingCount();
         break;
     case 'get_course_announcements':

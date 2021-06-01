@@ -725,7 +725,7 @@ if (api_can_login_as($studentId)) {
         .Display::return_icon('login_as.png', get_lang('Login as'), null, ICON_SIZE_MEDIUM).'</a>&nbsp;&nbsp;';
 }
 
-if (Skill::isAllowed($studentId, false)) {
+if (SkillModel::isAllowed($studentId, false)) {
     $actions .= Display::url(
         Display::return_icon(
             'skill-badges.png',
@@ -737,7 +737,7 @@ if (Skill::isAllowed($studentId, false)) {
     );
 }
 
-if (Skill::isAllowed($studentId, false)) {
+if (SkillModel::isAllowed($studentId, false)) {
     $actions .= Display::url(
         Display::return_icon(
             'attendance.png',

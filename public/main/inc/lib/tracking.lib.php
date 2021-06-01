@@ -6586,10 +6586,10 @@ class Tracking
      */
     public static function displayUserSkills($userId, $courseId = 0, $sessionId = 0, $forceView = false)
     {
-        if (false === Skill::isAllowed($userId, false) && false == $forceView) {
+        if (false === SkillModel::isAllowed($userId, false) && false == $forceView) {
             return '';
         }
-        $skillManager = new Skill();
+        $skillManager = new SkillModel();
         $html = $skillManager->getUserSkillsTable($userId, $courseId, $sessionId)['table'];
 
         return $html;

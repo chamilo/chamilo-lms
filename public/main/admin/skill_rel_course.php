@@ -62,7 +62,7 @@ $form->addButtonSave(get_lang('Save'));
 $form->setDefaults(['skills' => array_keys($skillList)]);
 
 if ($form->validate()) {
-    $result = Skill::saveSkillsToCourseFromForm($form);
+    $result = SkillModel::saveSkillsToCourseFromForm($form);
     if ($result) {
         Display::addFlash(Display::return_message(get_lang('Update successful')));
     }

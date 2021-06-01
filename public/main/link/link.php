@@ -107,7 +107,7 @@ switch ($action) {
             $link = new Link();
             $link->setCourse($courseInfo);
             $linkId = $link->save($form->exportValues());
-            Skill::saveSkills($form, ITEM_TYPE_LINK, $linkId);
+            SkillModel::saveSkills($form, ITEM_TYPE_LINK, $linkId);
 
             Security::clear_token();
             header('Location: '.$linkListUrl);
@@ -120,7 +120,7 @@ switch ($action) {
         $form = Link::getLinkForm($id, 'editlink');
         if ($form->validate()) {
             Link::editLink($id, $form->getSubmitValues());
-            Skill::saveSkills($form, ITEM_TYPE_LINK, $id);
+            SkillModel::saveSkills($form, ITEM_TYPE_LINK, $id);
             header('Location: '.$linkListUrl);
             exit;
         }

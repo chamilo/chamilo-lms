@@ -4239,7 +4239,7 @@ class CourseManager
                 'session_category_id' => $session_category_id,
             ];
 
-        if (Skill::isAllowed($user_id, false)) {
+        if (SkillModel::isAllowed($user_id, false)) {
             $em = Database::getManager();
             $objUser = api_get_user_entity($user_id);
             $objCourse = api_get_course_entity($course['real_id']);

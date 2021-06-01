@@ -4,670 +4,24 @@
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
-use Chamilo\CoreBundle\Entity\Skill as SkillEntity;
+use Chamilo\CoreBundle\Entity\Level;
+use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\SkillRelCourse;
 use Chamilo\CoreBundle\Entity\SkillRelItem;
 use Chamilo\CoreBundle\Entity\SkillRelItemRelUser;
-use Chamilo\CoreBundle\Entity\SkillRelUser as SkillRelUserEntity;
+use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CourseBundle\Entity\CAttendance;
+use Chamilo\CourseBundle\Entity\CForumThread;
+use Chamilo\CourseBundle\Entity\CLink;
+use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Chamilo\CourseBundle\Entity\CSurvey;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 
-/**
- * Class SkillProfile.
- *
- * @todo break the file in different classes
- */
-class SkillProfile extends Model
-{
-    public $columns = ['id', 'name', 'description'];
-
-    public function __construct()
-    {
-        $this->table = Database::get_main_table(TABLE_MAIN_SKILL_PROFILE);
-        $this->table_rel_profile = Database::get_main_table(TABLE_MAIN_SKILL_REL_PROFILE);
-    }
-
-    /**
-     * @return array
-     */
-    public function getProfiles()
-    {
-        $sql = "SELECT * FROM $this->table p
-                INNER JOIN $this->table_rel_profile sp
-                ON (p.id = sp.profile_id) ";
-        $result = Database::query($sql);
-        
-        return Database::store_result($result, 'ASSOC');
-    }
-
-    /**
-     * This function is for editing profile info from profile_id.
-     *
-     * @param int    $profileId
-     * @param string $name
-     * @param string $description
-     *
-     * @return bool
-     */
-    public function updateProfileInfo($profileId, $name, $description)
-    {
-        $profileId = (int) $profileId;
-
-        if (empty($profileId)) {
-            return false;
-        }
-
-        $name = Database::escape_string($name);
-        $description = Database::escape_string($description);
-
-        $sql = "UPDATE $this->table SET
-                    name = '$name',
-                    description = '$description'
-                WHERE id = $profileId ";
-        Database::query($sql);
-
-        return true;
-    }
-
-    /**
-     * Call the save method of the parent class and the SkillRelProfile object.
-     *
-     * @param array $params
-     * @param bool  $showQuery Whether to show the query in parent save() method
-     *
-     * @return mixed Profile ID or false if incomplete params
-     */
-    public function save($params, $showQuery = false)
-    {
-        if (!empty($params)) {
-            $profile_id = parent::save($params, $showQuery);
-            if ($profile_id) {
-                $skill_rel_profile = new SkillRelProfile();
-                if (isset($params['skills'])) {
-                    foreach ($params['skills'] as $skill_id) {
-                        $attributes = [
-                            'skill_id' => $skill_id,
-                            'profile_id' => $profile_id,
-                        ];
-                        $skill_rel_profile->save($attributes);
-                    }
-                }
-
-                return $profile_id;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Delete a skill profile.
-     *
-     * @param int $id The skill profile id
-     *
-     * @return bool Whether delete a skill profile
-     */
-    public function delete($id)
-    {
-        Database::delete(
-            $this->table_rel_profile,
-            [
-                'profile_id' => $id,
-            ]
-        );
-
-        return parent::delete($id);
-    }
-}
-
-/**
- * Class SkillRelProfile.
- */
-class SkillRelProfile extends Model
-{
-    public $columns = ['id', 'skill_id', 'profile_id'];
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        $this->table = Database::get_main_table(TABLE_MAIN_SKILL_REL_PROFILE);
-        $this->tableProfile = Database::get_main_table(TABLE_MAIN_SKILL_PROFILE);
-    }
-
-    /**
-     * @param int $profileId
-     *
-     * @return array
-     */
-    public function getSkillsByProfile($profileId)
-    {
-        $profileId = (int) $profileId;
-        $skills = $this->get_all(['where' => ['profile_id = ? ' => $profileId]]);
-        $return = [];
-        if (!empty($skills)) {
-            foreach ($skills as $skill_data) {
-                $return[] = $skill_data['skill_id'];
-            }
-        }
-
-        return $return;
-    }
-
-    /**
-     * This function is for getting profile info from profile_id.
-     *
-     * @param int $profileId
-     *
-     * @return array
-     */
-    public function getProfileInfo($profileId)
-    {
-        $profileId = (int) $profileId;
-        $sql = "SELECT * FROM $this->table p
-                INNER JOIN $this->tableProfile pr
-                ON (pr.id = p.profile_id)
-                WHERE p.profile_id = ".$profileId;
-        $result = Database::query($sql);
-        $profileData = Database::fetch_array($result, 'ASSOC');
-
-        return $profileData;
-    }
-}
-
-/**
- * Class SkillRelSkill.
- */
-class SkillRelSkill extends Model
-{
-    public $columns = ['skill_id', 'parent_id', 'relation_type', 'level'];
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        $this->table = Database::get_main_table(TABLE_MAIN_SKILL_REL_SKILL);
-        $this->tableSkill = Database::get_main_table(TABLE_MAIN_SKILL);
-    }
-
-    /**
-     * Gets an element.
-     *
-     * @param int $id
-     *
-     * @return array
-     */
-    public function getSkillInfo($id)
-    {
-        $id = (int) $id;
-
-        if (empty($id)) {
-            return [];
-        }
-
-        $result = Database::select(
-            '*',
-            $this->table,
-            ['where' => ['skill_id = ?' => $id]],
-            'first'
-        );
-
-        return $result;
-    }
-
-    /**
-     * @param int  $skillId
-     * @param bool $add_child_info
-     *
-     * @return array
-     */
-    public function getSkillParents($skillId, $add_child_info = true)
-    {
-        $skillId = (int) $skillId;
-        $sql = 'SELECT child.* FROM '.$this->table.' child
-                LEFT JOIN '.$this->table.' parent
-                ON child.parent_id = parent.skill_id
-                WHERE child.skill_id = '.$skillId.' ';
-        $result = Database::query($sql);
-        $skill = Database::store_result($result, 'ASSOC');
-        $skill = isset($skill[0]) ? $skill[0] : null;
-
-        $parents = [];
-        if (!empty($skill)) {
-            if (null != $skill['parent_id']) {
-                $parents = self::getSkillParents($skill['parent_id']);
-            }
-            if ($add_child_info) {
-                $parents[] = $skill;
-            }
-        }
-
-        return $parents;
-    }
-
-    /**
-     * @param int $skillId
-     *
-     * @return array
-     */
-    public function getDirectParents($skillId)
-    {
-        $skillId = (int) $skillId;
-        $sql = 'SELECT parent_id as skill_id
-                FROM '.$this->table.'
-                WHERE skill_id = '.$skillId;
-        $result = Database::query($sql);
-        $skill = Database::store_result($result, 'ASSOC');
-        $skill = isset($skill[0]) ? $skill[0] : null;
-        $parents = [];
-        if (!empty($skill)) {
-            $parents[] = $skill;
-        }
-
-        return $parents;
-    }
-
-    /**
-     * @param int  $skill_id
-     * @param bool $load_user_data
-     * @param bool $user_id
-     *
-     * @return array
-     */
-    public function getChildren(
-        $skill_id,
-        $load_user_data = false,
-        $user_id = false,
-        $order = ''
-    ) {
-        $skill_id = (int) $skill_id;
-        $sql = 'SELECT parent.* FROM '.$this->tableSkill.' skill
-                INNER JOIN '.$this->table.' parent
-                ON parent.id = skill.id
-                WHERE parent_id = '.$skill_id.'
-                ORDER BY skill.name ASC';
-        $result = Database::query($sql);
-        $skills = Database::store_result($result, 'ASSOC');
-
-        $skill_obj = new Skill();
-        $skill_rel_user = new SkillRelUser();
-
-        if ($load_user_data) {
-            $passed_skills = $skill_rel_user->getUserSkills($user_id);
-            $done_skills = [];
-            foreach ($passed_skills as $done_skill) {
-                $done_skills[] = $done_skill['skill_id'];
-            }
-        }
-
-        if (!empty($skills)) {
-            foreach ($skills as &$skill) {
-                $skill['data'] = $skill_obj->get($skill['skill_id']);
-                if (isset($skill['data']) && !empty($skill['data'])) {
-                    if (!empty($done_skills)) {
-                        $skill['data']['passed'] = 0;
-                        if (in_array($skill['skill_id'], $done_skills)) {
-                            $skill['data']['passed'] = 1;
-                        }
-                    }
-                } else {
-                    $skill = null;
-                }
-            }
-        }
-
-        return $skills;
-    }
-
-    /**
-     * @param array $params
-     *
-     * @return bool
-     */
-    public function updateBySkill($params)
-    {
-        $result = Database::update(
-            $this->table,
-            $params,
-            ['skill_id = ? ' => $params['skill_id']]
-        );
-        if ($result) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param int $skill_id
-     * @param int $parent_id
-     *
-     * @return bool
-     */
-    public function relationExists($skill_id, $parent_id)
-    {
-        $result = $this->find(
-            'all',
-            [
-                'where' => [
-                    'skill_id = ? AND parent_id = ?' => [
-                        $skill_id,
-                        $parent_id,
-                    ],
-                ],
-            ]
-        );
-
-        if (!empty($result)) {
-            return true;
-        }
-
-        return false;
-    }
-}
-
-/**
- * Class SkillRelGradebook.
- */
-class SkillRelGradebook extends Model
-{
-    public $columns = ['id', 'gradebook_id', 'skill_id'];
-
-    /**
-     * SkillRelGradebook constructor.
-     */
-    public function __construct()
-    {
-        $this->table = Database::get_main_table(TABLE_MAIN_SKILL_REL_GRADEBOOK);
-    }
-
-    /**
-     * @param int $gradebookId
-     * @param int $skillId
-     *
-     * @return bool
-     */
-    public function existsGradeBookSkill($gradebookId, $skillId)
-    {
-        $result = $this->find(
-            'all',
-            [
-                'where' => [
-                    'gradebook_id = ? AND skill_id = ?' => [
-                        $gradebookId,
-                        $skillId,
-                    ],
-                ],
-            ]
-        );
-        if (!empty($result)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Gets an element.
-     */
-    public function getSkillInfo($skill_id, $gradebookId)
-    {
-        if (empty($skill_id)) {
-            return [];
-        }
-        $result = Database::select(
-            '*',
-            $this->table,
-            [
-                'where' => [
-                    'skill_id = ? AND gradebook_id = ? ' => [
-                        $skill_id,
-                        $gradebookId,
-                    ],
-                ],
-            ],
-            'first'
-        );
-
-        return $result;
-    }
-
-    /**
-     * @param int   $skill_id
-     * @param array $gradebook_list
-     */
-    public function updateGradeBookListBySkill($skill_id, $gradebook_list)
-    {
-        $original_gradebook_list = $this->find(
-            'all',
-            ['where' => ['skill_id = ?' => [$skill_id]]]
-        );
-        $gradebooks_to_remove = [];
-        $gradebooks_to_add = [];
-        $original_gradebook_list_ids = [];
-
-        if (!empty($original_gradebook_list)) {
-            foreach ($original_gradebook_list as $gradebook) {
-                if (!in_array($gradebook['gradebook_id'], $gradebook_list)) {
-                    $gradebooks_to_remove[] = $gradebook['id'];
-                }
-            }
-            foreach ($original_gradebook_list as $gradebook_item) {
-                $original_gradebook_list_ids[] = $gradebook_item['gradebook_id'];
-            }
-        }
-
-        if (!empty($gradebook_list)) {
-            foreach ($gradebook_list as $gradebook_id) {
-                if (!in_array($gradebook_id, $original_gradebook_list_ids)) {
-                    $gradebooks_to_add[] = $gradebook_id;
-                }
-            }
-        }
-
-        if (!empty($gradebooks_to_remove)) {
-            foreach ($gradebooks_to_remove as $id) {
-                $this->delete($id);
-            }
-        }
-
-        if (!empty($gradebooks_to_add)) {
-            foreach ($gradebooks_to_add as $gradebook_id) {
-                $attributes = [
-                    'skill_id' => $skill_id,
-                    'gradebook_id' => $gradebook_id,
-                ];
-                $this->save($attributes);
-            }
-        }
-    }
-
-    /**
-     * @param array $params
-     *
-     * @return bool|void
-     */
-    public function updateBySkill($params)
-    {
-        $skillInfo = $this->existsGradeBookSkill(
-            $params['gradebook_id'],
-            $params['skill_id']
-        );
-
-        if ($skillInfo) {
-            return;
-        } else {
-            $result = $this->save($params);
-        }
-        if ($result) {
-            return true;
-        }
-
-        return false;
-    }
-}
-
-/**
- * Class SkillRelUser.
- */
-class SkillRelUser extends Model
-{
-    public $columns = [
-        'id',
-        'user_id',
-        'skill_id',
-        'acquired_skill_at',
-        'assigned_by',
-        'course_id',
-        'session_id',
-    ];
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        $this->table = Database::get_main_table(TABLE_MAIN_SKILL_REL_USER);
-    }
-
-    /**
-     * @param array $skill_list
-     *
-     * @return array
-     */
-    public function getUserBySkills($skill_list)
-    {
-        $users = [];
-        if (!empty($skill_list)) {
-            $skill_list = array_map('intval', $skill_list);
-            $skill_list = implode("', '", $skill_list);
-
-            $sql = "SELECT user_id FROM {$this->table}
-                    WHERE skill_id IN ('$skill_list') ";
-
-            $result = Database::query($sql);
-            $users = Database::store_result($result, 'ASSOC');
-        }
-
-        return $users;
-    }
-
-    /**
-     * Get the achieved skills for the user.
-     *
-     * @param int $userId
-     * @param int $courseId  Optional. The course id
-     * @param int $sessionId Optional. The session id
-     *
-     * @return array The skill list. Otherwise return false
-     */
-    public function getUserSkills($userId, $courseId = 0, $sessionId = 0)
-    {
-        if (empty($userId)) {
-            return [];
-        }
-
-        $courseId = (int) $courseId;
-        $sessionId = $sessionId ? (int) $sessionId : null;
-        $whereConditions = [
-            'user_id = ? ' => (int) $userId,
-        ];
-
-        if ($courseId > 0) {
-            $whereConditions['AND course_id = ? '] = $courseId;
-            $whereConditions['AND session_id = ?'] = $sessionId;
-        }
-
-        $result = Database::select(
-            'skill_id',
-            $this->table,
-            [
-                'where' => $whereConditions,
-            ],
-            'all'
-        );
-
-        return $result;
-    }
-
-    /**
-     * Get the relation data between user and skill.
-     *
-     * @param int $userId    The user id
-     * @param int $skillId   The skill id
-     * @param int $courseId  Optional. The course id
-     * @param int $sessionId Optional. The session id
-     *
-     * @return array The relation data. Otherwise return false
-     */
-    public function getByUserAndSkill($userId, $skillId, $courseId = 0, $sessionId = 0)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE user_id = %d AND skill_id = %d ";
-
-        if ($courseId > 0) {
-            $sql .= "AND course_id = %d ".api_get_session_condition($sessionId, true);
-        }
-
-        $sql = sprintf(
-            $sql,
-            $userId,
-            $skillId,
-            $courseId
-        );
-
-        $result = Database::query($sql);
-
-        return Database::fetch_assoc($result);
-    }
-
-    /**
-     * Get the URL for the issue.
-     *
-     * @return string
-     */
-    public static function getIssueUrl(SkillRelUserEntity $skillIssue)
-    {
-        return api_get_path(WEB_PATH)."badge/{$skillIssue->getId()}";
-    }
-
-    /**
-     * Get the URL for the All issues page.
-     *
-     * @return string
-     */
-    public static function getIssueUrlAll(SkillRelUserEntity $skillIssue)
-    {
-        return api_get_path(WEB_PATH)."skill/{$skillIssue->getSkill()->getId()}/user/{$skillIssue->getUser()->getId()}";
-    }
-
-    /**
-     * Get the URL for the assertion.
-     *
-     * @return string
-     */
-    public static function getAssertionUrl(SkillRelUserEntity $skillIssue)
-    {
-        $url = api_get_path(WEB_CODE_PATH).'badge/assertion.php?';
-
-        $url .= http_build_query([
-            'user' => $skillIssue->getUser()->getId(),
-            'skill' => $skillIssue->getSkill()->getId(),
-            'course' => $skillIssue->getCourse() ? $skillIssue->getCourse()->getId() : 0,
-            'session' => $skillIssue->getSession() ? $skillIssue->getSession()->getId() : 0,
-        ]);
-
-        return $url;
-    }
-}
-
-/**
- * Class Skill.
- */
-class Skill extends Model
+class SkillModel extends Model
 {
     public $columns = [
         'id',
@@ -721,7 +75,9 @@ class Skill extends Model
             return [];
         }
 
-        $path = api_get_path(WEB_UPLOAD_PATH).'badges/';
+        // @todo fix badges icons
+        //$path = api_get_path(WEB_UPLOAD_PATH).'badges/';
+        $path = '';
         if (!empty($result['icon'])) {
             $iconSmall = sprintf(
                 '%s-small.png',
@@ -868,7 +224,7 @@ class Skill extends Model
      */
     public function getSkillInfo($id)
     {
-        $skillRelSkill = new SkillRelSkill();
+        $skillRelSkill = new SkillRelSkillModel();
         $skillInfo = $this->get($id);
         if (!empty($skillInfo)) {
             $skillInfo['extra'] = $skillRelSkill->getSkillInfo($id);
@@ -918,7 +274,7 @@ class Skill extends Model
      *
      * @return array
      */
-    public function get_all(
+    public function getAllSkills(
         $load_user_data = false,
         $user_id = false,
         $id = null,
@@ -955,7 +311,7 @@ class Skill extends Model
 
         $result = Database::query($sql);
         $skills = [];
-        $webPath = api_get_path(WEB_UPLOAD_PATH);
+        //$webPath = api_get_path(WEB_UPLOAD_PATH);
         if (Database::num_rows($result)) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $skillInfo = self::get($row['id']);
@@ -966,7 +322,7 @@ class Skill extends Model
 
                 $row['name'] = self::translateName($row['name']);
                 $row['short_code'] = self::translateCode($row['short_code']);
-                $skillRelSkill = new SkillRelSkill();
+                $skillRelSkill = new SkillRelSkillModel();
                 $parents = $skillRelSkill->getSkillParents($row['id']);
                 $row['level'] = count($parents) - 1;
                 $row['gradebooks'] = $this->getGradebooksBySkill($row['id']);
@@ -1016,7 +372,7 @@ class Skill extends Model
      */
     public function getChildren($skill_id, $load_user_data = false)
     {
-        $skillRelSkill = new SkillRelSkill();
+        $skillRelSkill = new SkillRelSkillModel();
         if ($load_user_data) {
             $user_id = api_get_user_id();
             $skills = $skillRelSkill->getChildren($skill_id, true, $user_id);
@@ -1036,7 +392,7 @@ class Skill extends Model
      */
     public function getAllChildren($skillId)
     {
-        $skillRelSkill = new SkillRelSkill();
+        $skillRelSkill = new SkillRelSkillModel();
         $children = $skillRelSkill->getChildren($skillId);
         foreach ($children as $child) {
             $subChildren = $this->getAllChildren($child['id']);
@@ -1054,7 +410,7 @@ class Skill extends Model
      */
     public function get_parents($skillId)
     {
-        $skillRelSkill = new SkillRelSkill();
+        $skillRelSkill = new SkillRelSkillModel();
         $skills = $skillRelSkill->getSkillParents($skillId, true);
         foreach ($skills as &$skill) {
             $skill['data'] = $this->get($skill['skill_id']);
@@ -1072,7 +428,7 @@ class Skill extends Model
      */
     public function getDirectParents($skillId)
     {
-        $skillRelSkill = new SkillRelSkill();
+        $skillRelSkill = new SkillRelSkillModel();
         $skills = $skillRelSkill->getDirectParents($skillId, true);
         if (!empty($skills)) {
             foreach ($skills as &$skill) {
@@ -1109,8 +465,8 @@ class Skill extends Model
             $params['parent_id'] = [$params['parent_id']];
         }
 
-        $skillRelSkill = new SkillRelSkill();
-        $skillRelGradebook = new SkillRelGradebook();
+        $skillRelSkill = new SkillRelSkillModel();
+        $skillRelGradebook = new SkillRelGradebookModel();
 
         // Saving name, description
         $params['access_url_id'] = api_get_current_access_url_id();
@@ -1161,7 +517,7 @@ class Skill extends Model
         $courseId,
         $sessionId
     ) {
-        $skill_rel_user = new SkillRelUser();
+        $skill_rel_user = new SkillRelUserModel();
 
         // Load subcategories
         if ($category->hasSubCategories()) {
@@ -1228,8 +584,8 @@ class Skill extends Model
 
         $params['gradebook_id'] = isset($params['gradebook_id']) ? $params['gradebook_id'] : [];
 
-        $skillRelSkill = new SkillRelSkill();
-        $skillRelGradebook = new SkillRelGradebook();
+        $skillRelSkill = new SkillRelSkillModel();
+        $skillRelGradebook = new SkillRelGradebookModel();
 
         // Saving name, description
         $this->update($params);
@@ -1578,9 +934,9 @@ class Skill extends Model
             $skill_id = 0;
         }
         if (isset($user_id) && !empty($user_id)) {
-            $skills = $this->get_all(true, $user_id, null, $skill_id);
+            $skills = $this->getAllSkills(true, $user_id, null, $skill_id);
         } else {
-            $skills = $this->get_all(false, false, null, $skill_id);
+            $skills = $this->getAllSkills(false, false, null, $skill_id);
         }
 
         $original_skill = $this->list = $skills;
@@ -1701,7 +1057,7 @@ class Skill extends Model
             }
 
             $skills_tree = [
-                'name' => get_lang('SkillrootName'),
+                'name' => get_lang('Absolute skill'),
                 'id' => 'root',
                 'children' => $refs['root']['children'],
                 'data' => [],
@@ -2370,7 +1726,7 @@ class Skill extends Model
      */
     public function setForm(FormValidator &$form, $skillInfo = [])
     {
-        $allSkills = $this->get_all();
+        $allSkills = $this->getAllSkills();
         $objGradebook = new Gradebook();
 
         $isAlreadyRootSkill = false;
@@ -2521,7 +1877,7 @@ class Skill extends Model
                 ['itemId' => $itemId, 'itemType' => $typeId]
             );
 
-            $skillRelUser = new SkillRelUser();
+            $skillRelUser = new SkillRelUserModel();
             $skillUserList = $skillRelUser->getUserSkills($userId);
             if (!empty($skillUserList)) {
                 $skillUserList = array_column($skillUserList, 'skill_id');
@@ -2534,7 +1890,7 @@ class Skill extends Model
                     'user' => $userId,
                     'skillRelItem' => $skillRelItem,
                 ];
-                $skillRelItemRelUser = $em->getRepository('ChamiloCoreBundle:SkillRelItemRelUser')->findOneBy($criteria);
+                $skillRelItemRelUser = $em->getRepository(SkillRelItemRelUser::class)->findOneBy($criteria);
                 $skills .= self::getUserSkillStatusLabel($skillRelItem, $skillRelItemRelUser);
             }
 
@@ -2600,7 +1956,7 @@ class Skill extends Model
         $skillList = [];
         if (!empty($itemId)) {
             $em = Database::getManager();
-            $items = $em->getRepository('ChamiloCoreBundle:SkillRelItem')->findBy(
+            $items = $em->getRepository(SkillRelItem::class)->findBy(
                 ['itemId' => $itemId, 'itemType' => $typeId]
             );
             /** @var SkillRelItem $skillRelItem */
@@ -2644,7 +2000,7 @@ class Skill extends Model
 
         if ($allowSkillInTools) {
             $em = Database::getManager();
-            $skills = $em->getRepository('ChamiloCoreBundle:SkillRelItem')->findBy(
+            $skills = $em->getRepository(SkillRelItem::class)->findBy(
                 ['courseId' => $courseId, 'sessionId' => $sessionId]
             );
         }
@@ -2676,15 +2032,15 @@ class Skill extends Model
             case ITEM_TYPE_HOTPOTATOES:
                 break;
             case ITEM_TYPE_LINK:
-                /** @var \Chamilo\CourseBundle\Entity\CLink $item */
-                $item = $em->getRepository('ChamiloCourseBundle:CLink')->find($itemId);
+                /** @var CLink $item */
+                $item = $em->getRepository(CLink::class)->find($itemId);
                 if ($item) {
                     $itemInfo['name'] = $item->getTitle();
                 }
                 break;
             case ITEM_TYPE_LEARNPATH:
-                /** @var \Chamilo\CourseBundle\Entity\CLp $item */
-                $item = $em->getRepository('ChamiloCourseBundle:CLp')->find($itemId);
+                /** @var CLp $item */
+                $item = $em->getRepository(CLp::class)->find($itemId);
                 if ($item) {
                     $itemInfo['name'] = $item->getName();
                 }
@@ -2692,30 +2048,30 @@ class Skill extends Model
             case ITEM_TYPE_GRADEBOOK:
                 break;
             case ITEM_TYPE_STUDENT_PUBLICATION:
-                /** @var \Chamilo\CourseBundle\Entity\CStudentPublication $item */
-                $item = $em->getRepository('ChamiloCourseBundle:CStudentPublication')->find($itemId);
+                /** @var CStudentPublication $item */
+                $item = $em->getRepository(CStudentPublication::class)->find($itemId);
                 if ($item) {
                     $itemInfo['name'] = $item->getTitle();
                 }
                 break;
             //ITEM_TYPE_FORUM', 7);
             case ITEM_TYPE_ATTENDANCE:
-                /** @var \Chamilo\CourseBundle\Entity\CAttendance $item */
-                $item = $em->getRepository('ChamiloCourseBundle:CAttendance')->find($itemId);
+                /** @var CAttendance $item */
+                $item = $em->getRepository(CAttendance::class)->find($itemId);
                 if ($item) {
                     $itemInfo['name'] = $item->getName();
                 }
                 break;
             case ITEM_TYPE_SURVEY:
-                /** @var \Chamilo\CourseBundle\Entity\CSurvey $item */
-                $item = $em->getRepository('ChamiloCourseBundle:CSurvey')->find($itemId);
+                /** @var CSurvey $item */
+                $item = $em->getRepository(CSurvey::class)->find($itemId);
                 if ($item) {
                     $itemInfo['name'] = strip_tags($item->getTitle());
                 }
                 break;
             case ITEM_TYPE_FORUM_THREAD:
-                /** @var \Chamilo\CourseBundle\Entity\CForumThread $item */
-                $item = $em->getRepository('ChamiloCourseBundle:CForumThread')->find($itemId);
+                /** @var CForumThread $item */
+                $item = $em->getRepository(CForumThread::class)->find($itemId);
                 if ($item) {
                     $itemInfo['name'] = $item->getThreadTitle();
                 }
@@ -2737,7 +2093,7 @@ class Skill extends Model
         $skills = [];
         if ($allowSkillInTools) {
             $em = Database::getManager();
-            $skills = $em->getRepository('ChamiloCoreBundle:SkillRelItem')->findBy(
+            $skills = $em->getRepository(SkillRelItem::class)->findBy(
                 ['itemId' => $itemId, 'itemType' => $typeId]
             );
         }
@@ -2780,7 +2136,7 @@ class Skill extends Model
 
             $em = Database::getManager();
             // Delete old ones
-            $items = $em->getRepository('ChamiloCoreBundle:SkillRelItem')->findBy(
+            $items = $em->getRepository(SkillRelItem::class)->findBy(
                 ['itemId' => $itemId, 'itemType' => $typeId]
             );
 
@@ -2819,7 +2175,7 @@ class Skill extends Model
             $skills = (array) $form->getSubmitValue('skills');
 
             // Delete old ones
-            $items = $em->getRepository('ChamiloCoreBundle:SkillRelItem')->findBy(
+            $items = $em->getRepository(SkillRelItem::class)->findBy(
                 ['itemId' => $itemId, 'itemType' => $typeId]
             );
             if (!empty($items)) {
@@ -2835,8 +2191,8 @@ class Skill extends Model
             // Add new one
             if (!empty($skills)) {
                 foreach ($skills as $skillId) {
-                    /** @var SkillEntity $skill */
-                    $skill = $em->getRepository('ChamiloCoreBundle:Skill')->find($skillId);
+                    /** @var Skill $skill */
+                    $skill = $em->getRepository(Skill::class)->find($skillId);
                     if ($skill) {
                         if (!$skill->hasItem($typeId, $itemId)) {
                             $skillRelItem = new SkillRelItem();
@@ -2877,8 +2233,6 @@ class Skill extends Model
      * @param int   $courseId
      * @param int   $sessionId
      *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     *
      * @return bool
      */
     public static function saveSkillsToCourse($skills, $courseId, $sessionId)
@@ -2905,7 +2259,7 @@ class Skill extends Model
         }
 
         // Delete old ones
-        $items = $em->getRepository('ChamiloCoreBundle:SkillRelCourse')->findBy(
+        $items = $em->getRepository(SkillRelCourse::class)->findBy(
             ['course' => $courseId, 'session' => $sessionId]
         );
 
@@ -2926,8 +2280,8 @@ class Skill extends Model
                 $item->setCourse($course);
                 $item->setSession($session);
 
-                /** @var SkillEntity $skill */
-                $skill = $em->getRepository('ChamiloCoreBundle:Skill')->find($skillId);
+                /** @var Skill $skill */
+                $skill = $em->getRepository(Skill::class)->find($skillId);
                 if ($skill) {
                     if (!$skill->hasCourseAndSession($item)) {
                         $skill->addToCourse($item);
@@ -2948,33 +2302,34 @@ class Skill extends Model
      *
      * @return string
      */
-    public static function getWebIconPath(SkillEntity $skill, $getSmall = false)
+    public static function getWebIconPath(Skill $skill, $getSmall = false)
     {
+        throw new Exception('fix WEB_UPLOAD_PATH');
+
         if ($getSmall) {
             if (empty($skill->getIcon())) {
                 return \Display::return_icon('badges-default.png', null, null, ICON_SIZE_BIG, null, true);
             }
 
-            return api_get_path(WEB_UPLOAD_PATH).'badges/'.sha1($skill->getName()).'-small.png';
+            //return api_get_path(WEB_UPLOAD_PATH).'badges/'.sha1($skill->getName()).'-small.png';
         }
 
         if (empty($skill->getIcon())) {
             return \Display::return_icon('badges-default.png', null, null, ICON_SIZE_HUGE, null, true);
         }
 
-        return api_get_path(WEB_UPLOAD_PATH)."badges/{$skill->getIcon()}";
+        //return api_get_path(WEB_UPLOAD_PATH)."badges/{$skill->getIcon()}";
     }
 
     /**
-     * @param User                             $user
-     * @param \Chamilo\CoreBundle\Entity\Skill $skill
-     * @param int                              $levelId
-     * @param string                           $argumentation
-     * @param int                              $authorId
+     * @param User   $user
+     * @param Skill  $skill
+     * @param int    $levelId
+     * @param string $argumentation
+     * @param int    $authorId
      *
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @return \Chamilo\CoreBundle\Entity\SkillRelUser|bool
      *
-     * @return SkillRelUserEntity
      */
     public function addSkillToUserBadge($user, $skill, $levelId, $argumentation, $authorId)
     {
@@ -2982,7 +2337,7 @@ class Skill extends Model
 
         $entityManager = Database::getManager();
 
-        $skillUserRepo = $entityManager->getRepository('ChamiloCoreBundle:SkillRelUser');
+        $skillUserRepo = $entityManager->getRepository(SkillRelUser::class);
 
         $criteria = ['user' => $user, 'skill' => $skill];
         $result = $skillUserRepo->findOneBy($criteria);
@@ -2990,9 +2345,10 @@ class Skill extends Model
         if (!empty($result)) {
             return false;
         }
-        $skillLevelRepo = $entityManager->getRepository('ChamiloCoreBundle:Level');
 
-        $skillUser = new SkillRelUserEntity();
+        $skillLevelRepo = $entityManager->getRepository(Level::class);
+
+        $skillUser = new SkillRelUser();
         $skillUser->setUser($user);
         $skillUser->setSkill($skill);
 

@@ -37,7 +37,7 @@ class OnlineListener
             and ignore any subrequest in the process (for example when doing a
             render() in a twig template)*/
 
-        if (HttpKernel::MASTER_REQUEST !== $event->getRequestType()) {
+        if (HttpKernel::MAIN_REQUEST !== $event->getRequestType()) {
             return;
         }
 

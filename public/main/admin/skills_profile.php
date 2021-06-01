@@ -8,16 +8,16 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-Skill::isAllowed();
+SkillModel::isAllowed();
 
 $interbreadcrumb[] = [
     'url' => 'index.php',
     "name" => get_lang('Administration'),
 ];
 
-$skill = new Skill();
-$skill_profile = new SkillProfile();
-$skill_rel_user = new SkillRelUser();
+$skill = new SkillModel();
+$skill_profile = new SkillProfileModel();
+$skill_rel_user = new SkillRelUserModel();
 
 $url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php';
 $tpl = new Template(get_lang('Skills'));
@@ -118,7 +118,7 @@ switch ($action) {
         Session::write('skills', $skills);
         break;
     case 'load_profile':
-        $skill_profile = new SkillRelProfile();
+        $skill_profile = new SkillRelProfileModel();
         $skills = $skill_profile->getSkillsByProfile($id);
         $total_skills_to_search = $skill->getSkillsInfo($skills);
         break;

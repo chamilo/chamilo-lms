@@ -8,8 +8,7 @@ namespace Chamilo\CoreBundle\Security;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
@@ -17,12 +16,12 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
 class AuthenticationEntryPoint implements AuthenticationEntryPointInterface
 {
     private UrlGeneratorInterface $urlGenerator;
-    private SessionInterface $session;
+    private RequestStack $requestStack;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, SessionInterface $session)
+    public function __construct(UrlGeneratorInterface $urlGenerator, RequestStack $requestStack)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->session = $session;
+        $this->requestStack = $requestStack;
     }
 
     public function start(Request $request, AuthenticationException $authException = null): RedirectResponse
@@ -32,8 +31,7 @@ class AuthenticationEntryPoint implements AuthenticationEntryPointInterface
             $message = $authException->getPrevious()->getMessage();
         }
 
-        /** @var Session $session */
-        $session = $this->session;
+        $session = $this->requestStack->getSession();
         $session->getFlashBag()->add('warning', $message);
 
         return new RedirectResponse($this->urlGenerator->generate('login'));

@@ -60,14 +60,12 @@ use Chamilo\CourseBundle\Repository\CThematicPlanRepository;
 use Chamilo\CourseBundle\Repository\CThematicRepository;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
-use CourseManager;
 use Database;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
@@ -77,13 +75,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 /**
- * Class Container
- * This class is a way to access Symfony2 services in legacy Chamilo code.
+ * Symfony services for the legacy Chamilo code.
  */
 class Container
 {
     public static ?ContainerInterface $container = null;
-    public static ?SessionInterface $session = null;
     public static ?Request $request = null;
     public static ?TranslatorInterface $translator = null;
     public static Environment $twig;
@@ -184,7 +180,7 @@ class Container
     public static function getSession()
     {
         if (null !== self::$container) {
-            return self::$container->get('session');
+            return self::getRequest()->getSession();
         }
 
         return false;

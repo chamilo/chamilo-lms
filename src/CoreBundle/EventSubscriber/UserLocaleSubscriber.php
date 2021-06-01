@@ -8,7 +8,7 @@ namespace Chamilo\CoreBundle\EventSubscriber;
 
 use Chamilo\CoreBundle\Entity\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
 
@@ -21,11 +21,11 @@ use Symfony\Component\Security\Http\SecurityEvents;
  */
 class UserLocaleSubscriber implements EventSubscriberInterface
 {
-    private SessionInterface $session;
+    private RequestStack $requestStack;
 
-    public function __construct(SessionInterface $session)
+    public function __construct(RequestStack $requestStack)
     {
-        $this->session = $session;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -35,10 +35,11 @@ class UserLocaleSubscriber implements EventSubscriberInterface
     {
         /** @var User $user */
         $user = $event->getAuthenticationToken()->getUser();
+        $session = $this->requestStack->getSession();
 
         if (null !== $user->getLocale()) {
-            $this->session->set('_locale', $user->getLocale());
-            $this->session->set('_locale_user', $user->getLocale());
+            $session->set('_locale', $user->getLocale());
+            $session->set('_locale_user', $user->getLocale());
         }
     }
 

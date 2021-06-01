@@ -99,7 +99,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__.'/src/CoreBundle/Component/HTMLPurifier/Filter/AllowIframes.php',
             __DIR__.'/src/CoreBundle/Traits/*',
             __DIR__.'/src/CourseBundle/Component/*',
-            __DIR__.'/src/DataFixtures/*',
             IncrementStyleFixer::class => 'post',
             PropertyTypeHintSniff::class.'.'.PropertyTypeHintSniff::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION,
             PropertyTypeHintSniff::class.'.'.PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT,

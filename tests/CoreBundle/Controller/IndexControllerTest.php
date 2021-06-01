@@ -17,7 +17,7 @@ class IndexControllerTest extends WebTestCase
         $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
     }*/
 
-    public function testLogin()
+    public function testLoginPage()
     {
         $client = static::createClient();
         $client->request('GET', '/login');

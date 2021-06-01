@@ -253,7 +253,7 @@ if (api_is_platform_admin()) {
     $blocks['sessions']['extra'] = null;
 
     // Skills
-    if (Skill::isToolAvailable()) {
+    if (SkillModel::isToolAvailable()) {
         $blocks['skills']['icon'] = Display::return_icon(
             'skill-badges.png',
             get_lang('Skills'),

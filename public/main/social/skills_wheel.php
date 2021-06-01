@@ -8,7 +8,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_SOCIAL;
 
 api_block_anonymous_users();
-Skill::isAllowed(api_get_user_id());
+SkillModel::isAllowed(api_get_user_id());
 
 //Adds the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_js('d3/d3.v3.5.4.min.js');
@@ -23,7 +23,7 @@ $tpl = new Template(null, false, false);
 $userId = api_get_user_id();
 $userInfo = api_get_user_info();
 
-$skill = new Skill();
+$skill = new SkillModel();
 $ranking = $skill->getUserSkillRanking($userId);
 $skills = $skill->getUserSkills($userId, true);
 

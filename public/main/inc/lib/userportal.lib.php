@@ -286,7 +286,7 @@ class IndexManager
             ];
         }
 
-        if (Skill::isAllowed(api_get_user_id(), false)) {
+        if (SkillModel::isAllowed(api_get_user_id(), false)) {
             $items[] = [
                 'icon' => Display::return_icon('skill-badges.png', get_lang('My skills')),
                 'link' => api_get_path(WEB_CODE_PATH).'social/my_skills_report.php',
@@ -2047,7 +2047,7 @@ class IndexManager
                         $badgeList[$id]['finished'] = true;
                     }
 
-                    $objSkill = new Skill();
+                    $objSkill = new SkillModel();
                     $skills = $category->get_skills();
                     $skillList = [];
                     foreach ($skills as $skill) {

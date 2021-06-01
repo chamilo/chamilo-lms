@@ -3,7 +3,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Skill;
-use Skill as SkillManager;
 
 /**
  * Page for assign skills to a user.
@@ -18,7 +17,7 @@ if (empty($userId)) {
     api_not_allowed(true);
 }
 
-SkillManager::isAllowed($userId);
+SkillModel::isAllowed($userId);
 
 $user = api_get_user_entity($userId);
 
@@ -27,7 +26,7 @@ if (!$user) {
 }
 
 $entityManager = Database::getManager();
-$skillManager = new SkillManager();
+$skillManager = new SkillModel();
 $skillRepo = $entityManager->getRepository(Skill::class);
 $skillRelSkill = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\SkillRelSkill::class);
 $skillLevelRepo = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\Level::class);

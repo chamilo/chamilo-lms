@@ -17,7 +17,7 @@ if (0 === $userId || 0 === $skillId) {
     exit;
 }
 
-$objSkill = new Skill();
+$objSkill = new SkillModel();
 if (!$objSkill->userHasSkill($userId, $skillId, $courseId, $sessionId)) {
     exit;
 }

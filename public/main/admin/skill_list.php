@@ -3,7 +3,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Skill;
-use Skill as SkillManager;
 
 /**
  * Skill list for management.
@@ -18,7 +17,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-SkillManager::isAllowed();
+SkillModel::isAllowed();
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 $skillId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
@@ -81,7 +80,7 @@ switch ($action) {
 
             $entityManager->persist($skill);
 
-            $skillObj = new SkillManager();
+            $skillObj = new SkillModel();
             $children = $skillObj->getChildren($skill->getId());
 
             foreach ($children as $child) {
@@ -160,8 +159,8 @@ switch ($action) {
         }
 
         /* View */
-        $skill = new SkillManager();
-        $skillList = $skill->get_all();
+        $skill = new SkillModel();
+        $skillList = $skill->getAllSkills();
         $extraFieldSearchTagId = isset($_REQUEST['tag_id']) ? $_REQUEST['tag_id'] : 0;
 
         if ($extraFieldSearchTagId) {

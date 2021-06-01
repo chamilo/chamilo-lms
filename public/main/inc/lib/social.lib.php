@@ -2478,11 +2478,11 @@ class SocialManager extends UserManager
      */
     public static function getSkillBlock($userId, $orientation = 'horizontal')
     {
-        if (false === Skill::isAllowed($userId, false)) {
+        if (false === SkillModel::isAllowed($userId, false)) {
             return '';
         }
 
-        $skill = new Skill();
+        $skill = new SkillModel();
         $ranking = $skill->getUserSkillRanking($userId);
 
         $template = new Template(null, false, false, false, false, false);

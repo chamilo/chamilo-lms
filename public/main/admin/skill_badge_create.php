@@ -11,12 +11,12 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script();
-Skill::isAllowed();
+SkillModel::isAllowed();
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
 $skillId = intval($_GET['id']);
-$objSkill = new Skill();
+$objSkill = new SkillModel();
 $skill = $objSkill->get($skillId);
 
 $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_JS_PATH).'badge-studio/media/css/core.css" rel="stylesheet">';

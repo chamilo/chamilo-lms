@@ -539,7 +539,7 @@ class Attendance
         $attendance->setActive(2);
         $repo->update($attendance);
 
-        Skill::deleteSkillsFromItem($attendance->getIid(), ITEM_TYPE_ATTENDANCE);
+        SkillModel::deleteSkillsFromItem($attendance->getIid(), ITEM_TYPE_ATTENDANCE);
 
         return true;
 
@@ -2397,7 +2397,7 @@ class Attendance
             $form->applyFilter('attendance_weight', 'html_filter');
             $form->addElement('html', '</div>');
 
-            $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_ATTENDANCE, $attendance ? $attendance->getIid() : 0);
+            $skillList = SkillModel::addSkillsToForm($form, ITEM_TYPE_ATTENDANCE, $attendance ? $attendance->getIid() : 0);
 
             $form->addElement('html', '</div>');
         }

@@ -245,7 +245,7 @@ function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId = 
                 <div class='row'>
                     <div class='col-md-2 col-xs-4'>
                         <div class='thumbnail'>
-                          <img class='skill-badge-img' src='".Skill::getWebIconPath($skill)."' >
+                          <img class='skill-badge-img' src='".SkillModel::getWebIconPath($skill)."' >
                         </div>
                     </div>
                     <div class='col-md-8 col-xs-8'>

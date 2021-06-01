@@ -78,7 +78,7 @@ function save_data($skills)
             $skill['short_code'] = '';
             $skill['icon'] = '';
             $skill['updated_at'] = api_get_utc_datetime();
-            $oskill = new Skill();
+            $oskill = new SkillModel();
             $skill_id = $oskill->add($skill);
             $parents[$saved_id] = $skill_id;
         }
@@ -188,7 +188,7 @@ if (!empty($see_message_import)) {
     echo Display::return_message($see_message_import, 'normal');
 }
 
-$objSkill = new Skill();
+$objSkill = new SkillModel();
 echo $objSkill->getToolBar();
 
 $form = new FormValidator('user_import', 'post', 'skills_import.php');

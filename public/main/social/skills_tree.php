@@ -7,7 +7,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_MYPROFILE;
 
 api_block_anonymous_users();
-Skill::isAllowed(api_get_user_id());
+SkillModel::isAllowed(api_get_user_id());
 
 //Adds the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -15,7 +15,7 @@ $htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js'
 $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
 $htmlHeadXtra[] = api_get_js('skills.js');
 
-$skill = new Skill();
+$skill = new SkillModel();
 $type = 'read'; //edit
 $tree = $skill->getSkillsTree(api_get_user_id(), null, true);
 $skill_visualizer = new SkillVisualizer($tree, $type);

@@ -575,7 +575,7 @@ class SurveyManager
             api_get_user_id()
         );*/
 
-        Skill::deleteSkillsFromItem($surveyId, ITEM_TYPE_SURVEY);
+        SkillModel::deleteSkillsFromItem($surveyId, ITEM_TYPE_SURVEY);
 
         return true;
     }

@@ -284,7 +284,7 @@ if (api_is_allowed_to_edit(null, true)) {
 
 $form->addElement('html', '</div>');
 
-$skillList = Skill::addSkillsToForm($form, ITEM_TYPE_FORUM_THREAD, $threadId);
+$skillList = SkillModel::addSkillsToForm($form, ITEM_TYPE_FORUM_THREAD, $threadId);
 
 $defaults = [];
 $defaults['thread_qualify_gradebook'] = 0;
@@ -314,7 +314,7 @@ if ($form->validate()) {
         $values = $form->exportValues();
         Security::clear_token();
         updateThread($values);
-        Skill::saveSkills($form, ITEM_TYPE_FORUM_THREAD, $threadId);
+        SkillModel::saveSkills($form, ITEM_TYPE_FORUM_THREAD, $threadId);
         header('Location: '.$redirectUrl);
         exit;
     }

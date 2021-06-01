@@ -14,12 +14,12 @@ if (empty($userId)) {
     api_not_allowed(true);
 }
 
-Skill::isAllowed($userId);
+SkillModel::isAllowed($userId);
 
 $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 
-$objSkillRelUser = new SkillRelUser();
+$objSkillRelUser = new SkillRelUserModel();
 $userSkills = $objSkillRelUser->getUserSkills($userId, $courseId, $sessionId);
 
 if (empty($userSkills)) {
@@ -58,7 +58,7 @@ $tpl->assign(
     'content',
     "<script>
     $(function() {
-        OpenBadges.issue_no_modal(".json_encode($assertions)."); 
+        OpenBadges.issue_no_modal(".json_encode($assertions).");
     });
     </script>"
 );

@@ -230,7 +230,7 @@ class Certificate extends Model
             $courseId = $courseInfo['real_id'];
             $sessionId = $category->get_session_id();
 
-            $skill = new Skill();
+            $skill = new SkillModel();
             $skill->addSkillToUser(
                 $this->user_id,
                 $category,
@@ -789,7 +789,7 @@ class Certificate extends Model
             }
         }
 
-        $skill = new Skill();
+        $skill = new SkillModel();
         // Ofaj
         $skills = $skill->getStudentSkills($this->user_id, 2);
         $timeInSeconds = Tracking::get_time_spent_on_the_platform(

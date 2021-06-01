@@ -1044,7 +1044,7 @@ if ($isFeedbackAllowed && 'learnpath' !== $origin && 'student_progress' !== $ori
             .'&id_session='.api_get_session_id();
     }
 
-    Skill::addSkillsToUserForm(
+    SkillModel::addSkillsToUserForm(
         $emailForm,
         ITEM_TYPE_EXERCISE,
         $exercise_id,

@@ -288,7 +288,7 @@ $extra = $extraField->addElements(
     ['lp_icon', 'use_score_as_progress']
 );
 
-$skillList = Skill::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, $lpId);
+$skillList = SkillModel::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, $lpId);
 
 // Submit button
 $form->addButtonSave(get_lang('Save course settings'));
@@ -378,7 +378,7 @@ if ($form->validate()) {
 
     $form = new FormValidator('form1');
     $form->addSelect('skills', 'skills');
-    Skill::saveSkills($form, ITEM_TYPE_LEARNPATH, $lpId);
+    SkillModel::saveSkills($form, ITEM_TYPE_LEARNPATH, $lpId);
 
     if ('true' === api_get_setting('search_enabled')) {
         $specific_fields = get_specific_field_list();

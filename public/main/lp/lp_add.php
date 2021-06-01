@@ -146,7 +146,7 @@ if ($subscriptionSettings['allow_add_users_to_lp']) {
 $extraField = new ExtraField('lp');
 $extra = $extraField->addElements($form, 0, ['lp_icon']);
 
-Skill::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, 0);
+SkillModel::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, 0);
 
 $form->addElement('html', '</div>');
 
@@ -193,7 +193,7 @@ if ($form->validate()) {
         // Create temp form validator to save skills
         $form = new FormValidator('lp_add');
         $form->addSelect('skills', 'skills');
-        Skill::saveSkills($form, ITEM_TYPE_LEARNPATH, $lpId);
+        SkillModel::saveSkills($form, ITEM_TYPE_LEARNPATH, $lpId);
 
         $extraFieldValue = new ExtraFieldValue('lp');
         $_REQUEST['item_id'] = $lpId;

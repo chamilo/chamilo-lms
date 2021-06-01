@@ -178,7 +178,7 @@ function handleForum($url)
                 $locked = api_resource_is_locked_by_gradebook($id, LINK_FORUM_THREAD);
                 if ($resource && false === $locked) {
                     $repo->delete($resource);
-                    Skill::deleteSkillsFromItem($id, ITEM_TYPE_FORUM_THREAD);
+                    SkillModel::deleteSkillsFromItem($id, ITEM_TYPE_FORUM_THREAD);
                     $link_info = GradebookUtils::isResourceInCourseGradebook(
                         api_get_course_id(),
                         5,
@@ -440,7 +440,7 @@ function forumForm(CForum $forum = null, $lp_id)
     );*/
 
     //$forumId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-    //$skillList = Skill::addSkillsToForm($form, ITEM_TYPE_FORUM, $forumId);
+    //$skillList = SkillModel::addSkillsToForm($form, ITEM_TYPE_FORUM, $forumId);
 
     $form->addElement('html', '</div>');
 
@@ -497,7 +497,7 @@ function forumForm(CForum $forum = null, $lp_id)
             $values = $form->getSubmitValues();
             $forumId = store_forum($values, '', true);
             if ($forumId) {
-                // Skill::saveSkills($form, ITEM_TYPE_FORUM, $forumId);
+                // SkillModel::saveSkills($form, ITEM_TYPE_FORUM, $forumId);
                 if (isset($values['forum_id'])) {
                     Display::addFlash(Display::return_message(get_lang('The forum has been modified'), 'confirmation'));
                 } else {
@@ -2927,7 +2927,7 @@ function newThread(CForum $forum, $form_values = '', $showPreview = true)
         $form->addElement('html', '</div>');
     }
 
-    Skill::addSkillsToForm($form, ITEM_TYPE_FORUM_THREAD, 0);
+    SkillModel::addSkillsToForm($form, ITEM_TYPE_FORUM_THREAD, 0);
     $form->addElement('checkbox', 'thread_sticky', '', get_lang('This is a sticky message (appears always on top and has a special sticky icon)'));
 
     $form->addFile('user_upload', get_lang('Attachment'));
@@ -2996,7 +2996,7 @@ function newThread(CForum $forum, $form_values = '', $showPreview = true)
 
             $newThread = saveThread($forum, $values);
             if ($newThread) {
-                Skill::saveSkills($form, ITEM_TYPE_FORUM_THREAD, $newThread->getIid());
+                SkillModel::saveSkills($form, ITEM_TYPE_FORUM_THREAD, $newThread->getIid());
                 $postId = $newThread->getThreadLastPost();
 
                 if ($postId) {

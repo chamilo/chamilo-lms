@@ -362,7 +362,7 @@ class Link extends Model
         if ($link) {
             $repo->delete($link);
             self::delete_link_from_search_engine(api_get_course_id(), $id);
-            Skill::deleteSkillsFromItem($id, ITEM_TYPE_LINK);
+            SkillModel::deleteSkillsFromItem($id, ITEM_TYPE_LINK);
             Display::addFlash(Display::return_message(get_lang('The link has been deleted')));
 
             return true;
@@ -1683,7 +1683,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
             }
         }
 
-        $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_LINK, $linkId);
+        $skillList = SkillModel::addSkillsToForm($form, ITEM_TYPE_LINK, $linkId);
         $form->addHidden('lp_id', $lpId);
         $form->addButtonSave(get_lang('Save links'), 'submitLink');
         $defaults['skills'] = array_keys($skillList);

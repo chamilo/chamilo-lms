@@ -8,14 +8,14 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-Skill::isAllowed();
+SkillModel::isAllowed();
 
 //Adds the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
 $htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js');
 $htmlHeadXtra[] = api_get_js('skills.js');
 
-$skill = new Skill();
+$skill = new SkillModel();
 $type = 'edit'; //edit
 $tree = $skill->getSkillsTree(null, null, true);
 $skill_visualizer = new SkillVisualizer($tree, $type);

@@ -34,7 +34,7 @@ class AccessUrlAdminFixtures extends Fixture implements ContainerAwareInterface
         $container = $this->container;
 
         $toolChain = $container->get(ToolChain::class);
-        $toolChain->createTools($manager);
+        $toolChain->createTools();
 
         $admin = (new User())
             ->setSkipResourceNode(true)

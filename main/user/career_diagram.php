@@ -85,7 +85,7 @@ if (!empty($itemUrls) && !empty($itemUrls['value'])) {
 $showFullPage = isset($_REQUEST['iframe']) && 1 === (int) $_REQUEST['iframe'] ? false : true;
 $tpl = new Template(get_lang('Diagram'), $showFullPage, $showFullPage, !$showFullPage);
 $html = Display::page_subheader2($careerInfo['name'].$urlToString);
-$diagram = Career::renderDiagramByColumn($careerInfo, $tpl, $userId, !$showFullPage);
+$diagram = Career::renderDiagramByColumn($careerInfo, $tpl, $userId, $showFullPage);
 
 if (!empty($diagram)) {
     $html .= $diagram;

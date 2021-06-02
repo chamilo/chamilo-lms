@@ -3,13 +3,12 @@
 
 use Ddeboer\DataImport\Reader\ExcelReader;
 use League\Csv\Reader;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Class Import
  * This class provides some functions which can be used when importing data from
  * external files into Chamilo.
- *
- * @package chamilo.library
  */
 class Import
 {
@@ -81,8 +80,32 @@ class Import
         }
 
         $file = new \SplFileObject($filename);
-        $reader = new ExcelReader($file, 0);
 
-        return $reader;
+        return new ExcelReader($file, 0);
+    }
+
+    /**
+     * @param string $file
+     *
+     * @return Crawler
+     */
+    public static function xml($file)
+    {
+        return self::xmlFromString(file_get_contents($file));
+    }
+
+    /**
+     * @param string $contents
+     *
+     * @return Crawler
+     */
+    public static function xmlFromString($contents)
+    {
+        @libxml_disable_entity_loader(true);
+
+        $crawler = new Crawler();
+        $crawler->addXmlContent($contents);
+
+        return $crawler;
     }
 }

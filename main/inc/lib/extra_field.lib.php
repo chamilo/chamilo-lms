@@ -155,19 +155,19 @@ class ExtraField extends Model
             case 'forum_post':
                 $this->extraFieldType = EntityExtraField::FORUM_POST_TYPE;
                 break;
+            case 'track_exercise':
+                $this->extraFieldType = EntityExtraField::TRACK_EXERCISE_FIELD_TYPE;
+                break;
+            case 'portfolio':
+                $this->extraFieldType = EntityExtraField::PORTFOLIO_TYPE;
+                break;
+            case 'lp_view':
+                $this->extraFieldType = EntityExtraField::LP_VIEW_TYPE;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
         // Example QuestionFields
         $this->pageName = get_lang(ucwords($this->type).'Fields');
-    }
-
-    /**
-     * @return int
-     */
-    public function getExtraFieldType()
-    {
-        return (int) $this->extraFieldType;
     }
 
     /**
@@ -192,13 +192,372 @@ class ExtraField extends Model
             'forum_category',
             'forum_post',
             'exercise',
+            'track_exercise',
+            'lp_view',
         ];
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {
             $result[] = 'scheduled_announcement';
         }
 
+        if (api_get_configuration_value('allow_portfolio_tool')) {
+            $result[] = 'portfolio';
+        }
+        sort($result);
+
         return $result;
+    }
+    
+    /**
+     * Converts a string like this:
+     * France:Paris;Bretagne;Marseille;Lyon|Belgique:Bruxelles;Namur;Liège;Bruges|Peru:Lima;Piura;
+     * into
+     * array(
+     *   'France' =>
+     *      array('Paris', 'Bretagne', 'Marseille'),
+     *   'Belgique' =>
+     *      array('Namur', 'Liège')
+     * ), etc.
+     *
+     * @param string $string
+     *
+     * @return array
+     */
+    public static function extra_field_double_select_convert_string_to_array($string)
+    {
+        $options = explode('|', $string);
+        $options_parsed = [];
+        $id = 0;
+
+        if (!empty($options)) {
+            foreach ($options as $sub_options) {
+                $options = explode(':', $sub_options);
+                $sub_sub_options = isset($options[1]) ? explode(';', $options[1]) : [];
+                $options_parsed[$id] = [
+                    'label' => $options[0],
+                    'options' => $sub_sub_options,
+                ];
+                $id++;
+            }
+        }
+
+        return $options_parsed;
+    }
+
+    
+    /**
+     * @param $string
+     *
+     * @return array
+     */
+    public static function tripleSelectConvertStringToArray($string)
+    {
+        $options = [];
+        foreach (explode('|', $string) as $i => $item0) {
+            $level1 = explode('\\', $item0);
+
+            foreach ($level1 as $j => $item1) {
+                if (0 === $j) {
+                    $options[] = ['label' => $item1, 'options' => []];
+
+                    continue;
+                }
+
+                foreach (explode(':', $item1) as $k => $item2) {
+                    if (0 === $k) {
+                        $options[$i]['options'][] = ['label' => $item2, 'options' => []];
+
+                        continue;
+                    }
+
+                    $options[$i]['options'][$j - 1]['options'][] = explode(';', $item2);
+                }
+            }
+        }
+
+        array_walk_recursive(
+            $options,
+            function (&$item) {
+                $item = trim($item);
+            }
+        );
+
+        return $options;
+    }
+
+    /**
+     * @param array $options the result of the get_field_options_by_field() array
+     *
+     * @return string
+     */
+    public static function extra_field_double_select_convert_array_to_string($options)
+    {
+        $string = null;
+        $optionsParsed = self::extra_field_double_select_convert_array_to_ordered_array($options);
+
+        if (!empty($optionsParsed)) {
+            foreach ($optionsParsed as $option) {
+                foreach ($option as $key => $item) {
+                    $string .= $item['display_text'];
+                    if (0 == $key) {
+                        $string .= ':';
+                    } else {
+                        if (isset($option[$key + 1])) {
+                            $string .= ';';
+                        }
+                    }
+                }
+                $string .= '|';
+            }
+        }
+
+        if (!empty($string)) {
+            $string = substr($string, 0, strlen($string) - 1);
+        }
+
+        return $string;
+    }
+
+    /**
+     * @param array $options The result of the get_field_options_by_field() array
+     *
+     * @return string
+     */
+    public static function extraFieldSelectWithTextConvertArrayToString(array $options)
+    {
+        $parsedOptions = self::extra_field_double_select_convert_array_to_ordered_array($options);
+
+        if (empty($parsedOptions)) {
+            return '';
+        }
+
+        $string = '';
+        foreach ($parsedOptions as $options) {
+            $option = current($options);
+            $string .= $option['display_text'];
+            $string .= '|';
+        }
+
+        return rtrim($string, '|');
+    }
+
+    /**
+     * @return string
+     */
+    public static function tripleSelectConvertArrayToString(array $options)
+    {
+        $parsedOptions = self::tripleSelectConvertArrayToOrderedArray($options);
+        $string = '';
+        foreach ($parsedOptions['level1'] as $item1) {
+            $string .= $item1['display_text'];
+            $level2 = self::getOptionsFromTripleSelect($parsedOptions['level2'], $item1['id']);
+
+            foreach ($level2 as $item2) {
+                $string .= '\\'.$item2['display_text'].':';
+                $level3 = self::getOptionsFromTripleSelect($parsedOptions['level3'], $item2['id']);
+
+                $string .= implode(';', array_column($level3, 'display_text'));
+            }
+
+            $string .= '|';
+        }
+
+        return trim($string, '\\|;');
+    }
+
+    
+    /**
+     * @param string $variable
+     * @param string $dataValue
+     *
+     * @return string
+     */
+    public static function getLocalizationJavascript($variable, $dataValue)
+    {
+        $dataValue = addslashes($dataValue);
+        $html = "<script>
+            $(function() {
+                if (typeof google === 'object') {
+                    var address = '$dataValue';
+                    initializeGeo{$variable}(address, false);
+
+                    $('#geolocalization_extra_{$variable}').on('click', function() {
+                        var address = $('#{$variable}').val();
+                        initializeGeo{$variable}(address, false);
+                        return false;
+                    });
+
+                    $('#myLocation_extra_{$variable}').on('click', function() {
+                        myLocation{$variable}();
+                        return false;
+                    });
+
+                    // When clicking enter
+                    $('#{$variable}').keypress(function(event) {
+                        if (event.which == 13) {
+                            $('#geolocalization_extra_{$variable}').click();
+                            return false;
+                        }
+                    });
+
+                    // On focus out update city
+                    $('#{$variable}').focusout(function() {
+                        $('#geolocalization_extra_{$variable}').click();
+                        return false;
+                    });
+
+                    return;
+                }
+
+                $('#map_extra_{$variable}')
+                    .html('<div class=\"alert alert-info\">"
+            .addslashes(get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap'))
+            ."</div>');
+            });
+
+            function myLocation{$variable}()
+            {
+                if (navigator.geolocation) {
+                    var geoPosition = function(position) {
+                        var lat = position.coords.latitude;
+                        var lng = position.coords.longitude;
+                        var latLng = new google.maps.LatLng(lat, lng);
+                        initializeGeo{$variable}(false, latLng);
+                    };
+
+                    var geoError = function(error) {
+                        alert('Geocode ".get_lang('Error').": ' + error);
+                    };
+
+                    var geoOptions = {
+                        enableHighAccuracy: true
+                    };
+                    navigator.geolocation.getCurrentPosition(geoPosition, geoError, geoOptions);
+                }
+            }
+
+            function initializeGeo{$variable}(address, latLng)
+            {
+                var geocoder = new google.maps.Geocoder();
+                var latlng = new google.maps.LatLng(-34.397, 150.644);
+                var myOptions = {
+                    zoom: 15,
+                    center: latlng,
+                    mapTypeControl: true,
+                    mapTypeControlOptions: {
+                        style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+                    },
+                    navigationControl: true,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+
+                map_{$variable} = new google.maps.Map(
+                    document.getElementById('map_extra_{$variable}'),
+                    myOptions
+                );
+
+                var parameter = address ? {'address': address} : latLng ? {'latLng': latLng} : false;
+
+                if (geocoder && parameter) {
+                    geocoder.geocode(parameter, function(results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
+                                map_{$variable}.setCenter(results[0].geometry.location);
+
+                                // get city and country
+                                var defaultAddress = results[0].formatted_address;
+                                var city = '';
+                                var country = '';
+
+                                for (var i=0; i<results[0].address_components.length; i++) {
+                                    if (results[0].address_components[i].types[0] == \"locality\") {
+                                        //this is the object you are looking for City
+                                        city = results[0].address_components[i];
+                                    }
+                                    /*if (results[j].address_components[i].types[0] == \"administrative_area_level_1\") {
+                                        //this is the object you are looking for State
+                                        region = results[0].address_components[i];
+                                    }*/
+                                    if (results[0].address_components[i].types[0] == \"country\") {
+                                        //this is the object you are looking for
+                                        country = results[0].address_components[i];
+                                    }
+                                }
+
+                                if (city && city.long_name && country && country.long_name) {
+                                    defaultAddress = city.long_name + ', ' + country.long_name;
+                                }
+                                $('#{$variable}').val(defaultAddress);
+                                $('#{$variable}_coordinates').val(
+                                    results[0].geometry.location.lat()+','+results[0].geometry.location.lng()
+                                );
+
+                                var infowindow = new google.maps.InfoWindow({
+                                    content: '<b>' + $('#extra_{$variable}').val() + '</b>',
+                                    size: new google.maps.Size(150, 50)
+                                });
+
+                                var marker = new google.maps.Marker({
+                                    position: results[0].geometry.location,
+                                    map: map_{$variable},
+                                    title: $('#extra_{$variable}').val()
+                                });
+                                google.maps.event.addListener(marker, 'click', function() {
+                                    infowindow.open(map_{$variable}, marker);
+                                });
+                            } else {
+                                alert('".get_lang('NotFound')."');
+                            }
+                        } else {
+                            alert('Geocode ".get_lang('Error').': '.get_lang('AddressField').' '.get_lang('NotFound')."');
+                        }
+                    });
+                }
+            }
+            </script>";
+
+        return $html;
+    }
+
+    /**
+     * @param string $variable
+     * @param string $text
+     *
+     * @return string
+     */
+    public static function getLocalizationInput($variable, $text)
+    {
+        $html = '
+                <div class="form-group">
+                    <label for="geolocalization_extra_'.$variable.'"
+                        class="col-sm-2 control-label"></label>
+                    <div class="col-sm-8">
+                        <button class="btn btn-default"
+                            id="geolocalization_extra_'.$variable.'"
+                            name="geolocalization_extra_'.$variable.'"
+                            type="submit">
+                            <em class="fa fa-map-marker"></em> '.get_lang('SearchGeolocalization').'
+                        </button>
+                        <button class="btn btn-default" id="myLocation_extra_'.$variable.'"
+                            name="myLocation_extra_'.$variable.'"
+                            type="submit">
+                            <em class="fa fa-crosshairs"></em> '.get_lang('MyLocation').'
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="map_extra_'.$variable.'" class="col-sm-2 control-label">
+                        '.$text.' - '.get_lang('Map').'
+                    </label>
+                    <div class="col-sm-8">
+                        <div name="map_extra_'.$variable.'"
+                            id="map_extra_'.$variable.'" style="width:100%; height:300px;">
+                        </div>
+                    </div>
+                </div>
+            ';
+
+        return $html;
     }
 
     /**
@@ -213,6 +572,14 @@ class ExtraField extends Model
         $query->setParameter('type', $this->getExtraFieldType());
 
         return $query->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * @return int
+     */
+    public function getExtraFieldType()
+    {
+        return (int) $this->extraFieldType;
     }
 
     /**
@@ -259,6 +626,61 @@ class ExtraField extends Model
 
         return $query->getQuery()->getArrayResult();
     }
+
+    
+    /**
+     * Get all the field info for tags.
+     *
+     * @param string $variable
+     *
+     * @return array|bool
+     */
+    public function get_handler_field_info_by_tags($variable)
+    {
+        $variable = Database::escape_string($variable);
+        $sql = "SELECT * FROM {$this->table}
+                WHERE
+                    variable = '$variable' AND
+                    extra_field_type = $this->extraFieldType";
+        $result = Database::query($sql);
+        if (Database::num_rows($result)) {
+            $row = Database::fetch_array($result, 'ASSOC');
+            $row['display_text'] = $this->translateDisplayName(
+                $row['variable'],
+                $row['display_text']
+            );
+
+            // All the tags of the field
+            $sql = "SELECT * FROM $this->table_field_tag
+                    WHERE field_id='".intval($row['id'])."'
+                    ORDER BY id ASC";
+            $result = Database::query($sql);
+            while ($option = Database::fetch_array($result, 'ASSOC')) {
+                $row['options'][$option['id']] = $option;
+            }
+
+            return $row;
+        } else {
+            return false;
+        }
+    }
+
+    
+    /**
+     * Translate the display text for a extra field.
+     *
+     * @param string $variable
+     * @param string $defaultDisplayText
+     *
+     * @return string
+     */
+    public static function translateDisplayName($variable, $defaultDisplayText)
+    {
+        $camelCase = api_underscore_to_camel_case($variable);
+
+        return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : $defaultDisplayText;
+    }
+
 
     /**
      * Get an array of all the values from the extra_field and extra_field_options tables
@@ -342,42 +764,6 @@ class ExtraField extends Model
         return false;
     }
 
-    /**
-     * Get all the field info for tags.
-     *
-     * @param string $variable
-     *
-     * @return array|bool
-     */
-    public function get_handler_field_info_by_tags($variable)
-    {
-        $variable = Database::escape_string($variable);
-        $sql = "SELECT * FROM {$this->table}
-                WHERE
-                    variable = '$variable' AND
-                    extra_field_type = $this->extraFieldType";
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_array($result, 'ASSOC');
-            $row['display_text'] = $this->translateDisplayName(
-                $row['variable'],
-                $row['display_text']
-            );
-
-            // All the tags of the field
-            $sql = "SELECT * FROM $this->table_field_tag
-                    WHERE field_id='".intval($row['id'])."'
-                    ORDER BY id ASC";
-            $result = Database::query($sql);
-            while ($option = Database::fetch_array($result, 'ASSOC')) {
-                $row['options'][$option['id']] = $option;
-            }
-
-            return $row;
-        } else {
-            return false;
-        }
-    }
 
     /**
      * @param int $fieldId
@@ -720,79 +1106,7 @@ class ExtraField extends Model
         return null;
     }
 
-    /**
-     * Converts a string like this:
-     * France:Paris;Bretagne;Marseille;Lyon|Belgique:Bruxelles;Namur;Liège;Bruges|Peru:Lima;Piura;
-     * into
-     * array(
-     *   'France' =>
-     *      array('Paris', 'Bretagne', 'Marseille'),
-     *   'Belgique' =>
-     *      array('Namur', 'Liège')
-     * ), etc.
-     *
-     * @param string $string
-     *
-     * @return array
-     */
-    public static function extra_field_double_select_convert_string_to_array($string)
-    {
-        $options = explode('|', $string);
-        $options_parsed = [];
-        $id = 0;
 
-        if (!empty($options)) {
-            foreach ($options as $sub_options) {
-                $options = explode(':', $sub_options);
-                $sub_sub_options = isset($options[1]) ? explode(';', $options[1]) : [];
-                $options_parsed[$id] = [
-                    'label' => $options[0],
-                    'options' => $sub_sub_options,
-                ];
-                $id++;
-            }
-        }
-
-        return $options_parsed;
-    }
-
-    /**
-     * @param $string
-     *
-     * @return array
-     */
-    public static function tripleSelectConvertStringToArray($string)
-    {
-        $options = [];
-
-        foreach (explode('|', $string) as $i => $item0) {
-            $level1 = explode('\\', $item0);
-
-            foreach ($level1 as $j => $item1) {
-                if (0 === $j) {
-                    $options[] = ['label' => $item1, 'options' => []];
-
-                    continue;
-                }
-
-                foreach (explode(':', $item1) as $k => $item2) {
-                    if (0 === $k) {
-                        $options[$i]['options'][] = ['label' => $item2, 'options' => []];
-
-                        continue;
-                    }
-
-                    $options[$i]['options'][$j - 1]['options'][] = explode(';', $item2);
-                }
-            }
-        }
-
-        array_walk_recursive($options, function (&$item) {
-            $item = trim($item);
-        });
-
-        return $options;
-    }
 
     /**
      * @param array $options
@@ -837,89 +1151,9 @@ class ExtraField extends Model
         return ['level1' => $level1, 'level2' => $level2, 'level3' => $level3];
     }
 
-    /**
-     * @param array $options the result of the get_field_options_by_field() array
-     *
-     * @return string
-     */
-    public static function extra_field_double_select_convert_array_to_string($options)
-    {
-        $string = null;
-        $options_parsed = self::extra_field_double_select_convert_array_to_ordered_array($options);
 
-        if (!empty($options_parsed)) {
-            foreach ($options_parsed as $option) {
-                foreach ($option as $key => $item) {
-                    $string .= $item['display_text'];
-                    if ($key == 0) {
-                        $string .= ':';
-                    } else {
-                        if (isset($option[$key + 1])) {
-                            $string .= ';';
-                        }
-                    }
-                }
-                $string .= '|';
-            }
-        }
 
-        if (!empty($string)) {
-            $string = substr($string, 0, strlen($string) - 1);
-        }
 
-        return $string;
-    }
-
-    /**
-     * @param array $options The result of the get_field_options_by_field() array
-     *
-     * @return string
-     */
-    public static function extraFieldSelectWithTextConvertArrayToString(array $options)
-    {
-        $string = '';
-        $parsedOptions = self::extra_field_double_select_convert_array_to_ordered_array($options);
-
-        if (empty($parsedOptions)) {
-            return '';
-        }
-
-        foreach ($parsedOptions as $options) {
-            $option = current($options);
-
-            $string .= $option['display_text'];
-            $string .= '|';
-        }
-
-        return rtrim($string, '|');
-    }
-
-    /**
-     * @param array $options
-     *
-     * @return string
-     */
-    public static function tripleSelectConvertArrayToString(array $options)
-    {
-        $string = '';
-        $parsedOptions = self::tripleSelectConvertArrayToOrderedArray($options);
-
-        foreach ($parsedOptions['level1'] as $item1) {
-            $string .= $item1['display_text'];
-            $level2 = self::getOptionsFromTripleSelect($parsedOptions['level2'], $item1['id']);
-
-            foreach ($level2 as $item2) {
-                $string .= '\\'.$item2['display_text'].':';
-                $level3 = self::getOptionsFromTripleSelect($parsedOptions['level3'], $item2['id']);
-
-                $string .= implode(';', array_column($level3, 'display_text'));
-            }
-
-            $string .= '|';
-        }
-
-        return trim($string, '\\|;');
-    }
 
     /**
      * @param array $params
@@ -2215,7 +2449,7 @@ class ExtraField extends Model
         $header = get_lang('Add');
         $defaults = [];
 
-        if ($action === 'edit') {
+        if ('edit' === $action) {
             $header = get_lang('Modify');
             // Setting the defaults
             $defaults = $this->get($id, false);
@@ -2223,7 +2457,7 @@ class ExtraField extends Model
 
         $form->addElement('header', $header);
 
-        if ($action === 'edit') {
+        if ('edit' === $action) {
             $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'
                 .http_build_query(['extra_field' => $id]);
             $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');
@@ -2265,7 +2499,7 @@ class ExtraField extends Model
             self::FIELD_TYPE_TRIPLE_SELECT,
         ];
 
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             if (in_array($defaults['field_type'], $fieldWithOptions)) {
                 $url = Display::url(
                     get_lang('EditExtraFieldOptions'),
@@ -2273,7 +2507,7 @@ class ExtraField extends Model
                 );
                 $form->addElement('label', null, $url);
 
-                if ($defaults['field_type'] == self::FIELD_TYPE_SELECT) {
+                if (self::FIELD_TYPE_SELECT == $defaults['field_type']) {
                     $urlWorkFlow = Display::url(
                         get_lang('EditExtraFieldWorkFlow'),
                         'extra_field_workflow.php?type='.$this->type.'&field_id='.$id
@@ -2320,7 +2554,7 @@ class ExtraField extends Model
 
         $form->addElement('text', 'field_order', get_lang('FieldOrder'));
 
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             $option = new ExtraFieldOption($this->type);
             $defaults['field_options'] = $option->get_field_options_by_field_to_string($id);
             $form->addButtonUpdate(get_lang('Modify'));
@@ -2347,6 +2581,25 @@ class ExtraField extends Model
         return $form;
     }
 
+     /**
+     * Gets an element.
+     *
+     * @param int  $id
+     * @param bool $translateDisplayText Optional
+     *
+     * @return array
+     */
+    public function get($id, $translateDisplayText = true)
+    {
+        $info = parent::get($id);
+
+        if ($translateDisplayText) {
+            $info['display_text'] = self::translateDisplayName($info['variable'], $info['display_text']);
+        }
+
+        return $info;
+    }
+
     /**
      * @param $token
      *
@@ -2358,7 +2611,7 @@ class ExtraField extends Model
         $editIcon = Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL);
         $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
         $confirmMessage = addslashes(
-            api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES)
+            api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)
         );
 
         $editButton = <<<JAVASCRIPT
@@ -2414,7 +2667,7 @@ JAVASCRIPT;
                     ? $search_options['field_default_value']
                     : null;
 
-                if ($field['field_type'] == self::FIELD_TYPE_DOUBLE_SELECT) {
+                if (self::FIELD_TYPE_DOUBLE_SELECT == $field['field_type']) {
                     // Add 2 selects
                     $options = $extraFieldOption->get_field_options_by_field($field['id']);
                     $options = self::extra_field_double_select_convert_array_to_ordered_array($options);
@@ -2423,7 +2676,7 @@ JAVASCRIPT;
                     if (!empty($options)) {
                         foreach ($options as $option) {
                             foreach ($option as $sub_option) {
-                                if ($sub_option['option_value'] == 0) {
+                                if (0 == $sub_option['option_value']) {
                                     $first_options[] = $sub_option['field_id'].'#'.$sub_option['id'].':'
                                         .$sub_option['display_text'];
                                 }
@@ -2486,6 +2739,7 @@ JAVASCRIPT;
                 $rules[] = [
                     'field' => 'extra_'.$field['variable'],
                     'op' => 'cn',
+                    'data' => '',
                 ];
             }
         }
@@ -2894,6 +3148,7 @@ JAVASCRIPT;
                         [
                             'title' => $field['display_text'],
                             'target' => '_blank',
+                            'class' => 'download_extra_field',
                         ]
                     );
                     break;
@@ -2903,47 +3158,17 @@ JAVASCRIPT;
             }
 
             $valuesData[] = [
+                'variable' => $field['variable'],
                 'text' => $field['display_text'],
                 'value' => $displayedValue,
+                'value_as_array' => $valueAsArray,
             ];
         }
 
         return $valuesData;
     }
 
-    /**
-     * Gets an element.
-     *
-     * @param int  $id
-     * @param bool $translateDisplayText Optional
-     *
-     * @return array
-     */
-    public function get($id, $translateDisplayText = true)
-    {
-        $info = parent::get($id);
-
-        if ($translateDisplayText) {
-            $info['display_text'] = self::translateDisplayName($info['variable'], $info['display_text']);
-        }
-
-        return $info;
-    }
-
-    /**
-     * Translate the display text for a extra field.
-     *
-     * @param string $variable
-     * @param string $defaultDisplayText
-     *
-     * @return string
-     */
-    public static function translateDisplayName($variable, $defaultDisplayText)
-    {
-        $camelCase = api_underscore_to_camel_case($variable);
-
-        return isset($GLOBALS[$camelCase]) ? $GLOBALS[$camelCase] : $defaultDisplayText;
-    }
+  
 
     /**
      * @param int    $fieldId
@@ -3043,214 +3268,7 @@ JAVASCRIPT;
         $result = Database::store_result($result);
 
         return $result;
-    }
-
-    /**
-     * @param string $variable
-     * @param string $dataValue
-     *
-     * @return string
-     */
-    public static function getLocalizationJavascript($variable, $dataValue)
-    {
-        $dataValue = addslashes($dataValue);
-        $html = "<script>
-            $(function() {
-                if (typeof google === 'object') {
-                    var address = '$dataValue';
-                    initializeGeo{$variable}(address, false);
-    
-                    $('#geolocalization_extra_{$variable}').on('click', function() {
-                        var address = $('#{$variable}').val();
-                        initializeGeo{$variable}(address, false);
-                        return false;
-                    });
-    
-                    $('#myLocation_extra_{$variable}').on('click', function() {
-                        myLocation{$variable}();
-                        return false;
-                    });
-    
-                    // When clicking enter
-                    $('#{$variable}').keypress(function(event) {                        
-                        if (event.which == 13) {                            
-                            $('#geolocalization_extra_{$variable}').click();
-                            return false;
-                        }
-                    });
-                    
-                    // On focus out update city
-                    $('#{$variable}').focusout(function() {                                                 
-                        $('#geolocalization_extra_{$variable}').click();
-                        return false;                        
-                    });
-                    
-                    return;
-                }
-    
-                $('#map_extra_{$variable}')
-                    .html('<div class=\"alert alert-info\">"
-                .addslashes(get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap'))
-                ."</div>');
-            });
-    
-            function myLocation{$variable}() 
-            {                                                    
-                if (navigator.geolocation) {
-                    var geoPosition = function(position) {
-                        var lat = position.coords.latitude;
-                        var lng = position.coords.longitude;
-                        var latLng = new google.maps.LatLng(lat, lng);
-                        initializeGeo{$variable}(false, latLng);
-                    };
-    
-                    var geoError = function(error) {                        
-                        alert('Geocode ".get_lang('Error').": ' + error);
-                    };
-    
-                    var geoOptions = {
-                        enableHighAccuracy: true
-                    };
-                    navigator.geolocation.getCurrentPosition(geoPosition, geoError, geoOptions);
-                }
-            }
-    
-            function initializeGeo{$variable}(address, latLng)
-            {                
-                var geocoder = new google.maps.Geocoder();
-                var latlng = new google.maps.LatLng(-34.397, 150.644);
-                var myOptions = {
-                    zoom: 15,
-                    center: latlng,
-                    mapTypeControl: true,
-                    mapTypeControlOptions: {
-                        style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
-                    },
-                    navigationControl: true,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                };
-    
-                map_{$variable} = new google.maps.Map(
-                    document.getElementById('map_extra_{$variable}'),
-                    myOptions
-                );
-    
-                var parameter = address ? {'address': address} : latLng ? {'latLng': latLng} : false;
-    
-                if (geocoder && parameter) {
-                    geocoder.geocode(parameter, function(results, status) {
-                        if (status == google.maps.GeocoderStatus.OK) {
-                            if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {                                
-                                map_{$variable}.setCenter(results[0].geometry.location);
-                                
-                                // get city and country                                
-                                var defaultAddress = results[0].formatted_address;
-                                var city = '';
-                                var country = '';
-                                
-                                for (var i=0; i<results[0].address_components.length; i++) {
-                                    if (results[0].address_components[i].types[0] == \"locality\") {
-                                        //this is the object you are looking for City
-                                        city = results[0].address_components[i];
-                                    }
-                                    /*if (results[j].address_components[i].types[0] == \"administrative_area_level_1\") {
-                                        //this is the object you are looking for State
-                                        region = results[0].address_components[i];
-                                    }*/
-                                    if (results[0].address_components[i].types[0] == \"country\") {
-                                        //this is the object you are looking for
-                                        country = results[0].address_components[i];
-                                    }
-                                }
-                        
-                                if (city && city.long_name && country && country.long_name) {
-                                    defaultAddress = city.long_name + ', ' + country.long_name;
-                                }
-                                $('#{$variable}').val(defaultAddress);                                
-                                $('#{$variable}_coordinates').val(
-                                    results[0].geometry.location.lat()+','+results[0].geometry.location.lng()
-                                );
-                                
-                                var infowindow = new google.maps.InfoWindow({
-                                    content: '<b>' + $('#extra_{$variable}').val() + '</b>',
-                                    size: new google.maps.Size(150, 50)
-                                });
-    
-                                var marker = new google.maps.Marker({
-                                    position: results[0].geometry.location,
-                                    map: map_{$variable},
-                                    title: $('#extra_{$variable}').val()
-                                });
-                                google.maps.event.addListener(marker, 'click', function() {
-                                    infowindow.open(map_{$variable}, marker);
-                                });
-                            } else {
-                                alert('".get_lang('NotFound')."');
-                            }
-                        } else {
-                            alert('Geocode ".get_lang('Error').": ".get_lang("AddressField")." ".get_lang('NotFound')."');
-                        }
-                    });
-                }
-            }
-            </script>";
-
-        return $html;
-    }
-
-    /**
-     * @param string $variable
-     * @param string $text
-     *
-     * @return string
-     */
-    public static function getLocalizationInput($variable, $text)
-    {
-        $html = '
-                <div class="form-group">
-                    <label for="geolocalization_extra_'.$variable.'"
-                        class="col-sm-2 control-label"></label>
-                    <div class="col-sm-8">
-                        <button class="btn btn-default"
-                            id="geolocalization_extra_'.$variable.'"
-                            name="geolocalization_extra_'.$variable.'"
-                            type="submit">
-                            <em class="fa fa-map-marker"></em> '.get_lang('SearchGeolocalization').'
-                        </button>
-                        <button class="btn btn-default" id="myLocation_extra_'.$variable.'"
-                            name="myLocation_extra_'.$variable.'"
-                            type="submit">
-                            <em class="fa fa-crosshairs"></em> '.get_lang('MyLocation').'
-                        </button>
-                    </div>
-                </div>                   
-                <div class="form-group">
-                    <label for="map_extra_'.$variable.'" class="col-sm-2 control-label">
-                        '.$text.' - '.get_lang('Map').'
-                    </label>
-                    <div class="col-sm-8">
-                        <div name="map_extra_'.$variable.'"
-                            id="map_extra_'.$variable.'" style="width:100%; height:300px;">
-                        </div>
-                    </div>
-                </div>
-            ';
-
-        return $html;
-    }
-
-    /**
-     * @param array $options
-     * @param int   $parentId
-     *
-     * @return array
-     */
-    private static function getOptionsFromTripleSelect(array $options, $parentId)
-    {
-        return array_filter($options, function ($option) use ($parentId) {
-            return $option['option_value'] == $parentId;
-        });
-    }
+    }   
 
     /**
      * @param \FormValidator $form
@@ -3456,7 +3474,7 @@ JAVASCRIPT;
         if (!empty($options)) {
             foreach ($options as $option) {
                 foreach ($option as $sub_option) {
-                    if ($sub_option['option_value'] == '0') {
+                    if ('0' == $sub_option['option_value']) {
                         $values[$sub_option['id']] = $sub_option['display_text'];
 
                         continue;
@@ -3501,7 +3519,6 @@ JAVASCRIPT;
 
     /**
      * @param \FormValidator $form
-     * @param array          $fieldDetails
      * @param bool           $freezeElement Optional
      *
      * @return string JavaScript code
@@ -3530,7 +3547,7 @@ JAVASCRIPT;
         if (!empty($options)) {
             foreach ($options as $option) {
                 foreach ($option as $sub_option) {
-                    if ($sub_option['option_value'] != '0') {
+                    if ('0' == $sub_option['option_value']) {
                         continue;
                     }
 
@@ -3571,8 +3588,6 @@ JAVASCRIPT;
 
     /**
      * @param \FormValidator $form
-     * @param array          $fieldDetails
-     * @param array          $extraData
      * @param bool           $freezeElement
      *
      * @return string
@@ -3681,7 +3696,13 @@ JAVASCRIPT;
         /** @var \HTML_QuickForm_select $slctFirst */
         $slctFirst = $form->createElement('select', "extra_$variable", null, $values1, ['id' => $slctFirstId]);
         /** @var \HTML_QuickForm_select $slctFirst */
-        $slctSecond = $form->createElement('select', "extra_{$variable}_second", null, $values2, ['id' => $slctSecondId]);
+        $slctSecond = $form->createElement(
+            'select',
+            "extra_{$variable}_second",
+            null,
+            $values2,
+            ['id' => $slctSecondId]
+        );
         /** @var \HTML_QuickForm_select $slctFirst */
         $slctThird = $form->createElement('select', "extra_{$variable}_third", null, $values3, ['id' => $slctThirdId]);
 
@@ -3713,5 +3734,21 @@ JAVASCRIPT;
         }
 
         return $js;
+    }
+
+
+    /**
+     * @param int   $parentId
+     *
+     * @return array
+     */
+    private static function getOptionsFromTripleSelect(array $options, $parentId)
+    {
+        return array_filter(
+            $options,
+            function ($option) use ($parentId) {
+            return $option['option_value'] == $parentId;
+            }
+        );
     }
 }

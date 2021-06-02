@@ -421,7 +421,7 @@ class AddCourse
         if (is_null($fill_with_exemplary_content)) {
             $fill_with_exemplary_content = api_get_setting('example_material_course_creation') != 'false';
         }
-        $course_id = intval($course_id);
+        $course_id = (int) $course_id;
 
         if (empty($course_id)) {
             return false;
@@ -778,7 +778,7 @@ class AddCourse
                     $path_documents = "/$media_type/";
 
                     //hack until feature #5242 is implemented
-                    if ($media_type == 'images') {
+                    if ($media_type === 'images') {
                         $media_type = 'images/gallery';
                         $images_folder = $sys_course_path.$course_repository."/document/images/";
 
@@ -1293,8 +1293,8 @@ class AddCourse
         ) {
             $department_url = 'http://'.$department_url;
         }
-        //just in case
-        if ($department_url == 'http://') {
+        // Just in case
+        if ($department_url === 'http://') {
             $department_url = '';
         }
         $course_id = 0;
@@ -1312,7 +1312,7 @@ class AddCourse
                     'category_code' => $category_code,
                     'visibility' => $visibility,
                     'show_score' => 1,
-                    'disk_quota' => intval($disk_quota),
+                    'disk_quota' => (int) $disk_quota,
                     'creation_date' => $time,
                     'expiration_date' => $expiration_date,
                     'last_edit' => $time,
@@ -1353,7 +1353,7 @@ class AddCourse
                         $teachers = [$teachers];
                     }
                     foreach ($teachers as $key) {
-                        //just in case
+                        // Just in case.
                         if ($key == $user_id) {
                             continue;
                         }
@@ -1386,12 +1386,10 @@ class AddCourse
                     $course_id
                 );
 
-                $send_mail_to_admin = api_get_setting(
-                    'send_email_to_admin_when_create_course'
-                );
+                $send_mail_to_admin = api_get_setting('send_email_to_admin_when_create_course');
 
                 // @todo Improve code to send to all current portal administrators.
-                if ($send_mail_to_admin == 'true') {
+                if ($send_mail_to_admin === 'true') {
                     $siteName = api_get_setting('siteName');
                     $recipient_email = api_get_setting('emailAdministrator');
                     $recipient_name = api_get_person_name(

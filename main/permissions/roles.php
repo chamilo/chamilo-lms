@@ -89,7 +89,7 @@ if ($_GET['action'] == 'add') {
     echo "\n\t\t</td>";
     echo "\n\t</tr>";
     echo "\n</table>";
-    echo "<table class=\"data_table\">\n";
+    echo "<table class=\"table table-hover table-striped data_table\">\n";
 
     // the header
     if (api_get_setting('permissions') == 'limited') {
@@ -167,7 +167,7 @@ if ($_GET['role_id']) {
         echo get_lang('IsPlatformRoleNotEditable').'<br />';
     }
 
-    echo "<table class=\"data_table\">\n";
+    echo "<table class=\"table table-hover table-striped data_table\">\n";
 
     // the header
     echo "\t<tr>\n";

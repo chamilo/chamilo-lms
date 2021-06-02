@@ -247,7 +247,7 @@ class Agenda
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
-        $allDay = isset($allDay) && $allDay === 'true' ? 1 : 0;
+        $allDay = isset($allDay) && ($allDay === 'true' || $allDay == 1) ? 1 : 0;
         $id = null;
 
         switch ($this->type) {
@@ -2944,8 +2944,10 @@ class Agenda
 
         $form = '';
         if (api_is_allowed_to_edit(false, true) ||
-            (api_get_course_setting('allow_user_edit_agenda') == '1' && !api_is_anonymous()) &&
-            api_is_allowed_to_session_edit(false, true)
+            ('personal' === $this->type && !api_is_anonymous() && 'true' === api_get_setting('allow_personal_agenda')) ||
+            (
+                '1' === api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous() &&
+                api_is_allowed_to_session_edit(false, true))
             || (
                 GroupManager::user_has_access($currentUserId, $groupIid, GroupManager::GROUP_TOOL_CALENDAR)
                 && GroupManager::is_tutor_of_group($currentUserId, $groupInfo)
@@ -3384,10 +3386,10 @@ class Agenda
      */
     public static function get_global_agenda_items(
         $agendaitems,
-        $day = "",
-        $month = "",
-        $year = "",
-        $week = "",
+        $day,
+        $month,
+        $year,
+        $week,
         $type
     ) {
         $tbl_global_agenda = Database::get_main_table(
@@ -3529,10 +3531,10 @@ class Agenda
     public static function get_personal_agenda_items(
         $user_id,
         $agendaitems,
-        $day = "",
-        $month = "",
-        $year = "",
-        $week = "",
+        $day,
+        $month,
+        $year,
+        $week,
         $type
     ) {
         $tbl_personal_agenda = Database::get_main_table(TABLE_PERSONAL_AGENDA);
@@ -3661,7 +3663,7 @@ class Agenda
         $agendaitems,
         $month,
         $year,
-        $weekdaynames = [],
+        $weekdaynames,
         $monthName,
         $show_content = true
     ) {

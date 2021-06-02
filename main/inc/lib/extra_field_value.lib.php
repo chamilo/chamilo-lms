@@ -96,7 +96,7 @@ class ExtraFieldValue extends Model
         foreach ($params as $key => $value) {
             $found = strpos($key, '__persist__');
 
-            if ($found === false) {
+            if (false === $found) {
                 continue;
             }
 
@@ -279,8 +279,10 @@ class ExtraFieldValue extends Model
 
                     if (!empty($value['tmp_name']) && isset($value['error']) && $value['error'] == 0) {
                         //Crop the image to adjust 16:9 ratio
-                        $crop = new Image($value['tmp_name']);
-                        $crop->crop($params['extra_'.$field_variable.'_crop_result']);
+                        if (isset($params['extra_'.$field_variable.'_crop_result'])) {
+                            $crop = new Image($value['tmp_name']);
+                            $crop->crop($params['extra_'.$field_variable.'_crop_result']);
+                        }
 
                         $imageExtraField = new Image($value['tmp_name']);
                         $imageExtraField->resize(400);
@@ -461,7 +463,9 @@ class ExtraFieldValue extends Model
             $extraFieldInfo = $extra_field->get_handler_field_info_by_field_variable(
                 $params['variable']
             );
-            $params['field_id'] = $extraFieldInfo['id'];
+            if ($extraFieldInfo) {
+                $params['field_id'] = $extraFieldInfo['id'];
+            }
         }
 
         if ($extraFieldInfo) {
@@ -802,7 +806,7 @@ class ExtraFieldValue extends Model
                 ON (s.field_id = sf.id)
                 WHERE
                     item_id = '$item_id'  AND
-                    variable = '".$field_variable."' AND
+                    variable = '$field_variable' AND
                     sf.extra_field_type = $extraFieldType
                 ";
         if ($filterByVisibility) {
@@ -835,9 +839,7 @@ class ExtraFieldValue extends Model
                         $result = $field_option->get($options[0]);
 
                         if (!empty($result)) {
-                            $result['value'] = $result['display_text']
-                                .'&rarr;'
-                                .$options[1];
+                            $result['value'] = $result['display_text'].'&rarr;'.$options[1];
                         }
                     }
                 }
@@ -859,19 +861,20 @@ class ExtraFieldValue extends Model
             }
 
             return $result;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
      * Gets the ID from the item (course, session, etc) for which
      * the given field is defined with the given value.
      *
-     * @param string $field_variable Field (type of data) we want to check
-     * @param string $field_value    Data we are looking for in the given field
+     * @param string $variable  Field (type of data) we want to check
+     * @param string $value     Data we are looking for in the given field
      * @param bool   $transform      Whether to transform the result to a human readable strings
      * @param bool   $last           Whether to return the last element or simply the first one we get
+     * @param bool   $useLike
      *
      * @return mixed Give the ID if found, or false on failure or not found
      * @assert (-1,-1) === false
@@ -881,18 +884,24 @@ class ExtraFieldValue extends Model
         $field_value,
         $transform = false,
         $last = false,
-        $all = false
+        $all = false,
+        $useLike = false
     ) {
-        $field_value = Database::escape_string($field_value);
-        $field_variable = Database::escape_string($field_variable);
+        $value = Database::escape_string($value);
+        $variable = Database::escape_string($variable);
+
+        $valueCondition = " value  = '$value' AND ";
+        if ($useLike) {
+            $valueCondition = " value LIKE '%".$value."%' AND ";
+        }
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
         $sql = "SELECT item_id FROM {$this->table} s
                 INNER JOIN {$this->table_handler_field} sf
                 ON (s.field_id = sf.id)
                 WHERE
-                    value  = '$field_value' AND
-                    variable = '".$field_variable."' AND
+                    $valueCondition
+                    variable = '".$variable."' AND
                     sf.extra_field_type = $extraFieldType
                 ORDER BY item_id
                 ";
@@ -912,9 +921,9 @@ class ExtraFieldValue extends Model
             }
 
             return $result;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -1246,5 +1255,29 @@ class ExtraFieldValue extends Model
         }
 
         return $valueList;
+    }
+
+    public function copy($sourceId, $destinationId)
+    {
+        if (empty($sourceId) || empty($destinationId)) {
+            return false;
+        }
+
+        $extraField = new ExtraField($this->type);
+        $allFields = $extraField->get_all();
+        $extraFieldValue = new ExtraFieldValue($this->type);
+        foreach ($allFields as $field) {
+            $variable = $field['variable'];
+            $sourceValues = $extraFieldValue->get_values_by_handler_and_field_variable($sourceId, $variable);
+            if (!empty($sourceValues) && isset($sourceValues['value']) && $sourceValues['value'] != '') {
+                $params = [
+                    'extra_'.$variable => $sourceValues['value'],
+                    'item_id' => $destinationId,
+                ];
+                $extraFieldValue->saveFieldValues($params, true);
+            }
+        }
+
+        return true;
     }
 }

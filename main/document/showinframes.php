@@ -99,7 +99,8 @@ $is_visible = DocumentManager::check_visibility_tree(
 );
 
 if (!$is_allowed_to_edit && !$is_visible) {
-    api_not_allowed(true);
+    echo Display::return_message(get_lang('ProtectedDocument'), 'warning');
+    api_not_allowed(false, '&nbsp;');
 }
 
 $pathinfo = pathinfo($header_file);
@@ -110,9 +111,8 @@ if (in_array(strtolower($pathinfo['extension']), $playerSupportedFiles)) {
 }
 
 $group_id = api_get_group_id();
-$current_group = GroupManager::get_group_properties($group_id);
-
-if (isset($group_id) && $group_id != '') {
+if (!empty($group_id)) {
+    $current_group = GroupManager::get_group_properties($group_id);
     if ($current_group) {
         $current_group_name = $current_group['name'];
     }
@@ -194,8 +194,7 @@ if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
         $(function() {
             $(window).resize(resizeIframe());
         });
-    </script>'
-    ;
+    </script>';
 }
 
 // Activate code highlight.

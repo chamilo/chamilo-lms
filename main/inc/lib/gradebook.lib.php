@@ -2,11 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class Gradebook
+ * Class Gradebook.
  * This class provides methods for the notebook management.
  * Include/require it in your code to use its features.
- *
- * @package chamilo.library
  */
 class Gradebook extends Model
 {
@@ -52,7 +50,7 @@ class Gradebook extends Model
         $setting = Database::store_result($result);
         $setting = isset($setting[0]) ? $setting[0] : null;
         $setting = $setting ? $setting : [];
-        $inactive = isset($setting['selected_value']) && $setting['selected_value'] == 'true';
+        $inactive = isset($setting['selected_value']) && 'true' == $setting['selected_value'];
 
         if ($inactive) {
             return false;
@@ -70,7 +68,7 @@ class Gradebook extends Model
             return true;
         }
 
-        return $item['visibility'] == '1';
+        return '1' == $item['visibility'];
     }
 
     /**

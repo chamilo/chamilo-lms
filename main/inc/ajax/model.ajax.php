@@ -108,6 +108,7 @@ function getWhereClause($col, $oper, $val)
         'nc' => 'NOT LIKE',  //doesn't contain
     ];
 
+    $col = Database::escapeField($col);
     if (empty($col)) {
         return '';
     }
@@ -162,8 +163,20 @@ if (($search || $forceSearch) && ($search !== 'false')) {
     }
 
     if (!empty($filters)) {
-        if (in_array($action, ['get_questions', 'get_sessions', 'get_sessions_tracking'])) {
+        if (in_array($action,
+            [
+                'get_user_course_report_resumed',
+                'get_user_course_report',
+                'get_questions',
+                'get_sessions',
+                'get_sessions_tracking',
+            ]
+        )) {
             switch ($action) {
+                case 'get_user_course_report_resumed':
+                case 'get_user_course_report':
+                    $type = 'user';
+                    break;
                 case 'get_questions':
                     $type = 'question';
                     break;
@@ -177,20 +190,26 @@ if (($search || $forceSearch) && ($search !== 'false')) {
                 // Extra field.
                 $extraField = new ExtraField($type);
 
-                foreach ($filters->rules as $key => $data) {
-                    if (empty($data)) {
-                        continue;
-                    }
-                    if ($data->field === 'extra_access_start_date') {
-                        $accessStartDate = $data->data;
-                    }
+                if (is_object($filters)
+                    && property_exists($filters, 'rules')
+                    && is_array($filters->rules)
+                    && !empty($filters->rules)
+                ) {
+                    foreach ($filters->rules as $key => $data) {
+                        if (empty($data)) {
+                            continue;
+                        }
+                        if ($data->field === 'extra_access_start_date') {
+                            $accessStartDate = $data->data;
+                        }
 
-                    if ($data->field === 'extra_access_end_date') {
-                        $accessEndDate = $data->data;
-                    }
+                        if ($data->field === 'extra_access_end_date') {
+                            $accessEndDate = $data->data;
+                        }
 
-                    if (in_array($data->field, $toRemove)) {
-                        unset($filters->rules[$key]);
+                        if (in_array($data->field, $toRemove)) {
+                            unset($filters->rules[$key]);
+                        }
                     }
                 }
                 $result = $extraField->getExtraFieldRules($filters, 'extra_');
@@ -278,7 +297,7 @@ switch ($action) {
         break;
     case 'get_usergroups_users':
         $usergroup = new UserGroup();
-        $usergroup->protectScript();
+        $usergroup->protectScript(null, true, true);
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
         $count = $usergroup->getUserGroupUsers($id, true);
         break;
@@ -528,10 +547,30 @@ switch ($action) {
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $count = getWorkListStudent(0, $limit, null, null, $whereCondition, true);
         break;
+    case 'get_all_work_student':
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+        $withResults = isset($_REQUEST['with_results']) ? (int) $_REQUEST['with_results'] : 0;
+        $count = getAllWorkListStudent(0, $limit, null, null, $whereCondition, true, $withResults);
+        break;
     case 'get_work_user_list_all':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $work_id = $_REQUEST['work_id'];
         $count = get_count_work($work_id);
+        break;
+    case 'get_work_pending_list':
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+        $courseId = $_REQUEST['course'] ?? 0;
+        $status = $_REQUEST['status'] ?? 0;
+        $count = getAllWork(
+            null,
+            null,
+            null,
+            null,
+            $whereCondition,
+            true,
+            $courseId,
+            $status
+        );
         break;
     case 'get_work_user_list_others':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
@@ -591,6 +630,52 @@ switch ($action) {
             true
         );
         break;
+    case 'get_exercise_pending_results':
+        if (false === api_is_teacher()) {
+            exit;
+        }
+
+        $courseId = $_REQUEST['course_id'] ?? 0;
+        $exerciseId = $_REQUEST['exercise_id'] ?? 0;
+        $status = $_REQUEST['status'] ?? 0;
+        if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
+            $filter_user = (int) $_GET['filter_by_user'];
+            if (empty($whereCondition)) {
+                $whereCondition .= " te.exe_user_id  = '$filter_user'";
+            } else {
+                $whereCondition .= " AND te.exe_user_id  = '$filter_user'";
+            }
+        }
+
+        if (isset($_GET['group_id_in_toolbar']) && !empty($_GET['group_id_in_toolbar'])) {
+            $groupIdFromToolbar = (int) $_GET['group_id_in_toolbar'];
+            if (!empty($groupIdFromToolbar)) {
+                if (empty($whereCondition)) {
+                    $whereCondition .= " te.group_id  = '$groupIdFromToolbar'";
+                } else {
+                    $whereCondition .= " AND group_id  = '$groupIdFromToolbar'";
+                }
+            }
+        }
+
+        if (!empty($whereCondition)) {
+            $whereCondition = " AND $whereCondition";
+        }
+
+        if (!empty($courseId)) {
+            $whereCondition .= " AND te.c_id = $courseId";
+        }
+
+        $count = ExerciseLib::get_count_exam_results(
+            $exerciseId,
+            $whereCondition,
+            '',
+            false,
+            true,
+            $status
+        );
+
+        break;
     case 'get_exercise_results':
         $exercise_id = $_REQUEST['exerciseId'];
 
@@ -607,10 +692,7 @@ switch ($action) {
             $whereCondition = " AND $whereCondition";
         }
 
-        $count = ExerciseLib::get_count_exam_results(
-            $exercise_id,
-            $whereCondition
-        );
+        $count = ExerciseLib::get_count_exam_results($exercise_id, $whereCondition);
         break;
     case 'get_exercise_results_report':
         api_protect_admin_script();
@@ -827,7 +909,7 @@ switch ($action) {
         break;
     case 'get_usergroups_teacher':
         $obj = new UserGroup();
-        $obj->protectScript();
+        $obj->protectScript(null, false, true);
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'registered';
         $groupFilter = isset($_REQUEST['group_filter']) ? (int) $_REQUEST['group_filter'] : 0;
         $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : '';
@@ -1247,6 +1329,28 @@ switch ($action) {
             $whereCondition
         );
         break;
+    case 'get_all_work_student':
+        $columns = [
+            'type',
+            'title',
+            'expires_on',
+        ];
+
+        if ($withResults) {
+            $columns[] = 'feedback';
+            $columns[] = 'last_upload';
+        }
+        $sidx = in_array($sidx, $columns) ? $sidx : 'title';
+        $result = getAllWorkListStudent(
+            $start,
+            $limit,
+            $sidx,
+            $sord,
+            $whereCondition,
+            false,
+            $withResults
+        );
+        break;
     case 'get_work_user_list_all':
         $plagiarismColumns = [];
         if (api_get_configuration_value('allow_compilatio_tool')) {
@@ -1276,8 +1380,9 @@ switch ($action) {
         }
 
         $whereCondition = " AND $whereCondition ";
+        $columnOrderValidList = array_merge(['firstname', 'lastname'], $columns);
+        $sidx = in_array($sidx, $columnOrderValidList) ? $sidx : 'title';
 
-        $sidx = in_array($sidx, $columns) ? $sidx : 'title';
         $result = get_work_user_list(
             $start,
             $limit,
@@ -1285,6 +1390,41 @@ switch ($action) {
             $sord,
             $work_id,
             $whereCondition
+        );
+        break;
+    case 'get_work_pending_list':
+        api_block_anonymous_users();
+        if (false === api_is_teacher()) {
+            exit;
+        }
+        $plagiarismColumns = [];
+        if (api_get_configuration_value('allow_compilatio_tool')) {
+            $plagiarismColumns = ['compilatio'];
+        }
+        $columns = [
+            'course',
+            'work_name',
+            'fullname',
+            'title',
+            'qualification',
+            'sent_date',
+            'qualificator_id',
+            'correction',
+        ];
+        $columns = array_merge($columns, $plagiarismColumns);
+        $columns[] = 'actions';
+
+        $sidx = in_array($sidx, $columns) ? $sidx : 'work_name';
+
+        $result = getAllWork(
+            $start,
+            $limit,
+            $sidx,
+            $sord,
+            $whereCondition,
+            false,
+            $courseId,
+            $status
         );
         break;
     case 'get_work_user_list_others':
@@ -1322,7 +1462,7 @@ switch ($action) {
         break;
     case 'get_work_user_list':
         $plagiarismColumns = [];
-        if (api_get_configuration_value('allow_compilatio_tool')) {
+        if (api_get_configuration_value('allow_compilatio_tool') && api_is_allowed_to_edit()) {
             $plagiarismColumns = ['compilatio'];
         }
         if (isset($_GET['type']) && $_GET['type'] === 'simple') {
@@ -1364,6 +1504,48 @@ switch ($action) {
                 $whereCondition
             );
         }
+        break;
+    case 'get_exercise_pending_results':
+        $columns = [
+            'course',
+            'exercise',
+            'firstname',
+            'lastname',
+            'username',
+            'exe_duration',
+            'start_date',
+            'exe_date',
+            'score',
+            'user_ip',
+            'status',
+            'actions',
+        ];
+        $officialCodeInList = api_get_setting('show_official_code_exercise_result_list');
+        if ($officialCodeInList === 'true') {
+            $columns = array_merge(['official_code'], $columns);
+        }
+
+        $sidx = in_array($sidx, $columns) ? $sidx : 'course';
+
+        $result = ExerciseLib::get_exam_results_data(
+            $start,
+            $limit,
+            $sidx,
+            $sord,
+            $exerciseId,
+            $whereCondition,
+            false,
+            null,
+            false,
+            false,
+            [],
+            false,
+            false,
+            false,
+            true,
+            $status
+        );
+
         break;
     case 'get_exercise_results':
         $course = api_get_course_info();
@@ -1564,6 +1746,8 @@ switch ($action) {
         );
         break;
     case 'get_sessions_tracking':
+        $sessionColumns = SessionManager::getGridColumns('my_space');
+        $columns = $sessionColumns['simple_column_name'];
         if (api_is_drh() || api_is_session_admin()) {
             $orderByName = Database::escape_string($sidx);
             $orderByName = in_array($orderByName, ['name', 'access_start_date']) ? $orderByName : 'name';
@@ -2015,7 +2199,7 @@ switch ($action) {
         $result = $new_result;
         break;
     case 'get_careers':
-        $columns = ['name', 'description', 'actions'];
+        $columns = ['name', 'description', 'actions', 'external_career_id'];
         if (!in_array($sidx, $columns)) {
             $sidx = 'name';
         }
@@ -2025,9 +2209,14 @@ switch ($action) {
             ['order' => "$sidx $sord", 'LIMIT' => "$start , $limit"]
         );
         $new_result = [];
+        $loadExternalCareer = api_get_configuration_value('use_career_external_id_as_identifier_in_diagrams');
         foreach ($result as $item) {
             if (!$item['status']) {
                 $item['name'] = '<font style="color:#AAA">'.$item['name'].'</font>';
+            }
+
+            if ($loadExternalCareer) {
+                $item['external_career_id'] = $obj->getCareerIdFromInternalToExternal($item['id']);
             }
             $new_result[] = $item;
         }
@@ -2342,14 +2531,17 @@ $allowed_actions = [
     'get_session_progress',
     'get_exercise_progress',
     'get_exercise_results',
+    'get_exercise_pending_results',
     'get_exercise_results_report',
     'get_work_student_list_overview',
     'get_hotpotatoes_exercise_results',
     'get_work_teacher',
     'get_work_student',
+    'get_all_work_student',
     'get_work_user_list',
     'get_work_user_list_others',
     'get_work_user_list_all',
+    'get_work_pending_list',
     'get_timelines',
     'get_grade_models',
     'get_event_email_template',

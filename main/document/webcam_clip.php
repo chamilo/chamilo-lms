@@ -6,8 +6,6 @@ use ChamiloSession as Session;
 /**
  * This file allows record wav files.
  *
- * @package chamilo.document
- *
  * @author  Juan Carlos Raña Trabado herodoto@telefonica.net
  *
  * @since   7/jun/2012

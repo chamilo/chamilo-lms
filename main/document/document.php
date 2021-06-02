@@ -36,11 +36,14 @@ $parent_id = null;
 $lib_path = api_get_path(LIBRARY_PATH);
 $actionsRight = '';
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+if (isset($_POST['currentFile']) && !empty($_POST['currentFile']) && empty($action)) {
+    $action = 'replace';
+}
 $allowUseTool = false;
 
 if ($allowDownloadDocumentsByApiKey) {
     try {
-        if ($action != 'download') {
+        if ($action !== 'download') {
             throw new Exception(get_lang('SelectAnAction'));
         }
 
@@ -69,7 +72,7 @@ $_user = api_get_user_info();
 $courseInfo = api_get_course_info();
 $courseId = $courseInfo['real_id'];
 $course_dir = $courseInfo['directory'].'/document';
-$usePpt2lp = api_get_setting('service_ppt2lp', 'active') == 'true';
+$usePpt2lp = api_get_setting('service_ppt2lp', 'active') === 'true';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$course_dir;
 $http_www = api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/document';
@@ -81,7 +84,7 @@ $is_certificate_mode = false;
 if (isset($_GET['curdirpath'])) {
     $is_certificate_mode = DocumentManager::is_certificate_mode($_GET['curdirpath']);
 }
-if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
+if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] === 'true') {
     $is_certificate_mode = true;
 }
 
@@ -848,17 +851,21 @@ if ($is_certificate_mode) {
 // Interbreadcrumb for the current directory root path
 if (empty($document_data['parents'])) {
     if (isset($_GET['createdir'])) {
-        $interbreadcrumb[] = [
-            'url' => $document_data['document_url'],
-            'name' => $document_data['title'],
-        ];
-    } else {
-        // Hack in order to not add the document to the breadcrumb in case it is a link
-        if ($document_data['filetype'] != 'link') {
+        if ($document_data) {
             $interbreadcrumb[] = [
-                'url' => '#',
+                'url' => $document_data['document_url'],
                 'name' => $document_data['title'],
             ];
+        }
+    } else {
+        if ($document_data) {
+            // Hack in order to not add the document to the breadcrumb in case it is a link
+            if ($document_data['filetype'] != 'link') {
+                $interbreadcrumb[] = [
+                    'url' => '#',
+                    'name' => $document_data['title'],
+                ];
+            }
         }
     }
 } else {
@@ -1081,8 +1088,10 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
                     DocumentManager::updateDbInfo(
                         'update',
                         $document_to_move['path'],
-                        $moveTo.'/'.basename($document_to_move['path'])
+                        $moveTo.'/',
+                        $doc_id
                     );
+                    // $moveTo.'/' .basename($document_to_move['path'])
 
                     // Update database item property
                     api_item_property_update(
@@ -1574,8 +1583,9 @@ if (isset($_GET['curdirpath']) &&
     }
 }
 
+$disableSearch = api_get_configuration_value('disable_search_documents');
 /* GET ALL DOCUMENT DATA FOR CURDIRPATH */
-if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
+if (isset($_GET['keyword']) && !empty($_GET['keyword']) && false === $disableSearch) {
     $documentAndFolders = DocumentManager::getAllDocumentData(
         $courseInfo,
         $curdirpath,
@@ -1914,10 +1924,14 @@ if (!empty($documentAndFolders)) {
                 $is_certificate_mode
             );
 
-            // Document title with link
-            $row[] = $link.$session_img.'<br />'.$invisibility_span_open.'<i>'
-                .nl2br(htmlspecialchars($document_data['comment'], ENT_QUOTES, $charset))
-                .'</i>'.$invisibility_span_close.$user_link;
+            // Document title with link and comment
+            $titleWithLink = Security::remove_XSS($link.$session_img.'<br />'.$invisibility_span_open);
+            $commentText = nl2br(htmlspecialchars($document_data['comment'], ENT_QUOTES, $charset));
+            if (!empty($commentText)) {
+                $titleWithLink .= '<em>'.$commentText.'</em>';
+            }
+            $titleWithLink .= $invisibility_span_close.$user_link;
+            $row[] = $titleWithLink;
 
             if ($document_data['filetype'] == 'folder') {
                 $displaySize = '<span id="document_size_'.$document_data['id']

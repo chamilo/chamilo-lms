@@ -47,19 +47,6 @@ class ExtraFieldOption extends Model
     }
 
     /**
-     * Gets the number of options already available in the table for this item type.
-     *
-     * @return int Number of options available
-     * @assert () >= 0
-     */
-    /*public function get_count()
-    {
-        $row = Database::select('count(*) as count', $this->table, array(), 'first');
-
-        return $row['count'];
-    }*/
-
-    /**
      * Gets the number of options available for this field.
      *
      * @param int $fieldId
@@ -75,7 +62,7 @@ class ExtraFieldOption extends Model
             return false;
         }
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
-        $fieldId = intval($fieldId);
+        $fieldId = (int) $fieldId;
 
         $sql = "SELECT count(*) as count
                 FROM $this->table o 
@@ -125,14 +112,29 @@ class ExtraFieldOption extends Model
      */
     public function delete_all_options_by_field_id($field_id)
     {
-        $field_id = intval($field_id);
+        $field_id = (int) $field_id;
         $sql = "DELETE FROM {$this->table} WHERE field_id = $field_id";
-        $r = Database::query($sql);
 
-        return $r;
+        return Database::query($sql);
     }
 
     /**
+     * Save option.
+     *
+     * Example:
+     * <code>
+     * <?php
+     * $fieldOption = new ExtraFieldOption('user');
+     * $fieldOption->saveOptions([
+     * 'field_id'=> 1,
+     * 'option_value'=> 1,
+     * 'display_text'=> 'extra value option 1',
+     * 'option_order'=>0
+     * ]);
+     * echo "<pre>".var_export($fieldOption,true)."</pre>";
+     * ?>
+     * </code>
+     *
      * @param array $params
      * @param bool  $showQuery
      *
@@ -145,7 +147,7 @@ class ExtraFieldOption extends Model
             $params['option_value']
         );
 
-        if ($optionInfo == false) {
+        if (false == $optionInfo) {
             $optionValue = api_replace_dangerous_char($params['option_value']);
             $order = $this->get_max_order($params['field_id']);
             $newParams = [
@@ -164,6 +166,20 @@ class ExtraFieldOption extends Model
     /**
      * Saves an option into the corresponding *_field_options table.
      *
+     * Example:
+     * <code>
+     * <?php
+     * $fieldOption = new ExtraFieldOption('user');
+     * $fieldOption->save([
+     * 'field_id'=> 1,
+     * 'option_value'=> 1,
+     * 'display_text'=> 'extra value option 1',
+     * 'option_order=>0'
+     * ]);
+     * echo "<pre>".var_export($fieldOption,true)."</pre>";
+     * ?>
+     * </code>
+     *
      * @param array $params    Parameters to be considered for the insertion
      * @param bool  $showQuery Whether to show the query (sent to the parent save() method)
      *
@@ -173,7 +189,7 @@ class ExtraFieldOption extends Model
      */
     public function save($params, $showQuery = false)
     {
-        $field_id = intval($params['field_id']);
+        $field_id = (int) $params['field_id'];
 
         if (empty($field_id)) {
             return false;
@@ -229,7 +245,7 @@ class ExtraFieldOption extends Model
                         parent::update($new_params, $showQuery);
                     }
 
-                    if ($params['field_type'] == ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD) {
+                    if (ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD == $params['field_type']) {
                         continue;
                     }
 
@@ -345,7 +361,7 @@ class ExtraFieldOption extends Model
                     $optionValue = api_replace_dangerous_char($option);
                     $option = trim($option);
 
-                    if ($option_info != false) {
+                    if (false != $option_info) {
                         continue;
                     }
 
@@ -402,7 +418,7 @@ class ExtraFieldOption extends Model
                 $field_id,
                 $params['option_value']
             );
-            if ($check == false) {
+            if (false == $check) {
                 parent::save($params, $show_query);
             }
         }
@@ -421,7 +437,7 @@ class ExtraFieldOption extends Model
      */
     public function get_field_option_by_field_and_option($field_id, $option_value)
     {
-        $field_id = intval($field_id);
+        $field_id = (int) $field_id;
         $option_value = Database::escape_string($option_value);
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
@@ -452,7 +468,7 @@ class ExtraFieldOption extends Model
      */
     public function get_field_option_by_field_id_and_option_display_text($field_id, $option_display_text)
     {
-        $field_id = intval($field_id);
+        $field_id = (int) $field_id;
         $option_display_text = Database::escape_string($option_display_text);
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
@@ -487,7 +503,7 @@ class ExtraFieldOption extends Model
         $option_display_text,
         $option_value
     ) {
-        $field_id = intval($field_id);
+        $field_id = (int) $field_id;
         $option_display_text = Database::escape_string($option_display_text);
         $option_value = Database::escape_string($option_value);
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
@@ -512,6 +528,15 @@ class ExtraFieldOption extends Model
     /**
      * Gets an array of options for a specific field.
      *
+     * Example:
+     * <code>
+     * <?php
+     * $fieldOption = new ExtraFieldOption('user');
+     * $fieldOption->get_field_options_by_field(1);
+     * echo "<pre>".var_export($fieldOption,true)."</pre>";
+     * ?>
+     * </code>
+     *
      * @param int  $field_id        The field ID
      * @param bool $add_id_in_array Whether to add the row ID in the result
      * @param null $ordered_by      Extra ordering query bit
@@ -520,7 +545,7 @@ class ExtraFieldOption extends Model
      */
     public function get_field_options_by_field($field_id, $add_id_in_array = false, $ordered_by = null)
     {
-        $field_id = intval($field_id);
+        $field_id = (int) $field_id;
 
         $orderBy = null;
         switch ($ordered_by) {
@@ -589,7 +614,7 @@ class ExtraFieldOption extends Model
     public function get_second_select_field_options_by_field($option_value_id, $to_json = false)
     {
         $em = Database::getManager();
-        $option = $em->find('ChamiloCoreBundle:ExtraFieldOptions', intval($option_value_id));
+        $option = $em->find('ChamiloCoreBundle:ExtraFieldOptions', $option_value_id);
 
         if (!$option) {
             return !$to_json ? [] : '{}';
@@ -676,7 +701,7 @@ class ExtraFieldOption extends Model
      */
     public function get_max_order($field_id)
     {
-        $field_id = intval($field_id);
+        $field_id = (int) $field_id;
         $sql = "SELECT MAX(option_order)
                 FROM {$this->table}
                 WHERE field_id = $field_id";
@@ -753,18 +778,18 @@ class ExtraFieldOption extends Model
         $form = new FormValidator($form_name, 'post', $url);
         // Setting the form elements
         $header = get_lang('Add');
-        if ($action == 'edit') {
+        if ($action === 'edit') {
             $header = get_lang('Modify');
         }
 
         $form->addElement('header', $header);
-        $id = isset($_GET['id']) ? intval($_GET['id']) : '';
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : '';
 
         $form->addElement('hidden', 'id', $id);
         $form->addElement('hidden', 'type', $this->type);
         $form->addElement('hidden', 'field_id', $this->fieldId);
 
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'.http_build_query([
                 'extra_field_option' => $id,
             ]);
@@ -790,7 +815,7 @@ class ExtraFieldOption extends Model
 
         $defaults = [];
 
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             // Setting the defaults
             $defaults = $this->get($id, false);
             $form->freeze('option_value');
@@ -817,8 +842,8 @@ class ExtraFieldOption extends Model
      */
     public function searchByField($tag, $field_id, $limit = 10)
     {
-        $field_id = intval($field_id);
-        $limit = intval($limit);
+        $field_id = (int) $field_id;
+        $limit = (int) $limit;
         $tag = Database::escape_string($tag);
         $sql = "SELECT DISTINCT id, option_display_text
                 FROM {$this->table}
@@ -928,7 +953,7 @@ class ExtraFieldOption extends Model
     /**
      * @param string $variable
      *
-     * @return array|\Chamilo\CoreBundle\Entity\ExtraFieldOptions[]
+     * @return array|ExtraFieldOptions[]
      */
     public function getOptionsByFieldVariable($variable)
     {

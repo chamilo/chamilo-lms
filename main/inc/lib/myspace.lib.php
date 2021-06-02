@@ -429,10 +429,11 @@ class MySpace
      * reporting progress of all users and all courses the user is subscribed to.
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+     *         Alex Aragon <alex.aragon@beeznest.com>, BeezNest, Perú
      *
-     * @version Dokeos 1.8.6
+     * @version Chamilo 1.11.8
      *
-     * @since October 2008
+     * @since October 2008, Update April 2019
      */
     public static function display_tracking_user_overview()
     {
@@ -956,7 +957,7 @@ class MySpace
         $message = '';
         $defaults = [];
         // include the user manager and formvalidator library
-        if (isset($_GET['export']) && $_GET['export'] == 'options') {
+        if (isset($_GET['export']) && 'options' == $_GET['export']) {
             // get all the defined extra fields
             $extrafields = UserManager::get_extra_fields(
                 0,
@@ -1051,6 +1052,1041 @@ class MySpace
                 );
             }
         }
+    }
+
+    /**
+     * Export to cvs a list of users who were enrolled in the lessons.
+     * It is necessary that in the extra field, a company is defined.
+     *
+     * @param string|null $startDate
+     * @param string|null $endDate
+     *
+     * @return array
+     */
+    public static function exportCompanyResumeCsv($startDate, $endDate)
+    {
+        $companys = self::getCompanyLearnpathSubscription($startDate, $endDate);
+        $csv_content = [];
+        // Printing table
+        $total = 0;
+        $displayText = get_lang('Company');
+        // the first line of the csv file with the column headers
+        $csv_row = [];
+        $csv_row[] = $displayText;
+
+        $csv_row[] = get_lang('CountOfSubscribedUsers');
+        $csv_content[] = $csv_row;
+
+        foreach ($companys as $entity => $student) {
+            $csv_row = [];
+            // user official code
+            $csv_row[] = $entity;
+            $csv_row[] = count($student);
+            $total += count($student);
+            $csv_content[] = $csv_row;
+        }
+
+        $csv_row = [];
+        // user official code
+        $csv_row[] = get_lang('GeneralTotal');
+        $csv_row[] = $total;
+        $csv_content[] = $csv_row;
+        Export::arrayToCsv($csv_content, 'reporting_company_resume');
+        exit;
+    }
+
+    /**
+     * Generates a structure to show the links or names for the authors by lesson report.
+     *
+     * @param array $students
+     * @param array $studentRegistered
+     * @param       $lpCourseCode
+     */
+    public static function getStudentDataToReportByLp($students = [], $studentRegistered = [], $lpCourseCode)
+    {
+        $data = [];
+        $totalStudents = 0;
+        $data['csv'] = '';
+        $data['html'] = '';
+        $icon = Display::return_icon('statistics.png', get_lang('Stats'));
+        foreach ($students as $student) {
+            $lpSessionId = isset($student['session_id']) ? (int) $student['session_id'] : 0;
+            $studentId = (int) $student['id'];
+            if (!isset($studentRegistered[$studentId][$lpSessionId])) {
+                $url = api_get_path(WEB_CODE_PATH)."mySpace/myStudents.php?details=true&student=$studentId";
+                if (0 != $lpSessionId) {
+                    $url .= "&id_session=$lpSessionId";
+                }
+                $url .= "&course=$lpCourseCode";
+                $reportLink = Display::url(
+                    $icon,
+                    $url
+                );
+                $studentName = $student['complete_name']."(".$student['company'].")";
+                $studentRegistered[$studentId][$lpSessionId] = $student;
+                $data['csv'] .= $studentName.' / ';
+                $data['html'] .= "$reportLink <strong>$studentName</strong><br>";
+                $totalStudents++;
+            }
+        }
+        $data['student_registered'] = $studentRegistered;
+        $data['total_students'] = $totalStudents;
+
+        return $data;
+    }
+
+    /**
+     * * Generates a structure to show the names for the authors by lesson report by item.
+     *
+     * @param array  $students
+     * @param array  $studentProcessed
+     * @param string $typeReport
+     * @param false  $csv
+     */
+    public static function getStudentDataToReportByLpItem($students = [], $studentProcessed = [], $typeReport = '', $csv = false)
+    {
+        $totalStudent = count($students);
+        $sessionIcon = Display::return_icon(
+            'admin_star.png',
+            get_lang('StudentInSessionCourse'),
+            [],
+            ICON_SIZE_MEDIUM
+        );
+        $classIcon = Display::return_icon(
+            'group_summary.png',
+            get_lang('UsersInsideClass'),
+            '',
+            ICON_SIZE_MEDIUM
+        );
+        /* use 'for' to performance */
+        for ($i = 0; $i < $totalStudent; $i++) {
+            $student = $students[$i];
+            $studentId = $student['id'];
+            $lpItemIdStudent = $student['lp_item_id'];
+            $sessionId = isset($student['session_id']) ? (int) $student['session_id'] : 0;
+            $studentName = $student['complete_name'];
+            $studentCompany = $student['company'];
+            $studentName = "$studentName($studentCompany)";
+            $type = isset($student['type']) ? $student['type'] : null;
+            $icon = null;
+            if (0 != $sessionId) {
+                $icon = $sessionIcon;
+            }
+            if ('class' == $typeReport) {
+                $icon = $classIcon;
+            }
+            $studentString = "$icon $studentName";
+            if (0 != $sessionId) {
+                $studentString = "<strong>$studentString</strong>";
+            }
+            if ($csv == false) {
+                $studentProcessed[$lpItemIdStudent][$type][$studentId] = $studentString.'<br>';
+            } else {
+                $studentProcessed[$lpItemIdStudent][$type][$studentId] = "$studentName / ";
+            }
+        }
+
+        return $studentProcessed;
+    }
+
+    /**
+     * Displays a list as a table of users who were enrolled in the lessons.
+     * It is necessary that in the extra field, a company is defined.
+     *
+     * @param string|null $startDate
+     * @param string|null $endDate
+     */
+    public static function displayResumeCompany(
+        $startDate = null,
+        $endDate = null
+    ) {
+        $companys = self::getCompanyLearnpathSubscription($startDate, $endDate);
+        $tableHtml = '';
+        // Printing table
+        $total = 0;
+        $table = "<div class='table-responsive'><table class='table table-hover table-striped table-bordered data_table'>";
+
+        $displayText = get_lang('Company');
+        $table .= "<thead><tr><th class='th-header'>$displayText</th><th class='th-header'> ".get_lang('CountOfSubscribedUsers')." </th></tr></thead><tbody>";
+
+        foreach ($companys as $entity => $student) {
+            $table .= "<tr><td>$entity</td><td>".count($student)."</td></tr>";
+            $total += count($student);
+        }
+        $table .= "<tr><td>".get_lang('GeneralTotal')."</td><td>$total</td></tr>";
+        $table .= '</tbody></table></div>';
+
+        if (!empty($startDate) or !empty($endDate)) {
+            $tableHtml = $table;
+        }
+
+        $form = new FormValidator('searchDate', 'get');
+        $form->addHidden('display', 'company');
+        $today = new DateTime();
+        if (empty($startDate)) {
+            $startDate = api_get_local_time($today->modify('first day of this month')->format('Y-m-d'));
+        }
+        if (empty($endDate)) {
+            $endDate = api_get_local_time($today->modify('last day of this month')->format('Y-m-d'));
+        }
+        $form->addDatePicker(
+            'startDate',
+            get_lang('DateStart'),
+            [
+                'value' => $startDate,
+            ]);
+        $form->addDatePicker(
+            'endDate',
+            get_lang('DateEnd'),
+            [
+                'value' => $endDate,
+            ]);
+        $form->addButtonSearch(get_lang('Search'));
+        if (count($companys) != 0) {
+            //$form->addButtonSave(get_lang('Ok'), 'export');
+            $form
+                ->addButton(
+                    'export_csv',
+                    get_lang('ExportAsCSV'),
+                    'check',
+                    'primary',
+                    null,
+                    null,
+                    [
+                    ]
+                );
+        }
+
+        $tableContent = $form->returnForm();
+        $tableContent .= $tableHtml;
+        // $tableContent .= $table->return_table();
+
+        $tpl = new Template('', false, false, false, false, false, false);
+        $tpl->assign('table', $tableContent);
+        $templateName = $tpl->get_template('my_space/course_summary.tpl');
+        $tpl->display($templateName);
+    }
+
+    /**
+     *  Displays a list as a table of teachers who are set authors by a extra_field authors.
+     *
+     * @param string|null $startDate
+     * @param string|null $endDate
+     * @param bool        $csv
+     */
+    public static function displayResumeLP(
+        $startDate = null,
+        $endDate = null,
+        $csv = false
+    ) {
+        $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
+        $tblLp = Database::get_course_table(TABLE_LP_MAIN);
+        $tblAccessUrlCourse = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $accessUrlFilter = '';
+        if (api_is_multiple_url_enabled()) {
+            $urlId = api_get_current_access_url_id();
+            $accessUrlFilter = " INNER JOIN $tblAccessUrlCourse aurc
+                      ON (c.id = aurc.c_id AND aurc.access_url_id = $urlId)";
+        }
+        $query = "
+        SELECT DISTINCT
+            lp.name,
+            lpi.title,
+            lp.id as lp_id,
+            lpi.id AS lp_item_id,
+            REPLACE (efv.value, ';', ',') AS users_id,
+            c.title AS course_title,
+            c.code AS course_code
+        FROM $tblExtraFieldValue AS efv
+        INNER JOIN $tblExtraField AS ef
+        ON (
+            efv.field_id = ef.id AND
+            ef.variable = 'authorlpitem' AND
+            efv.value != ''
+            )
+        INNER JOIN $tblLpItem AS lpi
+        ON (efv.item_id = lpi.iid)
+        INNER JOIN $tblLp AS lp
+        ON (lpi.lp_id = lp.iid AND lpi.c_id = lp.c_id)
+        INNER JOIN $tblCourse AS c
+        ON (lp.c_id = c.id)
+        $accessUrlFilter";
+        $queryResult = Database::query($query);
+        $dataTeachers = Database::store_result($queryResult, 'ASSOC');
+        $totalData = count($dataTeachers);
+        $lpItems = [];
+        $teachers = [];
+        $users = [];
+        $learningPaths = [];
+        $csvContent = [];
+        $htmlData = '';
+        /* use 'for' to performance */
+        for ($i = 0; $i < $totalData; $i++) {
+            $row = $dataTeachers[$i];
+            $lpId = $row['lp_id'];
+            $lpItems[] = $lpId;
+            $authorData = $row['users_id'];
+            $learningPaths[$lpId] = $row;
+            if (strpos($authorData, ",") === false) {
+                if (!isset($users[$authorData])) {
+                    $users[$authorData] = api_get_user_info($authorData);
+                }
+                $teachers[$authorData][$lpId] = $users[$authorData];
+                $learningPaths[$lpId]['teachers'][$authorData] = $users[$authorData];
+            } else {
+                $items = explode(',', $authorData);
+                $totalItems = count($items);
+                for ($j = 0; $j < $totalItems; $j++) {
+                    $authorData = $items[$j];
+                    if (!isset($users[$authorData])) {
+                        $users[$authorData] = api_get_user_info($authorData);
+                    }
+                    $teachers[$authorData][$lpId] = $users[$authorData];
+                    $learningPaths[$lpId]['teachers'][$authorData] = $users[$authorData];
+                }
+            }
+        }
+        $lpItems = array_unique($lpItems);
+        $whereInLp = implode(',', $lpItems);
+        if (count($lpItems) != 0) {
+            $registeredUsers = self::getCompanyLearnpathSubscription(
+                $startDate,
+                $endDate,
+                $whereInLp
+            );
+            foreach ($registeredUsers as $students) {
+                $totalStudents = count($students);
+                /* use 'for' to performance */
+                for ($i = 0; $i < $totalStudents; $i++) {
+                    $user = $students[$i];
+                    $lpId = $user['lp_item'];
+                    $studentId = $user['id'];
+                    $learningPaths[$lpId]['courseStudent'][$studentId] = $user;
+                }
+            }
+            $registeredUsersBySession = self::getSessionAddUserCourseFromTrackDefault(
+                $startDate,
+                $endDate,
+                $whereInLp
+            );
+            foreach ($registeredUsersBySession as $lpId => $student) {
+                $totalStudents = count($student);
+                /* use 'for' to performance */
+                for ($i = 0; $i < $totalStudents; $i++) {
+                    $user = $student[$i];
+                    $lpId = $user['lp'];
+                    $studentId = $user['id'];
+                    $learningPaths[$lpId]['sessionStudent'][$studentId] = $user;
+                    $learningPaths[$lpId]['sessionStudent'][$studentId]['session_id'] = $user;
+                }
+            }
+            $registeredUsersGroup = self::getCompanyLearnpathSubscription(
+                $startDate,
+                $endDate,
+                $whereInLp,
+                true
+            );
+            foreach ($registeredUsersGroup as $student) {
+                $totalStudents = count($student);
+                /* use 'for' to performance */
+                for ($i = 0; $i < $totalStudents; $i++) {
+                    $user = $student[$i];
+                    $lpId = $user['lp_item'];
+                    $studentId = $user['id'];
+                    $learningPaths[$lpId]['courseStudentGroup'][$studentId] = $user;
+                }
+            }
+
+            $index = 0;
+            $iconAdd = Display::return_icon('add.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
+            $iconRemove = Display::return_icon('error.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
+            $htmlData = "<div class='table-responsive'>
+            <table class='table table-hover table-striped table-bordered data_table'>
+            <thead>
+                <tr>
+                    <th class='th-header'>".get_lang('Author')."</th>
+                    <th class='th-header'>".get_lang('LearningPathList')."</th>
+                    <th class='th-header'>".get_lang('CountOfSubscribedUsers')."</th>
+                    <th class='th-header'>".get_lang('StudentList')."</th>
+                </tr>
+            </thead>
+                <tbody>";
+            $lastTeacher = '';
+            /* csv */
+            $csv_row = [];
+            $csv_row[] = get_lang('Author');
+            $csv_row[] = get_lang('LearningPathList');
+            $csv_row[] = get_lang('CountOfSubscribedUsers');
+            $csv_row[] = get_lang('StudentList');
+            $csvContent[] = $csv_row;
+            $studentsName = '';
+            /* csv */
+            foreach ($teachers as $authorLId => $teacher) {
+                $totalStudents = 0;
+                foreach ($teacher as $lpId => $teacherData) {
+                    $lpSessionId = 0;
+                    $lpData = $learningPaths[$lpId];
+                    $printTeacherName = ($lastTeacher != $teacherData['complete_name']) ? $teacherData['complete_name'] : '';
+                    $htmlData .= "<tr><td>$printTeacherName</td>";
+                    $hiddenField = 'student_show_'.$index;
+                    $hiddenFieldLink = 'student_show_'.$index.'_';
+                    $lpCourseCode = $lpData['course_code'];
+                    $lpName = $lpData['name'];
+                    $courseStudent = isset($lpData['courseStudent']) ? $lpData['courseStudent'] : [];
+                    $courseStudentGroup = isset($lpData['courseStudentGroup']) ? $lpData['courseStudentGroup'] : [];
+                    $sessionStudent = isset($lpData['sessionStudent']) ? $lpData['sessionStudent'] : [];
+                    $htmlData .= "<td>$lpName</td><td>".count($courseStudent)." ( ".count($sessionStudent)." )</td><td>";
+                    $csv_row = [];
+                    $csv_row[] = $printTeacherName;
+                    $csv_row[] = $lpName;
+                    $csv_row[] = count($courseStudent).' ( '.count($sessionStudent)." )";
+                    if (!empty($courseStudent)
+                        || !empty($courseStudentGroup)
+                        || !empty($sessionStudent)
+                    ) {
+                        $htmlData .= "<a href='#!' id='$hiddenFieldLink' onclick='showHideStudent(\"$hiddenField\")'>
+                        <div class='icon_add'>$iconAdd</div>
+                        <div class='icon_remove hidden'>$iconRemove</div>
+                        </a>
+                        <div id='$hiddenField' class='hidden'>";
+                        $studentRegistered = [];
+
+                        $tempArray = self::getStudentDataToReportByLp($courseStudent, $studentRegistered, $lpCourseCode);
+                        $studentsName .= $tempArray['csv'];
+                        $htmlData .= $tempArray['html'];
+                        $studentRegistered = $tempArray['student_registered'];
+                        $totalStudents += $tempArray['total_students'];
+
+                        $tempArray = self::getStudentDataToReportByLp($sessionStudent, $studentRegistered, $lpCourseCode);
+                        $studentsName .= $tempArray['csv'];
+                        $htmlData .= $tempArray['html'];
+                        $studentRegistered = $tempArray['student_registered'];
+                        $totalStudents += $tempArray['total_students'];
+
+                        $tempArray = self::getStudentDataToReportByLp($courseStudentGroup, $studentRegistered, $lpCourseCode);
+                        $studentsName .= $tempArray['csv'];
+                        $htmlData .= $tempArray['html'];
+                        $studentRegistered = $tempArray['student_registered'];
+                        $totalStudents += $tempArray['total_students'];
+
+                        $htmlData .= "</div>";
+                    }
+                    $htmlData .= "</td></tr>";
+                    $index++;
+                    $csv_row[] = trim($studentsName, ' / ');
+                    $studentsName = '';
+                    $csvContent[] = $csv_row;
+                    $lastTeacher = $teacherData['complete_name'];
+                }
+                $htmlData .= "<tr>
+                <td></td>
+                <td><strong>".get_lang('LearnpathsTotal')." ".count($teacher)." </strong></td>
+                <td><strong>$totalStudents</strong></td>
+                <td></td>
+                </tr>";
+            }
+            $htmlData .= "</tbody>
+            </table>
+            </div>";
+        }
+        if (false == $csv) {
+            $form = new FormValidator('searchDate', 'get');
+            $form->addHidden('display', 'learningPath');
+            $today = new DateTime();
+            if (empty($startDate)) {
+                $startDate = $today->modify('first day of this month')->format('Y-m-d');
+            }
+            if (empty($endDate)) {
+                $endDate = $today->modify('last day of this month')->format('Y-m-d');
+            }
+            $form->addDatePicker(
+                'startDate',
+                get_lang('DateStart'),
+                [
+                    'value' => $startDate,
+                ]);
+            $form->addDatePicker(
+                'endDate',
+                get_lang('DateEnd'),
+                [
+                    'value' => $endDate,
+                ]);
+            $form->addButtonSearch(get_lang('Search'));
+            if (0 != count($csvContent)) {
+                $form
+                    ->addButton(
+                        'export_csv',
+                        get_lang('ExportAsCSV'),
+                        'check',
+                        'primary',
+                        null,
+                        null,
+                        [
+                        ]
+                    );
+            }
+            $tableContent = $form->returnForm();
+            if (!empty($startDate) || !empty($endDate)) {
+                $tableContent .= $htmlData;
+            }
+            $tpl = new Template('', false, false, false, false, false, false);
+            $tpl->assign('table', $tableContent);
+            $templateName = $tpl->get_template('my_space/course_summary.tpl');
+            $tpl->display($templateName);
+        } else {
+            if (count($csvContent) != 0) {
+                Export::arrayToCsv($csvContent, 'reporting_lp_by_authors');
+            }
+        }
+    }
+
+    /**
+     *  Displays a list as a table of teachers who are set authors of lp's item by a extra_field authors.
+     */
+    public static function displayResumeLpByItem(string $startDate = null, string $endDate = null, bool $csv = false)
+    {
+        $tableHtml = '';
+        $table = '';
+        $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
+        $tblLp = Database::get_course_table(TABLE_LP_MAIN);
+        $tblAccessUrlCourse = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $accessUrlFilter = '';
+        if (api_is_multiple_url_enabled()) {
+            $urlId = api_get_current_access_url_id();
+            $accessUrlFilter = " INNER JOIN $tblAccessUrlCourse aurc
+                      ON (lp.c_id = aurc.c_id AND aurc.access_url_id = $urlId)";
+        }
+        $index = 0;
+        $cLpItems = [];
+        $cLpItemsAuthor = [];
+        $authorArray = [];
+        $studentArray = [];
+        $whereInLp = [];
+        $dataSet = [];
+        /** Get lp items only with authors */
+        $sql = " SELECT
+                efv.item_id AS lp_item_id,
+                efv.value AS author
+            FROM $tblExtraFieldValue AS efv
+            INNER JOIN $tblExtraField AS ef
+            ON (
+                ef.variable = 'authorlpitem' AND
+                efv.field_id = ef.id AND
+                efv.value != ''
+            )
+            ORDER BY efv.item_id ";
+        $queryResult = Database::query($sql);
+        $data = Database::store_result($queryResult, 'ASSOC');
+        $totalData = count($data);
+        /* use 'for' to performance */
+        for ($i = 0; $i < $totalData; $i++) {
+            $cLpItemsAuthor[$data[$i]['lp_item_id']] = $data[$i]['author'];
+        }
+        /** Get lp items only with price */
+        $sql = " SELECT
+               lp.iid AS lp_id,
+               lp.name AS lp_name,
+               efv.item_id AS lp_item_id,
+               lpi.title AS title,
+               efv.value AS price
+            FROM $tblExtraFieldValue AS efv
+            INNER JOIN $tblExtraField AS ef
+            ON (
+                ef.variable = 'price' AND
+                efv.field_id = ef.id AND
+                efv.value > 0
+            )
+            INNER JOIN $tblLpItem AS lpi
+            ON (lpi.iid = efv.item_id)
+            INNER JOIN $tblLp AS lp
+            ON (lpi.lp_id = lp.iid AND lpi.c_id = lp.c_id)
+            $accessUrlFilter";
+        $queryResult = Database::query($sql);
+        $data = Database::store_result($queryResult, 'ASSOC');
+        $totalData = count($data);
+        /* use 'for' to performance */
+        for ($i = 0; $i < $totalData; $i++) {
+            $item = $data[$i];
+            $lpItemId = (int) $item['lp_item_id'];
+            $whereInLp[] = $item['lp_id'];
+            $author = isset($cLpItemsAuthor[$lpItemId]) ? $cLpItemsAuthor[$lpItemId] : null;
+            $item['author'] = $author;
+            if (!empty($author)) {
+                $cLpItems[count($cLpItems)] = $item;
+            }
+        }
+        $totalLpItems = count($cLpItems);
+        $tableNoData = "<div class='table-responsive'>
+                <table class='table table-hover table-striped table-bordered data_table'>
+                <thead>
+                    <tr>
+                    <th class='th-header'>".get_lang('NoDataAvailable').'</th>
+                </tr>
+                </thead>
+                </tbody>
+                </tbody>
+                </table>
+                </div>';
+        if (0 == $totalLpItems) {
+            $tableHtml = $tableNoData;
+        } elseif (0 == count($whereInLp)) {
+            $tableHtml = $tableNoData;
+        } else {
+            $whereInLp = array_unique($whereInLp);
+            $whereInLp = implode(',', $whereInLp);
+            $registeredUsersBySession = self::getSessionAddUserCourseFromTrackDefault(
+                $startDate,
+                $endDate,
+                $whereInLp
+            );
+            $registeredUsersInCourse = self::getUserSubscribedInCourseByDateAndLp($startDate, $endDate, $whereInLp);
+            $registeredUsersInLp = self::getCompanyLearnpathSubscription(
+                $startDate,
+                $endDate,
+                $whereInLp
+            );
+            $registeredGroupsInLp = self::getCompanyLearnpathSubscription(
+                $startDate,
+                $endDate,
+                $whereInLp,
+                true
+            );
+            /* use 'for' to performance */
+            for ($i = 0; $i < $totalLpItems; $i++) {
+                $lpItem = $cLpItems[$i];
+                $lpItemId = $lpItem['lp_item_id'];
+                $author = str_replace(';', ',', $lpItem['author']);
+                $tempArrayAuthor = explode(',', $author);
+                $byCourse = $registeredUsersInLp[$lpItemId] ?? [];
+                $byCourseGroups = $registeredGroupsInLp[$lpItemId] ?? [];
+                $bySession = $registeredUsersBySession[$lpItemId] ?? [];
+                $byUserInCourse = $registeredUsersInCourse[$lpItemId] ?? [];
+                if (is_array($tempArrayAuthor)) {
+                    $totalAuthors = count($tempArrayAuthor);
+                    for ($j = 0; $j < $totalAuthors; $j++) {
+                        if (!isset($authorArray[$tempArrayAuthor[$j]])) {
+                            $authorArray[$tempArrayAuthor[$j]] = api_get_user_info($tempArrayAuthor[$j]);
+                        }
+                        $dataSet[$tempArrayAuthor[$j]][$lpItemId] = [
+                            'course' => $byCourse,
+                            'courseGroups' => $byCourseGroups,
+                            'session' => $bySession,
+                            'lp_item' => $lpItem,
+                            'course_user' => $byUserInCourse,
+                        ];
+                    }
+                } else {
+                    if (!isset($authorArray[$author])) {
+                        $authorArray[$author] = api_get_user_info($author);
+                    }
+                    $dataSet[$author][$lpItemId] = [
+                        'course' => $byCourse,
+                        'courseGroups' => $byCourseGroups,
+                        'session' => $bySession,
+                        'lp_item' => $lpItem,
+                        'course_user' => $byUserInCourse,
+                    ];
+                }
+            }
+        }
+        if ($csv == false) {
+            if (empty($tableHtml)) {
+                $table .= "<div class='table-responsive'>
+                    <table class='table table-hover table-striped table-bordered data_table'>
+                    <thead>
+                    <tr>
+                    <th class='th-header'>".get_lang('Author')."</th>
+                    <th class='th-header'>".get_lang('ContentList')."</th>
+                    <th class='th-header'>".get_lang('Tariff')."</th>
+                    <th class='th-header'>".get_lang('CountOfSubscribedUsers')."</th>
+                    <th class='th-header'>".get_lang('ToInvoice')."</th>
+                    <th class='th-header'>".get_lang('StudentList')."</th>
+                    </tr>
+                    </thead>
+                    <tbody>";
+                //Icon Constant
+                $iconAdd = Display::return_icon('add.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
+                $iconRemove = Display::return_icon('error.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
+
+                $lastAuthor = '';
+                $total = 0;
+                foreach ($dataSet as $authorId => $lpItems) {
+                    $authorTemp = $authorArray[$authorId];
+                    $totalSudent = 0;
+                    foreach ($lpItems as $lpItem) {
+                        $totalStudents = 0;
+                        $itemLp = $lpItem['lp_item'];
+                        $title = $itemLp['title'];
+                        $price = $itemLp['price'];
+                        $byCourse = $lpItem['course'];
+                        $byCourseGroups = $lpItem['courseGroups'];
+                        $bySession = $lpItem['session'];
+                        $byUserInCourse = $lpItem['course_user'];
+                        $hide = "class='author_$authorId hidden' ";
+                        $tableTemp = '';
+                        if ($lastAuthor != $authorTemp) {
+                            $table .= "<tr><td>".$authorTemp['complete_name']."</td>";
+                        } else {
+                            $table .= "<tr $hide ><td></td>";
+                        }
+                        $table .= "<td>$title</td><td>$price</td>";
+                        $studentRegister = count($byCourse);
+                        $studentGroupsRegister = count($byCourseGroups);
+                        $studentRegisterBySession = count($bySession);
+                        $usersInCourseCount = count($byUserInCourse);
+
+                        $hiddenField = 'student_show_'.$index;
+                        $hiddenFieldLink = 'student_show_'.$index.'_';
+                        if (0 != $studentRegister ||
+                            0 != $studentRegisterBySession ||
+                            0 != $studentGroupsRegister ||
+                            0 != $usersInCourseCount
+                        ) {
+                            $tableTemp .= "<td>
+                                <a href='#!' id='$hiddenFieldLink' onclick='showHideStudent(\"$hiddenField\")'>
+                                <div class='icon_add'>$iconAdd</div>
+                                <div class='icon_remove hidden'>$iconRemove</div>
+                                </a>
+                                <div id='$hiddenField' class='hidden'>";
+                            $studentProcessed = [];
+                            /* Student by course*/
+                            $studentProcessed = self::getStudentDataToReportByLpItem($byCourse, $studentProcessed);
+                            /* Student by Class*/
+                            $studentProcessed = self::getStudentDataToReportByLpItem($byCourseGroups, $studentProcessed, 'class');
+                            /* Student by sessions*/
+                            $studentProcessed = self::getStudentDataToReportByLpItem($bySession, $studentProcessed);
+                            // Students in course*/
+                            $studentProcessed = self::getStudentDataToReportByLpItem($byUserInCourse, $studentProcessed);
+                            $index++;
+                            foreach ($studentProcessed as $lpItemId => $item) {
+                                foreach ($item as $type => $student) {
+                                    foreach ($student as $userId => $text) {
+                                        if ('LearnpathSubscription' == $type) {
+                                            $tableTemp .= $text;
+                                            $totalStudents++;
+                                        } else {
+                                            if (!isset($studentProcessed[$lpItemId]['LearnpathSubscription'])) {
+                                                $tableTemp .= $text;
+                                                $totalStudents++;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            $tableTemp .= "</div></td>";
+                        } else {
+                            $tableTemp .= "<td></td>";
+                        }
+                        $table .= "<td>$totalStudents</td>";
+                        $invoicing = ($totalStudents * $price);
+                        $table .= "<td>$invoicing</td>";
+                        $total += $invoicing;
+                        $totalSudent += $totalStudents;
+                        $table .= $tableTemp."</tr>";
+                        $lastAuthor = $authorTemp;
+                    }
+                    $hiddenFieldLink = 'student__show_'.$index.'_';
+                    $index++;
+                    $table .= "<tr>
+                    <th class='th-header'></th>
+                    <th class='th-header'>
+                            <a href='#!' id='$hiddenFieldLink' onclick='ShowMoreAuthor(\"$authorId\")'>
+                                <div class='icon_add_author_$authorId'>$iconAdd</div>
+                                <div class='icon_remove_author_$authorId hidden'>$iconRemove</div>
+                            </a>
+                        </th>
+                    <th class='th-header'></th>
+                    <th class='th-header'>$totalSudent</th>
+                    <th class='th-header'>$total</th>
+                    <th class='th-header'></tr>";
+                    $total = 0;
+                }
+                $table .= "</tbody></table></div>";
+                $tableHtml = $table;
+            }
+
+            $form = new FormValidator('searchDate', 'get');
+            $form->addHidden('display', 'learningPathByItem');
+            $today = new DateTime();
+            if (empty($startDate)) {
+                $startDate = $today->modify('first day of this month')->format('Y-m-d');
+            }
+            if (empty($endDate)) {
+                $endDate = $today->modify('last day of this month')->format('Y-m-d');
+            }
+            $form->addDatePicker(
+                'startDate',
+                get_lang('DateStart'),
+                [
+                    'value' => $startDate,
+                ]
+            );
+            $form->addDatePicker(
+                'endDate',
+                get_lang('DateEnd'),
+                [
+                    'value' => $endDate,
+                ]
+            );
+            $form->addButtonSearch(get_lang('Search'));
+
+            if (count($dataSet) != 0) {
+                $form->addButton(
+                    'export_csv',
+                    get_lang('ExportAsCSV'),
+                    'check',
+                    'primary',
+                    null,
+                    null,
+                    [
+                    ]
+                );
+            }
+            $tableContent = $form->returnForm();
+            $tableContent .= $tableHtml;
+            $tpl = new Template('', false, false, false, false, false, false);
+            $tpl->assign('table', $tableContent);
+            $templateName = $tpl->get_template('my_space/course_summary.tpl');
+            $tpl->display($templateName);
+        } else {
+            $csv_content = [];
+            $csv_row = [];
+            $csv_row[] = get_lang('Author');
+            $csv_row[] = get_lang('ContentList');
+            $csv_row[] = get_lang('Tariff');
+            $csv_row[] = get_lang('CountOfSubscribedUsers');
+            $csv_row[] = get_lang('ToInvoice');
+            $csv_row[] = get_lang('StudentList');
+            $csv_content[] = $csv_row;
+            $total = 0;
+            foreach ($dataSet as $authorId => $lpItems) {
+                $authorTemp = $authorArray[$authorId];
+                $totalSudent = 0;
+                foreach ($lpItems as $lpItem) {
+                    $totalStudents = 0;
+                    $itemLp = $lpItem['lp_item'];
+                    $itemLpId = $itemLp['lp_item_id'];
+                    $title = $itemLp['title'];
+                    $price = $itemLp['price'];
+                    $byCourse = $lpItem['course'];
+                    $bySession = $lpItem['session'];
+                    $byCourseGroups = $lpItem['courseGroups'];
+                    $byUserInCourse = $lpItem['course_user'];
+
+                    $csv_row = [];
+                    $csv_row[] = $authorTemp['complete_name'];
+                    $csv_row[] = $title;
+                    $csv_row[] = $price;
+
+                    $studentRegister = count($byCourse);
+                    $studentRegisterBySession = count($bySession);
+                    $studentGroupsRegister = count($byCourseGroups);
+                    $usersInCourseCount = count($byUserInCourse);
+
+                    $studentsName = '';
+                    if (0 != $studentRegister ||
+                        0 != $studentRegisterBySession ||
+                        0 != $studentGroupsRegister ||
+                        0 != $usersInCourseCount
+                    ) {
+                        $studentProcessed = [];
+                        /* Student by course*/
+                        $studentProcessed = self::getStudentDataToReportByLpItem($byCourse, $studentProcessed, '', true);
+                        /* Student by Class*/
+                        $studentProcessed = self::getStudentDataToReportByLpItem($byCourseGroups, $studentProcessed, 'class', true);
+                        /* Student by sessions*/
+                        $studentProcessed = self::getStudentDataToReportByLpItem($bySession, $studentProcessed, '', true);
+                        // Students in course*/
+                        $studentProcessed = self::getStudentDataToReportByLpItem($byUserInCourse, $studentProcessed, '', true);
+
+                        $index++;
+                        foreach ($studentProcessed as $lpItemId => $item) {
+                            foreach ($item as $type => $student) {
+                                foreach ($student as $userId => $text) {
+                                    if ('LearnpathSubscription' == $type) {
+                                        $studentsName .= $text;
+                                        $totalStudents++;
+                                    } else {
+                                        if (!isset($studentProcessed[$lpItemId]['LearnpathSubscription'])) {
+                                            $studentsName .= $text;
+                                            $totalStudents++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    $csv_row[] = $totalStudents;
+                    $csv_row[] = $price * $totalStudents;
+                    $csv_row[] = trim($studentsName, " / ");
+                    $csv_content[] = $csv_row;
+                }
+            }
+            Export::arrayToCsv($csv_content, 'reporting_lp_by_authors');
+        }
+    }
+
+    public static function getSessionAddUserCourseFromTrackDefault(
+        $startDate = null,
+        $endDate = null,
+        $whereInLp = null
+    ) {
+        $whereInLp = Database::escape_string($whereInLp);
+        $data = [];
+        $tblTrackDefault = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+        $tblSessionRelCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tblLp = Database::get_course_table(TABLE_LP_MAIN);
+        $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tblAccessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $accessUrlFilter = '';
+        if (api_is_multiple_url_enabled()) {
+            $urlId = api_get_current_access_url_id();
+            $accessUrlFilter = " INNER JOIN $tblAccessUrlUser auru
+                      ON (u.id = auru.user_id AND auru.access_url_id = $urlId)";
+        }
+
+        if (!empty($startDate)) {
+            $startDate = new DateTime($startDate);
+        } else {
+            $startDate = new DateTime();
+        }
+        if (!empty($endDate)) {
+            $endDate = new DateTime($endDate);
+        } else {
+            $endDate = new DateTime();
+        }
+        if (!empty($startDate) and !empty($endDate)) {
+            if ($startDate > $endDate) {
+                $dateTemp = $endDate;
+                $endDate = $startDate;
+                $startDate = $dateTemp;
+                unset($dateTemp);
+            }
+        }
+        $startDate = api_get_utc_datetime($startDate->setTime(0, 0, 0)->format('Y-m-d H:i:s'));
+        $endDate = api_get_utc_datetime($endDate->setTime(0, 0, 0)->format('Y-m-d H:i:s'));
+        $extra = '';
+        if (!empty($whereInLp)) {
+            $extra = " AND lpi.lp_id in ($whereInLp) ";
+        }
+
+        $sql = "SELECT DISTINCT
+            lp.iid AS lp,
+            lpi.iid AS lp_item,
+            lpi.iid AS lp_item_id,
+            td.default_value AS id,
+            srcu.session_id AS session_id,
+            u.username AS username,
+            td.default_date AS default_date,
+            td.default_event_type AS type,
+            u.firstname as firstname,
+            u.lastname as lastname
+        FROM $tblTrackDefault AS td
+        INNER JOIN $tblSessionRelCourseUser AS srcu
+        ON (td.default_value = srcu.user_id AND td.c_id = srcu.c_id)
+        INNER JOIN $tblLp AS lp
+        ON (lp.c_id = srcu.c_id)
+        INNER JOIN $tblLpItem AS lpi
+        ON (
+            lpi.c_id = srcu.c_id AND
+            lp.id = lpi.lp_id AND
+            lpi.c_id = lp.c_id
+        )
+        INNER JOIN $tblUser AS u
+        ON (u.id = srcu.user_id)
+        $accessUrlFilter
+        WHERE
+            td.default_event_type = 'session_add_user_course' AND
+            td.default_date >= '$startDate' AND
+            td.default_date <= '$endDate'
+            $extra
+        ORDER BY td.default_value ";
+        $queryResult = Database::query($sql);
+        $dataTrack = Database::store_result($queryResult, 'ASSOC');
+        foreach ($dataTrack as $item) {
+            $item['complete_name'] = api_get_person_name($item['firstname'], $item['lastname']);
+            $item['company'] = self::getCompanyOfUser($item['id']);
+            $data[$item['lp_item_id']][] = $item;
+        }
+
+        return $data;
+    }
+
+    public static function getUserSubscribedInCourseByDateAndLp(
+        $startDate = null,
+        $endDate = null,
+        $whereInLp = null
+    ): array {
+        $whereInLp = Database::escape_string($whereInLp);
+        $tblTrackDefault = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+        $tblCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $tblLp = Database::get_course_table(TABLE_LP_MAIN);
+        $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tblAccessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $accessUrlFilter = '';
+
+        if (api_is_multiple_url_enabled()) {
+            $urlId = api_get_current_access_url_id();
+            $accessUrlFilter = " INNER JOIN $tblAccessUrlUser auru
+                ON (u.id = auru.user_id AND auru.access_url_id = $urlId)";
+        }
+
+        $startDate = !empty($startDate) ? new DateTime($startDate) : new DateTime();
+        $endDate = !empty($endDate) ? new DateTime($endDate) : new DateTime();
+
+        $startDate = api_get_utc_datetime($startDate->setTime(0, 0)->format('Y-m-d H:i:s'));
+        $endDate = api_get_utc_datetime($endDate->setTime(0, 0)->format('Y-m-d H:i:s'));
+
+        $extra = '';
+
+        if (!empty($whereInLp)) {
+            $extra = " AND lpi.lp_id in ($whereInLp) ";
+        }
+
+        $sql = "SELECT DISTINCT
+                lp.iid AS lp,
+                lpi.iid AS lp_item,
+                lpi.iid AS lp_item_id,
+                u.id AS id,
+                u.username AS username,
+                td.default_date AS default_date,
+                td.default_event_type AS type,
+                u.firstname as firstname,
+                u.lastname as lastname
+            FROM $tblTrackDefault AS td
+            INNER JOIN $tblCourseRelUser AS cru ON td.c_id = cru.c_id
+            INNER JOIN $tblLp AS lp ON lp.c_id = cru.c_id
+            INNER JOIN $tblLpItem AS lpi
+                ON (lpi.c_id = cru.c_id AND lp.id = lpi.lp_id AND lpi.c_id = lp.c_id)
+            INNER JOIN $tblUser AS u ON u.id = cru.user_id
+            $accessUrlFilter
+            WHERE
+                td.default_event_type = '".LOG_SUBSCRIBE_USER_TO_COURSE."'
+                AND td.default_date >= '$startDate'
+                AND td.default_date <= '$endDate'
+                AND td.default_value LIKE CONCAT('%s:2:\\\\\\\\\\\"id\\\\\\\\\";i:', cru.user_id, ';%')
+                $extra
+            ORDER BY u.id";
+
+        $result = Database::query($sql);
+
+        $data = [];
+
+        while ($item = Database::fetch_assoc($result)) {
+            $item['complete_name'] = api_get_person_name($item['firstname'], $item['lastname']);
+            $item['company'] = self::getCompanyOfUser($item['id']);
+
+            $data[$item['lp_item_id']][] = $item;
+        }
+
+        return $data;
     }
 
     /**
@@ -1585,7 +2621,7 @@ class MySpace
     {
         $session_id = $row[0];
         // the table header
-        $return = '<table class="data_table" style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
+        $return = '<table class="table table-hover table-striped data_table" style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
 
         // database table definition
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -2203,12 +3239,20 @@ class MySpace
                              '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
                              </a>
                             </center>';
+            $scoreInCourse = null;
+            if (null !== $avg_score_in_course) {
+                if (is_numeric($avg_score_in_course)) {
+                    $scoreInCourse = $avg_score_in_course.'%';
+                } else {
+                    $scoreInCourse = $avg_score_in_course;
+                }
+            }
             $csv_content[] = [
                 api_html_entity_decode($row_course[1], ENT_QUOTES, $charset),
                 $nb_students_in_course,
                 $avg_time_spent_in_course,
                 is_null($avg_progress_in_course) ? null : $avg_progress_in_course.'%',
-                is_null($avg_score_in_course) ? null : is_numeric($avg_score_in_course) ? $avg_score_in_course.'%' : $avg_score_in_course,
+                $scoreInCourse,
                 is_null($avg_score_in_exercise) ? null : $avg_score_in_exercise.'%',
                 $avg_messages_in_course,
                 $avg_assignments_in_course,
@@ -2739,8 +3783,7 @@ class MySpace
      */
     public static function parse_xml_data($file)
     {
-        $crawler = new \Symfony\Component\DomCrawler\Crawler();
-        $crawler->addXmlContent(file_get_contents($file));
+        $crawler = Import::xml($file);
         $crawler = $crawler->filter('Contacts > Contact ');
         $array = [];
         foreach ($crawler as $domElement) {

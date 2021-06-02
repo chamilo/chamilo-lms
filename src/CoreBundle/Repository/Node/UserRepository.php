@@ -67,7 +67,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
-class UserRepository extends ResourceRepository implements UserLoaderInterface, PasswordUpgraderInterface
+class UserRepository extends ResourceRepository implements PasswordUpgraderInterface
 {
     protected ?UserPasswordHasherInterface $hasher = null;
 

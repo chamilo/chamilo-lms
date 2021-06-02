@@ -9740,6 +9740,10 @@ class SessionManager
             }
         }
 
+        if (!empty($content)) {
+            $content .= Career::renderDiagramFooter();
+        }
+
         return $content;
     }
 

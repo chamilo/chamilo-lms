@@ -39,8 +39,6 @@ $courseUserList = CourseManager::get_courses_list_by_user_id($user_id);
 $dates = $issues = '';
 $sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
 $courseCode = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : null;
-$allowCareerUser = api_get_configuration_value('allow_career_users');
-
 $showGraph = false === api_get_configuration_value('hide_session_graph_in_my_progress');
 
 $isAllowedToEdit = api_is_allowed_to_edit();

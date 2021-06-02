@@ -500,7 +500,7 @@ class Career extends Model
      *
      * @return string
      */
-    public static function renderDiagramByColumn($careerInfo, $tpl, $loadUserIdData = 0)
+    public static function renderDiagramByColumn($careerInfo, $tpl, $loadUserIdData = 0, $showFooter = true)
     {
         $careerId = isset($careerInfo['id']) ? $careerInfo['id'] : 0;
         if (empty($careerId)) {
@@ -792,6 +792,9 @@ class Career extends Model
         $tpl->assign('vertex_list', $graph->elementList);
 
         $graphHtml .= '<div id="graphContainer"></div>';
+        if ($showFooter) {
+            $graphHtml .= self::renderDiagramFooter();
+        }
 
         return $graphHtml;
     }
@@ -1410,5 +1413,18 @@ class Career extends Model
         $html .= '});</script>'.PHP_EOL;
 
         return $html;
+    }
+
+    public static function renderDiagramFooter(): string
+    {
+        $footer = '';
+        if (api_get_configuration_value('career_diagram_legend')) {
+            $footer .= get_lang('CareerDiagramLegend');
+        }
+        if (api_get_configuration_value('career_diagram_disclaimer')) {
+            $footer .= get_lang('CareerDiagramDisclaimer');
+        }
+
+        return $footer;
     }
 }

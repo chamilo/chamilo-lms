@@ -394,11 +394,6 @@ class CourseController extends ToolBaseController
      * @Route("/add/{id}", name="chamilo_lti_configure_global", requirements={"id"="\d+"})
      *
      * @Security("is_granted('ROLE_TEACHER')")
-     *
-     * @param int|null $id
-     * @param Request  $request
-     *
-     * @return Response
      */
     public function courseConfigureAction(?int $id, Request $request): Response
     {
@@ -469,7 +464,8 @@ class CourseController extends ToolBaseController
         $externalTool
             ->setCourse($course)
             ->setParent($course)
-            ->addCourseLink($course);
+            ->addCourseLink($course)
+        ;
 
         $em->persist($externalTool);
         $em->flush();
@@ -763,9 +759,6 @@ class CourseController extends ToolBaseController
         ];
     }
 
-    /**
-     * @return ExternalTool
-     */
     private function createLtiLink(array &$contentItem, ExternalTool $baseTool): ExternalTool
     {
         $newTool = clone $baseTool;

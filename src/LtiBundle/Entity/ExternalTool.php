@@ -111,6 +111,11 @@ class ExternalTool extends AbstractResource implements ResourceInterface
         $this->id = 0;
     }
 
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
+
     public function getId(): int
     {
         return $this->id;
@@ -415,15 +420,12 @@ class ExternalTool extends AbstractResource implements ResourceInterface
         return (bool) $unserialize['share_picture'];
     }
 
-    /**
-     * @return null|ExternalTool
-     */
-    public function getToolParent(): ?ExternalTool
+    public function getToolParent(): ?self
     {
         return $this->parent;
     }
 
-    public function setToolParent(self $parent): ExternalTool
+    public function setToolParent(self $parent): self
     {
         $this->parent = $parent;
         $this->sharedSecret = $parent->getSharedSecret();
@@ -446,6 +448,21 @@ class ExternalTool extends AbstractResource implements ResourceInterface
         $this->children = $children;
 
         return $this;
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getName();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setName($name);
+    }
+
+    public function getResourceIdentifier(): int
+    {
+        return $this->getId();
     }
 
     /**
@@ -472,25 +489,5 @@ class ExternalTool extends AbstractResource implements ResourceInterface
         }
 
         return $newKey;
-    }
-
-    public function getResourceName(): string
-    {
-        return $this->getName();
-    }
-
-    public function setResourceName(string $name): ExternalTool
-    {
-        return $this->setName($name);
-    }
-
-    public function __toString(): string
-    {
-        return $this->getName();
-    }
-
-    public function getResourceIdentifier(): int
-    {
-        return $this->getId();
     }
 }

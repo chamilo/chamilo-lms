@@ -37,7 +37,7 @@ class MyStudents
 
         $data = array_map(
             function (array $careerInfo) use ($webCodePath, $iconDiagram, $studentId) {
-                $url = $webCodePath.'user/career_diagram.php?career_id='.$careerInfo['id'].'&user_id='.$studentId;
+                $url = $webCodePath.'user/career_diagram.php?internal=1&career_id='.$careerInfo['id'].'&user_id='.$studentId;
 
                 return [
                     $careerInfo['name'],

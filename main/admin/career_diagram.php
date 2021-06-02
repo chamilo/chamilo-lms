@@ -27,7 +27,7 @@ if (empty($careerId)) {
 
 // Redirect to user/career_diagram.php if not admin/drh BT#18720
 if (!(api_is_platform_admin() || api_is_drh())) {
-    $url = api_get_path(WEB_CODE_PATH).'user/career_diagram.php?career_id='.$careerId;
+    $url = api_get_path(WEB_CODE_PATH).'user/career_diagram.php?career_id='.$careerId.'&internal=1';
     api_location($url);
 }
 

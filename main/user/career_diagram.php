@@ -21,18 +21,35 @@ api_block_anonymous_users();
 
 $this_section = SECTION_COURSES;
 
-$careerId = isset($_GET['career_id']) ? $_GET['career_id'] : 0;
+$careerId = $_GET['career_id'] ?? null;
+$isInternal = isset($_GET['internal']) && 1 === (int) $_GET['internal'];
 $userId = isset($_GET['user_id']) ? $_GET['user_id'] : api_get_user_id();
 
 if (empty($careerId)) {
     api_not_allowed(true);
 }
 
+$careerInfo = [];
+
 $career = new Career();
-$careerInfo = $career->get($careerId);
+if ($isInternal) {
+    $careerInfo = $career->get($careerId);
+} else {
+    // Try with the external career id.
+    $careerExtraFieldValue = new ExtraFieldValue('career');
+    $careerValue = $careerExtraFieldValue->get_item_id_from_field_variable_and_field_value(
+        'external_career_id',
+        $careerId
+    );
+    if (isset($careerValue['item_id'])) {
+        $careerInfo = $career->get($careerValue['item_id']);
+    }
+}
+
 if (empty($careerInfo)) {
     api_not_allowed(true);
 }
+
 $allow = UserManager::userHasCareer($userId, $careerId) || api_is_platform_admin() || api_is_drh();
 
 if ($allow === false) {
@@ -43,7 +60,6 @@ $htmlHeadXtra[] = api_get_js('jsplumb2.js');
 $htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
 
-// setting breadcrumbs
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'auth/my_progress.php',
     'name' => get_lang('Progress'),

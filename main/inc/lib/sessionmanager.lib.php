@@ -9720,7 +9720,7 @@ class SessionManager
                     $careerId = $career['id'];
                     if (!in_array($careerId, $careersAdded)) {
                         $careersAdded[] = $careerId;
-                        $careerUrl = api_get_path(WEB_CODE_PATH).'user/career_diagram.php?iframe=1&career_id='.$career['id'].'&user_id='.$userId;
+                        $careerUrl = api_get_path(WEB_CODE_PATH).'user/career_diagram.php?internal=1&iframe=1&career_id='.$career['id'].'&user_id='.$userId;
                         $content .= '
                             <iframe
                                 onload="resizeIframe(this)"

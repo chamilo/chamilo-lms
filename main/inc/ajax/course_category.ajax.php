@@ -16,7 +16,7 @@ switch ($action) {
         $categoryId = (int) $_REQUEST['id'];
         $categoryInfo = CourseCategory::getCategoryById($categoryId);
         if (!empty($categoryInfo)) {
-            $courses = CourseCategory::getCoursesInCategory($categoryInfo['code']);
+            $courses = CourseCategory::getCoursesInCategory($categoryInfo['code'], '', false, false);
 
             $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
             $headers = [

@@ -25,7 +25,7 @@ class ExternalToolType extends AbstractType
     {
         /** @var ExternalTool $tool */
         $tool = $builder->getData();
-        $parent = $tool ? $tool->getParent() : null;
+        $parent = $tool ? $tool->getToolParent() : null;
 
         $builder
             ->add('name', TextType::class)

@@ -366,6 +366,8 @@ services:
             -
                 shortcuts:
                     repository: Chamilo\CourseBundle\Repository\CShortcutRepository
+                external_tools:
+                    repository: Chamilo\LtiBundle\Repository\ExternalToolRepository
         tags:
             - {name: chamilo_core.tool}
 

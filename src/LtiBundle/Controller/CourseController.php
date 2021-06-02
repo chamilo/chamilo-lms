@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\LtiBundle\Entity\ExternalTool;
 use Chamilo\LtiBundle\Form\ExternalToolType;
 use Chamilo\LtiBundle\Util\Utils;
@@ -33,10 +34,17 @@ use UserManager;
 /**
  * Class CourseController.
  *
- * @Route("/courses/{course_code}/lti");
+ * @Route("/courses/{cid}/lti");
  */
 class CourseController extends ToolBaseController
 {
+    private CShortcutRepository $shortcutRepository;
+
+    public function __construct(CShortcutRepository $shortcutRepository)
+    {
+        $this->shortcutRepository = $shortcutRepository;
+    }
+
     /**
      * @Route("/edit/{id}", name="chamilo_lti_edit", requirements={"id"="\d+"})
      *
@@ -111,7 +119,7 @@ class CourseController extends ToolBaseController
             'chamilo_lti_edit',
             [
                 'id' => $tool->getId(),
-                'code' => $course->getCode(),
+                'cid' => $course->getId(),
             ]
         );
     }
@@ -125,7 +133,7 @@ class CourseController extends ToolBaseController
     {
         $em = $this->getDoctrine()->getManager();
         /** @var null|ExternalTool $tool */
-        $tool = $em->find('ChamiloLtiBundle:ExternalTool', $id);
+        $tool = $em->find(ExternalTool::class, $id);
 
         if (empty($tool)) {
             throw $this->createNotFoundException();
@@ -294,7 +302,7 @@ class CourseController extends ToolBaseController
         $em = $this->getDoctrine()->getManager();
 
         /** @var ExternalTool $tool */
-        $tool = $em->find('ChamiloLtiBundle:ExternalTool', str_replace('tool:', '', $data));
+        $tool = $em->find(ExternalTool::class, str_replace('tool:', '', $data));
 
         if (empty($tool)) {
             throw $this->createNotFoundException('External tool not found');
@@ -362,7 +370,7 @@ class CourseController extends ToolBaseController
         $em = $this->getDoctrine()->getManager();
 
         /** @var null|ExternalTool $externalTool */
-        $externalTool = $em->find('ChamiloLtiBundle:ExternalTool', $id);
+        $externalTool = $em->find(ExternalTool::class, $id);
 
         if (empty($externalTool)) {
             throw $this->createNotFoundException();
@@ -371,22 +379,6 @@ class CourseController extends ToolBaseController
         if (empty($externalTool->getCourse()) || $externalTool->getCourse()->getId() !== $course->getId()) {
             throw $this->createAccessDeniedException('');
         }
-
-        $breadcrumb = $this->get('chamilo_core.block.breadcrumb');
-        $breadcrumb->addChild(
-            $course->getTitle(),
-            [
-                'uri' => $this->generateUrl(
-                    'chamilo_course_home_home_index',
-                    [
-                        'course' => $course->getCode(),
-                    ]
-                ),
-            ]
-        );
-        $breadcrumb->addChild(
-            $this->trans($externalTool->getName())
-        );
 
         return $this->render(
             'ChamiloCoreBundle:Lti:iframe.html.twig',
@@ -403,17 +395,19 @@ class CourseController extends ToolBaseController
      *
      * @Security("is_granted('ROLE_TEACHER')")
      *
-     * @param string $id
+     * @param int|null $id
+     * @param Request  $request
+     *
+     * @return Response
      */
-    public function courseConfigureAction($id = '', Request $request): Response
+    public function courseConfigureAction(?int $id, Request $request): Response
     {
         $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('ChamiloLtiBundle:ExternalTool');
+        $repo = $em->getRepository(ExternalTool::class);
 
-        $tool = new ExternalTool();
-        $parentTool = null;
+        $externalTool = new ExternalTool();
 
-        if (!empty($id)) {
+        if (null !== $id) {
             $parentTool = $repo->findOneBy([
                 'id' => $id,
                 'course' => null,
@@ -423,16 +417,16 @@ class CourseController extends ToolBaseController
                 throw $this->createNotFoundException('External tool not found');
             }
 
-            $tool = clone $parentTool;
-            $tool->setParent($parentTool);
+            $externalTool = clone $parentTool;
+            $externalTool->setToolParent($parentTool);
         }
 
         $course = $this->getCourse();
 
-        $form = $this->createForm(ExternalToolType::class, $tool);
-        $form->get('shareName')->setData($tool->isSharingName());
-        $form->get('shareEmail')->setData($tool->isSharingEmail());
-        $form->get('sharePicture')->setData($tool->isSharingPicture());
+        $form = $this->createForm(ExternalToolType::class, $externalTool);
+        $form->get('shareName')->setData($externalTool->isSharingName());
+        $form->get('shareEmail')->setData($externalTool->isSharingEmail());
+        $form->get('sharePicture')->setData($externalTool->isSharingPicture());
         $form->handleRequest($request);
 
         if (!$form->isSubmitted() || !$form->isValid()) {
@@ -470,42 +464,25 @@ class CourseController extends ToolBaseController
             );
         }
 
-        /** @var ExternalTool $tool */
-        $tool = $form->getData();
-        $tool->setCourse($course);
+        /** @var ExternalTool $externalTool */
+        $externalTool = $form->getData();
+        $externalTool
+            ->setCourse($course)
+            ->setParent($course)
+            ->addCourseLink($course);
 
-        $em->persist($tool);
+        $em->persist($externalTool);
         $em->flush();
 
         $this->addFlash('success', $this->trans('External tool added'));
 
-        if (!$tool->isActiveDeepLinking()) {
-            $courseTool = new CTool();
-            $courseTool
-                ->setCourse($course)
-                ->setImage('plugin.png')
-                ->setName($tool->getName())
-                ->setVisibility(true)
-                ->setTarget('_self')
-                ->setCategory('interaction')
-                ->setLink(
-                    $this->generateUrl(
-                        'chamilo_lti_show',
-                        [
-                            'code' => $course->getCode(),
-                            'id' => $tool->getId(),
-                        ]
-                    )
-                )
-            ;
-
-            $em->persist($courseTool);
-            $em->flush();
+        if (!$externalTool->isActiveDeepLinking()) {
+            $this->shortcutRepository->addShortCut($externalTool, $course, $course);
 
             return $this->redirectToRoute(
-                'chamilo_course_home_home_index',
+                'chamilo_core_course_home',
                 [
-                    'course' => $course->getCode(),
+                    'cid' => $course->getId(),
                 ]
             );
         }
@@ -530,7 +507,7 @@ class CourseController extends ToolBaseController
     public function gradeAction($catId)
     {
         $em = $this->getDoctrine()->getManager();
-        $toolRepo = $em->getRepository('ChamiloLtiBundle:ExternalTool');
+        $toolRepo = $em->getRepository(ExternalTool::class);
         $course = $this->getCourse();
         /** @var User $user */
         $user = $this->getUser();
@@ -789,10 +766,10 @@ class CourseController extends ToolBaseController
     /**
      * @return ExternalTool
      */
-    private function createLtiLink(array &$contentItem, ExternalTool $baseTool)
+    private function createLtiLink(array &$contentItem, ExternalTool $baseTool): ExternalTool
     {
         $newTool = clone $baseTool;
-        $newTool->setParent($baseTool);
+        $newTool->setToolParent($baseTool);
         $newTool->setActiveDeepLinking(false);
 
         if (!empty($contentItem['title'])) {
@@ -815,32 +792,14 @@ class CourseController extends ToolBaseController
 
         $em = $this->getDoctrine()->getManager();
 
+        $course = $newTool->getCourse();
+
+        $newTool->addCourseLink($course);
+
         $em->persist($newTool);
         $em->flush();
 
-        $course = $newTool->getCourse();
-
-        $courseTool = new CTool();
-        $courseTool
-            ->setCourse($course)
-            ->setImage('plugin.png')
-            ->setName($newTool->getName())
-            ->setVisibility(true)
-            ->setTarget('_self')
-            ->setCategory('interaction')
-            ->setLink(
-                $this->generateUrl(
-                    'chamilo_lti_show',
-                    [
-                        'code' => $course->getCode(),
-                        'id' => $newTool->getId(),
-                    ]
-                )
-            )
-        ;
-
-        $em->persist($courseTool);
-        $em->flush();
+        $this->shortcutRepository->addShortCut($newTool, $course, $course);
 
         return $newTool;
     }

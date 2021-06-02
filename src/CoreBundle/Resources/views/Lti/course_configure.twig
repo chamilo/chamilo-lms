@@ -12,14 +12,14 @@
                                 <li class="list-group-item">
                                     <div class="float-right">
                                         {% if tool.isActiveDeepLinking %}
-                                            <a href="{{ url('chamilo_lti_show', {"id": tool.id, "code": course.code}) }}"
+                                            <a href="{{ url('chamilo_lti_show', {"id": tool.id, 'cid': course.id}) }}"
                                                class="btn btn-light btn-sm">
                                                 <span class="fa fa-rocket" aria-hidden="true"></span>
                                                 <span class="sr-only">{{ 'Configure'|trans }}</span>
                                             </a>
                                         {% endif %}
 
-                                        <a href="{{ url('chamilo_lti_edit', {"id": tool.id, "code": course.code}) }}"
+                                        <a href="{{ url('chamilo_lti_edit', {"id": tool.id, 'cid': course.id}) }}"
                                            class="btn btn-light btn-sm">
                                             <span class="fa fa-edit" aria-hidden="true"></span>
                                             <span class="sr-only">{{ 'Edit'|trans }}</span>
@@ -45,7 +45,7 @@
                                                 <span class="sr-only">{{ 'Configure'|trans }}</span>
                                             </a>
                                         {% else %}
-                                            <a href="{{ url('chamilo_lti_configure_global', {"code": course.code, "id": tool.id}) }}"
+                                            <a href="{{ url('chamilo_lti_configure_global', {'cid': course.id, "id": tool.id}) }}"
                                                class="btn btn-light btn-sm">
                                                 <span class="fa fa-plus" aria-hidden="true"></span>
                                                 <span class="sr-only">{{ 'Add'|trans }}</span>

@@ -118,7 +118,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         //UserPasswordEncoderInterface $passwordEncoder
         $password = (string) $user->getPlainPassword();
         if ('' !== $password) {
-            $password = $this->encoder->encodePassword($user, $password);
+            $password = $this->hasher->hashPassword($user, $password);
             $user->setPassword($password);
             $user->eraseCredentials();
             // $encoder = $this->getEncoder($user);

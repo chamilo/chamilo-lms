@@ -20,12 +20,25 @@ class Career extends Model
         'updated_at',
     ];
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->table = Database::get_main_table(TABLE_CAREER);
+    }
+
+    public function getFromExternalExtraField($careerId, $extraFieldVariable = 'external_career_id')
+    {
+        $careerExtraFieldValue = new ExtraFieldValue('career');
+        $careerValue = $careerExtraFieldValue->get_item_id_from_field_variable_and_field_value(
+            $extraFieldVariable,
+            $careerId
+        );
+
+        $careerInfo = [];
+        if (isset($careerValue['item_id'])) {
+            $careerInfo = $this->get($careerValue['item_id']);
+        }
+
+        return $careerInfo;
     }
 
     /**

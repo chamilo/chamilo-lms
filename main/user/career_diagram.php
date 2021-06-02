@@ -36,13 +36,9 @@ if ($isInternal) {
     $careerInfo = $career->get($careerId);
 } else {
     // Try with the external career id.
-    $careerExtraFieldValue = new ExtraFieldValue('career');
-    $careerValue = $careerExtraFieldValue->get_item_id_from_field_variable_and_field_value(
-        'external_career_id',
-        $careerId
-    );
-    if (isset($careerValue['item_id'])) {
-        $careerInfo = $career->get($careerValue['item_id']);
+    $careerInfo = $career->getFromExternalExtraField($careerId);
+    if (!empty($careerInfo)) {
+        $careerId = $careerInfo['id'];
     }
 }
 
@@ -52,7 +48,7 @@ if (empty($careerInfo)) {
 
 $allow = UserManager::userHasCareer($userId, $careerId) || api_is_platform_admin() || api_is_drh();
 
-if ($allow === false) {
+if (false === $allow) {
     api_not_allowed(true);
 }
 

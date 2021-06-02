@@ -24,15 +24,15 @@ $interbreadcrumb[] = [
     'name' => get_lang('CareersAndPromotions'),
 ];
 
-$action = isset($_GET['action']) ? $_GET['action'] : null;
+$action = $_GET['action'] ?? null;
 
 $check = Security::check_token('request');
 $token = Security::get_token();
 
-if ($action == 'add') {
+if ($action === 'add') {
     $interbreadcrumb[] = ['url' => 'careers.php', 'name' => get_lang('Careers')];
     $tool_name = get_lang('Add');
-} elseif ($action == 'edit') {
+} elseif ($action === 'edit') {
     $interbreadcrumb[] = ['url' => 'careers.php', 'name' => get_lang('Careers')];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
     $tool_name = get_lang('Edit');

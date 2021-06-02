@@ -19,7 +19,6 @@ if (false === api_get_configuration_value('allow_career_diagram')) {
 }
 
 $careerId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-//$userId = isset($_GET['user_id']) ? $_GET['user_id'] : api_get_user_id();
 
 if (empty($careerId)) {
     api_not_allowed(true);

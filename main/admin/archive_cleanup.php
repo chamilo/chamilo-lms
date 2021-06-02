@@ -1,12 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- *   @package chamilo.admin
- */
-// resetting the course id
 $cidReset = true;
 
-// including some necessary files
 require_once __DIR__.'/../inc/global.inc.php';
 
 ini_set('memory_limit', -1);
@@ -49,7 +44,7 @@ if ($form->validate()) {
     }
 
     $archive_path = api_get_path(SYS_ARCHIVE_PATH);
-    $htaccess = @file_get_contents($archive_path.'.htaccess');
+    $htaccess = 'php_flag engine off';
     $result = rmdirr($archive_path, true, true);
     if (false === $result) {
         Display::addFlash(Display::return_message(get_lang('ArchiveDirCleanupFailed'), 'error'));

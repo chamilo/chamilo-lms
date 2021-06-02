@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -40,7 +41,7 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator implements Passw
     public SerializerInterface $serializer;
     public RouterInterface $router;
 
-    private UserPasswordEncoderInterface $passwordEncoder;
+    private UserPasswordHasherInterface $passwordHasher;
     private UserRepository $userRepository;
     private CsrfTokenManagerInterface $csrfTokenManager;
     private UrlGeneratorInterface $urlGenerator;
@@ -49,7 +50,7 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator implements Passw
         //EntityManagerInterface $entityManager,
         UrlGeneratorInterface $urlGenerator,
         RouterInterface $router,
-        UserPasswordEncoderInterface $passwordEncoder,
+        UserPasswordHasherInterface $passwordHasher,
         //FormFactoryInterface $formFactory,
         //HookFactory $hookFactory,
         UserRepository $userRepository,
@@ -57,7 +58,7 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator implements Passw
         SerializerInterface $serializer
     ) {
         $this->router = $router;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->passwordHasher = $passwordHasher;
         //$this->formFactory = $formFactory;
         //$this->hookFactory = $hookFactory;
         $this->userRepository = $userRepository;
@@ -133,7 +134,7 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator implements Passw
     {
         error_log('login form');
 
-        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+        return $this->passwordHasher->isPasswordValid($user, $credentials['password']);
         /*$hook = $this->hookFactory->build(CheckLoginCredentialsHook::class);
 
         if (empty($hook)) {

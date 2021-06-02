@@ -28,7 +28,7 @@ services:
     # User repository
     Chamilo\CoreBundle\Repository\Node\UserRepository:
         calls:
-            - setEncoder: ['@security.user_password_encoder.generic']
+            - setHasher: ['@security.user_password_hasher']
             - setAuthorizationChecker: ['@security.authorization_checker']
             - setRouter: ['@router']
             - setSlugify: ['@cocur_slugify']

@@ -22,6 +22,7 @@ use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Environment;
@@ -35,10 +36,12 @@ class CourseListener
     use ContainerAwareTrait;
 
     private Environment $twig;
+    private AuthorizationCheckerInterface $authorizationChecker;
 
-    public function __construct(Environment $twig)
+    public function __construct(Environment $twig, AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->twig = $twig;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     /**
@@ -77,7 +80,7 @@ class CourseListener
 
         // Check if URL has cid value. Using Symfony request.
         $courseId = (int) $request->get('cid');
-        $checker = $container->get('security.authorization_checker');
+        $checker = $this->authorizationChecker;
 
         /** @var EntityManager $em */
         $em = $container->get('doctrine')->getManager();

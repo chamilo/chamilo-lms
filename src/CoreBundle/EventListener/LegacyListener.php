@@ -14,6 +14,7 @@ use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Environment;
 
@@ -26,10 +27,12 @@ class LegacyListener
     use ContainerAwareTrait;
 
     private Environment $twig;
+    private TokenStorageInterface $tokenStorage;
 
-    public function __construct(Environment $twig)
+    public function __construct(Environment $twig, TokenStorageInterface $tokenStorage)
     {
         $this->twig = $twig;
+        $this->tokenStorage = $tokenStorage;
     }
 
     public function onKernelRequest(RequestEvent $event): void
@@ -69,7 +72,7 @@ class LegacyListener
         }
 
         $twig = $this->twig;
-        $token = $container->get('security.token_storage')->getToken();
+        $token = $this->tokenStorage->getToken();
 
         $userObject = null;
         if (null !== $token) {

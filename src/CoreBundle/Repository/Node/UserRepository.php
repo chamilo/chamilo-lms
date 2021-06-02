@@ -57,6 +57,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use SocialManager;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
@@ -68,22 +69,22 @@ use Symfony\Component\Serializer\Serializer;
 
 class UserRepository extends ResourceRepository implements UserLoaderInterface, PasswordUpgraderInterface
 {
-    protected ?UserPasswordEncoderInterface $encoder = null;
+    protected ?UserPasswordHasherInterface $hasher = null;
 
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
     }
 
-    public function setEncoder(UserPasswordEncoderInterface $encoder): void
+    public function setHasher(UserPasswordHasherInterface $hasher): void
     {
-        $this->encoder = $encoder;
+        $this->hasher = $hasher;
     }
 
-    public function loadUserByUsername(string $username): ?User
+    public function loadUserByIdentifier(string $identifier): ?User
     {
         return $this->findOneBy([
-            'username' => $username,
+            'username' => $identifier,
         ]);
     }
 

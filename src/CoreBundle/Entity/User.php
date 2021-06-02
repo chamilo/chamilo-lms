@@ -22,6 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\NilUuid;
@@ -60,7 +61,7 @@ use UserManager;
  * @ORM\Entity
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\UserListener"})
  */
-class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface
+class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface
 {
     use TimestampableEntity;
 
@@ -997,7 +998,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    public function getPassword()
+    public function getPassword(): ?string
     {
         return $this->password;
     }

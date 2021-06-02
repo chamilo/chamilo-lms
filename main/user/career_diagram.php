@@ -22,29 +22,18 @@ api_block_anonymous_users();
 $this_section = SECTION_COURSES;
 
 $careerId = $_GET['career_id'] ?? null;
-$isInternal = isset($_GET['internal']) && 1 === (int) $_GET['internal'];
 $userId = isset($_GET['user_id']) ? $_GET['user_id'] : api_get_user_id();
 
 if (empty($careerId)) {
     api_not_allowed(true);
 }
 
-$careerInfo = [];
-
 $career = new Career();
-if ($isInternal) {
-    $careerInfo = $career->get($careerId);
-} else {
-    // Try with the external career id.
-    $careerInfo = $career->getFromExternalExtraField($careerId);
-    if (!empty($careerInfo)) {
-        $careerId = $careerInfo['id'];
-    }
-}
-
+$careerInfo = $career->getCareerFromId($careerId);
 if (empty($careerInfo)) {
     api_not_allowed(true);
 }
+$careerId = $careerInfo['id'];
 
 $allow = UserManager::userHasCareer($userId, $careerId) || api_is_platform_admin() || api_is_drh();
 

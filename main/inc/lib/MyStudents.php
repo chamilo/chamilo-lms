@@ -29,6 +29,7 @@ class MyStudents
 
         $webCodePath = api_get_path(WEB_CODE_PATH);
         $iconDiagram = Display::return_icon('multiplicate_survey.png', get_lang('Diagram'));
+        $careerModel = new Career();
 
         $headers = [
             get_lang('Career'),
@@ -36,8 +37,13 @@ class MyStudents
         ];
 
         $data = array_map(
-            function (array $careerInfo) use ($webCodePath, $iconDiagram, $studentId) {
-                $url = $webCodePath.'user/career_diagram.php?internal=1&career_id='.$careerInfo['id'].'&user_id='.$studentId;
+            function (array $careerInfo) use ($careerModel, $webCodePath, $iconDiagram, $studentId) {
+                $careerId = $careerInfo['id'];
+                if (api_get_configuration_value('use_career_external_id_as_identifier_in_diagrams')) {
+                    $careerId = $careerModel->getCareerIdFromInternalToExternal($careerId);
+                }
+
+                $url = $webCodePath.'user/career_diagram.php?career_id='.$careerId.'&user_id='.$studentId;
 
                 return [
                     $careerInfo['name'],

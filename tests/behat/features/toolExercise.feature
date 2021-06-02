@@ -262,13 +262,12 @@ Feature: Exercise tool
     # Question 1
     Then I should see "Multiple choice"
     And I check the "Answer true" radio button
-    And wait for the page to be loaded
     Then I press "Next question"
+    And wait for the page to be loaded
     # Question 2
-    And wait for the page to be loaded
     And I check the "Answer true" radio button
-    And wait for the page to be loaded
     Then I press "Next question"
+    And wait for the page to be loaded
     # Question 3
     Then I fill in the following:
       | choice_id_3_0 | Juliet |
@@ -284,36 +283,42 @@ Feature: Exercise tool
       | choice_id_3_10 | cherchent à |
       | choice_id_3_11 | Übung |
     Then I fill in select bootstrap static by text "#choice_id_3_12" select "Ärger"
-    And wait for the page to be loaded
     Then I press "Next question"
+    And wait for the page to be loaded
     # Question 4 - Matching
     Then I select "A" from "choice_id_4_1"
     Then I select "B" from "choice_id_4_2"
     Then I press "Next question"
+    And wait for the page to be loaded
     # Question 5 - Open question
-    #Then I fill in ckeditor field "<string>" with "<string>"
     Then wait for the page to be loaded
+    Then I fill the only ckeditor in the page with "Hello you"
     Then I press "Next question"
+    And wait for the page to be loaded
     # Question 6 - Oral question
-    Then wait for the page to be loaded
     Then I press "Next question"
+    And wait for the page to be loaded
     # Question 7 - Exact answers combination
     Then I check "Answer true"
     Then I press "Next question"
-    Then wait for the page to be loaded
+    And wait for the page to be loaded
     # Question 8 - Unique answer with unknown
     And I check the "Answer true" radio button
     Then I press "Next question"
-    Then wait for the page to be loaded
+    And wait for the page to be loaded
     # Question 9 - Multiple answer true - false - dont know
     #@todo
     Then I press "Next question"
+    And wait for the page to be loaded
      # Question 10 - Combination true - false - don't-know
     #@todo
     Then I press "Next question"
+    And wait for the page to be loaded
     # Question 11 - Global multiple answer
     Then I check "Answer true"
     Then I press "End test"
+    And wait for the page to be loaded
+    Then I should see "Hello you"
     Then I should see "Score for the test: 83 / 117"
 
   Scenario: Check exercise result
@@ -322,9 +327,18 @@ Feature: Exercise tool
     And I follow "Edit"
     And I follow "Results and feedback"
     Then I should see "Learner score"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     And I follow "Grade activity"
     Then I should see "Score for the test: 83 / 117"
+    And I press "Edit individual feedback and grade the open question"
+    And I should see "Assign a grade"
+    And I fill the only ckeditor in the page with "open question teacher answer"
+    And I fill in select "select[name=marks]" with option value "10" with class ".grade_select"
+    Then I press "Correct test"
+    And wait very long for the page to be loaded
+    And I follow "Edit"
+    Then I should see "open question teacher answer"
+    And I should see "Score for the test: 93 / 117"
 
   Scenario: Create a session "Session Exercise" and add user "acostea"
     Given I am on "/main/session/session_add.php"
@@ -345,7 +359,7 @@ Feature: Exercise tool
     Then I should see "Update successful"
 
   Scenario: Try exercise with categorized questions as student
-    Given I am a student
+    Given I am logged as "acostea"
     And I am on course "TEMP" homepage in session "Session Exercise"
     Then I should see "TEMP (Session Exercise)"
     And I am on "/main/exercise/exercise.php?cidReq=TEMP"
@@ -353,22 +367,28 @@ Feature: Exercise tool
     And I follow "Start test"
     When wait for the page to be loaded
     And I press "Next question"
+    And wait for the page to be loaded
     And I check "oligarchy"
     And I check "oligopoly"
     And I check "timocracy"
     And I check "autocracy"
     And I press "Next question"
+    And wait for the page to be loaded
     And I check the "semantics" radio button
     And I press "Next question"
+    And wait for the page to be loaded
     And I check the "RNASL" radio button
     And I press "Next question"
+    And wait for the page to be loaded
     And I check the "10" radio button
     And I press "Next question"
+    And wait for the page to be loaded
     And fill in the following:
       | choice_id_6_0 | words  |
       | choice_id_6_1 | fill   |
       | choice_id_6_2 | blanks |
     And I press "Next question"
+    And wait for the page to be loaded
     And I select "A" from "choice_id_7_1"
     And I select "B" from "choice_id_7_2"
     And I select "C" from "choice_id_7_3"
@@ -378,13 +398,14 @@ Feature: Exercise tool
     And I press "Next question"
     And wait for the page to be loaded
     And I press "End test"
+    And wait for the page to be loaded
     Then I should see "Score for the test: 190 / 190"
     And I should see the table "#category_results":
       | Categories    | Absolute score | Relative score |
-      | Categoryname2 | 50 / 70        | 71.43%         |
-      | Categoryname1 | 60 / 60        | 100%           |
-      | none          | 80 / 60        | 133.33%        |
-      | Total         | 190 / 190      | 100%           |
+      | Categoryname1 | 60 / 60        | 100 %           |
+      | Categoryname2 | 50 / 70        | 71.43 %         |
+      | none          | 80 / 60        | 133.33 %        |
+      | Total         | 190 / 190      | 100 %           |
 
   Scenario: Teacher looks at exercise results by categories
     Given I am on "/user_portal.php"
@@ -399,10 +420,10 @@ Feature: Exercise tool
     Then I should see "Score for the test: 190 / 190"
     And I should see the table "#category_results":
       | Categories    | Absolute score | Relative score |
-      | Categoryname2 | 50 / 70        | 71.43%         |
-      | Categoryname1 | 60 / 60        | 100%           |
-      | none          | 80 / 60        | 133.33%        |
-      | Total         | 190 / 190      | 100%           |
+      | Categoryname1 | 60 / 60        | 100 %           |
+      | Categoryname2 | 50 / 70        | 71.43 %         |
+      | none          | 80 / 60        | 133.33 %        |
+      | Total         | 190 / 190      | 100 %           |
 
   Scenario: Delete an exercise
     Given I am on "/main/exercise/exercise.php?cidReq=TEMP"

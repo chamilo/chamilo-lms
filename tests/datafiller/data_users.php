@@ -221,4 +221,5 @@ $users[] = array('username' => 'helena','pass'=> 'helena','firstname' => 'Helena
 $users[] = array('username' => 'cgonzales','pass'=> 'cgonzales','firstname' => 'Cecilia','lastname' => 'Gonzales','status' => 5,'auth_source' => 'platform','email' => 'cgonzales@example.com','creator_id' => 1,'active' => 1);
 $users[] = array('username' => 'amann','pass'=> 'amann','firstname' => 'Aimee','lastname' => 'Mann','status' => 5,'auth_source' => 'platform','email' => 'amann@example.com','creator_id' => 1,'active' => 1);
 $users[] = array('username' => 'zzaouidi','pass'=> 'zazup','firstname' => 'Zatar','lastname' => 'Zaouidi','status' => 5,'auth_source' => 'platform','email' => 'zazup@example.com','creator_id' => 1,'active' => 1);
+$users[] = array('username' => 'drh','pass'=> 'drh','firstname' => 'Joan DRH', 'lastname' => 'Holloway','status' => 4,'auth_source' => 'platform','email' => 'drh@example.com','creator_id' => 1,'active' => 1);
 

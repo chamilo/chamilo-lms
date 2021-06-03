@@ -6101,7 +6101,7 @@ EOT;
         $resultsStudentUrl = api_get_path(WEB_CODE_PATH).
             'exercise/result.php?id='.$exeId.'&'.api_get_cidreq();
         $resultsTeacherUrl = api_get_path(WEB_CODE_PATH).
-            'exercise/exercise_show.php?action=edit&id='.$exeId.'&'.api_get_cidreq();
+            'exercise/exercise_show.php?action=edit&id='.$exeId.'&'.api_get_cidreq(true, true, 'teacher');
 
         $content = str_replace(
             [

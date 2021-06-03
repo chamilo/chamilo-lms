@@ -26,7 +26,7 @@ if (!empty($action)) {
     if ('export' === $action) {
         $categoryInfo = CourseCategory::getCategoryById($categoryId);
         if (!empty($categoryInfo)) {
-            $courses = CourseCategory::getCoursesInCategory($categoryInfo['code']);
+            $courses = CourseCategory::getCoursesInCategory($categoryInfo['code'], '', false, false);
             if (!empty($courses)) {
                 $name = api_get_local_time().'_'.$categoryInfo['code'];
                 $courseList = array_map(

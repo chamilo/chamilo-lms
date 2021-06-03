@@ -9700,15 +9700,9 @@ class SessionManager
         }
 
         $userId = (int) $userId;
-        $content = Display::page_subheader(get_lang('OngoingTraining'));
-        $content .= '
-           <script>
-            resizeIframe = function(iFrame) {
-                iFrame.height = iFrame.contentWindow.document.body.scrollHeight + 20;
-            }
-            </script>
-        ';
         $careersAdded = [];
+        $careerModel = new Career();
+        $frames = '';
         foreach ($sessionList as $sessionId) {
             $visibility = api_get_session_visibility($sessionId, null, false, $userId);
             if (SESSION_AVAILABLE === $visibility) {
@@ -9717,11 +9711,15 @@ class SessionManager
                     continue;
                 }
                 foreach ($careerList as $career) {
-                    $careerId = $career['id'];
+                    $careerId = $careerIdToShow = $career['id'];
+                    if (api_get_configuration_value('use_career_external_id_as_identifier_in_diagrams')) {
+                        $careerIdToShow = $careerModel->getCareerIdFromInternalToExternal($careerId);
+                    }
+
                     if (!in_array($careerId, $careersAdded)) {
                         $careersAdded[] = $careerId;
-                        $careerUrl = api_get_path(WEB_CODE_PATH).'user/career_diagram.php?iframe=1&career_id='.$career['id'].'&user_id='.$userId;
-                        $content .= '
+                        $careerUrl = api_get_path(WEB_CODE_PATH).'user/career_diagram.php?iframe=1&career_id='.$careerIdToShow.'&user_id='.$userId;
+                        $frames .= '
                             <iframe
                                 onload="resizeIframe(this)"
                                 style="width:100%;"
@@ -9733,6 +9731,20 @@ class SessionManager
                     }
                 }
             }
+        }
+
+        $content = '';
+        if (!empty($frames)) {
+            $content = Display::page_subheader(get_lang('OngoingTraining'));
+            $content .= '
+               <script>
+                resizeIframe = function(iFrame) {
+                    iFrame.height = iFrame.contentWindow.document.body.scrollHeight + 20;
+                }
+                </script>
+            ';
+            $content .= $frames;
+            $content .= Career::renderDiagramFooter();
         }
 
         return $content;

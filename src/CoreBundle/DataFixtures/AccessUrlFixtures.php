@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
-class AccessUrlSettings extends Fixture implements ContainerAwareInterface
+class AccessUrlFixtures extends Fixture implements ContainerAwareInterface
 {
     private ContainerInterface $container;
 

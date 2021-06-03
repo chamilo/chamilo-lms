@@ -12,7 +12,7 @@ class UserRepositoryTest extends KernelTestCase
     {
         self::bootKernel();
         $count = self::getContainer()->get(UserRepository::class)->count([]);
-        // Admin + anon
+        // Admin + anon (registered in the DataFixture\AccessUrlAdminFixtures.php)
         $this->assertEquals(2, $count);
     }
 }

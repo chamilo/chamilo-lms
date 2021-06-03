@@ -16,9 +16,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class AccessUrlAdminFixtures extends Fixture implements ContainerAwareInterface
 {
-    public const ADMIN_USER_REFERENCE = 'admin-user';
+    public const ADMIN_USER_REFERENCE = 'admin';
     public const ANON_USER_REFERENCE = 'anon';
-    public const ACCESS_URL_REFERENCE = 'access-url';
+    public const ACCESS_URL_REFERENCE = 'accessUrl';
 
     private ContainerInterface $container;
 

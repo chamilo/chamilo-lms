@@ -1,5 +1,7 @@
 <?php
 
+/* For licensing terms, see /license.txt */
+
 namespace Chamilo\Tests\CoreBundle\Repository\Node;
 
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
@@ -11,6 +13,7 @@ class AccessUrlRepositoryTest extends KernelTestCase
     {
         self::bootKernel();
         $count = self::getContainer()->get(AccessUrlRepository::class)->count([]);
+        // localhost default URL (Added in AccessUrlFixtures.php)
         $this->assertEquals(1, $count);
     }
 }

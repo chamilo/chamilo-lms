@@ -25,30 +25,10 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * Route("/login", name="login").
-     */
-    //public function login(AuthenticationUtils $authenticationUtils): Response
-    //{
-    //$error = $authenticationUtils->getLastAuthenticationError();
-    //$lastUsername = $authenticationUtils->getLastUsername();
-
-    /** @var User */
-    /*$user = $this->getUser();
-    $data = [];
-    if ($user) {
-        $userClone = clone $user;
-        $userClone->setPassword('');
-        $data = $this->serializer->serialize($userClone, JsonEncoder::FORMAT);
-    }
-
-    return new JsonResponse($data, Response::HTTP_OK, [], true);*/
-    //}
-
-    /**
      * @Route("/login_json", name="login_json")
      */
     public function loginJson(AuthenticationUtils $authenticationUtils): Response
-    {
+    {error_log('loginJson');
         //$error = $authenticationUtils->getLastAuthenticationError();
         //$lastUsername = $authenticationUtils->getLastUsername();
 

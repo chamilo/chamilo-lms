@@ -6485,13 +6485,13 @@ class DocumentManager
      * Calculates the total size of a directory by adding the sizes (that
      * are stored in the database) of all files & folders in this directory.
      *
-     * @param string $value             = document path or document id
-     * @param bool   $can_see_invisible
-     * @param bool   $by_id             = default true, if is getting size by document id or false if getting by path
+     * @param string $value         Document path or document id
+     * @param bool $canSeeInvisible
+     * @param bool $byId            Default true, if is getting size by document id or false if getting by path
      *
      * @return int Total size
      */
-    public static function getTotalFolderSize($value, $can_see_invisible = false, $by_id = true)
+    public static function getTotalFolderSize($value, $canSeeInvisible = false, $byId = true)
     {
         $table_itemproperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $table_document = Database::get_course_table(TABLE_DOCUMENT);
@@ -6510,9 +6510,9 @@ class DocumentManager
             return 0;
         }
 
-        $visibility_rule = ' props.visibility '.($can_see_invisible ? '<> 2' : '= 1');
+        $visibility_rule = ' props.visibility '.($canSeeInvisible ? '<> 2' : '= 1');
 
-        if ($by_id) {
+        if ($byId) {
             $id = (int) $value;
             $query = "SELECT path FROM $table_document WHERE id = $id";
             $result1 = Database::query($query);

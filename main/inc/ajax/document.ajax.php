@@ -24,8 +24,8 @@ switch ($action) {
         foreach ($requests as $request) {
             $fileSize = DocumentManager::getTotalFolderSize($request, $isAllowedToEdit);
             $data = [
-                "id" => $request,
-                "size" => format_file_size($fileSize),
+                'id' => $request,
+                'size' => format_file_size($fileSize),
             ];
             array_push($response, $data);
         }

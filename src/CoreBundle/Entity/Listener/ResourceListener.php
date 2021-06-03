@@ -29,6 +29,7 @@ use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\Security;
 
 class ResourceListener
@@ -81,8 +82,11 @@ class ResourceListener
         $request = $this->request;
 
         if ($resource instanceof ResourceWithAccessUrlInterface) {
-            $url = $this->getAccessUrl($em);
-            $resource->addUrl($url);
+            if (0 === $resource->getUrls()->count()) {
+                throw new Exception('This resource needs an AccessUrl use $resource->addUrl()');
+            }
+            //$url = $this->getAccessUrl($em);
+            //$resource->addUrl($url);
         }
 
         if ($resource->hasResourceNode()) {
@@ -101,7 +105,7 @@ class ResourceListener
         $creator = $this->security->getUser();
 
         if (null === $creator) {
-            throw new InvalidArgumentException('User creator not found');
+            throw new UserNotFoundException('User creator not found');
         }
 
         $resourceNode = new ResourceNode();

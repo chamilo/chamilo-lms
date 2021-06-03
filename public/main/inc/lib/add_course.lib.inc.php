@@ -749,6 +749,7 @@ class AddCourse
         }
 
         $em = Database::getManager();
+        $url = api_get_url_entity();
         if ($ok_to_register_course) {
             $repo = Container::getCourseRepository();
             $categoryRepo = Container::getCourseCategoryRepository();
@@ -768,6 +769,7 @@ class AddCourse
                 ->setSubscribe($subscribe)
                 ->setUnsubscribe($unsubscribe)
                 ->setVisualCode($visual_code)
+                ->addUrl($url)
             ;
 
             if (!empty($categories)) {

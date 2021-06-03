@@ -10,10 +10,10 @@ use Doctrine\Common\Collections\Collection;
 
 interface ResourceWithAccessUrlInterface
 {
-    public function addUrl(AccessUrl $url);
+    public function addAccessUrl(AccessUrl $url);
 
     /**
-     * @return Collection
+     * @return Collection|EntityAccessUrlInterface[]
      */
     public function getUrls();
 }

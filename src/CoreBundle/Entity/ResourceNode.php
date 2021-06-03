@@ -233,7 +233,7 @@ class ResourceNode
         return $this->creator;
     }
 
-    public function setCreator(User $creator = null): self
+    public function setCreator(User $creator): self
     {
         $this->creator = $creator;
 

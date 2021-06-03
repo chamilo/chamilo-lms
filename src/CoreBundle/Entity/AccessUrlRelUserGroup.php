@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="access_url_rel_usergroup")
  * @ORM\Entity
  */
-class AccessUrlRelUserGroup
+class AccessUrlRelUserGroup implements EntityAccessUrlInterface
 {
     /**
      * @ORM\Column(name="id", type="integer")

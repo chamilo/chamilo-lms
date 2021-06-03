@@ -692,7 +692,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected $uuid;
 
     // Property used only during installation.
-    protected bool $skipResourceNode;
+    protected bool $skipResourceNode = false;
 
     public function __construct()
     {

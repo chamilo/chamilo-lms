@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="usergroup")
  * @ORM\Entity
  */
-class Usergroup extends AbstractResource implements ResourceInterface, ResourceIllustrationInterface, ResourceToRootInterface
+class Usergroup extends AbstractResource implements ResourceInterface, ResourceIllustrationInterface, ResourceWithAccessUrlInterface
 {
     use TimestampableEntity;
 
@@ -135,6 +135,24 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this->urls;
     }
 
+    public function addAccessUrl(AccessUrl $url): self
+    {
+        $urlRelUsergroup = new AccessUrlRelUserGroup();
+        $urlRelUsergroup->setUserGroup($this);
+        $urlRelUsergroup->setUrl($url);
+        $this->addUrlRelUsergroup($urlRelUsergroup);
+
+        return $this;
+    }
+
+    public function addUrlRelUsergroup(AccessUrlRelUserGroup $urlRelUsergroup): self
+    {
+        $urlRelUsergroup->setUserGroup($this);
+        $this->urls[] = $urlRelUsergroup;
+
+        return $this;
+    }
+
     public function setUsers($users): void
     {
         $this->users = new ArrayCollection();
@@ -150,9 +168,6 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         $this->users[] = $user;
     }
 
-    /**
-     * Remove $user.
-     */
     public function removeUsers(UsergroupRelUser $user): void
     {
         foreach ($this->users as $key => $value) {
@@ -179,12 +194,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this;
     }
 
-    /**
-     * Get name.
-     *
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -196,12 +206,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this;
     }
 
-    /**
-     * Get description.
-     *
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -277,7 +282,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this->courses;
     }
 
-    public function setCourses(Collection $courses)
+    public function setCourses(Collection $courses): self
     {
         $this->courses = $courses;
 
@@ -292,7 +297,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this->sessions;
     }
 
-    public function setSessions(Collection $sessions)
+    public function setSessions(Collection $sessions): self
     {
         $this->sessions = $sessions;
 

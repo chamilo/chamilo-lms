@@ -51,7 +51,7 @@ class CourseRelUser
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @Groups({"course:read", "user:read"})
@@ -125,7 +125,7 @@ class CourseRelUser
         return $this->getCourse()->getCode();
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

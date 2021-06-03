@@ -9,6 +9,8 @@ namespace Chamilo\CoreBundle\Entity\Listener;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\EntityAccessUrl;
+use Chamilo\CoreBundle\Entity\EntityAccessUrlInterface;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
@@ -53,28 +55,9 @@ class ResourceListener
         $this->accessUrl = null;
     }
 
-    public function getAccessUrl($em)
-    {
-        if (null === $this->accessUrl) {
-            $request = $this->request->getCurrentRequest();
-            if (null === $request) {
-                throw new Exception('An Request is needed');
-            }
-            $sessionRequest = $request->getSession();
-            $id = $sessionRequest->get('access_url_id');
-            /** @var AccessUrl $url */
-            $url = $em->getRepository(AccessUrl::class)->find($id);
-
-            if ($url) {
-                $this->accessUrl = $url;
-
-                return $url;
-            }
-        }
-
-        return $this->accessUrl;
-    }
-
+    /**
+     * Only in creation.
+     */
     public function prePersist(AbstractResource $resource, LifecycleEventArgs $event)
     {
         error_log('Resource listener prePersist for obj: '.\get_class($resource));
@@ -83,29 +66,38 @@ class ResourceListener
 
         if ($resource instanceof ResourceWithAccessUrlInterface) {
             if (0 === $resource->getUrls()->count()) {
-                throw new Exception('This resource needs an AccessUrl use $resource->addUrl()');
+                throw new Exception('This resource needs an AccessUrl use $resource->addAccessUrl();');
             }
-            //$url = $this->getAccessUrl($em);
-            //$resource->addUrl($url);
         }
 
         if ($resource->hasResourceNode()) {
             // This will attach the resource to the main resource node root (For example a Course).
-            if ($resource instanceof ResourceToRootInterface) {
+            /*if ($resource instanceof ResourceToRootInterface) {
                 $url = $this->getAccessUrl($em);
                 $resource->getResourceNode()->setParent($url->getResourceNode());
             }
             error_log('resource has already a resource node. Do nothing');
             // Do not override resource node, it's already added.
-            return true;
+            return true;*/
         }
 
-        // Add resource node.
-        /** @var User|null $creator */
-        $creator = $this->security->getUser();
+        // Check if creator is set with $resource->setCreator()
+        $creator = $resource->getResourceNodeCreator();
+        if (null === $creator) {
+            /** @var User|null $creator */
+            $defaultCreator = $this->security->getUser();
+            if (null !== $defaultCreator) {
+                $creator = $defaultCreator;
+            }
+
+            // Check if user has a resource node.
+            if ($resource->hasResourceNode() && null !== $resource->getCreator()) {
+                $creator = $resource->getCreator();
+            }
+        }
 
         if (null === $creator) {
-            throw new UserNotFoundException('User creator not found');
+            throw new UserNotFoundException('User creator not found, use $resource->setCreator();');
         }
 
         $resourceNode = new ResourceNode();
@@ -135,9 +127,23 @@ class ResourceListener
         ;
 
         // Add resource directly to the resource node root (Example: for a course resource).
-        if ($resource instanceof ResourceToRootInterface) {
-            $url = $this->getAccessUrl($em);
-            $resourceNode->setParent($url->getResourceNode());
+        if ($resource instanceof ResourceWithAccessUrlInterface) {
+            $parentUrl = null;
+            if ($resource->getUrls()->count() > 0) {
+                $urlRelResource = $resource->getUrls()->first();
+                if (!$urlRelResource instanceof EntityAccessUrlInterface) {
+                    throw new InvalidArgumentException('$resource->getUrls() must return a list of objects that implements the EntityAccessUrl interface');
+                }
+                if (!$urlRelResource->getUrl()->hasResourceNode()) {
+                    throw new InvalidArgumentException('A child from $resource->getUrls() must implement EntityAccessUrl interface and return a valid AccessUrl with a ResourceNode');
+                }
+                $parentUrl = $urlRelResource->getUrl()->getResourceNode();
+            }
+
+            if (null === $parentUrl) {
+                throw new InvalidArgumentException(('The resource needs an AccessUrl: use $resource->addAccessUrl()'));
+            }
+            $resourceNode->setParent($parentUrl);
         }
 
         if ($resource->hasParentResourceNode()) {

@@ -89,6 +89,11 @@ abstract class AbstractResource
      */
     public array $resourceLinkEntityList = [];
 
+    /**
+     * @Assert\NotNull
+     */
+    public ?User $resourceNodeCreator = null;
+
     abstract public function getResourceName(): string;
 
     abstract public function setResourceName(string $name);
@@ -98,6 +103,18 @@ abstract class AbstractResource
     public function getCreator()
     {
         return $this->getResourceNode()->getCreator();
+    }
+
+    public function setCreator(User $user): self
+    {
+        $this->resourceNodeCreator = $user;
+
+        return $this;
+    }
+
+    public function getResourceNodeCreator()
+    {
+        return $this->resourceNodeCreator;
     }
 
     public function getResourceLinkEntityList()

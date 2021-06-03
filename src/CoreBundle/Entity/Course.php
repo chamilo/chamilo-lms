@@ -37,7 +37,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ApiFilter(PropertyFilter::class)
  * @ApiFilter(OrderFilter::class, properties={"id", "title"})
  *
- * @ORM\HasLifecycleCallbacks
  * @ORM\Table(
  *     name="course",
  *     indexes={
@@ -385,6 +384,10 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->addTeachersToSessionsCourses = false;
         $this->courseTypeId = null;
         $this->room = null;
+        $this->courseLanguage = 'en';
+        $this->visibility = COURSE_VISIBILITY_OPEN_PLATFORM;
+        $this->subscribe = true;
+        $this->unsubscribe = false;
         //$this->specificFieldValues = new ArrayCollection();
         //$this->sharedSurveys = new ArrayCollection();
     }
@@ -433,21 +436,21 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     {
         $this->urls = new ArrayCollection();
         foreach ($urls as $url) {
-            $this->addUrl($url);
+            $this->addAccessUrl($url);
         }
 
         return $this;
     }
 
-    public function addUrlRelCourse(AccessUrlRelCourse $url)
+    public function addUrlRelCourse(AccessUrlRelCourse $accessUrlRelCourse)
     {
-        $url->setCourse($this);
-        $this->urls[] = $url;
+        $accessUrlRelCourse->setCourse($this);
+        $this->urls->add($accessUrlRelCourse);
 
         return $this;
     }
 
-    public function addUrl(AccessUrl $url)
+    public function addAccessUrl(AccessUrl $url)
     {
         $urlRelCourse = new AccessUrlRelCourse();
         $urlRelCourse->setCourse($this);
@@ -503,7 +506,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $courseRelUser->setCourse($this);
 
         if (!$this->hasSubscription($courseRelUser)) {
-            $this->users[] = $courseRelUser;
+            $this->users->add($courseRelUser);
         }
 
         return $this;

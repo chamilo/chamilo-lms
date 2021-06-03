@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="access_url_rel_course")
  * @ORM\Entity
  */
-class AccessUrlRelCourse
+class AccessUrlRelCourse implements EntityAccessUrlInterface
 {
     use CourseTrait;
 
@@ -38,10 +38,7 @@ class AccessUrlRelCourse
      */
     protected AccessUrl $url;
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return '-';
     }

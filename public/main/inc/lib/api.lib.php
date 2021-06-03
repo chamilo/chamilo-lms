@@ -1939,10 +1939,7 @@ function api_get_user_entity(int $userId = 0): ?User
     $userId = $userId ?: api_get_user_id();
     $repo = UserManager::getRepository();
 
-    /** @var User $user */
-    $user = $repo->find($userId);
-
-    return $user;
+    return $repo->find($userId);
 }
 
 function api_get_current_user(): ?User

@@ -45,7 +45,7 @@ class CourseListener
      */
     public function prePersist(Course $course, LifecycleEventArgs $args): void
     {
-        error_log('Course listener prePersist');
+        //error_log('Course listener prePersist');
         if ($course) {
             // $this->checkLimit($repo, $course, $url);
             //$this->toolChain->addToolsInCourse($this->toolRepository, $course);

@@ -56,12 +56,10 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use SocialManager;
-use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
@@ -76,16 +74,16 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         parent::__construct($registry, User::class);
     }
 
-    public function setHasher(UserPasswordHasherInterface $hasher): void
-    {
-        $this->hasher = $hasher;
-    }
-
     public function loadUserByIdentifier(string $identifier): ?User
     {
         return $this->findOneBy([
             'username' => $identifier,
         ]);
+    }
+
+    public function setHasher(UserPasswordHasherInterface $hasher): void
+    {
+        $this->hasher = $hasher;
     }
 
     public function updateUser(User $user, bool $andFlush = true): void
@@ -127,12 +125,12 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         }
     }
 
-    public function upgradePassword(UserInterface $user, string $newEncodedPassword): void
+    public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
         // this code is only an example; the exact code will depend on
         // your own application needs
         /** @var User $user */
-        $user->setPassword($newEncodedPassword);
+        $user->setPassword($newHashedPassword);
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
@@ -155,7 +153,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         $rootUser = $qb->getQuery()->getSingleResult();
 
         if (null === $rootUser) {
-            throw new UsernameNotFoundException('Root user not found');
+            throw new UserNotFoundException('Root user not found');
         }
 
         return $rootUser;
@@ -214,7 +212,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         ]);
 
         if (null === $user) {
-            throw new UsernameNotFoundException(sprintf("User with id '%s' not found.", $username));
+            throw new UserNotFoundException(sprintf("User with id '%s' not found.", $username));
         }
 
         return $user;

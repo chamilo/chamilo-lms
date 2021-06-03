@@ -748,8 +748,6 @@ class AddCourse
             return 0;
         }
 
-        $em = Database::getManager();
-        $url = api_get_url_entity();
         if ($ok_to_register_course) {
             $repo = Container::getCourseRepository();
             $categoryRepo = Container::getCourseCategoryRepository();
@@ -769,8 +767,8 @@ class AddCourse
                 ->setSubscribe($subscribe)
                 ->setUnsubscribe($unsubscribe)
                 ->setVisualCode($visual_code)
-                ->addUrl($url)
-            ;
+                ->setCreator(api_get_user_entity())
+                ->addAccessUrl(api_get_url_entity());
 
             if (!empty($categories)) {
                 if (!is_array($categories)) {
@@ -787,62 +785,57 @@ class AddCourse
                 }
             }
 
+            $sort = api_max_sort_value('0', api_get_user_id());
+            // Default true
+            $addTeacher = isset($params['add_user_as_teacher']) ? $params['add_user_as_teacher'] : true;
+            if ($addTeacher) {
+                $iCourseSort = CourseManager::userCourseSort($userId, $code);
+                $courseRelTutor = (new CourseRelUser())
+                    ->setCourse($course)
+                    ->setUser($user)
+                    ->setStatus(1)
+                    ->setTutor(true)
+                    ->setSort($iCourseSort)
+                    ->setRelationType(0)
+                    ->setUserCourseCat(0)
+                ;
+                $course->addUsers($courseRelTutor);
+            }
+
+            if (!empty($teachers)) {
+                $sort = $user->getMaxSortValue();
+                if (!is_array($teachers)) {
+                    $teachers = [$teachers];
+                }
+                foreach ($teachers as $key) {
+                    // Just in case.
+                    if ($key == $userId) {
+                        continue;
+                    }
+                    if (empty($key)) {
+                        continue;
+                    }
+                    $teacher = api_get_user_entity($key);
+                    if (is_null($teacher)) {
+                        continue;
+                    }
+                    $courseRelTeacher = (new CourseRelUser())
+                        ->setCourse($course)
+                        ->setUser($teacher)
+                        ->setStatus(1)
+                        ->setTutor(false)
+                        ->setSort($sort + 1)
+                        ->setRelationType(0)
+                        ->setUserCourseCat(0)
+                    ;
+                    $course->addUsers($courseRelTeacher);
+                }
+            }
+
             $repo->create($course);
 
             $course_id = $course->getId();
             if ($course_id) {
-                $sort = api_max_sort_value('0', api_get_user_id());
-                // Default true
-                $addTeacher = isset($params['add_user_as_teacher']) ? $params['add_user_as_teacher'] : true;
-                if ($addTeacher) {
-                    $iCourseSort = CourseManager::userCourseSort($userId, $code);
-                    $courseRelTutor = (new CourseRelUser())
-                        ->setCourse($course)
-                        ->setUser($user)
-                        ->setStatus(true)
-                        ->setTutor(true)
-                        ->setSort($iCourseSort)
-                        ->setRelationType(0)
-                        ->setUserCourseCat(0)
-                    ;
-                    $em->persist($courseRelTutor);
-                }
-
-                if (!empty($teachers)) {
-                    $sort = $user->getMaxSortValue();
-                    if (!is_array($teachers)) {
-                        $teachers = [$teachers];
-                    }
-                    foreach ($teachers as $key) {
-                        // Just in case.
-                        if ($key == $userId) {
-                            continue;
-                        }
-                        if (empty($key)) {
-                            continue;
-                        }
-                        $teacher = api_get_user_entity($key);
-                        if (is_null($teacher)) {
-                            continue;
-                        }
-                        $courseRelTeacher = (new CourseRelUser())
-                            ->setCourse($course)
-                            ->setUser($teacher)
-                            ->setStatus(true)
-                            ->setTutor(false)
-                            ->setSort($sort + 1)
-                            ->setRelationType(0)
-                            ->setUserCourseCat(0)
-                        ;
-                        $em->persist($courseRelTeacher);
-                    }
-                }
-
-                $em->flush();
-
-                // Adding the course to an URL.
-                //UrlManager::add_course_to_url($course_id, $accessUrlId);
-
                 // Add event to the system log.
                 Event::addEvent(
                     LOG_COURSE_CREATE,

@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="access_url_rel_course_category")
  * @ORM\Entity
  */
-class AccessUrlRelCourseCategory
+class AccessUrlRelCourseCategory implements EntityAccessUrlInterface
 {
     /**
      * @ORM\Column(name="id", type="integer")

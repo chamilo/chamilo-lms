@@ -6043,7 +6043,7 @@ EOT;
         return Database::store_result($result, 'ASSOC');
     }
 
-    public static function getExerciseResultsCount($type, $courseId, \Exercise $exercise, $sessionId = 0)
+    public static function getExerciseResultsCount($type, $courseId, Exercise $exercise, $sessionId = 0)
     {
         $courseId = (int) $courseId;
         $exerciseId = (int) $exercise->iId;

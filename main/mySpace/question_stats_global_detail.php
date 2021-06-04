@@ -81,9 +81,8 @@ $form->addButtonSearch(get_lang('Search'));
 
 $tableContent = '';
 
-function getCourseSessionRow($courseId, \Exercise $exercise, $sessionId, $title)
+function getCourseSessionRow($courseId, Exercise $exercise, $sessionId, $title)
 {
-    $exerciseId = $exercise->iId;
     $correctCount = ExerciseLib::getExerciseResultsCount('correct', $courseId, $exercise, $sessionId);
     $wrongCount = ExerciseLib::getExerciseResultsCount('wrong', $courseId, $exercise, $sessionId);
     $correctCountStudent = ExerciseLib::getExerciseResultsCount(
@@ -126,8 +125,11 @@ if ($form->validate()) {
             $courseTitle = $courseOptions[$courseId];
 
             foreach ($courseExerciseList as $exerciseId) {
-                $exercise = new Exercise($courseId);
-                $exerciseObj = $exercise->read($exerciseId, false);
+                $exerciseObj = new Exercise($courseId);
+                $result = $exerciseObj->read($exerciseId, false);
+                if (false === $result) {
+                    continue;
+                }
 
                 $exerciseTitle = $exerciseList[$exerciseId];
                 $tableContent .= Display::page_subheader2($courseTitle.' - '.$exerciseTitle);

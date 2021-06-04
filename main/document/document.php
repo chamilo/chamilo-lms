@@ -215,6 +215,81 @@ $currentUrl = api_get_self().'?'.api_get_cidreq().'&id='.$document_id;
 $curdirpath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
 
 switch ($action) {
+    case 'replace':
+        if (($isAllowedToEdit ||
+                $groupMemberWithUploadRights ||
+                DocumentManager::isBasicCourseFolder($curdirpath, $sessionId) ||
+                DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) ||
+                DocumentManager::is_my_shared_folder(api_get_user_id(), $moveTo, $sessionId)) &&
+            isset($_POST['currentFile'])
+        ) {
+            $fileTarget = $_POST['currentFile'];
+            if (isset($_FILES) && isset($_FILES['file_'.$fileTarget])) {
+                $fileId = (int) $_POST['id_'.$fileTarget];
+                if (!$isAllowedToEdit) {
+                    if (api_is_coach()) {
+                        if (!DocumentManager::is_visible_by_id(
+                            $fileId,
+                            $courseInfo,
+                            $sessionId,
+                            api_get_user_id()
+                        )
+                        ) {
+                            api_not_allowed();
+                        }
+                    }
+
+                    if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), '', $fileId, true)) {
+                        api_not_allowed();
+                    }
+                }
+
+                $documentInfo = DocumentManager::get_document_data_by_id(
+                    $fileId,
+                    $courseInfo['code'],
+                    false,
+                    $sessionId
+                );
+                GroupManager::allowUploadEditDocument(
+                    $userId,
+                    $courseId,
+                    $group_properties,
+                    $documentInfo,
+                    true
+                );
+                // Check whether the document is in the database.
+                if (!empty($documentInfo)) {
+                    $file = $_FILES['file_'.$fileTarget];
+                    if ($documentInfo['filetype'] == 'file') {
+                        $updateDocument = DocumentManager::writeContentIntoDocument(
+                            $courseInfo,
+                            null,
+                            $base_work_dir,
+                            $sessionId,
+                            $fileId,
+                            $groupIid,
+                            $file
+                        );
+                        if ($updateDocument) {
+                            Display::addFlash(
+                                Display::return_message(
+                                    get_lang('OverwritenFile').': '.$documentInfo['title'],
+                                    'success'
+                                )
+                            );
+                        } else {
+                            Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
+                        }
+                    }
+                } else {
+                    Display::addFlash(Display::return_message(get_lang('FileNotFound'), 'warning'));
+                }
+
+                header("Location: $currentUrl");
+                exit;
+            }
+        }
+        break;
     case 'delete_item':
         if ($isAllowedToEdit ||
             $groupMemberWithUploadRights ||

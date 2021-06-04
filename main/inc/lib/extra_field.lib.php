@@ -10,33 +10,33 @@ use Chamilo\CoreBundle\Entity\Tag;
  */
 class ExtraField extends Model
 {
-    const FIELD_TYPE_TEXT = 1;
-    const FIELD_TYPE_TEXTAREA = 2;
-    const FIELD_TYPE_RADIO = 3;
-    const FIELD_TYPE_SELECT = 4;
-    const FIELD_TYPE_SELECT_MULTIPLE = 5;
-    const FIELD_TYPE_DATE = 6;
-    const FIELD_TYPE_DATETIME = 7;
-    const FIELD_TYPE_DOUBLE_SELECT = 8;
-    const FIELD_TYPE_DIVIDER = 9;
-    const FIELD_TYPE_TAG = 10;
-    const FIELD_TYPE_TIMEZONE = 11;
-    const FIELD_TYPE_SOCIAL_PROFILE = 12;
-    const FIELD_TYPE_CHECKBOX = 13;
-    const FIELD_TYPE_MOBILE_PHONE_NUMBER = 14;
-    const FIELD_TYPE_INTEGER = 15;
-    const FIELD_TYPE_FILE_IMAGE = 16;
-    const FIELD_TYPE_FLOAT = 17;
-    const FIELD_TYPE_FILE = 18;
-    const FIELD_TYPE_VIDEO_URL = 19;
-    const FIELD_TYPE_LETTERS_ONLY = 20;
-    const FIELD_TYPE_ALPHANUMERIC = 21;
-    const FIELD_TYPE_LETTERS_SPACE = 22;
-    const FIELD_TYPE_ALPHANUMERIC_SPACE = 23;
-    const FIELD_TYPE_GEOLOCALIZATION = 24;
-    const FIELD_TYPE_GEOLOCALIZATION_COORDINATES = 25;
-    const FIELD_TYPE_SELECT_WITH_TEXT_FIELD = 26;
-    const FIELD_TYPE_TRIPLE_SELECT = 27;
+    public const FIELD_TYPE_TEXT = 1;
+    public const FIELD_TYPE_TEXTAREA = 2;
+    public const FIELD_TYPE_RADIO = 3;
+    public const FIELD_TYPE_SELECT = 4;
+    public const FIELD_TYPE_SELECT_MULTIPLE = 5;
+    public const FIELD_TYPE_DATE = 6;
+    public const FIELD_TYPE_DATETIME = 7;
+    public const FIELD_TYPE_DOUBLE_SELECT = 8;
+    public const FIELD_TYPE_DIVIDER = 9;
+    public const FIELD_TYPE_TAG = 10;
+    public const FIELD_TYPE_TIMEZONE = 11;
+    public const FIELD_TYPE_SOCIAL_PROFILE = 12;
+    public const FIELD_TYPE_CHECKBOX = 13;
+    public const FIELD_TYPE_MOBILE_PHONE_NUMBER = 14;
+    public const FIELD_TYPE_INTEGER = 15;
+    public const FIELD_TYPE_FILE_IMAGE = 16;
+    public const FIELD_TYPE_FLOAT = 17;
+    public const FIELD_TYPE_FILE = 18;
+    public const FIELD_TYPE_VIDEO_URL = 19;
+    public const FIELD_TYPE_LETTERS_ONLY = 20;
+    public const FIELD_TYPE_ALPHANUMERIC = 21;
+    public const FIELD_TYPE_LETTERS_SPACE = 22;
+    public const FIELD_TYPE_ALPHANUMERIC_SPACE = 23;
+    public const FIELD_TYPE_GEOLOCALIZATION = 24;
+    public const FIELD_TYPE_GEOLOCALIZATION_COORDINATES = 25;
+    public const FIELD_TYPE_SELECT_WITH_TEXT_FIELD = 26;
+    public const FIELD_TYPE_TRIPLE_SELECT = 27;
     public $columns = [
         'id',
         'field_type',
@@ -1038,7 +1038,7 @@ class ExtraField extends Model
                             $extra_data['extra_'.$field['variable']]['extra_'.$field['variable']] = $field_value;
                             break;
                         case self::FIELD_TYPE_TRIPLE_SELECT:
-                            list($level1, $level2, $level3) = explode(';', $field_value);
+                            [$level1, $level2, $level3] = explode(';', $field_value);
 
                             $extra_data["extra_$variable"]["extra_$variable"] = $level1;
                             $extra_data["extra_$variable"]["extra_{$variable}_second"] = $level2;
@@ -1104,51 +1104,6 @@ class ExtraField extends Model
         }
 
         return null;
-    }
-
-
-
-    /**
-     * @param array $options
-     *
-     * @return array
-     */
-    public static function extra_field_double_select_convert_array_to_ordered_array($options)
-    {
-        $options_parsed = [];
-        if (!empty($options)) {
-            foreach ($options as $option) {
-                if ($option['option_value'] == 0) {
-                    $options_parsed[$option['id']][] = $option;
-                } else {
-                    $options_parsed[$option['option_value']][] = $option;
-                }
-            }
-        }
-
-        return $options_parsed;
-    }
-
-    /**
-     * @param array $options
-     *
-     * @return array
-     */
-    public static function tripleSelectConvertArrayToOrderedArray(array $options)
-    {
-        $level1 = self::getOptionsFromTripleSelect($options, 0);
-        $level2 = [];
-        $level3 = [];
-
-        foreach ($level1 as $item1) {
-            $level2 += self::getOptionsFromTripleSelect($options, $item1['id']);
-        }
-
-        foreach ($level2 as $item2) {
-            $level3 += self::getOptionsFromTripleSelect($options, $item2['id']);
-        }
-
-        return ['level1' => $level1, 'level2' => $level2, 'level3' => $level3];
     }
 
 
@@ -1459,7 +1414,6 @@ class ExtraField extends Model
                                 'checkbox',
                                 'extra_'.$field_details['variable'],
                                 null,
-                                //$field_details['display_text'].'<br />',
                                 get_lang('Yes'),
                                 $checkboxAttributes
                             );
@@ -2298,15 +2252,58 @@ class ExtraField extends Model
     }
 
     /**
+     * @param array $options
+     *
+     * @return array
+     */
+    public static function extra_field_double_select_convert_array_to_ordered_array($options)
+    {
+        $optionsParsed = [];
+        if (!empty($options)) {
+            foreach ($options as $option) {
+                if (0 == $option['option_value']) {
+                    $optionsParsed[$option['id']][] = $option;
+                } else {
+                    $optionsParsed[$option['option_value']][] = $option;
+                }
+            }
+        }
+
+        return $optionsParsed;
+    }
+
+    /**
+     * @return array
+     */
+    public static function tripleSelectConvertArrayToOrderedArray(array $options)
+    {
+        $level1 = self::getOptionsFromTripleSelect($options, 0);
+        $level2 = [];
+        $level3 = [];
+
+        foreach ($level1 as $item1) {
+            $level2 += self::getOptionsFromTripleSelect($options, $item1['id']);
+        }
+
+        foreach ($level2 as $item2) {
+            $level3 += self::getOptionsFromTripleSelect($options, $item2['id']);
+        }
+
+        return ['level1' => $level1, 'level2' => $level2, 'level3' => $level3];
+    }
+
+
+
+    /**
      * @param $breadcrumb
      * @param $action
      */
     public function setupBreadcrumb(&$breadcrumb, $action)
     {
-        if ($action == 'add') {
+        if ('add' === $action) {
             $breadcrumb[] = ['url' => $this->pageUrl, 'name' => $this->pageName];
             $breadcrumb[] = ['url' => '#', 'name' => get_lang('Add')];
-        } elseif ($action == 'edit') {
+        } elseif ('edit' === $action) {
             $breadcrumb[] = ['url' => $this->pageUrl, 'name' => $this->pageName];
             $breadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
         } else {
@@ -2747,6 +2744,180 @@ JAVASCRIPT;
         return $rules;
     }
 
+    public function processExtraFieldSearch($values, $form, $alias, $condition = 'OR')
+    {
+        // Parse params.
+        $fields = [];
+        foreach ($values as $key => $value) {
+            if (substr($key, 0, 6) !== 'extra_' &&
+                substr($key, 0, 7) !== '_extra_'
+            ) {
+                continue;
+            }
+            if (!empty($value)) {
+                $fields[$key] = $value;
+            }
+        }
+
+        $extraFieldsAll = $this->get_all(['visible_to_self = ? AND filter = ?' => [1, 1]], 'option_order');
+        $extraFieldsType = array_column($extraFieldsAll, 'field_type', 'variable');
+        $extraFields = array_column($extraFieldsAll, 'variable');
+        $filter = new stdClass();
+        $defaults = [];
+        foreach ($fields as $variable => $col) {
+            $variableNoExtra = str_replace('extra_', '', $variable);
+            if (isset($values[$variable]) && !empty($values[$variable]) &&
+                in_array($variableNoExtra, $extraFields)
+            ) {
+                $rule = new stdClass();
+                $rule->field = $variable;
+                $rule->op = 'in';
+                $data = $col;
+                if (is_array($data) && array_key_exists($variable, $data)) {
+                    $data = $col;
+                }
+                $rule->data = $data;
+                $filter->rules[] = $rule;
+                $filter->groupOp = 'AND';
+
+                if ($extraFieldsType[$variableNoExtra] == ExtraField::FIELD_TYPE_TAG) {
+                    $tagElement = $form->getElement($variable);
+                    $tags = [];
+                    foreach ($values[$variable] as $tag) {
+                        $tag = Security::remove_XSS($tag);
+                        $tags[] = $tag;
+                        $tagElement->addOption(
+                            $tag,
+                            $tag
+                        );
+                    }
+                    $defaults[$variable] = $tags;
+                } else {
+                    if (is_array($data)) {
+                        $defaults[$variable] = array_map(['Security', 'remove_XSS'], $data);
+                    } else {
+                        $defaults[$variable] = Security::remove_XSS($data);
+                    }
+                }
+            }
+        }
+
+        $result = $this->getExtraFieldRules($filter, 'extra_', $condition);
+        $conditionArray = $result['condition_array'];
+
+        $whereCondition = '';
+        $extraCondition = '';
+        if (!empty($conditionArray)) {
+            $extraCondition = ' ( ';
+            $extraCondition .= implode(' AND ', $conditionArray);
+            $extraCondition .= ' ) ';
+        }
+        $whereCondition .= $extraCondition;
+        $conditions = $this->parseConditions(
+            [
+                'where' => $whereCondition,
+                'extra' => $result['extra_fields'],
+            ],
+            $alias
+        );
+
+        return ['condition' => $conditions, 'fields' => $fields, 'defaults' => $defaults];
+    }
+
+    /**
+     * @param $filters
+     * @param string $stringToSearch
+     *
+     * @return array
+     */
+    public function getExtraFieldRules($filters, $stringToSearch = 'extra_')
+    {
+        $extra_fields = [];
+
+        // Getting double select if exists
+        $double_select = [];
+        foreach ($filters->rules as $rule) {
+            if (empty($rule)) {
+                continue;
+            }
+                if (false === strpos($rule->field, '_second')) {
+            } else {
+                $my_field = str_replace('_second', '', $rule->field);
+                $double_select[$my_field] = $rule->data;
+            }
+        }
+
+        $condition_array = [];
+        foreach ($filters->rules as $rule) {
+            if (empty($rule)) {
+                continue;
+            }
+            if (strpos($rule->field, $stringToSearch) === false) {
+                // normal fields
+                $field = $rule->field;
+                if (isset($rule->data) && is_string($rule->data) && $rule->data != -1) {
+                    $condition_array[] = $this->get_where_clause($field, $rule->op, $rule->data);
+                }
+            } else {
+                // Extra fields
+                $ruleField = Database::escapeField($rule->field);
+                if (strpos($rule->field, '_second') === false) {
+                    //No _second
+                    $original_field = str_replace($stringToSearch, '', $rule->field);
+                    $field_option = $this->get_handler_field_info_by_field_variable($original_field);
+
+                    if ($field_option['field_type'] == self::FIELD_TYPE_DOUBLE_SELECT) {
+                        if (isset($double_select[$rule->field])) {
+                            $data = explode('#', $rule->data);
+                            $rule->data = $data[1].'::'.$double_select[$rule->field];
+                        } else {
+                            // only was sent 1 select
+                            if (is_string($rule->data)) {
+                                $data = explode('#', $rule->data);
+                                $rule->data = $data[1];
+                            }
+                        }
+
+                        if (!isset($rule->data)) {
+                            $condition_array[] = ' ('
+                                .$this->get_where_clause($rule->field, $rule->op, $rule->data)
+                                .') ';
+                            $extra_fields[] = ['field' => $ruleField 'id' => $field_option['id']];
+                        }
+                    } else {
+                        if (isset($rule->data)) {
+                            if (isset($rule->data) && is_int($rule->data) && $rule->data == -1) {
+                                continue;
+                            }
+                            $condition_array[] = ' ('
+                                .$this->get_where_clause($rule->field, $rule->op, $rule->data)
+                                .') ';
+                            $extra_fields[] = [
+                                'field' => $ruleField,
+                                'id' => $field_option['id'],
+                                'data' => $rule->data,
+                            ];
+                        }
+                    }
+                } else {
+                    $my_field = str_replace('_second', '', $rule->field);
+                    $original_field = str_replace($stringToSearch, '', $my_field);
+                    $field_option = $this->get_handler_field_info_by_field_variable($original_field);
+                    $extra_fields[] = [
+                        'field' => $ruleField,
+                        'id' => $field_option['id'],
+                    ];
+                }
+            }
+        }
+
+        return [
+            'extra_fields' => $extra_fields,
+            'condition_array' => $condition_array,
+        ];
+    }
+
+
     /**
      * @param array $options
      *
@@ -2946,98 +3117,7 @@ JAVASCRIPT;
         return " $col {$this->ops[$oper]} '$val' ";
     }
 
-    /**
-     * @param $filters
-     * @param string $stringToSearch
-     *
-     * @return array
-     */
-    public function getExtraFieldRules($filters, $stringToSearch = 'extra_')
-    {
-        $extra_fields = [];
-
-        // Getting double select if exists
-        $double_select = [];
-        foreach ($filters->rules as $rule) {
-            if (empty($rule)) {
-                continue;
-            }
-            if (strpos($rule->field, '_second') === false) {
-            } else {
-                $my_field = str_replace('_second', '', $rule->field);
-                $double_select[$my_field] = $rule->data;
-            }
-        }
-
-        $condition_array = [];
-        foreach ($filters->rules as $rule) {
-            if (empty($rule)) {
-                continue;
-            }
-            if (strpos($rule->field, $stringToSearch) === false) {
-                // normal fields
-                $field = $rule->field;
-                if (isset($rule->data) && is_string($rule->data) && $rule->data != -1) {
-                    $condition_array[] = $this->get_where_clause($field, $rule->op, $rule->data);
-                }
-            } else {
-                // Extra fields
-                if (strpos($rule->field, '_second') === false) {
-                    //No _second
-                    $original_field = str_replace($stringToSearch, '', $rule->field);
-                    $field_option = $this->get_handler_field_info_by_field_variable($original_field);
-
-                    if ($field_option['field_type'] == self::FIELD_TYPE_DOUBLE_SELECT) {
-                        if (isset($double_select[$rule->field])) {
-                            $data = explode('#', $rule->data);
-                            $rule->data = $data[1].'::'.$double_select[$rule->field];
-                        } else {
-                            // only was sent 1 select
-                            if (is_string($rule->data)) {
-                                $data = explode('#', $rule->data);
-                                $rule->data = $data[1];
-                            }
-                        }
-
-                        if (!isset($rule->data)) {
-                            $condition_array[] = ' ('
-                                .$this->get_where_clause($rule->field, $rule->op, $rule->data)
-                                .') ';
-                            $extra_fields[] = ['field' => $rule->field, 'id' => $field_option['id']];
-                        }
-                    } else {
-                        if (isset($rule->data)) {
-                            if (isset($rule->data) && is_int($rule->data) && $rule->data == -1) {
-                                continue;
-                            }
-                            $condition_array[] = ' ('
-                                .$this->get_where_clause($rule->field, $rule->op, $rule->data)
-                                .') ';
-                            $extra_fields[] = [
-                                'field' => $rule->field,
-                                'id' => $field_option['id'],
-                                'data' => $rule->data,
-                            ];
-                        }
-                    }
-                } else {
-                    $my_field = str_replace('_second', '', $rule->field);
-                    $original_field = str_replace($stringToSearch, '', $my_field);
-                    $field_option = $this->get_handler_field_info_by_field_variable($original_field);
-                    $extra_fields[] = [
-                        'field' => $rule->field,
-                        'id' => $field_option['id'],
-                    ];
-                }
-            }
-        }
-
-        return [
-            'extra_fields' => $extra_fields,
-            'condition_array' => $condition_array,
-        ];
-    }
-
+    
     /**
      * Get the extra fields and their formatted values.
      *
@@ -3363,57 +3443,6 @@ JAVASCRIPT;
 
             $slct->addOption(implode('', $valueParts), $value, ['data-value' => $dataValue]);
         }
-
-        /* Enable this when field_loggeable is introduced as a table field (2.0)
-        if ($optionsExists && $field_details['field_loggeable'] && !empty($defaultValueId)) {
-
-            $form->addElement(
-                'textarea',
-                'extra_' . $field_details['variable'] . '_comment',
-                $field_details['display_text'] . ' ' . get_lang('Comment')
-            );
-
-            $extraFieldValue = new ExtraFieldValue($this->type);
-            $repo = $app['orm.em']->getRepository($extraFieldValue->entityName);
-            $repoLog = $app['orm.em']->getRepository('Gedmo\Loggable\Entity\LogEntry');
-            $newEntity = $repo->findOneBy(
-                array(
-                    $this->handlerEntityId => $itemId,
-                    'fieldId' => $field_details['id']
-                )
-            );
-            // @todo move this in a function inside the class
-            if ($newEntity) {
-                $logs = $repoLog->getLogEntries($newEntity);
-                if (!empty($logs)) {
-                    $html = '<b>' . get_lang('LatestChanges') . '</b><br /><br />';
-
-                    $table = new HTML_Table(array('class' => 'data_table'));
-                    $table->setHeaderContents(0, 0, get_lang('Value'));
-                    $table->setHeaderContents(0, 1, get_lang('Comment'));
-                    $table->setHeaderContents(0, 2, get_lang('ModifyDate'));
-                    $table->setHeaderContents(0, 3, get_lang('Username'));
-                    $row = 1;
-                    foreach ($logs as $log) {
-                        $column = 0;
-                        $data = $log->getData();
-                        $fieldValue = isset($data['fieldValue']) ? $data['fieldValue'] : null;
-                        $comment = isset($data['comment']) ? $data['comment'] : null;
-
-                        $table->setCellContents($row, $column, $fieldValue);
-                        $column++;
-                        $table->setCellContents($row, $column, $comment);
-                        $column++;
-                        $table->setCellContents($row, $column, api_get_local_time($log->getLoggedAt()->format('Y-m-d H:i:s')));
-                        $column++;
-                        $table->setCellContents($row, $column, $log->getUsername());
-                        $row++;
-                    }
-                    $form->addElement('label', null, $html.$table->toHtml());
-                }
-            }
-        }
-        */
 
         if ($freezeElement) {
             $form->freeze('extra_'.$fieldDetails['variable']);

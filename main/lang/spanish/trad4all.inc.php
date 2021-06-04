@@ -8809,4 +8809,9 @@ $QuizDhrRemindBody = "Hola %s,<br /><br />Como padre, estan recibiendo este corr
 $QuizRemindDuration = "Duration del ejercicio: %s <br />";
 $QuizRemindStartDate = "Fecha de inicio del ejercicio: %s <br />";
 $QuizRemindEndDate = "Fecha de fin del ejercicio: %s <br />";
+$SuccessfulAttempt = "Intento exitoso";
+$FailedAttempt = "Intento fallido";
+$StudentWithSuccessfulAttempt = "Estudiantes con intento exitoso";
+$StudentWithFailedAttempt = "Estudiantes con ejercicio fallido";
+$ExerciseAttemptStatsReport = "Reporte de intentos de ejercicio";
 ?>

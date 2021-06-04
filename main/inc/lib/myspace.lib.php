@@ -69,7 +69,7 @@ class MySpace
             ],
             [
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/question_stats_global_detail.php',
-                'content' => get_lang('QuestionStatsDetailedReport'),
+                'content' => get_lang('ExerciseAttemptStatsReport'),
             ],
         ];
 

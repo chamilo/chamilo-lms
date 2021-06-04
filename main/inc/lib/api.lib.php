@@ -4980,7 +4980,7 @@ function languageCodeToCountryIsoCodeForFlags($languageIsoCode)
             $country = 'dk';
             break;
         case 'el':
-            $country = 'ae';
+            $country = 'gr';
             break;
         case 'en':
             $country = 'gb';

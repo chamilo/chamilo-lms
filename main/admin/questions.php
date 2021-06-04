@@ -7,9 +7,6 @@ use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use Knp\Component\Pager\Paginator;
 
-/**
- *  @package chamilo.admin
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 

@@ -51,9 +51,9 @@ function checkIdentificationData()
     $result = Database::query($sql);
     if (Database::affected_rows($result) > 0) {
         return true;
-    } else {
-        return false;
     }
+
+    return false;
 }
 
 function getActionId($courseId)
@@ -163,7 +163,6 @@ function getInfoSpecialtyTutorial($tutorialId)
     $tutorialId = (int) $tutorialId;
     $sql = "SELECT * FROM $tableSepeParticipantsSpecialtyTutorials WHERE id = $tutorialId";
     $res = Database::query($sql);
-    $aux = [];
     if (Database::num_rows($res) > 0) {
         $row = Database::fetch_assoc($res);
     } else {
@@ -266,7 +265,6 @@ function getInfoSpecialtyTutor($tutorId)
             INNER JOIN $tableSepeTutors b ON a.tutor_id=b.id 
             WHERE a.id = $tutorId;";
     $res = Database::query($sql);
-    $aux = [];
     if (Database::num_rows($res) > 0) {
         $row['tutor_accreditation'] = Security::remove_XSS(stripslashes($row['tutor_accreditation']));
         $row['teaching_competence'] = Security::remove_XSS(stripslashes($row['teaching_competence']));
@@ -489,7 +487,10 @@ function listCourseAction()
     global $tableSepeActions;
     global $tableSepeCourseActions;
 
-    $sql = "SELECT $tableSepeCourseActions.*, course.title AS title, $tableSepeActions.action_origin AS action_origin, $tableSepeActions.action_code AS action_code 
+    $sql = "SELECT
+            $tableSepeCourseActions.*, course.title AS title,
+            $tableSepeActions.action_origin AS action_origin,
+            $tableSepeActions.action_code AS action_code
             FROM $tableSepeCourseActions, course, $tableSepeActions 
             WHERE $tableSepeCourseActions.course_id=course.id 
             AND $tableSepeActions.id=$tableSepeCourseActions.action_id";
@@ -558,7 +559,8 @@ function checkInsertNewLog($platformUserId, $actionId)
     global $tableSepeLogParticipant;
     $platformUserId = (int) $platformUserId;
     $actionId = (int) $actionId;
-    $sql = "SELECT * FROM $tableSepeLogParticipant WHERE platform_user_id = $platformUserId AND action_id = $actionId";
+    $sql = "SELECT * FROM $tableSepeLogParticipant
+            WHERE platform_user_id = $platformUserId AND action_id = $actionId";
     $res = Database::query($sql);
     if (Database::num_rows($res) > 0) {
         return false;

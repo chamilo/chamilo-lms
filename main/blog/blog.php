@@ -3,8 +3,6 @@
 /**
  * BLOG HOMEPAGE
  * This file takes care of all blog navigation and displaying.
- *
- * @package chamilo.blogs
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -31,9 +29,6 @@ $MonthsLong = api_get_months_long();
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
-/*
-    PROCESSING
-*/
 
 $safe_post_file_comment = isset($_POST['post_file_comment']) ? Security::remove_XSS($_POST['post_file_comment']) : null;
 $safe_comment_text = isset($_POST['comment_text']) ? Security::remove_XSS($_POST['comment_text']) : null;

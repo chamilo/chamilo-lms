@@ -18,9 +18,6 @@ $ns = api_get_path(WEB_PLUGIN_PATH)."sepe/ws/ProveedorCentroTFWS.wsdl";
 $wsdl = api_get_path(SYS_PLUGIN_PATH)."sepe/ws/ProveedorCentroTFWS.wsdl";
 $serviceUrl = api_get_path(WEB_PLUGIN_PATH).'sepe/ws/service.php';
 
-/**
- * Class CustomServer.
- */
 class CustomServer extends Zend\Soap\Server
 {
     /**

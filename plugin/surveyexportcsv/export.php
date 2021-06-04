@@ -136,6 +136,7 @@ function getQuestionOptions($user, $courseId, $surveyId, $questionId)
                     AND sqo.iid = sa.optionId
             WHERE sa.user = :user AND sa.cId = :course AND sa.surveyId = :survey AND sa.questionId = :question'
         )
+        ->setMaxResults(1)
         ->setParameters(
             [
                 'user' => $user,

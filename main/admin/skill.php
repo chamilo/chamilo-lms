@@ -5,8 +5,6 @@ use Chamilo\CoreBundle\Entity\Skill;
 
 /**
  * This script manages the skills, levels and profiles assignments.
- *
- * @package chamilo.skill
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

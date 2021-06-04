@@ -12,8 +12,6 @@
  * @author Roan EMbrechts, code cleaning
  *
  * @since Dokeos 1.6
- *
- * @package chamilo.admin
  */
 
 // we are in the admin area so we do not need a course id

@@ -88,7 +88,6 @@ class QuestionOptionsEvaluationPlugin extends Plugin
 
     /**
      * @param int      $formula
-     * @param Exercise $exercise
      */
     public function saveFormulaForExercise($formula, Exercise $exercise)
     {
@@ -199,7 +198,6 @@ class QuestionOptionsEvaluationPlugin extends Plugin
 
     /**
      * @param int      $formula
-     * @param Exercise $exercise
      */
     private function recalculateQuestionScore($formula, Exercise $exercise)
     {
@@ -234,7 +232,6 @@ class QuestionOptionsEvaluationPlugin extends Plugin
                     $questionPonderation += $ponderation;
                 }
 
-                //error_log("question: $questionId -- i: $i -- w: $ponderation");
                 Database::query("UPDATE $tblAnswer SET ponderation = $ponderation WHERE iid = $iid");
             }
 

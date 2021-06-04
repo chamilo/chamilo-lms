@@ -444,8 +444,10 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     ];
     $tool_name = get_lang('CourseList');
     if (isset($_GET['delete_course'])) {
-        CourseManager::delete_course($_GET['delete_course']);
-        Display::addFlash(Display::return_message(get_lang('Deleted')));
+        $result = CourseManager::delete_course($_GET['delete_course']);
+        if ($result) {
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
+        }
     }
     // Create a search-box
     $form = new FormValidator(

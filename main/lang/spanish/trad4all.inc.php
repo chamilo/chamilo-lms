@@ -8812,6 +8812,6 @@ $QuizRemindEndDate = "Fecha de fin del ejercicio: %s <br />";
 $SuccessfulAttempt = "Intento exitoso";
 $FailedAttempt = "Intento fallido";
 $StudentWithSuccessfulAttempt = "Estudiantes con intento exitoso";
-$StudentWithFailedAttempt = "Estudiantes con ejercicio fallido";
+$StudentWithFailedAttempt = "Estudiantes con intento fallido";
 $ExerciseAttemptStatsReport = "Reporte de intentos de ejercicio";
 ?>

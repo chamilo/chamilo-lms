@@ -69,7 +69,7 @@ class SequenceMethod
     /**
      * @return SequenceMethod
      */
-    public function setDescription(string $description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -87,7 +87,7 @@ class SequenceMethod
     /**
      * @return SequenceMethod
      */
-    public function setFormula(string $formula)
+    public function setFormula(string $formula): self
     {
         $this->formula = $formula;
 
@@ -105,7 +105,7 @@ class SequenceMethod
     /**
      * @return SequenceMethod
      */
-    public function setAssign(string $assign)
+    public function setAssign(string $assign): self
     {
         $this->assign = $assign;
 
@@ -123,7 +123,7 @@ class SequenceMethod
     /**
      * @return SequenceMethod
      */
-    public function setMetType(string $metType)
+    public function setMetType(string $metType): self
     {
         $this->metType = $metType;
 
@@ -141,7 +141,7 @@ class SequenceMethod
     /**
      * @return SequenceMethod
      */
-    public function setActFalse(string $actFalse)
+    public function setActFalse(string $actFalse): self
     {
         $this->actFalse = $actFalse;
 

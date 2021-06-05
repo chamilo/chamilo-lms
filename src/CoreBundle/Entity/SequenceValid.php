@@ -9,8 +9,6 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class SequenceRule.
- *
  * @ORM\Table(name="sequence_valid")
  * @ORM\Entity
  */
@@ -53,7 +51,7 @@ class SequenceValid
     /**
      * @return SequenceValid
      */
-    public function setVariable(?SequenceVariable $variable)
+    public function setVariable(?SequenceVariable $variable): self
     {
         $this->variable = $variable;
 
@@ -68,7 +66,7 @@ class SequenceValid
     /**
      * @return SequenceValid
      */
-    public function setCondition(?SequenceCondition $condition)
+    public function setCondition(?SequenceCondition $condition): self
     {
         $this->condition = $condition;
 

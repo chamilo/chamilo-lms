@@ -61,7 +61,7 @@ class SequenceVariable
     /**
      * @return SequenceVariable
      */
-    public function setName(string $name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -79,7 +79,7 @@ class SequenceVariable
     /**
      * @return SequenceVariable
      */
-    public function setDefaultValue(string $defaultValue)
+    public function setDefaultValue(string $defaultValue): self
     {
         $this->defaultValue = $defaultValue;
 
@@ -97,7 +97,7 @@ class SequenceVariable
     /**
      * @return SequenceVariable
      */
-    public function setDescription(string $description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 

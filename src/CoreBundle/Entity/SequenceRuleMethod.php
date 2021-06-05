@@ -58,9 +58,11 @@ class SequenceRuleMethod
         return $this->methodOrder;
     }
 
-    public function setMethodOrder(string $methodOrder): void
+    public function setMethodOrder(string $methodOrder): self
     {
         $this->methodOrder = $methodOrder;
+
+        return $this;
     }
 
     public function getRule()
@@ -68,9 +70,11 @@ class SequenceRuleMethod
         return $this->rule;
     }
 
-    public function setRule(SequenceRule $rule): void
+    public function setRule(SequenceRule $rule): self
     {
         $this->rule = $rule;
+
+        return $this;
     }
 
     public function getMethod()
@@ -78,8 +82,10 @@ class SequenceRuleMethod
         return $this->method;
     }
 
-    public function setMethod(SequenceMethod $method): void
+    public function setMethod(SequenceMethod $method): self
     {
         $this->method = $method;
+
+        return $this;
     }
 }

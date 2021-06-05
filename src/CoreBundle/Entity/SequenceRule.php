@@ -49,7 +49,7 @@ class SequenceRule
     /**
      * @return SequenceRule
      */
-    public function setDescription(string $description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 

@@ -50,10 +50,7 @@ class SequenceFormula
         return $this->method;
     }
 
-    /**
-     * @return SequenceFormula
-     */
-    public function setMethod(?SequenceMethod $method)
+    public function setMethod(?SequenceMethod $method): self
     {
         $this->method = $method;
 
@@ -65,10 +62,7 @@ class SequenceFormula
         return $this->variable;
     }
 
-    /**
-     * @return SequenceFormula
-     */
-    public function setVariable(?SequenceVariable $variable)
+    public function setVariable(?SequenceVariable $variable): self
     {
         $this->variable = $variable;
 

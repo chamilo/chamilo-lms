@@ -59,7 +59,7 @@ class SequenceTypeEntity
     /**
      * @return SequenceTypeEntity
      */
-    public function setName(string $name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -77,7 +77,7 @@ class SequenceTypeEntity
     /**
      * @return SequenceTypeEntity
      */
-    public function setDescription(string $description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -95,7 +95,7 @@ class SequenceTypeEntity
     /**
      * @return SequenceTypeEntity
      */
-    public function setEntityTable(string $entityTable)
+    public function setEntityTable(string $entityTable): self
     {
         $this->entityTable = $entityTable;
 

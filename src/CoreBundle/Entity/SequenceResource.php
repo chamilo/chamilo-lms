@@ -65,7 +65,7 @@ class SequenceResource
      *
      * @return SequenceResource
      */
-    public function setType(int $type)
+    public function setType(int $type): self
     {
         $this->type = $type;
 
@@ -101,7 +101,7 @@ class SequenceResource
     /**
      * @return $this
      */
-    public function setResourceId(int $resourceId)
+    public function setResourceId(int $resourceId): self
     {
         $this->resourceId = $resourceId;
 
@@ -119,7 +119,7 @@ class SequenceResource
     /**
      * @return $this
      */
-    public function setSequence(Sequence $sequence)
+    public function setSequence(Sequence $sequence): self
     {
         $this->sequence = $sequence;
 

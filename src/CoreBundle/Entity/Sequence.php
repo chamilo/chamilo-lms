@@ -61,7 +61,7 @@ class Sequence
     /**
      * @return Sequence
      */
-    public function setName(string $name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -79,7 +79,7 @@ class Sequence
     /**
      * @return Sequence
      */
-    public function setGraph(string $graph)
+    public function setGraph(string $graph): self
     {
         $this->graph = $graph;
 

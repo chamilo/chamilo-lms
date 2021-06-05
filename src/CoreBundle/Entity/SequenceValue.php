@@ -97,7 +97,7 @@ class SequenceValue
     /**
      * @return SequenceValue
      */
-    public function setEntity(?SequenceRowEntity $entity)
+    public function setEntity(?SequenceRowEntity $entity): self
     {
         $this->entity = $entity;
 
@@ -133,7 +133,7 @@ class SequenceValue
     /**
      * @return SequenceValue
      */
-    public function setCompleteItems(int $completeItems)
+    public function setCompleteItems(int $completeItems): self
     {
         $this->completeItems = $completeItems;
 
@@ -151,7 +151,7 @@ class SequenceValue
     /**
      * @return SequenceValue
      */
-    public function setTotalItems(int $totalItems)
+    public function setTotalItems(int $totalItems): self
     {
         $this->totalItems = $totalItems;
 
@@ -169,7 +169,7 @@ class SequenceValue
     /**
      * @return SequenceValue
      */
-    public function setSuccess(int $success)
+    public function setSuccess(int $success): self
     {
         $this->success = $success;
 
@@ -187,7 +187,7 @@ class SequenceValue
     /**
      * @return SequenceValue
      */
-    public function setSuccessDate(DateTime $successDate)
+    public function setSuccessDate(DateTime $successDate): self
     {
         $this->successDate = $successDate;
 
@@ -205,7 +205,7 @@ class SequenceValue
     /**
      * @return SequenceValue
      */
-    public function setAvailable(int $available)
+    public function setAvailable(int $available): self
     {
         $this->available = $available;
 
@@ -223,7 +223,7 @@ class SequenceValue
     /**
      * @return SequenceValue
      */
-    public function setAvailableStartDate(DateTime $availableStartDate)
+    public function setAvailableStartDate(DateTime $availableStartDate): self
     {
         $this->availableStartDate = $availableStartDate;
 
@@ -241,7 +241,7 @@ class SequenceValue
     /**
      * @return SequenceValue
      */
-    public function setAvailableEndDate(DateTime $availableEndDate)
+    public function setAvailableEndDate(DateTime $availableEndDate): self
     {
         $this->availableEndDate = $availableEndDate;
 

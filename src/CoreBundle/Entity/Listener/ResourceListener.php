@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\Entity\Listener;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\EntityAccessUrl;
 use Chamilo\CoreBundle\Entity\EntityAccessUrlInterface;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
@@ -58,7 +57,7 @@ class ResourceListener
     /**
      * Only in creation.
      */
-    public function prePersist(AbstractResource $resource, LifecycleEventArgs $event)
+    public function prePersist(AbstractResource $resource, LifecycleEventArgs $event): void
     {
         error_log('Resource listener prePersist for obj: '.\get_class($resource));
         $em = $event->getEntityManager();
@@ -83,6 +82,7 @@ class ResourceListener
 
         // Check if creator is set with $resource->setCreator()
         $creator = $resource->getResourceNodeCreator();
+
         if (null === $creator) {
             /** @var User|null $creator */
             $defaultCreator = $this->security->getUser();
@@ -226,7 +226,7 @@ class ResourceListener
         }
 
         // Use by Chamilo.
-        $this->setLinks($resourceNode, $resource, $em);
+        $this->setLinks($resource, $em);
 
         if (null !== $resource->getParent()) {
             $resourceNode->setParent($resource->getParent()->getResourceNode());
@@ -247,7 +247,7 @@ class ResourceListener
     public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $event): void
     {
         error_log('Resource listener preUpdate');
-        $this->setLinks($resource->getResourceNode(), $resource, $event->getEntityManager());
+        $this->setLinks($resource, $event->getEntityManager());
 
         if ($resource->hasUploadFile()) {
             $uploadedFile = $resource->getUploadFile();
@@ -290,7 +290,7 @@ class ResourceListener
         $resource->getResourceNode()->setTitle($resourceName);
     }
 
-    public function setLinks(ResourceNode $resourceNode, AbstractResource $resource, $em): void
+    public function setLinks(AbstractResource $resource, $em): void
     {
         error_log('Resource listener setLinks');
         $links = $resource->getResourceLinkEntityList();

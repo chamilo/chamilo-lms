@@ -388,7 +388,7 @@ class LanguageFixtures extends Fixture
                 ->setOriginalName($data['original_name'])
                 ->setEnglishName($data['english_name'])
                 ->setIsocode($data['isocode'])
-                ->setAvailable(1 === (int) $data['available'])
+                ->setAvailable(1 === $data['available'])
             ;
             $manager->persist($lang);
         }

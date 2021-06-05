@@ -767,8 +767,9 @@ class AddCourse
                 ->setSubscribe($subscribe)
                 ->setUnsubscribe($unsubscribe)
                 ->setVisualCode($visual_code)
+                ->addAccessUrl(api_get_url_entity())
                 ->setCreator(api_get_user_entity())
-                ->addAccessUrl(api_get_url_entity());
+            ;
 
             if (!empty($categories)) {
                 if (!is_array($categories)) {

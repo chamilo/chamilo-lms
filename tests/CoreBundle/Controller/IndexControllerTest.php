@@ -24,11 +24,11 @@ class IndexControllerTest extends WebTestCase
         /** @var UserRepository $userRepository */
         $userRepository = $this->getContainer()->get(UserRepository::class);
 
-        // retrieve the test user
-        $testUser = $userRepository->findByUsername('admin');
+        // retrieve the admin
+        $admin = $userRepository->findByUsername('admin');
 
         // simulate $testUser being logged in
-        $client->loginUser($testUser);
+        $client->loginUser($admin);
 
         $client->request('GET', '/account/edit');
 

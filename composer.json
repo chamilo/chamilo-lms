@@ -32,6 +32,11 @@
             "public/main/survey"
         ]
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Chamilo\\Tests\\": "tests/"
+        }
+    },
     "require": {
         "php": "^7.4 || ^8.0",
         "ext-bcmath": "*",
@@ -151,10 +156,12 @@
     "require-dev": {
         "behat/behat": "@stable",
         "behat/mink": "dev-master",
-        "behat/mink-selenium2-driver": "@stable",
         "behat/mink-goutte-driver": "dev-master",
+        "behat/mink-selenium2-driver": "@stable",
         "dama/doctrine-test-bundle": "^6.5",
         "friends-of-behat/mink-extension": "dev-master",
+        "hautelook/alice-bundle": "^2.9",
+        "justinrainbow/json-schema": "^5.2",
         "phpstan/phpstan": "^0.12",
         "phpstan/phpstan-doctrine": "^0.12",
         "phpstan/phpstan-symfony": "^0.12",
@@ -171,7 +178,7 @@
         "symfony/test-pack": "*",
         "symfony/var-dumper": "^5.2",
         "symfony/web-profiler-bundle": "^5.3",
-        "symplify/easy-coding-standard": "^9.0",
+        "symplify/easy-coding-standard": "9.3.15",
         "vimeo/psalm": "^4.0",
         "weirdan/doctrine-psalm-plugin": "^1.0"
     },

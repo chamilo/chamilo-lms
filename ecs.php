@@ -87,6 +87,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         Option::PATHS,
         [
             __DIR__.'/src',
+            __DIR__.'/tests/CoreBundle',
+            __DIR__.'/tests/CourseBundle',
             //__DIR__.'/public/main/admin',
         ]
     );

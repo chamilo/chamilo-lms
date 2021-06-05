@@ -47,7 +47,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener", "Chamilo\CoreBundle\Entity\Listener\CourseListener"})
  */
-class Course extends AbstractResource implements ResourceInterface, ResourceWithAccessUrlInterface, ResourceToRootInterface, ResourceIllustrationInterface
+class Course extends AbstractResource implements ResourceInterface, ResourceWithAccessUrlInterface, ResourceIllustrationInterface
 {
     public const CLOSED = 0;
     public const REGISTERED = 1;
@@ -419,7 +419,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public function addTool(CTool $tool)
     {
         $tool->setCourse($this);
-        $this->tools[] = $tool;
+        $this->tools->add($tool);
 
         return $this;
     }
@@ -450,7 +450,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this;
     }
 
-    public function addAccessUrl(AccessUrl $url)
+    public function addAccessUrl(AccessUrl $url): self
     {
         $urlRelCourse = new AccessUrlRelCourse();
         $urlRelCourse->setCourse($this);

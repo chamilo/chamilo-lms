@@ -48,7 +48,7 @@ class CourseListener
         //error_log('Course listener prePersist');
         if ($course) {
             // $this->checkLimit($repo, $course, $url);
-            //$this->toolChain->addToolsInCourse($this->toolRepository, $course);
+            $this->toolChain->addToolsInCourse($course);
         }
     }
 
@@ -64,7 +64,6 @@ class CourseListener
             //$repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
             ///$this->checkLimit($repo, $course, $url);
             //$this->toolChain->addToolsInCourse($course);
-            $this->toolChain->addToolsInCourse($course);
         }
     }
 

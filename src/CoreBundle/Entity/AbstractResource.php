@@ -77,21 +77,18 @@ abstract class AbstractResource
 
     /**
      * Use when sending a request to Api platform.
-     * Temporal array that saves the resource link list that will be filled by CreateResourceNodeFileAction.php.
+     * Temporal array that saves the resource link list that will be filled by CreateDocumentFileAction.php.
      */
     public array $resourceLinkList = [];
 
     /**
      * Use when sending request to Chamilo.
-     * Temporal array of objects locates the resource link list that will be filled by CreateResourceNodeFileAction.php.
+     * Temporal array of objects locates the resource link list that will be filled by CreateDocumentFileAction.php.
      *
      * @var ResourceLink[]
      */
     public array $resourceLinkEntityList = [];
 
-    /**
-     * @Assert\NotNull
-     */
     public ?User $resourceNodeCreator = null;
 
     abstract public function getResourceName(): string;
@@ -112,7 +109,7 @@ abstract class AbstractResource
         return $this;
     }
 
-    public function getResourceNodeCreator()
+    public function getResourceNodeCreator(): ?User
     {
         return $this->resourceNodeCreator;
     }

@@ -29,6 +29,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class AccessUrl extends AbstractResource implements ResourceInterface
 {
+    public const DEFAULT_ACCESS_URL = 'http://localhost/';
+
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id

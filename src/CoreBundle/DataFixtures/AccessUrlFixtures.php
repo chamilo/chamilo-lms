@@ -45,7 +45,7 @@ class AccessUrlFixtures extends Fixture implements ContainerAwareInterface
         $client->loginUser($admin);*/
 
         $accessUrl = (new AccessUrl())
-            ->setUrl('http://localhost/')
+            ->setUrl(AccessUrl::DEFAULT_ACCESS_URL)
             ->setDescription('')
             ->setActive(1)
             ->setCreatedBy(1)

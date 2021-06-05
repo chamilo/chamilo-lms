@@ -2300,10 +2300,10 @@ function installSchemas($container, $upgrade = false)
     if (null === $accessUrl) {
         $em = Database::getManager();
 
-        // Creating AccessUrl
+        // Creating AccessUrl.
         $accessUrl = new AccessUrl();
         $accessUrl
-            ->setUrl('http://localhost/')
+            ->setUrl(AccessUrl::DEFAULT_ACCESS_URL)
             ->setDescription('')
             ->setActive(1)
             ->setCreatedBy(1)

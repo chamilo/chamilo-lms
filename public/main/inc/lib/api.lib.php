@@ -5155,7 +5155,7 @@ function api_get_access_url($id, $returnDefault = true)
         // information on another URL instead of the one asked as parameter
         if (1 === $currentUrl) {
             $rootWeb = api_get_path(WEB_PATH);
-            $default = 'http://localhost/';
+            $default = AccessUrl::DEFAULT_ACCESS_URL;
             if ($result['url'] === $default && $rootWeb != $default) {
                 $result['url'] = $rootWeb;
             }

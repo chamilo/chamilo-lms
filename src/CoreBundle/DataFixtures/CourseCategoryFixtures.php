@@ -29,7 +29,7 @@ class CourseCategoryFixtures extends Fixture
             ],
         ];
 
-        $url = $this->getReference(AccessUrlAdminFixtures::ACCESS_URL_REFERENCE);
+        $url = $this->getReference(AccessUserFixtures::ACCESS_URL_REFERENCE);
 
         foreach ($list as $key => $data) {
             $courseCategory = (new CourseCategory())

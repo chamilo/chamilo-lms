@@ -14,12 +14,11 @@ use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class AccessUrlAdminFixtures extends Fixture implements ContainerAwareInterface
+class AccessUserFixtures extends Fixture implements ContainerAwareInterface
 {
     public const ADMIN_USER_REFERENCE = 'admin';
     public const ANON_USER_REFERENCE = 'anon';
     public const ACCESS_URL_REFERENCE = 'accessUrl';
-
     private ContainerInterface $container;
 
     public function setContainer(ContainerInterface $container = null): void
@@ -30,11 +29,12 @@ class AccessUrlAdminFixtures extends Fixture implements ContainerAwareInterface
     public function load(ObjectManager $manager): void
     {
         $timezone = 'Europe\Paris';
-
         $container = $this->container;
-
         $toolChain = $container->get(ToolChain::class);
         $toolChain->createTools();
+
+        // Defined in AccessGroupFixtures.php.
+        $group = $this->getReference('GROUP_ADMIN');
 
         $admin = (new User())
             ->setSkipResourceNode(true)
@@ -50,6 +50,7 @@ class AccessUrlAdminFixtures extends Fixture implements ContainerAwareInterface
             ->setTimezone($timezone)
             ->addUserAsAdmin()
             ->addRole('ROLE_GLOBAL_ADMIN')
+            ->addGroup($group)
         ;
 
         $manager->persist($admin);

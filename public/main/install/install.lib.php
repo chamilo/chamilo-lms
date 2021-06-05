@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\TicketPriority;
 use Chamilo\CoreBundle\Entity\TicketProject;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\GroupRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\ToolChain;
@@ -2210,73 +2211,6 @@ function updateEnvFile($distFile, $envFile, $params)
     error_log("File env saved here: $envFile");
 }
 
-/**
- * @param EntityManager $manager
- */
-function installGroups($manager)
-{
-    error_log('installGroups');
-    // Creating fos_group (groups and roles)
-    $groups = [
-        [
-            'code' => 'ADMIN',
-            'title' => 'Administrators',
-            'roles' => ['ROLE_ADMIN'],
-        ],
-        [
-            'code' => 'STUDENT',
-            'title' => 'Students',
-            'roles' => ['ROLE_STUDENT'],
-        ],
-        [
-            'code' => 'TEACHER',
-            'title' => 'Teachers',
-            'roles' => ['ROLE_TEACHER'],
-        ],
-        [
-            'code' => 'RRHH',
-            'title' => 'Human resources manager',
-            'roles' => ['ROLE_RRHH'],
-        ],
-        [
-            'code' => 'SESSION_MANAGER',
-            'title' => 'Session',
-            'roles' => ['ROLE_SESSION_MANAGER'],
-        ],
-        [
-            'code' => 'QUESTION_MANAGER',
-            'title' => 'Question manager',
-            'roles' => ['ROLE_QUESTION_MANAGER'],
-        ],
-        [
-            'code' => 'STUDENT_BOSS',
-            'title' => 'Student boss',
-            'roles' => ['ROLE_STUDENT_BOSS'],
-        ],
-        [
-            'code' => 'INVITEE',
-            'title' => 'Invitee',
-            'roles' => ['ROLE_INVITEE'],
-        ],
-    ];
-    $repo = $manager->getRepository('ChamiloCoreBundle:Group');
-    foreach ($groups as $groupData) {
-        $criteria = ['code' => $groupData['code']];
-        $groupExists = $repo->findOneBy($criteria);
-        if (!$groupExists) {
-            $group = new Group($groupData['title']);
-            $group
-                ->setCode($groupData['code']);
-
-            foreach ($groupData['roles'] as $role) {
-                $group->addRole($role);
-            }
-            $manager->persist($group);
-        }
-    }
-    $manager->flush();
-}
-
 function installTools($container, $manager, $upgrade = false)
 {
     error_log('installTools');
@@ -2333,7 +2267,11 @@ function upgradeWithContainer($container)
     Container::setLegacyServices($container, false);
     error_log('setLegacyServices');
     $manager = Database::getManager();
-    installGroups($manager);
+
+    /** @var GroupRepository $repo */
+    $repo = $container->get(GroupRepository::class);
+    $repo->createDefaultGroups();
+
     // @todo check if adminId = 1
     installTools($container, $manager, true);
     installSchemas($container, true);
@@ -2379,114 +2317,20 @@ function finishInstallationWithContainer(
     $installationProfile = ''
 ) {
     error_log('finishInstallationWithContainer');
-    $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYMFONY_SYS_PATH);
     Container::setContainer($container);
     Container::setLegacyServices($container, false);
     error_log('setLegacyServices');
 
-    $manager = Database::getManager();
-    $trans = $container->get('translator');
-
-    // Add tickets defaults
-    $ticketProject = new TicketProject();
-    $ticketProject
-        ->setName('Ticket System')
-        ->setInsertUserId(1);
-
-    $manager->persist($ticketProject);
-
-    $categories = [
-        $trans->trans('Enrollment') => $trans->trans('Tickets about enrollment'),
-        $trans->trans('General information') => $trans->trans('Tickets about general information'),
-        $trans->trans('Requests and paperwork') => $trans->trans('Tickets about requests and paperwork'),
-        $trans->trans('Academic Incidents') => $trans->trans('Tickets about academic incidents, like exams, practices, tasks, etc.'),
-        $trans->trans('Virtual campus') => $trans->trans('Tickets about virtual campus'),
-        $trans->trans('Online evaluation') => $trans->trans('Tickets about online evaluation'),
-    ];
-
-    $i = 1;
-    foreach ($categories as $category => $description) {
-        // Online evaluation requires a course
-        $ticketCategory = new TicketCategory();
-        $ticketCategory
-            ->setName($category)
-            ->setDescription($description)
-            ->setProject($ticketProject)
-            ->setInsertUserId(1);
-
-        $isRequired = 6 == $i;
-        $ticketCategory->setCourseRequired($isRequired);
-
-        $manager->persist($ticketCategory);
-        $i++;
-    }
-
-    // Default Priorities
-    $defaultPriorities = [
-        TicketManager::PRIORITY_NORMAL => $trans->trans('Normal'),
-        TicketManager::PRIORITY_HIGH => $trans->trans('High'),
-        TicketManager::PRIORITY_LOW => $trans->trans('Low'),
-    ];
-
-    $i = 1;
-    foreach ($defaultPriorities as $code => $priority) {
-        $ticketPriority = new TicketPriority();
-        $ticketPriority
-            ->setName($priority)
-            ->setCode($code)
-            ->setInsertUserId(1);
-
-        $manager->persist($ticketPriority);
-        $i++;
-    }
-    error_log('Save ticket data');
-    $manager->flush();
-
-    $table = Database::get_main_table(TABLE_TICKET_STATUS);
-
-    // Default status
-    $defaultStatus = [
-        TicketManager::STATUS_NEW => $trans->trans('New'),
-        TicketManager::STATUS_PENDING => $trans->trans('Pending'),
-        TicketManager::STATUS_UNCONFIRMED => $trans->trans('Unconfirmed'),
-        TicketManager::STATUS_CLOSE => $trans->trans('Close'),
-        TicketManager::STATUS_FORWARDED => $trans->trans('Forwarded'),
-    ];
-
-    $i = 1;
-    foreach ($defaultStatus as $code => $status) {
-        $attributes = [
-            'id' => $i,
-            'code' => $code,
-            'name' => $status,
-        ];
-        Database::insert($table, $attributes);
-        $i++;
-    }
-
-    installGroups($manager);
-
-    error_log('Inserting data.sql');
-    // Inserting default data
-    $data = file_get_contents($sysPath.'public/main/install/data.sql');
-    $result = $manager->getConnection()->prepare($data);
-    $executeResult = $result->executeQuery();
-
-    if ($executeResult) {
-        error_log('data.sql Ok');
-    }
-    $result->free();
-
-    UserManager::setPasswordEncryption($encryptPassForm);
+    //UserManager::setPasswordEncryption($encryptPassForm);
     $timezone = api_get_timezone();
 
     error_log('user creation - admin');
 
-    $now = new DateTime();
-    // Creating admin user.
-    $admin = new User();
+    $repo = Container::getUserRepository();
+    /** @var User $admin */
+    $admin = $repo->findOneBy(['username' => 'admin']);
+
     $admin
-        ->setSkipResourceNode(true)
         ->setLastname($adminFirstName)
         ->setFirstname($adminLastName)
         ->setUsername($loginForm)
@@ -2494,84 +2338,16 @@ function finishInstallationWithContainer(
         ->setPlainPassword($passForm)
         ->setEmail($emailForm)
         ->setOfficialCode('ADMIN')
-        ->setCreatorId(1)
         ->setAuthSource(PLATFORM_AUTH_SOURCE)
         ->setPhone($adminPhoneForm)
         ->setLocale($languageForm)
-        ->setRegistrationDate($now)
-        ->setActive(1)
-        ->setEnabled(1)
         ->setTimezone($timezone)
     ;
+
+    $repo->updateUser($admin);
 
     $repo = Container::getUserRepository();
     $repo->updateUser($admin);
-    UserManager::addUserAsAdmin($admin);
-
-    $adminId = $admin->getId();
-
-    error_log('user creation - anon');
-
-    $anon = new User();
-    $anon
-        ->setSkipResourceNode(true)
-        ->setLastname('Joe')
-        ->setFirstname('Anonymous')
-        ->setUsername('anon')
-        ->setStatus(ANONYMOUS)
-        ->setPlainPassword('anon')
-        ->setEmail('anonymous@localhost')
-        ->setOfficialCode('anonymous')
-        ->setCreatorId(1)
-        ->setAuthSource(PLATFORM_AUTH_SOURCE)
-        ->setLocale($languageForm)
-        ->setRegistrationDate($now)
-        ->setActive(1)
-        ->setEnabled(1)
-        ->setTimezone($timezone)
-    ;
-
-    $repo->updateUser($anon);
-
-    $anonId = $anon->getId();
-
-    $userRepo = $container->get(UserRepository::class);
-    $urlRepo = $container->get(AccessUrlRepository::class);
-
-    installTools($container, $manager, false);
-
-    /** @var User $admin */
-    $admin = $userRepo->find($adminId);
-    $admin->addRole('ROLE_GLOBAL_ADMIN');
-    $manager->persist($admin);
-
-    // Login as admin
-    $token = new UsernamePasswordToken(
-        $admin,
-        $admin->getPassword(),
-        'public',
-        $admin->getRoles()
-    );
-    $container->get('security.token_storage')->setToken($token);
-
-    $userRepo->addUserToResourceNode($adminId, $adminId);
-    $userRepo->addUserToResourceNode($anonId, $adminId);
-
-    $manager->persist($anon);
-
-    $manager->flush();
-
-    installSchemas($container);
-    $accessUrl = $urlRepo->find(1);
-
-    UrlManager::add_user_to_url($adminId, $adminId);
-    UrlManager::add_user_to_url($anonId, $adminId);
-
-    $branch = new BranchSync();
-    $branch->setBranchName('localhost');
-    $branch->setUrl($accessUrl);
-    $manager->persist($branch);
-    $manager->flush();
 
     // Set default language
     Database::update(
@@ -2593,7 +2369,6 @@ function finishInstallationWithContainer(
         $allowSelfRegProf,
         $installationProfile
     );
-
     lockSettings();
     updateDirAndFilesPermissions();
 }

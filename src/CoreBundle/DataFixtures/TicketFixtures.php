@@ -10,21 +10,24 @@ use Chamilo\CoreBundle\Entity\TicketCategory;
 use Chamilo\CoreBundle\Entity\TicketPriority;
 use Chamilo\CoreBundle\Entity\TicketProject;
 use Chamilo\CoreBundle\Entity\TicketStatus;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use TicketManager;
 
-/**
- * @internal
- * @coversNothing
- */
-class TicketFixtures extends KernelTestCase
+class TicketFixtures extends Fixture implements ContainerAwareInterface
 {
+    private ContainerInterface $container;
+
+    public function setContainer(ContainerInterface $container = null): void
+    {
+        $this->container = $container;
+    }
+
     public function load(ObjectManager $manager): void
     {
-        self::bootKernel();
-
-        $container = $this->getContainer();
+        $container = $this->container;
         $trans = $container->get('translator');
 
         $adminId = 1;

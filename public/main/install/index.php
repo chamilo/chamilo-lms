@@ -367,7 +367,7 @@ if (isset($_POST['step2'])) {
     $form .= ob_get_contents();
     ob_end_clean();
 } elseif (isset($_POST['step4'])) {
-    //STEP 5 : CONFIGURATION SETTINGS
+    // STEP 5 : CONFIGURATION SETTINGS
     if ('update' === $installType) {
         $db_name = $dbNameForm;
         $database = connectToDatabase(
@@ -637,6 +637,7 @@ if (isset($_POST['step2'])) {
         Container::setLegacyServices($container, false);
 
         $manager = $container->get('doctrine')->getManager();
+
         migrateSwitch($my_old_version, $manager);
         upgradeWithContainer($container);
         error_log('Set upgradeWithContainer');
@@ -703,7 +704,12 @@ if (isset($_POST['step2'])) {
         $result = $command->run($input, new ConsoleOutput());
 
         // No errors
-        if (0 == $result) {
+        if (0 === $result) {
+            $input = new ArrayInput([]);
+            $input->setInteractive(false);
+            $command = $application->find('doctrine:fixtures:load');
+            $result = $command->run($input, new ConsoleOutput());
+
             error_log('Delete PHP Session');
             session_unset();
             $_SESSION = [];

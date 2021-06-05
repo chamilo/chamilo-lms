@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
-class AccessUrlFixtures extends Fixture implements ContainerAwareInterface
+class AccessUserUrlFixtures extends Fixture implements ContainerAwareInterface
 {
     private ContainerInterface $container;
 
@@ -27,8 +27,8 @@ class AccessUrlFixtures extends Fixture implements ContainerAwareInterface
     {
         $container = $this->container;
         /** @var User $admin */
-        $admin = $this->getReference(AccessUrlAdminFixtures::ADMIN_USER_REFERENCE);
-        $anon = $this->getReference(AccessUrlAdminFixtures::ANON_USER_REFERENCE);
+        $admin = $this->getReference(AccessUserFixtures::ADMIN_USER_REFERENCE);
+        $anon = $this->getReference(AccessUserFixtures::ANON_USER_REFERENCE);
 
         // Login as admin
         $token = new UsernamePasswordToken(
@@ -58,7 +58,7 @@ class AccessUrlFixtures extends Fixture implements ContainerAwareInterface
         $accessUrl->addUser($anon);
         $manager->flush();
 
-        $this->addReference(AccessUrlAdminFixtures::ACCESS_URL_REFERENCE, $accessUrl);
+        $this->addReference(AccessUserFixtures::ACCESS_URL_REFERENCE, $accessUrl);
 
         $settingsManager = $container->get('chamilo.settings.manager');
         $settingsManager->installSchemas($accessUrl);

@@ -748,6 +748,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         //$this->extraFields = new ArrayCollection();
         $this->createdAt = new DateTime();
         $this->updatedAt = new DateTime();
+        $this->registrationDate = new DateTime();
 
         $this->enabled = false;
         $this->locked = false;

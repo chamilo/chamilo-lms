@@ -19,7 +19,7 @@ class BranchFixtures extends Fixture
         // INSERT INTO branch_sync (access_url_id, branch_name, unique_id, ssl_pub_key)
         // VALUES (1, 'localhost', SHA1(UUID()), SHA1(UUID()));
 
-        $url = $this->getReference(AccessUrlAdminFixtures::ACCESS_URL_REFERENCE);
+        $url = $this->getReference(AccessUserFixtures::ACCESS_URL_REFERENCE);
 
         $branch = (new BranchSync())
             ->setBranchName('localhost')

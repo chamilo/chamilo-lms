@@ -11,18 +11,7 @@ jobs:
             fail-fast: false
             matrix:
                 operating-system: [ubuntu-latest]
-                php-versions: ['7.4', '8.0']
-
-#        services:
-#            mysql:
-#                image: mysql:5.7
-#                env:
-#                    MYSQL_ALLOW_EMPTY_PASSWORD: false
-#                    MYSQL_ROOT_PASSWORD: chamilo
-#                    MYSQL_DATABASE: chamilo
-#                ports:
-#                    - 3306/tcp
-#                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+                php-versions: ['8.0']
         steps:
             - name: Checkout
               uses: actions/checkout@v2
@@ -34,7 +23,7 @@ jobs:
                 sudo apt-get update
                 sudo apt-get install nodejs npm apache2 php${{ matrix.php-versions }} php${{ matrix.php-versions }}-common php${{ matrix.php-versions }}-cli libapache2-mod-php${{ matrix.php-versions }}
                 sudo a2enmod rewrite actions
-                sudo cp -f tests/travis/gh-apache /etc/apache2/sites-available/000-default.conf
+                sudo cp -f ../gh-apache /etc/apache2/sites-available/000-default.conf
                 sudo chmod 777 -R $HOME
                 cat /etc/apache2/sites-available/000-default.conf
                 sudo service apache2 restart

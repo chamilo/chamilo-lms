@@ -1,0 +1,5 @@
+lexik_jwt_authentication:
+    secret_key: '%kernel.project_dir%/config/jwt-test/private-test.pem'
+    public_key: '%kernel.project_dir%/config/jwt-test/public-test.pem'
+    pass_phrase: 'test'
+    token_ttl: 3600

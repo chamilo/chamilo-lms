@@ -10,11 +10,15 @@ use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 
 class CourseRepositoryTest extends WebTestCase
 {
-    public function testCreateNoLogin()
+    /**
+     * Create a course with no creator.
+     */
+    public function testCreateNoCreator()
     {
         self::bootKernel();
         $urlRepo = self::getContainer()->get(AccessUrlRepository::class);
@@ -33,6 +37,9 @@ class CourseRepositoryTest extends WebTestCase
         $this->assertEquals(1, $count);
     }
 
+    /**
+     * Create a course with a creator.
+     */
     public function testCreate()
     {
         /** @var UserRepository $userRepository */

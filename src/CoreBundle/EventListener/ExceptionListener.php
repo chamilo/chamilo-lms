@@ -22,7 +22,7 @@ class ExceptionListener
 
     public function onKernelException(ExceptionEvent $event): void
     {
-        if (isset($_SERVER['APP_ENV']) && in_array($_SERVER['APP_ENV'], ['dev', 'test'], true)) {
+        if (isset($_SERVER['APP_ENV']) && \in_array($_SERVER['APP_ENV'], ['dev', 'test'], true)) {
             return;
         }
 

@@ -14,7 +14,7 @@ class CreateDocumentFileAction extends BaseResourceFileAction
 {
     public function __invoke(Request $request): CDocument
     {
-        error_log('CreateResourceNodeFileAction __invoke');
+        error_log('CreateDocumentFileAction __invoke');
 
         $document = new CDocument();
         $this->handleCreateRequest($document, $request);

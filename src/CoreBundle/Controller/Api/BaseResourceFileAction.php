@@ -24,11 +24,13 @@ class BaseResourceFileAction
         if (!empty($contentData)) {
             $contentData = json_decode($contentData, true);
             var_dump($contentData);
-            $title = $contentData['title'];
-            $comment = $contentData['comment'];
+            $title = $contentData['title'] ?? '';
+            $comment = $contentData['comment'] ?? '';
+            $nodeId = $contentData['parentResourceNodeId'] ?? 0;
         } else {
             $title = $request->get('title');
             $comment = $request->get('comment');
+            $nodeId = (int) $request->get('parentResourceNodeId');
         }
 
         $fileType = 'folder';
@@ -40,14 +42,13 @@ class BaseResourceFileAction
             throw new Exception('filetype needed: folder or file');
         }
 
-        $nodeId = (int) $request->get('parentResourceNodeId');
-
         if (0 === $nodeId) {
             throw new Exception('parentResourceNodeId int value needed');
         }
 
         $resource->setParentResourceNode($nodeId);
 
+        error_log("fileType: $fileType");
         switch ($fileType) {
             case 'file':
                 $content = '';

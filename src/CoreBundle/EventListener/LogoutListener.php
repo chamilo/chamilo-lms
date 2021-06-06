@@ -52,6 +52,12 @@ class LogoutListener
             $chat->setUserStatus(0);
         }*/
         $token = $this->storage->getToken();
+        if (null === $token) {
+            $login = $this->router->generate('index');
+
+            return new RedirectResponse($login);
+        }
+
         /** @var null|User $user */
         $user = $token->getUser();
         if ($user instanceof User) {

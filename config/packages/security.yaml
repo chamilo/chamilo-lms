@@ -1,17 +1,18 @@
 # To get started with security, check out the documentation:
 # http://symfony.com/doc/current/book/security.html
 security:
+    #enable_authenticator_manager: true
+
     password_hashers:
         Chamilo\CoreBundle\Entity\User:
             algorithm: auto
-            cost: 14
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
         app_user_provider:
             entity:
                 class: Chamilo\CoreBundle\Entity\User
-                property: 'username'
+                property: username
     role_hierarchy:
         ROLE_ADMIN:
             - ROLE_SUPER_ADMIN
@@ -57,8 +58,6 @@ security:
             provider: app_user_provider
             json_login:
                 check_path: /api/authentication_token
-                #                username_path: email
-                #                password_path: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
             guard:
@@ -103,5 +102,9 @@ security:
         #        - {path: ^/administrator, role: ROLE_ADMIN}
         #        - {path: ^/efconnect, role: ROLE_USER}
         #        - {path: ^/elfinder, role: ROLE_USER}
-        - {path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY}
-        - {path: ^/api/authentication_token, roles: IS_AUTHENTICATED_ANONYMOUSLY}
+#        - { path: ^/login, roles: PUBLIC_ACCESS }
+#        - { path: ^/api/authentication_token, roles: PUBLIC_ACCESS }
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api/authentication_token, roles: PUBLIC_ACCESS }
+#        - {path: ^/login, roles: PUBLIC_ACCESS}
+#        - {path: ^/api/authentication_token, roles: PUBLIC_ACCESS}

@@ -11,19 +11,15 @@ use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\Tests\AbstractApiTest;
+use Chamilo\Tests\ChamiloTestTrait;
 
 class CDocumentRepositoryTest extends AbstractApiTest
 {
-    /*public function testLoginAsUserWithToken()
-    {
-
-        $this->createClientWithCredentials($token)->request('GET', '/account/edit');
-        $this->assertResponseStatusCodeSame('200');
-    }*/
+    use ChamiloTestTrait;
 
     public function testGetDocuments()
     {
-        $token = $this->getToken([]);
+        $token = $this->getUserToken([]);
         $response = $this->createClientWithCredentials($token)->request('GET', '/api/documents');
         $this->assertResponseIsSuccessful();
 
@@ -48,16 +44,13 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
     public function testCreateFolder(): void
     {
-        $userRepository = self::getContainer()->get(UserRepository::class);
-        $urlRepo = self::getContainer()->get(AccessUrlRepository::class);
         $courseRepo = self::getContainer()->get(CourseRepository::class);
 
         // Get admin.
-        $admin = $userRepository->findByUsername('admin');
+        $admin = $this->getUser('admin');
         // Get access url.
-        $accessUrl = $urlRepo->findOneBy(['url' => AccessUrl::DEFAULT_ACCESS_URL]);
+        $accessUrl = $this->getAccessUrl();
 
-        // Create course. @todo move in a function?
         $course = (new Course())
             ->setTitle('Test course')
             ->setCode('test_course')
@@ -72,8 +65,8 @@ class CDocumentRepositoryTest extends AbstractApiTest
             'visibility' => 2,
         ];
 
-        $token = $this->getToken([]);
-        $response = $this->createClientWithCredentials($token)->request(
+        $token = $this->getUserToken([]);
+        $this->createClientWithCredentials($token)->request(
             'POST',
             '/api/documents',
             [
@@ -86,8 +79,12 @@ class CDocumentRepositoryTest extends AbstractApiTest
         );
 
         $this->assertResponseIsSuccessful();
-
         $this->assertResponseStatusCodeSame(201);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertJsonContains([
+            '@context' => '/api/contexts/Documents',
+            '@type' => 'Documents',
+            'title' => 'folder1',
+        ]);
     }
 }

@@ -9,32 +9,29 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 
 class CourseRepositoryTest extends WebTestCase
 {
+    use ChamiloTestTrait;
+
     /**
      * Create a course with no creator.
      */
     public function testCreateNoCreator()
     {
         self::bootKernel();
-        $urlRepo = self::getContainer()->get(AccessUrlRepository::class);
         $courseRepo = self::getContainer()->get(CourseRepository::class);
-
-        $accessUrl = $urlRepo->findOneBy(['url' => AccessUrl::DEFAULT_ACCESS_URL]);
 
         $this->expectException(UserNotFoundException::class);
         $course = (new Course())
             ->setTitle('test_course')
-            ->addAccessUrl($accessUrl)
+            ->addAccessUrl($this->getAccessUrl())
         ;
         $courseRepo->create($course);
-
-        $count = $courseRepo->count([]);
-        $this->assertEquals(1, $count);
     }
 
     /**
@@ -42,21 +39,13 @@ class CourseRepositoryTest extends WebTestCase
      */
     public function testCreate()
     {
-        /** @var UserRepository $userRepository */
-        $userRepository = self::getContainer()->get(UserRepository::class);
-
-        $admin = $userRepository->findByUsername('admin');
-
-        $urlRepo = self::getContainer()->get(AccessUrlRepository::class);
         $courseRepo = self::getContainer()->get(CourseRepository::class);
-
-        $accessUrl = $urlRepo->findOneBy(['url' => AccessUrl::DEFAULT_ACCESS_URL]);
 
         $course = (new Course())
             ->setTitle('Test course')
             ->setCode('test_course')
-            ->addAccessUrl($accessUrl)
-            ->setCreator($admin)
+            ->addAccessUrl($this->getAccessUrl())
+            ->setCreator($this->getUser('admin'))
         ;
         $courseRepo->create($course);
 

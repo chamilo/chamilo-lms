@@ -57,9 +57,6 @@ class CourseHomeController extends ToolBaseController
 
         $session = $request->getSession();
 
-        /*$js = '<script>'.api_get_language_translate_html().'</script>';
-        $htmlHeadXtra[] = $js;*/
-
         $userId = 0;
         $user = $this->getUser();
         if (null !== $user) {
@@ -114,6 +111,7 @@ class CourseHomeController extends ToolBaseController
         Event::registerLog($logInfo);
 
         $qb = $toolRepository->getResourcesByCourse($course, $this->getSession());
+
         $qb->addSelect('tool');
         $qb->innerJoin('resource.tool', 'tool');
 
@@ -193,7 +191,6 @@ class CourseHomeController extends ToolBaseController
             $shortcutQuery = $shortcutRepository->getResources($user, $course->getResourceNode(), $course);
             $shortcuts = $shortcutQuery->getQuery()->getResult();
         }
-
         $responseData = [
             'course' => $course,
             'shortcuts' => $shortcuts,

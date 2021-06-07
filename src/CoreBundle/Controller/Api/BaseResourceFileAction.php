@@ -19,7 +19,7 @@ class BaseResourceFileAction
 {
     protected function handleCreateRequest(AbstractResource $resource, Request $request): void
     {
-        error_log('handleCreateRequest');
+        //error_log('handleCreateRequest');
         $contentData = $request->getContent();
         if (!empty($contentData)) {
             $contentData = json_decode($contentData, true);
@@ -48,7 +48,7 @@ class BaseResourceFileAction
 
         $resource->setParentResourceNode($nodeId);
 
-        error_log("fileType: $fileType");
+        //error_log("fileType: $fileType");
         switch ($fileType) {
             case 'file':
                 $content = '';
@@ -97,11 +97,11 @@ class BaseResourceFileAction
 
     protected function handleUpdateRequest(AbstractResource $resource, $repo, Request $request)
     {
-        error_log('handleUpdateRequest');
+        //error_log('handleUpdateRequest');
         $contentData = $request->getContent();
         $resourceLinkList = [];
         if (!empty($contentData)) {
-            error_log('contentData');
+            //error_log('contentData');
             $contentData = json_decode($contentData, true);
             $title = $contentData['title'];
             $content = $contentData['contentFile'];

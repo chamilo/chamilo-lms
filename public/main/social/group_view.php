@@ -117,7 +117,7 @@ if (0 != $group_id) {
         $user_leaved = intval($_GET['u']);
         // I can "leave me myself"
         if (api_get_user_id() == $user_leaved) {
-            if (UserGroup::canLeave($groupInfo)) {
+            if (UserGroupModel::canLeave($groupInfo)) {
                 $usergroup->delete_user_rel_group($user_leaved, $group_id);
                 Display::addFlash(
                     Display::return_message(get_lang('User is not subscribed to this group'), 'confirmation', false)

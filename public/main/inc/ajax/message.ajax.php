@@ -72,7 +72,7 @@ switch ($action) {
             $number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(
                 $userId
             );
-            $usergroup = new UserGroup();
+            $usergroup = new UserGroupModel();
             $group_pending_invitations = $usergroup->get_groups_by_user(
                 $userId,
                 GROUP_USER_PERMISSION_PENDING_INVITATION,

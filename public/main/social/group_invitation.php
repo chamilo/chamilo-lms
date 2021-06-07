@@ -24,7 +24,7 @@ $tbl_group_rel_user = Database::get_main_table(TABLE_USERGROUP_REL_USER);
 $tool_name = get_lang('Subscribe users to group');
 $group_id = intval($_REQUEST['id']);
 
-$usergroup = new UserGroup();
+$usergroup = new UserGroupModel();
 
 // todo @this validation could be in a function in group_portal_manager
 if (empty($group_id)) {

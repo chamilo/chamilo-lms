@@ -6823,7 +6823,7 @@ function WSCreateGroup($params)
     if (!WSHelperVerifyKey($params['secret_key'])) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
     $params = [
         'name' => $params['name'],
     ];
@@ -6874,7 +6874,7 @@ function WSUpdateGroup($params)
         return returnError(WS_ERROR_SECRET_KEY);
     }
     $params['allow_member_group_to_leave'] = null;
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
 
     return $userGroup->update($params);
 }
@@ -6915,7 +6915,7 @@ function WSDeleteGroup($params)
     if (!WSHelperVerifyKey($params['secret_key'])) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
 
     return $userGroup->delete($params['id']);
 }
@@ -6957,7 +6957,7 @@ function GroupBindToParent($params)
     if (!WSHelperVerifyKey($params['secret_key'])) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
 
     return $userGroup->setParentGroup($params['id'], $params['parent_id']);
 }
@@ -6998,7 +6998,7 @@ function GroupUnbindFromParent($params)
     if (!WSHelperVerifyKey($params['secret_key'])) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
 
     return $userGroup->setParentGroup($params['id'], 0);
 }
@@ -7042,7 +7042,7 @@ function WSAddUserToGroup($params)
         return returnError(WS_ERROR_SECRET_KEY);
     }
 
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
 
     return $userGroup->subscribe_users_to_usergroup(
         $params['group_id'],
@@ -7090,7 +7090,7 @@ function WSUpdateUserRoleInGroup($params)
     if (!WSHelperVerifyKey($params['secret_key'])) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
 
     return $userGroup->update_user_role(
         $params['user_id'],
@@ -7136,7 +7136,7 @@ function WSDeleteUserFromGroup($params)
     if (!WSHelperVerifyKey($params['secret_key'])) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
 
     return $userGroup->delete_user_rel_group(
         $params['user_id'],

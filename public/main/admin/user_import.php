@@ -37,7 +37,7 @@ function validate_data($users, $checkUniqueEmail = false)
     }
 
     $classExistList = [];
-    $usergroup = new UserGroup();
+    $usergroup = new UserGroupModel();
     foreach ($users as &$user) {
         $user['has_error'] = false;
         $user['message'] = '';
@@ -216,7 +216,7 @@ function save_data($users, $sendMail = false)
         $inserted_in_course = [];
     }
 
-    $usergroup = new UserGroup();
+    $usergroup = new UserGroupModel();
     if (is_array($users)) {
         $efo = new ExtraFieldOption('user');
 

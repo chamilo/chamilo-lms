@@ -760,7 +760,7 @@ class IndexManager
 
         $items = [];
 
-        $usergroup = new UserGroup();
+        $usergroup = new UserGroupModel();
         if (api_is_platform_admin()) {
             $items[] = [
                 'link' => api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add',
@@ -836,7 +836,7 @@ class IndexManager
         }
 
         $items = [];
-        $userGroup = new UserGroup();
+        $userGroup = new UserGroupModel();
         //  @todo Add a platform setting to add the user image.
         if ('true' === api_get_setting('allow_message_tool')) {
             // New messages.

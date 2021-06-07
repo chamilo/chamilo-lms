@@ -40,7 +40,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
 // getting group information
 $relation_group_title = '';
 $my_group_role = 0;
-$usergroup = new UserGroup();
+$usergroup = new UserGroupModel();
 $create_thread_link = '';
 
 $show_menu = 'browse_groups';

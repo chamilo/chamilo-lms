@@ -13,7 +13,7 @@
 function validate_data($classes)
 {
     $errors = [];
-    $usergroup = new UserGroup();
+    $usergroup = new UserGroupModel();
     foreach ($classes as $index => $class) {
         // 1. Check of class name is available.
         if (!isset($class['name']) || 0 == strlen(trim($class['name']))) {
@@ -44,7 +44,7 @@ function validate_data($classes)
 function save_data($classes)
 {
     $count = 0;
-    $usergroup = new UserGroup();
+    $usergroup = new UserGroupModel();
     foreach ($classes as $index => $class) {
         $usersToAdd = isset($class['users']) ? $class['users'] : null;
         unset($class['users']);
@@ -80,7 +80,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$usergroup = new UserGroup();
+$usergroup = new UserGroupModel();
 $usergroup->protectScript();
 
 // setting breadcrumbs

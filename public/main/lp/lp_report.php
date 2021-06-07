@@ -151,7 +151,7 @@ $label = get_lang('Groups');
 $classes = [];
 if ($allowUserGroups) {
     $label = get_lang('Groups').' / '.get_lang('Classes');
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
     $conditions = [];
     $conditions['where'] = [' usergroup.course_id = ? ' => $courseId];
     $classes = $userGroup->getUserGroupInCourse($conditions);

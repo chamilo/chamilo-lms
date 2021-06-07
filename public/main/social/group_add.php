@@ -2,9 +2,12 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Usergroup;
+
 /**
  * @author Julio Montoya <gugli100@gmail.com>
  */
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -18,14 +21,14 @@ if ('false' === api_get_setting('allow_students_to_create_groups_in_social') && 
 }
 
 $table_message = Database::get_main_table(TABLE_MESSAGE);
-$usergroup = new UserGroup();
+$usergroup = new UserGroupModel();
 $form = new FormValidator('add_group');
-$usergroup->setGroupType($usergroup::SOCIAL_CLASS);
+$usergroup->setGroupType(Usergroup::SOCIAL_CLASS);
 $usergroup->setForm($form, 'add');
 
 if ($form->validate()) {
     $values = $form->exportValues();
-    $values['group_type'] = UserGroup::SOCIAL_CLASS;
+    $values['group_type'] = Usergroup::SOCIAL_CLASS;
     $values['relation_type'] = GROUP_USER_PERMISSION_ADMIN;
     $groupId = $usergroup->save($values);
     if ($groupId) {

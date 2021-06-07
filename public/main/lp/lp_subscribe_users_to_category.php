@@ -96,7 +96,7 @@ if ($allowUserGroups) {
     $formUserGroup = new FormValidator('lp_edit', 'post', $url);
     $formUserGroup->addHidden('usergroup_form', 1);
 
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
     $conditions = [];
     $conditions['where'] = [' usergroup.course_id = ? ' => $courseId];
     $groups = $userGroup->getUserGroupInCourse($conditions);

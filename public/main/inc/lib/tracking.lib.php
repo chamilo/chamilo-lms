@@ -8935,7 +8935,7 @@ class TrackingCourseLog
             $user_row['count_assignments'] = $user['count_assignments'];
             $user_row['count_messages'] = $user['count_messages'];
 
-            $userGroupManager = new UserGroup();
+            $userGroupManager = new UserGroupModel();
             $user_row['classes'] = $userGroupManager->getLabelsFromNameList($user['user_id'], UserGroup::NORMAL_CLASS);
 
             if (empty($session_id)) {

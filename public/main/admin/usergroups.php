@@ -10,7 +10,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$usergroup = new UserGroup();
+$usergroup = new UserGroupModel();
 $usergroup->protectScript();
 
 // Add the JS needed to use the jqgrid

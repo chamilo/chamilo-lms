@@ -19,7 +19,7 @@ if (isset($_GET['id'])) {
 
 $content = '';
 
-$usergroup = new UserGroup();
+$usergroup = new UserGroupModel();
 $usergroup_list = $usergroup->get_usergroup_by_user(api_get_user_id());
 if (!empty($usergroup_list)) {
     $content .= Display::tag('h1', get_lang('My classes'));

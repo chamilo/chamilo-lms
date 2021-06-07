@@ -652,7 +652,7 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
     $current_user_id = '';
     $allowStudentToStudent = api_get_setting('dropbox_allow_student_to_student');
     $options = [];
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
     foreach ($complete_user_list_for_dropbox as $current_user) {
         if ((
             $dropbox_person->isCourseTutor

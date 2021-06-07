@@ -239,7 +239,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 $surveyList[] = $surveyData;
             }
 
-            $userGroup = new UserGroup();
+            $userGroup = new UserGroupModel();
             $options = [];
             $options['where'] = [' usergroup.course_id = ? ' => $course_id];
             $classes = $userGroup->getUserGroupInCourse($options, 0);

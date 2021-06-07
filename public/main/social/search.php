@@ -46,7 +46,7 @@ $groups = [];
 $totalGroups = [];
 $users = [];
 $totalUsers = [];
-$usergroup = new UserGroup();
+$usergroup = new UserGroupModel();
 
 // I'm searching something
 if ('' != $query || ('1' == $query_vars['search_type'] && count($query_vars) > 2)) {

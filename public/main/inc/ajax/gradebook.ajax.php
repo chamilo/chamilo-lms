@@ -58,7 +58,7 @@ switch ($action) {
         $filterOfficialCodeGet = isset($_GET['filter']) ? Security::remove_XSS($_GET['filter']) : null;
 
         if (api_is_student_boss()) {
-            $userGroup = new UserGroup();
+            $userGroup = new UserGroupModel();
             $userList = $userGroup->getGroupUsersByUser(api_get_user_id());
         } else {
             $userList = [];

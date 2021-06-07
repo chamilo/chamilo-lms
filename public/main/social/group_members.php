@@ -16,7 +16,7 @@ if ('true' != api_get_setting('allow_social_tool')) {
 
 $this_section = SECTION_SOCIAL;
 $group_id = intval($_GET['id']);
-$userGroup = new UserGroup();
+$userGroup = new UserGroupModel();
 $user_role = '';
 
 //todo @this validation could be in a function in group_portal_manager

@@ -17,7 +17,7 @@ if (!api_get_multiple_access_url()) {
     exit;
 }
 
-$userGroup = new UserGroup();
+$userGroup = new UserGroupModel();
 $firstLetterUserGroup = null;
 $courses = [];
 $url_list = [];

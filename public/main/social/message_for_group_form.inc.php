@@ -27,7 +27,7 @@ $allowed_action = isset($_GET['action']) && in_array($_GET['action'], $actions) 
 $to_group = '';
 $subject = '';
 $message = '';
-$usergroup = new UserGroup();
+$usergroup = new UserGroupModel();
 if (!empty($group_id) && $allowed_action) {
     $group_info = $usergroup->get($group_id);
     $is_member = $usergroup->is_group_member($group_id);

@@ -724,7 +724,7 @@ class MessageManager
                         $forceTitleWhenSendingEmail
                     );
                 } else {
-                    $usergroup = new UserGroup();
+                    $usergroup = new UserGroupModel();
                     $group_info = $usergroup->get($group_id);
                     $group_info['topic_id'] = $topic_id;
                     $group_info['msg_id'] = $messageId;

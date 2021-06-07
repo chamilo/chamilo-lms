@@ -1073,7 +1073,7 @@ $form->addText('keyword_officialcode', get_lang('Code'), false);
 $classId = isset($_REQUEST['class_id']) && !empty($_REQUEST['class_id']) ? (int) $_REQUEST['class_id'] : 0;
 $options = [];
 if ($classId) {
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
     $groupInfo = $userGroup->get($classId);
     if ($groupInfo) {
         $options = [$classId => $groupInfo['name']];

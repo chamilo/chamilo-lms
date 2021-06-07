@@ -19,7 +19,7 @@ $this_section = SECTION_SOCIAL;
 $interbreadcrumb[] = ['url' => 'profile.php', 'name' => get_lang('Social network')];
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Invitations')];
 
-$userGroupModel = new UserGroup();
+$userGroupModel = new UserGroupModel();
 
 if (is_array($_GET) && count($_GET) > 0) {
     foreach ($_GET as $key => $value) {

@@ -367,7 +367,7 @@ switch ($action) {
         }
 
         if (!empty($message->getGroupId())) {
-            $usergroup = new UserGroup();
+            $usergroup = new UserGroupModel();
             $groupInfo = $usergroup->get($groupId);
 
             if (empty($groupInfo)) {

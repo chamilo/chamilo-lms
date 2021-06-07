@@ -8,7 +8,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
-$usergroup = new UserGroup();
+$usergroup = new UserGroupModel();
 $userGroupInfo = $usergroup->get($id);
 if (empty($userGroupInfo)) {
     api_not_allowed(true);
@@ -232,8 +232,8 @@ function action_formatter(cellvalue, options, rowObject) {
 function extra_formatter(cellvalue, options, rowObject) {
     var calendarName = rowObject[1];
     var calendarId = rowObject[7];
-    
-    if (calendarName == "") {          
+
+    if (calendarName == "") {
         return \'<a href="'.
         api_get_path(WEB_CODE_PATH).'admin/usergroup_users.php?user_id=\'+options.rowId+\'&id='.$id.'&action=add_calendar&width=700" class="btn btn-primary ajax">'.get_lang('Add').'</a>\';
     } else {

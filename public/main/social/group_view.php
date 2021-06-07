@@ -106,7 +106,7 @@ $group_id = isset($_GET['id']) ? (int) $_GET['id'] : null;
 $relation_group_title = '';
 $role = 0;
 
-$usergroup = new UserGroup();
+$usergroup = new UserGroupModel();
 if (0 != $group_id) {
     $groupInfo = $usergroup->get($group_id);
     $groupInfo['name'] = Security::remove_XSS($groupInfo['name']);

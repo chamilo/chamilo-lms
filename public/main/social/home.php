@@ -26,7 +26,7 @@ if ('true' !== api_get_setting('allow_social_tool')) {
     exit;
 }
 
-$userGroup = new UserGroup();
+$userGroup = new UserGroupModel();
 
 SocialManager::handlePosts(api_get_self());
 

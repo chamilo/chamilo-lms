@@ -118,7 +118,7 @@ if ($subscribedTutors) {
 
 $orderUserListByOfficialCode = api_get_setting('order_user_list_by_official_code');
 $possible_users = [];
-$userGroup = new UserGroup();
+$userGroup = new UserGroupModel();
 
 if (!empty($complete_user_list)) {
     usort($complete_user_list, 'sort_users');

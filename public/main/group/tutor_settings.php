@@ -101,7 +101,7 @@ $complete_user_list = CourseManager::get_user_list_from_course_code(
 );
 
 $possible_users = [];
-$userGroup = new UserGroup();
+$userGroup = new UserGroupModel();
 
 $subscribedUsers = GroupManager::get_subscribed_users($groupEntity);
 if ($subscribedUsers) {

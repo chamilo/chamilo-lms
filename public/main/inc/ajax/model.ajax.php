@@ -304,7 +304,7 @@ switch ($action) {
         $count = $calendarPlugin->getUsersPerCalendarCount($id);
         break;
     case 'get_usergroups_users':
-        $usergroup = new UserGroup();
+        $usergroup = new UserGroupModel();
         $usergroup->protectScript(null, true, true);
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
         $count = $usergroup->getUserGroupUsers($id, true);
@@ -475,7 +475,7 @@ switch ($action) {
         }
 
         if ($searchByGroups) {
-            $userGroup = new UserGroup();
+            $userGroup = new UserGroupModel();
             $userIdList = array_merge(
                 $userIdList,
                 $userGroup->getGroupUsersByUser(api_get_user_id())
@@ -922,12 +922,12 @@ switch ($action) {
         $count = $obj->get_count();
         break;
     case 'get_usergroups':
-        $obj = new UserGroup();
+        $obj = new UserGroupModel();
         $obj->protectScript();
         $count = $obj->get_count($whereCondition);
         break;
     case 'get_usergroups_teacher':
-        $obj = new UserGroup();
+        $obj = new UserGroupModel();
         $obj->protectScript(null, false, true);
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'registered';
         $groupFilter = isset($_REQUEST['group_filter']) ? (int) $_REQUEST['group_filter'] : 0;
@@ -1279,7 +1279,7 @@ switch ($action) {
         $result = array_merge($sessions, $courses);
 
         if (api_is_student_boss()) {
-            $userGroup = new UserGroup();
+            $userGroup = new UserGroupModel();
             foreach ($result as &$item) {
                 $userGroups = $userGroup->get_groups_by_user($item['user_id']);
                 $item['group'] = implode(", ", array_column($userGroups, 'name'));

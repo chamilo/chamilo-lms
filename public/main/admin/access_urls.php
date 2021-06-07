@@ -127,7 +127,7 @@ $actions .= Display::url(
     api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php'
 );
 
-$userGroup = new UserGroup();
+$userGroup = new UserGroupModel();
 if ($userGroup->getUseMultipleUrl()) {
     $actions .= Display::url(
         Display::return_icon('class.png', get_lang('Manage user groups'), [], ICON_SIZE_MEDIUM),

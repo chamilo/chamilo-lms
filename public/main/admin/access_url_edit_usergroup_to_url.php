@@ -11,7 +11,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $xajax = new xajax();
 $xajax->registerFunction(['searchUserGroupAjax', 'UserGroup', 'searchUserGroupAjax']);
-$userGroup = new UserGroup();
+$userGroup = new UserGroupModel();
 
 // Setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;

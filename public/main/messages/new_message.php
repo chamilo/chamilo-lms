@@ -155,7 +155,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
             }
         }
     } else {
-        $userGroup = new UserGroup();
+        $userGroup = new UserGroupModel();
         $group_info = $userGroup->get($group_id);
 
         $form->addElement('label', get_lang('To social group'), api_xml_http_response_encode($group_info['name']));

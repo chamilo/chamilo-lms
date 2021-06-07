@@ -18,7 +18,7 @@ $group_id = intval($_GET['id']);
 $topic_id = isset($_GET['topic_id']) ? intval($_GET['topic_id']) : null;
 $message_id = isset($_GET['msg_id']) ? intval($_GET['msg_id']) : null;
 
-$usergroup = new UserGroup();
+$usergroup = new UserGroupModel();
 $is_member = false;
 
 //todo @this validation could be in a function in group_portal_manager

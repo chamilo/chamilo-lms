@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 // resetting the course id
+use Chamilo\CoreBundle\Entity\Usergroup;
+
 $cidReset = true;
 
 // including some necessary files
@@ -13,7 +15,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 $relation = isset($_REQUEST['relation']) ? (int) $_REQUEST['relation'] : '';
-$usergroup = new UserGroup();
+$usergroup = new UserGroupModel();
 $groupInfo = $usergroup->get($id);
 $usergroup->protectScript($groupInfo);
 
@@ -380,7 +382,7 @@ echo Display::input('hidden', 'add_type', null);
 ?>
 <div class="row">
     <div class="col-md-5">
-        <?php if (UserGroup::SOCIAL_CLASS == $data['group_type']) {
+        <?php if (Usergroup::SOCIAL_CLASS == $data['group_type']) {
     ?>
         <select name="relation" id="relation">
             <option value=""><?php echo get_lang('Relation type selection'); ?></option>

@@ -17,7 +17,7 @@ if ('true' != api_get_setting('allow_social_tool')) {
 
 $views = ['friends', 'mygroups'];
 $user_id = (int) $_GET['user_id'];
-$userGroup = new UserGroup();
+$userGroup = new UserGroupModel();
 
 if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
     // show all friends by user_id

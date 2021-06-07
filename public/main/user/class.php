@@ -37,7 +37,7 @@ $(function() {
 
 $actionsLeft = '';
 $actionsRight = '';
-$usergroup = new UserGroup();
+$usergroup = new UserGroupModel();
 $actions = '';
 
 $sessionId = api_get_session_id();

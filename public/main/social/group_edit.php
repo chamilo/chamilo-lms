@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Framework\Container;
 
 /**
@@ -19,7 +20,7 @@ $this_section = SECTION_SOCIAL;
 
 $group_id = isset($_GET['id']) ? (int) $_GET['id'] : (int) $_POST['id'];
 $tool_name = get_lang('Edit group');
-$usergroup = new UserGroup();
+$usergroup = new UserGroupModel();
 $group_data = $usergroup->get($group_id);
 
 if (empty($group_data)) {
@@ -38,7 +39,7 @@ if (!$usergroup->is_group_admin($group_id)) {
 // Create the form
 $form = new FormValidator('group_edit', 'post', '', '');
 $form->addElement('hidden', 'id', $group_id);
-$usergroup->setGroupType($usergroup::SOCIAL_CLASS);
+$usergroup->setGroupType(Usergroup::SOCIAL_CLASS);
 $repo = Container::getUsergroupRepository();
 $usergroup->setForm($form, 'edit', $repo->find($group_id));
 
@@ -49,7 +50,7 @@ $form->setDefaults($group_data);
 if ($form->validate()) {
     $group = $form->exportValues();
     $group['id'] = $group_id;
-    $group['group_type'] = $usergroup::SOCIAL_CLASS;
+    $group['group_type'] = Usergroup::SOCIAL_CLASS;
     $usergroup->update($group);
     Display::addFlash(Display::return_message(get_lang('Class updated.')));
     header('Location: group_view.php?id='.$group_id);

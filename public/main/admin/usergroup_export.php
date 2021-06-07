@@ -6,7 +6,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$userGroup = new UserGroup();
+$userGroup = new UserGroupModel();
 $userGroup->protectScript();
 
 $tool_name = get_lang('Export');

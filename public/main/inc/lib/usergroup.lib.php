@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ResourceFile;
-use Chamilo\CoreBundle\Entity\Usergroup as UserGroupEntity;
+use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -13,10 +13,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * This class provides methods for the UserGroup management.
  * Include/require it in your code to use its features.
  */
-class UserGroup extends Model
+class UserGroupModel extends Model
 {
-    public const SOCIAL_CLASS = 1;
-    public const NORMAL_CLASS = 0;
     public $columns = [
         'id',
         'name',
@@ -452,7 +450,7 @@ class UserGroup extends Model
      * <?php
      *
      * $options['where'] = [' usergroup.course_id = ? ' => $course_id];
-     * $obj = new UserGroup();
+     * $obj = new UserGroupModel();
      * $count = $obj->getUserGroupInCourse(
      * $options,
      * -1,
@@ -469,7 +467,7 @@ class UserGroup extends Model
      * <?php
      *
      * $options['where'] = [' usergroup.course_id = ? ' => $course_id];
-     * $obj = new UserGroup();
+     * $obj = new UserGroupModel();
      * $students = $obj->getUserGroupInCourse(
      * $options,
      * -1,
@@ -1524,12 +1522,12 @@ class UserGroup extends Model
     public function save($params, $showQuery = false)
     {
         $params['updated_at'] = $params['created_at'] = api_get_utc_datetime();
-        $params['group_type'] = isset($params['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS;
+        $params['group_type'] = isset($params['group_type']) ? Usergroup::SOCIAL_CLASS : Usergroup::NORMAL_CLASS;
         $params['allow_members_leave_group'] = isset($params['allow_members_leave_group']) ? 1 : 0;
 
         $userGroupExists = $this->usergroup_exists(trim($params['name']));
         if (false === $userGroupExists) {
-            $userGroup = new UserGroupEntity();
+            $userGroup = new Usergroup();
             $repo = Container::getUsergroupRepository();
             $userGroup
                 ->setName(trim($params['name']))
@@ -1551,7 +1549,7 @@ class UserGroup extends Model
                     $this->subscribeToUrl($id, api_get_current_access_url_id());
                 }
 
-                if (self::SOCIAL_CLASS == $params['group_type']) {
+                if (Usergroup::SOCIAL_CLASS == $params['group_type']) {
                     $this->add_user_to_group(
                         api_get_user_id(),
                         $id,
@@ -1574,7 +1572,7 @@ class UserGroup extends Model
     public function update($params, $showQuery = false)
     {
         $repo = Container::getUsergroupRepository();
-        /** @var UserGroupEntity $userGroup */
+        /** @var Usergroup $userGroup */
         $userGroup = $repo->find($params['id']);
         if (null === $userGroup) {
             return false;
@@ -1582,7 +1580,7 @@ class UserGroup extends Model
 
         //$params['updated_on'] = api_get_utc_datetime();
         $userGroup
-            ->setGroupType(isset($params['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS)
+            ->setGroupType(isset($params['group_type']) ? Usergroup::SOCIAL_CLASS : Usergroup::NORMAL_CLASS)
             ->setAllowMembersToLeaveGroup(isset($params['allow_members_leave_group']) ? 1 : 0)
         ;
         $cropImage = $params['picture_crop_result'] ?? null;
@@ -1605,7 +1603,7 @@ class UserGroup extends Model
     }
 
     public function manageFileUpload(
-        UserGroupEntity $userGroup,
+        Usergroup $userGroup,
         UploadedFile $picture,
         string $cropParameters = ''
     ): ?ResourceFile {
@@ -1763,7 +1761,7 @@ class UserGroup extends Model
      * @param FormValidator $form
      * @param string        $type
      */
-    public function setForm($form, $type = 'add', UserGroupEntity $userGroup = null)
+    public function setForm($form, $type = 'add', Usergroup $userGroup = null)
     {
         $header = '';
         switch ($type) {
@@ -1920,17 +1918,12 @@ class UserGroup extends Model
         return ['jpg', 'jpeg', 'png', 'gif'];
     }
 
-    /**
-     * @return array
-     */
-    public function getGroupStatusList()
+    public function getGroupStatusList(): array
     {
-        $status = [
+        return [
             GROUP_PERMISSION_OPEN => get_lang('Open'),
             GROUP_PERMISSION_CLOSED => get_lang('Closed'),
         ];
-
-        return $status;
     }
 
     /**
@@ -2250,7 +2243,7 @@ class UserGroup extends Model
         }
 
         $sql .= " WHERE
-				    g.group_type = ".self::SOCIAL_CLASS." AND
+				    g.group_type = ".Usergroup::SOCIAL_CLASS." AND
                     gu.user_id = $user_id
                     $relationCondition
                     $urlCondition
@@ -2290,7 +2283,7 @@ class UserGroup extends Model
         }
         // only show admins and readers
         $whereCondition = " WHERE
-                              g.group_type = ".self::SOCIAL_CLASS." AND
+                              g.group_type = ".Usergroup::SOCIAL_CLASS." AND
                               gu.relation_type IN
                               ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."', '".GROUP_USER_PERMISSION_HRM."') ";
 
@@ -2355,7 +2348,7 @@ class UserGroup extends Model
         }
 
         $where = " WHERE
-                        g.group_type = ".self::SOCIAL_CLASS." AND
+                        g.group_type = ".Usergroup::SOCIAL_CLASS." AND
                         gu.relation_type IN
                         ('".GROUP_USER_PERMISSION_ADMIN."' ,
                         '".GROUP_USER_PERMISSION_READER."',

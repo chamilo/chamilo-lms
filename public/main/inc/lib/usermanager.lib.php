@@ -300,8 +300,8 @@ class UserManager
             $expirationDate = new \DateTime($expirationDate, new DateTimeZone('UTC'));
         }
 
-        $user = new User();
-        $user
+        $repo = Container::getUserRepository();
+        $user = $repo->createUser()
             ->setLastname($lastName)
             ->setFirstname($firstName)
             ->setUsername($loginName)
@@ -325,12 +325,6 @@ class UserManager
             $user->setExpirationDate($expirationDate);
         }
 
-        $em = Database::getManager();
-        $repo = Container::getUserRepository();
-        $repo->updateUser($user, false);
-        $em->persist($user);
-        $em->flush();
-
         // Add user to a group
         $statusToGroup = [
             COURSEMANAGER => 'TEACHER',
@@ -349,7 +343,7 @@ class UserManager
             }
         }
 
-        $em->flush();
+        $repo->updateUser($user, true);
 
         $userId = $user->getId();
 
@@ -787,7 +781,7 @@ class UserManager
         //UrlManager::deleteUserFromAllUrls($user_id);
 
         if ('true' === api_get_setting('allow_social_tool')) {
-            $userGroup = new UserGroup();
+            $userGroup = new UserGroupModel();
             //Delete user from portal groups
             $group_list = $userGroup->get_groups_by_user($user_id);
             if (!empty($group_list)) {

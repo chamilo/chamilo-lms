@@ -756,7 +756,7 @@ class SocialManager extends UserManager
 
         if (in_array($show, $show_groups) && !empty($group_id)) {
             // Group image
-            $userGroup = new UserGroup();
+            $userGroup = new UserGroupModel();
             $group_info = $userGroup->get($group_id);
             $userGroupImage = $userGroup->get_picture_group(
                 $group_id,
@@ -828,7 +828,7 @@ class SocialManager extends UserManager
             $user_id = api_get_user_id();
         }
 
-        $usergroup = new UserGroup();
+        $usergroup = new UserGroupModel();
         $show_groups = [
             'groups',
             'group_messages',
@@ -1677,7 +1677,7 @@ class SocialManager extends UserManager
                 $repo = $em->getRepository(CForumPost::class);
                 $repoThread = $em->getRepository(CForumThread::class);
                 $groups = [];
-                $userGroup = new UserGroup();
+                $userGroup = new UserGroupModel();
                 $urlGroup = api_get_path(WEB_CODE_PATH).'social/group_view.php?id=';
                 while ($row = Database::fetch_array($res, 'ASSOC')) {
                     $row['group_info'] = [];
@@ -2355,7 +2355,7 @@ class SocialManager extends UserManager
      */
     public static function getMyWallMessages($userId, $start = 0, $length = 10, $threadList = [])
     {
-        $userGroup = new UserGroup();
+        $userGroup = new UserGroupModel();
         $groups = $userGroup->get_groups_by_user($userId, [GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_ADMIN]);
         $groupList = [];
         if (!empty($groups)) {
@@ -3004,7 +3004,7 @@ class SocialManager extends UserManager
     public static function getGroupBlock($userId)
     {
         $threadList = self::getThreadList($userId);
-        $userGroup = new UserGroup();
+        $userGroup = new UserGroupModel();
 
         $forumCourseId = api_get_configuration_value('global_forums_course_id');
         $courseInfo = null;

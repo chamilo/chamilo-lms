@@ -1933,7 +1933,7 @@ class SurveyManager
         }
 
         if (null === $groupId) {
-            $obj = new UserGroup();
+            $obj = new UserGroupModel();
             $options['where'] = [' usergroup.course_id = ? ' => $courseId];
             $classList = $obj->getUserGroupInCourse($options);
 

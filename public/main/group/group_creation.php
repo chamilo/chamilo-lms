@@ -303,7 +303,7 @@ EOT;
      * Show form to generate groups from classes subscribed to the course
      */
     $options['where'] = [' usergroup.course_id = ? ' => api_get_course_int_id()];
-    $obj = new UserGroup();
+    $obj = new UserGroupModel();
     $classes = $obj->getUserGroupInCourse($options);
     if (count($classes) > 0) {
         $description = '<p>'.get_lang('Using this option, you can create groups based on the classes subscribed to your course.').'</p>';

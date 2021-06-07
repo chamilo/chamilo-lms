@@ -870,7 +870,7 @@ $csv_content[] = [
 
 $coachs_name = '';
 $session_name = '';
-$userGroupManager = new UserGroup();
+$userGroupManager = new UserGroupModel();
 $userGroups = $userGroupManager->getNameListByUser(
     $studentId,
     UserGroup::NORMAL_CLASS

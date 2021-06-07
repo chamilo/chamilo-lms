@@ -289,7 +289,7 @@ if ($action_todo) {
 
     $form->addGroup($group, null, get_lang('Visible'));
     $form->addElement('hidden', 'id');
-    $userGroup = new UserGroup();
+    $userGroup = new UserGroupModel();
     $group_list = $userGroup->get_all();
 
     if (!empty($group_list)) {

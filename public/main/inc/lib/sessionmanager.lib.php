@@ -7683,7 +7683,7 @@ class SessionManager
         $sessionList = [];
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
         $sessionUserTable = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $userGroup = new UserGroup();
+        $userGroup = new UserGroupModel();
         $userIdList = $userGroup->getGroupUsersByUser($userId);
 
         if (empty($userIdList)) {
@@ -9772,7 +9772,7 @@ class SessionManager
             return;
         }
 
-        $usergroup = new UserGroup();
+        $usergroup = new UserGroupModel();
 
         foreach ($classesNames as $className) {
             if (empty($className)) {

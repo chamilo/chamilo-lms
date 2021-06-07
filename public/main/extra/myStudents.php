@@ -479,7 +479,7 @@ if (!empty($studentId)) {
     echo Display::page_subheader($table_title);
 
     $userPicture = UserManager::getUserPicture($user_info['user_id']);
-    $userGroupManager = new UserGroup();
+    $userGroupManager = new UserGroupModel();
     $userGroups = $userGroupManager->getNameListByUser($user_info['user_id'], UserGroup::NORMAL_CLASS); ?>
     <img src="<?php echo $userPicture; ?>">
     <div class="row">

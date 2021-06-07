@@ -8,7 +8,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
-$usergroup = new UserGroup();
+$usergroup = new UserGroupModel();
 $data = $usergroup->get($id);
 $usergroup->protectScript($data);
 

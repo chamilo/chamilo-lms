@@ -57,7 +57,7 @@ class SystemAnnouncementManager
         $user_selected_language = api_get_interface_language();
         $db_table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
         $tbl_announcement_group = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
-        $userGroup = new UserGroup();
+        $userGroup = new UserGroupModel();
 
         $temp_user_groups = $userGroup->get_groups_by_user(api_get_user_id(), 0);
         $groups = [];
@@ -142,7 +142,7 @@ class SystemAnnouncementManager
     ) {
         $user_selected_language = api_get_interface_language();
         $start = (int) $start;
-        $userGroup = new UserGroup();
+        $userGroup = new UserGroupModel();
         $tbl_announcement_group = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
         $temp_user_groups = $userGroup->get_groups_by_user(api_get_user_id(), 0);
         $groups = [];

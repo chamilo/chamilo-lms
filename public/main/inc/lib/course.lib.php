@@ -6083,7 +6083,7 @@ class CourseManager
         $coursesList = [];
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $userGroup = new UserGroup();
+        $userGroup = new UserGroupModel();
         $userIdList = $userGroup->getGroupUsersByUser($userId);
 
         if (empty($userIdList)) {

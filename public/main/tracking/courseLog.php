@@ -332,7 +332,7 @@ $hideReports = api_get_configuration_value('hide_course_report_graph');
 $conditions = [];
 
 $groupList = GroupManager::get_group_list(null, $course, 1, $sessionId);
-$class = new UserGroup();
+$class = new UserGroupModel();
 //$options['where'] = [' usergroup.course_id = ? ' => $courseId];
 //$classes = $class->getUserGroupInCourse($options);
 $classes = $class->get_all();

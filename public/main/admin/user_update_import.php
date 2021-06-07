@@ -25,7 +25,7 @@ function validate_data($users)
     $errors = [];
     $usernames = [];
     $classExistList = [];
-    $usergroup = new UserGroup();
+    $usergroup = new UserGroupModel();
 
     foreach ($users as $user) {
         // 2. Check username, first, check whether it is empty.
@@ -93,7 +93,7 @@ function updateUsers(
     $resetPassword = false,
     $sendEmail = false)
 {
-    $usergroup = new UserGroup();
+    $usergroup = new UserGroupModel();
     if (is_array($users)) {
         foreach ($users as $user) {
             if (isset($user['Status'])) {

@@ -142,7 +142,7 @@ switch ($action) {
                 'customcertificate/src/print_certificate.php?export_all_in_one=1&'.$params;
         } else {
             if (api_is_student_boss()) {
-                $userGroup = new UserGroup();
+                $userGroup = new UserGroupModel();
                 $userList = $userGroup->getGroupUsersByUser(api_get_user_id());
             } else {
                 $userList = [];

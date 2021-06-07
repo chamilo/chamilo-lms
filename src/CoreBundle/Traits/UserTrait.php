@@ -10,10 +10,7 @@ use Chamilo\CoreBundle\Entity\User;
 
 trait UserTrait
 {
-    /**
-     * @return User
-     */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }

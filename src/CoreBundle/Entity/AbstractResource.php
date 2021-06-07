@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Entity;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CoreBundle\Traits\UserCreatorTrait;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,6 +26,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 abstract class AbstractResource
 {
+    use UserCreatorTrait;
+
     /**
      * @ApiProperty(iri="http://schema.org/contentUrl")
      * @Groups({"resource_file:read", "resource_node:read", "document:read", "media_object_read"})
@@ -89,30 +92,11 @@ abstract class AbstractResource
      */
     public array $resourceLinkEntityList = [];
 
-    public ?User $resourceNodeCreator = null;
-
     abstract public function getResourceName(): string;
 
     abstract public function setResourceName(string $name);
 
     //abstract public function setResourceProperties(FormInterface $form, $course, $session, $fileType);
-
-    public function getCreator()
-    {
-        return $this->getResourceNode()->getCreator();
-    }
-
-    public function setCreator(User $user): self
-    {
-        $this->resourceNodeCreator = $user;
-
-        return $this;
-    }
-
-    public function getResourceNodeCreator(): ?User
-    {
-        return $this->resourceNodeCreator;
-    }
 
     public function getResourceLinkEntityList()
     {

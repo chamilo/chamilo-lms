@@ -28,12 +28,15 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
 {
     use TimestampableEntity;
 
+    public const SOCIAL_CLASS = 1;
+    public const NORMAL_CLASS = 0;
+
     /**
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @Assert\NotBlank()
@@ -48,6 +51,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     protected ?string $description = null;
 
     /**
+     * @Assert\NotNull()
      * @ORM\Column(name="group_type", type="integer", nullable=false)
      */
     protected int $groupType;
@@ -63,6 +67,8 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     protected ?string $url = null;
 
     /**
+     * @Assert\NotNull()
+     *
      * @ORM\Column(name="visibility", type="string", length=255, nullable=false)
      */
     protected string $visibility;
@@ -73,6 +79,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     protected ?string $authorId = null;
 
     /**
+     * @Assert\NotNull()
      * @ORM\Column(name="allow_members_leave_group", type="integer")
      */
     protected int $allowMembersToLeaveGroup;
@@ -113,6 +120,9 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
 
     public function __construct()
     {
+        $this->groupType = self::NORMAL_CLASS;
+        $this->visibility = GROUP_PERMISSION_OPEN;
+        $this->allowMembersToLeaveGroup = 0;
         $this->users = new ArrayCollection();
         $this->urls = new ArrayCollection();
         $this->courses = new ArrayCollection();

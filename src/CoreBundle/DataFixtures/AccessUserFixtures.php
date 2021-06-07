@@ -19,6 +19,7 @@ class AccessUserFixtures extends Fixture implements ContainerAwareInterface
     public const ADMIN_USER_REFERENCE = 'admin';
     public const ANON_USER_REFERENCE = 'anon';
     public const ACCESS_URL_REFERENCE = 'accessUrl';
+
     private ContainerInterface $container;
 
     public function setContainer(ContainerInterface $container = null): void
@@ -46,7 +47,6 @@ class AccessUserFixtures extends Fixture implements ContainerAwareInterface
             ->setEmail('admin@example.org')
             ->setOfficialCode('ADMIN')
             ->setCreatorId(1)
-            ->setAuthSource(PLATFORM_AUTH_SOURCE)
             ->setTimezone($timezone)
             ->addUserAsAdmin()
             ->addRole('ROLE_GLOBAL_ADMIN')
@@ -69,7 +69,6 @@ class AccessUserFixtures extends Fixture implements ContainerAwareInterface
             ->setEmail('anonymous@localhost')
             ->setOfficialCode('anonymous')
             ->setCreatorId(1)
-            ->setAuthSource(PLATFORM_AUTH_SOURCE)
             ->setTimezone($timezone)
         ;
         $manager->persist($anon);

@@ -12,6 +12,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Chamilo\CoreBundle\Traits\UserCreatorTrait;
 use Chamilo\CourseBundle\Entity\CGroupRelTutor;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use DateTime;
@@ -64,6 +65,7 @@ use UserManager;
 class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface
 {
     use TimestampableEntity;
+    use UserCreatorTrait;
 
     public const ROLE_DEFAULT = 'ROLE_USER';
     public const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
@@ -73,6 +75,16 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public const DRH = 4;
     public const STUDENT = 5;
     public const ANONYMOUS = 6;
+
+    /**
+     * @Groups({"user_json:read"})
+     *
+     * @ORM\OneToOne(
+     *     targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", cascade={"remove"}, orphanRemoval=true
+     * )
+     * @ORM\JoinColumn(name="resource_node_id", onDelete="CASCADE")
+     */
+    public ?ResourceNode $resourceNode = null;
 
     /**
      * @Groups({"user:read", "resource_node:read", "user_json:read"})
@@ -328,16 +340,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="generalCoach")
      */
     protected Collection $sessionsAsGeneralCoach;
-
-    /**
-     * @Groups({"user_json:read"})
-     *
-     * @ORM\OneToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", cascade={"remove"}, orphanRemoval=true
-     * )
-     * @ORM\JoinColumn(name="resource_node_id", onDelete="CASCADE")
-     */
-    protected ?ResourceNode $resourceNode = null;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", mappedBy="creator")
@@ -696,17 +698,22 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function __construct()
     {
+        $this->skipResourceNode = false;
         $this->uuid = Uuid::v4();
         $this->apiToken = null;
         $this->biography = '';
         $this->website = '';
         $this->locale = 'en';
+        $this->timezone = 'Europe\Paris';
+        $this->authSource = 'platform';
+
         $this->status = self::STUDENT;
         $this->salt = sha1(uniqid('', true));
         $this->active = true;
-        $this->registrationDate = new DateTime();
-        $this->authSource = 'platform';
-        $this->skipResourceNode = false;
+        $this->enabled = false;
+        $this->locked = false;
+        $this->expired = false;
+
         $this->courses = new ArrayCollection();
         $this->classes = new ArrayCollection();
         $this->curriculumItems = new ArrayCollection();
@@ -750,9 +757,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->updatedAt = new DateTime();
         $this->registrationDate = new DateTime();
 
-        $this->enabled = false;
-        $this->locked = false;
-        $this->expired = false;
         $this->roles = [];
         $this->credentialsExpired = false;
         $this->credentialsExpireAt = new DateTime();

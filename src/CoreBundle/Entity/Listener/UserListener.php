@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Exception;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\Security;
 
 class UserListener
@@ -29,7 +30,7 @@ class UserListener
      */
     public function prePersist(User $user, LifecycleEventArgs $args): void
     {
-        error_log('User listener prePersist');
+        //error_log('User listener prePersist');
 
         if ($user) {
             $this->userRepository->updateCanonicalFields($user);
@@ -40,17 +41,26 @@ class UserListener
             }
 
             if (!$user->hasResourceNode()) {
-                // @todo use the creator id.
-                $token = $this->security->getToken();
-                if (null === $token) {
-                    throw new Exception('A user creator is needed, to adding the user in a ResourceNode');
+                // Check if creator is set with $resource->setCreator()
+                $creator = $user->getResourceNodeCreator();
+
+                if (null === $creator) {
+                    /** @var User|null $creator */
+                    $defaultCreator = $this->security->getUser();
+                    if (null !== $defaultCreator) {
+                        $creator = $defaultCreator;
+                    }
+                }
+
+                if (null === $creator) {
+                    throw new UserNotFoundException('User creator not found, use $resource->setCreator();');
                 }
 
                 $em = $args->getEntityManager();
                 $resourceNode = new ResourceNode();
                 $resourceNode
                     ->setTitle($user->getUsername())
-                    ->setCreator($this->security->getUser())
+                    ->setCreator($creator)
                     ->setResourceType($this->userRepository->getResourceType())
                 ;
                 $em->persist($resourceNode);

@@ -86,6 +86,11 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         $this->hasher = $hasher;
     }
 
+    public function createUser(): User
+    {
+        return new User();
+    }
+
     public function updateUser(User $user, bool $andFlush = true): void
     {
         $this->updateCanonicalFields($user);

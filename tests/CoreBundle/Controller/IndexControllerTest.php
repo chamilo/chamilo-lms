@@ -5,11 +5,14 @@
 namespace Chamilo\Tests\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class IndexControllerTest extends WebTestCase
 {
+    use ChamiloTestTrait;
+
     public function testIndex()
     {
         $client = static::createClient();
@@ -21,18 +24,15 @@ class IndexControllerTest extends WebTestCase
     public function testUserAccess()
     {
         $client = static::createClient();
-        /** @var UserRepository $userRepository */
-        $userRepository = $this->getContainer()->get(UserRepository::class);
 
         // retrieve the admin
-        $admin = $userRepository->findByUsername('admin');
+        $admin = $this->getUser('admin');
 
         // simulate $testUser being logged in
         $client->loginUser($admin);
 
         $client->request('GET', '/account/edit');
 
-        //$this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
         $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
     }
 }

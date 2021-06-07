@@ -2882,7 +2882,7 @@ JAVASCRIPT;
                             $condition_array[] = ' ('
                                 .$this->get_where_clause($rule->field, $rule->op, $rule->data)
                                 .') ';
-                            $extra_fields[] = ['field' => $ruleField 'id' => $field_option['id']];
+                            $extra_fields[] = ['field' => $ruleField, 'id' => $field_option['id']];
                         }
                     } else {
                         if (isset($rule->data)) {

@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class CDocumentRepositoryTest extends AbstractApiTest
 {
@@ -85,6 +86,72 @@ class CDocumentRepositoryTest extends AbstractApiTest
             '@context' => '/api/contexts/Documents',
             '@type' => 'Documents',
             'title' => 'folder1',
+        ]);
+    }
+
+    public function testCreateFile(): void
+    {
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        // Get admin.
+        $admin = $this->getUser('admin');
+        // Get access url.
+        $accessUrl = $this->getAccessUrl();
+
+        $course = (new Course())
+            ->setTitle('Test course')
+            ->setCode('test_course')
+            ->addAccessUrl($accessUrl)
+            ->setCreator($admin)
+        ;
+        $courseRepo->create($course);
+
+        // Create file.
+        $resourceLinkList = [
+            'cid' => $course->getId(),
+            'visibility' => 2,
+        ];
+
+        $path = $this->getContainer()->get('kernel')->getProjectDir();
+
+        $filePath = $path.'/public/img/logo.png';
+
+        $file = new UploadedFile(
+            $filePath,
+            'logo.png',
+            'image/png',
+        );
+
+        $token = $this->getUserToken([]);
+        $this->createClientWithCredentials($token)->request(
+            'POST',
+            '/api/documents',
+            [
+                'headers' => ['Content-Type' => 'multipart/form-data'],
+                'extra' => [
+                    'files' => [
+                        'uploadFile' => $file,
+                    ],
+                ],
+                'json' => [
+                    'title' => 'my image',
+                    'type' => 'image/jpeg',
+                    'filetype' => 'file',
+                    'size' => filesize($filePath),
+                    'parentResourceNodeId' => $course->getResourceNode()->getId(),
+                    'resourceLinkList' => json_encode($resourceLinkList),
+                    //'uploadFile' => new F
+                ],
+            ]
+        );
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(201);
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertJsonContains([
+            '@context' => '/api/contexts/Documents',
+            '@type' => 'Documents',
+            'title' => 'my image',
         ]);
     }
 }

@@ -3,26 +3,16 @@
 namespace Chamilo\Tests;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 trait ChamiloTestTrait
 {
-    /**
-     * Finds a user registered in the test DB, added by the DataFixtures classes.
-     */
-    public function getUser(string $username): ?User
-    {
-        /** @var UserRepository $repo */
-        $repo = static::getContainer()->get(UserRepository::class);
-
-        // retrieve user
-        return $repo->findByUsername($username);
-    }
-
     public function createUser(string $username, string $password, string $email): ?User
     {
         /** @var UserRepository $repo */
@@ -37,12 +27,35 @@ trait ChamiloTestTrait
             ->setStatus(1)
             ->setPlainPassword($password)
             ->setEmail($email)
-            ->setCreator($admin)
-        ;
+            ->setCreator($admin);
 
         $repo->updateUser($user);
 
         return $user;
+    }
+
+    /**
+     * Finds a user registered in the test DB, added by the DataFixtures classes.
+     */
+    public function getUser(string $username): ?User
+    {
+        /** @var UserRepository $repo */
+        $repo = static::getContainer()->get(UserRepository::class);
+
+        // retrieve user
+        return $repo->findByUsername($username);
+    }
+
+    public function createCourse($title): ?Course
+    {
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $course = (new Course())
+            ->setTitle($title)
+            ->addAccessUrl($this->getAccessUrl())
+            ->setCreator($this->getUser('admin'));
+        $courseRepo->create($course);
+
+        return $course;
     }
 
     public function getAccessUrl(string $url = ''): ?AccessUrl

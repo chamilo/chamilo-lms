@@ -628,6 +628,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     {
         $this->title = $title;
 
+        $this->setCode($title);
+
         return $this;
     }
 

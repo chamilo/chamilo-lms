@@ -14,7 +14,6 @@ use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceRight;
-use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\ResourceWithAccessUrlInterface;
 use Chamilo\CoreBundle\Entity\Session;
@@ -54,6 +53,33 @@ class ResourceListener
         $this->accessUrl = null;
     }
 
+    public function getAccessUrl($em): ?AccessUrl
+    {
+        if (null === $this->accessUrl) {
+            $request = $this->request->getCurrentRequest();
+            if (null === $request) {
+                return null;
+            }
+
+            $sessionRequest = $request->getSession();
+            $id = (int) $sessionRequest->get('access_url_id');
+            if (0 !== $id) {
+                /** @var AccessUrl $url */
+                $url = $em->getRepository(AccessUrl::class)->find($id);
+
+                if (null !== $url) {
+                    $this->accessUrl = $url;
+
+                    return $url;
+                }
+            }
+
+            return null;
+        }
+
+        return $this->accessUrl;
+    }
+
     /**
      * Only in creation.
      */
@@ -65,7 +91,13 @@ class ResourceListener
 
         if ($resource instanceof ResourceWithAccessUrlInterface) {
             if (0 === $resource->getUrls()->count()) {
-                throw new Exception('This resource needs an AccessUrl use $resource->addAccessUrl();');
+                // The AccessUrl was not added using $resource->addAccessUrl(),
+                // try getting the URL from the session if possible.
+                $accessUrl = $this->getAccessUrl($em);
+                if (null === $accessUrl) {
+                    throw new Exception('This resource needs an AccessUrl use $resource->addAccessUrl();');
+                }
+                $resource->addAccessUrl($accessUrl);
             }
         }
 
@@ -84,7 +116,7 @@ class ResourceListener
         $creator = $resource->getResourceNodeCreator();
 
         if (null === $creator) {
-            /** @var User|null $creator */
+            /** @var User|null $defaultCreator */
             $defaultCreator = $this->security->getUser();
             if (null !== $defaultCreator) {
                 $creator = $defaultCreator;

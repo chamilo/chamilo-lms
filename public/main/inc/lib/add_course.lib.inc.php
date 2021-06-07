@@ -754,9 +754,9 @@ class AddCourse
 
             $course = new Course();
             $course
+                ->setTitle($title)
                 ->setCode($code)
                 ->setCourseLanguage($course_language)
-                ->setTitle($title)
                 ->setDescription(get_lang('Course Description'))
                 ->setVisibility($visibility)
                 ->setShowScore(1)

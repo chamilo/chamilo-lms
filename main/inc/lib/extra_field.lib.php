@@ -1038,7 +1038,7 @@ class ExtraField extends Model
                             $extra_data['extra_'.$field['variable']]['extra_'.$field['variable']] = $field_value;
                             break;
                         case self::FIELD_TYPE_TRIPLE_SELECT:
-                            [$level1, $level2, $level3] = explode(';', $field_value);
+                            list($level1, $level2, $level3) = explode(';', $field_value);
 
                             $extra_data["extra_$variable"]["extra_$variable"] = $level1;
                             $extra_data["extra_$variable"]["extra_{$variable}_second"] = $level2;

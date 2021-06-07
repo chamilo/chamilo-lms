@@ -54,9 +54,9 @@ class CourseListener
 
     public function postPersist(Course $course, LifecycleEventArgs $args): void
     {
-        error_log('Course listener postPersist');
+        //error_log('Course listener postPersist');
         if ($course) {
-            error_log('add tools');
+            //error_log('add tools');
             //$this->toolChain->addToolsInCourse($this->toolRepository, $course);
             /*$urlRelCourse = $course->getUrls()->first();
             $url = $urlRelCourse->getUrl();*/
@@ -74,7 +74,7 @@ class CourseListener
      */
     public function preUpdate(Course $course, LifecycleEventArgs $args): void
     {
-        error_log('preUpdate');
+        //error_log('preUpdate');
         if ($course) {
             /*$url = $course->getCurrentUrl();
             $repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');

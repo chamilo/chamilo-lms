@@ -59,7 +59,7 @@ class ResourceListener
      */
     public function prePersist(AbstractResource $resource, LifecycleEventArgs $event): void
     {
-        error_log('Resource listener prePersist for obj: '.\get_class($resource));
+        //error_log('Resource listener prePersist for obj: '.\get_class($resource));
         $em = $event->getEntityManager();
         $request = $this->request;
 
@@ -153,7 +153,7 @@ class ResourceListener
         }
 
         if ($resource->hasUploadFile()) {
-            error_log('hasUploadFile');
+            //error_log('hasUploadFile');
             // @todo check CreateResourceNodeFileAction
             /** @var File $uploadedFile */
             $uploadedFile = $request->getCurrentRequest()->files->get('uploadFile');
@@ -232,7 +232,7 @@ class ResourceListener
             $resourceNode->setParent($resource->getParent()->getResourceNode());
         }
 
-        error_log('Listener end, adding resource node');
+        //error_log('Listener end, adding resource node');
         $resource->setResourceNode($resourceNode);
 
         // All resources should have a parent, except AccessUrl.
@@ -246,7 +246,7 @@ class ResourceListener
      */
     public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $event): void
     {
-        error_log('Resource listener preUpdate');
+        //error_log('Resource listener preUpdate');
         $this->setLinks($resource, $event->getEntityManager());
 
         if ($resource->hasUploadFile()) {
@@ -292,11 +292,11 @@ class ResourceListener
 
     public function setLinks(AbstractResource $resource, $em): void
     {
-        error_log('Resource listener setLinks');
+        //error_log('Resource listener setLinks');
         $links = $resource->getResourceLinkEntityList();
         if ($links) {
             foreach ($links as $link) {
-                error_log('Adding resource links');
+                //error_log('Adding resource links');
                 $rights = [];
                 switch ($link->getVisibility()) {
                     case ResourceLink::VISIBILITY_PENDING:

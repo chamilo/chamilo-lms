@@ -10,33 +10,33 @@ use Chamilo\CoreBundle\Entity\Tag;
  */
 class ExtraField extends Model
 {
-    public const FIELD_TYPE_TEXT = 1;
-    public const FIELD_TYPE_TEXTAREA = 2;
-    public const FIELD_TYPE_RADIO = 3;
-    public const FIELD_TYPE_SELECT = 4;
-    public const FIELD_TYPE_SELECT_MULTIPLE = 5;
-    public const FIELD_TYPE_DATE = 6;
-    public const FIELD_TYPE_DATETIME = 7;
-    public const FIELD_TYPE_DOUBLE_SELECT = 8;
-    public const FIELD_TYPE_DIVIDER = 9;
-    public const FIELD_TYPE_TAG = 10;
-    public const FIELD_TYPE_TIMEZONE = 11;
-    public const FIELD_TYPE_SOCIAL_PROFILE = 12;
-    public const FIELD_TYPE_CHECKBOX = 13;
-    public const FIELD_TYPE_MOBILE_PHONE_NUMBER = 14;
-    public const FIELD_TYPE_INTEGER = 15;
-    public const FIELD_TYPE_FILE_IMAGE = 16;
-    public const FIELD_TYPE_FLOAT = 17;
-    public const FIELD_TYPE_FILE = 18;
-    public const FIELD_TYPE_VIDEO_URL = 19;
-    public const FIELD_TYPE_LETTERS_ONLY = 20;
-    public const FIELD_TYPE_ALPHANUMERIC = 21;
-    public const FIELD_TYPE_LETTERS_SPACE = 22;
-    public const FIELD_TYPE_ALPHANUMERIC_SPACE = 23;
-    public const FIELD_TYPE_GEOLOCALIZATION = 24;
-    public const FIELD_TYPE_GEOLOCALIZATION_COORDINATES = 25;
-    public const FIELD_TYPE_SELECT_WITH_TEXT_FIELD = 26;
-    public const FIELD_TYPE_TRIPLE_SELECT = 27;
+    const FIELD_TYPE_TEXT = 1;
+    const FIELD_TYPE_TEXTAREA = 2;
+    const FIELD_TYPE_RADIO = 3;
+    const FIELD_TYPE_SELECT = 4;
+    const FIELD_TYPE_SELECT_MULTIPLE = 5;
+    const FIELD_TYPE_DATE = 6;
+    const FIELD_TYPE_DATETIME = 7;
+    const FIELD_TYPE_DOUBLE_SELECT = 8;
+    const FIELD_TYPE_DIVIDER = 9;
+    const FIELD_TYPE_TAG = 10;
+    const FIELD_TYPE_TIMEZONE = 11;
+    const FIELD_TYPE_SOCIAL_PROFILE = 12;
+    const FIELD_TYPE_CHECKBOX = 13;
+    const FIELD_TYPE_MOBILE_PHONE_NUMBER = 14;
+    const FIELD_TYPE_INTEGER = 15;
+    const FIELD_TYPE_FILE_IMAGE = 16;
+    const FIELD_TYPE_FLOAT = 17;
+    const FIELD_TYPE_FILE = 18;
+    const FIELD_TYPE_VIDEO_URL = 19;
+    const FIELD_TYPE_LETTERS_ONLY = 20;
+    const FIELD_TYPE_ALPHANUMERIC = 21;
+    const FIELD_TYPE_LETTERS_SPACE = 22;
+    const FIELD_TYPE_ALPHANUMERIC_SPACE = 23;
+    const FIELD_TYPE_GEOLOCALIZATION = 24;
+    const FIELD_TYPE_GEOLOCALIZATION_COORDINATES = 25;
+    const FIELD_TYPE_SELECT_WITH_TEXT_FIELD = 26;
+    const FIELD_TYPE_TRIPLE_SELECT = 27;
     public $columns = [
         'id',
         'field_type',
@@ -207,7 +207,7 @@ class ExtraField extends Model
 
         return $result;
     }
-    
+
     /**
      * Converts a string like this:
      * France:Paris;Bretagne;Marseille;Lyon|Belgique:Bruxelles;Namur;Liège;Bruges|Peru:Lima;Piura;
@@ -244,7 +244,7 @@ class ExtraField extends Model
         return $options_parsed;
     }
 
-    
+
     /**
      * @param $string
      *
@@ -365,7 +365,7 @@ class ExtraField extends Model
         return trim($string, '\\|;');
     }
 
-    
+
     /**
      * @param string $variable
      * @param string $dataValue
@@ -627,7 +627,7 @@ class ExtraField extends Model
         return $query->getQuery()->getArrayResult();
     }
 
-    
+
     /**
      * Get all the field info for tags.
      *
@@ -665,7 +665,7 @@ class ExtraField extends Model
         }
     }
 
-    
+
     /**
      * Translate the display text for a extra field.
      *
@@ -1725,7 +1725,7 @@ class ExtraField extends Model
                                        </h4>
                                     </div>
                                 </div>
-                            </div>    
+                            </div>
                         ');
                         break;
                     case self::FIELD_TYPE_TAG:
@@ -2088,15 +2088,15 @@ class ExtraField extends Model
                                     $deleteId = $field_details['variable'].'_delete';
                                     $form->addHtml("
                                         <script>
-                                            $(function() {                                     
+                                            $(function() {
                                                 $('#".$deleteId."').on('click', function() {
-                                                    $.ajax({			
+                                                    $.ajax({
                                                         type: 'GET',
-                                                        url: '".$url."',			
-                                                        success: function(result) {		    
+                                                        url: '".$url."',
+                                                        success: function(result) {
                                                             if (result == 1) {
                                                                 $('#".$divItemId."').html('".get_lang('Deleted')."');
-                                                            }			    
+                                                            }
                                                         }
                                                     });
                                                 });
@@ -2625,7 +2625,7 @@ JAVASCRIPT;
             </a>
 JAVASCRIPT;
 
-        return "function action_formatter(cellvalue, options, rowObject) {        
+        return "function action_formatter(cellvalue, options, rowObject) {
             return '$editButton $deleteButton';
         }";
     }
@@ -3028,7 +3028,7 @@ JAVASCRIPT;
                             $inject_joins .= "
                                 INNER JOIN $this->table_field_rel_tag tag_rel$counter
                                 ON (
-                                    tag_rel$counter.field_id = ".$extra_info['id']." AND 
+                                    tag_rel$counter.field_id = ".$extra_info['id']." AND
                                     tag_rel$counter.item_id = s.".$this->primaryKey."
                                 )
                                 INNER JOIN $this->table_field_tag tag$counter
@@ -3117,7 +3117,7 @@ JAVASCRIPT;
         return " $col {$this->ops[$oper]} '$val' ";
     }
 
-    
+
     /**
      * Get the extra fields and their formatted values.
      *
@@ -3248,7 +3248,7 @@ JAVASCRIPT;
         return $valuesData;
     }
 
-  
+
 
     /**
      * @param int    $fieldId
@@ -3262,9 +3262,9 @@ JAVASCRIPT;
         $tag = Database::escape_string($tag);
         $fieldId = (int) $fieldId;
 
-        $sql = "SELECT user_id 
-                FROM {$this->table_field_tag} f INNER JOIN $tagRelUserTable ft 
-                ON tag_id = f.id 
+        $sql = "SELECT user_id
+                FROM {$this->table_field_tag} f INNER JOIN $tagRelUserTable ft
+                ON tag_id = f.id
                 WHERE tag = '$tag' AND f.field_id = $fieldId;
         ";
 
@@ -3333,9 +3333,9 @@ JAVASCRIPT;
         $value = Database::escape_string(implode("','", $options));
 
         $sql = "SELECT DISTINCT t.*, v.value, o.display_text
-                FROM $tagRelExtraTable te 
+                FROM $tagRelExtraTable te
                 INNER JOIN $tagTable t
-                ON (t.id = te.tag_id AND te.field_id = t.field_id AND te.field_id = $tagId) 
+                ON (t.id = te.tag_id AND te.field_id = t.field_id AND te.field_id = $tagId)
                 INNER JOIN $table v
                 ON (te.item_id = v.item_id AND v.field_id = $id)
                 INNER JOIN $optionsTable o
@@ -3348,7 +3348,7 @@ JAVASCRIPT;
         $result = Database::store_result($result);
 
         return $result;
-    }   
+    }
 
     /**
      * @param \FormValidator $form
@@ -3468,7 +3468,7 @@ JAVASCRIPT;
 
                 if (!id) {
                     $('#$secondSelectId').empty().selectpicker('refresh');
-                    
+
                     return;
                 }
 
@@ -3639,17 +3639,17 @@ JAVASCRIPT;
                 var slctFirst = $('#$slctFirstId'),
                     slctSecond = $('#$slctSecondId'),
                     slctThird = $('#$slctThirdId');
-                    
+
                 slctFirst.on('change', function () {
                     slctSecond.empty().selectpicker('refresh');
                     slctThird.empty().selectpicker('refresh');
-    
+
                     var level = $(this).val();
-    
+
                     if (!level) {
                         return;
                     }
-    
+
                     $.getJSON(_p.web_ajax + 'extra_field.ajax.php', {
                         'a': 'get_second_select_options',
                         'type': '$this->type',
@@ -3669,19 +3669,19 @@ JAVASCRIPT;
                                     $('<option>', {value: index, text: valueParts.join(''), 'data-value': dataValue})
                                 );
                             });
-    
+
                             slctSecond.selectpicker('refresh');
                         });
                 });
                 slctSecond.on('change', function () {
                     slctThird.empty().selectpicker('refresh');
-    
+
                     var level = $(this).val();
-                    
+
                     if (!level) {
                         return;
                     }
-                    
+
                     $.getJSON(_p.web_ajax + 'extra_field.ajax.php', {
                         'a': 'get_second_select_options',
                         'type': '$this->type',
@@ -3701,7 +3701,7 @@ JAVASCRIPT;
                                     $('<option>', {value: index, text: valueParts.join(''), 'data-value': dataValue})
                                 );
                             });
-    
+
                             slctThird.selectpicker('refresh');
                         });
                 });

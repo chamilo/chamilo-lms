@@ -227,15 +227,26 @@ function prepare_user_sql_query($getCount)
             $sql .= 'u.lastname AS col3, u.firstname AS col4, ';
         }
 
-        $sql .= " u.username AS col5,
+        // set columns name to sort
+        if (api_get_setting('login_is_email') === 'true') {
+            $sql .= " u.username AS col5,
+                    u.email,
+                    u.status AS col6,
+                    u.active AS col7,
+                    u.registration_date AS col8,
+                    u.last_login as col9,
+                    u.id AS col10,";
+        } else {
+            $sql .= " u.username AS col5,
                     u.email AS col6,
                     u.status AS col7,
                     u.active AS col8,
                     u.registration_date AS col9,
                     u.last_login as col10,
-                    u.id AS col11,
-                    u.expiration_date AS exp,
-                    u.password
+                    u.id AS col11,";
+        }
+        $sql .= "  u.expiration_date AS exp,
+                   u.password
                 FROM $user_table u";
     }
 

@@ -1005,29 +1005,29 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     if (isset($course_info) && isset($course_info['visibility'])) {
         switch ($course_info['visibility']) {
             default:
-            case COURSE_VISIBILITY_CLOSED:
+            case Course::CLOSED:
                 // Completely closed: the course is only accessible to the teachers. - 0
                 if ($isAllowedInCourse && api_get_user_id() && !api_is_anonymous()) {
                     $is_visible = true;
                 }
                 break;
-            case COURSE_VISIBILITY_REGISTERED:
+            case Course::REGISTERED:
                 // Private - access authorized to course members only - 1
                 if ($isAllowedInCourse && api_get_user_id() && !api_is_anonymous()) {
                     $is_visible = true;
                 }
                 break;
-            case COURSE_VISIBILITY_OPEN_PLATFORM:
+            case Course::OPEN_PLATFORM:
                 // Open - access allowed for users registered on the platform - 2
                 if ($isAllowedInCourse && api_get_user_id() && !api_is_anonymous()) {
                     $is_visible = true;
                 }
                 break;
-            case COURSE_VISIBILITY_OPEN_WORLD:
+            case Course::OPEN_WORLD:
                 //Open - access allowed for the whole world - 3
                 $is_visible = true;
                 break;
-            case COURSE_VISIBILITY_HIDDEN:
+            case Course::HIDDEN:
                 //Completely closed: the course is only accessible to the teachers. - 0
                 if (api_is_platform_admin()) {
                     $is_visible = true;
@@ -5437,14 +5437,14 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
     }
 
     switch ($visibility) {
-        case COURSE_VISIBILITY_OPEN_WORLD:
+        case Course::OPEN_WORLD:
             return true;
-        case COURSE_VISIBILITY_OPEN_PLATFORM:
+        case Course::OPEN_PLATFORM:
             return isset($userid);
-        case COURSE_VISIBILITY_REGISTERED:
-        case COURSE_VISIBILITY_CLOSED:
+        case Course::REGISTERED:
+        case Course::CLOSED:
             return $is_platformAdmin || $is_courseMember || $is_courseAdmin;
-        case COURSE_VISIBILITY_HIDDEN:
+        case Course::HIDDEN:
             return $is_platformAdmin;
     }
 

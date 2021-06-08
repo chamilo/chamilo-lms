@@ -668,7 +668,7 @@ class AddCourse
             if (isset($default_course_visibility)) {
                 $visibility = $default_course_visibility;
             } else {
-                $visibility = COURSE_VISIBILITY_OPEN_PLATFORM;
+                $visibility = Course::OPEN_PLATFORM;
             }
         } else {
             $visibility = $params['visibility'];
@@ -678,7 +678,7 @@ class AddCourse
         if (isset($params['subscribe'])) {
             $subscribe = 1 === (int) $params['subscribe'];
         } else {
-            if (COURSE_VISIBILITY_OPEN_PLATFORM == $visibility) {
+            if (Course::OPEN_PLATFORM == $visibility) {
                 $subscribe = true;
             }
         }

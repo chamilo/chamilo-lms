@@ -578,7 +578,7 @@ class CourseManager
 
         if (in_array($visibility, [
                 COURSE_VISIBILITY_CLOSED,
-                //COURSE_VISIBILITY_REGISTERED,
+                //Course::REGISTERED,
                 COURSE_VISIBILITY_HIDDEN,
         ])) {
             Display::addFlash(
@@ -592,7 +592,7 @@ class CourseManager
         }
 
         // Private course can allow auto subscription
-        if (COURSE_VISIBILITY_REGISTERED === $visibility && false === $course->getSubscribe()) {
+        if (Course::REGISTERED === $visibility && false === $course->getSubscribe()) {
             Display::addFlash(
                 Display::return_message(
                     get_lang('Subscribing not allowed'),
@@ -4950,7 +4950,7 @@ class CourseManager
             }
 
             if ($access_link && in_array('enter', $access_link) ||
-                COURSE_VISIBILITY_OPEN_WORLD == $course_info['visibility']
+                Course::OPEN_WORLD == $course_info['visibility']
             ) {
                 $my_course['go_to_course_button'] = Display::url(
                     get_lang('Go to the course').' '.
@@ -5118,7 +5118,7 @@ class CourseManager
         if ($checkHidePrivate) {
             $hidePrivateSetting = api_get_setting('course_catalog_hide_private');
             if ('true' === $hidePrivateSetting) {
-                $visibilityCondition .= " AND $courseTableAlias.visibility <> ".COURSE_VISIBILITY_REGISTERED;
+                $visibilityCondition .= " AND $courseTableAlias.visibility <> ".Course::REGISTERED;
             }
         }
         if ($hideClosed) {
@@ -5182,8 +5182,8 @@ class CourseManager
         // Register button
         if (!api_is_anonymous($uid) &&
             (
-            (COURSE_VISIBILITY_OPEN_WORLD == $course['visibility'] || COURSE_VISIBILITY_OPEN_PLATFORM == $course['visibility'])
-                //$course['visibility'] == COURSE_VISIBILITY_REGISTERED && $course['subscribe'] == SUBSCRIBE_ALLOWED
+            (Course::OPEN_WORLD == $course['visibility'] || Course::OPEN_PLATFORM == $course['visibility'])
+                //$course['visibility'] == Course::REGISTERED && $course['subscribe'] == SUBSCRIBE_ALLOWED
             ) &&
             SUBSCRIBE_ALLOWED == $course['subscribe'] &&
             (!in_array($course['real_id'], $user_courses) || empty($user_courses))
@@ -5195,16 +5195,16 @@ class CourseManager
 
         // Go To Course button (only if admin, if course public or if student already subscribed)
         if ($is_admin ||
-            COURSE_VISIBILITY_OPEN_WORLD == $course['visibility'] && empty($course['registration_code']) ||
-            ($isLogin && COURSE_VISIBILITY_OPEN_PLATFORM == $course['visibility'] && empty($course['registration_code'])) ||
+            Course::OPEN_WORLD == $course['visibility'] && empty($course['registration_code']) ||
+            ($isLogin && Course::OPEN_PLATFORM == $course['visibility'] && empty($course['registration_code'])) ||
             (in_array($course['real_id'], $user_courses) && COURSE_VISIBILITY_CLOSED != $course['visibility'])
         ) {
             $options[] = 'enter';
         }
 
         if ($is_admin ||
-            COURSE_VISIBILITY_OPEN_WORLD == $course['visibility'] && empty($course['registration_code']) ||
-            ($isLogin && COURSE_VISIBILITY_OPEN_PLATFORM == $course['visibility'] && empty($course['registration_code'])) ||
+            Course::OPEN_WORLD == $course['visibility'] && empty($course['registration_code']) ||
+            ($isLogin && Course::OPEN_PLATFORM == $course['visibility'] && empty($course['registration_code'])) ||
             (in_array($course['real_id'], $user_courses) && COURSE_VISIBILITY_CLOSED != $course['visibility'])
         ) {
             $options[] = 'enter';
@@ -6146,7 +6146,7 @@ class CourseManager
             if (!empty($course_info)) {
                 if (in_array(
                     $course_info['visibility'],
-                    [COURSE_VISIBILITY_OPEN_PLATFORM, COURSE_VISIBILITY_OPEN_WORLD]
+                    [Course::OPEN_PLATFORM, Course::OPEN_WORLD]
                 )
                 ) {
                     if (self::is_user_subscribed_in_course($userId, $course_info['code'])) {
@@ -6537,9 +6537,9 @@ class CourseManager
     public static function getCountOpenCourses()
     {
         $visibility = [
-            COURSE_VISIBILITY_REGISTERED,
-            COURSE_VISIBILITY_OPEN_PLATFORM,
-            COURSE_VISIBILITY_OPEN_WORLD,
+            Course::REGISTERED,
+            Course::OPEN_PLATFORM,
+            Course::OPEN_WORLD,
         ];
 
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -6558,9 +6558,9 @@ class CourseManager
     public static function getCountExercisesFromOpenCourse()
     {
         $visibility = [
-            COURSE_VISIBILITY_REGISTERED,
-            COURSE_VISIBILITY_OPEN_PLATFORM,
-            COURSE_VISIBILITY_OPEN_WORLD,
+            Course::REGISTERED,
+            Course::OPEN_PLATFORM,
+            Course::OPEN_WORLD,
         ];
 
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -6778,5 +6778,46 @@ class CourseManager
 
         $courseFieldValue = new ExtraFieldValue('course');
         $courseFieldValue->saveFieldValues($params);
+    }
+
+    public static function addVisibilityOptions(FormValidator $form): void
+    {
+        $group = [];
+        $group[] = $form->createElement(
+            'radio',
+            'visibility',
+            get_lang('Course access'),
+            get_lang('Public - access allowed for the whole world'),
+            Course::OPEN_WORLD
+        );
+        $group[] = $form->createElement(
+            'radio',
+            'visibility',
+            null,
+            get_lang(' Open - access allowed for users registered on the platform'),
+            Course::OPEN_PLATFORM
+        );
+        $group[] = $form->createElement(
+            'radio',
+            'visibility',
+            null,
+            get_lang('Private access (access authorized to group members only)'),
+            Course::REGISTERED
+        );
+        $group[] = $form->createElement(
+            'radio',
+            'visibility',
+            null,
+            get_lang('Closed - the course is only accessible to the teachers'),
+            Course::CLOSED
+        );
+        $group[] = $form->createElement(
+            'radio',
+            'visibility',
+            null,
+            get_lang('Hidden - Completely hidden to all users except the administrators'),
+            Course::HIDDEN
+        );
+        $form->addGroup($group, '', get_lang('Course access'));
     }
 }

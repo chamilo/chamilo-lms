@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @coversNothing
+ * @covers \Chamilo\CoreBundle\Controller\IndexController
  */
 class IndexControllerTest extends WebTestCase
 {

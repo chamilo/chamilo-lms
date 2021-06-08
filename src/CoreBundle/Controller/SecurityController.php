@@ -28,7 +28,16 @@ class SecurityController extends AbstractController
      * @Route("/login_json", name="login_json")
      */
     public function loginJson(AuthenticationUtils $authenticationUtils): Response
-    {error_log('loginJson');
+    {
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->json(
+                [
+                    'error' => 'Invalid login request: check that the Content-Type header is "application/json".',
+                ],
+                400
+            );
+        }
+
         //$error = $authenticationUtils->getLastAuthenticationError();
         //$lastUsername = $authenticationUtils->getLastUsername();
 

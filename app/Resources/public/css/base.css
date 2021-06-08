@@ -8544,7 +8544,8 @@ ul#toolnavbox-two li a.btn {
 }
 
 #lp-accordion .panel-default .panel-heading {
-    background: url(../../../../main/img/icons/svg/arrow-down.svg) #FFF right center no-repeat;
+    /*background: url(../../../../main/img/icons/svg/arrow-down.svg) #FFF right center no-repeat;*/
+    background: #FFF;
     border-radius: 10px;
 }
 

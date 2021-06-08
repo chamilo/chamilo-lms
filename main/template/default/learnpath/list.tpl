@@ -458,6 +458,11 @@
                                                 <img src="{{ "delete.png"|icon }}" alt="{{ "Delete"|get_lang }}">
                                             </a>
                                         {% endif %}
+                                        <a role="button" data-toggle="collapse" data-parent="#lp-accordion"
+                                           href="#collapse-{{ lp_data.category.getId() }}" aria-expanded="true"
+                                           aria-controls="collapse-{{ lp_data.category.getId() }}">
+                                            <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                                        </a>
                                     {% endif %}
                                 </div>
                             {% endif %}

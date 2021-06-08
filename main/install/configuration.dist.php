@@ -1942,6 +1942,9 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 // If true then a variable will be called get_lang('CareerDiagramDisclaimer') and printed below a diagram;
 //$_configuration['career_diagram_disclaimer'] = true;
 
+// Disable webservices.
+//$_configuration['disable_webservices'] = true;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

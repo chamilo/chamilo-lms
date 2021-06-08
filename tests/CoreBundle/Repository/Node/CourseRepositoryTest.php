@@ -8,7 +8,6 @@ namespace Chamilo\Tests\CoreBundle\Repository\Node;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
-use Chamilo\CoreBundle\ToolChain;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
@@ -29,8 +28,9 @@ class CourseRepositoryTest extends WebTestCase
         $courseRepo = self::getContainer()->get(CourseRepository::class);
 
         $this->expectException(UserNotFoundException::class);
+
         $course = (new Course())
-            ->setTitle('test_course')
+            ->setTitle('test')
             ->addAccessUrl($this->getAccessUrl())
         ;
         $courseRepo->create($course);
@@ -51,7 +51,7 @@ class CourseRepositoryTest extends WebTestCase
         $this->assertSame(25, \count($course->getTools()));
 
         // Check course code.
-        $this->assertSame('TEST-COURSE', $course->getCode());
+        $this->assertSame('TESTCOURSE', $course->getCode());
 
         // The course should connected with a Access URL
         $this->assertSame(1, $course->getUrls()->count());

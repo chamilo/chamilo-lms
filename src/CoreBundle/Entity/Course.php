@@ -85,6 +85,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      *     fields={"title"},
      *     updatable=false,
      *     unique=true,
+     *     separator="",
      *     style="upper"
      * )
      * @ORM\Column(name="code", type="string", length=40, nullable=false, unique=true)

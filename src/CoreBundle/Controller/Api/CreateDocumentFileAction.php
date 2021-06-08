@@ -17,11 +17,12 @@ class CreateDocumentFileAction extends BaseResourceFileAction
         error_log('CreateDocumentFileAction __invoke');
 
         $document = new CDocument();
-        $this->handleCreateRequest($document, $request);
-        if ($request->request->has('filetype')) {
-            $document->setFiletype($request->get('filetype'));
-        }
+        $result = $this->handleCreateRequest($document, $request);
 
+        $document->setFiletype($result['filetype']);
+        $document->setComment($result['comment']);
+
+        // Specific for the CDocument because it needs to be registered in a course.
         if ($request->request->has('resourceLinkList')) {
             $links = $request->get('resourceLinkList');
             $links = false === strpos($links, '[') ? json_decode('['.$links.']', true) : json_decode($links, true);
@@ -32,8 +33,6 @@ class CreateDocumentFileAction extends BaseResourceFileAction
             }
             $document->setResourceLinkArray($links);
         }
-
-        //$document->setComment($comment);
 
         return $document;
     }

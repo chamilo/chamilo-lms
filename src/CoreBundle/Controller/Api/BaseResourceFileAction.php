@@ -17,24 +17,19 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class BaseResourceFileAction
 {
-    protected function handleCreateRequest(AbstractResource $resource, Request $request): void
+    protected function handleCreateRequest(AbstractResource $resource, Request $request): array
     {
-        //error_log('handleCreateRequest');
         $contentData = $request->getContent();
         if (!empty($contentData)) {
             $contentData = json_decode($contentData, true);
-            var_dump($contentData);
             $title = $contentData['title'] ?? '';
             $comment = $contentData['comment'] ?? '';
-            $nodeId = $contentData['parentResourceNodeId'] ?? 0;
+            $parentResourceNodeId = $contentData['parentResourceNodeId'] ?? 0;
+            $fileType = $contentData['filetype'] ?? '';
         } else {
             $title = $request->get('title');
             $comment = $request->get('comment');
-            $nodeId = (int) $request->get('parentResourceNodeId');
-        }
-
-        $fileType = 'folder';
-        if ($request->request->has('filetype')) {
+            $parentResourceNodeId = (int) $request->get('parentResourceNodeId');
             $fileType = $request->get('filetype');
         }
 
@@ -42,13 +37,12 @@ class BaseResourceFileAction
             throw new Exception('filetype needed: folder or file');
         }
 
-        if (0 === $nodeId) {
+        if (0 === $parentResourceNodeId) {
             throw new Exception('parentResourceNodeId int value needed');
         }
 
-        $resource->setParentResourceNode($nodeId);
+        $resource->setParentResourceNode($parentResourceNodeId);
 
-        //error_log("fileType: $fileType");
         switch ($fileType) {
             case 'file':
                 $content = '';
@@ -80,7 +74,7 @@ class BaseResourceFileAction
                 }
 
                 if (!$fileParsed) {
-                    throw new InvalidArgumentException('filetype was set to "file" but not upload found');
+                    throw new InvalidArgumentException('filetype was set to "file" but not upload file found');
                 }
 
                 break;
@@ -93,6 +87,13 @@ class BaseResourceFileAction
         }
 
         $resource->setResourceName($title);
+
+        return [
+            'title' => $title,
+            'comment' => $comment,
+            'parentResourceNodeId' => $parentResourceNodeId,
+            'filetype' => $fileType,
+        ];
     }
 
     protected function handleUpdateRequest(AbstractResource $resource, $repo, Request $request)

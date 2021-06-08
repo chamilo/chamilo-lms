@@ -6,8 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -20,7 +18,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
 
-    public function testGetDocuments(): void
+    public function testGetDocumentsAsAdmin(): void
     {
         $token = $this->getUserToken([]);
         $response = $this->createClientWithCredentials($token)->request('GET', '/api/documents');
@@ -35,10 +33,6 @@ class CDocumentRepositoryTest extends AbstractApiTest
             '@id' => '/api/documents',
             '@type' => 'hydra:Collection',
             'hydra:totalItems' => 0,
-            /*'hydra:view' => [
-                '@id' => '/api/documents?page=1',
-                '@type' => 'hydra:PartialCollectionView',
-            ],*/
         ]);
 
         $this->assertCount(0, $response->toArray()['hydra:member']);
@@ -47,18 +41,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
     public function testCreateFolder(): void
     {
-        $courseRepo = self::getContainer()->get(CourseRepository::class);
-
-        $admin = $this->getUser('admin');
-        $accessUrl = $this->getAccessUrl();
-
-        $course = (new Course())
-            ->setTitle('Test course')
-            ->setCode('test_course')
-            ->addAccessUrl($accessUrl)
-            ->setCreator($admin)
-        ;
-        $courseRepo->create($course);
+        $course = $this->createCourse('Test');
 
         // Create folder.
         $resourceLinkList = [
@@ -66,13 +49,15 @@ class CDocumentRepositoryTest extends AbstractApiTest
             'visibility' => 2,
         ];
 
+        $folderName = 'folder1';
         $token = $this->getUserToken([]);
         $this->createClientWithCredentials($token)->request(
             'POST',
             '/api/documents',
             [
                 'json' => [
-                    'title' => 'folder1',
+                    'title' => $folderName,
+                    'filetype' => 'folder',
                     'parentResourceNodeId' => $course->getResourceNode()->getId(),
                     'resourceLinkList' => json_encode($resourceLinkList),
                 ],
@@ -85,27 +70,14 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $this->assertJsonContains([
             '@context' => '/api/contexts/Documents',
             '@type' => 'Documents',
-            'title' => 'folder1',
+            'title' => $folderName,
         ]);
     }
 
-    public function testCreateFile(): void
+    public function testUploadFile(): void
     {
-        $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $course = $this->createCourse('Test');
 
-        $admin = $this->getUser('admin');
-        // Get access url.
-        $accessUrl = $this->getAccessUrl();
-
-        $course = (new Course())
-            ->setTitle('Test course')
-            ->setCode('test_course')
-            ->addAccessUrl($accessUrl)
-            ->setCreator($admin)
-        ;
-        $courseRepo->create($course);
-
-        // Create file.
         $resourceLinkList = [
             'cid' => $course->getId(),
             'visibility' => 2,
@@ -114,10 +86,11 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $path = $this->getContainer()->get('kernel')->getProjectDir();
 
         $filePath = $path.'/public/img/logo.png';
+        $fileName = basename($filePath);
 
         $file = new UploadedFile(
             $filePath,
-            'logo.png',
+            $fileName,
             'image/png',
         );
 
@@ -135,13 +108,10 @@ class CDocumentRepositoryTest extends AbstractApiTest
                     ],
                 ],
                 'json' => [
-                    'title' => 'my image',
-                    'type' => 'image/jpeg',
                     'filetype' => 'file',
                     'size' => filesize($filePath),
                     'parentResourceNodeId' => $course->getResourceNode()->getId(),
                     'resourceLinkList' => json_encode($resourceLinkList),
-                    //'uploadFile' => new F
                 ],
             ]
         );
@@ -152,7 +122,82 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $this->assertJsonContains([
             '@context' => '/api/contexts/Documents',
             '@type' => 'Documents',
-            'title' => 'my image',
+            'title' => $fileName,
+            'filetype' => 'file',
+        ]);
+    }
+
+    public function testUploadFileInSideASubFolder(): void
+    {
+        $course = $this->createCourse('Test');
+
+        // Create folder.
+        $resourceLinkList = [
+            'cid' => $course->getId(),
+            'visibility' => 2,
+        ];
+
+        $token = $this->getUserToken([]);
+        // Creates a folder.
+        $folderName = 'test';
+        $response = $this->createClientWithCredentials($token)->request(
+            'POST',
+            '/api/documents',
+            [
+                'json' => [
+                    'title' => $folderName,
+                    'filetype' => 'folder',
+                    'parentResourceNodeId' => $course->getResourceNode()->getId(),
+                    'resourceLinkList' => json_encode($resourceLinkList),
+                ],
+            ]
+        );
+
+        $this->assertResponseIsSuccessful();
+        $data = json_decode($response->getContent());
+        $resourceNodeId = $data->resourceNode->id;
+
+        $path = $this->getContainer()->get('kernel')->getProjectDir();
+
+        $filePath = $path.'/public/img/logo.png';
+        $fileName = basename($filePath);
+
+        $file = new UploadedFile(
+            $filePath,
+            $fileName,
+            'image/png',
+        );
+
+        $token = $this->getUserToken([]);
+        $this->createClientWithCredentials($token)->request(
+            'POST',
+            '/api/documents',
+            [
+                'headers' => [
+                    'Content-Type' => 'multipart/form-data',
+                ],
+                'extra' => [
+                    'files' => [
+                        'uploadFile' => $file,
+                    ],
+                ],
+                'json' => [
+                    'filetype' => 'file',
+                    'size' => filesize($filePath),
+                    'parentResourceNodeId' => $resourceNodeId,
+                    'resourceLinkList' => json_encode($resourceLinkList),
+                ],
+            ]
+        );
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(201);
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertJsonContains([
+            '@context' => '/api/contexts/Documents',
+            '@type' => 'Documents',
+            'title' => $fileName,
+            'filetype' => 'file',
         ]);
     }
 }

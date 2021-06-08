@@ -35,7 +35,6 @@ abstract class AbstractApiTest extends ApiTestCase
 
         $this->assertResponseIsSuccessful();
         $data = json_decode($response->getContent());
-        //$this->token = $data->access_token;
 
         $this->assertEquals('admin', $data->username);
 
@@ -44,7 +43,7 @@ abstract class AbstractApiTest extends ApiTestCase
 
     protected function createClientWithCredentials($token = null): Client
     {
-        $token = $token ?: $this->getToken();
+        $token = $token ?: $this->getUserToken();
 
         return static::createClient([], ['headers' => ['authorization' => 'Bearer '.$token]]);
     }

@@ -469,6 +469,7 @@ export default {
         if (this.item.id) {
         } else {
           //this.products.push(this.product);
+          this.item.filetype = 'folder';
           this.item.parentResourceNodeId = this.$route.params.node;
           this.item.resourceLinkList = JSON.stringify([{
             gid: this.$route.query.gid,

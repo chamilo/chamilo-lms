@@ -277,7 +277,7 @@ export default {
           if (!isEmpty(this.$route.params.node)) {
             resourceNodeId = this.$route.params.node;
           }
-
+          this.item.filetype = 'folder';
           this.item.parentResourceNodeId = resourceNodeId;
           this.item.resourceLinkList = JSON.stringify([{
             gid: 0,

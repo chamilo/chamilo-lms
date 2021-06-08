@@ -139,7 +139,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
 
         $token = $this->getUserToken([]);
         // Creates a folder.
-        $folderName = 'test';
+        $folderName = 'myfolder';
         $response = $this->createClientWithCredentials($token)->request(
             'POST',
             '/api/documents',
@@ -199,5 +199,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
             'title' => $fileName,
             'filetype' => 'file',
         ]);
+
+        $this->assertMatchesRegularExpression('~'.$folderName.'~', $response->toArray()['resourceNode']['path']);
     }
 }

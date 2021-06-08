@@ -24,9 +24,10 @@ abstract class AbstractApiTest extends ApiTestCase
             'password' => $password,
         ];
 
-        $response = static::createClient()->request(
+        $client = static::createClient();
+        $response = $client->request(
             'POST',
-            '/api/authentication_token',
+            '/login_json',
             [
                 'headers' => ['Content-Type' => 'application/json'],
                 'body' => json_encode($params),
@@ -36,9 +37,9 @@ abstract class AbstractApiTest extends ApiTestCase
         $this->assertResponseIsSuccessful();
         $data = json_decode($response->getContent());
 
-        $this->assertEquals('admin', $data->username);
+        $this->assertEquals($username, $data->username);
 
-        return $response;
+        return $client;
     }
 
     protected function createClientWithCredentials($token = null): Client
@@ -57,6 +58,15 @@ abstract class AbstractApiTest extends ApiTestCase
             return $this->token;
         }
 
+        $defaultBody = [
+            'username' => 'admin',
+            'password' => 'admin',
+        ];
+
+        if (!empty($body)) {
+            $defaultBody = $body;
+        }
+
         $response = static::createClient()->request(
             'POST',
             '/api/authentication_token',
@@ -66,10 +76,7 @@ abstract class AbstractApiTest extends ApiTestCase
                     'password' => 'admin',
                 ],*/
                 'headers' => ['Content-Type' => 'application/json'],
-                'body' => json_encode([
-                    'username' => 'admin',
-                    'password' => 'admin',
-                ])
+                'body' => json_encode($defaultBody)
             ],
         );
 

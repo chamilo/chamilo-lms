@@ -18,6 +18,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -56,8 +57,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\SessionListener"})
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\SessionRepository")
+ * @UniqueEntity("name")
  */
-class Session
+class Session implements ResourceWithAccessUrlInterface
 {
     public const VISIBLE = 1;
     public const READ_ONLY = 2;
@@ -140,6 +142,7 @@ class Session
 
     /**
      * @Assert\NotBlank()
+     *
      * @Groups({"session:read", "session:write", "session_rel_course_rel_user:read", "document:read", "session_rel_user:read"})
      * @ORM\Column(name="name", type="string", length=150)
      */
@@ -1011,28 +1014,34 @@ class Session
         return $this->urls;
     }
 
-    public function setUrls(Collection $urls): void
+    public function setUrls(Collection $urls): self
     {
         $this->urls = new ArrayCollection();
 
         foreach ($urls as $url) {
             $this->addUrls($url);
         }
+
+        return $this;
     }
 
-    public function addUrl(AccessUrl $url): void
+    public function addAccessUrl(AccessUrl $url): self
     {
         $accessUrlRelSession = new AccessUrlRelSession();
         $accessUrlRelSession->setUrl($url);
         $accessUrlRelSession->setSession($this);
 
         $this->addUrls($accessUrlRelSession);
+
+        return $this;
     }
 
-    public function addUrls(AccessUrlRelSession $url): void
+    public function addUrls(AccessUrlRelSession $url): self
     {
         $url->setSession($this);
-        $this->urls[] = $url;
+        $this->urls->add($url);
+
+        return $this;
     }
 
     /**

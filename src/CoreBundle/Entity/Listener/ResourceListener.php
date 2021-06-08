@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\ToolChain;
+use Chamilo\CoreBundle\Traits\AccessUrlListenerTrait;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -34,11 +35,12 @@ use Symfony\Component\Security\Core\Security;
 
 class ResourceListener
 {
+    use AccessUrlListenerTrait;
+
     protected SlugifyInterface $slugify;
     protected Security $security;
     protected ToolChain $toolChain;
     protected RequestStack $request;
-    protected ?AccessUrl $accessUrl;
 
     public function __construct(
         SlugifyInterface $slugify,
@@ -50,34 +52,6 @@ class ResourceListener
         $this->security = $security;
         $this->toolChain = $toolChain;
         $this->request = $request;
-        $this->accessUrl = null;
-    }
-
-    public function getAccessUrl($em): ?AccessUrl
-    {
-        if (null === $this->accessUrl) {
-            $request = $this->request->getCurrentRequest();
-            if (null === $request) {
-                return null;
-            }
-
-            $sessionRequest = $request->getSession();
-            $id = (int) $sessionRequest->get('access_url_id');
-            if (0 !== $id) {
-                /** @var AccessUrl $url */
-                $url = $em->getRepository(AccessUrl::class)->find($id);
-
-                if (null !== $url) {
-                    $this->accessUrl = $url;
-
-                    return $url;
-                }
-            }
-
-            return null;
-        }
-
-        return $this->accessUrl;
     }
 
     /**
@@ -93,7 +67,7 @@ class ResourceListener
             if (0 === $resource->getUrls()->count()) {
                 // The AccessUrl was not added using $resource->addAccessUrl(),
                 // try getting the URL from the session if possible.
-                $accessUrl = $this->getAccessUrl($em);
+                $accessUrl = $this->getAccessUrl($em, $request);
                 if (null === $accessUrl) {
                     throw new Exception('This resource needs an AccessUrl use $resource->addAccessUrl();');
                 }
@@ -269,7 +243,7 @@ class ResourceListener
 
         // All resources should have a parent, except AccessUrl.
         if (!($resource instanceof AccessUrl) && null === $resourceNode->getParent()) {
-            throw new InvalidArgumentException('Resource Node should have a parent');
+            throw new InvalidArgumentException(\sprintf('Resource %s Node should have a parent', $resource->getResourceName()));
         }
     }
 

@@ -29,6 +29,12 @@ class SessionRepository extends ServiceEntityRepository
         parent::__construct($registry, Session::class);
     }
 
+    public function create(Session $session): void
+    {
+        $this->getEntityManager()->persist($session);
+        $this->getEntityManager()->flush();
+    }
+
     /**
      * @return SessionRelUser[]
      */
@@ -44,6 +50,9 @@ class SessionRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * @return SessionRelUser[]
+     */
     public function getUsersByCourse(Session $session, Course $course, AccessUrl $url)
     {
         if (0 === $session->getUsers()->count()) {

@@ -386,7 +386,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->courseTypeId = null;
         $this->room = null;
         $this->courseLanguage = 'en';
-        $this->visibility = COURSE_VISIBILITY_OPEN_PLATFORM;
+        $this->visibility = self::OPEN_PLATFORM;
         $this->subscribe = true;
         $this->unsubscribe = false;
         //$this->specificFieldValues = new ArrayCollection();
@@ -644,10 +644,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->getTitle();
     }
 
-    /**
-     * @return string
-     */
-    public function getTitleAndCode()
+    public function getTitleAndCode(): string
     {
         return $this->getTitle().' ('.$this->getCode().')';
     }
@@ -659,12 +656,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this;
     }
 
-    /**
-     * Get description.
-     *
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }

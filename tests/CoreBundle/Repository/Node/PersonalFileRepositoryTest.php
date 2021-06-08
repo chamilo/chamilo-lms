@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Repository\Node;
 
-use Chamilo\CoreBundle\Repository\Node\PersonalFileRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -24,7 +23,7 @@ class PersonalFileRepositoryTest extends AbstractApiTest
         $username = 'test';
         $password = 'test';
 
-        $user = $this->createUser($username, $password, 'test@test.com');
+        $user = $this->createUser($username, $password);
         $token = $this->getUserToken([
             'username' => $username,
             'password' => $password,
@@ -57,7 +56,6 @@ class PersonalFileRepositoryTest extends AbstractApiTest
                     'filetype' => 'file',
                     'size' => filesize($filePath),
                     'parentResourceNodeId' => $resourceNodeId,
-                    //'resourceLinkList' => json_encode($resourceLinkList),
                 ],
             ]
         );
@@ -74,7 +72,7 @@ class PersonalFileRepositoryTest extends AbstractApiTest
 
         $url = $response->toArray()['contentUrl'];
 
-        // Access file as anon.
+        // Access file as anon, redirects to the login.
         $this->createClient()->request(
             'GET',
             $url
@@ -82,7 +80,7 @@ class PersonalFileRepositoryTest extends AbstractApiTest
         $this->assertResponseRedirects('/login');
 
         // Access file as another user should be forbidden.
-        $this->createUser('another', 'another', 'another@test.com');
+        $this->createUser('another', 'another');
         $client = $this->getClientWithGuiCredentials('another', 'another');
         $client->request(
             'GET',
@@ -90,7 +88,7 @@ class PersonalFileRepositoryTest extends AbstractApiTest
         );
         $this->assertResponseStatusCodeSame(403); // forbidden
 
-        // Acces with the same user should be allowed.
+        // Access with the same user should be allowed.
         $client = $this->getClientWithGuiCredentials($username, $password);
         // Access file as user that created the file.
         $client->request(

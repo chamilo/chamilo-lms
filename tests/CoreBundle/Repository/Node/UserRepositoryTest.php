@@ -27,7 +27,7 @@ class UserRepositoryTest extends KernelTestCase
     {
         self::bootKernel();
 
-        $this->createUser('user', 'user', 'user@example.org');
+        $this->createUser('user', 'user');
 
         $count = self::getContainer()->get(UserRepository::class)->count([]);
         $this->assertSame(3, $count);

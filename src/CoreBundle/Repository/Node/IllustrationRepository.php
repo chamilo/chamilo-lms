@@ -70,7 +70,7 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
      */
     public function addIllustration(
         ResourceInterface $resource,
-        User $user,
+        User $creator,
         UploadedFile $uploadFile = null,
         string $crop = ''
     ): ?ResourceFile {
@@ -83,7 +83,7 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
 
         if (null === $illustrationNode) {
             $illustration = new Illustration();
-            $this->addResourceNode($illustration, $user, $resource);
+            $this->addResourceNode($illustration, $creator, $resource);
             $em->persist($illustration);
         } else {
             $illustration = $this->findOneBy([

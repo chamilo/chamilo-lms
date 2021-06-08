@@ -710,7 +710,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->status = self::STUDENT;
         $this->salt = sha1(uniqid('', true));
         $this->active = true;
-        $this->enabled = false;
+        $this->enabled = true;
         $this->locked = false;
         $this->expired = false;
 

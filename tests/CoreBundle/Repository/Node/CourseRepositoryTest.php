@@ -36,13 +36,25 @@ class CourseRepositoryTest extends WebTestCase
         $courseRepo->create($course);
     }
 
+    public function testCreateCourseSameTitle(): void
+    {
+        self::bootKernel();
+        $course = $this->createCourse('Test course');
+        $this->assertSame('TESTCOURSE', $course->getCode());
+
+        $course = $this->createCourse('Test course');
+        $this->assertSame('TESTCOURSE1', $course->getCode());
+    }
+
     /**
-     * Create a course with a creator.
+     * Create a course with a creator + check course tool creation (ToolChain).
      */
     public function testCreate(): void
     {
         $courseRepo = self::getContainer()->get(CourseRepository::class);
         $course = $this->createCourse('Test course');
+
+        $this->assertHasNoEntityViolations($course);
 
         $count = $courseRepo->count([]);
         $this->assertSame(1, $count);
@@ -50,27 +62,69 @@ class CourseRepositoryTest extends WebTestCase
         // Check tools.
         $this->assertSame(25, \count($course->getTools()));
 
-        // Check course code.
-        $this->assertSame('TESTCOURSE', $course->getCode());
-
-        // The course should connected with a Access URL
+        // The course should connected with the current Access URL.
         $this->assertSame(1, $course->getUrls()->count());
     }
 
-    public function testCourseAccess(): void
+    public function testCourseStudentSubscription(): void
     {
-        self::bootKernel();
+        $client = static::createClient();
+
         /** @var CourseRepository $courseRepo */
         $courseRepo = self::getContainer()->get(CourseRepository::class);
-        //$toolChain = self::getContainer()->get(ToolChain::class);
+
+        // Create default course.
         $course = $this->createCourse('Test course');
+        $course->setVisibility(Course::REGISTERED);
 
-        $student = $this->createUser('student', 'student', 'student@student.com');
+        // Create a user.
+        $student = $this->createUser('student', 'student');
 
+        // Add user to the course.
         $course->addUser($student, 0, null, 5);
-
         $courseRepo->update($course);
 
         $this->assertSame(1, $course->getUsers()->count());
+
+        // retrieve the admin
+        $user = $this->getUser('student');
+
+        $client->loginUser($user);
+
+        $client->request('GET', sprintf('/course/%s/home', $course->getId()));
+        $this->assertResponseIsSuccessful();
+    }
+
+    public function testCourseRegisteredVisibility(): void
+    {
+        $client = static::createClient();
+
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        // Create default course.
+        $course = $this->createCourse('Test course');
+        $course->setVisibility(Course::REGISTERED);
+        $courseRepo->update($course);
+
+        // Create a user.
+        $student = $this->createUser('student', 'student');
+
+        // Add user to the course.
+        $course->addUser($student, 0, null, 5);
+        $courseRepo->update($course);
+
+        $this->assertSame(1, $course->getUsers()->count());
+
+        // retrieve the admin
+        $user = $this->getUser('student');
+
+        $client->loginUser($user);
+
+        $client->request('GET', sprintf('/course/%s/home', $course->getId()));
+        $this->assertResponseIsSuccessful();
+
+        // Create a user.
+        $student2 = $this->createUser('student2');
     }
 }

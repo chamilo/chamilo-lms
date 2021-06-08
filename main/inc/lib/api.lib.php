@@ -5095,7 +5095,7 @@ function api_get_language_id($language)
         return null;
     }
 
-    static $staticResult;
+    static $staticResult = [];
 
     if (isset($staticResult[$language])) {
         return $staticResult[$language];

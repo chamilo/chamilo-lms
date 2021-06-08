@@ -1,19 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\Tests\CoreBundle\Controller;
 
-use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @coversNothing
+ */
 class IndexControllerTest extends WebTestCase
 {
     use ChamiloTestTrait;
 
-    public function testIndex()
+    public function testIndex(): void
     {
         $client = static::createClient();
         $client->request('GET', '/');
@@ -21,7 +25,7 @@ class IndexControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
-    public function testUserAccess()
+    public function testUserAccess(): void
     {
         $client = static::createClient();
 
@@ -33,6 +37,6 @@ class IndexControllerTest extends WebTestCase
 
         $client->request('GET', '/account/edit');
 
-        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
     }
 }

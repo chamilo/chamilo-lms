@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\Security;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Hook\HookFactory;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -124,14 +123,9 @@ class LoginFormAuthenticator extends AbstractGuardAuthenticator implements Passw
         return $user;
     }
 
-    /**
-     * @throws Exception
-     *
-     * @return bool
-     */
-    public function checkCredentials($credentials, UserInterface $user)
+    public function checkCredentials($credentials, $user): bool
     {
-        error_log('login form');
+        //error_log('login form');
 
         return $this->passwordHasher->isPasswordValid($user, $credentials['password']);
         /*$hook = $this->hookFactory->build(CheckLoginCredentialsHook::class);

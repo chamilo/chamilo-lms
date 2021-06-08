@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\Traits;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -11,20 +14,20 @@ trait TimestampableTypedEntity
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
-    protected \DateTime $createdAt;
+    protected DateTime $createdAt;
 
     /**
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      */
-    protected \DateTime $updatedAt;
+    protected DateTime $updatedAt;
 
     /**
      * Sets createdAt.
      *
      * @return $this
      */
-    public function setCreatedAt(\DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -34,7 +37,7 @@ trait TimestampableTypedEntity
     /**
      * Returns createdAt.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {
@@ -46,7 +49,7 @@ trait TimestampableTypedEntity
      *
      * @return $this
      */
-    public function setUpdatedAt(\DateTime $updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
 
@@ -56,7 +59,7 @@ trait TimestampableTypedEntity
     /**
      * Returns updatedAt.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUpdatedAt()
     {

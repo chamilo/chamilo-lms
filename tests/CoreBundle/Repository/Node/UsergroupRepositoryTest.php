@@ -1,22 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\Tests\CoreBundle\Repository\Node;
 
-use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Usergroup;
-use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
-use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
+/**
+ * @covers \UsergroupRepository
+ */
 class UsergroupRepositoryTest extends KernelTestCase
 {
     use ChamiloTestTrait;
 
-    public function testCount()
+    public function testCount(): void
     {
         self::bootKernel();
         $repo = self::getContainer()->get(UsergroupRepository::class);
@@ -29,6 +31,6 @@ class UsergroupRepositoryTest extends KernelTestCase
 
         $this->assertHasNoEntityViolations($usergroup);
         $repo->create($usergroup);
-        $this->assertEquals(1, $repo->count([]));
+        $this->assertSame(1, $repo->count([]));
     }
 }

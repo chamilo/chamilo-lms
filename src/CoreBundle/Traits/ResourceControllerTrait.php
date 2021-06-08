@@ -13,13 +13,15 @@ use Chamilo\CoreBundle\Repository\ResourceFactory;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Doctrine\ORM\EntityNotFoundException;
-use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use function is_object;
 
 trait ResourceControllerTrait
 {
+    /**
+     * @var ContainerInterface
+     */
     protected $container;
 
     public function getRepositoryFromRequest(Request $request): ResourceRepository
@@ -127,7 +129,7 @@ trait ResourceControllerTrait
         /** @var User $user */
         $user = $token->getUser();
 
-        if (!is_object($user)) {
+        if (!\is_object($user)) {
             // e.g. anonymous authentication
             return null;
         }

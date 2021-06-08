@@ -1,31 +1,35 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chamilo\Tests\CoreBundle\Repository\Node;
 
-use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
+/**
+ * @covers \UserRepository
+ */
 class UserRepositoryTest extends KernelTestCase
 {
     use ChamiloTestTrait;
 
-    public function testCount()
+    public function testCount(): void
     {
         self::bootKernel();
         $count = self::getContainer()->get(UserRepository::class)->count([]);
         // Admin + anon (registered in the DataFixture\AccessUrlAdminFixtures.php)
-        $this->assertEquals(2, $count);
+        $this->assertSame(2, $count);
     }
 
-    public function testCreateUser()
+    public function testCreateUser(): void
     {
         self::bootKernel();
 
         $this->createUser('user', 'user', 'user@example.org');
 
         $count = self::getContainer()->get(UserRepository::class)->count([]);
-        $this->assertEquals(3, $count);
+        $this->assertSame(3, $count);
     }
 }

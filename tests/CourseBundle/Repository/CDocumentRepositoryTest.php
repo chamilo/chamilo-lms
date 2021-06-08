@@ -1,24 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
-use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
-use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
+/**
+ * @covers \Chamilo\CourseBundle\Repository\CDocumentRepository
+ */
 class CDocumentRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
 
-    public function testGetDocuments()
+    public function testGetDocuments(): void
     {
         $token = $this->getUserToken([]);
         $response = $this->createClientWithCredentials($token)->request('GET', '/api/documents');
@@ -47,9 +49,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
     {
         $courseRepo = self::getContainer()->get(CourseRepository::class);
 
-        // Get admin.
         $admin = $this->getUser('admin');
-        // Get access url.
         $accessUrl = $this->getAccessUrl();
 
         $course = (new Course())
@@ -93,7 +93,6 @@ class CDocumentRepositoryTest extends AbstractApiTest
     {
         $courseRepo = self::getContainer()->get(CourseRepository::class);
 
-        // Get admin.
         $admin = $this->getUser('admin');
         // Get access url.
         $accessUrl = $this->getAccessUrl();
@@ -127,7 +126,9 @@ class CDocumentRepositoryTest extends AbstractApiTest
             'POST',
             '/api/documents',
             [
-                'headers' => ['Content-Type' => 'multipart/form-data'],
+                'headers' => [
+                    'Content-Type' => 'multipart/form-data',
+                ],
                 'extra' => [
                     'files' => [
                         'uploadFile' => $file,

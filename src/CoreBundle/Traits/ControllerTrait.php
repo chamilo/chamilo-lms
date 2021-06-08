@@ -31,12 +31,16 @@ use Chamilo\CourseBundle\Repository\CToolRepository;
 use Chamilo\LtiBundle\Repository\ExternalToolRepository;
 use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 trait ControllerTrait
 {
+    /**
+     * @var ContainerInterface
+     */
     protected $container;
 
     public static function getSubscribedServices(): array
@@ -99,7 +103,6 @@ trait ControllerTrait
 
     /**
      * Translator shortcut.
-     *
      *
      * @return string
      */

@@ -9,7 +9,7 @@ namespace Chamilo\CoreBundle\Traits;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CGroup;
-use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Trait CourseControllerTrait.
@@ -19,6 +19,9 @@ trait CourseControllerTrait
 {
     protected ?Course $course = null;
     protected ?Session $session = null;
+    /**
+     * @var ContainerInterface
+     */
     protected $container;
 
     /**
@@ -159,6 +162,6 @@ trait CourseControllerTrait
 
     public function getSessionId(): int
     {
-        return $this->session !== null ? $this->getSession()->getId() : 0;
+        return null !== $this->session ? $this->getSession()->getId() : 0;
     }
 }

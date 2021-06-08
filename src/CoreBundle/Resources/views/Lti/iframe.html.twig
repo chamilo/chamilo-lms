@@ -3,7 +3,7 @@
 {% block content %}
     <section class="bg-white">
         {% if not tool.description is empty %}
-            {% if tool.parent.activeDeepLinking %}
+            {% if tool.toolParent.activeDeepLinking %}
                 {% autoescape false %}
                     <div class="m-3 pt-3">{{ tool.description }}</div>
                 {% endautoescape %}
@@ -12,9 +12,9 @@
             {% endif %}
         {% endif %}
 
-        <div class="embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item plugin-ims-lti-iframe" allowfullscreen
-                    src="{{ url('chamilo_lti_launch', {'code': course.code, 'id': tool.id}) }}"></iframe>
+        <div class="">
+            <iframe class="w-full h-screen plugin-ims-lti-iframe" allowfullscreen
+                    src="{{ url('chamilo_lti_launch', {'cid': course.id, 'id': tool.id}) }}"></iframe>
         </div>
     </section>
 {% endblock %}

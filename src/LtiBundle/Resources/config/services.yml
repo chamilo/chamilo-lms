@@ -7,8 +7,10 @@ services:
 
   Chamilo\LtiBundle\:
     resource: '../../*'
-    exclude: '../../{Component,Form,ChamiloLtiBundle.php,Entity}'
+    exclude: '../../{Component,Form,ChamiloLtiBundle.php,Entity,Util}'
     public: true
+
+  Chamilo\LtiBundle\Util\Utils:
 
   Chamilo\LtiBundle\Controller\:
     resource: '../../Controller'

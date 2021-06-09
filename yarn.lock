@@ -6066,10 +6066,10 @@ __metadata:
     purgecss-webpack-plugin: ^4.0.3
     pwstrength-bootstrap: ^3.1.0
     qtip2: ^3.0.3
-    quasar: ^2.0.0-beta.19
+    quasar: 2.0.0-rc.1
     readmore-js: ^2.2.1
     sass: ^1.34.1
-    sass-loader: ^10.2.0
+    sass-loader: ^11.1.1
     select2: ^4.1.0-rc.0
     signature_pad: ^3.0.0-beta.4
     sortablejs: ^1.13.0
@@ -15870,10 +15870,10 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"quasar@npm:^2.0.0-beta.19":
-  version: 2.0.0-beta.19
-  resolution: "quasar@npm:2.0.0-beta.19"
-  checksum: 16f766dadefb6ecb0f6023e410cc2ac197c246a962715182f7dd9e1709a2b727ee1f8dfccbbe08005a7cc05d89a5dec6372f49a317a6d74202bcc34a6ff20a46
+"quasar@npm:2.0.0-rc.1":
+  version: 2.0.0-rc.1
+  resolution: "quasar@npm:2.0.0-rc.1"
+  checksum: 25b4a3a6bc32aa336c5d77878fb22b6360fdad5035a6405c24f2bc3f87241645c11f291429070cce8c79d3b13d33ad81a2c6f6eb6cac4a7b4b61676e508ed84a
   languageName: node
   linkType: hard
 
@@ -16743,20 +16743,17 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"sass-loader@npm:^10.2.0":
-  version: 10.2.0
-  resolution: "sass-loader@npm:10.2.0"
+"sass-loader@npm:^11.1.1":
+  version: 11.1.1
+  resolution: "sass-loader@npm:11.1.1"
   dependencies:
     klona: ^2.0.4
-    loader-utils: ^2.0.0
     neo-async: ^2.6.2
-    schema-utils: ^3.0.0
-    semver: ^7.3.2
   peerDependencies:
     fibers: ">= 3.1.0"
     node-sass: ^4.0.0 || ^5.0.0 || ^6.0.0
     sass: ^1.3.0
-    webpack: ^4.36.0 || ^5.0.0
+    webpack: ^5.0.0
   peerDependenciesMeta:
     fibers:
       optional: true
@@ -16764,7 +16761,7 @@ fsevents@~2.3.1:
       optional: true
     sass:
       optional: true
-  checksum: 1c8914920749f2e2e404e4663c9cce6ef4d38dc7fb30117c722c25b76257ebee444c90d20e174adf621036e1afefaadc8f89b69fd912347f4618b7401afae53c
+  checksum: 6d8ded8e2a0742f6b62dddc577324b74a7a0781f5405574d3af4ee34c9a6189debff1b90e3acd65a62ebbf6dc52c47a9a2be6c1786ac2435bd39c91c2ebe7367
   languageName: node
   linkType: hard
 

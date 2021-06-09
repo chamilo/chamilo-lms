@@ -6,34 +6,43 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Repository\Node;
 
-use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\Tests\ChamiloTestTrait;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * @covers \IllustrationRepository
  */
-class IllustrationRepositoryTest extends KernelTestCase
+class IllustrationRepositoryTest extends WebTestCase
 {
     use ChamiloTestTrait;
 
     public function testCreateCourseIllustration(): void
     {
-        self::bootKernel();
+        $client = static::createClient();
+
         /** @var IllustrationRepository $repo */
         $repo = self::getContainer()->get(IllustrationRepository::class);
 
         $course = $this->createCourse('course');
-
         $file = $repo->addIllustration($course, $this->getUser('admin'), $this->getUploadedFile());
+
         $this->assertHasNoEntityViolations($file);
         $this->assertNotNull($file);
+
+        $url = $repo->getIllustrationUrl($course);
+
+        $client->request(
+            'GET',
+            $url
+        );
+        $this->assertResponseIsSuccessful();
     }
 
     public function testCreateUserIllustration(): void
     {
-        self::bootKernel();
+        $client = static::createClient();
+
         /** @var IllustrationRepository $repo */
         $repo = self::getContainer()->get(IllustrationRepository::class);
 
@@ -42,5 +51,12 @@ class IllustrationRepositoryTest extends KernelTestCase
         $file = $repo->addIllustration($user, $user, $this->getUploadedFile());
         $this->assertHasNoEntityViolations($file);
         $this->assertNotNull($file);
+
+        $url = $repo->getIllustrationUrl($user);
+        $client->request(
+            'GET',
+            $url
+        );
+        $this->assertResponseIsSuccessful();
     }
 }

@@ -59,6 +59,8 @@ abstract class AbstractResource
     public ?ResourceNode $resourceNode = null;
 
     /**
+     * This property is used when using api platform.
+     *
      * @Groups({"resource_node:read", "resource_node:write", "document:read", "document:write"})
      */
     public ?int $parentResourceNode = 0;

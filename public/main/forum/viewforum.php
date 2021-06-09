@@ -348,7 +348,6 @@ if ('learnpath' !== $origin) {
 // Getting al the threads
 $threads = get_threads($forumId);
 $course_id = api_get_course_int_id();
-$illustrationRepo = Container::getIllustrationRepository();
 
 $threadList = [];
 

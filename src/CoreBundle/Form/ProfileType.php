@@ -94,8 +94,8 @@ class ProfileType extends AbstractType
                 'timezone',
                 TimezoneType::class,
                 [
-                    'label' => 'form.label_timezone',
-                    'required' => false,
+                    'label' => 'Timezone',
+                    'required' => true,
                     //'preferred_choices' => array('Europe/Paris', 'America/Lima'),
                 ]
             )

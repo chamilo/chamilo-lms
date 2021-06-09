@@ -89,7 +89,6 @@ class ResourceNodeVoter extends Voter
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
-        error_log('resourceNode voteOnAttribute');
         // Make sure there is a user object (i.e. that the user is logged in)
         // Update. No, anons can enter a node depending in the visibility.
         // $user = $token->getUser();
@@ -100,6 +99,8 @@ class ResourceNodeVoter extends Voter
         /** @var ResourceNode $resourceNode */
         $resourceNode = $subject;
         $resourceTypeName = $resourceNode->getResourceType()->getName();
+
+        //error_log("resourceNode voteOnAttribute $attribute : ".$resourceNode->getTitle());
 
         // Illustrations are always visible.
         if ('illustrations' === $resourceTypeName) {

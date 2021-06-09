@@ -24,7 +24,11 @@
         <tbody>
         {% for row in rows %}
             <tr>
-                <td>{{ row.skill_badge }}</td>
+                <td>
+                    <a href="{{ row.skill_url }}" target="_blank">
+                        {{ row.skill_badge }}
+                    </a>
+                </td>
                 <td>{{ row.skill_name }}</td>
                 <td>{{ row.achieved_at }}</td>
                 {% if row.course_name %}

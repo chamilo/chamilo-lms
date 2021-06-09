@@ -68,7 +68,7 @@ class Version20170625144000 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_student_publication CHANGE active active INT DEFAULT NULL');
 
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_student_publication ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_student_publication ADD resource_node_id BIGINT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_student_publication ADD CONSTRAINT FK_5246F7461BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
             );
@@ -83,7 +83,7 @@ class Version20170625144000 extends AbstractMigrationChamilo
 
         /*
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_student_publication_assignment ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_student_publication_assignment ADD resource_node_id BIGINT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_student_publication_assignment ADD CONSTRAINT FK_25687EB81BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
             );
@@ -112,7 +112,7 @@ class Version20170625144000 extends AbstractMigrationChamilo
 
         if (false === $schema->hasTable('c_student_publication_correction')) {
             $this->addSql(
-                'CREATE TABLE c_student_publication_correction (id INT AUTO_INCREMENT NOT NULL, resource_node_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_B7309BBA1BAD783F (resource_node_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
+                'CREATE TABLE c_student_publication_correction (id INT AUTO_INCREMENT NOT NULL, resource_node_id BIGINT DEFAULT NULL, title VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_B7309BBA1BAD783F (resource_node_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
             );
             $this->addSql(
                 'ALTER TABLE c_student_publication_correction ADD CONSTRAINT FK_B7309BBA1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'
@@ -121,7 +121,7 @@ class Version20170625144000 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('c_student_publication_comment');
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_student_publication_comment ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_student_publication_comment ADD resource_node_id BIGINT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_student_publication_comment ADD CONSTRAINT FK_35C509F61BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
             );

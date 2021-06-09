@@ -20,7 +20,7 @@ class Version20190110182620 extends AbstractMigrationChamilo
     {
         $table = $schema->getTable('c_blog');
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_blog ADD resource_node_id INT DEFAULT NULL;');
+            $this->addSql('ALTER TABLE c_blog ADD resource_node_id BIGINT DEFAULT NULL;');
             $this->addSql(
                 'ALTER TABLE c_blog ADD CONSTRAINT FK_64B00A121BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'
             );
@@ -29,7 +29,7 @@ class Version20190110182620 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('c_wiki');
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_wiki ADD resource_node_id INT DEFAULT NULL;');
+            $this->addSql('ALTER TABLE c_wiki ADD resource_node_id BIGINT DEFAULT NULL;');
             $this->addSql(
                 'ALTER TABLE c_wiki ADD CONSTRAINT FK_866887571BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'
             );

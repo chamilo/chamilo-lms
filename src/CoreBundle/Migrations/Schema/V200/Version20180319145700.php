@@ -53,7 +53,7 @@ class Version20180319145700 extends AbstractMigrationChamilo
         }
 
         if (false === $survey->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_survey ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_survey ADD resource_node_id BIGINT DEFAULT NULL');
             $this->addSql('ALTER TABLE c_survey ADD CONSTRAINT FK_F246DB301BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
             $this->addSql('CREATE UNIQUE INDEX UNIQ_F246DB301BAD783F ON c_survey (resource_node_id);');
         }

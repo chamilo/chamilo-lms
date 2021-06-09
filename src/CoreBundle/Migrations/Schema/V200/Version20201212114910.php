@@ -48,7 +48,7 @@ final class Version20201212114910 extends AbstractMigrationChamilo
         /** @var AccessUrl $url */
         foreach ($urls as $url) {
             if (false === $url->hasResourceNode()) {
-                $urlRepo->addResourceNode($url, $admin);
+                $urlRepo->createNodeForResourceWithNoParent($url, $admin);
                 $em->persist($url);
             }
         }

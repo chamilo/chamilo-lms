@@ -22,7 +22,7 @@ class Version20170625153000 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_forum_attachment CHANGE post_id post_id INT DEFAULT NULL');
 
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_forum_attachment ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_forum_attachment ADD resource_node_id BIGINT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_forum_attachment ADD CONSTRAINT FK_F1113A884B89032C FOREIGN KEY (post_id) REFERENCES c_forum_post (iid) ON DELETE CASCADE'
             );
@@ -36,7 +36,7 @@ class Version20170625153000 extends AbstractMigrationChamilo
         $table = $schema->getTable('c_forum_category');
 
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_forum_category ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_forum_category ADD resource_node_id BIGINT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_forum_category ADD CONSTRAINT FK_D627B86E1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
             );
@@ -53,7 +53,7 @@ class Version20170625153000 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('c_forum_forum');
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_forum_forum ADD resource_node_id INT DEFAULT NULL, DROP forum_id');
+            $this->addSql('ALTER TABLE c_forum_forum ADD resource_node_id BIGINT DEFAULT NULL, DROP forum_id');
             $this->addSql(
                 'ALTER TABLE c_forum_forum ADD CONSTRAINT FK_47A9C991BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
             );
@@ -102,7 +102,7 @@ class Version20170625153000 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_forum_thread CHANGE thread_date thread_date DATETIME NOT NULL');
 
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_forum_thread ADD resource_node_id INT DEFAULT NULL, DROP thread_id');
+            $this->addSql('ALTER TABLE c_forum_thread ADD resource_node_id BIGINT DEFAULT NULL, DROP thread_id');
             $this->addSql(
                 'ALTER TABLE c_forum_thread ADD CONSTRAINT FK_5DA7884C1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
             );
@@ -169,7 +169,7 @@ class Version20170625153000 extends AbstractMigrationChamilo
         }
 
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_forum_post ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_forum_post ADD resource_node_id BIGINT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_forum_post ADD CONSTRAINT FK_B5BEF55929CCBAD0 FOREIGN KEY (forum_id) REFERENCES c_forum_forum (iid) ON DELETE SET NULL'
             );

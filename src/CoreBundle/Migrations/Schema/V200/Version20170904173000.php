@@ -34,7 +34,7 @@ class Version20170904173000 extends AbstractMigrationChamilo
         }
 
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_group_info ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_group_info ADD resource_node_id BIGINT DEFAULT NULL');
             $this->addSql('ALTER TABLE c_group_info ADD CONSTRAINT FK_CE0653241BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
             $this->addSql('CREATE UNIQUE INDEX UNIQ_CE0653241BAD783F ON c_group_info (resource_node_id)');
         }
@@ -98,7 +98,7 @@ class Version20170904173000 extends AbstractMigrationChamilo
         }
 
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_group_category ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_group_category ADD resource_node_id BIGINT DEFAULT NULL');
             $this->addSql('ALTER TABLE c_group_category ADD CONSTRAINT FK_F8E479F61BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
             $this->addSql('CREATE UNIQUE INDEX UNIQ_F8E479F61BAD783F ON c_group_category (resource_node_id)');
         }

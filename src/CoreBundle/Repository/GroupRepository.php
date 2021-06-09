@@ -97,7 +97,9 @@ class GroupRepository extends ServiceEntityRepository
                 }
                 $manager->persist($group);
 
-                $accessGroupFixtures->addReference('GROUP_'.$groupData['code'], $group);
+                if (null !== $accessGroupFixtures) {
+                    $accessGroupFixtures->addReference('GROUP_'.$groupData['code'], $group);
+                }
             }
         }
 

@@ -47,7 +47,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
             $courseId = $course->getId();
 
             $sql = "SELECT * FROM c_document WHERE c_id = {$courseId}
-                    ORDER BY filetype DESC";
+                    ORDER BY filetype DESC, path";
             $result = $connection->executeQuery($sql);
             $documents = $result->fetchAllAssociative();
             foreach ($documents as $documentData) {
@@ -63,13 +63,15 @@ final class Version20201212203625 extends AbstractMigrationChamilo
 
                 $parent = null;
                 if ('.' !== \dirname($documentPath)) {
-                    $parentId = DocumentManager::get_document_id(
+                    $parentId = (int) DocumentManager::get_document_id(
                         [
                             'real_id' => $courseId,
                         ],
                         \dirname($documentPath)
                     );
-                    $parent = $documentRepo->find($parentId);
+                    if (!empty($parentId)) {
+                        $parent = $documentRepo->find($parentId);
+                    }
                 }
 
                 if (null === $parent) {

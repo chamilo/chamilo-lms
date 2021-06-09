@@ -20,7 +20,7 @@ class Version20170625145000 extends AbstractMigrationChamilo
     {
         $table = $schema->getTable('c_calendar_event');
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_calendar_event ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_calendar_event ADD resource_node_id BIGINT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_calendar_event ADD CONSTRAINT FK_A0622581EE3A445A FOREIGN KEY (parent_event_id) REFERENCES c_calendar_event (iid)'
             );
@@ -47,7 +47,7 @@ class Version20170625145000 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_calendar_event_attachment CHANGE agenda_id agenda_id INT DEFAULT NULL');
 
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_calendar_event_attachment ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_calendar_event_attachment ADD resource_node_id BIGINT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_calendar_event_attachment ADD CONSTRAINT FK_DDD745A6EA67784A FOREIGN KEY (agenda_id) REFERENCES c_calendar_event (iid) ON DELETE CASCADE'
             );

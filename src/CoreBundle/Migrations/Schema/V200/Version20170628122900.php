@@ -91,7 +91,7 @@ class Version20170628122900 extends AbstractMigrationChamilo
         }
 
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE access_url ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE access_url ADD resource_node_id BIGINT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE access_url ADD CONSTRAINT FK_9436187B1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'
             );

@@ -27,7 +27,7 @@ class Version20170625122900 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('c_document');
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_document ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_document ADD resource_node_id BIGINT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_document ADD CONSTRAINT FK_C9FA0CBD1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'
             );
@@ -48,6 +48,9 @@ class Version20170625122900 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_document CHANGE size size INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_document CHANGE session_id session_id INT DEFAULT NULL');
 
+        // Folders with c_document.path = / should be remove.
+        $this->addSql('DELETE FROM c_document WHERE filetype="folder" AND path = "/"');
+
         if (false === $table->hasIndex('idx_cdoc_type')) {
             $this->addSql('CREATE INDEX idx_cdoc_type ON c_document (filetype)');
         }
@@ -59,7 +62,7 @@ class Version20170625122900 extends AbstractMigrationChamilo
         //$this->addSql('ALTER TABLE c_document CHANGE path path VARCHAR(255) DEFAULT NULL;');
         $table = $schema->getTable('c_announcement');
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_announcement ADD resource_node_id INT DEFAULT NULL;');
+            $this->addSql('ALTER TABLE c_announcement ADD resource_node_id BIGINT DEFAULT NULL;');
             $this->addSql(
                 'ALTER TABLE c_announcement ADD CONSTRAINT FK_39912E021BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'
             );
@@ -80,7 +83,7 @@ class Version20170625122900 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_announcement_attachment CHANGE announcement_id announcement_id INT DEFAULT NULL');
 
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_announcement_attachment ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_announcement_attachment ADD resource_node_id BIGINT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_announcement_attachment ADD CONSTRAINT FK_5480BD4A913AEA17 FOREIGN KEY (announcement_id) REFERENCES c_announcement (iid) ON DELETE CASCADE'
             );

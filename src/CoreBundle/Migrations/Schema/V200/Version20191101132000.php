@@ -20,7 +20,7 @@ class Version20191101132000 extends AbstractMigrationChamilo
     {
         $table = $schema->getTable('course');
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE course ADD COLUMN resource_node_id INT DEFAULT NULL;');
+            $this->addSql('ALTER TABLE course ADD COLUMN resource_node_id BIGINT DEFAULT NULL;');
             $this->addSql(
                 'ALTER TABLE course ADD CONSTRAINT FK_169E6FB91BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'
             );

@@ -97,7 +97,7 @@ final class Version20200821224242 extends AbstractMigrationChamilo
         }
 
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE message_attachment ADD resource_node_id INT DEFAULT NULL;');
+            $this->addSql('ALTER TABLE message_attachment ADD resource_node_id BIGINT DEFAULT NULL;');
             $this->addSql('CREATE UNIQUE INDEX UNIQ_B68FF5241BAD783F ON message_attachment (resource_node_id);');
         }
 
@@ -106,7 +106,7 @@ final class Version20200821224242 extends AbstractMigrationChamilo
         }
 
         if (false === $schema->hasTable('c_chat_conversation')) {
-            $this->addSql('CREATE TABLE c_chat_conversation (id INT AUTO_INCREMENT NOT NULL, resource_node_id INT DEFAULT NULL, name VARCHAR(255) DEFAULT NULL, UNIQUE INDEX UNIQ_CD09E33F1BAD783F (resource_node_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
+            $this->addSql('CREATE TABLE c_chat_conversation (id INT AUTO_INCREMENT NOT NULL, resource_node_id BIGINT DEFAULT NULL, name VARCHAR(255) DEFAULT NULL, UNIQUE INDEX UNIQ_CD09E33F1BAD783F (resource_node_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
             $this->addSql('ALTER TABLE c_chat_conversation ADD CONSTRAINT FK_CD09E33F1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
         }
     }

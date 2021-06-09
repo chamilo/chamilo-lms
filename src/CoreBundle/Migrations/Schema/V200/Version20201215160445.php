@@ -162,7 +162,6 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                 $course = $courseRepo->find($courseId);
                 /** @var CForum $resource */
                 $forum = $forumRepo->find($forumId);
-
                 $result = $this->fixItemProperty(
                     'forum_thread',
                     $forumThreadRepo,
@@ -203,11 +202,17 @@ final class Version20201215160445 extends AbstractMigrationChamilo
 
                 $course = $courseRepo->find($courseId);
 
-                /** @var CForumThread $resource */
+                /** @var CForumThread $thread */
                 $thread = $forumThreadRepo->find($threadId);
 
+                $forum = $thread->getForum();
+                // For some reason the thread doens't have a forum, so we ignore the thread posts.
+                if (null === $forum) {
+                    continue;
+                }
+
                 $result = $this->fixItemProperty(
-                    'forum_thread',
+                    'forum_post',
                     $forumPostRepo,
                     $course,
                     $admin,

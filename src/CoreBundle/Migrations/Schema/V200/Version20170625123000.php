@@ -30,7 +30,7 @@ class Version20170625123000 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_attendance CHANGE active active INT NOT NULL');
 
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_attendance ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_attendance ADD resource_node_id BIGINT DEFAULT NULL');
             $this->addSql('ALTER TABLE c_attendance ADD CONSTRAINT FK_413634921BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
             $this->addSql('CREATE UNIQUE INDEX UNIQ_413634921BAD783F ON c_attendance (resource_node_id)');
         }

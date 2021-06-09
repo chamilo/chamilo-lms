@@ -20,7 +20,7 @@ class Version20170625154000 extends AbstractMigrationChamilo
     {
         $table = $schema->getTable('c_course_description');
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_course_description ADD resource_node_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_course_description ADD resource_node_id BIGINT DEFAULT NULL');
             $this->addSql('ALTER TABLE c_course_description ADD CONSTRAINT FK_EC3CD8091BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
             $this->addSql('CREATE UNIQUE INDEX UNIQ_EC3CD8091BAD783F ON c_course_description (resource_node_id)');
         }
@@ -36,7 +36,7 @@ class Version20170625154000 extends AbstractMigrationChamilo
         }
 
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_notebook ADD resource_node_id INT DEFAULT NULL, DROP notebook_id');
+            $this->addSql('ALTER TABLE c_notebook ADD resource_node_id BIGINT DEFAULT NULL, DROP notebook_id');
             $this->addSql('ALTER TABLE c_notebook ADD CONSTRAINT FK_E7EE1CE01BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
             $this->addSql('CREATE UNIQUE INDEX UNIQ_E7EE1CE01BAD783F ON c_notebook (resource_node_id)');
         }

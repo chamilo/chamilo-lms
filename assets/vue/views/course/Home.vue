@@ -6,6 +6,12 @@
       </div>
 
       <div v-if="isCurrentTeacher && course">
+
+        <a class="btn btn-info">
+          <v-icon>mdi-eye</v-icon>
+          See as student
+        </a>
+
         <v-icon>mdi-cog</v-icon>
 
         <select>

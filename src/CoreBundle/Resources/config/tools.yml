@@ -221,6 +221,8 @@ services:
 
     chamilo_core.tool.forum:
         class: Chamilo\CoreBundle\Tool\Forum
+        calls:
+            -   setIcon: [ 'mdi-forum' ]
         arguments:
             - 'forum'
             - 'interaction'

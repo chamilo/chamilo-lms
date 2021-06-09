@@ -8,7 +8,6 @@ namespace Chamilo\Tests\CoreBundle\Repository\Node;
 
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @covers \PersonalFileRepository
@@ -29,16 +28,12 @@ class PersonalFileRepositoryTest extends AbstractApiTest
             'password' => $password,
         ]);
 
-        $path = $this->getContainer()->get('kernel')->getProjectDir();
-        $filePath = $path.'/public/img/logo.png';
-        $fileName = basename($filePath);
+        //$path = $this->getContainer()->get('kernel')->getProjectDir();
+        //$filePath = $path.'/public/img/logo.png';
         $resourceNodeId = $user->getResourceNode()->getId();
 
-        $file = new UploadedFile(
-            $filePath,
-            $fileName,
-            'image/png',
-        );
+        $file = $this->getUploadedFile();
+        $fileName = $file->getFilename();
 
         $response = $this->createClientWithCredentials($token)->request(
             'POST',
@@ -54,7 +49,7 @@ class PersonalFileRepositoryTest extends AbstractApiTest
                 ],
                 'json' => [
                     'filetype' => 'file',
-                    'size' => filesize($filePath),
+                    'size' => $file->getSize(),
                     'parentResourceNodeId' => $resourceNodeId,
                 ],
             ]

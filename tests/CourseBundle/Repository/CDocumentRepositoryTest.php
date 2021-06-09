@@ -9,7 +9,6 @@ namespace Chamilo\Tests\CourseBundle\Repository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @covers \Chamilo\CourseBundle\Repository\CDocumentRepository
@@ -83,16 +82,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
             'visibility' => 2,
         ];
 
-        $path = $this->getContainer()->get('kernel')->getProjectDir();
-
-        $filePath = $path.'/public/img/logo.png';
-        $fileName = basename($filePath);
-
-        $file = new UploadedFile(
-            $filePath,
-            $fileName,
-            'image/png',
-        );
+        $file = $this->getUploadedFile();
 
         $token = $this->getUserToken([]);
         $this->createClientWithCredentials($token)->request(
@@ -109,7 +99,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
                 ],
                 'json' => [
                     'filetype' => 'file',
-                    'size' => filesize($filePath),
+                    'size' => $file->getSize(),
                     'parentResourceNodeId' => $course->getResourceNode()->getId(),
                     'resourceLinkList' => json_encode($resourceLinkList),
                 ],
@@ -122,7 +112,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $this->assertJsonContains([
             '@context' => '/api/contexts/Documents',
             '@type' => 'Documents',
-            'title' => $fileName,
+            'title' => $file->getFilename(),
             'filetype' => 'file',
         ]);
     }
@@ -157,16 +147,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $data = json_decode($response->getContent());
         $resourceNodeId = $data->resourceNode->id;
 
-        $path = $this->getContainer()->get('kernel')->getProjectDir();
-
-        $filePath = $path.'/public/img/logo.png';
-        $fileName = basename($filePath);
-
-        $file = new UploadedFile(
-            $filePath,
-            $fileName,
-            'image/png',
-        );
+        $file = $this->getUploadedFile();
 
         $token = $this->getUserToken([]);
         $this->createClientWithCredentials($token)->request(
@@ -183,7 +164,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
                 ],
                 'json' => [
                     'filetype' => 'file',
-                    'size' => filesize($filePath),
+                    'size' => $file->getSize(),
                     'parentResourceNodeId' => $resourceNodeId,
                     'resourceLinkList' => json_encode($resourceLinkList),
                 ],
@@ -196,7 +177,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $this->assertJsonContains([
             '@context' => '/api/contexts/Documents',
             '@type' => 'Documents',
-            'title' => $fileName,
+            'title' => $file->getFilename(),
             'filetype' => 'file',
         ]);
 

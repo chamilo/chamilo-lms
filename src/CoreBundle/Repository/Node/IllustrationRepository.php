@@ -82,8 +82,10 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
         $em = $this->getEntityManager();
 
         if (null === $illustrationNode) {
-            $illustration = new Illustration();
-            $this->addResourceNode($illustration, $creator, $resource);
+            $illustration = (new Illustration())
+                ->setCreator($creator)
+                ->setParent($resource)
+            ;
             $em->persist($illustration);
         } else {
             $illustration = $this->findOneBy([

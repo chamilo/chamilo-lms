@@ -110,7 +110,7 @@ trait ChamiloTestTrait
         $this->assertEquals(0, $errors->count(), implode(', ', $message));
     }
 
-    public function getUploadableFile(): UploadedFile
+    public function getUploadedFile(): UploadedFile
     {
         $path = $this->getContainer()->get('kernel')->getProjectDir();
         $filePath = $path.'/public/img/logo.png';
@@ -127,9 +127,8 @@ trait ChamiloTestTrait
     {
         /** @var ValidatorInterface $validator */
         $validator = static::$kernel->getContainer()->get('validator');
-        /** @var ConstraintViolationList $errors */
-        $errors = $validator->validate($entity);
 
-        return $errors;
+        /** @var ConstraintViolationList $errors */
+        return $validator->validate($entity);
     }
 }

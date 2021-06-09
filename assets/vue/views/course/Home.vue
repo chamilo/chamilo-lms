@@ -140,9 +140,9 @@ export default {
     }
 
     function changeVisibility(course, tool) {
-      axios.post(ENTRYPOINT + '../r/course_tool/links/' + tool.resourceNode.id + '/change_visibility').then(response => {
+      axios.post(ENTRYPOINT + '../r/course_tool/links/' + tool.ctool.resourceNode.id + '/change_visibility').then(response => {
         if (response.data.ok) {
-          tool.resourceNode.resourceLinks[0].visibility = response.data.visibility;
+          tool.ctool.resourceNode.resourceLinks[0].visibility = response.data.visibility;
         }
       }).catch(function (error) {
         console.log(error);

@@ -212,7 +212,8 @@ export default {
           // Redirect to the login if status 401.
           //this.$router.replace({path: "/login"}).catch(()=>{});
           // Real redirect to avoid loops with Login.vue page.
-          window.location.href = '/login';
+          //window.location.href = '/login';
+            this.showMessage(err.response.data.error, 'warning');
         } else if (500 === err.response.status) {
           if (err.response) {
             // Request made and server responded

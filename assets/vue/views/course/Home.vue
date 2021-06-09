@@ -1,51 +1,83 @@
 <template>
   <div v-if="course" class="grid gap-4">
-    <q-card-section>
-      <div class="text-h6">
+    <div class="flex justify-between">
+      <div class="text-h6 font-bold">
         {{ course.title }}
       </div>
-      <div class="text-subtitle2">
-        {{ course.description }}
+
+      <div v-if="isCurrentTeacher && course">
+        <v-icon>mdi-cog</v-icon>
+
+        <select>
+          <option
+              v-for="tool in tools.admin"
+          >
+            {{ tool.tool.name }}
+          </option>
+        </select>
+
       </div>
-    </q-card-section>
+    </div>
+    <hr/>
+
+    <div class="bg-gradient-to-r from-gray-100 to-gray-50 flex flex-col rounded-md text-center p-2">
+      <div class="text-center">
+        <div>
+          <v-icon>mdi-book-open-page-variant</v-icon>
+        </div>
+
+        <div class="p-text-bold">
+          You don't have course content
+        </div>
+        <div>
+        Add a course introduction to display to your students.
+        </div>
+        <a class="btn btn-info">
+          <v-icon>mdi-plus</v-icon>
+          Course introduction
+        </a>
+
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="flex justify-between">
+      <div class="text-h6 font-bold">
+        Tools
+      </div>
+      <div>
+        <v-icon>
+          mdi-format-paint
+        </v-icon>
+        Customize
+      </div>
+    </div>
+
 
     <div
-      class="grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-6"
+        class="grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-6"
     >
-        <HomeCourseCard
+      <HomeCourseCard
           v-for="tool in tools.authoring"
           :course="course"
           :tool="tool"
           :go-to-course-tool="goToCourseTool"
           :change-visibility="changeVisibility"
-        />
-        <HomeCourseCard
-            v-for="tool in tools.interaction"
-            :course="course"
-            :tool="tool"
-            :go-to-course-tool="goToCourseTool"
-            :change-visibility="changeVisibility"
-        />
-
-        <HomeShortCutCard
-            v-for="shortcut in shortcuts"
-            :shortcut="shortcut"
-            :go-to-short-cut="goToShortCut"
-            :change-visibility="changeVisibility"
-        />
-    </div>
-
-    <h2 v-if="isCurrentTeacher && tools && course">Settings</h2>
-
-    <div
-        v-if="isCurrentTeacher"
-        class="grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-6"
-    >
+      />
       <HomeCourseCard
-          v-for="tool in tools.admin"
+          v-for="tool in tools.interaction"
           :course="course"
           :tool="tool"
           :go-to-course-tool="goToCourseTool"
+          :change-visibility="changeVisibility"
+      />
+
+      <HomeShortCutCard
+          v-for="shortcut in shortcuts"
+          :shortcut="shortcut"
+          :go-to-short-cut="goToShortCut"
+          :change-visibility="changeVisibility"
       />
     </div>
   </div>
@@ -57,10 +89,10 @@ import Toolbar from '../../components/Toolbar.vue';
 import HomeCourseCard from '../../components/course/HomeCourseCard.vue';
 import HomeShortCutCard from '../../components/course/HomeShortCutCard.vue';
 
-import { useRoute } from 'vue-router'
+import {useRoute} from 'vue-router'
 import axios from "axios";
-import { ENTRYPOINT } from '../../config/entrypoint';
-import { reactive, toRefs} from 'vue'
+import {ENTRYPOINT} from '../../config/entrypoint';
+import {reactive, toRefs} from 'vue'
 import {mapGetters} from "vuex";
 
 export default {
@@ -73,7 +105,7 @@ export default {
     HomeShortCutCard
   },
   setup() {
-    const state = reactive({course: [], tools: [], shortcuts:[], goToCourseTool, changeVisibility, goToShortCut });
+    const state = reactive({course: [], tools: [], shortcuts: [], goToCourseTool, changeVisibility, goToShortCut});
     const route = useRoute()
     let courseId = route.params.id;
     let sessionId = route.query.sid ?? 0;
@@ -87,7 +119,7 @@ export default {
     });
 
     function goToCourseTool(course, tool) {
-      let url = '/course/' + courseId + '/tool/' + tool.name + '?sid=' + sessionId;
+      let url = '/course/' + courseId + '/tool/' + tool.tool.name + '?sid=' + sessionId;
 
       return url;
     }

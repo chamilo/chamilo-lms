@@ -77,9 +77,9 @@ store.registerModule(
 );
 
 // Vuetify.
-/*import '@mdi/font/css/materialdesignicons.css';
+import '@mdi/font/css/materialdesignicons.css';
 import { createVuetify } from 'vuetify';
-import 'vuetify/lib/styles/main.sass';
+//import 'vuetify/lib/styles/main.sass';
 import * as components from 'vuetify/lib/components';
 import * as directives from 'vuetify/lib/directives';
 import { aliases, mdi } from 'vuetify/lib/iconsets/mdi'
@@ -106,7 +106,7 @@ const options = {
         defaultTheme: 'light'
     },
 }
-const vuetify = createVuetify(options);*/
+const vuetify = createVuetify(options);
 
 import DashboardLayout from './components/layout/DashboardLayout.vue'
 import EmptyLayout from './components/layout/EmptyLayout.vue'
@@ -171,7 +171,7 @@ app
     .use(Quasar, quasarUserOptions)
     .use(VueFlatPickr)
     //.use(VuelidatePlugin)
-    //.use(vuetify)
+    .use(vuetify)
     .use(router)
     .use(store)
     .use(i18n)

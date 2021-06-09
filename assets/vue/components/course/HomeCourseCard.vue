@@ -1,15 +1,19 @@
 <template>
   <div
-      class="bg-gray-100 rounded-xl p-2 shadow-md"
+      class=""
   >
     <div class="flex flex-col flex-center">
-      <div class="mx-auto">
+      <div class="border p-12 rounded-xl shadow-md">
         <a :href="goToCourseTool(course, tool)">
-          <img
-              :alt="tool.name"
-              :src="'/img/tools/' + tool.name + '.png'"
-              class="w-32 h-32 object-contain"
-          />
+          <v-icon>
+            {{ tool.tool.icon }}
+            x-large
+          </v-icon>
+<!--          <img-->
+<!--              :alt="tool.tool.name"-->
+<!--              :src="'/img/tools/' + tool.tool.name + '.png'"-->
+<!--              class="w-24 h-24 object-contain"-->
+<!--          />-->
         </a>
       </div>
 
@@ -17,12 +21,12 @@
         <a
             :href="goToCourseTool(course, tool)"
         >
-          {{ tool.nameToTranslate }}
+          {{ tool.ctool.nameToTranslate }}
         </a>
 
         <button v-if="isCurrentTeacher && changeVisibility" @click="changeVisibility(course, tool)">
           <FontAwesomeIcon
-              v-if="tool.resourceNode.resourceLinks[0].visibility === 2"
+              v-if="tool.ctool.resourceNode.resourceLinks[0].visibility === 2"
               icon="eye" size="lg"
           />
           <FontAwesomeIcon

@@ -42,6 +42,8 @@ services:
     # Agenda tool
     chamilo_core.tool.agenda:
         class: Chamilo\CoreBundle\Tool\Agenda
+        calls:
+            -   setIcon: [ 'mdi-calendar' ]
         arguments:
             - 'agenda'
             - 'authoring'
@@ -58,6 +60,8 @@ services:
     # Announcement tool
     chamilo_core.tool.announcement:
         class: Chamilo\CoreBundle\Tool\Announcement
+        calls:
+            - setIcon: [ 'mdi-bullhorn' ]
         arguments:
             - 'announcement'
             - 'authoring'
@@ -170,6 +174,8 @@ services:
 
     chamilo_core.tool.document:
         class: Chamilo\CoreBundle\Tool\Document
+        calls:
+            -   setIcon: [ 'mdi-file-document' ]
         arguments:
             - 'document'
             - 'authoring'
@@ -236,6 +242,8 @@ services:
 
     chamilo_core.tool.glossary:
         class: Chamilo\CoreBundle\Tool\Glossary
+        calls:
+            - setIcon: [ 'mdi-alphabetical' ]
         arguments:
             - 'glossary'
             - 'authoring'
@@ -266,6 +274,8 @@ services:
 
     chamilo_core.tool.group:
         class: Chamilo\CoreBundle\Tool\Group
+        calls:
+            -   setIcon: [ 'mdi-account-group' ]
         arguments:
             - 'group'
             - 'interaction'
@@ -313,6 +323,8 @@ services:
 
     chamilo_core.tool.member:
         class: Chamilo\CoreBundle\Tool\Member
+        calls:
+            -   setIcon: [ 'mdi-account-multiple' ]
         arguments:
             - 'member'
             - 'interaction'
@@ -389,9 +401,11 @@ services:
 
     chamilo_core.tool.tracking:
         class: Chamilo\CoreBundle\Tool\Tracking
+        calls:
+            -   setIcon: [ 'mdi-chart-bar' ]
         arguments:
             - 'tracking'
-            - 'admin'
+            - 'interaction'
             - '/main/tracking/courseLog.php'
             - '@chamilo_course.settings.tracking'
         tags:

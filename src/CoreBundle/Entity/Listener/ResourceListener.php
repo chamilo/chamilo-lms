@@ -179,7 +179,7 @@ class ResourceListener
         if ($resource->hasUploadFile()) {
             //error_log('hasUploadFile');
             // @todo check CreateResourceNodeFileAction
-            /** @var File $uploadedFile */
+            /** @var File|null $uploadedFile */
             $uploadedFile = $request->getCurrentRequest()->files->get('uploadFile');
 
             if (null === $uploadedFile) {

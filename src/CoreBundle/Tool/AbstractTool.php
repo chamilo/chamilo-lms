@@ -7,10 +7,19 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Tool;
 
 use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 abstract class AbstractTool implements ToolInterface
 {
+    /**
+     * @Groups({"ctool:read"})
+     */
     protected string $name;
+
+    /**
+     * @Groups({"ctool:read"})
+     */
+    protected string $icon;
     protected string $category;
     protected string $link;
     protected string $image;
@@ -41,6 +50,7 @@ abstract class AbstractTool implements ToolInterface
         $this->image = $name.'.png';
         $this->settings = $settings;
         $this->resourceTypes = $resourceTypes;
+        $this->icon = 'mdi-crop-square';
     }
 
     public function isCourseTool(): bool
@@ -86,6 +96,18 @@ abstract class AbstractTool implements ToolInterface
     public function setResourceTypes(?array $resourceTypes): self
     {
         $this->resourceTypes = $resourceTypes;
+
+        return $this;
+    }
+
+    public function getIcon(): string
+    {
+        return $this->icon;
+    }
+
+    public function setIcon(string $icon): self
+    {
+        $this->icon = $icon;
 
         return $this;
     }

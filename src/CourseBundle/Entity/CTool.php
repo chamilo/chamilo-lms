@@ -73,8 +73,6 @@ class CTool extends AbstractResource implements ResourceInterface
     protected ?Session $session = null;
 
     /**
-     * @Groups({"ctool:read"})
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool")
      * @ORM\JoinColumn(name="tool_id", referencedColumnName="id", nullable=false)
      */
@@ -157,12 +155,7 @@ class CTool extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get visibility.
-     *
-     * @return bool
-     */
-    public function getVisibility()
+    public function getVisibility(): bool
     {
         return $this->visibility;
     }

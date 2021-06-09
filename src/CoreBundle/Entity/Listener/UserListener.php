@@ -71,12 +71,10 @@ class UserListener
 
     /**
      * This code is executed when a user is updated.
-     *
-     * @throws Exception
      */
     public function preUpdate(User $user, LifecycleEventArgs $args): void
     {
-        error_log('User listener preUpdate');
+        //error_log('User listener preUpdate');
         if ($user) {
             $this->userRepository->updatePassword($user);
             $this->userRepository->updateCanonicalFields($user);

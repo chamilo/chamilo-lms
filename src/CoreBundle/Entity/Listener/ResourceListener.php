@@ -153,7 +153,6 @@ class ResourceListener
                 throw new InvalidArgumentException(('The resource needs an AccessUrl: use $resource->addAccessUrl()'));
             }
             $parentNode = $parentUrl;
-            //$resourceNode->setParent($parentUrl);
         }
 
         if ($resource->hasParentResourceNode()) {
@@ -162,7 +161,6 @@ class ResourceListener
             if (null !== $parent) {
                 $parentNode = $parent;
             }
-            //$resourceNode->setParent($parent);
         }
 
         if (null === $parentNode) {
@@ -172,7 +170,7 @@ class ResourceListener
             }
         }
 
-        if (null === $parentNode) {
+        if (null === $parentNode && !$resource instanceof AccessUrl) {
             throw new InvalidArgumentException(sprintf('Resource %s needs a parent', $resource->getResourceName()));
         }
 

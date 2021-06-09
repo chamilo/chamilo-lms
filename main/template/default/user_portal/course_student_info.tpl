@@ -8,13 +8,13 @@
                     {% if not student_info.progress is null %}
                         <div class="{{ num_columns == 1 ? 'col-xs-12' : (num_columns == 2 ? 'col-xs-9' : 'col-xs-6') }}">
                             <strong>{{ 'CourseAdvance'|get_lang }}</strong>
-                            <div class="progress">
+                            <div class="progress" style="margin-bottom: 0">
                                 <div class="progress-bar progress-bar-success" role="progressbar"
                                      aria-valuenow="{{ student_info.progress }}" aria-valuemin="0" aria-valuemax="100"
                                      style="width: {{ student_info.progress }}%;">
-                                    {{ 'XPercentCompleted'|get_lang|format(student_info.progress) }}
                                 </div>
                             </div>
+                            <small>{{ 'XPercentCompleted'|get_lang|format(student_info.progress) }}</small>
                         </div>
                     {% endif %}
                     {% if not student_info.score is null %}

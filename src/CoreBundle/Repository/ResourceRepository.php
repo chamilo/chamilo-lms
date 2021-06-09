@@ -321,15 +321,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $resourceFile;
     }
 
-    public function addResourceNode(ResourceInterface $resource, User $creator, ResourceInterface $parent = null): ResourceNode
-    {
-        if (null !== $parent) {
-            $parent = $parent->getResourceNode();
-        }
-
-        return $this->createNodeForResource($resource, $creator, $parent);
-    }
-
     public function getResourceType(): ?ResourceType
     {
         $name = $this->getResourceTypeName();
@@ -755,7 +746,17 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PENDING);
     }
 
-    public function createNodeForResource(ResourceInterface $resource, User $creator, ResourceNode $parentNode = null, UploadedFile $file = null): ResourceNode
+    public function addResourceNode(ResourceInterface $resource, User $creator, ResourceInterface $parentResource): ResourceNode
+    {
+        $parentResourceNode = $parentResource->getResourceNode();
+
+        return $this->createNodeForResource($resource, $creator, $parentResourceNode);
+    }
+
+    /**
+     * @todo remove this function and merge it with addResourceNode()
+     */
+    public function createNodeForResource(ResourceInterface $resource, User $creator, ResourceNode $parentNode, UploadedFile $file = null): ResourceNode
     {
         $em = $this->getEntityManager();
 
@@ -790,6 +791,30 @@ abstract class ResourceRepository extends ServiceEntityRepository
         if (null !== $file) {
             $this->addFile($resource, $file);
         }
+
+        return $resourceNode;
+    }
+
+    /**
+     * This is only used during installation for the special nodes (admin and AccessUrl).
+     */
+    public function createNodeForResourceWithNoParent(ResourceInterface $resource, User $creator): ResourceNode
+    {
+        $em = $this->getEntityManager();
+
+        $resourceType = $this->getResourceType();
+        $resourceName = $resource->getResourceName();
+        $slug = $this->slugify->slugify($resourceName);
+        $resourceNode = new ResourceNode();
+        $resourceNode
+            ->setTitle($resourceName)
+            ->setSlug($slug)
+            ->setCreator($creator)
+            ->setResourceType($resourceType)
+        ;
+        $resource->setResourceNode($resourceNode);
+        $em->persist($resourceNode);
+        $em->persist($resource);
 
         return $resourceNode;
     }

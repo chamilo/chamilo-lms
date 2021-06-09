@@ -240,7 +240,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         $course,
         $admin,
         ResourceInterface $resource,
-        $parent,
+        $parentResource,
         array $items = []
     ) {
         $container = $this->getContainer();
@@ -268,14 +268,14 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         $groupRepo = $container->get(CGroupRepository::class);
         $userRepo = $container->get(UserRepository::class);
 
-        $resource->setParent($parent);
+        $resource->setParent($parentResource);
         $resourceNode = null;
         $userList = [];
         $groupList = [];
         $sessionList = [];
         foreach ($items as $item) {
-            $visibility = $item['visibility'];
-            $userId = $item['insert_user_id'];
+            $visibility = (int) $item['visibility'];
+            $userId = (int) $item['insert_user_id'];
             $sessionId = $item['session_id'] ?? 0;
             $groupId = $item['to_group_id'] ?? 0;
 
@@ -332,7 +332,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
             }
 
             if (null === $resourceNode) {
-                $resourceNode = $repo->addResourceNode($resource, $user, $parent);
+                $resourceNode = $repo->addResourceNode($resource, $user, $parentResource);
                 $em->persist($resourceNode);
             }
             $resource->addCourseLink($course, $session, $group, $newVisibility);

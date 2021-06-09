@@ -64,9 +64,10 @@ class ResourceListener
         $request = $this->request;
 
         if ($resource instanceof ResourceWithAccessUrlInterface) {
+            // Checking if this resource is connected with a AccessUrl.
             if (0 === $resource->getUrls()->count()) {
                 // The AccessUrl was not added using $resource->addAccessUrl(),
-                // try getting the URL from the session if possible.
+                // Try getting the URL from the session bag if possible.
                 $accessUrl = $this->getAccessUrl($em, $request);
                 if (null === $accessUrl) {
                     throw new Exception('This resource needs an AccessUrl use $resource->addAccessUrl();');
@@ -86,10 +87,11 @@ class ResourceListener
             return true;*/
         }
 
-        // Check if creator is set with $resource->setCreator()
+        // Check if creator was set with $resource->setCreator()
         $creator = $resource->getResourceNodeCreator();
 
         if (null === $creator) {
+            // Get the creator from the current request.
             /** @var User|null $defaultCreator */
             $defaultCreator = $this->security->getUser();
             if (null !== $defaultCreator) {
@@ -133,15 +135,16 @@ class ResourceListener
         ;
 
         // Add resource directly to the resource node root (Example: for a course resource).
+        $parentNode = null;
         if ($resource instanceof ResourceWithAccessUrlInterface) {
             $parentUrl = null;
             if ($resource->getUrls()->count() > 0) {
                 $urlRelResource = $resource->getUrls()->first();
                 if (!$urlRelResource instanceof EntityAccessUrlInterface) {
-                    throw new InvalidArgumentException('$resource->getUrls() must return a list of objects that implements the EntityAccessUrl interface');
+                    throw new InvalidArgumentException('$resource->getUrls() must return a list of objects that implements EntityAccessUrlInterface');
                 }
                 if (!$urlRelResource->getUrl()->hasResourceNode()) {
-                    throw new InvalidArgumentException('A child from $resource->getUrls() must implement EntityAccessUrl interface and return a valid AccessUrl with a ResourceNode');
+                    throw new InvalidArgumentException('An item from the collection $resource->getUrls() must implement EntityAccessUrlInterface and return a valid AccessUrl with a ResourceNode');
                 }
                 $parentUrl = $urlRelResource->getUrl()->getResourceNode();
             }
@@ -149,14 +152,31 @@ class ResourceListener
             if (null === $parentUrl) {
                 throw new InvalidArgumentException(('The resource needs an AccessUrl: use $resource->addAccessUrl()'));
             }
-            $resourceNode->setParent($parentUrl);
+            $parentNode = $parentUrl;
+            //$resourceNode->setParent($parentUrl);
         }
 
         if ($resource->hasParentResourceNode()) {
             $nodeRepo = $em->getRepository(ResourceNode::class);
             $parent = $nodeRepo->find($resource->getParentResourceNode());
-            $resourceNode->setParent($parent);
+            if (null !== $parent) {
+                $parentNode = $parent;
+            }
+            //$resourceNode->setParent($parent);
         }
+
+        if (null === $parentNode) {
+            // Last chance. Try getting the parent node from the resource.
+            if (null !== $resource->getParent()) {
+                $parentNode = $resource->getParent()->getResourceNode();
+            }
+        }
+
+        if (null === $parentNode) {
+            throw new InvalidArgumentException(sprintf('Resource %s needs a parent', $resource->getResourceName()));
+        }
+
+        $resourceNode->setParent($parentNode);
 
         if ($resource->hasUploadFile()) {
             //error_log('hasUploadFile');
@@ -164,7 +184,8 @@ class ResourceListener
             /** @var File $uploadedFile */
             $uploadedFile = $request->getCurrentRequest()->files->get('uploadFile');
 
-            if (empty($uploadedFile)) {
+            if (null === $uploadedFile) {
+                // This will create an UploadedFile from a string content (HTML).
                 $content = $request->getCurrentRequest()->get('contentFile');
                 $title = $resourceName.'.html';
                 $handle = tmpfile();
@@ -173,7 +194,7 @@ class ResourceListener
                 $uploadedFile = new UploadedFile($meta['uri'], $title, 'text/html', null, true);
             }
 
-            // File upload
+            // File upload.
             if ($uploadedFile instanceof UploadedFile) {
                 $resourceFile = new ResourceFile();
                 $resourceFile->setName($uploadedFile->getFilename());
@@ -184,7 +205,7 @@ class ResourceListener
             }
         }
 
-        // Use by api platform
+        // Use by api platform.
         $links = $resource->getResourceLinkArray();
         if ($links) {
             $groupRepo = $em->getRepository(CGroup::class);
@@ -231,19 +252,15 @@ class ResourceListener
             }
         }
 
-        // Use by Chamilo.
+        // Use by Chamilo not api platform.
         $this->setLinks($resource, $em);
-
-        if (null !== $resource->getParent()) {
-            $resourceNode->setParent($resource->getParent()->getResourceNode());
-        }
 
         //error_log('Listener end, adding resource node');
         $resource->setResourceNode($resourceNode);
 
         // All resources should have a parent, except AccessUrl.
         if (!($resource instanceof AccessUrl) && null === $resourceNode->getParent()) {
-            throw new InvalidArgumentException(\sprintf('Resource %s Node should have a parent', $resource->getResourceName()));
+            throw new InvalidArgumentException(sprintf('ResourceListener: Resource %s, has a resource node, but this resource node must have a parent', $resource->getResourceName()));
         }
     }
 

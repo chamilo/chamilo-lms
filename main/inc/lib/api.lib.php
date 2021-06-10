@@ -3950,6 +3950,9 @@ function api_not_allowed(
         exit;
     }
 
+    $tplPlugin = new AppPlugin();
+    $pluginRegionContent = $tplPlugin->load_region('login_bottom', $tpl, true);
+
     if (!empty($_SERVER['REQUEST_URI']) &&
         (
             !empty($_GET['cidReq']) ||
@@ -3996,6 +3999,8 @@ function api_not_allowed(
         if (api_is_cas_activated()) {
             $content .= "</div>";
         }
+
+        $content .= PHP_EOL.$pluginRegionContent;
 
         if (!empty($courseCode)) {
             $content .= '<hr/><p style="text-align:center"><a href="'.$home_url.'">'.
@@ -4072,6 +4077,8 @@ function api_not_allowed(
             $msg .= '</div>';
         }
     }
+
+    $msg .= PHP_EOL.$pluginRegionContent;
 
     $tpl->assign('content', $msg);
     $tpl->display_one_col_template();

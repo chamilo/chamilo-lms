@@ -2620,6 +2620,7 @@ JAVASCRIPT;
                     }
                 } else {
                     // Extra fields
+                    $ruleField = Database::escapeField($rule->field);
                     if (false === strpos($rule->field, '_second')) {
                         // No _second
                         $original_field = str_replace($stringToSearch, '', $rule->field);
@@ -2642,7 +2643,7 @@ JAVASCRIPT;
                                     $conditionArray[] = ' ('
                                         .$this->get_where_clause($rule->field, $rule->op, $rule->data)
                                         .') ';
-                                    $extraFields[] = ['field' => $rule->field, 'id' => $field_option['id']];
+                                    $extraFields[] = ['field' => $ruleField, 'id' => $field_option['id']];
                                 }
                                 break;
                             case self::FIELD_TYPE_TAG:
@@ -2654,7 +2655,7 @@ JAVASCRIPT;
                                     //$where = $this->get_where_clause($rule->field, $rule->op, $rule->data, 'OR');
                                     //$conditionArray[] = " ( $where ) ";
                                     $extraFields[] = [
-                                        'field' => $rule->field,
+                                        'field' => $ruleField,
                                         'id' => $field_option['id'],
                                         'data' => $rule->data,
                                     ];
@@ -2668,7 +2669,7 @@ JAVASCRIPT;
                                     $where = $this->get_where_clause($rule->field, $rule->op, $rule->data, 'OR');
                                     $conditionArray[] = " ( $where ) ";
                                     $extraFields[] = [
-                                        'field' => $rule->field,
+                                        'field' => $ruleField,
                                         'id' => $field_option['id'],
                                         'data' => $rule->data,
                                     ];
@@ -2680,7 +2681,7 @@ JAVASCRIPT;
                         $original_field = str_replace($stringToSearch, '', $my_field);
                         $field_option = $this->get_handler_field_info_by_field_variable($original_field);
                         $extraFields[] = [
-                            'field' => $rule->field,
+                            'field' => $ruleField,
                             'id' => $field_option['id'],
                         ];
                     }
@@ -2701,9 +2702,12 @@ JAVASCRIPT;
      */
     public function get_where_clause($col, $oper, $val, $conditionBetweenOptions = 'OR')
     {
+        $col = Database::escapeField($col);
+
         if (empty($col)) {
             return '';
         }
+
         $conditionBetweenOptions = in_array($conditionBetweenOptions, ['OR', 'AND']) ? $conditionBetweenOptions : 'OR';
         if ('bw' === $oper || 'bn' === $oper) {
             $val .= '%';

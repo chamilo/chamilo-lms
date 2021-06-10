@@ -200,7 +200,9 @@ if ($visible_return['value'] == false) {
 $advancedMessage = RemedialCoursePlugin::create()->getAdvancedCourseList(
     $objExercise,
     api_get_user_id(),
-    api_get_session_id()
+    api_get_session_id(),
+    $learnpath_id ?: 0,
+    $learnpath_item_id ?: 0
 );
 if (!empty($advancedMessage)) {
     $message .= Display::return_message(
@@ -213,7 +215,10 @@ if (!empty($advancedMessage)) {
 $remedialMessage = RemedialCoursePlugin::create()->getRemedialCourseList(
     $objExercise,
     api_get_user_id(),
-    api_get_session_id()
+    api_get_session_id(),
+    false,
+    $learnpath_id ?: 0,
+    $learnpath_item_id ?: 0
 );
 
 if (null != $remedialMessage) {

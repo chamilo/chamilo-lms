@@ -146,7 +146,8 @@ if ($form->validate()) {
                     'OfficialCode',
                     'PhoneNumber',
                     'RegistrationDate',
-                    'Active',
+            'Active',
+                    'ExpirationDate',
                 ];
             } else {
                 $data[] = [
@@ -162,6 +163,7 @@ if ($form->validate()) {
                     'PhoneNumber',
                     'RegistrationDate',
                     'Active',
+                    'ExpirationDate',
                 ];
             }
 

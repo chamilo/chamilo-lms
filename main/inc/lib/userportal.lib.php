@@ -1007,11 +1007,13 @@ class IndexManager
         // Tabs that are deactivated are added here.
         if (!empty($this->tpl->menu_navigation)) {
             foreach ($this->tpl->menu_navigation as $section => $navigation_info) {
-                $items[] = [
-                    'icon' => null,
-                    'link' => $navigation_info['url'],
-                    'title' => $navigation_info['title'],
-                ];
+                if (!empty($navigation_info)) {
+                    $items[] = [
+                        'icon' => null,
+                        'link' => $navigation_info['url'],
+                        'title' => $navigation_info['title'],
+                    ];
+                }
             }
         }
 

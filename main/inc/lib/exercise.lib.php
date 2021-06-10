@@ -6043,10 +6043,10 @@ EOT;
         return Database::store_result($result, 'ASSOC');
     }
 
-    public static function getExerciseResultsCount($type, $courseId, $exerciseId, $sessionId = 0)
+    public static function getExerciseResultsCount($type, $courseId, Exercise $exercise, $sessionId = 0)
     {
         $courseId = (int) $courseId;
-        $exerciseId = (int) $exerciseId;
+        $exerciseId = (int) $exercise->iId;
 
         $trackTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
@@ -6055,22 +6055,28 @@ EOT;
             $sessionCondition = api_get_session_condition($sessionId, true, false, 'te.session_id');
         }
 
+        $passPercentage = $exercise->selectPassPercentage();
+        $minPercentage = 100;
+        if (!empty($passPercentage)) {
+            $minPercentage = $passPercentage;
+        }
+
         $selectCount = 'count(DISTINCT te.exe_id)';
         $scoreCondition = '';
         switch ($type) {
             case 'correct_student':
                 $selectCount = 'count(DISTINCT te.exe_user_id)';
-                $scoreCondition = ' AND exe_result = exe_weighting ';
+                $scoreCondition = " AND (exe_result/exe_weighting*100) >= $minPercentage ";
                 break;
             case 'wrong_student':
                 $selectCount = 'count(DISTINCT te.exe_user_id)';
-                $scoreCondition = ' AND  exe_result != exe_weighting ';
+                $scoreCondition = " AND (exe_result/exe_weighting*100) < $minPercentage ";
                 break;
             case 'correct':
-                $scoreCondition = ' AND exe_result = exe_weighting ';
+                $scoreCondition = " AND (exe_result/exe_weighting*100) >= $minPercentage ";
                 break;
             case 'wrong':
-                $scoreCondition = ' AND exe_result != exe_weighting ';
+                $scoreCondition = " AND (exe_result/exe_weighting*100) < $minPercentage ";
                 break;
         }
 
@@ -6101,7 +6107,7 @@ EOT;
         $resultsStudentUrl = api_get_path(WEB_CODE_PATH).
             'exercise/result.php?id='.$exeId.'&'.api_get_cidreq();
         $resultsTeacherUrl = api_get_path(WEB_CODE_PATH).
-            'exercise/exercise_show.php?action=edit&id='.$exeId.'&'.api_get_cidreq();
+            'exercise/exercise_show.php?action=edit&id='.$exeId.'&'.api_get_cidreq(true, true, 'teacher');
 
         $content = str_replace(
             [

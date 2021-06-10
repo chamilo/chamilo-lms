@@ -6854,9 +6854,22 @@ class Exercise
                 $lpItemId,
                 $lpItemViewId
             );
-            $message .= RemedialCoursePlugin::create()->getAdvancedCourseList($this, $userId, api_get_session_id());
+            $message .= $remedialCoursePlugin->getAdvancedCourseList(
+                $this,
+                $userId,
+                api_get_session_id(),
+                $lpId ?: 0,
+                $lpItemId ?: 0
+            );
             if ($attemptCount >= $exerciseAttempts) {
-                $message .= $remedialCoursePlugin->getRemedialCourseList($this, $userId, api_get_session_id());
+                $message .= $remedialCoursePlugin->getRemedialCourseList(
+                    $this,
+                    $userId,
+                    api_get_session_id(),
+                    false,
+                    $lpId ?: 0,
+                    $lpItemId ?: 0
+                );
             }
         }
         // 4. We check if the student have attempts
@@ -6908,7 +6921,10 @@ class Exercise
                                 $message .= $remedialCoursePlugin->getRemedialCourseList(
                                     $this,
                                     api_get_user_id(),
-                                    api_get_session_id()
+                                    api_get_session_id(),
+                                    false,
+                                    $lpId,
+                                    $lpItemId
                                 );
                             }
                         }
@@ -9648,6 +9664,24 @@ class Exercise
                         }
 
                         $actions .= $delete;
+                        $usersToRemind = self::getUsersInExercise(
+                            $row['iid'],
+                            $row['c_id'],
+                            $row['session_id'],
+                            true
+                        );
+                        if ($usersToRemind > 0) {
+                            $actions .= Display::url(
+                                Display::return_icon('announce.png', get_lang('EmailNotifySubscription')),
+                                '',
+                                [
+                                    'href' => '#!',
+                                    'onclick' => 'showUserToSendNotificacion(this)',
+                                    'data-link' => 'exercise.php?'.api_get_cidreq()
+                                        .'&choice=send_reminder&sec_token='.$token.'&exerciseId='.$row['id'],
+                                ]
+                            );
+                        }
 
                         // Number of questions
                         $random_label = null;
@@ -10931,6 +10965,303 @@ class Exercise
                     });
                 </script>
                 ";
+    }
+
+    /**
+     * Returns a list of users based on the id of an exercise, the course and the session.
+     * If the count is true, it returns only the number of users.
+     *
+     * @param int   $exerciseId
+     * @param int   $courseId
+     * @param int   $sessionId
+     * @param false $count
+     */
+    public static function getUsersInExercise(
+        $exerciseId = 0,
+        $courseId = 0,
+        $sessionId = 0,
+        $count = false,
+        $toUsers = [],
+        $withSelectAll = true
+    ) {
+        $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
+        $courseId = empty($courseId) ? api_get_course_id() : (int) $courseId;
+        $exerciseId = (int) $exerciseId;
+        if ((0 == $sessionId && 0 == $courseId) || 0 == $exerciseId) {
+            return [];
+        }
+        $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tblCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+
+        $data = [];
+
+        $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+        $countSelect = " COUNT(*) AS total ";
+        $sqlToUsers = '';
+        if (0 == $sessionId) {
+            // Courses
+            if (false === $count) {
+                $countSelect = " cq.title AS quiz_title,
+                    cq.iid AS quiz_id,
+                    cru.c_id AS course_id,
+                    cru.user_id AS user_id,
+                    c.title AS title,
+                    c.code AS 'code',
+                    cq.active AS active,
+                    cq.session_id AS session_id ";
+            }
+
+            $sql = "SELECT $countSelect
+                FROM $tblCourseRelUser AS cru
+                INNER JOIN $tblCourse AS c ON ( cru.c_id = c.id )
+                INNER JOIN $tblQuiz AS cq ON ( cq.c_id = c.id )
+                WHERE cru.is_tutor IS NULL
+                    AND ( cq.session_id = 0 OR cq.session_id IS NULL)
+                    AND cq.active > 0
+                    AND cq.c_id = $courseId
+                    AND cq.iid = $exerciseId ";
+            if (!empty($toUsers)) {
+                $sqlToUsers = ' AND cru.user_id IN ('.implode(',', $toUsers).') ';
+            }
+        } else {
+            //Sessions
+            if (false === $count) {
+                $countSelect = " cq.title AS quiz_title,
+                    cq.iid AS quiz_id,
+                    sru.user_id AS user_id,
+                    cq.c_id AS course_id,
+                    sru.session_id AS session_id,
+                    c.title AS title,
+                    c.code AS 'code',
+                    cq.active AS active ";
+            }
+            if (!empty($toUsers)) {
+                $sqlToUsers = ' AND sru.user_id IN ('.implode(',', $toUsers).') ';
+            }
+            $sql = " SELECT $countSelect
+                FROM $tblSessionRelUser AS sru
+                    INNER JOIN $tblQuiz AS cq ON ( sru.session_id = sru.session_id )
+                    INNER JOIN $tblCourse AS c ON ( c.id = cq.c_id )
+                WHERE cq.active > 0
+                  AND cq.c_id = $courseId
+                  AND sru.session_id = $sessionId
+                  AND cq.iid = $exerciseId ";
+        }
+        $sql .= " $sqlToUsers ORDER BY cq.c_id ";
+
+        $result = Database::query($sql);
+        $data = Database::store_result($result);
+        Database::free_result($result);
+        if (true === $count) {
+            return (isset($data[0]) && isset($data[0]['total'])) ? $data[0]['total'] : 0;
+        }
+        $usersArray = [];
+
+        $return = [];
+        if ($withSelectAll) {
+            $return[] = [
+                'user_id' => 'X',
+                'value' => 'X',
+                'user_name' => get_lang('AllStudents'),
+            ];
+        }
+
+        foreach ($data as $index => $item) {
+            if (isset($item['user_id'])) {
+                $userId = (int) $item['user_id'];
+                if (!isset($usersArray[$userId])) {
+                    $usersArray[$userId] = api_get_user_info($userId);
+                }
+                $usersArray['user_id'] = $userId;
+                $userData = $usersArray[$userId];
+                $data[$index]['user_name'] = $userData['complete_name'];
+                $return[] = $data[$index];
+            }
+        }
+
+        return $return;
+    }
+
+    /**
+     * Search the users who are in an exercise to send them an exercise reminder email and to the human resources
+     * managers, it is necessary the exercise id, the course and the session if it exists.
+     *
+     * @param int $exerciseId
+     * @param int $courseId
+     * @param int $sessionId
+     */
+    public static function notifyUsersOfTheExercise(
+        $exerciseId = 0,
+        $courseId = 0,
+        $sessionId = 0,
+        $toUsers = []
+    ) {
+        $users = self::getUsersInExercise(
+            $exerciseId,
+            $courseId,
+            $sessionId,
+            false,
+            $toUsers
+        );
+        $totalUsers = count($users);
+        $usersArray = [];
+        $courseTitle = '';
+        $quizTitle = '';
+
+        for ($i = 0; $i < $totalUsers; $i++) {
+            $user = $users[$i];
+            $userId = (int) $user['user_id'];
+            if (0 != $userId) {
+                $quizTitle = $user['quiz_title'];
+                $courseTitle = $user['title'];
+                if (!isset($usersArray[$userId])) {
+                    $usersArray[$userId] = api_get_user_info($userId);
+                }
+            }
+        }
+
+        $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'
+            .api_get_cidreq()."&exerciseId=$exerciseId";
+        $link = "<a href=\"$url\">$url</a>";
+
+        $objExerciseTmp = new Exercise();
+        $objExerciseTmp->read($exerciseId);
+        $end = $objExerciseTmp->end_time;
+        $start = $objExerciseTmp->start_time;
+        $minutes = $objExerciseTmp->expired_time;
+        $formatDate = DATE_TIME_FORMAT_LONG;
+        $tblCourseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tblSessionUserRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $teachersName = [];
+        $teachersPrint = [];
+        if (0 == $sessionId) {
+            $sql = "SELECT course_user.user_id AS user_id
+                FROM $tblCourseUser AS course_user
+                WHERE course_user.status = 1 AND course_user.c_id ='".$courseId."'";
+            $result = Database::query($sql);
+            $data = Database::store_result($result);
+            Database::free_result($result);
+            foreach ($data as $teacher) {
+                $teacherId = (int) $teacher['user_id'];
+                if (!isset($teachersName[$teacherId])) {
+                    $teachersName[$teacherId] = api_get_user_info($teacherId);
+                }
+                $teacherData = $teachersName[$teacherId];
+                $teachersPrint[] = $teacherData['complete_name'];
+            }
+        } else {
+            // general tutor
+            $sql = "SELECT sesion.id_coach AS user_id
+                FROM $tblSession AS sesion
+                WHERE sesion.id = $sessionId";
+            $result = Database::query($sql);
+            $data = Database::store_result($result);
+            Database::free_result($result);
+            foreach ($data as $teacher) {
+                $teacherId = (int) $teacher['user_id'];
+                if (!isset($teachersName[$teacherId])) {
+                    $teachersName[$teacherId] = api_get_user_info($teacherId);
+                }
+                $teacherData = $teachersName[$teacherId];
+                $teachersPrint[] = $teacherData['complete_name'];
+            }
+            // Teacher into sessions course
+            $sql = "SELECT session_rel_course_rel_user.user_id
+                FROM $tblSessionUserRelCourse AS session_rel_course_rel_user
+                WHERE session_rel_course_rel_user.session_id = $sessionId AND
+                      session_rel_course_rel_user.c_id = $courseId AND
+                      session_rel_course_rel_user.status = 2";
+            $result = Database::query($sql);
+            $data = Database::store_result($result);
+            Database::free_result($result);
+            foreach ($data as $teacher) {
+                $teacherId = (int) $teacher['user_id'];
+                if (!isset($teachersName[$teacherId])) {
+                    $teachersName[$teacherId] = api_get_user_info($teacherId);
+                }
+                $teacherData = $teachersName[$teacherId];
+                $teachersPrint[] = $teacherData['complete_name'];
+            }
+        }
+
+        $teacherName = implode('<br>', $teachersPrint);
+
+        foreach ($usersArray as $userId => $userData) {
+            $studentName = $userData['complete_name'];
+            $title = sprintf(get_lang('QuizRemindSubject'), $teacherName);
+            $content = sprintf(
+                get_lang('QuizFirstRemindBody'),
+                $studentName,
+                $quizTitle,
+                $courseTitle,
+                $courseTitle,
+                $quizTitle
+            );
+            if (!empty($minutes)) {
+                $content .= sprintf(get_lang('QuizRemindDuration'), $minutes);
+            }
+            if (!empty($start)) {
+                // api_get_utc_datetime
+                $start = api_format_date(($start), $formatDate);
+
+                $content .= sprintf(get_lang('QuizRemindStartDate'), $start);
+            }
+            if (!empty($end)) {
+                $end = api_format_date(($end), $formatDate);
+                $content .= sprintf(get_lang('QuizRemindEndDate'), $end);
+            }
+            $content .= sprintf(
+                get_lang('QuizLastRemindBody'),
+                $link,
+                $link,
+                $teacherName
+            );
+            $drhList = UserManager::getDrhListFromUser($userId);
+            if (!empty($drhList)) {
+                foreach ($drhList as $drhUser) {
+                    $drhUserData = api_get_user_info($drhUser['id']);
+                    $drhName = $drhUserData['complete_name'];
+                    $contentDHR = sprintf(
+                        get_lang('QuizDhrRemindBody'),
+                        $drhName,
+                        $studentName,
+                        $quizTitle,
+                        $courseTitle,
+                        $studentName,
+                        $courseTitle,
+                        $quizTitle
+                    );
+                    if (!empty($minutes)) {
+                        $contentDHR .= sprintf(get_lang('QuizRemindDuration'), $minutes);
+                    }
+                    if (!empty($start)) {
+                        // api_get_utc_datetime
+                        $start = api_format_date(($start), $formatDate);
+
+                        $contentDHR .= sprintf(get_lang('QuizRemindStartDate'), $start);
+                    }
+                    if (!empty($end)) {
+                        $end = api_format_date(($end), $formatDate);
+                        $contentDHR .= sprintf(get_lang('QuizRemindEndDate'), $end);
+                    }
+                    MessageManager::send_message(
+                        $drhUser['id'],
+                        $title,
+                        $contentDHR
+                    );
+                }
+            }
+            MessageManager::send_message(
+                $userData['id'],
+                $title,
+                $content
+            );
+        }
+
+        return $usersArray;
     }
 
     /**

@@ -35,7 +35,7 @@
     <hr>
 </div>
 
-{{ carrers }}
+{{ careers }}
 
 {{ skills }}
 

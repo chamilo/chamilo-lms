@@ -25,6 +25,7 @@
   <li><a href="#5.Files-permissions">Restricting files permissions</a></li>
   <li><a href="#6.HSTS">HTTP Headers Security</a></li>
   <li><a href="#7.Direct-web-access">Direct web access to files</a></li>
+  <li><a href="#8.Disable-webservices">Disable webservices</a></li>
 </ol>
 
 <h2><a name="1.Disclosing-server-info"></a>1. Disclosing server info</h2>
@@ -194,6 +195,14 @@ This will prevent direct access to your settings and make it seem totally the sa
     do not contain confidential information. If you *DO* have confidential
     information in images, CSS or JavaScript files, you will need to update
     these rules to suit your needs.
+    </p>
+
+<h2><a name="8.Disable-webservices">Disable webservices</a></h2>
+    <p>
+        In order to disable webservices add the configuration below:
+    <pre>
+    $_configuration['disable_webservices'] = true;
+    </pre>
     </p>
 <h2>Authors</h2>
 <ul>

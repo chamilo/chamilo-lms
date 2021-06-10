@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -13,6 +14,8 @@
  * @package chamilo.webservices
  */
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_webservices();
 
 // Create the server instance
 $server = new soap_server();

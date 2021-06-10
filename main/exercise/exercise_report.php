@@ -252,7 +252,11 @@ if (isset($_REQUEST['comments']) &&
         $res = Database::query($qry);
         $tot = 0;
         while ($row = Database :: fetch_array($res, 'ASSOC')) {
-            $tot += $row['marks'];
+            $marks = $row['marks'];
+            if (!$objExerciseTmp->propagate_neg && $marks < 0) {
+                continue;
+            }
+            $tot += $marks;
         }
     } else {
         $tot = $pluginEvaluation->getResultWithFormula($id, $formula);
@@ -270,7 +274,9 @@ if (isset($_REQUEST['comments']) &&
         $objExerciseTmp,
         $student_id,
         api_get_session_id(),
-        true
+        true,
+        $lp_id ?: 0,
+        $lpItemId ?: 0
     );
     if (null != $remedialMessage) {
         Display::addFlash(
@@ -280,7 +286,9 @@ if (isset($_REQUEST['comments']) &&
     $advancedMessage = RemedialCoursePlugin::create()->getAdvancedCourseList(
         $objExerciseTmp,
         $student_id,
-        api_get_session_id()
+        api_get_session_id(),
+        $lp_id ?: 0,
+        $lpItemId ?: 0
     );
     if (!empty($advancedMessage)) {
         $message = Display::return_message(

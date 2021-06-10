@@ -399,6 +399,8 @@ INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, d
 (20, 13, 'invisible', 'Invisible', '', 0, 1, 0, 0, 0, NOW());
 */
 //$_configuration['student_follow_page_add_LP_invisible_checkbox'] = false;
+// Show the LP not marked as invisible by teacher in tracking page
+//$_configuration['student_follow_page_include_not_subscribed_lp_students'] = false;
 // Allow change the order to show the tools in "My progress" page.
 /*$_configuration['my_progress_course_tools_order'] = [
     'order' => ['quizzes', 'learning_paths', 'skills'],
@@ -1920,6 +1922,28 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 
 // Replace the Chamilo logo URL.
 //$_configuration['platform_logo_url'] = 'https://chamilo.org';
+
+// Hides the session graph in the main/auth/my_progress.php page.
+//$_configuration['hide_session_graph_in_my_progress'] = true;
+
+// Shows only users from active sessions in tracking.
+//$_configuration['show_users_in_active_sessions_in_tracking'] = true;
+
+// Allows a quick question description edition with a selected image from a popup.
+//$_configuration['allow_quick_question_description_popup'] = true;
+
+// Allows the use of the external id instead of the internal id.
+//$_configuration['use_career_external_id_as_identifier_in_diagrams'] = true;
+
+// Add a career legend below the diagram, a variable will be called
+// get_lang('CareerDiagramLegend') and printed below a diagram
+// $_configuration['career_diagram_legend'] = true;
+
+// If true then a variable will be called get_lang('CareerDiagramDisclaimer') and printed below a diagram;
+//$_configuration['career_diagram_disclaimer'] = true;
+
+// Disable webservices.
+//$_configuration['disable_webservices'] = true;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

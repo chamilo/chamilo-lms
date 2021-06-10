@@ -416,7 +416,7 @@ class SessionManager
                 SELECT DISTINCT
                  IF (
 					(s.access_start_date <= '$today' AND '$today' <= s.access_end_date) OR
-                    (s.access_start_date IS NULL AND s.access_end_date  = IS NULL ) OR
+                    (s.access_start_date IS NULL AND s.access_end_date IS NULL ) OR
 					(s.access_start_date <= '$today' AND s.access_end_date IS NULL) OR
 					('$today' <= s.access_end_date AND s.access_start_date IS NULL)
 				, 1, 0) as session_active,
@@ -6125,13 +6125,27 @@ class SessionManager
         }
 
         if (!empty($keyword)) {
-            $keyword = Database::escape_string($keyword);
+            $keyword = trim(Database::escape_string($keyword));
+            $keywordParts = array_filter(explode(' ', $keyword));
+            $extraKeyword = '';
+            if (!empty($keywordParts)) {
+                $keywordPartsFixed = Database::escape_string(implode('%', $keywordParts));
+                if (!empty($keywordPartsFixed)) {
+                    $extraKeyword .= " OR
+                        CONCAT(u.firstname, ' ', u.lastname) LIKE '%$keywordPartsFixed%' OR
+                        CONCAT(u.lastname, ' ', u.firstname) LIKE '%$keywordPartsFixed%' ";
+                }
+            }
+
             $userConditions .= " AND (
                 u.username LIKE '%$keyword%' OR
                 u.firstname LIKE '%$keyword%' OR
                 u.lastname LIKE '%$keyword%' OR
                 u.official_code LIKE '%$keyword%' OR
-                u.email LIKE '%$keyword%'
+                u.email LIKE '%$keyword%' OR
+                CONCAT(u.firstname, ' ', u.lastname) LIKE '%$keyword%' OR
+                CONCAT(u.lastname, ' ', u.firstname) LIKE '%$keyword%'
+                $extraKeyword
             )";
         }
 
@@ -6199,6 +6213,7 @@ class SessionManager
         }
 
         $sql .= $limitCondition;
+
         $result = Database::query($sql);
 
         return Database::store_result($result);
@@ -6427,7 +6442,9 @@ class SessionManager
             }
         }
 
-        if ($drhLoaded == false) {
+        $checkSessionVisibility = api_get_configuration_value('show_users_in_active_sessions_in_tracking');
+
+        if (false === $drhLoaded) {
             $count = UserManager::getUsersFollowedByUser(
                 $userId,
                 $filterUserStatus,
@@ -6441,7 +6458,8 @@ class SessionManager
                 $active,
                 $lastConnectionDate,
                 api_is_student_boss() ? STUDENT_BOSS : COURSEMANAGER,
-                $keyword
+                $keyword,
+                $checkSessionVisibility
             );
         }
 
@@ -9579,7 +9597,7 @@ class SessionManager
         $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        $relationInfo = array_merge(['visiblity' => 0, 'status' => Session::STUDENT], $relationInfo);
+        $relationInfo = array_merge(['visibility' => 0, 'status' => Session::STUDENT], $relationInfo);
 
         $sessionCourseUser = [
             'session_id' => $sessionId,
@@ -9595,15 +9613,33 @@ class SessionManager
         foreach ($studentIds as $studentId) {
             $sessionCourseUser['user_id'] = $studentId;
 
-            Database::insert($tblSessionCourseUser, $sessionCourseUser);
+            $count = Database::select(
+                'COUNT(1) as nbr',
+                $tblSessionCourseUser,
+                ['where' => ['session_id = ? AND c_id = ? AND user_id = ?' => [$sessionId, $courseId, $studentId]]],
+                'first'
+            );
+
+            if (empty($count['nbr'])) {
+                Database::insert($tblSessionCourseUser, $sessionCourseUser);
+
+                Event::logUserSubscribedInCourseSession($studentId, $courseId, $sessionId);
+            }
 
             if ($updateSession) {
                 $sessionUser['user_id'] = $studentId;
 
-                Database::insert($tblSessionUser, $sessionUser);
-            }
+                $count = Database::select(
+                    'COUNT(1) as nbr',
+                    $tblSessionUser,
+                    ['where' => ['session_id = ? AND user_id = ?' => [$sessionId, $studentId]]],
+                    'first'
+                );
 
-            Event::logUserSubscribedInCourseSession($studentId, $courseId, $sessionId);
+                if (empty($count['nbr'])) {
+                    Database::insert($tblSessionUser, $sessionUser);
+                }
+            }
         }
 
         Database::query(
@@ -9626,6 +9662,92 @@ class SessionManager
                 WHERE s.id = $sessionId"
             );
         }
+    }
+
+    public static function getCareersFromSession(int $sessionId): array
+    {
+        $extraFieldValueSession = new ExtraFieldValue('session');
+        $extraFieldValueCareer = new ExtraFieldValue('career');
+
+        $value = $extraFieldValueSession->get_values_by_handler_and_field_variable($sessionId, 'careerid');
+        $careers = [];
+        if (isset($value['value']) && !empty($value['value'])) {
+            $careerList = str_replace(['[', ']'], '', $value['value']);
+            $careerList = explode(',', $careerList);
+            $careerManager = new Career();
+            foreach ($careerList as $career) {
+                $careerIdValue = $extraFieldValueCareer->get_item_id_from_field_variable_and_field_value(
+                    'external_career_id',
+                    $career
+                );
+                if (isset($careerIdValue['item_id']) && !empty($careerIdValue['item_id'])) {
+                    $finalCareerId = $careerIdValue['item_id'];
+                    $careerInfo = $careerManager->get($finalCareerId);
+                    if (!empty($careerInfo)) {
+                        $careers[] = $careerInfo;
+                    }
+                }
+            }
+        }
+
+        return $careers;
+    }
+
+    public static function getCareerDiagramPerSessionList($sessionList, $userId)
+    {
+        if (empty($sessionList) || empty($userId)) {
+            return '';
+        }
+
+        $userId = (int) $userId;
+        $careersAdded = [];
+        $careerModel = new Career();
+        $frames = '';
+        foreach ($sessionList as $sessionId) {
+            $visibility = api_get_session_visibility($sessionId, null, false, $userId);
+            if (SESSION_AVAILABLE === $visibility) {
+                $careerList = self::getCareersFromSession($sessionId);
+                if (empty($careerList)) {
+                    continue;
+                }
+                foreach ($careerList as $career) {
+                    $careerId = $careerIdToShow = $career['id'];
+                    if (api_get_configuration_value('use_career_external_id_as_identifier_in_diagrams')) {
+                        $careerIdToShow = $careerModel->getCareerIdFromInternalToExternal($careerId);
+                    }
+
+                    if (!in_array($careerId, $careersAdded)) {
+                        $careersAdded[] = $careerId;
+                        $careerUrl = api_get_path(WEB_CODE_PATH).'user/career_diagram.php?iframe=1&career_id='.$careerIdToShow.'&user_id='.$userId;
+                        $frames .= '
+                            <iframe
+                                onload="resizeIframe(this)"
+                                style="width:100%;"
+                                border="0"
+                                frameborder="0"
+                                scrolling="no"
+                                src="'.$careerUrl.'"
+                            ></iframe>';
+                    }
+                }
+            }
+        }
+
+        $content = '';
+        if (!empty($frames)) {
+            $content = Display::page_subheader(get_lang('OngoingTraining'));
+            $content .= '
+               <script>
+                resizeIframe = function(iFrame) {
+                    iFrame.height = iFrame.contentWindow.document.body.scrollHeight + 20;
+                }
+                </script>
+            ';
+            $content .= $frames;
+            $content .= Career::renderDiagramFooter();
+        }
+
+        return $content;
     }
 
     /**

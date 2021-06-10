@@ -76,10 +76,17 @@ function LoginCheck($uid)
 function preventMultipleLogin($userId)
 {
     $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-    $userId = intval($userId);
+    $userId = (int) $userId;
     if (api_get_setting('prevent_multiple_simultaneous_login') === 'true') {
         if (!empty($userId) && !api_is_anonymous()) {
             $isFirstLogin = Session::read('first_user_login');
+            $currentIp = Session::read('current_ip');
+            $differentIp = false;
+            if (!empty($currentIp) && api_get_real_ip() !== $currentIp) {
+                $isFirstLogin = null;
+                $differentIp = true;
+            }
+
             if (empty($isFirstLogin)) {
                 $sql = "SELECT login_id FROM $table
                         WHERE login_user_id = $userId
@@ -94,7 +101,7 @@ function preventMultipleLogin($userId)
                 $userIsReallyOnline = user_is_online($userId);
 
                 // Trying double login.
-                if (!empty($loginData) && $userIsReallyOnline == true) {
+                if ((!empty($loginData) && $userIsReallyOnline) || $differentIp) {
                     session_regenerate_id();
                     Session::destroy();
                     header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=multiple_connection_not_allowed');
@@ -102,6 +109,7 @@ function preventMultipleLogin($userId)
                 } else {
                     // First time
                     Session::write('first_user_login', 1);
+                    Session::write('current_ip', api_get_real_ip());
                 }
             }
         }

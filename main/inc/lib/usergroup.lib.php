@@ -170,7 +170,7 @@ class UserGroup extends Model
                         }
                     }
 
-                    $courseAndSessionList = Tracking::show_user_progress(
+                    $courseAndSessionList = Tracking::showUserProgress(
                         $userId,
                         0,
                         '',

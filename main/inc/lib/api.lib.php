@@ -3951,7 +3951,8 @@ function api_not_allowed(
     }
 
     $tplPlugin = new AppPlugin();
-    $pluginRegionContent = $tplPlugin->load_region('login_bottom', $tpl, true);
+    $loginTopRegionContent = $tplPlugin->load_region('login_top', $tpl, true);
+    $loginBottomRegionContent = $tplPlugin->load_region('login_bottom', $tpl, true);
 
     if (!empty($_SERVER['REQUEST_URI']) &&
         (
@@ -3993,14 +3994,14 @@ function api_not_allowed(
             $content .= "<p style='text-align:center'><a href='#' onclick='$(this).parent().next().toggle()'>".get_lang('LoginWithExternalAccount')."</a></p>";
             $content .= "<div style='display:none;'>";
         }
+        $content .= PHP_EOL.$loginTopRegionContent;
         $content .= '<div class="well">';
         $content .= $form->returnForm();
         $content .= '</div>';
+        $content .= PHP_EOL.$loginBottomRegionContent;
         if (api_is_cas_activated()) {
             $content .= "</div>";
         }
-
-        $content .= PHP_EOL.$pluginRegionContent;
 
         if (!empty($courseCode)) {
             $content .= '<hr/><p style="text-align:center"><a href="'.$home_url.'">'.
@@ -4048,9 +4049,11 @@ function api_not_allowed(
             $msg .= "<div style='display:none;'>";
         }
         $form = api_get_not_allowed_login_form();
+        $msg .= PHP_EOL.$loginTopRegionContent;
         $msg .= '<div class="well">';
         $msg .= $form->returnForm();
         $msg .= '</div>';
+        $msg .= PHP_EOL.$loginBottomRegionContent;
         if ($casEnabled) {
             $msg .= "</div>";
         }
@@ -4072,13 +4075,13 @@ function api_not_allowed(
 
         if (api_is_anonymous()) {
             $form = api_get_not_allowed_login_form();
+            $msg .= PHP_EOL.$loginTopRegionContent;
             $msg .= '<div class="well">';
             $msg .= $form->returnForm();
             $msg .= '</div>';
+            $msg .= PHP_EOL.$loginBottomRegionContent;
         }
     }
-
-    $msg .= PHP_EOL.$pluginRegionContent;
 
     $tpl->assign('content', $msg);
     $tpl->display_one_col_template();

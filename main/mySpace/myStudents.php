@@ -2060,9 +2060,9 @@ if ($allowMessages === true) {
 $filter_messages = api_get_configuration_value('filter_interactivity_messages') && !empty($sessionId);
 
 if ($filter_messages) {
-	$session_info = api_get_session_info($sessionId);
-	$coach_access_start_date = $session_info['coach_access_start_date'];
-	$coach_access_end_date = $session_info['coach_access_end_date'];
+    $session_info = api_get_session_info($sessionId);
+    $coach_access_start_date = $session_info['coach_access_start_date'];
+    $coach_access_end_date = $session_info['coach_access_end_date'];
 }
 
 $allow = api_get_configuration_value('allow_user_message_tracking');

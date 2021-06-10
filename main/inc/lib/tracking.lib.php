@@ -8701,18 +8701,18 @@ class TrackingCourseLog
             $data = Session::read('default_additional_user_profile_info');
             $defaultExtraFieldInfo = Session::read('default_extra_field_info');
             if (isset($defaultExtraFieldInfo) && isset($data)) {
-                foreach ($data as $clave => $val) {
+                foreach ($data as $key => $val) {
                     if (isset($val[$user['user_id']])) {
                         if (is_array($val[$user['user_id']])) {
-                            $user_row[$defaultExtraFieldInfo[$clave]['variable']] = implode(
+                            $user_row[$defaultExtraFieldInfo[$key]['variable']] = implode(
                                 ', ',
                                 $val[$user['user_id']]
                             );
                         } else {
-                            $user_row[$defaultExtraFieldInfo[$clave]['variable']] = $val[$user['user_id']];
+                            $user_row[$defaultExtraFieldInfo[$key]['variable']] = $val[$user['user_id']];
                         }
                     } else {
-                        $user_row[$defaultExtraFieldInfo[$clave]['variable']] = '';
+                        $user_row[$defaultExtraFieldInfo[$key]['variable']] = '';
                     }
                 }
             }

@@ -25,7 +25,7 @@
         {% for row in rows %}
             <tr>
                 <td>
-                    <a href="{{ row.skill_url }}" target="_blank">
+                    <a href="{{ row.skill_url }}">
                         {{ row.skill_badge }}
                     </a>
                 </td>

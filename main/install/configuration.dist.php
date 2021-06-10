@@ -940,6 +940,10 @@ ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (ses
 // affect privacy protection.
 //$_configuration['allow_user_message_tracking'] = false;
 
+// Filter messages between a teacher and a student between the session start end dates
+// Need $_configuration['allow_user_message_tracking'] = true;
+$_configuration['filter_interactivity_messages'] = false;
+
 // Add a portfolio tool (duplicating the Notebook tool). Requires DB changes:
 /*
 CREATE TABLE portfolio (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, c_id INT DEFAULT NULL, session_id INT DEFAULT NULL, category_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, content LONGTEXT NOT NULL, creation_date DATETIME NOT NULL, update_date DATETIME NOT NULL, is_visible TINYINT(1) DEFAULT '1' NOT NULL, INDEX user (user_id), INDEX course (c_id), INDEX session (session_id), INDEX category (category_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;

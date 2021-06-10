@@ -127,9 +127,12 @@ class CourseController extends ToolBaseController
     /**
      * @Route("/launch/{id}", name="chamilo_lti_launch", requirements={"id"="\d+"})
      *
-     * @param string $id
+     * @param int   $id
+     * @param Utils $ltiUtil
+     *
+     * @return Response
      */
-    public function launchAction($id): Response
+    public function launchAction(int $id, Utils $ltiUtil): Response
     {
         $em = $this->getDoctrine()->getManager();
         /** @var null|ExternalTool $tool */
@@ -149,8 +152,6 @@ class CourseController extends ToolBaseController
         if (empty($tool->getCourse()) || $tool->getCourse()->getId() !== $course->getId()) {
             throw $this->createAccessDeniedException('');
         }
-
-        $ltiUtil = $this->get('chamilo_lti_utils');
 
         $institutionDomain = $ltiUtil->getInstitutionDomain();
         $toolUserId = $ltiUtil->generateToolUserId($user->getId());
@@ -381,7 +382,7 @@ class CourseController extends ToolBaseController
         }
 
         return $this->render(
-            'ChamiloCoreBundle:Lti:iframe.html.twig',
+            '@ChamiloCore/Lti/iframe.html.twig',
             [
                 'tool' => $externalTool,
                 'course' => $course,

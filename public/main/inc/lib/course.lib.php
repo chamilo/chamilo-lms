@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\SequenceResource;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
@@ -763,26 +764,6 @@ class CourseManager
                 $courseCode
             );
 
-            // Add event to the system log
-            Event::addEvent(
-                LOG_SUBSCRIBE_USER_TO_COURSE,
-                LOG_COURSE_CODE,
-                $courseCode,
-                api_get_utc_datetime(),
-                api_get_user_id(),
-                $courseId,
-                $sessionId
-            );
-            Event::addEvent(
-                LOG_SUBSCRIBE_USER_TO_COURSE,
-                LOG_USER_OBJECT,
-                $user,
-                api_get_utc_datetime(),
-                api_get_user_id(),
-                $courseId,
-                $sessionId
-            );
-
             return true;
         } else {
             // Check whether the user has not been already subscribed to the course.
@@ -841,22 +822,13 @@ class CourseManager
                 }
             }
 
-            $maxSort = api_max_sort_value('0', $userId);
+            $maxSort = api_max_sort_value(0, $userId) + 1;
 
-            $courseRelUser = new CourseRelUser();
-            $courseRelUser
-                ->setCourse($course)
-                ->setUser($user)
-                ->setStatus($status)
-                ->setSort($maxSort + 1)
-                ->setUserCourseCat($userCourseCategoryId)
-            ;
-
-            $em = Database::getManager();
-            $em->persist($courseRelUser);
-            $em->flush();
-
-            $insertId = $courseRelUser->getId();
+            $insertId = self::insertUserInCourse(
+                $user,
+                $course,
+                ['status' => $status, 'sort' => $maxSort, 'user_course_cat' => $userCourseCategoryId]
+            );
 
             if ($insertId) {
                 Display::addFlash(
@@ -892,25 +864,6 @@ class CourseManager
                         set_notification('forum', $forum->getIid(), false, $userInfo, $courseInfo);
                     }*/
                 }
-
-                // Add event to the system log
-                Event::addEvent(
-                    LOG_SUBSCRIBE_USER_TO_COURSE,
-                    LOG_COURSE_CODE,
-                    $courseCode,
-                    api_get_utc_datetime(),
-                    api_get_user_id(),
-                    $courseId
-                );
-
-                Event::addEvent(
-                    LOG_SUBSCRIBE_USER_TO_COURSE,
-                    LOG_USER_OBJECT,
-                    $user,
-                    api_get_utc_datetime(),
-                    api_get_user_id(),
-                    $courseId
-                );
 
                 return true;
             }
@@ -6681,28 +6634,41 @@ class CourseManager
         return '';
     }
 
-    public static function insertUserInCourse(int $studentId, int $courseId, array $relationInfo = [])
+    /**
+     * @param User   $user
+     * @param Course $course
+     * @param array  $relationInfo
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
+     * @return int|null
+     */
+    public static function insertUserInCourse(User $user, Course $course, array $relationInfo = []): ?int
     {
-        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-
         $relationInfo = array_merge(
             ['relation_type' => 0, 'status' => STUDENT, 'sort' => 0, 'user_course_cat' => 0],
             $relationInfo
         );
 
-        Database::insert(
-            $courseUserTable,
-            [
-                'c_id' => $courseId,
-                'user_id' => $studentId,
-                'status' => $relationInfo['status'],
-                'sort' => $relationInfo['sort'],
-                'relation_type' => $relationInfo['relation_type'],
-                'user_course_cat' => $relationInfo['user_course_cat'],
-            ]
-        );
+        $courseRelUser = (new CourseRelUser())
+            ->setCourse($course)
+            ->setUser($user)
+            ->setStatus($relationInfo['status'])
+            ->setSort($relationInfo['sort'])
+            ->setUserCourseCat($relationInfo['user_course_cat']);
 
-        Event::logSubscribedUserInCourse($studentId, $courseId);
+        $course->addUsers($courseRelUser);
+
+        $em = Database::getManager();
+        $em->persist($course);
+        $em->flush();
+
+        $insertId = $courseRelUser->getId();
+
+        Event::logSubscribedUserInCourse($user->getId(), $course->getId());
+
+        return $insertId;
     }
     /**
      * Check if a specific access-url-related setting is a problem or not.

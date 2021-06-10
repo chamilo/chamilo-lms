@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\TrackEAttemptRecording;
+use Chamilo\CoreBundle\Entity\TrackEDefault;
 use ChamiloSession as Session;
 
 /**
@@ -785,13 +786,9 @@ class Event
         $course_id = null,
         $sessionId = 0
     ) {
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
-
         if (empty($event_type)) {
             return false;
         }
-        $event_type = Database::escape_string($event_type);
-        $event_value_type = Database::escape_string($event_value_type);
         if (!empty($course_id)) {
             $course_id = (int) $course_id;
         } else {
@@ -836,29 +833,28 @@ class Event
             $event_value = serialize($event_value);
         }
 
-        $event_value = Database::escape_string($event_value);
         $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
 
         if (!isset($datetime)) {
             $datetime = api_get_utc_datetime();
         }
 
-        $datetime = Database::escape_string($datetime);
-
         if (!isset($user_id)) {
             $user_id = api_get_user_id();
         }
 
-        $params = [
-            'default_user_id' => $user_id,
-            'c_id' => $course_id,
-            'default_date' => $datetime,
-            'default_event_type' => $event_type,
-            'default_value_type' => $event_value_type,
-            'default_value' => $event_value,
-            'session_id' => $sessionId,
-        ];
-        Database::insert($table, $params);
+        $track = (new TrackEDefault())
+            ->setDefaultUserId($user_id)
+            ->setCId($course_id)
+            ->setDefaultDate(new DateTime($datetime, new DateTimeZone('UTC')))
+            ->setDefaultEventType($event_type)
+            ->setDefaultValueType($event_value_type)
+            ->setDefaultValue($event_value)
+            ->setSessionId($sessionId);
+
+        $em = Database::getManager();
+        $em->persist($track);
+        $em->flush();
 
         return true;
     }

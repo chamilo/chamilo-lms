@@ -76,10 +76,6 @@ services:
     chamilo_core.hook_factory:
         class: 'Chamilo\CoreBundle\Hook\HookFactory'
 
-    chamilo_lti_utils:
-        class: Chamilo\LtiBundle\Util\Utils
-        arguments: ['@chamilo.settings.manager']
-
     Chamilo\CoreBundle\EventListener\HTTPExceptionListener:
         tags:
             - {name: kernel.event_listener, event: kernel.exception}

@@ -362,6 +362,7 @@ class Session implements ResourceWithAccessUrlInterface
 
         if (!$this->hasUser($user)) {
             $this->users[] = $user;
+            $this->nbrUsers++;
         }
     }
 
@@ -885,7 +886,7 @@ class Session implements ResourceWithAccessUrlInterface
      * Add a user course subscription.
      * If user status in session is student, then increase number of course users.
      */
-    public function addUserInCourse(int $status, User $user, Course $course): void
+    public function addUserInCourse(int $status, User $user, Course $course): SessionRelCourseRelUser
     {
         $userRelCourseRelSession = new SessionRelCourseRelUser();
         $userRelCourseRelSession->setCourse($course);
@@ -898,6 +899,8 @@ class Session implements ResourceWithAccessUrlInterface
             $sessionCourse = $this->getCourseSubscription($course);
             $sessionCourse->setNbrUsers($sessionCourse->getNbrUsers() + 1);
         }
+
+        return $userRelCourseRelSession;
     }
 
     public function hasUserCourseSubscription(SessionRelCourseRelUser $subscription): bool

@@ -2055,15 +2055,15 @@ class SessionManager
                     function ($userId) use ($existingUsers) {
                         return !in_array($userId, $existingUsers);
                     }
-                        );
+                );
 
                 self::insertUsersInCourse(
                     $usersToSubscribeInCourse,
-                                $courseId,
+                    $courseId,
                     $sessionId,
                     ['visibility' => $session_visibility],
                     false
-                            );
+                );
             }
         }
 
@@ -2353,76 +2353,22 @@ class SessionManager
             }
         }
 
-        $nbr_users = 0;
-        foreach ($user_list as $enreg_user) {
-            $enreg_user = (int) $enreg_user;
-            // Checking if user exists in session - course - user table.
-            $sql = "SELECT count(user_id) as count
-                    FROM $tbl_session_rel_course_rel_user
-                    WHERE
-                        session_id = $session_id AND
-                        c_id = $courseId and
-                        user_id = $enreg_user ";
-            $result = Database::query($sql);
-            $count = 0;
+        self::insertUsersInCourse(
+            $user_list,
+            $courseId,
+            $session_id,
+            ['visibility' => $session_visibility]
+        );
 
-            if (Database::num_rows($result) > 0) {
-                $row = Database::fetch_array($result, 'ASSOC');
-                $count = $row['count'];
-            }
-
-            if (0 == $count) {
-                $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (session_id, c_id, user_id, visibility)
-                        VALUES ($session_id, $courseId, $enreg_user, $session_visibility)";
-                $result = Database::query($sql);
-                if (Database::affected_rows($result)) {
-                    $nbr_users++;
-                }
-            }
-
-            /*if (!empty($forums)) {
+        /*if (!empty($forums)) {
+            foreach ($user_list as $enreg_user) {
                 $userInfo = api_get_user_info($enreg_user);
                 foreach ($forums as $forum) {
                     $forumId = $forum['iid'];
                     //set_notification('forum', $forumId, false, $userInfo, $courseInfo);
                 }
-            }*/
-
-            // Checking if user exists in session - user table.
-            $sql = "SELECT count(user_id) as count
-                    FROM $tbl_session_rel_user
-                    WHERE session_id = $session_id AND user_id = $enreg_user ";
-            $result = Database::query($sql);
-            $count = 0;
-
-            if (Database::num_rows($result) > 0) {
-                $row = Database::fetch_array($result, 'ASSOC');
-                $count = $row['count'];
             }
-
-            if (empty($count)) {
-                // If user is not registered to a session then add it.
-                $sql = "INSERT IGNORE INTO $tbl_session_rel_user (session_id, user_id, registered_at)
-                        VALUES ($session_id, $enreg_user, '".api_get_utc_datetime()."')";
-                Database::query($sql);
-
-                $sql = "UPDATE $tbl_session SET nbr_users = nbr_users + 1
-                        WHERE id = $session_id ";
-                Database::query($sql);
-            }
-        }
-
-        // count users in this session-course relation
-        $sql = "SELECT COUNT(user_id) as nbUsers
-                FROM $tbl_session_rel_course_rel_user
-                WHERE session_id = $session_id AND c_id = $courseId AND status <> 2";
-        $rs = Database::query($sql);
-        [$nbr_users] = Database::fetch_array($rs);
-        // update the session-course relation to add the users total
-        $sql = "UPDATE $tbl_session_rel_course
-                SET nbr_users = $nbr_users
-                WHERE session_id = $session_id AND c_id = $courseId";
-        Database::query($sql);
+        }*/
     }
 
     /**
@@ -2776,31 +2722,13 @@ class SessionManager
                 $nbr_courses++;
 
                 // Subscribe all the users from the session to this course inside the session
-                $nbr_users = 0;
-                foreach ($user_list as $enreg_user) {
-                    $enreg_user_id = (int) $enreg_user['user_id'];
-                    $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (session_id, c_id, user_id, visibility)
-                            VALUES ($sessionId, $courseId, $enreg_user_id, $sessionVisibility)";
-                    $result = Database::query($sql);
-
-                    Event::addEvent(
-                        LOG_SESSION_ADD_USER_COURSE,
-                        LOG_USER_ID,
-                        $enreg_user_id,
-                        api_get_utc_datetime(),
-                        api_get_user_id(),
-                        $courseId,
-                        $sessionId
-                    );
-
-                    if (Database::affected_rows($result)) {
-                        $nbr_users++;
-                    }
-                }
-                $sql = "UPDATE $tbl_session_rel_course
-                        SET nbr_users = $nbr_users
-                        WHERE session_id = $sessionId AND c_id = $courseId";
-                Database::query($sql);
+                self::insertUsersInCourse(
+                    array_column($user_list, 'id'),
+                    $courseId,
+                    $sessionId,
+                    ['visibility' => $sessionVisibility],
+                    false
+                );
             }
 
             if ($copyCourseTeachersAsCoach) {
@@ -9550,28 +9478,17 @@ class SessionManager
 
     public static function insertUsersInCourses(array $studentIds, array $courseIds, int $sessionId)
     {
-        $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
+        $session = api_get_session_entity($sessionId);
 
         foreach ($courseIds as $courseId) {
             self::insertUsersInCourse($studentIds, $courseId, $sessionId, [], false);
         }
 
         foreach ($studentIds as $studentId) {
-            Database::query(
-                "INSERT IGNORE INTO $tblSessionUser (session_id, user_id, registered_at)
-                VALUES ($sessionId, $studentId, '".api_get_utc_datetime()."')"
-            );
-        }
+            $user = api_get_user_entity($studentId);
 
-        Database::query(
-            "UPDATE $tblSession s
-            SET s.nbr_users = (
-                SELECT COUNT(1) FROM session_rel_user sru
-                WHERE sru.session_id = $sessionId AND sru.relation_type <> ".Session::DRH."
-            )
-            WHERE s.id = $sessionId"
-        );
+            $session->addUserInSession(Session::STUDENT, $user);
+        }
     }
 
     public static function insertUsersInCourse(
@@ -9581,75 +9498,29 @@ class SessionManager
         array $relationInfo = [],
         bool $updateSession = true
     ) {
-        $tblSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tblSessionCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
+        $course = api_get_course_entity($courseId);
+        $session = api_get_session_entity($sessionId);
+
+        $em = Database::getManager();
 
         $relationInfo = array_merge(['visiblity' => 0, 'status' => Session::STUDENT], $relationInfo);
 
-        $sessionCourseUser = [
-            'session_id' => $sessionId,
-            'c_id' => $courseId,
-            'visibility' => $relationInfo['visibility'],
-            'status' => $relationInfo['status'],
-        ];
-        $sessionUser = [
-            'session_id' => $sessionId,
-            'registered_at' => api_get_utc_datetime(),
-        ];
-
         foreach ($studentIds as $studentId) {
-            $sessionCourseUser['user_id'] = $studentId;
+            $user = api_get_user_entity($studentId);
 
-            $count = Database::select(
-                'COUNT(1) as nbr',
-                $tblSessionCourseUser,
-                ['where' => ['session_id = ? AND c_id = ? AND user_id = ?' => [$sessionId, $courseId, $studentId]]],
-                'first'
-            );
+            $session
+                ->addUserInCourse($relationInfo['status'], $user, $course)
+                ->setVisibility($relationInfo['visibility']);
 
-            if (empty($count['nbr'])) {
-                Database::insert($tblSessionCourseUser, $sessionCourseUser);
+            Event::logUserSubscribedInCourseSession($studentId, $courseId, $sessionId);
 
-                Event::logUserSubscribedInCourseSession($studentId, $courseId, $sessionId);
-            }
             if ($updateSession) {
-                $sessionUser['user_id'] = $studentId;
-
-                $count = Database::select(
-                    'COUNT(1) as nbr',
-                    $tblSessionUser,
-                    ['where' => ['session_id = ? AND user_id = ?' => [$sessionId, $studentId]]],
-                    'first'
-                );
-
-                if (empty($count['nbr'])) {
-                    Database::insert($tblSessionUser, $sessionUser);
-                }
+                $session->addUserInSession(Session::STUDENT, $user);
             }
         }
 
-        Database::query(
-            "UPDATE $tblSessionCourse src
-            SET src.nbr_users = (
-                SELECT COUNT(1) FROM $tblSessionCourseUser srcru
-                WHERE
-                    srcru.session_id = $sessionId AND srcru.c_id = $courseId AND srcru.status <> ".Session::COACH."
-            )
-            WHERE src.session_id = $sessionId AND src.c_id = $courseId"
-        );
-
-        if ($updateSession) {
-            Database::query(
-                "UPDATE $tblSession s
-                SET s.nbr_users = (
-                    SELECT COUNT(1) FROM session_rel_user sru
-                    WHERE sru.session_id = $sessionId AND sru.relation_type <> ".Session::DRH."
-                )
-                WHERE s.id = $sessionId"
-            );
-        }
+        $em->persist($session);
+        $em->flush();
     }
 
     public static function getCareersFromSession(int $sessionId): array

@@ -6811,13 +6811,16 @@ class CourseManager
             get_lang('Closed - the course is only accessible to the teachers'),
             Course::CLOSED
         );
-        $group[] = $form->createElement(
-            'radio',
-            'visibility',
-            null,
-            get_lang('Hidden - Completely hidden to all users except the administrators'),
-            Course::HIDDEN
-        );
+        // The "hidden" visibility is only available to portal admins
+        if (api_is_platform_admin()) {
+            $group[] = $form->createElement(
+                'radio',
+                'visibility',
+                null,
+                get_lang('Hidden - Completely hidden to all users except the administrators'),
+                Course::HIDDEN
+            );
+        }
         $form->addGroup($group, '', get_lang('Course access'));
     }
 }

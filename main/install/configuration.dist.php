@@ -942,7 +942,7 @@ ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (ses
 
 // Filter messages between a teacher and a student between the session start end dates
 // Need $_configuration['allow_user_message_tracking'] = true;
-$_configuration['filter_interactivity_messages'] = false;
+//$_configuration['filter_interactivity_messages'] = false;
 
 // Add a portfolio tool (duplicating the Notebook tool). Requires DB changes:
 /*

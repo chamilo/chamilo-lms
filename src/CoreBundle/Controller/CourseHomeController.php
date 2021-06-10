@@ -128,7 +128,10 @@ class CourseHomeController extends ToolBaseController
             if (!$isCourseTeacher && 'admin' === $toolModel->getCategory()) {
                 continue;
             }
-            $tools[$toolModel->getCategory()][] = ['ctool' => $item, 'tool' => $toolModel];
+            $tools[$toolModel->getCategory()][] = [
+                'ctool' => $item,
+                'tool' => $toolModel,
+            ];
         }
 
         // Get session-career diagram

@@ -5225,19 +5225,14 @@ EOT;
         );
     }
 
-    /**
-     * @return array
-     */
-    public static function getNotificationSettings()
+    public static function getNotificationSettings(): array
     {
-        $emailAlerts = [
-            2 => get_lang('SendEmailToTrainerWhenStudentStartQuiz'),
-            1 => get_lang('SendEmailToTrainerWhenStudentEndQuiz'), // default
-            3 => get_lang('SendEmailToTrainerWhenStudentEndQuizOnlyIfOpenQuestion'),
-            4 => get_lang('SendEmailToTrainerWhenStudentEndQuizOnlyIfOralQuestion'),
+        return [
+            2 => get_lang('Paranoid: E-mail teacher when a student starts an exercise'),
+            1 => get_lang('Aware: E-mail teacher when a student ends an exercise'), // default
+            3 => get_lang('Relaxed open: E-mail teacher when a student ends an exercise, only if an open question is answered'),
+            4 => get_lang('Relaxed audio: E-mail teacher when a student ends an exercise, only if an oral question is answered'),
         ];
-
-        return $emailAlerts;
     }
 
     /**

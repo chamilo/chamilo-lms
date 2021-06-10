@@ -126,11 +126,6 @@ class CourseController extends ToolBaseController
 
     /**
      * @Route("/launch/{id}", name="chamilo_lti_launch", requirements={"id"="\d+"})
-     *
-     * @param int   $id
-     * @param Utils $ltiUtil
-     *
-     * @return Response
      */
     public function launchAction(int $id, Utils $ltiUtil): Response
     {

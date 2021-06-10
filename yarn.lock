@@ -1965,6 +1965,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tailwindcss/line-clamp@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "@tailwindcss/line-clamp@npm:0.2.1"
+  peerDependencies:
+    tailwindcss: ">=2.0.0"
+  checksum: 4975660111876e351832e737eced18925b1d11c402fbef014866bb8ffea6d62d4b50af3beab9f021721bd89414b167240631cb5d7d9fe892afece9e70e4dbfb4
+  languageName: node
+  linkType: hard
+
 "@tailwindcss/typography@npm:^0.2.0":
   version: 0.2.0
   resolution: "@tailwindcss/typography@npm:0.2.0"
@@ -5988,6 +5997,7 @@ __metadata:
     "@quasar/extras": latest
     "@symfony/webpack-encore": ^1.4.0
     "@tailwindcss/forms": ^0.3.3
+    "@tailwindcss/line-clamp": ^0.2.1
     "@tailwindcss/typography": ^0.4.1
     "@tailwindcss/ui": ^0.7.2
     "@tinymce/tinymce-vue": ^4.0.3

@@ -17,6 +17,7 @@
     "@popperjs/core": "^2.9.2",
     "@quasar/extras": "latest",
     "@tailwindcss/forms": "^0.3.3",
+    "@tailwindcss/line-clamp": "^0.2.1",
     "@tailwindcss/typography": "^0.4.1",
     "@tailwindcss/ui": "^0.7.2",
     "@tinymce/tinymce-vue": "^4.0.3",

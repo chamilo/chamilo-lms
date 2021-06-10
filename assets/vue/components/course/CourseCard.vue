@@ -12,19 +12,45 @@
 <!--  </q-card>-->
 
   <q-card class="my-card">
-    <img src="/img/session_default.png" />
-    <q-card-section>
-      <div class="text-h7">
-        <router-link :to="{ name: 'CourseHome', params: {id: course._id, course: course}}">
-          {{ course.title }}
-          <span v-if="course.users.edges.length">
-            <div v-for="courseRelUser in course.users.edges">
-              {{ courseRelUser.node.user.username }}
-            </div>
-          </span>
-        </router-link>
+    <div class="">
+      <img class="object-cover w-full h-44" src="/img/session_default.png" />
+    </div>
+    <div class="p-4">
+      <div class="h-10 flex flex-row justify-between">
+        <div class="line-clamp-2 text-md w-5/6">
+          <router-link :to="{ name: 'CourseHome', params: {id: course._id, course: course}}">
+            {{ course.title }}
+          </router-link>
+        </div>
+        <div>
+          <v-icon>
+            mdi-dots-vertical
+          </v-icon>
+        </div>
       </div>
-    </q-card-section>
+
+      <div class="pt-6 ">
+        <div class="flex flex-row" v-if="course.users.edges.length">
+          <div class="flex flex-row pr-3" v-for="courseRelUser in course.users.edges">
+            <div class="pr-2">
+              <v-avatar
+                  color="primary"
+                  size="32"
+              ></v-avatar>
+            </div>
+
+            <div v-if="course.users.edges.length < 3 " class="text-xs flex-col">
+              <div>
+              {{ courseRelUser.node.user.firstname }} {{ courseRelUser.node.user.lastname }}
+              </div>
+              <div>
+                Teacher
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
 <!--    <q-card-actions>-->
 <!--        <q-btn-->
 <!--            type="a"-->
@@ -34,6 +60,8 @@
 <!--            label="Go"-->
 <!--        />-->
 <!--      </q-card-actions>-->
+
+    </div>
   </q-card>
 </template>
 

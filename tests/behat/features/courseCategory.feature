@@ -34,4 +34,4 @@ Feature: Course category
     Then I follow "Delete"
     Then confirm the popup
     And wait for the page to be loaded
-    Then I should see "There are no categories here"
+    Then I should not see "Course category edited"

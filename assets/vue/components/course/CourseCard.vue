@@ -11,7 +11,9 @@
 <!--    </q-card-section>-->
 <!--  </q-card>-->
 
-  <q-card class="my-card">
+  <v-card
+      elevation="4"
+  >
     <div class="">
       <img class="object-cover w-full h-44" src="/img/session_default.png" />
     </div>
@@ -62,7 +64,7 @@
 <!--      </q-card-actions>-->
 
     </div>
-  </q-card>
+  </v-card>
 </template>
 
 <style scoped>

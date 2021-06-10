@@ -5,22 +5,47 @@
         {{ course.title }}
       </div>
 
-      <div v-if="isCurrentTeacher && course">
-
-        <a class="btn btn-info">
+      <div class="flex flex-row" v-if="isCurrentTeacher && course">
+        <a class="btn btn-info mr-2">
           <v-icon>mdi-eye</v-icon>
           See as student
         </a>
 
-        <v-icon>mdi-cog</v-icon>
-
-        <select>
-          <option
-              v-for="tool in tools.admin"
+        <div class="relative">
+<!--          shadow rounded-full-->
+          <button
+              @click="dropdownOpen = !dropdownOpen"
+              class="relative z-10 block h-8 w-8  overflow-hidden  focus:outline-none"
           >
-            {{ tool.tool.name }}
-          </option>
-        </select>
+          <v-icon>mdi-cog</v-icon>
+        </button>
+
+        <div
+            v-show="dropdownOpen"
+            @click="dropdownOpen = false"
+            class="fixed inset-0 h-full w-full z-10"
+        ></div>
+
+        <div
+            v-show="dropdownOpen"
+            class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20"
+        >
+          <q-list dense>
+<!--            <q-item replace :to="'/main/messages/index.php'" clickable class="">-->
+<!--              <q-item-section>Inbox</q-item-section>-->
+<!--            </q-item>-->
+            <q-item
+                :href="goToCourseTool(course, tool)"
+                tag="a"
+                class=""
+                v-for="tool in tools.admin"
+            >
+              <q-item-section> {{ tool.ctool.nameToTranslate }}</q-item-section>
+            </q-item>
+          </q-list>
+        </div>
+      </div>
+
 
       </div>
     </div>
@@ -46,19 +71,18 @@
       </div>
     </div>
 
-    <hr />
-
-    <div class="flex justify-between">
-      <div class="text-h6 font-bold">
-        Tools
-      </div>
-      <div>
-        <v-icon>
-          mdi-format-paint
-        </v-icon>
-        Customize
-      </div>
-    </div>
+<!--    <hr />-->
+<!--    <div class="flex justify-between">-->
+<!--      <div class="text-h6 font-bold">-->
+<!--        Tools-->
+<!--      </div>-->
+<!--      <div>-->
+<!--        <v-icon>-->
+<!--          mdi-format-paint-->
+<!--        </v-icon>-->
+<!--        Customize-->
+<!--      </div>-->
+<!--    </div>-->
 
 
     <div
@@ -111,7 +135,15 @@ export default {
     HomeShortCutCard
   },
   setup() {
-    const state = reactive({course: [], tools: [], shortcuts: [], goToCourseTool, changeVisibility, goToShortCut});
+    const state = reactive({
+      course: [],
+      tools: [],
+      shortcuts: [],
+      dropdownOpen: false,
+      goToCourseTool,
+      changeVisibility,
+      goToShortCut
+    });
     const route = useRoute()
     let courseId = route.params.id;
     let sessionId = route.query.sid ?? 0;

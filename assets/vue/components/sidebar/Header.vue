@@ -199,8 +199,6 @@ export default defineComponent({
     const dropdownOpen = ref(false);
     const { isOpen } = useSidebar();
     const userAvatar = ref(window.userAvatar);
-
-
     console.log('defineComponent window.user');
     console.log(window.user);
     console.log(window.userAvatar);

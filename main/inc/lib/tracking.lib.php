@@ -8118,7 +8118,7 @@ class TrackingCourseLog
     }
 
     /**
-     * @param array    $exclude    Extra fields to be skipped, by ID
+     * @param array $exclude Extra fields to be skipped, by ID
      *
      * @return string
      */

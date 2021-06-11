@@ -167,6 +167,7 @@ if ($form->validate()) {
                                 $courseId,
                                 $exerciseId,
                                 $questionId,
+                                null,
                                 $groupId
                             );
                             $orderedData[] = [
@@ -222,6 +223,7 @@ if ($form->validate()) {
                                 $courseId,
                                 $exerciseId,
                                 $questionId,
+                                null,
                                 null,
                                 $userId
                             );

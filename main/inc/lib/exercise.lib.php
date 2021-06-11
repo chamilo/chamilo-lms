@@ -5977,13 +5977,14 @@ EOT;
         return $trackedExercise;
     }
 
-    public static function getTotalQuestionAnswered($courseId, $exerciseId, $questionId, $groupId = 0, $userId = 0)
+    public static function getTotalQuestionAnswered($courseId, $exerciseId, $questionId, $sessionId = 0, $groupId = 0, $userId = 0)
     {
         $courseId = (int) $courseId;
         $exerciseId = (int) $exerciseId;
         $questionId = (int) $questionId;
         $groupId = (int) $groupId;
         $userId = (int) $userId;
+        $sessionId = (int) $sessionId;
 
         $attemptTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $trackTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
@@ -6002,6 +6003,11 @@ EOT;
             $userCondition = " AND user_id = $userId ";
         }
 
+        $sessionCondition = '';
+        if (!empty($sessionId)) {
+            $sessionCondition = api_get_session_condition($sessionId, true, false, 'te.session_id');
+        }
+
         $sql = "SELECT count(te.exe_id) total
                 FROM $attemptTable t
                 INNER JOIN $trackTable te
@@ -6011,6 +6017,7 @@ EOT;
                     exe_exo_id = $exerciseId AND
                     t.question_id = $questionId AND
                     status != 'incomplete'
+                    $sessionCondition
                     $groupCondition
                     $userCondition
         ";

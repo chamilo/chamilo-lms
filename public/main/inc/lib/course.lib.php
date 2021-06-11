@@ -578,9 +578,9 @@ class CourseManager
         $visibility = (int) $course->getVisibility();
 
         if (in_array($visibility, [
-                COURSE_VISIBILITY_CLOSED,
+                Course::CLOSED,
                 //Course::REGISTERED,
-                COURSE_VISIBILITY_HIDDEN,
+                Course::HIDDEN,
         ])) {
             Display::addFlash(
                 Display::return_message(
@@ -3577,7 +3577,7 @@ class CourseManager
             while ($course = Database::fetch_array($rs_special_course)) {
                 $course_info = api_get_course_info($course['code']);
                 $courseId = $course_info['real_id'];
-                if (COURSE_VISIBILITY_HIDDEN == $course_info['visibility']) {
+                if (Course::HIDDEN == $course_info['visibility']) {
                     continue;
                 }
 
@@ -3607,7 +3607,7 @@ class CourseManager
                         $params['document'] .= Display::div('', ['id' => 'document_result_'.$courseId.'_0', 'class' => 'document_preview_container']);
                     }
                 } else {
-                    if (COURSE_VISIBILITY_CLOSED != $course_info['visibility'] && $load_dirs) {
+                    if (Course::CLOSED != $course_info['visibility'] && $load_dirs) {
                         $params['document'] = '<a id="document_preview_'.$courseId.'_0" class="document_preview btn btn-outline-secondary btn-sm" href="javascript:void(0);">'
                            .Display::returnFontAwesomeIcon('folder-open').'</a>';
                         $params['document'] .= Display::div('', ['id' => 'document_result_'.$courseId.'_0', 'class' => 'document_preview_container']);
@@ -3647,7 +3647,7 @@ class CourseManager
                     $params['image'] = $course_info['course_image_large'];
                 }
 
-                if (COURSE_VISIBILITY_CLOSED != $course_info['visibility']) {
+                if (Course::CLOSED != $course_info['visibility']) {
                     $params['notifications'] = $show_notification;
                 }
 
@@ -3744,7 +3744,7 @@ class CourseManager
             }
 
             if (isset($course_info['visibility']) &&
-                COURSE_VISIBILITY_HIDDEN == $course_info['visibility']
+                Course::HIDDEN == $course_info['visibility']
             ) {
                 continue;
             }
@@ -3863,7 +3863,7 @@ class CourseManager
                 );
             }
 
-            if (COURSE_VISIBILITY_CLOSED != $course_info['visibility']) {
+            if (Course::CLOSED != $course_info['visibility']) {
                 $params['notifications'] = $showNotification;
             }
             $courseAdded[] = $course_info['real_id'];
@@ -3937,7 +3937,7 @@ class CourseManager
         $course_visibility = (int) $course_info['visibility'];
         $allowUnsubscribe = api_get_configuration_value('enable_unsubscribe_button_on_my_course_page');
 
-        if (COURSE_VISIBILITY_HIDDEN === $course_visibility) {
+        if (Course::HIDDEN === $course_visibility) {
             return '';
         }
 
@@ -3970,7 +3970,7 @@ class CourseManager
         // Display the "what's new" icons
         $notifications = '';
         if (
-            (COURSE_VISIBILITY_CLOSED != $course_visibility && COURSE_VISIBILITY_HIDDEN != $course_visibility) ||
+            (Course::CLOSED != $course_visibility && Course::HIDDEN != $course_visibility) ||
             !api_get_configuration_value('hide_course_notification')
         ) {
             $notifications .= Display::show_notification($course_info);
@@ -3978,7 +3978,7 @@ class CourseManager
 
         $sessionCourseAvailable = false;
         if ($session_accessible) {
-            if (COURSE_VISIBILITY_CLOSED != $course_visibility ||
+            if (Course::CLOSED != $course_visibility ||
                 COURSEMANAGER == $userInCourseStatus
             ) {
                 if (empty($course_info['id_session'])) {
@@ -4092,7 +4092,7 @@ class CourseManager
         $params['edit_actions'] = '';
         $params['document'] = '';
         $params['category'] = $course_info['categoryName'];
-        if (COURSE_VISIBILITY_CLOSED != $course_visibility &&
+        if (Course::CLOSED != $course_visibility &&
             false === $is_coach && $allowUnsubscribe && '1' === $course_info['unsubscribe']) {
             $params['unregister_button'] =
                 CoursesAndSessionsCatalog::return_unregister_button(
@@ -4104,8 +4104,8 @@ class CourseManager
                 );
         }
 
-        if (COURSE_VISIBILITY_CLOSED != $course_visibility &&
-            COURSE_VISIBILITY_HIDDEN != $course_visibility
+        if (Course::CLOSED != $course_visibility &&
+            Course::HIDDEN != $course_visibility
         ) {
             if ($isAdmin) {
                 $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course_info['code'];
@@ -4763,8 +4763,8 @@ class CourseManager
                     u.access_url_id = $urlId AND
                     login_course_date <= '$now' AND
                     login_course_date > DATE_SUB('$now', INTERVAL $days DAY) AND
-                    visibility <> ".COURSE_VISIBILITY_CLOSED." AND
-                    visibility <> ".COURSE_VISIBILITY_HIDDEN."
+                    visibility <> ".Course::CLOSED." AND
+                    visibility <> ".Course::HIDDEN."
                 GROUP BY a.c_id
                 ORDER BY course_count DESC
                 LIMIT $limit
@@ -4839,8 +4839,8 @@ class CourseManager
                     tcf.extra_field_type = $extraFieldType AND
                     tcf.variable = 'popular_courses' AND
                     tcfv.value = 1 AND
-                    visibility <> ".COURSE_VISIBILITY_CLOSED." AND
-                    visibility <> ".COURSE_VISIBILITY_HIDDEN." $where_access_url";
+                    visibility <> ".Course::CLOSED." AND
+                    visibility <> ".Course::HIDDEN." $where_access_url";
 
         $result = Database::query($sql);
         $courses = [];
@@ -4984,8 +4984,8 @@ class CourseManager
                 WHERE
                     relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
                     u.access_url_id = $urlId AND
-                    visibility <> ".COURSE_VISIBILITY_CLOSED." AND
-                    visibility <> ".COURSE_VISIBILITY_HIDDEN."
+                    visibility <> ".Course::CLOSED." AND
+                    visibility <> ".Course::HIDDEN."
                      ";
 
         $res = Database::query($sql);
@@ -5046,9 +5046,9 @@ class CourseManager
                     WHERE
                         c.id = u.c_id AND
                         u.access_url_id = $urlId AND
-                        visibility <> ".COURSE_VISIBILITY_HIDDEN;
+                        visibility <> ".Course::HIDDEN;
         } else {
-            $sql .= " WHERE visibility <> ".COURSE_VISIBILITY_HIDDEN;
+            $sql .= " WHERE visibility <> ".Course::HIDDEN;
         }
         $res = Database::query($sql);
         $row = Database::fetch_row($res);
@@ -5075,7 +5075,7 @@ class CourseManager
             }
         }
         if ($hideClosed) {
-            $visibilityCondition .= " AND $courseTableAlias.visibility NOT IN (".COURSE_VISIBILITY_CLOSED.','.COURSE_VISIBILITY_HIDDEN.')';
+            $visibilityCondition .= " AND $courseTableAlias.visibility NOT IN (".Course::CLOSED.','.Course::HIDDEN.')';
         }
 
         // Check if course have users allowed to see it in the catalogue, then show only if current user is allowed to see it
@@ -5126,7 +5126,7 @@ class CourseManager
             $course = api_get_course_info($course['code']);
         }
 
-        if (COURSE_VISIBILITY_HIDDEN == $course['visibility']) {
+        if (Course::HIDDEN == $course['visibility']) {
             return [];
         }
 
@@ -5150,7 +5150,7 @@ class CourseManager
         if ($is_admin ||
             Course::OPEN_WORLD == $course['visibility'] && empty($course['registration_code']) ||
             ($isLogin && Course::OPEN_PLATFORM == $course['visibility'] && empty($course['registration_code'])) ||
-            (in_array($course['real_id'], $user_courses) && COURSE_VISIBILITY_CLOSED != $course['visibility'])
+            (in_array($course['real_id'], $user_courses) && Course::CLOSED != $course['visibility'])
         ) {
             $options[] = 'enter';
         }
@@ -5158,12 +5158,12 @@ class CourseManager
         if ($is_admin ||
             Course::OPEN_WORLD == $course['visibility'] && empty($course['registration_code']) ||
             ($isLogin && Course::OPEN_PLATFORM == $course['visibility'] && empty($course['registration_code'])) ||
-            (in_array($course['real_id'], $user_courses) && COURSE_VISIBILITY_CLOSED != $course['visibility'])
+            (in_array($course['real_id'], $user_courses) && Course::CLOSED != $course['visibility'])
         ) {
             $options[] = 'enter';
         }
 
-        if (COURSE_VISIBILITY_HIDDEN != $course['visibility'] &&
+        if (Course::HIDDEN != $course['visibility'] &&
             empty($course['registration_code']) &&
             UNSUBSCRIBE_ALLOWED == $course['unsubscribe'] &&
             $isLogin &&
@@ -6248,7 +6248,7 @@ class CourseManager
                     Display::returnFontAwesomeIcon('pencil').'</a>';
             }
         } else {
-            if (COURSE_VISIBILITY_CLOSED != $course_info['visibility']) {
+            if (Course::CLOSED != $course_info['visibility']) {
                 if ($loadDirs) {
                     $params['right_actions'] .= '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview" href="javascript:void(0);">'.
                         Display::return_icon('folder.png', get_lang('Documents'), ['align' => 'absmiddle'], ICON_SIZE_SMALL).'</a>';
@@ -6270,7 +6270,7 @@ class CourseManager
         }
 
         $course_title_url = '';
-        if (COURSE_VISIBILITY_CLOSED != $course_info['visibility'] || COURSEMANAGER == $course['status']) {
+        if (Course::CLOSED != $course_info['visibility'] || COURSEMANAGER == $course['status']) {
             $course_title_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session=0';
             $course_title = Display::url($course_info['title'], $course_title_url);
         } else {
@@ -6297,7 +6297,7 @@ class CourseManager
         $params['icon'] = $status_icon;
         $params['title'] = $course_title;
         $params['teachers'] = $teachers;
-        if (COURSE_VISIBILITY_CLOSED != $course_info['visibility']) {
+        if (Course::CLOSED != $course_info['visibility']) {
             $params['notifications'] = $show_notification;
         }
 

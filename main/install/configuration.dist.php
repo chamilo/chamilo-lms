@@ -1945,6 +1945,10 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 // Disable webservices.
 //$_configuration['disable_webservices'] = true;
 
+// Ask user to renew password at first login.
+// Requires a user checkbox extra field called "ask_new_password".
+//$_configuration['force_renew_password_at_first_login'] = true;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

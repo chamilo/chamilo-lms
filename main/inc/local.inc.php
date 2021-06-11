@@ -516,6 +516,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                     if (is_array($my_url_list) &&
                                         in_array($current_access_url_id, $my_url_list)
                                     ) {
+                                        UserManager::redirectToResetPassword($uData['user_id']);
                                         ConditionalLogin::check_conditions($uData);
 
                                         $_user['user_id'] = $uData['user_id'];
@@ -536,9 +537,9 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                         exit;
                                     }
                                 } else {
-                                    //Only admins of the "main" (first) Chamilo portal can login wherever they want
+                                    // Only admins of the "main" (first) Chamilo portal can login wherever they want
                                     if (in_array(1, $my_url_list)) {
-                                        //Check if this admin have the access_url_id = 1 which means the principal
+                                        // Check if this admin have the access_url_id = 1 which means the principal
                                         ConditionalLogin::check_conditions($uData);
                                         $_user['user_id'] = $uData['user_id'];
                                         $_user['status'] = $uData['status'];
@@ -548,6 +549,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                     } else {
                                         //This means a secondary admin wants to login so we check as he's a normal user
                                         if (in_array($current_access_url_id, $my_url_list)) {
+                                            UserManager::redirectToResetPassword($uData['user_id']);
                                             $_user['user_id'] = $uData['user_id'];
                                             $_user['status'] = $uData['status'];
                                             Session::write('_user', $_user);
@@ -566,6 +568,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                     }
                                 }
                             } else {
+                                UserManager::redirectToResetPassword($uData['user_id']);
                                 ConditionalLogin::check_conditions($uData);
                                 $_user['user_id'] = $uData['user_id'];
                                 $_user['status'] = $uData['status'];

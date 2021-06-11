@@ -1431,28 +1431,50 @@ class Event
         $courseId,
         $session_id = 0,
         $load_question_list = true,
-        $user_id = null
+        $user_id = null,
+        $groupId = 0
     ) {
         $TABLETRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $courseId = (int) $courseId;
         $exercise_id = (int) $exercise_id;
         $session_id = (int) $session_id;
+        $user_id = (int) $user_id;
+        $groupId = (int) $groupId;
 
         $user_condition = null;
         if (!empty($user_id)) {
-            $user_id = (int) $user_id;
             $user_condition = "AND exe_user_id = $user_id ";
         }
+
+        $courseInfo = api_get_course_info_by_id($courseId);
+        if (empty($courseInfo)) {
+            return [];
+        }
+
+        $groupCondition = '';
+        if (!empty($groupId)) {
+            $users = GroupManager::get_users($groupId, null, null, null, false, $courseId);
+            // Check users added.
+            if (!empty($users)) {
+                $usersToString = implode("', '", $users);
+                $groupCondition = " AND exe_user_id IN ('$usersToString') ";
+            } else {
+                // No users found in the group, then return an empty array.
+                return [];
+            }
+        }
+
         $sql = "SELECT * FROM $TABLETRACK_EXERCICES
                 WHERE
-                    status = ''  AND
+                    status = '' AND
                     c_id = $courseId AND
                     exe_exo_id = $exercise_id AND
                     session_id = $session_id  AND
-                    orig_lp_id =0 AND
+                    orig_lp_id = 0 AND
                     orig_lp_item_id = 0
                     $user_condition
+                    $groupCondition
                 ORDER BY exe_id";
         $res = Database::query($sql);
         $list = [];

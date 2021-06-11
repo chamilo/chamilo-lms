@@ -14,17 +14,47 @@ if (!$allowToTrack) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('MySpace')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('MySpace')];
 
-$courseIdList = isset($_REQUEST['courses']) ? $_REQUEST['courses'] : [];
-$exercises = isset($_REQUEST['exercises']) ? $_REQUEST['exercises'] : [];
+$courseIdList = $_REQUEST['courses'] ?? [];
+$exercises = $_REQUEST['exercises'] ?? [];
+$groups = $_REQUEST['groups'] ?? [];
+$users = $_REQUEST['users'] ?? [];
 
 $courseOptions = [];
 $exerciseList = [];
 $selectedExercises = [];
+$groupList = [];
+$allGroups = [];
+$allUsers = [];
 if (!empty($courseIdList)) {
     foreach ($courseIdList as $courseId) {
+        $courseId = (int) $courseId;
         $courseInfo = api_get_course_info_by_id($courseId);
+        $courseGroups = GroupManager::get_group_list(null, $courseInfo);
+        if (!empty($courseGroups)) {
+            $courseGroups = array_column($courseGroups, 'name', 'iid');
+            array_walk(
+                $courseGroups,
+                function (&$name, $key) use ($courseInfo) {
+                    $name = $name.' - '.$courseInfo['title'];
+                }
+            );
+            $allGroups = $allGroups + $courseGroups;
+        }
+
+        $courseUsers = CourseManager::get_user_list_from_course_code($courseInfo['code']);
+        if (!empty($courseUsers)) {
+            array_walk(
+                $courseUsers,
+                function (&$data, $key) {
+                    $data = api_get_person_name($data['firstname'], $data['lastname']);
+                }
+            );
+
+            $allUsers = $allUsers + $courseUsers;
+        }
+
         $courseExerciseList = ExerciseLib::get_all_exercises(
             $courseInfo,
             0,
@@ -65,6 +95,28 @@ $form->addSelectAjax(
     ]
 );
 
+if (!empty($allGroups)) {
+    $form->addSelect(
+        'groups',
+        get_lang('Groups'),
+        $allGroups,
+        [
+            'multiple' => true,
+        ]
+    );
+}
+
+if (!empty($allUsers)) {
+    $form->addSelect(
+        'users',
+        get_lang('Users'),
+        $allUsers,
+        [
+            'multiple' => true,
+        ]
+    );
+}
+
 if (!empty($courseIdList)) {
     $form->addSelect(
         'exercises',
@@ -83,59 +135,120 @@ $tableContent = '';
 if ($form->validate()) {
     $headers = [
         get_lang('Course'),
+        get_lang('Group'),
+        get_lang('User'),
         get_lang('Exercise'),
         get_lang('Question'),
         get_lang('WrongAnswer').' / '.get_lang('Total'),
         '%',
     ];
-    /*$table = new HTML_Table(['class' => 'table table-hover table-striped']);
-    $row = 0;
-    $column = 0;
-    foreach ($headers as $header) {
-        $table->setHeaderContents($row, $column, $header);
-        $column++;
-    }
-    $row++;*/
+
     $scoreDisplay = new ScoreDisplay();
     $exercises = $form->getSubmitValue('exercises');
     if ($exercises) {
         $orderedData = [];
         foreach ($selectedExercises as $courseId => $selectedExerciseList) {
-            foreach ($selectedExerciseList as $exerciseId) {
-                $questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, null, 10);
-                foreach ($questions as $data) {
-                    $questionId = (int) $data['question_id'];
-                    $total = ExerciseLib::getTotalQuestionAnswered($courseId, $exerciseId, $questionId);
-                    /*$column = 0;
-                    $table->setCellContents($row, $column++, $courseOptions[$courseId]);
-                    $table->setCellContents($row, $column++, $exerciseList[$exerciseId]);
-                    $table->setCellContents($row, $column++, $data['question']);
-                    $table->setCellContents($row, $column++, $data['count'].' / '.$total);
-                    $percentage = $data['count']/$total;
-                    $table->setCellContents(
-                        $row,
-                        $column++,
-                        $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE)
-                    );
-                    $row++;*/
-                    $orderedData[] = [
-                        $courseOptions[$courseId],
-                        $exerciseList[$exerciseId],
-                        $data['question'],
-                        $data['count'].' / '.$total,
-                        $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE),
-                    ];
+            if (!empty($groups)) {
+                foreach ($groups as $groupId) {
+                    $groupEntity = api_get_group_entity($groupId);
+                    if (null === $groupEntity) {
+                        continue;
+                    }
+
+                    if ($courseId !== $groupEntity->getCId()) {
+                        continue;
+                    }
+
+                    foreach ($selectedExerciseList as $exerciseId) {
+                        $questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, null, $groupId);
+                        foreach ($questions as $data) {
+                            $questionId = (int) $data['question_id'];
+                            $total = ExerciseLib::getTotalQuestionAnswered(
+                                $courseId,
+                                $exerciseId,
+                                $questionId,
+                                null,
+                                $groupId
+                            );
+                            $orderedData[] = [
+                                $courseOptions[$courseId],
+                                $groupEntity->getName(),
+                                null,
+                                $exerciseList[$exerciseId],
+                                $data['question'],
+                                $data['count'].' / '.$total,
+                                $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE),
+                            ];
+                        }
+                    }
+                }
+            } else {
+                foreach ($selectedExerciseList as $exerciseId) {
+                    $questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId);
+                    foreach ($questions as $data) {
+                        $questionId = (int) $data['question_id'];
+                        $total = ExerciseLib::getTotalQuestionAnswered($courseId, $exerciseId, $questionId);
+                        $orderedData[] = [
+                            $courseOptions[$courseId],
+                            null,
+                            null,
+                            $exerciseList[$exerciseId],
+                            $data['question'],
+                            $data['count'].' / '.$total,
+                            $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE),
+                        ];
+                    }
+                }
+            }
+
+            if (!empty($users)) {
+                foreach ($users as $userId) {
+                    $user = api_get_user_entity($userId);
+                    if (null === $user) {
+                        continue;
+                    }
+
+                    foreach ($selectedExerciseList as $exerciseId) {
+                        $questions = ExerciseLib::getWrongQuestionResults(
+                            $courseId,
+                            $exerciseId,
+                            null,
+                            null,
+                            $userId,
+                            10
+                        );
+                        foreach ($questions as $data) {
+                            $questionId = (int) $data['question_id'];
+                            $total = ExerciseLib::getTotalQuestionAnswered(
+                                $courseId,
+                                $exerciseId,
+                                $questionId,
+                                null,
+                                null,
+                                $userId
+                            );
+                            $orderedData[] = [
+                                $courseOptions[$courseId],
+                                null,
+                                UserManager::formatUserFullName($user),
+                                $exerciseList[$exerciseId],
+                                $data['question'],
+                                $data['count'].' / '.$total,
+                                $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE),
+                            ];
+                        }
+                    }
                 }
             }
         }
 
         $table = new SortableTableFromArray(
             $orderedData,
-            1,
-            20,
+            0,
+            100,
             'question_tracking'
         );
-        $table->column = 4;
+        $table->column = 1;
         $column = 0;
         foreach ($headers as $header) {
             $table->set_header($column, $header, false);

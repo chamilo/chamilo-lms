@@ -7226,6 +7226,34 @@ SQL;
         $fs->remove($path);
     }
 
+    public static function redirectToResetPassword($userId)
+    {
+        if (!api_get_configuration_value('force_renew_password_at_first_login')) {
+            return;
+        }
+
+        $askPassword = self::get_extra_user_data_by_field(
+            $userId,
+            'ask_new_password'
+        );
+
+        if (!empty($askPassword) && isset($askPassword['ask_new_password']) &&
+            1 === (int) $askPassword['ask_new_password']
+        ) {
+            $uniqueId = api_get_unique_id();
+            $userObj = api_get_user_entity($userId);
+
+            $userObj->setConfirmationToken($uniqueId);
+            $userObj->setPasswordRequestedAt(new \DateTime());
+
+            Database::getManager()->persist($userObj);
+            Database::getManager()->flush();
+
+            $url = api_get_path(WEB_CODE_PATH).'auth/reset.php?token='.$uniqueId;
+            api_location($url);
+        }
+    }
+
     /**
      * @return EncoderFactory
      */

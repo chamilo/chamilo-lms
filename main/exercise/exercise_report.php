@@ -469,8 +469,17 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
             );
         }
 
-        $actions .= '<a class="btn btn-default" href="question_stats.php?'.api_get_cidreq().'&id='.$exercise_id.'">'.
-            get_lang('QuestionStats').'</a>';
+        $actions .= Display::url(
+            get_lang('QuestionStats'),
+            'question_stats.php?'.api_get_cidreq().'&id='.$exercise_id,
+            ['class' => 'btn btn-default']
+        );
+
+        $actions .= Display::url(
+            get_lang('ComparativeGroupReport'),
+            'comparative_group_report.php?'.api_get_cidreq().'&id='.$exercise_id,
+            ['class' => 'btn btn-default']
+        );
     }
 } else {
     $actions .= '<a href="exercise.php">'.

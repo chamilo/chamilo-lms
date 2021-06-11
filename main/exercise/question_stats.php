@@ -160,10 +160,8 @@ if ($form->validate()) {
                 $table->setCellContents($row, 4, $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE));
                 $row++;
             }
-
         }
     }
-
 } else {
     $questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, $sessionId);
     foreach ($questions as $data) {

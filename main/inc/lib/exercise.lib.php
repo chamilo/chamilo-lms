@@ -3811,18 +3811,21 @@ EOT;
     /**
      * Get average score (NO Exercises in LPs ).
      *
-     * @param    int    exercise id
+     * @param int $exerciseId
      * @param int $courseId
-     * @param    int    session id
+     * @param int $sessionId
      *
      * @return float Average score
      */
-    public static function get_average_score($exercise_id, $courseId, $session_id)
+    public static function get_average_score($exerciseId, $courseId, $sessionId, $groupId = 0)
     {
         $user_results = Event::get_all_exercise_results(
-            $exercise_id,
+            $exerciseId,
             $courseId,
-            $session_id
+            $sessionId,
+            true,
+            null,
+            $groupId
         );
         $avg_score = 0;
         if (!empty($user_results)) {
@@ -3839,18 +3842,18 @@ EOT;
     }
 
     /**
-     * Get average score by score (NO Exercises in LPs ).
+     * Get average quiz score by course (Only exercises not added in a LP).
      *
      * @param int $courseId
-     * @param    int    session id
+     * @param int $sessionId
      *
      * @return float Average score
      */
-    public static function get_average_score_by_course($courseId, $session_id)
+    public static function get_average_score_by_course($courseId, $sessionId)
     {
         $user_results = Event::get_all_exercise_results_by_course(
             $courseId,
-            $session_id,
+            $sessionId,
             false
         );
         $avg_score = 0;

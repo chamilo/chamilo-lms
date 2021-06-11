@@ -5977,24 +5977,42 @@ EOT;
         return $trackedExercise;
     }
 
-    public static function getTotalQuestionAnswered($courseId, $exerciseId, $questionId)
+    public static function getTotalQuestionAnswered($courseId, $exerciseId, $questionId, $groupId = 0, $userId = 0)
     {
         $courseId = (int) $courseId;
         $exerciseId = (int) $exerciseId;
         $questionId = (int) $questionId;
+        $groupId = (int) $groupId;
+        $userId = (int) $userId;
 
         $attemptTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $trackTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
+        $groupCondition = '';
+        if (!empty($groupId)) {
+            $users = GroupManager::get_users($groupId, null, null, null, false, $courseId);
+            if (!empty($users)) {
+                $usersToString = implode("', '", $users);
+                $groupCondition = " AND user_id IN ('$usersToString') ";
+            }
+        }
+
+        $userCondition = '';
+        if (!empty($userId)) {
+            $userCondition = " AND user_id = $userId ";
+        }
+
         $sql = "SELECT count(te.exe_id) total
-            FROM $attemptTable t
-            INNER JOIN $trackTable te
-            ON (te.c_id = t.c_id AND t.exe_id = te.exe_id)
-            WHERE
-                t.c_id = $courseId AND
-                exe_exo_id = $exerciseId AND
-                t.question_id = $questionId AND
-                status != 'incomplete'
+                FROM $attemptTable t
+                INNER JOIN $trackTable te
+                ON (te.c_id = t.c_id AND t.exe_id = te.exe_id)
+                WHERE
+                    t.c_id = $courseId AND
+                    exe_exo_id = $exerciseId AND
+                    t.question_id = $questionId AND
+                    status != 'incomplete'
+                    $groupCondition
+                    $userCondition
         ";
         $queryTotal = Database::query($sql);
         $totalRow = Database::fetch_array($queryTotal, 'ASSOC');
@@ -6006,9 +6024,11 @@ EOT;
         return $total;
     }
 
-    public static function getWrongQuestionResults($courseId, $exerciseId, $sessionId = 0, $limit = 10)
+    public static function getWrongQuestionResults($courseId, $exerciseId, $sessionId = 0, $groupId = 0, $userId = 0, $limit = 10)
     {
         $courseId = (int) $courseId;
+        $groupId = (int) $groupId;
+        $userId = (int) $userId;
         $exerciseId = (int) $exerciseId;
         $limit = (int) $limit;
 
@@ -6019,6 +6039,20 @@ EOT;
         $sessionCondition = '';
         if (!empty($sessionId)) {
             $sessionCondition = api_get_session_condition($sessionId, true, false, 'te.session_id');
+        }
+
+        $groupCondition = '';
+        if (!empty($groupId)) {
+            $users = GroupManager::get_users($groupId, null, null, null, false, $courseId);
+            if (!empty($users)) {
+                $usersToString = implode("', '", $users);
+                $groupCondition = " AND user_id IN ('$usersToString') ";
+            }
+        }
+
+        $userCondition = '';
+        if (!empty($userId)) {
+            $userCondition = " AND user_id = $userId ";
         }
 
         $sql = "SELECT q.question, question_id, count(q.iid) count
@@ -6033,6 +6067,8 @@ EOT;
                     exe_exo_id = $exerciseId AND
                     status != 'incomplete'
                     $sessionCondition
+                    $userCondition
+                    $groupCondition
                 GROUP BY q.iid
                 ORDER BY count DESC
                 LIMIT $limit

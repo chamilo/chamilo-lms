@@ -13,6 +13,7 @@ use League\Flysystem\FilesystemOperator;
 use PhpZip\ZipFile;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Routing\RouterInterface;
+use Vich\UploaderBundle\Storage\FlysystemStorage;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 class AssetRepository extends ServiceEntityRepository
@@ -20,14 +21,21 @@ class AssetRepository extends ServiceEntityRepository
     protected RouterInterface $router;
     protected UploaderHelper $uploaderHelper;
     protected FilesystemOperator $filesystem;
+    protected FlysystemStorage $storage;
 
-    public function __construct(ManagerRegistry $registry, RouterInterface $router, UploaderHelper $uploaderHelper, FilesystemOperator $assetFilesystem)
+    public function __construct(ManagerRegistry $registry, RouterInterface $router, UploaderHelper $uploaderHelper, FilesystemOperator $assetFilesystem, FlysystemStorage $storage)
     {
         parent::__construct($registry, Asset::class);
         $this->router = $router;
         $this->uploaderHelper = $uploaderHelper;
         // Flysystem mount name is saved in config/packages/oneup_flysystem.yaml
         $this->filesystem = $assetFilesystem;
+        $this->storage = $storage;
+    }
+
+    public function getStorage()
+    {
+        return $this->storage;
     }
 
     public function getFileSystem()
@@ -80,19 +88,24 @@ class AssetRepository extends ServiceEntityRepository
     public function getAssetUrl(Asset $asset)
     {
         if (Asset::SCORM === $asset->getCategory()) {
-            return $this->router->generate(
-                'chamilo_core_asset_showfile',
-                [
-                    'category' => $asset->getCategory(),
-                    'path' => $asset->getTitle(),
-                ]
-            );
+            $params = [
+                'category' => $asset->getCategory(),
+                'path' => $asset->getTitle(),
+            ];
+
+            return $this->router->generate('chamilo_core_asset_showfile', $params);
         }
 
         // Classic.
         $helper = $this->uploaderHelper;
 
-        return '/assets'.$helper->asset($asset);
+        $cropFilter = '';
+        $crop = $asset->getCrop();
+        if (!empty($crop)) {
+            $cropFilter = '?crop='.$crop;
+        }
+
+        return '/assets'.$helper->asset($asset).$cropFilter;
     }
 
     public function createFromRequest(Asset $asset, $file): Asset

@@ -82,10 +82,9 @@ final class ResourceNormalizer implements ContextAwareNormalizerInterface, Norma
 
             $object->contentUrl = $this->generator->generate('chamilo_core_resource_view', $params);
             $object->downloadUrl = $this->generator->generate('chamilo_core_resource_download', $params);
-            error_log($object->getResourceName());
+
             // Get illustration of a resource, instead of looking for the node children to get the illustration.
             if ($object instanceof ResourceIllustrationInterface) {
-                error_log('check illustration');
                 $object->illustrationUrl = $this->illustrationRepository->getIllustrationUrl($object);
             }
 

@@ -37,7 +37,7 @@ final class ResourceNormalizer implements ContextAwareNormalizerInterface, Norma
     /**
      * @param AbstractResource $object
      */
-    public function normalize($object, ?string $format = null, array $context = []): array | string | int | float | bool | ArrayObject | null
+    public function normalize($object, ?string $format = null, array $context = [])
     {
         $context[self::ALREADY_CALLED] = true;
 

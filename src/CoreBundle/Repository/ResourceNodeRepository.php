@@ -16,6 +16,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 use League\Flysystem\FilesystemOperator;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Throwable;
 use Vich\UploaderBundle\Storage\FlysystemStorage;
 
@@ -23,13 +25,15 @@ class ResourceNodeRepository extends MaterializedPathRepository
 {
     protected FlysystemStorage $storage;
     protected FilesystemOperator $filesystem;
+    protected RouterInterface $router;
 
-    public function __construct(EntityManagerInterface $manager, FlysystemStorage $storage, FilesystemOperator $resourceFilesystem)
+    public function __construct(EntityManagerInterface $manager, FlysystemStorage $storage, FilesystemOperator $resourceFilesystem, RouterInterface $router)
     {
         parent::__construct($manager, $manager->getClassMetadata(ResourceNode::class));
         $this->storage = $storage;
         // Flysystem mount name is saved in config/packages/oneup_flysystem.yaml
         $this->filesystem = $resourceFilesystem;
+        $this->router = $router;
     }
 
     public function getFilename(ResourceFile $resourceFile): ?string
@@ -87,6 +91,40 @@ class ResourceNodeRepository extends MaterializedPathRepository
             }
 
             return false;
+        } catch (Throwable $exception) {
+            throw new FileNotFoundException($resourceNode->getTitle());
+        }
+    }
+
+    public function getResourceFileUrl(ResourceNode $resourceNode, array $extraParams = [], $referenceType = null): string
+    {
+        try {
+            if ($resourceNode->hasResourceFile()) {
+                $params = [
+                    'tool' => $resourceNode->getResourceType()->getTool(),
+                    'type' => $resourceNode->getResourceType(),
+                    'id' => $resourceNode->getId(),
+                ];
+
+                if (!empty($extraParams)) {
+                    $params = array_merge($params, $extraParams);
+                }
+
+                $referenceType ??= UrlGeneratorInterface::ABSOLUTE_PATH;
+
+                $mode = $params['mode'] ?? 'view';
+                // Remove mode from params and sent directly to the controller.
+                unset($params['mode']);
+
+                switch ($mode) {
+                    case 'download':
+                        return $this->router->generate('chamilo_core_resource_download', $params, $referenceType);
+                    case 'view':
+                        return $this->router->generate('chamilo_core_resource_view', $params, $referenceType);
+                }
+            }
+
+            return '';
         } catch (Throwable $exception) {
             throw new FileNotFoundException($resourceNode->getTitle());
         }

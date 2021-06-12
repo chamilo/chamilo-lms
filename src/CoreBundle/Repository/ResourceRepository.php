@@ -33,7 +33,6 @@ use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Throwable;
 
 /**
@@ -631,37 +630,11 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
     public function getResourceFileUrl(AbstractResource $resource, array $extraParams = [], $referenceType = null): string
     {
-        try {
-            $resourceNode = $resource->getResourceNode();
-            if ($resourceNode->hasResourceFile()) {
-                $params = [
-                    'tool' => $resourceNode->getResourceType()->getTool(),
-                    'type' => $resourceNode->getResourceType(),
-                    'id' => $resourceNode->getId(),
-                ];
-
-                if (!empty($extraParams)) {
-                    $params = array_merge($params, $extraParams);
-                }
-
-                $referenceType ??= UrlGeneratorInterface::ABSOLUTE_PATH;
-
-                $mode = $params['mode'] ?? 'view';
-                // Remove mode from params and sent directly to the controller.
-                unset($params['mode']);
-
-                switch ($mode) {
-                    case 'download':
-                        return $this->router->generate('chamilo_core_resource_download', $params, $referenceType);
-                    case 'view':
-                        return $this->router->generate('chamilo_core_resource_view', $params, $referenceType);
-                }
-            }
-
-            return '';
-        } catch (Throwable $exception) {
-            throw new FileNotFoundException($resource->getResourceName());
-        }
+        return $this->getResourceNodeRepository()->getResourceFileUrl(
+            $resource->getResourceNode(),
+            $extraParams,
+            $referenceType
+        );
     }
 
     /**

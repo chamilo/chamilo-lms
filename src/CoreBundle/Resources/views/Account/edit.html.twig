@@ -2,7 +2,12 @@
 
 {% block content %}
     {% autoescape false %}
-        <h3>{{ user.username }}</h3>
+        <h3>{{ user.userIdentifier }}</h3>
+
+        <img class="inline-block h-16 w-16 rounded-full ring-2 ring-white"
+             src="{{ user | illustration }}?w=80&h=80&fit=crop"
+             alt=""
+        />
 
         {{ form_start(form, { 'action': path('chamilo_core_account_edit'), 'attr': { 'class': 'edit' } }) }}
         {{ form_widget(form) }}

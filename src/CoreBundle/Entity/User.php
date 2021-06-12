@@ -87,12 +87,27 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public ?ResourceNode $resourceNode = null;
 
     /**
+     * Resource illustration URL - Property set by ResourceNormalizer.php.
+     *
+     * @ApiProperty(iri="http://schema.org/contentUrl")
+     * @Groups({"user:read", "resource_node:read", "document:read", "media_object_read", "course:read", "course_rel_user:read", "user_json:read"})
+     */
+    public ?string $illustrationUrl = null;
+
+    /**
      * @Groups({"user:read", "resource_node:read", "user_json:read"})
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
     protected ?int $id = null;
+
+    /**
+     * @Groups({"user:read", "user:write", "course:read", "resource_node:read", "user_json:read"})
+     * @Assert\NotBlank()
+     * @ORM\Column(name="username", type="string", length=100, unique=true)
+     */
+    protected string $username;
 
     /**
      * @ORM\Column(name="api_token", type="string", unique=true, nullable=true)
@@ -130,13 +145,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * @ORM\Column(name="locale", type="string", length=8)
      */
     protected string $locale;
-
-    /**
-     * @Groups({"user:read", "user:write", "course:read", "resource_node:read", "user_json:read"})
-     * @Assert\NotBlank()
-     * @ORM\Column(name="username", type="string", length=100, unique=true)
-     */
-    protected string $username;
 
     /**
      * @Groups({"user:write"})

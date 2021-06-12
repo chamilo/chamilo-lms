@@ -1,13 +1,14 @@
 <template>
   <div v-if="course" class="grid gap-4">
-    <div class="flex justify-between">
-      <div class="text-h6 font-bold">
+    <div class="flex flex-row justify-between">
+      <div class="line-clamp-1 text-h6 font-bold">
         {{ course.title }}
       </div>
 
-      <div class="flex flex-row" v-if="isCurrentTeacher && course">
+      <div>
+        <div class="flex flex-row" v-if="isCurrentTeacher && course">
         <a class="btn btn-info mr-2">
-          <v-icon>mdi-eye</v-icon>
+          <v-icon class="pr-2">mdi-eye</v-icon>
           See as student
         </a>
 
@@ -47,6 +48,7 @@
       </div>
 
 
+      </div>
       </div>
     </div>
     <hr/>

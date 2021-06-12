@@ -56,6 +56,7 @@ export default {
                           id
                           status
                           user {
+                            illustrationUrl,
                             username,
                             firstname,
                             lastname

@@ -36,7 +36,6 @@ class Illustration extends AbstractResource implements ResourceInterface
 
     /**
      * @Assert\NotBlank()
-     * @Groups({"illustration:read"})
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     protected string $name;

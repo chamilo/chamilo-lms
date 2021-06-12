@@ -7,6 +7,7 @@ namespace Chamilo\CoreBundle\Serializer;
 use ArrayObject;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceIllustrationInterface;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -35,7 +36,7 @@ final class ResourceNormalizer implements ContextAwareNormalizerInterface, Norma
     }
 
     /**
-     * @param AbstractResource $object
+     * @param AbstractResource|User $object
      */
     public function normalize($object, ?string $format = null, array $context = [])
     {
@@ -75,7 +76,9 @@ final class ResourceNormalizer implements ContextAwareNormalizerInterface, Norma
 
             //if ($getFile) {
             // Get all links from resource.
-            $object->setResourceLinkListFromEntity();
+            if ($object instanceof AbstractResource) {
+                $object->setResourceLinkListFromEntity();
+            }
             //}
 
             $object->contentUrl = $this->generator->generate('chamilo_core_resource_view', $params);
@@ -107,6 +110,6 @@ final class ResourceNormalizer implements ContextAwareNormalizerInterface, Norma
             return false;
         }
 
-        return $data instanceof AbstractResource;
+        return $data instanceof AbstractResource || $data instanceof User;
     }
 }

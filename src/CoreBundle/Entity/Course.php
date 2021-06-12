@@ -78,6 +78,10 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * The course code.
      *
      * @Assert\NotBlank()
+     * @Assert\Length(
+     *     max = 40,
+     *     maxMessage = "Code cannot be longer than {{ limit }} characters"
+     * )
      * @ApiProperty(iri="http://schema.org/courseCode")
      * @Groups({"course:read", "course:write", "course_rel_user:read"})
      *
@@ -91,6 +95,15 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * @ORM\Column(name="code", type="string", length=40, nullable=false, unique=true)
      */
     protected string $code;
+
+    /**
+     * @Assert\Length(
+     *     max = 40,
+     *     maxMessage = "Code cannot be longer than {{ limit }} characters"
+     * )
+     * @ORM\Column(name="visual_code", type="string", length=40, nullable=true, unique=false)
+     */
+    protected ?string $visualCode = null;
 
     /**
      * @var Collection|CourseRelUser[]
@@ -265,11 +278,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * @ORM\Column(name="tutor_name", type="string", length=200, nullable=true, unique=false)
      */
     protected ?string $tutorName;
-
-    /**
-     * @ORM\Column(name="visual_code", type="string", length=40, nullable=true, unique=false)
-     */
-    protected ?string $visualCode = null;
 
     /**
      * @Groups({"course:read", "list"})
@@ -615,12 +623,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this;
     }
 
-    /**
-     * Get courseLanguage.
-     *
-     * @return string
-     */
-    public function getCourseLanguage()
+    public function getCourseLanguage(): string
     {
         return $this->courseLanguage;
     }
@@ -629,7 +632,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     {
         $this->title = $title;
 
-        $this->setCode($title);
+        if (empty($this->getCode())) {
+            $this->setCode($title);
+        }
 
         return $this;
     }

@@ -61,7 +61,6 @@ class AccountController extends BaseController
         return $this->render('@ChamiloCore/Account/edit.html.twig', [
             'form' => $form->createView(),
             'user' => $user,
-
         ]);
     }
 }

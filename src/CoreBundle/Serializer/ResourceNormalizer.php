@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Serializer;
 
-use ArrayObject;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceIllustrationInterface;
 use Chamilo\CoreBundle\Entity\User;

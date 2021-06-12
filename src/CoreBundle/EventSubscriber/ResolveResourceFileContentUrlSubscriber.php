@@ -30,13 +30,14 @@ class ResolveResourceFileContentUrlSubscriber implements EventSubscriberInterfac
     public static function getSubscribedEvents(): array
     {
         return [
-            KernelEvents::VIEW => ['onPreSerialize', EventPriorities::PRE_SERIALIZE],
+            //    KernelEvents::VIEW => ['onPreSerialize', EventPriorities::PRE_SERIALIZE],
         ];
     }
 
     public function onPreSerialize(ViewEvent $event): void
     {
-        $controllerResult = $event->getControllerResult();
+        return;
+        /*$controllerResult = $event->getControllerResult();
         $request = $event->getRequest();
 
         if ($controllerResult instanceof Response || !$request->attributes->getBoolean('_api_respond', true)) {
@@ -108,6 +109,6 @@ class ResolveResourceFileContentUrlSubscriber implements EventSubscriberInterfac
                     );
                 }
             }
-        }
+        }*/
     }
 }

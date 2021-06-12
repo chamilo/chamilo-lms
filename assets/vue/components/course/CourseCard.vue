@@ -15,7 +15,7 @@
       elevation="4"
   >
     <div class="">
-      <img class="object-cover w-full h-44" src="/img/session_default.png" />
+      <img class="object-cover w-full h-44" :src="course.illustrationUrl" />
     </div>
     <div class="p-4">
       <div class="h-10 flex flex-row justify-between">

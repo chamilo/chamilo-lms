@@ -47,8 +47,9 @@ export default {
               edges {
                 node {
                   course {
-                    _id
+                    _id,
                     title,
+                    illustrationUrl
                      users(status: 1, first: 4) {
                       edges {
                         node {

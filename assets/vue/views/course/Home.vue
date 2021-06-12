@@ -71,18 +71,18 @@
       </div>
     </div>
 
-<!--    <hr />-->
-<!--    <div class="flex justify-between">-->
-<!--      <div class="text-h6 font-bold">-->
-<!--        Tools-->
-<!--      </div>-->
+    <hr />
+    <div class="flex justify-between">
+      <div class="text-h6 font-bold">
+        Tools
+      </div>
 <!--      <div>-->
 <!--        <v-icon>-->
 <!--          mdi-format-paint-->
 <!--        </v-icon>-->
 <!--        Customize-->
 <!--      </div>-->
-<!--    </div>-->
+    </div>
 
 
     <div

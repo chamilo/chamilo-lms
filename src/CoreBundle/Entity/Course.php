@@ -632,7 +632,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     {
         $this->title = $title;
 
-        if (empty($this->getCode())) {
+        // Set the code based in the title if it doesnt exists.
+        if (empty($this->code)) {
             $this->setCode($title);
         }
 

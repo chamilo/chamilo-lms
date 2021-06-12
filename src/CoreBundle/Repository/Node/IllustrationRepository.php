@@ -15,16 +15,14 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Form\Resource\IllustrationType;
-use Chamilo\CoreBundle\Repository\GridInterface;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\UploadInterface;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-final class IllustrationRepository extends ResourceRepository implements GridInterface, UploadInterface
+final class IllustrationRepository extends ResourceRepository implements UploadInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -53,16 +51,6 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
         $resource->setName($file->getClientOriginalName());
 
         return $resource;
-    }
-
-    public function setResourceProperties(FormInterface $form, Course $course, Session $session, string $fileType): void
-    {
-        //return $form->getData();
-
-        //->setCourse($course)
-            //->setSession($session)
-            //->setFiletype($fileType)
-            //->setTitle($title) // already added in $form->getData()
     }
 
     /**

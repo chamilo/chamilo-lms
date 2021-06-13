@@ -33,10 +33,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     denormalizationContext={"groups"={"course:write"}},
  * )
  *
- * @ApiFilter(SearchFilter::class, properties={"title": "partial", "code": "partial"})
- * @ApiFilter(PropertyFilter::class)
- * @ApiFilter(OrderFilter::class, properties={"id", "title"})
- *
  * @ORM\Table(
  *     name="course",
  *     indexes={
@@ -47,6 +43,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener", "Chamilo\CoreBundle\Entity\Listener\CourseListener"})
  */
+#[ApiFilter(SearchFilter::class, properties: [
+    'title' => 'partial',
+    'code' => 'partial',
+])]
+#[ApiFilter(PropertyFilter::class)]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'title'])]
+
 class Course extends AbstractResource implements ResourceInterface, ResourceWithAccessUrlInterface, ResourceIllustrationInterface
 {
     public const CLOSED = 0;

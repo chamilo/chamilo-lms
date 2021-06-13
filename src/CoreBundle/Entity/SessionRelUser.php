@@ -31,6 +31,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
     attributes: [
         'security' => "is_granted('ROLE_USER')",
     ],
+    collectionOperations: [
+        'get' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+        'post' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+    ],
+    itemOperations: [
+        'get' => [
+            'security' => "is_granted('ROLE_ADMIN') or object.user == user",
+        ],
+    ],
     normalizationContext: [
         'groups' => ['session_rel_user:read', 'user:read'],
     ],

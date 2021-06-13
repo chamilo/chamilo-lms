@@ -42,9 +42,6 @@ use Symfony\Component\Validator\Constraints as Assert;
         'get' => [
             'security' => "is_granted('ROLE_ADMIN') or object.user == user",
         ],
-        'post' => [
-            'security' => "is_granted('ROLE_ADMIN')",
-        ],
     ],
     subresourceOperations: [
         'api_users_courses_get_subresource' => [

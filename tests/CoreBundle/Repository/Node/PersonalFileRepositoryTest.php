@@ -28,8 +28,6 @@ class PersonalFileRepositoryTest extends AbstractApiTest
             'password' => $password,
         ]);
 
-        //$path = $this->getContainer()->get('kernel')->getProjectDir();
-        //$filePath = $path.'/public/img/logo.png';
         $resourceNodeId = $user->getResourceNode()->getId();
 
         $file = $this->getUploadedFile();

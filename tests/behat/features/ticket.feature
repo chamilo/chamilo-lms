@@ -23,11 +23,9 @@ Feature: Ticket
 
   Scenario: Create a ticket
     Given I am on "/main/ticket/new_ticket.php?project_id=1"
-    Then I should see "Compose message"
     When I fill in the following:
       | subject | First ticket |
     And I fill in editor field "content" with "Ticket description"
-
     And I fill in select2 input "#category_id" with id "1" and value "Enrollment: Tickets about enrollment"
     #category id = 1 => Enrollment: Tickets about enrollment
     And I press "Send message"

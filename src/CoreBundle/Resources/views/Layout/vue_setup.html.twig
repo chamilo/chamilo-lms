@@ -1,6 +1,5 @@
 <script>
 window.user = {{ user_json | raw }};
-window.userAvatar = '{{ user_avatar }}';
 {% if legacy_breadcrumb is defined %}
 window.breadcrumb = {{ legacy_breadcrumb | raw }};
 {% else %}

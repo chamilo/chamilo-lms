@@ -74,7 +74,7 @@
 
           <q-btn v-if="isAuthenticated" dense flat no-wrap>
             <q-avatar size="26px">
-              <img :src="userAvatar + '?w=80&h=80&fit=crop'" />
+              <img :src="currentUser.illustrationUrl + '?w=80&h=80&fit=crop'" />
               <!--              <q-icon name="person" ></q-icon>-->
             </q-avatar>
 
@@ -240,7 +240,6 @@ export default {
 
   data: () => ({
     user: {},
-    userAvatar: '',
     moved: true,
     showBreadcrumb: true,
     linksUser: [
@@ -284,9 +283,7 @@ export default {
     let isAuthenticated = false;
     if (!isEmpty(window.user)) {
       console.log('is logged in as ' + window.user.username);
-      console.log('userAvatar ' + window.userAvatar);
       this.user = window.user;
-      this.userAvatar = window.userAvatar;
       isAuthenticated = true;
     }
 

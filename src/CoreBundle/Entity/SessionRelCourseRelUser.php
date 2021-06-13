@@ -29,7 +29,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity
  */
-
 #[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
 class SessionRelCourseRelUser
 {

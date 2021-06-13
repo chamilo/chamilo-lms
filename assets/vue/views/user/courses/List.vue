@@ -9,12 +9,10 @@
 
 <script>
 import CourseCardList from '../../../components/course/CourseCardList.vue';
-import {ENTRYPOINT} from '../../../config/entrypoint';
-import axios from "axios";
 import {ref, computed} from "vue";
-import { useStore } from 'vuex';
+import {useStore} from 'vuex';
 import gql from "graphql-tag";
-import { useQuery, useResult } from '@vue/apollo-composable'
+import {useQuery, useResult} from '@vue/apollo-composable'
 
 export default {
   name: 'CourseList',
@@ -22,9 +20,6 @@ export default {
     CourseCardList,
   },
   setup() {
-    //const courses = ref([]);
-    const status = ref('Loading');
-
     const store = useStore();
     let user = computed(() => store.getters['security/getUser']);
 
@@ -42,7 +37,7 @@ export default {
       );*/
 
       const GET_COURSE_REL_USER = gql`
-          query getCourses($user: String!){
+          query getCourses($user: String!) {
             courseRelUsers(user: $user) {
               edges {
                 node {

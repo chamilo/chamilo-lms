@@ -1,23 +1,15 @@
 <template>
-  <div class="text-h6 mt-4">{{ sessionRelUser.session.name }}</div>
+  <div class="text-h6 mt-4">{{ session.name }}</div>
   <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
       <div
-          v-for="course in sessionRelUser.courses"
-          :key="course.id"
+          v-for="edge in session.sessionRelCourseRelUsers.edges"
+          :key="edge.node.course.id"
           no-body
           style="max-width: 540px;"
       >
-        <q-card class="my-card">
-          <img src="/img/session_default.png" />
-          <q-card-section>
-            <div class="text-h7">
-<!--                  <router-link :to="'/course/' + course.course.id + '/home' + '?sid=' + sessionRelUser.session.id">-->
-              <a :href="'/course/' + course.course.id + '/home' + '?sid=' + sessionRelUser.session.id">
-                {{ course.course.title }}
-              </a>
-            </div>
-          </q-card-section>
-        </q-card>
+        <CourseCard
+            :course="edge.node.course"
+        />
       </div>
   </div>
 </template>
@@ -28,16 +20,16 @@
 }
 </style>
 <script>
+
+import CourseCard from '../course/CourseCard.vue';
+
 export default {
   name: 'SessionCard',
+  components: {
+    CourseCard,
+  },
   props: {
-    sessionRelUser: Object,
-  },
-  data() {
-    return {
-    };
-  },
-  methods: {
+    session: Object,
   }
 };
 </script>

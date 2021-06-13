@@ -7,48 +7,48 @@
 
       <div>
         <div class="flex flex-row" v-if="isCurrentTeacher && course">
-        <a class="btn btn-info mr-2">
-          <v-icon class="pr-2">mdi-eye</v-icon>
-          See as student
-        </a>
+          <a class="btn btn-info mr-2">
+            <v-icon class="pr-2">mdi-eye</v-icon>
+            See as student
+          </a>
 
-        <div class="relative">
-<!--          shadow rounded-full-->
-          <button
-              @click="dropdownOpen = !dropdownOpen"
-              class="relative z-10 block h-8 w-8  overflow-hidden  focus:outline-none"
-          >
-          <v-icon>mdi-cog</v-icon>
-        </button>
-
-        <div
-            v-show="dropdownOpen"
-            @click="dropdownOpen = false"
-            class="fixed inset-0 h-full w-full z-10"
-        ></div>
-
-        <div
-            v-show="dropdownOpen"
-            class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20"
-        >
-          <q-list dense>
-<!--            <q-item replace :to="'/main/messages/index.php'" clickable class="">-->
-<!--              <q-item-section>Inbox</q-item-section>-->
-<!--            </q-item>-->
-            <q-item
-                :href="goToCourseTool(course, tool)"
-                tag="a"
-                class=""
-                v-for="tool in tools.admin"
+          <div class="relative">
+            <!--          shadow rounded-full-->
+            <button
+                @click="dropdownOpen = !dropdownOpen"
+                class="relative z-10 block h-8 w-8  overflow-hidden  focus:outline-none"
             >
-              <q-item-section> {{ tool.ctool.nameToTranslate }}</q-item-section>
-            </q-item>
-          </q-list>
+              <v-icon>mdi-cog</v-icon>
+            </button>
+
+            <div
+                v-show="dropdownOpen"
+                @click="dropdownOpen = false"
+                class="fixed inset-0 h-full w-full z-10"
+            ></div>
+
+            <div
+                v-show="dropdownOpen"
+                class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20"
+            >
+              <q-list dense>
+                <!--            <q-item replace :to="'/main/messages/index.php'" clickable class="">-->
+                <!--              <q-item-section>Inbox</q-item-section>-->
+                <!--            </q-item>-->
+                <q-item
+                    :href="goToCourseTool(course, tool)"
+                    tag="a"
+                    class=""
+                    v-for="tool in tools.admin"
+                >
+                  <q-item-section> {{ tool.ctool.nameToTranslate }}</q-item-section>
+                </q-item>
+              </q-list>
+            </div>
+          </div>
+
+
         </div>
-      </div>
-
-
-      </div>
       </div>
     </div>
     <hr/>
@@ -63,7 +63,7 @@
           You don't have course content
         </div>
         <div>
-        Add a course introduction to display to your students.
+          Add a course introduction to display to your students.
         </div>
         <a class="btn btn-info">
           <v-icon>mdi-plus</v-icon>
@@ -73,17 +73,17 @@
       </div>
     </div>
 
-    <hr />
+    <hr/>
     <div class="flex justify-between">
       <div class="text-h6 font-bold">
         Tools
       </div>
-<!--      <div>-->
-<!--        <v-icon>-->
-<!--          mdi-format-paint-->
-<!--        </v-icon>-->
-<!--        Customize-->
-<!--      </div>-->
+      <!--      <div>-->
+      <!--        <v-icon>-->
+      <!--          mdi-format-paint-->
+      <!--        </v-icon>-->
+      <!--        Customize-->
+      <!--      </div>-->
     </div>
 
 

@@ -1,10 +1,10 @@
 <template>
     <div
-        v-for="card in sessions"
-        :key="card.session.id"
+        v-for="session in sessions"
+        :key="session.id"
     >
       <SessionCard
-          :sessionRelUser="card"
+          :session="session"
       />
     </div>
 </template>

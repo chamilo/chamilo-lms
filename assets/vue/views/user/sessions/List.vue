@@ -1,16 +1,16 @@
 <template>
   <div class="grid">
-    {{ status }}
+<!--    {{ status }}-->
     <SessionCardList :sessions="sessions" />
   </div>
 </template>
 
 <script>
 import SessionCardList from '../../../components/session/SessionCardList.vue';
-import { ENTRYPOINT } from '../../../config/entrypoint';
-import axios from "axios";
-import {computed, ref} from "vue";
-import {useStore} from "vuex";
+import {ref, computed} from "vue";
+import {useStore} from 'vuex';
+import gql from "graphql-tag";
+import {useQuery, useResult} from '@vue/apollo-composable'
 
 export default {
   name: 'SessionList',
@@ -18,15 +18,14 @@ export default {
     SessionCardList,
   },
   setup() {
-    const sessions = ref([]);
-    const status = ref('Loading');
-
+    const loading = ref('Loading');
     const store = useStore();
     let user = computed(() => store.getters['security/getUser']);
 
     if (user.value) {
       let userId = user.value.id;
-      axios.get(ENTRYPOINT + 'users/' + userId + '/sessions_rel_users.json').then(response => {
+
+      /*axios.get(ENTRYPOINT + 'users/' + userId + '/sessions_rel_users.json').then(response => {
         if (Array.isArray(response.data)) {
           sessions.value = response.data;
         }
@@ -35,12 +34,50 @@ export default {
         console.log(error);
       }).finally(() =>
           status.value = ''
-      );
-    }
+      );*/
 
-    return {
-      sessions,
-      status
+      const GET_SESSION_REL_USER = gql`
+          query getSessions($user: String!) {
+            sessionRelUsers(user: $user) {
+              edges {
+                node {
+                  session {
+                    _id
+                    name
+                    displayStartDate
+                    displayEndDate,
+                    sessionRelCourseRelUsers(user: $user) {
+                      edges {
+                        node {
+                          course {
+                            _id
+                            title
+                            illustrationUrl
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+      `;
+
+      const {result, loading, error} = useQuery(GET_SESSION_REL_USER, {
+        user: "/api/users/" + userId
+      }, );
+
+      const sessions = useResult(result, null, (data) => {
+        return data.sessionRelUsers.edges.map(function(edge) {
+          return edge.node.session;
+        });
+      });
+
+      return {
+        sessions,
+        loading
+      }
     }
   }
 }

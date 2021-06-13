@@ -23,24 +23,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_ADMIN')"},
- *     normalizationContext={"groups"={"session:read"}, "swagger_definition_name"="Read"},
- *     denormalizationContext={"groups"={"session:write"}},
- *     collectionOperations={
- *         "get"={
- *             "denormalization_context"={
- *                 "groups"={"session:read"},
- *             },
- *         },
- *         "post"={}
- *     },
- *     itemOperations={
- *         "get"={},
- *         "put"={},
- *     }
- * )
- *
  * @ORM\Table(
  *     name="session",
  *     uniqueConstraints={
@@ -55,6 +37,33 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\SessionRepository")
  * @UniqueEntity("name")
  */
+#[ApiResource(
+    attributes: [
+        'security' => "is_granted('ROLE_ADMIN')",
+    ],
+    collectionOperations: [
+        'get' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+        'post' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+    ],
+    itemOperations: [
+        'get' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+        'put' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+    ],
+    normalizationContext: [
+        'groups' => ['session:read'],
+    ],
+    denormalizationContext: [
+        'groups' => ['session:write'],
+    ],
+)]
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'partial'])]
 #[ApiFilter(PropertyFilter::class)]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'name'])]
@@ -280,6 +289,7 @@ class Session implements ResourceWithAccessUrlInterface
         $this->sessionRelCourseRelUsers = new ArrayCollection();
         $this->urls = new ArrayCollection();
 
+        $this->duration = 0;
         $this->description = '';
         $this->nbrClasses = 0;
         $this->nbrUsers = 0;

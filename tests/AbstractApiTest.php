@@ -76,7 +76,7 @@ abstract class AbstractApiTest extends ApiTestCase
                     'password' => 'admin',
                 ],*/
                 'headers' => ['Content-Type' => 'application/json'],
-                'body' => json_encode($defaultBody)
+                'body' => json_encode($defaultBody),
             ],
         );
 

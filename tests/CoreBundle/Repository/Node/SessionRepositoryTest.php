@@ -109,4 +109,69 @@ class SessionRepositoryTest extends AbstractApiTest
             'name' => $newSessionName,
         ]);
     }
+
+    public function testAddCourseToSessionWithApi(): void
+    {
+        $token = $this->getUserToken();
+
+        $session = $this->createSession('test session');
+        $course = $this->createCourse('test course');
+
+        $this->createClientWithCredentials($token)->request(
+            'POST',
+            '/api/session_rel_courses',
+            [
+                'json' => [
+                    'session' => '/api/sessions/'.$session->getId(),
+                    'course' => '/api/courses/'.$course->getId(),
+                ],
+            ]
+        );
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(201);
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertJsonContains([
+            '@context' => '/api/contexts/SessionRelCourse',
+            '@type' => 'SessionRelCourse',
+            'session' => '/api/sessions/'.$session->getId(),
+            'course' => '/api/courses/'.$course->getId(),
+        ]);
+    }
+
+    public function testAddUserToSessionWithApi(): void
+    {
+        $token = $this->getUserToken();
+
+        $testUser = $this->createUser('test');
+
+        $session = $this->createSession('test session');
+
+        $this->createClientWithCredentials($token)->request(
+            'POST',
+            '/api/session_rel_users',
+            [
+                'json' => [
+                    'session' => '/api/sessions/'.$session->getId(),
+                    'user' => '/api/users/'.$testUser->getId(),
+                ],
+            ]
+        );
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(201);
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertJsonContains(
+            [
+                '@context' => '/api/contexts/SessionRelUser',
+                '@type' => 'SessionRelUser',
+                'session' => [
+                    '@id' => '/api/sessions/'.$session->getId(),
+                ],
+                [
+                    '@id' => '/api/users/'.$testUser->getId(),
+                ],
+            ]
+        );
+    }
 }

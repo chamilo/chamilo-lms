@@ -122,6 +122,7 @@ class SessionRelUser
 
     public function __construct()
     {
+        $this->relationType = 0;
         $this->duration = 0;
         $this->movedTo = null;
         $this->movedStatus = null;

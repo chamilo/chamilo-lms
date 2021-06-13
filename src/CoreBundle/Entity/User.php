@@ -366,7 +366,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      *     orphanRemoval=true
      * )
      */
-    protected Collection $sessionCourseSubscriptions;
+    protected Collection $sessionRelCourseRelUsers;
 
     /**
      * @ApiSubresource()
@@ -734,7 +734,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->courseGroupsAsTutor = new ArrayCollection();
         $this->sessionsAsGeneralCoach = new ArrayCollection();
         $this->resourceNodes = new ArrayCollection();
-        $this->sessionCourseSubscriptions = new ArrayCollection();
+        $this->sessionRelCourseRelUsers = new ArrayCollection();
         $this->achievedSkills = new ArrayCollection();
         $this->commentedUserSkills = new ArrayCollection();
         $this->gradeBookCategories = new ArrayCollection();
@@ -1287,21 +1287,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function setLastLogin(DateTime $lastLogin = null): self
     {
         $this->lastLogin = $lastLogin;
-
-        return $this;
-    }
-
-    public function getSessionCourseSubscriptions(): Collection
-    {
-        return $this->sessionCourseSubscriptions;
-    }
-
-    /**
-     * @param Collection<int, SessionRelCourseRelUser>|SessionRelCourseRelUser[] $value
-     */
-    public function setSessionCourseSubscriptions(Collection $value): self
-    {
-        $this->sessionCourseSubscriptions = $value;
 
         return $this;
     }
@@ -2263,6 +2248,24 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
             $admin->setUser($this);
             $this->setAdmin($admin);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return SessionRelCourseRelUser[]|Collection
+     */
+    public function getSessionRelCourseRelUsers()
+    {
+        return $this->sessionRelCourseRelUsers;
+    }
+
+    /**
+     * @param SessionRelCourseRelUser[]|Collection $sessionRelCourseRelUsers
+     */
+    public function setSessionRelCourseRelUsers($sessionRelCourseRelUsers): self
+    {
+        $this->sessionRelCourseRelUsers = $sessionRelCourseRelUsers;
 
         return $this;
     }

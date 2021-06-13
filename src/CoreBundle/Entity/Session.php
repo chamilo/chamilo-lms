@@ -41,10 +41,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     }
  * )
  *
- * @ApiFilter(SearchFilter::class, properties={"name":"partial"})
- * @ApiFilter(PropertyFilter::class)
- * @ApiFilter(OrderFilter::class, properties={"id", "name"})
- *
  * @ORM\Table(
  *     name="session",
  *     uniqueConstraints={
@@ -59,6 +55,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\SessionRepository")
  * @UniqueEntity("name")
  */
+#[ApiFilter(SearchFilter::class, properties: ['name' => 'partial'])]
+#[ApiFilter(PropertyFilter::class)]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'name'])]
+
 class Session implements ResourceWithAccessUrlInterface
 {
     public const VISIBLE = 1;
@@ -79,12 +79,6 @@ class Session implements ResourceWithAccessUrlInterface
     protected ?int $id = null;
 
     /**
-     * @var Collection|SkillRelCourse[]
-     * @ORM\OneToMany(targetEntity="SkillRelCourse", mappedBy="session", cascade={"persist", "remove"})
-     */
-    protected Collection $skills;
-
-    /**
      * @var Collection|SessionRelCourse[]
      *
      * @ORM\OrderBy({"position"="ASC"})
@@ -100,6 +94,8 @@ class Session implements ResourceWithAccessUrlInterface
     protected Collection $users;
 
     /**
+     * @Groups({"session:read", "session_rel_user:read"})
+     *
      * @var Collection|SessionRelCourseRelUser[]
      *
      * @ORM\OneToMany(
@@ -109,9 +105,13 @@ class Session implements ResourceWithAccessUrlInterface
      *     orphanRemoval=true
      * )
      */
-    protected Collection $userCourseSubscriptions;
+    protected Collection $sessionRelCourseRelUsers;
 
-    protected Course $currentCourse;
+    /**
+     * @var Collection|SkillRelCourse[]
+     * @ORM\OneToMany(targetEntity="SkillRelCourse", mappedBy="session", cascade={"persist", "remove"})
+     */
+    protected Collection $skills;
 
     /**
      * @var Collection|SkillRelUser[]
@@ -140,12 +140,13 @@ class Session implements ResourceWithAccessUrlInterface
 
     protected AccessUrl $currentUrl;
 
+    protected Course $currentCourse;
+
     /**
-     * @Assert\NotBlank()
-     *
      * @Groups({"session:read", "session:write", "session_rel_course_rel_user:read", "document:read", "session_rel_user:read"})
      * @ORM\Column(name="name", type="string", length=150)
      */
+    #[Assert\NotBlank]
     protected string $name;
 
     /**
@@ -157,12 +158,12 @@ class Session implements ResourceWithAccessUrlInterface
 
     /**
      * @Groups({"session:read", "session:write"})
-     *
      * @ORM\Column(name="show_description", type="boolean", nullable=true)
      */
     protected ?bool $showDescription;
 
     /**
+     * @Groups({"session:read", "session:write"})
      * @ORM\Column(name="duration", type="integer", nullable=true)
      */
     protected ?int $duration = null;
@@ -186,6 +187,7 @@ class Session implements ResourceWithAccessUrlInterface
     protected int $nbrClasses;
 
     /**
+     * @Groups({"session:read", "session:write"})
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="session_admin_id", referencedColumnName="id", nullable=true)
      */
@@ -201,7 +203,7 @@ class Session implements ResourceWithAccessUrlInterface
     protected User $generalCoach;
 
     /**
-     * @Groups({"session:read"})
+     * @Groups({"session:read", "session:write"})
      * @ORM\Column(name="visibility", type="integer")
      */
     protected int $visibility;
@@ -275,8 +277,7 @@ class Session implements ResourceWithAccessUrlInterface
         $this->resourceLinks = new ArrayCollection();
         $this->courses = new ArrayCollection();
         $this->users = new ArrayCollection();
-        $this->userCourseSubscriptions = new ArrayCollection();
-        //$this->items = new ArrayCollection();
+        $this->sessionRelCourseRelUsers = new ArrayCollection();
         $this->urls = new ArrayCollection();
 
         $this->description = '';
@@ -465,19 +466,15 @@ class Session implements ResourceWithAccessUrlInterface
      */
     public function removeUserCourseSubscription(User $user, Course $course): void
     {
-        /** @var SessionRelCourseRelUser $courseSubscription */
-        foreach ($this->userCourseSubscriptions as $i => $courseSubscription) {
-            if ($courseSubscription->getCourse()->getId() === $course->getId() &&
-                $courseSubscription->getUser()->getId() === $user->getId()) {
-                if (self::STUDENT === $this->userCourseSubscriptions[$i]->getStatus()) {
+        foreach ($this->sessionRelCourseRelUsers as $i => $sessionRelUser) {
+            if ($sessionRelUser->getCourse()->getId() === $course->getId() &&
+                $sessionRelUser->getUser()->getId() === $user->getId()) {
+                if (self::STUDENT === $this->sessionRelCourseRelUsers[$i]->getStatus()) {
                     $sessionCourse = $this->getCourseSubscription($course);
-
-                    $sessionCourse->setNbrUsers(
-                        $sessionCourse->getNbrUsers() - 1
-                    );
+                    $sessionCourse->setNbrUsers($sessionCourse->getNbrUsers() - 1);
                 }
 
-                unset($this->userCourseSubscriptions[$i]);
+                unset($this->sessionRelCourseRelUsers[$i]);
             }
         }
     }
@@ -525,7 +522,7 @@ class Session implements ResourceWithAccessUrlInterface
             );
         }
 
-        return $this->getUserCourseSubscriptions()->matching($criteria);
+        return $this->getSessionRelCourseRelUsers()->matching($criteria);
     }
 
     public function getCoursesByUser(User $user, $status = null): Collection
@@ -542,7 +539,7 @@ class Session implements ResourceWithAccessUrlInterface
             );
         }
 
-        return $this->getUserCourseSubscriptions()->matching($criteria);
+        return $this->getSessionRelCourseRelUsers()->matching($criteria);
     }
 
     public function setName(string $name): self
@@ -815,8 +812,9 @@ class Session implements ResourceWithAccessUrlInterface
             return false;
         }
 
-        return (null === $this->accessStartDate || $this->accessStartDate < $now)
-            && (null === $this->accessEndDate || $now < $this->accessEndDate);
+        return
+            (null === $this->accessStartDate || $this->accessStartDate < $now) &&
+            (null === $this->accessEndDate || $now < $this->accessEndDate);
     }
 
     public function addCourse(Course $course): void
@@ -846,27 +844,30 @@ class Session implements ResourceWithAccessUrlInterface
         return false;
     }
 
-    public function getUserCourseSubscriptions(): Collection
+    /**
+     * @return SessionRelCourseRelUser[]|ArrayCollection|Collection
+     */
+    public function getSessionRelCourseRelUsers()
     {
-        return $this->userCourseSubscriptions;
+        return $this->sessionRelCourseRelUsers;
     }
 
-    public function setUserCourseSubscriptions(Collection $userCourseSubscriptions): self
+    public function setSessionRelCourseRelUsers(Collection $sessionRelCourseRelUsers): self
     {
-        $this->userCourseSubscriptions = new ArrayCollection();
+        $this->sessionRelCourseRelUsers = new ArrayCollection();
 
-        foreach ($userCourseSubscriptions as $item) {
-            $this->addUserCourseSubscription($item);
+        foreach ($sessionRelCourseRelUsers as $item) {
+            $this->addSessionRelCourseRelUser($item);
         }
 
         return $this;
     }
 
-    public function addUserCourseSubscription(SessionRelCourseRelUser $subscription): void
+    public function addSessionRelCourseRelUser(SessionRelCourseRelUser $sessionRelCourseRelUser): void
     {
-        $subscription->setSession($this);
-        if (!$this->hasUserCourseSubscription($subscription)) {
-            $this->userCourseSubscriptions[] = $subscription;
+        $sessionRelCourseRelUser->setSession($this);
+        if (!$this->hasUserCourseSubscription($sessionRelCourseRelUser)) {
+            $this->sessionRelCourseRelUsers->add($sessionRelCourseRelUser);
         }
     }
 
@@ -888,12 +889,14 @@ class Session implements ResourceWithAccessUrlInterface
      */
     public function addUserInCourse(int $status, User $user, Course $course): SessionRelCourseRelUser
     {
-        $userRelCourseRelSession = new SessionRelCourseRelUser();
-        $userRelCourseRelSession->setCourse($course);
-        $userRelCourseRelSession->setUser($user);
-        $userRelCourseRelSession->setSession($this);
-        $userRelCourseRelSession->setStatus($status);
-        $this->addUserCourseSubscription($userRelCourseRelSession);
+        $userRelCourseRelSession =
+            (new SessionRelCourseRelUser())
+                ->setCourse($course)
+                ->setUser($user)
+                ->setSession($this)
+                ->setStatus($status)
+        ;
+        $this->addSessionRelCourseRelUser($userRelCourseRelSession);
 
         if (self::STUDENT === $status) {
             $sessionCourse = $this->getCourseSubscription($course);
@@ -905,7 +908,7 @@ class Session implements ResourceWithAccessUrlInterface
 
     public function hasUserCourseSubscription(SessionRelCourseRelUser $subscription): bool
     {
-        if (0 !== $this->getUserCourseSubscriptions()->count()) {
+        if (0 !== $this->getSessionRelCourseRelUsers()->count()) {
             $criteria = Criteria::create()->where(
                 Criteria::expr()->eq('user', $subscription->getUser())
             )->andWhere(
@@ -913,7 +916,7 @@ class Session implements ResourceWithAccessUrlInterface
             )->andWhere(
                 Criteria::expr()->eq('session', $subscription->getSession())
             );
-            $relation = $this->getUserCourseSubscriptions()->matching($criteria);
+            $relation = $this->getSessionRelCourseRelUsers()->matching($criteria);
 
             return $relation->count() > 0;
         }
@@ -968,7 +971,7 @@ class Session implements ResourceWithAccessUrlInterface
      *
      * @return ArrayCollection|Collection
      */
-    public function getUserCourseSubscriptionsByStatus(Course $course, int $status)
+    public function getSessionRelCourseRelUsersByStatus(Course $course, int $status)
     {
         $criteria = Criteria::create()
             ->where(
@@ -979,7 +982,7 @@ class Session implements ResourceWithAccessUrlInterface
             )
         ;
 
-        return $this->userCourseSubscriptions->matching($criteria);
+        return $this->sessionRelCourseRelUsers->matching($criteria);
     }
 
     public function getIssuedSkills(): Collection

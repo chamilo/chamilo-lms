@@ -116,6 +116,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             WrapEncapsedVariableInCurlyBracesRector::class,
             ClassAttributesSeparationFixer::class,
             \PhpCsFixer\Fixer\FunctionNotation\FopenFlagsFixer::class,
+            \Symplify\CodingStandard\Fixer\ArrayNotation\ArrayOpenerAndCloserNewlineFixer::class,
+            \Symplify\CodingStandard\Fixer\ArrayNotation\ArrayListItemNewlineFixer::class,
             //UnusedVariableSniff::class . '.ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach' => true,
             //UnusedVariableSniff::class => 'ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach',
         ]

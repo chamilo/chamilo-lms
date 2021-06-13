@@ -140,7 +140,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      *
      * @ORM\OneToMany(targetEntity="SessionRelCourseRelUser", mappedBy="course", cascade={"persist", "remove"})
      */
-    protected Collection $sessionUserSubscriptions;
+    protected Collection $sessionRelCourseRelUsers;
 
     /**
      * @var Collection|CTool[]
@@ -368,7 +368,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public function __construct()
     {
         $this->sessions = new ArrayCollection();
-        $this->sessionUserSubscriptions = new ArrayCollection();
+        $this->sessionRelCourseRelUsers = new ArrayCollection();
         $this->skills = new ArrayCollection();
         $this->issuedSkills = new ArrayCollection();
         $this->creationDate = new DateTime();
@@ -1128,14 +1128,14 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @return SessionRelCourseRelUser[]|Collection
      */
-    public function getSessionUserSubscriptions()
+    public function getSessionRelCourseRelUsers()
     {
-        return $this->sessionUserSubscriptions;
+        return $this->sessionRelCourseRelUsers;
     }
 
-    public function setSessionUserSubscriptions(Collection $sessionUserSubscriptions): self
+    public function setSessionRelCourseRelUsers(Collection $sessionUserSubscriptions): self
     {
-        $this->sessionUserSubscriptions = $sessionUserSubscriptions;
+        $this->sessionRelCourseRelUsers = $sessionUserSubscriptions;
 
         return $this;
     }

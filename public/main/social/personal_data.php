@@ -321,7 +321,7 @@ foreach ($properties as $key => $value) {
                 }
                 $personalDataContent .= '</ul>';
                 break;
-            case 'sessionCourseSubscriptions':
+            case 'sessionRelCourseRelUsers':
                 $personalDataContent .= '<li>'.$key.': </li><ul>';
                 foreach ($value as $session => $courseList) {
                     $personalDataContent .= '<li>'.$session.'<ul>';

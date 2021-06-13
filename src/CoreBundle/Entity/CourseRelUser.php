@@ -17,22 +17,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * User subscriptions to a course.
  *
- * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_USER')"},
- *     normalizationContext={"groups"={"course_rel_user:read", "user:read"}},
- *     collectionOperations={
- *         "get"={"security"="is_granted('ROLE_ADMIN')"},
- *         "post"={"security"="is_granted('ROLE_ADMIN')"}
- *     },
- *     itemOperations={
- *         "get"={"security"="is_granted('ROLE_ADMIN') or object.user == user"},
- *     },
- *     subresourceOperations={
- *         "api_users_courses_get_subresource"={"security"="is_granted('ROLE_USER')"},
- *     },
- * )
- * @ApiFilter(SearchFilter::class, properties={"status":"exact", "user":"exact"})
- *
  * @ORM\Table(
  *     name="course_rel_user",
  *     indexes={
@@ -42,6 +26,37 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity
  */
+#[ApiResource(
+    attributes: [
+        'security' => "is_granted('ROLE_USER')",
+    ],
+    collectionOperations: [
+        'get' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+        'post' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+    ],
+    itemOperations: [
+        'get' => [
+            'security' => "is_granted('ROLE_ADMIN') or object.user == user",
+        ],
+        'post' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+    ],
+    subresourceOperations: [
+        'api_users_courses_get_subresource' => [
+            'security' => "is_granted('ROLE_USER')",
+        ],
+    ],
+    normalizationContext: [
+        'groups' => ['course_rel_user:read', 'user:read'],
+    ],
+)]
+#[ApiFilter(SearchFilter::class, properties: ['status' => 'exact', 'user' => 'exact'])]
+
 class CourseRelUser
 {
     use UserTrait;

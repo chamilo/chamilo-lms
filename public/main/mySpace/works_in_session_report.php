@@ -52,7 +52,7 @@ if ($session) {
         /** @var Course $course */
         $course = $sessionCourse->getCourse();
         $coursesInfo[$course->getId()] = $course->getCode();
-        $userCourseSubscriptions = $session->getUserCourseSubscriptionsByStatus($course, Session::STUDENT);
+        $userCourseSubscriptions = $session->getSessionRelCourseRelUsersByStatus($course, Session::STUDENT);
 
         foreach ($userCourseSubscriptions as $userCourseSubscription) {
             /** @var User $user */

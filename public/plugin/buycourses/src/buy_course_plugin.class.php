@@ -624,7 +624,7 @@ class BuyCoursesPlugin extends Plugin
                     'coaches' => [],
                 ];
 
-                $userCourseSubscriptions = $session->getUserCourseSubscriptionsByStatus(
+                $userCourseSubscriptions = $session->getSessionRelCourseRelUsersByStatus(
                     $course,
                     Chamilo\CoreBundle\Entity\Session::COACH
                 );
@@ -865,7 +865,7 @@ class BuyCoursesPlugin extends Plugin
                 'coaches' => [],
             ];
 
-            $userCourseSubscriptions = $session->getUserCourseSubscriptionsByStatus(
+            $userCourseSubscriptions = $session->getSessionRelCourseRelUsersByStatus(
                 $course,
                 Chamilo\CoreBundle\Entity\Session::COACH
             );

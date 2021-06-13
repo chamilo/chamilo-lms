@@ -6,7 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -16,7 +18,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * User subscriptions to a session course.
  *
  * @ApiResource(
- *     shortName="SessionCourseSubscription",
  *     normalizationContext={"groups"={"session_rel_course_rel_user:read", "user:read"}}
  * )
  * @ORM\Table(
@@ -28,6 +29,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity
  */
+
+#[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
 class SessionRelCourseRelUser
 {
     use UserTrait;
@@ -50,21 +53,22 @@ class SessionRelCourseRelUser
     protected int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sessionCourseSubscriptions", cascade={"persist"})
+     * @Groups({"session:read", "session_rel_course_rel_user:read"})
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="sessionRelCourseRelUsers", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     protected User $user;
 
     /**
-     * @Groups({"session_rel_course_rel_user:read"})
-     * @ORM\ManyToOne(targetEntity="Session", inversedBy="userCourseSubscriptions", cascade={"persist"})
+     * @Groups({"session:read", "session_rel_course_rel_user:read"})
+     * @ORM\ManyToOne(targetEntity="Session", inversedBy="sessionRelCourseRelUsers", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
      */
     protected Session $session;
 
     /**
-     * @Groups({"session_rel_course_rel_user:read", "session_rel_user:read"})
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="sessionUserSubscriptions", cascade={"persist"})
+     * @Groups({"session:read", "session_rel_course_rel_user:read", "session_rel_user:read"})
+     * @ORM\ManyToOne(targetEntity="Course", inversedBy="sessionRelCourseRelUsers", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     protected Course $course;

@@ -453,7 +453,7 @@ class Meeting
             }
         } else {
             if (null !== $this->course) {
-                $subscriptions = $this->session->getUserCourseSubscriptionsByStatus($this->course, Session::STUDENT);
+                $subscriptions = $this->session->getSessionRelCourseRelUsersByStatus($this->course, Session::STUDENT);
                 if ($subscriptions) {
                     /** @var SessionRelCourseRelUser $sessionCourseUser */
                     foreach ($subscriptions as $sessionCourseUser) {

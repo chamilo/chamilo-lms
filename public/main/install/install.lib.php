@@ -2331,8 +2331,8 @@ function finishInstallationWithContainer(
     $admin = $repo->findOneBy(['username' => 'admin']);
 
     $admin
-        ->setLastname($adminFirstName)
-        ->setFirstname($adminLastName)
+        ->setLastname($adminLastName)
+        ->setFirstname($adminFirstName)
         ->setUsername($loginForm)
         ->setStatus(1)
         ->setPlainPassword($passForm)

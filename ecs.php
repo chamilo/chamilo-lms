@@ -118,6 +118,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             \PhpCsFixer\Fixer\FunctionNotation\FopenFlagsFixer::class,
             \Symplify\CodingStandard\Fixer\ArrayNotation\ArrayOpenerAndCloserNewlineFixer::class,
             \Symplify\CodingStandard\Fixer\ArrayNotation\ArrayListItemNewlineFixer::class,
+            \Symplify\CodingStandard\Fixer\ArrayNotation\StandaloneLineInMultilineArrayFixer::class
             //UnusedVariableSniff::class . '.ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach' => true,
             //UnusedVariableSniff::class => 'ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach',
         ]

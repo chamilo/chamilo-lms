@@ -41,16 +41,13 @@ use UserManager;
  *     denormalizationContext={"groups"={"user:write"}},
  *     collectionOperations={
  *         "get"={"security"="is_granted('ROLE_ADMIN')"},
- *         "post"={}
+ *         "post"={"security"="is_granted('ROLE_ADMIN')"}
  *     },
  *     itemOperations={
  *         "get"={"security"="is_granted('ROLE_ADMIN')"},
- *         "put"={},
+ *         "put"={"security"="is_granted('ROLE_ADMIN')"},
  *     },
  * )
- *
- * @ApiFilter(SearchFilter::class, properties={"username":"partial", "firstname":"partial", "lastname":"partial"})
- * @ApiFilter(BooleanFilter::class, properties={"isActive"})
  *
  * @ORM\Table(
  *     name="user",
@@ -62,6 +59,13 @@ use UserManager;
  * @ORM\Entity
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\UserListener"})
  */
+#[ApiFilter(SearchFilter::class, properties: [
+    'username' => 'partial',
+    'firstname' => 'partial',
+    'lastname' => 'partial',
+])]
+#[ApiFilter(BooleanFilter::class, properties: ['isActive'])]
+
 class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface
 {
     use TimestampableEntity;

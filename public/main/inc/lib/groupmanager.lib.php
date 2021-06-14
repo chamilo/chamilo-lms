@@ -870,10 +870,8 @@ class GroupManager
         if (empty($course_info)) {
             return false;
         }
-        $course_id = $course_info['real_id'];
 
         $table_group = Database::get_course_table(TABLE_GROUP);
-        $table_group_cat = Database::get_course_table(TABLE_GROUP_CATEGORY);
         $cat_id = (int) $cat_id;
         $sql = "SELECT iid FROM $table_group
                 WHERE category_id='".$cat_id."'";

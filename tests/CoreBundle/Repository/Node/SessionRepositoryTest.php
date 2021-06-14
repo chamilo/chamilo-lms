@@ -49,7 +49,8 @@ class SessionRepositoryTest extends AbstractApiTest
         $session = (new Session())
             ->setName($name)
             ->setGeneralCoach($this->getUser('admin'))
-            ->addAccessUrl($this->getAccessUrl());
+            ->addAccessUrl($this->getAccessUrl())
+        ;
         $errors = $this->getViolations($session);
         $this->assertCount(1, $errors);
 

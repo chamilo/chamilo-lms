@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\TrackEAttemptRecording;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
+use Chamilo\CoreBundle\Entity\User;
 use ChamiloSession as Session;
 
 /**
@@ -816,7 +817,7 @@ class Event
                 $event_value = serialize($event_value);
             }
 
-            if ($event_value instanceof \Chamilo\CoreBundle\Entity\User) {
+            if ($event_value instanceof User) {
                 $event_value = serialize(
                     [
                         'id' => $event_value->getId(),

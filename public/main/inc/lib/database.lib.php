@@ -472,7 +472,7 @@ class Database
 
                 try {
                     $statement = self::getManager()->getConnection()->prepare($sql);
-                    $result = $statement->execute($attributes);
+                    $result = $statement->executeQuery($attributes);
                 } catch (Exception $e) {
                     self::handleError($e);
                 }

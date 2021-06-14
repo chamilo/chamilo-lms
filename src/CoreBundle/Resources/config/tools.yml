@@ -121,6 +121,8 @@ services:
             - {name: chamilo_core.tool}
 
     chamilo_core.tool.course_description:
+        calls:
+            -   setIcon: [ 'mdi-card-text' ]
         class: Chamilo\CoreBundle\Tool\CourseDescription
         arguments:
             - 'course_description'
@@ -135,6 +137,8 @@ services:
 
     chamilo_core.tool.course_tool:
         class: Chamilo\CoreBundle\Tool\CourseTool
+        calls:
+            -   setIcon: [ 'mdi-file-link' ]
         arguments:
             - 'course_tool'
             - 'admin'
@@ -258,6 +262,8 @@ services:
             - {name: chamilo_core.tool}
 
     chamilo_core.tool.gradebook:
+        calls:
+            -   setIcon: [ 'mdi-note-check' ]
         class: Chamilo\CoreBundle\Tool\Gradebook
         arguments:
             - 'gradebook'
@@ -294,6 +300,8 @@ services:
             - {name: chamilo_core.tool}
 
     chamilo_core.tool.learning_path:
+        calls:
+            -   setIcon: [ 'mdi-map-marker-path' ]
         class: Chamilo\CoreBundle\Tool\LearningPath
         arguments:
             - 'learnpath'
@@ -310,6 +318,8 @@ services:
 
     chamilo_core.tool.link:
         class: Chamilo\CoreBundle\Tool\Link
+        calls:
+            -   setIcon: [ 'mdi-file-link' ]
         arguments:
             - 'link'
             - 'authoring'
@@ -388,6 +398,8 @@ services:
     # Survey
     chamilo_core.tool.survey:
         class: Chamilo\CoreBundle\Tool\Survey
+        calls:
+            -   setIcon: [ 'mdi-file-question' ]
         arguments:
             - 'survey'
             - 'interaction'

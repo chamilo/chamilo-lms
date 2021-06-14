@@ -161,7 +161,7 @@ if (0 === $session->getNbrCourses()) {
 
         // Get coaches of the courses in session
         $namesOfCoaches = [];
-        $coachSubscriptions = $session->getUserCourseSubscriptionsByStatus($course, Session::COACH);
+        $coachSubscriptions = $session->getSessionRelCourseRelUsersByStatus($course, Session::COACH);
 
         if ($coachSubscriptions) {
             /** @var SessionRelCourseRelUser $subscription */

@@ -48,7 +48,7 @@ if (empty($sessionId) && $user) {
     }
 }
 
-$sessionCourseSubscriptions = $user->getSessionCourseSubscriptions();
+$sessionCourseSubscriptions = $user->getSessionRelCourseRelUsers();
 $currentSession = api_get_session_entity($sessionId);
 
 $sessionList = [];

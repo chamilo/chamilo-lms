@@ -88,12 +88,7 @@ class TrackEDefault
         return $this->defaultUserId;
     }
 
-    /**
-     * Set cId.
-     *
-     * @return TrackEDefault
-     */
-    public function setCId(int $cId)
+    public function setCId(int $cId): self
     {
         $this->cId = $cId;
 
@@ -110,12 +105,7 @@ class TrackEDefault
         return $this->cId;
     }
 
-    /**
-     * Set defaultDate.
-     *
-     * @return TrackEDefault
-     */
-    public function setDefaultDate(DateTime $defaultDate)
+    public function setDefaultDate(DateTime $defaultDate): self
     {
         $this->defaultDate = $defaultDate;
 
@@ -132,12 +122,7 @@ class TrackEDefault
         return $this->defaultDate;
     }
 
-    /**
-     * Set defaultEventType.
-     *
-     * @return TrackEDefault
-     */
-    public function setDefaultEventType(string $defaultEventType)
+    public function setDefaultEventType(string $defaultEventType): self
     {
         $this->defaultEventType = $defaultEventType;
 
@@ -154,12 +139,7 @@ class TrackEDefault
         return $this->defaultEventType;
     }
 
-    /**
-     * Set defaultValueType.
-     *
-     * @return TrackEDefault
-     */
-    public function setDefaultValueType(string $defaultValueType)
+    public function setDefaultValueType(string $defaultValueType): self
     {
         $this->defaultValueType = $defaultValueType;
 
@@ -176,12 +156,7 @@ class TrackEDefault
         return $this->defaultValueType;
     }
 
-    /**
-     * Set defaultValue.
-     *
-     * @return TrackEDefault
-     */
-    public function setDefaultValue(string $defaultValue)
+    public function setDefaultValue(string $defaultValue): self
     {
         $this->defaultValue = $defaultValue;
 
@@ -198,12 +173,7 @@ class TrackEDefault
         return $this->defaultValue;
     }
 
-    /**
-     * Set sessionId.
-     *
-     * @return TrackEDefault
-     */
-    public function setSessionId(int $sessionId)
+    public function setSessionId(int $sessionId): self
     {
         $this->sessionId = $sessionId;
 

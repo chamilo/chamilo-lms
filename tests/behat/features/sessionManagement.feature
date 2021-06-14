@@ -22,9 +22,8 @@ Feature: Session management tool
     And I press "submit"
     Then wait for the page to be loaded
     Then I should see "Add courses to this session (Session1)"
-    Then I select "TEMP (TEMP)" from "NoSessionCoursesList[]"
-    And I press "add_course"
-    And I press "next"
+    Then I fill in ajax select2 input "#courses" with id "2" and value "TEMP"
+    And I press "submit"
     And wait for the page to be loaded
     Then I should see "Update successful"
 
@@ -40,9 +39,8 @@ Feature: Session management tool
     And I press "submit"
     Then wait for the page to be loaded
     Then I should see "Add courses to this session (Temp Session)"
-    Then I select "TEMP (TEMP)" from "NoSessionCoursesList[]"
-    And I press "add_course"
-    And I press "next"
+    Then I fill in ajax select2 input "#courses" with id "2" and value "TEMP"
+    And I press "submit"
     And wait for the page to be loaded
     Then I should see "Update successful"
 

@@ -53,7 +53,7 @@ if (file_exists($envFile)) {
 }*/
 
 // Defaults settings
-putenv('APP_LOCALE=en');
+putenv('APP_LOCALE=en_US');
 putenv('APP_ENCRYPT_METHOD="bcrypt"');
 putenv('DATABASE_HOST=');
 putenv('DATABASE_PORT=');
@@ -67,7 +67,7 @@ session_start();
 
 require_once 'install.lib.php';
 
-$installationLanguage = 'en';
+$installationLanguage = 'en_US';
 // Determination of the language during the installation procedure.
 if (!empty($_POST['language_list'])) {
     $search = ['../', '\\0'];
@@ -79,7 +79,7 @@ if (!empty($_POST['language_list'])) {
 
 // Language validation.
 if (!array_key_exists($installationLanguage, get_language_folder_list())) {
-    $installationLanguage = 'en';
+    $installationLanguage = 'en_US';
 }
 
 // Set translation

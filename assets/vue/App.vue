@@ -79,7 +79,6 @@ export default {
 
   data: () => ({
     user: {},
-    userAvatar: '',
     firstTime: false,
     legacyContent: '',
   }),
@@ -182,9 +181,7 @@ export default {
     let isAuthenticated = false;
     if (!isEmpty(window.user)) {
       console.log('APP.vue: is logged in as ' + window.user.username);
-      console.log('APP.vue: userAvatar ' + window.userAvatar);
       this.user = window.user;
-      this.userAvatar = window.userAvatar;
       isAuthenticated = true;
     }
     console.log(this.user);

@@ -41,16 +41,13 @@ use UserManager;
  *     denormalizationContext={"groups"={"user:write"}},
  *     collectionOperations={
  *         "get"={"security"="is_granted('ROLE_ADMIN')"},
- *         "post"={}
+ *         "post"={"security"="is_granted('ROLE_ADMIN')"}
  *     },
  *     itemOperations={
  *         "get"={"security"="is_granted('ROLE_ADMIN')"},
- *         "put"={},
+ *         "put"={"security"="is_granted('ROLE_ADMIN')"},
  *     },
  * )
- *
- * @ApiFilter(SearchFilter::class, properties={"username":"partial", "firstname":"partial", "lastname":"partial"})
- * @ApiFilter(BooleanFilter::class, properties={"isActive"})
  *
  * @ORM\Table(
  *     name="user",
@@ -62,6 +59,13 @@ use UserManager;
  * @ORM\Entity
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\UserListener"})
  */
+#[ApiFilter(SearchFilter::class, properties: [
+    'username' => 'partial',
+    'firstname' => 'partial',
+    'lastname' => 'partial',
+])]
+#[ApiFilter(BooleanFilter::class, properties: ['isActive'])]
+
 class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface
 {
     use TimestampableEntity;
@@ -87,12 +91,27 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public ?ResourceNode $resourceNode = null;
 
     /**
+     * Resource illustration URL - Property set by ResourceNormalizer.php.
+     *
+     * @ApiProperty(iri="http://schema.org/contentUrl")
+     * @Groups({"user:read", "resource_node:read", "document:read", "media_object_read", "course:read", "course_rel_user:read", "user_json:read"})
+     */
+    public ?string $illustrationUrl = null;
+
+    /**
      * @Groups({"user:read", "resource_node:read", "user_json:read"})
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
     protected ?int $id = null;
+
+    /**
+     * @Groups({"user:read", "user:write", "course:read", "resource_node:read", "user_json:read"})
+     * @Assert\NotBlank()
+     * @ORM\Column(name="username", type="string", length=100, unique=true)
+     */
+    protected string $username;
 
     /**
      * @ORM\Column(name="api_token", type="string", unique=true, nullable=true)
@@ -130,13 +149,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * @ORM\Column(name="locale", type="string", length=8)
      */
     protected string $locale;
-
-    /**
-     * @Groups({"user:read", "user:write", "course:read", "resource_node:read", "user_json:read"})
-     * @Assert\NotBlank()
-     * @ORM\Column(name="username", type="string", length=100, unique=true)
-     */
-    protected string $username;
 
     /**
      * @Groups({"user:write"})
@@ -358,7 +370,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      *     orphanRemoval=true
      * )
      */
-    protected Collection $sessionCourseSubscriptions;
+    protected Collection $sessionRelCourseRelUsers;
 
     /**
      * @ApiSubresource()
@@ -726,7 +738,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->courseGroupsAsTutor = new ArrayCollection();
         $this->sessionsAsGeneralCoach = new ArrayCollection();
         $this->resourceNodes = new ArrayCollection();
-        $this->sessionCourseSubscriptions = new ArrayCollection();
+        $this->sessionRelCourseRelUsers = new ArrayCollection();
         $this->achievedSkills = new ArrayCollection();
         $this->commentedUserSkills = new ArrayCollection();
         $this->gradeBookCategories = new ArrayCollection();
@@ -1279,21 +1291,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function setLastLogin(DateTime $lastLogin = null): self
     {
         $this->lastLogin = $lastLogin;
-
-        return $this;
-    }
-
-    public function getSessionCourseSubscriptions(): Collection
-    {
-        return $this->sessionCourseSubscriptions;
-    }
-
-    /**
-     * @param Collection<int, SessionRelCourseRelUser>|SessionRelCourseRelUser[] $value
-     */
-    public function setSessionCourseSubscriptions(Collection $value): self
-    {
-        $this->sessionCourseSubscriptions = $value;
 
         return $this;
     }
@@ -2255,6 +2252,24 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
             $admin->setUser($this);
             $this->setAdmin($admin);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return SessionRelCourseRelUser[]|Collection
+     */
+    public function getSessionRelCourseRelUsers()
+    {
+        return $this->sessionRelCourseRelUsers;
+    }
+
+    /**
+     * @param SessionRelCourseRelUser[]|Collection $sessionRelCourseRelUsers
+     */
+    public function setSessionRelCourseRelUsers($sessionRelCourseRelUsers): self
+    {
+        $this->sessionRelCourseRelUsers = $sessionRelCourseRelUsers;
 
         return $this;
     }

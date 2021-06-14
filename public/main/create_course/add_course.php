@@ -346,17 +346,16 @@ if ($form->validate()) {
             $params['gradebook_model_id'] = isset($course_values['gradebook_model_id']) ? $course_values['gradebook_model_id'] : null;
             $params['course_template'] = isset($course_values['course_template']) ? $course_values['course_template'] : '';
 
-            $course_info = CourseManager::create_course($params);
+            $course = CourseManager::create_course($params);
 
-            if (!empty($course_info) && isset($course_info['real_id'])) {
+            if (null !== $course) {
                 $request = Container::getRequest();
 
                 if ($request->files->has('picture')) {
                     $uploadFile = $request->files->get('picture');
                     // @todo add in repository
-                    $courseEntity = api_get_course_entity($course_info['real_id']);
                     $file = Container::getIllustrationRepository()->addIllustration(
-                        $courseEntity,
+                        $course,
                         api_get_user_entity(api_get_user_id()),
                         $uploadFile
                     );
@@ -371,12 +370,12 @@ if ($form->validate()) {
                 if ('true' === $splash) {
                     $url = Container::getRouter()->generate(
                         'chamilo_core_course_welcome',
-                        ['cid' => $course_info['real_id']]
+                        ['cid' => $course->getId()]
                     );
                     header('Location: '.$url);
                     exit;
                 } else {
-                    $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/';
+                    $url = api_get_course_url($course->getId());
                     header('Location: '.$url);
                     exit;
                 }

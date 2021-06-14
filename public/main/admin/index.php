@@ -323,7 +323,7 @@ if (api_is_platform_admin()) {
     $searchForm = new FormValidator(
         'search_setting',
         'GET',
-        api_get_path(WEB_CODE_PATH).'admin/settings/search_settings/',
+        api_get_path(WEB_PATH).'admin/settings/search_settings/',
         null,
         null,
         FormValidator::LAYOUT_BOX_SEARCH

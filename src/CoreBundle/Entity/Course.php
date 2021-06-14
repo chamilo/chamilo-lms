@@ -33,10 +33,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     denormalizationContext={"groups"={"course:write"}},
  * )
  *
- * @ApiFilter(SearchFilter::class, properties={"title": "partial", "code": "partial"})
- * @ApiFilter(PropertyFilter::class)
- * @ApiFilter(OrderFilter::class, properties={"id", "title"})
- *
  * @ORM\Table(
  *     name="course",
  *     indexes={
@@ -47,6 +43,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener", "Chamilo\CoreBundle\Entity\Listener\CourseListener"})
  */
+#[ApiFilter(SearchFilter::class, properties: [
+    'title' => 'partial',
+    'code' => 'partial',
+])]
+#[ApiFilter(PropertyFilter::class)]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'title'])]
+
 class Course extends AbstractResource implements ResourceInterface, ResourceWithAccessUrlInterface, ResourceIllustrationInterface
 {
     public const CLOSED = 0;
@@ -78,6 +81,10 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * The course code.
      *
      * @Assert\NotBlank()
+     * @Assert\Length(
+     *     max = 40,
+     *     maxMessage = "Code cannot be longer than {{ limit }} characters"
+     * )
      * @ApiProperty(iri="http://schema.org/courseCode")
      * @Groups({"course:read", "course:write", "course_rel_user:read"})
      *
@@ -91,6 +98,15 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * @ORM\Column(name="code", type="string", length=40, nullable=false, unique=true)
      */
     protected string $code;
+
+    /**
+     * @Assert\Length(
+     *     max = 40,
+     *     maxMessage = "Code cannot be longer than {{ limit }} characters"
+     * )
+     * @ORM\Column(name="visual_code", type="string", length=40, nullable=true, unique=false)
+     */
+    protected ?string $visualCode = null;
 
     /**
      * @var Collection|CourseRelUser[]
@@ -127,7 +143,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      *
      * @ORM\OneToMany(targetEntity="SessionRelCourseRelUser", mappedBy="course", cascade={"persist", "remove"})
      */
-    protected Collection $sessionUserSubscriptions;
+    protected Collection $sessionRelCourseRelUsers;
 
     /**
      * @var Collection|CTool[]
@@ -267,11 +283,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected ?string $tutorName;
 
     /**
-     * @ORM\Column(name="visual_code", type="string", length=40, nullable=true, unique=false)
-     */
-    protected ?string $visualCode = null;
-
-    /**
      * @Groups({"course:read", "list"})
      * @ORM\Column(name="department_name", type="string", length=30, nullable=true, unique=false)
      */
@@ -360,7 +371,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public function __construct()
     {
         $this->sessions = new ArrayCollection();
-        $this->sessionUserSubscriptions = new ArrayCollection();
+        $this->sessionRelCourseRelUsers = new ArrayCollection();
         $this->skills = new ArrayCollection();
         $this->issuedSkills = new ArrayCollection();
         $this->creationDate = new DateTime();
@@ -615,12 +626,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this;
     }
 
-    /**
-     * Get courseLanguage.
-     *
-     * @return string
-     */
-    public function getCourseLanguage()
+    public function getCourseLanguage(): string
     {
         return $this->courseLanguage;
     }
@@ -629,7 +635,10 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     {
         $this->title = $title;
 
-        $this->setCode($title);
+        // Set the code based in the title if it doesnt exists.
+        if (empty($this->code)) {
+            $this->setCode($title);
+        }
 
         return $this;
     }
@@ -1122,14 +1131,14 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @return SessionRelCourseRelUser[]|Collection
      */
-    public function getSessionUserSubscriptions()
+    public function getSessionRelCourseRelUsers()
     {
-        return $this->sessionUserSubscriptions;
+        return $this->sessionRelCourseRelUsers;
     }
 
-    public function setSessionUserSubscriptions(Collection $sessionUserSubscriptions): self
+    public function setSessionRelCourseRelUsers(Collection $sessionUserSubscriptions): self
     {
-        $this->sessionUserSubscriptions = $sessionUserSubscriptions;
+        $this->sessionRelCourseRelUsers = $sessionUserSubscriptions;
 
         return $this;
     }

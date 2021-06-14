@@ -68,7 +68,7 @@ if (!$session) {
         ->getQuery()
         ->getResult();
 } else {
-    $list = $session->getUserCourseSubscriptionsByStatus($course, Session::STUDENT);
+    $list = $session->getSessionRelCourseRelUsersByStatus($course, Session::STUDENT);
     if ($list) {
         /** @var SessionRelCourseRelUser $sessionCourseUser */
         foreach ($list as $sessionCourseUser) {

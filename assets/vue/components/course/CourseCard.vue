@@ -1,21 +1,9 @@
 <template>
-<!--  <q-card class="my-card">-->
-<!--    <q-img src="https://cdn.quasar.dev/img/parallax2.jpg">-->
-<!--      <div class="absolute-bottom text-h6">-->
-<!--        Title-->
-<!--      </div>-->
-<!--    </q-img>-->
-
-<!--    <q-card-section>-->
-<!--      {{ lorem }}-->
-<!--    </q-card-section>-->
-<!--  </q-card>-->
-
   <v-card
       elevation="4"
   >
     <div class="">
-      <img class="object-cover w-full h-44" src="/img/session_default.png" />
+      <img class="object-cover w-full h-44" :src="course.illustrationUrl" />
     </div>
     <div class="p-4">
       <div class="h-10 flex flex-row justify-between">
@@ -31,27 +19,22 @@
         </div>
       </div>
 
-      <div class="pt-6 ">
+      <div v-if="course.users" class="pt-6">
         <div class="flex flex-row" v-if="course.users.edges.length">
           <div class="flex flex-row pr-3" v-for="courseRelUser in course.users.edges">
             <div class="pr-2">
-              <v-avatar
-                  color="primary"
-                  size="32"
-              ></v-avatar>
+                <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white"
+                     :src="courseRelUser.node.user.illustrationUrl + '?w=80&h=80&fit=crop'"
+                     alt=""
+                />
             </div>
-
             <div v-if="course.users.edges.length < 3 " class="text-xs flex-col">
               <div>
               {{ courseRelUser.node.user.firstname }} {{ courseRelUser.node.user.lastname }}
               </div>
-              <div>
-                Teacher
-              </div>
             </div>
           </div>
         </div>
-
       </div>
 <!--    <q-card-actions>-->
 <!--        <q-btn-->

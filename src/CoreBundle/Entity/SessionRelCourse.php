@@ -6,7 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Course subscriptions to a session.
@@ -16,6 +18,33 @@ use Doctrine\ORM\Mapping as ORM;
  * })
  * @ORM\Entity
  */
+#[ApiResource(
+    attributes: [
+        'security' => "is_granted('ROLE_ADMIN')",
+    ],
+    collectionOperations: [
+        'get' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+        'post' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+    ],
+    itemOperations: [
+        'get' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+        'put' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+    ],
+    normalizationContext: [
+        'groups' => ['session_rel_course:read'],
+    ],
+    denormalizationContext: [
+        'groups' => ['session_rel_course:write'],
+    ],
+)]
 class SessionRelCourse
 {
     /**
@@ -26,12 +55,14 @@ class SessionRelCourse
     protected int $id;
 
     /**
+     * @Groups({"session_rel_course:read", "session_rel_course:write"})
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="courses", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
      */
     protected ?Session $session = null;
 
     /**
+     * @Groups({"session_rel_course:read", "session_rel_course:write"})
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="sessions", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */

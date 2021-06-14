@@ -2975,6 +2975,7 @@ JAVASCRIPT;
                     }
                     $assetId = $valueData['value'];
                     $assetRepo = Container::getAssetRepository();
+                    /** @var Asset $asset */
                     $asset = $assetRepo->find($assetId);
 
                     if (null === $asset) {
@@ -2982,11 +2983,13 @@ JAVASCRIPT;
                     }
 
                     $url = $assetRepo->getAssetUrl($asset);
+
                     if (self::FIELD_TYPE_FILE_IMAGE === $fieldType) {
                         $image = Display::img(
                             $url,
                             $field['display_text'],
-                            ['width' => '300']
+                            ['width' => '300'],
+                            false
                         );
                         $displayedValue = Display::url(
                             $image,

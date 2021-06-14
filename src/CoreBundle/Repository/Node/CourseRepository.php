@@ -23,7 +23,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Class CourseRepository.
  *
- * The functions inside this class must return an instance of QueryBuilder.
+ * The functions inside this class should return an instance of QueryBuilder.
  */
 class CourseRepository extends ResourceRepository
 {
@@ -56,8 +56,8 @@ class CourseRepository extends ResourceRepository
         $em = $this->getEntityManager();
 
         // Deleting all nodes connected to the course:
-        $node = $course->getResourceNode();
-        $children = $node->getChildren();
+        //$node = $course->getResourceNode();
+        //$children = $node->getChildren();
         ///* var ResourceNode $child
         /*foreach ($children as $child) {
             var_dump($child->getId().'-'.$child->getTitle().'<br />');
@@ -67,6 +67,7 @@ class CourseRepository extends ResourceRepository
 
         $em->remove($course);
         $em->flush();
+        $em->clear();
     }
 
     public function findOneByCode(string $code): ?Course

@@ -153,6 +153,7 @@ class ResourceNode
 
     /**
      * Shortcut to access Course resource from ResourceNode.
+     * Groups({"resource_node:read", "course:read"}).
      *
      * ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Illustration", mappedBy="resourceNode")
      */

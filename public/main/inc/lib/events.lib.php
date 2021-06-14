@@ -6,7 +6,7 @@ use Chamilo\CoreBundle\Entity\Course as CourseEntity;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\TrackEAttemptRecording;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
-use Chamilo\CoreBundle\Entity\User as UserEntity;
+use Chamilo\CoreBundle\Entity\User;
 use ChamiloSession as Session;
 
 /**
@@ -819,7 +819,7 @@ class Event
                 $event_value = serialize($event_value);
             }
 
-            if ($event_value instanceof UserEntity) {
+            if ($event_value instanceof User) {
                 $event_value = serialize(
                     [
                         'id' => $event_value->getId(),
@@ -2460,7 +2460,7 @@ class Event
         return $now - $time;
     }
 
-    public static function logSubscribedUserInCourse(UserEntity $subscribedUser, CourseEntity $course)
+    public static function logSubscribedUserInCourse(User $subscribedUser, CourseEntity $course)
     {
         $dateTime = api_get_utc_datetime();
         $registrantId = api_get_user_id();
@@ -2485,7 +2485,7 @@ class Event
     }
 
     public static function logUserSubscribedInCourseSession(
-        UserEntity $userSubscribed,
+        User $userSubscribed,
         CourseEntity $course,
         SessionEntity $session
     ) {

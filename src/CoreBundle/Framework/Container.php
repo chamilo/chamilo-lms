@@ -519,15 +519,12 @@ class Container
         return self::$container->get(ToolChain::class);
     }
 
-    public static function setLegacyServices(ContainerInterface $container, bool $setSession = true): void
+    public static function setLegacyServices(ContainerInterface $container): void
     {
-        Database::setConnection($container->get('doctrine.dbal.default_connection'));
-        $em = $container->get('doctrine.orm.entity_manager');
+        $doctrine = $container->get('doctrine');
+        Database::setConnection($doctrine->getConnection());
+        /** @var EntityManager $em */
+        $em = $doctrine->getManager();
         Database::setManager($em);
-        // Setting course tool chain (in order to create tools to a course)
-        //CourseManager::setToolList($container->get(ToolChain::class));
-        /*if ($setSession) {
-            self::$session = $container->get('session');
-        }*/
     }
 }

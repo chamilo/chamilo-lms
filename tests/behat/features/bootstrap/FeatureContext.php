@@ -311,7 +311,6 @@ class FeatureContext extends MinkContext
         );
     }
 
-
     /**
      * @Then /^I fill the only ckeditor in the page with "([^"]*)"$/
      */

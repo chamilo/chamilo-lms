@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\UserBundle\Entity\User;
 
 /**
@@ -121,9 +122,8 @@ if ($typeUser) {
 } elseif ($typeSession) {
     $sessions = [];
     $user = api_get_user_entity($currentUserId);
-    $userSubscriptions = $user->getSessionCourseSubscriptions();
+    $userSubscriptions = $user->getSessionRelCourseRelUsers();
 
-    /** @var SessionRelCourseRelUser $userSubscription */
     foreach ($userSubscriptions as $userSubscription) {
         $sessions[$userSubscription->getSession()->getId()] = $userSubscription->getSession()->getName();
     }
@@ -142,8 +142,7 @@ if ($typeUser) {
     }
 } elseif ($typeFinalLp) {
     // We need here to check the current user courses first
-    /** @var User $user */
-    $user = UserManager::getRepository()->find($currentUserId);
+    $user = api_get_user_entity($currentUserId);
     $courses = $user->getCourses();
     $courseLpList = [];
     $sessionLpList = [];
@@ -157,10 +156,10 @@ if ($typeUser) {
     }
 
     // Here now checking the current user sessions
-    $sessions = $user->getSessionCourseSubscriptions();
+    $sessions = $user->getSessionRelCourseRelUsers();
     foreach ($sessions as $session) {
         $thisLpList = $em
-            ->getRepository('ChamiloCourseBundle:CLp')
+            ->getRepository(CLp::class)
             ->findBy(['sessionId' => $session->getSession()->getId()]);
 
         // Here check all the lpItems

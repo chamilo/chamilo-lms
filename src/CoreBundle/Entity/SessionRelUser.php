@@ -6,7 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
 use DateTimeZone;
@@ -15,12 +17,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * User subscriptions to a session see also SessionRelCourseRelUser.php for a more detail subscription.
+ * User subscriptions to a session. See also SessionRelCourseRelUser.php for a more detail subscription by course.
  *
- * @ApiResource(
- *     shortName="SessionSubscription",
- *     normalizationContext={"groups"={"session_rel_user:read"}}
- * )
  * @ORM\Table(
  *     name="session_rel_user",
  *     indexes={
@@ -29,6 +27,29 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * )
  * @ORM\Entity
  */
+#[ApiResource(
+    attributes: [
+        'security' => "is_granted('ROLE_USER')",
+    ],
+    collectionOperations: [
+        'get' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+        'post' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+    ],
+    itemOperations: [
+        'get' => [
+            'security' => "is_granted('ROLE_ADMIN') or object.user == user",
+        ],
+    ],
+    normalizationContext: [
+        'groups' => ['session_rel_user:read', 'user:read'],
+    ],
+)]
+#[ApiFilter(SearchFilter::class, properties: ['session' => 'exact', 'user' => 'exact'])]
+
 class SessionRelUser
 {
     use UserTrait;
@@ -101,6 +122,7 @@ class SessionRelUser
 
     public function __construct()
     {
+        $this->relationType = 0;
         $this->duration = 0;
         $this->movedTo = null;
         $this->movedStatus = null;

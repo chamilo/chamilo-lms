@@ -6152,7 +6152,7 @@ __metadata:
     easy-pie-chart: ^2.1.7
     easytimer.js: ^1.3.2
     eslint: ^7.28.0
-    eslint-plugin-vue: ^7.11.0
+    eslint-plugin-vue: ^7.11.1
     file-loader: ^6.2.0
     filemanager-webpack-plugin: ^5.0.0
     flag-icon-css: ^3.5.0
@@ -6186,7 +6186,7 @@ __metadata:
     optimize-css-assets-webpack-plugin: ^6.0.0
     path: ^0.12.7
     popper.js: ^1.16.1
-    postcss: ^8.3.2
+    postcss: ^8.3.3
     postcss-loader: ^5.3.0
     postcss-prefix-selector: ^1.9.0
     postcss-rtl: ^1.7.3
@@ -8588,9 +8588,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-vue@npm:^7.11.0":
-  version: 7.11.0
-  resolution: "eslint-plugin-vue@npm:7.11.0"
+"eslint-plugin-vue@npm:^7.11.1":
+  version: 7.11.1
+  resolution: "eslint-plugin-vue@npm:7.11.1"
   dependencies:
     eslint-utils: ^2.1.0
     natural-compare: ^1.4.0
@@ -8598,7 +8598,7 @@ __metadata:
     vue-eslint-parser: ^7.6.0
   peerDependencies:
     eslint: ^6.2.0 || ^7.0.0
-  checksum: 8215a2ea5aa72bf2943df7862fe7c306bc0d98afe3ac35bfd1517d7af47eb267f79a1a6099096ca536d5e38f5717c7f8ef80c8274f7a2fc0f299a4f54c7f897e
+  checksum: e4ae6feb50ff8ed66711cebf234264d9ae52593153dc81560168942a84edadec76ecfad7e2bcae4139887214a534f689b881e74ad7d8a6afd87b75735c9355c9
   languageName: node
   linkType: hard
 
@@ -15648,14 +15648,14 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.3.2":
-  version: 8.3.2
-  resolution: "postcss@npm:8.3.2"
+"postcss@npm:^8.3.3":
+  version: 8.3.3
+  resolution: "postcss@npm:8.3.3"
   dependencies:
     colorette: ^1.2.2
     nanoid: ^3.1.23
     source-map-js: ^0.6.2
-  checksum: 31e03ca7a5fdb86b92066bb31c152145254da2fc47dab1bb015ac4a3649a621d1a43d9464c2ce9fe8c13a7a253beb45185ac6ed0b059009c757fe65a2af35ab2
+  checksum: 3e8e8310b40e6ea87f4338af8f9890ace40cea774e0f5bf741ea436d71de89c3c4d955e7877ff8b2ab8ce7a283b2216bc7b9e1e895b9c9ef2bfa8e2bc248d94a
   languageName: node
   linkType: hard
 

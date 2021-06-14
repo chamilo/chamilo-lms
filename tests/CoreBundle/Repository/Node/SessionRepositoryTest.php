@@ -49,8 +49,7 @@ class SessionRepositoryTest extends AbstractApiTest
         $session = (new Session())
             ->setName($name)
             ->setGeneralCoach($this->getUser('admin'))
-            ->addAccessUrl($this->getAccessUrl())
-        ;
+            ->addAccessUrl($this->getAccessUrl());
         $errors = $this->getViolations($session);
         $this->assertCount(1, $errors);
 
@@ -77,10 +76,12 @@ class SessionRepositoryTest extends AbstractApiTest
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(201);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
-        $this->assertJsonContains([
-            '@context' => '/api/contexts/Session',
-            'name' => 'test',
-        ]);
+        $this->assertJsonContains(
+            [
+                '@context' => '/api/contexts/Session',
+                'name' => 'test',
+            ]
+        );
     }
 
     public function testUpdateWithApi(): void
@@ -104,10 +105,12 @@ class SessionRepositoryTest extends AbstractApiTest
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
-        $this->assertJsonContains([
-            '@context' => '/api/contexts/Session',
-            'name' => $newSessionName,
-        ]);
+        $this->assertJsonContains(
+            [
+                '@context' => '/api/contexts/Session',
+                'name' => $newSessionName,
+            ]
+        );
     }
 
     public function testAddCourseToSessionWithApi(): void
@@ -131,12 +134,14 @@ class SessionRepositoryTest extends AbstractApiTest
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(201);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
-        $this->assertJsonContains([
-            '@context' => '/api/contexts/SessionRelCourse',
-            '@type' => 'SessionRelCourse',
-            'session' => '/api/sessions/'.$session->getId(),
-            'course' => '/api/courses/'.$course->getId(),
-        ]);
+        $this->assertJsonContains(
+            [
+                '@context' => '/api/contexts/SessionRelCourse',
+                '@type' => 'SessionRelCourse',
+                'session' => '/api/sessions/'.$session->getId(),
+                'course' => '/api/courses/'.$course->getId(),
+            ]
+        );
     }
 
     public function testAddUserToSessionWithApi(): void
@@ -168,7 +173,7 @@ class SessionRepositoryTest extends AbstractApiTest
                 'session' => [
                     '@id' => '/api/sessions/'.$session->getId(),
                 ],
-                [
+                'user' => [
                     '@id' => '/api/users/'.$testUser->getId(),
                 ],
             ]

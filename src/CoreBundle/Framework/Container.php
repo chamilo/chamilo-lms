@@ -523,6 +523,8 @@ class Container
     {
         $doctrine = $container->get('doctrine');
         Database::setConnection($doctrine->getConnection());
-        Database::setManager($doctrine->getManager());
+        /** @var EntityManager $em */
+        $em = $doctrine->getManager();
+        Database::setManager($em);
     }
 }

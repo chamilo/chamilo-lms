@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageAttachment;
 use Chamilo\CoreBundle\Entity\MessageFeedback;
@@ -2872,27 +2873,23 @@ class MessageManager
     /**
      * @param string $subject
      * @param string $message
-     * @param array  $courseInfo
+     * @param Course $course
      * @param int    $sessionId
      *
      * @return bool
      */
-    public static function sendMessageToAllUsersInCourse($subject, $message, $courseInfo, $sessionId = 0)
+    public static function sendMessageToAllUsersInCourse($subject, $message, Course $course, $sessionId = 0)
     {
-        if (empty($courseInfo)) {
-            return false;
-        }
-
         $senderId = api_get_user_id();
         if (empty($senderId)) {
             return false;
         }
         if (empty($sessionId)) {
             // Course students and teachers
-            $users = CourseManager::get_user_list_from_course_code($courseInfo['code']);
+            $users = CourseManager::get_user_list_from_course_code($course->getCode());
         } else {
             // Course-session students and course session coaches
-            $users = CourseManager::get_user_list_from_course_code($courseInfo['code'], $sessionId);
+            $users = CourseManager::get_user_list_from_course_code($course->getCode(), $sessionId);
         }
 
         if (empty($users)) {

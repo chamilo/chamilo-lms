@@ -340,6 +340,7 @@ class AddCourse
                 //['path' => '/video/flv', 'title' => 'flv', 'filetype' => 'folder', 'size' => 0],
             ];
             $paths = [];
+            $courseInfo = ['real_id' => $course->getId()];
             foreach ($files as $file) {
                 $doc = self::insertDocument($courseInfo, $counter, $file, $authorId);
                 $paths[$file['path']] = $doc->getIid();
@@ -636,7 +637,7 @@ class AddCourse
      * @param array $params      Course details (see code for details).
      * @param int   $accessUrlId Optional.
      *
-     * @return int Created course ID
+     * @return Course|null
      *
      * @todo use an array called $params instead of lots of params
      * @assert (null) === false
@@ -739,8 +740,9 @@ class AddCourse
         if (null === $user) {
             error_log(sprintf('user_id "%s" is invalid', $userId));
 
-            return 0;
+            return null;
         }
+
         $course = null;
         if ($valid) {
             $repo = Container::getCourseRepository();

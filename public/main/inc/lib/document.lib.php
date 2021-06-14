@@ -6246,14 +6246,14 @@ This folder contains all sessions that have been opened in the chat. Although th
         if ($document) {
             $allowNotification = api_get_configuration_value('send_notification_when_document_added');
             if ($sendNotification && $allowNotification) {
-                $courseTitle = $courseInfo['title'];
+                $courseTitle = $courseEntity->getTitle();
                 if (!empty($sessionId)) {
                     $sessionInfo = api_get_session_info($sessionId);
                     $courseTitle .= ' ( '.$sessionInfo['name'].') ';
                 }
 
                 $url = api_get_path(WEB_CODE_PATH).
-                    'document/showinframes.php?cid='.$courseInfo['code'].'&sid='.$sessionId.'&id='.$document->getIid();
+                    'document/showinframes.php?cid='.$courseEntity->getId().'&sid='.$sessionId.'&id='.$document->getIid();
                 $link = Display::url(basename($title), $url, ['target' => '_blank']);
                 $userInfo = api_get_user_info($userId);
                 $message = sprintf(
@@ -6263,7 +6263,7 @@ This folder contains all sessions that have been opened in the chat. Although th
                     $userInfo['complete_name']
                 );
                 $subject = sprintf(get_lang('New document added to course %s'), $courseTitle);
-                MessageManager::sendMessageToAllUsersInCourse($subject, $message, $courseInfo, $sessionId);
+                MessageManager::sendMessageToAllUsersInCourse($subject, $message, $courseEntity, $sessionId);
             }
 
             return $document;

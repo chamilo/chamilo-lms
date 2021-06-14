@@ -129,7 +129,7 @@ function api_get_language_isocode()
         return $request->getLocale();
     }
 
-    return 'en';
+    return 'en_US';
 }
 
 /**

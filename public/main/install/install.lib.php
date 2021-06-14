@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\DataFixtures\LanguageFixtures;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\BranchSync;
 use Chamilo\CoreBundle\Entity\Group;
@@ -380,6 +381,10 @@ function writeSystemConfigFile($path)
  */
 function get_language_folder_list()
 {
+    $languages = LanguageFixtures::getLanguages();
+
+    return array_column($languages, 'english_name', 'isocode');
+
     return [
         'ar' => 'arabic',
         'ast' => 'asturian',
@@ -573,33 +578,12 @@ function display_step_sequence()
 /**
  * Displays a drop down box for selection the preferred language.
  */
-function display_language_selection_box($name = 'language_list', $default_language = 'en')
+function display_language_selection_box($name = 'language_list', $default_language = 'en_US')
 {
-    // Reading language list.
-    $language_list = get_language_folder_list();
-
-    // Sanity checks due to the possibility for customizations.
-    if (!is_array($language_list) || empty($language_list)) {
-        $language_list = ['en' => 'English'];
-    }
-
-    // Sorting again, if it is necessary.
-    //asort($language_list);
-
-    // More sanity checks.
-    if (!array_key_exists($default_language, $language_list)) {
-        if (array_key_exists('en', $language_list)) {
-            $default_language = 'en';
-        } else {
-            $language_keys = array_keys($language_list);
-            $default_language = $language_keys[0];
-        }
-    }
-
     // Displaying the box.
     return Display::select(
         'language_list',
-        $language_list,
+        get_language_folder_list(),
         $default_language,
         ['class' => 'form-control'],
         false

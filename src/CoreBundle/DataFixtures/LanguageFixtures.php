@@ -14,7 +14,23 @@ class LanguageFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $list = [
+        $list = self::getLanguages();
+        foreach ($list as $data) {
+            $lang = (new Language())
+                ->setOriginalName($data['original_name'])
+                ->setEnglishName($data['english_name'])
+                ->setIsocode($data['isocode'])
+                ->setAvailable(1 === $data['available'])
+            ;
+            $manager->persist($lang);
+        }
+
+        $manager->flush();
+    }
+
+    public static function getLanguages(): array
+    {
+        return [
             [
                 'original_name' => 'العربية',
                 'english_name' => 'arabic',
@@ -382,17 +398,5 @@ class LanguageFixtures extends Fixture
                 'available' => 0,
             ],
         ];
-
-        foreach ($list as $data) {
-            $lang = (new Language())
-                ->setOriginalName($data['original_name'])
-                ->setEnglishName($data['english_name'])
-                ->setIsocode($data['isocode'])
-                ->setAvailable(1 === $data['available'])
-            ;
-            $manager->persist($lang);
-        }
-
-        $manager->flush();
     }
 }

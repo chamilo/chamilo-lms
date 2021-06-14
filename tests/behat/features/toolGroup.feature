@@ -240,7 +240,6 @@ Feature: Group tool
     And I follow "Group 0001"
     Then I should see "Group 0001"
     And I follow "Announcements"
-    Then I should see "Announcements"
     Then I follow "Add an announcement"
     And wait for the page to be loaded
     Then I should see "Add an announcement"
@@ -259,7 +258,6 @@ Feature: Group tool
     And I follow "Group 0001"
     Then I should see "Group 0001"
     And I follow "Announcements"
-    Then I should see "Announcements"
     Then I follow "Add an announcement"
     And wait very long for the page to be loaded
     Then I should see "Add an announcement"
@@ -282,7 +280,6 @@ Feature: Group tool
     Then I should see "Group 0003"
     And I follow "Announcements"
     Then wait for the page to be loaded
-    Then I should see "Announcements"
     Then I follow "Add an announcement"
     And wait for the page to be loaded
     Then I should see "Add an announcement"
@@ -301,7 +298,6 @@ Feature: Group tool
     And I follow "Group 0003"
     Then I should see "Group 0003"
     And I follow "Announcements"
-    Then I should see "Announcements"
     Then I follow "Add an announcement"
     Then wait for the page to be loaded
     Then I should see "Add an announcement"

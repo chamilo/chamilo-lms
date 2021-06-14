@@ -287,6 +287,8 @@ class TicketManager
      * @param string $priority
      * @param string $status
      * @param int    $assignedUserId
+     * @param int    $exerciseId
+     * @param int    $lpId
      *
      * @return bool
      */
@@ -303,7 +305,9 @@ class TicketManager
         $source = '',
         $priority = '',
         $status = '',
-        $assignedUserId = 0
+        $assignedUserId = 0,
+        $exerciseId = null,
+        $lpId = null
     ) {
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_category = Database::get_main_table(TABLE_TICKET_CATEGORY);
@@ -364,6 +368,13 @@ class TicketManager
             'subject' => $subject,
             'message' => $content,
         ];
+        if (!empty($exerciseId)) {
+            $params['exercise_id'] = $exerciseId;
+        }
+
+        if (!empty($lpId)) {
+            $params['lp_id'] = $lpId;
+        }
 
         if (!empty($course_id)) {
             $params['course_id'] = $course_id;
@@ -1204,6 +1215,35 @@ class TicketManager
                     }
                     if ($course) {
                         $row['course_url'] = '<a href="'.$course['course_public_url'].'?id_session='.$sessionId.'">'.$course['name'].'</a>';
+                    }
+
+                    $row['exercise_url'] = null;
+
+                    if (!empty($row['exercise_id'])) {
+                        $exerciseTitle = ExerciseLib::getExerciseTitleById($row['exercise_id']);
+                        $dataExercise = [
+                            'cidReq' => $course['code'],
+                            'id_session' => $sessionId,
+                            'exerciseId' => $row['exercise_id'],
+                        ];
+                        $urlParamsExercise = http_build_query($dataExercise);
+
+                        $row['exercise_url'] = '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.$urlParamsExercise.'">'.$exerciseTitle.'</a>';
+                    }
+
+                    $row['lp_url'] = null;
+
+                    if (!empty($row['lp_id'])) {
+                        $lpName = learnpath::getLpNameById($row['lp_id']);
+                        $dataLp = [
+                            'cidReq' => $course['code'],
+                            'id_session' => $sessionId,
+                            'lp_id' => $row['lp_id'],
+                            'action' => 'view',
+                        ];
+                        $urlParamsLp = http_build_query($dataLp);
+
+                        $row['lp_url'] = '<a href="'.api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.$urlParamsLp.'">'.$lpName.'</a>';
                     }
                 }
 

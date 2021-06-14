@@ -12,7 +12,10 @@ RewriteEngine on
 RedirectMatch 403 ^/app/(?!courses/proxy)(cache|courses|home|logs|upload|Resources/public/css)/.*\.ph(p[3457]?|t|tml|ar)$
 RedirectMatch 403 ^/main/default_course_document/images/.*\.ph(p[3457]?|t|tml|ar)$
 RedirectMatch 403 ^/main/lang/.*\.ph(p[3457]?|t|tml|ar)$
-RedirectMatch 403 ^/web/.*\.ph(p[3457]?|t|tml|ar)$
+RedirectMatch 403 ^/web/(!app.php).*\.ph(p[3457]?|t|tml|ar)$
+
+RewriteRule ^/?app/config/.*\.yml$ - [F,L]
+RewriteRule ^/?app/config/.*\.yaml$ - [F,L]
 
 # http://my.chamilo.net/certificates/?id=123 to http://my.chamilo.net/certificates/index.php?id=123
 RewriteCond %{QUERY_STRING} ^id=(.*)$
@@ -47,13 +50,13 @@ RewriteRule ^courses/([^/]+)/course-pic.png$ main/inc/ajax/course.ajax.php?a=get
 RewriteRule ^courses/([^/]+)/(.*)$ app/courses/$1/$2 [QSA,L]
 
 # About session
-RewriteRule ^session/(\d{1,})/about/?$ main/session/about.php?session_id=$1 [L]
+RewriteRule ^session/(\d{1,})/about/?$ main/session/about.php?session_id=$1 [QSA,L]
 
 # About course
-RewriteRule ^course/(\d{1,})/about/?$ main/course_info/about.php?course_id=$1 [L]
+RewriteRule ^course/(\d{1,})/about/?$ main/course_info/about.php?course_id=$1 [QSA,L]
 
 # Issued individual badge friendly URL
-RewriteRule ^badge/(\d{1,})/?$ main/badge/issued.php?issue=$1 [L]
+RewriteRule ^badge/(\d{1,})/?$ main/badge/issued.php?issue=$1 [QSA,L]
 
 # Issued badges friendly URL
 RewriteRule ^skill/(\d{1,})/user/(\d{1,})/?$ main/badge/issued_all.php?skill=$1&user=$2 [L]

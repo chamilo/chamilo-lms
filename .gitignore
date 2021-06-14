@@ -2,6 +2,7 @@
 
 app/cache/*
 !app/cache/.gitkeep
+!app/cache/.htaccess
 
 app/logs/*
 !app/logs/.gitkeep

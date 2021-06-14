@@ -4,8 +4,6 @@
  * This script gives information about a course.
  *
  * @author Bart Mollet
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -70,8 +68,8 @@ function get_course_usage($course, $session_id = 0)
 
     $usage = [];
     $conditionSession = '';
-    if ($session_id !== '') {
-        $session_id = intval($session_id);
+    if ('' !== $session_id) {
+        $session_id = (int) $session_id;
         $conditionSession = " AND session_id = '$session_id' ";
     }
 
@@ -131,11 +129,11 @@ $sql = "SELECT *, cu.status as course_status
 if (api_is_multiple_url_enabled()) {
     $sql .= " INNER JOIN ".Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER)." url_rel_user
         ON 
-            u.user_id = url_rel_user.user_id AND 
+            u.id = url_rel_user.user_id AND
             url_rel_user.access_url_id = ".api_get_current_access_url_id();
 }
 $sql .= " WHERE
-            cu.user_id = u.user_id AND
+            cu.user_id = u.id AND
             cu.c_id = '".$courseId."' AND
             cu.relation_type <> ".COURSE_RELATION_TYPE_RRHH;
 $res = Database::query($sql);

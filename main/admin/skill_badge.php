@@ -4,8 +4,6 @@
  * Show information about Mozilla OpenBadges.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.admin.openbadges
  */
 $cidReset = true;
 

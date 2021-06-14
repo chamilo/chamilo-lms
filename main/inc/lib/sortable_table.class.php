@@ -100,6 +100,8 @@ class SortableTable extends HTML_Table
      */
     public $table_data;
     public $hideItemSelector;
+    // Hide table navigation, better to be use when exporting table to PDF.
+    public $hideNavigation = false;
 
     /**
      * @var array Columns to hide

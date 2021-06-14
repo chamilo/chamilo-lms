@@ -13,7 +13,6 @@ class UnserializeApi
      *
      * @param string $type
      * @param string $serialized
-     * @param bool   $ignoreErrors. Optional.
      *
      * @return mixed
      */

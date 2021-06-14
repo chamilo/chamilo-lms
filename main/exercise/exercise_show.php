@@ -139,8 +139,16 @@ if (!$is_allowedToEdit) {
 $allowRecordAudio = api_get_setting('enable_record_audio') === 'true';
 $allowTeacherCommentAudio = api_get_configuration_value('allow_teacher_comment_audio') === true;
 
-$js = '<script>'.api_get_language_translate_html().'</script>';
-$htmlHeadXtra[] = $js;
+$showTranslateJs = true;
+// Disable translate js when editing the exercise.
+if ($is_allowedToEdit && in_array($action, ['qualify', 'edit', 'export'])) {
+    $showTranslateJs = false;
+}
+
+if ($showTranslateJs) {
+    $js = '<script>'.api_get_language_translate_html().'</script>';
+    $htmlHeadXtra[] = $js;
+}
 
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
@@ -490,7 +498,7 @@ foreach ($questionList as $questionId) {
                                     $(function() {
                                         new HotspotQuestion({
                                             questionId: $questionId,
-                                            exerciseId: {$objExercise->id},                                            
+                                            exerciseId: {$objExercise->id},
                                             exeId: $id,
                                             selector: '#hotspot-solution-$questionId-$id',
                                             for: 'solution',
@@ -642,7 +650,7 @@ foreach ($questionList as $questionId) {
                 }
 
                 // Showing the score
-                $queryfree = "SELECT marks FROM $TBL_TRACK_ATTEMPT 
+                $queryfree = "SELECT marks FROM $TBL_TRACK_ATTEMPT
                               WHERE exe_id = $id AND question_id= ".intval($questionId);
                 $resfree = Database::query($queryfree);
                 $questionScore = Database::result($resfree, 0, "marks");

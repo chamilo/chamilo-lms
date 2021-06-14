@@ -66,8 +66,9 @@ class LearnpathList
         $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
 
         $order = ' ORDER BY lp.displayOrder ASC, lp.name ASC';
-        if (isset($order_by)) {
-            $order = Database::parse_conditions(['order' => $order_by]);
+        if (!empty($order_by)) {
+            // @todo Replace with criteria order by
+            $order = ' ORDER BY '.Database::escape_string($order_by);
         }
 
         $now = api_get_utc_datetime();
@@ -115,12 +116,12 @@ class LearnpathList
 
             $sql2 = "SELECT visibility FROM $tbl_tool
                      WHERE
-                        c_id = $course_id AND 
+                        c_id = $course_id AND
                         name = '$name' AND
                         image = 'scormbuilder.gif' AND
                         (
                             link LIKE '$link%' OR
-                            link LIKE '$oldLink%'                                
+                            link LIKE '$oldLink%'
                         )
                       ";
             $res2 = Database::query($sql2);

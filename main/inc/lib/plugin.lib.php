@@ -126,6 +126,8 @@ class AppPlugin
     }
 
     /**
+     * Returns a list of all installed plugins.
+     *
      * @param bool $fromDatabase
      *
      * @return array
@@ -159,6 +161,115 @@ class AppPlugin
         return $installedPlugins;
     }
 
+    public function getInstalledPluginsInCurrentUrl()
+    {
+        $installedPlugins = [];
+        $urlId = api_get_current_access_url_id();
+        $plugins = api_get_settings_params(
+            [
+                'variable = ? AND selected_value = ? AND category = ? AND access_url = ?' => ['status', 'installed', 'Plugins', $urlId],
+            ]
+        );
+
+        if (!empty($plugins)) {
+            foreach ($plugins as $row) {
+                $installedPlugins[$row['subkey']] = true;
+            }
+            $installedPlugins = array_keys($installedPlugins);
+        }
+
+        return $installedPlugins;
+    }
+
+    /**
+     * Returns a list of all official (delivered with the Chamilo package)
+     * plugins. This list is maintained manually and updated with every new
+     * release to avoid hacking.
+     *
+     * @return array
+     */
+    public function getOfficialPlugins()
+    {
+        static $officialPlugins = null;
+        // Please keep this list alphabetically sorted
+        $officialPlugins = [
+            'add_cas_login_button',
+            'add_cas_logout_button',
+            'add_facebook_login_button',
+            'add_shibboleth_login_button',
+            'advanced_subscription',
+            'azure_active_directory',
+            'bbb',
+            'before_login',
+            'buycourses',
+            'card_game',
+            'check_extra_field_author_company',
+            'cleandeletedfiles',
+            'clockworksms',
+            'courseblock',
+            'coursehomenotify',
+            'courselegal',
+            'createdrupaluser',
+            'customcertificate',
+            'customfooter',
+            'dashboard',
+            'date',
+            'dictionary',
+            'embedregistry',
+            'exercise_signature',
+            'ext_auth_chamilo_logout_button_behaviour',
+            'follow_buttons',
+            'formLogin_hide_unhide',
+            'google_maps',
+            'google_meet',
+            'grading_electronic',
+            'h5p',
+            'hello_world',
+            'ims_lti',
+            'jcapture',
+            'justification',
+            'kannelsms',
+            'keycloak',
+            'learning_calendar',
+            'maintenancemode',
+            'migrationmoodle',
+            'mindmap',
+            'nosearchindex',
+            'notebookteacher',
+            'oauth2',
+            'olpc_peru_filter',
+            'openmeetings',
+            'pausetraining',
+            'pens',
+            'positioning',
+            'questionoptionsevaluation',
+            'redirection',
+            'remedial_course',
+            'reports',
+            'resubscription',
+            'rss',
+            'search_course',
+            'send_notification_new_lp',
+            'sepe',
+            'share_buttons',
+            'show_regions',
+            'show_user_info',
+            'static',
+            'studentfollowup',
+            'surveyexportcsv',
+            'surveyexporttxt',
+            'test2pdf',
+            'toplinks',
+            'tour',
+            'userremoteservice',
+            'vchamilo',
+            'whispeakauth',
+            'zoom',
+            'xapi',
+        ];
+
+        return $officialPlugins;
+    }
     /**
      * @param string $pluginName
      * @param int    $urlId

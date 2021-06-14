@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- *  @package chamilo.admin
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -11,7 +8,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-if (api_get_setting('gradebook_enable_grade_model') != 'true') {
+if (api_get_setting('gradebook_enable_grade_model') !== 'true') {
     api_not_allowed(true);
 }
 
@@ -29,7 +26,7 @@ $token = Security::get_token();
 if ($action === 'add') {
     $interbreadcrumb[] = ['url' => 'grade_models.php', 'name' => get_lang('GradeModel')];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add')];
-} elseif ($action == 'edit') {
+} elseif ($action === 'edit') {
     $interbreadcrumb[] = ['url' => 'grade_models.php', 'name' => get_lang('GradeModel')];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
 } else {
@@ -53,11 +50,8 @@ function plusItem(item) {
 function minItem(item) {
     if (item != 1) {
         document.getElementById(item).style.display = "none";
-        //document.getElementById("txta-"+item).value = "";
-        //document.getElementById("txtb-"+item).value = "";
         document.getElementById("plus-"+item).style.display = "inline";
         document.getElementById("min-"+(item-1)).style.display = "inline";
-        //document.getElementById("txta-"+(item-1)).value = "100";
         $("input").removeClass("form-control");
 	}
 	if (item = 1) {

@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
+use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 use CpChart\Cache as pCache;
@@ -51,7 +52,7 @@ class Tracking
             return null;
         }
         $courseInfo = api_get_course_info_by_id($course_id);
-        if ($type == 'count') {
+        if ('count' == $type) {
             return GroupManager::get_group_list(null, $courseInfo, null, $sessionId, true);
         }
 
@@ -1970,6 +1971,9 @@ class Tracking
         // protect data
         $student_id = (int) $student_id;
         $session_id = (int) $session_id;
+        if (empty($courseInfo) || empty($student_id)) {
+            return false;
+        }
         $courseId = $courseInfo['real_id'];
 
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
@@ -2055,6 +2059,57 @@ class Tracking
         return false;
     }
 
+    public static function getLastConnectionInAnyCourse($studentId)
+    {
+        $studentId = (int) $studentId;
+
+        if (empty($studentId)) {
+            return false;
+        }
+
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $sql = "SELECT logout_course_date
+                FROM $table
+                WHERE user_id = $studentId
+                ORDER BY logout_course_date DESC
+                LIMIT 1";
+        $result = Database::query($sql);
+        if (Database::num_rows($result)) {
+            $row = Database::fetch_array($result);
+
+            return $row['logout_course_date'];
+        }
+
+        return false;
+    }
+
+    /**
+     * Get last course access by course/session.
+     */
+    public static function getLastConnectionDateByCourse($courseId, $sessionId = 0)
+    {
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+
+        $sql = "SELECT logout_course_date
+                FROM $table
+                WHERE
+                        c_id = $courseId AND
+                        session_id = $sessionId
+                ORDER BY logout_course_date DESC
+                LIMIT 0,1";
+
+        $result = Database::query($sql);
+        if (Database::num_rows($result)) {
+            $row = Database::fetch_array($result);
+            if ($row) {
+                return $row['logout_course_date'];
+            }
+        }
+
+        return '';
+    }
     /**
      * Get count of the connections to the course during a specified period.
      *
@@ -2175,7 +2230,8 @@ class Tracking
      * @param string code
      * @param int id (optional), filtered by exercise
      * @param int id (optional), if param $session_id is null
-     *                                                it'll return results including sessions, 0 = session is not filtered
+     *                                                it'll return results including sessions, 0 = session is not
+     *                                                filtered
      *
      * @return string value (number %) Which represents a round integer about the score average
      */
@@ -2301,7 +2357,10 @@ class Tracking
                         ";
                         $result = Database::query($sql);
                         $row_lp = Database::fetch_row($result);
-                        $lp_name = $row_lp[0];
+                        $lp_name = null;
+                        if ($row_lp && isset($row_lp[0])) {
+                            $lp_name = $row_lp[0];
+                        }
 
                         return [$quiz_avg_score, $lp_name];
                     } else {
@@ -2414,6 +2473,7 @@ class Tracking
                     ex.c_id = $courseId AND
                     ex.session_id  = $session_id AND
                     ex.exe_user_id = $user_id AND
+                    ex.status = '' AND
                     ex.exe_exo_id IN ('$exercise_list_imploded') ";
 
         $rs = Database::query($sql);
@@ -2853,7 +2913,7 @@ class Tracking
             }
 
             // Compose a filter based on optional session id
-            $session_id = intval($session_id);
+        $session_id = (int) $session_id;
             if (count($lp_ids) > 0) {
                 $condition_session = " AND session_id = $session_id ";
             } else {
@@ -3283,7 +3343,7 @@ class Tracking
      * @param int       $session_id  Session id (optional), if param $session_id is null(default)
      *                               it'll return results including sessions, 0 = session is not filtered
      *
-     * @return int Total time
+     * @return int Total time in seconds
      */
     public static function get_time_spent_in_lp(
         $student_id,

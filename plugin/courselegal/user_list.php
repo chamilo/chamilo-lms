@@ -39,7 +39,7 @@ switch ($action) {
 
 $order = " ORDER BY firstname, lastname";
 $userList = $legal->getUserAgreementList($courseId, $sessionId, $order);
-$table = new HTML_Table(['class' => 'data_table']);
+$table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
 $table->setHeaderContents(0, 0, get_lang('User'));
 $table->setHeaderContents(0, 1, $legal->get_lang('WebAgreement'));
 $table->setHeaderContents(0, 2, $legal->get_lang('MailAgreement'));

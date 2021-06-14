@@ -3,8 +3,6 @@
 
 /**
  *	This script displays a form for registering new users.
- *
- *	@package	 chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -74,9 +72,9 @@ if (api_is_multiple_url_enabled()) {
         $clean_url = str_replace('/', '-', $clean_url);
         $clean_url .= '/';
 
-        $homep = api_get_path(SYS_APP_PATH).'home/'; //homep for Home Path
-        $homep_new = api_get_path(SYS_APP_PATH).'home/'.$clean_url; //homep for Home Path added the url
-        $new_url_dir = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
+        $homep = api_get_path(SYS_HOME_PATH); //homep for Home Path
+        $homep_new = api_get_path(SYS_HOME_PATH).$clean_url; //homep for Home Path added the url
+        $new_url_dir = api_get_path(SYS_HOME_PATH).$clean_url;
         //we create the new dir for the new sites
         if (!is_dir($new_url_dir)) {
             mkdir($new_url_dir, api_get_permissions_for_new_directories());
@@ -84,7 +82,7 @@ if (api_is_multiple_url_enabled()) {
     }
 } else {
     $homep_new = '';
-    $homep = api_get_path(SYS_APP_PATH).'home/'; //homep for Home Path
+    $homep = api_get_path(SYS_HOME_PATH); //homep for Home Path
 }
 
 $topf = 'register_top'; //topf for Top File
@@ -205,11 +203,21 @@ if ($display_all_form) {
     }
 
     //	USERNAME
-    $form->addElement('text', 'username', get_lang('UserName'), ['size' => USERNAME_MAX_LENGTH, 'disabled' => 'disabled']);
+    $form->addElement(
+        'text',
+        'username',
+        get_lang('UserName'),
+        ['size' => USERNAME_MAX_LENGTH, 'disabled' => 'disabled']
+    );
     $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('username', get_lang('UsernameWrong'), 'username');
     $form->addRule('username', get_lang('UserTaken'), 'username_available');
-    $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+    $form->addRule(
+        'username',
+        sprintf(get_lang('UsernameMaxXCharacters'), (string) USERNAME_MAX_LENGTH),
+        'maxlength',
+        USERNAME_MAX_LENGTH
+    );
 
     //	PASSWORD
     $form->addElement('password', 'pass1', get_lang('Pass'), ['size' => 40, 'disabled' => 'disabled']);

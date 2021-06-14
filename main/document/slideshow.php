@@ -7,12 +7,13 @@ use ChamiloSession as Session;
  * @author Patrick Cool patrick.cool@UGent.be Ghent University Mai 2004
  * @author Julio Montoya Lots of improvements, cleaning, adding security
  * @author Juan Carlos Raña Trabado herodoto@telefonica.net	January 2008
- *
- * @package chamilo.document
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
+if (api_get_configuration_value('disable_slideshow_documents')) {
+    api_not_allowed(true);
+}
 
 $curdirpath = $path = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
 $courseInfo = api_get_course_info();

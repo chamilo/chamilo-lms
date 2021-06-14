@@ -16,7 +16,6 @@ $logInfo = [
     'action_details' => 'start-chat',
 ];
 Event::registerLog($logInfo);
-// View
 $externalCSS = [
     'jquery-emojiarea/jquery.emojiarea.css',
     'jquery-textcomplete/jquery.textcomplete.css',

@@ -14,8 +14,6 @@ use Fhaculty\Graph\Vertex;
  * Class SkillProfile.
  *
  * @todo break the file in different classes
- *
- * @package chamilo.library
  */
 class SkillProfile extends Model
 {
@@ -1458,9 +1456,8 @@ class Skill extends Model
         }
 
         if ($addTitle) {
-            $tableResult .= '<h3 class="section-title">'.get_lang('AchievedSkills').'</h3>
-                    <div class="skills-badges">
-                   ';
+            $tableResult .= Display::page_subheader(get_lang('AchievedSkills'));
+            $tableResult .= '<div class="skills-badges">';
         }
 
         if (!empty($skillParents)) {

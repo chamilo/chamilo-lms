@@ -9,12 +9,12 @@
                 {% if is_allowed_to_edit %}
                     <div class="pull-right">
                         {% if session_id == description.session_id %}
-                            <a href="{{ _p.web_self }}?action=edit&amp;id={{ description.id }}&amp;{{ _p.web_cid_query }}"
+                            <a href="{{ _p.web_self }}?action=edit&id={{ description.id }}&{{ _p.web_cid_query }}"
                                title="{{ 'Edit'|get_lang }}">
                                 <img src="{{ 'edit.png'|icon(22) }}"/>
                             </a>
-                            <a href="{{ _p.web_self }}?action=delete&amp;id={{ description.id }}&amp;{{ _p.web_cid_query }}"
-                               onclick="javascript:return confirmation('{{ description.title_js }}');"
+                            <a href="{{ _p.web_self }}?action=delete&id={{ description.id }}&{{ _p.web_cid_query }}"
+                               onclick = "javascript:return confirmation('{{ description.title_js | e('js') }}');"
                                title="{{ 'Delete'|get_lang }}">
                                 <img src="{{ 'delete.png'|icon(22) }}"/>
                             </a>
@@ -26,10 +26,10 @@
                         {% endif %}
                     </div>
                 {% endif %}
-                {{ description.title }}
+                {{ description.title | remove_xss }}
             </div>
             <div class="panel-body">
-                {{ description.content }}
+                {{ description.content | remove_xss }}
             </div>
         </div>
     {% endif %}

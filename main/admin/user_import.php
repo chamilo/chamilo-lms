@@ -6,8 +6,6 @@ use ChamiloSession as Session;
 
 /**
  * This tool allows platform admins to add users by uploading a CSV or XML file.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -74,6 +72,17 @@ function validate_data($users, $checkUniqueEmail = false)
             if (!UserManager::is_username_available($username)) {
                 $user['message'] .= Display::return_message(get_lang('UserNameNotAvailable'), 'warning');
                 $user['has_error'] = true;
+            }
+            if ('true' === api_get_setting('login_is_email')) {
+                if (false === api_valid_email($username)) {
+                    $user['message'] .= Display::return_message(get_lang('PleaseEnterValidEmail'), 'warning');
+                    $user['has_error'] = true;
+                }
+            } else {
+                if (!UserManager::is_username_valid($username)) {
+                    $user['message'] .= Display::return_message(get_lang('UsernameWrong'), 'warning');
+                    $user['has_error'] = true;
+                }
             }
         }
 
@@ -423,10 +432,9 @@ function parse_csv_data($users, $fileName, $sendEmail = 0, $checkUniqueEmail = t
  *
  * @return array All user information read from the file
  */
-function parse_xml_data($file)
+function parse_xml_data($file, $sendEmail = 0, $checkUniqueEmail = true)
 {
-    $crawler = new \Symfony\Component\DomCrawler\Crawler();
-    $crawler->addXmlContent(file_get_contents($file));
+    $crawler = Import::xml($file);
     $crawler = $crawler->filter('Contacts > Contact ');
     $array = [];
     foreach ($crawler as $domElement) {
@@ -440,6 +448,15 @@ function parse_xml_data($file)
             $array[] = $row;
         }
     }
+    Session::write(
+        'user_import_data_'.api_get_user_id(),
+        [
+            'check_unique_email' => $checkUniqueEmail,
+            'send_email' => $sendEmail,
+            'date' => api_get_utc_datetime(),
+            'log_messages' => '',
+        ]
+    );
 
     return $array;
 }
@@ -483,7 +500,7 @@ function processUsers(&$users, $sendMail)
     }
 
     // if the warning message is too long then we display the warning message trough a session
-    Display::addFlash(Display::return_message(get_lang('FileImported'), 'confirmation', false));
+    //Display::addFlash(Display::return_message(get_lang('FileImported'), 'confirmation', false));
 
     $importData = Session::read('user_import_data_'.api_get_user_id());
     if (!empty($importData)) {
@@ -538,7 +555,11 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
             $users = validate_data($users, $checkUniqueEmail);
             $error_kind_file = false;
         } elseif (strcmp($file_type, 'xml') === 0 && $ext_import_file == $allowed_file_mimetype[1]) {
-            $users = parse_xml_data($_FILES['import_file']['tmp_name']);
+            $users = parse_xml_data(
+                $_FILES['import_file']['tmp_name'],
+                $sendMail,
+                $checkUniqueEmail
+            );
             $users = validate_data($users, $checkUniqueEmail);
             $error_kind_file = false;
         }
@@ -569,7 +590,6 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
                 false
             )
         );
-        //header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_list.php?sec_token='.$tok);
         header('Location: '.api_get_self());
         exit;
     }
@@ -588,7 +608,9 @@ if (!empty($importData)) {
         $label = get_lang('ContinueLastImport');
     }
     $formContinue->addHeader($label);
-    $formContinue->addLabel(get_lang('File'), $importData['filename']);
+    if (isset($importData['filename'])) {
+        $formContinue->addLabel(get_lang('File'), $importData['filename'] ?? '');
+    }
 
     $resumeStop = true;
     if ($isResume) {
@@ -604,10 +626,12 @@ if (!empty($importData)) {
             $importData['counter'].' / '.count($importData['complete_list'])
         );
     } else {
-        $formContinue->addLabel(
-            get_lang('Users'),
-            count($importData['complete_list'])
-        );
+        if (!empty($importData['complete_list'])) {
+            $formContinue->addLabel(
+                get_lang('Users'),
+                count($importData['complete_list'])
+            );
+        }
     }
 
     $formContinue->addLabel(
@@ -624,7 +648,7 @@ if (!empty($importData)) {
         }
     }
 
-    $formContinue->addHtml(get_lang('Results').'<br />'.$importData['log_messages']);
+    $formContinue->addHtml('<br />'.$importData['log_messages']);
 
     if ($formContinue->validate()) {
         $users = parse_csv_data(

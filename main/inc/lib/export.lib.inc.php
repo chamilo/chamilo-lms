@@ -172,7 +172,7 @@ class Export
     public static function export_complex_table_xml(
         $data,
         $filename = 'export',
-        $wrapper_tagname,
+        $wrapper_tagname = null,
         $encoding = 'ISO-8859-1'
     ) {
         $file = api_get_path(SYS_ARCHIVE_PATH).'/'.uniqid('').'.xml';
@@ -259,7 +259,7 @@ class Export
         unset($data[0]);
 
         $header_attributes = isset($params['header_attributes']) ? $params['header_attributes'] : [];
-        $table = new HTML_Table(['class' => 'data_table', 'repeat_header' => '1']);
+        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table', 'repeat_header' => '1']);
         $row = 0;
         $column = 0;
         foreach ($headers as $header) {

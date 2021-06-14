@@ -4,10 +4,6 @@
 use ChamiloSession as Session;
 
 /**
- * @author Patrick Cool
- *
- * @package chamilo.document
- *
  * @author Patrick Cool, patrick.cool@UGent.be, Ghent University, May 2004, http://icto.UGent.be
  * Please bear in mind that this is only an beta release.
  * I wrote this quite quick and didn't think too much about it in advance.
@@ -26,6 +22,9 @@ use ChamiloSession as Session;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 api_protect_course_script();
+if (api_get_configuration_value('disable_slideshow_documents')) {
+    api_not_allowed(true);
+}
 
 $path = Security::remove_XSS($_GET['curdirpath']);
 $pathurl = urlencode($path);

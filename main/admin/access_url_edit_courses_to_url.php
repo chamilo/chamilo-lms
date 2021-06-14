@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.admin
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 // resetting the course id

@@ -568,11 +568,22 @@ class Database
             }
         }
 
+        if ($type_result === 'count') {
+            $clean_columns = ' count(*) count ';
+        }
         $sql = "SELECT $clean_columns FROM $table_name $conditions";
         if ($debug) {
             var_dump($sql);
         }
         $result = self::query($sql);
+        if ($type_result === 'count') {
+            $row = self::fetch_array($result, $option);
+            if ($row) {
+                return (int) $row['count'];
+            }
+
+            return 0;
+        }
         $array = [];
 
         if ($type_result === 'all') {
@@ -793,5 +804,10 @@ class Database
     public static function listTableColumns($table)
     {
         return self::getManager()->getConnection()->getSchemaManager()->listTableColumns($table);
+    }
+
+    public static function escapeField($field)
+    {
+        return self::escape_string(preg_replace("/[^a-zA-Z0-9_.]/", '', $field));
     }
 }

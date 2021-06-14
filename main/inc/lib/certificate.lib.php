@@ -4,8 +4,6 @@
 /**
  * Certificate Class
  * Generate certificates based in the gradebook tool.
- *
- * @package chamilo.library.certificates
  */
 class Certificate extends Model
 {

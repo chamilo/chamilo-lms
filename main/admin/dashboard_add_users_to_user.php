@@ -3,8 +3,6 @@
 
 /**
  *  Interface for assigning users to Human Resources Manager.
- *
- *  @package chamilo.admin
  */
 
 // resetting the course id
@@ -69,6 +67,8 @@ function search_users($needle, $type = 'multiple')
 
     $xajax_response = new xajaxResponse();
     $return = '';
+    $needle = Database::escape_string($needle);
+    $type = Database::escape_string($type);
     if (!empty($needle) && !empty($type)) {
         $assigned_users_to_hrm = [];
 

@@ -35,6 +35,7 @@ function search_coachs($needle)
     $return = '';
 
     if (!empty($needle)) {
+        $needle = Database::escape_string($needle);
         $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 
         // search users where username or firstname or lastname begins likes $needle

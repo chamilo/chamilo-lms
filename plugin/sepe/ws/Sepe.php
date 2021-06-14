@@ -246,6 +246,8 @@ class Sepe
 
         // Comprobamos si existen datos almacenados previamente
         $table = Database::get_main_table('plugin_sepe_actions');
+        $actionOrigin = Database::escape_string($actionOrigin);
+        $actionCode = Database::escape_string($actionCode);
         $sql = "SELECT action_origin FROM $table
                 WHERE action_origin='".$actionOrigin."' AND action_code='".$actionCode."';";
         $rs = Database::query($sql);
@@ -263,11 +265,29 @@ class Sepe
         $startDate = self::fixDate($startDate);
         $endDate = self::fixDate($endDate);
 
-        $sql = "INSERT INTO $table (action_origin, action_code, situation, specialty_origin, professional_area, specialty_code, duration, start_date, end_date, full_itinerary_indicator, financing_type, attendees_count, action_name, global_info, schedule, requirements, contact_action)
-                VALUES ('".$actionOrigin."','".$actionCode."','".$situation."','".$specialtyOrigin."','".$professionalArea."','".$specialtyCode."','".$duration."','".$startDate."','".$endDate."','".$fullItineraryIndicator."','".$financingType."','".$attendeesCount."','".$actionName."','".$globalInfo."','".$schedule."','".$requerements."','".$contactAction."')";
+        $params = [
+            'action_origin' => $actionOrigin,
+            'action_code' => $actionCode,
+            'situation' => $situation,
+            'specialty_origin' => $specialtyOrigin,
+            'professional_area' => $professionalArea,
+            'specialty_code' => $specialtyCode,
+            'duration' => $duration,
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+            'full_itinerary_indicator' => $fullItineraryIndicator,
+            'financing_type' => $financingType,
+            'attendees_count' => $attendeesCount,
+            'action_name' => $actionName,
+            'global_info' => $globalInfo,
+            'schedule' => $schedule,
+            'requirements' => $requerements,
+            'contact_actio' => $contactAction,
+        ];
 
-        $rs = Database::query($sql);
-        if (!$rs) {
+        $actionId = Database::insert($table, $params);
+
+        if (!empty($actionId)) {
             return [
                 "RESPUESTA_OBT_ACCION" => [
                     "CODIGO_RETORNO" => "-1",
@@ -276,7 +296,6 @@ class Sepe
                 ],
             ];
         }
-        $actionId = Database::insert_id();
 
         // DATOS ESPECIALIDADES DE LA ACCION
         $table = Database::get_main_table('plugin_sepe_specialty');
@@ -397,6 +416,8 @@ class Sepe
                         foreach ($centroList as $centro) {
                             $centerOrigin = $centro->ORIGEN_CENTRO;
                             $centerCode = $centro->CODIGO_CENTRO;
+                            $centerOrigin = Database::escape_string($centerOrigin);
+                            $centerCode = Database::escape_string($centerCode);
                             $sql = "SELECT id FROM $tableCenters 
                                     WHERE center_origin='".$centerOrigin."' AND center_code='".$centerCode."';";
                             $res = Database::query($sql);
@@ -446,8 +467,12 @@ class Sepe
                                 $experienceTeleforming = $tutor->EXPERIENCIA_MODALIDAD_TELEFORMACION;
                                 $trainingTeleforming = $tutor->FORMACION_MODALIDAD_TELEFORMACION;
 
+                                $documentType = Database::escape_string($documentType);
+                                $documentNumber = Database::escape_string($documentNumber);
+                                $documentLetter = Database::escape_string($documentLetter);
                                 /* check tutor not exists */
-                                $sql = "SELECT id FROM $tableTutors WHERE 
+                                $sql = "SELECT id FROM $tableTutors
+                                        WHERE
                                           document_type='".$documentType."' AND 
                                           document_number='".$documentNumber."' AND 
                                           document_letter='".$documentLetter."';";
@@ -470,9 +495,16 @@ class Sepe
                                         ],
                                     ];
                                 }
-                                $sql = "INSERT INTO $tableSpecialityTutors (specialty_id, tutor_id, tutor_accreditation, professional_experience, teaching_competence, experience_teleforming, training_teleforming)
-                                        VALUES ('".$specialtyId."','".$tutorId."','".$tutorAccreditation."','".$professionalExperience."','".$teachingCompetence."','".$experienceTeleforming."','".$trainingTeleforming."');";
-                                Database::query($sql);
+                                $params = [
+                                    'specialty_id' => $specialtyId,
+                                    'tutor_id' => $tutorId,
+                                    'tutor_accreditation' => $tutorAccreditation,
+                                    'professional_experience' => $professionalExperience,
+                                    'teaching_competence' => $teachingCompetence,
+                                    'experience_teleforming' => $experienceTeleforming,
+                                    'training_teleforming' => $trainingTeleforming,
+                                ];
+                                Database::insert($tableSpecialityTutors, $params);
                             }
                         }
                     }
@@ -532,6 +564,9 @@ class Sepe
                     $documentNumberTraining = isset($participant->CONTRATO_FORMACION->ID_TUTOR_FORMACION->NUM_DOCUMENTO) ? $participant->CONTRATO_FORMACION->ID_TUTOR_FORMACION->NUM_DOCUMENTO : null;
                     $documentLetterTraining = isset($participant->CONTRATO_FORMACION->ID_TUTOR_FORMACION->LETRA_NIF) ? $participant->CONTRATO_FORMACION->ID_TUTOR_FORMACION->LETRA_NIF : null;
                     if (!empty($documentTypeTraining) || !empty($documentNumberTraining) || !empty($documentLetterTraining)) {
+                        $documentTypeTraining = Database::escape_string($documentTypeTraining);
+                        $documentNumberTraining = Database::escape_string($documentNumberTraining);
+                        $documentLetterTraining = Database::escape_string($documentLetterTraining);
                         $tmp_f = Database::query(
                             '
                             SELECT id FROM '.$tableTutorsCompany.' 
@@ -631,10 +666,23 @@ class Sepe
                         $endDate = self::fixDate($endDate);
 
                         $table_aux = Database::get_main_table('plugin_sepe_participants_specialty');
-                        $sql = "INSERT INTO $table_aux (participant_id,specialty_origin,professional_area,specialty_code,registration_date,leaving_date,center_origin,center_code,start_date,end_date,final_result,final_qualification,final_score)
-                                VALUES ('".$participantId."','".$specialtyOrigin."','".$professionalArea."','".$specialtyCode."','".$registrationDate."','".$leavingDate."','".$centerOrigin."','".$centerCode."','".$startDate."','".$endDate."','".$finalResult."','".$finalQualification."','".$finalScore."');";
-                        Database::query($sql);
-                        $participantSpecialtyId = Database::insert_id();
+                        $params = [
+                            'participant_id' => $participantId,
+                            'specialty_origin' => $specialtyOrigin,
+                            'professional_area' => $professionalArea,
+                            'specialty_code' => $specialtyCode,
+                            'registration_date' => $registrationDate,
+                            'leaving_date' => $leavingDate,
+                            'center_origin' => $centerOrigin,
+                            'center_code' => $centerCode,
+                            'start_date' => $startDate,
+                            'end_date' => $endDate,
+                            'final_result' => $finalResult,
+                            'final_qualification' => $finalQualification,
+                            'final_score' => $finalScore,
+                        ];
+
+                        $participantSpecialtyId = Database::insert($table_aux, $params);
                         if (empty($participantSpecialtyId)) {
                             return [
                                 "RESPUESTA_OBT_ACCION" => [
@@ -661,10 +709,16 @@ class Sepe
                                 $endDate = self::fixDate($endDate);
 
                                 $table_aux2 = Database::get_main_table('plugin_sepe_participants_specialty_tutorials');
-                                $sql = "INSERT INTO $table_aux2 (participant_specialty_id,center_origin,center_code,start_date,end_date)
-                                        VALUES ('".$participantSpecialtyId."','".$centerOrigin."','".$centerCode."','".$startDate."','".$endDate."');";
-                                $rs = Database::query($sql);
-                                if (!$rs) {
+                                $params = [
+                                    'participant_specialty_id' => $participantSpecialtyId,
+                                    'center_origin' => $centerOrigin,
+                                    'center_code' => $centerCode,
+                                    'start_date' => $startDate,
+                                    'end_date' => $endDate,
+                                ];
+                                $id = Database::insert($table_aux2, $params);
+
+                                if (!empty($id)) {
                                     return [
                                         "RESPUESTA_OBT_ACCION" => [
                                             "CODIGO_RETORNO" => "-1",
@@ -685,9 +739,7 @@ class Sepe
         $obtenerAccionInput->ID_ACCION->ORIGEN_ACCION = $actionOrigin;
         $obtenerAccionInput->ID_ACCION->CODIGO_ACCION = $actionCode;
 
-        $result = self::obtenerAccion($obtenerAccionInput);
-
-        return $result;
+        return self::obtenerAccion($obtenerAccionInput);
     }
 
     public function obtenerAccion($obtenerAccionInput)
@@ -724,6 +776,8 @@ class Sepe
         $participantsSpecialityTable = Database::get_main_table('plugin_sepe_participants_specialty');
         $participantsSpecialityTutorialsTable = Database::get_main_table('plugin_sepe_participants_specialty_tutorials');
         $tableTutorsCompany = Database::get_main_table('plugin_sepe_tutors_company');
+        $actionOrigin = Database::escape_string($actionOrigin);
+        $actionCode = Database::escape_string($actionCode);
 
         // Comprobamos si existen datos almacenados previamente
         $sql = "SELECT *

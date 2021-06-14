@@ -19,14 +19,53 @@ class Career extends Model
         'updated_at',
     ];
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->table = Database::get_main_table(TABLE_CAREER);
     }
 
+    public function getCareerFromId($id)
+    {
+        if (api_get_configuration_value('use_career_external_id_as_identifier_in_diagrams')) {
+            // Try with the external career id.
+            $careerInfo = $this->getCareerFromExternalToInternal($id);
+        } else {
+            $careerInfo = $this->get($id);
+        }
+
+        return $careerInfo;
+    }
+
+    public function getCareerFromExternalToInternal($externalCareerId, $extraFieldVariable = 'external_career_id')
+    {
+        $careerExtraFieldValue = new ExtraFieldValue('career');
+        $careerValue = $careerExtraFieldValue->get_item_id_from_field_variable_and_field_value(
+            $extraFieldVariable,
+            $externalCareerId
+        );
+
+        $careerInfo = [];
+        if (isset($careerValue['item_id'])) {
+            $careerInfo = $this->get($careerValue['item_id']);
+        }
+
+        return $careerInfo;
+    }
+
+    public function getCareerIdFromInternalToExternal($internalCareerId)
+    {
+        $careerExtraFieldValue = new ExtraFieldValue('career');
+        $externalCareerValue = $careerExtraFieldValue->get_values_by_handler_and_field_variable(
+            $internalCareerId,
+            'external_career_id'
+        );
+
+        if (!empty($externalCareerValue) && isset($externalCareerValue['value'])) {
+            return $externalCareerValue['value'];
+        }
+
+        return null;
+    }
     /**
      * Get the count of elements.
      *
@@ -473,6 +512,13 @@ class Career extends Model
             }
         }
 
+        $userResult = [];
+        if (!empty($loadUserIdData)) {
+            $careerData = UserManager::getUserCareer($loadUserIdData, $careerId);
+            if (isset($careerData['extra_data']) && !empty($careerData['extra_data'])) {
+                $userResult = unserialize($careerData['extra_data']);
+            }
+        }
         $list = [];
         $subGroups = [];
         /** @var Vertex $vertex */
@@ -492,7 +538,6 @@ class Career extends Model
             $subGroupLabel = isset($subGroupData[1]) ? $subGroupData[1] : '';
 
             if (!empty($subGroupId) && !in_array($subGroupId, $subGroups)) {
-                //$subGroups[$subGroupId][] = $vertex->getId();
                 $subGroups[$subGroupId]['items'][] = $vertex->getId();
                 $subGroups[$subGroupId]['label'] = $subGroupLabel;
             }

@@ -3,9 +3,6 @@
 
 use Chamilo\CoreBundle\Entity\ExtraFieldOptionRelFieldOption;
 
-/**
- *  @package chamilo.admin
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -20,7 +17,7 @@ $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')]
 $tool_name = null;
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
-$field_id = isset($_GET['field_id']) ? $_GET['field_id'] : null;
+$field_id = isset($_GET['field_id']) ? (int) $_GET['field_id'] : null;
 
 if (empty($field_id)) {
     api_not_allowed();
@@ -76,7 +73,7 @@ if ($action == 'add') {
     ];
 }
 
-$roleId = isset($_REQUEST['roleId']) ? $_REQUEST['roleId'] : null;
+$roleId = isset($_REQUEST['roleId']) ? (int) $_REQUEST['roleId'] : null;
 
 //jqgrid will use this URL to do the selects
 $params = 'field_id='.$field_id.'&type='.$extraField->type.'&roleId='.$roleId;
@@ -129,7 +126,7 @@ $result = Database::select(
     ]
 );
 
-$table = new HTML_Table(['class' => 'data_table']);
+$table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
 $column = 0;
 $row = 0;
 $table->setHeaderContents($row, $column, get_lang('CurrentStatus'));

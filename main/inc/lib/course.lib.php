@@ -4358,9 +4358,9 @@ class CourseManager
      */
     public static function is_user_accepted_legal($user_id, $course_code, $session_id = 0)
     {
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
+        $session_id = (int) $session_id;
         $course_code = Database::escape_string($course_code);
-        $session_id = intval($session_id);
 
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
@@ -4368,7 +4368,7 @@ class CourseManager
         // Course legal
         $enabled = api_get_plugin_setting('courselegal', 'tool_enable');
 
-        if ($enabled == 'true') {
+        if ('true' == $enabled) {
             require_once api_get_path(SYS_PLUGIN_PATH).'courselegal/config.php';
             $plugin = CourseLegalPlugin::create();
 
@@ -4441,6 +4441,7 @@ class CourseManager
                     WHERE user_id = $user_id AND c_id = $courseId AND session_id = $session_id";
             Database::query($sql);
         }
+        return true;
     }
 
     /**
@@ -4781,6 +4782,78 @@ class CourseManager
                 ORDER BY course_count DESC
                 LIMIT $limit
             ";
+
+        $result = Database::query($sql);
+        $courses = [];
+        if (Database::num_rows($result)) {
+            $courses = Database::store_result($result, 'ASSOC');
+            $courses = self::processHotCourseItem($courses, $codeList);
+        }
+
+        return $courses;
+    }
+
+    /**
+     * Returns an array with the "hand picked" popular courses.
+     * Courses only appear in this list if their extra field 'popular_courses'
+     * has been selected in the admin page of the course.
+     *
+     * @return array
+     */
+    public static function returnPopularCoursesHandPicked()
+    {
+        if (api_is_invitee()) {
+            return [];
+        }
+
+        $userId = api_get_user_id();
+
+        // Getting my courses
+        $my_course_list = self::get_courses_list_by_user_id($userId);
+
+        $codeList = [];
+        foreach ($my_course_list as $course) {
+            $codeList[$course['real_id']] = $course['real_id'];
+        }
+
+        if (api_is_drh()) {
+            $courses = self::get_courses_followed_by_drh($userId);
+            foreach ($courses as $course) {
+                $codeList[$course['real_id']] = $course['real_id'];
+            }
+        }
+
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tbl_course_field = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $tbl_course_field_value = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+
+        //we filter the courses from the URL
+        $join_access_url = $where_access_url = '';
+        if (api_get_multiple_access_url()) {
+            $access_url_id = api_get_current_access_url_id();
+            if ($access_url_id != -1) {
+                $tbl_url_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+                $join_access_url = "LEFT JOIN $tbl_url_course url_rel_course
+                ON url_rel_course.c_id = tcfv.item_id ";
+                $where_access_url = " AND access_url_id = $access_url_id ";
+            }
+        }
+
+        $extraFieldType = EntityExtraField::COURSE_FIELD_TYPE;
+
+        // get course list auto-register
+        $sql = "SELECT DISTINCT(c.id) AS c_id
+                FROM $tbl_course_field_value tcfv
+                INNER JOIN $tbl_course_field tcf
+                ON tcfv.field_id =  tcf.id $join_access_url
+                INNER JOIN $courseTable c
+                ON (c.id = tcfv.item_id)
+                WHERE
+                    tcf.extra_field_type = $extraFieldType AND
+                    tcf.variable = 'popular_courses' AND
+                    tcfv.value = 1 AND
+                    visibility <> ".COURSE_VISIBILITY_CLOSED." AND
+                    visibility <> ".COURSE_VISIBILITY_HIDDEN." $where_access_url";
 
         $result = Database::query($sql);
         $courses = [];
@@ -5330,6 +5403,12 @@ class CourseManager
             $courseSettings[] = 'lp_return_link';
         }
 
+        if (api_get_configuration_value('allow_portfolio_tool')) {
+            $courseSettings[] = 'email_alert_teachers_new_post';
+            $courseSettings[] = 'qualify_portfolio_item';
+            $courseSettings[] = 'qualify_portfolio_comment';
+            $courseSettings[] = 'portfolio_max_score';
+        }
         if (!empty($pluginCourseSettings)) {
             $courseSettings = array_merge(
                 $courseSettings,
@@ -5668,7 +5747,7 @@ class CourseManager
     public static function getCourseUsers($filterByActive = null)
     {
         // This would return only the users from real courses:
-        $userList = self::get_user_list_from_course_code(
+        return self::get_user_list_from_course_code(
             api_get_course_id(),
             api_get_session_id(),
             null,
@@ -5683,7 +5762,6 @@ class CourseManager
             $filterByActive
         );
 
-        return $userList;
     }
 
     /**
@@ -6024,7 +6102,7 @@ class CourseManager
                             ['class' => 'btn btn-primary btn-large']
                         );
 
-                        $exercise_redirect = intval(Session::read('exercise_redirect'));
+                        $exercise_redirect = (int) Session::read('exercise_redirect');
                         // Specify the course id as the current context does not
                         // hold a global $_course array
                         $objExercise = new Exercise($course_info['real_id']);
@@ -6449,13 +6527,143 @@ class CourseManager
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
         $tableExercise = Database::get_course_table(TABLE_QUIZ_TEST);
         $sql = "SELECT count(e.iid) count
-                FROM $table c INNER JOIN $tableExercise e
+                FROM $table c
+                INNER JOIN $tableExercise e
                 ON (c.id = e.c_id)
                 WHERE e.active <> -1 AND visibility IN (".implode(',', $visibility).")";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
 
         return (int) $row['count'];
+    }
+
+    /**
+     * retrieves all the courses that the user has already subscribed to.
+     *
+     * @param int $user_id
+     *
+     * @return array an array containing all the information of the courses of the given user
+     */
+    public static function getCoursesByUserCourseCategory($user_id)
+    {
+        $course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $courseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
+        $visibilityCondition = self::getCourseVisibilitySQLCondition('course', true);
+
+        // Secondly we select the courses that are in a category (user_course_cat<>0) and
+        // sort these according to the sort of the category
+        $user_id = (int) $user_id;
+        $sql = "SELECT
+                    course.code k,
+                    course.visual_code vc,
+                    course.subscribe subscr,
+                    course.unsubscribe unsubscr,
+                    course.title i,
+                    course.tutor_name t,
+                    course.category_code cat,
+                    course.directory dir,
+                    course_rel_user.status status,
+                    course_rel_user.sort sort,
+                    course_rel_user.user_course_cat user_course_cat
+                FROM $course course, $courseRelUser course_rel_user
+                WHERE
+                    course.id = course_rel_user.c_id AND
+                    course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
+                    course_rel_user.user_id = '".$user_id."'
+                    $avoidCoursesCondition
+                    $visibilityCondition
+                ORDER BY course_rel_user.sort ASC";
+
+        $result = Database::query($sql);
+        $courses = [];
+        while ($row = Database::fetch_array($result, 'ASOC')) {
+            $courses[] = [
+                'code' => $row['k'],
+                'visual_code' => $row['vc'],
+                'title' => $row['i'],
+                'directory' => $row['dir'],
+                'status' => $row['status'],
+                'tutor' => $row['t'],
+                'subscribe' => $row['subscr'],
+                'category' => $row['cat'],
+                'unsubscribe' => $row['unsubscr'],
+                'sort' => $row['sort'],
+                'user_course_category' => $row['user_course_cat'],
+            ];
+        }
+
+        return $courses;
+    }
+
+    /**
+     * @param string $listType
+     *
+     * @return string
+     */
+    public static function getCourseListTabs($listType)
+    {
+        $tabs = [
+            [
+                'content' => get_lang('SimpleCourseList'),
+                'url' => api_get_path(WEB_CODE_PATH).'admin/course_list.php',
+            ],
+            [
+                'content' => get_lang('AdminCourseList'),
+                'url' => api_get_path(WEB_CODE_PATH).'admin/course_list_admin.php',
+            ],
+        ];
+
+        $default = 1;
+        switch ($listType) {
+            case 'simple':
+                $default = 1;
+                break;
+            case 'admin':
+                $default = 2;
+                break;
+        }
+
+        return Display::tabsOnlyLink($tabs, $default);
+    }
+
+    public static function getUrlMarker($courseId)
+    {
+        if (UrlManager::getCountAccessUrlFromCourse($courseId) > 1) {
+            return '&nbsp;'.Display::returnFontAwesomeIcon(
+                'link',
+                null,
+                null,
+                null,
+                get_lang('CourseUsedInOtherURL')
+            );
+        }
+
+        return '';
+    }
+
+    public static function insertUserInCourse(int $studentId, int $courseId, array $relationInfo = [])
+    {
+        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
+        $relationInfo = array_merge(
+            ['relation_type' => 0, 'status' => STUDENT, 'sort' => 0, 'user_course_cat' => 0],
+            $relationInfo
+        );
+
+        Database::insert(
+            $courseUserTable,
+            [
+                'c_id' => $courseId,
+                'user_id' => $studentId,
+                'status' => $relationInfo['status'],
+                'sort' => $relationInfo['sort'],
+                'relation_type' => $relationInfo['relation_type'],
+                'user_course_cat' => $relationInfo['user_course_cat'],
+            ]
+        );
+
+        Event::logSubscribedUserInCourse($studentId, $courseId);
     }
 
     /**

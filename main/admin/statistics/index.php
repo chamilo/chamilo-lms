@@ -352,6 +352,7 @@ $tools = [
         'report=no_login_users' => get_lang('StatsUsersDidNotLoginInLastPeriods'),
         'report=zombies' => get_lang('Zombies'),
         'report=users_active' => get_lang('UserStats'),
+        'report=users_online' => get_lang('UsersOnline'),
     ],
     get_lang('System') => [
         'report=activities' => get_lang('ImportantActivities'),
@@ -937,7 +938,7 @@ switch ($report) {
             );
 
             $scoreDisplay = ScoreDisplay::instance();
-            $table = new HTML_Table(['class' => 'data_table']);
+            $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
             $headers = [
                 get_lang('Name'),
                 get_lang('Count'),
@@ -1141,7 +1142,7 @@ switch ($report) {
                 ];
 
                 while ($row = Database::fetch_array($query)) {
-                    ++$usersFound;
+                    $usersFound++;
                     if (!empty($row['value'])) {
                         $validDate = DateTime::createFromFormat('Y-m-d', $row['value']);
                         $validDate = $validDate && $validDate->format('Y-m-d') === $row['value'];
@@ -1151,13 +1152,13 @@ switch ($report) {
                             $years = (int) $interval->y;
 
                             if ($years >= 16 && $years <= 17) {
-                                ++$all['16-17'];
+                                $all['16-17']++;
                             }
                             if ($years >= 18 && $years <= 25) {
-                                ++$all['18-25'];
+                                $all['18-25']++;
                             }
                             if ($years >= 26 && $years <= 30) {
-                                ++$all['26-30'];
+                                $all['26-30']++;
                             }
                         }
                     }
@@ -1313,6 +1314,137 @@ switch ($report) {
 
         $content = $form->returnForm().$content;
 
+        break;
+    case 'users_online':
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $intervals = [3, 5, 30, 120];
+        $counts = [];
+        foreach ($intervals as $minutes) {
+            $sql = "SELECT count(distinct(user_id))
+                FROM $table WHERE
+                DATE_ADD(tms, INTERVAL '$minutes' MINUTE) > UTC_TIMESTAMP()";
+            $query = Database::query($sql);
+            $counts[$minutes] = 0;
+            if (Database::num_rows($query) > 0) {
+                $row = Database::fetch_array($query);
+                $counts[$minutes] = $row[0];
+            }
+        }
+        $content = '<div class="pull-left">'.get_lang('UsersOnline').'</div>
+        <div class="pull-right">'.api_get_local_time().'</div>
+        <hr />
+        <div class="tracking-course-summary">
+            <div class="row">
+                <div class="col-lg-3 col-sm-3">
+                    <div class="panel panel-default tracking tracking-exercise">
+                        <div class="panel-body">
+                            <span class="tracking-icon">
+                                <i class="fa fa-thermometer-4" aria-hidden="true"></i>
+                            </span>
+                            <div class="tracking-info">
+                                <div class="tracking-text">'.get_lang('UsersOnline').' (3\')</div>
+                                <div class="tracking-number">'.getOnlineUsersCount(3).'</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-3">
+                    <div class="panel panel-default tracking tracking-certificate">
+                        <div class="panel-body">
+                            <span class="tracking-icon">
+                                <i class="fa fa-thermometer-3" aria-hidden="true"></i>
+                            </span>
+                            <div class="tracking-info">
+                                <div class="tracking-text">'.get_lang('UsersOnline').' (5\')</div>
+                                <div class="tracking-number">'.getOnlineUsersCount(5).'</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-3">
+                    <div class="panel panel-default tracking tracking-lessons">
+                        <div class="panel-body">
+                            <span class="tracking-icon">
+                                <i class="fa fa-thermometer-2" aria-hidden="true"></i>
+                            </span>
+                            <div class="tracking-info">
+                                <div class="tracking-text">'.get_lang('UsersOnline').' (30\')</div>
+                                <div class="tracking-number">'.getOnlineUsersCount(30).'</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-3">
+                    <div class="panel panel-default tracking tracking-student">
+                        <div class="panel-body">
+                            <span class="tracking-icon">
+                                <i class="fa fa-thermometer-1" aria-hidden="true"></i>
+                            </span>
+                            <div class="tracking-info">
+                                <div class="tracking-text">'.get_lang('UsersOnline').' (120\')</div>
+                                <div class="tracking-number">'.getOnlineUsersCount(120).'</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="pull-left">'.get_lang('UsersActiveInATest').'</div>
+        <hr />
+        <div class="row">
+            <div class="col-lg-3 col-sm-3">
+                <div class="panel panel-default tracking tracking-exercise">
+                    <div class="panel-body">
+                        <span class="tracking-icon">
+                            <i class="fa fa-thermometer-4" aria-hidden="true"></i>
+                        </span>
+                        <div class="tracking-info">
+                            <div class="tracking-text">(3\')</div>
+                            <div class="tracking-number">'.$counts[3].'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-3">
+                <div class="panel panel-default tracking tracking-certificate">
+                    <div class="panel-body">
+                        <span class="tracking-icon">
+                            <i class="fa fa-thermometer-3" aria-hidden="true"></i>
+                        </span>
+                        <div class="tracking-info">
+                            <div class="tracking-text">(5\')</div>
+                            <div class="tracking-number">'.$counts[5].'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-3">
+                <div class="panel panel-default tracking tracking-lessons">
+                    <div class="panel-body">
+                        <span class="tracking-icon">
+                            <i class="fa fa-thermometer-2" aria-hidden="true"></i>
+                        </span>
+                        <div class="tracking-info">
+                            <div class="tracking-text">(30\')</div>
+                            <div class="tracking-number">'.$counts[30].'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="col-lg-3 col-sm-3">
+                <div class="panel panel-default tracking tracking-student">
+                    <div class="panel-body">
+                        <span class="tracking-icon">
+                            <i class="fa fa-thermometer-1" aria-hidden="true"></i>
+                        </span>
+                        <div class="tracking-info">
+                            <div class="tracking-text">(120\')</div>
+                            <div class="tracking-number">'.$counts[120].'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>';
         break;
     case 'users':
         $content .= '<div class="row">';

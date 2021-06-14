@@ -67,6 +67,7 @@ class CourseRepository extends ResourceRepository
 
         $em->remove($course);
         $em->flush();
+        $em->clear();
     }
 
     public function findOneByCode(string $code): ?Course

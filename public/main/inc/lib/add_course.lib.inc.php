@@ -308,6 +308,7 @@ class AddCourse
             ->addCourseLink($course)
         ;
         Database::getManager()->persist($groupCategory);
+        Database::getManager()->flush();
 
         $now = api_get_utc_datetime();
         /*$files = [

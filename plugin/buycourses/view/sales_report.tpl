@@ -23,6 +23,8 @@
             <th>{{ 'OrderDate'|get_plugin_lang('BuyCoursesPlugin') }}</th>
             <th>{{ 'PaymentMethod'|get_plugin_lang('BuyCoursesPlugin') }}</th>
             <th>{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+            <th>{{ 'CouponDiscount'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+            <th>{{ 'Coupon'|get_plugin_lang('BuyCoursesPlugin') }}</th>
             <th>{{ 'ProductType'|get_plugin_lang('BuyCoursesPlugin') }}</th>
             <th>{{ 'Name'|get_lang }}</th>
             <th>{{ 'UserName'|get_lang }}</th>
@@ -49,6 +51,8 @@
                 <td class="text-center">{{ sale.date | api_get_local_time }}</td>
                 <td class="text-center">{{ sale.payment_type }}</td>
                 <td class="text-right">{{ sale.total_price }}</td>
+                <td class="text-right">{{ sale.total_discount }}</td>
+                <td class="text-right">{{ sale.coupon_code }}</td>
                 <td class="text-center">{{ sale.product_type }}</td>
                 <td>{{ sale.product_name }}</td>
                 <td>{{ sale.complete_user_name }}</td>

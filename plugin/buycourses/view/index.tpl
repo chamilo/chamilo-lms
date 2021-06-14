@@ -20,7 +20,9 @@
 {% endif %}
 
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-2">
         <div class="thumbnail">
             <a href="src/course_catalog.php">
                 <img src="resources/img/128/buycourses.png">
@@ -35,7 +37,7 @@
     </div>
 
     {% if _u.is_admin %}
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="thumbnail">
                 <a href="src/list.php">
                     <img src="resources/img/128/settings.png">
@@ -48,7 +50,20 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
+            <div class="thumbnail">
+                <a href="src/coupons.php">
+                    <img src="resources/img/128/discount.png">
+                </a>
+                <div class="caption">
+                    <p class="text-center">
+                        <a class="btn btn-default btn-sm"
+                           href="src/coupons.php">{{ 'CouponsConfiguration'|get_plugin_lang('BuyCoursesPlugin') }}</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
             <div class="thumbnail">
                 <a href="src/paymentsetup.php">
                     <img src="resources/img/128/paymentsettings.png">
@@ -61,7 +76,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="thumbnail">
                 <a href="src/sales_report.php">
                     <img src="resources/img/128/backlogs.png">
@@ -73,6 +88,8 @@
                     </p>
                 </div>
             </div>
+        </div>
+        <div class="col-md-1">
         </div>
     {% endif %}
 </div>

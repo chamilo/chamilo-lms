@@ -257,6 +257,16 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SALE)) {
     $saleTable->addColumn('status', Types::INTEGER);
     $saleTable->addColumn('payment_type', Types::INTEGER);
     $saleTable->addColumn('invoice', Types::INTEGER);
+    $saleTable->addColumn(
+        'price_without_discount',
+        Types::DECIMAL,
+        ['scale' => 2, 'notnull' => false]
+    );
+    $saleTable->addColumn(
+        'discount_amount',
+        Types::DECIMAL,
+        ['scale' => 2, 'notnull' => false]
+    );
     $saleTable->setPrimaryKey(['id']);
     $saleTable->addForeignKeyConstraint(
         $currencyTable,
@@ -340,6 +350,16 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SERVICES_SALE)) {
     $servicesNodeTable->addColumn('status', Types::INTEGER);
     $servicesNodeTable->addColumn('payment_type', Types::INTEGER);
     $servicesNodeTable->addColumn('invoice', Types::INTEGER);
+    $servicesNodeTable->addColumn(
+        'price_without_discount',
+        Types::DECIMAL,
+        ['scale' => 2, 'notnull' => false]
+    );
+    $servicesNodeTable->addColumn(
+        'discount_amount',
+        Types::DECIMAL,
+        ['scale' => 2, 'notnull' => false]
+    );
     $servicesNodeTable->setPrimaryKey(['id']);
     $servicesNodeTable->addForeignKeyConstraint(
         $servicesTable,
@@ -412,6 +432,72 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_INVOICE)) {
     $invoiceTable->addColumn('serie', Types::STRING);
     $invoiceTable->addColumn('date_invoice', Types::DATETIME_MUTABLE);
     $invoiceTable->setPrimaryKey(['id']);
+}
+
+if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON)) {
+    $couponTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_COUPON);
+    $couponTable->addColumn(
+        'id',
+        Types::INTEGER,
+        ['autoincrement' => true, 'unsigned' => true]
+    );
+    $couponTable->addColumn('code', Types::STRING);
+	$couponTable->addColumn('discount_type', Types::INTEGER);
+	$couponTable->addColumn('discount_amount', Types::INTEGER);
+	$couponTable->addColumn('valid_start', Types::DATETIME_MUTABLE);
+	$couponTable->addColumn('valid_end', Types::DATETIME_MUTABLE);
+	$couponTable->addColumn('delivered', Types::INTEGER);
+    $couponTable->addColumn('active', Types::TINYINT);
+    $couponTable->setPrimaryKey(['id']);
+}
+
+if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON_ITEM)) {
+    $couponItemTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_COUPON_ITEM);
+    $couponItemTable->addColumn(
+        'id',
+        Types::INTEGER,
+        ['autoincrement' => true, 'unsigned' => true]
+    );
+    $couponItemTable->addColumn('coupon_id', Types::INTEGER);
+	$couponItemTable->addColumn('product_type', Types::INTEGER);
+	$couponItemTable->addColumn('product_id', Types::INTEGER);
+    $couponItemTable->setPrimaryKey(['id']);
+}
+
+if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON_SERVICE)) {
+    $couponService = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_COUPON_SERVICE);
+    $couponService->addColumn(
+        'id',
+        Types::INTEGER,
+        ['autoincrement' => true, 'unsigned' => true]
+    );
+    $couponService->addColumn('coupon_id', Types::INTEGER);
+	$couponService->addColumn('service_id', Types::INTEGER);
+    $couponService->setPrimaryKey(['id']);
+}
+
+if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON_SALE)) {
+    $couponSaleTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_COUPON_SALE);
+    $couponSaleTable->addColumn(
+        'id',
+        Types::INTEGER,
+        ['autoincrement' => true, 'unsigned' => true]
+    );
+	$couponSaleTable->addColumn('coupon_id', Types::INTEGER);
+    $couponSaleTable->addColumn('sale_id', Types::INTEGER);
+    $couponSaleTable->setPrimaryKey(['id']);
+}
+
+if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON_SERVICE_SALE)) {
+    $couponSaleTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_COUPON_SERVICE_SALE);
+    $couponSaleTable->addColumn(
+        'id',
+        Types::INTEGER,
+        ['autoincrement' => true, 'unsigned' => true]
+    );
+	$couponSaleTable->addColumn('coupon_id', Types::INTEGER);
+    $couponSaleTable->addColumn('service_sale_id', Types::INTEGER);
+    $couponSaleTable->setPrimaryKey(['id']);
 }
 
 $queries = $pluginSchema->toSql($platform);

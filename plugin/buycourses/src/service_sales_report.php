@@ -35,6 +35,14 @@ $form->addText('user', get_lang('User'), false, ['cols-size' => [0, 0, 0]]);
 $form->addButtonSearch(get_lang('Search'), 'search');
 
 $servicesSales = $plugin->getServiceSales(null, $selectedStatus);
+
+foreach ($servicesSales as &$sale) {
+    if (isset($sale['discount_amount']) && $sale['discount_amount'] != 0) {
+        $sale['total_discount'] = $plugin->getPriceWithCurrencyFromIsoCode($sale['discount_amount'], $sale['iso_code']);
+        $sale['coupon_code'] = $plugin->getServiceCouponCode($sale['id']);
+    }
+}
+
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => $plugin->get_lang('plugin_title')];
 
 $webPluginPath = api_get_path(WEB_PLUGIN_PATH);

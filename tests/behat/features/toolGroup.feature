@@ -352,7 +352,6 @@ Feature: Group tool
     And wait for the page to be loaded
     Then I should see "Announcement for all users inside Group 0001"
     Then I should see "Announcement for user fapple inside Group 0001"
-    And wait very long for the page to be loaded
     Then I follow "Announcement for user fapple inside Group 0001"
     Then I should see "Announcement description for user fapple inside Group 0001"
     Then I save current URL with name "announcement_for_user_fapple_group_0001_public"
@@ -397,11 +396,11 @@ Feature: Group tool
     And I should see "Group 0003"
     And I should see "Group 0004"
     Then I visit URL saved with name "announcement_for_user_fapple_group_0001_public"
-    Then I should see "not allowed"
+    Then I should see "Unauthorised"
     Then I visit URL saved with name "announcement_for_all_users_group_0001_public"
-    Then I should not see "not allowed"
+    Then I should not see "Unauthorised"
     Then I visit URL saved with name "announcement_only_for_fapple_private"
-    Then I should not see "not allowed"
+    Then I should not see "Unauthorised"
 
     Given I am not logged
     Given I am logged as "acostea"
@@ -414,12 +413,12 @@ Feature: Group tool
     And I should see "Group 0005"
 
     Then I visit URL saved with name "announcement_for_user_fapple_group_0001_public"
-    Then I should see "not allowed"
+    Then I should see "Unauthorised"
     Then I visit URL saved with name "announcement_for_all_users_group_0001_public"
-    Then I should not see "not allowed"
+    Then I should not see "Unauthorised"
     Then I visit URL saved with name "announcement_for_user_fapple_group_0003_private"
-    Then I should see "not allowed"
+    Then I should see "Unauthorised"
     Then I visit URL saved with name "announcement_for_all_users_group_0003_private"
-    Then I should see "not allowed"
+    Then I should see "Unauthorised"
     Then I visit URL saved with name "announcement_only_for_fapple_private"
-    Then I should not see "not allowed"
+    Then I should not see "Unauthorised"

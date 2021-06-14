@@ -496,8 +496,8 @@ class CourseRequestManager
         $params['user_id'] = $course_request_info['user_id'];
         $params['tutor_name'] = api_get_person_name($user_info['firstname'], $user_info['lastname']);
 
-        $course_info = CourseManager::create_course($params);
-        if (!empty($course_info)) {
+        $course = CourseManager::create_course($params);
+        if (null !== $course) {
             // Mark the request as accepted.
             $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)."
                     SET status = ".COURSE_REQUEST_ACCEPTED."
@@ -508,36 +508,62 @@ class CourseRequestManager
 
             // E-mail language: The platform language seems to be the best choice
             $email_language = api_get_setting('platformLanguage');
-            $email_subject = sprintf(get_lang('CourseRequestAcceptedEmailSubject', null, $email_language), '['.api_get_setting('siteName').']', $course_info['code']);
+            $email_subject = sprintf(
+                get_lang('CourseRequestAcceptedEmailSubject', null, $email_language),
+                '['.api_get_setting('siteName').']',
+                $course->getCode()
+            );
 
             $email_body = get_lang('Dear', null, $email_language).' ';
-            $email_body .= api_get_person_name($user_info['firstname'], $user_info['lastname'], null, null, $email_language).",\n\n";
-            $email_body .= sprintf(
-                get_lang(
-                    'CourseRequestAcceptedEmailText',
+            $email_body .= api_get_person_name(
+                    $user_info['firstname'],
+                    $user_info['lastname'],
+                    null,
                     null,
                     $email_language
-                ),
-                $course_info['code'],
-                $course_info['code'],
-                api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/'
-            )."\n";
+                ).",\n\n";
+            $email_body .= sprintf(
+                    get_lang(
+                        'CourseRequestAcceptedEmailText',
+                        null,
+                        $email_language
+                    ),
+                    $course->getCode(),
+                    $course->getCode(),
+                    api_get_course_url($course->getId())
+                )."\n";
             $email_body .= "\n".get_lang('Formula', null, $email_language)."\n";
-            $email_body .= api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, null, $email_language)."\n";
+            $email_body .= api_get_person_name(
+                    api_get_setting('administratorName'),
+                    api_get_setting('administratorSurname'),
+                    null,
+                    null,
+                    $email_language
+                )."\n";
             $email_body .= get_lang('Manager', null, $email_language).' '.api_get_setting('siteName')."\n";
             $email_body .= get_lang('Phone', null, $email_language).': '.api_get_setting('administratorTelephone')."\n";
             $email_body .= get_lang('Email', null, $email_language).': '.api_get_setting('emailAdministrator', null, $email_language)."\n";
             $email_body .= "\n".get_lang('CourseRequestLegalNote', null, $email_language)."\n";
 
-            $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+            $sender_name = api_get_person_name(
+                api_get_setting('administratorName'),
+                api_get_setting('administratorSurname'),
+                null,
+                PERSON_NAME_EMAIL_ADDRESS
+            );
             $sender_email = api_get_setting('emailAdministrator');
-            $recipient_name = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
+            $recipient_name = api_get_person_name(
+                $user_info['firstname'],
+                $user_info['lastname'],
+                null,
+                PERSON_NAME_EMAIL_ADDRESS
+            );
             $recipient_email = $user_info['mail'];
 
             $additionalParameters = [
                 'smsType' => SmsPlugin::COURSE_OPENING_REQUEST_CODE_APPROVED,
                 'userId' => $user_id,
-                'courseCode' => $course_info['code'],
+                'courseCode' => $course->getCode(),
             ];
 
             api_mail_html(
@@ -553,7 +579,7 @@ class CourseRequestManager
                 $additionalParameters
             );
 
-            return $course_info['code'];
+            return $course->getCode();
         }
 
         return false;

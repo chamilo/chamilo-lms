@@ -164,7 +164,7 @@ class ExtraFieldValue extends Model
             }
 
             $commentVariable = 'extra_'.$field_variable.'_comment';
-            $comment = isset($params[$commentVariable]) ? $params[$commentVariable] : null;
+            $comment = $params[$commentVariable] ?? null;
 
             switch ($extraFieldInfo['field_type']) {
                 case ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:

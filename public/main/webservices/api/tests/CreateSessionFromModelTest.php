@@ -198,7 +198,7 @@ class CreateSessionFromModelTest extends V2TestCase
         $authorId = UserManager::get_user_id_from_username(self::WEBSERVICE_USERNAME);
         foreach ($courseCodes as $code) {
             $course = CourseManager::create_course(['code' => $code, 'title' => $code], $authorId);
-            $courseList[] = $course['real_id'];
+            $courseList[] = $course->getId();
         }
         SessionManager::add_courses_to_session($modelSessionId, $courseList);
 

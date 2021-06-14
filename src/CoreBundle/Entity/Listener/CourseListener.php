@@ -46,10 +46,10 @@ class CourseListener
     public function prePersist(Course $course, LifecycleEventArgs $args): void
     {
         //error_log('Course listener prePersist');
-        if ($course) {
+        /*if ($course) {
             // $this->checkLimit($repo, $course, $url);
             $this->toolChain->addToolsInCourse($course);
-        }
+        }*/
     }
 
     public function postPersist(Course $course, LifecycleEventArgs $args): void
@@ -57,13 +57,11 @@ class CourseListener
         //error_log('Course listener postPersist');
         if ($course) {
             //error_log('add tools');
-            //$this->toolChain->addToolsInCourse($this->toolRepository, $course);
-            /*$urlRelCourse = $course->getUrls()->first();
-            $url = $urlRelCourse->getUrl();*/
-            //$url = $course->getCurrentUrl();
-            //$repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
             ///$this->checkLimit($repo, $course, $url);
-            //$this->toolChain->addToolsInCourse($course);
+            $this->toolChain->addToolsInCourse($course);
+
+            $args->getEntityManager()->persist($course);
+            $args->getEntityManager()->flush();
         }
     }
 

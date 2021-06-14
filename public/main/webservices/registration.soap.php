@@ -3036,10 +3036,10 @@ function WSCreateCourse($params)
             $params['unsubscribe'] = $unsubscribe;
         }
 
-        $course_info = CourseManager::create_course($params, $sessionAdminId);
+        $course = CourseManager::create_course($params, $sessionAdminId);
 
-        if (!empty($course_info)) {
-            $course_code = $course_info['code'];
+        if (null !== $course) {
+            $course_code = $course->getCode();
 
             // Save new field label into course_field table
             CourseManager::create_course_extra_field(
@@ -3247,9 +3247,9 @@ function WSCreateCourseByTitle($params)
             $params['tutor_name'] = $tutor_name;
             $params['course_language'] = $course_language;
             $params['user_id'] = $sessionAdminId;
-            $course_info = CourseManager::create_course($params, $sessionAdminId);
-            if (!empty($course_info)) {
-                $course_code = $course_info['code'];
+            $course = CourseManager::create_course($params, $sessionAdminId);
+            if (null !== $course) {
+                $course_code = $course->getCode();
 
                 // Save new fieldlabel into course_field table.
                 CourseManager::create_course_extra_field(

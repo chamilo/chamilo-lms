@@ -1265,17 +1265,17 @@ class Rest extends WebService
             }
         }
 
-        $courseInfo = CourseManager::create_course($params, $params['user_id'], $idCampus);
+        $course = CourseManager::create_course($params, $params['user_id'], $idCampus);
 
         $results = [];
-        if (!empty($courseInfo)) {
+        if (null !== $course) {
             $results['status'] = true;
-            $results['code_course'] = $courseInfo['code'];
-            $results['title_course'] = $courseInfo['title'];
+            $results['code_course'] = $course->getCode();
+            $results['title_course'] = $course->getTitle();
             $extraFieldValues = new ExtraFieldValue('course');
-            $extraFields = $extraFieldValues->getAllValuesByItem($courseInfo['real_id']);
+            $extraFields = $extraFieldValues->getAllValuesByItem($course->getId());
             $results['extra_fields'] = $extraFields;
-            $results['message'] = sprintf(get_lang('CourseXAdded'), $courseInfo['code']);
+            $results['message'] = sprintf(get_lang('CourseXAdded'), $course->getCode());
         } else {
             $results['status'] = false;
             $results['message'] = get_lang('CourseCreationFailed');

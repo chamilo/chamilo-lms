@@ -39,17 +39,18 @@ class CourseManager
      * @param int   $authorId    Optional.
      * @param int   $accessUrlId Optional.
      *
-     * @return mixed false if the course was not created, array with the course info
+     * @return Course|null
      */
     public static function create_course($params, $authorId = 0, $accessUrlId = 0)
     {
-        global $_configuration;
+        //global $_configuration;
 
         // Check portal limits
         $accessUrlId = !empty($accessUrlId) ? (int) $accessUrlId : api_get_current_access_url_id();
         $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
 
-        if (isset($_configuration[$accessUrlId]) && is_array($_configuration[$accessUrlId])) {
+        // @todo Check that this was move inside the CourseListener in a pre persist throw an Exception
+        /*if (isset($_configuration[$accessUrlId]) && is_array($_configuration[$accessUrlId])) {
             $return = self::checkCreateCourseAccessUrlParam(
                 $_configuration,
                 $accessUrlId,
@@ -68,7 +69,7 @@ class CourseManager
             if (false != $return) {
                 return $return;
             }
-        }
+        }*/
 
         if (empty($params['title'])) {
             return false;
@@ -95,17 +96,16 @@ class CourseManager
             $params['directory'] = $keys['currentCourseRepository'];
             $courseInfo = api_get_course_info($params['code']);
             if (empty($courseInfo)) {
-                $courseId = AddCourse::register_course($params, $accessUrlId);
-                $courseInfo = api_get_course_info_by_id($courseId);
-                if (!empty($courseInfo)) {
-                    self::fillCourse($courseInfo, $params, $authorId);
+                $course = AddCourse::register_course($params, $accessUrlId);
+                if (null !== $course) {
+                    self::fillCourse($course, $params, $authorId);
 
-                    return $courseInfo;
+                    return $course;
                 }
             }
         }
 
-        return false;
+        return null;
     }
 
     /**
@@ -2327,18 +2327,15 @@ class CourseManager
             return false;
         }
 
-        $course = api_get_course_info($code);
+        $courseRepo = Container::getCourseRepository();
+        /** @var Course $course */
+        $course = $courseRepo->findOneBy(['code' => $code]);
 
-        if (empty($course)) {
+        if (null === $course) {
             return false;
         }
 
-        $courseId = $course['real_id'];
-        $courseEntity = api_get_course_entity($courseId);
-
-        if (null === $courseEntity) {
-            return false;
-        }
+        $courseId = $course->getId();
 
         /** @var SequenceResourceRepository $repo */
         $repo = Database::getManager()->getRepository(SequenceResource::class);
@@ -2370,12 +2367,11 @@ class CourseManager
 
         if (0 === $count) {
             //self::create_database_dump($code);
-
             // Cleaning group categories
-            $groupCategories = GroupManager::get_categories($courseEntity);
+            $groupCategories = GroupManager::get_categories($course);
             if (!empty($groupCategories)) {
                 foreach ($groupCategories as $category) {
-                    GroupManager::delete_category($category['iid'], $course['code']);
+                    GroupManager::delete_category($category['iid'], $course->getCode());
                 }
             }
             // Cleaning groups
@@ -2460,7 +2456,12 @@ class CourseManager
 
             // Skills
             $table = Database::get_main_table(TABLE_MAIN_SKILL_REL_USER);
-            $argumentation = Database::escape_string(sprintf(get_lang('This skill was obtained through course %s which has been removed since then.'), $course['code']));
+            $argumentation = Database::escape_string(
+                sprintf(
+                    get_lang('This skill was obtained through course %s which has been removed since then.'),
+                    $course->getCode()
+                )
+            );
             $sql = "UPDATE $table SET course_id = NULL, session_id = NULL, argumentation = '$argumentation'
                     WHERE course_id = $courseId";
             Database::query($sql);
@@ -2480,8 +2481,7 @@ class CourseManager
             //$repo->deleteAllByCourse($courseEntity);
 
             // Delete the course from the database
-            $repo = Container::getCourseRepository();
-            $repo->deleteCourse($courseEntity);
+            $courseRepo->deleteCourse($course);
 
             // delete extra course fields
             $extraFieldValues = new ExtraFieldValue('course');
@@ -4256,7 +4256,7 @@ class CourseManager
      * @param array $params
      * @param bool  $copySessionContent
      *
-     * @return array
+     * @return Course|null
      */
     public static function copy_course_simple(
         $new_title,
@@ -4270,22 +4270,22 @@ class CourseManager
         if (!empty($source_course_info)) {
             $new_course_code = self::generate_nice_next_course_code($source_course_code);
             if ($new_course_code) {
-                $new_course_info = self::create_course(
+                $newCourse = self::create_course(
                     $new_title,
                     $new_course_code,
                     false
                 );
-                if (!empty($new_course_info['code'])) {
+                if (null !== $newCourse) {
                     $result = self::copy_course(
                         $source_course_code,
                         $source_session_id,
-                        $new_course_info['code'],
+                        $newCourse->getCode(),
                         $destination_session_id,
                         $params,
                         true
                     );
                     if ($result) {
-                        return $new_course_info;
+                        return $newCourse;
                     }
                 }
             }
@@ -6710,16 +6710,15 @@ class CourseManager
     /**
      * Fill course with all necessary items.
      *
-     * @param array $courseInfo Course info array
      * @param array $params     Parameters from the course creation form
      * @param int   $authorId
      */
-    private static function fillCourse($courseInfo, $params, $authorId = 0)
+    private static function fillCourse(Course $course, $params, $authorId = 0)
     {
         $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
 
         AddCourse::fillCourse(
-            $courseInfo,
+            $course,
             $params['exemplary_content'],
             $authorId
         );
@@ -6727,7 +6726,7 @@ class CourseManager
         if (isset($params['gradebook_model_id'])) {
             self::createDefaultGradebook(
                 $params['gradebook_model_id'],
-                $courseInfo['code']
+                $course->getCode()
             );
         }
 
@@ -6735,15 +6734,15 @@ class CourseManager
         // template course into this new course
         if (isset($params['course_template'])) {
             self::useTemplateAsBasisIfRequired(
-                $courseInfo['id'],
+                $course->getCode(),
                 $params['course_template']
             );
         }
-        $params['course_code'] = $courseInfo['code'];
-        $params['item_id'] = $courseInfo['real_id'];
+        $params['course_code'] = $course->getCode();
+        $params['item_id'] = $course->getId();
 
         $courseFieldValue = new ExtraFieldValue('course');
-        $courseFieldValue->saveFieldValues($params);
+        //$courseFieldValue->saveFieldValues($params);
     }
 
     public static function addVisibilityOptions(FormValidator $form): void

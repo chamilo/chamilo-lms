@@ -4515,7 +4515,7 @@ class SessionManager
                     $params['skip_lp_dates'] = true;
 
                     foreach ($short_courses as $course_data) {
-                        $course_info = CourseManager::copy_course_simple(
+                        $course = CourseManager::copy_course_simple(
                             $course_data['title'].' '.get_lang(
                                 'Copy'
                             ),
@@ -4525,7 +4525,8 @@ class SessionManager
                             $params
                         );
 
-                        if ($course_info) {
+                        if (null !== $course) {
+                            $course_info = api_get_course_info($course->getCode());
                             //By default new elements are invisible
                             if ($set_exercises_lp_invisible) {
                                 $list = new LearnpathList('', $course_info, $sid);

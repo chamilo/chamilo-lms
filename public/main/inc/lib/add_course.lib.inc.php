@@ -226,7 +226,6 @@ class AddCourse
     /**
      * Fills the course database with some required content and example content.
      *
-     * @param array $courseInfo
      * @param bool Whether to fill the course with example content
      * @param int $authorId
      *
@@ -238,7 +237,7 @@ class AddCourse
      * @assert (1, 'TEST', 'spanish', true) === true
      */
     public static function fillCourse(
-        $courseInfo,
+        Course $course,
         $fill_with_exemplary_content = null,
         $authorId = 0
     ) {
@@ -246,18 +245,13 @@ class AddCourse
             $fill_with_exemplary_content = 'false' !== api_get_setting('example_material_course_creation');
         }
 
-        $course_id = (int) $courseInfo['real_id'];
-
-        if (empty($courseInfo)) {
-            return false;
-        }
+        $course_id = $course->getId();
         $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
 
-        $TABLEGROUPCATEGORIES = Database::get_course_table(TABLE_GROUP_CATEGORY);
         $TABLESETTING = Database::get_course_table(TABLE_COURSE_SETTING);
         $TABLEGRADEBOOK = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $TABLEGRADEBOOKLINK = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-        $course = api_get_course_entity($course_id);
+
         $settingsManager = Container::getCourseSettingsManager();
         $settingsManager->setCourse($course);
 
@@ -646,7 +640,7 @@ class AddCourse
      * @todo use an array called $params instead of lots of params
      * @assert (null) === false
      */
-    public static function register_course($params, $accessUrlId = 1)
+    public static function register_course($params, $accessUrlId = 1): ?Course
     {
         global $error_msg;
         $title = $params['title'];
@@ -685,28 +679,28 @@ class AddCourse
 
         //$subscribe = isset($params['subscribe']) ? (int) $params['subscribe'] : COURSE_VISIBILITY_OPEN_PLATFORM == $visibility ? 1 : 0;
         $unsubscribe = isset($params['unsubscribe']) ? (int) $params['unsubscribe'] : 0;
-        $expiration_date = isset($params['expiration_date']) ? $params['expiration_date'] : null;
-        $teachers = isset($params['teachers']) ? $params['teachers'] : null;
-        $categories = isset($params['course_categories']) ? $params['course_categories'] : null;
-        $ok_to_register_course = true;
+        $expiration_date = $params['expiration_date'] ?? null;
+        $teachers = $params['teachers'] ?? null;
+        $categories = $params['course_categories'] ?? null;
+        $valid = true;
 
         // Check whether all the needed parameters are present.
         if (empty($code)) {
             $error_msg[] = 'courseSysCode is missing';
-            $ok_to_register_course = false;
+            $valid = false;
         }
         if (empty($visual_code)) {
             $error_msg[] = 'courseScreenCode is missing';
-            $ok_to_register_course = false;
+            $valid = false;
         }
         if (empty($directory)) {
             $error_msg[] = 'courseRepository is missing';
-            $ok_to_register_course = false;
+            $valid = false;
         }
 
         if (empty($title)) {
             $error_msg[] = 'title is missing';
-            $ok_to_register_course = false;
+            $valid = false;
         }
 
         if (empty($expiration_date)) {
@@ -719,7 +713,7 @@ class AddCourse
 
         if ($visibility < 0 || $visibility > 4) {
             $error_msg[] = 'visibility is invalid';
-            $ok_to_register_course = false;
+            $valid = false;
         }
 
         if (empty($disk_quota)) {
@@ -738,7 +732,6 @@ class AddCourse
         if ('http://' === $department_url) {
             $department_url = '';
         }
-        $course_id = 0;
 
         $userId = empty($params['user_id']) ? api_get_user_id() : (int) $params['user_id'];
         $user = api_get_user_entity($userId);
@@ -747,8 +740,8 @@ class AddCourse
 
             return 0;
         }
-
-        if ($ok_to_register_course) {
+        $course = null;
+        if ($valid) {
             $repo = Container::getCourseRepository();
             $categoryRepo = Container::getCourseCategoryRepository();
 
@@ -782,7 +775,9 @@ class AddCourse
                     }
 
                     $category = $categoryRepo->find($key);
-                    $course->addCategory($category);
+                    if (null !== $category) {
+                        $course->addCategory($category);
+                    }
                 }
             }
 
@@ -858,14 +853,9 @@ class AddCourse
                         api_get_setting('administratorSurname')
                     );
                     $iname = api_get_setting('Institution');
-                    $subject = get_lang(
-                            'NewCourseCreatedIn'
-                        ).' '.$siteName.' - '.$iname;
-                    $message = get_lang(
-                            'Dear'
-                        ).' '.$recipient_name.",\n\n".get_lang(
-                            'MessageOfNewCourseToAdmin'
-                        ).' '.$siteName.' - '.$iname."\n";
+                    $subject = get_lang('NewCourseCreatedIn').' '.$siteName.' - '.$iname;
+                    $message = get_lang('Dear').' '.$recipient_name.",\n\n".
+                        get_lang('MessageOfNewCourseToAdmin').' '.$siteName.' - '.$iname."\n";
                     $message .= get_lang('Course name').' '.$title."\n";
 
                     if ($course->getCategories()->count() > 0) {
@@ -899,7 +889,7 @@ class AddCourse
             }
         }
 
-        return $course_id;
+        return $course;
     }
 
     /**

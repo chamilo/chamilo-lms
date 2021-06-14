@@ -1740,19 +1740,19 @@ class ImportCsv
                     $params['teachers'] = $row['teachers'];
                     $params['visibility'] = $row['visibility'];
 
-                    $courseInfo = CourseManager::create_course(
+                    $course = CourseManager::create_course(
                         $params,
                         $this->defaultAdminId
                     );
 
-                    if (!empty($courseInfo)) {
+                    if (null !== $course) {
                         CourseManager::update_course_extra_field_value(
-                            $courseInfo['code'],
+                            $course->getCode(),
                             'external_course_id',
                             $row['extra_'.$this->extraFieldIdNameList['course']]
                         );
 
-                        $this->logger->addInfo("Courses - Course created ".$courseInfo['code']);
+                        $this->logger->addInfo("Courses - Course created ".$course->getCode());
                     } else {
                         $this->logger->addError("Courses - Can't create course:".$row['title']);
                     }

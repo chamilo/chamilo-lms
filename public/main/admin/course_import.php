@@ -126,20 +126,20 @@ function save_courses_data($courses)
         $params['user_id'] = $creatorId;
         $addMeAsTeacher = $_POST['add_me_as_teacher'] ?? false;
         $params['add_user_as_teacher'] = $addMeAsTeacher;
-        $courseInfo = CourseManager::create_course($params);
+        $course = CourseManager::create_course($params);
 
-        if (!empty($courseInfo)) {
+        if (null !== $course) {
             if (!empty($teacherList)) {
                 foreach ($teacherList as $teacher) {
                     CourseManager::subscribeUser(
                         $teacher['user_id'],
-                        $courseInfo['real_id'],
+                        $course->getId(),
                         COURSEMANAGER
                     );
                 }
             }
-            $msg .= '<a href="'.api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/">
-                    '.$courseInfo['title'].'</a> '.get_lang('Created').'<br />';
+            $msg .= '<a href="'.api_get_course_url($course->getId()).'/">
+                    '.$course->getTitle().'</a> '.get_lang('Created').'<br />';
         }
     }
 

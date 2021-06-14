@@ -201,13 +201,13 @@ if ($form->validate()) {
         include $file_to_include;
     }
 
-    $courseInfo = CourseManager::create_course($course);
-    if ($courseInfo && isset($courseInfo['course_public_url'])) {
+    $course = CourseManager::create_course($course);
+    if (null !== $course) {
         Display::addFlash(
             Display::return_message(
                 sprintf(
                     get_lang('Course %s added'),
-                    Display::url($courseInfo['title'], $courseInfo['course_public_url'])
+                    Display::url($course->getTitle(), api_get_course_url($course->getId()))
                 ),
                 'confirmation',
                 false

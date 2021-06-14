@@ -122,7 +122,7 @@ if ($form->validate()) {
     $coupon['valid_end'] = $formValues['date_end'];
     $coupon['active'] = $formValues['active'];
 
-    if ($coupon['discount_type'] == BuyCoursesPlugin::COUPON_DISCOUNT_TYPE_PERCENTAGE && $coupon['discount_amount'] > 100){
+    if ($coupon['discount_type'] == BuyCoursesPlugin::COUPON_DISCOUNT_TYPE_PERCENTAGE && $coupon['discount_amount'] > 100) {
         Display::addFlash(
             Display::return_message($plugin->get_lang('CouponDiscountExceed100'), 'error', false)
         );
@@ -136,8 +136,7 @@ if ($form->validate()) {
 
     if ($result) {
         header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/coupons.php');
-    }
-    else { 
+    } else {
         header('Location:'.api_get_self().'?'.$queryString);
     }
     

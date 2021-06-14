@@ -730,8 +730,8 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get the item data.
      *
-     * @param int $productId The item ID
-     * @param int $itemType  The item type
+     * @param int   $productId The item ID
+     * @param int   $itemType  The item type
      * @param array $coupon
      *
      * @return array
@@ -1101,9 +1101,9 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Register a sale.
      *
-     * @param int $itemId      The product ID
-     * @param int $paymentType The payment type
-     * @param string $couponId The coupon ID
+     * @param int    $itemId      The product ID
+     * @param int    $paymentType The payment type
+     * @param string $couponId    The coupon ID
      *
      * @return bool
      */
@@ -1157,7 +1157,7 @@ class BuyCoursesPlugin extends Plugin
         if ($coupon != null) {
             if ($coupon['discount_type'] == self::COUPON_DISCOUNT_TYPE_AMOUNT) {
                 $couponDiscount = $coupon['discount_amount'];
-            } else if ($coupon['discount_type'] == self::COUPON_DISCOUNT_TYPE_PERCENTAGE) {
+            } elseif ($coupon['discount_type'] == self::COUPON_DISCOUNT_TYPE_PERCENTAGE) {
                 $couponDiscount = ($item['price'] * $coupon['discount_amount']) / 100;
             }
             $priceWithoutDiscount = $item['price'];
@@ -2460,7 +2460,7 @@ class BuyCoursesPlugin extends Plugin
     /**
      * @param array $product
      * @param int   $productType
-     * @param array   $coupon
+     * @param array $coupon
      *
      * @return bool
      */
@@ -2476,7 +2476,7 @@ class BuyCoursesPlugin extends Plugin
         if ($coupon != null) {
             if ($coupon['discount_type'] == self::COUPON_DISCOUNT_TYPE_AMOUNT) {
                 $couponDiscount = $coupon['discount_amount'];
-            } else if ($coupon['discount_type'] == self::COUPON_DISCOUNT_TYPE_PERCENTAGE) {
+            } elseif ($coupon['discount_type'] == self::COUPON_DISCOUNT_TYPE_PERCENTAGE) {
                 $couponDiscount = ($product['price'] * $coupon['discount_amount']) / 100;
             }
             $product['price_without_discount'] = $product['price'];
@@ -2530,7 +2530,7 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * @param int $id
+     * @param int   $id
      * @param array $coupon
      *
      * @return array
@@ -2572,7 +2572,6 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * List additional services.
-     *
      *
      * @return array
      */

@@ -38,8 +38,7 @@ if (isset($_REQUEST['c'])) {
     $couponCode = $_REQUEST['c'];
     if ($buyingCourse) {
         $coupon = $plugin->getCouponByCode($couponCode, BuyCoursesPlugin::PRODUCT_TYPE_COURSE, $_REQUEST['i']);
-    }
-    else {
+    } else {
         $coupon = $plugin->getCouponByCode($couponCode, BuyCoursesPlugin::PRODUCT_TYPE_SESSION, $_REQUEST['i']);
     }
 }
@@ -75,9 +74,9 @@ if ($form->validate()) {
     if ($saleId !== false) {
         $_SESSION['bc_sale_id'] = $saleId;
 
-        if(isset($formValues['c'])){
+        if (isset($formValues['c'])) {
             $couponSaleId = $plugin->registerCouponSale($saleId, $formValues['c']);
-            if($couponSaleId !== false) {
+            if ($couponSaleId !== false) {
                 $plugin->updateCouponDelivered($formValues['c']);
                 $_SESSION['bc_coupon_id'] = $formValues['c'];
             }
@@ -132,7 +131,7 @@ if ($count === 0) {
 
 $form->addHidden('t', intval($_GET['t']));
 $form->addHidden('i', intval($_GET['i']));
-if ( $coupon != null) {
+if ($coupon != null) {
     $form->addHidden('c', intval($coupon['id']));
 }
 $form->addButton('submit', $plugin->get_lang('ConfirmOrder'), 'check', 'success', 'btn-lg pull-right');
@@ -151,24 +150,23 @@ if ($formCoupon->validate()) {
 
     if ($buyingCourse) {
         $coupon = $plugin->getCouponByCode($formCouponValues['coupon_code'], BuyCoursesPlugin::PRODUCT_TYPE_COURSE, $_REQUEST['i']);
-    }
-    else {
+    } else {
         $coupon = $plugin->getCouponByCode($formCouponValues['coupon_code'], BuyCoursesPlugin::PRODUCT_TYPE_SESSION, $_REQUEST['i']);
     }
 
-	if($coupon == null) {
+    if ($coupon == null) {
         Display::addFlash(
             Display::return_message($plugin->get_lang('CouponNotValid'), 'error', false)
         );
         header('Location:'.api_get_self().'?'.$queryString);
         exit;
-	}
+    }
 
     Display::addFlash(
         Display::return_message($plugin->get_lang('CouponRedeemed'), 'success', false)
     );
 
-	header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.$_REQUEST['i'].'&t='. $_REQUEST['t'].'&c='.$formCouponValues['coupon_code']);
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.$_REQUEST['i'].'&t='. $_REQUEST['t'].'&c='.$formCouponValues['coupon_code']);
 
     exit;
 }

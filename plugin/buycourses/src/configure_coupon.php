@@ -140,7 +140,7 @@ if (!empty($servicesAdded)) {
 
 $formDefaults = [
     'id' => $coupon['id'],
-    'code' => $coupon['code'],    
+    'code' => $coupon['code'],
     'discount_type' => $discountTypes[$coupon['discount_type']],
     'discount_amount' => $coupon['discount_amount'],
     'date' => "$couponDateRangeFrom / $couponDateRangeTo",
@@ -177,11 +177,10 @@ if ($form->validate()) {
                 'success',
                 false
             )
-        ); 
+        );
 
         header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/configure_coupon.php?id='.$coupon["id"]);
-    }
-    else { 
+    } else {
         header('Location:'.api_get_self().'?'.$queryString);
     }
     

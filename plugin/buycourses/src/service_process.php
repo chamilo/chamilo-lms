@@ -48,7 +48,7 @@ $queryString = 'i='.$serviceId.'&t='.$type.$additionalQueryString;
 
 if (isset($_REQUEST['c'])) {
     $couponCode = $_REQUEST['c'];
-    $coupon = $plugin->getCouponServiceByCode ($couponCode, $_REQUEST['i']);
+    $coupon = $plugin->getCouponServiceByCode($couponCode, $_REQUEST['i']);
 }
 
 $serviceInfo = $plugin->getService($serviceId, $coupon);
@@ -250,9 +250,9 @@ if ($form->validate()) {
     if ($serviceSaleId !== false) {
         $_SESSION['bc_service_sale_id'] = $serviceSaleId;
 
-        if(isset($formValues['c'])){
+        if (isset($formValues['c'])) {
             $couponSaleId = $plugin->registerCouponServiceSale($serviceSaleId, $formValues['c']);
-            if($couponSaleId !== false) {
+            if ($couponSaleId !== false) {
                 $plugin->updateCouponDelivered($formValues['c']);
                 $_SESSION['bc_coupon_id'] = $formValues['c'];
             }
@@ -277,26 +277,26 @@ if ($formCoupon->validate()) {
 
     $coupon = $plugin->getCouponServiceByCode($formCouponValues['coupon_code'], $formCouponValues['i']);
 
-	if($coupon == null) {
+    if ($coupon == null) {
         Display::addFlash(
             Display::return_message($plugin->get_lang('CouponNotValid'), 'error', false)
         );
         header('Location:'.api_get_self().'?'.$queryString);
         exit;
-	}
+    }
 
     Display::addFlash(
         Display::return_message($plugin->get_lang('CouponRedeemed'), 'success', false)
     );
 
-	header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_process.php?i='.$_REQUEST['i'].'&t='. $_REQUEST['t'].'&c='.$formCouponValues['coupon_code']);
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_process.php?i='.$_REQUEST['i'].'&t='. $_REQUEST['t'].'&c='.$formCouponValues['coupon_code']);
 
     exit;
 }
 $formCoupon->addText('coupon_code', $plugin->get_lang('CouponsCode'), true);
 $formCoupon->addHidden('t', intval($_GET['t']));
 $formCoupon->addHidden('i', intval($_GET['i']));
-if ( $coupon != null) {
+if ($coupon != null) {
     $form->addHidden('c', intval($coupon['id']));
 }
 $formCoupon->addButton('submit', $plugin->get_lang('RedeemCoupon'), 'check', 'success', 'btn-lg pull-right');

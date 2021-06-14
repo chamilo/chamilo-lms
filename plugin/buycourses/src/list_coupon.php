@@ -37,7 +37,7 @@ if (isset($_GET['coupon_id'])) {
     exit;
 }
 
-$discountTypes =   $plugin->getCouponDiscountTypes();
+$discountTypes = $plugin->getCouponDiscountTypes();
 $couponStatuses = $plugin->getCouponStatuses();
 
 $selectedFilterType = '0';
@@ -70,8 +70,8 @@ $coupons = $plugin->getCouponsListByStatus($selectedStatus);
 
 foreach ($coupons as &$coupon) {
     if ($coupon['discount_type'] == BuyCoursesPlugin::COUPON_DISCOUNT_TYPE_PERCENTAGE) {
-        $coupon['discount_value'] = $coupon['discount_amount'] . "%";
-    } else if ($coupon['discount_type'] == BuyCoursesPlugin::COUPON_DISCOUNT_TYPE_AMOUNT) {
+        $coupon['discount_value'] = $coupon['discount_amount']. "%";
+    } elseif ($coupon['discount_type'] == BuyCoursesPlugin::COUPON_DISCOUNT_TYPE_AMOUNT) {
         $coupon['discount_value'] = $plugin->getPriceWithCurrencyFromIsoCode($coupon['discount_amount'], $coupon['iso_code']);
     }    
     $coupon['discount_type'] = $discountTypes[$coupon['discount_type']];

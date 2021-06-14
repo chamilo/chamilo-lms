@@ -2,8 +2,11 @@
 /* See license terms in /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\Course as CourseEntity;
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\TrackEAttemptRecording;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
+use Chamilo\CoreBundle\Entity\User as UserEntity;
 use ChamiloSession as Session;
 
 /**
@@ -816,7 +819,7 @@ class Event
                 $event_value = serialize($event_value);
             }
 
-            if ($event_value instanceof \Chamilo\CoreBundle\Entity\User) {
+            if ($event_value instanceof UserEntity) {
                 $event_value = serialize(
                     [
                         'id' => $event_value->getId(),
@@ -2457,7 +2460,7 @@ class Event
         return $now - $time;
     }
 
-    public static function logSubscribedUserInCourse(int $subscribedId, int $courseId)
+    public static function logSubscribedUserInCourse(UserEntity $subscribedUser, CourseEntity $course)
     {
         $dateTime = api_get_utc_datetime();
         $registrantId = api_get_user_id();
@@ -2465,53 +2468,56 @@ class Event
         self::addEvent(
             LOG_SUBSCRIBE_USER_TO_COURSE,
             LOG_COURSE_CODE,
-            api_get_course_entity($courseId)->getCode(),
+            $course->getCode(),
             $dateTime,
             $registrantId,
-            $courseId
+            $course->getId()
         );
 
         self::addEvent(
             LOG_SUBSCRIBE_USER_TO_COURSE,
             LOG_USER_OBJECT,
-            api_get_user_info($subscribedId),
+            api_get_user_info($subscribedUser->getId()),
             $dateTime,
             $registrantId,
-            $courseId
+            $course->getId()
         );
     }
 
-    public static function logUserSubscribedInCourseSession(int $subscribedId, int $courseId, int $sessionId)
-    {
+    public static function logUserSubscribedInCourseSession(
+        UserEntity $userSubscribed,
+        CourseEntity $course,
+        SessionEntity $session
+    ) {
         $dateTime = api_get_utc_datetime();
         $registrantId = api_get_user_id();
 
         self::addEvent(
             LOG_SESSION_ADD_USER_COURSE,
             LOG_USER_ID,
-            $subscribedId,
+            $userSubscribed,
             $dateTime,
             $registrantId,
-            $courseId,
-            $sessionId
+            $course->getId(),
+            $session->getId()
         );
         self::addEvent(
             LOG_SUBSCRIBE_USER_TO_COURSE,
             LOG_COURSE_CODE,
-            api_get_course_entity($courseId)->getCode(),
+            $course->getCode(),
             $dateTime,
             $registrantId,
-            $courseId,
-            $sessionId
+            $course->getId(),
+            $session->getId()
         );
         self::addEvent(
             LOG_SUBSCRIBE_USER_TO_COURSE,
             LOG_USER_OBJECT,
-            api_get_user_info($subscribedId),
+            api_get_user_info($userSubscribed->getId()),
             $dateTime,
             $registrantId,
-            $courseId,
-            $sessionId
+            $course->getId(),
+            $session->getId()
         );
     }
 }

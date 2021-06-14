@@ -6666,7 +6666,7 @@ class CourseManager
 
         $insertId = $courseRelUser->getId();
 
-        Event::logSubscribedUserInCourse($user->getId(), $course->getId());
+        Event::logSubscribedUserInCourse($user, $course);
 
         return $insertId;
     }

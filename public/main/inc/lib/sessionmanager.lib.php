@@ -9512,7 +9512,7 @@ class SessionManager
                 ->addUserInCourse($relationInfo['status'], $user, $course)
                 ->setVisibility($relationInfo['visibility']);
 
-            Event::logUserSubscribedInCourseSession($studentId, $courseId, $sessionId);
+            Event::logUserSubscribedInCourseSession($user, $course, $session);
 
             if ($updateSession) {
                 $session->addUserInSession(Session::STUDENT, $user);

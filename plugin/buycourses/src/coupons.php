@@ -14,7 +14,6 @@ api_protect_admin_script();
 
 $plugin = BuyCoursesPlugin::create();
 
-
 if (isset($_GET['coupon_id'])) {
     $coupon = $plugin->getCouponInfo($_GET['coupon_id']);
 
@@ -68,7 +67,6 @@ $form->setDefaults([
 
 $coupons = $plugin->getCouponsListByStatus($selectedStatus);
 $currency = $plugin->getSelectedCurrency();
-
 
 foreach ($coupons as &$coupon) {
     if ($coupon['discount_type'] == BuyCoursesPlugin::COUPON_DISCOUNT_TYPE_PERCENTAGE) {

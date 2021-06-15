@@ -14,7 +14,6 @@ api_protect_admin_script();
 
 $plugin = BuyCoursesPlugin::create();
 
-
 if (isset($_GET['coupon_id'])) {
     $coupon = $plugin->getCouponInfo($_GET['coupon_id']);
 

@@ -3135,8 +3135,8 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Register a coupon sale.
      *
-     * @param int $saleId      The sale ID
-     * @param int $couponId    The coupon ID
+     * @param int $saleId   The sale ID
+     * @param int $couponId The coupon ID
      *
      * @return int
      */
@@ -3159,8 +3159,8 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Register a coupon service sale.
      *
-     * @param int $saleId      The sale ID
-     * @param int $couponId    The coupon ID
+     * @param int $saleId   The sale ID
+     * @param int $couponId The coupon ID
      *
      * @return int
      */
@@ -3192,19 +3192,19 @@ class BuyCoursesPlugin extends Plugin
         $couponId = $this->registerCoupon($coupon);
         if ($couponId) {
             if (isset($coupon['courses'])) {
-                foreach($coupon['courses'] as $course) {
+                foreach ($coupon['courses'] as $course) {
                     $this->registerCouponItem($couponId, self::PRODUCT_TYPE_COURSE, $course);
                 }
             }
 
             if (isset($coupon['sessions'])) {
-                foreach($coupon['sessions'] as $session) {
+                foreach ($coupon['sessions'] as $session) {
                     $this->registerCouponItem($couponId, self::PRODUCT_TYPE_SESSION, $session);
                 }
             }
 
             if (isset($coupon['services'])) {
-                foreach($coupon['services'] as $service) {
+                foreach ($coupon['services'] as $service) {
                     $this->registerCouponService($couponId, $service);
                 }
             }
@@ -3238,19 +3238,19 @@ class BuyCoursesPlugin extends Plugin
         $this->deleteCouponServicesByCoupon($coupon['id']);
 
         if (isset($coupon['courses'])) {
-            foreach($coupon['courses'] as $course) {
+            foreach ($coupon['courses'] as $course) {
                 $this->registerCouponItem($coupon['id'], self::PRODUCT_TYPE_COURSE, $course);
             }
         }
 
         if (isset($coupon['sessions'])) {
-            foreach($coupon['sessions'] as $session) {
+            foreach ($coupon['sessions'] as $session) {
                 $this->registerCouponItem($coupon['id'], self::PRODUCT_TYPE_SESSION, $session);
             }
         }
 
         if (isset($coupon['services'])) {
-            foreach($coupon['services'] as $service) {
+            foreach ($coupon['services'] as $service) {
                 $this->registerCouponService($coupon['id'], $service);
             }
         }
@@ -3261,7 +3261,7 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Update coupons delivered.
      *
-     * @param int $couponId    The coupon ID
+     * @param int $couponId The coupon ID
      *
      * @return bool
      */
@@ -3278,7 +3278,7 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * Get coupon info
+     * Get coupon info.
      *
      * @param int $couponCode The coupon ID
      *
@@ -3300,11 +3300,11 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * Get coupon info
+     * Get a list of coupons.
      *
-     * @param int $couponCode The coupon ID
+     * @param int $status The coupons activation status
      *
-     * @return array The coupon data
+     * @return array Coupons data
      */
     public function getCouponsListByStatus($status)
     {
@@ -3316,8 +3316,8 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get the coupon data.
      *
-     * @param int $couponCode The coupon ID
-     * @param int $productId The product ID
+     * @param int $couponCode  The coupon ID
+     * @param int $productId   The product ID
      * @param int $productType The product type
      *
      * @return array The coupon data
@@ -3332,9 +3332,9 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get data of the coupon code.
      *
-     * @param string $couponCode The coupon code
-     * @param int $productId The product ID
-     * @param int $productType The product type
+     * @param string $couponCode  The coupon code
+     * @param int    $productId   The product ID
+     * @param int    $productType The product type
      *
      * @return array The coupon data
      */
@@ -3348,7 +3348,7 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get data of the coupon code for a service.
      *
-     * @param int $couponId The coupon ID
+     * @param int $couponId  The coupon ID
      * @param int $serviceId The product ID
      *
      * @return array The coupon data
@@ -3364,7 +3364,7 @@ class BuyCoursesPlugin extends Plugin
      * Get data of the coupon code for a service.
      *
      * @param string $couponCode The coupon code code
-     * @param int $serviceId The product id
+     * @param int    $serviceId  The product id
      *
      * @return array The coupon data
      */
@@ -3375,14 +3375,15 @@ class BuyCoursesPlugin extends Plugin
         return $coupon;
     }
 
-     /**
+    /**
      * Get the coupon code of a item sale.
      *
      * @param string $saleId The sale ID
      *
      * @return string The coupon code
      */
-    public function getSaleCouponCode($saleId) {
+    public function getSaleCouponCode($saleId)
+    {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
         $couponSaleTable = Database::get_main_table(self::TABLE_COUPON_SALE);
 
@@ -3405,14 +3406,15 @@ class BuyCoursesPlugin extends Plugin
         return $couponCode['code'];
     }
 
-     /**
+    /**
      * Get the coupon code of a service sale.
      *
      * @param string $serviceSaleId The service sale ID
      *
      * @return string The coupon code
      */
-    public function getServiceSaleCouponCode($serviceSaleId) {
+    public function getServiceSaleCouponCode($serviceSaleId)
+    {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
         $couponServiceSaleTable = Database::get_main_table(self::TABLE_COUPON_SERVICE_SALE);
 
@@ -3830,20 +3832,21 @@ class BuyCoursesPlugin extends Plugin
         );
     }
 
-     /**
+    /**
      * Get the items (courses or sessions) of a coupon.
      *
-     * @param string $couponId The coupon ID
-     * @param int $productType The product type
+     * @param string $couponId    The coupon ID
+     * @param int    $productType The product type
      *
      * @return array The item data
      */
-    private function getItemsCoupons($couponId, $productType) {
+    private function getItemsCoupons($couponId, $productType)
+    {
         $couponItemTable = Database::get_main_table(self::TABLE_COUPON_ITEM);
         if ($productType == self::PRODUCT_TYPE_COURSE) {
             $itemTable = Database::get_main_table(TABLE_MAIN_COURSE);
             $select = ['ci.product_id as id', 'it.title'];
-        } else if ($productType == self::PRODUCT_TYPE_SESSION) {
+        } elseif ($productType == self::PRODUCT_TYPE_SESSION) {
             $itemTable = Database::get_main_table(TABLE_MAIN_SESSION);
             $select = ['ci.product_id as id', 'it.name'];
         }
@@ -3865,14 +3868,15 @@ class BuyCoursesPlugin extends Plugin
         );
     }
 
-     /**
+    /**
      * Get the services of a coupon.
      *
      * @param string $couponId The coupon ID
      *
      * @return array The service data
      */
-    private function getServicesCoupons($couponId) {
+    private function getServicesCoupons($couponId)
+    {
         $couponServiceTable = Database::get_main_table(self::TABLE_COUPON_SERVICE);
         $serviceTable =  Database::get_main_table(self::TABLE_SERVICES);
 
@@ -3894,11 +3898,11 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * Get the coupon data.
+     * Get an array of coupons filtered by their status.
      *
      * @param int $status The coupon activation status
      *
-     * @return array The coupon data
+     * @return array Coupons data
      */
     private function getDataCoupons($status = null)
     {
@@ -3931,7 +3935,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @param int $couponId    The coupon code code
      * @param int $productType The product type
-     * @param int $productId   The product ID     
+     * @param int $productId   The product ID
      *
      * @return array The coupon data
      */
@@ -3950,8 +3954,7 @@ class BuyCoursesPlugin extends Plugin
                 ],
                 'first'
             );
-        }
-        else {
+        } else {
             $couponItemTable = Database::get_main_table(self::TABLE_COUPON_ITEM);
             $dtmNow = api_get_utc_datetime();
 
@@ -3981,9 +3984,9 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get data of a coupon for a product (course or service) by the coupon code.
      *
-     * @param string $couponCode The coupon code code
-     * @param int $productType   The product type
-     * @param int $productId     The product ID     
+     * @param string $couponCode  The coupon code code
+     * @param int    $productType The product type
+     * @param int    $productId   The product ID
      *
      * @return array The coupon data
      */
@@ -4067,7 +4070,7 @@ class BuyCoursesPlugin extends Plugin
      * Get data of coupon for a service by the coupon code.
      *
      * @param string $couponCode The coupon code
-     * @param int $serviceId     The service ID
+     * @param int    $serviceId  The service ID
      *
      * @return array The coupon data
      */
@@ -4169,9 +4172,9 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Register a coupon item.
      *
-     * @param int $couponId      The coupon ID
-     * @param int $productType    The product type
-     * @param int $productId    The product ID
+     * @param int $couponId    The coupon ID
+     * @param int $productType The product type
+     * @param int $productId   The product ID
      *
      * @return int
      */
@@ -4199,10 +4202,10 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * Remove all coupon items for a product type and coupon ID
+     * Remove all coupon items for a product type and coupon ID.
      *
      * @param int $productType The product type
-     * @param int $coupon_id The coupon ID
+     * @param int $coupon_id   The coupon ID
      *
      * @return int Rows affected. Otherwise return false
      */
@@ -4220,8 +4223,8 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Register a coupon service.
      *
-     * @param int $couponId      The coupon ID
-     * @param int $serviceId    The service ID
+     * @param int $couponId  The coupon ID
+     * @param int $serviceId The service ID
      *
      * @return int
      */
@@ -4251,7 +4254,7 @@ class BuyCoursesPlugin extends Plugin
      * Remove all coupon services for a product type and coupon ID
      *
      * @param int $productType The product type
-     * @param int $coupon_id The coupon ID
+     * @param int $coupon_id   The coupon ID
      *
      * @return int Rows affected. Otherwise return false
      */
@@ -4260,7 +4263,7 @@ class BuyCoursesPlugin extends Plugin
         return Database::delete(
             Database::get_main_table(self::TABLE_COUPON_SERVICE),
             [
-                'coupon_id = ?' => (int) $couponId
+                'coupon_id = ?' => (int) $couponId,
             ]
         );
     }

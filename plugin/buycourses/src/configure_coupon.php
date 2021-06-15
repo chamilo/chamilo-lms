@@ -6,7 +6,6 @@
  *
  * @package chamilo.plugin.buycourses
  */
-
 require_once '../config.php';
 
 api_protect_admin_script();

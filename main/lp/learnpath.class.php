@@ -2850,7 +2850,7 @@ class learnpath
      * Returns the XML DOM document's node.
      *
      * @param DOMNodeList $children Reference to a list of objects to search for the given ITEM_*
-     * @param string   $id       The identifier to look for
+     * @param string      $id       The identifier to look for
      *
      * @return mixed The reference to the element found with that identifier. False if not found
      */

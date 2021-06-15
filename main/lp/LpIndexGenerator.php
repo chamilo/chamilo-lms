@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class LpIndexGenerator
+ * Class LpIndexGenerator.
  */
 class LpIndexGenerator
 {
@@ -27,6 +27,15 @@ class LpIndexGenerator
         $this->domDocument = new DOMDocument();
 
         $this->generateHtml();
+    }
+
+    public function generate(): string
+    {
+        $this->generateToc();
+
+        $indexHtml = @$this->domDocument->saveHTML();
+
+        return api_utf8_decode_xml($indexHtml);
     }
 
     private function generateHtml()
@@ -146,14 +155,5 @@ class LpIndexGenerator
                 );
             }
         }
-    }
-
-    public function generate(): string
-    {
-        $this->generateToc();
-
-        $indexHtml = @$this->domDocument->saveHTML();
-
-        return api_utf8_decode_xml($indexHtml);
     }
 }

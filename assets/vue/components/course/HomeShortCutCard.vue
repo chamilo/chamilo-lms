@@ -13,7 +13,7 @@
         </a>
       </div>
 
-      <div class="flex flex-row gap-2 text-gray-500">
+      <div class="flex flex-row gap-2 text-gray-500 pt-3">
         <a
 
         >

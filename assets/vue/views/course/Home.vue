@@ -46,11 +46,10 @@
               </q-list>
             </div>
           </div>
-
-
         </div>
       </div>
     </div>
+
     <hr/>
 
     <div class="bg-gradient-to-r from-gray-100 to-gray-50 flex flex-col rounded-md text-center p-2">
@@ -74,6 +73,7 @@
     </div>
 
     <hr/>
+
     <div class="flex justify-between">
       <div class="text-h6 font-bold">
         Tools
@@ -88,7 +88,7 @@
 
 
     <div
-        class="grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-6"
+        class="grid gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-6"
     >
       <HomeCourseCard
           v-for="tool in tools.authoring"

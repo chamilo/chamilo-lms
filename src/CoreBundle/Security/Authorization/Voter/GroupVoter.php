@@ -107,10 +107,13 @@ class GroupVoter extends Voter
                     '/main/announcements/' => $group->getAnnouncementsState(),
                     '/main/work/' => $group->getWorkState(),
                     '/main/wiki/' => $group->getWikiState(),
+                    /*'/main/group/group_space' => GroupManager::TOOL_PUBLIC,
+                    '/main/inc/ajax/model.ajax.php' => GroupManager::TOOL_PUBLIC,
+                    '/main/inc/ajax/announcement.ajax.php' => GroupManager::TOOL_PUBLIC,*/
                     //'/main/chat/' => $group->getAnnouncementsState(),  ??
                 ];
 
-                $toolStatus = null;
+                $toolStatus = GroupManager::TOOL_PUBLIC;
                 foreach ($tools as $path => $status) {
                     if (false !== strpos($requestUri, $path)) {
                         $toolStatus = $status;

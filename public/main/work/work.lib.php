@@ -5496,7 +5496,7 @@ function getFormWork($form, $defaults = [], $workId = 0)
     }
 
     // ScoreOfAssignment
-    $form->addText('qualification', get_lang('ScoreNumeric'));
+    $form->addText('qualification', get_lang('ScoreNumeric'), false);
 
     if (0 != $sessionId && Gradebook::is_active() || 0 == $sessionId) {
         $form->addElement(

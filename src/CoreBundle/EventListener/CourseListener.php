@@ -143,7 +143,7 @@ class CourseListener
                 // See CourseVoter.php
                 //dump("Checkisgranted");
                 if (false === $checker->isGranted(CourseVoter::VIEW, $course)) {
-                    throw new AccessDeniedException($translator->trans('Unauthorised access to course!'));
+                    throw new AccessDeniedException($translator->trans('You\'re not allowed in this course'));
                 }
             } else {
                 //dump("Load chamilo session from DB");
@@ -157,7 +157,7 @@ class CourseListener
                     // Check if user is allowed to this course-session
                     // See SessionVoter.php
                     if (false === $checker->isGranted(SessionVoter::VIEW, $session)) {
-                        throw new AccessDeniedException($translator->trans('Unauthorised access to session!'));
+                        throw new AccessDeniedException($translator->trans('You\'re not allowed in this session'));
                     }
                     $sessionHandler->set('session_name', $session->getName());
                     $sessionHandler->set('sid', $session->getId());
@@ -183,7 +183,7 @@ class CourseListener
                 }
 
                 if (false === $checker->isGranted(GroupVoter::VIEW, $group)) {
-                    throw new AccessDeniedException($translator->trans('Unauthorised access to group'));
+                    throw new AccessDeniedException($translator->trans('You\'re not allowed in this group'));
                 }
 
                 $sessionHandler->set('gid', $groupId);

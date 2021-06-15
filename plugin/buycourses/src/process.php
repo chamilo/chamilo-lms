@@ -166,7 +166,7 @@ if ($formCoupon->validate()) {
         Display::return_message($plugin->get_lang('CouponRedeemed'), 'success', false)
     );
 
-    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.$_REQUEST['i'].'&t='. $_REQUEST['t'].'&c='.$formCouponValues['coupon_code']);
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.$_REQUEST['i'].'&t='.$_REQUEST['t'].'&c='.$formCouponValues['coupon_code']);
 
     exit;
 }

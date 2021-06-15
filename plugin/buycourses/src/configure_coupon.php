@@ -183,7 +183,7 @@ if ($form->validate()) {
     } else {
         header('Location:'.api_get_self().'?'.$queryString);
     }
-    
+
     exit;
 }
 

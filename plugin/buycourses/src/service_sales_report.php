@@ -39,7 +39,7 @@ $servicesSales = $plugin->getServiceSales(null, $selectedStatus);
 foreach ($servicesSales as &$sale) {
     if (isset($sale['discount_amount']) && $sale['discount_amount'] != 0) {
         $sale['total_discount'] = $plugin->getPriceWithCurrencyFromIsoCode($sale['discount_amount'], $sale['iso_code']);
-        $sale['coupon_code'] = $plugin->getServiceCouponCode($sale['id']);
+        $sale['coupon_code'] = $plugin->getServiceSaleCouponCode($sale['id']);
     }
 }
 

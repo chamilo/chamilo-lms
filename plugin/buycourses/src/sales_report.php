@@ -147,7 +147,7 @@ foreach ($sales as &$sale) {
     $sale['total_price'] = $plugin->getPriceWithCurrencyFromIsoCode($sale['price'], $sale['iso_code']);
     if (isset($sale['discount_amount']) && $sale['discount_amount'] != 0) {
         $sale['total_discount'] = $plugin->getPriceWithCurrencyFromIsoCode($sale['discount_amount'], $sale['iso_code']);
-        $sale['coupon_code'] = $plugin->getCouponCode($sale['id']);
+        $sale['coupon_code'] = $plugin->getSaleCouponCode($sale['id']);
     }
 }
 

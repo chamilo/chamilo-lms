@@ -16,7 +16,6 @@ $plugin = BuyCoursesPlugin::create();
 $includeSession = $plugin->get('include_sessions') === 'true';
 $includeServices = $plugin->get('include_services') === 'true';
 
-
 $entityManager = Database::getManager();
 $userRepo = UserManager::getRepository();
 $currency = $plugin->getSelectedCurrency();
@@ -28,8 +27,6 @@ if (empty($currency)) {
 }
 
 $currencyIso = null;
-
-/* inicio  jcp */
 
 $coursesList = CourseManager::get_courses_list(
     0,
@@ -139,7 +136,7 @@ if ($form->validate()) {
     } else {
         header('Location:'.api_get_self().'?'.$queryString);
     }
-    
+
     exit;
 }
 

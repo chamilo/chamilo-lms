@@ -484,6 +484,8 @@ ALTER TABLE c_lp_item CHANGE title title LONGTEXT NOT NULL;
 //
 // Show view accordion lp_item_view
 // $_configuration['lp_view_accordion'] = false;
+// Allow export learning paths to students
+//$_configuration['lp_allow_export_to_students'] = false;
 //
 // ------ HTTP headers security
 // This section relates to options to increase the security of your Chamilo

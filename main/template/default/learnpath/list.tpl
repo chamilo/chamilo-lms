@@ -370,6 +370,7 @@
                                             {% endif %}
                                             <div class="col-md-1">
                                                 {{ row.action_pdf }}
+                                                {{ row.action_export }}
                                             </div>
                                         </div>
                                     </div>
@@ -621,6 +622,7 @@
                                                     {% endif %}
                                                     <div class="col-md-1">
                                                         {{ row.action_pdf }}
+                                                        {{ row.action_export }}
                                                     </div>
                                                 </div>
                                             </div>

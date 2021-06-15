@@ -733,25 +733,6 @@ foreach ($categories as $item) {
                     }
                 }
 
-                /* Export */
-                if ($details['lp_type'] == 1) {
-                    $dsp_disk = Display::url(
-                        Display::return_icon('cd.png', get_lang('ExportShort')),
-                        api_get_self()."?$cidReq&action=export&lp_id=$id"
-                    );
-                } elseif ($details['lp_type'] == 2) {
-                    $dsp_disk = Display::url(
-                        Display::return_icon('cd.png', get_lang('ExportShort')),
-                        api_get_self()."?$cidReq&action=export&lp_id=$id&export_name="
-                            .api_replace_dangerous_char($name).'.zip'
-                    );
-                } else {
-                    $dsp_disk = Display::return_icon(
-                        'cd_na.png',
-                        get_lang('ExportShort')
-                    );
-                }
-
                 // Copy
                 $copy = Display::url(
                     Display::return_icon('cd_copy.png', get_lang('Copy')),
@@ -904,7 +885,28 @@ foreach ($categories as $item) {
                 );
             }
 
-            if ($hideScormExportLink === 'true') {
+            /* Export */
+            if ($details['lp_type'] == 1) {
+                $dsp_disk = Display::url(
+                    Display::return_icon('cd.png', get_lang('ExportShort')),
+                    api_get_self()."?$cidReq&action=export&lp_id=$id"
+                );
+            } elseif ($details['lp_type'] == 2) {
+                $dsp_disk = Display::url(
+                    Display::return_icon('cd.png', get_lang('ExportShort')),
+                    api_get_self()."?$cidReq&action=export&lp_id=$id&export_name="
+                    .api_replace_dangerous_char($name).'.zip'
+                );
+            } else {
+                $dsp_disk = Display::return_icon(
+                    'cd_na.png',
+                    get_lang('ExportShort')
+                );
+            }
+
+            if ($hideScormExportLink === 'true'
+                || (false === api_get_configuration_value('lp_allow_export_to_students') && !$is_allowed_to_edit)
+            ) {
                 $dsp_disk = null;
             }
 

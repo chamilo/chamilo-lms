@@ -31,10 +31,11 @@ Feature: Work tool
     Given I am not logged
     Given I am a student
     And I am on "/main/work/work.php?cid=1"
-    Then I should see "Assignments"
+    And I wait for the page to be loaded
+    Then I should see "Work 1"
     Then I am on "/main/work/work_list.php?cid=1&sid=0&gid=0&gradebook=0&origin=&id=1"
     Then I should see "Work 1"
-    Then I should see "Work description"
+    And I should see "Work description"
     Then I follow "Upload my assignment"
     Then I should see "Upload a document"
     Then I follow "Upload (Simple)"

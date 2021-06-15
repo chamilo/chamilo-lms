@@ -15,12 +15,10 @@ security:
                 property: username
     role_hierarchy:
         ROLE_ADMIN:
-            - ROLE_SUPER_ADMIN
+            - ROLE_SUPER_ADMIN # Admin that install the platform
             - ROLE_QUESTION_MANAGER
             - ROLE_SESSION_MANAGER
             - ROLE_TEACHER
-            - ROLE_DIRECTOR
-            - ROLE_JURY_PRESIDENT
             - ROLE_CURRENT_COURSE_TEACHER
             - ROLE_CURRENT_COURSE_SESSION_TEACHER
             - ROLE_CURRENT_COURSE_GROUP_TEACHER

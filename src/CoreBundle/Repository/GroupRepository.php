@@ -27,6 +27,7 @@ class GroupRepository extends ServiceEntityRepository
         $criteria = [
             'name' => 'admins',
         ];
+
         /** @var Group $group */
         $group = $this->findOneBy($criteria);
 
@@ -80,13 +81,9 @@ class GroupRepository extends ServiceEntityRepository
 
         $manager = $this->getEntityManager();
 
-        $repo = $manager->getRepository(Group::class);
         foreach ($groups as $groupData) {
-            $criteria = [
-                'code' => $groupData['code'],
-            ];
-            $groupExists = $repo->findOneBy($criteria);
-            if (!$groupExists) {
+            $groupExists = $this->findOneBy(['code' => $groupData['code']]);
+            if (null === $groupExists) {
                 $group = new Group($groupData['title']);
                 $group
                     ->setCode($groupData['code'])

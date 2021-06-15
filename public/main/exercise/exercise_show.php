@@ -100,7 +100,8 @@ if (!empty($sessionId) && !$is_allowedToEdit) {
         api_get_course_int_id(),
         $sessionId
     )) {
-        if (!api_coach_can_edit_view_results(api_get_course_int_id(), $sessionId)) {
+        if (!api_is_coach($sessionId, api_get_course_int_id())) {
+        //if (!api_coach_can_edit_view_results(api_get_course_int_id(), $sessionId)) {
             api_not_allowed($printHeaders);
         }
     }

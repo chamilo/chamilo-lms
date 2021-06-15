@@ -6779,7 +6779,7 @@ function api_set_default_visibility(
                 if (empty($sessionId)) {
                     $objExerciseTmp = new Exercise($courseId);
                     $objExerciseTmp->read($item_id);
-                    if ('visible' == $visibility) {
+                    if ('visible' === $visibility) {
                         $objExerciseTmp->enable();
                         $objExerciseTmp->save();
                     } else {
@@ -6792,105 +6792,15 @@ function api_set_default_visibility(
     }
 }
 
-/**
- * @param int $user_id
- * @param int $courseId
- * @param int $session_id
- *
- * @return array
- */
-function api_detect_user_roles($user_id, $courseId, $session_id = 0)
+function api_get_roles()
 {
-    $user_roles = [];
-    $courseInfo = api_get_course_info_by_id($courseId);
-    $course_code = $courseInfo['code'];
-
-    $url_id = api_get_current_access_url_id();
-    if (api_is_platform_admin_by_id($user_id, $url_id)) {
-        $user_roles[] = PLATFORM_ADMIN;
-    }
-
-    /*if (api_is_drh()) {
-        $user_roles[] = DRH;
-    }*/
-
-    if (!empty($session_id)) {
-        if (SessionManager::user_is_general_coach($user_id, $session_id)) {
-            $user_roles[] = SESSION_GENERAL_COACH;
-        }
-    }
-
-    if (!empty($course_code)) {
-        if (empty($session_id)) {
-            if (CourseManager::isCourseTeacher($user_id, $courseInfo['real_id'])) {
-                $user_roles[] = COURSEMANAGER;
-            }
-            if (CourseManager::get_tutor_in_course_status($user_id, $courseInfo['real_id'])) {
-                $user_roles[] = COURSE_TUTOR;
-            }
-
-            if (CourseManager::is_user_subscribed_in_course($user_id, $course_code)) {
-                $user_roles[] = COURSE_STUDENT;
-            }
-        } else {
-            $user_status_in_session = SessionManager::get_user_status_in_course_session(
-                $user_id,
-                $courseId,
-                $session_id
-            );
-
-            if (!empty($user_status_in_session)) {
-                if (0 == $user_status_in_session) {
-                    $user_roles[] = SESSION_STUDENT;
-                }
-                if (2 == $user_status_in_session) {
-                    $user_roles[] = SESSION_COURSE_COACH;
-                }
-            }
-
-            /*if (api_is_course_session_coach($user_id, $course_code, $session_id)) {
-               $user_roles[] = SESSION_COURSE_COACH;
-            }*/
-        }
-    }
-
-    return $user_roles;
-}
-
-/**
- * @param int $courseId
- * @param int $session_id
- *
- * @return bool
- */
-function api_coach_can_edit_view_results($courseId = null, $session_id = null)
-{
-    if (api_is_platform_admin()) {
-        return true;
-    }
-
-    $user_id = api_get_user_id();
-
-    if (empty($courseId)) {
-        $courseId = api_get_course_int_id();
-    }
-
-    if (empty($session_id)) {
-        $session_id = api_get_session_id();
-    }
-
-    $roles = api_detect_user_roles($user_id, $courseId, $session_id);
-
-    if (in_array(SESSION_COURSE_COACH, $roles)) {
-        //return api_get_setting('session_tutor_reports_visibility') == 'true';
-        return true;
-    } else {
-        if (in_array(COURSEMANAGER, $roles)) {
-            return true;
-        }
-
-        return false;
-    }
+    $hierarchy = Container::$container->getParameter('security.role_hierarchy.roles');
+    $roles = [];
+    array_walk_recursive($hierarchy, function($role) use (&$roles) {
+        $roles[$role] = $role;
+    });
+    //echo '<pre>';    var_dump($roles);
+    return $roles;
 }
 
 /**

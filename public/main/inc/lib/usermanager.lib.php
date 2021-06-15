@@ -339,7 +339,6 @@ class UserManager
             $group = Container::$container->get(GroupRepository::class)->findOneBy(['code' => $statusToGroup[$status]]);
             if ($group) {
                 $user->addGroup($group);
-                $repo->updateUser($user);
             }
         }
 

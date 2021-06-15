@@ -68,7 +68,7 @@ class UniqueAnswerImage extends UniqueAnswer
             $html .= '<script type="text/javascript" src="'.$finderFolder.'js/elfinder.full.js"></script>';
             $html .= '<!-- elFinder translation (OPTIONAL) -->';
             $language = 'en';
-            $platformLanguage = api_get_interface_language();
+            $platformLanguage = api_get_language_isocode();
             $iso = api_get_language_isocode($platformLanguage);
             $filePart = "vendor/studio-42/elfinder/js/i18n/elfinder.$iso.js";
             $file = api_get_path(SYS_PATH).$filePart;

@@ -18,7 +18,7 @@ if (api_is_anonymous()) {
     // Only available for the selected language.
     $languageToActivate = api_get_plugin_setting('before_login', 'language');
 
-    if (api_get_interface_language() != $languageToActivate) {
+    if (api_get_language_isocode() != $languageToActivate) {
         return null;
     }
 

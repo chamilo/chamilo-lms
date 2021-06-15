@@ -447,7 +447,7 @@ function display_language_selection()
         </h2>
         <label for="language_list"><?php echo get_lang('Please select installation language'); ?></label>
         <div class="form-group">
-            <?php echo display_language_selection_box('language_list', api_get_interface_language()); ?>
+            <?php echo display_language_selection_box('language_list', api_get_language_isocode()); ?>
         </div>
         <button type="submit" name="step1" class="btn btn-success" value="<?php echo get_lang('Next'); ?>">
             <em class="fa fa-forward"> </em>

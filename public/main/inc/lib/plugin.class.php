@@ -403,7 +403,7 @@ class Plugin
         // Check whether the language strings for the plugin have already been
         // loaded. If so, no need to load them again.
         if (is_null($this->strings)) {
-            $language_interface = api_get_interface_language();
+            $language_interface = api_get_language_isocode();
             $root = api_get_path(SYS_PLUGIN_PATH);
             $plugin_name = $this->get_name();
 

@@ -52,7 +52,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
 }
 switch ($action) {
     case 'send_legal':
-        $language = api_get_interface_language();
+        $language = api_get_language_isocode();
         $language = api_get_language_id($language);
         $terms = LegalManager::get_last_condition($language);
         if (!$terms) {

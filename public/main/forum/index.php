@@ -247,7 +247,7 @@ if (!empty($allCourseForums)) {
 $actions = Display::toolbarAction('toolbar-forum', [$actionLeft]);
 
 $languages = api_get_language_list_for_flag();
-$defaultUserLanguage = ucfirst(api_get_interface_language());
+$defaultUserLanguage = ucfirst(api_get_language_isocode());
 if (isset($_user['language']) && !empty($_user['language'])) {
     $defaultUserLanguage = ucfirst($_user['language']);
 }

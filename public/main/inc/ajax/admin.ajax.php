@@ -272,7 +272,7 @@ function getLatestNews()
         $url,
         [
             'query' => [
-                'language' => api_get_interface_language(),
+                'language' => api_get_language_isocode(),
             ],
         ]
     );

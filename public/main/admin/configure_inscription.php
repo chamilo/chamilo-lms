@@ -17,7 +17,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
     $get = array_keys($_GET);
     if (isset($get)) {
         if (isset($get[0]) && 'legal' == $get[0]) {
-            $language = api_get_interface_language();
+            $language = api_get_language_isocode();
             $language = api_get_language_id($language);
             $term_preview = LegalManager::get_last_condition($language);
             if (!$term_preview) {
@@ -267,7 +267,7 @@ if ($display_all_form) {
 
 // Terms and conditions
 if ('true' == api_get_setting('allow_terms_conditions')) {
-    $language = api_get_interface_language();
+    $language = api_get_language_isocode();
     $language = api_get_language_id($language);
     $term_preview = LegalManager::get_last_condition($language);
 

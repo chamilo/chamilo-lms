@@ -18,16 +18,14 @@ class SystemAnnouncementManager
 
     public static function getVisibilityList(): array
     {
-        $visibleToUsers = [
+        return [
             self::VISIBLE_TEACHER => get_lang('Trainer'),
             self::VISIBLE_STUDENT => get_lang('Learner'),
             self::VISIBLE_GUEST => get_lang('Guest'),
+            self::VISIBLE_DRH => get_lang('Human Resources Manager'),
+            self::VISIBLE_SESSION_ADMIN => get_lang('Session administrator'),
+            self::VISIBLE_STUDENT_BOSS => get_lang('Superior (n+1)'),
         ];
-        $visibleToUsers[self::VISIBLE_DRH] = get_lang('Human Resources Manager');
-        $visibleToUsers[self::VISIBLE_SESSION_ADMIN] = get_lang('Session administrator');
-        $visibleToUsers[self::VISIBLE_STUDENT_BOSS] = get_lang('LearnerBoss');
-
-        return $visibleToUsers;
     }
 
     /**
@@ -54,7 +52,7 @@ class SystemAnnouncementManager
      */
     public static function display_announcements($visibility, $id = -1)
     {
-        $user_selected_language = api_get_interface_language();
+        $user_selected_language = api_get_language_isocode();
         $db_table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
         $tbl_announcement_group = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
         $userGroup = new UserGroupModel();
@@ -140,7 +138,7 @@ class SystemAnnouncementManager
         $start = 0,
         $user_id = ''
     ) {
-        $user_selected_language = api_get_interface_language();
+        $user_selected_language = api_get_language_isocode();
         $start = (int) $start;
         $userGroup = new UserGroupModel();
         $tbl_announcement_group = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
@@ -310,7 +308,7 @@ class SystemAnnouncementManager
     public static function count_nb_announcement($start = 0, $user_id = '')
     {
         $start = intval($start);
-        $user_selected_language = api_get_interface_language();
+        $user_selected_language = api_get_language_isocode();
         $db_table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
         $sql = 'SELECT id FROM '.$db_table.'
                 WHERE (lang="'.$user_selected_language.'" OR lang IS NULL) ';
@@ -929,7 +927,7 @@ class SystemAnnouncementManager
      */
     public static function getAnnouncements($visible, $id = null): array
     {
-        $user_selected_language = Database::escape_string(api_get_interface_language());
+        $user_selected_language = Database::escape_string(api_get_language_isocode());
         $table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 
         $cut_size = 500;
@@ -1040,7 +1038,7 @@ class SystemAnnouncementManager
      */
     public static function getAnnouncement($announcementId, $visibility): array
     {
-        $selectedUserLanguage = Database::escape_string(api_get_interface_language());
+        $selectedUserLanguage = Database::escape_string(api_get_language_isocode());
         $announcementTable = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
         $now = api_get_utc_datetime();
         $announcementId = (int) $announcementId;

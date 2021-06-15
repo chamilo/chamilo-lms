@@ -20,8 +20,7 @@ class LanguageFixtures extends Fixture
                 ->setOriginalName($data['original_name'])
                 ->setEnglishName($data['english_name'])
                 ->setIsocode($data['isocode'])
-                ->setAvailable(1 === $data['available'])
-            ;
+                ->setAvailable(1 === $data['available']);
             $manager->persist($lang);
         }
 
@@ -55,6 +54,7 @@ class LanguageFixtures extends Fixture
                 'available' => 0,
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
+                'direction' => 'rtl',
             ],
             [
                 'original_name' => 'Asturianu',
@@ -143,6 +143,7 @@ class LanguageFixtures extends Fixture
                 'available' => 0,
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
+                'direction' => 'rtl',
             ],
             [
                 'original_name' => 'Nederlands',
@@ -245,6 +246,7 @@ class LanguageFixtures extends Fixture
                 'available' => 0,
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
+                'direction' => 'rtl',
             ],
             [
                 'original_name' => 'हिन्दी',
@@ -350,6 +352,7 @@ class LanguageFixtures extends Fixture
                 'available' => 0,
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
+                'direction' => 'rtl',
             ],
             [
                 'original_name' => 'فارسی',
@@ -358,6 +361,7 @@ class LanguageFixtures extends Fixture
                 'available' => 0,
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
+                'direction' => 'rtl',
             ],
             [
                 'original_name' => 'Polski',

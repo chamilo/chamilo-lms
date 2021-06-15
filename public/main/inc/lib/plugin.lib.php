@@ -411,7 +411,7 @@ class AppPlugin
      */
     public function load_plugin_lang_variables($plugin_name)
     {
-        $language_interface = api_get_interface_language();
+        $language_interface = api_get_language_isocode();
         $root = api_get_path(SYS_PLUGIN_PATH);
         $strings = null;
 

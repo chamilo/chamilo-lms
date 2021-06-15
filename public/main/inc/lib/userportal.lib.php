@@ -206,7 +206,7 @@ class IndexManager
      */
     public function return_notice()
     {
-        $user_selected_language = api_get_interface_language();
+        $user_selected_language = api_get_language_isocode();
         // Notice
         $home_notice = @(string) file_get_contents($this->home.'home_notice_'.$user_selected_language.'.html');
         if (empty($home_notice)) {
@@ -224,7 +224,7 @@ class IndexManager
      */
     public function return_help()
     {
-        $user_selected_language = api_get_interface_language();
+        $user_selected_language = api_get_language_isocode();
         $platformLanguage = api_get_setting('platformLanguage');
 
         // Help section.

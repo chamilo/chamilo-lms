@@ -57,7 +57,7 @@ foreach ($list as $mail) {
             'Password' => $pass,
             'Email' => $mail,
         ];
-        $l = api_get_interface_language();
+        $l = api_get_language_isocode();
         if (!empty($row['language'])) {
             $l = $row['language'];
         }

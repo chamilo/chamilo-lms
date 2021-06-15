@@ -440,7 +440,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
     $get = array_keys($_GET);
     if (isset($get)) {
         if (isset($get[0]) && 'legal' == $get[0]) {
-            $language = api_get_interface_language();
+            $language = api_get_language_isocode();
             $language = api_get_language_id($language);
             $term_preview = LegalManager::get_last_condition($language);
             if (!$term_preview) {
@@ -500,7 +500,7 @@ if ('true' === api_get_setting('allow_terms_conditions') && $user_already_regist
     }
 
     // Get user language ignoring the platform language
-    $language = api_get_interface_language();
+    $language = api_get_language_isocode();
     $language = api_get_language_id($language);
     $term_preview = LegalManager::get_last_condition($language);
 
@@ -674,7 +674,7 @@ if ($form->validate()) {
 
         $status = isset($values['status']) ? $values['status'] : STUDENT;
         $phone = isset($values['phone']) ? $values['phone'] : null;
-        $values['language'] = isset($values['language']) ? $values['language'] : api_get_interface_language();
+        $values['language'] = isset($values['language']) ? $values['language'] : api_get_language_isocode();
         $values['address'] = isset($values['address']) ? $values['address'] : '';
 
         // Creates a new user

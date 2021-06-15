@@ -100,7 +100,6 @@
         <file name="public/main/inc/lib/internationalization.lib.php"/>
         <file name="public/main/inc/lib/legal.lib.php"/>
         <file name="public/main/inc/lib/link.lib.php"/>
-        <file name="public/main/inc/lib/lp_item.lib.php"/>
         <file name="public/main/inc/lib/MailTemplateManager.php"/>
         <file name="public/main/inc/lib/message.lib.php"/>
         <file name="public/main/inc/lib/model.lib.php"/>

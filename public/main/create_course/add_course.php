@@ -55,11 +55,6 @@ $htmlHeadXtra[] = '<script>
     });
 </script>';
 
-/*$interbreadcrumb[] = [
-    'url' => api_get_path(WEB_PATH).'user_portal.php',
-    'name' => get_lang('My courses'),
-];*/
-
 // Displaying the header.
 $tool_name = $course_validation_feature ? get_lang('Create a course request') : get_lang('Add a new course');
 

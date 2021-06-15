@@ -1313,55 +1313,6 @@ function deleteTemplate($id)
 }
 
 /**
- * Returns the list of timezone identifiers used to populate the select
- * This function is called through a call_user_func() in the generate_settings_form function.
- *
- * @return array List of timezone identifiers
- *
- * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
- *
- * @since Chamilo 1.8.7
- */
-function select_timezone_value()
-{
-    return api_get_timezones();
-}
-
-/**
- * Returns an array containing the list of options used to populate the gradebook_number_decimals variable
- * This function is called through a call_user_func() in the generate_settings_form function.
- *
- * @return array List of gradebook_number_decimals options
- *
- * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
- */
-function select_gradebook_number_decimals()
-{
-    return ['0', '1', '2'];
-}
-
-/**
- * Get the options for a select element to select gradebook default grade model.
- *
- * @return array
- */
-function select_gradebook_default_grade_model_id()
-{
-    $grade_model = new GradeModel();
-    $models = $grade_model->get_all();
-    $options = [];
-    $options[-1] = get_lang('none');
-
-    if (!empty($models)) {
-        foreach ($models as $model) {
-            $options[$model['id']] = $model['name'];
-        }
-    }
-
-    return $options;
-}
-
-/**
  * @param array $settings
  * @param array $settings_by_access_list
  *

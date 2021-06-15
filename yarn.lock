@@ -6186,7 +6186,7 @@ __metadata:
     optimize-css-assets-webpack-plugin: ^6.0.0
     path: ^0.12.7
     popper.js: ^1.16.1
-    postcss: ^8.3.3
+    postcss: ^8.3.4
     postcss-loader: ^5.3.0
     postcss-prefix-selector: ^1.9.0
     postcss-rtl: ^1.7.3
@@ -6199,7 +6199,7 @@ __metadata:
     qtip2: ^3.0.3
     quasar: 2.0.0-rc.1
     readmore-js: ^2.2.1
-    sass: ^1.34.1
+    sass: ^1.35.0
     sass-loader: ^11.1.1
     select2: ^4.1.0-rc.0
     signature_pad: ^3.0.0-beta.4
@@ -6214,7 +6214,7 @@ __metadata:
     tinymce: ^5.8.1
     ts-loader: ^8.3.0
     typescript: ^3.9.9
-    video.js: ^7.13.0
+    video.js: ^7.13.1
     vue: 3.1.1
     vue-cli-plugin-quasar: next
     vue-eslint-parser: ^7.6.0
@@ -15648,14 +15648,14 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.3.3":
-  version: 8.3.3
-  resolution: "postcss@npm:8.3.3"
+"postcss@npm:^8.3.4":
+  version: 8.3.4
+  resolution: "postcss@npm:8.3.4"
   dependencies:
     colorette: ^1.2.2
     nanoid: ^3.1.23
     source-map-js: ^0.6.2
-  checksum: 3e8e8310b40e6ea87f4338af8f9890ace40cea774e0f5bf741ea436d71de89c3c4d955e7877ff8b2ab8ce7a283b2216bc7b9e1e895b9c9ef2bfa8e2bc248d94a
+  checksum: 9b02ccb85c27f43cba22a43b5b6f9babacfe3a0591037ffa17c302efce95332f22ec7ff5f8db99c569df58d8c2b597a813872f29953646d14f12f625be6215f7
   languageName: node
   linkType: hard
 
@@ -16921,14 +16921,14 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.34.1":
-  version: 1.34.1
-  resolution: "sass@npm:1.34.1"
+"sass@npm:^1.35.0":
+  version: 1.35.0
+  resolution: "sass@npm:1.35.0"
   dependencies:
     chokidar: ">=3.0.0 <4.0.0"
   bin:
     sass: sass.js
-  checksum: 5feb6de5ee50440da1764756b4ccd3060f6b091453579a2ab2854a9d7f6ff5b03dce01cd5bbe2d9cf916a68a581fc15203b66a9d3dc4b95709541ec43fd9eaca
+  checksum: 030a3767cc2cca44a664fd6159223161e0f48ae524af666b400c14aa88577079ffba651e978cd1dc553f57aa4c8d8f29467fb2d54b5d2d57641c31a7b0cf8636
   languageName: node
   linkType: hard
 
@@ -19262,9 +19262,9 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"video.js@npm:7.13.0, video.js@npm:^7.13.0":
-  version: 7.13.0
-  resolution: "video.js@npm:7.13.0"
+"video.js@npm:7.13.1, video.js@npm:^7.13.1":
+  version: 7.13.1
+  resolution: "video.js@npm:7.13.1"
   dependencies:
     "@babel/runtime": ^7.12.5
     "@videojs/http-streaming": 2.9.0
@@ -19279,7 +19279,7 @@ typescript@~4.1.5:
     safe-json-parse: 4.0.0
     videojs-font: 3.2.0
     videojs-vtt.js: ^0.15.3
-  checksum: f70c92cca18faf32884c0c728b949fbe09944fcfad613f8ea6e5f289784336c84380ec0bef392a7ba3d3d78a761459f22d2f203caa5addfa77c6dcc2700a7c31
+  checksum: cf966200adc3dc63844bf017f75624f6267386c6e18a81da17fba11e219025e87e7bd4d0f13909b75e649aad08a23d5da3ca1bb305ac3dcd7652577a4e6cee78
   languageName: node
   linkType: hard
 

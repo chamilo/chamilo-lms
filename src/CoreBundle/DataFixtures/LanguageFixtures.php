@@ -20,7 +20,8 @@ class LanguageFixtures extends Fixture
                 ->setOriginalName($data['original_name'])
                 ->setEnglishName($data['english_name'])
                 ->setIsocode($data['isocode'])
-                ->setAvailable(1 === $data['available']);
+                ->setAvailable(1 === $data['available'])
+            ;
             $manager->persist($lang);
         }
 
@@ -83,7 +84,7 @@ class LanguageFixtures extends Fixture
                 'original_name' => 'Bosanski',
                 'english_name' => 'bosnian',
                 'isocode' => 'bs_BA',
-                'available' => 1,
+                'available' => 0,
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
             ],
@@ -99,7 +100,7 @@ class LanguageFixtures extends Fixture
                 'original_name' => 'Български',
                 'english_name' => 'bulgarian',
                 'isocode' => 'bg',
-                'available' => 1,
+                'available' => 0,
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
             ],
@@ -241,7 +242,7 @@ class LanguageFixtures extends Fixture
                 'original_name' => 'עברית',
                 'english_name' => 'hebrew',
                 'isocode' => 'he_IL',
-                'available' => 1,
+                'available' => 0,
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
             ],
@@ -257,7 +258,7 @@ class LanguageFixtures extends Fixture
                 'original_name' => 'Magyar',
                 'english_name' => 'hungarian',
                 'isocode' => 'hu_HU',
-                'available' => 1,
+                'available' => 0,
                 'format' => 'title last_name first_name',
                 'sort_by' => 'last_name',
             ],
@@ -362,7 +363,7 @@ class LanguageFixtures extends Fixture
                 'original_name' => 'Polski',
                 'english_name' => 'polish',
                 'isocode' => 'pl_PL',
-                'available' => 0,
+                'available' => 1,
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
             ],
@@ -394,7 +395,7 @@ class LanguageFixtures extends Fixture
                 'original_name' => 'Русский',
                 'english_name' => 'russian',
                 'isocode' => 'ru_RU',
-                'available' => 0,
+                'available' => 1,
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
             ],

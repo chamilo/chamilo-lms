@@ -272,14 +272,12 @@ class UserManager
 
         // Checking the user language
         $languages = api_get_languages();
-        $language = strtolower($language);
 
         // Default to english
         if (!in_array($language, array_keys($languages), true)) {
-            $language = 'en';
+            $language = 'en_US';
         }
 
-        $currentDate = api_get_utc_datetime();
         $now = new DateTime();
 
         if (empty($expirationDate) || '0000-00-00 00:00:00' === $expirationDate) {
@@ -1038,7 +1036,7 @@ class UserManager
         $creator_id = null,
         $hr_dept_id = 0,
         $extra = null,
-        $language = 'english',
+        $language = 'en_US',
         $encrypt_method = '',
         $send_email = false,
         $reset_password = 0,
@@ -1111,12 +1109,10 @@ class UserManager
             ->setStatus($status)
             ->setAuthSource($auth_source)
             ->setLocale($language)
-            ->setLocale($language)
             ->setEmail($email)
             ->setOfficialCode($official_code)
             ->setPhone($phone)
             ->setAddress($address)
-            //->setPictureUri($picture_uri)
             ->setExpirationDate($expiration_date)
             ->setActive($active)
             ->setEnabled($active)

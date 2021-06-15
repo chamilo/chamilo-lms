@@ -85,6 +85,7 @@ if (1 != Database::num_rows($res)) {
 }
 
 $user_data = Database::fetch_array($res, 'ASSOC');
+
 $user_data['platform_admin'] = is_null($user_data['is_admin']) ? 0 : 1;
 $user_data['send_mail'] = 0;
 $user_data['old_password'] = $user_data['password'];
@@ -266,7 +267,7 @@ if (api_is_platform_admin()) {
 }
 
 //Language
-$form->addSelectLanguage('language', get_lang('Language'));
+$form->addSelectLanguage('locale', get_lang('Language'));
 
 // Send email
 $group = [];
@@ -423,7 +424,7 @@ if ($form->validate()) {
         $send_mail = (int) $user['send_mail'];
         $reset_password = (int) $user['reset_password'];
         $hr_dept_id = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : null;
-        $language = $user['language'];
+        $language = $user['locale'];
         $address = isset($user['address']) ? $user['address'] : null;
 
         $expiration_date = null;

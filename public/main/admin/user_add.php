@@ -258,7 +258,7 @@ if (api_is_platform_admin()) {
     $form->addElement('html', '</div>');
 }
 
-$form->addSelectLanguage('language', get_lang('Language'));
+$form->addSelectLanguage('locale', get_lang('Language'));
 
 // Send email
 $group = [];
@@ -329,6 +329,7 @@ $defaults['extra_mail_notify_message'] = 1;
 $defaults['extra_mail_notify_group_message'] = 1;
 $defaults['radio_expiration_date'] = 0;
 $defaults['status'] = STUDENT;
+$defaults['locale'] = api_get_language_isocode();
 $form->setDefaults($defaults);
 
 // Submit button
@@ -348,7 +349,7 @@ if ($form->validate()) {
         $phone = $user['phone'];
         $username = $user['username'];
         $status = (int) $user['status'];
-        $language = $user['language'];
+        $language = $user['locale'];
         $picture = $_FILES['picture'];
         $platform_admin = 0;
         if (isset($user['admin']) && isset($user['admin']['platform_admin'])) {

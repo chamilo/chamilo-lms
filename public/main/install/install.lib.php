@@ -195,98 +195,6 @@ function trueFalse($var)
 }
 
 /**
- * Detects browser's language.
- *
- * @return string Returns a language identificator, i.e. 'english', 'spanish', ...
- *
- * @author Ivan Tcholakov, 2010
- */
-function detect_browser_language()
-{
-    static $language_index = [
-        'ar' => 'arabic',
-        'ast' => 'asturian',
-        'bg' => 'bulgarian',
-        'bs' => 'bosnian',
-        'ca' => 'catalan',
-        'zh' => 'simpl_chinese',
-        'zh-tw' => 'trad_chinese',
-        'cs' => 'czech',
-        'da' => 'danish',
-        'prs' => 'dari',
-        'de' => 'german',
-        'el' => 'greek',
-        'en' => 'english',
-        'es' => 'spanish',
-        'eo' => 'esperanto',
-        'eu' => 'basque',
-        'fa' => 'persian',
-        'fr' => 'french',
-        'fur' => 'friulian',
-        'gl' => 'galician',
-        'ka' => 'georgian',
-        'hr' => 'croatian',
-        'he' => 'hebrew',
-        'hi' => 'hindi',
-        'id' => 'indonesian',
-        'it' => 'italian',
-        'ko' => 'korean',
-        'lv' => 'latvian',
-        'lt' => 'lithuanian',
-        'mk' => 'macedonian',
-        'hu' => 'hungarian',
-        'ms' => 'malay',
-        'nl' => 'dutch',
-        'ja' => 'japanese',
-        'no' => 'norwegian',
-        'oc' => 'occitan',
-        'ps' => 'pashto',
-        'pl' => 'polish',
-        'pt' => 'portuguese',
-        'pt-br' => 'brazilian',
-        'ro' => 'romanian',
-        'qu' => 'quechua_cusco',
-        'ru' => 'russian',
-        'sk' => 'slovak',
-        'sl' => 'slovenian',
-        'sr' => 'serbian',
-        'fi' => 'finnish',
-        'sv' => 'swedish',
-        'th' => 'thai',
-        'tr' => 'turkish',
-        'uk' => 'ukrainian',
-        'vi' => 'vietnamese',
-        'sw' => 'swahili',
-        'yo' => 'yoruba',
-    ];
-
-    $system_available_languages = get_language_folder_list();
-    if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-        $accept_languages = strtolower(str_replace('_', '-', $_SERVER['HTTP_ACCEPT_LANGUAGE']));
-        foreach ($language_index as $code => $language) {
-            if (0 === strpos($accept_languages, $code)) {
-                if (!empty($system_available_languages[$language])) {
-                    return $language;
-                }
-            }
-        }
-    }
-
-    if (isset($_SERVER['HTTP_USER_AGENT'])) {
-        $user_agent = strtolower(str_replace('_', '-', $_SERVER['HTTP_USER_AGENT']));
-        foreach ($language_index as $code => $language) {
-            if (@preg_match("/[\[\( ]{$code}[;,_\-\)]/", $user_agent)) {
-                if (!empty($system_available_languages[$language])) {
-                    return $language;
-                }
-            }
-        }
-    }
-
-    return 'english';
-}
-
-/**
  * This function checks if the given folder is writable.
  *
  * @param string $folder     Full path to a folder
@@ -374,73 +282,6 @@ function writeSystemConfigFile($path)
 
     fwrite($fp, $content);
     fclose($fp);
-}
-
-/**
- * Returns a list of language directories.
- */
-function get_language_folder_list()
-{
-    $languages = LanguageFixtures::getLanguages();
-
-    return array_column($languages, 'english_name', 'isocode');
-
-    return [
-        'ar' => 'arabic',
-        'ast' => 'asturian',
-        'bg' => 'bulgarian',
-        'bs' => 'bosnian',
-        'ca' => 'catalan',
-        'zh' => 'simpl_chinese',
-        'zh-tw' => 'trad_chinese',
-        'cs' => 'czech',
-        'da' => 'danish',
-        'prs' => 'dari',
-        'de' => 'german',
-        'el' => 'greek',
-        'en' => 'english',
-        'es' => 'spanish',
-        'eo' => 'esperanto',
-        'eu' => 'basque',
-        'fa' => 'persian',
-        'fr' => 'french',
-        'fur' => 'friulian',
-        'gl' => 'galician',
-        'ka' => 'georgian',
-        'hr' => 'croatian',
-        'he' => 'hebrew',
-        'hi' => 'hindi',
-        'id' => 'indonesian',
-        'it' => 'italian',
-        'ko' => 'korean',
-        'lv' => 'latvian',
-        'lt' => 'lithuanian',
-        'mk' => 'macedonian',
-        'hu' => 'hungarian',
-        'ms' => 'malay',
-        'nl' => 'dutch',
-        'ja' => 'japanese',
-        'no' => 'norwegian',
-        'oc' => 'occitan',
-        'ps' => 'pashto',
-        'pl' => 'polish',
-        'pt' => 'portuguese',
-        'pt-br' => 'brazilian',
-        'ro' => 'romanian',
-        'qu' => 'quechua_cusco',
-        'ru' => 'russian',
-        'sk' => 'slovak',
-        'sl' => 'slovenian',
-        'sr' => 'serbian',
-        'fi' => 'finnish',
-        'sv' => 'swedish',
-        'th' => 'thai',
-        'tr' => 'turkish',
-        'uk' => 'ukrainian',
-        'vi' => 'vietnamese',
-        'sw' => 'swahili',
-        'yo' => 'yoruba',
-    ];
 }
 
 /**
@@ -583,7 +424,7 @@ function display_language_selection_box($name = 'language_list', $default_langua
     // Displaying the box.
     return Display::select(
         'language_list',
-        get_language_folder_list(),
+        array_column(LanguageFixtures::getLanguages(),'english_name', 'isocode'),
         $default_language,
         ['class' => 'form-control'],
         false

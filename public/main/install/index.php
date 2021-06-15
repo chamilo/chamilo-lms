@@ -66,21 +66,7 @@ putenv('APP_DEBUG=1');
 session_start();
 
 require_once 'install.lib.php';
-
 $installationLanguage = 'en_US';
-// Determination of the language during the installation procedure.
-if (!empty($_POST['language_list'])) {
-    $search = ['../', '\\0'];
-    $installationLanguage = str_replace($search, '', urldecode($_POST['language_list']));
-} else {
-    // Trying to switch to the browser's language, it is covenient for most of the cases.
-    $installationLanguage = detect_browser_language();
-}
-
-// Language validation.
-if (!array_key_exists($installationLanguage, get_language_folder_list())) {
-    $installationLanguage = 'en_US';
-}
 
 // Set translation
 $translator = new Translator($installationLanguage);

@@ -2065,7 +2065,11 @@ function _api_get_person_name_convention($iso, $type)
         $conventionsFormatted[$iso]['format'] = $language['format'];
         $conventionsFormatted[$iso]['sort_by'] =  $language['sort_by'];
 
-        $conventionsFormatted[$iso]['format'] = str_replace($search1, $replacement1, $conventionsFormatted[$iso]['format']);
+        $conventionsFormatted[$iso]['format'] = str_replace(
+            $search1,
+            $replacement1,
+            $conventionsFormatted[$iso]['format']
+        );
         $conventionsFormatted[$iso]['format'] = _api_validate_person_name_format(
             _api_clean_person_name(
                 str_replace(
@@ -2079,6 +2083,7 @@ function _api_get_person_name_convention($iso, $type)
                 )
             )
         );
+
         $conventionsFormatted[$iso]['sort_by'] = 'last_name' !== strtolower($conventionsFormatted[$iso]['sort_by']) ? true : false;
     }
 

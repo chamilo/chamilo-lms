@@ -3403,6 +3403,7 @@ class BuyCoursesPlugin extends Plugin
             ],
             'first'
         );
+
         return $couponCode['code'];
     }
 
@@ -3434,6 +3435,7 @@ class BuyCoursesPlugin extends Plugin
             ],
             'first'
         );
+
         return $couponCode['code'];
     }
 
@@ -3878,7 +3880,7 @@ class BuyCoursesPlugin extends Plugin
     private function getServicesCoupons($couponId)
     {
         $couponServiceTable = Database::get_main_table(self::TABLE_COUPON_SERVICE);
-        $serviceTable =  Database::get_main_table(self::TABLE_SERVICES);
+        $serviceTable = Database::get_main_table(self::TABLE_SERVICES);
 
         $couponFrom = "
             $couponServiceTable cs
@@ -4119,6 +4121,7 @@ class BuyCoursesPlugin extends Plugin
                     false
                 )
             );
+
             return false;
         }
 
@@ -4153,6 +4156,7 @@ class BuyCoursesPlugin extends Plugin
                     false
                 )
             );
+
             return false;
         }
 
@@ -4189,6 +4193,7 @@ class BuyCoursesPlugin extends Plugin
                     false
                 )
             );
+
             return false;
         }
 
@@ -4239,6 +4244,7 @@ class BuyCoursesPlugin extends Plugin
                     false
                 )
             );
+
             return false;
         }
 
@@ -4251,7 +4257,7 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * Remove all coupon services for a product type and coupon ID
+     * Remove all coupon services for a product type and coupon ID.
      *
      * @param int $productType The product type
      * @param int $coupon_id   The coupon ID

@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\SkillRelCourse;
 use Chamilo\CoreBundle\Entity\SkillRelItem;
 use Chamilo\CoreBundle\Entity\SkillRelItemRelUser;
+use Chamilo\CoreBundle\Entity\SkillRelSkill;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CAttendance;
@@ -473,18 +474,24 @@ class SkillModel extends Model
         $params['icon'] = '';
 
         $skill_id = $this->save($params);
+        $em = Database::getManager();
+        $repo = $em->getRepository(Skill::class);
+
         if ($skill_id) {
             // Saving skill_rel_skill (parent_id, relation_type)
             foreach ($params['parent_id'] as $parent_id) {
                 $relation_exists = $skillRelSkill->relationExists($skill_id, $parent_id);
                 if (!$relation_exists) {
-                    $attributes = [
-                        'skill_id' => $skill_id,
-                        'parent_id' => $parent_id,
-                        'relation_type' => isset($params['relation_type']) ? $params['relation_type'] : 0,
-                        'level' => isset($params['level']) ? $params['level'] : 0,
-                    ];
-                    $skillRelSkill->save($attributes);
+                    $skillRelSkill =
+                        (new SkillRelSkill())
+                            ->setSkill($repo->find($skill_id))
+                            ->setParent($repo->find($parent_id))
+                            ->setLevel($params['level'] ?? 0)
+                            ->setRelationType($params['relation_type'] ?? 0)
+                    ;
+                    //$skillRelSkill->save($attributes);
+                    $em->persist($skillRelSkill);
+                    $em->flush();
                 }
             }
 
@@ -582,7 +589,7 @@ class SkillModel extends Model
             $params['parent_id'] = 1;
         }
 
-        $params['gradebook_id'] = isset($params['gradebook_id']) ? $params['gradebook_id'] : [];
+        $params['gradebook_id'] = $params['gradebook_id'] ?? [];
 
         $skillRelSkill = new SkillRelSkillModel();
         $skillRelGradebook = new SkillRelGradebookModel();
@@ -608,17 +615,14 @@ class SkillModel extends Model
                     $attributes = [
                         'skill_id' => $skillId,
                         'parent_id' => $parent_id,
-                        'relation_type' => $params['relation_type'],
+                        'relation_type' => $params['relation_type'] ?? 0,
                         //'level'         => $params['level'],
                     ];
                     $skillRelSkill->updateBySkill($attributes);
                 }
             }
 
-            $skillRelGradebook->updateGradeBookListBySkill(
-                $skillId,
-                $params['gradebook_id']
-            );
+            $skillRelGradebook->updateGradeBookListBySkill($skillId, $params['gradebook_id']);
 
             return $skillId;
         }

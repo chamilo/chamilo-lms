@@ -248,6 +248,13 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected ?string $description;
 
     /**
+     * @Groups({"course:read", "course_rel_user:read"})
+     *
+     * @ORM\Column(name="introduction", type="text", nullable=true)
+     */
+    protected ?string $introduction;
+
+    /**
      * @ApiSubresource()
      * @Groups({"course:read", "course:write", "course_rel_user:read"})
      * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="courses")
@@ -1265,6 +1272,18 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public function setSearchEngineRefs(Collection $searchEngineRefs): self
     {
         $this->searchEngineRefs = $searchEngineRefs;
+
+        return $this;
+    }
+
+    public function getIntroduction(): ?string
+    {
+        return $this->introduction;
+    }
+
+    public function setIntroduction(?string $introduction): self
+    {
+        $this->introduction = $introduction;
 
         return $this;
     }

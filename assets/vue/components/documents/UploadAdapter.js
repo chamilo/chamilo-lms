@@ -90,7 +90,7 @@ export default class MyUploadAdapter {
         // Chamilo
         data.append('filetype', 'file');
         data.append('parentResourceNodeId', '4');
-        data.append('resourceLinkList', '{"c_id": 1, "visibility":2}');
+        //data.append('resourceLinkList', '{"cid": 1, "visibility":2}');
         data.append('uploadFile', file);
         //data.append( 'upload', file );
 

@@ -282,7 +282,7 @@ export default {
           this.item.resourceLinkList = JSON.stringify([{
             gid: 0,
             sid: 0,
-            c_id: 0,
+            cid: 0,
             visibility: 2, // visible by default
           }]);
 

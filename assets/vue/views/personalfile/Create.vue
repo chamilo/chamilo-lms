@@ -52,7 +52,7 @@ export default {
     this.item.resourceLinkList = JSON.stringify([{
       gid: this.$route.query.gid,
       sid: this.$route.query.sid,
-      c_id: this.$route.query.cid,
+      cid: this.$route.query.cid,
       visibility: 2, // visible by default
     }]);
   },

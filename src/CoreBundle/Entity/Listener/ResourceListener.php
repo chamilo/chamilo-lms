@@ -212,12 +212,12 @@ class ResourceListener
 
             foreach ($links as $link) {
                 $resourceLink = new ResourceLink();
-                if (isset($link['c_id']) && !empty($link['c_id'])) {
-                    $course = $courseRepo->find($link['c_id']);
+                if (isset($link['cid']) && !empty($link['cid'])) {
+                    $course = $courseRepo->find($link['cid']);
                     if (null !== $course) {
                         $resourceLink->setCourse($course);
                     } else {
-                        throw new InvalidArgumentException(sprintf('Course #%s does not exists', $link['c_id']));
+                        throw new InvalidArgumentException(sprintf('Course #%s does not exists', $link['cid']));
                     }
                 }
 

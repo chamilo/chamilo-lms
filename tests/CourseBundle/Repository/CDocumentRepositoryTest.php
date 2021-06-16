@@ -6,8 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 
@@ -78,6 +81,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
     public function testUploadFile(): void
     {
         $course = $this->createCourse('Test');
+
         $courseId = $course->getId();
         $resourceLinkList = [[
             'cid' => $course->getId(),
@@ -87,6 +91,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $file = $this->getUploadedFile();
 
         $token = $this->getUserToken([]);
+        // Upload file.
         $response = $this->createClientWithCredentials($token)->request(
             'POST',
             '/api/documents',
@@ -124,8 +129,8 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $data = json_decode($response->getContent());
         $documentId = $data->iid;
 
-        // Test access to file with admin use getFile query in order to get more info of the document.
-        $response = $this->createClientWithCredentials($token)->request(
+        // Test access to file with admin. Use getFile param in order to get more info (resource link) of the document.
+        $this->createClientWithCredentials($token)->request(
             'GET',
             '/api/documents/'.$documentId,
             [
@@ -145,10 +150,9 @@ class CDocumentRepositoryTest extends AbstractApiTest
                 'resourceLinkListFromEntity' => [
                     [
                         'session' => null,
-                        'course' =>
-                            [
-                                '@id' => '/api/courses/'.$courseId,
-                            ],
+                        'course' => [
+                            '@id' => '/api/courses/'.$courseId,
+                        ],
                         'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
                     ],
                 ],
@@ -175,11 +179,88 @@ class CDocumentRepositoryTest extends AbstractApiTest
             [
                 'headers' => ['Content-Type' => 'application/json'],
                 'query' => [
-                    'cid' => $courseId
-                ]
+                    'cid' => $courseId,
+                ],
             ]
         );
         $this->assertResponseIsSuccessful();
+
+        // Update course visibility to REGISTERED
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $course = $courseRepo->find($courseId);
+        $course->setVisibility(Course::REGISTERED);
+        $courseRepo->update($course);
+
+        $client->request(
+            'GET',
+            "/api/documents/$documentId",
+            [
+                'headers' => ['Content-Type' => 'application/json'],
+                'query' => [
+                    'cid' => $courseId,
+                ],
+            ]
+        );
+        $this->assertResponseStatusCodeSame(403);
+
+        // Update course visibility to CLOSED
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $course = $courseRepo->find($courseId);
+        $course->setVisibility(Course::CLOSED);
+        $courseRepo->update($course);
+
+        $client->request(
+            'GET',
+            "/api/documents/$documentId",
+            [
+                'headers' => ['Content-Type' => 'application/json'],
+                'query' => [
+                    'cid' => $courseId,
+                ],
+            ]
+        );
+        $this->assertResponseStatusCodeSame(403);
+
+        // Update course visibility to HIDDEN
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $course = $courseRepo->find($courseId);
+        $course->setVisibility(Course::HIDDEN);
+        $courseRepo->update($course);
+
+        $client->request(
+            'GET',
+            "/api/documents/$documentId",
+            [
+                'headers' => ['Content-Type' => 'application/json'],
+                'query' => [
+                    'cid' => $courseId,
+                ],
+            ]
+        );
+        $this->assertResponseStatusCodeSame(403);
+
+        // Change visibility of the document to DRAFT
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $document = $documentRepo->find($documentId);
+        $documentRepo->setVisibilityDraft($document);
+        $documentRepo->update($document);
+
+        // Change course to OPEN TO THE WORLD but the document is in DRAFT, "another" user cannot have access.
+        $course = $courseRepo->find($courseId);
+        $course->setVisibility(Course::OPEN_WORLD);
+        $courseRepo->update($course);
+
+        $client->request(
+            'GET',
+            "/api/documents/$documentId",
+            [
+                'headers' => ['Content-Type' => 'application/json'],
+                'query' => [
+                    'cid' => $courseId,
+                ],
+            ]
+        );
+        $this->assertResponseStatusCodeSame(403);
     }
 
     public function testUploadFileInSideASubFolder(): void

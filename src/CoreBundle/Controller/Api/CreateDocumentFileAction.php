@@ -7,14 +7,13 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CourseBundle\Entity\CDocument;
-use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 
 class CreateDocumentFileAction extends BaseResourceFileAction
 {
     public function __invoke(Request $request): CDocument
     {
-        error_log('CreateDocumentFileAction __invoke');
+        //error_log('CreateDocumentFileAction __invoke');
 
         $document = new CDocument();
         $result = $this->handleCreateRequest($document, $request);

@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -8936,7 +8937,7 @@ class TrackingCourseLog
             $user_row['count_messages'] = $user['count_messages'];
 
             $userGroupManager = new UserGroupModel();
-            $user_row['classes'] = $userGroupManager->getLabelsFromNameList($user['user_id'], UserGroup::NORMAL_CLASS);
+            $user_row['classes'] = $userGroupManager->getLabelsFromNameList($user['user_id'], Usergroup::NORMAL_CLASS);
 
             if (empty($session_id)) {
                 $user_row['survey'] = $user['survey'];

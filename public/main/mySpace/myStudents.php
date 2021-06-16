@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use ChamiloSession as Session;
 
@@ -873,7 +874,7 @@ $session_name = '';
 $userGroupManager = new UserGroupModel();
 $userGroups = $userGroupManager->getNameListByUser(
     $studentId,
-    UserGroup::NORMAL_CLASS
+    Usergroup::NORMAL_CLASS
 );
 
 //$userInfo['complete_name_link'] = $userInfo['complete_name_with_message_link'];
@@ -900,10 +901,11 @@ if (!empty($courseCode)) {
 
 // Display timezone if the user selected one and if the admin allows the use of user's timezone
 $timezone = null;
-$timezone_user = UserManager::get_extra_user_data_by_field($studentId, 'timezone');
+$timezone_user = $user->getTimezone();
 $use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
-if (null != $timezone_user['timezone'] && 'true' === $use_users_timezone) {
-    $timezone = $timezone_user['timezone'];
+
+if (null != $timezone_user && 'true' === $use_users_timezone) {
+    $timezone = $timezone_user;
 }
 if (null !== $timezone) {
     $userInfoExtra['timezone'] = $timezone;

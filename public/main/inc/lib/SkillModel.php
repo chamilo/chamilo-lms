@@ -906,7 +906,7 @@ class SkillModel extends Model
                 $tableResult .= $table;
             }
         } else {
-            $tableResult .= get_lang('WithoutAchieved skills');
+            $tableResult .= get_lang('Without achieved skills');
         }
 
         if ($addTitle) {

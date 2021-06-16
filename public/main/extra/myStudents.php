@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Usergroup;
+
 require_once '../inc/global.inc.php';
 
 $allow = api_get_configuration_value('extra');
@@ -480,7 +482,7 @@ if (!empty($studentId)) {
 
     $userPicture = UserManager::getUserPicture($user_info['user_id']);
     $userGroupManager = new UserGroupModel();
-    $userGroups = $userGroupManager->getNameListByUser($user_info['user_id'], UserGroup::NORMAL_CLASS); ?>
+    $userGroups = $userGroupManager->getNameListByUser($user_info['user_id'], Usergroup::NORMAL_CLASS); ?>
     <img src="<?php echo $userPicture; ?>">
     <div class="row">
         <div class="col-sm-6">
@@ -608,7 +610,7 @@ if (!empty($studentId)) {
                         );
             $icon = Display::return_icon('accept_na.png');
             if (isset($value['value'])) {
-                list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
+                [$legalId, $legalLanguageId, $legalTime] = explode(':', $value['value']);
                 $icon = Display::return_icon('accept.png').' '.api_get_local_time($legalTime);
                 $icon .= ' '.Display::url(
                                     get_lang('Delete legal agreement'),

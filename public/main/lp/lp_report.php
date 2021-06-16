@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
@@ -325,7 +326,7 @@ if (!empty($users)) {
 
         $classesToString = '';
         if ($allowUserGroups) {
-            $classes = $userGroup->getUserGroupListByUser($userId, UserGroup::NORMAL_CLASS);
+            $classes = $userGroup->getUserGroupListByUser($userId, Usergroup::NORMAL_CLASS);
             $icon = Display::return_icon('class.png', get_lang('Class'));
             if (!empty($classes)) {
                 $classUrl = api_get_path(WEB_CODE_PATH).'user/class.php?'.api_get_cidreq(true, false);

@@ -10,16 +10,16 @@ $(function () {
         {% if skills %}
             {{ skills }}
         {% else %}
-            <p>{{ 'WithoutAchievedSkills'|get_lang }}</p>
+            <p>{{ 'Without achieved skills'|trans }}</p>
             <p>
                 <a href="{{ url('index') ~ 'main/social/skills_wheel.php' }}">
-                    {{ 'SkillsWheel'|get_lang }}
+                    {{ 'Skills wheel'|trans }}
                 </a>
             </p>
         {% endif %}
     {% endset %}
 
-    {{ macro.panel("Skills" | get_lang, data) }}
+    {{ macro.panel("Skills" | trans, data) }}
 
 {#<div class="panel-group" id="skill-block" role="tablist" aria-multiselectable="true">#}
     {#<div class="panel panel-default">#}

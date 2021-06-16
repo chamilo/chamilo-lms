@@ -3165,10 +3165,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/devtools-api@npm:^6.0.0-beta.10, @vue/devtools-api@npm:^6.0.0-beta.11, @vue/devtools-api@npm:^6.0.0-beta.7":
+"@vue/devtools-api@npm:^6.0.0-beta.11, @vue/devtools-api@npm:^6.0.0-beta.7":
   version: 6.0.0-beta.11
   resolution: "@vue/devtools-api@npm:6.0.0-beta.11"
   checksum: 0ddce20d35bfee57516f8c6a29d93ab8e506669f944701eaeb389eca928b5e4f03730129804dfbfa06f2571365842199cb875ff30c45a7fdc321bf9ef1b8f941
+  languageName: node
+  linkType: hard
+
+"@vue/devtools-api@npm:^6.0.0-beta.14":
+  version: 6.0.0-beta.14
+  resolution: "@vue/devtools-api@npm:6.0.0-beta.14"
+  checksum: a5819bd42c92ff6d864b341744e5dd873397690e96efaab1c3d1555beff97abcb6c3515a3ad4014659aefa9dd3c60299e947e997233b80483bb6f4a8545498ea
   languageName: node
   linkType: hard
 
@@ -6158,7 +6165,7 @@ __metadata:
     flag-icon-css: ^3.5.0
     free-jqgrid: "https://github.com/chamilo/jqGrid.git#bs4"
     full-icu: ^1.3.4
-    fullcalendar: ^5.7.2
+    fullcalendar: ^5.8.0
     glob-all: ^3.2.1
     graphql: ^15.5.0
     graphql-tag: ^2.12.4
@@ -6199,7 +6206,7 @@ __metadata:
     qtip2: ^3.0.3
     quasar: 2.0.0-rc.1
     readmore-js: ^2.2.1
-    sass: ^1.35.0
+    sass: ^1.35.1
     sass-loader: ^11.1.1
     select2: ^4.1.0-rc.0
     signature_pad: ^3.0.0-beta.4
@@ -6222,7 +6229,7 @@ __metadata:
     vue-i18n: ^9.1.6
     vue-loader: ^16.2.0
     vue-perfect-scrollbar: ^0.2.1
-    vue-router: ^4.0.8
+    vue-router: ^4.0.9
     vue-sidebar-menu: ^4.7.4
     vue-toastification: ^2.0.0-rc.1
     vuetify: ^3.0.0-alpha.5
@@ -9769,10 +9776,10 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"fullcalendar@npm:^5.7.2":
-  version: 5.7.2
-  resolution: "fullcalendar@npm:5.7.2"
-  checksum: 86334c97ba1afd33032e940d57d5b1cbe295f6874804c545df5a8f3a2770ff0606c06c839bb6143d953da1c24ec1c6a921a2dbabe3647a133c6047ed56a83b80
+"fullcalendar@npm:^5.8.0":
+  version: 5.8.0
+  resolution: "fullcalendar@npm:5.8.0"
+  checksum: 99d03fc7e4027494f5c17310f5e7ac9905be15fb930aa16c9d57a6f84589454528ef35aa5dec63b4ce68f9901dc24e781ac8a4dbb31457dafc645f6eb95650af
   languageName: node
   linkType: hard
 
@@ -16921,14 +16928,14 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.35.0":
-  version: 1.35.0
-  resolution: "sass@npm:1.35.0"
+"sass@npm:^1.35.1":
+  version: 1.35.1
+  resolution: "sass@npm:1.35.1"
   dependencies:
     chokidar: ">=3.0.0 <4.0.0"
   bin:
     sass: sass.js
-  checksum: 030a3767cc2cca44a664fd6159223161e0f48ae524af666b400c14aa88577079ffba651e978cd1dc553f57aa4c8d8f29467fb2d54b5d2d57641c31a7b0cf8636
+  checksum: ceeb2ebd09f8c058e71ce9b35b7dc0af8800ff2a87d52d9efe8d0f10e6649200065b7526f07326b52d6946c0d57997e13d96985fa826926edf8b1e31a839c000
   languageName: node
   linkType: hard
 
@@ -19468,14 +19475,14 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"vue-router@npm:^4.0.8":
-  version: 4.0.8
-  resolution: "vue-router@npm:4.0.8"
+"vue-router@npm:^4.0.9":
+  version: 4.0.9
+  resolution: "vue-router@npm:4.0.9"
   dependencies:
-    "@vue/devtools-api": ^6.0.0-beta.10
+    "@vue/devtools-api": ^6.0.0-beta.14
   peerDependencies:
     vue: ^3.0.0
-  checksum: 66c9cb9ec4a3aafe9267170f3d11ce84c1062a0c1cda420ba47f3a8bb404e268ee73a57a08b1afd7702f96151a82c56c30e444788b2fecdce0e365f566c6cfa9
+  checksum: 33bcb4274ca9b898c6348e30c9443b097f92313147c959d46dd7290ca23e6016523b85d32e960e8e402d35a1c34abfe35ce49a62ef8a1d961f810a2c929ca9be
   languageName: node
   linkType: hard
 

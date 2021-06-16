@@ -3,12 +3,15 @@
       class=""
   >
     <div class="flex flex-col flex-center">
-      <div class="border p-12 rounded-xl shadow-md">
-        <a :href="goToCourseTool(course, tool)">
-          <v-icon>
-            {{ tool.tool.icon }}
-            x-large
-          </v-icon>
+      <div class="p-9 rounded-xl shadow-lg border border-gray-300">
+        <a :href="goToCourseTool(course, tool)" class="">
+            <v-icon
+                :icon="tool.tool.icon"
+                size="48px"
+                class="font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-green-600">
+
+            </v-icon>
+
 <!--          <img-->
 <!--              :alt="tool.tool.name"-->
 <!--              :src="'/img/tools/' + tool.tool.name + '.png'"-->

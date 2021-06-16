@@ -53,8 +53,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Course extends AbstractResource implements ResourceInterface, ResourceWithAccessUrlInterface, ResourceIllustrationInterface
 {
     public const CLOSED = 0;
-    public const REGISTERED = 1;
-    public const OPEN_PLATFORM = 2;
+    public const REGISTERED = 1; // Only registered users in the course.
+    public const OPEN_PLATFORM = 2; // All users registered in the platform (default).
     public const OPEN_WORLD = 3;
     public const HIDDEN = 4;
 
@@ -370,6 +370,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     public function __construct()
     {
+        $this->visibility = self::OPEN_PLATFORM;
         $this->sessions = new ArrayCollection();
         $this->sessionRelCourseRelUsers = new ArrayCollection();
         $this->skills = new ArrayCollection();
@@ -397,7 +398,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->courseTypeId = null;
         $this->room = null;
         $this->courseLanguage = 'en';
-        $this->visibility = self::OPEN_PLATFORM;
         $this->subscribe = true;
         $this->unsubscribe = false;
         //$this->specificFieldValues = new ArrayCollection();

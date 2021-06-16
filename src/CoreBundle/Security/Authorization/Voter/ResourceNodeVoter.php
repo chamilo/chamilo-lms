@@ -102,7 +102,7 @@ class ResourceNodeVoter extends Voter
 
         //error_log("resourceNode voteOnAttribute $attribute : ".$resourceNode->getTitle());
 
-        // Illustrations are always visible.
+        // Illustrations are always visible, nothing to check.
         if ('illustrations' === $resourceTypeName) {
             return true;
         }
@@ -143,11 +143,9 @@ class ResourceNodeVoter extends Voter
 
         $links = $resourceNode->getResourceLinks();
 
-        //$courseManager = $this->entityManager->getRepository(Course::class);
-        //$sessionManager = $this->entityManager->getRepository(Session::class);
-
         $linkFound = 0;
         $link = null;
+
         // @todo implement view, edit, delete.
         foreach ($links as $link) {
             // Block access if visibility is deleted. Creator and admin have already access.
@@ -231,7 +229,6 @@ class ResourceNodeVoter extends Voter
             }*/
         }
         //var_dump($linkFound, $link->getId(), $link->getVisibility()); exit;
-
         // No link was found.
         if (0 === $linkFound) {
             return false;

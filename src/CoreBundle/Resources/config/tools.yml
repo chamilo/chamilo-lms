@@ -193,6 +193,8 @@ services:
 
     chamilo_core.tool.dropbox:
         class: Chamilo\CoreBundle\Tool\Dropbox
+        calls:
+            -   setIcon: [ 'mdi-cloud-upload' ]
         arguments:
             - 'dropbox'
             - 'interaction'
@@ -336,7 +338,7 @@ services:
     chamilo_core.tool.member:
         class: Chamilo\CoreBundle\Tool\Member
         calls:
-            -   setIcon: [ 'mdi-account-multiple' ]
+            -   setIcon: [ 'mdi-account' ]
         arguments:
             - 'member'
             - 'interaction'

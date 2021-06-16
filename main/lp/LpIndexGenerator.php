@@ -42,7 +42,6 @@ class LpIndexGenerator
     {
         $iso = api_get_language_isocode();
         $title = api_utf8_encode($this->lp->get_name());
-        $bootstrapCs = file_get_contents(api_get_path(SYS_PUBLIC_PATH).'assets/bootstrap/dist/css/bootstrap.min.css');
 
         $this->domDocument->loadHTML(
             '<!doctype html>
@@ -53,9 +52,10 @@ class LpIndexGenerator
                   content="width=device-width,user-scalable=no,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0">
             <meta http-equiv="X-UA-Compatible" content="ie=edge">
             <title>'.$title.'</title>
+            <link rel="stylesheet" href="assets/bootstrap/bootstrap.min.css">
             <style>
-                '.$bootstrapCs.'
                 .page-header { margin-top: 0; padding-top: 10px; }
+                #toc__ul { height: calc(100vh - 80px - 15px); overflow: auto; }
             </style>
             </head>
             <body>

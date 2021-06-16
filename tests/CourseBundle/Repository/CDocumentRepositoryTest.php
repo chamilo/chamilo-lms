@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -43,10 +44,10 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $course = $this->createCourse('Test');
 
         // Create folder.
-        $resourceLinkList = [
+        $resourceLinkList = [[
             'cid' => $course->getId(),
-            'visibility' => 2,
-        ];
+            'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
+        ]];
 
         $folderName = 'folder1';
         $token = $this->getUserToken([]);
@@ -58,7 +59,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
                     'title' => $folderName,
                     'filetype' => 'folder',
                     'parentResourceNodeId' => $course->getResourceNode()->getId(),
-                    'resourceLinkList' => json_encode($resourceLinkList),
+                    'resourceLinkList' => $resourceLinkList,
                 ],
             ]
         );
@@ -70,22 +71,23 @@ class CDocumentRepositoryTest extends AbstractApiTest
             '@context' => '/api/contexts/Documents',
             '@type' => 'Documents',
             'title' => $folderName,
+            'parentResourceNode' => $course->getResourceNode()->getId(),
         ]);
     }
 
     public function testUploadFile(): void
     {
         $course = $this->createCourse('Test');
-
-        $resourceLinkList = [
+        $courseId = $course->getId();
+        $resourceLinkList = [[
             'cid' => $course->getId(),
-            'visibility' => 2,
-        ];
+            'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
+        ]];
 
         $file = $this->getUploadedFile();
 
         $token = $this->getUserToken([]);
-        $this->createClientWithCredentials($token)->request(
+        $response = $this->createClientWithCredentials($token)->request(
             'POST',
             '/api/documents',
             [
@@ -101,11 +103,12 @@ class CDocumentRepositoryTest extends AbstractApiTest
                     'filetype' => 'file',
                     'size' => $file->getSize(),
                     'parentResourceNodeId' => $course->getResourceNode()->getId(),
-                    'resourceLinkList' => json_encode($resourceLinkList),
+                    'resourceLinkList' => $resourceLinkList,
                 ],
             ]
         );
 
+        // Check uploaded file.
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(201);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
@@ -114,7 +117,69 @@ class CDocumentRepositoryTest extends AbstractApiTest
             '@type' => 'Documents',
             'title' => $file->getFilename(),
             'filetype' => 'file',
+            'parentResourceNode' => $course->getResourceNode()->getId(),
         ]);
+
+        // Get document iid
+        $data = json_decode($response->getContent());
+        $documentId = $data->iid;
+
+        // Test access to file with admin use getFile query in order to get more info of the document.
+        $response = $this->createClientWithCredentials($token)->request(
+            'GET',
+            '/api/documents/'.$documentId,
+            [
+                'query' => [
+                    'getFile' => true,
+                ],
+            ]
+        );
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertJsonContains(
+            [
+                '@context' => '/api/contexts/Documents',
+                '@type' => 'Documents',
+                'title' => $file->getFilename(),
+                'filetype' => 'file',
+                'resourceLinkListFromEntity' => [
+                    [
+                        'session' => null,
+                        'course' =>
+                            [
+                                '@id' => '/api/courses/'.$courseId,
+                            ],
+                        'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
+                    ],
+                ],
+            ]
+        );
+
+        // Test access with another user. He cannot see the file, no cid is pass as a parameter.
+        $this->createUser('another');
+        $client = $this->getClientWithGuiCredentials('another', 'another');
+        $client->request(
+            'GET',
+            '/api/documents/'.$documentId,
+            [
+                'headers' => ['Content-Type' => 'application/json'],
+            ]
+        );
+        $this->assertResponseStatusCodeSame(403); // Forbidden
+
+        // Test access with another user. He CAN see the file, the cid is pass as a parameter
+        // and the course is open to the world by default.
+        $client->request(
+            'GET',
+            "/api/documents/$documentId",
+            [
+                'headers' => ['Content-Type' => 'application/json'],
+                'query' => [
+                    'cid' => $courseId
+                ]
+            ]
+        );
+        $this->assertResponseIsSuccessful();
     }
 
     public function testUploadFileInSideASubFolder(): void
@@ -122,10 +187,10 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $course = $this->createCourse('Test');
 
         // Create folder.
-        $resourceLinkList = [
+        $resourceLinkList = [[
             'cid' => $course->getId(),
-            'visibility' => 2,
-        ];
+            'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
+        ]];
 
         $token = $this->getUserToken([]);
         // Creates a folder.
@@ -138,7 +203,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
                     'title' => $folderName,
                     'filetype' => 'folder',
                     'parentResourceNodeId' => $course->getResourceNode()->getId(),
-                    'resourceLinkList' => json_encode($resourceLinkList),
+                    'resourceLinkList' => $resourceLinkList,
                 ],
             ]
         );
@@ -166,7 +231,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
                     'filetype' => 'file',
                     'size' => $file->getSize(),
                     'parentResourceNodeId' => $resourceNodeId,
-                    'resourceLinkList' => json_encode($resourceLinkList),
+                    'resourceLinkList' => $resourceLinkList,
                 ],
             ]
         );

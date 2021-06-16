@@ -89,5 +89,13 @@ class PersonalFileRepositoryTest extends AbstractApiTest
             $url
         );
         $this->assertResponseIsSuccessful();
+
+        // Access with admin should be allowed.
+        $client = $this->getClientWithGuiCredentials('admin', 'admin');
+        $client->request(
+            'GET',
+            $url
+        );
+        $this->assertResponseIsSuccessful();
     }
 }

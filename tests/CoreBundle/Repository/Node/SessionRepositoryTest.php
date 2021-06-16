@@ -104,7 +104,6 @@ class SessionRepositoryTest extends AbstractApiTest
         );
 
         $this->assertResponseIsSuccessful();
-        $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertJsonContains(
             [

@@ -21,6 +21,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *
  * @ORM\Table(
  *     name="session_rel_user",
+ *     uniqueConstraints={
+ *        @ORM\UniqueConstraint(name="session_user_unique",
+ *            columns={"session_id", "user_id", "relation_type"})
+ *     },
  *     indexes={
  *         @ORM\Index(name="idx_session_rel_user_id_user_moved", columns={"user_id", "moved_to"})
  *     }
@@ -28,9 +32,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Entity
  */
 #[ApiResource(
-    attributes: [
-        'security' => "is_granted('ROLE_USER')",
-    ],
     collectionOperations: [
         'get' => [
             'security' => "is_granted('ROLE_ADMIN')",
@@ -43,6 +44,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'get' => [
             'security' => "is_granted('ROLE_ADMIN') or object.user == user",
         ],
+    ],
+    attributes: [
+        'security' => "is_granted('ROLE_USER')",
     ],
     normalizationContext: [
         'groups' => ['session_rel_user:read', 'user:read'],

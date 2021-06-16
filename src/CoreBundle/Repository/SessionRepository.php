@@ -29,7 +29,12 @@ class SessionRepository extends ServiceEntityRepository
         parent::__construct($registry, Session::class);
     }
 
-    public function create(Session $session): void
+    public function create(): ?Session
+    {
+        return new Session();
+    }
+
+    public function update(Session $session): void
     {
         $this->getEntityManager()->persist($session);
         $this->getEntityManager()->flush();

@@ -54,6 +54,21 @@ class Version20190210182615 extends AbstractMigrationChamilo
         } else {
             $this->addSql('ALTER TABLE session_rel_course_rel_user ADD CONSTRAINT FK_720167E91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE');
         }
+
+        if (!$table->hasIndex('course_session_unique')) {
+            $this->addSql(' CREATE UNIQUE INDEX course_session_unique ON session_rel_course_rel_user (session_id, c_id, user_id, status);');
+        }
+
+
+        $table = $schema->getTable('session_rel_course');
+        if (!$table->hasIndex('UNIQ_12D110D391D79BD3')) {
+            $this->addSql('CREATE UNIQUE INDEX course_session_unique ON session_rel_course (session_id, c_id)');
+        }
+
+        $table = $schema->getTable('session_rel_user');
+        if (!$table->hasIndex('session_user_unique')) {
+            $this->addSql('CREATE UNIQUE INDEX session_user_unique ON session_rel_user (session_id, user_id, relation_type);');
+        }
     }
 
     public function down(Schema $schema): void

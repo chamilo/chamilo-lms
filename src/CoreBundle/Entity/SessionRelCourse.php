@@ -9,19 +9,23 @@ namespace Chamilo\CoreBundle\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Course subscriptions to a session.
  *
- * @ORM\Table(name="session_rel_course", indexes={
+ * @ORM\Table(name="session_rel_course",
+ *      uniqueConstraints={
+ *        @ORM\UniqueConstraint(name="course_session_unique",
+ *            columns={"session_id", "c_id"})
+ *     },
+ *     indexes={
  *     @ORM\Index(name="idx_session_rel_course_course_id", columns={"c_id"})
- * })
+ *     }
+ * )
  * @ORM\Entity
  */
 #[ApiResource(
-    attributes: [
-        'security' => "is_granted('ROLE_ADMIN')",
-    ],
     collectionOperations: [
         'get' => [
             'security' => "is_granted('ROLE_ADMIN')",
@@ -38,11 +42,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'security' => "is_granted('ROLE_ADMIN')",
         ],
     ],
-    normalizationContext: [
-        'groups' => ['session_rel_course:read'],
+    attributes: [
+        'security' => "is_granted('ROLE_ADMIN')",
     ],
     denormalizationContext: [
         'groups' => ['session_rel_course:write'],
+    ],
+    normalizationContext: [
+        'groups' => ['session_rel_course:read'],
     ],
 )]
 class SessionRelCourse

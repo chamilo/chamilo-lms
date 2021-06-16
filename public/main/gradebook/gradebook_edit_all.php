@@ -30,7 +30,9 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-$course_id = GradebookUtils::get_course_id_by_link_id($my_selectcat);
+//$course_id = GradebookUtils::get_course_id_by_link_id($my_selectcat);
+$course_id = api_get_course_int_id();
+
 $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 $tbl_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
@@ -191,7 +193,12 @@ $currentUrl = api_get_self().'?'.api_get_cidreq().'&selectcat='.$my_selectcat;
 
 $form = new FormValidator('auto_weight', 'post', $currentUrl);
 $form->addHeader(get_lang('Automatic weight'));
-$form->addLabel(null, get_lang('Automatic weightExplanation'));
+$form->addLabel(
+    null,
+    get_lang(
+        'Use the automatic weight distribution to speed things up. The system will then distribute the total weight evenly between the evaluation items below.'
+    )
+);
 $form->addButtonUpdate(get_lang('Automatic weight'));
 
 if ($form->validate()) {

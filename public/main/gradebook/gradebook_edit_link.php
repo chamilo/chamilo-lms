@@ -8,7 +8,8 @@ api_block_anonymous_users();
 GradebookUtils::block_students();
 $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 //selected name of database
-$course_id = GradebookUtils::get_course_id_by_link_id($_GET['editlink']);
+//$course_id = GradebookUtils::get_course_id_by_link_id($_GET['editlink']);
+$course_id = api_get_course_int_id();
 $tbl_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
 $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
 $em = Database::getManager();

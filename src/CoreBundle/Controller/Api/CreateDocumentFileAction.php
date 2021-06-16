@@ -23,15 +23,8 @@ class CreateDocumentFileAction extends BaseResourceFileAction
         $document->setComment($result['comment']);
 
         // Specific for the CDocument because it needs to be registered in a course.
-        if ($request->request->has('resourceLinkList')) {
-            $links = $request->get('resourceLinkList');
-            $links = false === strpos($links, '[') ? json_decode('['.$links.']', true) : json_decode($links, true);
-            if (empty($links)) {
-                $message = 'resourceLinkList is not a valid json. Use for example: [{"c_id":1, "visibility":1}]';
-
-                throw new InvalidArgumentException($message);
-            }
-            $document->setResourceLinkArray($links);
+        if (!empty($result['resourceLinkList'])) {
+            $document->setResourceLinkArray($result['resourceLinkList']);
         }
 
         return $document;

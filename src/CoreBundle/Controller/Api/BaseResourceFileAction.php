@@ -26,11 +26,21 @@ class BaseResourceFileAction
             $comment = $contentData['comment'] ?? '';
             $parentResourceNodeId = $contentData['parentResourceNodeId'] ?? 0;
             $fileType = $contentData['filetype'] ?? '';
+            $resourceLinkList = $contentData['resourceLinkList'] ?? [];
         } else {
             $title = $request->get('title');
             $comment = $request->get('comment');
             $parentResourceNodeId = (int) $request->get('parentResourceNodeId');
             $fileType = $request->get('filetype');
+            $resourceLinkList = $request->get('resourceLinkList', []);
+            if (!empty($resourceLinkList)) {
+                $resourceLinkList = false === strpos($resourceLinkList, '[') ? json_decode('['.$resourceLinkList.']', true) : json_decode($resourceLinkList, true);
+                if (empty($resourceLinkList)) {
+                    $message = 'resourceLinkList is not a valid json. Use for example: [{"c_id":1, "visibility":1}]';
+
+                    throw new InvalidArgumentException($message);
+                }
+            }
         }
 
         if (empty($fileType)) {
@@ -90,9 +100,10 @@ class BaseResourceFileAction
 
         return [
             'title' => $title,
+            'filetype' => $fileType,
             'comment' => $comment,
             'parentResourceNodeId' => $parentResourceNodeId,
-            'filetype' => $fileType,
+            'resourceLinkList' => $resourceLinkList,
         ];
     }
 

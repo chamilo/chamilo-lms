@@ -2726,11 +2726,10 @@ class SessionManager
 
                 // Subscribe all the users from the session to this course inside the session
                 self::insertUsersInCourse(
-                    array_column($user_list, 'id'),
+                    array_column($user_list, 'user_id'),
                     $courseId,
                     $sessionId,
-                    ['visibility' => $sessionVisibility],
-                    false
+                    ['visibility' => $sessionVisibility]
                 );
             }
 

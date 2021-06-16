@@ -1,0 +1,24 @@
+{
+    "https://testing3.beeznest.com": {
+        "client_id": "44WGA9lh8fmsRITfBac4",
+        "auth_login_url": "https://testing3.beeznest.com/plugin/ims_lti/auth.php",
+        "auth_token_url": "https://testing3.beeznest.com/plugin/ims_lti/token.php",
+        "key_set_url": "https://testing3.beeznest.com/plugin/ims_lti/jwks.php",
+        "private_key_file": "/keys/private.key",
+        "kid": "51dadff927d803c965f6",
+        "deployment": [
+            "8"
+        ]
+    },
+    "https://11.chamilo.org": {
+        "client_id": "RcHE5hk5ruI9sOr9t0UN",
+        "auth_login_url": "https://11.chamilo.org/plugin/ims_lti/auth.php",
+        "auth_token_url": "https://11.chamilo.org/plugin/ims_lti/token.php",
+        "key_set_url": "https://11.chamilo.org/plugin/ims_lti/jwks.php",
+        "private_key_file": "/keys/private.key",
+        "kid": "e52a3d2435f9e5071e3e",
+        "deployment": [
+            "183"
+        ]
+    }
+}

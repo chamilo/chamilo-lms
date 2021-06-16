@@ -1,0 +1,186 @@
+[
+    {
+        "name": "fproject/php-jwt",
+        "version": "4.0.5",
+        "version_normalized": "4.0.5.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/fproject/php-jwt.git",
+            "reference": "91047b202bbe7d966e8fce67ab16ebca8bdcb6b7"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/fproject/php-jwt/zipball/91047b202bbe7d966e8fce67ab16ebca8bdcb6b7",
+            "reference": "91047b202bbe7d966e8fce67ab16ebca8bdcb6b7",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.4.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "4.8.36"
+        },
+        "time": "2018-04-02T10:36:30+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Firebase\\JWT\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Neuman Vong",
+                "email": "neuman+pear@twilio.com",
+                "role": "Developer"
+            },
+            {
+                "name": "Anant Narayanan",
+                "email": "anant@php.net",
+                "role": "Developer"
+            },
+            {
+                "name": "Bui Sy Nguyen",
+                "email": "nguyenbs@gmail.com",
+                "role": "Developer"
+            }
+        ],
+        "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Support several key types including JWK.",
+        "homepage": "https://github.com/fproject/php-jwt"
+    },
+    {
+        "name": "imsglobal/lti-1p3-tool",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/IMSGlobal/lti-1-3-php-library.git",
+            "reference": "3a192de99f3783d76caea462b0d04db28569c123"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/IMSGlobal/lti-1-3-php-library/zipball/3a192de99f3783d76caea462b0d04db28569c123",
+            "reference": "3a192de99f3783d76caea462b0d04db28569c123",
+            "shasum": ""
+        },
+        "require": {
+            "fproject/php-jwt": "^4.0",
+            "phpseclib/phpseclib": "^2.0"
+        },
+        "time": "2020-06-03T16:10:05+00:00",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-4": {
+                "IMSGlobal\\LTI\\": "src/lti"
+            }
+        },
+        "authors": [
+            {
+                "name": "Martin Lenord",
+                "email": "ims.m@rtin.dev"
+            }
+        ],
+        "support": {
+            "source": "https://github.com/IMSGlobal/lti-1-3-php-library/tree/master",
+            "issues": "https://github.com/IMSGlobal/lti-1-3-php-library/issues"
+        }
+    },
+    {
+        "name": "phpseclib/phpseclib",
+        "version": "2.0.31",
+        "version_normalized": "2.0.31.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/phpseclib/phpseclib.git",
+            "reference": "233a920cb38636a43b18d428f9a8db1f0a1a08f4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/233a920cb38636a43b18d428f9a8db1f0a1a08f4",
+            "reference": "233a920cb38636a43b18d428f9a8db1f0a1a08f4",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "require-dev": {
+            "phing/phing": "~2.7",
+            "phpunit/phpunit": "^4.8.35|^5.7|^6.0|^9.4",
+            "squizlabs/php_codesniffer": "~2.0"
+        },
+        "suggest": {
+            "ext-gmp": "Install the GMP (GNU Multiple Precision) extension in order to speed up arbitrary precision integer arithmetic operations.",
+            "ext-libsodium": "SSH2/SFTP can make use of some algorithms provided by the libsodium-php extension.",
+            "ext-mcrypt": "Install the Mcrypt extension in order to speed up a few other cryptographic operations.",
+            "ext-openssl": "Install the OpenSSL extension in order to speed up a wide variety of cryptographic operations."
+        },
+        "time": "2021-04-06T13:56:45+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "phpseclib/bootstrap.php"
+            ],
+            "psr-4": {
+                "phpseclib\\": "phpseclib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jim Wigginton",
+                "email": "terrafrost@php.net",
+                "role": "Lead Developer"
+            },
+            {
+                "name": "Patrick Monnerat",
+                "email": "pm@datasphere.ch",
+                "role": "Developer"
+            },
+            {
+                "name": "Andreas Fischer",
+                "email": "bantu@phpbb.com",
+                "role": "Developer"
+            },
+            {
+                "name": "Hans-Jürgen Petrich",
+                "email": "petrich@tronic-media.com",
+                "role": "Developer"
+            },
+            {
+                "name": "Graham Campbell",
+                "email": "graham@alt-three.com",
+                "role": "Developer"
+            }
+        ],
+        "description": "PHP Secure Communications Library - Pure-PHP implementations of RSA, AES, SSH2, SFTP, X.509 etc.",
+        "homepage": "http://phpseclib.sourceforge.net",
+        "keywords": [
+            "BigInteger",
+            "aes",
+            "asn.1",
+            "asn1",
+            "blowfish",
+            "crypto",
+            "cryptography",
+            "encryption",
+            "rsa",
+            "security",
+            "sftp",
+            "signature",
+            "signing",
+            "ssh",
+            "twofish",
+            "x.509",
+            "x509"
+        ]
+    }
+]

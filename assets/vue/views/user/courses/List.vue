@@ -1,9 +1,31 @@
 <template>
 <!--  {{ loading }}-->
-  <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-2">
+  <div v-if="courses.length" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-2">
       <CourseCardList
           :courses="courses"
       />
+  </div>
+  <div v-else>
+    <div class="bg-gradient-to-r from-gray-100 to-gray-50 flex flex-col rounded-md text-center p-2">
+      <div class="p-10 text-center">
+        <div>
+          <v-icon
+              icon="mdi-book-open-page-variant"
+              size="72px"
+              class="font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-green-600"
+          />
+
+        </div>
+
+        <div class="mt-2 font-bold">
+          You don't have any courses yet.
+        </div>
+        <div>
+          Lorem ipsum
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -25,16 +47,6 @@ export default {
 
     if (user.value) {
       let userId = user.value.id;
-      /*
-      axios.get(ENTRYPOINT + 'users/' + userId + '/courses.json').then(response => {
-        if (Array.isArray(response.data)) {
-          courses.value = response.data;
-        }
-      }).catch(function (error) {
-        console.log(error);
-      }).finally(() =>
-          status.value = ''
-      );*/
 
       const GET_COURSE_REL_USER = gql`
           query getCourses($user: String!) {
@@ -70,11 +82,13 @@ export default {
         user: "/api/users/" + userId
       }, );
 
-      const courses = useResult(result, null, (data) => {
+      const courses = useResult(result, [], (data) => {
         return data.courseRelUsers.edges.map(function(edge) {
           return edge.node.course;
         });
       });
+
+      console.log(courses);
 
       return {
         courses,

@@ -1,13 +1,13 @@
 <template>
   <div v-if="course" class="grid gap-4">
-    <div class="flex flex-row justify-between">
-      <div class="line-clamp-1 text-h6 font-bold">
+    <div class="flex flex-row justify-between border-b-2 border-gray-200 ">
+      <div class=" line-clamp-1 text-2xl font-bold">
         {{ course.title }}
       </div>
 
       <div>
         <div class="flex flex-row" v-if="isCurrentTeacher && course">
-          <a class="btn btn-info mr-2">
+          <a class="btn btn-info mr-2 text-xs">
             <v-icon class="pr-2">mdi-eye</v-icon>
             See as student
           </a>
@@ -48,33 +48,35 @@
           </div>
         </div>
       </div>
+
     </div>
 
-    <hr/>
-
-    <div class="bg-gradient-to-r from-gray-100 to-gray-50 flex flex-col rounded-md text-center p-2">
-      <div class="text-center">
+    <div v-if="isCurrentTeacher && course" class="bg-gradient-to-r from-gray-100 to-gray-50 flex flex-col rounded-md text-center p-2">
+      <div class="p-10 text-center">
         <div>
-          <v-icon>mdi-book-open-page-variant</v-icon>
+          <v-icon
+              icon="mdi-book-open-page-variant"
+              size="72px"
+              class="font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-green-600"
+          />
+
         </div>
 
-        <div class="p-text-bold">
+        <div class="mt-2 font-bold">
           You don't have course content
         </div>
         <div>
           Add a course introduction to display to your students.
         </div>
-        <a class="btn btn-info">
+        <a class="mt-2 btn btn-info">
           <v-icon>mdi-plus</v-icon>
           Course introduction
         </a>
-
       </div>
     </div>
 
-    <hr/>
 
-    <div class="flex justify-between">
+    <div v-if="isCurrentTeacher && course" class="flex justify-between border-b-2 border-gray-200">
       <div class="text-h6 font-bold">
         Tools
       </div>
@@ -85,7 +87,6 @@
       <!--        Customize-->
       <!--      </div>-->
     </div>
-
 
     <div
         class="grid gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-6"

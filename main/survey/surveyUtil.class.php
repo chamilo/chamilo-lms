@@ -1440,7 +1440,7 @@ class SurveyUtil
         );
 
         $num = count($extra_user_fields);
-        if (!$survey_data['anonymous']){
+        if (!$survey_data['anonymous']) {
             $return .= str_repeat(';', $num);
         }
 

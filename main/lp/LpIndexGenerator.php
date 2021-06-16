@@ -108,7 +108,7 @@ class LpIndexGenerator
 
                     if ($this->lp->ref === 'chamilo_scorm_export') {
                         $pathToRemove = 'scorm/'.$this->lp->path.'/';
-                        $itemFilePath = str_replace($pathToRemove, '', $myFilePath);
+                        $itemFilePath = 'document/'.str_replace($pathToRemove, '', $myFilePath);
                     }
                 }
             } elseif (TOOL_LINK === $item->type) {
@@ -143,7 +143,7 @@ class LpIndexGenerator
                 $ulNode->appendChild($liNode);
             }
 
-            if (!empty($itemFilePath)) {
+            if (!empty($itemFilePath) && $itemFilePath !== 'document/') {
                 $aNode = $this->domDocument->createElement('a', $itemText);
                 $aNode->setAttribute('href', $itemFilePath);
                 $aNode->setAttribute('target', 'content-frame');

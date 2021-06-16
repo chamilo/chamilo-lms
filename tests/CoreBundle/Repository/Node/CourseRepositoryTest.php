@@ -86,7 +86,13 @@ class CourseRepositoryTest extends WebTestCase
 
         $this->assertSame(1, $course->getUsers()->count());
 
-        // retrieve the admin
+        // Add the same user again:
+        $course->addUser($student, 0, null, 5);
+        $courseRepo->update($course);
+
+        $this->assertSame(1, $course->getUsers()->count());
+
+        // Retrieve the admin
         $user = $this->getUser('student');
 
         $client->loginUser($user);

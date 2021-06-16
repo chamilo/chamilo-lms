@@ -14,6 +14,7 @@ use DateTime;
 use DateTimeZone;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -30,6 +31,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     }
  * )
  * @ORM\Entity
+ * @UniqueEntity(
+ *     fields={"session", "user", "relationType"},
+ *     message="The user-course-relationType is already registered in this session."
+ * )
  */
 #[ApiResource(
     collectionOperations: [

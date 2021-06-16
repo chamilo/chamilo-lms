@@ -59,7 +59,6 @@ class Version20190210182615 extends AbstractMigrationChamilo
             $this->addSql(' CREATE UNIQUE INDEX course_session_unique ON session_rel_course_rel_user (session_id, c_id, user_id, status);');
         }
 
-
         $table = $schema->getTable('session_rel_course');
         if (!$table->hasIndex('UNIQ_12D110D391D79BD3')) {
             $this->addSql('CREATE UNIQUE INDEX course_session_unique ON session_rel_course (session_id, c_id)');

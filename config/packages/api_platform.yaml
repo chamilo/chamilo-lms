@@ -12,14 +12,16 @@ api_platform:
                 name: Authorization
                 type: header
     formats:
-        jsonld:
-            mime_types: ['application/ld+json']
-        json:
-            mime_types: ['application/json']
-        html:
-            mime_types: ['text/html']
-        graphql:
-            mime_types: ['application/graphql']
+        jsonld: ['application/ld+json']
+        jsonhal: ['application/hal+json']
+        jsonapi: ['application/vnd.api+json']
+        json: ['application/json']
+        xml: ['application/xml', 'text/xml']
+        yaml: ['application/x-yaml']
+        csv: ['text/csv']
+        html: ['text/html']
+        graphql: ['application/graphql']
+
     collection:
         pagination:
             items_per_page_parameter_name: itemsPerPage # Default value
@@ -36,5 +38,14 @@ api_platform:
             etag: true
             # Default value for the response max age.
             max_age: 0
+    exception_to_status:
+        # default api platform https://api-platform.com/docs/core/errors/#converting-php-exceptions-to-http-errors
+        Symfony\Component\Serializer\Exception\ExceptionInterface: 400
+        # Or with a constant defined in the 'Symfony\Component\HttpFoundation\Response' class.
+        ApiPlatform\Core\Exception\InvalidArgumentException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST
+        ApiPlatform\Core\Exception\FilterValidationException: 400
+        Doctrine\ORM\OptimisticLockException: 409
+        Doctrine\DBAL\Exception\UniqueConstraintViolationException: 409
+
 #    mercure:
 #        hub_url: '%env(MERCURE_SUBSCRIBE_URL)%'

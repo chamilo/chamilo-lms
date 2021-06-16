@@ -80,7 +80,7 @@ trait ChamiloTestTrait
             ->setGeneralCoach($this->getUser('admin'))
             ->addAccessUrl($this->getAccessUrl())
         ;
-        $repo->create($session);
+        $repo->update($session);
 
         return $session;
     }

@@ -55,7 +55,7 @@ class SessionRepositoryTest extends AbstractApiTest
         $this->assertCount(1, $errors);
 
         $this->expectException(UniqueConstraintViolationException::class);
-        $repo->create($session);
+        $repo->update($session);
     }
 
     public function testCreateWithApi(): void
@@ -142,15 +142,41 @@ class SessionRepositoryTest extends AbstractApiTest
                 'course' => '/api/courses/'.$course->getId(),
             ]
         );
+
+        // Add the same course again, it should fail.
+        $this->createClientWithCredentials($token)->request(
+            'POST',
+            '/api/session_rel_courses',
+            [
+                'json' => [
+                    'session' => '/api/sessions/'.$session->getId(),
+                    'course' => '/api/courses/'.$course->getId(),
+                ],
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(422);
+
+        /** @var SessionRepository $courseRepo */
+        $sessionRepo = self::getContainer()->get(SessionRepository::class);
+        $session = $sessionRepo->find($session->getId());
+
+        $this->assertSame(1, $session->getCourses()->count());
     }
 
     public function testAddUserToSessionWithApi(): void
     {
         $token = $this->getUserToken();
 
-        $testUser = $this->createUser('test');
-
+        $user = $this->createUser('test');
+        $course = $this->createCourse('course title');
         $session = $this->createSession('test session');
+
+        /** @var SessionRepository $courseRepo */
+        $sessionRepo = self::getContainer()->get(SessionRepository::class);
+
+        $session->addCourse($course);
+        $sessionRepo->update($session);
 
         $this->createClientWithCredentials($token)->request(
             'POST',
@@ -158,7 +184,7 @@ class SessionRepositoryTest extends AbstractApiTest
             [
                 'json' => [
                     'session' => '/api/sessions/'.$session->getId(),
-                    'user' => '/api/users/'.$testUser->getId(),
+                    'user' => '/api/users/'.$user->getId(),
                 ],
             ]
         );
@@ -174,9 +200,27 @@ class SessionRepositoryTest extends AbstractApiTest
                     '@id' => '/api/sessions/'.$session->getId(),
                 ],
                 'user' => [
-                    '@id' => '/api/users/'.$testUser->getId(),
+                    '@id' => '/api/users/'.$user->getId(),
                 ],
             ]
         );
+
+        /** @var Session $session */
+        $session = $sessionRepo->find($session->getId());
+        $this->assertSame(1, $session->getUsers()->count());
+
+        // Add the user again!
+        $this->createClientWithCredentials($token)->request(
+            'POST',
+            '/api/session_rel_users',
+            [
+                'json' => [
+                    'session' => '/api/sessions/'.$session->getId(),
+                    'user' => '/api/users/'.$user->getId(),
+                ],
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(422);
     }
 }

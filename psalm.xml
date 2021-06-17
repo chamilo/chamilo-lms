@@ -49,7 +49,7 @@
         <directory name="public/main/social" />
 <!--        <directory name="public/main/survey" />-->
 <!--        <directory name="public/main/ticket" />-->
-<!--        <directory name="public/main/tracking" />-->
+        <directory name="public/main/tracking" />
 <!--        <directory name="public/main/upload" />-->
         <directory name="public/main/user" />
 <!--        <directory name="public/main/webservices" />-->
@@ -70,7 +70,7 @@
 <!--        <file name="public/main/inc/lib/baker.lib.php"/>-->
 <!--        <file name="public/main/inc/lib/blog.lib.php"/>-->
         <file name="public/main/inc/lib/career.lib.php"/>
-<!--        <file name="public/main/inc/lib/certificate.lib.php"/>-->
+        <file name="public/main/inc/lib/certificate.lib.php"/>
         <file name="public/main/inc/lib/course.lib.php"/>
         <file name="public/main/inc/lib/course_category.lib.php"/>
 <!--        <file name="public/main/inc/lib/course_description.lib.php"/>-->
@@ -145,7 +145,7 @@
 <!--        <file name="public/main/inc/lib/tracking.lib.php"/>-->
         <file name="public/main/inc/lib/urlmanager.lib.php"/>
         <file name="public/main/inc/lib/usergroup.lib.php"/>
-<!--        <file name="public/main/inc/lib/usermanager.lib.php"/>-->
+        <file name="public/main/inc/lib/usermanager.lib.php"/>
         <file name="public/main/inc/lib/userportal.lib.php"/>
         <file name="public/main/inc/lib/VideoChat.php"/>
 

@@ -927,7 +927,7 @@ class SurveyManager
      * @return array containing all the questions of the survey
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @deprecated
+     *
      * @version February 2007
      *
      * @todo one sql call should do the trick
@@ -939,10 +939,6 @@ class SurveyManager
 
         $courseId = (int) $courseId;
         $surveyId = (int) $surveyId;
-
-        if (empty($courseId)) {
-            $courseId = api_get_course_int_id();
-        }
 
         // Getting the information of the question
         $sql = "SELECT * FROM $tbl_survey_question

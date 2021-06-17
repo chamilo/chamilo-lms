@@ -454,7 +454,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
     public function getResourcesByCourseOnly(Course $course, ResourceNode $parentNode = null): QueryBuilder
     {
         $qb = $this->getResources($parentNode);
-        $this->addCourseQueryBuilder($course,$qb);
+        $this->addCourseQueryBuilder($course, $qb);
         $this->addVisibilityQueryBuilder($qb);
 
         return $qb;

@@ -386,6 +386,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->lastVisit = new DateTime();
         $this->lastEdit = new DateTime();
         $this->description = '';
+        $this->introduction = '';
         $this->tutorName = '';
         $this->registrationCode = null;
         $this->legal = '';

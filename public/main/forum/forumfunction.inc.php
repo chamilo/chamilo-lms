@@ -1333,7 +1333,7 @@ function get_forum_categories($courseId = 0, $sessionId = 0)
     $course = api_get_course_entity($courseId);
     $session = api_get_session_entity($sessionId);
 
-    $qb = $repo->getResources(api_get_user_entity(api_get_user_id()), $course->getResourceNode(), $course, $session);
+    $qb = $repo->getResourcesByCourse($course, $session, null, $course->getResourceNode());
 
     return $qb->getQuery()->getResult();
 }

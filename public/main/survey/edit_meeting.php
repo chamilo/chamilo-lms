@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CSurvey;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -30,9 +33,12 @@ $interbreadcrumb[] = [
 ];
 
 $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : null;
+$surveyRepo = Container::getSurveyRepository();
+/** @var CSurvey $survey */
+$survey = $surveyRepo->find($surveyId);
 $surveyData = SurveyManager::get_survey($surveyId);
 
-if (empty($surveyData)) {
+if (null === $survey) {
     api_not_allowed(true);
 }
 
@@ -83,16 +89,16 @@ $form->addRule(
 $form->addHtmlEditor('survey_introduction', get_lang('Description'), false);
 $form->setRequired($text);
 
-$questions = SurveyManager::get_questions($surveyData['iid']);
+$questions = $survey->getQuestions();
 $currentQuestionsCount = count($questions);
 $counter = 1;
 foreach ($questions as $question) {
     $name = 'time_'.$counter;
-    $parts = explode('@@', $question['question']);
+    $parts = explode('@@', $question->getSurveyQuestion());
     $surveyData[$name] = api_get_local_time($parts[0]).'@@'.api_get_local_time($parts[1]);
 
     $form->addDateTimeRangePicker($name, get_lang('Date'));
-    $form->addHidden($name.'_question_id', $question['question_id']);
+    $form->addHidden($name.'_question_id', $question->getIid());
     $counter++;
 }
 $currentQuestionsCount++;

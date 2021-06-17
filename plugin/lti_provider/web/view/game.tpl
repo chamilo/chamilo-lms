@@ -1,11 +1,11 @@
 <link href="https://fonts.googleapis.com/css?family=Gugi" rel="stylesheet">
-{% if launch.is_deep_link_launch %}
+{% if launch.isDeepLinkLaunch %}
     <div class="dl-config">
         <h1>Pick a Difficulty</h1>
         <ul>
-            <li><a href="{{ _p.web_plugin }}lti_provider/web/configure.php?diff=easy&launch_id={{ launch.get_launch_id }}">Easy</a></li>
-            <li><a href="{{ _p.web_plugin }}lti_provider/web/configure.php?diff=normal&launch_id={{ launch.get_launch_id }}">Normal</a></li>
-            <li><a href="{{ _p.web_plugin }}lti_provider/web/configure.php?diff=hard&launch_id={{ launch.get_launch_id }}">Hard</a></li>
+            <li><a href="{{ _p.web_plugin }}lti_provider/web/configure.php?diff=easy&launch_id={{ launch.getLaunchId }}">Easy</a></li>
+            <li><a href="{{ _p.web_plugin }}lti_provider/web/configure.php?diff=normal&launch_id={{ launch.getLaunchId }}">Normal</a></li>
+            <li><a href="{{ _p.web_plugin }}lti_provider/web/configure.php?diff=hard&launch_id={{ launch.getLaunchId }}">Hard</a></li>
         </ul>
     </div>
 {% else %}
@@ -28,7 +28,7 @@
     <script>
       var curr_diff = "{{ diff }}";
       var curr_user_name = "{{ username }}";
-      var launch_id = "{{ launch.get_launch_id }}";
+      var launch_id = "{{ launch.getLaunchId }}";
     </script>
     <script type="text/javascript" src="{{ _p.web_plugin }}lti_provider/web/static/breakout.js" charset="utf-8"></script>
 

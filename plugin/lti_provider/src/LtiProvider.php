@@ -1,9 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \IMSGlobal\LTI;
-use Chamilo\PluginBundle\Entity\LtiProvider\Platform;
-require_once __DIR__ . '/../db/demo_database.php';
+use Packback\Lti1p3;
+
+require_once __DIR__ . '/../db/lti13_cookie.php';
+require_once __DIR__ . '/../db/lti13_cache.php';
+require_once __DIR__ . '/../db/lti13_database.php';
+
+use Packback\Lti1p3\LtiOidcLogin;
+use Packback\Lti1p3\LtiMessageLaunch;
+
+
 
 /**
  * Class LtiProvider
@@ -15,22 +22,22 @@ class LtiProvider
      * Oidc login and register
      */
     public function login($request = null) {
-        LTI\LTI_OIDC_Login::new(new Demo_Database())
-            ->do_oidc_login_redirect(api_get_path(WEB_PLUGIN_PATH). "lti_provider/web/game.php", $request)
-            ->do_redirect();
+        LtiOidcLogin::new(new Lti13Database, new Lti13Cache(), new Lti13Cookie)
+            ->doOidcLoginRedirect(api_get_path(WEB_PLUGIN_PATH). "lti_provider/web/game.php", $request)
+            ->doRedirect();
     }
 
     /**
      * Lti Message Launch
-     * @param bool $from_cache
-     * @param null $launch_id
+     * @param bool $fromCache
+     * @param null $launchId
      * return $launch
      */
-    public function launch($from_cache = false, $launch_id = null) {
-        if ($from_cache) {
-            $launch = LTI\LTI_Message_Launch::from_cache($launch_id, new Demo_Database());
+    public function launch($fromCache = false, $launchId = null) {
+        if ($fromCache) {
+            $launch = LtiMessageLaunch::fromCache($launchId, new Lti13Database(), new Lti13Cache());
         } else {
-            $launch = LTI\LTI_Message_Launch::new(new Demo_Database())->validate();
+            $launch = LtiMessageLaunch::new(new Lti13Database(), new Lti13Cache(), new Lti13Cookie)->validate();
         }
         return $launch;
     }

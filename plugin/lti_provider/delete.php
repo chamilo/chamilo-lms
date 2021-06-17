@@ -13,7 +13,7 @@ if (!isset($_REQUEST['id'])) {
     api_not_allowed(true);
 }
 
-$platformId = intval($_REQUEST['id']);
+$platformId = (int)$_REQUEST['id'];
 
 $plugin = LtiProviderPlugin::create();
 $em = Database::getManager();

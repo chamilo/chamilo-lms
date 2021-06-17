@@ -3,8 +3,6 @@
 
 $strings['plugin_title'] = 'LTI 1.3 Advantage Provider';
 $strings['plugin_comment'] = 'Simple application developed as a way to demonstrate how to build an IMS LTI tool provider';
-$plugin_info['version'] = '1.0';
-$plugin_info['author'] = 'Christian Beeznest';
 $strings['description'] = 'The application allows a student inside a course of the platform with external tools which is scored (Assigment and Grade Services) and generating reporting of their members  (NRP Services).
 Here are your LTI connection details to try out this app:';
 $strings['LtiProviderDescription'] = 'First thing you will need is to configure your registration and deployment. To configure your registration
@@ -27,4 +25,7 @@ $strings['kid'] = 'kid';
 $strings['public_key'] = 'Public key';
 $strings['name'] = 'Provider name';
 $strings['enabled'] = 'Enabled';
+$strings['GenerateKeyPairInfo'] = 'A new private and public key pair will be created when enabling.';
+$strings['URLs'] = 'Endpoints Urls';
+$strings['PlatformConnectionAdded'] = 'A platform connection is added.';
 

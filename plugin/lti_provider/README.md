@@ -17,6 +17,8 @@ In this case Chamilo is used as provider , this plugin allows a student inside a
 4. Add the LTI connection details to try out this app (Configure page)
 5. To configure the Platforms LMS for registration and deployment
 
+# DB tables
+
 ## v1.0
 ```sql
 CREATE TABLE plugin_lti_provider_platform (
@@ -29,5 +31,13 @@ CREATE TABLE plugin_lti_provider_platform (
  key_set_url varchar(255) NOT NULL,
  deployment_id varchar(255) NOT NULL,
  PRIMARY KEY(id)
-) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB
+) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+
+CREATE TABLE plugin_lti_provider_platform_key (
+  id INT AUTO_INCREMENT NOT NULL,
+  kid VARCHAR(255) NOT NULL,
+  public_key LONGTEXT NOT NULL,
+  private_key LONGTEXT NOT NULL,
+  PRIMARY KEY(id)
+) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
 ```

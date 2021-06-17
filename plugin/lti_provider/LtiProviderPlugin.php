@@ -1,7 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\LtiProvider\Platform;
+use Chamilo\PluginBundle\Entity\LtiProvider\PlatformKey;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
@@ -23,8 +23,13 @@ class LtiProviderPlugin extends Plugin
     {
         $version = '1.0';
         $author = 'Christian Beeznest';
+
         $publicKey = $this->getPublicKey();
         $message = Display::return_message($this->get_lang('description'));
+
+        if (empty($publicKey)) {
+            $publicKey = $this->get_lang('GenerateKeyPairInfo');
+        }
 
         $pkHtml = '<div class="form-group ">
                     <label for="lti_provider_public_key" class="col-sm-2 control-label">'.$this->get_lang('public_key').'</label>
@@ -103,6 +108,33 @@ class LtiProviderPlugin extends Plugin
      */
     public function performActionsAfterConfigure()
     {
+        $em = Database::getManager();
+
+        /** @var PlatformKey $platformKey */
+        $platformKey = $em
+            ->getRepository('ChamiloPluginBundle:LtiProvider\PlatformKey')
+            ->findOneBy([]);
+
+        if ($this->get('enabled') === 'true') {
+            if (!$platformKey) {
+                $platformKey = new PlatformKey();
+            }
+
+            $keyPair = self::generatePlatformKeys();
+
+            $platformKey->setKid($keyPair['kid']);
+            $platformKey->publicKey = $keyPair['public'];
+            $platformKey->setPrivateKey($keyPair['private']);
+
+            $em->persist($platformKey);
+        } else {
+            if ($platformKey) {
+                $em->remove($platformKey);
+            }
+        }
+
+        $em->flush();
+
         return $this;
     }
 
@@ -152,6 +184,13 @@ class LtiProviderPlugin extends Plugin
                 deployment_id varchar(255) NOT NULL,
                 PRIMARY KEY(id)
             ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
+            "CREATE TABLE plugin_lti_provider_platform_key (
+                    id INT AUTO_INCREMENT NOT NULL,
+                    kid VARCHAR(255) NOT NULL,
+                    public_key LONGTEXT NOT NULL,
+                    private_key LONGTEXT NOT NULL,
+                    PRIMARY KEY(id)
+                ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB"
         ];
 
         foreach ($queries as $query) {
@@ -169,6 +208,7 @@ class LtiProviderPlugin extends Plugin
     private function dropPluginTables()
     {
         Database::query("DROP TABLE IF EXISTS plugin_lti_provider_platform");
+        Database::query("DROP TABLE IF EXISTS plugin_lti_provider_platform_key");
         return true;
     }
 
@@ -242,9 +282,19 @@ class LtiProviderPlugin extends Plugin
         ];
     }
 
+    /**
+     * Get the public key
+     *
+     * @return string
+     */
     public function getPublicKey() {
-        $keyPath = __DIR__.'/keys/public.key';
-        $publicKey = file_get_contents($keyPath);
+        $publicKey = '';
+        $platformKey = Database::getManager()
+            ->getRepository('ChamiloPluginBundle:LtiProvider\PlatformKey')
+            ->findOneBy([]);
+        if ($platformKey) {
+            $publicKey = $platformKey->getPublicKey();
+        }
         return $publicKey;
     }
 

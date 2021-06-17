@@ -39,7 +39,7 @@ class FrmEdit extends FormValidator
      */
     public function build($globalMode = true)
     {
-        $plugin = ImsLtiPlugin::create();
+        $plugin = LtiProviderPlugin::create();
         $this->addHeader($plugin->get_lang('ConnectionDetails'));
 
         $this->addText('issuer', $plugin->get_lang('PlatformName'));

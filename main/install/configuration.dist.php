@@ -222,11 +222,7 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // Course log - Default columns to hide
 //$_configuration['course_log_hide_columns'] = ['columns' => [1, 9]];
 // Course log - User extra fields to show as columns for default
-// For example, to show as a default column the user extra field with id 15 and 37 on site 1:
-// [1 => [15, 37]];
-// Same config plus site 3 and extra fields with id 53 and 55:
-// [1 => [15, 37], 3 => [53, 55]];
-//$_configuration['course_log_default_extra_fields'] = [1 => []];
+//$_configuration['course_log_default_extra_fields'] = ['extra_fields' => [66, 67]];
 // Unoconv binary file
 //$_configuration['unoconv.binaries'] = '/usr/bin/unoconv';
 // Proxy settings for access external services

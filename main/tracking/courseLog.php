@@ -209,8 +209,8 @@ Session::write('extra_field_info', $extra_info);
 $defaultExtraFields = [];
 $defaultExtraFieldsFromSettings = [];
 $defaultExtraFieldsFromSettings = api_get_configuration_value('course_log_default_extra_fields');
-if (isset($defaultExtraFieldsFromSettings)) {
-    $defaultExtraFields = $defaultExtraFieldsFromSettings;
+if (!empty($defaultExtraFieldsFromSettings) && isset($defaultExtraFieldsFromSettings['extra_fields'])) {
+    $defaultExtraFields = $defaultExtraFieldsFromSettings['extra_fields'];
     $defaultExtraInfo = [];
     $defaultUserProfileInfo = [];
 

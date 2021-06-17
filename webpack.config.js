@@ -65,16 +65,6 @@ Encore
     })
     .copyFiles([
         {
-            from: './node_modules/fullcalendar/',
-            pattern: /(main.js)$/,
-            to: 'libs/fullcalendar/main.js'
-        },
-        {
-            from: './node_modules/fullcalendar/',
-            pattern: /(main.css)$/,
-            to: 'libs/fullcalendar/main.css'
-        },
-        {
             from: './node_modules/multiselect-two-sides/dist/js',
             pattern: /(multiselect.js)$/,
             to: 'libs/multiselect-two-sides/dist/js/multiselect.js'

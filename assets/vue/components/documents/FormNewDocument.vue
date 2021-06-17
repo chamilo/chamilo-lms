@@ -24,12 +24,6 @@
           height: 500,
           toolbar_mode: 'sliding',
           file_picker_callback : browser,
-      /*images_upload_handler: (blobInfo, success, failure) => {
-              const img = 'data:image/jpeg;base64,' + blobInfo.base64();
-              //console.log(img);
-              success(img);
-            },*/
-          //menubar: true,
           autosave_ask_before_unload: true,
           plugins: [
             'fullpage advlist autolink lists link image charmap print preview anchor',

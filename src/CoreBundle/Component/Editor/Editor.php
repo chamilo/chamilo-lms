@@ -190,7 +190,7 @@ class Editor
                     $output[] = $this->toJavascript((string) $k).': '.$this->toJavascript($v);
                 }
 
-                return '{ '.implode(', ', $output).' }';
+                return '{ '.implode(', '."\n", $output).' } '."\n";
 
                 break;
             default:

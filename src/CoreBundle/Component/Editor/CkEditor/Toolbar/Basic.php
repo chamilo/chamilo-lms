@@ -147,12 +147,12 @@ class Basic extends Toolbar
     public function getConfig()
     {
         $config = [];
-        if ('true' === api_get_setting('more_buttons_maximized_mode')) {
+        /*if ('true' === api_get_setting('more_buttons_maximized_mode')) {
             $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
             $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
         }
 
-        $config['customConfig'] = api_get_path(WEB_PUBLIC_PATH).'editor/config?'.api_get_cidreq().'&tool=document&type=files';
+        $config['customConfig'] = api_get_path(WEB_PUBLIC_PATH).'editor/config?'.api_get_cidreq().'&tool=document&type=files';*/
         //$config['flash_flvPlayer'] = api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/plugins/flash/swf/player.swf';
 
         /*filebrowserFlashBrowseUrl
@@ -178,8 +178,7 @@ class Basic extends Toolbar
             'wordLimit' => 'unlimited'
         );*/
 
-        $config['skin'] = 'moono-lisa';
-
+        /*$config['skin'] = 'moono-lisa';
         $config['image2_chamilo_alignClasses'] = [
             'pull-left',
             'text-center',
@@ -193,16 +192,58 @@ class Basic extends Toolbar
             'img-va-text-top',
             'img-va-text-bottom',
         ];
-        $config['startupOutlineBlocks'] = true === api_get_configuration_value('ckeditor_startup_outline_blocks');
+        $config['startupOutlineBlocks'] = true === api_get_configuration_value('ckeditor_startup_outline_blocks');*/
 
-        if (isset($this->config)) {
+        $plugins = [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table paste wordcount ',
+        ];
+
+        /*plugins: [
+           'fullpage advlist autolink lists link image charmap print preview anchor',
+           'searchreplace visualblocks code fullscreen',
+           'insertdatetime media table paste wordcount emoticons'
+       ],*/
+
+        if ($this->getConfigAttribute('fullPage')) {
+            $plugins[] = 'fullpage';
+        }
+
+        $config['plugins'] = implode(' ', $plugins);
+        $config['toolbar'] = 'undo redo | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl';
+
+        //$config['skin'] = 'oxide';
+        $config['skin_url'] = '/build/libs/tinymce/skins/ui/oxide';
+        $config['content_css'] = '/build/libs/tinymce/skins/content/default/content.css';
+        $config['branding'] = false;
+        $config['relative_urls'] = false;
+        $config['toolbar_mode'] = 'sliding';
+        $config['autosave_ask_before_unload'] = true;
+        $config['toolbar_mode'] = 'sliding';
+
+        //file_picker_callback : browser,
+
+        $iso = api_get_language_isocode();
+        $url = api_get_path(WEB_PATH);
+
+        // Language list: https://www.tiny.cloud/get-tiny/language-packages/
+        if ('en_US' !== $iso) {
+            $config['language'] = $iso;
+            $config['language_url'] = "$url/libs/editor/langs/$iso.js";
+        }
+
+        /*if (isset($this->config)) {
             $this->config = array_merge($config, $this->config);
         } else {
             $this->config = $config;
-        }
+        }*/
+
+        $this->config = $config;
 
         //$config['width'] = '100';
-        //$config['height'] = '200';
+        $config['height'] = '300';
+
         return $this->config;
     }
 

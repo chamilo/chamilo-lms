@@ -62,18 +62,15 @@ class CkEditor extends Editor
             'CkEditor'
         );
 
-        $toolbar->setLanguage($this->getLocale());
         $config = $toolbar->getConfig();
+        $config['selector'] = '#'.$this->getTextareaId();
         $javascript = $this->toJavascript($config);
 
         return "<script>
             document.addEventListener('DOMContentLoaded', function() {
-                tinymce.init({
-                    skin: 'oxide',
-                    skin_url: '/build/libs/tinymce/skins/ui/oxide',
-                    content_css: '/build/libs/tinymce/skins/content/default/content.css',
-                    selector: '#".$this->getTextareaId()."'
-                });
+                tinymce.init(
+                    $javascript
+                );
            });
            </script>";
     }

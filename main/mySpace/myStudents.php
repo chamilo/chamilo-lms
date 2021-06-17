@@ -2057,18 +2057,23 @@ if ($allowMessages === true) {
     $form->display();
 }
 
-$filter_messages = api_get_configuration_value('filter_interactivity_messages') && !empty($sessionId);
+$coachAccessStartDate = null;
+$coachAccessEndDate = null;
 
-if ($filter_messages) {
-    $session_info = api_get_session_info($sessionId);
-    $coach_access_start_date = $session_info['coach_access_start_date'];
-    $coach_access_end_date = $session_info['coach_access_end_date'];
+if (!empty($sessionId)) {
+    $filterMessages = api_get_configuration_value('filter_interactivity_messages');
+
+    if ($filterMessages) {
+        $sessionInfo = api_get_session_info($sessionId);
+        $coachAccessStartDate = $sessionInfo['coach_access_start_date'];
+        $coachAccessEndDate = $sessionInfo['coach_access_end_date'];
+    }
 }
 
 $allow = api_get_configuration_value('allow_user_message_tracking');
 if ($allow && (api_is_drh() || api_is_platform_admin())) {
-    if ($filter_messages) {
-        $users = MessageManager::getUsersThatHadConversationWithUser($student_id, $coach_access_start_date, $coach_access_end_date);
+    if ($filterMessages) {
+        $users = MessageManager::getUsersThatHadConversationWithUser($student_id, $coachAccessStartDate, $coachAccessEndDate);
     } else {
         $users = MessageManager::getUsersThatHadConversationWithUser($student_id);
     }
@@ -2090,8 +2095,8 @@ if ($allow && (api_is_drh() || api_is_platform_admin())) {
     foreach ($users as $userFollowed) {
         $followedUserId = $userFollowed['user_id'];
 
-        if ($filter_messages) {
-            $url = api_get_path(WEB_CODE_PATH).'tracking/messages.php?from_user='.$student_id.'&to_user='.$followedUserId.'&date_from='.$coach_access_start_date.'&date_to='.$coach_access_end_date;
+        if ($filterMessages) {
+            $url = api_get_path(WEB_CODE_PATH).'tracking/messages.php?from_user='.$student_id.'&to_user='.$followedUserId.'&start_date='.$coachAccessStartDate.'&end_date='.$coachAccessEndDate;
         } else {
             $url = api_get_path(WEB_CODE_PATH).'tracking/messages.php?from_user='.$student_id.'&to_user='.$followedUserId;
         }

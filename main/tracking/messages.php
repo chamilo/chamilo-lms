@@ -18,8 +18,8 @@ if (!$allowUser) {
 $fromUserId = isset($_GET['from_user']) ? (int) $_GET['from_user'] : 0;
 $toUserId = isset($_GET['to_user']) ? (int) $_GET['to_user'] : 0;
 
-$coach_access_start_date = isset($_GET['date_from']) ? $_GET['date_from'] : null;
-$coach_access_end_date = isset($_GET['date_to']) ? $_GET['date_to'] : null;
+$coachAccessStartDate = isset($_GET['start_date']) ? $_GET['start_date'] : null;
+$coachAccessEndDate = isset($_GET['end_date']) ? $_GET['end_date'] : null;
 
 if (empty($fromUserId) || empty($toUserId)) {
     api_not_allowed(true);
@@ -65,9 +65,9 @@ if (api_is_drh()) {
 $usersData[$toUserId] = api_get_user_info($toUserId);
 $usersData[$fromUserId] = api_get_user_info($fromUserId);
 
-$filter_messages = api_get_configuration_value('filter_interactivity_messages');
-if ($filter_messages) {
-    $messages = MessageManager::getAllMessagesBetweenStudents($toUserId, $fromUserId, $coach_access_start_date, $coach_access_end_date);
+$filterMessages = api_get_configuration_value('filter_interactivity_messages');
+if ($filterMessages) {
+    $messages = MessageManager::getAllMessagesBetweenStudents($toUserId, $fromUserId, $coachAccessStartDate, $coachAccessEndDate);
 } else {
     $messages = MessageManager::getAllMessagesBetweenStudents($toUserId, $fromUserId);
 }

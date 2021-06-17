@@ -204,6 +204,11 @@ class ResourceLink
         return $this;
     }
 
+    public function hasSession(): bool
+    {
+        return null !== $this->session;
+    }
+
     public function hasCourse(): bool
     {
         return null !== $this->course;

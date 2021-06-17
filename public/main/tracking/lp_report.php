@@ -414,7 +414,7 @@ foreach ($lps as $lp) {
 if (!empty($action)) {
     switch ($action) {
         case 'export':
-            $data = getData(0, 100000, null, null);
+            $data = getData(0, 100000, null, null, null);
             $data = array_merge([$headers], $data);
             $name = api_get_course_id().'_'.get_lang('Learnpath').'_'.get_lang('Export');
             Export::arrayToXls($data, $name);

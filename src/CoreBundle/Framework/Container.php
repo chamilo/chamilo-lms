@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Framework;
 
 use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CoreBundle\Repository\AssetRepository;
+use Chamilo\CoreBundle\Repository\CareerRepository;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\GradeBookCategoryRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
@@ -17,9 +18,11 @@ use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\PersonalFileRepository;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Repository\PromotionRepository;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
+use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
@@ -275,6 +278,11 @@ class Container
         return self::$container->get(CourseRepository::class);
     }
 
+    public static function getCareerRepository(): CareerRepository
+    {
+        return self::$container->get(CareerRepository::class);
+    }
+
     public static function getCourseCategoryRepository(): CourseCategoryRepository
     {
         return self::$container->get(CourseCategoryRepository::class);
@@ -410,6 +418,11 @@ class Container
         return self::$container->get(PersonalFileRepository::class);
     }
 
+    public static function getPromotionRepository(): PromotionRepository
+    {
+        return self::$container->get(PromotionRepository::class);
+    }
+
     public static function getUserRepository(): UserRepository
     {
         return self::$container->get(UserRepository::class);
@@ -468,6 +481,11 @@ class Container
     public static function getSurveyQuestionRepository(): CSurveyQuestionRepository
     {
         return self::$container->get(CSurveyQuestionRepository::class);
+    }
+
+    public static function getSysAnnouncementRepository(): SysAnnouncementRepository
+    {
+        return self::$container->get(SysAnnouncementRepository::class);
     }
 
     public static function getThematicRepository(): CThematicRepository

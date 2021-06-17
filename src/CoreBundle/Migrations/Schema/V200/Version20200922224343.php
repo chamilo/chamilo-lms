@@ -19,41 +19,27 @@ final class Version20200922224343 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         $table = $schema->getTable('sys_announcement');
-        if ($table->hasColumn('visible_drh')) {
-            $this->addSql('ALTER TABLE sys_announcement CHANGE visible_drh visible_drh TINYINT(1) NOT NULL');
-        } else {
-            $this->addSql('ALTER TABLE sys_announcement ADD COLUMN visible_drh TINYINT(1) NOT NULL');
+
+        if (!$table->hasColumn('roles')) {
+            $this->addSql("ALTER TABLE sys_announcement ADD roles LONGTEXT NOT NULL COMMENT '(DC2Type:array)'");
         }
 
-        if (false === $table->hasColumn('career_id')) {
+        if (!$table->hasColumn('career_id')) {
             $this->addSql('ALTER TABLE sys_announcement ADD career_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE sys_announcement ADD CONSTRAINT FK_E4A3EAD4B58CDA09 FOREIGN KEY (career_id) REFERENCES career (id)  ON DELETE CASCADE');
+        } else {
+            if (!$table->hasForeignKey('FK_E4A3EAD4B58CDA09')) {
+                $this->addSql('ALTER TABLE sys_announcement ADD CONSTRAINT FK_E4A3EAD4B58CDA09 FOREIGN KEY (career_id) REFERENCES career (id)  ON DELETE CASCADE');
+            }
         }
 
-        if (false === $table->hasColumn('promotion_id')) {
+        if (!$table->hasColumn('promotion_id')) {
             $this->addSql('ALTER TABLE sys_announcement ADD promotion_id INT DEFAULT NULL');
-        }
-
-        if ($table->hasColumn('visible_session_admin')) {
-            $this->addSql(
-                'ALTER TABLE sys_announcement CHANGE visible_session_admin visible_session_admin TINYINT(1) NOT NULL'
-            );
+            $this->addSql('ALTER TABLE sys_announcement ADD CONSTRAINT FK_E4A3EAD4139DF194 FOREIGN KEY (promotion_id) REFERENCES promotion (id)  ON DELETE CASCADE');
         } else {
-            $this->addSql(
-                'ALTER TABLE sys_announcement ADD COLUMN visible_session_admin TINYINT(1) NOT NULL'
-            );
-        }
-        if ($table->hasColumn('visible_boss')) {
-            $this->addSql('ALTER TABLE sys_announcement CHANGE visible_boss visible_boss TINYINT(1) NOT NULL');
-        } else {
-            $this->addSql('ALTER TABLE sys_announcement ADD COLUMN visible_boss TINYINT(1) NOT NULL');
-        }
-
-        if ($table->hasColumn('career_id')) {
-            $this->addSql('ALTER TABLE sys_announcement ADD career_id INT DEFAULT NULL');
-        }
-
-        if ($table->hasColumn('promotion_id')) {
-            $this->addSql('ALTER TABLE sys_announcement ADD promotion_id INT DEFAULT NULL;');
+            if (!$table->hasForeignKey('FK_E4A3EAD4139DF194')) {
+                $this->addSql('ALTER TABLE sys_announcement ADD CONSTRAINT FK_E4A3EAD4139DF194 FOREIGN KEY (promotion_id) REFERENCES promotion (id)  ON DELETE CASCADE');
+            }
         }
     }
 

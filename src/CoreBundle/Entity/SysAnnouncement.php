@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * SysAnnouncement.
+ * Portal announcements.
  *
  * @ORM\Table(name="sys_announcement")
  * @ORM\Entity
@@ -91,25 +91,35 @@ class SysAnnouncement
     protected AccessUrl $url;
 
     /**
-     * @ORM\Column(name="career_id", type="integer", nullable=true)
+     * An array of roles. Example: ROLE_USER, ROLE_TEACHER, ROLE_ADMIN.
+     *
+     * @ORM\Column(type="array")
+     *
+     * @var string[]
      */
-    protected ?int $careerId;
+    protected array $roles = [];
 
     /**
-     * @ORM\Column(name="promotion_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Career")
+     * @ORM\JoinColumn(name="career_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected ?int $promotionId;
+    protected ?Career $career = null;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Promotion")
+     * @ORM\JoinColumn(name="promotion_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected ?Promotion $promotion = null;
 
     public function __construct()
     {
+        $this->roles = [];
         $this->visibleBoss = false;
         $this->visibleDrh = false;
         $this->visibleGuest = false;
         $this->visibleSessionAdmin = false;
         $this->visibleStudent = false;
         $this->visibleTeacher = false;
-        $this->careerId = 0;
-        $this->promotionId = 0;
     }
 
     /**
@@ -304,5 +314,62 @@ class SysAnnouncement
         $this->url = $url;
 
         return $this;
+    }
+
+    public function getCareer(): ?Career
+    {
+        return $this->career;
+    }
+
+    public function setCareer(?Career $career): self
+    {
+        $this->career = $career;
+
+        return $this;
+    }
+
+    public function getPromotion(): ?Promotion
+    {
+        return $this->promotion;
+    }
+
+    public function setPromotion(?Promotion $promotion): self
+    {
+        $this->promotion = $promotion;
+
+        return $this;
+    }
+
+    public function getRoles(): array
+    {
+        return $this->roles;
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = [];
+        foreach ($roles as $role) {
+            $this->addRole($role);
+        }
+
+        return $this;
+    }
+
+    public function addRole(string $role): self
+    {
+        $role = strtoupper($role);
+
+        if (!\in_array($role, $this->roles, true)) {
+            $this->roles[] = $role;
+        }
+
+        return $this;
+    }
+
+    public function isVisible(): bool
+    {
+        $now = new DateTime();
+
+        return $this->getDateStart() <= $now && $now <= $this->getDateEnd();
     }
 }

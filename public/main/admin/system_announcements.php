@@ -346,7 +346,7 @@ if ($action_todo) {
                     $values['content'],
                     $values['range_start'],
                     $values['range_end'],
-                    $values['roles'],
+                    $values['roles'] ?? [],
                     $values['lang'],
                     $sendMail,
                     empty($values['add_to_calendar']) ? false : true,
@@ -389,7 +389,7 @@ if ($action_todo) {
                     $values['content'],
                     $values['range_start'],
                     $values['range_end'],
-                    $values['roles'],
+                    $values['roles'] ?? [],
                     $values['lang'],
                     $sendMail,
                     $sendMailTest
@@ -418,7 +418,7 @@ if ($action_todo) {
                     }
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('AnnouncementUpdate successful'),
+                            get_lang('Announcement has been updated'),
                             'confirmation'
                         )
                     );

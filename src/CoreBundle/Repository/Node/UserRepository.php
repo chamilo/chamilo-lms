@@ -210,6 +210,19 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         return $resourceNode;
     }
 
+    public function addRoleListQueryBuilder(array $roleList, QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb, 'u');
+        if (!empty($roleList)) {
+            $qb
+                ->andWhere('u.roles IN (:roles)')
+                ->setParameter('roles', $roleList, Types::ARRAY)
+            ;
+        }
+
+        return $qb;
+    }
+
     public function findByUsername(string $username): ?User
     {
         $user = $this->findOneBy([
@@ -224,17 +237,20 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     }
 
     /**
+     * Get a filtered list of user by role and (optionally) access url.
+     *
+     * @param string $keyword     The query to filter
+     * @param int    $accessUrlId The access URL ID
+     *
      * @return User[]
      */
-    public function findByRole(string $role)
+    public function findByRole(string $role, string $keyword, int $accessUrlId = 0)
     {
         $qb = $this->createQueryBuilder('u');
 
-        $qb->select('u')
-            ->from($this->_entityName, 'u')
-            ->where('u.roles LIKE :roles')
-            ->setParameter('roles', '%"'.$role.'"%', Types::STRING)
-        ;
+        $this->addAccessUrlQueryBuilder($accessUrlId, $qb);
+        $this->addRoleQueryBuilder($role, $qb);
+        $this->addSearchByKeywordQueryBuilder($keyword, $qb);
 
         return $qb->getQuery()->getResult();
     }
@@ -311,26 +327,6 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 
         return $query->execute();
     }*/
-
-    /**
-     * Get a filtered list of user by status and (optionally) access url.
-     *
-     * @param string $keyword     The query to filter
-     * @param int    $status      The status
-     * @param int    $accessUrlId The access URL ID
-     *
-     * @return User[]
-     */
-    public function findByStatus(string $keyword, int $status, int $accessUrlId = 0)
-    {
-        $qb = $this->createQueryBuilder('u');
-
-        $this->addAccessUrlQueryBuilder($accessUrlId, $qb);
-        $this->addStatusQueryBuilder($status, $qb);
-        $this->addSearchByKeywordQueryBuilder($keyword, $qb);
-
-        return $qb->getQuery()->getResult();
-    }
 
     /**
      * Get the coaches for a course within a session.
@@ -1436,6 +1432,52 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         ;
     }
 
+    public function addAccessUrlQueryBuilder(int $accessUrlId, QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb, 'u');
+        $qb
+            ->innerJoin('u.portals', 'p')
+            ->andWhere('p.url = :url')
+            ->setParameter('url', $accessUrlId, Types::INTEGER)
+        ;
+
+        return $qb;
+    }
+
+    public function addActiveAndNotAnonUserQueryBuilder(QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb, 'u');
+        $qb
+            ->andWhere('u.active = 1')
+            ->andWhere('u.status <> :status')
+            ->setParameter('status', User::ANONYMOUS, Types::INTEGER)
+        ;
+
+        return $qb;
+    }
+
+    public function addExpirationDateQueryBuilder(QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb, 'u');
+        $qb
+            ->andWhere('u.registrationDate IS NULL OR u.registrationDate > :now')
+            ->setParameter('now', new Datetime(), Types::DATETIME_MUTABLE)
+        ;
+
+        return $qb;
+    }
+
+    private function addRoleQueryBuilder(string $role, QueryBuilder $qb = null): QueryBuilder
+    {
+        $qb = $this->getOrCreateQueryBuilder($qb, 'u');
+        $qb
+            ->andWhere('u.roles LIKE :roles')
+            ->setParameter('roles', '%"'.$role.'"%', Types::STRING)
+        ;
+
+        return $qb;
+    }
+
     private function addSearchByKeywordQueryBuilder($keyword, QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
@@ -1482,47 +1524,12 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         return $qb;
     }
 
-    private function addAccessUrlQueryBuilder(int $accessUrlId, QueryBuilder $qb = null): QueryBuilder
-    {
-        $qb = $this->getOrCreateQueryBuilder($qb, 'u');
-        $qb
-            ->innerJoin('u.portals', 'p')
-            ->andWhere('p.url = :url')
-            ->setParameter('url', $accessUrlId, Types::INTEGER)
-        ;
-
-        return $qb;
-    }
-
     private function addNotCurrentUserQueryBuilder(int $userId, QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
         $qb
             ->andWhere('u.id <> :id')
             ->setParameter('id', $userId, Types::INTEGER)
-        ;
-
-        return $qb;
-    }
-
-    private function addActiveAndNotAnonUserQueryBuilder(QueryBuilder $qb = null): QueryBuilder
-    {
-        $qb = $this->getOrCreateQueryBuilder($qb, 'u');
-        $qb
-            ->andWhere('u.active = 1')
-            ->andWhere('u.status <> :status')
-            ->setParameter('status', User::ANONYMOUS, Types::INTEGER)
-        ;
-
-        return $qb;
-    }
-
-    private function addStatusQueryBuilder(int $status, QueryBuilder $qb = null): QueryBuilder
-    {
-        $qb = $this->getOrCreateQueryBuilder($qb, 'u');
-        $qb
-            ->andWhere('u.status = :status')
-            ->setParameter('status', $status, Types::INTEGER)
         ;
 
         return $qb;

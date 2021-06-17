@@ -340,7 +340,8 @@ class SystemAnnouncementManager
      * @param string $date_start      Start date (YYYY-MM-DD HH:II: SS)
      * @param string $date_end        End date (YYYY-MM-DD HH:II: SS)
      * @param array  $visibility
-     * @param string $lang            The language for which the announvement should be shown. Leave null for all langages
+     * @param string $lang            The language for which the announvement should be shown. Leave null for all
+     *                                langages
      * @param int    $send_mail       Whether to send an e-mail to all users (1) or not (0)
      * @param bool   $add_to_calendar
      * @param bool   $sendEmailTest
@@ -765,40 +766,25 @@ class SystemAnnouncementManager
             return true;
         }
 
-        $urlJoin = '';
-        $urlCondition = '';
-        $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        if (api_is_multiple_url_enabled()) {
-            $current_access_url_id = api_get_current_access_url_id();
-            $url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-            $urlJoin = " INNER JOIN $url_rel_user uu ON uu.user_id = u.id ";
-            $urlCondition = " AND access_url_id = '".$current_access_url_id."' ";
-        }
-
-        $sql = "SELECT DISTINCT u.id as user_id FROM $user_table u $urlJoin
-                WHERE status = '1' $urlCondition ";
-
-        $announcement;
-        $sql .= " AND roles IN () ";
-
-        if (!isset($sql)) {
-            return false;
-        }
+        $repo = Container::getUserRepository();
+        $qb = $repo->addRoleListQueryBuilder($announcement->getRoles());
+        $repo->addAccessUrlQueryBuilder(api_get_current_access_url_id(), $qb);
 
         if (!empty($language)) {
-            //special condition because language was already treated for SQL insert before
-            $sql .= " AND language = '".Database::escape_string($language)."' ";
+            $qb
+                ->andWhere('u.locale = :lang')
+                ->setParameter('lang', $language)
+            ;
         }
+
+        $repo->addActiveAndNotAnonUserQueryBuilder($qb);
+        $repo->addExpirationDateQueryBuilder($qb);
 
         // Sent to active users.
-        $sql .= " AND email <>'' AND active = 1 ";
+        //$sql .= " AND email <>'' AND active = 1 ";
 
         // Expiration date
-        $sql .= " AND (expiration_date = '' OR expiration_date IS NULL OR expiration_date > '$now') ";
-
-        if ((empty($teacher) || '0' == $teacher) && (empty($student) || '0' == $student)) {
-            return true;
-        }
+        //$sql .= " AND (expiration_date = '' OR expiration_date IS NULL OR expiration_date > '$now') ";
 
         $userListToFilter = [];
         // @todo check if other filters will apply for the career/promotion option.
@@ -814,14 +800,14 @@ class SystemAnnouncementManager
                 foreach ($promotionList as $promotion) {
                     $sessionList = SessionManager::get_all_sessions_by_promotion($promotion['id']);
                     foreach ($sessionList as $session) {
-                        if ($teacher) {
+                        if (in_array('ROLE_TEACHER', $announcement->getRoles(), true)) {
                             $users = SessionManager::get_users_by_session($session['id'], 2);
                             if (!empty($users)) {
                                 $userListToFilter = array_merge($users, $userListToFilter);
                             }
                         }
 
-                        if ($student) {
+                        if (in_array('ROLE_STUDENT', $announcement->getRoles(), true)) {
                             $users = SessionManager::get_users_by_session($session['id'], 0);
                             if (!empty($users)) {
                                 $userListToFilter = array_merge($users, $userListToFilter);
@@ -834,28 +820,29 @@ class SystemAnnouncementManager
 
         if (!empty($userListToFilter)) {
             $userListToFilter = array_column($userListToFilter, 'user_id');
-            $userListToFilterToString = implode("', '", $userListToFilter);
-            $sql .= " AND (u.user_id IN ('$userListToFilterToString') ) ";
+            //$userListToFilterToString = implode("', '", $userListToFilter);
+            $qb
+                ->andWhere('u.id IN (:users)')
+                ->setParameter('users', $userListToFilter)
+            ;
+            //$sql .= " AND (u.user_id IN ('$userListToFilterToString') ) ";
         }
-
-        $result = Database::query($sql);
-        if (false === $result) {
-            return false;
-        }
+        $users = $qb->getQuery()->getResult();
 
         $message_sent = false;
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
-            MessageManager::send_message_simple($row['user_id'], $title, $content);
+        /** @var \Chamilo\CoreBundle\Entity\User $user */
+        foreach ($users as $user) {
+            MessageManager::send_message_simple($user->getId(), $title, $content);
             $message_sent = true;
         }
 
         // Minor validation to clean up the attachment files in the announcement
-        if (!empty($_FILES)) {
+        /*if (!empty($_FILES)) {
             $attachments = $_FILES;
             foreach ($attachments as $attachment) {
                 unlink($attachment['tmp_name']);
             }
-        }
+        }*/
 
         return $message_sent; //true if at least one e-mail was sent
     }

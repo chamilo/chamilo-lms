@@ -39,9 +39,8 @@ class LearnPathItemForm
         $itemDescription = $lpItem->getDescription();
         $parentItemId = $lpItem->getParentItemId();
         $itemType = $lpItem->getItemType();
-        $previousItemId = $lpItem->getPreviousItemId();
+        //$previousItemId = $lpItem->getPreviousItemId();
 
-        $count = count($arrLP);
         // Parent
         $parentSelect = $form->addSelect(
             'parent',

@@ -6588,8 +6588,7 @@ class learnpath
         $form->setDefaults(['if_exists' => $defaultFileExistsOption]);
 
         // Check box options
-        $form->addElement(
-            'checkbox',
+        $form->addCheckBox(
             'unzip',
             get_lang('Options'),
             get_lang('Uncompress zip')

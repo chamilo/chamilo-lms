@@ -184,7 +184,8 @@ class LinkAddEditForm extends FormValidator
 
         // ELEMENT: visible
         $visible = (self::TYPE_EDIT == $form_type && $link->is_visible()) ? '1' : '0';
-        $this->addElement('checkbox', 'visible', null, get_lang('Visible'), $visible);
+        //$this->addCheckBox('visible', null, get_lang('Visible'), $visible);
+        $this->addCheckBox('visible', null, get_lang('Visible'));
         if (self::TYPE_EDIT == $form_type) {
             $defaults['visible'] = $link->is_visible();
         }

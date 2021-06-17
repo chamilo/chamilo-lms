@@ -24,9 +24,6 @@ class Editor
      */
     public string $toolbarSet;
 
-    /**
-     * Initial value.
-     */
     public string $value;
 
     public array $config;
@@ -142,14 +139,6 @@ class Editor
                 }
             }
         }
-    }
-
-    /**
-     * @return string
-     */
-    public function getLocale()
-    {
-        return api_get_language_isocode();
     }
 
     /**

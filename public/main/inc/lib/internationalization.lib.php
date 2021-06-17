@@ -768,7 +768,7 @@ function api_is_western_name_order($format = null, $language = null)
     }
 
     if (empty($language)) {
-        $language = api_get_language_isocode(false, true);
+        $language = api_get_language_isocode();
     }
     if (!isset($order[$format][$language])) {
         $test_name = api_get_person_name('%f', '%l', '%t', $format, $language);
@@ -798,7 +798,7 @@ function api_sort_by_first_name($language = null)
     static $sort_by_first_name = [];
 
     if (empty($language)) {
-        $language = api_get_language_isocode(false, true);
+        $language = api_get_language_isocode();
     }
     if (!isset($sort_by_first_name[$language])) {
         $sort_by_first_name[$language] = _api_get_person_name_convention($language, 'sort_by');
@@ -1200,23 +1200,6 @@ function api_strpos($haystack, $needle, $offset = 0, $encoding = null)
 function api_strrchr($haystack, $needle, $before_needle = false, $encoding = null)
 {
     return strrchr($haystack, $needle);
-}
-
-/**
- * Reverses a string.
- *
- * @param string $string   the string to be reversed
- * @param string $encoding (optional)    The used internally by this function character encoding. If it is omitted, the
- *                         platform character set will be used by default.
- *
- * @return string Returns the reversed string.
- *                This function is aimed at replacing the function strrev() for human-language strings.
- *
- * @see http://php.net/manual/en/function.strrev
- */
-function api_strrev($string, $encoding = null)
-{
-    return strrev($string);
 }
 
 /**
@@ -1951,78 +1934,6 @@ function &_api_get_day_month_names($language = null)
     }
 
     return $date_parts[$language];
-}
-
-function getIsoToLegacy()
-{
-    return array_flip(getLegacyToIso());
-}
-
-function getLegacyToIso()
-{
-    return [
-        'asturian' => 'ast_ES',
-        'basque' => 'eu_ES',
-        'bengali' => 'bn',
-        'bosnian' => 'bs',
-        'brazilian' => 'pt_BR',
-        'bulgarian' => 'bg',
-        'catalan' => 'ca_ES',
-        'croatian' => 'hr',
-        'czech' => 'cs',
-        'danish' => 'da',
-        'dari' => 'fa_AF',
-        'dutch' => 'nl',
-        'english' => 'en_US',
-        'estonian' => 'et',
-        'esperanto' => 'eo',
-        'faroese' => 'fo',
-        'finnish' => 'fi',
-        'french' => 'fr',
-        'friulian' => 'fur_IT',
-        'galician' => 'gl_ES',
-        'georgian' => 'ka',
-        'german' => 'de',
-        'greek' => 'el',
-        'hebrew' => 'he',
-        'hindi' => 'hi',
-        'hungarian' => 'hu',
-        'indonesian' => 'id',
-        'italian' => 'it',
-        'japanese' => 'ja',
-        'korean' => 'ko',
-        'latvian' => 'lv',
-        'lithuanian' => 'lt',
-        'macedonian' => 'mk',
-        'malay' => 'ms',
-        'norwegian' => 'nn',
-        'occitan' => 'oc_FR',
-        'pashto' => 'ps',
-        'persian' => 'fa',
-        'polish' => 'pl',
-        'portuguese' => 'pt',
-        'quechua_cusco' => 'qu',
-        'romanian' => 'ro',
-        'russian' => 'ru',
-        'serbian' => 'sr',
-        'simpl_chinese' => 'zh_CN',
-        'slovak' => 'sk',
-        'slovenian' => 'sl',
-        'somali' => 'so',
-        'spanish' => 'es',
-        'spanish_latin' => 'es_MX',
-        'swahili' => 'sw',
-        'swedish' => 'sv',
-        'tagalog' => 'tl',
-        'thai' => 'th',
-        'tibetan' => 'bo',
-        'trad_chinese' => 'zh_TW',
-        'turkish' => 'tr',
-        'ukrainian' => 'uk',
-        'vietnamese' => 'vi',
-        'xhosa' => 'xh',
-        'yoruba' => 'yo',
-    ];
 }
 
 /**

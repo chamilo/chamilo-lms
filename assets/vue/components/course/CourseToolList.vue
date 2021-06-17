@@ -46,7 +46,7 @@
 import {mapGetters} from "vuex";
 
 export default {
-  name: 'HomeCourseCard',
+  name: 'CourseToolList',
   props: {
     course: Object,
     tool: Object,

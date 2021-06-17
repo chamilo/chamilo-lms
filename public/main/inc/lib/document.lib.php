@@ -6087,58 +6087,6 @@ This folder contains all sessions that have been opened in the chat. Although th
     }
 
     /**
-     * @deprecated use CDocumentRepository
-     *
-     * @param string              $realPath
-     * @param string|UploadedFile $content
-     * @param int                 $visibility
-     * @param CGroup              $group
-     *
-     * @return CDocument|null
-     */
-    public static function addFileToDocument(CDocument $document, $realPath, $content, $visibility, $group)
-    {
-        if (!$document->hasResourceNode()) {
-            return $document;
-        }
-
-        $documentRepo = Container::getDocumentRepository();
-        $fileType = $document->getFiletype();
-        $resourceNode = $document->getResourceNode();
-
-        $em = Database::getManager();
-        $title = $document->getTitle();
-        // Only create a ResourceFile if there's a file involved
-        if ('file' === $fileType) {
-            if ($content instanceof UploadedFile) {
-                $documentRepo->addFile($document, $content);
-                error_log('UploadedFile');
-            } else {
-                // $path points to a file in the directory
-                if (!empty($realPath) && file_exists($realPath) && !is_dir($realPath)) {
-                    error_log('file_exists');
-                    $documentRepo->addFileFromPath($document, $title, $realPath, false);
-                } else {
-                    // We get the content and create a file
-                    error_log('From content');
-                    $documentRepo->addFileFromString($document, $title, 'text/html', $content, false);
-                }
-            }
-            $em->persist($resourceNode);
-        }
-        $em->persist($document);
-        $em->flush();
-
-        $documentId = $document->getIid();
-
-        if ($documentId) {
-            return $document;
-        }
-
-        return null;
-    }
-
-    /**
      * Adds a new document to the database.
      *
      * @param array  $courseInfo
@@ -6241,7 +6189,8 @@ This folder contains all sessions that have been opened in the chat. Although th
         $em = Database::getManager();
         $em->persist($document);
         $em->flush();
-        $document = self::addFileToDocument($document, $realPath, $content, $visibility, $group);
+        $repo = Container::getDocumentRepository();
+        $repo->addFileFromString($document, $realPath, 'text/html', $content, true);
 
         if ($document) {
             $allowNotification = api_get_configuration_value('send_notification_when_document_added');

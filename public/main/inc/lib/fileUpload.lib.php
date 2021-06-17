@@ -384,7 +384,7 @@ function handle_uploaded_document(
             );*/
 
             $courseEntity = api_get_course_entity($courseInfo['real_id']);
-            if (empty($courseEntity)) {
+            if (null === $courseEntity) {
                 return false;
             }
 
@@ -430,14 +430,15 @@ function handle_uploaded_document(
                             $uploadedFile['size']
                         );*/
 
-                        $document = DocumentManager::addFileToDocument(
+                        /*$document = DocumentManager::addFileToDocument(
                             $document,
                             null,
                             $content,
                             $defaultVisibility,
                             null,
                             $group
-                        );
+                        );*/
+                        $documentRepo->addFileFromString($document, $documentTitle, 'text/html', $content, true);
 
                         // Display success message with extra info to user
                         if ($document && $output) {

@@ -185,11 +185,11 @@ if ($display_all_form) {
     $form->addEmailRule('email');
 
     //	USERNAME
-    $form->addElement('text', 'username', get_lang('Username'), ['size' => USERNAME_MAX_LENGTH, 'disabled' => 'disabled']);
+    $form->addElement('text', 'username', get_lang('Username'), ['size' => \Chamilo\CoreBundle\Entity\User::USERNAME_MAX_LENGTH, 'disabled' => 'disabled']);
     $form->addRule('username', get_lang('Required field'), 'required');
     $form->addRule('username', get_lang('Your login can only contain letters, numbers and _.-'), 'username');
     $form->addRule('username', get_lang('This login is already in use'), 'username_available');
-    $form->addRule('username', sprintf(get_lang('The login needs to be maximum %s characters long'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+    $form->addRule('username', sprintf(get_lang('The login needs to be maximum %s characters long'), (string) \Chamilo\CoreBundle\Entity\User::USERNAME_MAX_LENGTH), 'maxlength', \Chamilo\CoreBundle\Entity\User::USERNAME_MAX_LENGTH);
 
     //	PASSWORD
     $form->addElement('password', 'pass1', get_lang('Pass'), ['size' => 40, 'disabled' => 'disabled']);

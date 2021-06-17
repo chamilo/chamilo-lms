@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
@@ -153,10 +154,10 @@ if (false === $user_already_registered_show_terms &&
             'email',
             sprintf(
                 get_lang('The login needs to be maximum %s characters long'),
-                (string) USERNAME_MAX_LENGTH
+                (string) User::USERNAME_MAX_LENGTH
             ),
             'maxlength',
-            USERNAME_MAX_LENGTH
+            User::USERNAME_MAX_LENGTH
         );
         $form->addRule('email', get_lang('This login is already in use'), 'username_available');
     }
@@ -171,7 +172,7 @@ if (false === $user_already_registered_show_terms &&
             true,
             [
                 'id' => 'username',
-                'size' => USERNAME_MAX_LENGTH,
+                'size' => User::USERNAME_MAX_LENGTH,
                 'autocomplete' => 'off',
             ]
         );
@@ -181,10 +182,10 @@ if (false === $user_already_registered_show_terms &&
             'username',
             sprintf(
                 get_lang('The login needs to be maximum %s characters long'),
-                (string) USERNAME_MAX_LENGTH
+                (string) User::USERNAME_MAX_LENGTH
             ),
             'maxlength',
-            USERNAME_MAX_LENGTH
+            User::USERNAME_MAX_LENGTH
         );
         $form->addRule('username', get_lang('Your login can only contain letters, numbers and _.-'), 'username');
         $form->addRule('username', get_lang('This login is already in use'), 'username_available');
@@ -632,7 +633,7 @@ if ($form->validate()) {
     $values = $form->getSubmitValues(1);
     // Make *sure* the login isn't too long
     if (isset($values['username'])) {
-        $values['username'] = api_substr($values['username'], 0, USERNAME_MAX_LENGTH);
+        $values['username'] = api_substr($values['username'], 0, User::USERNAME_MAX_LENGTH);
     }
 
     if ('false' === api_get_setting('allow_registration_as_teacher')) {

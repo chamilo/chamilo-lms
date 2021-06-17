@@ -66,8 +66,8 @@ class ScoreDisplay
             $this->custom_display = $portal_displays;
             if (count($this->custom_display) > 0) {
                 $value = api_get_setting('gradebook_score_display_upperlimit');
-                $value = $value['my_display_upperlimit'];
-                $this->upperlimit_included = 'true' == $value ? true : false;
+                //$value = $value['my_display_upperlimit'];
+                $this->upperlimit_included = 'true' === $value ? true : false;
                 $this->custom_display_conv = $this->convert_displays($this->custom_display);
             }
         }
@@ -643,8 +643,9 @@ class ScoreDisplay
             $converted2 = [];
             foreach ($converted as $element) {
                 $newelement = [];
-                if (isset($highest) && !empty($highest) && $highest > 0) {
-                    $newelement['score'] = $element['score'] / $highest;
+                $highest = (float) $highest;
+                if (!empty($highest) && $highest > 0) {
+                    $newelement['score'] = (float) $element['score'] / $highest;
                 } else {
                     $newelement['score'] = 0;
                 }

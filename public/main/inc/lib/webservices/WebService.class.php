@@ -93,9 +93,8 @@ class WebService
         }
 
         return UserManager::isPasswordValid(
-            $user->getPassword(),
-            $password,
-            $user->getSalt()
+            $user,
+            $password
         );
     }
 

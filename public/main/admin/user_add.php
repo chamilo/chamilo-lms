@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 
 $cidReset = true;
@@ -141,12 +142,12 @@ if ('true' == api_get_setting('registration', 'email')) {
     $form->addRule('email', get_lang('Required field'), 'required');
 }
 
-if ('true' == api_get_setting('login_is_email')) {
+if ('true' === api_get_setting('login_is_email')) {
     $form->addRule(
         'email',
-        sprintf(get_lang('The login needs to be maximum %s characters long'), (string) USERNAME_MAX_LENGTH),
+        sprintf(get_lang('The login needs to be maximum %s characters long'), (string) User::USERNAME_MAX_LENGTH),
         'maxlength',
-        USERNAME_MAX_LENGTH
+        User::USERNAME_MAX_LENGTH
     );
     $form->addRule('email', get_lang('This login is already in use'), 'username_available');
 }
@@ -164,10 +165,10 @@ $allowed_picture_types = api_get_supported_image_extensions(false);
 $form->addRule('picture', get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
 
 // Username
-if ('true' != api_get_setting('login_is_email')) {
-    $form->addElement('text', 'username', get_lang('Login'), ['id' => 'username', 'maxlength' => USERNAME_MAX_LENGTH, 'autocomplete' => 'off']);
+if ('true' !== api_get_setting('login_is_email')) {
+    $form->addElement('text', 'username', get_lang('Login'), ['id' => 'username', 'maxlength' => User::USERNAME_MAX_LENGTH, 'autocomplete' => 'off']);
     $form->addRule('username', get_lang('Required field'), 'required');
-    $form->addRule('username', sprintf(get_lang('The login needs to be maximum %s characters long'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+    $form->addRule('username', sprintf(get_lang('The login needs to be maximum %s characters long'), (string) User::USERNAME_MAX_LENGTH), 'maxlength', User::USERNAME_MAX_LENGTH);
     $form->addRule('username', get_lang('Only letters and numbers allowed'), 'username');
     $form->addRule('username', get_lang('This login is already in use'), 'username_available');
 }

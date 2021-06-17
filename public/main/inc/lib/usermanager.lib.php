@@ -39,13 +39,6 @@ class UserManager
     public const USER_FIELD_TYPE_FILE = 13;
     public const USER_FIELD_TYPE_MOBILE_PHONE_NUMBER = 14;
 
-    private static $encryptionMethod;
-
-    /**
-     * Constructor.
-     *
-     * @assert () === null
-     */
     public function __construct()
     {
     }
@@ -61,41 +54,15 @@ class UserManager
     }
 
     /**
-     * @param string $encryptionMethod
-     */
-    public static function setPasswordEncryption($encryptionMethod)
-    {
-        self::$encryptionMethod = $encryptionMethod;
-    }
-
-    /**
-     * @return bool|mixed
-     */
-    public static function getPasswordEncryption()
-    {
-        $encryptionMethod = self::$encryptionMethod;
-        if (empty($encryptionMethod)) {
-            $encryptionMethod = api_get_configuration_value('password_encryption');
-        }
-
-        return $encryptionMethod;
-    }
-
-    /**
      * Validates the password.
-     *
-     * @param $encoded
-     * @param $raw
-     * @param $salt
      *
      * @return bool
      */
-    public static function isPasswordValid($encoded, $raw, $salt)
+    public static function isPasswordValid(User $user, $plainPassword)
     {
-        $encoder = new \Chamilo\CoreBundle\Security\Encoder(self::getPasswordEncryption());
-        $validPassword = $encoder->isPasswordValid($encoded, $raw, $salt);
+        $hasher = Container::$container->get('security.user_password_hasher');
 
-        return $validPassword;
+        return $hasher->isPasswordValid($user, $plainPassword);
     }
 
     /**
@@ -1382,7 +1349,7 @@ class UserManager
 
         $username = URLify::transliterate($username);
 
-        return strtolower(substr($username, 0, USERNAME_MAX_LENGTH - 3));
+        return strtolower(substr($username, 0, User::USERNAME_MAX_LENGTH - 3));
     }
 
     /**
@@ -1414,10 +1381,10 @@ class UserManager
         }
         if (!self::is_username_available($username)) {
             $i = 2;
-            $temp_username = substr($username, 0, USERNAME_MAX_LENGTH - strlen((string) $i)).$i;
+            $temp_username = substr($username, 0, User::USERNAME_MAX_LENGTH - strlen((string) $i)).$i;
             while (!self::is_username_available($temp_username)) {
                 $i++;
-                $temp_username = substr($username, 0, USERNAME_MAX_LENGTH - strlen((string) $i)).$i;
+                $temp_username = substr($username, 0, User::USERNAME_MAX_LENGTH - strlen((string) $i)).$i;
             }
             $username = $temp_username;
         }
@@ -1443,7 +1410,7 @@ class UserManager
             // into ASCII letters in order they not to be totally removed.
             // 2. Applying the strict purifier.
             // 3. Length limitation.
-            $return = 'true' === api_get_setting('login_is_email') ? substr(preg_replace(USERNAME_PURIFIER_MAIL, '', $username), 0, USERNAME_MAX_LENGTH) : substr(preg_replace(USERNAME_PURIFIER, '', $username), 0, USERNAME_MAX_LENGTH);
+            $return = 'true' === api_get_setting('login_is_email') ? substr(preg_replace(USERNAME_PURIFIER_MAIL, '', $username), 0, User::USERNAME_MAX_LENGTH) : substr(preg_replace(USERNAME_PURIFIER, '', $username), 0, User::USERNAME_MAX_LENGTH);
             $return = URLify::transliterate($return);
 
             return $return;
@@ -1454,7 +1421,7 @@ class UserManager
         return substr(
             preg_replace(USERNAME_PURIFIER_SHALLOW, '', $username),
             0,
-            USERNAME_MAX_LENGTH
+            User::USERNAME_MAX_LENGTH
         );
     }
 
@@ -1521,7 +1488,7 @@ class UserManager
      */
     public static function is_username_too_long($username)
     {
-        return strlen($username) > USERNAME_MAX_LENGTH;
+        return strlen($username) > User::USERNAME_MAX_LENGTH;
     }
 
     /**
@@ -2246,7 +2213,6 @@ class UserManager
         $extra_data = [];
         $t_uf = Database::get_main_table(TABLE_EXTRA_FIELD);
         $t_ufv = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $user_id = (int) $user_id;
         $sql = "SELECT f.id as id, f.variable as fvar, f.field_type as type
                 FROM $t_uf f
                 WHERE
@@ -3253,7 +3219,7 @@ class UserManager
      *
      * @return string
      */
-    public static function get_user_upload_files_by_course(
+    /*public static function get_user_upload_files_by_course(
         $user_id,
         $course,
         $resourceType = 'all'
@@ -3302,7 +3268,7 @@ class UserManager
         }
 
         return $return;
-    }
+    }*/
 
     /**
      * Gets the API key (or keys) and return them into an array.
@@ -3529,8 +3495,8 @@ class UserManager
                     WHERE 1 = 1 ";
         }
 
-        if (is_int($status) && $status > 0) {
-            $status = (int) $status;
+        $status = (int) $status;
+        if (!empty($status) && $status > 0) {
             $sql .= " AND u.status = $status ";
         }
 
@@ -5761,7 +5727,7 @@ SQL;
             ->setLastname($uniqueId)
             ->setBiography('')
             ->setAddress('')
-            ->setCurriculumItems(null)
+            //->setCurriculumItems(null)
             ->setDateOfBirth(null)
             ->setCompetences('')
             ->setDiplomas('')
@@ -6293,31 +6259,6 @@ SQL;
         $result = Database::query($sql);
 
         return Database::num_rows($result) > 0;
-    }
-
-    /**
-     * @return EncoderFactory
-     */
-    private static function getEncoderFactory()
-    {
-        $encryption = self::getPasswordEncryption();
-        $encoders = [
-            'Chamilo\\CoreBundle\\Entity\\User' => new \Chamilo\CoreBundle\Security\Encoder($encryption),
-        ];
-
-        $encoderFactory = new \Symfony\Component\Security\Core\Encoder\EncoderFactory($encoders);
-
-        return $encoderFactory;
-    }
-
-    /**
-     * @return \Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface
-     */
-    private static function getEncoder(User $user)
-    {
-        $encoderFactory = self::getEncoderFactory();
-
-        return $encoderFactory->getEncoder($user);
     }
 
     /**

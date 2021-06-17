@@ -138,8 +138,8 @@ $form->addElement(
     get_lang('Username'),
     [
         'id' => 'username',
-        'maxlength' => USERNAME_MAX_LENGTH,
-        'size' => USERNAME_MAX_LENGTH,
+        'maxlength' => User::USERNAME_MAX_LENGTH,
+        'size' => User::USERNAME_MAX_LENGTH,
     ]
 );
 if (!in_array('login', $profileList) || 'true' == api_get_setting('login_is_email')) {
@@ -384,9 +384,8 @@ if ($form->validate()) {
     ) {
         $passwordWasChecked = true;
         $validPassword = UserManager::isPasswordValid(
-            $user->getPassword(),
+            $user,
             $user_data['password0'],
-            $user->getSalt()
         );
 
         if ($validPassword) {

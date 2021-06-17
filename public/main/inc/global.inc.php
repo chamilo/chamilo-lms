@@ -14,7 +14,6 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 /**
  * All legacy Chamilo scripts should include this important file.
  */
-define('USERNAME_MAX_LENGTH', 100);
 
 require_once __DIR__.'/../../../vendor/autoload.php';
 

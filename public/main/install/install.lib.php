@@ -32,7 +32,6 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
  *   of older versions before upgrading.
  */
 define('SYSTEM_CONFIG_FILENAME', 'configuration.dist.php');
-define('USERNAME_MAX_LENGTH', 100);
 
 /**
  * This function detects whether the system has been already installed.

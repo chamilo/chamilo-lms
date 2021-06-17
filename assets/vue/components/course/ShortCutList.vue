@@ -29,7 +29,7 @@
 import {mapGetters} from "vuex";
 
 export default {
-  name: 'HomeShortCutCard',
+  name: 'ShortCutList',
   props: {
     shortcut: Object,
     goToShortCut: {

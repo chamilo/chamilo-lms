@@ -91,14 +91,15 @@
     <div
         class="grid gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-6"
     >
-      <HomeCourseCard
+      <CourseToolList
           v-for="tool in tools.authoring"
           :course="course"
           :tool="tool"
           :go-to-course-tool="goToCourseTool"
           :change-visibility="changeVisibility"
       />
-      <HomeCourseCard
+
+      <CourseToolList
           v-for="tool in tools.interaction"
           :course="course"
           :tool="tool"
@@ -106,7 +107,7 @@
           :change-visibility="changeVisibility"
       />
 
-      <HomeShortCutCard
+      <ShortCutList
           v-for="shortcut in shortcuts"
           :shortcut="shortcut"
           :go-to-short-cut="goToShortCut"
@@ -119,8 +120,8 @@
 <script>
 import Loading from '../../components/Loading.vue';
 import Toolbar from '../../components/Toolbar.vue';
-import HomeCourseCard from '../../components/course/HomeCourseCard.vue';
-import HomeShortCutCard from '../../components/course/HomeShortCutCard.vue';
+import CourseToolList from '../../components/course/CourseToolList.vue';
+import ShortCutList from '../../components/course/ShortCutList.vue';
 
 import {useRoute} from 'vue-router'
 import axios from "axios";
@@ -134,8 +135,8 @@ export default {
   components: {
     Loading,
     Toolbar,
-    HomeCourseCard,
-    HomeShortCutCard
+    CourseToolList,
+    ShortCutList
   },
   setup() {
     const state = reactive({

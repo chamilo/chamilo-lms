@@ -19,17 +19,17 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormInterface;
 
-final class CLinkRepository extends ResourceRepository implements GridInterface
+final class CLinkRepository extends ResourceRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CLink::class);
     }
 
-    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
+    /*public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
     {
         return $this->getResourcesByCourse($course, $session, $group, $parentNode);
-    }
+    }*/
 
     public function setResourceProperties(FormInterface $form, Course $course, Session $session, string $fileType): void
     {

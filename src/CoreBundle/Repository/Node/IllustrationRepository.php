@@ -29,7 +29,7 @@ final class IllustrationRepository extends ResourceRepository implements UploadI
         parent::__construct($registry, Illustration::class);
     }
 
-    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
+    /*public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
     {
         $qb = $this->createQueryBuilder('resource')
             ->select('resource')
@@ -43,7 +43,7 @@ final class IllustrationRepository extends ResourceRepository implements UploadI
         $qb->setParameter('creator', $user);
 
         return $qb;
-    }
+    }*/
 
     public function saveUpload(UploadedFile $file): ResourceInterface
     {

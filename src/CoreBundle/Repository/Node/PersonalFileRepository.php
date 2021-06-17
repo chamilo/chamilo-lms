@@ -27,10 +27,10 @@ final class PersonalFileRepository extends ResourceRepository implements GridInt
         parent::__construct($registry, PersonalFile::class);
     }
 
-    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
+    /*public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
     {
         return $this->getResourcesByCreator($user, $parentNode);
-    }
+    }*/
 
     public function getResourceSettings(): Settings
     {

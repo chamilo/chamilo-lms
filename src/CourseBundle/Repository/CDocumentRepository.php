@@ -31,10 +31,10 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
         parent::__construct($registry, CDocument::class);
     }
 
-    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
+    /*public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
     {
         return $this->getResourcesByCourse($course, $session, $group, $parentNode);
-    }
+    }*/
 
     public function getResourceSettings(): Settings
     {

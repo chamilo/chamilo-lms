@@ -191,7 +191,7 @@ class CourseHomeController extends ToolBaseController
 
         $shortcuts = [];
         if (null !== $user) {
-            $shortcutQuery = $shortcutRepository->getResources($user, $course->getResourceNode(), $course);
+            $shortcutQuery = $shortcutRepository->getResources($course->getResourceNode());
             $shortcuts = $shortcutQuery->getQuery()->getResult();
         }
         $responseData = [

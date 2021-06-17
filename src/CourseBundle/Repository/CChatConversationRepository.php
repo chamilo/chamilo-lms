@@ -22,9 +22,4 @@ final class CChatConversationRepository extends ResourceRepository
     {
         parent::__construct($registry, CChatConversation::class);
     }
-
-    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
-    {
-        return $this->getResourcesByCourse($course, $session, $group, $parentNode);
-    }
 }

@@ -28,10 +28,10 @@ final class CLinkCategoryRepository extends ResourceRepository implements GridIn
         parent::__construct($registry, CLinkCategory::class);
     }
 
-    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
+    /*public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
     {
         return $this->getResourcesByCourse($course, $session, $group, $parentNode);
-    }
+    }*/
 
     public function getResourceSettings(): Settings
     {

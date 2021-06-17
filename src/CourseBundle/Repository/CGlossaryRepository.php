@@ -49,10 +49,10 @@ final class CGlossaryRepository extends ResourceRepository implements ResourceWi
         return $templates;
     }
 
-    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
+    /*public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
     {
         return $this->getResourcesByCourse($course, $session, $group, $parentNode);
-    }
+    }*/
 
     public function getResourceFormType(): string
     {

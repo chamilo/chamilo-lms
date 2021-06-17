@@ -22,9 +22,4 @@ final class CThematicRepository extends ResourceRepository
     {
         parent::__construct($registry, CThematic::class);
     }
-
-    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
-    {
-        return $this->getResourcesByCourse($course, $session, $group, $parentNode);
-    }
 }

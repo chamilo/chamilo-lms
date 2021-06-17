@@ -336,34 +336,11 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $this->toolChain->getResourceTypeNameFromRepository(static::class);
     }
 
-    public function getResourcesByCourse(Course $course, Session $session = null, CGroup $group = null, ResourceNode $parentNode = null): QueryBuilder
+    public function addVisibilityQueryBuilder(QueryBuilder $qb = null): QueryBuilder
     {
+        $qb = $this->getOrCreateQueryBuilder($qb);
+
         $checker = $this->getAuthorizationChecker();
-        $reflectionClass = $this->getClassMetadata()->getReflectionClass();
-
-        // Check if this resource type requires to load the base course resources when using a session
-        $loadBaseSessionContent = $reflectionClass->hasProperty('loadCourseResourcesInSession');
-
-        $resourceTypeName = $this->getResourceTypeName();
-        $qb = $this->createQueryBuilder('resource')
-            ->select('resource')
-            //->from($className, 'resource')
-            ->innerJoin('resource.resourceNode', 'node')
-            ->innerJoin('node.resourceLinks', 'links')
-            ->innerJoin('node.resourceType', 'type')
-            ->leftJoin('node.resourceFile', 'file')
-
-            ->where('type.name = :type')
-            ->setParameter('type', $resourceTypeName, Types::STRING)
-            ->andWhere('links.course = :course')
-            ->setParameter('course', $course)
-            ->addSelect('node')
-            ->addSelect('links')
-            //->addSelect('course')
-            ->addSelect('type')
-            ->addSelect('file')
-        ;
-
         $isAdmin =
             $checker->isGranted('ROLE_ADMIN') ||
             $checker->isGranted('ROLE_CURRENT_COURSE_TEACHER');
@@ -382,6 +359,28 @@ abstract class ResourceRepository extends ServiceEntityRepository
             // @todo Add start/end visibility restrictions.
         }
 
+        return $qb;
+    }
+
+    public function addCourseQueryBuilder(Course $course, QueryBuilder $qb): QueryBuilder
+    {
+        $qb
+            ->andWhere('links.course = :course')
+            ->setParameter('course', $course)
+        ;
+
+        return $qb;
+    }
+
+    public function addCourseSessionGroupQueryBuilder(Course $course, Session $session = null, CGroup $group = null, QueryBuilder $qb = null): QueryBuilder
+    {
+        $reflectionClass = $this->getClassMetadata()->getReflectionClass();
+
+        // Check if this resource type requires to load the base course resources when using a session
+        $loadBaseSessionContent = $reflectionClass->hasProperty('loadCourseResourcesInSession');
+
+        $this->addCourseQueryBuilder($course, $qb);
+
         if (null === $session) {
             $qb->andWhere(
                 $qb->expr()->orX(
@@ -399,11 +398,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
             $qb->setParameter('session', $session);
         }
 
-        if (null !== $parentNode) {
-            $qb->andWhere('node.parent = :parentNode');
-            $qb->setParameter('parentNode', $parentNode);
-        }
-
         if (null === $group) {
             $qb->andWhere(
                 $qb->expr()->orX(
@@ -419,12 +413,8 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    /**
-     * Get resources only from the base course.
-     */
-    public function getResourcesByCourseOnly(Course $course, ResourceNode $parentNode = null): QueryBuilder
+    public function getResources(ResourceNode $parentNode = null): QueryBuilder
     {
-        $checker = $this->getAuthorizationChecker();
         $resourceTypeName = $this->getResourceTypeName();
 
         $qb = $this->createQueryBuilder('resource')
@@ -432,32 +422,40 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->innerJoin('resource.resourceNode', 'node')
             ->innerJoin('node.resourceLinks', 'links')
             ->innerJoin('node.resourceType', 'type')
+            ->leftJoin('node.resourceFile', 'file')
             ->where('type.name = :type')
             ->setParameter('type', $resourceTypeName, Types::STRING)
-            ->andWhere('links.course = :course')
-            ->setParameter('course', $course)
+            ->addSelect('node')
+            ->addSelect('links')
+            ->addSelect('type')
+            ->addSelect('file')
         ;
-
-        $isAdmin = $checker->isGranted('ROLE_ADMIN') || $checker->isGranted('ROLE_CURRENT_COURSE_TEACHER');
-
-        // Do not show deleted resources
-        $qb
-            ->andWhere('links.visibility != :visibilityDeleted')
-            ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED, Types::INTEGER)
-        ;
-
-        if (!$isAdmin) {
-            $qb
-                ->andWhere('links.visibility = :visibility')
-                ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED, Types::INTEGER)
-            ;
-            // @todo Add start/end visibility restrictions
-        }
 
         if (null !== $parentNode) {
             $qb->andWhere('node.parent = :parentNode');
             $qb->setParameter('parentNode', $parentNode);
         }
+
+        return $qb;
+    }
+
+    public function getResourcesByCourse(Course $course, Session $session = null, CGroup $group = null, ResourceNode $parentNode = null): QueryBuilder
+    {
+        $qb = $this->getResources($parentNode);
+        $this->addVisibilityQueryBuilder($qb);
+        $this->addCourseSessionGroupQueryBuilder($course, $session, $group, $qb);
+
+        return $qb;
+    }
+
+    /**
+     * Get resources only from the base course.
+     */
+    public function getResourcesByCourseOnly(Course $course, ResourceNode $parentNode = null): QueryBuilder
+    {
+        $qb = $this->getResources($parentNode);
+        $this->addCourseQueryBuilder($course,$qb);
+        $this->addVisibilityQueryBuilder($qb);
 
         return $qb;
     }
@@ -479,14 +477,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('resource')
             ->select('resource')
             ->innerJoin('resource.resourceNode', 'node')
-            //->innerJoin('node.resourceLinks', 'links')
-            //->where('node.resourceType = :type')
-            //->setParameter('type',$type)
-            ;
-        /*$qb
-            ->andWhere('links.visibility = :visibility')
-            ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)
-        ;*/
+        ;
 
         if (null !== $parentNode) {
             $qb->andWhere('node.parent = :parentNode');
@@ -514,41 +505,13 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
     public function getResourcesByLinkedUser(User $user, ResourceNode $parentNode = null): QueryBuilder
     {
-        $checker = $this->getAuthorizationChecker();
-        $resourceTypeName = $this->getResourceTypeName();
-
-        $qb = $this->createQueryBuilder('resource')
-            ->select('resource')
-            ->innerJoin('resource.resourceNode', 'node')
-            ->innerJoin('node.resourceLinks', 'links')
-            ->innerJoin('node.resourceType', 'type')
-            ->where('type.name = :type')
-            ->setParameter('type', $resourceTypeName, Types::STRING)
+        $qb = $this->getResources($parentNode);
+        $qb
             ->andWhere('links.user = :user')
             ->setParameter('user', $user)
         ;
 
-        $isAdmin = $checker->isGranted('ROLE_ADMIN') ||
-            $checker->isGranted('ROLE_CURRENT_COURSE_TEACHER');
-
-        // Do not show deleted resources
-        $qb
-            ->andWhere('links.visibility != :visibilityDeleted')
-            ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED)
-        ;
-
-        if (!$isAdmin) {
-            $qb
-                ->andWhere('links.visibility = :visibility')
-                ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)
-            ;
-            // @todo Add start/end visibility restrictrions
-        }
-
-        if (null !== $parentNode) {
-            $qb->andWhere('node.parent = :parentNode');
-            $qb->setParameter('parentNode', $parentNode);
-        }
+        $this->addVisibilityQueryBuilder($qb);
 
         return $qb;
     }

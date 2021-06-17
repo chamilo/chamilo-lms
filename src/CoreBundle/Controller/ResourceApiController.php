@@ -32,7 +32,7 @@ class ResourceApiController extends AbstractController implements CourseControll
     use ResourceControllerTrait;
     use ControllerTrait;
 
-    public function getResourcesListAction($id, Request $request)
+    /*public function getResourcesListAction($id, Request $request)
     {
         $repository = $this->getRepositoryFromRequest($request);
         $parentNode = $repository->getResourceNodeRepository()->find($id);
@@ -46,11 +46,10 @@ class ResourceApiController extends AbstractController implements CourseControll
         $course = $this->getCourse();
         $session = $this->getSession();
 
-        /** @var QueryBuilder $qb */
         $qb = $repository->getResources($this->getUser(), $parentNode, $course, $session, null);
 
         return $qb->getQuery()->getResult();
-    }
+    }*/
 
     public function getResourceAction($id, Request $request)
     {

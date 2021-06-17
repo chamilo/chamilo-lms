@@ -25,10 +25,10 @@ final class MessageAttachmentRepository extends ResourceRepository
         parent::__construct($registry, MessageAttachment::class);
     }
 
-    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
+    /*public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
     {
         return $this->getResourcesByCreator($user, $parentNode);
-    }
+    }*/
 
     public function getResourceSettings(): Settings
     {

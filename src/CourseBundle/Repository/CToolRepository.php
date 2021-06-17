@@ -24,7 +24,7 @@ final class CToolRepository extends ResourceRepository
         parent::__construct($registry, CTool::class);
     }
 
-    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
+    /*public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
     {
         $checker = $this->getAuthorizationChecker();
         $reflectionClass = $this->getClassMetadata()->getReflectionClass();
@@ -76,5 +76,5 @@ final class CToolRepository extends ResourceRepository
         $qb->andWhere('links.group IS NULL');
 
         return $qb;
-    }
+    }*/
 }

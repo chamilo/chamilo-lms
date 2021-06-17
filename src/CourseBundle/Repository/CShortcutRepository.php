@@ -67,7 +67,7 @@ final class CShortcutRepository extends ResourceRepository
         return false;
     }
 
-    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
+    /*public function getResources(ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
     {
         $qb = $this->createQueryBuilder('resource')
             ->select('resource')
@@ -81,16 +81,11 @@ final class CShortcutRepository extends ResourceRepository
             //->where('node.resourceType = :type')
             //->setParameter('type',$type)
         ;
-        /*$qb
-            ->andWhere('links.visibility = :visibility')
-            ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)
-        ;*/
-
         if (null !== $parentNode) {
             $qb->andWhere('node.parent = :parentNode');
             $qb->setParameter('parentNode', $parentNode);
         }
 
         return $qb;
-    }
+    }*/
 }

@@ -109,7 +109,7 @@ if (!empty($subSkillList)) {
 }
 
 if (!$profile) {
-    $skillRelSkill = new SkillRelSkill();
+    $skillRelSkill = new SkillRelSkillModel();
     $parents = $skillRelSkill->getSkillParents($skillId);
     krsort($parents);
     foreach ($parents as $parent) {
@@ -294,8 +294,8 @@ if ($form->validate()) {
     );
 
     // Send email depending of children_auto_threshold
-    $skillRelSkill = new SkillRelSkill();
-    $skillModel = new \Skill();
+    $skillRelSkill = new SkillRelSkillModel();
+    $skillModel = new SkillModel();
     $parents = $skillModel->getDirectParents($skillToProcess);
 
     $extraFieldValue = new ExtraFieldValue('skill');

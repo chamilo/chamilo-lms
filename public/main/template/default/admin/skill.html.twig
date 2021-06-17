@@ -1,19 +1,25 @@
 {% autoescape false %}
-<h3>{{ 'Skills' | get_lang }}</h3>
+<h3>{{ 'Skills' | trans }}</h3>
 <ul>
     <li>
-        <a href="{{ _p.web_main }}{{ 'admin/skill_profile.php' }}">
-            {{ 'AddProfile' | get_lang }}
+        <a
+            href="{{ url('legacy_main', {'name' : 'admin/skill_profile.php'}) }}"
+        >
+            {{ 'Add profile' | trans }}
         </a>
     </li>
     <li>
-        <a href="{{ _p.web_main }}{{ 'admin/skill_level.php' }}">
-            {{ 'AddLevel' | get_lang }}
+        <a
+            href="{{ url('legacy_main', {'name' : 'admin/skill_level.php'}) }}"
+        >
+            {{ 'Add level' | trans }}
         </a>
     </li>
 </ul>
 
-{{ form }}
+{% if form is defined %}
+    {{ form }}
+{% endif %}
 
 {% for item in list %}
     <h4>
@@ -21,8 +27,10 @@
         {% if item.shortCode %}
             ({{ item.shortCode }})
         {% endif %}
-        <a href="{{ _p.web_main }}admin/skill.php?action=edit&id={{ item.id }}">
-            <img src="{{ 'edit.png'|icon(22) }}">
+        <a
+            href="{{ url('legacy_main', {'name' : 'admin/skill.php'}) ~ '?action=edit&id='  ~  item.id}}"
+        >
+            <img src="{{ 'edit.png'|icon(22) }}" />
         </a>
     </h4>
     {{ item.profile }}

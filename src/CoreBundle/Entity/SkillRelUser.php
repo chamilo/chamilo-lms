@@ -108,6 +108,7 @@ class SkillRelUser
 
     public function __construct()
     {
+        $this->validationStatus = 0;
         $this->comments = new ArrayCollection();
     }
 

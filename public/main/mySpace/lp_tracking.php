@@ -98,8 +98,8 @@ switch ($action) {
             api_not_allowed();
         }
 
-        $view = $em->getRepository(\Chamilo\CourseBundle\Entity\CLpView::class)->find($itemView->getLpViewId());
-        $lp = $em->getRepository(\Chamilo\CourseBundle\Entity\CLp::class)->find($view->getLpId());
+        $view = $itemView->getView();
+        $lp = $view->getLp();
 
         $duration = learnpathItem::getScormTimeFromParameter('js', $itemView->getTotalTime());
         $endTime = $itemView->getStartTime() + $itemView->getTotalTime();

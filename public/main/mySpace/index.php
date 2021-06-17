@@ -33,8 +33,6 @@ $skipData = api_get_configuration_value('tracking_skip_generic_data');
 
 $logInfo = [
     'tool' => SECTION_TRACKING,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
 ];
 Event::registerLog($logInfo);
 
@@ -340,7 +338,10 @@ if (false === $skipData) {
         $csv_content[] = [get_lang('Learners')];
         $csv_content[] = [get_lang('InactivesLearners'), $nb_inactive_students];
         $csv_content[] = [get_lang('Time spent on portal'), $totalTimeSpent];
-        $csv_content[] = [get_lang('Average number of courses to which my learners are subscribed'), round($avg_courses_per_student, 3)];
+        $csv_content[] = [
+            get_lang('Average number of courses to which my learners are subscribed'),
+            round($avg_courses_per_student, 3),
+        ];
         $csv_content[] = [
             get_lang('Progress in courses'),
             is_null($avgTotalProgress)

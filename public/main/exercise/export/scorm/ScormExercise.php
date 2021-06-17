@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -100,11 +101,11 @@ class ScormExercise
      */
     public function end_body()
     {
-        $button = '<input 
-            id="chamilo_scorm_submit" 
-            class="btn btn-primary" 
-            type="button" 
-            name="chamilo_scorm_submit" 
+        $button = '<input
+            id="chamilo_scorm_submit"
+            class="btn btn-primary"
+            type="button"
+            name="chamilo_scorm_submit"
             value="OK" />';
 
         return '</table><br />'.$button.'</form></body>';
@@ -127,7 +128,7 @@ class ScormExercise
                 .'<!DOCTYPE questestinterop SYSTEM "ims_qtiasiv2p1.dtd">'."\n";
         }*/
 
-        list($js, $html) = $this->exportQuestions();
+        [$js, $html] = $this->exportQuestions();
 
         return $this->startPage()
             .$this->start_header()
@@ -157,8 +158,10 @@ class ScormExercise
 
         $em = Database::getManager();
         // Export cquiz data
+        $quizRepo = Container::getQuizRepository();
         /** @var CQuiz $exercise */
-        $exercise = $em->find('ChamiloCourseBundle:CQuiz', $this->exercise->iId);
+        $exercise = $quizRepo->find($this->exercise->iId);
+
         $exercise->setDescription('');
         $exercise->setTextWhenFinished('');
 
@@ -169,7 +172,7 @@ class ScormExercise
         $counter = 0;
         $scormQuestion = new ScormQuestion();
         foreach ($this->exercise->selectQuestionList() as $q) {
-            list($jstmp, $htmltmp) = $scormQuestion->exportQuestionToScorm($q, $counter);
+            [$jstmp, $htmltmp] = $scormQuestion->exportQuestionToScorm($q, $counter);
             $js .= $jstmp."\n";
             $html .= $htmltmp."\n";
             $counter++;

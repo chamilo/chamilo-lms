@@ -918,7 +918,7 @@ if (is_numeric($avg_student_score)) {
 }
 
 $userInfoExtra['student_score'] = (float) $score;
-$userInfoExtra['student_progress'] = (float) $avg_student_progress;
+$userInfoExtra['student_progress'] = $avg_student_progress;
 $userInfoExtra['first_connection'] = $first_connection_date;
 $userInfoExtra['last_connection'] = $last_connection_date;
 $userInfoExtra['last_connection_in_course'] = api_format_date(
@@ -1999,13 +1999,13 @@ if (empty($details)) {
                 }
                 echo '</td>';
 
-                if (!empty($hookContents)) {
+                /*if (!empty($hookContents)) {
                     foreach ($hookContents as $hookContent) {
                         if (isset($hookContent['value'])) {
                             echo Display::tag('td', $hookContent['value'], $hookContent['attrs']);
                         }
                     }
-                }
+                }*/
 
                 echo '</tr>';
                 $data_exercices[$i][] = $exercise->getTitle();
@@ -2022,11 +2022,11 @@ if (empty($details)) {
                 if (!empty($hookContents)) {
                     $csvContentIndex = count($csv_content) - 1;
 
-                    foreach ($hookContents as $hookContent) {
+                    /*foreach ($hookContents as $hookContent) {
                         if (isset($hookContent['value'])) {
                             $csv_content[$csvContentIndex][] = strip_tags($hookContent['value']);
                         }
-                    }
+                    }*/
                 }
                 $i++;
             }
@@ -2044,7 +2044,7 @@ if (empty($details)) {
                 $user_list = SurveyManager::get_people_who_filled_survey(
                     $survey['survey_id'],
                     false,
-                    $courseInfo['real_id']
+                    $course->getId()
                 );
                 $survey_done = Display::return_icon(
                     'accept_na.png',

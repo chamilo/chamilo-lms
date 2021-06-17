@@ -36,8 +36,8 @@ $result_course = Database::query($sql_course);
 
 if (Database::num_rows($result_course) > 0) {
     if (isset($_POST['export'])) {
-        $export_result = export_csv($header, $data, 'test.csv'); // TODO: There is no data for exporting yet.
-        echo Display::return_message($export_result, 'error');
+        //$export_result = export_csv($header, $data, 'test.csv'); // TODO: There is no data for exporting yet.
+        //echo Display::return_message($export_result, 'error');
     }
     echo '<table class="table table-hover table-striped data_table">
             <tr>

@@ -210,20 +210,20 @@ $defaultExtraFields = [];
 $defaultExtraFieldsFromSettings = [];
 $defaultExtraFieldsFromSettings = api_get_configuration_value('course_log_default_extra_fields');
 if (isset($defaultExtraFieldsFromSettings)) {
-    $default_extra_fields = $defaultExtraFieldsFromSettings;
+    $defaultExtraFields = $defaultExtraFieldsFromSettings;
     $defaultExtraInfo = [];
     $defaultUserProfileInfo = [];
 
-    $user_array = [];
+    $userArray = [];
     foreach ($studentList as $key => $item) {
-        $user_array[] = $key;
+        $userArray[] = $key;
     }
 
-    foreach ($default_extra_fields as $fieldId) {
+    foreach ($defaultExtraFields as $fieldId) {
         // Fetching only the user that are loaded NOT ALL user in the portal.
         $defaultUserProfileInfo[$fieldId] = TrackingCourseLog::getAdditionalProfileInformationOfFieldByUser(
             $fieldId,
-            $user_array
+            $userArray
         );
         $defaultExtraInfo[$fieldId] = UserManager::get_extra_field_information($fieldId);
     }
@@ -615,7 +615,7 @@ if ($nbStudents > 0) {
         Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_SMALL).
         get_lang('ExportAsCSV')
     .' </a>');
-    $extraFieldSelect = TrackingCourseLog::display_additional_profile_fields($default_extra_fields);
+    $extraFieldSelect = TrackingCourseLog::display_additional_profile_fields($defaultExtraFields);
     if (!empty($extraFieldSelect)) {
         $html .= $extraFieldSelect;
     }
@@ -771,7 +771,7 @@ if ($nbStudents > 0) {
             $parameters['additional_profile_field'] = $fieldId;
         }
     }
-    if (isset($default_extra_fields)) {
+    if (isset($defaultExtraFields)) {
         foreach ($defaultExtraInfo as $field) {
             $table->set_header($counter, $field['display_text'], false);
             $headers[$field['variable']] = $field['display_text'];

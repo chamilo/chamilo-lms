@@ -286,7 +286,6 @@ if (api_get_setting('allow_social_tool') === 'true') {
  */
 $sessions = SessionManager::get_sessions_by_user($userId, true);
 $personal_course_list = [];
-$courseToolInformationTotal = null;
 $sessionInformation = '';
 if (count($sessions) > 0) {
     $header = [
@@ -310,9 +309,9 @@ if (count($sessions) > 0) {
         $data = [];
         $personal_course_list = [];
         $id_session = $session_item['session_id'];
-
         $csvContent[] = [$session_item['session_name']];
         $csvContent[] = $headerList;
+        $courseToolInformationTotal = '';
         foreach ($session_item['courses'] as $my_course) {
             $courseInfo = api_get_course_info_by_id($my_course['real_id']);
             $sessionStatus = SessionManager::get_user_status_in_course_session(
@@ -341,7 +340,8 @@ if (count($sessions) > 0) {
                 Display::return_icon('course_home.png', get_lang('CourseHomepage')).'</a>';
 
             if (!empty($my_course['status']) && $my_course['status'] == STUDENT) {
-                $tools .= '<a href="user_information.php?action=unsubscribe_session_course&course_id='.$courseInfo['real_id'].'&user_id='.$userId.'&id_session='.$id_session.'">'.
+                $tools .= '<a
+                    href="user_information.php?action=unsubscribe_session_course&course_id='.$courseInfo['real_id'].'&user_id='.$userId.'&id_session='.$id_session.'">'.
                     Display::return_icon('delete.png', get_lang('Delete')).'</a>';
             }
 
@@ -419,7 +419,6 @@ if (count($sessions) > 0) {
 } else {
     $sessionInformation = '<p>'.get_lang('NoSessionsForThisUser').'</p>';
 }
-$courseToolInformationTotal = '';
 
 /**
  * Show the courses in which this user is subscribed.
@@ -449,7 +448,7 @@ if (Database::num_rows($res) > 0) {
     $csvContent[] = $headerList;
 
     $data = [];
-    $courseToolInformationTotal = null;
+    $courseToolInformationTotal = '';
     while ($course = Database::fetch_object($res)) {
         $courseInfo = api_get_course_info_by_id($course->c_id);
         $courseCode = $courseInfo['code'];
@@ -693,11 +692,17 @@ if (DRH == $user['status']) {
 }
 $socialTool = api_get_setting('allow_social_tool');
 $tpl->assign('social_tool', $socialTool);
-
 $tpl->assign('user', $userInfo);
 $layoutTemplate = $tpl->get_template('admin/user_information.tpl');
 $content = $tpl->fetch($layoutTemplate);
 echo $content;
+if (api_get_configuration_value('allow_career_users')) {
+    if (!empty($sessions)) {
+        $sessions = array_column($sessions, 'session_id');
+        echo SessionManager::getCareerDiagramPerSessionList($sessions, $userId);
+    }
+    echo MyStudents::userCareersTable($userId);
+}
 
 echo Display::page_subheader(get_lang('SessionList'), null, 'h3', ['class' => 'section-title']);
 echo $sessionInformation;
@@ -711,19 +716,5 @@ echo Tracking::displayUserSkills(
     0,
     0
 );
-if (api_get_configuration_value('allow_career_users')) {
-    $careers = UserManager::getUserCareers($userId);
-    if (!empty($careers)) {
-        echo Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
-        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
-        $table->setHeaderContents(0, 0, get_lang('Career'));
-        $row = 1;
-        foreach ($careers as $careerData) {
-            $table->setCellContents($row, 0, $careerData['name']);
-            $row++;
-        }
-        echo $table->toHtml();
-    }
-}
 
 Display::display_footer();

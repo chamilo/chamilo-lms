@@ -8544,12 +8544,13 @@ ul#toolnavbox-two li a.btn {
 }
 
 #lp-accordion .panel-default .panel-heading {
-    background: url(../../../../main/img/icons/svg/arrow-down.svg) #FFF right center no-repeat;
+    background: #FFF;
     border-radius: 10px;
+    padding-right: 0;
 }
 
 #lp-accordion .panel-default .panel-heading .tools-actions {
-    padding-right: 20px;
+    margin-right: 32px;
 }
 
 #lp-accordion .panel {
@@ -8560,13 +8561,19 @@ ul#toolnavbox-two li a.btn {
     font-weight: bold;
     width: 100%;
     display: block;
-    padding-top: 5px;
-    padding-bottom: 5px;
 }
 
 #lp-accordion .panel .panel-title a {
     width: 100%;
     display: block;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-image: url(../../../../main/img/icons/svg/arrow-down.svg);
+}
+#lp-accordion .panel .panel-title a[aria-expanded="true"] {
+    background-image: url(../../../../main/img/icons/svg/arrow-top.svg);
 }
 
 #lp-accordion .lp-item {

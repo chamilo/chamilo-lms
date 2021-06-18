@@ -291,7 +291,7 @@ define('LOG_SURVEY_CREATED', 'survey_created');
 define('LOG_SURVEY_DELETED', 'survey_deleted');
 define('LOG_SURVEY_CLEAN_RESULTS', 'survey_clean_results');
 
-define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.-]/');
+define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.\$-]/');
 
 //used when login_is_email setting is true
 define('USERNAME_PURIFIER_MAIL', '/[^0-9A-Za-z_\.@]/');
@@ -1186,6 +1186,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     }
 
     $isAllowedInCourse = api_is_allowed_in_course();
+
     $is_visible = false;
     if (isset($course_info) && isset($course_info['visibility'])) {
         switch ($course_info['visibility']) {
@@ -1245,6 +1246,11 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     if (!empty($session_id)) {
         // $isAllowedInCourse was set in local.inc.php
         if (!$isAllowedInCourse) {
+            $is_visible = false;
+        }
+
+        // Check if course is inside session.
+        if (!SessionManager::relation_session_course_exist($session_id, $course_info['real_id'])) {
             $is_visible = false;
         }
     }
@@ -2724,11 +2730,11 @@ function api_get_session_id()
 /**
  * Gets the current Chamilo (not social network) group ID.
  *
- * @return int O if no active session, the session ID otherwise
+ * @return int O if no active group, the group id otherwise
  */
 function api_get_group_id()
 {
-    return Session::read('_gid', 0);
+    return (int) Session::read('_gid', 0);
 }
 
 /**
@@ -2788,13 +2794,16 @@ function api_get_session_info($id)
 function api_get_session_visibility(
     $session_id,
     $courseId = null,
-    $ignore_visibility_for_admins = true
+    $ignore_visibility_for_admins = true,
+    $userId = 0
 ) {
     if (api_is_platform_admin()) {
         if ($ignore_visibility_for_admins) {
             return SESSION_AVAILABLE;
         }
     }
+
+    $userId = empty($userId) ? api_get_user_id() : (int) $userId;
 
     $now = time();
     if (empty($session_id)) {
@@ -2818,7 +2827,7 @@ function api_get_session_visibility(
         // Session duration per student.
         if (isset($row['duration']) && !empty($row['duration'])) {
             $duration = $row['duration'] * 24 * 60 * 60;
-            $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser($session_id, api_get_user_id());
+            $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser($session_id, $userId);
 
             // If there is a session duration but there is no previous
             // access by the user, then the session is still available
@@ -2830,10 +2839,7 @@ function api_get_session_visibility(
             $firstAccess = isset($courseAccess['login_course_date'])
                 ? api_strtotime($courseAccess['login_course_date'], 'UTC')
                 : 0;
-            $userDurationData = SessionManager::getUserSession(
-                api_get_user_id(),
-                $session_id
-            );
+            $userDurationData = SessionManager::getUserSession($userId, $session_id);
             $userDuration = isset($userDurationData['duration'])
                 ? (intval($userDurationData['duration']) * 24 * 60 * 60)
                 : 0;
@@ -2862,7 +2868,7 @@ function api_get_session_visibility(
     }
 
     // If I'm a coach the visibility can change in my favor depending in the coach dates.
-    $isCoach = api_is_coach($session_id, $courseId);
+    $isCoach = api_is_coach($session_id, $courseId, $userId);
 
     if ($isCoach) {
         // Test start date.
@@ -3250,12 +3256,13 @@ function api_is_course_session_coach($user_id, $courseId, $session_id)
  * @param int $session_id
  * @param int $courseId
  * @param bool  Check whether we are in student view and, if we are, return false
+ * @param int $userId
  *
  * @return bool True if current user is a course or session coach
  */
-function api_is_coach($session_id = 0, $courseId = null, $check_student_view = true)
+function api_is_coach($session_id = 0, $courseId = null, $check_student_view = true, $userId = 0)
 {
-    $userId = api_get_user_id();
+    $userId = empty($userId) ? api_get_user_id() : (int) $userId;
 
     if (!empty($session_id)) {
         $session_id = (int) $session_id;
@@ -3934,7 +3941,12 @@ function api_not_allowed(
         $show_headers = 1;
     }
 
-    $tpl = new Template(null, $show_headers, $show_headers, false, true, false, true, $responseCode);
+    $hideBreadCrumb = false;
+    if (api_get_configuration_value('hide_breadcrumb_if_not_allowed')) {
+        $hideBreadCrumb = true;
+    }
+
+    $tpl = new Template(null, $show_headers, $show_headers, $hideBreadCrumb, true, false, true, $responseCode);
     $tpl->assign('hide_login_link', 1);
     $tpl->assign('content', $msg);
 
@@ -3948,6 +3960,10 @@ function api_not_allowed(
         $tpl->display_one_col_template();
         exit;
     }
+
+    $tplPlugin = new AppPlugin();
+    $loginTopRegionContent = $tplPlugin->load_region('login_top', $tpl, true);
+    $loginBottomRegionContent = $tplPlugin->load_region('login_bottom', $tpl, true);
 
     if (!empty($_SERVER['REQUEST_URI']) &&
         (
@@ -3989,9 +4005,11 @@ function api_not_allowed(
             $content .= "<p style='text-align:center'><a href='#' onclick='$(this).parent().next().toggle()'>".get_lang('LoginWithExternalAccount')."</a></p>";
             $content .= "<div style='display:none;'>";
         }
+        $content .= PHP_EOL.$loginTopRegionContent;
         $content .= '<div class="well">';
         $content .= $form->returnForm();
         $content .= '</div>';
+        $content .= PHP_EOL.$loginBottomRegionContent;
         if (api_is_cas_activated()) {
             $content .= "</div>";
         }
@@ -4042,9 +4060,11 @@ function api_not_allowed(
             $msg .= "<div style='display:none;'>";
         }
         $form = api_get_not_allowed_login_form();
+        $msg .= PHP_EOL.$loginTopRegionContent;
         $msg .= '<div class="well">';
         $msg .= $form->returnForm();
         $msg .= '</div>';
+        $msg .= PHP_EOL.$loginBottomRegionContent;
         if ($casEnabled) {
             $msg .= "</div>";
         }
@@ -4066,9 +4086,11 @@ function api_not_allowed(
 
         if (api_is_anonymous()) {
             $form = api_get_not_allowed_login_form();
+            $msg .= PHP_EOL.$loginTopRegionContent;
             $msg .= '<div class="well">';
             $msg .= $form->returnForm();
             $msg .= '</div>';
+            $msg .= PHP_EOL.$loginBottomRegionContent;
         }
     }
 
@@ -4979,7 +5001,7 @@ function languageCodeToCountryIsoCodeForFlags($languageIsoCode)
             $country = 'dk';
             break;
         case 'el':
-            $country = 'ae';
+            $country = 'gr';
             break;
         case 'en':
             $country = 'gb';
@@ -5094,7 +5116,7 @@ function api_get_language_id($language)
         return null;
     }
 
-    static $staticResult;
+    static $staticResult = [];
 
     if (isset($staticResult[$language])) {
         return $staticResult[$language];
@@ -6824,7 +6846,7 @@ function api_is_in_group($groupIdParam = null, $courseCodeParam = null)
 
     $groupId = api_get_group_id();
 
-    if (isset($groupId) && $groupId != '') {
+    if (!empty($groupId)) {
         if (!empty($groupIdParam)) {
             return $groupIdParam == $groupId;
         } else {
@@ -10156,4 +10178,13 @@ function api_get_print_css(bool $getFileContents = true, bool $useWebPath = fals
     }
 
     return $cssFile;
+}
+
+function api_protect_webservices()
+{
+    if (api_get_configuration_value('disable_webservices')) {
+        echo "Webservices are disabled. \n";
+        echo "To enable, add \$_configuration['disable_webservices'] = true; in configuration.php";
+        exit;
+    }
 }

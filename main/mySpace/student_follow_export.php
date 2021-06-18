@@ -130,7 +130,7 @@ function generateHtmlForLearningPaths(int $studentId, array $courseInfo, int $se
 {
     $student = api_get_user_entity($studentId);
 
-    $html = Display::page_subheader2(get_lang('ToolLearnpath'));
+    $html = '';
 
     $columnHeaders = [];
     $columnHeaders['lp'] = get_lang('LearningPath');
@@ -161,6 +161,7 @@ function generateHtmlForLearningPaths(int $studentId, array $courseInfo, int $se
     $columnHeadersKeys = array_keys($columnHeaders);
 
     $hideInvisibleViews = api_get_configuration_value('student_follow_page_add_LP_invisible_checkbox');
+    $includeNotsubscribedLp = api_get_configuration_value('student_follow_page_include_not_subscribed_lp_students');
 
     $timeCourse = Tracking::minimumTimeAvailable($sessionId, $courseInfo['real_id'])
         ? Tracking::getCalculateTime($student->getId(), $courseInfo['real_id'], $sessionId)
@@ -185,16 +186,12 @@ function generateHtmlForLearningPaths(int $studentId, array $courseInfo, int $se
             $categoryId,
             false,
             false,
-            false
+            $includeNotsubscribedLp === true
         );
 
         $flatList = $lpList->get_flat_list();
 
-        if (count($lpCategories) > 1) {
-            $html .= Display::page_subheader3($item->getName());
-        }
-
-        $lpTable = [$columnHeaders];
+        $lpTable = [];
 
         foreach ($flatList as $learnpath) {
             $lpId = $learnpath['lp_old_id'];
@@ -307,7 +304,21 @@ function generateHtmlForLearningPaths(int $studentId, array $courseInfo, int $se
             $lpTable[] = $contentToExport;
         }
 
+        if (empty($lpTable)) {
+            continue;
+        }
+
+        if (count($lpCategories) > 1) {
+            $html .= Display::page_subheader3($item->getName());
+        }
+
+        array_unshift($lpTable, [$columnHeaders]);
+
         $html .= Export::convert_array_to_html($lpTable);
+    }
+
+    if (!empty($html)) {
+        $html = Display::page_subheader2(get_lang('ToolLearnpath')).PHP_EOL.$html;
     }
 
     return $html;
@@ -506,7 +517,7 @@ if ($form->validate()) {
 
     $view = new Template('', false, false, false, true, false, false);
     $view->assign('user_info', $studentInfo);
-    $view->assign('carrers', MyStudents::getBlockForCareers($studentInfo['id']));
+    $view->assign('careers', MyStudents::userCareersTable($studentInfo['id']));
     $view->assign('skills', Tracking::displayUserSkills($studentInfo['id']));
     $view->assign('classes', MyStudents::getBlockForClasses($studentInfo['id']));
     $view->assign('courses_info', $coursesInfo);
@@ -519,7 +530,6 @@ if ($form->validate()) {
         'orientation' => 'P',
     ];
 
-    $css = api_get_print_css();
     $css = '
         .user-info { clear: both; }
         .user-info__col { float: left; width: 33.33%; }

@@ -1,9 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
-/**
- * @package chamilo.webservices
- */
+
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_webservices();
 
 /**
  * Error returned by one of the methods of the web service.

@@ -16,6 +16,8 @@
  */
 require_once __DIR__.'/../../inc/global.inc.php';
 
+api_protect_webservices();
+
 $hash = isset($_REQUEST['hash']) ? $_REQUEST['hash'] : null;
 
 if ($hash) {
@@ -214,6 +216,7 @@ try {
             break;
         case Rest::GET_COURSES_FROM_EXTRA_FIELD:
             $variable = $_REQUEST['extra_field_variable'] ?? '';
+            $value = $_REQUEST['extra_field_value'] ?? '';
             $urlId = $_REQUEST['id_campus'] ?? '';
             $extraField = new ExtraField('course');
             $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($variable);
@@ -223,12 +226,19 @@ try {
             }
 
             $extraFieldValue = new ExtraFieldValue('course');
-            $items = $extraFieldValue->getValuesByFieldId($extraFieldInfo['id']);
+            $items = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+                $variable,
+                $value,
+                false,
+                false,
+                true
+            );
+
             $courseList = [];
             foreach ($items as $item) {
                 $courseId = $item['item_id'];
                 if (UrlManager::relation_url_course_exist($courseId, $urlId)) {
-                    $courseList[] = api_get_course_info($courseId);
+                    $courseList[] = api_get_course_info_by_id($courseId);
                 }
             }
 

@@ -7,6 +7,8 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_webservices();
+
 /**
  * Function to convert from ppt to png
  * This function is used from Chamilo Rapid Lesson.

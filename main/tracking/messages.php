@@ -18,6 +18,9 @@ if (!$allowUser) {
 $fromUserId = isset($_GET['from_user']) ? (int) $_GET['from_user'] : 0;
 $toUserId = isset($_GET['to_user']) ? (int) $_GET['to_user'] : 0;
 
+$coachAccessStartDate = isset($_GET['start_date']) ? $_GET['start_date'] : null;
+$coachAccessEndDate = isset($_GET['end_date']) ? $_GET['end_date'] : null;
+
 if (empty($fromUserId) || empty($toUserId)) {
     api_not_allowed(true);
 }
@@ -61,7 +64,13 @@ if (api_is_drh()) {
 
 $usersData[$toUserId] = api_get_user_info($toUserId);
 $usersData[$fromUserId] = api_get_user_info($fromUserId);
-$messages = MessageManager::getAllMessagesBetweenStudents($toUserId, $fromUserId);
+
+$filterMessages = api_get_configuration_value('filter_interactivity_messages');
+if ($filterMessages) {
+    $messages = MessageManager::getAllMessagesBetweenStudents($toUserId, $fromUserId, $coachAccessStartDate, $coachAccessEndDate);
+} else {
+    $messages = MessageManager::getAllMessagesBetweenStudents($toUserId, $fromUserId);
+}
 
 $content = Display::page_subheader2(sprintf(
     get_lang('MessagesExchangeBetweenXAndY'),

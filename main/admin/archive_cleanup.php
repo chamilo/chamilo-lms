@@ -46,7 +46,17 @@ if ($form->validate()) {
     }
 
     $archive_path = api_get_path(SYS_ARCHIVE_PATH);
-    $htaccess = @file_get_contents($archive_path.'.htaccess');
+    $htaccess = <<<TEXT
+order deny,allow
+deny from all
+# pChart generated files should be allowed
+<FilesMatch "^[0-9a-f]+$">
+    order allow,deny
+    allow from all
+</FilesMatch>
+php_flag engine off
+TEXT;
+
     $result = rmdirr($archive_path, true, true);
     if (false === $result) {
         Display::addFlash(Display::return_message(get_lang('ArchiveDirCleanupFailed'), 'error'));

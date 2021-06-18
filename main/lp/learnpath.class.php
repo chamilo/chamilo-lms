@@ -2299,6 +2299,7 @@ class learnpath
      * @param int   $student_id
      * @param array $courseInfo
      * @param int   $sessionId
+     * @param bool  $checkSubscription Optional. Allow don't check if user is subscribed to the LP.
      *
      * @return bool
      */
@@ -2306,7 +2307,8 @@ class learnpath
         $lp_id,
         $student_id,
         $courseInfo = [],
-        $sessionId = 0
+        $sessionId = 0,
+        bool $checkSubscription = true
     ) {
         $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
         $lp_id = (int) $lp_id;
@@ -2390,7 +2392,7 @@ class learnpath
                 }
             }
 
-            if ($is_visible) {
+            if ($is_visible && $checkSubscription) {
                 $is_visible = self::isUserSubscribedToLp(
                     $row,
                     (int) $student_id,
@@ -2847,23 +2849,23 @@ class learnpath
     /**
      * Returns the XML DOM document's node.
      *
-     * @param resource $children Reference to a list of objects to search for the given ITEM_*
-     * @param string   $id       The identifier to look for
+     * @param DOMNodeList $children Reference to a list of objects to search for the given ITEM_*
+     * @param string      $id       The identifier to look for
      *
      * @return mixed The reference to the element found with that identifier. False if not found
      */
-    public function get_scorm_xml_node(&$children, $id)
+    public function get_scorm_xml_node(DOMNodeList &$children, string $id, $nodeName = 'item', $attributeName = 'identifier')
     {
         for ($i = 0; $i < $children->length; $i++) {
             $item_temp = $children->item($i);
-            if ($item_temp->nodeName == 'item') {
-                if ($item_temp->getAttribute('identifier') == $id) {
+            if ($item_temp->nodeName == $nodeName) {
+                if ($item_temp instanceof DOMElement && $item_temp->getAttribute($attributeName) == $id) {
                     return $item_temp;
                 }
             }
             $subchildren = $item_temp->childNodes;
             if ($subchildren && $subchildren->length > 0) {
-                $val = $this->get_scorm_xml_node($subchildren, $id);
+                $val = $this->get_scorm_xml_node($subchildren, $id, $nodeName, $attributeName);
                 if (is_object($val)) {
                     return $val;
                 }
@@ -11902,6 +11904,14 @@ EOD;
         $manifest = @$xmldoc->saveXML();
         $manifest = api_utf8_decode_xml($manifest); // The manifest gets the system encoding now.
         file_put_contents($archivePath.'/'.$temp_dir_short.'/imsmanifest.xml', $manifest);
+
+        $htmlIndex = new LpIndexGenerator($this);
+
+        file_put_contents(
+            $archivePath.'/'.$temp_dir_short.'/index.html',
+            $htmlIndex->generate()
+        );
+
         $zip_folder->add(
             $archivePath.'/'.$temp_dir_short,
             PCLZIP_OPT_REMOVE_PATH,

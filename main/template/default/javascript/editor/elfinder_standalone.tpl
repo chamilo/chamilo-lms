@@ -9,7 +9,7 @@
 <!-- elFinder translation (OPTIONAL) -->
 {{ elfinder_translation_file }}
 
-<script type="text/javascript" charset="utf-8">
+<script charset="utf-8">
     // Helper function to get parameters from the query string.
     function getUrlParam(paramName) {
         var reParam = new RegExp('(?:[\?&]|&amp;)' + paramName + '=([^&]+)', 'i');
@@ -22,7 +22,16 @@
         var elf = $('#elfinder').elfinder({
             url : '{{ _p.web_lib ~ 'elfinder/connectorAction.php?' }}{{ course_condition }}',  // connector URL (REQUIRED)
             getFileCallback : function(file) {
-                window.opener.CKEDITOR.tools.callFunction(funcNum, file.url);
+                if (window.opener) {
+                    if (window.opener.CKEDITOR) {
+                        window.opener.CKEDITOR.tools.callFunction(funcNum, file.url);
+                    }
+
+                    if (window.opener.addImageToQuestion) {
+                        window.opener.addImageToQuestion(file.url, {{ question_id }});
+                    }
+                }
+
                 window.close();
             },
             startPathHash: 'l2_Lw', // Sets the course driver as default

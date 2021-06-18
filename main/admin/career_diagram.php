@@ -14,8 +14,30 @@ ALTER TABLE extra_field_values modify column value longtext null;
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (api_get_configuration_value('allow_career_diagram') == false) {
+if (false === api_get_configuration_value('allow_career_diagram')) {
     api_not_allowed(true);
+}
+
+$careerId = $careerIdFromRequest = isset($_GET['id']) ? $_GET['id'] : 0;
+
+if (empty($careerId)) {
+    api_not_allowed(true);
+}
+
+$career = new Career();
+$careerInfo = $career->getCareerFromId($careerId);
+if (empty($careerInfo)) {
+    api_not_allowed(true);
+}
+$careerId = $careerInfo['id'];
+
+// Redirect to user/career_diagram.php if not admin/drh BT#18720
+if (!(api_is_platform_admin() || api_is_drh())) {
+    if (api_get_configuration_value('use_career_external_id_as_identifier')) {
+        $careerId = Security::remove_XSS($careerIdFromRequest);
+    }
+    $url = api_get_path(WEB_CODE_PATH).'user/career_diagram.php?career_id='.$careerId;
+    api_location($url);
 }
 
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -24,11 +46,6 @@ $allowCareer = api_get_configuration_value('allow_session_admin_read_careers');
 api_protect_admin_script($allowCareer);
 
 $htmlHeadXtra[] = api_get_js('jsplumb2.js');
-
-$careerId = isset($_GET['id']) ? $_GET['id'] : 0;
-if (empty($careerId)) {
-    api_not_allowed(true);
-}
 
 $career = new Career();
 $careerInfo = $career->get($careerId);
@@ -53,10 +70,10 @@ $interbreadcrumb[] = [
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
-if ($action == 'add') {
+if ($action === 'add') {
     $interbreadcrumb[] = ['url' => 'careers.php', 'name' => get_lang('Careers')];
     $toolName = get_lang('Add');
-} elseif ($action == 'edit') {
+} elseif ($action === 'edit') {
     $interbreadcrumb[] = ['url' => 'careers.php', 'name' => get_lang('Careers')];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
     $toolName = get_lang('Edit');
@@ -107,5 +124,5 @@ if (!empty($diagram)) {
 }
 
 $tpl->assign('content', $html);
-$layout = $tpl->get_template('career/diagram.tpl');
+$layout = $tpl->get_template('career/diagram_full.tpl');
 $tpl->display($layout);

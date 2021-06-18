@@ -3811,18 +3811,21 @@ EOT;
     /**
      * Get average score (NO Exercises in LPs ).
      *
-     * @param    int    exercise id
+     * @param int $exerciseId
      * @param int $courseId
-     * @param    int    session id
+     * @param int $sessionId
      *
      * @return float Average score
      */
-    public static function get_average_score($exercise_id, $courseId, $session_id)
+    public static function get_average_score($exerciseId, $courseId, $sessionId, $groupId = 0)
     {
         $user_results = Event::get_all_exercise_results(
-            $exercise_id,
+            $exerciseId,
             $courseId,
-            $session_id
+            $sessionId,
+            true,
+            null,
+            $groupId
         );
         $avg_score = 0;
         if (!empty($user_results)) {
@@ -3839,18 +3842,18 @@ EOT;
     }
 
     /**
-     * Get average score by score (NO Exercises in LPs ).
+     * Get average quiz score by course (Only exercises not added in a LP).
      *
      * @param int $courseId
-     * @param    int    session id
+     * @param int $sessionId
      *
      * @return float Average score
      */
-    public static function get_average_score_by_course($courseId, $session_id)
+    public static function get_average_score_by_course($courseId, $sessionId)
     {
         $user_results = Event::get_all_exercise_results_by_course(
             $courseId,
-            $session_id,
+            $sessionId,
             false
         );
         $avg_score = 0;
@@ -5977,24 +5980,49 @@ EOT;
         return $trackedExercise;
     }
 
-    public static function getTotalQuestionAnswered($courseId, $exerciseId, $questionId)
+    public static function getTotalQuestionAnswered($courseId, $exerciseId, $questionId, $sessionId = 0, $groupId = 0, $userId = 0)
     {
         $courseId = (int) $courseId;
         $exerciseId = (int) $exerciseId;
         $questionId = (int) $questionId;
+        $groupId = (int) $groupId;
+        $userId = (int) $userId;
+        $sessionId = (int) $sessionId;
 
         $attemptTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $trackTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
+        $groupCondition = '';
+        if (!empty($groupId)) {
+            $users = GroupManager::get_users($groupId, null, null, null, false, $courseId);
+            if (!empty($users)) {
+                $usersToString = implode("', '", $users);
+                $groupCondition = " AND user_id IN ('$usersToString') ";
+            }
+        }
+
+        $userCondition = '';
+        if (!empty($userId)) {
+            $userCondition = " AND user_id = $userId ";
+        }
+
+        $sessionCondition = '';
+        if (!empty($sessionId)) {
+            $sessionCondition = api_get_session_condition($sessionId, true, false, 'te.session_id');
+        }
+
         $sql = "SELECT count(te.exe_id) total
-            FROM $attemptTable t
-            INNER JOIN $trackTable te
-            ON (te.c_id = t.c_id AND t.exe_id = te.exe_id)
-            WHERE
-                t.c_id = $courseId AND
-                exe_exo_id = $exerciseId AND
-                t.question_id = $questionId AND
-                status != 'incomplete'
+                FROM $attemptTable t
+                INNER JOIN $trackTable te
+                ON (te.c_id = t.c_id AND t.exe_id = te.exe_id)
+                WHERE
+                    t.c_id = $courseId AND
+                    exe_exo_id = $exerciseId AND
+                    t.question_id = $questionId AND
+                    status != 'incomplete'
+                    $sessionCondition
+                    $groupCondition
+                    $userCondition
         ";
         $queryTotal = Database::query($sql);
         $totalRow = Database::fetch_array($queryTotal, 'ASSOC');
@@ -6006,9 +6034,11 @@ EOT;
         return $total;
     }
 
-    public static function getWrongQuestionResults($courseId, $exerciseId, $sessionId = 0, $limit = 10)
+    public static function getWrongQuestionResults($courseId, $exerciseId, $sessionId = 0, $groupId = 0, $userId = 0, $limit = 10)
     {
         $courseId = (int) $courseId;
+        $groupId = (int) $groupId;
+        $userId = (int) $userId;
         $exerciseId = (int) $exerciseId;
         $limit = (int) $limit;
 
@@ -6019,6 +6049,20 @@ EOT;
         $sessionCondition = '';
         if (!empty($sessionId)) {
             $sessionCondition = api_get_session_condition($sessionId, true, false, 'te.session_id');
+        }
+
+        $groupCondition = '';
+        if (!empty($groupId)) {
+            $users = GroupManager::get_users($groupId, null, null, null, false, $courseId);
+            if (!empty($users)) {
+                $usersToString = implode("', '", $users);
+                $groupCondition = " AND user_id IN ('$usersToString') ";
+            }
+        }
+
+        $userCondition = '';
+        if (!empty($userId)) {
+            $userCondition = " AND user_id = $userId ";
         }
 
         $sql = "SELECT q.question, question_id, count(q.iid) count
@@ -6033,6 +6077,8 @@ EOT;
                     exe_exo_id = $exerciseId AND
                     status != 'incomplete'
                     $sessionCondition
+                    $userCondition
+                    $groupCondition
                 GROUP BY q.iid
                 ORDER BY count DESC
                 LIMIT $limit
@@ -6043,10 +6089,10 @@ EOT;
         return Database::store_result($result, 'ASSOC');
     }
 
-    public static function getExerciseResultsCount($type, $courseId, $exerciseId, $sessionId = 0)
+    public static function getExerciseResultsCount($type, $courseId, Exercise $exercise, $sessionId = 0)
     {
         $courseId = (int) $courseId;
-        $exerciseId = (int) $exerciseId;
+        $exerciseId = (int) $exercise->iId;
 
         $trackTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
@@ -6055,22 +6101,28 @@ EOT;
             $sessionCondition = api_get_session_condition($sessionId, true, false, 'te.session_id');
         }
 
+        $passPercentage = $exercise->selectPassPercentage();
+        $minPercentage = 100;
+        if (!empty($passPercentage)) {
+            $minPercentage = $passPercentage;
+        }
+
         $selectCount = 'count(DISTINCT te.exe_id)';
         $scoreCondition = '';
         switch ($type) {
             case 'correct_student':
                 $selectCount = 'count(DISTINCT te.exe_user_id)';
-                $scoreCondition = ' AND exe_result = exe_weighting ';
+                $scoreCondition = " AND (exe_result/exe_weighting*100) >= $minPercentage ";
                 break;
             case 'wrong_student':
                 $selectCount = 'count(DISTINCT te.exe_user_id)';
-                $scoreCondition = ' AND  exe_result != exe_weighting ';
+                $scoreCondition = " AND (exe_result/exe_weighting*100) < $minPercentage ";
                 break;
             case 'correct':
-                $scoreCondition = ' AND exe_result = exe_weighting ';
+                $scoreCondition = " AND (exe_result/exe_weighting*100) >= $minPercentage ";
                 break;
             case 'wrong':
-                $scoreCondition = ' AND exe_result != exe_weighting ';
+                $scoreCondition = " AND (exe_result/exe_weighting*100) < $minPercentage ";
                 break;
         }
 
@@ -6101,7 +6153,7 @@ EOT;
         $resultsStudentUrl = api_get_path(WEB_CODE_PATH).
             'exercise/result.php?id='.$exeId.'&'.api_get_cidreq();
         $resultsTeacherUrl = api_get_path(WEB_CODE_PATH).
-            'exercise/exercise_show.php?action=edit&id='.$exeId.'&'.api_get_cidreq();
+            'exercise/exercise_show.php?action=edit&id='.$exeId.'&'.api_get_cidreq(true, true, 'teacher');
 
         $content = str_replace(
             [

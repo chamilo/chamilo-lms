@@ -41,43 +41,43 @@ if (!empty($_POST)) {
         $endDate = $yearEnd."-".$monthEnd."-".$dayEnd;
 
         if (!empty($actionId) && $actionId != '0') {
-            $sql = "UPDATE plugin_sepe_actions SET 
-                        action_origin='".$actionOrigin."', 
-                        action_code='".$actionCode."', 
-                        situation='".$situation."', 
-                        specialty_origin='".$specialtyOrigin."', 
-                        professional_area='".$professionalArea."', 
-                        specialty_code='".$specialtyCode."', 
-                        duration='".$duration."', 
-                        start_date='".$startDate."', 
-                        end_date='".$endDate."', 
-                        full_itinerary_indicator='".$fullItineraryIndicator."', 
-                        financing_type='".$financingType."', 
-                        attendees_count='".$attendeesCount."', 
-                        action_name='".$actionName."', 
-                        global_info='".$globalInfo."', 
-                        schedule='".$schedule."', 
-                        requirements='".$requirements."', 
-                        contact_action='".$contactAction."' 
+            $sql = "UPDATE plugin_sepe_actions SET
+                        action_origin='".$actionOrigin."',
+                        action_code='".$actionCode."',
+                        situation='".$situation."',
+                        specialty_origin='".$specialtyOrigin."',
+                        professional_area='".$professionalArea."',
+                        specialty_code='".$specialtyCode."',
+                        duration='".$duration."',
+                        start_date='".$startDate."',
+                        end_date='".$endDate."',
+                        full_itinerary_indicator='".$fullItineraryIndicator."',
+                        financing_type='".$financingType."',
+                        attendees_count='".$attendeesCount."',
+                        action_name='".$actionName."',
+                        global_info='".$globalInfo."',
+                        schedule='".$schedule."',
+                        requirements='".$requirements."',
+                        contact_action='".$contactAction."'
                     WHERE id='".$actionId."';";
         } else {
             $sql = "INSERT INTO plugin_sepe_actions (
-                        action_origin, 
-                        action_code, 
-                        situation, 
-                        specialty_origin, 
-                        professional_area, 
-                        specialty_code, 
-                        duration, 
-                        start_date, 
-                        end_date, 
-                        full_itinerary_indicator, 
-                        financing_type, 
-                        attendees_count, 
-                        action_name, 
-                        global_info, 
-                        schedule, 
-                        requirements, 
+                        action_origin,
+                        action_code,
+                        situation,
+                        specialty_origin,
+                        professional_area,
+                        specialty_code,
+                        duration,
+                        start_date,
+                        end_date,
+                        full_itinerary_indicator,
+                        financing_type,
+                        attendees_count,
+                        action_name,
+                        global_info,
+                        schedule,
+                        requirements,
                         contact_action
                     ) VALUES (
                         '".$actionOrigin."',
@@ -145,8 +145,14 @@ if (!empty($_POST)) {
 if (api_is_platform_admin()) {
     if (isset($_GET['new_action']) && intval($_GET['new_action']) == 1) {
         $info = [];
-        $interbreadcrumb[] = ["url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe')];
-        $interbreadcrumb[] = ["url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList')];
+        $interbreadcrumb[] = [
+            "url" => "/plugin/sepe/src/sepe-administration-menu.php",
+            "name" => $plugin->get_lang('MenuSepe'),
+        ];
+        $interbreadcrumb[] = [
+            "url" => "formative-actions-list.php",
+            "name" => $plugin->get_lang('FormativesActionsList'),
+        ];
         $templateName = $plugin->get_lang('formativeActionNew');
         $tpl = new Template($templateName);
         $yearStart = $yearEnd = date("Y");
@@ -155,9 +161,18 @@ if (api_is_platform_admin()) {
         $tpl->assign('course_id', intval($_GET['cid']));
     } else {
         $courseId = getCourse($_GET['action_id']);
-        $interbreadcrumb[] = ["url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe')];
-        $interbreadcrumb[] = ["url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList')];
-        $interbreadcrumb[] = ["url" => "formative-action.php?cid=".$courseId, "name" => $plugin->get_lang('FormativeAction')];
+        $interbreadcrumb[] = [
+            "url" => "/plugin/sepe/src/sepe-administration-menu.php",
+            "name" => $plugin->get_lang('MenuSepe'),
+        ];
+        $interbreadcrumb[] = [
+            "url" => "formative-actions-list.php",
+            "name" => $plugin->get_lang('FormativesActionsList'),
+        ];
+        $interbreadcrumb[] = [
+            "url" => "formative-action.php?cid=".$courseId,
+            "name" => $plugin->get_lang('FormativeAction'),
+        ];
         $info = getActionInfo($_GET['action_id']);
         $templateName = $plugin->get_lang('formativeActionEdit');
         $tpl = new Template($templateName);

@@ -399,6 +399,8 @@ INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, d
 (20, 13, 'invisible', 'Invisible', '', 0, 1, 0, 0, 0, NOW());
 */
 //$_configuration['student_follow_page_add_LP_invisible_checkbox'] = false;
+// Show the LP not marked as invisible by teacher in tracking page
+//$_configuration['student_follow_page_include_not_subscribed_lp_students'] = false;
 // Allow change the order to show the tools in "My progress" page.
 /*$_configuration['my_progress_course_tools_order'] = [
     'order' => ['quizzes', 'learning_paths', 'skills'],
@@ -482,6 +484,8 @@ ALTER TABLE c_lp_item CHANGE title title LONGTEXT NOT NULL;
 //
 // Show view accordion lp_item_view
 // $_configuration['lp_view_accordion'] = false;
+// Allow export learning paths to students
+//$_configuration['lp_allow_export_to_students'] = false;
 //
 // ------ HTTP headers security
 // This section relates to options to increase the security of your Chamilo
@@ -937,6 +941,10 @@ ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (ses
 // Please make sure you include a note in your terms and conditions as this might
 // affect privacy protection.
 //$_configuration['allow_user_message_tracking'] = false;
+
+// Filter messages between a teacher and a student between the session start end dates
+// Need $_configuration['allow_user_message_tracking'] = true;
+//$_configuration['filter_interactivity_messages'] = false;
 
 // Add a portfolio tool (duplicating the Notebook tool). Requires DB changes:
 /*
@@ -1917,6 +1925,38 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 
 // Allow session admin access to main/admin/user_update_import.php and main/admin/user_export.php
 //$_configuration['allow_session_admin_extra_access'] = true;
+
+// Replace the Chamilo logo URL.
+//$_configuration['platform_logo_url'] = 'https://chamilo.org';
+
+// Hides the session graph in the main/auth/my_progress.php page.
+//$_configuration['hide_session_graph_in_my_progress'] = true;
+
+// Shows only users from active sessions in tracking.
+//$_configuration['show_users_in_active_sessions_in_tracking'] = true;
+
+// Allows a quick question description edition with a selected image from a popup.
+//$_configuration['allow_quick_question_description_popup'] = true;
+
+// Allows the use of the external id instead of the internal id.
+//$_configuration['use_career_external_id_as_identifier_in_diagrams'] = true;
+
+// Add a career legend below the diagram, a variable will be called
+// get_lang('CareerDiagramLegend') and printed below a diagram
+// $_configuration['career_diagram_legend'] = true;
+
+// If true then a variable will be called get_lang('CareerDiagramDisclaimer') and printed below a diagram;
+//$_configuration['career_diagram_disclaimer'] = true;
+
+// Disable webservices.
+//$_configuration['disable_webservices'] = true;
+
+// Ask user to renew password at first login.
+// Requires a user checkbox extra field called "ask_new_password".
+//$_configuration['force_renew_password_at_first_login'] = true;
+
+// If the user is blocked with not allowed (red message), then the breadcrumb is hidden.
+//$_configuration['hide_breadcrumb_if_not_allowed'] = true;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

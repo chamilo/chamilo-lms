@@ -4,15 +4,18 @@
     <div class="col-xs-12 col-sm-6 col-md-4">
         <div class="items items-sessions">
             <div class="image">
-                {% if course.visibility == constant('COURSE_VISIBILITY_CLOSED') or course.requirements %}
-                    <span title="{{ course.name }}" >
-                        <img src="{{ course.image }}" class="img-responsive">
-                    </span>
-                {% else %}
-                    <a title="{{ course.name }}" href="{{ course.link }}">
-                        <img src="{{ course.image }}" class="img-responsive">
-                    </a>
-                {% endif %}
+                {% set title %}
+                    {% if course.visibility == constant('COURSE_VISIBILITY_CLOSED') or course.requirements %}
+                        <span title="{{ course.name }}" >
+                            <img src="{{ course.image }}" class="img-responsive">
+                        </span>
+                    {% else %}
+                        <a title="{{ course.name }}" href="{{ course.link }}">
+                            <img src="{{ course.image }}" class="img-responsive">
+                        </a>
+                    {% endif %}
+                {% endset %}
+                {{ title |  remove_xss }}
 
                 {% if course.category != '' and show_category %}
                     <span class="category">{{ course.category }}</span>
@@ -38,12 +41,15 @@
             <div class="description">
                 <div class="block-title">
                   <h4 class="title">
-                      {% if course.visibility == constant('COURSE_VISIBILITY_CLOSED') or course.requirements %}
-                          {{ course.name }}
-                          <span class="code-title">{{ course.visual_code }}</span>
-                      {% else %}
-                          {{ course.title }}
-                      {% endif %}
+                      {% set title %}
+                          {% if course.visibility == constant('COURSE_VISIBILITY_CLOSED') or course.requirements %}
+                              {{ course.name }}
+                              <span class="code-title">{{ course.visual_code }}</span>
+                          {% else %}
+                              {{ course.title }}
+                          {% endif %}
+                      {% endset %}
+                      {{ title |  remove_xss }}
                   </h4>
                 </div>
                 <div class="block-author">
@@ -116,6 +122,7 @@
         {% if row.course_list_session_style %}
             {# If not style then no show header #}
             <div class="panel-heading">
+
                 {% if row.course_list_session_style == 1 or row.course_list_session_style == 2 %}
                     {# Session link #}
                     {% if remove_session_url == true %}
@@ -155,6 +162,8 @@
                        {{ row.collapsable_link }}
                     </div>
                 {% endif %}
+
+
             </div>
         {% endif %}
 

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /*
@@ -12,28 +13,31 @@ ALTER TABLE extra_field_values modify column value longtext null;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (api_get_configuration_value('allow_career_diagram') == false) {
+if (false === api_get_configuration_value('allow_career_diagram')) {
     api_not_allowed(true);
 }
 
+api_block_anonymous_users();
+
 $this_section = SECTION_COURSES;
 
-$careerId = isset($_GET['career_id']) ? $_GET['career_id'] : 0;
+$careerId = $_GET['career_id'] ?? null;
+$userId = isset($_GET['user_id']) ? $_GET['user_id'] : api_get_user_id();
 
 if (empty($careerId)) {
     api_not_allowed(true);
 }
 
 $career = new Career();
-$careerInfo = $career->get($careerId);
+$careerInfo = $career->getCareerFromId($careerId);
 if (empty($careerInfo)) {
     api_not_allowed(true);
 }
+$careerId = $careerInfo['id'];
 
-$userId = api_get_user_id();
-$allow = UserManager::userHasCareer($userId, $careerId) || api_is_platform_admin();
+$allow = UserManager::userHasCareer($userId, $careerId) || api_is_platform_admin() || api_is_drh();
 
-if ($allow === false) {
+if (false === $allow) {
     api_not_allowed(true);
 }
 
@@ -41,7 +45,6 @@ $htmlHeadXtra[] = api_get_js('jsplumb2.js');
 $htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
 
-// setting breadcrumbs
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'auth/my_progress.php',
     'name' => get_lang('Progress'),
@@ -79,9 +82,10 @@ if (!empty($itemUrls) && !empty($itemUrls['value'])) {
     }
 }
 
-$tpl = new Template(get_lang('Diagram'));
+$showFullPage = isset($_REQUEST['iframe']) && 1 === (int) $_REQUEST['iframe'] ? false : true;
+$tpl = new Template(get_lang('Diagram'), $showFullPage, $showFullPage, !$showFullPage);
 $html = Display::page_subheader2($careerInfo['name'].$urlToString);
-$diagram = Career::renderDiagramByColumn($careerInfo, $tpl, $userId);
+$diagram = Career::renderDiagramByColumn($careerInfo, $tpl, $userId, $showFullPage);
 
 if (!empty($diagram)) {
     $html .= $diagram;
@@ -95,5 +99,10 @@ if (!empty($diagram)) {
 }
 
 $tpl->assign('content', $html);
-$layout = $tpl->get_template('career/diagram.tpl');
+if ($showFullPage) {
+    $layout = $tpl->get_template('career/diagram_full.tpl');
+} else {
+    $layout = $tpl->get_template('career/diagram_iframe.tpl');
+}
+
 $tpl->display($layout);

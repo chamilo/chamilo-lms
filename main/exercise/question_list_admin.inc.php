@@ -32,6 +32,7 @@ if ($deleteQuestion) {
     unset($objQuestionTmp);
 }
 $ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&exercise_id='.intval($exerciseId);
+$addImageUrl = api_get_path(WEB_CODE_PATH).'inc/lib/elfinder/filemanager.php?add_image=1&'.api_get_cidreq();
 ?>
 <div id="dialog-confirm"
      title="<?php echo get_lang('ConfirmYourChoice'); ?>"
@@ -41,6 +42,33 @@ $ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&
     </p>
 </div>
 <script>
+    function addImageToQuestion(image, questionId) {
+        let url = '<?php echo $ajax_url; ?>' + '&a=save_question_description&question_id=' + questionId;
+        let params = {
+            image: image
+        }
+        $.ajax({
+            url: url,
+            data: params,
+            success: function (data) {
+                window.alert('<?php echo addslashes(get_lang('Updated')); ?>');
+            }
+        });
+    }
+
+    function loadEditor(button, questionId) {
+        event.preventDefault();
+        let url = '<?php echo $addImageUrl; ?>' + '&question_id=' + questionId;
+        let w = 850;
+        let h = 500;
+        let left = (screen.width / 2) - (w / 2);
+        let top = (screen.height / 2) - (h / 2);
+        let params = 'height=' + h + ',width=' + w + ',resizable=0,top=' + top + ',left=' + left;
+
+        setTimeout(() => window.open(url, 'editor', params), 1000);
+        return;
+    }
+
     $(function () {
         $("#dialog:ui-dialog").dialog("destroy");
         $("#dialog-confirm").dialog({
@@ -226,6 +254,20 @@ if (!$inATest) {
                     continue;
                 }
 
+                $addImageLink = '';
+                if (api_get_configuration_value('allow_quick_question_description_popup')) {
+                    $addImageLink = Display::url(
+                        Display::return_icon(
+                            'image.png',
+                            get_lang('AddImage'),
+                            [],
+                            ICON_SIZE_TINY
+                        ),
+                        'javascript:void(0);',
+                        ['class' => 'btn btn-default btn-sm ajax', 'onclick' => 'loadEditor(this, '.$id.')']
+                    );
+                }
+
                 $clone_link = Display::url(
                     Display::return_icon(
                         'cd.png',
@@ -292,7 +334,7 @@ if (!$inATest) {
 
                 $btnActions = implode(
                     PHP_EOL,
-                    [$edit_link, $clone_link, $delete_link]
+                    [$edit_link, $clone_link, $addImageLink, $delete_link]
                 );
 
                 $title = Security::remove_XSS($objQuestionTmp->selectTitle());

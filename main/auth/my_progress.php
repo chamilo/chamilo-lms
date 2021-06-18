@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Reporting page on the user's own progress.
- *
- * @package chamilo.tracking
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -40,6 +39,9 @@ $courseUserList = CourseManager::get_courses_list_by_user_id($user_id);
 $dates = $issues = '';
 $sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
 $courseCode = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : null;
+$showGraph = false === api_get_configuration_value('hide_session_graph_in_my_progress');
+
+$isAllowedToEdit = api_is_allowed_to_edit();
 
 if (!empty($courseUserList)) {
     $items = MySpace::get_connections_from_course_list(
@@ -64,56 +66,69 @@ if (!empty($courseUserList)) {
         $course_info = api_get_course_info_by_id($result['c_id']);
         $course_image = '<img src="'.$course_info['course_image_large'].'">';
         $dates .= '<li><a href="#'.$login.'">'.api_convert_and_format_date($login, DATE_FORMAT_SHORT).'</a></li>';
-        $issues .= '<li id ="'.$login.'">';
-        $issues .= '<div class="img-course">'.$course_image.'</div>';
 
-        $issues .= '<div class="text-course">';
-        $issues .= '<p>'.sprintf(
+        $entered = sprintf(
             get_lang('YouHaveEnteredTheCourseXInY'),
             '" '.$courseInfo['name'].' "',
             api_convert_and_format_date($login, DATE_TIME_FORMAT_LONG)
-        ).'</p>';
-        $issues .= '</div>';
-        $issues .= '</li>';
+        );
+
+        $issues .= '<li id ="'.$login.'">
+                        <div class="img-course">'.$course_image.'</div>
+                        <div class="text-course">
+                            <p>'.$entered.'</p>
+                        </div>
+                    </li>';
         $count++;
     }
 }
 
-$content = Tracking::show_user_progress($user_id, $sessionId);
-
+$content = Tracking::showUserProgress(
+    $user_id,
+    $sessionId,
+    '',
+    true,
+    true,
+    false,
+    $showGraph
+);
 $showAllSessionCourses = api_get_configuration_value('my_progress_session_show_all_courses');
 
 if ($showAllSessionCourses && !empty($sessionId) && empty($courseCode)) {
     $userSessionCourses = UserManager::get_courses_list_by_session($user_id, $sessionId);
-
     foreach ($userSessionCourses as $userSessionCourse) {
-        $content .= Tracking::show_course_detail($user_id, $userSessionCourse['course_code'], $sessionId);
+        $content .= Tracking::show_course_detail(
+            $user_id,
+            $userSessionCourse['course_code'],
+            $sessionId,
+            $isAllowedToEdit
+        );
     }
 } else {
-    $content .= Tracking::show_course_detail($user_id, $courseCode, $sessionId);
+    $content .= Tracking::show_course_detail($user_id, $courseCode, $sessionId, $isAllowedToEdit);
 }
 
 if (!empty($dates)) {
-    if (!empty($content)) {
-        $content .= '';
-    }
     $content .= Display::page_subheader(get_lang('Timeline'));
-    $content .= '<div class="row">';
-    $content .= '<div class="col-md-12">';
-    $content .= '<div id="my_timeline">';
-    $content .= '<ul id="dates">'.$dates.'</ul>';
-    $content .= '<ul id="issues">'.$issues.'</ul>';
-    $content .= '<div id="grad_left"></div>';
-    $content .= '<div id="grad_right"></div>';
-    $content .= '<a href="#" id="prev"></a>';
-    $content .= '<a href="#" id="next"></a>';
-    $content .= '</div></div>';
+    $content .= '
+    <div class="row">
+      <div class="col-md-12">
+          <div id="my_timeline">
+              <ul id="dates">'.$dates.'</ul>
+              <ul id="issues">'.$issues.'</ul>
+              <div id="grad_left"></div>
+              <div id="grad_right"></div>
+              <a href="#" id="prev"></a>
+              <a href="#" id="next"></a>
+          </div>
+       </div>
+    </div>
+    ';
 }
 
 if (api_get_configuration_value('private_messages_about_user_visible_to_user') === true) {
     $allowMessages = api_get_configuration_value('private_messages_about_user');
     if ($allowMessages === true) {
-        // Messages
         $content .= Display::page_subheader2(get_lang('Messages'));
         $content .= MessageManager::getMessagesAboutUserToString(api_get_user_info());
     }
@@ -122,29 +137,6 @@ if (api_get_configuration_value('private_messages_about_user_visible_to_user') =
 $message = null;
 if (empty($content)) {
     $message = Display::return_message(get_lang('NoDataAvailable'), 'warning');
-}
-
-$show = api_get_configuration_value('allow_career_users');
-
-if ($show) {
-    $careers = UserManager::getUserCareers($user_id);
-
-    if (!empty($careers)) {
-        $title = Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
-        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
-        $table->setHeaderContents(0, 0, get_lang('Career'));
-        $table->setHeaderContents(0, 1, get_lang('Diagram'));
-
-        $row = 1;
-        foreach ($careers as $careerData) {
-            $table->setCellContents($row, 0, $careerData['name']);
-            $url = api_get_path(WEB_CODE_PATH).'user/career_diagram.php?career_id='.$careerData['id'];
-            $diagram = Display::url(get_lang('Diagram'), $url);
-            $table->setCellContents($row, 1, $diagram);
-            $row++;
-        }
-        $content = $title.$table->toHtml().$content;
-    }
 }
 
 $tpl = new Template($nameTools);

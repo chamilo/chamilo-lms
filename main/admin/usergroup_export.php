@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 $cidReset = true;
@@ -19,7 +20,7 @@ $form->addElement('header', $tool_name);
 $form->addButtonExport(get_lang('Export'));
 
 if ($form->validate()) {
-    $header = [['id', 'name', 'description', 'users']];
+    $header = [['id', 'name', 'description', 'users', 'courses', 'sessions']];
     $data = $userGroup->getDataToExport();
     $data = array_merge($header, $data);
     $filename = 'export_classes_'.api_get_local_time();

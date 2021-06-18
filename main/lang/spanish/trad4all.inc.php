@@ -432,13 +432,13 @@ $LatestVersionIs = "La última versión es";
 $YourVersionNotUpToDate = "Su versión no está actualizada";
 $Hotpotatoes = "Hotpotatoes";
 $ZeroMeansNoQuestionWillBeSelectedMinusOneMeansThatAllQuestionsWillBeSelected = "-1 = Todas las preguntas serán seleccionadas. 0 = Ninguna pregunta será seleccionada.";
-$EmailNotificationTemplateDescription = "Puede modificar el correo enviado a los usuarios al terminar el ejercicio. Puede usar los siguientes términos:
+$EmailNotificationTemplateDescription = "Puede modificar el correo enviado a los usuarios al terminar el ejercicio. Puede usar los siguientes términos: 
 
 {{ student.username }}
-{{ student.firstname }}
+{{ student.firstname }} 
 {{ student.lastname }}
-{{ student.official_code }}
-{{ exercise.title }}
+{{ student.official_code }} 
+{{ exercise.title }} 
 {{ exercise.start_time }}
 {{ exercise.end_time }}
 {{ course.title }}
@@ -6157,7 +6157,7 @@ $LastConnexionDate = "Fecha de la última conexión";
 $ToolVideoconference = "Videoconferencia";
 $BigBlueButtonEnableTitle = "Herramienta de videoconferencia BigBlueButton";
 $BigBlueButtonEnableComment = "Seleccione si desea habilitar la herramienta de videoconferencia BigBlueButton. Una vez activada, se mostrará como una herramienta en la página principal todos los curso. Los profesores podrán lanzar una videoconferencia en cualquier momento, pero los estudiantes sólo podrán unirse a una ya lanzada.
-Si no dispone de un servidor BigBlueButton, pruebe a
+Si no dispone de un servidor BigBlueButton, pruebe a 
 <a href=\"http://bigbluebutton.org/\" target=\"_blank\">configurar uno</a> o pida ayuda a los <a href=\"http://www.chamilo.org/en/providers\" target=\"_blank\">proveedores oficiales de Chamilo</a>.
 BigBlueButton es libre, pero su instalación requiere ciertas habilidades técnicas que no todo el mundo posee. Puede instalarlo por su cuenta o buscar ayuda profesional con el consiguiente costo. En la lógica del software libre, nosotros le ofrecemos las herramientas para hacer más fácil su trabajo y le recomendamos profesionales (los proveedores oficiales de Chamilo) que serán capaces de ayudarle.";
 $BigBlueButtonHostTitle = "Servidor BigBlueButton";
@@ -6175,7 +6175,7 @@ La carpeta de los usuarios y las carpetas que contiene de cada uno de ellos, se 
 
 Si se hace visible la carpeta de los usuarios y la carpeta de uno o más alumnos, el resto de los alumnos podrán ver todo su contenido. En este caso, el alumno propietario de la carpeta también podrá desde la herramienta documentos (sólo dentro de su carpeta): crear y editar documentos web, convertir un documento web en una plantilla para uso personal, crear y editar dibujos SVG y PNG, grabar archivos de audio en formato WAV, convertir texto en audio en formato MP3, realizar capturas a través de su webcam, enviar documentos, crear carpetas, mover carpetas y archivos, borrar carpetas y archivos, y descargar copias de seguridad de su carpeta.
 
-Por otra parte, la herramienta documentos se sincroniza con el gestor de archivos del editor web, así que los cambios en la gestión de los documentos realizados en una u otra afectarán a ambas.
+Por otra parte, la herramienta documentos se sincroniza con el gestor de archivos del editor web, así que los cambios en la gestión de los documentos realizados en una u otra afectarán a ambas. 
 
 Así pues, la carpeta de usuario no sólo es un lugar para depositar los archivos, sino que se convierte en un completo gestor de los documentos que los estudiantes utilizan durante el curso. Además, recuerde que cualquier usuario podrá copiar un archivo, que sea visible, de cualquier carpeta de la herramienta documentos (sea o no la suya) a su portafolios o área personal de documentos de la red social, donde estará disponible para que lo pueda usar en otros cursos.";
 $HelpFolderChat = "INFORMACIÓN SOLO VISIBLE POR EL PROFESORADO:\nEsta carpeta contiene todas las sesiones que se han realizado en el chat. Aunque muchas veces las sesiones en el chat pueden ser triviales, en otras pueden ser dignas de ser tratadas como un documento más de trabajo. Para ello, sin cambiar la visibilidad de esta carpeta, haga visible el archivo y enlácelo donde considere oportuno. No se recomienda hacer visible esta carpeta.";
@@ -8153,7 +8153,7 @@ $RegistrationRoleWhatDoYouWantToDo = "¿Qué deseas hacer?";
 $RegistrationRoleFollowCourses = "Seguir cursos";
 $RegistrationRoleTeachCourses = "Dictar cursos";
 $EditPortfolioItem = "Editar elemento del portafolio";
-$PortfolioItemAdded = "Elemento del portafolio editado";
+$PortfolioItemAdded = "Elemento del portafolio agregado";
 $ExploreMoreCourses = "Explorar más cursos";
 $LinksOfInterest = "Enlaces de interés";
 $ExportToChamiloFormat = "Exportación de la lección";
@@ -8798,4 +8798,20 @@ $ExportMytPortfolioDataZip = "Exportar los datos de mi portafolio a un archivo Z
 $NewLearningPathSubject = "Nueva lección publicada";
 $NewLearningPathBody = "Hay una nueva leccion llamada %s que ha sido agregada al curso %s. Acceder a la lección aqui: %s";
 $XPercentCompleted = "%s %% Completado";
+$EmailToTeachersWhenNewPost = "Enviar correo electrónico a los profesores sobre los nuevos artículos en la herramienta de portafolio";
+$PortfolioAlertNewPostContent = "Hay un nuevo artículo por %s en el portafolio del curso %s. Para verlo haga <a href='%s'>click aquí</a>.";
+$PortfolioAlertNewPostSubject = "[Portfolio] Nuevo artículo en el curso %s";
+$OngoingTraining = "Formación(es) en curso";
+$QuizRemindSubject = "Tienes un nuevo mensaje de %s";
+$QuizFirstRemindBody = "Hola \%s,<br /><br /> Un nuevo ejercicio %s ha sido agregado en el curso %s.<br /><br />Curso: %s <br />Ejercicio: %s <br />";
+$QuizLastRemindBody = "Visitar el ejercicio en <a href=\"%s\">%s</a><br />";
+$QuizDhrRemindBody = "Hola %s,<br /><br />Como padre, estan recibiendo este correo para avisarle que %s tiene un nuevo ejercicio %s en el curso %s.<br /><br />Estudiante: %s<br /> Curso: %s<br />Ejercicio: %s<br />";
+$QuizRemindDuration = "Duration del ejercicio: %s <br />";
+$QuizRemindStartDate = "Fecha de inicio del ejercicio: %s <br />";
+$QuizRemindEndDate = "Fecha de fin del ejercicio: %s <br />";
+$SuccessfulAttempt = "Intento exitoso";
+$FailedAttempt = "Intento fallido";
+$StudentWithSuccessfulAttempt = "Estudiantes con intento exitoso";
+$StudentWithFailedAttempt = "Estudiantes con intento fallido";
+$ExerciseAttemptStatsReport = "Reporte de intentos de ejercicio";
 ?>

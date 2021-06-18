@@ -318,9 +318,9 @@ class Exercise
     }
 
     /**
-     * returns the number of attempts setted.
+     * returns the maximum number of attempts set in the exercise configuration
      *
-     * @return int - exercise attempts
+     * @return int Maximum attempts allowed (0 if no limit)
      */
     public function selectAttempts()
     {
@@ -1838,7 +1838,6 @@ class Exercise
                 $sql = "UPDATE $table SET
                             question_order ='".$position."'
                         WHERE
-                            c_id = ".$this->course_id." AND
                             question_id = ".$questionId." AND
                             exercice_id=".$this->iid;
                 Database::query($sql);
@@ -3240,6 +3239,9 @@ class Exercise
     }
 
     /**
+     * Get the contents of the track_e_exercises table for the current
+     * exercise object, in the specific context (if defined) of a
+     * learning path and optionally a current progress status
      * @param int    $lp_id
      * @param int    $lp_item_id
      * @param int    $lp_item_view_id
@@ -3670,15 +3672,14 @@ class Exercise
     }
 
     /**
-     * This function was originally found in the exercise_show.php.
+     * Prepare, calculate result and save answer to the database by calling
+     * Event::saveQuestionAttempt() once everything is ready.
      *
      * @param int    $exeId
      * @param int    $questionId
      * @param mixed  $choice                                    the user-selected option
-     * @param string $from                                      function is called from 'exercise_show' or
-     *                                                          'exercise_result'
-     * @param array  $exerciseResultCoordinates                 the hotspot coordinates $hotspot[$question_id] =
-     *                                                          coordinates
+     * @param string $from                                      function is called from 'exercise_show' or 'exercise_result'
+     * @param array  $exerciseResultCoordinates                 the hotspot coordinates $hotspot[$question_id] = coordinates
      * @param bool   $save_results                              save results in the DB or just show the response
      * @param bool   $from_database                             gets information from DB or from the current selection
      * @param bool   $show_result                               show results or not
@@ -3829,14 +3830,14 @@ class Exercise
 
         $user_answer = '';
         // Get answer list for matching.
-        $sql = "SELECT id_auto, iid, answer
+        $sql = "SELECT iid, answer
                 FROM $table_ans
-                WHERE c_id = $course_id AND question_id = $questionId";
+                WHERE question_id = $questionId";
         $res_answer = Database::query($sql);
 
         $answerMatching = [];
         while ($real_answer = Database::fetch_array($res_answer)) {
-            $answerMatching[$real_answer['id_auto']] = $real_answer['answer'];
+            $answerMatching[$real_answer['iid']] = $real_answer['answer'];
         }
 
         // Get first answer needed for global question, no matter the answer shuffle option;
@@ -3846,7 +3847,7 @@ class Exercise
         ) {
             $sql = "SELECT *
                     FROM $table_ans
-                    WHERE c_id = $course_id AND question_id = $questionId
+                    WHERE question_id = $questionId
                     ORDER BY position
                     LIMIT 1";
             $result = Database::query($sql);
@@ -3883,11 +3884,11 @@ class Exercise
             $answerComment = $objAnswerTmp->selectComment($answerId);
             $answerCorrect = $objAnswerTmp->isCorrect($answerId);
             $answerWeighting = (float) $objAnswerTmp->selectWeighting($answerId);
-            $answerAutoId = $objAnswerTmp->selectAutoId($answerId);
+            $answerAutoId = $objAnswerTmp->selectId($answerId);
             $answerIid = isset($objAnswerTmp->iid[$answerId]) ? (int) $objAnswerTmp->iid[$answerId] : 0;
 
             if ($debug) {
-                error_log("c_quiz_answer.id_auto: $answerAutoId ");
+                error_log("c_quiz_answer.iid: $answerAutoId ");
                 error_log("Answer marked as correct in db (0/1)?: $answerCorrect ");
                 error_log("answerWeighting: $answerWeighting");
             }
@@ -4622,7 +4623,6 @@ class Exercise
                         $sql = "SELECT iid, answer, id_auto
                                 FROM $table_ans
                                 WHERE
-                                    c_id = $course_id AND
                                     question_id = $questionId AND
                                     correct = 0
                                 ";
@@ -4630,10 +4630,10 @@ class Exercise
                         // Getting the real answer
                         $real_list = [];
                         while ($realAnswer = Database::fetch_array($result)) {
-                            $real_list[$realAnswer['id_auto']] = $realAnswer['answer'];
+                            $real_list[$realAnswer['iid']] = $realAnswer['answer'];
                         }
 
-                        $orderBy = ' ORDER BY id_auto ';
+                        $orderBy = ' ORDER BY iid ';
                         if (DRAGGABLE == $answerType) {
                             $orderBy = ' ORDER BY correct ';
                         }
@@ -4641,7 +4641,6 @@ class Exercise
                         $sql = "SELECT iid, answer, correct, id_auto, ponderation
                                 FROM $table_ans
                                 WHERE
-                                    c_id = $course_id AND
                                     question_id = $questionId AND
                                     correct <> 0
                                 $orderBy";
@@ -4659,13 +4658,12 @@ class Exercise
                             $i_answer_id = $a_answers['iid']; //3
                             $s_answer_label = $a_answers['answer']; // your daddy - your mother
                             $i_answer_correct_answer = $a_answers['correct']; //1 - 2
-                            $i_answer_id_auto = $a_answers['id_auto']; // 3 - 4
 
                             $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
                                     WHERE
                                         exe_id = '$exeId' AND
                                         question_id = '$questionId' AND
-                                        position = '$i_answer_id_auto'";
+                                        position = '$i_answer_id'";
                             $result = Database::query($sql);
                             $s_user_answer = 0;
                             if (Database::num_rows($result) > 0) {
@@ -4682,8 +4680,8 @@ class Exercise
                                         $questionScore += $i_answerWeighting;
                                         $totalScore += $i_answerWeighting;
                                         $user_answer = Display::label(get_lang('Correct'), 'success');
-                                        if ($this->showExpectedChoice() && !empty($i_answer_id_auto)) {
-                                            $user_answer = $answerMatching[$i_answer_id_auto];
+                                        if ($this->showExpectedChoice() && !empty($i_answer_id)) {
+                                            $user_answer = $answerMatching[$i_answer_id];
                                         }
                                         $status = Display::label(get_lang('Correct'), 'success');
                                     } else {
@@ -4709,9 +4707,9 @@ class Exercise
 
                                         // Try with $i_answer_id_auto
                                         if (empty($user_answer)) {
-                                            if (isset($real_list[$i_answer_id_auto])) {
+                                            if (isset($real_list[$i_answer_id])) {
                                                 $user_answer = Display::span(
-                                                    $real_list[$i_answer_id_auto],
+                                                    $real_list[$i_answer_id],
                                                     ['style' => 'color: #008000; font-weight: bold;']
                                                 );
                                             }
@@ -7112,7 +7110,7 @@ class Exercise
     }
 
     /**
-     * Get question list depend on the random settings.
+     * Get sorted question list based on the random order settings.
      *
      * @return array
      */

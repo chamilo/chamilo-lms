@@ -157,12 +157,12 @@ class ExerciseLib
                     $cpt1 = [];
                     for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
                         $answerCorrect = $objAnswerTmp->isCorrect($answerId);
-                        $numAnswer = $objAnswerTmp->selectAutoId($answerId);
+                        $numAnswer = $objAnswerTmp->selectId($answerId);
                         if ($answerCorrect == 0) {
                             // options (A, B, C, ...) that will be put into the list-box
                             // have the "correct" field set to 0 because they are answer
                             $cpt1[$x] = $letter;
-                            $answer_matching[$x] = $objAnswerTmp->selectAnswerByAutoId($numAnswer);
+                            $answer_matching[$x] = $objAnswerTmp->selectAnswerById($numAnswer);
                             $x++;
                             $letter++;
                         }
@@ -173,7 +173,7 @@ class ExerciseLib
                     $select_items[0]['letter'] = '--';
                     $select_items[0]['answer'] = '';
                     foreach ($answer_matching as $id => $value) {
-                        $select_items[$i]['id'] = $value['id_auto'];
+                        $select_items[$i]['id'] = $value['iid'];
                         $select_items[$i]['letter'] = $cpt1[$id];
                         $select_items[$i]['answer'] = $value['answer'];
                         $i++;
@@ -483,7 +483,7 @@ class ExerciseLib
             for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
                 $answer = $objAnswerTmp->selectAnswer($answerId);
                 $answerCorrect = $objAnswerTmp->isCorrect($answerId);
-                $numAnswer = $objAnswerTmp->selectAutoId($answerId);
+                $numAnswer = $objAnswerTmp->selectId($answerId);
                 $comment = $objAnswerTmp->selectComment($answerId);
                 $attributes = [];
 

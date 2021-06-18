@@ -472,42 +472,4 @@ class SystemAnnouncementManager
 
         return $message_sent; //true if at least one e-mail was sent
     }
-
-    /**
-     * Get the HTML code for an announcement.
-     *
-     * @param int    $announcementId The announcement ID
-     */
-    public static function getAnnouncement($announcementId, ?User $user = null): array
-    {
-        $selectedUserLanguage = api_get_language_isocode();
-        $announcementTable = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
-        $now = api_get_utc_datetime();
-        $announcementId = (int) $announcementId;
-
-        $whereConditions = [
-            "(lang = ? OR lang IS NULL OR lang = '') " => $selectedUserLanguage,
-            "AND (? >= date_start AND ? <= date_end) " => [$now, $now],
-            "AND id = ? " => $announcementId,
-        ];
-
-        $condition = self::getVisibilityCondition($visibility);
-        $whereConditions[$condition] = 1;
-
-        if (api_is_multiple_url_enabled()) {
-            $whereConditions["AND access_url_id IN (1, ?) "] = api_get_current_access_url_id();
-        }
-
-        $announcement = Database::select(
-            '*',
-            $announcementTable,
-            [
-                'where' => $whereConditions,
-                'order' => 'date_start',
-            ],
-            'first'
-        );
-
-        return $announcement;
-    }
 }

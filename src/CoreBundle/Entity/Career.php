@@ -114,7 +114,7 @@ class Career
         return $this->promotions;
     }
 
-    public function setPromotions(array | ArrayCollection | Collection $promotions): self
+    public function setPromotions(Collection $promotions): self
     {
         $this->promotions = $promotions;
 

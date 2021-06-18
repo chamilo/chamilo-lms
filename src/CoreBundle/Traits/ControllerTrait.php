@@ -125,7 +125,7 @@ trait ControllerTrait
     {
         $urlId = $this->getRequest()->getSession()->get('access_url_id');
 
-        return $this->getDoctrine()->getRepository(AccessUrl::class)->find($urlId);
+        return $this->container->get('doctrine')->getRepository(AccessUrl::class)->find($urlId);
     }
 
     /**

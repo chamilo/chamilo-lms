@@ -2057,8 +2057,28 @@ if ($allowMessages === true) {
     $form->display();
 }
 
+$coachAccessStartDate = null;
+$coachAccessEndDate = null;
+
+if (!empty($sessionId)) {
+    $filterMessages = api_get_configuration_value('filter_interactivity_messages');
+
+    if ($filterMessages) {
+        $sessionInfo = api_get_session_info($sessionId);
+        if (!empty($sessionInfo)) {
+            $coachAccessStartDate = $sessionInfo['coach_access_start_date'];
+            $coachAccessEndDate = $sessionInfo['coach_access_end_date'];
+        }
+    }
+}
+
 $allow = api_get_configuration_value('allow_user_message_tracking');
 if ($allow && (api_is_drh() || api_is_platform_admin())) {
+    if ($filterMessages) {
+        $users = MessageManager::getUsersThatHadConversationWithUser($student_id, $coachAccessStartDate, $coachAccessEndDate);
+    } else {
+        $users = MessageManager::getUsersThatHadConversationWithUser($student_id);
+    }
     $users = MessageManager::getUsersThatHadConversationWithUser($student_id);
     echo Display::page_subheader2(get_lang('MessageTracking'));
 
@@ -2076,7 +2096,13 @@ if ($allow && (api_is_drh() || api_is_platform_admin())) {
     $row++;
     foreach ($users as $userFollowed) {
         $followedUserId = $userFollowed['user_id'];
-        $url = api_get_path(WEB_CODE_PATH).'tracking/messages.php?from_user='.$student_id.'&to_user='.$followedUserId;
+
+        if ($filterMessages) {
+            $url = api_get_path(WEB_CODE_PATH).'tracking/messages.php?from_user='.$student_id.'&to_user='.$followedUserId.'&start_date='.$coachAccessStartDate.'&end_date='.$coachAccessEndDate;
+        } else {
+            $url = api_get_path(WEB_CODE_PATH).'tracking/messages.php?from_user='.$student_id.'&to_user='.$followedUserId;
+        }
+
         $link = Display::url(
             $userFollowed['complete_name'],
             $url

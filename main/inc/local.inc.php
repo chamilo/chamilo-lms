@@ -1300,8 +1300,22 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
 
         // We are in a session course? Check session permissions
         if (!empty($session_id)) {
-            if (!empty($session_id) && !empty($_course)) {
+            if (!empty($_course)) {
                 if (!SessionManager::relation_session_course_exist($session_id, $_course['real_id'])) {
+                    // Deleting all access.
+                    Session::erase('session_name');
+                    Session::erase('id_session');
+                    Session::erase('_real_cid');
+                    Session::erase('_cid');
+                    Session::erase('_course');
+                    Session::erase('_gid');
+                    Session::erase('is_courseAdmin');
+                    Session::erase('is_courseMember');
+                    Session::erase('is_courseTutor');
+                    Session::erase('is_session_general_coach');
+                    Session::erase('is_allowed_in_course');
+                    Session::erase('is_sessionAdmin');
+
                     api_not_allowed(true);
                 }
             }

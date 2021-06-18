@@ -1186,6 +1186,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     }
 
     $isAllowedInCourse = api_is_allowed_in_course();
+
     $is_visible = false;
     if (isset($course_info) && isset($course_info['visibility'])) {
         switch ($course_info['visibility']) {
@@ -1245,6 +1246,11 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     if (!empty($session_id)) {
         // $isAllowedInCourse was set in local.inc.php
         if (!$isAllowedInCourse) {
+            $is_visible = false;
+        }
+
+        // Check if course is inside session.
+        if (!SessionManager::relation_session_course_exist($session_id, $course_info['real_id'])) {
             $is_visible = false;
         }
     }
@@ -3935,7 +3941,12 @@ function api_not_allowed(
         $show_headers = 1;
     }
 
-    $tpl = new Template(null, $show_headers, $show_headers, false, true, false, true, $responseCode);
+    $hideBreadCrumb = false;
+    if (api_get_configuration_value('hide_breadcrumb_if_not_allowed')) {
+        $hideBreadCrumb = true;
+    }
+
+    $tpl = new Template(null, $show_headers, $show_headers, $hideBreadCrumb, true, false, true, $responseCode);
     $tpl->assign('hide_login_link', 1);
     $tpl->assign('content', $msg);
 

@@ -8,7 +8,7 @@ use ChamiloSession as Session;
  * Exercise administration
  * This script allows to manage (create, modify) an exercise and its questions.
  *
- *  Following scripts are includes for a best code understanding :
+ *  The following scripts are included :
  *
  * - exercise.class.php : for the creation of an Exercise object
  * - question.class.php : for the creation of a Question object
@@ -65,6 +65,7 @@ if (!$is_allowedToEdit) {
     api_not_allowed(true);
 }
 
+// Variables sanitizing
 $exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : 0;
 
 $newQuestion = isset($_GET['newQuestion']) ? $_GET['newQuestion'] : 0;
@@ -116,7 +117,6 @@ $picturePath = $documentPath.'/images';
 // audio path
 $audioPath = $documentPath.'/audio';
 
-// tables used in the exercise tool
 if (!empty($_GET['action']) && $_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
     require_once 'export/qti2/qti2_export.php';
     $export = export_question_qti($_GET['questionId'], true);
@@ -167,7 +167,7 @@ if ($objExercise->sessionId != $sessionId) {
     api_not_allowed(true);
 }
 
-// doesn't select the exercise ID if we come from the question pool
+// Do not select the exercise ID if we come from the question pool
 if (!$fromExercise) {
     // gets the right exercise ID, and if 0 creates a new exercise
     if (!$exerciseId = $objExercise->selectId()) {
@@ -225,6 +225,7 @@ if ($cancelQuestion) {
     }
 }
 
+// Cloning/copying a question
 if (!empty($clone_question) && !empty($objExercise->iid)) {
     $old_question_obj = Question::read($clone_question);
     $old_question_obj->question = $old_question_obj->question.' - '.get_lang('Copy');
@@ -344,6 +345,7 @@ if ($inATest) {
         href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->iid.'">'.
         Display::return_icon('settings.png', get_lang('ModifyExercise'), '', ICON_SIZE_MEDIUM).'</a>';
 
+    // Get the cumulative max score of all questions to show it in the upper bar to the editor
     $maxScoreAllQuestions = 0;
     if ($showPagination === false) {
         $questionList = $objExercise->selectQuestionList(true, $objExercise->random > 0 ? false : true);
@@ -361,6 +363,7 @@ if ($inATest) {
     if ($objExercise->added_in_lp()) {
         echo Display::return_message(get_lang('AddedToLPCannotBeAccessed'), 'warning');
     }
+    // If the question is used in another test, show a warning to the editor
     if ($editQuestion && $objQuestion->existsInAnotherExercise()) {
         echo Display::return_message(
             Display::returnFontAwesomeIcon('exclamation-triangle"')

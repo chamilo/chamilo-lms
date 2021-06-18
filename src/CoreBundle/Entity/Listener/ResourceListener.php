@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceRight;
+use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\ResourceWithAccessUrlInterface;
 use Chamilo\CoreBundle\Entity\Session;
@@ -76,15 +77,11 @@ class ResourceListener
             }
         }
 
-        if ($resource->hasResourceNode()) {
-            // This will attach the resource to the main resource node root (For example a Course).
-            /*if ($resource instanceof ResourceToRootInterface) {
-                $url = $this->getAccessUrl($em);
-                $resource->getResourceNode()->setParent($url->getResourceNode());
-            }
-            error_log('resource has already a resource node. Do nothing');
-            // Do not override resource node, it's already added.
-            return true;*/
+        //if ($resource->hasResourceNode()) {
+        // This will attach the resource to the main resource node root (For example a Course).
+        if ($resource instanceof ResourceToRootInterface) {
+            $accessUrl = $this->getAccessUrl($em, $request);
+            $resource->setParent($accessUrl);
         }
 
         // Check if creator was set with $resource->setCreator()

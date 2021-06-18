@@ -2065,8 +2065,10 @@ if (!empty($sessionId)) {
 
     if ($filterMessages) {
         $sessionInfo = api_get_session_info($sessionId);
-        $coachAccessStartDate = $sessionInfo['coach_access_start_date'];
-        $coachAccessEndDate = $sessionInfo['coach_access_end_date'];
+        if (!empty($sessionInfo)) {
+            $coachAccessStartDate = $sessionInfo['coach_access_start_date'];
+            $coachAccessEndDate = $sessionInfo['coach_access_end_date'];
+        }
     }
 }
 

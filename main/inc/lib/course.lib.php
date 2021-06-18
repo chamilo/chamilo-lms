@@ -5382,7 +5382,7 @@ class CourseManager
                 $my_course['unsubscribe_button'] = Display::url(
                     get_lang('Unreg').' '.
                     Display::returnFontAwesomeIcon('sign-out'),
-                    api_get_path(WEB_CODE_PATH).'auth/courses.php?action=unsubscribe&unsubscribe='.$courseCode
+                    api_get_path(WEB_CODE_PATH).'auth/courses.php?action=unsubscribe&course_code='.$courseCode
                     .'&sec_token='.$stok.'&category_code='.$categoryCode,
                     [
                         'class' => 'btn btn-danger btn-sm',

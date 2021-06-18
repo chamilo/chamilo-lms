@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Traits;
 
 use Chamilo\CoreBundle\Component\Utils\Glide;
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
@@ -103,10 +104,8 @@ trait ControllerTrait
 
     /**
      * Translator shortcut.
-     *
-     * @return string
      */
-    public function trans(string $variable)
+    public function trans(string $variable): string
     {
         /** @var TranslatorInterface $translator */
         $translator = $this->container->get('translator');
@@ -120,6 +119,13 @@ trait ControllerTrait
     public function getGlide()
     {
         return $this->container->get('glide');
+    }
+
+    public function getAccessUrl(): ?AccessUrl
+    {
+        $urlId = $this->getRequest()->getSession()->get('access_url_id');
+
+        return $this->container->get('doctrine')->getRepository(AccessUrl::class)->find($urlId);
     }
 
     /**

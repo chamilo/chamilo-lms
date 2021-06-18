@@ -16,6 +16,10 @@ doctrine:
         types:
             json: Doctrine\DBAL\Types\JsonType
             uuid: Symfony\Bridge\Doctrine\Types\UuidType
+            datetime: SimPod\DoctrineUtcDateTime\UTCDateTimeType
+            datetimetz: SimPod\DoctrineUtcDateTime\UTCDateTimeType
+            datetime_immutable: SimPod\DoctrineUtcDateTime\UTCDateTimeImmutableType
+            datetimetz_immutable: SimPod\DoctrineUtcDateTime\UTCDateTimeImmutableType
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware

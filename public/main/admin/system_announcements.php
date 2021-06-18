@@ -109,11 +109,11 @@ switch ($action) {
             $status = true;
         }
 
-        SystemAnnouncementManager::set_visibility(
+        /*SystemAnnouncementManager::set_visibility(
             $_GET['id'],
             $_GET['person'],
             $status
-        );
+        );*/
         echo Display::return_message(get_lang('Update successful'), 'confirmation');
         break;
     case 'delete':
@@ -325,14 +325,6 @@ if ($action_todo) {
 
     if ($form->validate()) {
         $values = $form->getSubmitValues();
-        /*$visibilityResult = [];
-        foreach ($visibleList as $key => $value) {
-            if (!isset($values[$key])) {
-                $values[$key] = false;
-            }
-            $visibilityResult[$key] = (int) $values[$key];
-        }*/
-
         if ('all' === $values['lang']) {
             $values['lang'] = null;
         }
@@ -371,10 +363,12 @@ if ($action_todo) {
                             [$values['group']]
                         );
                     }
-                    Display::addFlash(Display::return_message(
-                        get_lang('Announcement has been added'),
-                        'confirmation'
-                    ));
+                    Display::addFlash(
+                        Display::return_message(
+                            get_lang('Announcement has been added'),
+                            'confirmation'
+                        )
+                    );
                 }
 
                 api_location(api_get_self());
@@ -397,7 +391,7 @@ if ($action_todo) {
                     $deletePicture = $values['delete_picture'] ?? '';
 
                     if ($deletePicture) {
-                        SystemAnnouncementManager::deleteAnnouncementPicture($values['id']);
+                        //SystemAnnouncementManager::deleteAnnouncementPicture($values['id']);
                     } else {
                         // @todo
                         /*$picture = $_FILES['picture'];
@@ -438,27 +432,22 @@ if ($action_todo) {
 }
 
 if ($show_announcement_list) {
-    $criteria = [ 'url' => api_get_url_entity()];
+    $criteria = ['url' => api_get_url_entity()];
     $announcements = $repo->findBy($criteria);
     $announcement_data = [];
     /** @var SysAnnouncement $announcement */
     foreach ($announcements as $announcement) {
         $row = [];
         $row[] = $announcement->getId();
-        $row[] = Display::return_icon(($announcement->isVisible() ? 'accept.png' : 'exclamation.png'), ($announcement->isVisible() ? get_lang('The announcement is available') : get_lang('The announcement is not available')));
+        $row[] = Display::return_icon(
+            ($announcement->isVisible() ? 'accept.png' : 'exclamation.png'),
+            ($announcement->isVisible() ? get_lang('The announcement is available') : get_lang(
+                'The announcement is not available'
+            ))
+        );
         $row[] = $announcement->getTitle();
         $row[] = api_convert_and_format_date($announcement->getDateStart());
         $row[] = api_convert_and_format_date($announcement->getDateEnd());
-
-        //$data = (array) $announcement;
-        $roles = [];
-        /*foreach ($visibleList as $key => $value) {
-            $value = $data[$key];
-            $action = $value ? 'make_invisible' : 'make_visible';
-            $row[] = "<a href=\"?id=".$announcement->id."&person=".$key."&action=".$action."\">".
-                Display::return_icon(($value ? 'eyes.png' : 'eyes-close.png'), get_lang('Show/Hide'))."</a>";
-        }*/
-
         $row[] = implode(', ', $announcement->getRoles());
 
         /*$row[] = "<a href=\"?id=".$announcement->id."&person=".SystemAnnouncementManager::VISIBLE_TEACHER."&action=".($announcement->visible_teacher ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_teacher ? 'eyes.png' : 'eyes-close.png'), get_lang('Show/Hide'))."</a>";
@@ -482,15 +471,8 @@ if ($show_announcement_list) {
     $table->set_header(3, get_lang('Start'));
     $table->set_header(4, get_lang('End'));
     $table->set_header(5, get_lang('Roles'));
-
-    $count = 6;
-    /*foreach ($visibleList as $key => $title) {
-        $table->set_header($count, $title);
-        $count++;
-    }*/
-
-    $table->set_header($count++, get_lang('Language'));
-    $table->set_header($count++, get_lang('Edit'), false, 'width="50px"');
+    $table->set_header(6, get_lang('Language'));
+    $table->set_header(7, get_lang('Edit'), false, 'width="50px"');
     $form_actions = [];
     $form_actions['delete_selected'] = get_lang('Delete');
     $table->set_form_actions($form_actions);

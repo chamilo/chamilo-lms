@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -46,9 +48,19 @@ class Career
      */
     protected int $status;
 
+    /**
+     * @var Collection|Promotion[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\Promotion", mappedBy="career", cascade={"persist"}
+     * )
+     */
+    protected Collection $promotions;
+
     public function __construct()
     {
         $this->status = self::CAREER_STATUS_ACTIVE;
+        $this->promotions = new ArrayCollection();
     }
 
     /**
@@ -68,12 +80,7 @@ class Career
         return $this;
     }
 
-    /**
-     * Get name.
-     *
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -100,5 +107,17 @@ class Career
     public function getStatus(): int
     {
         return $this->status;
+    }
+
+    public function getPromotions(): array | ArrayCollection | Collection
+    {
+        return $this->promotions;
+    }
+
+    public function setPromotions(Collection $promotions): self
+    {
+        $this->promotions = $promotions;
+
+        return $this;
     }
 }

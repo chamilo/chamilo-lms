@@ -11,13 +11,11 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
-use Database;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
-use Exception;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -38,9 +36,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity("name")
  */
 #[ApiResource(
-    attributes: [
-        'security' => "is_granted('ROLE_ADMIN')",
-    ],
     collectionOperations: [
         'get' => [
             'security' => "is_granted('ROLE_ADMIN')",
@@ -57,11 +52,14 @@ use Symfony\Component\Validator\Constraints as Assert;
             'security' => "is_granted('ROLE_ADMIN')",
         ],
     ],
-    normalizationContext: [
-        'groups' => ['session:read'],
+    attributes: [
+        'security' => "is_granted('ROLE_ADMIN')",
     ],
     denormalizationContext: [
         'groups' => ['session:write'],
+    ],
+    normalizationContext: [
+        'groups' => ['session:read'],
     ],
 )]
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'partial'])]
@@ -311,7 +309,7 @@ class Session implements ResourceWithAccessUrlInterface
 
     public function __toString(): string
     {
-        return (string) $this->getName();
+        return $this->getName();
     }
 
     public function getDuration(): int
@@ -446,19 +444,6 @@ class Session implements ResourceWithAccessUrlInterface
     }
 
     /**
-     * Check for existence of a relation (SessionRelCourse) between a course and this session.
-     *
-     * @return bool whether the course is related to this session
-     */
-    public function isRelatedToCourse(Course $course): bool
-    {
-        return null !== Database::getManager()->getRepository(SessionRelCourse::class)->findOneBy([
-            'session' => $this,
-            'course' => $course,
-        ]);
-    }
-
-    /**
      * Remove $course.
      */
     public function removeCourses(SessionRelCourse $course): void
@@ -500,10 +485,7 @@ class Session implements ResourceWithAccessUrlInterface
         return $relation->count() > 0;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasStudentInCourse(User $user, Course $course)
+    public function hasStudentInCourse(User $user, Course $course): bool
     {
         return $this->hasUserInCourse($user, $course, self::STUDENT);
     }
@@ -535,7 +517,18 @@ class Session implements ResourceWithAccessUrlInterface
         return $this->getSessionRelCourseRelUsers()->matching($criteria);
     }
 
-    public function getCoursesByUser(User $user, $status = null): Collection
+    public function getAllUsersFromCourse(int $status): Collection
+    {
+        $criteria = Criteria::create()
+            ->where(
+                Criteria::expr()->eq('status', $status)
+            )
+        ;
+
+        return $this->getSessionRelCourseRelUsers()->matching($criteria);
+    }
+
+    public function getSessionRelCourseByUser(User $user, $status = null): Collection
     {
         $criteria = Criteria::create()
             ->where(
@@ -559,12 +552,7 @@ class Session implements ResourceWithAccessUrlInterface
         return $this;
     }
 
-    /**
-     * Get name.
-     *
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -816,11 +804,7 @@ class Session implements ResourceWithAccessUrlInterface
      */
     public function isCurrentlyAccessible(): bool
     {
-        try {
-            $now = new Datetime();
-        } catch (Exception $exception) {
-            return false;
-        }
+        $now = new Datetime();
 
         return
             (null === $this->accessStartDate || $this->accessStartDate < $now) &&
@@ -865,7 +849,6 @@ class Session implements ResourceWithAccessUrlInterface
     public function setSessionRelCourseRelUsers(Collection $sessionRelCourseRelUsers): self
     {
         $this->sessionRelCourseRelUsers = new ArrayCollection();
-
         foreach ($sessionRelCourseRelUsers as $item) {
             $this->addSessionRelCourseRelUser($item);
         }

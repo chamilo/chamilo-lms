@@ -352,6 +352,17 @@ if ($form->validate()) {
         )
     );
 
+    Display::addFlash(
+        Display::return_message(
+            sprintf(
+                get_lang('To assign a new skill to this user, click <a href="%s">here</a>'),
+                api_get_self().'?'.http_build_query(['user' => $user->getId()])
+            ),
+            'info',
+            false
+        )
+    );
+
     header('Location: '.api_get_path(WEB_PATH)."badge/{$skillUser->getId()}");
     exit;
 }

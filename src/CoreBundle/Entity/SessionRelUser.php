@@ -140,7 +140,7 @@ class SessionRelUser
 
     public function getCourses()
     {
-        return $this->session->getCoursesByUser($this->getUser());
+        return $this->session->getSessionRelCourseByUser($this->getUser());
     }
 
     public function getId(): int

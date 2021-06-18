@@ -123,7 +123,7 @@ abstract class AbstractTool implements ToolInterface
         return ucfirst(str_replace('_', ' ', $this->nameToShow));
     }
 
-    public function setNameToShow(string $nameToShow): AbstractTool
+    public function setNameToShow(string $nameToShow): self
     {
         $this->nameToShow = $nameToShow;
 

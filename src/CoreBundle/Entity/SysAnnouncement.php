@@ -316,6 +316,11 @@ class SysAnnouncement
         return $this;
     }
 
+    public function hasCareer(): bool
+    {
+        return null !== $this->career;
+    }
+
     public function getCareer(): ?Career
     {
         return $this->career;
@@ -326,6 +331,11 @@ class SysAnnouncement
         $this->career = $career;
 
         return $this;
+    }
+
+    public function hasPromotion(): bool
+    {
+        return null !== $this->promotion;
     }
 
     public function getPromotion(): ?Promotion

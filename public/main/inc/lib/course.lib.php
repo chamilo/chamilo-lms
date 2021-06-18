@@ -1149,7 +1149,7 @@ class CourseManager
                 return false;
             }
             foreach ($user->getStudentSessions() as $session) {
-                if ($session->isRelatedToCourse($course)) {
+                if ($session->hasCourse($course)) {
                     return true;
                 }
             }

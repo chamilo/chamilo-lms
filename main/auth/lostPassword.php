@@ -69,7 +69,7 @@ if ($allowCaptcha) {
             //'output' => 'gif'
         ],
     ];
-
+    $form->setLayout('inline');
     $captcha_question = $form->addElement(
         'CAPTCHA_Image',
         'captcha_question',

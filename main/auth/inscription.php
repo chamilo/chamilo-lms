@@ -394,7 +394,7 @@ if ($user_already_registered_show_terms === false &&
                 //'output' => 'gif'
             ],
         ];
-
+        $form->setLayout('inline');
         $captcha_question = $form->addElement(
             'CAPTCHA_Image',
             'captcha_question',

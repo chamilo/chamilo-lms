@@ -1955,6 +1955,9 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 // Requires a user checkbox extra field called "ask_new_password".
 //$_configuration['force_renew_password_at_first_login'] = true;
 
+// If the user is blocked with not allowed (red message), then the breadcrumb is hidden.
+//$_configuration['hide_breadcrumb_if_not_allowed'] = true;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

@@ -10548,3 +10548,14 @@ ul.dropdown-menu.inner > li > a {
 .form-inline .bootstrap-select.form-control:not([class*="col-"]) {
     width: 100%;
 }
+
+.youtube-embed-wrapper {
+    position: relative;
+}
+.youtube-embed-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}

@@ -2881,8 +2881,8 @@ class MessageManager
 
     /**
      * @param int      $userId
-     * @param datetime $dateStart
-     * @param datetime $dateFinish
+     * @param datetime $startDate
+     * @param datetime $endDate
      *
      * @return array
      */
@@ -2890,8 +2890,6 @@ class MessageManager
     {
         $messagesTable = Database::get_main_table(TABLE_MESSAGE);
         $userId = (int) $userId;
-        $startDate = Database::escape_string($startDate);
-        $endDate = Database::escape_string($endDate);
 
         $sql = "SELECT DISTINCT
                     user_sender_id
@@ -2900,10 +2898,12 @@ class MessageManager
                     user_receiver_id = ".$userId;
 
         if ($startDate != null) {
+            $startDate = Database::escape_string($startDate);
             $sql .= " AND send_date >= '".$startDate."'";
         }
 
         if ($endDate != null) {
+            $endDate = Database::escape_string($endDate);
             $sql .= " AND send_date <= '".$endDate."'";
         }
 
@@ -2927,8 +2927,8 @@ class MessageManager
     /**
      * @param int      $userId
      * @param int      $otherUserId
-     * @param datetime $dateStart
-     * @param datetime $dateFinish
+     * @param datetime $startDate
+     * @param datetime $endDate
      *
      * @return array
      */
@@ -2937,8 +2937,6 @@ class MessageManager
         $messagesTable = Database::get_main_table(TABLE_MESSAGE);
         $userId = (int) $userId;
         $otherUserId = (int) $otherUserId;
-        $startDate = Database::escape_string($startDate);
-        $endDate = Database::escape_string($endDate);
 
         if (empty($otherUserId) || empty($userId)) {
             return [];
@@ -2951,12 +2949,12 @@ class MessageManager
                     (user_receiver_id = $otherUserId AND user_sender_id = $userId))
             ";
         if ($startDate != null) {
-            $dateStart = Database::escape_string($startDate);
-            $sql .= " AND send_date >= '".$dateStart."'";
+            $startDate = Database::escape_string($startDate);
+            $sql .= " AND send_date >= '".$startDate."'";
         }
         if ($endDate != null) {
-            $dateFinish = Database::escape_string($endDate);
-            $sql .= " AND send_date <= '".$dateFinish."'";
+            $endDate = Database::escape_string($endDate);
+            $sql .= " AND send_date <= '".$endDate."'";
         }
         $sql .= " ORDER BY send_date DESC";
         $result = Database::query($sql);

@@ -46,10 +46,10 @@ class SysAnnouncementRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('s');
         $qb
-            ->andWhere(' s.lang IS NULL OR s.lang = :iso')
+            ->andWhere('s.lang IS NULL OR s.lang = :lang OR s.lang = :empty')
             ->andWhere('s.url = :url')
             ->setParameters(
-                ['url' => $url, 'iso' => $iso]
+                ['url' => $url, 'lang' => $iso, 'empty' => '']
             )
         ;
 
@@ -69,6 +69,7 @@ class SysAnnouncementRepository extends ServiceEntityRepository
         $qb = $this->getAnnouncementsQueryBuilder($iso, $url, $user);
 
         $announcements = $qb->getQuery()->getResult();
+
         $cutSize = 500;
         $list = [];
         if (!empty($announcements)) {
@@ -150,25 +151,30 @@ class SysAnnouncementRepository extends ServiceEntityRepository
         return $list;
     }
 
-    public function addRoleListQueryBuilder(array $roleList, QueryBuilder $qb = null): QueryBuilder
+    public function addRoleListQueryBuilder(array $roles, QueryBuilder $qb = null): QueryBuilder
     {
-        $qb = $this->getOrCreateQueryBuilder($qb, 's');
-        if (!empty($roleList)) {
-            $qb
-                ->andWhere('s.roles IN (:roles) OR s.roles IN (:anon)')
-                ->setParameter('roles', $roleList, Types::ARRAY)
-                ->setParameter('anon', ['ROLE_ANONYMOUS'], Types::ARRAY)
-            ;
+        $qb = $this->getOrCreateQueryBuilder($qb);
+
+        $conditions[] = $qb->expr()->like('s.roles', $qb->expr()->literal('%ROLE_ANONYMOUS%'));
+
+        if (!empty($roles)) {
+            foreach ($roles as $role) {
+                $conditions[] = $qb->expr()->like('s.roles', $qb->expr()->literal('%'.$role.'%'));
+            }
         }
+
+        $orX = $qb->expr()->orX();
+        $orX->addMultiple($conditions);
+        $qb->andWhere($orX);
 
         return $qb;
     }
 
     public function addDateQueryBuilder(QueryBuilder $qb = null): QueryBuilder
     {
-        $qb = $this->getOrCreateQueryBuilder($qb, 's');
+        $qb = $this->getOrCreateQueryBuilder($qb);
         $qb
-            ->andWhere('s.dateStart IS NULL OR s.dateEnd > :now')
+            ->andWhere('s.dateStart <= :now AND s.dateEnd > :now')
             ->setParameter('now', new Datetime(), Types::DATETIME_MUTABLE)
         ;
 

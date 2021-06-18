@@ -4,7 +4,7 @@ ignore: |
     .codeclimate.yml
     public/libs/*
     public/plugin/test2pdf/*
-    src/CoreBundle/Traits/Repository/ORM
+    src/CoreBundle/Traits/Repository/ORM/*
 
 extends: default
 rules:

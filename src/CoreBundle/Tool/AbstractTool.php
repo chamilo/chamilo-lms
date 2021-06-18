@@ -19,6 +19,11 @@ abstract class AbstractTool implements ToolInterface
     /**
      * @Groups({"ctool:read"})
      */
+    protected string $nameToShow;
+
+    /**
+     * @Groups({"ctool:read"})
+     */
     protected string $icon;
     protected string $category;
     protected string $link;
@@ -45,6 +50,7 @@ abstract class AbstractTool implements ToolInterface
         ?array $resourceTypes = []
     ) {
         $this->name = $name;
+        $this->nameToShow = $name;
         $this->category = $category;
         $this->link = $link;
         $this->image = $name.'.png';
@@ -108,6 +114,18 @@ abstract class AbstractTool implements ToolInterface
     public function setIcon(string $icon): self
     {
         $this->icon = $icon;
+
+        return $this;
+    }
+
+    public function getNameToShow(): string
+    {
+        return ucfirst(str_replace('_', ' ', $this->nameToShow));
+    }
+
+    public function setNameToShow(string $nameToShow): AbstractTool
+    {
+        $this->nameToShow = $nameToShow;
 
         return $this;
     }

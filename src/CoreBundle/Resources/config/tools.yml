@@ -185,7 +185,8 @@ services:
     chamilo_core.tool.document:
         class: Chamilo\CoreBundle\Tool\Document
         calls:
-            -   setIcon: [ 'mdi-bookshelf' ]
+            - setIcon: [ 'mdi-bookshelf' ]
+            - setNameToShow: ['Documents']
         arguments:
             - 'document'
             - 'authoring'
@@ -215,7 +216,8 @@ services:
     chamilo_core.tool.exercise:
         class: Chamilo\CoreBundle\Tool\Exercise
         calls:
-            -   setIcon: [ 'mdi-ballot' ]
+            - setIcon: ['mdi-ballot']
+            - setNameToShow: ['Tests']
         arguments:
             - 'quiz'
             - 'authoring'
@@ -293,7 +295,8 @@ services:
     chamilo_core.tool.group:
         class: Chamilo\CoreBundle\Tool\Group
         calls:
-            -   setIcon: [ 'mdi-account-group' ]
+            - setIcon: [ 'mdi-account-group' ]
+            - setNameToShow: [ 'Groups' ]
         arguments:
             - 'group'
             - 'interaction'
@@ -346,7 +349,8 @@ services:
     chamilo_core.tool.member:
         class: Chamilo\CoreBundle\Tool\Member
         calls:
-            -   setIcon: [ 'mdi-account' ]
+            - setIcon: [ 'mdi-account' ]
+            - setNameToShow: ['Students']
         arguments:
             - 'member'
             - 'interaction'

@@ -22,7 +22,8 @@
         <a
             :href="goToCourseTool(course, tool)"
         >
-          {{ tool.ctool.nameToTranslate }}
+<!--          {{ tool.ctool.nameToTranslate }} -->
+          {{ tool.tool.nameToShow }}
         </a>
 
         <button v-if="isCurrentTeacher && changeVisibility" @click="changeVisibility(course, tool)">

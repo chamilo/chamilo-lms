@@ -76,7 +76,7 @@ class SkillRelUser
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Level")
      * @ORM\JoinColumn(name="acquired_level", referencedColumnName="id")
      */
-    protected Level $acquiredLevel;
+    protected ?Level $acquiredLevel = null;
 
     /**
      * @ORM\Column(name="acquired_skill_at", type="datetime", nullable=false)
@@ -110,6 +110,7 @@ class SkillRelUser
     {
         $this->validationStatus = 0;
         $this->comments = new ArrayCollection();
+        $this->acquiredLevel = null;
     }
 
     /**

@@ -105,6 +105,7 @@
         "phpoffice/phpword": "~0.18",
         "sabre/vobject": "~4.2",
         "sensio/framework-extra-bundle": "~6.1",
+        "simpod/doctrine-utcdatetime": "^0.1.2",
         "sonata-project/exporter": "^2.2",
         "stof/doctrine-extensions-bundle": "~1.4",
         "sunra/php-simple-html-dom-parser": "~1.5",

@@ -1,9 +1,8 @@
 /* For licensing terms, see /license.txt */
 
 // Load symfony routes in order to use it in a js
-const routes = require('../../public/js/fos_js_routes.json');
-import Routing from '../../vendor/friendsofsymfony/jsrouting-bundle/Resources/public/js/router.min.js';
-//import $ from 'jquery';
+ //const routes = require('../../public/js/fos_js_routes.json');
+//import Routing from '../../vendor/friendsofsymfony/jsrouting-bundle/Resources/public/js/router.min.js';
 const $ = require('jquery');
 
 window.jQuery = $;
@@ -11,7 +10,7 @@ window.$ = $;
 global.jQuery = $;
 global.$ = global.jQuery = $
 
-Routing.setRoutingData(routes);
+//Routing.setRoutingData(routes);
 
 const locale = document.querySelector('html').lang;
 // moment
@@ -40,8 +39,6 @@ window.setContentFromEditor = function (id, content) {
 };
 
 //require('flatpickr');
-//import('bootstrap-vue');
-import('bootstrap');
 require('webpack-jquery-ui');
 require('webpack-jquery-ui/css');
 
@@ -52,7 +49,7 @@ require('webpack-jquery-ui/css');
 
 require('./vendor');
 import './main';
-require('bootstrap-daterangepicker');
+import('bootstrap-daterangepicker');
 import('qtip2');
 //require('bootstrap-daterangepicker/daterangepicker.js');
 

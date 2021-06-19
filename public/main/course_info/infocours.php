@@ -168,8 +168,9 @@ if ('true' === api_get_setting('allow_course_theme')) {
     $group[] = $form->createElement(
         'SelectTheme',
         'course_theme',
-        null,
-        ['id' => 'course_theme_id']
+        [],
+        ['id' => 'course_theme_id'],
+        []
     );
     $form->addGroup($group, '', [get_lang('Style sheets')]);
 }

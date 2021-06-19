@@ -209,7 +209,7 @@ function display_move_form(
     foreach ($target as $category) {
         $options[$category['cat_id']] = $category['cat_name'];
     }
-    $form->addElement('select', 'move_target', get_lang('Move file to'), $options);
+    $form->addSelect('move_target', get_lang('Move file to'), $options);
     $form->addButtonMove(get_lang('Move the file'), 'do_move');
     $form->display();
 }

@@ -89,7 +89,7 @@ $form->applyFilter('lp_name', 'html_filter');
 $form->addRule('lp_name', get_lang('Required field'), 'required');
 $form->addElement('hidden', 'lp_encoding');
 $items = learnpath::getCategoryFromCourseIntoSelect(api_get_course_int_id(), true);
-$form->addElement('select', 'category_id', get_lang('Category'), $items);
+$form->addSelect('category_id', get_lang('Category'), $items);
 
 // Hide toc frame
 $form->addElement(

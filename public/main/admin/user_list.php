@@ -1094,16 +1094,15 @@ $status_options[DRH] = get_lang('Human Resources Manager');
 $status_options[SESSIONADMIN] = get_lang('Course sessionsAdmin');
 $status_options[PLATFORM_ADMIN] = get_lang('Administrator');
 
-$form->addElement(
-    'select',
+$form->addSelect(
     'keyword_status',
     get_lang('Profile'),
     $status_options
 );
 
 $active_group = [];
-$active_group[] = $form->createElement('checkbox', 'keyword_active', '', get_lang('active'));
-$active_group[] = $form->createElement('checkbox', 'keyword_inactive', '', get_lang('inactive'));
+$active_group[] = $form->createElement('checkbox', 'keyword_active', '', get_lang('Active'));
+$active_group[] = $form->createElement('checkbox', 'keyword_inactive', '', get_lang('Inactive'));
 $form->addGroup($active_group, '', get_lang('activeAccount'), null, false);
 $form->addElement('checkbox', 'check_easy_passwords', null, get_lang('Check passwords too easy to guess'));
 $data = $extraField->addElements($form, 0, [], true, false, $variablesToShow);

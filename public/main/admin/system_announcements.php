@@ -278,17 +278,6 @@ if ($action_todo) {
         error_log($e);
     }
 
-    $group = [];
-    foreach ($visibleList as $key => $name) {
-        $group[] = $form->createElement(
-            'checkbox',
-            $key,
-            null,
-            $name
-        );
-    }
-
-    //$form->addGroup($group, null, get_lang('Visible'));
     $form->addSelect('roles', get_lang('Visible'), $visibleList, ['multiple' => 'multiple']);
 
     $form->addElement('hidden', 'id');
@@ -298,8 +287,7 @@ if ($action_todo) {
     if (!empty($group_list)) {
         $group_list = array_column($group_list, 'name', 'id');
         $group_list[0] = get_lang('All');
-        $form->addElement(
-            'select',
+        $form->addSelect(
             'group',
             get_lang('Announcement for a group'),
             $group_list
@@ -307,17 +295,17 @@ if ($action_todo) {
     }
 
     $values['group'] = $values['group'] ?? '0';
-    $form->addElement('checkbox', 'send_mail', null, get_lang('Send mail'));
+    $form->addCheckBox('send_mail', null, get_lang('Send mail'));
 
     if ('add' === $action) {
         $form->addElement('checkbox', 'add_to_calendar', null, get_lang('Add to calendar'));
         $text = get_lang('Add news');
         $class = 'add';
-        $form->addElement('hidden', 'action', 'add');
+        $form->addHidden('action', 'add');
     } elseif ('edit' === $action) {
         $text = get_lang('Edit News');
         $class = 'save';
-        $form->addElement('hidden', 'action', 'edit');
+        $form->addHidden('action', 'edit');
     }
     $form->addElement('checkbox', 'send_email_test', null, get_lang('Send an email to myself for testing purposes.'));
     $form->addButtonSend($text, 'submit');

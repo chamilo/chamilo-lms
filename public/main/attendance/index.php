@@ -557,7 +557,7 @@ switch ($action) {
                 'weekly' => get_lang('Weekly'),
                 'monthlyByDate' => get_lang('Monthly, by date'),
             ];
-            $form->addElement('select', 'repeat_type', get_lang('Repeat type'), $a_repeat_type);
+            $form->addSelect('repeat_type', get_lang('Repeat type'), $a_repeat_type);
 
             $form->addDatePicker(
                 'end_date_time',

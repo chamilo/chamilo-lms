@@ -122,7 +122,7 @@ class Timeline extends Model
 
         $form->addElement('text', 'headline', get_lang('Name'), ['size' => '70']);
         $status_list = $this->get_status_list();
-        $form->addElement('select', 'status', get_lang('Status'), $status_list);
+        $form->addSelect('status', get_lang('Status'), $status_list);
         if ('edit' == $action) {
             //$form->addElement('text', 'created_at', get_lang('Created at'));
             //$form->freeze('created_at');

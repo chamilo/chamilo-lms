@@ -7870,7 +7870,8 @@ class SessionManager
                 SESSION_VISIBLE_READ_ONLY => get_lang('Read only'),
                 SESSION_VISIBLE => get_lang('Accessible'),
                 SESSION_INVISIBLE => api_ucfirst(get_lang('Not accessible')),
-            ]
+            ],
+            []
         );
         $form->addGroup(
             $visibilityGroup,

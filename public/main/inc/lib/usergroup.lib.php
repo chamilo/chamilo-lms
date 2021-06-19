@@ -1825,7 +1825,7 @@ class UserGroupModel extends Model
             $form->addElement('checkbox', 'delete_picture', '', get_lang('Remove picture'));
         }
 
-        $form->addElement('select', 'visibility', get_lang('Group Permissions'), $this->getGroupStatusList());
+        $form->addSelect('visibility', get_lang('Group Permissions'), $this->getGroupStatusList());
         $form->setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('Required field').'</small>');
         $form->addElement('checkbox', 'allow_members_leave_group', '', get_lang('Allow members to leave group'));
 

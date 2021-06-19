@@ -138,7 +138,7 @@ class Career extends Model
             ]
         );
         $status_list = $this->get_status_list();
-        $form->addElement('select', 'status', get_lang('Status'), $status_list);
+        $form->addSelect('status', get_lang('Status'), $status_list);
 
         if ('edit' === $action) {
             $extraField = new ExtraField('career');

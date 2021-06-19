@@ -59,8 +59,8 @@ $form->addCheckBox(
     ],
     get_lang('Yes, add the headers')
 );
-$form->addElement('select', 'course_code', get_lang('Only users from the course'), $courses);
-$form->addElement('select', 'course_session', get_lang('Only users from the courseSession'), $coursesSessions);
+$form->addSelect('course_code', get_lang('Only users from the course'), $courses);
+$form->addSelect('course_session', get_lang('Only users from the courseSession'), $coursesSessions);
 $form->addButtonExport(get_lang('Export'));
 $form->setDefaults(['file_type' => 'csv']);
 

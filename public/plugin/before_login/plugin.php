@@ -20,7 +20,7 @@ $plugin_info['author'] = 'Julio Montoya';
 
 // The plugin configuration.
 $form = new FormValidator('form');
-$form->addElement('select', 'language', get_lang('Language'), api_get_languages_to_array());
+$form->addSelect('language', get_lang('Language'), api_get_languages_to_array());
 
 $form->addElement('header', 'Option 1');
 $form->addElement('textarea', 'option1', get_lang('Description'), ['rows' => 10, 'class' => 'span6']);

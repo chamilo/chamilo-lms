@@ -5328,7 +5328,7 @@ This folder contains all sessions that have been opened in the chat. Although th
                 }
             }
         }
-        $form->addElement('select', 'move_to', get_lang('Move to'), $options);
+        $form->addSelect('move_to', get_lang('Move to'), $options);
         $form->addButtonNext(get_lang('Move element'), 'move_file_submit');
 
         return $form->returnForm();

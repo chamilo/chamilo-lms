@@ -66,7 +66,7 @@ foreach ($Sessions as $enreg) {
     $options[$enreg['id']] = $enreg['name'];
 }
 
-$form->addElement('select', 'session_id', get_lang('SessionList'), $options, ['id' => 'session-id']);
+$form->addSelect('session_id', get_lang('SessionList'), $options, ['id' => 'session-id']);
 $form->addDatePicker('date_begin', get_lang('DateStart'), ['id' => 'date-begin']);
 $form->addDatePicker('date_end', get_lang('DateEnd'), ['id' => 'date-end']);
 

@@ -24,7 +24,7 @@ $tpl = new Template(get_lang('Skills'));
 $form = new FormValidator('profile_search');
 
 $form->addElement('header', get_lang('Search skills'));
-$form->addElement('select', 'skills', null, null, ['id' => 'skills']);
+$form->addSelect('skills', null, null, ['id' => 'skills']);
 $form->addButtonSearch(get_lang('Search'));
 
 $profiles = $skill_profile->get_all();

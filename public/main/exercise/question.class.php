@@ -1336,7 +1336,7 @@ abstract class Question
             }
             //Medias
             //$course_medias = self::prepare_course_media_select(api_get_course_int_id());
-            //$form->addElement('select', 'parent_id', get_lang('Attach to media'), $course_medias);
+            //$form->addSelect('parent_id', get_lang('Attach to media'), $course_medias);
         }
 
         $form->addElement('html', '</div>');

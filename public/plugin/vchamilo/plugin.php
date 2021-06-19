@@ -62,7 +62,7 @@ $form->addLabel(
     $plugin->get_lang('manage_instances').'</a>'
 );
 $form->addElement('header', $plugin->get_lang('enabling'));
-$form->addElement('select', 'enable_virtualisation', $plugin->get_lang('enable_virtualisation'), $options);
+$form->addSelect('enable_virtualisation', $plugin->get_lang('enable_virtualisation'), $options);
 $form->addElement(
     'text',
     'course_real_root',

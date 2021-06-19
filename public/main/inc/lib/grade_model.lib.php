@@ -282,7 +282,7 @@ class GradeModel extends Model
                     $grade_model_options[$item['id']] = $item['name'];
                 }
             }
-            $form->addElement('select', $name, get_lang('Grading model'), $grade_model_options);
+            $form->addSelect( $name, get_lang('Grading model'), $grade_model_options);
             $default_platform_setting = api_get_setting('gradebook_default_grade_model_id');
             $default = -1;
 

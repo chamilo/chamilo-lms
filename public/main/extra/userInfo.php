@@ -210,7 +210,7 @@ if ("viewDefEdit" == $displayMode) {
     $possible_line_nrs[5] = '5 '.get_lang('lines');
     $possible_line_nrs[10] = '10 '.get_lang('lines');
     $possible_line_nrs[15] = '15 '.get_lang('lines');
-    $edit_heading_form->addElement('select', 'nbline', get_lang('Line Number'), $possible_line_nrs);
+    $edit_heading_form->addSelect('nbline', get_lang('Line Number'), $possible_line_nrs);
     $edit_heading_form->addElement('submit', 'submitDef', get_lang('Validate'));
     $edit_heading_form->setDefaults($catToEdit);
     $edit_heading_form->display();

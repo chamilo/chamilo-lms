@@ -67,7 +67,7 @@ if ($global) {
     while ($a_exercices = Database::fetch_array($resultExercices)) {
         $exercise_list[$a_exercices['iid']] = $a_exercices['title'];
     }
-    $form->addElement('select', 'exercise_id', get_lang('Test'), $exercise_list);
+    $form->addSelect('exercise_id', get_lang('Test'), $exercise_list);
 }
 
 //$form->addElement('submit','submit',get_lang('Filter'));

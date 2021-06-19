@@ -84,7 +84,7 @@ $form->addElement('html', Display::return_message($message, 'info', false));
 $form->addElement('file', 'user_file', [Display::return_icon('powerpoint_big.gif'), $div_upload_limit]);
 $form->addElement('checkbox', 'take_slide_name', '', get_lang('Use the slides names as course learning object names'));
 $options = ChamiloApi::getDocumentConversionSizes();
-$form->addElement('select', 'slide_size', get_lang('Size of the slides'), $options);
+$form->addSelect('slide_size', get_lang('Size of the slides'), $options);
 if ('true' === api_get_setting('search_enabled')) {
     $specific_fields = get_specific_field_list();
     $form->addElement('checkbox', 'index_document', '', get_lang('Index document text?ument'));

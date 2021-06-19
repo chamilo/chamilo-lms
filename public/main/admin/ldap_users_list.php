@@ -155,7 +155,7 @@ $type["all"] = get_lang('All');
 $type["employee"] = get_lang('Trainer');
 $type["student"] = get_lang('Learner');
 
-$form->addElement('select', 'keyword_type', get_lang('Status'), $type);
+$form->addSelect('keyword_type', get_lang('Status'), $type);
 // Structure a rajouer ??
 $form->addElement('submit', 'submit', get_lang('Validate'));
 //$defaults['keyword_active'] = 1;

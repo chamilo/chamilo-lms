@@ -770,7 +770,7 @@ class ExtraFieldOption extends Model
 
         $form->addElement('text', 'option_value', get_lang('Value'));
         $form->addElement('text', 'option_order', get_lang('Order'));
-        $form->addElement('select', 'priority', get_lang('Priority'), $this->getPriorityOptions());
+        $form->addSelect('priority', get_lang('Priority'), $this->getPriorityOptions());
         $form->addElement('textarea', 'priority_message', get_lang('Message type'));
 
         $defaults = [];

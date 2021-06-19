@@ -168,7 +168,7 @@ Display::display_header($nameTool);
                     $form->addElement('text', 'path_to_lzx', get_lang('Path to LZX files'));
                     //$form -> addElement('html','<br /><br />');
                     $options = ChamiloApi::getDocumentConversionSizes();
-                    $form->addElement('select', 'size', get_lang('Size of the slides'), $options);
+                    $form->addSelect('size', get_lang('Size of the slides'), $options);
                     $form->addElement('hidden', 'extension_code', 'ppt2lp');
 
                     $defaults = [];

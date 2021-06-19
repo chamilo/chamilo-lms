@@ -60,7 +60,7 @@ if ('true' === api_get_setting('allow_group_categories')) {
     foreach ($groupCategories as $category) {
         $categoryList[$category['iid']] = $category['title'];
     }
-    $form->addElement('select', 'category_id', get_lang('Category'), $categoryList);
+    $form->addSelect('category_id', get_lang('Category'), $categoryList);
 } else {
     $form->addHidden('category_id', 0);
 }

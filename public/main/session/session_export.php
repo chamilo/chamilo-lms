@@ -306,7 +306,7 @@ foreach ($Sessions as $enreg) {
     $options[$enreg['id']] = $enreg['name'];
 }
 
-$form->addElement('select', 'session_id', get_lang('Choose the session to export'), $options);
+$form->addSelect('session_id', get_lang('Choose the session to export'), $options);
 $form->addButtonExport(get_lang('Export session(s)'));
 
 $defaults = [];

@@ -25,8 +25,6 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
      * Contains the select options
      *
      * @var       array
-     * @since     1.0
-     * @access    private
      */
     protected $_options = [];
     private $_optgroups = [];
@@ -35,8 +33,6 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
      * Default values of the SELECT
      *
      * @var       array
-     * @since     1.0
-     * @access    private
      */
     protected $_values = [];
 
@@ -54,37 +50,36 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
         $elementName,
         $elementLabel = '',
         $options = null,
-        $attributes = null
+        array $attributes = []
     ) {
         $addBlank = '';
-        if (is_array($attributes) || empty($attributes)) {
-            if (empty($attributes)) {
-                $attributes = [];
-            }
-            //selectpicker
-
-            $layout = $this->getLayout();
-            if (FormValidator::LAYOUT_HORIZONTAL === $layout) {
-                $attributes['class'] = 'form-control mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-indigo-500 sm:text-sm';
-            }
-            $attributes['data-live-search'] = 'true';
-
-            if (isset($attributes['disable_js']) && $attributes['disable_js']) {
-                $attributes['class'] = 'form-control';
-                $attributes['data-live-search'] = '';
-            }
-
-            if (isset($attributes['extra_class']) && $attributes['extra_class']) {
-                $attributes['class'] .= ' '.$attributes['extra_class'];
-                unset($attributes['extra_class']);
-            }
-
-            if (isset($attributes['placeholder'])) {
-                $addBlank =  $attributes['placeholder'];
-            }
+        $layout = $this->getLayout();
+        if (FormValidator::LAYOUT_HORIZONTAL === $layout) {
+            $attributes['class'] = 'form-control mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-indigo-500 sm:text-sm';
         }
-        $columnsSize = isset($attributes['cols-size']) ? $attributes['cols-size'] : null;
-        $this->setColumnsSize($columnsSize);
+
+        //$attributes['data-live-search'] = 'true';
+        if (isset($attributes['disable_js']) && $attributes['disable_js']) {
+            //$attributes['class'] = 'form-control';
+            //$attributes['data-live-search'] = '';
+        }
+
+        if (isset($attributes['extra_class']) && $attributes['extra_class']) {
+            //$attributes['class'] .= ' '.$attributes['extra_class'];
+            //unset($attributes['extra_class']);
+        }
+
+        if (isset($attributes['placeholder'])) {
+            $addBlank =  $attributes['placeholder'];
+        }
+
+        if (isset($attributes['multiple'])) {
+            $attributes['class'] = 'overflow-auto w-full border bg-white rounded px-3 py-2 outline-none text-gray-700';
+        }
+
+
+        //$columnsSize = isset($attributes['cols-size']) ? $attributes['cols-size'] : null;
+        //$this->setColumnsSize($columnsSize);
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->_persistantFreeze = true;
         $this->_type = 'select';
@@ -210,7 +205,6 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
      * Returns the element name
      *
      * @since     1.0
-     * @access    public
      * @return    string
      */
     public function getName()
@@ -222,7 +216,6 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
      * Returns the element name (possibly with brackets appended)
      *
      * @since     1.0
-     * @access    public
      * @return    string
      */
     public function getPrivateName()
@@ -239,7 +232,6 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
      *
      * @param     mixed    $values  Array or comma delimited string of selected values
      * @since     1.0
-     * @access    public
      * @return    void
      */
     public function setValue($value)
@@ -251,7 +243,6 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
      * Returns an array of the selected values
      *
      * @since     1.0
-     * @access    public
      * @return    array of selected values
      */
     public function getValue()
@@ -264,7 +255,6 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
      *
      * @param     int    $size  Size of select  field
      * @since     1.0
-     * @access    public
      * @return    void
      */
     public function setSize($size)
@@ -276,7 +266,6 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
      * Returns the select field size
      *
      * @since     1.0
-     * @access    public
      * @return    int
      */
     public function getSize()
@@ -305,7 +294,6 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
      * Returns the select mutiple attribute
      *
      * @since     1.2
-     * @access    public
      * @return    bool    true if multiple select, false otherwise
      */
     public function getMultiple()
@@ -321,30 +309,29 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
      * @param     mixed     $attributes Either a typical HTML attribute string
      *                                  or an associative array
      * @since     1.0
-     * @access    public
      * @return    void
      */
     public function addOption($text, $value, $attributes = null, $return_array = false)
     {
         if (null === $attributes) {
-            $attributes = array('value' => (string)$value);
+            $attributes = ['value' => (string) $value];
         } else {
             $attributes = $this->_parseAttributes($attributes);
             if (isset($attributes['selected'])) {
                 // the 'selected' attribute will be set in toHtml()
                 $this->_removeAttr('selected', $attributes);
                 if (is_null($this->_values)) {
-                    $this->_values = array($value);
+                    $this->_values = [$value];
                 } elseif (!in_array($value, $this->_values)) {
                     $this->_values[] = $value;
                 }
             }
-            $this->_updateAttrArray($attributes, array('value' => (string)$value));
+            $this->_updateAttrArray($attributes, ['value' => (string) $value]);
         }
         if ($return_array) {
-            return array('text' => $text, 'attr' => $attributes);
+            return ['text' => $text, 'attr' => $attributes];
         } else {
-            $this->_options[] = array('text' => $text, 'attr' => $attributes);
+            $this->_options[] = ['text' => $text, 'attr' => $attributes];
         }
     }
 
@@ -356,7 +343,6 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
      * @param     mixed     $attributes Either a typical HTML attribute string
      *                                  or an associative array
      * @since     1.0
-     * @access    public
      * @return    void
      */
     public function addOptGroup($options, $label)
@@ -364,7 +350,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
         foreach ($options as $option) {
             $this->addOption($option['text'], $option['value'], $option, true);
         }
-        $this->_optgroups[] = array('label' => $label, 'options' => $options);
+        $this->_optgroups[] = ['label' => $label, 'options' => $options];
     }
 
     /**
@@ -385,7 +371,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                 $attrString = $this->_getAttrString($this->_attributes);
             } else {
                 $myName = $this->getName();
-                $this->setName($myName . '[]');
+                $this->setName($myName.'[]');
                 $attrString = $this->_getAttrString($this->_attributes);
                 $this->setName($myName);
             }
@@ -397,11 +383,12 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                 if (!empty($strValues) && in_array($option['attr']['value'], $strValues, true)) {
                     $option['attr']['selected'] = 'selected';
                 }
-                $strHtml .= $tabs . "<option" . $this->_getAttrString($option['attr']) . '>' .
-                    $option['text'] . "</option>";
+                $strHtml .=
+                    $tabs."<option class='py-1' ".$this->_getAttrString($option['attr']).'>'.
+                    $option['text']."</option>";
             }
             foreach ($this->_optgroups as $optgroup) {
-                $strHtml .= $tabs . '<optgroup label="' . $optgroup['label'] . '">';
+                $strHtml .= $tabs.'<optgroup label="'.$optgroup['label'].'">';
                 foreach ($optgroup['options'] as $option) {
                     $text = $option['text'];
                     unset($option['text']);
@@ -410,7 +397,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                         $option['selected'] = 'selected';
                     }
 
-                    $strHtml .= $tabs . " <option" . $this->_getAttrString($option) . '>' .$text . "</option>";
+                    $strHtml .= $tabs." <option".$this->_getAttrString($option).'>'.$text."</option>";
                 }
                 $strHtml .= "</optgroup>";
             }
@@ -423,7 +410,6 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
      * Returns the value of field without HTML tags
      *
      * @since     1.0
-     * @access    public
      * @return    string
      */
     public function getFrozenHtml()

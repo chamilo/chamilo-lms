@@ -219,13 +219,14 @@ class HTML_QuickForm extends HTML_Common
         if (isset($attributes['id']) && !empty($attributes['id'])) {
             $form_id = Security::remove_XSS($attributes['id']);
         }
-        $attributes = array(
+        $attributes = [
             'action' => $action,
             'method' => $method,
             'name' => $formName,
             'id' => $form_id,
-        ) + $target;
+        ] + $target;
         $this->updateAttributes($attributes);
+        //var_dump($_REQUEST);exit;
         if (!$trackSubmit || isset($_REQUEST['_qf__' . $formName])) {
             $this->_submitValues = 'get' === $method ? $_GET : $_POST;
             $this->_submitFiles = $_FILES;
@@ -830,21 +831,6 @@ class HTML_QuickForm extends HTML_Common
             if (isset($this->_submitValues[$base])) {
                 $value = isset($this->_submitValues[$base][$cleanId]) ? $this->_submitValues[$base][$cleanId] : null;
             }
-
-            /*if ((is_array($value) || null === $value) && isset($this->_submitFiles[$base])) {
-                $props = array('name', 'type', 'size', 'tmp_name', 'error');
-                $code  = "if (!isset(\$this->_submitFiles['{$base}']['name']{$idx})) {\n" .
-                         "    return null;\n" .
-                         "} else {\n" .
-                         "    \$v = array();\n";
-                foreach ($props as $prop) {
-                    $code .= "    \$v = HTML_QuickForm::arrayMerge(\$v, \$this->_reindexFiles(\$this->_submitFiles['{$base}']['{$prop}']{$idx}, '{$prop}'));\n";
-                }
-                $fileValue = eval($code . "    return \$v;\n}\n");
-                if (null !== $fileValue) {
-                    $value = null === $value? $fileValue: HTML_QuickForm::arrayMerge($value, $fileValue);
-                }
-            }*/
         }
 
         // This is only supposed to work for groups with appendName = false

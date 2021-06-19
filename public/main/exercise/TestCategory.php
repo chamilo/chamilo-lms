@@ -938,7 +938,7 @@ class TestCategory
         }
         $form->addElement('html', $script);
 
-        $form->addElement('select', 'parent_id', get_lang('Parent'), $category_parent_list, ['id' => 'parent_id']);
+        $form->addSelect('parent_id', get_lang('Parent'), $category_parent_list, ['id' => 'parent_id']);
         $form->addElement('style_submit_button', 'SubmitNote', $submit, 'class="add"');
 
         // setting the defaults

@@ -39,7 +39,7 @@ foreach ($session_list as $sesion_item) {
 if (0 == count($session_list)) {
     $my_session_list[0] = get_lang('none');
 }
-$form->addElement('select', 'session_id', get_lang('Course sessions'), $my_session_list);
+$form->addSelect('session_id', get_lang('Course sessions'), $my_session_list);
 $form->addButtonFilter(get_lang('Filter'));
 
 if (!empty($_REQUEST['score'])) {

@@ -327,7 +327,7 @@ EOT;
         $classForm->addHtml($description);
         $classForm->addElement('hidden', 'action');
         if ($allowGroupCategories) {
-            $classForm->addElement('select', 'group_category', null, $categories);
+            $classForm->addSelect('group_category', null, $categories);
         } else {
             $classForm->addElement('hidden', 'group_category');
         }

@@ -186,7 +186,7 @@ switch ($action) {
             }
         }
         $users = [];
-        $searchForm->addElement('select', 'user_id', get_lang('Users'), $userList);
+        $searchForm->addSelect('user_id', get_lang('Users'), $userList);
         $searchForm->addButtonSearch(get_lang('Search'));
 
         $filterData = [];

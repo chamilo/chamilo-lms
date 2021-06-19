@@ -227,7 +227,7 @@ if ('google' == $service) {
     $form->addElement('hidden', 'text2voice_mode', 'google');
     $form->addElement('hidden', 'id', $document_id);
     $form->addElement('text', 'title', get_lang('Title'));
-    $form->addElement('select', 'lang', get_lang('Language'), $options);
+    $form->addSelect('lang', get_lang('Language'), $options);
     $form->addElement('textarea', 'text', get_lang('Enter the text you want to convert to an audio file'), ['id' => 'textarea_google']);
     $form->addButtonSave(get_lang('Save mp3'));
     $defaults = [];

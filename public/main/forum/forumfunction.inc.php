@@ -4231,7 +4231,7 @@ function move_post_form()
     foreach ($threads as $thread) {
         $threads_list[$thread->getIid()] = $thread->getThreadTitle();
     }
-    $form->addElement('select', 'thread', get_lang('Move toThread'), $threads_list);
+    $form->addSelect('thread', get_lang('Move toThread'), $threads_list);
     $form->applyFilter('thread', 'html_filter');
 
     // The OK button

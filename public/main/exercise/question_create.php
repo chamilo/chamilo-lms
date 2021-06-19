@@ -56,7 +56,7 @@ $exercises['-'] = '-'.get_lang('Select exercise').'-';
 while ($row = Database :: fetch_array($result)) {
     $exercises[$row['iid']] = cut($row['title'], EXERCISE_MAX_NAME_SIZE);
 }
-$form->addElement('select', 'exercise', get_lang('Test'), $exercises);
+$form->addSelect('exercise', get_lang('Test'), $exercises);
 
 // generate default content
 $form->addElement(

@@ -12,7 +12,7 @@ $options = [];
 foreach ($courses as $course) {
     $options[$course['id']] = $course['title'];
 }
-$form->addElement('select', 'course', get_lang('Course'), $options);
+$form->addSelect('course', get_lang('Course'), $options);
 $form->addElement('file', 'file', get_lang('File'));
 $form->addButton('submit', get_lang('Submit'));
 $form->display();

@@ -147,7 +147,7 @@ $options[STUDENT] = get_lang('Learner');
 $options[COURSEMANAGER] = get_lang('Trainer');
 
 ksort($options);
-$form->addElement('select', 'status', get_lang('Select role'), $options);
+$form->addSelect('status', get_lang('Select role'), $options);
 
 $repo = $em->getRepository(ExtraFieldOptionRelFieldOption::class);
 

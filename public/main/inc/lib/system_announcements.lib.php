@@ -6,9 +6,6 @@ use Chamilo\CoreBundle\Entity\SysAnnouncement;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 
-/**
- * Class SystemAnnouncementManager.
- */
 class SystemAnnouncementManager
 {
     /**
@@ -108,8 +105,7 @@ class SystemAnnouncementManager
             ->setDateEnd($end)
             ->setLang($lang)
             ->setUrl(api_get_url_entity())
-            ->setRoles($visibility)
-        ;
+            ->setRoles($visibility);
 
         if (api_get_configuration_value('allow_careers_in_global_announcements') && !empty($careerId)) {
             $careerRepo = Container::getCareerRepository();
@@ -124,17 +120,10 @@ class SystemAnnouncementManager
 
         if ($resultId) {
             if ($sendEmailTest) {
-                self::send_system_announcement_by_email(
-                    $sysAnnouncement,
-                    $visibility,
-                    true
-                );
+                self::send_system_announcement_by_email($sysAnnouncement, true);
             } else {
                 if (1 == $send_mail) {
-                    self::send_system_announcement_by_email(
-                        $sysAnnouncement,
-                        $visibility
-                    );
+                    self::send_system_announcement_by_email($sysAnnouncement);
                 }
             }
 
@@ -156,10 +145,109 @@ class SystemAnnouncementManager
     }
 
     /**
+     * Send a system announcement by e-mail to all teachers/students depending on parameters.
+     *
+     * @return bool True if the message was sent or there was no destination matching.
+     *              False on database or e-mail sending error.
+     */
+    public static function send_system_announcement_by_email(SysAnnouncement $announcement, bool $sendEmailTest = false)
+    {
+        $title = $announcement->getTitle();
+        $content = $announcement->getContent();
+        $language = $announcement->getLang();
+
+        $content = str_replace(['\r\n', '\n', '\r'], '', $content);
+
+        if ($sendEmailTest) {
+            MessageManager::send_message_simple(api_get_user_id(), $title, $content);
+
+            return true;
+        }
+
+        $repo = Container::getUserRepository();
+        $qb = $repo->addRoleListQueryBuilder($announcement->getRoles());
+        $repo->addAccessUrlQueryBuilder(api_get_current_access_url_id(), $qb);
+
+        if (!empty($language)) {
+            $qb
+                ->andWhere('u.locale = :lang')
+                ->setParameter('lang', $language);
+        }
+
+        $repo->addActiveAndNotAnonUserQueryBuilder($qb);
+        $repo->addExpirationDateQueryBuilder($qb);
+
+        // Sent to active users.
+        //$sql .= " AND email <>'' AND active = 1 ";
+
+        // Expiration date
+        //$sql .= " AND (expiration_date = '' OR expiration_date IS NULL OR expiration_date > '$now') ";
+
+        $userListToFilter = [];
+        // @todo check if other filters will apply for the career/promotion option.
+        if (null !== $announcement->getCareer()) {
+            $promotion = new Promotion();
+            $promotionList = $promotion->get_all_promotions_by_career_id($announcement->getCareer()->getId());
+            if (null !== $announcement->getPromotion()) {
+                $promotionList = [];
+                $promotionList[] = $promotion->get($announcement->getPromotion()->getId());
+            }
+
+            if (!empty($promotionList)) {
+                foreach ($promotionList as $promotion) {
+                    $sessionList = SessionManager::get_all_sessions_by_promotion($promotion['id']);
+                    foreach ($sessionList as $session) {
+                        if (in_array('ROLE_TEACHER', $announcement->getRoles(), true)) {
+                            $users = SessionManager::get_users_by_session($session['id'], 2);
+                            if (!empty($users)) {
+                                $userListToFilter = array_merge($users, $userListToFilter);
+                            }
+                        }
+
+                        if (in_array('ROLE_STUDENT', $announcement->getRoles(), true)) {
+                            $users = SessionManager::get_users_by_session($session['id'], 0);
+                            if (!empty($users)) {
+                                $userListToFilter = array_merge($users, $userListToFilter);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!empty($userListToFilter)) {
+            $userListToFilter = array_column($userListToFilter, 'user_id');
+            //$userListToFilterToString = implode("', '", $userListToFilter);
+            $qb
+                ->andWhere('u.id IN (:users)')
+                ->setParameter('users', $userListToFilter);
+            //$sql .= " AND (u.user_id IN ('$userListToFilterToString') ) ";
+        }
+        $users = $qb->getQuery()->getResult();
+
+        $message_sent = false;
+        /** @var User $user */
+        foreach ($users as $user) {
+            MessageManager::send_message_simple($user->getId(), $title, $content);
+            $message_sent = true;
+        }
+
+        // Minor validation to clean up the attachment files in the announcement
+        /*if (!empty($_FILES)) {
+            $attachments = $_FILES;
+            foreach ($attachments as $attachment) {
+                unlink($attachment['tmp_name']);
+            }
+        }*/
+
+        return $message_sent; //true if at least one e-mail was sent
+    }
+
+    /**
      * Makes the announcement id visible only for groups in groups_array.
      *
      * @param int   $announcement_id
-     * @param array $group_array     array of group id
+     * @param array $group_array array of group id
      *
      * @return bool
      */
@@ -220,11 +308,11 @@ class SystemAnnouncementManager
     /**
      * Updates an announcement to the database.
      *
-     * @param int    $id            of the announcement
-     * @param string $title         title of the announcement
-     * @param string $content       content of the announcement
-     * @param array  $date_start    start date (0 => day ; 1 => month ; 2 => year ; 3 => hour ; 4 => minute)
-     * @param array  $date_end      end date of (0 => day ; 1 => month ; 2 => year ; 3 => hour ; 4 => minute)
+     * @param int    $id         of the announcement
+     * @param string $title      title of the announcement
+     * @param string $content    content of the announcement
+     * @param array  $date_start start date (0 => day ; 1 => month ; 2 => year ; 3 => hour ; 4 => minute)
+     * @param array  $date_end   end date of (0 => day ; 1 => month ; 2 => year ; 3 => hour ; 4 => minute)
      * @param array  $visibility
      * @param array  $lang
      * @param int    $send_mail
@@ -314,10 +402,9 @@ class SystemAnnouncementManager
             ->setContent($content)
             ->setDateStart($dateStart)
             ->setDateEnd($dateEnd)
-            ->setRoles($visibility)
-        ;
+            ->setRoles($visibility);
 
-       $sysRepo->update($announcement);
+        $sysRepo->update($announcement);
 
         // Update visibility
         //$list = self::getVisibilityList();
@@ -349,127 +436,5 @@ class SystemAnnouncementManager
         }
 
         return true;
-    }
-
-    /**
-     * Deletes an announcement.
-     *
-     * @param int $id The identifier of the announcement that should be
-     *
-     * @return bool True on success, false on failure
-     */
-    public static function delete_announcement($id)
-    {
-        $table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
-        $id = (int) $id;
-        $sql = "DELETE FROM $table WHERE id =".$id;
-        $res = Database::query($sql);
-        if (false === $res) {
-            return false;
-        }
-        //self::deleteAnnouncementPicture($id);
-
-        return true;
-    }
-
-    /**
-     * Send a system announcement by e-mail to all teachers/students depending on parameters.
-     *
-     * @return bool True if the message was sent or there was no destination matching.
-     *              False on database or e-mail sending error.
-     */
-    public static function send_system_announcement_by_email(SysAnnouncement $announcement, bool $sendEmailTest = false)
-    {
-        $title = $announcement->getTitle();
-        $content = $announcement->getContent();
-        $language = $announcement->getLang();
-
-        $content = str_replace(['\r\n', '\n', '\r'], '', $content);
-
-        if ($sendEmailTest) {
-            MessageManager::send_message_simple(api_get_user_id(), $title, $content);
-
-            return true;
-        }
-
-        $repo = Container::getUserRepository();
-        $qb = $repo->addRoleListQueryBuilder($announcement->getRoles());
-        $repo->addAccessUrlQueryBuilder(api_get_current_access_url_id(), $qb);
-
-        if (!empty($language)) {
-            $qb
-                ->andWhere('u.locale = :lang')
-                ->setParameter('lang', $language)
-            ;
-        }
-
-        $repo->addActiveAndNotAnonUserQueryBuilder($qb);
-        $repo->addExpirationDateQueryBuilder($qb);
-
-        // Sent to active users.
-        //$sql .= " AND email <>'' AND active = 1 ";
-
-        // Expiration date
-        //$sql .= " AND (expiration_date = '' OR expiration_date IS NULL OR expiration_date > '$now') ";
-
-        $userListToFilter = [];
-        // @todo check if other filters will apply for the career/promotion option.
-        if (null !== $announcement->getCareer()) {
-            $promotion = new Promotion();
-            $promotionList = $promotion->get_all_promotions_by_career_id($announcement->getCareer()->getId());
-            if (null !== $announcement->getPromotion()) {
-                $promotionList = [];
-                $promotionList[] = $promotion->get($announcement->getPromotion()->getId());
-            }
-
-            if (!empty($promotionList)) {
-                foreach ($promotionList as $promotion) {
-                    $sessionList = SessionManager::get_all_sessions_by_promotion($promotion['id']);
-                    foreach ($sessionList as $session) {
-                        if (in_array('ROLE_TEACHER', $announcement->getRoles(), true)) {
-                            $users = SessionManager::get_users_by_session($session['id'], 2);
-                            if (!empty($users)) {
-                                $userListToFilter = array_merge($users, $userListToFilter);
-                            }
-                        }
-
-                        if (in_array('ROLE_STUDENT', $announcement->getRoles(), true)) {
-                            $users = SessionManager::get_users_by_session($session['id'], 0);
-                            if (!empty($users)) {
-                                $userListToFilter = array_merge($users, $userListToFilter);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (!empty($userListToFilter)) {
-            $userListToFilter = array_column($userListToFilter, 'user_id');
-            //$userListToFilterToString = implode("', '", $userListToFilter);
-            $qb
-                ->andWhere('u.id IN (:users)')
-                ->setParameter('users', $userListToFilter)
-            ;
-            //$sql .= " AND (u.user_id IN ('$userListToFilterToString') ) ";
-        }
-        $users = $qb->getQuery()->getResult();
-
-        $message_sent = false;
-        /** @var User $user */
-        foreach ($users as $user) {
-            MessageManager::send_message_simple($user->getId(), $title, $content);
-            $message_sent = true;
-        }
-
-        // Minor validation to clean up the attachment files in the announcement
-        /*if (!empty($_FILES)) {
-            $attachments = $_FILES;
-            foreach ($attachments as $attachment) {
-                unlink($attachment['tmp_name']);
-            }
-        }*/
-
-        return $message_sent; //true if at least one e-mail was sent
     }
 }

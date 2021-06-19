@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
-use Display;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,20 +25,12 @@ class NewsController extends BaseController
      */
     public function indexAction(SysAnnouncementRepository $sysAnnouncementRepository): Response
     {
-        /*$toolBar = '';
-        if ($this->isGranted('ROLE_ADMIN')) {
-            $actionEdit = Display::url(
-                Display::return_icon('edit.png', $this->trans('EditSystemAnnouncement'), [], ICON_SIZE_MEDIUM),
-                api_get_path(WEB_PATH).'main/admin/system_announcements.php'
-            );
-            $toolBar = Display::toolbarAction('toolbar', [$actionEdit]);
-        }*/
         $user = $this->getUser();
 
         $list = [];
         if (null !== $user) {
             $list = $sysAnnouncementRepository->getAnnouncements(
-                $this->getUser(),
+                $user,
                 $this->getAccessUrl(),
                 $this->getRequest()->getLocale()
             );

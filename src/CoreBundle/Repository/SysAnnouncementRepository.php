@@ -193,4 +193,14 @@ class SysAnnouncementRepository extends ServiceEntityRepository
     {
         return $qb ?: $this->createQueryBuilder($alias);
     }
+
+    public function delete($id): void
+    {
+        $announcement = $this->find($id);
+        if (null !== $announcement) {
+            $em = $this->getEntityManager();
+            $em->remove($announcement);
+            $em->flush();
+        }
+    }
 }

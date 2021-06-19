@@ -118,12 +118,12 @@ switch ($action) {
         break;
     case 'delete':
         // Delete an announcement.
-        SystemAnnouncementManager::delete_announcement($_GET['id']);
+        $repo->delete($_GET['id']);
         echo Display::return_message(get_lang('Announcement has been deleted'), 'confirmation');
         break;
     case 'delete_selected':
         foreach ($_POST['id'] as $index => $id) {
-            SystemAnnouncementManager::delete_announcement($id);
+            $repo->delete($id);
         }
         echo Display::return_message(get_lang('Announcement has been deleted'), 'confirmation');
         $action_todo = false;

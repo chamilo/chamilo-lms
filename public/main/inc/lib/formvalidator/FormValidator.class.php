@@ -460,7 +460,7 @@ EOT;
         return $this->addButton(
             $name,
             $label,
-            'times',
+            'close',
             'danger',
             null,
             null,
@@ -507,7 +507,7 @@ EOT;
         return $this->addButton(
             $name,
             $label,
-            'fa fas fa-pencil-alt',
+            'pencil',
             'primary',
             null,
             null,
@@ -530,7 +530,7 @@ EOT;
         return $this->addButton(
             $name,
             $label,
-            'trash',
+            'delete',
             'danger',
             null,
             null,
@@ -553,7 +553,7 @@ EOT;
         return $this->addButton(
             $name,
             $label,
-            'arrow-circle-right',
+            'arrow-right-bold-circle',
             'primary',
             null,
             null,
@@ -577,7 +577,7 @@ EOT;
         return $this->addButton(
             $name,
             $label,
-            'paper-plane',
+            'send',
             'primary',
             null,
             null,
@@ -796,7 +796,7 @@ EOT;
         return $this->addButton(
             $name,
             $label,
-            'search',
+            'magnify',
             'primary',
             null,
             null,

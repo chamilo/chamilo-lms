@@ -54,13 +54,13 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
         $style = 'default',
         $size = 'default',
         $class = null,
-        $attributes = array()
+        $attributes = []
     ) {
         $this->setIcon($icon);
         $this->setStyle($style);
         $this->setSize($size);
         $this->setClass($class);
-        $columnsSize = isset($attributes['cols-size']) ? $attributes['cols-size'] : null;
+        $columnsSize = $attributes['cols-size'] ?? null;
         $this->setColumnsSize($columnsSize);
 
         parent::__construct(
@@ -91,7 +91,7 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
 
             $icon = $this->getIcon();
             if (!empty($icon)) {
-                $icon = '<em class="' . $this->getIcon() . '"></em> ';
+                $icon = '<em class="mr-1 ' . $this->getIcon() . '"></em> ';
             }
             $class = $this->getClass().' '.$this->getStyle().' '.$this->getSize();
 
@@ -137,7 +137,7 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
         if (is_array($icon)) {
             $icon = @strval($icon[0]);
         }
-        $this->icon = !empty($icon) ? 'fa fa-'.$icon : null;
+        $this->icon = !empty($icon) ? 'mdi mdi-'.$icon : null;
     }
 
     /**

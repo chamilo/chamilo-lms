@@ -27,13 +27,13 @@
         </a>
 
         <button v-if="isCurrentTeacher && changeVisibility" @click="changeVisibility(course, tool)">
-          <FontAwesomeIcon
+          <v-icon
               v-if="tool.ctool.resourceNode.resourceLinks[0].visibility === 2"
-              icon="eye" size="lg"
+              icon="mdi-eye" size="lg"
           />
-          <FontAwesomeIcon
+          <v-icon
               v-else
-              icon="eye-slash"
+              icon="mdi-eye-off"
               size="lg"
           />
         </button>

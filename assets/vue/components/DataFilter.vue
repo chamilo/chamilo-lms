@@ -4,7 +4,8 @@
       v-b-toggle.collapse-1
       variant="primary"
     >
-      <FontAwesomeIcon icon="search" />
+      <v-icon icon="mdi-magnify"/>
+
       {{ $t('Search') }}
     </q-btn>
 <!--    <b-collapse-->

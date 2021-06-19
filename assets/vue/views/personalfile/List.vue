@@ -42,10 +42,7 @@
               v-if="slotProps.data"
               @click="handleClick(slotProps.data)"
               class="cursor-pointer " >
-            <FontAwesomeIcon
-                icon="folder"
-                size="lg"
-            />
+            <v-icon icon="mdi-folder"/>
             {{ slotProps.data.resourceNode.title }}
           </a>
         </div>

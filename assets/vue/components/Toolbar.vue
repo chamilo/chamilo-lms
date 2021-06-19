@@ -32,7 +32,7 @@
         @click="submitItem"
         unelevated
       >
-        <FontAwesomeIcon icon="save" />
+        <v-icon icon="mdi-content-save"/>
         {{ $t('Submit') }}
       </q-btn>
       <!--      <v-btn-->
@@ -62,7 +62,7 @@
         class="btn btn-primary"
         @click="addItem"
       >
-        <FontAwesomeIcon icon="folder-plus" />
+        <v-icon icon="mdi-folder-plus"/>
         New folder
       </q-btn>
 
@@ -72,7 +72,8 @@
         v-if="handleAddDocument"
         @click="addDocument"
       >
-        <FontAwesomeIcon icon="file-alt" /> New document
+        <v-icon icon="mdi-file-plus"/>
+        New document
       </q-btn>
 
       <q-btn
@@ -81,7 +82,8 @@
         v-if="handleUploadDocument"
         @click="uploadDocument"
       >
-        <FontAwesomeIcon icon="cloud-upload-alt" /> File upload
+        <v-icon icon="mdi-cloud-upload"/>
+        File upload
       </q-btn>
 
   <!--    <DataFilter-->

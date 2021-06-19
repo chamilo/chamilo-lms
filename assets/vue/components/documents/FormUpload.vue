@@ -48,7 +48,7 @@
               <a @click.prevent="files.splice(index, 1)"
                  class="delete"
               >
-                <FontAwesomeIcon icon="trash" />
+                <v-icon icon="mdi-delete"/>
               </a>
             </span>
             </div>

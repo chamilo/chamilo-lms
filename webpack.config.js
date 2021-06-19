@@ -19,14 +19,14 @@ Encore
     .enableBuildNotifications()
 
     .addEntry('app', './assets/js/app.js')
-    .addEntry('bootstrap', './assets/js/bootstrap.js')
+    //.addEntry('bootstrap', './assets/js/bootstrap.js')
     .addEntry('exercise', './assets/js/exercise.js')
     .addEntry('free-jqgrid', './assets/js/free-jqgrid.js')
     .addEntry('lp', './assets/js/lp.js')
     .addEntry('vue', './assets/vue/main.js')
 
     .addStyleEntry('css/app', './assets/css/app.scss')
-    .addStyleEntry('css/bootstrap', './assets/css/bootstrap.scss')
+    //.addStyleEntry('css/bootstrap', './assets/css/bootstrap.scss')
     .addStyleEntry('css/chat', './assets/css/chat.css')
     .addStyleEntry('css/document', './assets/css/document.css')
     .addStyleEntry('css/editor', './assets/css/editor.css')

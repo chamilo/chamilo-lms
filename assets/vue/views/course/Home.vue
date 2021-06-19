@@ -8,7 +8,7 @@
       <div>
         <div class="flex flex-row" v-if="isCurrentTeacher && course">
           <a class="btn btn-info mr-2 text-xs">
-            <v-icon class="pr-2">mdi-eye</v-icon>
+            <v-icon icon="mdi-eye" class="pr-2" />
             See as student
           </a>
 

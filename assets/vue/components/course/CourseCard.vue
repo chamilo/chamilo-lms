@@ -13,9 +13,7 @@
           </router-link>
         </div>
         <div>
-          <v-icon>
-            mdi-dots-vertical
-          </v-icon>
+          <v-icon icon="mdi-dots-vertical" />
         </div>
       </div>
 

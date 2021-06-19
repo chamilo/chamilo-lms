@@ -98,7 +98,7 @@
         <!--         <Button label="New document" icon="pi pi-plus" class="p-button-sm p-button-primary p-mr-2" @click="addDocumentHandler()" />-->
         <Button label="New document" icon="fa fa-file-alt" class="btn btn-primary" @click="addDocumentHandler()" />
         <Button label="Upload" icon="fa fa-file-upload" class="btn btn-primary" @click="uploadDocumentHandler()" />
-        <Button label="Delete" icon="pi pi-trash" class="btn btn-danger " @click="confirmDeleteMultiple" :disabled="!selectedItems || !selectedItems.length" />
+        <Button label="Delete" icon="mdi-delete" class="btn btn-danger " @click="confirmDeleteMultiple" :disabled="!selectedItems || !selectedItems.length" />
       </div>
     </div>
 
@@ -148,10 +148,7 @@
               v-if="slotProps.data"
               @click="handleClick(slotProps.data)"
               class="cursor-pointer " >
-            <FontAwesomeIcon
-                icon="folder"
-                size="lg"
-            />
+            <v-icon icon="mdi-folder"/>
             {{ slotProps.data.resourceNode.title }}
           </a>
         </div>
@@ -192,7 +189,9 @@
         <div class="flex flex-row gap-2">
           <Button icon="fa fa-info-circle"  class="btn btn-primary " @click="showHandler(slotProps.data)" />
           <Button v-if="isAuthenticated && isCurrentTeacher" icon="pi pi-pencil" class="btn btn-primary p-mr-2" @click="editHandler(slotProps.data)" />
-          <Button v-if="isAuthenticated && isCurrentTeacher" icon="pi pi-trash" class="btn btn-danger" @click="confirmDeleteItem(slotProps.data)" />
+          <Button v-if="isAuthenticated && isCurrentTeacher" class="btn btn-danger" @click="confirmDeleteItem(slotProps.data)" >
+            <v-icon icon="mdi-delete"/>
+          </Button>
         </div>
       </template>
     </Column>

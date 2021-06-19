@@ -1,21 +1,21 @@
 <template>
   <span>
-    <FontAwesomeIcon
+    <v-icon
       v-if="file.image"
-      icon="file-image"
-      size="lg"
+      icon="mdi-file-image"
+      medium
     />
 
-    <FontAwesomeIcon
+    <v-icon
       v-else-if="file.video"
-      icon="file-video"
-      size="lg"
+      icon="mdi-file-video"
+      medium
     />
 
-    <FontAwesomeIcon
+    <v-icon
       v-else
-      icon="file-alt"
-      size="lg"
+      icon="mdi-file-alt"
+      medium
     />
   </span>
 </template>

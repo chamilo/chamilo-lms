@@ -16,11 +16,6 @@ import makeCrudModule from './store/modules/crud';
 //require('@fancyapps/fancybox');
 //require('@fancyapps/fancybox/dist/jquery.fancybox.css');
 
-// Font awesome
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-library.add(fas);
 //Vue.use(Vuelidate);
 
 import Toast from 'vue-toastification';
@@ -150,7 +145,6 @@ app.component('Button', Button);
 app.component('Column', Column);
 app.component('ColumnGroup', ColumnGroup);
 app.component('Toolbar', Toolbar);
-app.component('FontAwesomeIcon', FontAwesomeIcon);
 app.component('DashboardLayout', DashboardLayout);
 app.component('EmptyLayout', EmptyLayout);
 app.component('TinyEditor', Editor);

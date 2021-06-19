@@ -132,8 +132,7 @@
         <q-list class="text-grey-8">
           <q-item class="GNL__drawer-item" v-ripple v-for="link in linksAnon" :key="link.text" :to="link.url" clickable>
             <q-item-section avatar>
-<!--              <q-icon :name="link.icon" />-->
-              <FontAwesomeIcon :icon="link.icon" size="lg" />
+              <v-icon :icon="link.icon" medium />
             </q-item-section>
             <q-item-section>
               <q-item-label>{{ link.text }}</q-item-label>
@@ -147,7 +146,7 @@
           <q-item class="GNL__drawer-item" v-ripple v-for="link in linksUser" :key="link.text" :to="link.url" clickable>
             <q-item-section avatar>
               <!--              <q-icon :name="link.icon" />-->
-              <FontAwesomeIcon :icon="link.icon" size="lg" />
+              <v-icon :icon="link.icon" medium />
             </q-item-section>
             <q-item-section>
               <q-item-label>{{ link.text }}</q-item-label>
@@ -159,7 +158,7 @@
           <q-item v-if="isAdmin" class="GNL__drawer-item" v-ripple v-for="link in linksAdmin" :key="link.text" :to="link.url"  clickable>
             <q-item-section avatar>
               <!--              <q-icon :name="link.icon" />-->
-              <FontAwesomeIcon :icon="link.icon" size="lg" />
+              <v-icon :icon="link.icon" medium />
             </q-item-section>
             <q-item-section>
               <q-item-label>{{ link.text }}</q-item-label>
@@ -172,7 +171,7 @@
             <q-item-section>
               <q-item-label>{{ link.text }}
                 <!--                <q-icon v-if="link.icon" :name="link.icon" />-->
-                <FontAwesomeIcon :icon="link.icon" size="lg" />
+                <v-icon :icon="link.icon" size="lg" />
               </q-item-label>
             </q-item-section>
           </q-item>
@@ -245,27 +244,27 @@ export default {
     linksUser: [
        //{ icon: 'home', url: '/', text: 'Home' },
        //{ icon: 'star_border', url: '/', text: 'News' },
-       { icon: 'book', url: '/courses', text: 'My courses' },
-       { icon: 'calendar-alt', url: '/main/calendar/agenda_js.php?type=personal', text: 'Events' },
+       { icon: 'mdi-book', url: '/courses', text: 'My courses' },
+       { icon: 'mdi-calendar', url: '/main/calendar/agenda_js.php?type=personal', text: 'Events' },
       //{ icon: 'star_border', url: '/sessions', text: 'My Sessions' },
       //{ icon: 'star_border', url: '/calendar', text: 'My calendar' },
       //{ icon: 'compass', url: '/catalog', text: 'Explore' },
       // { icon: 'star_border', url: '/news', text: 'News' },
     ],
     linksAdmin: [
-      { icon: 'users', url: '/main/admin/user_list.php', text: 'Users' },
-      { icon: 'book', url: '/main/admin/course_list.php', text: 'Courses' },
-      { icon: 'book-open',  url: '/main/session/session_list.php', text: 'Sessions' },
+      { icon: 'mdi-account-multiple', url: '/main/admin/user_list.php', text: 'Users' },
+      { icon: 'mdi-book', url: '/main/admin/course_list.php', text: 'Courses' },
+      { icon: 'mdi-book-open',  url: '/main/session/session_list.php', text: 'Sessions' },
       //{ icon: fasFlask, url: '/main/admin/index.php', text: 'Administration' },
-      { icon: 'cogs', url: '/main/admin/index.php', text: 'Administration' },
+      { icon: 'mdi-cogs', url: '/main/admin/index.php', text: 'Administration' },
     ],
     links3: [
       //{ icon: '', text: 'Settings' },
       // { icon: 'open_in_new', text: 'open in new' },
     ],
     linksAnon: [
-      { icon: 'home', url: '/home', text: 'Home' },
-      { icon: 'compass', url: '/catalog', text: 'Explore' },
+      { icon: 'mdi-home', url: '/home', text: 'Home' },
+      { icon: 'mdi-compass', url: '/catalog', text: 'Explore' },
     ],
     drawer: true,
     breadcrumb: [],
@@ -303,7 +302,7 @@ export default {
     //let payload = {isAuthenticated: isAuthenticated, user: this.user};
     //this.$store.dispatch("security/onRefresh", payload);
     if (isAuthenticated) {
-      this.linksUser.unshift({icon: 'user-circle', url: '/account/home', text: this.currentUser.username});
+      this.linksUser.unshift({icon: 'mdi-account', url: '/account/home', text: this.currentUser.username});
     }
   },
   computed: {

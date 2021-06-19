@@ -37,17 +37,14 @@
                     class="btn btn-primary"
                     :to="item['downloadUrl']"
                 >
-                  <FontAwesomeIcon icon="file-download" />
+                  <v-icon icon="mdi-file-download"/>
                   {{ $t('Download file') }}
                 </q-btn>
               </span>
           </div>
         </div>
         <div class ="flex justify-center" v-else>
-              <FontAwesomeIcon
-                  icon="folder"
-                  size="7x"
-              />
+          <v-icon icon="mdi-folder"/>
         </div>
       </div>
 
@@ -90,7 +87,7 @@
                     class="btn btn-primary"
                     :href="item['downloadUrl']"
                 >
-                  <FontAwesomeIcon icon="file-download" />
+                  <v-icon icon="mdi-file-download"/>
                   {{ $t('Download file') }}
                 </a>
               </div>

@@ -14,7 +14,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:^3.4.0-rc.5":
+"@apollo/client@npm:^3.4.0-rc.11":
   version: 3.4.0-rc.11
   resolution: "@apollo/client@npm:3.4.0-rc.11"
   dependencies:
@@ -5910,7 +5910,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "chamilo@workspace:."
   dependencies:
-    "@apollo/client": ^3.4.0-rc.5
+    "@apollo/client": ^3.4.0-rc.11
     "@babel/eslint-parser": ^7.14.5
     "@babel/plugin-transform-runtime": ^7.14.5
     "@fancyapps/fancybox": ^3.5.7
@@ -6001,7 +6001,7 @@ __metadata:
     purgecss-webpack-plugin: ^4.0.3
     pwstrength-bootstrap: ^3.1.0
     qtip2: ^3.0.3
-    quasar: 2.0.0-rc.1
+    quasar: 2.0.0-rc.3
     readmore-js: ^2.2.1
     sass: ^1.35.1
     sass-loader: ^11.1.1
@@ -15756,10 +15756,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"quasar@npm:2.0.0-rc.1":
-  version: 2.0.0-rc.1
-  resolution: "quasar@npm:2.0.0-rc.1"
-  checksum: 25b4a3a6bc32aa336c5d77878fb22b6360fdad5035a6405c24f2bc3f87241645c11f291429070cce8c79d3b13d33ad81a2c6f6eb6cac4a7b4b61676e508ed84a
+"quasar@npm:2.0.0-rc.3":
+  version: 2.0.0-rc.3
+  resolution: "quasar@npm:2.0.0-rc.3"
+  checksum: 46b2ebff1dcbe2699b97cb922d694ccc745b01ff3f4ec89270c9769a7b5570edf30ed8999a36faa51ef1d363f6e8de17829b546f39b178524b86fcbf82dab54d
   languageName: node
   linkType: hard
 

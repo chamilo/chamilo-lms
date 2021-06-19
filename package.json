@@ -6,7 +6,7 @@
     "start": "vue-cli-service serve --open"
   },
   "dependencies": {
-    "@apollo/client": "^3.4.0-rc.5",
+    "@apollo/client": "^3.4.0-rc.11",
     "@babel/plugin-transform-runtime": "^7.14.5",
     "@fancyapps/fancybox": "^3.5.7",
     "@headlessui/vue": "^1.2.0",
@@ -82,7 +82,7 @@
     "purgecss-webpack-plugin": "^4.0.3",
     "pwstrength-bootstrap": "^3.1.0",
     "qtip2": "^3.0.3",
-    "quasar": "2.0.0-rc.1",
+    "quasar": "2.0.0-rc.3",
     "readmore-js": "^2.2.1",
     "select2": "^4.1.0-rc.0",
     "signature_pad": "^3.0.0-beta.4",

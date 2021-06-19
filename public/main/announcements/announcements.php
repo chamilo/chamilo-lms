@@ -582,8 +582,7 @@ switch ($action) {
         }
 
         $defaults['email_ann'] = true;
-        $form->addElement(
-            'text',
+        $form->addText(
             'title',
             get_lang('Subject'),
             ['onkeypress' => 'return event.keyCode != 13;']

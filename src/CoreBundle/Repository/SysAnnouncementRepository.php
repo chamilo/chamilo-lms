@@ -189,11 +189,6 @@ class SysAnnouncementRepository extends ServiceEntityRepository
         }
     }
 
-    protected function getOrCreateQueryBuilder(QueryBuilder $qb = null, string $alias = 's'): QueryBuilder
-    {
-        return $qb ?: $this->createQueryBuilder($alias);
-    }
-
     public function delete($id): void
     {
         $announcement = $this->find($id);
@@ -202,5 +197,10 @@ class SysAnnouncementRepository extends ServiceEntityRepository
             $em->remove($announcement);
             $em->flush();
         }
+    }
+
+    protected function getOrCreateQueryBuilder(QueryBuilder $qb = null, string $alias = 's'): QueryBuilder
+    {
+        return $qb ?: $this->createQueryBuilder($alias);
     }
 }

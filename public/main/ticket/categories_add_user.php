@@ -25,12 +25,10 @@ $form->addHeader($categoryInfo['name']);
 $users = UserManager::get_user_list([], ['firstname']);
 $users = array_column($users, 'complete_name', 'user_id');
 
-$form->addElement(
-    'advmultiselect',
+$form->addMultiSelect(
     'users',
     get_lang('Users'),
-    $users,
-    'style="width: 280px;"'
+    $users
 );
 
 $usersAdded = TicketManager::getUsersInCategory($categoryId);

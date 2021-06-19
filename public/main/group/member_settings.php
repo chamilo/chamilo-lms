@@ -159,8 +159,7 @@ if (!empty($group_member_list)) {
     }
 }
 
-$group_members_element = $form->addElement(
-    'advmultiselect',
+$group_members_element = $form->addMultiSelect(
     'group_members',
     get_lang('Group members'),
     $possible_users

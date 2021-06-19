@@ -101,8 +101,7 @@ foreach ($subscribedUsersInLp as $itemProperty) {
 $formUsers = new FormValidator('lp_edit', 'post', $url);
 $formUsers->addElement('hidden', 'user_form', 1);
 
-$userMultiSelect = $formUsers->addElement(
-    'advmultiselect',
+$userMultiSelect = $formUsers->addMultiSelect(
     'users',
     get_lang('Users'),
     $choices
@@ -143,8 +142,7 @@ foreach ($subscribedGroupsInLp as $itemProperty) {
     $selectedGroupChoices[] = $itemProperty->getGroup()->getId();
 }
 
-$groupMultiSelect = $form->addElement(
-    'advmultiselect',
+$groupMultiSelect = $form->addMultiSelect(
     'groups',
     get_lang('Groups'),
     $groupChoices
@@ -172,8 +170,7 @@ if ($allowUserGroups) {
         }
     }
 
-    $userGroupMultiSelect = $formUserGroup->addElement(
-        'advmultiselect',
+    $userGroupMultiSelect = $formUserGroup->addMultiSelect(
         'usergroups',
         get_lang('Classes'),
         $allOptions

@@ -5796,8 +5796,7 @@ class CourseManager
             $result[$content['value']] = $content['content'];
         }
 
-        $multiple = $form->addElement(
-            'advmultiselect',
+        $multiple = $form->addMultiSelect(
             'users',
             get_lang('Users'),
             $result,
@@ -5894,7 +5893,7 @@ class CourseManager
             $result[$content['value']] = $content['content'];
         }
 
-        return $form->addElement('advmultiselect', 'users', get_lang('Users'), $result);
+        return $form->addMultiSelect( 'users', get_lang('Users'), $result);
     }
 
     /**

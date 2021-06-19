@@ -210,8 +210,7 @@ if (!empty($coursesInSession) && $allowEditSessionCoaches) {
 
         $groupName = 'session_coaches_'.$sessionId;
         $sessionUrl = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$sessionId;
-        $form->addElement(
-            'advmultiselect',
+        $form->addMultiSelect(
             $groupName,
             Display::url(
                 $session['name'],

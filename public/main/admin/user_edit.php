@@ -321,7 +321,7 @@ if (!empty($studentBossList)) {
 }
 
 $user_data['student_boss'] = array_values($studentBossList);
-$form->addElement('advmultiselect', 'student_boss', get_lang('Superior (n+1)'), $studentBossToSelect);
+$form->addMultiSelect('student_boss', get_lang('Superior (n+1)'), $studentBossToSelect);
 
 // EXTRA FIELDS
 $extraField = new ExtraField('user');

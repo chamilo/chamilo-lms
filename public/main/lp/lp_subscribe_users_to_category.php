@@ -82,8 +82,7 @@ foreach ($links as $link) {
     }
 }
 
-$groupMultiSelect = $form->addElement(
-    'advmultiselect',
+$groupMultiSelect = $form->addMultiSelect(
     'groups',
     get_lang('Groups'),
     $groupChoices
@@ -112,8 +111,7 @@ if ($allowUserGroups) {
         }
     }
 
-    $userGroupMultiSelect = $formUserGroup->addElement(
-        'advmultiselect',
+    $userGroupMultiSelect = $formUserGroup->addMultiSelect(
         'usergroups',
         get_lang('Classes'),
         $allOptions
@@ -252,8 +250,7 @@ $formUsers = new FormValidator('lp_edit', 'post', $url);
 $formUsers->addElement('hidden', 'user_form', 1);
 $formUsers->addLabel('', $message);
 
-$userMultiSelect = $formUsers->addElement(
-    'advmultiselect',
+$userMultiSelect = $formUsers->addMultiSelect(
     'users',
     get_lang('Users'),
     $choices

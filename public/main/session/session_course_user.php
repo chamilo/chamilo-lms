@@ -40,8 +40,7 @@ $form = new FormValidator(
     'post',
     api_get_self().'?id_user='.$user->getId().'&id_session='.$session->getId()
 );
-$form->addElement(
-    'advmultiselect',
+$form->addMultiSelect(
     'courses_to_avoid',
     $tool_name,
     getSessionCourseList($session)

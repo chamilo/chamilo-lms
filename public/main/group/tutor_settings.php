@@ -145,8 +145,7 @@ if (!empty($complete_user_list)) {
     }
 }
 
-$group_tutors_element = $form->addElement(
-    'advmultiselect',
+$group_tutors_element = $form->addMultiSelect(
     'group_tutors',
     get_lang('Coaches'),
     $possible_users,

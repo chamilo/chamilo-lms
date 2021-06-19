@@ -217,14 +217,14 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
         $elementName = null,
         $elementLabel = null,
         $options = null,
-        $attributes = null,
+        array $attributes = [],
         $sort = null
     ) {
         $opts = $options;
         $options = null;  // prevent to use the default select element load options
 
         parent::__construct($elementName, $elementLabel, $options, $attributes);
-        $this->selectAllCheckBox = isset($attributes['select_all_checkbox']) ? $attributes['select_all_checkbox'] : false;
+        $this->selectAllCheckBox = $attributes['select_all_checkbox'] ?? false;
 
         // allow to load options at once and take care of fancy attributes
         $this->load($opts);

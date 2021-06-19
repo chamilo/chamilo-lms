@@ -934,6 +934,11 @@ EOT;
         return $this->addElement('select', $name, $label, $options, $attributes);
     }
 
+    public function addMultiSelect(string $name, $label, array $options, array $attributes = [])
+    {
+        $this->addElement('advmultiselect', $name, $label, $options, $attributes);
+    }
+
     /**
      * @param string $label
      * @param string $text

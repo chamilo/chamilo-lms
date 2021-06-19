@@ -162,8 +162,7 @@ $form = new FormValidator('frm_invitation', 'post', api_get_self().'?id='.$group
 $form->addHidden('form_sent', 1);
 $form->addHidden('id', $group_id);
 
-$group_members_element = $form->addElement(
-    'advmultiselect',
+$group_members_element = $form->addMultiSelect(
     'invitation',
     get_lang('Friends'),
     $nosessionUsersList

@@ -2419,7 +2419,7 @@ class Display
         $fixWidth = false,
         $additionalClass = ''
     ) {
-        $className = "fa fa-$name";
+        $className = "mdi mdi-$name";
 
         if ($fixWidth) {
             $className .= ' fa-fw';

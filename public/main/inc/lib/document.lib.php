@@ -6189,8 +6189,10 @@ This folder contains all sessions that have been opened in the chat. Although th
         $em = Database::getManager();
         $em->persist($document);
         $em->flush();
-        $repo = Container::getDocumentRepository();
-        $repo->addFileFromString($document, $realPath, 'text/html', $content, true);
+        if (!empty($content)) {
+            $repo = Container::getDocumentRepository();
+            $repo->addFileFromString($document, $realPath, 'text/html', $content, true);
+        }
 
         if ($document) {
             $allowNotification = api_get_configuration_value('send_notification_when_document_added');

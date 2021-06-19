@@ -1,6 +1,5 @@
 // require('mediaelement');
 // import('multiselect-two-sides');
-// require('@fortawesome/fontawesome-free');
 
 require('image-map-resizer/js/imageMapResizer.js');
 require('cropper');

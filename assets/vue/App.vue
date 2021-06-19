@@ -14,7 +14,6 @@ import NotificationMixin from './mixins/NotificationMixin';
 import axios from "axios";
 import { onMounted, onUnmounted, ref, computed, watch, provide } from 'vue';
 import isEmpty from 'lodash/isEmpty';
-import { fasGlobeAmericas, fasFlask } from '@quasar/extras/fontawesome-v5'
 import { useRouter, useRoute } from 'vue-router'
 
 import useState from './hooks/useState'

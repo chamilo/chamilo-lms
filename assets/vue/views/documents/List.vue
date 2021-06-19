@@ -56,7 +56,7 @@
 <!--              </div>-->
 <!--              <div v-else>-->
 <!--                <a @click="handleClick(props.row)" class="cursor-pointer" >-->
-<!--                  <FontAwesomeIcon-->
+<!--                  <v-icon-->
 <!--                      icon="folder"-->
 <!--                      size="lg"-->
 <!--                  />-->

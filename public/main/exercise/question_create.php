@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CQuiz;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 // the section (tabs)
@@ -45,21 +48,27 @@ $session_id = api_get_session_id();
 // the exercises
 $tbl_exercises = Database::get_course_table(TABLE_QUIZ_TEST);
 $course_id = api_get_course_int_id();
+$course = api_get_course_entity();
+$session = api_get_session_entity();
 
-$sql = "SELECT iid,title,type,description, results_disabled
+$repo = Container::getQuizRepository();
+$qb = $repo->getResourcesByCourse($course, $session);
+$exercises = $qb->getQuery()->getResult();
+
+/*$sql = "SELECT iid,title,type,description, results_disabled
         FROM $tbl_exercises
         WHERE c_id = $course_id AND active<>'-1' AND session_id=".$session_id.'
         ORDER BY title ASC';
-$result = Database::query($sql);
-$exercises['-'] = '-'.get_lang('Select exercise').'-';
-while ($row = Database :: fetch_array($result)) {
-    $exercises[$row['iid']] = cut($row['title'], EXERCISE_MAX_NAME_SIZE);
+$result = Database::query($sql);*/
+$list['-'] = '-'.get_lang('Select exercise').'-';
+/** @var CQuiz $exercise */
+foreach ($exercises as $exercise) {
+    $list[$exercise->getIid()] = cut($exercise->getTitle(), EXERCISE_MAX_NAME_SIZE);
 }
-$form->addSelect('exercise', get_lang('Test'), $exercises);
+$form->addSelect('exercise', get_lang('Test'), $list);
 
 // generate default content
-$form->addElement(
-    'checkbox',
+$form->addCheckBox(
     'is_content',
     null,
     get_lang('Generate default content'),
@@ -82,7 +91,7 @@ if ($form->validate()) {
     // check feedback_type from current exercise for type of question delineation
     $exercise_id = (int) ($values['exercise']);
     $sql = "SELECT feedback_type FROM $tbl_exercises
-            WHERE c_id = $course_id AND iid = '$exercise_id'";
+            WHERE iid = '$exercise_id'";
     $rs_feedback_type = Database::query($sql);
     $row_feedback_type = Database::fetch_row($rs_feedback_type);
     $feedback_type = $row_feedback_type[0];

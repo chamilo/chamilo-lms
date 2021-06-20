@@ -9278,7 +9278,7 @@ class Exercise
                                 '',
                                 [
                                     'onclick' => "javascript:if(!confirm('".addslashes(
-                                            api_htmlentities(get_lang('AreYouSureToDeleteJS'), ENT_QUOTES, $charset)
+                                            api_htmlentities(get_lang('Are you sure to delete?'))
                                         )." ".addslashes($exercise->getUnformattedTitle())."?"."')) return false;",
                                     'href' => 'exercise.php?'.api_get_cidreq(
                                         ).'&action=delete&sec_token='.$token.'&exerciseId='.$exerciseId,

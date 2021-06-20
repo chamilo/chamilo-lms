@@ -52,12 +52,11 @@
     @apply text-white font-bold  focus:ring-indigo-500;
 //bg-blue-700 hover:bg-blue-800
     background: rgba(46, 117, 163, 1);
-
   }
+
   .btn-primary:hover {
     background: rgba(36, 77, 103, 1);
   }
-
 
   .btn-warning {
     @apply text-white bg-yellow-400 hover:bg-yellow-800 focus:ring-yellow-500;
@@ -72,7 +71,7 @@
   }
 
   // Buttons with icons.
-  .btn > .fa {
+  .btn > .mdi {
     @apply -ml-1 mr-1 h-4 w-5 fill-current ;
   }
 

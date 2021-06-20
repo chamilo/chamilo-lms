@@ -102,7 +102,7 @@ security:
         #        - {path: ^/elfinder, role: ROLE_USER}
 #        - { path: ^/login, roles: PUBLIC_ACCESS }
 #        - { path: ^/api/authentication_token, roles: PUBLIC_ACCESS }
-        - { path: ^/login, roles: PUBLIC_ACCESS }
-        - { path: ^/api/authentication_token, roles: PUBLIC_ACCESS }
+        - {path: ^/login, roles: PUBLIC_ACCESS}
+        - {path: ^/api/authentication_token, roles: PUBLIC_ACCESS}
 #        - {path: ^/login, roles: PUBLIC_ACCESS}
 #        - {path: ^/api/authentication_token, roles: PUBLIC_ACCESS}

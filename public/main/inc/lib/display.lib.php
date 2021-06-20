@@ -251,13 +251,13 @@ class Display
         $tableName = 'tablename',
         $tableId = ''
     ) {
-        $column = isset($sorting_options['column']) ? $sorting_options['column'] : 0;
-        $default_items_per_page = isset($paging_options['per_page']) ? $paging_options['per_page'] : 20;
+        $column = $sorting_options['column'] ?? 0;
+        $default_items_per_page = $paging_options['per_page'] ?? 20;
         $table = new SortableTableFromArray($content, $column, $default_items_per_page, $tableName, null, $tableId);
         if (is_array($query_vars)) {
             $table->set_additional_parameters($query_vars);
         }
-        if ('table' == $style) {
+        if ('table' === $style) {
             if (is_array($header) && count($header) > 0) {
                 foreach ($header as $index => $header_item) {
                     $table->set_header(
@@ -389,9 +389,9 @@ class Display
         $elementCount = 0
     ) {
         $column = 0;
-        $default_items_per_page = isset($paging_options['per_page']) ? $paging_options['per_page'] : 20;
+        $default_items_per_page = $paging_options['per_page'] ?? 20;
         $table = new SortableTableFromArray($content, $column, $default_items_per_page, $name);
-        $table->total_number_of_items = intval($elementCount);
+        $table->total_number_of_items = (int) $elementCount;
         if (is_array($query_vars)) {
             $table->set_additional_parameters($query_vars);
         }

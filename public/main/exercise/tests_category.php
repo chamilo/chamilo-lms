@@ -64,7 +64,7 @@ switch ($action) {
 
         if (!empty($categories)) {
             foreach ($categories as $category) {
-                $export[] = [$category['title'], $category['description']];
+                $export[] = [$category->getTitle(), $category->getDescription()];
             }
         }
 

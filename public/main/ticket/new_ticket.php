@@ -317,16 +317,14 @@ $form->addLabel(
     )
 );
 
-$form->addElement(
-    'select',
+$form->addSelect(
     'status_id',
     get_lang('Status'),
     $statusList,
     $statusAttributes
 );
 
-$form->addElement(
-    'select',
+$form->addSelect(
     'priority_id',
     get_lang('Priority'),
     $priorityList,
@@ -336,8 +334,7 @@ $form->addElement(
     ]
 );
 
-$form->addElement(
-    'select',
+$form->addSelect(
     'source_id',
     get_lang('Source'),
     $sourceList,

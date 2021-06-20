@@ -2134,8 +2134,7 @@ class Agenda
                 'html',
                 '<div id="options2" style="display:none">'
             );
-            $form->addElement(
-                'select',
+            $form->addSelect(
                 'repeat_type',
                 get_lang('Repeat type'),
                 self::getRepeatTypes()

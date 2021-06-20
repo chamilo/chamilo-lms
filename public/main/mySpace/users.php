@@ -334,8 +334,7 @@ $form = new FormValidator(
     'get',
     $webCodePath.'mySpace/users.php'
 );
-$form->addElement(
-    'select',
+$form->addSelect(
     'status',
     get_lang('Status'),
     [

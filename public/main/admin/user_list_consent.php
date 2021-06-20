@@ -574,8 +574,7 @@ $status_options[DRH] = get_lang('Human Resources Manager');
 $status_options[SESSIONADMIN] = get_lang('Sessions administrator');
 $status_options[PLATFORM_ADMIN] = get_lang('Administrator');
 
-$form->addElement(
-    'select',
+$form->addSelect(
     'keyword_status',
     get_lang('Profile'),
     $status_options

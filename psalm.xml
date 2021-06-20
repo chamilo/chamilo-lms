@@ -63,7 +63,7 @@
         <file name="public/main/inc/lib/agenda.lib.php"/>
         <file name="public/main/inc/lib/AnnouncementEmail.php"/>
         <file name="public/main/inc/lib/AnnouncementManager.php"/>
-<!--        <file name="public/main/inc/lib/api.lib.php"/>-->
+        <file name="public/main/inc/lib/api.lib.php"/>
         <file name="public/main/inc/lib/array.lib.php"/>
         <file name="public/main/inc/lib/attendance.lib.php"/>
         <file name="public/main/inc/lib/auth.lib.php"/>
@@ -86,7 +86,7 @@
 <!--        <file name="public/main/inc/lib/exercise.lib.php"/>-->
         <file name="public/main/inc/lib/exercise_show_functions.lib.php"/>
         <file name="public/main/inc/lib/ExerciseCategoryManager.php"/>
-<!--        <file name="public/main/inc/lib/export.lib.inc.php"/>-->
+        <file name="public/main/inc/lib/export.lib.inc.php"/>
 
         <file name="public/main/inc/lib/extra_field.lib.php"/>
         <file name="public/main/inc/lib/extra_field_option.lib.php"/>
@@ -165,6 +165,8 @@
             <directory name="public/main/inc/lib/search" />
             <directory name="public/main/inc/lib/svg-edit" />
             <directory name="public/main/inc/lib/zombie" />
+            <directory name="public/main/exercise/export/qti2" />
+
 
             <file name="public/main/lp/openoffice_presentation.class.php"/>
             <file name="public/main/lp/openoffice_document.class.php"/>
@@ -187,6 +189,7 @@
 
             <file name="public/main/admin/ldap_*"/>
             <file name="public/main/admin/special_exports.php"/>
+            <file name="public/main/exercise/admin.php"/>
 
             <file name="src/CoreBundle/Controller/EditorController.php"/>
             <file name="src/CoreBundle/Controller/ResourceController.php"/>

@@ -472,8 +472,7 @@ switch ($action) {
             } else {
                 if (BuyCoursesPlugin::SERVICE_TYPE_SESSION == $nodeType) {
                     $nodeType = get_lang('Session');
-                    /** @var Session $session */
-                    $session = $em->find('ChamiloCoreBundle:Session', $serviceSale['node_id']);
+                    $session = api_get_session_entity($serviceSale['node_id']);
                     $nodeName = $session ? $session->getName() : null;
                 } else {
                     if (BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM == $nodeType) {

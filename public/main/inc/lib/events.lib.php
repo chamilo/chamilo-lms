@@ -1,4 +1,5 @@
 <?php
+
 /* See license terms in /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
@@ -2343,7 +2344,6 @@ class Event
         }
 
         if (Tracking::minimumTimeAvailable($sessionId, $courseId)) {
-            $workId = (int) $workId;
             $sql = "SELECT id FROM track_e_access_complete
                     WHERE
                         tool = '".TOOL_STUDENTPUBLICATION."' AND

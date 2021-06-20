@@ -370,10 +370,10 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
     echo '	</td>';
     $question_counter++;
 
-    if ($is_survey_type_1) {
+    /*if ($is_survey_type_1) {
         echo '<td>'.((0 == $row['survey_group_pri']) ? get_lang('Secondary') : get_lang('Primary')).'</td>';
         echo '<td>'.((0 == $row['survey_group_pri']) ? $groups[$row['survey_group_sec1']].'-'.$groups[$row['survey_group_sec2']] : $groups[$row['survey_group_pri']]).'</td>';
-    }
+    }*/
     echo '</tr>';
 }
 

@@ -923,8 +923,7 @@ class TestCategory
             '1' => get_lang('Visible'),
             '0' => get_lang('Hidden'),
         ];
-        $form->addElement(
-            'select',
+        $form->addSelect(
             'visibility',
             get_lang('Visibility'),
             $options

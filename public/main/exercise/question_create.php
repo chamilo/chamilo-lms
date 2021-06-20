@@ -32,8 +32,7 @@ $question_list_options = [];
 foreach ($question_list as $key => $value) {
     $question_list_options[$key] = addslashes(get_lang($value[1]));
 }
-$form->addElement(
-    'select',
+$form->addSelect(
     'question_type_hidden',
     get_lang('Question type'),
     $question_list_options,

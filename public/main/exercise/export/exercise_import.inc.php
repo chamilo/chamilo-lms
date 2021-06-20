@@ -536,7 +536,7 @@ function parseQti2($xmlData)
                     }
 
                     if ('inlineChoiceInteraction' === $childNode->nodeName) {
-                        $currentQuestionItemBody .= '**claroline_start**'.$childNode->attr('responseIdentifier')
+                        $currentQuestionItemBody .= '**claroline_start**'.$childNode->getAttribute('responseIdentifier')
                             .'**claroline_end**';
 
                         continue;

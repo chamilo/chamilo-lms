@@ -59,15 +59,13 @@ foreach ($session_list as $sesion_item) {
 }
 
 $form = new FormValidator('search_simple', 'POST', '', '', null, false);
-$form->addElement(
-    'select',
+$form->addSelect(
     'session_id',
     get_lang('Course sessions'),
     $my_session_list,
     ['id' => 'session_id', 'onchange' => 'load_courses();']
 );
-$form->addElement(
-    'select',
+$form->addSelect(
     'course_code',
     get_lang('Courses'),
     $course_select_list

@@ -2036,8 +2036,7 @@ class Exercise
                 //EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM => get_lang('OrderedCategoriesByParentWithQuestionsRandom'),
             ];
 
-            $form->addElement(
-                'select',
+            $form->addSelect(
                 'question_selection_type',
                 [get_lang('Question selection type')],
                 $option,
@@ -2107,8 +2106,7 @@ class Exercise
             $option = range(0, $max);
             $option[0] = get_lang('No');
             $option[-1] = get_lang('All');
-            $form->addElement(
-                'select',
+            $form->addSelect(
                 'randomQuestions',
                 [
                     get_lang('Random questions'),
@@ -3911,7 +3909,7 @@ class Exercise
                             }
                         }
                     } else {
-                        $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
+                        $studentChoice = $choice[$answerAutoId] ?? null;
                         if (1 == $answerCorrect) {
                             $real_answers[$answerId] = false;
                             if ($studentChoice) {
@@ -5729,7 +5727,7 @@ class Exercise
                     // Save the score attempts
                     if (1) {
                         //getting the answer 1 or 0 comes from exercise_submit_modal.php
-                        $final_answer = isset($hotspot_delineation_result[1]) ? $hotspot_delineation_result[1] : '';
+                        $final_answer = $hotspot_delineation_result[1] ?? '';
                         if (0 == $final_answer) {
                             $questionScore = 0;
                         }

@@ -6272,15 +6272,13 @@ class Tracking
     public static function setUserSearchForm($form)
     {
         $form->addElement('text', 'keyword', get_lang('Keyword'));
-        $form->addElement(
-            'select',
+        $form->addSelect(
             'active',
             get_lang('Status'),
             [1 => get_lang('active'), 0 => get_lang('inactive')]
         );
 
-        $form->addElement(
-            'select',
+        $form->addSelect(
             'sleeping_days',
             get_lang('Inactive days'),
             [

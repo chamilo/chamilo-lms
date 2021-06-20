@@ -99,7 +99,7 @@ switch ($action) {
         } else {
             $actions = '<a href="'.$url.'">'.
                 Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
-            $content .= Display::toolbarAction('toolbar', [$actions]);
+            $content = Display::toolbarAction('toolbar', [$actions]);
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(['sec_token' => $token]);
             $content .= $form->returnForm();
@@ -123,7 +123,7 @@ switch ($action) {
         } else {
             $actions = '<a href="'.$url.'">'.
                 Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
-            $content .= Display::toolbarAction('toolbar', [$actions]);
+            $content = Display::toolbarAction('toolbar', [$actions]);
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(['sec_token' => $token]);
             $content .= $form->returnForm();

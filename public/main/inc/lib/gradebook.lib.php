@@ -178,8 +178,7 @@ class Gradebook extends Model
         foreach ($skills as $skill) {
             $clean_skill_list[$skill['id']] = $skill['name'];
         }
-        $form->addElement(
-            'select',
+        $form->addSelect(
             'skill',
             get_lang('Skills'),
             $clean_skill_list,

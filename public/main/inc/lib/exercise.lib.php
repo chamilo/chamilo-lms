@@ -1651,6 +1651,8 @@ HOTSPOT;
     public static function showTestsWhereQuestionIsUsed(int $questionId, int $excludeTestId = 0)
     {
         $questionId = (int) $questionId;
+        $excludeTestId = (int) $excludeTestId;
+
         $sql = "SELECT qz.title quiz_title,
                         c.title course_title,
                         s.name session_name,
@@ -1665,7 +1667,6 @@ HOTSPOT;
                     (qz.session_id = s.id OR qz.session_id = 0) AND
                     qq.quiz_id = qz.iid AND ";
         if (!empty($excludeTestId)) {
-            $excludeTestId = (int) $excludeTestId;
             $sql .= " qz.iid != $excludeTestId AND ";
         }
         $sql .= "     qq.question_id = $questionId

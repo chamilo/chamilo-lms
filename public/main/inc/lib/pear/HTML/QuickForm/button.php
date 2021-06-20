@@ -91,7 +91,7 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
 
             $icon = $this->getIcon();
             if (!empty($icon)) {
-                $icon = '<em class="mr-1 ' . $this->getIcon() . '"></em> ';
+                $icon = '<em class="'.$this->getIcon().'"></em> ';
             }
             $class = $this->getClass().' '.$this->getStyle().' '.$this->getSize();
 

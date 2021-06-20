@@ -230,7 +230,7 @@ function generateLPFinalItemTemplate(
 function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId = 0)
 {
     $em = Database::getManager();
-    $skillRelUser = new SkillRelUser();
+    $skillRelUser = new SkillRelUserModel();
     $userSkills = $skillRelUser->getUserSkills($userId, $courseId, $sessionId);
     $skillList = '';
     $badgeLink = '';

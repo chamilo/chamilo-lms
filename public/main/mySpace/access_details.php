@@ -46,8 +46,7 @@ $form = new FormValidator(
 );
 $form->addElement('text', 'from', get_lang('From'), ['id' => 'date_from']);
 $form->addElement('text', 'to', get_lang('Until'), ['id' => 'date_to']);
-$form->addElement(
-    'select',
+$form->addSelect(
     'type',
     get_lang('Type'),
     ['day' => get_lang('Day'), 'month' => get_lang('Month')],

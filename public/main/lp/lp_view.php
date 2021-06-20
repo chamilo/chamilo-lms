@@ -333,7 +333,7 @@ $lp_theme_css = $lp->getTheme();
 
 // Setting up the CSS theme if exists.
 if (!empty($lp_theme_css) && !empty($mycourselptheme) && -1 != $mycourselptheme && 1 == $mycourselptheme) {
-    global $lp_theme_css;
+    //global $lp_theme_css;
 } else {
     $lp_theme_css = $my_style;
 }
@@ -364,7 +364,7 @@ if (Database::num_rows($res_media) > 0) {
 
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true, true, false);
 
-global $interbreadcrumb;
+//global $interbreadcrumb;
 if ($is_allowed_to_edit) {
     $interbreadcrumb[] = [
         'url' => api_get_self().'?action=list&isStudentView=false&'.api_get_cidreq(true, true, 'course'),

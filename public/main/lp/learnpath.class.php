@@ -8496,7 +8496,7 @@ class learnpath
         if (!empty($itemList['thread'])) {
             $threadList = [];
             $em = Database::getManager();
-            $repo = $em->getRepository('ChamiloCourseBundle:CForumThread');
+            $repo = Container::getForumThreadRepository();
             foreach ($itemList['thread'] as $threadId) {
                 /** @var CForumThread $thread */
                 $thread = $repo->find($threadId);

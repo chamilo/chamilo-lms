@@ -136,7 +136,7 @@ $tpl->assign('filename', $lp_item->get_title().'_nano.wav');
 $tpl->assign('enable_record_audio', 'true' === api_get_setting('enable_record_audio'));
 $tpl->assign('cur_dir_path', '/audio');
 $tpl->assign('lp_item_id', $lp_item_id);
-$tpl->assign('lp_dir', api_remove_trailing_slash($lpPathInfo['dir']));
+//$tpl->assign('lp_dir', api_remove_trailing_slash($lpPathInfo['dir']));
 $recordVoiceForm .= $tpl->fetch('@ChamiloCore/LearnPath/record_voice.html.twig');
 $form->addElement('header', '<small class="text-muted">'.get_lang('Or').'</small> '.get_lang('AudioFile'));
 

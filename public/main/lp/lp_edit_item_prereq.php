@@ -21,7 +21,7 @@ $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 $isStudentView = isset($_REQUEST['isStudentView']) ? (int) $_REQUEST['isStudentView'] : null;
 $learnpath_id = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : null;
-$submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
+$submit = $_POST['submit_button'] ?? null;
 
 /* MAIN CODE */
 if (!$is_allowed_to_edit || $isStudentView) {

@@ -47,8 +47,7 @@ foreach ($course_list as $data) {
 }
 
 $form = new FormValidator('search_simple', 'POST', '', '', null, false);
-$form->addElement(
-    'select',
+$form->addSelect(
     'course_code',
     get_lang('Course'),
     $new_course_select

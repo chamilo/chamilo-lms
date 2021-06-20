@@ -79,28 +79,6 @@ class CourseDescription
         $qb = $repo->getResourcesByCourse($course, $session);
 
         return $qb->getQuery()->getResult();
-
-        /*$table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-        $condition_session = api_get_session_condition(
-            $this->session_id,
-            true,
-            true
-        );
-
-
-        if (empty($course_id)) {
-            return [];
-        }
-
-        $sql = "SELECT * FROM $table
-                ORDER BY iid ";
-        $rs = Database::query($sql);
-        $data = [];
-        while ($description = Database::fetch_array($rs)) {
-            $data['descriptions'][$description['iid']] = $description;
-        }
-
-        return $data;*/
     }
 
     /**
@@ -192,7 +170,6 @@ class CourseDescription
     public function get_max_description_type()
     {
         $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-        $course_id = api_get_course_int_id();
 
         $sql = "SELECT MAX(description_type) as MAX
                 FROM $table
@@ -273,17 +250,6 @@ class CourseDescription
                 ],
             ]
         );
-
-        if ($this->id > 0) {
-            // Insert into item_property
-            api_item_property_update(
-                api_get_course_info(),
-                TOOL_COURSE_DESCRIPTION,
-                $this->id,
-                'CourseDescriptionUpdated',
-                api_get_user_id()
-            );
-        }
 
         return 1;
     }

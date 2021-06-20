@@ -339,12 +339,16 @@ class FillBlanks extends Question
 
         //added multiple answers
         $form->addCheckBox('multiple_answer', '', get_lang('Allow answers order switches'));
-        $form->addElement(
-            'select',
+        $form->addSelect(
             'select_separator',
             get_lang('Select a blanks marker'),
             self::getAllowedSeparatorForSelect(),
-            ' id="select_separator" style="width:150px" class="form-control" onchange="changeBlankSeparator()" '
+            [
+                'id' => 'select_separator',
+                'style' => 'width:150px',
+                'class' => 'form-control',
+                'onchange' => 'changeBlankSeparator()',
+            ]
         );
         $form->addLabel(
             null,

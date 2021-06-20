@@ -1193,8 +1193,7 @@ class ExtraField extends Model
                                 $options[$optionDetails['option_value']] = $optionDetails['display_text'];
                             }
                         }
-                        $form->addElement(
-                            'select',
+                        $form->addSelect(
                             'extra_'.$variable,
                             $field_details['display_text'],
                             $options,
@@ -1436,12 +1435,10 @@ class ExtraField extends Model
 
                         break;
                     case self::FIELD_TYPE_TIMEZONE:
-                        $form->addElement(
-                            'select',
+                        $form->addSelect(
                             'extra_'.$variable,
                             $field_details['display_text'],
                             api_get_timezones(),
-                            ''
                         );
                         if ($freezeElement) {
                             $form->freeze('extra_'.$variable);

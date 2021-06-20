@@ -111,8 +111,8 @@ if (count($term_array)) {
 }
 
 if ($query) {
-    list($count, $results) = chamilo_query_query(
-        api_convert_encoding($query, 'UTF-8', $charset),
+    [$count, $results] = chamilo_query_query(
+        $query,
         0,
         1000,
         $fixed_queries

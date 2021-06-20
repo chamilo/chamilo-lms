@@ -1071,8 +1071,7 @@ switch ($action) {
         }
 
         if (count($attendance_select) > 1) {
-            $form->addElement(
-                'select',
+            $form->addSelect(
                 'attendance_select',
                 get_lang('Attendances'),
                 $attendance_select,

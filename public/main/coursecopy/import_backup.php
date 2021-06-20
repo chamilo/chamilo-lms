@@ -180,12 +180,10 @@ if (Security::check_token('post') && ('course_select_form' === $action || 'full_
         foreach ($backups as $index => $backup) {
             $options[$backup['file']] = $backup['course_code'].' ('.$backup['date'].')';
         }
-        $form->addElement(
-            'select',
+        $form->addSelect(
             'backup_server',
             '',
-            $options,
-            'style="margin-left: 50px;"'
+            $options
         );
         $form->addElement(
             'html',

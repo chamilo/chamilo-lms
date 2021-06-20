@@ -897,15 +897,13 @@ while ($i < 298) {
     $marginOptions[$i] = $i.' mm';
     $i++;
 }
-$form->addElement(
-    'select',
+$form->addSelect(
     'margin_left',
     get_lang('MarginLeft'),
     $marginOptions,
     ['cols-size' => [4, 8, 0]]
 );
-$form->addElement(
-    'select',
+$form->addSelect(
     'margin_right',
     get_lang('MarginRight'),
     $marginOptions,

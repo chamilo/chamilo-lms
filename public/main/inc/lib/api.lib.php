@@ -853,7 +853,7 @@ function api_get_path($path = '', $configuration = [])
     global $virtualChamilo;
     if (!empty($virtualChamilo)) {
         $paths[SYS_ARCHIVE_PATH] = api_add_trailing_slash($virtualChamilo[SYS_ARCHIVE_PATH]);
-        $paths[SYS_UPLOAD_PATH] = api_add_trailing_slash($virtualChamilo[SYS_UPLOAD_PATH]);
+        //$paths[SYS_UPLOAD_PATH] = api_add_trailing_slash($virtualChamilo[SYS_UPLOAD_PATH]);
         //$paths[$root_web][WEB_UPLOAD_PATH] = api_add_trailing_slash($virtualChamilo[WEB_UPLOAD_PATH]);
         $paths[WEB_ARCHIVE_PATH] = api_add_trailing_slash($virtualChamilo[WEB_ARCHIVE_PATH]);
         //$paths[$root_web][WEB_COURSE_PATH] = api_add_trailing_slash($virtualChamilo[WEB_COURSE_PATH]);
@@ -3767,14 +3767,14 @@ function api_is_allowed($tool, $action, $task_id = 0)
 
         // Getting the permissions of this user.
         if (0 == $task_id) {
-            $user_permissions = get_permissions('user', $_user['user_id']);
-            $_SESSION['total_permissions'][$_course['code']] = $user_permissions;
+            //$user_permissions = get_permissions('user', $_user['user_id']);
+            //$_SESSION['total_permissions'][$_course['code']] = $user_permissions;
         }
 
         // Getting the permissions of the task.
         if (0 != $task_id) {
-            $task_permissions = get_permissions('task', $task_id);
-            /* !!! */ $_SESSION['total_permissions'][$_course['code']] = $task_permissions;
+            //$task_permissions = get_permissions('task', $task_id);
+            //$_SESSION['total_permissions'][$_course['code']] = $task_permissions;
         }
     }
 
@@ -7965,7 +7965,7 @@ function api_unserialize_content($type, $serialized, $ignoreErrors = false)
                 scormOrganization::class,
                 scormResource::class,
                 Link::class,
-                LpItem::class,
+                //LpItem::class,
             ];
             break;
         case 'course':

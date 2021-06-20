@@ -235,8 +235,7 @@ $status[SESSIONADMIN] = get_lang('Sessions administrator');
 $status[STUDENT_BOSS] = get_lang('Student\'s superior');
 $status[INVITEE] = get_lang('Invitee');
 
-$form->addElement(
-    'select',
+$form->addSelect(
     'status',
     get_lang('Profile'),
     $status,

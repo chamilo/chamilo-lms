@@ -918,9 +918,11 @@ function api_htmlentities($string, $quote_style = ENT_COMPAT)
  *
  * @see http://php.net/html_entity_decode
  */
-function api_html_entity_decode($string, $quote_style = ENT_COMPAT, $encoding = 'UTF-8')
+function api_html_entity_decode($string, $quoteStyle = ENT_COMPAT, $encoding = 'UTF-8')
 {
-    if (empty($encoding)) {
+    return html_entity_decode($string, $quoteStyle, $encoding);
+
+    /*if (empty($encoding)) {
         $encoding = _api_mb_internal_encoding();
     }
     if (api_is_encoding_supported($encoding)) {
@@ -935,7 +937,7 @@ function api_html_entity_decode($string, $quote_style = ENT_COMPAT, $encoding = 
         return $string;
     }
 
-    return $string; // Here the function gives up.
+    return $string; // Here the function gives up.*/
 }
 
 /**
@@ -953,9 +955,9 @@ function api_xml_http_response_encode($string, $from_encoding = 'UTF8')
         if (empty($from_encoding)) {
             $from_encoding = _api_mb_internal_encoding();
         }
-        if (!api_is_utf8($from_encoding)) {
+        /*if (!api_is_utf8($from_encoding)) {
             return api_utf8_encode($string, $from_encoding);
-        }
+        }*/
     }
 
     return $string;
@@ -1445,11 +1447,7 @@ function api_preg_match(
     $offset = 0,
     $encoding = null
 ) {
-    if (empty($encoding)) {
-        $encoding = _api_mb_internal_encoding();
-    }
-
-    return preg_match(api_is_utf8($encoding) ? $pattern.'u' : $pattern, $subject, $matches, $flags, $offset);
+    return preg_match($pattern.'u', $subject, $matches, $flags, $offset);
 }
 
 /**
@@ -1487,7 +1485,9 @@ function api_preg_match_all($pattern, $subject, &$matches, $flags = PREG_PATTERN
         $flags = PREG_PATTERN_ORDER;
     }
 
-    return preg_match_all(api_is_utf8($encoding) ? $pattern.'u' : $pattern, $subject, $matches, $flags, $offset);
+    return preg_match_all( $pattern.'u', $subject, $matches, $flags, $offset);
+
+    //return preg_match_all(api_is_utf8($encoding) ? $pattern.'u' : $pattern, $subject, $matches, $flags, $offset);
 }
 
 /**
@@ -1510,7 +1510,7 @@ function api_preg_match_all($pattern, $subject, &$matches, $flags = PREG_PATTERN
  */
 function api_preg_replace($pattern, $replacement, $subject, $limit = -1, $count = 0, $encoding = null)
 {
-    if (empty($encoding)) {
+    /*if (empty($encoding)) {
         $encoding = _api_mb_internal_encoding();
     }
     $is_utf8 = api_is_utf8($encoding);
@@ -1520,7 +1520,8 @@ function api_preg_replace($pattern, $replacement, $subject, $limit = -1, $count 
         }
     } else {
         $pattern = $is_utf8 ? $pattern.'u' : $pattern;
-    }
+    }*/
+    $pattern = $pattern.'u';
 
     return preg_replace($pattern, $replacement, $subject, $limit, $count);
 }
@@ -1547,13 +1548,9 @@ function api_preg_replace($pattern, $replacement, $subject, $limit = -1, $count 
  *
  * @see http://php.net/preg_split
  */
-function api_preg_split($pattern, $subject, $limit = -1, $flags = 0, $encoding = null)
+function api_preg_split($pattern, $subject, $limit = -1, $flags = 0)
 {
-    if (empty($encoding)) {
-        $encoding = _api_mb_internal_encoding();
-    }
-
-    return preg_split(api_is_utf8($encoding) ? $pattern.'u' : $pattern, $subject, $limit, $flags);
+    return preg_split($pattern.'u', $subject, $limit, $flags);
 }
 
 /**
@@ -1685,73 +1682,6 @@ function api_refine_encoding_id($encoding)
 }
 
 /**
- * This function checks whether two $encoding are equal (same, equvalent).
- *
- * @param string|array $encoding1 The first encoding
- * @param string|array $encoding2 The second encoding
- * @param bool         $strict    When this parameter is TRUE the comparison ignores aliases of encodings.
- *                                When the parameter is FALSE, aliases are taken into account.
- *
- * @return bool returns TRUE if the encodings are equal, FALSE otherwise
- */
-function api_equal_encodings($encoding1, $encoding2, $strict = false)
-{
-    static $equal_encodings = [];
-    if (is_array($encoding1)) {
-        foreach ($encoding1 as $encoding) {
-            if (api_equal_encodings($encoding, $encoding2, $strict)) {
-                return true;
-            }
-        }
-
-        return false;
-    } elseif (is_array($encoding2)) {
-        foreach ($encoding2 as $encoding) {
-            if (api_equal_encodings($encoding1, $encoding, $strict)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-    if (!isset($equal_encodings[$encoding1][$encoding2][$strict])) {
-        $encoding_1 = api_refine_encoding_id($encoding1);
-        $encoding_2 = api_refine_encoding_id($encoding2);
-        if ($encoding_1 == $encoding_2) {
-            $result = true;
-        } else {
-            if ($strict) {
-                $result = false;
-            } else {
-                $alias1 = _api_get_character_map_name($encoding_1);
-                $alias2 = _api_get_character_map_name($encoding_2);
-                $result = !empty($alias1) && !empty($alias2) && $alias1 == $alias2;
-            }
-        }
-        $equal_encodings[$encoding1][$encoding2][$strict] = $result;
-    }
-
-    return $equal_encodings[$encoding1][$encoding2][$strict];
-}
-
-/**
- * This function checks whether a given encoding is UTF-8.
- *
- * @param string $encoding the tested encoding
- *
- * @return bool returns TRUE if the given encoding id means UTF-8, otherwise returns false
- */
-function api_is_utf8($encoding)
-{
-    static $result = [];
-    if (!isset($result[$encoding])) {
-        $result[$encoding] = api_equal_encodings($encoding, 'UTF-8');
-    }
-
-    return $result[$encoding];
-}
-
-/**
  * This function returns the encoding, currently used by the system.
  *
  * @return string The system's encoding.
@@ -1765,33 +1695,13 @@ function api_get_system_encoding()
 }
 
 /**
- * Checks whether a specified encoding is supported by this API.
- *
- * @param string $encoding the specified encoding
- *
- * @return bool returns TRUE when the specified encoding is supported, FALSE othewise
- */
-function api_is_encoding_supported($encoding)
-{
-    static $supported = [];
-    if (!isset($supported[$encoding])) {
-        $supported[$encoding] = _api_mb_supports($encoding) || _api_iconv_supports(
-                $encoding
-            ) || _api_convert_encoding_supports($encoding);
-    }
-
-    return $supported[$encoding];
-}
-
-/**
  * Detects encoding of plain text.
  *
  * @param string $string   the input text
- * @param string $language (optional) The language of the input text, provided if it is known
  *
  * @return string returns the detected encoding
  */
-function api_detect_encoding($string, $language = null)
+function api_detect_encoding($string)
 {
     // Testing against valid UTF-8 first.
     if (api_is_valid_utf8($string)) {
@@ -2021,33 +1931,6 @@ function _api_clean_person_name($person_name)
 }
 
 /**
- * This function determines the name of corresponding to a given encoding conversion table.
- * It is able to deal with some aliases of the encoding.
- *
- * @param string $encoding the given encoding identificator, for example 'WINDOWS-1252'
- *
- * @return string returns the name of the corresponding conversion table, for the same example - 'CP1252'
- */
-function _api_get_character_map_name($encoding)
-{
-    static $character_map_selector;
-    if (!isset($character_map_selector)) {
-        $file = __DIR__.'/internationalization_database/conversion/character_map_selector.php';
-        if (file_exists($file)) {
-            $character_map_selector = include $file;
-        } else {
-            $character_map_selector = [];
-        }
-    }
-
-    return isset($character_map_selector[$encoding]) ? $character_map_selector[$encoding] : '';
-}
-
-/**
- * Appendix to "String comparison".
- */
-
-/**
  * A reverse function from php-core function strnatcmp(),
  * performs string comparison in reverse natural (alpha-numerical) order.
  *
@@ -2078,27 +1961,6 @@ function _api_mb_internal_encoding($encoding = 'UTF-8')
 }
 
 /**
- * Checks whether the specified encoding is supported by the PHP mbstring extension.
- *
- * @param string $encoding the specified encoding
- *
- * @return bool returns TRUE when the specified encoding is supported, FALSE othewise
- */
-function _api_mb_supports($encoding)
-{
-    static $supported = [];
-    if (!isset($supported[$encoding])) {
-        if (MBSTRING_INSTALLED) {
-            $supported[$encoding] = api_equal_encodings($encoding, mb_list_encodings(), true);
-        } else {
-            $supported[$encoding] = false;
-        }
-    }
-
-    return $supported[$encoding];
-}
-
-/**
  * Checks whether the specified encoding is supported by the PHP iconv extension.
  *
  * @param string $encoding the specified encoding
@@ -2126,18 +1988,6 @@ function _api_iconv_supports($encoding)
     }
 
     return $supported[$encoding];
-}
-
-// This function checks whether the function _api_convert_encoding() (the php-
-// implementation) is able to convert from/to a given encoding.
-function _api_convert_encoding_supports($encoding)
-{
-    static $supports = [];
-    if (!isset($supports[$encoding])) {
-        $supports[$encoding] = '' != _api_get_character_map_name(api_refine_encoding_id($encoding));
-    }
-
-    return $supports[$encoding];
 }
 
 /**

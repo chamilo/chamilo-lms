@@ -437,8 +437,7 @@ class SurveyUtil
 
         // Actions bar
         if ($addActionBar) {
-            echo '<div class="actions">';
-            echo '<a href="'.$reportingUrl.'">'.
+            $actions = '<a href="'.$reportingUrl.'">'.
                 Display::return_icon(
                     'back.png',
                     get_lang('Back to').' '.get_lang('Reporting overview'),
@@ -449,32 +448,32 @@ class SurveyUtil
             if (isset($_GET['user'])) {
                 if (api_is_allowed_to_edit()) {
                     // The delete link
-                    echo '<a
+                    $actions .= '<a
                         href="'.$reportingUrl.'&action=deleteuserreport&user='.Security::remove_XSS($_GET['user']).'" >'.
                         Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_MEDIUM).'</a>';
                 }
 
                 // Export the user report
-                echo '<a href="javascript: void(0);" onclick="document.form1a.submit();">'
+                $actions .= '<a href="javascript: void(0);" onclick="document.form1a.submit();">'
                     .Display::return_icon('export_csv.png', get_lang('CSV export'), '', ICON_SIZE_MEDIUM).'</a> ';
-                echo '<a href="javascript: void(0);" onclick="document.form1b.submit();">'
+                $actions .= '<a href="javascript: void(0);" onclick="document.form1b.submit();">'
                     .Display::return_icon('export_excel.png', get_lang('Excel export'), '', ICON_SIZE_MEDIUM).'</a> ';
-                echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?action='
+                $actions .= '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?action='
                     .Security::remove_XSS($_GET['action']).'&survey_id='.$surveyId.'&'.api_get_cidreq().'&user_id='
                     .Security::remove_XSS($_GET['user']).'">';
-                echo '<input type="hidden" name="export_report" value="export_report">';
-                echo '<input type="hidden" name="export_format" value="csv">';
-                echo '</form>';
-                echo '<form id="form1b" name="form1b" method="post" action="'.api_get_self().'?action='
+                $actions .= '<input type="hidden" name="export_report" value="export_report">';
+                $actions .= '<input type="hidden" name="export_format" value="csv">';
+                $actions .= '</form>';
+                $actions .= '<form id="form1b" name="form1b" method="post" action="'.api_get_self().'?action='
                     .Security::remove_XSS($_GET['action']).'&survey_id='.$surveyId.'&'.api_get_cidreq().'&user_id='
                     .Security::remove_XSS($_GET['user']).'">';
-                echo '<input type="hidden" name="export_report" value="export_report">';
-                echo '<input type="hidden" name="export_format" value="xls">';
-                echo '</form>';
-                echo '<form id="form2" name="form2" method="post" action="'.api_get_self().'?action='
+                $actions .= '<input type="hidden" name="export_report" value="export_report">';
+                $actions .= '<input type="hidden" name="export_format" value="xls">';
+                $actions .= '</form>';
+                $actions .= '<form id="form2" name="form2" method="post" action="'.api_get_self().'?action='
                     .Security::remove_XSS($_GET['action']).'&survey_id='.$surveyId.'&'.api_get_cidreq().'">';
             }
-            echo '</div>';
+            echo Display::toolbarAction('survey', [$actions]);
         }
 
         echo self::displayUserReportForm($survey, $people_filled);
@@ -515,8 +514,7 @@ class SurveyUtil
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
-        echo '<div class="actions">';
-        echo '<a
+        $actions = '<a
             href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'.
             Display::return_icon(
                 'back.png',
@@ -524,7 +522,7 @@ class SurveyUtil
                 '',
                 ICON_SIZE_MEDIUM
             ).'</a>';
-        echo Display::url(
+        $actions .= Display::url(
             Display::return_icon(
                 'pdf.png',
                 get_lang('ExportToPdf'),
@@ -534,7 +532,9 @@ class SurveyUtil
             'javascript: void(0);',
             ['onclick' => 'exportToPdf();']
         );
-        echo '</div>';
+
+        echo Display::toolbarAction('survey', [$actions]);
+
         $fromUntil = sprintf(
             get_lang('FromXUntilY'),
             api_get_local_time($survey->getAvailFrom()),
@@ -957,8 +957,7 @@ class SurveyUtil
         $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
         $content = '';
         if ($addActionBar) {
-            $content .= '<div class="actions">';
-            $content .= '<a
+            $actions = '<a
                 href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'
                 .Display::return_icon(
                     'back.png',
@@ -967,17 +966,18 @@ class SurveyUtil
                     ICON_SIZE_MEDIUM
                 )
                 .'</a>';
-            $content .= '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1a.submit();">'
+            $actions .= '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1a.submit();">'
                 .Display::return_icon('export_csv.png', get_lang('CSV export'), '', ICON_SIZE_MEDIUM).'</a>';
-            $content .= '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1b.submit();">'
+            $actions .= '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1b.submit();">'
                 .Display::return_icon('export_excel.png', get_lang('Excel export'), '', ICON_SIZE_MEDIUM).'</a>';
-            $content .= '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1c.submit();">'
+            $actions .= '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1c.submit();">'
                 .Display::return_icon('export_compact_csv.png', get_lang('ExportAsCompactCSV'), '', ICON_SIZE_MEDIUM).'</a>';
-            $content .= '</div>';
+
+            $content .= Display::toolbarAction('survey', [$actions]);
 
             // The form
-            $content .= '<form id="form1a" name="form1a" method="post" action="'.api_get_self(
-                ).'?action='.$action.'&survey_id='
+            $content .= '<form
+                id="form1a" name="form1a" method="post" action="'.api_get_self().'?action='.$action.'&survey_id='
                 .$surveyId.'&'.api_get_cidreq().'">';
             $content .= '<input type="hidden" name="export_report" value="export_report">';
             $content .= '<input type="hidden" name="export_format" value="csv">';
@@ -1990,8 +1990,7 @@ class SurveyUtil
         $questions = SurveyManager::get_questions($surveyId);
 
         // Actions bar
-        echo '<div class="actions">';
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq()
+        $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq()
             .'">'
             .Display::return_icon(
                 'back.png',
@@ -2000,7 +1999,7 @@ class SurveyUtil
                 ICON_SIZE_MEDIUM
             )
             .'</a>';
-        echo '</div>';
+        echo Display::toolbarAction('survey',  [$actions]);
 
         // Displaying an information message that only the questions with predefined answers can be used in a comparative report
         echo Display::return_message(get_lang('Only questions with predefined answers can be used'), 'normal', false);

@@ -34,7 +34,7 @@ if (!empty($id)) {
 }
 
 $form = new FormValidator('Skill', 'GET', api_get_self().'?action='.$action.'&id='.$id);
-$form->addSelectFromCollection('profile_id', get_lang('Profile'), $profiles, null, true);
+$form->addSelectFromCollection('profile_id', get_lang('Profile'), $profiles, [], true);
 $form->addHidden('action', $action);
 $form->addHidden('id', $id);
 $form->addButtonSave(get_lang('Update'));

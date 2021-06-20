@@ -728,24 +728,24 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             $this->_removeButtonAttributes
                 = array_merge($this->_removeButtonAttributes, $attributes);
             $attrStrRemove = $this->_getAttrString($this->_removeButtonAttributes);
-            $strHtmlRemove = "<button $attrStrRemove  /> <em class='fa fa-arrow-left'></em></button>";
+            $strHtmlRemove = "<button $attrStrRemove  /> <em class='mdi mdi-chevron-left'></em></button>";
 
             // build the add button with all its attributes
             $attributes = array('id' => $selectId.'_rightSelected');
             $this->_addButtonAttributes = array_merge($this->_addButtonAttributes, $attributes);
             $attrStrAdd = $this->_getAttrString($this->_addButtonAttributes);
-            $strHtmlAdd = "<button $attrStrAdd  /> <em class='fa fa-arrow-right'></em></button><br /><br />";
+            $strHtmlAdd = "<button $attrStrAdd  /> <em class='mdi mdi-chevron-right'></em></button><br /><br />";
 
             if ($this->selectAllCheckBox) {
                 $attributes = array('id' => $selectId.'_rightAll');
                 $this->_addButtonAttributes = array_merge($this->_addButtonAttributes, $attributes);
                 $attrStrAdd = $this->_getAttrString($this->_addButtonAttributes);
-                $rightAll = "<button $attrStrAdd  /> <em class='fa fa-forward'></em></button><br /><br />";
+                $rightAll = "<button $attrStrAdd  /> <em class='mdi mdi-chevron-double-right'></em></button><br /><br />";
 
                 $attributes = array('id' => $selectId.'_leftAll');
                 $this->_addButtonAttributes = array_merge($this->_addButtonAttributes, $attributes);
                 $attrStrAdd = $this->_getAttrString($this->_addButtonAttributes);
-                $leftAll = "<br /><br /><button $attrStrAdd  /> <em class='fa fa-backward'></em></button>";
+                $leftAll = "<br /><br /><button $attrStrAdd  /> <em class='mdi mdi-chevron-double-left'></em></button>";
             }
 
             // build the select all button with all its attributes

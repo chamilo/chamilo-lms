@@ -460,8 +460,7 @@ function handleStylesheets()
         ['id' => 'stylesheets_id']
     );
 
-    $styles = $form_change->addElement(
-        'selectTheme',
+    $styles = $form_change->addSelectTheme(
         'style',
         get_lang('Name of the stylesheet')
     );

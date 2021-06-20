@@ -284,6 +284,12 @@ EOT;
         return $this->addElement('SelectLanguage', $name, $label, $options, $attributes);
     }
 
+    public function addSelectTheme($name, $label, $options = [], $attributes = [])
+    {
+        return $this->addElement('SelectTheme', $name, $label, $options, $attributes);
+    }
+
+
     /**
      * @param string $name
      * @param string $label

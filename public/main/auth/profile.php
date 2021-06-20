@@ -225,7 +225,7 @@ if (!in_array('language', $profileList)) {
 
 // THEME
 if ('true' === api_get_setting('profile.is_editable') && 'true' === api_get_setting('user_selected_theme')) {
-    $form->addElement('SelectTheme', 'theme', get_lang('Graphical theme'));
+    $form->addSelectTheme('theme', get_lang('Graphical theme'));
     if (!in_array('theme', $profileList)) {
         $form->freeze('theme');
     }

@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
 
 /**

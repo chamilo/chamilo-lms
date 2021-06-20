@@ -1546,11 +1546,10 @@ abstract class Question
     }
 
     /**
-     * @param CQuizQuestion $question
-     * @param string        $name
-     * @param int           $position
+     * @param string $name
+     * @param int    $position
      *
-     * @return null|CQuizQuestion
+     * @return CQuizQuestion|null
      */
     public static function saveQuestionOption(CQuizQuestion $question, $name, $position = 0)
     {

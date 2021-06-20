@@ -511,10 +511,9 @@ class SkillModel extends Model
     }
 
     /**
-     * @param int               $userId
-     * @param GradebookCategory $category
-     * @param int               $courseId
-     * @param int               $sessionId
+     * @param int $userId
+     * @param int $courseId
+     * @param int $sessionId
      *
      * @return bool
      */
@@ -2309,7 +2308,6 @@ class SkillModel extends Model
     public static function getWebIconPath(Skill $skill, $getSmall = false)
     {
         throw new Exception('fix WEB_UPLOAD_PATH');
-
         if ($getSmall) {
             if (empty($skill->getIcon())) {
                 return \Display::return_icon('badges-default.png', null, null, ICON_SIZE_BIG, null, true);
@@ -2333,7 +2331,6 @@ class SkillModel extends Model
      * @param int    $authorId
      *
      * @return \Chamilo\CoreBundle\Entity\SkillRelUser|bool
-     *
      */
     public function addSkillToUserBadge($user, $skill, $levelId, $argumentation, $authorId)
     {

@@ -2,9 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
@@ -595,7 +595,7 @@ class SurveyUtil
 
             // Getting the question information
             /*$sql = "SELECT * FROM $table_survey_question
-			        WHERE
+                    WHERE
                         survey_id = $surveyId AND
                         survey_question NOT LIKE '%{{%' AND
                         type <>'pagebreak'
@@ -928,10 +928,10 @@ class SurveyUtil
     /**
      * This functions displays the complete reporting.
      *
-     * @param int   $userId
-     * @param bool  $addActionBar
-     * @param bool  $addFilters
-     * @param bool  $addExtraFields
+     * @param int  $userId
+     * @param bool $addActionBar
+     * @param bool $addFilters
+     * @param bool $addExtraFields
      *
      * @return string
      */
@@ -2508,10 +2508,10 @@ class SurveyUtil
     }
 
     /**
-     * @param int    $courseId
-     * @param int    $sessionId
-     * @param int    $groupId
-     * @param int    $surveyId
+     * @param int $courseId
+     * @param int $sessionId
+     * @param int $groupId
+     * @param int $surveyId
      *
      * @return int
      */
@@ -2736,6 +2736,7 @@ class SurveyUtil
      * @param int $surveyId
      *
      * @return array Database rows matching the survey code
+     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      *
      * @version September 2007
@@ -3219,7 +3220,7 @@ class SurveyUtil
             $search_restriction = "WHERE c_id = $course_id";
         }
         $sql = "SELECT count(iid) AS total_number_of_items
-		        FROM $table_survey $search_restriction";
+                FROM $table_survey $search_restriction";
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
 
@@ -4019,8 +4020,7 @@ class SurveyUtil
     }
 
     /**
-     * @param string $code       invitation code
-     * @param Course $course
+     * @param string $code      invitation code
      * @param int    $sessionId
      *
      * @return string

@@ -30,7 +30,6 @@ $MonthsLong = api_get_months_long();
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
-
 $safe_post_file_comment = isset($_POST['post_file_comment']) ? Security::remove_XSS($_POST['post_file_comment']) : null;
 $safe_comment_text = isset($_POST['comment_text']) ? Security::remove_XSS($_POST['comment_text']) : null;
 $safe_comment_title = isset($_POST['comment_title']) ? Security::remove_XSS($_POST['comment_title']) : null;

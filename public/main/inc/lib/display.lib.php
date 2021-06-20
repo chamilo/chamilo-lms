@@ -27,6 +27,7 @@ class Display
     public static $global_template;
     public static $preview_style = null;
     public static $legacyTemplate;
+
     public function __construct()
     {
     }
@@ -1984,8 +1985,8 @@ class Display
                 tabindex="-1"
             >
             <div class="py-1" role="none">';
-            foreach ($elements as $item) {
-                $html .= self::url(
+        foreach ($elements as $item) {
+            $html .= self::url(
                     $item['title'],
                     $item['href'],
                     [
@@ -1995,7 +1996,7 @@ class Display
                         'data-action' => $item['data-action'] ?? '',
                     ]
                 );
-            }
+        }
         $html .= '
             </div>
             </div>

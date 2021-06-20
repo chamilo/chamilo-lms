@@ -115,13 +115,13 @@ function getWhereClause($col, $oper, $val)
         return '';
     }
 
-    if ($oper == 'bw' || $oper == 'bn') {
+    if ('bw' == $oper || 'bn' == $oper) {
         $val .= '%';
     }
-    if ($oper == 'ew' || $oper == 'en') {
+    if ('ew' == $oper || 'en' == $oper) {
         $val = '%'.$val;
     }
-    if ($oper == 'cn' || $oper == 'nc' || $oper == 'in' || $oper == 'ni') {
+    if ('cn' == $oper || 'nc' == $oper || 'in' == $oper || 'ni' == $oper) {
         $val = '%'.$val.'%';
     }
     $val = Database::escape_string($val);
@@ -1594,7 +1594,7 @@ switch ($action) {
             'actions',
         ];
         $officialCodeInList = api_get_setting('show_official_code_exercise_result_list');
-        if ($officialCodeInList === 'true') {
+        if ('true' === $officialCodeInList) {
             $columns = array_merge(['official_code'], $columns);
         }
 

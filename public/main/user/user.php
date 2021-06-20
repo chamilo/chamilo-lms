@@ -13,7 +13,6 @@ use Chamilo\CoreBundle\Framework\Container;
  * @author Roan Embrechts
  * @author Julio Montoya, Several fixes
  */
-
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_USER;
@@ -626,7 +625,6 @@ if ($canRead) {
         $actionsLeft .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=pdf&type='.$type.'">'.
             Display::return_icon('pdf.png', get_lang('Export to PDF'), [], ICON_SIZE_MEDIUM).'</a> ';
     }
-
 
     // Build search-form
     $form = new FormValidator(

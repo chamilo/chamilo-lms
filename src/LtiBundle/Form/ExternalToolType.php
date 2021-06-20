@@ -146,7 +146,7 @@ class ExternalToolType extends AbstractType
     /**
      * @param string $launchUrl
      *
-     * @return null|string
+     * @return string|null
      */
     private function getLaunchUrlFromCartridge($launchUrl)
     {

@@ -2,9 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CLp;
-
 /**
  * This script contains the server part of the xajax interaction process.
  * This script, in particular, enables the process of SCO's initialization. It

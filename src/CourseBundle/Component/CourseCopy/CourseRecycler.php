@@ -4,6 +4,7 @@
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
+use CourseManager;
 use Database;
 use TestCategory;
 
@@ -88,7 +89,7 @@ class CourseRecycler
         }
 
         if ('full_backup' === $backupType) {
-            \CourseManager::deleteCoursePicture($this->course_info['code']);
+            CourseManager::deleteCoursePicture($this->course_info['code']);
         }
     }
 

@@ -86,7 +86,7 @@ class ServiceController extends BaseController
     }
 
     /**
-     * @return null|\Chamilo\LtiBundle\Component\OutcomeResponse
+     * @return \Chamilo\LtiBundle\Component\OutcomeResponse|null
      */
     private function processServiceRequest()
     {

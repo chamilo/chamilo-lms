@@ -13,7 +13,7 @@ class OutcomeReplaceResponse extends OutcomeResponse
     /**
      * OutcomeReplaceResponse constructor.
      *
-     * @param null|mixed $bodyParam
+     * @param mixed|null $bodyParam
      */
     public function __construct(OutcomeResponseStatus $statusInfo, $bodyParam = null)
     {

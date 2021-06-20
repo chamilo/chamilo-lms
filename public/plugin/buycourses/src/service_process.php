@@ -2,7 +2,6 @@
 /* For license terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\UserBundle\Entity\User;
 

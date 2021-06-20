@@ -62,7 +62,7 @@ class MeetingActivity
     protected $event;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
@@ -70,7 +70,7 @@ class MeetingActivity
 
     public function __construct()
     {
-        $this->createdAt = new \DateTime();
+        $this->createdAt = new DateTime();
     }
 
     /**

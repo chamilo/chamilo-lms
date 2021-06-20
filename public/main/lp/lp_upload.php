@@ -4,7 +4,6 @@
 
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
-use Chamilo\CourseBundle\Entity\CLp;
 
 /**
  * Script managing the learnpath upload. To best treat the uploaded file, make sure we can identify it.

@@ -3,7 +3,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Controller\ExceptionController;
-use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ErrorHandler\Debug;
@@ -14,7 +13,6 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 /**
  * All legacy Chamilo scripts should include this important file.
  */
-
 require_once __DIR__.'/../../../vendor/autoload.php';
 
 // Get settings from .env.local file created.

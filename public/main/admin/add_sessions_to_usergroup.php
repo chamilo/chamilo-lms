@@ -159,7 +159,6 @@ if ('multiple' === $add_type) {
         Display::return_icon('multiple.gif').get_lang('Multiple registration').'</a>';
 }
 
-
 $actions = '<a href="usergroups.php">'.
     Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
 

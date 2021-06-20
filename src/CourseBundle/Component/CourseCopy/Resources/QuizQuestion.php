@@ -5,6 +5,8 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
+use DocumentManager;
+use Question;
 
 /**
  * Exercises questions backup script
@@ -106,13 +108,13 @@ class QuizQuestion extends Resource
             $courseId = $courseInfo['real_id'];
             $courseCode = $courseInfo['code'];
             $questionId = $this->source_id;
-            $question = \Question::read($questionId, $courseInfo);
+            $question = Question::read($questionId, $courseInfo);
             $pictureId = $question->getPictureId();
             // Add the picture document in the builder
             if (!empty($pictureId)) {
                 $itemsToAdd[] = $pictureId;
                 // Add the "images" folder needed for correct restore
-                $documentData = \DocumentManager::get_document_data_by_id($pictureId, $courseCode, true);
+                $documentData = DocumentManager::get_document_data_by_id($pictureId, $courseCode, true);
                 if ($documentData) {
                     if (isset($documentData['parents'])) {
                         foreach ($documentData['parents'] as $parent) {

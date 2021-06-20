@@ -24,7 +24,6 @@ class FormValidator extends HTML_QuickForm
      * @param string      $action      (optional) Action (default is $PHP_SELF)
      * @param string|null $target      (optional) Form's target defaults to '_self'
      * @param mixed       $attributes  (optional) Extra attributes for <form> tag
-     * @param string      $layout
      * @param bool        $trackSubmit Whether to track if the form was submitted by adding a special hidden field
      */
     public function __construct(
@@ -885,10 +884,7 @@ EOT;
     }
 
     /**
-     * @param string       $name
      * @param string|array $label
-     * @param array        $options
-     * @param array        $attributes
      *
      * @return HTML_QuickForm_select
      */
@@ -970,9 +966,9 @@ EOT;
     }
 
     /**
-     * @param string $name
+     * @param string       $name
      * @param string|array $label
-     * @param array  $attributes
+     * @param array        $attributes
      *
      * @throws Exception if the file doesn't have an id
      *

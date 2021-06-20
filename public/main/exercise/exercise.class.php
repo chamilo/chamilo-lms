@@ -216,7 +216,7 @@ class Exercise
                 //$this->pageResultConfiguration = $object->page_result_configuration;
             }
 
-            $this->hideQuestionNumber = $object->hide_question_number == 1;
+            $this->hideQuestionNumber = 1 == $object->hide_question_number;
 
             if (isset($object->show_previous_button)) {
                 $this->showPreviousButton = 1 == $object->show_previous_button ? true : false;
@@ -3369,7 +3369,7 @@ class Exercise
     /**
      * So the time control will work.
      *
-     * @param int $timeLeft
+     * @param int    $timeLeft
      * @param string $redirectToUrl
      *
      * @return string
@@ -3389,6 +3389,7 @@ class Exercise
         if (!empty($redirectToUrl)) {
             $exerciseSubmitRedirect = "window.location = '$redirectToUrl'";
         }
+
         return "<script>
             function openClockWarning() {
                 $('#clock_warning').dialog({
@@ -10401,7 +10402,6 @@ class Exercise
                 </script>
                 ";
     }
-
 
     /**
      * Returns true if the exercise is locked by percentage. an exercise attempt must be passed.

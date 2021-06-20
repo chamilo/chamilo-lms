@@ -24,7 +24,7 @@ $description = get_lang('No results found');
 
 if (!empty($glossaryId)) {
     $description = GlossaryManager::get_glossary_term_by_glossary_id($glossaryId);
-    //$description = str_replace($path_image_search, $path_image, $description);
+//$description = str_replace($path_image_search, $path_image, $description);
 } elseif (isset($_REQUEST['glossary_data']) && 'true' === $_REQUEST['glossary_data']) {
     // get_glossary_terms
     $glossary_data = GlossaryManager::get_glossary_terms();

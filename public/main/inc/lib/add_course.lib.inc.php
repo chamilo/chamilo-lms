@@ -637,8 +637,6 @@ class AddCourse
      * @param array $params      Course details (see code for details).
      * @param int   $accessUrlId Optional.
      *
-     * @return Course|null
-     *
      * @todo use an array called $params instead of lots of params
      * @assert (null) === false
      */

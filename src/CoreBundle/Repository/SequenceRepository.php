@@ -57,7 +57,7 @@ class SequenceRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return null|Course|Session
+     * @return Course|Session|null
      */
     public function getItem(int $itemId, int $type)
     {

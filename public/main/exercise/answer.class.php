@@ -469,7 +469,9 @@ class Answer
      * Returns the question type.
      *
      * @author    Yannick Warnier <ywarnier@beeznest.org>
+     *
      * @todo remove this function use CQuizQuestion
+     *
      * @return int The type of the question this answer is bound to
      */
     public function getQuestionType()

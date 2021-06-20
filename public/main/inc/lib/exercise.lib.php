@@ -1751,9 +1751,8 @@ HOTSPOT;
     /**
      * Validates the time control key.
      *
-     * @param Exercise $exercise
-     * @param int      $lp_id
-     * @param int      $lp_item_id
+     * @param int $lp_id
+     * @param int $lp_item_id
      *
      * @return bool
      */
@@ -1865,10 +1864,10 @@ HOTSPOT;
     /**
      * Gets count of exam results.
      *
-     * @param int    $exerciseId
-     * @param array  $conditions
-     * @param int    $courseId
-     * @param bool   $showSession
+     * @param int   $exerciseId
+     * @param array $conditions
+     * @param int   $courseId
+     * @param bool  $showSession
      *
      * @return array
      */
@@ -2154,7 +2153,7 @@ HOTSPOT;
         $column = !empty($column) ? Database::escape_string($column) : null;
         $from = (int) $from;
         $number_of_items = (int) $number_of_items;
-            $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
+        $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
 
         if (!empty($column)) {
             $sql .= " ORDER BY `$column` $direction ";
@@ -5366,11 +5365,11 @@ EOT;
      * Generate a certificate linked to current quiz and.
      * Return the HTML block with links to download and view the certificate.
      *
-     * @param float  $totalScore
-     * @param float  $totalWeight
-     * @param int    $studentId
-     * @param int    $courseId
-     * @param int    $sessionId
+     * @param float $totalScore
+     * @param float $totalWeight
+     * @param int   $studentId
+     * @param int   $courseId
+     * @param int   $sessionId
      *
      * @return string
      */

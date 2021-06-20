@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Hook;
 
 use Chamilo\CoreBundle\Hook\Interfaces\HookEventInterface;
 use Doctrine\ORM\EntityManager;
+use Exception;
 
 /**
  * Class HookFactory.
@@ -26,14 +27,14 @@ class HookFactory
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return HookEventInterface
      */
     public function build(string $type)
     {
         if (!class_exists($type)) {
-            throw new \Exception('Class "'.$type.'" fot found');
+            throw new Exception('Class "'.$type.'" fot found');
         }
 
         return $type::create($this->entityManager);

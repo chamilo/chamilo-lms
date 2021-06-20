@@ -187,9 +187,7 @@ if (!empty($scoreModels)) {
 }
 */
 
-
 $form->addButtonSave(get_lang('Save settings'), 'submit_save');
-
 
 CourseManager::addVisibilityOptions($form);
 

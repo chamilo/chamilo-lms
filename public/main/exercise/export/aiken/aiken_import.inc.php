@@ -121,7 +121,6 @@ function aiken_import_exercise($file)
         mkdir($baseWorkDir.$uploadPath, api_get_permissions_for_new_directories(), true);
     }
 
-
     // set some default values for the new exercise
     $exercise_info = [];
     $exercise_info['name'] = preg_replace('/.(zip|txt)$/i', '', $file);

@@ -234,7 +234,7 @@ class CourseHomeController extends ToolBaseController
      */
     public function redirectTool(string $toolName, CToolRepository $repo, ToolChain $toolChain)
     {
-        /** @var null|CTool $tool */
+        /** @var CTool|null $tool */
         $tool = $repo->findOneBy([
             'name' => $toolName,
         ]);
@@ -258,7 +258,7 @@ class CourseHomeController extends ToolBaseController
 
     public function redirectToShortCut(string $toolName, CToolRepository $repo, ToolChain $toolChain)
     {
-        /** @var null|CTool $tool */
+        /** @var CTool|null $tool */
         $tool = $repo->findOneBy([
             'name' => $toolName,
         ]);

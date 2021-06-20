@@ -247,7 +247,7 @@ class SystemAnnouncementManager
      * Makes the announcement id visible only for groups in groups_array.
      *
      * @param int   $announcement_id
-     * @param array $group_array array of group id
+     * @param array $group_array     array of group id
      *
      * @return bool
      */
@@ -308,11 +308,11 @@ class SystemAnnouncementManager
     /**
      * Updates an announcement to the database.
      *
-     * @param int    $id         of the announcement
-     * @param string $title      title of the announcement
-     * @param string $content    content of the announcement
-     * @param array  $date_start start date (0 => day ; 1 => month ; 2 => year ; 3 => hour ; 4 => minute)
-     * @param array  $date_end   end date of (0 => day ; 1 => month ; 2 => year ; 3 => hour ; 4 => minute)
+     * @param int    $id            of the announcement
+     * @param string $title         title of the announcement
+     * @param string $content       content of the announcement
+     * @param array  $date_start    start date (0 => day ; 1 => month ; 2 => year ; 3 => hour ; 4 => minute)
+     * @param array  $date_end      end date of (0 => day ; 1 => month ; 2 => year ; 3 => hour ; 4 => minute)
      * @param array  $visibility
      * @param array  $lang
      * @param int    $send_mail

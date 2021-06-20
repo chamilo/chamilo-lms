@@ -541,4 +541,3 @@ $tpl->assign('is_allowed_to_edit', $isTeacher);
 $layout = $tpl->get_template('forum/forum.tpl');
 
 $tpl->display($layout);
-

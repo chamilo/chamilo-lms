@@ -356,7 +356,7 @@ function api_strtotime($time, $timezone = null)
  * The given date should be in the timezone chosen by the administrator
  * and/or user. Use api_get_local_time to get it.
  *
- * @param mixed  $time     Timestamp or datetime string
+ * @param mixed $time Timestamp or datetime string
  * @param string|int Date format (see date formats in the Chamilo system:
  *                         TIME_NO_SEC_FORMAT,
  *                         DATE_FORMAT_SHORT,
@@ -401,49 +401,41 @@ function api_format_date($time, $format = null, $language = null)
     if (is_int($format)) {
         switch ($format) {
             case DATE_FORMAT_ONLY_DAYNAME:
-
                 $datetype = IntlDateFormatter::SHORT;
                 $timetype = IntlDateFormatter::NONE;
 
                 break;
             case DATE_FORMAT_NUMBER_NO_YEAR:
-
                 $datetype = IntlDateFormatter::SHORT;
                 $timetype = IntlDateFormatter::NONE;
 
                 break;
             case DATE_FORMAT_NUMBER:
-
                 $datetype = IntlDateFormatter::SHORT;
                 $timetype = IntlDateFormatter::NONE;
 
                 break;
             case TIME_NO_SEC_FORMAT:
-
                 $datetype = IntlDateFormatter::NONE;
                 $timetype = IntlDateFormatter::SHORT;
 
                 break;
             case DATE_FORMAT_SHORT:
-
                 $datetype = IntlDateFormatter::LONG;
                 $timetype = IntlDateFormatter::NONE;
 
                 break;
             case DATE_FORMAT_LONG:
-
                 $datetype = IntlDateFormatter::FULL;
                 $timetype = IntlDateFormatter::NONE;
 
                 break;
             case DATE_TIME_FORMAT_LONG:
-
                 $datetype = IntlDateFormatter::FULL;
                 $timetype = IntlDateFormatter::SHORT;
 
                 break;
             case DATE_FORMAT_LONG_NO_DAY:
-
                 $datetype = IntlDateFormatter::FULL;
                 $timetype = IntlDateFormatter::SHORT;
 
@@ -454,7 +446,6 @@ function api_format_date($time, $format = null, $language = null)
 
                 break;
             case DATE_TIME_FORMAT_SHORT_TIME_FIRST:
-
                 $datetype = IntlDateFormatter::FULL;
                 $timetype = IntlDateFormatter::SHORT;
 
@@ -488,7 +479,7 @@ function api_format_date($time, $format = null, $language = null)
  * You can use it like this:
  * Display::dateToStringAgoAndLongDate($dateInUtc);.
  *
- * @param string|DateTime $date Result of a date function in this format -> date('Y-m-d H:i:s', time());
+ * @param string|DateTime $date                 Result of a date function in this format -> date('Y-m-d H:i:s', time());
  * @param string          $timeZone
  * @param bool            $returnDateDifference
  *
@@ -1426,21 +1417,21 @@ function api_ucwords($string, $encoding = null)
 /**
  * Performs a regular expression match, UTF-8 aware when it is applicable.
  *
- * @param string  $pattern  the pattern to search for, as a string
- * @param string  $subject  the input string
- * @param array  &$matches  (optional) If matches is provided,
- *                          then it is filled with the results of search (as an array).
- *                          $matches[0] will contain the text that matched the full pattern, $matches[1] will have the
- *                          text that matched the first captured parenthesized subpattern, and so on.
- * @param int     $flags    (optional) Could be PREG_OFFSET_CAPTURE. If this flag is passed, for every occurring match
- *                          the appendant string offset will also be returned. Note that this changes the return value
- *                          in an array where every element is an array consisting of the matched string at index 0 and
- *                          its string offset into subject at index 1.
- * @param int     $offset   (optional)        Normally, the search starts from the beginning of the subject string. The
- *                          optional parameter offset can be used to specify the alternate place from which to start
- *                          the search.
- * @param string  $encoding (optional)    The used internally by this function character encoding. If it is omitted,
- *                          the platform character set will be used by default.
+ * @param string $pattern  the pattern to search for, as a string
+ * @param string $subject  the input string
+ * @param array  &$matches (optional) If matches is provided,
+ *                         then it is filled with the results of search (as an array).
+ *                         $matches[0] will contain the text that matched the full pattern, $matches[1] will have the
+ *                         text that matched the first captured parenthesized subpattern, and so on.
+ * @param int    $flags    (optional) Could be PREG_OFFSET_CAPTURE. If this flag is passed, for every occurring match
+ *                         the appendant string offset will also be returned. Note that this changes the return value
+ *                         in an array where every element is an array consisting of the matched string at index 0 and
+ *                         its string offset into subject at index 1.
+ * @param int    $offset   (optional)        Normally, the search starts from the beginning of the subject string. The
+ *                         optional parameter offset can be used to specify the alternate place from which to start
+ *                         the search.
+ * @param string $encoding (optional)    The used internally by this function character encoding. If it is omitted,
+ *                         the platform character set will be used by default.
  *
  * @return int|bool returns the number of times pattern matches or FALSE if an error occurred
  *
@@ -1464,24 +1455,24 @@ function api_preg_match(
 /**
  * Performs a global regular expression match, UTF-8 aware when it is applicable.
  *
- * @param string  $pattern  the pattern to search for, as a string
- * @param string  $subject  the input string
- * @param array  &$matches  (optional)    Array of all matches in multi-dimensional array ordered according to $flags
- * @param int     $flags    (optional)            Can be a combination of the following flags (note that it doesn't
- *                          make sense to use PREG_PATTERN_ORDER together with PREG_SET_ORDER): PREG_PATTERN_ORDER -
- *                          orders results so that $matches[0] is an array of full pattern matches, $matches[1] is an
- *                          array of strings matched by the first parenthesized subpattern, and so on; PREG_SET_ORDER -
- *                          orders results so that $matches[0] is an array of first set of matches, $matches[1] is an
- *                          array of second set of matches, and so on; PREG_OFFSET_CAPTURE - If this flag is passed,
- *                          for every occurring match the appendant string offset will also be returned. Note that this
- *                          changes the value of matches in an array where every element is an array consisting of the
- *                          matched string at offset 0 and its string offset into subject at offset 1. If no order flag
- *                          is given, PREG_PATTERN_ORDER is assumed.
- * @param int     $offset   (optional)        Normally, the search starts from the beginning of the subject string. The
- *                          optional parameter offset can be used to specify the alternate place from which to start
- *                          the search.
- * @param string  $encoding (optional)    The used internally by this function character encoding. If it is omitted,
- *                          the platform character set will be used by default.
+ * @param string $pattern  the pattern to search for, as a string
+ * @param string $subject  the input string
+ * @param array  &$matches (optional)    Array of all matches in multi-dimensional array ordered according to $flags
+ * @param int    $flags    (optional)            Can be a combination of the following flags (note that it doesn't
+ *                         make sense to use PREG_PATTERN_ORDER together with PREG_SET_ORDER): PREG_PATTERN_ORDER -
+ *                         orders results so that $matches[0] is an array of full pattern matches, $matches[1] is an
+ *                         array of strings matched by the first parenthesized subpattern, and so on; PREG_SET_ORDER -
+ *                         orders results so that $matches[0] is an array of first set of matches, $matches[1] is an
+ *                         array of second set of matches, and so on; PREG_OFFSET_CAPTURE - If this flag is passed,
+ *                         for every occurring match the appendant string offset will also be returned. Note that this
+ *                         changes the value of matches in an array where every element is an array consisting of the
+ *                         matched string at offset 0 and its string offset into subject at offset 1. If no order flag
+ *                         is given, PREG_PATTERN_ORDER is assumed.
+ * @param int    $offset   (optional)        Normally, the search starts from the beginning of the subject string. The
+ *                         optional parameter offset can be used to specify the alternate place from which to start
+ *                         the search.
+ * @param string $encoding (optional)    The used internally by this function character encoding. If it is omitted,
+ *                         the platform character set will be used by default.
  *
  * @return int|bool returns the number of full pattern matches (which might be zero), or FALSE if an error occurred
  *
@@ -1502,14 +1493,14 @@ function api_preg_match_all($pattern, $subject, &$matches, $flags = PREG_PATTERN
 /**
  * Performs a regular expression search and replace, UTF-8 aware when it is applicable.
  *
- * @param string|array  $pattern     The pattern to search for. It can be either a string or an array with strings.
- * @param string|array  $replacement the string or an array with strings to replace
- * @param string|array  $subject     the string or an array with strings to search and replace
- * @param int           $limit       The maximum possible replacements for each pattern in each subject string.
- *                                   Defaults to -1 (no limit).
- * @param int          &$count       If specified, this variable will be filled with the number of replacements done
- * @param string        $encoding    (optional)    The used internally by this function character encoding.
- *                                   If it is omitted, the platform character set will be used by default.
+ * @param string|array $pattern     The pattern to search for. It can be either a string or an array with strings.
+ * @param string|array $replacement the string or an array with strings to replace
+ * @param string|array $subject     the string or an array with strings to search and replace
+ * @param int          $limit       The maximum possible replacements for each pattern in each subject string.
+ *                                  Defaults to -1 (no limit).
+ * @param int          &$count      If specified, this variable will be filled with the number of replacements done
+ * @param string       $encoding    (optional)    The used internally by this function character encoding.
+ *                                  If it is omitted, the platform character set will be used by default.
  *
  * @return array|string|null returns an array if the subject parameter is an array, or a string otherwise.
  *                           If matches are found, the new subject will be returned, otherwise subject will be returned

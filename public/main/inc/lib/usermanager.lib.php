@@ -3,7 +3,6 @@
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch;
-use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Chamilo\CoreBundle\Entity\User;
@@ -147,6 +146,7 @@ class UserManager
             Display::addFlash(
                 Display::return_message(get_lang('A user creator is needed'))
             );
+
             return false;
         }
 
@@ -249,7 +249,7 @@ class UserManager
 
         if (empty($expirationDate) || '0000-00-00 00:00:00' === $expirationDate) {
             $expirationDate = null;
-            // Default expiration date
+        // Default expiration date
             // if there is a default duration of a valid account then
             // we have to change the expiration_date accordingly
             // Accept 0000-00-00 00:00:00 as a null value to avoid issues with
@@ -2105,7 +2105,7 @@ class UserManager
             $sqlf .= " AND filter = $field_filter ";
         }
         $sqlf .= " ORDER BY `".$columns[$column]."` $sort_direction ";
-        if ($number_of_items != 0) {
+        if (0 != $number_of_items) {
             $sqlf .= " LIMIT ".intval($from).','.intval($number_of_items);
         }
         $resf = Database::query($sqlf);
@@ -4383,7 +4383,7 @@ class UserManager
      * Get users followed by human resource manager.
      *
      * @param int    $userId
-     * @param int    $userStatus         Filter users by status (STUDENT, COURSEMANAGER, etc)
+     * @param int    $userStatus             Filter users by status (STUDENT, COURSEMANAGER, etc)
      * @param bool   $getOnlyUserId
      * @param bool   $getSql
      * @param bool   $getCount
@@ -4393,7 +4393,7 @@ class UserManager
      * @param string $direction
      * @param int    $active
      * @param string $lastConnectionDate
-     * @param int    $status             the function is called by who? COURSEMANAGER, DRH?
+     * @param int    $status                 the function is called by who? COURSEMANAGER, DRH?
      * @param string $keyword
      * @param bool   $checkSessionVisibility
      *
@@ -5065,8 +5065,8 @@ class UserManager
     /**
      * Subscribe boss to students.
      *
-     * @param int   $bossId  The boss id
-     * @param array $usersId The users array
+     * @param int   $bossId                   The boss id
+     * @param array $usersId                  The users array
      * @param bool  $deleteOtherAssignedUsers
      *
      * @return int Affected rows
@@ -5358,6 +5358,7 @@ class UserManager
 
         if ($userId > 0) {
             $userRelTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+
             return Database::select(
                 'DISTINCT friend_user_id AS boss_id',
                 $userRelTable,

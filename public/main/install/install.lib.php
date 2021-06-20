@@ -4,16 +4,10 @@
 
 use Chamilo\CoreBundle\DataFixtures\LanguageFixtures;
 use Chamilo\CoreBundle\Entity\AccessUrl;
-use Chamilo\CoreBundle\Entity\BranchSync;
-use Chamilo\CoreBundle\Entity\Group;
-use Chamilo\CoreBundle\Entity\TicketCategory;
-use Chamilo\CoreBundle\Entity\TicketPriority;
-use Chamilo\CoreBundle\Entity\TicketProject;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\GroupRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
-use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\ToolChain;
 use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
@@ -21,7 +15,6 @@ use Doctrine\Migrations\DependencyFactory;
 use Doctrine\Migrations\Query\Query;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\Container as SymfonyContainer;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /*
  * Chamilo LMS
@@ -423,7 +416,7 @@ function display_language_selection_box($name = 'language_list', $default_langua
     // Displaying the box.
     return Display::select(
         'language_list',
-        array_column(LanguageFixtures::getLanguages(),'english_name', 'isocode'),
+        array_column(LanguageFixtures::getLanguages(), 'english_name', 'isocode'),
         $default_language,
         ['class' => 'form-control'],
         false

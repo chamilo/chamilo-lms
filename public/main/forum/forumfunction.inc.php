@@ -6,9 +6,9 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumAttachment;
 use Chamilo\CourseBundle\Entity\CForumCategory;
-use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumNotification;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
@@ -286,7 +286,7 @@ function forumForm(CForum $forum = null, $lp_id)
 
     // We have a hidden field if we are editing.
     if ($forum) {
-        $form->addHidden( 'forum_id', $id);
+        $form->addHidden('forum_id', $id);
     }
     $lp_id = (int) $lp_id;
 
@@ -3496,7 +3496,7 @@ function store_reply(CForum $forum, CForumThread $thread, $values, $courseId = 0
  *
  * @param CForumPost   $post        contains all the information about the current post
  * @param CForumThread $thread      contains all the information about the current thread
- * @param CForum  $forum       contains all info about the current forum (to check if attachments are allowed)
+ * @param CForum       $forum       contains all info about the current forum (to check if attachments are allowed)
  * @param array        $form_values contains the default values to fill the form
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -3834,7 +3834,9 @@ function updateThreadInfo($threadId, $lastPostId, $post_date)
  * This function is used to find all the information about what's new in the forum tool.
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ *
  * @deprecated
+ *
  * @version february 2006, dokeos 1.8
  */
 function get_whats_new()
@@ -6175,8 +6177,8 @@ function getPostStatus(CForum $forum, array $row, bool $addWrapper = true): stri
 
 /**
  * @param CForum $forum
- * @param int         $threadId
- * @param int         $status
+ * @param int    $threadId
+ * @param int    $status
  */
 function getCountPostsWithStatus($status, $forum, $threadId = null)
 {
@@ -6200,8 +6202,8 @@ function getCountPostsWithStatus($status, $forum, $threadId = null)
 }
 
 /**
- * @param CForum $forum
- * @param CForumPost  $post
+ * @param CForum     $forum
+ * @param CForumPost $post
  *
  * @return bool
  */

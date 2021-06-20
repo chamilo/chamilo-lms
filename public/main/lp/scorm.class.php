@@ -1001,6 +1001,4 @@ class scorm extends learnpath
 
         return api_detect_encoding($test_string);
     }
-
-
 }

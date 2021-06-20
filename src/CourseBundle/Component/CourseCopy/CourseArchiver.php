@@ -6,7 +6,10 @@ namespace Chamilo\CourseBundle\Component\CourseCopy;
 
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Asset;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
+use DateTime;
+use PclZip;
 use Symfony\Component\Filesystem\Filesystem;
+use UnserializeApi;
 
 /**
  * Some functions to write a course-object to a zip-file and to read a course-
@@ -80,7 +83,7 @@ class CourseArchiver
         $course_info_file = $backup_dir.'course_info.dat';
 
         $user = api_get_user_info();
-        $date = new \DateTime(api_get_local_time());
+        $date = new DateTime(api_get_local_time());
         $zipFileName = $user['user_id'].'_'.$course->code.'_'.$date->format('Ymd-His').'.zip';
         $zipFilePath = $backupDirectory.$zipFileName;
 
@@ -194,7 +197,7 @@ class CourseArchiver
         }
 
         // Zip the course-contents
-        $zip = new \PclZip($zipFilePath);
+        $zip = new PclZip($zipFilePath);
         $zip->create($backup_dir, PCLZIP_OPT_REMOVE_PATH, $backup_dir);
 
         // Remove the temp-dir.
@@ -292,7 +295,7 @@ class CourseArchiver
         );
 
         // unzip the archive
-        $zip = new \PclZip($unzip_dir.'/backup.zip');
+        $zip = new PclZip($unzip_dir.'/backup.zip');
         @chdir($unzip_dir);
 
         $zip->extract(
@@ -345,7 +348,7 @@ class CourseArchiver
         class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Work', 'Work');
 
         /** @var Course $course */
-        $course = \UnserializeApi::unserialize('course', base64_decode($contents));
+        $course = UnserializeApi::unserialize('course', base64_decode($contents));
 
         if (!in_array(
             get_class($course),

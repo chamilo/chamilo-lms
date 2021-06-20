@@ -46,17 +46,17 @@ $answers = $objQuestion->getAnswers();
 // Query db for answers
 /*if (HOT_SPOT_DELINEATION == $answer_type) {
     $sql = "SELECT iid, answer, hotspot_coordinates, hotspot_type, ponderation
-	        FROM $TBL_ANSWERS
-	        WHERE
-	            c_id = $course_id AND
-	            question_id = $questionId AND
-	            hotspot_type = 'delineation'
+            FROM $TBL_ANSWERS
+            WHERE
+                c_id = $course_id AND
+                question_id = $questionId AND
+                hotspot_type = 'delineation'
             ORDER BY iid";
 } else {
     $sql = "SELECT iid, answer, hotspot_coordinates, hotspot_type, ponderation
-	        FROM $TBL_ANSWERS
-	        WHERE c_id = $course_id AND question_id = $questionId
-	        ORDER BY position";
+            FROM $TBL_ANSWERS
+            WHERE c_id = $course_id AND question_id = $questionId
+            ORDER BY position";
 }
 $result = Database::query($sql);*/
 

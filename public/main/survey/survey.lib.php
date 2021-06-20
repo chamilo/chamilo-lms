@@ -1215,7 +1215,7 @@ class SurveyManager
         $survey_id = (int) $survey_id;
 
         /*$sql = "DELETE FROM $table_survey_question
-		        WHERE $course_condition survey_id = '".$survey_id."'";
+                WHERE $course_condition survey_id = '".$survey_id."'";
 
         // Deleting the survey questions
         Database::query($sql);*/

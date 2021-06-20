@@ -76,7 +76,7 @@ try {
 
     if (empty($userId)) {
         // If we didn't find the user
-        if ($plugin->get(AzureActiveDirectory::SETTING_PROVISION_USERS) === 'true') {
+        if ('true' === $plugin->get(AzureActiveDirectory::SETTING_PROVISION_USERS)) {
             // If the option is set to create users, create it
             $userId = UserManager::create_user(
                 $me['givenName'],
@@ -112,7 +112,7 @@ try {
         throw new Exception('User '.$userId.' not found.');
     }
 
-    if ($userInfo['active'] != '1') {
+    if ('1' != $userInfo['active']) {
         throw new Exception(get_lang('AccountInactive'));
     }
 } catch (Exception $exception) {

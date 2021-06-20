@@ -10,7 +10,6 @@ use Chamilo\CoreBundle\Framework\Container;
  *
  * @author Imanol Losada <imanol.losada@beeznest.com>
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 /**

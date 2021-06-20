@@ -8,7 +8,6 @@
  *
  * @author Olivier Brouckaert
  */
-
 $type = isset($_REQUEST['answerType']) ? (int) $_REQUEST['answerType'] : 0;
 
 if (isset($_GET['editQuestion'])) {

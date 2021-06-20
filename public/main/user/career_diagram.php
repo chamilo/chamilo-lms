@@ -34,7 +34,7 @@ if (empty($careerInfo)) {
 }
 $allow = UserManager::userHasCareer($userId, $careerId) || api_is_platform_admin() || api_is_drh();
 
-if ($allow === false) {
+if (false === $allow) {
     api_not_allowed(true);
 }
 

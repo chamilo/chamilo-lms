@@ -227,6 +227,4 @@ example2@example.org;course01;'.STUDENT.'
 
 echo Display::prose($content);
 
-
-
 Display::display_footer();

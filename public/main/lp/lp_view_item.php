@@ -120,7 +120,7 @@ if (is_object($lp)) {
             echo $lp->build_action_menu();
             echo '<div class="row">';
             echo '<div class="col-md-3">';
-            echo $lp->return_new_tree();exit;
+            echo $lp->return_new_tree(); exit;
             echo '</div>';
             echo '<div class="col-md-9">';
             echo $lp->display_item($lpItem);

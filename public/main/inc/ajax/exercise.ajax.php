@@ -138,7 +138,6 @@ switch ($action) {
                         ->setExeDate($nowObject);
                     $em->persist($attempt);
                     $em->flush();
-
                 }
             } else {
                 if ($debug) {
@@ -479,7 +478,7 @@ switch ($action) {
         }
 
         if (WhispeakAuthPlugin::questionRequireAuthentify($question_id)) {
-            if ($objExercise->type == ONE_PER_PAGE) {
+            if (ONE_PER_PAGE == $objExercise->type) {
                 echo json_encode(['type' => 'one_per_page']);
                 break;
             }
@@ -565,7 +564,7 @@ switch ($action) {
             }
             if (!$atLeastOneAnswer) {
                 // Check if time is over.
-                if ($objExercise->expired_time != 0) {
+                if (0 != $objExercise->expired_time) {
                     $clockExpiredTime = ExerciseLib::get_session_time_control_key(
                         $objExercise->id,
                         $learnpath_id,
@@ -840,7 +839,7 @@ switch ($action) {
             );
         }
 
-        if ($type === 'all') {
+        if ('all' === $type) {
             if ($debug) {
                 error_log("result: ok - all");
                 error_log(" ------ end ajax call ------- ");

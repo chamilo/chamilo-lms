@@ -9,7 +9,6 @@ use Chamilo\CoreBundle\Framework\Container;
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
  * refactoring and rewriting large parts of the code
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';

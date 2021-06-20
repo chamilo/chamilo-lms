@@ -10,7 +10,6 @@ use Chamilo\CoreBundle\Entity\Course;
  */
 exit;
 
-
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_protect_admin_script();
@@ -53,7 +52,7 @@ foreach ($sessions as $session) {
         foreach ($users as $user) {
             $result = compareLpTimeAndCourseTime($user, $course, $sessionId);
             if ($result) {
-                ++$counter;
+                $counter++;
             }
 
             if ($counter > $max) {
@@ -76,9 +75,8 @@ foreach($courses as $courseInfo) {
 }*/
 
 /**
- * @param array  $user
- * @param Course $course
- * @param int    $sessionId
+ * @param array $user
+ * @param int   $sessionId
  *
  * @return bool
  */

@@ -2,10 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
-use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CQuiz;
-
 /**
  * Responses to AJAX calls.
  */

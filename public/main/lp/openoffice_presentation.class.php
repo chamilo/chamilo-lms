@@ -9,7 +9,6 @@
  * @author  Eric Marguin <eric.marguin@dokeos.com>
  * @license GNU/GPL
  */
-
 class OpenofficePresentation extends OpenofficeDocument
 {
     public $take_slide_name;

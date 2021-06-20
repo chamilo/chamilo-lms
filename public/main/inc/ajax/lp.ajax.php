@@ -5,7 +5,6 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CLp;
-use Chamilo\CourseBundle\Entity\CLpItem;
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../global.inc.php';
@@ -294,7 +293,6 @@ switch ($action) {
         // moved inside lp_nav.php
         exit;
         $lp = Session::read('oLP');
-
 
         break;
     case 'check_item_position':

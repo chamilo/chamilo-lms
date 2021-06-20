@@ -519,7 +519,7 @@ class Database
         $option = 'ASSOC',
         $debug = false
     ) {
-        if ($type_result === 'count') {
+        if ('count' === $type_result) {
             $conditions['LIMIT'] = null;
             $conditions['limit'] = null;
         }
@@ -536,7 +536,7 @@ class Database
             }
         }
 
-        if ($type_result === 'count') {
+        if ('count' === $type_result) {
             $clean_columns = ' count(*) count ';
         }
         $sql = "SELECT $clean_columns FROM $table_name $conditions";
@@ -544,7 +544,7 @@ class Database
             var_dump($sql);
         }
         $result = self::query($sql);
-        if ($type_result === 'count') {
+        if ('count' === $type_result) {
             $row = self::fetch_array($result, $option);
             if ($row) {
                 return (int) $row['count'];

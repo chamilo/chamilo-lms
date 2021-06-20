@@ -2,8 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\GradebookCategory;
 use ChamiloSession as Session;
 
 /**
@@ -2263,9 +2263,8 @@ class Category implements GradebookItem
     /**
      * Get the current score (as percentage) on a gradebook category for a user.
      *
-     * @param int               $userId The user id
-     * @param GradebookCategory $category
-     * @param bool              $recalculate
+     * @param int  $userId      The user id
+     * @param bool $recalculate
      *
      * @return float The score
      */
@@ -2681,6 +2680,7 @@ class Category implements GradebookItem
 
     /**
      * Calculate the current score on a gradebook category for a user.
+     *
      * @return float The score
      */
     private static function calculateCurrentScore(int $userId, GradebookCategory $category)

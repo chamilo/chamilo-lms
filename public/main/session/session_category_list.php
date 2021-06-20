@@ -115,9 +115,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
                         </div>
                     </form>';
 
-    echo Display::toolbarAction('category', [$actionsLeft, $actionsRight]);
-
-    ?>
+    echo Display::toolbarAction('category', [$actionsLeft, $actionsRight]); ?>
     <form method="post" action="<?php echo api_get_self(); ?>?action=delete&sort=<?php echo $sort; ?>"
           onsubmit="if(!confirm('<?php echo get_lang('Please confirm your choice'); ?>')) return false;">
         <?php

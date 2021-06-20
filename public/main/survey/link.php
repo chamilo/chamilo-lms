@@ -41,7 +41,7 @@ if ($hashIsValid && $course) {
         api_get_session_entity()
     );
     if ($invitation) {
-        $link = SurveyUtil::generateFillSurveyLink($survey,$invitationCode, $course, $sessionId);
+        $link = SurveyUtil::generateFillSurveyLink($survey, $invitationCode, $course, $sessionId);
         header('Location: '.$link);
         exit;
     }

@@ -13,7 +13,7 @@ class OutcomeDeleteResponse extends OutcomeResponse
     /**
      * OutcomeDeleteResponse constructor.
      *
-     * @param null|mixed $bodyParam
+     * @param mixed|null $bodyParam
      */
     public function __construct(OutcomeResponseStatus $statusInfo, $bodyParam = null)
     {

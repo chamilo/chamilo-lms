@@ -309,7 +309,7 @@ if (!empty($projectId)) {
     );
 
     if ($isAllow) {
-        echo Display::toolbarAction('toolbar-options', [$options,]);
+        echo Display::toolbarAction('toolbar-options', [$options]);
     }
 
     $advancedSearchForm = new FormValidator(

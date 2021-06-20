@@ -170,7 +170,6 @@ class CourseManager
             $sql .= " INNER JOIN $table url ON (url.c_id = course.id) ";
         }
 
-
         $visibility = (int) $visibility;
 
         if (!empty($startwith)) {
@@ -241,7 +240,7 @@ class CourseManager
         if (!in_array($orderdirection, ['ASC', 'DESC'])) {
             $sql .= 'ASC';
         } else {
-            $sql .= $orderdirection === 'ASC' ? 'ASC' : 'DESC';
+            $sql .= 'ASC' === $orderdirection ? 'ASC' : 'DESC';
         }
 
         $howmany = (int) $howmany;
@@ -710,12 +709,12 @@ class CourseManager
      * Subscribe a user to a course. No checks are performed here to see if
      * course subscription is allowed.
      *
-     * @param int    $userId
-     * @param int $courseId
-     * @param int    $status                 (STUDENT, COURSEMANAGER, COURSE_ADMIN, NORMAL_COURSE_MEMBER)
-     * @param int    $sessionId
-     * @param int    $userCourseCategoryId
-     * @param bool   $checkTeacherPermission
+     * @param int  $userId
+     * @param int  $courseId
+     * @param int  $status                 (STUDENT, COURSEMANAGER, COURSE_ADMIN, NORMAL_COURSE_MEMBER)
+     * @param int  $sessionId
+     * @param int  $userCourseCategoryId
+     * @param bool $checkTeacherPermission
      *
      * @return bool True on success, false on failure
      *
@@ -5893,7 +5892,7 @@ class CourseManager
             $result[$content['value']] = $content['content'];
         }
 
-        return $form->addMultiSelect( 'users', get_lang('Users'), $result);
+        return $form->addMultiSelect('users', get_lang('Users'), $result);
     }
 
     /**
@@ -6634,14 +6633,8 @@ class CourseManager
     }
 
     /**
-     * @param User   $user
-     * @param Course $course
-     * @param array  $relationInfo
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
-     *
-     * @return int|null
      */
     public static function insertUserInCourse(User $user, Course $course, array $relationInfo = []): ?int
     {
@@ -6668,80 +6661,6 @@ class CourseManager
         Event::logSubscribedUserInCourse($user, $course);
 
         return $insertId;
-    }
-    /**
-     * Check if a specific access-url-related setting is a problem or not.
-     *
-     * @param array  $_configuration The $_configuration array
-     * @param int    $accessUrlId    The access URL ID
-     * @param string $param
-     * @param string $msgLabel
-     *
-     * @return bool|string
-     */
-    private static function checkCreateCourseAccessUrlParam($_configuration, $accessUrlId, $param, $msgLabel)
-    {
-        if (isset($_configuration[$accessUrlId][$param]) && $_configuration[$accessUrlId][$param] > 0) {
-            $num = null;
-            switch ($param) {
-                case 'hosting_limit_courses':
-            $num = self::count_courses($accessUrlId);
-                    break;
-                case 'hosting_limit_active_courses':
-                    $num = self::countActiveCourses($accessUrlId);
-                    break;
-            }
-
-            if ($num && $num >= $_configuration[$accessUrlId][$param]) {
-                api_warn_hosting_contact($param);
-
-                Display::addFlash(
-                    Display::return_message($msgLabel)
-                );
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Fill course with all necessary items.
-     *
-     * @param array $params     Parameters from the course creation form
-     * @param int   $authorId
-     */
-    private static function fillCourse(Course $course, $params, $authorId = 0)
-    {
-        $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
-
-        AddCourse::fillCourse(
-            $course,
-            $params['exemplary_content'],
-            $authorId
-        );
-
-        if (isset($params['gradebook_model_id'])) {
-            self::createDefaultGradebook(
-                $params['gradebook_model_id'],
-                $course->getCode()
-            );
-        }
-
-        // If parameter defined, copy the contents from a specific
-        // template course into this new course
-        if (isset($params['course_template'])) {
-            self::useTemplateAsBasisIfRequired(
-                $course->getCode(),
-                $params['course_template']
-            );
-        }
-        $params['course_code'] = $course->getCode();
-        $params['item_id'] = $course->getId();
-
-        $courseFieldValue = new ExtraFieldValue('course');
-        //$courseFieldValue->saveFieldValues($params);
     }
 
     public static function addVisibilityOptions(FormValidator $form): void
@@ -6786,5 +6705,80 @@ class CourseManager
             );
         }
         $form->addGroup($group, '', get_lang('Course access'));
+    }
+
+    /**
+     * Check if a specific access-url-related setting is a problem or not.
+     *
+     * @param array  $_configuration The $_configuration array
+     * @param int    $accessUrlId    The access URL ID
+     * @param string $param
+     * @param string $msgLabel
+     *
+     * @return bool|string
+     */
+    private static function checkCreateCourseAccessUrlParam($_configuration, $accessUrlId, $param, $msgLabel)
+    {
+        if (isset($_configuration[$accessUrlId][$param]) && $_configuration[$accessUrlId][$param] > 0) {
+            $num = null;
+            switch ($param) {
+                case 'hosting_limit_courses':
+            $num = self::count_courses($accessUrlId);
+                    break;
+                case 'hosting_limit_active_courses':
+                    $num = self::countActiveCourses($accessUrlId);
+                    break;
+            }
+
+            if ($num && $num >= $_configuration[$accessUrlId][$param]) {
+                api_warn_hosting_contact($param);
+
+                Display::addFlash(
+                    Display::return_message($msgLabel)
+                );
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Fill course with all necessary items.
+     *
+     * @param array $params   Parameters from the course creation form
+     * @param int   $authorId
+     */
+    private static function fillCourse(Course $course, $params, $authorId = 0)
+    {
+        $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
+
+        AddCourse::fillCourse(
+            $course,
+            $params['exemplary_content'],
+            $authorId
+        );
+
+        if (isset($params['gradebook_model_id'])) {
+            self::createDefaultGradebook(
+                $params['gradebook_model_id'],
+                $course->getCode()
+            );
+        }
+
+        // If parameter defined, copy the contents from a specific
+        // template course into this new course
+        if (isset($params['course_template'])) {
+            self::useTemplateAsBasisIfRequired(
+                $course->getCode(),
+                $params['course_template']
+            );
+        }
+        $params['course_code'] = $course->getCode();
+        $params['item_id'] = $course->getId();
+
+        $courseFieldValue = new ExtraFieldValue('course');
+        //$courseFieldValue->saveFieldValues($params);
     }
 }

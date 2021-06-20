@@ -1256,7 +1256,6 @@ if (isset($questions) && is_array($questions)) {
     }
 
     foreach ($questions as $key => &$question) {
-
         $ch_type = 'ch_'.$question['type'];
         $questionNumber = $questionCounter;
         $display = new $ch_type();

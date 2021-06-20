@@ -2275,8 +2275,8 @@ class Tracking
      * @param string code
      * @param int id (optional), filtered by exercise
      * @param int id (optional), if param $sessionId is null
-     *                                                it'll return results including sessions, 0 = session is not
-     *                                                filtered
+     *                                               it'll return results including sessions, 0 = session is not
+     *                                               filtered
      *
      * @return string value (number %) Which represents a round integer about the score average
      */
@@ -2582,7 +2582,6 @@ class Tracking
      * course, it will take into account the progress that were not started.
      *
      * @param int|array     $studentId
-     * @param Course        $course
      * @param array         $lpIdList        Limit average to listed lp ids
      * @param SessionEntity $session         Session id (optional),
      *                                       if parameter $sessionId is null(default) it'll return results including
@@ -2752,7 +2751,6 @@ class Tracking
      * 3. And finally it will return the average between 1. and 2.
      *
      * @param mixed         $student_id                      Array of user ids or an user id
-     * @param Course        $course
      * @param array         $lp_ids                          List of LP ids
      * @param SessionEntity $session
      *                                                       if param $sessionId is null(default) it'll return results
@@ -2763,9 +2761,9 @@ class Tracking
      * @param bool          $getOnlyBestAttempt
      *
      * @return string value (number %) Which represents a round integer explain in got in 3
+     *
      * @todo improve performance, when loading 1500 users with 20 lps the script dies
      * This function does not take the results of a Test out of a LP
-     *
      */
     public static function get_avg_student_score(
         $student_id,
@@ -3146,7 +3144,7 @@ class Tracking
      * @param int|array $student_id  Array of user ids or an user id
      * @param string    $course_code Course code
      * @param array     $lp_ids      List of LP ids
-     * @param int       $sessionId  Session id (optional), if param $sessionId is 0(default)
+     * @param int       $sessionId   Session id (optional), if param $sessionId is 0(default)
      *                               it'll return results including sessions, 0 = session is not filtered
      *
      * @return string value (number %) Which represents a round integer explain in got in 3
@@ -3222,11 +3220,11 @@ class Tracking
     /**
      * This function gets time spent in learning path for a student inside a course.
      *
-     * @param int|array $student_id  Student id(s)
-     * @param Course    $course      Course code
-     * @param array     $lp_ids      Limit average to listed lp ids
+     * @param int|array $student_id Student id(s)
+     * @param Course    $course     Course code
+     * @param array     $lp_ids     Limit average to listed lp ids
      * @param int       $sessionId  Session id (optional), if param $sessionId is null(default)
-     *                               it'll return results including sessions, 0 = session is not filtered
+     *                              it'll return results including sessions, 0 = session is not filtered
      *
      * @return int Total time in seconds
      */
@@ -4006,7 +4004,7 @@ class Tracking
      * This function counts the number of post by course.
      *
      * @param string $course_code
-     * @param int    $sessionId  (optional), if is null(default) it'll return results including sessions,
+     * @param int    $sessionId   (optional), if is null(default) it'll return results including sessions,
      *                            0 = session is not filtered
      * @param int    $groupId
      *
@@ -4333,7 +4331,7 @@ class Tracking
     /**
      * Get course list inside a session from a student.
      *
-     * @param int $user_id    Student id
+     * @param int $user_id   Student id
      * @param int $sessionId Session id (optional)
      *
      * @return array Courses list
@@ -5419,10 +5417,10 @@ class Tracking
     /**
      * Shows the user detail progress (when clicking in the details link).
      *
-     * @param int $userId
-     * @param int $courseId
-     * @param int $sessionId
-     * @param bool   $showDiagram
+     * @param int  $userId
+     * @param int  $courseId
+     * @param int  $sessionId
+     * @param bool $showDiagram
      *
      * @return string html code
      */
@@ -7703,13 +7701,13 @@ class Tracking
                     ['cidReq' => $courseInfo['code'], 'id_session' => $sessionId, 'exerciseId' => $exercices['id']]
                 );
 
-            if ($visibleReturn['value'] == true) {
+            if (true == $visibleReturn['value']) {
                 $exercices['title'] = Display::url(
                     $exercices['title'],
                     $url,
                     ['target' => SESSION_LINK_TARGET]
                 );
-            } elseif ($exercices['active'] == -1) {
+            } elseif (-1 == $exercices['active']) {
                 $exercices['title'] = sprintf(get_lang('XParenthesisDeleted'), $exercices['title']);
             }
 
@@ -7785,7 +7783,7 @@ class Tracking
                     $latestAttemptUrl
                 );
 
-                $myScore = !empty($weighting) && intval($weighting) != 0 ? $score / $weighting : 0;
+                $myScore = !empty($weighting) && 0 != intval($weighting) ? $score / $weighting : 0;
 
                 //@todo this function slows the page
                 if (is_int($userList)) {
@@ -7837,7 +7835,7 @@ class Tracking
                 $columnHeaders,
                 function ($columHeader, $key) use ($trackingColumns) {
                     if (!isset($trackingColumns['my_progress_lp'][$key])
-                        || $trackingColumns['my_progress_lp'][$key] == false
+                        || false == $trackingColumns['my_progress_lp'][$key]
                     ) {
                         return false;
                     }
@@ -7901,7 +7899,7 @@ class Tracking
                 );
 
             if (in_array('lp', $columnHeadersKeys)) {
-                if ($learnpath['lp_visibility'] == 0) {
+                if (0 == $learnpath['lp_visibility']) {
                     $learningpathData[] = $learnpath['lp_name'];
                 } else {
                     $learningpathData[] = Display::url(

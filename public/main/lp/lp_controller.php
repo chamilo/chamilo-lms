@@ -695,7 +695,7 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            $result = ScormExport::exportToPdf($lpId, api_get_course_info());;
+            $result = ScormExport::exportToPdf($lpId, api_get_course_info());
             if (!$result) {
                 require 'lp_list.php';
             }

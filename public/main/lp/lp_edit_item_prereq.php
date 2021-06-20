@@ -69,4 +69,3 @@ $tpl->assign('actions', $lp->build_action_menu(true));
 $tpl->assign('left', $lp->showBuildSideBar());
 $tpl->assign('right', $right);
 $tpl->displayTwoColTemplate();
-

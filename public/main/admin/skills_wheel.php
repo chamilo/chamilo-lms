@@ -26,7 +26,6 @@ $skill_condition = '';
 $skillId = isset($_REQUEST['skill_id']) ? (int) $_REQUEST['skill_id'] : 0;
 if (!empty($skillId)) {
     $skill_condition = '&skill_id='.$skillId;
-
 }
 $tpl->assign('skill_id_to_load', $skillId);
 

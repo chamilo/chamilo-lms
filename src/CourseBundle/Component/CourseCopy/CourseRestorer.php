@@ -4,6 +4,8 @@
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
+use AbstractLink;
+use Category;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\GradeBookBackup;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\LearnPathCategory;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestion;
@@ -12,6 +14,11 @@ use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use CourseManager;
 use Database;
 use DocumentManager;
+use Evaluation;
+use ExtraFieldValue;
+use GroupManager;
+use Image;
+use learnpath;
 use Question;
 use stdClass;
 use SurveyManager;
@@ -2528,8 +2535,6 @@ class CourseRestorer
      * Check availability of a survey code.
      *
      * @param string $survey_code
-     *
-     * @return bool
      */
     public function is_survey_code_available($survey_code): bool
     {
@@ -2672,7 +2677,7 @@ class CourseRestorer
                             'c_id' => $this->destination_course_id,
                             'name' => $lpCategory->getName(),
                         ];
-                        $categoryId = \learnpath::createCategory($values);
+                        $categoryId = learnpath::createCategory($values);
                     }
 
                     if ($categoryId) {
@@ -2741,7 +2746,7 @@ class CourseRestorer
                         if ($copy_result) {
                             $lp->preview_image = $new_filename;
                             // Create 64 version from original
-                            $temp = new \Image($destination_path.$new_filename);
+                            $temp = new Image($destination_path.$new_filename);
                             $temp->resize(64);
                             $pathInfo = pathinfo($new_filename);
                             if ($pathInfo) {
@@ -2848,7 +2853,7 @@ class CourseRestorer
                     }
 
                     if (isset($lp->extraFields) && !empty($lp->extraFields)) {
-                        $extraFieldValue = new \ExtraFieldValue('lp');
+                        $extraFieldValue = new ExtraFieldValue('lp');
                         foreach ($lp->extraFields as $extraField) {
                             $params = [
                                 'item_id' => $new_lp_id,
@@ -3492,7 +3497,7 @@ class CourseRestorer
             $resources = $this->course->resources;
             $destinationCourseCode = $this->destination_course_info['code'];
             // Delete destination gradebook
-            $cats = \Category:: load(
+            $cats = Category:: load(
                 null,
                 null,
                 $destinationCourseCode,
@@ -3502,7 +3507,7 @@ class CourseRestorer
             );
 
             if (!empty($cats)) {
-                /** @var \Category $cat */
+                /** @var Category $cat */
                 foreach ($cats as $cat) {
                     $cat->delete_all();
                 }
@@ -3512,7 +3517,7 @@ class CourseRestorer
             foreach ($resources[RESOURCE_GRADEBOOK] as $id => $obj) {
                 if (!empty($obj->categories)) {
                     $categoryIdList = [];
-                    /** @var \Category $cat */
+                    /** @var Category $cat */
                     foreach ($obj->categories as $cat) {
                         $cat->set_course_code($destinationCourseCode);
                         $cat->set_session_id($sessionId);
@@ -3527,7 +3532,7 @@ class CourseRestorer
                         $categoryId = $cat->add();
                         $categoryIdList[$oldId] = $categoryId;
                         if (!empty($cat->evaluations)) {
-                            /** @var \Evaluation $evaluation */
+                            /** @var Evaluation $evaluation */
                             foreach ($cat->evaluations as $evaluation) {
                                 $evaluation->set_category_id($categoryId);
                                 $evaluation->set_course_code($destinationCourseCode);
@@ -3537,7 +3542,7 @@ class CourseRestorer
                         }
 
                         if (!empty($cat->links)) {
-                            /** @var \AbstractLink $link */
+                            /** @var AbstractLink $link */
                             foreach ($cat->links as $link) {
                                 $link->set_category_id($categoryId);
                                 $link->set_course_code($destinationCourseCode);
@@ -3680,7 +3685,7 @@ class CourseRestorer
      */
     public function checkGroupId($groupId)
     {
-        return \GroupManager::get_group_properties($groupId);
+        return GroupManager::get_group_properties($groupId);
     }
 
     /**

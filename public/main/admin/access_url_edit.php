@@ -21,10 +21,10 @@ $form = new FormValidator('add_url');
 $form->addUrl('url', 'URL');
 $form->addRule('url', get_lang('Required field'), 'required');
 $form->addRule('url', '', 'maxlength', 254);
-$form->addTextarea( 'description', get_lang('Description'));
+$form->addTextarea('description', get_lang('Description'));
 
 // URL Images
-$form->addFile( 'url_image_1', get_lang('Image'));
+$form->addFile('url_image_1', get_lang('Image'));
 //$form->addElement('file', 'url_image_2', 'URL Image 2 (PNG)');
 //$form->addElement('file', 'url_image_3', 'URL Image 3 (PNG)');
 

@@ -28,7 +28,6 @@ if ($allowSocial) {
 }
 $interbreadcrumb[] = ['url' => 'inbox.php', 'name' => get_lang('Messages')];
 
-
 $actions = '';
 if ($allowMessage) {
     $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.

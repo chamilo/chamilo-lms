@@ -173,7 +173,6 @@ if ($form->validate()) {
             }
 
             throw new Exception('@todo custom certificate upload');
-
             if ($_FILES[$field]['size']) {
                 $newPicture = api_upload_file(
                     'certificates',

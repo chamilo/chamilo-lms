@@ -18,7 +18,6 @@ if (empty($workId) || empty($courseInfo)) {
 }
 $course = api_get_course_entity();
 
-
 // Student publications are saved with the iid in a LP
 $origin = api_get_origin();
 if ('learnpath' === $origin) {

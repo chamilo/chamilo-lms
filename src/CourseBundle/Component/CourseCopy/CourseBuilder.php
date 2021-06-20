@@ -36,6 +36,8 @@ use Chamilo\CourseBundle\Component\CourseCopy\Resources\Work;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use CourseManager;
 use Database;
+use DocumentManager;
+use learnpath;
 use Link as LinkManager;
 use TestCategory;
 
@@ -143,7 +145,7 @@ class CourseBuilder
      */
     public function findAndSetDocumentsInText($text)
     {
-        $documentList = \DocumentManager::get_resources_from_source_html($text);
+        $documentList = DocumentManager::get_resources_from_source_html($text);
         $this->addDocumentList($documentList);
     }
 
@@ -169,7 +171,7 @@ class CourseBuilder
                         $documentFile = strstr($realOrigPath, 'document');
                         if (false !== strpos($realOrigPath, $documentFile)) {
                             $documentFile = str_replace('document', '', $documentFile);
-                            $itemDocumentId = \DocumentManager::get_document_id($courseInfo, $documentFile);
+                            $itemDocumentId = DocumentManager::get_document_id($courseInfo, $documentFile);
                             // Document found! Add it to the list
                             if ($itemDocumentId) {
                                 $list[] = $itemDocumentId;
@@ -1391,7 +1393,7 @@ class CourseBuilder
      */
     public function build_learnpath_category($session_id = 0, $courseId = 0, $withBaseContent = false, $idList = [])
     {
-        $categories = \learnpath::getCategories($courseId);
+        $categories = learnpath::getCategories($courseId);
 
         /** @var CLpCategory $item */
         foreach ($categories as $item) {

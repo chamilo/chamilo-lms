@@ -234,25 +234,25 @@ if (!empty($courseList)) {
             if ($global) {
                 $qb = $quizRepo->getResourcesByCourse($course);
                 $exercises = $qb->getQuery()->getResult();
-                /*$sql = "SELECT quiz.title, iid, session_id
-                        FROM $quizTable AS quiz
-                        WHERE c_id = $courseId AND active = 1
-                        ORDER BY session_id, quiz.title ASC";*/
+            /*$sql = "SELECT quiz.title, iid, session_id
+                    FROM $quizTable AS quiz
+                    WHERE c_id = $courseId AND active = 1
+                    ORDER BY session_id, quiz.title ASC";*/
             } else {
                 //$sessionCondition = api_get_session_condition($sessionId, true, false);
                 if (!empty($exerciseId)) {
                     $exercises = [];
                     $exercises[] = $quizRepo->find($exerciseId);
-                    /*
-                    $sql = "SELECT quiz.title, iid, session_id
-                            FROM $quizTable AS quiz
-                            WHERE
-                                c_id = $courseId AND
-                                active = 1 AND
-                                id = $exerciseId
-                                $sessionCondition
-                            ORDER BY session_id, quiz.title ASC";
-                    */
+                /*
+                $sql = "SELECT quiz.title, iid, session_id
+                        FROM $quizTable AS quiz
+                        WHERE
+                            c_id = $courseId AND
+                            active = 1 AND
+                            id = $exerciseId
+                            $sessionCondition
+                        ORDER BY session_id, quiz.title ASC";
+                */
                 } else {
                     $qb = $quizRepo->getResourcesByCourse($course, api_get_session_entity());
                     $exercises = $qb->getQuery()->getResult();

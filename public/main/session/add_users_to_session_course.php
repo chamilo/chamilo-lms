@@ -650,10 +650,10 @@ echo Display::page_header($tool_name.' ('.$session_info['name'].') - '.$courseIn
 ?>
 <form name="formulaire" method="post"
       action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&course_id=<?php echo $courseId; ?>&id_session=<?php echo $id_session; ?><?php if (!empty($addProcess)) {
-        echo '&add=true';
-    } ?>" <?php if ($ajax_search) {
-        echo ' onsubmit="valide();"';
-    } ?>>
+    echo '&add=true';
+} ?>" <?php if ($ajax_search) {
+    echo ' onsubmit="valide();"';
+} ?>>
     <?php
     if ('multiple' === $add_type) {
         if (is_array($extra_field_list)) {

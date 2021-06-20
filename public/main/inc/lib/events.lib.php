@@ -680,13 +680,12 @@ class Event
     /**
      * Record an hotspot spot for this attempt at answering an hotspot question.
      *
-     * @param Exercise $exercise
-     * @param int      $exeId
-     * @param int      $questionId Question ID
-     * @param int      $answerId   Answer ID
-     * @param int      $correct
-     * @param string   $coords     Coordinates of this point (e.g. 123;324)
-     * @param bool     $updateResults
+     * @param int    $exeId
+     * @param int    $questionId    Question ID
+     * @param int    $answerId      Answer ID
+     * @param int    $correct
+     * @param string $coords        Coordinates of this point (e.g. 123;324)
+     * @param bool   $updateResults
      *
      * @return bool Result of the insert query
      *
@@ -706,7 +705,7 @@ class Event
     ) {
         $debug = false;
 
-        if ($updateResults == false) {
+        if (false == $updateResults) {
             // Validation in case of fraud with activated control time
             if (!ExerciseLib::exercise_time_control_is_valid($exercise, $lpId, $lpItemId)) {
                 if ($debug) {

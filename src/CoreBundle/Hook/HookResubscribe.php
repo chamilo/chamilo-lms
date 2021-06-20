@@ -7,11 +7,12 @@ namespace Chamilo\CoreBundle\Hook;
 use Chamilo\CoreBundle\Hook\Interfaces\HookResubscribeEventInterface;
 use Chamilo\CoreBundle\Hook\Interfaces\HookResubscribeObserverInterface;
 use Doctrine\ORM\EntityManager;
+use SplObjectStorage;
 
 /**
  * Class HookResubscribe.
  *
- * @var \SplObjectStorage
+ * @var SplObjectStorage
  */
 class HookResubscribe extends HookEvent implements HookResubscribeEventInterface
 {

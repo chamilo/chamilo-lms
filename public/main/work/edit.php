@@ -110,7 +110,6 @@ if (!empty($my_folder_data)) {
     }
 }
 
-
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
     'name' => get_lang('Assignments'),

@@ -95,13 +95,13 @@ class GroupManager
     /**
      * Get list of groups for current course.
      *
-     * @param int    $categoryId The id of the category from which the groups are
-     *                           requested
-     * @param Course $course     Default is current course
-     * @param int    $status     group status
+     * @param int    $categoryId       The id of the category from which the groups are
+     *                                 requested
+     * @param Course $course           Default is current course
+     * @param int    $status           group status
      * @param int    $sessionId
      * @param bool   $getCount
-     * @param bool   $notInGroup Get groups not in a category
+     * @param bool   $notInGroup       Get groups not in a category
      * @param bool   $returnEntityList
      *
      * @return array|CGroup[] an array with all information about the groups
@@ -1634,7 +1634,7 @@ class GroupManager
     public static function get_subscribed_users(CGroup $group)
     {
         //$order = api_sort_by_first_name() ? ' ORDER BY u.firstname, u.lastname' : ' ORDER BY u.lastname, u.firstname';
-        $order = ['lastname'=> Criteria::DESC, 'firstname'=> Criteria::ASC];
+        $order = ['lastname' => Criteria::DESC, 'firstname' => Criteria::ASC];
         if (api_sort_by_first_name()) {
             $order = ['firstname' => Criteria::ASC, 'lastname' => Criteria::ASC];
         }
@@ -2816,7 +2816,6 @@ class GroupManager
     }
 
     /**
-     * @param Course $course
      * @param string $keyword
      *
      * @return string

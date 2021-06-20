@@ -2,8 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Component\Editor\Editor;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * A html editor field to use with QuickForm.

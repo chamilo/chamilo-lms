@@ -4,8 +4,6 @@
  * Strings to French L10n.
  *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
- *
- * @package chamilo.plugin.azure_active_directory
  */
 $strings['plugin_title'] = 'Azure Active Directory';
 $strings['plugin_comment'] = 'Permet l\'authentification des utilisateurs via Azure Active Directory de Microsoft';

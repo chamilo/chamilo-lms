@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-
 /**
  * This script contains the server part of the xajax interaction process. The client part is located
  * in lp_api.php or other api's.

@@ -5,7 +5,6 @@
 /**
  * @author Julio Montoya <gugli100@gmail.com>
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';

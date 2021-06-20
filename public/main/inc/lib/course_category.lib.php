@@ -3,9 +3,9 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Asset;
+use Chamilo\CoreBundle\Entity\CourseCategory as CourseCategoryEntity;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Entity\CourseCategory as CourseCategoryEntity;
 use Doctrine\Common\Collections\Criteria;
 
 class CourseCategory
@@ -125,10 +125,10 @@ class CourseCategory
     }
 
     /**
-     * @param string $code
-     * @param string $name
-     * @param string $canHaveCourses
-     * @param null|int    $parentId
+     * @param string   $code
+     * @param string   $name
+     * @param string   $canHaveCourses
+     * @param int|null $parentId
      */
     public static function add($code, $name, $canHaveCourses, $description = '', $parentId = null): ?CourseCategoryEntity
     {
@@ -471,7 +471,7 @@ class CourseCategory
                     $actions[] = Display::url(
                         $deleteIcon,
                         $deleteUrl,
-                        ['onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('Please confirm your choice')), ENT_QUOTES)).'\')) return false;',]
+                        ['onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('Please confirm your choice')), ENT_QUOTES)).'\')) return false;']
                     );
                 }
 

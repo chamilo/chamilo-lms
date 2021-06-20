@@ -8,7 +8,12 @@ use Chamilo\PluginBundle\WhispeakAuth\Request\ApiRequest;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession;
 use Display;
+use Exception;
+use Exercise;
+use learnpath;
 use Login;
+use Template;
+use UserManager;
 use WhispeakAuthPlugin;
 
 /**
@@ -17,12 +22,12 @@ use WhispeakAuthPlugin;
 class AuthenticationController extends BaseController
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function index()
     {
         if (!$this->plugin->toolIsEnabled()) {
-            throw new \Exception(get_lang('NotAllowed'));
+            throw new Exception(get_lang('NotAllowed'));
         }
 
         /** @var array $lpQuestionInfo */
@@ -46,9 +51,9 @@ class AuthenticationController extends BaseController
 
         /** @var array $lpItemInfo */
         $lpItemInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_LP_ITEM, []);
-        /** @var \learnpath $oLp */
+        /** @var learnpath $oLp */
         $oLp = ChamiloSession::read('oLP', null);
-        /** @var \Exercise $objExercise */
+        /** @var Exercise $objExercise */
         $objExercise = ChamiloSession::read('objExercise', null);
 
         $isAuthOnLp = !empty($lpItemInfo) && !empty($oLp);
@@ -93,7 +98,7 @@ class AuthenticationController extends BaseController
         ChamiloSession::write(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT, $response['token']);
 
         if (!empty($lpQuestionInfo) && empty($lpItemInfo)) {
-            $template = new \Template('', $showFullPage, $showFullPage, false, true, false);
+            $template = new Template('', $showFullPage, $showFullPage, false, true, false);
             $template->assign('show_form', $showForm);
             $template->assign('sample_text', $response['text']);
 
@@ -111,7 +116,7 @@ class AuthenticationController extends BaseController
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function ajax()
     {
@@ -125,7 +130,7 @@ class AuthenticationController extends BaseController
         }
 
         if (!$isAllowed || !$this->plugin->toolIsEnabled()) {
-            throw new \Exception(get_lang('NotAllowed'));
+            throw new Exception(get_lang('NotAllowed'));
         }
 
         if (!empty($user2fa)) {
@@ -134,11 +139,11 @@ class AuthenticationController extends BaseController
             $user = api_get_user_entity($userId);
         } else {
             /** @var User|null $user */
-            $user = \UserManager::getRepository()->findOneBy(['username' => $_POST['username']]);
+            $user = UserManager::getRepository()->findOneBy(['username' => $_POST['username']]);
         }
 
         if (!$user) {
-            throw new \Exception(get_lang('NotFound'));
+            throw new Exception(get_lang('NotFound'));
         }
 
         $audioFilePath = $this->uploadAudioFile($user);
@@ -147,15 +152,15 @@ class AuthenticationController extends BaseController
         $maxAttempts = $this->plugin->getMaxAttempts();
 
         if ($maxAttempts && $failedLogins >= $maxAttempts) {
-            throw new \Exception($this->plugin->get_lang('MaxAttemptsReached'));
+            throw new Exception($this->plugin->get_lang('MaxAttemptsReached'));
         }
 
-        $token = \ChamiloSession::read(\WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
+        $token = ChamiloSession::read(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
 
         $request = new ApiRequest();
         $success = $request->performAuthentication($token, $user, $audioFilePath);
 
-        \ChamiloSession::erase(\WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
+        ChamiloSession::erase(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
 
         /** @var array $lpItemInfo */
         $lpItemInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_LP_ITEM, []);
@@ -322,7 +327,7 @@ class AuthenticationController extends BaseController
 
         $pageTitle = $this->plugin->get_title();
 
-        $template = new \Template($pageTitle, $isFullPage, $isFullPage);
+        $template = new Template($pageTitle, $isFullPage, $isFullPage);
 
         foreach ($variables as $key => $value) {
             $template->assign($key, $value);

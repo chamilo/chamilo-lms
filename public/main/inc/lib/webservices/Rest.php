@@ -1046,6 +1046,7 @@ class Rest extends WebService
 
         return $userList;
     }
+
     /**
      * @param string $subject
      * @param string $text
@@ -1174,7 +1175,6 @@ class Rest extends WebService
             $idCampus, //$urlId
             true //AlsoSearchCode
         );
-
     }
 
     /**
@@ -1260,7 +1260,7 @@ class Rest extends WebService
         $params['course_language'] = $language;
 
         foreach ($courseParam as $key => $value) {
-            if (substr($key, 0, 6) === 'extra_') { //an extra field
+            if ('extra_' === substr($key, 0, 6)) { //an extra field
                 $params[$key] = $value;
             }
         }

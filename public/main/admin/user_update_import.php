@@ -387,7 +387,6 @@ if ($count_fields > 0) {
     }
 }
 
-
 $content = '<p>'.get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').') :</p>
     <blockquote>
     <pre>

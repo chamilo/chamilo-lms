@@ -1544,7 +1544,6 @@ class MySpace
         $tpl = new Template('', false, false, false, false, false, false);
         $data = null;
 
-
         $time_spent = 0;
         $progress = 0;
         $nb_progress_lp = 0;
@@ -1731,7 +1730,6 @@ class MySpace
 
             $csv_row = [];
             $csv_row[] = $course_title;
-
 
             $time_spent = 0;
             $progress = 0;

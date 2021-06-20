@@ -123,6 +123,7 @@ class UrlManager
         $sql = "SELECT id FROM $table
                 WHERE url = '".Database::escape_string($url)."' ";
         $res = Database::query($sql);
+
         return (int) Database::num_rows($res);
     }
 

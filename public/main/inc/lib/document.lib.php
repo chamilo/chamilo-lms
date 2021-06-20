@@ -2,15 +2,12 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
-use Chamilo\CourseBundle\Entity\CGroup;
 use ChamiloSession as Session;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  *  Class DocumentManager
@@ -2906,8 +2903,8 @@ class DocumentManager
             'rootOpen' => '<ul id="doc_list" class="list-group lp_resource">',
             'rootClose' => '</ul>',
             //'childOpen' => '<li class="doc_resource lp_resource_element ">',
-            'childOpen' => function($child) {
-                $id =  $child['id'];
+            'childOpen' => function ($child) {
+                $id = $child['id'];
                 $disableDrag = '';
                 if (!$child['resourceFile']) {
                     $disableDrag = ' disable_drag ';

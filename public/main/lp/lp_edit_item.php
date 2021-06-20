@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 /**
@@ -96,7 +95,6 @@ if (isset($is_success) && true === $is_success) {
     }
     Session::erase('finalItem');
 }
-
 
 $tpl = new Template();
 $tpl->assign('actions', $learnPath->build_action_menu(true));

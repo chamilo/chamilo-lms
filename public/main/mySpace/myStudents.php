@@ -2,10 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
-use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use ChamiloSession as Session;
 
@@ -2131,7 +2131,6 @@ if (empty($details)) {
             echo '<td class="text-center">'.$qualification.'</td>';
             echo '<td class="text-center">'.
                 api_convert_and_format_date($result->getSentDate()).' </td>';
-
 
             echo '<td class="text-center">';
             if ($assignment && !empty($assignment->getExpiresOn())) {

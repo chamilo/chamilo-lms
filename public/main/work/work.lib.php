@@ -282,17 +282,17 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null, $course_i
     if ($is_allowed_to_edit) {
         $qb->andWhere($qb->expr()->in('resource.active', [1, 0]));
         $qb->andWhere($qb->expr()->isNull('resource.publicationParent'));
-        /*$active_condition = ' active IN (0, 1)';
-        $sql = "SELECT * FROM $work_table
-                WHERE
-                    c_id = $course_id
-                    $add_in_where_query
-                    $condition_session AND
-                    $active_condition AND
-                    (parent_id = 0)
-                    $contains_file_query AND
-                    post_group_id = $groupIid
-                ORDER BY sent_date DESC";*/
+    /*$active_condition = ' active IN (0, 1)';
+    $sql = "SELECT * FROM $work_table
+            WHERE
+                c_id = $course_id
+                $add_in_where_query
+                $condition_session AND
+                $active_condition AND
+                (parent_id = 0)
+                $contains_file_query AND
+                post_group_id = $groupIid
+            ORDER BY sent_date DESC";*/
     } else {
         if (!empty($group_id)) {
             // set to select only messages posted by the user's group
@@ -1235,7 +1235,6 @@ function getWorkListStudent(
         ->setFirstResult($start)
         ->setMaxResults($limit)
     ;
-
 
     /*$sql = "$select
             FROM $workTable w
@@ -2266,7 +2265,7 @@ function get_work_user_list(
                 }
 
                 $feedback = '';
-                $count = count($studentPublication->getComments());// getWorkCommentCount($item_id, $course_info);
+                $count = count($studentPublication->getComments()); // getWorkCommentCount($item_id, $course_info);
                 if (null !== $count && !empty($count)) {
                     if ($qualification_exists) {
                         $feedback .= ' ';
@@ -3787,8 +3786,8 @@ function getWorkDescriptionToolbar()
 
 function getWorkComments(CStudentPublication $work)
 {
-   $comments = $work->getComments();
-   $commentList = [];
+    $comments = $work->getComments();
+    $commentList = [];
     if (!empty($comments)) {
         foreach ($comments as $comment) {
             //$userInfo = api_get_user_info($comment['user_id']);
@@ -5190,23 +5189,23 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
         ;
         $em->persist($publication);
 
-        /*$sql = "INSERT INTO $table SET
-                c_id = $course_id ,
-                $expiryDateCondition
-                $endOnCondition
-                add_to_calendar = $agendaId,
-                enable_qualification = '$qualification',
-                publication_id = '$workId'";
-        Database::query($sql);
-        $my_last_id = Database::insert_id();
+    /*$sql = "INSERT INTO $table SET
+            c_id = $course_id ,
+            $expiryDateCondition
+            $endOnCondition
+            add_to_calendar = $agendaId,
+            enable_qualification = '$qualification',
+            publication_id = '$workId'";
+    Database::query($sql);
+    $my_last_id = Database::insert_id();
 
-        if ($my_last_id) {
-            $sql = "UPDATE $workTable SET
-                        has_properties  = $my_last_id,
-                        view_properties = 1
-                    WHERE iid = $workId";
-            Database::query($sql);
-        }*/
+    if ($my_last_id) {
+        $sql = "UPDATE $workTable SET
+                    has_properties  = $my_last_id,
+                    view_properties = 1
+                WHERE iid = $workId";
+        Database::query($sql);
+    }*/
     } else {
         $assignment = $em->getRepository(CStudentPublicationAssignment::class)->find($data['iid']);
         /*$sql = "UPDATE $table SET
@@ -5306,7 +5305,7 @@ function deleteAllWorkPerUser(User $user, Course $course)
 
 /**
  * @param int    $item_id
- * @param Course $course course info
+ * @param Course $course  course info
  *
  * @return bool
  */

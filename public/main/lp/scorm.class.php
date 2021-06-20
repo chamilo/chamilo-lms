@@ -976,13 +976,12 @@ class scorm extends learnpath
             return 'UTF-8';
         }
 
+        $declared_encoding = '';
         if (preg_match(_PCRE_XML_ENCODING, $xml, $matches)) {
             $declared_encoding = api_refine_encoding_id($matches[1]);
-        } else {
-            $declared_encoding = '';
         }
 
-        if (!empty($declared_encoding) && !api_is_utf8($declared_encoding)) {
+        if (!empty($declared_encoding)) {
             return $declared_encoding;
         }
 

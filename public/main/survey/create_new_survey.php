@@ -264,12 +264,11 @@ $input_name_list = null;
 
 if ('edit' === $action && !empty($survey_id)) {
     if (0 == $survey_data['anonymous']) {
-        $form->addElement(
-            'checkbox',
+        $form->addCheckBox(
             'show_form_profile',
             null,
             get_lang('Show profile form'),
-            'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"'
+            ['onclick' => "javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"]
         );
 
         if (1 == $survey_data['show_form_profile']) {

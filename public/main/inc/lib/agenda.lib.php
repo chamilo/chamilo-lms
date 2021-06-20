@@ -1899,13 +1899,13 @@ class Agenda
             }
         }
 
-        $sendToGroups = isset($sendTo['groups']) ? $sendTo['groups'] : [];
-        $sendToUsers = isset($sendTo['users']) ? $sendTo['users'] : [];
+        $sendToGroups = $sendTo['groups'] ?? [];
+        $sendToUsers = $sendTo['users'] ?? [];
 
         $select = $form->addSelect(
             'users_to_send',
             get_lang('To'),
-            null,
+            [],
             $params
         );
 

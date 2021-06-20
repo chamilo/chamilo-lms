@@ -76,7 +76,6 @@ exclude_patterns:
   - public/main/fonts/
   - public/main/inc/ajax/Wami.swf
   - public/main/inc/lib/browser/
-  - public/main/inc/lib/internationalization_database/
   - public/main/inc/lib/javascript/
   - public/main/inc/lib/kses-0.2.2/
   - public/main/inc/lib/mimetex/

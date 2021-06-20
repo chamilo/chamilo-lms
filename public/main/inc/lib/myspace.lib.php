@@ -354,7 +354,7 @@ class MySpace
                 'student_exercises' => $resultToString,
                 'questions_answered' => $exercisesResults['questions_answered'],
                 'last_connection' => Tracking::get_last_connection_date_on_the_course(
-                    $user_id,
+                    $userId,
                     ['real_id' => $courseId]
                 ),
             ];
@@ -653,7 +653,7 @@ class MySpace
         }
 
         if (3 != $tracking_column) {
-            if ('DESC' == $tracking_direction) {
+            if ('DESC' === $tracking_direction) {
                 usort($all_datas, ['MySpace', 'rsort_users']);
             } else {
                 usort($all_datas, ['MySpace', 'sort_users']);
@@ -1426,7 +1426,7 @@ class MySpace
                     $csv_row[] = $studenRegister;
                     $facturar = ($studenRegister * $price);
                     $csv_row[] = $facturar;
-                    $totalSudent += $studenRegister;
+                    $totalStudent += $studenRegister;
                     if (0 != $studenRegister) {
                         $studentsName = '';
                         for ($i = 0; $i < $studenRegister; $i++) {
@@ -1782,10 +1782,9 @@ class MySpace
                     null,
                     false
                 );
+
                 if (false != $last_login_date_tmp && false == $last_login_date) {
-                    // TODO: To be cleaned.
                     $last_login_date = $last_login_date_tmp;
-                } elseif (false != $last_login_date_tmp && false == $last_login_date) {
                     // TODO: Repeated previous condition. To be cleaned.
                     // Find the max and assign it to first_login_date
                     if (strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
@@ -2035,7 +2034,7 @@ class MySpace
                     }
                 }
 
-                $exercise_results_tmp = self::exercises_results($row_user->user_id, $row->code, $session_id);
+                $exercise_results_tmp = self::exercises_results($row_user->user_id, $courseCode, $session_id);
                 $total_score_obtained += $exercise_results_tmp['score_obtained'];
                 $total_score_possible += $exercise_results_tmp['score_possible'];
                 $total_questions_answered += $exercise_results_tmp['questions_answered'];

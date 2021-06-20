@@ -4591,7 +4591,7 @@ class DocumentManager
         $parent_select = $form->addSelect(
             $selectName,
             get_lang('Current folder'),
-            '',
+            [],
             $attributes
         );
 

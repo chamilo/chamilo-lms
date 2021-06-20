@@ -289,7 +289,6 @@ EOT;
         return $this->addElement('SelectTheme', $name, $label, $options, $attributes);
     }
 
-
     /**
      * @param string $name
      * @param string $label

@@ -1485,7 +1485,7 @@ function api_preg_match_all($pattern, $subject, &$matches, $flags = PREG_PATTERN
         $flags = PREG_PATTERN_ORDER;
     }
 
-    return preg_match_all( $pattern.'u', $subject, $matches, $flags, $offset);
+    return preg_match_all($pattern.'u', $subject, $matches, $flags, $offset);
 
     //return preg_match_all(api_is_utf8($encoding) ? $pattern.'u' : $pattern, $subject, $matches, $flags, $offset);
 }
@@ -1697,7 +1697,7 @@ function api_get_system_encoding()
 /**
  * Detects encoding of plain text.
  *
- * @param string $string   the input text
+ * @param string $string the input text
  *
  * @return string returns the detected encoding
  */

@@ -471,7 +471,7 @@ class ResourceNode
     {
         if ($this->hasResourceFile()) {
             $mimeType = $this->getResourceFile()->getMimeType();
-            if (false !== strpos($mimeType, 'text')) {
+            if (str_contains($mimeType, 'text')) {
                 return true;
             }
         }
@@ -483,7 +483,7 @@ class ResourceNode
     {
         if ($this->hasResourceFile()) {
             $mimeType = $this->getResourceFile()->getMimeType();
-            if (false !== strpos($mimeType, 'image')) {
+            if (str_contains($mimeType, 'image')) {
                 return true;
             }
         }
@@ -495,7 +495,7 @@ class ResourceNode
     {
         if ($this->hasResourceFile()) {
             $mimeType = $this->getResourceFile()->getMimeType();
-            if (false !== strpos($mimeType, 'video')) {
+            if (str_contains($mimeType, 'video')) {
                 return true;
             }
         }

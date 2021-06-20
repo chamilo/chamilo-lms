@@ -1999,7 +1999,7 @@ class SurveyUtil
                 ICON_SIZE_MEDIUM
             )
             .'</a>';
-        echo Display::toolbarAction('survey',  [$actions]);
+        echo Display::toolbarAction('survey', [$actions]);
 
         // Displaying an information message that only the questions with predefined answers can be used in a comparative report
         echo Display::return_message(get_lang('Only questions with predefined answers can be used'), 'normal', false);

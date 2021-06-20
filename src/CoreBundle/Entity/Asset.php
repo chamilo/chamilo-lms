@@ -160,14 +160,14 @@ class Asset
     {
         $mimeType = $this->getMimeType();
 
-        return false !== strpos($mimeType, 'image');
+        return str_contains($mimeType, 'image');
     }
 
     public function isVideo(): bool
     {
         $mimeType = $this->getMimeType();
 
-        return false !== strpos($mimeType, 'video');
+        return str_contains($mimeType, 'video');
     }
 
     /**

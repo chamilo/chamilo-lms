@@ -6188,7 +6188,7 @@ This folder contains all sessions that have been opened in the chat. Although th
         $em->flush();
         if (!empty($content)) {
             $repo = Container::getDocumentRepository();
-            $repo->addFileFromString($document, $realPath, 'text/html', $content, true);
+            $repo->addFileFromString($document, $title, 'text/html', $content, true);
         }
 
         if ($document) {

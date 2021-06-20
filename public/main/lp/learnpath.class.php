@@ -4667,25 +4667,7 @@ class learnpath
      */
     public function return_new_tree($updateAudio = false, $dropElement = false)
     {
-        /*$result = $this->processBuildMenuElements($update_audio);
-        $list = '<ul id="lp_item_list">';
-        $tree = $this->print_recursive(
-            $result['elements'],
-            $result['default_data'],
-            $result['default_content']
-        );
-
-        if (!empty($tree)) {
-            $list .= $tree;
-        } else {
-            if ($drop_element_here) {
-                $list .= Display::return_message(get_lang('Drag and drop an element here'));
-            }
-        }
-        $list .= '</ul>';*/
-
         $list = $this->getBuildTree(false, $dropElement);
-
         $return = Display::panelCollapse(
             $this->name,
             $list,
@@ -5319,10 +5301,6 @@ class learnpath
             $document = $repo->find($id);
             if ($document->getResourceNode()->hasEditableTextContent()) {
                 $repo->updateResourceFileContent($document, $_REQUEST['content_lp']);
-                /*   $nodeRepo = Container::getDocumentRepository()->getResourceNodeRepository();
-                   $nodeRepo->update($document->getResourceNode());
-                   var_dump($document->getResourceNode()->getContent());
-                   exit;*/
             }
             $document->setTitle($_REQUEST['title']);
             $repo->update($document);
@@ -5685,7 +5663,6 @@ class learnpath
         );
 
         LearnPathItemForm::setForm($form, $action, $this, $lpItem);
-
         $form->addButtonSave(get_lang('Save'), 'submit_button');
 
         return '<div class="sectioncomment">'.$form->returnForm().'</div>';
@@ -5889,7 +5866,7 @@ class learnpath
         $result = $this->generate_lp_folder($courseInfo);
         $dir = $result['dir'];
 
-        if (empty($parentId) || '/' == $parentId) {
+        if (empty($parentId) || '/' === $parentId) {
             $postDir = isset($_POST['dir']) ? $_POST['dir'] : $dir;
             $dir = isset($_GET['dir']) ? $_GET['dir'] : $postDir; // Please, do not modify this dirname formatting.
 
@@ -8848,58 +8825,8 @@ class learnpath
             return true;
         }
         $lpItemRepo = Container::getLpItemRepository();
-        /*$previous = 2;
-        $next = 0;
-        $rootItem->setPreviousItemId(1);
-        $last = $this->updateList($orderList, $rootItem, $previous, $next);
-        $rootItem->setNextItemId($last + 1);
-*/
         $em = Database::getManager();
-        //echo '<pre>';
-        //var_dump($orderList);
-//        $em->persist($rootItem);
-
-        /*$node = new \Tree\Node\Node($rootItem->getIid());
-        $parentList[$rootItem->getIid()] = $node;
-
-        foreach ($orderList as $item) {
-            $itemId = $item->id ?? 0;
-            if (empty($itemId)) {
-                continue;
-            }
-            $parentId = $item->parent_id ?? 0;
-
-            if (empty($parentId)) {
-                $parent = $rootItem;
-                $parentId = $rootItem->getIid();
-            } else {
-                //$parent = $lpItemRepo->find($parentId);
-            }
-            //$parentList[$itemId] = ;
-
-            $child = new \Tree\Node\Node($itemId);
-            $parentList[$itemId] = $child;
-            $parentList[$parentId]->addChild($child);
-        }
-
-        $builder = new Tree\Builder\NodeBuilder;
-        echo '<pre>';
-        foreach ($node->getChildren() as $child) {
-            var_dump($child->getValue().'-'.$child->getDepth().'-'.$child->getSize());
-
-            var_dump("---");
-            foreach ($child->getNeighbors() as $neighbor) {
-
-                var_dump($neighbor->getValue(), $child->getSize(), $neighbor->getDepth());
-            }
-        }
-exit;*/
-
         $counter = 2;
-        /*$rootItem->setPreviousItemId(1);
-        $rootItem->setDisplayOrder(0);
-        $rootItem->setLaunchData(1);*/
-        //echo '<pre>';
         $rootItem->setDisplayOrder(1);
         $rootItem->setPreviousItemId(null);
         $em->persist($rootItem);
@@ -8907,8 +8834,6 @@ exit;*/
             $em->flush();
         }
 
-        //$rootItem->setNextItemId(null);
-        //$rootItem->setPreviousItemId(null);
         foreach ($orderList as $item) {
             $itemId = $item->id ?? 0;
             if (empty($itemId)) {
@@ -8923,20 +8848,8 @@ exit;*/
                 }
             }
 
-            /*if (isset($parentOrder[$parent->getIid()])) {
-                $parentOrder[$parent->getIid()]++;
-            } else {
-                $parentOrder[$parent->getIid()] = 0;
-            }*/
             /** @var CLpItem $itemEntity */
             $itemEntity = $lpItemRepo->find($itemId);
-
-            /*$previousId = 2;
-            if (isset($previous[$counter - 1])) {
-                $previousId = $previous[$counter - 1];
-            }
-            $previous[$counter] = $counter + 2;*/
-
             $itemEntity->setParent($parent);
             $previousId = (int) $itemEntity->getPreviousItemId();
             //if (0 === $previousId) {
@@ -8948,37 +8861,16 @@ exit;*/
                 $itemEntity->setNextItemId(null);
             //}
 
-            //$item->setPreviousItemId($previousId);
-            //$item->setNextItemId($counter + 1);
-            //$item->setDisplayOrder($parentOrder[$parent->getIid()]);
-            //var_dump($item->getIid().'-'.$counter);
-            //$item->setPreviousItemId(null);
-            //$item->setNextItemId(null);
-            //$item->setPreviousItemId($previousId);
+
             $itemEntity->setDisplayOrder($counter);
-            //var_dump($parent->getIid(), $parent->getTitle());
-//            $lpItemRepo->persistAsLastChildOf($item, $parent);
-            //$lpItemRepo->persistAs();
-            //$lpItemRepo->persistAsFirstChildOf($item, $parent);
-            //$em->flush();
-            //$lpItemRepo->moveDown($item, true);
-            //var_dump($itemEntity->getIid());            var_dump("parent: ".$parent->getIid());
             $em->persist($itemEntity);
             if ($flush) {
                 $em->flush();
             }
-            //$em->flush();
             $counter++;
         }
 
-        //$rootItem->setNextItemId($counter+1);
-
         $em->flush();
-        //var_dump($lpItemRepo->verify());
-        //$lpItemRepo->reorder($rootItem, 'displayOrder', 'ASC', false);
-        //$lpItemRepo->reorder($rootItem);
-        //$em->flush();
-        //var_dump($lpItemRepo->verifyNode($rootItem));exit;
         $lpItemRepo->recoverNode($rootItem, 'displayOrder');
         $em->persist($rootItem);
         if ($flush) {
@@ -9029,19 +8921,6 @@ exit;*/
                     'id' => $categoryId,
                 ]
             );
-    }
-
-    /**
-     * Return the scorm item type object with spaces replaced with _
-     * The return result is use to build a css classname like scorm_type_$return.
-     *
-     * @param $in_type
-     *
-     * @return mixed
-     */
-    private static function format_scorm_type_item($in_type)
-    {
-        return str_replace(' ', '_', $in_type);
     }
 
     /**

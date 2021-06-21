@@ -35,11 +35,10 @@ if (empty($careerInfo)) {
 }
 $careerId = $careerInfo['id'];
 
-$allow = UserManager::userHasCareer($userId, $careerId) || api_is_platform_admin() || api_is_drh();
-
+/*$allow = UserManager::userHasCareer($userId, $careerId) || api_is_platform_admin() || api_is_drh();
 if (false === $allow) {
     api_not_allowed(true);
-}
+}*/
 
 $htmlHeadXtra[] = api_get_js('jsplumb2.js');
 $htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');

@@ -219,13 +219,17 @@ if (!empty($defaultExtraFieldsFromSettings) && isset($defaultExtraFieldsFromSett
         $userArray[] = $key;
     }
 
-    foreach ($defaultExtraFields as $fieldId) {
-        // Fetching only the user that are loaded NOT ALL user in the portal.
-        $defaultUserProfileInfo[$fieldId] = TrackingCourseLog::getAdditionalProfileInformationOfFieldByUser(
-            $fieldId,
-            $userArray
-        );
-        $defaultExtraInfo[$fieldId] = UserManager::get_extra_field_information($fieldId);
+    foreach ($defaultExtraFields as $fieldName) {
+        $extraFieldInfo = UserManager::get_extra_field_information_by_name($fieldName);
+
+        if (!empty($extraFieldInfo)) {
+            // Fetching only the user that are loaded NOT ALL user in the portal.
+            $defaultUserProfileInfo[$extraFieldInfo['id']] = TrackingCourseLog::getAdditionalProfileInformationOfFieldByUser(
+                $extraFieldInfo['id'],
+                $userArray
+            );
+            $defaultExtraInfo[$extraFieldInfo['id']] = $extraFieldInfo;
+        }
     }
 
     Session::write('default_additional_user_profile_info', $defaultUserProfileInfo);

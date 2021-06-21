@@ -8137,7 +8137,7 @@ class TrackingCourseLog
         $extra_fields_to_show = 0;
         foreach ($extra_fields as $key => $field) {
             // exclude extra profile fields by id
-            if (in_array($field[0], $exclude)) {
+            if (in_array($field[3], $exclude)) {
                 continue;
             }
             // show only extra fields that are visible + and can be filtered, added by J.Montoya

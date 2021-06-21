@@ -17,7 +17,6 @@ class ResourceUploadListener
 
     public function __construct(RouterInterface $router)
     {
-        //$this->om = $om;
         $this->router = $router;
     }
 

@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
-use Chamilo\CoreBundle\Component\Utils\Glide;
 use Chamilo\CoreBundle\Component\Utils\GlideAsset;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
@@ -40,7 +39,7 @@ class AssetController
             $detector = new ExtensionMimeTypeDetector();
             $mimeType = $detector->detectMimeTypeFromFile($filePath);
             // If image use glide, because why not.
-            if (false !== strpos($mimeType, 'image')) {
+            if (str_contains($mimeType, 'image')) {
                 $server = $glide->getServer();
                 $request = $requestStack->getCurrentRequest();
                 $params = $request->query->all();

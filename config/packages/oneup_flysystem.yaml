@@ -6,12 +6,14 @@ oneup_flysystem:
         asset_cache_adapter:
             local:
                 location: '%kernel.project_dir%/var/cache/assets'
+
         resource_adapter:
             local:
                 location: '%kernel.project_dir%/var/upload/resource'
         resource_cache_adapter:
             local:
                 location: '%kernel.project_dir%/var/cache/resource'
+
     filesystems:
         asset:
             adapter: asset_adapter

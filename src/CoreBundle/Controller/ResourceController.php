@@ -61,7 +61,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      */
     public function indexAction(Request $request): Response
     {
-        $tool = $request->get('tool');
+        /*$tool = $request->get('tool');
         $type = $request->get('type');
 
         $parentResourceNode = $this->getParentResourceNode($request);
@@ -81,7 +81,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 'parent_resource_node' => $parentResourceNode,
                 'resource_settings' => $settings,
             ]
-        );
+        );*/
     }
 
     /**
@@ -125,7 +125,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      */
     public function newFolderAction(Request $request): Response
     {
-        return $this->createResource($request, 'folder');
+        //return $this->createResource($request, 'folder');
     }
 
     /**
@@ -135,7 +135,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      */
     public function newAction(Request $request): Response
     {
-        return $this->createResource($request, 'file');
+        //return $this->createResource($request, 'file');
     }
 
     /**
@@ -303,7 +303,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      */
     public function infoAction(Request $request): Response
     {
-        $nodeId = $request->get('id');
+        /*$nodeId = $request->get('id');
         $repository = $this->getRepositoryFromRequest($request);
 
         $resource = $repository->getResourceFromResourceNode($nodeId);
@@ -335,7 +335,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         return $this->render(
             $repository->getTemplates()->getFromAction(__FUNCTION__, $request->isXmlHttpRequest()),
             $params
-        );
+        );*/
     }
 
     /**
@@ -345,7 +345,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      */
     public function previewAction(Request $request): Response
     {
-        $nodeId = $request->get('id');
+        /*$nodeId = $request->get('id');
         $repository = $this->getRepositoryFromRequest($request);
 
         $resource = $repository->getResourceFromResourceNode($nodeId);
@@ -369,10 +369,12 @@ class ResourceController extends AbstractResourceController implements CourseCon
             'type' => $type,
         ];
 
-        return $this->render($repository->getTemplates()->getFromAction(__FUNCTION__), $params);
+        return $this->render($repository->getTemplates()->getFromAction(__FUNCTION__), $params);*/
     }
 
     /**
+     * @deprecated use vue.
+     *
      * @Route("/{tool}/{type}/{id}/change_visibility", name="chamilo_core_resource_change_visibility")
      */
     public function changeVisibilityAction(Request $request): Response
@@ -491,12 +493,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
     /**
      * Shows the associated resource file.
+     * @deprecated use vue.
      *
      * @Route("/{tool}/{type}/{id}/view_resource", methods={"GET"}, name="chamilo_core_resource_view_resource")
      */
     public function viewResourceAction(Request $request, RouterInterface $router): Response
     {
-        $id = $request->get('id');
+        /*$id = $request->get('id');
 
         $resourceNode = $this->getResourceNodeRepository()->find($id);
 
@@ -512,7 +515,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $repository = $this->getRepositoryFromRequest($request);
 
-        /** @var AbstractResource $resource */
         $resource = $repository->getResourceFromResourceNode($id);
 
         $tool = $request->get('tool');
@@ -525,7 +527,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             'type' => $type,
         ];
 
-        return $this->render($repository->getTemplates()->getFromAction(__FUNCTION__), $params);
+        return $this->render($repository->getTemplates()->getFromAction(__FUNCTION__), $params);*/
     }
 
     /**
@@ -656,13 +658,14 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
     /**
      * Upload form.
+     * @deprecated use vue + api platform.
      *
      * @Route("/{tool}/{type}/{id}/upload", name="chamilo_core_resource_upload", methods={"GET", "POST"},
      *     options={"expose"=true})
      */
     public function uploadAction(Request $request, $tool, $type, $id): Response
     {
-        $repository = $this->getRepositoryFromRequest($request);
+        /*$repository = $this->getRepositoryFromRequest($request);
         $resourceNode = $repository->getResourceNodeRepository()->find($id);
 
         $this->denyAccessUnlessGranted(
@@ -679,6 +682,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $routeParams['id'] = $id;
 
         return $this->render($repository->getTemplates()->getFromAction(__FUNCTION__), $routeParams);
+        */
     }
 
     /**
@@ -711,7 +715,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             default:
                 $forceDownload = false;
                 // If it's an image then send it to Glide.
-                if (false !== strpos($mimeType, 'image')) {
+                if (str_contains($mimeType, 'image')) {
                     $glide = $this->getGlide();
                     $server = $glide->getServer();
                     $params = $request->query->all();

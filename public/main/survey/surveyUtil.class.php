@@ -1990,7 +1990,9 @@ class SurveyUtil
         $questions = SurveyManager::get_questions($surveyId);
 
         // Actions bar
-        $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq()
+        $actions = '<a href="'.api_get_path(
+                WEB_CODE_PATH
+            ).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq()
             .'">'
             .Display::return_icon(
                 'back.png',

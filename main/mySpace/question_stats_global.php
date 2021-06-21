@@ -175,7 +175,7 @@ if ($form->validate()) {
             100,
             'question_tracking'
         );
-        $table->column = 1;
+        $table->column = 4;
         $column = 0;
         foreach ($headers as $header) {
             $table->set_header($column, $header, false);

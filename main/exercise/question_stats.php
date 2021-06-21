@@ -91,11 +91,8 @@ $formToString = $form->toHtml();
 $table = new HTML_Table(['class' => 'table table-hover table-striped']);
 $row = 0;
 $column = 0;
-
 $headers = [
     get_lang('Question'),
-    //get_lang('Group'),
-    //get_lang('User'),
     get_lang('WrongAnswer').' / '.get_lang('Total'),
     '%',
 ];

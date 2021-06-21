@@ -59,6 +59,7 @@ class Rest extends WebService
     const EDIT_CAMPUS = 'edit_campus';
     const DELETE_CAMPUS = 'delete_campus';
     const SAVE_SESSION = 'save_session';
+    const UPDATE_SESSION = 'update_session';
     const GET_USERS = 'get_users';
     const GET_COURSES = 'get_courses';
     const GET_COURSES_FROM_EXTRA_FIELD = 'get_courses_from_extra_field';
@@ -2107,5 +2108,66 @@ class Rest extends WebService
         );
 
         return json_encode($params);
+    }
+
+    /**
+     * @return array
+     */
+    public function updateSession(array $params)
+    {
+        $id = $params['session_id'];
+        $reset = isset($params['reset']) ? $params['reset'] : null;
+        $name = isset($params['name']) ? $params['name'] : null;
+        $coachId = isset($params['id_coach']) ? (int) $params['id_coach'] : null;
+        $sessionCategoryId = isset($params['session_category_id']) ? (int) $params['session_category_id'] : null;
+        $description = isset($params['description']) ? $params['description'] : null;
+        $showDescription = isset($params['show_description']) ? $params['show_description'] : null;
+        $duration = isset($params['duration']) ? $params['duration'] : null;
+        $visibility = isset($params['visibility']) ? $params['visibility'] : null;
+        $promotionId = isset($params['promotion_id']) ? $params['promotion_id'] : null;
+        $displayStartDate = isset($params['display_start_date']) ? $params['display_start_date'] : null;
+        $displayEndDate = isset($params['display_end_date']) ? $params['display_end_date'] : null;
+        $accessStartDate = isset($params['access_start_date']) ? $params['access_start_date'] : null;
+        $accessEndDate = isset($params['access_end_date']) ? $params['access_end_date'] : null;
+        $coachStartDate = isset($params['coach_access_start_date']) ? $params['coach_access_start_date'] : null;
+        $coachEndDate = isset($params['coach_access_end_date']) ? $params['coach_access_end_date'] : null;
+        $sendSubscriptionNotification = isset($params['send_subscription_notification']) ? $params['send_subscription_notification'] : null;
+        $extraFields = isset($params['extra']) ? $params['extra'] : [];
+
+        $return = SessionManager::update_session(
+            $id,
+            $reset,
+            $name,
+            $coachId,
+            $sessionCategoryId,
+            $description,
+            $showDescription,
+            $duration,
+            $visibility,
+            $promotionId,
+            $displayStartDate,
+            $displayEndDate,
+            $accessStartDate,
+            $accessEndDate,
+            $coachStartDate,
+            $coachEndDate,
+            $sendSubscriptionNotification,
+            $extraFields
+        );
+
+        if ($return) {
+            $out = [
+                'status' => true,
+                'message' => "Session updated",
+                'id_session' => $return,
+            ];
+        } else {
+            $out = [
+                'status' => false,
+                'message' => get_lang('ErrorOccurred'),
+            ];
+        }
+
+        return $out;
     }
 }

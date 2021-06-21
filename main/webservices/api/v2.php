@@ -206,6 +206,10 @@ try {
             $data = $restApi->addSession($_POST);
             $restResponse->setData($data);
             break;
+        case Rest::UPDATE_SESSION:
+            $data = $restApi->updateSession($_POST);
+            $restResponse->setData($data);
+            break;
         case Rest::GET_USERS:
             $data = $restApi->getUsersCampus($_POST);
             $restResponse->setData($data);

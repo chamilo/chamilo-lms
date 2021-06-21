@@ -7740,8 +7740,7 @@ class SessionManager
         $form->addRule('name', get_lang('Session name already exists'), 'callback', 'check_session_name');
 
         if (!api_is_platform_admin() && api_is_teacher()) {
-            $form->addElement(
-                'select',
+            $form->addSelect(
                 'coach_username',
                 get_lang('Coach name'),
                 [api_get_user_id() => $userInfo['complete_name']],

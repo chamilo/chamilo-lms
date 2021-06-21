@@ -23,7 +23,7 @@ if (!empty($currentCourse)) {
 $form->addSelectAjax(
     'course_id',
     get_lang('Course'),
-    null,
+    [],
     [
         'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
     ]

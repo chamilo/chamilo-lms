@@ -216,12 +216,11 @@ if (count($session_select) > 1) {
         'get',
         api_get_self().'?session_id='.$session_id
     );
-    $form->addElement(
-        'select',
+    $form->addSelect(
         'session_id',
         get_lang('Session list'),
         $session_select,
-        'onchange="javascript:change_session()"'
+        ['onchange' => 'javascript:change_session()']
     );
     $defaults['session_id'] = $session_id;
     $form->setDefaults($defaults);

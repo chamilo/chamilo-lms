@@ -290,12 +290,10 @@ EOT;
     }
 
     /**
-     * @param string $name
-     * @param string $label
-     * @param array  $options
-     * @param array  $attributes
-     *
-     * @throws Exception
+     * @param string       $name
+     * @param string|array $label
+     * @param array        $options
+     * @param array        $attributes
      *
      * @return SelectAjax
      */

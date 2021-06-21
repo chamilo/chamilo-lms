@@ -476,7 +476,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $sessionSelect = $sessionFilter->addSelectAjax(
         'session_name',
         get_lang('Search course by session'),
-        null,
+        [],
         ['id' => 'session_name', 'url' => $url]
     );
 

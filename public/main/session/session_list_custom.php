@@ -34,7 +34,7 @@ $sessionFilter = new FormValidator(
 $courseSelect = $sessionFilter->addSelectAjax(
     'course_name',
     get_lang('SearchCourse'),
-    null,
+    [],
     ['url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course']
 );
 

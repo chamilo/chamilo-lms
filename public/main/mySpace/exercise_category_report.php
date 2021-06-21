@@ -28,12 +28,12 @@ $defaults['course_id'] = $courseId;
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = '<script>
 $(function() {
-    $("#exercise_course_id").on("change", function(e) {        
+    $("#exercise_course_id").on("change", function(e) {
         var data = $(this).select2(\'data\');
         var option = data[0];
         //Then I take the values like if I work with an array
-        var value = option.id;        
-        var selectedDate = $("#start_date").datepicker({ dateFormat: \'dd,MM,yyyy\' }).val();        
+        var value = option.id;
+        var selectedDate = $("#start_date").datepicker({ dateFormat: \'dd,MM,yyyy\' }).val();
         window.location.replace("'.$currentUrl.'?start_date="+selectedDate+"&course_id="+value);
     });
 });
@@ -45,7 +45,7 @@ if (empty($courseId)) {
     $form->addSelectAjax(
         'course_id',
         get_lang('Course'),
-        null,
+        [],
         [
             'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
         ]
@@ -253,9 +253,9 @@ if ($form->validate() && !empty($courseInfo)) {
             $.each(postData, function(key, value) {
                 myUrl += "&"+key+"="+encodeURIComponent(value);
             });
-            
+
             $("#excel_export").attr("href", myUrl);
-            
+
             jQuery("#'.$tableId.'").jqGrid(
                 "navGrid",
                 "#'.$tableId.'_pager",
@@ -263,8 +263,8 @@ if ($form->validate() && !empty($courseInfo)) {
                     view:false, edit:false, add:false, del:false, search:false, excel:true
                 }
             );
-            
-            jQuery("#'.$tableId.'").jqGrid("navButtonAdd","#'.$tableId.'_pager",{       
+
+            jQuery("#'.$tableId.'").jqGrid("navButtonAdd","#'.$tableId.'_pager",{
                caption: "",
                title:"'.get_lang('Excel export').'",
                onClickButton : function() {

@@ -67,7 +67,7 @@ $sessionFilter = new FormValidator(
 $courseSelect = $sessionFilter->addSelectAjax(
     'course_name',
     null,
-    null,
+    [],
     [
         'id' => 'course_name',
         'placeholder' => get_lang('Search courses'),

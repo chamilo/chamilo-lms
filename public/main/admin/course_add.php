@@ -55,7 +55,7 @@ $form->applyFilter('visual_code', 'html_filter');
 $form->addSelectAjax(
     'course_categories',
     get_lang('Categories'),
-    null,
+    [],
     [
         'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category',
         'multiple' => 'multiple',

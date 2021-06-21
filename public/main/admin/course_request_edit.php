@@ -58,7 +58,7 @@ if ($course_validation_feature) {
         $courseSelect = $form->addSelectAjax(
             'category_code',
             get_lang('Category'),
-            null,
+            [],
             ['url' => $url]
         );
 

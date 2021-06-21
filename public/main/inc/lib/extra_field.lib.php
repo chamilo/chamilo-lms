@@ -2207,8 +2207,7 @@ class ExtraField extends Model
         // Field type
         $types = self::get_field_types();
 
-        $form->addElement(
-            'select',
+        $form->addSelect(
             'field_type',
             get_lang('Field type'),
             $types,

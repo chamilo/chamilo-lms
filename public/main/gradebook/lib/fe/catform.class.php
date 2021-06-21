@@ -259,7 +259,7 @@ class CatForm extends FormValidator
                         get_lang('Skills'),
                         get_lang('Skills obtained when achieving this assessment'),
                     ],
-                    null,
+                    [],
                     [
                         'id' => 'skills',
                         'multiple' => 'multiple',

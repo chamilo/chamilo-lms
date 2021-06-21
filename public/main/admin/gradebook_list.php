@@ -78,7 +78,7 @@ switch ($action) {
         $form->addSelectAjax(
             'course_id',
             get_lang('Course'),
-            null,
+            [],
             [
                 'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
             ]
@@ -87,7 +87,7 @@ switch ($action) {
         $form->addSelectAjax(
             'depends',
             get_lang('DependsOnAssessments'),
-            null,
+            [],
             [
                 'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
                 'multiple' => 'multiple',

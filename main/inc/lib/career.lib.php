@@ -811,9 +811,8 @@ class Career extends Model
     public static function parseColumnList($groupCourseList, $columnList, &$graph, &$connections, $userResult)
     {
         $graphHtml = '';
-        $oldGroup = null;
         $newOrder = [];
-        foreach ($columnList as $key => $subGroupList) {
+        foreach ($columnList as $subGroupList) {
             $newGroup = $subGroupList['group'];
             $label = $subGroupList['group_label'];
             $newOrder[$newGroup]['items'][] = $subGroupList;

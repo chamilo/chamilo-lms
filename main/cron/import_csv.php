@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
@@ -2832,18 +2833,7 @@ class ImportCsv
                     $userIdList[$rowStudentId] = $studentId;
                 }
 
-                //$studentInfo = api_get_user_info($studentId);
-
-                /*$sql = "SELECT id FROM $userTable WHERE id = $studentId";
-                $result = Database::query($sql);
-                if (empty(Database::num_rows($result))) {
-                    $this->logger->addInfo("Student chamilo id not found: $studentId row data StudentId: ".$row['StudentId']);
-                    continue;
-                }*/
-
                 $careerId = $row['CareerId'];
-
-                //$careerChamiloId = 0;
                 if (isset($careerIdList[$careerId])) {
                     $careerChamiloId = $careerIdList[$careerId];
                 } else {
@@ -2884,7 +2874,6 @@ class ImportCsv
 
                 $extraData = isset($userCareerData['extra_data']) && !empty($userCareerData['extra_data']) ? unserialize($userCareerData['extra_data']) : [];
 
-                //$teacherInfo = api_get_user_info_from_username($row['TeacherUsername']);
                 $sql = "SELECT firstname, lastname FROM $userTable
                         WHERE username='".Database::escape_string($row['TeacherUsername'])."'";
                 $result = Database::query($sql);
@@ -2908,6 +2897,7 @@ class ImportCsv
                     'BorderColor' => $row['BorderColor'],
                     'Icon' => $row['Icon'],
                     'IconColor' => $row['IconColor'],
+                    'SortDate' => $row['SortDate'] ?? '',
                 ];
                 $serializedValue = serialize($extraData);
 
@@ -2936,7 +2926,6 @@ class ImportCsv
 
         $extraFieldValue = new ExtraFieldValue('career');
         $extraFieldName = $this->extraFieldIdNameList['career'];
-        $externalEventId = null;
 
         $extraField = new ExtraField('career');
         $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($extraFieldName);

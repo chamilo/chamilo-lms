@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="lti_external_tool")
  * @ORM\Entity
  */
-class ExternalTool extends AbstractResource implements ResourceInterface
+class ExternalTool extends AbstractResource implements ResourceInterface, ResourceToRootInterface
 {
     /**
      * @ORM\Column(name="id", type="integer")

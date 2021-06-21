@@ -99,7 +99,7 @@ class Utils
     public static function trimParams(array &$params): void
     {
         foreach ($params as $key => $value) {
-            $newValue = preg_replace('/\s+/', ' ', $value);
+            $newValue = preg_replace('/\s+/', ' ', (string) $value);
 
             $params[$key] = trim($newValue);
         }

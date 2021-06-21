@@ -133,13 +133,10 @@ class Tool
         return $this;
     }
 
-    /**
-     * @return ResourceType
-     */
-    public function getResourceTypeByName(string $name)
+    /*public function getResourceTypeByName(string $name): ?ResourceType
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq('name', $name));
 
         return $this->getResourceTypes()->matching($criteria)->first();
-    }
+    }*/
 }

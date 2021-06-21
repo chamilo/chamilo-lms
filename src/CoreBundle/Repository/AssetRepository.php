@@ -85,7 +85,7 @@ class AssetRepository extends ServiceEntityRepository
         return null;
     }
 
-    public function getAssetUrl(Asset $asset)
+    public function getAssetUrl(Asset $asset): string
     {
         if (Asset::SCORM === $asset->getCategory()) {
             $params = [

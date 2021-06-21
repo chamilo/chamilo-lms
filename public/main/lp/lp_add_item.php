@@ -51,19 +51,22 @@ function load_cbo(id, previousId) {
     previousId = previousId || 'previous';
 
     var cbo = document.getElementById(previousId);
-    for (var i = cbo.length - 1; i > 0; i--) {
-        cbo.options[i] = null;
+
+    if (cbo) {
+        for (var i = cbo.length - 1; i > 0; i--) {
+            cbo.options[i] = null;
+        }
+        var k=0;
+        for (var i = 1; i <= child_name[id].length; i++){
+            var option = new Option(child_name[id][i - 1], child_value[id][i - 1]);
+            option.style.paddingLeft = '40px';
+            cbo.options[i] = option;
+            k = i;
+        }
+
+        cbo.options[k].selected = true;
     }
 
-    var k=0;
-    for (var i = 1; i <= child_name[id].length; i++){
-        var option = new Option(child_name[id][i - 1], child_value[id][i - 1]);
-        option.style.paddingLeft = '40px';
-        cbo.options[i] = option;
-        k = i;
-    }
-
-    cbo.options[k].selected = true;
     //$('#' + previousId).selectpicker('refresh');
 }
 
@@ -76,9 +79,9 @@ $(function() {
     $('.lp_resource_element').click(function() {
         window.location.href = $('a', this).attr('href');
     });
-    CKEDITOR.on('instanceReady', function (e) {
+    /*CKEDITOR.on('instanceReady', function (e) {
         showTemplates('content_lp');
-    });
+    });*/
 });
 </script>";
 

@@ -16,6 +16,7 @@
  */
 require_once __DIR__.'/../../inc/global.inc.php';
 
+api_protect_webservices();
 $hash = isset($_REQUEST['hash']) ? $_REQUEST['hash'] : null;
 
 if ($hash) {

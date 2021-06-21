@@ -4,6 +4,7 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_webservices();
 /**
  * Error returned by one of the methods of the web service.
  * Contains an error code and an error message.

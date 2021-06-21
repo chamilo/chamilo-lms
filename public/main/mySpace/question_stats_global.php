@@ -17,14 +17,19 @@ if (!$allowToTrack) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('MySpace')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('MySpace')];
 
-$courseIdList = isset($_REQUEST['courses']) ? $_REQUEST['courses'] : [];
-$exercises = isset($_REQUEST['exercises']) ? $_REQUEST['exercises'] : [];
+$courseIdList = $_REQUEST['courses'] ?? [];
+$exercises = $_REQUEST['exercises'] ?? [];
+$groups = $_REQUEST['groups'] ?? [];
+$users = $_REQUEST['users'] ?? [];
 
 $courseOptions = [];
 $exerciseList = [];
 $selectedExercises = [];
+$groupList = [];
+$allGroups = [];
+$allUsers = [];
 if (!empty($courseIdList)) {
     foreach ($courseIdList as $courseId) {
         $course = api_get_course_entity($courseId);
@@ -72,6 +77,27 @@ $form->addSelectAjax(
     ]
 );
 
+if (!empty($allGroups)) {
+    $form->addSelect(
+        'groups',
+        get_lang('Groups'),
+        $allGroups,
+        [
+            'multiple' => true,
+        ]
+    );
+}
+
+if (!empty($allUsers)) {
+    $form->addSelect(
+        'users',
+        get_lang('Users'),
+        $allUsers,
+        [
+            'multiple' => true,
+        ]
+    );
+}
 if (!empty($courseIdList)) {
     $form->addSelect(
         'exercises',
@@ -95,36 +121,23 @@ if ($form->validate()) {
         get_lang('WrongAnswer').' / '.get_lang('Total'),
         '%',
     ];
-    /*$table = new HTML_Table(['class' => 'table table-hover table-striped']);
-    $row = 0;
-    $column = 0;
-    foreach ($headers as $header) {
-        $table->setHeaderContents($row, $column, $header);
-        $column++;
-    }
-    $row++;*/
     $scoreDisplay = new ScoreDisplay();
     $exercises = $form->getSubmitValue('exercises');
     if ($exercises) {
         $orderedData = [];
         foreach ($selectedExercises as $courseId => $selectedExerciseList) {
             foreach ($selectedExerciseList as $exerciseId) {
-                $questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, null, 10);
+                $questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, null, $groups, $users);
                 foreach ($questions as $data) {
                     $questionId = (int) $data['question_id'];
-                    $total = ExerciseLib::getTotalQuestionAnswered($courseId, $exerciseId, $questionId);
-                    /*$column = 0;
-                    $table->setCellContents($row, $column++, $courseOptions[$courseId]);
-                    $table->setCellContents($row, $column++, $exerciseList[$exerciseId]);
-                    $table->setCellContents($row, $column++, $data['question']);
-                    $table->setCellContents($row, $column++, $data['count'].' / '.$total);
-                    $percentage = $data['count']/$total;
-                    $table->setCellContents(
-                        $row,
-                        $column++,
-                        $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE)
+                    $total = ExerciseLib::getTotalQuestionAnswered(
+                        $courseId,
+                        $exerciseId,
+                        $questionId,
+                        null,
+                        $groups,
+                        $users
                     );
-                    $row++;*/
                     $orderedData[] = [
                         $courseOptions[$courseId],
                         $exerciseList[$exerciseId],
@@ -138,8 +151,8 @@ if ($form->validate()) {
 
         $table = new SortableTableFromArray(
             $orderedData,
-            1,
-            20,
+            0,
+            100,
             'question_tracking'
         );
         $table->column = 4;

@@ -50,11 +50,11 @@ $audioDir = Security::remove_XSS($_REQUEST['audio_dir']);
 
 switch ($type) {
     case 'document':
-        /*$dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
-        $saveDir = $dirBaseDocuments.$audioDir;
-        if (!is_dir($saveDir)) {
-            mkdir($saveDir, api_get_permissions_for_new_directories(), true);
-        }*/
+
+        if (empty($audioDir)) {
+            $audioDir = '/';
+        }
+
         $uploadedDocument = DocumentManager::upload_document(
             $file,
             $audioDir,
@@ -70,7 +70,7 @@ switch ($type) {
             $courseInfo,
             api_get_session_id(),
             api_get_group_id(),
-            true
+            'exercise' === $tool
         );
 
         $error = empty($uploadedDocument) || !is_array($uploadedDocument);

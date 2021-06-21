@@ -410,6 +410,44 @@ switch ($action) {
         echo Display::page_subheader(get_lang('QuestionsToReview'));
         echo $objExercise->getReminderTable($questionList, $statInfo, true);
         break;
+    case 'save_question_description':
+        if (!api_get_configuration_value('allow_quick_question_description_popup')) {
+            exit;
+        }
+        if (!api_is_allowed_to_edit(null, true)) {
+            exit;
+        }
+
+        /** @var \Exercise $objExercise */
+        $objExercise = Session::read('objExercise');
+        if (empty($objExercise)) {
+            exit;
+        }
+
+        $questionId = isset($_REQUEST['question_id']) ? (int) $_REQUEST['question_id'] : null;
+        $image = isset($_REQUEST['image']) ? $_REQUEST['image'] : '';
+
+        $questionList = $objExercise->getQuestionList();
+
+        if (!in_array($questionId, $questionList)) {
+            echo '0';
+            exit;
+        }
+
+        $em = Database::getManager();
+        $repo = $em->getRepository(CQuizQuestion::class);
+        /** @var CQuizQuestion $question */
+        $question = $repo->find($questionId);
+        if (null !== $question) {
+            $question->setDescription('<img src="'.$image.'" />');
+            $em->persist($question);
+            $em->flush();
+            echo 1;
+            exit;
+        }
+        echo 0;
+        exit;
+        break;
     case 'save_exercise_by_now':
         header('Content-Type: application/json');
         $course_info = api_get_course_info_by_id($course_id);

@@ -3,6 +3,9 @@
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_webservices();
+
 $debug = true;
 
 define('WS_ERROR_SECRET_KEY', 1);

@@ -13,6 +13,8 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_webservices();
+
 /**
  * Get a list of courses (code, url, title, teacher, language) and return to caller
  * Function registered as service. Returns strings in UTF-8.

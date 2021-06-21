@@ -801,8 +801,7 @@ class Wiki
         $form->addElement('text', 'comment', get_lang('Comments'));
         $progress = ['', 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
-        $form->addElement(
-            'select',
+        $form->addSelect(
             'progress',
             get_lang('Progress'),
             $progress

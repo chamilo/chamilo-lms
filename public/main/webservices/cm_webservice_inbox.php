@@ -125,9 +125,9 @@ class WSCMInbox extends WSCM
             }
 
             return $message;
-        } else {
-            return get_lang('Login failed - incorrect login or password.');
         }
+
+        return get_lang('InvalidId');
     }
 
     public function get_message_data_sent($username, $password, $id, $field)

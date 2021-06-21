@@ -294,7 +294,7 @@ define('LOG_SURVEY_ID', 'survey_id');
 define('LOG_SURVEY_CREATED', 'survey_created');
 define('LOG_SURVEY_DELETED', 'survey_deleted');
 define('LOG_SURVEY_CLEAN_RESULTS', 'survey_clean_results');
-define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.-]/');
+define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.\$-]/');
 
 //used when login_is_email setting is true
 define('USERNAME_PURIFIER_MAIL', '/[^0-9A-Za-z_\.@]/');
@@ -434,6 +434,11 @@ define('HOOK_EVENT_TYPE_PRE', 0);
 define('HOOK_EVENT_TYPE_POST', 1);
 define('HOOK_EVENT_TYPE_ALL', 10);
 
+define('CAREER_STATUS_ACTIVE', 1);
+define('CAREER_STATUS_INACTIVE', 0);
+
+define('PROMOTION_STATUS_ACTIVE', 1);
+define('PROMOTION_STATUS_INACTIVE', 0);
 // Group permissions
 define('GROUP_PERMISSION_OPEN', '1');
 define('GROUP_PERMISSION_CLOSED', '2');
@@ -1061,6 +1066,10 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     if (!empty($session_id)) {
         // $isAllowedInCourse was set in local.inc.php
         if (!$isAllowedInCourse) {
+            $is_visible = false;
+        }
+        // Check if course is inside session.
+        if (!SessionManager::relation_session_course_exist($session_id, $course_info['real_id'])) {
             $is_visible = false;
         }
     }
@@ -2722,13 +2731,15 @@ function api_get_session_info($id)
 function api_get_session_visibility(
     $session_id,
     $courseId = null,
-    $ignore_visibility_for_admins = true
+    $ignore_visibility_for_admins = true,
+    $userId = 0
 ) {
     if (api_is_platform_admin()) {
         if ($ignore_visibility_for_admins) {
             return SESSION_AVAILABLE;
         }
     }
+    $userId = empty($userId) ? api_get_user_id() : (int) $userId;
 
     $now = time();
     if (empty($session_id)) {
@@ -2752,7 +2763,7 @@ function api_get_session_visibility(
         // Session duration per student.
         if (isset($row['duration']) && !empty($row['duration'])) {
             $duration = $row['duration'] * 24 * 60 * 60;
-            $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser($session_id, api_get_user_id());
+            $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser($session_id, $userId);
 
             // If there is a session duration but there is no previous
             // access by the user, then the session is still available
@@ -2764,10 +2775,7 @@ function api_get_session_visibility(
             $firstAccess = isset($courseAccess['login_course_date'])
                 ? api_strtotime($courseAccess['login_course_date'], 'UTC')
                 : 0;
-            $userDurationData = SessionManager::getUserSession(
-                api_get_user_id(),
-                $session_id
-            );
+            $userDurationData = SessionManager::getUserSession($userId, $session_id);
             $userDuration = isset($userDurationData['duration'])
                 ? (intval($userDurationData['duration']) * 24 * 60 * 60)
                 : 0;
@@ -3268,12 +3276,13 @@ function api_is_course_session_coach($user_id, $courseId, $session_id)
  * @param int $session_id
  * @param int $courseId
  * @param bool  Check whether we are in student view and, if we are, return false
+ * @param int $userId
  *
  * @return bool True if current user is a course or session coach
  */
-function api_is_coach($session_id = 0, $courseId = null, $check_student_view = true)
+function api_is_coach($session_id = 0, $courseId = null, $check_student_view = true, $userId = 0)
 {
-    $userId = api_get_user_id();
+    $userId = empty($userId) ? api_get_user_id() : (int) $userId;
 
     if (!empty($session_id)) {
         $session_id = (int) $session_id;
@@ -3386,6 +3395,38 @@ function api_is_invitee()
     $user = api_get_user_info();
 
     return isset($user['status']) && INVITEE == $user['status'];
+}
+
+/**
+ * This function checks whether a session is assigned into a category.
+ *
+ * @param int       - session id
+ * @param string    - category name
+ *
+ * @return bool - true if is found, otherwise false
+ */
+function api_is_session_in_category($session_id, $category_name)
+{
+    $session_id = (int) $session_id;
+    $category_name = Database::escape_string($category_name);
+    $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+    $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+
+    $sql = "SELECT 1
+            FROM $tbl_session
+            WHERE $session_id IN (
+                SELECT s.id FROM $tbl_session s, $tbl_session_category sc
+                WHERE
+                  s.session_category_id = sc.id AND
+                  sc.name LIKE '%$category_name'
+            )";
+    $rs = Database::query($sql);
+
+    if (Database::num_rows($rs) > 0) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -5547,9 +5588,13 @@ function api_replace_dangerous_char($filename, $treat_spaces_as_hyphens = true)
         true,
         false,
         false,
-        false
+        false,
+        $treat_spaces_as_hyphens
     );
 
+    // Replace multiple dots at the end.
+    $regex = "/\.+$/";
+    $url = preg_replace($regex, '', $url);
     return $url;
 }
 
@@ -6680,11 +6725,19 @@ function api_check_ip_in_range($ip, $range)
     return false;
 }
 
-function api_check_user_access_to_legal($course_visibility)
+function api_check_user_access_to_legal($courseInfo)
 {
-    $course_visibility_list = [COURSE_VISIBILITY_OPEN_WORLD, COURSE_VISIBILITY_OPEN_PLATFORM];
+    if (empty($courseInfo)) {
+        return false;
+    }
 
-    return in_array($course_visibility, $course_visibility_list) || api_is_drh();
+    $visibility = (int) $courseInfo['visibility'];
+    $visibilityList = [COURSE_VISIBILITY_OPEN_WORLD, COURSE_VISIBILITY_OPEN_PLATFORM];
+
+    return
+        in_array($visibility, $visibilityList) ||
+        api_is_drh() ||
+        (COURSE_VISIBILITY_REGISTERED === $visibility && 1 === (int) $courseInfo['subscribe']);
 }
 
 /**
@@ -8191,4 +8244,13 @@ function api_get_filtered_multilingual_HTML_string($htmlString, $language = null
     }
     // Could not find pattern. Just return the whole string. We shouldn't get here.
     return $htmlString;
+}
+
+function api_protect_webservices()
+{
+    if (api_get_configuration_value('disable_webservices')) {
+        echo "Webservices are disabled. \n";
+        echo "To enable, add \$_configuration['disable_webservices'] = true; in configuration.php";
+        exit;
+    }
 }

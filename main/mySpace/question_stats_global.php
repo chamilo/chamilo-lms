@@ -135,8 +135,6 @@ $tableContent = '';
 if ($form->validate()) {
     $headers = [
         get_lang('Course'),
-        get_lang('Group'),
-        get_lang('User'),
         get_lang('Exercise'),
         get_lang('Question'),
         get_lang('WrongAnswer').' / '.get_lang('Total'),
@@ -148,96 +146,25 @@ if ($form->validate()) {
     if ($exercises) {
         $orderedData = [];
         foreach ($selectedExercises as $courseId => $selectedExerciseList) {
-            if (!empty($groups)) {
-                foreach ($groups as $groupId) {
-                    $groupEntity = api_get_group_entity($groupId);
-                    if (null === $groupEntity) {
-                        continue;
-                    }
-
-                    if ($courseId !== $groupEntity->getCId()) {
-                        continue;
-                    }
-
-                    foreach ($selectedExerciseList as $exerciseId) {
-                        $questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, null, $groupId);
-                        foreach ($questions as $data) {
-                            $questionId = (int) $data['question_id'];
-                            $total = ExerciseLib::getTotalQuestionAnswered(
-                                $courseId,
-                                $exerciseId,
-                                $questionId,
-                                null,
-                                $groupId
-                            );
-                            $orderedData[] = [
-                                $courseOptions[$courseId],
-                                $groupEntity->getName(),
-                                null,
-                                $exerciseList[$exerciseId],
-                                $data['question'],
-                                $data['count'].' / '.$total,
-                                $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE),
-                            ];
-                        }
-                    }
-                }
-            } else {
-                foreach ($selectedExerciseList as $exerciseId) {
-                    $questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId);
-                    foreach ($questions as $data) {
-                        $questionId = (int) $data['question_id'];
-                        $total = ExerciseLib::getTotalQuestionAnswered($courseId, $exerciseId, $questionId);
-                        $orderedData[] = [
-                            $courseOptions[$courseId],
-                            null,
-                            null,
-                            $exerciseList[$exerciseId],
-                            $data['question'],
-                            $data['count'].' / '.$total,
-                            $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE),
-                        ];
-                    }
-                }
-            }
-
-            if (!empty($users)) {
-                foreach ($users as $userId) {
-                    $user = api_get_user_entity($userId);
-                    if (null === $user) {
-                        continue;
-                    }
-
-                    foreach ($selectedExerciseList as $exerciseId) {
-                        $questions = ExerciseLib::getWrongQuestionResults(
-                            $courseId,
-                            $exerciseId,
-                            null,
-                            null,
-                            $userId,
-                            10
-                        );
-                        foreach ($questions as $data) {
-                            $questionId = (int) $data['question_id'];
-                            $total = ExerciseLib::getTotalQuestionAnswered(
-                                $courseId,
-                                $exerciseId,
-                                $questionId,
-                                null,
-                                null,
-                                $userId
-                            );
-                            $orderedData[] = [
-                                $courseOptions[$courseId],
-                                null,
-                                UserManager::formatUserFullName($user),
-                                $exerciseList[$exerciseId],
-                                $data['question'],
-                                $data['count'].' / '.$total,
-                                $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE),
-                            ];
-                        }
-                    }
+            foreach ($selectedExerciseList as $exerciseId) {
+                $questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, null, $groups, $users);
+                foreach ($questions as $data) {
+                    $questionId = (int) $data['question_id'];
+                    $total = ExerciseLib::getTotalQuestionAnswered(
+                        $courseId,
+                        $exerciseId,
+                        $questionId,
+                        null,
+                        $groups,
+                        $users
+                    );
+                    $orderedData[] = [
+                        $courseOptions[$courseId],
+                        $exerciseList[$exerciseId],
+                        $data['question'],
+                        $data['count'].' / '.$total,
+                        $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE),
+                    ];
                 }
             }
         }
@@ -254,7 +181,6 @@ if ($form->validate()) {
             $table->set_header($column, $header, false);
             $column++;
         }
-
         $tableContent = $table->return_table();
     }
 }

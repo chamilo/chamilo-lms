@@ -94,8 +94,8 @@ $column = 0;
 
 $headers = [
     get_lang('Question'),
-    get_lang('Group'),
-    get_lang('User'),
+    //get_lang('Group'),
+    //get_lang('User'),
     get_lang('WrongAnswer').' / '.get_lang('Total'),
     '%',
 ];
@@ -108,59 +108,21 @@ $row++;
 $scoreDisplay = new ScoreDisplay();
 
 if ($form->validate()) {
-    if (!empty($groups)) {
-        foreach ($groups as $groupId) {
-            $group = api_get_group_entity($groupId);
-
-            if (null === $group) {
-                continue;
-            }
-
-            $questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, $sessionId, $groupId);
-            foreach ($questions as $data) {
-                $questionId = (int) $data['question_id'];
-                $total = ExerciseLib::getTotalQuestionAnswered(
-                    $courseId,
-                    $exerciseId,
-                    $questionId,
-                    $sessionId,
-                    $groupId
-                );
-                $table->setCellContents($row, 0, $data['question']);
-                $table->setCellContents($row, 1, $group->getName());
-                $table->setCellContents($row, 2, '');
-                $table->setCellContents($row, 3, $data['count'].' / '.$total);
-                $table->setCellContents($row, 4, $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE));
-                $row++;
-            }
-        }
-    }
-
-    if (!empty($users)) {
-        foreach ($users as $userId) {
-            $user = api_get_user_entity($userId);
-            if (null === $user) {
-                continue;
-            }
-            $questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, $sessionId, null, $userId);
-            foreach ($questions as $data) {
-                $questionId = (int) $data['question_id'];
-                $total = ExerciseLib::getTotalQuestionAnswered(
-                    $courseId,
-                    $exerciseId,
-                    $questionId,
-                    $sessionId,
-                    null,
-                    $userId
-                );
-                $table->setCellContents($row, 0, $data['question']);
-                $table->setCellContents($row, 1, '');
-                $table->setCellContents($row, 2, UserManager::formatUserFullName($user));
-                $table->setCellContents($row, 3, $data['count'].' / '.$total);
-                $table->setCellContents($row, 4, $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE));
-                $row++;
-            }
-        }
+    $questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, $sessionId, $groups, $users);
+    foreach ($questions as $data) {
+        $questionId = (int) $data['question_id'];
+        $total = ExerciseLib::getTotalQuestionAnswered(
+            $courseId,
+            $exerciseId,
+            $questionId,
+            $sessionId,
+            $groups,
+            $users
+        );
+        $table->setCellContents($row, 0, $data['question']);
+        $table->setCellContents($row, 1, $data['count'].' / '.$total);
+        $table->setCellContents($row, 2, $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE));
+        $row++;
     }
 } else {
     $questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, $sessionId);
@@ -168,10 +130,8 @@ if ($form->validate()) {
         $questionId = (int) $data['question_id'];
         $total = ExerciseLib::getTotalQuestionAnswered($courseId, $exerciseId, $questionId, $sessionId);
         $table->setCellContents($row, 0, $data['question']);
-        $table->setCellContents($row, 1, '');
-        $table->setCellContents($row, 2, '');
-        $table->setCellContents($row, 3, $data['count'].' / '.$total);
-        $table->setCellContents($row, 4, $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE));
+        $table->setCellContents($row, 1, $data['count'].' / '.$total);
+        $table->setCellContents($row, 2, $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE));
         $row++;
     }
 }

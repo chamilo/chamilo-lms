@@ -5980,30 +5980,35 @@ EOT;
         return $trackedExercise;
     }
 
-    public static function getTotalQuestionAnswered($courseId, $exerciseId, $questionId, $sessionId = 0, $groupId = 0, $userId = 0)
+    public static function getTotalQuestionAnswered($courseId, $exerciseId, $questionId, $sessionId = 0, $groups = [], $users = [])
     {
         $courseId = (int) $courseId;
         $exerciseId = (int) $exerciseId;
         $questionId = (int) $questionId;
-        $groupId = (int) $groupId;
-        $userId = (int) $userId;
         $sessionId = (int) $sessionId;
 
         $attemptTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $trackTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
-        $groupCondition = '';
-        if (!empty($groupId)) {
-            $users = GroupManager::get_users($groupId, null, null, null, false, $courseId);
-            if (!empty($users)) {
-                $usersToString = implode("', '", $users);
-                $groupCondition = " AND user_id IN ('$usersToString') ";
+        $userCondition = '';
+        $allUsers = [];
+        if (!empty($groups)) {
+            foreach ($groups as $groupId) {
+                $groupUsers = GroupManager::get_users($groupId, null, null, null, false, $courseId);
+                if (!empty($groupUsers)) {
+                    $allUsers = array_merge($allUsers, $groupUsers);
+                }
             }
         }
 
-        $userCondition = '';
-        if (!empty($userId)) {
-            $userCondition = " AND user_id = $userId ";
+        if (!empty($users)) {
+            $allUsers = array_merge($allUsers, $users);
+        }
+
+        if (!empty($allUsers)) {
+            $allUsers = array_map('intval', $allUsers);
+            $usersToString = implode("', '", $allUsers);
+            $userCondition = " AND user_id IN ('$usersToString') ";
         }
 
         $sessionCondition = '';
@@ -6021,7 +6026,6 @@ EOT;
                     t.question_id = $questionId AND
                     status != 'incomplete'
                     $sessionCondition
-                    $groupCondition
                     $userCondition
         ";
         $queryTotal = Database::query($sql);
@@ -6034,11 +6038,9 @@ EOT;
         return $total;
     }
 
-    public static function getWrongQuestionResults($courseId, $exerciseId, $sessionId = 0, $groupId = 0, $userId = 0, $limit = 10)
+    public static function getWrongQuestionResults($courseId, $exerciseId, $sessionId = 0, $groups = [], $users = [], $limit = 10)
     {
         $courseId = (int) $courseId;
-        $groupId = (int) $groupId;
-        $userId = (int) $userId;
         $exerciseId = (int) $exerciseId;
         $limit = (int) $limit;
 
@@ -6051,18 +6053,25 @@ EOT;
             $sessionCondition = api_get_session_condition($sessionId, true, false, 'te.session_id');
         }
 
-        $groupCondition = '';
-        if (!empty($groupId)) {
-            $users = GroupManager::get_users($groupId, null, null, null, false, $courseId);
-            if (!empty($users)) {
-                $usersToString = implode("', '", $users);
-                $groupCondition = " AND user_id IN ('$usersToString') ";
+        $userCondition = '';
+        $allUsers = [];
+        if (!empty($groups)) {
+            foreach ($groups as $groupId) {
+                $groupUsers = GroupManager::get_users($groupId, null, null, null, false, $courseId);
+                if (!empty($groupUsers)) {
+                    $allUsers = array_merge($allUsers, $groupUsers);
+                }
             }
         }
 
-        $userCondition = '';
-        if (!empty($userId)) {
-            $userCondition = " AND user_id = $userId ";
+        if (!empty($users)) {
+            $allUsers = array_merge($allUsers, $users);
+        }
+
+        if (!empty($allUsers)) {
+            $allUsers = array_map('intval', $allUsers);
+            $usersToString = implode("', '", $allUsers);
+            $userCondition .= " AND user_id IN ('$usersToString') ";
         }
 
         $sql = "SELECT q.question, question_id, count(q.iid) count
@@ -6078,7 +6087,6 @@ EOT;
                     status != 'incomplete'
                     $sessionCondition
                     $userCondition
-                    $groupCondition
                 GROUP BY q.iid
                 ORDER BY count DESC
                 LIMIT $limit

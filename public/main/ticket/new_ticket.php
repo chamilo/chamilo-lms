@@ -293,7 +293,7 @@ if (api_is_platform_admin()) {
     $form->addSelectAjax(
         'user_id',
         get_lang('Assign'),
-        null,
+        [],
         ['url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_like']
     );
 }

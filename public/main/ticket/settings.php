@@ -17,18 +17,18 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'projects';
 
 Display::display_header(get_lang('Settings'));
 
-echo '<div class="actions">';
-echo Display::url(
+$actions = Display::url(
     Display::return_icon('back.png', get_lang('Tickets'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'ticket/tickets.php'
 );
 $sections = TicketManager::getSettingsMenuItems();
 foreach ($sections as $item) {
-    echo Display::url(
+    $actions .= Display::url(
         Display::return_icon($item['icon'], $item['content'], [], ICON_SIZE_MEDIUM),
         $item['url']
     );
 }
-echo '</div>';
+
+echo Display::toolbarAction('ticket', [$actions]);
 
 Display::display_footer();

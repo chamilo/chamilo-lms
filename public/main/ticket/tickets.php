@@ -12,6 +12,8 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 
 $tool_name = get_lang('Ticket');
+$isAdmin = api_is_platform_admin();
+$user_id = api_get_user_id();
 
 $webLibPath = api_get_path(WEB_LIBRARY_PATH);
 $htmlHeadXtra[] = '<script>
@@ -129,9 +131,7 @@ if (empty($projectId)) {
 }
 
 $currentUrl = api_get_self().'?project_id='.$projectId;
-$user_id = api_get_user_id();
 $isAllow = TicketManager::userIsAllowInProject(api_get_user_info(), $projectId);
-$isAdmin = api_is_platform_admin();
 $actionRight = '';
 
 Display::display_header(get_lang('My tickets'));
@@ -230,7 +230,7 @@ if (!empty($projectId)) {
     );
 
     // Add link
-    if ('true' == api_get_setting('ticket_allow_student_add') || api_is_platform_admin()) {
+    if ('true' === api_get_setting('ticket_allow_student_add') || api_is_platform_admin()) {
         $actionRight = Display::url(
             Display::return_icon(
                 'add.png',
@@ -270,9 +270,9 @@ if (!empty($projectId)) {
     echo Display::toolbarAction(
         'toolbar-tickets',
         [
-            $form->returnForm(),
-            $advancedSearch,
             $actionRight,
+            $advancedSearch,
+            $form->returnForm(),
         ]
     );
 

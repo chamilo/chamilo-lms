@@ -48,8 +48,8 @@ $(function() {
             if(!confirm("'.get_lang('Are you sure').' : '.strtoupper(get_lang('No')).'")){
                 return false;
             }
-        });     
-       
+        });
+
         '.$disableReponseButtons.'
 });
 
@@ -324,12 +324,12 @@ if ($allowEdition &&
 }
 
 Display::display_header();
-echo '<div class="actions">';
-echo Display::url(
+$actions = Display::url(
     Display::return_icon('back.png', get_lang('Tickets'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId
 );
-echo '</div>';
+echo Display::toolbarAction('ticket', [$actions]);
+
 $bold = '';
 if (TicketManager::STATUS_CLOSE == $ticket['ticket']['status_id']) {
     $bold = 'style = "font-weight: bold;"';
@@ -418,13 +418,12 @@ echo '<tr>
         <b>'.get_lang('Description').':</b> <br />
         '.Security::remove_XSS($ticket['ticket']['message']).'
         <hr />
-        </td>            
+        </td>
      </tr>
     ';
 echo '</table>';
 
 echo $messageToShow;
-
 echo $formToShow;
 
 Display::display_footer();
@@ -452,16 +451,14 @@ function getForm($ticket)
 
     if ($isAdmin) {
         $statusList = TicketManager::getStatusList();
-        $form->addElement(
-            'select',
+        $form->addSelect(
             'status_id',
             get_lang('Status'),
             $statusList
         );
 
         $priorityList = TicketManager::getPriorityList();
-        $form->addElement(
-            'select',
+        $form->addSelect(
             'priority_id',
             get_lang('Priority'),
             $priorityList,
@@ -474,7 +471,7 @@ function getForm($ticket)
         $form->addSelectAjax(
             'assigned_last_user',
             get_lang('Assign'),
-            null,
+            [],
             ['url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_like']
         );
 

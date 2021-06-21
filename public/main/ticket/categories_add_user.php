@@ -76,3 +76,4 @@ $interbreadcrumb[] = [
 
 Display::display_header(get_lang('Users'));
 $form->display();
+Display::display_footer();

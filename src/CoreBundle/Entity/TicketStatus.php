@@ -54,10 +54,7 @@ class TicketStatus
         return $this->code;
     }
 
-    /**
-     * @return TicketStatus
-     */
-    public function setCode(string $code)
+    public function setCode(string $code): self
     {
         $this->code = $code;
 
@@ -72,10 +69,7 @@ class TicketStatus
         return $this->name;
     }
 
-    /**
-     * @return TicketStatus
-     */
-    public function setName(string $name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -90,10 +84,7 @@ class TicketStatus
         return $this->description;
     }
 
-    /**
-     * @return TicketStatus
-     */
-    public function setDescription(string $description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 

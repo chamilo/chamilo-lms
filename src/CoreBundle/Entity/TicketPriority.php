@@ -92,10 +92,7 @@ class TicketPriority
         return $this->name;
     }
 
-    /**
-     * @return TicketPriority
-     */
-    public function setName(string $name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -110,10 +107,7 @@ class TicketPriority
         return $this->code;
     }
 
-    /**
-     * @return TicketPriority
-     */
-    public function setCode(string $code)
+    public function setCode(string $code): self
     {
         $this->code = $code;
 
@@ -128,10 +122,7 @@ class TicketPriority
         return $this->description;
     }
 
-    /**
-     * @return TicketPriority
-     */
-    public function setDescription(string $description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -146,10 +137,7 @@ class TicketPriority
         return $this->color;
     }
 
-    /**
-     * @return TicketPriority
-     */
-    public function setColor(string $color)
+    public function setColor(string $color): self
     {
         $this->color = $color;
 
@@ -164,10 +152,7 @@ class TicketPriority
         return $this->urgency;
     }
 
-    /**
-     * @return TicketPriority
-     */
-    public function setUrgency(string $urgency)
+    public function setUrgency(string $urgency): self
     {
         $this->urgency = $urgency;
 
@@ -182,10 +167,7 @@ class TicketPriority
         return $this->insertUserId;
     }
 
-    /**
-     * @return TicketPriority
-     */
-    public function setInsertUserId(int $insertUserId)
+    public function setInsertUserId(int $insertUserId): self
     {
         $this->insertUserId = $insertUserId;
 
@@ -200,10 +182,7 @@ class TicketPriority
         return $this->insertDateTime;
     }
 
-    /**
-     * @return TicketPriority
-     */
-    public function setInsertDateTime(DateTime $insertDateTime)
+    public function setInsertDateTime(DateTime $insertDateTime): self
     {
         $this->insertDateTime = $insertDateTime;
 
@@ -218,10 +197,7 @@ class TicketPriority
         return $this->lastEditUserId;
     }
 
-    /**
-     * @return TicketPriority
-     */
-    public function setLastEditUserId(int $lastEditUserId)
+    public function setLastEditUserId(int $lastEditUserId): self
     {
         $this->lastEditUserId = $lastEditUserId;
 
@@ -236,10 +212,7 @@ class TicketPriority
         return $this->lastEditDateTime;
     }
 
-    /**
-     * @return TicketPriority
-     */
-    public function setLastEditDateTime(DateTime $lastEditDateTime)
+    public function setLastEditDateTime(DateTime $lastEditDateTime): self
     {
         $this->lastEditDateTime = $lastEditDateTime;
 

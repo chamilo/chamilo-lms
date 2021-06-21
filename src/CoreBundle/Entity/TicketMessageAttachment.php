@@ -85,10 +85,7 @@ class TicketMessageAttachment
         return $this->message;
     }
 
-    /**
-     * @return TicketMessageAttachment
-     */
-    public function setMessage(TicketMessage $message)
+    public function setMessage(TicketMessage $message): self
     {
         $this->message = $message;
 
@@ -103,10 +100,7 @@ class TicketMessageAttachment
         return $this->path;
     }
 
-    /**
-     * @return TicketMessageAttachment
-     */
-    public function setPath(string $path)
+    public function setPath(string $path): self
     {
         $this->path = $path;
 
@@ -121,10 +115,7 @@ class TicketMessageAttachment
         return $this->filename;
     }
 
-    /**
-     * @return TicketMessageAttachment
-     */
-    public function setFilename(string $filename)
+    public function setFilename(string $filename): self
     {
         $this->filename = $filename;
 
@@ -139,10 +130,7 @@ class TicketMessageAttachment
         return $this->size;
     }
 
-    /**
-     * @return TicketMessageAttachment
-     */
-    public function setSize(int $size)
+    public function setSize(int $size): self
     {
         $this->size = $size;
 

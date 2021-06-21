@@ -146,10 +146,7 @@ class Ticket
         return $this->code;
     }
 
-    /**
-     * @return Ticket
-     */
-    public function setCode(string $code)
+    public function setCode(string $code): self
     {
         $this->code = $code;
 
@@ -164,10 +161,7 @@ class Ticket
         return $this->subject;
     }
 
-    /**
-     * @return Ticket
-     */
-    public function setSubject(string $subject)
+    public function setSubject(string $subject): self
     {
         $this->subject = $subject;
 
@@ -182,10 +176,7 @@ class Ticket
         return $this->message;
     }
 
-    /**
-     * @return Ticket
-     */
-    public function setMessage(string $message)
+    public function setMessage(string $message): self
     {
         $this->message = $message;
 

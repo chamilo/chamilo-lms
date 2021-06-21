@@ -215,10 +215,7 @@ class TicketCategory
         return $this->lastEditDateTime;
     }
 
-    /**
-     * @return TicketCategory
-     */
-    public function setLastEditDateTime(DateTime $lastEditDateTime)
+    public function setLastEditDateTime(DateTime $lastEditDateTime): self
     {
         $this->lastEditDateTime = $lastEditDateTime;
 

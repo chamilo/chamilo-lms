@@ -85,10 +85,7 @@ class TicketProject
         return $this->name;
     }
 
-    /**
-     * @return TicketProject
-     */
-    public function setName(string $name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -103,10 +100,7 @@ class TicketProject
         return $this->description;
     }
 
-    /**
-     * @return TicketProject
-     */
-    public function setDescription(string $description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -121,10 +115,7 @@ class TicketProject
         return $this->email;
     }
 
-    /**
-     * @return TicketProject
-     */
-    public function setEmail(string $email)
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
@@ -139,10 +130,7 @@ class TicketProject
         return $this->otherArea;
     }
 
-    /**
-     * @return TicketProject
-     */
-    public function setOtherArea(string $otherArea)
+    public function setOtherArea(string $otherArea): self
     {
         $this->otherArea = $otherArea;
 
@@ -157,10 +145,7 @@ class TicketProject
         return $this->insertUserId;
     }
 
-    /**
-     * @return TicketProject
-     */
-    public function setInsertUserId(int $insertUserId)
+    public function setInsertUserId(int $insertUserId): self
     {
         $this->insertUserId = $insertUserId;
 
@@ -175,10 +160,7 @@ class TicketProject
         return $this->insertDateTime;
     }
 
-    /**
-     * @return TicketProject
-     */
-    public function setInsertDateTime(DateTime $insertDateTime)
+    public function setInsertDateTime(DateTime $insertDateTime): self
     {
         $this->insertDateTime = $insertDateTime;
 
@@ -193,10 +175,7 @@ class TicketProject
         return $this->lastEditUserId;
     }
 
-    /**
-     * @return TicketProject
-     */
-    public function setLastEditUserId(int $lastEditUserId)
+    public function setLastEditUserId(int $lastEditUserId): self
     {
         $this->lastEditUserId = $lastEditUserId;
 
@@ -211,10 +190,7 @@ class TicketProject
         return $this->lastEditDateTime;
     }
 
-    /**
-     * @return TicketProject
-     */
-    public function setLastEditDateTime(DateTime $lastEditDateTime)
+    public function setLastEditDateTime(DateTime $lastEditDateTime): self
     {
         $this->lastEditDateTime = $lastEditDateTime;
 

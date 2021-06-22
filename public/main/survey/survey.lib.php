@@ -138,16 +138,7 @@ class SurveyManager
         $course_code = '',
         $simple_return = false
     ) {
-        $my_course_id = api_get_course_id();
-
-        // Table definition
-        if (!empty($course_code)) {
-            $my_course_id = $course_code;
-        } elseif (isset($_GET['course'])) {
-            $my_course_id = Security::remove_XSS($_GET['course']);
-        }
-
-        $courseInfo = api_get_course_info($my_course_id);
+        $courseInfo = api_get_course_info();
         $survey_id = (int) $survey_id;
         $table_survey = Database::get_course_table(TABLE_SURVEY);
 
@@ -1834,7 +1825,7 @@ class SurveyManager
         }
         $row = Database::fetch_array($res, 'ASSOC');
         $params = [
-            'c_id' => $row['c_id'],
+            //'c_id' => $row['c_id'],
             'survey_id' => $row['survey_id'],
             'survey_question' => trim($row['survey_question']),
             'survey_question_comment' => $row['survey_question_comment'],
@@ -1868,7 +1859,7 @@ class SurveyManager
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
             $params = [
-                'c_id' => $row['c_id'],
+                //'c_id' => $row['c_id'],
                 'question_id' => $insertId,
                 'survey_id' => $row['survey_id'],
                 'option_text' => $row['option_text'],

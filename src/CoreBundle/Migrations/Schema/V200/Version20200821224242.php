@@ -29,7 +29,15 @@ final class Version20200821224242 extends AbstractMigrationChamilo
 
         $this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id NOT IN (SELECT id FROM message)');
 
-        if (false === $table->hasForeignKey('FK_B6BD307F727ACA70')) {
+        if (!$table->hasColumn('group_id')) {
+            $this->addSql('ALTER TABLE message CHANGE group_id group_id INT DEFAULT NULL');
+        }
+
+        if (!$table->hasForeignKey('FK_B6BD307FFE54D947')) {
+            $this->addSql('ALTER TABLE message ADD CONSTRAINT FK_B6BD307FFE54D947 FOREIGN KEY (group_id) REFERENCES c_group_info (iid) ON DELETE CASCADE');
+        }
+
+        if (!$table->hasForeignKey('FK_B6BD307F727ACA70')) {
             $this->addSql(
                 'ALTER TABLE message ADD CONSTRAINT FK_B6BD307F727ACA70 FOREIGN KEY (parent_id) REFERENCES message (id);'
             );

@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Repository;
 
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -19,15 +18,14 @@ class SysAnnouncementRepositoryTest extends WebTestCase
     use ChamiloTestTrait;
 
     /**
-     * Create a course with no creator.
+     * Class SysAnnouncementFixtures created one announcement during installation.
      */
-    public function testCreateNoCreator(): void
+    public function testWelcomeSysAnnouncement(): void
     {
         self::bootKernel();
         $repo = self::getContainer()->get(SysAnnouncementRepository::class);
         $count = $repo->count([]);
 
-        // SysAnnouncementFixtures created one announcement during installation.
         $this->assertSame(1, $count);
     }
 }

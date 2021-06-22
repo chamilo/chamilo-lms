@@ -502,7 +502,7 @@ class Career extends Model
      */
     public static function renderDiagramByColumn($careerInfo, $tpl, $loadUserIdData = 0, $showFooter = true)
     {
-        $careerId = isset($careerInfo['id']) ? $careerInfo['id'] : 0;
+        $careerId = $careerInfo['id'] ?? 0;
         if (empty($careerId)) {
             return '';
         }
@@ -1010,7 +1010,7 @@ class Career extends Model
 
             $title = $vertex->getAttribute('graphviz.label');
             if (!empty($vertex->getAttribute('LinkedElement'))) {
-                $title = Display::url($title, $vertex->getAttribute('LinkedElement'));
+                $title = Display::url($title, $vertex->getAttribute('LinkedElement').'&iframe=1');
             }
 
             $originalRow--;

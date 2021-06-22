@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 use Datetime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -23,7 +24,6 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -444,12 +444,12 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
      */
     public function getCountUsersByUrl(AccessUrl $url)
     {
-        return $this->createQueryBuilder('a')
+        return $this->createQueryBuilder('u')
             ->select('COUNT(a)')
-            ->innerJoin('a.portals', 'u')
-            ->where('u.portal = :u')
+            ->innerJoin('a.portals', 'p')
+            ->where('p.portal = :p')
             ->setParameters([
-                'u' => $url,
+                'p' => $url,
             ])
             ->getQuery()
             ->getSingleScalarResult()
@@ -463,15 +463,15 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
      */
     public function getCountTeachersByUrl(AccessUrl $url)
     {
-        $qb = $this->createQueryBuilder('a');
+        $qb = $this->createQueryBuilder('u');
 
         return $qb
-            ->select('COUNT(a)')
-            ->innerJoin('a.portals', 'u')
-            ->where('u.portal = :u')
-            ->andWhere($qb->expr()->in('a.roles', ['ROLE_TEACHER']))
+            ->select('COUNT(u)')
+            ->innerJoin('a.portals', 'p')
+            ->where('p.portal = :p')
+            ->andWhere($qb->expr()->in('u.roles', ['ROLE_TEACHER']))
             ->setParameters([
-                'u' => $url,
+                'p' => $url,
             ])
             ->getQuery()
             ->getSingleScalarResult()
@@ -581,19 +581,17 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
      * as user.last_login was only implemented in 1.10 version with a default
      * value of NULL (not the last record from track_e_login).
      *
-     * @throws Exception
-     *
      * @return null|TrackELogin
      */
     public function getLastLogin(User $user)
     {
-        $repo = $this->getEntityManager()->getRepository(TrackELogin::class);
-        $qb = $repo->createQueryBuilder('u');
+        $qb = $this->createQueryBuilder('u');
 
         return $qb
-            ->select('u')
+            ->select('l')
+            ->innerJoin('u.logins', 'l')
             ->where(
-                $qb->expr()->eq('u.loginUserId', $user->getId())
+                $qb->expr()->eq('l.user', $user)
             )
             ->setMaxResults(1)
             ->orderBy('u.loginDate', Criteria::DESC)
@@ -637,8 +635,26 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         return $qb;
     }
 
-    public function getUserPendingInvitations(): void
+    /**
+     * @return CSurveyInvitation[]
+     */
+    public function getUserPendingInvitations(User $user)
     {
+        $qb = $this->createQueryBuilder('u');
+        $qb
+            ->select('s')
+            ->innerJoin('u.surveyInvitations', 's')
+            ->andWhere('s.user = :u')
+            ->andWhere('s.availFrom <= :now AND s.availTill >= :now')
+            ->andWhere('s.answered = 0')
+            ->setParameters([
+                'now' => new Datetime(),
+                'u' => $user,
+            ])
+            ->orderBy('s.availTill', Criteria::ASC)
+        ;
+
+        return $qb->getQuery()->getResult();
     }
 
     private function addRoleQueryBuilder(string $role, QueryBuilder $qb = null): QueryBuilder

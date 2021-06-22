@@ -699,7 +699,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * @var Collection|CSurveyInvitation[]
      */
     #[ORM\OneToMany(
-        targetEntity: 'Chamilo\\CourseBundle\\Entity\\CSurveyInvitation',
+        targetEntity: 'Chamilo\CourseBundle\Entity\CSurveyInvitation',
         mappedBy: 'user',
         cascade: ['remove']
     )]

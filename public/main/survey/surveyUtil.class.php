@@ -258,7 +258,7 @@ class SurveyUtil
                             WHERE
                                 iid = '".$survey_id."'
                         ) AND
-			            user = '".$user_id."'";
+			            user_id = '".$user_id."'";
             $result = Database::query($sql);
         }
 
@@ -2633,12 +2633,12 @@ class SurveyUtil
         $table_survey = Database::get_course_table(TABLE_SURVEY);
 
         // Counting the number of people that are invited
-        $sql = "SELECT count(user) as total
+        $sql = "SELECT count(user_id) as total
                 FROM $table_survey_invitation
 		        WHERE
 		            c_id = $courseId AND
 		            survey_id = '".$surveyId."' AND
-		            user <> ''
+		            user_id <> ''
 		            $sessionCondition
                 ";
         $result = Database::query($sql);
@@ -2685,7 +2685,7 @@ class SurveyUtil
 
         // Selecting all the invitations of this survey AND the additional emailaddresses (the left join)
         $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
-        $sql = "SELECT user, group_id
+        $sql = "SELECT user_id, group_id
 				FROM $table_survey_invitation as table_invitation
 				WHERE
 				    table_invitation.c_id = $course_id AND
@@ -2700,12 +2700,12 @@ class SurveyUtil
 
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
-            if (is_numeric($row['user'])) {
-                $defaults['course_users'][] = $row['user'];
-                $defaults['users'][] = 'USER:'.$row['user'];
+            if (is_numeric($row['user_id'])) {
+                $defaults['course_users'][] = $row['user_id'];
+                $defaults['users'][] = 'USER:'.$row['user_id'];
             } else {
-                if (!empty($row['user'])) {
-                    $defaults['additional_users'][] = $row['user'];
+                if (!empty($row['user_id'])) {
+                    $defaults['additional_users'][] = $row['user_id'];
                 }
             }
 
@@ -2758,7 +2758,7 @@ class SurveyUtil
         $result = Database::query($sql);
         $return = [];
         while ($row = Database::fetch_array($result)) {
-            $return[$row['user']] = $row;
+            $return[$row['user_id']] = $row;
         }
 
         return $return;
@@ -3569,7 +3569,7 @@ class SurveyUtil
                     survey.iid = survey_invitation.survey_id
                 )
 				WHERE
-                    survey_invitation.user = $user_id AND
+                    survey_invitation.user_id = $user_id AND
                     survey.avail_from <= '$filterDate' AND
                     survey.avail_till >= '$filterDate' AND
                     survey_invitation.c_id = $course_id
@@ -3979,7 +3979,7 @@ class SurveyUtil
         $sql = "SELECT survey_invitation.*, user.firstname, user.lastname, user.email
                 FROM $tblSurveyInvitation survey_invitation
                 LEFT JOIN $tblUser user
-                ON (survey_invitation.user = user.id AND survey_invitation.c_id = $courseId)
+                ON (survey_invitation.user_id = user.id AND survey_invitation.c_id = $courseId)
                 WHERE
                     survey_invitation.survey_id = $surveyId AND
                     survey_invitation.c_id = $courseId

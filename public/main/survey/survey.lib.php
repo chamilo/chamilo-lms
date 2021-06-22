@@ -70,7 +70,7 @@ class SurveyManager
         $table_survey = Database::get_course_table(TABLE_SURVEY);
 
         $sql = "SELECT iid, survey_id
-                FROM $table_survey_invitation WHERE user = '$user_id' AND c_id <> 0 ";
+                FROM $table_survey_invitation WHERE user_id = '$user_id' AND c_id <> 0 ";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $survey_invitation_id = $row['iid'];
@@ -792,7 +792,7 @@ class SurveyManager
                 WHERE
                     c_id = $courseId AND
                     session_id = $sessionId AND
-                    user ='".Database::escape_string($user)."' AND
+                    user_id ='".Database::escape_string($user)."' AND
                     survey_id ='".$surveyId."'";
         Database::query($sql);
     }
@@ -1475,7 +1475,7 @@ class SurveyManager
                 $tblInvitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
                 $tblSurvey = Database::get_course_table(TABLE_SURVEY);
 
-                $sql = "SELECT i.user FROM $tblInvitation i
+                $sql = "SELECT i.user_id FROM $tblInvitation i
                     INNER JOIN $tblSurvey s
                     ON i.survey_code = s.code
                     WHERE i.answered IS TRUE AND s.iid = $survey_id";

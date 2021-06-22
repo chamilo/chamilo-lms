@@ -134,7 +134,7 @@ if ('auto' === $invitationCode) {
     SurveyManager::checkTimeAvailability($survey);
 
     // Check for double invitation records (insert should be done once)
-    $sql = "SELECT user
+    $sql = "SELECT user_id
             FROM $table_survey_invitation
             WHERE
                 c_id = $courseId AND
@@ -145,7 +145,7 @@ if ('auto' === $invitationCode) {
         $params = [
             'c_id' => $courseId,
             'survey_id' => $surveyId,
-            'user' => $userid,
+            'user_id' => $userid,
             'invitation_code' => $autoInvitationCode,
             'invitation_date' => $now,
         ];
@@ -277,7 +277,7 @@ if (count($_POST) > 0) {
                 */
                 if (is_array($value)) {
                     SurveyUtil::remove_answer(
-                        $survey_invitation['user'],
+                        $survey_invitation['user_id'],
                         $surveyId,
                         $survey_question_id
                     );
@@ -292,7 +292,7 @@ if (count($_POST) > 0) {
                         }
 
                         SurveyUtil::saveAnswer(
-                            $survey_invitation['user'],
+                            $survey_invitation['user_id'],
                             $survey,
                             $question,
                             $option_id,
@@ -319,13 +319,13 @@ if (count($_POST) > 0) {
 
                     $survey_question_answer = $value;
                     SurveyUtil::remove_answer(
-                        $survey_invitation['user'],
+                        $survey_invitation['user_id'],
                         $surveyId,
                         $survey_question_id
                     );
 
                     SurveyUtil::saveAnswer(
-                        $survey_invitation['user'],
+                        $survey_invitation['user_id'],
                         $survey,
                         $question,
                         $value,
@@ -379,13 +379,13 @@ if (count($_POST) > 0) {
 
                 // We save the answer after making sure that a possible previous attempt is deleted
                 SurveyUtil::remove_answer(
-                    $survey_invitation['user'],
+                    $survey_invitation['user_id'],
                     $survey_invitation['survey_id'],
                     $survey_question_id
                 );
 
                 SurveyUtil::saveAnswer(
-                    $survey_invitation['user'],
+                    $survey_invitation['user_id'],
                     $survey_invitation['survey_id'],
                     $questionList[$survey_question_id],
                     $value,
@@ -401,7 +401,7 @@ if (count($_POST) > 0) {
 
 $user_id = api_get_user_id();
 if (0 == $user_id) {
-    $user_id = $survey_invitation['user'];
+    $user_id = $survey_invitation['user_id'];
 }
 $user_data = api_get_user_info($user_id);
 
@@ -634,7 +634,7 @@ if ($survey->getFormFields() &&
 if (isset($_POST['finish_survey'])) {
     echo Display::return_message(get_lang('You have finished this survey.'), 'confirm');
     echo Security::remove_XSS($survey->getSurveythanks());
-    SurveyManager::updateSurveyAnswered($survey, $survey_invitation['user']);
+    SurveyManager::updateSurveyAnswered($survey, $survey_invitation['user_id']);
     SurveyUtil::flagSurveyAsAnswered($survey->getCode(), $survey_invitation['c_id']);
 
     if ($courseInfo && !api_is_anonymous()) {
@@ -800,7 +800,7 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
         }
     } elseif (1 === $survey->getSurveyType()) {
         $my_survey_id = (int) $survey_invitation['survey_id'];
-        $current_user = Database::escape_string($survey_invitation['user']);
+        $current_user = Database::escape_string($survey_invitation['user_id']);
 
         if (isset($_POST['personality'])) {
             // Compute the results to get the 3 groups nearest to the user's personality

@@ -1,4 +1,0 @@
-name: Chamilo Migrations
-migrations_namespace: Application\Migrations\Schema\V111
-table_name: version
-migrations_directory: app/Migrations/Schema/V111

@@ -309,4 +309,16 @@ class Message
     {
         return $this->likes;
     }
+
+    public function getGroup(): ?CGroup
+    {
+        return $this->group;
+    }
+
+    public function setGroup(?CGroup $group): Message
+    {
+        $this->group = $group;
+
+        return $this;
+    }
 }

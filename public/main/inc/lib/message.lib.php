@@ -625,7 +625,7 @@ class MessageManager
                     ->setMsgStatus($status)
                     ->setTitle($subject)
                     ->setContent($content)
-                    ->setGroupId($group_id)
+                    ->setGroup(api_get_group_entity($group_id))
                     ->setParent($parent)
                 ;
                 $em->persist($message);
@@ -668,7 +668,7 @@ class MessageManager
                     ->setMsgStatus(MESSAGE_STATUS_OUTBOX)
                     ->setTitle($subject)
                     ->setContent($content)
-                    ->setGroupId($group_id)
+                    ->setGroup(api_get_group_entity($group_id))
                     ->setParent($parent)
                 ;
                 $em->persist($message);

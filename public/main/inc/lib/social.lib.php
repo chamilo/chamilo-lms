@@ -291,7 +291,6 @@ class SocialManager extends UserManager
                 ->setMsgStatus(MESSAGE_STATUS_INVITATION_PENDING)
                 ->setTitle($message_title)
                 ->setContent($message_content)
-                ->setGroupId(0)
             ;
             $em->persist($message);
             $em->flush();
@@ -1476,7 +1475,6 @@ class SocialManager extends UserManager
             ->setMsgStatus($messageStatus)
             ->setTitle('')
             ->setContent($messageContent)
-            ->setGroupId(0)
             ->setParent($parent)
         ;
         $em->persist($message);

@@ -48,7 +48,7 @@
         <directory name="public/main/session" />
         <directory name="public/main/social" />
 <!--        <directory name="public/main/survey" />-->
-<!--        <directory name="public/main/ticket" />-->
+        <directory name="public/main/ticket" />
         <directory name="public/main/tracking" />
 <!--        <directory name="public/main/upload" />-->
         <directory name="public/main/user" />
@@ -118,7 +118,6 @@
 
         <file name="public/main/inc/lib/sessionmanager.lib.php"/>
         <file name="public/main/inc/lib/skill.visualizer.lib.php"/>
-
         <file name="public/main/inc/lib/SkillModel.php"/>
         <file name="public/main/inc/lib/SkillProfileModel.php"/>
         <file name="public/main/inc/lib/SkillRelGradebookModel.php"/>

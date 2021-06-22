@@ -6852,7 +6852,7 @@ function api_get_roles()
     array_walk_recursive($hierarchy, function ($role) use (&$roles) {
         $roles[$role] = $role;
     });
-    //echo '<pre>';    var_dump($roles);
+
     return $roles;
 }
 
@@ -7981,95 +7981,6 @@ function api_get_relative_path($from, $to)
     }
 
     return implode('/', $relPath);
-}
-
-/**
- * Unserialize content using Brummann\Polyfill\Unserialize.
- *
- * @param string $type
- * @param string $serialized
- *
- * @return mixed
- */
-function api_unserialize_content($type, $serialized, $ignoreErrors = false)
-{
-    switch ($type) {
-        case 'career':
-        case 'sequence_graph':
-            $allowedClasses = [
-                \Fhaculty\Graph\Graph::class,
-                \Fhaculty\Graph\Set\VerticesMap::class,
-                \Fhaculty\Graph\Set\Vertices::class,
-                \Fhaculty\Graph\Set\Edges::class,
-            ];
-            break;
-        case 'lp':
-            $allowedClasses = [
-                learnpath::class,
-                learnpathItem::class,
-                aicc::class,
-                aiccBlock::class,
-                aiccItem::class,
-                aiccObjective::class,
-                aiccResource::class,
-                scorm::class,
-                scormItem::class,
-                scormMetadata::class,
-                scormOrganization::class,
-                scormResource::class,
-                Link::class,
-                //LpItem::class,
-            ];
-            break;
-        case 'course':
-            $allowedClasses = [
-                \Chamilo\CourseBundle\Component\CourseCopy\Course::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\Announcement::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\Attendance::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\CalendarEvent::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyLearnpath::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyTestCategory::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseDescription::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseSession::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\Document::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\Forum::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumCategory::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumPost::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumTopic::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\Glossary::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\GradeBookBackup::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\Link::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\LinkCategory::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\Quiz::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestion::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestionOption::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\ScormDocument::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\Survey::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\SurveyInvitation::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\SurveyQuestion::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\Thematic::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\ToolIntro::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\Wiki::class,
-                \Chamilo\CourseBundle\Component\CourseCopy\Resources\Work::class,
-                stdClass::class,
-            ];
-            break;
-        case 'not_allowed_classes':
-        default:
-            $allowedClasses = false;
-    }
-
-    if ($ignoreErrors) {
-        return @UnserializeApi::unserialize(
-            $serialized,
-            ['allowed_classes' => $allowedClasses]
-        );
-    }
-
-    return UnserializeApi::unserialize(
-        $serialized,
-        ['allowed_classes' => $allowedClasses]
-    );
 }
 
 /**

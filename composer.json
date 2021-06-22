@@ -178,7 +178,7 @@
         "symfony/phpunit-bridge": "^5.0",
         "symfony/profiler-pack": "*",
         "symfony/test-pack": "*",
-        "symfony/var-dumper": "^5.2",
+        "symfony/var-dumper": "^5.3",
         "symfony/web-profiler-bundle": "^5.3",
         "symplify/easy-coding-standard": "9.3.15",
         "vimeo/psalm": "^4.7",
@@ -201,7 +201,7 @@
             "@auto-scripts"
         ],
         "pre-install-cmd": [
-            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::deleteOldFilesFrom19x"
+            "Chamilo\\CoreBundle\\Component\\Utils\\ScriptHandler::deleteOldFilesFrom19x"
         ],
         "pre-update-cmd": [
         ],

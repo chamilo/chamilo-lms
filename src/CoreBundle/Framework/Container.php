@@ -23,6 +23,7 @@ use Chamilo\CoreBundle\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
+use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
@@ -431,6 +432,11 @@ class Container
     public static function getUsergroupRepository(): UsergroupRepository
     {
         return self::$container->get(UsergroupRepository::class);
+    }
+
+    public static function getUserToJsonNormalizer(): UserToJsonNormalizer
+    {
+        return self::$container->get(UserToJsonNormalizer::class);
     }
 
     public static function getShortcutRepository(): CShortcutRepository

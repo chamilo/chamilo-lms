@@ -2414,8 +2414,8 @@ class SurveyUtil
         }
 
         $users_array = array_unique($users_array);
-        foreach ($users_array as $key => $value) {
-            if (!isset($value) || '' == $value) {
+        foreach ($users_array as $value) {
+            if (empty($value)) {
                 continue;
             }
 
@@ -2443,7 +2443,7 @@ class SurveyUtil
                 $new_user = true;
                 if (!array_key_exists($value, $survey_invitations)) {
                     self::saveInvitation(
-                        $value,
+                        api_get_user_entity($value),
                         $invitation_code,
                         api_get_utc_datetime(time(), null, true),
                         $survey,
@@ -2478,7 +2478,7 @@ class SurveyUtil
     }
 
     public static function saveInvitation(
-        $user,
+        User $user,
         $invitationCode,
         $reminderDate,
         CSurvey $survey,
@@ -2486,10 +2486,6 @@ class SurveyUtil
         SessionEntity $session = null,
         CGroup $group = null
     ): ?CSurveyInvitation {
-        /*var_dump($params);
-        array(6) { ["c_id"]=> int(1) ["session_id"]=> int(0) ["user"]=> int(61) ["survey_code"]=> string(3) "aaa
-        " ["invitation_code"]=> string(32) "6046726ce1894c21437377a53903714a" ["invitation_date"]=> string(19) "2021-03-19 09:06:50" }
-        */
 
         $invitation = new CSurveyInvitation();
         $invitation

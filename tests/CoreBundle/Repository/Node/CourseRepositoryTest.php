@@ -60,7 +60,7 @@ class CourseRepositoryTest extends WebTestCase
         $this->assertSame(1, $count);
 
         // Check tools.
-        $this->assertSame(25, \count($course->getTools()));
+        $this->assertSame(23, \count($course->getTools()));
 
         // The course should connected with the current Access URL.
         $this->assertSame(1, $course->getUrls()->count());

@@ -696,7 +696,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected Collection $receivedMessages;
 
     /**
-     * @var Collection|CSurveyInvitation[]
+     * @var Collection<int, CSurveyInvitation>|CSurveyInvitation[]
      */
     #[ORM\OneToMany(
         targetEntity: 'Chamilo\CourseBundle\Entity\CSurveyInvitation',
@@ -706,7 +706,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected Collection $surveyInvitations;
 
     /**
-     * @var Collection|TrackELogin[]
+     * @var Collection<int, TrackELogin>|TrackELogin[]
      */
     #[ORM\OneToMany(
         targetEntity: 'TrackELogin',
@@ -2313,7 +2313,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return CSurveyInvitation[]|Collection
      */
-    public function getSurveyInvitations(): Collection
+    public function getSurveyInvitations()
     {
         return $this->surveyInvitations;
     }
@@ -2328,7 +2328,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return TrackELogin[]|Collection
      */
-    public function getLogins(): Collection
+    public function getLogins()
     {
         return $this->logins;
     }

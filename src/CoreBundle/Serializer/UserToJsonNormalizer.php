@@ -51,8 +51,8 @@ use Symfony\Component\Serializer\Serializer;
 
 final class UserToJsonNormalizer
 {
-    private $em;
-    private $userRepository;
+    private EntityManager $em;
+    private UserRepository $userRepository;
 
     public function __construct(EntityManager $em, UserRepository $userRepository)
     {
@@ -774,7 +774,7 @@ final class UserToJsonNormalizer
         //$extraFieldValues = new \ExtraFieldValue('user');
 
         $lastLogin = $user->getLastLogin();
-        if (empty($lastLogin)) {
+        if (null === $lastLogin) {
             $login = $this->userRepository->getLastLogin($user);
             if (null !== $login) {
                 $lastLogin = $login->getLoginDate();

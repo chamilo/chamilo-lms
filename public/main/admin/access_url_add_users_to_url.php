@@ -40,7 +40,7 @@ echo Display::toolbarAction(
     ]
 );
 
-api_display_tool_title($tool_name);
+Display::page_subheader2($tool_name);
 
 if ($_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];

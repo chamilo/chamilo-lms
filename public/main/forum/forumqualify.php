@@ -190,7 +190,7 @@ if ('learnpath' === $origin) {
 
         // the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
         Display::display_header('');
-        api_display_tool_title($nameTools);
+        Display::page_subheader2($nameTools);
     } else {
         $interbreadcrumb[] = [
             'url' => 'index.php?'.api_get_cidreq().'&search='.$search,

@@ -142,7 +142,7 @@ if (!api_is_platform_admin() && api_is_teacher()) {
 
 Display::display_header($tool_name);
 $tool_name = get_lang('Edit session course');
-api_display_tool_title($tool_name);
+Display::page_subheader2($tool_name);
 
 $form = new FormValidator(
     'form',

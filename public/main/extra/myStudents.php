@@ -1485,7 +1485,7 @@ while ($a_courses = Database::fetch_array($result2)) {
     }
 }
 
-api_display_tool_title($nameTools);
+Display::page_subheader2($nameTools);
 $tbl_personal_agenda = Database:: get_main_table(TABLE_PERSONAL_AGENDA);
 $now = date('Y-m-d');
 //on compte le nombre de m% dans l'agenda pour chaque module

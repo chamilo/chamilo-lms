@@ -102,7 +102,7 @@ echo Display::toolbarAction(
     ]
 );
 
-api_display_tool_title($tool_name);
+Display::page_subheader2($tool_name);
 
 $no_course_list = $course_list = [];
 $ajax_search = 'unique' == $add_type ? true : false;

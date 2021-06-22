@@ -159,7 +159,7 @@ switch ($action) {
                     $result = Blog::getBlogPostFromUser($courseId, $user_id, $courseCode);
 
                     if (!empty($result)) {
-                        api_display_tool_title(api_xml_http_response_encode(get_lang('Blog')));
+                        Display::page_subheader2(api_xml_http_response_encode(get_lang('Blog')));
                         echo '<div style="background:#FAF9F6; padding:0px;">';
                         echo api_xml_http_response_encode($result);
                         echo '</div>';
@@ -171,7 +171,7 @@ switch ($action) {
                     $result = Blog::getBlogCommentsFromUser($courseId, $user_id, $course_code);
                     if (!empty($result)) {
                         echo '<div  style="background:#FAF9F6; padding-left:10px;">';
-                        api_display_tool_title(api_xml_http_response_encode(get_lang('Blog comments')));
+                        Display::page_subheader2(api_xml_http_response_encode(get_lang('Blog comments')));
                         echo api_xml_http_response_encode($result);
                         echo '</div>';
                         echo '<br />';
@@ -182,7 +182,7 @@ switch ($action) {
                     }
                 } else {
                     echo '<div class="clear"></div><br />';
-                    api_display_tool_title(api_xml_http_response_encode(get_lang('Details')));
+                    Display::page_subheader2(api_xml_http_response_encode(get_lang('Details')));
                     echo '<div style="background:#FAF9F6; padding:0px;">';
                     echo api_xml_http_response_encode(get_lang('User not registered in course'));
                     echo '<div class="clear"></div><br />';

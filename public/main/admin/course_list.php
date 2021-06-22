@@ -139,7 +139,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
 
     $res = Database::query($sql);
     $courses = [];
-    $languages = api_get_languages_to_array();
+    $languages = api_get_languages();
 
     $path = api_get_path(WEB_CODE_PATH);
 

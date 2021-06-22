@@ -2486,7 +2486,6 @@ class SurveyUtil
         SessionEntity $session = null,
         CGroup $group = null
     ): ?CSurveyInvitation {
-
         $invitation = new CSurveyInvitation();
         $invitation
             ->setUser($user)

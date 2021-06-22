@@ -337,7 +337,7 @@ $content = Display::page_header($tool_name);
 //    api_not_allowed();
 //}
 
-//api_display_tool_title($tool_name);
+//Display::page_subheader2($tool_name);
 if ('approval' == api_get_setting('allow_registration')) {
     $content .= Display::return_message(get_lang('Your account has to be approved'), 'normal');
 }

@@ -3496,67 +3496,6 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false)
 }
 
 /**
- * Checks whether the user is allowed in a specific tool for a specific action.
- *
- * @param string $tool   the tool we are checking if the user has a certain permission
- * @param string $action the action we are checking (add, edit, delete, move, visibility)
- *
- * @return bool
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @author Julio Montoya
- *
- * @version 1.0
- */
-function api_is_allowed($tool, $action, $task_id = 0)
-{
-    $_course = api_get_course_info();
-
-    if (api_is_course_admin()) {
-        return true;
-    }
-
-    if (is_array($_course) and count($_course) > 0) {
-        require_once api_get_path(SYS_CODE_PATH).'permissions/permissions_functions.inc.php';
-
-        // Getting the permissions of this user.
-        if (0 == $task_id) {
-            //$user_permissions = get_permissions('user', $_user['user_id']);
-            //$_SESSION['total_permissions'][$_course['code']] = $user_permissions;
-        }
-
-        // Getting the permissions of the task.
-        if (0 != $task_id) {
-            //$task_permissions = get_permissions('task', $task_id);
-            //$_SESSION['total_permissions'][$_course['code']] = $task_permissions;
-        }
-    }
-
-    // If the permissions are limited, we have to map the extended ones to the limited ones.
-    if ('limited' == api_get_setting('permissions')) {
-        if ('Visibility' == $action) {
-            $action = 'Edit';
-        }
-        if ('Move' == $action) {
-            $action = 'Edit';
-        }
-    }
-
-    // The session that contains all the permissions already exists for this course
-    // so there is no need to requery everything.
-    //my_print_r($_SESSION['total_permissions'][$_course['code']][$tool]);
-    if (is_array($_SESSION['total_permissions'][$_course['code']][$tool])) {
-        if (in_array($action, $_SESSION['total_permissions'][$_course['code']][$tool])) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    return false;
-}
-
-/**
  * Current user is anon?
  *
  * @return bool true if this user is anonymous, false otherwise

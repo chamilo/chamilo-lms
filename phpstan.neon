@@ -52,11 +52,9 @@ parameters:
 		- public/main/portfolio/*
 		- public/main/notification_event/*
 
-		- public/main/permissions/*
 		- public/main/extra/*
 		- public/main/cron/*
 		- public/main/webservices/*
-		- public/main/wiki/*
 
 		- src/CoreBundle/Hook/*
 		- src/CoreBundle/Migrations/*

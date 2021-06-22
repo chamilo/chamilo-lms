@@ -11018,7 +11018,7 @@ class Exercise
                 INNER JOIN $tblQuiz AS cq ON ( cq.c_id = c.id )
                 WHERE cru.is_tutor IS NULL
                     AND ( cq.session_id = 0 OR cq.session_id IS NULL)
-                    AND cq.active > 0
+                    AND cq.active != -1
                     AND cq.c_id = $courseId
                     AND cq.iid = $exerciseId ";
             if (!empty($toUsers)) {
@@ -11043,7 +11043,7 @@ class Exercise
                 FROM $tblSessionRelUser AS sru
                     INNER JOIN $tblQuiz AS cq ON ( sru.session_id = sru.session_id )
                     INNER JOIN $tblCourse AS c ON ( c.id = cq.c_id )
-                WHERE cq.active > 0
+                WHERE cq.active != 1
                   AND cq.c_id = $courseId
                   AND sru.session_id = $sessionId
                   AND cq.iid = $exerciseId ";

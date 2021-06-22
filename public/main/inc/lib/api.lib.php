@@ -5594,8 +5594,8 @@ function api_replace_dangerous_char($filename, $treat_spaces_as_hyphens = true)
 
     // Replace multiple dots at the end.
     $regex = "/\.+$/";
-    $url = preg_replace($regex, '', $url);
-    return $url;
+
+    return preg_replace($regex, '', $url);
 }
 
 /**

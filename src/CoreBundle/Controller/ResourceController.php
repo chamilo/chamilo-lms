@@ -59,9 +59,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
      * For the tool value check the Tool entity.
      * For the type value check the ResourceType entity.
      */
-    public function indexAction(Request $request): Response
+    /*public function indexAction(Request $request): Response
     {
-        /*$tool = $request->get('tool');
+       $tool = $request->get('tool');
         $type = $request->get('type');
 
         $parentResourceNode = $this->getParentResourceNode($request);
@@ -81,8 +81,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 'parent_resource_node' => $parentResourceNode,
                 'resource_settings' => $settings,
             ]
-        );*/
-    }
+        );
+    }*/
 
     /**
      * @deprecated Use Vue
@@ -91,52 +91,52 @@ class ResourceController extends AbstractResourceController implements CourseCon
      *
      * If node has children show it
      */
-    public function listAction(Request $request): void
+    /*public function listAction(Request $request): void
     {
-        /*$tool = $request->get('tool');
+        $tool = $request->get('tool');
         $type = $request->get('type');
         $resourceNodeId = $request->get('id');
 
         $repository = $this->getRepositoryFromRequest($request);
         $settings = $repository->getResourceSettings();*/
 
-        /*$grid = $this->getGrid($request, $repository, $grid, $resourceNodeId, 'chamilo_core_resource_list');
-        $parentResourceNode = $this->getParentResourceNode($request);
-        $this->setBreadCrumb($request, $parentResourceNode);*/
+    /*$grid = $this->getGrid($request, $repository, $grid, $resourceNodeId, 'chamilo_core_resource_list');
+    $parentResourceNode = $this->getParentResourceNode($request);
+    $this->setBreadCrumb($request, $parentResourceNode);*/
 
-        //return $grid->getGridResponse(
-        /*return $this->render(
-            $repository->getTemplates()->getFromAction(__FUNCTION__),
-            [
-                'parent_id' => $resourceNodeId,
-                'tool' => $tool,
-                'type' => $type,
-                'id' => $resourceNodeId,
-                'parent_resource_node' => $parentResourceNode,
-                'resource_settings' => $settings,
-            ]
-        );*/
-    }
+    //return $grid->getGridResponse(
+    /*return $this->render(
+        $repository->getTemplates()->getFromAction(__FUNCTION__),
+        [
+            'parent_id' => $resourceNodeId,
+            'tool' => $tool,
+            'type' => $type,
+            'id' => $resourceNodeId,
+            'parent_resource_node' => $parentResourceNode,
+            'resource_settings' => $settings,
+        ]
+    );
+    }*/
 
     /**
      * @deprecated Use Vue
      *
      * @Route("/{tool}/{type}/{id}/new_folder", methods={"GET", "POST"}, name="chamilo_core_resource_new_folder")
      */
-    public function newFolderAction(Request $request): Response
+    /*public function newFolderAction(Request $request): Response
     {
-        //return $this->createResource($request, 'folder');
-    }
+        return $this->createResource($request, 'folder');
+    }*/
 
     /**
      * @deprecated Use Vue
      *
      * @Route("/{tool}/{type}/{id}/new", methods={"GET", "POST"}, name="chamilo_core_resource_new")
      */
-    public function newAction(Request $request): Response
+    /*public function newAction(Request $request): Response
     {
-        //return $this->createResource($request, 'file');
-    }
+        return $this->createResource($request, 'file');
+    }*/
 
     /**
      * @Route("/{tool}/{type}/{id}/disk_space", methods={"GET", "POST"}, name="chamilo_core_resource_disk_space")
@@ -301,9 +301,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
      *
      * @Route("/{tool}/{type}/{id}/info", methods={"GET", "POST"}, name="chamilo_core_resource_info")
      */
-    public function infoAction(Request $request): Response
+    /*public function infoAction(Request $request): Response
     {
-        /*$nodeId = $request->get('id');
+        $nodeId = $request->get('id');
         $repository = $this->getRepositoryFromRequest($request);
 
         $resource = $repository->getResourceFromResourceNode($nodeId);
@@ -335,17 +335,17 @@ class ResourceController extends AbstractResourceController implements CourseCon
         return $this->render(
             $repository->getTemplates()->getFromAction(__FUNCTION__, $request->isXmlHttpRequest()),
             $params
-        );*/
-    }
+        );
+    }*/
 
     /**
      * Preview a file. Mostly used when using a modal.
      *
      * @Route("/{tool}/{type}/{id}/preview", methods={"GET"}, name="chamilo_core_resource_preview")
      */
-    public function previewAction(Request $request): Response
+    /*public function previewAction(Request $request): Response
     {
-        /*$nodeId = $request->get('id');
+        $nodeId = $request->get('id');
         $repository = $this->getRepositoryFromRequest($request);
 
         $resource = $repository->getResourceFromResourceNode($nodeId);
@@ -369,11 +369,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
             'type' => $type,
         ];
 
-        return $this->render($repository->getTemplates()->getFromAction(__FUNCTION__), $params);*/
-    }
+        return $this->render($repository->getTemplates()->getFromAction(__FUNCTION__), $params);
+    }*/
 
     /**
-     * @deprecated use vue.
+     * @deprecated use vue
      *
      * @Route("/{tool}/{type}/{id}/change_visibility", name="chamilo_core_resource_change_visibility")
      */
@@ -493,13 +493,14 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
     /**
      * Shows the associated resource file.
-     * @deprecated use vue.
+     *
+     * @deprecated use vue
      *
      * @Route("/{tool}/{type}/{id}/view_resource", methods={"GET"}, name="chamilo_core_resource_view_resource")
      */
-    public function viewResourceAction(Request $request, RouterInterface $router): Response
+    /*public function viewResourceAction(Request $request, RouterInterface $router): Response
     {
-        /*$id = $request->get('id');
+        $id = $request->get('id');
 
         $resourceNode = $this->getResourceNodeRepository()->find($id);
 
@@ -527,8 +528,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
             'type' => $type,
         ];
 
-        return $this->render($repository->getTemplates()->getFromAction(__FUNCTION__), $params);*/
-    }
+        return $this->render($repository->getTemplates()->getFromAction(__FUNCTION__), $params);
+    }*/
 
     /**
      * View file of a resource node.
@@ -658,14 +659,15 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
     /**
      * Upload form.
-     * @deprecated use vue + api platform.
+     *
+     * @deprecated use vue + api platform
      *
      * @Route("/{tool}/{type}/{id}/upload", name="chamilo_core_resource_upload", methods={"GET", "POST"},
      *     options={"expose"=true})
      */
-    public function uploadAction(Request $request, $tool, $type, $id): Response
+    /*public function uploadAction(Request $request, $tool, $type, $id): Response
     {
-        /*$repository = $this->getRepositoryFromRequest($request);
+        $repository = $this->getRepositoryFromRequest($request);
         $resourceNode = $repository->getResourceNodeRepository()->find($id);
 
         $this->denyAccessUnlessGranted(
@@ -682,8 +684,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $routeParams['id'] = $id;
 
         return $this->render($repository->getTemplates()->getFromAction(__FUNCTION__), $routeParams);
-        */
-    }
+    }*/
 
     /**
      * @return mixed|StreamedResponse

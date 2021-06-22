@@ -126,10 +126,10 @@ Feature: Course tools basic testing
     And I am on "/main/survey/index.php?cid=1"
     Then I should not see an error
 
-  Scenario: Make sure the wiki tool is available
-    Given I am on course "TEMP" homepage
-    And I am on "/main/wiki/index.php?cid=1"
-    Then I should not see an error
+#  Scenario: Make sure the wiki tool is available
+#    Given I am on course "TEMP" homepage
+#    And I am on "/main/wiki/index.php?cid=1"
+#    Then I should not see an error
 
 #  Scenario: Make sure the notebook tool is available
 #    Given I am on course "TEMP" homepage

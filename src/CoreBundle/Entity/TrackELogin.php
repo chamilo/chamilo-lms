@@ -21,9 +21,17 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackELogin
 {
     /**
-     * @ORM\Column(name="login_user_id", type="integer", nullable=false)
+     * @ORM\Column(name="login_id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue()
      */
-    protected int $loginUserId;
+    protected int $loginId;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="logins")
+     * @ORM\JoinColumn(name="login_user_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected User $user;
 
     /**
      * @ORM\Column(name="login_date", type="datetime", nullable=false)
@@ -40,41 +48,19 @@ class TrackELogin
      */
     protected ?DateTime $logoutDate = null;
 
-    /**
-     * @ORM\Column(name="login_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected int $loginId;
-
-    /**
-     * Set loginUserId.
-     *
-     * @return TrackELogin
-     */
-    public function setLoginUserId(int $loginUserId)
+    public function getUser(): User
     {
-        $this->loginUserId = $loginUserId;
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * Get loginUserId.
-     *
-     * @return int
-     */
-    public function getLoginUserId()
-    {
-        return $this->loginUserId;
-    }
-
-    /**
-     * Set loginDate.
-     *
-     * @return TrackELogin
-     */
-    public function setLoginDate(DateTime $loginDate)
+    public function setLoginDate(DateTime $loginDate): self
     {
         $this->loginDate = $loginDate;
 
@@ -91,12 +77,7 @@ class TrackELogin
         return $this->loginDate;
     }
 
-    /**
-     * Set userIp.
-     *
-     * @return TrackELogin
-     */
-    public function setUserIp(string $userIp)
+    public function setUserIp(string $userIp): self
     {
         $this->userIp = $userIp;
 
@@ -113,12 +94,7 @@ class TrackELogin
         return $this->userIp;
     }
 
-    /**
-     * Set logoutDate.
-     *
-     * @return TrackELogin
-     */
-    public function setLogoutDate(DateTime $logoutDate)
+    public function setLogoutDate(DateTime $logoutDate): self
     {
         $this->logoutDate = $logoutDate;
 

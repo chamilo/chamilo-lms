@@ -315,7 +315,7 @@ class Message
         return $this->group;
     }
 
-    public function setGroup(?CGroup $group): Message
+    public function setGroup(?CGroup $group): self
     {
         $this->group = $group;
 

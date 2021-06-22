@@ -15,6 +15,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Traits\UserCreatorTrait;
 use Chamilo\CourseBundle\Entity\CGroupRelTutor;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
+use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -695,6 +696,26 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected Collection $receivedMessages;
 
     /**
+     * @var Collection|CSurveyInvitation[]
+     */
+    #[ORM\OneToMany(
+        targetEntity: 'Chamilo\\CourseBundle\\Entity\\CSurveyInvitation',
+        mappedBy: 'user',
+        cascade: ['remove']
+    )]
+    protected Collection $surveyInvitations;
+
+    /**
+     * @var Collection|TrackELogin[]
+     */
+    #[ORM\OneToMany(
+        targetEntity: 'TrackELogin',
+        mappedBy: 'user',
+        cascade: ['remove']
+    )]
+    protected Collection $logins;
+
+    /**
      * @ORM\OneToOne(targetEntity="Admin", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected ?Admin $admin = null;
@@ -764,6 +785,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->sessionsRelUser = new ArrayCollection();
         $this->sentMessages = new ArrayCollection();
         $this->receivedMessages = new ArrayCollection();
+        $this->surveyInvitations = new ArrayCollection();
+        $this->logins = new ArrayCollection();
 
         //$this->extraFields = new ArrayCollection();
         $this->createdAt = new DateTime();
@@ -2271,6 +2294,48 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function setSessionRelCourseRelUsers($sessionRelCourseRelUsers): self
     {
         $this->sessionRelCourseRelUsers = $sessionRelCourseRelUsers;
+
+        return $this;
+    }
+
+    public function getGender(): ?string
+    {
+        return $this->gender;
+    }
+
+    public function setGender(?string $gender): self
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    /**
+     * @return CSurveyInvitation[]|Collection
+     */
+    public function getSurveyInvitations(): Collection
+    {
+        return $this->surveyInvitations;
+    }
+
+    public function setSurveyInvitations(Collection $surveyInvitations): self
+    {
+        $this->surveyInvitations = $surveyInvitations;
+
+        return $this;
+    }
+
+    /**
+     * @return TrackELogin[]|Collection
+     */
+    public function getLogins(): Collection
+    {
+        return $this->logins;
+    }
+
+    public function setLogins(Collection $logins): self
+    {
+        $this->logins = $logins;
 
         return $this;
     }

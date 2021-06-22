@@ -29,6 +29,13 @@ class Version20180904175500 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX idx_track_e_login_date ON track_e_login (login_date)');
         }
 
+        $this->addSql('DELETE FROM track_e_login WHERE login_user_id NOT IN (SELECT id FROM user)');
+        $this->addSql('ALTER TABLE track_e_login CHANGE login_user_id login_user_id INT DEFAULT NULL');
+
+        if (!$table->hasForeignKey('FK_C8EA20EB743CDE8')) {
+            $this->addSql('ALTER TABLE track_e_login ADD CONSTRAINT FK_C8EA20EB743CDE8 FOREIGN KEY (login_user_id) REFERENCES user (id) ON DELETE CASCADE');
+        }
+
         $table = $schema->getTable('track_e_default');
         if (!$table->hasIndex('idx_default_user_id')) {
             $this->addSql('CREATE INDEX idx_default_user_id ON track_e_default (default_user_id)');

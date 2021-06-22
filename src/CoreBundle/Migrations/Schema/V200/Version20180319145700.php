@@ -108,6 +108,22 @@ class Version20180319145700 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('c_survey_invitation');
 
+        if (!$table->hasColumn('user_id')) {
+            $this->addSql('ALTER TABLE c_survey_invitation ADD user_id INT DEFAULT NULL');
+            $this->addSql('DELETE FROM c_survey_invitation WHERE user NOT IN (SELECT id FROM user) ');
+            $this->addSql('UPDATE c_survey_invitation SET user_id = user');
+        }
+
+        if (!$table->hasForeignKey('FK_D0BC7C2A76ED395')) {
+            $this->addSql(
+                'ALTER TABLE c_survey_invitation ADD CONSTRAINT FK_D0BC7C2A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
+            );
+        }
+
+        if (!$table->hasIndex('IDX_D0BC7C2A76ED395')) {
+            $this->addSql('CREATE INDEX IDX_D0BC7C2A76ED395 ON c_survey_invitation (user_id)');
+        }
+
         if (!$table->hasColumn('answered_at')) {
             $this->addSql('ALTER TABLE c_survey_invitation ADD answered_at DATETIME DEFAULT NULL;');
         }

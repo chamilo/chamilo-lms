@@ -8,6 +8,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -56,9 +57,10 @@ class CSurveyInvitation
     protected CSurvey $survey;
 
     /**
-     * @ORM\Column(name="user", type="string", length=250, nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="surveyInvitations")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected string $user;
+    protected User $user;
 
     /**
      * @ORM\Column(name="invitation_code", type="string", length=250, nullable=false)
@@ -103,21 +105,16 @@ class CSurveyInvitation
         return $this;
     }
 
-    public function setUser(string $user): self
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
     {
         $this->user = $user;
 
         return $this;
-    }
-
-    /**
-     * Get user.
-     *
-     * @return string
-     */
-    public function getUser()
-    {
-        return $this->user;
     }
 
     public function setInvitationCode(string $invitationCode): self

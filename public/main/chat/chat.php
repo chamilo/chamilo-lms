@@ -2,8 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-define('CHAMILO_LOAD_WYSIWYG', false);
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);

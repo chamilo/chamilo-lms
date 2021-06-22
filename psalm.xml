@@ -15,7 +15,6 @@
         <directory name="public/main/attendance"/>
         <directory name="public/main/auth"/>
 <!--        <directory name="public/main/badge"/>-->
-        <directory name="public/main/blog"/>
         <directory name="public/main/calendar"/>
 <!--        <directory name="public/main/chat"/>-->
         <directory name="public/main/course_description"/>
@@ -53,7 +52,6 @@
 <!--        <directory name="public/main/upload" />-->
         <directory name="public/main/user" />
 <!--        <directory name="public/main/webservices" />-->
-<!--        <directory name="public/main/wiki" />-->
         <directory name="public/main/work" />
 
         <file name="public/main/inc/lib/access_url_edit_courses_to_url_functions.lib.php"/>
@@ -68,7 +66,6 @@
         <file name="public/main/inc/lib/attendance.lib.php"/>
         <file name="public/main/inc/lib/auth.lib.php"/>
 <!--        <file name="public/main/inc/lib/baker.lib.php"/>-->
-<!--        <file name="public/main/inc/lib/blog.lib.php"/>-->
         <file name="public/main/inc/lib/career.lib.php"/>
         <file name="public/main/inc/lib/certificate.lib.php"/>
         <file name="public/main/inc/lib/course.lib.php"/>
@@ -153,7 +150,6 @@
             <directory name="src/CoreBundle/Component/Editor"/>
             <directory name="src/CourseBundle/Component/CourseCopy"/>
             <directory name="src/LtiBundle"/>
-
 
             <directory name="public/main/inc/lib/javascript" />
             <directory name="public/main/inc/lib/kses-0.2.2" />

@@ -1245,8 +1245,9 @@ class SocialManager extends UserManager
 
             $userPicture = $user_info['avatar'];
             $officialCode = '';
-            if ('true' == api_get_setting('show_official_code_whoisonline')) {
-                $officialCode .= '<div class="items-user-official-code"><p style="min-height: 30px;" title="'.get_lang('Code').'">'.$user_info['official_code'].'</p></div>';
+            if ('true' === api_get_setting('show_official_code_whoisonline')) {
+                $officialCode .= '<div class="items-user-official-code">
+                    <p style="min-height: 30px;" title="'.get_lang('Code').'">'.$user_info['official_code'].'</p></div>';
             }
 
             if (true === $hide) {
@@ -1283,109 +1284,6 @@ class SocialManager extends UserManager
         }
 
         return $html;
-    }
-
-    /**
-     * Displays the information of an individual user.
-     *
-     * @param int $user_id
-     *
-     * @return string
-     */
-    public static function display_individual_user($user_id)
-    {
-        global $interbreadcrumb;
-        $safe_user_id = (int) $user_id;
-        $currentUserId = api_get_user_id();
-
-        $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT * FROM $user_table WHERE user_id = ".$safe_user_id;
-        $result = Database::query($sql);
-        $html = null;
-        if (1 == Database::num_rows($result)) {
-            $user_object = Database::fetch_object($result);
-            $userInfo = api_get_user_info($user_id);
-            $alt = $userInfo['complete_name'].($currentUserId == $user_id ? '&nbsp;('.get_lang('Me').')' : '');
-            $status = get_status_from_code($user_object->status);
-            $interbreadcrumb[] = ['url' => 'whoisonline.php', 'name' => get_lang('Online users list')];
-
-            $html .= '<div class ="thumbnail">';
-            $fullurl = $userInfo['avatar'];
-
-            $html .= '<img src="'.$fullurl.'" alt="'.$alt.'" />';
-
-            if (!empty($status)) {
-                $html .= '<div class="caption">'.$status.'</div>';
-            }
-            $html .= '</div>';
-
-            if ('true' == api_get_setting('show_email_addresses')) {
-                $html .= Display::encrypted_mailto_link($user_object->email, $user_object->email).'<br />';
-            }
-
-            if ($user_object->competences) {
-                $html .= Display::page_subheader(get_lang('My competences'));
-                $html .= '<p>'.$user_object->competences.'</p>';
-            }
-            if ($user_object->diplomas) {
-                $html .= Display::page_subheader(get_lang('My diplomas'));
-                $html .= '<p>'.$user_object->diplomas.'</p>';
-            }
-            if ($user_object->teach) {
-                $html .= Display::page_subheader(get_lang('What I am able to teach'));
-                $html .= '<p>'.$user_object->teach.'</p>';
-            }
-            self::display_productions($user_object->user_id);
-            if ($user_object->openarea) {
-                $html .= Display::page_subheader(get_lang('My personal open area'));
-                $html .= '<p>'.$user_object->openarea.'</p>';
-            }
-        } else {
-            $html .= '<div class="actions-title">';
-            $html .= get_lang('Online users list');
-            $html .= '</div>';
-        }
-
-        return $html;
-    }
-
-    /**
-     * Display productions in who is online.
-     *
-     * @param int $user_id User id
-     */
-    public static function display_productions($user_id)
-    {
-        /*$webdir_array = UserManager::get_user_picture_path_by_id($user_id, 'web');
-        $sysdir = UserManager::getUserPathById($user_id, 'system');
-        $webdir = UserManager::getUserPathById($user_id, 'web');
-
-        if (!is_dir($sysdir)) {
-            mkdir($sysdir, api_get_permissions_for_new_directories(), true);
-        }
-
-        $productions = UserManager::get_user_productions($user_id);
-
-        if (count($productions) > 0) {
-            echo '<dt><strong>'.get_lang('Productions').'</strong></dt>';
-            echo '<dd><ul>';
-            foreach ($productions as $file) {
-                // Only display direct file links to avoid browsing an empty directory
-                if (is_file($sysdir.$file) && $file != $webdir_array['file']) {
-                    echo '<li><a href="'.$webdir.urlencode($file).'" target=_blank>'.$file.'</a></li>';
-                }
-                // Real productions are under a subdirectory by the User's id
-                if (is_dir($sysdir.$file)) {
-                    $subs = scandir($sysdir.$file);
-                    foreach ($subs as $my => $sub) {
-                        if ('.' != substr($sub, 0, 1) && is_file($sysdir.$file.'/'.$sub)) {
-                            echo '<li><a href="'.$webdir.urlencode($file).'/'.urlencode($sub).'" target=_blank>'.$sub.'</a></li>';
-                        }
-                    }
-                }
-            }
-            echo '</ul></dd>';
-        }*/
     }
 
     /**

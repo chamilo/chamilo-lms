@@ -247,17 +247,6 @@ class IndexManager
     }
 
     /**
-     * Reacts on a failed login:
-     * Displays an explanation with a link to the registration form.
-     *
-     * @version 1.0.1
-     */
-    public function handle_login_failed()
-    {
-        return $this->tpl->handleLoginFailed();
-    }
-
-    /**
      * Display list of courses in a category.
      * (for anonymous users).
      *

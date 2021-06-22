@@ -143,7 +143,7 @@ define('TOOL_COURSE_RIGHTS_OVERVIEW', 'course_rights');
 define('TOOL_UPLOAD', 'file_upload');
 define('TOOL_COURSE_MAINTENANCE', 'course_maintenance');
 define('TOOL_SURVEY', 'survey');
-define('TOOL_WIKI', 'wiki');
+//define('TOOL_WIKI', 'wiki');
 define('TOOL_GLOSSARY', 'glossary');
 define('TOOL_GRADEBOOK', 'gradebook');
 define('TOOL_NOTEBOOK', 'notebook');
@@ -224,7 +224,7 @@ define('LOG_PROMOTION_DELETE', 'promotion_deleted');
 define('LOG_CAREER_CREATE', 'career_created');
 define('LOG_CAREER_DELETE', 'career_deleted');
 define('LOG_USER_PERSONAL_DOC_DELETED', 'user_doc_deleted');
-define('LOG_WIKI_ACCESS', 'wiki_page_view');
+//define('LOG_WIKI_ACCESS', 'wiki_page_view');
 // All results from an exercise
 define('LOG_EXERCISE_RESULT_DELETE', 'exe_result_deleted');
 // Logs only the one attempt
@@ -262,7 +262,7 @@ define('LOG_PROMOTION_ID', 'promotion_id');
 define('LOG_GRADEBOOK_LOCKED', 'gradebook_locked');
 define('LOG_GRADEBOOK_UNLOCKED', 'gradebook_unlocked');
 define('LOG_GRADEBOOK_ID', 'gradebook_id');
-define('LOG_WIKI_PAGE_ID', 'wiki_page_id');
+//define('LOG_WIKI_PAGE_ID', 'wiki_page_id');
 define('LOG_EXERCISE_ID', 'exercise_id');
 define('LOG_EXERCISE_AND_USER_ID', 'exercise_and_user_id');
 define('LOG_LP_ID', 'lp_id');
@@ -557,11 +557,6 @@ define('TF', 1);
 define('MCMA', 2);
 define('FIB', 3);
 
-// Skills
-define('SKILL_TYPE_REQUIREMENT', 'required');
-define('SKILL_TYPE_ACQUIRED', 'acquired');
-define('SKILL_TYPE_BOTH', 'both');
-
 // Message
 define('MESSAGE_STATUS_NEW', 0);
 define('MESSAGE_STATUS_UNREAD', 1);
@@ -644,7 +639,7 @@ define('RESOURCE_SCORM', 'Scorm');
 define('RESOURCE_SURVEY', 'survey');
 define('RESOURCE_SURVEYQUESTION', 'survey_question');
 define('RESOURCE_SURVEYINVITATION', 'survey_invitation');
-define('RESOURCE_WIKI', 'wiki');
+//define('RESOURCE_WIKI', 'wiki');
 define('RESOURCE_THEMATIC', 'thematic');
 define('RESOURCE_ATTENDANCE', 'attendance');
 define('RESOURCE_WORK', 'work');
@@ -654,17 +649,6 @@ define('ADD_THEMATIC_PLAN', 6);
 
 // Max online users to show per page (whoisonline)
 define('MAX_ONLINE_USERS', 12);
-
-// Number of characters maximum to show in preview of course blog posts
-define('BLOG_MAX_PREVIEW_CHARS', 800);
-// HTML string to replace with a 'Read more...' link
-define('BLOG_PAGE_BREAK', '<div style="page-break-after: always"><span style="display: none;">&nbsp;</span></div>');
-
-// Make sure the CHAMILO_LOAD_WYSIWYG constant is defined
-// To remove CKeditor libs from HTML, set this constant to true before loading
-if (!defined('CHAMILO_LOAD_WYSIWYG')) {
-    define('CHAMILO_LOAD_WYSIWYG', true);
-}
 
 define('TOOL_AUTHORING', 'toolauthoring');
 define('TOOL_INTERACTION', 'toolinteraction');
@@ -691,14 +675,8 @@ define('XAPIAN_PREFIX_COURSEID', 'C');
 define('XAPIAN_PREFIX_TOOLID', 'O');
 
 /**
- * Returns a path to a certain resource within the Chamilo area, specifyed through a parameter.
- * Also, this function provides conversion between path types, in this case the input path points inside the Chamilo area too.
- *
- * See $_configuration['course_folder'] in the configuration.php to alter the WEB_COURSE_PATH and SYS_COURSE_PATH parameters.
-
- *
- * @param string $path (optional)   A path which type is to be converted. Also, it may be a defined constant for a path.
- *                     This parameter has meaning when $type parameter has one of the following values: TO_WEB, TO_SYS, TO_REL. Otherwise it is ignored.
+ * Returns a path to a certain resource within Chamilo.
+ * @param string $path A path which type is to be converted. Also, it may be a defined constant for a path.
  *
  * @return string the requested path or the converted path
  *
@@ -711,9 +689,6 @@ define('XAPIAN_PREFIX_TOOLID', 'O');
  * no a mechanism for processing relative web/system paths, such as: lesson01.html, ./lesson01.html, ../css/my_styles.css.
  * It has not been identified as needed yet.
  * 4. Also, resolving the meta-symbols "." and ".." within paths has not been implemented, it is to be identified as needed.
- *
- * For examples go to: *
- * See main/admin/system_status.php?section=paths
  *
  * Vchamilo changes : allow using an alternate configuration
  * to get vchamilo  instance paths
@@ -894,9 +869,6 @@ function api_valid_email($address)
 {
     return filter_var($address, FILTER_VALIDATE_EMAIL);
 }
-
-/* PROTECTION FUNCTIONS
-   Use these functions to protect your scripts. */
 
 /**
  * Function used to protect a course script.
@@ -1126,13 +1098,6 @@ function api_block_inactive_user()
         $msg .= '<p class="text-center">
                  <a class="btn btn-default" href="'.$homeUrl.'">'.get_lang('BackHome').'</a></p>';
 
-        if (api_is_anonymous()) {
-            /*$form = api_get_not_allowed_login_form();
-            $msg .= '<div class="well">';
-            $msg .= $form->returnForm();
-            $msg .= '</div>';*/
-        }
-
         $tpl->assign('content', $msg);
         $tpl->display_one_col_template();
         exit;
@@ -1251,14 +1216,6 @@ function api_get_navigator()
 }
 
 /**
- * @return true if user self registration is allowed, false otherwise
- */
-function api_is_self_registration_allowed()
-{
-    return isset($GLOBALS['allowSelfReg']) ? $GLOBALS['allowSelfReg'] : false;
-}
-
-/**
  * This function returns the id of the user which is stored in the $_user array.
  *
  * example: The function can be used to check if a user is logged in
@@ -1364,7 +1321,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
     }
 
     foreach ($attributes as $attribute) {
-        $result[$attribute] = isset($user[$attribute]) ? $user[$attribute] : null;
+        $result[$attribute] = $user[$attribute] ?? null;
     }
 
     $user_id = (int) $user['id'];
@@ -2231,7 +2188,6 @@ function api_format_course_array(Course $course = null)
     $courseData['legal'] = $course->getLegal();
     $courseData['show_score'] = $course->getShowScore(); //used in the work tool
 
-    //$coursePath = api_get_path(WEB_COURSE_PATH);
     $coursePath = '/course/';
     $webCourseHome = $coursePath.$courseData['real_id'].'/home';
 
@@ -5421,7 +5377,7 @@ function api_get_tools_lists($my_tool = null)
         TOOL_UPLOAD,
         TOOL_COURSE_MAINTENANCE,
         TOOL_SURVEY,
-        TOOL_WIKI,
+        //TOOL_WIKI,
         TOOL_GLOSSARY,
         TOOL_GRADEBOOK,
         TOOL_NOTEBOOK,

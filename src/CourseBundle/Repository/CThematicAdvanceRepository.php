@@ -6,8 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Repository;
 
+use Chamilo\CoreBundle\Traits\NonResourceRepository;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
-use Chamilo\CourseBundle\Traits\NonResourceRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

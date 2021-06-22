@@ -8,7 +8,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
-use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
+use Chamilo\CoreBundle\Traits\ShowCourseResourcesInSessionTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

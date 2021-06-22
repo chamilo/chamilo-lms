@@ -62,6 +62,8 @@ class CSurveyInvitation
      */
     protected User $user;
 
+    protected string $externalEmail;
+
     /**
      * @ORM\Column(name="invitation_code", type="string", length=250, nullable=false)
      */

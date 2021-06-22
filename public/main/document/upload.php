@@ -57,7 +57,7 @@ $group_properties = [];
 $htmlHeadXtra[] = '<script>
 function check_unzip() {
     if (document.upload.unzip.checked) {
-        document.upload.if_exists[1].checked=true;        
+        document.upload.if_exists[1].checked=true;
     } else {
         document.upload.if_exists[2].checked=true;
     }
@@ -264,7 +264,7 @@ if ('true' === api_get_setting('search_enabled')) {
     );
     $form->addElement('html', '<br /><div class="sub-form">');
     $form->addElement('html', '<div class="label">'.get_lang('Document language for indexation').'</div>');
-    $form->addLabel(get_lang('Language'), api_get_languages_combo());
+    //$form->addLabel(get_lang('Language'), api_get_languages_combo());
     $form->addElement('html', '</div><div class="sub-form">');
     $specific_fields = get_specific_field_list();
     foreach ($specific_fields as $specific_field) {

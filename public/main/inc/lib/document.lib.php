@@ -3889,7 +3889,7 @@ class DocumentManager
             $defaultVisibility = $portalDefaultVisibility;
         }
 
-        if ('true' == api_get_setting('documents_default_visibility_defined_in_course')) {
+        if ('true' === api_get_setting('documents_default_visibility_defined_in_course')) {
             $courseVisibility = api_get_course_setting('documents_default_visibility', $courseCode);
             if (!empty($courseVisibility) && in_array($courseVisibility, ['visible', 'invisible'])) {
                 $defaultVisibility = $courseVisibility;

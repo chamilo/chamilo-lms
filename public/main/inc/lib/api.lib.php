@@ -802,7 +802,7 @@ function api_get_path($path = '', $configuration = [])
  */
 function api_add_trailing_slash($path)
 {
-    return '/' == substr($path, -1) ? $path : $path.'/';
+    return '/' === substr($path, -1) ? $path : $path.'/';
 }
 
 /**
@@ -814,7 +814,7 @@ function api_add_trailing_slash($path)
  */
 function api_remove_trailing_slash($path)
 {
-    return '/' == substr($path, -1) ? substr($path, 0, -1) : $path;
+    return '/' === substr($path, -1) ? substr($path, 0, -1) : $path;
 }
 
 /**
@@ -3231,7 +3231,6 @@ function api_display_tool_view_option()
     return $html;
 }
 
-// TODO: This is for the permission section.
 /**
  * Function that removes the need to directly use is_courseAdmin global in
  * tool scripts. It returns true or false depending on the user's rights in
@@ -3474,111 +3473,6 @@ function api_not_allowed(
     $responseCode = 0
 ) {
     throw new Exception('You are not allowed');
-}
-
-/**
- * Displays a combo box so the user can select his/her preferred language.
- *
- * @param string The desired name= value for the select
- * @param bool Whether we use the JQuery Chozen library or not
- * (in some cases, like the indexing language picker, it can alter the presentation)
- *
- * @deprecated
- *
- * @return string
- */
-function api_get_languages_combo($name = 'language')
-{
-    $ret = '';
-    $platformLanguage = api_get_setting('platformLanguage');
-
-    // Retrieve a complete list of all the languages.
-    $language_list = api_get_languages();
-
-    if (count($language_list) < 2) {
-        return $ret;
-    }
-
-    // The the current language of the user so that his/her language occurs as selected in the dropdown menu.
-    if (isset($_SESSION['user_language_choice'])) {
-        $default = $_SESSION['user_language_choice'];
-    } else {
-        $default = $platformLanguage;
-    }
-
-    $ret .= '<select name="'.$name.'" id="language_chosen" class="selectpicker show-tick form-control">';
-    foreach ($language_list as $key => $value) {
-        if ($key == $default) {
-            $selected = ' selected="selected"';
-        } else {
-            $selected = '';
-        }
-        $ret .= sprintf('<option value=%s" %s>%s</option>', $key, $selected, $value);
-    }
-    $ret .= '</select>';
-
-    return $ret;
-}
-
-/**
- * Displays a form (drop down menu) so the user can select his/her preferred language.
- * The form works with or without javascript.
- *
- * @param  bool Hide form if only one language available (defaults to false = show the box anyway)
- * @param bool $showAsButton
- *
- * @return string|null Display the box directly
- */
-function api_display_language_form($hide_if_no_choice = false, $showAsButton = false)
-{
-    // Retrieve a complete list of all the languages.
-    $language_list = api_get_languages();
-    if (count($language_list['name']) <= 1 && $hide_if_no_choice) {
-        return; //don't show any form
-    }
-
-    // The the current language of the user so that his/her language occurs as selected in the dropdown menu.
-    if (isset($_SESSION['user_language_choice'])) {
-        $user_selected_language = $_SESSION['user_language_choice'];
-    }
-    if (empty($user_selected_language)) {
-        $user_selected_language = api_get_setting('platformLanguage');
-    }
-
-    $currentLanguageId = api_get_language_id($user_selected_language);
-    $currentLanguageInfo = api_get_language_info($currentLanguageId);
-    $countryCode = languageToCountryIsoCode($currentLanguageInfo['isocode']);
-    $url = api_get_self();
-    if ($showAsButton) {
-        $html = '<div class="btn-group">
-              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                <span class="flag-icon flag-icon-'.$countryCode.'"></span>
-                '.$currentLanguageInfo['original_name'].'
-                <span class="caret">
-                </span>
-              </button>';
-    } else {
-        $html = '
-            <a href="'.$url.'" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                <span class="flag-icon flag-icon-'.$countryCode.'"></span>
-                '.$currentLanguageInfo['original_name'].'
-                <span class="caret"></span>
-            </a>
-            ';
-    }
-
-    $html .= '<ul class="dropdown-menu" role="menu">';
-    foreach ($language_list['all'] as $key => $data) {
-        $urlLink = $url.'?language='.$data['english_name'];
-        $html .= '<li><a href="'.$urlLink.'"><span class="flag-icon flag-icon-'.languageToCountryIsoCode($data['isocode']).'"></span> '.$data['original_name'].'</a></li>';
-    }
-    $html .= '</ul>';
-
-    if ($showAsButton) {
-        $html .= '</div>';
-    }
-
-    return $html;
 }
 
 /**
@@ -5830,12 +5724,12 @@ function api_check_browscap()
  */
 function api_get_js($file)
 {
-    return '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$file.'"></script>'."\n";
+    return '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$file.'"></script>'."\n";
 }
 
 function api_get_build_js($file)
 {
-    return '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'build/'.$file.'"></script>'."\n";
+    return '<script src="'.api_get_path(WEB_PUBLIC_PATH).'build/'.$file.'"></script>'."\n";
 }
 
 function api_get_build_css($file, $media = 'screen')
@@ -5851,7 +5745,7 @@ function api_get_build_css($file, $media = 'screen')
  */
 function api_get_asset($file)
 {
-    return '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'build/libs/'.$file.'"></script>'."\n";
+    return '<script src="'.api_get_path(WEB_PUBLIC_PATH).'build/libs/'.$file.'"></script>'."\n";
 }
 
 /**
@@ -5864,7 +5758,9 @@ function api_get_asset($file)
  */
 function api_get_css_asset($file, $media = 'screen')
 {
-    return '<link href="'.api_get_path(WEB_PUBLIC_PATH).'build/libs/'.$file.'" rel="stylesheet" media="'.$media.'" type="text/css" />'."\n";
+    return '<link
+        href="'.api_get_path(WEB_PUBLIC_PATH).'build/libs/'.$file.'"
+        rel="stylesheet" media="'.$media.'" type="text/css" />'."\n";
 }
 
 /**
@@ -6088,7 +5984,7 @@ function api_resource_is_locked_by_gradebook($item_id, $link_type, $course_code 
     if (api_is_platform_admin()) {
         return false;
     }
-    if ('true' == api_get_setting('gradebook_locking_enabled')) {
+    if ('true' === api_get_setting('gradebook_locking_enabled')) {
         if (empty($course_code)) {
             $course_code = api_get_course_id();
         }
@@ -6157,7 +6053,7 @@ function api_check_archive_dir()
     if (is_dir(api_get_path(SYS_ARCHIVE_PATH)) && !is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
         $message = Display::return_message(
             get_lang(
-                'The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator.'
+                'The var/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator.'
             ),
             'warning'
         );
@@ -6378,7 +6274,7 @@ function api_set_default_visibility(
 
     if (isset($setting[$tool_id])) {
         $visibility = 'invisible';
-        if ('true' == $setting[$tool_id]) {
+        if ('true' === $setting[$tool_id]) {
             $visibility = 'visible';
         }
 
@@ -6485,20 +6381,20 @@ function api_get_bytes_memory_limit($mem)
 
     switch ($size) {
         case 't':
-            $mem = intval(substr($mem, -1)) * 1024 * 1024 * 1024 * 1024;
+            $mem = (int) substr($mem, -1) * 1024 * 1024 * 1024 * 1024;
             break;
         case 'g':
-            $mem = intval(substr($mem, 0, -1)) * 1024 * 1024 * 1024;
+            $mem = (int) substr($mem, 0, -1) * 1024 * 1024 * 1024;
             break;
         case 'm':
-            $mem = intval(substr($mem, 0, -1)) * 1024 * 1024;
+            $mem = (int) substr($mem, 0, -1) * 1024 * 1024;
             break;
         case 'k':
-            $mem = intval(substr($mem, 0, -1)) * 1024;
+            $mem = (int) substr($mem, 0, -1) * 1024;
             break;
         default:
             // we assume it's integer only
-            $mem = intval($mem);
+            $mem = (int) $mem;
             break;
     }
 
@@ -6667,52 +6563,6 @@ function api_get_user_blocked_by_captcha($username)
 }
 
 /**
- * Remove tags from HTML anf return the $in_number_char first non-HTML char
- * Postfix the text with "..." if it has been truncated.
- *
- * @param string $text
- * @param int    $number
- *
- * @return string
- *
- * @author hubert borderiou
- */
-function api_get_short_text_from_html($text, $number)
-{
-    // Delete script and style tags
-    $text = preg_replace('/(<(script|style)\b[^>]*>).*?(<\/\2>)/is', "$1$3", $text);
-    $text = api_html_entity_decode($text);
-    $out_res = api_remove_tags_with_space($text, false);
-    $postfix = "...";
-    if (strlen($out_res) > $number) {
-        $out_res = substr($out_res, 0, $number).$postfix;
-    }
-
-    return $out_res;
-}
-
-/**
- * Replace tags with a space in a text.
- * If $in_double_quote_replace, replace " with '' (for HTML attribute purpose, for exemple).
- *
- * @return string
- *
- * @author hubert borderiou
- */
-function api_remove_tags_with_space($in_html, $in_double_quote_replace = true)
-{
-    $out_res = $in_html;
-    if ($in_double_quote_replace) {
-        $out_res = str_replace('"', "''", $out_res);
-    }
-    // avoid text stuck together when tags are removed, adding a space after >
-    $out_res = str_replace(">", "> ", $out_res);
-    $out_res = strip_tags($out_res);
-
-    return $out_res;
-}
-
-/**
  * If true, the drh can access all content (courses, users) inside a session.
  *
  * @return bool
@@ -6720,26 +6570,6 @@ function api_remove_tags_with_space($in_html, $in_double_quote_replace = true)
 function api_drh_can_access_all_session_content()
 {
     return 'true' === api_get_setting('drh_can_access_all_session_content');
-}
-
-/**
- * @param string $tool
- * @param string $setting
- * @param int    $defaultValue
- *
- * @return string
- */
-function api_get_default_tool_setting($tool, $setting, $defaultValue)
-{
-    global $_configuration;
-    if (isset($_configuration[$tool]) &&
-        isset($_configuration[$tool]['default_settings']) &&
-        isset($_configuration[$tool]['default_settings'][$setting])
-    ) {
-        return $_configuration[$tool]['default_settings'][$setting];
-    }
-
-    return $defaultValue;
 }
 
 /**
@@ -7663,59 +7493,6 @@ function api_get_language_translate_html()
                 }
             });
     ';
-}
-
-/**
- * Filter a multi-language HTML string (for the multi-language HTML
- * feature) into the given language (strip the rest).
- *
- * @param string $htmlString The HTML string to "translate". Usually <p><span lang="en">Some string</span></p><p><span lang="fr">Une chaîne</span></p>
- * @param string $language   The language in which we want to get the
- *
- * @throws Exception
- *
- * @return string The filtered string in the given language, or the full string if no translated string was identified
- */
-function api_get_filtered_multilingual_HTML_string($htmlString, $language = null)
-{
-    if (true != api_get_configuration_value('translate_html')) {
-        return $htmlString;
-    }
-    $userInfo = api_get_user_info();
-    $languageId = 0;
-    if (!empty($language)) {
-        $languageId = api_get_language_id($language);
-    } elseif (!empty($userInfo['language'])) {
-        $languageId = api_get_language_id($userInfo['language']);
-    }
-    $languageInfo = api_get_language_info($languageId);
-    $isoCode = 'en';
-
-    if (!empty($languageInfo)) {
-        $isoCode = $languageInfo['isocode'];
-    }
-
-    // Split HTML in the separate language strings
-    // Note: some strings might look like <p><span ..>...</span></p> but others might be like combine 2 <span> in 1 <p>
-    if (!preg_match('/<span.*?lang="(\w\w)">/is', $htmlString)) {
-        return $htmlString;
-    }
-    $matches = [];
-    preg_match_all('/<span.*?lang="(\w\w)">(.*?)<\/span>/is', $htmlString, $matches);
-    if (!empty($matches)) {
-        // matches[0] are the full string
-        // matches[1] are the languages
-        // matches[2] are the strings
-        foreach ($matches[1] as $id => $match) {
-            if ($match == $isoCode) {
-                return $matches[2][$id];
-            }
-        }
-        // Could find the pattern but could not find our language. Return the first language found.
-        return $matches[2][0];
-    }
-    // Could not find pattern. Just return the whole string. We shouldn't get here.
-    return $htmlString;
 }
 
 function api_protect_webservices()

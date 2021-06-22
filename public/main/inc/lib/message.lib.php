@@ -18,10 +18,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class MessageManager
 {
-    public const MESSAGE_TYPE_INBOX = 1;
-    public const MESSAGE_TYPE_OUTBOX = 2;
-    public const MESSAGE_TYPE_PROMOTED = 3;
-
     /**
      * Get count new messages for the current user from the database.
      *
@@ -97,15 +93,15 @@ class MessageManager
         }
 
         switch ($type) {
-            case self::MESSAGE_TYPE_INBOX:
+            case Message::MESSAGE_TYPE_INBOX:
                 $statusList = [MESSAGE_STATUS_NEW, MESSAGE_STATUS_UNREAD];
                 $userCondition = " user_receiver_id = $userId AND";
                 break;
-            case self::MESSAGE_TYPE_OUTBOX:
+            case Message::MESSAGE_TYPE_OUTBOX:
                 $statusList = [MESSAGE_STATUS_OUTBOX];
                 $userCondition = " user_sender_id = $userId AND";
                 break;
-            case self::MESSAGE_TYPE_PROMOTED:
+            case Message::MESSAGE_TYPE_PROMOTED:
                 $statusList = [MESSAGE_STATUS_PROMOTED];
                 $userCondition = " user_receiver_id = $userId AND";
                 break;
@@ -171,11 +167,11 @@ class MessageManager
 
         $viewUrl = '';
         switch ($type) {
-            case self::MESSAGE_TYPE_OUTBOX:
-            case self::MESSAGE_TYPE_INBOX:
+            case Message::MESSAGE_TYPE_OUTBOX:
+            case Message::MESSAGE_TYPE_INBOX:
                 $viewUrl = api_get_path(WEB_CODE_PATH).'messages/view_message.php';
                 break;
-            case self::MESSAGE_TYPE_PROMOTED:
+            case Message::MESSAGE_TYPE_PROMOTED:
                 $viewUrl = api_get_path(WEB_CODE_PATH).'social/view_promoted_message.php';
                 break;
         }
@@ -224,7 +220,7 @@ class MessageManager
             }
 
             $userInfo = api_get_user_info($senderId);
-            if (self::MESSAGE_TYPE_OUTBOX == $type) {
+            if (Message::MESSAGE_TYPE_OUTBOX == $type) {
                 $userInfo = api_get_user_info($receiverId);
             }
             $message[3] = '';
@@ -1294,12 +1290,12 @@ class MessageManager
         $criteria = [];
         $status = null;
         switch ($type) {
-            case self::MESSAGE_TYPE_OUTBOX:
+            case Message::MESSAGE_TYPE_OUTBOX:
                 $userCondition = " user_sender_id = $currentUserId AND ";
                 $criteria['userSender'] = $currentUserId;
                 $criteria['msgStatus'] = MESSAGE_STATUS_OUTBOX;
                 break;
-            case self::MESSAGE_TYPE_INBOX:
+            case Message::MESSAGE_TYPE_INBOX:
                 $userCondition = " user_receiver_id = $currentUserId AND ";
                 $criteria['userReceiver'] = $currentUserId;
                 /*$query = "UPDATE $table SET
@@ -1307,7 +1303,7 @@ class MessageManager
                           WHERE id = $messageId ";
                 Database::query($query);*/
                 break;
-            case self::MESSAGE_TYPE_PROMOTED:
+            case Message::MESSAGE_TYPE_PROMOTED:
                 $userCondition = " user_receiver_id = $currentUserId AND ";
                 $criteria['userReceiver'] = $currentUserId;
                 $criteria['msgStatus'] = MESSAGE_STATUS_PROMOTED;
@@ -1380,16 +1376,16 @@ class MessageManager
             }
 
             switch ($type) {
-                case self::MESSAGE_TYPE_INBOX:
+                case Message::MESSAGE_TYPE_INBOX:
                     $messageContent .= '&nbsp;'.get_lang('To').'&nbsp;'.get_lang('Me');
                     break;
-                case self::MESSAGE_TYPE_OUTBOX:
+                case Message::MESSAGE_TYPE_OUTBOX:
                     if (null !== $message->getUserReceiver()) {
                         $messageContent .= '&nbsp;'.get_lang('To')
                             .'&nbsp;<b>'.UserManager::formatUserFullName($message->getUserReceiver()).'</b></li>';
                     }
                     break;
-                case self::MESSAGE_TYPE_PROMOTED:
+                case Message::MESSAGE_TYPE_PROMOTED:
                     break;
             }
 
@@ -1399,11 +1395,11 @@ class MessageManager
             $messageContent .= '</div>';
         } else {
             switch ($type) {
-                case self::MESSAGE_TYPE_INBOX:
+                case Message::MESSAGE_TYPE_INBOX:
                     $messageContent .= get_lang('From').':&nbsp;'.$name.'</b> '.get_lang('To').' <b>'.
                         get_lang('Me').'</b>';
                     break;
-                case self::MESSAGE_TYPE_OUTBOX:
+                case Message::MESSAGE_TYPE_OUTBOX:
                     $messageContent .= get_lang('From').':&nbsp;'.$name.'</b> '.get_lang('To').' <b>'.
                         UserManager::formatUserFullName($message->getUserReceiver()).'</b>';
                     break;
@@ -1427,13 +1423,13 @@ class MessageManager
 
         $actions = '';
         switch ($type) {
-            case self::MESSAGE_TYPE_OUTBOX:
+            case Message::MESSAGE_TYPE_OUTBOX:
                 $actions .= '<a href="outbox.php?'.$social_link.'">'.
                     Display::return_icon('back.png', get_lang('Return to outbox')).'</a> &nbsp';
                 $actions .= '<a href="outbox.php?action=deleteone&id='.$messageId.'&'.$social_link.'" >'.
                     Display::return_icon('delete.png', get_lang('Delete message')).'</a>&nbsp';
                 break;
-            case self::MESSAGE_TYPE_INBOX:
+            case Message::MESSAGE_TYPE_INBOX:
                 $actions .= '<a href="inbox.php?'.$social_link.'">'.
                     Display::return_icon('back.png', get_lang('Return to inbox')).'</a> &nbsp';
                 $actions .= '<a href="new_message.php?re_id='.$messageId.'&'.$social_link.'">'.
@@ -2207,7 +2203,7 @@ class MessageManager
 
         $actions = ['reply', 'mark_as_unread', 'mark_as_read', 'forward', 'delete'];
 
-        return self::getMessageGrid(self::MESSAGE_TYPE_INBOX, $keyword, $actions);
+        return self::getMessageGrid(Message::MESSAGE_TYPE_INBOX, $keyword, $actions);
     }
 
     /**
@@ -2247,9 +2243,7 @@ class MessageManager
             exit;
         }
 
-        $html = self::getMessageGrid(self::MESSAGE_TYPE_PROMOTED, $keyword, $actions);
-
-        return $html;
+        return self::getMessageGrid(Message::MESSAGE_TYPE_PROMOTED, $keyword, $actions);
     }
 
     /**
@@ -2290,9 +2284,7 @@ class MessageManager
             exit;
         }
 
-        $html = self::getMessageGrid(self::MESSAGE_TYPE_OUTBOX, $keyword, $actions);
-
-        return $html;
+        return self::getMessageGrid(Message::MESSAGE_TYPE_OUTBOX, $keyword, $actions);
     }
 
     /**
@@ -2338,9 +2330,7 @@ class MessageManager
             20,
             'DESC'
         );
-        $table->setDataFunctionParams(
-            ['keyword' => $keyword, 'type' => self::MESSAGE_TYPE_OUTBOX]
-        );
+        $table->setDataFunctionParams(['keyword' => $keyword, 'type' => Message::MESSAGE_TYPE_OUTBOX]);
 
         $table->set_header(0, '', false, ['style' => 'width:15px;']);
         $table->set_header(1, get_lang('Messages'), false);

@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Message;
+
 $_dont_save_user_course_access = true;
 
 /**
@@ -21,7 +23,7 @@ switch ($action) {
                 10,
                 null,
                 null,
-                ['actions' => ['read'], 'type' => MessageManager::MESSAGE_TYPE_INBOX]
+                ['actions' => ['read'], 'type' => Message::MESSAGE_TYPE_INBOX]
             );
             foreach ($list as $row) {
                 $user = api_get_user_info($row['0']);

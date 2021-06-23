@@ -1,7 +1,7 @@
 # To get started with security, check out the documentation:
 # http://symfony.com/doc/current/book/security.html
 security:
-    #enable_authenticator_manager: true
+    enable_authenticator_manager: true
 
     password_hashers:
         Chamilo\CoreBundle\Entity\User:
@@ -50,24 +50,23 @@ security:
         # Use to connect via a JWT token
         api:
             pattern: ^/api
-            stateless: false
+            stateless: true
+            jwt: ~
             context: main
-            anonymous: true
             provider: app_user_provider
             json_login:
-                check_path: /api/authentication_token
+                check_path: authentication_token
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
-            guard:
-                authenticators:
-                    - lexik_jwt_authentication.jwt_token_authenticator
+#            guard:
+#                authenticators:
+#                    - lexik_jwt_authentication.jwt_token_authenticator
 
         # Default login via json
         main:
             pattern: ^/
             context: main
             provider: app_user_provider
-            anonymous: true
 #            login_throttling:
 #                max_attempts: 5
             #            form_login:
@@ -76,11 +75,10 @@ security:
             #                use_forward: false
             #                check_path: /login
             #                failure_path: null
-            guard:
-                authenticators:
-                    - Chamilo\CoreBundle\Security\LoginFormAuthenticator
+#            guard:
+#                authenticators:
+#                    - Chamilo\CoreBundle\Security\LoginFormAuthenticator
 #                    - Chamilo\CoreBundle\Security\TokenAuthenticator
-
             entry_point: Chamilo\CoreBundle\Security\AuthenticationEntryPoint
             remember_me:
                 secret: '%secret%'
@@ -97,12 +95,5 @@ security:
                 # password_path: security.credentials.password
 
     access_control:
-        #        - {path: ^/administrator, role: ROLE_ADMIN}
-        #        - {path: ^/efconnect, role: ROLE_USER}
-        #        - {path: ^/elfinder, role: ROLE_USER}
-#        - { path: ^/login, roles: PUBLIC_ACCESS }
-#        - { path: ^/api/authentication_token, roles: PUBLIC_ACCESS }
         - {path: ^/login, roles: PUBLIC_ACCESS}
         - {path: ^/api/authentication_token, roles: PUBLIC_ACCESS}
-#        - {path: ^/login, roles: PUBLIC_ACCESS}
-#        - {path: ^/api/authentication_token, roles: PUBLIC_ACCESS}

@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -257,7 +258,7 @@ class SurveyUtil
                             WHERE
                                 iid = '".$survey_id."'
                         ) AND
-			            user = '".$user_id."'";
+			            user_id = '".$user_id."'";
             $result = Database::query($sql);
         }
 
@@ -2413,8 +2414,8 @@ class SurveyUtil
         }
 
         $users_array = array_unique($users_array);
-        foreach ($users_array as $key => $value) {
-            if (!isset($value) || '' == $value) {
+        foreach ($users_array as $value) {
+            if (empty($value)) {
                 continue;
             }
 
@@ -2442,7 +2443,7 @@ class SurveyUtil
                 $new_user = true;
                 if (!array_key_exists($value, $survey_invitations)) {
                     self::saveInvitation(
-                        $value,
+                        api_get_user_entity($value),
                         $invitation_code,
                         api_get_utc_datetime(time(), null, true),
                         $survey,
@@ -2477,7 +2478,7 @@ class SurveyUtil
     }
 
     public static function saveInvitation(
-        $user,
+        User $user,
         $invitationCode,
         $reminderDate,
         CSurvey $survey,
@@ -2485,11 +2486,6 @@ class SurveyUtil
         SessionEntity $session = null,
         CGroup $group = null
     ): ?CSurveyInvitation {
-        /*var_dump($params);
-        array(6) { ["c_id"]=> int(1) ["session_id"]=> int(0) ["user"]=> int(61) ["survey_code"]=> string(3) "aaa
-        " ["invitation_code"]=> string(32) "6046726ce1894c21437377a53903714a" ["invitation_date"]=> string(19) "2021-03-19 09:06:50" }
-        */
-
         $invitation = new CSurveyInvitation();
         $invitation
             ->setUser($user)
@@ -2632,12 +2628,12 @@ class SurveyUtil
         $table_survey = Database::get_course_table(TABLE_SURVEY);
 
         // Counting the number of people that are invited
-        $sql = "SELECT count(user) as total
+        $sql = "SELECT count(user_id) as total
                 FROM $table_survey_invitation
 		        WHERE
 		            c_id = $courseId AND
 		            survey_id = '".$surveyId."' AND
-		            user <> ''
+		            user_id <> ''
 		            $sessionCondition
                 ";
         $result = Database::query($sql);
@@ -2684,7 +2680,7 @@ class SurveyUtil
 
         // Selecting all the invitations of this survey AND the additional emailaddresses (the left join)
         $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
-        $sql = "SELECT user, group_id
+        $sql = "SELECT user_id, group_id
 				FROM $table_survey_invitation as table_invitation
 				WHERE
 				    table_invitation.c_id = $course_id AND
@@ -2699,12 +2695,12 @@ class SurveyUtil
 
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
-            if (is_numeric($row['user'])) {
-                $defaults['course_users'][] = $row['user'];
-                $defaults['users'][] = 'USER:'.$row['user'];
+            if (is_numeric($row['user_id'])) {
+                $defaults['course_users'][] = $row['user_id'];
+                $defaults['users'][] = 'USER:'.$row['user_id'];
             } else {
-                if (!empty($row['user'])) {
-                    $defaults['additional_users'][] = $row['user'];
+                if (!empty($row['user_id'])) {
+                    $defaults['additional_users'][] = $row['user_id'];
                 }
             }
 
@@ -2757,7 +2753,7 @@ class SurveyUtil
         $result = Database::query($sql);
         $return = [];
         while ($row = Database::fetch_array($result)) {
-            $return[$row['user']] = $row;
+            $return[$row['user_id']] = $row;
         }
 
         return $return;
@@ -3568,7 +3564,7 @@ class SurveyUtil
                     survey.iid = survey_invitation.survey_id
                 )
 				WHERE
-                    survey_invitation.user = $user_id AND
+                    survey_invitation.user_id = $user_id AND
                     survey.avail_from <= '$filterDate' AND
                     survey.avail_till >= '$filterDate' AND
                     survey_invitation.c_id = $course_id
@@ -3960,37 +3956,6 @@ class SurveyUtil
     }
 
     /**
-     * Get the pending surveys for a user.
-     *
-     * @param int $userId
-     *
-     * @return array
-     */
-    public static function getUserPendingInvitations($userId)
-    {
-        $now = api_get_utc_datetime(null, false, true);
-
-        $dql = "
-            SELECT s, si FROM ChamiloCourseBundle:CSurvey s
-            INNER JOIN ChamiloCourseBundle:CSurveyInvitation si
-                WITH (s.code = si.surveyCode AND s.cId = si.cId AND s.sessionId = si.sessionId )
-            WHERE
-                si.user = :user_id AND
-                s.availFrom <= :now AND
-                s.availTill >= :now AND
-                si.answered = 0
-            ORDER BY s.availTill ASC
-        ";
-
-        $pendingSurveys = Database::getManager()
-            ->createQuery($dql)
-            ->setParameters(['user_id' => $userId, 'now' => $now->format('Y-m-d')])
-            ->getResult();
-
-        return $pendingSurveys;
-    }
-
-    /**
      * @param int $surveyId
      * @param int $courseId
      * @param int $sessionId
@@ -4009,7 +3974,7 @@ class SurveyUtil
         $sql = "SELECT survey_invitation.*, user.firstname, user.lastname, user.email
                 FROM $tblSurveyInvitation survey_invitation
                 LEFT JOIN $tblUser user
-                ON (survey_invitation.user = user.id AND survey_invitation.c_id = $courseId)
+                ON (survey_invitation.user_id = user.id AND survey_invitation.c_id = $courseId)
                 WHERE
                     survey_invitation.survey_id = $surveyId AND
                     survey_invitation.c_id = $courseId

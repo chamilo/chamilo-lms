@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CourseBundle\Entity\CGroup;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -29,6 +30,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Message
 {
+    public const MESSAGE_TYPE_INBOX = 1;
+    public const MESSAGE_TYPE_OUTBOX = 2;
+    public const MESSAGE_TYPE_PROMOTED = 3;
+
     /**
      * @ORM\Column(name="id", type="bigint")
      * @ORM\Id
@@ -36,6 +41,7 @@ class Message
      */
     protected int $id;
 
+    #[Assert\NotBlank]
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sentMessages")
      * @ORM\JoinColumn(name="user_sender_id", referencedColumnName="id", nullable=false)
@@ -58,23 +64,23 @@ class Message
      */
     protected DateTime $sendDate;
 
+    #[Assert\NotBlank]
     /**
-     * @Assert\NotBlank
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
     protected string $title;
 
+    #[Assert\NotBlank]
     /**
-     * @Assert\NotBlank
-     *
      * @ORM\Column(name="content", type="text", nullable=false)
      */
     protected string $content;
 
     /**
-     * @ORM\Column(name="group_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroup")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=true, onDelete="CASCADE")
      */
-    protected int $groupId;
+    protected ?CGroup $group = null;
 
     /**
      * @var Collection|Message[]
@@ -211,23 +217,6 @@ class Message
         return $this->content;
     }
 
-    public function setGroupId(int $groupId): self
-    {
-        $this->groupId = $groupId;
-
-        return $this;
-    }
-
-    /**
-     * Get groupId.
-     *
-     * @return int
-     */
-    public function getGroupId()
-    {
-        return $this->groupId;
-    }
-
     public function setUpdateDate(DateTime $updateDate): self
     {
         $this->updateDate = $updateDate;
@@ -321,17 +310,15 @@ class Message
         return $this->likes;
     }
 
-    /**
-     * Get an excerpt from the content.
-     *
-     * @param int $length Optional. Length of the excerpt.
-     */
-    public function getExcerpt(int $length = 50): string
+    public function getGroup(): ?CGroup
     {
-        $striped = strip_tags($this->content);
-        $replaced = str_replace(["\r\n", "\n"], ' ', $striped);
-        $trimmed = trim($replaced);
+        return $this->group;
+    }
 
-        return api_trunc_str($trimmed, $length);
+    public function setGroup(?CGroup $group): self
+    {
+        $this->group = $group;
+
+        return $this;
     }
 }

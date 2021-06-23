@@ -602,7 +602,7 @@ EOT;
             $label = get_lang('Search');
         }
 
-        return $this->addButton($name, $label, 'search', 'primary');
+        return $this->addButton($name, $label, 'magnify', 'primary');
     }
 
     /**

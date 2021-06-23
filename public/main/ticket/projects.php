@@ -170,7 +170,6 @@ $items = [
     'content' => get_lang('Add project'),
 ];
 
-
 $actions = Display::url(
     Display::return_icon('back.png', get_lang('Tickets'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'ticket/tickets.php'

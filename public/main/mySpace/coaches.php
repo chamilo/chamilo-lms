@@ -20,7 +20,7 @@ if (isset($_GET["id_student"])) {
 
 Display::display_header($nameTools);
 
-api_display_tool_title($nameTools);
+Display::page_subheader2($nameTools);
 $data = [];
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);

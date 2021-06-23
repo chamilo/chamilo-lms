@@ -40,7 +40,6 @@
 </template>
 
 <script>
-import has from 'lodash/has';
 import useVuelidate from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 import { useRouter, useRoute } from 'vue-router'

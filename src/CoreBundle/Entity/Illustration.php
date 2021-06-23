@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Chamilo\CourseBundle\Traits\PersonalResourceTrait;
+use Chamilo\CoreBundle\Traits\PersonalResourceTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;

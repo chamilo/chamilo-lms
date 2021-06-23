@@ -180,8 +180,7 @@ $form->addSelectAjax(
 );
 $courseInfo['course_teachers'] = $course_teachers;
 if (array_key_exists('add_teachers_to_sessions_courses', $courseInfo)) {
-    $form->addElement(
-        'checkbox',
+    $form->addCheckBox(
         'add_teachers_to_sessions_courses',
         null,
         get_lang('Teachers will be added as a coach in all course sessions.')
@@ -250,8 +249,8 @@ $form->addRule('disk_quota', get_lang('Required field'), 'required');
 $form->addRule('disk_quota', get_lang('This field should be numeric'), 'numeric');
 
 // Extra fields
-$extra_field = new ExtraField('course');
-$extra = $extra_field->addElements(
+$extraField = new ExtraField('course');
+$extra = $extraField->addElements(
     $form,
     $courseId,
     [],

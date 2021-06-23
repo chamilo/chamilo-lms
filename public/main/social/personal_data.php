@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\LegalRepository;
 
 $cidReset = true;
@@ -193,7 +194,7 @@ switch ($action) {
         break;
 }
 
-$propertiesToJson = UserManager::getRepository()->getPersonalDataToJson($userId, $substitutionTerms);
+$propertiesToJson = Container::getUserToJsonNormalizer()->getPersonalDataToJson($userId, $substitutionTerms);
 
 if (!empty($_GET['export'])) {
     $filename = md5(mt_rand(0, 1000000)).'.json';
@@ -369,7 +370,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
     );
     $permissionBlock .= Display::return_icon('accept_na.png', get_lang('Rejected'));
     if (isset($value['value']) && !empty($value['value'])) {
-        list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
+        [$legalId, $legalLanguageId, $legalTime] = explode(':', $value['value']);
         $permissionBlock = '<h4>'.get_lang('Current status').'</h4>'.
             get_lang('Legal agreement accepted').' '.Display::return_icon('accept.png', get_lang('Legal agreement accepted'), [], ICON_SIZE_TINY).
             '<br />';

@@ -15,7 +15,7 @@ use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateDocumentFileAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
-use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
+use Chamilo\CoreBundle\Traits\ShowCourseResourcesInSessionTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;

@@ -89,7 +89,7 @@ if (isset($_POST) && !empty($_POST)) {
         }
     }
 
-    SurveyManager::updateSurveyAnswered($survey, $survey_invitation['user']);
+    SurveyManager::updateSurveyAnswered($survey, $survey_invitation['user_id']);
 
     Display::addFlash(Display::return_message(get_lang('Saved.')));
     header('Location: '.$url);

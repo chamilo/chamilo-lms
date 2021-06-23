@@ -19,8 +19,8 @@ use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CoreBundle\Traits\NonResourceRepository;
 use Chamilo\CourseBundle\Entity\CGroup;
-use Chamilo\CourseBundle\Traits\NonResourceRepository;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -610,26 +610,8 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $resourceNode = $resource->getResourceNode();
         if ($resourceNode->hasResourceFile()) {
             $resourceNode->setContent($content);
-            error_log('updated');
             $resourceNode->getResourceFile()->setSize(\strlen($content));
-            /*
-            error_log('has file');
-            $resourceFile = $resourceNode->getResourceFile();
-            if ($resourceFile) {
-                error_log('$resourceFile');
-                $title = $resource->getResourceName();
-                $handle = tmpfile();
-                fwrite($handle, $content);
-                error_log($title);
-                error_log($content);
-                $meta = stream_get_meta_data($handle);
-                $file = new UploadedFile($meta['uri'], $title, 'text/html', null, true);
-                $resource->setUploadFile($file);
-
-                return true;
-            }*/
         }
-        error_log('false');
 
         return false;
     }

@@ -28,8 +28,21 @@ class Version20191206150000 extends AbstractMigrationChamilo
         }
 
         $table = $schema->getTable('extra_field_values');
+
         if (!$table->hasIndex('idx_efv_item')) {
             $this->addSql('CREATE INDEX idx_efv_item ON extra_field_values (item_id)');
+        }
+
+        if (!$table->hasColumn('asset_id')) {
+            $this->addSql('ALTER TABLE extra_field_values ADD asset_id INT DEFAULT NULL');
+        }
+
+        if (!$table->hasForeignKey('FK_171DF9245DA1941')) {
+            $this->addSql('ALTER TABLE extra_field_values ADD CONSTRAINT FK_171DF9245DA1941 FOREIGN KEY (asset_id) REFERENCES asset (id) DELETE ON CASCADE');
+        }
+
+        if (!$table->hasIndex('IDX_171DF9245DA1941')) {
+            $this->addSql('CREATE INDEX IDX_171DF9245DA1941 ON extra_field_values (asset_id)');
         }
 
         $table = $schema->getTable('extra_field_option_rel_field_option');

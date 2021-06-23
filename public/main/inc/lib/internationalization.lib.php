@@ -1961,36 +1961,6 @@ function _api_mb_internal_encoding($encoding = 'UTF-8')
 }
 
 /**
- * Checks whether the specified encoding is supported by the PHP iconv extension.
- *
- * @param string $encoding the specified encoding
- *
- * @return bool returns TRUE when the specified encoding is supported, FALSE othewise
- */
-function _api_iconv_supports($encoding)
-{
-    static $supported = [];
-    if (!isset($supported[$encoding])) {
-        if (ICONV_INSTALLED) {
-            $enc = api_refine_encoding_id($encoding);
-            if ('HTML-ENTITIES' != $enc) {
-                $test_string = '';
-                for ($i = 32; $i < 128; $i++) {
-                    $test_string .= chr($i);
-                }
-                $supported[$encoding] = (@iconv_strlen($test_string, $enc)) ? true : false;
-            } else {
-                $supported[$encoding] = false;
-            }
-        } else {
-            $supported[$encoding] = false;
-        }
-    }
-
-    return $supported[$encoding];
-}
-
-/**
  * Given a date object, return a human or ISO format, with or without h:m:s.
  *
  * @param object $date      The Date object

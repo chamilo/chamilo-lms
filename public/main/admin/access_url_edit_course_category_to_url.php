@@ -96,7 +96,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 }
 
 Display::display_header($tool_name);
-api_display_tool_title($tool_name);
+Display::page_subheader2($tool_name);
 
 $noUserGroupList = $userGroupList = [];
 $ajax_search = 'unique' == $add_type ? true : false;

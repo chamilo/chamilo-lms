@@ -523,7 +523,7 @@ class ExtraField extends Model
      */
     public static function getLocalizationInput($variable, $text)
     {
-        $html = '
+        return '
                 <div class="form-group">
                     <label for="geolocalization_extra_'.$variable.'"
                         class="col-sm-2 control-label"></label>
@@ -552,8 +552,6 @@ class ExtraField extends Model
                     </div>
                 </div>
             ';
-
-        return $html;
     }
 
     /**
@@ -833,7 +831,7 @@ class ExtraField extends Model
 
         if (!empty($fields)) {
             foreach ($fields as $field) {
-                $field_value = $field_values->get_values_by_handler_and_field_id(
+                $field_value = $fieldValueArray = $field_values->get_values_by_handler_and_field_id(
                     $itemId,
                     $field['id']
                 );
@@ -853,6 +851,11 @@ class ExtraField extends Model
                     $variable = $field['variable'];
                     $field_value = $field_value['value'];
                     switch ($field['field_type']) {
+                        case self::FIELD_TYPE_FILE_IMAGE:
+                        case self::FIELD_TYPE_FILE:
+                            // Get asset id
+                            $extra_data['extra_'.$field['variable']] = $fieldValueArray['asset_id'] ?? 0;
+                            break;
                         case self::FIELD_TYPE_TAG:
                             $tags = UserManager::get_user_tags_to_string(
                                 $itemId,
@@ -985,6 +988,8 @@ class ExtraField extends Model
         $help = false
     ) {
         $jquery_ready_content = null;
+
+        $assetRepo = Container::getAssetRepository();
         if (!empty($extra)) {
             $newOrder = [];
             if (!empty($orderFields)) {
@@ -1046,7 +1051,7 @@ class ExtraField extends Model
                     $freezeElement = 0 == $field_details['visible_to_self'] || 0 == $field_details['changeable'];
                 }
 
-                $translatedDisplayText = get_lang($field_details['display_text'], true);
+                $translatedDisplayText = get_lang($field_details['display_text']);
                 $translatedDisplayHelpText = '';
                 if ($help) {
                     $translatedDisplayHelpText .= get_lang($field_details['display_text'].'Help');
@@ -1543,14 +1548,16 @@ class ExtraField extends Model
 
                         if (is_array($extraData) && array_key_exists($fieldVariable, $extraData)) {
                             $assetId = $extraData[$fieldVariable];
-                            $assetRepo = Container::getAssetRepository();
-                            $asset = $assetRepo->find($assetId);
-                            if (null !== $asset) {
-                                $fieldTexts[] = Display::img(
-                                    $assetRepo->getAssetUrl($asset),
-                                    $field_details['display_text'],
-                                    ['width' => '300']
-                                );
+                            if (!empty($assetId)) {
+                                $asset = $assetRepo->find($assetId);
+                                if (null !== $asset) {
+                                    $fieldTexts[] = Display::img(
+                                        $assetRepo->getAssetUrl($asset),
+                                        $field_details['display_text'],
+                                        ['width' => '300'],
+                                        false
+                                    );
+                                }
                             }
                         }
 
@@ -1588,8 +1595,7 @@ class ExtraField extends Model
                         if (is_array($extraData) &&
                             array_key_exists($fieldVariable, $extraData)
                         ) {
-                            $assetId = $extraData[$fieldVariable];
-                            $assetRepo = Container::getAssetRepository();
+                            $assetId = $extraData[$fieldVariable] ?? 0;
                             /** @var Asset $asset */
                             $asset = $assetRepo->find($assetId);
                             if (null !== $asset) {
@@ -1843,33 +1849,33 @@ class ExtraField extends Model
     public static function get_extra_fields_by_handler($handler)
     {
         $types = [];
-        $types[self::FIELD_TYPE_TEXT] = get_lang('FieldTypeText');
-        $types[self::FIELD_TYPE_TEXTAREA] = get_lang('FieldTypeTextarea');
-        $types[self::FIELD_TYPE_RADIO] = get_lang('FieldTypeRadio');
-        $types[self::FIELD_TYPE_SELECT] = get_lang('FieldTypeSelect');
-        $types[self::FIELD_TYPE_SELECT_MULTIPLE] = get_lang('FieldTypeSelectMultiple');
-        $types[self::FIELD_TYPE_DATE] = get_lang('FieldTypeDate');
-        $types[self::FIELD_TYPE_DATETIME] = get_lang('FieldTypeDatetime');
-        $types[self::FIELD_TYPE_DOUBLE_SELECT] = get_lang('FieldTypeDoubleSelect');
-        $types[self::FIELD_TYPE_DIVIDER] = get_lang('FieldTypeDivider');
-        $types[self::FIELD_TYPE_TAG] = get_lang('FieldTypeTag');
-        $types[self::FIELD_TYPE_TIMEZONE] = get_lang('FieldTypeTimezone');
-        $types[self::FIELD_TYPE_SOCIAL_PROFILE] = get_lang('FieldTypeSocialProfile');
-        $types[self::FIELD_TYPE_MOBILE_PHONE_NUMBER] = get_lang('FieldTypeMobilePhoneNumber');
-        $types[self::FIELD_TYPE_CHECKBOX] = get_lang('FieldTypeCheckbox');
-        $types[self::FIELD_TYPE_INTEGER] = get_lang('FieldTypeInteger');
-        $types[self::FIELD_TYPE_FILE_IMAGE] = get_lang('FieldTypeFileImage');
-        $types[self::FIELD_TYPE_FLOAT] = get_lang('FieldTypeFloat');
-        $types[self::FIELD_TYPE_FILE] = get_lang('FieldTypeFile');
-        $types[self::FIELD_TYPE_VIDEO_URL] = get_lang('FieldTypeVideoUrl');
-        $types[self::FIELD_TYPE_LETTERS_ONLY] = get_lang('FieldTypeOnlyLetters');
-        $types[self::FIELD_TYPE_ALPHANUMERIC] = get_lang('FieldTypeAlphanumeric');
-        $types[self::FIELD_TYPE_LETTERS_SPACE] = get_lang('FieldTypeLettersSpaces');
-        $types[self::FIELD_TYPE_ALPHANUMERIC_SPACE] = get_lang('FieldTypeAlphanumericSpaces');
+        $types[self::FIELD_TYPE_TEXT] = get_lang('Text');
+        $types[self::FIELD_TYPE_TEXTAREA] = get_lang('Text area');
+        $types[self::FIELD_TYPE_RADIO] = get_lang('Radio buttons');
+        $types[self::FIELD_TYPE_SELECT] = get_lang('Select drop-down');
+        $types[self::FIELD_TYPE_SELECT_MULTIPLE] = get_lang('Multiple selection drop-down');
+        $types[self::FIELD_TYPE_DATE] = get_lang('Date');
+        $types[self::FIELD_TYPE_DATETIME] = get_lang('Date and time');
+        $types[self::FIELD_TYPE_DOUBLE_SELECT] = get_lang('Double select');
+        $types[self::FIELD_TYPE_DIVIDER] = get_lang('Visual divider');
+        $types[self::FIELD_TYPE_TAG] = get_lang('User tag');
+        $types[self::FIELD_TYPE_TIMEZONE] = get_lang('Timezone');
+        $types[self::FIELD_TYPE_SOCIAL_PROFILE] = get_lang('Social network link');
+        $types[self::FIELD_TYPE_MOBILE_PHONE_NUMBER] = get_lang('Mobile phone number');
+        $types[self::FIELD_TYPE_CHECKBOX] = get_lang('Checkbox');
+        $types[self::FIELD_TYPE_INTEGER] = get_lang('Integer');
+        $types[self::FIELD_TYPE_FILE_IMAGE] = get_lang('Image');
+        $types[self::FIELD_TYPE_FLOAT] = get_lang('Float');
+        $types[self::FIELD_TYPE_FILE] = get_lang('File');
+        $types[self::FIELD_TYPE_VIDEO_URL] = get_lang('Video URL');
+        $types[self::FIELD_TYPE_LETTERS_ONLY] = get_lang('Text only letters');
+        $types[self::FIELD_TYPE_ALPHANUMERIC] = get_lang('Text only alphanumeric characters');
+        $types[self::FIELD_TYPE_LETTERS_SPACE] = get_lang('Text letters and spaces');
+        $types[self::FIELD_TYPE_ALPHANUMERIC_SPACE] = get_lang('Text alphanumeric characters and spaces');
         $types[self::FIELD_TYPE_GEOLOCALIZATION] = get_lang('Geolocalization');
-        $types[self::FIELD_TYPE_GEOLOCALIZATION_COORDINATES] = get_lang('GeolocalizationCoordinates');
-        $types[self::FIELD_TYPE_SELECT_WITH_TEXT_FIELD] = get_lang('FieldTypeSelectWithTextField');
-        $types[self::FIELD_TYPE_TRIPLE_SELECT] = get_lang('FieldTypeTripleSelect');
+        $types[self::FIELD_TYPE_GEOLOCALIZATION_COORDINATES] = get_lang('Geolocalization by coordinates');
+        $types[self::FIELD_TYPE_SELECT_WITH_TEXT_FIELD] = get_lang('Select with text field');
+        $types[self::FIELD_TYPE_TRIPLE_SELECT] = get_lang('Triple select');
 
         switch ($handler) {
             case 'course':
@@ -2966,10 +2972,10 @@ JAVASCRIPT;
                     break;
                 case self::FIELD_TYPE_FILE:
                 case self::FIELD_TYPE_FILE_IMAGE:
-                    if (false === $valueData || empty($valueData['value'])) {
+                    if (false === $valueData || empty($valueData['asset_id'])) {
                         break;
                     }
-                    $assetId = $valueData['value'];
+                    $assetId = $valueData['asset_id'];
                     $assetRepo = Container::getAssetRepository();
                     /** @var Asset $asset */
                     $asset = $assetRepo->find($assetId);

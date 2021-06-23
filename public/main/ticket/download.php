@@ -39,11 +39,11 @@ if (!api_is_platform_admin()) {
         api_not_allowed(true);
     }
 }
-
+/*
 api_download_uploaded_file(
     'ticket_attachment',
     $ticket_id,
     $messageAttachment->getPath(),
     $messageAttachment->getFilename()
-);
+);*/
 exit;

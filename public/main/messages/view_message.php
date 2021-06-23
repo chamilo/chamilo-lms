@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Message;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
@@ -39,10 +41,10 @@ if ($allowMessage) {
 }
 $social_right_content = Display::toolbarAction('toolbar', [$actions]);
 
-$type = isset($_GET['type']) ? (int) $_GET['type'] : MessageManager::MESSAGE_TYPE_INBOX;
+$type = isset($_GET['type']) ? (int) $_GET['type'] : Message::MESSAGE_TYPE_INBOX;
 
 $show_menu = 'messages_inbox';
-if (MessageManager::MESSAGE_TYPE_OUTBOX === $type) {
+if (Message::MESSAGE_TYPE_OUTBOX === $type) {
     $show_menu = 'messages_outbox';
 }
 

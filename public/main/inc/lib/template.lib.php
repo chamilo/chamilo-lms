@@ -808,60 +808,6 @@ class Template
     /**
      * @return string
      */
-    public function handleLoginFailed()
-    {
-        $message = get_lang('Login failed - incorrect login or password.');
-
-        if (!isset($_GET['error'])) {
-            if (api_is_self_registration_allowed()) {
-                $message = get_lang('Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>');
-            }
-        } else {
-            switch ($_GET['error']) {
-                case '':
-                    if (api_is_self_registration_allowed()) {
-                        $message = get_lang('Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>');
-                    }
-                    break;
-                case 'account_expired':
-                    $message = get_lang('Account expired');
-                    break;
-                case 'account_inactive':
-                    $message = get_lang('Account inactive');
-
-                    if ('confirmation' === api_get_setting('allow_registration')) {
-                        $message = get_lang('Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email').PHP_EOL;
-                        $message .= Display::url(
-                            get_lang('Send confirmation mail again'),
-                            api_get_path(WEB_PATH).'main/auth/resend_confirmation_mail.php',
-                            ['class' => 'alert-link']
-                        );
-                    }
-                    break;
-                case 'user_password_incorrect':
-                    $message = get_lang('Login failed - incorrect login or password.');
-                    break;
-                case 'access_url_inactive':
-                    $message = get_lang('Account inactive for this URL');
-                    break;
-                case 'wrong_captcha':
-                    $message = get_lang('The text you entered doesn\'t match the picture.');
-                    break;
-                case 'blocked_by_captcha':
-                    $message = get_lang('Account blocked by captcha.');
-                    break;
-                case 'multiple_connection_not_allowed':
-                    $message = get_lang('This user is already logged in');
-                    break;
-            }
-        }
-
-        return Display::return_message($message, 'error', false);
-    }
-
-    /**
-     * @return string
-     */
     public function displayLoginForm()
     {
         $form = new FormValidator(

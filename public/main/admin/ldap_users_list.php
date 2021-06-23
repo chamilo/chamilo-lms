@@ -28,7 +28,7 @@ if (($_GET['action']=="add_user") && ($_GET['id_session'] == strval(intval($_GET
 $interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('Administration')];
 $tool_name = get_lang('Search for LDAP users');
 //Display::display_header($tool_name); //cannot display now as we need to redirect
-//api_display_tool_title($tool_name);
+//Display::page_subheader2($tool_name);
 
 if (isset($_GET['action'])) {
     $check = Security::check_token('get');

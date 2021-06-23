@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ScriptHandler;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -57,7 +59,7 @@ if ($form->validate()) {
     }
 
     try {
-        \Chamilo\CoreBundle\Composer\ScriptHandler::dumpCssFiles();
+        ScriptHandler::dumpCssFiles();
         Display::addFlash(
             Display::return_message(get_lang('The styles and assets in the web/ folder have been refreshed.'))
         );

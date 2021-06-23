@@ -99,9 +99,9 @@ function check_download_survey($course, $invitation, $doc_url)
                 FROM $table_survey_question_option
                 WHERE
                     c_id = $course_id AND
-                    survey_id = ".$survey_invitation['survey_id']." AND (
-                        option_text LIKE '%$doc_url%'
-                    )";
+                    survey_id = ".$survey_invitation['survey_id']." AND
+                    option_text LIKE '%$doc_url%'
+            ";
     $result = Database::query($sql);
     if (0 == Database::num_rows($result)) {
         echo Display::return_message(get_lang('Wrong invitation code'), 'error', false);

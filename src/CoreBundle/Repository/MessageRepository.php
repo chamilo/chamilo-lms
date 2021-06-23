@@ -41,4 +41,12 @@ class MessageRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function update(Message $message, $andFlush = true): void
+    {
+        $this->getEntityManager()->persist($message);
+        if ($andFlush) {
+            $this->getEntityManager()->flush();
+        }
+    }
 }

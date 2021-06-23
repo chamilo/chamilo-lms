@@ -70,7 +70,7 @@ class SurveyManager
         $table_survey = Database::get_course_table(TABLE_SURVEY);
 
         $sql = "SELECT iid, survey_id
-                FROM $table_survey_invitation WHERE user = '$user_id' AND c_id <> 0 ";
+                FROM $table_survey_invitation WHERE user_id = '$user_id' AND c_id <> 0 ";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $survey_invitation_id = $row['iid'];
@@ -138,16 +138,7 @@ class SurveyManager
         $course_code = '',
         $simple_return = false
     ) {
-        $my_course_id = api_get_course_id();
-
-        // Table definition
-        if (!empty($course_code)) {
-            $my_course_id = $course_code;
-        } elseif (isset($_GET['course'])) {
-            $my_course_id = Security::remove_XSS($_GET['course']);
-        }
-
-        $courseInfo = api_get_course_info($my_course_id);
+        $courseInfo = api_get_course_info();
         $survey_id = (int) $survey_id;
         $table_survey = Database::get_course_table(TABLE_SURVEY);
 
@@ -792,7 +783,7 @@ class SurveyManager
                 WHERE
                     c_id = $courseId AND
                     session_id = $sessionId AND
-                    user ='".Database::escape_string($user)."' AND
+                    user_id ='".Database::escape_string($user)."' AND
                     survey_id ='".$surveyId."'";
         Database::query($sql);
     }
@@ -1475,7 +1466,7 @@ class SurveyManager
                 $tblInvitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
                 $tblSurvey = Database::get_course_table(TABLE_SURVEY);
 
-                $sql = "SELECT i.user FROM $tblInvitation i
+                $sql = "SELECT i.user_id FROM $tblInvitation i
                     INNER JOIN $tblSurvey s
                     ON i.survey_code = s.code
                     WHERE i.answered IS TRUE AND s.iid = $survey_id";
@@ -1834,7 +1825,7 @@ class SurveyManager
         }
         $row = Database::fetch_array($res, 'ASSOC');
         $params = [
-            'c_id' => $row['c_id'],
+            //'c_id' => $row['c_id'],
             'survey_id' => $row['survey_id'],
             'survey_question' => trim($row['survey_question']),
             'survey_question_comment' => $row['survey_question_comment'],
@@ -1868,7 +1859,7 @@ class SurveyManager
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
             $params = [
-                'c_id' => $row['c_id'],
+                //'c_id' => $row['c_id'],
                 'question_id' => $insertId,
                 'survey_id' => $row['survey_id'],
                 'option_text' => $row['option_text'],

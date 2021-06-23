@@ -401,19 +401,24 @@ function api_trunc_str($text, $length = 30, $suffix = '...', $middle = false, $e
 }
 
 /**
- * Handling simple and double apostrofe in order that strings be stored properly in database.
- *
- * @author Denes Nagy
- *
- * @param  string variable - the variable to be revised
+ * Replace tags with a space in a text.
+ * If $in_double_quote_replace, replace " with '' (for HTML attribute purpose, for exemple).
  *
  * @return string
+ *
+ * @author hubert borderiou
  */
-function domesticate($input)
+function api_remove_tags_with_space($in_html, $in_double_quote_replace = true)
 {
-    $input = str_replace(["'", '"'], "''", stripslashes($input));
+    $out_res = $in_html;
+    if ($in_double_quote_replace) {
+        $out_res = str_replace('"', "''", $out_res);
+    }
+    // avoid text stuck together when tags are removed, adding a space after >
+    $out_res = str_replace(">", "> ", $out_res);
+    $out_res = strip_tags($out_res);
 
-    return $input;
+    return $out_res;
 }
 
 /**
@@ -569,167 +574,6 @@ function _make_web_ftp_clickable_cb($matches)
     }
 
     return $matches[1]."<a href=\"$dest\" rel=\"nofollow\">$dest</a>$ret";
-}
-
-/**
- * Callback to convert email address match to HTML A element.
- *
- * This function was backported from 2.5.0 to 2.3.2. Regex callback for {@link * make_clickable()}.
- *
- * @since wordpress  2.3.2
- *
- * @param array $matches single Regex Match
- *
- * @return string HTML A element with email address
- */
-function _make_email_clickable_cb($matches)
-{
-    $email = $matches[2].'@'.$matches[3];
-
-    return $matches[1]."<a href=\"mailto:$email\">$email</a>";
-}
-
-/**
- * Convert plaintext URI to HTML links.
- *
- * Converts URI, www and ftp, and email addresses. Finishes by fixing links
- * within links.
- *
- * @since wordpress  0.71
- *
- * @param string $text content to convert URIs
- *
- * @return string content with converted URIs
- */
-function make_clickable($text)
-{
-    $r = '';
-    // split out HTML tags
-    $textarr = preg_split('/(<[^<>]+>)/', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
-    $nested_code_pre = 0; // Keep track of how many levels link is nested inside <pre> or <code>
-    foreach ($textarr as $piece) {
-        if (preg_match('|^<code[\s>]|i', $piece) || preg_match('|^<pre[\s>]|i', $piece)) {
-            $nested_code_pre++;
-        } elseif (('</code>' === strtolower($piece) || '</pre>' === strtolower($piece)) && $nested_code_pre) {
-            $nested_code_pre--;
-        }
-
-        if ($nested_code_pre ||
-            empty($piece) ||
-            ('<' === $piece[0] && !preg_match('|^<\s*[\w]{1,20}+://|', $piece))
-        ) {
-            $r .= $piece;
-            continue;
-        }
-
-        // Long strings might contain expensive edge cases ...
-        if (10000 < strlen($piece)) {
-            // ... break it up
-            foreach (_split_str_by_whitespace($piece, 2100) as $chunk) {
-                // 2100: Extra room for scheme and leading and trailing paretheses
-                if (2101 < strlen($chunk)) {
-                    $r .= $chunk; // Too big, no whitespace: bail.
-                } else {
-                    $r .= make_clickable($chunk);
-                }
-            }
-        } else {
-            $ret = " $piece "; // Pad with whitespace to simplify the regexes
-
-            $url_clickable = '~
-				([\\s(<.,;:!?])                                        # 1: Leading whitespace, or punctuation
-				(                                                      # 2: URL
-					[\\w]{1,20}+://                                # Scheme and hier-part prefix
-					(?=\S{1,2000}\s)                               # Limit to URLs less than about 2000 characters long
-					[\\w\\x80-\\xff#%\\~/@\\[\\]*(+=&$-]*+         # Non-punctuation URL character
-					(?:                                            # Unroll the Loop: Only allow puctuation URL character if followed by a non-punctuation URL character
-						[\'.,;:!?)]                            # Punctuation URL character
-						[\\w\\x80-\\xff#%\\~/@\\[\\]*(+=&$-]++ # Non-punctuation URL character
-					)*
-				)
-				(\)?)                                                  # 3: Trailing closing parenthesis (for parethesis balancing post processing)
-			~xS'; // The regex is a non-anchored pattern and does not have a single fixed starting character.
-            // Tell PCRE to spend more time optimizing since, when used on a page load, it will probably be used several times.
-
-            $ret = preg_replace_callback($url_clickable, '_make_url_clickable_cb', $ret);
-            $ret = preg_replace_callback(
-                '#([\s>])((www|ftp)\.[\w\\x80-\\xff\#$%&~/.\-;:=,?@\[\]+]+)#is',
-                '_make_web_ftp_clickable_cb',
-                $ret
-            );
-            $ret = preg_replace_callback(
-                '#([\s>])([.0-9a-z_+-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,})#i',
-                '_make_email_clickable_cb',
-                $ret
-            );
-
-            $ret = substr($ret, 1, -1); // Remove our whitespace padding.
-            $r .= $ret;
-        }
-    }
-
-    // Cleanup of accidental links within links
-    $r = preg_replace('#(<a([ \r\n\t]+[^>]+?>|>))<a [^>]+?>([^>]+?)</a></a>#i', "$1$3</a>", $r);
-
-    return $r;
-}
-
-/**
- * Breaks a string into chunks by splitting at whitespace characters.
- * The length of each returned chunk is as close to the specified length goal as possible,
- * with the caveat that each chunk includes its trailing delimiter.
- * Chunks longer than the goal are guaranteed to not have any inner whitespace.
- *
- * Joining the returned chunks with empty delimiters reconstructs the input string losslessly.
- *
- * Input string must have no null characters (or eventual transformations on output chunks
- * must not care about null characters)
- *
- * <code>
- * _split_str_by_whitespace( "1234 67890 1234 67890a cd 1234   890 123456789 1234567890a    45678   1 3 5 7 90 ", 10 ) ==
- * array (
- *   0 => '1234 67890 ',  // 11 characters: Perfect split
- *   1 => '1234 ',        //  5 characters: '1234 67890a' was too long
- *   2 => '67890a cd ',   // 10 characters: '67890a cd 1234' was too long
- *   3 => '1234   890 ',  // 11 characters: Perfect split
- *   4 => '123456789 ',   // 10 characters: '123456789 1234567890a' was too long
- *   5 => '1234567890a ', // 12 characters: Too long, but no inner whitespace on which to split
- *   6 => '   45678   ',  // 11 characters: Perfect split
- *   7 => '1 3 5 7 9',    //  9 characters: End of $string
- * );
- * </code>
- *
- * @since wordpress  3.4.0
- *
- * @param string $string the string to split
- * @param int    $goal   the desired chunk length
- *
- * @return array numeric array of chunks
- */
-function _split_str_by_whitespace($string, $goal)
-{
-    $chunks = [];
-    $string_nullspace = strtr($string, "\r\n\t\v\f ", "\000\000\000\000\000\000");
-    while ($goal < strlen($string_nullspace)) {
-        $pos = strrpos(substr($string_nullspace, 0, $goal + 1), "\000");
-
-        if (false === $pos) {
-            $pos = strpos($string_nullspace, "\000", $goal + 1);
-            if (false === $pos) {
-                break;
-            }
-        }
-
-        $chunks[] = substr($string, 0, $pos + 1);
-        $string = substr($string, $pos + 1);
-        $string_nullspace = substr($string_nullspace, $pos + 1);
-    }
-
-    if ($string) {
-        $chunks[] = $string;
-    }
-
-    return $chunks;
 }
 
 /**
@@ -971,4 +815,83 @@ function strip_tags_blacklist($html, $tags)
     }
 
     return $html;
+}
+
+/**
+ * Remove tags from HTML anf return the $in_number_char first non-HTML char
+ * Postfix the text with "..." if it has been truncated.
+ *
+ * @param string $text
+ * @param int    $number
+ *
+ * @return string
+ *
+ * @author hubert borderiou
+ */
+function api_get_short_text_from_html($text, $number)
+{
+    // Delete script and style tags
+    $text = preg_replace('/(<(script|style)\b[^>]*>).*?(<\/\2>)/is', "$1$3", $text);
+    $text = api_html_entity_decode($text);
+    $out_res = api_remove_tags_with_space($text, false);
+    $postfix = "...";
+    if (strlen($out_res) > $number) {
+        $out_res = substr($out_res, 0, $number).$postfix;
+    }
+
+    return $out_res;
+}
+
+/**
+ * Filter a multi-language HTML string (for the multi-language HTML
+ * feature) into the given language (strip the rest).
+ *
+ * @param string $htmlString The HTML string to "translate".
+ *                           Usually <p><span lang="en">Some string</span></p><p><span lang="fr">Une chaîne</span></p>
+ * @param string $language   The language in which we want to get the
+ *
+ * @return string The filtered string in the given language, or the full string if no translated string was identified
+ *
+ *@throws Exception
+ */
+function api_get_filtered_multilingual_HTML_string($htmlString, $language = null)
+{
+    if (true != api_get_configuration_value('translate_html')) {
+        return $htmlString;
+    }
+    $userInfo = api_get_user_info();
+    $languageId = 0;
+    if (!empty($language)) {
+        $languageId = api_get_language_id($language);
+    } elseif (!empty($userInfo['language'])) {
+        $languageId = api_get_language_id($userInfo['language']);
+    }
+    $languageInfo = api_get_language_info($languageId);
+    $isoCode = 'en';
+
+    if (!empty($languageInfo)) {
+        $isoCode = $languageInfo['isocode'];
+    }
+
+    // Split HTML in the separate language strings
+    // Note: some strings might look like <p><span ..>...</span></p> but others might be like combine 2 <span> in 1 <p>
+    if (!preg_match('/<span.*?lang="(\w\w)">/is', $htmlString)) {
+        return $htmlString;
+    }
+    $matches = [];
+    preg_match_all('/<span.*?lang="(\w\w)">(.*?)<\/span>/is', $htmlString, $matches);
+    if (!empty($matches)) {
+        // matches[0] are the full string
+        // matches[1] are the languages
+        // matches[2] are the strings
+        foreach ($matches[1] as $id => $match) {
+            if ($match == $isoCode) {
+                return $matches[2][$id];
+            }
+        }
+        // Could find the pattern but could not find our language. Return the first language found.
+        return $matches[2][0];
+    }
+    // Could not find pattern. Just return the whole string. We shouldn't get here.
+    return $htmlString;
 }

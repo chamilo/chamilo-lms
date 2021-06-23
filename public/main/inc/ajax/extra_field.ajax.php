@@ -15,7 +15,7 @@ switch ($action) {
     case 'delete_file':
         api_protect_admin_script();
 
-        $itemId = isset($_REQUEST['item_id']) ? $_REQUEST['item_id'] : null;
+        $itemId = $_REQUEST['item_id'] ?? null;
         $extraFieldValue = new ExtraFieldValue($type);
         $data = $extraFieldValue->get_values_by_handler_and_field_id($itemId, $fieldId);
         if (!empty($data) && isset($data['id']) && !empty($data['value'])) {

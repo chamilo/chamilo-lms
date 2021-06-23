@@ -178,9 +178,9 @@ class ToolChain
             'chat',
             'student_publication',
             'survey',
-            'wiki',
+            //'wiki',
             'notebook',
-            'blog',
+            //'blog',
             'course_tool',
             'tracking',
             'course_setting',
@@ -199,6 +199,7 @@ class ToolChain
             if (!isset($toolList[$tool->getName()])) {
                 continue;
             }
+
             /** @var Tool $toolEntity */
             $toolEntity = $toolRepo->findOneBy($criteria);
             $position = $toolList[$tool->getName()] + 1;

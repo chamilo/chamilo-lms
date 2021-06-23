@@ -590,11 +590,11 @@ class ZoomPlugin extends Plugin
         if (empty($courseInfo)) {
             throw new Exception('This meeting is not linked to a valid course');
         }
-        $path = '/zoom_meeting_recording_file_'.$file->id.'.'.$file->file_type;
+        /*$path = '/zoom_meeting_recording_file_'.$file->id.'.'.$file->file_type;
         $docId = DocumentManager::addCloudLink($courseInfo, $path, $file->play_url, $name);
         if (!$docId) {
             throw new Exception(get_lang(DocumentManager::cloudLinkExists($courseInfo, $path, $file->play_url) ? 'UrlAlreadyExists' : 'ErrorAddCloudLink'));
-        }
+        }*/
     }
 
     /**

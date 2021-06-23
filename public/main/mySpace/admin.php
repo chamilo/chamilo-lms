@@ -17,7 +17,7 @@ api_block_anonymous_users();
 $interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('Reporting')];
 Display::display_header($nameTools);
 $data = [];
-api_display_tool_title($nameTools);
+Display::page_subheader2($nameTools);
 
 // Database Table Definitions
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);

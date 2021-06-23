@@ -227,7 +227,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
         if (1 == $user[7] && !empty($user[10])) {
             // check expiration date
-            $expiration_time = convert_sql_date($user[10]);
+            $expiration_time = api_strtotime($user[10]);
             // if expiration date is passed, store a special value for active field
             if ($expiration_time < $t) {
                 $user[7] = '-1';

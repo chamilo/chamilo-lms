@@ -15,7 +15,6 @@
         <directory name="public/main/attendance"/>
         <directory name="public/main/auth"/>
 <!--        <directory name="public/main/badge"/>-->
-        <directory name="public/main/blog"/>
         <directory name="public/main/calendar"/>
 <!--        <directory name="public/main/chat"/>-->
         <directory name="public/main/course_description"/>
@@ -47,13 +46,12 @@
         <directory name="public/main/notebook" />
         <directory name="public/main/session" />
         <directory name="public/main/social" />
-<!--        <directory name="public/main/survey" />-->
-<!--        <directory name="public/main/ticket" />-->
+        <directory name="public/main/survey" />
+        <directory name="public/main/ticket" />
         <directory name="public/main/tracking" />
 <!--        <directory name="public/main/upload" />-->
         <directory name="public/main/user" />
 <!--        <directory name="public/main/webservices" />-->
-<!--        <directory name="public/main/wiki" />-->
         <directory name="public/main/work" />
 
         <file name="public/main/inc/lib/access_url_edit_courses_to_url_functions.lib.php"/>
@@ -68,7 +66,6 @@
         <file name="public/main/inc/lib/attendance.lib.php"/>
         <file name="public/main/inc/lib/auth.lib.php"/>
 <!--        <file name="public/main/inc/lib/baker.lib.php"/>-->
-<!--        <file name="public/main/inc/lib/blog.lib.php"/>-->
         <file name="public/main/inc/lib/career.lib.php"/>
         <file name="public/main/inc/lib/certificate.lib.php"/>
         <file name="public/main/inc/lib/course.lib.php"/>
@@ -118,7 +115,6 @@
 
         <file name="public/main/inc/lib/sessionmanager.lib.php"/>
         <file name="public/main/inc/lib/skill.visualizer.lib.php"/>
-
         <file name="public/main/inc/lib/SkillModel.php"/>
         <file name="public/main/inc/lib/SkillProfileModel.php"/>
         <file name="public/main/inc/lib/SkillRelGradebookModel.php"/>
@@ -163,19 +159,11 @@
             <directory name="public/main/inc/lib/pear" />
             <directory name="public/main/inc/lib/ppt2png" />
             <directory name="public/main/inc/lib/search" />
-            <directory name="public/main/inc/lib/svg-edit" />
             <directory name="public/main/inc/lib/zombie" />
             <directory name="public/main/exercise/export/qti2" />
 
 
-            <file name="public/main/lp/openoffice_presentation.class.php"/>
-            <file name="public/main/lp/openoffice_document.class.php"/>
-            <file name="public/main/lp/openoffice_text.class.php"/>
-            <file name="public/main/lp/openoffice_text_document.class.php"/>
-            <file name="public/main/lp/aicc.class.php"/>
-
             <file name="public/main/admin/index.php"/>
-
             <file name="public/main/admin/db.php"/>
             <file name="public/main/admin/settings.php"/>
             <file name="public/main/admin/periodic_export.php"/>
@@ -185,11 +173,17 @@
             <file name="public/main/admin/teachers_time_by_session_report.php"/>
             <file name="public/main/admin/specific_fields.php"/>
             <file name="public/main/admin/sub_language*"/>
-
-
             <file name="public/main/admin/ldap_*"/>
             <file name="public/main/admin/special_exports.php"/>
+
+            <file name="public/main/lp/openoffice_presentation.class.php"/>
+            <file name="public/main/lp/openoffice_document.class.php"/>
+            <file name="public/main/lp/openoffice_text.class.php"/>
+            <file name="public/main/lp/openoffice_text_document.class.php"/>
+            <file name="public/main/lp/aicc.class.php"/>
+
             <file name="public/main/exercise/admin.php"/>
+            <file name="public/main/survey/survey_list.php"/>
 
             <file name="src/CoreBundle/Controller/EditorController.php"/>
             <file name="src/CoreBundle/Controller/ResourceController.php"/>

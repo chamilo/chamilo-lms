@@ -55,7 +55,7 @@ class CSurveyQuestion
     protected ?CSurveyQuestionOption $parentOption = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CSurvey", inversedBy="questions", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="CSurvey", inversedBy="questions")
      * @ORM\JoinColumn(name="survey_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected CSurvey $survey;

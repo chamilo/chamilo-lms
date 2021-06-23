@@ -48,15 +48,15 @@ class Version20191206150030 extends AbstractMigrationChamilo
                     $fileName = basename($path);
                     $mimeType = mime_content_type($filePath);
                     $file = new UploadedFile($filePath, $fileName, $mimeType, null, true);
-                    $asset = new Asset();
-                    $asset
+                    $asset = (new Asset())
                         ->setCategory(Asset::EXTRA_FIELD)
                         ->setTitle($fileName)
                         ->setFile($file)
                     ;
                     $em->persist($asset);
                     $em->flush();
-                    $item->setValue((string) $asset->getId());
+                    $item->setAsset($asset);
+                    //$item->setValue((string) $asset->getId());
                     $em->persist($item);
                 }
             }

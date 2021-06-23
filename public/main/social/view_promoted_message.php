@@ -2,11 +2,13 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Message;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 
-if ('true' != api_get_setting('allow_social_tool')) {
+if ('true' !== api_get_setting('allow_social_tool')) {
     api_not_allowed(true);
 }
 
@@ -25,7 +27,7 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 $social_menu_block = SocialManager::show_social_menu('inbox');
-$message .= MessageManager::showMessageBox($messageId, MessageManager::MESSAGE_TYPE_PROMOTED);
+$message .= MessageManager::showMessageBox($messageId, Message::MESSAGE_TYPE_PROMOTED);
 
 if (!empty($message)) {
     $social_right_content .= $message;

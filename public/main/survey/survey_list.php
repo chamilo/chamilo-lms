@@ -139,11 +139,11 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 $result = Database::query($sql);
                 $usersWithAnswers = [];
                 while ($row = Database::fetch_array($result)) {
-                    if (isset($usersWithAnswers[$row['user']])) {
+                    if (isset($usersWithAnswers[$row['user_id']])) {
                         continue;
                     }
-                    $userInfo = api_get_user_info($row['user']);
-                    $usersWithAnswers[$row['user']] = $userInfo;
+                    $userInfo = api_get_user_info($row['user_id']);
+                    $usersWithAnswers[$row['user_id']] = $userInfo;
                 }
 
                 $sql = "SELECT
@@ -446,18 +446,12 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
     }
 
     if ('export_all' === $action) {
-        $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().'.zip';
-        $zip = new PclZip($tempZipFile);
+        $name = get_lang('Surveys').'-'.api_get_course_id().'-'.api_get_local_time().'.zip';
+        $zip = api_create_zip($name);
         foreach ($exportList as $file) {
-            $zip->add($file, PCLZIP_OPT_REMOVE_ALL_PATH);
+            $zip->addFile($file);
         }
-
-        DocumentManager::file_send_for_download(
-            $tempZipFile,
-            true,
-            get_lang('Surveys').'-'.api_get_course_id().'-'.api_get_local_time().'.zip'
-        );
-        unlink($tempZipFile);
+        $zip->finish();
     }
 
     header('Location: '.$listUrl);

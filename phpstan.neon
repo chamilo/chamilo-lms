@@ -36,7 +36,6 @@ parameters:
 		- public/main/inc/lib/pear/*
 		- public/main/inc/lib/ppt2png/*
 		- public/main/inc/lib/search/*
-		- public/main/inc/lib/svg-edit/*
 		- public/main/inc/lib/zombie/*
 
 		- public/main/admin/ldap*
@@ -52,11 +51,9 @@ parameters:
 		- public/main/portfolio/*
 		- public/main/notification_event/*
 
-		- public/main/permissions/*
 		- public/main/extra/*
 		- public/main/cron/*
 		- public/main/webservices/*
-		- public/main/wiki/*
 
 		- src/CoreBundle/Hook/*
 		- src/CoreBundle/Migrations/*

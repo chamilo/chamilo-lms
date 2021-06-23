@@ -60,9 +60,9 @@ class OutcomeReplaceRequest extends OutcomeRequest
         }
 
         /** @var GradebookEvaluation $evaluation */
-        $evaluation = $this->entityManager->find('ChamiloCoreBundle:GradebookEvaluation', $sourcedParts['e']);
+        $evaluation = $this->entityManager->find(GradebookEvaluation::class, $sourcedParts['e']);
         /** @var User $user */
-        $user = $this->entityManager->find('ChamiloCoreBundle:User', $sourcedParts['u']);
+        $user = $this->entityManager->find(User::class, $sourcedParts['u']);
 
         if (empty($evaluation) || empty($user)) {
             $this->statusInfo

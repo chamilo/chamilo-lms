@@ -1005,17 +1005,16 @@ class HTML_QuickForm extends HTML_Common
      * To validate grouped elements as separated entities,
      * use addGroupRule instead of addRule.
      *
-     * @param    string|array $element Form element name
-     * @param    string $message Message to display for invalid data
-     * @param    string $type Rule type, use getRegisteredRules() to get types
-     * @param    string $format (optional)Required for extra rule data
-     * @param    string $validation (optional)Where to perform validation: "server", "client"
-     * @param    boolean $reset Client-side validation: reset the form element to its original value if there is an
-     *                          error?
-     * @param    boolean $force Force the rule to be applied, even if the target form element does not exist
-     * @param array|string $dependent needed when comparing values
-     * @since    1.0
-     * @access   public
+     * @param string|array $element    Form element name
+     * @param string       $message    Message to display for invalid data
+     * @param string       $type       Rule type, use getRegisteredRules() to get types
+     * @param string|array $format     (optional) Required for extra rule data
+     * @param string       $validation (optional)Where to perform validation: "server", "client"
+     * @param boolean      $reset      Client-side validation: reset the form element to its original value if there is an
+     *                                 error?
+     * @param boolean      $force      Force the rule to be applied, even if the target form element does not exist
+     * @param array|string $dependent  needed when comparing values
+     *
      */
     public function addRule(
         $element,

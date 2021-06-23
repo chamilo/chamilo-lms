@@ -50,7 +50,6 @@ $audioDir = Security::remove_XSS($_REQUEST['audio_dir']);
 
 switch ($type) {
     case 'document':
-
         if (empty($audioDir)) {
             $audioDir = '/';
         }

@@ -19,14 +19,10 @@ export default {
     onUploadForm() {
       console.log('onUploadForm');
       const createForm = this.$refs.createForm;
-      //createForm.processFiles();
-      //createForm.$v.$touch();
-      //if (!createForm.$v.$invalid) {
-        for (let i = 0; i < createForm.files.length; i++) {
-          let file = createForm.files[i];
-          this.create(file);
-        }
-      //}
+      for (let i = 0; i < createForm.files.length; i++) {
+        let file = createForm.files[i];
+        this.create(file);
+      }
     },
   },
   watch: {

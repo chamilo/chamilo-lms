@@ -1,25 +1,34 @@
 <template>
   <div>
-    <DocumentsForm
-      ref="createForm"
-      :values="files"
-      :parentResourceNodeId="parentResourceNodeId"
-      :resourceLinkList="resourceLinkList"
-      :errors="violations"
-      :process-files="processFiles"
+<!--    <FormUpload-->
+<!--      ref="createForm"-->
+<!--      :values="files"-->
+<!--      :parentResourceNodeId="parentResourceNodeId"-->
+<!--      :resourceLinkList="resourceLinkList"-->
+<!--      :errors="violations"-->
+<!--      :process-files="processFiles"-->
+<!--    />-->
+
+    <dashboard
+        :uppy="uppy"
+        :plugins="['Webcam', 'ImageEditor']"
+        :props="{
+          //metaFields: [{id: 'name', name: 'Name', placeholder: 'file name'}],
+          proudlyDisplayPoweredByUppy: false,
+        }"
     />
 
-    <Toolbar
-      :handle-submit="onUploadForm"
-    />
-    <Loading :visible="isLoading" />
+<!--    <Toolbar-->
+<!--      :handle-submit="onUploadForm"-->
+<!--    />-->
+<!--    <Loading :visible="isLoading" />-->
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
 import { createHelpers } from 'vuex-map-fields';
-import DocumentsForm from '../../components/documents/FormUpload.vue';
+import FormUpload from '../../components/documents/FormUpload.vue';
 import Loading from '../../components/Loading.vue';
 import Toolbar from '../../components/Toolbar.vue';
 import UploadMixin from '../../mixins/UploadMixin';
@@ -32,22 +41,96 @@ const { mapFields } = createHelpers({
   mutationType: 'documents/updateField'
 });
 
+import '@uppy/core/dist/style.css'
+import '@uppy/dashboard/dist/style.css'
+import '@uppy/image-editor/dist/style.css'
+
+import Uppy from '@uppy/core'
+import Webcam from '@uppy/webcam'
+const XHRUpload = require('@uppy/xhr-upload');
+import { Dashboard } from '@uppy/vue'
+import {useRoute} from "vue-router";
+const ImageEditor = require('@uppy/image-editor');
+
 export default {
   name: 'DocumentsCreate',
   servicePrefix,
+  mixins: [UploadMixin],
   components: {
     Loading,
     Toolbar,
-    DocumentsForm
+    FormUpload,
+    Dashboard
   },
   setup() {
     const createForm = ref(null);
+    const parentResourceNodeId = ref(null);
+    const resourceLinkList = ref(null);
+    const route = useRoute();
+
+    parentResourceNodeId.value = Number(route.params.node);
+    resourceLinkList.value = JSON.stringify([{
+      gid: route.query.gid,
+      sid: route.query.sid,
+      cid: route.query.cid,
+      visibility: 2,
+    }]);
+
+    let uppy = ref();
+    uppy.value = new Uppy()
+        .use(Webcam)
+        .use(ImageEditor, {
+          //target: Dashboard,
+          //quality: 0.8
+          cropperOptions: {
+            viewMode: 1,
+            background: false,
+            autoCropArea: 1,
+            responsive: true
+          },
+          actions: {
+            revert: true,
+            rotate: true,
+            granularRotate: true,
+            flip: true,
+            zoomIn: true,
+            zoomOut: true,
+            cropSquare: true,
+            cropWidescreen: true,
+            cropWidescreenVertical: true
+          }
+        })
+        .use(
+            XHRUpload, {
+              endpoint: '/api/documents',
+              formData: true,
+              fieldName: 'uploadFile'
+            }
+        )
+
+        /*.on('file-added', (file) => {
+          console.log(file.id);
+          console.log(parentResourceNodeId.value);
+          uppy.value.setFileMeta(file.id, {
+            size: file.size,
+            filetype: 'file',
+            parentResourceNodeId: parentResourceNodeId.value,
+            resourceLinkList: resourceLinkList.value,
+          })
+        })*/
+    ;
+
+    uppy.value.setMeta({
+      filetype: 'file',
+      parentResourceNodeId: parentResourceNodeId.value,
+      resourceLinkList: resourceLinkList.value,
+    });
 
     return {
-      createForm
+      createForm,
+      uppy
     }
   },
-  mixins: [UploadMixin],
   data() {
     return {
       files : [],

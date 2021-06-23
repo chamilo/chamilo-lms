@@ -2093,28 +2093,6 @@ class Rest extends WebService
     }
 
     /**
-     * @param array $additionalParams Optional
-     *
-     * @return string
-     */
-    private function encodeParams(array $additionalParams = [])
-    {
-        $params = array_merge(
-            $additionalParams,
-            [
-                'api_key' => $this->apiKey,
-                'username' => $this->user->getUsername(),
-            ]
-        );
-
-        return json_encode($params);
-    }
-
-    /**
-     * @param array $params
-     *
-     * @return array
-     *
      * @throws Exception
      */
     public function updateSession(array $params): array
@@ -2259,5 +2237,23 @@ class Rest extends WebService
             'message' => get_lang('Updated'),
             'id_session' => $id,
         ];
+    }
+
+    /**
+     * @param array $additionalParams Optional
+     *
+     * @return string
+     */
+    private function encodeParams(array $additionalParams = [])
+    {
+        $params = array_merge(
+            $additionalParams,
+            [
+                'api_key' => $this->apiKey,
+                'username' => $this->user->getUsername(),
+            ]
+        );
+
+        return json_encode($params);
     }
 }

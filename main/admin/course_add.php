@@ -38,23 +38,32 @@ $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
 // Code
-$form->addText(
-    'visual_code',
-    [
-        get_lang('CourseCode'),
-        get_lang('OnlyLettersAndNumbers'),
-    ],
-    false,
-    [
-        'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
-        'pattern' => '[a-zA-Z0-9]+',
-        'title' => get_lang('OnlyLettersAndNumbers'),
-        'id' => 'visual_code',
-    ]
-);
+if (!api_get_configuration_value('course_creation_form_hide_course_code')) {
+    $form->addText(
+        'visual_code',
+        [
+            get_lang('CourseCode'),
+            get_lang('OnlyLettersAndNumbers'),
+        ],
+        false,
+        [
+            'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
+            'pattern' => '[a-zA-Z0-9]+',
+            'title' => get_lang('OnlyLettersAndNumbers'),
+            'id' => 'visual_code',
+        ]
+    );
 
-$form->applyFilter('visual_code', 'api_strtoupper');
-$form->applyFilter('visual_code', 'html_filter');
+    $form->applyFilter('visual_code', 'api_strtoupper');
+    $form->applyFilter('visual_code', 'html_filter');
+
+    $form->addRule(
+        'visual_code',
+        get_lang('Max'),
+        'maxlength',
+        CourseManager::MAX_COURSE_LENGTH_CODE
+    );
+}
 
 $countCategories = $courseCategoriesRepo->countAllInAccessUrl(
     $accessUrlId,
@@ -88,13 +97,6 @@ if ($countCategories >= 100) {
         $categoriesOptions
     );
 }
-
-$form->addRule(
-    'visual_code',
-    get_lang('Max'),
-    'maxlength',
-    CourseManager::MAX_COURSE_LENGTH_CODE
-);
 
 $currentTeacher = api_get_user_entity(api_get_user_id());
 

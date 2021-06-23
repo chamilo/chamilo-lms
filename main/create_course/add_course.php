@@ -134,26 +134,28 @@ if ($countCategories >= 100) {
 }
 
 // Course code
-$form->addText(
-    'wanted_code',
-    [
-        get_lang('Code'),
-        get_lang('OnlyLettersAndNumbers'),
-    ],
-    '',
-    [
-        'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
-        'pattern' => '[a-zA-Z0-9]+',
-        'title' => get_lang('OnlyLettersAndNumbers'),
-    ]
-);
-$form->applyFilter('wanted_code', 'html_filter');
-$form->addRule(
-    'wanted_code',
-    get_lang('Max'),
-    'maxlength',
-    CourseManager::MAX_COURSE_LENGTH_CODE
-);
+if (!api_get_configuration_value('course_creation_form_hide_course_code')) {
+    $form->addText(
+        'wanted_code',
+        [
+            get_lang('Code'),
+            get_lang('OnlyLettersAndNumbers'),
+        ],
+        '',
+        [
+            'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
+            'pattern' => '[a-zA-Z0-9]+',
+            'title' => get_lang('OnlyLettersAndNumbers'),
+        ]
+    );
+    $form->applyFilter('wanted_code', 'html_filter');
+    $form->addRule(
+        'wanted_code',
+        get_lang('Max'),
+        'maxlength',
+        CourseManager::MAX_COURSE_LENGTH_CODE
+    );
+}
 
 // The teacher
 $titular = &$form->addElement('hidden', 'tutor_name', '');

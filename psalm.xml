@@ -159,7 +159,6 @@
             <directory name="public/main/inc/lib/pear" />
             <directory name="public/main/inc/lib/ppt2png" />
             <directory name="public/main/inc/lib/search" />
-            <directory name="public/main/inc/lib/svg-edit" />
             <directory name="public/main/inc/lib/zombie" />
             <directory name="public/main/exercise/export/qti2" />
 

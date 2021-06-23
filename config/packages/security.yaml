@@ -22,6 +22,7 @@ security:
             - ROLE_CURRENT_COURSE_TEACHER
             - ROLE_CURRENT_COURSE_SESSION_TEACHER
             - ROLE_CURRENT_COURSE_GROUP_TEACHER
+            - ROLE_USER
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
         ROLE_GLOBAL_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
         ROLE_RRHH: [ROLE_TEACHER, ROLE_ALLOWED_TO_SWITCH]
@@ -50,7 +51,7 @@ security:
         # Use to connect via a JWT token
         api:
             pattern: ^/api
-            stateless: true
+#            stateless: true
             jwt: ~
             context: main
             provider: app_user_provider

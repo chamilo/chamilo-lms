@@ -851,8 +851,8 @@ function api_get_short_text_from_html($text, $number)
  * @param string $language   The language in which we want to get the
  *
  * @return string The filtered string in the given language, or the full string if no translated string was identified
- *@throws Exception
  *
+ *@throws Exception
  */
 function api_get_filtered_multilingual_HTML_string($htmlString, $language = null)
 {

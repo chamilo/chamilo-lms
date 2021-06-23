@@ -676,6 +676,7 @@ define('XAPIAN_PREFIX_TOOLID', 'O');
 
 /**
  * Returns a path to a certain resource within Chamilo.
+ *
  * @param string $path A path which type is to be converted. Also, it may be a defined constant for a path.
  *
  * @return string the requested path or the converted path

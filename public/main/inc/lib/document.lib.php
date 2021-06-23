@@ -5336,5 +5336,4 @@ This folder contains all sessions that have been opened in the chat. Although th
 
         return $return;
     }
-
 }

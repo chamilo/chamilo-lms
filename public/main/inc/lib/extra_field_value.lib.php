@@ -1041,8 +1041,8 @@ class ExtraFieldValue extends Model
     }
 
     /**
-     * @param int $itemId
-     * @param int $fieldId
+     * @param int        $itemId
+     * @param int        $fieldId
      * @param string|int $fieldValue
      *
      * @return bool

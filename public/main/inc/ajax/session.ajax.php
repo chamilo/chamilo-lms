@@ -419,10 +419,10 @@ switch ($action) {
                 $docId
             );
         } else {
-            $deletedDocument = DocumentManager::deleteCloudLink(
+            /*$deletedDocument = DocumentManager::deleteCloudLink(
                 $courseInfo,
                 $docId
-            );
+            );*/
         }
 
         if (!$deletedDocument) {

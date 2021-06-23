@@ -8118,9 +8118,11 @@ class TrackingCourseLog
     }
 
     /**
+     * @param array $exclude Extra fields to be skipped, by ID
+     *
      * @return string
      */
-    public static function display_additional_profile_fields()
+    public static function display_additional_profile_fields($exclude = [])
     {
         // getting all the extra profile fields that are defined by the platform administrator
         $extra_fields = UserManager::get_extra_fields(0, 50, 5, 'ASC');
@@ -8134,6 +8136,10 @@ class TrackingCourseLog
         $return .= '<option value="-">'.get_lang('SelectFieldToAdd').'</option>';
         $extra_fields_to_show = 0;
         foreach ($extra_fields as $key => $field) {
+            // exclude extra profile fields by id
+            if (in_array($field[3], $exclude)) {
+                continue;
+            }
             // show only extra fields that are visible + and can be filtered, added by J.Montoya
             if ($field[6] == 1 && $field[8] == 1) {
                 if (isset($_GET['additional_profile_field']) && $field[0] == $_GET['additional_profile_field']) {
@@ -8692,6 +8698,25 @@ class TrackingCourseLog
                 }
             }
 
+            $data = Session::read('default_additional_user_profile_info');
+            $defaultExtraFieldInfo = Session::read('default_extra_field_info');
+            if (isset($defaultExtraFieldInfo) && isset($data)) {
+                foreach ($data as $key => $val) {
+                    if (isset($val[$user['user_id']])) {
+                        if (is_array($val[$user['user_id']])) {
+                            $user_row[$defaultExtraFieldInfo[$key]['variable']] = implode(
+                                ', ',
+                                $val[$user['user_id']]
+                            );
+                        } else {
+                            $user_row[$defaultExtraFieldInfo[$key]['variable']] = $val[$user['user_id']];
+                        }
+                    } else {
+                        $user_row[$defaultExtraFieldInfo[$key]['variable']] = '';
+                    }
+                }
+            }
+
             if (api_get_setting('show_email_addresses') === 'true') {
                 $user_row['email'] = $user['col4'];
             }
@@ -8717,6 +8742,8 @@ class TrackingCourseLog
 
         Session::erase('additional_user_profile_info');
         Session::erase('extra_field_info');
+        Session::erase('default_additional_user_profile_info');
+        Session::erase('default_extra_field_info');
         Session::write('user_id_list', $userIdList);
 
         return $users;

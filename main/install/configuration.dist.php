@@ -221,6 +221,8 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //);
 // Course log - Default columns to hide
 //$_configuration['course_log_hide_columns'] = ['columns' => [1, 9]];
+// Course log - User extra fields to show as columns for default
+//$_configuration['course_log_default_extra_fields'] = ['extra_fields' => ['office_address', 'office_phone_extension']];
 // Unoconv binary file
 //$_configuration['unoconv.binaries'] = '/usr/bin/unoconv';
 // Proxy settings for access external services

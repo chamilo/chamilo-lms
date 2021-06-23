@@ -206,6 +206,36 @@ if (isset($_GET['additional_profile_field'])) {
 Session::write('additional_user_profile_info', $userProfileInfo);
 Session::write('extra_field_info', $extra_info);
 
+$defaultExtraFields = [];
+$defaultExtraFieldsFromSettings = [];
+$defaultExtraFieldsFromSettings = api_get_configuration_value('course_log_default_extra_fields');
+if (!empty($defaultExtraFieldsFromSettings) && isset($defaultExtraFieldsFromSettings['extra_fields'])) {
+    $defaultExtraFields = $defaultExtraFieldsFromSettings['extra_fields'];
+    $defaultExtraInfo = [];
+    $defaultUserProfileInfo = [];
+
+    $userArray = [];
+    foreach ($studentList as $key => $item) {
+        $userArray[] = $key;
+    }
+
+    foreach ($defaultExtraFields as $fieldName) {
+        $extraFieldInfo = UserManager::get_extra_field_information_by_name($fieldName);
+
+        if (!empty($extraFieldInfo)) {
+            // Fetching only the user that are loaded NOT ALL user in the portal.
+            $defaultUserProfileInfo[$extraFieldInfo['id']] = TrackingCourseLog::getAdditionalProfileInformationOfFieldByUser(
+                $extraFieldInfo['id'],
+                $userArray
+            );
+            $defaultExtraInfo[$extraFieldInfo['id']] = $extraFieldInfo;
+        }
+    }
+
+    Session::write('default_additional_user_profile_info', $defaultUserProfileInfo);
+    Session::write('default_extra_field_info', $defaultExtraInfo);
+}
+
 Display::display_header($nameTools, 'Tracking');
 
 $actionsLeft = TrackingCourseLog::actionsLeft('users', $sessionId);
@@ -589,7 +619,7 @@ if ($nbStudents > 0) {
         Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_SMALL).
         get_lang('ExportAsCSV')
     .' </a>');
-    $extraFieldSelect = TrackingCourseLog::display_additional_profile_fields();
+    $extraFieldSelect = TrackingCourseLog::display_additional_profile_fields($defaultExtraFields);
     if (!empty($extraFieldSelect)) {
         $html .= $extraFieldSelect;
     }
@@ -743,6 +773,13 @@ if ($nbStudents > 0) {
             $headers[$extra_info[$fieldId]['variable']] = $extra_info[$fieldId]['display_text'];
             $counter++;
             $parameters['additional_profile_field'] = $fieldId;
+        }
+    }
+    if (isset($defaultExtraFields)) {
+        foreach ($defaultExtraInfo as $field) {
+            $table->set_header($counter, $field['display_text'], false);
+            $headers[$field['variable']] = $field['display_text'];
+            $counter++;
         }
     }
     $table->set_header($counter, get_lang('Details'), false);

@@ -1006,15 +1006,11 @@ class CourseCategory
     public static function saveImage(CourseCategoryEntity $category, $fileData)
     {
         if (isset($fileData['tmp_name']) && !empty($fileData['tmp_name'])) {
-            $categoryId = $category->getId();
-            $extension = getextension($fileData['name']);
-            $fileName = "cc_$categoryId.{$extension[0]}";
-
             $repo = Container::getAssetRepository();
             $asset = new Asset();
             $asset
                 ->setCategory(Asset::COURSE_CATEGORY)
-                ->setTitle($fileName);
+                ->setTitle($fileData['name']);
             $asset = $repo->createFromRequest($asset, $fileData);
 
             $category->setImage($asset->getId());

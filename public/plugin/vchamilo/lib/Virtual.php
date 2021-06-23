@@ -254,26 +254,20 @@ class Virtual
         # Change this file to fit your configuration and save it as .htaccess in the courses folder #
         # Chamilo mod rewrite
         # Comment lines start with # and are not processed
-        
+
         <IfModule mod_rewrite.c>
         RewriteEngine On
-        
+
         # Rewrite base is the dir chamilo is installed in with trailing slash
         RewriteBase /{$course_folder}/
-        
+
         # Do not rewrite on the main dir
         # Change this path to the path of your main folder
         RewriteCond %{REQUEST_URI} !^/main/
-        
+
         #replace nasty ampersands by 3 slashes, we change these back in download.php
         RewriteRule ([^/]+)/document/(.*)&(.*)$ $1/document/$2///$3 [N]
-        
-        # Rewrite everything in the scorm folder of a course to the download script
-        RewriteRule ([^/]+)/scorm/(.*)$ /main/document/download_scorm.php?doc_url=/$2&cDir=$1 [QSA,L]
-        
-        # Rewrite everything in the document folder of a course to the download script
-        RewriteRule ([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
-        
+
         # Rewrite everything in the work folder
         RewriteRule ([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
         </IfModule>
@@ -997,7 +991,7 @@ class Virtual
 
         self::ctrace('Registering: '.$data->root_web);
         $tablename = Database::get_main_table('vchamilo');
-        $sql = "SELECT * FROM $tablename 
+        $sql = "SELECT * FROM $tablename
                 WHERE root_web = '".Database::escape_string($data->root_web)."'";
         $result = Database::query($sql);
 
@@ -1047,10 +1041,10 @@ class Virtual
         $sitename = Database::escape_string($data->sitename);
         $institution = Database::escape_string($data->institution);
 
-        $sqls[] = "UPDATE {$settingstable} SET selected_value = '{$sitename}' 
+        $sqls[] = "UPDATE {$settingstable} SET selected_value = '{$sitename}'
                    WHERE variable = 'siteName' AND category = 'Platform' ";
 
-        $sqls[] = "UPDATE {$settingstable} SET selected_value = '{$institution}' 
+        $sqls[] = "UPDATE {$settingstable} SET selected_value = '{$institution}'
                    WHERE variable = 'institution' AND category = 'Platform' ";
 
         $sqls[] = "UPDATE {$accessurltable} SET url = '{$data->root_web}' WHERE id = '1' ";
@@ -1128,7 +1122,7 @@ class Virtual
         self::ctrace('Registering: '.$data->root_web);
 
         $table = Database::get_main_table('vchamilo');
-        $sql = "SELECT * FROM $table 
+        $sql = "SELECT * FROM $table
                 WHERE root_web = '".Database::escape_string($data->root_web)."'";
         $result = Database::query($sql);
         $id = null;

@@ -407,9 +407,7 @@ Typically, the .htaccess will look like this (with additional comments):<br />
 RewriteEngine On
 RewriteBase /courses/
 RewriteCond %{REQUEST_URI} !^/main/
-RewriteRule ([^/]+)/document/(.*)&(.*)$ $1/document/$2///$3 [N]
 RewriteRule ([^/]+)/scorm/(.*)$ /main/document/download_scorm.php?doc_url=/$2&cDir=$1 [QSA,L]
-RewriteRule ([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
 RewriteRule ([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
 </IfModule>
 </pre><br />
@@ -419,9 +417,7 @@ The idea is to allow direct access (without access validation) to resources in t
 RewriteEngine On
 RewriteBase /courses/
 RewriteCond %{REQUEST_URI} !^/main/
-RewriteRule ([^/]+)/document/(.*)&(.*)$ $1/document/$2///$3 [N]
 RewriteRule ([^/]+)/scorm/(.*)$ /app/courses/$1/scorm/$2 [QSA,L]
-RewriteRule ([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
 RewriteRule ([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
 </IfModule>
 </pre><br />

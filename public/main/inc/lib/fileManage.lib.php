@@ -106,82 +106,6 @@ function removeDir($dir)
 }
 
 /**
- * Return true if folder is empty.
- *
- * @author hubert.borderiou@grenet.fr
- *
- * @param string $in_folder folder path on disk
- *
- * @return int 1 if folder is empty, 0 otherwise
- */
-function folder_is_empty($in_folder)
-{
-    $folder_is_empty = 0;
-    if (is_dir($in_folder)) {
-        $tab_folder_content = scandir($in_folder);
-        if ((
-            2 == count($tab_folder_content) &&
-            in_array(".", $tab_folder_content) &&
-            in_array("..", $tab_folder_content)
-            ) ||
-            (count($tab_folder_content) < 2)
-        ) {
-            $folder_is_empty = 1;
-        }
-    }
-
-    return $folder_is_empty;
-}
-
-/**
- * Renames a file or a directory.
- *
- * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
- *
- * @param string $file_path     complete path of the file or the directory
- * @param string $new_file_name new name for the file or the directory
- *
- * @return bool true if succeed, false otherwise
- *
- * @see rename() uses the check_name_exist() and php2phps() functions
- */
-function my_rename($file_path, $new_file_name)
-{
-    $save_dir = getcwd();
-    $path = dirname($file_path);
-    $old_file_name = basename($file_path);
-    $new_file_name = api_replace_dangerous_char($new_file_name);
-
-    // If no extension, take the old one
-    if ((false === strpos($new_file_name, '.')) && ($dotpos = strrpos($old_file_name, '.'))) {
-        $new_file_name .= substr($old_file_name, $dotpos);
-    }
-
-    // Note: still possible: 'xx.yy' -rename-> '.yy' -rename-> 'zz'
-    // This is useful for folder names, where otherwise '.' would be sticky
-
-    // Extension PHP is not allowed, change to PHPS
-    $new_file_name = php2phps($new_file_name);
-
-    if ($new_file_name == $old_file_name) {
-        return $old_file_name;
-    }
-
-    if (strtolower($new_file_name) != strtolower($old_file_name) && check_name_exist($path.'/'.$new_file_name)) {
-        return false;
-    }
-    // On a Windows server, it would be better not to do the above check
-    // because it succeeds for some new names resembling the old name.
-    // But on Unix/Linux the check must be done because rename overwrites.
-
-    chdir($path);
-    $res = rename($old_file_name, $new_file_name) ? $new_file_name : false;
-    chdir($save_dir);
-
-    return $res;
-}
-
-/**
  * Moves a file or a directory to an other area.
  *
  * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
@@ -328,20 +252,6 @@ function copyDirWithoutFilesTo($source, $destination)
     }
 
     return true;
-}
-
-/**
- * Extracting extension of a filename.
- *
- * @returns array
- *
- * @param string $filename filename
- */
-function getextension($filename)
-{
-    $bouts = explode('.', $filename);
-
-    return [array_pop($bouts), implode('.', $bouts)];
 }
 
 /**

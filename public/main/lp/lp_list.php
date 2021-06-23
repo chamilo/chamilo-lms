@@ -960,7 +960,7 @@ Session::erase('objExercise');
 Session::erase('questionList');
 
 learnpath::generate_learning_path_folder($courseInfo);
-DocumentManager::removeGeneratedAudioTempFile();
+//DocumentManager::removeGeneratedAudioTempFile();
 
 $downloadFileAfterFinish = '';
 if ($ending && $allLpTimeValid && api_get_configuration_value('download_files_after_all_lp_finished')) {

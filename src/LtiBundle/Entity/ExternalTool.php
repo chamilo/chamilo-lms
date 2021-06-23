@@ -1,8 +1,7 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
-
-/* For licensing terms, see /license.txt */
 
 namespace Chamilo\LtiBundle\Entity;
 
@@ -13,7 +12,9 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use UnserializeApi;
 
 /**
  * Class ExternalTool.
@@ -23,6 +24,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ExternalTool extends AbstractResource implements ResourceInterface, ResourceToRootInterface
 {
+    const V_1P1 = 'lti1p1';
+    const V_1P3 = 'lti1p3';
+
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -38,7 +42,7 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected ?string $description = null;
+    protected ?string $description;
 
     /**
      * @ORM\Column(name="launch_url", type="string")
@@ -58,7 +62,7 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
     /**
      * @ORM\Column(name="custom_params", type="text", nullable=true)
      */
-    protected ?string $customParams = null;
+    protected ?string $customParams;
 
     /**
      * @ORM\Column(name="active_deep_linking", type="boolean", nullable=false, options={"default": false})
@@ -68,30 +72,84 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
     /**
      * @ORM\Column(name="privacy", type="text", nullable=true, options={"default": null})
      */
-    protected ?string $privacy = null;
+    protected ?string $privacy;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    protected ?Course $course = null;
+    protected ?Course $course;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation")
      * @ORM\JoinColumn(name="gradebook_eval_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected ?GradebookEvaluation $gradebookEval = null;
+    protected ?GradebookEvaluation $gradebookEval;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\LtiBundle\Entity\ExternalTool", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
-    protected ?ExternalTool $parent = null;
+    protected ?ExternalTool $parent;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\LtiBundle\Entity\ExternalTool", mappedBy="parent")
      */
     protected Collection $children;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="client_id", type="string", nullable=true)
+     */
+    private ?string $clientId;
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="login_url", type="string", nullable=true)
+     */
+    private ?string $loginUrl;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="redirect_url", type="string", nullable=true)
+     */
+    private ?string $redirectUrl;
+
+    /**
+     * @var array|null
+     *
+     * @ORM\Column(name="advantage_services", type="json", nullable=true)
+     */
+    private ?array $advantageServices;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\LtiBundle\Entity\LineItem", mappedBy="tool")
+     */
+    private Collection $lineItems;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="version", type="string", options={"default": "lti1p1"})
+     */
+    private string $version;
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="launch_presentation", type="json")
+     */
+    private array $launchPresentation;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="replacement_params", type="json")
+     */
+    private array $replacementParams;
 
     public function __construct()
     {
@@ -105,11 +163,14 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
         $this->sharedSecret = null;
         $this->parent = null;
         $this->children = new ArrayCollection();
-    }
-
-    public function __clone()
-    {
-        $this->id = 0;
+        $this->consumerKey = null;
+        $this->sharedSecret = null;
+        $this->lineItems = new ArrayCollection();
+        $this->version = self::V_1P1;
+        $this->launchPresentation = [
+            'document_target' => 'iframe',
+        ];
+        $this->replacementParams = [];
     }
 
     public function __toString(): string
@@ -125,117 +186,48 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return ExternalTool
-     */
-    public function setName($name)
+    public function setName(string $name): static
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * @return null|string
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * @param null|string $description
-     *
-     * @return ExternalTool
-     */
-    public function setDescription($description)
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getLaunchUrl()
+    public function getLaunchUrl(): string
     {
         return $this->launchUrl;
     }
 
-    /**
-     * @param string $launchUrl
-     *
-     * @return ExternalTool
-     */
-    public function setLaunchUrl($launchUrl)
+    public function setLaunchUrl(string $launchUrl): static
     {
         $this->launchUrl = $launchUrl;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getConsumerKey()
-    {
-        return $this->consumerKey;
-    }
-
-    /**
-     * @param string $consumerKey
-     *
-     * @return ExternalTool
-     */
-    public function setConsumerKey($consumerKey)
-    {
-        $this->consumerKey = $consumerKey;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSharedSecret()
-    {
-        return $this->sharedSecret;
-    }
-
-    /**
-     * @param string $sharedSecret
-     *
-     * @return ExternalTool
-     */
-    public function setSharedSecret($sharedSecret)
-    {
-        $this->sharedSecret = $sharedSecret;
-
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getCustomParams()
+    public function getCustomParams(): ?string
     {
         return $this->customParams;
     }
 
-    /**
-     * @param null|string $customParams
-     *
-     * @return ExternalTool
-     */
-    public function setCustomParams($customParams)
+    public function setCustomParams(?string $customParams): static
     {
         $this->customParams = $customParams;
 
@@ -247,39 +239,64 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
         return null === $this->course;
     }
 
-    /**
-     * @return null|string
-     */
-    public function encodeCustomParams(array $params)
+    public function encodeCustomParams(array $params): ?string
     {
         if (empty($params)) {
             return null;
         }
+
         $pairs = [];
+
         foreach ($params as $key => $value) {
-            $pairs[] = "{$key}={$value}";
+            $pairs[] = "$key=$value";
         }
 
         return implode("\n", $pairs);
     }
 
-    /**
-     * @return array
-     */
-    public function parseCustomParams()
+    public function getCustomParamsAsArray(): array
+    {
+        $params = [];
+        $lines = explode("\n", $this->customParams);
+        $lines = array_filter($lines);
+
+        foreach ($lines as $line) {
+            [$key, $value] = explode('=', $line, 2);
+
+            $key = self::filterSpecialChars($key);
+            $value = self::filterSpaces($value);
+
+            $params[$key] = $value;
+        }
+
+        return $params;
+    }
+
+    private static function filterSpaces(string $value): string
+    {
+        $newValue = preg_replace('/\s+/', ' ', $value);
+
+        return trim($newValue);
+    }
+
+    public function parseCustomParams(): array
     {
         if (empty($this->customParams)) {
             return [];
         }
+
         $params = [];
         $strings = explode("\n", $this->customParams);
+
         foreach ($strings as $string) {
             if (empty($string)) {
                 continue;
             }
+
             $pairs = explode('=', $string, 2);
-            $key = self::parseCustomKey($pairs[0]);
+            $key = self::filterSpecialChars($pairs[0]);
             $value = $pairs[1];
+
             $params['custom_'.$key] = $value;
         }
 
@@ -291,86 +308,43 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
         return $this->activeDeepLinking;
     }
 
-    /**
-     * Set activeDeepLinking.
-     *
-     * @param bool $activeDeepLinking
-     *
-     * @return ExternalTool
-     */
-    public function setActiveDeepLinking($activeDeepLinking)
+    public function setActiveDeepLinking(bool $activeDeepLinking): static
     {
         $this->activeDeepLinking = $activeDeepLinking;
 
         return $this;
     }
 
-    /**
-     * Get course.
-     *
-     * @return null|Course
-     */
-    public function getCourse()
+    public function getCourse(): ?Course
     {
         return $this->course;
     }
 
-    /**
-     * Set course.
-     *
-     * @return ExternalTool
-     */
-    public function setCourse(Course $course = null)
+    public function setCourse(Course $course = null): static
     {
         $this->course = $course;
 
         return $this;
     }
 
-    /**
-     * Get gradebookEval.
-     *
-     * @return null|GradebookEvaluation
-     */
-    public function getGradebookEval()
+    public function getGradebookEval(): ?GradebookEvaluation
     {
         return $this->gradebookEval;
     }
 
-    /**
-     * Set gradebookEval.
-     *
-     * @param null|GradebookEvaluation $gradebookEval
-     *
-     * @return ExternalTool
-     */
-    public function setGradebookEval($gradebookEval)
+    public function setGradebookEval(?GradebookEvaluation $gradebookEval): static
     {
         $this->gradebookEval = $gradebookEval;
 
         return $this;
     }
 
-    /**
-     * Get privacy.
-     *
-     * @return null|string
-     */
-    public function getPrivacy()
+    public function getPrivacy(): ?string
     {
         return $this->privacy;
     }
 
-    /**
-     * Set privacy.
-     *
-     * @param bool $shareName
-     * @param bool $shareEmail
-     * @param bool $sharePicture
-     *
-     * @return ExternalTool
-     */
-    public function setPrivacy($shareName = false, $shareEmail = false, $sharePicture = false)
+    public function setPrivacy(bool $shareName = false, bool $shareEmail = false, bool $sharePicture = false): static
     {
         $this->privacy = serialize(
             [
@@ -387,16 +361,12 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
     {
         $unserialize = $this->unserializePrivacy();
 
-        if (!$unserialize) {
-            return false;
-        }
-
         return (bool) $unserialize['share_name'];
     }
 
-    public function unserializePrivacy()
+    public function unserializePrivacy(): array
     {
-        return unserialize((string) $this->privacy);
+        return UnserializeApi::unserialize('not_allowed_classes', $this->privacy);
     }
 
     public function isSharingEmail(): bool
@@ -421,12 +391,12 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
         return (bool) $unserialize['share_picture'];
     }
 
-    public function getToolParent(): ?self
+    public function getToolParent(): ?ExternalTool
     {
         return $this->parent;
     }
 
-    public function setToolParent(self $parent): self
+    public function setToolParent(ExternalTool $parent): static
     {
         $this->parent = $parent;
         $this->sharedSecret = $parent->getSharedSecret();
@@ -441,14 +411,207 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
         return $this->children;
     }
 
-    /**
-     * @return ExternalTool
-     */
-    public function setChildren(Collection $children): self
+    public function setChildren(Collection $children): static
     {
         $this->children = $children;
 
         return $this;
+    }
+
+    public function getSharedSecret(): ?string
+    {
+        return $this->sharedSecret;
+    }
+
+    public function setSharedSecret(?string $sharedSecret): static
+    {
+        $this->sharedSecret = $sharedSecret;
+
+        return $this;
+    }
+
+    public function getConsumerKey(): ?string
+    {
+        return $this->consumerKey;
+    }
+
+    public function setConsumerKey(?string $consumerKey): static
+    {
+        $this->consumerKey = $consumerKey;
+
+        return $this;
+    }
+
+    public function getLoginUrl(): ?string
+    {
+        return $this->loginUrl;
+    }
+
+    public function setLoginUrl(?string $loginUrl): static
+    {
+        $this->loginUrl = $loginUrl;
+
+        return $this;
+    }
+
+    public function getRedirectUrl(): ?string
+    {
+        return $this->redirectUrl;
+    }
+
+    public function setRedirectUrl(?string $redirectUrl): static
+    {
+        $this->redirectUrl = $redirectUrl;
+
+        return $this;
+    }
+
+    public function getClientId(): ?string
+    {
+        return $this->clientId;
+    }
+
+    public function setClientId(?string $clientId): static
+    {
+        $this->clientId = $clientId;
+
+        return $this;
+    }
+
+    public function getAdvantageServices(): array
+    {
+        if (empty($this->advantageServices)) {
+            $this->advantageServices = [];
+        }
+
+        return array_merge(
+            [
+                'ags' => LtiAssignmentGradesService::AGS_NONE,
+                'nrps' => LtiNamesRoleProvisioningService::NRPS_NONE,
+            ],
+            $this->advantageServices
+        );
+    }
+
+    public function setAdvantageServices(array $advantageServices): static
+    {
+        $this->advantageServices = $advantageServices;
+
+        return $this;
+    }
+
+    public function addLineItem(LineItem $lineItem): static
+    {
+        $lineItem->setTool($this);
+
+        $this->lineItems[] = $lineItem;
+
+        return $this;
+    }
+
+    public function getLineItems(
+        int $resourceLinkId = 0,
+        int $resourceId = 0,
+        string $tag = '',
+        int $limit = 0,
+        int $page = 1
+    ): Collection {
+        $criteria = Criteria::create();
+
+        if ($resourceLinkId) {
+            $criteria->andWhere(Criteria::expr()->eq('tool', $resourceId));
+        }
+
+        if ($resourceId) {
+            $criteria->andWhere(Criteria::expr()->eq('tool', $resourceId));
+        }
+
+        if (!empty($tag)) {
+            $criteria->andWhere(Criteria::expr()->eq('tag', $tag));
+        }
+
+        if ($limit > 0) {
+            $criteria->setMaxResults($limit);
+
+            if ($page > 0) {
+                $criteria->setFirstResult($page * $limit);
+            }
+        }
+
+        return $this->lineItems->matching($criteria);
+    }
+
+    public function setLineItems(Collection $lineItems): static
+    {
+        $this->lineItems = $lineItems;
+
+        return $this;
+    }
+
+    public function getVersion(): string
+    {
+        return $this->version;
+    }
+
+    public function setVersion(string $version): static
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    public function getVersionName(): string
+    {
+        if (self::V_1P1 === $this->version) {
+            return 'LTI 1.0 / 1.1';
+        }
+
+        return 'LTI 1.3';
+    }
+
+    public function setDocumenTarget(string $target): static
+    {
+        $this->launchPresentation['document_target'] = in_array($target, ['iframe', 'window']) ? $target : 'iframe';
+
+        return $this;
+    }
+
+    public function getDocumentTarget()
+    {
+        return $this->launchPresentation['document_target'] ?: 'iframe';
+    }
+
+    /**
+     * @return array
+     */
+    public function getLaunchPresentation(): array
+    {
+        return $this->launchPresentation;
+    }
+
+    public function setReplacementForUserId(string $replacement): static
+    {
+        $this->replacementParams['user_id'] = $replacement;
+
+        return $this;
+    }
+
+    public function getReplacementForUserId(): ?string
+    {
+        if (!empty($this->replacementParams['user_id'])) {
+            return $this->replacementParams['user_id'];
+        }
+
+        return null;
+    }
+
+    public function getChildrenInCourses(array $coursesId): Collection
+    {
+        return $this->children->filter(
+            function (ExternalTool $child) use ($coursesId) {
+                return in_array($child->getCourse()->getId(), $coursesId);
+            }
+        );
     }
 
     public function getResourceName(): string
@@ -456,7 +619,7 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
         return $this->getName();
     }
 
-    public function setResourceName(string $name): self
+    public function setResourceName(string $name): static
     {
         return $this->setName($name);
     }
@@ -466,18 +629,12 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
         return $this->getId();
     }
 
-    /**
-     * Map the key from custom param.
-     *
-     * @param string $key
-     *
-     * @return string
-     */
-    private static function parseCustomKey($key)
+    private static function filterSpecialChars(string $key): string
     {
         $newKey = '';
         $key = strtolower($key);
         $split = str_split($key);
+
         foreach ($split as $char) {
             if (
                 ($char >= 'a' && $char <= 'z') || ($char >= '0' && $char <= '9')
@@ -486,6 +643,7 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
 
                 continue;
             }
+
             $newKey .= '_';
         }
 

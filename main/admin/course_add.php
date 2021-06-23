@@ -98,6 +98,10 @@ if ($countCategories >= 100) {
     );
 }
 
+if (api_get_configuration_value('course_creation_form_set_course_category_mandatory')) {
+    $form->addRule('category_code', get_lang('ThisFieldIsRequired'), 'required');
+}
+
 $currentTeacher = api_get_user_entity(api_get_user_id());
 
 $form->addSelectAjax(

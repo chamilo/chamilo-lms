@@ -133,6 +133,10 @@ if ($countCategories >= 100) {
     );
 }
 
+if (api_get_configuration_value('course_creation_form_set_course_category_mandatory')) {
+    $form->addRule('category_code', get_lang('ThisFieldIsRequired'), 'required');
+}
+
 // Course code
 if (!api_get_configuration_value('course_creation_form_hide_course_code')) {
     $form->addText(

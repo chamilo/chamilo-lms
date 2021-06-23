@@ -1970,3 +1970,6 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 
 // Configuration setting to disable course code field in course creation form.
 //$_configuration['course_creation_form_hide_course_code'] = false;
+
+// Configuration setting to make required course category in course creation form.
+//$_configuration['course_creation_form_set_course_category_mandatory'] = false;

@@ -523,7 +523,7 @@ class ExtraField extends Model
      */
     public static function getLocalizationInput($variable, $text)
     {
-        $html = '
+        return '
                 <div class="form-group">
                     <label for="geolocalization_extra_'.$variable.'"
                         class="col-sm-2 control-label"></label>
@@ -552,8 +552,6 @@ class ExtraField extends Model
                     </div>
                 </div>
             ';
-
-        return $html;
     }
 
     /**
@@ -833,7 +831,7 @@ class ExtraField extends Model
 
         if (!empty($fields)) {
             foreach ($fields as $field) {
-                $field_value = $field_values->get_values_by_handler_and_field_id(
+                $field_value = $fieldValueArray = $field_values->get_values_by_handler_and_field_id(
                     $itemId,
                     $field['id']
                 );
@@ -853,6 +851,11 @@ class ExtraField extends Model
                     $variable = $field['variable'];
                     $field_value = $field_value['value'];
                     switch ($field['field_type']) {
+                        case self::FIELD_TYPE_FILE_IMAGE:
+                        case self::FIELD_TYPE_FILE:
+                            // Get asset id
+                            $extra_data['extra_'.$field['variable']] = $fieldValueArray['asset_id'] ?? 0;
+                            break;
                         case self::FIELD_TYPE_TAG:
                             $tags = UserManager::get_user_tags_to_string(
                                 $itemId,
@@ -985,6 +988,8 @@ class ExtraField extends Model
         $help = false
     ) {
         $jquery_ready_content = null;
+
+        $assetRepo = Container::getAssetRepository();
         if (!empty($extra)) {
             $newOrder = [];
             if (!empty($orderFields)) {
@@ -1046,7 +1051,7 @@ class ExtraField extends Model
                     $freezeElement = 0 == $field_details['visible_to_self'] || 0 == $field_details['changeable'];
                 }
 
-                $translatedDisplayText = get_lang($field_details['display_text'], true);
+                $translatedDisplayText = get_lang($field_details['display_text']);
                 $translatedDisplayHelpText = '';
                 if ($help) {
                     $translatedDisplayHelpText .= get_lang($field_details['display_text'].'Help');
@@ -1543,15 +1548,16 @@ class ExtraField extends Model
 
                         if (is_array($extraData) && array_key_exists($fieldVariable, $extraData)) {
                             $assetId = $extraData[$fieldVariable];
-                            $assetRepo = Container::getAssetRepository();
-                            $asset = $assetRepo->find($assetId);
-                            if (null !== $asset) {
-                                $fieldTexts[] = Display::img(
-                                    $assetRepo->getAssetUrl($asset),
-                                    $field_details['display_text'],
-                                    ['width' => '300'],
-                                    false
-                                );
+                            if (!empty($assetId)) {
+                                $asset = $assetRepo->find($assetId);
+                                if (null !== $asset) {
+                                    $fieldTexts[] = Display::img(
+                                        $assetRepo->getAssetUrl($asset),
+                                        $field_details['display_text'],
+                                        ['width' => '300'],
+                                        false
+                                    );
+                                }
                             }
                         }
 
@@ -1589,8 +1595,7 @@ class ExtraField extends Model
                         if (is_array($extraData) &&
                             array_key_exists($fieldVariable, $extraData)
                         ) {
-                            $assetId = $extraData[$fieldVariable];
-                            $assetRepo = Container::getAssetRepository();
+                            $assetId = $extraData[$fieldVariable] ?? 0;
                             /** @var Asset $asset */
                             $asset = $assetRepo->find($assetId);
                             if (null !== $asset) {
@@ -2967,10 +2972,10 @@ JAVASCRIPT;
                     break;
                 case self::FIELD_TYPE_FILE:
                 case self::FIELD_TYPE_FILE_IMAGE:
-                    if (false === $valueData || empty($valueData['value'])) {
+                    if (false === $valueData || empty($valueData['asset_id'])) {
                         break;
                     }
-                    $assetId = $valueData['value'];
+                    $assetId = $valueData['asset_id'];
                     $assetRepo = Container::getAssetRepository();
                     /** @var Asset $asset */
                     $asset = $assetRepo->find($assetId);

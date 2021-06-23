@@ -24,6 +24,7 @@ class ExtraFieldValue extends Model
         'value',
         'comment',
         'item_id',
+        'asset_id',
         'created_at',
         'updated_at',
     ];
@@ -292,14 +293,11 @@ class ExtraFieldValue extends Model
                         $asset = $repo->createFromRequest($asset, $value);
                         if ($asset) {
                             $assetId = $asset->getId();
-                            // Crop the image to adjust 16:9 ratio
-                            /*$imageExtraField = new Image($value['tmp_name']);
-                            $imageExtraField->resize(400);
-                            $imageExtraField->send_image($fileDir.$fileName, -1, 'png');*/
                             $newParams = [
                                 'item_id' => $params['item_id'],
                                 'field_id' => $extraFieldInfo['id'],
                                 'value' => $assetId,
+                                'asset_id' => $assetId,
                                 'comment' => $comment,
                             ];
                             $this->save($newParams);
@@ -307,43 +305,10 @@ class ExtraFieldValue extends Model
                     }
                     break;
                 case ExtraField::FIELD_TYPE_FILE:
-                    /*$fileDir = $fileDirStored = '';
-                    switch ($this->type) {
-                        case 'course':
-                            $fileDir = api_get_path(SYS_UPLOAD_PATH).'courses/';
-                            $fileDirStored = "courses/";
-                            break;
-                        case 'session':
-                            $fileDir = api_get_path(SYS_UPLOAD_PATH).'sessions/';
-                            $fileDirStored = "sessions/";
-                            break;
-                        case 'user':
-                            $fileDir = UserManager::getUserPathById($params['item_id'], 'system');
-                            $fileDirStored = UserManager::getUserPathById($params['item_id'], 'last');
-                            break;
-                        case 'work':
-                            $fileDir = api_get_path(SYS_UPLOAD_PATH).'work/';
-                            $fileDirStored = "work/";
-                            break;
-                        case 'scheduled_announcement':
-                            $fileDir = api_get_path(SYS_UPLOAD_PATH).'scheduled_announcement/';
-                            $fileDirStored = 'scheduled_announcement/';
-                            break;
-                    }*/
-
                     $cleanedName = api_replace_dangerous_char($value['name']);
                     $fileName = ExtraField::FIELD_TYPE_FILE."_{$params['item_id']}_$cleanedName";
 
                     if (!empty($value['tmp_name']) && isset($value['error']) && 0 == $value['error']) {
-                        /*$cleanedName = api_replace_dangerous_char($value['name']);
-                        $fileName = ExtraField::FIELD_TYPE_FILE."_{$params['item_id']}_$cleanedName";
-                        moveUploadedFile($value, $fileDir.$fileName);
-
-                        $new_params = [
-                            'item_id' => $params['item_id'],
-                            'field_id' => $extraFieldInfo['id'],
-                            'value' => $fileDirStored.$fileName,
-                        ];*/
                         $mimeType = mime_content_type($value['tmp_name']);
                         $file = new UploadedFile($value['tmp_name'], $fileName, $mimeType, null, true);
                         $asset = new Asset();
@@ -361,6 +326,7 @@ class ExtraFieldValue extends Model
                                 'item_id' => $params['item_id'],
                                 'field_id' => $extraFieldInfo['id'],
                                 'value' => $assetId,
+                                'asset_id' => $assetId,
                             ];
                             if ('session' !== $this->type && 'course' !== $this->type) {
                                 $new_params['comment'] = $comment;
@@ -574,10 +540,11 @@ class ExtraFieldValue extends Model
         $item_id = Database::escape_string($item_id);
 
         $sql = "SELECT s.*, field_type FROM {$this->table} s
-                INNER JOIN {$this->table_handler_field} sf ON (s.field_id = sf.id)
+                INNER JOIN {$this->table_handler_field} sf
+                ON (s.field_id = sf.id)
                 WHERE
                     item_id = '$item_id' AND
-                    field_id = '".$field_id."' AND
+                    field_id = $field_id AND
                     sf.extra_field_type = ".$this->getExtraField()->getExtraFieldType()."
                 ORDER BY id";
         $result = Database::query($sql);
@@ -654,15 +621,16 @@ class ExtraFieldValue extends Model
     {
         $field_id = (int) $field_id;
         $limit = (int) $limit;
+        $tag = Database::escape_string($tag);
+
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
-        $tag = Database::escape_string($tag);
         $sql = "SELECT DISTINCT s.value, s.field_id
                 FROM {$this->table} s
                 INNER JOIN {$this->table_handler_field} sf
                 ON (s.field_id = sf.id)
                 WHERE
-                    field_id = '".$field_id."' AND
+                    field_id = $field_id AND
                     value LIKE '%$tag%' AND
                     sf.extra_field_type = ".$extraFieldType."
                 ORDER BY value
@@ -764,8 +732,8 @@ class ExtraFieldValue extends Model
 
                 if (in_array($result['field_type'], ExtraField::getExtraFieldTypesWithFiles())) {
                     $result['url'] = '';
-                    if (!empty($result['value'])) {
-                        $asset = $repo->find($result['value']);
+                    if (!empty($result['asset_id'])) {
+                        $asset = $repo->find($result['asset_id']);
                         if ($asset) {
                             $url = $repo->getAssetUrl($asset);
                             $result['url'] = $url;
@@ -926,8 +894,10 @@ class ExtraFieldValue extends Model
             foreach ($result as $item) {
                 $fieldType = (int) $item['field_type'];
                 $item['url'] = '';
-                if (in_array($fieldType, ExtraField::getExtraFieldTypesWithFiles(), true)) {
-                    $asset = $repo->find($item['value']);
+                if (!empty($item['asset_id']) &&
+                    in_array($fieldType, ExtraField::getExtraFieldTypesWithFiles(), true)
+                ) {
+                    $asset = $repo->find($item['asset_id']);
                     if ($asset) {
                         $url = $repo->getAssetUrl($asset);
                         $item['url'] = $url;
@@ -1048,8 +1018,10 @@ class ExtraFieldValue extends Model
         $repo = Container::getAssetRepository();
         foreach ($result as $item) {
             $fieldType = (int) $item['field_type'];
-            if (in_array($fieldType, ExtraField::getExtraFieldTypesWithFiles(), true)) {
-                $asset = $repo->find($item['value']);
+            if (!empty($item['asset_id']) &&
+                in_array($fieldType, ExtraField::getExtraFieldTypesWithFiles(), true)
+            ) {
+                $asset = $repo->find($item['asset_id']);
                 if ($asset) {
                     $em->remove($asset);
                 }
@@ -1071,7 +1043,7 @@ class ExtraFieldValue extends Model
     /**
      * @param int $itemId
      * @param int $fieldId
-     * @param int $fieldValue
+     * @param string|int $fieldValue
      *
      * @return bool
      */
@@ -1092,10 +1064,14 @@ class ExtraFieldValue extends Model
             Database::query($sql);
 
             // Delete file from uploads.
-            if (in_array($fieldData['field_type'], ExtraField::getExtraFieldTypesWithFiles())) {
+            if (isset($fieldData['asset_id']) &&
+                in_array($fieldData['field_type'], ExtraField::getExtraFieldTypesWithFiles())
+            ) {
                 $repo = Container::getAssetRepository();
-                $asset = $repo->find($fieldValue);
-                $repo->delete($asset);
+                $asset = $repo->find($fieldData['asset_id']);
+                if (null !== $asset) {
+                    $repo->delete($asset);
+                }
             }
 
             return true;

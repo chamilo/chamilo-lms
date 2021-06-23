@@ -43,12 +43,21 @@ class ExtraFieldValues
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraField")
      * @ORM\JoinColumn(name="field_id", referencedColumnName="id")
      */
+    #[Assert\NotBlank]
     protected ExtraField $field;
 
     /**
-     * @Assert\NotBlank()
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Asset")
+     * @ORM\JoinColumn(name="asset_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected ?Asset $asset = null;
+
+    /**
+     * Item id can be: userId, courseId, sessionId, etc.
+     *
      * @ORM\Column(name="item_id", type="integer")
      */
+    #[Assert\NotBlank]
     protected int $itemId;
 
     /**
@@ -115,6 +124,18 @@ class ExtraFieldValues
     public function setValue(string $value): self
     {
         $this->value = $value;
+
+        return $this;
+    }
+
+    public function getAsset(): ?Asset
+    {
+        return $this->asset;
+    }
+
+    public function setAsset(?Asset $asset): self
+    {
+        $this->asset = $asset;
 
         return $this;
     }

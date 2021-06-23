@@ -1,3 +1,0 @@
-<!DOCTYPE html>
-<?php
-exit;

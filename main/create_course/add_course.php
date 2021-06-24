@@ -85,11 +85,13 @@ $form->addElement(
 $form->applyFilter('title', 'html_filter');
 $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
-$form->addButtonAdvancedSettings('advanced_params');
-$form->addElement(
-    'html',
-    '<div id="advanced_params_options" style="display:none">'
-);
+if (!api_get_configuration_value('course_creation_form_set_course_category_mandatory')) {
+    $form->addButtonAdvancedSettings('advanced_params');
+    $form->addElement(
+        'html',
+        '<div id="advanced_params_options" style="display:none">'
+    );
+}
 
 $countCategories = $courseCategoriesRepo->countAllInAccessUrl(
     $accessUrlId,
@@ -135,6 +137,11 @@ if ($countCategories >= 100) {
 
 if (api_get_configuration_value('course_creation_form_set_course_category_mandatory')) {
     $form->addRule('category_code', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addButtonAdvancedSettings('advanced_params');
+    $form->addElement(
+        'html',
+        '<div id="advanced_params_options" style="display:none">'
+    );
 }
 
 // Course code

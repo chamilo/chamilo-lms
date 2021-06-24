@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
@@ -24,8 +25,8 @@ use UnserializeApi;
  */
 class ExternalTool extends AbstractResource implements ResourceInterface, ResourceToRootInterface
 {
-    const V_1P1 = 'lti1p1';
-    const V_1P3 = 'lti1p3';
+    public const V_1P1 = 'lti1p1';
+    public const V_1P3 = 'lti1p3';
 
     /**
      * @ORM\Column(name="id", type="integer")
@@ -98,55 +99,39 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
     protected Collection $children;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(name="client_id", type="string", nullable=true)
      */
     private ?string $clientId;
     /**
-     * @var string|null
-     *
      * @ORM\Column(name="login_url", type="string", nullable=true)
      */
     private ?string $loginUrl;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(name="redirect_url", type="string", nullable=true)
      */
     private ?string $redirectUrl;
 
     /**
-     * @var array|null
-     *
      * @ORM\Column(name="advantage_services", type="json", nullable=true)
      */
     private ?array $advantageServices;
 
     /**
-     * @var Collection
-     *
      * @ORM\OneToMany(targetEntity="Chamilo\LtiBundle\Entity\LineItem", mappedBy="tool")
      */
     private Collection $lineItems;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="version", type="string", options={"default": "lti1p1"})
      */
     private string $version;
     /**
-     * @var array
-     *
      * @ORM\Column(name="launch_presentation", type="json")
      */
     private array $launchPresentation;
 
     /**
-     * @var array
-     *
      * @ORM\Column(name="replacement_params", type="json")
      */
     private array $replacementParams;
@@ -183,9 +168,6 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
@@ -270,13 +252,6 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
         }
 
         return $params;
-    }
-
-    private static function filterSpaces(string $value): string
-    {
-        $newValue = preg_replace('/\s+/', ' ', $value);
-
-        return trim($newValue);
     }
 
     public function parseCustomParams(): array
@@ -391,12 +366,12 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
         return (bool) $unserialize['share_picture'];
     }
 
-    public function getToolParent(): ?ExternalTool
+    public function getToolParent(): ?self
     {
         return $this->parent;
     }
 
-    public function setToolParent(ExternalTool $parent): static
+    public function setToolParent(self $parent): static
     {
         $this->parent = $parent;
         $this->sharedSecret = $parent->getSharedSecret();
@@ -571,7 +546,7 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
 
     public function setDocumenTarget(string $target): static
     {
-        $this->launchPresentation['document_target'] = in_array($target, ['iframe', 'window']) ? $target : 'iframe';
+        $this->launchPresentation['document_target'] = \in_array($target, ['iframe', 'window'], true) ? $target : 'iframe';
 
         return $this;
     }
@@ -581,9 +556,6 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
         return $this->launchPresentation['document_target'] ?: 'iframe';
     }
 
-    /**
-     * @return array
-     */
     public function getLaunchPresentation(): array
     {
         return $this->launchPresentation;
@@ -608,8 +580,8 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
     public function getChildrenInCourses(array $coursesId): Collection
     {
         return $this->children->filter(
-            function (ExternalTool $child) use ($coursesId) {
-                return in_array($child->getCourse()->getId(), $coursesId);
+            function (self $child) use ($coursesId) {
+                return \in_array($child->getCourse()->getId(), $coursesId, true);
             }
         );
     }
@@ -627,6 +599,13 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
     public function getResourceIdentifier(): int
     {
         return $this->getId();
+    }
+
+    private static function filterSpaces(string $value): string
+    {
+        $newValue = preg_replace('/\s+/', ' ', $value);
+
+        return trim($newValue);
     }
 
     private static function filterSpecialChars(string $key): string

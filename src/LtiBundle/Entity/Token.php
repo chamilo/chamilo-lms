@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
@@ -10,58 +11,41 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class Token.
  *
- * @package Chamilo\LtiBundle\Entity
- *
  * @ORM\Table(name="lti_token")
  * @ORM\Entity
  */
 class Token
 {
-    const TOKEN_LIFETIME = 3600;
+    public const TOKEN_LIFETIME = 3600;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id()
      * @ORM\GeneratedValue()
      */
     protected int $id;
     /**
-     * @var ExternalTool
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\LtiBundle\Entity\ExternalTool")
      * @ORM\JoinColumn(name="tool_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private ExternalTool $tool;
     /**
-     * @var array
-     *
      * @ORM\Column(name="scope", type="json")
      */
     private array $scope;
     /**
-     * @var string
-     *
      * @ORM\Column(name="hash", type="string")
      */
     private string $hash;
     /**
-     * @var int
-     *
      * @ORM\Column(name="created_at", type="integer")
      */
     private int $createdAt;
     /**
-     * @var int
-     *
      * @ORM\Column(name="expires_at", type="integer")
      */
     private int $expiresAt;
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
@@ -79,9 +63,6 @@ class Token
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getScope(): array
     {
         return $this->scope;

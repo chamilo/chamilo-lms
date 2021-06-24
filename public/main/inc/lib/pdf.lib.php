@@ -801,7 +801,7 @@ class PDF
      *
      * @return string The PDF path
      */
-    public function exportFromHtmlToFile($html, $fileName, $dest = null)
+    public function exportFromHtmlToFile($html, $fileName)
     {
         $this->template = $this->template ?: new Template('', false, false, false, false, false, false);
 
@@ -819,13 +819,7 @@ class PDF
             'F'
         );
 
-        if (!$dest) {
-            return $pdfPath;
-        }
-
-        move($pdfPath, $dest);
-
-        return $dest.basename($pdfPath);
+        return $pdfPath;
     }
 
     /**
@@ -844,17 +838,15 @@ class PDF
     ) {
         $userId = api_get_user_id();
         $courseInfo = api_get_course_info_by_id($courseId);
-        $courseDirectory = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/document/';
 
         $docPath = $this->exportFromHtmlToFile(
             $htmlContent,
-            $fileName,
-            $courseDirectory
+            $fileName
         );
 
         DocumentManager::addDocument(
             $courseInfo,
-            str_replace($courseDirectory, '/', $docPath),
+            '',
             'file',
             filesize($docPath),
             $fileName,
@@ -863,7 +855,11 @@ class PDF
             true,
             null,
             $sessionId,
-            $userId
+            $userId,
+            false,
+            '',
+            null,
+            $docPath
         );
 
         Display::addFlash(Display::return_message(get_lang('Item added')));

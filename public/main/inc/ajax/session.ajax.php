@@ -289,7 +289,7 @@ switch ($action) {
 
             $http_www = api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/document';
 
-            $documentAndFolders = DocumentManager::getAllDocumentData(
+            /*$documentAndFolders = DocumentManager::getAllDocumentData(
                 $courseInfo,
                 $folderName,
                 0,
@@ -297,7 +297,8 @@ switch ($action) {
                 false,
                 false,
                 $session->getId()
-            );
+            );*/
+            $documentAndFolders = [];
 
             $documentAndFolders = array_filter(
                 $documentAndFolders,

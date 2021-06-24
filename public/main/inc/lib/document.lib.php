@@ -519,183 +519,6 @@ class DocumentManager
     }
 
     /**
-     * Fetches all document data for the given user/group.
-     *
-     * @param array  $courseInfo
-     * @param string $path
-     * @param int    $toGroupId       iid
-     * @param int    $toUserId
-     * @param bool   $canSeeInvisible
-     * @param bool   $search
-     * @param int    $sessionId
-     *
-     * @return array with all document data
-     */
-    public static function getAllDocumentData(
-        $courseInfo,
-        $path = '/',
-        $toGroupId = 0,
-        $toUserId = null,
-        $canSeeInvisible = false,
-        $search = false,
-        $sessionId = 0,
-        User $currentUser = null
-    ) {
-        if (empty($courseInfo)) {
-            return [];
-        }
-
-        $tblDocument = Database::get_course_table(TABLE_DOCUMENT);
-        $currentUser = $currentUser ?: api_get_current_user();
-
-        // Escape underscores in the path so they don't act as a wildcard
-        $originalPath = $path;
-        $path = str_replace('_', '\_', $path);
-
-        // The given path will not end with a slash, unless it's the root '/'
-        // so no root -> add slash
-        $addedSlash = '/' == $path ? '' : '/';
-
-        $sharedCondition = null;
-        if ('/shared_folder' == $originalPath) {
-            $students = CourseManager::get_user_list_from_course_code($courseInfo['code'], $sessionId);
-            if (!empty($students)) {
-                $conditionList = [];
-                foreach ($students as $studentInfo) {
-                    $conditionList[] = '/shared_folder/sf_user_'.$studentInfo['user_id'];
-                }
-                $sharedCondition .= ' AND docs.path IN ("'.implode('","', $conditionList).'")';
-            }
-        }
-
-        $sql = "SELECT
-                    docs.iid,
-                    docs.filetype,
-                    docs.path,
-                    docs.title,
-                    docs.comment,
-                    docs.size,
-                    docs.readonly,
-                    docs.session_id,
-                    creator_id,
-                    visibility,
-                    n.updated_at,
-                    n.created_at,
-                    n.creator_id
-                FROM resource_node AS n
-                INNER JOIN $tblDocument AS docs
-                ON (docs.resource_node_id = n.id)
-                INNER JOIN resource_link l
-                ON (l.resource_node_id = n.id)
-                WHERE
-                    l.c_id = {$courseInfo['real_id']} AND
-                    n.path LIKE '".Database::escape_string($path.$addedSlash.'%')."' AND
-                    n.path NOT LIKE '".Database::escape_string($path.$addedSlash.'%/%')."' AND
-                    l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."')
-                    $sharedCondition
-                ";
-        //$userGroupFilter AND
-        //$conditionSession
-        $result = Database::query($sql);
-
-        $documentData = [];
-        $isAllowedToEdit = api_is_allowed_to_edit(null, true);
-        $isCoach = api_is_coach();
-        if (false !== $result && 0 != Database::num_rows($result)) {
-            $rows = [];
-            $hideInvisibleDocuments = api_get_configuration_value('hide_invisible_course_documents_in_sessions');
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
-                if (isset($rows[$row['id']])) {
-                    continue;
-                }
-
-                // If we are in session and hide_invisible_course_documents_in_sessions is enabled
-                // Then we avoid the documents that have visibility in session but that they come from a base course
-                /*if ($hideInvisibleDocuments && $sessionId) {
-                    if ($row['item_property_session_id'] == $sessionId && empty($row['session_id'])) {
-                        continue;
-                    }
-                }*/
-
-                if (self::isBasicCourseFolder($row['path'], $sessionId)) {
-                    $basicCourseDocumentsContent = self::getAllDocumentData(
-                        $courseInfo,
-                        $row['path']
-                    );
-
-                    if (empty($basicCourseDocumentsContent)) {
-                        continue;
-                    }
-                }
-
-                $rows[$row['id']] = $row;
-            }
-
-            // If we are in session and hide_invisible_course_documents_in_sessions is enabled
-            // Or if we are students
-            // Then don't list the invisible or deleted documents
-            if (($sessionId && $hideInvisibleDocuments) || (!$isCoach && !$isAllowedToEdit)) {
-                $rows = array_filter($rows, function ($row) {
-                    if (in_array(
-                        $row['visibility'],
-                        [
-                            ResourceLink::VISIBILITY_DELETED,
-                            ResourceLink::VISIBILITY_DRAFT,
-                        ]
-                    )) {
-                        return false;
-                    }
-
-                    return true;
-                });
-            }
-
-            foreach ($rows as $row) {
-                if ('file' == $row['filetype'] &&
-                    'html' == pathinfo($row['path'], PATHINFO_EXTENSION)
-                ) {
-                    // Templates management
-                    $tblTemplate = Database::get_main_table(TABLE_MAIN_TEMPLATES);
-                    $sql = "SELECT id FROM $tblTemplate
-                            WHERE
-                                c_id = '".$courseInfo['real_id']."' AND
-                                user_id = '".$currentUser->getId()."' AND
-                                ref_doc = '".$row['id']."'";
-                    $templateResult = Database::query($sql);
-                    $row['is_template'] = (Database::num_rows($templateResult) > 0) ? 1 : 0;
-                }
-                $row['basename'] = basename($row['path']);
-                // Just filling $document_data.
-                $documentData[$row['id']] = $row;
-            }
-
-            // Only for the student we filter the results see BT#1652
-            if (!$isCoach && !$isAllowedToEdit) {
-                // Checking parents visibility.
-                $finalDocumentData = [];
-                foreach ($documentData as $row) {
-                    $isVisible = self::check_visibility_tree(
-                        $row['id'],
-                        $courseInfo,
-                        $sessionId,
-                        $currentUser->getId(),
-                        $toGroupId
-                    );
-                    if ($isVisible) {
-                        $finalDocumentData[$row['id']] = $row;
-                    }
-                }
-            } else {
-                $finalDocumentData = $documentData;
-            }
-
-            return $finalDocumentData;
-        }
-
-        return [];
-    }
-
-    /**
      * Gets the paths of all folders in a course
      * can show all folders (except for the deleted ones) or only visible ones.
      *
@@ -3282,168 +3105,6 @@ class DocumentManager
     }
 
     /**
-     * @param string $filePath
-     * @param string $path
-     * @param array  $courseInfo
-     * @param int    $sessionId
-     * @param string $whatIfFileExists overwrite|rename
-     * @param int    $userId
-     * @param int    $groupId
-     * @param int    $toUserId
-     * @param string $comment
-     *
-     * @return bool|path
-     */
-    public static function addFileToDocumentTool(
-        $filePath,
-        $path,
-        $courseInfo,
-        $sessionId,
-        $userId,
-        $whatIfFileExists = 'overwrite',
-        $groupId = null,
-        $toUserId = null,
-        $comment = null
-    ) {
-        if (!file_exists($filePath)) {
-            return false;
-        }
-
-        $fileInfo = pathinfo($filePath);
-
-        $file = [
-            'name' => $fileInfo['basename'],
-            'tmp_name' => $filePath,
-            'size' => filesize($filePath),
-            'from_file' => true,
-        ];
-
-        $course_dir = $courseInfo['path'].'/document';
-        $baseWorkDir = api_get_path(SYS_COURSE_PATH).$course_dir;
-
-        $filePath = handle_uploaded_document(
-            $courseInfo,
-            $file,
-            $baseWorkDir,
-            $path,
-            $userId,
-            $groupId,
-            $toUserId,
-            false,
-            $whatIfFileExists,
-            false,
-            false,
-            $comment,
-            $sessionId
-        );
-
-        if ($filePath) {
-            return self::get_document_id(
-                $courseInfo,
-                $filePath,
-                $sessionId
-            );
-        }
-
-        return false;
-    }
-
-    /**
-     * Converts wav to mp3 file.
-     * Requires the ffmpeg lib. In ubuntu: sudo apt-get install ffmpeg.
-     *
-     * @param string $wavFile
-     * @param bool   $removeWavFileIfSuccess
-     *
-     * @return bool
-     */
-    public static function convertWavToMp3($wavFile, $removeWavFileIfSuccess = false)
-    {
-        if (file_exists($wavFile)) {
-            try {
-                $ffmpeg = \FFMpeg\FFMpeg::create();
-                $video = $ffmpeg->open($wavFile);
-
-                $mp3File = str_replace('wav', 'mp3', $wavFile);
-                $result = $video->save(new FFMpeg\Format\Audio\Mp3(), $mp3File);
-                if ($result && $removeWavFileIfSuccess) {
-                    unlink($wavFile);
-                }
-
-                if (file_exists($mp3File)) {
-                    return $mp3File;
-                }
-            } catch (Exception $e) {
-                error_log($e->getMessage());
-                error_log($e->getPrevious()->getMessage());
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param string $documentData     wav document information
-     * @param array  $courseInfo
-     * @param int    $sessionId
-     * @param int    $userId           user that adds the document
-     * @param string $whatIfFileExists
-     * @param bool   $deleteWavFile
-     *
-     * @return bool
-     */
-    public static function addAndConvertWavToMp3(
-        $documentData,
-        $courseInfo,
-        $sessionId,
-        $userId,
-        $whatIfFileExists = 'overwrite',
-        $deleteWavFile = false
-    ) {
-        if (empty($documentData)) {
-            return false;
-        }
-
-        if (isset($documentData['absolute_path']) &&
-            file_exists($documentData['absolute_path'])
-        ) {
-            $mp3FilePath = self::convertWavToMp3($documentData['absolute_path']);
-
-            if (!empty($mp3FilePath) && file_exists($mp3FilePath)) {
-                $documentId = self::addFileToDocumentTool(
-                    $mp3FilePath,
-                    dirname($documentData['path']),
-                    $courseInfo,
-                    $sessionId,
-                    $userId,
-                    $whatIfFileExists,
-                    null,
-                    null,
-                    $documentData['comment']
-                );
-
-                if (!empty($documentId)) {
-                    if ($deleteWavFile) {
-                        $coursePath = $courseInfo['directory'].'/document';
-                        $documentPath = api_get_path(SYS_COURSE_PATH).$coursePath;
-                        self::delete_document(
-                            $courseInfo,
-                            null,
-                            $documentPath,
-                            $sessionId,
-                            $documentData['id']
-                        );
-                    }
-
-                    return $documentId;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * @param array $_course
      *
      * @return CDocument
@@ -4053,12 +3714,12 @@ This folder contains all sessions that have been opened in the chat. Although th
         }
 
         $userEntity = api_get_user_entity($userId);
-        if (empty($userEntity)) {
+        if (null === $userEntity) {
             return false;
         }
 
         $courseEntity = api_get_course_entity($courseInfo['real_id']);
-        if (empty($courseEntity)) {
+        if (null === $courseEntity) {
             return false;
         }
 
@@ -4099,8 +3760,7 @@ This folder contains all sessions that have been opened in the chat. Although th
 //        }
 
         // is updated using the title
-        $document = new CDocument();
-        $document
+        $document = (new CDocument())
             ->setFiletype($fileType)
             ->setTitle($title)
             ->setComment($comment)
@@ -4112,9 +3772,14 @@ This folder contains all sessions that have been opened in the chat. Although th
         $em = Database::getManager();
         $em->persist($document);
         $em->flush();
+
+        $repo = Container::getDocumentRepository();
         if (!empty($content)) {
-            $repo = Container::getDocumentRepository();
             $repo->addFileFromString($document, $title, 'text/html', $content, true);
+        } else {
+            if (!empty($realPath) && !is_dir($realPath) && file_exists($realPath)) {
+                $repo->addFileFromPath($document, $title, $realPath);
+            }
         }
 
         if ($document) {

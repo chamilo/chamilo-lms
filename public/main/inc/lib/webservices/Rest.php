@@ -407,7 +407,7 @@ class Rest extends WebService
         }
 
         $courseInfo = api_get_course_info_by_id($this->course->getId());
-        $documents = DocumentManager::getAllDocumentData(
+        /*$documents = DocumentManager::getAllDocumentData(
             $courseInfo,
             $path,
             0,
@@ -415,7 +415,8 @@ class Rest extends WebService
             false,
             false,
             $sessionId
-        );
+        );*/
+        $documents = [];
         $results = [];
 
         if (!empty($documents)) {

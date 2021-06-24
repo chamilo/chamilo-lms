@@ -176,7 +176,7 @@ switch ($action) {
                 $file['name'] = $title.'.'.$fileInfo['extension'];
                 $file['file'] = $file;
 
-                $result = DocumentManager::upload_document(
+                /*$result = DocumentManager::upload_document(
                     $file,
                     '/audio',
                     $file['name'],
@@ -185,7 +185,7 @@ switch ($action) {
                     'overwrite',
                     false,
                     false
-                );
+                );*/
 
                 if (!empty($result) && is_array($result)) {
                     $newDocId = $result['id'];

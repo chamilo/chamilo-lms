@@ -651,7 +651,8 @@ class ZoomPlugin extends Plugin
             $groupId = $group->getIid();
         }
 
-        $newPath = handle_uploaded_document(
+        $newPath = null;
+        /*$newPath = handle_uploaded_document(
             $courseInfo,
             [
                 'name' => $name,
@@ -673,7 +674,7 @@ class ZoomPlugin extends Plugin
             null,
             $sessionId,
             true
-        );
+        );*/
 
         fclose($tmpFile);
         if (false === $newPath) {

@@ -138,7 +138,7 @@ class MoodleImport
 
                 $title = isset($fileInfo['title']) ? $fileInfo['title'] : pathinfo($fileInfo['filename'], PATHINFO_FILENAME);
 
-                $data = DocumentManager::upload_document(
+                /*$data = DocumentManager::upload_document(
                     $files,
                     '/moodle',
                     $title,
@@ -149,7 +149,7 @@ class MoodleImport
                     true,
                     'file',
                     false
-                );
+                );*/
 
                 if ($data) {
                     $importedFiles[$fileInfo['filename']] = basename($data['path']);
@@ -344,7 +344,7 @@ class MoodleImport
                         $_POST['language'] = $courseInfo['language'];
                         $_POST['moodle_import'] = true;
 
-                        DocumentManager::upload_document(
+                        /*DocumentManager::upload_document(
                             $files,
                             '/moodle',
                             $fileInfo['title'],
@@ -353,7 +353,7 @@ class MoodleImport
                             null,
                             true,
                             true
-                        );
+                        );*/
                     }
 
                     break;

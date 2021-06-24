@@ -54,7 +54,7 @@ switch ($type) {
             $audioDir = '/';
         }
 
-        $uploadedDocument = DocumentManager::upload_document(
+        /*$uploadedDocument = DocumentManager::upload_document(
             $file,
             $audioDir,
             $file['name'],
@@ -70,7 +70,7 @@ switch ($type) {
             api_get_session_id(),
             api_get_group_id(),
             'exercise' === $tool
-        );
+        );*/
 
         $error = empty($uploadedDocument) || !is_array($uploadedDocument);
 

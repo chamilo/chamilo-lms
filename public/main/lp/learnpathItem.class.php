@@ -4043,7 +4043,8 @@ class learnpathItem
             return false;
         }
 
-        $document = DocumentManager::upload_document(
+        $document = null;
+        /*$document = DocumentManager::upload_document(
             $_FILES,
             null,
             null,
@@ -4055,7 +4056,7 @@ class learnpathItem
             'file',
             false,
             $folderDocument->getIid(),
-        );
+        );*/
 
         if ($document) {
             $name = '/audio/'.$document->getResourceNode()->getResourceFile()->getOriginalName();

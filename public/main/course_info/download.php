@@ -1,5 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
+exit;
 
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 
@@ -17,7 +20,8 @@ if (isset($_GET['archive_path'])) {
 $archive_file = isset($_GET['archive']) ? $_GET['archive'] : null;
 $archive_file = str_replace(['..', '/', '\\'], '', $archive_file);
 
-list($extension) = getextension($archive_file);
+$extension = null;
+//list($extension) = getextension($archive_file);
 
 if (empty($extension) || !file_exists($archive_path.$archive_file)) {
     exit;

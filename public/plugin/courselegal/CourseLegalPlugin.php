@@ -362,7 +362,8 @@ class CourseLegalPlugin extends Plugin
         $fileName = null;
 
         if ($uploadOk) {
-            $uploadResult = handle_uploaded_document(
+            $uploadResult = null;
+            /*$uploadResult = handle_uploaded_document(
                 $course,
                 $file,
                 $coursePath,
@@ -374,7 +375,7 @@ class CourseLegalPlugin extends Plugin
                 false,
                 false,
                 true
-            );
+            );*/
 
             if ($uploadResult) {
                 $fileName = basename($uploadResult);

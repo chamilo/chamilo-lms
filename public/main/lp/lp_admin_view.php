@@ -118,9 +118,9 @@ if (isset($_POST['save_audio'])) {
                 // Using the new name in the $_FILES superglobal.
                 $_FILES[$key]['name'] = $clean_name;
             }
-
+            $filePath = null;
             // Upload the file in the documents tool.
-            $filePath = handle_uploaded_document(
+            /*$filePath = handle_uploaded_document(
                 $_course,
                 $_FILES[$key],
                 api_get_path(SYS_COURSE_PATH).$_course['path'].'/document',
@@ -131,7 +131,7 @@ if (isset($_POST['save_audio'])) {
                 '',
                 '',
                 false
-            );
+            );*/
 
             // Store the mp3 file in the lp_item table.
             $sql = "UPDATE $tbl_lp_item

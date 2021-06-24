@@ -11123,7 +11123,6 @@ class Exercise
 
         $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'
             .api_get_cidreq()."&exerciseId=$exerciseId";
-        $link = "<a href=\"$url\">$url</a>";
 
         $objExerciseTmp = new Exercise();
         $objExerciseTmp->read($exerciseId);
@@ -11215,8 +11214,8 @@ class Exercise
             }
             $content .= sprintf(
                 get_lang('QuizLastRemindBody'),
-                $link,
-                $link,
+                $url,
+                $url,
                 $teacherName
             );
             $drhList = UserManager::getDrhListFromUser($userId);

@@ -231,7 +231,7 @@ if ($form->validate()) {
     $course['disk_quota'] = $course['disk_quota'] * 1024 * 1024;
     $course['exemplary_content'] = empty($course['exemplary_content']) ? false : true;
     $course['teachers'] = $course_teachers;
-    $course['wanted_code'] = $course['visual_code'];
+    $course['wanted_code'] = isset($course['visual_code']) ? $course['visual_code'] : '';
     $course['gradebook_model_id'] = isset($course['gradebook_model_id']) ? $course['gradebook_model_id'] : null;
     // Fixing category code
     $course['course_category'] = isset($course['category_code']) ? $course['category_code'] : '';

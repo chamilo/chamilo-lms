@@ -39,7 +39,7 @@ switch ($action) {
 
 $nameTools = $plugin->get_lang('Positioning');
 
-$htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
+//$htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
 $template = new Template($nameTools);
 $url = $currentUrl.'&';
 $actions = function ($row) use ($plugin, $url, $courseId, $sessionId) {

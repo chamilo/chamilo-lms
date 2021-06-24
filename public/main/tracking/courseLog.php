@@ -35,7 +35,7 @@ $origin = api_get_origin();
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && 'csv' === $_GET['export'];
 
-$htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
+//$htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
 
 $this_section = SECTION_COURSES;
 if ('myspace' === $from) {

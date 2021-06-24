@@ -170,7 +170,7 @@ if ($allowRecordAudio && $allowTeacherCommentAudio) {
 }
 
 if (RESULT_DISABLE_RADAR === (int) $objExercise->results_disabled) {
-    $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
+    //$htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
 }
 
 if ('export' != $action) {

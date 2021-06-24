@@ -5839,7 +5839,7 @@ class Tracking
      */
     public static function generate_session_exercise_graph($names, $my_results, $average)
     {
-        $html = api_get_js('chartjs/Chart.js');
+        //$html = api_get_js('chartjs/Chart.js');
         $canvas = Display::tag('canvas', '', ['id' => 'session_graph_chart']);
         $html .= Display::tag('div', $canvas, ['style' => 'width:100%']);
         $jsStr = " var data = {

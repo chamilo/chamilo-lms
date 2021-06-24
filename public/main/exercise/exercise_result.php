@@ -64,7 +64,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Tests'),
 ];
 if (RESULT_DISABLE_RADAR === (int) $objExercise->results_disabled) {
-    $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
+    //$htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
 }
 
 //$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';

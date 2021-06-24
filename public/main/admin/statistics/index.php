@@ -22,8 +22,8 @@ in_array(
     ['recentlogins', 'tools', 'courses', 'coursebylanguage', 'users', 'users_active', 'session_by_date']
 )
 ) {
-    $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
-    $htmlHeadXtra[] = api_get_asset('chartjs-plugin-labels/build/chartjs-plugin-labels.min.js');
+    //$htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
+    //$htmlHeadXtra[] = api_get_asset('chartjs-plugin-labels/build/chartjs-plugin-labels.min.js');
     // Prepare variables for the JS charts
     $url = $reportName = $reportType = $reportOptions = '';
     switch ($report) {

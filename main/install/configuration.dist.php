@@ -1960,6 +1960,12 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 // If the user is blocked with not allowed (red message), then the breadcrumb is hidden.
 //$_configuration['hide_breadcrumb_if_not_allowed'] = true;
 
+// Configuration setting to disable course code field in course creation form.
+//$_configuration['course_creation_form_hide_course_code'] = false;
+
+// Configuration setting to make required course category in course creation form.
+//$_configuration['course_creation_form_set_course_category_mandatory'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email
@@ -1967,9 +1973,3 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 // You need add a new option called "confirmation" to the registration settings
 //INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
 // ------ (End) Custom DB changes
-
-// Configuration setting to disable course code field in course creation form.
-//$_configuration['course_creation_form_hide_course_code'] = false;
-
-// Configuration setting to make required course category in course creation form.
-//$_configuration['course_creation_form_set_course_category_mandatory'] = false;

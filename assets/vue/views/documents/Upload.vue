@@ -15,7 +15,9 @@
         :props="{
           //metaFields: [{id: 'name', name: 'Name', placeholder: 'file name'}],
           proudlyDisplayPoweredByUppy: false,
+          width: '100%'
         }"
+
     />
 
 <!--    <Toolbar-->

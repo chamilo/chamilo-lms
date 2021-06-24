@@ -52,10 +52,11 @@ Feature: Document tool
   Scenario: Upload a document
     Then I press "Upload"
     And wait for the page to be loaded
-    Then I attach the file "/public/favicon.ico" to "file_upload"
-    And I press "Submit"
+    Then I should see "Drop files here"
+    Then I attach the file "/public/favicon.ico" to "files[]"
+    Then I press "Upload 1 file"
     And wait for the page to be loaded
-    Then I should see "created"
+    Then I should see "Complete"
     Then I move backward one page
     Then I should see "favicon.ico"
 

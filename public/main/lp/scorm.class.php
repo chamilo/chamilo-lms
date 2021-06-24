@@ -792,21 +792,16 @@ class scorm extends learnpath
         $zipfilename = $zipfoldername.'/'.$LPnamesafe.'.zip';
 
         // Get a temporary dir for creating the zip file.
-        //error_log('cleaning dir '.$zipfoldername, 0);
-        my_delete($zipfoldername); // Make sure the temp dir is cleared.
         mkdir($zipfoldername, api_get_permissions_for_new_directories());
 
         // Create zipfile of given directory.
+        // @todo use ZipFile
         $zip_folder = new PclZip($zipfilename);
         $zip_folder->create($scormfoldername.'/', PCLZIP_OPT_REMOVE_PATH, $scormfoldername.'/');
 
         //This file sending implies removing the default mime-type from php.ini
         //DocumentManager::file_send_for_download($zipfilename, true, $LPnamesafe.'.zip');
         DocumentManager::file_send_for_download($zipfilename, true);
-
-        // Delete the temporary zip file and directory in fileManage.lib.php
-        my_delete($zipfilename);
-        my_delete($zipfoldername);
 
         return true;
     }

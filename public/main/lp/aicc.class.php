@@ -616,16 +616,13 @@ class aicc extends learnpath
         removeDir($zipfoldername); //make sure the temp dir is cleared
         mkdir($zipfoldername, api_get_permissions_for_new_directories());
 
+        // @todo use ZipFile
         // Create zipfile of given directory.
         $zip_folder = new PclZip($zipfilename);
         $zip_folder->create($scormfoldername.'/', PCLZIP_OPT_REMOVE_PATH, $scormfoldername.'/');
 
         //this file sending implies removing the default mime-type from php.ini
         DocumentManager::file_send_for_download($zipfilename, true);
-
-        // Delete the temporary zip file and directory in fileManage.lib.php
-        my_delete($zipfilename);
-        my_delete($zipfoldername);
 
         return true;
     }

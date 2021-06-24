@@ -44,67 +44,6 @@ function aiken_display_form()
 }
 
 /**
- * Gets the uploaded file (from $_FILES) and unzip it to the given directory.
- *
- * @param string The directory where to do the work
- * @param string The path of the temporary directory where the exercise was uploaded and unzipped
- * @param string $baseWorkDir
- * @param string $uploadPath
- *
- * @return bool True on success, false on failure
- */
-function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
-{
-    $_course = api_get_course_info();
-    $_user = api_get_user_info();
-
-    // Check if the file is valid (not to big and exists)
-    if (!isset($_FILES['userFile']) || !is_uploaded_file($_FILES['userFile']['tmp_name'])) {
-        // upload failed
-        return false;
-    }
-
-    if (preg_match('/.zip$/i', $_FILES['userFile']['name']) &&
-        handle_uploaded_document(
-            $_course,
-            $_FILES['userFile'],
-            $baseWorkDir,
-            $uploadPath,
-            $_user['user_id'],
-            0,
-            null,
-            1,
-            'overwrite',
-            false,
-            true
-        )
-    ) {
-        if (!function_exists('gzopen')) {
-            return false;
-        }
-        // upload successful
-        return true;
-    } elseif (preg_match('/.txt/i', $_FILES['userFile']['name']) &&
-        handle_uploaded_document(
-            $_course,
-            $_FILES['userFile'],
-            $baseWorkDir,
-            $uploadPath,
-            $_user['user_id'],
-            0,
-            null,
-            0,
-            'overwrite',
-            false
-        )
-    ) {
-        return true;
-    }
-
-    return false;
-}
-
-/**
  * Main function to import the Aiken exercise.
  *
  * @param string $file
@@ -113,62 +52,19 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
  */
 function aiken_import_exercise($file)
 {
-    $archive_path = api_get_path(SYS_ARCHIVE_PATH).'aiken/';
-    $baseWorkDir = $archive_path;
-
-    $uploadPath = 'aiken_'.api_get_unique_id();
-    if (!is_dir($baseWorkDir.$uploadPath)) {
-        mkdir($baseWorkDir.$uploadPath, api_get_permissions_for_new_directories(), true);
-    }
-
     // set some default values for the new exercise
     $exercise_info = [];
-    $exercise_info['name'] = preg_replace('/.(zip|txt)$/i', '', $file);
+    $exercise_info['name'] = preg_replace('/.(txt)$/i', '', $file);
     $exercise_info['question'] = [];
 
     // if file is not a .zip, then we cancel all
-    if (!preg_match('/.(zip|txt)$/i', $file)) {
-        return 'YouMustUploadAZipOrTxtFile';
+    if (!preg_match('/.(zip)$/i', $file)) {
+        return 'You must upload a .txt file';
     }
 
-    // unzip the uploaded file in a tmp directory
-    if (preg_match('/.(zip|txt)$/i', $file)) {
-        if (!get_and_unzip_uploaded_exercise($baseWorkDir.$uploadPath, '/')) {
-            return 'ThereWasAProblemWithYourFile';
-        }
-    }
-
-    // find the different manifests for each question and parse them
-    $exerciseHandle = opendir($baseWorkDir.$uploadPath);
     $file_found = false;
     $operation = false;
-    $result = false;
-
-    // Parse every subdirectory to search txt question files
-    while (false !== ($file = readdir($exerciseHandle))) {
-        if (is_dir($baseWorkDir.'/'.$uploadPath.$file) && '.' != $file && '..' != $file) {
-            //find each manifest for each question repository found
-            $questionHandle = opendir($baseWorkDir.'/'.$uploadPath.$file);
-            while (false !== ($questionFile = readdir($questionHandle))) {
-                if (preg_match('/.txt$/i', $questionFile)) {
-                    $result = aiken_parse_file(
-                        $exercise_info,
-                        $baseWorkDir,
-                        $file,
-                        $questionFile
-                    );
-                    $file_found = true;
-                }
-            }
-        } elseif (preg_match('/.txt$/i', $file)) {
-            $result = aiken_parse_file($exercise_info, $baseWorkDir.$uploadPath, '', $file);
-            $file_found = true;
-        }
-    }
-
-    if (!$file_found) {
-        $result = 'NoTxtFileFoundInTheZip';
-    }
+    $result = aiken_parse_file($exercise_info,   $file);
 
     if (true !== $result) {
         return $result;
@@ -267,8 +163,6 @@ function aiken_import_exercise($file)
             );
         }
 
-        // Delete the temp dir where the exercise was unzipped
-        my_delete($baseWorkDir.$uploadPath);
         $operation = $last_exercise_id;
     }
 
@@ -290,15 +184,13 @@ function aiken_import_exercise($file)
  * @return string|bool True on success, error message on error
  * @assert ('','','') === false
  */
-function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
+function aiken_parse_file(&$exercise_info, $file)
 {
-    $questionTempDir = $exercisePath.'/'.$file.'/';
-    $questionFilePath = $questionTempDir.$questionFile;
-
-    if (!is_file($questionFilePath)) {
+    if (!is_file($file)) {
         return 'FileNotFound';
     }
-    $text = file_get_contents($questionFilePath);
+
+    $text = file_get_contents($file);
     $detect = mb_detect_encoding($text, 'ASCII', true);
     if ('ASCII' === $detect) {
         $data = explode("\n", $text);

@@ -7405,12 +7405,7 @@ function api_get_language_list_for_flag()
     return $languages;
 }
 
-/**
- * @param string $name
- *
- * @return ZipStream
- */
-function api_create_zip($name)
+function api_create_zip(string $name): ZipStream
 {
     $zipStreamOptions = new Archive();
     $zipStreamOptions->setSendHttpHeaders(true);

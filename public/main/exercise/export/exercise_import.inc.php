@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use PhpZip\ZipFile;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -13,50 +14,9 @@ use Symfony\Component\DomCrawler\Crawler;
  */
 
 /**
- * Unzip the exercise in the temp folder.
- *
- * @param string $baseWorkDir The path of the temporary directory where the exercise was uploaded and unzipped
- * @param string $uploadPath
- *
- * @return bool
- */
-function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
-{
-    $_course = api_get_course_info();
-    $_user = api_get_user_info();
-
-    //Check if the file is valid (not to big and exists)
-    if (!isset($_FILES['userFile']) || !is_uploaded_file($_FILES['userFile']['tmp_name'])) {
-        // upload failed
-        return false;
-    }
-
-    if (preg_match('/.zip$/i', $_FILES['userFile']['name'])) {
-        return handle_uploaded_document(
-            $_course,
-            $_FILES['userFile'],
-            $baseWorkDir,
-            $uploadPath,
-            $_user['user_id'],
-            0,
-            null,
-            1,
-            null,
-            null,
-            true,
-            null,
-            null,
-            false
-        );
-    }
-
-    return false;
-}
-
-/**
  * Imports an exercise in QTI format if the XML structure can be found in it.
  *
- * @param array $file
+ * @param string $file
  *
  * @return string|array as a backlog of what was really imported, and error or debug messages to display
  */
@@ -64,17 +24,6 @@ function import_exercise($file)
 {
     global $exerciseInfo;
     global $resourcesLinks;
-
-    $baseWorkDir = api_get_path(SYS_ARCHIVE_PATH).'qti2/';
-    if (!is_dir($baseWorkDir)) {
-        mkdir($baseWorkDir, api_get_permissions_for_new_directories(), true);
-    }
-
-    $uploadPath = api_get_unique_id().'/';
-
-    if (!is_dir($baseWorkDir.$uploadPath)) {
-        mkdir($baseWorkDir.$uploadPath, api_get_permissions_for_new_directories(), true);
-    }
 
     // set some default values for the new exercise
     $exerciseInfo = [];
@@ -86,15 +35,10 @@ function import_exercise($file)
         return 'UplZipCorrupt';
     }
 
-    // unzip the uploaded file in a tmp directory
-    if (!get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)) {
-        return 'UplZipCorrupt';
-    }
+    $zipFile = new ZipFile();
+    $zipFile->openFile($file);
+    $zipContentArray = $zipFile->getEntries();
 
-    $baseWorkDir = $baseWorkDir.$uploadPath;
-
-    // find the different manifests for each question and parse them.
-    $exerciseHandle = opendir($baseWorkDir);
     $fileFound = false;
     $result = false;
     $filePath = null;
@@ -103,37 +47,23 @@ function import_exercise($file)
     // parse every subdirectory to search xml question files and other assets to be imported
     // The assets-related code is a bit fragile as it has to deal with files renamed by Chamilo and it only works if
     // the imsmanifest.xml file is read.
-    while (false !== ($file = readdir($exerciseHandle))) {
-        if (is_dir($baseWorkDir.'/'.$file) && '.' != $file && '..' != $file) {
-            // Find each manifest for each question repository found
-            $questionHandle = opendir($baseWorkDir.'/'.$file);
-            // Only analyse one level of subdirectory - no recursivity here
-            while (false !== ($questionFile = readdir($questionHandle))) {
-                if (preg_match('/.xml$/i', $questionFile)) {
-                    $isQti = isQtiQuestionBank($baseWorkDir.'/'.$file.'/'.$questionFile);
-                    if ($isQti) {
-                        $result = qti_parse_file($baseWorkDir, $file, $questionFile);
-                        $filePath = $baseWorkDir.$file;
-                        $fileFound = true;
-                    } else {
-                        $isManifest = isQtiManifest($baseWorkDir.'/'.$file.'/'.$questionFile);
-                        if ($isManifest) {
-                            $resourcesLinks = qtiProcessManifest($baseWorkDir.'/'.$file.'/'.$questionFile);
-                        }
-                    }
-                }
-            }
-        } elseif (preg_match('/.xml$/i', $file)) {
-            $isQti = isQtiQuestionBank($baseWorkDir.'/'.$file);
-            if ($isQti) {
-                $result = qti_parse_file($baseWorkDir, '', $file);
-                $filePath = $baseWorkDir.'/'.$file;
-                $fileFound = true;
-            } else {
-                $isManifest = isQtiManifest($baseWorkDir.'/'.$file);
-                if ($isManifest) {
-                    $resourcesLinks = qtiProcessManifest($baseWorkDir.'/'.$file);
-                }
+    foreach ($zipContentArray as $item) {
+        $file = $item->getName();
+
+        if ($item->isDirectory()) {
+            continue;
+        }
+
+        $data = $item->getData();
+
+        $isQti = isQtiQuestionBank($data);
+        if ($isQti) {
+            $result = qti_parse_file($data);
+            $fileFound = true;
+        } else {
+            $isManifest = isQtiManifest($data);
+            if ($isManifest) {
+                $resourcesLinks = qtiProcessManifest($data);
             }
         }
     }
@@ -145,13 +75,14 @@ function import_exercise($file)
     if (false == $result) {
         return false;
     }
+
     // 1. Create exercise.
     $exercise = new Exercise();
     $exercise->exercise = $exerciseInfo['name'];
 
     // Random QTI support
     if (isset($exerciseInfo['order_type'])) {
-        if ('Random' == $exerciseInfo['order_type']) {
+        if ('Random' === $exerciseInfo['order_type']) {
             $exercise->setQuestionSelectionType(2);
             $exercise->random = -1;
         }
@@ -261,9 +192,6 @@ function import_exercise($file)
             $answer->save();
         }
 
-        // delete the temp dir where the exercise was unzipped
-        my_delete($baseWorkDir.$uploadPath);
-
         return $last_exercise_id;
     }
 
@@ -287,24 +215,16 @@ function formatText($text)
  *
  * @return bool
  */
-function qti_parse_file($exercisePath, $file, $questionFile)
+function qti_parse_file($data)
 {
     global $record_item_body;
     global $questionTempDir;
 
-    $questionTempDir = $exercisePath.'/'.$file.'/';
-    $questionFilePath = $questionTempDir.$questionFile;
-
-    if (!($fp = fopen($questionFilePath, 'r'))) {
+    if (empty($data)) {
         Display::addFlash(Display::return_message(get_lang('Error opening question\'s XML file'), 'error'));
 
         return false;
     }
-
-    $data = fread($fp, filesize($questionFilePath));
-
-    //close file
-    fclose($fp);
 
     //parse XML question file
     //$data = str_replace(array('<p>', '</p>', '<front>', '</front>'), '', $data);
@@ -656,9 +576,8 @@ function parseQti2($xmlData)
  *
  * @return bool Whether it is an IMS/QTI question bank or not
  */
-function isQtiQuestionBank($filePath)
+function isQtiQuestionBank($data)
 {
-    $data = file_get_contents($filePath);
     if (!empty($data)) {
         $match = preg_match('/ims_qtiasiv(\d)p(\d)/', $data);
         // @todo allow other types
@@ -679,9 +598,8 @@ function isQtiQuestionBank($filePath)
  *
  * @return bool Whether it is an IMS/QTI manifest file or not
  */
-function isQtiManifest($filePath)
+function isQtiManifest($data)
 {
-    $data = file_get_contents($filePath);
     if (!empty($data)) {
         $match = preg_match('/imsccv(\d)p(\d)/', $data);
         if ($match) {
@@ -700,14 +618,12 @@ function isQtiManifest($filePath)
  *
  * @return bool
  */
-function qtiProcessManifest($filePath)
+function qtiProcessManifest($data)
 {
-    $xml = simplexml_load_file($filePath);
+    $xml = simplexml_load_string($data);
     $course = api_get_course_info();
     $sessionId = api_get_session_id();
-    $courseDir = $course['path'];
-    $sysPath = api_get_path(SYS_COURSE_PATH);
-    $exercisesSysPath = $sysPath.$courseDir.'/document/';
+    $exercisesSysPath = '/';
     $webPath = api_get_path(WEB_CODE_PATH);
     $exercisesWebPath = $webPath.'document/document.php?'.api_get_cidreq().'&action=download&id=';
     $links = [

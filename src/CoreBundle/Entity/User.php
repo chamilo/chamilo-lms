@@ -66,8 +66,8 @@ use UserManager;
     'lastname' => 'partial',
 ])]
 #[ApiFilter(BooleanFilter::class, properties: ['isActive'])]
-
-class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface
+//EquatableInterface,
+class User implements UserInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface
 {
     use TimestampableEntity;
     use UserCreatorTrait;
@@ -254,7 +254,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * @Groups({"user:read"})
      * @ORM\Column(name="last_login", type="datetime", nullable=true)
      */
-    protected ?DateTime $lastLogin;
+    protected ?DateTime $lastLogin = null;
 
     /**
      * Random string sent to the user email address in order to verify it.
@@ -649,7 +649,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @ORM\Column(name="expiration_date", type="datetime", nullable=true, unique=false)
      */
-    protected ?DateTime $expirationDate;
+    protected ?DateTime $expirationDate = null;
 
     /**
      * @ORM\Column(name="active", type="boolean")
@@ -1659,7 +1659,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    public function isEqualTo(UserInterface $user): bool
+    /*public function isEqualTo(UserInterface $user): bool
     {
         if ($this->password !== $user->getPassword()) {
             return false;
@@ -1674,7 +1674,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         }
 
         return true;
-    }
+    }*/
 
     public function getSentMessages(): Collection
     {

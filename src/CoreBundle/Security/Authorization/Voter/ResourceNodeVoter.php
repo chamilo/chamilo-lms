@@ -18,6 +18,7 @@ use Laminas\Permissions\Acl\Role\GenericRole;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
+use Symfony\Component\Security\Core\Authentication\Token\NullToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
@@ -431,7 +432,8 @@ class ResourceNodeVoter extends Voter
         $acl->allow($admin);
         $acl->allow($superAdmin);
 
-        if ($token instanceof AnonymousToken) {
+        //if ($token instanceof AnonymousToken) {
+        if ($token instanceof NullToken) {
             return $acl->isAllowed('IS_AUTHENTICATED_ANONYMOUSLY', $linkId, $askedMask);
         }
 

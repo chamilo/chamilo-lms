@@ -79,7 +79,7 @@ class PersonalFileRepositoryTest extends AbstractApiTest
             'GET',
             $url
         );
-        $this->assertResponseStatusCodeSame(403); // forbidden
+        $this->assertResponseStatusCodeSame(403); // unauthorized
 
         // Access with the same user should be allowed.
         $client = $this->getClientWithGuiCredentials($username, $password);

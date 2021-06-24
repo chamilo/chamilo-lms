@@ -91,6 +91,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $file = $this->getUploadedFile();
 
         $token = $this->getUserToken([]);
+
         // Upload file.
         $response = $this->createClientWithCredentials($token)->request(
             'POST',
@@ -169,7 +170,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
                 'headers' => ['Content-Type' => 'application/json'],
             ]
         );
-        $this->assertResponseStatusCodeSame(403); // Forbidden
+        $this->assertResponseStatusCodeSame(403); // Unauthorized
 
         // Test access with another user. He CAN see the file, the cid is pass as a parameter
         // and the course is open to the world by default.
@@ -201,7 +202,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
                 ],
             ]
         );
-        $this->assertResponseStatusCodeSame(403);
+        $this->assertResponseStatusCodeSame(401);
 
         // Update course visibility to CLOSED
         $courseRepo = self::getContainer()->get(CourseRepository::class);
@@ -219,7 +220,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
                 ],
             ]
         );
-        $this->assertResponseStatusCodeSame(403);
+        $this->assertResponseStatusCodeSame(401);
 
         // Update course visibility to HIDDEN
         $courseRepo = self::getContainer()->get(CourseRepository::class);
@@ -237,7 +238,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
                 ],
             ]
         );
-        $this->assertResponseStatusCodeSame(403);
+        $this->assertResponseStatusCodeSame(401);
 
         // Change visibility of the document to DRAFT
         $documentRepo = self::getContainer()->get(CDocumentRepository::class);
@@ -260,7 +261,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
                 ],
             ]
         );
-        $this->assertResponseStatusCodeSame(403);
+        $this->assertResponseStatusCodeSame(401);
     }
 
     public function testUploadFileInSideASubFolder(): void

@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\LtiBundle\Entity\ExternalTool;
 use Chamilo\LtiBundle\Form\ExternalToolType;
+use Chamilo\LtiBundle\Repository\ExternalToolRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,8 +31,7 @@ class AdminController extends BaseController
      */
     public function adminAction(): Response
     {
-        $repo = $this->getDoctrine()->getRepository(ExternalTool::class);
-        $tools = $repo->findAll();
+        $tools = $this->get(ExternalToolRepository::class)->findAll();
 
         return $this->render('@ChamiloCore/Lti/admin.html.twig', [
             'tools' => $tools,
@@ -50,9 +50,7 @@ class AdminController extends BaseController
             /** @var ExternalTool $tool */
             $tool = $form->getData();
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($tool);
-            $em->flush();
+            $this->get(ExternalToolRepository::class)->create($tool);
 
             $this->addFlash('success', $this->trans('External tool added'));
 

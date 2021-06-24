@@ -798,9 +798,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->credentialsExpireAt = new DateTime();
         $this->dateOfBirth = new DateTime();
         $this->expiresAt = new DateTime();
-        $this->lastLogin = new DateTime();
         $this->passwordRequestedAt = new DateTime();
-        $this->expirationDate = new DateTime();
     }
 
     public function __toString(): string

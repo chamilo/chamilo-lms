@@ -246,7 +246,6 @@ class UserManager
         }
 
         $now = new DateTime();
-
         if (empty($expirationDate) || '0000-00-00 00:00:00' === $expirationDate) {
             $expirationDate = null;
         // Default expiration date
@@ -261,8 +260,7 @@ class UserManager
                 $expirationDate->modify('+'.$days.' day');
             }*/
         } else {
-            $expirationDate = api_get_utc_datetime($expirationDate);
-            $expirationDate = new \DateTime($expirationDate, new DateTimeZone('UTC'));
+            $expirationDate = api_get_utc_datetime($expirationDate, true, true);
         }
 
         $repo = Container::getUserRepository();

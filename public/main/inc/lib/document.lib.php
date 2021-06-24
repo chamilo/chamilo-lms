@@ -2359,9 +2359,10 @@ class DocumentManager
     {
         $filePath = $documentWebPath.$documentInfo['path'];
         $extension = $documentInfo['file_extension'];
-        $html = '<span class="preview"> <audio class="audio_preview skip" src="'.$filePath.'" type="audio/'.$extension.'" > </audio></span>';
 
-        return $html;
+        return '<span class="preview">
+                    <audio class="audio_preview skip" src="'.$filePath.'" type="audio/'.$extension.'"></audio>
+                </span>';
     }
 
     /**

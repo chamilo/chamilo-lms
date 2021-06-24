@@ -248,8 +248,8 @@ class learnpath
                             $oItem->set_lp_view($this->lp_view_id, $course_id);
                             $oItem->set_prevent_reinit($this->prevent_reinit);
                             // Don't use reference here as the next loop will make the pointed object change.
-                            $this->items[$my_item_id] = $oItem;
-                            $this->refs_list[$oItem->ref] = $my_item_id;
+                            $this->items[$itemId] = $oItem;
+                            $this->refs_list[$oItem->ref] = $itemId;
                         }
                         break;
                     case 2:

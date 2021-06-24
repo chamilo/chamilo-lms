@@ -526,13 +526,13 @@ class aicc extends learnpath
             return false;
         }
 
-        if (!enough_size($realFileSize, $course_sys_dir, $maxFilledSpace)) {
+        /*if (!enough_size($realFileSize, $course_sys_dir, $maxFilledSpace)) {
             Display::addFlash(
                 Display::return_message(get_lang('The upload has failed. Either you have exceeded your maximum quota, or there is not enough disk space.'))
             );
 
             return false;
-        }
+        }*/
 
         // It happens on Linux that $new_dir sometimes doesn't start with '/'
         if ('/' != $new_dir[0]) {

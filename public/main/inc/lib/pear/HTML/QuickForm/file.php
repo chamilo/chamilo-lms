@@ -149,23 +149,6 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
     }
 
     /**
-     * Moves an uploaded file into the destination
-     *
-     * @param    string  Destination directory path
-     * @param    string  New file name
-     * @access   public
-     * @return   bool    Whether the file was moved successfully
-     */
-    public function moveUploadedFile($dest, $fileName = '')
-    {
-        if ($dest != ''  && substr($dest, -1) != '/') {
-            $dest .= '/';
-        }
-        $fileName = ($fileName != '') ? $fileName : basename($this->_value['name']);
-        return move_uploaded_file($this->_value['tmp_name'], $dest . $fileName);
-    }
-
-    /**
      * Checks if the element contains an uploaded file
      *
      * @access    public

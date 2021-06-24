@@ -64,7 +64,7 @@ function aiken_import_exercise($file)
 
     $file_found = false;
     $operation = false;
-    $result = aiken_parse_file($exercise_info,   $file);
+    $result = aiken_parse_file($exercise_info, $file);
 
     if (true !== $result) {
         return $result;

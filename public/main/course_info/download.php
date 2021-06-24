@@ -27,7 +27,7 @@ if (empty($extension) || !file_exists($archive_path.$archive_file)) {
     exit;
 }
 
-$extension = strtolower($extension);
+//$extension = strtolower($extension);
 $content_type = '';
 
 if (in_array($extension, ['xml', 'csv']) &&

@@ -5,7 +5,6 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumThread;
-use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 
 /**
@@ -285,8 +284,8 @@ class learnpathItem
             error_log("Type: ".$type);
             error_log("get_id: ".$this->get_id());
         }
-        if ($type !== 'sco') {
-            if ($type == TOOL_QUIZ || $type == TOOL_HOTPOTATOES) {
+        if ('sco' !== $type) {
+            if (TOOL_QUIZ == $type || TOOL_HOTPOTATOES == $type) {
                 $this->get_status(
                     true,
                     true
@@ -308,6 +307,7 @@ class learnpathItem
         if ($debug) {
             error_log('End - learnpathItem:close');
         }
+
         return true;
     }
 
@@ -3709,7 +3709,7 @@ class learnpathItem
                     Database::update($item_view_table, $params, $where);
                 } else {
                     // For all other content types...
-                    if ($this->type === 'quiz') {
+                    if ('quiz' === $this->type) {
                         $my_status = ' ';
                         $total_time = ' ';
                         if (!empty($_REQUEST['exeId'])) {
@@ -4258,7 +4258,6 @@ class learnpathItem
      *
      * @param int $courseId  The course ID from the learning path
      * @param int $sessionId Optional. The session ID from the learning path
-     *
      */
     public function getForumThread($courseId, $sessionId = 0): ?CForumThread
     {

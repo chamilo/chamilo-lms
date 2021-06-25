@@ -85,11 +85,13 @@ $form->addElement(
 $form->applyFilter('title', 'html_filter');
 $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
-$form->addButtonAdvancedSettings('advanced_params');
-$form->addElement(
-    'html',
-    '<div id="advanced_params_options" style="display:none">'
-);
+if (!api_get_configuration_value('course_creation_form_set_course_category_mandatory')) {
+    $form->addButtonAdvancedSettings('advanced_params');
+    $form->addElement(
+        'html',
+        '<div id="advanced_params_options" style="display:none">'
+    );
+}
 
 $countCategories = $courseCategoriesRepo->countAllInAccessUrl(
     $accessUrlId,
@@ -133,27 +135,38 @@ if ($countCategories >= 100) {
     );
 }
 
+if (api_get_configuration_value('course_creation_form_set_course_category_mandatory')) {
+    $form->addRule('category_code', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addButtonAdvancedSettings('advanced_params');
+    $form->addElement(
+        'html',
+        '<div id="advanced_params_options" style="display:none">'
+    );
+}
+
 // Course code
-$form->addText(
-    'wanted_code',
-    [
-        get_lang('Code'),
-        get_lang('OnlyLettersAndNumbers'),
-    ],
-    '',
-    [
-        'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
-        'pattern' => '[a-zA-Z0-9]+',
-        'title' => get_lang('OnlyLettersAndNumbers'),
-    ]
-);
-$form->applyFilter('wanted_code', 'html_filter');
-$form->addRule(
-    'wanted_code',
-    get_lang('Max'),
-    'maxlength',
-    CourseManager::MAX_COURSE_LENGTH_CODE
-);
+if (!api_get_configuration_value('course_creation_form_hide_course_code')) {
+    $form->addText(
+        'wanted_code',
+        [
+            get_lang('Code'),
+            get_lang('OnlyLettersAndNumbers'),
+        ],
+        '',
+        [
+            'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
+            'pattern' => '[a-zA-Z0-9]+',
+            'title' => get_lang('OnlyLettersAndNumbers'),
+        ]
+    );
+    $form->applyFilter('wanted_code', 'html_filter');
+    $form->addRule(
+        'wanted_code',
+        get_lang('Max'),
+        'maxlength',
+        CourseManager::MAX_COURSE_LENGTH_CODE
+    );
+}
 
 // The teacher
 $titular = &$form->addElement('hidden', 'tutor_name', '');
@@ -292,7 +305,7 @@ $content = null;
 if ($form->validate()) {
     $course_values = $form->exportValues();
 
-    $wanted_code = $course_values['wanted_code'];
+    $wanted_code = isset($course_values['wanted_code']) ? $course_values['wanted_code'] : '';
     $category_code = isset($course_values['category_code']) ? $course_values['category_code'] : '';
     $title = $course_values['title'];
     $course_language = $course_values['course_language'];

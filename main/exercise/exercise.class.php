@@ -11121,12 +11121,9 @@ class Exercise
             }
         }
 
-        $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'
-            .api_get_cidreq()."&exerciseId=$exerciseId";
-        $link = "<a href=\"$url\">$url</a>";
-
         $objExerciseTmp = new Exercise();
         $objExerciseTmp->read($exerciseId);
+        $isAddedInLp = !empty($objExerciseTmp->lpList);
         $end = $objExerciseTmp->end_time;
         $start = $objExerciseTmp->start_time;
         $minutes = $objExerciseTmp->expired_time;
@@ -11189,6 +11186,14 @@ class Exercise
 
         $teacherName = implode('<br>', $teachersPrint);
 
+        if ($isAddedInLp) {
+            $lpInfo = current($objExerciseTmp->lpList);
+            $url = api_get_path(WEB_CODE_PATH)."lp/lp_controller.php?".api_get_cidreq().'&'
+                .http_build_query(['action' => 'view', 'lp_id' => $lpInfo['lp_id']]);
+        } else {
+            $url = api_get_path(WEB_CODE_PATH)."exercise/overview.php?".api_get_cidreq()."&exerciseId=$exerciseId";
+        }
+
         foreach ($usersArray as $userId => $userData) {
             $studentName = $userData['complete_name'];
             $title = sprintf(get_lang('QuizRemindSubject'), $teacherName);
@@ -11215,8 +11220,8 @@ class Exercise
             }
             $content .= sprintf(
                 get_lang('QuizLastRemindBody'),
-                $link,
-                $link,
+                $url,
+                $url,
                 $teacherName
             );
             $drhList = UserManager::getDrhListFromUser($userId);

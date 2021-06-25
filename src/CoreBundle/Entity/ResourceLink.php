@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CourseBundle\Entity\CGroup;
-use DateTime;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -17,10 +16,10 @@ use LogicException;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
  * @ORM\Entity
  * @ORM\Table(name="resource_link")
  */
+#[ApiResource]
 class ResourceLink
 {
     public const VISIBILITY_DRAFT = 0;
@@ -72,12 +71,12 @@ class ResourceLink
     protected ?User $user = null;
 
     /**
+     * @var Collection|ResourceRight[]
+     *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\ResourceRight",
      *     mappedBy="resourceLink", cascade={"persist", "remove"}, orphanRemoval=true
      * )
-     *
-     * @var Collection|ResourceRight[]
      */
     protected Collection $resourceRights;
 
@@ -273,7 +272,12 @@ class ResourceLink
     public function setVisibility(int $visibility): self
     {
         if (!\in_array($visibility, self::getVisibilityList(), true)) {
-            throw new LogicException('The visibility is not valid');
+            $message = sprintf(
+                'The visibility is not valid. Valid options: %s',
+                print_r(self::getVisibilityList(), true)
+            );
+
+            throw new LogicException($message);
         }
 
         $this->visibility = $visibility;

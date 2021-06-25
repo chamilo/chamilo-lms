@@ -7,17 +7,16 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\PersonalFile;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
 
 class CreatePersonalFileAction extends BaseResourceFileAction
 {
-    public function __invoke(Request $request): PersonalFile
+    public function __invoke(Request $request, EntityManager $em): PersonalFile
     {
-        error_log('CreatePersonalFileAction __invoke');
+        $resource = new PersonalFile();
+        $this->handleCreateRequest($resource, $request, $em);
 
-        $document = new PersonalFile();
-        $this->handleCreateRequest($document, $request);
-
-        return $document;
+        return $resource;
     }
 }

@@ -98,53 +98,7 @@
         </q-markup-table>
 
         <hr />
-
-        <span v-if="item['resourceLinkListFromEntity']">
-           <h2>{{ $t('Shared') }}</h2>
-            <span
-                v-for="link in item['resourceLinkListFromEntity']"
-            >
-             <q-markup-table>
-              <tbody>
-              <tr>
-                 <td>
-                   {{ $t('Status') }}
-                 </td>
-                 <td>
-                   {{ link.visibilityName }}
-                 </td>
-              </tr>
-
-              <tr v-if="link['course']">
-                 <td>
-                   {{ $t('Course') }}
-                 </td>
-                <td>
-                  {{ link.course.resourceNode.title }}
-                 </td>
-              </tr>
-
-              <tr v-if="link['session']">
-                 <td>
-                   {{ $t('Session') }}
-                 </td>
-                <td>
-                 {{ link.session.name }}
-                 </td>
-              </tr>
-
-              <tr v-if="link['group']">
-                 <td>
-                   {{ $t('Group') }}
-                 </td>
-                <td>
-                 {{ link.group.resourceNode.title }}
-                 </td>
-              </tr>
-              </tbody>
-            </q-markup-table>
-            </span>
-        </span>
+        <ShowLinks :item="item" />
       </span>
     </div>
 
@@ -158,13 +112,17 @@ import { mapFields } from 'vuex-map-fields';
 import Loading from '../../components/Loading.vue';
 import ShowMixin from '../../mixins/ShowMixin';
 import Toolbar from '../../components/Toolbar.vue';
+
+import ShowLinks from "../../components/resource_links/ShowLinks.vue";
+
 const servicePrefix = 'PersonalFile';
 
 export default {
   name: 'PersonalFileShow',
   components: {
       Loading,
-      Toolbar
+      Toolbar,
+      ShowLinks
   },
   mixins: [ShowMixin],
   computed: {

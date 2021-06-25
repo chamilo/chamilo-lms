@@ -618,10 +618,13 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
     public function setResourceName(AbstractResource $resource, $title): void
     {
-        $resource->setResourceName($title);
-        $resourceNode = $resource->getResourceNode();
-        $resourceNode->setTitle($title);
-        if ($resourceNode->hasResourceFile()) {
+        if (!empty($title)) {
+            $resource->setResourceName($title);
+            $resourceNode = $resource->getResourceNode();
+            $resourceNode->setTitle($title);
+        }
+
+        //if ($resourceNode->hasResourceFile()) {
             //$resourceNode->getResourceFile()->getFile()->
             //$resourceNode->getResourceFile()->setName($title);
             //$resourceFile->setName($title);
@@ -633,7 +636,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             $this->getResourceNodeRepository()->getFileSystem()->rename($fileName, $title);
             $resourceFile->setName($title);
             $resourceFile->setOriginalName($title);*/
-        }
+        //}
     }
 
     /**

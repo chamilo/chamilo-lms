@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isLoading && item && isCurrentTeacher">
+  <div v-if="!isLoading && item">
     <!--      :handle-delete="del"-->
     <Toolbar
         :handle-submit="onSendForm"
@@ -10,11 +10,9 @@
       :values="item"
       :errors="violations"
     >
-      <ResourceLinkForm
-          v-if="item && !isLoading"
-          ref="resourceLinkForm"
-          :values="item"
-      />
+
+    <EditLinks :item="item" />
+
     </DocumentsForm>
     <Loading :visible="isLoading || deleteLoading" />
   </div>
@@ -24,10 +22,10 @@
 import { mapActions, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 import DocumentsForm from '../../components/personalfile/Form.vue';
-import ResourceLinkForm from '../../components/personalfile/ResourceLinkForm.vue';
 import Loading from '../../components/Loading.vue';
 import Toolbar from '../../components/Toolbar.vue';
 import UpdateMixin from '../../mixins/UpdateMixin';
+import EditLinks from "../../components/resource_links/EditLinks.vue";
 
 const servicePrefix = 'PersonalFile';
 
@@ -35,10 +33,10 @@ export default {
   name: 'PersonalFileUpdate',
   servicePrefix,
   components: {
+    EditLinks,
     Loading,
     Toolbar,
     DocumentsForm,
-    ResourceLinkForm
   },
   mixins: [UpdateMixin],
   computed: {
@@ -50,9 +48,6 @@ export default {
       violations: 'violations'
     }),
     ...mapGetters('personalfile', ['find']),
-    ...mapGetters({
-      'isCurrentTeacher': 'security/isCurrentTeacher',
-    }),
   },
   methods: {
     ...mapActions('personalfile', {

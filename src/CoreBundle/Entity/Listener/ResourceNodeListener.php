@@ -48,15 +48,14 @@ class ResourceNodeListener
 
     /**
      * When updating a Resource.
+     * $resourceNode->getContent() was set in the BaseResourceFileAction (when calling the api).
      */
     public function preUpdate(ResourceNode $resourceNode, PreUpdateEventArgs $event)
     {
-        //error_log('resource node preUpdate');
+        error_log('preUpdate');
         if ($resourceNode->hasResourceFile() && $resourceNode->hasEditableTextContent()) {
             $fileName = $this->resourceNodeRepository->getFilename($resourceNode->getResourceFile());
-            error_log(sprintf('fileName: %s', $fileName));
             if ($fileName) {
-                error_log('updated');
                 $content = $resourceNode->getContent();
                 // Skip saving null.
                 if (null !== $content) {

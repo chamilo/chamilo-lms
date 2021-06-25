@@ -19,6 +19,7 @@ import {useStore} from "vuex";
 import axios from "axios";
 import {reactive, toRefs} from 'vue'
 import {mapGetters} from "vuex";
+import {ENTRYPOINT} from "../config/entrypoint";
 
 export default {
   name: "Home",
@@ -29,7 +30,7 @@ export default {
       announcements: [],
     });
 
-    axios.get('/news/list').then(response => {
+    axios.get(ENTRYPOINT+'news/list').then(response => {
       console.log(response.data);
       console.log(response);
       if (Array.isArray(response.data)) {

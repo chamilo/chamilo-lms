@@ -231,12 +231,7 @@ class CDocument extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get comment.
-     *
-     * @return string
-     */
-    public function getComment()
+    public function getComment(): ?string
     {
         return $this->comment;
     }
@@ -248,9 +243,6 @@ class CDocument extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Document title.
-     */
     public function getTitle(): string
     {
         return $this->title;

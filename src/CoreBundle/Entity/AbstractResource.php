@@ -60,7 +60,7 @@ abstract class AbstractResource
     /**
      * @Assert\Valid()
      * @ApiSubresource()
-     * @Groups({"resource_node:read", "resource_node:write", "document:write", "ctool:read", "course:read", "illustration:read"})
+     * @Groups({"resource_node:read", "resource_node:write", "personal_file:write", "document:write", "ctool:read", "course:read", "illustration:read"})
      * @ORM\OneToOne(
      *     targetEntity="Chamilo\CoreBundle\Entity\ResourceNode",
      *     cascade={"persist", "remove"},
@@ -304,12 +304,13 @@ abstract class AbstractResource
             foreach ($links as $link) {
                 $resourceLinkList[] = [
                     'id' => $link->getId(),
-                    'session' => $link->getSession(),
-                    'course' => $link->getCourse(),
                     'visibility' => $link->getVisibility(),
                     'visibilityName' => $link->getVisibilityName(),
+                    'session' => $link->getSession(),
+                    'course' => $link->getCourse(),
                     'group' => $link->getGroup(),
                     'userGroup' => $link->getUserGroup(),
+                    'user' => $link->getUser(),
                 ];
             }
         }

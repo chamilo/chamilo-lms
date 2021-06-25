@@ -103,6 +103,7 @@ foreach ($headers as $header) {
 }
 $row++;
 $scoreDisplay = new ScoreDisplay();
+$orderedData = [];
 
 if ($form->validate()) {
     $questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, $sessionId, $groups, $users);
@@ -116,24 +117,43 @@ if ($form->validate()) {
             $groups,
             $users
         );
-        $table->setCellContents($row, 0, $data['question']);
-        $table->setCellContents($row, 1, $data['count'].' / '.$total);
-        $table->setCellContents($row, 2, $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE));
-        $row++;
+        $orderedData[] = [
+            $data['question'],
+            $data['count'].' / '.$total,
+            $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE),
+        ];
     }
 } else {
     $questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, $sessionId);
     foreach ($questions as $data) {
         $questionId = (int) $data['question_id'];
         $total = ExerciseLib::getTotalQuestionAnswered($courseId, $exerciseId, $questionId, $sessionId);
-        $table->setCellContents($row, 0, $data['question']);
-        $table->setCellContents($row, 1, $data['count'].' / '.$total);
-        $table->setCellContents($row, 2, $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE));
-        $row++;
+        $orderedData[] = [
+            $data['question'],
+            $data['count'].' / '.$total,
+            $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE),
+        ];
     }
 }
 
+$table = new SortableTableFromArray(
+    $orderedData,
+    0,
+    100,
+    'question_tracking'
+);
+
+$table->hideNavigation = true;
+
+$table->column = 2;
+$column = 0;
+foreach ($headers as $header) {
+    $table->set_header($column, $header, false);
+    $column++;
+}
+
+
 Display::display_header($nameTools, get_lang('Exercise'));
 echo $formToString;
-echo $table->toHtml();
+echo $table->return_table();
 Display::display_footer();

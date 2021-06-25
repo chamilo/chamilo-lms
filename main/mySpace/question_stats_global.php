@@ -175,6 +175,7 @@ if ($form->validate()) {
             100,
             'question_tracking'
         );
+        $table->hideNavigation = true;
         $table->column = 4;
         $column = 0;
         foreach ($headers as $header) {

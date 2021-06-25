@@ -8788,4 +8788,5 @@ $FailedAttempt = "Failed attempt";
 $StudentWithSuccessfulAttempt = "Students with successful attempt";
 $StudentWithFailedAttempt = "Students with failed attempt";
 $ExerciseAttemptStatsReport = "Exercise attempt stats report";
+$ComparativeGroupReport = "Comparative group report";
 ?>

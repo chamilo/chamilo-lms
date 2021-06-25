@@ -15,11 +15,7 @@ class UpdatePersonalFileAction extends BaseResourceFileAction
 {
     public function __invoke(PersonalFile $resource, Request $request, PersonalFileRepository $repo, EntityManager $em): PersonalFile
     {
-        error_log('UpdatePersonalFileAction __invoke');
-
         $this->handleUpdateRequest($resource, $repo, $request, $em);
-
-        //error_log('Finish update resource node file action');
 
         return $resource;
     }

@@ -15,13 +15,9 @@ class UpdateDocumentFileAction extends BaseResourceFileAction
 {
     public function __invoke(CDocument $document, Request $request, CDocumentRepository $repo, EntityManager $em): CDocument
     {
-        error_log('UpdateDocumentFileAction __invoke');
-
         $this->handleUpdateRequest($document, $repo, $request, $em);
 
         //$document->setComment($comment);
-
-        error_log('Finish update resource node file action');
 
         return $document;
     }

@@ -226,9 +226,11 @@ class ResourceNode
         return $this->id;
     }
 
-    /**
-     * Returns the resource creator.
-     */
+    public function hasCreator(): bool
+    {
+        return null !== $this->creator;
+    }
+
     public function getCreator(): ?User
     {
         return $this->creator;

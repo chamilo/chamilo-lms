@@ -20,6 +20,10 @@ trait UserCreatorTrait
             return null;
         }
 
+        if (!$this->resourceNode->hasCreator()) {
+            return null;
+        }
+
         return $this->resourceNode->getCreator();
     }
 

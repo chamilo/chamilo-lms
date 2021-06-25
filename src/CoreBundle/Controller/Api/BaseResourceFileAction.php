@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller\Api;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
@@ -23,13 +24,11 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class BaseResourceFileAction
 {
-    public function setLinks(AbstractResource $resource, $em): void
+    public static function setLinks(AbstractResource $resource, $em): void
     {
-        error_log('setLinks ResourceNode ');
         $resourceNode = $resource->getResourceNode();
         $links = $resource->getResourceLinkArray();
         if ($links) {
-            error_log('$resource->getResourceLinkArray()');
             $groupRepo = $em->getRepository(CGroup::class);
             $courseRepo = $em->getRepository(Course::class);
             $sessionRepo = $em->getRepository(Session::class);
@@ -85,7 +84,6 @@ class BaseResourceFileAction
                 }
 
                 if ($linkSet) {
-                    error_log('add link');
                     $em->persist($resourceLink);
                     $resourceNode->addResourceLink($resourceLink);
                     //$em->persist($resourceNode);
@@ -93,8 +91,6 @@ class BaseResourceFileAction
                 }
             }
         }
-
-        //$em->persist($resource);
 
         // Use by Chamilo not api platform.
         /*$links = $resource->getResourceLinkEntityList();
@@ -134,7 +130,7 @@ class BaseResourceFileAction
      */
     protected function handleCreateRequest(AbstractResource $resource, Request $request, EntityManager $em): array
     {
-        error_log('handleCreateRequest');
+        //error_log('handleCreateRequest');
         $contentData = $request->getContent();
         if (!empty($contentData)) {
             $contentData = json_decode($contentData, true);
@@ -217,7 +213,6 @@ class BaseResourceFileAction
         // Set resource link list if exists.
         if (!empty($resourceLinkList)) {
             $resource->setResourceLinkArray($resourceLinkList);
-            $this->setLinks($resource, $em);
         }
 
         return [
@@ -228,17 +223,14 @@ class BaseResourceFileAction
 
     protected function handleUpdateRequest(AbstractResource $resource, ResourceRepository $repo, Request $request, EntityManager $em)
     {
-        error_log('handleUpdateRequest');
         $contentData = $request->getContent();
         $resourceLinkList = [];
         if (!empty($contentData)) {
-            error_log('contentData');
             $contentData = json_decode($contentData, true);
             $title = $contentData['title'] ?? '';
             $content = $contentData['contentFile'] ?? '';
             $resourceLinkList = $contentData['resourceLinkListFromEntity'] ?? [];
         } else {
-            error_log('else');
             $title = $request->get('title');
             $content = $request->request->get('contentFile');
             //$comment = $request->request->get('comment');
@@ -277,9 +269,8 @@ class BaseResourceFileAction
                 }
             }
 
-            error_log(print_r($resourceLinkList, true));
             $resource->setResourceLinkArray($resourceLinkList);
-            $this->setLinks($resource, $em);
+            self::setLinks($resource, $em);
             /*
 
             $groupRepo = $em->getRepository(CGroup::class);

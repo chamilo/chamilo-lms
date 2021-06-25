@@ -41,8 +41,6 @@ class ResourceNodeListener
 
     public function prePersist(ResourceNode $resourceNode, LifecycleEventArgs $event)
     {
-        //error_log('resource node prePersist');
-
         return true;
     }
 
@@ -52,7 +50,6 @@ class ResourceNodeListener
      */
     public function preUpdate(ResourceNode $resourceNode, PreUpdateEventArgs $event)
     {
-        error_log('preUpdate');
         if ($resourceNode->hasResourceFile() && $resourceNode->hasEditableTextContent()) {
             $fileName = $this->resourceNodeRepository->getFilename($resourceNode->getResourceFile());
             if ($fileName) {
@@ -69,6 +66,5 @@ class ResourceNodeListener
 
     public function postUpdate(ResourceNode $resourceNode, LifecycleEventArgs $event): void
     {
-        //error_log('ResourceNode postUpdate');
     }
 }

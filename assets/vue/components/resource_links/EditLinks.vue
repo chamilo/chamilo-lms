@@ -76,6 +76,7 @@ import useVuelidate from "@vuelidate/core";
 
 import VueMultiselect from 'vue-multiselect'
 import isEmpty from 'lodash/isEmpty';
+import union from 'lodash/union';
 
 export default {
   name: 'EditLinks',
@@ -109,16 +110,13 @@ export default {
         () => item
     );*/
 
-    console.log('2222');
-    console.log(props.item);
-
-
     function addUser() {
       selectedUsers.value.forEach(userResult => {
 
         if (isEmpty(props.item.resourceLinkListFromEntity)) {
           props.item.resourceLinkListFromEntity = [];
         }
+
         props.item.resourceLinkListFromEntity.push(
             {
               uid: userResult.id,

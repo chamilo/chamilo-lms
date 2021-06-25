@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity\Listener;
 
+use Chamilo\CoreBundle\Controller\Api\BaseResourceFileAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
@@ -56,10 +57,11 @@ class ResourceListener
      */
     public function prePersist(AbstractResource $resource, LifecycleEventArgs $event): void
     {
-        error_log('Resource listener prePersist for obj: '.\get_class($resource));
+        //error_log('Resource listener prePersist for obj: '.\get_class($resource));
         $em = $event->getEntityManager();
         $request = $this->request;
 
+        // 1. Set AccessUrl.
         if ($resource instanceof ResourceWithAccessUrlInterface) {
             // Checking if this resource is connected with a AccessUrl.
             if (0 === $resource->getUrls()->count()) {
@@ -79,6 +81,7 @@ class ResourceListener
             $resource->setParent($accessUrl);
         }
 
+        // 2. Set creator.
         // Check if creator was set with $resource->setCreator()
         $creator = $resource->getResourceNodeCreator();
 
@@ -100,11 +103,7 @@ class ResourceListener
             throw new UserNotFoundException('User creator not found, use $resource->setCreator();');
         }
 
-        $resourceNode = new ResourceNode();
-        $resource->setResourceNode($resourceNode);
-        $this->updateResourceName($resource);
-        $resourceName = $resource->getResourceName();
-
+        // 3. Set ResourceType.
         // @todo use static table instead of Doctrine
         $repo = $em->getRepository(ResourceType::class);
         $entityClass = \get_class($event->getEntity());
@@ -121,11 +120,7 @@ class ResourceListener
             throw new InvalidArgumentException(sprintf('ResourceType: %s not found', $name));
         }
 
-        $resourceNode
-            ->setCreator($creator)
-            ->setResourceType($resourceType)
-        ;
-
+        // 4. Set ResourceNode parent.
         // Add resource directly to the resource node root (Example: a Course resource).
         $parentNode = null;
         if ($resource instanceof ResourceWithAccessUrlInterface) {
@@ -171,24 +166,36 @@ class ResourceListener
             throw new InvalidArgumentException(sprintf('Resource %s needs a parent', $resource->getResourceName()));
         }
 
-        $resourceNode->setParent($parentNode);
+        // 4. Create ResourceNode for the Resource
+        $resourceNode = (new ResourceNode())
+            ->setCreator($creator)
+            ->setResourceType($resourceType)
+            ->setParent($parentNode)
+        ;
+        $resource->setResourceNode($resourceNode);
+        // Update resourceNode title from Resource.
+        $this->updateResourceName($resource);
 
+        BaseResourceFileAction::setLinks($resource, $em);
+
+        // Upload File was set in BaseResourceFileAction.php
         if ($resource->hasUploadFile()) {
-            // Set in BaseResourceFileAction.php
             $uploadedFile = $resource->getUploadFile();
 
             // File upload.
             if ($uploadedFile instanceof UploadedFile) {
-                $resourceFile = new ResourceFile();
-                $resourceFile->setName($uploadedFile->getFilename());
-                $resourceFile->setOriginalName($uploadedFile->getFilename());
-                $resourceFile->setFile($uploadedFile);
+                $resourceFile = (new ResourceFile())
+                    ->setName($uploadedFile->getFilename())
+                    ->setOriginalName($uploadedFile->getFilename())
+                    ->setFile($uploadedFile)
+                ;
                 $em->persist($resourceFile);
                 $resourceNode->setResourceFile($resourceFile);
             }
         }
 
         $resource->setResourceNode($resourceNode);
+        //$em->persist($resourceNode);
 
         // All resources should have a parent, except AccessUrl.
         if (!($resource instanceof AccessUrl) && null === $resourceNode->getParent()) {
@@ -199,7 +206,6 @@ class ResourceListener
 
             throw new InvalidArgumentException($message);
         }
-        error_log('end resource listener');
     }
 
     /**
@@ -233,7 +239,6 @@ class ResourceListener
         /*$originalExtension = pathinfo($resourceName, PATHINFO_EXTENSION);
         $originalBasename = \basename($resourceName, $originalExtension);
         $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);*/
-
         $resource->getResourceNode()->setTitle($resourceName);
     }
 }

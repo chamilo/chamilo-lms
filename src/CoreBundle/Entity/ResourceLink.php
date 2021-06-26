@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Chamilo\CourseBundle\Entity\CGroup;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,6 +23,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource]
 class ResourceLink
 {
+    use TimestampableTypedEntity;
+
     public const VISIBILITY_DRAFT = 0;
     public const VISIBILITY_PENDING = 1;
     public const VISIBILITY_PUBLISHED = 2;

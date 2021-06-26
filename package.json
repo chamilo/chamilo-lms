@@ -116,7 +116,7 @@
     "vue-router": "^4.0.10",
     "vue-sidebar-menu": "^4.8.1",
     "vue-toastification": "^2.0.0-rc.1",
-    "vuetify": "^3.0.0-alpha.6",
+    "vuetify": "3.0.0-alpha.7",
     "vuex": "^4.0.2",
     "vuex-composition-helpers": "next",
     "vuex-map-fields": "^1.4.1",

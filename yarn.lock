@@ -6315,7 +6315,7 @@ __metadata:
     vue-router: ^4.0.10
     vue-sidebar-menu: ^4.8.1
     vue-toastification: ^2.0.0-rc.1
-    vuetify: ^3.0.0-alpha.6
+    vuetify: 3.0.0-alpha.7
     vuex: ^4.0.2
     vuex-composition-helpers: next
     vuex-map-fields: ^1.4.1
@@ -19665,12 +19665,12 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"vuetify@npm:^3.0.0-alpha.6":
-  version: 3.0.0-alpha.6
-  resolution: "vuetify@npm:3.0.0-alpha.6"
+"vuetify@npm:3.0.0-alpha.7":
+  version: 3.0.0-alpha.7
+  resolution: "vuetify@npm:3.0.0-alpha.7"
   peerDependencies:
     vue: ^3.1.1
-  checksum: a9d773ed1355e088a8a08c3e4ef34910cb15c959352837a367068dda1e7618356c0e56ee86272ae65821d60c5e91fb21bb7e402ad9da16185aedd68fdc1659d8
+  checksum: b17d17698e6a864277d7d0f9824bd34bf0c101b4cf1f12198e4ff1744de2f231bddacd9183818482164bc70fec2bc296baa2333f0e5ab4ab1054fc4396dc6970
   languageName: node
   linkType: hard
 

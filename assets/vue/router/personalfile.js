@@ -26,6 +26,11 @@ export default {
           component: () => import('../views/personalfile/Upload.vue')
         },
         {
+          name: 'PersonalFileShared',
+          path: 'shared',
+          component: () => import('../views/personalfile/Shared.vue')
+        },
+        {
           name: 'PersonalFileUpdate',
           //path: ':id/edit',
           path: 'edit_file',

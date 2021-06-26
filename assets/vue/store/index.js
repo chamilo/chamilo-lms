@@ -4,7 +4,7 @@ import SecurityModule from "./security";
 import createPersistedState from "vuex-persistedstate";
 //createLogger(),
 export default createStore({
-    plugins: [createLogger(), createPersistedState()],
+    plugins: [createPersistedState()],
     modules: {
         notifications,
         security: SecurityModule,

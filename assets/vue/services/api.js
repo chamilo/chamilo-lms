@@ -10,9 +10,7 @@ export default function makeService(endpoint) {
         params = {getFile: true};
       }
 
-      console.log(id);
-      console.log(params);
-
+      //console.log(id);console.log(params);
       //let options = {params: {getFile: true}};
       let options = {params: params};
       return fetch(`${id}`, options);

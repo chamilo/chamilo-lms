@@ -3,7 +3,7 @@
       class=""
   >
     <div class="flex flex-col flex-center">
-      <div class="p-9 rounded-xl shadow-lg border border-gray-300">
+      <div class="p-9 rounded-xl shadow-lg">
         <a :href="goToCourseTool(course, tool)" class="">
             <v-icon
                 :icon="tool.tool.icon"

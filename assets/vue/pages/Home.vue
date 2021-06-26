@@ -30,7 +30,7 @@ export default {
       announcements: [],
     });
 
-    axios.get(ENTRYPOINT+'news/list').then(response => {
+    axios.get('/news/list').then(response => {
       console.log(response.data);
       console.log(response);
       if (Array.isArray(response.data)) {

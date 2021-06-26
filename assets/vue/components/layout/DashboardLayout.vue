@@ -207,9 +207,7 @@
 import {mapGetters} from "vuex";
 import isEmpty from "lodash/isEmpty";
 import useState from "../../hooks/useState";
-import {useRouter} from "vue-router";
 import {computed, ref, toRefs} from "vue";
-import axios from "axios";
 
 import Breadcrumb from '../../components/Breadcrumb.vue';
 
@@ -221,7 +219,6 @@ export default {
   setup (props) {
     const { isSidebarOpen, isSettingsPanelOpen, isSearchPanelOpen, isNotificationsPanelOpen } = useState();
     const rightDrawerOpen = ref(false);
-
     const { showBreadcrumb } = toRefs(props);
 
     return {
@@ -255,7 +252,6 @@ export default {
       { icon: 'mdi-account-multiple', url: '/main/admin/user_list.php', text: 'Users' },
       { icon: 'mdi-book', url: '/main/admin/course_list.php', text: 'Courses' },
       { icon: 'mdi-book-open',  url: '/main/session/session_list.php', text: 'Sessions' },
-      //{ icon: fasFlask, url: '/main/admin/index.php', text: 'Administration' },
       { icon: 'mdi-cogs', url: '/main/admin/index.php', text: 'Administration' },
     ],
     links3: [
@@ -275,13 +271,13 @@ export default {
     ],
   }),
   created() {
-    console.log('dashboard created');
+    //console.log('dashboard created');
     this.legacyContent = '';
-    console.log('updated empty created');
+    //console.log('updated empty created');
 
     let isAuthenticated = false;
     if (!isEmpty(window.user)) {
-      console.log('is logged in as ' + window.user.username);
+      //console.log('is logged in as ' + window.user.username);
       this.user = window.user;
       isAuthenticated = true;
     }
@@ -294,11 +290,6 @@ export default {
       console.log(e.message);
     }
 
-    /*if (app && app.attributes["data-user-json"].value) {
-      this.user = JSON.parse(app.attributes["data-user-json"].value);
-      this.userAvatar = app.attributes["data-user-avatar"].value;
-    }*/
-    //console.log(this.user);
     //let payload = {isAuthenticated: isAuthenticated, user: this.user};
     //this.$store.dispatch("security/onRefresh", payload);
     if (isAuthenticated) {

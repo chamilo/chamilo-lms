@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
 
 /**
- * CDocumentExtension is called when calling the api/documents.json.
+ * Extension is called when loading api/documents.json.
  */
 final class CDocumentExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
 {

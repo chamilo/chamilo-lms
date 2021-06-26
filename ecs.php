@@ -43,7 +43,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(SetList::SYMFONY);
     $containerConfigurator->import(SetList::PSR_12);
     $containerConfigurator->import(SetList::PHP_CS_FIXER);
-    //$containerConfigurator->import(SetList::DOCTRINE_ANNOTATIONS);
+    $containerConfigurator->import(SetList::DOCTRINE_ANNOTATIONS);
     $containerConfigurator->import(SetList::SYMFONY_RISKY);
 
     $services->set(DisallowLongArraySyntaxSniff::class);

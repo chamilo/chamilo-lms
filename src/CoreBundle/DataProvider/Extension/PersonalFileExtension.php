@@ -11,10 +11,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInter
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
-use Chamilo\CourseBundle\Entity\CDocument;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
 
 /**
@@ -62,7 +60,8 @@ final class PersonalFileExtension implements QueryCollectionExtensionInterface /
 
         $rootAlias = $queryBuilder->getRootAliases()[0];
         $queryBuilder
-            ->innerJoin("$rootAlias.resourceNode", 'node');
+            ->innerJoin("$rootAlias.resourceNode", 'node')
+        ;
 
         if ($isShared) {
             $queryBuilder->leftJoin('node.resourceLinks', 'links');

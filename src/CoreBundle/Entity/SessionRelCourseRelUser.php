@@ -93,9 +93,9 @@ class SessionRelCourseRelUser
 
     /**
      * @Assert\Range(
-     *      min = 0,
-     *      max = 100,
-     *      notInRangeMessage = "Progress from {{ min }} to {{ max }} only",
+     *     min = 0,
+     *     max = 100,
+     *     notInRangeMessage = "Progress from {{ min }} to {{ max }} only",
      * )
      *
      * @ORM\Column(name="progress", type="integer")

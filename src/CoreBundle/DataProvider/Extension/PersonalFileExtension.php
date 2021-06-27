@@ -77,7 +77,7 @@ final class PersonalFileExtension implements QueryCollectionExtensionInterface /
             ;
 
             $queryBuilder
-                ->orWhere('links.user = :userLink')
+                ->andWhere('links.user = :userLink')
                 ->setParameter('userLink', $user)
             ;
         } else {

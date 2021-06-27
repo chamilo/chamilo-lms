@@ -305,6 +305,7 @@ import { ref, reactive, onMounted, computed } from 'vue';
 import { useStore } from 'vuex';
 import isEmpty from 'lodash/isEmpty';
 import moment from "moment";
+import toInteger from "lodash/toInteger";
 
 export default {
   name: 'DocumentsList',
@@ -350,32 +351,12 @@ export default {
   },
   created() {
     console.log('created - vue/views/documents/List.vue');
-    /*const route = useRoute();
-    let nodeId = route.params['node'];
-    if (!isEmpty(nodeId)) {
-      this.findResourceNode('/api/resource_nodes/' + nodeId);
-    }
-
-    this.onUpdateOptions(this.options);*/
-    //this.initFilters1();
-  /*
-    this.onRequest({
-      pagination: this.pagination,
-    });*/
+    this.filters['loadNode'] = 1;
   },
   mounted() {
+    this.filters['loadNode'] = 1;
     console.log('mounted - vue/views/documents/List.vue');
-    const route = useRoute()
-    /*let nodeId = route.params['node'];
-    if (!isEmpty(nodeId)) {
-      this.findResourceNode('/api/resource_nodes/' + nodeId);
-    }*/
     this.onUpdateOptions(this.options);
-
-    /*this.onRequest({
-      pagination: this.pagination,
-    });*/
-
 
     // Detect when scrolled to bottom.
     /*const listElm = document.querySelector('#documents');
@@ -429,7 +410,7 @@ export default {
   methods: {
     // prime
     onPage(event) {
-      console.log(event);
+      console.log('onPage');
       console.log(event.page);
       console.log(event.sortField);
       console.log(event.sortOrder);
@@ -451,7 +432,6 @@ export default {
       // ctx.sortBy   ==> Field key for sorting by (or null for no sorting)
       // ctx.sortDesc ==> true if sorting descending, false otherwise
     },
-
     openNew() {
       this.item = {};
       this.submitted = false;

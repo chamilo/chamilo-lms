@@ -84,23 +84,11 @@ export default {
 
   watch: {
     $route() {
-      console.log('App.vue watch $route');
-      console.log(this.$route.name);
-
-      //let content = document.getElementById("sectionMainContent");
+      //console.log('App.vue watch $route');
+      //console.log(this.$route.name);
       this.legacyContent = '';
-      /*if (content && false === this.contentLoaded) {
-        console.log('updated ok ');
-        content.style.display = 'block';
-        this.legacyContent = content.outerHTML;
-        if (document.querySelector("#sectionMainContent")) {
-          console.log('remove sectionMainContent ');
-          document.querySelector("#sectionMainContent").remove();
-        }
-      }*/
 
       // This code below will handle the legacy content to be loaded.
-
       let url = window.location.href;
       var n = url.indexOf("main/");
       if (n > 0) {
@@ -121,27 +109,6 @@ export default {
 
           console.log('Replace URL', url);
           window.location.replace(url);
-
-          /*axios.get(url, {
-            params: {
-              from_vue: 1
-            },
-          })
-              .then((response) => {
-                console.log('updated page using axios');
-                this.legacyContent = response.data;
-              }).catch(function (error) {
-            if (error.response) {
-              // Request made and server responded
-              console.log(error.response.status);
-              console.log(error.response.data);
-            } else if (error.request) {
-              // The request was made but no response was received
-              console.log(error.request);
-            } else {
-              console.log('Error', error.message);
-            }
-          });*/
         }
       } else {
         if (this.firstTime) {
@@ -199,8 +166,7 @@ export default {
     }
 
     axios.interceptors.response.use(undefined, (err) => {
-      console.log('interceptor');
-      console.log(err.response.status);
+      //console.log('interceptor');console.log(err.response.status);
 
       return new Promise(() => {
         // Unauthorized.

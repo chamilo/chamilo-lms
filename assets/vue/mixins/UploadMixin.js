@@ -7,14 +7,6 @@ export default {
     formatDateTime,
     onCreated(item) {
       this.showMessage(this.$i18n.t('{resource} created', {'resource': item['resourceNode'].title}));
-      const createForm = this.$refs.createForm;
-      let folderParams = this.$route.query;
-
-      /*this.$router.push({
-        name: `${this.$options.servicePrefix}List`,
-        params: {id: item['@id']},
-        query: folderParams
-      });*/
     },
     onUploadForm() {
       console.log('onUploadForm');

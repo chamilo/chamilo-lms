@@ -27,7 +27,6 @@ export default {
         page: 1,
         itemsPerPage: 10
       },
-      //filters: {}
     };
   },
   watch: {
@@ -49,7 +48,6 @@ export default {
     },
 
     deletedItem(item) {
-      //console.log('deletedItem');
       this.showMessage(this.$i18n.t('{resource} deleted', {'resource': item['resourceNode'].title}));
       this.onUpdateOptions(this.options);
     },
@@ -59,6 +57,7 @@ export default {
     },
 
     items() {
+      this.options.totalItems = this.totalItems;
     }
   },
   methods: {
@@ -97,18 +96,22 @@ export default {
     onUpdateOptions({ page, itemsPerPage, sortBy, sortDesc, totalItems } = {}) {
       console.log('ListMixin.js: onUpdateOptions');
 
-      //this.resetList = true;
+      this.resetList = true;
 
       let params = {
         ...this.filters
       }
 
-      if (itemsPerPage > 0) {
-        params = { ...params, itemsPerPage, page };
+      if (1 === this.filters['loadNode']) {
+        params[`resourceNode.parent`] = this.$route.params.node;
       }
 
-      if (this.$route.params.node) {
+      /*if (this.$route.params.node) {
         params[`resourceNode.parent`] = this.$route.params.node;
+      }*/
+
+      if (itemsPerPage > 0) {
+        params = { ...params, itemsPerPage, page };
       }
 
       // prime
@@ -129,7 +132,6 @@ export default {
       }*/
       console.log(params);
 
-      this.resetList = true;
       this.getPage(params).then(() => {
         this.options.sortBy = sortBy;
         this.options.sortDesc = sortDesc;
@@ -195,7 +197,6 @@ export default {
 
     sharedDocumentHandler() {
       let folderParams = this.$route.query;
-      folderParams['shared'] = 1;
       this.$router.push({ name: `${this.$options.servicePrefix}Shared` , query: folderParams});
     },
 
@@ -207,15 +208,6 @@ export default {
       if (item) {
         folderParams['id'] = item['@id'];
       }
-
-      /*let cid = toInteger(this.$route.query.cid);
-      let sid = toInteger(this.$route.query.sid);
-      let gid = toInteger(this.$route.query.gid);
-
-      folderParams['cid'] = cid;
-      folderParams['sid'] = sid;
-      folderParams['gid'] = gid;*/
-
       console.log(folderParams);
 
       this.$router.push({

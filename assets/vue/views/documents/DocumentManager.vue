@@ -152,21 +152,11 @@ export default {
   },
   created() {
     console.log('created - vue/views/documents/List.vue');
-    /*const route = useRoute();
-    let nodeId = route.params['node'];
-    if (!isEmpty(nodeId)) {
-      this.findResourceNode('/api/resource_nodes/' + nodeId);
-    }
-
-    this.onUpdateOptions(this.options);*/
-    //this.initFilters1();
-  /*
-    this.onRequest({
-      pagination: this.pagination,
-    });*/
+    this.filters['loadNode'] = 1;
   },
   mounted() {
     console.log('mounted - vue/views/documents/List.vue');
+    this.filters['loadNode'] = 1;
     this.onUpdateOptions(this.options);
   },
   computed: {

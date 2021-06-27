@@ -4,6 +4,7 @@
       <div class="flex flex-row gap-2" >
         <Button label="New folder" icon="fa fa-folder-plus" class="btn btn-primary" @click="openNew" />
         <Button label="Upload" icon="fa fa-file-upload" class="btn btn-primary" @click="uploadDocumentHandler()" />
+        <Button label="Shared" icon="fa fa-file-upload" class="btn btn-success" @click="sharedDocumentHandler()" />
         <Button label="Delete" icon="pi pi-trash" class="btn btn-danger " @click="confirmDeleteMultiple" :disabled="!selectedItems || !selectedItems.length" />
       </div>
     </div>
@@ -26,12 +27,8 @@
       :rowsPerPageOptions="[5, 10, 20, 50]"
       responsiveLayout="scroll"
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-      :globalFilterFields="['resourceNode.title', 'resourceNode.updatedAt']">
-
-    <span v-if="isCurrentTeacher">
-      <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
-    </span>
-
+      :globalFilterFields="['resourceNode.title', 'resourceNode.updatedAt']"
+  >
     <Column field="resourceNode.title" :header="$t('Title')" :sortable="true">
       <template #body="slotProps">
         <div v-if="slotProps.data && slotProps.data.resourceNode && slotProps.data.resourceNode.resourceFile">
@@ -130,17 +127,15 @@ import { mapActions, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 import ListMixin from '../../mixins/ListMixin';
 import ActionCell from '../../components/ActionCell.vue';
-//import Toolbar from '../../components/Toolbar.vue';
 import ResourceFileIcon from '../../components/documents/ResourceFileIcon.vue';
 import ResourceFileLink from '../../components/documents/ResourceFileLink.vue';
 
 import { useRoute } from 'vue-router'
 import DataFilter from '../../components/DataFilter';
-//import DocumentsFilterForm from '../../components/personalfile/Filter';
+
 import { ref, reactive, onMounted, computed } from 'vue';
 import { useStore } from 'vuex';
 import isEmpty from 'lodash/isEmpty';
-import moment from "moment";
 
 export default {
   name: 'PersonalFileList',
@@ -180,28 +175,18 @@ export default {
       deleteItemDialog: false,
       deleteMultipleDialog: false,
       item: {},
-      filters: {},
+      filters: {shared: 0, loadNode: 1},
       submitted: false,
     };
   },
   created() {
-    console.log('CREATED');
-    let resourceNodeId = this.currentUser.resourceNode['id'];
-    if (isEmpty(this.$route.params.node)) {
-      this.$route.params.node = resourceNodeId;
-    }
-    //this.item.parentResourceNodeId = this.$route.params.node;
-    this.filters['resourceNode.parent'] = resourceNodeId;
-  },
-  mounted() {
-    const route = useRoute()
-    /*let nodeId = route.params['node'];
-    if (!isEmpty(nodeId)) {
-      this.findResourceNode('/api/resource_nodes/' + nodeId);
-    }*/
-    console.log(this.options);
+    this.resetList = true;
     this.onUpdateOptions(this.options);
   },
+  /*mounted() {
+    this.resetList = true;
+    this.onUpdateOptions(this.options);
+  },*/
   computed: {
     // From crud.js list function
     ...mapGetters('resourcenode', {

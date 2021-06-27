@@ -82,7 +82,7 @@ final class PersonalFileExtension implements QueryCollectionExtensionInterface /
             ;
         } else {
             $queryBuilder->orWhere('node.creator = :current');
-            $queryBuilder->setParameter('current', $user->getId());
+            $queryBuilder->setParameter('current', $user);
         }
     }
 }

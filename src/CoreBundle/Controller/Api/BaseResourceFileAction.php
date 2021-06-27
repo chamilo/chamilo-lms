@@ -253,7 +253,7 @@ class BaseResourceFileAction
 
         $link = null;
         if (!empty($resourceLinkList)) {
-            foreach ($resourceLinkList as $linkArray) {
+            foreach ($resourceLinkList as $key => &$linkArray) {
                 // Find the exact link.
                 $linkId = $linkArray['id'] ?? 0;
                 if (!empty($linkId)) {
@@ -262,80 +262,15 @@ class BaseResourceFileAction
 
                     if (null !== $link) {
                         $link->setVisibility((int) $linkArray['visibility']);
+                        unset($resourceLinkList[$key]);
 
-                        break;
+                        $em->persist($link);
                     }
                 }
             }
 
             $resource->setResourceLinkArray($resourceLinkList);
             self::setLinks($resource, $em);
-            /*
-
-            $groupRepo = $em->getRepository(CGroup::class);
-            $courseRepo = $em->getRepository(Course::class);
-            $sessionRepo = $em->getRepository(Session::class);
-            $userRepo = $em->getRepository(User::class);
-
-            foreach ($resourceLinkList as $link) {
-                $resourceLink = new ResourceLink();
-                $linkSet = false;
-                if (isset($link['cid']) && !empty($link['cid'])) {
-                    $course = $courseRepo->find($link['cid']);
-                    if (null !== $course) {
-                        $linkSet = true;
-                        $resourceLink->setCourse($course);
-                    } else {
-                        throw new InvalidArgumentException(sprintf('Course #%s does not exists', $link['cid']));
-                    }
-                }
-
-                if (isset($link['sid']) && !empty($link['sid'])) {
-                    $session = $sessionRepo->find($link['sid']);
-                    if (null !== $session) {
-                        $linkSet = true;
-                        $resourceLink->setSession($session);
-                    } else {
-                        throw new InvalidArgumentException(sprintf('Session #%s does not exists', $link['sid']));
-                    }
-                }
-
-                if (isset($link['gid']) && !empty($link['gid'])) {
-                    $group = $groupRepo->find($link['gid']);
-                    if (null !== $group) {
-                        $linkSet = true;
-                        $resourceLink->setGroup($group);
-                    } else {
-                        throw new InvalidArgumentException(sprintf('Group #%s does not exists', $link['gid']));
-                    }
-                }
-
-                if (isset($link['uid']) && !empty($link['uid'])) {
-                    $user = $userRepo->find($link['uid']);
-                    if (null !== $user) {
-                        $linkSet = true;
-                        $resourceLink->setUser($user);
-                    } else {
-                        throw new InvalidArgumentException(sprintf('User #%s does not exists', $link['uid']));
-                    }
-                }
-
-                if (isset($link['visibility'])) {
-                    $resourceLink->setVisibility((int) $link['visibility']);
-                } else {
-                    throw new InvalidArgumentException('Link needs a visibility key');
-                }
-
-                if ($linkSet) {
-                    error_log('link added');
-                    $em->persist($resourceLink);
-                    //$resourceLink->setResourceNode($resource->getResourceNode());
-                    $resource->getResourceNode()->addResourceLink($resourceLink);
-                    $em->persist($resource->getResourceNode());
-                }
-            }
-
-            */
         }
 
         $isRecursive = !$hasFile;
@@ -345,8 +280,6 @@ class BaseResourceFileAction
         }
 
         $resourceNode->setUpdatedAt(new DateTime());
-
-        error_log('Finish update resource node file action');
 
         return $resource;
     }

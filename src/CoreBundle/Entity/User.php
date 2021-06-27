@@ -36,6 +36,8 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 use UserManager;
 
 /**
+ * EquatableInterface is needed to check if the user needs to be refreshed.
+ *
  * @ApiResource(
  *     attributes={"security"="is_granted('ROLE_ADMIN')"},
  *     iri="http://schema.org/Person",
@@ -68,9 +70,6 @@ use UserManager;
 ])]
 #[ApiFilter(BooleanFilter::class, properties: ['isActive'])]
 
-/**
- * EquatableInterface is needed to check if user need to be refreshed.
- */
 class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface, LegacyPasswordAuthenticatedUserInterface
 {
     use TimestampableEntity;

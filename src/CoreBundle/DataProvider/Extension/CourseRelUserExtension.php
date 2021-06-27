@@ -25,6 +25,21 @@ final class CourseRelUserExtension implements QueryCollectionExtensionInterface 
 
     public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null): void
     {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return;
+        }
+
+        // Blocks a ROLE_USER to access CourseRelUsers from another User.
+        if ('collection_query' === $operationName) {
+            if (null === $user = $this->security->getUser()) {
+                throw new AccessDeniedException('Access Denied.');
+            }
+
+            $rootAlias = $queryBuilder->getRootAliases()[0];
+            $queryBuilder->andWhere(sprintf('%s.user = :current_user', $rootAlias));
+            $queryBuilder->setParameter('current_user', $user);
+        }
+
         $this->addWhere($queryBuilder, $resourceClass);
     }
 
@@ -44,12 +59,9 @@ final class CourseRelUserExtension implements QueryCollectionExtensionInterface 
             return;
         }
 
+        // Need to be login to access the list.
         if (null === $user = $this->security->getUser()) {
             throw new AccessDeniedException('Access Denied.');
         }
-
-        $rootAlias = $queryBuilder->getRootAliases()[0];
-        $queryBuilder->andWhere(sprintf('%s.user = :current_user', $rootAlias));
-        $queryBuilder->setParameter('current_user', $user);
     }
 }

@@ -24,6 +24,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Component\Security\Core\User\LegacyPasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -66,8 +67,11 @@ use UserManager;
     'lastname' => 'partial',
 ])]
 #[ApiFilter(BooleanFilter::class, properties: ['isActive'])]
-//EquatableInterface,
-class User implements UserInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface
+
+/**
+ * EquatableInterface is needed to check if user need to be refreshed.
+ */
+class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface, LegacyPasswordAuthenticatedUserInterface
 {
     use TimestampableEntity;
     use UserCreatorTrait;
@@ -977,7 +981,7 @@ class User implements UserInterface, ResourceInterface, ResourceIllustrationInte
         return $this;
     }
 
-    public function getSalt(): string
+    public function getSalt(): ?string
     {
         return $this->salt;
     }
@@ -1659,7 +1663,7 @@ class User implements UserInterface, ResourceInterface, ResourceIllustrationInte
         return $this;
     }
 
-    /*public function isEqualTo(UserInterface $user): bool
+    public function isEqualTo(UserInterface $user): bool
     {
         if ($this->password !== $user->getPassword()) {
             return false;
@@ -1674,7 +1678,7 @@ class User implements UserInterface, ResourceInterface, ResourceIllustrationInte
         }
 
         return true;
-    }*/
+    }
 
     public function getSentMessages(): Collection
     {

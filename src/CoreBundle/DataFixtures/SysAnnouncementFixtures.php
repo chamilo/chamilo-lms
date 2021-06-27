@@ -33,6 +33,7 @@ class SysAnnouncementFixtures extends Fixture
             ->setDateStart(new DateTime())
             ->setDateEnd(new DateTime('now +30 days'))
             ->addRole('ROLE_ANONYMOUS')
+            ->addRole('ROLE_USER') // connected users
         ;
         $manager->persist($sysAnnouncement);
         $manager->flush();

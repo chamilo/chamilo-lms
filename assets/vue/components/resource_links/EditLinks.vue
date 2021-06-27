@@ -45,8 +45,11 @@
   <VueMultiselect
       placeholder="Share with User"
       v-model="selectedUsers"
+      :loading="isLoading"
       :options="users"
       :multiple="true"
+      :searchable="true"
+      :internal-search="false"
       @search-change="asyncFind"
       limit-text="3"
       limit="3"
@@ -76,8 +79,6 @@ import useVuelidate from "@vuelidate/core";
 
 import VueMultiselect from 'vue-multiselect'
 import isEmpty from 'lodash/isEmpty';
-import union from 'lodash/union';
-
 export default {
   name: 'EditLinks',
   components: {
@@ -95,28 +96,15 @@ export default {
       {value: 0, label: 'Draft'},
     ];
 
-    //const { item } = toRefs(props);
     const users = ref([]);
     const selectedUsers = ref([]);
-
-    //const { item } = toRefs(props);
-    //const item = props.item;
-
-    /*const item = computed(
-        () => props.item
-    );*/
-
-    /*const itemProp = computed(
-        () => item
-    );*/
+    const isLoading = ref(false);
 
     function addUser() {
       selectedUsers.value.forEach(userResult => {
-
         if (isEmpty(props.item.resourceLinkListFromEntity)) {
           props.item.resourceLinkListFromEntity = [];
         }
-
         props.item.resourceLinkListFromEntity.push(
             {
               uid: userResult.id,
@@ -131,26 +119,22 @@ export default {
         return;
       }
 
+      isLoading.value = true;
       axios.get(ENTRYPOINT + 'users', {
         params: {
           username: query
         }
       }).then(response => {
+        isLoading.value = false;
         let data = response.data;
-        data['hydra:member'].forEach(userResult => {
-
-          if (users.value.indexOf(userResult) >= 0) {
-            return;
-          }
-
-          users.value.push(userResult);
-        });
+        users.value = data['hydra:member'];
       }).catch(function (error) {
+        isLoading.value = false;
         console.log(error);
       });
     }
 
-    return {v$: useVuelidate(), visibilityList, users, selectedUsers, asyncFind, addUser};
+    return {v$: useVuelidate(), visibilityList, users, selectedUsers, asyncFind, addUser, isLoading};
   },
 };
 </script>

@@ -197,6 +197,11 @@ export default {
 
     sharedDocumentHandler() {
       let folderParams = this.$route.query;
+      this.filters['shared'] = 1;
+      this.filters['loadNode'] = 0;
+      delete this.filters['resourceNode.parent'];
+      this.resetList = true;
+
       this.$router.push({ name: `${this.$options.servicePrefix}Shared` , query: folderParams});
     },
 
@@ -222,6 +227,8 @@ export default {
       let resourceId = item['resourceNode']['id'];
       this.$route.params.node = resourceId;
       //folderParams['node'] = resourceId;
+
+      this.filters[`resourceNode.parent`] = resourceId;
 
       this.$router.push({
         name: `${this.$options.servicePrefix}List`,

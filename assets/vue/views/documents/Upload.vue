@@ -1,14 +1,5 @@
 <template>
   <div>
-<!--    <FormUpload-->
-<!--      ref="createForm"-->
-<!--      :values="files"-->
-<!--      :parentResourceNodeId="parentResourceNodeId"-->
-<!--      :resourceLinkList="resourceLinkList"-->
-<!--      :errors="violations"-->
-<!--      :process-files="processFiles"-->
-<!--    />-->
-
     <dashboard
         :uppy="uppy"
         :plugins="['Webcam', 'ImageEditor']"
@@ -17,13 +8,7 @@
           proudlyDisplayPoweredByUppy: false,
           width: '100%'
         }"
-
     />
-
-<!--    <Toolbar-->
-<!--      :handle-submit="onUploadForm"-->
-<!--    />-->
-<!--    <Loading :visible="isLoading" />-->
   </div>
 </template>
 
@@ -82,8 +67,6 @@ export default {
     uppy.value = new Uppy()
         .use(Webcam)
         .use(ImageEditor, {
-          //target: Dashboard,
-          //quality: 0.8
           cropperOptions: {
             viewMode: 1,
             background: false,
@@ -109,17 +92,6 @@ export default {
               fieldName: 'uploadFile'
             }
         )
-
-        /*.on('file-added', (file) => {
-          console.log(file.id);
-          console.log(parentResourceNodeId.value);
-          uppy.value.setFileMeta(file.id, {
-            size: file.size,
-            filetype: 'file',
-            parentResourceNodeId: parentResourceNodeId.value,
-            resourceLinkList: resourceLinkList.value,
-          })
-        })*/
     ;
 
     uppy.value.setMeta({
@@ -156,21 +128,6 @@ export default {
   },
   methods: {
     async processFiles(files) {
-      /*this.files = [
-        ...this.files,
-        ...map(files, file => ({
-          title: file.name,
-          name: file.name,
-          size: file.size,
-          type: file.type,
-          filetype: 'file',
-          parentResourceNodeId: this.parentResourceNodeId,
-          resourceLinkList: this.resourceLinkList,
-          uploadFile: file,
-          invalidMessage: this.validate(file),
-        }))
-      ];*/
-
       return new Promise((resolve) => {
         for (let i = 0; i < files.length; i++) {
           files[i].title = files[i].name;
@@ -181,19 +138,6 @@ export default {
         }
 
         resolve(files);
-        /*console.log(file);
-        file.title = file.name;
-        file.parentResourceNodeId = this.parentResourceNodeId;
-        file.resourceLinkList = this.resourceLinkList;
-        file.uploadFile = file;
-        this.create(file);
-        resolve(file);*/
-
-
-        /*for (let i = 0; i < this.files.length; i++) {
-          this.create(this.files[i]);
-        }
-        resolve(true);*/
       }).then(() => {
         this.files = [];
       });

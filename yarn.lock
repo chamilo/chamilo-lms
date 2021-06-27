@@ -14,9 +14,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:^3.4.0-rc.11":
-  version: 3.4.0-rc.11
-  resolution: "@apollo/client@npm:3.4.0-rc.11"
+"@apollo/client@npm:^3.4.0-rc.14":
+  version: 3.4.0-rc.14
+  resolution: "@apollo/client@npm:3.4.0-rc.14"
   dependencies:
     "@graphql-typed-document-node/core": ^3.0.0
     "@wry/context": ^0.6.0
@@ -39,7 +39,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: a311b3407b33cf5eb378e44346ab571e1766d0e36bbb2b90cb0838d2cf21ef312bad56fead1af9cc4f1cd65899c395bdf180a8a01afb438df735c9d55b7c07e7
+  checksum: 16bfc0a9a06ce95791c9e7be2a030421e437a17c5502d3286ab905532ecf1cc3c9b4eca01713c614e9b33a91f8bb4c2a7ecadcb02305e7beeabbb7c0474f26b2
   languageName: node
   linkType: hard
 
@@ -6186,7 +6186,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "chamilo@workspace:."
   dependencies:
-    "@apollo/client": ^3.4.0-rc.11
+    "@apollo/client": ^3.4.0-rc.14
     "@babel/eslint-parser": ^7.14.7
     "@babel/plugin-transform-runtime": ^7.14.5
     "@fancyapps/fancybox": ^3.5.7
@@ -7033,8 +7033,8 @@ __metadata:
   linkType: hard
 
 "copy-webpack-plugin@npm:^9.0.0":
-  version: 9.0.0
-  resolution: "copy-webpack-plugin@npm:9.0.0"
+  version: 9.0.1
+  resolution: "copy-webpack-plugin@npm:9.0.1"
   dependencies:
     fast-glob: ^3.2.5
     glob-parent: ^6.0.0
@@ -7042,10 +7042,10 @@ __metadata:
     normalize-path: ^3.0.0
     p-limit: ^3.1.0
     schema-utils: ^3.0.0
-    serialize-javascript: ^5.0.1
+    serialize-javascript: ^6.0.0
   peerDependencies:
     webpack: ^5.1.0
-  checksum: c209583f60f81d54cb3e7625810a6779ff3ad0d06e76f1f5c049f91c1eab8bf555ac6ad56478539939f826e009c1ad03e1fac258ff432239192811aab0b97ecc
+  checksum: 9c5a4694b049be0f16070d53b932d47ccb4e44a8ea3259f7e0883367177a203cf251c369f8ad58277a088c3227b89548abdaa89340b8f50c76627d7413b9fef4
   languageName: node
   linkType: hard
 
@@ -10316,7 +10316,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"graphql-tag@npm:^2.10.3, graphql-tag@npm:^2.11.0, graphql-tag@npm:^2.12.3, graphql-tag@npm:^2.12.4":
+"graphql-tag@npm:^2.10.3, graphql-tag@npm:^2.11.0, graphql-tag@npm:^2.12.3":
   version: 2.12.4
   resolution: "graphql-tag@npm:2.12.4"
   dependencies:
@@ -10324,6 +10324,17 @@ fsevents@~2.3.2:
   peerDependencies:
     graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
   checksum: 01623ede3509a46becd80cdcff81b63248f3bc5dc44b4e7df54730b5c77101c5b44d49ed7d1fbb83a5de0ad21fda59fca33f0f2d9ea5c0d95884aba6d15aeab9
+  languageName: node
+  linkType: hard
+
+"graphql-tag@npm:^2.12.4":
+  version: 2.12.5
+  resolution: "graphql-tag@npm:2.12.5"
+  dependencies:
+    tslib: ^2.1.0
+  peerDependencies:
+    graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
+  checksum: db324292677bfe1f14e29baea6a4953a756a633a20dfe73939b14bc5f647b981087acf1e8a61245480f57da6587b63bab3562f06bddfda59e6c8233f28042dad
   languageName: node
   linkType: hard
 
@@ -13161,7 +13172,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"mini-css-extract-plugin@npm:^1.5.0, mini-css-extract-plugin@npm:^1.6.0":
+"mini-css-extract-plugin@npm:^1.5.0":
   version: 1.6.0
   resolution: "mini-css-extract-plugin@npm:1.6.0"
   dependencies:
@@ -13171,6 +13182,19 @@ fsevents@~2.3.2:
   peerDependencies:
     webpack: ^4.4.0 || ^5.0.0
   checksum: c9c50bed4ffa0ce0099c26184ed6f5b8675be068252fb2a68b790d8afa58c896e0c36aae0e0601e5036fdc04ecad761e884ce4d27a75c8bd3fb69ff7b4c52f91
+  languageName: node
+  linkType: hard
+
+"mini-css-extract-plugin@npm:^1.6.0":
+  version: 1.6.1
+  resolution: "mini-css-extract-plugin@npm:1.6.1"
+  dependencies:
+    loader-utils: ^2.0.0
+    schema-utils: ^3.0.0
+    webpack-sources: ^1.1.0
+  peerDependencies:
+    webpack: ^4.4.0 || ^5.0.0
+  checksum: 34fe3c65953982b20e3fa87494e6d632f3730c1688664a474c3c1298da65910aa162c94a5ebe9351402afc20d2539052c5d93bfe88cbcf88c3b3172789689b0c
   languageName: node
   linkType: hard
 
@@ -17219,6 +17243,15 @@ fsevents@~2.3.2:
   dependencies:
     randombytes: ^2.1.0
   checksum: 97eef70a33c75e690b0c6aa2ffe622ecdfc888d3f181a5cf129e5778228dcd100febabc0f41ff793199ee79acd14cbbad0c69f1348a3893580fe424c4718889b
+  languageName: node
+  linkType: hard
+
+"serialize-javascript@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "serialize-javascript@npm:6.0.0"
+  dependencies:
+    randombytes: ^2.1.0
+  checksum: e086a40bfcb9d341c37a4e52bc200d143b54397cf1bb486f38cd40cdbaac4b82437d981472df94dbcff6334269e0d82daffbd6b75dd50fe54a5a5da2273f2360
   languageName: node
   linkType: hard
 

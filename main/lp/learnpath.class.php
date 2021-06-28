@@ -11295,16 +11295,14 @@ class learnpath
                                         $abs_path = api_get_path(SYS_PATH).str_replace(api_get_path(WEB_PATH), '', $doc_info[0]);
 
                                         if (file_exists($file_path)) {
-                                            if (strstr($file_path, 'main/default_course_document') !== false) {
+                                            $pos = strpos($file_path, 'main/default_course_document/');
+                                            if ($pos !== false) {
                                                 // We get the relative path.
-                                                $pos = strpos($file_path, 'main/default_course_document/');
-                                                if ($pos !== false) {
-                                                    $onlyDirectory = str_replace(
-                                                        'main/default_course_document/',
-                                                        '',
-                                                        substr($file_path, $pos, strlen($file_path))
-                                                    );
-                                                }
+                                                $onlyDirectory = str_replace(
+                                                    'main/default_course_document/',
+                                                    '',
+                                                    substr($file_path, $pos, strlen($file_path))
+                                                );
 
                                                 $destinationFile = 'default_course_document/'.$onlyDirectory;
                                                 $fileAbs = substr($file_path, strlen(api_get_path(SYS_PATH)));

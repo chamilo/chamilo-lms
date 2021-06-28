@@ -1003,14 +1003,16 @@ class CourseCategory
      *
      * @param array $fileData File data from $_FILES
      */
-    public static function saveImage(CourseCategoryEntity $category, $fileData)
+    public static function saveImage(CourseCategoryEntity $category, $fileData, $crop = '')
     {
         if (isset($fileData['tmp_name']) && !empty($fileData['tmp_name'])) {
             $repo = Container::getAssetRepository();
             $asset = new Asset();
             $asset
                 ->setCategory(Asset::COURSE_CATEGORY)
-                ->setTitle($fileData['name']);
+                ->setTitle($fileData['name'])
+                ->setCrop($crop)
+            ;
             $asset = $repo->createFromRequest($asset, $fileData);
 
             $category->setImage($asset->getId());

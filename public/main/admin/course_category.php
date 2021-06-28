@@ -70,7 +70,8 @@ switch ($action) {
             );
 
             if (isset($_FILES['image']) && $categoryEntity) {
-                CourseCategory::saveImage($categoryEntity, $_FILES['image']);
+                $crop = $_POST['picture_crop_result'] ?? '';
+                CourseCategory::saveImage($categoryEntity, $_FILES['image'], $crop);
             }
             Display::addFlash(Display::return_message(get_lang('Item added')));
             header('Location: '.api_get_path(WEB_CODE_PATH).'admin/course_category.php?id='.$parentId);
@@ -94,7 +95,8 @@ switch ($action) {
             }
 
             if (isset($_FILES['image']) && $categoryEntity) {
-                CourseCategory::saveImage($categoryEntity, $_FILES['image']);
+                $crop = $_POST['picture_crop_result'] ?? '';
+                CourseCategory::saveImage($categoryEntity, $_FILES['image'], $crop);
             }
 
             Display::addFlash(Display::return_message(get_lang('Update successful')));

@@ -127,8 +127,8 @@ if ('add' === $action || 'edit' === $action) {
     }
     $url = api_get_self().'?action='.Security::remove_XSS($action).'&id='.Security::remove_XSS($categoryId);
     $form = new FormValidator('course_category', 'post', $url);
-    $form->addElement('header', '', $form_title);
-    $form->addElement('hidden', 'formSent', 1);
+    $form->addHeader($form_title);
+    $form->addHidden('formSent', 1);
     $form->addElement('text', 'code', get_lang('Category code'));
 
     if (api_get_configuration_value('save_titles_as_html')) {
@@ -185,12 +185,10 @@ if ('add' === $action || 'edit' === $action) {
     }
 
     if ('edit' === $action  && !empty($categoryInfo)) {
-        $class = 'save';
         $text = get_lang('Save');
         $form->setDefaults($categoryInfo);
         $form->addButtonSave($text);
     } else {
-        $class = 'add';
         $text = get_lang('Add category');
         $form->setDefaults(['auth_course_child' => 'TRUE']);
         $form->addButtonCreate($text);

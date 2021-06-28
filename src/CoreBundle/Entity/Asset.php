@@ -29,7 +29,7 @@ class Asset
 
     public const SCORM = 'scorm';
     public const WATERMARK = 'watermark';
-    public const CSS = 'css';
+    //public const CSS = 'css';
     public const EXTRA_FIELD = 'ef';
     public const COURSE_CATEGORY = 'course_category';
 
@@ -53,7 +53,6 @@ class Asset
      * @Assert\Choice({
      *     Asset::SCORM,
      *     Asset::WATERMARK,
-     *     Asset::CSS,
      *     Asset::EXTRA_FIELD
      * },
      * message="Choose a valid category."
@@ -101,7 +100,7 @@ class Asset
     /**
      * @ORM\Column(type="integer")
      */
-    protected ?int $size;
+    protected ?int $size = null;
 
     /**
      * @ORM\Column(name="crop", type="string", length=255, nullable=true)
@@ -146,12 +145,12 @@ class Asset
         return $this->id;
     }
 
-    public function getFolder()
+    public function getFolder(): string
     {
         return $this->category.'/'.$this->getOriginalName();
     }
 
-    public function getFileUrl()
+    public function getFileUrl(): string
     {
         return $this->getFolder().'/'.$this->getOriginalName();
     }
@@ -185,36 +184,24 @@ class Asset
         return $this;
     }
 
-    public function getSize(): int
+    public function getSize(): ?int
     {
         return $this->size;
     }
 
-    public function setSize(int $size): self
+    public function setSize(?int $size): self
     {
         $this->size = $size;
 
         return $this;
     }
 
-    /*public function getDescription(): string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): self
-    {
-        $this->description = $description;
-
-        return $this;
-    }*/
-
-    public function getMimeType(): string
+    public function getMimeType(): ?string
     {
         return $this->mimeType;
     }
 
-    public function setMimeType(string $mimeType): self
+    public function setMimeType(?string $mimeType): self
     {
         $this->mimeType = $mimeType;
 
@@ -226,7 +213,7 @@ class Asset
         return (string) $this->originalName;
     }
 
-    public function setOriginalName(string $originalName): self
+    public function setOriginalName(?string $originalName): self
     {
         $this->originalName = $originalName;
 
@@ -349,7 +336,7 @@ class Asset
         return $this->compressed;
     }
 
-    public function setCompressed(bool $compressed)
+    public function setCompressed(bool $compressed): self
     {
         $this->compressed = $compressed;
 

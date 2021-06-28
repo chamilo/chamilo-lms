@@ -216,37 +216,6 @@ class CourseCategory
         $repo->delete($category);
 
         return true;
-
-        // @todo check that doctrine deletes all the connections.
-        /*$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $node = Database::escape_string($node);
-        $result = Database::query("SELECT parent_id, tree_pos FROM $tbl_category WHERE code='$node'");
-
-        if ($row = Database::fetch_array($result)) {
-            if (!empty($row['parent_id'])) {
-                Database::query(
-                    "UPDATE $tbl_course SET category_id = '".$row['parent_id']."' WHERE category_id = {$category['id']}"
-                );
-                Database::query("UPDATE $tbl_category SET parent_id='".$row['parent_id']."' WHERE parent_id='$node'");
-            } else {
-                Database::query("UPDATE $tbl_course SET category_id = NULL WHERE category_id = ".$category['id']);
-                Database::query("UPDATE $tbl_category SET parent_id=NULL WHERE parent_id='$node'");
-            }
-
-            $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-            $sql = "DELETE FROM $table WHERE course_category_id = ".$category['id'];
-
-            Database::query($sql);
-            Database::query("UPDATE $tbl_category SET tree_pos=tree_pos-1 WHERE tree_pos > '".$row['tree_pos']."'");
-            Database::query("DELETE FROM $tbl_category WHERE code='$node'");
-
-            if (!empty($row['parent_id'])) {
-                self::updateParentCategoryChildrenCount($row['parent_id'], -1);
-            }
-
-            return true;
-        }*/
     }
 
     public static function edit($categoryId, $name, $canHaveCourses, $code, $description): CourseCategoryEntity
@@ -261,7 +230,8 @@ class CourseCategory
             ->setCode($name)
             ->setName($name)
             ->setDescription($description)
-            ->setAuthCourseChild($canHaveCourses);
+            ->setAuthCourseChild($canHaveCourses)
+        ;
 
         $repo->save($category);
 
@@ -471,7 +441,13 @@ class CourseCategory
                     $actions[] = Display::url(
                         $deleteIcon,
                         $deleteUrl,
-                        ['onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('Please confirm your choice')), ENT_QUOTES)).'\')) return false;']
+                        [
+                            'onclick'
+                            =>
+                                'javascript: if (!confirm(\''.addslashes(
+                                    api_htmlentities(sprintf(get_lang('Please confirm your choice')), ENT_QUOTES)
+                                ).'\')) return false;',
+                        ]
                     );
                 }
 
@@ -522,53 +498,6 @@ class CourseCategory
             api_get_configuration_value('allow_base_course_category'),
             $category
         );
-
-        /*
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-        $conditions = " INNER JOIN $table a ON (t1.id = a.course_category_id)";
-        $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
-        $allowBaseCategories = api_get_configuration_value('allow_base_course_category');
-        if ($allowBaseCategories) {
-            $whereCondition = " AND (a.access_url_id = ".api_get_current_access_url_id()." OR a.access_url_id = 1) ";
-        }
-
-        $parentIdCondition = " AND (t1.parent_id IS NULL OR t1.parent_id = '' )";
-
-        if ($category) {
-            $parentIdCondition = " AND t1.parent_id = $category ";
-        }
-
-        $sql = "SELECT
-                t1.name,
-                t1.code,
-                t1.parent_id,
-                t1.tree_pos,
-                t1.children_count,
-                COUNT(DISTINCT t4.code) AS nbr_courses,
-                a.access_url_id
-                FROM $tbl_category t1
-                $conditions
-                LEFT JOIN $tbl_category t2
-                ON t1.id = t2.parent_id
-                LEFT JOIN $tbl_course_rel_category t3
-                ON t1.id = t3.course_category_id
-                LEFT JOIN $tbl_course t4
-                ON t3.course_id = t4.id
-                WHERE
-                    1 = 1
-                    $parentIdCondition
-                    $whereCondition
-                GROUP BY t1.name,
-                         t1.code,
-                         t1.parent_id,
-                         t1.tree_pos,
-                         t1.children_count
-                ORDER BY t1.tree_pos
-        ";
-
-        $result = Database::query($sql);
-
-        return Database::store_result($result, 'ASSOC');*/
     }
 
     /**
@@ -656,78 +585,6 @@ class CourseCategory
         // @todo add filters
 
         return $category->getCourses();
-
-        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $keyword = Database::escape_string($keyword);
-        $categoryCode = Database::escape_string($category_code);
-        $avoidCoursesCondition = '';
-        if ($avoidCourses) {
-            $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
-        }
-
-        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
-
-        $sqlInjectJoins = '';
-        $where = ' AND 1 = 1 ';
-        $sqlInjectWhere = '';
-        if (!empty($conditions)) {
-            $sqlInjectJoins = $conditions['inject_joins'];
-            $where = $conditions['where'];
-            $sqlInjectWhere = $conditions['inject_where'];
-        }
-        $categoryFilter = '';
-        if ('ALL' === $categoryCode || empty($categoryCode)) {
-            // Nothing to do
-        } elseif ('NONE' === $categoryCode) {
-            $categoryFilter = ' AND course.category_id IS NULL ';
-        } else {
-            $categoryJoin = " INNER JOIN $tblCourseCategory cat ON course.category_id = cat.id ";
-            $categoryFilter = ' AND cat.code = "'.$categoryCode.'" ';
-        }
-
-        $searchFilter = '';
-        if (!empty($keyword)) {
-            $searchFilter = ' AND (
-                course.code LIKE "%'.$keyword.'%" OR
-                course.title LIKE "%'.$keyword.'%" OR
-                course.tutor_name LIKE "%'.$keyword.'%"
-            ) ';
-        }
-
-        $urlCondition = ' url_rel_course.access_url_id = '.api_get_current_access_url_id().' AND';
-        $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-
-        $select = " DISTINCT course.id, course.code, course.title ";
-        if ($getCount) {
-            $select = "count(DISTINCT course.id) as count";
-        }
-        $sql = "SELECT $select
-                FROM $tbl_course as course
-                INNER JOIN $tbl_url_rel_course as url_rel_course
-                ON (url_rel_course.c_id = course.id)
-                $sqlInjectJoins
-                $categoryJoin
-                WHERE
-                    $urlCondition
-                    course.visibility != '0' AND
-                    course.visibility != '4'
-                    $categoryFilter
-                    $searchFilter
-                    $avoidCoursesCondition
-                    $visibilityCondition
-                    $where
-                    $sqlInjectWhere
-            ";
-
-        $result = Database::query($sql);
-        if ($getCount) {
-            $row = Database::fetch_array($result);
-
-            return (int) $row['count'];
-        }
-
-        return Database::store_result($result, 'ASSOC');
     }
 
     /**
@@ -988,14 +845,22 @@ class CourseCategory
 
     public static function deleteImage(CourseCategoryEntity $category)
     {
-        $assetRepo = Container::getAssetRepository();
         $assetId = $category->getImage();
-        $asset = $assetRepo->find($assetId);
-        $assetRepo->delete($asset);
+        if (empty($assetId)) {
+            return false;
+        }
 
-        $category->setImage('');
-        $repo = Container::getCourseCategoryRepository();
-        $repo->save($category);
+        $assetRepo = Container::getAssetRepository();
+        /** @var Asset $asset */
+        $asset = $assetRepo->find($assetId);
+        if (null !== $asset) {
+            $category->setImage('');
+            $assetRepo->delete($asset);
+            $repo = Container::getCourseCategoryRepository();
+            $repo->save($category);
+        }
+
+        return true;
     }
 
     /**
@@ -1006,6 +871,8 @@ class CourseCategory
     public static function saveImage(CourseCategoryEntity $category, $fileData, $crop = '')
     {
         if (isset($fileData['tmp_name']) && !empty($fileData['tmp_name'])) {
+            self::deleteImage($category);
+
             $repo = Container::getAssetRepository();
             $asset = new Asset();
             $asset

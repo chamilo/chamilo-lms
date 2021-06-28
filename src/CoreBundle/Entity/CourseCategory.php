@@ -118,18 +118,19 @@ class CourseCategory
     protected Collection $urls;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\Course", mappedBy="categories")
+     * @var Course[]|Collection
+     * @ORM\ManyToMany(targetEntity="Course", mappedBy="categories")
      */
     protected Collection $courses;
 
     public function __construct()
     {
-        $this->urls = new ArrayCollection();
         $this->childrenCount = 0;
-        $this->children = new ArrayCollection();
-        $this->courses = new ArrayCollection();
         $this->authCatChild = 'TRUE';
         $this->authCourseChild = 'TRUE';
+        $this->urls = new ArrayCollection();
+        $this->children = new ArrayCollection();
+        $this->courses = new ArrayCollection();
     }
 
     public function __toString(): string

@@ -373,7 +373,11 @@ if ($isAdmin) {
 } else {
     if (false == $isAllow) {
         echo Display::page_subheader(get_lang('My tickets'));
-        echo Display::return_message(get_lang('Welcome to YOUR tickets section. Here, you\'ll be able to track the state of all the tickets you created in the main tickets section.'));
+        echo Display::return_message(
+            get_lang(
+                'Welcome to YOUR tickets section. Here, you\'ll be able to track the state of all the tickets you created in the main tickets section.'
+            )
+        );
     }
     $table->set_header(0, '#', true);
     $table->set_header(1, get_lang('Status'), false);

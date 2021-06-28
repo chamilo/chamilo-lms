@@ -225,59 +225,12 @@ $form = new FormValidator(
     ]
 );
 
-$form->addElement(
-    'hidden',
-    'user_id_request',
-    '',
-    [
-        'id' => 'user_id_request',
-    ]
-);
-
-$form->addElement(
-    'hidden',
-    'project_id',
-    $projectId
-);
-
-$form->addElement(
-    'hidden',
-    'other_area',
-    '',
-    [
-        'id' => 'other_area',
-    ]
-);
-
-$form->addElement(
-    'hidden',
-    'email',
-    '',
-    [
-        'id' => 'email',
-    ]
-);
-
-$form->addSelect(
-    'category_id',
-    get_lang('Category'),
-    $categoryList,
-    [
-        'id' => 'category_id',
-        'for' => 'category_id',
-        'style' => 'width: 562px;',
-    ]
-);
-
-$form->addElement(
-    'text',
-    'subject',
-    get_lang('Subject'),
-    [
-        'id' => 'subject',
-    ]
-);
-
+$form->addHidden('user_id_request', '', ['id' => 'user_id_request']);
+$form->addHidden('project_id', $projectId);
+$form->addHidden('other_area', '', ['id' => 'other_area']);
+$form->addHidden('email', '', ['id' => 'email']);
+$form->addSelect('category_id', get_lang('Category'), $categoryList, ['id' => 'category_id', 'for' => 'category_id',]);
+$form->addElement('text', 'subject', get_lang('Subject'), ['id' => 'subject']);
 $form->addHtmlEditor(
     'content',
     get_lang('Message'),
@@ -298,15 +251,7 @@ if (api_is_platform_admin()) {
     );
 }
 
-$form->addElement(
-    'text',
-    'personal_email',
-    get_lang('Personal e-mail'),
-    [
-        'id' => 'personal_email',
-    ]
-);
-
+$form->addElement('text', 'personal_email', get_lang('Personal e-mail'), ['id' => 'personal_email']);
 $form->addLabel(
     '',
     Display::div(
@@ -317,30 +262,9 @@ $form->addLabel(
     )
 );
 
-$form->addSelect(
-    'status_id',
-    get_lang('Status'),
-    $statusList,
-    $statusAttributes
-);
-
-$form->addSelect(
-    'priority_id',
-    get_lang('Priority'),
-    $priorityList,
-    [
-        'id' => 'priority_id',
-        'for' => 'priority_id',
-    ]
-);
-
-$form->addSelect(
-    'source_id',
-    get_lang('Source'),
-    $sourceList,
-    $sourceAttributes
-);
-
+$form->addSelect('status_id', get_lang('Status'), $statusList, $statusAttributes);
+$form->addSelect('priority_id', get_lang('Priority'), $priorityList, ['id' => 'priority_id', 'for' => 'priority_id']);
+$form->addSelect('source_id', get_lang('Source'), $sourceList, $sourceAttributes);
 $form->addElement(
     'text',
     'phone',
@@ -358,7 +282,6 @@ if (api_is_platform_admin() || !empty($sessionList)) {
     foreach ($sessionList as $sessionInfo) {
         $sessionListToSelect[$sessionInfo['session_id']] = $sessionInfo['session_name'];
     }
-
     $form->addSelect('session_id', get_lang('Session'), $sessionListToSelect, ['id' => 'session_id']);
 } else {
     $form->addHidden('session_id', 0);

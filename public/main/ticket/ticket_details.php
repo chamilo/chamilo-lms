@@ -335,8 +335,8 @@ if (TicketManager::STATUS_CLOSE == $ticket['ticket']['status_id']) {
     $bold = 'style = "font-weight: bold;"';
 }
 $senderData = get_lang('added by').' '.$ticket['usuario']['complete_name_with_message_link'];
-
-echo '<table width="100%" >
+echo '<div class="prose">';
+echo '<table width="100%">
         <tr>
           <td colspan="3">
           <h1>'.$title.'</h1>
@@ -371,11 +371,11 @@ echo '<table width="100%" >
 if (!empty($ticket['ticket']['assigned_last_user'])) {
     $assignedUser = api_get_user_info($ticket['ticket']['assigned_last_user']);
     echo '<tr>
-            <td><p><b>'.get_lang('Assigned to').': </b>'.$assignedUser['complete_name_with_message_link'].'<p></td>
+            <td><p><b>'.get_lang('Assigned to').': </b>'.$assignedUser['complete_name_with_message_link'].'</p></td>
         </tr>';
 } else {
     echo '<tr>
-            <td><p><b>'.get_lang('Assigned to').': </b>-<p></td>
+            <td><p><b>'.get_lang('Assigned to').': </b>-</p></td>
         </tr>';
 }
 if (null != $ticket['ticket']['course_url']) {
@@ -414,16 +414,16 @@ if (null != $ticket['ticket']['course_url']) {
 
 echo '<tr>
         <td>
-        <hr />
         <b>'.get_lang('Description').':</b> <br />
         '.Security::remove_XSS($ticket['ticket']['message']).'
-        <hr />
+        
         </td>
      </tr>
     ';
 echo '</table>';
 
 echo $messageToShow;
+echo '</div>';
 echo $formToShow;
 
 Display::display_footer();

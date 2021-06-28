@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Ticket;
@@ -508,7 +509,6 @@ class TicketManager
             } else {
                 $categoryInfo = self::getCategory($category_id);
                 $usersInCategory = self::getUsersInCategory($category_id);
-
                 $message = '<h2>'.get_lang('Ticket info').'</h2><br />'.$helpDeskMessage;
 
                 if ('true' === api_get_setting('ticket_warn_admin_no_user_in_category')) {
@@ -522,7 +522,9 @@ class TicketManager
                         if ('true' === api_get_setting('ticket_send_warning_to_all_admins')) {
                             Display::addFlash(Display::return_message(
                                 sprintf(
-                                    get_lang('A notification was sent to the administrators to report this category has no user assigned'),
+                                    get_lang(
+                                        'A notification was sent to the administrators to report this category has no user assigned'
+                                    ),
                                     $categoryInfo['name']
                                 ),
                                 null,
@@ -784,12 +786,8 @@ class TicketManager
      *
      * @return array
      */
-    public static function getTicketsByCurrentUser(
-        $from,
-        $number_of_items,
-        $column,
-        $direction
-    ) {
+    public static function getTicketsByCurrentUser($from, $number_of_items, $column, $direction)
+    {
         $table_support_category = Database::get_main_table(TABLE_TICKET_CATEGORY);
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_priority = Database::get_main_table(TABLE_TICKET_PRIORITY);
@@ -1002,8 +1000,18 @@ class TicketManager
                 ];
             }
             if ($isAdmin) {
-                $ticket['0'] .= '&nbsp;&nbsp;<a href="javascript:void(0)" onclick="load_history_ticket(\'div_'.$row['ticket_id'].'\','.$row['ticket_id'].')">
-					<img onclick="load_course_list(\'div_'.$row['ticket_id'].'\','.$row['ticket_id'].')" onmouseover="clear_course_list (\'div_'.$row['ticket_id'].'\')" src="'.Display::returnIconPath('history.gif').'" title="'.get_lang('History').'" alt="'.get_lang('History').'"/>
+                $ticket['0'] .= '&nbsp;&nbsp;<a 
+                href="javascript:void(0)" 
+                onclick="load_history_ticket(\'div_'.$row['ticket_id'].'\','.$row['ticket_id'].')">
+                    <a 
+                        onclick="load_course_list(\'div_'.$row['ticket_id'].'\','.$row['ticket_id'].')" 
+					    onmouseover="clear_course_list (\'div_'.$row['ticket_id'].'\')"					     
+					    title="'.get_lang('History').'" 
+					    alt="'.get_lang('History').'"
+                    >
+                    '.Display::returnFontAwesomeIcon('history').'
+                    </a>                                        
+					
 					<div class="blackboard_hide" id="div_'.$row['ticket_id'].'">&nbsp;&nbsp;</div>
 					</a>&nbsp;&nbsp;';
             }
@@ -1374,23 +1382,7 @@ class TicketManager
         if (!empty($attachments)) {
             /** @var TicketMessageAttachment $attachment */
             foreach ($attachments as $attachment) {
-                $file = api_get_uploaded_file(
-                    'ticket_attachment',
-                    $ticketId,
-                    $attachment->getPath()
-                );
-                if (!empty($file)) {
-                    $attachmentList[] = [
-                        'tmp_name' => api_get_uploaded_file(
-                            'ticket_attachment',
-                            $ticketId,
-                            $attachment->getPath()
-                        ),
-                        'size' => $attachment->getSize(),
-                        'name' => $attachment->getFilename(),
-                        'error' => 0,
-                    ];
-                }
+                //$attachment->get
             }
         }
 

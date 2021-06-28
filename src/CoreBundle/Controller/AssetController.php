@@ -9,8 +9,6 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\Component\Utils\GlideAsset;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
-use Chamilo\CoreBundle\Traits\CourseControllerTrait;
-use Chamilo\CoreBundle\Traits\ResourceControllerTrait;
 use League\MimeTypeDetection\ExtensionMimeTypeDetector;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -18,22 +16,24 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/assets")
- */
+#[Route('/assets')]
 class AssetController
 {
-    use CourseControllerTrait;
-    use ResourceControllerTrait;
     use ControllerTrait;
 
     /**
      * @Route("/{category}/{path}", methods={"GET"}, requirements={"path"=".+"}, name="chamilo_core_asset_showfile")
      */
-    public function showFile($category, $path, AssetRepository $assetRepository, GlideAsset $glide, RequestStack $requestStack)
-    {
+    public function showFile(
+        $category,
+        $path,
+        AssetRepository $assetRepository,
+        GlideAsset $glide,
+        RequestStack $requestStack
+    ) {
         $filePath = $category.'/'.$path;
         $exists = $assetRepository->getFileSystem()->fileExists($filePath);
+
         if ($exists) {
             $fileName = basename($filePath);
             $detector = new ExtensionMimeTypeDetector();
@@ -71,6 +71,7 @@ class AssetController
                 $fileName
             );
             $response->headers->set('Content-Disposition', $disposition);
+
             //$response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
 
             return $response;

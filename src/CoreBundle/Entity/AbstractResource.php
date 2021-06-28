@@ -53,7 +53,15 @@ abstract class AbstractResource
      * Resource illustration URL - Property set by ResourceNormalizer.php.
      *
      * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"resource_node:read", "document:read", "media_object_read", "course:read", "session:read", "course_rel_user:read", "session_rel_course_rel_user:read"})
+     * @Groups({
+     *     "resource_node:read",
+     *     "document:read",
+     *     "media_object_read",
+     *     "course:read",
+     *     "session:read",
+     *     "course_rel_user:read",
+     *     "session_rel_course_rel_user:read"
+     * })
      */
     public ?string $illustrationUrl = null;
 

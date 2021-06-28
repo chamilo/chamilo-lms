@@ -248,12 +248,7 @@ class CourseCategory
         return $this;
     }
 
-    /**
-     * Get authCourseChild.
-     *
-     * @return string
-     */
-    public function getAuthCourseChild()
+    public function getAuthCourseChild(): ?string
     {
         return $this->authCourseChild;
     }
@@ -265,17 +260,12 @@ class CourseCategory
         return $this;
     }
 
-    /**
-     * Get authCatChild.
-     *
-     * @return string
-     */
-    public function getAuthCatChild()
+    public function getAuthCatChild(): ?string
     {
         return $this->authCatChild;
     }
 
-    public function getImage(): string
+    public function getImage(): ?string
     {
         return $this->image;
     }

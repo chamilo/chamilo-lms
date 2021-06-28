@@ -84,12 +84,7 @@ class UserRelUser
         return $this;
     }
 
-    /**
-     * Get relationType.
-     *
-     * @return int
-     */
-    public function getRelationType()
+    public function getRelationType(): ?int
     {
         return $this->relationType;
     }

@@ -112,14 +112,13 @@ if (1 === count($languages)) {
 }
 
 if ('true' === api_get_setting('teacher_can_select_course_template')) {
-    $form->addElement(
-        'select_ajax',
+    $form->addSelectAjax(
         'course_template',
         [
             get_lang('Course template'),
             get_lang('Pick a course as template for this new course'),
         ],
-        null,
+        [],
         ['url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course']
     );
 }

@@ -43,11 +43,6 @@ class AssetRepository extends ServiceEntityRepository
         return $this->filesystem;
     }
 
-    /*public function getUploaderHelper(): UploaderHelper
-    {
-        return $this->uploaderHelper;
-    }*/
-
     public function unZipFile(Asset $asset, ZipFile $zipFile): void
     {
         $folder = '/'.$asset->getCategory().'/'.$asset->getTitle();
@@ -120,38 +115,6 @@ class AssetRepository extends ServiceEntityRepository
 
         return $asset;
     }
-
-    /*public function getFileContent(Asset $asset): string
-    {
-        try {
-            if ($asset->hasFile()) {
-                $file = $asset->getFile();
-                $fileName = $this->getFilename($file);
-
-                return $this->getFileSystem()->read($fileName);
-            }
-
-            return '';
-        } catch (\Throwable $exception) {
-            throw new FileNotFoundException($asset);
-        }
-    }*/
-
-    /*public function getFileStream(Asset $asset)
-    {
-        try {
-            if ($asset->hasFile()) {
-                $file = $asset->getFile();
-                $fileName = $this->getFilename($file);
-
-                return $this->getFileSystem()->readStream($fileName);
-            }
-
-            return '';
-        } catch (\Throwable $exception) {
-            throw new FileNotFoundException($asset);
-        }
-    }*/
 
     public function delete(Asset $asset = null): void
     {

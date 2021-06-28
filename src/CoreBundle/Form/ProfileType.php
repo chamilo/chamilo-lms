@@ -18,10 +18,6 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * Class ProfileType
- * Located in web/app_dev.php/profile/edit-profile.
- */
 class ProfileType extends AbstractType
 {
     /**

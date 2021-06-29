@@ -3,9 +3,8 @@ import has from 'lodash/has';
 import mapValues from 'lodash/mapValues';
 
 export function normalize(data) {
-  //console.log('normalize');
   if (has(data, 'hydra:member')) {
-    console.log('Normalize items in collections');
+    //console.log('Normalize items in collections');
     // Normalize items in collections
     data['hydra:member'] = data['hydra:member'].map(item => normalize(item));
 

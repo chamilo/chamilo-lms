@@ -204,8 +204,7 @@ class ToolChain
             $toolEntity = $toolRepo->findOneBy($criteria);
             $position = $toolList[$tool->getName()] + 1;
 
-            $courseTool = new CTool();
-            $courseTool
+            $courseTool = (new CTool())
                 ->setTool($toolEntity)
                 ->setName($tool->getName())
                 ->setPosition($position)

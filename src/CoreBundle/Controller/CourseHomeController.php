@@ -60,7 +60,7 @@ class CourseHomeController extends ToolBaseController
         $userId = 0;
         $user = $this->getUser();
         if (null !== $user) {
-            $userId = $this->getUser()->getId();
+            $userId = $user->getId();
         }
 
         $courseCode = $course->getCode();
@@ -118,6 +118,7 @@ class CourseHomeController extends ToolBaseController
         $result = $qb->getQuery()->getResult();
         $tools = [];
         $isCourseTeacher = $this->isGranted('ROLE_CURRENT_COURSE_TEACHER');
+
         /** @var CTool $item */
         foreach ($result as $item) {
             if ('course_tool' === $item->getName()) {

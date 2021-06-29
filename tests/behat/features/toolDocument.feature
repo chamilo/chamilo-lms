@@ -58,6 +58,7 @@ Feature: Document tool
     And wait for the page to be loaded
     Then I should see "Complete"
     Then I move backward one page
+    And wait for the page to be loaded
     Then I should see "favicon.ico"
 
 #  Scenario: Search for "My second document" and edit it

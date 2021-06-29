@@ -80,12 +80,15 @@ use Symfony\Component\Validator\Constraints as Assert;
  *                                                 "visibility"={
  *                                                     "type"="integer",
  *                                                 },
- *                                                 "c_id"={
+ *                                                 "cid"={
  *                                                     "type"="integer",
  *                                                 },
- *                                                 "session_id"={
+ *                                                 "gid"={
  *                                                     "type"="integer",
  *                                                 },
+ *                                                 "sid"={
+ *                                                     "type"="integer",
+ *                                                 }
  *                                             }
  *                                         }
  *                                     },

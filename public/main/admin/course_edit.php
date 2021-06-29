@@ -17,18 +17,17 @@ $courseCategoriesRepo = Container::getCourseCategoryRepository();
 
 $urlId = api_get_current_access_url_id();
 
-$courseId = isset($_GET['id']) ? $_GET['id'] : null;
+$courseId = $_GET['id'] ?? null;
 
 if (empty($courseId)) {
     api_not_allowed(true);
 }
 
 $courseInfo = api_get_course_info_by_id($courseId);
-$courseCode = $courseInfo['code'];
-
 if (empty($courseInfo)) {
     api_not_allowed(true);
 }
+$courseCode = $courseInfo['code'];
 
 $tool_name = get_lang('Edit course information');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];

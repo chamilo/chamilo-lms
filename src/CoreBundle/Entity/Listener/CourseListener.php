@@ -54,9 +54,7 @@ class CourseListener
 
     public function postPersist(Course $course, LifecycleEventArgs $args): void
     {
-        //error_log('Course listener postPersist');
         if ($course) {
-            //error_log('add tools');
             ///$this->checkLimit($repo, $course, $url);
             $this->toolChain->addToolsInCourse($course);
 

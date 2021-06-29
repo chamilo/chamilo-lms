@@ -202,7 +202,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
                 ],
             ]
         );
-        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseStatusCodeSame(403);
 
         // Update course visibility to CLOSED
         $courseRepo = self::getContainer()->get(CourseRepository::class);
@@ -220,7 +220,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
                 ],
             ]
         );
-        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseStatusCodeSame(403);
 
         // Update course visibility to HIDDEN
         $courseRepo = self::getContainer()->get(CourseRepository::class);
@@ -238,7 +238,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
                 ],
             ]
         );
-        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseStatusCodeSame(403);
 
         // Change visibility of the document to DRAFT
         $documentRepo = self::getContainer()->get(CDocumentRepository::class);
@@ -261,7 +261,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
                 ],
             ]
         );
-        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseStatusCodeSame(403);
     }
 
     public function testUploadFileInSideASubFolder(): void

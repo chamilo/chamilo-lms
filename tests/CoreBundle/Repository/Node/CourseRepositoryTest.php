@@ -62,6 +62,15 @@ class CourseRepositoryTest extends WebTestCase
         // Check tools.
         $this->assertSame(23, \count($course->getTools()));
 
+        // Check resource links for each Tool
+        foreach ($course->getTools() as $tool) {
+            $this->assertSame(
+                1,
+                $tool->getResourceNode()->getResourceLinks()->count(),
+                sprintf("Tool '%s' needs a ResourceLink ", $tool->getResourceNode()->getTitle())
+            );
+        }
+
         // The course should connected with the current Access URL.
         $this->assertSame(1, $course->getUrls()->count());
     }

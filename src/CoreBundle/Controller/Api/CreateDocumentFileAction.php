@@ -7,15 +7,16 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
 
 class CreateDocumentFileAction extends BaseResourceFileAction
 {
-    public function __invoke(Request $request, EntityManager $em): CDocument
+    public function __invoke(Request $request, CDocumentRepository $repo, EntityManager $em): CDocument
     {
         $document = new CDocument();
-        $result = $this->handleCreateRequest($document, $request, $em);
+        $result = $this->handleCreateRequest($document, $repo, $request);
 
         $document->setFiletype($result['filetype']);
         $document->setComment($result['comment']);

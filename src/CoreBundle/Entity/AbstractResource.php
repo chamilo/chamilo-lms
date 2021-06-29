@@ -125,6 +125,9 @@ abstract class AbstractResource
         return $this->resourceLinkEntityList;
     }
 
+    /**
+     * $this->resourceLinkEntityList will be loaded in the ResourceListener in the setLinks() function.
+     */
     public function addLink(ResourceLink $link)
     {
         $this->resourceLinkEntityList[] = $link;
@@ -135,11 +138,10 @@ abstract class AbstractResource
     public function addCourseLink(Course $course, Session $session = null, CGroup $group = null, int $visibility = ResourceLink::VISIBILITY_PUBLISHED)
     {
         if (null === $this->getParent()) {
-            throw new Exception('addCourseLink requires to set the parent first.');
+            throw new Exception('$resource->addCourseLink requires to set the parent first.');
         }
 
-        $resourceLink = new ResourceLink();
-        $resourceLink
+        $resourceLink = (new ResourceLink())
             ->setVisibility($visibility)
             ->setCourse($course)
             ->setSession($session)
@@ -163,7 +165,6 @@ abstract class AbstractResource
 
         if (!empty($rights)) {
             foreach ($rights as $right) {
-                //$resourceLink->addResourceRights($right);
                 $resourceLink->addResourceRight($right);
             }
         }

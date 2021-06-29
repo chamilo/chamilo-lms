@@ -43,8 +43,6 @@ class CourseManager
      */
     public static function create_course($params, $authorId = 0, $accessUrlId = 0)
     {
-        //global $_configuration;
-
         // Check portal limits
         $accessUrlId = !empty($accessUrlId) ? (int) $accessUrlId : api_get_current_access_url_id();
         $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
@@ -88,7 +86,7 @@ class CourseManager
 
         // Create the course keys
         $keys = AddCourse::define_course_keys($params['wanted_code']);
-        $params['exemplary_content'] = isset($params['exemplary_content']) ? $params['exemplary_content'] : false;
+        $params['exemplary_content'] = $params['exemplary_content'] ?? false;
 
         if (count($keys)) {
             $params['code'] = $keys['currentCourseCode'];

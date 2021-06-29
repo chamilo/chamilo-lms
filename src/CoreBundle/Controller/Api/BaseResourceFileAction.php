@@ -9,9 +9,11 @@ namespace Chamilo\CoreBundle\Controller\Api;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CGroup;
 use DateTime;
 use Doctrine\ORM\EntityManager;
@@ -92,11 +94,11 @@ class BaseResourceFileAction
         }
 
         // Use by Chamilo not api platform.
-        /*$links = $resource->getResourceLinkEntityList();
+        $links = $resource->getResourceLinkEntityList();
         if ($links) {
-            error_log('$resource->getResourceLinkEntityList()');
+            //error_log('$resource->getResourceLinkEntityList()');
             foreach ($links as $link) {
-                $rights = [];
+                /*$rights = [];
                 switch ($link->getVisibility()) {
                     case ResourceLink::VISIBILITY_PENDING:
                     case ResourceLink::VISIBILITY_DRAFT:
@@ -115,14 +117,14 @@ class BaseResourceFileAction
                     foreach ($rights as $right) {
                         $link->addResourceRight($right);
                     }
-                }
+                }*/
                 //error_log('link adding to node: '.$resource->getResourceNode()->getId());
                 //error_log('link with user : '.$link->getUser()->getUsername());
                 $resource->getResourceNode()->addResourceLink($link);
 
                 $em->persist($link);
             }
-        }*/
+        }
     }
     /**
      * Function loaded when creating a resource using the api, then the ResourceListener is executed.

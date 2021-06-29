@@ -20,17 +20,19 @@
                 {% endif %}
             </div>
         </div>
-        {% if allow_download_export %}
-            {% if badge_error %}
-                <hr>
-                <div class="alert alert-danger"> {{ 'BakedBadgeProblem'|trans }}</div>
-            {% else %}
-                <p class="text-center">
-                    <a href="{{ personal_badge }}" class="btn btn-primary" target="_new" download="badge">
-                        <em class="fa fa-download fa-fw"></em> {{ 'DownloadBadge'|trans }}
-                    </a>
-                </p>
-            {% endif %}
+
+        {% if badge_error %}
+            <hr>
+            <div class="alert alert-danger"> {{ 'BakedBadgeProblem'|trans }}</div>
+        {% elseif not personal_badge is empty %}
+            <p class="text-center">
+                <a href="{{ personal_badge }}" class="btn btn-primary" target="_new" download="badge">
+                    <em class="fa fa-download fa-fw"></em> {{ 'DownloadBadge'|trans }}
+                </a>
+            </p>
+        {% endif %}
+
+        {% if allow_export %}
             <hr>
             <p class="text-center">
                 <a href="#" class="btn btn-success" id="badge-export-button">
@@ -38,12 +40,23 @@
                 </a>
             </p>
             <div class='col-md-12 text-center'>
-                <h5><b> {{ 'ShareWithYourFriends' | trans }} </b></h5>
+                <h5><b> {{ 'ShareWithYourFriends'|trans }} </b></h5>
                 <a href="http://www.facebook.com/sharer.php?u={{ _p.web }}badge/{{ issue_info.id }}" target="_new">
                     <em class='fa fa-facebook-square fa-3x text-info' aria-hidden='true'></em>
                 </a>
-                <a href="https://twitter.com/home?status={{ 'IHaveObtainedSkillXOnY' | trans |format(skill_info.name, _s.site_name)}} - {{ _p.web }}badge/{{ issue_info.id }}" target="_new">
+                <a href="https://twitter.com/home?status={{ 'IHaveObtainedSkillXOnY'|trans|format(issue_info.skill_name, _s.site_name)}} - {{ _p.web }}badge/{{ issue_info.id }}" target="_new">
                     <em class='fa fa-twitter-square fa-3x text-light' aria-hidden='true'></em>
+                </a>
+                <a href="{{ 'https://www.linkedin.com/profile/add?' ~ {
+                    'certId':issue_info.id,
+                    'certUrl':_p.web ~ "badge/" ~ issue_info.id,
+                    'isFromA2p':'true',
+                    'issueMonth':issue_info.month,
+                    'issueYear': issue_info.year,
+                    'name':'BadgeXTitle'|trans|format(issue_info.skill_name),
+                    'organizationId':issue_info.linkedin_organization_id
+                }|url_encode }}" target="_new">
+                    <em class='fa fa-linkedin-square fa-3x txt-linkedin' aria-hidden='true'></em>
                 </a>
             </div>
         {% endif %}
@@ -75,12 +88,12 @@
         </ul>
 
         {% if show_level %}
-        <h4>{{ 'AcquiredLevel'|trans }}</h4>
-        <ul class="fa-ul">
-            <li>
-                <em class="fa-li fa fa-check-circle-o fa-fw"></em> {{ issue_info.acquired_level }}
-            </li>
-        </ul>
+            <h4>{{ 'AcquiredLevel'|trans }}</h4>
+            <ul class="fa-ul">
+                <li>
+                    <em class="fa-li fa fa-check-circle-o fa-fw"></em> {{ issue_info.acquired_level }}
+                </li>
+            </ul>
         {% endif %}
 
         {% if allow_comment %}
@@ -141,7 +154,7 @@
         {% endif %}
     </div>
 </div>
-{% if allow_download_export %}
+{% if allow_export %}
     <script>
         $(function () {
             $('#badge-export-button').on('click', function (e) {

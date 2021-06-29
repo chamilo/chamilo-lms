@@ -25,8 +25,8 @@ import CreateMixin from '../../mixins/CreateMixin';
 const servicePrefix = 'PersonalFile';
 
 const { mapFields } = createHelpers({
-  getterType: 'personal_file/getField',
-  mutationType: 'personal_file/updateField'
+  getterType: 'personalfile/getField',
+  mutationType: 'personalfile/updateField'
 });
 
 export default {

@@ -6,7 +6,12 @@ export default {
   methods: {
     formatDateTime,
     onCreated(item) {
-      this.showMessage(this.$i18n.t('{resource} created', {'resource': item['resourceNode'].title}));
+      if (item['resourceNode']) {
+        this.showMessage(this.$i18n.t('{resource} created', {'resource': item['resourceNode'].title}));
+      } else {
+        this.showMessage(this.$i18n.t('{resource} created', {'resource': item.title}));
+      }
+
       let folderParams = this.$route.query;
 
       this.$router.push({
@@ -29,6 +34,30 @@ export default {
         this.createWithFormData(createForm.v$.item.$model);
       }
     },
+    onSendMessageForm() {
+      const createForm = this.$refs.createForm;
+      createForm.v$.$touch();
+
+      if (!createForm.v$.$invalid) {
+        createForm.v$.item.$model.receivers.forEach(user => {
+          // Send to inbox
+          createForm.v$.item.$model.userSender = '/api/users/' + this.currentUser.id;
+          createForm.v$.item.$model.userReceiver = user['@id'];
+          createForm.v$.item.$model.msgStatus = 1;
+          this.create(createForm.v$.item.$model);
+
+          // Send a copy to the outbox
+
+          createForm.v$.item.$model.userSender = '/api/users/' + this.currentUser.id;
+          createForm.v$.item.$model.userReceiver = user['@id'];
+          createForm.v$.item.$model.msgStatus = 2;
+          this.create(createForm.v$.item.$model);
+        });
+      }
+
+      this.create(createForm.v$.item.$model);
+
+    },
     resetForm() {
       this.$refs.createForm.$v.$reset();
       this.item = {};
@@ -36,6 +65,9 @@ export default {
   },
   watch: {
     created(created) {
+      console.log('created');
+      console.log(created);
+
       if (!created) {
         return;
       }

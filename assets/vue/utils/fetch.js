@@ -8,7 +8,7 @@ const MIME_TYPE = 'application/ld+json';
 const makeParamArray = (key, arr) =>
   arr.map(val => `${key}[]=${val}`).join('&');
 
-export default function(id, options = {}, formData = false) {
+export default function(id, options = {}) {
     console.log('fetch');
     console.log(options);
 
@@ -20,13 +20,13 @@ export default function(id, options = {}, formData = false) {
         options.headers = { ...options.headers, Accept: MIME_TYPE };
     }
 
-    /*if (
+    if (
         undefined !== options.body &&
         !(options.body instanceof FormData) &&
         !options.headers.hasOwnProperty("Content-Type")
     ) {
         options.headers = { ...options.headers, "Content-Type": MIME_TYPE };
-    }*/
+    }
 
     if (options.params) {
         const params = normalize(options.params);
@@ -44,23 +44,6 @@ export default function(id, options = {}, formData = false) {
     const entryPoint = ENTRYPOINT + (ENTRYPOINT.endsWith('/') ? '' : '/');
 
     console.log('entryPoint', entryPoint);
-
-    if (formData) {
-        //options.headers = { ...options.headers, Accept: MIME_TYPE };
-        //options.headers = { ...options.headers, "Content-Type": 'multipart/form-data' };
-        let formData = new FormData();
-        console.log('body');
-        console.log(options.body);
-        if (options.body) {
-            Object.keys(options.body).forEach(function (key) {
-                // key: the name of the object key
-                // index: the ordinal position of the key within the object
-                formData.append(key, options.body[key]);
-                console.log('options.key', key);
-            });
-            options.body = formData;
-        }
-    }
 
     if ('PUT' === options.method) {
         const payload = options.body && JSON.parse(options.body);

@@ -38,10 +38,6 @@
     </ul>
   </div>
 
-
-
-  <!--  multiple="multiple"-->
-  <!--  searchable="true"-->
   <VueMultiselect
       placeholder="Share with User"
       v-model="selectedUsers"

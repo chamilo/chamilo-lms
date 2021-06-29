@@ -6,12 +6,17 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CourseBundle\Entity\CGroup;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -28,6 +33,61 @@ use Symfony\Component\Validator\Constraints as Assert;
  * })
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\MessageRepository")
  */
+#[ApiResource(
+    collectionOperations: [
+        'get' => [],
+        'post' => [
+            'security' => "is_granted('ROLE_USER')",
+            //            'deserialize' => false,
+            //            'controller' => Create::class,
+            //            'openapi_context' => [
+            //                'requestBody' => [
+            //                    'content' => [
+            //                        'multipart/form-data' => [
+            //                            'schema' => [
+            //                                'type' => 'object',
+            //                                'properties' => [
+            //                                    'title' => [
+            //                                        'type' => 'string',
+            //                                    ],
+            //                                    'content' => [
+            //                                        'type' => 'string',
+            //                                    ],
+            //                                ],
+            //                            ],
+            //                        ],
+            //                    ],
+            //                ],
+            //            ],
+        ],
+    ],
+    itemOperations: [
+        'get' => [
+            'security' => "is_granted('VIEW', object)",
+        ],
+        'put' => [
+            'security' => "is_granted('EDIT', object)",
+        ],
+        'delete' => [
+            'security' => "is_granted('DELETE', object)",
+        ],
+    ],
+    attributes: [
+        'security' => "is_granted('ROLE_USER')",
+    ],
+    denormalizationContext: [
+        'groups' => ['message:write'],
+    ],
+    normalizationContext: [
+        'groups' => ['message:read'],
+    ],
+)]
+#[ApiFilter(OrderFilter::class, properties: ['title', 'sendDate'])]
+#[ApiFilter(SearchFilter::class, properties: [
+    'msgStatus' => 'exact',
+    'userSender' => 'exact',
+    'userReceiver' => 'exact',
+])]
 class Message
 {
     public const MESSAGE_TYPE_INBOX = 1;
@@ -39,41 +99,49 @@ class Message
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
+    #[Groups(['message:read'])]
     protected int $id;
 
-    #[Assert\NotBlank]
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sentMessages")
      * @ORM\JoinColumn(name="user_sender_id", referencedColumnName="id", nullable=false)
      */
+    #[Assert\NotBlank]
+    #[Groups(['message:read', 'message:write'])]
     protected User $userSender;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="receivedMessages")
      * @ORM\JoinColumn(name="user_receiver_id", referencedColumnName="id", nullable=true)
      */
+    #[Groups(['message:read', 'message:write'])]
     protected User $userReceiver;
 
     /**
      * @ORM\Column(name="msg_status", type="smallint", nullable=false)
      */
+    #[Assert\NotBlank]
+    #[Groups(['message:read', 'message:write'])]
     protected int $msgStatus;
 
     /**
      * @ORM\Column(name="send_date", type="datetime", nullable=false)
      */
+    #[Groups(['message:read'])]
     protected DateTime $sendDate;
 
-    #[Assert\NotBlank]
     /**
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
+    #[Groups(['message:read', 'message:write'])]
     protected string $title;
 
-    #[Assert\NotBlank]
     /**
      * @ORM\Column(name="content", type="text", nullable=false)
      */
+    #[Assert\NotBlank]
+    #[Groups(['message:read', 'message:write'])]
     protected string $content;
 
     /**

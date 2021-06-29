@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import courseRoutes from './course';
 import accountRoutes from './account';
 import personalFileRoutes from './personalfile';
+import messageRoutes from './message';
 
 //import courseCategoryRoutes from './coursecategory';
 import documents from './documents';
@@ -89,7 +90,8 @@ const router = createRouter({
         //courseCategoryRoutes,
         documents,
         accountRoutes,
-        personalFileRoutes
+        personalFileRoutes,
+        messageRoutes
     ]
 });
 

@@ -99,8 +99,17 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * Resource illustration URL - Property set by ResourceNormalizer.php.
      *
      * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"user:read", "resource_node:read", "document:read", "media_object_read", "course:read", "course_rel_user:read", "user_json:read"})
      */
+    #[Groups([
+        'user:read',
+        'resource_node:read',
+        'document:read',
+        'media_object_read',
+        'course:read',
+        'course_rel_user:read',
+        'user_json:read',
+        'message:read',
+    ])]
     public ?string $illustrationUrl = null;
 
     /**
@@ -112,7 +121,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected ?int $id = null;
 
     /**
-     * @Groups({"user:read", "user:write", "course:read", "resource_node:read", "user_json:read"})
+     * @Groups({"user:read", "user:write", "course:read", "resource_node:read", "user_json:read", "message:read"})
      * @Assert\NotBlank()
      * @ORM\Column(name="username", type="string", length=100, unique=true)
      */

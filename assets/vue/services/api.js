@@ -10,8 +10,6 @@ export default function makeService(endpoint) {
         params = {getFile: true};
       }
 
-      //console.log(id);console.log(params);
-      //let options = {params: {getFile: true}};
       let options = {params: params};
       return fetch(`${id}`, options);
     },
@@ -20,11 +18,25 @@ export default function makeService(endpoint) {
       console.log(params);
       return fetch(endpoint, params);
     },
-    createWithFormData(payload) {
+    async createWithFormData(payload) {
       console.log('api.js createWithFormData');
-      return fetch(endpoint, { method: 'POST', body: payload}, true);
+
+      let formData = new FormData();
+      console.log('body');
+      console.log(payload);
+      if (payload) {
+        Object.keys(payload).forEach(function (key) {
+          // key: the name of the object key
+          // index: the ordinal position of the key within the object
+          formData.append(key, payload[key]);
+          console.log('options.key', key);
+        });
+        payload = formData;
+      }
+
+      return fetch(endpoint, { method: 'POST', body: payload});
     },
-    create(payload) {
+    async create(payload) {
       console.log('api.js create');
       return fetch(endpoint, { method: 'POST', body: JSON.stringify(payload) });
     },

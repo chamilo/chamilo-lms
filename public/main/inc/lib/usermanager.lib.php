@@ -284,7 +284,7 @@ class UserManager
             ->setTimezone(api_get_timezone())
         ;
 
-        if (!empty($expirationDate)) {
+        if (null !== $expirationDate) {
             $user->setExpirationDate($expirationDate);
         }
 

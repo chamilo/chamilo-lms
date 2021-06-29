@@ -2076,11 +2076,11 @@ class TicketManager
     /**
      * @return array
      */
-    public static function getStatusSimple()
+    /*public static function getStatusSimple()
     {
         $projects = Database::getManager()->getRepository(TicketStatus::class)->findAll();
         $list = [];
-        /** @var TicketProject $row */
+        // @var TicketProject $row
         foreach ($projects as $row) {
             $list[] = [
                 'id' => $row->getId(),
@@ -2091,7 +2091,7 @@ class TicketManager
         }
 
         return $list;
-    }
+    }*/
 
     /**
      * @return int

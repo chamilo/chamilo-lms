@@ -127,7 +127,7 @@ class BaseResourceFileAction
     /**
      * Function loaded when creating a resource using the api, then the ResourceListener is executed.
      */
-    protected function handleCreateRequest(AbstractResource $resource, Request $request, EntityManager $em): array
+    protected function handleCreateRequest(AbstractResource $resource, ResourceRepository $resourceRepository, Request $request): array
     {
         //error_log('handleCreateRequest');
         $contentData = $request->getContent();
@@ -186,11 +186,8 @@ class BaseResourceFileAction
 
                 // Get data in content and create a HTML file.
                 if (!$fileParsed && $content) {
-                    $handle = tmpfile();
-                    fwrite($handle, $content);
-                    $meta = stream_get_meta_data($handle);
-                    $file = new UploadedFile($meta['uri'], $title.'.html', 'text/html', null, true);
-                    $resource->setUploadFile($file);
+                    $uploadedFile = $resourceRepository->createTempUploadedFile($title.'.html', 'text/html', $content);
+                    $resource->setUploadFile($uploadedFile);
                     $fileParsed = true;
                 }
 

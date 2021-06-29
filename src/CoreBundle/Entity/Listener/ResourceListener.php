@@ -175,7 +175,6 @@ class ResourceListener
         $resource->setResourceNode($resourceNode);
         // Update resourceNode title from Resource.
         $this->updateResourceName($resource);
-
         BaseResourceFileAction::setLinks($resource, $em);
 
         // Upload File was set in BaseResourceFileAction.php
@@ -195,7 +194,6 @@ class ResourceListener
         }
 
         $resource->setResourceNode($resourceNode);
-        //$em->persist($resourceNode);
 
         // All resources should have a parent, except AccessUrl.
         if (!($resource instanceof AccessUrl) && null === $resourceNode->getParent()) {

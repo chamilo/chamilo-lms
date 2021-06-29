@@ -113,52 +113,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
         ]);
     }
 
-    /*public function findOneBy(array $criteria, array $orderBy = null)
-    {
-        return $this->findOneBy($criteria, $orderBy);
-    }*/
-
-    /*public function updateResource(AbstractResource $resource)
-    {
-        $em = $this->getEntityManager();
-
-        $resourceNode = $resource->getResourceNode();
-        $resourceNode->setTitle($resource->getResourceName());
-
-        $links = $resource->getResourceLinkEntityList();
-        if ($links) {
-            foreach ($links as $link) {
-                $link->setResourceNode($resourceNode);
-
-                $rights = [];
-                switch ($link->getVisibility()) {
-                    case ResourceLink::VISIBILITY_PENDING:
-                    case ResourceLink::VISIBILITY_DRAFT:
-                        $editorMask = ResourceNodeVoter::getEditorMask();
-                        $resourceRight = new ResourceRight();
-                        $resourceRight
-                            ->setMask($editorMask)
-                            ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
-                        ;
-                        $rights[] = $resourceRight;
-
-                        break;
-                }
-
-                if (!empty($rights)) {
-                    foreach ($rights as $right) {
-                        $link->addResourceRight($right);
-                    }
-                }
-                $em->persist($link);
-            }
-        }
-
-        $em->persist($resourceNode);
-        $em->persist($resource);
-        $em->flush();
-    }*/
-
     public function create(AbstractResource $resource): void
     {
         $this->getEntityManager()->persist($resource);
@@ -261,12 +215,21 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return null;
     }
 
+    public function createTempUploadedFile(string $fileName, string $mimeType, string $content): UploadedFile
+    {
+        /*$handle = tmpfile();
+        fwrite($handle, $content);
+        $meta = stream_get_meta_data($handle);*/
+
+        $tmpFilename = tempnam(sys_get_temp_dir(), 'resource_file_');
+        file_put_contents($tmpFilename, $content);
+
+        return new UploadedFile($tmpFilename, $fileName, $mimeType, null, true);
+    }
+
     public function addFileFromString(ResourceInterface $resource, string $fileName, string $mimeType, string $content, bool $flush = true): ?ResourceFile
     {
-        $handle = tmpfile();
-        fwrite($handle, $content);
-        $meta = stream_get_meta_data($handle);
-        $file = new UploadedFile($meta['uri'], $fileName, $mimeType, null, true);
+        $file = $this->createTempUploadedFile($fileName, $mimeType, $content);
 
         return $this->addFile($resource, $file, '', $flush);
     }

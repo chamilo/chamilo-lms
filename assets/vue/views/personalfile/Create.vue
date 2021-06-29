@@ -1,7 +1,7 @@
 <template>
   <div>
     <Toolbar
-        :handle-submit="onSendForm"
+        :handle-submit="onSendFormData"
         :handle-reset="resetForm"
     />
 
@@ -57,7 +57,7 @@ export default {
     }]);
   },
   methods: {
-    ...mapActions('personalfile', ['create', 'reset'])
+    ...mapActions('personalfile', ['createWithFormData', 'reset'])
   }
 };
 </script>

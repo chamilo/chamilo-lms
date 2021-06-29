@@ -134,7 +134,7 @@ export default {
 
     // From ListMixin
     ...mapFields('personalfile', {
-      deletedItem: 'deleted',
+      deletedResource: 'deleted',
       error: 'error',
       isLoading: 'isLoading',
       resetList: 'resetList',
@@ -218,7 +218,6 @@ export default {
     // From ListMixin
     ...mapActions('personalfile', {
       getPage: 'fetchAll',
-      create: 'create',
       deleteItem: 'del',
       deleteMultipleAction: 'delMultiple'
     }),

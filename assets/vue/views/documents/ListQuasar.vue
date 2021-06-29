@@ -171,7 +171,7 @@ export default {
 
     // From ListMixin
     ...mapFields('documents', {
-      deletedItem: 'deleted',
+      deletedResource: 'deleted',
       error: 'error',
       isLoading: 'isLoading',
       resetList: 'resetList',

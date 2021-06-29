@@ -20,24 +20,29 @@ export default function makeService(endpoint) {
       console.log(params);
       return fetch(endpoint, params);
     },
-    async createFile(payload) {
-      console.log('api.js createFile');
-      return fetch(endpoint, { method: 'POST', body: payload });
-      //return fetch(endpoint, { method: 'POST', body: JSON.stringify(payload) });
+    createWithFormData(payload) {
+      console.log('api.js createWithFormData');
+      return fetch(endpoint, { method: 'POST', body: payload}, true);
     },
     create(payload) {
       console.log('api.js create');
-      return fetch(endpoint, { method: 'POST', body: payload });
-      //return fetch(endpoint, { method: 'POST', body: JSON.stringify(payload) });
+      return fetch(endpoint, { method: 'POST', body: JSON.stringify(payload) });
     },
     del(item) {
       console.log('api.js del');
       console.log(item['@id']);
       return fetch(item['@id'], { method: 'DELETE' });
     },
+    updateWithFormData(payload) {
+      console.log('api.js - update');
+
+      return fetch(payload['@id'], {
+        method: 'PUT',
+        body: JSON.stringify(payload)
+      });
+    },
     update(payload) {
       console.log('api.js - update');
-      //console.log(JSON.stringify(payload));
 
       return fetch(payload['@id'], {
         method: 'PUT',

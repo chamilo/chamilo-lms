@@ -1,4 +1,3 @@
-import axios from "axios";
 import { isArray, isObject, isUndefined, forEach } from 'lodash';
 import { ENTRYPOINT } from '../config/entrypoint';
 import SubmissionError from '../error/SubmissionError';
@@ -6,44 +5,31 @@ import { normalize } from './hydra';
 
 const MIME_TYPE = 'application/ld+json';
 
-const transformRelationToIri = (payload) => {
-    console.log('transformRelationToIri');
-    forEach(payload, (value, property) => {
-        if (isObject(value) && !isUndefined(value['@id'])) {
-            payload[property] = value['@id'];
-        }
-
-        if (isArray(value)) payload[property] = transformRelationToIri(value);
-    });
-
-    return payload;
-};
-
 const makeParamArray = (key, arr) =>
   arr.map(val => `${key}[]=${val}`).join('&');
 
-export default function(id, options = {}) {
+export default function(id, options = {}, formData = false) {
     console.log('fetch');
-    console.log(options.method, 'method');
+    console.log(options);
 
-    if ('undefined' === typeof options.headers) options.headers = new Headers();
+    if ("undefined" === typeof options.headers) {
+        options.headers = {};
+    }
 
-    if (null === options.headers.get('Accept')) {
-        options.headers.set('Accept', MIME_TYPE);
+    if (!options.headers.hasOwnProperty("Accept")) {
+        options.headers = { ...options.headers, Accept: MIME_TYPE };
     }
 
     /*if (
-      'undefined' !== options.body &&
-      !(options.body instanceof FormData) &&
-      null === options.headers.get('Content-Type')
-    )
-      options.headers.set('Content-Type', MIME_TYPE);*/
+        undefined !== options.body &&
+        !(options.body instanceof FormData) &&
+        !options.headers.hasOwnProperty("Content-Type")
+    ) {
+        options.headers = { ...options.headers, "Content-Type": MIME_TYPE };
+    }*/
 
     if (options.params) {
-        console.log('params');
-        console.log(options.params);
         const params = normalize(options.params);
-        //const params = options.params;
         let queryString = Object.keys(params)
             .map(key =>
                 Array.isArray(params[key])
@@ -52,25 +38,25 @@ export default function(id, options = {}) {
             )
             .join('&');
         id = `${id}?${queryString}`;
-
         console.log('URL', id);
     }
 
     const entryPoint = ENTRYPOINT + (ENTRYPOINT.endsWith('/') ? '' : '/');
 
     console.log('entryPoint', entryPoint);
-    /*let useAxios = false;
-    let originalBody = options.body;*/
-    if ('POST' === options.method) {
+
+    if (formData) {
+        //options.headers = { ...options.headers, Accept: MIME_TYPE };
+        //options.headers = { ...options.headers, "Content-Type": 'multipart/form-data' };
         let formData = new FormData();
+        console.log('body');
+        console.log(options.body);
         if (options.body) {
             Object.keys(options.body).forEach(function (key) {
-                /*if (key === 'uploadFile') {
-                    useAxios = true;
-                }*/
                 // key: the name of the object key
                 // index: the ordinal position of the key within the object
                 formData.append(key, options.body[key]);
+                console.log('options.key', key);
             });
             options.body = formData;
         }
@@ -80,9 +66,13 @@ export default function(id, options = {}) {
         const payload = options.body && JSON.parse(options.body);
         if (isObject(payload) && payload['@id']) {
             options.body = JSON.stringify(normalize(payload));
-            //options.body = JSON.stringify(transformRelationToIri(payload));
         }
     }
+
+    /*const payload = options.body && JSON.parse(options.body);
+    if (isObject(payload) && payload["@id"]) {
+        options.body = JSON.stringify(normalize(payload));
+    }*/
 
     /*if (useAxios) {
         console.log('axios');

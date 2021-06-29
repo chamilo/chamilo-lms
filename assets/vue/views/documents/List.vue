@@ -399,7 +399,7 @@ export default {
 
     // From ListMixin
     ...mapFields('documents', {
-      deletedItem: 'deleted',
+      deletedResource: 'deleted',
       error: 'error',
       isLoading: 'isLoading',
       resetList: 'resetList',
@@ -457,7 +457,7 @@ export default {
             visibility: 2, // visible by default
           }]);
 
-          this.create(this.item);
+          this.createWithFormData(this.item);
           this.showMessage('Saved');
         }
 
@@ -569,7 +569,7 @@ export default {
     // From ListMixin
     ...mapActions('documents', {
       getPage: 'fetchAll',
-      create: 'create',
+      createWithFormData: 'createWithFormData',
       deleteItem: 'del',
       deleteMultipleAction: 'delMultiple'
     }),

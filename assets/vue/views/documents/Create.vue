@@ -57,7 +57,7 @@ export default {
     }]);
   },
   methods: {
-    ...mapActions('documents', ['create', 'reset'])
+    ...mapActions('documents', ['createWithFormData', 'reset'])
   }
 };
 </script>

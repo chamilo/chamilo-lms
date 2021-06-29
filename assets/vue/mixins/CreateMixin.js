@@ -22,6 +22,13 @@ export default {
         this.create(createForm.v$.item.$model);
       }
     },
+    onSendFormData() {
+      const createForm = this.$refs.createForm;
+      createForm.v$.$touch();
+      if (!createForm.v$.$invalid) {
+        this.createWithFormData(createForm.v$.item.$model);
+      }
+    },
     resetForm() {
       this.$refs.createForm.$v.$reset();
       this.item = {};

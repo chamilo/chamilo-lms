@@ -2,7 +2,7 @@
     <div v-if="!isLoading && item && isCurrentTeacher">
       <!--    :handle-delete="del"-->
       <Toolbar
-          :handle-submit="onSendForm"
+          :handle-submit="onSendFormData"
           :handle-reset="resetForm"
       />
       <DocumentsForm
@@ -58,7 +58,7 @@ export default {
       deleteItem: 'del',
       delReset: 'resetDelete',
       retrieve: 'load',
-      update: 'update',
+      updateWithFormData: 'updateWithFormData',
       updateReset: 'resetUpdate'
     })
   }

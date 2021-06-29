@@ -149,7 +149,7 @@ export default {
 
       return 'error';
     },
-    ...mapActions('personalfile', ['uploadMany', 'create', 'createFile'])
+    ...mapActions('personalfile', ['uploadMany', 'createFile'])
   }
 };
 </script>

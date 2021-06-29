@@ -1,7 +1,7 @@
 <template>
   <div>
     <Toolbar
-        :handle-submit="onSendForm"
+        :handle-submit="onSendFormData"
         :handle-reset="resetForm"
     />
     <DocumentsForm
@@ -30,7 +30,7 @@ const { mapFields } = createHelpers({
 });
 
 export default {
-  name: 'DocumentsCreate',
+  name: 'DocumentsCreateFile',
   servicePrefix,
   components: {
     Loading,
@@ -62,7 +62,7 @@ export default {
     }]);
   },
   methods: {
-    ...mapActions('documents', ['create', 'reset'])
+    ...mapActions('documents', ['createWithFormData', 'reset'])
   }
 };
 </script>

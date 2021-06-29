@@ -91,6 +91,15 @@ export default {
         this.item = { ...this.retrieved };
       }
     },
+    onSendFormData() {
+      console.log('onSendForm');
+      const updateForm = this.$refs.updateForm;
+      updateForm.v$.$touch();
+      if (!updateForm.v$.$invalid) {
+        this.updateWithFormData(updateForm.v$.item.$model);
+        this.item = { ...this.retrieved };
+      }
+    },
     resetForm() {
       console.log('resetForm');
       this.$refs.updateForm.v$.$reset();

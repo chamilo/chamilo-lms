@@ -74,18 +74,18 @@ export default function makeCrudModule({
 
         return response;
       },
-      createFile: ({ commit }, values) => {
+      createWithFormData: ({ commit }, values) => {
         commit(ACTIONS.SET_ERROR, '');
         commit(ACTIONS.TOGGLE_LOADING);
 
         service
-            .createFile(values)
-            //.then(response => response.json())
-            .then(response => {
+            .createWithFormData(values)
+            .then(response => response.json())
+            /*.then(response => {
               if (200 === response.status) {
                 return response.json();
               }
-            })
+            })*/
             .then(data => {
               commit(ACTIONS.TOGGLE_LOADING);
               commit(ACTIONS.ADD, data);
@@ -280,6 +280,19 @@ export default function makeCrudModule({
             commit(ACTIONS.SET_UPDATED, data);
           })
           .catch(e => handleError(commit, e));
+      },
+      updateWithFormData: ({ commit }, item) => {
+        console.log('crud updateWithFormData');
+        commit(ACTIONS.TOGGLE_LOADING);
+
+        service
+            .updateWithFormData(item)
+            .then(response => response.json())
+            .then(data => {
+              commit(ACTIONS.TOGGLE_LOADING);
+              commit(ACTIONS.SET_UPDATED, data);
+            })
+            .catch(e => handleError(commit, e));
       }
     },
     getters: {

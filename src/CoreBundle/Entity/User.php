@@ -678,7 +678,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * @var Collection<int, Message>|Message[]
      *
      * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\Message",
+     *     targetEntity="Message",
      *     mappedBy="userSender",
      *     cascade={"persist", "remove"},
      *     orphanRemoval=true
@@ -1201,7 +1201,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->expirationDate;
     }
 
-    public function setExpirationDate(DateTime $expirationDate): self
+    public function setExpirationDate(?DateTime $expirationDate): self
     {
         $this->expirationDate = $expirationDate;
 

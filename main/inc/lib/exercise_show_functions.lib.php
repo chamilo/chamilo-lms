@@ -23,7 +23,7 @@ class ExerciseShowFunctions
         $id,
         $questionId,
         $resultsDisabled,
-        $originalStudentAnswer = '',
+        $originalStudentAnswer,
         $showTotalScoreAndUserChoices
     ) {
         $answerHTML = FillBlanks::getHtmlDisplayForAnswer(

@@ -824,7 +824,7 @@ class MessageManager
         $criteria = ['id' => $id, 'userReceiver' => $user_receiver_id];
         $message = $repo->findOneBy($criteria);
 
-        if (null === $message || ($message && MESSAGE_STATUS_OUTBOX === $message->getMsgStatus())) {
+        if (null === $message || ($message && MESSAGE_STATUS_OUTBOX === $message->getMsgType())) {
             return false;
         }
 

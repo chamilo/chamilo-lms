@@ -2907,7 +2907,7 @@ class ImportCsv
                 }
 
                 $extraData = isset($userCareerData['extra_data']) && !empty($userCareerData['extra_data']) ? unserialize($userCareerData['extra_data']) : [];
-                $extraData[$row['CourseId']][$row['ResultId']] = [];
+                unset($extraData[$row['CourseId']][$row['ResultId']]);
                 $serializedValue = serialize($extraData);
 
                 UserManager::updateUserCareer($userCareerData['id'], $serializedValue);

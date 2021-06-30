@@ -201,6 +201,14 @@ class Message
      */
     protected Collection $likes;
 
+    /**
+     * @var Collection|MessageTag[]
+     *
+     * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\MessageTag", inversedBy="messages", cascade={"persist"})
+     * @ORM\JoinTable(name="message_rel_tags")
+     */
+    protected Collection $tags;
+
     public function __construct()
     {
         $this->sendDate = new DateTime('now');
@@ -208,9 +216,36 @@ class Message
         $this->content = '';
         $this->attachments = new ArrayCollection();
         $this->children = new ArrayCollection();
+        $this->tags = new ArrayCollection();
         $this->likes = new ArrayCollection();
         $this->votes = 0;
         $this->read = false;
+    }
+
+    /**
+     * @return Collection|MessageTag[]
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    public function addTag(MessageTag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(MessageTag $tag): self
+    {
+        if ($this->tags->contains($tag)) {
+            $this->tags->removeElement($tag);
+        }
+
+        return $this;
     }
 
     public function setUserSender(User $userSender): self

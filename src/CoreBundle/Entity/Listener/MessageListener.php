@@ -38,7 +38,7 @@ class MessageListener
         }
     }
 
-    public function preUpdate(Course $course, LifecycleEventArgs $args): void
+    public function preUpdate(Message $message, LifecycleEventArgs $args): void
     {
     }
 }

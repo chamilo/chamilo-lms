@@ -11,7 +11,7 @@
   <div>
     <q-splitter
         v-model="splitterModel"
-        style="height: 250px"
+        style="height: 100%"
     >
 
       <template v-slot:before>

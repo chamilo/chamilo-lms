@@ -32,6 +32,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     @ORM\Index(name="idx_message_status", columns={"msg_status"})
  * })
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\MessageRepository")
+ * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\MessageListener"})
  */
 #[ApiResource(
     collectionOperations: [
@@ -121,6 +122,11 @@ class Message
      * @ORM\Column(name="msg_status", type="smallint", nullable=false)
      */
     #[Assert\NotBlank]
+    #[Assert\Choice([
+        self::MESSAGE_TYPE_INBOX,
+        self::MESSAGE_TYPE_OUTBOX,
+        self::MESSAGE_TYPE_PROMOTED,
+    ])]
     #[Groups(['message:read', 'message:write'])]
     protected int $msgStatus;
 

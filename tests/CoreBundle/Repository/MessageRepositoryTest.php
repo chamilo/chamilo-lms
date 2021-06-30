@@ -35,8 +35,12 @@ class MessageRepositoryTest extends WebTestCase
 
         $repo->update($message);
 
-        $count = $repo->count([]);
+        // 1. Message in the inbox
+        $count = $repo->count(['msgStatus' => Message::MESSAGE_TYPE_INBOX]);
+        $this->assertSame(1, $count);
 
+        // 2. Message in the outbox
+        $count = $repo->count(['msgStatus' => Message::MESSAGE_TYPE_OUTBOX]);
         $this->assertSame(1, $count);
     }
 }

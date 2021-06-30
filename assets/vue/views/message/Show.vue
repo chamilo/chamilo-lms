@@ -1,7 +1,6 @@
 <template>
-  <div>
+  <div v-if="item">
     <Toolbar
-      v-if="item"
       :handle-delete="del"
     >
       <template slot="left">
@@ -13,7 +12,7 @@
       </template>
     </Toolbar>
 
-    <p class="text-lg" v-if="item">
+    <p class="text-lg">
       From:
       <q-avatar size="32px">
         <img :src="item['userSender']['illustrationUrl'] + '?w=80&h=80&fit=crop'" />
@@ -23,23 +22,19 @@
       {{ item['userSender']['username'] }}
     </p>
 
-    <p class="text-lg" v-if="item">
+    <p class="text-lg">
       {{$luxonDateTime.fromISO(item['sendDate']).toRelative() }}
     </p>
 
-    <p class="text-lg" v-if="item">
-      {{ item['title'] }}
+    <p class="text-lg">
+      <h3>{{ item.title }} </h3>
     </p>
 
     <div v-if="item" class="flex flex-row">
       <div class="w-full">
-        <h3>{{ item.title }} </h3>
         <p v-html="item.content" />
       </div>
     </div>
-
-
-
     <Loading :visible="isLoading" />
   </div>
 </template>

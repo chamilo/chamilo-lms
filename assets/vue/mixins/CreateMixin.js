@@ -45,18 +45,8 @@ export default {
           createForm.v$.item.$model.userReceiver = user['@id'];
           createForm.v$.item.$model.msgStatus = 1;
           this.create(createForm.v$.item.$model);
-
-          // Send a copy to the outbox
-
-          createForm.v$.item.$model.userSender = '/api/users/' + this.currentUser.id;
-          createForm.v$.item.$model.userReceiver = user['@id'];
-          createForm.v$.item.$model.msgStatus = 2;
-          this.create(createForm.v$.item.$model);
         });
       }
-
-      this.create(createForm.v$.item.$model);
-
     },
     resetForm() {
       this.$refs.createForm.$v.$reset();

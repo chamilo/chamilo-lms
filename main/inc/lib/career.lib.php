@@ -944,6 +944,9 @@ class Career extends Model
                 // Order by SortDate
                 $sortedByDate = $userResult[$id];
                 foreach ($sortedByDate as $resultId => &$result) {
+                    if (empty($result)) {
+                        continue;
+                    }
                     $result['resultId'] = $resultId;
                 }
 
@@ -959,6 +962,9 @@ class Career extends Model
                 $results = '';
                 $size = 2;
                 foreach ($sortedByDate as $iconData) {
+                    if (empty($iconData)) {
+                        continue;
+                    }
                     $resultId = $iconData['resultId'];
                     $icon = '';
                     switch ($iconData['Icon']) {

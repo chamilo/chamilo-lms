@@ -41,15 +41,18 @@
             </p>
             <div class='col-md-12 text-center'>
                 <h5><b> {{ 'ShareWithYourFriends'|trans }} </b></h5>
-                <a href="http://www.facebook.com/sharer.php?u={{ _p.web }}badge/{{ issue_info.id }}" target="_new">
+                <a href="http://www.facebook.com/sharer.php?u={{ url('badge_issued', { 'id': issue_info.id }) }}" target="_blank">
                     <em class='fa fa-facebook-square fa-3x text-info' aria-hidden='true'></em>
                 </a>
-                <a href="https://twitter.com/home?status={{ 'IHaveObtainedSkillXOnY'|trans|format(issue_info.skill_name, _s.site_name)}} - {{ _p.web }}badge/{{ issue_info.id }}" target="_new">
+                <a href="https://twitter.com/home?status={{ 'IHaveObtainedSkillXOnY'|trans|format(
+                    issue_info.skill_name, chamilo_settings_get('platform.site_name')
+                ) }} - {{ url('badge_issued', { 'id': issue_info.id }) }}"
+                   target="_new">
                     <em class='fa fa-twitter-square fa-3x text-light' aria-hidden='true'></em>
                 </a>
                 <a href="{{ 'https://www.linkedin.com/profile/add?' ~ {
                     'certId':issue_info.id,
-                    'certUrl':_p.web ~ "badge/" ~ issue_info.id,
+                    'certUrl': url('badge_issued', { 'id': issue_info.id }),
                     'isFromA2p':'true',
                     'issueMonth':issue_info.month,
                     'issueYear': issue_info.year,
@@ -76,11 +79,11 @@
                 {% endif %}
                 {% if issue_info.argumentation %}
                     {% if issue_info.argumentation %}
-                        <b>
+                        <strong>
                             <p style="font-style: italic;">
                                 {{ 'UserXIndicated'|trans|format(issue_info.argumentation_author_name) }}
                             </p>
-                        </b>
+                        </strong>
                     {% endif %}
                     <p>{{ issue_info.argumentation }}</p>
                 {% endif %}
@@ -105,7 +108,7 @@
                         {{ 'ChangeAcquiredLevel'|trans }}
                     </div>
                     <div class="panel-body">
-                        {{ acquired_level_form }}
+                        {% autoescape false %}{{ acquired_level_form }}{% endautoescape %}
                     </div>
                 </div>
             {% endif %}
@@ -119,7 +122,7 @@
                     {{ 'AverageRatingX'|trans|format(issue_info.feedback_average) }}
                 </div>
                 <div class="panel-body">
-                    {{ comment_form }}
+                    {% autoescape false %}{{ comment_form }}{% endautoescape %}
                     {% if issue_info.comments %}
                         <hr>
                         {% for comment in issue_info.comments %}

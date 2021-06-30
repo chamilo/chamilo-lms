@@ -95,10 +95,18 @@ if ($skillIssue->getAcquiredLevel()) {
 }
 
 $author = api_get_user_info($skillIssue->getArgumentationAuthorId());
+$tempDate = DateTime::createFromFormat('Y-m-d H:i:s', $skillIssueDate);
+$linkedinOrganizationId = api_get_configuration_value('linkedin_organization_id');
+if (($linkedinOrganizationId === false)) {
+    $linkedinOrganizationId = null;
+}
 
 $skillIssueInfo = [
     'id' => $skillIssue->getId(),
     'datetime' => api_format_date($skillIssueDate, DATE_TIME_FORMAT_SHORT),
+    'year' => $tempDate->format('Y'),
+    'month' => $tempDate->format('m'),
+    'linkedin_organization_id' => $linkedinOrganizationId,
     'acquired_level' => $currentSkillLevel,
     'argumentation_author_id' => $skillIssue->getArgumentationAuthorId(),
     'argumentation_author_name' => $author['complete_name'],
@@ -261,38 +269,38 @@ if ($allowExport) {
     $skills = $objSkill->get($skillId);
 //    $unbakedBadge = api_get_path(SYS_UPLOAD_PATH).'badges/'.$skills['icon'];
 //    if (!is_file($unbakedBadge)) {
-        $unbakedBadge = api_get_path(SYS_CODE_PATH).'img/icons/128/badges-default.png';
+        $unbakedBadge = api_get_path(SYS_PUBLIC_PATH).'img/icons/128/badges-default.png';
 //    }
 
-    $unbakedBadge = file_get_contents($unbakedBadge);
+//    $unbakedBadge = file_get_contents($unbakedBadge);
     $badgeInfoError = false;
-    $personalBadge = '';
-    $png = new PNGImageBaker($unbakedBadge);
-
-    if ($png->checkChunks("tEXt", "openbadges")) {
-        $bakedInfo = $png->addChunk("tEXt", "openbadges", $assertionUrl);
-        $bakedBadge = UserManager::getUserPathById($userId, "system");
-        $bakedBadge = $bakedBadge.'badges';
-        if (!file_exists($bakedBadge)) {
-            mkdir($bakedBadge, api_get_permissions_for_new_directories(), true);
-        }
-        $skillRelUserId = $skillIssueInfo['id'];
-        if (!file_exists($bakedBadge."/badge_".$skillRelUserId)) {
-            file_put_contents($bakedBadge."/badge_".$skillRelUserId.".png", $bakedInfo);
-        }
-
-        // Process to validate a baked badge
-        $badgeContent = file_get_contents($bakedBadge."/badge_".$skillRelUserId.".png");
-        $verifyBakedBadge = $png->extractBadgeInfo($badgeContent);
-        if (!is_array($verifyBakedBadge)) {
-            $badgeInfoError = true;
-        }
-
-        if (!$badgeInfoError) {
-            $personalBadge = UserManager::getUserPathById($userId, 'web');
-            $personalBadge = $personalBadge."badges/badge_".$skillRelUserId.".png";
-        }
-    }
+    $personalBadge = $unbakedBadge;
+//    $png = new PNGImageBaker($unbakedBadge);
+//
+//    if ($png->checkChunks("tEXt", "openbadges")) {
+//        $bakedInfo = $png->addChunk("tEXt", "openbadges", $assertionUrl);
+//        $bakedBadge = UserManager::getUserPathById($userId, "system");
+//        $bakedBadge = $bakedBadge.'badges';
+//        if (!file_exists($bakedBadge)) {
+//            mkdir($bakedBadge, api_get_permissions_for_new_directories(), true);
+//        }
+//        $skillRelUserId = $skillIssueInfo['id'];
+//        if (!file_exists($bakedBadge."/badge_".$skillRelUserId)) {
+//            file_put_contents($bakedBadge."/badge_".$skillRelUserId.".png", $bakedInfo);
+//        }
+//
+//        // Process to validate a baked badge
+//        $badgeContent = file_get_contents($bakedBadge."/badge_".$skillRelUserId.".png");
+//        $verifyBakedBadge = $png->extractBadgeInfo($badgeContent);
+//        if (!is_array($verifyBakedBadge)) {
+//            $badgeInfoError = true;
+//        }
+//
+//        if (!$badgeInfoError) {
+//            $personalBadge = UserManager::getUserPathById($userId, 'web');
+//            $personalBadge = $personalBadge."badges/badge_".$skillRelUserId.".png";
+//        }
+//    }
 }
 
 $template = new Template(get_lang('Issued badge information'));
@@ -307,7 +315,7 @@ if ($allowComment && $allowToEdit) {
 $template->assign('comment_form', $commentForm);
 
 $levelForm = '';
-if ($showLevels && $allowToEdit) {
+if ($showLevels && $allowToEdit && $formAcquiredLevel) {
     $levelForm = $formAcquiredLevel->returnForm();
 }
 $template->assign('acquired_level_form', $levelForm);

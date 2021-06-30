@@ -218,9 +218,9 @@ class ImportCsv
                 'courseinsert-static',
                 'unsubscribe-static',
                 'care',
-                'careers',
-                'careersdiagram',
-                'careersresults',
+                //'careers',
+                //'careersdiagram',
+                //'careersresults',
             ];
 
             foreach ($sections as $section) {
@@ -291,6 +291,33 @@ class ImportCsv
             }
             $this->logger->addInfo('teacher backup');
             $this->logger->addInfo(print_r($teacherBackup, 1));
+
+            // Careers at the end:
+            $sections = [
+                'careers',
+                'careersdiagram',
+                'careersresults',
+            ];
+
+            foreach ($sections as $section) {
+                if (isset($fileToProcess[$section]) && !empty($fileToProcess[$section])) {
+                    $this->logger->addInfo("-- Import $section --");
+                    $files = $fileToProcess[$section];
+                    foreach ($files as $fileInfo) {
+                        $method = $fileInfo['method'];
+                        $file = $fileInfo['file'];
+                        echo 'File: '.$file.PHP_EOL;
+                        echo 'Method : '.$method.PHP_EOL;
+                        echo PHP_EOL;
+
+                        $this->logger->addInfo('====================================================');
+                        $this->logger->addInfo("Reading file: $file");
+                        $this->logger->addInfo("Loading method $method ");
+                        $this->$method($file, true);
+                        $this->logger->addInfo('--Finish reading file--');
+                    }
+                }
+            }
         }
     }
 
@@ -2780,6 +2807,10 @@ class ImportCsv
                 }
             }
         }
+
+        if ($moveFile) {
+            $this->moveFile($file);
+        }
     }
 
     /**
@@ -2907,6 +2938,10 @@ class ImportCsv
                     "Saving graph for user chamilo # $studentId (".$row['StudentId'].") with career #$careerChamiloId (ext #$careerId)"
                 );
             }
+        }
+
+        if ($moveFile) {
+            $this->moveFile($file);
         }
     }
 
@@ -3079,6 +3114,10 @@ class ImportCsv
                     $extraFieldValue->saveFieldValues($params, true);
                 }
             }
+        }
+
+        if ($moveFile) {
+            $this->moveFile($file);
         }
     }
 

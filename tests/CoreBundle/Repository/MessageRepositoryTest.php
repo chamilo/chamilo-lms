@@ -23,12 +23,15 @@ class MessageRepositoryTest extends WebTestCase
         self::bootKernel();
         $repo = self::getContainer()->get(MessageRepository::class);
 
+        $testUser = $this->createUser('test');
+
         $message =
             (new Message())
                 ->setTitle('hello')
                 ->setContent('content')
                 ->setMsgStatus(Message::MESSAGE_TYPE_INBOX)
                 ->setUserSender($this->getUser('admin'))
+                ->setUserReceiver($testUser)
         ;
 
         $this->assertHasNoEntityViolations($message);

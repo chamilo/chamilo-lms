@@ -66,23 +66,12 @@ services:
 
     Chamilo\CoreBundle\Repository\AssetRepository: ~
 
+    # Event listeners
     Chamilo\CoreBundle\EventListener\AssetListener:
         arguments:
             - '@Chamilo\CoreBundle\Repository\AssetRepository'
         tags:
             - {name: kernel.event_listener, event: vich_uploader.post_remove}
-
-    Chamilo\CoreBundle\Entity\Listener\ResourceListener:
-        tags:
-            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
-
-    Chamilo\CoreBundle\Entity\Listener\ResourceNodeListener:
-        tags:
-            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
-
-    Chamilo\CoreBundle\Entity\Listener\SessionListener:
-        tags:
-            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
 
     Chamilo\CoreBundle\EventListener\CourseListener:
         calls:
@@ -109,18 +98,6 @@ services:
             - [setRequest, ['@request_stack']]
         tags:
             - {name: kernel.event_listener, event: chamilo_course.course.session, method: onSessionAccessEvent}
-
-    # When the Course entity is created/updated
-    Chamilo\CoreBundle\Entity\Listener\CourseListener:
-        arguments: ['@Chamilo\CoreBundle\ToolChain', '@chamilo.settings.manager']
-        tags:
-            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
-
-    # When the User entity is created/updated        -
-    Chamilo\CoreBundle\Entity\Listener\UserListener:
-        arguments: ['@Chamilo\CoreBundle\Repository\Node\UserRepository']
-        tags:
-            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
 
     # Setting user
     Chamilo\CoreBundle\EventListener\LegacyListener:
@@ -169,6 +146,35 @@ services:
               event: Symfony\Component\Security\Http\Event\LogoutEvent
               dispatcher: security.event_dispatcher.main
               priority: 20
+
+    # Entity listeners
+    Chamilo\CoreBundle\Entity\Listener\ResourceListener:
+        tags:
+            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
+
+    Chamilo\CoreBundle\Entity\Listener\ResourceNodeListener:
+        tags:
+            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
+
+    Chamilo\CoreBundle\Entity\Listener\SessionListener:
+        tags:
+            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
+
+    # When the Course entity is created/updated
+    Chamilo\CoreBundle\Entity\Listener\CourseListener:
+        arguments: ['@Chamilo\CoreBundle\ToolChain', '@chamilo.settings.manager']
+        tags:
+            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
+
+    # When the User entity is created/updated        -
+    Chamilo\CoreBundle\Entity\Listener\UserListener:
+        arguments: ['@Chamilo\CoreBundle\Repository\Node\UserRepository']
+        tags:
+            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
+
+    Chamilo\CoreBundle\Entity\Listener\MessageListener:
+        tags:
+            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
 
     Chamilo\CoreBundle\Twig\SettingsHelper:
         arguments:

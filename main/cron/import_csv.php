@@ -266,7 +266,7 @@ class ImportCsv
                 'unsubsessionsextid-static',
                 'subsessionsextid-static',
                 'calendar-static',
-                'careersresultsremove-static'
+                'careersresultsremove-static',
             ];
 
             foreach ($sections as $section) {

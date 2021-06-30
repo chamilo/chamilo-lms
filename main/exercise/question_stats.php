@@ -152,7 +152,6 @@ foreach ($headers as $header) {
     $column++;
 }
 
-
 Display::display_header($nameTools, get_lang('Exercise'));
 echo $formToString;
 echo $table->return_table();

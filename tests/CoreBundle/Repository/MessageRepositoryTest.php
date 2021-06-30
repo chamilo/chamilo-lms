@@ -29,7 +29,7 @@ class MessageRepositoryTest extends WebTestCase
             (new Message())
                 ->setTitle('hello')
                 ->setContent('content')
-                ->setMsgStatus(Message::MESSAGE_TYPE_INBOX)
+                ->setMsgType(Message::MESSAGE_TYPE_INBOX)
                 ->setUserSender($this->getUser('admin'))
                 ->setUserReceiver($testUser)
         ;
@@ -39,11 +39,11 @@ class MessageRepositoryTest extends WebTestCase
         $repo->update($message);
 
         // 1. Message in the inbox
-        $count = $repo->count(['msgStatus' => Message::MESSAGE_TYPE_INBOX]);
+        $count = $repo->count(['msgType' => Message::MESSAGE_TYPE_INBOX]);
         $this->assertSame(1, $count);
 
-        // 2. Message in the outbox
-        $count = $repo->count(['msgStatus' => Message::MESSAGE_TYPE_OUTBOX]);
+        // 2. Message in the outbox (this is created in the MessageListener by default).
+        $count = $repo->count(['msgType' => Message::MESSAGE_TYPE_OUTBOX]);
         $this->assertSame(1, $count);
     }
 }

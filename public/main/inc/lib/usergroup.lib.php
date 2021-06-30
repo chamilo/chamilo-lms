@@ -2624,7 +2624,7 @@ class UserGroupModel extends Model
         $group_id = (int) $group_id;
 
         $sql = "UPDATE $table_message SET
-                    msg_status = 3
+                    msg_type = 3
                 WHERE
                     group_id = $group_id AND
                     (id = '$topic_id' OR parent_id = $topic_id)

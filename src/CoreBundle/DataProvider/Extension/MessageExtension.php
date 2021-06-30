@@ -63,8 +63,8 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
         $alias = $queryBuilder->getRootAliases()[0];
 
         $queryBuilder->andWhere("
-            ($alias.userSender = :current AND $alias.msgStatus = :outbox) OR 
-            ($alias.userReceiver = :current AND $alias.msgStatus = :inbox)
+            ($alias.userSender = :current AND $alias.msgType = :outbox) OR 
+            ($alias.userReceiver = :current AND $alias.msgType = :inbox)
         ");
         $queryBuilder->setParameters([
             'current' => $user,

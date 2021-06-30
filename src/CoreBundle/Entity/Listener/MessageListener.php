@@ -26,10 +26,12 @@ class MessageListener
     {
         if ($message) {
             // Creates an outbox version, if message is sent in the inbox.
-            if (Message::MESSAGE_TYPE_INBOX === $message->getMsgStatus()) {
+            if (Message::MESSAGE_TYPE_INBOX === $message->getMsgType()) {
                 $messageSent = clone $message;
-                $messageSent->setMsgStatus(Message::MESSAGE_TYPE_OUTBOX);
-
+                $messageSent
+                    ->setMsgType(Message::MESSAGE_TYPE_OUTBOX)
+                    ->setRead(true)
+                ;
                 $args->getEntityManager()->persist($messageSent);
                 $args->getEntityManager()->flush();
             }

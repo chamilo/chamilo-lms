@@ -293,13 +293,13 @@ export default {
     const user = store.getters["security/getUser"]
 
     filtersSent.value = {
-      msgStatus: 2,
+      msgType: 2,
       userSender: user.id
     }
 
     // inbox
     filters.value = {
-      msgStatus: 1,
+      msgType: 1,
       userReceiver: user.id
     };
 

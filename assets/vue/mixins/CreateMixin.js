@@ -43,7 +43,7 @@ export default {
           // Send to inbox
           createForm.v$.item.$model.userSender = '/api/users/' + this.currentUser.id;
           createForm.v$.item.$model.userReceiver = user['@id'];
-          createForm.v$.item.$model.msgStatus = 1;
+          createForm.v$.item.$model.msgType = 1;
           this.create(createForm.v$.item.$model);
         });
       }

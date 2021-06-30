@@ -26,10 +26,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     @ORM\Index(name="idx_message_user_sender", columns={"user_sender_id"}),
  *     @ORM\Index(name="idx_message_user_receiver", columns={"user_receiver_id"}),
  *     @ORM\Index(name="idx_message_user_sender_user_receiver", columns={"user_sender_id", "user_receiver_id"}),
- *     @ORM\Index(name="idx_message_user_receiver_status", columns={"user_receiver_id", "msg_status"}),
- *     @ORM\Index(name="idx_message_receiver_status_send_date", columns={"user_receiver_id", "msg_status", "send_date"}),
+ *     @ORM\Index(name="idx_message_user_receiver_type", columns={"user_receiver_id", "msg_type"}),
+ *     @ORM\Index(name="idx_message_receiver_type_send_date", columns={"user_receiver_id", "msg_type", "send_date"}),
  *     @ORM\Index(name="idx_message_group", columns={"group_id"}),
- *     @ORM\Index(name="idx_message_status", columns={"msg_status"})
+ *     @ORM\Index(name="idx_message_type", columns={"msg_type"})
  * })
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\MessageRepository")
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\MessageListener"})
@@ -85,7 +85,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ApiFilter(OrderFilter::class, properties: ['title', 'sendDate'])]
 #[ApiFilter(SearchFilter::class, properties: [
-    'msgStatus' => 'exact',
+    'read' => 'exact',
+    'msgType' => 'exact',
     'userSender' => 'exact',
     'userReceiver' => 'exact',
 ])]
@@ -119,7 +120,7 @@ class Message
     protected User $userReceiver;
 
     /**
-     * @ORM\Column(name="msg_status", type="smallint", nullable=false)
+     * @ORM\Column(name="msg_type", type="smallint", nullable=false)
      */
     #[Assert\NotBlank]
     #[Assert\Choice([
@@ -128,7 +129,14 @@ class Message
         self::MESSAGE_TYPE_PROMOTED,
     ])]
     #[Groups(['message:read', 'message:write'])]
-    protected int $msgStatus;
+    protected int $msgType;
+
+    /**
+     * @ORM\Column(name="msg_read", type="boolean", nullable=false)
+     */
+    #[Assert\NotNull]
+    #[Groups(['message:read', 'message:write'])]
+    protected bool $read;
 
     /**
      * @ORM\Column(name="send_date", type="datetime", nullable=false)
@@ -202,6 +210,7 @@ class Message
         $this->children = new ArrayCollection();
         $this->likes = new ArrayCollection();
         $this->votes = 0;
+        $this->read = false;
     }
 
     public function setUserSender(User $userSender): self
@@ -233,16 +242,16 @@ class Message
         return $this->userReceiver;
     }
 
-    public function setMsgStatus(int $msgStatus): self
+    public function setMsgType(int $msgType): self
     {
-        $this->msgStatus = $msgStatus;
+        $this->msgType = $msgType;
 
         return $this;
     }
 
-    public function getMsgStatus(): int
+    public function getMsgType(): int
     {
-        return $this->msgStatus;
+        return $this->msgType;
     }
 
     public function setSendDate(DateTime $sendDate): self
@@ -392,6 +401,18 @@ class Message
     public function setGroup(?CGroup $group): self
     {
         $this->group = $group;
+
+        return $this;
+    }
+
+    public function isRead(): bool
+    {
+        return $this->read;
+    }
+
+    public function setRead(bool $read): self
+    {
+        $this->read = $read;
 
         return $this;
     }

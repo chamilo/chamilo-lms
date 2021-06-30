@@ -940,7 +940,7 @@ class Career extends Model
             $content = '<div class="pull-left">'.$vertex->getAttribute('Notes').'</div>';
             $content .= '<div class="pull-right">['.$id.']</div>';
 
-            if (!empty($userResult) && isset($userResult[$id])) {
+            if (!empty($userResult) && isset($userResult[$id]) && !empty($userResult[$id])) {
                 // Order by SortDate
                 $sortedByDate = $userResult[$id];
                 foreach ($sortedByDate as $resultId => &$result) {

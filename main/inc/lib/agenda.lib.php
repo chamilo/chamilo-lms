@@ -3114,7 +3114,16 @@ class Agenda
         $calendar = Sabre\VObject\Reader::read($data);
         $currentTimeZone = api_get_timezone();
         if (!empty($calendar->VEVENT)) {
+            /** @var Sabre\VObject\Component\VEvent $event */
             foreach ($calendar->VEVENT as $event) {
+                $tempDate = $event->DTSTART->getValue();
+                if ('Z' == substr($tempDate, -1) && 'UTC' != date('e', strtotime($tempDate))) {
+                    $event->DTSTART->setValue(gmdate('Ymd\THis\Z', strtotime($tempDate)));
+                }
+                $tempDate = $event->DTEND->getValue();
+                if ('Z' == substr($tempDate, -1) && 'UTC' != date('e', strtotime($tempDate))) {
+                    $event->DTEND->setValue(gmdate('Ymd\THis\Z', strtotime($tempDate)));
+                }
                 $start = $event->DTSTART->getDateTime();
                 $end = $event->DTEND->getDateTime();
                 //Sabre\VObject\DateTimeParser::parseDateTime(string $dt, \Sabre\VObject\DateTimeZone $tz)

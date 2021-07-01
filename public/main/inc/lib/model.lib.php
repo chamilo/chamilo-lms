@@ -11,7 +11,7 @@ class Model
 {
     public $table;
     public $columns;
-    public $required;
+    public array $required;
     public $is_course_model = false;
 
     public function __construct()

@@ -780,6 +780,8 @@ class SkillModel extends Model
                     $courseInfo = api_get_course_info_by_id($courseId);
                     $courseTempList[$courseId] = $courseInfo;
                 }
+            } else {
+                $courseInfo = [];
             }
             $tableRow = [
                 'skill_badge' => $resultData['img_small'],
@@ -807,9 +809,8 @@ class SkillModel extends Model
         }
 
         if ($addTitle) {
-            $tableResult .= '<h3 class="section-title">'.get_lang('Achieved skills').'</h3>
-                    <div class="skills-badges">
-                   ';
+            $tableResult .= Display::page_subheader(get_lang('Achieved skills'));
+            $tableResult .= '<div class="skills-badges">';
         }
 
         if (!empty($skillParents)) {
@@ -951,8 +952,8 @@ class SkillModel extends Model
                     // Default root node
                     $skills[1] = [
                         'id' => '1',
-                        'name' => get_lang('root'),
-                        'parent_id' => '0',
+                        'name' => get_lang('Root'),
+                        'parent_id' => 0,
                         'status' => 1,
                     ];
                     $skillInfo = $this->getSkillInfo($skill_id);
@@ -975,7 +976,7 @@ class SkillModel extends Model
         if (!empty($skills)) {
             foreach ($skills as &$skill) {
                 if (0 == $skill['parent_id']) {
-                    $skill['parent_id'] = 'root';
+                    $skill['parent_id'] = 1;
                 }
 
                 // because except main keys (id, name, children) others keys
@@ -1044,9 +1045,9 @@ class SkillModel extends Model
             }
 
             if (empty($original_skill)) {
-                $refs['root']['children'][0] = $skills[1];
+                $refs[1]['children'][0] = $skills[1];
                 $skills[$skill_id]['data']['family_id'] = 1;
-                $refs['root']['children'][0]['children'][0] = $skills[$skill_id];
+                $refs[1]['children'][0]['children'][0] = $skills[$skill_id];
                 $flat_array[$skill_id] = $skills[$skill_id];
             } else {
                 // Moving node to the children index of their parents
@@ -1061,8 +1062,8 @@ class SkillModel extends Model
 
             $skills_tree = [
                 'name' => get_lang('Absolute skill'),
-                'id' => 'root',
-                'children' => $refs['root']['children'],
+                'id' => 1,
+                'children' => $refs[1]['children'],
                 'data' => [],
             ];
         }
@@ -1111,7 +1112,7 @@ class SkillModel extends Model
             }
         }
 
-        return json_encode($simple_tree[0]['children']);
+        return json_encode($simple_tree);
     }
 
     /**
@@ -1365,7 +1366,7 @@ class SkillModel extends Model
             'first'
         );
 
-        if (false === $result) {
+        if (empty($result)) {
             return false;
         }
 
@@ -2236,6 +2237,8 @@ class SkillModel extends Model
      * @param int   $courseId
      * @param int   $sessionId
      *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
      * @return bool
      */
     public static function saveSkillsToCourse($skills, $courseId, $sessionId)
@@ -2330,7 +2333,10 @@ class SkillModel extends Model
      * @param string $argumentation
      * @param int    $authorId
      *
-     * @return \Chamilo\CoreBundle\Entity\SkillRelUser|bool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
+     * @return SkillRelUser|false
      */
     public function addSkillToUserBadge($user, $skill, $levelId, $argumentation, $authorId)
     {

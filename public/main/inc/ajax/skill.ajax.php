@@ -104,13 +104,13 @@ switch ($action) {
         }
         break;
     case 'get_skills_by_profile':
-        $skillRelProfile = new SkillRelProfile();
+        $skillRelProfile = new SkillRelProfileModel();
         $profile_id = isset($_REQUEST['profile_id']) ? $_REQUEST['profile_id'] : null;
         $skills = $skillRelProfile->getSkillsByProfile($profile_id);
         echo json_encode($skills);
         break;
     case 'get_saved_profiles':
-        $skillProfile = new SkillProfile();
+        $skillProfile = new SkillProfileModel();
         $profiles = $skillProfile->get_all();
         Display::display_no_header();
         Display::$global_template->assign('profiles', $profiles);
@@ -304,14 +304,14 @@ switch ($action) {
         }
         break;
     case 'get_profile':
-        $skillRelProfile = new SkillRelProfile();
+        $skillRelProfile = new SkillRelProfileModel();
         $profileId = isset($_REQUEST['profile_id']) ? intval($_REQUEST['profile_id']) : null;
         $profile = $skillRelProfile->getProfileInfo($profileId);
         echo json_encode($profile);
         break;
     case 'save_profile':
         if (api_is_platform_admin() || api_is_drh()) {
-            $skill_profile = new SkillProfile();
+            $skill_profile = new SkillProfileModel();
             $params = $_REQUEST;
             $params['skills'] = isset($params['skill_id']) ? $params['skill_id'] : null;
             $profileId = isset($_REQUEST['profile']) ? intval($_REQUEST['profile']) : null;
@@ -335,7 +335,7 @@ switch ($action) {
     case 'delete_profile':
         if (api_is_platform_admin() || api_is_drh()) {
             $profileId = $_REQUEST['profile'];
-            $skillProfile = new SkillProfile();
+            $skillProfile = new SkillProfileModel();
             $isDeleted = $skillProfile->delete($profileId);
 
             echo json_encode([

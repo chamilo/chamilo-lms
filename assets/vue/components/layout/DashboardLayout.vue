@@ -41,7 +41,10 @@
             <q-tooltip>Account</q-tooltip>
           </q-btn>
 
-          <q-btn v-if="isAuthenticated" round dense flat color="grey-8" icon="inbox" :to="'/main/messages/inbox.php'" >
+          <q-btn v-if="isAuthenticated" round dense flat color="grey-8"
+                 icon="inbox"
+                 :to="'/resources/messages'"
+          >
             <q-badge color="red" text-color="white" floating>
               2
             </q-badge>

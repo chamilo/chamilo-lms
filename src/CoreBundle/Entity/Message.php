@@ -6,12 +6,18 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CourseBundle\Entity\CGroup;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -21,13 +27,71 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     @ORM\Index(name="idx_message_user_sender", columns={"user_sender_id"}),
  *     @ORM\Index(name="idx_message_user_receiver", columns={"user_receiver_id"}),
  *     @ORM\Index(name="idx_message_user_sender_user_receiver", columns={"user_sender_id", "user_receiver_id"}),
- *     @ORM\Index(name="idx_message_user_receiver_status", columns={"user_receiver_id", "msg_status"}),
- *     @ORM\Index(name="idx_message_receiver_status_send_date", columns={"user_receiver_id", "msg_status", "send_date"}),
+ *     @ORM\Index(name="idx_message_user_receiver_type", columns={"user_receiver_id", "msg_type"}),
+ *     @ORM\Index(name="idx_message_receiver_type_send_date", columns={"user_receiver_id", "msg_type", "send_date"}),
  *     @ORM\Index(name="idx_message_group", columns={"group_id"}),
- *     @ORM\Index(name="idx_message_status", columns={"msg_status"})
+ *     @ORM\Index(name="idx_message_type", columns={"msg_type"})
  * })
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\MessageRepository")
+ * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\MessageListener"})
  */
+#[ApiResource(
+    collectionOperations: [
+        'get' => [],
+        'post' => [
+            'security' => "is_granted('ROLE_USER')",
+            //            'deserialize' => false,
+            //            'controller' => Create::class,
+            //            'openapi_context' => [
+            //                'requestBody' => [
+            //                    'content' => [
+            //                        'multipart/form-data' => [
+            //                            'schema' => [
+            //                                'type' => 'object',
+            //                                'properties' => [
+            //                                    'title' => [
+            //                                        'type' => 'string',
+            //                                    ],
+            //                                    'content' => [
+            //                                        'type' => 'string',
+            //                                    ],
+            //                                ],
+            //                            ],
+            //                        ],
+            //                    ],
+            //                ],
+            //            ],
+        ],
+    ],
+    itemOperations: [
+        'get' => [
+            'security' => "is_granted('VIEW', object)",
+        ],
+        'put' => [
+            'security' => "is_granted('EDIT', object)",
+        ],
+        'delete' => [
+            'security' => "is_granted('DELETE', object)",
+        ],
+    ],
+    attributes: [
+        'security' => "is_granted('ROLE_USER')",
+    ],
+    denormalizationContext: [
+        'groups' => ['message:write'],
+    ],
+    normalizationContext: [
+        'groups' => ['message:read'],
+    ],
+)]
+#[ApiFilter(OrderFilter::class, properties: ['title', 'sendDate'])]
+#[ApiFilter(SearchFilter::class, properties: [
+    'read' => 'exact',
+    'msgType' => 'exact',
+    'userSender' => 'exact',
+    'userReceiver' => 'exact',
+    'tags' => 'exact',
+])]
 class Message
 {
     public const MESSAGE_TYPE_INBOX = 1;
@@ -39,41 +103,67 @@ class Message
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
+    #[Groups(['message:read'])]
     protected int $id;
 
-    #[Assert\NotBlank]
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sentMessages")
      * @ORM\JoinColumn(name="user_sender_id", referencedColumnName="id", nullable=false)
      */
+    #[Assert\NotBlank]
+    #[Groups(['message:read', 'message:write'])]
     protected User $userSender;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="receivedMessages")
      * @ORM\JoinColumn(name="user_receiver_id", referencedColumnName="id", nullable=true)
      */
+    #[Groups(['message:read', 'message:write'])]
     protected User $userReceiver;
 
     /**
-     * @ORM\Column(name="msg_status", type="smallint", nullable=false)
+     * @ORM\Column(name="msg_type", type="smallint", nullable=false)
      */
-    protected int $msgStatus;
+    #[Assert\NotBlank]
+    #[Assert\Choice([
+        self::MESSAGE_TYPE_INBOX,
+        self::MESSAGE_TYPE_OUTBOX,
+        self::MESSAGE_TYPE_PROMOTED,
+    ])]
+    /*#[ApiProperty(attributes: [
+        'openapi_context' => [
+            'type' => 'int',
+            'enum' => [self::MESSAGE_TYPE_INBOX, self::MESSAGE_TYPE_OUTBOX],
+        ],
+    ])]*/
+    #[Groups(['message:read', 'message:write'])]
+    protected int $msgType;
+
+    /**
+     * @ORM\Column(name="msg_read", type="boolean", nullable=false)
+     */
+    #[Assert\NotNull]
+    #[Groups(['message:read', 'message:write'])]
+    protected bool $read;
 
     /**
      * @ORM\Column(name="send_date", type="datetime", nullable=false)
      */
+    #[Groups(['message:read'])]
     protected DateTime $sendDate;
 
-    #[Assert\NotBlank]
     /**
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
+    #[Groups(['message:read', 'message:write'])]
     protected string $title;
 
-    #[Assert\NotBlank]
     /**
      * @ORM\Column(name="content", type="text", nullable=false)
      */
+    #[Assert\NotBlank]
+    #[Groups(['message:read', 'message:write'])]
     protected string $content;
 
     /**
@@ -119,6 +209,15 @@ class Message
      */
     protected Collection $likes;
 
+    /**
+     * @var Collection|MessageTag[]
+     *
+     * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\MessageTag", inversedBy="messages", cascade={"persist"})
+     * @ORM\JoinTable(name="message_rel_tags")
+     */
+    #[Groups(['message:read', 'message:write'])]
+    protected Collection $tags;
+
     public function __construct()
     {
         $this->sendDate = new DateTime('now');
@@ -126,8 +225,36 @@ class Message
         $this->content = '';
         $this->attachments = new ArrayCollection();
         $this->children = new ArrayCollection();
+        $this->tags = new ArrayCollection();
         $this->likes = new ArrayCollection();
         $this->votes = 0;
+        $this->read = false;
+    }
+
+    /**
+     * @return Collection|MessageTag[]
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    public function addTag(MessageTag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(MessageTag $tag): self
+    {
+        if ($this->tags->contains($tag)) {
+            $this->tags->removeElement($tag);
+        }
+
+        return $this;
     }
 
     public function setUserSender(User $userSender): self
@@ -159,16 +286,16 @@ class Message
         return $this->userReceiver;
     }
 
-    public function setMsgStatus(int $msgStatus): self
+    public function setMsgType(int $msgType): self
     {
-        $this->msgStatus = $msgStatus;
+        $this->msgType = $msgType;
 
         return $this;
     }
 
-    public function getMsgStatus(): int
+    public function getMsgType(): int
     {
-        return $this->msgStatus;
+        return $this->msgType;
     }
 
     public function setSendDate(DateTime $sendDate): self
@@ -318,6 +445,18 @@ class Message
     public function setGroup(?CGroup $group): self
     {
         $this->group = $group;
+
+        return $this;
+    }
+
+    public function isRead(): bool
+    {
+        return $this->read;
+    }
+
+    public function setRead(bool $read): self
+    {
+        $this->read = $read;
 
         return $this;
     }

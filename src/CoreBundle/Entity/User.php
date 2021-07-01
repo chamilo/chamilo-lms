@@ -99,8 +99,17 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * Resource illustration URL - Property set by ResourceNormalizer.php.
      *
      * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"user:read", "resource_node:read", "document:read", "media_object_read", "course:read", "course_rel_user:read", "user_json:read"})
      */
+    #[Groups([
+        'user:read',
+        'resource_node:read',
+        'document:read',
+        'media_object_read',
+        'course:read',
+        'course_rel_user:read',
+        'user_json:read',
+        'message:read',
+    ])]
     public ?string $illustrationUrl = null;
 
     /**
@@ -112,7 +121,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected ?int $id = null;
 
     /**
-     * @Groups({"user:read", "user:write", "course:read", "resource_node:read", "user_json:read"})
+     * @Groups({"user:read", "user:write", "course:read", "resource_node:read", "user_json:read", "message:read"})
      * @Assert\NotBlank()
      * @ORM\Column(name="username", type="string", length=100, unique=true)
      */
@@ -673,6 +682,17 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * @ORM\Column(name="hr_dept_id", type="smallint", nullable=true, unique=false)
      */
     protected ?int $hrDeptId = null;
+
+    /**
+     * @var Collection<int, MessageTag>|MessageTag[]
+     */
+    #[ORM\OneToMany(
+        targetEntity: MessageTag::class,
+        mappedBy: 'user',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
+    protected Collection $messageTags;
 
     /**
      * @var Collection<int, Message>|Message[]
@@ -1687,29 +1707,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function getReceivedMessages(): Collection
     {
         return $this->receivedMessages;
-    }
-
-    /**
-     * @param int $lastId Optional. The ID of the last received message
-     */
-    public function getUnreadReceivedMessages(int $lastId = 0): Collection
-    {
-        $criteria = Criteria::create();
-        $criteria->where(
-            Criteria::expr()->eq('msgStatus', MESSAGE_STATUS_UNREAD)
-        );
-
-        if ($lastId > 0) {
-            $criteria->andWhere(
-                Criteria::expr()->gt('id', $lastId)
-            );
-        }
-
-        $criteria->orderBy([
-            'sendDate' => Criteria::DESC,
-        ]);
-
-        return $this->receivedMessages->matching($criteria);
     }
 
     public function getCourseGroupsAsMember(): Collection

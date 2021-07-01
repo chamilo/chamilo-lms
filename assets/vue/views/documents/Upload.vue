@@ -40,7 +40,7 @@ import {useRoute} from "vue-router";
 const ImageEditor = require('@uppy/image-editor');
 
 export default {
-  name: 'DocumentsCreate',
+  name: 'DocumentsUpload',
   servicePrefix,
   mixins: [UploadMixin],
   components: {
@@ -149,7 +149,7 @@ export default {
 
       return 'error';
     },
-    ...mapActions('documents', ['uploadMany', 'create', 'createFile'])
+    ...mapActions('documents', ['uploadMany', 'createFile'])
   }
 };
 </script>

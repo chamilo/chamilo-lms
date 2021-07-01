@@ -44,17 +44,16 @@ export default {
   },
   setup() {
     const parentResourceNodeId = ref(null);
-    const resourceLinkList = ref(null);
     const route = useRoute();
 
     const store = useStore();
     const user = computed(() => store.getters['security/getUser']);
 
-    parentResourceNodeId.value = Number(route.params.node);
-    resourceLinkList.value = JSON.stringify([{
-      uid: route.query.gid,
-      visibility: 2,
-    }]);
+    parentResourceNodeId.value = user.value.resourceNode['id']
+
+    if (route.params.node) {
+      parentResourceNodeId.value = Number(route.params.node);
+    }
 
     let uppy = ref();
     uppy.value = new Uppy()
@@ -89,7 +88,7 @@ export default {
 
     uppy.value.setMeta({
       filetype: 'file',
-      parentResourceNodeId: user.value.resourceNode['id'],
+      parentResourceNodeId: parentResourceNodeId.value,
     });
 
     return {
@@ -101,7 +100,6 @@ export default {
     return {
       files : [],
       parentResourceNodeId: 0,
-      resourceLinkList: '',
     };
   },
   computed: {
@@ -113,43 +111,14 @@ export default {
     }),
   },
   created() {
-    console.log('created');
     let nodeId = this.$route.params.node;
     if (isEmpty(nodeId)) {
       nodeId = this.currentUser.resourceNode['id']
     }
-
-    console.log(nodeId)
     this.parentResourceNodeId = Number(nodeId);
-    this.resourceLinkList = JSON.stringify([{
-      visibility: 2,
-    }]);
-    this.files = [];
   },
   methods: {
-    async processFiles(files) {
-      return new Promise((resolve) => {
-        for (let i = 0; i < files.length; i++) {
-          files[i].title = files[i].name;
-          files[i].parentResourceNodeId = this.parentResourceNodeId;
-          files[i].resourceLinkList = this.resourceLinkList;
-          files[i].uploadFile = files[i];
-          this.createFile(files[i]);
-        }
-
-        resolve(files);
-      }).then(() => {
-        this.files = [];
-      });
-    },
-    validate(file) {
-      if (file) {
-        return '';
-      }
-
-      return 'error';
-    },
-    ...mapActions('personalfile', ['uploadMany', 'create', 'createFile'])
+    ...mapActions('personalfile', ['uploadMany', 'createFile'])
   }
 };
 </script>

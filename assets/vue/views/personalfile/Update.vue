@@ -2,7 +2,7 @@
   <div v-if="!isLoading && item">
     <!--      :handle-delete="del"-->
     <Toolbar
-        :handle-submit="onSendForm"
+        :handle-submit="onSendFormData"
         :handle-reset="resetForm"
     />
     <DocumentsForm

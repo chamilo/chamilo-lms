@@ -21,6 +21,15 @@ final class Version20200821224242 extends AbstractMigrationChamilo
         $table = $schema->getTable('message');
         $this->addSql('ALTER TABLE message CHANGE parent_id parent_id BIGINT DEFAULT NULL');
 
+        if (!$table->hasColumn('msg_read')) {
+            $this->addSql('ALTER TABLE message ADD msg_read TINYINT(1) NOT NULL');
+
+            $this->addSql('UPDATE message SET msg_read = 1 WHERE msg_status = 1');
+            $this->addSql('UPDATE message SET msg_read = 0 WHERE msg_status = 0');
+            $this->addSql('UPDATE message SET msg_status = 1 WHERE msg_status = 0');
+            $this->addSql('ALTER TABLE message CHANGE msg_status msg_type SMALLINT NOT NULL');
+        }
+
         if ($table->hasIndex('idx_message_parent')) {
             $this->addSql('DROP INDEX idx_message_parent ON message');
         }
@@ -58,26 +67,40 @@ final class Version20200821224242 extends AbstractMigrationChamilo
                 'ALTER TABLE message ADD CONSTRAINT FK_B6BD307FF6C43E79 FOREIGN KEY (user_sender_id) REFERENCES user (id)'
             );
         }
-        if (false === $table->hasForeignKey('FK_B6BD307F64482423')) {
+
+        if (!$table->hasForeignKey('FK_B6BD307F64482423')) {
             $this->addSql(
                 'ALTER TABLE message ADD CONSTRAINT FK_B6BD307F64482423 FOREIGN KEY (user_receiver_id) REFERENCES user (id)'
             );
         }
-        if (!$table->hasIndex('idx_message_user_receiver_status')) {
-            $this->addSql('CREATE INDEX idx_message_user_receiver_status ON message (user_receiver_id, msg_status)');
+
+        if ($table->hasIndex('idx_message_user_receiver_status')) {
+            $this->addSql('DROP INDEX idx_message_user_receiver_status ON message');
         }
 
-        if (!$table->hasIndex('idx_message_status')) {
-            $this->addSql('CREATE INDEX idx_message_status ON message (msg_status)');
+        if ($table->hasIndex('idx_message_receiver_status_send_date')) {
+            $this->addSql('DROP INDEX idx_message_receiver_status_send_date ON message');
         }
 
-        if (!$table->hasIndex('idx_message_receiver_status_send_date')) {
+        if ($table->hasIndex('idx_message_status')) {
+            $this->addSql('DROP INDEX idx_message_status ON message');
+        }
+
+        if (!$table->hasIndex('idx_message_user_receiver_type')) {
+            $this->addSql('CREATE INDEX idx_message_user_receiver_type ON message (user_receiver_id, msg_type)');
+        }
+
+        if (!$table->hasIndex('idx_message_type')) {
+            $this->addSql('CREATE INDEX idx_message_type ON message (msg_type)');
+        }
+
+        if (!$table->hasIndex('idx_message_receiver_type_send_date')) {
             $this->addSql(
-                'CREATE INDEX idx_message_receiver_status_send_date ON message (user_receiver_id, msg_status, send_date)'
+                'CREATE INDEX idx_message_receiver_type_send_date ON message (user_receiver_id, msg_type, send_date)'
             );
         }
 
-        $this->addSql('ALTER TABLE message CHANGE msg_status msg_status SMALLINT NOT NULL;');
+        //$this->addSql('ALTER TABLE message CHANGE msg_status msg_status SMALLINT NOT NULL;');
 
         $table = $schema->hasTable('message_feedback');
         if (false === $table) {
@@ -104,18 +127,28 @@ final class Version20200821224242 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE message_attachment ADD CONSTRAINT FK_B68FF524537A1329 FOREIGN KEY (message_id) REFERENCES message (id)');
         }
 
-        if (false === $table->hasColumn('resource_node_id')) {
+        if (!$table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE message_attachment ADD resource_node_id BIGINT DEFAULT NULL;');
             $this->addSql('CREATE UNIQUE INDEX UNIQ_B68FF5241BAD783F ON message_attachment (resource_node_id);');
         }
 
-        if (false === $table->hasForeignKey('FK_B68FF5241BAD783F')) {
+        if (!$table->hasForeignKey('FK_B68FF5241BAD783F')) {
             $this->addSql(' ALTER TABLE message_attachment ADD CONSTRAINT FK_B68FF5241BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;');
         }
 
-        if (false === $schema->hasTable('c_chat_conversation')) {
+        if (!$schema->hasTable('c_chat_conversation')) {
             $this->addSql('CREATE TABLE c_chat_conversation (id INT AUTO_INCREMENT NOT NULL, resource_node_id BIGINT DEFAULT NULL, name VARCHAR(255) DEFAULT NULL, UNIQUE INDEX UNIQ_CD09E33F1BAD783F (resource_node_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
             $this->addSql('ALTER TABLE c_chat_conversation ADD CONSTRAINT FK_CD09E33F1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
+        }
+
+        if (!$schema->hasTable('message_tag')) {
+            $this->addSql("CREATE TABLE message_tag (id BIGINT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, tag VARCHAR(255) NOT NULL, color VARCHAR(255) NOT NULL, position INT NOT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_2ABC3D6FA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;");
+            $this->addSql('CREATE TABLE message_rel_tags (message_id BIGINT NOT NULL, message_tag_id BIGINT NOT NULL, INDEX IDX_D07232D6537A1329 (message_id), INDEX IDX_D07232D68DF5FE1E (message_tag_id), PRIMARY KEY(message_id, message_tag_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
+            $this->addSql('ALTER TABLE message_tag ADD CONSTRAINT FK_2ABC3D6FA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
+            $this->addSql('ALTER TABLE message_rel_tags ADD CONSTRAINT FK_D07232D6537A1329 FOREIGN KEY (message_id) REFERENCES message (id) ON DELETE CASCADE');
+            $this->addSql('ALTER TABLE message_rel_tags ADD CONSTRAINT FK_D07232D68DF5FE1E FOREIGN KEY (message_tag_id) REFERENCES message_tag (id) ON DELETE CASCADE');
+
+            $this->addSql('CREATE UNIQUE INDEX user_tag ON message_tag (user_id, tag)');
         }
     }
 

@@ -74,18 +74,19 @@ export default function makeCrudModule({
 
         return response;
       },
-      createFile: ({ commit }, values) => {
+      createWithFormData: ({ commit }, values) => {
+        console.log('createWithFormData');
         commit(ACTIONS.SET_ERROR, '');
         commit(ACTIONS.TOGGLE_LOADING);
 
-        service
-            .createFile(values)
-            //.then(response => response.json())
-            .then(response => {
+        return service
+            .createWithFormData(values)
+            .then(response => response.json())
+            /*.then(response => {
               if (200 === response.status) {
                 return response.json();
               }
-            })
+            })*/
             .then(data => {
               commit(ACTIONS.TOGGLE_LOADING);
               commit(ACTIONS.ADD, data);
@@ -94,10 +95,11 @@ export default function makeCrudModule({
             .catch(e => handleError(commit, e));
       },
       create: ({ commit }, values) => {
+        console.log('create');
         commit(ACTIONS.SET_ERROR, '');
         commit(ACTIONS.TOGGLE_LOADING);
 
-        service
+        return service
           .create(values)
           .then(response => response.json())
           .then(data => {
@@ -112,7 +114,7 @@ export default function makeCrudModule({
         commit(ACTIONS.SET_ERROR, '');
         commit(ACTIONS.TOGGLE_LOADING);
 
-        service
+        return service
           .del(item)
           .then(() => {
             commit(ACTIONS.TOGGLE_LOADING);
@@ -143,6 +145,7 @@ export default function makeCrudModule({
         console.log('crud.js fetchAll');
 
         commit(ACTIONS.TOGGLE_LOADING);
+
         return service
           .findAll({params})
           .then(response => response.json())
@@ -168,7 +171,7 @@ export default function makeCrudModule({
         commit(ACTIONS.TOGGLE_LOADING);
         if (!service) throw new Error('No service specified!');
 
-        service
+        return service
           .findAll({ params })
           .then(response => response.json())
           .then(retrieved => {
@@ -265,6 +268,9 @@ export default function makeCrudModule({
       resetShow: ({ commit }) => {
         commit(ACTIONS.RESET_SHOW);
       },
+      resetList: ({ commit }) => {
+        commit(ACTIONS.RESET_LIST);
+      },
       resetUpdate: ({ commit }) => {
         commit(ACTIONS.RESET_UPDATE);
       },
@@ -272,7 +278,7 @@ export default function makeCrudModule({
         console.log('crud update');
         commit(ACTIONS.TOGGLE_LOADING);
 
-        service
+        return service
           .update(item)
           .then(response => response.json())
           .then(data => {
@@ -280,6 +286,19 @@ export default function makeCrudModule({
             commit(ACTIONS.SET_UPDATED, data);
           })
           .catch(e => handleError(commit, e));
+      },
+      updateWithFormData: ({ commit }, item) => {
+        console.log('crud updateWithFormData');
+        commit(ACTIONS.TOGGLE_LOADING);
+
+        return service
+            .updateWithFormData(item)
+            .then(response => response.json())
+            .then(data => {
+              commit(ACTIONS.TOGGLE_LOADING);
+              commit(ACTIONS.SET_UPDATED, data);
+            })
+            .catch(e => handleError(commit, e));
       }
     },
     getters: {
@@ -288,7 +307,6 @@ export default function makeCrudModule({
       },
       getField,
       list: (state, getters) => {
-
         return state.allIds.map(id => getters.find(id));
       },
       getResourceNode: (state) => {
@@ -352,7 +370,10 @@ export default function makeCrudModule({
         });
       },
       [ACTIONS.SET_CREATED]: (state, created) => {
+        console.log('set _created');
+        console.log(created);
         Object.assign(state, { created });
+        state.created = created;
       },
       [ACTIONS.SET_DELETED]: (state, deleted) => {
         console.log('SET_DELETED');

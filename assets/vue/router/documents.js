@@ -25,7 +25,7 @@ export default {
     },
     {
       name: 'DocumentsCreateFile',
-      path: 'new_file',
+      path: 'create',
       component: () => import('../views/documents/CreateFile.vue')
     },
     {

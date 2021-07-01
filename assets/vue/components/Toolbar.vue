@@ -50,12 +50,10 @@
         unelevated
         @click="confirmDeleteClick = true"
       >
-        {{ $t('Delete') }}
+        <v-icon icon="mdi-delete" />
+<!--        {{ $t('Delete') }}-->
       </q-btn>
-
-
 <!--      color="primary"-->
-
       <q-btn
         v-if="handleAdd"
         no-caps

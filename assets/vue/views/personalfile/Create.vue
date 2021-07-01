@@ -1,7 +1,7 @@
 <template>
   <div>
     <Toolbar
-        :handle-submit="onSendForm"
+        :handle-submit="onSendFormData"
         :handle-reset="resetForm"
     />
 
@@ -25,8 +25,8 @@ import CreateMixin from '../../mixins/CreateMixin';
 const servicePrefix = 'PersonalFile';
 
 const { mapFields } = createHelpers({
-  getterType: 'personal_file/getField',
-  mutationType: 'personal_file/updateField'
+  getterType: 'personalfile/getField',
+  mutationType: 'personalfile/updateField'
 });
 
 export default {
@@ -57,7 +57,7 @@ export default {
     }]);
   },
   methods: {
-    ...mapActions('personalfile', ['create', 'reset'])
+    ...mapActions('personalfile', ['createWithFormData', 'reset'])
   }
 };
 </script>

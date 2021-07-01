@@ -481,7 +481,7 @@ final class UserToJsonNormalizer
                 'Title: '.$item->getTitle(),
                 'Sent date: '.$date,
                 'To user: '.$userName,
-                'Status'.$item->getMsgStatus(),
+                'Type: '.$item->getMsgType(),
             ];
             $messageList[] = implode(', ', $list);
         }

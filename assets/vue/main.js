@@ -10,7 +10,7 @@ import courseService from './services/course';
 import personalFileService from './services/personalfile';
 import resourceLinkService from './services/resourcelink';
 import resourceNodeService from './services/resourcenode';
-//import messageService from './services/message';
+import messageService from './services/message';
 import makeCrudModule from './store/modules/crud';
 //import vuetify from './plugins/vuetify' // path to vuetify export
 
@@ -69,6 +69,13 @@ store.registerModule(
     'resourcenode',
     makeCrudModule({
         service: resourceNodeService
+    })
+);
+
+store.registerModule(
+    'message',
+    makeCrudModule({
+        service: messageService
     })
 );
 

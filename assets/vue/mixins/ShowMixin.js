@@ -48,7 +48,6 @@ export default {
             .catch(() => {});
       }
 
-
       return item;
       //return this.find(decodeURIComponent(this.$route.params.id));
     },

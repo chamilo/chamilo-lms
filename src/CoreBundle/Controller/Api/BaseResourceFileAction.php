@@ -131,13 +131,13 @@ class BaseResourceFileAction
      */
     protected function handleCreateRequest(AbstractResource $resource, ResourceRepository $resourceRepository, Request $request): array
     {
-        //error_log('handleCreateRequest');
         $contentData = $request->getContent();
+
         if (!empty($contentData)) {
             $contentData = json_decode($contentData, true);
             $title = $contentData['title'] ?? '';
             $comment = $contentData['comment'] ?? '';
-            $parentResourceNodeId = $contentData['parentResourceNodeId'] ?? 0;
+            $parentResourceNodeId = (int) ($contentData['parentResourceNodeId'] ?? 0);
             $fileType = $contentData['filetype'] ?? '';
             $resourceLinkList = $contentData['resourceLinkList'] ?? [];
         } else {

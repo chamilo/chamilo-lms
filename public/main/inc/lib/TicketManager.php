@@ -2193,27 +2193,6 @@ class TicketManager
     }
 
     /**
-     * @return array
-     */
-    public static function getPrioritySimple()
-    {
-        $projects = Database::getManager()->getRepository(TicketPriority::class)->findAll();
-
-        $list = [];
-        /** @var TicketPriority $row */
-        foreach ($projects as $row) {
-            $list[] = [
-                'id' => $row->getId(),
-                '0' => $row->getId(),
-                '1' => Display::url($row->getName()),
-                '2' => $row->getDescription(),
-            ];
-        }
-
-        return $list;
-    }
-
-    /**
      * @return int
      */
     public static function getPriorityCount()

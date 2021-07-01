@@ -48,6 +48,10 @@ export default {
     },
 
     deletedItem(item) {
+      this.showMessage(`${item['@id']} deleted.`);
+    },
+
+    deletedResource(item) {
       this.showMessage(this.$i18n.t('{resource} deleted', {'resource': item['resourceNode'].title}));
       this.onUpdateOptions(this.options);
     },
@@ -130,8 +134,6 @@ export default {
       /*if (!isEmpty(sortBy) && !isEmpty(sortDesc)) {
         params[`order[${sortBy[0]}]`] = sortDesc[0] ? 'desc' : 'asc'
       }*/
-      console.log(params);
-
       this.getPage(params).then(() => {
         this.options.sortBy = sortBy;
         this.options.sortDesc = sortDesc;
@@ -210,6 +212,7 @@ export default {
       let folderParams = this.$route.query;
       console.log(folderParams, 'folderParams');
       console.log(this.$route.params, 'params');
+      console.log(item);
       if (item) {
         folderParams['id'] = item['@id'];
       }
@@ -217,16 +220,15 @@ export default {
 
       this.$router.push({
         name: `${this.$options.servicePrefix}Show`,
+        params: folderParams,
         query: folderParams
       });
     },
-
     handleClick(item) {
       let folderParams = this.$route.query;
       this.resetList = true;
       let resourceId = item['resourceNode']['id'];
       this.$route.params.node = resourceId;
-      //folderParams['node'] = resourceId;
 
       this.filters[`resourceNode.parent`] = resourceId;
 

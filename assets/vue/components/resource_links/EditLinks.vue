@@ -38,10 +38,6 @@
     </ul>
   </div>
 
-
-
-  <!--  multiple="multiple"-->
-  <!--  searchable="true"-->
   <VueMultiselect
       placeholder="Share with User"
       v-model="selectedUsers"
@@ -76,7 +72,6 @@ import {computed, ref, toRefs} from "vue";
 import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
 import useVuelidate from "@vuelidate/core";
-
 import VueMultiselect from 'vue-multiselect'
 import isEmpty from 'lodash/isEmpty';
 export default {

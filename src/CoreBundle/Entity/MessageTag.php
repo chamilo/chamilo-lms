@@ -6,22 +6,35 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Message tag.
  *
- * @ORM\Entity()
- * @ORM\Table(name="message_tag")
- *
+ * @ORM\Table(
+ *     name="message_tag",
+ *     uniqueConstraints={
+ *        @ORM\UniqueConstraint(
+ *            name="user_tag",
+ *            columns={"user_id", "tag"})
+ *     },
+ * )
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\MessageTagRepository")
  */
+#[UniqueEntity(
+    fields: ['user', 'tag'],
+    errorPath: 'tag',
+    message: 'This value is already used.',
+)]
 #[ApiResource(
     collectionOperations: [
         'get' => [
@@ -43,7 +56,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         ],
     ],
     attributes: [
-        'security' => 'object.user == user',
+        'security' => 'is_granted("ROLE_USER") or object.user == user',
     ],
     denormalizationContext: [
         'groups' => ['message_tag:write'],
@@ -52,6 +65,9 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['message_tag:read'],
     ],
 )]
+#[ApiFilter(SearchFilter::class, properties: [
+    'user' => 'exact',
+])]
 class MessageTag
 {
     use TimestampableTypedEntity;
@@ -79,6 +95,9 @@ class MessageTag
     #[Groups(['message_tag:read', 'message_tag:write'])]
     protected string $tag;
 
+    /**
+     * @ORM\Column(name="color", type="string", nullable=false)
+     */
     #[Assert\NotBlank]
     #[Groups(['message_tag:read', 'message_tag:write'])]
     protected string $color;

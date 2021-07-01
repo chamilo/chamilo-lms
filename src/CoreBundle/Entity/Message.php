@@ -207,6 +207,7 @@ class Message
      * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\MessageTag", inversedBy="messages", cascade={"persist"})
      * @ORM\JoinTable(name="message_rel_tags")
      */
+    #[Groups(['message:read', 'message:write'])]
     protected Collection $tags;
 
     public function __construct()

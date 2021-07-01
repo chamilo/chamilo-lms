@@ -5,21 +5,21 @@
         <Button label="Compose" icon="fa fa-file-alt" class="btn btn-primary" @click="composeHandler()" />
 
          <v-btn
-            variant="outlined"
+            tile
             icon
             @click="confirmDeleteMultiple" :disabled="!selectedItems || !selectedItems.length"        >
           <v-icon icon="mdi-delete" />
         </v-btn>
 
         <v-btn
-            variant="outlined"
             icon
+            tile
             @click="markAsUnReadMultiple" :disabled="!selectedItems || !selectedItems.length"        >
           <v-icon icon="mdi-email" />
         </v-btn>
 
         <v-btn
-            variant="outlined"
+            tile
             icon
             @click="markAsReadMultiple" :disabled="!selectedItems || !selectedItems.length"        >
           <v-icon icon="mdi-email-open" />

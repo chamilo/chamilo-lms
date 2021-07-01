@@ -86,7 +86,7 @@
     </v-card>
     </div>
     <div class="w-4/5 pl-4">
-      <div class="text-h4 q-mb-md">Inbox</div>
+      <div class="text-h4 q-mb-md">{{ title }}</div>
       <DataTable
         class="p-datatable-sm"
         :value="items"
@@ -140,8 +140,8 @@
             {{ slotProps.data.title }}
           </a>
 
-          <div v-for="tag in slotProps.data.tags" class="flext flex-row">
-            <q-chip>
+          <div class="flex flex-row">
+            <q-chip v-for="tag in slotProps.data.tags" >
               {{ tag.tag }}
             </q-chip>
           </div>
@@ -267,6 +267,7 @@ export default {
     const filtersSent = ref([]);
     const user = store.getters["security/getUser"];
     const tags = ref([]);
+    const title = ref('Inbox');
 
     filtersSent.value = {
       msgType: 2,
@@ -290,6 +291,7 @@ export default {
     });
 
     function goToInbox() {
+      title.value = 'Inbox';
       filters.value = {
         msgType: 1,
         userReceiver: user.id
@@ -299,6 +301,7 @@ export default {
     }
 
     function goToUnread() {
+      title.value = 'Unread';
       filters.value = {
         msgType: 1,
         userReceiver: user.id,
@@ -309,6 +312,7 @@ export default {
     }
 
     function goToSent() {
+      title.value = 'Sent';
       filters.value = {
         msgType: 2,
         userSender: user.id
@@ -317,7 +321,8 @@ export default {
       store.dispatch('message/fetchAll', filters.value);
     }
 
-    function goToTag(tag){
+    function goToTag(tag) {
+      title.value = tag.tag;
       filters.value = {
         msgType: 1,
         userReceiver: user.id,
@@ -334,6 +339,7 @@ export default {
       goToUnread,
       tags,
       filters,
+      title,
     }
   },
   data() {

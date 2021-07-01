@@ -55,8 +55,8 @@
       </div>
     </div>
 
-    <div v-for="tag in item.tags">
-      <q-chip>
+    <div class="flex flex-row" >
+      <q-chip v-for="tag in item.tags">
         {{ tag.tag }}
       </q-chip>
     </div>

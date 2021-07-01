@@ -11209,6 +11209,11 @@ class learnpath
                                             $replace = $onlyDirectory;
                                             $destinationFile = $replace;
                                         }
+
+                                        if (strpos($file_path, '/web') === 0) {
+                                            $replace = str_replace('/web', 'web', $file_path);
+                                        }
+
                                         $zip_files_abs[] = $file_path;
                                         $link_updates[$my_file_path][] = [
                                             'orig' => $doc_info[0],

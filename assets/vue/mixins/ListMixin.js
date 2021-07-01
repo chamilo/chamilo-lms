@@ -134,8 +134,6 @@ export default {
       /*if (!isEmpty(sortBy) && !isEmpty(sortDesc)) {
         params[`order[${sortBy[0]}]`] = sortDesc[0] ? 'desc' : 'asc'
       }*/
-      console.log(params);
-
       this.getPage(params).then(() => {
         this.options.sortBy = sortBy;
         this.options.sortDesc = sortDesc;

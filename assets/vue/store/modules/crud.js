@@ -268,6 +268,9 @@ export default function makeCrudModule({
       resetShow: ({ commit }) => {
         commit(ACTIONS.RESET_SHOW);
       },
+      resetList: ({ commit }) => {
+        commit(ACTIONS.RESET_LIST);
+      },
       resetUpdate: ({ commit }) => {
         commit(ACTIONS.RESET_UPDATE);
       },

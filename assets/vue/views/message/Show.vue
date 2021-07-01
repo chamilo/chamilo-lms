@@ -56,7 +56,9 @@
     </div>
 
     <div v-for="tag in item.tags">
-         {{ tag.tag }}
+      <q-chip>
+        {{ tag.tag }}
+      </q-chip>
     </div>
 
     <Loading :visible="isLoading" />

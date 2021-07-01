@@ -3,207 +3,154 @@
     <div class="p-4 flex flex-row gap-1 mb-2">
       <div class="flex flex-row gap-2" >
         <Button label="Compose" icon="fa fa-file-alt" class="btn btn-primary" @click="composeHandler()" />
-        <Button label="Delete" icon="mdi-delete" class="btn btn-danger " @click="confirmDeleteMultiple" :disabled="!selectedItems || !selectedItems.length" />
+        <Button class="btn btn-danger " @click="confirmDeleteMultiple" :disabled="!selectedItems || !selectedItems.length" >
+          <v-icon icon="mdi-delete"/>
+        </Button>
       </div>
     </div>
   </div>
 
-  <div>
-    <q-splitter
-        v-model="splitterModel"
-        style="height: 100%"
+  <div class="flex flex-row ">
+    <div class="w-1/5">
+      <v-card
+        max-width="300"
+        tile
     >
-
-      <template v-slot:before>
-        <q-tabs
-            v-model="tab"
-            vertical
-            inline-label
-            no-caps
+      <v-list dense>
+  <!--      v-model="selectedItem"-->
+        <v-list-item-group
+            color="primary"
         >
-          <q-tab name="inbox" icon="inbox" label="Inbox" />
-          <q-tab name="outbox" icon="mdi-send-outline" label="Sent" />
-        </q-tabs>
-      </template>
+          <v-list-item @click="goToInbox">
+            <v-list-item-icon>
+              <v-icon icon="mdi-inbox"></v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Inbox</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
 
-      <template v-slot:after>
-        <q-tab-panels
-            v-model="tab"
-            animated
-            swipeable
-            vertical
-            transition-prev="jump-up"
-            transition-next="jump-up"
-        >
-          <q-tab-panel name="inbox">
-            <div class="text-h4 q-mb-md">Inbox</div>
-            <DataTable
-                class="p-datatable-sm"
-                :value="items"
-                v-model:selection="selectedItems"
-                dataKey="id"
-                v-model:filters="filters"
-                filterDisplay="menu"
-                sortBy="sendDate"
-                sortOrder="asc"
-                :lazy="true"
-                :paginator="true"
-                :rows="10"
-                :totalRecords="totalItems"
-                :loading="isLoading"
-                @page="onPage($event)"
-                @sort="sortingChanged($event)"
-                paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                :rowsPerPageOptions="[5, 10, 20, 50]"
-                responsiveLayout="scroll"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-                :globalFilterFields="['title', 'sendDate']">
-
-              <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
-
-              <Column field="title" :header="$t('Title')" :sortable="true">
-                <template #body="slotProps">
-                  <a
-                      v-if="slotProps.data"
-                      @click="showHandler(slotProps.data)"
-                      class="cursor-pointer " >
-                    {{ slotProps.data.title }}
-                  </a>
-                </template>
-
-                <!--         <template #filter="{filterModel}">-->
-                <!--           <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by name"/>-->
-                <!--         </template>-->
-                <!--         -->
-
-                <!--      <template #filter="{filterModel}">-->
-                <!--        <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by title"/>-->
-                <!--      </template>-->
-                <!--      <template #filterclear="{filterCallback}">-->
-                <!--        <Button type="button" icon="pi pi-times" @click="filterCallback()" class="p-button-secondary"></Button>-->
-                <!--      </template>-->
-                <!--      <template #filterapply="{filterCallback}">-->
-                <!--        <Button type="button" icon="pi pi-check" @click="filterCallback()" class="p-button-success"></Button>-->
-                <!--      </template>-->
-              </Column>
-              <Column field="userSender" :header="$t('Sender')" :sortable="true">
-                <template #body="slotProps">
-                  <q-avatar size="32px">
-                    <img :src="slotProps.data.userSender.illustrationUrl + '?w=80&h=80&fit=crop'" />
-                  </q-avatar>
-                  {{ slotProps.data.userSender.username }}
-                </template>
-              </Column>
-
-              <Column field="sendDate" :header="$t('Send date')" :sortable="true">
-                <template #body="slotProps">
-                  {{$luxonDateTime.fromISO(slotProps.data.sendDate).toRelative() }}
-                </template>
-              </Column>
-
-              <Column :exportable="false">
-                <template #body="slotProps">
-                  <div class="flex flex-row gap-2">
-                    <Button icon="fa fa-info-circle"  class="btn btn-primary " @click="showHandler(slotProps.data)" />
-                    <Button v-if="isAuthenticated"  class="btn btn-danger" @click="confirmDeleteItem(slotProps.data)" >
-                      <v-icon icon="mdi-delete"/>
-                    </Button>
-                  </div>
-                </template>
-              </Column>
-            </DataTable>
-
-          </q-tab-panel>
-
-          <q-tab-panel name="outbox">
-            <div class="text-h4 q-mb-md">Sent</div>
+          <v-list-item @click="goToSent">
+            <v-list-item-icon>
+              <v-icon icon="mdi-send-outline"></v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Sent</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
 
 
-            <DataTable
-                class="p-datatable-sm"
-                :value="items"
-                v-model:selection="selectedItems"
-                dataKey="id"
-                v-model:filters="filtersSent"
-                filterDisplay="menu"
-                sortBy="sendDate"
-                sortOrder="asc"
-                :lazy="true"
-                :paginator="true"
-                :rows="10"
-                :totalRecords="totalItems"
-                :loading="isLoading"
-                @page="onPage($event)"
-                @sort="sortingChanged($event)"
-                paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                :rowsPerPageOptions="[5, 10, 20, 50]"
-                responsiveLayout="scroll"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-                :globalFilterFields="['title', 'sendDate']">
+          <v-list-item
+              v-for="(tag, i) in tags"
+              :key="i"
+              @click="goToTag(tag)"
+          >
+            <v-list-item-icon>
+              <v-icon icon="mdi-label-outline"></v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title v-text="tag.tag"></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </v-card>
+    </div>
+    <div class="w-4/5 pl-4">
+      <div class="text-h4 q-mb-md">Inbox</div>
+      <DataTable
+        class="p-datatable-sm"
+        :value="items"
+        v-model:selection="selectedItems"
+        dataKey="id"
+        v-model:filters="filters"
+        filterDisplay="menu"
+        sortBy="sendDate"
+        sortOrder="asc"
+        :lazy="true"
+        :paginator="true"
+        :rows="10"
+        :totalRecords="totalItems"
+        :loading="isLoading"
+        @page="onPage($event)"
+        @sort="sortingChanged($event)"
+        paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+        :rowsPerPageOptions="[5, 10, 20, 50]"
+        responsiveLayout="scroll"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+        :globalFilterFields="['title', 'sendDate']">
 
-              <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
+      <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
 
-              <Column field="title" :header="$t('Title')" :sortable="true">
-                <template #body="slotProps">
-                  <a
-                      v-if="slotProps.data"
-                      @click="showHandler(slotProps.data)"
-                      class="cursor-pointer " >
-                    {{ slotProps.data.title }}
-                  </a>
-                </template>
+      <Column field="userSender" :header="$t('Sender')" :sortable="true">
+        <template #body="slotProps">
+          <q-avatar size="40px">
+            <img :src="slotProps.data.userSender.illustrationUrl + '?w=80&h=80&fit=crop'" />
+          </q-avatar>
 
-                <!--         <template #filter="{filterModel}">-->
-                <!--           <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by name"/>-->
-                <!--         </template>-->
-                <!--         -->
-
-                <!--      <template #filter="{filterModel}">-->
-                <!--        <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by title"/>-->
-                <!--      </template>-->
-                <!--      <template #filterclear="{filterCallback}">-->
-                <!--        <Button type="button" icon="pi pi-times" @click="filterCallback()" class="p-button-secondary"></Button>-->
-                <!--      </template>-->
-                <!--      <template #filterapply="{filterCallback}">-->
-                <!--        <Button type="button" icon="pi pi-check" @click="filterCallback()" class="p-button-success"></Button>-->
-                <!--      </template>-->
-              </Column>
-              <Column field="userSender" :header="$t('Sender')" :sortable="true">
-                <template #body="slotProps">
-                  <q-avatar size="32px">
-                    <img :src="slotProps.data.userSender.illustrationUrl + '?w=80&h=80&fit=crop'" />
-                  </q-avatar>
-                  {{ slotProps.data.userSender.username }}
-                </template>
-              </Column>
-
-              <Column field="sendDate" :header="$t('Send date')" :sortable="true">
-                <template #body="slotProps">
-                  {{$luxonDateTime.fromISO(slotProps.data.sendDate).toRelative() }}
-                </template>
-              </Column>
-
-              <Column :exportable="false">
-                <template #body="slotProps">
-                  <div class="flex flex-row gap-2">
-                    <Button icon="fa fa-info-circle"  class="btn btn-primary " @click="showHandler(slotProps.data)" />
-                    <Button v-if="isAuthenticated"  class="btn btn-danger" @click="confirmDeleteItem(slotProps.data)" >
-                      <v-icon icon="mdi-delete"/>
-                    </Button>
-                  </div>
-                </template>
-              </Column>
-            </DataTable>
+          <a
+              v-if="slotProps.data"
+              @click="showHandler(slotProps.data)"
+              class="cursor-pointer"
+          >
+            {{ slotProps.data.userSender.username }}
+          </a>
+        </template>
+      </Column>
 
 
-          </q-tab-panel>
-        </q-tab-panels>
-      </template>
+      <Column field="title" :header="$t('Title')" :sortable="true">
+        <template #body="slotProps">
+          <a
+              v-if="slotProps.data"
+              @click="showHandler(slotProps.data)"
+              class="cursor-pointer"
+          >
+            {{ slotProps.data.title }}
+          </a>
 
-    </q-splitter>
+          <div v-for="tag in slotProps.data.tags" class="flext flex-row">
+            <q-chip>
+              {{ tag.tag }}
+            </q-chip>
+          </div>
+        </template>
+
+        <!--         <template #filter="{filterModel}">-->
+        <!--           <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by name"/>-->
+        <!--         </template>-->
+        <!--         -->
+
+        <!--      <template #filter="{filterModel}">-->
+        <!--        <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by title"/>-->
+        <!--      </template>-->
+        <!--      <template #filterclear="{filterCallback}">-->
+        <!--        <Button type="button" icon="pi pi-times" @click="filterCallback()" class="p-button-secondary"></Button>-->
+        <!--      </template>-->
+        <!--      <template #filterapply="{filterCallback}">-->
+        <!--        <Button type="button" icon="pi pi-check" @click="filterCallback()" class="p-button-success"></Button>-->
+        <!--      </template>-->
+      </Column>
+
+      <Column field="sendDate" :header="$t('Send date')" :sortable="true">
+        <template #body="slotProps">
+          {{$luxonDateTime.fromISO(slotProps.data.sendDate).toRelative() }}
+        </template>
+      </Column>
+
+      <Column :exportable="false">
+        <template #body="slotProps">
+          <div class="flex flex-row gap-2">
+            <Button icon="fa fa-info-circle"  class="btn btn-primary " @click="showHandler(slotProps.data)" />
+            <Button v-if="isAuthenticated"  class="btn btn-danger" @click="confirmDeleteItem(slotProps.data)" >
+              <v-icon icon="mdi-delete"/>
+            </Button>
+          </div>
+        </template>
+      </Column>
+    </DataTable>
+    </div>
   </div>
-
-
 
 <!--  Dialogs-->
 
@@ -268,6 +215,8 @@ import isEmpty from 'lodash/isEmpty';
 import moment from "moment";
 import toInteger from "lodash/toInteger";
 import useState from "../../hooks/useState";
+import axios from "axios";
+import {ENTRYPOINT} from "../../config/entrypoint";
 
 export default {
   name: 'MessageList',
@@ -282,15 +231,11 @@ export default {
   },
   mixins: [ListMixin],
   setup() {
-    const route = useRoute();
-    const router = useRouter();
     const store = useStore();
-
     const filters = ref([]);
     const filtersSent = ref([]);
-
-
-    const user = store.getters["security/getUser"]
+    const user = store.getters["security/getUser"];
+    const tags = ref([]);
 
     filtersSent.value = {
       msgType: 2,
@@ -303,11 +248,49 @@ export default {
       userReceiver: user.id
     };
 
+    axios.get(ENTRYPOINT + 'message_tags', {
+      params: {
+        user: user['@id']
+      }
+    }).then(response => {
+      let data = response.data;
+      tags.value = data['hydra:member'];
+    });
+
+    function goToInbox() {
+      filters.value = {
+        msgType: 1,
+        userReceiver: user.id
+      };
+      store.dispatch('message/resetList');
+      store.dispatch('message/fetchAll', filters.value);
+    }
+
+    function goToSent() {
+      filters.value = {
+        msgType: 2,
+        userSender: user.id
+      };
+      store.dispatch('message/resetList');
+      store.dispatch('message/fetchAll', filters.value);
+    }
+
+    function goToTag(tag){
+      filters.value = {
+        msgType: 1,
+        userReceiver: user.id,
+        tags: [tag]
+      };
+      store.dispatch('message/resetList');
+      store.dispatch('message/fetchAll', filters.value);
+    }
+
     return {
-      filters,
-      filtersSent,
-      tab: ref('inbox'),
-      splitterModel: ref(20)
+      goToInbox,
+      goToSent,
+      goToTag,
+      tags,
+      filters
     }
   },
   data() {

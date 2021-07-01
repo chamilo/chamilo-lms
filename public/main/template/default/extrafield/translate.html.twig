@@ -1,4 +1,5 @@
-{{ form }}
+{% autoescape false %}{{ form }}{% endautoescape %}
+
 <script>
     $(function () {
         $('select[name="sub_language"]').on('change', function () {

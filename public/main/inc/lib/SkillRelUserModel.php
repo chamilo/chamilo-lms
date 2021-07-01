@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\SkillRelUser;
+use Chamilo\CoreBundle\Framework\Container;
 
 class SkillRelUserModel extends Model
 {
@@ -123,12 +124,18 @@ class SkillRelUserModel extends Model
 
     /**
      * Get the URL for the All issues page.
-     *
-     * @return string
      */
-    public static function getIssueUrlAll(SkillRelUser $skillIssue)
+    public static function getIssueUrlAll(SkillRelUser $skillIssue): string
     {
-        return api_get_path(WEB_PATH)."skill/{$skillIssue->getSkill()->getId()}/user/{$skillIssue->getUser()->getId()}";
+        $router = Container::$container->get('router');
+
+        return $router->generate(
+            'badge_issued_all',
+            [
+                'skill_id' => $skillIssue->getSkill()->getId(),
+                'user_id' => $skillIssue->getUser()->getId(),
+            ]
+        );
     }
 
     /**

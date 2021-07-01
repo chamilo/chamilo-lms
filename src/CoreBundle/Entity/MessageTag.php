@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -81,6 +82,7 @@ class MessageTag
     protected ?int $id = null;
 
     /**
+     * @Gedmo\SortableGroup()
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="messageTags")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="cascade")
      */
@@ -101,6 +103,12 @@ class MessageTag
     #[Assert\NotBlank]
     #[Groups(['message_tag:read', 'message_tag:write'])]
     protected string $color;
+
+    /**
+     * @Gedmo\SortablePosition()
+     * @ORM\Column(name="position", type="integer")
+     */
+    protected int $position;
 
     /**
      * @var Collection|Message[]
@@ -154,6 +162,18 @@ class MessageTag
         $this->color = $color;
 
         return $this;
+    }
+
+    public function setPosition(int $position): self
+    {
+        $this->position = $position;
+
+        return $this;
+    }
+
+    public function getPosition(): int
+    {
+        return $this->position;
     }
 
     public function getMessages(): Collection

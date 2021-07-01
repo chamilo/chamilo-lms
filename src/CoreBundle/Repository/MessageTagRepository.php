@@ -8,13 +8,15 @@ namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\MessageTag;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Gedmo\Sortable\Entity\Repository\SortableRepository;
 
-class MessageTagRepository extends ServiceEntityRepository
+class MessageTagRepository extends SortableRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(EntityManagerInterface $em)
     {
-        parent::__construct($registry, MessageTag::class);
+        parent::__construct($em, $em->getClassMetadata(MessageTag::class));
     }
 
     public function update(MessageTag $message, $andFlush = true): void

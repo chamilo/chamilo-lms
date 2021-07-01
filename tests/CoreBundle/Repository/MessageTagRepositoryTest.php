@@ -20,7 +20,7 @@ class MessageTagRepositoryTest extends WebTestCase
 {
     use ChamiloTestTrait;
 
-    public function testCreateTag(): void
+    public function testCreateTagAndDeleteUser(): void
     {
         self::bootKernel();
         $tagRepo = self::getContainer()->get(MessageTagRepository::class);
@@ -48,6 +48,39 @@ class MessageTagRepositoryTest extends WebTestCase
 
         $count = $tagRepo->count([]);
         $this->assertSame(0, $count);
+
+        $this->assertSame(0, $tag->getPosition());
+    }
+
+    public function testCreateTags(): void
+    {
+        $tagRepo = self::getContainer()->get(MessageTagRepository::class);
+
+        $testUser = $this->createUser('test');
+
+        // Create first tag.
+        $tag =
+            (new MessageTag())
+                ->setTag('tag 1')
+                ->setUser($testUser)
+        ;
+        $this->assertHasNoEntityViolations($tag);
+        $tagRepo->update($tag);
+        $this->assertSame(0, $tag->getPosition());
+
+        // Create second tag
+        $tag2 =
+            (new MessageTag())
+                ->setTag('tag 2')
+                ->setUser($testUser)
+        ;
+        $this->assertHasNoEntityViolations($tag2);
+        $tagRepo->update($tag2);
+
+        $count = $tagRepo->count([]);
+        $this->assertSame(2, $count);
+
+        $this->assertSame(1, $tag2->getPosition());
     }
 
     public function testCreateTagWithSameName(): void

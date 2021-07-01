@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
@@ -89,6 +90,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     'msgType' => 'exact',
     'userSender' => 'exact',
     'userReceiver' => 'exact',
+    'tags' => 'exact',
 ])]
 class Message
 {
@@ -128,6 +130,12 @@ class Message
         self::MESSAGE_TYPE_OUTBOX,
         self::MESSAGE_TYPE_PROMOTED,
     ])]
+    /*#[ApiProperty(attributes: [
+        'openapi_context' => [
+            'type' => 'int',
+            'enum' => [self::MESSAGE_TYPE_INBOX, self::MESSAGE_TYPE_OUTBOX],
+        ],
+    ])]*/
     #[Groups(['message:read', 'message:write'])]
     protected int $msgType;
 

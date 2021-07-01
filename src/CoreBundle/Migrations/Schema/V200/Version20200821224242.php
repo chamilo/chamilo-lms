@@ -142,7 +142,7 @@ final class Version20200821224242 extends AbstractMigrationChamilo
         }
 
         if (!$schema->hasTable('message_tag')) {
-            $this->addSql("CREATE TABLE message_tag (id BIGINT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, tag VARCHAR(255) NOT NULL, color VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_2ABC3D6FA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;");
+            $this->addSql("CREATE TABLE message_tag (id BIGINT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, tag VARCHAR(255) NOT NULL, color VARCHAR(255) NOT NULL, position INT NOT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_2ABC3D6FA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;");
             $this->addSql('CREATE TABLE message_rel_tags (message_id BIGINT NOT NULL, message_tag_id BIGINT NOT NULL, INDEX IDX_D07232D6537A1329 (message_id), INDEX IDX_D07232D68DF5FE1E (message_tag_id), PRIMARY KEY(message_id, message_tag_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
             $this->addSql('ALTER TABLE message_tag ADD CONSTRAINT FK_2ABC3D6FA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
             $this->addSql('ALTER TABLE message_rel_tags ADD CONSTRAINT FK_D07232D6537A1329 FOREIGN KEY (message_id) REFERENCES message (id) ON DELETE CASCADE');

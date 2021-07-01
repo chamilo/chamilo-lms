@@ -11316,7 +11316,7 @@ class learnpath
                                                     'orig' => $doc_info[0],
                                                     'dest' => $destinationFile,
                                                 ];
-                                                $my_dep_file->setAttribute('href', 'document/'.$file_path);
+                                                $my_dep_file->setAttribute('href', 'document/'.$destinationFile);
                                                 $my_dep->setAttribute('xml:base', '');
                                             }
                                         }

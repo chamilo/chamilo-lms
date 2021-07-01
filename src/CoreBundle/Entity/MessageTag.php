@@ -77,7 +77,7 @@ class MessageTag
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    #[Groups(['message_tag:read'])]
+    #[Groups(['message_tag:read', 'message:read'])]
     protected ?int $id = null;
 
     /**
@@ -92,7 +92,7 @@ class MessageTag
      * @ORM\Column(name="tag", type="string", nullable=false)
      */
     #[Assert\NotBlank]
-    #[Groups(['message_tag:read', 'message_tag:write'])]
+    #[Groups(['message_tag:read', 'message_tag:write', 'message:read'])]
     protected string $tag;
 
     /**

@@ -3,9 +3,29 @@
     <div class="p-4 flex flex-row gap-1 mb-2">
       <div class="flex flex-row gap-2" >
         <Button label="Compose" icon="fa fa-file-alt" class="btn btn-primary" @click="composeHandler()" />
-        <Button class="btn btn-danger " @click="confirmDeleteMultiple" :disabled="!selectedItems || !selectedItems.length" >
-          <v-icon icon="mdi-delete"/>
-        </Button>
+
+         <v-btn
+            variant="outlined"
+            icon
+            @click="confirmDeleteMultiple" :disabled="!selectedItems || !selectedItems.length"        >
+          <v-icon icon="mdi-delete" />
+        </v-btn>
+
+        <v-btn
+            variant="outlined"
+            icon
+            @click="markAsUnReadMultiple" :disabled="!selectedItems || !selectedItems.length"        >
+          <v-icon icon="mdi-email" />
+        </v-btn>
+
+        <v-btn
+            variant="outlined"
+            icon
+            @click="markAsReadMultiple" :disabled="!selectedItems || !selectedItems.length"        >
+          <v-icon icon="mdi-email-open" />
+        </v-btn>
+
+
       </div>
     </div>
   </div>
@@ -36,6 +56,15 @@
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title>Sent</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item @click="goToUnread">
+            <v-list-item-icon>
+              <v-icon icon="mdi-email-outline"></v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Unread</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -92,6 +121,7 @@
               v-if="slotProps.data"
               @click="showHandler(slotProps.data)"
               class="cursor-pointer"
+              v-bind:class="[ true === slotProps.data.read ? 'font-normal': 'font-semibold']"
           >
             {{ slotProps.data.userSender.username }}
           </a>
@@ -105,6 +135,7 @@
               v-if="slotProps.data"
               @click="showHandler(slotProps.data)"
               class="cursor-pointer"
+              v-bind:class="{ 'font-semibold': !slotProps.data.read }"
           >
             {{ slotProps.data.title }}
           </a>
@@ -248,6 +279,7 @@ export default {
       userReceiver: user.id
     };
 
+    // Get user tags.
     axios.get(ENTRYPOINT + 'message_tags', {
       params: {
         user: user['@id']
@@ -261,6 +293,16 @@ export default {
       filters.value = {
         msgType: 1,
         userReceiver: user.id
+      };
+      store.dispatch('message/resetList');
+      store.dispatch('message/fetchAll', filters.value);
+    }
+
+    function goToUnread() {
+      filters.value = {
+        msgType: 1,
+        userReceiver: user.id,
+        read: false
       };
       store.dispatch('message/resetList');
       store.dispatch('message/fetchAll', filters.value);
@@ -289,8 +331,9 @@ export default {
       goToInbox,
       goToSent,
       goToTag,
+      goToUnread,
       tags,
-      filters
+      filters,
     }
   },
   data() {
@@ -416,6 +459,25 @@ export default {
     confirmDeleteMultiple() {
       this.deleteMultipleDialog = true;
     },
+    markAsReadMultiple(){
+      console.log('markAsReadMultiple');
+      this.selectedItems.forEach(message => {
+        message.read = true;
+        this.update(message);
+      });
+      this.selectedItems = null;
+      this.resetList = true;
+    },
+    markAsUnReadMultiple(){
+      console.log('markAsUnReadMultiple');
+      this.selectedItems.forEach(message => {
+        message.read = false;
+        this.update(message);
+      });
+      this.selectedItems = null;
+      this.resetList = true;
+      //this.onUpdateOptions(this.options);
+    },
     deleteMultipleItems() {
       console.log('deleteMultipleItems');
       console.log(this.selectedItems);
@@ -425,7 +487,7 @@ export default {
       });
       this.deleteMultipleDialog = false;
       this.selectedItems = null;
-      //this.$toast.add({severity:'success', summary: 'Successful', detail: 'Products Deleted', life: 3000});*/
+      //this.onUpdateOptions(this.options);
     },
     deleteItemButton() {
       console.log('deleteItem');
@@ -462,6 +524,7 @@ export default {
     ...mapActions('message', {
       getPage: 'fetchAll',
       create: 'create',
+      update: 'update',
       deleteItem: 'del',
       deleteMultipleAction: 'delMultiple'
     }),

@@ -7,9 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\MessageTag;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
 
 class MessageTagRepository extends SortableRepository

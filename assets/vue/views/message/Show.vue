@@ -108,6 +108,17 @@ export default {
     console.log('item', item);
     console.log('tags', item.tags);
 
+    // Change to read
+    if (false === item.read) {
+      axios.put(ENTRYPOINT + 'messages/' + item.id, {
+        read: true,
+      }).then(response => {
+        console.log(response);
+      }).catch(function (error) {
+        console.log(error);
+      });
+    }
+
     function addTag(newTag) {
       axios.post(ENTRYPOINT + 'message_tags', {
         user: user['@id'],

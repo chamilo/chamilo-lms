@@ -93,23 +93,27 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         },
  *     },
  * )
- * @ApiFilter(SearchFilter::class, properties={"title":"partial", "resourceNode.parent":"exact"})
- * @ApiFilter(PropertyFilter::class)
- * @ApiFilter(
- *     OrderFilter::class,
- *     properties={
- *         "id",
- *         "resourceNode.title",
- *         "resourceNode.createdAt",
- *         "resourceNode.resourceFile.size",
- *         "resourceNode.updatedAt"
- *     }
- * )
  *
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener"})
  * @ORM\Table(name="personal_file")
  * @ORM\Entity
  */
+#[ApiFilter(SearchFilter::class, properties: [
+    'title' => 'partial',
+    'resourceNode.parent' => 'exact',
+])]
+#[ApiFilter(PropertyFilter::class)]
+#[ApiFilter(
+    OrderFilter::class,
+    properties: [
+        'id',
+        'resourceNode.title',
+        'resourceNode.createdAt',
+        'resourceNode.resourceFile.size',
+        'resourceNode.updatedAt',
+    ]
+)]
+
 class PersonalFile extends AbstractResource implements ResourceInterface
 {
     use TimestampableEntity;

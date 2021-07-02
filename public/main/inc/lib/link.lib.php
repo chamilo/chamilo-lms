@@ -37,12 +37,9 @@ class Link extends Model
         'target',
         'session_id',
     ];
-    public $required = ['url', 'title'];
+    public array $required = ['url', 'title'];
     private $course;
 
-    /**
-     * Link constructor.
-     */
     public function __construct()
     {
         $this->table = Database::get_course_table(TABLE_LINK);

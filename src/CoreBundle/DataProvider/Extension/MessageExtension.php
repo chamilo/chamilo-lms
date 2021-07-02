@@ -25,9 +25,9 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
 
     public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null): void
     {
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+        /*if ($this->security->isGranted('ROLE_ADMIN')) {
             return;
-        }
+        }*/
         /*
         if ('collection_query' === $operationName) {
             if (null === $user = $this->security->getUser()) {
@@ -54,9 +54,9 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
             return;
         }
 
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+        /*if ($this->security->isGranted('ROLE_ADMIN')) {
             return;
-        }
+        }*/
 
         $user = $this->security->getUser();
 

@@ -1,7 +1,9 @@
 <template>
   <div>
+
+    <!--        :handle-submit="onSendMessageForm"-->
     <Toolbar
-        :handle-submit="onSendMessageForm"
+        :handle-send="onSendMessageForm"
     />
 
     <DocumentsForm

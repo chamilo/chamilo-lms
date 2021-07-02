@@ -1301,6 +1301,15 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->id;
     }
 
+    public function getIri(): ?string
+    {
+        if (null === $this->id) {
+            return null;
+        }
+
+        return '/api/users/'.$this->getId();
+    }
+
     public function getSlug(): string
     {
         return $this->getUsername();

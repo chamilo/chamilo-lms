@@ -2,40 +2,59 @@
   <div v-if="isAuthenticated"  class="q-card">
     <div class="p-4 flex flex-row gap-1 mb-2">
       <div class="flex flex-row gap-2" >
-        <Button label="Compose" icon="fa fa-file-alt" class="btn btn-primary" @click="composeHandler()" />
+        <v-btn
+            tile
+            icon
+            @click="composeHandler">
+          <v-icon icon="mdi-email-plus-outline" />
+        </v-btn>
+
+        <v-btn
+            tile
+            icon
+            :loading="isLoading"
+            @click="reloadHandler">
+          <v-icon icon="mdi-refresh" />
+        </v-btn>
 
          <v-btn
             tile
             icon
-            @click="confirmDeleteMultiple" :disabled="!selectedItems || !selectedItems.length"        >
+            @click="confirmDeleteMultiple"
+            :class="[ !selectedItems || !selectedItems.length ? 'hidden': '']"
+         >
           <v-icon icon="mdi-delete" />
         </v-btn>
+
+
+<!--        :disabled="!selectedItems || !selectedItems.length"-->
 
         <v-btn
             icon
             tile
-            @click="markAsUnReadMultiple" :disabled="!selectedItems || !selectedItems.length"        >
+            @click="markAsUnReadMultiple"
+            :class="[ !selectedItems || !selectedItems.length ? 'hidden': '']"
+        >
           <v-icon icon="mdi-email" />
         </v-btn>
 
         <v-btn
             tile
             icon
-            @click="markAsReadMultiple" :disabled="!selectedItems || !selectedItems.length"        >
+            :class="[ !selectedItems || !selectedItems.length ? 'hidden': '']"
+        >
           <v-icon icon="mdi-email-open" />
         </v-btn>
-
-
       </div>
     </div>
   </div>
 
   <div class="flex flex-row ">
-    <div class="w-1/5">
+    <div class="w-1/5 ">
       <v-card
         max-width="300"
         tile
-    >
+      >
       <v-list dense>
   <!--      v-model="selectedItem"-->
         <v-list-item-group
@@ -111,7 +130,7 @@
 
       <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
 
-      <Column field="userSender" :header="$t('Sender')" :sortable="true">
+      <Column field="userSender" :header="$t('From')" :sortable="false">
         <template #body="slotProps">
           <q-avatar size="40px">
             <img :src="slotProps.data.userSender.illustrationUrl + '?w=80&h=80&fit=crop'" />
@@ -121,7 +140,7 @@
               v-if="slotProps.data"
               @click="showHandler(slotProps.data)"
               class="cursor-pointer"
-              v-bind:class="[ true === slotProps.data.read ? 'font-normal': 'font-semibold']"
+              :class="[ true === slotProps.data.read ? 'font-normal': 'font-semibold']"
           >
             {{ slotProps.data.userSender.username }}
           </a>
@@ -129,7 +148,7 @@
       </Column>
 
 
-      <Column field="title" :header="$t('Title')" :sortable="true">
+      <Column field="title" :header="$t('Title')" :sortable="false">
         <template #body="slotProps">
           <a
               v-if="slotProps.data"
@@ -141,9 +160,9 @@
           </a>
 
           <div class="flex flex-row">
-            <q-chip v-for="tag in slotProps.data.tags" >
+            <v-chip v-for="tag in slotProps.data.tags" >
               {{ tag.tag }}
-            </q-chip>
+            </v-chip>
           </div>
         </template>
 
@@ -172,10 +191,12 @@
       <Column :exportable="false">
         <template #body="slotProps">
           <div class="flex flex-row gap-2">
-            <Button icon="fa fa-info-circle"  class="btn btn-primary " @click="showHandler(slotProps.data)" />
-            <Button v-if="isAuthenticated"  class="btn btn-danger" @click="confirmDeleteItem(slotProps.data)" >
-              <v-icon icon="mdi-delete"/>
-            </Button>
+            <v-btn
+                tile
+                icon
+                @click="confirmDeleteItem(slotProps.data)" >
+              <v-icon icon="mdi-delete" />
+            </v-btn>
           </div>
         </template>
       </Column>
@@ -294,7 +315,7 @@ export default {
       title.value = 'Inbox';
       filters.value = {
         msgType: 1,
-        userReceiver: user.id
+        userReceiver: user.id,
       };
       store.dispatch('message/resetList');
       store.dispatch('message/fetchAll', filters.value);
@@ -473,6 +494,9 @@ export default {
       });
       this.selectedItems = null;
       this.resetList = true;
+    },
+    reloadHandler() {
+      this.onUpdateOptions(this.options);
     },
     markAsUnReadMultiple(){
       console.log('markAsUnReadMultiple');

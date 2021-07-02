@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
@@ -37,9 +36,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ApiResource(
     collectionOperations: [
-        'get' => [],
+        'get' => [
+            'security' => "is_granted('ROLE_USER')",  // the get collection is also filtered by MessageExtension
+        ],
         'post' => [
-            'security' => "is_granted('ROLE_USER')",
+            'security_post_denormalize' => "is_granted('CREATE', object)",
             //            'deserialize' => false,
             //            'controller' => Create::class,
             //            'openapi_context' => [
@@ -147,6 +148,13 @@ class Message
     protected bool $read;
 
     /**
+     * @ORM\Column(name="starred", type="boolean", nullable=false)
+     */
+    #[Assert\NotNull]
+    #[Groups(['message:read', 'message:write'])]
+    protected bool $starred;
+
+    /**
      * @ORM\Column(name="send_date", type="datetime", nullable=false)
      */
     #[Groups(['message:read'])]
@@ -229,6 +237,7 @@ class Message
         $this->likes = new ArrayCollection();
         $this->votes = 0;
         $this->read = false;
+        $this->starred = false;
     }
 
     /**
@@ -457,6 +466,18 @@ class Message
     public function setRead(bool $read): self
     {
         $this->read = $read;
+
+        return $this;
+    }
+
+    public function isStarred(): bool
+    {
+        return $this->starred;
+    }
+
+    public function setStarred(bool $starred): self
+    {
+        $this->starred = $starred;
 
         return $this;
     }

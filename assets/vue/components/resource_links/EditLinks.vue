@@ -21,7 +21,11 @@
         </div>
 
         <div v-if="link['user']">
-          {{ $t('User') }}: {{ link.user.username }}
+          {{ $t('User') }}:
+<!--          <q-avatar size="32px">-->
+<!--            <img :src="link.user.illustrationUrl + '?w=80&h=80&fit=crop'" />-->
+<!--          </q-avatar>-->
+          {{ link.user.username }}
         </div>
 
         <q-separator />

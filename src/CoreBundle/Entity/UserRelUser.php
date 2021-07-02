@@ -6,12 +6,13 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Associations between users (friends).
+ * Associations between users.
  *
  * @ORM\Table(name="user_rel_user", indexes={
  *     @ORM\Index(name="idx_user_rel_user__user", columns={"user_id"}),
@@ -20,6 +21,36 @@ use Doctrine\ORM\Mapping as ORM;
  * })
  * @ORM\Entity
  */
+#[ApiResource(
+    collectionOperations: [
+        'get' => [
+            //'security' => "is_granted('ROLE_ADMIN')",
+        ],
+        'post' => [
+            //'security' => "is_granted('ROLE_ADMIN') or object.user == user",
+        ],
+    ],
+    itemOperations: [
+        'get' => [
+            //'security' => "is_granted('ROLE_ADMIN')",
+        ],
+        'put' => [
+            //'security' => "is_granted('ROLE_ADMIN') or object.user == user",
+        ],
+        'delete' => [
+            //'security' => "is_granted('ROLE_ADMIN') or object.user == user",
+        ],
+    ],
+    attributes: [
+        'security' => 'is_granted("ROLE_USER") and object.user == user',
+    ],
+    denormalizationContext: [
+        'groups' => ['message_tag:write'],
+    ],
+    normalizationContext: [
+        'groups' => ['message_tag:read'],
+    ],
+)]
 class UserRelUser
 {
     use UserTrait;

@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
-use Chamilo\CoreBundle\Entity\Message;
+use Chamilo\CoreBundle\Entity\MessageTag;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class MessageVoter extends Voter
+class MessageTagVoter extends Voter
 {
     public const CREATE = 'CREATE';
     public const VIEW = 'VIEW';
@@ -47,7 +47,7 @@ class MessageVoter extends Voter
         }
 
         // only vote on Post objects inside this voter
-        return $subject instanceof Message;
+        return $subject instanceof MessageTag;
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
@@ -59,34 +59,19 @@ class MessageVoter extends Voter
             return false;
         }
 
-        // Admins have access to everything.
         if ($this->security->isGranted('ROLE_ADMIN')) {
             return true;
         }
 
-        /** @var Message $message */
+        /** @var MessageTag $message */
         $message = $subject;
 
         switch ($attribute) {
             case self::CREATE:
-                if ($message->getUserSender() === $user) {
-                    return true;
-                }
-
-                break;
             case self::VIEW:
-                if ($message->getUserReceiver() === $user) {
-                    return true;
-                }
-
-                break;
             case self::EDIT:
             case self::DELETE:
-                if ($message->getUserReceiver() === $user && Message::MESSAGE_TYPE_INBOX === $message->getMsgType()) {
-                    return true;
-                }
-
-                if ($message->getUserSender() === $user && Message::MESSAGE_TYPE_OUTBOX === $message->getMsgType()) {
+                if ($message->getUser() === $user) {
                     return true;
                 }
 

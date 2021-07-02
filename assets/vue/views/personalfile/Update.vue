@@ -56,6 +56,7 @@ export default {
       delReset: 'resetDelete',
       retrieve: 'load',
       update: 'update',
+      updateWithFormData: 'updateWithFormData',
       updateReset: 'resetUpdate'
     })
   }

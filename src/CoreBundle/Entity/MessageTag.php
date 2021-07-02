@@ -39,21 +39,21 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     collectionOperations: [
         'get' => [
-            //'security' => "is_granted('ROLE_ADMIN')",
+            'security' => "is_granted('ROLE_USER')", // the get collection is also filtered by MessageTagExtension
         ],
         'post' => [
-            //'security' => "is_granted('ROLE_ADMIN') or object.user == user",
+            'security_post_denormalize' => "is_granted('CREATE', object)",
         ],
     ],
     itemOperations: [
         'get' => [
-            //'security' => "is_granted('ROLE_ADMIN')",
+            'security' => "is_granted('VIEW', object)",
         ],
         'put' => [
-            //'security' => "is_granted('ROLE_ADMIN') or object.user == user",
+            'security' => "is_granted('EDIT', object)",
         ],
         'delete' => [
-            //'security' => "is_granted('ROLE_ADMIN') or object.user == user",
+            'security' => "is_granted('DELETE', object)",
         ],
     ],
     attributes: [

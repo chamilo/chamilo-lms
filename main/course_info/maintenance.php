@@ -58,6 +58,28 @@ echo Display::page_header($nameTools);
 <div class="sectioncomment"><?php echo get_lang('DescriptionCopyCourse'); ?>
 </div>
 
+<br>
+<div class="sectiontitle">
+    <?php Display::display_icon('copy.gif', get_lang('CommonCartridge13')); ?>&nbsp;&nbsp;
+    <?php echo get_lang('CommonCartridge13'); ?>
+</div>
+<div class="sectioncomment">
+    <ul>
+        <li>
+            <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>common_cartridge/cc13_export.php?<?php echo api_get_cidreq(); ?>">
+            <?php echo get_lang('ExportCcVersion13'); ?></a>
+            </a><br/>
+            <?php echo get_lang('ExportInfo'); ?>
+        </li>
+        <li>
+            <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>common_cartridge/cc13_import.php?<?php echo api_get_cidreq(); ?>">
+            <?php echo get_lang('ImportCcVersion13'); ?></a>
+            </a><br/>
+            <?php echo get_lang('ImportInfo'); ?>
+        </li>
+    </ul>
+</div>
+
 <div class="sectiontitle">
     <?php Display::display_icon('tool_delete.gif', get_lang('recycle_course')); ?>&nbsp;&nbsp;
     <a href="../coursecopy/recycle_course.php?<?php echo api_get_cidreq(); ?>">

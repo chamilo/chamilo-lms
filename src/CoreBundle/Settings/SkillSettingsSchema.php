@@ -20,6 +20,7 @@ class SkillSettingsSchema extends AbstractSettingsSchema
                     'allow_skills_tool' => 'true',
                     'allow_hr_skills_management' => 'true',
                     'show_full_skill_name_on_skill_wheel' => 'false',
+                    'badge_assignation_notification' => 'false',
                 ]
             )
         ;
@@ -35,6 +36,7 @@ class SkillSettingsSchema extends AbstractSettingsSchema
             ->add('allow_skills_tool', YesNoType::class)
             ->add('allow_hr_skills_management', YesNoType::class)
             ->add('show_full_skill_name_on_skill_wheel', YesNoType::class)
+            ->add('badge_assignation_notification', YesNoType::class)
         ;
     }
 }

@@ -176,6 +176,14 @@ services:
         tags:
             - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
 
+    Chamilo\CoreBundle\Entity\Listener\SkillRelUserListener:
+        arguments:
+            - '@chamilo.settings.manager'
+            - '@router'
+            - '@translator'
+        tags:
+            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
+
     Chamilo\CoreBundle\Twig\SettingsHelper:
         arguments:
             - '@chamilo.settings.manager'

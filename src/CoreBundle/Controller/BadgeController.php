@@ -6,12 +6,15 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class BadgeController extends AbstractController
 {
+    use ControllerTrait;
+
     #[Route('/badge/{id}', name: 'badge_issued')]
     public function issued(int $id): Response
     {
@@ -20,8 +23,8 @@ class BadgeController extends AbstractController
         );
     }
 
-    #[Route('/badge/{skill_id}/user{user_id}')]
-    #[Route('/skill/{skill_id}/user{user_id}', name: 'badge_issued_all')]
+    #[Route('/badge/{skillId}/user/{userId}')]
+    #[Route('/skill/{skillId}/user/{userId}', name: 'badge_issued_all')]
     public function issuedAll(int $skillId, int $userId): Response
     {
         return $this->redirect(

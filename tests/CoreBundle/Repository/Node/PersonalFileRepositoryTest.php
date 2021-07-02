@@ -17,6 +17,29 @@ class PersonalFileRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
 
+    public function testAccessAsAnon(): void
+    {
+        $admin = $this->getUser('admin');
+
+        $client = static::createClient();
+        $client->request('GET', '/api/personal_files');
+        $this->assertResponseStatusCodeSame(401);
+
+        $client->request('POST', '/api/personal_files');
+        $this->assertResponseStatusCodeSame(401);
+
+        $client->request(
+            'GET',
+            '/api/personal_files',
+            [
+                'json' => [
+                    'resourceNode.parent' => $admin->getResourceNode()->getId(),
+                ],
+            ]
+        );
+        $this->assertResponseStatusCodeSame(401);
+    }
+
     public function testCreateFolder(): void
     {
         $username = 'test';
@@ -24,10 +47,12 @@ class PersonalFileRepositoryTest extends AbstractApiTest
 
         $user = $this->createUser($username, $password);
         $folderName = 'folder1';
-        $token = $this->getUserToken([
-            'username' => $username,
-            'password' => $password,
-        ]);
+        $token = $this->getUserToken(
+            [
+                'username' => $username,
+                'password' => $password,
+            ]
+        );
 
         $resourceNodeId = $user->getResourceNode()->getId();
 
@@ -46,15 +71,17 @@ class PersonalFileRepositoryTest extends AbstractApiTest
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(201);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
-        $this->assertJsonContains([
-            '@context' => '/api/contexts/PersonalFile',
-            '@type' => 'PersonalFile',
-            'title' => $folderName,
-            'parentResourceNode' => $resourceNodeId,
-        ]);
+        $this->assertJsonContains(
+            [
+                '@context' => '/api/contexts/PersonalFile',
+                '@type' => 'PersonalFile',
+                'title' => $folderName,
+                'parentResourceNode' => $resourceNodeId,
+            ]
+        );
     }
 
-    public function testFileUpload(): void
+    public function testFileUploadAndShare(): void
     {
         self::bootKernel();
         $username = 'sender';
@@ -63,20 +90,17 @@ class PersonalFileRepositoryTest extends AbstractApiTest
 
         // Creates "sender" user.
         $user = $this->createUser($username, $password);
-        $token = $this->getUserToken([
-            'username' => $username,
-            'password' => $password,
-        ]);
+        $token = $this->getUserToken(
+            [
+                'username' => $username,
+                'password' => $password,
+            ]
+        );
 
         // Creates "receiver" user.
         $receiverUsername = 'receiver';
         $receiverPassword = 'receiver';
         $receiverUser = $this->createUser($receiverUsername, $receiverPassword);
-        $receiverToken = $this->getUserToken([
-            'username' => $receiverUsername,
-            'password' => $receiverPassword,
-        ]);
-
         $resourceNodeId = $user->getResourceNode()->getId();
 
         $file = $this->getUploadedFile();
@@ -106,21 +130,25 @@ class PersonalFileRepositoryTest extends AbstractApiTest
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(201);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
-        $this->assertJsonContains([
-            '@context' => '/api/contexts/PersonalFile',
-            '@type' => 'PersonalFile',
-            'title' => $fileName,
-            'parentResourceNode' => $resourceNodeId,
-        ]);
+        $this->assertJsonContains(
+            [
+                '@context' => '/api/contexts/PersonalFile',
+                '@type' => 'PersonalFile',
+                'title' => $fileName,
+                'parentResourceNode' => $resourceNodeId,
+            ]
+        );
 
         // File URL.
         $url = $response->toArray()['contentUrl'];
         $personalFileId = $response->toArray()['id'];
 
-        $resourceLinkList = [[
-            'uid' => $receiverUser->getId(),
-            'visibility' => $visibilityPublished,
-        ]];
+        $resourceLinkList = [
+            [
+                'uid' => $receiverUser->getId(),
+                'visibility' => $visibilityPublished,
+            ],
+        ];
 
         // Share PersonalFile with user 'receiver'.
         $this->createClientWithCredentials($token)->request(
@@ -136,24 +164,26 @@ class PersonalFileRepositoryTest extends AbstractApiTest
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
-        $this->assertJsonContains([
-            '@context' => '/api/contexts/PersonalFile',
-            '@type' => 'PersonalFile',
-            'title' => $fileName,
-            'id' => $personalFileId,
-            'resourceLinkListFromEntity' => [
-                [
-                    'visibility' => $visibilityPublished,
-                    'session' => null,
-                    'course' => null,
-                    'group' => null,
-                    'userGroup' => null,
-                    'user' => [
-                        'id' => $receiverUser->getId(),
+        $this->assertJsonContains(
+            [
+                '@context' => '/api/contexts/PersonalFile',
+                '@type' => 'PersonalFile',
+                'title' => $fileName,
+                'id' => $personalFileId,
+                'resourceLinkListFromEntity' => [
+                    [
+                        'visibility' => $visibilityPublished,
+                        'session' => null,
+                        'course' => null,
+                        'group' => null,
+                        'userGroup' => null,
+                        'user' => [
+                            'id' => $receiverUser->getId(),
+                        ],
                     ],
                 ],
-            ],
-        ]);
+            ]
+        );
 
         // Access Checks.
 
@@ -196,5 +226,65 @@ class PersonalFileRepositoryTest extends AbstractApiTest
             $url
         );
         $this->assertResponseIsSuccessful();
+    }
+
+    public function testUserUploadFileAsAnotherUser(): void
+    {
+        self::bootKernel();
+        $username = 'sender';
+        $password = 'sender';
+
+        // Creates "sender" user.
+        $user = $this->createUser($username, $password);
+
+        $this->createUser('bad', 'bad');
+        $badUserToken = $this->getUserToken(
+            [
+                'username' => 'bad',
+                'password' => 'bad',
+            ],
+            true
+        );
+
+        // 1. This is the original user.
+        $resourceNodeId = $user->getResourceNode()->getId();
+
+        $file = $this->getUploadedFile();
+
+        // 2. "bad user" tries to upload file to the original user.
+        $this->createClientWithCredentials($badUserToken)->request(
+            'POST',
+            '/api/personal_files',
+            [
+                'headers' => [
+                    'Content-Type' => 'multipart/form-data',
+                ],
+                'extra' => [
+                    'files' => [
+                        'uploadFile' => $file,
+                    ],
+                ],
+                'json' => [
+                    'filetype' => 'file',
+                    'size' => $file->getSize(),
+                    'parentResourceNodeId' => $resourceNodeId,
+                ],
+            ]
+        );
+        $this->assertResponseStatusCodeSame(401);
+
+        // Bad user tries to get files from other user
+
+        $this->createClientWithCredentials($badUserToken)->request(
+            'GET',
+            '/api/personal_files',
+            [
+                'json' => [
+                    'parentResourceNodeId' => $resourceNodeId,
+                ],
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(401);
     }
 }

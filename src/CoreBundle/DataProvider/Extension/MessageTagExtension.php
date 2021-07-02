@@ -10,11 +10,12 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInter
 //use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use Chamilo\CoreBundle\Entity\Message;
+use Chamilo\CoreBundle\Entity\MessageTag;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
 
-final class MessageExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
+final class MessageTagExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
 {
     private Security $security;
 
@@ -25,51 +26,27 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
 
     public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null): void
     {
-        /*if ($this->security->isGranted('ROLE_ADMIN')) {
-            return;
-        }*/
-        /*
-        if ('collection_query' === $operationName) {
-            if (null === $user = $this->security->getUser()) {
-                throw new AccessDeniedException('Access Denied.');
-            }
-
-            $rootAlias = $queryBuilder->getRootAliases()[0];
-            $queryBuilder->andWhere(sprintf('%s.user = :current_user', $rootAlias));
-            $queryBuilder->setParameter('current_user', $user);
-        }*/
-
         $this->addWhere($queryBuilder, $resourceClass);
     }
 
-    public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, array $identifiers, string $operationName = null, array $context = []): void
+    /*public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, array $identifiers, string $operationName = null, array $context = []): void
     {
         //error_log('applyToItem');
         //$this->addWhere($queryBuilder, $resourceClass);
-    }
+    }*/
 
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {
-        if (Message::class !== $resourceClass) {
+        if (MessageTag::class !== $resourceClass) {
             return;
         }
 
-        /*if ($this->security->isGranted('ROLE_ADMIN')) {
-            return;
-        }*/
-
         $user = $this->security->getUser();
-
         $alias = $queryBuilder->getRootAliases()[0];
 
-        $queryBuilder->andWhere("
-            ($alias.userSender = :current AND $alias.msgType = :outbox) OR 
-            ($alias.userReceiver = :current AND $alias.msgType = :inbox)
-        ");
+        $queryBuilder->andWhere(" $alias.user = :current ");
         $queryBuilder->setParameters([
             'current' => $user,
-            'inbox' => Message::MESSAGE_TYPE_INBOX,
-            'outbox' => Message::MESSAGE_TYPE_OUTBOX,
         ]);
     }
 }

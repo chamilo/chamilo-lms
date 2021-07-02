@@ -10,13 +10,13 @@ use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageTag;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\Repository\MessageTagRepository;
+use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * @covers \MessageRepository
  */
-class MessageRepositoryTest extends WebTestCase
+class MessageRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
 
@@ -82,5 +82,73 @@ class MessageRepositoryTest extends WebTestCase
         $repo->update($message);
 
         $this->assertSame(2, $message->getTags()->count());
+    }
+
+    public function testCreateMessageWithApi(): void
+    {
+        self::bootKernel();
+
+        $fromUser = $this->createUser('from');
+        $toUser = $this->createUser('to');
+
+        $tokenFrom = $this->getUserToken(
+            [
+                'username' => 'from',
+                'password' => 'from',
+            ]
+        );
+
+        $this->createClientWithCredentials($tokenFrom)->request(
+            'POST',
+            '/api/messages',
+            [
+                'json' => [
+                    'title' => 'hello',
+                    'content' => 'content of hello',
+                    'msgType' => Message::MESSAGE_TYPE_INBOX,
+                    'userSender' => '/api/users/'.$fromUser->getId(),
+                    'userReceiver' => '/api/users/'.$toUser->getId(),
+                ],
+            ]
+        );
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(201);
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertJsonContains(
+            [
+                '@context' => '/api/contexts/Message',
+                '@type' => 'Message',
+                'title' => 'hello',
+                'read' => false,
+                'starred' => false,
+            ]
+        );
+
+        // Try to send a message as another user
+        $this->createUser('bad');
+        $tokenFromBadUser = $this->getUserToken(
+            [
+                'username' => 'bad',
+                'password' => 'bad',
+            ],
+            true
+        );
+
+        $this->createClientWithCredentials($tokenFromBadUser)->request(
+            'POST',
+            '/api/messages',
+            [
+                'json' => [
+                    'title' => 'hello',
+                    'content' => 'content of hello',
+                    'msgType' => Message::MESSAGE_TYPE_INBOX,
+                    'userSender' => '/api/users/'.$fromUser->getId(),
+                    'userReceiver' => '/api/users/'.$toUser->getId(),
+                ],
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(403);
     }
 }

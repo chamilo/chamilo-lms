@@ -72,8 +72,6 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface //, 
             throw new AccessDeniedException('cid is required');
         }
 
-        error_log('addWhere');
-        error_log('here!');
         $rootAlias = $queryBuilder->getRootAliases()[0];
 
         $queryBuilder

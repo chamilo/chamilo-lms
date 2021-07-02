@@ -39,17 +39,17 @@ use UserManager;
  * EquatableInterface is needed to check if the user needs to be refreshed.
  *
  * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *     attributes={"security"="is_granted('ROLE_USER')"},
  *     iri="http://schema.org/Person",
  *     normalizationContext={"groups"={"user:read"}},
  *     denormalizationContext={"groups"={"user:write"}},
  *     collectionOperations={
- *         "get"={"security"="is_granted('ROLE_ADMIN')"},
- *         "post"={"security"="is_granted('ROLE_ADMIN')"}
+ *         "get"={"security"="is_granted('ROLE_USER')"},
+ *         "post"={"security"="is_granted('ROLE_USER')"}
  *     },
  *     itemOperations={
- *         "get"={"security"="is_granted('ROLE_ADMIN')"},
- *         "put"={"security"="is_granted('ROLE_ADMIN')"},
+ *         "get"={"security"="is_granted('ROLE_USER')"},
+ *         "put"={"security"="is_granted('ROLE_USER')"},
  *     },
  * )
  *
@@ -1299,6 +1299,15 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getIri(): ?string
+    {
+        if (null === $this->id) {
+            return null;
+        }
+
+        return '/api/users/'.$this->getId();
     }
 
     public function getSlug(): string

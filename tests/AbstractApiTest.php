@@ -52,9 +52,13 @@ abstract class AbstractApiTest extends ApiTestCase
     /**
      * Use credentials with token.
      */
-    protected function getUserToken($body = []): string
+    protected function getUserToken($body = [], $cleanToken = false): string
     {
-        if ($this->token) {
+        if ($cleanToken) {
+            $this->token = null;
+        }
+
+        if (null !== $this->token) {
             return $this->token;
         }
 

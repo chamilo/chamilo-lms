@@ -14,30 +14,6 @@ require_once __DIR__.'/../global.inc.php';
 $action = $_GET['a'];
 
 switch ($action) {
-    case 'get_notifications_inbox':
-        $userId = api_get_user_id();
-        $listInbox = [];
-        if ('true' === api_get_setting('allow_message_tool')) {
-            $list = MessageManager::getMessageData(
-                0,
-                10,
-                null,
-                null,
-                ['actions' => ['read'], 'type' => Message::MESSAGE_TYPE_INBOX]
-            );
-            foreach ($list as $row) {
-                $user = api_get_user_info($row['0']);
-                $temp['title'] = $row['1'];
-                $temp['date'] = $row['2'];
-                $temp['fullname'] = $user['complete_name'];
-                $temp['email'] = $user['email'];
-                $temp['url'] = $row['1'];
-                $listInbox[] = $temp;
-            }
-        }
-        header('Content-type:application/json');
-        echo json_encode($listInbox);
-        break;
     case 'get_notifications_friends':
         $userId = api_get_user_id();
         $listInvitations = [];

@@ -33,13 +33,9 @@
         <q-space />
 
         <div class="q-gutter-sm row items-center no-wrap">
-          <!--          <q-btn v-if="$q.screen.gt.sm" round dense flat color="text-grey-7" icon="apps">-->
-          <!--            <q-tooltip>Google Apps</q-tooltip>-->
-          <!--          </q-btn>-->
-
-          <q-btn v-if="isAuthenticated" round dense flat color="grey-8" icon="person">
-            <q-tooltip>Account</q-tooltip>
-          </q-btn>
+<!--          <q-btn v-if="isAuthenticated" round dense flat color="grey-8" icon="people">-->
+<!--            <q-tooltip>Friends</q-tooltip>-->
+<!--          </q-btn>-->
 
           <q-btn v-if="isAuthenticated" round dense flat color="grey-8"
                  icon="inbox"
@@ -50,6 +46,14 @@
             </q-badge>
             <q-tooltip>Inbox</q-tooltip>
           </q-btn>
+
+          <q-btn
+              v-if="isAuthenticated" round dense flat color="grey-8" icon="folder"
+               :to="'/resources/personal_files/' + currentUser.resourceNode.id"
+          >
+            <q-tooltip>Files</q-tooltip>
+          </q-btn>
+
 
           <q-btn v-if="isAuthenticated" round dense flat color="grey-8" icon="notifications">
             <q-badge color="red" text-color="white" floating>

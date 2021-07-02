@@ -20,25 +20,31 @@
          <v-btn
             tile
             icon
-            @click="confirmDeleteMultiple" :disabled="!selectedItems || !selectedItems.length"        >
+            @click="confirmDeleteMultiple"
+            :class="[ !selectedItems || !selectedItems.length ? 'hidden': '']"
+         >
           <v-icon icon="mdi-delete" />
         </v-btn>
+
+
+<!--        :disabled="!selectedItems || !selectedItems.length"-->
 
         <v-btn
             icon
             tile
-            @click="markAsUnReadMultiple" :disabled="!selectedItems || !selectedItems.length"        >
+            @click="markAsUnReadMultiple"
+            :class="[ !selectedItems || !selectedItems.length ? 'hidden': '']"
+        >
           <v-icon icon="mdi-email" />
         </v-btn>
 
         <v-btn
             tile
             icon
-            @click="markAsReadMultiple" :disabled="!selectedItems || !selectedItems.length"        >
+            :class="[ !selectedItems || !selectedItems.length ? 'hidden': '']"
+        >
           <v-icon icon="mdi-email-open" />
         </v-btn>
-
-
       </div>
     </div>
   </div>
@@ -48,7 +54,7 @@
       <v-card
         max-width="300"
         tile
-    >
+      >
       <v-list dense>
   <!--      v-model="selectedItem"-->
         <v-list-item-group
@@ -124,7 +130,7 @@
 
       <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
 
-      <Column field="userSender" :header="$t('Sender')" :sortable="true">
+      <Column field="userSender" :header="$t('From')" :sortable="false">
         <template #body="slotProps">
           <q-avatar size="40px">
             <img :src="slotProps.data.userSender.illustrationUrl + '?w=80&h=80&fit=crop'" />
@@ -134,7 +140,7 @@
               v-if="slotProps.data"
               @click="showHandler(slotProps.data)"
               class="cursor-pointer"
-              v-bind:class="[ true === slotProps.data.read ? 'font-normal': 'font-semibold']"
+              :class="[ true === slotProps.data.read ? 'font-normal': 'font-semibold']"
           >
             {{ slotProps.data.userSender.username }}
           </a>
@@ -142,7 +148,7 @@
       </Column>
 
 
-      <Column field="title" :header="$t('Title')" :sortable="true">
+      <Column field="title" :header="$t('Title')" :sortable="false">
         <template #body="slotProps">
           <a
               v-if="slotProps.data"

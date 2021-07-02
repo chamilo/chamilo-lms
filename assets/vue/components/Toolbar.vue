@@ -104,6 +104,18 @@
         File upload
       </q-btn>
 
+<!--      <v-btn-->
+<!--          v-if="handleUploadDocument"-->
+<!--          :loading="isLoading"-->
+<!--          tile-->
+<!--          icon-->
+<!--          @click="uploadDocument"-->
+<!--      >-->
+<!--        <v-icon icon="mdi-cloud-upload"/>-->
+<!--      </v-btn>-->
+
+
+
   <!--    <DataFilter-->
   <!--      v-if="filters"-->
   <!--      :handle-filter="onSendFilter"-->

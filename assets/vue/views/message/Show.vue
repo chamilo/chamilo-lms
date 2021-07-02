@@ -54,13 +54,6 @@
         <p v-html="item.content" />
       </div>
     </div>
-
-    <div class="flex flex-row" >
-      <q-chip v-for="tag in item.tags">
-        {{ tag.tag }}
-      </q-chip>
-    </div>
-
     <Loading :visible="isLoading" />
   </div>
 </template>
@@ -80,6 +73,7 @@ import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
 import useVuelidate from "@vuelidate/core";
 import {useRoute} from "vue-router";
+import NotificationMixin from "../../mixins/NotificationMixin";
 
 const servicePrefix = 'Message';
 
@@ -125,6 +119,7 @@ export default {
         tag: newTag,
       }).then(response => {
         addTagToMessage(response.data);
+        //this.showMessage('Added');
         item.tags.push(response.data);
         console.log(response);
         isLoadingSelect.value = false;
@@ -146,6 +141,7 @@ export default {
       axios.put(ENTRYPOINT + 'messages/' + item.id, {
         tags: tagsToUpdate,
       }).then(response => {
+        //this.showMessage('Added');
         console.log(response);
         isLoadingSelect.value = false;
       }).catch(function (error) {
@@ -204,7 +200,7 @@ export default {
 
     return {v$: useVuelidate(), tags, isLoadingSelect, addTag, addTagToMessage, removeTagFromMessage, asyncFind, item};
   },
-  mixins: [ShowMixin],
+  mixins: [ShowMixin, NotificationMixin],
   computed: {
     ...mapFields('message', {
       isLoading: 'isLoading'

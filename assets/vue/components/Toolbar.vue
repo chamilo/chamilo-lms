@@ -24,17 +24,38 @@
         {{ $t('Edit') }}
       </q-btn>
 
-      <q-btn
-        v-if="handleSubmit"
-        no-caps
-        class="btn btn-primary"
-        :loading="isLoading"
-        @click="submitItem"
-        unelevated
+<!--      <q-btn-->
+<!--        v-if="handleSubmit"-->
+<!--        no-caps-->
+<!--        class="btn btn-primary"-->
+<!--        :loading="isLoading"-->
+<!--        @click="submitItem"-->
+<!--        unelevated-->
+<!--      >-->
+<!--        <v-icon icon="mdi-content-save"/>-->
+<!--        {{ $t('Submit') }}-->
+<!--      </q-btn>-->
+
+      <v-btn
+          v-if="handleSubmit"
+          :loading="isLoading"
+          tile
+          icon
+          @click="submitItem"
       >
-        <v-icon icon="mdi-content-save"/>
-        {{ $t('Submit') }}
-      </q-btn>
+        <v-icon icon="mdi-content-save" />
+      </v-btn>
+
+      <v-btn
+          v-if="handleSend"
+          :loading="isLoading"
+          tile
+          icon
+          @click="sendItem"
+      >
+        <v-icon icon="mdi-send" />
+      </v-btn>
+
       <!--      <v-btn-->
       <!--        v-if="handleReset"-->
       <!--        color="primary"-->
@@ -43,16 +64,15 @@
       <!--      >-->
       <!--        {{ $t('Reset') }}-->
       <!--      </v-btn>-->
-      <q-btn
-        v-if="handleDelete"
-        no-caps
-        class="btn btn-danger"
-        unelevated
-        @click="confirmDeleteClick = true"
+      <v-btn
+          v-if="handleDelete"
+          :loading="isLoading"
+          tile
+          icon
+          @click="confirmDeleteClick = true"
       >
         <v-icon icon="mdi-delete" />
-<!--        {{ $t('Delete') }}-->
-      </q-btn>
+      </v-btn>
 <!--      color="primary"-->
       <q-btn
         v-if="handleAdd"
@@ -150,6 +170,10 @@ export default {
       type: Function,
       required: false
     },
+    handleSend: {
+      type: Function,
+      required: false
+    },
     handleAddDocument: {
       type: Function,
       required: false
@@ -205,6 +229,11 @@ export default {
     editItem() {
       if (this.handleEdit) {
         this.handleEdit();
+      }
+    },
+    sendItem() {
+      if (this.handleSend) {
+        this.handleSend();
       }
     },
     submitItem() {

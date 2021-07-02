@@ -15,7 +15,7 @@
                     <p>{{ issue_info.skill_description }}</p>
                 {% endif %}
                 {% if issue_info.skill_criteria %}
-                    <h4>{{ 'CriteriaToEarnTheBadge'|trans }}</h4>
+                    <h4>{{ 'Criteria to earn the badge'|trans }}</h4>
                     <p>{{ issue_info.skill_criteria }}</p>
                 {% endif %}
             </div>
@@ -23,11 +23,11 @@
 
         {% if badge_error %}
             <hr>
-            <div class="alert alert-danger"> {{ 'BakedBadgeProblem'|trans }}</div>
+            <div class="alert alert-danger"> {{ 'There was a problem embedding the badge assertion info into the badge image, but you can still use this page as a valid proof.'|trans }}</div>
         {% elseif not personal_badge is empty %}
             <p class="text-center">
                 <a href="{{ personal_badge }}" class="btn btn-primary" target="_new" download="badge">
-                    <em class="fa fa-download fa-fw"></em> {{ 'DownloadBadge'|trans }}
+                    <em class="fa fa-download fa-fw"></em> {{ 'Download badges'|trans }}
                 </a>
             </p>
         {% endif %}
@@ -36,11 +36,11 @@
             <hr>
             <p class="text-center">
                 <a href="#" class="btn btn-success" id="badge-export-button">
-                    <em class="fa fa-external-link-square fa-fw"></em> {{ 'ExportBadge'|trans }}
+                    <em class="fa fa-external-link-square fa-fw"></em> {{ 'Export badge'|trans }}
                 </a>
             </p>
             <div class='col-md-12 text-center'>
-                <h5><b> {{ 'ShareWithYourFriends'|trans }} </b></h5>
+                <h5><b> {{ 'Share with your friends'|trans }} </b></h5>
                 <a href="http://www.facebook.com/sharer.php?u={{ url('badge_issued', { 'id': issue_info.id }) }}" target="_blank">
                     <em class='fa fa-facebook-square fa-3x text-info' aria-hidden='true'></em>
                 </a>
@@ -65,9 +65,9 @@
         {% endif %}
     </div>
     <div class="col-md-7">
-        <h3>{{ 'RecipientDetails'|trans }}</h3>
+        <h3>{{ 'Recipient details'|trans }}</h3>
         <p class="lead">{{ issue_info.user_complete_name }}</p>
-        <h4>{{ 'SkillAcquiredAt'|trans }}</h4>
+        <h4>{{ 'Skill acquired at'|trans }}</h4>
         <ul class="fa-ul">
             <li>
                 {% if issue_info.source_name %}
@@ -91,7 +91,7 @@
         </ul>
 
         {% if show_level %}
-            <h4>{{ 'AcquiredLevel'|trans }}</h4>
+            <h4>{{ 'Level acquired'|trans }}</h4>
             <ul class="fa-ul">
                 <li>
                     <em class="fa-li fa fa-check-circle-o fa-fw"></em> {{ issue_info.acquired_level }}
@@ -105,7 +105,7 @@
                 <div class="panel panel-info">
                     <div class="panel-heading">
                         <em class="fa fa-check-circle-o fa-fw" aria-hidden="true"></em>
-                        {{ 'ChangeAcquiredLevel'|trans }}
+                        {{ 'Change acquired level'|trans }}
                     </div>
                     <div class="panel-body">
                         {% autoescape false %}{{ acquired_level_form }}{% endautoescape %}
@@ -135,8 +135,8 @@
                                 <div class="media-right text-right">
                                     <div style="width: 80px;">
                                         {% if comment.value %}
-                                            <em class="fa fa-certificate fa-fw" aria-label="{{ 'AverageRating' }}"></em>
-                                            <span class="sr-only">{{ 'AverageRating' }}</span> {{ comment.value }}
+                                            <em class="fa fa-certificate fa-fw" aria-label="{{ 'Average rating'|trans }}"></em>
+                                            <span class="sr-only">{{ 'Average rating'|trans }}</span> {{ comment.value }}
                                         {% endif %}
                                     </div>
                                 </div>

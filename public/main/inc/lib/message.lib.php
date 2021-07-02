@@ -19,33 +19,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class MessageManager
 {
     /**
-     * Gets the total number of messages, used for the inbox sortable table.
-     *
-     * @param array $params
-     *
-     * @return int
-     */
-    public static function getNumberOfMessages($params)
-    {
-        $table = Database::get_main_table(TABLE_MESSAGE);
-        $conditions = self::getWhereConditions($params);
-
-        $sql = "SELECT COUNT(id) as number_messages
-                FROM $table
-                WHERE
-                    $conditions
-                ";
-        $result = Database::query($sql);
-        $result = Database::fetch_array($result);
-
-        if ($result) {
-            return (int) $result['number_messages'];
-        }
-
-        return 0;
-    }
-
-    /**
      * @param array $extraParams
      *
      * @return string

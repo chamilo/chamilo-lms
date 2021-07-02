@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * @covers \MessageTagRepository

@@ -9,10 +9,8 @@ namespace Chamilo\CoreBundle\DataProvider\Extension;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 //use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
-use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageTag;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
 
 final class MessageTagExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface

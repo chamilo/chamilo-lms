@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
-use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageTag;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;

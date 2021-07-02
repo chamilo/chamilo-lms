@@ -98,13 +98,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="personal_file")
  * @ORM\Entity
  */
-
 #[ApiFilter(SearchFilter::class, properties: [
     'title' => 'partial',
     'resourceNode.parent' => 'partial',
 ])]
 #[ApiFilter(PropertyFilter::class)]
-#[ApiFilter(OrderFilter::class, properties: [
+#[ApiFilter(
+    OrderFilter::class,
+    properties: [
         'id',
         'resourceNode.title',
         'resourceNode.createdAt',

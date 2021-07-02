@@ -190,6 +190,8 @@ class Version20170626122900 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('user_rel_user');
         $this->addSql('DELETE FROM user_rel_user WHERE user_id = 0 OR friend_user_id = 0');
+        $this->addSql('DELETE FROM user_rel_user WHERE user_id = IS NULL OR friend_user_id IS NULL');
+        $this->addSql('ALTER TABLE user_rel_user CHANGE user_id user_id INT NOT NULL, CHANGE friend_user_id friend_user_id INT NOT NULL');
 
         $this->addSql('ALTER TABLE user_rel_user CHANGE user_id user_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE user_rel_user CHANGE friend_user_id friend_user_id INT DEFAULT NULL');

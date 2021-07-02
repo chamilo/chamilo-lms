@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Repository\Node;
 
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -29,7 +30,63 @@ class UserRepositoryTest extends AbstractApiTest
         $this->createUser('user', 'user');
 
         $count = self::getContainer()->get(UserRepository::class)->count([]);
+        // By default there are 2 users: admin + anon.
         $this->assertSame(3, $count);
+    }
+
+    public function testAddFriendToUser(): void
+    {
+        self::bootKernel();
+        $manager = self::getContainer()->get('doctrine')->getManager();
+
+        $user = $this->createUser('user', 'user');
+        $friend = $this->createUser('friend', 'friend');
+
+        $userRepo = self::getContainer()->get(UserRepository::class);
+
+        // user -> friend
+        $user->addFriend($friend);
+        $userRepo->update($user);
+
+        $this->assertSame(1, $user->getFriends()->count());
+        $this->assertSame('friend', $user->getFriends()->first()->getFriend()->getUsername());
+        $this->assertSame(0, $user->getFriendsWithMe()->count());
+
+        $manager->clear();
+
+        // Check friend
+        $friend = $userRepo->find($friend->getId());
+        $this->assertSame(1, $friend->getFriendsWithMe()->count());
+        $this->assertSame(0, $friend->getFriends()->count());
+
+        // another_friend -> user
+        $anotherFriend = $this->createUser('anotherfriend', 'anotherfriend');
+        $user = $userRepo->find($user->getId());
+
+        $anotherFriend->addFriend($user);
+        $userRepo->update($anotherFriend);
+
+        $this->assertSame(1, $anotherFriend->getFriends()->count());
+        $this->assertSame('user', $anotherFriend->getFriends()->first()->getFriend()->getUsername());
+        $this->assertSame(0, $anotherFriend->getFriendsWithMe()->count());
+
+        $manager->clear();
+
+        /** @var User $user */
+        $user = $userRepo->find($user->getId());
+
+        $this->assertSame(1, $user->getFriends()->count());
+        $this->assertSame(1, $user->getFriendsWithMe()->count());
+
+        $manager->clear();
+
+        // Delete friend
+        $friend = $userRepo->find($friend->getId());
+        $userRepo->delete($friend);
+
+        $user = $userRepo->find($user->getId());
+        $this->assertSame(0, $user->getFriends()->count());
+        $this->assertSame(1, $user->getFriendsWithMe()->count());
     }
 
     public function testCreateUserWithApi(): void

@@ -55,6 +55,16 @@ class UserRelUser
 {
     use UserTrait;
 
+    public const USER_RELATION_TYPE_UNKNOWN = 1;
+    public const USER_RELATION_TYPE_PARENT = 2;
+    public const USER_RELATION_TYPE_FRIEND = 3;
+    public const USER_RELATION_TYPE_GOODFRIEND = 4; // should be deprecated is useless
+    public const USER_RELATION_TYPE_ENEMY = 5; // should be deprecated is useless
+    public const USER_RELATION_TYPE_DELETED = 6;
+    public const USER_RELATION_TYPE_RRHH = 7;
+    public const USER_RELATION_TYPE_BOSS = 8;
+    public const USER_RELATION_TYPE_HRM_REQUEST = 9;
+
     /**
      * @ORM\Column(name="id", type="bigint")
      * @ORM\Id
@@ -63,14 +73,14 @@ class UserRelUser
     protected int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="userRelUsers")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="friends")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */
     protected User $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="friend_user_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="friendsWithMe")
+     * @ORM\JoinColumn(name="friend_user_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */
     protected User $friend;
 
@@ -83,6 +93,11 @@ class UserRelUser
      * @ORM\Column(name="last_edit", type="datetime", nullable=true)
      */
     protected ?DateTime $lastEdit = null;
+
+    public function __construct()
+    {
+        $this->relationType = self::USER_RELATION_TYPE_FRIEND;
+    }
 
     public function getUser(): User
     {

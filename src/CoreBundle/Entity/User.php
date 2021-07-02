@@ -490,9 +490,15 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     /**
      * @var Collection<int, UserRelUser>|UserRelUser[]
-     * @ORM\OneToMany(targetEntity="UserRelUser", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="UserRelUser", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
      */
-    protected Collection $userRelUsers;
+    protected Collection $friends;
+
+    /**
+     * @var Collection<int, UserRelUser>|UserRelUser[]
+     * @ORM\OneToMany(targetEntity="UserRelUser", mappedBy="friend", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     */
+    protected Collection $friendsWithMe;
 
     /**
      * @var Collection<int, GradebookLinkevalLog>|GradebookLinkevalLog[]
@@ -793,7 +799,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->gradeBookResults = new ArrayCollection();
         $this->gradeBookResultLogs = new ArrayCollection();
         $this->gradeBookScoreLogs = new ArrayCollection();
-        $this->userRelUsers = new ArrayCollection();
+        $this->friends = new ArrayCollection();
+        $this->friendsWithMe = new ArrayCollection();
         $this->gradeBookLinkEvalLogs = new ArrayCollection();
         $this->sequenceValues = new ArrayCollection();
         $this->trackEExerciseConfirmations = new ArrayCollection();
@@ -2081,9 +2088,28 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @return UserRelUser[]|Collection
      */
-    public function getUserRelUsers()
+    public function getFriends()
     {
-        return $this->userRelUsers;
+        return $this->friends;
+    }
+
+    /**
+     * @return UserRelUser[]|Collection
+     */
+    public function getFriendsWithMe()
+    {
+        return $this->friendsWithMe;
+    }
+
+    public function addFriend(self $friend): self
+    {
+        $userRelUser = (new UserRelUser())
+            ->setUser($this)
+            ->setFriend($friend)
+        ;
+        $this->friends->add($userRelUser);
+
+        return $this;
     }
 
     /**

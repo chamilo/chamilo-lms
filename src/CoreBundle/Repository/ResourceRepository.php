@@ -119,7 +119,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
-    public function update(AbstractResource $resource, bool $andFlush = true): void
+    public function update(AbstractResource | User $resource, bool $andFlush = true): void
     {
         if (!$resource->hasResourceNode()) {
             throw new Exception('Resource needs a resource node');

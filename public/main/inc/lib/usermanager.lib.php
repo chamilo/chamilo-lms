@@ -753,7 +753,7 @@ class UserManager
             }
 
             // Delete user from friend lists
-            SocialManager::remove_user_rel_user($user_id, true);
+            //SocialManager::remove_user_rel_user($user_id, true);
         }
 
         // Removing survey invitation

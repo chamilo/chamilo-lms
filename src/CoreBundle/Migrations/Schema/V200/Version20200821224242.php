@@ -30,6 +30,10 @@ final class Version20200821224242 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE message CHANGE msg_status msg_type SMALLINT NOT NULL');
         }
 
+        if (!$table->hasColumn('starred')) {
+            $this->addSql('ALTER TABLE message ADD starred TINYINT(1) NOT NULL');
+        }
+
         if ($table->hasIndex('idx_message_parent')) {
             $this->addSql('DROP INDEX idx_message_parent ON message');
         }

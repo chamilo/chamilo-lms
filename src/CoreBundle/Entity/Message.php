@@ -147,6 +147,13 @@ class Message
     protected bool $read;
 
     /**
+     * @ORM\Column(name="starred", type="boolean", nullable=false)
+     */
+    #[Assert\NotNull]
+    #[Groups(['message:read', 'message:write'])]
+    protected bool $starred;
+
+    /**
      * @ORM\Column(name="send_date", type="datetime", nullable=false)
      */
     #[Groups(['message:read'])]
@@ -229,6 +236,7 @@ class Message
         $this->likes = new ArrayCollection();
         $this->votes = 0;
         $this->read = false;
+        $this->starred = false;
     }
 
     /**
@@ -457,6 +465,18 @@ class Message
     public function setRead(bool $read): self
     {
         $this->read = $read;
+
+        return $this;
+    }
+
+    public function isStarred(): bool
+    {
+        return $this->starred;
+    }
+
+    public function setStarred(bool $starred): self
+    {
+        $this->starred = $starred;
 
         return $this;
     }

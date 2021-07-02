@@ -39,17 +39,17 @@ use UserManager;
  * EquatableInterface is needed to check if the user needs to be refreshed.
  *
  * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_USER')"},
+ *     attributes={"security"="is_granted('ROLE_ADMIN')"},
  *     iri="http://schema.org/Person",
  *     normalizationContext={"groups"={"user:read"}},
  *     denormalizationContext={"groups"={"user:write"}},
  *     collectionOperations={
- *         "get"={"security"="is_granted('ROLE_USER')"},
- *         "post"={"security"="is_granted('ROLE_USER')"}
+ *         "get"={"security"="is_granted('ROLE_ADMIN')"},
+ *         "post"={"security"="is_granted('ROLE_ADMIN')"}
  *     },
  *     itemOperations={
- *         "get"={"security"="is_granted('ROLE_USER')"},
- *         "put"={"security"="is_granted('ROLE_USER')"},
+ *         "get"={"security"="is_granted('ROLE_ADMIN')"},
+ *         "put"={"security"="is_granted('ROLE_ADMIN')"},
  *     },
  * )
  *

@@ -25,6 +25,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     }
  * )
  * @ORM\Entity
+ * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\SkillRelUserListener"})
  */
 class SkillRelUser
 {

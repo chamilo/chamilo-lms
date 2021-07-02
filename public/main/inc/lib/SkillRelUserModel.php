@@ -132,8 +132,8 @@ class SkillRelUserModel extends Model
         return $router->generate(
             'badge_issued_all',
             [
-                'skill_id' => $skillIssue->getSkill()->getId(),
-                'user_id' => $skillIssue->getUser()->getId(),
+                'skillId' => $skillIssue->getSkill()->getId(),
+                'userId' => $skillIssue->getUser()->getId(),
             ]
         );
     }

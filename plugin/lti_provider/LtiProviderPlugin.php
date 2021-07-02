@@ -25,14 +25,14 @@ class LtiProviderPlugin extends Plugin
         $author = 'Christian Beeznest';
 
         $publicKey = $this->getPublicKey();
-        $message = Display::return_message($this->get_lang('description'));
+        $message = Display::return_message($this->get_lang('Description'));
 
         if (empty($publicKey)) {
             $publicKey = $this->get_lang('GenerateKeyPairInfo');
         }
 
         $pkHtml = '<div class="form-group ">
-                    <label for="lti_provider_public_key" class="col-sm-2 control-label">'.$this->get_lang('public_key').'</label>
+                    <label for="lti_provider_public_key" class="col-sm-2 control-label">'.$this->get_lang('PublicKey').'</label>
                     <div class="col-sm-8">
                         <pre>'.$publicKey.'</pre>
                         <p class="help-block"></p>

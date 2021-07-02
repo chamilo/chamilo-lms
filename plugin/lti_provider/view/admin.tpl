@@ -15,9 +15,9 @@
             <thead>
                 <tr>
                     <th>{{ 'PlatformName'|get_plugin_lang('LtiProviderPlugin') }}</th>
-                    <th>{{ 'client_id'|get_plugin_lang('LtiProviderPlugin') }}</th>
-                    <th class="text-center">{{ 'deployment_id'|get_plugin_lang('LtiProviderPlugin') }}</th>
-                    <th class="text-center">{{ 'kid'|get_plugin_lang('LtiProviderPlugin') }}</th>
+                    <th>{{ 'ClientId'|get_plugin_lang('LtiProviderPlugin') }}</th>
+                    <th class="text-center">{{ 'DeploymentId'|get_plugin_lang('LtiProviderPlugin') }}</th>
+                    <th class="text-center">{{ 'KeyId'|get_plugin_lang('LtiProviderPlugin') }}</th>
                     <th class="text-center">{{ 'URLs'|get_plugin_lang('LtiProviderPlugin') }}</th>
                     <th class="text-right">{{ 'Actions'|get_lang }}</th>
                 </tr>
@@ -31,9 +31,9 @@
                     <td>{{ platform.getDeploymentId }}</td>
                     <td>{{ platform.getKid }}</td>
                     <td>
-                        <p><strong>{{ 'auth_login_url'|get_plugin_lang('LtiProviderPlugin') }}:</strong><br> {{ platform.getAuthLoginUrl }}</p>
-                        <p><strong>{{ 'auth_token_url'|get_plugin_lang('LtiProviderPlugin') }}:</strong><br> {{ platform.getAuthTokenUrl }}</p>
-                        <p><strong>{{ 'key_set_url'|get_plugin_lang('LtiProviderPlugin') }}:</strong><br> {{ platform.getKeySetUrl }}</p>
+                        <p><strong>{{ 'AuthLoginUrl'|get_plugin_lang('LtiProviderPlugin') }}:</strong><br> {{ platform.getAuthLoginUrl }}</p>
+                        <p><strong>{{ 'AuthTokenUrl'|get_plugin_lang('LtiProviderPlugin') }}:</strong><br> {{ platform.getAuthTokenUrl }}</p>
+                        <p><strong>{{ 'KeySetUrl'|get_plugin_lang('LtiProviderPlugin') }}:</strong><br> {{ platform.getKeySetUrl }}</p>
                     </td>
                     <td>
                         <a href="{{ _p.web_plugin }}lti_provider/edit.php?{{ url_params }}">

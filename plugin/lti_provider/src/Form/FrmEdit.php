@@ -43,12 +43,12 @@ class FrmEdit extends FormValidator
         $this->addHeader($plugin->get_lang('ConnectionDetails'));
 
         $this->addText('issuer', $plugin->get_lang('PlatformName'));
-        $this->addUrl('auth_login_url', $plugin->get_lang('auth_login_url'));
-        $this->addUrl('auth_token_url', $plugin->get_lang('auth_token_url'));
-        $this->addUrl('key_set_url', $plugin->get_lang('key_set_url'));
-        $this->addText('client_id', $plugin->get_lang('client_id'));
-        $this->addText('deployment_id', $plugin->get_lang('deployment_id'));
-        $this->addText('kid', $plugin->get_lang('kid'));
+        $this->addUrl('auth_login_url', $plugin->get_lang('AuthLoginUrl'));
+        $this->addUrl('auth_token_url', $plugin->get_lang('AuthTokenUrl'));
+        $this->addUrl('key_set_url', $plugin->get_lang('KeySetUrl'));
+        $this->addText('client_id', $plugin->get_lang('ClientId'));
+        $this->addText('deployment_id', $plugin->get_lang('DeploymentId'));
+        $this->addText('kid', $plugin->get_lang('KeyId'));
 
         $this->addButtonCreate($plugin->get_lang('EditPlatform'));
         $this->addHidden('id', $this->platform->getId());

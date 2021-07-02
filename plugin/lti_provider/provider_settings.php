@@ -33,23 +33,23 @@ try {
 
 
     $html = '<div class="row">'
-        .'<div class="col-xs-2 text-right"><strong>'.$plugin->get_lang('name').'</strong></div>'
+        .'<div class="col-xs-2 text-right"><strong>'.$plugin->get_lang('Name').'</strong></div>'
         .'<div class="col-xs-10">'.$name.'</div>'
         .'</div>'
         .'<div class="row">'
-        .'<div class="col-xs-2 text-right"><strong>'.$plugin->get_lang('launch_url').'</strong></div>'
+        .'<div class="col-xs-2 text-right"><strong>'.$plugin->get_lang('LaunchUrl').'</strong></div>'
         .'<div class="col-xs-10">'.$launchUrl.'</div>'
         .'</div>'
         .'<div class="row">'
-        .'<div class="col-xs-2 text-right"><strong>'.$plugin->get_lang('login_url').'</strong></div>'
+        .'<div class="col-xs-2 text-right"><strong>'.$plugin->get_lang('LoginUrl').'</strong></div>'
         .'<div class="col-xs-10">'.$loginUrl.'</div>'
         .'</div>'
         .'<div class="row">'
-        .'<div class="col-xs-2 text-right"><strong>'.$plugin->get_lang('redirect_url').'</strong></div>'
+        .'<div class="col-xs-2 text-right"><strong>'.$plugin->get_lang('RedirectUrl').'</strong></div>'
         .'<div class="col-xs-10">'.$redirectUrl.'</div>'
         .'</div>'
         .'<div class="row">'
-        .'<div class="col-xs-2 text-right"><strong>'.$plugin->get_lang('public_key').'</strong></div>'
+        .'<div class="col-xs-2 text-right"><strong>'.$plugin->get_lang('PublicKey').'</strong></div>'
         .'<div class="col-xs-10"><pre>'.$publicKey.'</pre></div>'
         .'</div>';
 

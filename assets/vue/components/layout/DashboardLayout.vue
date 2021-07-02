@@ -47,12 +47,12 @@
             <q-tooltip>Inbox</q-tooltip>
           </q-btn>
 
-          <q-btn
-              v-if="isAuthenticated" round dense flat color="grey-8" icon="folder"
-               :to="'/resources/personal_files/' + currentUser.resourceNode.id"
-          >
-            <q-tooltip>Files</q-tooltip>
-          </q-btn>
+<!--          <q-btn-->
+<!--              v-if="isAuthenticated" round dense flat color="grey-8" icon="folder"-->
+<!--               :to="'/resources/personal_files/' + currentUser.resourceNode.id"-->
+<!--          >-->
+<!--            <q-tooltip>Files</q-tooltip>-->
+<!--          </q-btn>-->
 
 
           <q-btn v-if="isAuthenticated" round dense flat color="grey-8" icon="notifications">
@@ -211,7 +211,7 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import {mapGetters, useStore} from "vuex";
 import isEmpty from "lodash/isEmpty";
 import useState from "../../hooks/useState";
 import {computed, ref, toRefs} from "vue";
@@ -228,7 +228,11 @@ export default {
     const rightDrawerOpen = ref(false);
     const { showBreadcrumb } = toRefs(props);
 
+    /*const store = useStore();
+    const currentUser = store.getters["security/getUser"];*/
+
     return {
+      //currentUser,
       showBreadcrumb,
       isSettingsPanelOpen,
       isSearchPanelOpen,

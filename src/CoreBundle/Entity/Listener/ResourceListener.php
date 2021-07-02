@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\EntityAccessUrlInterface;
+use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
@@ -85,12 +86,13 @@ class ResourceListener
         // Check if creator was set with $resource->setCreator()
         $creator = $resource->getResourceNodeCreator();
 
+        $currentUser = null;
         if (null === $creator) {
             // Get the creator from the current request.
-            /** @var User|null $defaultCreator */
-            $defaultCreator = $this->security->getUser();
-            if (null !== $defaultCreator) {
-                $creator = $defaultCreator;
+            /** @var User|null $currentUser */
+            $currentUser = $this->security->getUser();
+            if (null !== $currentUser) {
+                $creator = $currentUser;
             }
 
             // Check if user has a resource node.
@@ -163,7 +165,20 @@ class ResourceListener
         }
 
         if (null === $parentNode && !$resource instanceof AccessUrl) {
-            throw new InvalidArgumentException(sprintf('Resource %s needs a parent', $resource->getResourceName()));
+            $msg = sprintf('Resource %s needs a parent', $resource->getResourceName());
+
+            throw new InvalidArgumentException($msg);
+        }
+
+        if ($resource instanceof PersonalFile) {
+            $valid = $parentNode->getCreator()->getUsername() === $currentUser->getUsername() ||
+                     $parentNode->getId() === $currentUser->getResourceNode()->getId();
+
+            if (!$valid) {
+                $msg = sprintf('User %s cannot add a file to another user', $currentUser->getUsername());
+
+                throw new InvalidArgumentException($msg);
+            }
         }
 
         // 4. Create ResourceNode for the Resource

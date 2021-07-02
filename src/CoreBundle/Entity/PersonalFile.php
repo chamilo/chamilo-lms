@@ -100,7 +100,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ApiFilter(SearchFilter::class, properties: [
     'title' => 'partial',
-    'resourceNode.parent' => 'partial',
+    'resourceNode.parent' => 'exact',
 ])]
 #[ApiFilter(PropertyFilter::class)]
 #[ApiFilter(

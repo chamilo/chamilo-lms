@@ -236,6 +236,31 @@ class PersonalFileRepositoryTest extends AbstractApiTest
 
         // Creates "sender" user.
         $user = $this->createUser($username, $password);
+        $token = $this->getUserToken(
+            [
+                'username' => $username,
+                'password' => $password,
+            ]
+        );
+
+        // Add a folder.
+
+        // 1. This is the original user.
+        $resourceNodeId = $user->getResourceNode()->getId();
+
+        $this->createClientWithCredentials($token)->request(
+            'POST',
+            '/api/personal_files',
+            [
+                'json' => [
+                    'filetype' => 'folder',
+                    'title' => 'temp',
+                    'parentResourceNodeId' => $resourceNodeId,
+                ],
+            ]
+        );
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(201);
 
         $this->createUser('bad', 'bad');
         $badUserToken = $this->getUserToken(
@@ -246,12 +271,9 @@ class PersonalFileRepositoryTest extends AbstractApiTest
             true
         );
 
-        // 1. This is the original user.
-        $resourceNodeId = $user->getResourceNode()->getId();
-
         $file = $this->getUploadedFile();
 
-        // 2. "bad user" tries to upload file to the original user.
+        // 2. "bad user" tries to upload file to the original "sender" personal list.
         $this->createClientWithCredentials($badUserToken)->request(
             'POST',
             '/api/personal_files',
@@ -271,10 +293,9 @@ class PersonalFileRepositoryTest extends AbstractApiTest
                 ],
             ]
         );
-        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseStatusCodeSame(500);
 
-        // Bad user tries to get files from other user
-
+        // Bad user tries to get files from other user, this should return an empty array
         $this->createClientWithCredentials($badUserToken)->request(
             'GET',
             '/api/personal_files',
@@ -285,6 +306,12 @@ class PersonalFileRepositoryTest extends AbstractApiTest
             ]
         );
 
-        $this->assertResponseStatusCodeSame(401);
+        $this->assertResponseIsSuccessful();
+        $this->assertJsonContains([
+            '@context' => '/api/contexts/PersonalFile',
+            '@id' => '/api/personal_files',
+            '@type' => 'hydra:Collection',
+            'hydra:totalItems' => 0,
+        ]);
     }
 }

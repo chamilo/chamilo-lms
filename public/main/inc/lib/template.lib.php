@@ -1107,32 +1107,6 @@ class Template
     }
 
     /**
-     * Prepare the _u array for template files. The _u array contains
-     * information about the current user, as returned by
-     * api_get_user_info().
-     */
-    private function set_user_parameters()
-    {
-        $user_info = [];
-        $user_info['logged'] = 0;
-        $this->user_is_logged_in = false;
-        if (!api_is_anonymous()) {
-            $user_info = api_get_user_info(api_get_user_id(), true);
-            $user_info['logged'] = 1;
-
-            $user_info['is_admin'] = 0;
-            if (api_is_platform_admin()) {
-                $user_info['is_admin'] = 1;
-            }
-
-            $user_info['messages_count'] = MessageManager::getCountNewMessages();
-            $this->user_is_logged_in = true;
-        }
-        // Setting the $_u array that could be use in any template
-        $this->assign('_u', $user_info);
-    }
-
-    /**
      * Set header parameters.
      *
      * @deprecated

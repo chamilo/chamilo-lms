@@ -19,37 +19,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class MessageManager
 {
     /**
-     * Get count new messages for the current user from the database.
-     *
-     * @return int
-     */
-    public static function getCountNewMessages()
-    {
-        $userId = api_get_user_id();
-        if (empty($userId)) {
-            return false;
-        }
-
-        static $count;
-        if (!isset($count)) {
-            $cacheAvailable = api_get_configuration_value('apc');
-            if (true === $cacheAvailable) {
-                $var = api_get_configuration_value('apc_prefix').'social_messages_unread_u_'.$userId;
-                if (apcu_exists($var)) {
-                    $count = apcu_fetch($var);
-                } else {
-                    $count = self::getCountNewMessagesFromDB($userId);
-                    apcu_store($var, $count, 60);
-                }
-            } else {
-                $count = self::getCountNewMessagesFromDB($userId);
-            }
-        }
-
-        return $count;
-    }
-
-    /**
      * Gets the total number of messages, used for the inbox sortable table.
      *
      * @param array $params
@@ -1888,83 +1857,6 @@ class MessageManager
      *
      * @return string
      */
-    public static function inboxDisplay($keyword = '')
-    {
-        $success = get_lang('The selected messages have been deleted');
-        $success_read = get_lang('Selected messages have been marked as read');
-        $success_unread = get_lang('Selected messages have been marked as unread');
-        $currentUserId = api_get_user_id();
-        if (isset($_REQUEST['action'])) {
-            switch ($_REQUEST['action']) {
-                case 'mark_as_unread':
-                    if (is_array($_POST['id'])) {
-                        foreach ($_POST['id'] as $index => $messageId) {
-                            self::update_message_status(
-                                $currentUserId,
-                                $messageId,
-                                MESSAGE_STATUS_UNREAD
-                            );
-                        }
-                    }
-                    Display::addFlash(Display::return_message(
-                        $success_unread,
-                        'normal',
-                        false
-                    ));
-                    break;
-                case 'mark_as_read':
-                    if (is_array($_POST['id'])) {
-                        foreach ($_POST['id'] as $index => $messageId) {
-                            self::update_message_status(
-                                $currentUserId,
-                                $messageId,
-                                MESSAGE_STATUS_NEW
-                            );
-                        }
-                    }
-                    Display::addFlash(Display::return_message(
-                        $success_read,
-                        'normal',
-                        false
-                    ));
-                    break;
-                case 'delete':
-                    foreach ($_POST['id'] as $index => $messageId) {
-                        self::delete_message_by_user_receiver($currentUserId, $messageId);
-                    }
-                    Display::addFlash(Display::return_message(
-                        $success,
-                        'normal',
-                        false
-                    ));
-                    break;
-                case 'deleteone':
-                    $result = self::delete_message_by_user_receiver($currentUserId, $_GET['id']);
-                    if ($result) {
-                        Display::addFlash(
-                            Display::return_message(
-                                $success,
-                                'confirmation',
-                                false
-                            )
-                        );
-                    }
-                    break;
-            }
-            header('Location: '.api_get_self());
-            exit;
-        }
-
-        $actions = ['reply', 'mark_as_unread', 'mark_as_read', 'forward', 'delete'];
-
-        return self::getMessageGrid(Message::MESSAGE_TYPE_INBOX, $keyword, $actions);
-    }
-
-    /**
-     * @param string $keyword
-     *
-     * @return string
-     */
     public static function getPromotedMessagesGrid($keyword)
     {
         $actions = ['delete'];
@@ -1998,103 +1890,6 @@ class MessageManager
         }
 
         return self::getMessageGrid(Message::MESSAGE_TYPE_PROMOTED, $keyword, $actions);
-    }
-
-    /**
-     * @param string $keyword
-     *
-     * @return string
-     */
-    public static function outBoxDisplay($keyword)
-    {
-        $actions = ['delete'];
-
-        $success = get_lang('The selected messages have been deleted');
-        $currentUserId = api_get_user_id();
-        if (isset($_REQUEST['action'])) {
-            switch ($_REQUEST['action']) {
-                case 'delete':
-                    foreach ($_POST['id'] as $index => $messageId) {
-                        self::delete_message_by_user_sender($currentUserId, $messageId);
-                    }
-                    Display::addFlash(Display::return_message(
-                        $success,
-                        'normal',
-                        false
-                    ));
-
-                    break;
-                case 'deleteone':
-                    self::delete_message_by_user_sender($currentUserId, $_GET['id']);
-                    Display::addFlash(Display::return_message(
-                        $success,
-                        'confirmation',
-                        false
-                    ));
-                    break;
-            }
-
-            header('Location: '.api_get_self());
-            exit;
-        }
-
-        return self::getMessageGrid(Message::MESSAGE_TYPE_OUTBOX, $keyword, $actions);
-    }
-
-    /**
-     * @param string $keyword
-     *
-     * @return string
-     */
-    public static function outbox_display($keyword = '')
-    {
-        Session::write('message_sent_search_keyword', $keyword);
-        $success = get_lang('The selected messages have been deleted').'&nbsp</b><br />
-                    <a href="outbox.php">'.get_lang('Back to outbox').'</a>';
-
-        $html = '';
-        if (isset($_REQUEST['action'])) {
-            switch ($_REQUEST['action']) {
-                case 'delete':
-                    $count = count($_POST['id']);
-                    if (0 != $count) {
-                        foreach ($_POST['id'] as $index => $messageId) {
-                            self::delete_message_by_user_receiver(
-                                api_get_user_id(),
-                                $messageId
-                            );
-                        }
-                    }
-                    $html .= Display::return_message(api_xml_http_response_encode($success), 'normal', false);
-                    break;
-                case 'deleteone':
-                    self::delete_message_by_user_receiver(api_get_user_id(), $_GET['id']);
-                    $html .= Display::return_message(api_xml_http_response_encode($success), 'normal', false);
-                    $html .= '<br/>';
-                    break;
-            }
-        }
-
-        // display sortable table with messages of the current user
-        $table = new SortableTable(
-            'message_outbox',
-            ['MessageManager', 'getNumberOfMessages'],
-            ['MessageManager', 'getMessageData'],
-            2,
-            20,
-            'DESC'
-        );
-        $table->setDataFunctionParams(['keyword' => $keyword, 'type' => Message::MESSAGE_TYPE_OUTBOX]);
-
-        $table->set_header(0, '', false, ['style' => 'width:15px;']);
-        $table->set_header(1, get_lang('Messages'), false);
-        $table->set_header(2, get_lang('Date'), true, ['style' => 'width:180px;']);
-        $table->set_header(3, get_lang('Edit'), false, ['style' => 'width:70px;']);
-
-        $table->set_form_actions(['delete' => get_lang('Delete selected messages')]);
-        $html .= $table->return_table();
-
-        return $html;
     }
 
     /**
@@ -2768,32 +2563,5 @@ class MessageManager
         }
 
         return $btnLike.PHP_EOL.$btnDislike;
-    }
-
-    /**
-     * Execute the SQL necessary to know the number of messages in the database.
-     *
-     * @param int $userId The user for which we need the unread messages count
-     *
-     * @return int The number of unread messages in the database for the given user
-     */
-    public static function getCountNewMessagesFromDB($userId)
-    {
-        $userId = (int) $userId;
-
-        if (empty($userId)) {
-            return 0;
-        }
-
-        $table = Database::get_main_table(TABLE_MESSAGE);
-        $sql = "SELECT COUNT(id) as count
-                FROM $table
-                WHERE
-                    user_receiver_id = $userId AND
-                    msg_status = ".MESSAGE_STATUS_UNREAD;
-        $result = Database::query($sql);
-        $row = Database::fetch_assoc($result);
-
-        return (int) $row['count'];
     }
 }

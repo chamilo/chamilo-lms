@@ -4135,25 +4135,6 @@ class UserManager
     }
 
     /**
-     * Shows the user menu.
-     */
-    public static function show_menu()
-    {
-        echo '<div class="actions">';
-        echo '<a href="/main/auth/profile.php">'.
-            Display::return_icon('profile.png').' '.get_lang('Profile').'</a>';
-        echo '<a href="/main/messages/inbox.php">'.
-            Display::return_icon('inbox.png').' '.get_lang('Inbox').'</a>';
-        echo '<a href="/main/messages/outbox.php">'.
-            Display::return_icon('outbox.png').' '.get_lang('Outbox').'</a>';
-        echo '<span style="float:right; padding-top:7px;">'.
-        '<a href="/main/auth/profile.php?show=1">'.
-            Display::return_icon('edit.gif').' '.get_lang('Configuration').'</a>';
-        echo '</span>';
-        echo '</div>';
-    }
-
-    /**
      * Allow to register contact to social network.
      *
      * @param int $friend_id     user friend id

@@ -791,6 +791,7 @@ class MessageManager
         $em = Database::getManager();
         $repo = $em->getRepository(Message::class);
         $criteria = ['id' => $id, 'userReceiver' => $user_receiver_id];
+        /** @var Message $message */
         $message = $repo->findOneBy($criteria);
 
         if (null === $message || ($message && MESSAGE_STATUS_OUTBOX === $message->getMsgType())) {

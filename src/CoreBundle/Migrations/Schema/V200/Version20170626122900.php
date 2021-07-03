@@ -196,7 +196,23 @@ class Version20170626122900 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE user_rel_user CHANGE user_id user_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE user_rel_user CHANGE friend_user_id friend_user_id INT DEFAULT NULL');
 
-        if (false === $table->hasForeignKey('FK_DBF650A893D1119E')) {
+        $this->addSql('ALTER TABLE user_rel_user CHANGE friend_user_id friend_user_id INT DEFAULT NULL');
+
+        if ($table->hasColumn('last_edit')) {
+            $this->addSql("UPDATE user_rel_user SET last_edit = NOW() WHERE last_edit IS NULL");
+        }
+
+        if (!$table->hasColumn('created_at')) {
+            $this->addSql("ALTER TABLE user_rel_user ADD created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)");
+            $this->addSql("UPDATE user_rel_user SET created_at = last_edit");
+        }
+
+        if (!$table->hasColumn('updated_at')) {
+            $this->addSql("ALTER TABLE user_rel_user ADD updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)");
+            $this->addSql("UPDATE user_rel_user SET updated_at = last_edit");
+        }
+
+        if (!$table->hasForeignKey('FK_DBF650A893D1119E')) {
             $this->addSql(
                 ' ALTER TABLE user_rel_user ADD CONSTRAINT FK_DBF650A893D1119E FOREIGN KEY (friend_user_id) REFERENCES user (id) ON DELETE CASCADE;'
             );

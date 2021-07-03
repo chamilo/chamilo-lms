@@ -8,8 +8,8 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CoreBundle\Traits\UserTrait;
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * Associations between users.
@@ -42,7 +42,7 @@ use Doctrine\ORM\Mapping as ORM;
         ],
     ],
     attributes: [
-        'security' => 'is_granted("ROLE_USER") and object.user == user',
+        'security' => 'is_granted("ROLE_USER")',
     ],
     denormalizationContext: [
         'groups' => ['message_tag:write'],
@@ -54,6 +54,7 @@ use Doctrine\ORM\Mapping as ORM;
 class UserRelUser
 {
     use UserTrait;
+    use TimestampableEntity;
 
     public const USER_RELATION_TYPE_UNKNOWN = 1;
     public const USER_RELATION_TYPE_PARENT = 2;
@@ -88,11 +89,6 @@ class UserRelUser
      * @ORM\Column(name="relation_type", type="integer", nullable=false)
      */
     protected int $relationType;
-
-    /**
-     * @ORM\Column(name="last_edit", type="datetime", nullable=true)
-     */
-    protected ?DateTime $lastEdit = null;
 
     public function __construct()
     {
@@ -133,23 +129,6 @@ class UserRelUser
     public function getRelationType(): ?int
     {
         return $this->relationType;
-    }
-
-    public function setLastEdit(DateTime $lastEdit): self
-    {
-        $this->lastEdit = $lastEdit;
-
-        return $this;
-    }
-
-    /**
-     * Get lastEdit.
-     *
-     * @return DateTime
-     */
-    public function getLastEdit()
-    {
-        return $this->lastEdit;
     }
 
     /**

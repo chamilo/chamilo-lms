@@ -14,16 +14,15 @@
         {{ $t('List') }}
       </q-btn>
 
-      <q-btn
+      <v-btn
         v-if="handleEdit"
-        no-caps
-        class="btn btn-primary"
         :loading="isLoading"
         @click="editItem"
-        unelevated
+        tile
+        icon
       >
-        {{ $t('Edit') }}
-      </q-btn>
+        <v-icon icon="mdi-pencil"/>
+      </v-btn>
 
 <!--      <q-btn-->
 <!--        v-if="handleSubmit"-->

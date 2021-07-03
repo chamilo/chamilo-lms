@@ -140,11 +140,12 @@ class Message
      * @ORM\Column(name="msg_type", type="smallint", nullable=false)
      */
     #[Assert\NotBlank]
-    #[Assert\Choice([
+    // @todo use enums with PHP 8.1
+    /*#[Assert\Choice([
         self::MESSAGE_TYPE_INBOX,
         self::MESSAGE_TYPE_OUTBOX,
         self::MESSAGE_TYPE_PROMOTED,
-    ])]
+    ])]*/
     /*#[ApiProperty(attributes: [
         'openapi_context' => [
             'type' => 'int',

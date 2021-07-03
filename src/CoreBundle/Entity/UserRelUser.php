@@ -10,6 +10,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Associations between users.
@@ -77,17 +78,20 @@ class UserRelUser
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="friends")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */
+    #[Assert\NotBlank]
     protected User $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="friendsWithMe")
      * @ORM\JoinColumn(name="friend_user_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */
+    #[Assert\NotBlank]
     protected User $friend;
 
     /**
      * @ORM\Column(name="relation_type", type="integer", nullable=false)
      */
+    #[Assert\NotBlank]
     protected int $relationType;
 
     public function __construct()

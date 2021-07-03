@@ -59,17 +59,25 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
         }*/
 
         $user = $this->security->getUser();
-
         $alias = $queryBuilder->getRootAliases()[0];
 
         $queryBuilder->andWhere("
             ($alias.userSender = :current AND $alias.msgType = :outbox) OR 
-            ($alias.userReceiver = :current AND $alias.msgType = :inbox)
+            ($alias.userReceiver = :current AND $alias.msgType = :inbox) OR
+            ($alias.userReceiver = :current AND $alias.msgType = :invitation) OR
+            ($alias.userReceiver = :current AND $alias.msgType = :promoted) OR
+            ($alias.userReceiver = :current AND $alias.msgType = :wallPost) OR
+            ($alias.userReceiver = :current AND $alias.msgType = :conversation) 
         ");
         $queryBuilder->setParameters([
             'current' => $user,
             'inbox' => Message::MESSAGE_TYPE_INBOX,
             'outbox' => Message::MESSAGE_TYPE_OUTBOX,
+            'invitation' => Message::MESSAGE_TYPE_INVITATION,
+            'promoted' => Message::MESSAGE_TYPE_PROMOTED,
+            'wallPost' => Message::MESSAGE_TYPE_WALL,
+            'conversation' => Message::MESSAGE_STATUS_CONVERSATION,
+
         ]);
     }
 }

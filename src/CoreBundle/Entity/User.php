@@ -2398,7 +2398,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
             ? 0
             : max(
                 $categoryCourses->map(
-                    /** @var CourseRelUser $courseRelUser */
                     function ($courseRelUser) {
                         return $courseRelUser->getSort();
                     }

@@ -77,7 +77,6 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
             'promoted' => Message::MESSAGE_TYPE_PROMOTED,
             'wallPost' => Message::MESSAGE_TYPE_WALL,
             'conversation' => Message::MESSAGE_STATUS_CONVERSATION,
-
         ]);
     }
 }

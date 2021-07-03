@@ -24,16 +24,16 @@ class ScheduledAnnouncement extends Model
     }
 
     /**
-     * @param array $where_conditions
+     * @param array $options
      *
      * @return array
      */
-    public function get_all($where_conditions = [])
+    public function get_all($options = [])
     {
         return Database::select(
             '*',
             $this->table,
-            ['where' => $where_conditions, 'order' => 'subject ASC']
+            ['where' => $options, 'order' => 'subject ASC']
         );
     }
 

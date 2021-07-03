@@ -139,7 +139,7 @@ class Certificate extends Model
      *
      * @return bool
      */
-    public function delete($force_delete = false)
+    public function deleteCertificate($force_delete = false)
     {
         $delete_db = false;
         if (!empty($this->certificate_data)) {
@@ -484,17 +484,18 @@ class Certificate extends Model
      */
     public function generateQRImage($text, $path)
     {
+        throw new \Exception('generateQRImage');
         if (!empty($text) && !empty($path)) {
             $qrCode = new QrCode($text);
             //$qrCode->setEncoding('UTF-8');
             $qrCode->setSize(120);
             $qrCode->setMargin(5);
-            $qrCode->setWriterByName('png');
+            /*$qrCode->setWriterByName('png');
             $qrCode->setErrorCorrectionLevel(ErrorCorrectionLevel::MEDIUM());
             $qrCode->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0, 'a' => 0]);
             $qrCode->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255, 'a' => 0]);
             $qrCode->setValidateResult(false);
-            $qrCode->writeFile($path);
+            $qrCode->writeFile($path);*/
 
             return true;
         }

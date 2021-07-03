@@ -514,7 +514,7 @@ switch ($action) {
         );
         if ($myCertificate) {
             $certificate = new Certificate($myCertificate['id'], $studentId);
-            $certificate->delete(true);
+            $certificate->deleteCertificate(true);
         }
         // Create new one
         $certificate = new Certificate(0, $studentId);

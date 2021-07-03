@@ -563,7 +563,7 @@ class SkillModel extends Model
     }
 
     /* Deletes a skill */
-    public function delete($skill_id)
+    public function delete($id)
     {
         /*$params = array('skill_id' => $skill_id);
 

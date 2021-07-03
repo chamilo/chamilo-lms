@@ -30,7 +30,6 @@ if (!empty($action) && $hrm && $assignedId) {
 
             if ($request) {
                 $request->setRelationType(USER_RELATION_TYPE_RRHH);
-                $request->setLastEdit(api_get_utc_datetime(null, null, true));
                 $em->persist($request);
                 $em->flush();
 

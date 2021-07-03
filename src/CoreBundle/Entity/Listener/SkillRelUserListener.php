@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
@@ -13,11 +14,6 @@ use MessageManager;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * Class SkillRelUserListener
- *
- * @package Chamilo\CoreBundle\Entity\Listener
- */
 class SkillRelUserListener
 {
     private SettingsManager $settingsManager;

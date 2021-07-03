@@ -96,7 +96,7 @@ class WSCMUser extends WSCM
         return "0";
     }
 
-    public function send_invitation(
+    /*public function send_invitation(
         $username,
         $password,
         $userfriend_id,
@@ -166,7 +166,7 @@ class WSCMUser extends WSCM
         }
 
         return get_lang('Login failed - incorrect login or password.');
-    }
+    }*/
 
     /**
      * Get a list of users of which the given conditions match with a LIKE '%cond%'.

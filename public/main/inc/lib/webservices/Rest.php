@@ -252,7 +252,7 @@ class Rest extends WebService
      *
      * @return array
      */
-    public function getUserMessages($lastMessageId = 0)
+    /*public function getUserMessages($lastMessageId = 0)
     {
         $lastMessages = MessageManager::getMessagesFromLastReceivedMessage($this->user->getId(), $lastMessageId);
         $messages = [];
@@ -261,12 +261,12 @@ class Rest extends WebService
         }
 
         return $messages;
-    }
+    }*/
 
     /**
      * @return array
      */
-    public function getUserReceivedMessages()
+    /*public function getUserReceivedMessages()
     {
         $lastMessages = MessageManager::getReceivedMessages($this->user->getId(), 0);
         $messages = [];
@@ -275,12 +275,12 @@ class Rest extends WebService
         }
 
         return $messages;
-    }
+    }*/
 
     /**
      * @return array
      */
-    public function getUserSentMessages()
+    /*public function getUserSentMessages()
     {
         $lastMessages = MessageManager::getSentMessages($this->user->getId(), 0);
         $messages = [];
@@ -290,7 +290,7 @@ class Rest extends WebService
         }
 
         return $messages;
-    }
+    }*/
 
     /**
      * Get the user courses.
@@ -1454,7 +1454,7 @@ class Rest extends WebService
         return [false];
     }
 
-    public function deleteUserMessage($messageId, $messageType)
+    /*public function deleteUserMessage($messageId, $messageType)
     {
         if ("sent" === $messageType) {
             return MessageManager::delete_message_by_user_sender($this->user->getId(), $messageId);
@@ -1466,7 +1466,7 @@ class Rest extends WebService
     public function setMessageRead($messageId)
     {
         MessageManager::update_message($this->user->getId(), $messageId);
-    }
+    }*/
 
     /**
      * Add Campus Virtual.

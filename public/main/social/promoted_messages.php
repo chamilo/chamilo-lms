@@ -44,7 +44,7 @@ if ($form->validate()) {
 }
 $actionsRight = $form->returnForm();
 $social_right_content .= Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]);
-$social_right_content .= MessageManager::getPromotedMessagesGrid($keyword);
+//$social_right_content .= MessageManager::getPromotedMessagesGrid($keyword);
 
 $tpl = new Template(null);
 // Block Social Avatar

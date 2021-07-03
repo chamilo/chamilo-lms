@@ -195,67 +195,6 @@ switch ($action) {
                 break;
         }
         break;
-    case 'send_comment':
-        if (api_is_anonymous()) {
-            exit;
-        }
-
-        if ('true' !== api_get_setting('allow_social_tool')) {
-            exit;
-        }
-
-        $messageId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-
-        if (empty($messageId)) {
-            exit;
-        }
-
-        $userId = api_get_user_id();
-        $messageInfo = MessageManager::get_message_by_id($messageId);
-        if (!empty($messageInfo)) {
-            $comment = isset($_REQUEST['comment']) ? $_REQUEST['comment'] : '';
-            if (!empty($comment)) {
-                $messageId = SocialManager::sendWallMessage(
-                    $userId,
-                    $messageInfo['user_receiver_id'],
-                    $comment,
-                    $messageId,
-                    MESSAGE_STATUS_WALL
-                );
-                if ($messageId) {
-                    $messageInfo = MessageManager::get_message_by_id($messageId);
-                    echo SocialManager::processPostComment($messageInfo);
-                }
-            }
-        }
-        break;
-    case 'delete_message':
-        if (api_is_anonymous()) {
-            exit;
-        }
-
-        if ('true' !== api_get_setting('allow_social_tool')) {
-            exit;
-        }
-
-        $messageId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-
-        if (empty($messageId)) {
-            exit;
-        }
-
-        $userId = api_get_user_id();
-        $messageInfo = MessageManager::get_message_by_id($messageId);
-        if (!empty($messageInfo)) {
-            $canDelete = ($messageInfo['user_receiver_id'] == $userId || $messageInfo['user_sender_id'] == $userId) &&
-                empty($messageInfo['group_id']);
-            if ($canDelete || api_is_platform_admin()) {
-                SocialManager::deleteMessage($messageId);
-                echo Display::return_message(get_lang('The message has been deleted'));
-                break;
-            }
-        }
-        break;
     case 'list_wall_message':
         if (api_is_anonymous()) {
             break;

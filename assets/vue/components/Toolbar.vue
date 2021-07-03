@@ -1,8 +1,9 @@
 <template>
-  <div class="q-card">
-<!--    <slot name="left" />-->
-<!--    <q-space />-->
-    <div class="p-4 flex flex-row gap-1 mb-2">
+   <v-card
+       elevation="2"
+   >
+<!--    <div class="p-4 flex flex-row gap-1 mb-2">-->
+      <slot name="left" />
       <q-btn
         v-if="handleList"
         :loading="isLoading"
@@ -127,15 +128,14 @@
   <!--        :values="filters"-->
   <!--      />-->
   <!--    </DataFilter>-->
-
+     <slot name="right" />
       <ConfirmDelete
         v-if="handleDelete"
         :show="confirmDeleteClick"
         :handle-delete="handleDelete"
-        :handle-cancel="() => (confirmDeleteClick = false)"
+        :handle-cancel="() => confirmDeleteClick = false"
       />
-    </div>
-  </div>
+  </v-card>
 </template>
 
 <script>

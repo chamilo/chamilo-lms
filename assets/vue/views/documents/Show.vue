@@ -5,13 +5,6 @@
       :handle-edit="editHandler"
       :handle-delete="del"
     >
-      <template slot="left">
-<!--        <v-toolbar-title v-if="item">-->
-<!--          {{-->
-<!--            `${$options.servicePrefix} ${item['@id']}`-->
-<!--          }}-->
-<!--        </v-toolbar-title>-->
-      </template>
     </Toolbar>
 
     <p class="text-lg" v-if="item">

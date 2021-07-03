@@ -1,13 +1,14 @@
 <template>
-    <!--        :handle-submit="onSendMessageForm"-->
-    <Toolbar
-        :handle-send="onSendMessageForm"
-    />
-    <DocumentsForm
-      ref="createForm"
-      :values="item"
-      :errors="violations"
-    >
+  <!--        :handle-submit="onSendMessageForm"-->
+  <Toolbar
+      :handle-send="onSendMessageForm"
+  />
+
+  <DocumentsForm
+    ref="createForm"
+    :values="item"
+    :errors="violations"
+  >
     <VueMultiselect
         placeholder="To"
         v-model="item.receivers"
@@ -23,29 +24,30 @@
         track-by="id"
     />
 
-    <TinyEditor
-        v-model="item.content"
-        required
-        :init="{
-          skin_url: '/build/libs/tinymce/skins/ui/oxide',
-          content_css: '/build/libs/tinymce/skins/content/default/content.css',
-          branding: false,
-          relative_urls: false,
-          height: 500,
-          toolbar_mode: 'sliding',
-          file_picker_callback : browser,
-          autosave_ask_before_unload: true,
-          plugins: [
-            'fullpage advlist autolink lists link image charmap print preview anchor',
-            'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table paste wordcount emoticons'
-          ],
-          toolbar: 'undo redo | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl',
-        }
-        "
-    />
-    </DocumentsForm>
-    <Loading :visible="isLoading" />
+  <TinyEditor
+      v-model="item.content"
+      required
+      :init="{
+        skin_url: '/build/libs/tinymce/skins/ui/oxide',
+        content_css: '/build/libs/tinymce/skins/content/default/content.css',
+        branding: false,
+        relative_urls: false,
+        height: 500,
+        toolbar_mode: 'sliding',
+        file_picker_callback : browser,
+        autosave_ask_before_unload: true,
+        plugins: [
+          'fullpage advlist autolink lists link image charmap print preview anchor',
+          'searchreplace visualblocks code fullscreen',
+          'insertdatetime media table paste wordcount emoticons'
+        ],
+        toolbar: 'undo redo | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl',
+      }
+      "
+  />
+  </DocumentsForm>
+  <Loading :visible="isLoading" />
+
 </template>
 <style src="vue-multiselect/dist/vue-multiselect.css"></style>
 <script>
@@ -69,7 +71,7 @@ const { mapFields } = createHelpers({
 });
 
 export default {
-  name: 'MessageCreate',
+  name: 'MessageReply',
   servicePrefix,
   mixins: [CreateMixin],
   components: {
@@ -81,6 +83,8 @@ export default {
   setup () {
     const users = ref([]);
     const isLoadingSelect = ref(false);
+
+
 
     function asyncFind (query) {
       if (query.toString().length < 3) {

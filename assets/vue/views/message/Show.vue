@@ -3,12 +3,21 @@
     <Toolbar
       :handle-delete="del"
     >
-      <template slot="left">
+      <template v-slot:right>
 <!--        <v-toolbar-title v-if="item">-->
 <!--          {{-->
 <!--            `${$options.servicePrefix} ${item['@id']}`-->
 <!--          }}-->
 <!--        </v-toolbar-title>-->
+
+        <v-btn
+            :loading="isLoading"
+            tile
+            icon
+            @click="reply"
+        >
+          <v-icon icon="mdi-reply" />
+        </v-btn>
       </template>
     </Toolbar>
 
@@ -72,7 +81,7 @@ import isEmpty from "lodash/isEmpty";
 import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
 import useVuelidate from "@vuelidate/core";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import NotificationMixin from "../../mixins/NotificationMixin";
 
 const servicePrefix = 'Message';
@@ -91,16 +100,17 @@ export default {
     const user = store.getters["security/getUser"];
     const find = store.getters["message/find"];
     const route = useRoute();
+    const router = useRouter();
 
     let id = route.params.id;
     if (isEmpty(id)) {
       id = route.query.id;
     }
 
+    console.log(id);
+    console.log(decodeURIComponent(id));
+
     let item = find(decodeURIComponent(id));
-    console.log('------');
-    console.log('item', item);
-    console.log('tags', item.tags);
 
     // Change to read
     if (false === item.read) {
@@ -177,6 +187,11 @@ export default {
       tags.value = data['hydra:member'];
     });
 
+    function reply() {
+      let params = route.query;
+      router.push({name: `${servicePrefix}Reply`, query: params});
+    }
+
     function asyncFind (query) {
       if (query.toString().length < 3) {
         return;
@@ -198,7 +213,10 @@ export default {
       });
     }
 
-    return {v$: useVuelidate(), tags, isLoadingSelect, addTag, addTagToMessage, removeTagFromMessage, asyncFind, item};
+    return {
+      v$: useVuelidate(), tags, isLoadingSelect, item,
+      addTag, addTagToMessage, removeTagFromMessage, asyncFind, reply
+    };
   },
   mixins: [ShowMixin, NotificationMixin],
   computed: {

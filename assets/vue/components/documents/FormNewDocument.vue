@@ -108,7 +108,7 @@ export default {
       //const route = useRoute();
       let nodeId = this.$route.params['node'];
       let folderParams = this.$route.query;
-      let url = this.$router.resolve({ name: 'DocumentManager', params: { id: nodeId }, query: folderParams })
+      let url = this.$router.resolve({ name: 'DocumentForHtmlEditor', params: { id: nodeId }, query: folderParams })
       url = url.fullPath;
       console.log(url);
 

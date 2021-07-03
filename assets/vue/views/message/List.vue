@@ -1,7 +1,7 @@
 <template>
-  <div v-if="isAuthenticated"  class="q-card">
-    <div class="p-4 flex flex-row gap-1 mb-2">
-      <div class="flex flex-row gap-2" >
+  <Toolbar
+  >
+    <template v-slot:right>
         <v-btn
             tile
             icon
@@ -25,10 +25,7 @@
          >
           <v-icon icon="mdi-delete" />
         </v-btn>
-
-
 <!--        :disabled="!selectedItems || !selectedItems.length"-->
-
         <v-btn
             icon
             tile
@@ -45,11 +42,11 @@
         >
           <v-icon icon="mdi-email-open" />
         </v-btn>
-      </div>
-    </div>
-  </div>
 
-  <div class="flex flex-row ">
+    </template>
+  </Toolbar>
+
+  <div class="flex flex-row pt-2">
     <div class="w-1/5 ">
       <v-card
         max-width="300"
@@ -254,7 +251,7 @@ import { mapActions, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 import ListMixin from '../../mixins/ListMixin';
 import ActionCell from '../../components/ActionCell.vue';
-//import Toolbar from '../../components/Toolbar.vue';
+import Toolbar from '../../components/Toolbar.vue';
 import ResourceFileIcon from '../../components/documents/ResourceFileIcon.vue';
 import ResourceFileLink from '../../components/documents/ResourceFileLink.vue';
 
@@ -274,7 +271,7 @@ export default {
   name: 'MessageList',
   servicePrefix: 'Message',
   components: {
-    //8Toolbar,
+    Toolbar,
     ActionCell,
     ResourceFileIcon,
     ResourceFileLink,

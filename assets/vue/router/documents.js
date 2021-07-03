@@ -11,14 +11,6 @@ export default {
       component: () => import('../views/documents/List.vue')
     },
     {
-      name: 'DocumentManager',
-      path: 'manager',
-      component: () => import('../views/documents/DocumentManager.vue'),
-      meta: {
-        layout: 'Empty'
-      }
-    },
-    {
       name: 'DocumentsCreate',
       path: 'new',
       component: () => import('../views/documents/Create.vue')
@@ -49,6 +41,14 @@ export default {
       name: 'DocumentsShow',
       path: 'show',
       component: () => import('../views/documents/Show.vue')
-    }
+    },
+    {
+      name: 'DocumentForHtmlEditor',
+      path: 'manager',
+      component: () => import('../views/documents/DocumentForHtmlEditor.vue'),
+      meta: {
+        layout: 'Empty'
+      }
+    },
   ]
 };

@@ -115,7 +115,7 @@ import isEmpty from 'lodash/isEmpty';
 import moment from "moment";
 
 export default {
-  name: 'DocumentsList',
+  name: 'DocumentForHtmlEditor',
   servicePrefix: 'Documents',
   components: {
     //8Toolbar,

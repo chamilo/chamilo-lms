@@ -1,5 +1,4 @@
 <template>
-  <div>
     <Toolbar
         :handle-submit="onSendForm"
         :handle-reset="resetForm"
@@ -11,7 +10,6 @@
       :errors="violations"
     />
     <Loading :visible="isLoading" />
-  </div>
 </template>
 
 <script>

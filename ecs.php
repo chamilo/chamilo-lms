@@ -96,7 +96,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(
         Option::SKIP,
         [
-            __DIR__.'/public/main/admin/db.php',
             __DIR__.'/src/CoreBundle/Hook/*',
             __DIR__.'/src/CoreBundle/Component/HTMLPurifier/Filter/AllowIframes.php',
             __DIR__.'/src/CoreBundle/Traits/Repository/*',

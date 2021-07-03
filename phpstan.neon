@@ -16,7 +16,6 @@ parameters:
 	doctrine:
 		objectManagerLoader: %rootDir%/../../../tests/phpstan/doctrine-orm-bootstrap.php
 	excludes_analyse:
-		- public/main/admin/db.php
 		- public/main/admin/index.php
 		- public/main/admin/settings.php
 		- public/main/admin/periodic_export.php

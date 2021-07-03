@@ -21,7 +21,6 @@ filter:
         - 'bin/*'
         - 'config/*'
         - 'public/documentation/*'
-        - 'public/main/admin/db.php'
         - 'public/main/admin/ldap_synchro.php'
         - 'public/main/chat/emoji_strategy.php'
         - 'public/main/inc/lib/javascript/*'

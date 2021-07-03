@@ -56,7 +56,6 @@ $finder = PhpCsFixer\Finder::create()
     ->exclude('var')
     ->exclude('vendor')
 
-    ->notPath('public/main/admin/db.php')
     ->notPath('public/check.php')
     ->notPath('public/main/admin/ldap_synchro.php')
     ->notPath('public/main/chat/emoji_strategy.php')

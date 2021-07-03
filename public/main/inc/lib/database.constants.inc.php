@@ -61,14 +61,6 @@ define('TABLE_MAIN_USER_FIELD', 'user_field');
 define('TABLE_MAIN_USER_FIELD_OPTIONS', 'user_field_options');
 define('TABLE_MAIN_USER_FIELD_VALUES', 'user_field_values');
 
-/*define('TABLE_MAIN_LP_FIELD', 'lp_field');
-define('TABLE_MAIN_LP_FIELD_OPTIONS', 'lp_field_options');
-define('TABLE_MAIN_LP_FIELD_VALUES', 'lp_field_values');*/
-
-/*define('TABLE_MAIN_CALENDAR_EVENT_FIELD', 'calendar_event_field');
-define('TABLE_MAIN_CALENDAR_EVENT_OPTIONS', 'calendar_event_options');
-define('TABLE_MAIN_CALENDAR_EVENT_VALUES', 'calendar_event_values');*/
-
 //User tags
 define('TABLE_MAIN_TAG', 'tag');
 define('TABLE_MAIN_USER_REL_TAG', 'user_rel_tag');
@@ -145,7 +137,6 @@ define('TABLE_ANNOUNCEMENT_ATTACHMENT', 'announcement_attachment');
 define('TABLE_CHAT_CONNECTED', 'chat_connected');
 define('TABLE_COURSE_DESCRIPTION', 'course_description');
 define('TABLE_DOCUMENT', 'document');
-//define('TABLE_ITEM_PROPERTY', 'item_property');
 define('TABLE_LINK', 'link');
 define('TABLE_LINK_CATEGORY', 'link_category');
 define('TABLE_TOOL_LIST', 'tool');
@@ -325,14 +316,5 @@ define('TABLE_TICKET_MESSAGE_ATTACHMENTS', 'ticket_message_attachments');
 define('TABLE_BRANCH', 'branch_sync');
 define('TABLE_BRANCH_TRANSACTION', 'branch_transaction');
 define('TABLE_BRANCH_TRANSACTION_STATUS', 'branch_transaction_status');
-
-// main/extra @todo after code is finished remove constants not used
-define('TABLE_CAL_DATE', 'cal_dates');
-define('TABLE_CAL_HORAIRE', 'cal_horaire');
-define('TABLE_CAL_TEMP', 'cal_temp');
-define('TABLE_STATISTIC_TRACK_E_EXERCICES_TEMP', 'track_e_exercices_temp');
-
-define('TABLE_USER_INFO_DEF', 'userinfo_def');
-define('TABLE_USER_INFO_CONTENT', 'userinfo_content');
 
 define('TABLE_MAIN_USER_CAREER', 'user_career');

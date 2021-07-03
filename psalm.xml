@@ -162,9 +162,7 @@
             <directory name="public/main/inc/lib/zombie" />
             <directory name="public/main/exercise/export/qti2" />
 
-
             <file name="public/main/admin/index.php"/>
-            <file name="public/main/admin/db.php"/>
             <file name="public/main/admin/settings.php"/>
             <file name="public/main/admin/periodic_export.php"/>
             <file name="public/main/admin/user_move_stats.php"/>

@@ -28,13 +28,13 @@ function validate_data($users, $checkUniqueEmail = false)
 {
     global $defined_auth_sources;
     $usernames = [];
-
+    
     // 1. Check if mandatory fields are set.
     $mandatory_fields = ['LastName', 'FirstName'];
     if (api_get_setting('registration', 'email') == 'true' || $checkUniqueEmail) {
         $mandatory_fields[] = 'Email';
     }
-
+       
     $classExistList = [];
     $usergroup = new UserGroup();
     foreach ($users as &$user) {
@@ -86,8 +86,12 @@ function validate_data($users, $checkUniqueEmail = false)
                 }
             }
         }
-
-        if (isset($user['Email'])) {
+        
+        // When e-mail is not a required field, It's added a fake email by default
+        if (api_get_setting('registration', 'email') === 'false' && empty($user['Email'])) {
+            $user['Email'] = 'noemail@example.com';
+        }        
+        if (isset($user['Email'])) {                        
             $result = api_valid_email($user['Email']);
             if ($result === false) {
                 $user['message'] .= Display::return_message(get_lang('PleaseEnterValidEmail'), 'warning');
@@ -229,12 +233,12 @@ function save_data($users, $sendMail = false)
         foreach ($users as &$user) {
             if ($user['has_error']) {
                 continue;
-            }
-
+            }                        
+                          
             $user = complete_missing_data($user);
             $user['Status'] = api_status_key($user['Status']);
             $redirection = isset($user['Redirection']) ? $user['Redirection'] : '';
-
+                                
             $user_id = UserManager::create_user(
                 $user['FirstName'],
                 $user['LastName'],

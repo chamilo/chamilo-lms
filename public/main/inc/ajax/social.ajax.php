@@ -57,16 +57,6 @@ switch ($action) {
             exit;
         }
         break;
-    case 'delete_friend':
-        if (api_is_anonymous()) {
-            echo '';
-            break;
-        }
-        $my_delete_friend = (int) $_POST['delete_friend_id'];
-        if (isset($_POST['delete_friend_id'])) {
-            SocialManager::remove_user_rel_user($my_delete_friend);
-        }
-        break;
     case 'show_my_friends':
         if (api_is_anonymous()) {
             echo '';

@@ -146,7 +146,7 @@ class MessageManager
                     user_receiver_id = $receiverId AND
                     title = '$subject' AND
                     content = '$message' AND
-                    (msg_status = ".MESSAGE_STATUS_UNREAD." OR msg_status = ".MESSAGE_STATUS_NEW.")
+                    msg_type = ".Message::MESSAGE_TYPE_INBOX."
                 ";
         $result = Database::query($sql);
 

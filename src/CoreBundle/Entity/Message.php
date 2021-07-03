@@ -98,6 +98,20 @@ class Message
     public const MESSAGE_TYPE_INBOX = 1;
     public const MESSAGE_TYPE_OUTBOX = 2;
     public const MESSAGE_TYPE_PROMOTED = 3;
+    public const MESSAGE_TYPE_WALL = 4;
+    public const MESSAGE_TYPE_GROUP = 5;
+    public const MESSAGE_TYPE_INVITATION = 6;
+    public const MESSAGE_STATUS_CONVERSATION = 7;
+
+    // status
+    public const MESSAGE_STATUS_DELETED = 3;
+    public const MESSAGE_STATUS_DRAFT = 4;
+
+    public const MESSAGE_STATUS_INVITATION_PENDING = 5;
+    public const MESSAGE_STATUS_INVITATION_ACCEPTED = 6;
+    public const MESSAGE_STATUS_INVITATION_DENIED = 7;
+
+    public const MESSAGE_STATUS_PROMOTED = 13;
 
     /**
      * @ORM\Column(name="id", type="bigint")
@@ -120,7 +134,7 @@ class Message
      * @ORM\JoinColumn(name="user_receiver_id", referencedColumnName="id", nullable=true)
      */
     #[Groups(['message:read', 'message:write'])]
-    protected User $userReceiver;
+    protected ?User $userReceiver = null;
 
     /**
      * @ORM\Column(name="msg_type", type="smallint", nullable=false)
@@ -139,6 +153,13 @@ class Message
     ])]*/
     #[Groups(['message:read', 'message:write'])]
     protected int $msgType;
+
+    /**
+     * @ORM\Column(name="status", type="smallint", nullable=false)
+     */
+    #[Assert\NotBlank]
+    #[Groups(['message:read', 'message:write'])]
+    protected int $status;
 
     /**
      * @ORM\Column(name="msg_read", type="boolean", nullable=false)
@@ -236,6 +257,7 @@ class Message
         $this->tags = new ArrayCollection();
         $this->likes = new ArrayCollection();
         $this->votes = 0;
+        $this->status = 0;
         $this->read = false;
         $this->starred = false;
     }
@@ -278,19 +300,14 @@ class Message
         return $this->userSender;
     }
 
-    public function setUserReceiver(User $userReceiver): self
+    public function setUserReceiver(?User $userReceiver): self
     {
         $this->userReceiver = $userReceiver;
 
         return $this;
     }
 
-    /**
-     * Get userReceiver.
-     *
-     * @return User
-     */
-    public function getUserReceiver()
+    public function getUserReceiver(): ?User
     {
         return $this->userReceiver;
     }
@@ -343,12 +360,7 @@ class Message
         return $this;
     }
 
-    /**
-     * Get content.
-     *
-     * @return string
-     */
-    public function getContent()
+    public function getContent(): string
     {
         return $this->content;
     }
@@ -478,6 +490,18 @@ class Message
     public function setStarred(bool $starred): self
     {
         $this->starred = $starred;
+
+        return $this;
+    }
+
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+
+    public function setStatus(int $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }

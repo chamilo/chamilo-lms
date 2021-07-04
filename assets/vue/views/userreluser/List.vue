@@ -42,7 +42,6 @@
         v-model:selection="selectedItems"
         dataKey="id"
         v-model:filters="filters"
-        filterDisplay="menu"
         sortBy="sendDate"
         sortOrder="asc"
         :lazy="true"
@@ -173,14 +172,21 @@ export default {
   setup() {
     const store = useStore();
     const user = store.getters["security/getUser"];
-
+    const filters = ref([]);
     const isLoadingSelect = ref(false);
+
+    filters.value = {
+        friend: user.id
+    };
+
     function addFriend(friend) {
       axios.put(friend['@id'], {
         relationType: 3,
       }).then(response => {
         console.log(response);
         isLoadingSelect.value = false;
+        store.dispatch('userreluser/resetList');
+        store.dispatch('userreluser/fetchAll', filters.value);
       }).catch(function (error) {
         isLoadingSelect.value = false;
         console.log(error);
@@ -308,27 +314,8 @@ export default {
     confirmDeleteMultiple() {
       this.deleteMultipleDialog = true;
     },
-    markAsReadMultiple(){
-      console.log('markAsReadMultiple');
-      this.selectedItems.forEach(message => {
-        message.read = true;
-        this.update(message);
-      });
-      this.selectedItems = null;
-      this.resetList = true;
-    },
     reloadHandler() {
       this.onUpdateOptions(this.options);
-    },
-    markAsUnReadMultiple(){
-      console.log('markAsUnReadMultiple');
-      this.selectedItems.forEach(message => {
-        message.read = false;
-        this.update(message);
-      });
-      this.selectedItems = null;
-      this.resetList = true;
-      //this.onUpdateOptions(this.options);
     },
     deleteMultipleItems() {
       console.log('deleteMultipleItems');

@@ -6,7 +6,7 @@
           icon
           :loading="isLoading"
           @click="reloadHandler">
-        <v-icon icon="mdi-account-plus-outline" />
+        <v-icon icon="mdi-arrow-left" />
       </v-btn>
     </template>
   </Toolbar>

@@ -7,9 +7,10 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -46,16 +47,16 @@ use Symfony\Component\Validator\Constraints as Assert;
         'security' => 'is_granted("ROLE_USER")',
     ],
     denormalizationContext: [
-        'groups' => ['message_tag:write'],
+        'groups' => ['user_rel_user:write'],
     ],
     normalizationContext: [
-        'groups' => ['message_tag:read'],
+        'groups' => ['user_rel_user:read', 'timestampable_created:read'],
     ],
 )]
 class UserRelUser
 {
     use UserTrait;
-    use TimestampableEntity;
+    use TimestampableTypedEntity;
 
     public const USER_RELATION_TYPE_UNKNOWN = 1;
     public const USER_RELATION_TYPE_PARENT = 2;
@@ -66,6 +67,7 @@ class UserRelUser
     public const USER_RELATION_TYPE_RRHH = 7;
     public const USER_RELATION_TYPE_BOSS = 8;
     public const USER_RELATION_TYPE_HRM_REQUEST = 9;
+    public const USER_RELATION_TYPE_FRIEND_REQUEST = 10;
 
     /**
      * @ORM\Column(name="id", type="bigint")
@@ -78,20 +80,23 @@ class UserRelUser
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="friends")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */
-    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Groups(['user_rel_user:read', 'user_rel_user:write'])]
     protected User $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="friendsWithMe")
      * @ORM\JoinColumn(name="friend_user_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */
-    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Groups(['user_rel_user:read', 'user_rel_user:write'])]
     protected User $friend;
 
     /**
      * @ORM\Column(name="relation_type", type="integer", nullable=false)
      */
     #[Assert\NotBlank]
+    #[Groups(['user_rel_user:read', 'user_rel_user:write'])]
     protected int $relationType;
 
     public function __construct()

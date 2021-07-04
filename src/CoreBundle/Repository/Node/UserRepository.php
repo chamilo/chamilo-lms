@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 use Datetime;
@@ -570,7 +571,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         $qb = $this->createQueryBuilder('u');
         $this->addAccessUrlQueryBuilder($urlId, $qb);
         $this->addActiveAndNotAnonUserQueryBuilder($qb);
-        $this->addUserRelUserQueryBuilder($userId, USER_RELATION_TYPE_RRHH, $qb);
+        $this->addUserRelUserQueryBuilder($userId, UserRelUser::USER_RELATION_TYPE_RRHH, $qb);
 
         return $qb->getQuery()->getResult();
     }
@@ -688,7 +689,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     private function addUserRelUserQueryBuilder(int $userId, int $relationType, QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
-        $qb->leftJoin('u.userRelUsers', 'relations');
+        $qb->leftJoin('u.friends', 'relations');
         $qb
             ->andWhere('relations.relationType = :relationType')
             ->andWhere('relations.user = :userRelation AND relations.friend <> :userRelation')
@@ -703,9 +704,12 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
         $qb
-            ->leftJoin('u.userRelUsers', 'relations')
+            ->leftJoin('u.friends', 'relations')
             ->andWhere(
-                $qb->expr()->notIn('relations.relationType', [USER_RELATION_TYPE_DELETED, USER_RELATION_TYPE_RRHH])
+                $qb->expr()->notIn(
+                    'relations.relationType',
+                    [UserRelUser::USER_RELATION_TYPE_DELETED, UserRelUser::USER_RELATION_TYPE_RRHH]
+                )
             )
             ->andWhere('relations.user = :user AND relations.friend <> :user')
             ->setParameter('user', $userId, Types::INTEGER)

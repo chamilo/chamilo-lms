@@ -38,21 +38,6 @@ use UserManager;
 /**
  * EquatableInterface is needed to check if the user needs to be refreshed.
  *
- * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_ADMIN')"},
- *     iri="http://schema.org/Person",
- *     normalizationContext={"groups"={"user:read"}},
- *     denormalizationContext={"groups"={"user:write"}},
- *     collectionOperations={
- *         "get"={"security"="is_granted('ROLE_ADMIN')"},
- *         "post"={"security"="is_granted('ROLE_ADMIN')"}
- *     },
- *     itemOperations={
- *         "get"={"security"="is_granted('ROLE_ADMIN')"},
- *         "put"={"security"="is_granted('ROLE_ADMIN')"},
- *     },
- * )
- *
  * @ORM\Table(
  *     name="user",
  *     indexes={
@@ -63,6 +48,37 @@ use UserManager;
  * @ORM\Entity
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\UserListener"})
  */
+#[ApiResource(
+    collectionOperations: [
+        'get' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+        'post' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+    ],
+    itemOperations: [
+        'get' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+        'put' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+        'delete' => [
+            'security' => "is_granted('ROLE_ADMIN')",
+        ],
+    ],
+    iri: 'http://schema.org/Person',
+    attributes: [
+        'security' => 'is_granted("ROLE_USER")',
+    ],
+    denormalizationContext: [
+        'groups' => ['user:write'],
+    ],
+    normalizationContext: [
+        'groups' => ['user:read'],
+    ],
+)]
 #[ApiFilter(SearchFilter::class, properties: [
     'username' => 'partial',
     'firstname' => 'partial',
@@ -86,13 +102,12 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public const ANONYMOUS = 6;
 
     /**
-     * @Groups({"user_json:read"})
-     *
      * @ORM\OneToOne(
      *     targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", cascade={"remove"}, orphanRemoval=true
      * )
      * @ORM\JoinColumn(name="resource_node_id", onDelete="CASCADE")
      */
+    #[Groups(['user_json:read'])]
     public ?ResourceNode $resourceNode = null;
 
     /**
@@ -109,6 +124,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'course_rel_user:read',
         'user_json:read',
         'message:read',
+        'user_rel_user:read',
     ])]
     public ?string $illustrationUrl = null;
 
@@ -121,10 +137,18 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected ?int $id = null;
 
     /**
-     * @Groups({"user:read", "user:write", "course:read", "resource_node:read", "user_json:read", "message:read"})
-     * @Assert\NotBlank()
      * @ORM\Column(name="username", type="string", length=100, unique=true)
      */
+    #[Assert\NotBlank]
+    #[Groups([
+        'user:read',
+        'user:write',
+        'course:read',
+        'resource_node:read',
+        'user_json:read',
+        'message:read',
+        'user_rel_user:read',
+    ])]
     protected string $username;
 
     /**
@@ -135,15 +159,25 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @Assert\NotBlank()
      * @ApiProperty(iri="http://schema.org/name")
-     * @Groups({"user:read", "user:write", "resource_node:read", "user_json:read"})
      * @ORM\Column(name="firstname", type="string", length=64, nullable=true)
      */
+    #[Groups([
+        'user:read',
+        'user:write',
+        'resource_node:read',
+        'user_json:read',
+    ])]
     protected ?string $firstname = null;
 
     /**
-     * @Groups({"user:read", "user:write", "resource_node:read", "user_json:read"})
      * @ORM\Column(name="lastname", type="string", length=64, nullable=true)
      */
+    #[Groups([
+        'user:read',
+        'user:write',
+        'resource_node:read',
+        'user_json:read',
+    ])]
     protected ?string $lastname = null;
 
     /**
@@ -249,8 +283,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * @ORM\Column(name="address", type="string", length=250, nullable=true)
      */
     protected ?string $address = null;
-
-    protected AccessUrl $currentUrl;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -688,6 +720,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * @ORM\Column(name="hr_dept_id", type="smallint", nullable=true, unique=false)
      */
     protected ?int $hrDeptId = null;
+
+    protected AccessUrl $currentUrl;
 
     /**
      * @var Collection<int, MessageTag>|MessageTag[]

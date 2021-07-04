@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Traits;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 trait TimestampableTypedEntity
 {
@@ -14,12 +16,16 @@ trait TimestampableTypedEntity
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
+    #[ApiProperty]
+    #[Groups(['timestampable_created:read'])]
     protected DateTime $createdAt;
 
     /**
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      */
+    #[ApiProperty]
+    #[Groups(['timestampable_updated:read'])]
     protected DateTime $updatedAt;
 
     /**

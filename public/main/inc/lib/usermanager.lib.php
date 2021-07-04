@@ -4494,7 +4494,7 @@ class UserManager
         return self::subscribeUsersToUser(
             $hr_dept_id,
             $users_id,
-            USER_RELATION_TYPE_RRHH,
+            UserRelUser::USER_RELATION_TYPE_RRHH,
             false,
             $deleteOtherAssignedUsers
         );

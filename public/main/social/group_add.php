@@ -45,12 +45,12 @@ $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
 $interbreadcrumb[] = ['url' => '#', 'name' => $nameTools];
 
 $social_avatar_block = SocialManager::show_social_avatar_block('group_add');
-$social_menu_block = SocialManager::show_social_menu('group_add');
+//$social_menu_block = SocialManager::show_social_menu('group_add');
 
 $tpl = new Template(null);
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), null, null);
 $tpl->setHelp('Groups');
-$tpl->assign('social_menu_block', $social_menu_block);
+//$tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $form->returnForm());
 
 $social_layout = $tpl->get_template('social/add_groups.tpl');

@@ -182,7 +182,7 @@ $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
 $interbreadcrumb[] = ['url' => 'group_view.php?id='.$group_id, 'name' => Security::remove_XSS($group_info['name'])];
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Discussions')];
 
-$social_left_content = SocialManager::show_social_menu('member_list', $group_id);
+$social_left_content = null; //SocialManager::show_social_menu('member_list', $group_id);
 $show_message = null;
 if (!empty($show_message)) {
     $social_right_content .= Display::return_message($show_message, 'confirmation');
@@ -194,13 +194,13 @@ $group_message = MessageManager::display_message_for_group(
     $message_id
 );
 
-$social_menu_block = SocialManager::show_social_menu('member_list', $group_id);
+//$social_menu_block = SocialManager::show_social_menu('member_list', $group_id);
 
 $tpl = new Template(null);
 $tpl->setHelp('Groups');
 // Block Social Avatar
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'groups', $group_id);
-$tpl->assign('social_menu_block', $social_menu_block);
+$tpl->assign('social_menu_block', '');
 $tpl->assign('social_friend_block', $friend_html);
 $tpl->assign('group_message', $group_message);
 $tpl->assign('social_right_content', $social_right_content);

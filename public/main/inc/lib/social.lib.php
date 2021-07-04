@@ -153,7 +153,7 @@ class SocialManager extends UserManager
         $tbl_my_user = Database::get_main_table(TABLE_MAIN_USER);
         $sql = 'SELECT friend_user_id FROM '.$tbl_my_friend.'
                 WHERE
-                    relation_type NOT IN ('.USER_RELATION_TYPE_DELETED.', '.USER_RELATION_TYPE_RRHH.') AND
+                    relation_type NOT IN ('.UserRelUser::USER_RELATION_TYPE_DELETED.', '.UserRelUser::USER_RELATION_TYPE_RRHH.') AND
                     friend_user_id<>'.$user_id.' AND
                     user_id='.$user_id;
         if (isset($id_group) && $id_group > 0) {

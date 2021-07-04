@@ -219,7 +219,7 @@ $social_right_content = null;
 $social_left_content = '';
 
 // Block Social Menu
-$social_menu_block = SocialManager::show_social_menu('messages');
+//$social_menu_block = SocialManager::show_social_menu('messages');
 $social_right_content .= '<div class="row">';
 $social_right_content .= '<div class="col-md-12">';
 $social_right_content .= '<div class="actions">';

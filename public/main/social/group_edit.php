@@ -57,7 +57,7 @@ if ($form->validate()) {
     exit();
 }
 
-$social_left_content = SocialManager::show_social_menu('group_edit', $group_id);
+//$social_left_content = SocialManager::show_social_menu('group_edit', $group_id);
 $social_right_content = $form->returnForm();
 
 $tpl = new Template(get_lang('Edit'));
@@ -65,7 +65,7 @@ $tpl = new Template(get_lang('Edit'));
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'groups', $group_id);
 
 $tpl->setHelp('Groups');
-$tpl->assign('social_menu_block', $social_left_content);
+//$tpl->assign('social_menu_block', $social_left_content);
 $tpl->assign('social_right_content', $social_right_content);
 
 $social_layout = $tpl->get_template('social/add_groups.tpl');

@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\UserRelUser;
 
 /**
  * This class provides some functions for statistics.
@@ -1098,7 +1099,7 @@ class Statistics
                     LEFT JOIN $user_table u
                     ON (uf.user_id = u.id)
                     WHERE
-                        uf.relation_type <> '".USER_RELATION_TYPE_RRHH."' AND
+                        uf.relation_type <> '".UserRelUser::USER_RELATION_TYPE_RRHH."' AND
                         uf.user_id = url.user_id AND
                         access_url_id = '".$urlId."'
                     GROUP BY uf.user_id
@@ -1108,7 +1109,7 @@ class Statistics
                     FROM $user_friend_table uf
                     LEFT JOIN $user_table u
                     ON (uf.user_id = u.id)
-                    WHERE uf.relation_type <> '".USER_RELATION_TYPE_RRHH."'
+                    WHERE uf.relation_type <> '".UserRelUser::USER_RELATION_TYPE_RRHH."'
                     GROUP BY uf.user_id
                     ORDER BY count_friend DESC ";
         }

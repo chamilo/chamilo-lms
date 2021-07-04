@@ -111,8 +111,7 @@ if (empty($new_member_list) > 0) {
 $tpl = new Template(null);
 
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'groups', $group_id);
-$social_menu_block = SocialManager::show_social_menu('member_list', $group_id);
-$tpl->assign('social_menu_block', $social_menu_block);
+
 $tpl->setHelp('Groups');
 $tpl->assign('members', $new_member_list);
 $tpl->assign('social_right_content', $social_right_content);

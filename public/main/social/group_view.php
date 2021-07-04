@@ -338,13 +338,13 @@ $tpl = new Template(null);
 // Block Social Avatar
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'groups', $group_id);
 
-$social_menu_block = SocialManager::show_social_menu('groups', $group_id);
+//$social_menu_block = SocialManager::show_social_menu('groups', $group_id);
 $tpl->setHelp('Groups');
 $tpl->assign('create_link', $create_thread_link);
 $tpl->assign('is_group_member', $is_group_member);
 $tpl->assign('group_info', $groupInfo);
 $tpl->assign('social_friend_block', $friend_html);
-$tpl->assign('social_menu_block', $social_menu_block);
+//$tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_forum', $socialForum);
 $tpl->assign('social_right_content', $social_right_content);
 $tpl->assign('list_members', $listMembers);

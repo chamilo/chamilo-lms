@@ -231,7 +231,7 @@ $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Personal data')];
 $socialMenuBlock = '';
 if ($allowSocial) {
     // Block Social Menu
-    $socialMenuBlock = SocialManager::show_social_menu('personal-data');
+    //$socialMenuBlock = SocialManager::show_social_menu('personal-data');
 }
 
 // MAIN CONTENT

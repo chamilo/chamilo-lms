@@ -60,7 +60,7 @@ class Group
         return $this->getName() ?: '';
     }
 
-    public function addRole(string $role)
+    public function addRole(string $role): self
     {
         if (!$this->hasRole($role)) {
             $this->roles[] = strtoupper($role);
@@ -79,7 +79,7 @@ class Group
         return $this->roles;
     }
 
-    public function removeRole($role): self
+    public function removeRole(string $role): self
     {
         if (false !== $key = array_search(strtoupper($role), $this->roles, true)) {
             unset($this->roles[$key]);
@@ -118,6 +118,9 @@ class Group
         return $this->id;
     }
 
+    /**
+     * @return User[]|Collection
+     */
     public function getUsers()
     {
         return $this->users;

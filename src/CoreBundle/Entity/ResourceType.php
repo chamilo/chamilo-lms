@@ -57,7 +57,7 @@ class ResourceType
         return $this->name;
     }
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -89,11 +89,19 @@ class ResourceType
         return $this;
     }
 
+    /**
+     * @return ResourceNode[]|Collection
+     */
     public function getResourceNodes()
     {
         return $this->resourceNodes;
     }
 
+    /**
+     * @param ResourceNode[]|Collection $resourceNodes
+     *
+     * @return $this
+     */
     public function setResourceNodes($resourceNodes): self
     {
         $this->resourceNodes = $resourceNodes;

@@ -66,7 +66,7 @@ class CShortcut extends AbstractResource implements ResourceInterface
         return $this->name;
     }
 
-    public function getUrl()
+    public function getUrl(): string
     {
         return '/r/'.$this->getShortCutNode()->getResourceType()->getTool()->getName().
             '/'.$this->getShortCutNode()->getResourceType()->getName().
@@ -74,12 +74,12 @@ class CShortcut extends AbstractResource implements ResourceInterface
             '/link';
     }
 
-    public function getTool()
+    public function getTool(): string
     {
         return $this->getShortCutNode()->getResourceType()->getTool()->getName();
     }
 
-    public function getType()
+    public function getType(): string
     {
         return $this->getShortCutNode()->getResourceType()->getName();
     }

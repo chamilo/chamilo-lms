@@ -25,6 +25,7 @@ use ExtraFieldValue;
 use Fhaculty\Graph\Graph;
 use Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -46,7 +47,7 @@ class CourseHomeController extends ToolBaseController
      *
      * @Entity("course", expr="repository.find(cid)")
      */
-    public function indexJsonAction(Request $request, CToolRepository $toolRepository, CShortcutRepository $shortcutRepository, ToolChain $toolChain)
+    public function indexJsonAction(Request $request, CToolRepository $toolRepository, CShortcutRepository $shortcutRepository, ToolChain $toolChain): Response
     {
         $course = $this->getCourse();
         if (null === $course) {
@@ -233,7 +234,7 @@ class CourseHomeController extends ToolBaseController
      *
      * @Route("/{cid}/tool/{toolName}", name="chamilo_core_course_redirect_tool")
      */
-    public function redirectTool(string $toolName, CToolRepository $repo, ToolChain $toolChain)
+    public function redirectTool(string $toolName, CToolRepository $repo, ToolChain $toolChain): RedirectResponse
     {
         /** @var CTool|null $tool */
         $tool = $repo->findOneBy([
@@ -257,7 +258,7 @@ class CourseHomeController extends ToolBaseController
         return $this->redirect($url);
     }
 
-    public function redirectToShortCut(string $toolName, CToolRepository $repo, ToolChain $toolChain)
+    public function redirectToShortCut(string $toolName, CToolRepository $repo, ToolChain $toolChain): RedirectResponse
     {
         /** @var CTool|null $tool */
         $tool = $repo->findOneBy([
@@ -287,10 +288,8 @@ class CourseHomeController extends ToolBaseController
      * @Route("/{cid}/settings/{namespace}", name="chamilo_core_course_settings")
      *
      * @Entity("course", expr="repository.find(cid)")
-     *
-     * @return Response
      */
-    public function updateSettingsAction(Request $request, Course $course, string $namespace, SettingsCourseManager $manager, SettingsFormFactory $formFactory)
+    public function updateSettingsAction(Request $request, Course $course, string $namespace, SettingsCourseManager $manager, SettingsFormFactory $formFactory): Response
     {
         $schemaAlias = $manager->convertNameSpaceToService($namespace);
         $settings = $manager->load($namespace);

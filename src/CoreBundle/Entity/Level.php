@@ -80,7 +80,7 @@ class Level
         return $this;
     }
 
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
@@ -92,7 +92,7 @@ class Level
         return $this;
     }
 
-    public function getShortName()
+    public function getShortName(): string
     {
         return $this->shortName;
     }

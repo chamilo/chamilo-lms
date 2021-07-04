@@ -31,7 +31,7 @@ class SysAnnouncementRepository extends ServiceEntityRepository
         $this->security = $security;
     }
 
-    public function getVisibilityList()
+    public function getVisibilityList(): array
     {
         $hierarchy = $this->parameterBag->get('security.role_hierarchy.roles');
         $roles = [];
@@ -181,7 +181,7 @@ class SysAnnouncementRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function update(SysAnnouncement $sysAnnouncement, $andFlush = true): void
+    public function update(SysAnnouncement $sysAnnouncement, bool $andFlush = true): void
     {
         $this->getEntityManager()->persist($sysAnnouncement);
         if ($andFlush) {
@@ -189,7 +189,7 @@ class SysAnnouncementRepository extends ServiceEntityRepository
         }
     }
 
-    public function delete($id): void
+    public function delete(int $id): void
     {
         $announcement = $this->find($id);
         if (null !== $announcement) {

@@ -23,7 +23,7 @@ class ToolController extends AbstractController
      * @Security("is_granted('ROLE_ADMIN')")
      * @Route("/update", methods={"GET"})
      */
-    public function profileAction(ToolChain $toolChain)
+    public function profileAction(ToolChain $toolChain): Response
     {
         $toolChain->createTools();
 

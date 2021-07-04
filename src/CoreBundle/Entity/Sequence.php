@@ -76,9 +76,6 @@ class Sequence
         return $this->graph;
     }
 
-    /**
-     * @return Sequence
-     */
     public function setGraph(string $graph): self
     {
         $this->graph = $graph;
@@ -102,7 +99,7 @@ class Sequence
         return unserialize($this->graph);
     }
 
-    public function setGraphAndSerialize($graph): self
+    public function setGraphAndSerialize(Graph $graph): self
     {
         $this->setGraph(serialize($graph));
 

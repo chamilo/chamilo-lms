@@ -49,7 +49,7 @@ class Template
         $this->upload = '@ChamiloCore/Resource/upload.html.twig';
     }
 
-    public function getFromAction(string $action, $isAjax = false)
+    public function getFromAction(string $action, bool $isAjax = false): string
     {
         $action = str_replace('Action', '', $action);
         if ($isAjax) {

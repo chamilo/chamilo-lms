@@ -131,7 +131,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getPostTitle()
+    public function getPostTitle(): string
     {
         return $this->postTitle;
     }

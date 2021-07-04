@@ -499,7 +499,7 @@ class Session implements ResourceWithAccessUrlInterface
         return $this->hasUserInCourse($user, $course, self::COACH);
     }
 
-    public function getUserInCourse(User $user, Course $course, $status = null): Collection
+    public function getUserInCourse(User $user, Course $course, ?int $status = null): Collection
     {
         $criteria = Criteria::create()
             ->where(
@@ -528,7 +528,7 @@ class Session implements ResourceWithAccessUrlInterface
         return $this->getSessionRelCourseRelUsers()->matching($criteria);
     }
 
-    public function getSessionRelCourseByUser(User $user, $status = null): Collection
+    public function getSessionRelCourseByUser(User $user, ?int $status = null): Collection
     {
         $criteria = Criteria::create()
             ->where(

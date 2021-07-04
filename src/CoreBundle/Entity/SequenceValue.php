@@ -89,7 +89,7 @@ class SequenceValue
         return $this->id;
     }
 
-    public function getEntity()
+    public function getEntity(): ?SequenceRowEntity
     {
         return $this->entity;
     }

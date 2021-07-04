@@ -79,12 +79,12 @@ class SkillRelSkill
         return $this;
     }
 
-    public function getLevel()
+    public function getLevel(): int
     {
         return $this->level;
     }
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }

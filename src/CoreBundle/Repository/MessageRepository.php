@@ -17,7 +17,7 @@ class MessageRepository extends ServiceEntityRepository
         parent::__construct($registry, Message::class);
     }
 
-    public function update(Message $message, $andFlush = true): void
+    public function update(Message $message, bool $andFlush = true): void
     {
         $this->getEntityManager()->persist($message);
         if ($andFlush) {

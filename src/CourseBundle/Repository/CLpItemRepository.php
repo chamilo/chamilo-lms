@@ -24,7 +24,7 @@ final class CLpItemRepository extends ServiceEntityRepository
         $this->initializeTreeRepository($this->getEntityManager(), $this->getClassMetadata());
     }
 
-    public function getRootItem($lpId): ?CLpItem
+    public function getRootItem(int $lpId): ?CLpItem
     {
         return $this->findOneBy([
             'path' => 'root',
@@ -32,7 +32,10 @@ final class CLpItemRepository extends ServiceEntityRepository
         ]);
     }
 
-    public function getTree($lpId)
+    /**
+     * @return CLpItem[]
+     */
+    public function getTree(int $lpId)
     {
         $qb = $this->createQueryBuilder('i');
         $qb

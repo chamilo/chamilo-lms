@@ -138,24 +138,24 @@ class Skill
         $this->status = self::STATUS_ENABLED;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return (string) $this->getName();
+        return $this->getName();
     }
 
-    public function setName(string $name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function getShortCode()
+    public function getShortCode(): string
     {
         return $this->shortCode;
     }
@@ -174,7 +174,7 @@ class Skill
         return $this;
     }
 
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }

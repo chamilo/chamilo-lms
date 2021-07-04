@@ -51,12 +51,9 @@ class Profile
         $this->levels = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
-        return (string) $this->getName();
+        return $this->getName();
     }
 
     /**
@@ -67,48 +64,48 @@ class Profile
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return Profile
-     */
-    public function setName(string $name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
+    /**
+     * @return Skill[]|Collection
+     */
     public function getSkills()
     {
         return $this->skills;
     }
 
     /**
-     * @return Profile
+     * @param Skill[]|Collection $skills
      */
-    public function setSkills($skills)
+    public function setSkills($skills): self
     {
         $this->skills = $skills;
 
         return $this;
     }
 
+    /**
+     * @return Level[]|Collection
+     */
     public function getLevels()
     {
         return $this->levels;
     }
 
     /**
-     * @return Profile
+     * @param Collection $levels
      */
-    public function setLevels($levels)
+    public function setLevels($levels): self
     {
         $this->levels = $levels;
 

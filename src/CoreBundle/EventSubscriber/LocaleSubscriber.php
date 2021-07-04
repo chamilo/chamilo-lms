@@ -30,7 +30,7 @@ class LocaleSubscriber implements EventSubscriberInterface
         $this->parameterBag = $parameterBag;
     }
 
-    public function onKernelRequest(RequestEvent $event)
+    public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
         if (!$request->hasPreviousSession()) {
@@ -59,7 +59,7 @@ class LocaleSubscriber implements EventSubscriberInterface
             $locale = $request->getSession()->get('_locale');
             $request->setLocale($locale);
 
-            return true;
+            return;
         }
 
         // Try to see if the locale has been set as a _locale routing parameter (from lang switcher)

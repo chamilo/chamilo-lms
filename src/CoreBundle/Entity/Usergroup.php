@@ -135,11 +135,17 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this->getName();
     }
 
+    /**
+     * @return UsergroupRelUser[]|Collection
+     */
     public function getUsers()
     {
         return $this->users;
     }
 
+    /**
+     * @return AccessUrlRelUserGroup[]|Collection
+     */
     public function getUrls()
     {
         return $this->urls;
@@ -163,7 +169,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this;
     }
 
-    public function setUsers($users): void
+    public function setUsers(Collection $users): void
     {
         $this->users = new ArrayCollection();
 
@@ -172,10 +178,12 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         }
     }
 
-    public function addUsers(UsergroupRelUser $user): void
+    public function addUsers(UsergroupRelUser $user): self
     {
         $user->setUsergroup($this);
         $this->users[] = $user;
+
+        return $this;
     }
 
     public function removeUsers(UsergroupRelUser $user): void
@@ -322,7 +330,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
         return $this->questions;
     }
 
-    public function setQuestions(Collection $questions)
+    public function setQuestions(Collection $questions): self
     {
         $this->questions = $questions;
 

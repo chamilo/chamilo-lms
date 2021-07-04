@@ -120,6 +120,9 @@ abstract class AbstractResource
 
     //abstract public function setResourceProperties(FormInterface $form, $course, $session, $fileType);
 
+    /**
+     * @return ResourceLink[]
+     */
     public function getResourceLinkEntityList()
     {
         return $this->resourceLinkEntityList;
@@ -338,7 +341,7 @@ abstract class AbstractResource
         return $this;
     }
 
-    public function getParentResourceNode()
+    public function getParentResourceNode(): ?int
     {
         return $this->parentResourceNode;
     }
@@ -348,7 +351,7 @@ abstract class AbstractResource
         return null !== $this->uploadFile;
     }
 
-    public function getUploadFile()
+    public function getUploadFile(): ?UploadedFile
     {
         return $this->uploadFile;
     }

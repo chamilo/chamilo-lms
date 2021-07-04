@@ -314,6 +314,9 @@ class CourseCategory
         return $this->urls;
     }
 
+    /**
+     * @param AccessUrlRelCourseCategory[]|Collection $urls
+     */
     public function setUrls($urls): self
     {
         $this->urls = $urls;

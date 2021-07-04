@@ -45,14 +45,11 @@ class SequenceRuleCondition
         return $this->id;
     }
 
-    public function getRule()
+    public function getRule(): ?SequenceRule
     {
         return $this->rule;
     }
 
-    /**
-     * @return SequenceRuleCondition
-     */
     public function setRule(?SequenceRule $rule): self
     {
         $this->rule = $rule;
@@ -60,14 +57,11 @@ class SequenceRuleCondition
         return $this;
     }
 
-    public function getCondition()
+    public function getCondition(): ?SequenceCondition
     {
         return $this->condition;
     }
 
-    /**
-     * @return SequenceRuleCondition
-     */
     public function setCondition(?SequenceCondition $condition): self
     {
         $this->condition = $condition;

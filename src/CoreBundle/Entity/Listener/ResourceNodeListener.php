@@ -39,10 +39,10 @@ class ResourceNodeListener
         $this->resourceNodeRepository = $resourceNodeRepository;
     }
 
-    public function prePersist(ResourceNode $resourceNode, LifecycleEventArgs $event)
+    /*public function prePersist(ResourceNode $resourceNode, LifecycleEventArgs $event)
     {
         return true;
-    }
+    }*/
 
     /**
      * When updating a Resource.
@@ -64,7 +64,7 @@ class ResourceNodeListener
         return true;
     }
 
-    public function postUpdate(ResourceNode $resourceNode, LifecycleEventArgs $event): void
+    /*public function postUpdate(ResourceNode $resourceNode, LifecycleEventArgs $event): void
     {
-    }
+    }*/
 }

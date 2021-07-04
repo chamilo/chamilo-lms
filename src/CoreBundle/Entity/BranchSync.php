@@ -574,9 +574,6 @@ class BranchSync
         return $this->root;
     }
 
-    /**
-     * @param BranchSync $parent
-     */
     public function setParent(self $parent = null): self
     {
         $this->parent = $parent;
@@ -584,7 +581,7 @@ class BranchSync
         return $this;
     }
 
-    public function getParent()
+    public function getParent(): self
     {
         return $this->parent;
     }
@@ -597,10 +594,7 @@ class BranchSync
         return $this->uniqueId;
     }
 
-    /**
-     * @return $this
-     */
-    public function setUniqueId(string $uniqueId)
+    public function setUniqueId(string $uniqueId): self
     {
         $this->uniqueId = $uniqueId;
 

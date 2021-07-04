@@ -91,7 +91,7 @@ class ResourceComment
     protected DateTime $updatedAt;
 
     /**
-     * @var ArrayCollection|ResourceComment[]
+     * @var Collection|ResourceComment[]
      *
      * @ORM\OneToMany(
      *     targetEntity="ResourceComment",
@@ -108,7 +108,7 @@ class ResourceComment
         $this->children = new ArrayCollection();
     }
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -125,7 +125,7 @@ class ResourceComment
         return $this;
     }
 
-    public function getResourceNode()
+    public function getResourceNode(): ResourceNode
     {
         return $this->resourceNode;
     }
@@ -149,7 +149,7 @@ class ResourceComment
         return $this;
     }
 
-    public function getParent()
+    public function getParent(): ?self
     {
         return $this->parent;
     }
@@ -161,12 +161,18 @@ class ResourceComment
         return $this;
     }
 
+    /**
+     * @return ResourceComment[]|Collection
+     */
     public function getChildren()
     {
         return $this->children;
     }
 
-    public function setChildren($children): self
+    /**
+     * @param ResourceComment[]|Collection $children
+     */
+    public function setChildren(Collection $children): self
     {
         $this->children = $children;
 

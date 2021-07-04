@@ -25,7 +25,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class BaseResourceFileAction
 {
-    public static function setLinks(AbstractResource $resource, $em): void
+    public static function setLinks(AbstractResource $resource, EntityManager $em): void
     {
         $resourceNode = $resource->getResourceNode();
         $links = $resource->getResourceLinkArray();
@@ -219,7 +219,7 @@ class BaseResourceFileAction
         ];
     }
 
-    protected function handleUpdateRequest(AbstractResource $resource, ResourceRepository $repo, Request $request, EntityManager $em)
+    protected function handleUpdateRequest(AbstractResource $resource, ResourceRepository $repo, Request $request, EntityManager $em): AbstractResource
     {
         $contentData = $request->getContent();
         $resourceLinkList = [];

@@ -187,6 +187,9 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
 
+    /**
+     * @return ResourceInterface[]
+     */
     public function findCourseResourcesByTitle(
         string $title,
         ResourceNode $parentNode,
@@ -203,7 +206,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
     /**
      * @todo clean path
      */
-    public function addFileFromPath(ResourceInterface $resource, string $fileName, string $path, bool $flush = true)
+    public function addFileFromPath(ResourceInterface $resource, string $fileName, string $path, bool $flush = true): ?ResourceFile
     {
         if (!empty($path) && file_exists($path) && !is_dir($path)) {
             $mimeType = mime_content_type($path);
@@ -542,19 +545,22 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $this->resourceNodeRepository->getResourceNodeFileContent($resourceNode);
     }
 
+    /**
+     * @return false|resource
+     */
     public function getResourceNodeFileStream(ResourceNode $resourceNode)
     {
         return $this->resourceNodeRepository->getResourceNodeFileStream($resourceNode);
     }
 
-    public function getResourceFileDownloadUrl(AbstractResource $resource, array $extraParams = [], $referenceType = null): string
+    public function getResourceFileDownloadUrl(AbstractResource $resource, array $extraParams = [], ?int $referenceType = null): string
     {
         $extraParams['mode'] = 'download';
 
         return $this->getResourceFileUrl($resource, $extraParams, $referenceType);
     }
 
-    public function getResourceFileUrl(AbstractResource $resource, array $extraParams = [], $referenceType = null): string
+    public function getResourceFileUrl(AbstractResource $resource, array $extraParams = [], ?int $referenceType = null): string
     {
         return $this->getResourceNodeRepository()->getResourceFileUrl(
             $resource->getResourceNode(),

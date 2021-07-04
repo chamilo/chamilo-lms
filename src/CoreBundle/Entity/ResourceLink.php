@@ -114,7 +114,7 @@ class ResourceLink
         return (string) $this->getId();
     }
 
-    public function getStartVisibilityAt()
+    public function getStartVisibilityAt(): ?DateTimeInterface
     {
         return $this->startVisibilityAt;
     }
@@ -126,7 +126,7 @@ class ResourceLink
         return $this;
     }
 
-    public function getEndVisibilityAt()
+    public function getEndVisibilityAt(): ?DateTimeInterface
     {
         return $this->endVisibilityAt;
     }
@@ -138,6 +138,9 @@ class ResourceLink
         return $this;
     }
 
+    /**
+     * @param ResourceRight[]|Collection $rights
+     */
     public function setResourceRights($rights): self
     {
         $this->resourceRights = $rights;

@@ -43,7 +43,7 @@ class SequenceValid
         return $this->id;
     }
 
-    public function getVariable()
+    public function getVariable(): ?SequenceVariable
     {
         return $this->variable;
     }
@@ -58,7 +58,7 @@ class SequenceValid
         return $this;
     }
 
-    public function getCondition()
+    public function getCondition(): ?SequenceCondition
     {
         return $this->condition;
     }

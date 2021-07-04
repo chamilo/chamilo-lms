@@ -257,6 +257,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @ApiSubresource()
      * @Groups({"course:read", "course:write", "course_rel_user:read"})
+     *
+     * @var CourseCategory[]|Collection
+     *
      * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="courses")
      * @ORM\JoinTable(
      *     name="course_rel_category",
@@ -417,17 +420,23 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->getTitle();
     }
 
+    /**
+     * @return SessionRelCourse[]|ArrayCollection|Collection
+     */
     public function getSessions()
     {
         return $this->sessions;
     }
 
+    /**
+     * @return CTool[]|ArrayCollection|Collection
+     */
     public function getTools()
     {
         return $this->tools;
     }
 
-    public function setTools(array $tools)
+    public function setTools(array $tools): self
     {
         foreach ($tools as $tool) {
             $this->addTool($tool);
@@ -436,7 +445,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this;
     }
 
-    public function addTool(CTool $tool)
+    public function addTool(CTool $tool): self
     {
         $tool->setCourse($this);
         $this->tools->add($tool);
@@ -452,7 +461,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->urls;
     }
 
-    public function setUrls(Collection $urls)
+    public function setUrls(Collection $urls): self
     {
         $this->urls = new ArrayCollection();
         foreach ($urls as $url) {
@@ -462,7 +471,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this;
     }
 
-    public function addUrlRelCourse(AccessUrlRelCourse $accessUrlRelCourse)
+    public function addUrlRelCourse(AccessUrlRelCourse $accessUrlRelCourse): self
     {
         $accessUrlRelCourse->setCourse($this);
         $this->urls->add($accessUrlRelCourse);
@@ -510,7 +519,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->users->matching($criteria);
     }
 
-    public function setUsers(Collection $users)
+    public function setUsers(Collection $users): self
     {
         $this->users = new ArrayCollection();
 
@@ -521,7 +530,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this;
     }
 
-    public function addUsers(CourseRelUser $courseRelUser)
+    public function addUsers(CourseRelUser $courseRelUser): self
     {
         $courseRelUser->setCourse($this);
 
@@ -580,14 +589,14 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         }
     }
 
-    public function addTeacher(User $user)
+    public function addTeacher(User $user): self
     {
         $this->addUser($user, 0, 'Trainer', User::COURSE_MANAGER);
 
         return $this;
     }
 
-    public function addStudent(User $user)
+    public function addStudent(User $user): self
     {
         $this->addUser($user, 0, '', User::STUDENT);
 
@@ -656,7 +665,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->title;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->getTitle();
     }
@@ -685,6 +694,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this;
     }
 
+    /**
+     * @return CourseCategory[]|Collection
+     */
     public function getCategories()
     {
         return $this->categories;
@@ -1123,7 +1135,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return false;
     }
 
-    public function addUser(User $user, int $relationType, $role, int $status): self
+    public function addUser(User $user, int $relationType, string $role, int $status): self
     {
         $courseRelUser = new CourseRelUser();
         $courseRelUser->setCourse($this);

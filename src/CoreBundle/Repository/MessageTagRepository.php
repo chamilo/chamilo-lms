@@ -17,7 +17,7 @@ class MessageTagRepository extends SortableRepository
         parent::__construct($em, $em->getClassMetadata(MessageTag::class));
     }
 
-    public function update(MessageTag $message, $andFlush = true): void
+    public function update(MessageTag $message, bool $andFlush = true): void
     {
         $this->getEntityManager()->persist($message);
         if ($andFlush) {

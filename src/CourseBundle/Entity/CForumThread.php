@@ -166,7 +166,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getThreadTitle()
+    public function getThreadTitle(): string
     {
         return $this->threadTitle;
     }
@@ -195,12 +195,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get threadReplies.
-     *
-     * @return int
-     */
-    public function getThreadReplies()
+    public function getThreadReplies(): int
     {
         return $this->threadReplies;
     }
@@ -212,12 +207,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get threadViews.
-     *
-     * @return int
-     */
-    public function getThreadViews()
+    public function getThreadViews(): int
     {
         return $this->threadViews;
     }

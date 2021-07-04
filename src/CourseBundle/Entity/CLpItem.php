@@ -579,7 +579,7 @@ class CLpItem
         return $this->lvl;
     }
 
-    public function setLvl($lvl): self
+    public function setLvl(int $lvl): self
     {
         $this->lvl = $lvl;
 

@@ -456,9 +456,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
     /**
      * @deprecated Use Vue + api platform
      *
-     * @Route("/{tool}/{type}/{id}/delete_mass", methods={"DELETE"}, name="chamilo_core_resource_delete_mass")
+     * Route("/{tool}/{type}/{id}/delete_mass", methods={"DELETE"}, name="chamilo_core_resource_delete_mass")
      */
-    public function deleteMassAction($primaryKeys, $allPrimaryKeys, Request $request): Response
+    /*public function deleteMassAction($primaryKeys, $allPrimaryKeys, Request $request): Response
     {
         $em = $this->getDoctrine()->getManager();
         $repo = $this->getRepositoryFromRequest($request);
@@ -489,7 +489,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $routeParams['id'] = $parentId;
 
         return $this->redirectToRoute('chamilo_core_resource_list', $routeParams);
-    }
+    }*/
 
     /**
      * Shows the associated resource file.
@@ -539,7 +539,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     public function viewAction(Request $request): Response
     {
         $id = $request->get('id');
-        $filter = $request->get('filter'); // See filters definitions in /config/services.yml.
+        $filter = (string) $request->get('filter'); // See filters definitions in /config/services.yml.
         $resourceNode = $this->getResourceNodeRepository()->find($id);
 
         if (null === $resourceNode) {
@@ -553,6 +553,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
      * Redirect resource to link.
      *
      * @Route("/{tool}/{type}/{id}/link", methods={"GET"}, name="chamilo_core_resource_link")
+     *
+     * @return RedirectResponse|void
      */
     public function linkAction(Request $request, RouterInterface $router)
     {
@@ -578,6 +580,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
      * Download file of a resource node.
      *
      * @Route("/{tool}/{type}/{id}/download", methods={"GET"}, name="chamilo_core_resource_download")
+     *
+     * @return RedirectResponse|StreamedResponse
      */
     public function downloadAction(Request $request)
     {
@@ -689,7 +693,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     /**
      * @return mixed|StreamedResponse
      */
-    private function processFile(Request $request, ResourceNode $resourceNode, $mode = 'show', $filter = '')
+    private function processFile(Request $request, ResourceNode $resourceNode, string $mode = 'show', string $filter = '')
     {
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,

@@ -65,7 +65,7 @@ class SequenceRuleMethod
         return $this;
     }
 
-    public function getRule()
+    public function getRule(): ?SequenceRule
     {
         return $this->rule;
     }
@@ -77,7 +77,7 @@ class SequenceRuleMethod
         return $this;
     }
 
-    public function getMethod()
+    public function getMethod(): SequenceMethod
     {
         return $this->method;
     }

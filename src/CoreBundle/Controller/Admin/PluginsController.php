@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 use AppPlugin;
 use Chamilo\CoreBundle\Controller\BaseController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PluginsController extends BaseController
@@ -18,7 +19,7 @@ class PluginsController extends BaseController
      *
      * @Route("/plugins")
      */
-    public function pluginsAction()
+    public function pluginsAction(): Response
     {
         $appPlugin = new AppPlugin();
         $installedPlugins = $appPlugin->getInstalledPlugins();
@@ -36,7 +37,7 @@ class PluginsController extends BaseController
      *
      * @Route("/plugins/add")
      */
-    public function pluginsAddAction()
+    public function pluginsAddAction(): Response
     {
         $appPlugin = new AppPlugin();
         $allPlugins = $appPlugin->read_plugins_from_path();

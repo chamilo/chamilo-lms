@@ -463,7 +463,7 @@ class GradebookCategory
     /**
      * @param GradebookEvaluation[]|Collection $evaluations
      */
-    public function setEvaluations(Collection $evaluations)
+    public function setEvaluations(Collection $evaluations): self
     {
         $this->evaluations = $evaluations;
 
@@ -488,6 +488,9 @@ class GradebookCategory
         return $this;
     }
 
+    /**
+     * @return GradebookCategory[]|Collection
+     */
     public function getSubCategories()
     {
         return $this->subCategories;
@@ -529,6 +532,9 @@ class GradebookCategory
         return $this;
     }
 
+    /**
+     * @return SkillRelGradebook[]|Collection
+     */
     public function getSkills()
     {
         return $this->skills;

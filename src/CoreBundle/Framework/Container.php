@@ -95,6 +95,9 @@ class Container
         self::$container = $container;
     }
 
+    /**
+     * @return array|bool|float|int|string|null
+     */
     public static function getParameter(string $parameter)
     {
         if (self::$container->hasParameter($parameter)) {

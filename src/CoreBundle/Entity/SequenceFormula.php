@@ -45,7 +45,7 @@ class SequenceFormula
         return $this->id;
     }
 
-    public function getMethod()
+    public function getMethod(): ?SequenceMethod
     {
         return $this->method;
     }
@@ -57,7 +57,7 @@ class SequenceFormula
         return $this;
     }
 
-    public function getVariable()
+    public function getVariable(): ?SequenceVariable
     {
         return $this->variable;
     }

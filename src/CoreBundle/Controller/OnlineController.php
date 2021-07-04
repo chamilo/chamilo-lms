@@ -38,7 +38,7 @@ class OnlineController extends BaseController
     /**
      * @Route("/in_course/{cidReq}", name="online_users_in_course", methods={"GET", "POST"}, options={"expose"=true})
      */
-    public function onlineUsersInCoursesAction($cidReq): Response
+    public function onlineUsersInCoursesAction(string $cidReq): Response
     {
         // @todo don't use legacy code
         $users = who_is_online_in_this_course(

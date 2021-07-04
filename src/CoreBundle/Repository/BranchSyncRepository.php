@@ -7,12 +7,16 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\BranchSync;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 
 class BranchSyncRepository extends NestedTreeRepository
 {
+    /**
+     * @return BranchSync[]|Collection
+     */
     public function searchByKeyword(string $keyword)
     {
         $qb = $this->createQueryBuilder('a');
@@ -37,7 +41,7 @@ class BranchSyncRepository extends NestedTreeRepository
     /**
      * Gets the first branch with parent_id = NULL.
      */
-    public function getTopBranch()
+    public function getTopBranch(): ?BranchSync
     {
         $qb = $this->createQueryBuilder('a');
 
@@ -49,12 +53,6 @@ class BranchSyncRepository extends NestedTreeRepository
         $qb->orderBy('b.id', Criteria::ASC);
         $qb->setMaxResults(1);
 
-        $q = $qb->getQuery()->getResult();
-        if (empty($q)) {
-            return null;
-        }
-        foreach ($q as $result) {
-            return $result;
-        }
+        return $qb->getQuery()->getOneOrNullResult();
     }
 }

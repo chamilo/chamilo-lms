@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -137,7 +138,7 @@ class SessionRepository extends ServiceEntityRepository
         }
     }
 
-    private function addSessionRelUserFilterByUrl(Session $session, AccessUrl $url)
+    private function addSessionRelUserFilterByUrl(Session $session, AccessUrl $url): QueryBuilder
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb

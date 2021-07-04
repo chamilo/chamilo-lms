@@ -33,12 +33,12 @@ class AssetRepository extends ServiceEntityRepository
         $this->storage = $storage;
     }
 
-    public function getStorage()
+    public function getStorage(): FlysystemStorage
     {
         return $this->storage;
     }
 
-    public function getFileSystem()
+    public function getFileSystem(): FilesystemOperator
     {
         return $this->filesystem;
     }
@@ -103,7 +103,7 @@ class AssetRepository extends ServiceEntityRepository
         return '/assets'.$helper->asset($asset).$cropFilter;
     }
 
-    public function createFromRequest(Asset $asset, $file): Asset
+    public function createFromRequest(Asset $asset, array $file): Asset
     {
         if (isset($file['tmp_name']) && !empty($file['tmp_name'])) {
             $mimeType = mime_content_type($file['tmp_name']);

@@ -44,7 +44,7 @@ class UserListener
                 $creator = $user->getResourceNodeCreator();
 
                 if (null === $creator) {
-                    /** @var User|null $creator */
+                    /** @var User|null $defaultCreator */
                     $defaultCreator = $this->security->getUser();
                     if (null !== $defaultCreator) {
                         $creator = $defaultCreator;

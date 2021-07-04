@@ -211,9 +211,9 @@ class ResourceNode
         $this->fileEditableText = false;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return (string) $this->getPathForDisplay();
+        return $this->getPathForDisplay();
     }
 
     /**
@@ -301,26 +301,26 @@ class ResourceNode
         return $this->comments;
     }
 
-    public function addComment(ResourceComment $comment)
+    public function addComment(ResourceComment $comment): self
     {
         $comment->setResourceNode($this);
 
-        return $this->comments->add($comment);
+        $this->comments->add($comment);
+
+        return $this;
     }
 
     /**
      * Returns the path cleaned from its ids.
      * Eg.: "Root/subdir/file.txt".
-     *
-     * @return string
      */
-    public function getPathForDisplay()
+    public function getPathForDisplay(): string
     {
         return $this->path;
         //return $this->convertPathForDisplay($this->path);
     }
 
-    public function getPathForDisplayToArray($baseRoot = null)
+    public function getPathForDisplayToArray(?int $baseRoot = null): array
     {
         $parts = explode(self::PATH_SEPARATOR, $this->path);
         $list = [];
@@ -349,17 +349,17 @@ class ResourceNode
         return $this->convertPathForDisplay($path);
     }
 
-    public function getSlug()
+    public function getSlug(): string
     {
         return $this->slug;
     }
 
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    public function setTitle(string $title)
+    public function setTitle(string $title): self
     {
         $title = str_replace('/', '-', $title);
 
@@ -381,10 +381,8 @@ class ResourceNode
 
     /**
      * Convert a path for display: remove ids.
-     *
-     * @return string
      */
-    public function convertPathForDisplay(string $path)
+    public function convertPathForDisplay(string $path): string
     {
         /*$pathForDisplay = preg_replace(
             '/-\d+'.self::PATH_SEPARATOR.'/',
@@ -437,6 +435,9 @@ class ResourceNode
         return $this;
     }
 
+    /**
+     * @param Collection|ResourceLink[] $resourceLinks
+     */
     public function setResourceLinks($resourceLinks): self
     {
         $this->resourceLinks = $resourceLinks;
@@ -563,7 +564,7 @@ class ResourceNode
         return '<i class="'.$class.'"></i>';
     }
 
-    public function getContent()
+    public function getContent(): string
     {
         return $this->content;
     }

@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -30,7 +31,7 @@ class AccountController extends BaseController
     /**
      * @Route("/edit", methods={"GET", "POST"}, name="chamilo_core_account_edit")
      */
-    public function editAction(Request $request, UserRepository $userRepository, IllustrationRepository $illustrationRepo)
+    public function editAction(Request $request, UserRepository $userRepository, IllustrationRepository $illustrationRepo): Response
     {
         $user = $this->getUser();
 

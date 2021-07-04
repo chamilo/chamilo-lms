@@ -47,7 +47,7 @@ class ResourceNodeRepository extends MaterializedPathRepository
         $this->getEntityManager()->flush();
     }
 
-    public function update(ResourceNode $node, $andFlush = true): void
+    public function update(ResourceNode $node, bool $andFlush = true): void
     {
         //$node->setUpdatedAt(new \DateTime());
         $this->getEntityManager()->persist($node);
@@ -56,7 +56,7 @@ class ResourceNodeRepository extends MaterializedPathRepository
         }
     }*/
 
-    public function getFileSystem()
+    public function getFileSystem(): FilesystemOperator
     {
         return $this->filesystem;
     }
@@ -96,7 +96,7 @@ class ResourceNodeRepository extends MaterializedPathRepository
         }
     }
 
-    public function getResourceFileUrl(ResourceNode $resourceNode, array $extraParams = [], $referenceType = null): string
+    public function getResourceFileUrl(ResourceNode $resourceNode, array $extraParams = [], ?int $referenceType = null): string
     {
         try {
             if ($resourceNode->hasResourceFile()) {

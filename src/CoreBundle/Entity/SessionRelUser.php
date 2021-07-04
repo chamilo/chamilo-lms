@@ -138,7 +138,7 @@ class SessionRelUser
         $this->registeredAt = new DateTime('now', new DateTimeZone('UTC'));
     }
 
-    public function getCourses()
+    public function getCourses(): Collection
     {
         return $this->session->getSessionRelCourseByUser($this->getUser());
     }

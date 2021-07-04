@@ -131,7 +131,7 @@ class SequenceRowEntity
         return $this;
     }
 
-    public function getType()
+    public function getType(): ?SequenceTypeEntity
     {
         return $this->type;
     }

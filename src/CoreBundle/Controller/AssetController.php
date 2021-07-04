@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Traits\ControllerTrait;
 use League\MimeTypeDetection\ExtensionMimeTypeDetector;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,12 +26,12 @@ class AssetController
      * @Route("/{category}/{path}", methods={"GET"}, requirements={"path"=".+"}, name="chamilo_core_asset_showfile")
      */
     public function showFile(
-        $category,
-        $path,
+        string $category,
+        string $path,
         AssetRepository $assetRepository,
         GlideAsset $glide,
         RequestStack $requestStack
-    ) {
+    ): Response {
         $filePath = $category.'/'.$path;
         $exists = $assetRepository->getFileSystem()->fileExists($filePath);
 

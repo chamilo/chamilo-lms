@@ -286,7 +286,7 @@ class Asset
         return $this->file;
     }
 
-    public function hasFile()
+    public function hasFile(): bool
     {
         return null !== $this->file;
     }
@@ -307,7 +307,7 @@ class Asset
         return $this;
     }
 
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }

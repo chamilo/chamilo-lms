@@ -669,7 +669,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         return $qb;
     }
 
-    private function addSearchByKeywordQueryBuilder($keyword, QueryBuilder $qb = null): QueryBuilder
+    private function addSearchByKeywordQueryBuilder(string $keyword, QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
         $qb

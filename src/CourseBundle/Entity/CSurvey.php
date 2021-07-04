@@ -757,14 +757,6 @@ class CSurvey extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return CSurveyInvitation[]|Collection
-     */
-    public function getInvitations()
-    {
-        return $this->invitations;
-    }
-
-    /**
      * @return CSurveyQuestionOption[]|Collection
      */
     public function getOptions()
@@ -779,6 +771,17 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
+    /**
+     * @return CSurveyInvitation[]|Collection
+     */
+    public function getInvitations()
+    {
+        return $this->invitations;
+    }
+
+    /**
+     * @param CSurveyInvitation[]|Collection $invitations
+     */
     public function setInvitations($invitations): self
     {
         $this->invitations = $invitations;

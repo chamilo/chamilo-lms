@@ -59,7 +59,7 @@ final class CStudentPublicationRepository extends ResourceRepository
         return $qb;
     }
 
-    public function getStudentPublicationByUser(User $user, Course $course, Session $session = null)
+    public function getStudentPublicationByUser(User $user, Course $course, Session $session = null): array
     {
         $qb = $this->findAllByCourse($course, $session);
         /** @var CStudentPublication[] $works */

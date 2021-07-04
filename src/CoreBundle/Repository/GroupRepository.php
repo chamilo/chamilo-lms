@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\DataFixtures\AccessGroupFixtures;
 use Chamilo\CoreBundle\Entity\Group;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 
 class GroupRepository extends ServiceEntityRepository
@@ -20,7 +21,7 @@ class GroupRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return User[]
+     * @return User[]|Collection
      */
     public function getAdmins()
     {

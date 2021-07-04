@@ -258,7 +258,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getActive()
+    public function getActive(): int
     {
         return $this->active;
     }
@@ -404,6 +404,9 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this;
     }
 
+    /**
+     * @return Collection<int, SettingsCurrent>|SettingsCurrent[]
+     */
     public function getSettings()
     {
         return $this->settings;
@@ -434,6 +437,9 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this;
     }
 
+    /**
+     * @return Collection<int, AccessUrlRelCourse>|AccessUrlRelCourse[]
+     */
     public function getCourses()
     {
         return $this->courses;
@@ -449,6 +455,9 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this;
     }
 
+    /**
+     * @return SessionCategory[]|Collection
+     */
     public function getSessionCategories()
     {
         return $this->sessionCategories;

@@ -7,6 +7,9 @@
  *
  * @author Julio Montoya <gugli100@gmail.com>
  */
+
+use Chamilo\CoreBundle\Entity\UserRelUser;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -27,7 +30,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
         //SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, SOCIALPARENT
         $friends = SocialManager::get_friends(
             $user_id,
-            USER_RELATION_TYPE_FRIEND
+            UserRelUser::USER_RELATION_TYPE_FRIEND
         );
         $number_friends = count($friends);
         $friend_html = '';

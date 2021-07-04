@@ -8,6 +8,9 @@
 /**
  * Init.
  */
+
+use Chamilo\CoreBundle\Entity\UserRelUser;
+
 require_once __DIR__.'/../config.php';
 $plugin = AdvancedSubscriptionPlugin::create();
 $now = api_get_utc_datetime();
@@ -26,7 +29,7 @@ $conditions = [
     'where' => [
         's.access_start_date >= ? AND uu.relation_type = ? AND asq.updated_at <= ?' => [
             $now,
-            USER_RELATION_TYPE_BOSS,
+            UserRelUser::USER_RELATION_TYPE_BOSS,
             $weekAgo,
         ],
     ],

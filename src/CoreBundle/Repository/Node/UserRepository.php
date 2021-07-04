@@ -428,7 +428,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
                 'u.id = uu.friendUserId'
             )
             ->where(
-                $qb->expr()->eq('uu.relationType', USER_RELATION_TYPE_BOSS)
+                $qb->expr()->eq('uu.relationType', UserRelUser::USER_RELATION_TYPE_BOSS)
             )
             ->andWhere(
                 $qb->expr()->eq('uu.userId', $user->getId())

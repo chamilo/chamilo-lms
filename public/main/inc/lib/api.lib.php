@@ -355,18 +355,6 @@ define('USER_IMAGE_SIZE_BIG', 2);
 define('USER_IMAGE_SIZE_MEDIUM', 3);
 define('USER_IMAGE_SIZE_SMALL', 4);
 
-// Relation type between users
-define('USER_UNKNOWN', 0);
-define('USER_RELATION_TYPE_UNKNOWN', 1);
-define('USER_RELATION_TYPE_PARENT', 2); // should be deprecated is useless
-define('USER_RELATION_TYPE_FRIEND', 3);
-define('USER_RELATION_TYPE_GOODFRIEND', 4); // should be deprecated is useless
-define('USER_RELATION_TYPE_ENEMY', 5); // should be deprecated is useless
-define('USER_RELATION_TYPE_DELETED', 6);
-//define('USER_RELATION_TYPE_RRHH', 7);
-define('USER_RELATION_TYPE_BOSS', 8);
-define('USER_RELATION_TYPE_HRM_REQUEST', 9);
-
 // Gradebook link constants
 // Please do not change existing values, they are used in the database !
 define('GRADEBOOK_ITEM_LIMIT', 1000);

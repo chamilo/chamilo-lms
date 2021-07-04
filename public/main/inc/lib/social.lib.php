@@ -105,7 +105,7 @@ class SocialManager extends UserManager
                 $adminsList = UserManager::get_all_administrators();
                 foreach ($adminsList as $admin) {
                     if (api_get_user_id() == $admin['user_id']) {
-                        return USER_RELATION_TYPE_GOODFRIEND;
+                        return UserRelUser::USER_RELATION_TYPE_GOODFRIEND;
                     }
                 }
                 $targetUserCoursesList = CourseManager::get_courses_list_by_user_id(
@@ -118,7 +118,7 @@ class SocialManager extends UserManager
                     $teachersList = CourseManager::get_teacher_list_from_course_code($course['code']);
                     foreach ($teachersList as $teacher) {
                         if ($currentUserId == $teacher['user_id']) {
-                            return USER_RELATION_TYPE_GOODFRIEND;
+                            return UserRelUser::USER_RELATION_TYPE_GOODFRIEND;
                         }
                     }
                 }
@@ -1152,7 +1152,7 @@ class SocialManager extends UserManager
 
         $template->assign('chat_enabled', $chatEnabled);
         $template->assign('user_relation', $userRelationType);
-        $template->assign('user_relation_type_friend', USER_RELATION_TYPE_FRIEND);
+        $template->assign('user_relation_type_friend', UserRelUser::USER_RELATION_TYPE_FRIEND);
         $template->assign('show_full_profile', $show_full_profile);
 
         $templateName = $template->get_template('social/user_block.tpl');

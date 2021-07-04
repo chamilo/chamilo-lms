@@ -4410,12 +4410,12 @@ class UserManager
                 ;
                 break;
             case STUDENT_BOSS:
-                $drhConditions = " AND friend_user_id = $userId AND relation_type = ".USER_RELATION_TYPE_BOSS;
+                $drhConditions = " AND friend_user_id = $userId AND relation_type = ".UserRelUser::USER_RELATION_TYPE_BOSS;
                 break;
             case HRM_REQUEST:
                 $drhConditions .= " AND
                     friend_user_id = '$userId' AND
-                    relation_type = '".USER_RELATION_TYPE_HRM_REQUEST."'
+                    relation_type = '".UserRelUser::USER_RELATION_TYPE_HRM_REQUEST."'
                 ";
                 break;
         }
@@ -4513,7 +4513,7 @@ class UserManager
         return self::subscribeUsersToUser(
             $hrmId,
             $usersId,
-            USER_RELATION_TYPE_HRM_REQUEST,
+            UserRelUser::USER_RELATION_TYPE_HRM_REQUEST,
             false,
             false
         );
@@ -4532,7 +4532,7 @@ class UserManager
                 DELETE FROM ChamiloCoreBundle:UserRelUser uru
                 WHERE uru.friendUserId = :hrm_id AND uru.relationType = :relation_type AND uru.userId IN (:users_ids)
             ')
-            ->execute(['hrm_id' => $hrmId, 'relation_type' => USER_RELATION_TYPE_HRM_REQUEST, 'users_ids' => $users]);
+            ->execute(['hrm_id' => $hrmId, 'relation_type' => UserRelUser::USER_RELATION_TYPE_HRM_REQUEST, 'users_ids' => $users]);
     }
 
     /**
@@ -4912,7 +4912,7 @@ class UserManager
         return self::subscribeUsersToUser(
             $bossId,
             $usersId,
-            USER_RELATION_TYPE_BOSS,
+            UserRelUser::USER_RELATION_TYPE_BOSS,
             false,
             $deleteOtherAssignedUsers
         );
@@ -4933,7 +4933,7 @@ class UserManager
 
         $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $sql = "DELETE FROM $userRelUserTable
-                WHERE user_id = $userId AND relation_type = ".USER_RELATION_TYPE_BOSS;
+                WHERE user_id = $userId AND relation_type = ".UserRelUser::USER_RELATION_TYPE_BOSS;
         Database::query($sql);
 
         return true;
@@ -4985,7 +4985,7 @@ class UserManager
 
                 $bossLanguage = $bossInfo['language'];
                 $sql = "INSERT IGNORE INTO $userRelUserTable (user_id, friend_user_id, relation_type)
-                        VALUES ($studentId, $bossId, ".USER_RELATION_TYPE_BOSS.")";
+                        VALUES ($studentId, $bossId, ".UserRelUser::USER_RELATION_TYPE_BOSS.")";
                 $insertId = Database::query($sql);
 
                 if ($insertId) {
@@ -5168,7 +5168,7 @@ class UserManager
                     'where' => [
                         'user_id = ? AND relation_type = ? LIMIT 1' => [
                             $userId,
-                            USER_RELATION_TYPE_BOSS,
+                            UserRelUser::USER_RELATION_TYPE_BOSS,
                         ],
                     ],
                 ]
@@ -5202,7 +5202,7 @@ class UserManager
                     'where' => [
                         'user_id = ? AND relation_type = ? ' => [
                             $userId,
-                            USER_RELATION_TYPE_BOSS,
+                            UserRelUser::USER_RELATION_TYPE_BOSS,
                         ],
                     ],
                 ]

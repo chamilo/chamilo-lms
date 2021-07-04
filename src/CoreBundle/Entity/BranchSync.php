@@ -163,6 +163,7 @@ class BranchSync
         $this->children = new ArrayCollection();
         $this->uniqueId = sha1(uniqid());
         $this->sslPubKey = sha1(uniqid());
+        $this->description = '';
         // $this->lastSyncTransDate = new \DateTime();
     }
 
@@ -581,15 +582,12 @@ class BranchSync
         return $this;
     }
 
-    public function getParent(): self
+    public function getParent(): ?self
     {
         return $this->parent;
     }
 
-    /**
-     * @return string
-     */
-    public function getUniqueId()
+    public function getUniqueId(): string
     {
         return $this->uniqueId;
     }
@@ -601,10 +599,7 @@ class BranchSync
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }

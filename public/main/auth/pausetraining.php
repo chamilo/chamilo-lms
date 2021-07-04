@@ -68,15 +68,7 @@ $content = $tabs.$form->returnForm();
 $tpl = new Template(get_lang('ModifyProfile'));
 
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');
-$menu = SocialManager::show_social_menu(
-    'home',
-    null,
-    api_get_user_id(),
-    false,
-    false
-);
 
-$tpl->assign('social_menu_block', $menu);
 $tpl->assign('social_right_content', $content);
 $social_layout = $tpl->get_template('social/edit_profile.tpl');
 

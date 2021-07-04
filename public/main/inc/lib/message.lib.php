@@ -12,10 +12,6 @@ use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-/**
- * This class provides methods for messages management.
- * Include/require it in your code to use its features.
- */
 class MessageManager
 {
     /**

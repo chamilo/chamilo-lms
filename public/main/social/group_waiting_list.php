@@ -85,7 +85,6 @@ $users = $usergroup->get_users_by_group(
 );
 
 $new_member_list = [];
-$social_left_content = SocialManager::show_social_menu('waiting_list', $group_id);
 
 // Display form
 foreach ($users as $user) {

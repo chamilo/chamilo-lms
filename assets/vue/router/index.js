@@ -3,12 +3,13 @@ import courseRoutes from './course';
 import accountRoutes from './account';
 import personalFileRoutes from './personalfile';
 import messageRoutes from './message';
+import userRoutes from './user';
+import userGroupRoutes from './usergroup';
+import userRelUserRoutes from './userreluser';
 
 //import courseCategoryRoutes from './coursecategory';
 import documents from './documents';
 import store from '../store';
-//import Legacy from '../views/Legacy.vue';
-//import Home from '../views/Home.vue';
 import MyCourseList from '../views/user/courses/List.vue';
 import MySessionList from '../views/user/sessions/List.vue';
 
@@ -91,7 +92,10 @@ const router = createRouter({
         documents,
         accountRoutes,
         personalFileRoutes,
-        messageRoutes
+        messageRoutes,
+        userRoutes,
+        userGroupRoutes,
+        userRelUserRoutes,
     ]
 });
 

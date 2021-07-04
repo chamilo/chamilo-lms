@@ -84,8 +84,6 @@ export default {
     const users = ref([]);
     const isLoadingSelect = ref(false);
 
-
-
     function asyncFind (query) {
       if (query.toString().length < 3) {
         return;

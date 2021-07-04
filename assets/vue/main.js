@@ -4,6 +4,9 @@ import i18n from './i18n';
 import router from './router';
 import store from './store';
 import axios from 'axios'
+
+// Services
+
 import courseCategoryService from './services/coursecategory';
 import documentsService from './services/documents';
 import courseService from './services/course';
@@ -11,6 +14,11 @@ import personalFileService from './services/personalfile';
 import resourceLinkService from './services/resourcelink';
 import resourceNodeService from './services/resourcenode';
 import messageService from './services/message';
+import userService from './services/user';
+import userGroupService from './services/usergroup';
+import userRelUserService from './services/userreluser';
+
+
 import makeCrudModule from './store/modules/crud';
 //import vuetify from './plugins/vuetify' // path to vuetify export
 
@@ -78,6 +86,29 @@ store.registerModule(
         service: messageService
     })
 );
+
+store.registerModule(
+    'userreluser',
+    makeCrudModule({
+        service: userRelUserService
+    })
+);
+
+store.registerModule(
+    'user',
+    makeCrudModule({
+        service: userService
+    })
+);
+
+store.registerModule(
+    'usergroup',
+    makeCrudModule({
+        service: userGroupService
+    })
+);
+
+
 
 // Vuetify.
 import '@mdi/font/css/materialdesignicons.css';

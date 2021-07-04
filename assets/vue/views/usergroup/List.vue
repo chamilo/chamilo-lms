@@ -268,8 +268,8 @@ import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
 
 export default {
-  name: 'MessageList',
-  servicePrefix: 'Message',
+  name: 'UserGroupList',
+  servicePrefix: 'usergroups',
   components: {
     Toolbar,
     ActionCell,
@@ -353,8 +353,8 @@ export default {
     return {
       goToInbox,
       goToSent,
-      goToUnread,
       goToTag,
+      goToUnread,
       tags,
       filters,
       title,

@@ -1,19 +1,22 @@
 <template>
-  <Toolbar
-  >
+  <Toolbar  >
     <template v-slot:right>
-        <v-btn
-            tile
-            icon
-            @click="composeHandler">
-          <v-icon icon="mdi-email-plus-outline" />
-        </v-btn>
+
+      <v-btn
+          tile
+          icon
+          :loading="isLoading"
+          :to="'/resources/friends/add'"
+      >
+        <v-icon icon="mdi-account-plus-outline" />
+      </v-btn>
 
         <v-btn
             tile
             icon
             :loading="isLoading"
-            @click="reloadHandler">
+            @click="reloadHandler"
+        >
           <v-icon icon="mdi-refresh" />
         </v-btn>
 
@@ -26,83 +29,13 @@
           <v-icon icon="mdi-delete" />
         </v-btn>
 <!--        :disabled="!selectedItems || !selectedItems.length"-->
-        <v-btn
-            icon
-            tile
-            @click="markAsUnReadMultiple"
-            :class="[ !selectedItems || !selectedItems.length ? 'hidden': '']"
-        >
-          <v-icon icon="mdi-email" />
-        </v-btn>
-
-        <v-btn
-            tile
-            icon
-            :class="[ !selectedItems || !selectedItems.length ? 'hidden': '']"
-        >
-          <v-icon icon="mdi-email-open" />
-        </v-btn>
 
     </template>
   </Toolbar>
 
   <div class="flex flex-row pt-2">
-    <div class="w-1/5 ">
-      <v-card
-        max-width="300"
-        tile
-      >
-      <v-list dense>
-  <!--      v-model="selectedItem"-->
-        <v-list-item-group
-            color="primary"
-        >
-          <v-list-item @click="goToInbox">
-            <v-list-item-icon>
-              <v-icon icon="mdi-inbox"></v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>Inbox</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-list-item @click="goToSent">
-            <v-list-item-icon>
-              <v-icon icon="mdi-send-outline"></v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>Sent</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-list-item @click="goToUnread">
-            <v-list-item-icon>
-              <v-icon icon="mdi-email-outline"></v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>Unread</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-
-          <v-list-item
-              v-for="(tag, i) in tags"
-              :key="i"
-              @click="goToTag(tag)"
-          >
-            <v-list-item-icon>
-              <v-icon icon="mdi-label-outline"></v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title v-text="tag.tag"></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>
-    </v-card>
-    </div>
-    <div class="w-4/5 pl-4">
-      <div class="text-h4 q-mb-md">{{ title }}</div>
+    <div class="w-full">
+      <div class="text-h4 q-mb-md">Friends</div>
       <DataTable
         class="p-datatable-sm"
         :value="items"
@@ -113,8 +46,7 @@
         sortBy="sendDate"
         sortOrder="asc"
         :lazy="true"
-        :paginator="true"
-        :rows="10"
+        :paginator="false"
         :totalRecords="totalItems"
         :loading="isLoading"
         @page="onPage($event)"
@@ -123,85 +55,54 @@
         :rowsPerPageOptions="[5, 10, 20, 50]"
         responsiveLayout="scroll"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-        :globalFilterFields="['title', 'sendDate']">
+      >
 
       <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
 
-      <Column field="userSender" :header="$t('From')" :sortable="false">
+      <Column field="userSender" :header="$t('User')" :sortable="false">
         <template #body="slotProps">
           <q-avatar size="40px">
-            <img :src="slotProps.data.userSender.illustrationUrl + '?w=80&h=80&fit=crop'" />
-          </q-avatar>
-
-          <a
-              v-if="slotProps.data"
-              @click="showHandler(slotProps.data)"
-              class="cursor-pointer"
-              :class="[ true === slotProps.data.read ? 'font-normal': 'font-semibold']"
-          >
-            {{ slotProps.data.userSender.username }}
-          </a>
+            <img :src="slotProps.data.friend.illustrationUrl + '?w=80&h=80&fit=crop'" />
+         </q-avatar>
+            {{ slotProps.data.friend.username }}
         </template>
       </Column>
 
-
-      <Column field="title" :header="$t('Title')" :sortable="false">
+      <Column field="createdAt" :header="$t('Sent date')" :sortable="true">
         <template #body="slotProps">
-          <a
-              v-if="slotProps.data"
-              @click="showHandler(slotProps.data)"
-              class="cursor-pointer"
-              v-bind:class="{ 'font-semibold': !slotProps.data.read }"
-          >
-            {{ slotProps.data.title }}
-          </a>
-
-          <div class="flex flex-row">
-            <v-chip v-for="tag in slotProps.data.tags" >
-              {{ tag.tag }}
-            </v-chip>
-          </div>
-        </template>
-
-        <!--         <template #filter="{filterModel}">-->
-        <!--           <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by name"/>-->
-        <!--         </template>-->
-        <!--         -->
-
-        <!--      <template #filter="{filterModel}">-->
-        <!--        <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by title"/>-->
-        <!--      </template>-->
-        <!--      <template #filterclear="{filterCallback}">-->
-        <!--        <Button type="button" icon="pi pi-times" @click="filterCallback()" class="p-button-secondary"></Button>-->
-        <!--      </template>-->
-        <!--      <template #filterapply="{filterCallback}">-->
-        <!--        <Button type="button" icon="pi pi-check" @click="filterCallback()" class="p-button-success"></Button>-->
-        <!--      </template>-->
-      </Column>
-
-      <Column field="sendDate" :header="$t('Send date')" :sortable="true">
-        <template #body="slotProps">
-          {{$luxonDateTime.fromISO(slotProps.data.sendDate).toRelative() }}
+          {{$luxonDateTime.fromISO(slotProps.data.createdAt).toRelative() }}
         </template>
       </Column>
 
       <Column :exportable="false">
+
         <template #body="slotProps">
-          <div class="flex flex-row gap-2">
+<!--          class="flex flex-row gap-2"-->
+
+              <v-icon   v-if="slotProps.data.relationType == 3" icon="mdi-check" />
+
+
+            <v-btn
+                v-if="slotProps.data.relationType == 10"
+                tile
+                icon
+                @click="addFriend(slotProps.data)" >
+              <v-icon icon="mdi-plus" />
+            </v-btn>
+
             <v-btn
                 tile
                 icon
                 @click="confirmDeleteItem(slotProps.data)" >
               <v-icon icon="mdi-delete" />
             </v-btn>
-          </div>
+
         </template>
+
       </Column>
     </DataTable>
     </div>
   </div>
-
-<!--  Dialogs-->
 
   <Dialog v-model:visible="itemDialog" :style="{width: '450px'}" :header="$t('New folder')" :modal="true" class="p-fluid">
     <div class="p-field">
@@ -255,126 +156,51 @@ import Toolbar from '../../components/Toolbar.vue';
 import ResourceFileIcon from '../../components/documents/ResourceFileIcon.vue';
 import ResourceFileLink from '../../components/documents/ResourceFileLink.vue';
 
-import {useRoute, useRouter} from 'vue-router'
 import DataFilter from '../../components/DataFilter';
 import DocumentsFilterForm from '../../components/documents/Filter';
 import { ref, reactive, onMounted, computed } from 'vue';
 import { useStore } from 'vuex';
-import isEmpty from 'lodash/isEmpty';
-import moment from "moment";
-import toInteger from "lodash/toInteger";
-import useState from "../../hooks/useState";
 import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
 
 export default {
-  name: 'MessageList',
-  servicePrefix: 'Message',
+  name: 'UserRelUserList',
+  servicePrefix: 'userreluser',
   components: {
     Toolbar,
-    ActionCell,
-    ResourceFileIcon,
-    ResourceFileLink,
-    DocumentsFilterForm,
-    DataFilter
   },
   mixins: [ListMixin],
   setup() {
     const store = useStore();
-    const filters = ref([]);
-    const filtersSent = ref([]);
     const user = store.getters["security/getUser"];
-    const tags = ref([]);
-    const title = ref('Inbox');
 
-    filtersSent.value = {
-      msgType: 2,
-      userSender: user.id
-    }
-
-    // inbox
-    filters.value = {
-      msgType: 1,
-      userReceiver: user.id
-    };
-
-    // Get user tags.
-    axios.get(ENTRYPOINT + 'message_tags', {
-      params: {
-        user: user['@id']
-      }
-    }).then(response => {
-      let data = response.data;
-      tags.value = data['hydra:member'];
-    });
-
-    function goToInbox() {
-      title.value = 'Inbox';
-      filters.value = {
-        msgType: 1,
-        userReceiver: user.id,
-      };
-      store.dispatch('message/resetList');
-      store.dispatch('message/fetchAll', filters.value);
-    }
-
-    function goToUnread() {
-      title.value = 'Unread';
-      filters.value = {
-        msgType: 1,
-        userReceiver: user.id,
-        read: false
-      };
-      store.dispatch('message/resetList');
-      store.dispatch('message/fetchAll', filters.value);
-    }
-
-    function goToSent() {
-      title.value = 'Sent';
-      filters.value = {
-        msgType: 2,
-        userSender: user.id
-      };
-      store.dispatch('message/resetList');
-      store.dispatch('message/fetchAll', filters.value);
-    }
-
-    function goToTag(tag) {
-      title.value = tag.tag;
-      filters.value = {
-        msgType: 1,
-        userReceiver: user.id,
-        tags: [tag]
-      };
-      store.dispatch('message/resetList');
-      store.dispatch('message/fetchAll', filters.value);
+    const isLoadingSelect = ref(false);
+    function addFriend(friend) {
+      axios.put(friend['@id'], {
+        relationType: 3,
+      }).then(response => {
+        console.log(response);
+        isLoadingSelect.value = false;
+      }).catch(function (error) {
+        isLoadingSelect.value = false;
+        console.log(error);
+      });
     }
 
     return {
-      goToInbox,
-      goToSent,
-      goToUnread,
-      goToTag,
-      tags,
-      filters,
-      title,
+      addFriend,
     }
   },
   data() {
     return {
       columns: [
-        { label: this.$i18n.t('Title'), field: 'title', name: 'title', sortable: true},
-        { label: this.$i18n.t('Sender'), field: 'userSender', name: 'userSender', sortable: true},
-        { label: this.$i18n.t('Modified'), field: 'sendDate', name: 'updatedAt', sortable: true},
+        { label: this.$i18n.t('User'), field: 'friend.username', name: 'friend', sortable: true},
+        { label: this.$i18n.t('Sent'), field: 'createdAt', name: 'createdAt', sortable: true},
         { label: this.$i18n.t('Actions'), name: 'action', sortable: false}
       ],
       pageOptions: [10, 20, 50, this.$i18n.t('All')],
       selected: [],
       isBusy: false,
-      options: {
-        sortBy: 'sendDate',
-        sortDesc: 'asc',
-      },
       selectedItems: [],
       // prime vue
       itemDialog: false,
@@ -385,6 +211,10 @@ export default {
     };
   },
   mounted() {
+    console.log('mounted');
+    this.filters = {
+       friend: this.currentUser.id
+    };
     this.onUpdateOptions(this.options);
   },
   computed: {
@@ -398,14 +228,14 @@ export default {
       'currentUser': 'security/getUser',
     }),
 
-    ...mapGetters('message', {
+    ...mapGetters('userreluser', {
       items: 'list',
     }),
 
     //...getters
 
     // From ListMixin
-    ...mapFields('message', {
+    ...mapFields('userreluser', {
       deletedItem: 'deleted',
       error: 'error',
       isLoading: 'isLoading',
@@ -415,11 +245,6 @@ export default {
     }),
   },
   methods: {
-    composeHandler() {
-      let folderParams = this.$route.query;
-      this.$router.push({ name: `${this.$options.servicePrefix}Create` , query: folderParams});
-    },
-
     // prime
     onPage(event) {
       this.options.itemsPerPage = event.rows;
@@ -534,13 +359,6 @@ export default {
       this.$refs.selectableTable.clearSelected()
     },
     async deleteSelected() {
-      console.log('deleteSelected');
-      /*for (let i = 0; i < this.selected.length; i++) {
-        let item = this.selected[i];
-        //this.deleteHandler(item);
-        this.deleteItem(item);
-      }*/
-
       this.deleteMultipleAction(this.selected);
       this.onRequest({
         pagination: this.pagination,
@@ -548,7 +366,7 @@ export default {
     },
     //...actions,
     // From ListMixin
-    ...mapActions('message', {
+    ...mapActions('userreluser', {
       getPage: 'fetchAll',
       create: 'create',
       update: 'update',

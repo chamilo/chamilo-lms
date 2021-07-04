@@ -6,7 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
@@ -53,6 +55,11 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['user_rel_user:read', 'timestampable_created:read'],
     ],
 )]
+#[ApiFilter(SearchFilter::class, properties: [
+    'user' => 'exact',
+    'friend' => 'exact',
+    'relationType' => 'exact',
+])]
 class UserRelUser
 {
     use UserTrait;

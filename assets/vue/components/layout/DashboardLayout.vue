@@ -33,9 +33,12 @@
         <q-space />
 
         <div class="q-gutter-sm row items-center no-wrap">
-<!--          <q-btn v-if="isAuthenticated" round dense flat color="grey-8" icon="people">-->
-<!--            <q-tooltip>Friends</q-tooltip>-->
-<!--          </q-btn>-->
+          <q-btn v-if="isAuthenticated" round dense flat color="grey-8"
+                 icon="person"
+                 :to="'/account/home'"
+          >
+            <q-tooltip>Profile</q-tooltip>
+          </q-btn>
 
           <q-btn v-if="isAuthenticated" round dense flat color="grey-8"
                  icon="inbox"
@@ -303,9 +306,9 @@ export default {
 
     //let payload = {isAuthenticated: isAuthenticated, user: this.user};
     //this.$store.dispatch("security/onRefresh", payload);
-    if (isAuthenticated) {
+    /*if (isAuthenticated) {
       this.linksUser.unshift({icon: 'mdi-account', url: '/account/home', text: this.currentUser.username});
-    }
+    }*/
   },
   computed: {
     ...mapGetters({

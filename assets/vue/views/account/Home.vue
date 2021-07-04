@@ -1,18 +1,21 @@
 <template>
-  <div class="card">
+  <v-card>
+
+    <q-avatar size="64px">
+      <img :src="user.illustrationUrl + '?w=80&h=80&fit=crop'" />
+    </q-avatar>
+
     <h6>{{ user.firstname }} {{ user.lastname }} </h6>
+
     <q-tabs align="left" dense inline-label no-caps>
-      <q-route-tab to="/resources/messages" label="Inbox" />
-      <q-route-tab to="/courses" label="Posts" />
-      <q-route-tab to="/courses" label="Friends" />
-      <q-route-tab to="/" label="Posts" />
+      <q-route-tab to="/resources/friends" label="My friends" />
       <q-route-tab to="/resources/personal_files" label="My files" />
     </q-tabs>
 
     <a href="/account/edit" class="btn btn-primary">
       Edit profile
     </a>
-  </div>
+  </v-card>
 </template>
 
 <script>

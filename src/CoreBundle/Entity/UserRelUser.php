@@ -12,17 +12,26 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Associations between users.
  *
- * @ORM\Table(name="user_rel_user", indexes={
- *     @ORM\Index(name="idx_user_rel_user__user", columns={"user_id"}),
- *     @ORM\Index(name="idx_user_rel_user__friend_user", columns={"friend_user_id"}),
- *     @ORM\Index(name="idx_user_rel_user__user_friend_user", columns={"user_id", "friend_user_id"})
- * })
+ * @ORM\Table(name="user_rel_user",
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(
+ *             name="user_friend_relation",
+ *             columns={"user_id", "friend_user_id", "relation_type"}
+ *         )
+ *     },
+ *     indexes={
+ *       @ORM\Index(name="idx_user_rel_user__user", columns={"user_id"}),
+ *       @ORM\Index(name="idx_user_rel_user__friend_user", columns={"friend_user_id"}),
+ *       @ORM\Index(name="idx_user_rel_user__user_friend_user", columns={"user_id", "friend_user_id"})
+ *    }
+ * )
  * @ORM\Entity
  */
 #[ApiResource(
@@ -60,6 +69,11 @@ use Symfony\Component\Validator\Constraints as Assert;
     'friend' => 'exact',
     'relationType' => 'exact',
 ])]
+#[UniqueEntity(
+    fields: ['user', 'friend', 'relationType'],
+    errorPath: 'User',
+    message: 'User relation already exists',
+)]
 class UserRelUser
 {
     use UserTrait;

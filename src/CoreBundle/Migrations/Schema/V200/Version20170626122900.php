@@ -202,6 +202,10 @@ class Version20170626122900 extends AbstractMigrationChamilo
             $this->addSql('UPDATE user_rel_user SET last_edit = NOW() WHERE last_edit IS NULL');
         }
 
+        if (!$table->hasIndex('user_friend_relation')) {
+            $this->addSql('CREATE UNIQUE INDEX user_friend_relation ON user_rel_user (user_id, friend_user_id, relation_type)');
+        }
+
         if (!$table->hasColumn('created_at')) {
             $this->addSql("ALTER TABLE user_rel_user ADD created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)");
             $this->addSql('UPDATE user_rel_user SET created_at = last_edit');

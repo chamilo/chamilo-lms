@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\UserRelUser;
 use ChamiloSession as Session;
 
 /**
@@ -307,7 +308,7 @@ function who_is_online(
                   WHERE
                     login_date >= '".$current_date."' AND
                     friend_user_id <> '".api_get_user_id()."' AND
-                    relation_type='".USER_RELATION_TYPE_FRIEND."' AND
+                    relation_type='".UserRelUser::USER_RELATION_TYPE_FRIEND."' AND
                     user_id = '".api_get_user_id()."'
                   ORDER BY `$column` $direction
                   LIMIT $from, $number_of_items";
@@ -331,7 +332,7 @@ function who_is_online(
                             WHERE   track.access_url_id =  $access_url_id AND
                                     login_date >= '".$current_date."' AND
                                     friend_user_id <> '".api_get_user_id()."' AND
-                                    relation_type='".USER_RELATION_TYPE_FRIEND."'
+                                    relation_type='".UserRelUser::USER_RELATION_TYPE_FRIEND."'
                             ORDER BY `$column` $direction
                             LIMIT $from, $number_of_items";
             } else {
@@ -392,7 +393,7 @@ function who_is_online_count($time_limit = null, $friends = false)
 				  WHERE
 				        login_date >= '$current_date' AND
 				        friend_user_id <> '".api_get_user_id()."' AND
-				        relation_type='".USER_RELATION_TYPE_FRIEND."' AND
+				        relation_type='".UserRelUser::USER_RELATION_TYPE_FRIEND."' AND
 				        user_id = '".api_get_user_id()."' ";
     } else {
         // All users online
@@ -414,7 +415,7 @@ function who_is_online_count($time_limit = null, $friends = false)
 							    track.access_url_id = $access_url_id AND
 							    login_date >= '".$current_date."' AND
 							    friend_user_id <> '".api_get_user_id()."' AND
-							    relation_type='".USER_RELATION_TYPE_FRIEND."'  ";
+							    relation_type='".UserRelUser::USER_RELATION_TYPE_FRIEND."'  ";
             } else {
                 // all users online
                 $query = "SELECT count(login_id) as count FROM $track_online_table  track

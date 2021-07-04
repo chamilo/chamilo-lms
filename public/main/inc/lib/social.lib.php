@@ -123,7 +123,7 @@ class SocialManager extends UserManager
                     }
                 }
             } else {
-                return USER_UNKNOWN;
+                return UserRelUser::USER_UNKNOWN;
             }
         }
     }
@@ -1174,7 +1174,7 @@ class SocialManager extends UserManager
     public static function listMyFriendsBlock($user_id, $link_shared = '', $showLinkToChat = false)
     {
         //SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_PARENT
-        $friends = self::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
+        $friends = self::get_friends($user_id, UserRelUser::USER_RELATION_TYPE_FRIEND);
         $numberFriends = count($friends);
         $friendHtml = '';
 

@@ -23,13 +23,13 @@ if (!empty($action) && $hrm && $assignedId) {
             /** @var UserRelUser $request */
             $request = $em->getRepository(UserRelUser::class)
                 ->findOneBy([
-                    'userId' => $assignedId,
-                    'friendUserId' => $hrm->getId(),
-                    'relationType' => USER_RELATION_TYPE_HRM_REQUEST,
+                    'user' => $assignedId,
+                    'friend' => $hrm->getId(),
+                    'relationType' => UserRelUser::USER_RELATION_TYPE_HRM_REQUEST,
                 ]);
 
             if ($request) {
-                $request->setRelationType(USER_RELATION_TYPE_RRHH);
+                $request->setRelationType(UserRelUser::USER_RELATION_TYPE_RRHH);
                 $em->persist($request);
                 $em->flush();
 
@@ -44,9 +44,9 @@ if (!empty($action) && $hrm && $assignedId) {
             /** @var UserRelUser $request */
             $request = $em->getRepository(UserRelUser::class)
                 ->findOneBy([
-                    'userId' => $assignedId,
-                    'friendUserId' => $hrm->getId(),
-                    'relationType' => USER_RELATION_TYPE_HRM_REQUEST,
+                    'user' => $assignedId,
+                    'friend' => $hrm->getId(),
+                    'relationType' => UserRelUser::USER_RELATION_TYPE_HRM_REQUEST,
                 ]);
 
             if ($request) {
@@ -64,9 +64,9 @@ if (!empty($action) && $hrm && $assignedId) {
             /** @var UserRelUser $request */
             $request = $em->getRepository(UserRelUser::class)
                 ->findOneBy([
-                    'userId' => $assignedId,
-                    'friendUserId' => $hrm->getId(),
-                    'relationType' => USER_RELATION_TYPE_RRHH,
+                    'user' => $assignedId,
+                    'friend' => $hrm->getId(),
+                    'relationType' => UserRelUser::USER_RELATION_TYPE_RRHH,
                 ]);
 
             if ($request) {

@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\GroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
@@ -4135,67 +4136,6 @@ class UserManager
     }
 
     /**
-     * Allow to register contact to social network.
-     *
-     * @param int $friend_id     user friend id
-     * @param int $my_user_id    user id
-     * @param int $relation_type relation between users see constants definition
-     *
-     * @return bool
-     */
-    public static function relate_users($friend_id, $my_user_id, $relation_type)
-    {
-        $tbl_my_friend = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-
-        $friend_id = (int) $friend_id;
-        $my_user_id = (int) $my_user_id;
-        $relation_type = (int) $relation_type;
-
-        $sql = 'SELECT COUNT(*) as count FROM '.$tbl_my_friend.'
-                WHERE
-                    friend_user_id='.$friend_id.' AND
-                    user_id='.$my_user_id.' AND
-                    relation_type NOT IN('.USER_RELATION_TYPE_RRHH.', '.USER_RELATION_TYPE_BOSS.') ';
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result, 'ASSOC');
-        $current_date = api_get_utc_datetime();
-
-        if (0 == $row['count']) {
-            $sql = 'INSERT INTO '.$tbl_my_friend.'(friend_user_id,user_id,relation_type,last_edit)
-                    VALUES ('.$friend_id.','.$my_user_id.','.$relation_type.',"'.$current_date.'")';
-            Database::query($sql);
-
-            return true;
-        }
-
-        $sql = 'SELECT COUNT(*) as count, relation_type  FROM '.$tbl_my_friend.'
-                WHERE
-                    friend_user_id='.$friend_id.' AND
-                    user_id='.$my_user_id.' AND
-                    relation_type NOT IN('.USER_RELATION_TYPE_RRHH.', '.USER_RELATION_TYPE_BOSS.') ';
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result, 'ASSOC');
-
-        if (1 == $row['count']) {
-            //only for the case of a RRHH or a Student BOSS
-            if ($row['relation_type'] != $relation_type &&
-                (USER_RELATION_TYPE_RRHH == $relation_type || USER_RELATION_TYPE_BOSS == $relation_type)
-            ) {
-                $sql = 'INSERT INTO '.$tbl_my_friend.'(friend_user_id,user_id,relation_type,last_edit)
-                        VALUES ('.$friend_id.','.$my_user_id.','.$relation_type.',"'.$current_date.'")';
-            } else {
-                $sql = 'UPDATE '.$tbl_my_friend.' SET relation_type='.$relation_type.'
-                        WHERE friend_user_id='.$friend_id.' AND user_id='.$my_user_id;
-            }
-            Database::query($sql);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * @param int $userId
      *
      * @return array
@@ -4221,8 +4161,8 @@ class UserManager
                 WHERE
                     access_url_id = ".api_get_current_access_url_id()." AND
                     uru.user_id = '$userId' AND
-                    relation_type = '".USER_RELATION_TYPE_RRHH."'
-                $orderBy
+                    relation_type = '".UserRelUser::USER_RELATION_TYPE_RRHH."'
+                    $orderBy
                 ";
         $result = Database::query($sql);
 
@@ -4394,13 +4334,13 @@ class UserManager
             case DRH:
                 $drhConditions .= " AND
                     friend_user_id = '$userId' AND
-                    relation_type = '".USER_RELATION_TYPE_RRHH."'
+                    relation_type = '".UserRelUser::USER_RELATION_TYPE_RRHH."'
                 ";
                 break;
             case COURSEMANAGER:
                 $drhConditions .= " AND
                     friend_user_id = '$userId' AND
-                    relation_type = '".USER_RELATION_TYPE_RRHH."'
+                    relation_type = '".UserRelUser::USER_RELATION_TYPE_RRHH."'
                 ";
 
                 $sessionConditionsCoach .= " AND
@@ -4705,7 +4645,7 @@ class UserManager
                 WHERE
                     user_id = $user_id AND
                     friend_user_id = $hr_dept_id AND
-                    relation_type = ".USER_RELATION_TYPE_RRHH;
+                    relation_type = ".UserRelUser::USER_RELATION_TYPE_RRHH;
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0) {
             $result = true;

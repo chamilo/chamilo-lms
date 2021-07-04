@@ -16,12 +16,10 @@ define('DB_COURSE_PREFIX', 'c_');
 // Main database tables
 define('TABLE_MAIN_COURSE', 'course');
 define('TABLE_MAIN_USER', 'user');
-define('TABLE_MAIN_CLASS', 'class_item');
 define('TABLE_MAIN_ADMIN', 'admin');
 define('TABLE_MAIN_COURSE_CLASS', 'course_rel_class');
 define('TABLE_MAIN_COURSE_USER', 'course_rel_user');
 define('TABLE_MAIN_COURSE_CATALOGUE_USER', 'course_rel_user_catalogue');
-define('TABLE_MAIN_CLASS_USER', 'class_user');
 define('TABLE_MAIN_CATEGORY', 'course_category');
 define('TABLE_MAIN_COURSE_REL_CATEGORY', 'course_rel_category');
 define('TABLE_MAIN_SYSTEM_ANNOUNCEMENTS', 'sys_announcement');

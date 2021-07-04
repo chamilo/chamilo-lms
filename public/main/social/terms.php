@@ -46,7 +46,7 @@ $allowSocial = 'true' === api_get_setting('allow_social_tool');
 
 if ($allowSocial) {
     // Block Social Menu
-    $socialMenuBlock = SocialManager::show_social_menu('personal-data');
+    //$socialMenuBlock = SocialManager::show_social_menu('personal-data');
 }
 
 $tpl = new Template(null);

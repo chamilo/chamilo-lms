@@ -142,7 +142,7 @@ if (is_array($Users) && count($Users) > 0) {
     }
 }
 
-$social_left_content = SocialManager::show_social_menu('invite_friends', $group_id);
+//$social_left_content = SocialManager::show_social_menu('invite_friends', $group_id);
 $social_right_content = '<h3 class="group-title">'.Security::remove_XSS($group_info['name'], STUDENT, true).'</h3>';
 
 if (0 == count($nosessionUsersList)) {

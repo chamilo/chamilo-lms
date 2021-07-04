@@ -29,7 +29,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('PromotedMessages'),
 ];
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('List')];
-$menu = SocialManager::show_social_menu('messages');
+//$menu = SocialManager::show_social_menu('messages');
 
 // Right content
 $social_right_content = '';
@@ -50,7 +50,7 @@ $tpl = new Template(null);
 // Block Social Avatar
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 
-$tpl->assign('social_menu_block', $menu);
+$tpl->assign('social_menu_block', '');
 $tpl->assign('social_right_content', $social_right_content);
 $social_layout = $tpl->get_template('social/inbox.tpl');
 $tpl->display($social_layout);

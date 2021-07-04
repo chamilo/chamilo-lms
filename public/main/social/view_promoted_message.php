@@ -26,7 +26,7 @@ $logInfo = [
     'action_details' => 'view-message',
 ];
 Event::registerLog($logInfo);
-$social_menu_block = SocialManager::show_social_menu('inbox');
+//$social_menu_block = SocialManager::show_social_menu('inbox');
 
 throw new Exception('Fix MessageManager::showMessageBox');
 

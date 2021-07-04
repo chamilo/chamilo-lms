@@ -363,7 +363,7 @@ define('USER_RELATION_TYPE_FRIEND', 3);
 define('USER_RELATION_TYPE_GOODFRIEND', 4); // should be deprecated is useless
 define('USER_RELATION_TYPE_ENEMY', 5); // should be deprecated is useless
 define('USER_RELATION_TYPE_DELETED', 6);
-define('USER_RELATION_TYPE_RRHH', 7);
+//define('USER_RELATION_TYPE_RRHH', 7);
 define('USER_RELATION_TYPE_BOSS', 8);
 define('USER_RELATION_TYPE_HRM_REQUEST', 9);
 

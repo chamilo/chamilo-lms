@@ -225,7 +225,7 @@ foreach ($data as $label => $item) {
 /**
  * Show social activity.
  */
-if ('true' === api_get_setting('allow_social_tool')) {
+if (false) {
     $data = [];
     $messagesSent = '';
     // Calculate values
@@ -238,19 +238,19 @@ if ('true' === api_get_setting('allow_social_tool')) {
     $wallMessagesPosted = SocialManager::getCountWallPostedMessages($userId);
     $data[] = [get_lang('Wall messages posted by him/herself'), $wallMessagesPosted];
 
-    $friends = SocialManager::getCountFriends($userId);
-    $data[] = [get_lang('Friends'), $friends];
+    //$friends = SocialManager::getCountFriends($userId);
+    //$data[] = [get_lang('Friends'), $friends];
 
-    $countSent = SocialManager::getCountInvitationSent($userId);
-    $data[] = [get_lang('Invitation sent'), $countSent];
+    //$countSent = SocialManager::getCountInvitationSent($userId);
+    //$data[] = [get_lang('Invitation sent'), $countSent];
 
-    $countReceived = SocialManager::get_message_number_invitation_by_user_id($userId);
-    $data[] = [get_lang('Invitation received'), $countReceived];
+    //$countReceived = SocialManager::get_message_number_invitation_by_user_id($userId);
+    //$data[] = [get_lang('Invitation received'), $countReceived];
 
     $params['social'] = [
-        'friends' => $friends,
-        'invitation_sent' => $countSent,
-        'invitation_received' => $countReceived,
+        ///'friends' => $friends,
+      //  'invitation_sent' => $countSent,
+        //'invitation_received' => $countReceived,
         'messages_posted' => $wallMessagesPosted,
         'messages_sent' => $messagesSent,
         'messages_received' => $messagesReceived,

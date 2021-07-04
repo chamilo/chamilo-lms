@@ -28,9 +28,6 @@ $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_C
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_class = Database::get_main_table(TABLE_MAIN_CLASS);
-$tbl_class_user = Database::get_main_table(TABLE_MAIN_CLASS_USER);
-
 $tbl_session_rel_etape = "session_rel_etape";
 
 $id_session = intval($_GET['id_session']);

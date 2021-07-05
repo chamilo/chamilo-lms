@@ -23,9 +23,8 @@ class UserRelUserListener
 
     public function prePersist(UserRelUser $userRelUser, LifecycleEventArgs $args): void
     {
-        $currentUser = $this->security->getUser();
         // User cannot be connected to himself
-        if ($userRelUser->getFriend()->getUsername() === $currentUser->getUserIdentifier()) {
+        if ($userRelUser->getFriend()->getUsername() === $userRelUser->getUser()->getUsername()) {
             throw new Exception('Invalid relation UserRelUser');
         }
     }

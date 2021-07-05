@@ -7,33 +7,43 @@ require_once __DIR__ . '/../../src/LtiProvider.php';
 $launch = LtiProvider::create()->launch(true, $_REQUEST['launch_id']);
 
 if (!$launch->hasAgs()) {
-    //throw new Exception("Don't have grades!");
+    throw new Exception("Don't have grades!");
 }
 
-$launchData = $launch->getLaunchData();
-$coursecode = $launchData['https://purl.imsglobal.org/spec/lti/claim/context']['label'];
-$userid = $launchData['sub'];
-$data = array();
+$grades = $launch->getAgs();
 
-$dataFile = __DIR__ . '/ags/results.json';
+$score = Packback\Lti1p3\LtiGrade::new()
+    ->setScoreGiven($_REQUEST['score'])
+    ->setScoreMaximum(100)
+    ->setTimestamp(date(DateTime::ISO8601))
+    ->setActivityProgress('Completed')
+    ->setGradingProgress('FullyGraded')
+    ->setUserId($launch->getLaunchData()['sub']);
 
-$dataContent = file_get_contents($dataFile);
-if (!empty($dataContent)) {
-    $data = json_decode($dataContent, true);
-}
-$data[$coursecode][$userid]['name'] = $launchData['given_name'];
-if (isset($_REQUEST['score'])) {
-    $data[$coursecode][$userid]['score'] = $_REQUEST['score'];
-}
 
-if (isset($_REQUEST['time'])) {
-    $data[$coursecode][$userid]['time'] = $_REQUEST['time'];
+$scoreLineitem = Packback\Lti1p3\LtiLineitem::new()
+    ->setTag('score')
+    ->setScoreMaximum(100)
+    ->setLabel('Score')
+    ->setResourceId($launch->getLaunchData()['https://purl.imsglobal.org/spec/lti/claim/resource_link']['id']);
 
-}
+$grades->putGrade($score, $scoreLineitem);
 
-if (file_exists($dataFile)) {
-    @chmod($dataFile,  0775);
-}
-file_put_contents($dataFile, json_encode($data));
+
+$time = Packback\Lti1p3\LtiGrade::new()
+    ->setScoreGiven($_REQUEST['time'])
+    ->setScoreMaximum(999)
+    ->setTimestamp(DateTime::ISO8601)
+    ->setActivityProgress('Completed')
+    ->setGradingProgress('FullyGraded')
+    ->setUserId($launch->getLaunchData()['sub']);
+
+$timeLineitem = Packback\Lti1p3\LtiLineitem::new()
+    ->setTag('time')
+    ->setScoreMaximum(999)
+    ->setLabel('Time Taken')
+    ->setResourceId('time'.$launch->getLaunchData()['https://purl.imsglobal.org/spec/lti/claim/resource_link']['id']);
+
+$grades->putGrade($time, $timeLineitem);
+
 echo '{"success" : true}';
-?>

@@ -439,9 +439,9 @@ var endGame = function() {
 var refreshScoreBoard = function() {
     var scores = JSON.parse(this.responseText);
     console.log(scores);
-    var output = '<tr><th>Name</th><th>Score</th><th>Time</th></tr>';
+    var output = '<tr><th>Score</th><th>Time</th><th>Name</th></tr>';
     for (var i = 0; i < scores.length; i++) {
-        output += '<tr><td>' + scores[i].name + '</td><td>' + scores[i].score + '</td><td>' + scores[i].time + '</td></tr>';
+        output += '<tr><td>' + scores[i].score + '</td><td>' + scores[i].time + 's</td><td>' + scores[i].name + '</td></tr>';
     }
     document.getElementById("leadertable").innerHTML = output;
 }

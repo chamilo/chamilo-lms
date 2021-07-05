@@ -6,12 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity\Listener;
 
-use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
-use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Symfony\Component\Security\Core\Exception\UserNotFoundException;
+use Exception;
 use Symfony\Component\Security\Core\Security;
 
 class UserRelUserListener
@@ -28,11 +26,11 @@ class UserRelUserListener
         $currentUser = $this->security->getUser();
         // User cannot be connected to himself
         if ($userRelUser->getFriend()->getUsername() === $currentUser->getUserIdentifier()) {
-            throw new \Exception('Invalid relation UserRelUser');
+            throw new Exception('Invalid relation UserRelUser');
         }
     }
 
-    public function postRemove(UserRelUser $userRelUser, LifecycleEventArgs $args)
+    public function postRemove(UserRelUser $userRelUser, LifecycleEventArgs $args): void
     {
         // Deletes the other connection
         $em = $args->getEntityManager();

@@ -168,7 +168,10 @@ services:
 
     # When the User entity is created/updated        -
     Chamilo\CoreBundle\Entity\Listener\UserListener:
-        arguments: ['@Chamilo\CoreBundle\Repository\Node\UserRepository']
+        tags:
+            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
+
+    Chamilo\CoreBundle\Entity\Listener\UserRelUserListener:
         tags:
             - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
 

@@ -3231,19 +3231,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/compiler-core@npm:3.1.3":
-  version: 3.1.3
-  resolution: "@vue/compiler-core@npm:3.1.3"
-  dependencies:
-    "@babel/parser": ^7.12.0
-    "@babel/types": ^7.12.0
-    "@vue/shared": 3.1.3
-    estree-walker: ^2.0.1
-    source-map: ^0.6.1
-  checksum: acdc50e8839342ca42bff00b38dba671da5578365d7c59d587a3e7225d11b5bb06284a81007c6d6b636dbb9a9c3aa50d6c4a899b7b75566e594b0e3e8f457f92
-  languageName: node
-  linkType: hard
-
 "@vue/compiler-core@npm:3.1.4":
   version: 3.1.4
   resolution: "@vue/compiler-core@npm:3.1.4"
@@ -3254,16 +3241,6 @@ __metadata:
     estree-walker: ^2.0.1
     source-map: ^0.6.1
   checksum: 78b3eaa2811a5c1223c8fa848938d3b29d1ee0c91941058969b0d660be8ac114dc53857054e036dc7a12c35b757b7901182234fc34ab9e441c380266e5cb6917
-  languageName: node
-  linkType: hard
-
-"@vue/compiler-dom@npm:3.1.3":
-  version: 3.1.3
-  resolution: "@vue/compiler-dom@npm:3.1.3"
-  dependencies:
-    "@vue/compiler-core": 3.1.3
-    "@vue/shared": 3.1.3
-  checksum: 4a8e133a259f1b716dccc22fb3d3bcf5a394c5384bb97cd31a99a6e528f9cca86ebec8264b656b56055c0336e2f09369dd018df3ce3b4c247d0ffad5c076ef2b
   languageName: node
   linkType: hard
 
@@ -3287,17 +3264,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/compiler-sfc@npm:^3.1.3":
-  version: 3.1.3
-  resolution: "@vue/compiler-sfc@npm:3.1.3"
+"@vue/compiler-sfc@npm:^3.1.4":
+  version: 3.1.4
+  resolution: "@vue/compiler-sfc@npm:3.1.4"
   dependencies:
     "@babel/parser": ^7.13.9
     "@babel/types": ^7.13.0
     "@types/estree": ^0.0.48
-    "@vue/compiler-core": 3.1.3
-    "@vue/compiler-dom": 3.1.3
-    "@vue/compiler-ssr": 3.1.3
-    "@vue/shared": 3.1.3
+    "@vue/compiler-core": 3.1.4
+    "@vue/compiler-dom": 3.1.4
+    "@vue/compiler-ssr": 3.1.4
+    "@vue/shared": 3.1.4
     consolidate: ^0.16.0
     estree-walker: ^2.0.1
     hash-sum: ^2.0.0
@@ -3309,18 +3286,18 @@ __metadata:
     postcss-selector-parser: ^6.0.4
     source-map: ^0.6.1
   peerDependencies:
-    vue: 3.1.3
-  checksum: eada23371ce2436b471a6304c9d551f1efb56b00125dc5e6b9fe6a70a0f5f0a279f05c9fe1cd1d643af912dcba3fefc09890e7399bbeb9ccb11af37e81cf82ed
+    vue: 3.1.4
+  checksum: 1200de53f0dec13159bc72dbbabc9e3a04160027fd9bfedf6bc1e240eccb2293c1de19bb30dff9c6b8c310a371bb56a72968b4f74cfb5078ca7749b45708bedf
   languageName: node
   linkType: hard
 
-"@vue/compiler-ssr@npm:3.1.3":
-  version: 3.1.3
-  resolution: "@vue/compiler-ssr@npm:3.1.3"
+"@vue/compiler-ssr@npm:3.1.4":
+  version: 3.1.4
+  resolution: "@vue/compiler-ssr@npm:3.1.4"
   dependencies:
-    "@vue/compiler-dom": 3.1.3
-    "@vue/shared": 3.1.3
-  checksum: 9d53d39cb72a74b4491c8ef4576487497d8bf03aa0b4573beabd0d029a2b9f57613a2bf4e6ee9dbafbfc4037b8d428ff2107691ace7c75df63e4fe962fd98a4f
+    "@vue/compiler-dom": 3.1.4
+    "@vue/shared": 3.1.4
+  checksum: 8db0b0e3c3d7b53621947f0b4916457f121bed0108c75db474561c991fbde696bdd03c32a132a457941a9e821351dd49cf16a7fb99566168d8857db196858fbd
   languageName: node
   linkType: hard
 
@@ -3395,13 +3372,6 @@ __metadata:
   version: 3.1.1
   resolution: "@vue/shared@npm:3.1.1"
   checksum: 827ad5d79748595f9745c5144ddbd58682c4febb50cac0ea993c569ee42d5b79c8a95ea21a07036a548abcf37c89f42813e30ead8986d909892e3908ce9a4197
-  languageName: node
-  linkType: hard
-
-"@vue/shared@npm:3.1.3":
-  version: 3.1.3
-  resolution: "@vue/shared@npm:3.1.3"
-  checksum: 248f634b89314bf6e2e59c51885283f88f9d7ba9328caf56f3dc0990e89d5d18f4cd880f48de32e323aee5b899dca7b8b0c3ece441a9d086644c85afab3d7993
   languageName: node
   linkType: hard
 
@@ -6265,7 +6235,7 @@ __metadata:
     "@vue/cli-plugin-babel": ~4.5.13
     "@vue/cli-plugin-eslint": ~4.5.13
     "@vue/cli-service": ~4.5.13
-    "@vue/compiler-sfc": ^3.1.3
+    "@vue/compiler-sfc": ^3.1.4
     "@vuelidate/core": ^2.0.0-alpha.19
     "@vuelidate/validators": ^2.0.0-alpha.17
     autoprefixer: ^10.2.6
@@ -6340,7 +6310,7 @@ __metadata:
     sass-loader: ^11.1.1
     select2: ^4.1.0-rc.0
     signature_pad: ^3.0.0-beta.4
-    sortablejs: ^1.13.0
+    sortablejs: ^1.14.0
     sweetalert2: ^11.0.18
     tailwindcss: ^2.2.4
     tempusdominus-bootstrap-4: ^5.39.0
@@ -17639,10 +17609,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"sortablejs@npm:^1.13.0":
-  version: 1.13.0
-  resolution: "sortablejs@npm:1.13.0"
-  checksum: 96bef6c83baebc6e5c259d9141af3700636cdbea3af47b3986dda03d04c8e5ca33e3a8139358c1d60a1d5d65670faecb66882949f53f66068b7f363f34e6d0cb
+"sortablejs@npm:^1.14.0":
+  version: 1.14.0
+  resolution: "sortablejs@npm:1.14.0"
+  checksum: 2e63a225fd5d75a4032ee5ea7155194d2729a44ff4c1dab027106523699836eb05d272eeb44d528ab9d60cc302e5ef13e611c508f9cb79e005eb4a0b0e251c95
   languageName: node
   linkType: hard
 

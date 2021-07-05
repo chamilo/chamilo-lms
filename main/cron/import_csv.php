@@ -266,7 +266,7 @@ class ImportCsv
                 'unsubsessionsextid-static',
                 'subsessionsextid-static',
                 'calendar-static',
-                'careersresultsremove-static',
+                //'careersresultsremove-static',
             ];
 
             foreach ($sections as $section) {
@@ -322,6 +322,27 @@ class ImportCsv
                         $this->$method($file, true);
                         $this->logger->addInfo('--Finish reading file--');
                     }
+                }
+            }
+
+            $removeResults = 'careersresultsremove-static';
+            if (isset($fileToProcessStatic[$removeResults]) &&
+                !empty($fileToProcessStatic[$removeResults])
+            ) {
+                $files = $fileToProcessStatic[$removeResults];
+                foreach ($files as $fileInfo) {
+                    $method = $fileInfo['method'];
+                    $file = $fileInfo['file'];
+                    echo 'Static file: '.$file.PHP_EOL;
+                    echo 'Method : '.$method.PHP_EOL;
+                    echo PHP_EOL;
+                    $this->logger->addInfo("Reading static file: $file");
+                    $this->logger->addInfo("Loading method $method ");
+                    $this->$method(
+                        $file,
+                        true
+                    );
+                    $this->logger->addInfo('--Finish reading file--');
                 }
             }
         }
@@ -2827,9 +2848,7 @@ class ImportCsv
      */
     private function importCareersResultsRemoveStatic(
         $file,
-        $moveFile = false,
-        &$teacherBackup = [],
-        &$groupBackup = []
+        $moveFile = false
     ) {
         $data = Import::csv_reader($file);
 
@@ -2917,6 +2936,10 @@ class ImportCsv
                     "Saving graph for user chamilo # $studentId (".$row['StudentId'].") with career #$careerChamiloId (ext #$careerId)"
                 );
             }
+        }
+
+        if ($moveFile) {
+            $this->moveFile($file);
         }
     }
 

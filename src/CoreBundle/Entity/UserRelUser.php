@@ -33,6 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *    }
  * )
  * @ORM\Entity
+ * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\UserRelUserListener"})
  */
 #[ApiResource(
     collectionOperations: [
@@ -51,7 +52,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             //'security' => "is_granted('ROLE_ADMIN') or object.user == user",
         ],
         'delete' => [
-            //'security' => "is_granted('ROLE_ADMIN') or object.user == user",
+            //'security' => "object.user == user",
         ],
     ],
     attributes: [
@@ -96,7 +97,7 @@ class UserRelUser
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="friends")

@@ -139,6 +139,23 @@ export default function makeCrudModule({
           commit(ACTIONS.TOGGLE_LOADING);
         }
       },
+      findAll: ({ commit, state }, params) => {
+        if (!service) throw new Error('No service specified!');
+
+        console.log('crud.js findAll');
+        //commit(ACTIONS.TOGGLE_LOADING);
+
+        return service
+            .findAll({params})
+            .then(response => response.json())
+            .then(retrieved => {
+              console.log('result of retrieved');
+              //commit(ACTIONS.TOGGLE_LOADING);
+
+              return retrieved['hydra:member'];
+            })
+            .catch(e => handleError(commit, e));
+      },
       fetchAll: ({ commit, state }, params) => {
         if (!service) throw new Error('No service specified!');
 
@@ -235,16 +252,13 @@ export default function makeCrudModule({
       findResourceNode: ({ commit }, params) => {
         const id = params['id'];
         delete params['id'];
-        console.log('findResourceNode');
-        console.log(id);
-        console.log(params);
+        console.log('findResourceNode', id);
         if (!service) throw new Error('No service specified!');
 
         commit(ACTIONS.TOGGLE_LOADING);
 
         return service
             .find(id, params)
-            //.then(response => service.checkResponse(response))
             .then(response => {
               if (200 === response.status) {
                 return response.json();

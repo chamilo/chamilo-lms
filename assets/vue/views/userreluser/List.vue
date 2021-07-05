@@ -33,21 +33,55 @@
     </template>
   </Toolbar>
 
+  <div v-if="friendRequests.length">
+    <div class="text-h4 q-mb-md">
+      Requests
+    </div>
+
+    <v-card
+        v-for="request in friendRequests"
+    >
+      <q-avatar size="40px">
+        <img :src="request.user.illustrationUrl + '?w=80&h=80&fit=crop'" />
+      </q-avatar>
+      {{ request.user.username }}
+
+      <v-btn
+          tile
+          icon
+          @click="addFriend(request)" >
+        <v-icon icon="mdi-plus" />
+      </v-btn>
+    </v-card>
+  </div>
+
+  <v-card
+      v-for="request in waitingRequests"
+  >
+    <q-avatar size="40px">
+      <img :src="request.friend.illustrationUrl + '?w=80&h=80&fit=crop'" />
+    </q-avatar>
+    {{ request.friend.username }}
+
+    <v-chip>Waiting</v-chip>
+  </v-card>
+
   <div class="flex flex-row pt-2">
     <div class="w-full">
       <div class="text-h4 q-mb-md">Friends</div>
+
+<!--      :loading="isLoading"-->
       <DataTable
         class="p-datatable-sm"
         :value="items"
         v-model:selection="selectedItems"
         dataKey="id"
-        v-model:filters="filters"
+        v-model:filters="friendFilter"
         sortBy="sendDate"
         sortOrder="asc"
         :lazy="true"
         :paginator="false"
         :totalRecords="totalItems"
-        :loading="isLoading"
         @page="onPage($event)"
         @sort="sortingChanged($event)"
         paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
@@ -62,7 +96,7 @@
         <template #body="slotProps">
           <q-avatar size="40px">
             <img :src="slotProps.data.friend.illustrationUrl + '?w=80&h=80&fit=crop'" />
-         </q-avatar>
+          </q-avatar>
             {{ slotProps.data.friend.username }}
         </template>
       </Column>
@@ -74,28 +108,15 @@
       </Column>
 
       <Column :exportable="false">
-
         <template #body="slotProps">
 <!--          class="flex flex-row gap-2"-->
-
-              <v-icon   v-if="slotProps.data.relationType == 3" icon="mdi-check" />
-
-
-            <v-btn
-                v-if="slotProps.data.relationType == 10"
-                tile
-                icon
-                @click="addFriend(slotProps.data)" >
-              <v-icon icon="mdi-plus" />
-            </v-btn>
-
-            <v-btn
-                tile
-                icon
-                @click="confirmDeleteItem(slotProps.data)" >
-              <v-icon icon="mdi-delete" />
-            </v-btn>
-
+<!--            <v-icon   v-if="slotProps.data.relationType == 3" icon="mdi-check" />-->
+          <v-btn
+              tile
+              icon
+              @click="confirmDeleteItem(slotProps.data)" >
+            <v-icon icon="mdi-delete" />
+          </v-btn>
         </template>
 
       </Column>
@@ -130,7 +151,7 @@
     </div>
     <template #footer>
       <Button label="No" icon="pi pi-times" class="p-button-text" @click="deleteItemDialog = false"/>
-      <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteItemButton" />
+      <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteItemButton(item)" />
     </template>
   </Dialog>
 
@@ -172,29 +193,89 @@ export default {
   setup() {
     const store = useStore();
     const user = store.getters["security/getUser"];
-    const filters = ref([]);
     const isLoadingSelect = ref(false);
+    const deleteItemDialog = ref(false);
+    const item = ref([]);
+    const friendRequests = ref([]);
+    const waitingRequests = ref([]);
+    //const friendFilter = ref([]);
 
-    filters.value = {
-        friend: user.id
+    const friendRequestFilter = {
+      friend: user.id,
+      relationType: 10
     };
 
+    const waitingFilter = {
+      user: user.id,
+      relationType: 10
+    };
+
+    const friendFilter = {
+      user: user.id,
+      relationType: 3,
+    };
+
+    /*store.dispatch('userreluser/findAll', friendRequestFilter).then(response => {
+      friendRequests.value = response;
+    });
+    store.dispatch('userreluser/findAll', waitingFilter).then(response => {
+      waitingRequests.value = response;
+    });
+
+    // Handles the table
+    store.dispatch('userreluser/fetchAll', friendFilter);*/
+
     function addFriend(friend) {
-      axios.put(friend['@id'], {
+      // Create new friend connection
+      axios.post(ENTRYPOINT + 'user_rel_users', {
+        user: user['@id'],
+        friend: friend.user['@id'],
         relationType: 3,
       }).then(response => {
         console.log(response);
         isLoadingSelect.value = false;
-        store.dispatch('userreluser/resetList');
-        store.dispatch('userreluser/fetchAll', filters.value);
+        // Update other relation from invitation to friend.
+        axios.put(friend['@id'], {
+          relationType: 3,
+        }).then(response => {
+          console.log(response);
+          reloadHandler();
+        }).catch(function (error) {
+          console.log(error);
+        });
       }).catch(function (error) {
-        isLoadingSelect.value = false;
         console.log(error);
       });
     }
 
+    function reloadHandler() {
+      store.dispatch('userreluser/resetList');
+      store.dispatch('userreluser/fetchAll', friendFilter);
+      store.dispatch('userreluser/findAll', friendRequestFilter).then(response => {
+        friendRequests.value = response;
+      });
+      store.dispatch('userreluser/findAll', waitingFilter).then(response => {
+        waitingRequests.value = response;
+      });
+    }
+
+    function deleteItemButton(item) {
+      store.dispatch('userreluser/del', item);
+      deleteItemDialog.value = false;
+      reloadHandler();
+    }
+
+    reloadHandler();
+
     return {
       addFriend,
+      reloadHandler,
+      deleteItemButton,
+      item,
+      friendRequests,
+      waitingRequests,
+      friendFilter,
+      deleteItemDialog
     }
   },
   data() {
@@ -206,22 +287,12 @@ export default {
       ],
       pageOptions: [10, 20, 50, this.$i18n.t('All')],
       selected: [],
-      isBusy: false,
       selectedItems: [],
       // prime vue
       itemDialog: false,
-      deleteItemDialog: false,
       deleteMultipleDialog: false,
-      item: {},
       submitted: false,
     };
-  },
-  mounted() {
-    console.log('mounted');
-    this.filters = {
-       friend: this.currentUser.id
-    };
-    this.onUpdateOptions(this.options);
   },
   computed: {
     // From crud.js list function
@@ -257,7 +328,10 @@ export default {
       this.options.page = event.page + 1;
       this.options.sortBy = event.sortField;
       this.options.sortDesc = event.sortOrder === -1;
-
+      this.filters = {
+        user: this.currentUser.id,
+        relationType: 3
+      };
       this.onUpdateOptions(this.options);
     },
     sortingChanged(event) {
@@ -269,11 +343,6 @@ export default {
       this.onUpdateOptions(this.options);
       // ctx.sortBy   ==> Field key for sorting by (or null for no sorting)
       // ctx.sortDesc ==> true if sorting descending, false otherwise
-    },
-    openNew() {
-      this.item = {};
-      this.submitted = false;
-      this.itemDialog = true;
     },
     hideDialog() {
       this.itemDialog = false;
@@ -314,12 +383,7 @@ export default {
     confirmDeleteMultiple() {
       this.deleteMultipleDialog = true;
     },
-    reloadHandler() {
-      this.onUpdateOptions(this.options);
-    },
     deleteMultipleItems() {
-      console.log('deleteMultipleItems');
-      console.log(this.selectedItems);
       this.deleteMultipleAction(this.selectedItems);
       this.onRequest({
         pagination: this.pagination,
@@ -327,14 +391,6 @@ export default {
       this.deleteMultipleDialog = false;
       this.selectedItems = null;
       //this.onUpdateOptions(this.options);
-    },
-    deleteItemButton() {
-      console.log('deleteItem');
-      this.deleteItem(this.item);
-      //this.items = this.items.filter(val => val.iid !== this.item.iid);
-      this.deleteItemDialog = false;
-      this.item = {};
-      this.onUpdateOptions(this.options);
     },
     onRowSelected(items) {
       this.selected = items

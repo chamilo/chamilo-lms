@@ -4,8 +4,8 @@
       <v-btn
           tile
           icon
-          :loading="isLoading"
-          @click="reloadHandler">
+          :to="{ name: 'UserRelUserList' }"
+      >
         <v-icon icon="mdi-arrow-left" />
       </v-btn>
     </template>
@@ -17,14 +17,12 @@
 
       <VueMultiselect
           placeholder="Add"
-
           :loading="isLoadingSelect"
           :options="users"
           :multiple="true"
           :searchable="true"
           :internal-search="false"
           @search-change="asyncFind"
-
           @select="addFriend"
           limit-text="3"
           limit="3"
@@ -42,7 +40,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
-import ListMixin from '../../mixins/ListMixin';
 import Toolbar from '../../components/Toolbar.vue';
 
 import VueMultiselect from 'vue-multiselect'
@@ -59,7 +56,6 @@ export default {
     Toolbar,
     VueMultiselect
   },
-  mixins: [ListMixin],
   setup() {
     const users = ref([]);
     const isLoadingSelect = ref(false);
@@ -104,12 +100,6 @@ export default {
   },
   data() {
     return {
-      selected: [],
-      isBusy: false,
-      options: {
-        sortBy: 'sendDate',
-        sortDesc: 'asc',
-      },
       selectedItems: [],
       // prime vue
       itemDialog: false,
@@ -119,72 +109,14 @@ export default {
       submitted: false,
     };
   },
-  mounted() {
-    this.onUpdateOptions(this.options);
-  },
   computed: {
-    // From crud.js list function
-    ...mapGetters('resourcenode', {
-      resourceNode: 'getResourceNode'
-    }),
     ...mapGetters({
       'isAuthenticated': 'security/isAuthenticated',
       'isAdmin': 'security/isAdmin',
       'currentUser': 'security/getUser',
     }),
-
-    ...mapGetters('message', {
-      items: 'list',
-    }),
-
-    //...getters
-
-    // From ListMixin
-    ...mapFields('message', {
-      deletedItem: 'deleted',
-      error: 'error',
-      isLoading: 'isLoading',
-      resetList: 'resetList',
-      totalItems: 'totalItems',
-      view: 'view'
-    }),
   },
   methods: {
-    deleteItemButton() {
-      console.log('deleteItem');
-      this.deleteItem(this.item);
-      //this.items = this.items.filter(val => val.iid !== this.item.iid);
-      this.deleteItemDialog = false;
-      this.item = {};
-      this.onUpdateOptions(this.options);
-    },
-    onRowSelected(items) {
-      this.selected = items
-    },
-    selectAllRows() {
-      this.$refs.selectableTable.selectAllRows()
-    },
-    clearSelected() {
-      this.$refs.selectableTable.clearSelected()
-    },
-    async deleteSelected() {
-      this.deleteMultipleAction(this.selected);
-      this.onRequest({
-        pagination: this.pagination,
-      });
-    },
-    //...actions,
-    // From ListMixin
-    ...mapActions('userreluser', {
-      getPage: 'fetchAll',
-      create: 'create',
-      update: 'update',
-      deleteItem: 'del',
-      deleteMultipleAction: 'delMultiple'
-    }),
-    ...mapActions('resourcenode', {
-      findResourceNode: 'findResourceNode',
-    }),
   }
 };
 </script>

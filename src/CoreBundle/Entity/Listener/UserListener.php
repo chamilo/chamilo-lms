@@ -30,7 +30,6 @@ class UserListener
     public function prePersist(User $user, LifecycleEventArgs $args): void
     {
         //error_log('User listener prePersist');
-
         if ($user) {
             $this->userRepository->updateCanonicalFields($user);
             $this->userRepository->updatePassword($user);

@@ -43,8 +43,6 @@ export default function(id, options = {}) {
 
     const entryPoint = ENTRYPOINT + (ENTRYPOINT.endsWith('/') ? '' : '/');
 
-    console.log('entryPoint', entryPoint);
-
     if ('PUT' === options.method) {
         const payload = options.body && JSON.parse(options.body);
         if (isObject(payload) && payload['@id']) {

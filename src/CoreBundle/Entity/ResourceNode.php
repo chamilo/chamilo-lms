@@ -564,7 +564,7 @@ class ResourceNode
         return '<i class="'.$class.'"></i>';
     }
 
-    public function getContent(): string
+    public function getContent(): ?string
     {
         return $this->content;
     }

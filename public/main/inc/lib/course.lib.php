@@ -2363,7 +2363,6 @@ class CourseManager
         }
 
         if (0 === $count) {
-            //self::create_database_dump($code);
             // Cleaning group categories
             $groupCategories = GroupManager::get_categories($course);
             if (!empty($groupCategories)) {
@@ -2495,54 +2494,6 @@ class CourseManager
             );
 
             return true;
-        }
-    }
-
-    /**
-     * Creates a file called mysql_dump.sql in the course folder.
-     *
-     * @param string $course_code The code of the course
-     *
-     * @todo Implementation for single database
-     */
-    public static function create_database_dump($course_code)
-    {
-        return false;
-        $sql_dump = '';
-        $course_code = Database::escape_string($course_code);
-        $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT * FROM $table_course WHERE code = '$course_code'";
-        $res = Database::query($sql);
-        $course = Database::fetch_array($res);
-
-        $course_tables = AddCourse::get_course_tables();
-
-        if (!empty($course['id'])) {
-            //Cleaning c_x tables
-            foreach ($course_tables as $table) {
-                $table = Database::get_course_table($table);
-                $sql = "SELECT * FROM $table WHERE c_id = {$course['id']} ";
-                $res_table = Database::query($sql);
-
-                while ($row = Database::fetch_array($res_table, 'ASSOC')) {
-                    $row_to_save = [];
-                    foreach ($row as $key => $value) {
-                        $row_to_save[$key] = $key."='".Database::escape_string($row[$key])."'";
-                    }
-                    $sql_dump .= "\nINSERT INTO $table SET ".implode(', ', $row_to_save).';';
-                }
-            }
-        }
-
-        if (is_dir(api_get_path(SYS_COURSE_PATH).$course['directory'])) {
-            $file_name = api_get_path(SYS_COURSE_PATH).$course['directory'].'/mysql_dump.sql';
-            $handle = fopen($file_name, 'a+');
-            if (false !== $handle) {
-                fwrite($handle, $sql_dump);
-                fclose($handle);
-            } else {
-                //TODO trigger exception in a try-catch
-            }
         }
     }
 

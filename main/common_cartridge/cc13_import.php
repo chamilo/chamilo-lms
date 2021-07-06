@@ -69,12 +69,12 @@ if ($form->validate()) {
 
 }
 
-$template = new Template(get_lang('ImportCc'));
+$template = new Template(get_lang('ImportCcVersion13'));
 $infoMsg = Display::return_message(get_lang('ImportCcInstructions'), 'normal', false);
 $template->assign('info_msg', $infoMsg);
 $template->assign('form', $form->returnForm());
 $templateName = $template->get_template('common_cartridge/import_cc.tpl');
 $content = $template->fetch($templateName);
-$template->assign('header', get_lang('ImportFromCc'));
+$template->assign('header', get_lang('ImportCcVersion13'));
 $template->assign('content', $content);
 $template->display_one_col_template();

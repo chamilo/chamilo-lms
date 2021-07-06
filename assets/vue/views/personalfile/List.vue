@@ -33,12 +33,17 @@
       <template #body="slotProps">
         <div v-if="slotProps.data && slotProps.data.resourceNode && slotProps.data.resourceNode.resourceFile">
           <ResourceFileLink :resource="slotProps.data" />
+          <v-icon
+              v-if="slotProps.data.resourceLinkListFromEntity && slotProps.data.resourceLinkListFromEntity.length > 0"
+              icon="mdi-link"
+          />
         </div>
         <div v-else>
           <a
               v-if="slotProps.data"
               @click="handleClick(slotProps.data)"
-              class="cursor-pointer " >
+              class="cursor-pointer "
+          >
             <v-icon icon="mdi-folder"/>
             {{ slotProps.data.resourceNode.title }}
           </a>

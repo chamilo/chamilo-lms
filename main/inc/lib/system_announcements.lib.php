@@ -392,7 +392,7 @@ class SystemAnnouncementManager
      * Makes the announcement id visible only for groups in groups_array.
      *
      * @param int   $announcement_id
-     * @param array $groups array of group id
+     * @param array $groups          array of group id
      *
      * @return bool
      */

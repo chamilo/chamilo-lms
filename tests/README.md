@@ -1,15 +1,11 @@
 # Chamilo 2.x tests directory
 
-This directory is used for all kinds of tests and scripts and is removed from
+This directory is being used for all kinds of tests and scripts and is removed from
 public releases as it may represent a risk for production systems.
 
-## Behat integration testing
+## Behat 
 
-The current automated tests are developed using Behat. To run them, you will
-need a basic default installation of the corresponding version of Chamilo LMS,
-which should include the vendor/behat/behat/bin/behat executable.
-
-Make sure you set the right base_url in behat.yml, then run (on the command
+Make sure you set the right base_url in behat/behat.yml, then run (on the command
 line, from the tests/ directory): 
 ```
 ../vendor/behat/behat/bin/behat behat/features/login.feature
@@ -21,24 +17,57 @@ line, from the tests/ directory):
 ../vendor/behat/behat/bin/behat behat/features/accessCompanyReports.feature
 ```
 
-This should run all tests and all of them should pass.
+## PHPUnit 
+
+We use the default Symfony PHPUnit settings:
+
+https://symfony.com/doc/current/testing.html
+
+Install phpunit:
+
+`vendor/bin/simple-phpunit --version`
+
+Setup a test database
+
+Create a new env file with named **.env.test.local** with your mysql credentials:
+
+<pre>
+DATABASE_HOST='127.0.0.1'
+DATABASE_PORT='3306'
+DATABASE_NAME='chamilo_test'
+DATABASE_USER='root'
+DATABASE_PASSWORD='root'
+</pre>
+
+After creating the .env.test.local file execute: 
+
+`php bin/console --env=test cache:clear
+php bin/console --env=test doctrine:database:create
+php bin/console --env=test doctrine:schema:create
+php bin/console --env=test doctrine:fixtures:load --no-interaction`
+
+Those commands will install Chamilo in the chamilo_test database.
+You can call the PHPUnit tests with: 
+
+`php bin/phpunit`
+
+If there are DB changes you can migrate your test installation with:
+
+`php bin/console --env=test doctrine:schema:update --force`
+
 
 ## Folders
 
 Although many scripts here are deprecated, the current structure can be
  described as follows;
 
-The scripts available at the root are mostly deprecated.
-behat.yml (see Behat section) serves as the configuration for the Behat
-test suite.
+### behat
+
+Behat-specific folder
 
 ### datafiller
 
 Set of scripts to fill your test installation of Chamilo with demo content.
-
-### behat
-
-Behat-specific folder
 
 ### history
 
@@ -47,7 +76,6 @@ Attempt at keeping a track of what Chamilo looked like over time.
 ### migrations
 
 Combination of unofficial scripts to execute migrations from other systems
-
 
 ### procedures
 
@@ -58,8 +86,3 @@ Chamilo.
 
 A collection of scripts used to fix or improve some things globally in Chamilo
 portals. Mostly for old versions.
-
-
-### translations
-
-Scripts to help with the move from Chamilo-format translations to PO (gettext)

@@ -15,14 +15,13 @@ use Chamilo\Tests\ChamiloTestTrait;
 /**
  * @covers \UserRelUser
  */
-class UserRelUserRepositoryTest extends AbstractApiTest
+class UserRelUserTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
 
     public function testAddFriend(): void
     {
         self::bootKernel();
-        $em = self::getContainer()->get('doctrine')->getManager();
 
         $user = $this->createUser('user');
         $friend = $this->createUser('friend');

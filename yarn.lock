@@ -6248,7 +6248,7 @@ __metadata:
     blueimp-load-image: ^5.14.0
     bootstrap-daterangepicker: ^3.1
     bootstrap-select: ^1.13.18
-    chart.js: ^3.4.0
+    chart.js: ^3.4.1
     copy-webpack-plugin: ^9.0.1
     core-js: ^3.15.2
     cropper: ^4.1.0
@@ -6325,7 +6325,7 @@ __metadata:
     vue: 3.1.4
     vue-cli-plugin-quasar: next
     vue-eslint-parser: ^7.7.2
-    vue-flatpickr-component: ^9.0.3
+    vue-flatpickr-component: ^9.0.4
     vue-i18n: ^9.1.6
     vue-loader: ^16.3.0
     vue-multiselect: next
@@ -6350,10 +6350,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chart.js@npm:^3.4.0":
-  version: 3.4.0
-  resolution: "chart.js@npm:3.4.0"
-  checksum: f58d509e2d586e3c72e65d7305b3515994e11b6fc7ea3d3d496df81a4b1c55f1f6a32ab9f643bb407ce46e172359297cad2204f12d4c9eb8dc1e4ca23f773f4a
+"chart.js@npm:^3.4.1":
+  version: 3.4.1
+  resolution: "chart.js@npm:3.4.1"
+  checksum: 8b14b108fb4bc3b0c4f6c8ab4f7cd87e0f3e612d70a3b62e7f54fae13c730b44f7dc2deaf006276acbe990f5f306245ba830e570f637bf30934abe31153a9b12
   languageName: node
   linkType: hard
 
@@ -19591,14 +19591,14 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"vue-flatpickr-component@npm:^9.0.3":
-  version: 9.0.3
-  resolution: "vue-flatpickr-component@npm:9.0.3"
+"vue-flatpickr-component@npm:^9.0.4":
+  version: 9.0.4
+  resolution: "vue-flatpickr-component@npm:9.0.4"
   dependencies:
     flatpickr: ^4.6.9
   peerDependencies:
     vue: ^3.0.0
-  checksum: 87a412a186074db1841035f56a5d4b065fce9f22c7d085b515de8f55f849c4a453b6ac137ed99679b3d479dfb454ac7675f99800b9c455430db80e2cc257a223
+  checksum: 33fb5f71ed0c220008d691cf0e1396e40d992b246eaf4544618a0aa26feed6ae4bb0ac3cb49f6ff3f4c7dcafd486ac7d1c51d299a86465dc21d3362d58ae9c41
   languageName: node
   linkType: hard
 

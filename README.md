@@ -56,9 +56,12 @@ If you have already installed it and just want to update it from Git, do:
 ~~~~
 git pull
 composer update
-php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
+
+# Database update
+php bin/console doctrine:schema:update --force
     
-yarn up
+# js/css update
+yarn install
 yarn run encore dev
 ~~~~
 This will update the JS (yarn) and PHP (composer) dependencies in the public/build folder.

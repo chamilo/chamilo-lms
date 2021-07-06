@@ -290,15 +290,14 @@ if (isset($_POST['formSent']) && 1 == (int) ($_POST['formSent'])) {
     switch ($userStatus) {
         case DRH:
         case PLATFORM_ADMIN:
-            $affected_rows = UserManager::subscribeUsersToHRManager($user_id, $user_list);
+            UserManager::subscribeUsersToHRManager($user_id, $user_list);
 
             break;
         case STUDENT_BOSS:
-            $affected_rows = UserManager::subscribeBossToUsers($user_id, $user_list);
+            UserManager::subscribeBossToUsers($user_id, $user_list);
 
             break;
         default:
-            $affected_rows = 0;
     }
 
     Display::addFlash(

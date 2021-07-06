@@ -4470,15 +4470,13 @@ class UserManager
      * @param int   $hr_dept_id
      * @param array $users_id
      * @param bool  $deleteOtherAssignedUsers
-     *
-     * @return int
      */
     public static function subscribeUsersToHRManager(
         $hr_dept_id,
         $users_id,
         $deleteOtherAssignedUsers = true
-    ) {
-        return self::subscribeUsersToUser(
+    ): void {
+        self::subscribeUsersToUser(
             $hr_dept_id,
             $users_id,
             UserRelUser::USER_RELATION_TYPE_RRHH,
@@ -4492,12 +4490,10 @@ class UserManager
      *
      * @param int   $hrmId   The HRM ID
      * @param array $usersId The users IDs
-     *
-     * @return int
      */
-    public static function requestUsersToHRManager($hrmId, $usersId)
+    public static function requestUsersToHRManager($hrmId, $usersId): void
     {
-        return self::subscribeUsersToUser(
+        self::subscribeUsersToUser(
             $hrmId,
             $usersId,
             UserRelUser::USER_RELATION_TYPE_HRM_REQUEST,
@@ -4527,11 +4523,9 @@ class UserManager
      *
      * @param int    $userId                   The user id
      * @param array  $subscribedUsersId        The id of subscribed users
-     * @param string $relationType             The relation type
+     * @param int    $relationType             The relation type
      * @param bool   $deleteUsersBeforeInsert
      * @param bool   $deleteOtherAssignedUsers
-     *
-     * @return int
      */
     public static function subscribeUsersToUser(
         $userId,
@@ -4539,13 +4533,12 @@ class UserManager
         $relationType,
         $deleteUsersBeforeInsert = false,
         $deleteOtherAssignedUsers = true
-    ) {
+    ): void {
         $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $userRelAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
         $userId = (int) $userId;
         $relationType = (int) $relationType;
-        $affectedRows = 0;
 
         if ($deleteOtherAssignedUsers) {
             if (api_get_multiple_access_url()) {
@@ -4587,7 +4580,7 @@ class UserManager
             Database::query($sql);
         }
 
-        // Inserting new user list
+        // Inserting new user list.
         if (is_array($subscribedUsersId)) {
             foreach ($subscribedUsersId as $subscribedUserId) {
                 $subscribedUserId = (int) $subscribedUserId;
@@ -4601,16 +4594,21 @@ class UserManager
                 $result = Database::query($sql);
                 $num = Database::num_rows($result);
                 if (0 === $num) {
-                    $date = api_get_utc_datetime();
+                    /*$date = api_get_utc_datetime();
                     $sql = "INSERT INTO $userRelUserTable (user_id, friend_user_id, relation_type, last_edit)
                             VALUES ($subscribedUserId, $userId, $relationType, '$date')";
                     $result = Database::query($sql);
-                    $affectedRows += Database::affected_rows($result);
+                    $affectedRows += Database::affected_rows($result);*/
+                    $userRelUser = (new UserRelUser())
+                        ->setUser(api_get_user_entity($subscribedUserId))
+                        ->setFriend(api_get_user_entity($userId))
+                        ->setRelationType($relationType);
+                    $em = Database::getManager();
+                    $em->persist($userRelUser);
+                    $em->flush();
                 }
             }
         }
-
-        return $affectedRows;
     }
 
     /**
@@ -4891,12 +4889,10 @@ class UserManager
      * @param int   $bossId                   The boss id
      * @param array $usersId                  The users array
      * @param bool  $deleteOtherAssignedUsers
-     *
-     * @return int Affected rows
      */
-    public static function subscribeBossToUsers($bossId, $usersId, $deleteOtherAssignedUsers = true)
+    public static function subscribeBossToUsers($bossId, $usersId, $deleteOtherAssignedUsers = true): void
     {
-        return self::subscribeUsersToUser(
+        self::subscribeUsersToUser(
             $bossId,
             $usersId,
             UserRelUser::USER_RELATION_TYPE_BOSS,

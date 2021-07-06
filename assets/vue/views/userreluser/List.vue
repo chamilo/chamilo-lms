@@ -198,11 +198,10 @@ export default {
     const item = ref([]);
     const friendRequests = ref([]);
     const waitingRequests = ref([]);
-    //const friendFilter = ref([]);
 
     const friendRequestFilter = {
       friend: user.id,
-      relationType: 10
+      relationType: 10  // friend request
     };
 
     const waitingFilter = {
@@ -212,21 +211,11 @@ export default {
 
     const friendFilter = {
       user: user.id,
-      relationType: 3,
+      relationType: 3, // friend status
     };
 
-    /*store.dispatch('userreluser/findAll', friendRequestFilter).then(response => {
-      friendRequests.value = response;
-    });
-    store.dispatch('userreluser/findAll', waitingFilter).then(response => {
-      waitingRequests.value = response;
-    });
-
-    // Handles the table
-    store.dispatch('userreluser/fetchAll', friendFilter);*/
-
     function addFriend(friend) {
-      // Create new friend connection
+      // Add friend
       axios.post(ENTRYPOINT + 'user_rel_users', {
         user: user['@id'],
         friend: friend.user['@id'],
@@ -234,15 +223,15 @@ export default {
       }).then(response => {
         console.log(response);
         isLoadingSelect.value = false;
-        // Update other relation from invitation to friend.
-        axios.put(friend['@id'], {
+        // Update other relation from invitation to friend. This is now done by the UserRelUserDataPersister
+        /*axios.put(friend['@id'], {
           relationType: 3,
         }).then(response => {
           console.log(response);
           reloadHandler();
         }).catch(function (error) {
           console.log(error);
-        });
+        });*/
       }).catch(function (error) {
         console.log(error);
       });

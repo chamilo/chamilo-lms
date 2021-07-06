@@ -41,7 +41,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             //'security' => "is_granted('ROLE_ADMIN')",
         ],
         'post' => [
-            //'security' => "is_granted('ROLE_ADMIN') or object.user == user",
+            'security_post_denormalize' => "is_granted('CREATE', object)",
         ],
     ],
     itemOperations: [
@@ -49,10 +49,10 @@ use Symfony\Component\Validator\Constraints as Assert;
             //'security' => "is_granted('ROLE_ADMIN')",
         ],
         'put' => [
-            //'security' => "is_granted('ROLE_ADMIN') or object.user == user",
+            'security' => "is_granted('EDIT', object)",
         ],
         'delete' => [
-            //'security' => "object.user == user",
+            'security' => "is_granted('DELETE', object)",
         ],
     ],
     attributes: [

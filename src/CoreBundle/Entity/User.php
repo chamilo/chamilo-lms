@@ -2137,9 +2137,15 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function addFriend(self $friend): self
     {
+        return $this->addUserRelUser($friend, UserRelUser::USER_RELATION_TYPE_FRIEND);
+    }
+
+    public function addUserRelUser(self $friend, int $relationType): self
+    {
         $userRelUser = (new UserRelUser())
             ->setUser($this)
             ->setFriend($friend)
+            ->setRelationType($relationType)
         ;
         $this->friends->add($userRelUser);
 

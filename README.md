@@ -32,8 +32,7 @@ Otherwise, you can use the following directly:
 git clone https://github.com/chamilo/chamilo-lms.git chamilo2
 cd chamilo2
 composer install
-# *important*: when composer asks to accept recipes, about 11 times, press enter or "n"
-php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
+
 yarn set version berry
 yarn install
 yarn run encore dev

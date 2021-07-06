@@ -5,7 +5,6 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 
-//require_once __DIR__.'/../inc/global.inc.php';
 require_once 'autoload.php';
 
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
@@ -30,7 +29,7 @@ $interbreadcrumb[] = [
 ];
 
 // Displaying the header
-$nameTools = get_lang('Cc13Export');
+$nameTools = get_lang('ExportCcVersion13');
 Display::display_header($nameTools);
 
 // Display the tool title
@@ -42,13 +41,13 @@ $backupOption = 'select_items';
 if (Security::check_token('post') && ($action === 'course_select_form')) {
     // Clear token
     Security::clear_token();
-   
+
     if ($action === 'course_select_form') {
         $cb = new CourseBuilder('partial');
         $course = $cb->build(0, null, false, array_keys($_POST['resource']), $_POST['resource']);
         $course = CourseSelectForm::get_posted_course(null, 0, '', $course);
-    } 
-   
+    }
+
     $imsccFile = Cc13ExportConvert::export($course);
     if ($imsccFile !== FALSE) {
         echo Display::return_message(get_lang('ImsccCreated'), 'confirm');
@@ -63,8 +62,18 @@ if (Security::check_token('post') && ($action === 'course_select_form')) {
 } else {
     // Clear token
     Security::clear_token();
-    $cb = new CourseBuilder('partial');
-    $course = $cb->build();
+    $cb = new CourseBuilder('partial');    
+    $tools_to_build = [
+        RESOURCE_DOCUMENT,
+        RESOURCE_FORUMCATEGORY,
+        RESOURCE_FORUM,
+        RESOURCE_FORUMTOPIC,
+        RESOURCE_QUIZ,
+        RESOURCE_TEST_CATEGORY,
+        RESOURCE_LINK,
+        RESOURCE_WIKI
+    ];    
+    $course = $cb->build(0, null, false, $tools_to_build);            
     if ($course->has_resources()) {
         // Add token to Course select form
         $hiddenFields['sec_token'] = Security::get_token();
@@ -73,7 +82,7 @@ if (Security::check_token('post') && ($action === 'course_select_form')) {
         echo Display::return_message(get_lang('NoResourcesToBackup'), 'warning');
     }
 
-}    
+}
 
 
 Display::display_footer();

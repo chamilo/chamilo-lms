@@ -3750,19 +3750,6 @@ class UserManager
          *  @todo we don't create tags with numbers
          *
          */
-        if (is_numeric($tag)) {
-            //the form is sending an id this means that the user select it from the list so it MUST exists
-            /* $new_tag_id = self::get_tag_id_from_id($tag,$field_id);
-              if ($new_tag_id !== false) {
-              $sql = "UPDATE $table_user_tag SET count = count + 1 WHERE id  = $new_tag_id";
-              $result = Database::query($sql);
-              $last_insert_id = $new_tag_id;
-              } else {
-              $sql = "INSERT INTO $table_user_tag (tag, field_id,count) VALUES ('$tag','$field_id', count + 1)";
-              $result = Database::query($sql);
-              $last_insert_id = Database::insert_id();
-              } */
-        }
 
         //this is a new tag
         if (0 == $tag_id) {

@@ -360,15 +360,6 @@ class SurveyManager
                     api_get_course_int_id(),
                     api_get_session_id()
                 );
-
-                // Insert into item_property
-                /*api_item_property_update(
-                    api_get_course_info(),
-                    TOOL_SURVEY,
-                    $survey_id,
-                    'SurveyAdded',
-                    api_get_user_id()
-                );*/
             }
 
             if (1 == $values['survey_type'] && !empty($values['parent_id'])) {
@@ -611,17 +602,6 @@ class SurveyManager
             $params['invited'] = 0;
             $params['answered'] = 0;
             $new_survey_id = Database::insert($table_survey, $params);
-
-            if ($new_survey_id) {
-                // Insert into item_property
-                /*api_item_property_update(
-                    api_get_course_info(),
-                    TOOL_SURVEY,
-                    $new_survey_id,
-                    'SurveyAdded',
-                    api_get_user_id()
-                );*/
-            }
         } else {
             $new_survey_id = (int) $new_survey_id;
         }

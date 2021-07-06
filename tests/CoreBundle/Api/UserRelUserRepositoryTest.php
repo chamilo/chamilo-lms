@@ -29,7 +29,6 @@ class UserRelUserRepositoryTest extends AbstractApiTest
 
         $em = self::getContainer()->get('doctrine')->getManager();
         $userRepo = self::getContainer()->get(UserRepository::class);
-        $userRelUserRepo = $em->getRepository(UserRelUser::class);
 
         $tokenTest = $this->getUserToken(
             [

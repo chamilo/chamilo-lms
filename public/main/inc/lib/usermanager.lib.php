@@ -4594,15 +4594,11 @@ class UserManager
                 $result = Database::query($sql);
                 $num = Database::num_rows($result);
                 if (0 === $num) {
-                    /*$date = api_get_utc_datetime();
-                    $sql = "INSERT INTO $userRelUserTable (user_id, friend_user_id, relation_type, last_edit)
-                            VALUES ($subscribedUserId, $userId, $relationType, '$date')";
-                    $result = Database::query($sql);
-                    $affectedRows += Database::affected_rows($result);*/
                     $userRelUser = (new UserRelUser())
                         ->setUser(api_get_user_entity($subscribedUserId))
                         ->setFriend(api_get_user_entity($userId))
-                        ->setRelationType($relationType);
+                        ->setRelationType($relationType)
+                    ;
                     $em = Database::getManager();
                     $em->persist($userRelUser);
                     $em->flush();

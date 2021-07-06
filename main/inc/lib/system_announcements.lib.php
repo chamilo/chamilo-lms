@@ -251,7 +251,7 @@ class SystemAnnouncementManager
      * @param bool   $sendEmailTest
      * @param int    $careerId
      * @param int    $promotionId
-     * @param int    $groupId
+     * @param array  $groups
      *
      * @return mixed insert_id on success, false on failure
      */
@@ -267,7 +267,7 @@ class SystemAnnouncementManager
         $sendEmailTest = false,
         $careerId = 0,
         $promotionId = 0,
-        $groupId = 0
+        $groups = []
     ) {
         $original_content = $content;
         $a_dateS = explode(' ', $date_start);
@@ -366,7 +366,7 @@ class SystemAnnouncementManager
                         $resultId,
                         $visibility,
                         false,
-                        $groupId
+                        $groups
                     );
                 }
             }
@@ -392,40 +392,30 @@ class SystemAnnouncementManager
      * Makes the announcement id visible only for groups in groups_array.
      *
      * @param int   $announcement_id
-     * @param array $group_array     array of group id
+     * @param array $groups array of group id
      *
      * @return bool
      */
-    public static function announcement_for_groups($announcement_id, $group_array)
+    public static function announcement_for_groups($announcement_id, $groups)
     {
         $tbl_announcement_group = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
-
         $announcement_id = (int) $announcement_id;
 
         if (empty($announcement_id)) {
             return false;
         }
 
-        //first delete all group associations for this announcement
-        $res = Database::query(
-            "DELETE FROM $tbl_announcement_group
-             WHERE announcement_id=".$announcement_id
-        );
+        // First delete all group associations for this announcement
+        $sql = "DELETE FROM $tbl_announcement_group WHERE announcement_id= $announcement_id";
+        Database::query($sql);
 
-        if ($res === false) {
-            return false;
-        }
-
-        if (!empty($group_array)) {
-            foreach ($group_array as $group_id) {
+        if (!empty($groups)) {
+            foreach ($groups as $group_id) {
                 if (intval($group_id) != 0) {
                     $sql = "INSERT INTO $tbl_announcement_group SET
                             announcement_id=".$announcement_id.",
                             group_id=".intval($group_id);
-                    $res = Database::query($sql);
-                    if ($res === false) {
-                        return false;
-                    }
+                    Database::query($sql);
                 }
             }
         }
@@ -453,9 +443,8 @@ class SystemAnnouncementManager
                     announcement_id =".intval($announcement_id)." AND
                     ag.group_id = g.id";
         $res = Database::query($sql);
-        $groups = Database::fetch_array($res);
 
-        return $groups;
+        return Database::store_result($res);
     }
 
     /**
@@ -472,6 +461,7 @@ class SystemAnnouncementManager
      * @param bool   $sendEmailTest
      * @param int    $careerId
      * @param int    $promotionId
+     * @param array  $groups
      *
      * @return bool True on success, false on failure
      */
@@ -487,7 +477,7 @@ class SystemAnnouncementManager
         $sendEmailTest = false,
         $careerId = 0,
         $promotionId = 0,
-        $groupId = 0
+        $groups = []
     ) {
         $em = Database::getManager();
         $announcement = $em->find('ChamiloCoreBundle:SysAnnouncement', $id);
@@ -560,7 +550,7 @@ class SystemAnnouncementManager
             //->setVisibleGuest($visible_guest)
             ->setAccessUrlId(api_get_current_access_url_id());
 
-        $em->merge($announcement);
+        $em->persist($announcement);
         $em->flush();
 
         // Update visibility
@@ -596,7 +586,7 @@ class SystemAnnouncementManager
                     $id,
                     $visibility,
                     false,
-                    $groupId
+                    $groups
                 );
             }
         }
@@ -679,28 +669,22 @@ class SystemAnnouncementManager
      * @param int   $id
      * @param array $visibility
      * @param bool  $sendEmailTest
-     * @param int   $groupId
+     * @param array $groups
      *
      * @return bool True if the message was sent or there was no destination matching.
      *              False on database or e-mail sending error.
      */
-    public static function send_system_announcement_by_email(
-        $id,
-        $visibility,
-        $sendEmailTest = false,
-        $groupId = 0
-    ) {
+    public static function send_system_announcement_by_email($id, $visibility, $sendEmailTest = false, $groups = [])
+    {
         $announcement = self::get_announcement($id);
 
         if (empty($announcement)) {
             return false;
         }
 
-        $groupId = (int) $groupId;
         $title = $announcement->title;
         $content = $announcement->content;
         $language = $announcement->lang;
-
         $content = str_replace(['\r\n', '\n', '\r'], '', $content);
         $now = api_get_utc_datetime();
         $teacher = $visibility['visible_teacher'];
@@ -710,16 +694,22 @@ class SystemAnnouncementManager
 
             return true;
         }
+
         $whereUsersInGroup = '';
-        if (0 != $groupId) {
-            $tblGroupRelUser = Database::get_main_table(TABLE_USERGROUP_REL_USER);
-            $sql = "SELECT user_id FROM $tblGroupRelUser WHERE usergroup_id = $groupId";
-            $result = Database::query($sql);
-            $data = Database::store_result($result);
-            $usersId = [];
-            foreach ($data as $userArray) {
-                $usersId[] = $userArray['user_id'];
+        $usersId = [];
+        foreach ($groups as $groupId) {
+            if (0 != $groupId) {
+                $tblGroupRelUser = Database::get_main_table(TABLE_USERGROUP_REL_USER);
+                $sql = "SELECT user_id FROM $tblGroupRelUser WHERE usergroup_id = $groupId";
+                $result = Database::query($sql);
+                $data = Database::store_result($result);
+                foreach ($data as $userArray) {
+                    $usersId[] = $userArray['user_id'];
+                }
             }
+        }
+
+        if (!empty($usersId)) {
             $usersId = implode(',', $usersId);
             $whereUsersInGroup = " AND u.user_id in ($usersId) ";
         }

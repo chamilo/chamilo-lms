@@ -331,24 +331,6 @@ class Thematic
             ;
 
             $repo->create($thematic);
-
-            // insert
-            /*$params = [
-                'c_id' => $this->course_int_id,
-                'active' => 1,
-                'display_order' => intval($max_thematic_item) + 1,
-                'session_id' => $session_id,
-            ];*/
-            $last_id = $thematic->getIid();
-            if ($last_id) {
-                /*api_item_property_update(
-                    $_course,
-                    'thematic',
-                    $last_id,
-                    'ThematicAdded',
-                    $user_id
-                );*/
-            }
         } else {
             $thematic = $repo->find($id);
             if ($thematic) {
@@ -358,30 +340,6 @@ class Thematic
                 ;
                 $repo->update($thematic);
             }
-
-            // Update
-            /*$params = [
-                'title' => $title,
-                'content' => $content,
-                'session_id' => $session_id,
-            ];
-
-            Database::update(
-                $tbl_thematic,
-                $params,
-                ['id  = ? AND c_id = ?' => [$id, $this->course_int_id]]
-            );
-
-            $last_id = $id;
-
-            // save inside item property table
-            api_item_property_update(
-                $_course,
-                'thematic',
-                $last_id,
-                'ThematicUpdated',
-                $user_id
-            );*/
         }
 
         return $thematic;

@@ -215,23 +215,12 @@ export default {
     };
 
     function addFriend(friend) {
-      // Add friend
-      axios.post(ENTRYPOINT + 'user_rel_users', {
-        user: user['@id'],
-        friend: friend.user['@id'],
+      // Change from request to friend
+      axios.put(friend['@id'], {
         relationType: 3,
       }).then(response => {
         console.log(response);
-        isLoadingSelect.value = false;
-        // Update other relation from invitation to friend. This is now done by the UserRelUserDataPersister
-        /*axios.put(friend['@id'], {
-          relationType: 3,
-        }).then(response => {
-          console.log(response);
-          reloadHandler();
-        }).catch(function (error) {
-          console.log(error);
-        });*/
+        reloadHandler();
       }).catch(function (error) {
         console.log(error);
       });

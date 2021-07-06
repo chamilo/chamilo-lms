@@ -184,10 +184,6 @@
         "weirdan/doctrine-psalm-plugin": "^1.0"
     },
     "scripts": {
-        "analyse": [
-            "@php vendor/bin/ecs check",
-            "@php vendor/bin/psalm --show-info=false"
-        ],
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
@@ -204,6 +200,12 @@
         ],
         "pre-update-cmd": [
         ],
-        "phpcs": "phpcs --standard=.php_cs.dist"
+        "phpcs": [
+            "@php vendor/bin/ecs check --clear-cache --no-interaction",
+            "@php vendor/bin/ecs check --no-interaction",
+            "@php vendor/bin/ecs check --fix --no-interaction"
+        ],
+        "psalm": "@php vendor/bin/psalm --show-info=false",
+        "phpstan": "@php vendor/bin/phpstan analyse --no-interaction"
     }
 }

@@ -69,6 +69,7 @@ Feature: Course tools basic testing
   Scenario: Make sure the assessments tool is available
     Given I am on course "TEMP" homepage
     And I am on "/main/gradebook/index.php?cid=1"
+    And wait the page to be loaded when ready
     Then I should not see an error
 
 #  Scenario: Make sure the glossary tool is available

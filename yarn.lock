@@ -2278,10 +2278,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4.14.170":
-  version: 4.14.170
-  resolution: "@types/lodash@npm:4.14.170"
-  checksum: 5ecc968649e764e3204435ba5125a3645e5e83963069a26b9307791698bf47ed9c2bd0f97488d9537eb4753d4bae596e5fa6187437a5b04bf47aba78fa553d50
+"@types/lodash@npm:^4.14.171":
+  version: 4.14.171
+  resolution: "@types/lodash@npm:4.14.171"
+  checksum: e48668fb030ad7d8c0c7751061bd332ad8704937d976bd4e24fd9e2128f80c17112be11e5c13d39f6a210336dc3549f7fb00eaebb56b94c2bfb89ad64c57d721
   languageName: node
   linkType: hard
 
@@ -6219,7 +6219,7 @@ __metadata:
     "@tailwindcss/typography": ^0.4.1
     "@tailwindcss/ui": ^0.7.2
     "@tinymce/tinymce-vue": ^4.0.3
-    "@types/lodash": ^4.14.170
+    "@types/lodash": ^4.14.171
     "@uppy/core": ^1.19.2
     "@uppy/dashboard": ^1.20.2
     "@uppy/drag-drop": ^1.4.30
@@ -6259,7 +6259,7 @@ __metadata:
     easy-pie-chart: ^2.1.7
     easytimer.js: ^1.3.2
     eslint: ^7.30.0
-    eslint-plugin-vue: ^7.12.1
+    eslint-plugin-vue: ^7.13.0
     file-loader: ^6.2.0
     filemanager-webpack-plugin: ^5.0.0
     flag-icon-css: ^3.5.0
@@ -6324,7 +6324,7 @@ __metadata:
     video.js: ^7.14.0
     vue: 3.1.4
     vue-cli-plugin-quasar: next
-    vue-eslint-parser: ^7.7.2
+    vue-eslint-parser: ^7.8.0
     vue-flatpickr-component: ^9.0.4
     vue-i18n: ^9.1.6
     vue-loader: ^16.3.0
@@ -8738,21 +8738,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-vue@npm:^7.12.1":
-  version: 7.12.1
-  resolution: "eslint-plugin-vue@npm:7.12.1"
+"eslint-plugin-vue@npm:^7.13.0":
+  version: 7.13.0
+  resolution: "eslint-plugin-vue@npm:7.13.0"
   dependencies:
     eslint-utils: ^2.1.0
     natural-compare: ^1.4.0
     semver: ^7.3.2
-    vue-eslint-parser: ^7.6.0
+    vue-eslint-parser: ^7.8.0
   peerDependencies:
     eslint: ^6.2.0 || ^7.0.0
-  checksum: 4fcf61f24fc35e3f017e0924ef5cac3ac6f5188be88f5b1edab036f5d25e52a0f05e0a73f632e55da77352ad96b3af492e911dc5f6e1b6da8d4fe9f29e400d02
+  checksum: 13bcf7d486516a821a45b4e3336e5f17010a195f751cda1a1f7c4efe8cfaf27edb95772356ec5546e9068b4e5efeaed598292d7b5e3baf45721f77a0bbeffd31
   languageName: node
   linkType: hard
 
-"eslint-scope@npm:5.1.1, eslint-scope@npm:^5.0.0, eslint-scope@npm:^5.1.1":
+"eslint-scope@npm:5.1.1, eslint-scope@npm:^5.1.1":
   version: 5.1.1
   resolution: "eslint-scope@npm:5.1.1"
   dependencies:
@@ -19558,25 +19558,9 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"vue-eslint-parser@npm:^7.6.0":
-  version: 7.6.0
-  resolution: "vue-eslint-parser@npm:7.6.0"
-  dependencies:
-    debug: ^4.1.1
-    eslint-scope: ^5.0.0
-    eslint-visitor-keys: ^1.1.0
-    espree: ^6.2.1
-    esquery: ^1.4.0
-    lodash: ^4.17.15
-  peerDependencies:
-    eslint: ">=5.0.0"
-  checksum: 27d6bc4acaafe897af8eee41512d0cd2812b533883d7ecbfda30c263533ebf486fdd76cb65f546f3c3737df383fb4bc33ecb358d7397b8b731c161c89db72bcd
-  languageName: node
-  linkType: hard
-
-"vue-eslint-parser@npm:^7.7.2":
-  version: 7.7.2
-  resolution: "vue-eslint-parser@npm:7.7.2"
+"vue-eslint-parser@npm:^7.8.0":
+  version: 7.8.0
+  resolution: "vue-eslint-parser@npm:7.8.0"
   dependencies:
     debug: ^4.1.1
     eslint-scope: ^5.1.1
@@ -19587,7 +19571,7 @@ typescript@~4.1.5:
     semver: ^6.3.0
   peerDependencies:
     eslint: ">=5.0.0"
-  checksum: 5a89f6b990a4a66cd585add662cb4985e3ea0fdc6a3007aa056322145a5c054aec7d2c271a2730be69636f5c60ef896fb51f0678f7760945c7a998282da2f1f8
+  checksum: 6b9eeb275d1866548d0f4b161a8f037aed6a10f8eaca26a0b8545bf0ff56e55cfb90b1cefadeb19b3369ec8206e0be513ce2b5029d2be325df386a457528d5ff
   languageName: node
   linkType: hard
 

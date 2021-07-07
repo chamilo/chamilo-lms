@@ -37,7 +37,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     collectionOperations: [
         'get' => [
-            'security' => "is_granted('ROLE_USER')",  // the get collection is also filtered by MessageExtension
+            'security' => "is_granted('ROLE_USER')",  // the get collection is also filtered by MessageExtension.php
         ],
         'post' => [
             'security_post_denormalize' => "is_granted('CREATE', object)",

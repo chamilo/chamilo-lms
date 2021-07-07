@@ -40,7 +40,7 @@ class MessageRepositoryTest extends AbstractApiTest
 
         $repo->update($message);
 
-        // 1. Message in the inbox
+        // 1. Message exists in the inbox.
         $count = $repo->count(['msgType' => Message::MESSAGE_TYPE_INBOX]);
         $this->assertSame(1, $count);
 
@@ -90,6 +90,7 @@ class MessageRepositoryTest extends AbstractApiTest
 
         $fromUser = $this->createUser('from');
         $toUser = $this->createUser('to');
+        $repo = self::getContainer()->get(MessageRepository::class);
 
         $tokenFrom = $this->getUserToken(
             [
@@ -106,8 +107,8 @@ class MessageRepositoryTest extends AbstractApiTest
                     'title' => 'hello',
                     'content' => 'content of hello',
                     'msgType' => Message::MESSAGE_TYPE_INBOX,
-                    'userSender' => '/api/users/'.$fromUser->getId(),
-                    'userReceiver' => '/api/users/'.$toUser->getId(),
+                    'userSender' => $fromUser->getIri(),
+                    'userReceiver' => $toUser->getIri(),
                 ],
             ]
         );
@@ -125,7 +126,11 @@ class MessageRepositoryTest extends AbstractApiTest
             ]
         );
 
-        // Try to send a message as another user
+        // 2 Messages: 1 from inbox + 1 from outbox.
+        $this->assertSame(1, $repo->count(['msgType' => Message::MESSAGE_TYPE_INBOX]));
+        $this->assertSame(1, $repo->count(['msgType' => Message::MESSAGE_TYPE_OUTBOX]));
+
+        // Try to send a message as another user.
         $this->createUser('bad');
         $tokenFromBadUser = $this->getUserToken(
             [
@@ -143,12 +148,100 @@ class MessageRepositoryTest extends AbstractApiTest
                     'title' => 'hello',
                     'content' => 'content of hello',
                     'msgType' => Message::MESSAGE_TYPE_INBOX,
-                    'userSender' => '/api/users/'.$fromUser->getId(),
-                    'userReceiver' => '/api/users/'.$toUser->getId(),
+                    'userSender' => $fromUser->getIri(),
+                    'userReceiver' => $toUser->getIri(),
+                ],
+            ]
+        );
+        $this->assertResponseStatusCodeSame(403);
+
+        // Try to send a message as another user.
+        $this->createClientWithCredentials($tokenFromBadUser)->request(
+            'POST',
+            '/api/messages',
+            [
+                'json' => [
+                    'title' => 'hello',
+                    'content' => 'content of hello',
+                    'msgType' => Message::MESSAGE_TYPE_INBOX,
+                    'userSender' => $toUser->getIri(),
+                    'userReceiver' => $fromUser->getIri(),
+                ],
+            ]
+        );
+        $this->assertResponseStatusCodeSame(403);
+    }
+
+    public function testDeleteMessageWithApi(): void
+    {
+        self::bootKernel();
+
+        $fromUser = $this->createUser('from');
+        $toUser = $this->createUser('to');
+        $repo = self::getContainer()->get(MessageRepository::class);
+
+        $tokenFrom = $this->getUserToken(
+            [
+                'username' => 'from',
+                'password' => 'from',
+            ]
+        );
+
+        $response = $this->createClientWithCredentials($tokenFrom)->request(
+            'POST',
+            '/api/messages',
+            [
+                'json' => [
+                    'title' => 'hello',
+                    'content' => 'content of hello',
+                    'msgType' => Message::MESSAGE_TYPE_INBOX,
+                    'userSender' => $fromUser->getIri(),
+                    'userReceiver' => $toUser->getIri(),
                 ],
             ]
         );
 
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(201);
+
+        $id = $response->toArray()['@id'];
+
+        // Sender cannot delete a message already sent.
+        $this->createClientWithCredentials($tokenFrom)->request(
+            'DELETE',
+            $id,
+        );
         $this->assertResponseStatusCodeSame(403);
+
+        // Get the outbox message.
+        /** @var Message $outboxMessage */
+        $outboxMessage = $repo->findOneBy(['msgType' => Message::MESSAGE_TYPE_OUTBOX]);
+        $this->assertInstanceOf(Message::class, $outboxMessage);
+
+        // Sender removes the outbox message.
+        $this->createClientWithCredentials($tokenFrom)->request(
+            'DELETE',
+            '/api/messages/'.$outboxMessage->getId(),
+        );
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(204);
+        $this->assertSame(1, $repo->count([]));
+
+        // Receiver deletes the message.
+        $tokenTo = $this->getUserToken(
+            [
+                'username' => 'to',
+                'password' => 'to',
+            ],
+            true
+        );
+
+        $this->createClientWithCredentials($tokenTo)->request(
+            'DELETE',
+            $id,
+        );
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(204);
     }
 }

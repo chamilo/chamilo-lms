@@ -1,8 +1,8 @@
 <p>{{ 'Dear'|trans }} {{ complete_name }},</p>
-<p>{{ 'YouAreReg'|trans }} {{ _s.site_name }} {{ 'WithTheFollowingSettings'|trans }}</p>
+<p>{{ 'YouAreReg'|trans }} {{ 'platform.site_name' | api_get_setting }} {{ 'WithTheFollowingSettings'|trans }}</p>
 <p>{{ 'Username'|trans }} : {{ login_name }}<br>
 <p>{{ 'YouWillReceivedASecondEmail'|trans }}</p>
-<p>{{ 'Address'|trans }} {{ _s.site_name }} {{ 'Is'|trans }} : {{ mailWebPath }}</p>
+<p>{{ 'Address'|trans }} {{ 'platform.site_name' | api_get_setting }} {{ 'Is'|trans }} : {{ mailWebPath }}</p>
 <p>{{ 'Problem'|trans }}</p>
 
 {% include '@ChamiloCore/Mailer/Legacy/_admin_signature_footer.html.twig' %}

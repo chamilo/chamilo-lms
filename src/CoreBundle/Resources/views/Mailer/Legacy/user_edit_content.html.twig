@@ -1,9 +1,9 @@
 <p>{{ 'Dear'|trans }} {{ complete_name }},</p>
-<p>{{ 'You are registered to'|trans }} {{ _s.site_name }} {{ 'with the following settings:'|trans }}</p>
+<p>{{ 'You are registered to'|trans }} {{ 'platform.site_name' | api_get_setting }} {{ 'with the following settings:'|trans }}</p>
 <p>{{ 'Username'|trans }} : {{ login_name }}<br>
 {% if original_password != '' %}
 {{ 'Password'|trans }} : {{ original_password }}</p>
 {% endif %}
-<p>{{ 'Address'|trans }} {{ _s.site_name }} {{ 'is'|trans }} : {{ portal_url }}</p>
+<p>{{ 'Address'|trans }} {{ 'platform.site_name' | api_get_setting }} {{ 'is'|trans }} : {{ portal_url }}</p>
 <p>{{ 'In case of trouble, contact us.'|trans }}</p>
 {% include '@ChamiloCore/Mailer/Legacy/_admin_signature_footer.html.twig' %}

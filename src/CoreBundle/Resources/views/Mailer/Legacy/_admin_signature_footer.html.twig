@@ -1,6 +1,6 @@
 <p>{{ 'Sincerely'|trans }}</p>
 <p>{{ 'admin.administrator_name' | api_get_setting }} {{ 'admin.administrator_surname' | api_get_setting }}<br />
-    {{ 'Manager'|trans }} {{ 'site_name' | api_get_setting }}<br />
+    {{ 'Manager'|trans }} {{ 'platform.site_name' | api_get_setting }}<br />
 
     {% if 'admin.administrator_phone' | api_get_setting %}
         {{ 'T. ' ~ 'admin.administrator_phone' | api_get_setting }}<br />

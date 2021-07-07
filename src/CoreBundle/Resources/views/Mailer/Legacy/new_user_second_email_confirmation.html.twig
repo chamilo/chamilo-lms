@@ -1,5 +1,5 @@
 <p>{{ 'Dear'|trans }} {{ complete_name }},</p>
-<p>{{ 'YouAreReg'|trans }} {{ _s.site_name }} {{ 'WithTheFollowingSettings'|trans }}</p>
+<p>{{ 'YouAreReg'|trans }} {{ 'platform.site_name' | api_get_setting }} {{ 'WithTheFollowingSettings'|trans }}</p>
     {{ 'Pass'|trans }} : {{ original_password }}</p>
 <p>{{ 'YouReceivedAnEmailWithTheUsername'|trans }}</p>
 <p>{{ 'ThanksForRegisteringToSite'|trans|format(_s.site_name) }}</p>

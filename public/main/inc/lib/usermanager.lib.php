@@ -1164,8 +1164,7 @@ class UserManager
             $tplContent->assign('original_password', $originalPassword);
             $tplContent->assign('portal_url', $url);
 
-            $layoutContent = $tplContent->get_template('mail/user_edit_content.tpl');
-            $emailBody = $tplContent->fetch($layoutContent);
+            $emailBody = $tplContent->fetch('@ChamiloCore/Mailer/Legacy/user_edit_content.html.twig');
 
             $mailTemplateManager = new MailTemplateManager();
 
@@ -1193,14 +1192,6 @@ class UserManager
                 null,
                 $creatorEmail
             );
-        }
-
-        $cacheAvailable = api_get_configuration_value('apc');
-        if (true === $cacheAvailable) {
-            $apcVar = api_get_configuration_value('apc_prefix').'userinfo_'.$user_id;
-            if (apcu_exists($apcVar)) {
-                apcu_delete($apcVar);
-            }
         }
 
         return $user->getId();

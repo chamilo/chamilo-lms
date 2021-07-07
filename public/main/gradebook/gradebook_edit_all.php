@@ -203,7 +203,10 @@ $form->addButtonUpdate(get_lang('Automatic weight'));
 
 if ($form->validate()) {
     $itemCount = count($links) + count($evaluations);
-    $weight = round($original_total / $itemCount, 2);
+    $weight = 0;
+    if (!empty($itemCount)) {
+        $weight = round($original_total / $itemCount, 2);
+    }
     $total = $weight * $itemCount;
 
     $diff = null;
@@ -250,8 +253,7 @@ if ($form->validate()) {
     exit;
 }
 
-// 	DISPLAY HEADERS AND MESSAGES
-if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
+if (!isset($_GET['exportpdf']) && !isset($_GET['export_certificate'])) {
     if (isset($_GET['studentoverview'])) {
         $interbreadcrumb[] = [
             'url' => Category::getUrl().'selectcat='.$my_selectcat,

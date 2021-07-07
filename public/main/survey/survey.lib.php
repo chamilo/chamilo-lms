@@ -1065,12 +1065,13 @@ class SurveyManager
                         }
                     }
 
-                    $maxScore = isset($form_content['maximum_score']) ? $form_content['maximum_score'] : null;
+                    $maxScore = isset($form_content['maximum_score']) ? (int) $form_content['maximum_score'] : 0;
                     $questionComment = $form_content['question_comment'] ?? '';
                     $question
                         ->setSurveyQuestionComment($questionComment)
                         ->setSurveyQuestion($form_content['question'])
                         ->setDisplay($form_content['horizontalvertical'])
+                        ->setMaxValue($maxScore)
                     ;
 
                     if (api_get_configuration_value('allow_required_survey_questions')) {

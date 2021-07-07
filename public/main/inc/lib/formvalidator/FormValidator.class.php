@@ -891,7 +891,7 @@ EOT;
      *
      * @return HTML_QuickForm_select
      */
-    public function addSelect(string $name, $label, array $options = [], array $attributes = [])
+    public function addSelect(string $name, $label, ?array $options = [], array $attributes = [])
     {
         return $this->addElement('select', $name, $label, $options, $attributes);
     }

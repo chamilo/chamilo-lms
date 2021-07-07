@@ -207,9 +207,10 @@ $exercise_sound = $objExercise->getSound();
 // If reminder ends we jump to the exercise_reminder
 if ($objExercise->review_answers) {
     if (-1 == $remind_question_id) {
-        header('Location: '.api_get_path(WEB_CODE_PATH).
-            'exercise/exercise_reminder.php?exerciseId='.$exerciseId.'&'.api_get_cidreq());
-        exit;
+        $extraParams = "&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id";
+        $url = api_get_path(WEB_CODE_PATH).
+            'exercise/exercise_reminder.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().$extraParams;
+        api_location($url);
     }
 }
 

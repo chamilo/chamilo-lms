@@ -2274,7 +2274,7 @@ class Exercise
                 ['id' => 'pass_percentage']
             );
 
-            $form->addRule('pass_percentage', get_lang('Numericalal'), 'numeric');
+            $form->addRule('pass_percentage', get_lang('Numeric'), 'numeric');
             $form->addRule('pass_percentage', get_lang('Value is too small.'), 'min_numeric_length', 0);
             $form->addRule('pass_percentage', get_lang('Value is too big.'), 'max_numeric_length', 100);
 
@@ -3179,7 +3179,6 @@ class Exercise
             $html .= Display::url($urlTitle, $url, $params);
             $html .= '<br />';
 
-            // User
             return $html;
         }
 

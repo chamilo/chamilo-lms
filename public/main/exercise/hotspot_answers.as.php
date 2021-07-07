@@ -227,7 +227,7 @@ if (!$hideExpectedAnswer) {
 $data['answers'] = [];
 
 $rs = $em
-    ->getRepository('ChamiloCoreBundle:TrackEHotspot')
+    ->getRepository(TrackEHotspot::class)
     ->findBy(
         [
             'hotspotQuestionId' => $questionId,

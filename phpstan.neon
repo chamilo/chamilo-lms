@@ -2,6 +2,8 @@ parameters:
 	level: 5
 	paths:
 		- src
+		- tests/CoreBundle
+		- tests/CourseBundle
 #		- public/main
 #		- public/main/inc/lib/agenda.lib.php
 #		- public/main/inc/lib/AnnouncementEmail.php

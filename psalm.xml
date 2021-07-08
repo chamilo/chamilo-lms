@@ -8,6 +8,8 @@
 >
     <projectFiles>
         <directory name="src"/>
+        <directory name="tests/CoreBundle"/>
+        <directory name="tests/CourseBundle"/>
 
         <file name="public/legacy.php"/>
         <directory name="public/main/admin" />

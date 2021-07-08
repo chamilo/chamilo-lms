@@ -29,7 +29,6 @@ Event::registerLog($logInfo);
 //$social_menu_block = SocialManager::show_social_menu('inbox');
 
 throw new Exception('Fix MessageManager::showMessageBox');
-
 //$message .= MessageManager::showMessageBox($messageId, Message::MESSAGE_TYPE_PROMOTED);
 
 if (!empty($message)) {

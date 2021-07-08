@@ -2,8 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Message;
-
 $_dont_save_user_course_access = true;
 
 /**

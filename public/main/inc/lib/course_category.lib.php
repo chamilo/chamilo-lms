@@ -442,9 +442,7 @@ class CourseCategory
                         $deleteIcon,
                         $deleteUrl,
                         [
-                            'onclick'
-                            =>
-                                'javascript: if (!confirm(\''.addslashes(
+                            'onclick' => 'javascript: if (!confirm(\''.addslashes(
                                     api_htmlentities(sprintf(get_lang('Please confirm your choice')), ENT_QUOTES)
                                 ).'\')) return false;',
                         ]

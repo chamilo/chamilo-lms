@@ -97,7 +97,7 @@ if ($skillIssue->getAcquiredLevel()) {
 $author = api_get_user_info($skillIssue->getArgumentationAuthorId());
 $tempDate = DateTime::createFromFormat('Y-m-d H:i:s', $skillIssueDate);
 $linkedinOrganizationId = api_get_configuration_value('linkedin_organization_id');
-if (($linkedinOrganizationId === false)) {
+if ((false === $linkedinOrganizationId)) {
     $linkedinOrganizationId = null;
 }
 
@@ -269,7 +269,7 @@ if ($allowExport) {
     $skills = $objSkill->get($skillId);
 //    $unbakedBadge = api_get_path(SYS_UPLOAD_PATH).'badges/'.$skills['icon'];
 //    if (!is_file($unbakedBadge)) {
-        $unbakedBadge = api_get_path(SYS_PUBLIC_PATH).'img/icons/128/badges-default.png';
+    $unbakedBadge = api_get_path(SYS_PUBLIC_PATH).'img/icons/128/badges-default.png';
 //    }
 
 //    $unbakedBadge = file_get_contents($unbakedBadge);

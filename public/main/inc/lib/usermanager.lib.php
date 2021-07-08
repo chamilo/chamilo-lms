@@ -4512,11 +4512,11 @@ class UserManager
     /**
      * Add subscribed users to a user by relation type.
      *
-     * @param int    $userId                   The user id
-     * @param array  $subscribedUsersId        The id of subscribed users
-     * @param int    $relationType             The relation type
-     * @param bool   $deleteUsersBeforeInsert
-     * @param bool   $deleteOtherAssignedUsers
+     * @param int   $userId                   The user id
+     * @param array $subscribedUsersId        The id of subscribed users
+     * @param int   $relationType             The relation type
+     * @param bool  $deleteUsersBeforeInsert
+     * @param bool  $deleteOtherAssignedUsers
      */
     public static function subscribeUsersToUser(
         $userId,

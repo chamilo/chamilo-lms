@@ -229,7 +229,7 @@ $form->addHidden('user_id_request', '', ['id' => 'user_id_request']);
 $form->addHidden('project_id', $projectId);
 $form->addHidden('other_area', '', ['id' => 'other_area']);
 $form->addHidden('email', '', ['id' => 'email']);
-$form->addSelect('category_id', get_lang('Category'), $categoryList, ['id' => 'category_id', 'for' => 'category_id',]);
+$form->addSelect('category_id', get_lang('Category'), $categoryList, ['id' => 'category_id', 'for' => 'category_id']);
 $form->addElement('text', 'subject', get_lang('Subject'), ['id' => 'subject']);
 $form->addHtmlEditor(
     'content',

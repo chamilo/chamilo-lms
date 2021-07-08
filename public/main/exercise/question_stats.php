@@ -105,8 +105,8 @@ $orderedData = [];
 
 if ($form->validate()) {
     $questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, $sessionId, $groups, $users);
-foreach ($questions as $data) {
-    $questionId = (int) $data['question_id'];
+    foreach ($questions as $data) {
+        $questionId = (int) $data['question_id'];
         $total = ExerciseLib::getTotalQuestionAnswered(
             $courseId,
             $exerciseId,

@@ -249,8 +249,6 @@ class Rest extends WebService
 
     /**
      * @param int $lastMessageId
-     *
-     * @return array
      */
     /*public function getUserMessages($lastMessageId = 0)
     {
@@ -263,9 +261,6 @@ class Rest extends WebService
         return $messages;
     }*/
 
-    /**
-     * @return array
-     */
     /*public function getUserReceivedMessages()
     {
         $lastMessages = MessageManager::getReceivedMessages($this->user->getId(), 0);
@@ -277,9 +272,6 @@ class Rest extends WebService
         return $messages;
     }*/
 
-    /**
-     * @return array
-     */
     /*public function getUserSentMessages()
     {
         $lastMessages = MessageManager::getSentMessages($this->user->getId(), 0);

@@ -32,6 +32,7 @@ class Notification extends Model
     const NOTIFICATION_TYPE_GROUP = 3;
     const NOTIFICATION_TYPE_WALL_MESSAGE = 4;
     const NOTIFICATION_TYPE_DIRECT_MESSAGE = 5;
+
     public $table;
     public $columns = [
         'id',
@@ -54,9 +55,6 @@ class Notification extends Model
     public $adminEmail;
     public $titlePrefix;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->table = Database::get_main_table(TABLE_NOTIFICATION);

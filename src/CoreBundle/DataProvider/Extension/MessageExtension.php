@@ -63,7 +63,7 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
         $user = $this->security->getUser();
         $alias = $qb->getRootAliases()[0];
 
-        $qb->innerJoin("$alias.receivers", 'r');
+        $qb->leftJoin("$alias.receivers", 'r');
         /*$qb->andWhere(
             $qb->expr()->orX(
                 $qb->andWhere(

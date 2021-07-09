@@ -39,6 +39,7 @@ class MessageListener
                 $messageSent
                     ->setMsgType(Message::MESSAGE_TYPE_OUTBOX)
                     ->setRead(true)
+                    ->setReceivers(null)
                 ;
                 $args->getEntityManager()->persist($messageSent);
                 $args->getEntityManager()->flush();

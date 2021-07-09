@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\CareerRepository;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\GradeBookCategoryRepository;
+use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
@@ -143,6 +144,11 @@ class Container
     public static function isInstalled()
     {
         return self::$container->get('kernel')->isInstalled();
+    }
+
+    public static function getMessengerBus()
+    {
+        return self::$container->get('messenger.bus.default');
     }
 
     /**
@@ -405,6 +411,11 @@ class Container
     public static function getLpCategoryRepository(): CLpCategoryRepository
     {
         return self::$container->get(CLpCategoryRepository::class);
+    }
+
+    public static function getMessageRepository(): MessageRepository
+    {
+        return self::$container->get(MessageRepository::class);
     }
 
     public static function getMessageAttachmentRepository(): MessageAttachmentRepository

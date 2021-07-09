@@ -51,7 +51,7 @@ use UserManager;
 #[ApiResource(
     collectionOperations: [
         'get' => [
-            'security' => "is_granted('ROLE_ADMIN')",
+            'security' => "is_granted('ROLE_USER')", // @todo increase security
         ],
         'post' => [
             'security' => "is_granted('ROLE_ADMIN')",

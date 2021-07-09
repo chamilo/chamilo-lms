@@ -483,7 +483,7 @@ export default {
     confirmDeleteMultiple() {
       this.deleteMultipleDialog = true;
     },
-    markAsReadMultiple(){
+    markAsReadMultiple() {
       console.log('markAsReadMultiple');
       this.selectedItems.forEach(message => {
         message.read = true;

@@ -970,7 +970,7 @@ if ($installed) {
         }
         </script>
     ';
-    $url = api_get_path(WEB_CODE_PATH).'plugin/studentfollowup/posts.php?iframe=1&student_id='.$student_id;
+    $url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/posts.php?iframe=1&student_id='.$student_id;
     echo '<iframe
         onload="resizeIframe(this)"
         style="width:100%;"

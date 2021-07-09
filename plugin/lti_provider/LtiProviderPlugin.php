@@ -23,22 +23,22 @@ class LtiProviderPlugin extends Plugin
         $version = '1.0';
         $author = 'Christian Beeznest';
 
-        $publicKey = $this->getPublicKey();
         $message = Display::return_message($this->get_lang('Description'));
 
-        if (empty($publicKey)) {
-            $publicKey = $this->get_lang('GenerateKeyPairInfo');
-        }
+        if ($this->areTablesCreated()) {
+            $publicKey = $this->getPublicKey();
 
-        $pkHtml = '<div class="form-group ">
+            $pkHtml = '<div class="form-group">
                     <label for="lti_provider_public_key" class="col-sm-2 control-label">'
-            .$this->get_lang('PublicKey').'</label>
+                .$this->get_lang('PublicKey').'</label>
                     <div class="col-sm-8">
                         <pre>'.$publicKey.'</pre>
-                        <p class="help-block"></p>
                     </div>
                     <div class="col-sm-2"></div>
                 </div>';
+        } else {
+            $pkHtml = $this->get_lang('GenerateKeyPairInfo');
+        }
 
         $settings = [
             $message => 'html',
@@ -137,10 +137,7 @@ class LtiProviderPlugin extends Plugin
      */
     private function createPluginTables(): void
     {
-        $entityManager = Database::getManager();
-        $connection = $entityManager->getConnection();
-
-        if ($connection->getSchemaManager()->tablesExist(self::TABLE_PLATFORM)) {
+        if ($this->areTablesCreated()) {
             return;
         }
 
@@ -169,6 +166,14 @@ class LtiProviderPlugin extends Plugin
             Database::query($query);
         }
 
+    }
+
+    private function areTablesCreated(): bool
+    {
+        $entityManager = Database::getManager();
+        $connection = $entityManager->getConnection();
+
+        return $connection->getSchemaManager()->tablesExist(self::TABLE_PLATFORM);
     }
 
     /**

@@ -1512,6 +1512,9 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // In Scorm comunication use a specific extra field instead of the user_id
 //$_configuration['scorm_api_extrafield_to_use_as_student_id'] = '';
 
+// LMS will try to update SCO status every time the status is not sent by the SCO 
+//$_configuration['scorm_LMS_update_sco_status_all_time'] = false;
+
 // Show online user only to Administrators
 //$_configuration['whoisonline_only_for_admin'] = false;
 

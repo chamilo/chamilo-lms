@@ -315,8 +315,7 @@ class Notification extends Model
                                 $this->adminEmail,
                                 $extraHeaders,
                                 $attachments,
-                                false,
-                                $smsParameters
+                                false
                             );
                         }
                         $sendDate = api_get_utc_datetime();

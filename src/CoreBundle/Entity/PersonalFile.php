@@ -127,10 +127,10 @@ class PersonalFile extends AbstractResource implements ResourceInterface
     protected int $id;
 
     /**
-     * @Groups({"personal_file:read"})
-     * @Assert\NotBlank()
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
+    #[Groups(['personal_file:read'])]
     protected string $title;
 
     public function __construct()

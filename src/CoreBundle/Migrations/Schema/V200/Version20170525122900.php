@@ -28,11 +28,11 @@ class Version20170525122900 extends AbstractMigrationChamilo
             $this->addSql(
                 'CREATE TABLE IF NOT EXISTS resource_node (id BIGINT AUTO_INCREMENT NOT NULL, resource_type_id INT NOT NULL, resource_file_id BIGINT DEFAULT NULL, creator_id INT NOT NULL, parent_id BIGINT DEFAULT NULL, name VARCHAR(255) NOT NULL, level INT DEFAULT NULL, path VARCHAR(3000) DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_8A5F48FF98EC6B7B (resource_type_id), UNIQUE INDEX UNIQ_8A5F48FFCE6B9E84 (resource_file_id), INDEX IDX_8A5F48FF61220EA6 (creator_id), INDEX IDX_8A5F48FF727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
             );
-
             $this->addSql(
                 'ALTER TABLE resource_node ADD slug VARCHAR(255) NOT NULL, ADD uuid BINARY(16) NOT NULL COMMENT \'(DC2Type:uuid)\', CHANGE creator_id creator_id INT DEFAULT NULL, CHANGE path path LONGTEXT DEFAULT NULL, CHANGE name title VARCHAR(255) NOT NULL'
             );
             $this->addSql('CREATE UNIQUE INDEX UNIQ_8A5F48FFD17F50A6 ON resource_node (uuid)');
+            $this->addSql('ALTER TABLE resource_node ADD public TINYINT(1) NOT NULL');
         }
 
         if (false === $schema->hasTable('resource_link')) {

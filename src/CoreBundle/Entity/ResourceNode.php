@@ -180,10 +180,14 @@ class ResourceNode
      */
     protected DateTime $updatedAt;
 
-    /**
-     * @Groups({"resource_node:read", "document:read"})
-     */
+    #[Groups(['resource_node:read', 'document:read'])]
     protected bool $fileEditableText;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    #[Groups(['resource_node:read', 'document:read'])]
+    protected bool $public;
 
     protected ?string $content = null;
 
@@ -203,6 +207,7 @@ class ResourceNode
 
     public function __construct()
     {
+        $this->public = false;
         $this->uuid = Uuid::v4();
         $this->children = new ArrayCollection();
         $this->resourceLinks = new ArrayCollection();
@@ -584,6 +589,18 @@ class ResourceNode
     public function setShortCut(?CShortcut $shortCut): self
     {
         $this->shortCut = $shortCut;
+
+        return $this;
+    }
+
+    public function isPublic(): bool
+    {
+        return $this->public;
+    }
+
+    public function setPublic(bool $public): self
+    {
+        $this->public = $public;
 
         return $this;
     }

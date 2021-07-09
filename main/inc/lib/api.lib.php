@@ -2784,6 +2784,7 @@ function api_get_session_info($id)
  * @param int  $session_id
  * @param int  $courseId
  * @param bool $ignore_visibility_for_admins
+ * @param int  $userId
  *
  * @return int
  *             0 = session still available,

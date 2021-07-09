@@ -12,12 +12,12 @@ require_once __DIR__.'/cm_webservice.php';
  */
 class WSCMInbox extends WSCM
 {
-    public function unreadMessage($username, $password)
+    /*public function unreadMessage($username, $password)
     {
         if ("valid" == $this->verifyUserPass($username, $password)) {
             $table_message = Database::get_main_table(TABLE_MESSAGE);
             $user_id = UserManager::get_user_id_from_username($username);
-            $condition_msg_status = ' msg_status = 1 '; // define('MESSAGE_STATUS_UNREAD', '1');
+            $condition_msg_status = ' msg_status = 1 ';
 
             $sql_query = "SELECT COUNT(*) as number_messages 
                           FROM $table_message 
@@ -203,14 +203,7 @@ class WSCMInbox extends WSCM
             return get_lang('Login failed - incorrect login or password.');
         }
     }
-
-    protected function set_message_as_read($user_id, $message_id)
-    {
-        $table_message = Database::get_main_table(TABLE_MESSAGE);
-        $query = "UPDATE $table_message SET msg_status = '".MESSAGE_STATUS_NEW."' 
-                  WHERE user_receiver_id=".$user_id." AND id='".$message_id."';";
-        Database::query($query);
-    }
+    */
 }
 
 /*

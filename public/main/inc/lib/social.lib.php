@@ -768,7 +768,7 @@ class SocialManager extends UserManager
                 $groupId = (int) $groupId;
                 $groupCondition = " ( group_id = $groupId ";
             }
-            $groupCondition .= ' AND (msg_status = '.MESSAGE_STATUS_NEW.' OR msg_status = '.MESSAGE_STATUS_UNREAD.')) ';
+            $groupCondition .= ' AND (msg_type = '.Message::MESSAGE_TYPE_GROUP.') ';
         }
         if (!empty($groupCondition)) {
             $sql[3] = $sqlBase.$groupCondition;

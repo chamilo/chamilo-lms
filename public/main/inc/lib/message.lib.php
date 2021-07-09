@@ -41,7 +41,7 @@ class MessageManager
         $params = [
             'user_sender_id' => $fromUserInfo['id'],
             'user_receiver_id' => $aboutUserInfo['id'],
-            'msg_status' => MESSAGE_STATUS_CONVERSATION,
+            'msg_type' => Message::MESSAGE_TYPE_CONVERSATION,
             'send_date' => $now,
             'title' => $subject,
             'content' => $content,
@@ -65,7 +65,7 @@ class MessageManager
             $sql = 'SELECT id FROM '.$table.'
                     WHERE
                       user_receiver_id = '.$user->getId().' AND
-                      msg_status = '.MESSAGE_STATUS_CONVERSATION.'
+                      msg_type = '.Message::MESSAGE_TYPE_CONVERSATION.'
                     ';
             $result = Database::query($sql);
             $messages = [];
@@ -166,7 +166,6 @@ class MessageManager
      * @param array  $smsParameters
      * @param bool   $checkCurrentAudioId
      * @param bool   $forceTitleWhenSendingEmail force the use of $title as subject instead of "You have a new message"
-     * @param int    $status                     Message status
      *
      * @return bool
      */
@@ -186,14 +185,12 @@ class MessageManager
         $smsParameters = [],
         $checkCurrentAudioId = false,
         $forceTitleWhenSendingEmail = false,
-        $status = 0
     ) {
         $group_id = (int) $group_id;
         $receiverUserId = (int) $receiverUserId;
         $parent_id = (int) $parent_id;
         $editMessageId = (int) $editMessageId;
         $topic_id = (int) $topic_id;
-        $status = empty($status) ? MESSAGE_STATUS_UNREAD : (int) $status;
         $user_sender_id = empty($sender_id) ? api_get_user_id() : (int) $sender_id;
 
         if (empty($user_sender_id) || empty($receiverUserId)) {
@@ -342,7 +339,6 @@ class MessageManager
                 $message = (new Message())
                     ->setSender($userSender)
                     ->addReceiver($userRecipient)
-                    ->setMsgType($status)
                     ->setTitle($subject)
                     ->setContent($content)
                     ->setGroup(api_get_group_entity($group_id))
@@ -494,9 +490,7 @@ class MessageManager
             null,
             null,
             $sender_id,
-            $directMessage,
-            0,
-            $smsParameters
+            $directMessage
         );
 
         if ($sendCopyToDrhUsers) {
@@ -636,7 +630,7 @@ class MessageManager
         $sql = "SELECT * FROM $table
                 WHERE
                     group_id= $group_id AND
-                    msg_status NOT IN ('".MESSAGE_STATUS_OUTBOX."', '".MESSAGE_STATUS_DELETED."')
+                    msg_type = ".Message::MESSAGE_TYPE_GROUP."
                 ORDER BY id";
         $rs = Database::query($sql);
         $data = [];
@@ -669,7 +663,7 @@ class MessageManager
         $sql = "SELECT * FROM $table
                 WHERE
                     group_id = $group_id AND
-                    msg_status NOT IN ('".MESSAGE_STATUS_OUTBOX."', '".MESSAGE_STATUS_DELETED."')
+                    msg_type = '".Message::MESSAGE_TYPE_GROUP."'
                 ORDER BY id ";
 
         $rs = Database::query($sql);
@@ -723,7 +717,7 @@ class MessageManager
         $sql = "SELECT * FROM $table
                 WHERE
                     parent_id='$parentId' AND
-                    msg_status NOT IN (".MESSAGE_STATUS_OUTBOX.", ".MESSAGE_STATUS_WALL_DELETE.")
+                    msg_type = '".Message::MESSAGE_TYPE_GROUP."'
                     $condition_group_id
                 ORDER BY send_date DESC $condition_limit ";
         $rs = Database::query($sql);
@@ -766,7 +760,6 @@ class MessageManager
             $new_topics = [];
 
             foreach ($topics as $id => $value) {
-                $rows = null;
                 $rows = self::get_messages_by_group_by_message($groupId, $value['id']);
                 if (!empty($rows)) {
                     $count = count(self::calculate_children($rows, $value['id']));
@@ -878,7 +871,7 @@ class MessageManager
     public static function display_message_for_group($groupId, $topic_id)
     {
         global $my_group_role;
-        $main_message = self::get_message_by_id($topic_id);
+        $main_message = Container::getMessageAttachmentRepository()::get_message_by_id($topic_id);
         if (empty($main_message)) {
             return false;
         }
@@ -1267,30 +1260,6 @@ class MessageManager
         }
 
         return $list;
-    }
-
-    /**
-     * Get message list by id.
-     *
-     * @param int $messageId
-     *
-     * @return array
-     */
-    public static function get_message_by_id($messageId)
-    {
-        $table = Database::get_main_table(TABLE_MESSAGE);
-        $messageId = (int) $messageId;
-        $sql = "SELECT * FROM $table
-                WHERE
-                    id = '$messageId' AND
-                    msg_status <> '".MESSAGE_STATUS_DELETED."' ";
-        $res = Database::query($sql);
-        $item = [];
-        if (Database::num_rows($res) > 0) {
-            $item = Database::fetch_array($res, 'ASSOC');
-        }
-
-        return $item;
     }
 
     /**

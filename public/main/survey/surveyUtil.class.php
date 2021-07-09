@@ -2536,7 +2536,7 @@ class SurveyUtil
      * Send the invitation by mail.
      *
      * @param int invitedUser - the userId (course user) or emailaddress of additional user
-     * $param string $invitation_code - the unique invitation code for the URL
+     * @param string $invitation_code - the unique invitation code for the URL
      */
     public static function sendInvitationMail(
         CSurvey $survey,

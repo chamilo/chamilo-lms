@@ -4107,15 +4107,19 @@ function send_mail($userInfo, CForum $forum, CForumThread $thread, CForumPost $p
     $thread_link = api_get_path(WEB_CODE_PATH).
         'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId;
 
-    $email_body = get_lang('Dear').' '.api_get_person_name($userInfo['firstname'], $userInfo['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).", <br />\n\r";
-    $email_body .= get_lang('New Post in the forum').': '.$forum->getForumTitle().' - '.$thread->getThreadTitle()." <br />\n";
+    $email_body = get_lang('Dear').' '.
+        api_get_person_name($userInfo['firstname'], $userInfo['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).", <br />\n\r";
+    $email_body .= get_lang('New Post in the forum').
+        ': '.$forum->getForumTitle().' - '.$thread->getThreadTitle()." <br />\n";
 
     $courseId = api_get_configuration_value('global_forums_course_id');
-    $subject = get_lang('New Post in the forum').' - '.$_course['official_code'].': '.$forum->getForumTitle().' - '.$thread->getThreadTitle()." <br />\n";
+    $subject = get_lang('New Post in the forum').' - '.
+        $_course['official_code'].': '.$forum->getForumTitle().' - '.$thread->getThreadTitle()." <br />\n";
 
     $courseInfoTitle = get_lang('Course').': '.$_course['name'].' - ['.$_course['official_code']."] - <br />\n";
     if (!empty($courseId) && $_course['real_id'] == $courseId) {
-        $subject = get_lang('New Post in the forum').': '.$forum->getForumTitle().' - '.$thread->getThreadTitle()." <br />\n";
+        $subject = get_lang('New Post in the forum').': '.
+            $forum->getForumTitle().' - '.$thread->getThreadTitle()." <br />\n";
         $courseInfoTitle = " <br />\n";
     }
     $email_body .= $courseInfoTitle;

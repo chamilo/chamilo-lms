@@ -1046,7 +1046,7 @@ class Rest extends WebService
      *
      * @return array
      */
-    public function saveUserMessage($subject, $text, array $receivers)
+    /*public function saveUserMessage($subject, $text, array $receivers)
     {
         foreach ($receivers as $userId) {
             MessageManager::send_message($userId, $subject, $text);
@@ -1055,14 +1055,14 @@ class Rest extends WebService
         return [
             'sent' => true,
         ];
-    }
+    }*/
 
     /**
      * @param string $search
      *
      * @return array
      */
-    public function getMessageUsers($search)
+    /*public function getMessageUsers($search)
     {
         $repo = UserManager::getRepository();
 
@@ -1070,7 +1070,6 @@ class Rest extends WebService
         $showEmail = 'true' === api_get_setting('show_email_addresses');
         $data = [];
 
-        /** @var User $user */
         foreach ($users as $user) {
             $userName = UserManager::formatUserFullName($user);
 
@@ -1085,7 +1084,7 @@ class Rest extends WebService
         }
 
         return $data;
-    }
+    }*/
 
     /**
      * @param string $title

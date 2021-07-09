@@ -103,7 +103,7 @@ class Message
     public const MESSAGE_TYPE_WALL = 4;
     public const MESSAGE_TYPE_GROUP = 5;
     public const MESSAGE_TYPE_INVITATION = 6;
-    public const MESSAGE_STATUS_CONVERSATION = 7;
+    public const MESSAGE_TYPE_CONVERSATION = 7;
 
     // status
     public const MESSAGE_STATUS_DELETED = 3;
@@ -488,6 +488,7 @@ class Message
 
     public function setGroup(?CGroup $group): self
     {
+        $this->msgType = self::MESSAGE_TYPE_GROUP;
         $this->group = $group;
 
         return $this;

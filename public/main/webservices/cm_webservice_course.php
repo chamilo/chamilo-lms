@@ -445,12 +445,12 @@ class WSCMCourse extends WSCM
         }
     }
 
-    public function unreadMessage($username, $password)
+    /*public function unreadMessage($username, $password)
     {
         if ("valid" == $this->verifyUserPass($username, $password)) {
             $table_message = Database::get_main_table(TABLE_MESSAGE);
             $user_id = UserManager::get_user_id_from_username($username);
-            $condition_msg_status = ' msg_status = 1 '; // define('MESSAGE_STATUS_UNREAD', '1');
+            $condition_msg_status = ' msg_status = 1 ';
 
             $sql_query = "SELECT COUNT(*) as number_messages
                           FROM $table_message
@@ -470,7 +470,7 @@ class WSCMCourse extends WSCM
         if ("valid" == $this->verifyUserPass($username, $password)) {
             $user_id = get_user_id_from_username($username);
         }
-    }
+    }*/
 
     public function nada($username, $password)
     {

@@ -69,13 +69,13 @@ try {
             break;
 
         case Rest::GET_USER_MESSAGES:
-            $lastMessageId = isset($_POST['last']) ? (int) $_POST['last'] : 0;
+            /*$lastMessageId = isset($_POST['last']) ? (int) $_POST['last'] : 0;
             $messages = $restApi->getUserMessages($lastMessageId);
-            $restResponse->setData($messages);
+            $restResponse->setData($messages);*/
             break;
         case Rest::POST_USER_MESSAGE_READ:
         case Rest::POST_USER_MESSAGE_UNREAD:
-            $messagesId = isset($_POST['messages']) && is_array($_POST['messages'])
+            /*$messagesId = isset($_POST['messages']) && is_array($_POST['messages'])
                 ? array_map('intval', $_POST['messages'])
                 : [];
 
@@ -83,8 +83,6 @@ try {
             if (empty($messagesId)) {
                 throw new Exception(get_lang('NoData'));
             }
-
-            $messageStatus = Rest::POST_USER_MESSAGE_READ === $action ? MESSAGE_STATUS_NEW : MESSAGE_STATUS_UNREAD;
 
             $data = array_flip($messagesId);
 
@@ -96,7 +94,7 @@ try {
                 );
             }
 
-            $restResponse->setData($data);
+            $restResponse->setData($data);*/
             break;
         case Rest::GET_USER_COURSES:
             $userId = isset($_REQUEST['user_id']) ? (int) $_REQUEST['user_id'] : 0;
@@ -303,20 +301,20 @@ try {
             $restResponse->setData($users);
             break;
         case Rest::SAVE_USER_MESSAGE:
-            $receivers = isset($_POST['receivers']) ? $_POST['receivers'] : [];
+            /*$receivers = isset($_POST['receivers']) ? $_POST['receivers'] : [];
             $subject = !empty($_POST['subject']) ? $_POST['subject'] : null;
             $text = !empty($_POST['text']) ? $_POST['text'] : null;
             $data = $restApi->saveUserMessage($subject, $text, $receivers);
-            $restResponse->setData($data);
+            $restResponse->setData($data);*/
             break;
         case Rest::GET_MESSAGE_USERS:
-            $search = !empty($_REQUEST['q']) ? $_REQUEST['q'] : null;
+            /*$search = !empty($_REQUEST['q']) ? $_REQUEST['q'] : null;
             if (!$search || strlen($search) < 2) {
                 throw new Exception(get_lang('TooShort'));
             }
 
             $data = $restApi->getMessageUsers($search);
-            $restResponse->setData($data);
+            $restResponse->setData($data);*/
             break;
         case Rest::SAVE_COURSE_NOTEBOOK:
             $title = !empty($_POST['title']) ? $_POST['title'] : null;
@@ -343,25 +341,25 @@ try {
             $restResponse->setData($data);
             break;
         case Rest::GET_USER_MESSAGES_RECEIVED:
-            $lastMessageId = isset($_POST['last']) ? (int) $_POST['last'] : 0;
+            /*$lastMessageId = isset($_POST['last']) ? (int) $_POST['last'] : 0;
             $messages = $restApi->getUserReceivedMessages($lastMessageId);
-            $restResponse->setData($messages);
+            $restResponse->setData($messages);*/
             break;
         case Rest::GET_USER_MESSAGES_SENT:
-            $lastMessageId = isset($_POST['last']) ? (int) $_POST['last'] : 0;
+            /*$lastMessageId = isset($_POST['last']) ? (int) $_POST['last'] : 0;
             $messages = $restApi->getUserSentMessages($lastMessageId);
-            $restResponse->setData($messages);
+            $restResponse->setData($messages);*/
             break;
         case Rest::DELETE_USER_MESSAGE:
-            $messageId = isset($_POST['message_id']) ? (int) $_POST['message_id'] : 0;
+            /*$messageId = isset($_POST['message_id']) ? (int) $_POST['message_id'] : 0;
             $messageType = !empty($_POST['msg_type']) ? $_POST['msg_type'] : '';
             $restApi->deleteUserMessage($messageId, $messageType);
-            $restResponse->setData(['status' => true]);
+            $restResponse->setData(['status' => true]);*/
             break;
         case Rest::SET_MESSAGE_READ:
-            $messageId = isset($_POST['message_id']) ? (int) $_POST['message_id'] : 0;
+            /*$messageId = isset($_POST['message_id']) ? (int) $_POST['message_id'] : 0;
             $restApi->setMessageRead($messageId);
-            $restResponse->setData(['status' => true]);
+            $restResponse->setData(['status' => true]);*/
             break;
         case Rest::CREATE_SESSION_FROM_MODEL:
             $newSessionId = $restApi->createSessionFromModel(

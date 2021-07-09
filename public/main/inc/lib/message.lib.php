@@ -101,13 +101,12 @@ class MessageManager
                     false,
                     false
                 );
-                $senderId = $message->getUserSender()->getId();
-                $senderInfo = api_get_user_info($senderId);
+                $sender = $message->getSender();
                 $html .= Display::panelCollapse(
-                    $localTime.' '.$senderInfo['complete_name'].' '.$message->getTitle(),
+                    $localTime.' '.UserManager::formatUserFullName($sender).' '.$message->getTitle(),
                     $message->getContent().'<br />'.$date.'<br />'.get_lang(
                         'Author'
-                    ).': '.$senderInfo['complete_name_with_message_link'],
+                    ).': '.$sender->getUsername(),
                     $tag,
                     null,
                     $tagAccordion,
@@ -340,10 +339,9 @@ class MessageManager
                 }
                 $messageId = $editMessageId;
             } else {
-                $message = new Message();
-                $message
-                    ->setUserSender($userSender)
-                    ->setUserReceiver($userRecipient)
+                $message = (new Message())
+                    ->setSender($userSender)
+                    ->addReceiver($userRecipient)
                     ->setMsgType($status)
                     ->setTitle($subject)
                     ->setContent($content)
@@ -574,7 +572,7 @@ class MessageManager
             ->setPath($fileName)
             ->setFilename($fileName)
             ->setComment($comment)
-            ->setParent($message->getUserSender())
+            ->setParent($message->getSender())
             ->setMessage($message)
         ;
 
@@ -606,8 +604,11 @@ class MessageManager
         if (null !== $fileToUpload) {
             $em->persist($attachment);
             $attachmentRepo->addFile($attachment, $fileToUpload);
-            $attachment->addUserLink($message->getUserSender());
-            $attachment->addUserLink($message->getUserReceiver());
+            $attachment->addUserLink($message->getSender());
+            $receivers = $message->getReceivers();
+            foreach ($receivers as $receiver) {
+                $attachment->addUserLink($receiver);
+            }
             $em->flush();
 
             return true;

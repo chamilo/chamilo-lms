@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
@@ -24,10 +25,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="message", indexes={
  *     @ORM\Index(name="idx_message_user_sender", columns={"user_sender_id"}),
- *     @ORM\Index(name="idx_message_user_receiver", columns={"user_receiver_id"}),
- *     @ORM\Index(name="idx_message_user_sender_user_receiver", columns={"user_sender_id", "user_receiver_id"}),
- *     @ORM\Index(name="idx_message_user_receiver_type", columns={"user_receiver_id", "msg_type"}),
- *     @ORM\Index(name="idx_message_receiver_type_send_date", columns={"user_receiver_id", "msg_type", "send_date"}),
  *     @ORM\Index(name="idx_message_group", columns={"group_id"}),
  *     @ORM\Index(name="idx_message_type", columns={"msg_type"})
  * })
@@ -40,6 +37,10 @@ use Symfony\Component\Validator\Constraints as Assert;
             'security' => "is_granted('ROLE_USER')",  // the get collection is also filtered by MessageExtension.php
         ],
         'post' => [
+            //'security' => "is_granted('ROLE_USER')",
+            /*'messenger' => true,
+            'output' => false,
+            'status' => 202,*/
             'security_post_denormalize' => "is_granted('CREATE', object)",
             //            'deserialize' => false,
             //            'controller' => Create::class,
@@ -88,10 +89,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(OrderFilter::class, properties: ['title', 'sendDate'])]
 #[ApiFilter(SearchFilter::class, properties: [
     'read' => 'exact',
+    'status' => 'exact',
     'msgType' => 'exact',
-    'userSender' => 'exact',
-    'userReceiver' => 'exact',
+    'sender' => 'exact',
     'tags' => 'exact',
+    'receivers' => 'exact',
 ])]
 class Message
 {
@@ -118,6 +120,7 @@ class Message
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
+    #[ApiProperty(identifier: true)]
     #[Groups(['message:read'])]
     protected int $id;
 
@@ -127,14 +130,20 @@ class Message
      */
     #[Assert\NotBlank]
     #[Groups(['message:read', 'message:write'])]
-    protected User $userSender;
+    protected User $sender;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="receivedMessages")
-     * @ORM\JoinColumn(name="user_receiver_id", referencedColumnName="id", nullable=true)
+     * @var Collection<int, User>|User[]
+     *
+     * @ORM\ManyToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\User",
+     *     inversedBy="receivedMessages",
+     *     cascade={"persist"}
+     * )
+     * @ORM\JoinTable(name="message_rel_user")
      */
     #[Groups(['message:read', 'message:write'])]
-    protected ?User $userReceiver = null;
+    protected array | null | Collection $receivers;
 
     /**
      * @ORM\Column(name="msg_type", type="smallint", nullable=false)
@@ -257,10 +266,35 @@ class Message
         $this->children = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->likes = new ArrayCollection();
+        $this->receivers = new ArrayCollection();
         $this->votes = 0;
         $this->status = 0;
         $this->read = false;
         $this->starred = false;
+    }
+
+    /**
+     * @return null|Collection|User[]
+     */
+    public function getReceivers()
+    {
+        return $this->receivers;
+    }
+
+    public function addReceiver(User $receiver): self
+    {
+        if (!$this->receivers->contains($receiver)) {
+            $this->receivers->add($receiver);
+        }
+
+        return $this;
+    }
+
+    public function setReceivers($receivers): self
+    {
+        $this->receivers = $receivers;
+
+        return $this;
     }
 
     /**
@@ -289,28 +323,16 @@ class Message
         return $this;
     }
 
-    public function setUserSender(User $userSender): self
+    public function setSender(User $sender): self
     {
-        $this->userSender = $userSender;
+        $this->sender = $sender;
 
         return $this;
     }
 
-    public function getUserSender(): User
+    public function getSender(): User
     {
-        return $this->userSender;
-    }
-
-    public function setUserReceiver(?User $userReceiver): self
-    {
-        $this->userReceiver = $userReceiver;
-
-        return $this;
-    }
-
-    public function getUserReceiver(): ?User
-    {
-        return $this->userReceiver;
+        return $this->sender;
     }
 
     public function setMsgType(int $msgType): self

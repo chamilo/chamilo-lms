@@ -10,6 +10,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInter
 //use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use Chamilo\CoreBundle\Entity\Message;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
@@ -48,7 +49,7 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
         //$this->addWhere($queryBuilder, $resourceClass);
     }
 
-    private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
+    private function addWhere(QueryBuilder $qb, string $resourceClass): void
     {
         if (Message::class !== $resourceClass) {
             return;
@@ -58,19 +59,36 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
             return;
         }*/
 
+        /** @var User $user */
         $user = $this->security->getUser();
-        $alias = $queryBuilder->getRootAliases()[0];
+        $alias = $qb->getRootAliases()[0];
 
-        $queryBuilder->andWhere("
-            ($alias.userSender = :current AND $alias.msgType = :outbox) OR 
-            ($alias.userReceiver = :current AND $alias.msgType = :inbox) OR
-            ($alias.userReceiver = :current AND $alias.msgType = :invitation) OR
-            ($alias.userReceiver = :current AND $alias.msgType = :promoted) OR
-            ($alias.userReceiver = :current AND $alias.msgType = :wallPost) OR
-            ($alias.userReceiver = :current AND $alias.msgType = :conversation) 
+        $qb->innerJoin("$alias.receivers", 'r');
+        /*$qb->andWhere(
+            $qb->expr()->orX(
+                $qb->andWhere(
+                    $qb->expr()->eq("$alias.sender", $user->getId()),
+                    $qb->expr()->eq("$alias.msgType", Message::MESSAGE_TYPE_OUTBOX)
+                ),
+                $qb->andWhere(
+                    $qb->expr()->in("r", $user->getId()),
+                    $qb->expr()->eq("$alias.msgType", Message::MESSAGE_TYPE_INBOX)
+                )
+            ),
+        );*/
+
+        $qb->andWhere("
+            ($alias.sender = :current AND $alias.msgType = :outbox) OR 
+            (r IN (:currentList) AND $alias.msgType = :inbox) OR
+            (r IN (:currentList) AND $alias.msgType = :invitation) OR
+            (r IN (:currentList) AND $alias.msgType = :promoted) OR
+            (r IN (:currentList) AND $alias.msgType = :wallPost) OR
+            (r IN (:currentList) AND $alias.msgType = :conversation) 
         ");
-        $queryBuilder->setParameters([
+
+        $qb->setParameters([
             'current' => $user,
+            'currentList' => [$user->getId()],
             'inbox' => Message::MESSAGE_TYPE_INBOX,
             'outbox' => Message::MESSAGE_TYPE_OUTBOX,
             'invitation' => Message::MESSAGE_TYPE_INVITATION,

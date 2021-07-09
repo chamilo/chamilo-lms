@@ -44,10 +44,10 @@
     <p class="text-lg">
       From:
       <q-avatar size="32px">
-        <img :src="item['userSender']['illustrationUrl'] + '?w=80&h=80&fit=crop'" />
+        <img :src="item['sender']['illustrationUrl'] + '?w=80&h=80&fit=crop'" />
         <!--              <q-icon name="person" ></q-icon>-->
       </q-avatar>
-      {{ item['userSender']['username'] }}
+      {{ item['sender']['username'] }}
     </p>
 
     <p class="text-lg">

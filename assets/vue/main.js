@@ -108,8 +108,6 @@ store.registerModule(
     })
 );
 
-
-
 // Vuetify.
 import '@mdi/font/css/materialdesignicons.css';
 import 'vuetify/lib/styles/main.sass';

@@ -10,7 +10,7 @@ use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Doctrine\ORM\EntityManager;
 
-class UserRelUserDataPersister
+class UserRelUserDataPersister implements ContextAwareDataPersisterInterface
 {
     private EntityManager $entityManager;
     private ContextAwareDataPersisterInterface $decorated;
@@ -29,13 +29,11 @@ class UserRelUserDataPersister
     public function persist($data, array $context = [])
     {
         $result = $this->decorated->persist($data, $context);
-
-        if (
-            $data instanceof UserRelUser && (
+        if ($data instanceof UserRelUser && (
                 //($context['collection_operation_name'] ?? null) === 'post' ||
                 //($context['graphql_operation_name'] ?? null) === 'create'
                 ($context['item_operation_name'] ?? null) === 'put' // on update
-            )
+        )
         ) {
             if (UserRelUser::USER_RELATION_TYPE_FRIEND === $data->getRelationType()) {
                 //error_log((string)$data->getRelationType());

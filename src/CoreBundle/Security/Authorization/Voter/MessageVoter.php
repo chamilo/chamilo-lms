@@ -69,24 +69,26 @@ class MessageVoter extends Voter
 
         switch ($attribute) {
             case self::CREATE:
-                if ($message->getUserSender() === $user) {
+                if ($message->getSender() === $user) {
                     return true;
                 }
 
                 break;
             case self::VIEW:
-                if ($message->getUserReceiver() === $user) {
+                if ($message->getReceivers()->contains($user)) {
                     return true;
                 }
 
                 break;
             case self::EDIT:
             case self::DELETE:
-                if ($message->getUserReceiver() === $user && Message::MESSAGE_TYPE_INBOX === $message->getMsgType()) {
+                if ($message->getReceivers()->contains($user) &&
+                    Message::MESSAGE_TYPE_INBOX === $message->getMsgType()
+                ) {
                     return true;
                 }
 
-                if ($message->getUserSender() === $user && Message::MESSAGE_TYPE_OUTBOX === $message->getMsgType()) {
+                if ($message->getSender() === $user && Message::MESSAGE_TYPE_OUTBOX === $message->getMsgType()) {
                     return true;
                 }
 

@@ -1,6 +1,6 @@
 import NotificationMixin from './NotificationMixin';
 import { formatDateTime } from '../utils/dates';
-
+import isEmpty from 'lodash/isEmpty';
 export default {
   mixins: [NotificationMixin],
   methods: {
@@ -37,15 +37,19 @@ export default {
     onSendMessageForm() {
       const createForm = this.$refs.createForm;
       createForm.v$.$touch();
-
       if (!createForm.v$.$invalid) {
+
+        let users = [];
         createForm.v$.item.$model.receivers.forEach(user => {
           // Send to inbox
-          createForm.v$.item.$model.userSender = '/api/users/' + this.currentUser.id;
-          createForm.v$.item.$model.userReceiver = user['@id'];
-          createForm.v$.item.$model.msgType = 1;
-          this.create(createForm.v$.item.$model);
+          users.push(user['@id']);
         });
+
+        createForm.v$.item.$model.sender = '/api/users/' + this.currentUser.id;
+        createForm.v$.item.$model.receivers = users;
+        createForm.v$.item.$model.msgType = 1;
+        this.create(createForm.v$.item.$model);
+
       }
     },
     resetForm() {

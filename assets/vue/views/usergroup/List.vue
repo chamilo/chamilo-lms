@@ -127,10 +127,10 @@
 
       <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
 
-      <Column field="userSender" :header="$t('From')" :sortable="false">
+      <Column field="sender" :header="$t('From')" :sortable="false">
         <template #body="slotProps">
           <q-avatar size="40px">
-            <img :src="slotProps.data.userSender.illustrationUrl + '?w=80&h=80&fit=crop'" />
+            <img :src="slotProps.data.sender.illustrationUrl + '?w=80&h=80&fit=crop'" />
           </q-avatar>
 
           <a
@@ -139,7 +139,7 @@
               class="cursor-pointer"
               :class="[ true === slotProps.data.read ? 'font-normal': 'font-semibold']"
           >
-            {{ slotProps.data.userSender.username }}
+            {{ slotProps.data.sender.username }}
           </a>
         </template>
       </Column>
@@ -289,7 +289,7 @@ export default {
 
     filtersSent.value = {
       msgType: 2,
-      userSender: user.id
+      sender: user.id
     }
 
     // inbox
@@ -333,7 +333,7 @@ export default {
       title.value = 'Sent';
       filters.value = {
         msgType: 2,
-        userSender: user.id
+        sender: user.id
       };
       store.dispatch('message/resetList');
       store.dispatch('message/fetchAll', filters.value);
@@ -364,7 +364,7 @@ export default {
     return {
       columns: [
         { label: this.$i18n.t('Title'), field: 'title', name: 'title', sortable: true},
-        { label: this.$i18n.t('Sender'), field: 'userSender', name: 'userSender', sortable: true},
+        { label: this.$i18n.t('Sender'), field: 'sender', name: 'userSender', sortable: true},
         { label: this.$i18n.t('Modified'), field: 'sendDate', name: 'updatedAt', sortable: true},
         { label: this.$i18n.t('Actions'), name: 'action', sortable: false}
       ],

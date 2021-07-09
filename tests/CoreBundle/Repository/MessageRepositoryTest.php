@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\Repository\MessageTagRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use Symfony\Component\Messenger\Transport\InMemoryTransport;
 
 /**
  * @covers \MessageRepository
@@ -24,7 +25,7 @@ class MessageRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
         $repo = self::getContainer()->get(MessageRepository::class);
-
+        $admin = $this->getUser('admin');
         $testUser = $this->createUser('test');
 
         $message =
@@ -32,8 +33,8 @@ class MessageRepositoryTest extends AbstractApiTest
                 ->setTitle('hello')
                 ->setContent('content')
                 ->setMsgType(Message::MESSAGE_TYPE_INBOX)
-                ->setUserSender($this->getUser('admin'))
-                ->setUserReceiver($testUser)
+                ->setSender($admin)
+                ->addReceiver($testUser)
         ;
 
         $this->assertHasNoEntityViolations($message);
@@ -107,8 +108,8 @@ class MessageRepositoryTest extends AbstractApiTest
                     'title' => 'hello',
                     'content' => 'content of hello',
                     'msgType' => Message::MESSAGE_TYPE_INBOX,
-                    'userSender' => $fromUser->getIri(),
-                    'userReceiver' => $toUser->getIri(),
+                    'sender' => $fromUser->getIri(),
+                    'receivers' => [$toUser->getIri()],
                 ],
             ]
         );
@@ -116,6 +117,7 @@ class MessageRepositoryTest extends AbstractApiTest
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(201);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+
         $this->assertJsonContains(
             [
                 '@context' => '/api/contexts/Message',
@@ -129,6 +131,18 @@ class MessageRepositoryTest extends AbstractApiTest
         // 2 Messages: 1 from inbox + 1 from outbox.
         $this->assertSame(1, $repo->count(['msgType' => Message::MESSAGE_TYPE_INBOX]));
         $this->assertSame(1, $repo->count(['msgType' => Message::MESSAGE_TYPE_OUTBOX]));
+
+        // The message was added in the queue.
+        /** @var InMemoryTransport $transport */
+        $transport = $this->getContainer()->get('messenger.transport.sync_priority_high');
+        $this->assertCount(1, $transport->getSent());
+    }
+
+    public function testCreateMessageWithApiAsOtherUser(): void
+    {
+        $fromUser = $this->createUser('from');
+        $toUser = $this->createUser('to');
+        $repo = self::getContainer()->get(MessageRepository::class);
 
         // Try to send a message as another user.
         $this->createUser('bad');
@@ -148,8 +162,8 @@ class MessageRepositoryTest extends AbstractApiTest
                     'title' => 'hello',
                     'content' => 'content of hello',
                     'msgType' => Message::MESSAGE_TYPE_INBOX,
-                    'userSender' => $fromUser->getIri(),
-                    'userReceiver' => $toUser->getIri(),
+                    'sender' => $fromUser->getIri(),
+                    'receivers' => [$toUser->getIri()],
                 ],
             ]
         );
@@ -164,8 +178,8 @@ class MessageRepositoryTest extends AbstractApiTest
                     'title' => 'hello',
                     'content' => 'content of hello',
                     'msgType' => Message::MESSAGE_TYPE_INBOX,
-                    'userSender' => $toUser->getIri(),
-                    'userReceiver' => $fromUser->getIri(),
+                    'sender' => $toUser->getIri(),
+                    'receivers' => [$fromUser->getIri()],
                 ],
             ]
         );
@@ -195,8 +209,8 @@ class MessageRepositoryTest extends AbstractApiTest
                     'title' => 'hello',
                     'content' => 'content of hello',
                     'msgType' => Message::MESSAGE_TYPE_INBOX,
-                    'userSender' => $fromUser->getIri(),
-                    'userReceiver' => $toUser->getIri(),
+                    'sender' => $fromUser->getIri(),
+                    'receivers' => [$toUser->getIri()],
                 ],
             ]
         );

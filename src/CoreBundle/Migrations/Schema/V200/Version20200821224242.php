@@ -43,12 +43,17 @@ final class Version20200821224242 extends AbstractMigrationChamilo
         }
 
         $this->addSql('UPDATE message SET parent_id = NULL WHERE parent_id = 0');
-
         $this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id NOT IN (SELECT id FROM message)');
 
         if (!$table->hasColumn('group_id')) {
             $this->addSql('ALTER TABLE message CHANGE group_id group_id INT DEFAULT NULL');
         }
+
+        $this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id in (select id FROM message WHERE user_sender_id NOT IN (SELECT id FROM user))');
+        $this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id in (select id FROM message WHERE user_receiver_id NOT IN (SELECT id FROM user))');
+
+        $this->addSql('DELETE FROM message WHERE user_sender_id NOT IN (SELECT id FROM user)');
+        $this->addSql('DELETE FROM message WHERE user_receiver_id IS NOT NULL AND user_receiver_id NOT IN (SELECT id FROM user)');
 
         if (!$table->hasForeignKey('FK_B6BD307FFE54D947')) {
             $this->addSql('ALTER TABLE message ADD CONSTRAINT FK_B6BD307FFE54D947 FOREIGN KEY (group_id) REFERENCES c_group_info (iid) ON DELETE CASCADE');
@@ -61,24 +66,42 @@ final class Version20200821224242 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_B6BD307F727ACA70 ON message (parent_id)');
         }
         $this->addSql('DELETE FROM message WHERE user_sender_id IS NULL OR user_sender_id = 0');
-        $this->addSql('ALTER TABLE message CHANGE user_receiver_id user_receiver_id INT DEFAULT NULL');
+
+        if ($table->hasForeignKey('FK_B6BD307F64482423')) {
+            $this->addSql('ALTER TABLE message DROP FOREIGN KEY FK_B6BD307F64482423');
+        }
+
+        if ($schema->hasTable('message_rel_user')) {
+            $this->addSql(
+                'CREATE TABLE message_rel_user (message_id BIGINT NOT NULL, user_id INT NOT NULL, INDEX IDX_24064D90537A1329 (message_id), INDEX IDX_24064D90A76ED395 (user_id), PRIMARY KEY(message_id, user_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
+            );
+            $this->addSql(
+                'ALTER TABLE message_rel_user ADD CONSTRAINT FK_24064D90537A1329 FOREIGN KEY (message_id) REFERENCES message (id) ON DELETE CASCADE;'
+            );
+            $this->addSql(
+                'ALTER TABLE message_rel_user ADD CONSTRAINT FK_24064D90A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;'
+            );
+        }
+
+        //$this->addSql('ALTER TABLE message CHANGE user_receiver_id user_receiver_id INT DEFAULT NULL');
         $this->addSql('UPDATE message SET user_receiver_id = NULL WHERE user_receiver_id = 0');
 
-        $this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id in (select id FROM message WHERE user_sender_id NOT IN (SELECT id FROM user))');
-        $this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id in (select id FROM message WHERE user_receiver_id NOT IN (SELECT id FROM user))');
+        $connection = $this->getEntityManager()->getConnection();
+        $result = $connection->executeQuery('SELECT * FROM message WHERE user_receiver_id IS NOT NULL');
+        $messages = $result->fetchAllAssociative();
 
-        $this->addSql('DELETE FROM message WHERE user_sender_id NOT IN (SELECT id FROM user)');
-        $this->addSql('DELETE FROM message WHERE user_receiver_id IS NOT NULL AND user_receiver_id NOT IN (SELECT id FROM user)');
+        if ($messages) {
+            foreach ($messages as $message) {
+                $messageId = $message['id'];
+                $receiverId = $message['user_receiver_id'];
+                $this->addSql("INSERT INTO message_rel_user (message_id, user_id) VALUES('$messageId', '$receiverId') ");
+                $this->addSql("UPDATE message SET user_receiver_id = NULL WHERE id = $messageId");
+            }
+        }
 
         if (false === $table->hasForeignKey('FK_B6BD307FF6C43E79')) {
             $this->addSql(
                 'ALTER TABLE message ADD CONSTRAINT FK_B6BD307FF6C43E79 FOREIGN KEY (user_sender_id) REFERENCES user (id)'
-            );
-        }
-
-        if (!$table->hasForeignKey('FK_B6BD307F64482423')) {
-            $this->addSql(
-                'ALTER TABLE message ADD CONSTRAINT FK_B6BD307F64482423 FOREIGN KEY (user_receiver_id) REFERENCES user (id)'
             );
         }
 
@@ -94,18 +117,25 @@ final class Version20200821224242 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX idx_message_status ON message');
         }
 
-        if (!$table->hasIndex('idx_message_user_receiver_type')) {
-            $this->addSql('CREATE INDEX idx_message_user_receiver_type ON message (user_receiver_id, msg_type)');
+        if ($table->hasIndex('idx_message_user_receiver_type')) {
+            $this->addSql('DROP INDEX idx_message_user_receiver_type ON message');
         }
 
+        if ($table->hasIndex('idx_message_receiver_type_send_date')) {
+            $this->addSql('DROP INDEX idx_message_receiver_type_send_date ON message');
+        }
+
+        if ($table->hasIndex('idx_message_user_receiver')) {
+            $this->addSql('DROP INDEX idx_message_user_receiver ON message');
+        }
+
+        if ($table->hasIndex('idx_message_user_sender_user_receiver')) {
+            $this->addSql('DROP INDEX idx_message_user_sender_user_receiver ON message');
+        }
+
+        //ALTER TABLE message DROP user_receiver_id;
         if (!$table->hasIndex('idx_message_type')) {
             $this->addSql('CREATE INDEX idx_message_type ON message (msg_type)');
-        }
-
-        if (!$table->hasIndex('idx_message_receiver_type_send_date')) {
-            $this->addSql(
-                'CREATE INDEX idx_message_receiver_type_send_date ON message (user_receiver_id, msg_type, send_date)'
-            );
         }
 
         //$this->addSql('ALTER TABLE message CHANGE msg_status msg_status SMALLINT NOT NULL;');

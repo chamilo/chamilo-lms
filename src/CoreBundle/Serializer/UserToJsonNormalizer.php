@@ -466,7 +466,7 @@ final class UserToJsonNormalizer
 
         // Message
         $criteria = [
-            'userSender' => $userId,
+            'sender' => $userId,
         ];
         $result = $em->getRepository(Message::class)->findBy($criteria);
         $messageList = [];
@@ -474,13 +474,16 @@ final class UserToJsonNormalizer
         foreach ($result as $item) {
             $date = $item->getSendDate()->format($dateFormat);
             $userName = '';
-            if ($item->getUserReceiver()) {
-                $userName = $item->getUserReceiver()->getUsername();
+            if ($item->getReceivers()) {
+                foreach ($item->getReceivers() as $receiver) {
+                    $userName = ', '.$receiver->getUsername();
+                }
             }
+
             $list = [
                 'Title: '.$item->getTitle(),
                 'Sent date: '.$date,
-                'To user: '.$userName,
+                'To users: '.$userName,
                 'Type: '.$item->getMsgType(),
             ];
             $messageList[] = implode(', ', $list);

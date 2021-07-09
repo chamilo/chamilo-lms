@@ -31,6 +31,7 @@ api_platform:
     enable_docs: true
     enable_entrypoint: true
     show_webby: false
+    messenger: true
     defaults:
         pagination_client_items_per_page: true
         cache_headers:
@@ -49,3 +50,9 @@ api_platform:
 
 #    mercure:
 #        hub_url: '%env(MERCURE_SUBSCRIBE_URL)%'
+
+#doctrine:
+#    orm:
+#        filters:
+#            user_filter:
+#                class: Chamilo\CoreBundle\Filter\UserFilter

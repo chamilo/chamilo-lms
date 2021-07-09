@@ -3,27 +3,47 @@
     <Toolbar
         :handle-send="onSendMessageForm"
     />
-    <DocumentsForm
+    <MessageForm
       ref="createForm"
       :values="item"
       :errors="violations"
     >
-    <VueMultiselect
-        placeholder="To"
-        v-model="item.receivers"
-        :loading="isLoadingSelect"
-        :options="users"
-        :multiple="true"
-        :searchable="true"
-        :internal-search="false"
-        @search-change="asyncFind"
-        limit-text="3"
-        limit="3"
-        label="username"
-        track-by="id"
-    />
+      <VueMultiselect
+          placeholder="To"
+          v-model="item.receivers"
+          :loading="isLoadingSelect"
+          :options="users"
+          :multiple="true"
+          :searchable="true"
+          :internal-search="false"
+          @search-change="asyncFind"
+          limit-text="3"
+          limit="3"
+          label="username"
+          track-by="id"
+          :allow-empty="false"
+          @input="v$.item.receivers.$touch()"
+      />
 
-    <TinyEditor
+
+      <!--          @filter-abort="abortFilterFn"-->
+<!--      <q-select-->
+<!--          filled-->
+<!--          v-model="item.receivers"-->
+<!--          use-input-->
+<!--          use-chips-->
+<!--          :options="users"-->
+<!--          input-debounce="0"-->
+<!--          label="Lazy filter"-->
+<!--          @filter="asyncFind"-->
+<!--          style="width: 250px"-->
+<!--          hint="With use-chips"-->
+<!--          :error-message="receiversErrors"-->
+<!--      />-->
+
+
+
+      <TinyEditor
         v-model="item.content"
         required
         :init="{
@@ -44,19 +64,20 @@
         }
         "
     />
-    </DocumentsForm>
+    </MessageForm>
     <Loading :visible="isLoading" />
 </template>
+
 <style src="vue-multiselect/dist/vue-multiselect.css"></style>
+
 <script>
 import {mapActions, mapGetters, useStore} from 'vuex';
 import { createHelpers } from 'vuex-map-fields';
-import DocumentsForm from '../../components/documents/Form.vue';
+import MessageForm from '../../components/message/Form.vue';
 import Loading from '../../components/Loading.vue';
 import Toolbar from '../../components/Toolbar.vue';
 import CreateMixin from '../../mixins/CreateMixin';
 import {ref} from "vue";
-import isEmpty from "lodash/isEmpty";
 import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
 import useVuelidate from "@vuelidate/core";
@@ -75,12 +96,14 @@ export default {
   components: {
     Loading,
     Toolbar,
-    DocumentsForm,
+    MessageForm,
     VueMultiselect
   },
   setup () {
     const users = ref([]);
+
     const isLoadingSelect = ref(false);
+    const isTouched = ref(false);
 
     function asyncFind (query) {
       if (query.toString().length < 3) {
@@ -101,6 +124,7 @@ export default {
         console.log(error);
       });
     }
+
 
     return {v$: useVuelidate(), users, asyncFind, isLoadingSelect};
   },

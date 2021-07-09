@@ -7072,6 +7072,10 @@ function api_mail_html(
     }
 
     try {
+        $bus = Container::getMessengerBus();
+        //$sendMessage = new \Chamilo\CoreBundle\Message\SendMessage();
+        //$bus->dispatch($sendMessage);
+
         $message = new TemplatedEmail();
         $message->subject($subject);
 

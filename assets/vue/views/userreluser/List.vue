@@ -92,7 +92,7 @@
 
       <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
 
-      <Column field="userSender" :header="$t('User')" :sortable="false">
+      <Column field="sender" :header="$t('User')" :sortable="false">
         <template #body="slotProps">
           <q-avatar size="40px">
             <img :src="slotProps.data.friend.illustrationUrl + '?w=80&h=80&fit=crop'" />

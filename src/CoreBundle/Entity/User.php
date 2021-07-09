@@ -157,10 +157,10 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected ?string $apiToken = null;
 
     /**
-     * @Assert\NotBlank()
      * @ApiProperty(iri="http://schema.org/name")
      * @ORM\Column(name="firstname", type="string", length=64, nullable=true)
      */
+    #[Assert\NotBlank]
     #[Groups([
         'user:read',
         'user:write',
@@ -226,11 +226,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     /**
      * @Groups({"user:read", "user:write", "user_json:read"})
-     * @Assert\NotBlank()
-     * @Assert\Email()
      *
      * @ORM\Column(name="email", type="string", length=100)
      */
+    #[Assert\NotBlank]
+    #[Assert\Email]
     protected string $email;
 
     /**
@@ -239,10 +239,10 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected bool $locked;
 
     /**
-     * @Assert\NotBlank()
      * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="enabled", type="boolean")
      */
+    #[Assert\NotBlank]
     protected bool $enabled;
 
     /**
@@ -739,7 +739,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      *
      * @ORM\OneToMany(
      *     targetEntity="Message",
-     *     mappedBy="userSender",
+     *     mappedBy="sender",
      *     cascade={"persist", "remove"},
      *     orphanRemoval=true
      * )
@@ -749,11 +749,10 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @var Collection<int, Message>|Message[]
      *
-     * @ORM\OneToMany(
+     * @ORM\ManyToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\Message",
-     *     mappedBy="userReceiver",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
+     *     mappedBy="receivers",
+     *     cascade={"persist", "remove"}
      * )
      */
     protected Collection $receivedMessages;

@@ -127,10 +127,10 @@
 
       <Column selectionMode="multiple" style="width: 3rem" :exportable="false"></Column>
 
-      <Column field="userSender" :header="$t('From')" :sortable="false">
+      <Column field="sender" :header="$t('From')" :sortable="false">
         <template #body="slotProps">
           <q-avatar size="40px">
-            <img :src="slotProps.data.userSender.illustrationUrl + '?w=80&h=80&fit=crop'" />
+            <img :src="slotProps.data.sender.illustrationUrl + '?w=80&h=80&fit=crop'" />
           </q-avatar>
 
           <a
@@ -139,7 +139,7 @@
               class="cursor-pointer"
               :class="[ true === slotProps.data.read ? 'font-normal': 'font-semibold']"
           >
-            {{ slotProps.data.userSender.username }}
+            {{ slotProps.data.sender.username }}
           </a>
         </template>
       </Column>
@@ -179,7 +179,7 @@
         <!--      </template>-->
       </Column>
 
-      <Column field="sendDate" :header="$t('Send date')" :sortable="true">
+      <Column field="sendDate" :header="$t('Send date')" :sortable="false">
         <template #body="slotProps">
           {{$luxonDateTime.fromISO(slotProps.data.sendDate).toRelative() }}
         </template>
@@ -289,13 +289,13 @@ export default {
 
     filtersSent.value = {
       msgType: 2,
-      userSender: user.id
+      sender: user.id
     }
 
     // inbox
     filters.value = {
       msgType: 1,
-      userReceiver: user.id
+      receivers: [user.id]
     };
 
     // Get user tags.
@@ -312,7 +312,7 @@ export default {
       title.value = 'Inbox';
       filters.value = {
         msgType: 1,
-        userReceiver: user.id,
+        receivers: [user.id],
       };
       store.dispatch('message/resetList');
       store.dispatch('message/fetchAll', filters.value);
@@ -322,7 +322,7 @@ export default {
       title.value = 'Unread';
       filters.value = {
         msgType: 1,
-        userReceiver: user.id,
+        receivers: [user.id],
         read: false
       };
       store.dispatch('message/resetList');
@@ -333,7 +333,7 @@ export default {
       title.value = 'Sent';
       filters.value = {
         msgType: 2,
-        userSender: user.id
+        sender: user.id
       };
       store.dispatch('message/resetList');
       store.dispatch('message/fetchAll', filters.value);
@@ -343,7 +343,7 @@ export default {
       title.value = tag.tag;
       filters.value = {
         msgType: 1,
-        userReceiver: user.id,
+        receivers: [user.id],
         tags: [tag]
       };
       store.dispatch('message/resetList');
@@ -364,7 +364,7 @@ export default {
     return {
       columns: [
         { label: this.$i18n.t('Title'), field: 'title', name: 'title', sortable: true},
-        { label: this.$i18n.t('Sender'), field: 'userSender', name: 'userSender', sortable: true},
+        { label: this.$i18n.t('Sender'), field: 'sender', name: 'sender', sortable: true},
         { label: this.$i18n.t('Modified'), field: 'sendDate', name: 'updatedAt', sortable: true},
         { label: this.$i18n.t('Actions'), name: 'action', sortable: false}
       ],
@@ -493,7 +493,7 @@ export default {
       this.resetList = true;
     },
     reloadHandler() {
-      this.onUpdateOptions(this.options);
+      this.onUpdateOptions();
     },
     markAsUnReadMultiple(){
       console.log('markAsUnReadMultiple');

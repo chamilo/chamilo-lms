@@ -6,6 +6,7 @@ import messageRoutes from './message';
 import userRoutes from './user';
 import userGroupRoutes from './usergroup';
 import userRelUserRoutes from './userreluser';
+import calendarEventRoutes from './ccalendarevent';
 
 //import courseCategoryRoutes from './coursecategory';
 import documents from './documents';
@@ -96,6 +97,7 @@ const router = createRouter({
         userRoutes,
         userGroupRoutes,
         userRelUserRoutes,
+        calendarEventRoutes
     ]
 });
 

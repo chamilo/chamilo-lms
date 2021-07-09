@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Room;
@@ -13,10 +14,11 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CCalendarEvent.
+ * Calendar events.
  *
  * @ORM\Table(
  *     name="c_calendar_event",
@@ -25,6 +27,36 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity
  */
+#[ApiResource(
+    collectionOperations: [
+        'get' => [
+            'security' => "is_granted('VIEW', object)",  // the get collection is also filtered by MessageExtension.php
+        ],
+        'post' => [
+            'security_post_denormalize' => "is_granted('CREATE', object)",
+        ],
+    ],
+    itemOperations: [
+        'get' => [
+            'security' => "is_granted('VIEW', object)",
+        ],
+        'put' => [
+            'security' => "is_granted('EDIT', object)",
+        ],
+        'delete' => [
+            'security' => "is_granted('DELETE', object)",
+        ],
+    ],
+    attributes: [
+        'security' => "is_granted('ROLE_USER')",
+    ],
+    denormalizationContext: [
+        'groups' => ['calendar_event:write'],
+    ],
+    normalizationContext: [
+        'groups' => ['calendar_event:read'],
+    ],
+)]
 class CCalendarEvent extends AbstractResource implements ResourceInterface
 {
     /**
@@ -32,27 +64,33 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      */
+    #[Groups(['calendar_event:read', 'calendar_event:write'])]
     protected int $iid;
 
     /**
-     * @Assert\NotBlank()
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
+    #[Assert\NotBlank]
+    #[Groups(['calendar_event:read', 'calendar_event:write'])]
     protected string $title;
 
     /**
      * @ORM\Column(name="content", type="text", nullable=true)
      */
+    #[Assert\NotBlank]
+    #[Groups(['calendar_event:read', 'calendar_event:write'])]
     protected ?string $content = null;
 
     /**
      * @ORM\Column(name="start_date", type="datetime", nullable=true)
      */
+    #[Groups(['calendar_event:read', 'calendar_event:write'])]
     protected ?DateTime $startDate = null;
 
     /**
      * @ORM\Column(name="end_date", type="datetime", nullable=true)
      */
+    #[Groups(['calendar_event:read', 'calendar_event:write'])]
     protected ?DateTime $endDate = null;
 
     /**
@@ -77,6 +115,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="all_day", type="integer", nullable=false)
      */
+    #[Groups(['calendar_event:read', 'calendar_event:write'])]
     protected int $allDay;
 
     /**
@@ -87,6 +126,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     /**
      * @ORM\Column(name="color", type="string", length=100, nullable=true)
      */
+    #[Groups(['calendar_event:read', 'calendar_event:write'])]
     protected ?string $color = null;
 
     /**
@@ -109,6 +149,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
         $this->children = new ArrayCollection();
         $this->attachments = new ArrayCollection();
         $this->repeatEvents = new ArrayCollection();
+        $this->allDay = 0;
     }
 
     public function __toString(): string

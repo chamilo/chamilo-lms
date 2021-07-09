@@ -158,9 +158,27 @@ class ResourceListener
         }
 
         if (null === $parentNode) {
-            // Last chance. Try getting the parent node from the resource.
+            // Try getting the parent node from the resource.
             if (null !== $resource->getParent()) {
                 $parentNode = $resource->getParent()->getResourceNode();
+            }
+        }
+
+        // Last chance check parentResourceNodeId from request.
+        if (null !== $request && null === $parentNode) {
+            $resourceNodeIdFromRequest = $request->getCurrentRequest()->get('parentResourceNodeId');
+            if (empty($resourceNodeIdFromRequest)) {
+                $contentData = $request->getCurrentRequest()->getContent();
+                $contentData = json_decode($contentData, true);
+                $resourceNodeIdFromRequest = $contentData['parentResourceNodeId'] ?? '';
+            }
+
+            if (!empty($resourceNodeIdFromRequest)) {
+                $nodeRepo = $em->getRepository(ResourceNode::class);
+                $parent = $nodeRepo->find($resourceNodeIdFromRequest);
+                if (null !== $parent) {
+                    $parentNode = $parent;
+                }
             }
         }
 

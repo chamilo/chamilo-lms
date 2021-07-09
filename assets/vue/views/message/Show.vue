@@ -18,6 +18,15 @@
         >
           <v-icon icon="mdi-reply" />
         </v-btn>
+
+        <v-btn
+            tile
+            icon
+            @click="createEvent"
+        >
+          <v-icon icon="mdi-calendar-plus" />
+        </v-btn>
+
       </template>
     </Toolbar>
 
@@ -192,6 +201,11 @@ export default {
       router.push({name: `${servicePrefix}Reply`, query: params});
     }
 
+    function createEvent() {
+      let params = route.query;
+      router.push({name: `CCalendarEventCreate`, query: params});
+    }
+
     function asyncFind (query) {
       if (query.toString().length < 3) {
         return;
@@ -215,7 +229,12 @@ export default {
 
     return {
       v$: useVuelidate(), tags, isLoadingSelect, item,
-      addTag, addTagToMessage, removeTagFromMessage, asyncFind, reply
+      addTag,
+      addTagToMessage,
+      removeTagFromMessage,
+      asyncFind,
+      reply,
+      createEvent
     };
   },
   mixins: [ShowMixin, NotificationMixin],

@@ -5,7 +5,7 @@ import router from './router';
 import store from './store';
 import axios from 'axios'
 
-// Services
+// Services.
 
 import courseCategoryService from './services/coursecategory';
 import documentsService from './services/documents';
@@ -17,7 +17,7 @@ import messageService from './services/message';
 import userService from './services/user';
 import userGroupService from './services/usergroup';
 import userRelUserService from './services/userreluser';
-
+import calendarEventService from './services/ccalendarevent';
 
 import makeCrudModule from './store/modules/crud';
 //import vuetify from './plugins/vuetify' // path to vuetify export
@@ -56,6 +56,13 @@ store.registerModule(
     'documents',
     makeCrudModule({
         service: documentsService
+    })
+);
+
+store.registerModule(
+    'ccalendarevent',
+    makeCrudModule({
+        service: calendarEventService
     })
 );
 

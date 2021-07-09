@@ -16,16 +16,16 @@ class FrmAdd extends FormValidator
     /**
      * FrmAdd constructor.
      *
-     * @param string          $name
-     * @param array           $attributes
-     * @param Platform|null   $platform
+     * @param string        $name
+     * @param array         $attributes
+     * @param Platform|null $platform
      */
     public function __construct(
         $name,
         $attributes = [],
         Platform $platform = null
     ) {
-        parent::__construct($name, 'POST', '', '', $attributes, self::LAYOUT_HORIZONTAL, true);
+        parent::__construct($name, 'POST', '', '', $attributes, self::LAYOUT_HORIZONTAL);
 
         $this->platform = $platform;
     }
@@ -60,7 +60,7 @@ class FrmAdd extends FormValidator
             $this->platform = new Platform();
         }
 
-        $defaults['issuer'] =  $this->platform->getIssuer();
+        $defaults['issuer'] = $this->platform->getIssuer();
         $defaults['auth_login_url'] = $this->platform->getAuthLoginUrl();
         $defaults['auth_token_url'] = $this->platform->getAuthTokenUrl();
         $defaults['key_set_url'] = $this->platform->getKeySetUrl();
@@ -71,7 +71,7 @@ class FrmAdd extends FormValidator
         $this->setDefaults($defaults);
     }
 
-    public function returnForm()
+    public function returnForm(): string
     {
         $js = "<script>
             </script>";

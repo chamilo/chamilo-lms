@@ -16,16 +16,16 @@ class FrmEdit extends FormValidator
     /**
      * FrmAdd constructor.
      *
-     * @param string          $name
-     * @param array           $attributes
-     * @param Platform|null   $platform
+     * @param string        $name
+     * @param array         $attributes
+     * @param Platform|null $platform
      */
     public function __construct(
         $name,
         $attributes = [],
         Platform $platform = null
     ) {
-        parent::__construct($name, 'POST', '', '', $attributes, self::LAYOUT_HORIZONTAL, true);
+        parent::__construct($name, 'POST', '', '', $attributes, self::LAYOUT_HORIZONTAL);
 
         $this->platform = $platform;
     }
@@ -37,7 +37,7 @@ class FrmEdit extends FormValidator
      *
      * @throws Exception
      */
-    public function build($globalMode = true)
+    public function build(bool $globalMode = true)
     {
         $plugin = LtiProviderPlugin::create();
         $this->addHeader($plugin->get_lang('ConnectionDetails'));
@@ -62,7 +62,7 @@ class FrmEdit extends FormValidator
     public function setDefaultValues()
     {
         $defaults = [];
-        $defaults['issuer'] =  $this->platform->getIssuer();
+        $defaults['issuer'] = $this->platform->getIssuer();
         $defaults['auth_login_url'] = $this->platform->getAuthLoginUrl();
         $defaults['auth_token_url'] = $this->platform->getAuthTokenUrl();
         $defaults['key_set_url'] = $this->platform->getKeySetUrl();

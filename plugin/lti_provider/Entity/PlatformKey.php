@@ -47,19 +47,15 @@ class PlatformKey
      *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
      * Set id.
-     *
-     * @param int $id
-     *
-     * @return Platform
      */
-    public function setId($id)
+    public function setId(int $id): PlatformKey
     {
         $this->id = $id;
 
@@ -72,7 +68,7 @@ class PlatformKey
      *
      * @return string
      */
-    public function getKid()
+    public function getKid(): string
     {
         return $this->kid;
     }
@@ -82,7 +78,7 @@ class PlatformKey
      *
      * @param string $kid
      */
-    public function setKid($kid)
+    public function setKid(string $kid)
     {
         $this->kid = $kid;
     }
@@ -92,7 +88,7 @@ class PlatformKey
      *
      * @return string
      */
-    public function getPrivateKey()
+    public function getPrivateKey(): string
     {
         return $this->privateKey;
     }
@@ -102,9 +98,9 @@ class PlatformKey
      *
      * @param string $privateKey
      *
-     * @return Platform
+     * @return PlatformKey
      */
-    public function setPrivateKey($privateKey)
+    public function setPrivateKey(string $privateKey): PlatformKey
     {
         $this->privateKey = $privateKey;
 
@@ -114,7 +110,7 @@ class PlatformKey
     /**
      * @return string
      */
-    public function getPublicKey()
+    public function getPublicKey(): string
     {
         return $this->publicKey;
     }
@@ -126,6 +122,4 @@ class PlatformKey
     {
         $this->publicKey = $publicKey;
     }
-
-
 }

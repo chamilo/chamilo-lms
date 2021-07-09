@@ -11,29 +11,31 @@ class Lti13Cookie implements Lti1p3Cookie
             return $_COOKIE[$name];
         }
         // Look for backup cookie if same site is not supported by the user's browser.
-        if (isset($_COOKIE["LEGACY_" . $name])) {
-            return $_COOKIE["LEGACY_" . $name];
+        if (isset($_COOKIE["LEGACY_".$name])) {
+            return $_COOKIE["LEGACY_".$name];
         }
+
         return false;
     }
 
     public function setCookie($name, $value, $exp = 3600, $options = []): self
     {
         $cookieOptions = [
-            'expires' => time() + $exp
+            'expires' => time() + $exp,
         ];
 
         // SameSite none and secure will be required for tools to work inside iframes
         $sameSiteOptions = [
             'samesite' => 'None',
             'secure' => false,
-            'httponly' => true
+            'httponly' => true,
         ];
 
         setcookie($name, $value, array_merge($cookieOptions, $sameSiteOptions, $options));
 
         // Set a second fallback cookie in the event that "SameSite" is not supported
-        setcookie("LEGACY_" . $name, $value, array_merge($cookieOptions, $options));
+        setcookie("LEGACY_".$name, $value, array_merge($cookieOptions, $options));
+
         return $this;
     }
 }

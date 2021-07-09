@@ -4,7 +4,7 @@
 $cidReset = true;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
-require_once __DIR__ . '/LtiProviderPlugin.php';
+require_once __DIR__.'/LtiProviderPlugin.php';
 
 api_protect_admin_script();
 

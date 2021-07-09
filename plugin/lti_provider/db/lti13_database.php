@@ -1,19 +1,16 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\LtiProvider\Platform;
-use Chamilo\PluginBundle\Entity\LtiProvider\PlatformKey;
 use ChamiloSession as Session;
-use Packback\Lti1p3;
 use Packback\Lti1p3\Interfaces;
-use Packback\Lti1p3\LtiRegistration;
 use Packback\Lti1p3\LtiDeployment;
-use Packback\Lti1p3\OidcException;
+use Packback\Lti1p3\LtiRegistration;
 
 class Lti13Database implements Interfaces\Database
 {
 
-    public function findRegistrationByIssuer($iss, $clientId = null) {
+    public function findRegistrationByIssuer($iss, $clientId = null)
+    {
         $ltiCustomers = $this->getLtiConnection();
         if (empty($ltiCustomers[$iss])) {
             return false;
@@ -33,16 +30,8 @@ class Lti13Database implements Interfaces\Database
             ->setToolPrivateKey($this->getPrivateKey());
     }
 
-    public function findDeployment($iss, $deploymentId, $clientId = null) {
-        if (!in_array($deploymentId, $_SESSION['iss'][$iss]['deployment'])) {
-            return false;
-        }
-        return LtiDeployment::new()
-                ->setDeploymentId($deploymentId);
-    }
-
-    private function getLtiConnection() {
-
+    private function getLtiConnection(): array
+    {
         $em = Database::getManager();
         $platforms = $em->getRepository('ChamiloPluginBundle:LtiProvider\Platform')->findAll();
 
@@ -50,19 +39,21 @@ class Lti13Database implements Interfaces\Database
         foreach ($platforms as $platform) {
             $issuer = $platform->getIssuer();
             $ltiCustomers[$issuer] = [
-              'client_id' => $platform->getClientId(),
-              'auth_login_url' => $platform->getAuthLoginUrl(),
-              'auth_token_url' => $platform->getAuthTokenUrl(),
-              'key_set_url' => $platform->getKeySetUrl(),
-              'kid' => $platform->getKid(),
-              'deployment' => [$platform->getDeploymentId()]
+                'client_id' => $platform->getClientId(),
+                'auth_login_url' => $platform->getAuthLoginUrl(),
+                'auth_token_url' => $platform->getAuthTokenUrl(),
+                'key_set_url' => $platform->getKeySetUrl(),
+                'kid' => $platform->getKid(),
+                'deployment' => [$platform->getDeploymentId()],
             ];
         }
         Session::write('iss', $ltiCustomers);
+
         return $ltiCustomers;
     }
 
-    private function getPrivateKey() {
+    private function getPrivateKey()
+    {
         $privateKey = '';
         $platformKey = Database::getManager()
             ->getRepository('ChamiloPluginBundle:LtiProvider\PlatformKey')
@@ -70,6 +61,16 @@ class Lti13Database implements Interfaces\Database
         if ($platformKey) {
             $privateKey = $platformKey->getPrivateKey();
         }
+
         return $privateKey;
+    }
+
+    public function findDeployment($iss, $deploymentId, $clientId = null)
+    {
+        if (!in_array($deploymentId, $_SESSION['iss'][$iss]['deployment'])) {
+            return false;
+        }
+
+        return LtiDeployment::new()->setDeploymentId($deploymentId);
     }
 }

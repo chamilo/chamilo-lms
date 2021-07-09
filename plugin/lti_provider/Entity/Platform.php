@@ -71,7 +71,7 @@ class Platform
      *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -83,7 +83,7 @@ class Platform
      *
      * @return Platform
      */
-    public function setId($id)
+    public function setId(int $id): Platform
     {
         $this->id = $id;
 
@@ -96,9 +96,19 @@ class Platform
      *
      * @return string
      */
-    public function getKid()
+    public function getKid(): string
     {
         return $this->kid;
+    }
+
+    /**
+     * Set kid.
+     *
+     * @param string $kid
+     */
+    public function setKid(string $kid)
+    {
+        $this->kid = $kid;
     }
 
     /**
@@ -106,7 +116,7 @@ class Platform
      *
      * @return string
      */
-    public function getIssuer()
+    public function getIssuer(): string
     {
         return $this->issuer;
     }
@@ -126,7 +136,7 @@ class Platform
      *
      * @return string
      */
-    public function getClientId()
+    public function getClientId(): string
     {
         return $this->clientId;
     }
@@ -146,7 +156,7 @@ class Platform
      *
      * @return string
      */
-    public function getAuthLoginUrl()
+    public function getAuthLoginUrl(): string
     {
         return $this->authLoginUrl;
     }
@@ -166,7 +176,7 @@ class Platform
      *
      * @return string
      */
-    public function getAuthTokenUrl()
+    public function getAuthTokenUrl(): string
     {
         return $this->authTokenUrl;
     }
@@ -183,15 +193,17 @@ class Platform
 
     /**
      * Get key set URL
+     *
      * @return string
      */
-    public function getKeySetUrl()
+    public function getKeySetUrl(): string
     {
         return $this->keySetUrl;
     }
 
     /**
      * Set key set URL
+     *
      * @param string $keySetUrl
      */
     public function setKeySetUrl(string $keySetUrl)
@@ -204,7 +216,7 @@ class Platform
      *
      * @return string
      */
-    public function getDeploymentId()
+    public function getDeploymentId(): string
     {
         return $this->deploymentId;
     }
@@ -218,16 +230,4 @@ class Platform
     {
         $this->deploymentId = $deploymentId;
     }
-
-    /**
-     * Set kid.
-     *
-     * @param string $kid
-     */
-    public function setKid($kid)
-    {
-        $this->kid = $kid;
-    }
-
-
 }

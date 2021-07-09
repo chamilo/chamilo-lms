@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 $cidReset = true;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
-require_once __DIR__ . '/LtiProviderPlugin.php';
+require_once __DIR__.'/LtiProviderPlugin.php';
 
 api_block_anonymous_users(false);
 

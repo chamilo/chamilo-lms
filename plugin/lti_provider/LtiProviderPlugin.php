@@ -3,8 +3,7 @@
 
 use Chamilo\PluginBundle\Entity\LtiProvider\PlatformKey;
 use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\OptimisticLockException;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -32,7 +31,8 @@ class LtiProviderPlugin extends Plugin
         }
 
         $pkHtml = '<div class="form-group ">
-                    <label for="lti_provider_public_key" class="col-sm-2 control-label">'.$this->get_lang('PublicKey').'</label>
+                    <label for="lti_provider_public_key" class="col-sm-2 control-label">'
+            .$this->get_lang('PublicKey').'</label>
                     <div class="col-sm-8">
                         <pre>'.$publicKey.'</pre>
                         <p class="help-block"></p>
@@ -47,28 +47,53 @@ class LtiProviderPlugin extends Plugin
             'login_url' => 'text',
             'redirect_url' => 'text',
             $pkHtml => 'html',
-            'enabled' => 'boolean'
+            'enabled' => 'boolean',
         ];
         parent::__construct($version, $author, $settings);
 
     }
 
     /**
+     * Get the public key
+     *
+     * @return string
+     */
+    public function getPublicKey(): string
+    {
+        $publicKey = '';
+        $platformKey = Database::getManager()
+           ->getRepository('ChamiloPluginBundle:LtiProvider\PlatformKey')
+           ->findOneBy([]);
+
+        if ($platformKey) {
+            $publicKey = $platformKey->getPublicKey();
+        }
+
+        return $publicKey;
+    }
+
+    /**
      * Get the class instance
+     *
      * @staticvar LtiProviderPlugin $result
      * @return LtiProviderPlugin
      */
-    public static function create()
+    public static function create(): LtiProviderPlugin
     {
         static $result = null;
 
         return $result ?: $result = new self();
     }
 
+    public static function isInstructor()
+    {
+        api_is_allowed_to_edit(false, true);
+    }
+
     /**
      * Get the plugin directory name
      */
-    public function get_name()
+    public function get_name(): string
     {
         return 'lti_provider';
     }
@@ -85,7 +110,7 @@ class LtiProviderPlugin extends Plugin
                 $message = get_lang('ErrorCreatingDir').': '.$pluginEntityPath;
                 Display::addFlash(Display::return_message($message, 'error'));
 
-                return false;
+                return;
             }
 
             mkdir($pluginEntityPath, api_get_permissions_for_new_directories());
@@ -98,11 +123,61 @@ class LtiProviderPlugin extends Plugin
     }
 
     /**
+     * @return string
+     */
+    public function getEntityPath(): string
+    {
+        return api_get_path(SYS_PATH).'src/Chamilo/PluginBundle/Entity/'.$this->getCamelCaseName();
+    }
+
+    /**
+     * Creates the plugin tables on database
+     *
+     * @return void
+     */
+    private function createPluginTables(): void
+    {
+        $entityManager = Database::getManager();
+        $connection = $entityManager->getConnection();
+
+        if ($connection->getSchemaManager()->tablesExist(self::TABLE_PLATFORM)) {
+            return;
+        }
+
+        $queries = [
+            "CREATE TABLE plugin_lti_provider_platform (
+                id int NOT NULL AUTO_INCREMENT,
+                issuer varchar(255) NOT NULL,
+                client_id varchar(255) NOT NULL,
+                kid varchar(255) NOT NULL,
+                auth_login_url varchar(255) NOT NULL,
+                auth_token_url varchar(255) NOT NULL,
+                key_set_url varchar(255) NOT NULL,
+                deployment_id varchar(255) NOT NULL,
+                PRIMARY KEY(id)
+            ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
+            "CREATE TABLE plugin_lti_provider_platform_key (
+                    id INT AUTO_INCREMENT NOT NULL,
+                    kid VARCHAR(255) NOT NULL,
+                    public_key LONGTEXT NOT NULL,
+                    private_key LONGTEXT NOT NULL,
+                    PRIMARY KEY(id)
+                ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
+        ];
+
+        foreach ($queries as $query) {
+            Database::query($query);
+        }
+
+    }
+
+    /**
      * Save configuration for plugin.
      *
      * Generate a new key pair for platform when enabling plugin.
      *
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
      *
      * @return $this|Plugin
      */
@@ -139,125 +214,13 @@ class LtiProviderPlugin extends Plugin
     }
 
     /**
-     * Unistall plugin. Clear the database
-     */
-    public function uninstall()
-    {
-        $pluginEntityPath = $this->getEntityPath();
-        $fs = new Filesystem();
-
-        if ($fs->exists($pluginEntityPath)) {
-            $fs->remove($pluginEntityPath);
-        }
-
-        try {
-            $this->dropPluginTables();
-        } catch (DBALException $e) {
-            error_log('Error while uninstalling IMS/LTI plugin: '.$e->getMessage());
-        }
-    }
-
-    /**
-     * Creates the plugin tables on database
-     *
-     * @return boolean
-     * @throws DBALException
-     */
-    private function createPluginTables()
-    {
-        $entityManager = Database::getManager();
-        $connection = $entityManager->getConnection();
-
-        if ($connection->getSchemaManager()->tablesExist(self::TABLE_PLATFORM)) {
-            return true;
-        }
-
-        $queries = [
-            "CREATE TABLE plugin_lti_provider_platform (
-                id int NOT NULL AUTO_INCREMENT,
-                issuer varchar(255) NOT NULL,
-                client_id varchar(255) NOT NULL,
-                kid varchar(255) NOT NULL,
-                auth_login_url varchar(255) NOT NULL,
-                auth_token_url varchar(255) NOT NULL,
-                key_set_url varchar(255) NOT NULL,
-                deployment_id varchar(255) NOT NULL,
-                PRIMARY KEY(id)
-            ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
-            "CREATE TABLE plugin_lti_provider_platform_key (
-                    id INT AUTO_INCREMENT NOT NULL,
-                    kid VARCHAR(255) NOT NULL,
-                    public_key LONGTEXT NOT NULL,
-                    private_key LONGTEXT NOT NULL,
-                    PRIMARY KEY(id)
-                ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB"
-        ];
-
-        foreach ($queries as $query) {
-            Database::query($query);
-        }
-
-        return true;
-    }
-
-    /**
-     * Drops the plugin tables on database
-     *
-     * @return boolean
-     */
-    private function dropPluginTables()
-    {
-        Database::query("DROP TABLE IF EXISTS plugin_lti_provider_platform");
-        Database::query("DROP TABLE IF EXISTS plugin_lti_provider_platform_key");
-        return true;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEntityPath()
-    {
-        return api_get_path(SYS_PATH).'src/Chamilo/PluginBundle/Entity/'.$this->getCamelCaseName();
-    }
-
-    public static function isInstructor()
-    {
-        api_is_allowed_to_edit(false, true);
-    }
-
-    /**
-     * @return null|SimpleXMLElement
-     */
-    private function getRequestXmlElement()
-    {
-        $request = file_get_contents("php://input");
-
-        if (empty($request)) {
-            return null;
-        }
-
-        return new SimpleXMLElement($request);
-    }
-
-    /**
-     * @param array $params
-     */
-    public function trimParams(array &$params)
-    {
-        foreach ($params as $key => $value) {
-            $newValue = preg_replace('/\s+/', ' ', $value);
-            $params[$key] = trim($newValue);
-        }
-    }
-
-    /**
      * Generate a key pair and key id for the platform.
      *
      * Rerturn a associative array like ['kid' => '...', 'private' => '...', 'public' => '...'].
      *
      * @return array
      */
-    private static function generatePlatformKeys()
+    private static function generatePlatformKeys(): array
     {
         // Create the private and public key
         $res = openssl_pkey_new(
@@ -283,19 +246,62 @@ class LtiProviderPlugin extends Plugin
     }
 
     /**
-     * Get the public key
-     *
-     * @return string
+     * Unistall plugin. Clear the database
      */
-    public function getPublicKey() {
-        $publicKey = '';
-        $platformKey = Database::getManager()
-            ->getRepository('ChamiloPluginBundle:LtiProvider\PlatformKey')
-            ->findOneBy([]);
-        if ($platformKey) {
-            $publicKey = $platformKey->getPublicKey();
+    public function uninstall()
+    {
+        $pluginEntityPath = $this->getEntityPath();
+        $fs = new Filesystem();
+
+        if ($fs->exists($pluginEntityPath)) {
+            $fs->remove($pluginEntityPath);
         }
-        return $publicKey;
+
+        try {
+            $this->dropPluginTables();
+        } catch (DBALException $e) {
+            error_log('Error while uninstalling IMS/LTI plugin: '.$e->getMessage());
+        }
+    }
+
+    /**
+     * Drops the plugin tables on database
+     *
+     * @return boolean
+     */
+    private function dropPluginTables(): bool
+    {
+        Database::query("DROP TABLE IF EXISTS plugin_lti_provider_platform");
+        Database::query("DROP TABLE IF EXISTS plugin_lti_provider_platform_key");
+
+        return true;
+    }
+
+    /**
+     * @param array $params
+     */
+    public function trimParams(array &$params)
+    {
+        foreach ($params as $key => $value) {
+            $newValue = preg_replace('/\s+/', ' ', $value);
+            $params[$key] = trim($newValue);
+        }
+    }
+
+    /**
+     * @throws Exception
+     *
+     * @return null|SimpleXMLElement
+     */
+    private function getRequestXmlElement(): ?SimpleXMLElement
+    {
+        $request = file_get_contents("php://input");
+
+        if (empty($request)) {
+            return null;
+        }
+
+        return new SimpleXMLElement($request);
     }
 
 }

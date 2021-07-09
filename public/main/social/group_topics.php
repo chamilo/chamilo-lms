@@ -76,7 +76,6 @@ if (isset($_POST['action'])) {
             $group_id,
             $parent_id,
             $edit_message_id,
-            0,
             $topic_id
         );
     } else {

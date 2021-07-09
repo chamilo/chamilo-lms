@@ -217,7 +217,6 @@ class Notification extends Model
      * @param string $content
      * @param array  $senderInfo                 result of api_get_user_info() or GroupPortalManager:get_group_data()
      * @param array  $attachments
-     * @param array  $smsParameters
      * @param bool   $forceTitleWhenSendingEmail force the use of $title as subject instead of "You have a new message"
      */
     public function saveNotification(
@@ -228,7 +227,6 @@ class Notification extends Model
         $content,
         $senderInfo = [],
         $attachments = [],
-        $smsParameters = [],
         $forceTitleWhenSendingEmail = false
     ) {
         $this->type = (int) $type;

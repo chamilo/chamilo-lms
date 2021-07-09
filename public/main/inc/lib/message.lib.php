@@ -163,7 +163,6 @@ class MessageManager
      * @param int    $sender_id
      * @param bool   $directMessage
      * @param int    $forwardId
-     * @param array  $smsParameters
      * @param bool   $checkCurrentAudioId
      * @param bool   $forceTitleWhenSendingEmail force the use of $title as subject instead of "You have a new message"
      *
@@ -182,7 +181,6 @@ class MessageManager
         $sender_id = 0,
         $directMessage = false,
         $forwardId = 0,
-        $smsParameters = [],
         $checkCurrentAudioId = false,
         $forceTitleWhenSendingEmail = false,
     ) {
@@ -401,7 +399,6 @@ class MessageManager
                         $content,
                         $sender_info,
                         $attachmentAddedByMail,
-                        $smsParameters,
                         $forceTitleWhenSendingEmail
                     );
                 } else {
@@ -435,8 +432,7 @@ class MessageManager
                         $subject,
                         $content,
                         $group_info,
-                        $attachmentAddedByMail,
-                        $smsParameters
+                        $attachmentAddedByMail
                     );
                 }
             }
@@ -870,9 +866,11 @@ class MessageManager
      */
     public static function display_message_for_group($groupId, $topic_id)
     {
-        global $my_group_role;
-        $main_message = Container::getMessageAttachmentRepository()::get_message_by_id($topic_id);
-        if (empty($main_message)) {
+        return '';
+
+        /*global $my_group_role;
+        $message = Container::getMessageRepository()->find($topic_id);
+        if (null === $message) {
             return false;
         }
 
@@ -897,9 +895,8 @@ class MessageManager
         $html = '';
         $items_page_nr = null;
 
-        $user_sender_info = api_get_user_info($main_message['user_sender_id']);
-        $filesAttachments = self::getAttachmentLinkList($main_message['id'], 0);
-        $name = $user_sender_info['complete_name'];
+        $filesAttachments = self::getAttachmentLinkList($message);
+        $name = UserManager::formatUserFullName($message->getSender());
 
         $topic_page_nr = isset($_GET['topics_page_nr']) ? (int) $_GET['topics_page_nr'] : null;
 
@@ -907,19 +904,19 @@ class MessageManager
         $links .= '<div class="btn-group btn-group-sm">';
 
         if ((GROUP_USER_PERMISSION_ADMIN == $my_group_role || GROUP_USER_PERMISSION_MODERATOR == $my_group_role) ||
-            $main_message['user_sender_id'] == $current_user_id
+            $message->getSender()->getId() == $current_user_id
         ) {
             $urlEdit = $webCodePath.'social/message_for_group_form.inc.php?'
                 .http_build_query(
                     [
                         'user_friend' => $current_user_id,
                         'group_id' => $groupId,
-                        'message_id' => $main_message['id'],
+                        'message_id' => $message->getId(),
                         'action' => 'edit_message_group',
-                        'anchor_topic' => 'topic_'.$main_message['id'],
+                        'anchor_topic' => 'topic_'.$message->getId(),
                         'topics_page_nr' => $topic_page_nr,
                         'items_page_nr' => $items_page_nr,
-                        'topic_id' => $main_message['id'],
+                        'topic_id' => $message->getId(),
                     ]
                 );
 
@@ -933,18 +930,18 @@ class MessageManager
             );
         }
 
-        $links .= self::getLikesButton($main_message['id'], $current_user_id, $groupId);
+        $links .= self::getLikesButton($message->getId(), $current_user_id, $groupId);
 
         $urlReply = $webCodePath.'social/message_for_group_form.inc.php?'
             .http_build_query(
                 [
                     'user_friend' => $current_user_id,
                     'group_id' => $groupId,
-                    'message_id' => $main_message['id'],
+                    'message_id' => $message->getId(),
                     'action' => 'reply_message_group',
-                    'anchor_topic' => 'topic_'.$main_message['id'],
+                    'anchor_topic' => 'topic_'.$message->getId(),
                     'topics_page_nr' => $topic_page_nr,
-                    'topic_id' => $main_message['id'],
+                    'topic_id' => $message->getId(),
                 ]
             );
 
@@ -971,9 +968,8 @@ class MessageManager
         $links .= '</div>';
         $links .= '</div>';
 
-        $title = '<h4>'.Security::remove_XSS($main_message['title'], STUDENT, true).$links.'</h4>';
+        $title = '<h4>'.Security::remove_XSS($message->getTitle(), STUDENT, true).$links.'</h4>';
 
-        $userPicture = $user_sender_info['avatar'];
         $main_content .= '<div class="row">';
         $main_content .= '<div class="col-md-2">';
         $main_content .= '<div class="avatar-author">';
@@ -1176,7 +1172,7 @@ class MessageManager
                     $style_class
                 );
             }
-        }
+        }*/
 
         return $html;
     }

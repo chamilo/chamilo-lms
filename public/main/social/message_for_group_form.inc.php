@@ -38,13 +38,13 @@ if (!empty($group_id) && $allowed_action) {
 
     $to_group = $group_info['name'];
     if (!empty($message_id)) {
-        $message_info = MessageManager::get_message_by_id($message_id);
+        /*$message_info = MessageManager::get_message_by_id($message_id);
         if ('reply_message_group' === $allowed_action) {
             $subject = get_lang('Reply').': '.api_xml_http_response_encode($message_info['title']);
         } else {
             $subject = api_xml_http_response_encode($message_info['title']);
             $message = api_xml_http_response_encode($message_info['content']);
-        }
+        }*/
     }
 }
 

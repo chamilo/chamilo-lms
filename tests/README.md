@@ -29,7 +29,7 @@ Install phpunit:
 
 Setup a test database
 
-Create a new env file with named **.env.test.local** with your mysql credentials:
+Create a new env file called **.env.test.local** with your mysql credentials for your new test database.
 
 <pre>
 DATABASE_HOST='127.0.0.1'

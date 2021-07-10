@@ -30,14 +30,14 @@ class CQuiz
 
     /**
      * @var int
-     *
+     * @deprecated Now using iid
      * @ORM\Column(name="c_id", type="integer")
      */
     protected $cId;
 
     /**
      * @var int
-     *
+     * @deprecated Now using iid
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     protected $id;
@@ -751,13 +751,13 @@ class CQuiz
     /**
      * Set id.
      *
-     * @param int $id
+     * @param int $iid
      *
      * @return CQuiz
      */
-    public function setId($id)
+    public function setId($iid)
     {
-        $this->id = $id;
+        $this->iid = $iid;
 
         return $this;
     }
@@ -769,7 +769,7 @@ class CQuiz
      */
     public function getId()
     {
-        return $this->id;
+        return $this->iid;
     }
 
     /**
@@ -832,26 +832,6 @@ class CQuiz
     public function setHideQuestionTitle($hideQuestionTitle)
     {
         $this->hideQuestionTitle = $hideQuestionTitle;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getIid()
-    {
-        return $this->iid;
-    }
-
-    /**
-     * @param int $iid
-     *
-     * @return CQuiz
-     */
-    public function setIid($iid)
-    {
-        $this->iid = $iid;
 
         return $this;
     }

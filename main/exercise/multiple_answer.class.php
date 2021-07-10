@@ -63,8 +63,8 @@ class MultipleAnswer extends Question
         $defaults = [];
         $correct = 0;
         $answer = false;
-        if (!empty($this->id)) {
-            $answer = new Answer($this->id);
+        if (!empty($this->iid)) {
+            $answer = new Answer($this->iid);
             $answer->read();
             if ($answer->nbrAnswers > 0 && !$form->isSubmitted()) {
                 $nb_answers = $answer->nbrAnswers;
@@ -153,7 +153,7 @@ class MultipleAnswer extends Question
         $buttonGroup = [];
         global $text;
         if ($obj_ex->edit_exercise_in_lp == true ||
-            (empty($this->exerciseList) && empty($obj_ex->id))
+            (empty($this->exerciseList) && empty($obj_ex->iid))
         ) {
             // setting the save button here and not in the question class.php
             $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
@@ -174,7 +174,7 @@ class MultipleAnswer extends Question
 
         $defaults['correct'] = $correct;
 
-        if (!empty($this->id)) {
+        if (!empty($this->iid)) {
             $form->setDefaults($defaults);
         } else {
             if ($this->isContent == 1) {
@@ -190,7 +190,7 @@ class MultipleAnswer extends Question
     public function processAnswersCreation($form, $exercise)
     {
         $questionWeighting = 0;
-        $objAnswer = new Answer($this->id);
+        $objAnswer = new Answer($this->iid);
         $nb_answers = $form->getSubmitValue('nb_answers');
 
         for ($i = 1; $i <= $nb_answers; $i++) {

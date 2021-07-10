@@ -239,7 +239,7 @@ if (!$inATest) {
             <div id="question_list">
         ';
 
-        $category_list = TestCategory::getListOfCategoriesNameForTest($objExercise->id, false);
+        $category_list = TestCategory::getListOfCategoriesNameForTest($objExercise->iid, false);
 
         if (is_array($questionList)) {
             foreach ($questionList as $id) {
@@ -358,7 +358,7 @@ if (!$inATest) {
 
                 // Question category
                 $txtQuestionCat = Security::remove_XSS(
-                    TestCategory::getCategoryNameForQuestion($objQuestionTmp->id)
+                    TestCategory::getCategoryNameForQuestion($objQuestionTmp->iid)
                 );
                 if (empty($txtQuestionCat)) {
                     $txtQuestionCat = '-';

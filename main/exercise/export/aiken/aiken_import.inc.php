@@ -250,7 +250,7 @@ function aiken_import_exercise($file)
                 if ($answerId) {
                     $params = [
                         'id_auto' => $answerId,
-                        'id' => $answerId,
+                        'iid' => $answerId,
                     ];
                     Database::update($tableAnswer, $params, ['iid = ?' => [$answerId]]);
                 }

@@ -36,7 +36,7 @@ class CQuizQuestionCategory
 
     /**
      * @var int
-     *
+     * @deprecated Now using iid
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     protected $id;
@@ -106,13 +106,13 @@ class CQuizQuestionCategory
     /**
      * Set id.
      *
-     * @param int $id
+     * @param int $iid
      *
      * @return CQuizQuestionCategory
      */
-    public function setId($id)
+    public function setId($iid)
     {
-        $this->id = $id;
+        $this->iid = $iid;
 
         return $this;
     }
@@ -124,7 +124,7 @@ class CQuizQuestionCategory
      */
     public function getId()
     {
-        return $this->id;
+        return $this->iid;
     }
 
     /**

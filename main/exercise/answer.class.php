@@ -6,13 +6,14 @@ use Chamilo\CourseBundle\Entity\CQuizAnswer;
 
 /**
  * Class Answer
- * Allows to instantiate an object of type Answer
+ * Allows to instantiate an object of type Answer, as a *list* of answers for one question
  * 5 arrays are created to receive the attributes of each answer belonging to a specified question.
  *
  * @author Olivier Brouckaert
  */
 class Answer
 {
+    /* The question of which we want the possible answers */
     public $questionId;
 
     // these are arrays
@@ -124,9 +125,7 @@ class Answer
         $questionId = $this->questionId;
 
         $sql = "SELECT * FROM $table
-                WHERE
-                    c_id = {$this->course_id} AND
-                    question_id ='".$questionId."'
+                WHERE question_id = $questionId
                 ORDER BY position";
 
         $result = Database::query($sql);
@@ -134,7 +133,8 @@ class Answer
 
         // while a record is found
         while ($object = Database::fetch_object($result)) {
-            $this->id[$i] = $object->id;
+            $this->id[$i] = $object->iid;
+            $this->iid[$i] = $object->iid;
             $this->answer[$i] = $object->answer;
             $this->correct[$i] = $object->correct;
             $this->comment[$i] = $object->comment;
@@ -144,7 +144,6 @@ class Answer
             $this->hotspot_type[$i] = $object->hotspot_type;
             $this->destination[$i] = $object->destination;
             $this->autoId[$i] = $object->id_auto;
-            $this->iid[$i] = $object->iid;
             $i++;
         }
         $this->nbrAnswers = $i - 1;
@@ -161,8 +160,7 @@ class Answer
         $questionId = $this->questionId;
 
         $sql = "SELECT * FROM $table
-                WHERE c_id = {$this->course_id}
-                    AND question_id = $questionId
+                WHERE question_id = $questionId
                 ORDER BY position";
 
         $result = Database::query($sql);
@@ -209,16 +207,14 @@ class Answer
         $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $questionId = $this->questionId;
 
-        $sql = "SELECT id FROM
-              $table
-              WHERE c_id = {$this->course_id} AND question_id ='".$questionId."'";
+        $sql = "SELECT iid FROM $table WHERE question_id = $questionId";
 
         $result = Database::query($sql);
         $id = [];
         // while a record is found
         if (Database::num_rows($result) > 0) {
             while ($object = Database::fetch_array($result)) {
-                $id[] = $object['id'];
+                $id[] = $object['iid'];
             }
         }
 
@@ -247,11 +243,11 @@ class Answer
         }
 
         $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
-        $TBL_QUIZ = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $TBL_QUESTION = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $questionId = (int) $this->questionId;
 
-        $sql = "SELECT type FROM $TBL_QUIZ
-                WHERE c_id = {$this->course_id} AND id = $questionId";
+        $sql = "SELECT type FROM $TBL_QUESTION
+                WHERE iid = $questionId";
         $result_question = Database::query($sql);
         $questionType = Database::fetch_array($result_question);
 
@@ -275,7 +271,6 @@ class Answer
                     iid
                 FROM $TBL_ANSWER
                 WHERE
-                    c_id = {$this->course_id} AND
                     question_id='".$questionId."'
                 ORDER BY $field $order";
         $result = Database::query($sql);
@@ -324,11 +319,21 @@ class Answer
      *
      * @author Juan Carlos Ra�a
      *
-     * @return int - answer num
+     * @return int Answer num
      */
     public function selectAutoId($id)
     {
         return isset($this->autoId[$id]) ? $this->autoId[$id] : 0;
+    }
+
+    /**
+     * Returns the unique ID (iid field).
+     *
+     * @return int Answer ID
+     */
+    public function selectId($id)
+    {
+        return isset($this->iid[$id]) ? $this->iid[$id] : 0;
     }
 
     /**
@@ -394,8 +399,33 @@ class Answer
     {
         $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $auto_id = (int) $auto_id;
-        $sql = "SELECT id, answer, id_auto FROM $table
+        $sql = "SELECT iid, answer, id_auto FROM $table
                 WHERE c_id = {$this->course_id} AND id_auto='$auto_id'";
+        $rs = Database::query($sql);
+
+        if (Database::num_rows($rs) > 0) {
+            return Database::fetch_array($rs, 'ASSOC');
+        }
+
+        return false;
+    }
+
+    /**
+     * return array answer by iid. Else return a bool.
+     *
+     * @param int $iid
+     *
+     * @return array
+     */
+    public function selectAnswerById($id)
+    {
+        if (empty($id)) {
+            return false;
+        }
+        $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $id = (int) $id;
+        $sql = "SELECT iid, answer, id_auto FROM $table
+                WHERE iid = $id";
         $rs = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {
@@ -457,7 +487,7 @@ class Answer
                 }
 
                 $list[] = [
-                    'id' => $i,
+                    'iid' => $i,
                     'answer' => $this->answer[$i],
                     'comment' => $this->comment[$i],
                     'grade' => $this->weighting[$i],
@@ -502,7 +532,7 @@ class Answer
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $sql = "SELECT type FROM $table
-                WHERE c_id = {$this->course_id} AND id = '".$this->questionId."'";
+                WHERE iid = {$this->questionId}";
         $res = Database::query($sql);
         if (Database::num_rows($res) <= 0) {
             return null;
@@ -728,7 +758,7 @@ class Answer
                 $em->persist($quizAnswer);
                 $em->flush();
 
-                $iid = $quizAnswer->getIid();
+                $iid = $quizAnswer->getId();
 
                 if ($iid) {
                     $quizAnswer
@@ -736,7 +766,6 @@ class Answer
                         ->setIdAuto($iid);
 
                     $questionType = $this->getQuestionType();
-
                     if (in_array(
                         $questionType,
                         [MATCHING, MATCHING_DRAGGABLE]
@@ -748,6 +777,8 @@ class Answer
                         // Continue to avoid matching question bug if $correctAnswerId returns false
                         // See : https://support.chamilo.org/issues/8334
                         if ($questionType == MATCHING && !$correctAnswerId) {
+                            $em->merge($quizAnswer);
+                            $em->flush();
                             continue;
                         }
                         $correctAnswerAutoId = $answer->selectAutoId($correct);
@@ -821,7 +852,7 @@ class Answer
                 $sql = "DELETE FROM $answerTable
                         WHERE
                             c_id = {$this->course_id} AND
-                            question_id = '".$questionId."' AND
+                            question_id = {$questionId} AND
                             position ='$position'";
                 Database::query($sql);
                 $i++;
@@ -852,7 +883,7 @@ class Answer
      */
     public function duplicate($newQuestion, $course_info = null)
     {
-        $newQuestionId = $newQuestion->id;
+        $newQuestionId = $newQuestion->iid;
 
         if (empty($course_info)) {
             $course_info = $this->course;
@@ -872,7 +903,7 @@ class Answer
 
             if (!empty($origin_options)) {
                 foreach ($origin_options as $item) {
-                    $new_option_list[] = $item['id'];
+                    $new_option_list[] = $item['iid'];
                 }
             }
 
@@ -883,7 +914,7 @@ class Answer
             $i = 0;
             if (!empty($destination_options)) {
                 foreach ($destination_options as $item) {
-                    $fixed_list[$new_option_list[$i]] = $item['id'];
+                    $fixed_list[$new_option_list[$i]] = $item['iid'];
                     $i++;
                 }
             }
@@ -903,7 +934,7 @@ class Answer
                 $temp = [];
                 for ($i = 1; $i <= $this->nbrAnswers; $i++) {
                     $answer = [
-                        'id' => $this->id[$i],
+                        'iid' => $this->iid[$i],
                         'answer' => $this->answer[$i],
                         'correct' => $this->correct[$i],
                         'comment' => $this->comment[$i],
@@ -915,7 +946,7 @@ class Answer
                         'destination' => $this->destination[$i],
                     ];
                     $temp[$answer['position']] = $answer;
-                    $allAnswers[$this->id[$i]] = $this->answer[$i];
+                    $allAnswers[$this->iid[$i]] = $this->answer[$i];
                 }
 
                 foreach ($temp as $answer) {
@@ -950,7 +981,7 @@ class Answer
                     $em->persist($quizAnswer);
                     $em->flush();
 
-                    $answerId = $quizAnswer->getIid();
+                    $answerId = $quizAnswer->getId();
 
                     if ($answerId) {
                         $quizAnswer
@@ -1002,7 +1033,7 @@ class Answer
                     $em->persist($quizAnswer);
                     $em->flush();
 
-                    $answerId = $quizAnswer->getIid();
+                    $answerId = $quizAnswer->getId();
                     $quizAnswer
                         ->setId($answerId)
                         ->setIdAuto($answerId);
@@ -1012,7 +1043,7 @@ class Answer
 
                     $correctAnswers[$answerId] = $correct;
                     $onlyAnswers[$answerId] = $this->answer[$i];
-                    $allAnswers[$this->id[$i]] = $this->answer[$i];
+                    $allAnswers[$this->iid[$i]] = $this->answer[$i];
                 }
             }
 
@@ -1029,7 +1060,7 @@ class Answer
                             $tableAnswer,
                             $params,
                             [
-                                'id = ? AND c_id = ? AND question_id = ? ' => [
+                                'iid = ? AND c_id = ? AND question_id = ? ' => [
                                     $answer_id,
                                     $courseId,
                                     $newQuestionId,

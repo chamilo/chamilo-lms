@@ -41,7 +41,7 @@ class ImsAssessmentItem
     {
         $this->question = $question;
         $this->answer = $this->question->setAnswer();
-        $this->questionIdent = 'QST_'.$question->id;
+        $this->questionIdent = 'QST_'.$question->iid;
     }
 
     /**
@@ -463,7 +463,7 @@ function export_question_qti($questionId, $standalone = true)
         return '';
     }
 
-    $question->id = $qst->id;
+    $question->iid = $qst->iid;
     $question->type = $qst->type;
     $question->question = $qst->question;
     $question->description = $qst->description;

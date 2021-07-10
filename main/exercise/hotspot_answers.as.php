@@ -108,7 +108,7 @@ if (in_array(
     if ($objExercise->attempts > 0) {
         $attempts = Event::getExerciseResultsByUser(
             api_get_user_id(),
-            $objExercise->id,
+            $objExercise->iid,
             $courseId,
             api_get_session_id(),
             $lpId,
@@ -198,14 +198,14 @@ if (!$hideExpectedAnswer) {
     foreach ($result as $hotSpotAnswer) {
         if (RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK == $resultDisable) {
             if (false === $showTotalScoreAndUserChoicesInLastAttempt) {
-                if (!in_array($hotSpotAnswer->getIid(), $hotSpotWithAnswer)) {
+                if (!in_array($hotSpotAnswer->getId(), $hotSpotWithAnswer)) {
                     continue;
                 }
             }
         }
 
         $hotSpot = [];
-        $hotSpot['id'] = $hotSpotAnswer->getIid();
+        $hotSpot['id'] = $hotSpotAnswer->getId();
         $hotSpot['answer'] = $hotSpotAnswer->getAnswer();
 
         switch ($hotSpotAnswer->getHotspotType()) {

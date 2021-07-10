@@ -100,11 +100,11 @@ class ScormExercise
      */
     public function end_body()
     {
-        $button = '<input 
-            id="chamilo_scorm_submit" 
-            class="btn btn-primary" 
-            type="button" 
-            name="chamilo_scorm_submit" 
+        $button = '<input
+            id="chamilo_scorm_submit"
+            class="btn btn-primary"
+            type="button"
+            name="chamilo_scorm_submit"
             value="OK" />';
 
         return '</table><br />'.$button.'</form></body>';
@@ -158,7 +158,7 @@ class ScormExercise
         $em = Database::getManager();
         // Export cquiz data
         /** @var CQuiz $exercise */
-        $exercise = $em->find('ChamiloCourseBundle:CQuiz', $this->exercise->iId);
+        $exercise = $em->find('ChamiloCourseBundle:CQuiz', $this->exercise->iid);
         $exercise->setDescription('');
         $exercise->setTextWhenFinished('');
 

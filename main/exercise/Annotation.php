@@ -41,7 +41,7 @@ class Annotation extends Question
             ['step' => '0.1']
         );
 
-        if (!empty($this->id)) {
+        if (!empty($this->iid)) {
             $form->setDefaults(['weighting' => float_format($this->weighting, 1)]);
         } else {
             if ($this->isContent == 1) {

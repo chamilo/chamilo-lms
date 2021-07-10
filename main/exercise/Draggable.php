@@ -50,10 +50,10 @@ class Draggable extends Question
             if (isset($_POST['moreOptions'])) {
                 $nb_options++;
             }
-        } elseif (!empty($this->id)) {
+        } elseif (!empty($this->iid)) {
             $defaults['orientation'] = in_array($this->extra, ['h', 'v']) ? $this->extra : 'h';
 
-            $answer = new Answer($this->id);
+            $answer = new Answer($this->iid);
             $answer->read();
 
             if ($answer->nbrAnswers > 0) {
@@ -154,7 +154,7 @@ class Draggable extends Question
 
         $form->addGroup($group);
 
-        if (!empty($this->id)) {
+        if (!empty($this->iid)) {
             $form->setDefaults($defaults);
         } else {
             $form->setDefaults(['orientation' => 'h']);
@@ -181,7 +181,7 @@ class Draggable extends Question
         $nb_matches = $form->getSubmitValue('nb_matches');
         $this->weighting = 0;
         $position = 0;
-        $objAnswer = new Answer($this->id);
+        $objAnswer = new Answer($this->iid);
         // Insert the options
         for ($i = 1; $i <= $nb_matches; $i++) {
             $position++;

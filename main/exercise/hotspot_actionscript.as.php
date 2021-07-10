@@ -37,7 +37,7 @@ $course_id = api_get_course_int_id();
 
 // Query db for answers
 if ($answer_type == HOT_SPOT_DELINEATION) {
-    $sql = "SELECT iid, id, answer, hotspot_coordinates, hotspot_type, ponderation
+    $sql = "SELECT iid, answer, hotspot_coordinates, hotspot_type, ponderation
 	        FROM $TBL_ANSWERS
 	        WHERE
 	            c_id = $course_id AND
@@ -45,7 +45,7 @@ if ($answer_type == HOT_SPOT_DELINEATION) {
 	            hotspot_type = 'delineation'
             ORDER BY iid";
 } else {
-    $sql = "SELECT iid, id, answer, hotspot_coordinates, hotspot_type, ponderation
+    $sql = "SELECT iid, answer, hotspot_coordinates, hotspot_type, ponderation
 	        FROM $TBL_ANSWERS
 	        WHERE c_id = $course_id AND question_id = $questionId
 	        ORDER BY position";
@@ -84,7 +84,6 @@ $nmbrTries = 0;
 
 while ($hotspot = Database::fetch_assoc($result)) {
     $hotSpot = [];
-    $hotSpot['id'] = $hotspot['id'];
     $hotSpot['iid'] = $hotspot['iid'];
     $hotSpot['answer'] = $hotspot['answer'];
 
@@ -164,7 +163,7 @@ if (Session::has("hotspot_ordered$questionId")) {
 
     foreach ($hotspotOrdered as $hotspotOrder) {
         foreach ($data['hotspots'] as $hotspot) {
-            if ($hotspot['id'] != $hotspotOrder) {
+            if ($hotspot['iid'] != $hotspotOrder) {
                 continue;
             }
 

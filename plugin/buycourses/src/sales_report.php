@@ -21,7 +21,6 @@ $invoicingEnable = $plugin->get('invoicing_enable') === 'true';
 
 if (isset($_GET['order'])) {
     $sale = $plugin->getSale($_GET['order']);
-
     if (empty($sale)) {
         api_not_allowed(true);
     }
@@ -150,6 +149,8 @@ foreach ($sales as &$sale) {
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => $plugin->get_lang('plugin_title')];
 
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'buycourses/resources/css/style.css');
+$htmlHeadXtra[] = api_get_jqgrid_js();
+$htmlHeadXtra[] = BuyCoursesPlugin::getSalesReportScript($sales, $invoicingEnable);
 
 $templateName = $plugin->get_lang('SalesReport');
 $template = new Template($templateName);

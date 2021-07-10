@@ -2973,6 +2973,111 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Returns the javascript to set the sales report table for courses.
+     *
+     * @param array $sales
+     * @param bool  $invoicingEnable
+     */
+    public static function getSalesReportScript($sales = [], $invoicingEnable = false)
+    {
+        $cols = "
+    '".get_plugin_lang('OrderReference', 'BuyCoursesPlugin')."',
+    '".get_plugin_lang('OrderStatus', 'BuyCoursesPlugin')."',
+    '".get_plugin_lang('OrderDate', 'BuyCoursesPlugin')."',
+    '".get_plugin_lang('PaymentMethod', 'BuyCoursesPlugin')."',
+    '".get_plugin_lang('Price', 'BuyCoursesPlugin')."',
+    '".get_plugin_lang('ProductType', 'BuyCoursesPlugin')."',
+    '".get_plugin_lang('Name', 'BuyCoursesPlugin')."',
+    '".get_lang('UserName')."',
+    '".get_lang('Email')."',";
+        $model = "
+        {name:'reference',index:'reference'  ,height: 'auto', width:70, sorttype:'string', align: 'center'},
+        {name:'status',index:'status'  , height: 'auto',width:70, sorttype:'string', align: 'center'},
+        {name:'date',index:'date'  , height: 'auto', width:70, sorttype:'date', align: 'center'},
+        {name:'payment_type',index:'payment_type'  , height: 'auto', width:70, sorttype:'string', align: 'center'},
+        {name:'total_price',index:'total_price'  ,height: 'auto',  width:70, sorttype:'string', align: 'center'},
+        {name:'product_type',index:'product_type'  ,height: 'auto',  width:70, sorttype:'string'},
+        {name:'product_name',index:'product_name'  ,height: 'auto', /*width:60,*/ sorttype:'string'},
+        {name:'complete_user_name',index:'complete_user_name'  , height: 'auto', width:70, sorttype:'string'},
+        {name:'email',index:'email'  , height: 'auto',/*width:60,*/ sorttype:'string'},  ";
+        if ($invoicingEnable) {
+            $model .= "{name:'invoice',index:'invoice'  , height: 'auto', width:70, sorttype:'string'},";
+            $cols .= "'".get_plugin_lang('Invoice', 'BuyCoursesPlugin')."',";
+        }
+        $cols .= "'".get_lang('Options')."',";
+        $model .= "
+        {name:'options',index:'options'  , height: 'auto',width:80, sortable:false},";
+        $data = '';
+        foreach ($sales as $item) {
+            $option = '';
+            if (!isset($item['complete_user_name'])) {
+                $item['complete_user_name'] = api_get_person_name($item['firstname'], $item['lastname']);
+            }
+            if ($item['invoice'] == 1) {
+                if ($invoicingEnable) {
+                    $item['invoice'] = "<a href='".api_get_path(WEB_PLUGIN_PATH).'buycourses/src/invoice.php?invoice='.$item['id']."&is_service=0"
+                        ."' title='".get_plugin_lang('InvoiceView', 'BuyCoursesPlugin')."'>".
+                        Display::return_icon('default.png', get_plugin_lang('InvoiceView', 'BuyCoursesPlugin'), '', ICON_SIZE_MEDIUM).
+                        "<br/>".$item['num_invoice'].
+                        "</a>";
+                }
+            } else {
+                $item['invoice'] = null;
+            }
+            if ($item['status'] == BuyCoursesPlugin::SALE_STATUS_CANCELED) {
+                $item['status'] = get_plugin_lang('SaleStatusCanceled', 'BuyCoursesPlugin');
+            } elseif ($item['status'] == BuyCoursesPlugin::SALE_STATUS_PENDING) {
+                $item['status'] = get_plugin_lang('SaleStatusPending', 'BuyCoursesPlugin');
+                $option = "<div class='btn-group btn-group-xs' role='group'>".
+                    "<a title='".get_plugin_lang('SubscribeUser', 'BuyCoursesPlugin')."'".
+                    " href='".api_get_self()."?order=".$item['id']."&action=confirm'".
+                    " class='btn btn-default'>".
+                    Display::return_icon('user_subscribe_session.png', get_plugin_lang('SubscribeUser', 'BuyCoursesPlugin'), '', ICON_SIZE_SMALL)
+                    ."</a>".
+                    "<a title='".get_plugin_lang('DeleteOrder', 'BuyCoursesPlugin')."'".
+                    " href='".api_get_self()."?order=".$item['id']."&action=cancel'".
+                    " class='btn btn-default'>".
+                    Display::return_icon('delete.png', get_plugin_lang('DeleteOrder', 'BuyCoursesPlugin'), '', ICON_SIZE_SMALL)
+                    ."</a>".
+                    "</div>";
+            } elseif ($item['status'] == BuyCoursesPlugin::SALE_STATUS_COMPLETED) {
+                $item['status'] = get_plugin_lang('SaleStatusCompleted', 'BuyCoursesPlugin');
+            }
+            $item['options'] = $option;
+            $item['date'] = api_get_local_time($item['date']);
+            $data .= json_encode($item).",";
+        }
+
+        return "
+<script>
+    $(window).load( function () {
+        $('#table_report').jqGrid({
+            height: '100%',
+            autowidth: 'auto',
+            LoadOnce: true,
+            rowNum:10,
+            rowList: [10, 25, 50, 100],
+            pager: 'tblGridPager',
+            datatype: 'local',
+            width: '100%',
+            viewrecords: true,
+            gridview: true,
+            colNames:[ $cols ],
+            colModel:[ $model ],
+            caption: '".get_plugin_lang('SalesReport', 'BuyCoursesPlugin')."'
+        });
+        var mydata = [ $data ];
+        for(var i=0;i<=mydata.length;i++){
+            $('#table_report').jqGrid('addRowData',i+1,mydata[i]);
+            if(i==mydata.length){
+                $('#table_report').trigger('reloadGrid',[{page:1}])
+            }
+        }
+    });
+</script>";
+    }
+
+    /**
      * Filter the registered courses for show in plugin catalog.
      */
     private function getCourses($first, $maxResults)

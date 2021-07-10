@@ -49,12 +49,9 @@ class Level
      */
     protected ?Profile $profile = null;
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
-        return (string) $this->getName();
+        return $this->getName();
     }
 
     /**

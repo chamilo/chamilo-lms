@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
-use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Doctrine\ORM\EntityManagerInterface;
@@ -71,11 +70,8 @@ class CCalendarEventVoter extends Voter
         // @todo check permissions
         switch ($attribute) {
             case self::CREATE:
-                return true;
-                break;
             case self::VIEW:
                 return true;
-                break;
             case self::EDIT:
             case self::DELETE:
                 if ($event->getCreator() === $user) {

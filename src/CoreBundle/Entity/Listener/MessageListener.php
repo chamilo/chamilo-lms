@@ -35,14 +35,14 @@ class MessageListener
         if ($message) {
             // Creates an outbox version, if message is sent in the inbox.
             if (Message::MESSAGE_TYPE_INBOX === $message->getMsgType()) {
-                $messageSent = clone $message;
+                /*$messageSent = clone $message;
                 $messageSent
                     ->setMsgType(Message::MESSAGE_TYPE_OUTBOX)
                     ->setRead(true)
                     ->setReceivers(null)
                 ;
                 $args->getEntityManager()->persist($messageSent);
-                $args->getEntityManager()->flush();
+                $args->getEntityManager()->flush();*/
 
                 // Dispatch to the Messenger bus. Function MessageHandler.php will send the message.
                 $this->bus->dispatch($message);

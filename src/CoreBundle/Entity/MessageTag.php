@@ -34,7 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity(
     fields: ['user', 'tag'],
     errorPath: 'tag',
-    message: 'This value is already used.',
+    message: 'This user-tag relation is already used.',
 )]
 #[ApiResource(
     collectionOperations: [
@@ -111,16 +111,16 @@ class MessageTag
     protected int $position;
 
     /**
-     * @var Collection|Message[]
+     * @var Collection|MessageRelUser[]
      *
-     * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\Message", mappedBy="tags", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\MessageRelUser", mappedBy="tags", cascade={"persist"})
      */
-    protected Collection $messages;
+    protected Collection $messageRelUsers;
 
     public function __construct()
     {
         $this->color = 'blue';
-        $this->messages = new ArrayCollection();
+        $this->messageRelUsers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -178,23 +178,23 @@ class MessageTag
 
     public function getMessages(): Collection
     {
-        return $this->messages;
+        return $this->messageRelUsers;
     }
 
-    public function addMessage(Message $message): self
+    public function addMessage(MessageRelUser $message): self
     {
-        if (!$this->messages->contains($message)) {
-            $this->messages->add($message);
+        if (!$this->messageRelUsers->contains($message)) {
+            $this->messageRelUsers->add($message);
             $message->addTag($this);
         }
 
         return $this;
     }
 
-    public function removeArticle(Message $message): self
+    public function removeMessage(MessageRelUser $message): self
     {
-        if ($this->messages->contains($message)) {
-            $this->messages->removeElement($message);
+        if ($this->messageRelUsers->contains($message)) {
+            $this->messageRelUsers->removeElement($message);
             $message->removeTag($this);
         }
 

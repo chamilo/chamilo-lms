@@ -73,7 +73,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity(
     fields: ['user', 'friend', 'relationType'],
     errorPath: 'User',
-    message: 'User relation already exists',
+    message: 'User-friend relation already exists',
 )]
 class UserRelUser
 {

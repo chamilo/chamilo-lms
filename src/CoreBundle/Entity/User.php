@@ -313,12 +313,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected ?DateTime $passwordRequestedAt;
 
     /**
-     * @ApiSubresource
-     *
      * @var Collection<int, CourseRelUser>|CourseRelUser[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="user", orphanRemoval=true)
      */
+    #[ApiSubresource]
     protected Collection $courses;
 
     /**
@@ -419,8 +418,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected Collection $sessionRelCourseRelUsers;
 
     /**
-     * @ApiSubresource()
-     *
      * @var Collection<int, SessionRelUser>|SessionRelUser[]
      *
      * @ORM\OneToMany(
@@ -430,6 +427,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      *     orphanRemoval=true
      * )
      */
+    #[ApiSubresource]
     protected Collection $sessionsRelUser;
 
     /**
@@ -726,6 +724,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @var Collection<int, MessageTag>|MessageTag[]
      */
+    #[Assert\Valid]
     #[ORM\OneToMany(
         targetEntity: MessageTag::class,
         mappedBy: 'user',
@@ -747,11 +746,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected Collection $sentMessages;
 
     /**
-     * @var Collection<int, Message>|Message[]
+     * @var Collection<int, MessageRelUser>|MessageRelUser[]
      *
-     * @ORM\ManyToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\Message",
-     *     mappedBy="receivers",
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\MessageRelUser",
+     *     mappedBy="receiver",
      *     cascade={"persist", "remove"}
      * )
      */

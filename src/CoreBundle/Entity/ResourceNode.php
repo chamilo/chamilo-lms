@@ -87,13 +87,12 @@ class ResourceNode
     protected ResourceType $resourceType;
 
     /**
-     * @ApiSubresource()
-     * @Groups({"ctool:read"})
-     *
      * @var Collection|ResourceLink[]
      *
      * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="resourceNode", cascade={"persist", "remove"})
      */
+    #[ApiSubresource]
+    #[Groups(['ctool:read'])]
     protected Collection $resourceLinks;
 
     /**
@@ -115,17 +114,13 @@ class ResourceNode
     protected User $creator;
 
     /**
-     * @ApiSubresource()
-     *
      * @Gedmo\TreeParent
-     * @ORM\ManyToOne(
-     *     targetEntity="ResourceNode",
-     *     inversedBy="children"
-     * )
+     * @ORM\ManyToOne(targetEntity="ResourceNode", inversedBy="children")
      * @ORM\JoinColumns({
      *     @ORM\JoinColumn(name="parent_id", onDelete="CASCADE")
      * })
      */
+    #[ApiSubresource]
     protected ?ResourceNode $parent = null;
 
     /**

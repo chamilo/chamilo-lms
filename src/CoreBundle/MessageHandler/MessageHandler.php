@@ -37,7 +37,8 @@ class MessageHandler implements MessageHandlerInterface
             ->htmlTemplate('@ChamiloCore/Mailer/Default/default.html.twig')
             ->textTemplate('@ChamiloCore/Mailer/Default/default.text.twig')
         ;
-        foreach ($message->getReceivers() as $receiver) {
+        foreach ($message->getReceivers() as $messageRelUser) {
+            $receiver = $messageRelUser->getReceiver();
             $address = new Address($receiver->getEmail(), $receiver->getFirstname());
             $email->addBcc($address);
         }

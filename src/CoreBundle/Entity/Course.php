@@ -111,7 +111,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @var Collection|CourseRelUser[]
      *
-     * @ApiSubresource()
      * @Groups({"course:read", "user:read"})
      * "orphanRemoval" is needed to delete the CourseRelUser relation
      * in the CourseAdmin class. The setUsers, getUsers, removeUsers and
@@ -119,6 +118,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      *
      * @ORM\OneToMany(targetEntity="CourseRelUser", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
      */
+    #[ApiSubresource]
     protected Collection $users;
 
     /**
@@ -255,7 +255,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected ?string $introduction;
 
     /**
-     * @ApiSubresource()
      * @Groups({"course:read", "course:write", "course_rel_user:read"})
      *
      * @var CourseCategory[]|Collection
@@ -270,6 +269,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      *         @ORM\JoinColumn(name="course_category_id", referencedColumnName="id")}
      * )
      */
+    #[ApiSubresource]
     protected Collection $categories;
 
     /**

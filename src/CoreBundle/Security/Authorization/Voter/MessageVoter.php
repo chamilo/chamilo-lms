@@ -75,23 +75,24 @@ class MessageVoter extends Voter
 
                 break;
             case self::VIEW:
-                if ($message->getReceivers()->contains($user)) {
+                if ($message->hasReceiver($user) || $message->getSender() === $user) {
                     return true;
                 }
 
                 break;
             case self::EDIT:
             case self::DELETE:
-                if ($message->getReceivers()->contains($user) &&
+                return false;
+                /*if ($message->hasReceiver($user) &&
                     Message::MESSAGE_TYPE_INBOX === $message->getMsgType()
                 ) {
                     return true;
-                }
+                }*/
 
-                if ($message->getSender() === $user && Message::MESSAGE_TYPE_OUTBOX === $message->getMsgType()) {
+                // User cannot delete.
+                /*if ($message->getSender() === $user && Message::MESSAGE_TYPE_OUTBOX === $message->getMsgType()) {
                     return true;
-                }
-
+                }*/
                 break;
         }
 

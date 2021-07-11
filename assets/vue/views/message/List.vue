@@ -83,8 +83,6 @@
               <v-list-item-title>Unread</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-
-
           <v-list-item
               v-for="(tag, i) in tags"
               :key="i"
@@ -143,7 +141,6 @@
           </a>
         </template>
       </Column>
-
 
       <Column field="title" :header="$t('Title')" :sortable="false">
         <template #body="slotProps">
@@ -230,7 +227,7 @@
     </div>
     <template #footer>
       <Button label="No" icon="pi pi-times" class="p-button-text" @click="deleteItemDialog = false"/>
-      <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteItemButton" />
+      <Button label="Yes" icon="pi pi-check" class="p-button-text" @click="deleteItemButton(item)" />
     </template>
   </Dialog>
 
@@ -273,31 +270,24 @@ export default {
   components: {
     Toolbar,
     ActionCell,
-    ResourceFileIcon,
-    ResourceFileLink,
-    DocumentsFilterForm,
-    DataFilter
   },
   mixins: [ListMixin],
   setup() {
     const store = useStore();
+    const deleteItemDialog = ref(false);
+    const deleteMultipleDialog = ref(false);
+
     const filters = ref([]);
-    const filtersSent = ref([]);
+    const itemToDelete = ref([]);
+
     const user = store.getters["security/getUser"];
     const tags = ref([]);
     const title = ref('Inbox');
 
-    // Sent messages.
-    filtersSent.value = {
-      msgType: 2,
-      sender: user.id
-    }
-
     // Inbox
-    filters.value = {
+    const inBoxFilter = {
       msgType: 1,
       'receivers.receiver': user.id
-      //receivers: [user.id]
     };
 
     // Get user tags.
@@ -312,49 +302,81 @@ export default {
 
     function goToInbox() {
       title.value = 'Inbox';
-      /*filters.value = {
-        msgType: 1,
-      };*/
       store.dispatch('message/resetList');
-      store.dispatch('message/fetchAll', filters.value);
+      store.dispatch('message/fetchAll', inBoxFilter);
     }
 
     function goToUnread() {
       title.value = 'Unread';
-      filters.value = {
+      const unReadFilter = {
         msgType: 1,
         'receivers.receiver': user.id,
         read: false
       };
       store.dispatch('message/resetList');
-      store.dispatch('message/fetchAll', filters.value);
+      store.dispatch('message/fetchAll', unReadFilter);
     }
 
     function goToSent() {
       title.value = 'Sent';
-      filters.value = {
+      const sentFilter = {
         sender: user.id
       };
       store.dispatch('message/resetList');
-      store.dispatch('message/fetchAll', filters.value);
+      store.dispatch('message/fetchAll', sentFilter);
     }
 
     function goToTag(tag) {
       title.value = tag.tag;
-      filters.value = {
+      const tagFilter = {
         msgType: 1,
         'receivers.receiver': user.id,
-        tags: [tag]
+        'receivers.tags.tag': [tag.tag]
       };
       store.dispatch('message/resetList');
-      store.dispatch('message/fetchAll', filters.value);
+      store.dispatch('message/fetchAll', tagFilter);
     }
 
+    function deleteItemButton() {
+      console.log('deleteItemButton');
+      //console.log(item);
+      let myReceiver = {};
+      itemToDelete.value.receivers.forEach(receiver => {
+        if (receiver.receiver['@id'] === user['@id']) {
+          myReceiver = receiver;
+        }
+      });
+
+      console.log('deleteItem');
+      store.dispatch('messagereluser/del', myReceiver);
+
+      deleteItemDialog.value = false;
+
+      goToInbox();
+    }
+
+
+    function confirmDeleteItem(item) {
+      itemToDelete.value = item;
+      deleteItemDialog.value  = true;
+    }
+
+    function confirmDeleteMultiple() {
+      deleteMultipleDialog.value = true;
+    }
+
+
+    goToInbox();
+
     return {
+      deleteItemButton,
+      confirmDeleteMultiple,
       goToInbox,
       goToSent,
       goToUnread,
       goToTag,
+      confirmDeleteItem,
+      deleteItemDialog,
       tags,
       filters,
       title,
@@ -378,14 +400,9 @@ export default {
       selectedItems: [],
       // prime vue
       itemDialog: false,
-      deleteItemDialog: false,
-      deleteMultipleDialog: false,
       item: {},
       submitted: false,
     };
-  },
-  mounted() {
-    this.onUpdateOptions(this.options);
   },
   computed: {
     // From crud.js list function
@@ -476,13 +493,6 @@ export default {
       this.item = {...item};
       this.itemDialog = true;
     },
-    confirmDeleteItem(item) {
-      this.item = item;
-      this.deleteItemDialog = true;
-    },
-    confirmDeleteMultiple() {
-      this.deleteMultipleDialog = true;
-    },
     markAsReadMultiple() {
       console.log('markAsReadMultiple');
       this.selectedItems.forEach(message => {
@@ -515,14 +525,6 @@ export default {
       this.deleteMultipleDialog = false;
       this.selectedItems = null;
       //this.onUpdateOptions(this.options);
-    },
-    deleteItemButton() {
-      console.log('deleteItem');
-      this.deleteItem(this.item);
-      //this.items = this.items.filter(val => val.iid !== this.item.iid);
-      this.deleteItemDialog = false;
-      this.item = {};
-      this.onUpdateOptions(this.options);
     },
     onRowSelected(items) {
       this.selected = items
@@ -557,6 +559,9 @@ export default {
     }),
     ...mapActions('resourcenode', {
       findResourceNode: 'findResourceNode',
+    }),
+    ...mapActions('messagereluser', {
+      deleteMessageRelUser: 'del',
     }),
   }
 };

@@ -93,7 +93,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     'msgType' => 'exact',
     'status' => 'exact',
     'sender' => 'exact',
-    //'receivers' => 'exact',
     'receivers.receiver' => 'exact',
     'receivers.tags.tag' => 'exact',
 ])]

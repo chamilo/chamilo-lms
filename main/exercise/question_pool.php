@@ -399,16 +399,16 @@ $my_exercise_list['-1'] = get_lang('OrphanQuestions');
 $titleSavedAsHtml = api_get_configuration_value('save_titles_as_html');
 if (is_array($exercise_list)) {
     foreach ($exercise_list as $row) {
-        $my_exercise_list[$row['id']] = '';
-        if ($row['id'] == $fromExercise && $selected_course == api_get_course_int_id()) {
-            $my_exercise_list[$row['id']] = ">&nbsp;&nbsp;&nbsp;&nbsp;";
+        $my_exercise_list[$row['iid']] = '';
+        if ($row['iid'] == $fromExercise && $selected_course == api_get_course_int_id()) {
+            $my_exercise_list[$row['iid']] = ">&nbsp;&nbsp;&nbsp;&nbsp;";
         }
 
         $exerciseTitle = $row['title'];
         if ($titleSavedAsHtml) {
             $exerciseTitle = strip_tags(api_html_entity_decode(trim($exerciseTitle)));
         }
-        $my_exercise_list[$row['id']] .= $exerciseTitle;
+        $my_exercise_list[$row['iid']] .= $exerciseTitle;
     }
 }
 
@@ -642,7 +642,7 @@ function getQuestions(
             $from = ", $TBL_COURSE_REL_CATEGORY crc ";
             $where .= " AND
                     crc.c_id = $selected_course AND
-                    crc.question_id = qu.id AND
+                    crc.question_id = qu.iid AND
                     crc.category_id = $courseCategoryId";
         }
         if (isset($exerciseLevel) && -1 != $exerciseLevel) {
@@ -673,13 +673,12 @@ function getQuestions(
                 FROM
                     $TBL_EXERCISE_QUESTION qt
                     INNER JOIN $TBL_QUESTIONS qu
-                    ON qt.question_id = qu.id
+                    ON qt.question_id = qu.iid
                     $from
                     {$efConditions['from']}
                 WHERE
                     qt.exercice_id = $exerciseId AND
-                    qt.c_id = $selected_course  AND
-                    qu.c_id = $selected_course
+                    qt.c_id = $selected_course
                     $where
                     $currentExerciseCondition
                     {$efConditions['where']}
@@ -723,9 +722,9 @@ function getQuestions(
                     SELECT $select
                     FROM $TBL_QUESTIONS qu
                     INNER JOIN $TBL_EXERCISE_QUESTION r
-                    ON (qu.c_id = r.c_id AND qu.id = r.question_id)
+                    ON qu.iid = r.question_id
                     INNER JOIN $TBL_EXERCISES ex
-                    ON (ex.id = r.exercice_id AND ex.c_id = r.c_id)
+                    ON (ex.iid = r.exercice_id AND ex.c_id = r.c_id)
                     $from
                     {$efConditions['from']}
                     WHERE
@@ -740,11 +739,11 @@ function getQuestions(
                     SELECT $select
                     FROM $TBL_QUESTIONS qu
                     LEFT OUTER JOIN $TBL_EXERCISE_QUESTION r
-                    ON (qu.c_id = r.c_id AND qu.id = r.question_id)
+                    ON qu.iid = r.question_id
                     $from
                     {$efConditions['from']}
                     WHERE
-                        qu.c_id = '$selected_course' AND
+                        r.c_id = '$selected_course' AND
                         r.question_id is null
                         $level_where
                         $answer_where
@@ -755,7 +754,7 @@ function getQuestions(
                         SELECT $select
                         FROM $TBL_QUESTIONS qu
                         INNER JOIN $TBL_EXERCISE_QUESTION r
-                        ON (qu.c_id = r.c_id AND qu.id = r.question_id)
+                        ON qu.iid = r.question_id
                         $from
                         {$efConditions['from']}
                         WHERE
@@ -779,7 +778,7 @@ function getQuestions(
             $from = ", $TBL_COURSE_REL_CATEGORY crc ";
             $filter .= " AND
                         crc.c_id = $selected_course AND
-                        crc.question_id = qu.id AND
+                        crc.question_id = qu.iid AND
                         crc.category_id = $courseCategoryId";
         }
         if (isset($exerciseLevel) && -1 != $exerciseLevel) {
@@ -813,13 +812,12 @@ function getQuestions(
                 FROM
                 $TBL_QUESTIONS as qu
                 INNER JOIN $TBL_EXERCISE_QUESTION as qt
-                ON (qu.id = qt.question_id AND qu.c_id = qt.c_id)
+                ON qu.iid = qt.question_id
                 INNER JOIN $TBL_EXERCISES as q
-                ON (q.c_id = qu.c_id AND q.id = qt.exercice_id)
+                ON q.iid = qt.exercice_id
                 {$efConditions['from']}
                 $from
                 WHERE
-                    qu.c_id = $selected_course AND
                     qt.c_id = $selected_course AND
                     q.c_id = $selected_course
                     $sessionCondition
@@ -965,6 +963,8 @@ if ($fromExercise <= 0) {
         $actionIcon1 = 'add';
         $actionIcon2 = '';
         $questionTagA = 1;
+    } elseif (true === api_get_configuration_value('quiz_question_allow_inter_course_linking')) {
+        $actionIcon2 = 'add';
     }
 }
 

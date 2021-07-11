@@ -189,8 +189,7 @@ class CalculatedAnswer extends Question
             Database::delete(
                 $table,
                 [
-                    'c_id = ? AND question_id = ?' => [
-                        $this->course['real_id'],
+                    'question_id = ?' => [
                         $this->id,
                     ],
                 ]

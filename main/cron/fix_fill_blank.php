@@ -27,7 +27,7 @@ var_dump($sql2);
 $res2 = Database::query($sql2);
 
 while ($row = Database::fetch_array($res2)) {
-    $id = $row['id'];
+    $id = $row['iid'];
     $courseId = $row['c_id'];
     $idAuto = $row['id_auto'];
     $answerOriginal = $row['answer'];

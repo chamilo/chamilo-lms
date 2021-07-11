@@ -324,7 +324,7 @@ class CourseRecycler
                   f.c_id = $courseId AND
                   i.c_id = f.c_id AND
                   i.tool = 'forum' AND
-        	      f.iid = i.ref AND 
+        	      f.iid = i.ref AND
                   i.visibility = 1";
         $sql = "DELETE FROM $forumCategoryTable
                     WHERE c_id = $courseId AND cat_id NOT IN ($subQuery)";
@@ -351,7 +351,7 @@ class CourseRecycler
                   l.c_id = $courseId AND
                   i.c_id = l.c_id AND
                   i.tool = 'link' AND
-        	      l.iid = i.ref AND 
+        	      l.iid = i.ref AND
                   i.visibility = 1";
         $sql = "DELETE FROM $linkCategoryTable
                     WHERE c_id = $courseId AND id NOT IN ($subQuery)";
@@ -428,7 +428,7 @@ class CourseRecycler
                 // Deletion of the tests first. Questions in these tests are
                 //   not deleted and become orphan at this point
                 $sql = "DELETE FROM ".$table_qui."
-                        WHERE c_id = ".$this->course_id." AND id IN(".$ids.")";
+                        WHERE iid IN(".$ids.")";
                 Database::query($sql);
                 $sql = "DELETE FROM ".$table_rel."
                         WHERE c_id = ".$this->course_id." AND exercice_id IN(".$ids.")";
@@ -440,43 +440,43 @@ class CourseRecycler
                 // If this query was ever too slow, there is an alternative here:
                 // https://github.com/beeznest/chamilo-lms-icpna/commit/a38eab725402188dffff50245ee068d79bcef779
                 $sql = " (
-                        SELECT q.id, ex.c_id FROM $table_qui_que q
+                        SELECT q.iid, ex.c_id FROM $table_qui_que q
                         INNER JOIN $table_rel r
-                        ON (q.c_id = r.c_id AND q.id = r.question_id)
-                        
+                        ON q.iid = r.question_id
+
                         INNER JOIN $table_qui ex
-                        ON (ex.id = r.exercice_id AND ex.c_id = r.c_id)
+                        ON (ex.iid = r.exercice_id AND ex.c_id = r.c_id)
                         WHERE ex.c_id = ".$this->course_id." AND (ex.active = '-1' OR ex.id = '-1')
                     )
                     UNION
                     (
-                        SELECT q.id, r.c_id FROM $table_qui_que q
+                        SELECT q.iid, r.c_id FROM $table_qui_que q
                         LEFT OUTER JOIN $table_rel r
-                        ON (q.c_id = r.c_id AND q.id = r.question_id)
+                        ON q.iid = r.question_id
                         WHERE q.c_id = ".$this->course_id." AND r.question_id is null
                     )
                     UNION
                     (
-                        SELECT q.id, r.c_id FROM $table_qui_que q
+                        SELECT q.iid, r.c_id FROM $table_qui_que q
                         INNER JOIN $table_rel r
-                        ON (q.c_id = r.c_id AND q.id = r.question_id)
+                        ON q.iid = r.question_id
                         WHERE r.c_id = ".$this->course_id." AND (r.exercice_id = '-1' OR r.exercice_id = '0')
                     )";
                 $db_result = Database::query($sql);
                 if (Database::num_rows($db_result) > 0) {
                     $orphan_ids = [];
                     while ($obj = Database::fetch_object($db_result)) {
-                        $orphan_ids[] = $obj->id;
+                        $orphan_ids[] = $obj->iid;
                     }
                     $orphan_ids = implode(',', $orphan_ids);
                     $sql = "DELETE FROM ".$table_rel."
                             WHERE c_id = ".$this->course_id." AND question_id IN(".$orphan_ids.")";
                     Database::query($sql);
                     $sql = "DELETE FROM ".$table_qui_ans."
-                            WHERE c_id = ".$this->course_id." AND question_id IN(".$orphan_ids.")";
+                            WHERE question_id IN(".$orphan_ids.")";
                     Database::query($sql);
                     $sql = "DELETE FROM ".$table_qui_que."
-                            WHERE c_id = ".$this->course_id." AND id IN(".$orphan_ids.")";
+                            WHERE iid IN(".$orphan_ids.")";
                     Database::query($sql);
                 }
                 // Also delete questions categories and options

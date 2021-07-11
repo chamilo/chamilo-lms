@@ -26,7 +26,7 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
 
     foreach ($exerciseList as $exerciseItem) {
         $exercise = new Exercise($courseId);
-        $exercise->read($exerciseItem['id']);
+        $exercise->read($exerciseItem['iid']);
 
         echo '    iid:'.$exercise->iId.' id:'.$exercise->id.'- '.$exercise->title.PHP_EOL;
         $questionList = $exercise->getQuestionList();

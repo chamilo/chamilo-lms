@@ -32,7 +32,7 @@ if (empty($track_exercise_info)) {
     api_not_allowed($printHeaders);
 }
 
-$exercise_id = $track_exercise_info['id'];
+$exercise_id = $track_exercise_info['iid'];
 $student_id = $track_exercise_info['exe_user_id'];
 $learnpath_id = $track_exercise_info['orig_lp_id'];
 $learnpath_item_id = $track_exercise_info['orig_lp_item_id'];
@@ -342,8 +342,7 @@ $sql = "SELECT attempts.question_id, answer
             quizz_rel_questions.c_id=".api_get_course_int_id()."
         INNER JOIN $TBL_QUESTIONS AS questions
         ON
-            questions.id = quizz_rel_questions.question_id AND
-            questions.c_id = ".api_get_course_int_id()."
+            questions.iid = quizz_rel_questions.question_id
         WHERE
             attempts.exe_id = $id $user_restriction
 		GROUP BY quizz_rel_questions.question_order, attempts.question_id";

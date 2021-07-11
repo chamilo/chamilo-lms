@@ -69,7 +69,7 @@ $sql = "SELECT *, quiz_question.question, firstname, lastname
         FROM $TBL_TRACK_ATTEMPT_RECORDING t, $TBL_USER,
         $TBL_EXERCISES_QUESTION quiz_question
         WHERE
-            quiz_question.id = question_id AND
+            quiz_question.iid = question_id AND
             user_id = author AND
             exe_id = '".(int) $_GET['exe_id']."'
         ORDER BY position";

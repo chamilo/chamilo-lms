@@ -92,7 +92,7 @@ class ExerciseResult
                     te.status as exstatus
                 FROM $TBL_EXERCISES  AS ce
                 INNER JOIN $TBL_TRACK_EXERCISES AS te
-                ON (te.exe_exo_id = ce.id)
+                ON (te.exe_exo_id = ce.iid)
                 INNER JOIN $TBL_USER AS user
                 ON (user.user_id = exe_user_id)
                 LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm
@@ -129,7 +129,7 @@ class ExerciseResult
                         te.status as exstatus
                     FROM $TBL_EXERCISES  AS ce
                     INNER JOIN $TBL_TRACK_EXERCISES AS te
-                    ON (te.exe_exo_id = ce.id)
+                    ON (te.exe_exo_id = ce.iid)
                     INNER JOIN $TBL_USER AS user
                     ON (user.user_id = exe_user_id)
                     LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm

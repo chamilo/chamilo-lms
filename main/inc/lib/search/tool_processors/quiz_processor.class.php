@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CQuiz;
+
 /**
  * Process exercises before pass it to search listing scripts.
  *
@@ -108,12 +110,7 @@ class quiz_processor extends search_processor
 
         if (!empty($course_information)) {
             $exercise_id = intval($exercise_id);
-            $dk_result = $em
-                ->getRepository('ChamiloCourseBundle:CQuiz')
-                ->findOneBy([
-                    'id' => $exercise_id,
-                    'cId' => $course_id,
-                ]);
+            $dk_result = $em->find(CQuiz::class, $exercise_id);
 
             $name = '';
             if ($dk_result) {

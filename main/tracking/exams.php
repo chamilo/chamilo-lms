@@ -61,7 +61,7 @@ if ($global) {
     // Get exam lists
     $courseId = api_get_course_int_id();
 
-    $sql = "SELECT quiz.title, id FROM $quizTable AS quiz
+    $sql = "SELECT quiz.title, iid FROM $quizTable AS quiz
             WHERE
                 c_id = $courseId AND
                 active = 1
@@ -72,7 +72,7 @@ if ($global) {
     if (Database::num_rows($result) > 0) {
         $exerciseList = [get_lang('All')];
         while ($row = Database::fetch_array($result)) {
-            $exerciseList[$row['id']] = $row['title'];
+            $exerciseList[$row['iid']] = $row['title'];
         }
         $form->addElement('select', 'exercise_id', get_lang('Exercise'), $exerciseList);
     }
@@ -178,14 +178,14 @@ if (!empty($courseList) && is_array($courseList)) {
         $courseId = $courseInfo['real_id'];
 
         if ($global) {
-            $sql = "SELECT count(id) as count
+            $sql = "SELECT count(iid) as count
                     FROM $quizTable AS quiz
                     WHERE c_id = $courseId AND  active = 1 AND (session_id = 0 OR session_id IS NULL)";
             $result = Database::query($sql);
             $countExercises = Database::store_result($result);
             $exerciseCount = $countExercises[0]['count'];
 
-            $sql = "SELECT count(id) as count
+            $sql = "SELECT count(iid) as count
                     FROM $quizTable AS quiz
                     WHERE c_id = $courseId AND active = 1 AND session_id <> 0";
             $result = Database::query($sql);
@@ -212,14 +212,14 @@ if (!empty($courseList) && is_array($courseList)) {
         if (1 == Database::result($result, 0, 'visibility')) {
             // Getting the exam list.
             if ($global) {
-                $sql = "SELECT quiz.title, id, session_id
+                $sql = "SELECT quiz.title, iid, session_id
                     FROM $quizTable AS quiz
                     WHERE c_id = $courseId AND active = 1
                     ORDER BY session_id, quiz.title ASC";
             } else {
                 //$sessionCondition = api_get_session_condition($sessionId, true, false);
                 if (!empty($exerciseId)) {
-                    $sql = "SELECT quiz.title, id, session_id
+                    $sql = "SELECT quiz.title, iid, session_id
                             FROM $quizTable AS quiz
                             WHERE
                                 c_id = $courseId AND
@@ -229,7 +229,7 @@ if (!empty($courseList) && is_array($courseList)) {
 
                             ORDER BY session_id, quiz.title ASC";
                 } else {
-                    $sql = "SELECT quiz.title, id, session_id
+                    $sql = "SELECT quiz.title, iid, session_id
                             FROM $quizTable AS quiz
                             WHERE
                                 c_id = $courseId AND
@@ -482,8 +482,8 @@ function export_complete_report_xls($filename, $array)
  */
 function processStudentList($filter_score, $global, $exercise, $courseInfo, $sessionId, $newSessionList)
 {
-    if ((isset($exercise['id']) && empty($exercise['id'])) ||
-        !isset($exercise['id'])
+    if ((isset($exercise['iid']) && empty($exercise['iid'])) ||
+        !isset($exercise['iid'])
     ) {
         return [
             'html' => '',
@@ -554,7 +554,7 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
                 FROM $exerciseStatsTable AS ex
                 WHERE
                     ex.c_id = $courseId AND
-                    ex.exe_exo_id = ".$exercise['id']." AND
+                    ex.exe_exo_id = ".$exercise['iid']." AND
                     exe_user_id= $studentId AND
                     session_id = $sessionId
                 ";
@@ -566,7 +566,7 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
                 WHERE
                     exe_user_id = $studentId AND
                     c_id = $courseId AND
-                    exe_exo_id = ".$exercise['id']." AND
+                    exe_exo_id = ".$exercise['iid']." AND
                     session_id = $sessionId
                 ORDER BY exe_result DESC
                 LIMIT 1";

@@ -182,14 +182,12 @@ if (!$hideExpectedAnswer) {
 
     if ($objQuestion->selectType() == HOT_SPOT_DELINEATION) {
         $qb
-            ->where($qb->expr()->eq('a.cId', $courseId))
-            ->andWhere($qb->expr()->eq('a.questionId', $questionId))
+            ->where($qb->expr()->eq('a.questionId', $questionId))
             ->andWhere("a.hotspotType != 'noerror'")
-            ->orderBy('a.id', 'ASC');
+            ->orderBy('a.iid', 'ASC');
     } else {
         $qb
-            ->where($qb->expr()->eq('a.cId', $courseId))
-            ->andWhere($qb->expr()->eq('a.questionId', $questionId))
+            ->where($qb->expr()->eq('a.questionId', $questionId))
             ->orderBy('a.position', 'ASC');
     }
 

@@ -58,13 +58,13 @@ if ($global) {
     //Get exam lists
     $course_id = api_get_course_int_id();
     $t_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
-    $sqlExercices = "SELECT quiz.title,id FROM ".$t_quiz." AS quiz
+    $sqlExercices = "SELECT quiz.title,iid FROM ".$t_quiz." AS quiz
                      WHERE c_id = $course_id AND active='1'
                      ORDER BY quiz.title ASC";
     $resultExercices = Database::query($sqlExercices);
     $exercise_list[0] = get_lang('All');
     while ($a_exercices = Database::fetch_array($resultExercices)) {
-        $exercise_list[$a_exercices['id']] = $a_exercices['title'];
+        $exercise_list[$a_exercices['iid']] = $a_exercices['title'];
     }
     $form->addElement('select', 'exercise_id', get_lang('Exercise'), $exercise_list);
 }

@@ -125,8 +125,7 @@ class Answer
 
         $sql = "SELECT * FROM $table
                 WHERE
-                    c_id = {$this->course_id} AND
-                    question_id ='".$questionId."'
+                    question_id = $questionId
                 ORDER BY position";
 
         $result = Database::query($sql);
@@ -134,7 +133,7 @@ class Answer
 
         // while a record is found
         while ($object = Database::fetch_object($result)) {
-            $this->id[$i] = $object->id;
+            $this->id[$i] = $object->iid;
             $this->answer[$i] = $object->answer;
             $this->correct[$i] = $object->correct;
             $this->comment[$i] = $object->comment;
@@ -161,8 +160,8 @@ class Answer
         $questionId = $this->questionId;
 
         $sql = "SELECT * FROM $table
-                WHERE c_id = {$this->course_id}
-                    AND question_id = $questionId
+                WHERE
+                      question_id = $questionId
                 ORDER BY position";
 
         $result = Database::query($sql);
@@ -211,7 +210,7 @@ class Answer
 
         $sql = "SELECT id FROM
               $table
-              WHERE c_id = {$this->course_id} AND question_id ='".$questionId."'";
+              WHERE question_id = $questionId";
 
         $result = Database::query($sql);
         $id = [];
@@ -251,7 +250,7 @@ class Answer
         $questionId = (int) $this->questionId;
 
         $sql = "SELECT type FROM $TBL_QUIZ
-                WHERE c_id = {$this->course_id} AND id = $questionId";
+                WHERE iid = $questionId";
         $result_question = Database::query($sql);
         $questionType = Database::fetch_array($result_question);
 
@@ -394,8 +393,8 @@ class Answer
     {
         $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $auto_id = (int) $auto_id;
-        $sql = "SELECT id, answer, id_auto FROM $table
-                WHERE c_id = {$this->course_id} AND id_auto='$auto_id'";
+        $sql = "SELECT iid, answer, id_auto FROM $table
+                WHERE id_auto = $auto_id";
         $rs = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {
@@ -502,7 +501,7 @@ class Answer
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $sql = "SELECT type FROM $table
-                WHERE c_id = {$this->course_id} AND id = '".$this->questionId."'";
+                WHERE iid = {$this->questionId}";
         $res = Database::query($sql);
         if (Database::num_rows($res) <= 0) {
             return null;
@@ -1029,10 +1028,8 @@ class Answer
                             $tableAnswer,
                             $params,
                             [
-                                'id = ? AND c_id = ? AND question_id = ? ' => [
+                                'iid = ? ' => [
                                     $answer_id,
-                                    $courseId,
-                                    $newQuestionId,
                                 ],
                             ]
                         );

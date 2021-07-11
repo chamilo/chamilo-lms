@@ -1147,7 +1147,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $optionId = (int) $optionId;
         $sql = "SELECT position
                 FROM $tblAnswerOption
-                WHERE c_id = $courseId AND id = $optionId";
+                WHERE iid = $optionId";
         $res = Database::query($sql);
 
         if (Database::num_rows($res) == 0) {
@@ -1169,10 +1169,9 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     public static function getCorrectAnswerOptionId($idAuto)
     {
         $tblAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
-        $courseId = api_get_course_int_id();
         $idAuto = (int) $idAuto;
         $sql = "SELECT correct FROM $tblAnswer
-                WHERE c_id = $courseId AND id_auto = $idAuto";
+                WHERE id_auto = $idAuto";
 
         $res = Database::query($sql);
         $data = Database::fetch_assoc($res);

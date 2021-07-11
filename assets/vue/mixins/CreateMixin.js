@@ -42,7 +42,7 @@ export default {
         let users = [];
         createForm.v$.item.$model.receivers.forEach(user => {
           // Send to inbox
-          users.push(user['@id']);
+          users.push({receiver: user['@id']});
         });
 
         createForm.v$.item.$model.sender = '/api/users/' + this.currentUser.id;

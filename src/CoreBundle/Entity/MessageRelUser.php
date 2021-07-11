@@ -6,8 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -31,6 +32,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 // @todo add security checks.
 #[ApiResource]
+#[ApiFilter(SearchFilter::class, properties: [
+    'star' => 'exact',
+    'receiver' => 'exact',
+    'read' => 'exact',
+    'starred' => 'exact',
+    'tags.tag' => 'exact',
+])]
 class MessageRelUser
 {
     /**

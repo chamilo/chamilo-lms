@@ -3,7 +3,6 @@ export default {
   meta: { requiresAuth: true },
   name: 'users',
   component: () => import('../components/user/Layout.vue'),
-  //redirect: { name: 'UserGroupList' },
   children: [
     {
       name: 'UserGroupShow',

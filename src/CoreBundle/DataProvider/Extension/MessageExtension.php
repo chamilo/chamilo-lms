@@ -79,11 +79,14 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
 
         $qb->andWhere("
             ($alias.sender = :current AND $alias.status <> :deleted) OR 
-            (r IN (:currentList) AND $alias.msgType = :inbox) OR
-            (r IN (:currentList) AND $alias.msgType = :invitation) OR
-            (r IN (:currentList) AND $alias.msgType = :promoted) OR
-            (r IN (:currentList) AND $alias.msgType = :wallPost) OR
-            (r IN (:currentList) AND $alias.msgType = :conversation) 
+            ($alias.sender <> :current AND (
+                (r.receiver IN (:currentList) AND $alias.msgType = :inbox) OR
+                (r.receiver IN (:currentList) AND $alias.msgType = :invitation) OR
+                (r.receiver IN (:currentList) AND $alias.msgType = :promoted) OR
+                (r.receiver IN (:currentList) AND $alias.msgType = :wallPost) OR
+                (r.receiver IN (:currentList) AND $alias.msgType = :conversation)
+            ) 
+            )
         ");
 
         $qb->setParameters([

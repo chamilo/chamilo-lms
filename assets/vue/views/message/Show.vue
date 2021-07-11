@@ -32,7 +32,7 @@
 
     <VueMultiselect
         placeholder="Tags"
-        v-model="item.tags"
+        v-model="myReceiver.tags"
         :loading="isLoadingSelect"
         tag-placeholder="Add this as new tag"
         :options="tags"
@@ -121,9 +121,16 @@ export default {
 
     let item = find(decodeURIComponent(id));
 
+    const myReceiver = ref([]);
+    item.receivers.forEach(receiver => {
+      if (receiver.receiver['@id'] === user['@id']) {
+        myReceiver.value = receiver;
+      }
+    });
+
     // Change to read
-    if (false === item.read) {
-      axios.put(ENTRYPOINT + 'messages/' + item.id, {
+    if (false === myReceiver.value.read) {
+      axios.put(myReceiver.value['@id'], {
         read: true,
       }).then(response => {
         console.log(response);
@@ -151,13 +158,13 @@ export default {
     function addTagToMessage(newTag) {
       console.log('addTagToMessage');
       let tagsToUpdate = [];
-      item.tags.forEach(tagItem => {
+      myReceiver.value.tags.forEach(tagItem => {
         tagsToUpdate.push(tagItem['@id']);
       });
       tagsToUpdate.push(newTag['@id']);
       console.log(tagsToUpdate);
 
-      axios.put(ENTRYPOINT + 'messages/' + item.id, {
+      axios.put(myReceiver.value['@id'], {
         tags: tagsToUpdate,
       }).then(response => {
         //this.showMessage('Added');
@@ -171,11 +178,11 @@ export default {
 
     function removeTagFromMessage() {
       let tagsToUpdate = [];
-      item.tags.forEach(tagItem => {
+      myReceiver.value.tags.forEach(tagItem => {
         tagsToUpdate.push(tagItem['@id']);
       });
 
-      axios.put(ENTRYPOINT + 'messages/' + item.id, {
+      axios.put(myReceiver.value['@id'], {
         tags: tagsToUpdate,
       }).then(response => {
         console.log(response);
@@ -228,13 +235,17 @@ export default {
     }
 
     return {
-      v$: useVuelidate(), tags, isLoadingSelect, item,
+      v$: useVuelidate(),
+      tags,
+      isLoadingSelect,
+      item,
       addTag,
       addTagToMessage,
       removeTagFromMessage,
       asyncFind,
       reply,
-      createEvent
+      createEvent,
+      myReceiver
     };
   },
   mixins: [ShowMixin, NotificationMixin],

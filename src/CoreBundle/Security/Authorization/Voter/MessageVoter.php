@@ -82,7 +82,8 @@ class MessageVoter extends Voter
                 break;
             case self::EDIT:
             case self::DELETE:
-                return false;
+                // @todo
+                break;
                 /*if ($message->hasReceiver($user) &&
                     Message::MESSAGE_TYPE_INBOX === $message->getMsgType()
                 ) {
@@ -93,7 +94,6 @@ class MessageVoter extends Voter
                 /*if ($message->getSender() === $user && Message::MESSAGE_TYPE_OUTBOX === $message->getMsgType()) {
                     return true;
                 }*/
-                break;
         }
 
         return false;

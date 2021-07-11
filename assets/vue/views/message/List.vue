@@ -287,15 +287,17 @@ export default {
     const tags = ref([]);
     const title = ref('Inbox');
 
+    // Sent messages.
     filtersSent.value = {
       msgType: 2,
       sender: user.id
     }
 
-    // inbox
+    // Inbox
     filters.value = {
       msgType: 1,
-      receivers: [user.id]
+      'receivers.receiver': user.id
+      //receivers: [user.id]
     };
 
     // Get user tags.
@@ -310,10 +312,9 @@ export default {
 
     function goToInbox() {
       title.value = 'Inbox';
-      filters.value = {
+      /*filters.value = {
         msgType: 1,
-        receivers: [user.id],
-      };
+      };*/
       store.dispatch('message/resetList');
       store.dispatch('message/fetchAll', filters.value);
     }
@@ -322,7 +323,7 @@ export default {
       title.value = 'Unread';
       filters.value = {
         msgType: 1,
-        receivers: [user.id],
+        'receivers.receiver': user.id,
         read: false
       };
       store.dispatch('message/resetList');
@@ -332,7 +333,6 @@ export default {
     function goToSent() {
       title.value = 'Sent';
       filters.value = {
-        msgType: 2,
         sender: user.id
       };
       store.dispatch('message/resetList');
@@ -343,7 +343,7 @@ export default {
       title.value = tag.tag;
       filters.value = {
         msgType: 1,
-        receivers: [user.id],
+        'receivers.receiver': user.id,
         tags: [tag]
       };
       store.dispatch('message/resetList');

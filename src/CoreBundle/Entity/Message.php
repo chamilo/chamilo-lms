@@ -91,9 +91,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(OrderFilter::class, properties: ['title', 'sendDate'])]
 #[ApiFilter(SearchFilter::class, properties: [
     'msgType' => 'exact',
+    'status' => 'exact',
     'sender' => 'exact',
-    'tags' => 'exact',
-    'receivers' => 'exact',
+    //'receivers' => 'exact',
+    'receivers.receiver' => 'exact',
+    'receivers.tags.tag' => 'exact',
 ])]
 class Message
 {

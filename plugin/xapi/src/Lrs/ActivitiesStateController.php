@@ -1,8 +1,7 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\Lrs;
-
-/* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\XApi\ActivityState;
 use Database;
@@ -12,16 +11,13 @@ use Xabbuh\XApi\Model\Actor;
 use Xabbuh\XApi\Serializer\Symfony\Serializer;
 
 /**
- * Class ActivitiesController.
+ * Class ActivitiesStateController.
  *
  * @package Chamilo\PluginBundle\XApi\Lrs
  */
-class ActivitiesController extends BaseController
+class ActivitiesStateController extends BaseController
 {
-    /**
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
-    public function get()
+    public function get(): Response
     {
         $serializer = Serializer::createSerializer();
 
@@ -70,13 +66,17 @@ class ActivitiesController extends BaseController
         return JsonResponse::create($documentData);
     }
 
-    /**
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function put()
+    public function head(): Response
+    {
+        return $this->get()->setContent('');
+    }
+
+    public function post(): Response
+    {
+        return $this->put();
+    }
+
+    public function put(): Response
     {
         $activityId = $this->httpRequest->query->get('activityId');
         $agent = $this->httpRequest->query->get('agent');

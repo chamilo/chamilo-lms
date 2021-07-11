@@ -92,6 +92,23 @@ if (api_get_configuration_value('allow_htaccess_import_from_scorm')) {
 
 $form->addButtonUpload(get_lang('Upload'));
 
+if (api_get_configuration_value('scorm_upload_from_cache')) {
+    $list = get_zip_files_in_garbage();
+    $select_file_name = &$form->addElement(
+        'select',
+        'file_name',
+        get_lang('Or').' '.api_strtolower(get_lang('UploadLocalFileFromGarbageDir'))
+    );
+    if (count($list) > 0) {
+        foreach ($list as $file) {
+            $select_file_name->addOption($file, $file);
+        }
+        $form->addButtonUpload(get_lang('Upload'));
+    } else {
+        $select_file_name->addOption(get_lang('ImportNoFile'), get_lang('ImportNoFile'));
+    }
+}
+
 // the default values for the form
 $defaults = ['index_document' => 'checked="checked"', 'use_max_score' => 1];
 $form->setDefaults($defaults);

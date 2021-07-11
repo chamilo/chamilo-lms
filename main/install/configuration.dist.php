@@ -1965,6 +1965,10 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 // Configuration setting to make required course category in course creation form.
 //$_configuration['course_creation_form_set_course_category_mandatory'] = false;
 
+// Enable upload of large SCORM files from FTP by uploading them to app/cache/
+// and showing them in the SCORM upload form
+//$_configuration['scorm_upload_from_cache'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

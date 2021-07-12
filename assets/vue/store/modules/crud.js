@@ -204,8 +204,8 @@ export default function makeCrudModule({
         const id = params['id'];
         delete params['id'];
 
-        console.log(id, 'id');
-        console.log(commit, 'commit');
+        /*console.log(id, 'id');
+        console.log(commit, 'commit');*/
 
         if (isEmpty(id)) {
           throw new Error('Incorrect id');
@@ -235,7 +235,7 @@ export default function makeCrudModule({
         }
 
         commit(ACTIONS.TOGGLE_LOADING);
-        service
+        return service
           .find(id)
           //.then(response => service.checkResponse(response))
             .then(response => {
@@ -246,6 +246,8 @@ export default function makeCrudModule({
           .then(item => {
             commit(ACTIONS.TOGGLE_LOADING);
             commit(ACTIONS.ADD, normalizeRelations(item));
+
+            return item;
           })
           .catch(e => handleError(commit, e));
       },

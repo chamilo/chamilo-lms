@@ -38,7 +38,6 @@ export default {
       const createForm = this.$refs.createForm;
       createForm.v$.$touch();
       if (!createForm.v$.$invalid) {
-
         let users = [];
         createForm.v$.item.$model.receivers.forEach(user => {
           // Send to inbox
@@ -49,7 +48,6 @@ export default {
         createForm.v$.item.$model.receivers = users;
         createForm.v$.item.$model.msgType = 1;
         this.create(createForm.v$.item.$model);
-
       }
     },
     resetForm() {

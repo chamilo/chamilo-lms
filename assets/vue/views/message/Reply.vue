@@ -4,25 +4,14 @@
       :handle-send="onSendMessageForm"
   />
 
-  <DocumentsForm
+  <MessageForm
     ref="createForm"
     :values="item"
     :errors="violations"
   >
-    <VueMultiselect
-        placeholder="To"
-        v-model="item.receivers"
-        :loading="isLoadingSelect"
-        :options="users"
-        :multiple="true"
-        :searchable="true"
-        :internal-search="false"
-        @search-change="asyncFind"
-        limit-text="3"
-        limit="3"
-        label="username"
-        track-by="id"
-    />
+   <div v-if="item.originalSender">
+     To: {{ item.originalSender.username }}
+   </div>
 
   <TinyEditor
       v-model="item.content"
@@ -45,7 +34,7 @@
       }
       "
   />
-  </DocumentsForm>
+  </MessageForm>
   <Loading :visible="isLoading" />
 
 </template>
@@ -53,7 +42,8 @@
 <script>
 import {mapActions, mapGetters, useStore} from 'vuex';
 import { createHelpers } from 'vuex-map-fields';
-import DocumentsForm from '../../components/documents/Form.vue';
+import {computed, onMounted, reactive} from "vue";
+import MessageForm from '../../components/message/Form.vue';
 import Loading from '../../components/Loading.vue';
 import Toolbar from '../../components/Toolbar.vue';
 import CreateMixin from '../../mixins/CreateMixin';
@@ -62,7 +52,7 @@ import isEmpty from "lodash/isEmpty";
 import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
 import useVuelidate from "@vuelidate/core";
-import VueMultiselect from 'vue-multiselect'
+import {useRoute, useRouter} from "vue-router";
 const servicePrefix = 'Message';
 
 const { mapFields } = createHelpers({
@@ -77,39 +67,45 @@ export default {
   components: {
     Loading,
     Toolbar,
-    DocumentsForm,
-    VueMultiselect
+    MessageForm
   },
   setup () {
-    const users = ref([]);
+    const item = ref([]);
     const isLoadingSelect = ref(false);
+    const store = useStore();
+    const route = useRoute();
+    const router = useRouter();
 
-    function asyncFind (query) {
-      if (query.toString().length < 3) {
-        return;
-      }
-
-      isLoadingSelect.value = true;
-      axios.get(ENTRYPOINT + 'users', {
-        params: {
-          username: query
-        }
-      }).then(response => {
-        isLoadingSelect.value = false;
-        let data = response.data;
-        users.value = data['hydra:member'];
-      }).catch(function (error) {
-        isLoadingSelect.value = false;
-        console.log(error);
-      });
+    let id = route.params.id;
+    if (isEmpty(id)) {
+      id = route.query.id;
     }
 
-    return {v$: useVuelidate(), users, asyncFind, isLoadingSelect};
-  },
-  data() {
-    return {
-      item: {},
-    };
+    onMounted(async () => {
+      const response = await store.dispatch('message/load', id);
+
+      const currentUser = computed(() => store.getters['security/getUser']);
+      item.value = await response;
+
+      delete item.value['@id'];
+      delete item.value['id'];
+      delete item.value['firstReceiver'];
+      //delete item.value['receivers'];
+      delete item.value['sendDate'];
+
+      item.value['originalSender'] = item.value['sender'];
+      // New sender.
+      item.value['sender'] = currentUser.value['@id'];
+
+      // Set new receivers, will be loaded by onSendMessageForm()
+      item.value['receivers'] = [];
+      item.value['receivers'][0] = item.value['originalSender'];
+
+      // Set reply content.
+      item.value.content = `<br /><blockquote>${item.value.content}</blockquote>`;
+    });
+
+    return {v$: useVuelidate(), isLoadingSelect, item};
   },
   computed: {
     ...mapFields(['error', 'isLoading', 'created', 'violations']),

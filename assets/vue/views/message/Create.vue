@@ -41,8 +41,6 @@
 <!--          :error-message="receiversErrors"-->
 <!--      />-->
 
-
-
       <TinyEditor
         v-model="item.content"
         required
@@ -56,7 +54,7 @@
           file_picker_callback : browser,
           autosave_ask_before_unload: true,
           plugins: [
-            'fullpage advlist autolink lists link image charmap print preview anchor',
+            'advlist autolink lists link image charmap print preview anchor',
             'searchreplace visualblocks code fullscreen',
             'insertdatetime media table paste wordcount emoticons'
           ],

@@ -187,6 +187,9 @@ class Message
     #[Groups(['message:read', 'message:write'])]
     protected string $content;
 
+    #[Groups(['message:read', 'message:write'])]
+    protected string $firstReceiver;
+
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroup")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=true, onDelete="CASCADE")
@@ -249,6 +252,15 @@ class Message
     public function getReceivers()
     {
         return $this->receivers;
+    }
+
+    public function getFirstReceiver(): ?MessageRelUser
+    {
+        if ($this->receivers->count() > 0) {
+            return $this->receivers->first();
+        }
+
+        return null;
     }
 
     public function hasReceiver(User $receiver)

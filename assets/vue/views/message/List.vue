@@ -26,6 +26,7 @@
           <v-icon icon="mdi-delete" />
         </v-btn>
 <!--        :disabled="!selectedItems || !selectedItems.length"-->
+
         <v-btn
             icon
             tile
@@ -135,10 +136,11 @@
               v-if="slotProps.data"
               @click="showHandler(slotProps.data)"
               class="cursor-pointer"
-              :class="[ true === slotProps.data.read ? 'font-normal': 'font-semibold']"
+              :class="{ 'font-semibold': index == 'inbox' && !slotProps.data.firstReceiver.read }"
           >
             {{ slotProps.data.sender.username }}
           </a>
+
         </template>
       </Column>
 
@@ -148,13 +150,16 @@
               v-if="slotProps.data"
               @click="showHandler(slotProps.data)"
               class="cursor-pointer"
-              v-bind:class="{ 'font-semibold': !slotProps.data.read }"
+              :class="{ 'font-semibold': index == 'inbox' &&  !slotProps.data.firstReceiver.read }"
           >
             {{ slotProps.data.title }}
           </a>
 
-          <div class="flex flex-row">
-            <v-chip v-for="tag in slotProps.data.tags" >
+          <div
+             v-if = "index == 'inbox' && slotProps.data.firstReceiver"
+             class="flex flex-row"
+          >
+            <v-chip v-for="tag in slotProps.data.firstReceiver.tags" >
               {{ tag.tag }}
             </v-chip>
           </div>
@@ -283,11 +288,13 @@ export default {
     const user = store.getters["security/getUser"];
     const tags = ref([]);
     const title = ref('Inbox');
+    const index = ref('inbox');
 
     // Inbox
     const inBoxFilter = {
       msgType: 1,
-      'receivers.receiver': user.id
+      'receivers.receiver': user.id,
+      'order[sendDate]': 'desc',
     };
 
     // Get user tags.
@@ -301,45 +308,52 @@ export default {
     });
 
     function goToInbox() {
+      filters.value = inBoxFilter;
       title.value = 'Inbox';
+      index.value = 'inbox';
       store.dispatch('message/resetList');
       store.dispatch('message/fetchAll', inBoxFilter);
     }
 
     function goToUnread() {
       title.value = 'Unread';
+      index.value = 'unread';
       const unReadFilter = {
         msgType: 1,
         'receivers.receiver': user.id,
         read: false
       };
+      filters.value = unReadFilter;
       store.dispatch('message/resetList');
       store.dispatch('message/fetchAll', unReadFilter);
     }
 
     function goToSent() {
       title.value = 'Sent';
+      index.value = 'sent';
       const sentFilter = {
         sender: user.id
       };
+      filters.value = sentFilter;
       store.dispatch('message/resetList');
       store.dispatch('message/fetchAll', sentFilter);
     }
 
     function goToTag(tag) {
       title.value = tag.tag;
+      index.value = 'tag';
       const tagFilter = {
         msgType: 1,
         'receivers.receiver': user.id,
         'receivers.tags.tag': [tag.tag]
       };
+      filters.value = tagFilter;
       store.dispatch('message/resetList');
       store.dispatch('message/fetchAll', tagFilter);
     }
 
     function deleteItemButton() {
       console.log('deleteItemButton');
-      //console.log(item);
       let myReceiver = {};
       itemToDelete.value.receivers.forEach(receiver => {
         if (receiver.receiver['@id'] === user['@id']) {
@@ -349,12 +363,10 @@ export default {
 
       console.log('deleteItem');
       store.dispatch('messagereluser/del', myReceiver);
-
       deleteItemDialog.value = false;
 
       goToInbox();
     }
-
 
     function confirmDeleteItem(item) {
       itemToDelete.value = item;
@@ -364,7 +376,6 @@ export default {
     function confirmDeleteMultiple() {
       deleteMultipleDialog.value = true;
     }
-
 
     goToInbox();
 
@@ -380,6 +391,7 @@ export default {
       tags,
       filters,
       title,
+      index,
     }
   },
   data() {

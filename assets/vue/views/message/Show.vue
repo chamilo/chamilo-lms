@@ -102,6 +102,7 @@ export default {
       Toolbar,
       VueMultiselect
   },
+  mixins: [ShowMixin, NotificationMixin],
   setup () {
     const tags = ref([]);
     const isLoadingSelect = ref(false);
@@ -120,6 +121,8 @@ export default {
     console.log(decodeURIComponent(id));
 
     let item = find(decodeURIComponent(id));
+    /*let item = store.dispatch('message/load', id);
+    console.log(item);*/
 
     const myReceiver = ref([]);
     item.receivers.forEach(receiver => {
@@ -248,12 +251,11 @@ export default {
       myReceiver
     };
   },
-  mixins: [ShowMixin, NotificationMixin],
   computed: {
     ...mapFields('message', {
       isLoading: 'isLoading'
     }),
-    ...mapGetters('message', ['find']),
+    //...mapGetters('message', ['find']),
     ...mapGetters({
       'isAuthenticated': 'security/isAuthenticated',
       'isAdmin': 'security/isAdmin',

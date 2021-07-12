@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import {mapActions, mapGetters, useStore} from 'vuex';
 import Loading from '../../components/Loading.vue';
-import ShowMixin from '../../mixins/ShowMixin';
 import Toolbar from '../../components/Toolbar.vue';
-import isEmpty from "lodash/isEmpty";
+import {computed} from "vue";
+import {useRoute, useRouter} from "vue-router";
 const servicePrefix = 'PersonalFile';
 
 export default {
@@ -17,15 +17,15 @@ export default {
       Loading,
       Toolbar
   },
-  created() {
-    console.log('CREATED HOME');
-    let resourceNodeId = this.currentUser.resourceNode['id'];
+  setup () {
+    const store = useStore();
+    const currentUser = computed(() => store.getters['security/getUser']);
+    const route = useRoute();
+    const router = useRouter();
 
-    console.log(resourceNodeId);
-    this.$router
-        .push({ name: `${this.$options.servicePrefix}List`,    params: { node: resourceNodeId },})
+    router
+        .push({name: `PersonalFileList`, params: {node: currentUser.value.resourceNode['id']}})
         .catch(() => {});
-
   },
   computed: {
     // From crud.js list function

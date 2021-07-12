@@ -12,13 +12,19 @@ require_once '../config.php';
 
 $plugin = BuyCoursesPlugin::create();
 $serviceSaleId = Session::read('bc_service_sale_id');
+$couponId = Session::read('bc_coupon_id');
 
 if (empty($serviceSaleId)) {
     api_not_allowed(true);
 }
 
-$serviceSale = $plugin->getServiceSale($serviceSaleId);
+$serviceSale = $plugin->getServiceSale($serviceSaleId, $coupon);
 $userInfo = api_get_user_info($serviceSale['buyer']['id']);
+
+if (!empty($couponId)) {
+    $coupon = $plugin->getCouponService($couponId, $serviceSale['service_id']);
+    $serviceSale['item'] = $plugin->getService($serviceSale['service_id'], $coupon);
+}
 
 if (empty($serviceSale)) {
     api_not_allowed(true);
@@ -119,6 +125,7 @@ switch ($serviceSale['payment_type']) {
                 $plugin->cancelServiceSale($serviceSale['id']);
 
                 unset($_SESSION['bc_service_sale_id']);
+                unset($_SESSION['bc_coupon_id']);
                 Display::addFlash(
                     Display::return_message($plugin->get_lang('OrderCancelled'), 'error', false)
                 );
@@ -183,6 +190,7 @@ switch ($serviceSale['payment_type']) {
             );
 
             unset($_SESSION['bc_service_sale_id']);
+            unset($_SESSION['bc_coupon_id']);
             header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_catalog.php');
             exit;
         }
@@ -243,6 +251,7 @@ switch ($serviceSale['payment_type']) {
                 $plugin->cancelServiceSale($serviceSale['id']);
 
                 unset($_SESSION['bc_service_sale_id']);
+                unset($_SESSION['bc_coupon_id']);
 
                 Display::addFlash(
                     Display::return_message(

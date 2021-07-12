@@ -1,3 +1,10 @@
+v7.0 - 2021-06-14
+====
+Added support for discount coupons
+
+The file update.php must be executed to update the structure of the tables
+in the database.
+
 v6.0 - 2020-11-29
 ====
 Added support for purchase instructions e-mail customization (although this 

@@ -6,7 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Room;
@@ -30,7 +33,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     collectionOperations: [
         'get' => [
-            'security' => "is_granted('VIEW', object)",  // the get collection is also filtered by MessageExtension.php
+            //'security' => "is_granted('VIEW', object)",  // the get collection is also filtered by MessageExtension.php
+            'security' => "is_granted('ROLE_USER')",
         ],
         'post' => [
             'security_post_denormalize' => "is_granted('CREATE', object)",
@@ -57,6 +61,15 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['calendar_event:read'],
     ],
 )]
+
+#[ApiFilter(SearchFilter::class, properties: [
+    'startDate' => 'exact',
+    'endDate' => 'exact',
+    'allDay' => 'boolean',
+])]
+
+#[ApiFilter(DateFilter::class, strategy: DateFilter::EXCLUDE_NULL)]
+
 class CCalendarEvent extends AbstractResource implements ResourceInterface
 {
     /**

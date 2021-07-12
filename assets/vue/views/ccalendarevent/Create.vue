@@ -20,7 +20,7 @@ import CCalendarEventForm from '../../components/ccalendarevent/Form.vue';
 import Loading from '../../components/Loading.vue';
 import Toolbar from '../../components/Toolbar.vue';
 import CreateMixin from '../../mixins/CreateMixin';
-import {computed, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
 import useVuelidate from "@vuelidate/core";
@@ -44,35 +44,44 @@ export default {
   },
   setup () {
     const users = ref([]);
-    const item = ref([]);
     const isLoadingSelect = ref(false);
     const parentResourceNodeId = ref(null);
+
+
+    const item = ref([]);
+    const store = useStore();
     const route = useRoute();
     const router = useRouter();
-    const store = useStore();
-    /*const user = computed(() => store.getters['security/getUser']);
-    parentResourceNodeId.value = user.value.resourceNode['id']
-
 
     let id = route.params.id;
     if (isEmpty(id)) {
       id = route.query.id;
     }
-    let message = find(decodeURIComponent(id));
 
-    console.log(id);
-    console.log(message);
-    item.value.title = message.title;*/
+    onMounted(async () => {
+      const response = await store.dispatch('message/load', id);
 
-    return {v$: useVuelidate(), users, isLoadingSelect};
-  },
-  created() {
-    this.item.parentResourceNodeId = this.currentUser.resourceNode['id'];
-  },
-  data() {
-    return {
-      item: {},
-    };
+      const currentUser = computed(() => store.getters['security/getUser']);
+      item.value = await response;
+
+      delete item.value['@id'];
+      delete item.value['id'];
+      delete item.value['firstReceiver'];
+      //delete item.value['receivers'];
+      delete item.value['sendDate'];
+
+      item.value['parentResourceNodeId'] = currentUser.value.resourceNode['id'];
+
+      //item.value['originalSender'] = item.value['sender'];
+      // New sender.
+      //item.value['sender'] = currentUser.value['@id'];
+
+      // Set new receivers, will be loaded by onSendMessageForm()
+      /*item.value['receivers'] = [];
+      item.value['receivers'][0] = item.value['originalSender'];*/
+    });
+
+    return {v$: useVuelidate(), users, isLoadingSelect, item};
   },
   computed: {
     ...mapFields(['error', 'isLoading', 'created', 'violations']),

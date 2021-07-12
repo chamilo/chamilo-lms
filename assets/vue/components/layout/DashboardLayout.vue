@@ -256,7 +256,7 @@ export default {
        //{ icon: 'home', url: '/', text: 'Home' },
        //{ icon: 'star_border', url: '/', text: 'News' },
        { icon: 'mdi-book', url: '/courses', text: 'My courses' },
-       { icon: 'mdi-calendar', url: '/main/calendar/agenda_js.php?type=personal', text: 'Events' },
+       { icon: 'mdi-calendar', url: '/resources/ccalendarevent', text: 'Events' },
       //{ icon: 'star_border', url: '/sessions', text: 'My Sessions' },
       //{ icon: 'star_border', url: '/calendar', text: 'My calendar' },
       //{ icon: 'compass', url: '/catalog', text: 'Explore' },

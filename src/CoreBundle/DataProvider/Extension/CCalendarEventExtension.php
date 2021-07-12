@@ -12,12 +12,13 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInter
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
 
-final class MessageExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
+final class CCalendarEventExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
 {
     private Security $security;
 
@@ -53,7 +54,7 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
 
     private function addWhere(QueryBuilder $qb, string $resourceClass): void
     {
-        if (Message::class !== $resourceClass) {
+        if (CCalendarEvent::class !== $resourceClass) {
             return;
         }
 
@@ -65,9 +66,22 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
         $user = $this->security->getUser();
         $alias = $qb->getRootAliases()[0];
 
-        //$qb->leftJoin("$alias.receivers", 'r');
+        $qb
+            ->innerJoin("$alias.resourceNode", 'node')
+            ->leftJoin('node.resourceLinks', 'links')
+        ;
 
-        $qb->leftJoin("$alias.receivers", 'r', Join::WITH, "r.receiver = :current OR $alias.sender = :current ");
+        $qb
+            ->andWhere(
+                '
+                links.user = :user OR node.creator = :user
+                '
+            )
+            ->setParameter('user', $user)
+        ;
+
+        //$qb->leftJoin("$alias.receivers", 'r');
+        //$qb->leftJoin("$alias.receivers", 'r', Join::WITH, "r.receiver = :current OR $alias.sender = :current ");
         //$qb->leftJoin("$alias.receivers", 'r');
         /*$qb->andWhere(
             $qb->expr()->orX(
@@ -81,29 +95,5 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
                 )
             ),
         );*/
-
-        $qb->andWhere("
-            ($alias.sender = :current AND $alias.status <> :deleted) OR 
-                ($alias.sender <> :current AND r.receiver = :current AND (
-                    ($alias.msgType = :inbox) OR
-                    ($alias.msgType = :invitation) OR
-                    ($alias.msgType = :promoted) OR
-                    ($alias.msgType = :wallPost) OR
-                    ($alias.msgType = :conversation)
-                ) 
-            )
-        ");
-
-        $qb->setParameters([
-            'current' => $user,
-            'deleted' => Message::MESSAGE_STATUS_DELETED,
-            //'currentList' => [$user->getId()],
-            'inbox' => Message::MESSAGE_TYPE_INBOX,
-            //'outbox' => Message::MESSAGE_TYPE_OUTBOX,
-            'invitation' => Message::MESSAGE_TYPE_INVITATION,
-            'promoted' => Message::MESSAGE_TYPE_PROMOTED,
-            'wallPost' => Message::MESSAGE_TYPE_WALL,
-            'conversation' => Message::MESSAGE_TYPE_CONVERSATION,
-        ]);
     }
 }

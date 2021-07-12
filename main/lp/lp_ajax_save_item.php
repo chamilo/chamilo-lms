@@ -336,7 +336,7 @@ function save_item(
              * that must be adhered to successfully handle these cases:.
 	     */
             $LMSUpdateStatus = true;
-            if (!api_get_configuration_value('scorm_LMS_update_status_all_time') && $myLPI->get_status() !== "not attempted") {
+            if (!api_get_configuration_value('scorm_lms_update_status_all_time') && $myLPI->get_status() !== "not attempted") {
                 $LMSUpdateStatus = false;
             }
             if (!$statusIsSet && empty($status) && !$statusSignalReceived && $LMSUpdateStatus) {

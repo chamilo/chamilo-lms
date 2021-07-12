@@ -14,9 +14,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:^3.4.0-rc.18":
-  version: 3.4.0-rc.18
-  resolution: "@apollo/client@npm:3.4.0-rc.18"
+"@apollo/client@npm:3.4.0-rc.15":
+  version: 3.4.0-rc.15
+  resolution: "@apollo/client@npm:3.4.0-rc.15"
   dependencies:
     "@graphql-typed-document-node/core": ^3.0.0
     "@wry/context": ^0.6.0
@@ -29,7 +29,7 @@ __metadata:
     symbol-observable: ^4.0.0
     ts-invariant: ^0.8.2
     tslib: ^2.1.0
-    zen-observable-ts: ^1.1.0
+    zen-observable-ts: ^1.0.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0
     react: ^16.8.0 || ^17.0.0
@@ -39,7 +39,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: f82bf07baadffae45d834f738720314684dda44dac582273b5fef77c2c52ef01d1c8f80a46b54fcbc5d5432bc33e76ad4352596da702879e25a7200c223f01a0
+  checksum: 9aab66954dde42e0526ded57831b46742fba3339d5786300f3091a220dc4aea2e369f5c04f98b85cf09a346f5f4292ccd5e3c184ae2b05c9614d91a3b80530fd
   languageName: node
   linkType: hard
 
@@ -2821,29 +2821,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/apollo-composable@npm:^4.0.0-alpha.13":
-  version: 4.0.0-alpha.13
-  resolution: "@vue/apollo-composable@npm:4.0.0-alpha.13"
+"@vue/apollo-composable@npm:4.0.0-alpha.12":
+  version: 4.0.0-alpha.12
+  resolution: "@vue/apollo-composable@npm:4.0.0-alpha.12"
   dependencies:
     throttle-debounce: ^2.3.0
-    vue-demi: ^0.9.1
+    vue-demi: ^0.4.0
   peerDependencies:
     "@apollo/client": ^3.2.1
-    graphql: ^15.3.0
-    vue: ^3.1.0
-  checksum: c6817c62a4c58284119479e1f980814c56a36df8bb55c65b9ab30708f65126731f0a4bd5bfbe55d5e40f720f66f0880f7e15dbdbf7bb3f7721b508b2aeab2f99
+    "@vue/composition-api": ^1.0.0-beta.16
+    graphql: ^14.5.8
+    vue: ^2.6.10
+  checksum: 72af446e168ba95289d36988a00b1dbe1ed462e67a86ab158578c11453f494197fdb4e6fb3c56cb27d6722a0c4eba6d9bf2ca138deb8ca7e49911eed0bbdedec
   languageName: node
   linkType: hard
 
-"@vue/apollo-option@npm:^4.0.0-alpha.13":
-  version: 4.0.0-alpha.13
-  resolution: "@vue/apollo-option@npm:4.0.0-alpha.13"
+"@vue/apollo-option@npm:4.0.0-alpha.11":
+  version: 4.0.0-alpha.11
+  resolution: "@vue/apollo-option@npm:4.0.0-alpha.11"
   dependencies:
     throttle-debounce: ^2.3.0
   peerDependencies:
     "@apollo/client": ^3.2.1
-    vue: ^3.1.0
-  checksum: be90929cdcabd0d1a1145bfba50dae5fbe7c490f08a9e8d6e984a1767738b9f4636cbebd24702647418342822041469a104563d921aeeccc0fa7f263738b9ff7
+  checksum: a203c22b30a3d415b7543fd18b915dd9e8d2c57bde79fc82c90d3a9b67ea0523b74b09d0a10e5d96d5bcfd8623a1265174c5c02830cd38af060497543b880b34
   languageName: node
   linkType: hard
 
@@ -3452,7 +3452,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vuelidate/core@npm:^2.0.0-alpha.21":
+"@vuelidate/core@npm:^2.0.0-alpha.19":
   version: 2.0.0-alpha.21
   resolution: "@vuelidate/core@npm:2.0.0-alpha.21"
   dependencies:
@@ -3461,7 +3461,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vuelidate/validators@npm:^2.0.0-alpha.18":
+"@vuelidate/validators@npm:^2.0.0-alpha.17":
   version: 2.0.0-alpha.18
   resolution: "@vuelidate/validators@npm:2.0.0-alpha.18"
   dependencies:
@@ -4715,7 +4715,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"autoprefixer@npm:^10.3.0":
+"autoprefixer@npm:^10.2.6":
   version: 10.3.0
   resolution: "autoprefixer@npm:10.3.0"
   dependencies:
@@ -6274,7 +6274,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "chamilo@workspace:."
   dependencies:
-    "@apollo/client": ^3.4.0-rc.18
+    "@apollo/client": 3.4.0-rc.15
     "@babel/eslint-parser": ^7.14.7
     "@babel/plugin-transform-runtime": ^7.14.5
     "@fancyapps/fancybox": ^3.5.7
@@ -6304,16 +6304,16 @@ __metadata:
     "@uppy/vue": ^0.2.5
     "@uppy/webcam": ^1.8.12
     "@uppy/xhr-upload": ^1.7.5
-    "@vue/apollo-composable": ^4.0.0-alpha.13
-    "@vue/apollo-option": ^4.0.0-alpha.13
+    "@vue/apollo-composable": 4.0.0-alpha.12
+    "@vue/apollo-option": 4.0.0-alpha.11
     "@vue/cli": ^4.5.13
     "@vue/cli-plugin-babel": ~4.5.13
     "@vue/cli-plugin-eslint": ~4.5.13
     "@vue/cli-service": ~4.5.13
     "@vue/compiler-sfc": ^3.1.4
-    "@vuelidate/core": ^2.0.0-alpha.21
-    "@vuelidate/validators": ^2.0.0-alpha.18
-    autoprefixer: ^10.3.0
+    "@vuelidate/core": ^2.0.0-alpha.19
+    "@vuelidate/validators": ^2.0.0-alpha.17
+    autoprefixer: ^10.2.6
     axios: ^0.21.1
     babel: ^6.23.0
     babel-plugin-transform-builtin-extend: ^1.1.2
@@ -6345,7 +6345,7 @@ __metadata:
     graphql-tag: ^2.12.5
     highlight.js: ^11.1.0
     hljs: ^6.2.3
-    html2canvas: ^1.1.0
+    html2canvas: ^1.0.0-rc.7
     image-map-resizer: ^1.0.10
     jquery: ^3.6.0
     jquery-ui: ^1.12.1
@@ -6356,7 +6356,7 @@ __metadata:
     jsplumb: ^2.15.6
     linkifyjs: 3.0.0-beta.3
     litepicker: ^2.0.11
-    luxon: ^1.28.0
+    luxon: ^1.27.0
     mathjax: ^2.7.9
     mediaelement: ^4.2.16
     mediaelement-plugins: "https://github.com/chamilo/mediaelement-plugins"
@@ -6378,7 +6378,7 @@ __metadata:
     purgecss-webpack-plugin: ^4.0.3
     pwstrength-bootstrap: ^3.1.0
     qtip2: ^3.0.3
-    quasar: 2.0.2
+    quasar: 2.0.1
     readmore-js: ^2.2.1
     sass: ^1.35.2
     sass-loader: ^11.1.1
@@ -10857,12 +10857,12 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"html2canvas@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "html2canvas@npm:1.1.0"
+"html2canvas@npm:^1.0.0-rc.7":
+  version: 1.1.1
+  resolution: "html2canvas@npm:1.1.1"
   dependencies:
     css-line-break: 1.1.1
-  checksum: e3631dfcdeb8c2559fc51944939362920243f711ba6012392cbcfcf63f43d3099131a804cde91e53192a737f2a5199604bc094f03fa817958aa2d547ef7bcd97
+  checksum: d4eecdb4ad38729489d09046648e3ce9ed288772cc01bfd6e3752103382a1f4750f1f6b86a5d57d013c3a0cdcdfc93fb5557eb2106405845ced72409714c8fd9
   languageName: node
   linkType: hard
 
@@ -12831,7 +12831,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"luxon@npm:^1.28.0":
+"luxon@npm:^1.27.0":
   version: 1.28.0
   resolution: "luxon@npm:1.28.0"
   checksum: db7638087b89527c721a9f308a4ec0ed4e95183ebcf03079c0be827a3455d2d70e674d9708d84758e0cc93b486cc2a34c50649b106778bc788285c43e223c7b7
@@ -16261,10 +16261,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"quasar@npm:2.0.2":
-  version: 2.0.2
-  resolution: "quasar@npm:2.0.2"
-  checksum: ce632dc5a5e7082fde14d3d08d98915f3b25e9cb2b3ec2fa36f81f414bf7f54070efc5f165e46d29409e20cfe416566aa60c8818aabd2f1db555a494155679b9
+"quasar@npm:2.0.1":
+  version: 2.0.1
+  resolution: "quasar@npm:2.0.1"
+  checksum: b1a0ac1e0be808910781be40b64a5b9c95079942808df7aab0c0a1ab22b3795ccf714185f03ade6c4f083642e11de17eb34946f085a6ec6f0152c0d609779bbf
   languageName: node
   linkType: hard
 
@@ -19614,6 +19614,17 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
+"vue-demi@npm:^0.4.0":
+  version: 0.4.5
+  resolution: "vue-demi@npm:0.4.5"
+  peerDependencies:
+    vue: ^2.6.0 || >=3.0.0-rc.1
+  bin:
+    vue-demi-fix: scripts/postinstall.js
+  checksum: b315dfebdaf970f64fc546c3f137fa728e67442b48063e90f46309666cb7f90ac664674814a8dd178561c9f28d1a121588733c29c0351231bc7da492f08c88c4
+  languageName: node
+  linkType: hard
+
 "vue-demi@npm:^0.9.1":
   version: 0.9.1
   resolution: "vue-demi@npm:0.9.1"
@@ -20655,7 +20666,7 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"zen-observable-ts@npm:^1.1.0":
+"zen-observable-ts@npm:^1.0.0":
   version: 1.1.0
   resolution: "zen-observable-ts@npm:1.1.0"
   dependencies:

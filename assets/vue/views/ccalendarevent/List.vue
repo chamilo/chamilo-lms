@@ -1,9 +1,10 @@
 <template>
   <div>
-    <FullCalendar :options="calendarOptions" />
+    <FullCalendar ref="cal" :options="calendarOptions" />
 
     <Loading :visible="isLoading" />
 
+    <!-- Add form-->
     <q-dialog v-model="dialog" persistent>
       <q-card style="min-width: 500px">
         <q-card-section>
@@ -24,22 +25,21 @@
 
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Cancel" v-close-popup />
-          <q-btn flat label="Add" @click="onSendForm" />
+          <q-btn flat label="Add" @click="onCreateEventForm" />
         </q-card-actions>
       </q-card>
     </q-dialog>
 
+    <!-- Show form-->
     <q-dialog v-model="dialogShow" persistent>
       <q-card style="min-width: 500px">
         <q-card-section class="q-pt-none">
-
           <h3>{{ item.title }}</h3>
           <p>
             {{ item.startDate }}
           </p>
           <p>{{ item.endDate }}</p>
         </q-card-section>
-
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Close" v-close-popup />
         </q-card-actions>
@@ -114,8 +114,6 @@ export default {
       endParam: 'endDate[before]',
       selectable: true,
       eventClick: function (EventClickArg) {
-        console.log(EventClickArg.event);
-
         item.value['title'] = EventClickArg.event.title;
         item.value['startDate'] = EventClickArg.event.startStr;
         item.value['endDate'] = EventClickArg.event.endStr;
@@ -139,8 +137,8 @@ export default {
       events: function(info, successCallback, failureCallback) {
         axios.get('/api/c_calendar_events',{
           params: {
-            'startDate[after]': info.start.valueOf(),
-            'endDate[before]': info.end.valueOf()
+            'startDate[after]': info.startStr,
+            'endDate[before]': info.endStr
           }
         }).then(response => {
           let data = response.data;
@@ -160,7 +158,12 @@ export default {
       },
     }
 
-    return {calendarOptions, dialog, item, dialogShow};
+    function reFetch() {
+      let calendarApi = this.$refs.cal.getApi();
+      calendarApi.refetchEvents();
+    }
+
+    return {calendarOptions, dialog, item, dialogShow, reFetch};
   },
   computed: {
     ...mapFields('ccalendarevent', {
@@ -176,6 +179,15 @@ export default {
     }),
   },
   methods: {
+    onCreateEventForm() {
+      const createForm = this.$refs.createForm;
+      createForm.v$.$touch();
+      if (!createForm.v$.$invalid) {
+        this.create(createForm.v$.item.$model);
+        this.reFetch();
+        this.dialog = false;
+      }
+    },
     ...mapActions('ccalendarevent', {
       create: 'create',
       deleteItem: 'del',

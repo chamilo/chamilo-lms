@@ -21,8 +21,6 @@ import Loading from '../../components/Loading.vue';
 import Toolbar from '../../components/Toolbar.vue';
 import CreateMixin from '../../mixins/CreateMixin';
 import {computed, onMounted, ref} from "vue";
-import axios from "axios";
-import {ENTRYPOINT} from "../../config/entrypoint";
 import useVuelidate from "@vuelidate/core";
 import {useRoute, useRouter} from "vue-router";
 import isEmpty from "lodash/isEmpty";
@@ -45,10 +43,7 @@ export default {
   setup () {
     const users = ref([]);
     const isLoadingSelect = ref(false);
-    const parentResourceNodeId = ref(null);
-
-
-    const item = ref([]);
+    const item = ref({});
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
@@ -64,9 +59,15 @@ export default {
       const currentUser = computed(() => store.getters['security/getUser']);
       item.value = await response;
 
+      // Remove unused properties:
+      delete item.value['status'];
+      delete item.value['msgType'];
+      delete item.value['@type'];
+      delete item.value['@context'];
       delete item.value['@id'];
       delete item.value['id'];
       delete item.value['firstReceiver'];
+      delete item.value['sender'];
       //delete item.value['receivers'];
       delete item.value['sendDate'];
 
@@ -79,6 +80,16 @@ export default {
       //item.value['sender'] = currentUser.value['@id'];
 
       // Set new receivers, will be loaded by onSendMessageForm()
+      item.value['resourceLinkListFromEntity'] = [];
+      item.value['receivers'].forEach(receiver => {
+        item.value['resourceLinkListFromEntity'].push(
+            {
+              uid: receiver.receiver['id'],
+              user: { username: receiver.receiver['username']},
+              visibility: 2
+            }
+        );
+      });
       /*item.value['receivers'] = [];
       item.value['receivers'][0] = item.value['originalSender'];*/
     });

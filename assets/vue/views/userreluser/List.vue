@@ -195,7 +195,7 @@ export default {
     const user = store.getters["security/getUser"];
     const isLoadingSelect = ref(false);
     const deleteItemDialog = ref(false);
-    const item = ref([]);
+    const item = ref({});
     const friendRequests = ref([]);
     const waitingRequests = ref([]);
 

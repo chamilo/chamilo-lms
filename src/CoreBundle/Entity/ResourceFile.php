@@ -67,7 +67,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *
  * @ORM\Table(name="resource_file")
  */
-
 #[ApiFilter(PropertyFilter::class)]
 #[ApiFilter(SearchFilter::class, properties: [
     'name' => 'partial',

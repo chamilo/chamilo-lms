@@ -1,82 +1,85 @@
 <template>
+  <div class="q-pa-md" style="max-width: 400px">
+    <q-form
+        class="q-gutter-md"
+    >
+      <q-input
+          id="item_title"
+          v-model="item.title"
+          :placeholder="$t('Title')"
+          :error="v$.item.title.$error"
+          @input="v$.item.title.$touch()"
+          @blur="v$.item.title.$touch()"
+          :error-message="titleErrors"
+      />
 
-  <q-form>
-    <q-input
-        id="item_title"
-        v-model="item.title"
-        :placeholder="$t('Title')"
-        :error="v$.item.title.$error"
-        @input="v$.item.title.$touch()"
-        @blur="v$.item.title.$touch()"
-        :error-message="titleErrors"
-    />
+      <q-input filled v-model="item.startDate">
+        <template v-slot:prepend>
+          <q-icon name="event" class="cursor-pointer">
+            <q-popup-proxy transition-show="scale" transition-hide="scale">
+              <q-date v-model="item.startDate" mask="YYYY-MM-DD HH:mm">
+                <div class="row items-center justify-end">
+                  <q-btn v-close-popup label="Close" color="primary" flat />
+                </div>
+              </q-date>
+            </q-popup-proxy>
+          </q-icon>
+        </template>
 
-    <q-input filled v-model="item.startDate">
-      <template v-slot:prepend>
-        <q-icon name="event" class="cursor-pointer">
-          <q-popup-proxy transition-show="scale" transition-hide="scale">
-            <q-date v-model="item.startDate" mask="YYYY-MM-DD HH:mm">
-              <div class="row items-center justify-end">
-                <q-btn v-close-popup label="Close" color="primary" flat />
-              </div>
-            </q-date>
-          </q-popup-proxy>
-        </q-icon>
-      </template>
+        <template v-slot:append>
+          <q-icon name="access_time" class="cursor-pointer">
+            <q-popup-proxy transition-show="scale" transition-hide="scale">
+              <q-time v-model="item.startDate" mask="YYYY-MM-DD HH:mm" format24h>
+                <div class="row items-center justify-end">
+                  <q-btn v-close-popup label="Close" color="primary" flat />
+                </div>
+              </q-time>
+            </q-popup-proxy>
+          </q-icon>
+        </template>
+      </q-input>
 
-      <template v-slot:append>
-        <q-icon name="access_time" class="cursor-pointer">
-          <q-popup-proxy transition-show="scale" transition-hide="scale">
-            <q-time v-model="item.startDate" mask="YYYY-MM-DD HH:mm" format24h>
-              <div class="row items-center justify-end">
-                <q-btn v-close-popup label="Close" color="primary" flat />
-              </div>
-            </q-time>
-          </q-popup-proxy>
-        </q-icon>
-      </template>
-    </q-input>
+      <q-input filled v-model="item.endDate">
+        <template v-slot:prepend>
+          <q-icon name="event" class="cursor-pointer">
+            <q-popup-proxy transition-show="scale" transition-hide="scale">
+              <q-date v-model="item.endDate" mask="YYYY-MM-DD HH:mm">
+                <div class="row items-center justify-end">
+                  <q-btn v-close-popup label="Close" color="primary" flat />
+                </div>
+              </q-date>
+            </q-popup-proxy>
+          </q-icon>
+        </template>
 
-    <q-input filled v-model="item.endDate">
-      <template v-slot:prepend>
-        <q-icon name="event" class="cursor-pointer">
-          <q-popup-proxy transition-show="scale" transition-hide="scale">
-            <q-date v-model="item.endDate" mask="YYYY-MM-DD HH:mm">
-              <div class="row items-center justify-end">
-                <q-btn v-close-popup label="Close" color="primary" flat />
-              </div>
-            </q-date>
-          </q-popup-proxy>
-        </q-icon>
-      </template>
+        <template v-slot:append>
+          <q-icon name="access_time" class="cursor-pointer">
+            <q-popup-proxy transition-show="scale" transition-hide="scale">
+              <q-time v-model="item.endDate" mask="YYYY-MM-DD HH:mm" format24h>
+                <div class="row items-center justify-end">
+                  <q-btn v-close-popup label="Close" color="primary" flat />
+                </div>
+              </q-time>
+            </q-popup-proxy>
+          </q-icon>
+        </template>
+      </q-input>
 
-      <template v-slot:append>
-        <q-icon name="access_time" class="cursor-pointer">
-          <q-popup-proxy transition-show="scale" transition-hide="scale">
-            <q-time v-model="item.endDate" mask="YYYY-MM-DD HH:mm" format24h>
-              <div class="row items-center justify-end">
-                <q-btn v-close-popup label="Close" color="primary" flat />
-              </div>
-            </q-time>
-          </q-popup-proxy>
-        </q-icon>
-      </template>
-    </q-input>
+      <EditLinks :item="item" />
 
-    <EditLinks :item="item" />
+      <q-input
+          v-model="item.content"
+          type="textarea"
+          :placeholder="$t('Content')"
+          :error="v$.item.content.$error"
+          @input="v$.item.content.$touch()"
+          @blur="v$.item.content.$touch()"
+          :error-message="contentErrors"
+      />
 
-    <q-input
-        v-model="item.content"
-        type="textarea"
-        :placeholder="$t('Content')"
-        :error="v$.item.content.$error"
-        @input="v$.item.content.$touch()"
-        @blur="v$.item.content.$touch()"
-        :error-message="contentErrors"
-    />
-
-    <slot></slot>
-  </q-form>
+      <slot></slot>
+    </q-form>
+  </div>
 </template>
 
 <script>
@@ -87,7 +90,9 @@ import EditLinks from "../resource_links/EditLinks.vue";
 
 export default {
   name: 'CCalendarEventForm',
-  components: {EditLinks},
+  components: {
+    EditLinks
+  },
   setup () {
     return { v$: useVuelidate() }
   },

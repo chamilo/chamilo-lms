@@ -70,7 +70,7 @@ export default {
     MessageForm
   },
   setup () {
-    const item = ref([]);
+    const item = ref({});
     const isLoadingSelect = ref(false);
     const store = useStore();
     const route = useRoute();

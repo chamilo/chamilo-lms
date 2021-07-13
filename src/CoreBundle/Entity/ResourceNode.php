@@ -37,7 +37,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     normalizationContext={"groups"={"resource_node:read", "document:read"}},
  *     denormalizationContext={"groups"={"resource_node:write", "document:write"}}
  * )
-
+ *
  * @ApiFilter(OrderFilter::class, properties={"id", "title", "resourceFile", "createdAt", "updatedAt"})
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ResourceNodeRepository")
  *

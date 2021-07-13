@@ -158,7 +158,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener"})
  * @ORM\Entity
  */
-
 #[ApiFilter(PropertyFilter::class)]
 #[ApiFilter(SearchFilter::class, properties: [
     'title' => 'partial',

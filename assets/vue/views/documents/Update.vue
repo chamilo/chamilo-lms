@@ -1,6 +1,5 @@
 <template>
   <div v-if="!isLoading && item && isCurrentTeacher">
-    <!--      :handle-delete="del"-->
     <Toolbar
         :handle-submit="onSendFormData"
         :handle-reset="resetForm"
@@ -23,7 +22,7 @@ import DocumentsForm from '../../components/documents/Form.vue';
 import Loading from '../../components/Loading.vue';
 import Toolbar from '../../components/Toolbar.vue';
 import UpdateMixin from '../../mixins/UpdateMixin';
-import EditLinks from "../../components/resource_links/EditLinks";
+import EditLinks from "../../components/resource_links/EditLinks.vue";
 
 const servicePrefix = 'Documents';
 

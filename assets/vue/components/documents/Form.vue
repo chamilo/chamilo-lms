@@ -1,16 +1,16 @@
 <template>
-        <q-form>
-          <q-input
-              id="item_title"
-              v-model="item.title"
-              :placeholder="$t('Title')"
-              :error="v$.item.title.$error"
-              @input="v$.item.title.$touch()"
-              @blur="v$.item.title.$touch()"
-              :error-message="titleErrors"
-          />
-          <slot></slot>
-        </q-form>
+  <q-form>
+    <q-input
+        id="item_title"
+        v-model="item.title"
+        :placeholder="$t('Title')"
+        :error="v$.item.title.$error"
+        @input="v$.item.title.$touch()"
+        @blur="v$.item.title.$touch()"
+        :error-message="titleErrors"
+    />
+    <slot></slot>
+  </q-form>
 </template>
 
 <script>

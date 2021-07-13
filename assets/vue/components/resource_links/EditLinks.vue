@@ -55,20 +55,12 @@
       :searchable="true"
       :internal-search="false"
       @search-change="asyncFind"
+      @select="addUser"
       limit-text="3"
       limit="3"
       label="username"
       track-by="id"
   />
-
-  <q-btn
-      no-caps
-      class="btn btn-primary"
-      @click="addUser"
-  >
-    <v-icon icon="mdi-cloud-upload"/>
-    Share
-  </q-btn>
 
 </template>
 
@@ -103,21 +95,21 @@ export default {
     const selectedUsers = ref([]);
     const isLoading = ref(false);
 
-    function addUser() {
-      selectedUsers.value.forEach(userResult => {
-        if (isEmpty(props.item.resourceLinkListFromEntity)) {
-          props.item.resourceLinkListFromEntity = [];
-        }
-        props.item.resourceLinkListFromEntity.push(
-            {
-              uid: userResult.id,
-              visibility: 2
-            }
-        );
-      });
+    function addUser(userResult) {
+      if (isEmpty(props.item.resourceLinkListFromEntity)) {
+        props.item.resourceLinkListFromEntity = [];
+      }
+
+      props.item.resourceLinkListFromEntity.push(
+          {
+            uid: userResult.id,
+            user: { username: userResult.username},
+            visibility: 2
+          }
+      );
     }
 
-    function asyncFind (query) {
+    function asyncFind(query) {
       if (query.toString().length < 3) {
         return;
       }

@@ -128,10 +128,10 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     protected Collection $repeatEvents;
 
     /**
-     * @ORM\Column(name="all_day", type="integer", nullable=false)
+     * @ORM\Column(name="all_day", type="boolean", nullable=false)
      */
     #[Groups(['calendar_event:read', 'calendar_event:write'])]
-    protected int $allDay;
+    protected bool $allDay;
 
     /**
      * @ORM\Column(name="comment", type="text", nullable=true)
@@ -164,7 +164,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
         $this->children = new ArrayCollection();
         $this->attachments = new ArrayCollection();
         $this->repeatEvents = new ArrayCollection();
-        $this->allDay = 0;
+        $this->allDay = false;
     }
 
     public function __toString(): string
@@ -269,16 +269,16 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function setAllDay(int $allDay): self
+    public function isAllDay(): bool
+    {
+        return $this->allDay;
+    }
+
+    public function setAllDay(bool $allDay): self
     {
         $this->allDay = $allDay;
 
         return $this;
-    }
-
-    public function getAllDay(): int
-    {
-        return $this->allDay;
     }
 
     /**

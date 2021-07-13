@@ -1266,7 +1266,7 @@ class Agenda
                         $event['iid'] = $eventEntity->getIid();
                         $event['title'] = $eventEntity->getTitle();
                         $event['content'] = $eventEntity->getContent();
-                        $event['all_day'] = $eventEntity->getAllDay();
+                        $event['all_day'] = $eventEntity->isAllDay();
                         $event['start_date'] = $eventEntity->getStartDate()->format('Y-m-d H:i:s');
                         $event['end_date'] = $eventEntity->getEndDate()->format('Y-m-d H:i:s');
                         $event['description'] = $eventEntity->getComment();
@@ -1789,7 +1789,7 @@ class Agenda
             $event['description'] = $row->getContent();
             $event['visibility'] = $row->isVisible($course, $session) ? 1 : 0;
             $event['real_id'] = $eventId;
-            $event['allDay'] = $row->getAllDay();
+            $event['allDay'] = $row->isAllDay();
             $event['parent_event_id'] = $row->getParentEvent() ? $row->getParentEvent()->getIid() : null;
             $event['has_children'] = $row->getChildren()->count() > 0;
             $event['comment'] = $row->getComment();

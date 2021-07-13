@@ -31,6 +31,8 @@ class Version20170625145000 extends AbstractMigrationChamilo
             $this->addSql('CREATE UNIQUE INDEX UNIQ_A06225811BAD783F ON c_calendar_event (resource_node_id)');
         }
 
+        $this->addSql('ALTER TABLE c_calendar_event CHANGE all_day all_day TINYINT(1) NOT NULL');
+
         if ($table->hasIndex('course')) {
             $this->addSql('DROP INDEX course ON c_calendar_event');
         }

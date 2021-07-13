@@ -17,6 +17,7 @@ We assume you already have:
 
 - composer 2.x - https://getcomposer.org/download/
 - yarn 2.x - https://yarnpkg.com/getting-started/install
+- Node >= v14 - https://github.com/nodesource/distributions/blob/master/README.md
 - Configuring a virtualhost in a domain, not in a sub folder inside a domain.
 - A working LAMP/WAMP server with PHP 8.0+
 
@@ -25,10 +26,11 @@ We assume you already have:
 On a fresh Ubuntu, you can prepare your server by issuing an apt command like the following:
 
 ~~~~
-apt update && apt -y upgrade && apt install apache2 libapache2-mod-php mariadb-client mariadb-server php-pear php-dev php-gd php-curl php-intl php-mysql php-mbstring php-zip php-xml php-cli php-apcu php-bcmath php-soap yarn git unzip npm
+apt update && apt -y upgrade && apt install apache2 libapache2-mod-php mariadb-client mariadb-server php-pear php-dev php-gd php-curl php-intl php-mysql php-mbstring php-zip php-xml php-cli php-apcu php-bcmath php-soap git unzip npm
 ~~~~
 
-Note: you might need to use more up-to-date versions of nodejs (at least v14) and yarn. These second part of these instructions may help: https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-20-04-fr
+Note: you might need to use more up-to-date versions of nodejs (at least v14) and yarn. 
+These second part of these instructions may help: https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-20-04-fr
 
 Otherwise, you can use the following directly:
 
@@ -42,8 +44,6 @@ yarn install
 yarn run encore dev
 chmod -R 777 .
 ~~~~
-
-Note: on Ubuntu Groovy, the `yarn` package has been replaced by `yarnpkg`. In this case, replace `yarn` by `yarnpkg` in all commands above (make sure you compare both packages with `apt search yarn` to get the latest version).
 
 In your web server configuration, ensure you allow for the interpretation of .htaccess (`AllowOverride all` and `Require all granted`), and point the `DocumentRoot` to the `public/` subdirectory.
 
@@ -157,7 +157,7 @@ systemctl reload php8.0-fpm
 Libraries 
 
 * Integration with Symfony 5 
-* PHPMailer replaced with Swift Mailer
+* PHPMailer replaced with Symfony Mailer
 * bower replaced by [yarn](https://yarnpkg.com)
 
 ## JWT Authentication
@@ -203,5 +203,4 @@ For more information on Chamilo, visit https://campus.chamilo.org/documentation/
 
 ## Notes
 
-You can install Yarn on Ubuntu following the instructions at https://linuxize.com/post/how-to-install-yarn-on-ubuntu-18-04/
 You can install Composer on Ubuntu following the instructions at https://getcomposer.org/download/

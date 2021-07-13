@@ -134,6 +134,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
+    #[Groups([
+        'message:read',
+    ])]
     protected ?int $id = null;
 
     /**

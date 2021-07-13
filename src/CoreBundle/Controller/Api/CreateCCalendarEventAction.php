@@ -27,8 +27,6 @@ class CreateCCalendarEventAction extends BaseResourceFileAction
             //->setAllDay($result['allDay'] ?? false)
         ;
 
-        var_dump($result);
-
         return $event;
     }
 }

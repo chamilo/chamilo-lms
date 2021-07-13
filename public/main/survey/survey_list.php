@@ -47,7 +47,7 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     $courseInfo
 );
 
-$htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
+//$htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
 
 if ($isDrhOfCourse) {
     Display::display_header(get_lang('Survey list'));

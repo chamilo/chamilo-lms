@@ -543,7 +543,7 @@ if ('' != $survey->getFormFields() &&
     $form->setDefaults($user_data);
 }
 
-$htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
+//$htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
 $htmlHeadXtra[] = ch_selectivedisplay::getJs();
 $htmlHeadXtra[] = survey_question::getJs();
 

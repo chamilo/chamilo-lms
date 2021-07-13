@@ -2,7 +2,7 @@ export default {
   path: '/resources/ccalendarevent',
   meta: { requiresAuth: true },
   name: 'ccalendarevent',
-  redirect: { name: 'CCalendarEventIndex' },
+  redirect: { name: 'CCalendarEventList' },
   component: () => import('../components/ccalendarevent/Layout.vue'),
   children: [
     {
@@ -16,9 +16,9 @@ export default {
       component: () => import('../views/ccalendarevent/Create.vue')
     },
     {
-      name: 'CCalendarEventIndex',
+      name: 'CCalendarEventList',
       path: '',
-      component: () => import('../views/ccalendarevent/Index.vue')
+      component: () => import('../views/ccalendarevent/List.vue')
     }
   ]
 };

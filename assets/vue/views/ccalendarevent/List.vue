@@ -28,6 +28,23 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+
+    <q-dialog v-model="dialogShow" persistent>
+      <q-card style="min-width: 500px">
+        <q-card-section class="q-pt-none">
+
+          <h3>{{ item.title }}</h3>
+          <p>
+            {{ item.startDate }}
+          </p>
+          <p>{{ item.endDate }}</p>
+        </q-card-section>
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Close" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -36,10 +53,10 @@ import {mapActions, mapGetters, useStore} from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 import Loading from '../../components/Loading.vue';
 import Toolbar from '../../components/Toolbar.vue';
-import {computed, ref} from "vue";
+import {computed, ref, watch} from "vue";
 
 //import '@fullcalendar/core/vdom' // solve problem with Vite
-import FullCalendar from '@fullcalendar/vue3';
+import FullCalendar, {EventClickArg} from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -51,7 +68,7 @@ import {useRoute, useRouter} from "vue-router";
 const servicePrefix = 'CCalendarEvent';
 
 export default {
-  name: 'CCalendarEventIndex',
+  name: 'CCalendarEventList',
   components: {
       CCalendarEventForm,
       Loading,
@@ -61,14 +78,15 @@ export default {
 
   mixins: [CreateMixin],
   //mixins: [ShowMixin],
-  setup() {
+  setup(props) {
     const calendarOptions = ref([]);
     const item = ref({});
     const dialog = ref(false);
+    const dialogShow = ref(false);
+
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
-
     const currentUser = computed(() => store.getters['security/getUser']);
 
     calendarOptions.value = {
@@ -95,6 +113,15 @@ export default {
       startParam: "startDate[after]",
       endParam: 'endDate[before]',
       selectable: true,
+      eventClick: function (EventClickArg) {
+        console.log(EventClickArg.event);
+
+        item.value['title'] = EventClickArg.event.title;
+        item.value['startDate'] = EventClickArg.event.startStr;
+        item.value['endDate'] = EventClickArg.event.endStr;
+
+        dialogShow.value = true;
+      },
       dateClick: function(info) {
         item.value['allDay'] = info.allDay;
         item.value['startDate'] = info.dateStr;
@@ -133,11 +160,13 @@ export default {
       },
     }
 
-    return {calendarOptions, dialog, item};
+    return {calendarOptions, dialog, item, dialogShow};
   },
   computed: {
     ...mapFields('ccalendarevent', {
-      isLoading: 'isLoading'
+      isLoading: 'isLoading',
+      created: 'created',
+      violations: 'violations',
     }),
     ...mapGetters('ccalendarevent', ['find']),
     ...mapGetters({

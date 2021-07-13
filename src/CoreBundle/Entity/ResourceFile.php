@@ -61,14 +61,17 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *         "get"
  *     }
  * )
- * @ApiFilter(SearchFilter::class, properties={"name":"partial"})
- * @ApiFilter(PropertyFilter::class)
  * @ApiFilter(OrderFilter::class, properties={"id", "name", "size", "updatedAt"})
  * @ORM\Entity
  * @Vich\Uploadable
  *
  * @ORM\Table(name="resource_file")
  */
+
+#[ApiFilter(PropertyFilter::class)]
+#[ApiFilter(SearchFilter::class, properties: [
+    'name' => 'partial',
+])]
 class ResourceFile
 {
     use TimestampableEntity;

@@ -37,8 +37,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     normalizationContext={"groups"={"resource_node:read", "document:read"}},
  *     denormalizationContext={"groups"={"resource_node:write", "document:write"}}
  * )
- * @ApiFilter(SearchFilter::class, properties={"title":"partial"})
- * @ApiFilter(PropertyFilter::class)
+
  * @ApiFilter(OrderFilter::class, properties={"id", "title", "resourceFile", "createdAt", "updatedAt"})
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ResourceNodeRepository")
  *
@@ -48,6 +47,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @Gedmo\Tree(type="materializedPath")
  */
+#[ApiFilter(PropertyFilter::class)]
+#[ApiFilter(SearchFilter::class, properties: [
+    'title' => 'partial',
+])]
 class ResourceNode
 {
     use TimestampableTypedEntity;

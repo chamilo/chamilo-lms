@@ -137,8 +137,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * //resourceNode.resourceLinks.course can be used but instead cid/sid/gid is used
  *
- * @ApiFilter(SearchFilter::class, properties={"title": "partial", "resourceNode.parent": "exact"})
- * @ApiFilter(PropertyFilter::class)
  * @ApiFilter(
  *     OrderFilter::class,
  *     properties={
@@ -160,6 +158,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener"})
  * @ORM\Entity
  */
+
+#[ApiFilter(PropertyFilter::class)]
+#[ApiFilter(SearchFilter::class, properties: [
+    'title' => 'partial',
+    'resourceNode.parent' => 'exact',
+])]
 class CDocument extends AbstractResource implements ResourceInterface
 {
     use ShowCourseResourcesInSessionTrait;

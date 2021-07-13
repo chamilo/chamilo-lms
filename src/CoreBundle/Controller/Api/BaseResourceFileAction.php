@@ -126,10 +126,61 @@ class BaseResourceFileAction
             }
         }
     }
+
+    /**
+     * @todo use this function inside handleCreateFileRequest
+     */
+    protected function handleCreateRequest(AbstractResource $resource, ResourceRepository $resourceRepository, Request $request): array
+    {
+        $contentData = $request->getContent();
+
+        if (!empty($contentData)) {
+            $contentData = json_decode($contentData, true);
+            $title = $contentData['title'] ?? '';
+            $parentResourceNodeId = (int) ($contentData['parentResourceNodeId'] ?? 0);
+            $resourceLinkList = $contentData['resourceLinkList'] ?? [];
+            if (empty($resourceLinkList)) {
+                $resourceLinkList = $contentData['resourceLinkListFromEntity'] ?? [];
+            }
+        } else {
+            $contentData = $request->request->all();
+            $title = $request->get('title');
+            $parentResourceNodeId = (int) $request->get('parentResourceNodeId');
+            $resourceLinkList = $request->get('resourceLinkList', []);
+            if (!empty($resourceLinkList)) {
+                $resourceLinkList = false === strpos($resourceLinkList, '[') ? json_decode('['.$resourceLinkList.']', true) : json_decode($resourceLinkList, true);
+                if (empty($resourceLinkList)) {
+                    $message = 'resourceLinkList is not a valid json. Use for example: [{"cid":1, "visibility":1}]';
+
+                    throw new InvalidArgumentException($message);
+                }
+            }
+        }
+
+        if (0 === $parentResourceNodeId) {
+            throw new Exception('Parameter parentResourceNodeId int value is needed');
+        }
+
+        $resource->setParentResourceNode($parentResourceNodeId);
+
+        if (empty($title)) {
+            throw new InvalidArgumentException('title is required');
+        }
+
+        $resource->setResourceName($title);
+
+        // Set resource link list if exists.
+        if (!empty($resourceLinkList)) {
+            $resource->setResourceLinkArray($resourceLinkList);
+        }
+
+        return $contentData;
+    }
+
     /**
      * Function loaded when creating a resource using the api, then the ResourceListener is executed.
      */
-    protected function handleCreateRequest(AbstractResource $resource, ResourceRepository $resourceRepository, Request $request): array
+    protected function handleCreateFileRequest(AbstractResource $resource, ResourceRepository $resourceRepository, Request $request): array
     {
         $contentData = $request->getContent();
 

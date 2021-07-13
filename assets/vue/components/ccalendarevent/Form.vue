@@ -1,4 +1,5 @@
 <template>
+
   <q-form>
     <q-input
         id="item_title"
@@ -62,6 +63,8 @@
       </template>
     </q-input>
 
+    <EditLinks :item="item" />
+
     <q-input
         v-model="item.content"
         type="textarea"
@@ -80,9 +83,11 @@
 import has from 'lodash/has';
 import useVuelidate from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
+import EditLinks from "../resource_links/EditLinks.vue";
 
 export default {
   name: 'CCalendarEventForm',
+  components: {EditLinks},
   setup () {
     return { v$: useVuelidate() }
   },

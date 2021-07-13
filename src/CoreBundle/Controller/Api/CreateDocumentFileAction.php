@@ -16,7 +16,7 @@ class CreateDocumentFileAction extends BaseResourceFileAction
     public function __invoke(Request $request, CDocumentRepository $repo, EntityManager $em): CDocument
     {
         $document = new CDocument();
-        $result = $this->handleCreateRequest($document, $repo, $request);
+        $result = $this->handleCreateFileRequest($document, $repo, $request);
 
         $document->setFiletype($result['filetype']);
         $document->setComment($result['comment']);

@@ -10,6 +10,7 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Chamilo\CoreBundle\Controller\Api\CreateCCalendarEventAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Room;
@@ -37,6 +38,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             'security' => "is_granted('ROLE_USER')",
         ],
         'post' => [
+            'controller' => CreateCCalendarEventAction::class,
             'security_post_denormalize' => "is_granted('CREATE', object)",
         ],
     ],

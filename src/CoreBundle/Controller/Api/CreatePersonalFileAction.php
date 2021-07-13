@@ -16,7 +16,7 @@ class CreatePersonalFileAction extends BaseResourceFileAction
     public function __invoke(Request $request, PersonalFileRepository $repo, EntityManager $em): PersonalFile
     {
         $resource = new PersonalFile();
-        $this->handleCreateRequest($resource, $repo, $request);
+        $this->handleCreateFileRequest($resource, $repo, $request);
 
         return $resource;
     }

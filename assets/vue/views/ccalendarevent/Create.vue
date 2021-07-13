@@ -71,6 +71,8 @@ export default {
       delete item.value['sendDate'];
 
       item.value['parentResourceNodeId'] = currentUser.value.resourceNode['id'];
+      //item.value.startDate = new Date;
+      //item.value.endDate = new Date;
 
       //item.value['originalSender'] = item.value['sender'];
       // New sender.

@@ -1,6 +1,7 @@
 In order to run behat tests locally with the right support for browser
 and JS environments under Linux, you will need to:
 
+- Have Java installed (see notes below)
 - Download Selenium Standalone Server v3.*
 
 http://www.seleniumhq.org/download/
@@ -50,3 +51,8 @@ To run an specific feature:
 ```
 ../../vendor/behat/behat/bin/behat features/course.feature
 ```
+
+## Java versions
+
+Not all java versions will work. For Ubuntu, `sudo apt install openjdk-11-jdk openjdk-11-jre` should do, but OpenJDK 17 will not work, for example.
+If you have several versions installed, you can update the "active" version with `sudo update-java-alternatives -l` to see the possibilities, then `sudo update-java-alternatives -s java-1.11.0-openjdk-amd64` or something like that to set it. Beware this can have a big impact on other things you run with Java (like your IDE?) so maybe think about undoing this later on...

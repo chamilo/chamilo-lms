@@ -37,6 +37,12 @@ export default {
     onSendMessageForm() {
       const createForm = this.$refs.createForm;
       createForm.v$.$touch();
+
+      // @todo this should be built in in the VueMultiselect component.
+      if (isEmpty(createForm.v$.item.$model.receivers)) {
+        this.showMessage('Select a user', 'warning');
+      }
+
       if (!createForm.v$.$invalid) {
         let users = [];
         createForm.v$.item.$model.receivers.forEach(user => {

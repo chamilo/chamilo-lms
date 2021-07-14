@@ -38,6 +38,7 @@ export default function makeService(endpoint) {
     },
     async create(payload) {
       console.log('api.js create');
+      console.log(payload);
       return fetch(endpoint, { method: 'POST', body: JSON.stringify(payload) });
     },
     del(item) {

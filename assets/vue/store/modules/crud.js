@@ -95,7 +95,8 @@ export default function makeCrudModule({
             .catch(e => handleError(commit, e));
       },
       create: ({ commit }, values) => {
-        console.log('create');
+        console.log('crud.js create');
+        console.log(values);
         commit(ACTIONS.SET_ERROR, '');
         commit(ACTIONS.TOGGLE_LOADING);
 

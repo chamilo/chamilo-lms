@@ -27,10 +27,10 @@ import isEmpty from "lodash/isEmpty";
 const servicePrefix = 'Message';
 
 const { mapFields } = createHelpers({
-  getterType: 'message/getField',
-  mutationType: 'message/updateField'
+  getterType: 'ccalendarevent/getField',
+  mutationType: 'ccalendarevent/updateField'
 });
-
+//const { DateTime } = require("luxon");
 export default {
   name: 'CCalendarEventCreate',
   servicePrefix,
@@ -67,13 +67,12 @@ export default {
       delete item.value['@id'];
       delete item.value['id'];
       delete item.value['firstReceiver'];
-      delete item.value['sender'];
       //delete item.value['receivers'];
       delete item.value['sendDate'];
 
       item.value['parentResourceNodeId'] = currentUser.value.resourceNode['id'];
-      //item.value.startDate = new Date;
-      //item.value.endDate = new Date;
+      //item.value['startDate'] = date.now();
+      //item.value['endDate'] = new Date();
 
       //item.value['originalSender'] = item.value['sender'];
       // New sender.
@@ -90,6 +89,18 @@ export default {
             }
         );
       });
+
+      // Set the sender too.
+      item.value['resourceLinkListFromEntity'].push(
+          {
+            uid: item.value['sender']['id'],
+            user: { username: item.value['sender']['username']},
+            visibility: 2
+          }
+      );
+
+      delete item.value['sender'];
+
       /*item.value['receivers'] = [];
       item.value['receivers'][0] = item.value['originalSender'];*/
     });

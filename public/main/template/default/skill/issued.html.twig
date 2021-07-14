@@ -81,7 +81,7 @@
                     {% if issue_info.argumentation %}
                         <strong>
                             <p style="font-style: italic;">
-                                {{ 'UserXIndicated'|trans|format(issue_info.argumentation_author_name) }}
+                                {{ 'User %s indicated:'|trans|format(issue_info.argumentation_author_name) }}
                             </p>
                         </strong>
                     {% endif %}

@@ -100,7 +100,11 @@ export default {
           text: 'Add event',
           click: function () {
             item.value['parentResourceNodeId'] = currentUser.value.resourceNode['id'];
-            item.value['collective'] = false;
+
+            if (!!!item.value['collective']) {
+              item.value['collective'] = false;
+            }
+
             dialog.value = true;
           }
         }
@@ -116,10 +120,12 @@ export default {
       endParam: 'endDate[before]',
       selectable: true,
       eventClick(EventClickArg) {
-        item.value['title'] = EventClickArg.event.title;
-        item.value['startDate'] = EventClickArg.event.startStr;
-        item.value['endDate'] = EventClickArg.event.endStr;
-        item.value['collective'] = EventClickArg.event.collective || false;
+        let event = EventClickArg.event;
+
+        item.value['title'] = event.title;
+        item.value['startDate'] = event.startStr;
+        item.value['endDate'] = event.endStr;
+        item.value['collective'] = event.extendedProps.collective;
 
         dialogShow.value = true;
       },
@@ -151,9 +157,10 @@ export default {
           successCallback(
               Array.prototype.slice.call(events)
                   .map(event => ({
-                    title: event['title'],
-                    start: event['startDate'],
-                    end: event['endDate'],
+                    title: event.title,
+                    start: event.startDate,
+                    end: event.endDate,
+                    collective: event.collective
                   }))
           )
         })

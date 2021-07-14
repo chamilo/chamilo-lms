@@ -119,7 +119,7 @@ export default {
       title: null,
       content: null,
       parentResourceNodeId: null,
-      collective: false,
+      collective: null,
     };
   },
   computed: {

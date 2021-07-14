@@ -124,6 +124,7 @@ class ResourceNodeVoter extends Voter
                 if ($resourceNode->isPublic()) {
                     return true;
                 }
+                // no break
             case self::EDIT:
                 break;
         }

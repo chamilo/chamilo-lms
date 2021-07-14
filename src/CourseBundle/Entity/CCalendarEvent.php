@@ -159,12 +159,19 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
      */
     protected Collection $attachments;
 
+    /**
+     * @ORM\Column(name="collective", type="boolean", options={"default": false}, nullable=false)
+     */
+    #[Groups(['calendar_event:read', 'calendar_event:write'])]
+    protected bool $collective = false;
+
     public function __construct()
     {
         $this->children = new ArrayCollection();
         $this->attachments = new ArrayCollection();
         $this->repeatEvents = new ArrayCollection();
         $this->allDay = false;
+        $this->collective = false;
     }
 
     public function __toString(): string
@@ -386,5 +393,17 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     public function setResourceName(string $name): self
     {
         return $this->setTitle($name);
+    }
+
+    public function isCollective(): bool
+    {
+        return $this->collective;
+    }
+
+    public function setCollective(bool $collective): CCalendarEvent
+    {
+        $this->collective = $collective;
+
+        return $this;
     }
 }

@@ -26,6 +26,7 @@ class CreateCCalendarEventAction extends BaseResourceFileAction
             ->setStartDate(new DateTime($result['startDate'] ?? ''))
             ->setEndDate(new DateTime($result['endDate'] ?? ''))
             //->setAllDay($result['allDay'] ?? false)
+            ->setCollective($result['collective'] ?? false)
         ;
 
         return $event;

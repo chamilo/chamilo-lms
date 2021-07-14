@@ -67,6 +67,8 @@
 
       <EditLinks :item="item" />
 
+      <q-checkbox v-model="item.collective" label="Is collective" />
+
       <q-input
           v-model="item.content"
           type="textarea"
@@ -115,6 +117,7 @@ export default {
       title: null,
       content: null,
       parentResourceNodeId: null,
+      collective: false,
     };
   },
   computed: {

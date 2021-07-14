@@ -100,6 +100,7 @@ export default {
           text: 'Add event',
           click: function() {
             item.value['parentResourceNodeId'] = currentUser.value.resourceNode['id'];
+            item.value['collective'] = false;
             dialog.value = true;
           }
         }
@@ -118,6 +119,7 @@ export default {
         item.value['title'] = EventClickArg.event.title;
         item.value['startDate'] = EventClickArg.event.startStr;
         item.value['endDate'] = EventClickArg.event.endStr;
+        item.value['collective'] = EventClickArg.event.collective || false;
 
         dialogShow.value = true;
       },
@@ -126,6 +128,7 @@ export default {
         item.value['startDate'] = info.dateStr;
         item.value['endDate'] = info.dateStr;
         item.value['parentResourceNodeId'] = currentUser.value.resourceNode['id'];
+        item.value['collective'] = false;
         dialog.value = true;
       },
       select: function(info) {
@@ -133,6 +136,7 @@ export default {
         item.value['startDate'] = info.startStr;
         item.value['endDate'] = info.endStr;
         item.value['parentResourceNodeId'] = currentUser.value.resourceNode['id'];
+        item.value['collective'] = false;
         dialog.value = true;
       },
       events: function(info, successCallback, failureCallback) {

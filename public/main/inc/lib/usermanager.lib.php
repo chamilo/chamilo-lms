@@ -411,13 +411,6 @@ class UserManager
                 $mailTemplateManager = new MailTemplateManager();
                 $phoneNumber = $extra['mobile_phone_number'] ?? null;
 
-                $additionalParameters = [
-                    'smsType' => SmsPlugin::WELCOME_LOGIN_PASSWORD,
-                    'userId' => $userId,
-                    'mobilePhoneNumber' => $phoneNumber,
-                    'password' => $original_password,
-                ];
-
                 $emailBodyTemplate = '';
                 if (!empty($emailTemplate)) {
                     if (isset($emailTemplate['content_registration_platform.tpl']) &&
@@ -452,12 +445,7 @@ class UserManager
                         $emailSubject,
                         $emailBody,
                         $sender_name,
-                        $email_admin,
-                        null,
-                        null,
-                        null,
-                        $additionalParameters,
-                        $creatorEmail
+                        $email_admin
                     );
 
                     $emailBody = $tpl->render('@ChamiloCore/Mailer/Legacy/new_user_second_email_confirmation.html.twig');

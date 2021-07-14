@@ -2672,23 +2672,13 @@ class CourseManager
             );
             $email_admin = api_get_setting('emailAdministrator');
 
-            $additionalParameters = [
-                'smsType' => SmsPlugin::NEW_USER_SUBSCRIBED_COURSE,
-                'userId' => $tutor['user_id'],
-                'userUsername' => $student['username'],
-                'courseCode' => $course_code,
-            ];
             api_mail_html(
                 $recipient_name,
                 $emailto,
                 $emailsubject,
                 $emailbody,
                 $sender_name,
-                $email_admin,
-                null,
-                null,
-                null,
-                $additionalParameters
+                $email_admin
             );
         }
     }

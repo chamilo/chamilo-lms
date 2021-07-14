@@ -838,38 +838,6 @@ class AppPlugin
     }
 
     /**
-     * Get first SMS plugin name.
-     *
-     * @return string|bool
-     */
-    public function getSMSPluginName()
-    {
-        $installedPluginsList = $this->getInstalledPluginListObject();
-        foreach ($installedPluginsList as $installedPlugin) {
-            if ($installedPlugin->isMailPlugin) {
-                return get_class($installedPlugin);
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @return SmsPluginLibraryInterface
-     */
-    public function getSMSPluginLibrary()
-    {
-        $className = $this->getSMSPluginName();
-        $className = str_replace('Plugin', '', $className);
-
-        if (class_exists($className)) {
-            return new $className();
-        }
-
-        return false;
-    }
-
-    /**
      * @param array            $pluginRegionList
      * @param string           $pluginRegion
      * @param Twig_Environment $twig

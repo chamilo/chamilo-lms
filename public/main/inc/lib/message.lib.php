@@ -450,7 +450,6 @@ class MessageManager
      * @param int    $sender_id
      * @param bool   $sendCopyToDrhUsers send copy to related DRH users
      * @param bool   $directMessage
-     * @param array  $smsParameters
      * @param bool   $uploadFiles        Do not upload files using the MessageManager class
      * @param array  $attachmentList
      *
@@ -463,7 +462,6 @@ class MessageManager
         $sender_id = 0,
         $sendCopyToDrhUsers = false,
         $directMessage = false,
-        $smsParameters = [],
         $uploadFiles = true,
         $attachmentList = []
     ) {
@@ -1666,7 +1664,6 @@ class MessageManager
                 $senderId,
                 false,
                 false,
-                [],
                 false
             );
         }

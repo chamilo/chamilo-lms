@@ -171,29 +171,16 @@ class CourseRequestManager
         );
         $recipient_email_admin = api_get_setting('emailAdministrator');
 
-        $userInfo = api_get_user_info($user_id);
-
-        $additionalParameters = [
-            'smsType' => SmsPlugin::NEW_COURSE_SUGGESTED_TEACHER,
-            'userId' => $user_id,
-            'userUsername' => $userInfo['username'],
-        ];
-
         api_mail_html(
             $recipient_name_admin,
             $recipient_email_admin,
             $email_subject,
             $email_body_admin,
             $sender_name_teacher,
-            $sender_email_teacher,
-            null,
-            null,
-            null,
-            $additionalParameters
+            $sender_email_teacher
         );
 
-        // Sending an e-mail to the requestor.
-
+        // Sending an e-mail to the request.
         $email_body_teacher = get_lang('Dear', null, $email_language).' ';
         $email_body_teacher .= api_get_person_name($user_info['firstname'], $user_info['lastname'], null, null, $email_language).",\n\n";
         $email_body_teacher .= $email_body;
@@ -216,12 +203,6 @@ class CourseRequestManager
         $recipient_name_teacher = $sender_name_teacher;
         $recipient_email_teacher = $sender_email_teacher;
 
-        $additionalParameters = [
-            'smsType' => SmsPlugin::COURSE_OPENING_REQUEST_CODE_REGISTERED,
-            'userId' => $user_info['user_id'],
-            'courseCode' => $wanted_code,
-        ];
-
         api_mail_html(
             $recipient_name_teacher,
             $recipient_email_teacher,
@@ -231,8 +212,7 @@ class CourseRequestManager
             $sender_email_admin,
             null,
             null,
-            null,
-            $additionalParameters
+            null
         );
 
         return $last_insert_id;
@@ -560,23 +540,13 @@ class CourseRequestManager
             );
             $recipient_email = $user_info['mail'];
 
-            $additionalParameters = [
-                'smsType' => SmsPlugin::COURSE_OPENING_REQUEST_CODE_APPROVED,
-                'userId' => $user_id,
-                'courseCode' => $course->getCode(),
-            ];
-
             api_mail_html(
                 $recipient_name,
                 $recipient_email,
                 $email_subject,
                 $email_body,
                 $sender_name,
-                $sender_email,
-                null,
-                null,
-                null,
-                $additionalParameters
+                $sender_email
             );
 
             return $course->getCode();
@@ -652,23 +622,13 @@ class CourseRequestManager
         );
         $recipient_email = $user_info['mail'];
 
-        $additionalParameters = [
-            'smsType' => SmsPlugin::COURSE_OPENING_REQUEST_CODE_REJECTED,
-            'userId' => $user_id,
-            'courseCode' => $code,
-        ];
-
         api_mail_html(
             $recipient_name,
             $recipient_email,
             $email_subject,
             $email_body,
             $sender_name,
-            $sender_email,
-            null,
-            null,
-            null,
-            $additionalParameters
+            $sender_email
         );
 
         return true;
@@ -740,23 +700,13 @@ class CourseRequestManager
         );
         $recipient_email = $user_info['mail'];
 
-        $additionalParameters = [
-            'smsType' => SmsPlugin::COURSE_OPENING_REQUEST_CODE,
-            'userId' => $user_id,
-            'courseCode' => $code,
-        ];
-
         $result = api_mail_html(
             $recipient_name,
             $recipient_email,
             $email_subject,
             $email_body,
             $sender_name,
-            $sender_email,
-            null,
-            null,
-            null,
-            $additionalParameters
+            $sender_email
         );
 
         if (!$result) {

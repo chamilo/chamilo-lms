@@ -411,17 +411,6 @@ class Certificate extends Model
             0,
             $currentUserInfo['id']
         );
-
-        $plugin = new AppPlugin();
-        $smsPlugin = $plugin->getSMSPluginLibrary();
-        if ($smsPlugin) {
-            $additionalParameters = [
-                'smsType' => SmsPlugin::CERTIFICATE_NOTIFICATION,
-                'userId' => $userInfo['id'],
-                'direct_message' => $message,
-            ];
-            $smsPlugin->send($additionalParameters);
-        }
     }
 
     /**

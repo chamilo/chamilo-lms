@@ -229,19 +229,10 @@ switch ($action) {
                     api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".
                     get_lang('e-mail')." : ".api_get_setting('emailAdministrator');
 
-                    $additionalParameters = [
-                        'smsType' => SmsPlugin::ACCOUNT_APPROVED_CONNECT,
-                        'userId' => $user_id,
-                    ];
-
                     MessageManager::send_message_simple(
                         $user_id,
                         $subject,
-                        $body,
-                        null,
-                        false,
-                        false,
-                        $additionalParameters
+                        $body
                     );
                     Event::addEvent(LOG_USER_ENABLE, LOG_USER_ID, $user_id);
                 } else {

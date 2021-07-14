@@ -1396,8 +1396,7 @@ class TicketManager
                     0,
                     false,
                     false,
-                    [],
-                    false,
+                    true,
                     $attachmentList
                 );
             }
@@ -1411,7 +1410,6 @@ class TicketManager
                     0,
                     false,
                     false,
-                    [],
                     false,
                     $attachmentList
                 );
@@ -1428,7 +1426,6 @@ class TicketManager
                     0,
                     false,
                     false,
-                    [],
                     false,
                     $attachmentList
                 );

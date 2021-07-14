@@ -867,13 +867,6 @@ class AddCourse
                     $message .= get_lang('Coach').' '.$tutor_name."\n";
                     $message .= get_lang('Language').' '.$course_language;
 
-                    $additionalParameters = [
-                        'smsType' => SmsPlugin::NEW_COURSE_BEEN_CREATED,
-                        'userId' => $userId,
-                        'courseName' => $title,
-                        'creatorUsername' => $user->getUsername(),
-                    ];
-
                     api_mail_html(
                         $recipient_name,
                         $recipient_email,
@@ -883,8 +876,7 @@ class AddCourse
                         $recipient_email,
                         null,
                         null,
-                        null,
-                        $additionalParameters
+                        null
                     );
                 }
             }

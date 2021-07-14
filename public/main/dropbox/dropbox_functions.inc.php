@@ -1066,12 +1066,6 @@ function store_add_dropbox($file = [], $work = null)
     if ($b_send_mail && empty($work)) {
         foreach ($new_work_recipients as $recipient_id) {
             $recipent_temp = api_get_user_info($recipient_id);
-            $additionalParameters = [
-                'smsType' => SmsPlugin::NEW_FILE_SHARED_COURSE_BY,
-                'userId' => $recipient_id,
-                'courseTitle' => $_course['title'],
-                'userUsername' => $recipent_temp['username'],
-            ];
             api_mail_html(
                 api_get_person_name(
                     $recipent_temp['firstname'].' '.$recipent_temp['lastname'],
@@ -1094,11 +1088,7 @@ function store_add_dropbox($file = [], $work = null)
                     null,
                     PERSON_NAME_EMAIL_ADDRESS
                 ),
-                $_user['mail'],
-                null,
-                null,
-                null,
-                $additionalParameters
+                $_user['mail']
             );
         }
     }

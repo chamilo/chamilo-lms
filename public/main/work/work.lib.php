@@ -3155,22 +3155,10 @@ function sendEmailToStudentsOnHomeworkCreation($workId, $courseId, $sessionId = 
                     '<a href="'.$link.'">'.get_lang('Please check the assignments page.').'</a>';
                 $emailbody .= "\n\n".$currentUser['complete_name'];
 
-                $additionalParameters = [
-                    'smsType' => SmsPlugin::ASSIGNMENT_BEEN_CREATED_COURSE,
-                    'userId' => $student['user_id'],
-                    'courseTitle' => $courseCode,
-                    'link' => $link,
-                ];
-
                 MessageManager::send_message_simple(
                     $student['user_id'],
                     $emailsubject,
-                    $emailbody,
-                    null,
-                    false,
-                    false,
-                    $additionalParameters,
-                    false
+                    $emailbody
                 );
             }
         }
@@ -4652,7 +4640,6 @@ function sendAlertToUsers($workInfo, $workId, $courseInfo, $sessionId = 0)
                 0,
                 false,
                 false,
-                [],
                 false
             );
         }

@@ -7125,14 +7125,6 @@ function api_mail_html(
         error_log($e->getMessage());
     }
 
-    if (!empty($additionalParameters)) {
-        $plugin = new AppPlugin();
-        $smsPlugin = $plugin->getSMSPluginLibrary();
-        if ($smsPlugin) {
-            $smsPlugin->send($additionalParameters);
-        }
-    }
-
     return 1;
 }
 

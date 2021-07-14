@@ -112,6 +112,7 @@ class SkillRelUser
         $this->validationStatus = 0;
         $this->comments = new ArrayCollection();
         $this->acquiredLevel = null;
+        $this->acquiredSkillAt = new DateTime();
     }
 
     /**

@@ -498,11 +498,11 @@ function WSAssignSkill($params)
         $authorInfo['id']
     );
 
-    if (!empty($skillUser)) {
-        return 1;
+    if (null === $skillUser) {
+        return 0;
     }
 
-    return 0;
+    return 1;
 }
 
 // Use the request to (try to) invoke the service

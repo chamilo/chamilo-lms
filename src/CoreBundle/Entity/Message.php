@@ -19,6 +19,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -124,6 +125,8 @@ class Message
     protected ?int $id = null;
 
     /**
+     * @var User|UserInterface
+     *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="sentMessages")
      * @ORM\JoinColumn(name="user_sender_id", referencedColumnName="id", nullable=false)
      */
@@ -237,6 +240,7 @@ class Message
     {
         $this->sendDate = new DateTime('now');
         $this->updateDate = $this->sendDate;
+        $this->msgType = self::MESSAGE_TYPE_INBOX;
         $this->content = '';
         $this->attachments = new ArrayCollection();
         $this->children = new ArrayCollection();
@@ -305,7 +309,10 @@ class Message
         return $this;
     }
 
-    public function setSender(User $sender): self
+    /**
+     * @param User|UserInterface $sender
+     */
+    public function setSender($sender): self
     {
         $this->sender = $sender;
 

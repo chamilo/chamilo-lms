@@ -2333,10 +2333,7 @@ class SkillModel extends Model
      * @param string $argumentation
      * @param int    $authorId
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     *
-     * @return SkillRelUser|false
+     * @return SkillRelUser|null
      */
     public function addSkillToUserBadge($user, $skill, $levelId, $argumentation, $authorId)
     {
@@ -2349,25 +2346,24 @@ class SkillModel extends Model
         $criteria = ['user' => $user, 'skill' => $skill];
         $result = $skillUserRepo->findOneBy($criteria);
 
-        if (!empty($result)) {
-            return false;
+        if (null !== $result) {
+            return null;
         }
 
         $skillLevelRepo = $entityManager->getRepository(Level::class);
 
-        $skillUser = new SkillRelUser();
-        $skillUser->setUser($user);
-        $skillUser->setSkill($skill);
+        $skillUser = (new SkillRelUser())
+            ->setUser($user)
+            ->setSkill($skill)
+            ->setArgumentation($argumentation)
+            ->setArgumentationAuthorId($authorId)
+            ->setAssignedBy(0)
+        ;
 
         if ($showLevels && !empty($levelId)) {
             $level = $skillLevelRepo->find($levelId);
             $skillUser->setAcquiredLevel($level);
         }
-
-        $skillUser->setArgumentation($argumentation);
-        $skillUser->setArgumentationAuthorId($authorId);
-        $skillUser->setAcquiredSkillAt(new DateTime());
-        $skillUser->setAssignedBy(0);
 
         $entityManager->persist($skillUser);
         $entityManager->flush();

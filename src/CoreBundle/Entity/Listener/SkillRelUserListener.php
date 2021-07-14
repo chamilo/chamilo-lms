@@ -6,16 +6,18 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity\Listener;
 
+use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Display;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use MessageManager;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SkillRelUserListener
 {
+    protected Security $security;
     private SettingsManager $settingsManager;
     private RouterInterface $router;
     private TranslatorInterface $translator;
@@ -23,11 +25,13 @@ class SkillRelUserListener
     public function __construct(
         SettingsManager $settingsManager,
         RouterInterface $router,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        Security $security
     ) {
         $this->settingsManager = $settingsManager;
         $this->router = $router;
         $this->translator = $translator;
+        $this->security = $security;
     }
 
     public function postPersist(SkillRelUser $skillRelUser, LifecycleEventArgs $event): void
@@ -50,11 +54,18 @@ class SkillRelUserListener
                 Display::url($url, $url)
             );
 
-            MessageManager::send_message_simple(
-                $user->getId(),
-                $this->translator->trans('You have achieved a new skillskill.'),
-                $message
-            );
+            if (null !== $this->security->getToken()) {
+                $currentUser = $this->security->getUser();
+                $message = (new Message())
+                    ->setTitle($this->translator->trans('You have achieved a new skillskill.'))
+                    ->setContent($message)
+                    ->addReceiver($user)
+                    ->setSender($currentUser)
+                ;
+
+                $event->getEntityManager()->persist($message);
+                $event->getEntityManager()->flush();
+            }
         }
     }
 }

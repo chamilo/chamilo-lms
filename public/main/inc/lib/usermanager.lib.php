@@ -470,7 +470,6 @@ class UserManager
                         null,
                         null,
                         null,
-                        $additionalParameters,
                         $creatorEmail
                     );
                 } else {
@@ -503,7 +502,6 @@ class UserManager
                             null,
                             null,
                             null,
-                            $additionalParameters,
                             $creatorEmail
                         );
                     }

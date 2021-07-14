@@ -216,7 +216,7 @@ switch ($action) {
         echo json_encode($return);
         break;
     case 'profile_matches':
-        $skill_rel_user = new SkillRelUser();
+        $skill_rel_user = new SkillRelUserModel();
         $skills = !empty($_REQUEST['skill_id']) ? $_REQUEST['skill_id'] : [];
         $total_skills_to_search = $skills;
         $users = $skill_rel_user->getUserBySkills($skills);

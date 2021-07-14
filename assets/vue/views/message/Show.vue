@@ -92,6 +92,7 @@ import {ENTRYPOINT} from "../../config/entrypoint";
 import useVuelidate from "@vuelidate/core";
 import {useRoute, useRouter} from "vue-router";
 import NotificationMixin from "../../mixins/NotificationMixin";
+import useNotification from '../../components/Notification.js';
 
 const servicePrefix = 'Message';
 
@@ -111,6 +112,7 @@ export default {
     const find = store.getters["message/find"];
     const route = useRoute();
     const router = useRouter();
+    const {showNotification} = useNotification();
 
     let id = route.params.id;
     if (isEmpty(id)) {
@@ -148,8 +150,7 @@ export default {
         tag: newTag,
       }).then(response => {
         addTagToMessage(response.data);
-        //this.showMessage('Added');
-        item.tags.push(response.data);
+        myReceiver.value.tags.push(response.data);
         console.log(response);
         isLoadingSelect.value = false;
       }).catch(function (error) {
@@ -170,7 +171,7 @@ export default {
       axios.put(myReceiver.value['@id'], {
         tags: tagsToUpdate,
       }).then(response => {
-        //this.showMessage('Added');
+        showNotification('Tag added');
         console.log(response);
         isLoadingSelect.value = false;
       }).catch(function (error) {

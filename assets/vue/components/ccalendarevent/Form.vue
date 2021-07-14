@@ -6,20 +6,20 @@
       <q-input
           id="item_title"
           v-model="item.title"
-          :placeholder="$t('Title')"
           :error="v$.item.title.$error"
-          @input="v$.item.title.$touch()"
-          @blur="v$.item.title.$touch()"
           :error-message="titleErrors"
+          :placeholder="$t('Title')"
+          @blur="v$.item.title.$touch()"
+          @input="v$.item.title.$touch()"
       />
 
-      <q-input filled v-model="item.startDate">
+      <q-input v-model="item.startDate" filled>
         <template v-slot:prepend>
-          <q-icon name="event" class="cursor-pointer">
-            <q-popup-proxy transition-show="scale" transition-hide="scale">
+          <q-icon class="cursor-pointer" name="event">
+            <q-popup-proxy transition-hide="scale" transition-show="scale">
               <q-date v-model="item.startDate" mask="YYYY-MM-DD HH:mm">
                 <div class="row items-center justify-end">
-                  <q-btn v-close-popup label="Close" color="primary" flat />
+                  <q-btn v-close-popup color="primary" flat label="Close"/>
                 </div>
               </q-date>
             </q-popup-proxy>
@@ -27,11 +27,11 @@
         </template>
 
         <template v-slot:append>
-          <q-icon name="access_time" class="cursor-pointer">
-            <q-popup-proxy transition-show="scale" transition-hide="scale">
-              <q-time v-model="item.startDate" mask="YYYY-MM-DD HH:mm" format24h>
+          <q-icon class="cursor-pointer" name="access_time">
+            <q-popup-proxy transition-hide="scale" transition-show="scale">
+              <q-time v-model="item.startDate" format24h mask="YYYY-MM-DD HH:mm">
                 <div class="row items-center justify-end">
-                  <q-btn v-close-popup label="Close" color="primary" flat />
+                  <q-btn v-close-popup color="primary" flat label="Close"/>
                 </div>
               </q-time>
             </q-popup-proxy>
@@ -39,13 +39,13 @@
         </template>
       </q-input>
 
-      <q-input filled v-model="item.endDate">
+      <q-input v-model="item.endDate" filled>
         <template v-slot:prepend>
-          <q-icon name="event" class="cursor-pointer">
-            <q-popup-proxy transition-show="scale" transition-hide="scale">
+          <q-icon class="cursor-pointer" name="event">
+            <q-popup-proxy transition-hide="scale" transition-show="scale">
               <q-date v-model="item.endDate" mask="YYYY-MM-DD HH:mm">
                 <div class="row items-center justify-end">
-                  <q-btn v-close-popup label="Close" color="primary" flat />
+                  <q-btn v-close-popup color="primary" flat label="Close"/>
                 </div>
               </q-date>
             </q-popup-proxy>
@@ -53,11 +53,11 @@
         </template>
 
         <template v-slot:append>
-          <q-icon name="access_time" class="cursor-pointer">
-            <q-popup-proxy transition-show="scale" transition-hide="scale">
-              <q-time v-model="item.endDate" mask="YYYY-MM-DD HH:mm" format24h>
+          <q-icon class="cursor-pointer" name="access_time">
+            <q-popup-proxy transition-hide="scale" transition-show="scale">
+              <q-time v-model="item.endDate" format24h mask="YYYY-MM-DD HH:mm">
                 <div class="row items-center justify-end">
-                  <q-btn v-close-popup label="Close" color="primary" flat />
+                  <q-btn v-close-popup color="primary" flat label="Close"/>
                 </div>
               </q-time>
             </q-popup-proxy>
@@ -65,18 +65,18 @@
         </template>
       </q-input>
 
-      <EditLinks :item="item" />
+      <EditLinks :item="item"/>
 
-      <q-checkbox v-model="item.collective" label="Is collective" />
+      <q-checkbox v-model="item.collective" label="Is collective"/>
 
       <q-input
           v-model="item.content"
-          type="textarea"
-          :placeholder="$t('Content')"
           :error="v$.item.content.$error"
-          @input="v$.item.content.$touch()"
-          @blur="v$.item.content.$touch()"
           :error-message="contentErrors"
+          :placeholder="$t('Content')"
+          type="textarea"
+          @blur="v$.item.content.$touch()"
+          @input="v$.item.content.$touch()"
       />
 
       <slot></slot>
@@ -87,7 +87,7 @@
 <script>
 import has from 'lodash/has';
 import useVuelidate from '@vuelidate/core';
-import { required } from '@vuelidate/validators';
+import {required} from '@vuelidate/validators';
 import EditLinks from "../resource_links/EditLinks.vue";
 
 export default {
@@ -95,8 +95,8 @@ export default {
   components: {
     EditLinks
   },
-  setup () {
-    return { v$: useVuelidate() }
+  setup() {
+    return {v$: useVuelidate()}
   },
   props: {
     values: {
@@ -105,11 +105,13 @@ export default {
     },
     errors: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
     initialValues: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
   },
   data() {

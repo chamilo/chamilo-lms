@@ -1,8 +1,8 @@
 <template>
   <div>
-    <FullCalendar ref="cal" :options="calendarOptions" />
+    <FullCalendar ref="cal" :options="calendarOptions"/>
 
-    <Loading :visible="isLoading" />
+    <Loading :visible="isLoading"/>
 
     <!-- Add form-->
     <q-dialog v-model="dialog" persistent>
@@ -12,7 +12,7 @@
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-<!--          <q-input dense v-model="address" autofocus @keyup.enter="dialog = false" />-->
+          <!--          <q-input dense v-model="address" autofocus @keyup.enter="dialog = false" />-->
 
           <!--              :errors="violations"-->
           <CCalendarEventForm
@@ -24,8 +24,8 @@
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
-          <q-btn flat label="Cancel" v-close-popup />
-          <q-btn flat label="Add" @click="onCreateEventForm" />
+          <q-btn v-close-popup flat label="Cancel"/>
+          <q-btn flat label="Add" @click="onCreateEventForm"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -41,7 +41,7 @@
           <p>{{ item.endDate }}</p>
         </q-card-section>
         <q-card-actions align="right" class="text-primary">
-          <q-btn flat label="Close" v-close-popup />
+          <q-btn v-close-popup flat label="Close"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -50,13 +50,13 @@
 
 <script>
 import {mapActions, mapGetters, useStore} from 'vuex';
-import { mapFields } from 'vuex-map-fields';
+import {mapFields} from 'vuex-map-fields';
 import Loading from '../../components/Loading.vue';
 import Toolbar from '../../components/Toolbar.vue';
-import {computed, ref, watch} from "vue";
+import {computed, ref} from "vue";
 
 //import '@fullcalendar/core/vdom' // solve problem with Vite
-import FullCalendar, {EventClickArg} from '@fullcalendar/vue3';
+import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -70,10 +70,10 @@ const servicePrefix = 'CCalendarEvent';
 export default {
   name: 'CCalendarEventList',
   components: {
-      CCalendarEventForm,
-      Loading,
-      Toolbar,
-      FullCalendar
+    CCalendarEventForm,
+    Loading,
+    Toolbar,
+    FullCalendar
   },
 
   mixins: [CreateMixin],
@@ -98,7 +98,7 @@ export default {
       customButtons: {
         addEvent: {
           text: 'Add event',
-          click: function() {
+          click: function () {
             item.value['parentResourceNodeId'] = currentUser.value.resourceNode['id'];
             item.value['collective'] = false;
             dialog.value = true;
@@ -115,7 +115,7 @@ export default {
       startParam: "startDate[after]",
       endParam: 'endDate[before]',
       selectable: true,
-      eventClick: function (EventClickArg) {
+      eventClick(EventClickArg) {
         item.value['title'] = EventClickArg.event.title;
         item.value['startDate'] = EventClickArg.event.startStr;
         item.value['endDate'] = EventClickArg.event.endStr;
@@ -123,7 +123,7 @@ export default {
 
         dialogShow.value = true;
       },
-      dateClick: function(info) {
+      dateClick(info) {
         item.value['allDay'] = info.allDay;
         item.value['startDate'] = info.dateStr;
         item.value['endDate'] = info.dateStr;
@@ -131,7 +131,7 @@ export default {
         item.value['collective'] = false;
         dialog.value = true;
       },
-      select: function(info) {
+      select(info) {
         item.value['allDay'] = info.allDay;
         item.value['startDate'] = info.startStr;
         item.value['endDate'] = info.endStr;
@@ -139,8 +139,8 @@ export default {
         item.value['collective'] = false;
         dialog.value = true;
       },
-      events: function(info, successCallback, failureCallback) {
-        axios.get('/api/c_calendar_events',{
+      events(info, successCallback, failureCallback) {
+        axios.get('/api/c_calendar_events', {
           params: {
             'startDate[after]': info.startStr,
             'endDate[before]': info.endStr
@@ -149,17 +149,14 @@ export default {
           let data = response.data;
           let events = data['hydra:member'];
           successCallback(
-                Array.prototype.slice.call( // convert to array
-                    events
-                ).map(function(event) {
-                  return {
+              Array.prototype.slice.call(events)
+                  .map(event => ({
                     title: event['title'],
                     start: event['startDate'],
                     end: event['endDate'],
-                  }
-                })
-            )
-          })
+                  }))
+          )
+        })
       },
     }
 

@@ -99,6 +99,7 @@ export default {
         addEvent: {
           text: 'Add event',
           click: function() {
+            item.value['parentResourceNodeId'] = currentUser.value.resourceNode['id'];
             dialog.value = true;
           }
         }

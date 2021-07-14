@@ -125,8 +125,6 @@ class Message
     protected ?int $id = null;
 
     /**
-     * @var User|UserInterface
-     *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="sentMessages")
      * @ORM\JoinColumn(name="user_sender_id", referencedColumnName="id", nullable=false)
      */
@@ -309,10 +307,7 @@ class Message
         return $this;
     }
 
-    /**
-     * @param User|UserInterface $sender
-     */
-    public function setSender($sender): self
+    public function setSender(User $sender): self
     {
         $this->sender = $sender;
 

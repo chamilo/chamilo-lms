@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Entity\Listener;
 
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Display;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -55,9 +56,10 @@ class SkillRelUserListener
             );
 
             if (null !== $this->security->getToken()) {
+                /** @var User $currentUser */
                 $currentUser = $this->security->getUser();
                 $message = (new Message())
-                    ->setTitle($this->translator->trans('You have achieved a new skillskill.'))
+                    ->setTitle($this->translator->trans('You have achieved a new skill.'))
                     ->setContent($message)
                     ->addReceiver($user)
                     ->setSender($currentUser)

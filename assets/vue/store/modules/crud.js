@@ -139,6 +139,8 @@ export default function makeCrudModule({
         if (result) {
           commit(ACTIONS.TOGGLE_LOADING);
         }
+
+        return result;
       },
       findAll: ({ commit, state }, params) => {
         if (!service) throw new Error('No service specified!');

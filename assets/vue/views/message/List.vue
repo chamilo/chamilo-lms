@@ -30,7 +30,7 @@
         <v-btn
             icon
             tile
-            @click="markAsUnReadMultiple"
+            @click="markAsReadMultiple"
             :class="[ !selectedItems || !selectedItems.length ? 'hidden': '']"
         >
           <v-icon icon="mdi-email" />
@@ -39,6 +39,7 @@
         <v-btn
             tile
             icon
+            @click="markAsUnReadMultiple"
             :class="[ !selectedItems || !selectedItems.length ? 'hidden': '']"
         >
           <v-icon icon="mdi-email-open" />
@@ -284,6 +285,7 @@ export default {
 
     const filters = ref([]);
     const itemToDelete = ref([]);
+    const selectedItems = ref([]);
 
     const user = store.getters["security/getUser"];
     const tags = ref([]);
@@ -377,9 +379,63 @@ export default {
       deleteMultipleDialog.value = true;
     }
 
+    function markAsReadMultiple() {
+      selectedItems.value.forEach(message => {
+        let myReceiver = {};
+        message.receivers.forEach(receiver => {
+          if (receiver.receiver['@id'] === user['@id']) {
+            myReceiver = receiver;
+            myReceiver.read = true;
+            store.dispatch('messagereluser/update', myReceiver);
+          }
+        });
+      });
+      selectedItems.value = [];
+      goToInbox();
+    }
+
+    function markAsUnReadMultiple() {
+      selectedItems.value.forEach(message => {
+        let myReceiver = {};
+        message.receivers.forEach(receiver => {
+          if (receiver.receiver['@id'] === user['@id']) {
+            myReceiver = receiver;
+            myReceiver.read = false;
+            store.dispatch('messagereluser/update', myReceiver);
+          }
+        });
+      });
+      selectedItems.value = [];
+      goToInbox();
+    }
+
+    function deleteMultipleItems() {
+      let items = [];
+      selectedItems.value.forEach(message => {
+        let myReceiver = {};
+        message.receivers.forEach(receiver => {
+          if (receiver.receiver['@id'] === user['@id']) {
+            myReceiver = receiver;
+            items.push(myReceiver);
+          }
+        });
+      });
+      let promise = store.dispatch('messagereluser/delMultiple', items);
+
+      deleteMultipleDialog.value = false;
+      selectedItems.value = [];
+
+      promise.then(() => {
+        goToInbox();
+      });
+    }
+
     goToInbox();
 
     return {
+      markAsUnReadMultiple,
+      markAsReadMultiple,
+      deleteMultipleItems,
       deleteItemButton,
       confirmDeleteMultiple,
       goToInbox,
@@ -387,6 +443,8 @@ export default {
       goToUnread,
       goToTag,
       confirmDeleteItem,
+      deleteMultipleDialog,
+      selectedItems,
       deleteItemDialog,
       tags,
       filters,
@@ -409,7 +467,6 @@ export default {
         sortBy: 'sendDate',
         sortDesc: 'asc',
       },
-      selectedItems: [],
       // prime vue
       itemDialog: false,
       item: {},
@@ -448,7 +505,9 @@ export default {
       let folderParams = this.$route.query;
       this.$router.push({ name: `${this.$options.servicePrefix}Create` , query: folderParams});
     },
-
+    reloadHandler() {
+      this.onUpdateOptions();
+    },
     // prime
     onPage(event) {
       this.options.itemsPerPage = event.rows;
@@ -505,39 +564,6 @@ export default {
       this.item = {...item};
       this.itemDialog = true;
     },
-    markAsReadMultiple() {
-      console.log('markAsReadMultiple');
-      this.selectedItems.forEach(message => {
-        message.read = true;
-        this.update(message);
-      });
-      this.selectedItems = null;
-      this.resetList = true;
-    },
-    reloadHandler() {
-      this.onUpdateOptions();
-    },
-    markAsUnReadMultiple(){
-      console.log('markAsUnReadMultiple');
-      this.selectedItems.forEach(message => {
-        message.read = false;
-        this.update(message);
-      });
-      this.selectedItems = null;
-      this.resetList = true;
-      //this.onUpdateOptions(this.options);
-    },
-    deleteMultipleItems() {
-      console.log('deleteMultipleItems');
-      console.log(this.selectedItems);
-      this.deleteMultipleAction(this.selectedItems);
-      this.onRequest({
-        pagination: this.pagination,
-      });
-      this.deleteMultipleDialog = false;
-      this.selectedItems = null;
-      //this.onUpdateOptions(this.options);
-    },
     onRowSelected(items) {
       this.selected = items
     },
@@ -574,6 +600,7 @@ export default {
     }),
     ...mapActions('messagereluser', {
       deleteMessageRelUser: 'del',
+      deleteMessageRelUserMultipleAction: 'delMultiple'
     }),
   }
 };

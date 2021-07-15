@@ -41,6 +41,7 @@
           <p>{{ item.endDate }}</p>
         </q-card-section>
         <q-card-actions align="right" class="text-primary">
+          <q-btn flat color="primary" v-if="isEventEditable" label="Edit" @click="dialog = true" />
           <q-btn v-close-popup flat label="Close"/>
         </q-card-actions>
       </q-card>
@@ -83,6 +84,7 @@ export default {
     const item = ref({});
     const dialog = ref(false);
     const dialogShow = ref(false);
+    const isEventEditable = ref(false);
 
     const store = useStore();
     const route = useRoute();
@@ -99,11 +101,9 @@ export default {
         addEvent: {
           text: 'Add event',
           click: function () {
+            item.value = {};
             item.value['parentResourceNodeId'] = currentUser.value.resourceNode['id'];
-
-            if (!!!item.value['collective']) {
-              item.value['collective'] = false;
-            }
+            item.value['collective'] = false;
 
             dialog.value = true;
           }
@@ -122,14 +122,31 @@ export default {
       eventClick(EventClickArg) {
         let event = EventClickArg.event;
 
+        item.value['@id'] = event.extendedProps['@id'];
         item.value['title'] = event.title;
         item.value['startDate'] = event.startStr;
         item.value['endDate'] = event.endStr;
         item.value['collective'] = event.extendedProps.collective;
+        item.value['parentResourceNodeId'] = event.extendedProps.resourceNode.creator.id;
+        item.value['content'] = event.extendedProps.content;
+
+        isEventEditable.value = event.extendedProps.resourceNode.creator.id === currentUser.value.resourceNode['id'];
+
+        if (!isEventEditable.value
+            && event.extendedProps.collective
+            && event.extendedProps.resourceLinkListFromEntity
+        ) {
+          const resourceLink = event.extendedProps.resourceLinkListFromEntity.find(linkEntity => linkEntity.user.id === currentUser.value.id);
+
+          if (resourceLink) {
+            isEventEditable.value = true;
+          }
+        }
 
         dialogShow.value = true;
       },
       dateClick(info) {
+        item.value['@id'] = null;
         item.value['allDay'] = info.allDay;
         item.value['startDate'] = info.dateStr;
         item.value['endDate'] = info.dateStr;
@@ -138,6 +155,7 @@ export default {
         dialog.value = true;
       },
       select(info) {
+        item.value['@id'] = null;
         item.value['allDay'] = info.allDay;
         item.value['startDate'] = info.startStr;
         item.value['endDate'] = info.endStr;
@@ -157,10 +175,9 @@ export default {
           successCallback(
               Array.prototype.slice.call(events)
                   .map(event => ({
-                    title: event.title,
+                    ...event,
                     start: event.startDate,
                     end: event.endDate,
-                    collective: event.collective
                   }))
           )
         })
@@ -172,7 +189,7 @@ export default {
       calendarApi.refetchEvents();
     }
 
-    return {calendarOptions, dialog, item, dialogShow, reFetch};
+    return {calendarOptions, dialog, item, dialogShow, reFetch, isEventEditable};
   },
   computed: {
     ...mapFields('ccalendarevent', {
@@ -192,7 +209,14 @@ export default {
       const createForm = this.$refs.createForm;
       createForm.v$.$touch();
       if (!createForm.v$.$invalid) {
-        this.create(createForm.v$.item.$model);
+        let itemModel = createForm.v$.item.$model;
+
+        if (itemModel['@id']) {
+          this.updateItem(itemModel);
+        } else {
+          this.create(itemModel);
+        }
+
         this.reFetch();
         this.dialog = false;
       }
@@ -201,7 +225,8 @@ export default {
       create: 'create',
       deleteItem: 'del',
       reset: 'resetShow',
-      retrieve: 'loadWithQuery'
+      retrieve: 'loadWithQuery',
+      updateItem: 'update'
     }),
   },
   servicePrefix

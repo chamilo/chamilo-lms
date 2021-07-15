@@ -11,6 +11,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Controller\Api\CreateCCalendarEventAction;
+use Chamilo\CoreBundle\Controller\Api\UpdateCCalendarEventAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Room;
@@ -47,6 +48,8 @@ use Symfony\Component\Validator\Constraints as Assert;
             'security' => "is_granted('VIEW', object)",
         ],
         'put' => [
+            'controller' => UpdateCCalendarEventAction::class,
+            'deserialize' => false,
             'security' => "is_granted('EDIT', object)",
         ],
         'delete' => [
@@ -60,7 +63,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['calendar_event:write'],
     ],
     normalizationContext: [
-        'groups' => ['calendar_event:read'],
+        'groups' => ['calendar_event:read', 'resource_node:read'],
     ],
 )]
 

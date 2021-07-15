@@ -73,6 +73,15 @@ class CCalendarEventVoter extends Voter
             case self::VIEW:
                 return true;
             case self::EDIT:
+                if ($event->isCollective()) {
+                    $links = $event->getResourceLinkEntityList();
+
+                    foreach ($links as $link) {
+                        if ($link->getUser() === $user) {
+                            return true;
+                        }
+                    }
+                }
             case self::DELETE:
                 if ($event->getCreator() === $user) {
                     return true;

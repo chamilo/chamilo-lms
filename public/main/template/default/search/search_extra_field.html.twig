@@ -1,0 +1,20 @@
+{% autoescape false %}
+
+    {% if (form_search) %}
+        {{ form_search }}
+    {% endif %}
+
+    {% if (form) %}
+        {{ form }}
+    {% endif %}
+
+    {% if (grid_js) %}
+        <script>
+            $(function() {
+                {{ grid_js }}
+            });
+        </script>
+        {{ grid }}
+    {% endif %}
+
+{% endautoescape %}

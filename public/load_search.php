@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch;
@@ -6,11 +7,7 @@ use ChamiloSession as Session;
 
 $cidReset = true;
 
-require_once __DIR__.'/../inc/global.inc.php';
-
-if ('false' === api_get_setting('session.allow_search_diagnostic')) {
-    api_not_allowed();
-}
+require_once 'main/inc/global.inc.php';
 
 $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_PATH).'web/assets/cropper/dist/cropper.min.css" rel="stylesheet">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_PATH).'web/assets/cropper/dist/cropper.min.js"></script>';
@@ -175,8 +172,7 @@ $extraFieldValue = new ExtraFieldValue('session');
 $extraFieldValueUser = new ExtraFieldValue('user');
 
 $theme = 'theme_fr';
-
-$lang = $defaultLangCible = api_get_language_isocode();
+$lang = $defaultLangCible = api_get_interface_language();
 
 if ($userToLoadInfo) {
     $lang = $userToLoadInfo['language'];
@@ -1190,14 +1186,9 @@ $userReportButton = Display::url(
     api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$userToLoad,
     ['class' => 'btn btn-primary']
 );
-
-
 $tpl->assign('grid', $grid.$button.$table->toHtml().$userReportButton);
 $tpl->assign('grid_js', $griJs);
-$templateName = $tpl->get_template('search/search_extra_field.tpl');
-$contentTemplate = $tpl->fetch($templateName);
-$tpl->assign('content', $contentTemplate);
+
+$content = $tpl->fetch('default/user_portal/search_extra_field.tpl');
+$tpl->assign('content', $content);
 $tpl->display_one_col_template();
-
-
-

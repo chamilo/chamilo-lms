@@ -67,7 +67,7 @@
 
       <EditLinks :item="item"/>
 
-      <q-checkbox v-model="item.collective" label="Is collective"/>
+      <q-checkbox v-model="item.collective" label="Is it editable by the invitees?"/>
 
       <q-input
           v-model="item.content"

@@ -8,7 +8,7 @@
     <q-dialog v-model="dialog" persistent>
       <q-card style="min-width: 500px">
         <q-card-section>
-          <div class="text-h6">Add event</div>
+          <div class="text-h6">{{ item['@id'] ? 'Edit event' : 'Add event' }}</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
@@ -25,7 +25,7 @@
 
         <q-card-actions align="right" class="text-primary">
           <q-btn v-close-popup flat label="Cancel"/>
-          <q-btn flat label="Add" @click="onCreateEventForm"/>
+          <q-btn :label="item['@id'] ? 'Edit' : 'Add'" flat @click="onCreateEventForm"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -34,14 +34,12 @@
     <q-dialog v-model="dialogShow" persistent>
       <q-card style="min-width: 500px">
         <q-card-section class="q-pt-none">
-          <h3>{{ item.title }}</h3>
-          <p>
-            {{ item.startDate }}
-          </p>
+          <div class="text-h6">{{ item.title }}</div>
+          <p>{{ item.startDate }}</p>
           <p>{{ item.endDate }}</p>
         </q-card-section>
         <q-card-actions align="right" class="text-primary">
-          <q-btn flat color="primary" v-if="isEventEditable" label="Edit" @click="dialog = true" />
+          <q-btn v-if="isEventEditable" color="primary" flat label="Edit" @click="dialog = true"/>
           <q-btn v-close-popup flat label="Close"/>
         </q-card-actions>
       </q-card>
@@ -122,15 +120,14 @@ export default {
       eventClick(EventClickArg) {
         let event = EventClickArg.event;
 
-        item.value['@id'] = event.extendedProps['@id'];
+        item.value = {...event.extendedProps};
+
         item.value['title'] = event.title;
         item.value['startDate'] = event.startStr;
         item.value['endDate'] = event.endStr;
-        item.value['collective'] = event.extendedProps.collective;
         item.value['parentResourceNodeId'] = event.extendedProps.resourceNode.creator.id;
-        item.value['content'] = event.extendedProps.content;
 
-        isEventEditable.value = event.extendedProps.resourceNode.creator.id === currentUser.value.resourceNode['id'];
+        isEventEditable.value = item.value['parentResourceNodeId'] === currentUser.value.resourceNode['id'];
 
         if (!isEventEditable.value
             && event.extendedProps.collective
@@ -146,21 +143,23 @@ export default {
         dialogShow.value = true;
       },
       dateClick(info) {
-        item.value['@id'] = null;
-        item.value['allDay'] = info.allDay;
-        item.value['startDate'] = info.dateStr;
-        item.value['endDate'] = info.dateStr;
+        item.value = {};
         item.value['parentResourceNodeId'] = currentUser.value.resourceNode['id'];
         item.value['collective'] = false;
-        dialog.value = true;
-      },
-      select(info) {
-        item.value['@id'] = null;
         item.value['allDay'] = info.allDay;
         item.value['startDate'] = info.startStr;
         item.value['endDate'] = info.endStr;
+
+        dialog.value = true;
+      },
+      select(info) {
+        item.value = {};
         item.value['parentResourceNodeId'] = currentUser.value.resourceNode['id'];
         item.value['collective'] = false;
+        item.value['allDay'] = info.allDay;
+        item.value['startDate'] = info.startStr;
+        item.value['endDate'] = info.endStr;
+
         dialog.value = true;
       },
       events(info, successCallback, failureCallback) {

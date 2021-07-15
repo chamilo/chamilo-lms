@@ -7,6 +7,7 @@ namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
+use DateTime;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -19,6 +20,18 @@ class UpdateCCalendarEventAction extends BaseResourceFileAction
         EntityManager $em
     ): CCalendarEvent {
         $this->handleUpdateRequest($calendarEvent, $repo, $request, $em);
+
+        $result = json_decode($request->getContent(), true);
+
+        $calendarEvent
+            ->setContent($result['content'] ?? '')
+            ->setComment($result['comment'] ?? '')
+            ->setColor($result['color'] ?? '')
+            ->setStartDate(new DateTime($result['startDate'] ?? ''))
+            ->setEndDate(new DateTime($result['endDate'] ?? ''))
+            //->setAllDay($result['allDay'] ?? false)
+            ->setCollective($result['collective'] ?? false)
+        ;
 
         return $calendarEvent;
     }

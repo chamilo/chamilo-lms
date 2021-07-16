@@ -1966,6 +1966,9 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 // Configuration setting to make required course category in course creation form.
 //$_configuration['course_creation_form_set_course_category_mandatory'] = false;
 
+// Show option to set course announcement date
+//$_configuration['course_announcement_scheduled_by_date'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

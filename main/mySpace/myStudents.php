@@ -957,8 +957,31 @@ echo MyStudents::getBlockForSkills(
     $courseInfo ? $courseInfo['real_id'] : 0,
     $sessionId
 );
-
 echo '<br /><br />';
+
+$installed = AppPlugin::getInstance()->isInstalled('studentfollowup');
+
+if ($installed) {
+    echo Display::page_subheader(get_lang('Guidance'));
+    echo '
+       <script>
+        resizeIframe = function(iFrame) {
+            iFrame.height = iFrame.contentWindow.document.body.scrollHeight + 20;
+        }
+        </script>
+    ';
+    $url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/posts.php?iframe=1&student_id='.$student_id;
+    echo '<iframe
+        onload="resizeIframe(this)"
+        style="width:100%;"
+        border="0"
+        frameborder="0"
+        scrolling="no"
+        src="'.$url.'"
+    ></iframe>';
+    echo '<br /><br />';
+}
+
 echo '<div class="row"><div class="col-sm-5">';
 echo MyStudents::getBlockForClasses($student_id);
 echo '</div></div>';

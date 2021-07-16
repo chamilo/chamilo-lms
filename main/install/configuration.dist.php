@@ -950,23 +950,19 @@ ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (ses
 
 // Add a portfolio tool (duplicating the Notebook tool). Requires DB changes:
 /*
-CREATE TABLE portfolio (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, c_id INT DEFAULT NULL, session_id INT DEFAULT NULL, category_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, content LONGTEXT NOT NULL, creation_date DATETIME NOT NULL, update_date DATETIME NOT NULL, is_visible TINYINT(1) DEFAULT '1' NOT NULL, INDEX user (user_id), INDEX course (c_id), INDEX session (session_id), INDEX category (category_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
-CREATE TABLE portfolio_category (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, title VARCHAR(255) NOT NULL, description LONGTEXT DEFAULT NULL, is_visible TINYINT(1) DEFAULT '1' NOT NULL, INDEX user (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE portfolio_attachment (id INT AUTO_INCREMENT NOT NULL, path VARCHAR(255) NOT NULL, comment LONGTEXT DEFAULT NULL, size INT NOT NULL, filename VARCHAR(255) NOT NULL, origin_id INT NOT NULL, origin_type INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+CREATE TABLE portfolio (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, c_id INT DEFAULT NULL, session_id INT DEFAULT NULL, category_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, content LONGTEXT NOT NULL, creation_date DATETIME NOT NULL, update_date DATETIME NOT NULL, is_visible TINYINT(1) DEFAULT '1' NOT NULL, origin INT DEFAULT NULL, origin_type INT DEFAULT NULL, score DOUBLE PRECISION DEFAULT NULL, INDEX user (user_id), INDEX course (c_id), INDEX session (session_id), INDEX category (category_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+CREATE TABLE portfolio_category (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, title VARCHAR(255) NOT NULL, description LONGTEXT DEFAULT NULL, is_visible TINYINT(1) DEFAULT '1' NOT NULL, INDEX user (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+CREATE TABLE portfolio_comment (id INT AUTO_INCREMENT NOT NULL, author_id INT NOT NULL, item_id INT NOT NULL, tree_root INT DEFAULT NULL, parent_id INT DEFAULT NULL, content LONGTEXT NOT NULL, date DATETIME NOT NULL, is_important TINYINT(1) DEFAULT '0' NOT NULL, lft INT NOT NULL, lvl INT NOT NULL, rgt INT NOT NULL, score DOUBLE PRECISION DEFAULT NULL, INDEX IDX_C2C17DA2F675F31B (author_id), INDEX IDX_C2C17DA2126F525E (item_id), INDEX IDX_C2C17DA2A977936C (tree_root), INDEX IDX_C2C17DA2727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
 ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED1062A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;
 ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED106291D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE;
 ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED1062613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE;
 ALTER TABLE portfolio ADD CONSTRAINT FK_A9ED106212469DE2 FOREIGN KEY (category_id) REFERENCES portfolio_category (id) ON DELETE SET NULL;
-ALTER TABLE portfolio_category ADD CONSTRAINT FK_7AC64359A76ED395 FOREIGN KEY (user_id) REFERENCES user (id);
-INSERT INTO settings_current(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('course_create_active_tools','portfolio','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Portfolio', 0);
-CREATE TABLE portfolio_comment (id INT AUTO_INCREMENT NOT NULL, author_id INT NOT NULL, item_id INT NOT NULL, tree_root INT DEFAULT NULL, parent_id INT DEFAULT NULL, content LONGTEXT NOT NULL, date DATETIME NOT NULL, is_important TINYINT(1) DEFAULT '0' NOT NULL, lft INT NOT NULL, lvl INT NOT NULL, rgt INT NOT NULL, score DOUBLE PRECISION DEFAULT NULL, INDEX IDX_C2C17DA2F675F31B (author_id), INDEX IDX_C2C17DA2126F525E (item_id), INDEX IDX_C2C17DA2A977936C (tree_root), INDEX IDX_C2C17DA2727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
-ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2F675F31B FOREIGN KEY (author_id) REFERENCES user (id);
-ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2126F525E FOREIGN KEY (item_id) REFERENCES portfolio (id);
+ALTER TABLE portfolio_category ADD CONSTRAINT FK_7AC64359A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;
+ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2F675F31B FOREIGN KEY (author_id) REFERENCES user (id) ON DELETE CASCADE;
+ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2126F525E FOREIGN KEY (item_id) REFERENCES portfolio (id) ON DELETE CASCADE;
 ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2A977936C FOREIGN KEY (tree_root) REFERENCES portfolio_comment (id) ON DELETE CASCADE;
 ALTER TABLE portfolio_comment ADD CONSTRAINT FK_C2C17DA2727ACA70 FOREIGN KEY (parent_id) REFERENCES portfolio_comment (id) ON DELETE CASCADE;
-ALTER TABLE portfolio ADD origin INT DEFAULT NULL, ADD origin_type INT DEFAULT NULL;
-ALTER TABLE portfolio ADD score DOUBLE PRECISION DEFAULT NULL;
-INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, visible_to_others, changeable, created_at) VALUES (19, 10, 'tags', 'tags', 1, 1, 1, NOW());
-CREATE TABLE portfolio_attachment (id INT AUTO_INCREMENT NOT NULL, path VARCHAR(255) NOT NULL, comment LONGTEXT DEFAULT NULL, size INT NOT NULL, filename VARCHAR(255) NOT NULL, origin_id INT NOT NULL, origin_type INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
 */
 // In 1.11.8, before enabling this feature, you also need to:
 // - edit src/Chamilo/CoreBundle/Entity/Portfolio.php and PortfolioCategory.php
@@ -1512,6 +1508,9 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // In Scorm comunication use a specific extra field instead of the user_id
 //$_configuration['scorm_api_extrafield_to_use_as_student_id'] = '';
 
+// LMS will try to update SCO status every time the status is not sent by the SCO
+//$_configuration['scorm_lms_update_sco_status_all_time'] = false;
+
 // Show online user only to Administrators
 //$_configuration['whoisonline_only_for_admin'] = false;
 
@@ -1968,6 +1967,10 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 
 // Show option to set course announcement date
 //$_configuration['course_announcement_scheduled_by_date'] = false;
+
+// Enable upload of large SCORM files from FTP by uploading them to app/cache/
+// and showing them in the SCORM upload form
+//$_configuration['scorm_upload_from_cache'] = false;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

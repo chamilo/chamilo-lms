@@ -948,6 +948,9 @@ class Career extends Model
                 }
 
                 usort($sortedByDate, function ($item1, $item2) {
+                    if (!isset($item1['SortDate']) || !isset($item2['SortDate'])) {
+                        return false;
+                    }
                     return $item1['SortDate'] > $item2['SortDate'];
                 });
 

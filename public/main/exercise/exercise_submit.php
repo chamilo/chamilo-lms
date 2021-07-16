@@ -55,8 +55,8 @@ if ($showGlossary) {
     $htmlHeadXtra[] = api_get_js('jquery.highlight.js');
 }
 
-$js = '<script>'.api_get_language_translate_html().'</script>';
-$htmlHeadXtra[] = $js;
+//$js = '<script>'.api_get_language_translate_html().'</script>';
+//$htmlHeadXtra[] = $js;
 
 //$htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js');
 //$htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');

@@ -856,7 +856,7 @@ function api_get_short_text_from_html($text, $number)
  */
 function api_get_filtered_multilingual_HTML_string($htmlString, $language = null)
 {
-    if (true != api_get_configuration_value('translate_html')) {
+    if ('false' === api_get_setting('editor.translate_html')) {
         return $htmlString;
     }
     $userInfo = api_get_user_info();

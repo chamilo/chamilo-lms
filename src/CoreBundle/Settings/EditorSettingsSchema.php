@@ -36,6 +36,7 @@ class EditorSettingsSchema extends AbstractSettingsSchema
                     'htmlpurifier_wiki' => '',
                     'enable_iframe_inclusion' => '',
                     'enabled_mathjax' => '',
+                    'translate_html' => 'false',
                 ]
             )
             /*->setAllowedTypes(
@@ -67,6 +68,7 @@ class EditorSettingsSchema extends AbstractSettingsSchema
             ->add('htmlpurifier_wiki', YesNoType::class)
             ->add('enable_iframe_inclusion', YesNoType::class)
             ->add('enabled_mathjax', YesNoType::class)
+            ->add('translate_html', YesNoType::class)
         ;
     }
 }

@@ -2642,7 +2642,7 @@ HTML;
         }
 
         $translateHtml = '';
-        $translate = api_get_configuration_value('translate_html');
+        $translate = (api_get_setting('editor.translate_html') === 'true');
         if ($translate) {
             $translateHtml = '{type:"script", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},';
         }

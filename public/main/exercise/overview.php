@@ -12,8 +12,8 @@ $current_course_tool = TOOL_QUIZ;
 Exercise::cleanSessionVariables();
 $this_section = SECTION_COURSES;
 
-$js = '<script>'.api_get_language_translate_html().'</script>';
-$htmlHeadXtra[] = $js;
+//$js = '<script>'.api_get_language_translate_html().'</script>';
+//$htmlHeadXtra[] = $js;
 
 // Notice for unauthorized people.
 api_protect_course_script(true);

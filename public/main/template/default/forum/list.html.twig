@@ -3,7 +3,7 @@
 
 {% block content %}
 {% autoescape false %}
-    {% if 'translate_html'|api_get_configuration_value %}
+    {% if 'editor.translate_html'|api_get_setting == 'true' %}
     <script>
         $(function () {
             // default

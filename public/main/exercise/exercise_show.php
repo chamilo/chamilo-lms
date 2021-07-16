@@ -138,8 +138,8 @@ if (!$is_allowedToEdit) {
 $allowRecordAudio = 'true' === api_get_setting('enable_record_audio');
 $allowTeacherCommentAudio = true === api_get_configuration_value('allow_teacher_comment_audio');
 
-$js = '<script>'.api_get_language_translate_html().'</script>';
-$htmlHeadXtra[] = $js;
+//$js = '<script>'.api_get_language_translate_html().'</script>';
+//$htmlHeadXtra[] = $js;
 
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [

@@ -22,3 +22,4 @@ global.textcomplete = textcomplete;
 
 require('chart.js');
 require('./annotation.js');
+require('./translatehtml.js');

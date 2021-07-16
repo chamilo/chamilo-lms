@@ -48,7 +48,7 @@ $interbreadcrumb[] = [
     'name' => strip_tags($survey->getTitle(), '<span>'),
 ];
 
-$htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
+//$htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
 $htmlHeadXtra[] = ch_selectivedisplay::getJs();
 $htmlHeadXtra[] = survey_question::getJs();
 $show = 0;

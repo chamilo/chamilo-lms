@@ -642,16 +642,16 @@ switch ($action) {
         if (api_get_configuration_value('course_announcement_scheduled_by_date')) {
 
             // Extra fields
-            $extra_field = new ExtraField('course_announcement');
+            $extraField = new ExtraField('course_announcement');
             $extraFieldValue = new ExtraFieldValue('course_announcement');
-            $values_checkbox = $extraFieldValue->get_values_by_handler_and_field_variable($id, 'send_notification_at_a_specific_date');
+            $valueCheckbox = $extraFieldValue->get_values_by_handler_and_field_variable($id, 'send_notification_at_a_specific_date');
 
             $form->addElement('html', '<div id="email_ann_date">');
             if (!$id) {
                 $defaults['extra_date_to_send_notification'] = date('Y-m-d', strtotime(' +1 day'));
             }
 
-            $extra = $extra_field->addElements(
+            $extra = $extraField->addElements(
                 $form,
                 $id ? $id : 0,
                 [],
@@ -664,10 +664,10 @@ switch ($action) {
                 true
             );
 
-            $element_conditional = $values_checkbox['value'] == 0 ? '<div id="course_announcement_date" style="display:none">' : '<div id="course_announcement_date">';
+            $elementConditional = $valueCheckbox['value'] == 0 ? '<div id="course_announcement_date" style="display:none">' : '<div id="course_announcement_date">';
 
-            $form->addElement('html', $element_conditional);
-            $extra = $extra_field->addElements(
+            $form->addElement('html', $elementConditional);
+            $extra = $extraField->addElements(
                 $form,
                 $id ? $id : 0,
                 [],

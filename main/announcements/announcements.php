@@ -317,11 +317,11 @@ switch ($action) {
         }
 
         if ($delete) {
-            AnnouncementManager::delete_announcement($_course, $id);
             if (api_get_configuration_value('course_announcement_scheduled_by_date')) {
                 $extraFieldValue = new ExtraFieldValue('course_announcement');
                 $extraFieldValue->deleteValuesByItem($id);
             }
+            AnnouncementManager::delete_announcement($_course, $id);
             Display::addFlash(Display::return_message(get_lang('AnnouncementDeleted')));
         }
         header('Location: '.$homeUrl);
@@ -688,7 +688,7 @@ switch ($action) {
                     $(\'input[name="extra_send_notification_at_a_specific_date[extra_send_notification_at_a_specific_date]"]\').click(function() {
                         var checked = $(this).is(\':checked\');
                         if (checked){
-                            $("#extra_date_to_send_notification").val("'.date('Y-m-d', strtotime(' +1 day')).'");
+                            $("#extra_date_to_send_notification").val("'.date('Y-m-d', strtotime('+1 day')).'");
                             $("#course_announcement_date").css("display", "block");
                         } else {
                             $("#course_announcement_date").css("display", "none");

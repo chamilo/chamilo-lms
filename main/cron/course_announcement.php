@@ -34,16 +34,16 @@ $today = date('Y-m-d');
 
 foreach ($result as $announcement) {
 
-    $send_notification = $extraFieldValue->get_values_by_handler_and_field_variable($announcement->getId(), 'send_notification_at_a_specific_date');
+    $sendNotification = $extraFieldValue->get_values_by_handler_and_field_variable($announcement->getId(), 'send_notification_at_a_specific_date');
 
-    if ($send_notification['value'] == 1) {
+    if ($sendNotification['value'] == 1) {
 
-        $date_to_send = $extraFieldValue->get_values_by_handler_and_field_variable($announcement->getId(), 'date_to_send_notification');
+        $dateToSend = $extraFieldValue->get_values_by_handler_and_field_variable($announcement->getId(), 'date_to_send_notification');
 
-        if ($today >= $date_to_send['value']) {
-            $course_info = api_get_course_info_by_id($announcement->getCId());
-            $email = new AnnouncementEmail($course_info, 0, $announcement->getId());
-            $send_to = $email->send();
+        if ($today >= $dateToSend['value']) {
+            $courseInfo = api_get_course_info_by_id($announcement->getCId());
+            $email = new AnnouncementEmail($courseInfo, 0, $announcement->getId());
+            $sendTo = $email->send();
         }
     }
 }

@@ -648,7 +648,7 @@ switch ($action) {
 
             $form->addElement('html', '<div id="email_ann_date">');
             if (!$id) {
-                $defaults['extra_date_to_send_notification'] = date('Y-m-d', strtotime(' +1 day'));
+                $defaults['extra_date_to_send_notification'] = date('Y-m-d', strtotime('+1 day'));
             }
 
             $extra = $extraField->addElements(

@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require __DIR__.'/../inc/global.inc.php';
+require __DIR__ . '/../inc/global.inc.php';
 
 if (php_sapi_name() != 'cli') {
     exit; //do not run from browser
@@ -43,7 +43,7 @@ foreach ($result as $announcement) {
         if ($today >= $dateToSend['value']) {
             $courseInfo = api_get_course_info_by_id($announcement->getCId());
             $email = new AnnouncementEmail($courseInfo, 0, $announcement->getId());
-            $sendTo = $email->send();
+            $sendTo = $email->send(false, false, 1);
         }
     }
 }

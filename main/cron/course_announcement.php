@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require __DIR__ . '/../inc/global.inc.php';
+require __DIR__.'/../inc/global.inc.php';
 
 if (php_sapi_name() != 'cli') {
     exit; //do not run from browser

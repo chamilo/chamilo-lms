@@ -951,6 +951,7 @@ class Career extends Model
                     if (!isset($item1['SortDate']) || !isset($item2['SortDate'])) {
                         return false;
                     }
+
                     return $item1['SortDate'] > $item2['SortDate'];
                 });
 

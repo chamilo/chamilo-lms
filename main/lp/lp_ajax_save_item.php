@@ -334,7 +334,7 @@ function save_item(
              * However, the SCORM does not force the SCO to set the
              * cmi.core.lesson_status.  There is some additional requirements
              * that must be adhered to successfully handle these cases:.
-	     */
+             */
             $LMSUpdateStatus = true;
             if (!api_get_configuration_value('scorm_lms_update_status_all_time') && $myLPI->get_status() !== "not attempted") {
                 $LMSUpdateStatus = false;

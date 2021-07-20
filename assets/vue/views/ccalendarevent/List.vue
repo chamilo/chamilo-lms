@@ -127,7 +127,7 @@ export default {
         item.value['endDate'] = event.endStr;
         item.value['parentResourceNodeId'] = event.extendedProps.resourceNode.creator.id;
 
-        isEventEditable.value = item.value['parentResourceNodeId'] === currentUser.value.resourceNode['id'];
+        isEventEditable.value = item.value['parentResourceNodeId'] === currentUser.value['id'];
 
         if (!isEventEditable.value
             && event.extendedProps.collective

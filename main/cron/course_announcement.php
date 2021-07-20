@@ -42,8 +42,17 @@ foreach ($result as $announcement) {
 
         if ($today >= $dateToSend['value']) {
             $courseInfo = api_get_course_info_by_id($announcement->getCId());
+
+            $query = "SELECT ip FROM ChamiloCourseBundle:CItemProperty ip
+                        WHERE ip.ref = :announcementId AND ip.course = :courseId";
+
+            $sql = Database::getManager()->createQuery($query);
+            $itemProperty = $sql->execute(['announcementId' => $announcement->getId(), 'courseId' => $announcement->getCId()]);
+            $senderId = $itemProperty[0]->getInsertUser()->getId();
+            $sendToUsersInSession = $itemProperty[0]->getSession() ? $itemProperty[0]->getSession()->getId() : false;
+
             $email = new AnnouncementEmail($courseInfo, 0, $announcement->getId());
-            $sendTo = $email->send(false, false, 1);
+            $sendTo = $email->send($sendToUsersInSession, false, $senderId);
         }
     }
 }

@@ -279,6 +279,7 @@ if (!isset($_GET['running'])) {
         $GLOBALS[$key] = $_POST[$key];
     }
 }
+$dbPortForm = (int) $dbPortForm;
 
 /* NEXT STEPS IMPLEMENTATION */
 

@@ -46,7 +46,7 @@ if ($installType === 'new') {
     $dbName = null;
 }
 
-$dbPort = isset($_POST['db_port']) ? $_POST['db_port'] : 3306;
+$dbPort = isset($_POST['db_port']) ? (int) $_POST['db_port'] : 3306;
 
 $manager = connectToDatabase($dbHost, $dbUsername, $dbPass, $dbName, $dbPort);
 

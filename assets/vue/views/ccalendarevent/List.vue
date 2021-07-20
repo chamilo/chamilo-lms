@@ -39,6 +39,7 @@
           <p>{{ item.endDate }}</p>
         </q-card-section>
         <q-card-actions align="right" class="text-primary">
+          <q-btn color="primary" flat label="Delete" @click="confirmDelete"/>
           <q-btn v-if="isEventEditable" color="primary" flat label="Edit" @click="dialog = true"/>
           <q-btn v-close-popup flat label="Close"/>
         </q-card-actions>
@@ -63,6 +64,7 @@ import axios from "axios";
 import CCalendarEventForm from "../../components/ccalendarevent/Form.vue";
 import CreateMixin from "../../mixins/CreateMixin";
 import {useRoute, useRouter} from "vue-router";
+import {useQuasar} from 'quasar';
 
 const servicePrefix = 'CCalendarEvent';
 
@@ -78,6 +80,8 @@ export default {
   mixins: [CreateMixin],
   //mixins: [ShowMixin],
   setup(props) {
+    const $q = useQuasar();
+
     const calendarOptions = ref([]);
     const item = ref({});
     const dialog = ref(false);
@@ -88,6 +92,8 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const currentUser = computed(() => store.getters['security/getUser']);
+
+    let currentEvent = null;
 
     calendarOptions.value = {
       plugins: [
@@ -119,6 +125,7 @@ export default {
       selectable: true,
       eventClick(EventClickArg) {
         let event = EventClickArg.event;
+        currentEvent = event;
 
         item.value = {...event.extendedProps};
 
@@ -188,7 +195,32 @@ export default {
       calendarApi.refetchEvents();
     }
 
-    return {calendarOptions, dialog, item, dialogShow, reFetch, isEventEditable};
+    function confirmDelete() {
+      $q
+          .dialog({
+            title: 'Delete',
+            message: 'Are you sure you want to delete this event?',
+            persistent: true,
+            cancel: true
+          })
+          .onOk(function () {
+            if (item.value['parentResourceNodeId'] === currentUser.value['id']) {
+              store.dispatch('ccalendarevent/del', item.value)
+            } else {
+              let filteredLinks = item.value['resourceLinkListFromEntity']
+                  .filter(resourceLinkFromEntity => resourceLinkFromEntity['user']['id'] === currentUser.value['id']);
+
+              if (filteredLinks.length > 0) {
+                store.dispatch('resourcelink/del', {'@id': `/api/resource_links/${filteredLinks[0]['id']}`})
+
+                currentEvent.remove();
+                dialogShow.value = false;
+              }
+            }
+          });
+    }
+
+    return {calendarOptions, dialog, item, dialogShow, reFetch, isEventEditable, confirmDelete};
   },
   computed: {
     ...mapFields('ccalendarevent', {

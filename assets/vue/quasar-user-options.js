@@ -1,7 +1,7 @@
 import './styles/quasar.sass'
 import '@quasar/extras/material-icons/material-icons.css'
 
-import { Notify } from 'quasar'
+import {Dialog, Notify} from 'quasar'
 
 export default {
   config: {
@@ -9,7 +9,8 @@ export default {
     }
   },
   plugins: [
-    Notify
+    Notify,
+    Dialog,
   ],
   extras: [
     'material-icons',

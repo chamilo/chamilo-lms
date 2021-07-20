@@ -198,7 +198,7 @@ class Basic extends Toolbar
 
         $customPlugins = '';
         $customPluginsPath = [];
-        if (api_get_setting('editor.translate_html') === 'true') {
+        if ('true' === api_get_setting('editor.translate_html')) {
             $customPlugins .= ' translatehtml';
             $customPluginsPath['translatehtml'] = api_get_path(WEB_PUBLIC_PATH).'libs/editor/tinymce_plugins/translatehtml/plugin.js';
 

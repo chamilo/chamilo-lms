@@ -7408,7 +7408,7 @@ function api_create_zip(string $name): ZipStream
  */
 function api_get_language_translate_html()
 {
-    $translate = (api_get_setting('editor.translate_html') === 'true');
+    $translate = ('true' === api_get_setting('editor.translate_html'));
 
     if (!$translate) {
         return '';

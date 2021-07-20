@@ -662,6 +662,7 @@ class SocialManager extends UserManager
         $user_info = api_get_user_info($userId);
         $success = get_lang('MessageSentTo');
         $success .= ' : '.api_get_person_name($user_info['firstName'], $user_info['lastName']);
+        $content = strip_tags($content);
 
         if (isset($subject) && isset($content) && isset($userId)) {
             $result = MessageManager::send_message($userId, $subject, $content);

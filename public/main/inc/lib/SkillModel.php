@@ -456,9 +456,9 @@ class SkillModel extends Model
      *
      * @return bool|null
      */
-    public function add($params)
+    public function add(array $params)
     {
-        if (!isset($params['parent_id'])) {
+        if (empty($params['parent_id'])) {
             $params['parent_id'] = 1;
         }
 
@@ -480,6 +480,7 @@ class SkillModel extends Model
         if ($skill_id) {
             // Saving skill_rel_skill (parent_id, relation_type)
             foreach ($params['parent_id'] as $parent_id) {
+                error_log('foreach $parent_id = '.$parent_id);
                 $relation_exists = $skillRelSkill->relationExists($skill_id, $parent_id);
                 if (!$relation_exists) {
                     $skillRelSkill =
@@ -1733,15 +1734,7 @@ class SkillModel extends Model
         $allSkills = $this->getAllSkills();
         $objGradebook = new Gradebook();
 
-        $isAlreadyRootSkill = false;
-        foreach ($allSkills as $checkedSkill) {
-            if (intval($checkedSkill['parent_id']) > 0) {
-                $isAlreadyRootSkill = true;
-                break;
-            }
-        }
-
-        $skillList = $isAlreadyRootSkill ? [] : [0 => get_lang('None')];
+        $skillList = [0 => get_lang('None')];
 
         foreach ($allSkills as $skill) {
             if (isset($skillInfo['id']) && $skill['id'] == $skillInfo['id']) {

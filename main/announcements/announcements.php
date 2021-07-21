@@ -621,8 +621,27 @@ switch ($action) {
 
         $form->addHidden('sec_token', $token);
 
+        $announcementScheduledByDate = api_get_configuration_value('course_announcement_scheduled_by_date');
         if (empty($sessionId)) {
-            $form->addCheckBox('send_to_users_in_session', null, get_lang('SendToUsersInSessions'));
+            if ($announcementScheduledByDate) {
+                $extraField = new ExtraField('course_announcement');
+                $extraFieldValue = new ExtraFieldValue('course_announcement');
+
+                $extra = $extraField->addElements(
+                    $form,
+                    $id ? $id : 0,
+                    [],
+                    false,
+                    false,
+                    ['send_to_users_in_session'],
+                    [],
+                    [],
+                    false,
+                    true
+                );
+            } else {
+                $form->addCheckBox('send_to_users_in_session', null, get_lang('SendToUsersInSessions'));
+            }
         }
 
         $config = api_get_configuration_value('announcements_hide_send_to_hrm_users');
@@ -639,9 +658,7 @@ switch ($action) {
         $form->addCheckBox('send_me_a_copy_by_email', null, get_lang('SendAnnouncementCopyToMyself'));
         $defaults['send_me_a_copy_by_email'] = true;
 
-        if (api_get_configuration_value('course_announcement_scheduled_by_date')) {
-
-            // Extra fields
+        if ($announcementScheduledByDate) {
             $extraField = new ExtraField('course_announcement');
             $extraFieldValue = new ExtraFieldValue('course_announcement');
             $valueCheckbox = $extraFieldValue->get_values_by_handler_and_field_variable($id, 'send_notification_at_a_specific_date');
@@ -727,7 +744,11 @@ switch ($action) {
         if ($form->validate()) {
             $data = $form->getSubmitValues();
             $data['users'] = isset($data['users']) ? $data['users'] : [];
-            $sendToUsersInSession = isset($data['send_to_users_in_session']) ? true : false;
+            if ($announcementScheduledByDate) {
+                $sendToUsersInSession = isset($data['extra_send_to_users_in_session']) ? true : false;
+            } else {
+                $sendToUsersInSession = isset($data['send_to_users_in_session']) ? true : false;
+            }
             $sendMeCopy = isset($data['send_me_a_copy_by_email']) ? true : false;
 
             if (isset($id) && $id) {

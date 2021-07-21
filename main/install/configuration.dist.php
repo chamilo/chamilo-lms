@@ -1970,7 +1970,8 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 /*
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, field_order, visible_to_self, visible_to_others, changeable, filter, created_at)
 VALUES (21, 13, 'send_notification_at_a_specific_date', 'Send notification at a specific date', 0, 1, 0, 0, 0, NOW()),
-       (21, 6, 'date_to_send_notification', 'Date to send notification', 0, 1, 0, 0, 0, NOW());
+       (21, 6, 'date_to_send_notification', 'Date to send notification', 0, 1, 0, 0, 0, NOW()),
+       (21, 13, 'send_to_users_in_session', 'Send to users in session', 0, 1, 0, 0, 0, NOW());
 */
 //$_configuration['course_announcement_scheduled_by_date'] = false;
 

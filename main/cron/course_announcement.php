@@ -44,12 +44,13 @@ foreach ($result as $announcement) {
             $courseInfo = api_get_course_info_by_id($announcement->getCId());
 
             $query = "SELECT ip FROM ChamiloCourseBundle:CItemProperty ip
-                        WHERE ip.ref = :announcementId AND ip.course = :courseId";
+                        WHERE ip.ref = :announcementId AND ip.course = :courseId
+                        AND ip.tool = 'announcement'";
 
             $sql = Database::getManager()->createQuery($query);
             $itemProperty = $sql->execute(['announcementId' => $announcement->getId(), 'courseId' => $announcement->getCId()]);
             $senderId = $itemProperty[0]->getInsertUser()->getId();
-            $sendToUsersInSession = $itemProperty[0]->getSession() ? $itemProperty[0]->getSession()->getId() : false;
+            $sendToUsersInSession = (bool) $extraFieldValue->get_values_by_handler_and_field_variable($announcement->getId(), 'send_to_users_in_session');
 
             $email = new AnnouncementEmail($courseInfo, 0, $announcement->getId());
             $sendTo = $email->send($sendToUsersInSession, false, $senderId);

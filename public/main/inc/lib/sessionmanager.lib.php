@@ -257,28 +257,19 @@ class SessionManager
                     ->setSendSubscriptionNotification((bool) $sendSubscriptionNotification)
                 ;
 
-                if (!empty($startDate)) {
-                    $session->setAccessStartDate(api_get_utc_datetime($startDate, true, true));
-                }
+                $startDate = $startDate ? api_get_utc_datetime($startDate, true, true) : null;
+                $endDate = $endDate ? api_get_utc_datetime($endDate, true, true) : null;
+                $displayStartDate = $displayStartDate ? api_get_utc_datetime($displayStartDate, true, true) : null;
+                $displayEndDate = $displayEndDate ? api_get_utc_datetime($displayEndDate, true, true) : null;
+                $coachStartDate = $coachStartDate ? api_get_utc_datetime($coachStartDate, true, true) : null;
+                $coachEndDate = $coachEndDate ? api_get_utc_datetime($coachEndDate, true, true) : null;
 
-                if (!empty($endDate)) {
-                    $session->setAccessEndDate(api_get_utc_datetime($endDate, true, true));
-                }
-
-                if (!empty($displayStartDate)) {
-                    $session->setDisplayStartDate(api_get_utc_datetime($displayStartDate, true, true));
-                }
-
-                if (!empty($displayEndDate)) {
-                    $session->setDisplayEndDate(api_get_utc_datetime($displayEndDate, true, true));
-                }
-
-                if (!empty($coachStartDate)) {
-                    $session->setCoachAccessStartDate(api_get_utc_datetime($coachStartDate, true, true));
-                }
-                if (!empty($coachEndDate)) {
-                    $session->setCoachAccessEndDate(api_get_utc_datetime($coachEndDate, true, true));
-                }
+                $session->setAccessStartDate($startDate);
+                $session->setAccessEndDate($endDate);
+                $session->setDisplayStartDate($displayStartDate);
+                $session->setDisplayEndDate($displayEndDate);
+                $session->setCoachAccessStartDate($coachStartDate);
+                $session->setCoachAccessEndDate($coachEndDate);
 
                 if (!empty($sessionCategoryId)) {
                     //$session->setCategory($category);
@@ -7674,21 +7665,21 @@ class SessionManager
     public static function parseSessionDates(Session $session, bool $showTime = false)
     {
         $displayDates = self::convertSessionDateToString(
-            $session->getDisplayStartDate()->format('Y-m-d H:i:s'),
-            $session->getDisplayEndDate()->format('Y-m-d H:i:s'),
+            $session->getDisplayStartDate(),
+            $session->getDisplayEndDate(),
             $showTime,
             true
         );
         $accessDates = self::convertSessionDateToString(
-            $session->getAccessStartDate()->format('Y-m-d H:i:s'),
-            $session->getAccessEndDate()->format('Y-m-d H:i:s'),
+            $session->getAccessStartDate(),
+            $session->getAccessEndDate(),
             $showTime,
             true
         );
 
         $coachDates = self::convertSessionDateToString(
-            $session->getCoachAccessStartDate()->format('Y-m-d H:i:s'),
-            $session->getCoachAccessEndDate()->format('Y-m-d H:i:s'),
+            $session->getCoachAccessStartDate(),
+            $session->getCoachAccessEndDate(),
             $showTime,
             true
         );
@@ -9274,8 +9265,8 @@ class SessionManager
     /**
      * Converts "start date" and "end date" to "From start date to end date" string.
      *
-     * @param string $startDate
-     * @param string $endDate
+     * @param string|DateTime $startDate
+     * @param string|DateTime $endDate
      * @param bool   $showTime
      * @param bool   $dateHuman
      *

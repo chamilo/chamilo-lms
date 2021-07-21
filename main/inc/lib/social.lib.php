@@ -2404,52 +2404,6 @@ class SocialManager extends UserManager
         </script>';
     }
 
-    private static function getWallForm(string $urlForm): FormValidator
-    {
-        $userId = isset($_GET['u']) ? '?u='.intval($_GET['u']) : '';
-        $form = new FormValidator(
-            'social_wall_main',
-            'post',
-            $urlForm.$userId,
-            null,
-            ['enctype' => 'multipart/form-data'],
-            FormValidator::LAYOUT_HORIZONTAL
-        );
-
-        $socialWallPlaceholder = isset($_GET['u'])
-            ? get_lang('SocialWallWriteNewPostToFriend')
-            : get_lang('SocialWallWhatAreYouThinkingAbout');
-
-        $form->addTextarea(
-            'social_wall_new_msg_main',
-            null,
-            [
-                'placeholder' => $socialWallPlaceholder,
-                'cols-size' => [1, 12, 1],
-                'aria-label' => $socialWallPlaceholder,
-            ]
-        );
-        $form->addHtml('<div class="form-group">');
-        $form->addHtml('<div class="col-sm-6">');
-        $form->addFile('picture', get_lang('UploadFile'), ['custom' => true]);
-        $form->addHtml('</div>');
-        $form->addHtml('<div class="col-sm-6 "><div class="pull-right">');
-        $form->addButtonSend(
-            get_lang('Post'),
-            'wall_post_button',
-            false,
-            [
-                'cols-size' => [1, 10, 1],
-                'custom' => true,
-            ]
-        );
-        $form->addHtml('</div></div>');
-        $form->addHtml('</div>');
-        $form->addHidden('url_content', '');
-
-        return $form;
-    }
-
     public static function displayWallForm(string $urlForm): string
     {
         $form = self::getWallForm($urlForm);
@@ -3415,6 +3369,52 @@ class SocialManager extends UserManager
         }
 
         return $tabs;
+    }
+
+    private static function getWallForm(string $urlForm): FormValidator
+    {
+        $userId = isset($_GET['u']) ? '?u='.intval($_GET['u']) : '';
+        $form = new FormValidator(
+            'social_wall_main',
+            'post',
+            $urlForm.$userId,
+            null,
+            ['enctype' => 'multipart/form-data'],
+            FormValidator::LAYOUT_HORIZONTAL
+        );
+
+        $socialWallPlaceholder = isset($_GET['u'])
+            ? get_lang('SocialWallWriteNewPostToFriend')
+            : get_lang('SocialWallWhatAreYouThinkingAbout');
+
+        $form->addTextarea(
+            'social_wall_new_msg_main',
+            null,
+            [
+                'placeholder' => $socialWallPlaceholder,
+                'cols-size' => [1, 12, 1],
+                'aria-label' => $socialWallPlaceholder,
+            ]
+        );
+        $form->addHtml('<div class="form-group">');
+        $form->addHtml('<div class="col-sm-6">');
+        $form->addFile('picture', get_lang('UploadFile'), ['custom' => true]);
+        $form->addHtml('</div>');
+        $form->addHtml('<div class="col-sm-6 "><div class="pull-right">');
+        $form->addButtonSend(
+            get_lang('Post'),
+            'wall_post_button',
+            false,
+            [
+                'cols-size' => [1, 10, 1],
+                'custom' => true,
+            ]
+        );
+        $form->addHtml('</div></div>');
+        $form->addHtml('</div>');
+        $form->addHidden('url_content', '');
+
+        return $form;
     }
 
     /**

@@ -116,24 +116,21 @@ switch ($action) {
 
         // The validation or display
         if ($form->validate()) {
-            if ($check) {
-                $values = $form->exportValues();
-                $res = $career->save($values);
-                if ($res) {
-                    Display::addFlash(
-                        Display::return_message(get_lang('Item added'), 'confirmation')
-                    );
-                }
+            $values = $form->exportValues();
+            $res = $career->save($values);
+            if ($res) {
+                Display::addFlash(
+                    Display::return_message(get_lang('Item added'), 'confirmation')
+                );
             }
             header('Location: '.$listUrl);
             exit;
         } else {
-            $actions = '<a href="'.api_get_self().'">'.
-                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).
-                '</a>';
-            $form->addElement('hidden', 'sec_token');
-            $form->setConstants(['sec_token' => $token]);
-            $content .= Display::toolbarAction('career_actions', [$actions]);
+            $content .= '<div class="actions">';
+            $content .= '<a href="'.api_get_self().'">'.
+                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+            $content .= '</div>';
+            $form->protect();
             $content .= $form->returnForm();
         }
 
@@ -151,49 +148,44 @@ switch ($action) {
 
         // The validation or display
         if ($form->validate()) {
-            if ($check) {
-                $values = $form->exportValues();
-                $career->update_all_promotion_status_by_career_id($values['id'], $values['status']);
-                $old_status = $career->get_status($values['id']);
-                $res = $career->update($values);
+            $values = $form->exportValues();
+            $career->update_all_promotion_status_by_career_id($values['id'], $values['status']);
+            $old_status = $career->get_status($values['id']);
+            $res = $career->update($values);
 
-                $values['item_id'] = $values['id'];
-                $sessionFieldValue = new ExtraFieldValue('career');
-                $sessionFieldValue->saveFieldValues($values);
+            $values['item_id'] = $values['id'];
+            $sessionFieldValue = new ExtraFieldValue('career');
+            $sessionFieldValue->saveFieldValues($values);
 
-                if ($res) {
+            if ($res) {
+                Display::addFlash(
+                    Display::return_message(get_lang('Career updated successfully'), 'confirmation')
+                );
+                if ($values['status'] && !$old_status) {
                     Display::addFlash(
-                        Display::return_message(get_lang('Career updated successfully'), 'confirmation')
+                        Display::return_message(
+                            sprintf(get_lang('The <i>%s</i> career has been unarchived. This action has the consequence of making visible the career, its promotions and all the sessions registered into this promotion. You can undo this by archiving the career.'), $values['name']),
+                            'confirmation',
+                            false
+                        )
                     );
-                    if ($values['status'] && !$old_status) {
-                        Display::addFlash(
-                            Display::return_message(
-                                sprintf(get_lang('The <i>%s</i> career has been unarchived. This action has the consequence of making visible the career, its promotions and all the sessions registered into this promotion. You can undo this by archiving the career.'), $values['name']),
-                                'confirmation',
-                                false
-                            )
-                        );
-                    } elseif (!$values['status'] && $old_status) {
-                        Display::addFlash(
-                            Display::return_message(
-                                sprintf(get_lang('The <i>%s</i> career has been archived. This action has the consequence of making invisible the career, its promotions and all the sessions registered into this promotion. You can undo this by unarchiving the career.'), $values['name']),
-                                'confirmation',
-                                false
-                            )
-                        );
-                    }
+                } elseif (!$values['status'] && $old_status) {
+                    Display::addFlash(
+                        Display::return_message(
+                            sprintf(get_lang('The <i>%s</i> career has been archived. This action has the consequence of making invisible the career, its promotions and all the sessions registered into this promotion. You can undo this by unarchiving the career.'), $values['name']),
+                            'confirmation',
+                            false
+                        )
+                    );
                 }
             }
             header('Location: '.$listUrl);
             exit;
         } else {
-            $actions = '<a href="'.api_get_self().'">'.
-                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).
-                '</a>';
-
-            $form->addElement('hidden', 'sec_token');
-            $form->setConstants(['sec_token' => $token]);
-            $content .= Display::toolbarAction('career_actions', [$actions]);
+            $content .= '<div class="actions">';
+            $content .= '<a href="'.api_get_self().'">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+            $content .= '</div>';
+            $form->protect();
             $content .= $form->returnForm();
         }
 

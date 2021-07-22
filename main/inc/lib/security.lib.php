@@ -131,9 +131,20 @@ class Security
     /**
      * @return string
      */
-    public static function getTokenFromSession()
+    public static function getTokenFromSession(string $prefix = '')
     {
-        return Session::read('sec_token');
+        $secTokenVariable = self::generateSecTokenVariable($prefix);
+
+        return Session::read($secTokenVariable);
+    }
+
+    private static function generateSecTokenVariable(string $prefix = ''): string
+    {
+        if (empty($prefix)) {
+            return 'sec_token';
+        }
+
+        return $prefix.'_sec_token';
     }
 
     /**
@@ -144,24 +155,25 @@ class Security
      *
      * @return bool True if it's the right token, false otherwise
      */
-    public static function check_token($request_type = 'post', FormValidator $form = null)
+    public static function check_token($request_type = 'post', FormValidator $form = null, string $prefix = '')
     {
-        $sessionToken = Session::read('sec_token');
+        $secTokenVariable = self::generateSecTokenVariable($prefix);
+        $sessionToken = Session::read($secTokenVariable);
         switch ($request_type) {
             case 'request':
-                if (!empty($sessionToken) && isset($_REQUEST['sec_token']) && $sessionToken === $_REQUEST['sec_token']) {
+                if (!empty($sessionToken) && isset($_REQUEST[$secTokenVariable]) && $sessionToken === $_REQUEST[$secTokenVariable]) {
                     return true;
                 }
 
                 return false;
             case 'get':
-                if (!empty($sessionToken) && isset($_GET['sec_token']) && $sessionToken === $_GET['sec_token']) {
+                if (!empty($sessionToken) && isset($_GET[$secTokenVariable]) && $sessionToken === $_GET[$secTokenVariable]) {
                     return true;
                 }
 
                 return false;
             case 'post':
-                if (!empty($sessionToken) && isset($_POST['sec_token']) && $sessionToken === $_POST['sec_token']) {
+                if (!empty($sessionToken) && isset($_POST[$secTokenVariable]) && $sessionToken === $_POST[$secTokenVariable]) {
                     return true;
                 }
 
@@ -206,9 +218,11 @@ class Security
     /**
      * Clear the security token from the session.
      */
-    public static function clear_token()
+    public static function clear_token(string $prefix = '')
     {
-        Session::erase('sec_token');
+        $secTokenVariable = self::generateSecTokenVariable($prefix);
+
+        Session::erase($secTokenVariable);
     }
 
     /**
@@ -221,11 +235,12 @@ class Security
      *
      * @return string Hidden-type input ready to insert into a form
      */
-    public static function get_HTML_token()
+    public static function get_HTML_token(string $prefix = '')
     {
+        $secTokenVariable = self::generateSecTokenVariable($prefix);
         $token = md5(uniqid(rand(), true));
-        $string = '<input type="hidden" name="sec_token" value="'.$token.'" />';
-        Session::write('sec_token', $token);
+        $string = '<input type="hidden" name="'.$secTokenVariable.'" value="'.$token.'" />';
+        Session::write($secTokenVariable, $token);
 
         return $string;
     }
@@ -240,10 +255,11 @@ class Security
      *
      * @return string Token
      */
-    public static function get_token()
+    public static function get_token($prefix = '')
     {
+        $secTokenVariable = self::generateSecTokenVariable($prefix);
         $token = md5(uniqid(rand(), true));
-        Session::write('sec_token', $token);
+        Session::write($secTokenVariable, $token);
 
         return $token;
     }
@@ -251,13 +267,14 @@ class Security
     /**
      * @return string
      */
-    public static function get_existing_token()
+    public static function get_existing_token(string $prefix = '')
     {
-        $token = Session::read('sec_token');
+        $secTokenVariable = self::generateSecTokenVariable($prefix);
+        $token = Session::read($secTokenVariable);
         if (!empty($token)) {
             return $token;
         } else {
-            return self::get_token();
+            return self::get_token($prefix);
         }
     }
 

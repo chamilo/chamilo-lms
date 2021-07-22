@@ -178,8 +178,15 @@ class ChamiloApi
         $institutionUrl = api_get_setting('InstitutionUrl');
         $siteName = api_get_setting('siteName');
 
+        $homeURL = api_get_path(WEB_PATH).'index.php';
+
+        $replaceHomeURL = api_get_configuration_value('platform_logo_url');
+        if (!empty($replaceHomeURL)) {
+            $homeURL = $replaceHomeURL;
+        }
+
         if ($logoPath === null) {
-            $headerLogo = \Display::url($siteName, api_get_path(WEB_PATH).'index.php');
+            $headerLogo = \Display::url($siteName, $homeURL);
 
             if (!empty($institutionUrl) && !empty($institution)) {
                 $headerLogo .= ' - '.\Display::url($institution, $institutionUrl);
@@ -188,7 +195,6 @@ class ChamiloApi
             $courseInfo = api_get_course_info();
             if (isset($courseInfo['extLink']) && !empty($courseInfo['extLink']['name'])) {
                 $headerLogo .= '<span class="extLinkSeparator"> - </span>';
-
                 if (!empty($courseInfo['extLink']['url'])) {
                     $headerLogo .= \Display::url(
                         $courseInfo['extLink']['name'],
@@ -205,7 +211,7 @@ class ChamiloApi
 
         $image = \Display::img($logoPath, $institution, $imageAttributes);
 
-        return \Display::url($image, api_get_path(WEB_PATH).'index.php');
+        return \Display::url($image, $homeURL);
     }
 
     /**

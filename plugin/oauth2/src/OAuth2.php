@@ -24,8 +24,8 @@ class OAuth2 extends Plugin
     const SETTING_CLIENT_SECRET = 'client_secret';
 
     const SETTING_AUTHORIZE_URL = 'authorize_url';
-    // const SETTING_SCOPES = 'scopes';
-    // const SETTING_SCOPE_SEPARATOR = 'scope_separator';
+    const SETTING_SCOPES = 'scopes';
+    const SETTING_SCOPE_SEPARATOR = 'scope_separator';
 
     const SETTING_ACCESS_TOKEN_URL = 'access_token_url';
     const SETTING_ACCESS_TOKEN_METHOD = 'access_token_method';
@@ -68,8 +68,8 @@ class OAuth2 extends Plugin
                 self::SETTING_CLIENT_SECRET => 'text',
 
                 self::SETTING_AUTHORIZE_URL => 'text',
-                // self::SETTING_SCOPES => 'text',
-                // self::SETTING_SCOPE_SEPARATOR => 'text',
+                self::SETTING_SCOPES => 'text',
+                self::SETTING_SCOPE_SEPARATOR => 'text',
 
                 self::SETTING_ACCESS_TOKEN_URL => 'text',
                 self::SETTING_ACCESS_TOKEN_METHOD => [
@@ -121,33 +121,51 @@ class OAuth2 extends Plugin
         return $result ? $result : $result = new self();
     }
 
-    /**
-     * @return GenericProvider
-     */
-    public function getProvider()
+    public function getProvider(): GenericProvider
     {
-        return new GenericProvider(
-            [
-                'clientId' => $this->get(self::SETTING_CLIENT_ID),
-                'clientSecret' => $this->get(self::SETTING_CLIENT_SECRET),
-                'redirectUri' => api_get_path(WEB_PLUGIN_PATH).'oauth2/src/callback.php',
+        $options = [
+            'clientId' => $this->get(self::SETTING_CLIENT_ID),
+            'clientSecret' => $this->get(self::SETTING_CLIENT_SECRET),
+            'redirectUri' => api_get_path(WEB_PLUGIN_PATH).'oauth2/src/callback.php',
+            'urlAuthorize' => $this->get(self::SETTING_AUTHORIZE_URL),
+            'urlResourceOwnerDetails' => $this->get(self::SETTING_RESOURCE_OWNER_DETAILS_URL),
+        ];
 
-                'urlAuthorize' => $this->get(self::SETTING_AUTHORIZE_URL),
-                // 'scopes' => $this->get(self::SETTING_SCOPES) or null,
-                // 'scopeSeparator' => $this->get(self::SETTING_SCOPE_SEPARATOR) ?: ',',
+        if ('' === $scopeSeparator = (string) $this->get(self::SETTING_SCOPE_SEPARATOR)) {
+            $scopeSeparator = ' ';
+        }
 
-                'urlAccessToken' => $this->get(self::SETTING_ACCESS_TOKEN_URL),
-                'accessTokenMethod' => $this->get(self::SETTING_ACCESS_TOKEN_METHOD) ?: GenericProvider::METHOD_POST,
-                //'accessTokenResourceOwnerId' => $this->get(self::SETTING_ACCESS_TOKEN_RESOURCE_OWNER_ID)
-                //    ?: GenericProvider::ACCESS_TOKEN_RESOURCE_OWNER_ID,
+        $options['scopeSeparator'] = $scopeSeparator;
 
-                'urlResourceOwnerDetails' => $this->get(self::SETTING_RESOURCE_OWNER_DETAILS_URL),
+        if ('' !== $scopes = (string) $this->get(self::SETTING_SCOPES)) {
+            $options['scopes'] = explode($scopeSeparator, $scopes);
+        }
 
-                'responseError' => $this->get(self::SETTING_RESPONSE_ERROR) ?: 'error',
-                'responseCode' => $this->get(self::SETTING_RESPONSE_CODE) ?: null,
-                'responseResourceOwnerId' => $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_ID) ?: 'id',
-            ]
-        );
+        if ('' !== $urlAccessToken = (string) $this->get(self::SETTING_ACCESS_TOKEN_URL)) {
+            $options['urlAccessToken'] = $urlAccessToken;
+        }
+
+        if ('' !== $accessTokenMethod = (string) $this->get(self::SETTING_ACCESS_TOKEN_METHOD)) {
+            $options['accessTokenMethod'] = $accessTokenMethod;
+        }
+
+//        if ('' !== $accessTokenResourceOwnerId = (string) $this->get(self::SETTING_ACCESS_TOKEN_RESOURCE_OWNER_ID)) {
+//            $options['accessTokenResourceOwnerId'] = $accessTokenResourceOwnerId;
+//        }
+
+        if ('' !== $responseError = (string) $this->get(self::SETTING_RESPONSE_ERROR)) {
+            $options['responseError'] = $responseError;
+        }
+
+        if ('' !== $responseCode = (string) $this->get(self::SETTING_RESPONSE_CODE)) {
+            $options['responseCode'] = $responseCode;
+        }
+
+        if ('' !== $responseResourceOwnerId = (string) $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_ID)) {
+            $options['responseResourceOwnerId'] = $responseResourceOwnerId;
+        }
+
+        return new GenericProvider($options);
     }
 
     /**

@@ -45,7 +45,7 @@ class LearnpathList
         $categoryId = null,
         $ignoreCategoryFilter = false,
         $ignoreLpVisibility = false,
-        $ignoreLpSubscription = true
+        bool $includeSubscribedLp = true
     ) {
         if (empty($courseInfo)) {
             $courseInfo = api_get_course_info();
@@ -169,7 +169,8 @@ class LearnpathList
                         $row->getId(),
                         $user_id,
                         $courseInfo,
-                        $session_id
+                        $session_id,
+                        $includeSubscribedLp
                     );
                     if ($lpVisibility === false) {
                         continue;
@@ -177,7 +178,7 @@ class LearnpathList
                 }
             }
 
-            if (!$ignoreLpSubscription && $row->getSubscribeUsers()) {
+            if (!$includeSubscribedLp && $row->getSubscribeUsers() && $isAllowToEdit) {
                 $isSubscribedToLp = learnpath::isUserSubscribedToLp(
                     ['subscribe_users' => $row->getSubscribeUsers(), 'id' => $row->getIid()],
                     (int) $this->user_id,

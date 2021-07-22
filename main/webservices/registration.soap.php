@@ -4,10 +4,10 @@
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\UserBundle\Entity\User;
 
-/**
- * @package chamilo.webservices
- */
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_webservices();
+
 $debug = true;
 
 define('WS_ERROR_SECRET_KEY', 1);
@@ -805,8 +805,8 @@ function WSCreateUsersPasswordCrypted($params)
         $active = 1;
         $hr_dept_id = 0;
         $extra = null;
-        $original_user_id_name = $user_param['original_user_id_name'];
-        $original_user_id_value = $user_param['original_user_id_value'];
+        $original_user_id_name = Database::escape_string($user_param['original_user_id_name']);
+        $original_user_id_value = Database::escape_string($user_param['original_user_id_value']);
         $orig_user_id_value[] = $user_param['original_user_id_value'];
         $extra_list = $user_param['extra'];
         $salt = '';
@@ -858,7 +858,7 @@ function WSCreateUsersPasswordCrypted($params)
         $sql = "SELECT value as field_value,item_id as user_id
                 FROM $t_uf uf, $t_ufv ufv
                 WHERE
-                    uf.extra_field_type = $extraFieldType
+                    uf.extra_field_type = $extraFieldType AND
                     ufv.field_id=uf.id AND
                     variable='$original_user_id_name' AND
                     value ='$original_user_id_value'";

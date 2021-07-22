@@ -173,7 +173,7 @@ class Export
     public static function export_complex_table_xml(
         $data,
         $filename = 'export',
-        $wrapper_tagname,
+        $wrapper_tagname = null,
         $encoding = 'ISO-8859-1'
     ) {
         $file = api_get_path(SYS_ARCHIVE_PATH).'/'.uniqid('').'.xml';

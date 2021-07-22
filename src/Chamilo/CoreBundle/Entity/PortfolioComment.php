@@ -34,14 +34,14 @@ class PortfolioComment
      * @var \Chamilo\UserBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $author;
     /**
      * @var \Chamilo\CoreBundle\Entity\Portfolio
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Portfolio", inversedBy="comments")
-     * @ORM\JoinColumn(name="item_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="item_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $item;
     /**

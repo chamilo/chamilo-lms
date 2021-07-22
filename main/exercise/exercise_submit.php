@@ -205,9 +205,10 @@ $exercise_sound = $objExercise->selectSound();
 // If reminder ends we jump to the exercise_reminder
 if ($objExercise->review_answers) {
     if (-1 == $remind_question_id) {
-        header('Location: '.api_get_path(WEB_CODE_PATH).
-            'exercise/exercise_reminder.php?exerciseId='.$exerciseId.'&'.api_get_cidreq());
-        exit;
+        $extraParams = "&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id";
+        $url = api_get_path(WEB_CODE_PATH).
+            'exercise/exercise_reminder.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().$extraParams;
+        api_location($url);
     }
 }
 
@@ -432,7 +433,6 @@ if (empty($exercise_stat_info)) {
     $exe_id = $exercise_stat_info['exe_id'];
     // Remember last question id position.
     $isFirstTime = Session::read('firstTime');
-    //$isFirstTime = true;
     if ($isFirstTime && ONE_PER_PAGE == $objExercise->type) {
         $resolvedQuestions = Event::getAllExerciseEventByExeId($exe_id);
         if (!empty($resolvedQuestions) &&
@@ -442,7 +442,6 @@ if (empty($exercise_stat_info)) {
             $resolvedQuestionsQuestionIds = array_keys($resolvedQuestions);
             $count = 0;
             $attemptQuestionList = explode(',', $exercise_stat_info['data_tracking']);
-            //var_dump($attemptQuestionList, $resolvedQuestionsQuestionIds);
             foreach ($attemptQuestionList as $index => $question) {
                 if (in_array($question, $resolvedQuestionsQuestionIds)) {
                     $count = $index;
@@ -473,7 +472,6 @@ if (api_get_configuration_value('block_category_questions')) {
 if (!isset($questionListInSession)) {
     // Selects the list of question ID
     $questionList = $objExercise->getQuestionList();
-
     // Media questions.
     $media_is_activated = $objExercise->mediaIsActivated();
     // Getting order from random

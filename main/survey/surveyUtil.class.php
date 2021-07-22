@@ -259,7 +259,7 @@ class SurveyUtil
                 self::display_comparative_report();
                 break;
             case 'completereport':
-                echo self::displayCompleteReport($survey_data);
+                echo self::displayCompleteReport($survey_data, 0, true, true, !$survey_data['anonymous']);
                 break;
             case 'deleteuserreport':
                 self::delete_user_report($_GET['survey_id'], $_GET['user']);
@@ -1440,7 +1440,9 @@ class SurveyUtil
         );
 
         $num = count($extra_user_fields);
-        $return .= str_repeat(';', $num);
+        if (!$survey_data['anonymous']) {
+            $return .= str_repeat(';', $num);
+        }
 
         $sql = "SELECT
                     questions.question_id,
@@ -1497,7 +1499,7 @@ class SurveyUtil
         // Getting all the questions and options
         $return .= ';';
         // Show the fields names for user fields
-        if (!empty($extra_user_fields)) {
+        if (!empty($extra_user_fields) && !$survey_data['anonymous']) {
             foreach ($extra_user_fields as &$field) {
                 if ($translate) {
                     $field[3] = api_get_filtered_multilingual_HTML_string($field[3], $course['language']);
@@ -1588,7 +1590,7 @@ class SurveyUtil
                     $possible_answers,
                     $answers_of_user,
                     $old_user,
-                    true,
+                    !$survey_data['anonymous'],
                     $compact
                 );
                 $answers_of_user = [];
@@ -1779,11 +1781,12 @@ class SurveyUtil
             true
         );
         $num = count($extra_user_fields);
-        for ($i = 0; $i < $num; $i++) {
-            $worksheet->setCellValueByColumnAndRow($column, $line, '');
-            $column++;
+        if (!$survey_data['anonymous']) {
+            for ($i = 0; $i < $num; $i++) {
+                $worksheet->setCellValueByColumnAndRow($column, $line, '');
+                $column++;
+            }
         }
-
         $display_extra_user_fields = true;
 
         // Database table definitions
@@ -1847,7 +1850,7 @@ class SurveyUtil
         $line++;
         $column = 1;
         // Show extra field values
-        if ($display_extra_user_fields) {
+        if ($display_extra_user_fields && !$survey_data['anonymous']) {
             // Show the fields names for user fields
             foreach ($extra_user_fields as &$field) {
                 $worksheet->setCellValueByColumnAndRow(
@@ -1927,7 +1930,7 @@ class SurveyUtil
                     $possible_answers,
                     $answers_of_user,
                     $old_user,
-                    true
+                    !$survey_data['anonymous']
                 );
                 foreach ($return as $elem) {
                     $worksheet->setCellValueByColumnAndRow($column, $line, $elem);

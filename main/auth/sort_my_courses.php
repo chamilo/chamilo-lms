@@ -306,27 +306,29 @@ if (!empty($user_course_categories)) {
                 echo '&nbsp;';
                 echo CourseManager::getTeacherListFromCourseCodeToString($course['code']);
                 echo '<br />';
-
                 if (api_get_setting('display_teacher_in_courselist') === 'true') {
                     echo $course['tutor'];
                 }
-                echo '</td><td valign="top">'; ?>
-                <div style="float:left;width:110px;">
-                <?php
-                    if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-                        $icon_title = get_lang('CourseDetails').' - '.$course['title']; ?>
-                <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>inc/ajax/course_home.ajax.php?a=show_course_information&code=<?php echo $course['code']; ?>" data-title="<?php echo $icon_title; ?>" title="<?php echo $icon_title; ?>" class="ajax">
-                    <?php
-                    echo Display::return_icon('info.png', $icon_title, '', '22');
-                    } ?>
-                </a>
-                <?php
+                echo '</td><td valign="top">';
+                echo '<div style="float:left;width:110px;">';
+                if (api_get_setting('show_courses_descriptions_in_catalog') === 'true') {
+                    $icon_title = get_lang('CourseDetails').' - '.$course['title'];
+                    $url = api_get_path(
+                            WEB_CODE_PATH
+                        ).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'];
+                    echo Security::remove_XSS(
+                        Display::url(
+                            Display::return_icon('info.png', $icon_title, '', '22'),
+                            $url,
+                            ['class' => 'ajax', 'data-title' => $icon_title, 'title' => $icon_title]
+                        )
+                    );
                     echo Display::url(
                         Display::return_icon('edit.png', get_lang('Edit'), '', 22),
                         $currentUrl.'?action=edit_course_category&category_id='.$row['id'].'&course_id='.$course['real_id'].'&sec_token='.$stok,
                         ['class' => 'ajax']
                     );
-
+                }
                 if ($key > 0) {
                     ?>
                     <a href="<?php echo $currentUrl; ?>?action=<?php echo $action; ?>&amp;move=up&amp;course=<?php echo $course['code']; ?>&amp;category=<?php echo $course['user_course_cat']; ?>&amp;sec_token=<?php echo $stok; ?>">
@@ -390,16 +392,19 @@ if (!empty($courses_without_category)) {
         if (api_get_setting('display_teacher_in_courselist') === 'true') {
             echo $course['tutor'];
         }
-        echo '</td><td class="text-right">'; ?>
-            <div>
-            <?php
-            if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-                $icon_title = get_lang('CourseDetails').' - '.$course['title']; ?>
-            <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>inc/ajax/course_home.ajax.php?a=show_course_information&code=<?php echo $course['code']; ?>" data-title="<?php echo $icon_title; ?>" title="<?php echo $icon_title; ?>" class="ajax">
-                <?php echo Display::return_icon('info.png', $icon_title, '', '22'); ?>
-            </a>
-            <?php
-            }
+        echo '</td><td class="text-right">';
+        echo '<div>';
+        if (api_get_setting('show_courses_descriptions_in_catalog') === 'true') {
+            $icon_title = get_lang('CourseDetails').' - '.$course['title'];
+            $url = api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'];
+            echo Security::remove_XSS(
+                Display::url(
+                    Display::return_icon('info.png', $icon_title, '', '22'),
+                    $url,
+                    ['class' => 'ajax', 'data-title' => $icon_title, 'title' => $icon_title]
+                )
+            );
+        }
         echo '';
         if (isset($_GET['edit']) && $course['code'] == $_GET['edit']) {
             echo Display::return_icon('edit_na.png', get_lang('Edit'), '', 22);
@@ -412,7 +417,8 @@ if (!empty($courses_without_category)) {
         }
         if ($key > 0) {
             ?>
-                <a href="<?php echo $currentUrl; ?>?action=<?php echo $action; ?>&amp;move=up&amp;course=<?php echo $course['code']; ?>&amp;category=<?php echo $course['user_course_cat']; ?>&amp;sec_token=<?php echo $stok; ?>">
+                <a
+                    href="<?php echo $currentUrl; ?>?action=<?php echo $action; ?>&amp;move=up&amp;course=<?php echo $course['code']; ?>&amp;category=<?php echo $course['user_course_cat']; ?>&amp;sec_token=<?php echo $stok; ?>">
                 <?php echo Display::display_icon('up.png', get_lang('Up'), '', 22); ?>
                 </a>
             <?php
@@ -421,7 +427,8 @@ if (!empty($courses_without_category)) {
         }
         if ($key < $number_of_courses - 1) {
             ?>
-                <a href="<?php echo $currentUrl; ?>?action=<?php echo $action; ?>&amp;move=down&amp;course=<?php echo $course['code']; ?>&amp;category=<?php echo $course['user_course_cat']; ?>&amp;sec_token=<?php echo $stok; ?>">
+                <a
+                    href="<?php echo $currentUrl; ?>?action=<?php echo $action; ?>&amp;move=down&amp;course=<?php echo $course['code']; ?>&amp;category=<?php echo $course['user_course_cat']; ?>&amp;sec_token=<?php echo $stok; ?>">
                 <?php echo Display::display_icon('down.png', get_lang('Down'), '', 22); ?>
                 </a>
             <?php
@@ -435,7 +442,9 @@ if (!empty($courses_without_category)) {
                     if ($course['unsubscr'] == 1) {
                         ?>
                 <!-- changed link to submit to avoid action by the search tool indexer -->
-                <form action="<?php echo api_get_self(); ?>" method="post" onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES, api_get_system_encoding())); ?>')) return false;">
+                <form action="<?php echo api_get_self(); ?>"
+                      method="post"
+                      onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES, api_get_system_encoding())); ?>')) return false;">
                     <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
                     <input type="hidden" name="unsubscribe" value="<?php echo $course['code']; ?>" />
                     <button class="btn btn-default" value="<?php echo get_lang('Unsubscribe'); ?>" name="unsub">

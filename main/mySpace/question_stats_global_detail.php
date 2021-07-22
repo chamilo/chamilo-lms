@@ -81,20 +81,20 @@ $form->addButtonSearch(get_lang('Search'));
 
 $tableContent = '';
 
-function getCourseSessionRow($courseId, $exerciseId, $sessionId, $title)
+function getCourseSessionRow($courseId, Exercise $exercise, $sessionId, $title)
 {
-    $correctCount = ExerciseLib::getExerciseResultsCount('correct', $courseId, $exerciseId, $sessionId);
-    $wrongCount = ExerciseLib::getExerciseResultsCount('wrong', $courseId, $exerciseId, $sessionId);
+    $correctCount = ExerciseLib::getExerciseResultsCount('correct', $courseId, $exercise, $sessionId);
+    $wrongCount = ExerciseLib::getExerciseResultsCount('wrong', $courseId, $exercise, $sessionId);
     $correctCountStudent = ExerciseLib::getExerciseResultsCount(
         'correct_student',
         $courseId,
-        $exerciseId,
+        $exercise,
         $sessionId
     );
     $wrongCountStudent = ExerciseLib::getExerciseResultsCount(
         'wrong_student',
         $courseId,
-        $exerciseId,
+        $exercise,
         $sessionId
     );
 
@@ -111,20 +111,26 @@ function getCourseSessionRow($courseId, $exerciseId, $sessionId, $title)
 if ($form->validate()) {
     $headers = [
         get_lang('Session'),
-        get_lang('CorrectAttempts'),
-        get_lang('WrongAttempts'),
-        get_lang('StudentsWithCorrectAnswers'),
-        get_lang('StudentsWithWrongAnswers'),
+        get_lang('SuccessfulAttempt'),
+        get_lang('FailedAttempt'),
+        get_lang('StudentWithSuccessfulAttempt'),
+        get_lang('StudentWithFailedAttempt'),
     ];
     $scoreDisplay = new ScoreDisplay();
     $exercises = $form->getSubmitValue('exercises');
-
+    $exerciseTable = Database::get_course_table(TABLE_QUIZ_TEST);
     if ($exercises) {
         foreach ($selectedExercises as $courseId => $courseExerciseList) {
             $sessions = SessionManager::get_session_by_course($courseId);
             $courseTitle = $courseOptions[$courseId];
 
             foreach ($courseExerciseList as $exerciseId) {
+                $exerciseObj = new Exercise($courseId);
+                $result = $exerciseObj->read($exerciseId, false);
+                if (false === $result) {
+                    continue;
+                }
+
                 $exerciseTitle = $exerciseList[$exerciseId];
                 $tableContent .= Display::page_subheader2($courseTitle.' - '.$exerciseTitle);
                 $orderedData = [];
@@ -136,7 +142,7 @@ if ($form->validate()) {
 
                 foreach ($sessions as $session) {
                     $sessionId = $session['id'];
-                    $row = getCourseSessionRow($courseId, $exerciseId, $sessionId, $session['name']);
+                    $row = getCourseSessionRow($courseId, $exerciseObj, $sessionId, $session['name']);
                     $correctCount += $row['correct_count'];
                     $wrongCount += $row['wrong_count'];
                     $correctCountStudent += $row['correct_count_student'];
@@ -152,7 +158,7 @@ if ($form->validate()) {
                 }
 
                 // Course base
-                $row = getCourseSessionRow($courseId, $exerciseId, 0, get_lang('BaseCourse'));
+                $row = getCourseSessionRow($courseId, $exerciseObj, 0, get_lang('BaseCourse'));
                 $orderedData[] = [
                     $row['title'],
                     $row['correct_count'],

@@ -81,11 +81,11 @@ $actions = null;
 if (isset($_GET['cidReq'])) {
     $actions = Display::url(
         Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('Documents').' ('.get_lang('Course').')'),
-        api_get_self().'?'.api_get_cidreq().'&id='.$_GET['parent_id']
+        api_get_self().'?'.api_get_cidreq().'&id='.(int) $_GET['parent_id']
     );
 }
 
-if (api_get_setting('allow_social_tool') == 'true') {
+if (api_get_setting('allow_social_tool') === 'true') {
     Session::write('this_section', SECTION_SOCIAL);
     $interbreadcrumb[] = [
         'url' => 'profile.php',

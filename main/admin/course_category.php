@@ -18,11 +18,33 @@ $categoryId = isset($_GET['id']) ? Security::remove_XSS($_GET['id']) : null;
 if (!empty($categoryId)) {
     $categoryInfo = CourseCategory::getCategory($categoryId);
 }
-$action = isset($_GET['action']) ? $_GET['action'] : null;
+$action = $_GET['action'] ?? null;
 
 $myCourseListAsCategory = api_get_configuration_value('my_courses_list_as_category');
 
 if (!empty($action)) {
+    if ('export' === $action) {
+        $categoryInfo = CourseCategory::getCategoryById($categoryId);
+        if (!empty($categoryInfo)) {
+            $courses = CourseCategory::getCoursesInCategory($categoryInfo['code'], '', false, false);
+            if (!empty($courses)) {
+                $name = api_get_local_time().'_'.$categoryInfo['code'];
+                $courseList = array_map(
+                    function ($value) {
+                        return [$value];
+                    },
+                    array_column($courses, 'title')
+                );
+                Export::arrayToCsv($courseList, $name);
+            }
+        }
+
+        Display::addFlash(Display::return_message(get_lang('HaveNoCourse')));
+
+        header('Location: '.api_get_self());
+        exit;
+    }
+
     if ($action === 'delete') {
         CourseCategory::deleteNode($categoryId);
         Display::addFlash(Display::return_message(get_lang('Deleted')));
@@ -70,6 +92,33 @@ if (!empty($action)) {
         exit();
     }
 }
+$htmlHeadXtra[] = '
+<script>
+    function showCourses(button, categoryId) {
+        event.preventDefault();
+        let url = button.getAttribute("href");
+        let tableId = "cat_" + categoryId;
+        let exists = button.parentNode.parentNode.parentNode.querySelector("#" + tableId);
+        if (exists !== null) {
+            button.parentNode.parentNode.parentNode.removeChild(exists);
+            return ;
+        }
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function(result) {
+                let row = document.createElement("tr");
+                row.setAttribute("id", tableId);
+                let cell = document.createElement("td");
+                cell.setAttribute("colspan", "4");
+                cell.innerHTML= result;
+                row.appendChild(cell);
+                button.parentNode.parentNode.parentNode.insertBefore(row, button.parentNode.parentNode.nextSibling);
+            }
+        });
+    }
+</script>';
 
 $tool_name = get_lang('AdminCategories');
 $interbreadcrumb[] = [

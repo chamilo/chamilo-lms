@@ -84,6 +84,7 @@ class CourseCategory
         }
 
         $sql = "SELECT
+                t1.id,
                 t1.name,
                 t1.code,
                 t1.parent_id,
@@ -476,13 +477,15 @@ class CourseCategory
             }
             $row++;
             $mainUrl = api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.$categorySource;
-
+            $ajaxUrl = api_get_path(WEB_AJAX_PATH).'course_category.ajax.php';
             $editIcon = Display::return_icon(
                 'edit.png',
                 get_lang('EditNode'),
                 null,
                 ICON_SIZE_SMALL
             );
+            $exportIcon = Display::return_icon('export_csv.png', get_lang('ExportAsCSV'));
+
             $deleteIcon = Display::return_icon(
                 'delete.png',
                 get_lang('DeleteNode'),
@@ -496,17 +499,37 @@ class CourseCategory
                 ICON_SIZE_SMALL
             );
 
+            $showCoursesIcon = Display::return_icon(
+                'course.png',
+                get_lang('Courses'),
+                null,
+                ICON_SIZE_SMALL
+            );
+
             $urlId = api_get_current_access_url_id();
             foreach ($categories as $category) {
+                $categoryId = $category['id'];
                 $editUrl = $mainUrl.'&id='.$category['code'].'&action=edit';
                 $moveUrl = $mainUrl.'&id='.$category['code'].'&action=moveUp&tree_pos='.$category['tree_pos'];
                 $deleteUrl = $mainUrl.'&id='.$category['code'].'&action=delete';
+                $exportUrl = $mainUrl.'&id='.$categoryId.'&action=export';
+                $showCoursesUrl = $ajaxUrl.'?id='.$categoryId.'&a=show_courses';
 
                 $actions = [];
                 if ($urlId == $category['access_url_id']) {
+                    $actions[] = Display::url(
+                        $showCoursesIcon,
+                        $showCoursesUrl,
+                        ['onclick' => 'showCourses(this, '.$categoryId.')']
+                    );
                     $actions[] = Display::url($editIcon, $editUrl);
                     $actions[] = Display::url($moveIcon, $moveUrl);
-                    $actions[] = Display::url($deleteIcon, $deleteUrl);
+                    $actions[] = Display::url($exportIcon, $exportUrl);
+                    $actions[] = Display::url(
+                        $deleteIcon,
+                        $deleteUrl,
+                        ['onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('ConfirmYourChoice')), ENT_QUOTES)).'\')) return false;']
+                    );
                 }
 
                 $url = api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.$category['code'];

@@ -16,7 +16,8 @@ class StudentFollowPage
         array $lpInfo,
         int $studentId,
         int $courseId,
-        int $sessionId = 0
+        int $sessionId = 0,
+        bool $showTeacherName = true
     ): string {
         $em = Database::getManager();
 
@@ -52,15 +53,17 @@ class StudentFollowPage
                 return '-';
             }
 
-            $insertUser = $itemProperty->getInsertUser()->getId() !== $studentId
-                ? $itemProperty->getInsertUser()->getCompleteName()
-                : '-';
+            $formattedDate = api_convert_and_format_date($itemProperty->getInsertDate(), DATE_TIME_FORMAT_LONG);
 
-            return "$insertUser<br>"
-                .Display::tag(
-                    'small',
-                    api_convert_and_format_date($itemProperty->getInsertDate(), DATE_TIME_FORMAT_LONG)
-                );
+            if ($showTeacherName) {
+                $insertUser = $itemProperty->getInsertUser()->getId() !== $studentId
+                    ? $itemProperty->getInsertUser()->getCompleteName()
+                    : '-';
+
+                return "$insertUser<br>".Display::tag('small', $formattedDate);
+            }
+
+            return $formattedDate;
         }
 
         $subscriptionEvent = Event::findUserSubscriptionToCourse($studentId, $courseId, $sessionId);
@@ -69,13 +72,15 @@ class StudentFollowPage
             return '-';
         }
 
-        $creator = api_get_user_entity($subscriptionEvent['default_user_id']);
+        $formattedDate = api_convert_and_format_date($subscriptionEvent['default_date'], DATE_TIME_FORMAT_LONG);
 
-        return "{$creator->getCompleteName()}<br>"
-            .Display::tag(
-                'small',
-                api_convert_and_format_date($subscriptionEvent['default_date'], DATE_TIME_FORMAT_LONG)
-            );
+        if ($showTeacherName) {
+            $creator = api_get_user_entity($subscriptionEvent['default_user_id']);
+
+            return "{$creator->getCompleteName()}<br>".Display::tag('small', $formattedDate);
+        }
+
+        return $formattedDate;
     }
 
     public static function getLpAcquisition(

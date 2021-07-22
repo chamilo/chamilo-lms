@@ -20,12 +20,52 @@ class Career extends Model
         'updated_at',
     ];
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->table = Database::get_main_table(TABLE_CAREER);
+    }
+
+    public function getCareerFromId($id)
+    {
+        if (api_get_configuration_value('use_career_external_id_as_identifier_in_diagrams')) {
+            // Try with the external career id.
+            $careerInfo = $this->getCareerFromExternalToInternal($id);
+        } else {
+            $careerInfo = $this->get($id);
+        }
+
+        return $careerInfo;
+    }
+
+    public function getCareerFromExternalToInternal($externalCareerId, $extraFieldVariable = 'external_career_id')
+    {
+        $careerExtraFieldValue = new ExtraFieldValue('career');
+        $careerValue = $careerExtraFieldValue->get_item_id_from_field_variable_and_field_value(
+            $extraFieldVariable,
+            $externalCareerId
+        );
+
+        $careerInfo = [];
+        if (isset($careerValue['item_id'])) {
+            $careerInfo = $this->get($careerValue['item_id']);
+        }
+
+        return $careerInfo;
+    }
+
+    public function getCareerIdFromInternalToExternal($internalCareerId)
+    {
+        $careerExtraFieldValue = new ExtraFieldValue('career');
+        $externalCareerValue = $careerExtraFieldValue->get_values_by_handler_and_field_variable(
+            $internalCareerId,
+            'external_career_id'
+        );
+
+        if (!empty($externalCareerValue) && isset($externalCareerValue['value'])) {
+            return $externalCareerValue['value'];
+        }
+
+        return null;
     }
 
     /**
@@ -460,9 +500,9 @@ class Career extends Model
      *
      * @return string
      */
-    public static function renderDiagramByColumn($careerInfo, $tpl, $loadUserIdData = 0)
+    public static function renderDiagramByColumn($careerInfo, $tpl, $loadUserIdData = 0, $showFooter = true)
     {
-        $careerId = isset($careerInfo['id']) ? $careerInfo['id'] : 0;
+        $careerId = $careerInfo['id'] ?? 0;
         if (empty($careerId)) {
             return '';
         }
@@ -752,6 +792,9 @@ class Career extends Model
         $tpl->assign('vertex_list', $graph->elementList);
 
         $graphHtml .= '<div id="graphContainer"></div>';
+        if ($showFooter) {
+            $graphHtml .= self::renderDiagramFooter();
+        }
 
         return $graphHtml;
     }
@@ -768,9 +811,8 @@ class Career extends Model
     public static function parseColumnList($groupCourseList, $columnList, &$graph, &$connections, $userResult)
     {
         $graphHtml = '';
-        $oldGroup = null;
         $newOrder = [];
-        foreach ($columnList as $key => $subGroupList) {
+        foreach ($columnList as $subGroupList) {
             $newGroup = $subGroupList['group'];
             $label = $subGroupList['group_label'];
             $newOrder[$newGroup]['items'][] = $subGroupList;
@@ -866,7 +908,7 @@ class Career extends Model
      *
      * @return string
      */
-    public static function parseVertexList($groupCourseList, $vertexList, $addRow = 0, &$graph, $group, &$connections, $userResult)
+    public static function parseVertexList($groupCourseList, $vertexList, $addRow, &$graph, $group, &$connections, $userResult)
     {
         if (empty($vertexList)) {
             return '';
@@ -898,15 +940,30 @@ class Career extends Model
             $content = '<div class="pull-left">'.$vertex->getAttribute('Notes').'</div>';
             $content .= '<div class="pull-right">['.$id.']</div>';
 
-            if (!empty($userResult) && isset($userResult[$id])) {
-                $lastItem = end($userResult[$id]);
+            if (!empty($userResult) && isset($userResult[$id]) && !empty($userResult[$id])) {
+                // Order by SortDate
+                $sortedByDate = $userResult[$id];
+                foreach ($sortedByDate as $resultId => &$result) {
+                    $result['resultId'] = $resultId;
+                }
+
+                usort($sortedByDate, function ($item1, $item2) {
+                    if (!isset($item1['SortDate']) || !isset($item2['SortDate'])) {
+                        return false;
+                    }
+
+                    return $item1['SortDate'] > $item2['SortDate'];
+                });
+
+                $lastItem = end($sortedByDate);
                 if ($lastItem && isset($lastItem['BgColor']) && !empty($lastItem['BgColor'])) {
                     $color = $lastItem['BgColor'].'; color: '.$lastItem['Color'];
                     $borderColor = $lastItem['BorderColor'];
                 }
                 $results = '';
                 $size = 2;
-                foreach ($userResult[$id] as $resultId => $iconData) {
+                foreach ($sortedByDate as $iconData) {
+                    $resultId = $iconData['resultId'];
                     $icon = '';
                     switch ($iconData['Icon']) {
                         case 0:
@@ -957,7 +1014,7 @@ class Career extends Model
 
             $title = $vertex->getAttribute('graphviz.label');
             if (!empty($vertex->getAttribute('LinkedElement'))) {
-                $title = Display::url($title, $vertex->getAttribute('LinkedElement'));
+                $title = Display::url($title, $vertex->getAttribute('LinkedElement').'&iframe=1');
             }
 
             $originalRow--;
@@ -1370,5 +1427,18 @@ class Career extends Model
         $html .= '});</script>'.PHP_EOL;
 
         return $html;
+    }
+
+    public static function renderDiagramFooter(): string
+    {
+        $footer = '';
+        if (api_get_configuration_value('career_diagram_legend')) {
+            $footer .= get_lang('CareerDiagramLegend');
+        }
+        if (api_get_configuration_value('career_diagram_disclaimer')) {
+            $footer .= get_lang('CareerDiagramDisclaimer');
+        }
+
+        return $footer;
     }
 }

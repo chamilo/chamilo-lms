@@ -5319,7 +5319,7 @@ class UserManager
      * Get users followed by human resource manager.
      *
      * @param int    $userId
-     * @param int    $userStatus         Filter users by status (STUDENT, COURSEMANAGER, etc)
+     * @param int    $userStatus             Filter users by status (STUDENT, COURSEMANAGER, etc)
      * @param bool   $getOnlyUserId
      * @param bool   $getSql
      * @param bool   $getCount
@@ -5329,8 +5329,9 @@ class UserManager
      * @param string $direction
      * @param int    $active
      * @param string $lastConnectionDate
-     * @param int    $status             the function is called by who? COURSEMANAGER, DRH?
+     * @param int    $status                 the function is called by who? COURSEMANAGER, DRH?
      * @param string $keyword
+     * @param bool   $checkSessionVisibility
      *
      * @return mixed Users list (array) or the SQL query if $getSQL was set to true
      */
@@ -5347,7 +5348,8 @@ class UserManager
         $active = null,
         $lastConnectionDate = null,
         $status = null,
-        $keyword = null
+        $keyword = null,
+        $checkSessionVisibility = false
     ) {
         // Database Table Definitions
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -5394,13 +5396,27 @@ class UserManager
         }
 
         if (!empty($keyword)) {
-            $keyword = Database::escape_string($keyword);
+            $keyword = trim(Database::escape_string($keyword));
+            $keywordParts = array_filter(explode(' ', $keyword));
+            $extraKeyword = '';
+            if (!empty($keywordParts)) {
+                $keywordPartsFixed = Database::escape_string(implode('%', $keywordParts));
+                if (!empty($keywordPartsFixed)) {
+                    $extraKeyword .= " OR
+                        CONCAT(u.firstname, ' ', u.lastname) LIKE '%$keywordPartsFixed%' OR
+                        CONCAT(u.lastname, ' ', u.firstname) LIKE '%$keywordPartsFixed%' ";
+                }
+            }
+
             $userConditions .= " AND (
                 u.username LIKE '%$keyword%' OR
                 u.firstname LIKE '%$keyword%' OR
                 u.lastname LIKE '%$keyword%' OR
                 u.official_code LIKE '%$keyword%' OR
-                u.email LIKE '%$keyword%'
+                u.email LIKE '%$keyword%' OR
+                CONCAT(u.firstname, ' ', u.lastname) LIKE '%$keyword%' OR
+                CONCAT(u.lastname, ' ', u.firstname) LIKE '%$keyword%'
+                $extraKeyword
             )";
         }
 
@@ -5410,9 +5426,11 @@ class UserManager
         }
 
         $sessionConditionsCoach = null;
-        $sessionConditionsTeacher = null;
+        $dateCondition = '';
         $drhConditions = null;
         $teacherSelect = null;
+
+        $urlId = api_get_current_access_url_id();
 
         switch ($status) {
             case DRH:
@@ -5431,10 +5449,30 @@ class UserManager
                     (s.id_coach = '$userId')
                 ";
 
-                $sessionConditionsTeacher .= " AND
+                $sessionConditionsTeacher = " AND
                     (scu.status = 2 AND scu.user_id = '$userId')
                 ";
 
+                if ($checkSessionVisibility) {
+                    $today = api_strtotime('now', 'UTC');
+                    $today = date('Y-m-d', $today);
+                    $dateCondition = "
+                        AND
+                        (
+                            (s.access_start_date <= '$today' AND '$today' <= s.access_end_date) OR
+                            (s.access_start_date IS NULL AND s.access_end_date IS NULL) OR
+                            (s.access_start_date <= '$today' AND s.access_end_date IS NULL) OR
+                            ('$today' <= s.access_end_date AND s.access_start_date IS NULL)
+                        )
+					";
+                }
+
+                // Use $tbl_session_rel_course_rel_user instead of $tbl_session_rel_user
+                /*
+                INNER JOIN $tbl_session_rel_user sru
+                ON (sru.user_id = u.id)
+                INNER JOIN $tbl_session_rel_course_rel_user scu
+                ON (scu.user_id = u.id AND scu.c_id IS NOT NULL AND visibility = 1)*/
                 $teacherSelect =
                 "UNION ALL (
                         $select
@@ -5446,7 +5484,7 @@ class UserManager
                                     SELECT DISTINCT(s.id) FROM $tbl_session s INNER JOIN
                                     $tbl_session_rel_access_url session_rel_access_rel_user
                                     ON session_rel_access_rel_user.session_id = s.id
-                                    WHERE access_url_id = ".api_get_current_access_url_id()."
+                                    WHERE access_url_id = ".$urlId."
                                     $sessionConditionsCoach
                                 ) OR sru.session_id IN (
                                     SELECT DISTINCT(s.id) FROM $tbl_session s
@@ -5454,8 +5492,9 @@ class UserManager
                                     ON (url.session_id = s.id)
                                     INNER JOIN $tbl_session_rel_course_rel_user scu
                                     ON (scu.session_id = s.id)
-                                    WHERE access_url_id = ".api_get_current_access_url_id()."
+                                    WHERE access_url_id = ".$urlId."
                                     $sessionConditionsTeacher
+                                    $dateCondition
                                 )
                             )
                             $userConditions
@@ -5493,7 +5532,7 @@ class UserManager
                         LEFT JOIN $tbl_user_rel_access_url a ON (a.user_id = u.id)
                         $join
                         WHERE
-                            access_url_id = ".api_get_current_access_url_id()."
+                            access_url_id = ".$urlId."
                             $drhConditions
                             $userConditions
                     )
@@ -5503,6 +5542,7 @@ class UserManager
         if ($getSql) {
             return $sql;
         }
+
         if ($getCount) {
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
@@ -7184,6 +7224,34 @@ SQL;
 
         $fs = new Filesystem();
         $fs->remove($path);
+    }
+
+    public static function redirectToResetPassword($userId)
+    {
+        if (!api_get_configuration_value('force_renew_password_at_first_login')) {
+            return;
+        }
+
+        $askPassword = self::get_extra_user_data_by_field(
+            $userId,
+            'ask_new_password'
+        );
+
+        if (!empty($askPassword) && isset($askPassword['ask_new_password']) &&
+            1 === (int) $askPassword['ask_new_password']
+        ) {
+            $uniqueId = api_get_unique_id();
+            $userObj = api_get_user_entity($userId);
+
+            $userObj->setConfirmationToken($uniqueId);
+            $userObj->setPasswordRequestedAt(new \DateTime());
+
+            Database::getManager()->persist($userObj);
+            Database::getManager()->flush();
+
+            $url = api_get_path(WEB_CODE_PATH).'auth/reset.php?token='.$uniqueId;
+            api_location($url);
+        }
     }
 
     /**

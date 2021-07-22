@@ -3001,7 +3001,7 @@ class DocumentManager
      * @param array  $courseInfo              Optional. Course info
      * @param int    $sessionId               Optional. Session ID
      * @param int    $groupId                 Optional. Group ID
-     * @param bool   $recordAudio
+     * @param bool   $recordAudioExercise
      *
      * @return array|bool
      */
@@ -3020,7 +3020,7 @@ class DocumentManager
         array $courseInfo = [],
         $sessionId = 0,
         $groupId = 0,
-        $recordAudio = false
+        $recordAudioExercise = false
     ) {
         $course_info = $courseInfo ?: api_get_course_info();
         $sessionId = $sessionId ?: api_get_session_id();
@@ -3030,7 +3030,7 @@ class DocumentManager
         $userId = $userId ?: api_get_user_id();
         $groupId = $groupId ?: api_get_group_id();
 
-        if ($recordAudio) {
+        if ($recordAudioExercise) {
             $base_work_dir = $sys_course_path.$course_info['path'].'/exercises';
             $path = str_replace('/../exercises/', '/', $path);
         }
@@ -3346,9 +3346,9 @@ class DocumentManager
     {
         $id = api_get_unique_id();
         switch ($extension) {
+            case 'wav':
             case 'ogg':
             case 'mp3':
-                $document_data['file_extension'] = $extension;
                 $html = '<div style="margin: 0; position: absolute; top: 50%; left: 35%;">';
                 $html .= '<audio id="'.$id.'" controls="controls" src="'.$file.'" type="audio/mp3" ></audio></div>';
                 break;

@@ -5856,6 +5856,7 @@ class CourseManager
         }
 
         if (api_get_configuration_value('allow_portfolio_tool')) {
+            $courseSettings[] = 'email_alert_teachers_new_post';
             $courseSettings[] = 'qualify_portfolio_item';
             $courseSettings[] = 'qualify_portfolio_comment';
             $courseSettings[] = 'portfolio_max_score';

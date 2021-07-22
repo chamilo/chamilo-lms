@@ -170,7 +170,7 @@ class UserGroup extends Model
                         }
                     }
 
-                    $courseAndSessionList = Tracking::show_user_progress(
+                    $courseAndSessionList = Tracking::showUserProgress(
                         $userId,
                         0,
                         '',
@@ -1298,7 +1298,7 @@ class UserGroup extends Model
             if ($this->allowTeachers()) {
                 $options['where'] = [' author_id = ? ' => api_get_user_id()];
             }
-            $classes = Database::select('a.id, name, description', $from, $options);
+            $classes = Database::select('u.id, name, description', $from, $options);
         } else {
             if ($this->allowTeachers()) {
                 $options['where'] = [' author_id = ? ' => api_get_user_id()];
@@ -1318,7 +1318,26 @@ class UserGroup extends Model
                     }
                     $userToString = implode(',', $userNameList);
                 }
+
+                $courses = $this->get_courses_by_usergroup($data['id'], true);
+                $coursesToString = '';
+                if (!empty($courses)) {
+                    $coursesToString = implode(', ', array_column($courses, 'code'));
+                }
+
+                $sessions = $this->get_sessions_by_usergroup($data['id']);
+                $sessionsToString = '';
+                if (!empty($sessions)) {
+                    $sessionList = [];
+                    foreach ($sessions as $sessionId) {
+                        $sessionList[] = api_get_session_info($sessionId)['name'];
+                    }
+                    $sessionsToString = implode(', ', $sessionList);
+                }
+
                 $data['users'] = $userToString;
+                $data['courses'] = $coursesToString;
+                $data['sessions'] = $sessionsToString;
                 $result[] = $data;
             }
         }

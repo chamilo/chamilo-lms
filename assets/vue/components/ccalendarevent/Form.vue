@@ -65,7 +65,7 @@
         </template>
       </q-input>
 
-      <EditLinks :item="item"/>
+      <EditLinks :item="item" :show-status="false"/>
 
       <q-checkbox v-model="item.collective" label="Is it editable by the invitees?"/>
 

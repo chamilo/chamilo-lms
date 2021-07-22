@@ -25,9 +25,10 @@ $form = new FormValidator('search', 'post', api_get_self());
 $form->addHeader(get_lang('Diagnosis'));
 
 /** @var ExtraFieldSavedSearch $saved */
-$search = ['user' => $userId];
-$extraFieldSavedSearchRepo = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch');
-
+$search = [
+    'user' => $userId,
+];
+$extraFieldSavedSearchRepo = $em->getRepository(ExtraFieldSavedSearch::class);
 $items = $extraFieldSavedSearchRepo->findBy($search);
 
 $extraFieldSession = new ExtraField('session');
@@ -895,6 +896,7 @@ $userFormToString = $userForm->returnForm();
 $result = isset($_GET['result']) ? true : false;
 $tpl = new Template(get_lang('Diagnosis'));
 $tpl->assign('grid_js', false);
+$tpl->assign('form', '');
 if ($result === false) {
     $tpl->assign('form_search', $userFormToString);
 } else {

@@ -1275,7 +1275,7 @@ class ExtraField extends Model
                                 $tagsSelect = $form->addSelect(
                                     'extra_'.$variable.'['.$i.']',
                                     $customLabelsExtraMultipleSelect[$variable][$i], //$field_details['display_text'],
-                                    null,
+                                    [],
                                     ['id' => 'extra_'.$variable.'_'.$i]
                                 );
 

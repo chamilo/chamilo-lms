@@ -8363,16 +8363,15 @@ class SessionManager
                     ];
                 }
                 break;
-
             case 'complete':
                 $columns = [
                     get_lang('Name'),
-                    get_lang('SessionDisplayStartDate'),
-                    get_lang('SessionDisplayEndDate'),
+                    get_lang('Start date to display'),
+                    get_lang('End date to display'),
                     get_lang('Coach'),
                     get_lang('Status'),
                     get_lang('Visibility'),
-                    get_lang('CourseTitle'),
+                    get_lang('Course title'),
                 ];
                 $columnModel = [
                     [
@@ -8450,8 +8449,8 @@ class SessionManager
                     '#',
                     get_lang('Name'),
                     get_lang('Category'),
-                    get_lang('SessionDisplayStartDate'),
-                    get_lang('SessionDisplayEndDate'),
+                    get_lang('Start date to display'),
+                    get_lang('End date to display'),
                     get_lang('Visibility'),
                 ];
                 $columnModel = [

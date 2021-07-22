@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch;
+use Chamilo\CoreBundle\Entity\User;
 use ChamiloSession as Session;
 
 $cidReset = true;
@@ -152,7 +153,7 @@ $search = [
     'user' => $userToLoad,
 ];
 
-$items = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findBy($search);
+$items = $em->getRepository(ExtraFieldSavedSearch::class)->findBy($search);
 if (empty($items)) {
     Display::addFlash(Display::return_message('NoData'));
 }
@@ -727,7 +728,8 @@ if ($form->validate()) {
 
         // Save session search
         /** @var \Chamilo\UserBundle\Entity\User $user */
-        $user = $em->getRepository('ChamiloUserBundle:User')->find($userToLoad);
+        $repo = $em->getRepository(User::class)->find($userToLoad);
+
         $extraFieldValueSession = new ExtraFieldValue('session');
 
         $sessionFields = [

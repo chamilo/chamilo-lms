@@ -3373,7 +3373,7 @@ class SocialManager extends UserManager
 
     private static function getWallForm(string $urlForm): FormValidator
     {
-        $userId = isset($_GET['u']) ? '?u='.intval($_GET['u']) : '';
+        $userId = isset($_GET['u']) ? '?u='.((int) $_GET['u']) : '';
         $form = new FormValidator(
             'social_wall_main',
             'post',

@@ -480,7 +480,6 @@ class SkillModel extends Model
         if ($skill_id) {
             // Saving skill_rel_skill (parent_id, relation_type)
             foreach ($params['parent_id'] as $parent_id) {
-                error_log('foreach $parent_id = '.$parent_id);
                 $relation_exists = $skillRelSkill->relationExists($skill_id, $parent_id);
                 if (!$relation_exists) {
                     $skillRelSkill =
@@ -580,12 +579,9 @@ class SkillModel extends Model
         $skillRelGradebook->delete($params);*/
     }
 
-    /**
-     * @param array $params
-     */
-    public function edit($params)
+    public function edit(array $params)
     {
-        if (!isset($params['parent_id'])) {
+        if (empty($params['parent_id'])) {
             $params['parent_id'] = 1;
         }
 

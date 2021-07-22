@@ -142,7 +142,7 @@ class Chat extends Model
             'me' => get_lang('Me'),
             'user_id' => api_get_user_id(),
             'items' => $chats,
-            'sec_token' => Security::get_token(),
+            'sec_token' => Security::get_token('chat'),
         ];
         echo json_encode($return);
 
@@ -368,7 +368,7 @@ class Chat extends Model
     ) {
         $relation = SocialManager::get_relation_between_contacts($fromUserId, $to_user_id);
 
-        if (!Security::check_token()) {
+        if (!Security::check_token('post', null, 'chat')) {
             if ($printResult) {
                 echo '0';
                 exit;
@@ -416,7 +416,7 @@ class Chat extends Model
 
                 if ($printResult) {
                     header('Content-Type: application/json');
-                    echo json_encode(['id' => $messageId, 'sec_token' => Security::get_token()]);
+                    echo json_encode(['id' => $messageId, 'sec_token' => Security::get_token('chat')]);
                     exit;
                 }
             }

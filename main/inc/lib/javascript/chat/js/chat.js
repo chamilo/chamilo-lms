@@ -904,7 +904,7 @@ function checkChatBoxInputKey(event, chatboxtextarea, user_id)
 			$.post(ajax_url + "?action=sendchat", {
 				to: user_id,
 				message: message,
-				sec_token: currentToken
+				chat_sec_token: currentToken
 			}, function (messageId) {
 				if (messageId.id > 0) {
 					currentToken = messageId.sec_token;

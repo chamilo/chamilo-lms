@@ -40,6 +40,7 @@
               label="Status"
               emit-value
               map-options
+              v-if="showStatus"
           />
         </v-list-item-content>
       </v-list-item>
@@ -84,6 +85,11 @@ export default {
       type: Object,
       required: true
     },
+    showStatus: {
+      type: Boolean,
+      required: false,
+      default: true
+    }
   },
   setup (props) {
     const visibilityList = [

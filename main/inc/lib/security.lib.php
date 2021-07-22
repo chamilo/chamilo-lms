@@ -138,15 +138,6 @@ class Security
         return Session::read($secTokenVariable);
     }
 
-    private static function generateSecTokenVariable(string $prefix = ''): string
-    {
-        if (empty($prefix)) {
-            return 'sec_token';
-        }
-
-        return $prefix.'_sec_token';
-    }
-
     /**
      * This function checks that the token generated in get_token() has been kept (prevents
      * Cross-Site Request Forgeries attacks).
@@ -600,5 +591,14 @@ class Security
         }
 
         return $output;
+    }
+
+    private static function generateSecTokenVariable(string $prefix = ''): string
+    {
+        if (empty($prefix)) {
+            return 'sec_token';
+        }
+
+        return $prefix.'_sec_token';
     }
 }

@@ -52,20 +52,20 @@ Feature: Skills
     #    And wait for the page to be loaded
     #    Then I should see "Skill "skilldis" disabled"
 
-    # This scenario is commented for the moment 
-    # until fixing the default parent to be root when creating the first skill
-    #  Scenario: Update a skill skill1
-    #    Given I am a platform administrator
-    #    And I am on "main/admin/skill_list.php"
-    #    And wait for the page to be loaded
-    #    Then I should see "skill1"
-    #    Then I follow "Edit"
-    #    When I fill in the following:
-    #      | name | skill1 Edited |
-    #      | description | description Edited |
-    #    And I press "submit"
-    #    And wait for the page to be loaded
-    #    Then I should see "The skill has been updated"
+    # This scenario works but it needs to be adapted 
+    # because it does not update skill1 but the first in the list
+    Scenario: Update a skill skill1
+      Given I am a platform administrator
+      And I am on "main/admin/skill_list.php"
+      And wait for the page to be loaded
+      Then I should see "skill1"
+      Then I follow "Edit"
+      When I fill in the following:
+        | name | skill1 Edited |
+        | description | description Edited |
+      And I press "submit"
+      And wait for the page to be loaded
+      Then I should see "The skill has been updated"
 
   Scenario: Assign skill11 to user 1
     Given I am a platform administrator

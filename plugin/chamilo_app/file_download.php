@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../main/inc/global.inc.php';
+require_once __DIR__.'/../../main/inc/global.inc.php';
 require_once 'webservices/WSApp.class.php';
 require_once 'webservices/AppWebService.class.php';
 
@@ -9,7 +9,7 @@ $username = isset($_GET['username']) ? Security::remove_XSS($_GET['username']) :
 $apiKey = isset($_GET['api_key']) ? Security::remove_XSS($_GET['api_key']) : null;
 $userId = isset($_GET['user_id']) ? Security::remove_XSS($_GET['user_id']) : null;
 $courseId = isset($_GET['c_id']) ? Security::remove_XSS($_GET['c_id']) : null;
-$sessionId= isset($_GET['c_id']) ? Security::remove_XSS($_GET['s_id']) : null;
+$sessionId = isset($_GET['c_id']) ? Security::remove_XSS($_GET['s_id']) : null;
 $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : null;
 $id = isset($_GET['id']) ? Security::remove_XSS($_GET['id']) : null;
 
@@ -99,11 +99,11 @@ if (AppWebService::isValidApiKey($username, $apiKey)) {
                     ) {
                         api_not_allowed(true);
                     }
-                            
+
                     $work = get_work_data_by_id($workData['work_id']);
-                    
+
                     protectWork($courseInfo, $work['parent_id']);
-                    
+
                     if (Security::check_abs_path(
                             $workData['file_path'],
                             api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'
@@ -116,7 +116,6 @@ if (AppWebService::isValidApiKey($username, $apiKey)) {
                         );
                         exit;
                     }
-                            
                 } else {
                     api_not_allowed(true);
                 }
@@ -140,4 +139,3 @@ if (AppWebService::isValidApiKey($username, $apiKey)) {
 } else {
     error_log("Not valid apiKey");
 }
-

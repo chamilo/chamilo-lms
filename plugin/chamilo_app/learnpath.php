@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../main/inc/global.inc.php';
+require_once __DIR__.'/../../main/inc/global.inc.php';
 require_once 'webservices/WSApp.class.php';
 require_once 'webservices/AppWebService.class.php';
 
@@ -14,7 +14,7 @@ $userId = isset($_GET['user_id']) ? (int) $_GET['user_id'] : 0;
 $courseId = isset($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
 $sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
 
-$url = str_replace('&amp;','&',$url);
+$url = str_replace('&amp;', '&', $url);
 
 if (AppWebService::isValidApiKey($username, $apiKey)) {
     /* LOGIN */
@@ -37,14 +37,13 @@ if (AppWebService::isValidApiKey($username, $apiKey)) {
 
     require $includePath.'/local.inc.php';
 
-	global $_configuration;
-	$ruta = $_configuration['root_web'];
-	if ((strripos($ruta, '/') + 1) != strlen($ruta)) {
-	    $ruta = $ruta.'/';
-	}
-	$url_final = $ruta.'main/lp/lp_controller.php?'.$url;
-	header('Location:'.$url_final);
+    global $_configuration;
+    $ruta = $_configuration['root_web'];
+    if ((strripos($ruta, '/') + 1) != strlen($ruta)) {
+        $ruta = $ruta.'/';
+    }
+    $url_final = $ruta.'main/lp/lp_controller.php?'.$url;
+    header('Location:'.$url_final);
 } else {
-	error_log("Not valid apiKey");
+    error_log("Not valid apiKey");
 }
-       

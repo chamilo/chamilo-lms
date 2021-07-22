@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../main/inc/global.inc.php';
+require_once __DIR__.'/../../main/inc/global.inc.php';
 require_once 'webservices/WSApp.class.php';
 require_once 'webservices/AppWebService.class.php';
 
@@ -39,7 +39,7 @@ if (AppWebService::isValidApiKey($username, $apiKey)) {
     global $_configuration;
     $includePath = $_configuration['root_sys'].'main/inc/';
     require $includePath.'/local.inc.php';
-    
+
     $ruta = $_configuration['root_web'];
     if ((strripos($ruta, '/') + 1) != strlen($ruta)) {
         $ruta = $ruta.'/';

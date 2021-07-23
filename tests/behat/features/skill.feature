@@ -79,3 +79,15 @@ Feature: Skills
     Then I should see "To assign a new skill to this user, click here"
     Then I should see "The skill skill11 has been assigned to user John Doe"
 
+# The following scenario need to be completed once the funcionality is ready
+#  Scenario: View assign skill
+#    Given I am a platform administrator
+#    And I am on "/badge/3/user/1"
+#    Then I should see "..."
+#
+# The following scenario need to be completed once the funcionality is ready
+#  Scenario: Set a badge to a skill
+#    Given I am a platform administrator
+#    And I am on "main/admin/skill_list.php"
+#    Then I should see "skill11"
+#    Then I follow "Create badge"

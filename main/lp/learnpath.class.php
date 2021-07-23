@@ -11206,7 +11206,7 @@ class learnpath
                                                     substr($file_path, $pos, strlen($file_path))
                                                 );
                                             }
-                                            $replace = $onlyDirectory;
+                                            $replace = './'.$onlyDirectory;
                                             $destinationFile = $replace;
                                         }
 

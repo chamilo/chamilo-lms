@@ -221,7 +221,7 @@ function handlePlugins()
 {
     Session::erase('plugin_data');
     $plugin_obj = new AppPlugin();
-    $token = Security::get_token();
+    $token = Security::get_existing_token();
     if (isset($_POST['submit_plugins'])) {
         storePlugins();
         // Add event to the system log.

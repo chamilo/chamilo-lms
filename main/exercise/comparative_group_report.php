@@ -34,12 +34,12 @@ $interbreadcrumb[] = [
     'name' => get_lang('Exercises'),
 ];
 $interbreadcrumb[] = [
-    'url' => 'admin.php?exerciseId='.$exercise->iId.'&'.api_get_cidreq(),
+    'url' => 'admin.php?exerciseId='.$exercise->iid.'&'.api_get_cidreq(),
     'name' => $exercise->selectTitle(true),
 ];
 
 $interbreadcrumb[] = [
-    'url' => 'exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exercise->iId,
+    'url' => 'exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exercise->iid,
     'name' => get_lang('StudentScore'),
 ];
 

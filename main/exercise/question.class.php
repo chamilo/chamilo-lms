@@ -17,7 +17,7 @@ use Chamilo\CourseBundle\Entity\CQuizAnswer;
 abstract class Question
 {
     public $id;
-    public $iId;
+    public $iid;
     public $question;
     public $description;
     public $weighting;

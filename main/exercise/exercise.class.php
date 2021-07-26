@@ -318,7 +318,7 @@ class Exercise
     }
 
     /**
-     * returns the maximum number of attempts set in the exercise configuration
+     * Returns the maximum number of attempts set in the exercise configuration.
      *
      * @return int Maximum attempts allowed (0 if no limit)
      */
@@ -3241,7 +3241,7 @@ class Exercise
     /**
      * Get the contents of the track_e_exercises table for the current
      * exercise object, in the specific context (if defined) of a
-     * learning path and optionally a current progress status
+     * learning path and optionally a current progress status.
      * @param int    $lp_id
      * @param int    $lp_item_id
      * @param int    $lp_item_view_id

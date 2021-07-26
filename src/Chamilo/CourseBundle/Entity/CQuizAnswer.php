@@ -44,6 +44,7 @@ class CQuizAnswer
 
     /**
      * @var int
+     *
      * @deprecated Now using iid
      * @ORM\Column(name="id", type="integer", nullable=true)
      */

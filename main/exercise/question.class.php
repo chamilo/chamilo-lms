@@ -2132,6 +2132,7 @@ abstract class Question
             // does not exist
             unset($params['id']);
         }
+
         return Database::update(
             $table,
             $params,

@@ -1966,7 +1966,7 @@ class CourseRestorer
     /**
      * Restore quiz-questions.
      *
-     * @param int $id question id
+     * @param int  $id       Question id
      * @param bool $idColumn Whether the 'id' column still exists in this table
      */
     public function restore_quiz_question($id, $idColumn = true)

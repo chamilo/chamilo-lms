@@ -1588,7 +1588,7 @@ abstract class Question
                 foreach ($options as $item) {
                     $item['question_id'] = $newQuestionId;
                     $item['c_id'] = $course_id;
-                    unset($item['iid']);
+                    unset($item['id']);
                     $id = Database::insert($TBL_QUESTION_OPTIONS, $item);
                 }
             }
@@ -2091,7 +2091,7 @@ abstract class Question
         $params['name'] = $name;
         $params['position'] = $position;
         $params['c_id'] = $course_id;
-        $result = self::readQuestionOption($question_id, $course_id);
+        //$result = self::readQuestionOption($question_id, $course_id);
         $last_id = Database::insert($table, $params);
 
         return $last_id;
@@ -2151,7 +2151,7 @@ abstract class Question
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
 
         return Database::select(
-            '*, iid as id',
+            '*',
             $table,
             [
                 'where' => [

@@ -28,7 +28,7 @@ cd /tmp && wget https://chromedriver.storage.googleapis.com/85.0.4183.83/chromed
 
 ```
 chromedriver --version
-ChromeDriver 2.34.522913
+ChromeDriver 92.0.4515.43 (8c61b7e2989f2990d42f859cac71319137787cce-refs/branch-heads/4515@{#306})
 ```
 
 ### Chamilo configuration

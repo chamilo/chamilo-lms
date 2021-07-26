@@ -3242,6 +3242,7 @@ class Exercise
      * Get the contents of the track_e_exercises table for the current
      * exercise object, in the specific context (if defined) of a
      * learning path and optionally a current progress status.
+     *
      * @param int    $lp_id
      * @param int    $lp_item_id
      * @param int    $lp_item_view_id
@@ -10191,7 +10192,8 @@ class Exercise
     }
 
     /**
-     * @param Question  $objQuestionTmp
+     * Get results of a delineation type question.
+     * Params described here are only non-typed params.
      * @param int   $questionId
      * @param bool  $show_results
      * @param array $question_result
@@ -11719,7 +11721,7 @@ class Exercise
     }
 
     /**
-     * @param FormValidator $form
+     * Returns the part of the form for the disabled results option.
      * @return HTML_QuickForm_group
      */
     private function setResultDisabledGroup(FormValidator $form)

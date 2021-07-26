@@ -300,11 +300,12 @@ class UniqueAnswerNoOption extends Question
             $comment = trim($form->getSubmitValue('comment['.$i.']'));
             $weighting = trim($form->getSubmitValue('weighting['.$i.']'));
             $scenario = $form->getSubmitValue('scenario');
-            $try = $scenario['try'.$i];
-            $lp = $scenario['lp'.$i];
-            $destination = $scenario['destination'.$i];
-            $url = trim($scenario['url'.$i]);
-
+            if (!empty($scenario)) {
+                $try = $scenario['try'.$i];
+                $lp = $scenario['lp'.$i];
+                $destination = $scenario['destination'.$i];
+                $url = trim($scenario['url'.$i]);
+            }
             /*
             How we are going to parse the destination value
 
@@ -346,7 +347,7 @@ class UniqueAnswerNoOption extends Question
                 $destination = 0;
             }
 
-            if ('' == $url) {
+            if (empty($url)) {
                 $url = 0;
             }
 

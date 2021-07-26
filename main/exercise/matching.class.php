@@ -38,7 +38,7 @@ class Matching extends Question
         $answer = null;
         $counter = 1;
 
-        if (isset($this->iid)) {
+        if (!empty($this->iid)) {
             $answer = new Answer($this->iid);
             $answer->read();
             if ($answer->nbrAnswers > 0) {
@@ -70,7 +70,7 @@ class Matching extends Question
                     if ($answer->isCorrect($i)) {
                         $nb_matches++;
                         $defaults['answer['.$nb_matches.']'] = $answer->selectAnswer($i);
-                        $defaults['weighting['.$nb_matches.']'] = float_format($answer->selectWeighting($i), 1);
+                        $defaults['weighting['.$nb_matches.']'] = float_format($answer->selectWeighting($i));
                         $defaults['matches['.$nb_matches.']'] = $answer->correct[$i];
                     } else {
                         $nb_options++;

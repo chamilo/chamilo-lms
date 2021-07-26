@@ -32,7 +32,7 @@ class MatchingDraggable extends Question
         $matches = [];
         $answer = null;
         $counter = 1;
-        if (isset($this->iid)) {
+        if (!empty($this->iid)) {
             $answer = new Answer($this->iid);
             $answer->read();
 

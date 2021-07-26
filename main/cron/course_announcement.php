@@ -41,7 +41,6 @@ foreach ($result as $announcement) {
         $dateToSend = $extraFieldValue->get_values_by_handler_and_field_variable($announcement->getId(), 'date_to_send_notification');
 
         if ($today >= $dateToSend['value']) {
-            $courseInfo = api_get_course_info_by_id($announcement->getCId());
 
             $query = "SELECT ip FROM ChamiloCourseBundle:CItemProperty ip
                         WHERE ip.ref = :announcementId AND ip.course = :courseId
@@ -49,11 +48,22 @@ foreach ($result as $announcement) {
 
             $sql = Database::getManager()->createQuery($query);
             $itemProperty = $sql->execute(['announcementId' => $announcement->getId(), 'courseId' => $announcement->getCId()]);
-            $senderId = $itemProperty[0]->getInsertUser()->getId();
-            $sendToUsersInSession = (bool) $extraFieldValue->get_values_by_handler_and_field_variable($announcement->getId(), 'send_to_users_in_session');
+            $sessionName = $itemProperty[0]->getSession();
 
-            $email = new AnnouncementEmail($courseInfo, 0, $announcement->getId());
-            $sendTo = $email->send($sendToUsersInSession, false, $senderId);
+            $courseInfo = api_get_course_info_by_id($announcement->getCId());
+            $sessionId = (int) SessionManager::get_session_by_name($sessionName)['id'];
+            $senderId = $itemProperty[0]->getInsertUser()->getId();
+            $sendToUsersInSession = (int) $extraFieldValue->get_values_by_handler_and_field_variable($announcement->getId(), 'send_to_users_in_session')['value'];
+
+            $messageSentTo = AnnouncementManager::sendEmail(
+                $courseInfo,
+                $sessionId,
+                $announcement->getId(),
+                $sendToUsersInSession,
+                false,
+                null,
+                $senderId
+            );
         }
     }
 }

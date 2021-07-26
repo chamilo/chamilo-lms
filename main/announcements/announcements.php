@@ -625,7 +625,6 @@ switch ($action) {
         if (empty($sessionId)) {
             if ($announcementScheduledByDate) {
                 $extraField = new ExtraField('course_announcement');
-                $extraFieldValue = new ExtraFieldValue('course_announcement');
 
                 $extra = $extraField->addElements(
                     $form,
@@ -769,8 +768,27 @@ switch ($action) {
 
                     // Send mail
                     $messageSentTo = [];
-                    if (isset($_POST['email_ann']) && empty($_POST['onlyThoseMails'])) {
-                        if ($data['extra_send_notification_at_a_specific_date']['extra_send_notification_at_a_specific_date'] == 0) {
+
+                    if ($announcementScheduledByDate) {
+                        if (isset($_POST['email_ann']) && empty($_POST['onlyThoseMails'])) {
+                            if ($data['extra_send_notification_at_a_specific_date']['extra_send_notification_at_a_specific_date'] == 0) {
+                                $messageSentTo = AnnouncementManager::sendEmail(
+                                    api_get_course_info(),
+                                    api_get_session_id(),
+                                    $id,
+                                    $sendToUsersInSession,
+                                    isset($data['send_to_hrm_users'])
+                                );
+                            } else {
+                                $extraFieldValue = new ExtraFieldValue('course_announcement');
+                                $extraFieldValue->saveFieldValues($data);
+                            }
+                        } else {
+                            $extraFieldValue = new ExtraFieldValue('course_announcement');
+                            $extraFieldValue->deleteValuesByItem($id);
+                        }
+                    } else {
+                        if (isset($_POST['email_ann']) && empty($_POST['onlyThoseMails'])) {
                             $messageSentTo = AnnouncementManager::sendEmail(
                                 api_get_course_info(),
                                 api_get_session_id(),
@@ -778,13 +796,7 @@ switch ($action) {
                                 $sendToUsersInSession,
                                 isset($data['send_to_hrm_users'])
                             );
-                        } else {
-                            $extraFieldValue = new ExtraFieldValue('course_announcement');
-                            $extraFieldValue->saveFieldValues($data);
                         }
-                    } else {
-                        $extraFieldValue = new ExtraFieldValue('course_announcement');
-                        $extraFieldValue->deleteValuesByItem($id);
                     }
 
                     if ($sendMeCopy && !in_array(api_get_user_id(), $messageSentTo)) {
@@ -842,19 +854,32 @@ switch ($action) {
 
                         // Send mail
                         $messageSentTo = [];
-                        if (isset($data['email_ann']) && $data['email_ann']) {
-                            if ($data['extra_send_notification_at_a_specific_date']['extra_send_notification_at_a_specific_date'] == 0) {
+
+                        if ($announcementScheduledByDate) {
+                            if (isset($data['email_ann']) && $data['email_ann']) {
+                                if ($data['extra_send_notification_at_a_specific_date']['extra_send_notification_at_a_specific_date'] == 0) {
+                                    $messageSentTo = AnnouncementManager::sendEmail(
+                                        api_get_course_info(),
+                                        api_get_session_id(),
+                                        $insert_id,
+                                        $sendToUsersInSession,
+                                        isset($data['send_to_hrm_users'])
+                                    );
+                                } else {
+                                    $extraFieldValues = new ExtraFieldValue('course_announcement');
+                                    $data['item_id'] = $insert_id;
+                                    $extraFieldValues->saveFieldValues($data);
+                                }
+                            }
+                        } else {
+                            if (isset($data['email_ann']) && $data['email_ann']) {
                                 $messageSentTo = AnnouncementManager::sendEmail(
                                     api_get_course_info(),
-                                    0,
+                                    api_get_session_id(),
                                     $insert_id,
                                     $sendToUsersInSession,
                                     isset($data['send_to_hrm_users'])
                                 );
-                            } else {
-                                $extraFieldValues = new ExtraFieldValue('course_announcement');
-                                $data['item_id'] = $insert_id;
-                                $extraFieldValues->saveFieldValues($data);
                             }
                         }
 

@@ -1,29 +1,37 @@
 In order to run behat tests locally with the right support for browser
 and JS environments under Linux, you will need to:
 
-- Download Selenium Standalone Server v3.*
-
-http://www.seleniumhq.org/download/
-
-And run it with the following command:
-
+- Have Java (or OpenJDK) installed.
 ```
-Example:
+# On Ubuntu, this might look like this:
+sudo apt install openjdk-11-jre-headless
+```
+
+- Download Selenium Standalone Server v3.\*. Check http://www.seleniumhq.org/download/ for the latest version, download it and run it with the following command:
+```
+#Example:
 wget https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
 java -jar selenium-server-standalone-3.141.59.jar
+```
+This has to keep running for the duration of your tests, so launch it in a separate terminal, in a screen or in any equivalent context.
 
+- Install google-chrome (stable version, not beta or dev).
+```
+# on Ubuntu, you might use something like this:
+wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add 
+sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+sudo apt update
+sudo apt install google-chrome-stable
+# check in the download info which version of the browser you are downloading,
+# as the chromedriver in the next step needs to be the same version
 ```
 
-- Download the Chrome driver, unzip and copy into /usr/bin
-
-Check the latest version at https://sites.google.com/a/chromium.org/chromedriver/downloads,
+- Download the Chrome driver, unzip and copy into /usr/bin. Check the latest version at https://sites.google.com/a/chromium.org/chromedriver/downloads,
 then adapt the following command to the latest version:
-
 ```
 cd /tmp && wget https://chromedriver.storage.googleapis.com/85.0.4183.83/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/local/bin
 ```
 
-- Install google-chrome (stable version, not beta or dev).
 - Test if chromedriver is working correctly, the result should be something like:
 
 ```

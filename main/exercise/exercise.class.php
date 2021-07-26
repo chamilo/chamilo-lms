@@ -10194,6 +10194,7 @@ class Exercise
     /**
      * Get results of a delineation type question.
      * Params described here are only non-typed params.
+     *
      * @param int   $questionId
      * @param bool  $show_results
      * @param array $question_result
@@ -11722,6 +11723,7 @@ class Exercise
 
     /**
      * Returns the part of the form for the disabled results option.
+     *
      * @return HTML_QuickForm_group
      */
     private function setResultDisabledGroup(FormValidator $form)

@@ -1637,6 +1637,9 @@ $_configuration['auth_password_links'] = [
 // Enable recording of all answers (even temporary) in the track_e_attempt_recording table
 // This requires a column to be added to the table with the following query:
 // ALTER TABLE track_e_attempt_recording ADD COLUMN answer longtext default '' AFTER question_id;
+// This is an experimental feature, known to create issues in the 
+// exercise_report.php page when wanting to grade an attempt (due to usage in 
+// get_exam_results_data()).
 //$_configuration['quiz_answer_extra_recording'] = false;
 
 // Disable clean results for teachers

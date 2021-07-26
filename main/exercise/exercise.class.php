@@ -660,7 +660,6 @@ class Exercise
             $sql = "SELECT q.iid
                     FROM $TBL_EXERCICE_QUESTION e
                     INNER JOIN $TBL_QUESTIONS  q
-                    ON (e.question_id = q.iid AND e.c_id = ".$this->course_id." )
 					WHERE e.exercice_id	= ".$this->iid;
 
             $orderCondition = ' ORDER BY question_order ';
@@ -759,7 +758,7 @@ class Exercise
         $sql = "SELECT count(q.iid) as count
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid)
+                ON e.question_id = q.iid
                 WHERE
                     e.c_id = {$this->course_id} AND
                     e.exercice_id = {$this->iid}";
@@ -790,7 +789,7 @@ class Exercise
         $sql = "SELECT e.question_id
                 FROM $exerciseQuestionTable e
                 INNER JOIN $questionTable q
-                ON (e.question_id= q.iid)
+                ON e.question_id= q.iid
                 WHERE
                     e.c_id = {$this->course_id} AND
                     e.exercice_id = {$this->iid}
@@ -1160,7 +1159,7 @@ class Exercise
         $sql = "SELECT e.question_id
                 FROM $quizRelQuestion e
                 INNER JOIN $question q
-                ON (e.question_id= q.iid)
+                ON e.question_id= q.iid
                 WHERE
                     e.c_id = {$this->course_id} AND
                     e.exercice_id = '".Database::escape_string($this->iid)."'
@@ -1209,7 +1208,7 @@ class Exercise
         $sql = "SELECT q.iid
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid)
+                ON e.question_id = q.iid
                 WHERE
                     q.iid = $questionId AND
                     e.c_id = {$this->course_id} AND
@@ -1229,7 +1228,7 @@ class Exercise
         $sql = "SELECT q.iid
                 FROM $table e
                 INNER JOIN $tableQuestion q
-                ON (e.question_id = q.iid)
+                ON e.question_id = q.iid
                 WHERE
                     q.type = $type AND
                     e.c_id = {$this->course_id} AND
@@ -1253,7 +1252,7 @@ class Exercise
         $sql = "SELECT q.iid
                 FROM $table e
                 INNER JOIN $tableQuestion q
-                ON (e.question_id = q.iid)
+                ON e.question_id = q.iid
                 WHERE
                     q.type NOT IN ('$questionTypeToString')  AND
                     e.c_id = {$this->course_id} AND
@@ -1933,7 +1932,7 @@ class Exercise
 
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
         $sql = "UPDATE $table SET active='-1'
-                WHERE c_id = ".$this->course_id." AND iid = ".intval($this->iid);
+                WHERE iid = ".intval($this->iid);
         Database::query($sql);
 
         api_item_property_update(
@@ -8047,7 +8046,7 @@ class Exercise
         $sql = "SELECT DISTINCT cat.*
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid)
+                ON e.question_id = q.iid
                 INNER JOIN $categoryRelTable catRel
                 ON (catRel.question_id = e.question_id AND catRel.c_id = e.c_id)
                 INNER JOIN $categoryTable cat
@@ -8785,7 +8784,7 @@ class Exercise
         $sql = "SELECT DISTINCT e.question_id
                 FROM $quizRelQuestion e
                 INNER JOIN $question q
-                ON (e.question_id = q.iid)
+                ON e.question_id = q.iid
                 WHERE
                     e.c_id = {$this->course_id} AND
                     e.exercice_id = {$this->iid}
@@ -11318,7 +11317,7 @@ class Exercise
         $sql = "SELECT DISTINCT count(e.question_order) as count
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid)
+                ON e.question_id = q.iid
                 WHERE
                   e.c_id = {$this->course_id} AND
                   e.exercice_id	= ".$this->iid;
@@ -11331,7 +11330,7 @@ class Exercise
         $sql = "SELECT DISTINCT e.question_id, e.question_order
                 FROM $TBL_EXERCICE_QUESTION e
                 INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid)
+                ON e.question_id = q.iid
                 WHERE
                     e.c_id = {$this->course_id} AND
                     e.exercice_id = '".$this->iid."'

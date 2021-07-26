@@ -40,8 +40,7 @@ $sql = "UPDATE $TBL_ANSWER SET
             hotspot_coordinates = '".Database::escape_string($hotspot_coordinates)."',
             hotspot_type = '".Database::escape_string($hotspot_type)."'
         WHERE
-            iid = ".intval($answerId)." AND
-            question_id = ".intval($questionId)."
+            iid = ".intval($answerId)."
         LIMIT 1 ";
 $result = Database::query($sql);
 echo "done=done";

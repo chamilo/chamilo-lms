@@ -678,8 +678,7 @@ function getQuestions(
                     {$efConditions['from']}
                 WHERE
                     qt.exercice_id = $exerciseId AND
-                    qt.c_id = $selected_course  AND
-                    qu.c_id = $selected_course
+                    qt.c_id = $selected_course
                     $where
                     $currentExerciseCondition
                     {$efConditions['where']}
@@ -723,9 +722,9 @@ function getQuestions(
                     SELECT $select
                     FROM $TBL_QUESTIONS qu
                     INNER JOIN $TBL_EXERCISE_QUESTION r
-                    ON (qu.iid = r.question_id)
+                    ON qu.iid = r.question_id
                     INNER JOIN $TBL_EXERCISES ex
-                    ON (ex.iid = r.exercice_id)
+                    ON ex.iid = r.exercice_id
                     $from
                     {$efConditions['from']}
                     WHERE
@@ -740,7 +739,7 @@ function getQuestions(
                     SELECT $select
                     FROM $TBL_QUESTIONS qu
                     LEFT OUTER JOIN $TBL_EXERCISE_QUESTION r
-                    ON (qu.iid = r.question_id)
+                    ON qu.iid = r.question_id
                     $from
                     {$efConditions['from']}
                     WHERE
@@ -755,7 +754,7 @@ function getQuestions(
                         SELECT $select
                         FROM $TBL_QUESTIONS qu
                         INNER JOIN $TBL_EXERCISE_QUESTION r
-                        ON (qu.iid = r.question_id)
+                        ON qu.iid = r.question_id
                         $from
                         {$efConditions['from']}
                         WHERE
@@ -813,13 +812,12 @@ function getQuestions(
                 FROM
                 $TBL_QUESTIONS as qu
                 INNER JOIN $TBL_EXERCISE_QUESTION as qt
-                ON (qu.iid = qt.question_id)
+                ON qu.iid = qt.question_id
                 INNER JOIN $TBL_EXERCISES as ex
-                ON (ex.c_id = qu.c_id AND ex.iid = qt.exercice_id)
+                ON ex.iid = qt.exercice_id
                 {$efConditions['from']}
                 $from
                 WHERE
-                    qu.c_id = $selected_course AND
                     qt.c_id = $selected_course AND
                     ex.c_id = $selected_course
                     $sessionCondition
@@ -965,6 +963,8 @@ if ($fromExercise <= 0) {
         $actionIcon1 = 'add';
         $actionIcon2 = '';
         $questionTagA = 1;
+    } elseif (true === api_get_configuration_value('quiz_question_allow_inter_course_linking')) {
+        $actionIcon2 = 'add';
     }
 }
 

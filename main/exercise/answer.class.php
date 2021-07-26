@@ -34,6 +34,7 @@ class Answer
     public $new_position;
     public $new_hotspot_coordinates;
     public $new_hotspot_type;
+    /** @var int Incremental ID used in the past when PK was a mix of c_id+id*/
     public $autoId;
     /** @var int Number of answers in the question */
     public $nbrAnswers;
@@ -246,8 +247,7 @@ class Answer
         $TBL_QUESTION = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $questionId = (int) $this->questionId;
 
-        $sql = "SELECT type FROM $TBL_QUESTION
-                WHERE iid = $questionId";
+        $sql = "SELECT type FROM $TBL_QUESTION WHERE iid = $questionId";
         $result_question = Database::query($sql);
         $questionType = Database::fetch_array($result_question);
 
@@ -394,13 +394,14 @@ class Answer
      * @param int $auto_id
      *
      * @return array
+     * @todo Replace method by iid search
      */
     public function selectAnswerByAutoId($auto_id)
     {
         $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $auto_id = (int) $auto_id;
-        $sql = "SELECT iid, answer, id_auto FROM $table
-                WHERE c_id = {$this->course_id} AND id_auto='$auto_id'";
+        $sql = "SELECT iid, answer FROM $table
+                WHERE c_id = {$this->course_id} AND id_auto = $auto_id";
         $rs = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {
@@ -1060,10 +1061,8 @@ class Answer
                             $tableAnswer,
                             $params,
                             [
-                                'iid = ? AND c_id = ? AND question_id = ? ' => [
+                                'iid = ? ' => [
                                     $answer_id,
-                                    $courseId,
-                                    $newQuestionId,
                                 ],
                             ]
                         );

@@ -541,7 +541,7 @@ class TestCategory
                 INNER JOIN $categoryTable c
                 ON (c.iid = qrc.category_id AND c.c_id = eq.c_id)
                 INNER JOIN $tableQuestion q
-                ON (q.iid = qrc.question_id)
+                ON q.iid = qrc.question_id
                 WHERE
                     exercice_id = $exerciseId AND
                     qrc.c_id = $courseId

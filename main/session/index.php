@@ -71,7 +71,7 @@ foreach ($courseList as $course) {
     if (!empty($exerciseList)) {
         // Exercises
         foreach ($exerciseList as $exerciseInfo) {
-            $exerciseId = $exerciseInfo['id'];
+            $exerciseId = $exerciseInfo['iid'];
             $visibility = api_get_item_visibility(
                 $course,
                 TOOL_QUIZ,
@@ -264,7 +264,7 @@ if (!empty($courseList)) {
                     $start_date = $exerciseInfo['start_time'];
                 }
 
-                $exerciseId = $exerciseInfo['id'];
+                $exerciseId = $exerciseInfo['iid'];
 
                 $best_score_data = ExerciseLib::get_best_attempt_in_course(
                     $exerciseId,

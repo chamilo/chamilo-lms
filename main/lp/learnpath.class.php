@@ -564,11 +564,9 @@ class learnpath
                     FROM '.Database::get_course_table(TABLE_QUIZ_QUESTION).' as quiz_question
                     INNER JOIN '.Database::get_course_table(TABLE_QUIZ_TEST_QUESTION).' as quiz_rel_question
                     ON
-                        quiz_question.id = quiz_rel_question.question_id AND
-                        quiz_question.c_id = quiz_rel_question.c_id
+                        quiz_question.iid = quiz_rel_question.question_id
                     WHERE
                         quiz_rel_question.exercice_id = '.$id." AND
-                        quiz_question.c_id = $course_id AND
                         quiz_rel_question.c_id = $course_id ";
             $rsQuiz = Database::query($sql);
             $max_score = Database::result($rsQuiz, 0, 0);
@@ -7690,7 +7688,7 @@ class learnpath
         } elseif (is_numeric($extra_info)) {
             $sql = "SELECT title, description
                     FROM $tbl_quiz
-                    WHERE c_id = $course_id AND iid = ".$extra_info;
+                    WHERE iid = $extra_info";
 
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
@@ -10625,10 +10623,10 @@ class learnpath
 
             $link = Display::url(
                 $previewIcon,
-                $exerciseUrl.'&exerciseId='.$row_quiz['id'],
+                $exerciseUrl.'&exerciseId='.$row_quiz['iid'],
                 ['target' => '_blank']
             );
-            $return .= '<li class="lp_resource_element" data_id="'.$row_quiz['id'].'" data_type="quiz" title="'.$title.'" >';
+            $return .= '<li class="lp_resource_element" data_id="'.$row_quiz['iid'].'" data_type="quiz" title="'.$title.'" >';
             $return .= Display::url($moveIcon, '#', ['class' => 'moved']);
             $return .= $quizIcon;
             $sessionStar = api_get_session_image(
@@ -10637,7 +10635,7 @@ class learnpath
             );
             $return .= Display::url(
                 Security::remove_XSS(cut($title, 80)).$link.$sessionStar,
-                api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_QUIZ.'&file='.$row_quiz['id'].'&lp_id='.$this->lp_id,
+                api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_QUIZ.'&file='.$row_quiz['iid'].'&lp_id='.$this->lp_id,
                 [
                     'class' => $visibility == 0 ? 'moved text-muted' : 'moved',
                 ]
@@ -13583,7 +13581,7 @@ EOD;
                 break;
             case TOOL_QUIZ:
                 $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-                $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id = $id");
+                $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE iid = $id");
                 $myrow = Database::fetch_array($result);
                 $output = $myrow['title'];
                 break;

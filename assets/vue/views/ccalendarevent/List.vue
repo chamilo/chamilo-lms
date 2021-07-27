@@ -95,6 +95,28 @@ export default {
 
     let currentEvent = null;
 
+    async function getCalendarEvents({startStr, endStr}) {
+      const calendarEvents = await axios.get('/api/c_calendar_events', {
+        params: {
+          'startDate[after]': startStr,
+          'endDate[before]': endStr
+        }
+      });
+
+      return calendarEvents.data['hydra:member'];
+    }
+
+    async function getSessions({startStr, endStr}) {
+      const sessions = await axios.get(`/api/users/${currentUser.value['id']}/sessions_rel_users`, {
+        params: {
+          'displayStartDate[after]': startStr,
+          'displayEndDate[before]': endStr
+        }
+      });
+
+      return sessions.data['hydra:member'];
+    }
+
     calendarOptions.value = {
       plugins: [
         dayGridPlugin,
@@ -125,6 +147,13 @@ export default {
       selectable: true,
       eventClick(EventClickArg) {
         let event = EventClickArg.event;
+
+        if (event.extendedProps.type && event.extendedProps.type === 'session') {
+          EventClickArg.jsEvent.preventDefault();
+
+          return;
+        }
+
         currentEvent = event;
 
         item.value = {...event.extendedProps};
@@ -170,23 +199,29 @@ export default {
         dialog.value = true;
       },
       events(info, successCallback, failureCallback) {
-        axios.get('/api/c_calendar_events', {
-          params: {
-            'startDate[after]': info.startStr,
-            'endDate[before]': info.endStr
-          }
-        }).then(response => {
-          let data = response.data;
-          let events = data['hydra:member'];
-          successCallback(
-              Array.prototype.slice.call(events)
+        Promise
+            .all([getCalendarEvents(info), getSessions(info)])
+            .then(values => {
+              const calendarEvents = Array.prototype.slice.call(values[0])
                   .map(event => ({
                     ...event,
                     start: event.startDate,
                     end: event.endDate,
-                  }))
-          )
-        })
+                  }));
+
+              const sessionEvents = values[1].map(sessionRelUser => (
+                  {
+                    title: sessionRelUser.session.name,
+                    start: sessionRelUser.session.displayStartDate,
+                    end: sessionRelUser.session.displayEndDate,
+                    type: 'session'
+                  }
+              ));
+
+              const events = [...calendarEvents, ...sessionEvents];
+
+              successCallback(events);
+            });
       },
     }
 

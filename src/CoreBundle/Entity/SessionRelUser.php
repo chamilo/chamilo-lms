@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
@@ -54,11 +55,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'security' => "is_granted('ROLE_USER')",
     ],
     normalizationContext: [
-        'groups' => ['session_rel_user:read', 'user:read'],
+        'groups' => ['session_rel_user:read', 'session:read'],
     ],
 )]
-#[ApiFilter(SearchFilter::class, properties: ['session' => 'exact', 'user' => 'exact'])]
-
+#[ApiFilter(SearchFilter::class, properties: [
+    'session' => 'exact',
+    'user' => 'exact',
+])]
+#[ApiFilter(DateFilter::class, properties: ['session.displayStartDate' =>  null, 'session.displayEndDate' => null])]
 class SessionRelUser
 {
     use UserTrait;

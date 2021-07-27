@@ -3947,7 +3947,7 @@ class Exercise
                     }
 
                     $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
-                    if (!empty($studentChoice)) {
+                    if (isset($studentChoice)) {
                         $correctAnswerId[] = $answerAutoId;
                         if ($studentChoice == $answerCorrect) {
                             $questionScore += $true_score;

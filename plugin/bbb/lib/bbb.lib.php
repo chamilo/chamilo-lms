@@ -1792,7 +1792,6 @@ class bbb
             array('where' => array('id = ?' => array($id))),
             'first'
         );
-
         $records = $this->api->getRecordingsWithXmlResponseArray(
             array('meetingId' => $meetingData['remote_id'])
         );
@@ -1809,12 +1808,13 @@ class bbb
             } else {
                 $record = $records[0];
                 if (is_array($record) && isset($record['recordId'])) {
+                    $dateRecord = api_convert_and_format_date($meetingData['created_at']);
                     $url = $record['playbackFormatUrl'];
+                    $name = $this->plugin->get_lang('Videoconference');
                     $link = new Link();
                     $params['url'] = $url;
-                    $params['title'] = $meetingData['meeting_name'];
+                    $params['title'] = $name.' - '.$dateRecord;
                     $id = $link->save($params);
-
                     return $id;
                 }
             }

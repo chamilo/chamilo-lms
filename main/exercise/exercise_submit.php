@@ -154,6 +154,7 @@ if (api_is_allowed_to_edit(null, true) &&
 $exerciseInSession = Session::read('objExercise');
 if (empty($exerciseInSession) || (!empty($exerciseInSession) && $exerciseInSession->iid != $_GET['exerciseId'])) {
     // Construction of Exercise
+    /** @var |Exercise $objExercise */
     $objExercise = new Exercise($courseId);
     Session::write('firstTime', true);
     if ($debug) {

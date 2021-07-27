@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function (){
       });
       const selectedLang = document.querySelectorAll('[lang="' + isoCode + '"]');
       selectedLang.forEach(function (userLang) {
+        userLang.classList.remove('hidden')
         userLang.style.display = 'block';
       });
     }

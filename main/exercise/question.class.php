@@ -1027,7 +1027,7 @@ abstract class Question
             Database::update(
                 $TBL_QUESTIONS,
                 $params,
-                ['id = ?' => [$id]]
+                ['iid = ?' => [$id]]
             );
 
             Event::addEvent(

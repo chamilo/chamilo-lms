@@ -659,8 +659,8 @@ class Exercise
 
             $sql = "SELECT q.iid
                     FROM $TBL_EXERCICE_QUESTION e
-                    INNER JOIN $TBL_QUESTIONS  q
-					WHERE e.exercice_id	= ".$this->iid;
+                    INNER JOIN $TBL_QUESTIONS  q ON e.question_id = q.iid
+					WHERE e.exercice_id	= ".$this->iid." AND e.c_id = {$this->course_id}";
 
             $orderCondition = ' ORDER BY question_order ';
 

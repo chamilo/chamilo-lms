@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CAnnouncementAttachment;
+use Chamilo\CourseBundle\Entity\CCalendarEvent;
 
 /**
  * Include file with functions for the announcements module.
@@ -1901,5 +1902,50 @@ class AnnouncementManager
 
             return $qb->getQuery()->getSingleScalarResult();
         }
+    }
+
+    public static function createEvent(
+        CAnnouncement $announcement,
+        DateTime $startDate,
+        DateTime $endDate,
+        array $choosenUsers = []
+    ): CCalendarEvent {
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
+        $group = api_get_group_entity();
+
+        $event = (new CCalendarEvent())
+            ->setTitle($announcement->getTitle())
+            ->setStartDate($startDate)
+            ->setEndDate($endDate)
+            ->setContent($announcement->getContent())
+            ->setParent($course)
+        ;
+
+        if (empty($choosenUsers) || (isset($choosenUsers[0]) && 'everyone' === $choosenUsers[0])) {
+            $event->addCourseLink($course, $session, $group);
+        } else {
+            $sendTo = CourseManager::separateUsersGroups($choosenUsers);
+
+            if (is_array($sendTo['groups']) && !empty($sendTo['groups'])) {
+                $sendTo['groups'] = array_map('api_get_group_entity', $sendTo['groups']);
+                $sendTo['groups'] = array_filter($sendTo['groups']);
+
+                $event->addResourceToGroupList($sendTo['groups'], $course, $session);
+            }
+
+            // Storing the selected users
+            if (is_array($sendTo['users'])) {
+                $sendTo['users'] = array_map('api_get_user_entity', $sendTo['users']);
+
+                $event->addResourceToUserList($sendTo['users'], $course, $session, $group);
+            }
+        }
+
+        $em = Container::getEntityManager();
+        $em->persist($event);
+        $em->flush();
+
+        return $event;
     }
 }

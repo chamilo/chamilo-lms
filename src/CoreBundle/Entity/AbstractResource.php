@@ -290,6 +290,18 @@ abstract class AbstractResource
         return $this;
     }
 
+    public function addResourceToGroupList(
+        array $groupList,
+        Course $course = null,
+        Session $session = null,
+    ) {
+        foreach ($groupList as $group) {
+            $this->addGroupLink($course, $session, $group);
+        }
+
+        return $this;
+    }
+
     public function setResourceLinkArray(array $links)
     {
         $this->resourceLinkList = $links;

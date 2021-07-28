@@ -471,7 +471,7 @@ class Message
 
     public function setGroup(?CGroup $group): self
     {
-        $this->msgType = self::MESSAGE_TYPE_GROUP;
+//        $this->msgType = self::MESSAGE_TYPE_GROUP;
         $this->group = $group;
 
         return $this;

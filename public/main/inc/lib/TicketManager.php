@@ -1000,18 +1000,18 @@ class TicketManager
                 ];
             }
             if ($isAdmin) {
-                $ticket['0'] .= '&nbsp;&nbsp;<a 
-                href="javascript:void(0)" 
+                $ticket['0'] .= '&nbsp;&nbsp;<a
+                href="javascript:void(0)"
                 onclick="load_history_ticket(\'div_'.$row['ticket_id'].'\','.$row['ticket_id'].')">
-                    <a 
-                        onclick="load_course_list(\'div_'.$row['ticket_id'].'\','.$row['ticket_id'].')" 
-					    onmouseover="clear_course_list (\'div_'.$row['ticket_id'].'\')"					     
-					    title="'.get_lang('History').'" 
+                    <a
+                        onclick="load_course_list(\'div_'.$row['ticket_id'].'\','.$row['ticket_id'].')"
+					    onmouseover="clear_course_list (\'div_'.$row['ticket_id'].'\')"
+					    title="'.get_lang('History').'"
 					    alt="'.get_lang('History').'"
                     >
                     '.Display::returnFontAwesomeIcon('history').'
-                    </a>                                        
-					
+                    </a>
+
 					<div class="blackboard_hide" id="div_'.$row['ticket_id'].'">&nbsp;&nbsp;</div>
 					</a>&nbsp;&nbsp;';
             }
@@ -1268,7 +1268,7 @@ class TicketManager
                 $ticket['ticket'] = $row;
             }
 
-            $sql = "SELECT *, message.id as message_id
+            $sql = "SELECT *, message.id as message_id, user.id AS user_id
                     FROM $table_support_messages message
                     INNER JOIN $table_main_user user
                     ON (message.sys_insert_user_id = user.id)

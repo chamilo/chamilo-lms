@@ -109,7 +109,7 @@ $htmlHeadXtra[] = '<script>
     var course_required = '.js_array($types, 'course_required', 'course_required').'
     var other_area = '.js_array($types, 'other_area', 'other_area').'
     var email = '.js_array($types, 'email', 'email').
-'</script>';
+    '</script>';
 
 /**
  * @param $array
@@ -311,10 +311,13 @@ $form->addLabel('', '<span id="filepaths"><div id="filepath_1"></div></span>');
 $form->addLabel(
     '',
     '<span id="link-more-attach">
-         <span class="btn btn-success" onclick="return add_image_form()">'.get_lang('Add one more file').'</span>
-         </span>
-         ('.sprintf(get_lang('Maximun file size: %s'), format_file_size(api_get_setting('message_max_upload_filesize'))).')
-    '
+         <span class="btn btn-success" onclick="return add_image_form()">'
+    .get_lang('Add one more file')
+    .'</span></span>('
+    .sprintf(
+        get_lang('Maximun file size: %s'),
+        format_file_size((int) api_get_setting('message_max_upload_filesize'))
+    ).')'
 );
 
 $form->addElement('html', '<br/>');

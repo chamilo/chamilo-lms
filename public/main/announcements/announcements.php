@@ -735,12 +735,15 @@ switch ($action) {
                 }
 
                 if ($announcement) {
-                    AnnouncementManager::createEvent(
-                        $announcement,
-                        api_get_utc_datetime($data['event_date_start'], true, true),
-                        api_get_utc_datetime($data['event_date_end'], true, true),
-                        $data['users']
-                    );
+                    if (!empty($data['event_date_start']) && !empty($data['event_date_end'])) {
+                        AnnouncementManager::createEvent(
+                            $announcement,
+                            api_get_utc_datetime($data['event_date_start'], true, true),
+                            api_get_utc_datetime($data['event_date_end'], true, true),
+                            $data['users']
+                        );
+                    }
+
 
                     Display::addFlash(
                         Display::return_message(

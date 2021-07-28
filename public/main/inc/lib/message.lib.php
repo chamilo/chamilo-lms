@@ -129,19 +129,20 @@ class MessageManager
      */
     public static function messageWasAlreadySent($senderId, $receiverId, $subject, $message)
     {
-        $table = Database::get_main_table(TABLE_MESSAGE);
+        $tblMessage = Database::get_main_table(TABLE_MESSAGE);
         $senderId = (int) $senderId;
         $receiverId = (int) $receiverId;
         $subject = Database::escape_string($subject);
         $message = Database::escape_string($message);
 
-        $sql = "SELECT * FROM $table
+        $sql = "SELECT m.id FROM $tblMessage m
+                INNER JOIN message_rel_user mru on m.id = mru.message_id
                 WHERE
-                    user_sender_id = $senderId AND
-                    user_receiver_id = $receiverId AND
-                    title = '$subject' AND
-                    content = '$message' AND
-                    msg_type = ".Message::MESSAGE_TYPE_INBOX."
+                    m.user_sender_id = $senderId AND
+                    mru.user_id = $receiverId AND
+                    m.title = '$subject' AND
+                    m.content = '$message' AND
+                    m.msg_type = ".Message::MESSAGE_TYPE_INBOX."
                 ";
         $result = Database::query($sql);
 

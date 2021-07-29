@@ -234,15 +234,17 @@ class ExtraFieldValue extends Model
                         }
                     }
 
-                    foreach ($tags as $tag) {
-                        $tagUses = $em
-                            ->getRepository(ExtraFieldRelTag::class)
-                            ->findBy([
-                                'tagId' => $tag->getId(),
-                            ]);
+                    if (!empty($tags)) {
+                        foreach ($tags as $tag) {
+                            $tagUses = $em
+                                ->getRepository(ExtraFieldRelTag::class)
+                                ->findBy([
+                                    'tag' => $tag->getId(),
+                                ]);
 
-                        $tag->setCount(count($tagUses) + 1);
-                        $em->persist($tag);
+                            $tag->setCount(count($tagUses) + 1);
+                            $em->persist($tag);
+                        }
                     }
 
                     $em->flush();

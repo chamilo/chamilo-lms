@@ -47,7 +47,9 @@ switch ($action) {
 
         $extraFieldOption = new ExtraFieldOption($type);
 
-        $tags = Database::getManager()
+        //var_dump($fieldId);
+
+        /*$tags = Database::getManager()
             ->getRepository(Tag::class)
             ->createQueryBuilder('t')
             ->where("t.tag LIKE :tag")
@@ -55,7 +57,14 @@ switch ($action) {
             ->setParameter('field', $fieldId)
             ->setParameter('tag', "$tag%")
             ->getQuery()
-            ->getResult();
+            ->getResult();*/
+
+        $tags = Database::getManager()
+            ->getRepository(Tag::class)
+            ->findBy([
+                'tag' => $tag,
+                'field' => $fieldId,
+            ]);
 
         /** @var Tag $tag */
         foreach ($tags as $tag) {

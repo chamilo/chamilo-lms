@@ -75,7 +75,7 @@ class ExtraFieldSavedSearch
         return $this->value;
     }
 
-    public function setValue(array $value): self
+    public function setValue($value): self
     {
         $this->value = $value;
 

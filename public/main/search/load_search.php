@@ -12,9 +12,27 @@ require_once __DIR__.'/../inc/global.inc.php';
 if ('false' === api_get_setting('session.allow_search_diagnostic')) {
     api_not_allowed();
 }
-
-$htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_PATH).'web/assets/cropper/dist/cropper.min.css" rel="stylesheet">';
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_PATH).'web/assets/cropper/dist/cropper.min.js"></script>';
+$htmlHeadXtra[] = '
+<style>
+input[type="checkbox"], input[type="radio"] {
+    appearance: auto !important;
+    font-size: 14px;
+    margin-left: 0px !important;
+    height: auto !important;
+    width: auto !important;
+}
+form label, input {
+    font-size: 15px !important;
+    font-weight: normal !important;
+}
+.btn {
+    padding: 0px 12px !important;
+}
+</style>
+<link href="bootstrap/bootstrap.min.css" rel="stylesheet" media="screen" type="text/css" />
+<script src="bootstrap/bootstrap.min.js"></script>';
+$htmlHeadXtra[] = '<link  href="cropper/cropper.min.css" rel="stylesheet">';
+$htmlHeadXtra[] = '<script src="cropper/cropper.min.js"></script>';
 
 $htmlHeadXtra[] = '<script>
 $(function() {
@@ -96,7 +114,7 @@ switch ($action) {
 $em = Database::getManager();
 
 $formSearch = new FormValidator('load', 'get', api_get_self());
-$formSearch->addHeader(get_lang('LoadDiagnosis'));
+$formSearch->addHeader(get_lang('Load Diagnosis'));
 if (!empty($userInfo)) {
     $users = [];
     switch ($userInfo['status']) {
@@ -142,7 +160,7 @@ if ($userToLoad) {
     $formSearch->setDefaults(['user_id' => $userToLoad]);
 }
 
-$formSearch->addButtonSearch(get_lang('ShowDiagnostic'), 'save');
+$formSearch->addButtonSearch(get_lang('Show Diagnostic'), 'save');
 
 $form = new FormValidator('search', 'post', api_get_self().'?user_id='.$userToLoad.'#session-table');
 $form->addHeader(get_lang('Diagnosis'));
@@ -219,7 +237,7 @@ $userForm->addHtml('<div class="panel-group" id="search_extrafield" role="tablis
 $userForm->addHtml('<div class="panel panel-default">');
 $userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">'.get_lang('Filiere').'</a></div>');
 $userForm->addHtml('<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">');
-$userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('FiliereExplanation').'</p>');
+$userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('Filiere Explanation').'</p>');
 
 $fieldsToShow = [
     'statusocial',
@@ -247,9 +265,9 @@ $extra = $extraFieldUser->addElements(
 $userForm->addHtml('</div></div></div>');
 
 $userForm->addHtml('<div class="panel panel-default">');
-$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">'.get_lang('DisponibilitePendantMonStage').'</a></div>');
+$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">'.get_lang('Disponibilite Pendant Mon Stage').'</a></div>');
 $userForm->addHtml('<div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">');
-$userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('DisponibilitePendantMonStageExplanation').'</p>');
+$userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('Disponibilite Pendant Mon Stage Explanation').'</p>');
 
 $fieldsToShow = [
     'datedebutstage',
@@ -277,9 +295,9 @@ $extra = $extraFieldUser->addElements(
 $userForm->addHtml('</div></div></div>');
 
 $userForm->addHtml('<div class="panel panel-default">');
-$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseSix" aria-expanded="true" aria-controls="collapseSix">'.get_lang('ObjectifsApprentissage').'</a></div>');
+$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseSix" aria-expanded="true" aria-controls="collapseSix">'.get_lang('Objectifs Apprentissage').'</a></div>');
 $userForm->addHtml('<div id="collapseSix" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingSix">');
-$userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('ObjectifsApprentissageExplanation').'</p>');
+$userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('Objectifs Apprentissage Explanation').'</p>');
 
 $fieldsToShow = [
     'objectif_apprentissage',
@@ -303,9 +321,9 @@ $extra = $extraFieldUser->addElements(
 $userForm->addHtml('</div></div></div>');
 
 $userForm->addHtml('<div class="panel panel-default">');
-$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">'.get_lang('MethodeTravail').'</a></div>');
+$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">'.get_lang('Metho de Travail').'</a></div>');
 $userForm->addHtml('<div id="collapseSeven" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingSeven">');
-$userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('MethodeTravailExplanation').'</p>');
+$userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('Metho de Travail Explanation').'</p>');
 
 $fieldsToShow = [
     'methode_de_travaille',
@@ -348,9 +366,9 @@ if (isset($_POST) && !empty($_POST)) {
 }
 
 $form->addHtml('<div class="panel panel-default">');
-$form->addHtml('<div class="panel-heading"><input type="checkbox" name="search_using_1" '.$searchChecked1.' />&nbsp;<a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">'.get_lang('DisponibiliteAvant').'</a></div>');
+$form->addHtml('<div class="panel-heading"><input type="checkbox" name="search_using_1" '.$searchChecked1.' />&nbsp;<a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">'.get_lang('Disponibilite Avant').'</a></div>');
 $form->addHtml('<div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">');
-$form->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('DisponibiliteAvantExplanation').'</p>');
+$form->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('Disponibilite Avant Explanation').'</p>');
 
 // Session fields
 $showOnlyThisFields = [
@@ -395,9 +413,9 @@ $extra = $extraFieldUser->addElements(
 $form->addHtml('</div></div></div>');
 
 $form->addHtml('<div class="panel panel-default">');
-$form->addHtml('<div class="panel-heading"><input type="checkbox" name="search_using_2" '.$searchChecked2.' />&nbsp;<a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">'.get_lang('ThemesObjectifs').'</a></div>');
+$form->addHtml('<div class="panel-heading"><input type="checkbox" name="search_using_2" '.$searchChecked2.' />&nbsp;<a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">'.get_lang('Themes Objectifs').'</a></div>');
 $form->addHtml('<div id="collapseFour" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFour">');
-$form->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('ThemesObjectifsExplanation').'</p>');
+$form->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('Themes Objectifs Explanation').'</p>');
 
 $showOnlyThisFields = [
     'domaine',
@@ -424,11 +442,11 @@ $extra = $extraField->addElements(
             get_lang('Domaine').' 3',
         ],
         $theme => [
-            get_lang('ThemeField').' 1',
-            get_lang('ThemeField').' 2',
-            get_lang('ThemeField').' 3',
-            get_lang('ThemeField').' 4',
-            get_lang('ThemeField').' 5',
+            get_lang('Theme Field').' 1',
+            get_lang('Theme Field').' 2',
+            get_lang('Theme Field').' 3',
+            get_lang('Theme Field').' 4',
+            get_lang('Theme Field').' 5',
         ],
     ],
     true
@@ -454,9 +472,9 @@ $extra = $extraFieldUser->addElements(
 
 $form->addHtml('</div></div></div>');
 $form->addHtml('<div class="panel panel-default">');
-$form->addHtml('<div class="panel-heading"><input type="checkbox" name="search_using_3" '.$searchChecked3.' />&nbsp;<a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">'.get_lang('NiveauLangue').'</a></div>');
+$form->addHtml('<div class="panel-heading"><input type="checkbox" name="search_using_3" '.$searchChecked3.' />&nbsp;<a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">'.get_lang('Niveau Langue').'</a></div>');
 $form->addHtml('<div id="collapseFive" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFive">');
-$form->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('NiveauLangueExplanation').'</p>');
+$form->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('Niveau Langue Explanation').'</p>');
 
 $showOnlyThisFields = [
     'ecouter',
@@ -501,9 +519,9 @@ $userForm->addHtml('<div class="panel panel-default">');
 $userForm->addHtml(
     '<div class="panel-heading">
     <a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseEight" aria-expanded="true" aria-controls="collapseEight">'.
-    get_lang('MonEnvironnementDeTravail').'</a></div>');
+    get_lang('Mon Environnement De Travail').'</a></div>');
 $userForm->addHtml('<div id="collapseEight" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingEight">');
-$userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('MonEnvironnementDeTravailExplanation').'</p>');
+$userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('Mon Environnement De Travail Explanation').'</p>');
 
 $fieldsToShow = [
     'outil_de_travail_ordinateur',
@@ -514,7 +532,7 @@ $fieldsToShow = [
     'outil_de_travail_smartphone_so',
 ];
 
-$userForm->addLabel(null, get_lang('MonEnvironnementDeTravailExplanationIntro1'));
+$userForm->addLabel(null, get_lang('Mon Environnement De Travail Explanation Intro1'));
 
 $extra = $extraFieldUser->addElements(
     $userForm,
@@ -529,7 +547,7 @@ $extra = $extraFieldUser->addElements(
     $forceShowFields
 );
 
-$userForm->addLabel(null, get_lang('MonEnvironnementDeTravailExplanationIntro2'));
+$userForm->addLabel(null, get_lang('Mon Environnement De Travail Explanation Intro2'));
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
@@ -555,13 +573,13 @@ $extra = $extraFieldUser->addElements(
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
-$userForm->addHtml('<p class="text-info">'.get_lang('MonEnvironnementDeTravailRenvoiFAQ').'</p>');
+$userForm->addHtml('<p class="text-info">'.get_lang('Mon Environnement De Travail Renvoi FAQ').'</p>');
 
 $userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseEight]');
-$userForm->addHtml('</div></div></div>');
+$userForm->addHtml('</div></div></div></div>');
 
-$form->addButtonSave(get_lang('SaveDiagnosticChanges'), 'save');
-$form->addButtonSearch(get_lang('SearchSessions'), 'search');
+$form->addButtonSave(get_lang('Save Diagnostic Changes'), 'save');
+$form->addButtonSearch(get_lang('Search Sessions'), 'search');
 
 $extraFieldsToFilter = $extraField->get_all(['variable = ?' => 'temps_de_travail']);
 $extraFieldToSearch = [];
@@ -886,6 +904,10 @@ if (!empty($filterToSend)) {
     // Special filters
     // see https://task.beeznest.com/issues/10849#change-81902
     foreach ($filterToSend['rules'] as &$filterItem) {
+        if (!isset($filterItem)) {
+            continue;
+        }
+
         if (isset($filterItem['field'])) {
             switch ($filterItem['field']) {
                 case 'extra_filiere':
@@ -899,7 +921,9 @@ if (!empty($filterToSend)) {
                     }
                     break;
             }
+        }
 
+        if (isset($filterItem['field'])) {
             switch ($filterItem['field']) {
                 case 'extra_ecouter':
                 case 'extra_lire':
@@ -1166,9 +1190,9 @@ if ($data) {
 
 $numHours = $total - $sumHours;
 $headers = [
-    get_lang('TotalAvailableHours') => $total,
-    get_lang('SumHoursSessionsSubscribed') => $sumHours,
-    get_lang('CountHoursAvailable') => $numHours,
+    get_lang('Total Available Hours') => $total,
+    get_lang('Sum Hours Sessions Subscribed') => $sumHours,
+    get_lang('Count Hours Available') => $numHours,
 ];
 foreach ($headers as $header => $value) {
     $table->setCellContents($row, 0, $header);
@@ -1179,16 +1203,16 @@ foreach ($headers as $header => $value) {
 
 $button = '';
 if ($userToLoad) {
-    $button = Display::url(
-        get_lang('OfajEndOfLearnPath'),
+    /*$button = Display::url(
+        get_lang('Ofaj End Of LearnPath'),
         api_get_path(WEB_CODE_PATH).'messages/new_message.php?prefill=ofaj&send_to_user='.$userToLoad,
         ['class' => 'btn btn-default']
     );
-    $button .= '<br /><br />';
+    $button .= '<br /><br />';*/
 }
 
 $userReportButton = Display::url(
-    get_lang('DiagnosticValidateLearningPath'),
+    get_lang('Diagnostic Validate LearningPath'),
     api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$userToLoad,
     ['class' => 'btn btn-primary']
 );

@@ -1,20 +1,14 @@
 {% autoescape false %}
+{{ form_search }}
 
-    {% if (form_search) %}
-        {{ form_search }}
-    {% endif %}
+{{ form }}
 
-    {% if (form) %}
-        {{ form }}
-    {% endif %}
+<script>
+    $(function() {
+        {{ grid_js }}
+    });
+</script>
 
-    {% if (grid_js) %}
-        <script>
-            $(function() {
-                {{ grid_js }}
-            });
-        </script>
-        {{ grid }}
-    {% endif %}
+{{ grid }}
 
 {% endautoescape %}

@@ -201,5 +201,38 @@ switch ($action) {
         header('Cache-Control: no-cache');
         echo json_encode($result);
         break;
+    case 'show_conditional_to_export_pdf':
+
+        $studentId = (int) $_REQUEST['student'];
+        $sId = (int) $_REQUEST['session_to_export'];
+
+        $form = new FormValidator(
+            'conditional_to_export_pdf',
+            'post',
+            api_get_path(WEB_CODE_PATH).'mySpace/session.php?'
+            .http_build_query(
+                [
+                    'student' => $studentId,
+                    'action' => 'export_to_pdf',
+                    'type' => 'achievement',
+                    'session_to_export' => $sId,
+                ]
+            )
+        );
+
+        $message = get_lang('HideConnectionTime', true);
+        if (empty($message)) {
+            $message = "¿Hide connection time?";
+        }
+        $form->addCheckBox('hide_connection_time', null, $message);
+
+        $messageBtn = get_lang('GenerateCertificate', true);
+        if (empty($messageBtn)) {
+            $messageBtn = 'Generate Certificate';
+        }
+        $form->addButtonSave($messageBtn, 'submitLink');
+        $content = $form->returnForm();
+        echo $content;
+        break;
 }
 exit;

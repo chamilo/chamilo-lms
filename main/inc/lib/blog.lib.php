@@ -35,7 +35,7 @@ class Blog
             $result = Database::query($sql);
             $blog = Database::fetch_array($result);
 
-            return stripslashes($blog['blog_name']);
+            return Security::remove_XSS(stripslashes($blog['blog_name']));
         }
     }
 
@@ -57,7 +57,7 @@ class Blog
         $result = Database::query($sql);
         $blog = Database::fetch_array($result);
 
-        return stripslashes($blog['blog_subtitle']);
+        return Security::remove_XSS(stripslashes($blog['blog_subtitle']));
     }
 
     /**
@@ -3029,12 +3029,12 @@ class Blog
                 $session_img = api_get_session_image($info_log[4], $_user['status']);
 
                 $url_start_blog = 'blog.php'."?"."blog_id=".$info_log[3]."&".api_get_cidreq();
-                $title = $info_log[0];
+                $title = Security::remove_XSS($info_log[0]);
                 $image = Display::return_icon('blog.png', $title);
                 $list_name = '<div style="float: left; width: 35px; height: 22px;"><a href="'.$url_start_blog.'">'.$image.'</a></div><a href="'.$url_start_blog.'">'.$title.'</a>'.$session_img;
 
                 $list_body_blog[] = $list_name;
-                $list_body_blog[] = $info_log[1];
+                $list_body_blog[] = Security::remove_XSS($info_log[1]);
 
                 $visibility_icon = ($info_log[2] == 0) ? 'invisible' : 'visible';
                 $visibility_info = ($info_log[2] == 0) ? 'Visible' : 'Invisible';

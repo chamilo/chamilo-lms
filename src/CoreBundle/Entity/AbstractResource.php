@@ -11,10 +11,8 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Traits\UserCreatorTrait;
 use Chamilo\CourseBundle\Entity\CGroup;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -484,5 +482,40 @@ abstract class AbstractResource
             'users' => $users,
             'groups' => $groups,
         ];
+    }
+
+    /**
+     * This function separates the users from the groups users have a value
+     * USER:XXX (with XXX the groups id have a value
+     * GROUP:YYY (with YYY the group id).
+     *
+     * @param array $to Array of strings that define the type and id of each destination
+     *
+     * @return array Array of groups and users (each an array of IDs)
+     */
+    public static function separateUsersGroups(array $to): array
+    {
+        $send_to = ['groups' => [], 'users' => []];
+
+        foreach ($to as $to_item) {
+            if (empty($to_item)) {
+                continue;
+            }
+
+            $parts = explode(':', $to_item);
+            $type = $parts[0] ?? '';
+            $id = $parts[1] ?? '';
+
+            switch ($type) {
+                case 'GROUP':
+                    $send_to['groups'][] = (int) $id;
+                    break;
+                case 'USER':
+                    $send_to['users'][] = (int) $id;
+                    break;
+            }
+        }
+
+        return $send_to;
     }
 }

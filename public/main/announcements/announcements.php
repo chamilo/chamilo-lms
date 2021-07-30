@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 
@@ -503,7 +504,7 @@ switch ($action) {
             $to = AnnouncementManager::loadEditUsers($announcementInfo);
 
             if (!empty($group_id)) {
-                $separated = CourseManager::separateUsersGroups($to);
+                $separated = AbstractResource::separateUsersGroups($to);
                 if (isset($separated['groups']) && count($separated['groups']) > 1) {
                     $form->freeze();
                     Display::addFlash(Display::return_message(get_lang('Disabled by trainer')));

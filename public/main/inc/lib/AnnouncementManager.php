@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Framework\Container;
@@ -677,7 +678,7 @@ class AnnouncementManager
                 $group
             );
         } else {
-            $send_to = CourseManager::separateUsersGroups($sentTo);
+            $send_to = AbstractResource::separateUsersGroups($sentTo);
             // Storing the selected groups
             if (is_array($send_to['groups']) && !empty($send_to['groups'])) {
                 foreach ($send_to['groups'] as $group) {
@@ -756,7 +757,7 @@ class AnnouncementManager
 
         $em->persist($announcement);
 
-        $sendToUsers = CourseManager::separateUsersGroups($to_users);
+        $sendToUsers = AbstractResource::separateUsersGroups($to_users);
         // if nothing was selected in the menu then send to all the group
         $sentToAllGroup = false;
         if (empty($sendToUsers['groups']) && empty($sendToUsers['users'])) {
@@ -879,7 +880,7 @@ class AnnouncementManager
 
         // store, first the groups, then the users
         if (!empty($to)) {
-            $send_to = CourseManager::separateUsersGroups($to);
+            $send_to = AbstractResource::separateUsersGroups($to);
 
             // storing the selected groups
             if (is_array($send_to['groups'])) {
@@ -1705,7 +1706,7 @@ class AnnouncementManager
                 $groupReference = '';
                 $disableEdit = false;
                 $to = [];
-                $separated = CourseManager::separateUsersGroups($to);
+                $separated = AbstractResource::separateUsersGroups($to);
                 if (!empty($group_id)) {
                     // If the announcement was sent to many groups, disable edition inside a group
                     if (isset($separated['groups']) && count($separated['groups']) > 1) {
@@ -1925,7 +1926,7 @@ class AnnouncementManager
         if (empty($choosenUsers) || (isset($choosenUsers[0]) && 'everyone' === $choosenUsers[0])) {
             $event->addCourseLink($course, $session, $group);
         } else {
-            $sendTo = CourseManager::separateUsersGroups($choosenUsers);
+            $sendTo = AbstractResource::separateUsersGroups($choosenUsers);
 
             if (is_array($sendTo['groups']) && !empty($sendTo['groups'])) {
                 $sendTo['groups'] = array_map('api_get_group_entity', $sendTo['groups']);

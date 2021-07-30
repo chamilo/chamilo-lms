@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Framework\Container;
 
 require_once __DIR__.'/../global.inc.php';
@@ -84,7 +85,7 @@ switch ($action) {
                     $previewGroups[] = $group['iid'];
                 }
             } else {
-                $send_to = CourseManager::separateUsersGroups($users);
+                $send_to = AbstractResource::separateUsersGroups($users);
                 // Storing the selected groups
                 if (is_array($send_to['groups']) &&
                     !empty($send_to['groups'])
@@ -104,7 +105,7 @@ switch ($action) {
                 }
             }
         } else {
-            $send_to_users = CourseManager::separateUsersGroups($users);
+            $send_to_users = AbstractResource::separateUsersGroups($users);
             $sentToAllGroup = false;
             if (empty($send_to_users['groups']) && empty($send_to_users['users'])) {
                 $previewGroups[] = $groupId;

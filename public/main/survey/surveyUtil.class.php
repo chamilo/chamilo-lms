@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\User;
@@ -2376,7 +2377,7 @@ class SurveyUtil
         $session_id = api_get_session_id();
 
         if (false == $isAdditionalEmail) {
-            $result = CourseManager::separateUsersGroups($users_array);
+            $result = AbstractResource::separateUsersGroups($users_array);
             $groupList = $result['groups'];
             $users_array = $result['users'];
 

@@ -149,5 +149,6 @@
     "vue-cli-plugin-quasar": "next",
     "webpack-notifier": "^1.13.0"
   },
-  "license": "GPL-3.0"
+  "license": "GPL-3.0",
+  "packageManager": "yarn@2.4.2"
 }

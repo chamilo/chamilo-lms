@@ -39,7 +39,7 @@ git clone https://github.com/chamilo/chamilo-lms.git chamilo2
 cd chamilo2
 composer install
 
-yarn set version berry
+yarn set version 2.4.2
 yarn install
 yarn run encore dev
 chmod -R 777 .

@@ -17,6 +17,7 @@ Feature: Announcement tool
     And I follow "Preview"
     And wait for the page to be loaded
     Then I should see "Announcement will be sent to"
+    And I should see "John Doe"
     Then I press "submit"
     And wait for the page to be loaded
     Then I should see "Announcement has been added"

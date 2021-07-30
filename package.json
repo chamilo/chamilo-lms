@@ -6,7 +6,7 @@
     "start": "vue-cli-service serve --open"
   },
   "dependencies": {
-    "@apollo/client": "3.4.0-rc.15",
+    "@apollo/client": "3.4.1",
     "@babel/plugin-transform-runtime": "^7.14.5",
     "@fancyapps/fancybox": "^3.5.7",
     "@fullcalendar/core": "^5.9.0",
@@ -33,8 +33,8 @@
     "@uppy/vue": "^0.2.6",
     "@uppy/webcam": "^1.8.13",
     "@uppy/xhr-upload": "^1.7.5",
-    "@vue/apollo-composable": "4.0.0-alpha.12",
-    "@vue/apollo-option": "4.0.0-alpha.11",
+    "@vue/apollo-composable": "4.0.0-alpha.14",
+    "@vue/apollo-option": "4.0.0-alpha.14",
     "@vue/cli": "^4.5.13",
     "@vuelidate/core": "^2.0.0-alpha.19",
     "@vuelidate/validators": "^2.0.0-alpha.17",

@@ -14,9 +14,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.4.0-rc.15":
-  version: 3.4.0-rc.15
-  resolution: "@apollo/client@npm:3.4.0-rc.15"
+"@apollo/client@npm:3.4.1":
+  version: 3.4.1
+  resolution: "@apollo/client@npm:3.4.1"
   dependencies:
     "@graphql-typed-document-node/core": ^3.0.0
     "@wry/context": ^0.6.0
@@ -27,9 +27,9 @@ __metadata:
     optimism: ^0.16.1
     prop-types: ^15.7.2
     symbol-observable: ^4.0.0
-    ts-invariant: ^0.8.2
-    tslib: ^2.1.0
-    zen-observable-ts: ^1.0.0
+    ts-invariant: ^0.9.0
+    tslib: ^2.3.0
+    zen-observable-ts: ^1.1.0
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0
     react: ^16.8.0 || ^17.0.0
@@ -39,7 +39,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 9aab66954dde42e0526ded57831b46742fba3339d5786300f3091a220dc4aea2e369f5c04f98b85cf09a346f5f4292ccd5e3c184ae2b05c9614d91a3b80530fd
+  checksum: 8434e26f923bc8c20aaeb4457f3c74ab101a08bba732385a32934ad70d232f4af72bb4029c6325cabaa09e1aed1c047ecc6b40040dea504e9c6ba9b89c5f8830
   languageName: node
   linkType: hard
 
@@ -2810,29 +2810,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/apollo-composable@npm:4.0.0-alpha.12":
-  version: 4.0.0-alpha.12
-  resolution: "@vue/apollo-composable@npm:4.0.0-alpha.12"
+"@vue/apollo-composable@npm:4.0.0-alpha.14":
+  version: 4.0.0-alpha.14
+  resolution: "@vue/apollo-composable@npm:4.0.0-alpha.14"
   dependencies:
     throttle-debounce: ^2.3.0
-    vue-demi: ^0.4.0
+    vue-demi: ^0.9.1
   peerDependencies:
     "@apollo/client": ^3.2.1
-    "@vue/composition-api": ^1.0.0-beta.16
-    graphql: ^14.5.8
-    vue: ^2.6.10
-  checksum: 72af446e168ba95289d36988a00b1dbe1ed462e67a86ab158578c11453f494197fdb4e6fb3c56cb27d6722a0c4eba6d9bf2ca138deb8ca7e49911eed0bbdedec
+    graphql: ^15.3.0
+    vue: ^3.1.0
+  checksum: e1b3be6ddc7ccfb533f26d5b8a047cb74b9127b9d8e4bc369321f29751dbcf2c3fbb54ba8058694ebb0dd91c0ee4e6cb1debe255c6bf62805109f1a33bfe3678
   languageName: node
   linkType: hard
 
-"@vue/apollo-option@npm:4.0.0-alpha.11":
-  version: 4.0.0-alpha.11
-  resolution: "@vue/apollo-option@npm:4.0.0-alpha.11"
+"@vue/apollo-option@npm:4.0.0-alpha.14":
+  version: 4.0.0-alpha.14
+  resolution: "@vue/apollo-option@npm:4.0.0-alpha.14"
   dependencies:
     throttle-debounce: ^2.3.0
   peerDependencies:
     "@apollo/client": ^3.2.1
-  checksum: a203c22b30a3d415b7543fd18b915dd9e8d2c57bde79fc82c90d3a9b67ea0523b74b09d0a10e5d96d5bcfd8623a1265174c5c02830cd38af060497543b880b34
+    vue: ^3.1.0
+  checksum: 62881149e8182b4864e9e0ae016d7c97f2e446f9c45aa59e72ffa7439c4256f31b7982977056425937481cebed1b39123211965ce0a08a3e4b61a631c5bf4491
   languageName: node
   linkType: hard
 
@@ -6263,7 +6263,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "chamilo@workspace:."
   dependencies:
-    "@apollo/client": 3.4.0-rc.15
+    "@apollo/client": 3.4.1
     "@babel/eslint-parser": ^7.14.7
     "@babel/plugin-transform-runtime": ^7.14.5
     "@fancyapps/fancybox": ^3.5.7
@@ -6293,8 +6293,8 @@ __metadata:
     "@uppy/vue": ^0.2.6
     "@uppy/webcam": ^1.8.13
     "@uppy/xhr-upload": ^1.7.5
-    "@vue/apollo-composable": 4.0.0-alpha.12
-    "@vue/apollo-option": 4.0.0-alpha.11
+    "@vue/apollo-composable": 4.0.0-alpha.14
+    "@vue/apollo-option": 4.0.0-alpha.14
     "@vue/cli": ^4.5.13
     "@vue/cli-plugin-babel": ~4.5.13
     "@vue/cli-plugin-eslint": ~4.5.13
@@ -18960,12 +18960,12 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"ts-invariant@npm:^0.8.2":
-  version: 0.8.2
-  resolution: "ts-invariant@npm:0.8.2"
+"ts-invariant@npm:^0.9.0":
+  version: 0.9.0
+  resolution: "ts-invariant@npm:0.9.0"
   dependencies:
     tslib: ^2.1.0
-  checksum: 5b2ba5e5536f20e741dd05fc5055849cd706d0ec67b42d6342dcdf3b1de2611f6629d5c263fe9e9a06302a57dcc29d89f1db539298bf86fbe284a83308b0d504
+  checksum: 968e6c0dd53967dca485ecb635dc8bacfe93d38a76e26b8c8df16ad26be795f4e4c98b56f5095b6172962f9a776e8162b0635ca10d03e67ded34d2cd980acd37
   languageName: node
   linkType: hard
 
@@ -19002,7 +19002,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.0.1, tslib@npm:^2.1.0":
+"tslib@npm:^2.0.1, tslib@npm:^2.1.0, tslib@npm:^2.3.0":
   version: 2.3.0
   resolution: "tslib@npm:2.3.0"
   checksum: 7b4fc9feff0f704743c3760f5d8d708f6417fac6458159e63df3a6b1100f0736e3b99edb9fe370f274ad15160a1f49ff05cb49402534c818ff552c48e38c3e6e
@@ -19644,17 +19644,6 @@ typescript@~4.1.5:
   bin:
     vue-codemod: dist/bin/vue-codemod.js
   checksum: 000df666cab0523576150fd5dbaf2577a658e69656b630f5c6cea17da7baf1621435bba9ed2ec32fed4eed918c16ae412f7fe28442687d0c54d6b79ea36c5668
-  languageName: node
-  linkType: hard
-
-"vue-demi@npm:^0.4.0":
-  version: 0.4.5
-  resolution: "vue-demi@npm:0.4.5"
-  peerDependencies:
-    vue: ^2.6.0 || >=3.0.0-rc.1
-  bin:
-    vue-demi-fix: scripts/postinstall.js
-  checksum: b315dfebdaf970f64fc546c3f137fa728e67442b48063e90f46309666cb7f90ac664674814a8dd178561c9f28d1a121588733c29c0351231bc7da492f08c88c4
   languageName: node
   linkType: hard
 
@@ -20699,7 +20688,7 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"zen-observable-ts@npm:^1.0.0":
+"zen-observable-ts@npm:^1.1.0":
   version: 1.1.0
   resolution: "zen-observable-ts@npm:1.1.0"
   dependencies:

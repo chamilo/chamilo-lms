@@ -1505,77 +1505,66 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fullcalendar/common@npm:~5.8.0":
-  version: 5.8.0
-  resolution: "@fullcalendar/common@npm:5.8.0"
+"@fullcalendar/common@npm:~5.9.0":
+  version: 5.9.0
+  resolution: "@fullcalendar/common@npm:5.9.0"
   dependencies:
     tslib: ^2.1.0
-  checksum: 3f385053214bf00a3ae8080d203ffd226e91e4642237e6d72cb9b15510785e2e0678f7716068677e43553f869fd7db5990eea68d2403aeea7df1c81ed3a41bd8
+  checksum: bc6b9877dba7a157157924c86451d1e58937ebe9d1081c325a0b089b9d2946082b82cb2a55a17540e772cd644c70ae25b40a46c3e09d7e4aa367fe34fdb94df3
   languageName: node
   linkType: hard
 
-"@fullcalendar/core@npm:^5.8.0, @fullcalendar/core@npm:~5.8.0":
-  version: 5.8.0
-  resolution: "@fullcalendar/core@npm:5.8.0"
+"@fullcalendar/core@npm:^5.9.0, @fullcalendar/core@npm:~5.9.0":
+  version: 5.9.0
+  resolution: "@fullcalendar/core@npm:5.9.0"
   dependencies:
-    "@fullcalendar/common": ~5.8.0
+    "@fullcalendar/common": ~5.9.0
     preact: ^10.0.5
     tslib: ^2.1.0
-  checksum: e8da63d0c6e242f5df812370db53d1fdfc403472f1b4210fae54b4a4abf22ddc9744a1779506786cf61c5b344cb902e24e1db00d7eae6dea88a0b854b315fae1
+  checksum: 0cb2b34000c7fab2c5a3b5d2d70643565acb60114465211950e13accc79648fe9e1a9021b6eb64f2750ea763c20464549c75d3859e9ab13578372e40c89a9120
   languageName: node
   linkType: hard
 
-"@fullcalendar/daygrid@npm:^5.8.0, @fullcalendar/daygrid@npm:~5.8.0":
-  version: 5.8.0
-  resolution: "@fullcalendar/daygrid@npm:5.8.0"
+"@fullcalendar/daygrid@npm:^5.9.0, @fullcalendar/daygrid@npm:~5.9.0":
+  version: 5.9.0
+  resolution: "@fullcalendar/daygrid@npm:5.9.0"
   dependencies:
-    "@fullcalendar/common": ~5.8.0
+    "@fullcalendar/common": ~5.9.0
     tslib: ^2.1.0
-  checksum: a07fe810cbb41a7a4651a8843171f2e1565a175ac3b032d54ce18e8e63e3f6df61700def34adc13299e5375704fb8d998c1547c61c4a9aee1a4f3c79e162896e
+  checksum: b8b1cef0d42f2949662b7b7e5c77e6891c5df37e3eb18271a06a7c180dc6051e16a2c22f7167541ebba8faf9185225ff89780a6bb3892ed9e2ba8cfd87bf4839
   languageName: node
   linkType: hard
 
-"@fullcalendar/interaction@npm:^5.8.0":
-  version: 5.8.0
-  resolution: "@fullcalendar/interaction@npm:5.8.0"
+"@fullcalendar/interaction@npm:^5.9.0":
+  version: 5.9.0
+  resolution: "@fullcalendar/interaction@npm:5.9.0"
   dependencies:
-    "@fullcalendar/common": ~5.8.0
+    "@fullcalendar/common": ~5.9.0
     tslib: ^2.1.0
-  checksum: 2813c959fe506366bba5c7b8152e3fc2073edaf0075a7451a1dc210abc971f35b086857811cdd27979364fc584db64c878d9db318212539fc76036184c099e1c
+  checksum: 459d6c45ffb9c2bd686da46144f156b008f720e4aeaef2e9dddb22e6cf7fb4fe5d4c5c55807aa296dbfb1957f68647014d44a5c789a4867c590f03592477d57a
   languageName: node
   linkType: hard
 
-"@fullcalendar/timegrid@npm:^5.8.0":
-  version: 5.8.0
-  resolution: "@fullcalendar/timegrid@npm:5.8.0"
+"@fullcalendar/timegrid@npm:^5.9.0":
+  version: 5.9.0
+  resolution: "@fullcalendar/timegrid@npm:5.9.0"
   dependencies:
-    "@fullcalendar/common": ~5.8.0
-    "@fullcalendar/daygrid": ~5.8.0
+    "@fullcalendar/common": ~5.9.0
+    "@fullcalendar/daygrid": ~5.9.0
     tslib: ^2.1.0
-  checksum: 516450e97421e5da508a61ca12f80918e935afe16285bd8e5281e9f2ef9265d2f63b46b4d5d073ca6f15a1a19bbb5011dead0011a66d56ccea939b0df7d81595
+  checksum: e6ccd6f605b6a4488eab10da70f98a76341eb5d147316ff9f1365d8eefbc4b76c41e691ee928955e1ef23d1e5694f0b65b02809d1102d73758ea2b78fda84395
   languageName: node
   linkType: hard
 
-"@fullcalendar/vue3@npm:^5.8.0":
-  version: 5.8.0
-  resolution: "@fullcalendar/vue3@npm:5.8.0"
+"@fullcalendar/vue3@npm:^5.9.0":
+  version: 5.9.0
+  resolution: "@fullcalendar/vue3@npm:5.9.0"
   dependencies:
-    "@fullcalendar/core": ~5.8.0
+    "@fullcalendar/core": ~5.9.0
     tslib: ^2.1.0
   peerDependencies:
     vue: ^3.0.11
-  checksum: 4496e4eb608e2552f9a8916fc9cd28734c703b1b8c94af12774f61e79e5dcf7a587261cde4555012a644fdb7ae3bde1a35882ee879108b30f3583308f8cda6c2
-  languageName: node
-  linkType: hard
-
-"@fullhuman/postcss-purgecss@npm:^4.0.3":
-  version: 4.0.3
-  resolution: "@fullhuman/postcss-purgecss@npm:4.0.3"
-  dependencies:
-    purgecss: ^4.0.3
-  peerDependencies:
-    postcss: ^8.0.0
-  checksum: 8c1875f2b58416b796deb28cebf3ff932716034270c8b3e89dd515670194fa9bb44bcd798e4b79da64cfd859f99d017a6a9ea05217512e69e7b66afb180a9228
+  checksum: ea451e242751282bc69e342cf01bcbe4a6530dee1ff485897d3d88b2b2ae7266e66773f317cfceab6d1aa537bd43402bbb58b14e7175c67ecdc861d7f99d48ae
   languageName: node
   linkType: hard
 
@@ -1630,21 +1619,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@headlessui/vue@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "@headlessui/vue@npm:1.3.0"
+"@headlessui/vue@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "@headlessui/vue@npm:1.4.0"
   peerDependencies:
     vue: ^3.0.0
-  checksum: e45d302a94efec81c583662ff6ac7a5390f660fc6797e773fbc0606cf64e4b253da01cafd902fab0ae463f480db7a7ef4aec1a73579cbf5f16cd8a5d610d7486
+  checksum: 48cab0f9228ea5cf6592ddcd356611b1f4fc3d122055bee7721dc47918759ad9b9af746c064e6bc35820c11923cc99626d4eea9d62a7067e0a827a7b8dd42981
   languageName: node
   linkType: hard
 
-"@heroicons/vue@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "@heroicons/vue@npm:1.0.2"
+"@heroicons/vue@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@heroicons/vue@npm:1.0.3"
   peerDependencies:
     vue: ">= 3"
-  checksum: 113430f32a2bdcbcd1946bea8dde48b2ed6ce2dd030bf49a30241c31d1194fd25699652e4c0e944b22e59fff2a3e42410d56b59336ab21d7ffb04aa722b084b0
+  checksum: 8c2bb5b56e9334b5d433bfd93389bcc0cd57a044a454d82556d369964d4bece92e5de0293ac4dc7c079c7a1a38643c5bb269d229a383681281d29ecf8ac76554
   languageName: node
   linkType: hard
 
@@ -2556,9 +2545,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@uppy/core@npm:^1.19.2":
-  version: 1.19.2
-  resolution: "@uppy/core@npm:1.19.2"
+"@uppy/core@npm:^1.20.0":
+  version: 1.20.0
+  resolution: "@uppy/core@npm:1.20.0"
   dependencies:
     "@transloadit/prettier-bytes": 0.0.7
     "@uppy/store-default": ^1.2.7
@@ -2568,13 +2557,13 @@ __metadata:
     mime-match: ^1.0.2
     namespace-emitter: ^2.0.1
     preact: 8.2.9
-  checksum: 7e9f2ee8665c6e1d570152757453aac7ccc02cf1a4fb9ee6bbea62fc651235fe9a5845ee131e16fe8d8972a0c25087b35e9e49dd411d5657f94e2b040dec1b2e
+  checksum: e89e45f5a84329849d37437dc0fdb1c2bbc12be55d9f3cd40612601c3558d60b57c2fb7d09b42b673dbf505186bba31f8d955f49d7307c8d88da1c08e54ea058
   languageName: node
   linkType: hard
 
-"@uppy/dashboard@npm:^1.20.2":
-  version: 1.20.2
-  resolution: "@uppy/dashboard@npm:1.20.2"
+"@uppy/dashboard@npm:^1.21.0":
+  version: 1.21.0
+  resolution: "@uppy/dashboard@npm:1.21.0"
   dependencies:
     "@transloadit/prettier-bytes": 0.0.7
     "@uppy/informer": ^1.6.6
@@ -2592,19 +2581,19 @@ __metadata:
     resize-observer-polyfill: ^1.5.0
   peerDependencies:
     "@uppy/core": ^1.0.0
-  checksum: cb69e06f64e13ca397d94c146569d0f0e561e2eabef34e562c0e732532630d79d3c231c558cb1a18d7f5e1db30118989ce3193216a4d0c86c54f2da0c8a226ae
+  checksum: 7dc55c3b8095fa509a1c22ae626324e295c7fa215d8c6c1ffe98ae3537e36e690b99e6c5ac783e76fea18dec9ee04a5dca5fa8330d9ded651b287a58c64abbdf
   languageName: node
   linkType: hard
 
-"@uppy/drag-drop@npm:^1.4.30":
-  version: 1.4.30
-  resolution: "@uppy/drag-drop@npm:1.4.30"
+"@uppy/drag-drop@npm:^1.4.31":
+  version: 1.4.31
+  resolution: "@uppy/drag-drop@npm:1.4.31"
   dependencies:
     "@uppy/utils": ^3.6.2
     preact: 8.2.9
   peerDependencies:
     "@uppy/core": ^1.0.0
-  checksum: bca5f0fbcec90c0ab1e49d7ef1faf0b5fc690df10073cb189416f2ce6d040af38c340b31859bb942836ea9126093a855e55fdfc17c17bda7d82bfce5d0a49114
+  checksum: a9b5ec95bf43879dd938f1cd7a4813e9b2ee8abddc8a8dd12fb5f700524dda4a40e6ea69a0e36a1831d0f9d8c8fc6ae8282247b4a1c0212da70e85e4dca68290
   languageName: node
   linkType: hard
 
@@ -2620,16 +2609,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@uppy/image-editor@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "@uppy/image-editor@npm:0.3.0"
+"@uppy/image-editor@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "@uppy/image-editor@npm:0.4.0"
   dependencies:
     "@uppy/utils": ^3.6.2
     cropperjs: 1.5.7
     preact: 8.2.9
   peerDependencies:
     "@uppy/core": ^1.0.0
-  checksum: 7234be10641f56bd4cdb32a37f2a471ea4e9cf121fdd134a50b20fee4429a4d01526fe50b5775e4e3bcec3d677bcb64a40f7017d5c31537c6b10a7b4829e40d0
+  checksum: 5ace2ebbf4734cf571822355c32df6a78ed38dc951e8bd0d411aca50e9f4704d924f151de8f6b8c496836dd39c66b7178433dcfa9fdc57f109ace1b2bfb32d36
   languageName: node
   linkType: hard
 
@@ -2645,10 +2634,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@uppy/locales@npm:^1.21.0":
-  version: 1.21.0
-  resolution: "@uppy/locales@npm:1.21.0"
-  checksum: 31aafb7e4edd7e603d7e24067cddf51bed037539caaa8076947b404ca576466d2ce2fa08597edbb603007b4edecdeb78c2278abdb5d1c4fc837324857fc2ae63
+"@uppy/locales@npm:^1.22.0":
+  version: 1.22.0
+  resolution: "@uppy/locales@npm:1.22.0"
+  checksum: 4a48c52f36aed6ba25964046ca6003e25fcf794746150c12178d70fb3906de99ab62d35da1b881be52faccd868aa5986605ae326bd1b685ff1130d0e57980386
   languageName: node
   linkType: hard
 
@@ -2722,31 +2711,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@uppy/vue@npm:^0.2.5":
-  version: 0.2.5
-  resolution: "@uppy/vue@npm:0.2.5"
+"@uppy/vue@npm:^0.2.6":
+  version: 0.2.6
+  resolution: "@uppy/vue@npm:0.2.6"
   dependencies:
-    "@uppy/dashboard": ^1.20.2
-    "@uppy/drag-drop": ^1.4.30
+    "@uppy/dashboard": ^1.21.0
+    "@uppy/drag-drop": ^1.4.31
     "@uppy/progress-bar": ^1.3.30
     "@uppy/status-bar": ^1.9.6
     shallow-equal: ^1.2.1
   peerDependencies:
     "@uppy/core": ^1.0.0
     vue: ">=2.6.11"
-  checksum: 6912e629664a9540e572ec7cafcd35114040b6a1be733504359a09a0a3236161459293676643a74147ed7a15bce43bf86e31ba1a7d038a7b822a673be9cbb77f
+  checksum: 14c61758b7db42a225e941cdc073f5e1b81f661ac91416ba08f302c32fab51231d520469df40f31e8d606aaadb0726dcaff5099584bdde2ae0f41738051a3544
   languageName: node
   linkType: hard
 
-"@uppy/webcam@npm:^1.8.12":
-  version: 1.8.12
-  resolution: "@uppy/webcam@npm:1.8.12"
+"@uppy/webcam@npm:^1.8.13":
+  version: 1.8.13
+  resolution: "@uppy/webcam@npm:1.8.13"
   dependencies:
     "@uppy/utils": ^3.6.2
     preact: 8.2.9
   peerDependencies:
     "@uppy/core": ^1.0.0
-  checksum: f54ae63d945dc9df6b78b5230ec6c2be76914b927e63cdd6295d809b1ca6a7c535640adfc3675fb281d4fababb3a5cdb24640e9c0d3615b982f2ea46e2753084
+  checksum: 7fc531175e0174bff18e9cb8ce19f988666db2113118651f9e49894f9faf8d61fb0aa3e7d1b61275be7c7b763a50caac26232a9ab162f583b1110b6c4c035b4e
   languageName: node
   linkType: hard
 
@@ -6278,13 +6267,13 @@ __metadata:
     "@babel/eslint-parser": ^7.14.7
     "@babel/plugin-transform-runtime": ^7.14.5
     "@fancyapps/fancybox": ^3.5.7
-    "@fullcalendar/core": ^5.8.0
-    "@fullcalendar/daygrid": ^5.8.0
-    "@fullcalendar/interaction": ^5.8.0
-    "@fullcalendar/timegrid": ^5.8.0
-    "@fullcalendar/vue3": ^5.8.0
-    "@headlessui/vue": ^1.3.0
-    "@heroicons/vue": ^1.0.2
+    "@fullcalendar/core": ^5.9.0
+    "@fullcalendar/daygrid": ^5.9.0
+    "@fullcalendar/interaction": ^5.9.0
+    "@fullcalendar/timegrid": ^5.9.0
+    "@fullcalendar/vue3": ^5.9.0
+    "@headlessui/vue": ^1.4.0
+    "@heroicons/vue": ^1.0.3
     "@mdi/font": ^5.9.55
     "@popperjs/core": ^2.9.2
     "@quasar/extras": latest
@@ -6295,14 +6284,14 @@ __metadata:
     "@tailwindcss/ui": ^0.7.2
     "@tinymce/tinymce-vue": ^4.0.4
     "@types/lodash": ^4.14.171
-    "@uppy/core": ^1.19.2
-    "@uppy/dashboard": ^1.20.2
-    "@uppy/drag-drop": ^1.4.30
+    "@uppy/core": ^1.20.0
+    "@uppy/dashboard": ^1.21.0
+    "@uppy/drag-drop": ^1.4.31
     "@uppy/file-input": ^1.5.2
-    "@uppy/image-editor": ^0.3.0
-    "@uppy/locales": ^1.21.0
-    "@uppy/vue": ^0.2.5
-    "@uppy/webcam": ^1.8.12
+    "@uppy/image-editor": ^0.4.0
+    "@uppy/locales": ^1.22.0
+    "@uppy/vue": ^0.2.6
+    "@uppy/webcam": ^1.8.13
     "@uppy/xhr-upload": ^1.7.5
     "@vue/apollo-composable": 4.0.0-alpha.12
     "@vue/apollo-option": 4.0.0-alpha.11
@@ -6323,9 +6312,9 @@ __metadata:
     blueimp-load-image: ^5.14.0
     bootstrap-daterangepicker: ^3.1
     bootstrap-select: ^1.13.18
-    chart.js: ^3.4.1
+    chart.js: ^3.5.0
     copy-webpack-plugin: ^9.0.1
-    core-js: ^3.15.2
+    core-js: ^3.16.0
     cropper: ^4.1.0
     datepair.js: ^0.4.17
     deepmerge: ^4.2.2
@@ -6367,26 +6356,26 @@ __metadata:
     optimize-css-assets-webpack-plugin: ^6.0.1
     path: ^0.12.7
     popper.js: ^1.16.1
-    postcss: ^8.3.5
+    postcss: ^8.3.6
     postcss-loader: ^5.3.0
     postcss-prefix-selector: ^1.10.0
     postcss-rtl: ^1.7.3
     pretty-bytes: ^5.6.0
-    primeflex: ^2.0.0
+    primeflex: ^3.0.1
     primeicons: ^4.1.0
-    primevue: ^3.5.1
+    primevue: ^3.6.0
     purgecss-webpack-plugin: ^4.0.3
     pwstrength-bootstrap: ^3.1.0
     qtip2: ^3.0.3
     quasar: 2.0.1
     readmore-js: ^2.2.1
-    sass: ^1.35.2
+    sass: ^1.36.0
     sass-loader: ^11.1.1
     select2: ^4.1.0-rc.0
     signature_pad: ^3.0.0-beta.4
     sortablejs: ^1.14.0
-    sweetalert2: ^11.0.18
-    tailwindcss: ^2.2.4
+    sweetalert2: ^11.0.20
+    tailwindcss: ^2.2.7
     tempusdominus-bootstrap-4: ^5.39.0
     tempusdominus-core: ^5.19.0
     textcomplete: ^0.18.2
@@ -6424,10 +6413,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chart.js@npm:^3.4.1":
-  version: 3.4.1
-  resolution: "chart.js@npm:3.4.1"
-  checksum: 8b14b108fb4bc3b0c4f6c8ab4f7cd87e0f3e612d70a3b62e7f54fae13c730b44f7dc2deaf006276acbe990f5f306245ba830e570f637bf30934abe31153a9b12
+"chart.js@npm:^3.5.0":
+  version: 3.5.0
+  resolution: "chart.js@npm:3.5.0"
+  checksum: 0c9b9cbd6d57a17cc0b3af948891abd7569d1763660970251dfdf320c29babe2bcf785fd2d2c0321ee160fc4bf5e18ba85119cd6ca48c52c2f7e1a0e86e5bb8e
   languageName: node
   linkType: hard
 
@@ -6747,7 +6736,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"color-convert@npm:^1.9.0, color-convert@npm:^1.9.1":
+"color-convert@npm:^1.9.0, color-convert@npm:^1.9.1, color-convert@npm:^1.9.3":
   version: 1.9.3
   resolution: "color-convert@npm:1.9.3"
   dependencies:
@@ -6789,13 +6778,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"color@npm:^3.0.0, color@npm:^3.1.3":
+"color-string@npm:^1.6.0":
+  version: 1.6.0
+  resolution: "color-string@npm:1.6.0"
+  dependencies:
+    color-name: ^1.0.0
+    simple-swizzle: ^0.2.2
+  checksum: d48692037a6d38bd1deb91886a075d8af82e4e8269c5ab33eadf174d8aa5e82753a2f3edfe6749e24e48898ea2eb76df706b603c65a721e10ddc57c5d6a078cf
+  languageName: node
+  linkType: hard
+
+"color@npm:^3.0.0":
   version: 3.1.3
   resolution: "color@npm:3.1.3"
   dependencies:
     color-convert: ^1.9.1
     color-string: ^1.5.4
   checksum: d0f4139e986806aaacaa748d170c9778faed93695fb776cd27d9c5825424263eb9354f69033804d0d2d350d9831a31d14dddff045da00713499f279da97e602f
+  languageName: node
+  linkType: hard
+
+"color@npm:^3.2.0":
+  version: 3.2.1
+  resolution: "color@npm:3.2.1"
+  dependencies:
+    color-convert: ^1.9.3
+    color-string: ^1.6.0
+  checksum: 2cf9436cba4cf0cd2da88d82aa69cbad548a850ec24abc1a64930778aa4bc6ef2839b178d85fa2bc254b2a5b982e7db1040c05764f6161a1266880bb0dd14d4f
   languageName: node
   linkType: hard
 
@@ -7165,10 +7174,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:^3.15.2":
-  version: 3.15.2
-  resolution: "core-js@npm:3.15.2"
-  checksum: 983706260ab8d1fb07adceda18b76165b625bb5807fa0974090c2167ec3744fc148c0827f3a53dc6f7783b334830b181162aa92a259d90cd3d9c8ae5284e0d9f
+"core-js@npm:^3.16.0":
+  version: 3.16.0
+  resolution: "core-js@npm:3.16.0"
+  checksum: 5a9743b324e5a67d119fe0b8074888c47ab12d8e92222db9c56b853e74016e71a09422bbd93a526b78a870951bd7a72872df75ee777f92f4878490ef74d57315
   languageName: node
   linkType: hard
 
@@ -8218,10 +8227,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"didyoumean@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "didyoumean@npm:1.2.1"
-  checksum: a886a07b4b9212693644309b302122b128ff5abf2c05b99c8ed4721c0650463a2b6bd49e59d8f10eba1f7cc586b35e726348e9dbf7751e12fc4ad37ad023de79
+"didyoumean@npm:^1.2.2":
+  version: 1.2.2
+  resolution: "didyoumean@npm:1.2.2"
+  checksum: 808a1e4855dbb3c099bb9479af665b0065e574afd39c379c19be8cc4a1a9b06a520b919a6f4f07dcea9d88b4e87d3c69736c509d0725b89437f60ae09e8c4498
   languageName: node
   linkType: hard
 
@@ -9365,6 +9374,19 @@ __metadata:
     micromatch: ^4.0.2
     picomatch: ^2.2.1
   checksum: 1a33c4a68d14cb2314c07a451689bc311bde87b09c525dd2064321165127a38a553457d121e2d3ecdd022374e3d53afb82cbb57f5694414d3406ce14ed6c0a1f
+  languageName: node
+  linkType: hard
+
+"fast-glob@npm:^3.2.7":
+  version: 3.2.7
+  resolution: "fast-glob@npm:3.2.7"
+  dependencies:
+    "@nodelib/fs.stat": ^2.0.2
+    "@nodelib/fs.walk": ^1.2.3
+    glob-parent: ^5.1.2
+    merge2: ^1.3.0
+    micromatch: ^4.0.4
+  checksum: 819aa8f1c0b4ca2b86ec89da259c46c370f31db94e91019e99d1f010c0c5750e1ef1ef87266b55c0d0b23e900c22699fd39dacdc79c3b629547889a4f29e3f7b
   languageName: node
   linkType: hard
 
@@ -13144,7 +13166,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"micromatch@npm:^4.0.0, micromatch@npm:^4.0.2":
+"micromatch@npm:^4.0.0, micromatch@npm:^4.0.2, micromatch@npm:^4.0.4":
   version: 4.0.4
   resolution: "micromatch@npm:4.0.4"
   dependencies:
@@ -15876,7 +15898,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.1.10, postcss@npm:^8.1.6, postcss@npm:^8.2.1, postcss@npm:^8.2.10, postcss@npm:^8.2.15, postcss@npm:^8.2.9, postcss@npm:^8.3.5":
+"postcss@npm:^8.1.10, postcss@npm:^8.1.6, postcss@npm:^8.2.1, postcss@npm:^8.2.10, postcss@npm:^8.2.15, postcss@npm:^8.2.9":
   version: 8.3.5
   resolution: "postcss@npm:8.3.5"
   dependencies:
@@ -15884,6 +15906,17 @@ fsevents@~2.3.2:
     nanoid: ^3.1.23
     source-map-js: ^0.6.2
   checksum: 87dc16efcf40286fad4ded0a433497ddbc55dfad3d7ddb200ba9c0761ec376280fa2c06a522628583c9284def85894c52bc361cffedf0679f4936370c084a145
+  languageName: node
+  linkType: hard
+
+"postcss@npm:^8.3.6":
+  version: 8.3.6
+  resolution: "postcss@npm:8.3.6"
+  dependencies:
+    colorette: ^1.2.2
+    nanoid: ^3.1.23
+    source-map-js: ^0.6.2
+  checksum: 515c26472861ce0f3b0a7945b9ac4732756d2aab6b12950137f72c7c6d90967136ba56e878815edcbf132c5643005dad1e9bbcb14139a948802af10245a8f6e3
   languageName: node
   linkType: hard
 
@@ -15965,10 +15998,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"primeflex@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "primeflex@npm:2.0.0"
-  checksum: 8b7f7af50cb7ba9c0b57f57a312d85bb134eb867026a0238cef76b6d801dfe66b29a4a58b5b93e811a097424503cc9f23a0bdd67dbfa9dae5510f54240139123
+"primeflex@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "primeflex@npm:3.0.1"
+  checksum: 0860861ef56f9fb25456e488f79c6700e74504a646e891dd3b1c7b2bd3bdfdc166d37e50e6a261c5199a17dec79ca3e6ce690a5435363e66faba5bc8aba1abfb
   languageName: node
   linkType: hard
 
@@ -15979,10 +16012,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"primevue@npm:^3.5.1":
-  version: 3.5.1
-  resolution: "primevue@npm:3.5.1"
-  checksum: cfd8ad6a847fd15a1834ace6181ec8f35bc6f94bb0bb830d39178347861c8f12dd50ba98b2530662cba36882b5e0eedc79408e706f2c24652504b1f45ee665db
+"primevue@npm:^3.6.0":
+  version: 3.6.0
+  resolution: "primevue@npm:3.6.0"
+  checksum: a87d6599cd61f2caf18af5404e3c34937c717fa4afc0bf0fcd4b01a922a39c8929149ad3c2d80c4d5ee2c4f762586cfb7e2a38055c62e529e21658e871f569a4
   languageName: node
   linkType: hard
 
@@ -17151,14 +17184,14 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.35.2":
-  version: 1.35.2
-  resolution: "sass@npm:1.35.2"
+"sass@npm:^1.36.0":
+  version: 1.36.0
+  resolution: "sass@npm:1.36.0"
   dependencies:
     chokidar: ">=3.0.0 <4.0.0"
   bin:
     sass: sass.js
-  checksum: d102e3fd6e6aa1a61f9c765fb31ff701d78ef05cf256ebb9ed80994c86638dcc8cc71832df1a1f71edce427cf823449c2fc43618b29ad51a8ca5bf93349ccaf4
+  checksum: e72aa7d49d7a65f37253b5b762925e260c7aaed06f404876fd11e5b2ac0a8d13995f7fae6e02f8098f53d3046150f8aaf3faaaf248216e313622252cbc4b46b7
   languageName: node
   linkType: hard
 
@@ -18358,10 +18391,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"sweetalert2@npm:^11.0.18":
-  version: 11.0.18
-  resolution: "sweetalert2@npm:11.0.18"
-  checksum: e41a6734eb7098d19cd423e1f5d6d321f0d798afdfa288f0454931a8bda56438d15858fdf2ef054692c583c66d23c6406b99994771d1544a21ea48b42af6a1ff
+"sweetalert2@npm:^11.0.20":
+  version: 11.0.20
+  resolution: "sweetalert2@npm:11.0.20"
+  checksum: 0a02ed5936ce08cef19f905c0129901892cb272a4ff7434ed6f006e6526a243fa7717731ba3bfa48073a45943f48160822a84e9844d453425a4f3d32d165c2e8
   languageName: node
   linkType: hard
 
@@ -18393,21 +18426,20 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"tailwindcss@npm:^2.2.4":
-  version: 2.2.4
-  resolution: "tailwindcss@npm:2.2.4"
+"tailwindcss@npm:^2.2.7":
+  version: 2.2.7
+  resolution: "tailwindcss@npm:2.2.7"
   dependencies:
-    "@fullhuman/postcss-purgecss": ^4.0.3
     arg: ^5.0.0
     bytes: ^3.0.0
     chalk: ^4.1.1
     chokidar: ^3.5.2
-    color: ^3.1.3
+    color: ^3.2.0
     cosmiconfig: ^7.0.0
     detective: ^5.2.0
-    didyoumean: ^1.2.1
+    didyoumean: ^1.2.2
     dlv: ^1.1.3
-    fast-glob: ^3.2.5
+    fast-glob: ^3.2.7
     fs-extra: ^10.0.0
     glob-parent: ^6.0.0
     html-tags: ^3.1.0
@@ -18424,6 +18456,7 @@ fsevents@~2.3.2:
     postcss-selector-parser: ^6.0.6
     postcss-value-parser: ^4.1.0
     pretty-hrtime: ^1.0.3
+    purgecss: ^4.0.3
     quick-lru: ^5.1.1
     reduce-css-calc: ^2.1.8
     resolve: ^1.20.0
@@ -18434,7 +18467,7 @@ fsevents@~2.3.2:
   bin:
     tailwind: lib/cli.js
     tailwindcss: lib/cli.js
-  checksum: e48ad9747ac3082bd46df0a70d839818ecff5033ffd89f785bb4fb399046a49feb2a2a9c7f79468d4728d5edad29b9c453c3b723d6da0e0331e4db4d48b0bd03
+  checksum: 2ba3493c4642cc591f5dbb3f7cc8792bed009ba8f60f843e5694b6e3ceefec7ed457f855485fb192001c2fec1e28910307a8527dda9996fc55b6cb1067f7145b
   languageName: node
   linkType: hard
 

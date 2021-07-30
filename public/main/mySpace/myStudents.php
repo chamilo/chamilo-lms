@@ -1103,6 +1103,7 @@ if (null !== $course) {
     $chat_last_connection = Tracking::chat_last_connection($studentId, $courseId, $sessionId);
     $documents = Tracking::count_student_downloaded_documents($studentId, $courseId, $sessionId);
     $uploaded_documents = Tracking::count_student_uploaded_documents($studentId, $courseCode, $sessionId);
+
     $tpl->assign('title', $course->getTitle());
 
     $userInfoExtra['tools'] = [
@@ -1387,13 +1388,13 @@ if (empty($details)) {
                     <td >'.$scoretotal_display.'</td>';
 
                     if (!empty($coachId)) {
-                        echo '<td width="10"><a href="'.api_get_self().'?student='.$studentId
-                            .'&details=true&course='.$courseCode.'&id_coach='.$coachId.'&origin='.$origin
-                            .'&id_session='.$sId.'#infosStudent">'
+                        echo '<td><a href="'.api_get_self().'?student='.$studentId
+                            .'&details=true&cid='.$courseId.'&id_coach='.$coachId.'&origin='.$origin
+                            .'&sid='.$sId.'#infosStudent">'
                             .Display::return_icon('2rightarrow.png', get_lang('Details')).'</a></td>';
                     } else {
                         echo '<td width="10"><a href="'.api_get_self().'?student='.$studentId
-                            .'&details=true&course='.$courseCode.'&origin='.$origin.'&id_session='.$sId.'#infosStudent">'
+                            .'&details=true&cid='.$courseId.'&origin='.$origin.'&sid='.$sId.'#infosStudent">'
                             .Display::return_icon('2rightarrow.png', get_lang('Details')).'</a></td>';
                     }
                     echo '</tr>';
@@ -1562,8 +1563,6 @@ if (empty($details)) {
         $columnHeadersKeys = array_keys($columnHeaders);
         $categoriesTempList = learnpath::getCategories($courseId);
         $categoryTest = new CLpCategory();
-        //$categoryTest->setId(0);
-        //$categoryTest->setId(0);
         $categoryTest->setName(get_lang('WithOutCategory'));
         $categoryTest->setPosition(0);
         $categories = [
@@ -1719,11 +1718,7 @@ if (empty($details)) {
                 echo '<tr class="'.$css_class.'">';
                 $contentToExport = [];
                 if (in_array('lp', $columnHeadersKeys)) {
-                    $contentToExport[] = api_html_entity_decode(
-                        stripslashes($lp_name),
-                        ENT_QUOTES,
-                        $charset
-                    );
+                    $contentToExport[] = api_html_entity_decode(stripslashes($lp_name));
                     echo Display::tag('td', stripslashes($lp_name));
                 }
                 if (in_array('time', $columnHeadersKeys)) {
@@ -2109,7 +2104,6 @@ if (empty($details)) {
     $repo = Container::getStudentPublicationRepository();
     $works = $repo->getStudentPublicationByUser($user, $course, $session);
 
-    //$userWorks = getWorkPerUser($studentId, $courseId, $sessionId);
     foreach ($works as $workData) {
         /** @var CStudentPublication $work */
         $work = $workData['work'];

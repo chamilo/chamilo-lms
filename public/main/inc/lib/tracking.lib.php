@@ -2016,7 +2016,11 @@ class Tracking
             return false;
         }
 
-        $courseId = $courseInfo['real_id'];
+        $courseId = (int) $courseInfo['real_id'];
+
+        if (empty($courseId)) {
+            return false;
+        }
 
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 

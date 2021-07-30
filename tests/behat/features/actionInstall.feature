@@ -21,6 +21,7 @@ Feature: Install portal
     Then I should see "Step5"
     Then I fill in the following:
       | passForm | admin |
+      | emailForm | admin@example.com |
     Then I press "step5"
     Then I should see "Last check before install"
     Then wait the page to be loaded when ready

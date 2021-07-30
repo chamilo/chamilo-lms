@@ -13,4 +13,3 @@ Feature: Login user
   Scenario: Login as admin
     Given I am a platform administrator
     Then I should not see an error
-    #Then I should see "MyCourses"

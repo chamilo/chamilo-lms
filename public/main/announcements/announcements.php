@@ -737,14 +737,17 @@ switch ($action) {
 
                 if ($announcement) {
                     if (!empty($data['event_date_start']) && !empty($data['event_date_end'])) {
-                        AnnouncementManager::createEvent(
-                            $announcement,
-                            api_get_utc_datetime($data['event_date_start'], true, true),
-                            api_get_utc_datetime($data['event_date_end'], true, true),
-                            $data['users']
-                        );
+                        Container::getCalendarEventRepository()
+                            ->createFromAnnouncement(
+                                $announcement,
+                                api_get_utc_datetime($data['event_date_start'], true, true),
+                                api_get_utc_datetime($data['event_date_end'], true, true),
+                                $data['users'],
+                                api_get_course_entity(),
+                                api_get_session_entity(),
+                                api_get_group_entity()
+                            );
                     }
-
 
                     Display::addFlash(
                         Display::return_message(

@@ -6962,7 +6962,7 @@ class DocumentManager
         $icon = choose_image($path);
         $position = strrpos($icon, '.');
         $icon = substr($icon, 0, $position).'_small.gif';
-        $my_file_title = $resource['title'];
+        $my_file_title = Security::remove_XSS($resource['title']);
         $visibility = $resource['visibility'];
 
         // If title is empty we try to use the path
@@ -7083,7 +7083,6 @@ class DocumentManager
             return null;
         }
 
-        //$onclick = '';
         // if in LP, hidden folder are displayed in grey
         $folder_class_hidden = '';
         if ($lp_id) {
@@ -7098,15 +7097,27 @@ class DocumentManager
             $return = '<ul class="lp_resource">';
         }
 
-        $return .= '<li class="doc_folder'.$folder_class_hidden.'" id="doc_id_'.$resource['id'].'"  style="margin-left:'.($num * 18).'px; ">';
+        $return .= '<li 
+            class="doc_folder'.$folder_class_hidden.'" 
+            id="doc_id_'.$resource['id'].'"  
+            style="margin-left:'.($num * 18).'px;" 
+            >';
 
         $image = Display::returnIconPath('nolines_plus.gif');
         if (empty($path)) {
             $image = Display::returnIconPath('nolines_minus.gif');
         }
-        $return .= '<img style="cursor: pointer;" src="'.$image.'" align="absmiddle" id="img_'.$resource['id'].'" '.$onclick.'>';
+        $return .= '<img 
+            style="cursor: pointer;" 
+            src="'.$image.'" 
+            align="absmiddle" 
+            id="img_'.$resource['id'].'" '.$onclick.'
+        >';
+
         $return .= Display::return_icon('lp_folder.gif').'&nbsp;';
-        $return .= '<span '.$onclick.' style="cursor: pointer;" >'.$title.'</span>';
+        $return .= '<span '.$onclick.' style="cursor: pointer;" >'.
+            Security::remove_XSS($title).
+            '</span>';
         $return .= '</li>';
 
         if (empty($path)) {

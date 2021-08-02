@@ -3539,7 +3539,7 @@ class learnpath
      */
     public function getNameNoTags()
     {
-        return strip_tags($this->get_name());
+        return Security::remove_XSS(strip_tags($this->get_name()));
     }
 
     /**
@@ -6642,7 +6642,7 @@ class learnpath
         $list .= '</ul>';
 
         $return = Display::panelCollapse(
-            $this->name,
+            $this->getNameNoTags(),
             $list,
             'scorm-list',
             null,
@@ -7585,7 +7585,6 @@ class learnpath
         ];
 
         $xApiPlugin = XApiPlugin::create();
-
         if ($xApiPlugin->isEnabled()) {
             $headers[] = Display::return_icon(
                 'import_scorm.png',
@@ -13171,9 +13170,7 @@ EOD;
         $form->addHidden('action', 'add_final_item');
         $form->addHidden('path', Session::read('pathItem'));
         $form->addHidden('previous', $this->get_last());
-        $form->setDefaults(
-            ['title' => $title, 'content_lp_certificate' => $content]
-        );
+        $form->setDefaults(['title' => $title, 'content_lp_certificate' => $content]);
 
         if ($form->validate()) {
             $values = $form->exportValues();

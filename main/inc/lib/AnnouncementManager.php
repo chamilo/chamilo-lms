@@ -448,7 +448,7 @@ class AnnouncementManager
             return '';
         }
 
-        $title = $announcement->getTitle();
+        $title = Security::remove_XSS($announcement->getTitle());
         $content = $announcement->getContent();
 
         $html .= "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" class=\"table table-hover table-striped data_table\">";
@@ -471,7 +471,9 @@ class AnnouncementManager
                 Display::return_icon($image_visibility.'.png', $alt_visibility, '', ICON_SIZE_SMALL)."</a>";
 
             if (api_is_allowed_to_edit(false, true)) {
-                $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$id."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."')) return false;\">".
+                $modify_icons .= "<a 
+                    href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$id."&sec_token=".$stok."\" 
+                    onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."')) return false;\">".
                     Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).
                     "</a>";
             }
@@ -514,7 +516,7 @@ class AnnouncementManager
             $html .= '<br/>';
             $html .= Display::return_icon('attachment.gif', get_lang('Attachment'));
             $html .= '<a href="'.$full_file_name.' "> '.$user_filename.' </a>';
-            $html .= ' - <span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
+            $html .= ' - <span class="forum_attach_comment" >'.Security::remove_XSS($attachment_list['comment']).'</span>';
             if (api_is_allowed_to_edit(false, true)) {
                 $url = api_get_self()."?".api_get_cidreq().
                     "&action=delete_attachment&id_attach=".$attachment_list['id']."&sec_token=".$stok;

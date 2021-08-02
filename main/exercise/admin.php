@@ -277,12 +277,12 @@ $interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_l
 if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
     $interbreadcrumb[] = [
         'url' => 'admin.php?exerciseId='.$objExercise->iid.'&'.api_get_cidreq(),
-        'name' => $objExercise->selectTitle(true),
+        'name' => Security::remove_XSS($objExercise->selectTitle(true)),
     ];
 } else {
     $interbreadcrumb[] = [
         'url' => '#',
-        'name' => $objExercise->selectTitle(true),
+        'name' => Security::remove_XSS($objExercise->selectTitle(true)),
     ];
 }
 
@@ -445,7 +445,7 @@ if ($newQuestion || $editQuestion) {
         // Question preview if teacher clicked the "switch to student"
         if ($studentViewActive && $is_allowedToEdit) {
             echo '<div class="main-question">';
-            echo Display::div($objQuestion->selectTitle(), ['class' => 'question_title']);
+            echo Display::div(Security::remove_XSS($objQuestion->selectTitle()), ['class' => 'question_title']);
             ExerciseLib::showQuestion(
                 $objExercise,
                 $editQuestion,

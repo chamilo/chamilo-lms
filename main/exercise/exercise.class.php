@@ -6524,9 +6524,9 @@ class Exercise
         }
 
         if (api_get_configuration_value('save_titles_as_html')) {
-            $data['title'] = $this->get_formated_title().get_lang('Result');
+            $data['title'] = Security::remove_XSS($this->get_formated_title()).get_lang('Result');
         } else {
-            $data['title'] = PHP_EOL.$this->exercise.' : '.get_lang('Result');
+            $data['title'] = PHP_EOL.Security::remove_XSS($this->exercise).' : '.get_lang('Result');
         }
 
         $questionsCount = count(explode(',', $trackExerciseInfo['data_tracking']));

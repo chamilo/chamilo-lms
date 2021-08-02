@@ -499,7 +499,7 @@ class TestCategory
         $categories = self::getCategoryListInfo('', $courseId);
         $result = ['0' => get_lang('NoCategorySelected')];
         for ($i = 0; $i < count($categories); $i++) {
-            $result[$categories[$i]->iid] = $categories[$i]->name;
+            $result[$categories[$i]->iid] = Security::remove_XSS($categories[$i]->name);
         }
 
         return $result;
@@ -677,7 +677,7 @@ class TestCategory
             ($in_display_category_name == 1 || !$is_student)
         ) {
             $content .= '<div class="page-header">';
-            $content .= '<h4>'.get_lang('Category').": ".self::getCategoryNameForQuestion($questionId).'</h4>';
+            $content .= '<h4>'.get_lang('Category').": ".Security::remove_XSS(self::getCategoryNameForQuestion($questionId)).'</h4>';
             $content .= "</div>";
         }
 
@@ -1239,7 +1239,7 @@ class TestCategory
             $nb_question_label = $nb_question == 1 ? $nb_question.' '.get_lang('Question') : $nb_question.' '.get_lang('Questions');
             $content = "<span style='float:right'>".$nb_question_label."</span>";
             $content .= '<div class="sectioncomment">';
-            $content .= $category['description'];
+            $content .= Security::remove_XSS($category['description']);
             $content .= '</div>';
             $links = '';
 
@@ -1251,7 +1251,7 @@ class TestCategory
                 $links .= Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
             }
 
-            $html .= Display::panel($content, $category['title'].$links);
+            $html .= Display::panel($content, Security::remove_XSS($category['title']).$links);
         }
 
         return $html;

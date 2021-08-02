@@ -52,7 +52,7 @@ $interbreadcrumb[] = [
     'url' => 'exercise.php?'.api_get_cidreq(),
     'name' => get_lang('Exercises'),
 ];
-$interbreadcrumb[] = ['url' => '#', 'name' => $objExercise->selectTitle(true)];
+$interbreadcrumb[] = ['url' => '#', 'name' => Security::remove_XSS($objExercise->selectTitle(true))];
 
 $time_control = false;
 $clock_expired_time = ExerciseLib::get_session_time_control_key($objExercise->iid, $learnpath_id, $learnpath_item_id);
@@ -122,17 +122,17 @@ $iconExercise = Display::return_icon('test-quiz.png', null, [], ICON_SIZE_MEDIUM
 // Exercise name.
 if (api_get_configuration_value('save_titles_as_html')) {
     $html .= Display::div(
-        $objExercise->get_formated_title().PHP_EOL.$editLink
+        Security::remove_XSS($objExercise->get_formated_title()).PHP_EOL.$editLink
     );
 } else {
     $html .= Display::page_header(
-        $iconExercise.PHP_EOL.$objExercise->selectTitle().PHP_EOL.$editLink
+        $iconExercise.PHP_EOL.Security::remove_XSS($objExercise->selectTitle()).PHP_EOL.$editLink
     );
 }
 
 // Exercise description.
 if (!empty($objExercise->description)) {
-    $html .= Display::div($objExercise->description, ['class' => 'exercise_description']);
+    $html .= Display::div(Security::remove_XSS($objExercise->description), ['class' => 'exercise_description']);
 }
 
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info(

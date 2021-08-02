@@ -200,7 +200,7 @@ if ('true' === api_get_plugin_setting('positioning', 'tool_enable')) {
 }
 
 // if the user has submitted the form.
-$exercise_title = $objExercise->selectTitle();
+$exercise_title = Security::remove_XSS($objExercise->selectTitle());
 $exercise_sound = $objExercise->selectSound();
 
 // If reminder ends we jump to the exercise_reminder
@@ -659,12 +659,6 @@ if ($allowBlockCategory &&
         }
         $count++;
     }
-    //var_dump($questionCheck);exit;
-    // Use reminder list to get the current question.
-    /*if (2 === $reminder && !empty($myRemindList)) {
-        $remindQuestionId = current($myRemindList);
-        $questionCheck = Question::read($remindQuestionId);
-    }*/
 
     $categoryId = 0;
     if (null !== $questionCheck) {
@@ -674,12 +668,12 @@ if ($allowBlockCategory &&
     if ($objExercise->review_answers && isset($_GET['category_id'])) {
         $categoryId = $_GET['category_id'] ?? 0;
     }
-    //var_dump($categoryId, $categoryList);
+
     if (!empty($categoryId)) {
         $categoryInfo = $categoryList[$categoryId];
         $count = 1;
         $total = count($categoryList[$categoryId]);
-        //var_dump($questionCheck);
+
         foreach ($categoryList[$categoryId] as $checkQuestionId) {
             if ((int) $checkQuestionId === (int) $questionCheck->iid) {
                 break;
@@ -687,7 +681,6 @@ if ($allowBlockCategory &&
             $count++;
         }
 
-        //var_dump($count , $total);
         if ($count === $total) {
             $isLastQuestionInCategory = $categoryId;
             if ($isLastQuestionInCategory) {
@@ -717,8 +710,7 @@ if ($allowBlockCategory &&
         api_location($url);
     }
 }
-//exit;
-//var_dump($isLastQuestionInCategory);
+
 if ($debug) {
     error_log('8. Question list loaded '.print_r($questionList, 1));
 }
@@ -728,7 +720,7 @@ $question_count = 0;
 if (!empty($questionList)) {
     $question_count = count($questionList);
 }
-//var_dump($current_question);
+
 if ($current_question > $question_count) {
     // If time control then don't change the current question, otherwise there will be a loop.
     // @todo
@@ -738,10 +730,6 @@ if ($current_question > $question_count) {
 }
 
 if ($formSent && isset($_POST)) {
-    if ($debug) {
-        error_log('9. $formSent was set');
-    }
-
     if (!is_array($exerciseResult)) {
         $exerciseResult = [];
         $exerciseResultCoordinates = [];
@@ -1701,7 +1689,7 @@ foreach ($questionList as $questionId) {
         if ($objExercise->type == ONE_PER_PAGE || ($objExercise->type != ONE_PER_PAGE && $i == 1)) {
             echo Display::panelCollapse(
                 '<span>'.get_lang('ExerciseDescriptionLabel').'</span>',
-                $objExercise->description,
+                Security::remove_XSS($objExercise->description),
                 'exercise-description',
                 [],
                 'description',

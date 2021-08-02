@@ -84,7 +84,7 @@ class ExerciseLib
                     if ($exercise->display_category_name) {
                         TestCategory::displayCategoryAndTitle($objQuestionTmp->iid);
                     }
-                    $titleToDisplay = $objQuestionTmp->getTitleToDisplay($current_item);
+                    $titleToDisplay = Security::remove_XSS($objQuestionTmp->getTitleToDisplay($current_item));
                     if ($answerType == READING_COMPREHENSION) {
                         // In READING_COMPREHENSION, the title of the question
                         // contains the question itself, which can only be
@@ -4846,7 +4846,7 @@ EOT;
         }
 
         // Display text when test is finished #4074 and for LP #4227
-        $endOfMessage = $objExercise->getTextWhenFinished();
+        $endOfMessage = Security::remove_XSS($objExercise->getTextWhenFinished());
         if (!empty($endOfMessage)) {
             echo Display::div(
                 $endOfMessage,
@@ -5173,7 +5173,7 @@ EOT;
         if (api_get_configuration_value('quiz_show_description_on_results_page') &&
             !empty($objExercise->description)
         ) {
-            echo Display::div($objExercise->description, ['class' => 'exercise_description']);
+            echo Display::div(Security::remove_XSS($objExercise->description), ['class' => 'exercise_description']);
         }
 
         echo $exercise_content;

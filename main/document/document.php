@@ -1090,7 +1090,7 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
                 false,
                 $curdirpath
             );
-            $moveForm .= '<legend>'.get_lang('Move').': '.$document_to_move['title'].'</legend>';
+            $moveForm .= '<legend>'.get_lang('Move').': '.Security::remove_XSS($document_to_move['title']).'</legend>';
 
             // filter if is my shared folder. TODO: move this code to build_move_to_selector function
             if (DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) &&

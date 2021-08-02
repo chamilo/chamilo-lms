@@ -5049,7 +5049,7 @@ class DocumentManager
 
         if (is_array($folders)) {
             $escaped_folders = [];
-            foreach ($folders as $key => &$val) {
+            foreach ($folders as $key => $val) {
                 $escaped_folders[$key] = Database::escape_string($val);
             }
             $folder_sql = implode("','", $escaped_folders);
@@ -5097,6 +5097,7 @@ class DocumentManager
                     } else {
                         $label = ' &mdash; '.$folder_titles[$folder];
                     }
+                    $label = Security::remove_XSS($label);
                     $parent_select->addOption($label, $folder_id);
                     if ($selected != '') {
                         $parent_select->setSelected($folder_id);

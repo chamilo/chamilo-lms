@@ -624,10 +624,10 @@ class GlossaryManager
         while ($data = Database::fetch_array($res)) {
             // Validation when belongs to a session
             $session_img = api_get_session_image($data['session_id'], $_user['status']);
-            $array[0] = $data[0].$session_img;
+            $array[0] = Security::remove_XSS($data[0]).$session_img;
 
             if (!$view || $view === 'table') {
-                $array[1] = str_replace(['<p>', '</p>'], ['', '<br />'], $data[1]);
+                $array[1] = Security::remove_XSS(str_replace(['<p>', '</p>'], ['', '<br />'], $data[1]));
             } else {
                 $array[1] = $data[1];
             }

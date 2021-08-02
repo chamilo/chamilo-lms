@@ -221,15 +221,9 @@ switch ($action) {
         );
 
         $message = get_lang('HideConnectionTime', true);
-        if (empty($message)) {
-            $message = "¿Hide connection time?";
-        }
         $form->addCheckBox('hide_connection_time', null, $message);
 
         $messageBtn = get_lang('GenerateCertificate', true);
-        if (empty($messageBtn)) {
-            $messageBtn = 'Generate Certificate';
-        }
         $form->addButtonSave($messageBtn, 'submitLink');
         $content = $form->returnForm();
         echo $content;

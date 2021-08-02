@@ -369,12 +369,7 @@ if (count($sessions) > 0) {
             }*/
         }
 
-        $dates = array_filter(
-            [
-                $session->getAccessStartDate()->format('Y-m-d H:i:s'),
-                $session->getAccessEndDate()->format('Y-m-d H:i:s'),
-            ]
-        );
+        $dates = SessionManager::parseSessionDates($session);
 
         $certificateLink = Display::url(
             Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_SMALL),
@@ -392,7 +387,7 @@ if (count($sessions) > 0) {
         $sessionInformation .= Display::page_subheader(
             '<a href="'.api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$sessionId.'">'.
             $session->getName().'</a>',
-            $certificateLink.' '.implode(' - ', $dates)
+            $certificateLink.' '.$dates['access']
         );
 
         $sessionInformation .= Display::return_sortable_table(

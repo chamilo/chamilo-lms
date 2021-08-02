@@ -34,7 +34,7 @@ class Answer
     public $new_position;
     public $new_hotspot_coordinates;
     public $new_hotspot_type;
-    /** @var int Incremental ID used in the past when PK was a mix of c_id+id*/
+    /** @var int Incremental ID used in the past when PK was a mix of c_id+id */
     public $autoId;
     /** @var int Number of answers in the question */
     public $nbrAnswers;
@@ -394,6 +394,7 @@ class Answer
      * @param int $auto_id
      *
      * @return array
+     *
      * @todo Replace method by iid search
      */
     public function selectAnswerByAutoId($auto_id)

@@ -190,7 +190,7 @@ class CalculatedAnswer extends Question
                 $table,
                 [
                     'question_id = ?' => [
-                        $this->iid
+                        $this->iid,
                     ],
                 ]
             );

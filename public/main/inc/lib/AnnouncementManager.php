@@ -9,7 +9,6 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CAnnouncementAttachment;
-use Chamilo\CourseBundle\Entity\CCalendarEvent;
 
 /**
  * Include file with functions for the announcements module.

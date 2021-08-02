@@ -19,8 +19,8 @@ class WSCMInbox extends WSCM
             $user_id = UserManager::get_user_id_from_username($username);
             $condition_msg_status = ' msg_status = 1 ';
 
-            $sql_query = "SELECT COUNT(*) as number_messages 
-                          FROM $table_message 
+            $sql_query = "SELECT COUNT(*) as number_messages
+                          FROM $table_message
                           WHERE $condition_msg_status AND user_receiver_id=".$user_id;
 
             $sql_result = Database::query($sql_query);
@@ -113,8 +113,8 @@ class WSCMInbox extends WSCM
             $user_id = UserManager::get_user_id_from_username($username);
 
             $table_message = Database::get_main_table(TABLE_MESSAGE);
-            $sql_query = "SELECT id FROM $table_message 
-                          WHERE user_sender_id=".$user_id." AND msg_status=".MESSAGE_STATUS_OUTBOX." 					 
+            $sql_query = "SELECT id FROM $table_message
+                          WHERE user_sender_id=".$user_id." AND msg_status=".MESSAGE_STATUS_OUTBOX."
                           ORDER BY send_date
                           LIMIT $from,$number_of_items";
 

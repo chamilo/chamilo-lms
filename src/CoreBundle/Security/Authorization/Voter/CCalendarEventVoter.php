@@ -82,6 +82,7 @@ class CCalendarEventVoter extends Voter
                         }
                     }
                 }
+                // no break
             case self::DELETE:
                 if ($event->getCreator() === $user) {
                     return true;

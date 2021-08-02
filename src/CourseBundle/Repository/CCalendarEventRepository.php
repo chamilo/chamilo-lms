@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CGroup;
+use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 
 final class CCalendarEventRepository extends ResourceRepository
@@ -25,8 +26,8 @@ final class CCalendarEventRepository extends ResourceRepository
 
     public function createFromAnnouncement(
         CAnnouncement $announcement,
-        \DateTime $startDate,
-        \DateTime $endDate,
+        DateTime $startDate,
+        DateTime $endDate,
         array $users,
         Course $course,
         ?Session $session = null,
@@ -45,9 +46,9 @@ final class CCalendarEventRepository extends ResourceRepository
         } else {
             $sendTo = AbstractResource::separateUsersGroups($users);
 
-            if (is_array($sendTo['groups']) && !empty($sendTo['groups'])) {
+            if (\is_array($sendTo['groups']) && !empty($sendTo['groups'])) {
                 $sendTo['groups'] = array_map(
-                    fn($gId) => $this->_em->find(CGroup::class, $gId),
+                    fn ($gId) => $this->_em->find(CGroup::class, $gId),
                     $sendTo['groups']
                 );
                 $sendTo['groups'] = array_filter($sendTo['groups']);
@@ -56,9 +57,9 @@ final class CCalendarEventRepository extends ResourceRepository
             }
 
             // Storing the selected users
-            if (is_array($sendTo['users'])) {
+            if (\is_array($sendTo['users'])) {
                 $sendTo['users'] = array_map(
-                    fn($uId) => $this->_em->find(User::class, $uId),
+                    fn ($uId) => $this->_em->find(User::class, $uId),
                     $sendTo['users']
                 );
 

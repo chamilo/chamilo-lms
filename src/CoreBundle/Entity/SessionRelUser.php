@@ -62,7 +62,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     'session' => 'exact',
     'user' => 'exact',
 ])]
-#[ApiFilter(DateFilter::class, properties: ['session.displayStartDate' =>  null, 'session.displayEndDate' => null])]
+#[ApiFilter(DateFilter::class, properties: ['session.displayStartDate' => null, 'session.displayEndDate' => null])]
 class SessionRelUser
 {
     use UserTrait;

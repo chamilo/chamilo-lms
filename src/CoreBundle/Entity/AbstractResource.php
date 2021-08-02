@@ -509,9 +509,11 @@ abstract class AbstractResource
             switch ($type) {
                 case 'GROUP':
                     $send_to['groups'][] = (int) $id;
+
                     break;
                 case 'USER':
                     $send_to['users'][] = (int) $id;
+
                     break;
             }
         }

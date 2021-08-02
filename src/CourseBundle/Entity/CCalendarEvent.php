@@ -403,7 +403,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
         return $this->collective;
     }
 
-    public function setCollective(bool $collective): CCalendarEvent
+    public function setCollective(bool $collective): self
     {
         $this->collective = $collective;
 

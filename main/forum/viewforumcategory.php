@@ -126,8 +126,6 @@ echo $html;
 
 $logInfo = [
     'tool' => TOOL_FORUM,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => $action,
     'info' => isset($_GET['content']) ? $_GET['content'] : '',
 ];
@@ -181,7 +179,7 @@ if ($action != 'add') {
 
     $forum_categories_list = [];
     $forumId = $forum_category['cat_id'];
-    $forumTitle = $forum_category['cat_title'];
+    $forumTitle = Security::remove_XSS($forum_category['cat_title']);
     $linkForumCategory = 'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.strval(intval($forumId));
     $descriptionCategory = $forum_category['cat_comment'];
     $icoCategory = Display::return_icon(
@@ -271,15 +269,12 @@ if ($action != 'add') {
                 // you are teacher => show forum
 
                 if (api_is_allowed_to_edit(false, true)) {
-                    //echo 'teacher';
                     $show_forum = true;
                 } else {
                     // you are not a teacher
-                    //echo 'student';
                     // it is not a group forum => show forum
                     // (invisible forums are already left out see get_forums function)
                     if ($forum['forum_of_group'] == '0') {
-                        //echo '-gewoon forum';
                         $show_forum = true;
                     } else {
                         // it is a group forum
@@ -287,16 +282,13 @@ if ($action != 'add') {
                         // it is a group forum but it is public => show
                         if ($forum['forum_group_public_private'] == 'public') {
                             $show_forum = true;
-                        //echo '-publiek';
                         } else {
                             // it is a group forum and it is private
                             //echo '-prive';
                             // it is a group forum and it is private but the user is member of the group
                             if (in_array($forum['forum_of_group'], $groups_of_user)) {
-                                //echo '-is lid';
                                 $show_forum = true;
                             } else {
-                                //echo '-is GEEN lid';
                                 $show_forum = false;
                             }
                         }
@@ -360,14 +352,14 @@ if ($action != 'add') {
                     $html .= '<div class="col-md-9">';
                     $iconForum = Display::return_icon(
                         'forum_yellow.png',
-                        get_lang($forum_category['cat_title']),
+                        Security::remove_XSS(get_lang($forum_category['cat_title'])),
                         null,
                         ICON_SIZE_MEDIUM
                     );
 
                     $linkForum = Display::tag(
                         'a',
-                        $forum['forum_title'].$session_displayed,
+                        Security::remove_XSS($forum['forum_title']).$session_displayed,
                         [
                             'href' => 'viewforum.php?'.api_get_cidreq(true, false)."&gidReq={$forum['forum_of_group']}&forum={$forum['forum_id']}&search=".Security::remove_XSS(urlencode(isset($_GET['search']) ? $_GET['search'] : '')),
                             'class' => empty($forum['visibility']) ? 'text-muted' : null,
@@ -382,7 +374,7 @@ if ($action != 'add') {
                     );
                     $html .= Display::tag(
                         'p',
-                        strip_tags($forum['forum_comment']),
+                        Security::remove_XSS(strip_tags($forum['forum_comment'])),
                         [
                             'class' => 'description',
                         ]

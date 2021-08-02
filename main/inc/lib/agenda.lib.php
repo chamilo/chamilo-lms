@@ -2055,13 +2055,13 @@ class Agenda
                     $event['sent_to'] = '<div class="label_tag notice">'.get_lang('Everyone').'</div>';
                 }
 
-                $event['description'] = $row['content'];
+                $event['description'] = Security::remove_XSS($row['content']);
                 $event['visibility'] = $row['visibility'];
                 $event['real_id'] = $row['id'];
                 $event['allDay'] = isset($row['all_day']) && $row['all_day'] == 1 ? $row['all_day'] : 0;
                 $event['parent_event_id'] = $row['parent_event_id'];
                 $event['has_children'] = $this->hasChildren($row['id'], $courseId) ? 1 : 0;
-                $event['comment'] = $row['comment'];
+                $event['comment'] = Security::remove_XSS($row['comment']);
                 $this->events[] = $event;
             }
         }

@@ -41,6 +41,8 @@ final class CCalendarEventRepository extends ResourceRepository
             ->setParent($course)
         ;
 
+        $em = $this->getEntityManager();
+
         if (empty($users) || (isset($users[0]) && 'everyone' === $users[0])) {
             $event->addCourseLink($course, $session, $group);
         } else {
@@ -48,7 +50,7 @@ final class CCalendarEventRepository extends ResourceRepository
 
             if (\is_array($sendTo['groups']) && !empty($sendTo['groups'])) {
                 $sendTo['groups'] = array_map(
-                    fn ($gId) => $this->_em->find(CGroup::class, $gId),
+                    fn ($groupId) => $em->find(CGroup::class, $groupId),
                     $sendTo['groups']
                 );
                 $sendTo['groups'] = array_filter($sendTo['groups']);
@@ -59,7 +61,7 @@ final class CCalendarEventRepository extends ResourceRepository
             // Storing the selected users
             if (\is_array($sendTo['users'])) {
                 $sendTo['users'] = array_map(
-                    fn ($uId) => $this->_em->find(User::class, $uId),
+                    fn ($userId) => $em->find(User::class, $userId),
                     $sendTo['users']
                 );
 
@@ -67,8 +69,8 @@ final class CCalendarEventRepository extends ResourceRepository
             }
         }
 
-        $this->_em->persist($event);
-        $this->_em->flush();
+        $em->persist($event);
+        $em->flush();
 
         return $event;
     }

@@ -64,6 +64,7 @@ final class CCalendarEventRepository extends ResourceRepository
                     fn ($userId) => $em->find(User::class, $userId),
                     $sendTo['users']
                 );
+                $sendTo['users'] = array_filter($sendTo['users']);
 
                 $event->addResourceToUserList($sendTo['users'], $course, $session, $group);
             }

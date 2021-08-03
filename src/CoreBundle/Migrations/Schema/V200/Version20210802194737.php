@@ -20,13 +20,15 @@ final class Version20210802194737 extends AbstractMigration
         $schema
             ->getTable('c_calendar_event')
             ->addColumn('collective', Types::BOOLEAN)
-            ->setDefault(false);
+            ->setDefault(false)
+        ;
     }
 
     public function down(Schema $schema): void
     {
         $schema
             ->getTable('c_calendar_event')
-            ->dropColumn('collective');
+            ->dropColumn('collective')
+        ;
     }
 }

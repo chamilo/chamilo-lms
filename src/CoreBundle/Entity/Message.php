@@ -298,7 +298,6 @@ class Message
         });
         */
         return $list;
-
     }
 
     public function getFirstReceiver(): ?MessageRelUser

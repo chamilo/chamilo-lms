@@ -73,24 +73,24 @@ final class Version20200821224242 extends AbstractMigrationChamilo
 
         if (!$schema->hasTable('message_rel_user')) {
             $this->addSql(
-                "CREATE TABLE message_rel_user (id BIGINT AUTO_INCREMENT NOT NULL, message_id BIGINT NOT NULL, user_id INT NOT NULL, msg_read TINYINT(1) NOT NULL, starred TINYINT(1) NOT NULL, INDEX IDX_325D70B9537A1329 (message_id), INDEX IDX_325D70B9A76ED395 (user_id), UNIQUE INDEX message_receiver (message_id, user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC"
+                'CREATE TABLE message_rel_user (id BIGINT AUTO_INCREMENT NOT NULL, message_id BIGINT NOT NULL, user_id INT NOT NULL, msg_read TINYINT(1) NOT NULL, starred TINYINT(1) NOT NULL, INDEX IDX_325D70B9537A1329 (message_id), INDEX IDX_325D70B9A76ED395 (user_id), UNIQUE INDEX message_receiver (message_id, user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
             );
             $this->addSql(
-                "CREATE TABLE message_rel_user_rel_tags (message_rel_user_id BIGINT NOT NULL, message_tag_id BIGINT NOT NULL, INDEX IDX_B4B37A20962B5422 (message_rel_user_id), INDEX IDX_B4B37A208DF5FE1E (message_tag_id), PRIMARY KEY(message_rel_user_id, message_tag_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC"
+                'CREATE TABLE message_rel_user_rel_tags (message_rel_user_id BIGINT NOT NULL, message_tag_id BIGINT NOT NULL, INDEX IDX_B4B37A20962B5422 (message_rel_user_id), INDEX IDX_B4B37A208DF5FE1E (message_tag_id), PRIMARY KEY(message_rel_user_id, message_tag_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
             );
             $this->addSql(
-                "ALTER TABLE message_rel_user ADD CONSTRAINT FK_325D70B9537A1329 FOREIGN KEY (message_id) REFERENCES message (id)"
+                'ALTER TABLE message_rel_user ADD CONSTRAINT FK_325D70B9537A1329 FOREIGN KEY (message_id) REFERENCES message (id)'
             );
             $this->addSql(
-                "ALTER TABLE message_rel_user ADD CONSTRAINT FK_325D70B9A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE"
+                'ALTER TABLE message_rel_user ADD CONSTRAINT FK_325D70B9A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
             );
             $this->addSql(
-                "ALTER TABLE message_rel_user_rel_tags ADD CONSTRAINT FK_B4B37A20962B5422 FOREIGN KEY (message_rel_user_id) REFERENCES message_rel_user (id) ON DELETE CASCADE"
+                'ALTER TABLE message_rel_user_rel_tags ADD CONSTRAINT FK_B4B37A20962B5422 FOREIGN KEY (message_rel_user_id) REFERENCES message_rel_user (id) ON DELETE CASCADE'
             );
             $this->addSql(
-                "ALTER TABLE message_rel_user_rel_tags ADD CONSTRAINT FK_B4B37A208DF5FE1E FOREIGN KEY (message_tag_id) REFERENCES message_tag (id) ON DELETE CASCADE "
+                'ALTER TABLE message_rel_user_rel_tags ADD CONSTRAINT FK_B4B37A208DF5FE1E FOREIGN KEY (message_tag_id) REFERENCES message_tag (id) ON DELETE CASCADE '
             );
-            $this->addSql(" ALTER TABLE message_rel_user ADD receiver_type SMALLINT NOT NULL;");
+            $this->addSql(' ALTER TABLE message_rel_user ADD receiver_type SMALLINT NOT NULL;');
         }
 
         //$this->addSql('ALTER TABLE message CHANGE user_receiver_id user_receiver_id INT DEFAULT NULL');

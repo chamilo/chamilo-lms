@@ -24,7 +24,7 @@
           <div v-if="link['user']">
             {{ $t('User') }}: {{ link.user.username }}
           </div>
-          <div>
+          <div v-if="showStatus">
             {{ $t('Status') }}: {{ link.visibilityName }}
           </div>
         </v-list-item-content>
@@ -55,6 +55,11 @@ export default {
       type: Object,
       required: true
     },
+    showStatus: {
+      type: Boolean,
+      required: false,
+      default: true
+    }
   }
 };
 </script>

@@ -33,10 +33,8 @@
     <!-- Show form-->
     <q-dialog v-model="dialogShow" persistent>
       <q-card style="min-width: 500px">
-        <q-card-section class="q-pt-none">
-          <div class="text-h6">{{ item.title }}</div>
-          <p>{{ item.startDate }}</p>
-          <p>{{ item.endDate }}</p>
+        <q-card-section>
+          <CCalendarEventInfo :event="item" />
         </q-card-section>
         <q-card-actions align="right" class="text-primary">
           <q-btn color="primary" flat label="Delete" @click="confirmDelete"/>
@@ -65,12 +63,14 @@ import CCalendarEventForm from "../../components/ccalendarevent/Form.vue";
 import CreateMixin from "../../mixins/CreateMixin";
 import {useRoute, useRouter} from "vue-router";
 import {useQuasar} from 'quasar';
+import CCalendarEventInfo from "../../components/ccalendarevent/Info";
 
 const servicePrefix = 'CCalendarEvent';
 
 export default {
   name: 'CCalendarEventList',
   components: {
+    CCalendarEventInfo,
     CCalendarEventForm,
     Loading,
     Toolbar,

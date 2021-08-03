@@ -419,7 +419,7 @@ class SessionManager
                 SELECT DISTINCT
                  IF (
 					(s.access_start_date <= '$today' AND '$today' <= s.access_end_date) OR
-                    (s.access_start_date IS NULL AND s.access_end_date  = IS NULL ) OR
+                    (s.access_start_date IS NULL AND s.access_end_date IS NULL ) OR
 					(s.access_start_date <= '$today' AND s.access_end_date IS NULL) OR
 					('$today' <= s.access_end_date AND s.access_start_date IS NULL)
 				, 1, 0) as session_active,
@@ -7557,6 +7557,16 @@ class SessionManager
         }
 
         foreach ($sessionFieldValueList as $sessionFieldValue) {
+            // Match session field values to session
+            if ($sessionFieldValue['item_id'] != $sessionId) {
+                continue;
+            }
+
+            // Check if session field value is set in session field list
+            if (!isset($fields[$sessionFieldValue['field_id']])) {
+                continue;
+            }
+
             $extrafieldVariable = $fields[$sessionFieldValue['field_id']];
             $extrafieldValue = $sessionFieldValue['value'];
 

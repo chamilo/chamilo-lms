@@ -1198,7 +1198,74 @@ class ExtraField extends Model
                                 $options[$optionDetails['option_value']] = $optionDetails['display_text'];
                             }
                         }
-                        $form->addSelect(
+
+                        if ($orderDependingDefaults) {
+                            if (isset($extraData['extra_'.$variable])) {
+                                $defaultOptions = $extraData['extra_'.$variable];
+                                $firstList = [];
+                                if ($addEmptyOptionSelects) {
+                                    $firstList[] = '';
+                                }
+                                foreach ($defaultOptions as $key) {
+                                    if (isset($options[$key])) {
+                                        $firstList[$key] = $options[$key];
+                                    }
+                                }
+                                if (!empty($firstList)) {
+                                    $options = array_merge($firstList, $options);
+                                }
+                            } else {
+                                $firstList = [];
+                                if ($addEmptyOptionSelects) {
+                                    $firstList[] = '&nbsp;';
+                                    $options = array_merge($firstList, $options);
+                                }
+                            }
+                        }
+                        // OFAJ
+                        $separateValue = 0;
+                        if (isset($separateExtraMultipleSelect[$variable])) {
+                            $separateValue = $separateExtraMultipleSelect[$variable];
+                        }
+
+                        if ($separateValue > 0) {
+                            for ($i = 0; $i < $separateValue; $i++) {
+                                $form->addSelect(
+                                    'extra_'.$variable.'['.$i.']',
+                                    $customLabelsExtraMultipleSelect[$variable][$i],
+                                    $options,
+                                    ['id' => 'extra_'.$variable.'_'.$i]
+                                );
+                            }
+                        } else {
+                            // Ofaj
+                            $attributes = ['multiple' => 'multiple', 'id' => 'extra_'.$variable];
+                            $chosenSelect = [
+                                'ecouter',
+                                'lire',
+                                'participer_a_une_conversation',
+                                's_exprimer_oralement_en_continu',
+                                'ecrire',
+                            ];
+
+                            if (in_array($variable, $chosenSelect)) {
+                                $attributes['select_chosen'] = true;
+                            }
+
+                            // default behaviour
+                            $form->addSelect(
+                                'extra_'.$variable,
+                                $field_details['display_text'],
+                                $options,
+                                $attributes,
+                            );
+
+                        }
+
+                        if ($freezeElement) {
+                            $form->freeze('extra_'.$variable);
+                        }
+                        /*$form->addSelect(
                             'extra_'.$variable,
                             $field_details['display_text'],
                             $options,
@@ -1209,7 +1276,7 @@ class ExtraField extends Model
                         );
                         if ($freezeElement) {
                             $form->freeze('extra_'.$variable);
-                        }
+                        }*/
                         break;
                     case self::FIELD_TYPE_DATE:
                         $form->addDatePicker('extra_'.$variable, $field_details['display_text']);

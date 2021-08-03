@@ -30,12 +30,16 @@ form label, input {
 }
 </style>
 <link href="bootstrap/bootstrap.min.css" rel="stylesheet" media="screen" type="text/css" />
-<script src="bootstrap/bootstrap.min.js"></script>';
+<script src="bootstrap/bootstrap.min.js"></script>
+<link href="select2/select2.min.css" rel="stylesheet" media="screen" type="text/css" />
+<script src="select2/select2.min.js"></script>';
 $htmlHeadXtra[] = '<link  href="cropper/cropper.min.css" rel="stylesheet">';
 $htmlHeadXtra[] = '<script src="cropper/cropper.min.js"></script>';
 
 $htmlHeadXtra[] = '<script>
 $(function() {
+    $("#user_form select").select2();
+
     $("#filiere").on("click", function() {
         $("#filiere_panel").toggle();
         return false;
@@ -101,7 +105,6 @@ switch ($action) {
         );
         Display::addFlash(Display::return_message(get_lang('UserAdded')));
         header("Location: ".api_get_self().'?user_id='.$userToLoad.'#session-table');
-        exit;
         break;
     case 'unsubscribe_user':
         $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : '';
@@ -589,7 +592,6 @@ if (!empty($extraFieldsToFilter)) {
     }
 }
 $extraFieldListToString = implode(',', $extraFieldToSearch);
-
 $result = SessionManager::getGridColumns('simple', $extraFieldsToFilter);
 $columns = $result['columns'];
 $column_model = $result['column_model'];
@@ -811,7 +813,7 @@ if ($form->validate()) {
 
             $search = [
                 'field' => $extraFieldObj,
-                'user' => $user,
+                'user' => $userToLoad,
             ];
 
             /** @var ExtraFieldSavedSearch $saved */
@@ -820,7 +822,7 @@ if ($form->validate()) {
             if ($saved) {
                 $saved
                     ->setField($extraFieldObj)
-                    ->setUser($user)
+                    ->setUser(api_get_user_entity($userToLoad))
                     ->setValue($value)
                 ;
                 $em->merge($saved);
@@ -828,7 +830,7 @@ if ($form->validate()) {
                 $saved = new ExtraFieldSavedSearch();
                 $saved
                     ->setField($extraFieldObj)
-                    ->setUser($user)
+                    ->setUser(api_get_user_entity($userToLoad))
                     ->setValue($value)
                 ;
                 $em->persist($saved);

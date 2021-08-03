@@ -41,7 +41,7 @@ $diagnosisComplete = $extraFieldValue->get_values_by_handler_and_field_variable(
     api_get_user_id(),
     'diagnosis_completed'
 );
-
+$diagnosisComplete = false;
 if ($diagnosisComplete && isset($diagnosisComplete['value']) && $diagnosisComplete['value'] == 1) {
     if (!isset($_GET['result'])) {
         header('Location:'.api_get_self().'?result=1');
@@ -62,7 +62,8 @@ if ($hide === false) {
 $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?a=order&user_id='.$userId;
 
 // Use current user language
-$targetLanguage = $userInfo['language'];
+$langInfo = api_get_language_from_iso($userInfo['language']);
+$targetLanguage =  $langInfo->getEnglishName();
 $theme = 'theme_fr';
 switch ($targetLanguage) {
     case 'italian':
@@ -103,6 +104,8 @@ form label, input {
 </style>
 <link href="bootstrap/bootstrap.min.css" rel="stylesheet" media="screen" type="text/css" />
 <script src="bootstrap/bootstrap.min.js"></script>
+<link href="select2/select2.min.css" rel="stylesheet" media="screen" type="text/css" />
+<script src="select2/select2.min.js"></script>
 ';
 
 $htmlHeadXtra[] = '<script>
@@ -242,6 +245,9 @@ $jqueryExtra = '';
 $htmlHeadXtra[] = '<script>
 
 $(function() {
+
+    $("#user_form select").select2();
+
 	var blocks = [
         "#collapseOne",
         "#collapseTwo",

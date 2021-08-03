@@ -55,22 +55,22 @@ Display::display_header(get_lang('SurveyPreview'));
 SurveyUtil::check_first_last_question($surveyId, false);
 
 // Survey information
-echo '<div class="page-header"><h2>'.$survey_data['survey_title'].'</h2></div>';
+echo '<div class="page-header"><h2>'.Security::remove_XSS($survey_data['survey_title']).'</h2></div>';
 if (!empty($survey_data['survey_subtitle'])) {
-    echo '<div id="survey_subtitle">'.$survey_data['survey_subtitle'].'</div>';
+    echo '<div id="survey_subtitle">'.Security::remove_XSS($survey_data['survey_subtitle']).'</div>';
 }
 
 // Displaying the survey introduction
 if (!isset($_GET['show'])) {
     if (!empty($survey_data['survey_introduction'])) {
-        echo '<div class="survey_content">'.$survey_data['survey_introduction'].'</div>';
+        echo '<div class="survey_content">'.Security::remove_XSS($survey_data['survey_introduction']).'</div>';
     }
 }
 
 // Displaying the survey thanks message
 if (isset($_POST['finish_survey'])) {
     echo Display::return_message(get_lang('SurveyFinished'), 'confirm');
-    echo $survey_data['survey_thanks'];
+    echo Security::remove_XSS($survey_data['survey_thanks']);
     Display::display_footer();
     exit;
 }

@@ -3472,6 +3472,8 @@ class SurveyUtil
         $efv = new ExtraFieldValue('survey');
         while ($survey = Database::fetch_array($res)) {
             $array[0] = $survey[0];
+            $survey[1] = Security::remove_XSS($survey[1]);
+
             if (self::checkHideEditionToolsByCode($survey['col2'])) {
                 $array[1] = $survey[1];
             } else {
@@ -3711,6 +3713,8 @@ class SurveyUtil
                 continue;
             }
 
+            $title = Security::remove_XSS($row['title']);
+
             echo '<tr>';
             if ($row['answered'] == 0) {
                 echo '<td>';
@@ -3723,7 +3727,7 @@ class SurveyUtil
                 );
                 echo '<a href="'.$url.'">
                     '.$icon
-                    .$row['title']
+                    .$title
                     .'</a></td>';
             } else {
                 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
@@ -3748,7 +3752,7 @@ class SurveyUtil
                             'survey_id' => $row['survey_id'],
                         ])
                     )
-                    : $icon.PHP_EOL.$row['title'];
+                    : $icon.PHP_EOL.$title;
                 echo '</td>';
             }
             echo '<td class="text-center">';
@@ -3762,7 +3766,6 @@ class SurveyUtil
                 echo '<td class="text-center">'.($efvMandatory['value'] ? get_lang('Yes') : get_lang('No')).'</td>';
             }
             echo '</tr>';
-
             $surveyIds[] = $row['survey_id'];
         }
         echo '</tbody>';

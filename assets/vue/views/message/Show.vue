@@ -20,6 +20,15 @@
         </v-btn>
 
         <v-btn
+            :loading="isLoading"
+            tile
+            icon
+            @click="replyAll"
+        >
+          <v-icon icon="mdi-reply-all" />
+        </v-btn>
+
+        <v-btn
             tile
             icon
             @click="createEvent"
@@ -212,6 +221,12 @@ export default {
       router.push({name: `${servicePrefix}Reply`, query: params});
     }
 
+    function replyAll() {
+      let params = route.query;
+      params['all'] = 1;
+      router.push({name: `${servicePrefix}Reply`, query: params});
+    }
+
     function createEvent() {
       let params = route.query;
       router.push({name: `CCalendarEventCreate`, query: params});
@@ -248,6 +263,7 @@ export default {
       removeTagFromMessage,
       asyncFind,
       reply,
+      replyAll,
       createEvent,
       myReceiver
     };

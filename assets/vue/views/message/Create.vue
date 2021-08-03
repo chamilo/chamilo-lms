@@ -8,23 +8,43 @@
       :values="item"
       :errors="violations"
     >
+
+      <!--          @input="v$.item.receiversTo.$touch()"-->
+
       <VueMultiselect
+          id="to"
           placeholder="To"
-          v-model="item.receivers"
+          v-model="item.receiversTo"
           :loading="isLoadingSelect"
-          :options="users"
+          :options="usersTo"
           :multiple="true"
           :searchable="true"
           :internal-search="false"
-          @search-change="asyncFind"
+          @search-change="asyncFindTo"
           limit-text="3"
           limit="3"
           label="username"
           track-by="id"
           :allow-empty="false"
-          @input="v$.item.receivers.$touch()"
+
       />
 
+      <VueMultiselect
+          id="cc"
+          placeholder="Cc"
+          v-model="item.receiversCc"
+          :loading="isLoadingSelect"
+          :options="usersCc"
+          :multiple="true"
+          :searchable="true"
+          :internal-search="false"
+          @search-change="asyncFindCc"
+          limit-text="3"
+          limit="3"
+          label="username"
+          track-by="id"
+          :allow-empty="true"
+      />
 
       <!--          @filter-abort="abortFilterFn"-->
 <!--      <q-select-->
@@ -40,7 +60,6 @@
 <!--          hint="With use-chips"-->
 <!--          :error-message="receiversErrors"-->
 <!--      />-->
-
       <TinyEditor
         v-model="item.content"
         required
@@ -98,30 +117,53 @@ export default {
     VueMultiselect
   },
   setup () {
-    const users = ref([]);
+    const usersTo = ref([]);
+    const usersCc = ref([]);
     const isLoadingSelect = ref(false);
 
     function asyncFind (query) {
       if (query.toString().length < 3) {
-        return;
+        throw new Error('error');
       }
 
       isLoadingSelect.value = true;
-      axios.get(ENTRYPOINT + 'users', {
+      return axios.get(ENTRYPOINT + 'users', {
         params: {
           username: query
         }
       }).then(response => {
         isLoadingSelect.value = false;
         let data = response.data;
-        users.value = data['hydra:member'];
+        console.log('data');
+        console.log(data);
+
+        return data['hydra:member'];
       }).catch(function (error) {
         isLoadingSelect.value = false;
         console.log(error);
       });
     }
 
-    return {v$: useVuelidate(), users, asyncFind, isLoadingSelect};
+    function asyncFindTo(query) {
+      try {
+        asyncFind(query).then(users => {
+          console.log(users);
+          usersTo.value = users;
+        });
+      } catch (e) {
+      }
+    }
+
+    function asyncFindCc(query) {
+      try {
+        asyncFind(query).then(users => {
+          usersCc.value = users;
+        });
+      } catch (e) {
+      }
+    }
+
+    return {v$: useVuelidate(), usersTo, usersCc, asyncFindTo, asyncFindCc, isLoadingSelect};
   },
   data() {
     return {

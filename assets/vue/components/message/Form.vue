@@ -41,7 +41,8 @@ export default {
     return {
       title: null,
       parentResourceNodeId: null,
-      receivers: []
+      receiversTo: [],
+      receiversCc: [],
     };
   },
   computed: {
@@ -50,10 +51,10 @@ export default {
     },
     receiversErrors() {
       const errors = [];
-      if (!this.v$.item.receivers.$dirty) return errors;
-      has(this.violations, 'receivers') && errors.push(this.violations.receivers);
+      if (!this.v$.item.receiversTo.$dirty) return errors;
+      has(this.violations, 'receiversTo') && errors.push(this.violations.receiversTo);
 
-      if (this.v$.item.receivers.required) {
+      if (this.v$.item.receiversTo.required) {
         return this.$t('Field is required')
       }
 
@@ -80,9 +81,12 @@ export default {
       title: {
         required,
       },
-      receivers: {
+      receiversTo: {
         required,
       },
+      /*receiversCc: {
+        required,
+      },*/
       content: {
         required,
       },

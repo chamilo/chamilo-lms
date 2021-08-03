@@ -142,6 +142,18 @@ class Message
     protected array | null | Collection $receivers;
 
     /**
+     * @var Collection|MessageRelUser[]
+     */
+    #[Groups(['message:read', 'message:write'])]
+    protected array | null | Collection $receiversTo;
+
+    /**
+     * @var Collection|MessageRelUser[]
+     */
+    #[Groups(['message:read', 'message:write'])]
+    protected array | null | Collection $receiversCc;
+
+    /**
      * @ORM\Column(name="msg_type", type="smallint", nullable=false)
      */
     #[Assert\NotBlank]
@@ -188,7 +200,7 @@ class Message
     protected string $content;
 
     #[Groups(['message:read', 'message:write'])]
-    protected string $firstReceiver;
+    protected ?MessageRelUser $firstReceiver;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroup")
@@ -243,6 +255,8 @@ class Message
         $this->children = new ArrayCollection();
         $this->likes = new ArrayCollection();
         $this->receivers = new ArrayCollection();
+        $this->receiversCc = new ArrayCollection();
+        $this->receiversTo = new ArrayCollection();
         $this->votes = 0;
         $this->status = 0;
     }
@@ -253,6 +267,37 @@ class Message
     public function getReceivers()
     {
         return $this->receivers;
+    }
+
+    /**
+     * @return null|Collection|MessageRelUser[]
+     */
+    public function getReceiversTo()
+    {
+        return $this->getReceivers()->filter(function (MessageRelUser $messageRelUser) {
+            return MessageRelUser::TYPE_TO === $messageRelUser->getReceiverType();
+        });
+    }
+
+    /**
+     * @return MessageRelUser[]
+     */
+    public function getReceiversCc()
+    {
+        $list = [];
+        foreach ($this->receivers as $receiver) {
+            if (MessageRelUser::TYPE_CC === $receiver->getReceiverType()) {
+                $list[] = $receiver;
+            }
+        }
+
+        /*
+        $result = $this->receivers->filter(function (MessageRelUser $messageRelUser) {
+            error_log((string)$messageRelUser->getId());
+            return MessageRelUser::TYPE_CC === $messageRelUser->getReceiverType();
+        });
+        */
+        return $list;
     }
 
     public function getFirstReceiver(): ?MessageRelUser
@@ -279,10 +324,11 @@ class Message
         return false;
     }
 
-    public function addReceiver(User $receiver): self
+    public function addReceiver(User $receiver, int $receiverType = MessageRelUser::TYPE_TO): self
     {
         $messageRelUser = (new MessageRelUser())
             ->setReceiver($receiver)
+            ->setReceiverType($receiverType)
             ->setMessage($this)
         ;
         if (!$this->receivers->contains($messageRelUser)) {

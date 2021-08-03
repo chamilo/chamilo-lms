@@ -39,18 +39,47 @@ export default {
       createForm.v$.$touch();
 
       // @todo this should be built in in the VueMultiselect component.
-      if (isEmpty(createForm.v$.item.$model.receivers)) {
+      if (isEmpty(createForm.v$.item.$model.receiversTo)) {
         this.showMessage('Select a user', 'warning');
       }
 
       if (!createForm.v$.$invalid) {
         let users = [];
-        createForm.v$.item.$model.receivers.forEach(user => {
+        createForm.v$.item.$model.receiversTo.forEach(user => {
           // Send to inbox
-          users.push({receiver: user['@id']});
+          users.push({receiver: user['@id'], receiverType: 1});
+        });
+
+        createForm.v$.item.$model.receiversCc.forEach(user => {
+          // Send to inbox
+          users.push({receiver: user['@id'], receiverType: 2});
         });
 
         createForm.v$.item.$model.sender = '/api/users/' + this.currentUser.id;
+        createForm.v$.item.$model.receivers = users;
+        createForm.v$.item.$model.msgType = 1;
+        this.create(createForm.v$.item.$model);
+      }
+    },
+    onReplyMessageForm() {
+      const createForm = this.$refs.createForm;
+      createForm.v$.$touch();
+
+      if (!createForm.v$.$invalid) {
+        let users = [];
+
+        // Send to original sender.
+        users.push({receiver: createForm.v$.item.$model.originalSender['@id'], receiverType: 1});
+
+        // Check Ccs
+        createForm.v$.item.$model.receiversCc.forEach(user => {
+          // Send to inbox
+          users.push({receiver: user.receiver['@id'], receiverType: 2});
+        });
+
+        createForm.v$.item.$model.sender = '/api/users/' + this.currentUser.id;
+        createForm.v$.item.$model.receiversTo = null;
+        createForm.v$.item.$model.receiversCc = null;
         createForm.v$.item.$model.receivers = users;
         createForm.v$.item.$model.msgType = 1;
         this.create(createForm.v$.item.$model);

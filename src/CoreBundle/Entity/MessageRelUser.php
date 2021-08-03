@@ -41,6 +41,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 ])]
 class MessageRelUser
 {
+    public const TYPE_TO = 1;
+    public const TYPE_CC = 2;
+
     /**
      * @ORM\Column(name="id", type="bigint")
      * @ORM\Id
@@ -70,6 +73,12 @@ class MessageRelUser
     protected bool $read;
 
     /**
+     * @ORM\Column(name="receiver_type", type="smallint", nullable=false)
+     */
+    #[Groups(['message:read', 'message:write'])]
+    protected int $receiverType;
+
+    /**
      * @ORM\Column(name="starred", type="boolean", nullable=false)
      */
     #[Groups(['message:read', 'message:write'])]
@@ -90,6 +99,7 @@ class MessageRelUser
         $this->tags = new ArrayCollection();
         $this->read = false;
         $this->starred = false;
+        $this->receiverType = self::TYPE_TO;
     }
 
     public function getId(): ?int
@@ -167,6 +177,18 @@ class MessageRelUser
     public function setReceiver(User $receiver): self
     {
         $this->receiver = $receiver;
+
+        return $this;
+    }
+
+    public function getReceiverType(): int
+    {
+        return $this->receiverType;
+    }
+
+    public function setReceiverType(int $receiverType): self
+    {
+        $this->receiverType = $receiverType;
 
         return $this;
     }

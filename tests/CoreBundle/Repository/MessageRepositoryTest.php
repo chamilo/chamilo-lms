@@ -54,6 +54,10 @@ class MessageRepositoryTest extends AbstractApiTest
         $count = $messageRepo->count(['msgType' => Message::MESSAGE_TYPE_INBOX]);
         $this->assertSame(1, $count);
 
+        // One receiver in MessageRelUser.
+        $this->assertSame(1, $messageRelUserRepo->count([]));
+        $this->assertSame(1, $message->getReceivers()->count());
+
         // Check if message was schedule to be sent.
         /** @var InMemoryTransport $transport */
         $transport = $this->getContainer()->get('messenger.transport.sync_priority_high');
@@ -125,6 +129,59 @@ class MessageRepositoryTest extends AbstractApiTest
         $this->assertSame(0, $messageRelUserRepo->count([]));
         // Tags.
         $this->assertSame(2, $messageTagRepo->count([]));
+    }
+
+    public function testCreateMessageWithCc(): void
+    {
+        self::bootKernel();
+
+        $em = self::getContainer()->get('doctrine')->getManager();
+
+        $messageRepo = self::getContainer()->get(MessageRepository::class);
+        $userRepo = self::getContainer()->get(UserRepository::class);
+        $messageRelUserRepo = $em->getRepository(MessageRelUser::class);
+
+        $admin = $this->getUser('admin');
+        $testUser = $this->createUser('test');
+        $receiverCopy = $this->createUser('cc');
+
+        $message =
+            (new Message())
+                ->setTitle('hello')
+                ->setContent('content')
+                ->setMsgType(Message::MESSAGE_TYPE_INBOX)
+                ->setSender($admin)
+                ->addReceiver($testUser)
+                ->addReceiver($receiverCopy, MessageRelUser::TYPE_CC)
+        ;
+
+        $this->assertHasNoEntityViolations($message);
+        $messageRepo->update($message);
+
+        // 1. Message exists in the inbox.
+        $count = $messageRepo->count(['msgType' => Message::MESSAGE_TYPE_INBOX]);
+        $this->assertSame(1, $count);
+
+        $this->assertSame(2, $messageRelUserRepo->count([]));
+
+        // Check if message was schedule to be sent.
+        /** @var InMemoryTransport $transport */
+        $transport = $this->getContainer()->get('messenger.transport.sync_priority_high');
+        $this->assertCount(1, $transport->getSent());
+
+        $em->clear();
+        /** @var Message $message */
+        $message = $messageRepo->find($message->getId());
+
+        $this->assertSame(2, $message->getReceivers()->count());
+
+        // Delete message.
+        $messageRepo->delete($message);
+
+        // No messages.
+        $this->assertSame(0, $messageRepo->count([]));
+        // No message_rel_user.
+        $this->assertSame(0, $messageRelUserRepo->count([]));
     }
 
     public function testCreateMessageWithApi(): void

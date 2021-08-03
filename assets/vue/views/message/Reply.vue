@@ -1,7 +1,7 @@
 <template>
   <!--        :handle-submit="onSendMessageForm"-->
   <Toolbar
-      :handle-send="onSendMessageForm"
+      :handle-send="onReplyMessageForm"
   />
 
   <MessageForm
@@ -10,8 +10,33 @@
     :errors="violations"
   >
    <div v-if="item.originalSender">
-     To: {{ item.originalSender.username }}
+     To: <v-chip>{{ item.originalSender.username }}</v-chip>
    </div>
+
+    <div v-if="item.receiversCc">
+<!--        <VueMultiselect-->
+<!--            id="cc"-->
+<!--            placeholder="Cc"-->
+<!--            v-model="item.receiversCc"-->
+<!--            :options="usersCc"-->
+<!--            :multiple="true"-->
+<!--            :searchable="false"-->
+<!--            :internal-search="false"-->
+<!--            limit-text="3"-->
+<!--            limit="3"-->
+<!--            label="username"-->
+<!--            track-by="id"-->
+<!--        />-->
+
+        Cc:
+      <span v-for="messageRelUser in item.receiversCc">
+        <v-chip>
+          {{ messageRelUser.receiver.username }}
+        </v-chip>
+      </span>
+
+
+    </div>
 
   <TinyEditor
       v-model="item.content"
@@ -55,6 +80,7 @@ import useVuelidate from "@vuelidate/core";
 import {useRoute, useRouter} from "vue-router";
 const servicePrefix = 'Message';
 
+import VueMultiselect from 'vue-multiselect'
 const { mapFields } = createHelpers({
   getterType: 'message/getField',
   mutationType: 'message/updateField'
@@ -65,11 +91,13 @@ export default {
   servicePrefix,
   mixins: [CreateMixin],
   components: {
+    VueMultiselect,
     Loading,
     Toolbar,
     MessageForm
   },
   setup () {
+    const usersCc = ref([]);
     const item = ref({});
     const isLoadingSelect = ref(false);
     const store = useStore();
@@ -81,10 +109,15 @@ export default {
       id = route.query.id;
     }
 
+    let replyAll = '1' === route.query['all'];
+
+    console.log(replyAll);
+
     onMounted(async () => {
+      const currentUser = computed(() => store.getters['security/getUser']);
+
       const response = await store.dispatch('message/load', id);
 
-      const currentUser = computed(() => store.getters['security/getUser']);
       item.value = await response;
 
       delete item.value['@id'];
@@ -98,14 +131,30 @@ export default {
       item.value['sender'] = currentUser.value['@id'];
 
       // Set new receivers, will be loaded by onSendMessageForm()
-      item.value['receivers'] = [];
-      item.value['receivers'][0] = item.value['originalSender'];
+      if (!replyAll) {
+        item.value['receivers'] = null;
+        item.value['receiversTo'] = null;
+        item.value['receiversCc'] = null;
+        item.value['receivers'][0] = item.value['originalSender'];
+      }
+
+      /*console.log('-----------------------');
+      console.log(item.value.receiversCc);
+      if (item.value.receiversCc) {
+        item.value.receiversCc.forEach(user => {
+          console.log(user);
+          // Send to inbox
+          usersCc.value.push(user.receiver);
+        });
+      }*/
 
       // Set reply content.
       item.value.content = `<br /><blockquote>${item.value.content}</blockquote>`;
     });
-
-    return {v$: useVuelidate(), isLoadingSelect, item};
+    console.log('---------------------------');
+    console.log(replyAll);
+    console.log(item.value['receiversCc'] );
+    return {v$: useVuelidate(), isLoadingSelect, usersCc, item};
   },
   computed: {
     ...mapFields(['error', 'isLoading', 'created', 'violations']),

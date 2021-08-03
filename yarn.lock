@@ -2752,6 +2752,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@videojs/http-streaming@npm:2.10.0":
+  version: 2.10.0
+  resolution: "@videojs/http-streaming@npm:2.10.0"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+    "@videojs/vhs-utils": 3.0.3
+    aes-decrypter: 3.1.2
+    global: ^4.4.0
+    m3u8-parser: 4.7.0
+    mpd-parser: 0.18.0
+    mux.js: 5.12.2
+    video.js: ^6 || ^7
+  peerDependencies:
+    video.js: ^6 || ^7
+  checksum: f8e22fc4008db12543835ef3c246b9a84c2e74267220586fa96ac6fea8ccfc9dd12591a8abd66bdd62eae33084149db2e355b6edd47e476f82f512f3e8f488f4
+  languageName: node
+  linkType: hard
+
 "@videojs/http-streaming@npm:2.9.0":
   version: 2.9.0
   resolution: "@videojs/http-streaming@npm:2.9.0"
@@ -2770,21 +2788,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@videojs/http-streaming@npm:2.9.1":
-  version: 2.9.1
-  resolution: "@videojs/http-streaming@npm:2.9.1"
+"@videojs/vhs-utils@npm:3.0.3, @videojs/vhs-utils@npm:^3.0.3":
+  version: 3.0.3
+  resolution: "@videojs/vhs-utils@npm:3.0.3"
   dependencies:
     "@babel/runtime": ^7.12.5
-    "@videojs/vhs-utils": ^3.0.2
-    aes-decrypter: 3.1.2
     global: ^4.4.0
-    m3u8-parser: 4.7.0
-    mpd-parser: 0.17.0
-    mux.js: 5.11.1
-    video.js: ^6 || ^7
-  peerDependencies:
-    video.js: ^6 || ^7
-  checksum: a25e59ac593b63b1c47371e182f39ee7bf0bef63c0f1a21735b71bda87f2d19ae7183c4f8d9d7c24b02285e188b67d760406f760b5953e184dee7067293aadd1
+    url-toolkit: ^2.2.1
+  checksum: d0e19a160e555af1f5305216b57c9a30cc73cd36f26a56fa6963b0166cec3878156188cac25e40954d7e54e0a24c4be061adf4101209bf0ecdf8c2857c3f5af8
   languageName: node
   linkType: hard
 
@@ -2807,6 +2818,17 @@ __metadata:
     global: ~4.4.0
     is-function: ^1.0.1
   checksum: ea8c1c1d20f0b220a238f0f916d7b78e26f2148fd675119de587a8ae32cc729d7de1dbdd6a7ffe5ad0b551527baa5caefbe1d41fdb77b7e4ee127397937f39c0
+  languageName: node
+  linkType: hard
+
+"@videojs/xhr@npm:2.6.0":
+  version: 2.6.0
+  resolution: "@videojs/xhr@npm:2.6.0"
+  dependencies:
+    "@babel/runtime": ^7.5.5
+    global: ~4.4.0
+    is-function: ^1.0.1
+  checksum: 1f0a8f3d6da68e98125b009f1c8c78daa8e22a46897f0914acae041677cf09f70a584d5ae9a887e0aa3768e1d330fe70f4a94b2b72989b208c5d223dc176f96b
   languageName: node
   linkType: hard
 
@@ -6367,14 +6389,14 @@ __metadata:
     purgecss-webpack-plugin: ^4.0.3
     pwstrength-bootstrap: ^3.1.0
     qtip2: ^3.0.3
-    quasar: 2.0.1
+    quasar: 2.0.3
     readmore-js: ^2.2.1
     sass: ^1.36.0
     sass-loader: ^11.1.1
     select2: ^4.1.0-rc.0
     signature_pad: ^3.0.0-beta.4
     sortablejs: ^1.14.0
-    sweetalert2: ^11.0.20
+    sweetalert2: ^11.1.0
     tailwindcss: ^2.2.7
     tempusdominus-bootstrap-4: ^5.39.0
     tempusdominus-core: ^5.19.0
@@ -6384,7 +6406,7 @@ __metadata:
     tinymce: ^5.8.2
     ts-loader: ^8.3.0
     typescript: ^3.9.10
-    video.js: ^7.14.0
+    video.js: ^7.15.0
     vue: 3.1.4
     vue-cli-plugin-quasar: next
     vue-eslint-parser: ^7.8.0
@@ -6396,7 +6418,7 @@ __metadata:
     vue-router: ^4.0.10
     vue-sidebar-menu: ^4.8.1
     vue-toastification: ^2.0.0-rc.1
-    vuetify: 3.0.0-alpha.9
+    vuetify: 3.0.0-alpha.10
     vuex: ^4.0.2
     vuex-composition-helpers: next
     vuex-map-fields: ^1.4.1
@@ -13541,6 +13563,20 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
+"mpd-parser@npm:0.18.0":
+  version: 0.18.0
+  resolution: "mpd-parser@npm:0.18.0"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+    "@videojs/vhs-utils": ^3.0.2
+    global: ^4.4.0
+    xmldom: ^0.5.0
+  bin:
+    mpd-to-m3u8-json: bin/parse.js
+  checksum: e92efed6cfd0cc544cfee0736ebbaabebbc23762bbba38eb78287b19cae4759bc366629e5a243118a6786dbebbcd5481d21dd09138642a013c8a6e1d3328d56d
+  languageName: node
+  linkType: hard
+
 "ms@npm:2.0.0":
   version: 2.0.0
   resolution: "ms@npm:2.0.0"
@@ -13615,14 +13651,14 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"mux.js@npm:5.11.1":
-  version: 5.11.1
-  resolution: "mux.js@npm:5.11.1"
+"mux.js@npm:5.12.2":
+  version: 5.12.2
+  resolution: "mux.js@npm:5.12.2"
   dependencies:
     "@babel/runtime": ^7.11.2
   bin:
     muxjs-transmux: bin/transmux.js
-  checksum: 9a313744905c1c230b721d3be364eabb1a4829e84b713f2fd5a4fa29259b428a4525012c00b96759a71fb6638ab27af7b144e66cdb3cfa4980e92f5d093078c1
+  checksum: 1ce5f90bd60aabb634f82dfdc4b552922271a64effd27882f26cfbd84da633a47e68269b02572284127f5162b91e3c0510ef63339e99c1d3f70e927ae8125858
   languageName: node
   linkType: hard
 
@@ -16294,10 +16330,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"quasar@npm:2.0.1":
-  version: 2.0.1
-  resolution: "quasar@npm:2.0.1"
-  checksum: b1a0ac1e0be808910781be40b64a5b9c95079942808df7aab0c0a1ab22b3795ccf714185f03ade6c4f083642e11de17eb34946f085a6ec6f0152c0d609779bbf
+"quasar@npm:2.0.3":
+  version: 2.0.3
+  resolution: "quasar@npm:2.0.3"
+  checksum: 5b829cf0b76afa9d6b5a0680c5426b14baa95d751adaed6d3f6ac75fd30de813eeaf0cf0b4ea02f3956a2680c89e99cb68a504f3ab2f7e774e8aaaaa30b628e8
   languageName: node
   linkType: hard
 
@@ -18391,10 +18427,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"sweetalert2@npm:^11.0.20":
-  version: 11.0.20
-  resolution: "sweetalert2@npm:11.0.20"
-  checksum: 0a02ed5936ce08cef19f905c0129901892cb272a4ff7434ed6f006e6526a243fa7717731ba3bfa48073a45943f48160822a84e9844d453425a4f3d32d165c2e8
+"sweetalert2@npm:^11.1.0":
+  version: 11.1.0
+  resolution: "sweetalert2@npm:11.1.0"
+  checksum: 017362ef8757bcde6c5fa353267358f7e23297bb56b8c22c657d637801b6456c6e24d74beb1a0b137d8cd71f377ac024fc3dda92d11382ca3168d3df3b17f427
   languageName: node
   linkType: hard
 
@@ -19550,24 +19586,24 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"video.js@npm:7.14.0, video.js@npm:^7.14.0":
-  version: 7.14.0
-  resolution: "video.js@npm:7.14.0"
+"video.js@npm:7.15.0, video.js@npm:^7.15.0":
+  version: 7.15.0
+  resolution: "video.js@npm:7.15.0"
   dependencies:
     "@babel/runtime": ^7.12.5
-    "@videojs/http-streaming": 2.9.1
-    "@videojs/vhs-utils": ^3.0.2
-    "@videojs/xhr": 2.5.1
+    "@videojs/http-streaming": 2.10.0
+    "@videojs/vhs-utils": ^3.0.3
+    "@videojs/xhr": 2.6.0
     aes-decrypter: 3.1.2
     global: ^4.4.0
     keycode: ^2.2.0
     m3u8-parser: 4.7.0
-    mpd-parser: 0.17.0
-    mux.js: 5.11.1
+    mpd-parser: 0.18.0
+    mux.js: 5.12.2
     safe-json-parse: 4.0.0
     videojs-font: 3.2.0
     videojs-vtt.js: ^0.15.3
-  checksum: 1e8bee03266b73e8ea71ad9715a0dd3aaa060bde0ac7d2c31680eed2727a3b9109c358d8e13153c0e6aabb125b1262d2786d5444f7a7b17ee164182749e148c6
+  checksum: b84a3f162fd906391bdd6e41d8baf5971dc57909400069af97365b661c943ed3738d5c00f8cb53195ad6e0e3e87130fd59f76e15d0fe649f4cc5abf9f98bff5c
   languageName: node
   linkType: hard
 
@@ -19834,12 +19870,12 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"vuetify@npm:3.0.0-alpha.9":
-  version: 3.0.0-alpha.9
-  resolution: "vuetify@npm:3.0.0-alpha.9"
+"vuetify@npm:3.0.0-alpha.10":
+  version: 3.0.0-alpha.10
+  resolution: "vuetify@npm:3.0.0-alpha.10"
   peerDependencies:
     vue: ^3.1.4
-  checksum: 1e2001bfdbdbda6b27b2acf4712dae1148660b2d1efbd6bb8c30f42048f21a4737a403ae75da2f879a8c83eaa043f9d7c53a857de71c046aa5ff5a5bf1a410ae
+  checksum: 98fd3503c3dcbed3887724bd5cc807079920d8c0a142305969fc528f345118f522d7ff27c9ca993ed573e4cc64ff85e3e62fda16dded5d6b54be275deaabfbc4
   languageName: node
   linkType: hard
 

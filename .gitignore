@@ -2,6 +2,7 @@
 
 app/cache/*
 !app/cache/.gitkeep
+!app/cache/.htaccess
 
 app/logs/*
 !app/logs/.gitkeep
@@ -48,7 +49,7 @@ main/cron/incoming/*
 plugin/vchamilo/templates/*
 
 # Stuff updated through composer - Remove just before release
-vendor
-web/assets/*
+/vendor
+web/
 node_modules
 yarn.lock

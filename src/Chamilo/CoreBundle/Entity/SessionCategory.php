@@ -23,6 +23,7 @@ class SessionCategory
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="category")
      */
     protected $session;
+
     /**
      * @var int
      *
@@ -52,6 +53,8 @@ class SessionCategory
      * @ORM\Column(name="date_end", type="date", nullable=true, unique=false)
      */
     protected $dateEnd;
+
+    protected $accessUrlId;
 
     /**
      * @return string

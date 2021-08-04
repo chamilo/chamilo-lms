@@ -1,12 +1,11 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 use Chamilo\UserBundle\Entity\User;
 
 /**
  * This script initiates a video conference session, calling the BigBlueButton API.
- *
- * @package chamilo.plugin.bigbluebutton
  */
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 $cidReset = true;
@@ -17,7 +16,6 @@ api_protect_admin_script();
 
 $plugin = BBBPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
-
 $isGlobal = isset($_GET['global']) ? true : false;
 
 $bbb = new bbb('', '', $isGlobal);
@@ -46,11 +44,12 @@ $meetings = $bbb->getMeetings(0, 0, 0, true, $dateRange);
 
 foreach ($meetings as &$meeting) {
     $participants = $bbb->findConnectedMeetingParticipants($meeting['id']);
-
     foreach ($participants as $meetingParticipant) {
         /** @var User $participant */
         $participant = $meetingParticipant['participant'];
-        $meeting['participants'][] = $participant->getCompleteName().' ('.$participant->getEmail().')';
+        if ($participant) {
+            $meeting['participants'][] = $participant->getCompleteName().' ('.$participant->getEmail().')';
+        }
     }
 }
 
@@ -105,8 +104,46 @@ $tpl = new Template($tool_name);
 $tpl->assign('meetings', $meetings);
 $tpl->assign('search_form', $form->returnForm());
 
-$content = $tpl->fetch('bbb/view/admin.tpl');
+$settingsForm = new FormValidator('settings', api_get_self());
+$settingsForm->addHeader($plugin->get_lang('UpdateAllCourseSettings'));
+$settingsForm->addHtml(Display::return_message($plugin->get_lang('ThisWillUpdateAllSettingsInAllCourses')));
+$settings = $plugin->course_settings;
+$defaults = [];
+foreach ($settings as $setting) {
+    $setting = $setting['name'];
+    $text = $settingsForm->addText($setting, $plugin->get_lang($setting), false);
+    $text->freeze();
+    $defaults[$setting] = api_get_plugin_setting('bbb', $setting) === 'true' ? get_lang('Yes') : get_lang('No');
+}
 
+$settingsForm->addButtonSave($plugin->get_lang('UpdateAllCourses'));
+
+if ($settingsForm->validate()) {
+    $table = Database::get_course_table(TABLE_COURSE_SETTING);
+    foreach ($settings as $setting) {
+        $setting = $setting['name'];
+        $setting = Database::escape_string($setting);
+
+        if (empty($setting)) {
+            continue;
+        }
+        $value = api_get_plugin_setting('bbb', $setting);
+        if ($value === 'true') {
+            $value = 1;
+        } else {
+            $value = '';
+        }
+        $sql = "UPDATE $table SET value = '$value' WHERE variable = '$setting'";
+        Database::query($sql);
+    }
+    Display::addFlash(Display::return_message(get_lang('Updated')));
+    header('Location: '.api_get_self());
+    exit;
+}
+
+$settingsForm->setDefaults($defaults);
+$tpl->assign('settings_form', $settingsForm->returnForm());
+$content = $tpl->fetch('bbb/view/admin.tpl');
 if ($meetings) {
     $actions = Display::toolbarButton(
         get_lang('ExportInExcel'),
@@ -125,6 +162,5 @@ if ($meetings) {
     );
 }
 
-$tpl->assign('header', $plugin->get_lang('RecordList'));
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

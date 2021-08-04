@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Teacher report.
- *
- * @package chamilo.reporting
  */
 $cidReset = true;
 
@@ -17,7 +15,7 @@ if (!$allowToTrack) {
     api_not_allowed(true);
 }
 
-$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+$export_csv = isset($_GET['export']) && 'csv' == $_GET['export'] ? true : false;
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 $active = isset($_GET['active']) ? intval($_GET['active']) : 1;
 $sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
@@ -92,7 +90,8 @@ function get_users($from, $limit, $column, $direction)
         $drhLoaded = true;
     }
 
-    if ($drhLoaded == false) {
+    $checkSessionVisibility = api_get_configuration_value('show_users_in_active_sessions_in_tracking');
+    if (false == $drhLoaded) {
         $students = UserManager::getUsersFollowedByUser(
             api_get_user_id(),
             COURSEMANAGER,
@@ -106,7 +105,8 @@ function get_users($from, $limit, $column, $direction)
             $active,
             $lastConnectionDate,
             COURSEMANAGER,
-            $keyword
+            $keyword,
+            $checkSessionVisibility
         );
     }
 
@@ -152,7 +152,7 @@ function get_users($from, $limit, $column, $direction)
         }
 
         $urlDetails = $url."?student=$student_id&origin=teacher_details";
-        if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
+        if (isset($_GET['id_coach']) && 0 != intval($_GET['id_coach'])) {
             $urlDetails = $url."?student=$student_id&id_coach=$coach_id&id_session=$sessionId";
         }
 

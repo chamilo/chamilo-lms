@@ -140,7 +140,7 @@ if (!empty($groupId)) {
     $interbreadcrumb[] = [
         'url' => $forumUrl.'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id']
             .'&search='.Security::remove_XSS(urlencode($my_search)),
-        'name' => prepare4display($current_forum_category['cat_title']),
+        'name' => Security::remove_XSS(prepare4display($current_forum_category['cat_title'])),
     ];
     $interbreadcrumb[] = [
         'url' => '#',
@@ -260,7 +260,7 @@ if ($my_action == 'liststd' &&
         $table_list .= Display::tabsOnlyLink($tabs, $active);
 
         $icon_qualify = 'quiz.png';
-        $table_list .= '<center><br /><table class="data_table" style="width:50%">';
+        $table_list .= '<center><br /><table class="table table-hover table-striped data_table" style="width:50%">';
         // The column headers (TODO: Make this sortable).
         $table_list .= '<tr >';
         $table_list .= '<th height="24">'.get_lang('NamesAndLastNames').'</th>';
@@ -375,7 +375,7 @@ if (api_is_allowed_to_edit(false, true) ||
 echo '</div>';
 
 /* Display */
-$titleForum = $current_forum['forum_title'];
+$titleForum = Security::remove_XSS($current_forum['forum_title']);
 $descriptionForum = $current_forum['forum_comment'];
 $iconForum = Display::return_icon(
     'forum_yellow.png',
@@ -440,7 +440,7 @@ if (is_array($threads)) {
             $linkPostForum = '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$my_forum
                 ."&thread={$row['thread_id']}&search="
                 .Security::remove_XSS(urlencode($my_search)).'">'
-                .$row['thread_title'].'</a>';
+                .Security::remove_XSS($row['thread_title']).'</a>';
             $html = '';
             $html .= '<div class="panel panel-default forum '.($row['thread_sticky'] ? 'sticky' : '').'">';
             $html .= '<div class="panel-body">';

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -6,8 +7,6 @@
  * Allow instanciate an object of type HotSpot extending the class question.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.
  */
 class Annotation extends Question
 {
@@ -42,7 +41,7 @@ class Annotation extends Question
             ['step' => '0.1']
         );
 
-        if (!empty($this->id)) {
+        if (!empty($this->iid)) {
             $form->setDefaults(['weighting' => float_format($this->weighting, 1)]);
         } else {
             if ($this->isContent == 1) {

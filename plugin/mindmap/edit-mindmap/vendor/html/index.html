@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>kampfer's mindMap</title>
+        <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="../css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" type="text/css" href="../css/app.css">
+        <script type="text/javascript" src="../js/base.js"></script>
+        <script type="text/javascript">
+            kampfer.require('mindMap.Menu');
+        </script>
+    </head>
+    <body>
+        <!-- MapContainer
+        ================================================== -->
+        <div class="map-container">
+            <div class="node" style="left:600px;top:100px;">
+                <div class="node-caption black">As a thank you, we ask you to include an optional link back to Glyphicons whenever practical.</div>
+                <canvas></canvas>
+            </div>
+            <div class="node" style="left:600px;top:200px;">
+                <div class="node-caption red">As a thank you, we ask you to include an optional link back to Glyphicons whenever practical.</div>
+                <canvas></canvas>
+            </div>
+            <div class="node" style="left:600px;top:300px;">
+                <div class="node-caption orange">As a thank you, we ask you to include an optional link back to Glyphicons whenever practical.</div>
+                <canvas></canvas>
+            </div>
+            <div class="node" style="left:900px;top:100px;">
+                <div class="node-caption green">As a thank you, we ask you to include an optional link back to Glyphicons whenever practical.</div>
+                <canvas></canvas>
+            </div>
+            <div class="node" style="left:900px;top:200px;">
+                <div class="node-caption blue">As a thank you, we ask you to include an optional link back to Glyphicons whenever practical.</div>
+                <canvas></canvas>
+            </div>
+            <div class="node" style="left:900px;top:300px;">
+                <div class="node-caption dark-blue">As a thank you, we ask you to include an optional link back to Glyphicons whenever practical.</div>
+                <canvas></canvas>
+            </div>
+        </div>
+
+        <!-- menu
+        ================================================== -->
+        <ul class="dropdown-menu" id="menu">
+            <li><a tabindex="-1" href="javascript:void(0);" command="fuck">Action</a></li>
+            <li><a tabindex="-1" href="javascript:void(0);">Another action</a></li>
+            <li><a tabindex="-1" href="javascript:void(0);" command="cry">Something else here</a></li>
+            <li class="divider"></li>
+            <li class="dropdown-submenu">
+                <a tabindex="-1" href="javascript:void(0);">More options</a>
+                <ul class="dropdown-menu">
+                    <li><a tabindex="-1" href="javascript:void(0);">Second level link</a></li>
+                    <li><a tabindex="-1" href="javascript:void(0);">Second level link</a></li>
+                    <li><a tabindex="-1" href="javascript:void(0);">Second level link</a></li>
+                    <li><a tabindex="-1" href="javascript:void(0);">Second level link</a></li>
+                    <li class="dropdown-submenu">
+                        <a tabindex="-1" href="javascript:void(0);">Second level link</a>
+                        <ul class="dropdown-menu">
+                            <li><a tabindex="-1" href="javascript:void(0);">Third level link</a></li>
+                            <li><a tabindex="-1" href="javascript:void(0);">Third level link</a></li>
+                            <li class="divider"></li>
+                            <li><a tabindex="-1" href="javascript:void(0);">Third level link</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><a tabindex="-1" href="javascript:void(0);">Another action</a></li>
+            <li><a tabindex="-1" href="javascript:void(0);">Second level link</a></li>
+        </ul>
+
+        <!-- script
+        ================================================== -->
+        <script type="text/javascript">
+            var menu = new kampfer.mindMap.Menu('menu');
+            kampfer.events.addListener(menu, 'beforeshow', function(event) {
+                console.log(event.type);
+            });
+            kampfer.events.addListener(menu, 'beforehide', function(event) {
+                console.log(event.type);
+            });
+            kampfer.events.addListener(menu, 'cry', function(event) {
+                console.log(event.type);
+            });
+
+
+            kampfer.events.addListener(document, 'contextmenu', function(event) {
+                menu.setPosition(event.pageX, event.pageY);
+                menu.show();
+                return false;
+            });
+
+            kampfer.events.addListener(document, 'click', function(event) {
+                if(event.which === 1) {
+                    menu.hide();
+                    return false;
+                }
+            });
+
+            menu.disable(0);
+        </script>
+    </body>
+</html>

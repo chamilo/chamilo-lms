@@ -11,7 +11,7 @@
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 // To launch, remove the following line
-die();
+exit;
 require __DIR__.'/../../main/inc/global.inc.php';
 $sql = "SELECT table_name, table_collation FROM information_schema.tables where TABLE_SCHEMA='".$_configuration['main_database']."'";
 $res = Database::query($sql);

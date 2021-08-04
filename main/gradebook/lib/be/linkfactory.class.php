@@ -6,8 +6,6 @@
  * Factory for link objects.
  *
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 class LinkFactory
 {
@@ -96,6 +94,8 @@ class LinkFactory
                 return new AttendanceLink();
             case LINK_SURVEY:
                 return new SurveyLink();
+            case LINK_PORTFOLIO:
+                return new PortfolioLink();
         }
 
         return null;
@@ -108,8 +108,7 @@ class LinkFactory
      */
     public static function get_all_types()
     {
-        //LINK_DROPBOX,
-        return [
+        $types = [
             LINK_EXERCISE,
             //LINK_DROPBOX,
             LINK_HOTPOTATOES,
@@ -119,6 +118,12 @@ class LinkFactory
             LINK_ATTENDANCE,
             LINK_SURVEY,
         ];
+
+        if (api_get_configuration_value('allow_portfolio_tool')) {
+            $types[] = LINK_PORTFOLIO;
+        }
+
+        return $types;
     }
 
     public function delete()

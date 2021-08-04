@@ -73,20 +73,33 @@ class ChamiloApi
      *
      * @param string $theme
      * @param bool   $getSysPath
+     * @param bool   $forcedGetter
      *
      * @return string
      */
-    public static function getPlatformLogoPath($theme = '', $getSysPath = false)
+    public static function getPlatformLogoPath($theme = '', $getSysPath = false, $forcedGetter = false)
     {
         static $logoPath;
-        if (!isset($logoPath)) {
+
+        // If call from CLI it should be reload.
+        if ('cli' === PHP_SAPI) {
+            $logoPath = null;
+        }
+
+        if (!isset($logoPath) || $forcedGetter) {
             $theme = empty($theme) ? api_get_visual_theme() : $theme;
             $accessUrlId = api_get_current_access_url_id();
+            if ('cli' === PHP_SAPI) {
+                $accessUrl = api_get_configuration_value('access_url');
+                if (!empty($accessUrl)) {
+                    $accessUrlId = $accessUrl;
+                }
+            }
             $themeDir = \Template::getThemeDir($theme);
             $customLogoPath = $themeDir."images/header-logo-custom$accessUrlId.png";
 
             $svgIcons = api_get_setting('icons_mode_svg');
-            if ($svgIcons == 'true') {
+            if ($svgIcons === 'true') {
                 $customLogoPathSVG = substr($customLogoPath, 0, -3).'svg';
                 if (file_exists(api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPathSVG")) {
                     if ($getSysPath) {
@@ -112,7 +125,7 @@ class ChamiloApi
             }
 
             $originalLogoPath = $themeDir."images/header-logo.png";
-            if ($svgIcons == 'true') {
+            if ($svgIcons === 'true') {
                 $originalLogoPathSVG = $themeDir."images/header-logo.svg";
                 if (file_exists(api_get_path(SYS_CSS_PATH).$originalLogoPathSVG)) {
                     if ($getSysPath) {
@@ -125,6 +138,7 @@ class ChamiloApi
                     return $logoPath;
                 }
             }
+
             if (file_exists(api_get_path(SYS_CSS_PATH).$originalLogoPath)) {
                 if ($getSysPath) {
                     $logoPath = api_get_path(SYS_CSS_PATH).$originalLogoPath;
@@ -149,18 +163,30 @@ class ChamiloApi
      * @param string $theme
      * @param array  $imageAttributes optional
      * @param bool   $getSysPath
+     * @param bool   $forcedGetter
      *
      * @return string
      */
-    public static function getPlatformLogo($theme = '', $imageAttributes = [], $getSysPath = false)
-    {
-        $logoPath = self::getPlatformLogoPath($theme, $getSysPath);
+    public static function getPlatformLogo(
+        $theme = '',
+        $imageAttributes = [],
+        $getSysPath = false,
+        $forcedGetter = false
+    ) {
+        $logoPath = self::getPlatformLogoPath($theme, $getSysPath, $forcedGetter);
         $institution = api_get_setting('Institution');
         $institutionUrl = api_get_setting('InstitutionUrl');
         $siteName = api_get_setting('siteName');
 
+        $homeURL = api_get_path(WEB_PATH).'index.php';
+
+        $replaceHomeURL = api_get_configuration_value('platform_logo_url');
+        if (!empty($replaceHomeURL)) {
+            $homeURL = $replaceHomeURL;
+        }
+
         if ($logoPath === null) {
-            $headerLogo = \Display::url($siteName, api_get_path(WEB_PATH).'index.php');
+            $headerLogo = \Display::url($siteName, $homeURL);
 
             if (!empty($institutionUrl) && !empty($institution)) {
                 $headerLogo .= ' - '.\Display::url($institution, $institutionUrl);
@@ -169,7 +195,6 @@ class ChamiloApi
             $courseInfo = api_get_course_info();
             if (isset($courseInfo['extLink']) && !empty($courseInfo['extLink']['name'])) {
                 $headerLogo .= '<span class="extLinkSeparator"> - </span>';
-
                 if (!empty($courseInfo['extLink']['url'])) {
                     $headerLogo .= \Display::url(
                         $courseInfo['extLink']['name'],
@@ -186,7 +211,7 @@ class ChamiloApi
 
         $image = \Display::img($logoPath, $institution, $imageAttributes);
 
-        return \Display::url($image, api_get_path(WEB_PATH).'index.php');
+        return \Display::url($image, $homeURL);
     }
 
     /**
@@ -341,7 +366,7 @@ class ChamiloApi
     public static function getColorPalette(
         $decimalOpacity = false,
         $wrapInRGBA = false,
-        $fillUpTo = null
+        $fillUpTo = 0
     ) {
         // Get the common colors from the palette used for pchart
         $paletteFile = api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color';

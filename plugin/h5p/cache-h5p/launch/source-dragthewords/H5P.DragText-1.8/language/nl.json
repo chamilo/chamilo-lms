@@ -1,0 +1,136 @@
+{
+  "semantics": [
+    {
+      "label": "Beschrijving taak",
+      "description": "Beschrijf hoe de gebruiker de taak moet uitvoeren.",
+      "default": "Sleep de woorden naar de juiste vakjes."
+    },
+    {
+      "label": "Tekst",
+      "placeholder": "*Amsterdam* is de hoofdstad van Nederland, *Brussel* is de hoofdstad van België en *Luxemburg* is de hoofdstad van Luxemburg.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Sleepbare woorden worden tussen asterisken (*) geplaatst.</li><li>Je kunt een tip toevoegen door een (:) voor de tiptekst te plaatsen.</li><li>Voor elk leeg veld is er slechts één juist woord van toepassing.</li><li>Je kunt feedback tonen als een opgave is afgerond. Gebruik '\\+' voor juiste en '\\-' voor onjuiste antwoorden.</li></ul>",
+        "example": "H5P content may be edited using a *browser:What type of program is Chrome?*. </br> H5P content is *interactive\\+Correct! \\-Incorrect, try again!*"
+      }
+    },
+    {
+      "label": "Algehele feedback",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Standaard"
+            }
+          ],
+          "label": "Definieer aangepaste feedback voor elke score reeks",
+          "description": "Druk op de \"Voeg score reeks\" knop om zoveel reeksen toe te voegen als nodig. Voorbeeld: 0-20% Lage score, 21-91% Gemiddelde score, 91-100% Uitstekende score!",
+          "entity": "reeks",
+          "field": {
+            "fields": [
+              {
+                "label": "Score reeks"
+              },
+              {},
+              {
+                "label": "Feedback voor de gedefinieerde score reeks",
+                "placeholder": "Vul de aangepaste feedback in"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Tekst voor de \"Controleer\"-knop",
+      "default": "Controleer"
+    },
+    {
+      "label": "Tekst voor de \"Opnieuw proberen\"-knop",
+      "default": "Opnieuw proberen"
+    },
+    {
+      "label": "Tekst voor de \"Toon oplossing\"-knop",
+      "default": "Toon oplossing"
+    },
+    {
+      "label": "Label van het genummerde neerzetgebied",
+      "default": "Neerzetgebied @index.",
+      "description": "Label dat gebruikt wordt voor de toegankelijkheid, waarbij de readspeaker de index van het neerzetgebied leest. Beschikbare variabele: @index"
+    },
+    {
+      "label": "Label leeg neerzetgebied",
+      "default": "Neerzetgebied @index is leeg.",
+      "description": "Label dat gebruikt wordt voor de toegankelijkheid, waarbij de readspeaker leest dat het neerzetgebied leeg is"
+    },
+    {
+      "label": "Label neergezetgebied bevat",
+      "default": "Neerzetgebied @index bevat sleepbare @draggable.",
+      "description": "Label dat gebruikt wordt voor de toegankelijkheid, waarbij de readspeaker leest dat het neerzetgebied een sleepbare tekst bevat"
+    },
+    {
+      "label": "Label sleepbare elementen",
+      "default": "@index van @count sleepbare elementen.",
+      "description": "Label dat wordt gebruikt voor de toegankelijkheid, waarbij de readspeaker aangeeft dat dit een versleepbaar element is. Beschikbare variabelen: @index, @count"
+    },
+    {
+      "label": "Label voor toon tip knop",
+      "default": "Toon tip",
+      "description": "Label dat gebruikt wordt voor de toegankelijkheid, als de readspeaker het leest voordat de tip wordt weergegeven"
+    },
+    {
+      "label": "Readspeaker tekst voor het juiste antwoord",
+      "default": "Juist!"
+    },
+    {
+      "label": "Readspeaker tekst voor het onjuiste antwoord",
+      "default": "Onjuist!"
+    },
+    {
+      "label": "Bevestigingstitel wanneer de gebruiker een plaatsing wil herstellen",
+      "default": "Herstel plaatsing"
+    },
+    {
+      "label": "Omschrijving bevestigingsdialoog dat de gebruiker een plaatsing wil herstellen",
+      "default": "Weet je zeker dat je deze plaatsing wilt herstellen?"
+    },
+    {
+      "label": "Label dat gebruikt wordt voor de toegankelijkheid, waarbij de readspeaker aangeeft dat het slepen is gestart",
+      "default": "Er is gestart met het slepen van het woord."
+    },
+    {
+      "label": "Label dat gebruikt wordt voor de toegankelijkheid, waarbij de readspeaker aangeeft dat het slepen is geannuleerd",
+      "default": "Annuleer slepen."
+    },
+    {
+      "label": "Label dat gebruikt wordt voor de toegankelijkheid, waarbij de readspeaker aangeeft dat een tekst het juiste antwoord is",
+      "default": "Juist antwoord:"
+    },
+    {
+      "label": "Koptekst voor het onderdeel met feedback voor juiste/ onjuiste antwoorden",
+      "default": "Feedback"
+    },
+    {
+      "label": "Gedragsinstellingen",
+      "description": "Deze opties bepalen hoe de taak op de input reageert.",
+      "fields": [
+        {
+          "label": "Schakel de knop \"Opnieuw\" in"
+        },
+        {
+          "label": "\"Toon oplossing\"-knop inschakelen"
+        },
+        {
+          "label": "Activeer \"Controleer\" knop"
+        },
+        {
+          "label": "Geef direct feedback (Antwoorden)"
+        }
+      ]
+    },
+    {
+      "label": "Tekstuele weergave van de score balk voor de gebruikers van de readspeaker",
+      "default": "Je hebt :num out van :total points"
+    }
+  ]
+}

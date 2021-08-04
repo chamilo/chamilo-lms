@@ -1,0 +1,220 @@
+{
+  "semantics": [
+    {
+      "label": "Heading"
+    },
+    {
+      "label": "Mode",
+      "description": "Mode of presenting the dialog cards",
+      "options": [
+        {
+          "label": "Normal"
+        },
+        {
+          "label": "Repetition"
+        }
+      ]
+    },
+    {
+      "label": "Beschrijving taak",
+      "default": ""
+    },
+    {
+      "widgets": [
+        {
+          "label": "Standaard"
+        }
+      ],
+      "label": "Dialogen",
+      "entity": "dialoog",
+      "field": {
+        "label": "Vraag",
+        "fields": [
+          {
+            "label": "Tekst",
+            "description": "Hint voor het eerste deel van het dialoog"
+          },
+          {
+            "label": "Antwoord",
+            "description": "Hint voor het tweede deel van het dialoog"
+          },
+          {
+            "label": "Afbeelding",
+            "description": "Optionele afbeelding voor de kaart. (De kaart mag alleen een afbeelding gebruiken, alleen een tekst of allebei)"
+          },
+          {
+            "label": "Alternatieve tekst voor een afbeelding"
+          },
+          {
+            "label": "Audio bestanden"
+          },
+          {
+            "label": "Tips",
+            "fields": [
+              {
+                "label": "Tip voor de tekst",
+                "description": "Tip voor het eerste gedeelte van de dialoog"
+              },
+              {
+                "label": "Tip voor het antwoord",
+                "description": "Tip voor het tweede gedeelte van de dialoog"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "Gedragsinstellingen",
+      "description": "Met deze opties kun je instellen hoe de taak zich gedraagt.",
+      "fields": [
+        {
+          "label": "\"Opnieuw proberen\" knop inschakelen"
+        },
+        {
+          "label": "Achteruit navigeren uitschakelen",
+          "description": "Deze optie zorgt ervoor dat je alleen maar vooruit kunt bladeren met Dialoogkaarten"
+        },
+        {
+          "label": "De tekst passend maken in de kaart",
+          "description": "Door dit uit te vinken zullen de afmetingen van de kaart zich aanpassen aan de grootte van de tekst"
+        },
+        {
+          "label": "Kaarten in willekeurige volgorde",
+          "description": "Schakel in om de kaarten in willekeurige volgorde te tonen."
+        },
+        {
+          "label": "Maximum proficiency level"
+        },
+        {
+          "label": "Allow quick progression",
+          "description": "If activated, learners can decide to indicate that they know a card without turning it"
+        }
+      ]
+    },
+    {
+      "label": "Tekst knop Omdraaien",
+      "default": "Omdraaien"
+    },
+    {
+      "label": "Tekst voor de knop Volgende",
+      "default": "Volgende"
+    },
+    {
+      "label": "Tekst voor de knop Vorige",
+      "default": "Vorige"
+    },
+    {
+      "label": "Tekst voor de knop Opnieuw",
+      "default": "Opnieuw"
+    },
+    {
+      "label": "Text for the \"correct answer\" button",
+      "default": "I got it right!"
+    },
+    {
+      "label": "Text for the \"incorrect answer\" button",
+      "default": "I got it wrong"
+    },
+    {
+      "label": "Text for \"Round\" message below cards and on the summary screen",
+      "description": "@round will be replaced by the number of the current round",
+      "default": "Round @round"
+    },
+    {
+      "label": "Text for \"Cards left\" message",
+      "description": "@number will be replaced by the number of cards left in this round",
+      "default": "Cards left: @number"
+    },
+    {
+      "label": "Text for the \"next round\" button",
+      "description": "@round will be replaced by the round number",
+      "default": "Proceed to round @round"
+    },
+    {
+      "label": "Text for the \"Start over\" button",
+      "default": "Start over"
+    },
+    {
+      "label": "Text for the \"show summary\" button",
+      "default": "Next"
+    },
+    {
+      "label": "Title text for the summary page",
+      "default": "Summary"
+    },
+    {
+      "label": "Text for \"Cards you got right:\"",
+      "default": "Cards you got right:"
+    },
+    {
+      "label": "Text for \"Cards you got wrong:\"",
+      "default": "Cards you got wrong:"
+    },
+    {
+      "label": "Text for \"Cards not shown:\"",
+      "default": "Cards in pool not shown:"
+    },
+    {
+      "label": "Text for \"Overall Score\"",
+      "default": "Overall Score"
+    },
+    {
+      "label": "Text for \"Cards completed\"",
+      "default": "Cards you have completed learning:"
+    },
+    {
+      "label": "Text for \"Completed rounds:\"",
+      "default": "Completed rounds:"
+    },
+    {
+      "label": "Message when all cards have been learned proficiently",
+      "description": "@cards will be replaced by the number of all cards in the pool. @max will be replaced by the maximum proficiency level - 1.",
+      "default": "Well done! You got all @cards cards correct @max times in a row!"
+    },
+    {
+      "label": "Tekst bij voortgang",
+      "description": "Beschikbare variabelen zijn @card en @total.",
+      "default": "Kaart @card van @total"
+    },
+    {
+      "label": "Label voor de kaarttekst",
+      "description": "Dit wordt gebruikt voor de toegankelijkheid door ondersteunende technologieën",
+      "default": "Voorkant kaart"
+    },
+    {
+      "label": "Label voor de achterkant van de kaart",
+      "description": "Dit wordt gebruikt voor de toegankelijkheid door ondersteunende technologieën",
+      "default": "Achterkant kaart"
+    },
+    {
+      "label": "Label voor de toon tip knop",
+      "default": "Toon tip"
+    },
+    {
+      "label": "Statusbericht dat de audio niet wordt ondersteund",
+      "default": "Je browser ondersteunt de audio niet"
+    },
+    {
+      "label": "Confirm starting over dialog",
+      "fields": [
+        {
+          "label": "Header text",
+          "default": "Start over?"
+        },
+        {
+          "label": "Body text",
+          "default": "All progress will be lost. Are you sure you want to start over?"
+        },
+        {
+          "label": "Cancel button label",
+          "default": "Cancel"
+        },
+        {
+          "label": "Confirm button label",
+          "default": "Start over"
+        }
+      ]
+    }
+  ]
+}

@@ -12,17 +12,13 @@ $compilatio = new Compilatio();
 $use_space = number_format($quotas->usedSpace / 1000000, 2);
 $total_space = $quotas->space / 1000000;
 
-echo "<h3>".get_lang('compilatioDescription')."</h3>";
+echo "<h3>".get_lang('CompilatioDescription')."</h3>";
 
 echo "<b>"
-    .get_lang('compilatioQuota')
+    .get_lang('CompilatioQuota')
     .":"
     ." </b><br>"
-    .get_lang('compilatioCredit')
-    .": "
-    .$quotas->usedCredits
-    .get_lang('compilatioOn')
-    .$quotas->credits;
+    .sprintf(get_lang('CompilatioCreditXOnY'), $quotas->usedCredits, $quotas->credits);
 
 ?>
 <br><br>
@@ -35,13 +31,13 @@ if (!isset($_GET['action'])) {
 </form>
 <?php
 } else {
-        echo get_lang('compilatioConnectionTestSoap')."<br>";
-        echo "1) ".get_lang('compilatioServerConnection')."<br>";
+        echo get_lang('CompilatioConnectionTestSoap')."<br>";
+        echo "1) ".get_lang('CompilatioServerConnection')."<br>";
         $compilatio = new Compilatio();
         if ($compilatio) {
-            echo get_lang('compilatioConnectionAccomplished')."<br>";
-            echo "2) ".get_lang('compilatioSendTextToServer')."<br>";
-            $text = get_lang('compilatioTestSendText').$compilatio->getKey();
+            echo get_lang('CompilatioConnectionSuccessful')."<br>";
+            echo "2) ".get_lang('CompilatioSendTextToServer')."<br>";
+            $text = sprintf(get_lang('CompilatioTextSendingTestKeyX'), $compilatio->getKey());
             $id_compi = $compilatio->SendDoc(
             'Doc de test',
             'test',
@@ -50,13 +46,14 @@ if (!isset($_GET['action'])) {
             $text
         );
             if (Compilatio::isMd5($id_compi)) {
-                echo get_lang('compilatioSuccessfulTransfer')."<br>";
+                echo get_lang('CompilatioSuccessfulTransfer')."<br>";
             } else {
-                echo get_lang('compilatioFailedTransfer')."<br>";
+                echo get_lang('CompilatioFailedTransfer')."<br>";
+                echo get_lang('CompilatioParamVerification')."<br>";
             }
         } else {
-            echo get_lang('compilatioNotConnection')."<br>";
-            echo get_lang('compilatioParamVerification')."<br>";
+            echo get_lang('CompilatioNoConnection')."<br>";
+            echo get_lang('CompilatioParamVerification')."<br>";
         }
     }
 ?>

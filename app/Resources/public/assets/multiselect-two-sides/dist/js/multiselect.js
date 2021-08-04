@@ -1,10 +1,10 @@
 /*
  * @license
  *
- * Multiselect v2.5.4
+ * Multiselect v2.5.6
  * http://crlcu.github.io/multiselect/
  *
- * Copyright (c) 2016-2018 Adrian Crisan
+ * Copyright (c) 2016-2020 Adrian Crisan
  * Licensed under the MIT license (https://github.com/crlcu/multiselect/blob/master/LICENSE)
  */
 
@@ -754,7 +754,7 @@ if (typeof jQuery === 'undefined') {
             });
         }
         if(isFirefox){
-            this.attr('disabled', false)
+            this.prop('disabled', false)
         }
 
         return this;
@@ -772,7 +772,7 @@ if (typeof jQuery === 'undefined') {
             });
         }
         if(isFirefox){
-            this.attr('disabled', true)
+            this.prop('disabled', true)
         }
         return this;
     };

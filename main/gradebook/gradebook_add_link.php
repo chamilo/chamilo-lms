@@ -1,11 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * Script.
- *
- * @package chamilo.gradebook
- */
 require_once __DIR__.'/../inc/global.inc.php';
 require_once '../forum/forumfunction.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
@@ -22,9 +17,9 @@ $tbl_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
 $tbl_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 $session_id = api_get_session_id();
-$typeSelected = isset($_GET['typeselected']) ? intval($_GET['typeselected']) : null;
+$typeSelected = isset($_GET['typeselected']) ? (int) $_GET['typeselected'] : null;
 
-if ($session_id == 0) {
+if (0 == $session_id) {
     $all_categories = Category::load(
         null,
         null,
@@ -36,7 +31,7 @@ if ($session_id == 0) {
 } else {
     $all_categories = Category::loadSessionCategories(null, $session_id);
 }
-$category = Category :: load($selectCat);
+$category = Category::load($selectCat);
 $url = api_get_self().'?selectcat='.$selectCat.'&newtypeselected='.$typeSelected.'&course_code='.api_get_course_id().'&'.api_get_cidreq();
 $typeform = new LinkForm(
     LinkForm::TYPE_CREATE,
@@ -60,7 +55,7 @@ if ($typeform->validate() && isset($_GET['newtypeselected'])) {
 }
 
 // link type selected, show 2nd form to retrieve the link data
-if (isset($typeSelected) && $typeSelected != '0') {
+if (isset($typeSelected) && '0' != $typeSelected) {
     $url = api_get_self().'?selectcat='.$selectCat.'&typeselected='.$typeSelected.'&course_code='.$courseCode.'&'.api_get_cidreq();
 
     $addform = new LinkAddEditForm(
@@ -101,48 +96,45 @@ if (isset($typeSelected) && $typeSelected != '0') {
         // Update view_properties
         if (isset($typeSelected) &&
             5 == $typeSelected &&
-            (isset($addvalues['select_link']) && $addvalues['select_link'] != "")
+            (isset($addvalues['select_link']) && "" != $addvalues['select_link'])
         ) {
             $sql1 = 'SELECT thread_title from '.$tbl_forum_thread.'
-					 WHERE 
-					    c_id = '.$course_info['real_id'].' AND 
+					 WHERE
+					    c_id = '.$course_info['real_id'].' AND
 					    thread_id = '.$addvalues['select_link'];
             $res1 = Database::query($sql1);
             $rowtit = Database::fetch_row($res1);
             $course_id = api_get_course_id();
             $sql_l = 'SELECT count(*) FROM '.$tbl_link.'
-                      WHERE 
-                            ref_id='.$addvalues['select_link'].' AND 
-                            course_code="'.$course_id.'" AND 
+                      WHERE
+                            ref_id='.$addvalues['select_link'].' AND
+                            course_code="'.$course_id.'" AND
                             type = 5;';
             $res_l = Database::query($sql_l);
             $row = Database::fetch_row($res_l);
-            if ($row[0] == 0) {
+            if (0 == $row[0]) {
                 $link->add();
                 $sql = 'UPDATE '.$tbl_forum_thread.' SET
                             thread_qualify_max= "'.api_float_val($addvalues['weight']).'",
                             thread_weight= "'.api_float_val($addvalues['weight']).'",
                             thread_title_qualify = "'.$rowtit[0].'"
-						WHERE 
-						    thread_id='.$addvalues['select_link'].' AND 
+						WHERE
+						    thread_id='.$addvalues['select_link'].' AND
 						    c_id = '.$course_info['real_id'].' ';
                 Database::query($sql);
             }
         }
 
         $link->add();
-
         $logInfo = [
             'tool' => TOOL_GRADEBOOK,
-            'tool_id' => 0,
-            'tool_id_detail' => 0,
             'action' => 'new-link',
             'action_details' => 'selectcat='.$selectCat,
         ];
         Event::registerLog($logInfo);
 
         $addvalue_result = !empty($addvalues['addresult']) ? $addvalues['addresult'] : [];
-        if ($addvalue_result == 1) {
+        if (1 == $addvalue_result) {
             header('Location: gradebook_add_result.php?selecteval='.$link->get_ref_id().'&'.api_get_cidreq());
             exit;
         } else {
@@ -161,8 +153,6 @@ if (isset($_GET['selectcat'])) {
 
 $logInfo = [
     'tool' => TOOL_GRADEBOOK,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => 'add-link',
     'action_details' => 'selectcat='.$selectCat,
 ];

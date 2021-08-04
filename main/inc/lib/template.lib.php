@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
@@ -148,6 +149,7 @@ class Template
             'api_get_user_info',
             'api_get_configuration_value',
             'api_get_setting',
+            'api_get_course_setting',
             'api_get_plugin_setting',
             [
                 'name' => 'return_message',
@@ -180,6 +182,10 @@ class Template
             [
                 'name' => 'date_to_time_ago',
                 'callable' => 'Display::dateToStringAgoAndLongDate',
+            ],
+            [
+                'name' => 'remove_xss',
+                'callable' => 'Security::remove_XSS',
             ],
         ];
 
@@ -441,9 +447,10 @@ class Template
 
         // Only if course is available
         $courseToolBar = '';
+        $origin = api_get_origin();
         $show_course_navigation_menu = '';
         if (!empty($this->course_id) && $this->user_is_logged_in) {
-            if (api_get_setting('show_toolshortcuts') != 'false') {
+            if ($origin !== 'embeddable' && api_get_setting('show_toolshortcuts') !== 'false') {
                 // Course toolbar
                 $courseToolBar = CourseHome::show_navigation_tool_shortcuts();
             }
@@ -552,6 +559,7 @@ class Template
             'system_version' => api_get_configuration_value('system_version'),
             'site_name' => api_get_setting('siteName'),
             'institution' => api_get_setting('Institution'),
+            'institution_url' => api_get_setting('InstitutionUrl'),
             'date' => api_format_date('now', DATE_FORMAT_LONG),
             'timezone' => api_get_timezone(),
             'gamification_mode' => api_get_setting('gamification_mode'),
@@ -570,6 +578,9 @@ class Template
         global $disable_js_and_css_files;
         $css = [];
 
+        $webPublicPath = api_get_path(WEB_PUBLIC_PATH);
+        $webJsPath = api_get_path(WEB_LIBRARY_JS_PATH);
+
         // Default CSS Bootstrap
         $bowerCSSFiles = [
             'fontawesome/css/font-awesome.min.css',
@@ -582,7 +593,6 @@ class Template
             'bootstrap-daterangepicker/daterangepicker.css',
             'bootstrap-select/dist/css/bootstrap-select.min.css',
             'select2/dist/css/select2.min.css',
-            'mediaelement/plugins/vrview/vrview.css',
         ];
 
         $hide = api_get_configuration_value('hide_flag_language_switcher');
@@ -590,6 +600,12 @@ class Template
         if ($hide === false) {
             $bowerCSSFiles[] = 'flag-icon-css/css/flag-icon.min.css';
         }
+
+        foreach ($bowerCSSFiles as $file) {
+            $css[] = api_get_cdn_path($webPublicPath.'assets/'.$file);
+        }
+
+        $css[] = $webJsPath.'mediaelement/plugins/vrview/vrview.css';
 
         $features = api_get_configuration_value('video_features');
         $defaultFeatures = [
@@ -609,19 +625,15 @@ class Template
                 if ($feature === 'vrview') {
                     continue;
                 }
-                $bowerCSSFiles[] = "mediaelement/plugins/$feature/$feature.css";
+                $css[] = $webJsPath."mediaelement/plugins/$feature/$feature.min.css";
                 $defaultFeatures[] = $feature;
             }
         }
 
-        foreach ($bowerCSSFiles as $file) {
-            $css[] = api_get_cdn_path(api_get_path(WEB_PUBLIC_PATH).'assets/'.$file);
-        }
-
-        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css';
+        $css[] = $webJsPath.'chosen/chosen.css';
 
         if (api_is_global_chat_enabled()) {
-            $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
+            $css[] = $webJsPath.'chat/css/chat.css';
         }
         $css_file_to_string = '';
         foreach ($css as $file) {
@@ -651,6 +663,14 @@ class Template
             $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'scorm.css');
             if (is_file(api_get_path(SYS_CSS_PATH).$this->themeDir.'learnpath.css')) {
                 $css[] = api_get_path(WEB_CSS_PATH).$this->themeDir.'learnpath.css';
+            }
+        }
+        if (CustomPages::enabled()) {
+            $cssCustomPage = api_get_path(SYS_CSS_PATH).$this->themeDir."custompage.css";
+            if (is_file($cssCustomPage)) {
+                $css[] = api_get_path(WEB_CSS_PATH).$this->themeDir.'custompage.css';
+            } else {
+                $css[] = api_get_path(WEB_CSS_PATH).'custompage.css';
             }
         }
 
@@ -684,13 +704,10 @@ class Template
         if (!$disable_js_and_css_files) {
             $this->assign('css_custom_file_to_string', $css_file_to_string);
 
-            $style_print = '';
-            if (is_readable(api_get_path(SYS_CSS_PATH).$this->theme.'/print.css')) {
-                $style_print = api_get_css(
-                    api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/print.css'),
-                    'print'
-                );
-            }
+            $style_print = api_get_css(
+                api_get_print_css(false, true),
+                'print'
+            );
             $this->assign('css_style_print', $style_print);
         }
 
@@ -718,6 +735,8 @@ class Template
         // JS files
         $js_files = [
             'chosen/chosen.jquery.min.js',
+            'mediaelement/plugins/vrview/vrview.js',
+            'mediaelement/plugins/markersrolls/markersrolls.min.js',
         ];
 
         if (api_get_setting('accessibility_font_resize') === 'true') {
@@ -743,9 +762,7 @@ class Template
             $selectLink,
             'select2/dist/js/select2.min.js',
             "select2/dist/js/i18n/$isoCode.js",
-            'mediaelement/plugins/vrview/vrview.js',
             'js-cookie/src/js.cookie.js',
-            'mediaelement/plugins/markersrolls/markersrolls.min.js',
         ];
 
         $viewBySession = api_get_setting('my_courses_view_by_session') === 'true';
@@ -768,7 +785,7 @@ class Template
                 if ($feature === 'vrview') {
                     continue;
                 }
-                $bowerJsFiles[] = "mediaelement/plugins/$feature/$feature.js";
+                $js_files[] = "mediaelement/plugins/$feature/$feature.min.js";
             }
         }
 
@@ -790,7 +807,7 @@ class Template
         }
 
         foreach ($bowerJsFiles as $file) {
-            $js_file_to_string .= '<script type="text/javascript" src="'.api_get_cdn_path(api_get_path(WEB_PUBLIC_PATH).'assets/'.$file).'"></script>'."\n";
+            $js_file_to_string .= '<script src="'.api_get_cdn_path(api_get_path(WEB_PUBLIC_PATH).'assets/'.$file).'"></script>'."\n";
         }
 
         foreach ($js_files as $file) {
@@ -798,9 +815,20 @@ class Template
         }
 
         // Loading email_editor js
-        if (!api_is_anonymous() && api_get_setting('allow_email_editor') === 'true') {
-            $template = $this->get_template('mail_editor/email_link.js.tpl');
-            $js_file_to_string .= $this->fetch($template);
+        if (api_get_setting('allow_email_editor') === 'true') {
+            $link = 'email_editor.php';
+            if (!api_is_anonymous()) {
+                $this->assign('email_editor', $link);
+                $template = $this->get_template('mail_editor/email_link.js.tpl');
+                $js_file_to_string .= $this->fetch($template);
+            } else {
+                if (api_get_configuration_value('allow_email_editor_for_anonymous')) {
+                    $link = 'email_editor_external.php';
+                    $this->assign('email_editor', $link);
+                    $template = $this->get_template('mail_editor/email_link.js.tpl');
+                    $js_file_to_string .= $this->fetch($template);
+                }
+            }
         }
 
         if (!$disable_js_and_css_files) {
@@ -860,8 +888,8 @@ class Template
             //Do not include the global chat in LP
             if ($this->show_learnpath == false && $this->show_footer == true && $this->hide_global_chat == false) {
                 $js_files[] = 'chat/js/chat.js';
-                $bower .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/linkifyjs/linkify.js"></script>';
-                $bower .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/linkifyjs/linkify-jquery.js"></script>';
+                $bower .= '<script src="'.api_get_path(WEB_PUBLIC_PATH).'assets/linkifyjs/linkify.js"></script>';
+                $bower .= '<script src="'.api_get_path(WEB_PUBLIC_PATH).'assets/linkifyjs/linkify-jquery.js"></script>';
             }
         }
         $js_file_to_string = '';
@@ -1078,7 +1106,6 @@ class Template
 
     public static function displayCASLoginButton($label = null)
     {
-        $course = api_get_course_id();
         $form = new FormValidator(
             'form-cas-login',
             'POST',
@@ -1113,7 +1140,7 @@ class Template
         $form->addHidden('logout', 1);
         $form->addButton(
             'casLogoutButton',
-            is_null($label) ? sprintf(get_lang('LogoutWithYourAccount'), api_get_setting("Institution")) : $label,
+            is_null($label) ? sprintf(get_lang('LogoutWithYourAccountFromX'), api_get_setting("Institution")) : $label,
             api_get_setting("casLogoURL"),
             'primary',
             null,
@@ -1138,7 +1165,7 @@ class Template
         }
 
         $form = new FormValidator(
-            'form-login',
+            'formLogin',
             'POST',
             null,
             null,
@@ -1324,9 +1351,6 @@ class Template
         $this->responseCode = $code;
     }
 
-    /**
-     * @param string $code
-     */
     public function getResponseCode()
     {
         return $this->responseCode;
@@ -1371,8 +1395,18 @@ class Template
             if (!empty($courseInfo)) {
                 $courseParams = api_get_cidreq();
             }
-            $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams;
 
+            $extraParams = '';
+            if (api_get_configuration_value('ticket_lp_quiz_info_add')) {
+                if (isset($_GET['exerciseId']) && !empty($_GET['exerciseId'])) {
+                    $extraParams = '&exerciseId='.(int) $_GET['exerciseId'];
+                }
+
+                if (isset($_GET['lp_id']) && !empty($_GET['lp_id'])) {
+                    $extraParams .= '&lpId='.(int) $_GET['lp_id'];
+                }
+            }
+            $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams.$extraParams;
             $allow = TicketManager::userIsAllowInProject(api_get_user_info(), $defaultProjectId);
 
             if ($allow) {
@@ -1827,14 +1861,14 @@ class Template
     private function assignFavIcon()
     {
         // Default root chamilo favicon
-        $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
+        $favico = '<link rel="icon" href="'.api_get_path(WEB_PATH).'favicon.png" type="image/png" />';
 
         //Added to verify if in the current Chamilo Theme exist a favicon
         $favicoThemeUrl = api_get_path(SYS_CSS_PATH).$this->themeDir.'images/';
 
         //If exist pick the current chamilo theme favicon
-        if (is_file($favicoThemeUrl.'favicon.ico')) {
-            $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_CSS_PATH).$this->themeDir.'images/favicon.ico" type="image/x-icon" />';
+        if (is_file($favicoThemeUrl.'favicon.png')) {
+            $favico = '<link rel="icon" href="'.api_get_path(WEB_CSS_PATH).$this->themeDir.'images/favicon.png" type="image/png" />';
         }
 
         if (api_is_multiple_url_enabled()) {
@@ -1848,10 +1882,10 @@ class Template
                 $clean_url = str_replace('/', '-', $clean_url);
                 $clean_url .= '/';
                 $homep = api_get_path(WEB_HOME_PATH).$clean_url; //homep for Home Path
-                $icon_real_homep = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
+                $icon_real_homep = api_get_path(SYS_HOME_PATH).$clean_url;
                 //we create the new dir for the new sites
                 if (is_file($icon_real_homep.'favicon.ico')) {
-                    $favico = '<link rel="shortcut icon" href="'.$homep.'favicon.ico" type="image/x-icon" />';
+                    $favico = '<link rel="icon" href="'.$homep.'favicon.png" type="image/png" />';
                 }
             }
         }

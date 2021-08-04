@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -9,8 +10,6 @@
  * @author Christian Fasanando <christian1827@gmail.com>
  *
  * @todo move to main/inc/lib
- *
- * @package chamilo.dashboard
  */
 class DashboardController
 {
@@ -126,7 +125,7 @@ class DashboardController
      */
     public function store_user_block()
     {
-        if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
+        if ("POST" == strtoupper($_SERVER['REQUEST_METHOD'])) {
             $enabled_blocks = $_POST['enabled_blocks'];
             $columns = $_POST['columns'];
             DashboardManager::store_user_blocks($this->user_id, $enabled_blocks, $columns);

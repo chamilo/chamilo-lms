@@ -103,7 +103,7 @@ if (api_get_setting('user_roles') == 'true') {
 // 			DISPLAYING THE MATRIX (user permissions)
 // ---------------------------------------------------
 echo '<strong>'.get_lang('UserPermissions').'</strong>';
-echo "<table class=\"data_table\">\n";
+echo "<table class=\"table table-hover table-striped data_table\">\n";
 
 // the header
 echo "\t<tr>\n";

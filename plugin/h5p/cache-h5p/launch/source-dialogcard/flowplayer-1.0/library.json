@@ -1,0 +1,15 @@
+{
+  "title": "Flowplayer",
+  "contentType": "Media",
+  "description": "Provides you with flowplayer for all your Flash needs.",
+  "majorVersion": 1,
+  "minorVersion": 0,
+  "patchVersion": 5,
+  "runnable": 0,
+  "machineName": "flowplayer",
+  "preloadedJs": [
+    {
+      "path": "scripts/flowplayer-3.2.12.min.js"
+    }
+  ]
+}

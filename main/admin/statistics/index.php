@@ -15,6 +15,7 @@ $interbreadcrumb[] = ['url' => '../index.php', 'name' => get_lang('PlatformAdmin
 $report = isset($_REQUEST['report']) ? $_REQUEST['report'] : '';
 $sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_duration'] : '';
 $validated = false;
+$sessionStatusAllowed = api_get_configuration_value('allow_session_status');
 
 if (
 in_array(
@@ -164,13 +165,13 @@ in_array(
                 ';
 
             $reportName1 = get_lang('UsersCreatedInTheSelectedPeriod');
-            $reportName2 = get_lang('UserByStatus');
-            $reportName3 = get_lang('UserByLanguage');
-            $reportName4 = get_lang('UserByLanguageCible');
-            $reportName5 = get_lang('UserByCareer');
-            $reportName6 = get_lang('UserByContract');
-            $reportName7 = get_lang('UserByCertificate');
-            $reportName8 = get_lang('UserByAge');
+            $reportName2 = get_lang('UsersByStatus');
+            $reportName3 = get_lang('UsersByLanguage');
+            $reportName4 = get_lang('UsersByTargetLanguage');
+            $reportName5 = get_lang('UsersByCareer');
+            $reportName6 = get_lang('UsersByContract');
+            $reportName7 = get_lang('UsersByCertificate');
+            $reportName8 = get_lang('UsersByAge');
 
             //$url1 = $urlBase.'a=users_active&filter=active&date_start='.$dateStart.'&date_end='.$dateEnd;
             $url2 = $urlBase.'a=users_active&filter=status&date_start='.$dateStart.'&date_end='.$dateEnd;
@@ -199,8 +200,12 @@ in_array(
                 true,
                 ['format' => 'YYYY-MM-DD', 'timePicker' => 'false', 'validate_format' => 'Y-m-d']
             );
-            $options = SessionManager::getStatusList();
-            $form->addSelect('status_id', get_lang('SessionStatus'), $options, ['placeholder' => get_lang('All')]);
+
+            if ($sessionStatusAllowed) {
+                $options = SessionManager::getStatusList();
+                $form->addSelect('status_id', get_lang('SessionStatus'), $options, ['placeholder' => get_lang('All')]);
+            }
+
             $form->addHidden('report', 'session_by_date');
             $form->addButtonSearch(get_lang('Search'));
 
@@ -226,7 +231,7 @@ in_array(
                     $dateEnd = Security::remove_XSS($_REQUEST['range_end']);
                 }
 
-                $statusId = (int) $_REQUEST['status_id'];
+                $statusId = isset($_REQUEST['status_id']) ? (int) $_REQUEST['status_id'] : 0;
 
                 $conditions = "&date_start=$dateStart&date_end=$dateEnd&status=$statusId";
 
@@ -267,12 +272,15 @@ in_array(
                     $reportOptions2,
                     'canvas2'
                 );
-                $htmlHeadXtra[] = Statistics::getJSChartTemplate(
-                    $url3,
-                    $reportType,
-                    $reportOptions3,
-                    'canvas3'
-                );
+
+                if ($sessionStatusAllowed) {
+                    $htmlHeadXtra[] = Statistics::getJSChartTemplate(
+                        $url3,
+                        $reportType,
+                        $reportOptions3,
+                        'canvas3'
+                    );
+                }
 
                 $reportOptions = '
                     legend: {
@@ -344,6 +352,7 @@ $tools = [
         'report=no_login_users' => get_lang('StatsUsersDidNotLoginInLastPeriods'),
         'report=zombies' => get_lang('Zombies'),
         'report=users_active' => get_lang('UserStats'),
+        'report=users_online' => get_lang('UsersOnline'),
     ],
     get_lang('System') => [
         'report=activities' => get_lang('ImportantActivities'),
@@ -361,7 +370,6 @@ $tools = [
 
 $course_categories = Statistics::getCourseCategories();
 $content = '';
-$sessionStatusAllowed = api_get_configuration_value('allow_session_status');
 
 switch ($report) {
     case 'session_by_date':
@@ -560,7 +568,7 @@ switch ($report) {
                 $courseId = $courses[0];
                 $courseInfo = api_get_course_info_by_id($courseId);
                 $language = $courseInfo['language'];
-                $language = str_replace('2', '', $language);
+                $language = get_lang(ucfirst(str_replace(2, '', $language)));
             }
             $table->setCellContents($row, 3, $language);
 
@@ -728,16 +736,16 @@ switch ($report) {
 
             $graph .= '<div class="row">';
             $graph .= '<div class="col-md-6"><canvas id="canvas4" style="margin-bottom: 20px"></canvas></div>';
+            $graph .= '<div class="col-md-6"><canvas id="canvas8" style="margin-bottom: 20px"></canvas></div>';
+            $graph .= '</div>';
+
+            $graph .= '<div class="row">';
             $graph .= '<div class="col-md-6"><canvas id="canvas5" style="margin-bottom: 20px"></canvas></div>';
-            $graph .= '</div>';
-
-            $graph .= '<div class="row">';
             $graph .= '<div class="col-md-6"><canvas id="canvas6" style="margin-bottom: 20px"></canvas></div>';
-            $graph .= '<div class="col-md-6"><canvas id="canvas7" style="margin-bottom: 20px"></canvas></div>';
             $graph .= '</div>';
 
             $graph .= '<div class="row">';
-            $graph .= '<div class="col-md-4"><canvas id="canvas8" style="margin-bottom: 20px"></canvas></div>';
+            $graph .= '<div class="col-md-6"><canvas id="canvas7" style="margin-bottom: 20px"></canvas></div>';
             $graph .= '</div>';
 
             $conditions = [];
@@ -825,7 +833,16 @@ switch ($report) {
 
                 $certificate = GradebookUtils::get_certificate_by_user_id(0, $userId);
                 $language = isset($extraFields['langue_cible']) ? $extraFields['langue_cible'] : '';
-                $contract = isset($extraFields['termactivated']) ? $extraFields['termactivated'] : '';
+                //$contract = isset($extraFields['termactivated']) ? $extraFields['termactivated'] : '';
+                $contract = false;
+                $legalAccept = $extraFieldValueUser->get_values_by_handler_and_field_variable($userId, 'legal_accept');
+                if ($legalAccept && isset($legalAccept['value'])) {
+                    list($legalId, $legalLanguageId, $legalTime) = explode(':', $legalAccept['value']);
+                    if ($legalId) {
+                        $contract = true;
+                    }
+                }
+
                 $residence = isset($extraFields['terms_paysresidence']) ? $extraFields['terms_paysresidence'] : '';
                 $career = isset($extraFields['filiere_user']) ? $extraFields['filiere_user'] : '';
                 $birthDate = isset($extraFields['terms_datedenaissance']) ? $extraFields['terms_datedenaissance'] : '';
@@ -921,7 +938,7 @@ switch ($report) {
             );
 
             $scoreDisplay = ScoreDisplay::instance();
-            $table = new HTML_Table(['class' => 'data_table']);
+            $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
             $headers = [
                 get_lang('Name'),
                 get_lang('Count'),
@@ -1089,6 +1106,74 @@ switch ($report) {
                 $extraTables .= $data['table'];
             }
 
+            // Graph Age
+            $extraFieldValueUser = new ExtraField('user');
+            $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('terms_datedenaissance');
+            if ($extraField) {
+                $users = UserManager::getUserListExtraConditions(
+                    [],
+                    [],
+                    false,
+                    false,
+                    null,
+                    $extraConditions,
+                    false
+                );
+
+                $userIdList = array_column($users, 'user_id');
+                $userIdListToString = implode("', '", $userIdList);
+
+                $all = [];
+                $total = count($users);
+
+                $sql = "SELECT value
+                        FROM $extraFieldValueUser->table_field_values
+                        WHERE
+                        item_id IN ('$userIdListToString') AND
+                        field_id = ".$extraField['id'];
+                $query = Database::query($sql);
+                $usersFound = 0;
+                $now = new DateTime();
+                $all = [
+                    //get_lang('N/A') => 0,
+                    '16-17' => 0,
+                    '18-25' => 0,
+                    '26-30' => 0,
+                ];
+
+                while ($row = Database::fetch_array($query)) {
+                    $usersFound++;
+                    if (!empty($row['value'])) {
+                        $validDate = DateTime::createFromFormat('Y-m-d', $row['value']);
+                        $validDate = $validDate && $validDate->format('Y-m-d') === $row['value'];
+                        if ($validDate) {
+                            $date1 = new DateTime($row['value']);
+                            $interval = $now->diff($date1);
+                            $years = (int) $interval->y;
+
+                            if ($years >= 16 && $years <= 17) {
+                                $all['16-17']++;
+                            }
+                            if ($years >= 18 && $years <= 25) {
+                                $all['18-25']++;
+                            }
+                            if ($years >= 26 && $years <= 30) {
+                                $all['26-30']++;
+                            }
+                        }
+                    }
+                }
+
+                $data = Statistics::buildJsChartData($all, $reportName8);
+                $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
+                    $data['chart'],
+                    'pie',
+                    $reportOptions8,
+                    'canvas8'
+                );
+                $extraTables .= $data['table'];
+            }
+
             // graph 5
             $extraFieldValueUser = new ExtraField('user');
             $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('filiere_user');
@@ -1223,81 +1308,143 @@ switch ($report) {
                 $extraTables .= $data['table'];
             }
 
-            // Graph 8
-
-            $extraFieldValueUser = new ExtraField('user');
-            $extraField = $extraFieldValueUser->get_handler_field_info_by_field_variable('terms_datedenaissance');
-            if ($extraField) {
-                $users = UserManager::getUserListExtraConditions(
-                    [],
-                    [],
-                    false,
-                    false,
-                    null,
-                    $extraConditions,
-                    false
-                );
-
-                $userIdList = array_column($users, 'user_id');
-                $userIdListToString = implode("', '", $userIdList);
-
-                $all = [];
-                $total = count($users);
-
-                $sql = "SELECT value
-                        FROM $extraFieldValueUser->table_field_values
-                        WHERE
-                        item_id IN ('$userIdListToString') AND
-                        field_id = ".$extraField['id'];
-                $query = Database::query($sql);
-                $usersFound = 0;
-                $now = new DateTime();
-                $all = [
-                    //get_lang('N/A') => 0,
-                    '16-17' => 0,
-                    '18-25' => 0,
-                    '26-30' => 0,
-                ];
-
-                while ($row = Database::fetch_array($query)) {
-                    $usersFound++;
-                    if (!empty($row['value'])) {
-                        $validDate = DateTime::createFromFormat('Y-m-d', $row['value']);
-                        $validDate = $validDate && $validDate->format('Y-m-d') === $row['value'];
-                        if ($validDate) {
-                            $date1 = new DateTime($row['value']);
-                            $interval = $now->diff($date1);
-                            $years = (int) $interval->y;
-
-                            if ($years >= 16 && $years <= 17) {
-                                $all['16-17']++;
-                            }
-                            if ($years >= 18 && $years <= 25) {
-                                $all['18-25']++;
-                            }
-                            if ($years >= 26 && $years <= 30) {
-                                $all['26-30']++;
-                            }
-                        }
-                    }
-                }
-
-                $data = Statistics::buildJsChartData($all, $reportName8);
-                $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
-                    $data['chart'],
-                    'pie',
-                    $reportOptions8,
-                    'canvas8'
-                );
-                $extraTables .= $data['table'];
-            }
-
             $header = Display::page_subheader2(get_lang('TotalNumberOfStudents').': '.$studentCount);
             $content = $header.$extraTables.$graph.$content;
         }
 
         $content = $form->returnForm().$content;
 
+        break;
+    case 'users_online':
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $intervals = [3, 5, 30, 120];
+        $counts = [];
+        foreach ($intervals as $minutes) {
+            $sql = "SELECT count(distinct(user_id))
+                FROM $table WHERE
+                DATE_ADD(tms, INTERVAL '$minutes' MINUTE) > UTC_TIMESTAMP()";
+            $query = Database::query($sql);
+            $counts[$minutes] = 0;
+            if (Database::num_rows($query) > 0) {
+                $row = Database::fetch_array($query);
+                $counts[$minutes] = $row[0];
+            }
+        }
+        $content = '<div class="pull-left">'.get_lang('UsersOnline').'</div>
+        <div class="pull-right">'.api_get_local_time().'</div>
+        <hr />
+        <div class="tracking-course-summary">
+            <div class="row">
+                <div class="col-lg-3 col-sm-3">
+                    <div class="panel panel-default tracking tracking-exercise">
+                        <div class="panel-body">
+                            <span class="tracking-icon">
+                                <i class="fa fa-thermometer-4" aria-hidden="true"></i>
+                            </span>
+                            <div class="tracking-info">
+                                <div class="tracking-text">'.get_lang('UsersOnline').' (3\')</div>
+                                <div class="tracking-number">'.getOnlineUsersCount(3).'</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-3">
+                    <div class="panel panel-default tracking tracking-certificate">
+                        <div class="panel-body">
+                            <span class="tracking-icon">
+                                <i class="fa fa-thermometer-3" aria-hidden="true"></i>
+                            </span>
+                            <div class="tracking-info">
+                                <div class="tracking-text">'.get_lang('UsersOnline').' (5\')</div>
+                                <div class="tracking-number">'.getOnlineUsersCount(5).'</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-3">
+                    <div class="panel panel-default tracking tracking-lessons">
+                        <div class="panel-body">
+                            <span class="tracking-icon">
+                                <i class="fa fa-thermometer-2" aria-hidden="true"></i>
+                            </span>
+                            <div class="tracking-info">
+                                <div class="tracking-text">'.get_lang('UsersOnline').' (30\')</div>
+                                <div class="tracking-number">'.getOnlineUsersCount(30).'</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-3">
+                    <div class="panel panel-default tracking tracking-student">
+                        <div class="panel-body">
+                            <span class="tracking-icon">
+                                <i class="fa fa-thermometer-1" aria-hidden="true"></i>
+                            </span>
+                            <div class="tracking-info">
+                                <div class="tracking-text">'.get_lang('UsersOnline').' (120\')</div>
+                                <div class="tracking-number">'.getOnlineUsersCount(120).'</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="pull-left">'.get_lang('UsersActiveInATest').'</div>
+        <hr />
+        <div class="row">
+            <div class="col-lg-3 col-sm-3">
+                <div class="panel panel-default tracking tracking-exercise">
+                    <div class="panel-body">
+                        <span class="tracking-icon">
+                            <i class="fa fa-thermometer-4" aria-hidden="true"></i>
+                        </span>
+                        <div class="tracking-info">
+                            <div class="tracking-text">(3\')</div>
+                            <div class="tracking-number">'.$counts[3].'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-3">
+                <div class="panel panel-default tracking tracking-certificate">
+                    <div class="panel-body">
+                        <span class="tracking-icon">
+                            <i class="fa fa-thermometer-3" aria-hidden="true"></i>
+                        </span>
+                        <div class="tracking-info">
+                            <div class="tracking-text">(5\')</div>
+                            <div class="tracking-number">'.$counts[5].'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-3">
+                <div class="panel panel-default tracking tracking-lessons">
+                    <div class="panel-body">
+                        <span class="tracking-icon">
+                            <i class="fa fa-thermometer-2" aria-hidden="true"></i>
+                        </span>
+                        <div class="tracking-info">
+                            <div class="tracking-text">(30\')</div>
+                            <div class="tracking-number">'.$counts[30].'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="col-lg-3 col-sm-3">
+                <div class="panel panel-default tracking tracking-student">
+                    <div class="panel-body">
+                        <span class="tracking-icon">
+                            <i class="fa fa-thermometer-1" aria-hidden="true"></i>
+                        </span>
+                        <div class="tracking-info">
+                            <div class="tracking-text">(120\')</div>
+                            <div class="tracking-number">'.$counts[120].'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>';
         break;
     case 'users':
         $content .= '<div class="row">';
@@ -1327,7 +1474,7 @@ switch ($report) {
         $content .= Statistics::printStats(get_lang('Students'), $students);
         break;
     case 'recentlogins':
-        $content .= '<h2>'.sprintf(get_lang('LastXDays'), '15').'</h2>';
+        $content .= '<h2>'.sprintf(get_lang('LastXDays'), '31').'</h2>';
         $form = new FormValidator(
             'session_time',
             'get',

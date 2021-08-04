@@ -18,7 +18,7 @@ $student_idd = isset($_GET['student_id']) ? (int) $_GET['student_id'] : '';
 
 ?>
 <form action="update_exam.php" method="post" name="save_exam">
-    <table class='data_table'>
+    <table class='table table-hover table-striped data_table'>
         <tr>
             <th colspan="6">
                 <?php echo get_lang('edit_save'); ?>

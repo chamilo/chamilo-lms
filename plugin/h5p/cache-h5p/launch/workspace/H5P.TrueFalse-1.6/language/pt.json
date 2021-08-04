@@ -1,0 +1,147 @@
+{
+  "semantics": [
+    {
+      "label": "Mídia",
+      "fields": [
+        {
+          "label": "Tipo",
+          "description": "Mídia opcional para exibir acima da pergunta."
+        },
+        {
+          "label": "Desativar zoom da imagem"
+        }
+      ]
+    },
+    {
+      "label": "Pergunta"
+    },
+    {
+      "label": "Resposta correta",
+      "options": [
+        {
+          "label": "Verdadeiro"
+        },
+        {
+          "label": "Falso"
+        }
+      ]
+    },
+    {
+      "label": "Traduções da interface de usuário para questões de verdadeiro/falso",
+      "fields": [
+        {
+          "label": "Rótulo para o botão de verdadeiro",
+          "default": "Verdadeiro"
+        },
+        {
+          "label": "Rótulo para o botão de falso",
+          "default": "Falso"
+        },
+        {
+          "label": "Texto de feedback",
+          "default": "Você conseguiu @score de @total pontos",
+          "description": "Texto de feedback, variáveis disponíveis: @score e @total. Exemplo: 'você conseguiu @score de @total pontos possíveis'"
+        },
+        {
+          "label": "Texto para o botão \"Verificar\"",
+          "default": "Verificar"
+        },
+        {
+          "label": "Texto para o botão \"Mostrar solução\"",
+          "default": "Mostrar solução"
+        },
+        {
+          "label": "Texto para o botão \"Tentar novamente\"",
+          "default": "Tentar novamente"
+        },
+        {
+          "label": "Resposta errada",
+          "default": "Resposta errada"
+        },
+        {
+          "label": "Resposta correta",
+          "default": "Resposta correta"
+        },
+        {
+          "label": "Textual representation of the score bar for those using a readspeaker",
+          "default": "You got :num out of :total points"
+        }
+      ]
+    },
+    {
+      "label": "Configurações comportamentais",
+      "description": "Estas opções permitem que você controle como a tarefa se comporta.",
+      "fields": [
+        {
+          "label": "Habilitar o botão \"Tentar novamente\""
+        },
+        {
+          "label": "Habilitar o botão \"Mostrar solução\""
+        },
+        {
+          "label": "Enable \"Check\" button"
+        },
+        {
+          "label": "Solicitar confirmação ao clicar \"Verificar\""
+        },
+        {
+          "label": "Solicitar confirmação ao clicar \"Tentar novamente\""
+        },
+        {
+          "label": "Verificar resposta automaticamente",
+          "description": "Observe que haverá problemas de acessibilidade se habilitar esta opção"
+        },
+        {
+          "label": "Feedback sobre a resposta correta",
+          "description": "Isto irá substituir o texto padrão de feedback. Variáveis disponíveis: @score e @total"
+        },
+        {
+          "label": "Feedback sobre a resposta errada",
+          "description": "Isto irá substituir o texto padrão de feedback. Variáveis disponíveis: @score e @total"
+        }
+      ]
+    },
+    {
+      "label": "Caixa de diálogo de confirmação ao clicar Verificar",
+      "fields": [
+        {
+          "label": "Texto de cabeçalho",
+          "default": "Terminar?"
+        },
+        {
+          "label": "Corpo de texto",
+          "default": "Tem certeza que deseja terminar?"
+        },
+        {
+          "label": "Rótulo do botão Cancelar",
+          "default": "Cancelar"
+        },
+        {
+          "label": "Rótulo do botão Confirmar",
+          "default": "Terminar"
+        }
+      ]
+    },
+    {
+      "label": "Caixa de diálogo de confirmação do Tentar novamente",
+      "fields": [
+        {
+          "label": "Texto de cabeçalho",
+          "default": "Tentar novamente?"
+        },
+        {
+          "label": "Corpo de texto",
+          "default": "Tem certeza que deseja tentar novamente?"
+        },
+        {
+          "label": "Rótulo do botão Cancelar",
+          "default": "Cancelar"
+        },
+        {
+          "label": "Rótulo do botão Confirmar",
+          "default": "Confirmar"
+        }
+      ]
+    }
+  ]
+}

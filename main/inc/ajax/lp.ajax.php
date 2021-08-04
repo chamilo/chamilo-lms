@@ -20,6 +20,21 @@ if ($debug) {
 }
 
 switch ($action) {
+    case 'get_lp_list_by_course':
+        $course_id = (isset($_GET['course_id']) && !empty($_GET['course_id'])) ? (int) $_GET['course_id'] : 0;
+        $session_id = (isset($_GET['session_id']) && !empty($_GET['session_id'])) ? (int) $_GET['session_id'] : 0;
+        $onlyActiveLp = !(api_is_platform_admin(true) || api_is_course_admin());
+        $results = learnpath::getLpList($course_id, $session_id, $onlyActiveLp);
+        $data = [];
+
+        if (!empty($results)) {
+            foreach ($results as $lp) {
+                $data[] = ['id' => $lp['id'], 'text' => html_entity_decode($lp['name'])];
+            }
+        }
+
+        echo json_encode($data);
+        break;
     case 'get_documents':
         $courseInfo = api_get_course_info();
         $folderId = isset($_GET['folder_id']) ? $_GET['folder_id'] : null;
@@ -86,7 +101,7 @@ switch ($action) {
             $orderList = [];
 
             foreach ($sections as $items) {
-                list($id, $parentId) = explode('|', $items);
+                [$id, $parentId] = explode('|', $items);
 
                 $orderList[$id] = $parentId;
             }
@@ -113,11 +128,11 @@ switch ($action) {
         foreach (['video', 'audio'] as $type) {
             if (isset($_FILES["${type}-blob"])) {
                 $fileName = $_POST["${type}-filename"];
-                //$file = $_FILES["${type}-blob"]["tmp_name"];
                 $file = $_FILES["${type}-blob"];
+                $title = $_POST['audio-title'];
                 $fileInfo = pathinfo($fileName);
-
-                $file['name'] = 'rec_'.date('Y-m-d_His').'_'.uniqid().'.'.$fileInfo['extension'];
+                //$file['name'] = 'rec_'.date('Y-m-d_His').'_'.uniqid().'.'.$fileInfo['extension'];
+                $file['name'] = $title.'.'.$fileInfo['extension'];
                 $file['file'] = $file;
 
                 $result = DocumentManager::upload_document(
@@ -283,6 +298,11 @@ switch ($action) {
         if (empty($lp) || empty($itemId)) {
             exit;
         }
+        if ($lp->debug) {
+            error_log('--------------------------------------');
+            error_log('get_item_prerequisites');
+        }
+
         $result = $lp->prerequisites_match($itemId);
         if ($result) {
             echo '1';

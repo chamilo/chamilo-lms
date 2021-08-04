@@ -109,9 +109,9 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
     {
         if ($this->isFrozen()) {
             return $this->getFrozenHtml();
-        } else {
-            return $this->_getTabs().'<input'.$this->_getAttrString($this->_attributes).' />';
         }
+
+        return $this->_getTabs().'<input'.$this->_getAttrString($this->_attributes).' />';
     }
 
     /**

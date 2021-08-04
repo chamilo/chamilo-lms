@@ -12,7 +12,9 @@
                 {{ item.actions }}
             </div>
             <h4 class="media-heading"
-                id="comment-{{ item.iid }}-title">{{ item.title }}</h4>
+                id="comment-{{ item.iid }}-title">
+                {{ item.title | remove_xss }}
+            </h4>
             <ul class="info-post list-inline">
                 <li class="date">
                     <i class="fa fa-clock-o"></i> {{ item.comment_date }}
@@ -29,13 +31,15 @@
                 </li>
             </ul>
             <div id="comment-{{ item.iid }}-content">
-                {{ item.content }}
+                {{ item.content | remove_xss }}
             </div>
             {% if item.files %}
                 <aside class="well well-sm files">
                     <i class="fa fa-paperclip" aria-hidden="true"></i>
-                    <a href="download.php?file={{ item.files.path }}">{{ item.files.filename }}</a>
-                    <p>{{ item.files.comment }}</p>
+                    <a href="download.php?file={{ item.files.path }}">
+                        {{ item.files.filename | remove_xss }}
+                    </a>
+                    <p>{{ item.files.comment | remove_xss }}</p>
                 </aside>
             {% endif %}
 
@@ -74,7 +78,7 @@
                         <div class="form-group">
                             <input type="hidden" name="blog_id" value="{{ id_blog }}"/>
                             <input type="hidden" name="action" value="view_search_result"/>
-                            <input type="text" class="form-control" size="20" name="q" value="{{ search }}"/>
+                            <input type="text" class="form-control" size="20" name="q" value="{{ search | remove_xss }}"/>
                         </div>
                         <button class="btn btn-default btn-block" type="submit">
                             <em class="fa fa-search"></em> {{ 'Search'|get_lang }}
@@ -106,7 +110,7 @@
                     <article>
                         <div class="article-header">
                             <div class="title">
-                                <h1 title="{{ post.title }}">{{ post.title }}</h1>
+                                <h1 title="{{ post.title }}">{{ post.title | remove_xss  }}</h1>
                             </div>
                             <ul class="info-post list-inline">
                                 <li class="date">
@@ -118,7 +122,9 @@
                                 </li>
                                 <li class="autor">
                                     <i class="fa fa-user" aria-hidden="true"></i>
-                                    <a href="{{ _p.web }}main/social/profile.php?u={{ post.id_author }}">{{ post.author }}</a>
+                                    <a href="{{ _p.web }}main/social/profile.php?u={{ post.id_author }}">
+                                        {{ post.author }}
+                                    </a>
                                 </li>
                                 <li class="score">
                                     <i class="fa fa-star" aria-hidden="true"></i> {{ post.score_ranking }}
@@ -126,7 +132,7 @@
                             </ul>
                         </div>
                         <div class="content-post">
-                            {{ post.content }}
+                            {{ post.content | remove_xss }}
                         </div>
                         {% if post.files %}
                             <aside class="well well-sm files">

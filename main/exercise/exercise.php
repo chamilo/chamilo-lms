@@ -1,12 +1,9 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
+/* For licensing terms, see /license.txt */
 
 /**
  * Exercise list: This script shows the list of exercises for administrators and students.
- *
- * @package chamilo.exercise
  *
  * @author Olivier Brouckaert, original author
  * @author Denes Nagy, HotPotatoes integration
@@ -22,10 +19,81 @@ $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
+$htmlHeadXtra[] = '
+<div class="modal fade" id="NotificarUsuarios" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="'.get_lang('Close').'">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="#" class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-6" id="myModalLabel">'.get_lang('EmailNotifySubscription').'</div>
+                        <div class="col-md-6">
+                            <select class="selectpicker form-control" multiple="multiple" id="toUsers" name="toUsers">
+                                <option value="">-</option>
+                            </select>
+                        </div>
+                    </div>
+                    <input class="hidden" id="urlTo" type="hidden">
+               </form>
+               <div class="clearfix clear-fix"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" onclick="sendNotificationToUsers()" data-dismiss="modal">'
+                    .get_lang('SendMailToUsers').'
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">'.get_lang('Close').'</button>
+            </div>
+        </div>
+    </div>
+</div>';
+$htmlHeadXtra[] = '<script>
+function sendNotificationToUsers() {
+   var sendTo = $("#toUsers").val().join(",");
+   var url = $("#urlTo").val() + sendTo;
+   $("#toUsers").find("option").remove().end().selectpicker("refresh");
+   $.ajax({
+        url: url,
+        dataType: "json"
+    }).done(function(response) {
+        $("#cm-tools").html(response.message);
+    }).always(function() {
+        $("#toUsers").find("option").remove().end().selectpicker("refresh");
+        $("#urlTo").val("");
+    });
+}
+function showUserToSendNotificacion(element) {
+    var url = $(element).data("link");
+    $("#toUsers").find("option").remove().end().selectpicker("refresh");
+    $("#urlTo").val("");
+    $.ajax({
+        url: url,
+        dataType: "json",
+    }).done(function(response) {
+        $("#toUsers").find("option").remove().end().selectpicker("refresh");
+        $.each(response,function(a,b){
+            $("#toUsers").append($("<option>", {
+                value: b.user_id,
+                text: b.user_name
+            }));
+        });
+        $("#urlTo").val($(element).data("link").replace("send_reminder","send_reminder_to") + "&users=")
+        $("#toUsers").selectpicker("refresh");
+        $("#NotificarUsuarios").modal()
+    });
+}
+</script>';
 
 api_protect_course_script(true);
 
 $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+
+$allowDelete = Exercise::allowAction('delete');
+$allowClean = Exercise::allowAction('clean_results');
 
 $check = Security::get_existing_token('get');
 
@@ -97,7 +165,7 @@ if ($is_allowedToEdit) {
     switch ($action) {
         case 'clean_all_test':
             if ($check) {
-                if ($limitTeacherAccess && !api_is_platform_admin()) {
+                if (false === $allowClean) {
                     api_not_allowed(true);
                 }
 
@@ -113,10 +181,10 @@ if ($is_allowedToEdit) {
                 $quantity_results_deleted = 0;
                 foreach ($exerciseList as $exeItem) {
                     // delete result for test, if not in a gradebook
-                    $exercise_action_locked = api_resource_is_locked_by_gradebook($exeItem['id'], LINK_EXERCISE);
+                    $exercise_action_locked = api_resource_is_locked_by_gradebook($exeItem['iid'], LINK_EXERCISE);
                     if ($exercise_action_locked == false) {
                         $objExerciseTmp = new Exercise();
-                        if ($objExerciseTmp->read($exeItem['id'])) {
+                        if ($objExerciseTmp->read($exeItem['iid'])) {
                             $quantity_results_deleted += $objExerciseTmp->cleanResults(true);
                         }
                     }
@@ -210,7 +278,9 @@ if (!empty($action) && $is_allowedToEdit) {
 
             switch ($action) {
                 case 'delete':
-                    $objExerciseTmp->delete();
+                    if ($allowDelete) {
+                        $objExerciseTmp->delete();
+                    }
                     break;
                 case 'visible':
                     if ($limitTeacherAccess && !api_is_platform_admin()) {
@@ -231,7 +301,7 @@ if (!empty($action) && $is_allowedToEdit) {
                     api_item_property_update(
                         $courseInfo,
                         TOOL_QUIZ,
-                        $objExerciseTmp->id,
+                        $objExerciseTmp->iid,
                         'visible',
                         $userId
                     );
@@ -257,7 +327,7 @@ if (!empty($action) && $is_allowedToEdit) {
                     api_item_property_update(
                         $courseInfo,
                         TOOL_QUIZ,
-                        $objExerciseTmp->id,
+                        $objExerciseTmp->iid,
                         'visible',
                         $userId
                     );
@@ -306,9 +376,11 @@ if ($is_allowedToEdit) {
                         break;
                     case 'delete':
                         // deletes an exercise
-                        $result = $objExerciseTmp->delete();
-                        if ($result) {
-                            Display::addFlash(Display::return_message(get_lang('ExerciseDeleted'), 'confirmation'));
+                        if ($allowDelete) {
+                            $result = $objExerciseTmp->delete();
+                            if ($result) {
+                                Display::addFlash(Display::return_message(get_lang('ExerciseDeleted'), 'confirmation'));
+                            }
                         }
                         break;
                     case 'enable':
@@ -331,7 +403,7 @@ if ($is_allowedToEdit) {
                         api_item_property_update(
                             $courseInfo,
                             TOOL_QUIZ,
-                            $objExerciseTmp->id,
+                            $objExerciseTmp->iid,
                             'visible',
                             $userId
                         );
@@ -357,7 +429,7 @@ if ($is_allowedToEdit) {
                         api_item_property_update(
                             $courseInfo,
                             TOOL_QUIZ,
-                            $objExerciseTmp->id,
+                            $objExerciseTmp->iid,
                             'invisible',
                             $userId
                         );
@@ -378,13 +450,13 @@ if ($is_allowedToEdit) {
 
                         break;
                     case 'clean_results':
-                        if ($limitTeacherAccess && !api_is_platform_admin()) {
+                        if (false === $allowClean) {
                             // Teacher change exercise
                             break;
                         }
 
                         // Clean student results
-                        if ($exercise_action_locked == false) {
+                        if (false == $exercise_action_locked) {
                             $quantity_results_deleted = $objExerciseTmp->cleanResults(true);
                             $title = $objExerciseTmp->selectTitle();
 
@@ -407,6 +479,53 @@ if ($is_allowedToEdit) {
                             'confirmation'
                         ));
                         break;
+                    case 'send_reminder_to':
+                        $toUsers = $_GET['users'] ?? null;
+                        if (!empty($toUsers) && !empty($exerciseId)) {
+                            $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
+                            $courseCode = $_GET['cidReq'] ?? null;
+                            $courseId = api_get_course_int_id($courseCode);
+                            $temo = [];
+                            if (is_int(strpos($toUsers, 'X'))) {
+                                // to all users
+                                $temo = Exercise::getUsersInExercise(
+                                    $exerciseId,
+                                    $courseId,
+                                    $sessionId,
+                                    false,
+                                     [],
+                                    false
+                                );
+                                $toUsers = [];
+                                foreach ($temo as $item) {
+                                    $toUsers[] = $item['user_id'];
+                                }
+                            }
+                            $toUsers = explode(',', $toUsers);
+                            api_set_more_memory_and_time_limits();
+                            Exercise::notifyUsersOfTheExercise(
+                                $exerciseId,
+                                $courseId,
+                                $sessionId,
+                                $toUsers
+                            );
+                            echo json_encode(
+                                [
+                                    'message' => Display::return_message(
+                                        get_lang('AnnounceSentByEmail'), 'confirmation'
+                                    ),
+                                ]
+                            );
+                        }
+                        exit();
+                    case 'send_reminder':
+                        $users = Exercise::getUsersInExercise(
+                            $objExerciseTmp->id,
+                            $courseId,
+                            $sessionId
+                        );
+                        echo json_encode($users);
+                        exit();
                 }
                 header('Location: '.$currentUrl);
                 exit;
@@ -461,14 +580,14 @@ if ($is_allowedToEdit) {
                 }
 
                 $newVisibilityStatus = '1'; //"visible"
-                $query = "SELECT id FROM $TBL_DOCUMENT
+                $query = "SELECT iid FROM $TBL_DOCUMENT
                           WHERE c_id = $courseId AND path='".Database::escape_string($file)."'";
                 $res = Database::query($query);
                 $row = Database :: fetch_array($res, 'ASSOC');
                 api_item_property_update(
                     $courseInfo,
                     TOOL_DOCUMENT,
-                    $row['id'],
+                    $row['iid'],
                     'visible',
                     $userId
                 );
@@ -482,14 +601,14 @@ if ($is_allowedToEdit) {
                     break;
                 }
                 $newVisibilityStatus = '0'; //"invisible"
-                $query = "SELECT id FROM $TBL_DOCUMENT
+                $query = "SELECT iid FROM $TBL_DOCUMENT
                           WHERE c_id = $courseId AND path='".Database::escape_string($file)."'";
                 $res = Database::query($query);
                 $row = Database :: fetch_array($res, 'ASSOC');
                 api_item_property_update(
                     $courseInfo,
                     TOOL_DOCUMENT,
-                    $row['id'],
+                    $row['iid'],
                     'invisible',
                     $userId
                 );
@@ -502,7 +621,7 @@ if ($is_allowedToEdit) {
     }
 }
 
-if ($origin !== 'learnpath') {
+if (!in_array($origin, ['learnpath', 'mobileapp'])) {
     //so we are not in learnpath tool
     Display::display_header($nameTools, get_lang('Exercise'));
     if (isset($_GET['message']) && in_array($_GET['message'], ['ExerciseEdited'])) {
@@ -540,7 +659,6 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
     $actionsLeft .= Display::return_icon('database.png', get_lang('QuestionPool'), '', ICON_SIZE_MEDIUM);
     $actionsLeft .= '</a>';
 
-    //echo Display::url(Display::return_icon('looknfeel.png', get_lang('Media')), 'media.php?' . api_get_cidreq());
     // end question category
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/hotpotatoes.php?'.api_get_cidreq().'">'.
         Display::return_icon('import_hotpotatoes.png', get_lang('ImportHotPotatoesQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -552,21 +670,24 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/upload_exercise.php?'.api_get_cidreq().'">'.
         Display::return_icon('import_excel.png', get_lang('ImportExcelQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    $cleanAll = Display::url(
-        Display::return_icon(
-            'clean_all.png',
-            get_lang('CleanAllStudentsResultsForAllTests'),
-            '',
-            ICON_SIZE_MEDIUM
-        ),
-        '#',
-        [
-            'data-item-question' => addslashes(get_lang('AreYouSureToEmptyAllTestResults')),
-            'data-href' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&action=clean_all_test&sec_token='.$token,
-            'data-toggle' => 'modal',
-            'data-target' => '#confirm-delete',
-        ]
-    );
+    $cleanAll = null;
+    if ($allowClean) {
+        $cleanAll = Display::url(
+            Display::return_icon(
+                'clean_all.png',
+                get_lang('CleanAllStudentsResultsForAllTests'),
+                '',
+                ICON_SIZE_MEDIUM
+            ),
+            '#',
+            [
+                'data-item-question' => addslashes(get_lang('AreYouSureToEmptyAllTestResults')),
+                'data-href' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&action=clean_all_test&sec_token='.$token,
+                'data-toggle' => 'modal',
+                'data-target' => '#confirm-delete',
+            ]
+        );
+    }
 
     if ($limitTeacherAccess) {
         if (api_is_platform_admin()) {
@@ -612,6 +733,7 @@ if ($is_allowedToEdit) {
         [6, 1, 5]
     );
 }
+
 if (api_get_configuration_value('allow_exercise_categories') === false) {
     echo Exercise::exerciseGrid(0, $keyword);
 } else {
@@ -632,7 +754,7 @@ if (api_get_configuration_value('allow_exercise_categories') === false) {
             $down = '';
             if ($is_allowedToEdit) {
                 $up = Display::url($upIcon, $modifyUrl.'&action=up_category&category_id_edit='.$categoryIdItem);
-                if ($counter === 0) {
+                if (0 === $counter) {
                     $up = Display::url(Display::return_icon('up_na.png'), '#');
                 }
                 $down = Display::url($downIcon, $modifyUrl.'&action=down_category&category_id_edit='.$categoryIdItem);
@@ -649,11 +771,11 @@ if (api_get_configuration_value('allow_exercise_categories') === false) {
         $manager = new ExerciseCategoryManager();
         $category = $manager->get($categoryId);
         echo Display::page_subheader($category['name']);
-        echo Exercise::exerciseGrid($category['id'], $keyword);
+        echo Exercise::exerciseGrid($category['iid'], $keyword);
     }
 }
 
-if ($origin !== 'learnpath') {
+if ('learnpath' !== $origin) {
     // We are not in learnpath tool
     Display::display_footer();
 }

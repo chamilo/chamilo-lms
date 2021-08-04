@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CForumPost;
@@ -12,8 +13,6 @@ use Zend\Feed\Reader\Reader;
  *
  * This class provides methods for the social network management.
  * Include/require it in your code to use its features.
- *
- * @package chamilo.social
  */
 class SocialManager extends UserManager
 {
@@ -38,7 +37,7 @@ class SocialManager extends UserManager
     {
         $table = Database::get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
         $sql = 'SELECT id, title FROM '.$table.'
-                WHERE id<>6 
+                WHERE id<>6
                 ORDER BY id ASC';
         $result = Database::query($sql);
         $friend_relation_list = [];
@@ -56,22 +55,23 @@ class SocialManager extends UserManager
     /**
      * Get the kind of relation between contacts.
      *
-     * @param int user id
-     * @param int user friend id
-     * @param string
+     * @param int  $user_id     user id
+     * @param int  $user_friend user friend id
+     * @param bool $includeRH   include the RH relationship
      *
      * @return int
      *
      * @author isaac flores paz
      */
-    public static function get_relation_between_contacts($user_id, $user_friend)
+    public static function get_relation_between_contacts($user_id, $user_friend, $includeRH = false)
     {
         $table = Database::get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
         $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-        $sql = 'SELECT rt.id as id 
+        if ($includeRH == false) {
+            $sql = 'SELECT rt.id as id
                 FROM '.$table.' rt
                 WHERE rt.id = (
-                    SELECT uf.relation_type 
+                    SELECT uf.relation_type
                     FROM '.$userRelUserTable.' uf
                     WHERE
                         user_id='.((int) $user_id).' AND
@@ -79,13 +79,48 @@ class SocialManager extends UserManager
                         uf.relation_type <> '.USER_RELATION_TYPE_RRHH.'
                     LIMIT 1
                 )';
+        } else {
+            $sql = 'SELECT rt.id as id
+                FROM '.$table.' rt
+                WHERE rt.id = (
+                    SELECT uf.relation_type
+                    FROM '.$userRelUserTable.' uf
+                    WHERE
+                        user_id='.((int) $user_id).' AND
+                        friend_user_id='.((int) $user_friend).'
+                    LIMIT 1
+                )';
+        }
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res, 'ASSOC');
 
-            return $row['id'];
+            return (int) $row['id'];
         } else {
-            return USER_UNKNOWN;
+            if (api_get_configuration_value('social_make_teachers_friend_all')) {
+                $adminsList = UserManager::get_all_administrators();
+                foreach ($adminsList as $admin) {
+                    if (api_get_user_id() == $admin['user_id']) {
+                        return USER_RELATION_TYPE_GOODFRIEND;
+                    }
+                }
+                $targetUserCoursesList = CourseManager::get_courses_list_by_user_id(
+                    $user_id,
+                    true,
+                    false
+                );
+                $currentUserId = api_get_user_id();
+                foreach ($targetUserCoursesList as $course) {
+                    $teachersList = CourseManager::get_teacher_list_from_course_code($course['code']);
+                    foreach ($teachersList as $teacher) {
+                        if ($currentUserId == $teacher['user_id']) {
+                            return USER_RELATION_TYPE_GOODFRIEND;
+                        }
+                    }
+                }
+            } else {
+                return USER_UNKNOWN;
+            }
         }
     }
 
@@ -274,18 +309,18 @@ class SocialManager extends UserManager
         } else {
             // invitation already exist
             $sql = 'SELECT COUNT(*) AS count, id FROM '.$tbl_message.'
-                    WHERE 
-                        user_sender_id='.$user_id.' AND 
-                        user_receiver_id='.$friend_id.' AND 
+                    WHERE
+                        user_sender_id='.$user_id.' AND
+                        user_receiver_id='.$friend_id.' AND
                         msg_status = 7';
             $res_if_exist = Database::query($sql);
             $row_if_exist = Database::fetch_array($res_if_exist, 'ASSOC');
             if ($row_if_exist['count'] == 1) {
                 $sql = 'UPDATE '.$tbl_message.' SET
                             msg_status = 5, content = "'.$clean_message_content.'"
-                        WHERE 
-                            user_sender_id='.$user_id.' AND 
-                            user_receiver_id='.$friend_id.' AND 
+                        WHERE
+                            user_sender_id='.$user_id.' AND
+                            user_receiver_id='.$friend_id.' AND
                             msg_status = 7 ';
                 Database::query($sql);
 
@@ -379,12 +414,12 @@ class SocialManager extends UserManager
         }
 
         $table = Database::get_main_table(TABLE_MESSAGE);
-        $sql = 'SELECT COUNT(*) 
+        $sql = 'SELECT COUNT(*)
                 FROM '.$table.'
                 WHERE
                     user_sender_id='.$userId.' AND
-                    (msg_status = '.MESSAGE_STATUS_WALL.' OR 
-                    msg_status = '.MESSAGE_STATUS_WALL_POST.') AND 
+                    (msg_status = '.MESSAGE_STATUS_WALL.' OR
+                    msg_status = '.MESSAGE_STATUS_WALL_POST.') AND
                     parent_id = 0';
         $res = Database::query($sql);
         $row = Database::fetch_row($res);
@@ -570,7 +605,7 @@ class SocialManager extends UserManager
             return '';
         }
         $feeds = explode(';', $feed['rssfeeds']);
-        if (count($feeds) == 0) {
+        if (0 == count($feeds)) {
             return '';
         }
         $res = '';
@@ -627,6 +662,7 @@ class SocialManager extends UserManager
         $user_info = api_get_user_info($userId);
         $success = get_lang('MessageSentTo');
         $success .= ' : '.api_get_person_name($user_info['firstName'], $user_info['lastName']);
+        $content = strip_tags($content);
 
         if (isset($subject) && isset($content) && isset($userId)) {
             $result = MessageManager::send_message($userId, $subject, $content);
@@ -851,9 +887,7 @@ class SocialManager extends UserManager
             );
         }
 
-        $skillBlock = $template->get_template('social/avatar_block.tpl');
-
-        return $template->fetch($skillBlock);
+        return $template->fetch($template->get_template('social/avatar_block.tpl'));
     }
 
     /**
@@ -884,11 +918,17 @@ class SocialManager extends UserManager
     ) {
         $user_id = (int) $user_id;
         $group_id = (int) $group_id;
+        $settingExtendedProfileEnabled = api_get_setting('extended_profile');
 
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
 
+        $myExtendedProfileEdit = '';
+        if ($user_id == api_get_user_id()) {
+            $myExtendedProfileEdit .= '<a href="/main/auth/profile.php?type=extended#openarea" style="display:initial">'.
+                Display::return_icon('edit.png', get_lang('EditExtendProfile'), '', 16).'</a>';
+        }
         $usergroup = new UserGroup();
         $show_groups = [
             'groups',
@@ -928,6 +968,9 @@ class SocialManager extends UserManager
         $portfolioIcon = Display::return_icon('wiki_task.png', get_lang('Portfolio'));
         $personalDataIcon = Display::return_icon('database.png', get_lang('PersonalDataReport'));
         $messageSocialIcon = Display::return_icon('promoted_message.png', get_lang('PromotedMessages'));
+        $portfolio = Display::return_icon('portfolio.png', get_lang('Portfolio '));
+
+        $allowPortfolioTool = api_get_configuration_value('allow_portfolio_tool');
 
         $forumCourseId = api_get_configuration_value('global_forums_course_id');
         $groupUrl = api_get_path(WEB_CODE_PATH).'social/groups.php';
@@ -959,6 +1002,25 @@ class SocialManager extends UserManager
                         '.$messagesIcon.' '.get_lang('Messages').$count_unread_message.'
                     </a>
                 </li>';
+            if ($allowPortfolioTool) {
+                $links .= '
+                    <li class="portoflio-icon '.($show === 'portfolio' ? 'active' : '').'">
+                        <a href="'.api_get_path(WEB_CODE_PATH).'portfolio/index.php">
+                            '.$portfolioIcon.' '.get_lang('Portfolio').'
+                        </a>
+                    </li>
+                ';
+            } else {
+                if ($settingExtendedProfileEnabled == true) {
+                    $active = $show === 'portfolio' ? 'active' : null;
+                    $links .= '
+                <li class="portfolio-icon '.$active.'">
+                      <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id.'&p=1">
+                        '.$portfolio.' '.get_lang('Portfolio').'
+                    </a>
+                </li>';
+                }
+            }
 
             // Invitations
             $active = $show === 'invitations' ? 'active' : null;
@@ -1015,15 +1077,6 @@ class SocialManager extends UserManager
                 $myFiles = '';
             }
             $links .= $myFiles;
-            if (api_get_configuration_value('allow_portfolio_tool')) {
-                $links .= '
-                    <li class="portoflio-icon '.($show === 'portfolio' ? 'active' : '').'">
-                        <a href="'.api_get_path(WEB_CODE_PATH).'portfolio/index.php">
-                            '.$portfolioIcon.' '.get_lang('Portfolio').'
-                        </a>
-                    </li>
-                ';
-            }
 
             if (!api_get_configuration_value('disable_gdpr')) {
                 $active = $show === 'personal-data' ? 'active' : null;
@@ -1080,6 +1133,25 @@ class SocialManager extends UserManager
                             '.$messagesIcon.' '.get_lang('Messages').$count_unread_message.'
                         </a>
                     </li>';
+                if ($allowPortfolioTool) {
+                    $links .= '
+                        <li class="portoflio-icon '.($show == 'portfolio' ? 'active' : '').'">
+                            <a href="'.api_get_path(WEB_CODE_PATH).'portfolio/index.php">
+                                '.$portfolioIcon.' '.get_lang('Portfolio').'
+                            </a>
+                        </li>
+                    ';
+                } else {
+                    if ($settingExtendedProfileEnabled == true) {
+                        $active = $show === 'portfolio' ? 'active' : null;
+                        $links .= '
+                <li class="portfolio-icon '.$active.'">
+                      <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id.'&p=1">
+                      '.$portfolio.' '.get_lang('Portfolio').'
+                    </a>
+                </li>';
+                    }
+                }
                 $active = $show === 'invitations' ? 'active' : null;
                 $links .= '
                     <li class="invitations-icon'.$active.'">
@@ -1127,16 +1199,6 @@ class SocialManager extends UserManager
                 }
                 $links .= $myFiles;
 
-                if (api_get_configuration_value('allow_portfolio_tool')) {
-                    $links .= '
-                        <li class="portoflio-icon '.($show == 'portfolio' ? 'active' : '').'">
-                            <a href="'.api_get_path(WEB_CODE_PATH).'portfolio/index.php">
-                                '.$portfolioIcon.' '.get_lang('Portfolio').'
-                            </a>
-                        </li>
-                    ';
-                }
-
                 if (!api_get_configuration_value('disable_gdpr')) {
                     $active = $show == 'personal-data' ? 'active' : null;
                     $personalData = '
@@ -1172,9 +1234,7 @@ class SocialManager extends UserManager
                         'data-title' => $sendMessageText,
                     ]
                 );
-                $links .= '</li>';
-
-                if (api_get_configuration_value('allow_portfolio_tool')) {
+                if ($allowPortfolioTool) {
                     $links .= '
                         <li class="portoflio-icon '.($show == 'portfolio' ? 'active' : '').'">
                             <a href="'.api_get_path(WEB_CODE_PATH).'portfolio/index.php?user='.$user_id.'">
@@ -1182,6 +1242,16 @@ class SocialManager extends UserManager
                             </a>
                         </li>
                     ';
+                } else {
+                    if ($settingExtendedProfileEnabled == true) {
+                        $active = $show === 'portfolio' ? 'active' : null;
+                        $links .= '
+                <li class="portfolio-icon '.$active.'">
+                      <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id.'&p=1">
+                        '.$portfolio.' '.get_lang('Portfolio').'
+                    </a>
+                </li>';
+                    }
                 }
             }
 
@@ -1378,24 +1448,28 @@ class SocialManager extends UserManager
             if (api_get_setting('show_email_addresses') == 'true') {
                 $html .= Display::encrypted_mailto_link($user_object->email, $user_object->email).'<br />';
             }
-
-            if ($user_object->competences) {
-                $html .= Display::page_subheader(get_lang('MyCompetences'));
-                $html .= '<p>'.$user_object->competences.'</p>';
-            }
-            if ($user_object->diplomas) {
-                $html .= Display::page_subheader(get_lang('MyDiplomas'));
-                $html .= '<p>'.$user_object->diplomas.'</p>';
-            }
-            if ($user_object->teach) {
-                $html .= Display::page_subheader(get_lang('MyTeach'));
-                $html .= '<p>'.$user_object->teach.'</p>';
-            }
-            self::display_productions($user_object->user_id);
+            //    MY PERSONAL OPEN AREA
             if ($user_object->openarea) {
                 $html .= Display::page_subheader(get_lang('MyPersonalOpenArea'));
                 $html .= '<p>'.$user_object->openarea.'</p>';
             }
+            //    MY COMPETENCES
+            if ($user_object->competences) {
+                $html .= Display::page_subheader(get_lang('MyCompetences'));
+                $html .= '<p>'.$user_object->competences.'</p>';
+            }
+            //    MY DIPLOMAS
+            if ($user_object->diplomas) {
+                $html .= Display::page_subheader(get_lang('MyDiplomas'));
+                $html .= '<p>'.$user_object->diplomas.'</p>';
+            }
+            // WHAT I AM ABLE TO TEACH
+            if ($user_object->teach) {
+                $html .= Display::page_subheader(get_lang('MyTeach'));
+                $html .= '<p>'.$user_object->teach.'</p>';
+            }
+            //    MY PRODUCTIONS
+            self::display_productions($user_object->user_id);
         } else {
             $html .= '<div class="actions-title">';
             $html .= get_lang('UsersOnLineList');
@@ -1630,7 +1704,7 @@ class SocialManager extends UserManager
 
         // Get my own posts
         $userReceiverCondition = ' (
-            user_receiver_id = '.$userId.' AND 
+            user_receiver_id = '.$userId.' AND
             msg_status IN ('.MESSAGE_STATUS_WALL_POST.', '.MESSAGE_STATUS_WALL.') AND
             parent_id = '.$parentId.'
         )';
@@ -1677,7 +1751,7 @@ class SocialManager extends UserManager
             if ($getCount) {
                 $select = ' SELECT count(iid) count_items ';
             } else {
-                $select = " SELECT 
+                $select = " SELECT
                                 iid as id,
                                 poster_id as user_sender_id,
                                 '' as user_receiver_id,
@@ -1688,7 +1762,7 @@ class SocialManager extends UserManager
                                 '' as group_id,
                                 forum_id,
                                 thread_id,
-                                c_id                            
+                                c_id
                             ";
             }
 
@@ -1696,8 +1770,8 @@ class SocialManager extends UserManager
             $threadList = implode("','", $threadList);
             $condition = " thread_id IN ('$threadList') ";
             $sql[5] = "$select
-                    FROM c_forum_post  
-                    WHERE $condition                                         
+                    FROM c_forum_post
+                    WHERE $condition
                 ";
         }
 
@@ -1861,8 +1935,8 @@ class SocialManager extends UserManager
         $comment .= '<div class="col-md-2 col-xs-2 social-post-answers">';
         $comment .= '<div class="user-image pull-right">';
         $comment .= '<a href="'.$url.'">
-                        <img src="'.$users[$userIdLoop]['avatar'].'" 
-                        alt="'.$users[$userIdLoop]['complete_name'].'" 
+                        <img src="'.$users[$userIdLoop]['avatar'].'"
+                        alt="'.$users[$userIdLoop]['complete_name'].'"
                         class="avatar-thumb">
                      </a>';
         $comment .= '</div>';
@@ -1870,7 +1944,7 @@ class SocialManager extends UserManager
         $comment .= '<div class="col-md-7 col-xs-7 social-post-answers">';
         $comment .= '<div class="user-data">';
         $comment .= $iconStatus;
-        $comment .= '<div class="username"><a href="'.$url.'">'.$nameComplete.'</a> 
+        $comment .= '<div class="username"><a href="'.$url.'">'.$nameComplete.'</a>
                         <span>'.Security::remove_XSS($message['content']).'</span>
                        </div>';
         $comment .= '<div>'.$date.'</div>';
@@ -2098,7 +2172,7 @@ class SocialManager extends UserManager
         $groupId = 0,
         $show_full_profile = true
     ) {
-        if (api_get_setting('allow_social_tool') != 'true') {
+        if (api_get_setting('allow_social_tool') !== 'true') {
             return '';
         }
 
@@ -2377,9 +2451,121 @@ class SocialManager extends UserManager
         $form->addHtml('</div></div>');
         $form->addHtml('</div>');
         $form->addHidden('url_content', '');
-        $html = Display::panel($form->returnForm(), get_lang('SocialWall'));
 
-        return $html;
+        return Display::panel($form->returnForm(), get_lang('SocialWall'));
+    }
+
+    /**
+     * Show middle section for Portfolio extended.
+     * Must be active on main/admin/settings.php?category=User into extended_profile.
+     *
+     * @param string $urlForm
+     *
+     * @return string
+     */
+    public static function getWallFormPortfolio($urlForm)
+    {
+        $userId = isset($_GET['u']) ? (int) $_GET['u'] : 0;
+        $userId = $userId !== 0 ? $userId : api_get_user_id();
+        $user_info = api_get_user_info($userId);
+        $friend = true;
+        $editPorfolioLink = '';
+        if ($userId != api_get_user_id()) {
+            $friend = self::get_relation_between_contacts(api_get_user_id(), $userId);
+        } else {
+            $editPorfolioLink .= "<div class=\"pull-right\" style='margin-top: -5px'>".
+                '<a href="/main/auth/profile.php?type=extended#openarea" class="btn btn-default btn-sm btn-social-edit">'.
+                "<i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>".
+                '</a>'.
+                "</div>";
+        }
+        if ($friend == 0) {
+            /* if has not relation, get current user */
+            $userId = api_get_user_id();
+            $user_info = api_get_user_info($userId);
+        }
+        // Images uploaded by course
+        $more_info = '';
+
+        // Productions
+        $production_list = UserManager::build_production_list($userId);
+
+        $form = new FormValidator(
+            'social_wall_main',
+            'post',
+            $urlForm.$userId,
+            null,
+            ['enctype' => 'multipart/form-data'],
+            FormValidator::LAYOUT_HORIZONTAL
+        );
+
+        $socialWallPlaceholder = isset($_GET['u']) ? get_lang('SocialWallWriteNewPostToFriend') : get_lang(
+            'SocialWallWhatAreYouThinkingAbout'
+        );
+
+        if (!empty($user_info['competences']) || !empty($user_info['diplomas'])
+            || !empty($user_info['openarea']) || !empty($user_info['teach'])) {
+            // $more_info .= '<div><h3>'.get_lang('MoreInformation').'</h3></div>';
+            //    MY PERSONAL OPEN AREA
+            if (!empty($user_info['openarea'])) {
+                $more_info .= '<div class="social-actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div>';
+                $more_info .= '<div class="social-profile-extended">'.$user_info['openarea'].'</div>';
+                $more_info .= '<br />';
+            }
+            //    MY COMPETENCES
+            if (!empty($user_info['competences'])) {
+                $more_info .= '<div class="social-actions-message"><strong>'.get_lang('MyCompetences').'</strong></div>';
+                $more_info .= '<div class="social-profile-extended">'.$user_info['competences'].'</div>';
+                $more_info .= '<br />';
+            }
+            //    MY DIPLOMAS
+            if (!empty($user_info['diplomas'])) {
+                $more_info .= '<div class="social-actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div>';
+                $more_info .= '<div class="social-profile-extended">'.$user_info['diplomas'].'</div>';
+                $more_info .= '<br />';
+            }
+            //    MY PRODUCTIONS
+            if (!empty($production_list)) {
+                $more_info .= '<div class="social-actions-message"><strong>'.get_lang('MyProductions').'</strong></div>';
+                $more_info .= '<div class="social-profile-extended">'.$production_list.'</div>';
+                $more_info .= '<br />';
+            }
+            // WHAT I AM ABLE TO TEACH
+            if (!empty($user_info['teach'])) {
+                $more_info .= '<div class="social-actions-message"><strong>'.get_lang('MyTeach').'</strong></div>';
+                $more_info .= '<div class="social-profile-extended">'.$user_info['teach'].'</div>';
+                $more_info .= '<br />';
+            }
+        }
+
+        $form->addTextarea(
+            'social_wall_new_msg_main',
+            null,
+            [
+                'placeholder' => $socialWallPlaceholder,
+                'cols-size' => [1, 12, 1],
+                'aria-label' => $socialWallPlaceholder,
+            ]
+        );
+        $form->addHtml('<div class="form-group">');
+        $form->addHtml('<div class="col-sm-6">');
+        $form->addFile('picture', get_lang('UploadFile'), ['custom' => true]);
+        $form->addHtml('</div>');
+        $form->addHtml('<div class="col-sm-6 "><div class="pull-right">');
+        $form->addButtonSend(
+            get_lang('Post'),
+            'wall_post_button',
+            false,
+            [
+                'cols-size' => [1, 10, 1],
+                'custom' => true,
+            ]
+        );
+        $form->addHtml('</div></div>');
+        $form->addHtml('</div>');
+        $form->addHidden('url_content', '');
+
+        return Display::panel($more_info, get_lang('Portfolio').$editPorfolioLink);
     }
 
     /**
@@ -2470,7 +2656,7 @@ class SocialManager extends UserManager
      */
     public static function getCountWallMessagesByUser($userId, $groupList = [], $friendList = [], $threadList = [])
     {
-        $count = self::getWallMessages(
+        return self::getWallMessages(
             $userId,
             0,
             $groupList,
@@ -2481,8 +2667,6 @@ class SocialManager extends UserManager
             true,
             $threadList
         );
-
-        return $count;
     }
 
     /**
@@ -2656,8 +2840,8 @@ class SocialManager extends UserManager
                             $value_options = [];
                             // get option display text from user_field_options table
                             foreach ($id_options as $id_option) {
-                                $sql = "SELECT display_text 
-                                    FROM $t_ufo 
+                                $sql = "SELECT display_text
+                                    FROM $t_ufo
                                     WHERE id = '$id_option'";
                                 $res_options = Database::query($sql);
                                 $row_options = Database::fetch_row($res_options);
@@ -2863,15 +3047,15 @@ class SocialManager extends UserManager
                     loadingHtml: "<div class=\"well_border\">'.get_lang('Loading').' </div>",
                     nextSelector: "a.nextPage:last",
                     contentSelector: "",
-                    callback: timeAgo                    
+                    callback: timeAgo
                 });
             });
             </script>';
         }
 
         $htmlHeadXtra[] = '<script>
-            function deleteMessage(id) 
-            {                      
+            function deleteMessage(id)
+            {
                 $.ajax({
                     url: "'.$socialAjaxUrl.'?a=delete_message" + "&id=" + id,
                     success: function (result) {
@@ -2879,11 +3063,11 @@ class SocialManager extends UserManager
                             $("#message_" + id).parent().parent().parent().parent().html(result);
                         }
                     }
-                });                        
+                });
             }
-            
-            function deleteComment(id) 
-            {                      
+
+            function deleteComment(id)
+            {
                 $.ajax({
                     url: "'.$socialAjaxUrl.'?a=delete_message" + "&id=" + id,
                     success: function (result) {
@@ -2891,40 +3075,40 @@ class SocialManager extends UserManager
                             $("#message_" + id).parent().parent().parent().html(result);
                         }
                     }
-                });                     
-            }           
-            
-            function submitComment(messageId) 
+                });
+            }
+
+            function submitComment(messageId)
             {
-                var data = $("#form_comment_"+messageId).serializeArray();                                
+                var data = $("#form_comment_"+messageId).serializeArray();
                 $.ajax({
                     type : "POST",
                     url: "'.$socialAjaxUrl.'?a=send_comment" + "&id=" + messageId,
                     data: data,
-                    success: function (result) {                        
+                    success: function (result) {
                         if (result) {
                             $("#post_" + messageId + " textarea").val("");
                             $("#post_" + messageId + " .sub-mediapost").prepend(result);
                             $("#post_" + messageId + " .sub-mediapost").append(
                                 $(\'<div id=result_\' + messageId +\'>'.addslashes(get_lang('Saved')).'</div>\')
-                            ); 
-                                                        
+                            );
+
                             $("#result_" + messageId + "").fadeIn("fast", function() {
                                 $("#result_" + messageId + "").delay(1000).fadeOut("fast", function() {
                                     $(this).remove();
-                                }); 
+                                });
                             });
                         }
                     }
-                });  
-            } 
-            
+                });
+            }
+
             $(function() {
                 timeAgo();
-                
+
                 /*$(".delete_message").on("click", function() {
                     var id = $(this).attr("id");
-                    id = id.split("_")[1];          
+                    id = id.split("_")[1];
                     $.ajax({
                         url: "'.$socialAjaxUrl.'?a=delete_message" + "&id=" + id,
                         success: function (result) {
@@ -2932,13 +3116,13 @@ class SocialManager extends UserManager
                                 $("#message_" + id).parent().parent().parent().parent().html(result);
                             }
                         }
-                    });        
-                });                  
-                
-                
+                    });
+                });
+
+
                 $(".delete_comment").on("click", function() {
                     var id = $(this).attr("id");
-                    id = id.split("_")[1];                    
+                    id = id.split("_")[1];
                     $.ajax({
                         url: "'.$socialAjaxUrl.'?a=delete_message" + "&id=" + id,
                         success: function (result) {
@@ -2947,10 +3131,10 @@ class SocialManager extends UserManager
                             }
                         }
                     });
-                });          
+                });
                 */
             });
-            
+
             function timeAgo() {
                 $(".timeago").timeago();
             }
@@ -3172,6 +3356,55 @@ class SocialManager extends UserManager
         }
 
         return $social_group_block;
+    }
+
+    /**
+     * @param string $selected
+     *
+     * @return string
+     */
+    public static function getHomeProfileTabs($selected = 'home')
+    {
+        $headers = [
+            [
+                'url' => api_get_path(WEB_CODE_PATH).'auth/profile.php',
+                'content' => get_lang('Profile'),
+            ],
+        ];
+        $allowJustification = api_get_plugin_setting('justification', 'tool_enable') === 'true';
+        if ($allowJustification) {
+            $plugin = Justification::create();
+            $headers[] = [
+                'url' => api_get_path(WEB_CODE_PATH).'auth/justification.php',
+                'content' => $plugin->get_lang('Justification'),
+            ];
+        }
+
+        $allowPauseTraining = api_get_plugin_setting('pausetraining', 'tool_enable') === 'true';
+        $allowEdit = api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation') === 'true';
+        if ($allowPauseTraining && $allowEdit) {
+            $plugin = PauseTraining::create();
+            $headers[] = [
+                'url' => api_get_path(WEB_CODE_PATH).'auth/pausetraining.php',
+                'content' => $plugin->get_lang('PauseTraining'),
+            ];
+        }
+
+        $selectedItem = 1;
+        foreach ($headers as $header) {
+            $info = pathinfo($header['url']);
+            if ($selected === $info['filename']) {
+                break;
+            }
+            $selectedItem++;
+        }
+
+        $tabs = '';
+        if (count($headers) > 1) {
+            $tabs = Display::tabsOnlyLink($headers, $selectedItem);
+        }
+
+        return $tabs;
     }
 
     /**

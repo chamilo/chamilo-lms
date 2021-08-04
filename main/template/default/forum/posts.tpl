@@ -50,10 +50,20 @@
             </div>
         {% endset %}
 
-        <div class="col-md-offset-{{ post.indent_cnt }} forum-post">
-            {{ display.panel('', post_data) }}
-        </div>
+        {% if view_mode == 'nested' %}
+            <div class="col-md-offset-{{ post.indent_cnt }} forum-post">
+                {{ display.panel('', post_data) }}
+            </div>
+        {% else %}
+            <div class="col-md-12 forum-post">
+                {{ display.panel('', post_data) }}
+            </div>
+        {% endif %}
     {% endfor %}
 
-    {{ form }}
+    <div class="row">
+        <div class="col-md-12">
+            {{ form }}
+        </div>
+    </div>
 {% endblock %}

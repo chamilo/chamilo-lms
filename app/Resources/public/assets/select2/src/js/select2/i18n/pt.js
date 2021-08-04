@@ -9,7 +9,7 @@ define(function () {
 
       var message = 'Por favor apague ' + overChars + ' ';
 
-      message += overChars != 1 ? 'caracteres' : 'carácter';
+      message += overChars != 1 ? 'caracteres' : 'caractere';
 
       return message;
     },
@@ -35,6 +35,9 @@ define(function () {
     },
     searching: function () {
       return 'A procurar…';
+    },
+    removeAllItems: function () {
+      return 'Remover todos os itens';
     }
   };
 });

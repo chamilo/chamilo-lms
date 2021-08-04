@@ -1,5 +1,6 @@
 <?php
-// External login module : LDAP
+
+/* For licensing terms, see /license.txt */
 
 /**
  * This files is included by newUser.ldap.php and login.ldap.php
@@ -314,8 +315,7 @@ function extldap_import_all_users()
     }
     foreach ($alphanum as $char1) {
         foreach ($alphanum as $char2) {
-            //$user_search = "uid=*";
-            $user_search = "sAMAccountName=$char1$char2*";
+            $user_search = $extldap_config['user_search_import_all_users'];
             //Search distinguish name of user
             $sr = ldap_search($ds, $extldap_config['base_dn'], $user_search);
             if (!$sr) {

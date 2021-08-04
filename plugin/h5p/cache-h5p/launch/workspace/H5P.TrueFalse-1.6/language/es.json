@@ -1,0 +1,147 @@
+{
+  "semantics": [
+    {
+      "label": "Media",
+      "fields": [
+        {
+          "label": "Type",
+          "description": "Medios opcionales para mostrar sobre la pregunta."
+        },
+        {
+          "label": "Desactivar zoom de imagen para imagen de pregunta"
+        }
+      ]
+    },
+    {
+      "label": "Pregunta"
+    },
+    {
+      "label": "Respuesta correcta",
+      "options": [
+        {
+          "label": "Verdadero"
+        },
+        {
+          "label": "Falso"
+        }
+      ]
+    },
+    {
+      "label": "Traducciones de interfaz de usuario para preguntas verdaderas/falsas",
+      "fields": [
+        {
+          "label": "Texto para el botón verdadero",
+          "default": "Verdadero"
+        },
+        {
+          "label": "Texto para botón falso",
+          "default": "Falso"
+        },
+        {
+          "label": "Texto de retroalimentación",
+          "default": "Tienes @score de @total",
+          "description": "Texto de retroalimentación, variables disponibles: @score y @total. Ejemplo: 'Tienes @score de @total puntos posibles'"
+        },
+        {
+          "label": "Texto para el botón \"Verificar\"",
+          "default": "Verificar"
+        },
+        {
+          "label": "Texto para el botón \"Mostrar solución\"",
+          "default": "Mostrar solución"
+        },
+        {
+          "label": "Texto para el botón \"Reintentar\"",
+          "default": "Reintentar"
+        },
+        {
+          "label": "Respuesta incorrecta",
+          "default": "Respuesta incorrecta"
+        },
+        {
+          "label": "Correct Answer",
+          "default": "Respuesta correcta"
+        },
+        {
+          "label": "Representación textual de la barra de puntaje para aquellos que usan un lector en voz alta",
+          "default": "Tienes :num de :puntos posibles"
+        }
+      ]
+    },
+    {
+      "label": "Configuraciones de comportamiento",
+      "description": "Estas opciones te permitirán controlar cómo se comporta la tarea.",
+      "fields": [
+        {
+          "label": "Habilitar el botón \"Reintentar\""
+        },
+        {
+          "label": "Habilite el botón \"Mostrar solución\""
+        },
+        {
+          "label": "Habilite el botón \"Comprobar\""
+        },
+        {
+          "label": "Mostrar el cuadro de diálogo de confirmación en \"Comprobar\""
+        },
+        {
+          "label": "Mostrar el diálogo de confirmación en \"Reintentar\""
+        },
+        {
+          "label": "Verificar automáticamente la respuesta",
+          "description": "Tenga en cuenta que la accesibilidad sufrirá si habilita esta opción"
+        },
+        {
+          "label": "Retrolimentación en respuestas correctas",
+          "description": "Esto anulará el texto de retroalimentación predeterminado. Variables disponibles: @score y @total"
+        },
+        {
+          "label": "Retroalimentación en respuestas incorrectas",
+          "description": "Esto anulará el texto de retroalimentación predeterminado. Variables disponibles: @score y @total"
+        }
+      ]
+    },
+    {
+      "label": "Verifique el diálogo de confirmación",
+      "fields": [
+        {
+          "label": "Texto de cabecera",
+          "default": "¿Terminar?"
+        },
+        {
+          "label": "Cuerpo del texto",
+          "default": "¿Seguro de que desea terminar?"
+        },
+        {
+          "label": "Texto del botón Cancelar",
+          "default": "Cancelar"
+        },
+        {
+          "label": "Texto del botón Terminar",
+          "default": "Terminar"
+        }
+      ]
+    },
+    {
+      "label": "Diálogo de confirmación Reintentar",
+      "fields": [
+        {
+          "label": "Texto de cabecera",
+          "default": "¿Reintentar?"
+        },
+        {
+          "label": "Cuerpo de texto",
+          "default": "¿Estás seguro de que deseas volver a intentarlo?"
+        },
+        {
+          "label": "Texto del botón Cancelar",
+          "default": "Cancelar"
+        },
+        {
+          "label": "Texto del botón Confirmar",
+          "default": "Confirmar"
+        }
+      ]
+    }
+  ]
+}

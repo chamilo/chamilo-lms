@@ -14,8 +14,6 @@ use CpChart\Image as pImage;
  * @author Stijn Konings
  * @author Bert Steppé  - (refactored, optimised)
  * @author Julio Montoya Armas - Gradebook Graphics
- *
- * @package chamilo.gradebook
  */
 class FlatViewTable extends SortableTable
 {
@@ -95,9 +93,7 @@ class FlatViewTable extends SortableTable
     {
         $headerName = $this->datagen->get_header_names();
         $total_users = $this->datagen->get_total_users_count();
-
-        $displayscore = ScoreDisplay::instance();
-        $customdisplays = $displayscore->get_custom_score_display_settings();
+        $customdisplays = ScoreDisplay::instance()->get_custom_score_display_settings();
 
         if (empty($customdisplays)) {
             echo get_lang('ToViewGraphScoreRuleMustBeEnabled');
@@ -120,7 +116,7 @@ class FlatViewTable extends SortableTable
         // Removing username
         array_shift($headerName);
 
-        $pre_result = $new_result = [];
+        $pre_result = [];
         foreach ($user_results as $result) {
             for ($i = 0; $i < count($headerName); $i++) {
                 if (isset($result[$i + 1])) {
@@ -132,7 +128,6 @@ class FlatViewTable extends SortableTable
         $i = 0;
         $resource_list = [];
         $pre_result2 = [];
-
         foreach ($pre_result as $key => $res_array) {
             rsort($res_array);
             $pre_result2[] = $res_array;
@@ -177,9 +172,9 @@ class FlatViewTable extends SortableTable
             $new_list[] = $new_value;
         }
         $resource_list = $new_list;
-
         $i = 1;
-
+        // Cache definition
+        $cachePath = api_get_path(SYS_ARCHIVE_PATH);
         foreach ($resource_list as $key => $resource) {
             // Reverse array, otherwise we get highest values first
             $resource = array_reverse($resource, true);
@@ -207,8 +202,6 @@ class FlatViewTable extends SortableTable
                 '7' => ['R' => 171, 'G' => 70, 'B' => 67, 'Alpha' => 100],
                 '8' => ['R' => 69, 'G' => 115, 'B' => 168, 'Alpha' => 100],
             ];
-            // Cache definition
-            $cachePath = api_get_path(SYS_ARCHIVE_PATH);
             $myCache = new pCache(['CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)]);
             $chartHash = $myCache->getHash($dataSet);
             if ($myCache->isInCache($chartHash)) {
@@ -219,7 +212,6 @@ class FlatViewTable extends SortableTable
                 /* Create the pChart object */
                 $widthSize = 480;
                 $heightSize = 250;
-
                 $myPicture = new pImage($widthSize, $heightSize, $dataSet);
 
                 /* Turn of Antialiasing */
@@ -310,7 +302,6 @@ class FlatViewTable extends SortableTable
                 $myPicture->drawBarChart($settings);
 
                 /* Render the picture (choose the best way) */
-
                 $myCache->writeToCache($chartHash, $myPicture);
                 $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
                 $myCache->saveFromCache($chartHash, $imgPath);
@@ -357,16 +348,15 @@ class FlatViewTable extends SortableTable
 
         $header = null;
         if ($this->limit_enabled && $totalitems > GRADEBOOK_ITEM_LIMIT) {
-            $header .= '<table style="width: 100%; text-align: right; margin-left: auto; margin-right: auto;" border="0" cellpadding="2">'
-                .'<tbody>'
-                .'<tr>';
-
+            $header .= '<table
+                    style="width: 100%; text-align: right; margin-left: auto; margin-right: auto;"
+                    border="0" cellpadding="2"><tbody>
+                    <tr>';
             // previous X
             $header .= '<td style="width:100%;">';
             if ($this->offset >= GRADEBOOK_ITEM_LIMIT) {
-                $header .= '<a href="'.api_get_self()
-                    .'?selectcat='.Security::remove_XSS($_GET['selectcat'])
-                    .'&offset='.(($this->offset) - GRADEBOOK_ITEM_LIMIT)
+                $header .= '<a
+                    href="'.api_get_self().'?selectcat='.(int) $_GET['selectcat'].'&offset='.(($this->offset) - GRADEBOOK_ITEM_LIMIT)
                     .(isset($_GET['search']) ? '&search='.Security::remove_XSS($_GET['search']) : '').'">'
                     .Display::return_icon(
                         'action_prev.png',
@@ -415,7 +405,7 @@ class FlatViewTable extends SortableTable
             $users_sorting = ($this->column == 0 ? FlatViewDataGenerator::FVDG_SORT_LASTNAME : FlatViewDataGenerator::FVDG_SORT_FIRSTNAME);
         }
 
-        if ($this->direction == 'DESC') {
+        if ('DESC' === $this->direction) {
             $users_sorting |= FlatViewDataGenerator::FVDG_SORT_DESC;
         } else {
             $users_sorting |= FlatViewDataGenerator::FVDG_SORT_ASC;
@@ -443,10 +433,8 @@ class FlatViewTable extends SortableTable
         $firstHeader = [];
         while ($column < count($header_names)) {
             $headerData = $header_names[$column];
-
             if (is_array($headerData)) {
                 $countItems = count($headerData['items']);
-
                 $this->set_header(
                     $column,
                     $headerData['header'],
@@ -454,8 +442,12 @@ class FlatViewTable extends SortableTable
                     'colspan="'.$countItems.'"'
                 );
 
-                foreach ($headerData['items'] as $item) {
-                    $firstHeader[] = '<span class="text-center">'.$item.'</span>';
+                if (count($headerData['items']) > 0) {
+                    foreach ($headerData['items'] as $item) {
+                        $firstHeader[] = '<span class="text-center">'.$item.'</span>';
+                    }
+                } else {
+                    $firstHeader[] = '&mdash;';
                 }
             } else {
                 $this->set_header($column, $headerData, false, $thAttributes);
@@ -518,6 +510,8 @@ class FlatViewTable extends SortableTable
      */
     private function build_name_link($userId, $name)
     {
-        return '<a href="user_stats.php?userid='.$userId.'&selectcat='.$this->selectcat->get_id().'&'.api_get_cidreq().'">'.$name.'</a>';
+        return '<a
+            href="user_stats.php?userid='.$userId.'&selectcat='.$this->selectcat->get_id().'&'.api_get_cidreq().'">'.
+            $name.'</a>';
     }
 }

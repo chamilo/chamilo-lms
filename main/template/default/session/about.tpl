@@ -90,7 +90,7 @@
                                     <div class="price-text">
                                         {{ is_premium.total_price_formatted }}
                                     </div>
-                                    {% if _u.logged and not is_subscribed %}
+                                    {% if not is_subscribed %}
                                         <div class="buy-box">
                                             <a href="{{ _p.web }}plugin/buycourses/src/process.php?i={{ is_premium.product_id }}&t={{ is_premium.product_type }}"
                                                class="btn btn-lg btn-primary btn-block">{{ 'BuyNow'|get_lang }}</a>

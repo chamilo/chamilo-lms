@@ -1,13 +1,10 @@
 # flag-icon-css
 
-[![npm version](https://badge.fury.io/js/flag-icon-css.svg)](https://badge.fury.io/js/flag-icon-css)
-[![Bower version](https://badge.fury.io/bo/flag-icon-css.svg)](https://badge.fury.io/bo/flag-icon-css)
+> A collection of all country flags in SVG — plus the CSS for easier integration.
+> See the [demo](https://flagicons.lipis.dev).
 
-A collection of all country flags in SVG — plus the CSS for easier integration.
-See the [demo](http://lipis.github.io/flag-icon-css/).
+## Install
 
-Install
--------
 You can either [download](https://github.com/lipis/flag-icon-css/archive/master.zip)
 the whole project as is or install it via Bower or NPM:
 
@@ -20,7 +17,7 @@ $ npm install flag-icon-css
 
 For using the flags inline with text add the classes `.flag-icon` and
 `.flag-icon-xx` (where `xx` is the
-[ISO 3166-1-alpha-2 code](http://www.iso.org/iso/country_names_and_code_elements)
+[ISO 3166-1-alpha-2 code](https://www.iso.org/obp/ui/#search/code/)
 of a country) to an empty `<span>`. If you want to have a squared version flag
 then add the class `flag-icon-squared` as well. Example:
 
@@ -75,3 +72,33 @@ file and build it again.
 
 This project wouldn't exist without the awesome and now deleted collection of
 SVG flags by [koppi](https://github.com/koppi).
+
+## Contributors
+
+### Code Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="https://github.com/lipis/flag-icon-css/graphs/contributors"><img src="https://opencollective.com/lipis/contributors.svg?width=890&button=false" /></a>
+
+### Financial Contributors
+
+Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/lipis/contribute)]
+
+#### Individuals
+
+<a href="https://opencollective.com/lipis"><img src="https://opencollective.com/lipis/individuals.svg?width=890"></a>
+
+#### Organizations
+
+Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/lipis/contribute)]
+
+<a href="https://opencollective.com/lipis/organization/0/website"><img src="https://opencollective.com/lipis/organization/0/avatar.svg"></a>
+<a href="https://opencollective.com/lipis/organization/1/website"><img src="https://opencollective.com/lipis/organization/1/avatar.svg"></a>
+<a href="https://opencollective.com/lipis/organization/2/website"><img src="https://opencollective.com/lipis/organization/2/avatar.svg"></a>
+<a href="https://opencollective.com/lipis/organization/3/website"><img src="https://opencollective.com/lipis/organization/3/avatar.svg"></a>
+<a href="https://opencollective.com/lipis/organization/4/website"><img src="https://opencollective.com/lipis/organization/4/avatar.svg"></a>
+<a href="https://opencollective.com/lipis/organization/5/website"><img src="https://opencollective.com/lipis/organization/5/avatar.svg"></a>
+<a href="https://opencollective.com/lipis/organization/6/website"><img src="https://opencollective.com/lipis/organization/6/avatar.svg"></a>
+<a href="https://opencollective.com/lipis/organization/7/website"><img src="https://opencollective.com/lipis/organization/7/avatar.svg"></a>
+<a href="https://opencollective.com/lipis/organization/8/website"><img src="https://opencollective.com/lipis/organization/8/avatar.svg"></a>
+<a href="https://opencollective.com/lipis/organization/9/website"><img src="https://opencollective.com/lipis/organization/9/avatar.svg"></a>

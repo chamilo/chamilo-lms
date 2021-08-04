@@ -3,8 +3,6 @@
 /**
  * Redirection script.
  *
- * @package chamilo.learnpath
- *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 

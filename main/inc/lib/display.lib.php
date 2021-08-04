@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
@@ -64,7 +65,11 @@ class Display
     ) {
         $origin = api_get_origin();
         $showHeader = true;
-        if (isset($origin) && $origin == 'learnpath') {
+        if (isset($origin) && ($origin == 'learnpath' || $origin == 'mobileapp')) {
+            $showHeader = false;
+        }
+
+        if (Session::read('origin') == 'mobileapp') {
             $showHeader = false;
         }
 
@@ -317,7 +322,7 @@ class Display
      *                              'page_nr' = The page to display
      *                              'hide_navigation' =  true to hide the navigation
      * @param array $query_vars     Additional variables to add in the query-string
-     * @param array $form           actions Additional variables to add in the query-string
+     * @param array $form_actions   actions Additional variables to add in the query-string
      * @param mixed An array with bool values to know which columns show.
      * i.e: $visibility_options= array(true, false) we will only show the first column
      *                Can be also only a bool value. TRUE: show all columns, FALSE: show nothing
@@ -359,7 +364,6 @@ class Display
      *                              'page_nr' = The page to display
      *                              'hide_navigation' =  true to hide the navigation
      * @param array $query_vars     Additional variables to add in the query-string
-     * @param array $form           actions Additional variables to add in the query-string
      * @param mixed An array with bool values to know which columns show. i.e:
      *  $visibility_options= array(true, false) we will only show the first column
      *    Can be also only a bool value. TRUE: show all columns, FALSE: show nothing
@@ -462,91 +466,6 @@ class Display
         }
         $table->set_form_actions($form_actions);
         $table->display();
-    }
-
-    /**
-     * Displays a normal message. It is recommended to use this public function
-     * to display any normal information messages.
-     *
-     * @param string $message
-     * @param bool   $filter      (true) or not (false)
-     * @param bool   $returnValue
-     *
-     * @deprecated Use <code>Display::addFlash(Display::return_message($message, 'normal'));</code>
-     *  Or <code>echo Display::return_message($message, 'normal')</code>
-     */
-    public static function display_normal_message(
-        $message,
-        $filter = true,
-        $returnValue = false
-    ) {
-        $message = self::return_message($message, 'normal', $filter);
-        if ($returnValue) {
-            return $message;
-        } else {
-            echo $message;
-        }
-    }
-
-    /**
-     * Displays an warning message. Use this if you want to draw attention to something
-     * This can also be used for instance with the hint in the exercises.
-     *
-     * @deprecated use Display::addFlash(Display::return_message($message, 'warning'));
-     */
-    public static function display_warning_message(
-        $message,
-        $filter = true,
-        $returnValue = false
-    ) {
-        $message = self::return_message($message, 'warning', $filter);
-        if ($returnValue) {
-            return $message;
-        } else {
-            echo $message;
-        }
-    }
-
-    /**
-     * Displays an confirmation message. Use this if something has been done successfully.
-     *
-     * @param bool    Filter (true) or not (false)
-     *
-     * @deprecated use Display::addFlash(Display::return_message($message, 'confirm'));
-     */
-    public static function display_confirmation_message(
-        $message,
-        $filter = true,
-        $returnValue = false
-    ) {
-        $message = self::return_message($message, 'confirm', $filter);
-        if ($returnValue) {
-            return $message;
-        } else {
-            echo $message;
-        }
-    }
-
-    /**
-     * Displays an error message. It is recommended to use this public function if an error occurs.
-     *
-     * @param string $message - include any additional html
-     *                        tags if you need them
-     * @param bool    Filter (true) or not (false)
-     *
-     * @deprecated use Display::addFlash(Display::return_message($message, 'error'));
-     */
-    public static function display_error_message(
-        $message,
-        $filter = true,
-        $returnValue = false
-    ) {
-        $message = self::return_message($message, 'error', $filter);
-        if ($returnValue) {
-            return $message;
-        } else {
-            echo $message;
-        }
     }
 
     /**
@@ -672,7 +591,10 @@ class Display
                         }
                     }
                 }
-                $hmail .= '&body='.rawurlencode($content);
+
+                if (!empty($content)) {
+                    $hmail .= '&body='.rawurlencode($content);
+                }
             }
         }
 
@@ -737,8 +659,6 @@ class Display
 
     /**
      * Prints an <option>-list with all letters (A-Z).
-     *
-     * @param string $selected_letter The letter that should be selected
      *
      * @todo This is English language specific implementation.
      * It should be adapted for the other languages.
@@ -816,12 +736,15 @@ class Display
     }
 
     /**
-     * This public function returns the htmlcode for an icon.
+     * This public function returns the HTML code for an icon.
      *
-     * @param string   The filename of the file (in the main/img/ folder
-     * @param string   The alt text (probably a language variable)
-     * @param array    Additional attributes (for instance height, width, onclick, ...)
-     * @param int  The wanted width of the icon (to be looked for in the corresponding img/icons/ folder)
+     * @param string $image                 The filename of the file (in the main/img/ folder
+     * @param string $alt_text              The alt text (probably a language variable)
+     * @param array  $additional_attributes Additional attributes (for instance height, width, onclick, ...)
+     * @param int    $size                  The wanted width of the icon (to be looked for in the corresponding img/icons/ folder)
+     * @param bool   $show_text             Whether to show the text next (usually under) the icon
+     * @param bool   $return_only_path      Whether we only want the path to the icon or the whole HTML tag
+     * @param bool   $loadThemeIcon         Whether we want to allow an overloaded theme icon, if it exists, to replace the default icon
      *
      * @return string An HTML string of the right <img> tag
      *
@@ -925,7 +848,7 @@ class Display
     }
 
     /**
-     * Returns the htmlcode for an image.
+     * Returns the HTML code for an image.
      *
      * @param string $image_path            the filename of the file (in the main/img/ folder
      * @param string $alt_text              the alt text (probably a language variable)
@@ -1563,7 +1486,7 @@ class Display
     public static function table($headers, $rows, $attributes = [])
     {
         if (empty($attributes)) {
-            $attributes['class'] = 'data_table';
+            $attributes['class'] = 'table table-hover table-striped data_table';
         }
         $table = new HTML_Table($attributes);
         $row = 0;
@@ -1800,8 +1723,8 @@ class Display
         if (!$nosession) {
             $session_info = api_get_session_info($session_id);
             $coachInfo = [];
-            if (!empty($session['id_coach'])) {
-                $coachInfo = api_get_user_info($session['id_coach']);
+            if (!empty($session_info['id_coach'])) {
+                $coachInfo = api_get_user_info($session_info['id_coach']);
             }
 
             $session = [];
@@ -1963,9 +1886,9 @@ class Display
             $second_title = Security::remove_XSS($second_title);
             $title .= "<small> $second_title<small>";
         }
-        $subTitle = self::tag($size, Security::remove_XSS($title), $attributes);
+        $attributes['class'] = 'page-header';
 
-        return $subTitle;
+        return self::tag($size, Security::remove_XSS($title), $attributes);
     }
 
     public static function page_subheader2($title, $second_title = null)
@@ -2275,7 +2198,7 @@ class Display
         switch ($fileInfo['extension']) {
             case 'mp3':
             case 'webm':
-                $html = '<audio id="'.$id.'" '.$class.' controls '.$autoplay.' '.$width.' src="'.$params['url'].'" >';
+                $html = '<audio id="'.$id.'" '.$class.' controls '.$autoplay.' '.$width.' src="'.$params['url'].'">';
                 $html .= '<object width="'.$width.'" height="50" type="application/x-shockwave-flash" data="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf">
                             <param name="movie" value="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf" />
                             <param name="flashvars" value="controls=true&file='.$params['url'].'" />
@@ -2286,7 +2209,7 @@ class Display
                 break;
             case 'wav':
             case 'ogg':
-                $html = '<audio width="300px" controls id="'.$id.'" '.$autoplay.' src="'.$params['url'].'" >';
+                $html = '<audio width="300px" controls id="'.$id.'" '.$autoplay.' src="'.$params['url'].'"></audio>';
 
                 return $html;
                 break;
@@ -2429,7 +2352,7 @@ class Display
         }
         $link = self::url($label.' ', $link_to_show, $linkAttributes);
 
-        return  '<li class = "'.$class.'">'.$link.'</li>';
+        return '<li class = "'.$class.'">'.$link.'</li>';
     }
 
     /**
@@ -2607,6 +2530,11 @@ class Display
         }
 
         $title = !empty($title) ? '<div class="panel-heading" '.$headerStyle.' ><h3 class="panel-title">'.$title.'</h3>'.$extra.'</div>' : '';
+
+        if (empty($title) && !empty($extra)) {
+            $title = '<div class="panel-heading" '.$headerStyle.' >'.$extra.'</div>';
+        }
+
         $footer = !empty($footer) ? '<div class="panel-footer">'.$footer.'</div>' : '';
         $typeList = ['primary', 'success', 'info', 'warning', 'danger'];
         $style = !in_array($type, $typeList) ? 'default' : $type;
@@ -2717,7 +2645,8 @@ class Display
      * @param string     $name            The icon name. Example: "mail-reply"
      * @param int|string $size            Optional. The size for the icon. (Example: lg, 2, 3, 4, 5)
      * @param bool       $fixWidth        Optional. Whether add the fw class
-     * @param string     $additionalClass Optional. Additional class
+     * @param string     $additionalClass
+     * @param string     $title
      *
      * @return string
      */
@@ -2725,7 +2654,8 @@ class Display
         $name,
         $size = '',
         $fixWidth = false,
-        $additionalClass = ''
+        $additionalClass = '',
+        $title = ''
     ) {
         $className = "fa fa-$name";
 
@@ -2749,7 +2679,7 @@ class Display
             $className .= " $additionalClass";
         }
 
-        $icon = self::tag('em', null, ['class' => $className]);
+        $icon = self::tag('em', null, ['class' => $className, 'title' => $title]);
 
         return "$icon ";
     }
@@ -2783,20 +2713,39 @@ class Display
             $headerClass .= $fullClickable ? 'center-block ' : '';
             $headerClass .= $open ? '' : 'collapsed';
             $contentClass = 'panel-collapse collapse ';
-            $contentClass .= $open ? 'in' : '';
+            $contentClass .= $open ? 'in ' : '';
+            $contentClass .= $params['class'] ?? '';
             $ariaExpanded = $open ? 'true' : 'false';
+
+            $attributes = [
+                'id' => $idCollapse,
+                'class' => $contentClass,
+                'role' => 'tabpanel',
+            ];
+
+            if (!empty($params)) {
+                $attributes = array_merge(
+                    $params,
+                    $attributes
+                );
+            }
+
+            $collapseDiv = self::div('<div class="panel-body">'.$content.'</div>', $attributes);
 
             $html = <<<HTML
                 <div class="panel-group" id="$idAccordion" role="tablist" aria-multiselectable="true">
                     <div class="panel panel-default" id="$id">
                         <div class="panel-heading" role="tab">
                             <h4 class="panel-title">
-                                <a class="$headerClass" role="button" data-toggle="collapse" data-parent="#$idAccordion" href="#$idCollapse" aria-expanded="$ariaExpanded" aria-controls="$idCollapse">$title</a>
+                                <a
+                                    class="$headerClass"
+                                    role="button" data-toggle="collapse"
+                                    data-parent="#$idAccordion" href="#$idCollapse"
+                                    aria-expanded="$ariaExpanded"
+                                    aria-controls="$idCollapse">$title</a>
                             </h4>
                         </div>
-                        <div id="$idCollapse" class="$contentClass" role="tabpanel">
-                            <div class="panel-body">$content</div>
-                        </div>
+                        $collapseDiv
                     </div>
                 </div>
 HTML;
@@ -2922,9 +2871,10 @@ HTML;
      *
      * @return string
      */
-    public static function getFrameReadyBlock($frameName)
+    public static function getFrameReadyBlock($frameName, $itemType = '')
     {
         $webPublicPath = api_get_path(WEB_PUBLIC_PATH);
+        $webJsPath = api_get_path(WEB_LIBRARY_JS_PATH);
 
         $videoFeatures = [
             'playpause',
@@ -2946,19 +2896,19 @@ HTML;
                     continue;
                 }
                 $defaultFeatures[] = $feature;
-                $videoPluginsJS[] = "mediaelement/plugins/$feature/$feature.js";
-                $videoPluginCSS[] = "mediaelement/plugins/$feature/$feature.css";
+                $videoPluginsJS[] = "mediaelement/plugins/$feature/$feature.min.js";
+                $videoPluginCSS[] = "mediaelement/plugins/$feature/$feature.min.css";
             }
         }
 
         $videoPluginFiles = '';
         foreach ($videoPluginsJS as $file) {
-            $videoPluginFiles .= '{type: "script", src: "'.$webPublicPath.'assets/'.$file.'"},';
+            $videoPluginFiles .= '{type: "script", src: "'.$webJsPath.$file.'"},';
         }
 
         $videoPluginCssFiles = '';
         foreach ($videoPluginCSS as $file) {
-            $videoPluginCssFiles .= '{type: "stylesheet", src: "'.$webPublicPath.'assets/'.$file.'"},';
+            $videoPluginCssFiles .= '{type: "stylesheet", src: "'.$webJsPath.$file.'"},';
         }
 
         $translateHtml = '';
@@ -2978,7 +2928,7 @@ HTML;
         $.frameReady(function() {
              $(function () {
                 $("video:not(.skip), audio:not(.skip)").mediaelementplayer({
-                    pluginPath: "'.$webPublicPath.'assets/mediaelement/plugins/",
+                    pluginPath: "'.$webJsPath.'mediaelement/plugins/",
                     features: [\''.$videoFeatures.'\'],
                     success: function(mediaElement, originalNode, instance) {
                         '.ChamiloApi::getQuizMarkersRollsJS().'
@@ -2988,28 +2938,48 @@ HTML;
             });
         },
         "'.$frameName.'",
-        [
-            {type:"script", src:"'.api_get_jquery_web_path().'", deps: [
+        ';
 
+        if ('quiz' === $itemType) {
+            $jquery = '
+                '.$fixLink.'
+                {type:"script", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+                {type:"script", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
+                {type:"script", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelement-and-player.min.js",
+                    deps: [
+                    {type:"script", src: "'.$webJsPath.'mediaelement/plugins/vrview/vrview.js"},
+                    {type:"script", src: "'.$webJsPath.'mediaelement/plugins/markersrolls/markersrolls.min.js"},
+                    '.$videoPluginFiles.'
+                ]},
+                '.$translateHtml.'
+            ';
+        } else {
+            $jquery = '
+                {type:"script", src:"'.api_get_jquery_web_path().'", deps: [
                 '.$fixLink.'
                 {type:"script", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
                 {type:"script", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
                 {type:"script", src:"'.$webPublicPath.'assets/jquery-ui/jquery-ui.min.js"},
                 {type:"script", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelement-and-player.min.js",
                     deps: [
-                    {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.js"},
-                    {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/markersrolls/markersrolls.js"},
+                    {type:"script", src: "'.$webJsPath.'mediaelement/plugins/vrview/vrview.js"},
+                    {type:"script", src: "'.$webJsPath.'mediaelement/plugins/markersrolls/markersrolls.min.js"},
                     '.$videoPluginFiles.'
                 ]},
                 '.$translateHtml.'
-            ]},
+            ]},';
+        }
+
+        $frameReady .= '
+        [
+            '.$jquery.'
             '.$videoPluginCssFiles.'
             {type:"script", src:"'.$webPublicPath.'assets/MathJax/MathJax.js?config=AM_HTMLorMML"},
             {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
             {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/theme.css"},
             {type:"stylesheet", src:"'.$webPublicPath.'css/dialog.css"},
             {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelementplayer.min.css"},
-            {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.css"},
+            {type:"stylesheet", src: "'.$webJsPath.'mediaelement/plugins/vrview/vrview.css"},
         ]);';
 
         return $frameReady;

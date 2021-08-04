@@ -7,8 +7,6 @@
  *
  * @author Stijn Konings
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 class ScoreDisplayForm extends FormValidator
 {
@@ -22,7 +20,7 @@ class ScoreDisplayForm extends FormValidator
         $displayscore = ScoreDisplay::instance();
         $customdisplays = $displayscore->get_custom_score_display_settings();
 
-        $nr_items = (count($customdisplays) != '0') ? count($customdisplays) : '1';
+        $nr_items = ('0' != count($customdisplays)) ? count($customdisplays) : '1';
         $this->setDefaults(
             [
                 'scorecolpercent' => $displayscore->get_color_split_value(),

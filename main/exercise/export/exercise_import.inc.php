@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
@@ -6,9 +7,6 @@ use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * @copyright (c) 2001-2006 Universite catholique de Louvain (UCL)
- *
- * @package chamilo.exercise
- *
  * @author claro team <cvs@claroline.net>
  * @author Guillaume Lederer <guillaume@claroline.net>
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
@@ -34,7 +32,7 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
     }
 
     if (preg_match('/.zip$/i', $_FILES['userFile']['name'])) {
-        $result = handle_uploaded_document(
+        return handle_uploaded_document(
             $_course,
             $_FILES['userFile'],
             $baseWorkDir,
@@ -50,8 +48,6 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
             null,
             false
         );
-
-        return $result;
     }
 
     return false;
@@ -683,7 +679,6 @@ function isQtiManifest($filePath)
  * to be able to transform them into the questions text.
  *
  * @param string $filePath The absolute filepath
- * @param array  $links    List of filepaths changes
  *
  * @return bool
  */
@@ -708,8 +703,8 @@ function qtiProcessManifest($filePath)
         $file = $xml->resources->resource->file[$i];
         $href = '';
         foreach ($file->attributes() as $key => $value) {
-            if ($key == 'href') {
-                if (substr($value, -3, 3) != 'xml') {
+            if ('href' == $key) {
+                if ('xml' != substr($value, -3, 3)) {
                     $href = $value;
                 }
             }

@@ -26,7 +26,7 @@ ChamiloSession::write('lti_tool_login', $tool->getId());
 $params = [
     'iss' => ImsLtiPlugin::getIssuerUrl(),
     'target_link_uri' => $tool->getLaunchUrl(),
-    'login_hint' => $user->getId(),
+    'login_hint' => ImsLtiPlugin::getLaunchUserIdClaim($tool, $user),
     'lti_message_hint' => $tool->getId(),
 ];
 ?>

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -39,7 +40,7 @@ $form->addElement(
     Display::url(
         get_lang('ExampleCSVFile'),
         api_get_path(WEB_CODE_PATH).'group/example.csv',
-        ['download' => true]
+        ['download' => 'example.csv']
     )
 );
 $form->addButtonImport(get_lang('Import'));

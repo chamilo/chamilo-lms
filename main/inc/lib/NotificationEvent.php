@@ -67,7 +67,7 @@ class NotificationEvent extends Model
         $form->addTextarea('content', get_lang('Content'));
         $form->addText('link', get_lang('Link'), false);
         $form->addCheckBox('persistent', get_lang('Persistent'));
-        $form->addNumeric('day_diff', get_lang('DayDiff'), false);
+        $form->addNumeric('day_diff', get_lang('DaysDifference'), false);
 
         return $form;
     }
@@ -90,7 +90,7 @@ class NotificationEvent extends Model
             $form->addTextarea('content', get_lang('Content'));
             $form->addText('link', get_lang('Link'), false);
             $form->addCheckBox('persistent', get_lang('Persistent'));
-            $form->addNumeric('day_diff', get_lang('DayDiff'), false);
+            $form->addNumeric('day_diff', get_lang('DaysDifference'), false);
 
             switch ($eventType) {
                 case self::JUSTIFICATION_EXPIRATION:

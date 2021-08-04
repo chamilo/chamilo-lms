@@ -1,9 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.admin
- */
 $cidReset = true;
 // Including necessary libraries.
 require_once __DIR__.'/../inc/global.inc.php';
@@ -44,20 +42,15 @@ function password_switch_radio_button() {
 
 var is_platform_id = "'.$is_platform_admin.'";
 
-function display_drh_list(){
+function updateStatus(){
     if (document.getElementById("status_select").value=='.STUDENT.') {
-        document.getElementById("drh_list").style.display="block";
         if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="none";
 
     } else if (document.getElementById("status_select").value=='.COURSEMANAGER.') {
-        document.getElementById("drh_list").style.display="none";
-
         if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="block";
     } else {
-        document.getElementById("drh_list").style.display="none";
-
         if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="none";
     }
@@ -216,6 +209,7 @@ $group[] = $form->createElement(
         'id' => 'password',
         'autocomplete' => 'new-password',
         'onkeydown' => 'javascript: password_switch_radio_button();',
+        'show_hide' => true,
         //'required' => 'required'
     ]
 );
@@ -240,25 +234,12 @@ $form->addElement(
     $status,
     [
         'id' => 'status_select',
-        'onchange' => 'javascript: display_drh_list();',
+        'onchange' => 'javascript: updateStatus();',
     ]
 );
 
 //drh list (display only if student)
 $display = (isset($_POST['status']) && $_POST['status'] == STUDENT) || !isset($_POST['status']) ? 'block' : 'none';
-
-//@todo remove the drh list here. This code is unused
-$form->addElement('html', '<div id="drh_list" style="display:'.$display.';">');
-
-if (isset($drh_list) && is_array($drh_list)) {
-    foreach ($drh_list as $drh) {
-        $drh_select->addOption(
-            api_get_person_name($drh['firstname'], $drh['lastname']),
-            $drh['user_id']
-        );
-    }
-}
-$form->addElement('html', '</div>');
 
 if (api_is_platform_admin()) {
     // Platform admin
@@ -322,7 +303,6 @@ if ($allowEmailTemplate) {
 
 $jquery_ready_content = $returnParams['jquery_ready_content'];
 
-// the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
 $htmlHeadXtra[] = '<script>
 $(function () {
     '.$jquery_ready_content.'

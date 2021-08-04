@@ -132,4 +132,25 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
             $extraField->delete($extraFieldInfo['id']);
         }
     }
+
+    /*
+    public function notifyDocumentAction(HookDocumentActionEventInterface $hook)
+    {
+        $data = $hook->getEventData();
+        if ($data['type'] === HOOK_EVENT_TYPE_PRE) {
+            $data['actions'][] = Display::return_icon('edit.png');
+        }
+
+        return $data;
+    }
+
+    public function notifyDocumentItemAction(HookDocumentItemActionEventInterface $hook)
+    {
+        $data = $hook->getEventData();
+        if ($data['type'] === HOOK_EVENT_TYPE_PRE) {
+            $data['actions'][] = $data['id'].' - '.$data['title'];
+        }
+
+        return $data;
+    }*/
 }

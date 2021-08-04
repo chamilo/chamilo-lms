@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Class LegalManager.
- *
- * @package chamilo.legal
  */
 class LegalManager
 {
@@ -28,6 +27,10 @@ class LegalManager
      */
     public static function add($language, $content, $type, $changes, $extraFieldValuesToSave = [])
     {
+        if (empty($content)) {
+            return 0;
+        }
+
         $legalTable = Database::get_main_table(TABLE_MAIN_LEGAL);
         $last = self::get_last_condition($language);
         $type = (int) $type;
@@ -162,6 +165,10 @@ class LegalManager
         $result = Database::query($sql);
         $result = Database::fetch_array($result, 'ASSOC');
 
+        if (empty($result)) {
+            return [];
+        }
+
         if (isset($result['content'])) {
             $result['content'] = self::replaceTags($result['content']);
         }
@@ -188,9 +195,9 @@ class LegalManager
         }
 
         $sql = "SELECT version FROM $table
-                WHERE 
-                    language_id = $language AND 
-                    version = $version                
+                WHERE
+                    language_id = $language AND
+                    version = $version
                 LIMIT 1 ";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -310,10 +317,10 @@ class LegalManager
         $column = (int) $column;
 
         $sql = "SELECT version, original_name as language, content, changes, type, FROM_UNIXTIME(date)
-                FROM $table 
+                FROM $table
                 INNER JOIN $lang_table l
-                ON (language_id = l.id) 
-                ORDER BY language, version ASC 
+                ON (language_id = l.id)
+                ORDER BY language, version ASC
                 LIMIT $from, $number_of_items ";
 
         $result = Database::query($sql);
@@ -322,7 +329,7 @@ class LegalManager
             // max 2000 chars
             $languages[] = $legal[1];
             if (strlen($legal[2]) > 2000) {
-                $legal[2] = substr($legal[2], 0, 2000).' ... ';
+                $legal[2] = substr(strip_tags($legal[2]), 0, 2000).' ... ';
             }
             if ($legal[4] == 0) {
                 $legal[4] = get_lang('HTMLText');
@@ -390,7 +397,7 @@ class LegalManager
 
         $extraFieldValue = new ExtraFieldValue('user');
         $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'termactivated');
-        if ($value === false) {
+        if (false === $value) {
             $extraFieldInfo = $extraFieldValue->getExtraField()->get_handler_field_info_by_field_variable('termactivated');
             if ($extraFieldInfo) {
                 $newParams = [
@@ -430,7 +437,7 @@ class LegalManager
      */
     public static function getTreatmentTypeList()
     {
-        return  [
+        return [
             'privacy_terms_collection' => 'collection',
             'privacy_terms_recording' => 'recording',
             'privacy_terms_organization' => 'organization',

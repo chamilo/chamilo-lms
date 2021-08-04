@@ -208,6 +208,7 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
                             {element}
                         </div>';
                 break;
+            case FormValidator::LAYOUT_GRID:
             case FormValidator::LAYOUT_BOX:
                 return '
                         <div class="input-group">
@@ -231,9 +232,9 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
         if ($this->getChecked()) {
             return '<code>[x]</code>'.
                 $this->_getPersistantData();
-        } else {
-            return '<code>[ ]</code>';
         }
+
+        return '<code>[ ]</code>';
     }
 
     /**

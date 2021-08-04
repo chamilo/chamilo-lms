@@ -19,12 +19,12 @@ if (isset($params['webcamname']) && isset($params['webcamdir']) && isset($params
     $webcamuserid = $params['webcamuserid'];
 } else {
     api_not_allowed();
-    die();
+    exit();
 }
 
 if ($webcamuserid != api_get_user_id() || api_get_user_id() == 0 || $webcamuserid == 0) {
     api_not_allowed();
-    die();
+    exit();
 }
 
 //clean
@@ -34,24 +34,23 @@ $webcamname = addslashes(trim($webcamname));
 $webcamname = api_replace_dangerous_char($webcamname);
 $webcamname = disable_dangerous_file($webcamname);
 $webcamdir = Security::remove_XSS($webcamdir);
-
+$courseInfo = api_get_course_info();
 //security extension
 $ext = explode('.', $webcamname);
-$ext = strtolower($ext[sizeof($ext) - 1]);
+$ext = strtolower($ext[count($ext) - 1]);
 
-if ($ext != 'jpg') {
-    die();
+if ($ext !== 'jpg') {
+    exit;
 }
 
 //Do not use here check Fileinfo method because return: text/plain                //CHECK THIS BEFORE COMMIT
-
-$dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
+$dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
 $saveDir = $dirBaseDocuments.$webcamdir;
 $current_session_id = api_get_session_id();
 $groupId = api_get_group_id();
 $groupInfo = GroupManager::get_group_properties($groupId);
 
-//Avoid duplicates
+// Avoid duplicates.
 $webcamname_to_save = $webcamname;
 $title_to_save = str_replace('_', ' ', $webcamname);
 $webcamname_noex = basename($webcamname, ".jpg");
@@ -77,24 +76,24 @@ if (!$content) {
 
 //add document to database
 $doc_id = add_document(
-    $_course,
+    $courseInfo,
     $webcamdir.'/'.$webcamname_to_save,
     'file',
     filesize($documentPath),
     $title_to_save
 );
 api_item_property_update(
-    $_course,
+    $courseInfo,
     TOOL_DOCUMENT,
     $doc_id,
     'DocumentAdded',
-    $_user['user_id'],
+    api_get_user_id(),
     $groupInfo,
     null,
     null,
     null,
     $current_session_id
 );
-///
+
 $url = 'http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']).'/'.$documentPath;
 echo get_lang('ClipSent');

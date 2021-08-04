@@ -1,5 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * Script to move users from one course to another if they haven't taken the
  * test in the first course.
@@ -10,7 +12,7 @@
 /**
  * Init
  */
-die('Remove the "die()" line to execute this script'.PHP_EOL);
+exit;
 require __DIR__.'/../../main/inc/global.inc.php';
 // Define origin and destination courses' code
 $originCourse = 'XYZ2014';

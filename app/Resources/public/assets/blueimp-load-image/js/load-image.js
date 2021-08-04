@@ -9,28 +9,138 @@
  * https://opensource.org/licenses/MIT
  */
 
-/* global define, URL, webkitURL, FileReader */
+/* global define, module, Promise */
 
 ;(function ($) {
   'use strict'
 
-  // Loads an image for a given File object.
-  // Invokes the callback with an img or optional canvas
-  // element (if supported by the browser) as parameter:
-  function loadImage (file, callback, options) {
-    var img = document.createElement('img')
-    var url
-    img.onerror = function (event) {
-      return loadImage.onerror(img, event, file, callback, options)
+  var urlAPI = $.URL || $.webkitURL
+
+  /**
+   * Creates an object URL for a given File object.
+   *
+   * @param {Blob} blob Blob object
+   * @returns {string|boolean} Returns object URL if API exists, else false.
+   */
+  function createObjectURL(blob) {
+    return urlAPI ? urlAPI.createObjectURL(blob) : false
+  }
+
+  /**
+   * Revokes a given object URL.
+   *
+   * @param {string} url Blob object URL
+   * @returns {undefined|boolean} Returns undefined if API exists, else false.
+   */
+  function revokeObjectURL(url) {
+    return urlAPI ? urlAPI.revokeObjectURL(url) : false
+  }
+
+  /**
+   * Helper function to revoke an object URL
+   *
+   * @param {string} url Blob Object URL
+   * @param {object} [options] Options object
+   */
+  function revokeHelper(url, options) {
+    if (url && url.slice(0, 5) === 'blob:' && !(options && options.noRevoke)) {
+      revokeObjectURL(url)
     }
-    img.onload = function (event) {
-      return loadImage.onload(img, event, file, callback, options)
+  }
+
+  /**
+   * Loads a given File object via FileReader interface.
+   *
+   * @param {Blob} file Blob object
+   * @param {Function} onload Load event callback
+   * @param {Function} [onerror] Error/Abort event callback
+   * @param {string} [method=readAsDataURL] FileReader method
+   * @returns {FileReader|boolean} Returns FileReader if API exists, else false.
+   */
+  function readFile(file, onload, onerror, method) {
+    if (!$.FileReader) return false
+    var reader = new FileReader()
+    reader.onload = function () {
+      onload.call(reader, this.result)
     }
-    if (typeof file === 'string') {
-      loadImage.fetchBlob(file, function (blob) {
-        if (blob) {
-          file = blob
-          url = loadImage.createObjectURL(file)
+    if (onerror) {
+      reader.onabort = reader.onerror = function () {
+        onerror.call(reader, this.error)
+      }
+    }
+    var readerMethod = reader[method || 'readAsDataURL']
+    if (readerMethod) {
+      readerMethod.call(reader, file)
+      return reader
+    }
+  }
+
+  /**
+   * Cross-frame instanceof check.
+   *
+   * @param {string} type Instance type
+   * @param {object} obj Object instance
+   * @returns {boolean} Returns true if the object is of the given instance.
+   */
+  function isInstanceOf(type, obj) {
+    // Cross-frame instanceof check
+    return Object.prototype.toString.call(obj) === '[object ' + type + ']'
+  }
+
+  /**
+   * @typedef { HTMLImageElement|HTMLCanvasElement } Result
+   */
+
+  /**
+   * Loads an image for a given File object.
+   *
+   * @param {Blob|string} file Blob object or image URL
+   * @param {Function|object} [callback] Image load event callback or options
+   * @param {object} [options] Options object
+   * @returns {HTMLImageElement|FileReader|Promise<Result>} Object
+   */
+  function loadImage(file, callback, options) {
+    /**
+     * Promise executor
+     *
+     * @param {Function} resolve Resolution function
+     * @param {Function} reject Rejection function
+     * @returns {HTMLImageElement|FileReader} Object
+     */
+    function executor(resolve, reject) {
+      var img = document.createElement('img')
+      var url
+      /**
+       * Callback for the fetchBlob call.
+       *
+       * @param {HTMLImageElement|HTMLCanvasElement} img Error object
+       * @param {object} data Data object
+       * @returns {undefined} Undefined
+       */
+      function resolveWrapper(img, data) {
+        if (resolve === reject) {
+          // Not using Promises
+          if (resolve) resolve(img, data)
+          return
+        } else if (img instanceof Error) {
+          reject(img)
+          return
+        }
+        data = data || {} // eslint-disable-line no-param-reassign
+        data.image = img
+        resolve(data)
+      }
+      /**
+       * Callback for the fetchBlob call.
+       *
+       * @param {Blob} blob Blob object
+       * @param {Error} err Error object
+       */
+      function fetchBlobCallback(blob, err) {
+        if (err && $.console) console.log(err) // eslint-disable-line no-console
+        if (blob && isInstanceOf('Blob', blob)) {
+          file = blob // eslint-disable-line no-param-reassign
+          url = createObjectURL(file)
         } else {
           url = file
           if (options && options.crossOrigin) {
@@ -38,93 +148,74 @@
           }
         }
         img.src = url
-      }, options)
-      return img
-    } else if (loadImage.isInstanceOf('Blob', file) ||
-        // Files are also Blob instances, but some browsers
-        // (Firefox 3.6) support the File API but not Blobs:
-        loadImage.isInstanceOf('File', file)) {
-      url = img._objectURL = loadImage.createObjectURL(file)
-      if (url) {
-        img.src = url
-        return img
       }
-      return loadImage.readFile(file, function (e) {
-        var target = e.target
-        if (target && target.result) {
-          img.src = target.result
-        } else if (callback) {
-          callback(e)
+      img.onerror = function (event) {
+        revokeHelper(url, options)
+        if (reject) reject.call(img, event)
+      }
+      img.onload = function () {
+        revokeHelper(url, options)
+        var data = {
+          originalWidth: img.naturalWidth || img.width,
+          originalHeight: img.naturalHeight || img.height
         }
-      })
+        try {
+          loadImage.transform(img, options, resolveWrapper, file, data)
+        } catch (error) {
+          if (reject) reject(error)
+        }
+      }
+      if (typeof file === 'string') {
+        if (loadImage.requiresMetaData(options)) {
+          loadImage.fetchBlob(file, fetchBlobCallback, options)
+        } else {
+          fetchBlobCallback()
+        }
+        return img
+      } else if (isInstanceOf('Blob', file) || isInstanceOf('File', file)) {
+        url = createObjectURL(file)
+        if (url) {
+          img.src = url
+          return img
+        }
+        return readFile(
+          file,
+          function (url) {
+            img.src = url
+          },
+          reject
+        )
+      }
     }
+    if ($.Promise && typeof callback !== 'function') {
+      options = callback // eslint-disable-line no-param-reassign
+      return new Promise(executor)
+    }
+    return executor(callback, callback)
   }
-  // The check for URL.revokeObjectURL fixes an issue with Opera 12,
-  // which provides URL.createObjectURL but doesn't properly implement it:
-  var urlAPI = ($.createObjectURL && $) ||
-                ($.URL && URL.revokeObjectURL && URL) ||
-                ($.webkitURL && webkitURL)
 
-  function revokeHelper (img, options) {
-    if (img._objectURL && !(options && options.noRevoke)) {
-      loadImage.revokeObjectURL(img._objectURL)
-      delete img._objectURL
-    }
+  // Determines if metadata should be loaded automatically.
+  // Requires the load image meta extension to load metadata.
+  loadImage.requiresMetaData = function (options) {
+    return options && options.meta
   }
 
   // If the callback given to this function returns a blob, it is used as image
   // source instead of the original url and overrides the file argument used in
   // the onload and onerror event callbacks:
-  loadImage.fetchBlob = function (url, callback, options) {
+  loadImage.fetchBlob = function (url, callback) {
     callback()
-  }
-
-  loadImage.isInstanceOf = function (type, obj) {
-    // Cross-frame instanceof check
-    return Object.prototype.toString.call(obj) === '[object ' + type + ']'
   }
 
   loadImage.transform = function (img, options, callback, file, data) {
     callback(img, data)
   }
 
-  loadImage.onerror = function (img, event, file, callback, options) {
-    revokeHelper(img, options)
-    if (callback) {
-      callback.call(img, event)
-    }
-  }
-
-  loadImage.onload = function (img, event, file, callback, options) {
-    revokeHelper(img, options)
-    if (callback) {
-      loadImage.transform(img, options, callback, file, {})
-    }
-  }
-
-  loadImage.createObjectURL = function (file) {
-    return urlAPI ? urlAPI.createObjectURL(file) : false
-  }
-
-  loadImage.revokeObjectURL = function (url) {
-    return urlAPI ? urlAPI.revokeObjectURL(url) : false
-  }
-
-  // Loads a given File object via FileReader interface,
-  // invokes the callback with the event object (load or error).
-  // The result can be read via event.target.result:
-  loadImage.readFile = function (file, callback, method) {
-    if ($.FileReader) {
-      var fileReader = new FileReader()
-      fileReader.onload = fileReader.onerror = callback
-      method = method || 'readAsDataURL'
-      if (fileReader[method]) {
-        fileReader[method](file)
-        return fileReader
-      }
-    }
-    return false
-  }
+  loadImage.global = $
+  loadImage.readFile = readFile
+  loadImage.isInstanceOf = isInstanceOf
+  loadImage.createObjectURL = createObjectURL
+  loadImage.revokeObjectURL = revokeObjectURL
 
   if (typeof define === 'function' && define.amd) {
     define(function () {
@@ -135,4 +226,4 @@
   } else {
     $.loadImage = loadImage
   }
-}(typeof window !== 'undefined' && window || this))
+})((typeof window !== 'undefined' && window) || this)

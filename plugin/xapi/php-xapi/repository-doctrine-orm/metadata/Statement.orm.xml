@@ -1,0 +1,62 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+        http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="XApi\Repository\Doctrine\Mapping\Statement"
+        repository-class="XApi\Repository\ORM\StatementRepository"
+        table="xapi_statement">
+
+        <id name="id" type="string">
+            <generator strategy="NONE" />
+        </id>
+
+        <field name="created" type="bigint" nullable="true" />
+        <field name="stored" type="bigint" nullable="true" />
+        <field name="hasAttachments" type="boolean" />
+
+        <one-to-one field="actor" target-entity="XApi\Repository\Doctrine\Mapping\StatementObject">
+            <cascade>
+                <cascade-all />
+            </cascade>
+            <join-column referenced-column-name="identifier" />
+        </one-to-one>
+        <one-to-one field="verb" target-entity="XApi\Repository\Doctrine\Mapping\Verb">
+            <cascade>
+                <cascade-all />
+            </cascade>
+            <join-column referenced-column-name="identifier" />
+        </one-to-one>
+        <one-to-one field="object" target-entity="XApi\Repository\Doctrine\Mapping\StatementObject">
+            <cascade>
+                <cascade-all />
+            </cascade>
+            <join-column referenced-column-name="identifier" />
+        </one-to-one>
+        <one-to-one field="result" target-entity="XApi\Repository\Doctrine\Mapping\Result">
+            <cascade>
+                <cascade-all />
+            </cascade>
+            <join-column referenced-column-name="identifier" />
+        </one-to-one>
+        <one-to-one field="authority" target-entity="XApi\Repository\Doctrine\Mapping\StatementObject">
+            <cascade>
+                <cascade-all />
+            </cascade>
+            <join-column referenced-column-name="identifier" />
+        </one-to-one>
+        <one-to-one field="context" target-entity="XApi\Repository\Doctrine\Mapping\Context">
+            <cascade>
+                <cascade-all />
+            </cascade>
+            <join-column referenced-column-name="identifier" />
+        </one-to-one>
+
+        <!-- attachments -->
+        <one-to-many field="attachments" target-entity="XApi\Repository\Doctrine\Mapping\Attachment" mapped-by="statement">
+            <cascade>
+                <cascade-all />
+            </cascade>
+        </one-to-many>
+    </entity>
+</doctrine-mapping>

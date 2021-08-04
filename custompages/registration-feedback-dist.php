@@ -33,7 +33,7 @@ $rootWeb = api_get_path('WEB_PATH');
                     </div>
                     <div id="registration-form-box" class="form-box">
                         <div class="block-form-login">
-                            <?php   echo $content['info']; ?>
+                            <?php echo $content['info']; ?>
                         </div>
                     </div>
                     <div id="footer">

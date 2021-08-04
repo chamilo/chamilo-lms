@@ -36,7 +36,7 @@ $htmlHeadXtra[] = '
 <script>
 $(function() {
     $(".scrollbar-light").scrollbar();
-    
+
     expandColumnToogle("#hide_bar_template", {
         selector: "#template_col",
         width: 3
@@ -47,6 +47,12 @@ $(function() {
 
     CKEDITOR.on("instanceReady", function (e) {
         showTemplates();
+
+        e.editor.on("beforeCommandExec", function (event) {
+            if (event.data.name == "save") {
+                $("#formEdit").append("<input type=hidden name=button_ck value=1 />");
+            }
+        });
     });
 });
 
@@ -328,7 +334,14 @@ if ($is_allowed_to_edit) {
             }
         }
 
-        header('Location: document.php?id='.$document_data['parent_id'].'&'.api_get_cidreq().($is_certificate_mode ? '&curdirpath=/certificates&selectcat=1' : ''));
+        $url = 'document.php?id='.$document_data['parent_id'].'&'.api_get_cidreq().($is_certificate_mode ? '&curdirpath=/certificates&selectcat=1' : '');
+
+        $redirectToEditPage = isset($_POST['button_ck']) && 1 === (int) $_POST['button_ck'];
+        if ($redirectToEditPage) {
+            $url = 'edit_document.php?'.api_get_cidreq().'&id='.$document_id.($is_certificate_mode ? '&curdirpath=/certificates&selectcat=1' : '');
+        }
+
+        header('Location: '.$url);
         exit;
     }
 }
@@ -497,7 +510,8 @@ if ($owner_id == api_get_user_id() ||
     if ($is_certificate_mode) {
         $all_information_by_create_certificate = DocumentManager::get_all_info_to_certificate(
             api_get_user_id(),
-            api_get_course_id()
+            api_get_course_id(),
+            api_get_session_id()
         );
         $str_info = '';
         foreach ($all_information_by_create_certificate[0] as $info_value) {
@@ -537,7 +551,7 @@ if ($owner_id == api_get_user_id() ||
         $(function() {
             $("[data-toggle=\'tooltip\']").tooltip(
                 {
-                    content: 
+                    content:
                         function() {
                             return $(this).attr("title");
                         }

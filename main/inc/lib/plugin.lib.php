@@ -144,11 +144,26 @@ class AppPlugin
 
         if ($fromDatabase || $installedPlugins === null) {
             $installedPlugins = [];
+
+            /*if (api_is_multiple_url_enabled()) {
+                $urlId = api_get_current_access_url_id();
+                $plugins = api_get_settings_params(
+                    [
+                        'variable = ? AND selected_value = ? AND category = ? AND access_url = ? ' => [
+                            'status',
+                            'installed',
+                            'Plugins',
+                            $urlId,
+                        ],
+                    ]
+                );
+            } else {*/
             $plugins = api_get_settings_params(
-                [
-                    'variable = ? AND selected_value = ? AND category = ? ' => ['status', 'installed', 'Plugins'],
-                ]
-            );
+                    [
+                        'variable = ? AND selected_value = ? AND category = ? ' => ['status', 'installed', 'Plugins'],
+                    ]
+                );
+            //}
 
             if (!empty($plugins)) {
                 foreach ($plugins as $row) {
@@ -156,6 +171,26 @@ class AppPlugin
                 }
                 $installedPlugins = array_keys($installedPlugins);
             }
+        }
+
+        return $installedPlugins;
+    }
+
+    public function getInstalledPluginsInCurrentUrl()
+    {
+        $installedPlugins = [];
+        $urlId = api_get_current_access_url_id();
+        $plugins = api_get_settings_params(
+            [
+                'variable = ? AND selected_value = ? AND category = ? AND access_url = ?' => ['status', 'installed', 'Plugins', $urlId],
+            ]
+        );
+
+        if (!empty($plugins)) {
+            foreach ($plugins as $row) {
+                $installedPlugins[$row['subkey']] = true;
+            }
+            $installedPlugins = array_keys($installedPlugins);
         }
 
         return $installedPlugins;
@@ -183,6 +218,8 @@ class AppPlugin
             'before_login',
             'buycourses',
             'card_game',
+            'check_extra_field_author_company',
+            'cleandeletedfiles',
             'clockworksms',
             'courseblock',
             'coursehomenotify',
@@ -194,11 +231,14 @@ class AppPlugin
             'date',
             'dictionary',
             'embedregistry',
+            'exercise_signature',
             'ext_auth_chamilo_logout_button_behaviour',
             'follow_buttons',
             'formLogin_hide_unhide',
             'google_maps',
+            'google_meet',
             'grading_electronic',
+            'h5p',
             'hello_world',
             'ims_lti',
             'jcapture',
@@ -207,17 +247,24 @@ class AppPlugin
             'keycloak',
             'learning_calendar',
             'maintenancemode',
+            'migrationmoodle',
+            'mindmap',
             'nosearchindex',
             'notebookteacher',
+            'oauth2',
             'olpc_peru_filter',
             'openmeetings',
+            'pausetraining',
             'pens',
+            'positioning',
             'questionoptionsevaluation',
             'redirection',
+            'remedial_course',
             'reports',
             'resubscription',
             'rss',
             'search_course',
+            'send_notification_new_lp',
             'sepe',
             'share_buttons',
             'show_regions',
@@ -227,9 +274,13 @@ class AppPlugin
             'surveyexportcsv',
             'surveyexporttxt',
             'test2pdf',
+            'toplinks',
             'tour',
+            'userremoteservice',
             'vchamilo',
             'whispeakauth',
+            'zoom',
+            'xapi',
         ];
 
         return $officialPlugins;
@@ -685,7 +736,10 @@ class AppPlugin
                 $form->addHtml('
                     <div class="panel-heading" role="tab" id="heading-'.$plugin_name.'-settings">
                         <h4 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-'.$plugin_name.'-settings" aria-expanded="false" aria-controls="collapse-'.$plugin_name.'-settings">
+                            <a class="collapsed"
+                                role="button" data-toggle="collapse" data-parent="#accordion"
+                                href="#collapse-'.$plugin_name.'-settings" aria-expanded="false"
+                                aria-controls="collapse-'.$plugin_name.'-settings">
                 ');
                 $form->addHtml($icon.' '.$pluginTitle);
                 $form->addHtml('
@@ -694,7 +748,10 @@ class AppPlugin
                     </div>
                 ');
                 $form->addHtml('
-                    <div id="collapse-'.$plugin_name.'-settings" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-'.$plugin_name.'-settings">
+                    <div
+                        id="collapse-'.$plugin_name.'-settings"
+                        class="panel-collapse collapse" role="tabpanel"
+                        aria-labelledby="heading-'.$plugin_name.'-settings">
                         <div class="panel-body">
                 ');
 
@@ -703,7 +760,7 @@ class AppPlugin
                     if ($obj->validateCourseSetting($setting['name']) === false) {
                         continue;
                     }
-                    if ($setting['type'] != 'checkbox') {
+                    if ($setting['type'] !== 'checkbox') {
                         $form->addElement($setting['type'], $setting['name'], $obj->get_lang($setting['name']));
                     } else {
                         $element = &$form->createElement(
@@ -712,11 +769,23 @@ class AppPlugin
                             '',
                             $obj->get_lang($setting['name'])
                         );
+
+                        // Check global settings
+                        $courseSetting = api_get_course_setting($setting['name']);
+                        if (-1 === $courseSetting) {
+                            $defaultValue = api_get_plugin_setting($plugin_name, $setting['name']);
+                            if (!empty($defaultValue)) {
+                                if ('true' === $defaultValue) {
+                                    $element->setChecked(true);
+                                }
+                            }
+                        }
+
                         if (isset($setting['init_value']) && $setting['init_value'] == 1) {
                             $element->setChecked(true);
                         }
-                        $form->addElement($element);
 
+                        $form->addElement($element);
                         if (isset($setting['group'])) {
                             $groups[$setting['group']][] = $element;
                         }

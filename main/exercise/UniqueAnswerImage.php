@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -59,6 +60,71 @@ class UniqueAnswerImage extends UniqueAnswer
 
         $html = '<div class="alert alert-success" role="alert">'.
                 get_lang('UniqueAnswerImagePreferredSize200x150').'</div>';
+
+        $zoomOptions = api_get_configuration_value('quiz_image_zoom');
+        if (isset($zoomOptions['options'])) {
+            $finderFolder = api_get_path(WEB_PATH).'vendor/studio-42/elfinder/';
+            $html .= '<!-- elFinder CSS (REQUIRED) -->';
+            $html .= '<link rel="stylesheet" type="text/css" media="screen"
+                href="'.$finderFolder.'css/elfinder.full.css">';
+            $html .= '<link rel="stylesheet" type="text/css" media="screen" href="'.$finderFolder.'css/theme.css">';
+            $html .= '<!-- elFinder JS (REQUIRED) -->';
+            $html .= '<script type="text/javascript" src="'.$finderFolder.'js/elfinder.full.js"></script>';
+            $html .= '<!-- elFinder translation (OPTIONAL) -->';
+            $language = 'en';
+            $platformLanguage = api_get_interface_language();
+            $iso = api_get_language_isocode($platformLanguage);
+            $filePart = "vendor/studio-42/elfinder/js/i18n/elfinder.$iso.js";
+            $file = api_get_path(SYS_PATH).$filePart;
+            $includeFile = '';
+            if (file_exists($file)) {
+                $includeFile = '<script type="text/javascript" src="'.api_get_path(WEB_PATH).$filePart.'"></script>';
+                $language = $iso;
+            }
+            $html .= $includeFile;
+
+            $html .= '<script type="text/javascript" charset="utf-8">
+            $(function() {
+                $(".add_img_link").on("click", function(e){
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    var name = $(this).prop("name");
+                    var id = parseInt(name.match(/[0-9]+/));
+
+                    $([document.documentElement, document.body]).animate({
+                        scrollTop: $("#elfinder").offset().top
+                    }, 1000);
+
+                    var elf = $("#elfinder").elfinder({
+                        url : "'.api_get_path(WEB_LIBRARY_PATH).'elfinder/connectorAction.php?'.api_get_cidreq().'",
+                        getFileCallback: function(file) {
+                            var filePath = file; //file contains the relative url.
+                            var imageZoom = filePath.url;
+                            var iname = "answer["+id+"]";
+
+                            CKEDITOR.instances[iname].insertHtml(\'
+                                <img
+                                    id="zoom_picture"
+                                    class="zoom_picture"
+                                    src="\'+imageZoom+\'"
+                                    data-zoom-image="\'+imageZoom+\'"
+                                    width="200px"
+                                    height="150px"
+                                />\');
+
+                            $("#elfinder").elfinder("destroy"); //close the window after image is selected
+                        },
+                        startPathHash: "l2_Lw", // Sets the course driver as default
+                        resizable: false,
+                        lang: "'.$language.'"
+                    }).elfinder("instance"+id);
+                });
+            });
+            </script>';
+            $html .= '<div id="elfinder"></div>';
+        }
+
         $html .= '<table class="table table-striped table-hover">
             <thead>
                 <tr style="text-align: center;">
@@ -78,8 +144,8 @@ class UniqueAnswerImage extends UniqueAnswer
         $defaults = [];
         $correct = 0;
 
-        if (!empty($this->id)) {
-            $answer = new Answer($this->id);
+        if (!empty($this->iid)) {
+            $answer = new Answer($this->iid);
             $answer->read();
 
             if ($answer->nbrAnswers > 0 && !$form->isSubmitted()) {
@@ -146,12 +212,12 @@ class UniqueAnswerImage extends UniqueAnswer
                 $url = $itemList[3];
 
                 $tryResult = 0;
-                if ($try != 0) {
+                if (0 != $try) {
                     $tryResult = 1;
                 }
 
                 $urlResult = '';
-                if ($url != 0) {
+                if (0 != $url) {
                     $urlResult = $url;
                 }
 
@@ -180,7 +246,20 @@ class UniqueAnswerImage extends UniqueAnswer
                 'counter['.$i.']'
             );
             $renderer->setElementTemplate(
-                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
+                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}'.
+                    (isset($zoomOptions['options']) ?
+                    '<br><div class="form-group ">
+                        <label for="question_admin_form_btn_add_img['.$i.']" class="col-sm-2 control-label"></label>
+                        <div class="col-sm-8">
+                            <button class="add_img_link btn btn-info btn-sm"
+                                name="btn_add_img['.$i.']"
+                                type="submit"
+                                id="question_admin_form_btn_add_img['.$i.']">
+                                <em class="fa fa-plus"></em> '.get_lang('AddImageWithZoom').'
+                            </button>
+                        </div>
+                        <div class="col-sm-2"></div>
+                    </div>' : '').'</td>',
                 'answer['.$i.']'
             );
             $renderer->setElementTemplate(
@@ -220,7 +299,7 @@ class UniqueAnswerImage extends UniqueAnswer
         global $text;
         $buttonGroup = [];
         if ($objExercise->edit_exercise_in_lp == true ||
-            (empty($this->exerciseList) && empty($objExercise->id))
+            (empty($this->exerciseList) && empty($objExercise->iid))
         ) {
             //setting the save button here and not in the question class.php
             $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
@@ -230,16 +309,16 @@ class UniqueAnswerImage extends UniqueAnswer
         }
 
         // We check the first radio button to be sure a radio button will be check
-        if ($correct == 0) {
+        if (0 == $correct) {
             $correct = 1;
         }
 
         $defaults['correct'] = $correct;
 
-        if (!empty($this->id)) {
+        if (!empty($this->iid)) {
             $form->setDefaults($defaults);
         } else {
-            if ($this->isContent == 1) {
+            if (1 == $this->isContent) {
                 // Default sample content.
                 $form->setDefaults($defaults);
             } else {
@@ -257,7 +336,7 @@ class UniqueAnswerImage extends UniqueAnswer
     {
         $questionWeighting = $nbrGoodAnswers = 0;
         $correct = $form->getSubmitValue('correct');
-        $objAnswer = new Answer($this->id);
+        $objAnswer = new Answer($this->iid);
         $numberAnswers = $form->getSubmitValue('nb_answers');
 
         for ($i = 1; $i <= $numberAnswers; $i++) {
@@ -269,11 +348,12 @@ class UniqueAnswerImage extends UniqueAnswer
 
             //$listDestination = $form -> getSubmitValue('destination'.$i);
             //$destinationStr = $form -> getSubmitValue('destination'.$i);
-
-            $try = $scenario['try'.$i];
-            $lp = $scenario['lp'.$i];
-            $destination = $scenario['destination'.$i];
-            $url = trim($scenario['url'.$i]);
+            if (!empty($scenario)) {
+                $try = $scenario['try'.$i];
+                $lp = $scenario['lp'.$i];
+                $destination = $scenario['destination'.$i];
+                $url = trim($scenario['url'.$i]);
+            }
 
             /*
               How we are going to parse the destination value
@@ -356,7 +436,9 @@ class UniqueAnswerImage extends UniqueAnswer
             }
             $header .= '<th>'.get_lang('Answer').'</th>';
             $header .= '<th>'.get_lang('Status').'</th>';
-            $header .= '<th>'.get_lang('Comment').'</th>';
+            if (false === $exercise->hideComment) {
+                $header .= '<th>'.get_lang('Comment').'</th>';
+            }
             $header .= '</tr>';
         } else {
             $header = parent::return_header($exercise, $counter, $score);

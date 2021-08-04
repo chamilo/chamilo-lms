@@ -416,7 +416,7 @@ class FeatureContext extends MinkContext
      */
     public function waitForThePageToBeLoaded()
     {
-        $this->getSession()->wait(3000);
+        $this->getSession()->wait(2000);
     }
 
     /**
@@ -425,7 +425,7 @@ class FeatureContext extends MinkContext
     public function waitVeryLongForThePageToBeLoaded()
     {
         //$this->getSession()->wait(10000, "document.readyState === 'complete'");
-        $this->getSession()->wait(8000);
+        $this->getSession()->wait(4000);
     }
 
     /**
@@ -554,8 +554,8 @@ class FeatureContext extends MinkContext
     /**
      * Example: Then I should see the table "#category_results":
      *               | Categories    | Absolute score | Relative score |
-     *               | Categoryname2 | 50 / 70        | 71.43%         |
-     *               | Categoryname1 | 60 / 60        | 100%           |
+     *               | Categoryname2 | 50 / 70        | 71.43 %         |
+     *               | Categoryname1 | 60 / 60        | 100 %           |
      *
      * @Then /^I should see the table "([^"]*)":$/
      *

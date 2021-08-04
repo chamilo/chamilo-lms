@@ -3,8 +3,6 @@
 
 /**
  * Exams script.
- *
- * @package chamilo.tracking
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -48,30 +46,38 @@ if (empty($sessionId)) {
     $sessionCondition = api_get_session_condition($sessionId, true, true);
 }
 
-$form = new FormValidator('search_simple', 'POST', '', '', null, false);
-$form->addElement('text', 'score', get_lang('Percentage'));
+$form = new FormValidator(
+    'search_simple',
+    'POST',
+    api_get_self().'?'.api_get_cidreq(),
+    '',
+    null,
+    false
+);
+$form->addElement('number', 'score', get_lang('Percentage'));
 if ($global) {
     $form->addElement('hidden', 'view', 'admin');
 } else {
     // Get exam lists
     $courseId = api_get_course_int_id();
 
-    $sql = "SELECT quiz.title, id FROM $quizTable AS quiz
+    $sql = "SELECT quiz.title, iid FROM $quizTable AS quiz
             WHERE
                 c_id = $courseId AND
                 active = 1
                 $sessionCondition
             ORDER BY quiz.title ASC";
     $result = Database::query($sql);
-
-    $exerciseList = [get_lang('All')];
-    while ($row = Database::fetch_array($result)) {
-        $exerciseList[$row['id']] = $row['title'];
+    // Only show select bar if there is more than one test
+    if (Database::num_rows($result) > 0) {
+        $exerciseList = [get_lang('All')];
+        while ($row = Database::fetch_array($result)) {
+            $exerciseList[$row['iid']] = $row['title'];
+        }
+        $form->addElement('select', 'exercise_id', get_lang('Exercise'), $exerciseList);
     }
-    $form->addElement('select', 'exercise_id', get_lang('Exercise'), $exerciseList);
 }
-
-$form->addButtonFilter(get_lang('Filter'));
+$form->addButton('filter', get_lang('Filter'), 'filter', 'primary', null, null, ['style' => 'margin-top: 5px; margin-left: 15px;']);
 
 $filter_score = isset($_REQUEST['score']) ? intval($_REQUEST['score']) : 70;
 $exerciseId = isset($_REQUEST['exercise_id']) ? intval($_REQUEST['exercise_id']) : 0;
@@ -131,7 +137,8 @@ if (!$exportToXLS) {
     echo '<h3>'.sprintf(get_lang('FilteringWithScoreX'), $filter_score).'%</h3>';
 }
 
-$html = '<table  class="data_table">';
+$html = '<div class="table-responsive">';
+$html .= '<table  class="table table-hover table-striped data_table">';
 if ($global) {
     $html .= '<tr>';
     $html .= '<th>'.get_lang('Courses').'</th>';
@@ -171,14 +178,14 @@ if (!empty($courseList) && is_array($courseList)) {
         $courseId = $courseInfo['real_id'];
 
         if ($global) {
-            $sql = "SELECT count(id) as count
+            $sql = "SELECT count(iid) as count
                     FROM $quizTable AS quiz
                     WHERE c_id = $courseId AND  active = 1 AND (session_id = 0 OR session_id IS NULL)";
             $result = Database::query($sql);
             $countExercises = Database::store_result($result);
             $exerciseCount = $countExercises[0]['count'];
 
-            $sql = "SELECT count(id) as count
+            $sql = "SELECT count(iid) as count
                     FROM $quizTable AS quiz
                     WHERE c_id = $courseId AND active = 1 AND session_id <> 0";
             $result = Database::query($sql);
@@ -188,7 +195,7 @@ if (!empty($courseList) && is_array($courseList)) {
             $exerciseCount = $exerciseCount + $exerciseCount * count($newSessionList) + $exerciseSessionCount;
 
             // Add course and session list.
-            if ($exerciseCount == 0) {
+            if (0 == $exerciseCount) {
                 $exerciseCount = 2;
             }
             $html .= "<tr>
@@ -202,17 +209,17 @@ if (!empty($courseList) && is_array($courseList)) {
         $result = Database::query($sql);
 
         // If main tool is visible.
-        if (Database::result($result, 0, 'visibility') == 1) {
+        if (1 == Database::result($result, 0, 'visibility')) {
             // Getting the exam list.
             if ($global) {
-                $sql = "SELECT quiz.title, id, session_id
+                $sql = "SELECT quiz.title, iid, session_id
                     FROM $quizTable AS quiz
                     WHERE c_id = $courseId AND active = 1
                     ORDER BY session_id, quiz.title ASC";
             } else {
                 //$sessionCondition = api_get_session_condition($sessionId, true, false);
                 if (!empty($exerciseId)) {
-                    $sql = "SELECT quiz.title, id, session_id
+                    $sql = "SELECT quiz.title, iid, session_id
                             FROM $quizTable AS quiz
                             WHERE
                                 c_id = $courseId AND
@@ -222,7 +229,7 @@ if (!empty($courseList) && is_array($courseList)) {
 
                             ORDER BY session_id, quiz.title ASC";
                 } else {
-                    $sql = "SELECT quiz.title, id, session_id
+                    $sql = "SELECT quiz.title, iid, session_id
                             FROM $quizTable AS quiz
                             WHERE
                                 c_id = $courseId AND
@@ -341,6 +348,7 @@ if (!empty($courseList) && is_array($courseList)) {
 }
 
 $html .= '</table>';
+$html .= '</div>';
 
 if (!$exportToXLS) {
     echo $html;
@@ -474,8 +482,8 @@ function export_complete_report_xls($filename, $array)
  */
 function processStudentList($filter_score, $global, $exercise, $courseInfo, $sessionId, $newSessionList)
 {
-    if ((isset($exercise['id']) && empty($exercise['id'])) ||
-        !isset($exercise['id'])
+    if ((isset($exercise['iid']) && empty($exercise['iid'])) ||
+        !isset($exercise['iid'])
     ) {
         return [
             'html' => '',
@@ -546,7 +554,7 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
                 FROM $exerciseStatsTable AS ex
                 WHERE
                     ex.c_id = $courseId AND
-                    ex.exe_exo_id = ".$exercise['id']." AND
+                    ex.exe_exo_id = ".$exercise['iid']." AND
                     exe_user_id= $studentId AND
                     session_id = $sessionId
                 ";
@@ -558,7 +566,7 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
                 WHERE
                     exe_user_id = $studentId AND
                     c_id = $courseId AND
-                    exe_exo_id = ".$exercise['id']." AND
+                    exe_exo_id = ".$exercise['iid']." AND
                     session_id = $sessionId
                 ORDER BY exe_result DESC
                 LIMIT 1";

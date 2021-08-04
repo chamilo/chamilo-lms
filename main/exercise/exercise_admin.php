@@ -49,8 +49,7 @@ $htmlHeadXtra[] = '<script>
     }
 
     function option_time_expired() {
-        if(document.getElementById(\'timercontrol\').style.display == \'none\')
-        {
+        if(document.getElementById(\'timercontrol\').style.display == \'none\') {
           document.getElementById(\'timercontrol\').style.display = \'block\';
         } else {
           document.getElementById(\'timercontrol\').style.display = \'none\';
@@ -58,7 +57,7 @@ $htmlHeadXtra[] = '<script>
     }
 
     function check_per_page_one() {
-         document.getElementById(\'exerciseType_0\').checked=true;
+         //document.getElementById(\'exerciseType_0\').checked=true;
     }
 
     function check_per_page_all() {
@@ -69,6 +68,10 @@ $htmlHeadXtra[] = '<script>
 
     function check_feedback() {
         if (document.getElementById(\'result_disabled_1\').checked == true) {
+            document.getElementById(\'result_disabled_0\').checked = true;
+        }
+
+        if (document.getElementById(\'exerciseType_0\').checked == true) {
             document.getElementById(\'result_disabled_0\').checked = true;
         }
     }
@@ -113,22 +116,20 @@ $htmlHeadXtra[] = '<script>
                 break;
         }
     }
-</script>';
 
-// to correct #4029 Random and number of attempt menu empty added window.onload=advanced_parameters;
-$htmlHeadXtra[] = '<script>
-function setFocus(){
-    $("#exercise_title").focus();
-}
-$(function() {
-    setFocus();
-});
+    function setFocus(){
+        $("#exercise_title").focus();
+    }
+
+    // to correct #4029 Random and number of attempt menu empty added window.onload=advanced_parameters;
+    $(function() {
+        setFocus();
+    });
 </script>';
 
 $objExercise = new Exercise();
 $course_id = api_get_course_int_id();
 
-//INIT FORM
 if (isset($_GET['exerciseId'])) {
     $form = new FormValidator(
         'exercise_admin',
@@ -148,7 +149,6 @@ if (isset($_GET['exerciseId'])) {
 
 $objExercise->createForm($form);
 
-// VALIDATE FORM
 if ($form->validate()) {
     $objExercise->processCreation($form);
     if ($form->getSubmitValue('edit') === 'true') {
@@ -160,7 +160,7 @@ if ($form->validate()) {
             Display::return_message(get_lang('ExerciseAdded'), 'success')
         );
     }
-    $exercise_id = $objExercise->id;
+    $exercise_id = $objExercise->iid;
     Session::erase('objExercise');
     header('Location:admin.php?exerciseId='.$exercise_id.'&'.api_get_cidreq());
     exit;
@@ -177,15 +177,15 @@ if ($form->validate()) {
         'name' => get_lang('Exercises'),
     ];
     $interbreadcrumb[] = [
-        'url' => 'admin.php?exerciseId='.$objExercise->id.'&'.api_get_cidreq(),
+        'url' => 'admin.php?exerciseId='.$objExercise->iid.'&'.api_get_cidreq(),
         'name' => $objExercise->selectTitle(true),
     ];
 
     Display::display_header($nameTools, get_lang('Exercise'));
 
     echo '<div class="actions">';
-    if ($objExercise->id != 0) {
-        echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
+    if ($objExercise->iid != 0) {
+        echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->iid.'">'.
             Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
         if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {
@@ -196,7 +196,8 @@ if ($form->validate()) {
                 $lp_id = $_GET['lp_id'];
             }
             $lp_id = (int) $lp_id;
-            echo "<a href=\"../lp/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-2\">".
+            echo "<a
+                href=\"../lp/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-2\">".
                 Display::return_icon('back.png', get_lang("BackTo").' '.get_lang('LearningPaths'), '', ICON_SIZE_MEDIUM)."</a>";
         } else {
             echo '<a href="exercise.php?'.api_get_cidreq().'">'.

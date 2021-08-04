@@ -229,7 +229,7 @@ function is_proxybypass($url)
 // Main execution sequence
 
 if (!$vchamilos = Database::select('*', 'vchamilo', [], 'all')) {
-    die("Nothing to do. No Vhosts");
+    exit("Nothing to do. No Vhosts");
 }
 
 $allvhosts = array_values($vchamilos);
@@ -251,7 +251,7 @@ if ($VCRON->STRATEGY == ROUND_ROBIN) {
                 fire_vhost_cron($vhost);
             }
 
-            die('Done.');
+            exit('Done.');
         }
         if ($vhost->id == api_get_setting('vchamilo_cron_lasthost', 'vchamilo')) {
             $rr = 1; // take next one

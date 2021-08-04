@@ -1,5 +1,13 @@
 <div class="actions">
-    <a href="{{ _p.web }}main/auth/courses.php" title="{{ "Back"|get_lang }}">
+    {% if item_type == 1 %}
+        {% set back_url = _p.web_plugin ~ 'buycourses/src/course_catalog.php' %}
+    {% elseif item_type == 2 %}
+        {% set back_url = _p.web_plugin ~ 'buycourses/src/session_catalog.php' %}
+    {% else %}
+        {% set back_url = _p.web_plugin ~ 'buycourses/src/service_catalog.php' %}
+    {% endif %}
+
+    <a href="{{ back_url }}" title="{{ "Back"|get_lang }}">
         <img src="{{ "back.png"|icon(32) }}" width="32" height="32" alt="{{ "Back"|get_lang }}"
              title="{{ "Back"|get_lang }}"/>
     </a>

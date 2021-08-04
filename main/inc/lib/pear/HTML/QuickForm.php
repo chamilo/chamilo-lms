@@ -64,6 +64,7 @@ class HTML_QuickForm extends HTML_Common
 {
     const MAX_ELEMENT_ARGUMENT = 10;
     private $dateTimePickerLibraryAdded;
+    private $token;
 
     /**
      * Array containing the form fields
@@ -227,7 +228,9 @@ class HTML_QuickForm extends HTML_Common
         $attributes = null,
         $trackSubmit = false
     ) {
+        $this->token = null;
         parent::__construct($attributes);
+
         $method = (strtoupper($method) == 'GET') ? 'get' : 'post';
         $action = ($action == '') ? api_get_self() : $action;
         $target = empty($target) ? array() : array('target' => $target);
@@ -268,6 +271,28 @@ class HTML_QuickForm extends HTML_Common
                     $this->_maxFileSize = $matches['1'];
             }
         }
+    }
+
+    public function protect()
+    {
+        $token = $this->getSubmitValue('protect_token');
+        if (null === $token) {
+            $token = Security::get_token();
+        } else {
+            $token = Security::get_existing_token();
+        }
+        $this->addHidden('protect_token', $token);
+        $this->setToken($token);
+    }
+
+    public function setToken($token)
+    {
+        $this->token = $token;
+    }
+
+    public function getToken()
+    {
+        return $this->token;
     }
 
     /**
@@ -1399,6 +1424,14 @@ class HTML_QuickForm extends HTML_Common
         } elseif (!$this->isSubmitted()) {
 
             return false;
+        }
+
+        if (null !== $this->getToken()) {
+            $check = Security::check_token('form', $this);
+            Security::clear_token();
+            if (false === $check) {
+                return false;
+            }
         }
 
         $registry =& HTML_QuickForm_RuleRegistry::singleton();

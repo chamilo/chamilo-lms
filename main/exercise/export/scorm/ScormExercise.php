@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -19,8 +20,6 @@ use Symfony\Component\Serializer\Serializer;
  *
  * @author Julio Montoya
  * @author Amand Tihon <amand@alrj.org>
- *
- * @package chamilo.exercise.scorm
  */
 class ScormExercise
 {
@@ -47,9 +46,8 @@ class ScormExercise
     public function startPage()
     {
         $charset = 'UTF-8';
-        $head = '<?xml version="1.0" encoding="'.$charset.'" standalone="no"?><html>';
 
-        return $head;
+        return '<?xml version="1.0" encoding="'.$charset.'" standalone="no"?><html>';
     }
 
     /**
@@ -92,7 +90,7 @@ class ScormExercise
     public function start_body()
     {
         return '<body>'.
-            '<h1>'.$this->exercise->selectTitle().'</h1><p>'.$this->exercise->selectDescription()."</p>".
+            '<h1>'.$this->exercise->selectTitle().'</h1><p>'.$this->exercise->selectDescription().'</p>'.
             '<form id="chamilo_scorm_form" method="post" action="">'.
             '<table width="100%">';
     }
@@ -102,11 +100,11 @@ class ScormExercise
      */
     public function end_body()
     {
-        $button = '<input 
-            id="chamilo_scorm_submit" 
-            class="btn btn-primary" 
-            type="button" 
-            name="chamilo_scorm_submit" 
+        $button = '<input
+            id="chamilo_scorm_submit"
+            class="btn btn-primary"
+            type="button"
+            name="chamilo_scorm_submit"
             value="OK" />';
 
         return '</table><br />'.$button.'</form></body>';
@@ -116,8 +114,6 @@ class ScormExercise
      * Export the question as a SCORM Item.
      *
      * This is a default behaviour, some classes may want to override this.
-     *
-     * @param $standalone: Boolean stating if it should be exported as a stand-alone question
      *
      * @return string string, the XML flow for an Item
      */
@@ -132,7 +128,8 @@ class ScormExercise
         }*/
 
         list($js, $html) = $this->exportQuestions();
-        $res = $this->startPage()
+
+        return $this->startPage()
             .$this->start_header()
             .$this->css()
             .$this->globalAssets()
@@ -145,8 +142,6 @@ class ScormExercise
             .$html
             .$this->end_body()
             .$this->end_page();
-
-        return $res;
     }
 
     /**
@@ -163,7 +158,7 @@ class ScormExercise
         $em = Database::getManager();
         // Export cquiz data
         /** @var CQuiz $exercise */
-        $exercise = $em->find('ChamiloCourseBundle:CQuiz', $this->exercise->iId);
+        $exercise = $em->find('ChamiloCourseBundle:CQuiz', $this->exercise->iid);
         $exercise->setDescription('');
         $exercise->setTextWhenFinished('');
 

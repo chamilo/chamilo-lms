@@ -58,7 +58,7 @@ class Wiki extends Basic
                 'Find',
             ],
             ['Wikilink', 'Link', 'Unlink', 'Anchor'],
-            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio', 'Asciimath'],
+            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'VimeoEmbed', 'Audio', 'Asciimath'],
             ['Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'leaflet'],
             ['Format', 'Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],

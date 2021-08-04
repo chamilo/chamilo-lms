@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\HTMLPurifier\Filter\AllowIframes;
@@ -21,8 +22,6 @@ use ChamiloSession as Session;
  * For Cross-Site Request Forgeries, use get_token() and check_tocken()
  * For basic filtering, use filter()
  * For files inclusions (using dynamic paths) use check_rel_path() and check_abs_path()
- *
- * @package chamilo.library
  *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
@@ -59,6 +58,8 @@ class Security
             return false;
         }
 
+        // Clean $abs_path.
+        $abs_path = str_replace(['//', '../'], ['/', ''], $abs_path);
         $true_path = str_replace("\\", '/', realpath($abs_path));
         $checker_path = str_replace("\\", '/', realpath($checker_path));
 
@@ -143,7 +144,7 @@ class Security
      *
      * @return bool True if it's the right token, false otherwise
      */
-    public static function check_token($request_type = 'post')
+    public static function check_token($request_type = 'post', FormValidator $form = null)
     {
         $sessionToken = Session::read('sec_token');
         switch ($request_type) {
@@ -161,6 +162,14 @@ class Security
                 return false;
             case 'post':
                 if (!empty($sessionToken) && isset($_POST['sec_token']) && $sessionToken === $_POST['sec_token']) {
+                    return true;
+                }
+
+                return false;
+            case 'form':
+                $token = $form->getSubmitValue('protect_token');
+
+                if (!empty($sessionToken) && !empty($token) && $sessionToken === $token) {
                     return true;
                 }
 
@@ -478,7 +487,7 @@ class Security
      * this method encourages a safe practice for generating icon paths, without using heavy solutions
      * based on HTMLPurifier for example.
      *
-     * @param string $img_path the input path of the image, it could be relative or absolute URL
+     * @param string $image_path the input path of the image, it could be relative or absolute URL
      *
      * @return string returns sanitized image path or an empty string when the image path is not secure
      *

@@ -93,7 +93,7 @@ class CourseChatUtils
         }
         $friendId = (int) $friendId;
 
-        $user = api_get_user_entity($this->userId);
+        $userInfo = api_get_user_info($this->userId);
         $courseInfo = api_get_course_info_by_id($this->courseId);
         $isMaster = api_is_course_admin();
         $document_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
@@ -150,7 +150,6 @@ class CourseChatUtils
                 false
             );
             $documentLogTypes = ['DocumentAdded', 'invisible'];
-
             foreach ($documentLogTypes as $logType) {
                 api_item_property_update(
                     $courseInfo,
@@ -172,13 +171,13 @@ class CourseChatUtils
         }
 
         $fp = fopen($absoluteFilePath, 'a');
-        $userPhoto = UserManager::getUserPicture($this->userId, USER_IMAGE_SIZE_MEDIUM);
+        $userPhoto = UserManager::getUserPicture($this->userId, USER_IMAGE_SIZE_MEDIUM, true, $userInfo);
 
         if ($isMaster) {
             $fileContent = '
                 <div class="message-teacher">
                     <div class="content-message">
-                        <div class="chat-message-block-name">'.UserManager::formatUserFullName($user).'</div>
+                        <div class="chat-message-block-name">'.$userInfo['complete_name'].'</div>
                         <div class="chat-message-block-content">'.$message.'</div>
                         <div class="message-date">'.$timeNow.'</div>
                     </div>
@@ -192,7 +191,7 @@ class CourseChatUtils
                     <img class="chat-image" src="'.$userPhoto.'">
                     <div class="icon-message"></div>
                     <div class="content-message">
-                        <div class="chat-message-block-name">'.UserManager::formatUserFullName($user).'</div>
+                        <div class="chat-message-block-name">'.$userInfo['complete_name'].'</div>
                         <div class="chat-message-block-content">'.$message.'</div>
                         <div class="message-date">'.$timeNow.'</div>
                     </div>

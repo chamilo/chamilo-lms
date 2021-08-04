@@ -367,7 +367,7 @@ class Chat extends Model
     ) {
         $relation = SocialManager::get_relation_between_contacts($fromUserId, $to_user_id);
 
-        if ($relation == USER_RELATION_TYPE_FRIEND) {
+        if (USER_RELATION_TYPE_FRIEND == $relation) {
             $now = api_get_utc_datetime();
             $user_info = api_get_user_info($to_user_id, true);
             $this->saveWindow($to_user_id);
@@ -400,7 +400,7 @@ class Chat extends Model
             $params = [];
             $params['from_user'] = (int) $fromUserId;
             $params['to_user'] = (int) $to_user_id;
-            $params['message'] = $message;
+            $params['message'] = $messagesan;
             $params['sent'] = api_get_utc_datetime();
 
             if (!empty($fromUserId) && !empty($to_user_id)) {

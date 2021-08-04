@@ -160,7 +160,7 @@ if (api_is_drh() && !UserManager::is_user_followed_by_drh($student_id, $_user['u
 $info_user['name'] = api_get_person_name($info_user['firstname'], $info_user['lastname']);
 
 ?>
-<table class='data_table'>
+<table class='table table-hover table-striped data_table'>
     <tr>
         <th colspan="6">
             <?php echo get_lang('result_exam_title');

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
@@ -43,7 +44,7 @@ if (file_exists($kernel->getConfigurationFile())) {
         $global_error_code = 2;
         // The system has not been installed yet.
         require_once __DIR__.'/../inc/global_error_message.inc.php';
-        die();
+        exit();
     }
 }
 
@@ -150,6 +151,7 @@ $dbParams = [
     'path' => isset($_configuration['db_path']) ? $_configuration['db_path'] : '',
     // Only relevant for pdo_mysql, pdo_pgsql, and pdo_oci/oci8,
     'port' => isset($_configuration['db_port']) ? $_configuration['db_port'] : '',
+    'driverOptions' => isset($_configuration['db_client_flags']) && is_array($_configuration['db_client_flags']) ? $_configuration['db_client_flags'] : [],
 ];
 
 try {
@@ -159,7 +161,7 @@ try {
     $global_error_code = 3;
     // The database server is not available or credentials are invalid.
     require $includePath.'/global_error_message.inc.php';
-    die();
+    exit();
 }
 
 /* RETRIEVING ALL THE CHAMILO CONFIG SETTINGS FOR MULTIPLE URLs FEATURE*/
@@ -575,7 +577,7 @@ if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
 
 // Update of the logout_date field in the table track_e_login
 // (needed for the calculation of the total connection time)
-if (!isset($_SESSION['login_as']) && isset($_user)) {
+if (!isset($_SESSION['login_as']) && isset($_user) && isset($_user["user_id"])) {
     // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
     $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
     $sql = "SELECT login_id, login_date

@@ -1,9 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.work
- */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
 
@@ -24,9 +22,6 @@ $my_folder_data = get_work_data_by_id($work_id);
 $curdirpath = '';
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = to_javascript_work();
-
-/*	Constants and variables */
-
 $tool_name = get_lang('StudentPublications');
 
 $item_id = isset($_REQUEST['item_id']) ? (int) $_REQUEST['item_id'] : null;
@@ -45,7 +40,6 @@ if ($action === 'upload_form') {
     $display_upload_form = true;
 }
 
-/*	Header */
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.api_get_cidreq(),
@@ -74,23 +68,23 @@ if (!empty($groupId)) {
         $interbreadcrumb[] = ['url' => $url_dir, 'name' => $my_folder_data['title']];
     }
 
-    if ($action == 'upload_form') {
+    if ($action === 'upload_form') {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
             'name' => get_lang('UploadADocument'),
         ];
     }
 
-    if ($action == 'create_dir') {
+    if ($action === 'create_dir') {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
             'name' => get_lang('CreateAssignment'),
         ];
     }
 } else {
-    if ($origin != 'learnpath') {
+    if ($origin !== 'learnpath') {
         if (isset($_GET['id']) &&
-            !empty($_GET['id']) || $display_upload_form || $action == 'create_dir'
+            !empty($_GET['id']) || $display_upload_form || $action === 'create_dir'
         ) {
             $interbreadcrumb[] = [
                 'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
@@ -121,8 +115,6 @@ Event::event_access_tool(TOOL_STUDENTPUBLICATION);
 
 $logInfo = [
     'tool' => TOOL_STUDENTPUBLICATION,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => $action,
 ];
 Event::registerLog($logInfo);
@@ -171,6 +163,7 @@ switch ($action) {
 
         if ($form->validate()) {
             $values = $form->getSubmitValues();
+
             $result = addDir(
                 $values,
                 $user_id,
@@ -353,7 +346,7 @@ switch ($action) {
 Display::display_header(null);
 Display::display_introduction_section(TOOL_STUDENTPUBLICATION);
 
-if ($origin === 'learnpath') {
+if ('learnpath' === $origin) {
     echo '<div style="height:15px">&nbsp;</div>';
 }
 

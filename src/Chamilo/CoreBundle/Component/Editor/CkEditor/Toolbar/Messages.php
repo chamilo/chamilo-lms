@@ -48,6 +48,7 @@ class Messages extends Basic
                 'Video',
                 'Oembed',
                 'Youtube',
+                'VimeoEmbed',
                 'Flash',
                 'Audio',
                 'leaflet',
@@ -78,7 +79,7 @@ class Messages extends Basic
     {
         return [
             ['Link', 'Unlink'],
-            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio'],
+            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'VimeoEmbed', 'Audio'],
             ['Table', 'Smiley'],
             ['TextColor', 'BGColor'],
             ['Source'],

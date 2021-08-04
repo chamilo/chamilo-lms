@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * @author Claro Team <cvs@claroline.net>
  * @author Yannick Warnier <yannick.warnier@beeznest.com> - updated ImsAnswerHotspot to match QTI norms
  * @author César Perales <cesar.perales@gmail.com> Updated function names and import files for Aiken format support
- *
- * @package chamilo.exercise
  */
 
 /**
@@ -21,7 +20,7 @@ class Aiken2Question extends Question
     {
         switch ($this->type) {
             case MCUA:
-                $answer = new AikenAnswerMultipleChoice($this->id);
+                $answer = new AikenAnswerMultipleChoice($this->iid);
 
                 return $answer;
             default:
@@ -37,9 +36,6 @@ class Aiken2Question extends Question
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function processAnswersCreation($form, $exercise)
     {
         return true;
@@ -48,8 +44,6 @@ class Aiken2Question extends Question
 
 /**
  * Class.
- *
- * @package chamilo.exercise
  */
 class AikenAnswerMultipleChoice extends Answer
 {

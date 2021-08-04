@@ -5,8 +5,6 @@
  * Gradebook link to dropbox item.
  *
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 class DropboxLink extends EvalLink
 {

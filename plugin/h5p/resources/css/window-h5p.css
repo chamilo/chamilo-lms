@@ -1,0 +1,49 @@
+
+#extrasobjectH5p{
+    position : fixed;
+    z-index : 10003;
+    border : solid 3px #2575be;
+    background-color : white;
+    top : 50%;
+    left : 50%;
+    width : 580px;
+    height : 520px;
+    margin-left : -290px;
+    margin-top : -265px;
+}
+.bloch5pGrid{
+    position : relative;
+    padding : 5px;
+    margin-bottom : 10px;
+    width : 560px;
+    height : 300px;
+    overflow : auto;
+    border : dotted 1px gray;
+}
+.bloch5pLine{
+    position : relative;
+    float : left;
+    width : 260px;
+    padding : 4px;
+    border : solid 1px gray;
+    cursor : pointer;
+    margin  :1px;
+    border-radius : 2px;
+}
+.bloch5pLine:hover{
+    background-color : #BCF5A9;
+}
+
+.bloch5pAdd{
+    position : relative;
+    float : left;
+    width : 260px;
+    padding : 4px;
+    border : solid 1px gray;
+    cursor : pointer;
+    margin  : 1px;
+    border-radius : 2px;
+    background-image : url("../img/add.png");
+    background-position : center center;
+    background-repeat: no-repeat;
+}

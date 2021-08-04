@@ -38,13 +38,6 @@ $orig_param = '&origin=resume_session';
 // Database Table Definitions
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_rel_class = Database::get_main_table(TABLE_MAIN_SESSION_CLASS);
-$tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-$table_access_url_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
 $em = Database::getManager();
 $sessionInfo = api_get_session_info($sessionId);
@@ -150,7 +143,7 @@ $url = Display::url(
 );
 $courseListToShow = Display::page_subheader(get_lang('CourseList').$url);
 
-$courseListToShow .= '<table id="session-list-course" class="table table-hover data_table">
+$courseListToShow .= '<table id="session-list-course" class="table table-hover table-striped data_table">
 <tr>
   <th width="35%">'.get_lang('CourseTitle').'</th>
   <th width="30%">'.get_lang('CourseCoach').'</th>
@@ -165,17 +158,43 @@ if ($session->getNbrCourses() === 0) {
 } else {
     $count = 0;
     $courseItem = '';
-    $courses = $sessionRepository->getCoursesOrderedByPosition($session);
+    //$courses = $sessionRepository->getCoursesOrderedByPosition($session);
+
+    $courses = $session->getCourses();
+    $iterator = $courses->getIterator();
+    // define ordering closure, using preferred comparison method/field
+    $iterator->uasort(function ($first, $second) {
+        return (int) $first->getPosition() > (int) $second->getPosition() ? 1 : -1;
+    });
+    $courseList = [];
+    $positionList = [];
+    $courseListByCode = [];
+    /** @var \Chamilo\CoreBundle\Entity\SessionRelCourse $sessionRelCourse */
+    foreach ($iterator as $sessionRelCourse) {
+        $courseList[] = $sessionRelCourse->getCourse();
+        $courseListByCode[$sessionRelCourse->getCourse()->getCode()] = $sessionRelCourse->getCourse();
+        $positionList[] = $sessionRelCourse->getPosition();
+    }
+
+    $checkPosition = array_filter($positionList);
+    if (empty($checkPosition)) {
+        // The session course list doesn't have any position,
+        // then order the course list by course code.
+        $orderByCode = array_keys($courseListByCode);
+        sort($orderByCode, SORT_NATURAL);
+        $newCourseList = [];
+        foreach ($orderByCode as $code) {
+            $newCourseList[] = $courseListByCode[$code];
+        }
+        $courseList = $newCourseList;
+    }
 
     $allowSkills = api_get_configuration_value('allow_skill_rel_items');
 
     /** @var Course $course */
-    foreach ($courses as $course) {
+    foreach ($courseList as $course) {
         // Select the number of users
-        $numberOfUsers = SessionManager::getCountUsersInCourseSession(
-            $course,
-            $session
-        );
+        $numberOfUsers = SessionManager::getCountUsersInCourseSession($course, $session);
 
         // Get coachs of the courses in session
         $namesOfCoaches = [];
@@ -212,6 +231,7 @@ if ($session->getNbrCourses() === 0) {
         }
 
         $courseUrl = api_get_course_url($course->getCode(), $sessionId);
+        $courseBaseUrl = api_get_course_url($course->getCode());
 
         // hide_course_breadcrumb the parameter has been added to hide the name
         // of the course, that appeared in the default $interbreadcrumb
@@ -225,7 +245,13 @@ if ($session->getNbrCourses() === 0) {
         $courseItem .= '<td>'.($namesOfCoaches ? implode('<br>', $namesOfCoaches) : get_lang('None')).'</td>';
         $courseItem .= '<td>'.$numberOfUsers.'</td>';
         $courseItem .= '<td>';
-        $courseItem .= Display::url(Display::return_icon('course_home.gif', get_lang('Course')), $courseUrl);
+        $courseItem .= Display::url(Display::return_icon('course_home.gif', get_lang('CourseInSession')), $courseUrl);
+
+        $courseItem .= Display::url(
+            Display::return_icon('settings.png', get_lang('Course')),
+            $courseBaseUrl,
+            ['target' => '_blank']
+        );
 
         if ($allowSkills) {
             $courseItem .= Display::url(
@@ -295,13 +321,24 @@ $url .= Display::url(
     Display::return_icon('export_csv.png', get_lang('ExportUsers')),
     $codePath."user/user_export.php?file_type=csv&session=$sessionId&addcsvheader=1"
 );
+$url .= Display::url(
+    Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_SMALL),
+    $codePath.'mySpace/session.php?'.http_build_query(
+        [
+            'action' => 'export_to_pdf',
+            'type' => 'achievement',
+            'session_to_export' => $sessionId,
+            'all_students' => 1,
+        ]
+    )
+);
 
 $userListToShow = Display::page_subheader(get_lang('UserList').$url);
 $userList = SessionManager::get_users_by_session($sessionId);
 
 if (!empty($userList)) {
     $table = new HTML_Table(
-        ['class' => 'table table-hover data_table', 'id' => 'session-user-list']
+        ['class' => 'table table-hover table-striped data_table', 'id' => 'session-user-list']
     );
     $table->setHeaderContents(0, 0, get_lang('User'));
     $table->setHeaderContents(0, 1, get_lang('Status'));

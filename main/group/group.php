@@ -175,24 +175,17 @@ if (api_is_allowed_to_edit(false, true)) {
     }
 }
 
-/*	Header */
 Display::display_header(get_lang('Groups'));
-
-// Tool introduction
 Display::display_introduction_section(TOOL_GROUP);
 
 $actionsLeft = '';
-
 if (api_is_allowed_to_edit(false, true)) {
     $actionsLeft .= '<a href="group_creation.php?'.api_get_cidreq().'">'.
         Display::return_icon('add-groups.png', get_lang('NewGroupCreate'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    if (api_get_setting('allow_group_categories') === 'true' && empty($sessionId)) {
+    if (empty($sessionId) && 'true' === api_get_setting('allow_group_categories')) {
         $actionsLeft .= '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.
             Display::return_icon('new_folder.png', get_lang('AddCategory'), '', ICON_SIZE_MEDIUM).'</a>';
-    } else {
-        $actionsLeft .= '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.
-            Display::return_icon('settings.png', get_lang('PropModify'), '', ICON_SIZE_MEDIUM).'</a>';
     }
 
     $actionsLeft .= '<a href="import.php?'.api_get_cidreq().'&action=import">'.
@@ -226,15 +219,10 @@ if (api_get_setting('allow_group_categories') === 'true') {
         'title' => get_lang('DefaultGroupCategory'),
     ];
     $group_cats = array_merge([$defaultCategory], $group_cats);
-
     foreach ($group_cats as $index => $category) {
         $categoryId = $category['id'];
         $group_list = GroupManager::get_group_list($categoryId);
         $groupToShow = GroupManager::process_groups($group_list, $categoryId);
-
-        if (empty($groupToShow)) {
-            continue;
-        }
 
         if (empty($categoryId) && empty($group_list)) {
             continue;
@@ -273,7 +261,7 @@ if (api_get_setting('allow_group_categories') === 'true') {
             false
         );
 
-        echo $category['description'];
+        echo Security::remove_XSS($category['description']);
         echo $groupToShow;
     }
 } else {

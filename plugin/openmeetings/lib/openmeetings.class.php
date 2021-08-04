@@ -77,7 +77,7 @@ class OpenMeetings
             if ($return == 0) {
                 $msg = 'Could not initiate session with server through OpenMeetingsGateway::loginUser()';
                 error_log(__FILE__.'+'.__LINE__.': '.$msg);
-                die($msg);
+                exit($msg);
             }
             $this->sessionId = $this->gateway->sessionId;
         }
@@ -127,7 +127,7 @@ class OpenMeetings
             $roomId = $this->gateway->updateRoomWithModeration($room);
             if ($roomId != $meetingData['room_id']) {
                 $msg = 'Something went wrong: the updated room ID ('.$roomId.') is not the same as the one we had ('.$meetingData['room_id'].')';
-                die($msg);
+                exit($msg);
             }
         } else {
             $room = new Room();

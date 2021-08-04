@@ -1,14 +1,15 @@
 {
   "name": "timepicker",
-  "version": "1.11.14",
+  "version": "1.13.10",
   "title": "jquery-timepicker",
   "author": {
     "name": "Jon Thornton",
     "url": "https://github.com/jonthornton"
   },
   "scripts": {
-    "format": "prettier-eslint --write \"jquery.timepicker.js\"",
-    "lint": "eslint",
+    "build": "rollup --config rollup.config.js",
+    "watch": "rollup -w --config rollup.config.js",
+    "format": "prettier-eslint --write \"src/**/*.js\"",
     "test": "jest"
   },
   "license": "MIT",
@@ -16,16 +17,23 @@
     "jquery": ">=1.7"
   },
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-cli": "~0.1.9",
-    "grunt-contrib-cssmin": "~0.4.1",
-    "grunt-contrib-jshint": "^0.11.3",
-    "grunt-contrib-uglify": "~0.11.0",
-    "jest": "^21.1.0",
-    "prettier-eslint": "^8.1.1",
-    "prettier-eslint-cli": "^4.3.2"
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@rollup/plugin-babel": "^5.0.0",
+    "babel-jest": "^25.4.0",
+    "jest": "^25.4.0",
+    "prettier-eslint": "^9.0.1",
+    "prettier-eslint-cli": "^5.0.0",
+    "rollup": "^2.7.6",
+    "rollup-plugin-copy": "^3.3.0",
+    "rollup-plugin-terser": "^5.3.0"
   },
   "main": "jquery.timepicker.min.js",
+  "files": [
+    "jquery.timepicker.min.js",
+    "jquery.timepicker.js",
+    "jquery.timepicker.css"
+  ],
   "description": "A jQuery timepicker plugin inspired by Google Calendar. It supports both mouse and keyboard navigation.",
   "keywords": [
     "timepicker",

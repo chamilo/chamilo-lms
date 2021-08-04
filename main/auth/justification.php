@@ -23,7 +23,7 @@ foreach ($fields as $field) {
     $formValidator->addHtml('<a name="'.$field['code'].'"></a>');
     $formValidator->addFile($field['code'].'_file', [$field['name'], $field['comment']]);
     if ($field['date_manual_on']) {
-        $formValidator->addDatePicker($field['code'].'_date', $plugin->get_lang('DateValidity'));
+        $formValidator->addDatePicker($field['code'].'_date', $plugin->get_lang('ValidityDate'));
     }
     $formValidator->addHtml('<hr>');
 }
@@ -118,7 +118,7 @@ switch ($action) {
 
 if (!empty($userJustifications)) {
     $userJustificationList .= Display::page_subheader3($plugin->get_lang('MyJustifications'));
-    $table = new HTML_Table(['class' => 'data_table']);
+    $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
     $column = 0;
     $row = 0;
     $headers = [
@@ -157,20 +157,8 @@ if (!empty($userJustifications)) {
     $userJustificationList .= $justificationContent.$table->toHtml();
 }
 
-$justificationTab = '';
-$headers = [
-    [
-        'url' => api_get_path(WEB_CODE_PATH).'auth/profile.php',
-        'content' => get_lang('Profile'),
-    ],
-    [
-        'url' => api_get_path(WEB_CODE_PATH).'auth/justification.php',
-        'content' => $plugin->get_lang('Justification'),
-    ],
-];
-$justificationTab = Display::tabsOnlyLink($headers, 2);
-
-$justification = $justificationTab.$formValidator->returnForm().$userJustificationList;
+$tabs = SocialManager::getHomeProfileTabs('justification');
+$justification = $tabs.$formValidator->returnForm().$userJustificationList;
 
 $tpl = new Template(get_lang('ModifyProfile'));
 

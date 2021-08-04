@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -154,8 +155,9 @@ class Agenda
      */
     public function setType($type)
     {
+        $type = (string) trim($type);
         $typeList = $this->getTypes();
-        if (in_array($type, $typeList)) {
+        if (in_array($type, $typeList, true)) {
             $this->type = $type;
         }
     }
@@ -246,7 +248,7 @@ class Agenda
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
-        $allDay = isset($allDay) && $allDay === 'true' ? 1 : 0;
+        $allDay = isset($allDay) && ($allDay === 'true' || $allDay == 1) ? 1 : 0;
         $id = null;
 
         switch ($this->type) {
@@ -528,7 +530,6 @@ class Agenda
 
             // @todo remove comment code
             $startDateInLocal = new DateTime($newStartDate, new DateTimeZone($timeZone));
-            //$originalOffset = $startDate->getOffset();
             if ($startDateInLocal->format('I') == 0) {
                 // Is saving time? Then fix UTC time to add time
                 $seconds = $startDateInLocal->getOffset();
@@ -536,14 +537,7 @@ class Agenda
                 $startDateFixed = $startDate->format('Y-m-d H:i:s');
                 $startDateInLocalFixed = new DateTime($startDateFixed, new DateTimeZone($timeZone));
                 $newStartDate = $startDateInLocalFixed->format('Y-m-d H:i:s');
-            } else {
-                /*$seconds = $startDateInLocal->getOffset();
-                $startDate->add(new DateInterval("PT".$seconds."S"));
-                $startDateFixed = $startDate->format('Y-m-d H:i:s');
-                $startDateInLocalFixed = new DateTime($startDateFixed, new DateTimeZone($timeZone));
-                $newStartDate = $startDateInLocalFixed->format('Y-m-d H:i:s');*/
             }
-            //var_dump($newStartDate.' - '.$startDateInLocal->format('I'));
             $endDateInLocal = new DateTime($newEndDate, new DateTimeZone($timeZone));
 
             if ($endDateInLocal->format('I') == 0) {
@@ -636,8 +630,12 @@ class Agenda
         }
 
         foreach ($generatedDates as $dateInfo) {
-            $start = api_get_local_time($dateInfo['start']);
-            $end = api_get_local_time($dateInfo['end']);
+//            $start = api_get_local_time($dateInfo['start']);
+//            $end = api_get_local_time($dateInfo['end']);
+            // On line 529 in function generateDatesByType there is a @todo remove comment code
+            // just before the part updating the date in local time so keep both synchronised
+            $start = $dateInfo['start'];
+            $end = $dateInfo['end'];
             $this->addEvent(
                 $start,
                 $end,
@@ -1242,9 +1240,7 @@ class Agenda
                         if (!empty($sessionList)) {
                             foreach ($sessionList as $sessionItem) {
                                 $sessionId = $sessionItem['id'];
-                                $courses = SessionManager::get_course_list_by_session_id(
-                                    $sessionId
-                                );
+                                $courses = SessionManager::get_course_list_by_session_id($sessionId);
                                 $sessionInfo = [
                                     'session_id' => $sessionId,
                                     'courses' => $courses,
@@ -2059,13 +2055,13 @@ class Agenda
                     $event['sent_to'] = '<div class="label_tag notice">'.get_lang('Everyone').'</div>';
                 }
 
-                $event['description'] = $row['content'];
+                $event['description'] = Security::remove_XSS($row['content']);
                 $event['visibility'] = $row['visibility'];
                 $event['real_id'] = $row['id'];
                 $event['allDay'] = isset($row['all_day']) && $row['all_day'] == 1 ? $row['all_day'] : 0;
                 $event['parent_event_id'] = $row['parent_event_id'];
                 $event['has_children'] = $this->hasChildren($row['id'], $courseId) ? 1 : 0;
-                $event['comment'] = $row['comment'];
+                $event['comment'] = Security::remove_XSS($row['comment']);
                 $this->events[] = $event;
             }
         }
@@ -2947,8 +2943,10 @@ class Agenda
 
         $form = '';
         if (api_is_allowed_to_edit(false, true) ||
-            (api_get_course_setting('allow_user_edit_agenda') == '1' && !api_is_anonymous()) &&
-            api_is_allowed_to_session_edit(false, true)
+            ('personal' === $this->type && !api_is_anonymous() && 'true' === api_get_setting('allow_personal_agenda')) ||
+            (
+                '1' === api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous() &&
+                api_is_allowed_to_session_edit(false, true))
             || (
                 GroupManager::user_has_access($currentUserId, $groupIid, GroupManager::GROUP_TOOL_CALENDAR)
                 && GroupManager::is_tutor_of_group($currentUserId, $groupInfo)
@@ -2985,11 +2983,18 @@ class Agenda
             }
         }
 
-        if ($this->type == 'personal' && !api_is_anonymous()) {
+        if ($this->type === 'personal' && !api_is_anonymous()) {
             $actionsLeft .= Display::url(
                 Display::return_icon('1day.png', get_lang('SessionsPlanCalendar'), [], ICON_SIZE_MEDIUM),
-                $codePath."calendar/planification.php"
+                $codePath.'calendar/planification.php'
             );
+
+            if (api_is_student_boss() || api_is_platform_admin()) {
+                $actionsLeft .= Display::url(
+                    Display::return_icon('calendar-user.png', get_lang('MyStudentsSchedule'), [], ICON_SIZE_MEDIUM),
+                    $codePath.'mySpace/calendar_plan.php'
+                );
+            }
         }
 
         if (api_is_platform_admin() ||
@@ -3380,10 +3385,10 @@ class Agenda
      */
     public static function get_global_agenda_items(
         $agendaitems,
-        $day = "",
-        $month = "",
-        $year = "",
-        $week = "",
+        $day,
+        $month,
+        $year,
+        $week,
         $type
     ) {
         $tbl_global_agenda = Database::get_main_table(
@@ -3397,9 +3402,14 @@ class Agenda
 
         $current_access_url_id = api_get_current_access_url_id();
 
-        if ($type == "month_view" or $type == "") {
+        if ($type == "month_view" || $type == "") {
             // We are in month view
-            $sql = "SELECT * FROM ".$tbl_global_agenda." WHERE MONTH(start_date) = ".$month." AND YEAR(start_date) = ".$year."  AND access_url_id = $current_access_url_id ORDER BY start_date ASC";
+            $sql = "SELECT * FROM ".$tbl_global_agenda."
+                    WHERE
+                        MONTH(start_date) = ".$month." AND
+                        YEAR(start_date) = ".$year."  AND
+                        access_url_id = $current_access_url_id
+                    ORDER BY start_date ASC";
         }
         // 2. creating the SQL statement for getting the personal agenda items in WEEK view
         if ($type == "week_view") { // we are in week view
@@ -3520,19 +3530,24 @@ class Agenda
     public static function get_personal_agenda_items(
         $user_id,
         $agendaitems,
-        $day = "",
-        $month = "",
-        $year = "",
-        $week = "",
+        $day,
+        $month,
+        $year,
+        $week,
         $type
     ) {
         $tbl_personal_agenda = Database::get_main_table(TABLE_PERSONAL_AGENDA);
         $user_id = intval($user_id);
 
         // 1. creating the SQL statement for getting the personal agenda items in MONTH view
-        if ($type == "month_view" or $type == "") {
+        if ($type === "month_view" || $type === "") {
             // we are in month view
-            $sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$user_id."' and MONTH(date)='".$month."' AND YEAR(date) = '".$year."'  ORDER BY date ASC";
+            $sql = "SELECT * FROM $tbl_personal_agenda
+                    WHERE
+                        user='".$user_id."' AND
+                        MONTH(date)='".$month."' AND
+                        YEAR(date) = '".$year."'
+                     ORDER BY date ASC";
         }
 
         // 2. creating the SQL statement for getting the personal agenda items in WEEK view
@@ -3647,7 +3662,7 @@ class Agenda
         $agendaitems,
         $month,
         $year,
-        $weekdaynames = [],
+        $weekdaynames,
         $monthName,
         $show_content = true
     ) {

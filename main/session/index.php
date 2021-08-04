@@ -71,7 +71,7 @@ foreach ($courseList as $course) {
     if (!empty($exerciseList)) {
         // Exercises
         foreach ($exerciseList as $exerciseInfo) {
-            $exerciseId = $exerciseInfo['id'];
+            $exerciseId = $exerciseInfo['iid'];
             $visibility = api_get_item_visibility(
                 $course,
                 TOOL_QUIZ,
@@ -264,8 +264,10 @@ if (!empty($courseList)) {
                     $start_date = $exerciseInfo['start_time'];
                 }
 
+                $exerciseId = $exerciseInfo['iid'];
+
                 $best_score_data = ExerciseLib::get_best_attempt_in_course(
-                    $exerciseInfo['id'],
+                    $exerciseId,
                     $courseInfo['real_id'],
                     $session_id
                 );
@@ -618,7 +620,7 @@ $(function() {
 $courseCode = isset($_GET['course']) ? $_GET['course'] : null;
 $reportingTab = '';
 if (!api_is_anonymous()) {
-    $reportingTab = Tracking::show_user_progress(
+    $reportingTab = Tracking::showUserProgress(
         api_get_user_id(),
         $session_id,
         '#tabs-5',

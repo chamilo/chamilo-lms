@@ -41,6 +41,7 @@ class BigBlueButtonBN
 {
 	private $_securitySalt;
 	private $_bbbServerBaseUrl;
+	private $_bbbServerProtocol;
 
 	public function __construct()
     {
@@ -51,6 +52,7 @@ class BigBlueButtonBN
 		// simply flow in here via the constants:
 		$this->_securitySalt 		= CONFIG_SECURITY_SALT;
 		$this->_bbbServerBaseUrl 	= CONFIG_SERVER_BASE_URL;
+		$this->_bbbServerProtocol 	= CONFIG_SERVER_PROTOCOL;
 	}
 
 	private function _processXmlResponse($url)
@@ -62,16 +64,19 @@ class BigBlueButtonBN
 			$ch = curl_init() or die ( curl_error($ch) );
 			$timeout = 10;
 			curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false);
-			curl_setopt( $ch, CURLOPT_URL, $url );
+			curl_setopt( $ch, CURLOPT_URL, $this->_bbbServerProtocol.$url );
 			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
 			curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+            // Following redirect required to use Scalelite, BBB's Load Balancer
+			curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true);
 			$data = curl_exec( $ch );
 			curl_close( $ch );
 
-			if($data)
+			if ($data) {
 				return (new SimpleXMLElement($data));
-			else
+            } else {
 				return false;
+            }
 		}
 		return (simplexml_load_file($url));
 	}
@@ -219,6 +224,9 @@ class BigBlueButtonBN
 
 		if (isset($joinParams['interface']) && (int) $joinParams['interface'] === BBBPlugin::INTERFACE_HTML5) {
 			$bbbHost = api_remove_trailing_slash(CONFIG_SERVER_URL_WITH_PROTOCOL);
+			if (preg_match('#/bigbluebutton$#', $bbbHost)) {
+			    $bbbHost = preg_replace('#/bigbluebutton$#', '', $bbbHost);
+            }
             $params .= '&redirectClient=true&clientURL='.$bbbHost.'/html5client/join';
         }
 

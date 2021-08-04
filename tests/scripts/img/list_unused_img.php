@@ -1,4 +1,7 @@
-<?php /* For licensing terms, see /license.txt */
+<?php
+
+/* For licensing terms, see /license.txt */
+
 /**
  * Cron script to list unused images
  * @package chamilo.cron
@@ -6,6 +9,7 @@
 /**
  * Includes and declarations
  */
+exit;
 if (PHP_SAPI!='cli') {
     die('Run this script through the command line or comment this line in the code');
 }

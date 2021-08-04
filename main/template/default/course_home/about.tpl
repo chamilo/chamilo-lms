@@ -110,7 +110,13 @@
                     <div class="panel-body">
                         {% if is_premium == false %}
                             <div class="session-subscribe">
-                                {% if _u.logged == 0 %}
+                                {# public course (open world) #}
+                                {% if 3 == course.visibility %}
+                                    <a href="{{ _p.web }}courses/{{ course.code }}/index.php?id_session=0"
+                                       class="btn btn-lg btn-success btn-block">
+                                        {{ 'CourseHomepage'|get_lang }}
+                                    </a>
+                                {% elseif _u.logged == 0 %}
                                     {% if 'allow_registration'|api_get_setting != 'false' %}
                                         <a
                                             href="{{ _p.web_main ~ 'auth/inscription.php' ~ redirect_to_session }}"

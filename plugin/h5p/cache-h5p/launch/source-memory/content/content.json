@@ -1,0 +1,3 @@
+{"cards":["@base_cards@"]
+,
+"behaviour":{"useGrid":true,"allowRetry":true},"lookNFeel":{"themeColor":"#909090"},"l10n":{"cardTurns":"Card turns","timeSpent":"Time spent","feedback":"Good work!","tryAgain":"Reset","closeLabel":"Close","label":"Memory Game.\u00a0Find the matching cards.","done":"All of the cards have been found.","cardPrefix":"Card %num:","cardUnturned":"Unturned.","cardMatched":"Match found."}}

@@ -1,0 +1,220 @@
+{
+  "semantics": [
+    {
+      "label": "Heading"
+    },
+    {
+      "label": "Mode",
+      "description": "Mode of presenting the dialog cards",
+      "options": [
+        {
+          "label": "Normal"
+        },
+        {
+          "label": "Repetition"
+        }
+      ]
+    },
+    {
+      "label": "Opgavebeskrivelse",
+      "default": ""
+    },
+    {
+      "widgets": [
+        {
+          "label": "Default"
+        }
+      ],
+      "label": "Dialog",
+      "entity": "dialog",
+      "field": {
+        "label": "Spørgsmål",
+        "fields": [
+          {
+            "label": "Tekst",
+            "description": "Hint til første del af dialogen"
+          },
+          {
+            "label": "Svar",
+            "description": "Hint til anden del af dialogen"
+          },
+          {
+            "label": "Billede",
+            "description": "Valgfrit billede til kortet. (Kortet kan indeholde enten billede eller tekst, eller begge dele)."
+          },
+          {
+            "label": "Alternativ tekst til billedet"
+          },
+          {
+            "label": "Lydfiler"
+          },
+          {
+            "label": "Tips",
+            "fields": [
+              {
+                "label": "Tip til tekst",
+                "description": "Tip til første del af dialogen"
+              },
+              {
+                "label": "Tip for svar",
+                "description": "Tip til anden del af dialogen."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "Indstillinger.",
+      "description": "Disse indstillinger vil kontrollere hvordan opgaven fremstår.",
+      "fields": [
+        {
+          "label": "Aktiver \"prøv igen\" knap."
+        },
+        {
+          "label": "Slå bagglæns navigation fra",
+          "description": "Disse indstillinger vil kun gøre det muligt at gå fremad med dialogkortene"
+        },
+        {
+          "label": "Tilpas teksten så den passer inden for kortet",
+          "description": "Vælges denne indstilling ikke vil kortet tilpasse sig størrelsen på teksten."
+        },
+        {
+          "label": "Bland kort",
+          "description": "Aktivér for at få en tilfældig rækkefølge i visningen af kortene."
+        },
+        {
+          "label": "Maximum proficiency level"
+        },
+        {
+          "label": "Allow quick progression",
+          "description": "If activated, learners can decide to indicate that they know a card without turning it"
+        }
+      ]
+    },
+    {
+      "label": "Tekst på 'vend' knap",
+      "default": "Vend"
+    },
+    {
+      "label": "Tekst på 'næste' knap",
+      "default": "Næste"
+    },
+    {
+      "label": "Tekst på 'forrige' knap.",
+      "default": "Forrige"
+    },
+    {
+      "label": "Tekst på 'prøv igen' knap",
+      "default": "Prøv igen"
+    },
+    {
+      "label": "Text for the \"correct answer\" button",
+      "default": "I got it right!"
+    },
+    {
+      "label": "Text for the \"incorrect answer\" button",
+      "default": "I got it wrong"
+    },
+    {
+      "label": "Text for \"Round\" message below cards and on the summary screen",
+      "description": "@round will be replaced by the number of the current round",
+      "default": "Round @round"
+    },
+    {
+      "label": "Text for \"Cards left\" message",
+      "description": "@number will be replaced by the number of cards left in this round",
+      "default": "Cards left: @number"
+    },
+    {
+      "label": "Text for the \"next round\" button",
+      "description": "@round will be replaced by the round number",
+      "default": "Proceed to round @round"
+    },
+    {
+      "label": "Text for the \"Start over\" button",
+      "default": "Start over"
+    },
+    {
+      "label": "Text for the \"show summary\" button",
+      "default": "Next"
+    },
+    {
+      "label": "Title text for the summary page",
+      "default": "Summary"
+    },
+    {
+      "label": "Text for \"Cards you got right:\"",
+      "default": "Cards you got right:"
+    },
+    {
+      "label": "Text for \"Cards you got wrong:\"",
+      "default": "Cards you got wrong:"
+    },
+    {
+      "label": "Text for \"Cards not shown:\"",
+      "default": "Cards in pool not shown:"
+    },
+    {
+      "label": "Text for \"Overall Score\"",
+      "default": "Overall Score"
+    },
+    {
+      "label": "Text for \"Cards completed\"",
+      "default": "Cards you have completed learning:"
+    },
+    {
+      "label": "Text for \"Completed rounds:\"",
+      "default": "Completed rounds:"
+    },
+    {
+      "label": "Message when all cards have been learned proficiently",
+      "description": "@cards will be replaced by the number of all cards in the pool. @max will be replaced by the maximum proficiency level - 1.",
+      "default": "Well done! You got all @cards cards correct @max times in a row!"
+    },
+    {
+      "label": "Proces tekst",
+      "description": "Antal kort variationer @card og @total.",
+      "default": "Kort @card af @total"
+    },
+    {
+      "label": "Label til tekst på kort",
+      "description": "Vist for tilgængelighed ved støtte med teknologier.",
+      "default": "Forside kort"
+    },
+    {
+      "label": "Label til kort bagside",
+      "description": "Vist for tilgængelighed ved støtte med teknologier",
+      "default": "Bagside kort"
+    },
+    {
+      "label": "Label for the show tip button",
+      "default": "Show tip"
+    },
+    {
+      "label": "Audio not supported message",
+      "default": "Your browser does not support this audio"
+    },
+    {
+      "label": "Confirm starting over dialog",
+      "fields": [
+        {
+          "label": "Header text",
+          "default": "Start over?"
+        },
+        {
+          "label": "Body text",
+          "default": "All progress will be lost. Are you sure you want to start over?"
+        },
+        {
+          "label": "Cancel button label",
+          "default": "Cancel"
+        },
+        {
+          "label": "Confirm button label",
+          "default": "Start over"
+        }
+      ]
+    }
+  ]
+}

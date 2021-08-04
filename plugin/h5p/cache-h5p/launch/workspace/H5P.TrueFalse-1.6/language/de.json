@@ -1,0 +1,147 @@
+{
+  "semantics": [
+    {
+      "label": "Medien",
+      "fields": [
+        {
+          "label": "Art",
+          "description": "Medien, die wahlweise oberhalb der Aufgabe angezeigt werden."
+        },
+        {
+          "label": "Bildzoom deaktivieren"
+        }
+      ]
+    },
+    {
+      "label": "Frage"
+    },
+    {
+      "label": "Richtige Antwort",
+      "options": [
+        {
+          "label": "Wahr"
+        },
+        {
+          "label": "Falsch"
+        }
+      ]
+    },
+    {
+      "label": "Bezeichnungen und Beschriftungen",
+      "fields": [
+        {
+          "label": "Beschriftung des \"Wahr\"-Buttons",
+          "default": "Wahr"
+        },
+        {
+          "label": "Beschriftung des \"Falsch\"-Buttons",
+          "default": "Falsch"
+        },
+        {
+          "label": "Rückmeldungstext",
+          "default": "Du hast @score von @total Punkten erreicht.",
+          "description": "Verfügbare Platzhalter: @score und @total. Beispiel: 'Du hast @score von @total möglichen Punkten erreicht.'"
+        },
+        {
+          "label": "Beschriftung des \"Überprüfen\"-Buttons",
+          "default": "Überprüfen"
+        },
+        {
+          "label": "Beschriftung des \"Lösung anzeigen\"-Buttons",
+          "default": "Lösung anzeigen"
+        },
+        {
+          "label": "Beschriftung des \"Wiederholen\"-Buttons",
+          "default": "Wiederholen"
+        },
+        {
+          "label": "Falsche Antwort",
+          "default": "Falsche Antwort"
+        },
+        {
+          "label": "Richtige Antwort",
+          "default": "Richtige Antwort"
+        },
+        {
+          "label": "Anzeigetext als Ersatz für den Punktebalken in Vorlesewerkzeugen (Barrierefreiheit)",
+          "default": "Du hast :num von :total Punkten erreicht."
+        }
+      ]
+    },
+    {
+      "label": "Verhaltenseinstellungen",
+      "description": "Diese Optionen legen fest, wie die Aufgabe im Detail funktioniert.",
+      "fields": [
+        {
+          "label": "\"Wiederholen\"-Button anzeigen"
+        },
+        {
+          "label": "\"Lösung anzeigen\"-Button aktivieren"
+        },
+        {
+          "label": "\"Überprüfen\"-Button anzeigen"
+        },
+        {
+          "label": "Bestätigungsdialog beim Klicken auf \"Überprüfen\" anzeigen"
+        },
+        {
+          "label": "Bestätigungsdialog beim Klicken auf \"Wiederholen\" anzeigen"
+        },
+        {
+          "label": "Antworten nach Eingabe automatisch prüfen",
+          "description": "Wenn diese Option gewählt wird, leidet die Barrierefreiheit."
+        },
+        {
+          "label": "Rückmeldung bei richtiger Antwort",
+          "description": "Dies überschreibt den Standard-Rückmeldungstext. Verfügbare Platzhalter: @score und @total"
+        },
+        {
+          "label": "Rückmeldung bei falscher Antwort",
+          "description": "Dies überschreibt den Standard-Rückmeldungstext. Verfügbare Platzhalter: @score und @total"
+        }
+      ]
+    },
+    {
+      "label": "Bestätigungsdialog beim Überprüfen",
+      "fields": [
+        {
+          "label": "Text der Überschrift",
+          "default": "Beenden?"
+        },
+        {
+          "label": "Text des Hauptteils",
+          "default": "Ganz sicher beenden?"
+        },
+        {
+          "label": "Beschriftung des \"Abbrechen\"-Buttons",
+          "default": "Abbrechen"
+        },
+        {
+          "label": "Beschriftung des \"Bestätigen\"-Buttons",
+          "default": "Beenden"
+        }
+      ]
+    },
+    {
+      "label": "Bestätigungsdialog beim Wiederholen",
+      "fields": [
+        {
+          "label": "Text der Überschrift",
+          "default": "Wiederholen?"
+        },
+        {
+          "label": "Text des Hauptteils",
+          "default": "Ganz sicher wiederholen?"
+        },
+        {
+          "label": "Beschriftung des \"Abbrechen\"-Buttons",
+          "default": "Abbrechen"
+        },
+        {
+          "label": "Beschriftung des \"Bestätigen\"-Buttons",
+          "default": "Bestätigen"
+        }
+      ]
+    }
+  ]
+}

@@ -16,6 +16,8 @@ $courseInfo = api_get_course_info($courseCode);
 if (empty($courseInfo)) {
     $courseInfo = api_get_course_info();
 }
+$type = preg_replace("/[^a-zA-Z_]+/", '', $type);
+
 if (empty($courseInfo) || empty($type) || empty($file)) {
     api_not_allowed(true);
 }

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
@@ -21,6 +22,8 @@ class Database
     private static $connection;
 
     /**
+     * Set the DB manager instance.
+     *
      * @param EntityManager $em
      */
     public function setManager($em)
@@ -28,12 +31,17 @@ class Database
         self::$em = $em;
     }
 
+    /**
+     * Set the DB connection instance.
+     */
     public function setConnection(Connection $connection)
     {
         self::$connection = $connection;
     }
 
     /**
+     * Get the DB connection instance.
+     *
      * @return Connection
      */
     public function getConnection()
@@ -42,6 +50,8 @@ class Database
     }
 
     /**
+     * Get the DB manager instance.
+     *
      * @return EntityManager
      */
     public static function getManager()
@@ -104,7 +114,7 @@ class Database
      *
      * @return int
      */
-    public static function affected_rows(Statement $result)
+    public static function affected_rows($result)
     {
         return $result->rowCount();
     }
@@ -225,7 +235,7 @@ class Database
     }
 
     /**
-     * Escape MySQL wildchars _ and % in LIKE search.
+     * Escape MySQL wildcards _ and % in LIKE search.
      *
      * @param string $text The string to escape
      *
@@ -264,7 +274,7 @@ class Database
      *
      * @return array|mixed
      */
-    public static function fetch_array(Statement $result, $option = 'BOTH')
+    public static function fetch_array($result, $option = 'BOTH')
     {
         if ($result === false) {
             return [];
@@ -278,7 +288,7 @@ class Database
      *
      * @return array
      */
-    public static function fetch_assoc(Statement $result)
+    public static function fetch_assoc($result)
     {
         return $result->fetch(PDO::FETCH_ASSOC);
     }
@@ -289,7 +299,7 @@ class Database
      *
      * @return mixed
      */
-    public static function fetch_object(Statement $result)
+    public static function fetch_object($result)
     {
         return $result->fetch(PDO::FETCH_OBJ);
     }
@@ -300,7 +310,7 @@ class Database
      *
      * @return mixed
      */
-    public static function fetch_row(Statement $result)
+    public static function fetch_row($result)
     {
         if ($result === false) {
             return [];
@@ -316,7 +326,7 @@ class Database
      *                   Notes: Use this method if you are concerned about how much memory is being used for queries that return large result sets.
      *                   Anyway, all associated result memory is automatically freed at the end of the script's execution.
      */
-    public static function free_result(Statement $result)
+    public static function free_result($result)
     {
         $result->closeCursor();
     }
@@ -332,9 +342,11 @@ class Database
     }
 
     /**
+     * Wrapper for rowCount().
+     *
      * @return int
      */
-    public static function num_rows(Statement $result)
+    public static function num_rows($result)
     {
         if ($result === false) {
             return 0;
@@ -352,7 +364,7 @@ class Database
      *
      * @return mixed
      */
-    public static function result(Statement $resource, $row, $field = '')
+    public static function result($resource, $row, $field = '')
     {
         if ($resource->rowCount() > 0) {
             $result = $resource->fetchAll(PDO::FETCH_BOTH);
@@ -364,6 +376,8 @@ class Database
     }
 
     /**
+     * Wrapper for executeQuery().
+     *
      * @param string $query
      *
      * @return Statement
@@ -382,6 +396,8 @@ class Database
     }
 
     /**
+     * Deal with exceptions from the database extension.
+     *
      * @param Exception $e
      */
     public static function handleError($e)
@@ -393,13 +409,21 @@ class Database
             $handler->handle($e);
             exit;
         } else {
-            error_log($e->getMessage());
-            api_not_allowed(false, get_lang('GeneralError'));
-            exit;
+            $msg = $e->getMessage();
+            if (preg_match('/Serialization failure:/', $msg)) {
+                //do nothing except from logging
+                error_log($msg.' - Reported but otherwise ignored');
+            } else {
+                error_log($msg);
+                api_not_allowed(false, get_lang('GeneralError'));
+                exit;
+            }
         }
     }
 
     /**
+     * Transform an SQL option from Chamilo to PDO syntax.
+     *
      * @param string $option
      *
      * @return int
@@ -430,13 +454,13 @@ class Database
      *
      * @return array - the value returned by the query
      */
-    public static function store_result(Statement $result, $option = 'BOTH')
+    public static function store_result($result, $option = 'BOTH')
     {
         return $result->fetchAll(self::customOptionToDoctrineOption($option));
     }
 
     /**
-     * Database insert.
+     * Build an insert query.
      *
      * @param string $table_name
      * @param array  $attributes
@@ -473,6 +497,8 @@ class Database
     }
 
     /**
+     * Build an update query.
+     *
      * @param string $tableName       use Database::get_main_table
      * @param array  $attributes      Values to updates
      *                                Example: $params['name'] = 'Julio'; $params['lastname'] = 'Montoya';
@@ -639,7 +665,7 @@ class Database
                             }
                         } else {
                             $value_array = self::escape_string($value_array);
-                            $clean_values = $value_array;
+                            $clean_values = [$value_array];
                         }
 
                         if (!empty($condition) && $clean_values != '') {
@@ -667,7 +693,7 @@ class Database
 
                     if (!empty($order_array)) {
                         // 'order' => 'id desc, name desc'
-                        $order_array = self::escape_string($order_array, null, false);
+                        $order_array = self::escape_string($order_array);
                         $new_order_array = explode(',', $order_array);
                         $temp_value = [];
 
@@ -682,10 +708,10 @@ class Database
                                 if (in_array($element[1], ['desc', 'asc'])) {
                                     $order = $element[1];
                                 }
-                                $temp_value[] = $element[0].' '.$order.' ';
+                                $temp_value[] = ' `'.$element[0].'` '.$order.' ';
                             } else {
                                 //by default DESC
-                                $temp_value[] = $element[0].' DESC ';
+                                $temp_value[] = ' `'.$element[0].'` DESC ';
                             }
                         }
                         if (!empty($temp_value)) {
@@ -720,6 +746,8 @@ class Database
     }
 
     /**
+     * Build a delete query.
+     *
      * @param string $table_name
      * @param array  $where_conditions
      * @param bool   $show_query
@@ -783,6 +811,8 @@ class Database
     }
 
     /**
+     * Check if a given table exists.
+     *
      * @param string $table
      *
      * @return bool
@@ -793,6 +823,8 @@ class Database
     }
 
     /**
+     * List the columns of a given table.
+     *
      * @param string $table
      *
      * @return \Doctrine\DBAL\Schema\Column[]
@@ -800,5 +832,10 @@ class Database
     public static function listTableColumns($table)
     {
         return self::getManager()->getConnection()->getSchemaManager()->listTableColumns($table);
+    }
+
+    public static function escapeField($field)
+    {
+        return self::escape_string(preg_replace("/[^a-zA-Z0-9_.]/", '', $field));
     }
 }

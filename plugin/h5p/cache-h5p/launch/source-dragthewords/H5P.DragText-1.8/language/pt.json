@@ -1,0 +1,136 @@
+{
+  "semantics": [
+    {
+      "label": "Descrição da atividade",
+      "description": "Descreva a forma como o utilizador vai completar a atividade.",
+      "default": "Arraste as palavras para as caixas corretas"
+    },
+    {
+      "label": "Mensagem",
+      "placeholder": "*Oslo* é a capital da Noruega, *Estocolmo* é a capital da Suécia e *Copenhaga* é a capital da Dinamarca. Todas as cidades estão localizadas na península *Escandinava:Norte da Europa*.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Adicione as palavras a largar através de um asterisco (*) no início e no fim da palavra/frase correta.</li><li>Adicione uma dica contextual utilizando os dois pontos (:) à frente do texto da dica.</li><li>Para todos os espaços existe apenas uma palavra correta</li><li>Pode adicionar feedback quando o utilizador completar a atividade. Utilize '\\+' para feedback correto e '\\-' para feedback incorreto.</li></ul>",
+        "example": "O conteúdo H5P pode ser editado utilizando um *browser:O tipo de programa que o Chrome é.*</br> O conteúdo H5P é *interativo\\+Correto! \\-Incorreto, tente de novo!*"
+      }
+    },
+    {
+      "label": "Feedback Geral",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Por defeito"
+            }
+          ],
+          "label": "Defina feedback personalizado para cada intervalo de pontuação",
+          "description": "Clique em \"Adicionar intervalo\" e adicione quantos intervalos forem necessários. Exemplo: 0-20% Mau, 21-91% Mediano, 91-100% Excelente!",
+          "entity": "intervalo",
+          "field": {
+            "fields": [
+              {
+                "label": "Intervalo de Pontuação"
+              },
+              {},
+              {
+                "label": "Feedback para o intervalo de pontuação definido",
+                "placeholder": "Preencha o feedback"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Texto para o botão \"Verificar\"",
+      "default": "Verificar"
+    },
+    {
+      "label": "Texto para o botão \"Repetir\"",
+      "default": "Repetir"
+    },
+    {
+      "label": "Texto para o botão \"Mostrar soluções\"",
+      "default": "Mostrar soluções"
+    },
+    {
+      "label": "Etiqueta para espaço de largada numerada",
+      "default": "Espaço de largada @index.",
+      "description": "Etiqueta utilizada para acessibilidade, onde o leitor de ecrã lê o índice do espaço de largada. Variável disponível: @index"
+    },
+    {
+      "label": "Etiqueta para espaço de largada vazio",
+      "default": "Espaço de largada @index está vazio.",
+      "description": "Etiqueta utilizada para acessibilidade, onde o leitor de ecrã lê que o espaço de largada está vazio."
+    },
+    {
+      "label": "Etiqueta para espaço de largada com conteúdos",
+      "default": "Espaço de largada @index contém um item @draggable.",
+      "description": "Etiqueta utilizada para acessibilidade, onde o leitor de ecrã lê que o espaço de largada contém um elemento."
+    },
+    {
+      "label": "Etiqueta para elementos arrastáveis",
+      "default": "Elemento @index de @count.",
+      "description": "Etiqueta utilizada para acessibilidade, onde o leitor de ecrã lê que este é um elemento arrastável. Variáveis disponíveis: @index, @count"
+    },
+    {
+      "label": "Etiqueta para o botão de mostrar dica",
+      "default": "Mostrar dica",
+      "description": "Etiqueta utilizada para acessibilidade, onde o leitor de ecrã lê que existe uma dica antes de a mostrar"
+    },
+    {
+      "label": "Texto do leitor de ecrã para resposta correta",
+      "default": "Correto!"
+    },
+    {
+      "label": "Texto do leitor de ecrã para resposta incorreta",
+      "default": "Incorreto!"
+    },
+    {
+      "label": "Texto da caixa de diálogo de confirmação para reposição de elementos",
+      "default": "Repor elemento arrastável"
+    },
+    {
+      "label": "Descrição da caixa de diálogo de confirmação para reposição de elementos",
+      "default": "Tem a certeza que deseja repor esta zona de largada ao seu estado original?"
+    },
+    {
+      "label": "Etiqueta utilizada para acessibilidade, onde o leitor de ecrã indica que uma ação de arrasto foi iniciada.",
+      "default": "Um elemento foi agarrado."
+    },
+    {
+      "label": "Etiqueta utilizada para acessibilidade, onde o leitor de ecrã indica que o arrastamento foi cancelado.",
+      "default": "Arrastamento cancelado."
+    },
+    {
+      "label": "Etiqueta utilizada para acessibilidade, onde o leitor de ecrã indica que o texto é uma resposta correta.",
+      "default": "Resposta correta:"
+    },
+    {
+      "label": "Cabeçalho para painel que contém feedback de respostas corretas/incorretas",
+      "default": "Feedback"
+    },
+    {
+      "label": "Definições de funcionamento",
+      "description": "Estas opções controlam a forma como a atividade se comporta.",
+      "fields": [
+        {
+          "label": "Ativar \"Repetir\""
+        },
+        {
+          "label": "Ativar botão de \"Mostrar Soluções\""
+        },
+        {
+          "label": "Ativar botão de  \"Verificar\""
+        },
+        {
+          "label": "Feedback instantâneo"
+        }
+      ]
+    },
+    {
+      "label": "Representação textual da barra de resultados para utilizadores de leitor de ecrã",
+      "default": "Conseguiu :num pontos de um total de :total"
+    }
+  ]
+}

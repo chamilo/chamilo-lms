@@ -23,7 +23,7 @@
     </nav>
     {% if students|length > 0 %}
         <div class="table-responsive" id="calendar-session-planification">
-            <table class="table table-bordered table-condensed">
+            <table class="table table-bordered table-striped table-condensed">
                 <thead>
                 <tr>
                     <th class="col-session">

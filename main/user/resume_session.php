@@ -132,7 +132,7 @@ if ($allowTutors === 'true') {
     );
     echo Display::page_subheader(get_lang('GeneralProperties').$url); ?>
     <!-- General properties -->
-    <table class="data_table">
+    <table class="table table-hover table-striped data_table">
     <tr>
         <td><?php echo get_lang('GeneralCoach'); ?> :</td>
         <td><?php echo api_get_person_name($session['firstname'], $session['lastname']).' ('.$session['username'].')'; ?></td>
@@ -217,7 +217,7 @@ if ($allowTutors === 'true') {
     <?php
     echo Display::page_subheader(get_lang('CourseList').$url); ?>
     <!--List of courses -->
-    <table class="data_table">
+    <table class="table table-hover table-striped data_table">
     <tr>
       <th width="35%"><?php echo get_lang('CourseTitle'); ?></th>
       <th width="30%"><?php echo get_lang('CourseCoach'); ?></th>
@@ -255,7 +255,7 @@ if ($allowTutors === 'true') {
             $sql = "SELECT user.lastname,user.firstname,user.username
                     FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
                     WHERE
-                        session_rcru.user_id = user.user_id AND
+                        session_rcru.user_id = user.id AND
                         session_rcru.session_id = '".intval($id_session)."' AND
                         session_rcru.c_id ='".Database::escape_string($course['id'])."' AND
                         session_rcru.status=2";
@@ -296,7 +296,7 @@ if ($allowTutors === 'true') {
     <?php
     echo Display::page_subheader(get_lang('UserList').$url); ?>
     <!--List of users -->
-    <table class="data_table">
+    <table class="table table-hover table-striped data_table">
         <tr>
             <th>
                 <?php echo get_lang('User'); ?>

@@ -228,6 +228,16 @@ if (!empty($projectId)) {
 
     // Add link
     if (api_get_setting('ticket_allow_student_add') == 'true' || api_is_platform_admin()) {
+        $extraParams = '';
+
+        if (isset($_GET['exerciseId']) && !empty($_GET['exerciseId'])) {
+            $extraParams .= '&exerciseId='.(int) $_GET['exerciseId'];
+        }
+
+        if (isset($_GET['lpId']) && !empty($_GET['lpId'])) {
+            $extraParams .= '&lpId='.(int) $_GET['lpId'];
+        }
+
         $actionRight = Display::url(
             Display::return_icon(
                 'add.png',
@@ -235,7 +245,7 @@ if (!empty($projectId)) {
                 null,
                 ICON_SIZE_MEDIUM
             ),
-            api_get_path(WEB_CODE_PATH).'ticket/new_ticket.php?project_id='.$projectId.'&'.api_get_cidReq(),
+            api_get_path(WEB_CODE_PATH).'ticket/new_ticket.php?project_id='.$projectId.'&'.api_get_cidReq().$extraParams,
             ['title' => get_lang('Add')]
         );
     }

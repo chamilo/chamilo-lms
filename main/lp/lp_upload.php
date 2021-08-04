@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
@@ -6,8 +7,6 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 
 /**
  * Script managing the learnpath upload. To best treat the uploaded file, make sure we can identify it.
- *
- * @package chamilo.learnpath
  *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
@@ -42,7 +41,7 @@ if (isset($_POST) && $is_error) {
 
     return false;
     unset($_FILES['user_file']);
-} elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES['user_file']['name'])) {
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && count($_FILES) > 0 && !empty($_FILES['user_file']['name'])) {
     // A file upload has been detected, now deal with the file...
     // Directory creation.
     $stopping_error = false;
@@ -55,10 +54,7 @@ if (isset($_POST) && $is_error) {
     $file_base_name = str_replace('.'.$extension, '', $filename);
 
     $new_dir = api_replace_dangerous_char(trim($file_base_name));
-    $type = learnpath::getPackageType(
-        $_FILES['user_file']['tmp_name'],
-        $_FILES['user_file']['name']
-    );
+    $type = learnpath::getPackageType($_FILES['user_file']['tmp_name'], $_FILES['user_file']['name']);
 
     $proximity = 'local';
     if (!empty($_REQUEST['content_proximity'])) {
@@ -72,15 +68,13 @@ if (isset($_POST) && $is_error) {
 
     switch ($type) {
         case 'chamilo':
-            $filename = CourseArchiver::importUploadedFile(
-                $_FILES['user_file']['tmp_name']
-            );
+            $filename = CourseArchiver::importUploadedFile($_FILES['user_file']['tmp_name']);
             if ($filename) {
                 $course = CourseArchiver::readCourse($filename, false);
                 $courseRestorer = new CourseRestorer($course);
                 // FILE_SKIP, FILE_RENAME or FILE_OVERWRITE
                 $courseRestorer->set_file_option(FILE_OVERWRITE);
-                $courseRestorer->restore();
+                $courseRestorer->restore('', api_get_session_id());
                 Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
             }
             break;

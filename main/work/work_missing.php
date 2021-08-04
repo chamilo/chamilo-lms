@@ -10,7 +10,7 @@ api_protect_course_script(true);
 require_once 'work.lib.php';
 $this_section = SECTION_COURSES;
 
-$workId = isset($_GET['id']) ? intval($_GET['id']) : null;
+$workId = isset($_GET['id']) ? (int) ($_GET['id']) : null;
 $group_id = api_get_group_id();
 $user_id = api_get_user_id();
 

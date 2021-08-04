@@ -9,7 +9,7 @@ if (empty($allow)) {
 }
 
 api_block_anonymous_users();
-$export_csv = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
+$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false;
 $course_code = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : null;
 $_course = api_get_course_info();
 $coment = '';
@@ -57,7 +57,7 @@ if ($export) {
 $csv_content = [];
 $from_myspace = false;
 
-if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
+if (isset($_GET['from']) && 'myspace' == $_GET['from']) {
     $from_myspace = true;
     $this_section = SECTION_TRACKING;
 } else {
@@ -68,7 +68,7 @@ $nameTools = get_lang('StudentDetails');
 $em = Database::getManager();
 
 if (isset($_GET['details'])) {
-    if ($origin === 'user_course') {
+    if ('user_course' === $origin) {
         if (empty($cidReq)) {
             $interbreadcrumb[] = [
                 "url" => api_get_path(WEB_COURSE_PATH).$courseInfo['directory'],
@@ -80,7 +80,7 @@ if (isset($_GET['details'])) {
             "name" => get_lang('Users'),
         ];
     } else {
-        if ($origin === 'tracking_course') {
+        if ('tracking_course' === $origin) {
             $interbreadcrumb[] = [
                 "url" => "../tracking/courseLog.php?cidReq=".$course_code.'&id_session='.api_get_session_id(),
                 "name" => get_lang('Tracking'),
@@ -162,30 +162,11 @@ if (isset($_GET['details'])) {
 }
 
 // Database Table Definitions
-//$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-//$tbl_stats_exercices = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-$tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
-$tbl_session_user = Database:: get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_session = Database:: get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_course = Database:: get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session_course_user = Database:: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_course = Database:: get_main_table(TABLE_MAIN_COURSE);
 $tbl_course_user = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_stats_access = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 $tbl_stats_exercices = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-$tbl_stats_exercices_attempts = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 $tbl_personal_agenda = Database:: get_main_table(TABLE_PERSONAL_AGENDA);
-$tbl_course_lp_item = Database:: get_course_table(TABLE_LP_ITEM);
 
-$tbl_course_lp_view = 'lp_view';
-$tbl_course_lp_view_item = 'lp_item_view';
-$tbl_course_lp_item = 'lp_item';
-$tbl_course_lp = 'lp';
-$tbl_course_quiz = 'quiz';
-$course_quiz_question = 'quiz_question';
-$course_quiz_rel_question = 'quiz_rel_question';
-$course_quiz_answer = 'quiz_answer';
-$course_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 $TABLECALHORAIRE = Database:: get_course_table(TABLE_CAL_HORAIRE);
 
 if (isset($_GET['user_id']) && $_GET['user_id'] != '') {
@@ -1117,18 +1098,18 @@ if (!empty($studentId)) {
                 'quiz.session_id'
             );
 
-            $sql = "SELECT quiz.title, id FROM $t_quiz AS quiz
+            $sql = "SELECT quiz.title, iid FROM $t_quiz AS quiz
                             WHERE
-                                quiz.c_id = ".$courseInfo['real_id']." AND
+                                quiz.c_id = {$courseInfo['real_id']} AND
                                 active IN (0, 1)
-                                $sessionCondition                    
+                                $sessionCondition
                             ORDER BY quiz.title ASC ";
 
             $result_exercices = Database::query($sql);
             $i = 0;
             if (Database:: num_rows($result_exercices) > 0) {
                 while ($exercices = Database:: fetch_array($result_exercices)) {
-                    $exercise_id = intval($exercices['id']);
+                    $exercise_id = intval($exercices['iid']);
                     $count_attempts = Tracking::count_student_exercise_attempts(
                                 $studentId,
                                 $courseInfo['real_id'],
@@ -1268,7 +1249,7 @@ if (!empty($studentId)) {
             }
 
             if (!empty($survey_list)) {
-                $table = new HTML_Table(['class' => 'data_table']);
+                $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
                 $header_names = [get_lang('Survey'), get_lang('Answered')];
                 $row = 0;
                 $column = 0;
@@ -1404,8 +1385,8 @@ $nom_hor = $horaire_id['official_code'];
 $course_code_real = $_course['real_id'];
 //avec le nom d'horaire= official code, on trouve le nombre de jour a faire
 $sql = "SELECT * FROM $TABLECALHORAIRE
-        where 
-          name = '$nom_hor' and 
+        where
+          name = '$nom_hor' and
           c_id = $course_code_real ";
 
 $res = Database::query($sql);
@@ -1460,10 +1441,10 @@ while ($a_courses = Database::fetch_array($result2)) {
             $lp_item_id = $resulta['id'];
             $Req3 = "SELECT MAX(id)
                       FROM c_lp_item_view
-                      WHERE  
-                        lp_item_id =  $lp_item_id AND 
-                        lp_view_id =  $lp_id_view AND 
-                        c_id = $c_id_view AND 
+                      WHERE
+                        lp_item_id =  $lp_item_id AND
+                        lp_view_id =  $lp_id_view AND
+                        c_id = $c_id_view AND
                         status =  'completed'
                       ";
             $res3 = Database::query($Req3);
@@ -1471,8 +1452,8 @@ while ($a_courses = Database::fetch_array($result2)) {
                 $max = $resul['0'];
                 $Req4 = "SELECT COUNT( id )
                          FROM  c_lp_item_view
-                         WHERE  
-                            id = $max AND 
+                         WHERE
+                            id = $max AND
                             c_id = $c_id_view";
                 $res4 = Database::query($Req4);
                 while ($resultat = Database::fetch_array($res4)) {
@@ -1504,9 +1485,9 @@ while ($jour_agenda == '') {
     $tour++;
     $date = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d") - $tour, date("Y")));
     $sql4 = "SELECT *  FROM $tbl_personal_agenda
-             WHERE 
-              user = $studentId AND  
-                text='Pour le calendrier, ne pas effacer' AND 
+             WHERE
+              user = $studentId AND
+                text='Pour le calendrier, ne pas effacer' AND
                 date like '".$date." %:%' ";
     $result4 = Database::query($sql4);
     $res4 = Database::fetch_array($result4);
@@ -1531,7 +1512,7 @@ $goto = $num_days + $diff2;
 $goto = number_format($goto);
 $sqlgo = "SELECT *  FROM $tbl_personal_agenda
          WHERE user = $studentId
-            AND title = '".$goto."'  
+            AND title = '".$goto."'
          ";
 $result7 = Database::query($sqlgo);
 $res7 = Database::fetch_array($result7);
@@ -1543,7 +1524,7 @@ if ($end_date < '2010-01-01') {
 }
 
 ?>
-<table class="data_table">
+<table class="table table-hover table-striped data_table">
     <th rowspan="6">
         <?php
         //on récupere les points de controle de l'élève
@@ -1632,7 +1613,7 @@ if ($end_date < '2010-01-01') {
 <hr>
 <br>
 <form action="create_intervention.php" method="post" name="create_intervention">
-    <table class='data_table'>
+    <table class='table table-hover table-striped data_table'>
         <tr>
             <th colspan="6">
                 <?php echo get_lang('create_interventions_commentaires');
@@ -1666,7 +1647,7 @@ if ($end_date < '2010-01-01') {
 // formulaire d'édition des commentaires
 ?>
 <form>
-    <table class='data_table'>
+    <table class='table table-hover table-striped data_table'>
         <tr>
             <th><?php echo get_lang('level'); ?> </th>
             <th>
@@ -1684,10 +1665,10 @@ if ($end_date < '2010-01-01') {
         $tbl_stats_exercices = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $sqlinter = "SELECT *
                      FROM $tbl_stats_exercices
-                     WHERE 
-                        exe_user_id = $studentId AND 
+                     WHERE
+                        exe_user_id = $studentId AND
                         level != 0
-                     ORDER BY exe_date ASC, level ASC 
+                     ORDER BY exe_date ASC, level ASC
                              ";
         $resultinter = Database::query($sqlinter);
         $mod_no = null;
@@ -1703,8 +1684,8 @@ if ($end_date < '2010-01-01') {
                 <td>
                      $inter_date
                     </td>
-                
-                    <td>$inter_coment 
+
+                    <td>$inter_coment
                 </td>
                 ";
             $exe_id = $a_inter['exe_id']; ?>
@@ -1793,7 +1774,7 @@ if (empty($_GET['details'])) {
         }
 
         // Courses
-        echo '<table class="data_table">';
+        echo '<table class="table table-hover table-striped data_table">';
         echo '<h3>'.$title.'</h3>';
         echo '<tr>
                 <th>'.get_lang('Course').'</th>
@@ -1823,7 +1804,7 @@ if (empty($_GET['details'])) {
 
                     //  firts connection date
                     $sql2 = 'SELECT STR_TO_DATE(access_date,"%Y-%m-%d")
-                              FROM '.$tbl_stats_access.' 
+                              FROM '.$tbl_stats_access.'
                                 WHERE access_user_id = '.$studentId.'
                                 AND c_id = '.$c_id.'
                                     ORDER BY access_id ASC LIMIT 0,1
@@ -1860,9 +1841,9 @@ if (empty($_GET['details'])) {
                     $nombre_jours_module = number_format($nombre_jours_module, 0);
                     //on trouve la date de fin de chaque module AND date = date_format('$first_connection_date_to_module','%Y-%m-%d')
                     $sql = "SELECT * FROM `c_cal_dates`
-                            WHERE 
-                                horaire_name = '$nom_hor' AND 
-                                c_id = '$course_code_real' AND 
+                            WHERE
+                                horaire_name = '$nom_hor' AND
+                                c_id = '$course_code_real' AND
                                 STR_TO_DATE(date,'%Y-%m-%d') >= STR_TO_DATE('$first_connection_date_to_module','%Y-%m-%d')
                             ORDER BY STR_TO_DATE(date, '%Y-%m-%d') ASC ";
                     $res = Database::query($sql);
@@ -1997,7 +1978,7 @@ if (empty($_GET['details'])) {
     if (Database:: num_rows($rs_lp) > 0) {
         ?>
         <!-- LPs-->
-        <table class="data_table">
+        <table class="table table-hover table-striped data_table">
         <tr>
             <th><?php echo get_lang('Learnpaths'); ?></th>
             <th><?php echo get_lang('FirstConnexion'); ?></th>
@@ -2041,7 +2022,7 @@ if (empty($_GET['details'])) {
 
         //  firts connection date
         $sql2 = 'SELECT access_date
-                FROM '.$tbl_stats_access.' 
+                FROM '.$tbl_stats_access.'
                 WHERE access_user_id = '.$studentId.'
                 AND c_id = '.$c_id.'
                 ORDER BY access_id ASC LIMIT 0,1
@@ -2207,7 +2188,7 @@ if (empty($_GET['details'])) {
     } ?>
     </table>
     <!-- line about exercises -->
-    <table class="data_table">
+    <table class="table table-hover table-striped data_table">
         <tr>
             <th><?php echo get_lang('Exercises'); ?></th>
             <th><?php echo get_lang('LearningPath'); ?></th>
@@ -2231,7 +2212,7 @@ if (empty($_GET['details'])) {
         ];
 
     $t_quiz = Database:: get_course_table(TABLE_QUIZ_TEST);
-    $sql = "SELECT quiz.title, id FROM ".$t_quiz." AS quiz
+    $sql = "SELECT quiz.title, iid FROM $t_quiz AS quiz
                 WHERE
                     quiz.c_id = $c_id AND
                     (quiz.session_id = $session_id OR quiz.session_id = 0) AND
@@ -2241,7 +2222,7 @@ if (empty($_GET['details'])) {
     $i = 0;
     if (Database:: num_rows($result_exercices) > 0) {
         while ($exercices = Database:: fetch_array($result_exercices)) {
-            $exercise_id = intval($exercices['id']);
+            $exercise_id = intval($exercices['iid']);
             $count_attempts = Tracking::count_student_exercise_attempts(
                     $studentId,
                     $course_code,
@@ -2367,7 +2348,7 @@ if (empty($_GET['details'])) {
         }
 
         if (!empty($survey_list)) {
-            $table = new HTML_Table(['class' => 'data_table']);
+            $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
             $header_names = [get_lang('Survey'), get_lang('Answered')];
             $row = 0;
             $column = 0;
@@ -2394,7 +2375,7 @@ if (empty($_GET['details'])) {
     }
 
     // line about other tools
-    echo '<table class="data_table">';
+    echo '<table class="table table-hover table-striped data_table">';
 
     $csv_content[] = [];
     $nb_assignments = Tracking::count_student_assignments($studentId, $course_code, $session_id);
@@ -2475,7 +2456,7 @@ if ($export_csv) {
 ?>
 <br>
 <form action="create_exam.php" method="post" name="create_exam">
-    <table class='data_table'>
+    <table class='table table-hover table-striped data_table'>
         <tr>
             <th colspan="6">
                 <?php echo get_lang('Title');
@@ -2533,7 +2514,7 @@ if ($export_csv) {
 </form>
 
 <form name="save_exam">
-    <table class='data_table'>
+    <table class='table table-hover table-striped data_table'>
         <tr>
             <th colspan="6">
                 <?php echo get_lang('result_exam_title');
@@ -2607,12 +2588,12 @@ if ($export_csv) {
 </form>
 <strong><?php echo get_lang('imprime_sommaire'); ?> </strong>
 <?php
-echo '<a target="_blank" 
+echo '<a target="_blank"
     href="print_myStudents.php?student='.$studentId.'&details=true&course='.$course_code.'&origin=tracking_course">
 <img src="'.api_get_path(WEB_IMG_PATH).'printmgr.gif" border="0" /></a>';
 // tableau pour date de fin prévue pour chaque module
 ?>
-<table class='data_table'>
+<table class='table table-hover table-striped data_table'>
     <tr>
         <th colspan="6">
             <?php echo get_lang('fin_mod_prevue');

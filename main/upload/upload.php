@@ -13,6 +13,8 @@ use ChamiloSession as Session;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script(true);
+
 $toolFromSession = Session::read('my_tool');
 
 // return to index if no tool is set
@@ -40,6 +42,6 @@ switch ($toolFromSession) {
     case TOOL_STUDENTPUBLICATION:
     case TOOL_DOCUMENT:
     default:
-        require 'upload.document.php';
+        //require 'upload.document.php';
         break;
 }

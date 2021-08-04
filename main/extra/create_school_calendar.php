@@ -32,7 +32,7 @@ if (empty($title)) {
 }
 ?>
 <form action="save_school_calendar.php" method="post" name="save_cal">
-    <table class='data_table'>
+    <table class='table table-hover table-striped data_table'>
         <tr>
             <th colspan="3">
                 <?php echo get_lang('edit_save'); ?>
@@ -57,7 +57,7 @@ if (empty($title)) {
         $nbcol = 2;
 
         echo "<table border='1'><tr>";
-        if ($i % $nbcol == 0) {
+        if (0 == $i % $nbcol) {
             for ($i = 0; $i <= $nbjour; $i++) {
                 echo "<td><input type='text' NAME='date_case' size='8' value=".date('Y-m-d', $date1)."> ";
                 $date1 += 60 * 60 * 24; //On additionne d'un jour (en seconde)
@@ -65,7 +65,7 @@ if (empty($title)) {
                 echo '</td>';
                 echo "<td><input type='text' NAME='day_number' size='4' value=".$number."/></td>";
                 echo "<td><input type='text' NAME='d_title' size='4' value=".$title."/></td>";
-                $sql4 = "INSERT INTO set_module (cal_name,cal_day_num,cal_date) 
+                $sql4 = "INSERT INTO set_module (cal_name,cal_day_num,cal_date)
                          VALUES ('$title','$number','".date('Y-m-d', $date1)."') ";
                 Database::query($sql4);
                 if ($i % $nbcol == ($nbcol - 1)) {

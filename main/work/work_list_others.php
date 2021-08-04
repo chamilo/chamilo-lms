@@ -10,7 +10,7 @@ api_protect_course_script(true);
 require_once 'work.lib.php';
 $this_section = SECTION_COURSES;
 
-$workId = isset($_GET['id']) ? intval($_GET['id']) : null;
+$workId = isset($_GET['id']) ? (int) ($_GET['id']) : null;
 
 if (empty($workId)) {
     api_not_allowed(true);
@@ -28,7 +28,7 @@ $group_id = api_get_group_id();
 $courseInfo = api_get_course_info();
 
 // not all users
-if ($courseInfo['show_score'] == 1) {
+if (1 == $courseInfo['show_score']) {
     api_not_allowed(true);
 }
 

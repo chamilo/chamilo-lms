@@ -1,19 +1,16 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * This script allows to manage the statements of questions.
  * It is included from the script admin.php.
  *
- * @package chamilo.exercise
- *
  * @author Olivier Brouckaert
- *
- * @version $Id: question_admin.inc.php 22126 2009-07-15 22:38:39Z juliomontoya $
  */
 if (isset($_GET['editQuestion'])) {
     $objQuestion = Question::read($_GET['editQuestion']);
-    $action = api_get_self().'?'.api_get_cidreq().'&modifyQuestion='.$modifyQuestion.'&editQuestion='.$objQuestion->id.'&page='.$page;
+    $action = api_get_self().'?'.api_get_cidreq().'&modifyQuestion='.$modifyQuestion.'&editQuestion='.$objQuestion->iid.'&page='.$page;
 } else {
     $objQuestion = Question::getInstance($_REQUEST['answerType']);
     $action = api_get_self().'?'.api_get_cidreq().'&modifyQuestion='.$modifyQuestion.'&newQuestion='.$newQuestion;
@@ -42,7 +39,6 @@ if (is_object($objQuestion)) {
 
     // form title
     $form->addHeader($text.': '.$form_title_extra.$code);
-
     // question form elements
     $objQuestion->createForm($form, $objExercise);
 
@@ -50,7 +46,7 @@ if (is_object($objQuestion)) {
     $objQuestion->createAnswersForm($form);
 
     // this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications
-    if (!empty($objExercise->id) && $objExercise->edit_exercise_in_lp == false) {
+    if (!empty($objExercise->iid) && $objExercise->edit_exercise_in_lp == false) {
         $form->freeze();
     }
 
@@ -67,7 +63,7 @@ if (is_object($objQuestion)) {
             if (isset($_GET['editQuestion'])) {
                 if (empty($exerciseId)) {
                     Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
-                    $url = 'admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&editQuestion='.$objQuestion->id;
+                    $url = 'admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&editQuestion='.$objQuestion->iid;
                     echo '<script type="text/javascript">window.location.href="'.$url.'"</script>';
                     exit;
                 }
@@ -82,7 +78,7 @@ if (is_object($objQuestion)) {
                 echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page.'&message=ItemAdded"</script>';
             }
         } else {
-            echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&page='.$page.'&hotspotadmin='.$objQuestion->id.'&'.api_get_cidreq().'"</script>';
+            echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&page='.$page.'&hotspotadmin='.$objQuestion->iid.'&'.api_get_cidreq().'"</script>';
         }
     } else {
         if (isset($questionName)) {

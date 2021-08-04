@@ -15,7 +15,7 @@
             {% if _u.logged != 1 %}
                 <div class="key-login">
                     <a href="#login-block" id="btn-login" class="btn btn-default">
-                        <img src="{{ 'key.png'|icon(22) }}"> {{ 'LoginAsThisUser'|get_lang }}
+                        <img src="{{ 'key.png'|icon(22) }}" alt="key"> {{ 'LoginAsThisUser'|get_lang }}
                     </a>
                 </div>
             {% endif %}

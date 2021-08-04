@@ -120,6 +120,22 @@ class ExtraFieldOption extends Model
     }
 
     /**
+     * Save option.
+     *
+     * Example:
+     * <code>
+     * <?php
+     * $fieldOption = new ExtraFieldOption('user');
+     * $fieldOption->saveOptions([
+     * 'field_id'=> 1,
+     * 'option_value'=> 1,
+     * 'display_text'=> 'extra value option 1',
+     * 'option_order'=>0
+     * ]);
+     * echo "<pre>".var_export($fieldOption,true)."</pre>";
+     * ?>
+     * </code>
+     *
      * @param array $params
      * @param bool  $showQuery
      *
@@ -132,7 +148,7 @@ class ExtraFieldOption extends Model
             $params['option_value']
         );
 
-        if ($optionInfo == false) {
+        if (false == $optionInfo) {
             $optionValue = api_replace_dangerous_char($params['option_value']);
             $order = $this->get_max_order($params['field_id']);
             $newParams = [
@@ -150,6 +166,20 @@ class ExtraFieldOption extends Model
 
     /**
      * Saves an option into the corresponding *_field_options table.
+     *
+     * Example:
+     * <code>
+     * <?php
+     * $fieldOption = new ExtraFieldOption('user');
+     * $fieldOption->save([
+     * 'field_id'=> 1,
+     * 'option_value'=> 1,
+     * 'display_text'=> 'extra value option 1',
+     * 'option_order=>0'
+     * ]);
+     * echo "<pre>".var_export($fieldOption,true)."</pre>";
+     * ?>
+     * </code>
      *
      * @param array $params    Parameters to be considered for the insertion
      * @param bool  $showQuery Whether to show the query (sent to the parent save() method)
@@ -216,7 +246,7 @@ class ExtraFieldOption extends Model
                         parent::update($new_params, $showQuery);
                     }
 
-                    if ($params['field_type'] == ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD) {
+                    if (ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD == $params['field_type']) {
                         continue;
                     }
 
@@ -332,7 +362,7 @@ class ExtraFieldOption extends Model
                     $optionValue = api_replace_dangerous_char($option);
                     $option = trim($option);
 
-                    if ($option_info != false) {
+                    if (false != $option_info) {
                         continue;
                     }
 
@@ -389,7 +419,7 @@ class ExtraFieldOption extends Model
                 $field_id,
                 $params['option_value']
             );
-            if ($check == false) {
+            if (false == $check) {
                 parent::save($params, $show_query);
             }
         }
@@ -498,6 +528,15 @@ class ExtraFieldOption extends Model
 
     /**
      * Gets an array of options for a specific field.
+     *
+     * Example:
+     * <code>
+     * <?php
+     * $fieldOption = new ExtraFieldOption('user');
+     * $fieldOption->get_field_options_by_field(1);
+     * echo "<pre>".var_export($fieldOption,true)."</pre>";
+     * ?>
+     * </code>
      *
      * @param int  $field_id        The field ID
      * @param bool $add_id_in_array Whether to add the row ID in the result
@@ -696,7 +735,7 @@ class ExtraFieldOption extends Model
      */
     public function getPriorityOptions()
     {
-        return  [
+        return [
             '' => get_lang('SelectAnOption'),
             1 => get_lang('Success'),
             2 => get_lang('Info'),
@@ -751,7 +790,7 @@ class ExtraFieldOption extends Model
         $form->addElement('hidden', 'type', $this->type);
         $form->addElement('hidden', 'field_id', $this->fieldId);
 
-        if ($action === 'edit') {
+        if ('edit' == $action) {
             $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'.http_build_query([
                 'extra_field_option' => $id,
             ]);
@@ -777,7 +816,7 @@ class ExtraFieldOption extends Model
 
         $defaults = [];
 
-        if ($action === 'edit') {
+        if ('edit' == $action) {
             // Setting the defaults
             $defaults = $this->get($id, false);
             $form->freeze('option_value');

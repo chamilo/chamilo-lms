@@ -82,7 +82,7 @@ if (!$displayScore->is_custom() || empty($displays)) {
     }
 
     // Generate table
-    $html = '<table class="data_table" cellspacing="0" cellpadding="3">';
+    $html = '<table class="table table-hover table-striped data_table" cellspacing="0" cellpadding="3">';
     $html .= '<tr><th>'.get_lang('ScoringSystem').'</th>';
     $html .= '<th>'.get_lang('Percentage').'</th>';
     $html .= '<th>'.get_lang('CountUsers').'</th></tr>';

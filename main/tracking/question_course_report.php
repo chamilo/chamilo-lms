@@ -1,11 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * Report.
- *
- * @package chamilo.tracking
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -62,7 +58,7 @@ foreach ($session_list as $sesion_item) {
     $my_session_list[$sesion_item['id']] = $sesion_item['name'];
 }
 
-$form = new FormValidator('search_simple', 'POST', '', '', null, false);
+$form = new FormValidator('search_simple', 'POST', '', '', null);
 $form->addElement(
     'select',
     'session_id',
@@ -116,7 +112,7 @@ if (!empty($course_info)) {
             );
 
             foreach ($question_list as $question_id) {
-                $question_data = Question::read($question_id);
+                $question_data = Question::read($question_id, $course_info);
                 $main_question_list[$question_id] = $question_data;
                 $quantity_exercises = 0;
                 $question_result = 0;
@@ -177,7 +173,7 @@ $course_average = [];
 $counter = 0;
 
 if (!empty($main_question_list) && is_array($main_question_list)) {
-    $html_result .= '<table  class="data_table">';
+    $html_result .= '<table  class="table table-hover table-striped data_table">';
     $html_result .= '<tr><th>'.get_lang('Question').
                     Display::return_icon('info3.gif', get_lang('QuestionsAreTakenFromLPExercises'), ['align' => 'absmiddle', 'hspace' => '3px']).'</th>';
     $html_result .= '<th>'.$course_info['visual_code'].' '.get_lang('AverageScore').Display::return_icon('info3.gif', get_lang('AllStudentsAttemptsAreConsidered'), ['align' => 'absmiddle', 'hspace' => '3px']).' </th>';

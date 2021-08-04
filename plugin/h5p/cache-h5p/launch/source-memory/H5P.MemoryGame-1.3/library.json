@@ -1,0 +1,62 @@
+{
+  "title": "Memory Game",
+  "description": "See how many cards you can remember!",
+  "majorVersion": 1,
+  "minorVersion": 3,
+  "patchVersion": 4,
+  "runnable": 1,
+  "author": "Joubel",
+  "license": "MIT",
+  "machineName": "H5P.MemoryGame",
+  "preloadedCss": [
+    {
+      "path": "memory-game.css"
+    }
+  ],
+  "preloadedJs": [
+    {
+      "path": "memory-game.js"
+    },
+    {
+      "path": "card.js"
+    },
+    {
+      "path": "counter.js"
+    },
+    {
+      "path": "popup.js"
+    },
+    {
+      "path": "timer.js"
+    }
+  ],
+  "preloadedDependencies": [
+    {
+      "machineName": "H5P.Timer",
+      "majorVersion": 0,
+      "minorVersion": 4
+    },
+    {
+      "machineName": "FontAwesome",
+      "majorVersion": 4,
+      "minorVersion": 5
+    }
+  ],
+  "editorDependencies": [
+    {
+      "machineName": "H5PEditor.ColorSelector",
+      "majorVersion": 1,
+      "minorVersion": 2
+    },
+    {
+      "machineName": "H5PEditor.VerticalTabs",
+      "majorVersion": 1,
+      "minorVersion": 3
+    },
+    {
+      "machineName": "H5PEditor.AudioRecorder",
+      "majorVersion": 1,
+      "minorVersion": 0
+    }
+  ]
+}

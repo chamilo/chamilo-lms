@@ -394,6 +394,24 @@ if ($ticket['ticket']['course_url'] != null) {
             <td></td>
             <td colspan="2"></td>
           </tr>';
+
+    if (api_get_configuration_value('ticket_lp_quiz_info_add')) {
+        if (!empty($ticket['ticket']['exercise_url'])) {
+            echo '<tr>
+                <td><b>'.get_lang('Exercise').':</b> '.$ticket['ticket']['exercise_url'].' </td>
+                <td></td>
+                <td colspan="2"></td>
+              </tr>';
+        }
+
+        if (!empty($ticket['ticket']['lp_id'])) {
+            echo '<tr>
+                <td><b>'.get_lang('LearningPath').':</b> '.$ticket['ticket']['lp_url'].' </td>
+                <td></td>
+                <td colspan="2"></td>
+              </tr>';
+        }
+    }
 }
 
 echo '<tr>

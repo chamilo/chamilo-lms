@@ -3,32 +3,21 @@
 
 namespace Chamilo\UserBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Doctrine\Common\Collections\ArrayCollection;
-//use Sonata\UserBundle\Entity\BaseUser as BaseUser;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
-//use Symfony\Component\Security\Core\User\UserInterface;
 use FOS\UserBundle\Model\GroupInterface;
 use FOS\UserBundle\Model\UserInterface;
-use Sonata\UserBundle\Model\User as BaseUser;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
-
-//use Chamilo\CoreBundle\Component\Auth;
-//use FOS\MessageBundle\Model\ParticipantInterface;
-//use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
-//use Vich\UploaderBundle\Mapping\Annotation as Vich;
-//use Application\Sonata\MediaBundle\Entity\Media;
-//use Chamilo\UserBundle\Model\UserInterface as UserInterfaceModel;
-
-//use Sylius\Component\Attribute\Model\AttributeValueInterface as BaseAttributeValueInterface;
-//use Sylius\Component\Variation\Model\OptionInterface as BaseOptionInterface;
-//use Sylius\Component\Variation\Model\VariantInterface as BaseVariantInterface;
 
 /**
  * @ORM\HasLifecycleCallbacks
@@ -277,7 +266,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     protected $portals;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|Session[]
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="generalCoach")
      */
     protected $sessionAsGeneralCoach;
@@ -542,6 +531,8 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     public function setDropBoxSentFiles($value)
     {
         $this->dropBoxSentFiles = $value;
+
+        return $this;
     }
 
     /**
@@ -550,6 +541,8 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     public function setDropBoxReceivedFiles($value)
     {
         $this->dropBoxReceivedFiles = $value;
+
+        return $this;
     }
 
     /**
@@ -558,10 +551,12 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     public function setCourses($courses)
     {
         $this->courses = $courses;
+
+        return $this;
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection|CourseRelUser[]
      */
     public function getCourses()
     {
@@ -669,6 +664,8 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     public function setPortals($value)
     {
         $this->portals = $value;
+
+        return $this;
     }
 
     /**
@@ -760,7 +757,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection|UsergroupRelUser[]
      */
     public function getClasses()
     {
@@ -1451,7 +1448,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
      *
      * @return User
      */
-    public function setLastLogin(\DateTime $lastLogin)
+    public function setLastLogin(\DateTime $lastLogin = null)
     {
         $this->lastLogin = $lastLogin;
 
@@ -1499,6 +1496,8 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     public function setExtraFields($extraFields)
     {
         $this->extraFields = $extraFields;
+
+        return $this;
     }
 
     /**
@@ -1580,7 +1579,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     /**
      * Get sessionCourseSubscription.
      *
-     * @return ArrayCollection
+     * @return ArrayCollection|SessionRelCourseRelUser[]
      */
     public function getSessionCourseSubscriptions()
     {
@@ -1590,6 +1589,8 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     public function setSessionCourseSubscriptions($value)
     {
         $this->sessionCourseSubscriptions = $value;
+
+        return $this;
     }
 
     /**
@@ -2323,6 +2324,11 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
         $this->plainPassword = $password;
 
         return $this;
+    }
+
+    public function getLocked()
+    {
+        return $this->locked;
     }
 
     public function setLocked($boolean)

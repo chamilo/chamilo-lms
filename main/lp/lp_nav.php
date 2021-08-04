@@ -5,8 +5,6 @@
  * Script opened in an iframe and containing the
  * learning path's navigation and progress bar.
  *
- * @package chamilo.learnpath
- *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
@@ -38,11 +36,11 @@ if ($myLP) {
 
     // Setting up the CSS theme if exists
     $myCourseLpTheme = null;
-    if (api_get_setting('allow_course_theme') === 'true') {
+    if ('true' === api_get_setting('allow_course_theme')) {
         $myCourseLpTheme = api_get_course_setting('allow_learning_path_theme');
     }
 
-    if (!empty($lp_theme_css) && !empty($myCourseLpTheme) && $myCourseLpTheme != -1 && $myCourseLpTheme == 1) {
+    if (!empty($lp_theme_css) && !empty($myCourseLpTheme) && -1 != $myCourseLpTheme && 1 == $myCourseLpTheme) {
         global $lp_theme_css;
     } else {
         $lp_theme_css = $my_style;

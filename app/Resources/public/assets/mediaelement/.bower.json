@@ -23,14 +23,14 @@
     "./build/mediaelement-and-player.js",
     "./build/mediaelementplayer.css"
   ],
-  "version": "4.2.9",
-  "_release": "4.2.9",
+  "version": "4.2.16",
+  "_release": "4.2.16",
   "_resolution": {
     "type": "version",
-    "tag": "4.2.9",
-    "commit": "6d665634da067ac075cd49631e646c7b16f25510"
+    "tag": "4.2.16",
+    "commit": "80b658fc7e9f125659b9a7b1a6284c8fba2a244e"
   },
   "_source": "https://github.com/johndyer/mediaelement.git",
-  "_target": "4.*",
+  "_target": "^4.2.16",
   "_originalSource": "mediaelement"
 }

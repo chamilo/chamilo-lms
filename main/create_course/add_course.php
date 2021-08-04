@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\CourseCategory;
@@ -9,10 +10,6 @@ use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Roan Embrechts, refactoring
- *
- * @package chamilo.create_course
- * "Course validation" feature:
- *
  * @author Jose Manuel Abuin Mosquera <chema@cesga.es>, Centro de Supercomputacion de Galicia
  * "Course validation" feature, technical adaptation for Chamilo 1.8.8:
  * @author Ivan Tcholakov <ivantcholakov@gmail.com>
@@ -88,11 +85,13 @@ $form->addElement(
 $form->applyFilter('title', 'html_filter');
 $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
-$form->addButtonAdvancedSettings('advanced_params');
-$form->addElement(
-    'html',
-    '<div id="advanced_params_options" style="display:none">'
-);
+if (!api_get_configuration_value('course_creation_form_set_course_category_mandatory')) {
+    $form->addButtonAdvancedSettings('advanced_params');
+    $form->addElement(
+        'html',
+        '<div id="advanced_params_options" style="display:none">'
+    );
+}
 
 $countCategories = $courseCategoriesRepo->countAllInAccessUrl(
     $accessUrlId,
@@ -115,10 +114,18 @@ if ($countCategories >= 100) {
         api_get_configuration_value('allow_base_course_category')
     );
     $categoriesOptions = [null => get_lang('None')];
+    $categoryToAvoid = '';
+    if (!api_is_platform_admin()) {
+        $categoryToAvoid = api_get_configuration_value('course_category_code_to_use_as_model');
+    }
 
     /** @var CourseCategory $category */
     foreach ($categories as $category) {
-        $categoriesOptions[$category->getCode()] = $category->__toString();
+        $categoryCode = $category->getCode();
+        if (!empty($categoryToAvoid) && $categoryToAvoid == $categoryCode) {
+            continue;
+        }
+        $categoriesOptions[$categoryCode] = $category->__toString();
     }
 
     $form->addSelect(
@@ -128,27 +135,38 @@ if ($countCategories >= 100) {
     );
 }
 
+if (api_get_configuration_value('course_creation_form_set_course_category_mandatory')) {
+    $form->addRule('category_code', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addButtonAdvancedSettings('advanced_params');
+    $form->addElement(
+        'html',
+        '<div id="advanced_params_options" style="display:none">'
+    );
+}
+
 // Course code
-$form->addText(
-    'wanted_code',
-    [
-        get_lang('Code'),
-        get_lang('OnlyLettersAndNumbers'),
-    ],
-    '',
-    [
-        'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
-        'pattern' => '[a-zA-Z0-9]+',
-        'title' => get_lang('OnlyLettersAndNumbers'),
-    ]
-);
-$form->applyFilter('wanted_code', 'html_filter');
-$form->addRule(
-    'wanted_code',
-    get_lang('Max'),
-    'maxlength',
-    CourseManager::MAX_COURSE_LENGTH_CODE
-);
+if (!api_get_configuration_value('course_creation_form_hide_course_code')) {
+    $form->addText(
+        'wanted_code',
+        [
+            get_lang('Code'),
+            get_lang('OnlyLettersAndNumbers'),
+        ],
+        '',
+        [
+            'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
+            'pattern' => '[a-zA-Z0-9]+',
+            'title' => get_lang('OnlyLettersAndNumbers'),
+        ]
+    );
+    $form->applyFilter('wanted_code', 'html_filter');
+    $form->addRule(
+        'wanted_code',
+        get_lang('Max'),
+        'maxlength',
+        CourseManager::MAX_COURSE_LENGTH_CODE
+    );
+}
 
 // The teacher
 $titular = &$form->addElement('hidden', 'tutor_name', '');
@@ -287,7 +305,7 @@ $content = null;
 if ($form->validate()) {
     $course_values = $form->exportValues();
 
-    $wanted_code = $course_values['wanted_code'];
+    $wanted_code = isset($course_values['wanted_code']) ? $course_values['wanted_code'] : '';
     $category_code = isset($course_values['category_code']) ? $course_values['category_code'] : '';
     $title = $course_values['title'];
     $course_language = $course_values['course_language'];
@@ -420,6 +438,13 @@ if ($form->validate()) {
 } else {
     if (!$course_validation_feature) {
         $message = Display::return_message(get_lang('Explanation'));
+        // If the donation feature is enabled, show a message with a donate button
+        if (api_get_configuration_value('course_creation_donate_message_show') == true) {
+            $button = api_get_configuration_value('course_creation_donate_link');
+            if (!empty($button)) {
+                $message .= Display::return_message(get_lang('DonateToTheProject').'<br /><br /><div style="display:block; margin-left:42%;">'.$button.'</div>', 'warning', false);
+            }
+        }
     }
     // Display the form.
     $content = $form->returnForm();

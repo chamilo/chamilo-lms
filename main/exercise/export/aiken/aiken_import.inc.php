@@ -1,13 +1,13 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * Library for the import of Aiken format.
  *
  * @author claro team <cvs@claroline.net>
  * @author Guillaume Lederer <guillaume@claroline.net>
  * @author César Perales <cesar.perales@gmail.com> Parse function for Aiken format
- *
- * @package chamilo.exercise
  */
 
 /**
@@ -75,7 +75,8 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
             null,
             1,
             'overwrite',
-            false
+            false,
+            true
         )
     ) {
         if (!function_exists('gzopen')) {
@@ -98,9 +99,9 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
         )
     ) {
         return true;
-    } else {
-        return false;
     }
+
+    return false;
 }
 
 /**
@@ -115,11 +116,10 @@ function aiken_import_exercise($file)
     $archive_path = api_get_path(SYS_ARCHIVE_PATH).'aiken/';
     $baseWorkDir = $archive_path;
 
-    if (!is_dir($baseWorkDir)) {
-        mkdir($baseWorkDir, api_get_permissions_for_new_directories(), true);
+    $uploadPath = 'aiken_'.api_get_unique_id();
+    if (!is_dir($baseWorkDir.$uploadPath)) {
+        mkdir($baseWorkDir.$uploadPath, api_get_permissions_for_new_directories(), true);
     }
-
-    $uploadPath = 'aiken_'.api_get_unique_id().'/';
 
     // set some default values for the new exercise
     $exercise_info = [];
@@ -133,7 +133,7 @@ function aiken_import_exercise($file)
 
     // unzip the uploaded file in a tmp directory
     if (preg_match('/.(zip|txt)$/i', $file)) {
-        if (!get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)) {
+        if (!get_and_unzip_uploaded_exercise($baseWorkDir.$uploadPath, '/')) {
             return 'ThereWasAProblemWithYourFile';
         }
     }
@@ -170,11 +170,11 @@ function aiken_import_exercise($file)
         $result = 'NoTxtFileFoundInTheZip';
     }
 
-    if ($result !== true) {
+    if (true !== $result) {
         return $result;
     }
 
-    // 1. Create exercise
+    // 1. Create exercise.
     $exercise = new Exercise();
     $exercise->exercise = $exercise_info['name'];
     $exercise->save();
@@ -182,10 +182,9 @@ function aiken_import_exercise($file)
     $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
     $tableAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
     if (!empty($last_exercise_id)) {
-        // For each question found...
         $courseId = api_get_course_int_id();
         foreach ($exercise_info['question'] as $key => $question_array) {
-            // 2.create question
+            // 2. Create question.
             $question = new Aiken2Question();
             $question->type = $question_array['type'];
             $question->setAnswer();
@@ -215,7 +214,9 @@ function aiken_import_exercise($file)
                 $answer->new_position[$key] = $key;
                 $answer->new_comment[$key] = '';
                 // Correct answers ...
-                if (in_array($key, $question_array['correct_answers'])) {
+                if (isset($question_array['correct_answers']) &&
+                    in_array($key, $question_array['correct_answers'])
+                ) {
                     $answer->new_correct[$key] = 1;
                     if (isset($question_array['feedback'])) {
                         $answer->new_comment[$key] = $question_array['feedback'];
@@ -249,7 +250,7 @@ function aiken_import_exercise($file)
                 if ($answerId) {
                     $params = [
                         'id_auto' => $answerId,
-                        'id' => $answerId,
+                        'iid' => $answerId,
                     ];
                     Database::update($tableAnswer, $params, ['iid = ?' => [$answerId]]);
                 }
@@ -258,9 +259,6 @@ function aiken_import_exercise($file)
             if (!empty($scoreFromFile)) {
                 $max_score = $scoreFromFile;
             }
-
-            //$answer->save();
-
             $params = ['ponderation' => $max_score];
             Database::update(
                 $tableQuestion,
@@ -300,22 +298,30 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
     if (!is_file($questionFilePath)) {
         return 'FileNotFound';
     }
-    $data = file($questionFilePath);
+
+    $text = file_get_contents($questionFilePath);
+    $detect = mb_detect_encoding($text, 'ASCII', true);
+    if ('ASCII' === $detect) {
+        $data = explode("\n", $text);
+    } else {
+        $text = str_ireplace(["\x0D", "\r\n"], "\n", $text); // Removes ^M char from win files.
+        $data = explode("\n\n", $text);
+    }
 
     $question_index = 0;
     $answers_array = [];
-    $new_question = true;
     foreach ($data as $line => $info) {
-        if ($question_index > 0 && $new_question == true && preg_match('/^(\r)?\n/', $info)) {
-            // double empty line
+        $info = trim($info);
+        if (empty($info)) {
             continue;
         }
-        $new_question = false;
+
         //make sure it is transformed from iso-8859-1 to utf-8 if in that form
         if (!mb_check_encoding($info, 'utf-8') && mb_check_encoding($info, 'iso-8859-1')) {
             $info = utf8_encode($info);
         }
         $exercise_info['question'][$question_index]['type'] = 'MCUA';
+
         if (preg_match('/^([A-Za-z])(\)|\.)\s(.*)/', $info, $matches)) {
             //adding one of the possible answers
             $exercise_info['question'][$question_index]['answer'][]['value'] = $matches[3];
@@ -326,14 +332,51 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
             $exercise_info['question'][$question_index]['correct_answers'][] = $correct_answer_index + 1;
             //weight for correct answer
             $exercise_info['question'][$question_index]['weighting'][$correct_answer_index] = 1;
+            $next = $line + 1;
+
+            if (false !== strpos($data[$next], 'ANSWER_EXPLANATION:')) {
+                continue;
+            }
+
+            if (false !== strpos($data[$next], 'DESCRIPTION:')) {
+                continue;
+            }
+
+            // Check if next has score, otherwise loop too next question.
+            if (false === strpos($data[$next], 'SCORE:')) {
+                $answers_array = [];
+                $question_index++;
+                continue;
+            }
         } elseif (preg_match('/^SCORE:\s?(.*)/', $info, $matches)) {
             $exercise_info['question'][$question_index]['score'] = (float) $matches[1];
+            $answers_array = [];
+            $question_index++;
+            continue;
         } elseif (preg_match('/^DESCRIPTION:\s?(.*)/', $info, $matches)) {
             $exercise_info['question'][$question_index]['description'] = $matches[1];
+            $next = $line + 1;
+
+            if (false !== strpos($data[$next], 'ANSWER_EXPLANATION:')) {
+                continue;
+            }
+            // Check if next has score, otherwise loop too next question.
+            if (false === strpos($data[$next], 'SCORE:')) {
+                $answers_array = [];
+                $question_index++;
+                continue;
+            }
         } elseif (preg_match('/^ANSWER_EXPLANATION:\s?(.*)/', $info, $matches)) {
-            //Comment of correct answer
+            // Comment of correct answer
             $correct_answer_index = array_search($matches[1], $answers_array);
             $exercise_info['question'][$question_index]['feedback'] = $matches[1];
+            $next = $line + 1;
+            // Check if next has score, otherwise loop too next question.
+            if (false === strpos($data[$next], 'SCORE:')) {
+                $answers_array = [];
+                $question_index++;
+                continue;
+            }
         } elseif (preg_match('/^TEXTO_CORRECTA:\s?(.*)/', $info, $matches)) {
             //Comment of correct answer (Spanish e-ducativa format)
             $correct_answer_index = array_search($matches[1], $answers_array);
@@ -348,7 +391,10 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
         } elseif (preg_match('/^ETIQUETAS:\s?([A-Z])\s?/', $info, $matches)) {
             //TAGS for chamilo >= 1.10 (Spanish e-ducativa format)
             $exercise_info['question'][$question_index]['answer_tags'] = explode(',', $matches[1]);
-        } elseif (preg_match('/^(\r)?\n/', $info)) {
+        } elseif (empty($info)) {
+            /*if (empty($exercise_info['question'][$question_index]['title'])) {
+                $exercise_info['question'][$question_index]['title'] = $info;
+            }
             //moving to next question (tolerate \r\n or just \n)
             if (empty($exercise_info['question'][$question_index]['correct_answers'])) {
                 error_log('Aiken: Error in question index '.$question_index.': no correct answer defined');
@@ -363,19 +409,28 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
             $question_index++;
             //emptying answers array when moving to next question
             $answers_array = [];
-            $new_question = true;
+            //$new_question = true;*/
         } else {
             if (empty($exercise_info['question'][$question_index]['title'])) {
                 $exercise_info['question'][$question_index]['title'] = $info;
             }
+            /*$question_index++;
+            //emptying answers array when moving to next question
+            $answers_array = [];
+            $new_question = true;*/
         }
     }
+
     $total_questions = count($exercise_info['question']);
-    $total_weight = (!empty($_POST['total_weight'])) ? intval($_POST['total_weight']) : 20;
+    $total_weight = !empty($_POST['total_weight']) ? (int) ($_POST['total_weight']) : 20;
     foreach ($exercise_info['question'] as $key => $question) {
+        if (!isset($exercise_info['question'][$key]['weighting'])) {
+            continue;
+        }
         $exercise_info['question'][$key]['weighting'][current(array_keys($exercise_info['question'][$key]['weighting']))] = $total_weight / $total_questions;
     }
 
+    //exit;
     return true;
 }
 

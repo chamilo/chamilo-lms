@@ -34,7 +34,7 @@ class Redirect
             self::navigate($www);
         }
 
-        $is_full_uri = (strpos($url, 'http') === 0);
+        $is_full_uri = (0 === strpos($url, 'http'));
         if ($is_full_uri) {
             self::navigate($url);
         }
@@ -116,7 +116,7 @@ class Redirect
                 }
             }
             $redirect = api_get_setting('redirect_admin_to_courses_list');
-            if ($redirect !== 'true') {
+            if ('true' !== $redirect) {
                 // If the user is a platform admin, redirect to the main admin page
                 if (api_is_multiple_url_enabled()) {
                     // if multiple URLs are enabled, make sure he's admin of the

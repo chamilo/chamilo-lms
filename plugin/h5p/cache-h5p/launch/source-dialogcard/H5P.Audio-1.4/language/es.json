@@ -1,0 +1,49 @@
+{
+  "semantics": [
+    {
+      "label": "Archivo de origen"
+    },
+    {
+      "label": "Modo reproductor",
+      "description": "Seleccione el diseño del reproductor.",
+      "options": [
+        {
+          "label": "Minimalista"
+        },
+        {
+          "label": "Completo"
+        },
+        {
+          "label": "Transparente"
+        }
+      ]
+    },
+    {
+      "label": "Ajustar al marco"
+    },
+    {
+      "label": "Habilitar controles",
+      "description": "Los controles permiten al usuario por ejemplo pausar el audio"
+    },
+    {
+      "label": "Habilitar reproduccion automatica",
+      "description": "Con la reproducción automática el audio empieza a reproducirse inmediatamente. Si la reproducción automática está deshabilitada, el usuario presiona un botón de reproducción para iniciar el audio."
+    },
+    {
+      "label": "Reproducir audio (Herramienta de lectura)",
+      "default": "Reproducir audio"
+    },
+    {
+      "label": "Pausar audio (Herramienta de lectura)",
+      "default": "Pausar audio"
+    },
+    {
+      "label": "Nombre contenido de audio",
+      "default": "Audio"
+    },
+    {
+      "label": "Mensaje de audio no permitido",
+      "default": "Su navegador no es compatible con este audio"
+    }
+  ]
+}

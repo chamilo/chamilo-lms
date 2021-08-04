@@ -34,75 +34,160 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $js = '<script>'.api_get_language_translate_html().'</script>';
 $htmlHeadXtra[] = $js;
-
 $htmlHeadXtra[] = '<script>
-/* option show/hide thematic-block */
-$(function() {
-    $("#thematic-show").click(function(){
-        $(".btn-hide-thematic").hide();
-        $(".btn-show-thematic").show(); //show using class
-        $("#pross").fadeToggle(); //Not working collapse for Chrome
+    /* show eye for all show/hide*/
+    function buttonForAllShowHide()
+    {
+        tools_invisibles = [];
+        tools_visibles = [];
+        $.each($(".make_visible_and_invisible").parent(), function (index, item) {
+            var element = $(item).find("a");
+            image = $(element[0]).find("em")[0];
+            // extract the tool ID from the HTML em id, removing linktool_
+            image_id = $(image).attr("id").replace("linktool_","");
+            if (!$(image).hasClass("fa-eye-slash")) {
+                // if the image does not have the eye-slash icon, prepare to make invisible
+                tools_invisibles.push(image_id)
+            } else {
+                // if the image has the eye-slash icon, prepare to make visible
+                tools_visibles.push(image_id)
+            }
+        });
+        if (tools_visibles.length == 0) {
+            $(".visible-all").addClass("hidden");
+            $(".invisible-all").removeClass("hidden");
+        } else {
+            $(".visible-all").removeClass("hidden");
+            $(".invisible-all").addClass("hidden");
+        }
+    }
+
+    /* option show/hide thematic-block */
+    $(function() {
+        buttonForAllShowHide();
+        /* option show/hide all*/
+        $(".show-hide-all-tools").on("click" , function() {
+            $(".show-hide-all-tools").addClass("disabled");
+            tools_invisibles = [];
+            tools_visibles = [];
+            $.each($(".make_visible_and_invisible").parent(), function (index, item) {
+                var element = $(item).find("a");
+                image = $(element[0]).find("em")[0];
+                image_id = $(image).attr("id").replace("linktool_","");
+                if (!$(image).hasClass("fa-eye-slash")) {
+                    tools_invisibles.push(image_id)
+                } else {
+                    tools_visibles.push(image_id)
+                }
+            });
+            message_invisible = "'.get_lang('ToolIsNowHidden').'";
+            ids = tools_invisibles;
+            if (tools_invisibles.length == 0) {
+                ids = tools_visibles;
+                message_invisible = "'.get_lang('ToolIsNowVisible').'";
+            }
+
+            $.ajax({
+                contentType: "application/x-www-form-urlencoded",
+                beforeSend: function (myObject) {
+                    $(".normal-message").show();
+                    $("#id_confirmation_message").hide();
+                },
+                type: "GET",
+                url: "'.api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?'.api_get_cidreq().'&a=set_visibility_for_all",
+                data: "tools_ids=" + JSON.stringify(ids) + "&sent_http_request=1",
+                success: function (data) {
+                    data = JSON.parse(data);
+                    $.each(data,function(index,item){
+                        new_current_view = "'.api_get_path(WEB_IMG_PATH).'" + item.view;
+                        //eyes
+                        $("#linktool_"+item.id).attr("class", item.fclass);
+                        //tool
+                        $("#toolimage_" + item.id).attr("src", item.image);
+                        //class
+                        $("#tooldesc_" + item.id).attr("class", item.tclass);
+                        $("#istooldesc_" + item.id).attr("class", item.tclass);
+                    });
+                    $(".show-hide-all-tools").removeClass("disabled");
+                    $(".normal-message").hide();
+                    $("#id_confirmation_message").html(message_invisible);
+                    $("#id_confirmation_message").show();
+                    buttonForAllShowHide();
+                },
+                error: function( jqXHR, textStatus, errorThrown ) {
+                    $(".show-hide-all-tools").removeClass("disabled");
+                    $(".normal-message").hide();
+                    buttonForAllShowHide();
+                }
+            });
+        });
+
+        $("#thematic-show").click(function(){
+            $(".btn-hide-thematic").hide();
+            $(".btn-show-thematic").show(); //show using class
+            $("#pross").fadeToggle(); //Not working collapse for Chrome
+        });
+
+        $("#thematic-hide").click(function(){
+            $(".btn-show-thematic").hide(); //show using class
+            $(".btn-hide-thematic").show();
+            $("#pross").fadeToggle(); //Not working collapse for Chrome
+        });
+
+        $(".make_visible_and_invisible").attr("href", "javascript:void(0);");
+        $(".make_visible_and_invisible > em").click(function () {
+            make_visible = "visible.gif";
+            make_invisible = "invisible.gif";
+            //path_name = $(this).attr("src");
+            //list_path_name = path_name.split("/");
+            //image_link = list_path_name[list_path_name.length - 1];
+            tool_id = $(this).attr("id");
+            tool_info = tool_id.split("_");
+            my_tool_id = tool_info[1];
+            $("#id_normal_message").attr("class", "normal-message alert alert-success");
+
+            $.ajax({
+                contentType: "application/x-www-form-urlencoded",
+                beforeSend: function(myObject) {
+                    $(".normal-message").show();
+                    $("#id_confirmation_message").hide();
+                },
+                type: "GET",
+                url: "'.api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?'.api_get_cidreq().'&a=set_visibility",
+                data: "id=" + my_tool_id + "&sent_http_request=1",
+                success: function(data) {
+                    eval("var info=" + data);
+                    new_current_tool_image = info.image;
+                    new_current_view = "'.api_get_path(WEB_IMG_PATH).'" + info.view;
+                    //eyes
+                    //$("#" + tool_id).attr("src", new_current_view);
+                     $("#linktool_"+my_tool_id).attr("class", info.fclass);
+                     $("#linktool_"+my_tool_id).attr("title", info.label);
+
+                    //tool
+                    $("#toolimage_" + my_tool_id).attr("src", new_current_tool_image);
+                    //clase
+                    $("#tooldesc_" + my_tool_id).attr("class", info.tclass);
+                    $("#istooldesc_" + my_tool_id).attr("class", info.tclass);
+
+                    if (info.message == "is_active") {
+                        message = "'.get_lang('ToolIsNowVisible').'";
+                        $("#" + tool_id)
+                        .attr("alt", "'.get_lang('Deactivate').'")
+                        .attr("title", "'.get_lang('Deactivate').'");
+                    } else {
+                        message = "'.get_lang('ToolIsNowHidden').'";
+                        $("#" + tool_id)
+                        .attr("alt", "'.get_lang('Activate').'")
+                        .attr("title", "'.get_lang('Activate').'");
+                    }
+                    $(".normal-message").hide();
+                    $("#id_confirmation_message").html(message);
+                    $("#id_confirmation_message").show();
+                }
+            });
+        });
     });
-
-    $("#thematic-hide").click(function(){
-        $(".btn-show-thematic").hide(); //show using class
-        $(".btn-hide-thematic").show();
-        $("#pross").fadeToggle(); //Not working collapse for Chrome
-    });
-
-	$(".make_visible_and_invisible").attr("href", "javascript:void(0);");
-	$(".make_visible_and_invisible > img").click(function () {
-		make_visible = "visible.gif";
-		make_invisible = "invisible.gif";
-		path_name = $(this).attr("src");
-		list_path_name = path_name.split("/");
-		image_link = list_path_name[list_path_name.length - 1];
-		tool_id = $(this).attr("id");
-		tool_info = tool_id.split("_");
-		my_tool_id = tool_info[1];
-        $("#id_normal_message").attr("class", "normal-message alert alert-success");
-
-		$.ajax({
-			contentType: "application/x-www-form-urlencoded",
-			beforeSend: function(myObject) {
-				$(".normal-message").show();
-				$("#id_confirmation_message").hide();
-			},
-			type: "GET",
-			url: "'.api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?'.api_get_cidreq().'&a=set_visibility",
-			data: "id=" + my_tool_id + "&sent_http_request=1",
-			success: function(data) {
-				eval("var info=" + data);
-				new_current_tool_image = info.image;
-				new_current_view       = "'.api_get_path(WEB_IMG_PATH).'" + info.view;
-				//eyes
-				$("#" + tool_id).attr("src", new_current_view);
-				//tool
-				$("#toolimage_" + my_tool_id).attr("src", new_current_tool_image);
-				//clase
-				$("#tooldesc_" + my_tool_id).attr("class", info.tclass);
-				$("#istooldesc_" + my_tool_id).attr("class", info.tclass);
-
-				if (image_link == "visible.gif") {
-					$("#" + tool_id).attr("alt", "'.get_lang('Activate', '').'");
-					$("#" + tool_id).attr("title", "'.get_lang('Activate', '').'");
-				} else {
-					$("#" + tool_id).attr("alt", "'.get_lang('Deactivate', '').'");
-					$("#" + tool_id).attr("title", "'.get_lang('Deactivate', '').'");
-				}
-				if (info.message == "is_active") {
-					message = "'.get_lang('ToolIsNowVisible', '').'";
-				} else {
-					message = "'.get_lang('ToolIsNowHidden', '').'";
-				}
-				$(".normal-message").hide();
-				$("#id_confirmation_message").html(message);
-				$("#id_confirmation_message").show();
-			}
-		});
-	});
-});
-
 </script>';
 
 // The section for the tabs

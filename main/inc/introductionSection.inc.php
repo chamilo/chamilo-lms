@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CToolIntro;
@@ -26,8 +27,6 @@ use Chamilo\CourseBundle\Entity\CToolIntro;
  *
  * This script is also used since Chamilo 1.9 to show course progress (from the
  * course_progress module)
- *
- * @package chamilo.include
  */
 $em = Database::getManager();
 $intro_editAllowed = $is_allowed_to_edit = api_is_allowed_to_edit();
@@ -76,7 +75,6 @@ if ($intro_editAllowed) {
         if ($form->validate()) {
             $form_values = $form->exportValues();
             $intro_content = $form_values['intro_content'];
-
             if (!empty($intro_content)) {
                 if (!$toolIntro) {
                     $toolIntro = new CToolIntro();
@@ -210,11 +208,21 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         $thematic_advance = get_lang('CourseThematicAdvance');
         $thematicScore = $thematic->get_total_average_of_thematic_advances().'%';
         $thematicUrl = api_get_path(WEB_CODE_PATH).'course_progress/index.php?action=thematic_details&'.api_get_cidreq();
-        $thematic_info = $thematic->get_thematic_list($thematic_advance_info['thematic_id']);
 
-        $thematic_advance_info['start_date'] = api_get_local_time(
-            $thematic_advance_info['start_date']
-        );
+        $thematic_advance_info['thematic_id'] = isset($thematic_advance_info['thematic_id']) ? $thematic_advance_info['thematic_id'] : 0;
+        $thematic_advance_info['start_date'] = isset($thematic_advance_info['start_date']) ? $thematic_advance_info['start_date'] : null;
+        $thematic_advance_info['content'] = isset($thematic_advance_info['content']) ? $thematic_advance_info['content'] : '';
+        $thematic_advance_info['duration'] = isset($thematic_advance_info['duration']) ? $thematic_advance_info['duration'] : 0;
+
+        $thematic_info = $thematic->get_thematic_list($thematic_advance_info['thematic_id']);
+        $thematic_info['title'] = isset($thematic_info['title']) ? $thematic_info['title'] : '';
+
+        if (!empty($thematic_advance_info['start_date'])) {
+            $thematic_advance_info['start_date'] = api_get_local_time(
+                $thematic_advance_info['start_date']
+            );
+        }
+
         $thematic_advance_info['start_date'] = api_format_date(
             $thematic_advance_info['start_date'],
             DATE_TIME_FORMAT_LONG
@@ -291,6 +299,12 @@ if (api_is_allowed_to_edit() && empty($session_id)) {
         ['class' => 'btn btn-default', 'title' => get_lang('CustomizeIcons')]
     );
 }
+/* Tool to show /hide all tools on course */
+$toolAllShowHide = '';
+if (api_is_allowed_to_edit() && empty($session_id)) {
+    $toolAllShowHide = '<button class="btn btn-default hidden visible-all show-hide-all-tools" title="'.get_lang('Activate', '').'"><em class="fa fa-eye"></em></button>';
+    $toolAllShowHide .= '<button class="btn btn-default hidden invisible-all show-hide-all-tools" title="'.get_lang('Deactivate', '').'"><em class="fa fa-eye-slash"></em></button>';
+}
 
 $toolbar = '';
 $textIntro = '';
@@ -303,10 +317,10 @@ if ($intro_dispCommand) {
             $textIntro = '<a class="btn btn-default" title="'.addslashes(get_lang('AddIntro')).'" href="'.api_get_self().'?'.api_get_cidreq().$blogParam.'&intro_cmdAdd=1">';
             $textIntro .= '<em class="fa fa-file-text"></em> ';
             $textIntro .= "</a>";
-            $toolbar .= $textIntro.$editIconButton;
+            $toolbar .= $textIntro.$editIconButton.$toolAllShowHide;
         } else {
             $toolbar .= '<a class="btn btn-default" href="'.api_get_self().'?intro_cmdAdd=1">'.get_lang('AddIntro').'</a>';
-            $toolbar .= $editIconButton;
+            $toolbar .= $editIconButton.$toolAllShowHide;
         }
         $toolbar .= '</div></div>';
     } else {
@@ -317,7 +331,7 @@ if ($intro_dispCommand) {
             $toolbar .=
                 '<a class="btn btn-default" href="'.api_get_self().'?'.api_get_cidreq().$blogParam.'&intro_cmdEdit=1" title="'.get_lang('Modify').'">
                 <em class="fa fa-pencil"></em></a>';
-            $toolbar .= $editIconButton;
+            $toolbar .= $editIconButton.$toolAllShowHide;
             $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".api_get_cidreq().$blogParam."&intro_cmdDel=1\" onclick=\"javascript:
                 if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
                 "')) return false;\"><em class=\"fa fa-trash-o\"></em></a>";
@@ -326,7 +340,7 @@ if ($intro_dispCommand) {
                 '<a class="btn btn-default" href="'.api_get_self().'?intro_cmdEdit=1" title="'.get_lang('Modify').'">
                 <em class="fa fa-pencil"></em>
                 </a>"';
-            $toolbar .= $editIconButton;
+            $toolbar .= $editIconButton.$toolAllShowHide;
             $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".api_get_cidreq()."&intro_cmdDel=1\" onclick=\"javascript:
                 if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
                 "')) return false;\"><em class=\"fa fa-trash-o\"></em></a>";
@@ -341,8 +355,12 @@ if ($intro_dispCommand) {
 }
 
 $nameSection = get_lang('AddCustomCourseIntro');
-if ($moduleId != 'course_homepage') {
+if ($moduleId !== 'course_homepage') {
     $nameSection = get_lang('AddCustomToolsIntro');
+}
+
+if (!api_is_anonymous()) {
+    $intro_content = AnnouncementManager::parseContent(api_get_user_id(), $intro_content, api_get_course_id());
 }
 
 $introduction_section .= '<div class="col-md-12">';

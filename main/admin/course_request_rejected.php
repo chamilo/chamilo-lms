@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * A list containing the rejected course requests.
- *
- * @package chamilo.admin
  *
  * @author José Manuel Abuin Mosquera <chema@cesga.es>, 2010
  * @author Bruno Rubio Gayo <brubio@cesga.es>, 2010
@@ -114,9 +113,9 @@ function get_request_data($from, $number_of_items, $column, $direction)
     $keyword = isset($_GET['keyword']) ? Database::escape_string(trim($_GET['keyword'])) : '';
     $course_request_table = Database::get_main_table(TABLE_MAIN_COURSE_REQUEST);
 
-    $from = intval($from);
-    $number_of_items = intval($number_of_items);
-    $column = intval($column);
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+    $column = (int) $column;
     $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
 
     $sql = "SELECT

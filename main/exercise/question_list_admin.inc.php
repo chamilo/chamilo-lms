@@ -1,13 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 /**
- *    Code library for HotPotatoes integration.
- *
- * @package chamilo.exercise
- *
  * @author Olivier Brouckaert & Julio Montoya & Hubert Borderiou 21-10-2011 (Question by category)
  *    QUESTION LIST ADMINISTRATION
  *
@@ -35,6 +32,7 @@ if ($deleteQuestion) {
     unset($objQuestionTmp);
 }
 $ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&exercise_id='.intval($exerciseId);
+$addImageUrl = api_get_path(WEB_CODE_PATH).'inc/lib/elfinder/filemanager.php?add_image=1&'.api_get_cidreq();
 ?>
 <div id="dialog-confirm"
      title="<?php echo get_lang('ConfirmYourChoice'); ?>"
@@ -44,6 +42,33 @@ $ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&
     </p>
 </div>
 <script>
+    function addImageToQuestion(image, questionId) {
+        let url = '<?php echo $ajax_url; ?>' + '&a=save_question_description&question_id=' + questionId;
+        let params = {
+            image: image
+        }
+        $.ajax({
+            url: url,
+            data: params,
+            success: function (data) {
+                window.alert('<?php echo addslashes(get_lang('Updated')); ?>');
+            }
+        });
+    }
+
+    function loadEditor(button, questionId) {
+        event.preventDefault();
+        let url = '<?php echo $addImageUrl; ?>' + '&question_id=' + questionId;
+        let w = 850;
+        let h = 500;
+        let left = (screen.width / 2) - (w / 2);
+        let top = (screen.height / 2) - (h / 2);
+        let params = 'height=' + h + ',width=' + w + ',resizable=0,top=' + top + ',left=' + left;
+
+        setTimeout(() => window.open(url, 'editor', params), 1000);
+        return;
+    }
+
     $(function () {
         $("#dialog:ui-dialog").dialog("destroy");
         $("#dialog-confirm").dialog({
@@ -149,7 +174,6 @@ $ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&
 
 // Filter the type of questions we can add
 Question::displayTypeMenu($objExercise);
-
 echo '<div id="message"></div>';
 $token = Security::get_token();
 //deletes a session when using don't know question type (ugly fix)
@@ -163,7 +187,7 @@ if (!$inATest) {
     if ($nbrQuestions) {
         // In the building exercise mode show question list ordered as is.
         $objExercise->setCategoriesGrouping(false);
-
+        $originalQuestionSelectType = $objExercise->questionSelectionType;
         // In building mode show all questions not render by teacher order.
         $objExercise->questionSelectionType = EX_Q_SELECTION_ORDERED;
         $allowQuestionOrdering = true;
@@ -177,7 +201,6 @@ if (!$inATest) {
             $questionList = $objExercise->getQuestionForTeacher($start, $length);
             $paginator = new Knp\Component\Pager\Paginator();
             $pagination = $paginator->paginate([]);
-
             $pagination->setTotalItemCount($nbrQuestions);
             $pagination->setItemNumberPerPage($length);
             $pagination->setCurrentPageNumber($page);
@@ -196,9 +219,13 @@ if (!$inATest) {
             };
             echo $pagination;
         } else {
-            // Classic order
-            $questionList = $objExercise->selectQuestionList(true, true);
+            // Teacher view, see all questions.
+            //$questionList = $objExercise->selectQuestionList(true, true);
+            $questionList = $objExercise->getQuestionOrderedList(true);
         }
+
+        // Restore original value
+        $objExercise->questionSelectionType = $originalQuestionSelectType;
 
         echo '
             <div class="row hidden-xs">
@@ -212,7 +239,7 @@ if (!$inATest) {
             <div id="question_list">
         ';
 
-        $category_list = TestCategory::getListOfCategoriesNameForTest($objExercise->id, false);
+        $category_list = TestCategory::getListOfCategoriesNameForTest($objExercise->iid, false);
 
         if (is_array($questionList)) {
             foreach ($questionList as $id) {
@@ -225,6 +252,20 @@ if (!$inATest) {
 
                 if (empty($objQuestionTmp)) {
                     continue;
+                }
+
+                $addImageLink = '';
+                if (api_get_configuration_value('allow_quick_question_description_popup')) {
+                    $addImageLink = Display::url(
+                        Display::return_icon(
+                            'image.png',
+                            get_lang('AddImage'),
+                            [],
+                            ICON_SIZE_TINY
+                        ),
+                        'javascript:void(0);',
+                        ['class' => 'btn btn-default btn-sm ajax', 'onclick' => 'loadEditor(this, '.$id.')']
+                    );
                 }
 
                 $clone_link = Display::url(
@@ -242,7 +283,9 @@ if (!$inATest) {
                     ? Display::span(
                         Display::return_icon(
                             'edit_na.png',
-                            get_lang('QuestionEditionNotAvailableBecauseItIsAlreadyAnsweredHoweverYouCanCopyItAndModifyTheCopy'),
+                            get_lang(
+                                'QuestionEditionNotAvailableBecauseItIsAlreadyAnsweredHoweverYouCanCopyItAndModifyTheCopy'
+                            ),
                             [],
                             ICON_SIZE_TINY
                         ),
@@ -291,7 +334,7 @@ if (!$inATest) {
 
                 $btnActions = implode(
                     PHP_EOL,
-                    [$edit_link, $clone_link, $delete_link]
+                    [$edit_link, $clone_link, $addImageLink, $delete_link]
                 );
 
                 $title = Security::remove_XSS($objQuestionTmp->selectTitle());
@@ -315,7 +358,7 @@ if (!$inATest) {
 
                 // Question category
                 $txtQuestionCat = Security::remove_XSS(
-                    TestCategory::getCategoryNameForQuestion($objQuestionTmp->id)
+                    TestCategory::getCategoryNameForQuestion($objQuestionTmp->iid)
                 );
                 if (empty($txtQuestionCat)) {
                     $txtQuestionCat = '-';

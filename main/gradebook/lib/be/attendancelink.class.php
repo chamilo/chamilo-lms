@@ -5,8 +5,6 @@
  * Gradebook link to attendance item.
  *
  * @author Christian Fasanando (christian1827@gmail.com)
- *
- * @package chamilo.gradebook
  */
 class AttendanceLink extends AbstractLink
 {
@@ -61,7 +59,7 @@ class AttendanceLink extends AbstractLink
         $result = Database::query($sql);
 
         while ($data = Database::fetch_array($result)) {
-            if (isset($data['attendance_qualify_title']) && $data['attendance_qualify_title'] != '') {
+            if (isset($data['attendance_qualify_title']) && '' != $data['attendance_qualify_title']) {
                 $cats[] = [$data['id'], $data['attendance_qualify_title']];
             } else {
                 $cats[] = [$data['id'], $data['name']];
@@ -88,7 +86,7 @@ class AttendanceLink extends AbstractLink
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
-        return $number[0] != 0;
+        return 0 != $number[0];
     }
 
     /**
@@ -141,7 +139,7 @@ class AttendanceLink extends AbstractLink
 
             while ($data = Database::fetch_array($scores)) {
                 if (!(array_key_exists($data['user_id'], $students))) {
-                    if ($attendance['attendance_qualify_max'] != 0) {
+                    if (0 != $attendance['attendance_qualify_max']) {
                         $students[$data['user_id']] = $data['score'];
                         $rescount++;
                         $sum += $data['score'] / $attendance['attendance_qualify_max'];
@@ -154,7 +152,7 @@ class AttendanceLink extends AbstractLink
                 }
             }
 
-            if ($rescount == 0) {
+            if (0 == $rescount) {
                 return [null, null];
             } else {
                 switch ($type) {
@@ -198,7 +196,7 @@ class AttendanceLink extends AbstractLink
         $this->get_attendance_data();
         $attendance_title = isset($this->attendance_data['name']) ? $this->attendance_data['name'] : '';
         $attendance_qualify_title = isset($this->attendance_data['attendance_qualify_title']) ? $this->attendance_data['attendance_qualify_title'] : '';
-        if (isset($attendance_qualify_title) && $attendance_qualify_title != '') {
+        if (isset($attendance_qualify_title) && '' != $attendance_qualify_title) {
             return $this->attendance_data['attendance_qualify_title'];
         } else {
             return $attendance_title;
@@ -223,7 +221,7 @@ class AttendanceLink extends AbstractLink
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
-        return $number[0] != 0;
+        return 0 != $number[0];
     }
 
     public function get_link()
@@ -264,7 +262,7 @@ class AttendanceLink extends AbstractLink
     private function get_attendance_data()
     {
         $tbl_name = $this->get_attendance_table();
-        if ($tbl_name == '') {
+        if ('' == $tbl_name) {
             return false;
         } elseif (!isset($this->attendance_data)) {
             $sql = 'SELECT * FROM '.$this->get_attendance_table().' att

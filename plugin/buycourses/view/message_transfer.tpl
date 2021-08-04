@@ -32,5 +32,6 @@
         {% endfor %}
         </tbody>
     </table>
+    <p>{{ info_email_extra }}</p>
     <p>{{ 'PurchaseDetailsEnd'|get_plugin_lang('BuyCoursesPlugin') }}</p>
 </div>

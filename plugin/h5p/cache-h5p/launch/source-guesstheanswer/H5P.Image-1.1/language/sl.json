@@ -1,0 +1,19 @@
+{
+  "semantics": [
+    {
+      "label": "Slika"
+    },
+    {
+      "label": "Nadomestno besedilo",
+      "description": "Zahtevano. Besedilo se prikaže, če spletni brskalnik ne more naložiti slike. Besedilo uporabljajo tudi \"sintetizatorji govora\" (text-to-speech readers)."
+    },
+    {
+      "label": "Besedilo ob preletu miške",
+      "description": "Neobvezno. Besedilo se prikaže, ko uporabnik sliko preleti s kazalcem miške."
+    },
+    {
+      "label": "Naslov vsebine slike",
+      "default": "Slika"
+    }
+  ]
+}

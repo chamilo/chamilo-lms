@@ -53,7 +53,7 @@ class Session
     protected $courses;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|SessionRelUser[]
      * @ORM\OneToMany(targetEntity="SessionRelUser", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
      */
     protected $users;
@@ -939,6 +939,26 @@ class Session
         $entity->setPosition(0);
         $this->addCourses($entity);
         $this->setNbrCourses(count($this->courses));
+    }
+
+    /**
+     * Removes a course from this session.
+     *
+     * @param Course $course the course to remove from this session
+     *
+     * @return bool whether the course was actually found in this session and removed from it
+     */
+    public function removeCourse(Course $course)
+    {
+        $relCourse = $this->getCourseSubscription($course);
+        if ($relCourse) {
+            $this->courses->removeElement($relCourse);
+            $this->setNbrCourses(count($this->courses));
+
+            return true;
+        }
+
+        return false;
     }
 
     /**

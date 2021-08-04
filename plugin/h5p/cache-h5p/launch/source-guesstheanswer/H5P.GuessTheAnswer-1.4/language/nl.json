@@ -1,0 +1,26 @@
+{
+  "semantics": [
+    {
+      "label": "Taakomschrijving",
+      "description": "Beschrijf hoe de gebruiker de taak dient op te lossen."
+    },
+    {
+      "label": "Media",
+      "fields": [
+        {
+          "label": "Type",
+          "description": "Optionele media die boven de vraag wordt getoond."
+        }
+      ]
+    },
+    {
+      "label": "Label voor de beschrijving van de oplossing",
+      "default": "Klik om het antwoord te zien",
+      "description": "Het klikbare tekstgebied waar de oplossing zal worden getoond."
+    },
+    {
+      "label": "Tekst voor de oplossing",
+      "description": "De oplossing voor de afbeelding."
+    }
+  ]
+}

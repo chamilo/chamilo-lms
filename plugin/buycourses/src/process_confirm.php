@@ -104,6 +104,7 @@ switch ($sale['payment_type']) {
         }
 
         $transferAccounts = $plugin->getTransferAccounts();
+        $infoEmailExtra = $plugin->getTransferInfoExtra()['tinfo_email_extra'];
 
         $form = new FormValidator(
             'success',
@@ -139,10 +140,10 @@ switch ($sale['payment_type']) {
                 ]
             );
             $messageTemplate->assign('transfer_accounts', $transferAccounts);
+            $messageTemplate->assign('info_email_extra', $infoEmailExtra);
 
-            api_mail_html(
-                $userInfo['complete_name'],
-                $userInfo['email'],
+            MessageManager::send_message_simple(
+                $userInfo['user_id'],
                 $plugin->get_lang('bc_subject'),
                 $messageTemplate->fetch('buycourses/view/message_transfer.tpl')
             );
@@ -311,6 +312,56 @@ switch ($sale['payment_type']) {
 
         $template->assign('content', $content);
         $template->display_one_col_template();
+
+        break;
+    case BuyCoursesPlugin::PAYMENT_TYPE_TPV_REDSYS:
+        $tpvRedsysParams = $plugin->getTpvRedsysParams();
+
+        require_once '../resources/apiRedsys.php';
+        $tpv = new RedsysAPI();
+
+        $merchantcode = $tpvRedsysParams['merchantcode'];
+        $terminal = $tpvRedsysParams['terminal'];
+        $currency = $tpvRedsysParams['currency'];
+        $transactionType = "0";
+        $urlMerchant = api_get_path(WEB_PLUGIN_PATH).'buycourses/src/tpv_response.php';
+        $urlSuccess = api_get_path(WEB_PLUGIN_PATH).'buycourses/src/tpv_success.php';
+        $urlFailed = api_get_path(WEB_PLUGIN_PATH).'buycourses/src/tpv_error.php';
+        $order = str_pad(strval($saleId), 4, "0", STR_PAD_LEFT);
+        $amount = $sale['price'] * 100;
+        $description = $plugin->get_lang('OrderReference').": ".$sale['reference'];
+        $tpv->setParameter("DS_MERCHANT_AMOUNT", $amount);
+        $tpv->setParameter("DS_MERCHANT_ORDER", $order);
+        $tpv->setParameter("DS_MERCHANT_MERCHANTCODE", $merchantcode);
+        $tpv->setParameter("DS_MERCHANT_CURRENCY", $currency);
+        $tpv->setParameter("DS_MERCHANT_TRANSACTIONTYPE", $transactionType);
+        $tpv->setParameter("DS_MERCHANT_TERMINAL", $terminal);
+        $tpv->setParameter("DS_MERCHANT_MERCHANTURL", $urlMerchant);
+        $tpv->setParameter("DS_MERCHANT_URLOK", $urlSuccess);
+        $tpv->setParameter("DS_MERCHANT_URLKO", $urlFailed);
+        $tpv->setParameter("DS_MERCHANT_PRODUCTDESCRIPTION", $description);
+
+        $version = "HMAC_SHA256_V1";
+        $kc = $tpvRedsysParams['kc'];
+
+        $urlTpv = $tpvRedsysParams['url_redsys'];
+        $sandboxFlag = $tpvRedsysParams['sandbox'] == 1;
+        if ($sandboxFlag === true) {
+            $urlTpv = $tpvRedsysParams['url_redsys_sandbox'];
+        }
+
+        $params = $tpv->createMerchantParameters();
+        $signature = $tpv->createMerchantSignature($kc);
+
+        echo '<form name="tpv_chamilo" action="'.$urlTpv.'" method="POST">';
+        echo '<input type="hidden" name="Ds_SignatureVersion" value="'.$version.'" />';
+        echo '<input type="hidden" name="Ds_MerchantParameters" value="'.$params.'" />';
+        echo '<input type="hidden" name="Ds_Signature" value="'.$signature.'" />';
+        echo '</form>';
+
+        echo '<SCRIPT language=javascript>';
+        echo 'document.tpv_chamilo.submit();';
+        echo '</script>';
 
         break;
 }

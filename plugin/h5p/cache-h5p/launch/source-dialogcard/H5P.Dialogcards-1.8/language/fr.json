@@ -1,0 +1,220 @@
+{
+  "semantics": [
+    {
+      "label": "En-tête"
+    },
+    {
+      "label": "Mode",
+      "description": "Mode de présentation des cartes de dialogue",
+      "options": [
+        {
+          "label": "Normal"
+        },
+        {
+          "label": "Répétition"
+        }
+      ]
+    },
+    {
+      "label": "Consigne",
+      "default": ""
+    },
+    {
+      "widgets": [
+        {
+          "label": "Par défaut"
+        }
+      ],
+      "label": "Dialogue",
+      "entity": "dialogue",
+      "field": {
+        "label": "Question",
+        "fields": [
+          {
+            "label": "Question",
+            "description": "Texte pour la face avant de la carte"
+          },
+          {
+            "label": "Réponse",
+            "description": "Texte pour le dos de la carte"
+          },
+          {
+            "label": "Image",
+            "description": "Image facultative pour la carte. (Une carte peut contenir une image seule, un texte seul ou les deux combinés)"
+          },
+          {
+            "label": "Texte alternatif pour l'image"
+          },
+          {
+            "label": "Fichiers audio"
+          },
+          {
+            "label": "Indices",
+            "fields": [
+              {
+                "label": "Indice pour la face avant",
+                "description": "Indice pour la face avant de la carte"
+              },
+              {
+                "label": "Indice pour le dos",
+                "description": "Indice pour le dos de la carte"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "Options générales",
+      "description": "Ces options vous permettent de paramétrer le déroulement de l'exercice.",
+      "fields": [
+        {
+          "label": "Activer le bouton \"Recommencer\""
+        },
+        {
+          "label": "Désactiver la possibilité de naviguer en arrière",
+          "description": "Cette option ne permettra plus que la navigation en avant au sein des cartes"
+        },
+        {
+          "label": "Mettre à l'échelle le texte afin de s'adapter à la taille de la carte",
+          "description": "Si cette option est décochée, la taille de la carte sera adaptée au texte placé à l'intérieur"
+        },
+        {
+          "label": "Mélanger les cartes",
+          "description": "Cocher pour mélanger l'ordre des cartes à l'affichage."
+        },
+        {
+          "label": "Niveau de compétences maximum"
+        },
+        {
+          "label": "Autoriser la progression rapide",
+          "description": "Si activé, les apprenants pourront décider d'indiquer ce qu'ils connaissent une carte sans la retourner"
+        }
+      ]
+    },
+    {
+      "label": "Texte pour le bouton \"Retourner\"",
+      "default": "Retourner"
+    },
+    {
+      "label": "Texte pour le bouton \"Suivant\"",
+      "default": "Suivant"
+    },
+    {
+      "label": "Texte pour le bouton \"Précédent\"",
+      "default": "Précédent"
+    },
+    {
+      "label": "Texte pour le bouton \"Recommencer\"",
+      "default": "Recommencer"
+    },
+    {
+      "label": "Texte pour le bouton \"Réponse correcte\"",
+      "default": "J'ai eu bon!"
+    },
+    {
+      "label": "Texte pour le bouton \"Réponse incorrecte\"",
+      "default": "J'ai eu faux"
+    },
+    {
+      "label": "Texte pour le message \"Round\" en dessous des cartes et sur le résumé",
+      "description": "@round sera remplacé par le numéro du round actuel",
+      "default": "Round @round"
+    },
+    {
+      "label": "Texte pour le message \"Cartes restantes\"",
+      "description": "@number sera remplacé par le nombre de cartes restantes pour ce round",
+      "default": "Cartes restantes: @number"
+    },
+    {
+      "label": "Texte pour le bouton \"Round suivant\"",
+      "description": "@round sera remplacé par le numéro du round",
+      "default": "Procéder au round @round"
+    },
+    {
+      "label": "Texte pour le bouton \"Recommencer\"",
+      "default": "Recommencer"
+    },
+    {
+      "label": "Texte pour le bouton \"Voir le résumé\"",
+      "default": "Suivant"
+    },
+    {
+      "label": "Titre de la page de résumé",
+      "default": "Résumé"
+    },
+    {
+      "label": "Texte pour \"Cartes correctes:\"",
+      "default": "Cartes correctes:"
+    },
+    {
+      "label": "Texte pour \"Cartes incorrectes:\"",
+      "default": "Cartes incorrectes:"
+    },
+    {
+      "label": "Texte pour \"Cartes non montrées:\"",
+      "default": "Cartes non montrées:"
+    },
+    {
+      "label": "Texte pour \"Score global\"",
+      "default": "Score global"
+    },
+    {
+      "label": "Texte pour \"Cartes completées\"",
+      "default": "Cartes que vous avez complétées:"
+    },
+    {
+      "label": "Texte pour \"Rounds complétés:\"",
+      "default": "Rounds complétés:"
+    },
+    {
+      "label": "Message lorsque toutes les cartes ont été apprises avec compétence",
+      "description": "@cards sera remplacé par le nombre de cartes dans la réserve. @max sera remplacé par le niveau de compétences maximal - 1.",
+      "default": "Bien joué! Vous avez réussi à avoir les @cards cartes correctes @max fois de suite!"
+    },
+    {
+      "label": "Texte de progression",
+      "description": "Les variables disponibles sont @card et @total.",
+      "default": "Carte @card sur @total"
+    },
+    {
+      "label": "Etiquette pour le devant de la carte",
+      "description": "Est utilisée par les technologies d'assistance pour plus d'accessibilité",
+      "default": "Le devant de la carte"
+    },
+    {
+      "label": "Etiquette pour le dos de la carte",
+      "description": "Est utilisée par les technologies d'assistance pour plus d'accessibilité",
+      "default": "Le dos de la carte"
+    },
+    {
+      "label": "Etiquette pour montrer le bouton Indice",
+      "default": "Montrer l'indice"
+    },
+    {
+      "label": "Message L'audio n'est pas supporté",
+      "default": "Votre navigateur ne supporte pas ce fichier audio"
+    },
+    {
+      "label": "Confirmer le redémarrage du dialogue",
+      "fields": [
+        {
+          "label": "Texte d'en-tête",
+          "default": "Recommencer?"
+        },
+        {
+          "label": "Contenu",
+          "default": "Toutes les progressions seront perdues. Êtes-vous sûr de vouloir recommencer?"
+        },
+        {
+          "label": "Libellé du bouton annuler",
+          "default": "Annuler"
+        },
+        {
+          "label": "Libellé du bouton de confirmation",
+          "default": "Recommencer"
+        }
+      ]
+    }
+  ]
+}

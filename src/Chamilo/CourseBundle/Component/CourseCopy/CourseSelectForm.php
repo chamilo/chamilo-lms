@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
@@ -209,10 +210,10 @@ class CourseSelectForm
             foreach ($forum_categories as $forum_category_id => $forum_category) {
                 echo '<li>';
                 echo '<label class="checkbox">';
-                echo '<input type="checkbox" 
-                    id="resource_'.RESOURCE_FORUMCATEGORY.'_'.$forum_category_id.'" 
-                    my_rel="'.$forum_category_id.'" 
-                    onclick="javascript:check_category(this);" 
+                echo '<input type="checkbox"
+                    id="resource_'.RESOURCE_FORUMCATEGORY.'_'.$forum_category_id.'"
+                    my_rel="'.$forum_category_id.'"
+                    onclick="javascript:check_category(this);"
                     name="resource['.RESOURCE_FORUMCATEGORY.']['.$forum_category_id.']" /> ';
                 $forum_category->show();
                 echo '</label>';
@@ -224,12 +225,12 @@ class CourseSelectForm
                     foreach ($my_forums as $forum_id => $forum) {
                         echo '<li>';
                         echo '<label class="checkbox">';
-                        echo '<input type="checkbox" 
-                            class="resource_forum" 
-                            id="resource_'.RESOURCE_FORUM.'_'.$forum_id.'" 
-                            onclick="javascript:check_forum(this);" 
-                            my_rel="'.$forum_id.'" 
-                            rel="'.$forum_category_id.'" 
+                        echo '<input type="checkbox"
+                            class="resource_forum"
+                            id="resource_'.RESOURCE_FORUM.'_'.$forum_id.'"
+                            onclick="javascript:check_forum(this);"
+                            my_rel="'.$forum_id.'"
+                            rel="'.$forum_category_id.'"
                             name="resource['.RESOURCE_FORUM.']['.$forum_id.']" />';
                         $forum->show();
                         echo '</label>';
@@ -241,13 +242,13 @@ class CourseSelectForm
                                 foreach ($my_forum_topics as $topic_id => $topic) {
                                     echo '<li>';
                                     echo '<label class="checkbox">';
-                                    echo '<input 
-                                        type="checkbox" 
-                                        id="resource_'.RESOURCE_FORUMTOPIC.'_'.$topic_id.'" 
-                                        onclick="javascript:check_topic(this);" class="resource_topic" 
-                                        forum_id="'.$forum_id.'"  
-                                        rel="'.$forum_id.'" 
-                                        cat_id="'.$forum_category_id.'" 
+                                    echo '<input
+                                        type="checkbox"
+                                        id="resource_'.RESOURCE_FORUMTOPIC.'_'.$topic_id.'"
+                                        onclick="javascript:check_topic(this);" class="resource_topic"
+                                        forum_id="'.$forum_id.'"
+                                        rel="'.$forum_id.'"
+                                        cat_id="'.$forum_category_id.'"
                                         name="resource['.RESOURCE_FORUMTOPIC.']['.$topic_id.']" />';
                                     $topic->show();
                                     echo '</label>';
@@ -291,9 +292,9 @@ class CourseSelectForm
         } else {
             if (!empty($hidden_fields['destination_session'])) {
                 echo '<br />
-                      <button 
-                        class="save" 
-                        type="submit" 
+                      <button
+                        class="save"
+                        type="submit"
                         onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset))."'".')) return false;" >'.
                     get_lang('Ok').'</button>';
             } else {
@@ -301,9 +302,9 @@ class CourseSelectForm
                     echo '<br /><button class="save" type="submit">'.get_lang('Ok').'</button>';
                 } else {
                     echo '<br />
-                          <button 
-                                class="save btn btn-primary" 
-                                type="submit" 
+                          <button
+                                class="save btn btn-primary"
+                                type="submit"
                                 onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.
                     get_lang('Ok').'</button>';
                 }
@@ -396,14 +397,23 @@ class CourseSelectForm
                             }
                         }
 
+                        if ($type == RESOURCE_QUIZ) {
+                            echo Display::return_message(
+                                get_lang(
+                                    'IfYourQuizHaveHotspotQuestionsIncludedYouShouldSelectTheImagesFromTheDocuments'
+                                ),
+                                'warning'
+                            );
+                        }
+
                         if ($showItems) {
                             echo '<div class="well">';
                             echo '<div class="btn-group">';
-                            echo "<a class=\"btn btn-default\" 
-                                        href=\"javascript: void(0);\" 
+                            echo "<a class=\"btn btn-default\"
+                                        href=\"javascript: void(0);\"
                                         onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All')."</a>";
-                            echo "<a class=\"btn btn-default\" 
-                                        href=\"javascript: void(0);\" 
+                            echo "<a class=\"btn btn-default\"
+                                        href=\"javascript: void(0);\"
                                         onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('None')."</a>";
                             echo '</div>';
                             echo '<ul class="list-backups-options">';
@@ -413,9 +423,9 @@ class CourseSelectForm
                                     // Event obj in 1.9.x in 1.10.x the class is CalendarEvent
                                     Resource::setClassType($resource);
                                     echo '<label class="checkbox">';
-                                    echo '<input 
-                                        type="checkbox" 
-                                        name="resource['.$type.']['.$id.']"  
+                                    echo '<input
+                                        type="checkbox"
+                                        name="resource['.$type.']['.$id.']"
                                         id="resource['.$type.']['.$id.']" />';
                                     $resource->show();
                                     echo '</label>';
@@ -449,9 +459,9 @@ class CourseSelectForm
                     switch ($type) {
                         case RESOURCE_QUIZQUESTION:
                             foreach ($resources as $id => $resource) {
-                                echo '<input 
-                                    type="hidden" 
-                                    name="resource['.RESOURCE_QUIZQUESTION.']['.$id.']" 
+                                echo '<input
+                                    type="hidden"
+                                    name="resource['.RESOURCE_QUIZQUESTION.']['.$id.']"
                                     id="resource['.RESOURCE_QUIZQUESTION.']['.$id.']" value="On" />';
                             }
                             break;
@@ -472,9 +482,9 @@ class CourseSelectForm
                     switch ($type) {
                         case RESOURCE_SCORM:
                             foreach ($resources as $id => $resource) {
-                                echo '<input 
-                                    type="hidden" 
-                                    name="resource['.RESOURCE_SCORM.']['.$id.']" 
+                                echo '<input
+                                    type="hidden"
+                                    name="resource['.RESOURCE_SCORM.']['.$id.']"
                                     id="resource['.RESOURCE_SCORM.']['.$id.']" value="On" />';
                             }
                             break;
@@ -531,7 +541,7 @@ class CourseSelectForm
                     }
 
                     $sql = 'SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
-                            FROM '.$table_doc.' d 
+                            FROM '.$table_doc.' d
                             INNER JOIN '.$table_prop.' p
                             ON (d.c_id = p.c_id)
                             WHERE
@@ -806,7 +816,7 @@ class CourseSelectForm
                 echo '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
             }
         }
-        echo '<br /><button class="save" type="submit" 
+        echo '<br /><button class="save" type="submit"
             onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.
             get_lang('Ok').'</button>';
         self::display_hidden_quiz_questions($course);

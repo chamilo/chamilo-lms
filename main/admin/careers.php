@@ -3,9 +3,6 @@
 
 use ChamiloSession as Session;
 
-/**
- *  @package chamilo.admin
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -27,15 +24,15 @@ $interbreadcrumb[] = [
     'name' => get_lang('CareersAndPromotions'),
 ];
 
-$action = isset($_GET['action']) ? $_GET['action'] : null;
+$action = $_GET['action'] ?? null;
 
 $check = Security::check_token('request');
 $token = Security::get_token();
 
-if ($action == 'add') {
+if ($action === 'add') {
     $interbreadcrumb[] = ['url' => 'careers.php', 'name' => get_lang('Careers')];
     $tool_name = get_lang('Add');
-} elseif ($action == 'edit') {
+} elseif ($action === 'edit') {
     $interbreadcrumb[] = ['url' => 'careers.php', 'name' => get_lang('Careers')];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
     $tool_name = get_lang('Edit');
@@ -80,7 +77,12 @@ $extra_params['height'] = 'auto';
 $diagramLink = '';
 $allow = api_get_configuration_value('allow_career_diagram');
 if ($allow) {
-    $diagramLink = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/career_diagram.php?id=\'+options.rowId+\'">'.get_lang('Diagram').'</a>';
+    $careerDiagramUrl = api_get_path(WEB_CODE_PATH).'admin/career_diagram.php';
+    if (api_get_configuration_value('use_career_external_id_as_identifier_in_diagrams')) {
+        $diagramLink = '<a href="'.$careerDiagramUrl.'?id=\'+rowObject[3]+\'">'.get_lang('Diagram').'</a>';
+    } else {
+        $diagramLink = '<a href="'.$careerDiagramUrl.'?id=\'+options.rowId+\'">'.get_lang('Diagram').'</a>';
+    }
 }
 
 // With this function we can add actions to the jgrid (edit, delete, etc)
@@ -100,7 +102,6 @@ if (api_is_platform_admin()) {
 
 $career = new Career();
 $content = '';
-
 $listUrl = api_get_self();
 
 // Action handling: Add
@@ -120,14 +121,12 @@ switch ($action) {
 
         // The validation or display
         if ($form->validate()) {
-            if ($check) {
-                $values = $form->exportValues();
-                $res = $career->save($values);
-                if ($res) {
-                    Display::addFlash(
-                        Display::return_message(get_lang('ItemAdded'), 'confirmation')
-                    );
-                }
+            $values = $form->exportValues();
+            $res = $career->save($values);
+            if ($res) {
+                Display::addFlash(
+                    Display::return_message(get_lang('ItemAdded'), 'confirmation')
+                );
             }
             header('Location: '.$listUrl);
             exit;
@@ -136,8 +135,7 @@ switch ($action) {
             $content .= '<a href="'.api_get_self().'">'.
                 Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
             $content .= '</div>';
-            $form->addElement('hidden', 'sec_token');
-            $form->setConstants(['sec_token' => $token]);
+            $form->protect();
             $content .= $form->returnForm();
         }
         break;
@@ -154,37 +152,35 @@ switch ($action) {
 
         // The validation or display
         if ($form->validate()) {
-            if ($check) {
-                $values = $form->exportValues();
-                $career->update_all_promotion_status_by_career_id($values['id'], $values['status']);
-                $old_status = $career->get_status($values['id']);
-                $res = $career->update($values);
+            $values = $form->exportValues();
+            $career->update_all_promotion_status_by_career_id($values['id'], $values['status']);
+            $old_status = $career->get_status($values['id']);
+            $res = $career->update($values);
 
-                $values['item_id'] = $values['id'];
-                $sessionFieldValue = new ExtraFieldValue('career');
-                $sessionFieldValue->saveFieldValues($values);
+            $values['item_id'] = $values['id'];
+            $sessionFieldValue = new ExtraFieldValue('career');
+            $sessionFieldValue->saveFieldValues($values);
 
-                if ($res) {
+            if ($res) {
+                Display::addFlash(
+                    Display::return_message(get_lang('CareerUpdated'), 'confirmation')
+                );
+                if ($values['status'] && !$old_status) {
                     Display::addFlash(
-                        Display::return_message(get_lang('CareerUpdated'), 'confirmation')
+                        Display::return_message(
+                            sprintf(get_lang('CareerXUnarchived'), $values['name']),
+                            'confirmation',
+                            false
+                        )
                     );
-                    if ($values['status'] && !$old_status) {
-                        Display::addFlash(
-                            Display::return_message(
-                                sprintf(get_lang('CareerXUnarchived'), $values['name']),
-                                'confirmation',
-                                false
-                            )
-                        );
-                    } elseif (!$values['status'] && $old_status) {
-                        Display::addFlash(
-                            Display::return_message(
-                                sprintf(get_lang('CareerXArchived'), $values['name']),
-                                'confirmation',
-                                false
-                            )
-                        );
-                    }
+                } elseif (!$values['status'] && $old_status) {
+                    Display::addFlash(
+                        Display::return_message(
+                            sprintf(get_lang('CareerXArchived'), $values['name']),
+                            'confirmation',
+                            false
+                        )
+                    );
                 }
             }
             header('Location: '.$listUrl);
@@ -193,8 +189,7 @@ switch ($action) {
             $content .= '<div class="actions">';
             $content .= '<a href="'.api_get_self().'">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
             $content .= '</div>';
-            $form->addElement('hidden', 'sec_token');
-            $form->setConstants(['sec_token' => $token]);
+            $form->protect();
             $content .= $form->returnForm();
         }
         break;

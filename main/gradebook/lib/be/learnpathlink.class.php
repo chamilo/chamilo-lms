@@ -6,8 +6,6 @@
  *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 class LearnpathLink extends AbstractLink
 {
@@ -65,7 +63,7 @@ class LearnpathLink extends AbstractLink
         $result = Database::query($sql);
         $number = Database::fetch_array($result, 'NUM');
 
-        return $number[0] != 0;
+        return 0 != $number[0];
     }
 
     /**
@@ -128,7 +126,7 @@ class LearnpathLink extends AbstractLink
                 }
             }
 
-            if ($rescount == 0) {
+            if (0 == $rescount) {
                 return [null, null];
             } else {
                 switch ($type) {
@@ -160,7 +158,7 @@ class LearnpathLink extends AbstractLink
                 $session_id
         ).'&gradebook=view';
 
-        if (!api_is_allowed_to_edit() || $this->calc_score(api_get_user_id()) == null) {
+        if (!api_is_allowed_to_edit() || null == $this->calc_score(api_get_user_id())) {
             $url .= '&action=view&lp_id='.$this->get_ref_id();
         } else {
             $url .= '&action=build&lp_id='.$this->get_ref_id();
@@ -199,7 +197,7 @@ class LearnpathLink extends AbstractLink
         $result = Database::query($sql);
         $number = Database::fetch_row($result, 'NUM');
 
-        return $number[0] != 0;
+        return 0 != $number[0];
     }
 
     public function get_type_name()

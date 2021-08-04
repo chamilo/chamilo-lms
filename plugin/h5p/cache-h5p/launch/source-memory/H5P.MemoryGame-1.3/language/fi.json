@@ -1,0 +1,121 @@
+{
+  "semantics": [
+    {
+      "widgets": [
+        {
+          "label": "Oletus"
+        }
+      ],
+      "label": "Kortit",
+      "entity": "kortti",
+      "field": {
+        "label": "Kortti",
+        "fields": [
+          {
+            "label": "Kuva"
+          },
+          {
+            "label": "Vaihtoehtoinen teksti kuvalle.",
+            "description": "Kuvaile tekstillä mitä kuvassa näkyy. Tämä teksti luetaan ruudunlukijasovelluksella henkilöille jotka käyttävät ko. sovelluksia."
+          },
+          {
+            "label": "Audioraita.",
+            "description": "Vapaaehtoinen äänitehoste joka soitetaan kun kortti käännetään."
+          },
+          {
+            "label": "Vastattava kuva",
+            "description": "Valinnainen kuva johon verrata korttia sen sijaan, että kortille etsitään toista samaa kuvaa pariksi."
+          },
+          {
+            "label": "Vaihtoehtoinen teksti kuvapareille.",
+            "description": "Kuvaile tekstillä mitä kuvassa näkyy. Tämä teksti luetaan ruudunlukijasovelluksella henkilöille jotka käyttävät ko. sovelluksia."
+          },
+          {
+            "label": "Vastaavien parien audioraita.",
+            "description": "Vapaaehtoinen äänitehoste joka soitetaan kun toinen kortti käännetään."
+          },
+          {
+            "label": "Selite",
+            "description": "Valinnainen lyhyt teksti, joka näytetään kun oikea pari on löydetty."
+          }
+        ]
+      }
+    },
+    {
+      "label": "Yleisasetukset",
+      "description": "Näillä valinnoilla voit muokata pelin asetuksia.",
+      "fields": [
+        {
+          "label": "Aseta kortit säännöllisesti",
+          "description": "Yrittää sovittaa kortit ruudukkomuotoon rivien sijaan."
+        },
+        {
+          "label": "Korttien lukumäärä",
+          "description": "Kun lukumäärä on suurempi kuin kaksi, annettu määrä kortteja arvotaan kaikista korteista pelattavaksi."
+        },
+        {
+          "label": "Salli Yritä uudelleen -painike pelin päätyttyä"
+        }
+      ]
+    },
+    {
+      "label": "Ulkoasu",
+      "description": "Hallinnoi pelin ulkoasua.",
+      "fields": [
+        {
+          "label": "Väriteema",
+          "description": "Valitse väri luodaksesi teeman pelille."
+        },
+        {
+          "label": "Kortin kääntöpuoli",
+          "description": "Mukauta korttien kääntöpuoli."
+        }
+      ]
+    },
+    {
+      "label": "Tekstit",
+      "fields": [
+        {
+          "label": "Kortteja käännetty",
+          "default": "Kortteja käännetty"
+        },
+        {
+          "label": "Aikaa kulunut",
+          "default": "Aikaa kulunut"
+        },
+        {
+          "label": "Palaute",
+          "default": "Hyvää työtä!"
+        },
+        {
+          "label": "Painikkeen Yritä uudelleen teksti",
+          "default": "Yritä uudelleen?"
+        },
+        {
+          "label": "Painikkeen Sulje teksti",
+          "default": "Sulje"
+        },
+        {
+          "label": "Pelin kuvaus",
+          "default": "Muistipeli. Löydä parit."
+        },
+        {
+          "label": "Peli päättynyt",
+          "default": "Kaikki parit löydetty."
+        },
+        {
+          "label": "Kortin yksilöllinen järjestysnumero",
+          "default": "Kortti %num:"
+        },
+        {
+          "label": "Kääntämätön",
+          "default": "Kääntämätön."
+        },
+        {
+          "label": "Pari löytynyt",
+          "default": "Pari löydetty."
+        }
+      ]
+    }
+  ]
+}

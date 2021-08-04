@@ -45,7 +45,7 @@ if (isset($_GET['action'])) {
                     $surveyId = $data['item_id'];
                     $surveyData = SurveyManager::get_survey($surveyId, 0, api_get_course_id());
                     if (!empty($surveyData)) {
-                        $filename = 'survey_results_'.$surveyId.'.xlsx';
+                        $filename = $surveyData['code'].'.xlsx';
                         $exportList[] = @SurveyUtil::export_complete_report_xls($surveyData, $filename, 0, true);
                     }
                 }
@@ -60,7 +60,7 @@ if (isset($_GET['action'])) {
                     DocumentManager::file_send_for_download(
                         $tempZipFile,
                         true,
-                        get_lang('Surveys').'-'.api_get_course_id().'-'.api_get_local_time().'.zip'
+                        get_lang('SurveysWordInASCII').'-'.api_get_course_id().'-'.api_get_local_time().'.zip'
                     );
                     unlink($tempZipFile);
                     exit;
@@ -105,10 +105,9 @@ if (isset($_GET['action'])) {
     }
 }
 
-/*	Header */
 $interbreadcrumb[] = ['url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups')];
 $origin = api_get_origin();
-if ($origin !== 'learnpath') {
+if ('learnpath' != $origin) {
     // So we are not in learnpath tool
     if (!api_is_allowed_in_course()) {
         api_not_allowed(true);
@@ -155,6 +154,6 @@ Display::return_icon('user.png', get_lang('GoTo').' '.get_lang('Users'), '', ICO
 echo Display::toolbarAction('actions', [$actions, GroupManager::getSearchForm()]);
 echo GroupManager::getOverview($courseId, $keyword);
 
-if ($origin !== 'learnpath') {
+if ('learnpath' !== $origin) {
     Display::display_footer();
 }

@@ -1,0 +1,116 @@
+{
+  "semantics": [
+    {
+      "label": "Consigne",
+      "description": "Expliquez ce que doit faire l'utilisateur.",
+      "placeholder": "Cliquer sur tous les verbes dans le texte ci-dessous."
+    },
+    {
+      "label": "Champ de texte",
+      "placeholder": "Voici une réponse exacte : *réponse*.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Les mots corrects sont marqués avec un astérisque (*) avant et après le mot.</li><li>Les astérisques peuvent être ajoutés dans les mots marqués en ajoutant un autre astérisque, * mot correct *** => mot correct *.</li><li>Seuls les mots peuvent être marqués comme corrects. Pas les phrases.</li></ul>",
+        "example": "Les mots corrects sont marqués comme ceci: *motcorrect *, un astérisque est écrit comme ceci: *motcorrect***."
+      }
+    },
+    {
+      "label": "Feedback général",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Par défaut"
+            }
+          ],
+          "label": "Définissez le feedback pour chaque intervalle de score",
+          "description": "Cliquez sur le bouton \"Ajoutez Intervalle\" pour ajouter autant d'intervalles que vous le souhaitez. Exemple: 0-20% Mauvais score, 21-91% Score moyen, 91-100% Score excellent !",
+          "entity": "intervalle",
+          "field": {
+            "fields": [
+              {
+                "label": "Intervalle de score"
+              },
+              {},
+              {
+                "label": "Feedback pour l'intervalle de score défini",
+                "placeholder": "Remplir le feedback"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Texte du bouton \"Vérifier\"",
+      "default": "Vérifier"
+    },
+    {
+      "label": "Texte du bouton \"Recommencer\"",
+      "default": "Recommencer"
+    },
+    {
+      "label": "Texte du bouton \"Voir la solution\"",
+      "default": "Voir la correction"
+    },
+    {
+      "label": "Options générales",
+      "description": "Ces options vous permettent de contrôler le déroulement de vos activités.",
+      "fields": [
+        {
+          "label": "Activer le bouton \"Recommencer\""
+        },
+        {
+          "label": "Activer le bouton \"Voir la solution\""
+        },
+        {
+          "label": "Activer le bouton \"Vérifier\""
+        },
+        {
+          "label": "Montrer le score en points",
+          "description": "Afficher les points obtenus pour chaque réponse."
+        }
+      ]
+    },
+    {
+      "label": "Texte de réponse correcte",
+      "default": "Réponse correcte !",
+      "description": "Texte pour indiquer qu'une réponse est bonne"
+    },
+    {
+      "label": "Texte de réponse incorrecte",
+      "default": "Réponse incorrecte !",
+      "description": "Texte pour indiquer qu'une réponse est mauvaise"
+    },
+    {
+      "label": "Texte de réponse manquée",
+      "default": "Absence de réponse !",
+      "description": "Texte pour indiquer qu'une réponse manque"
+    },
+    {
+      "label": "Description pour la solution d'affichage",
+      "default": "L'activité a été mise à jour pour afficher la solution.",
+      "description": "Ce texte indique à l'utilisateur que l'activité a été mise à jour avec la solution."
+    },
+    {
+      "label": "Représentation textuelle du panneau du score pour les utilisateurs de la sythèse vocale",
+      "default": "Vous avez :num points sur un total de :total"
+    },
+    {
+      "label": "Label for the full readable text for assistive technologies",
+      "default": "Full readable text"
+    },
+    {
+      "label": "Label for the text where words can be marked for assistive technologies",
+      "default": "Full text where words can be marked"
+    },
+    {
+      "label": "Solution mode header for assistive technologies",
+      "default": "Solution mode"
+    },
+    {
+      "label": "Checking mode header for assistive technologies",
+      "default": "Checking mode"
+    }
+  ]
+}

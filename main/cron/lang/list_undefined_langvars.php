@@ -1,4 +1,5 @@
-<?php /* For licensing terms, see /license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Cron script to list used, but undefined, language variables.
  *
@@ -7,7 +8,7 @@
 /**
  * Includes and declarations.
  */
-die();
+exit();
 require_once __DIR__.'/../../inc/global.inc.php';
 $path = api_get_path(SYS_LANG_PATH).'english';
 ini_set('memory_limit', '128M');
@@ -41,7 +42,9 @@ foreach ($files as $file) {
     $lines = file($file);
     foreach ($lines as $line) {
         $myterms = [];
-        $res = preg_match_all('/get_lang\(\'(\\w*)\'\)/', $line, $myterms);
+        // Find terms but ignore those starting with ->get_lang(), which are
+        // for plugins
+        $res = preg_match_all('/(?<!-\>)get_lang\(\'(\\w*)\'\)/', $line, $myterms);
         if ($res > 0) {
             foreach ($myterms[1] as $term) {
                 if (!isset($defined_terms[$term]) && !isset($defined_terms['lang'.$term])) {
@@ -65,7 +68,7 @@ foreach ($files as $file) {
 }
 //$undefined_terms = array_flip($undefined_terms);
 if (count($undefined_terms) < 1) {
-    die("No missing terms<br />\n");
+    exit("No missing terms<br />\n");
 } else {
     echo "The following terms were nowhere to be found: <br />\n<table>";
 }

@@ -11,5 +11,6 @@
 {% block body %}
     {{ content }}
 {% endblock %}
+</section>
 </body>
 </html>

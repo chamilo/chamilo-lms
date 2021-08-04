@@ -8,8 +8,6 @@ use ChamiloSession as Session;
  * the controllers depend on the current action.
  *
  * @author Christian Fasanando <christian1827@gmail.com>
- *
- * @package chamilo.dashboard
  */
 $cidReset = true;
 

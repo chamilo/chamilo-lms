@@ -51,12 +51,12 @@ if ($form->validate()) {
 $content = $form->returnForm();
 $content .= '
 <div class="table-responsive">
-    <table class="table table-bordered table-condensed">
+    <table class="table table-hover table-striped table-bordered table-condensed">
         <tr>
             <th>User</th>
             <th>URL</th>
             <th></th>
-        </tr>        
+        </tr>
 ';
 
 foreach ($list as $item) {

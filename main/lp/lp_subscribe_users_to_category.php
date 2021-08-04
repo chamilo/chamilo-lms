@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Repository\CourseRepository;
@@ -6,6 +7,7 @@ use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CLpCategoryUser;
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\Common\Collections\Criteria;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -17,19 +19,22 @@ if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }
 
-$categoryId = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$categoryId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 if (empty($categoryId)) {
     api_not_allowed(true);
 }
 
 $subscriptionSettings = learnpath::getSubscriptionSettings();
-if ($subscriptionSettings['allow_add_users_to_lp_category'] == false) {
+if (false == $subscriptionSettings['allow_add_users_to_lp_category']) {
     api_not_allowed(true);
 }
 
+$allowUserGroups = api_get_configuration_value('allow_lp_subscription_to_usergroups');
 $courseId = api_get_course_int_id();
 $courseCode = api_get_course_id();
+$sessionId = api_get_session_id();
+$currentUser = api_get_user_entity(api_get_user_id());
 
 $em = Database::getManager();
 
@@ -58,23 +63,19 @@ $form->addLabel('', $message);
 // Group list
 $groupList = \CourseManager::get_group_list_of_course(
     api_get_course_id(),
-    api_get_session_id(),
+    $sessionId,
     1
 );
 $groupChoices = array_column($groupList, 'name', 'id');
 
-/** @var Session $session */
-$session = null;
-if (!empty($sessionId)) {
-    $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
-}
+$session = api_get_session_entity($sessionId);
 
 /** @var CourseRepository $courseRepo */
 $courseRepo = $em->getRepository('ChamiloCoreBundle:Course');
 /** @var ItemPropertyRepository $itemRepo */
 $itemRepo = $em->getRepository('ChamiloCourseBundle:CItemProperty');
 
-$course = $courseRepo->find($courseId);
+$course = api_get_course_entity($courseId);
 
 // Subscribed groups to a LP
 $subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
@@ -85,7 +86,7 @@ $subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
 );
 
 $selectedGroupChoices = [];
-/** @var CItemProperty $itemProperty */
+/** @var \Chamilo\CourseBundle\Entity\CItemProperty $itemProperty */
 foreach ($subscribedGroupsInLp as $itemProperty) {
     $selectedGroupChoices[] = $itemProperty->getGroup()->getId();
 }
@@ -100,6 +101,131 @@ $groupMultiSelect = $form->addElement(
 // submit button
 $form->addButtonSave(get_lang('Save'));
 
+// UserGroup
+if ($allowUserGroups) {
+    $formUserGroup = new FormValidator('lp_edit_usergroup', 'post', $url);
+    $formUserGroup->addHidden('usergroup_form', 1);
+
+    $userGroup = new UserGroup();
+    $conditions = [];
+    $conditions['where'] = [' usergroup.course_id = ? ' => $courseId];
+    $groups = $userGroup->getUserGroupInCourse($conditions);
+    $allOptions = array_column($groups, 'name', 'id');
+    $items = $userGroup->getGroupsByLpCategory($categoryId, $courseId, $sessionId);
+
+    $selectedUserGroupChoices = [];
+    if (!empty($items)) {
+        foreach ($items as $data) {
+            if (isset($allOptions[$data['usergroup_id']])) {
+                $selectedUserGroupChoices[] = $data['usergroup_id'];
+            }
+        }
+    }
+
+    $userGroupMultiSelect = $formUserGroup->addElement(
+        'advmultiselect',
+        'usergroups',
+        get_lang('Classes'),
+        $allOptions
+    );
+
+    $formUserGroup->setDefaults(['usergroups' => $selectedUserGroupChoices]);
+    $formUserGroup->addButtonSave(get_lang('Save'));
+    $sessionCondition = api_get_session_condition($sessionId, true);
+    if ($formUserGroup->validate()) {
+        $values = $formUserGroup->getSubmitValues();
+        $table = Database::get_course_table(TABLE_LP_CATEGORY_REL_USERGROUP);
+        if (isset($values['usergroups'])) {
+            $userGroups = $values['usergroups'];
+            foreach ($selectedUserGroupChoices as $userGroupId) {
+                $userGroupId = (int) $userGroupId;
+                if (!in_array($userGroupId, $userGroups)) {
+                    $sql = "DELETE FROM $table
+                            WHERE
+                                c_id = $courseId AND
+                                lp_category_id = $categoryId AND
+                                usergroup_id = $userGroupId
+                                $sessionCondition
+                                ";
+                    Database::query($sql);
+                    $userList = $userGroup->get_users_by_usergroup($userGroupId);
+                    foreach ($userList as $userId) {
+                        $user = api_get_user_entity($userId);
+                        $criteria = Criteria::create()->where(
+                            Criteria::expr()->eq('user', $user)
+                        );
+                        $userCategory = $category->getUsers()->matching($criteria)->first();
+                        if ($userCategory) {
+                            $category->removeUsers($userCategory);
+                        }
+                    }
+                }
+            }
+
+            foreach ($userGroups as $userGroupId) {
+                $userGroupId = (int) $userGroupId;
+                $sql = "SELECT id FROM $table
+                        WHERE
+                            c_id = $courseId AND
+                            lp_category_id = $categoryId AND
+                            usergroup_id = $userGroupId
+                            $sessionCondition
+                        ";
+                $result = Database::query($sql);
+
+                if (0 == Database::num_rows($result)) {
+                    $params = [
+                        'lp_category_id' => $categoryId,
+                        'c_id' => $courseId,
+                        'usergroup_id' => $userGroupId,
+                        'created_at' => api_get_utc_datetime(),
+                    ];
+                    if (!empty($sessionId)) {
+                        $params['session_id'] = $sessionId;
+                    }
+                    Database::insert($table, $params);
+                }
+            }
+
+            $groups = $userGroup->getGroupsByLpCategory($categoryId, $courseId, $sessionId);
+            $userList = [];
+            foreach ($groups as $groupId) {
+                $userList = $userGroup->get_users_by_usergroup($groupId);
+                foreach ($userList as $userId) {
+                    $user = api_get_user_entity($userId);
+                    if ($user) {
+                        $categoryUser = new CLpCategoryUser();
+                        $categoryUser->setUser($user);
+                        $category->addUser($categoryUser);
+                    }
+                }
+            }
+
+            $em->persist($category);
+            $em->flush();
+            Display::addFlash(Display::return_message(get_lang('Updated')));
+        } else {
+            foreach ($category->getUsers() as $userCategory) {
+                $category->removeUsers($userCategory);
+            }
+
+            // Clean all
+            $sql = "DELETE FROM $table
+                    WHERE
+                        c_id = $courseId AND
+                        lp_category_id = $categoryId
+                        $sessionCondition
+                    ";
+            Database::query($sql);
+            $em->persist($category);
+            $em->flush();
+        }
+
+        header("Location: $url");
+        exit;
+    }
+}
+
 $defaults = [];
 if (!empty($selectedGroupChoices)) {
     $defaults['groups'] = $selectedGroupChoices;
@@ -107,26 +233,34 @@ if (!empty($selectedGroupChoices)) {
 $form->setDefaults($defaults);
 
 // Getting subscribe users to the course.
-$subscribedUsers = $courseRepo->getSubscribedStudents($course);
-$subscribedUsers = $subscribedUsers->getQuery();
-$subscribedUsers = $subscribedUsers->execute();
-
-// Getting all users in a nice format.
 $choices = [];
-/** @var User $user */
-foreach ($subscribedUsers as $user) {
-    $choices[$user->getUserId()] = $user->getCompleteNameWithClasses();
+if (empty($sessionId)) {
+    $subscribedUsers = $courseRepo->getSubscribedStudents($course);
+    $subscribedUsers = $subscribedUsers->getQuery();
+    $subscribedUsers = $subscribedUsers->execute();
+
+    // Getting all users in a nice format.
+    /** @var User $user */
+    foreach ($subscribedUsers as $user) {
+        $choices[$user->getId()] = $user->getCompleteNameWithClasses();
+    }
+} else {
+    $users = CourseManager::get_user_list_from_course_code($course->getCode(), $sessionId);
+    foreach ($users as $user) {
+        $choices[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
+    }
 }
 
 // Getting subscribed users to a category.
 $subscribedUsersInCategory = $category->getUsers();
+
 $selectedChoices = [];
 foreach ($subscribedUsersInCategory as $item) {
     $selectedChoices[] = $item->getUser()->getId();
 }
 
 // Building the form for Users
-$formUsers = new FormValidator('lp_edit', 'post', $url);
+$formUsers = new FormValidator('lp_edit_users', 'post', $url);
 $formUsers->addElement('hidden', 'user_form', 1);
 $formUsers->addLabel('', $message);
 
@@ -145,11 +279,7 @@ if (!empty($selectedChoices)) {
 
 $formUsers->setDefaults($defaults);
 
-// Building the form for Groups
 $tpl = new Template();
-
-$currentUser = api_get_user_entity(api_get_user_id());
-
 if ($formUsers->validate()) {
     $values = $formUsers->getSubmitValues();
 
@@ -172,15 +302,23 @@ if ($formUsers->validate()) {
         foreach ($users as $userId) {
             $categoryUser = new CLpCategoryUser();
             $user = UserManager::getRepository()->find($userId);
-            $categoryUser->setUser($user);
-            $category->addUser($categoryUser);
+            if ($user) {
+                $categoryUser->setUser($user);
+                $category->addUser($categoryUser);
+            }
         }
 
-        $em->merge($category);
+        $em->persist($category);
         $em->flush();
         Display::addFlash(Display::return_message(get_lang('Updated')));
     }
 
+    header("Location: $url");
+    exit;
+}
+
+if ($form->validate()) {
+    $values = $form->getSubmitValues();
     // Subscribing groups
     $groups = isset($values['groups']) ? $values['groups'] : [];
     $groupForm = isset($values['group_form']) ? $values['group_form'] : [];
@@ -199,12 +337,18 @@ if ($formUsers->validate()) {
 
     header("Location: $url");
     exit;
-} else {
-    $headers = [
-        get_lang('SubscribeUsersToLpCategory'),
-        get_lang('SubscribeGroupsToLpCategory'),
-    ];
-    $tabs = Display::tabs($headers, [$formUsers->toHtml(), $form->toHtml()]);
-    $tpl->assign('content', $tabs);
-    $tpl->display_one_col_template();
 }
+
+$headers = [
+    get_lang('SubscribeUsersToLpCategory'),
+    get_lang('SubscribeGroupsToLpCategory'),
+];
+$items = [$formUsers->toHtml(), $form->toHtml()];
+
+if ($allowUserGroups) {
+    $headers[] = get_lang('SubscribeClassesToLpCategory');
+    $items[] = $formUserGroup->toHtml();
+}
+$tabs = Display::tabs($headers, $items);
+$tpl->assign('content', $tabs);
+$tpl->display_one_col_template();

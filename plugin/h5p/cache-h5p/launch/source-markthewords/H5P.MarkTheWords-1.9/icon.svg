@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #9a5bb4;
+      }
+
+      .cls-2 {
+        opacity: 0.15;
+      }
+
+      .cls-3 {
+        fill: #231f20;
+      }
+
+      .cls-4 {
+        fill: #fff;
+      }
+
+      .cls-5 {
+        fill: #79aad3;
+      }
+
+      .cls-6 {
+        fill: #b0afad;
+      }
+
+      .cls-7 {
+        fill: none;
+      }
+    </style>
+  </defs>
+  <title>mark the words</title>
+  <g id="Layer_2" data-name="Layer 2">
+    <g id="mark_the_words" data-name="mark the words">
+      <g>
+        <rect class="cls-1" x="134.44" y="26.71" width="139.13" height="173.57"/>
+        <g>
+          <g class="cls-2">
+            <rect class="cls-3" x="150.44" y="43.38" width="112.94" height="146.07"/>
+          </g>
+          <rect class="cls-4" x="147.53" y="40.46" width="112.94" height="146.07"/>
+        </g>
+        <path class="cls-5" d="M200.13,75.11H174.58a1.17,1.17,0,0,1-1.17-1.17V69.28a1.35,1.35,0,0,1,1.17-1.36h25.56a1.35,1.35,0,0,1,1.17,1.36v4.66A1.17,1.17,0,0,1,200.13,75.11Z"/>
+        <path class="cls-6" d="M168.44,75.11h-6.58a1.17,1.17,0,0,1-1.17-1.17V69.28a1.35,1.35,0,0,1,1.17-1.36h6.58a1.35,1.35,0,0,1,1.17,1.36v4.66A1.17,1.17,0,0,1,168.44,75.11Z"/>
+        <path class="cls-6" d="M220.13,75.11H206.41a1.17,1.17,0,0,1-1.17-1.17V69.28a1.35,1.35,0,0,1,1.17-1.36h13.73a1.35,1.35,0,0,1,1.17,1.36v4.66A1.17,1.17,0,0,1,220.13,75.11Z"/>
+        <path class="cls-6" d="M248.56,75.11H226.88a1.17,1.17,0,0,1-1.17-1.17V69.28a1.35,1.35,0,0,1,1.17-1.36h21.68a1.35,1.35,0,0,1,1.17,1.36v4.66A1.17,1.17,0,0,1,248.56,75.11Z"/>
+        <rect class="cls-6" x="160.69" y="89.46" width="12.72" height="7.19" rx="1.17" ry="1.17"/>
+        <rect class="cls-6" x="176.87" y="89.46" width="9.94" height="7.19" rx="1.17" ry="1.17"/>
+        <rect class="cls-6" x="211.36" y="89.46" width="19.68" height="7.19" rx="1.17" ry="1.17"/>
+        <rect class="cls-6" x="234.61" y="89.46" width="7.56" height="7.19" rx="1.17" ry="1.17"/>
+        <rect class="cls-5" x="190.31" y="89.46" width="16.9" height="7.19" rx="1.17" ry="1.17"/>
+        <rect class="cls-6" x="223.33" y="111" width="9.94" height="7.19" rx="1.17" ry="1.17"/>
+        <rect class="cls-6" x="160.69" y="111" width="15.12" height="7.19" rx="1.17" ry="1.17"/>
+        <rect class="cls-6" x="179.58" y="111" width="39.68" height="7.19" rx="1.17" ry="1.17"/>
+        <rect class="cls-6" x="160.69" y="132.53" width="8.92" height="7.19" rx="1.17" ry="1.17"/>
+        <rect class="cls-6" x="187.92" y="132.53" width="13.94" height="7.19" rx="1.17" ry="1.17"/>
+        <rect class="cls-6" x="205.79" y="132.53" width="24.19" height="7.19" rx="1.17" ry="1.17"/>
+        <rect class="cls-6" x="233.55" y="132.53" width="14.02" height="7.19" rx="1.17" ry="1.17"/>
+        <rect class="cls-5" x="173.41" y="132.53" width="10.99" height="7.19" rx="1.17" ry="1.17"/>
+        <rect class="cls-6" x="160.69" y="154.07" width="23.71" height="7.19" rx="1.17" ry="1.17"/>
+        <rect class="cls-6" x="187.76" y="154.07" width="5.07" height="7.19" rx="1.17" ry="1.17"/>
+        <rect class="cls-5" x="195.92" y="154.07" width="29.79" height="7.19" rx="1.17" ry="1.17"/>
+      </g>
+      <rect class="cls-7" width="400" height="225"/>
+    </g>
+  </g>
+</svg>

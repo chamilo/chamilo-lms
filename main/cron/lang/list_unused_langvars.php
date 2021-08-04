@@ -1,4 +1,5 @@
-<?php /* For licensing terms, see /license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Cron script to list unused, but defined, language variables.
  *
@@ -7,7 +8,7 @@
 /**
  * Includes and declarations.
  */
-die();
+exit();
 require_once __DIR__.'/../../inc/global.inc.php';
 $path = api_get_path(SYS_LANG_PATH).'english';
 ini_set('memory_limit', '128M');
@@ -110,7 +111,7 @@ foreach ($files as $file) {
 // defined terms, and this should prove the concept that there are much
 // more variables than what we really use
 if (count($usedTerms) < 1) {
-    die("No used terms<br />\n");
+    exit("No used terms<br />\n");
 } else {
     echo "The following terms were defined but never used: <br />\n<table>";
 }

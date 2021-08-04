@@ -22,17 +22,18 @@ class Auth
     /**
      * This function get all the courses in the particular user category.
      *
+     * @param bool $hidePrivate
+     *
      * @return array
      */
-    public function getCoursesInCategory()
+    public function getCoursesInCategory($hidePrivate = true)
     {
         $user_id = api_get_user_id();
 
-        // table definitions
         $TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
-        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
+        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true, $hidePrivate);
 
         $sql = "SELECT
                     course.id as real_id,
@@ -102,11 +103,10 @@ class Auth
      */
     public function move_course($direction, $course2move, $category)
     {
-        // definition of tables
         $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
         $current_user_id = api_get_user_id();
-        $all_user_courses = $this->getCoursesOfUser($current_user_id);
+        $all_user_courses = CourseManager::getCoursesByUserCourseCategory($current_user_id);
 
         // we need only the courses of the category we are moving in
         $user_courses = [];
@@ -122,7 +122,7 @@ class Auth
                 // source_course is the course where we clicked the up or down icon
                 $source_course = $course;
                 // target_course is the course before/after the source_course (depending on the up/down icon)
-                if ($direction == 'up') {
+                if ('up' == $direction) {
                     $target_course = $user_courses[$count - 1];
                 } else {
                     $target_course = $user_courses[$count + 1];
@@ -186,7 +186,7 @@ class Auth
                 // source_course is the course where we clicked the up or down icon
                 $source_category = $userCategories[$category2move];
                 // target_course is the course before/after the source_course (depending on the up/down icon)
-                if ($direction === 'up') {
+                if ('up' == $direction) {
                     if (isset($categories[$key - 1])) {
                         $target_category = $userCategories[$categories[$key - 1]['id']];
                     }
@@ -302,16 +302,25 @@ class Auth
      *
      * @return bool True if it success
      */
-    public function remove_user_from_course($course_code)
+    public function remove_user_from_course($course_code, $sessionId = 0)
     {
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
         // protect variables
         $current_user_id = api_get_user_id();
         $course_code = Database::escape_string($course_code);
-        $result = true;
 
         $courseInfo = api_get_course_info($course_code);
+
+        if (empty($courseInfo) || empty($current_user_id)) {
+            return false;
+        }
+
+        // Check if course can be unsubscribe.
+        if ('1' !== $courseInfo['unsubscribe']) {
+            return false;
+        }
+
         $courseId = $courseInfo['real_id'];
 
         // we check (once again) if the user is not course administrator
@@ -324,11 +333,15 @@ class Auth
                     status='1' ";
         $result_check = Database::query($sql);
         $number_of_rows = Database::num_rows($result_check);
+
+        $result = true;
         if ($number_of_rows > 0) {
             $result = false;
         }
 
-        CourseManager::unsubscribe_user($current_user_id, $course_code);
+        if ($result) {
+            CourseManager::unsubscribe_user($current_user_id, $course_code, $sessionId);
+        }
 
         return $result;
     }
@@ -366,7 +379,7 @@ class Auth
         $rs = Database::query($sql);
 
         $result = false;
-        if (Database::num_rows($rs) == 0) {
+        if (0 == Database::num_rows($rs)) {
             $sql = "INSERT INTO $table (user_id, title,sort)
                     VALUES ('".$current_user_id."', '".api_htmlentities(
                     $category_title,

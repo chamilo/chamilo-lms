@@ -15,7 +15,6 @@ class GetCourseLpProgressTest extends V2TestCase
     public function testCourseList()
     {
         $result = $this->dataArray();
-        var_dump($result);
         $this->assertIsArray($result);
 
         //$result = $this->dataArray();

@@ -1,0 +1,147 @@
+{
+  "semantics": [
+    {
+      "label": "Recurs",
+      "fields": [
+        {
+          "label": "Tipus",
+          "description": "Recursos opcionals per mostrar al damunt de la pregunta."
+        },
+        {
+          "label": "Desactivar el zoom per la imatge"
+        }
+      ]
+    },
+    {
+      "label": "Pregunta"
+    },
+    {
+      "label": "Resposta correcta",
+      "options": [
+        {
+          "label": "Cert"
+        },
+        {
+          "label": "Fals"
+        }
+      ]
+    },
+    {
+      "label": "Traduccions de la interfície d'usuari per preguntes Cert/Fals",
+      "fields": [
+        {
+          "label": "Etiqueta pel botó \"Cert\"",
+          "default": "Cert"
+        },
+        {
+          "label": "Etiqueta pel botó \"Fals\"",
+          "default": "Fals"
+        },
+        {
+          "label": "Text de retroacció",
+          "default": "Has aconseguit @score de @total punts",
+          "description": "Text de retroacció, variables disponibles: @score i @total. Per exemple: 'Has aconseguit @score de @total punts'"
+        },
+        {
+          "label": "Text pel botó \"Verificar\"",
+          "default": "Verificar"
+        },
+        {
+          "label": "Text pel botó \"Mostrar solució\"",
+          "default": "Mostrar solució"
+        },
+        {
+          "label": "Text pel botó \"Tornar-ho a provar\"",
+          "default": "Tornar-ho a provar"
+        },
+        {
+          "label": "La resposta no és correcta",
+          "default": "La resposta no és correcta"
+        },
+        {
+          "label": "Resposta correcta",
+          "default": "Resposta correcta"
+        },
+        {
+          "label": "Textual representation of the score bar for those using a readspeaker",
+          "default": "You got :num out of :total points"
+        }
+      ]
+    },
+    {
+      "label": "Opcions de comportament",
+      "description": "Aquestes opcions et permetran controlar com es comporta la tasca.",
+      "fields": [
+        {
+          "label": "Activa el botó \"Tornar-ho a provar\""
+        },
+        {
+          "label": "Activa el botó \"Mostrar solució\""
+        },
+        {
+          "label": "Enable \"Check\" button"
+        },
+        {
+          "label": "Mostra el diàleg de confirmació a \"Verificar\""
+        },
+        {
+          "label": "Mostra el diàleg de confirmació de \"Tornar-ho a provar\""
+        },
+        {
+          "label": "Comprovar la resposta automàticament",
+          "description": "Tingues en compte que l'accessibilitat se'n ressentirà si esculls aquesta opció"
+        },
+        {
+          "label": "Text de retroalimentació per resposta correcta",
+          "description": "Això sobre escriurà el text per defecte. Variables disponibles: @score i @total"
+        },
+        {
+          "label": "Text de retroalimentació per resposta incorrecta",
+          "description": "Això sobre escriurà el text per defecte. Variables disponibles: @score i @total"
+        }
+      ]
+    },
+    {
+      "label": "Comprovar diàleg de confirmació",
+      "fields": [
+        {
+          "label": "Títol",
+          "default": "Ja has fet?"
+        },
+        {
+          "label": "Cos de text",
+          "default": "N'estàs segur de voler acabar?"
+        },
+        {
+          "label": "Etiqueta del botó \"Cancel•lar\"",
+          "default": "Cancel·lar"
+        },
+        {
+          "label": "Etiqueta del botó \"Confirmar\"",
+          "default": "Acabar"
+        }
+      ]
+    },
+    {
+      "label": "Diàleg de la confirmació \"Tornar-ho a provar\"",
+      "fields": [
+        {
+          "label": "Títol",
+          "default": "Vols tornar-ho a provar?"
+        },
+        {
+          "label": "Cos de text",
+          "default": "N'estàs segur de voler-ho tornar a provar?"
+        },
+        {
+          "label": "Etiqueta del botó \"Cancel•lar\"",
+          "default": "Cancel·lar"
+        },
+        {
+          "label": "Etiqueta del botó \"Confirmar\"",
+          "default": "Confirmar"
+        }
+      ]
+    }
+  ]
+}

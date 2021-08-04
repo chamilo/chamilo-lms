@@ -7,7 +7,7 @@
             <tr>
                 <th>{{ 'Title'| get_lang }}</th>
                 <th>{{ 'Type'| get_lang }}</th>
-                <th>{{ 'DayDiff'| get_lang }}</th>
+                <th>{{ 'DaysDifference'| get_lang }}</th>
                 <th>{{ 'Actions'| get_lang }}</th>
             </tr>
 

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -17,8 +18,6 @@
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @copyright Ghent University
- *
- *  @package chamilo.forum
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -73,7 +72,7 @@ if ($origin == 'group') {
 }
 
 // Display the header.
-if ($origin == 'learnpath') {
+if ('learnpath' == $origin) {
     Display::display_reduced_header();
 } else {
     Display::display_header($nameTools);
@@ -89,6 +88,6 @@ Event::event_access_tool(TOOL_FORUM);
 forum_search();
 
 // Footer
-if ($origin != 'learnpath') {
+if ('learnpath' != $origin) {
     Display :: display_footer();
 }

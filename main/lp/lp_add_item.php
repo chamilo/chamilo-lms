@@ -4,16 +4,11 @@
 use ChamiloSession as Session;
 
 /**
- * This is a learning path creation and player tool in Chamilo - previously
- * learnpath_handler.php.
- *
  * @author Patrick Cool
  * @author Denes Nagy
  * @author Roan Embrechts, refactoring and code cleaning
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update
  * @author Julio Montoya  - Improving the list of templates
- *
- * @package chamilo.learnpath
  */
 $this_section = SECTION_COURSES;
 
@@ -50,7 +45,7 @@ function load_cbo(id, previousId) {
     if (!id) {
         return false;
     }
-    
+
     previousId = previousId || 'previous';
 
     var cbo = document.getElementById(previousId);
@@ -193,8 +188,20 @@ $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
 })
 </script>
 <?php
+$extraField = [];
+$field = new ExtraField('user');
+$authorLpField = $field->get_handler_field_info_by_field_variable('authorlp');
+if ($authorLpField != null) {
+    $extraField['authorlp'] = $authorLpField;
+}
 
-echo $learnPath->build_action_menu();
+echo $learnPath->build_action_menu(false,
+    true,
+    false,
+    true,
+    '',
+    $extraField
+);
 echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';
 echo $learnPath->return_new_tree(null, true);

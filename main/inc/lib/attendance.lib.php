@@ -37,8 +37,6 @@ class Attendance
     /**
      * Get the total number of attendance inside current course and current session.
      *
-     * @param int $active
-     *
      * @return int
      *
      * @see SortableTable#get_total_number_of_items()
@@ -60,8 +58,8 @@ class Attendance
 
         $sql = "SELECT COUNT(att.id) AS total_number_of_items
                 FROM $tbl_attendance att
-                WHERE 
-                      c_id = $course_id AND 
+                WHERE
+                      c_id = $course_id AND
                       active <> 2 $active_plus $condition_session  ";
         /*$active = (int) $active;
         if ($active === 1 || $active === 0) {
@@ -172,8 +170,8 @@ class Attendance
 
         while ($attendance = Database::fetch_row($res)) {
             $session_star = '';
-            if (api_get_session_id() == $attendance[6]) {
-                $session_star = api_get_session_image(api_get_session_id(), $user_info['status']);
+            if ($session_id == $attendance[6]) {
+                $session_star = api_get_session_image($session_id, $user_info['status']);
             }
 
             if ($attendance[5] == 1) {
@@ -183,13 +181,26 @@ class Attendance
                 ) || api_is_drh();
                 if (api_is_allowed_to_edit(null, true) || $isDrhOfCourse) {
                     // Link to edit
-                    $attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$student_param.'">'.$attendance[1].'</a>'.$session_star;
+                    $attendance[1] = '<a 
+                        href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$student_param.'">'.
+                        Security::remove_XSS($attendance[1]).
+                        '</a>'.
+                        $session_star;
                 } else {
                     // Link to view
-                    $attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list_no_edit&attendance_id='.$attendance[0].$student_param.'">'.$attendance[1].'</a>'.$session_star;
+                    $attendance[1] = '<a 
+                        href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list_no_edit&attendance_id='.$attendance[0].$student_param.'">'.
+                        Security::remove_XSS($attendance[1]).
+                        '</a>'.
+                        $session_star;
                 }
             } else {
-                $attendance[1] = '<a class="muted" href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$student_param.'">'.$attendance[1].'</a>'.$session_star;
+                $attendance[1] = '<a 
+                    class="muted" 
+                    href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$student_param.'">'.
+                    Security::remove_XSS($attendance[1]).
+                    '</a>'.
+                    $session_star;
             }
 
             if ($attendance[5] == 1) {
@@ -200,9 +211,7 @@ class Attendance
 
             $attendance[3] = '<center>'.$attendance[3].'</center>';
             if (api_is_allowed_to_edit(null, true)) {
-                $actions = '';
-                $actions .= '<center>';
-
+                $actions = '<center>';
                 if (api_is_platform_admin()) {
                     $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].'">'.
                         Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>&nbsp;';
@@ -270,7 +279,7 @@ class Attendance
                 $attendances[] = [
                     $attendance[0],
                     $attendance[1],
-                    $attendance[2],
+                    Security::remove_XSS($attendance[2]),
                     $attendance[3],
                     $actions,
                 ];
@@ -279,7 +288,7 @@ class Attendance
                 $attendances[] = [
                     $attendance[0],
                     $attendance[1],
-                    $attendance[2],
+                    Security::remove_XSS($attendance[2]),
                     $attendance[3],
                 ];
             }
@@ -1216,26 +1225,38 @@ class Attendance
     }
 
     /**
-     * Get registered users' attendance sheet inside current course.
+     * Get registered users' attendance sheet inside current course or course by id.
      *
-     * @param int $attendanceId
-     * @param int $user_id      for showing data for only one user (optional)
-     * @param int $groupId
+     * @param int      $attendanceId
+     * @param int      $user_id      for showing data for only one user (optional)
+     * @param int      $groupId
+     * @param int      $course_id    if id = 0 get the current course
+     * @param DateTime $startDate    Filter atttendance sheet with a start date
+     * @param DateTime $endDate      Filter atttendance sheet with a end date
      *
      * @return array users attendance sheet data
      */
     public function get_users_attendance_sheet(
         $attendanceId,
         $user_id = 0,
-        $groupId = 0
+        $groupId = 0,
+        $course_id = 0,
+        DateTime $startDate = null,
+        DateTime $endDate = null
     ) {
+        //Get actual course or by course_id
+        $course_id = (0 == $course_id) ? api_get_course_int_id() : (int) $course_id;
         $tbl_attendance_sheet = Database::get_course_table(TABLE_ATTENDANCE_SHEET);
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $attendance_calendar = $this->get_attendance_calendar(
             $attendanceId,
             'all',
             null,
-            $groupId
+            $groupId,
+            true,
+            $course_id,
+            $startDate,
+            $endDate
         );
         $calendar_ids = [];
         // get all dates from calendar by current attendance
@@ -1243,7 +1264,16 @@ class Attendance
             $calendar_ids[] = $cal['id'];
         }
 
-        $course_id = api_get_course_int_id();
+        $whereDate = '';
+        if (!empty($startDate)) {
+            $whereDate .= " AND cal.date_time >= '".$startDate->format('Y-m-d H:i:s')."'";
+        }
+        if (!empty($endDate)) {
+            $whereDate .= " AND cal.date_time <= '".$endDate->format('Y-m-d H:i:s')."'";
+        }
+
+        // moved at start of this function
+        // $course_id = api_get_course_int_id();
 
         $data = [];
         if (empty($user_id)) {
@@ -1280,6 +1310,7 @@ class Attendance
                             cal.c_id =  $course_id AND
                             att.user_id = '$user_id' AND
                             att.attendance_calendar_id IN (".implode(',', $calendar_ids).")
+                            $whereDate
                         ORDER BY date_time";
                 $res = Database::query($sql);
                 if (Database::num_rows($res) > 0) {
@@ -1433,13 +1464,16 @@ class Attendance
     }
 
     /**
-     * Get all attendance calendar data inside current attendance.
+     * Get all attendance calendar data inside current attendance or by course id.
      *
-     * @param int    $attendanceId
-     * @param string $type
-     * @param int    $calendar_id
-     * @param int    $groupId
-     * @param bool   $showAll      = false show group calendar items or not
+     * @param int      $attendanceId
+     * @param string   $type
+     * @param int      $calendar_id
+     * @param int      $groupId
+     * @param bool     $showAll      = false show group calendar items or not
+     * @param int      $course_id
+     * @param DateTime $startDate    Filter calendar with a start date
+     * @param DateTime $endDate      Filter calendar with a end date
      *
      * @return array attendance calendar data
      */
@@ -1448,16 +1482,27 @@ class Attendance
         $type = 'all',
         $calendar_id = null,
         $groupId = 0,
-        $showAll = false
+        $showAll = false,
+        $course_id = 0,
+        DateTime $startDate = null,
+        DateTime $endDate = null
     ) {
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $tbl_acrg = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
         $attendanceId = intval($attendanceId);
-        $course_id = api_get_course_int_id();
-
+        $course_id = (0 == $course_id) ? api_get_course_int_id() : (int) $course_id;
+        $whereDate = '';
+        if (!empty($startDate)) {
+            $whereDate .= " AND c.date_time >= '".$startDate->format('Y-m-d H:i:s')."'";
+        }
+        if (!empty($endDate)) {
+            $whereDate .= " AND c.date_time <= '".$endDate->format('Y-m-d H:i:s')."'";
+        }
         if ($showAll) {
             $sql = "SELECT * FROM $tbl_attendance_calendar c
-                    WHERE c_id = $course_id AND attendance_id = '$attendanceId'";
+                    WHERE c_id = $course_id
+                      AND attendance_id = '$attendanceId'
+                        $whereDate";
         } else {
             $sql = "SELECT * FROM $tbl_attendance_calendar c
                     WHERE
@@ -1467,6 +1512,7 @@ class Attendance
                             SELECT calendar_id FROM $tbl_acrg
                             WHERE c_id = $course_id AND group_id != 0 AND group_id IS NOT NULL
                         )
+                        $whereDate
                     ";
         }
 
@@ -2167,7 +2213,7 @@ class Attendance
         $users = $data['users'];
         $results = $data['results'];
 
-        $table = new HTML_Table(['class' => 'data_table']);
+        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
         $row = 0;
         $column = 0;
         foreach ($headers as $header) {
@@ -2220,7 +2266,7 @@ class Attendance
         $users = $data['users'];
         $results = $data['results'];
 
-        $table = new HTML_Table(['class' => 'data_table']);
+        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
         $table->setHeaderContents(0, 0, get_lang('User'));
         $table->setHeaderContents(0, 1, get_lang('Date'));
 
@@ -2255,5 +2301,209 @@ class Attendance
         ];
         $pdf = new PDF('A4', null, $params);
         $pdf->html_to_pdf_with_template($tableToString);
+    }
+
+    /**
+     * Return all course for a student between dates and order by key date (Y-m-d).
+     *
+     * @param int       $studentId
+     * @param \DateTime $startDate
+     * @param \DateTime $endDate
+     * @param bool      $orderDesc
+     *
+     * @return array
+     */
+    public function getCoursesWithAttendance(
+        $studentId = 0,
+        DateTime $startDate = null,
+        DateTime $endDate = null,
+        $orderDesc = false
+    ) {
+        // Lang variables
+        $presentString = get_lang('Present');
+        //$absentString = get_lang('Absent');
+        $absentString = '-';
+        // Lang variables
+        $attendanceLib = new Attendance();
+        $data = [];
+        /*
+         $specialCourses = CourseManager::returnSpecialCourses(
+            $studentId, false, false
+        );
+         */
+        $courses = CourseManager::returnCourses(
+            $studentId,
+            false,
+            false
+        );
+        /* Get course with (in_category) and without (not_category) category */
+        foreach ($courses as $courseData) {
+            /*
+             * $coursesKey can be in_category or not_category for courses
+             * */
+            $totalCoursesNoCategory = count($courseData);
+            for ($i = 0; $i < $totalCoursesNoCategory; $i++) {
+                $courseItem = $courseData[$i];
+                $courseId = $courseItem['course_id'];
+
+                /* Get all attendance by courses*/
+                $attenances = $attendanceLib->get_attendances_list($courseId);
+                $temp = [];
+                $sheetsProccessed = [];
+                $tempDate = [];
+                foreach ($attenances as $attendanceData) {
+                    $attendanceId = $attendanceData['id'];
+                    $sheets = $attendanceLib->get_users_attendance_sheet(
+                        $attendanceId,
+                        $studentId,
+                        0,
+                        $courseId,
+                        $startDate,
+                        $endDate
+                    );
+
+                    $sheetsProccessed[] = [];
+                    foreach ($sheets as $sheetData) {
+                        $totalb = count($sheetData);
+                        $tempDate = [];
+                        for ($ii = 0; $ii < $totalb; $ii++) {
+                            $attendancesProccess = $sheetData[$ii];
+                            if (!empty($attendancesProccess)) {
+                                $dateTemp = $attendancesProccess['0'];
+                                $attendancesProccess[0] = $attendancesProccess[1];
+                                $attendancesProccess[1] = $dateTemp;
+
+                                $attendancesProccess[2] = $courseItem['title'];
+                                $attendancesProccess['courseTitle'] = $courseItem['title'];
+
+                                $attendancesProccess[3] = $courseItem['real_id'];
+                                $attendancesProccess['courseId'] = $courseItem['real_id'];
+
+                                $attendancesProccess[4] = $attendanceData['name'];
+                                $attendancesProccess['attendanceName'] = $attendanceData['name'];
+                                $attendancesProccess['courseCode'] = $courseItem['course_code'];
+
+                                $attendancesProccess[5] = $attendanceData['id'];
+                                $attendancesProccess['attendanceId'] = $attendanceData['id'];
+                                if ($attendancesProccess['presence'] == 1) {
+                                    $attendancesProccess['presence'] = $presentString;
+                                    $attendancesProccess[0] = 1;
+                                } else {
+                                    $attendancesProccess['presence'] = $absentString;
+                                    $attendancesProccess[0] = 0;
+                                }
+                                $attendancesProccess['session'] = 0;
+                                $attendancesProccess['sessionName'] = '';
+                                $tempDate[] = $attendancesProccess;
+                                $dateKey = new DateTime($dateTemp);
+                                /*
+                                $attendancesProccess['teacher'] = '';
+                                if(isset($courseItem['teachers']) and isset($courseItem['teachers'][0])){
+                                    $attendancesProccess['teacher'] = $courseItem['teachers'][0]['fullname'];
+                                }
+                                */
+                                $data[$dateKey->format('Y-m-d')][] = $attendancesProccess;
+                            }
+                        }
+                    }
+                    $sheetsProccessed[] = $tempDate;
+                    $temp[] = $sheetsProccessed;
+                }
+                $courses['not_category'][$i]['attendanceSheet'] = $temp;
+            }
+        }
+
+        /* Sessions */
+        $studentId = (int) $studentId;
+        $sql = "
+            SELECT
+                session_id,
+                c_id
+            FROM
+                session_rel_course_rel_user
+            WHERE
+                user_id = $studentId";
+
+        $rs = Database::query($sql);
+        // get info from sessions
+        while ($row = Database::fetch_array($rs, 'ASSOC')) {
+            $courseId = $row['c_id'];
+            $sessionId = $row['session_id'];
+            $courseItem = api_get_course_info_by_id($courseId);
+
+            $attenances = $attendanceLib->get_attendances_list(
+                $courseId,
+                $sessionId
+            );
+            $temp = [];
+            $sheetsProccessed = [];
+            $tempDate = [];
+            foreach ($attenances as $attendanceData) {
+                $attendanceId = $attendanceData['id'];
+                $sheets = $attendanceLib->get_users_attendance_sheet(
+                    $attendanceId,
+                    $studentId,
+                    0,
+                    $courseId,
+                    $startDate,
+                    $endDate
+                );
+
+                $sheetsProccessed[] = [];
+                foreach ($sheets as $sheetData) {
+                    $totalb = count($sheetData);
+                    $tempDate = [];
+                    for ($ii = 0; $ii < $totalb; $ii++) {
+                        $work = $sheetData[$ii];
+                        $attendancesProccess = $work;
+                        if (!empty($attendancesProccess)) {
+                            $dateTemp = $attendancesProccess['0'];
+                            $attendancesProccess[0] = $attendancesProccess[1];
+                            $attendancesProccess[1] = $dateTemp;
+                            $attendancesProccess[2] = $courseItem['title'];
+                            $attendancesProccess['courseTitle'] = $courseItem['title'];
+                            $attendancesProccess[3] = $courseItem['real_id'];
+                            $attendancesProccess['courseId'] = $courseItem['real_id'];
+                            $attendancesProccess[4] = $attendanceData['name'];
+                            $attendancesProccess['attendanceName'] = $attendanceData['name'];
+                            $attendancesProccess[5] = $attendanceData['id'];
+                            $attendancesProccess['attendanceId'] = $attendanceData['id'];
+                            $attendancesProccess['courseCode'] = $courseItem['official_code'];
+                            if ($attendancesProccess['presence'] == 1) {
+                                $attendancesProccess['presence'] = $presentString;
+                                $attendancesProccess[0] = 1;
+                            } else {
+                                $attendancesProccess['presence'] = $absentString;
+                                $attendancesProccess[0] = 0;
+                            }
+                            $attendancesProccess['session'] = $sessionId;
+                            $attendancesProccess['sessionName'] = api_get_session_name($sessionId);
+
+                            $tempDate[] = $attendancesProccess;
+                            $dateKey = new DateTime($dateTemp);
+                            /*
+                            $attendancesProccess['teacher'] = '';
+                            if(isset($courseItem['tutor_name']) ){
+                                $attendancesProccess['teacher'] = $courseItem['tutor_name'];
+                            }
+                            */
+                            $data[$dateKey->format('Y-m-d')][] = $attendancesProccess;
+                        }
+                    }
+                }
+                $sheetsProccessed[] = $tempDate;
+                $temp[] = $sheetsProccessed;
+            }
+            $courses['session'][$i]['attendanceSheet'] = $temp;
+        }
+
+        /* Order desc by date,  by default */
+        if ($orderDesc == true) {
+            ksort($data);
+        } else {
+            krsort($data);
+        }
+
+        return $data;
     }
 }

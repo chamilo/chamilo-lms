@@ -24,6 +24,13 @@
                     {{ 'webservices.png'|img(22, 'ConfigSettingsForTool'|get_plugin_lang('ImsLtiPlugin')) }}
                 </a>
             {% endif %}
+
+            {% if not is_child %}
+                <a href="{{ _p.web_plugin }}ims_lti/multiply.php?{{ url_params }}">
+                    {{ 'multiplicate_survey.png'|img(22, 'AddInCourses'|get_plugin_lang('ImsLtiPlugin')) }}
+                </a>
+            {% endif %}
+
             <a href="{{ _p.web_plugin }}ims_lti/edit.php?{{ url_params }}">
                 {{ 'edit.png'|img(22, 'Edit'|get_lang) }}
             </a>

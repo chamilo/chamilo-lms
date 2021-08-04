@@ -6,7 +6,7 @@ require_once 'dropbox_init.inc.php';
 
 api_protect_course_script();
 
-if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+if (0 != api_get_session_id() && !api_is_allowed_to_session_edit(false, true)) {
     api_not_allowed(true);
 }
 

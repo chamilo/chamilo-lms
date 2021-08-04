@@ -18,7 +18,6 @@ cache:
   directories:
     - $HOME/.composer/cache/files
 php:
-  - 7.0
   - 7.1
   - 7.2
   - 7.3
@@ -70,7 +69,7 @@ before_install:
   # Install Chash, a database, and then install Chamilo
   - git clone https://github.com/chamilo/chash
   - cd chash
-  - git checkout v0.1.1
+  - git checkout 0.2.x
   - composer install
   - php -d phar.readonly=0 createPhar.php
   - chmod +x chash.phar
@@ -104,7 +103,7 @@ script:
 #  - chromedriver --version
   - cd tests/behat
   - pwd
-  - travis_wait 45 ../../vendor/behat/behat/bin/behat -v
+  - travis_wait 45 ../../vendor/behat/behat/bin/behat -vv
   # - sudo cat /var/log/apache2/$VHOST_URL-access.log
 
 after_failure:

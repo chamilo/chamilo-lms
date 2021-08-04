@@ -1,0 +1,136 @@
+{
+  "semantics": [
+    {
+      "label": "Zereginaren deskribapena",
+      "description": "Deskribatu zereginaren irtenbidea aurkitzeko modua.",
+      "default": "Arrastatu hitzak dagozkien kutxetara"
+    },
+    {
+      "label": "Testua",
+      "placeholder": "*Oslo* Norvegiako hiruburua da, *Stockholm* Suediako hiriburua da eta *Kopenhagen* Danimarkako hiriburua da. Hiru hiri *Eskandinavia:Europako iparraldeko* penintsulan daude.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Jaregin daitezkeen hitzak edo esaldiak gehitu dira asterisko  (*) bat aurretik eta beste bat atzetik dutela bere kokaleku egokianin.</li><li>Gehitzen ahal dituzu laguntzak, horien aurretik bi puntu (:) jarrita.</li><li>Hutsune bakoitzak hitz/esaldi zuzen bakarra dago.</li><li>Gehitzen ahal duzu ataza burutu ondoren ikusiko diren feedbackak.     . Erabili '\\+' erantzun zuzenen feedbackarako eta '\\-' erantzun okerretarako.</li></ul>",
+        "example": "H5P edukia editatu daiteke *nabigatzailez:Zer aplikazio mota da Chrome?*. </br> H5P edukia *interaktiboa\\+Asmatu duzu! \\-Ez da zuzena, saiatu berroro!* da."
+      }
+    },
+    {
+      "label": "Feedback orokorra",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Lehenetsia"
+            }
+          ],
+          "label": "Definitu feedback pertsonalizatuak puntuazio tarte bakoitzerako",
+          "description": "Klikatu \"Gehitu tartea\" botoia gehitzeko behar haina tarte. Adibidez: 0-%20 Puntuazio txarra, &21-%90 Tarteko puntuazioa, %91-%100 Puntuazio bikaina!",
+          "entity": "tartea",
+          "field": {
+            "fields": [
+              {
+                "label": "Puntuazio tartea"
+              },
+              {},
+              {
+                "label": "Definitutako puntuazio tarterako feedbacka",
+                "placeholder": "Bete feedbacka"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "\"Egiaztatu\" botoirako testua",
+      "default": "Egiaztatu"
+    },
+    {
+      "label": "\"Saiatu berriro\" botoiaren testua",
+      "default": "Saiatu berriro"
+    },
+    {
+      "label": "\"Erakutsi erantzuna\" botoiaren testua",
+      "default": "Erakutsi erantzuna"
+    },
+    {
+      "label": "Jaregiteko zona numeratuaren etiketa",
+      "default": "Jaregiteko zona @index.",
+      "description": "Erabilgarritasunerako etiketa, non testu irakurgailuak irakurriko du jaregin zonen aurkibidea. Erabiltzen den aldagaia: @index"
+    },
+    {
+      "label": "Hutsik dagoen jJaregin zonaren etiketa",
+      "default": "@index jaregin zona hutsik dago.",
+      "description": "Erabilgarritasunerako etiketa, non testu irakurgailuak irakurriko du jaregin zona hutsik dagoela"
+    },
+    {
+      "label": "Jaregin zona dauka etiketa",
+      "default": "@index jaregin zonak @draggable arrastagarria dauka.",
+      "description": "Erabilgarritasunerako etiketa, non testu irakurgailuak irakurriko du jaregin zonak arrastagarri bat daukala"
+    },
+    {
+      "label": "Elementu arrastagarrien etiketa",
+      "default": "@count etik @index garren arrastagarria.",
+      "description": "Erabilgarritasunerako etiketa, non testu irakurgailuak irakurriko du hori elementu arrastagarri bat dela. Erabiltzen dituen aldagaiak: @index, @count"
+    },
+    {
+      "label": "Erakutsi argibidea botoiaren etiketa",
+      "default": "Erakutsi argibidea",
+      "description": "Erabilgarritasunerako etiketa, non testu irakurgailuak irakurtzen du testua laguntza irakurri aurretik"
+    },
+    {
+      "label": "Erantzun zuzenetarako irakurgailuaren testua",
+      "default": "Zuzena!"
+    },
+    {
+      "label": "Erantzun okerretarako irakurgailuaren testua",
+      "default": "Erantzun okerra!"
+    },
+    {
+      "label": "Erabiltzaileak jaregiteko elementua berrezartzeko egiaztapena",
+      "default": "Berrezarri jaregiteko elementua"
+    },
+    {
+      "label": "Erabiltzaileak jaregiteko elementua berrezartzeko egiaztapenaren deskripzioa",
+      "default": "Ziur zaude jaregin zona hau berrezarri nahi duzula?"
+    },
+    {
+      "label": "Erabilgarritasunerako etiketa, non testu irakurgailuak adierazten du arrastea hasi dela",
+      "default": "Arrastagarria helduta."
+    },
+    {
+      "label": "Erabilgarritasunerako etiketa, non testu irakurgailuak adierazten du arrastea bertan behera geratu dela",
+      "default": "Arrastea bertan behera geratu da."
+    },
+    {
+      "label": "Erabilgarritasunerako etiketa, non testu irakurgailuak adierazten du testua erantzun zuzena dela",
+      "default": "Erantzun zuzena:"
+    },
+    {
+      "label": "Erantzun zuzen eta okerren feedbacka duen panelaren goiburua",
+      "default": "Feedbacka"
+    },
+    {
+      "label": "Portaera ezarpenak.",
+      "description": "Aukera hauen bidez kontrolatu ahal izango duzu zereginaren portaera.",
+      "fields": [
+        {
+          "label": "Aktibatu \"Saiatu berriro\""
+        },
+        {
+          "label": "Aktibatu \"Erakutsi erantzuna\" botoia"
+        },
+        {
+          "label": "Aktibatu \"Egiaztatu\" botoia"
+        },
+        {
+          "label": "Berehalako feedbacka"
+        }
+      ]
+    },
+    {
+      "label": "Puntuazio barraren testu adierazpena irakurgailua erabiltzen dutenentzat",
+      "default": ":total puntutik :num lortu dituzu"
+    }
+  ]
+}

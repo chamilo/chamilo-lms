@@ -5,6 +5,18 @@
                 <div class="form-group">
                     <span class="fa fa-microphone fa-5x fa-fw" aria-hidden="true"></span>
                     <span class="sr-only">{{ 'RecordAudio'|get_lang }}</span>
+
+                    <div id="timer" style="display: none">
+                        <h2>
+                            <div class="label label-danger">
+                                <span id="hour">00</span>
+                                <span class="divider">:</span>
+                                <span id="minute">00</span>
+                                <span class="divider">:</span>
+                                <span id="second">00</span>
+                            </div>
+                        </h2>
+                    </div>
                 </div>
                 <input type="hidden" name="audio_title" id="audio-title-rtc" value="{{ audio_title }}">
             </div>

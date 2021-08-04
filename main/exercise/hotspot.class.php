@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -9,8 +10,6 @@
  * extending the class question
  *
  * @author Eric Marguin
- *
- * @package chamilo.exercise
  */
 class HotSpot extends Question
 {
@@ -103,5 +102,14 @@ class HotSpot extends Question
     public function processAnswersCreation($form, $exercise)
     {
         // nothing
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function return_header(Exercise $exercise, $counter = null, $score = [])
+    {
+        return parent::return_header($exercise, $counter, $score)
+            .'<table><tr><td><table class="table">';
     }
 }

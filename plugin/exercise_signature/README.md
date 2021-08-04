@@ -1,0 +1,1 @@
+Students can sign exercise results.

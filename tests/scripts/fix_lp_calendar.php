@@ -1,6 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
+exit;
 require __DIR__ . '/../../main/inc/global.inc.php';
 
 $extraField = new ExtraField('lp_item');

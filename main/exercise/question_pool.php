@@ -55,9 +55,9 @@ if (!empty($fromExercise)) {
 $nameTools = get_lang('QuestionPool');
 $interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_lang('Exercises')];
 
-if (!empty($objExercise->id)) {
+if (!empty($objExercise->iid)) {
     $interbreadcrumb[] = [
-        'url' => 'admin.php?exerciseId='.$objExercise->id.'&'.api_get_cidreq(),
+        'url' => 'admin.php?exerciseId='.$objExercise->iid.'&'.api_get_cidreq(),
         'name' => $objExercise->selectTitle(true),
     ];
 }
@@ -109,6 +109,9 @@ if ($is_allowedToEdit) {
         if ($objQuestionTmp) {
             // deletes the question from all exercises
             $objQuestionTmp->delete();
+
+            // solving the error that when deleting a question from the question pool it is not displaying all questions
+            $exerciseId = null;
         }
         // destruction of the Question object
         unset($objQuestionTmp);
@@ -237,7 +240,7 @@ if (isset($_REQUEST['action'])) {
                         $objQuestionTmp = Question::read($questionId);
                         // if the question exists
                         if ($objQuestionTmp) {
-                            if ($objExercise->hasQuestion($questionId) === false) {
+                            if (false === $objExercise->hasQuestion($questionId)) {
                                 $objExercise->addToList($questionId);
                                 $objQuestionTmp->addToList($fromExercise);
                             }
@@ -308,7 +311,7 @@ if (isset($fromExercise) && $fromExercise > 0) {
 }
 echo '</div>';
 
-if ($displayMessage != '') {
+if ('' != $displayMessage) {
     echo Display::return_message($displayMessage, 'confirm');
 }
 
@@ -357,7 +360,7 @@ foreach ($course_list as $item) {
     $courseInfo = api_get_course_info_by_id($courseItemId);
     $course_select_list[$courseItemId] = '';
     if ($courseItemId == api_get_course_int_id()) {
-        $course_select_list[$courseItemId] = ">&nbsp;&nbsp;&nbsp;&nbsp;";
+        $course_select_list[$courseItemId] = '>&nbsp;&nbsp;&nbsp;&nbsp;';
     }
     $course_select_list[$courseItemId] .= $courseInfo['title'];
 }
@@ -385,7 +388,7 @@ $exercise_list = ExerciseLib::get_all_exercises_for_course_id(
     false
 );
 
-if ($exercise_id_changed == 1) {
+if (1 == $exercise_id_changed) {
     reset_menu_lvl_type();
 }
 
@@ -396,16 +399,16 @@ $my_exercise_list['-1'] = get_lang('OrphanQuestions');
 $titleSavedAsHtml = api_get_configuration_value('save_titles_as_html');
 if (is_array($exercise_list)) {
     foreach ($exercise_list as $row) {
-        $my_exercise_list[$row['id']] = '';
-        if ($row['id'] == $fromExercise && $selected_course == api_get_course_int_id()) {
-            $my_exercise_list[$row['id']] = ">&nbsp;&nbsp;&nbsp;&nbsp;";
+        $my_exercise_list[$row['iid']] = '';
+        if ($row['iid'] == $fromExercise && $selected_course == api_get_course_int_id()) {
+            $my_exercise_list[$row['iid']] = ">&nbsp;&nbsp;&nbsp;&nbsp;";
         }
 
         $exerciseTitle = $row['title'];
         if ($titleSavedAsHtml) {
             $exerciseTitle = strip_tags(api_html_entity_decode(trim($exerciseTitle)));
         }
-        $my_exercise_list[$row['id']] .= $exerciseTitle;
+        $my_exercise_list[$row['iid']] .= $exerciseTitle;
     }
 }
 
@@ -436,7 +439,7 @@ if (!empty($_course)) {
             }
             $new_question_list[$key] = get_lang($item[1]);
         } else {
-            if ($key == HOT_SPOT_DELINEATION) {
+            if (HOT_SPOT_DELINEATION == $key) {
                 continue;
             }
             $new_question_list[$key] = get_lang($item[1]);
@@ -623,7 +626,7 @@ function getQuestions(
     if (!empty($fromExercise)) {
         $currentCourseId = api_get_course_int_id();
         $currentExerciseCondition = "
-            AND qu.id NOT IN (
+            AND qu.iid NOT IN (
                 SELECT question_id FROM $TBL_EXERCISE_QUESTION
                 WHERE exercice_id = $fromExercise AND c_id = $currentCourseId
             )";
@@ -639,18 +642,18 @@ function getQuestions(
             $from = ", $TBL_COURSE_REL_CATEGORY crc ";
             $where .= " AND
                     crc.c_id = $selected_course AND
-                    crc.question_id = qu.id AND
+                    crc.question_id = qu.iid AND
                     crc.category_id = $courseCategoryId";
         }
-        if (isset($exerciseLevel) && $exerciseLevel != -1) {
-            $where .= ' AND level='.$exerciseLevel;
+        if (isset($exerciseLevel) && -1 != $exerciseLevel) {
+            $where .= ' AND level = '.$exerciseLevel;
         }
         if (isset($answerType) && $answerType > 0) {
-            $where .= ' AND type='.$answerType;
+            $where .= ' AND type = '.$answerType;
         }
 
         if (!empty($questionId)) {
-            $where .= ' AND qu.iid='.$questionId;
+            $where .= ' AND qu.iid = '.$questionId;
         }
 
         if (!empty($description)) {
@@ -658,10 +661,10 @@ function getQuestions(
         }
 
         $select = 'DISTINCT
-                    id,
-                    question,
-                    type,
-                    level,
+                    qu.iid,
+                    qu.question,
+                    qu.type,
+                    qu.level,
                     qt.exercice_id exerciseId';
         if ($getCount) {
             $select = 'count(qu.iid) as count';
@@ -670,13 +673,12 @@ function getQuestions(
                 FROM
                     $TBL_EXERCISE_QUESTION qt
                     INNER JOIN $TBL_QUESTIONS qu
-                    ON qt.question_id = qu.id
+                    ON qt.question_id = qu.iid
                     $from
                     {$efConditions['from']}
                 WHERE
                     qt.exercice_id = $exerciseId AND
-                    qt.c_id = $selected_course  AND
-                    qu.c_id = $selected_course
+                    qt.c_id = $selected_course
                     $where
                     $currentExerciseCondition
                     {$efConditions['where']}
@@ -689,12 +691,12 @@ function getQuestions(
         $from = '';
         if (isset($courseCategoryId) && $courseCategoryId > 0) {
             $from = " INNER JOIN $TBL_COURSE_REL_CATEGORY crc
-                      ON crc.question_id = q.id AND crc.c_id = q.c_id ";
+                      ON crc.question_id = ex.iid ";
             $level_where .= " AND
                     crc.c_id = $selected_course AND
                     crc.category_id = $courseCategoryId";
         }
-        if (isset($exerciseLevel) && $exerciseLevel != -1) {
+        if (isset($exerciseLevel) && -1 != $exerciseLevel) {
             $level_where = ' AND level='.$exerciseLevel;
         }
         $answer_where = '';
@@ -703,11 +705,11 @@ function getQuestions(
         }
 
         if (!empty($questionId)) {
-            $answer_where .= ' AND q.iid='.$questionId;
+            $answer_where .= ' AND ex.iid = '.$questionId;
         }
 
         if (!empty($description)) {
-            $answer_where .= " AND q.description LIKE '%$description%'";
+            $answer_where .= " AND ex.description LIKE '%$description%'";
         }
 
         $select = ' qu.*, r.exercice_id exerciseId  ';
@@ -720,13 +722,13 @@ function getQuestions(
                     SELECT $select
                     FROM $TBL_QUESTIONS qu
                     INNER JOIN $TBL_EXERCISE_QUESTION r
-                    ON (qu.c_id = r.c_id AND qu.id = r.question_id)
+                    ON qu.iid = r.question_id
                     INNER JOIN $TBL_EXERCISES ex
-                    ON (ex.id = r.exercice_id AND ex.c_id = r.c_id)
+                    ON ex.iid = r.exercice_id
                     $from
                     {$efConditions['from']}
                     WHERE
-                        ex.c_id = '$selected_course' AND
+                        ex.c_id = $selected_course AND
                         ex.active = '-1'
                         $level_where
                         $answer_where
@@ -737,11 +739,11 @@ function getQuestions(
                     SELECT $select
                     FROM $TBL_QUESTIONS qu
                     LEFT OUTER JOIN $TBL_EXERCISE_QUESTION r
-                    ON (qu.c_id = r.c_id AND qu.id = r.question_id)
+                    ON qu.iid = r.question_id
                     $from
                     {$efConditions['from']}
                     WHERE
-                        qu.c_id = '$selected_course' AND
+                        qu.c_id = $selected_course AND
                         r.question_id is null
                         $level_where
                         $answer_where
@@ -752,11 +754,11 @@ function getQuestions(
                         SELECT $select
                         FROM $TBL_QUESTIONS qu
                         INNER JOIN $TBL_EXERCISE_QUESTION r
-                        ON (qu.c_id = r.c_id AND qu.id = r.question_id)
+                        ON qu.iid = r.question_id
                         $from
                         {$efConditions['from']}
                         WHERE
-                            r.c_id = '$selected_course' AND
+                            r.c_id = $selected_course AND
                             (r.exercice_id = '-1' OR r.exercice_id = '0')
                             $level_where
                             $answer_where
@@ -776,30 +778,30 @@ function getQuestions(
             $from = ", $TBL_COURSE_REL_CATEGORY crc ";
             $filter .= " AND
                         crc.c_id = $selected_course AND
-                        crc.question_id = qu.id AND
+                        crc.question_id = qu.iid AND
                         crc.category_id = $courseCategoryId";
         }
-        if (isset($exerciseLevel) && $exerciseLevel != -1) {
-            $filter .= ' AND level='.$exerciseLevel.' ';
+        if (isset($exerciseLevel) && -1 != $exerciseLevel) {
+            $filter .= ' AND level = '.$exerciseLevel.' ';
         }
         if (isset($answerType) && $answerType > 0) {
-            $filter .= ' AND qu.type='.$answerType.' ';
+            $filter .= ' AND qu.type = '.$answerType.' ';
         }
 
         if (!empty($questionId)) {
-            $filter .= ' AND qu.iid='.$questionId;
+            $filter .= ' AND qu.iid = '.$questionId;
         }
 
         if (!empty($description)) {
             $filter .= " AND qu.description LIKE '%$description%'";
         }
 
-        if ($session_id == -1 || empty($session_id)) {
+        if (-1 == $session_id || empty($session_id)) {
             $session_id = 0;
         }
-        $sessionCondition = api_get_session_condition($session_id, true, 'q.session_id');
+        $sessionCondition = api_get_session_condition($session_id, true, 'ex.session_id');
 
-        $select = 'qu.id, question, qu.type, level, q.session_id, qt.exercice_id exerciseId  ';
+        $select = 'qu.iid, question, qu.type, level, ex.session_id, qt.exercice_id exerciseId  ';
         if ($getCount) {
             $select = 'count(qu.iid) as count';
         }
@@ -808,18 +810,17 @@ function getQuestions(
         $sql = "SELECT DISTINCT
                     $select
                 FROM
-                $TBL_QUESTIONS as qu,
-                $TBL_EXERCISE_QUESTION as qt,
-                $TBL_EXERCISES as q
+                $TBL_QUESTIONS as qu
+                INNER JOIN $TBL_EXERCISE_QUESTION as qt
+                ON qu.iid = qt.question_id
+                INNER JOIN $TBL_EXERCISES as ex
+                ON ex.iid = qt.exercice_id
                 {$efConditions['from']}
                 $from
                 WHERE
-                    qu.c_id = $selected_course AND
                     qt.c_id = $selected_course AND
-                    q.c_id = $selected_course AND
-                    qu.id = qt.question_id
-                    $sessionCondition AND
-                    q.id = qt.exercice_id
+                    ex.c_id = $selected_course
+                    $sessionCondition
                     $filter
                     $currentExerciseCondition
                     {$efConditions['where']}
@@ -962,6 +963,8 @@ if ($fromExercise <= 0) {
         $actionIcon1 = 'add';
         $actionIcon2 = '';
         $questionTagA = 1;
+    } elseif (true === api_get_configuration_value('quiz_question_allow_inter_course_linking')) {
+        $actionIcon2 = 'add';
     }
 }
 
@@ -970,17 +973,17 @@ if (is_array($mainQuestionList)) {
     foreach ($mainQuestionList as $question) {
         $row = [];
         // This function checks if the question can be read
-        $question_type = get_question_type_for_question($selected_course, $question['id']);
+        $question_type = get_question_type_for_question($selected_course, $question['iid']);
 
         if (empty($question_type)) {
             continue;
         }
         $sessionId = isset($question['session_id']) ? $question['session_id'] : null;
-        if (!$objExercise->hasQuestion($question['id'])) {
+        if (!$objExercise->hasQuestion($question['iid'])) {
             $row[] = Display::input(
                 'checkbox',
                 'questions[]',
-                $question['id'],
+                $question['iid'],
                 ['class' => 'question_checkbox']
             );
         } else {
@@ -990,7 +993,7 @@ if (is_array($mainQuestionList)) {
         $row[] = getLinkForQuestion(
             $questionTagA,
             $fromExercise,
-            $question['id'],
+            $question['iid'],
             $question['type'],
             $question['question'],
             $sessionId,
@@ -998,12 +1001,12 @@ if (is_array($mainQuestionList)) {
         );
 
         $row[] = $question_type;
-        $row[] = TestCategory::getCategoryNameForQuestion($question['id'], $selected_course);
+        $row[] = TestCategory::getCategoryNameForQuestion($question['iid'], $selected_course);
         $row[] = $question['level'];
         $row[] = get_action_icon_for_question(
             $actionIcon1,
             $fromExercise,
-            $question['id'],
+            $question['iid'],
             $question['type'],
             $question['question'],
             $selected_course,
@@ -1017,7 +1020,7 @@ if (is_array($mainQuestionList)) {
         get_action_icon_for_question(
             $actionIcon2,
             $fromExercise,
-            $question['id'],
+            $question['iid'],
             $question['type'],
             $question['question'],
             $selected_course,
@@ -1042,18 +1045,20 @@ $headers = [
 ];
 
 echo $pagination;
-echo '<form id="question_pool_id" method="get" action="'.$url.'">';
+
+$tableId = 'question_pool_id';
+echo '<form id="'.$tableId.'" method="get" action="'.$url.'">';
 echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
 echo '<input type="hidden" name="cidReq" value="'.$_course['code'].'">';
 echo '<input type="hidden" name="selected_course" value="'.$selected_course.'">';
 echo '<input type="hidden" name="course_id" value="'.$selected_course.'">';
+echo '<input type="hidden" name="action">';
 
-$table = new HTML_Table(['class' => 'table table-bordered data_table'], false);
+$table = new HTML_Table(['class' => 'table table-hover table-striped table-bordered data_table'], false);
 $row = 0;
 $column = 0;
 foreach ($headers as $header) {
     $table->setHeaderContents($row, $column, $header);
-
     $column++;
 }
 
@@ -1076,19 +1081,25 @@ $table->display();
 
 echo '</form>';
 
-$tableId = 'question_pool_id';
 $html = '<div class="btn-toolbar">';
 $html .= '<div class="btn-group">';
-$html .= '<a class="btn btn-default" href="?'.$url.'selectall=1" onclick="javascript: setCheckbox(true, \''.$tableId.'\'); return false;">'.
-    get_lang('SelectAll').'</a>';
-$html .= '<a class="btn btn-default" href="?'.$url.'" onclick="javascript: setCheckbox(false, \''.$tableId.'\'); return false;">'.get_lang('UnSelectAll').'</a> ';
+$html .= '<a
+        class="btn btn-default"
+        href="?'.$url.'selectall=1"
+        onclick="javascript: setCheckbox(true, \''.$tableId.'\'); return false;">
+        '.get_lang('SelectAll').'</a>';
+$html .= '<a
+            class="btn btn-default"
+            href="?'.$url.'"
+            onclick="javascript: setCheckbox(false, \''.$tableId.'\'); return false;">
+            '.get_lang('UnSelectAll').'</a> ';
 $html .= '</div>';
 $html .= '<div class="btn-group">
             <button class="btn btn-default" onclick="javascript:return false;">'.get_lang('Actions').'</button>
             <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                 <span class="caret"></span>
-            </button>';
-$html .= '<ul class="dropdown-menu">';
+            </button>
+            <ul class="dropdown-menu">';
 
 $actionLabel = get_lang('ReUseACopyInCurrentTest');
 $actions = ['clone' => get_lang('ReUseACopyInCurrentTest')];
@@ -1098,7 +1109,10 @@ if ($selected_course == api_get_course_int_id()) {
 
 foreach ($actions as $action => &$label) {
     $html .= '<li>
-            <a data-action ="'.$action.'" href="#" onclick="javascript:action_click(this, \''.$tableId.'\');">'.
+            <a
+                data-action ="'.$action.'"
+                href="#"
+                onclick="javascript:action_click(this, \''.$tableId.'\');">'.
                 $label.'
             </a>
           </li>';
@@ -1165,7 +1179,7 @@ function getLinkForQuestion(
     $result = $questionName;
     if ($in_addA) {
         $sessionIcon = '';
-        if (!empty($sessionId) && $sessionId != -1) {
+        if (!empty($sessionId) && -1 != $sessionId) {
             $sessionIcon = ' '.Display::return_icon('star.png', get_lang('Session'));
         }
         $exerciseId = (int) $exerciseId;
@@ -1244,7 +1258,7 @@ function get_action_icon_for_question(
         case 'add':
             $res = '-';
             if (!$myObjEx->hasQuestion($in_questionid)) {
-                $res = "<a href='".api_get_self()."?".
+                $res = "<a href='".api_get_self().'?'.
                     api_get_cidreq().$getParams."&recup=$in_questionid&fromExercise=$from_exercise'>";
                 $res .= Display::return_icon('view_more_stats.gif', get_lang('InsertALinkToThisQuestionInTheExercise'));
                 $res .= '</a>';
@@ -1276,16 +1290,25 @@ function isQuestionInActiveQuiz($questionId)
     $tblQuizRelQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
     $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
 
+    $questionId = (int) $questionId;
+
+    if (empty($questionId)) {
+        return false;
+    }
+
     $result = Database::fetch_assoc(
         Database::query(
-            "SELECT COUNT(qq.question_id) c FROM $tblQuizRelQuestion qq
-                INNER JOIN $tblQuiz q ON qq.exercice_id = q.iid
-                WHERE q.active = 1
-                AND qq.question_id = $questionId"
+            "SELECT COUNT(qq.question_id) count
+                    FROM $tblQuizRelQuestion qq
+                    INNER JOIN $tblQuiz ex
+                    ON qq.exercice_id = ex.iid
+                    WHERE
+                        ex.active = 1 AND
+                        qq.question_id = $questionId"
         )
     );
 
-    return $result['c'] > 0;
+    return $result['count'] > 0;
 }
 
 /**

@@ -1,0 +1,121 @@
+{
+  "semantics": [
+    {
+      "widgets": [
+        {
+          "label": "Vaikimisi"
+        }
+      ],
+      "label": "Kaardid",
+      "entity": "kaart",
+      "field": {
+        "label": "Kaart",
+        "fields": [
+          {
+            "label": "Pilt"
+          },
+          {
+            "label": "Pildi alternatiivtekst",
+            "description": "Kirjelda, mis pildil näha on. Tekst on mõeldud vaegnägijaile tekstilugeriga kuulamiseks."
+          },
+          {
+            "label": "Heliriba",
+            "description": "Valikheli, mida mängitakse kaardi pööramisel."
+          },
+          {
+            "label": "Sobituv pilt",
+            "description": "Valikuline pilt võrdlemiseks, selmet kasutada kahte kaarti sama pildiga."
+          },
+          {
+            "label": "Sobituva pildi alternatiivtekst",
+            "description": "Kirjelda, mis pildil näha on. Tekst on mõeldud vaegnägijaile tekstilugeriga kuulamiseks."
+          },
+          {
+            "label": "Sobituv heliriba",
+            "description": "Valikheli, mida mängitakse teise kaardi pööramisel."
+          },
+          {
+            "label": "Kirjeldus",
+            "description": "Valikuline lühitekst, mida näidatakse hüpikaknas peale kahe sobituva kaardi leidmist."
+          }
+        ]
+      }
+    },
+    {
+      "label": "Käitumisseaded",
+      "description": "Need valikud võimaldavad sul kontrollida mängu käitumist.",
+      "fields": [
+        {
+          "label": "Aseta kaardid väljakule",
+          "description": "Proovib sobitada ridade ja veergude arvu kaartide asetamisel. Peale seda muudetakse kaartide suurust, et täita neid hoidev raam."
+        },
+        {
+          "label": "Kasutatav kaartide arv",
+          "description": "Määrates selle arvu kahest suuremaks valib mäng kaartide loetelust juhuslikud kaardid."
+        },
+        {
+          "label": "Lisa Proovi uuesti nupp lõppenud mängule"
+        }
+      ]
+    },
+    {
+      "label": "Välimus",
+      "description": "Säti mängu visuaali.",
+      "fields": [
+        {
+          "label": "Teemavärv",
+          "description": "Vali oma mängu teemavärv."
+        },
+        {
+          "label": "Kaardi taust",
+          "description": "Kasuta kohandatud kaarditausta."
+        }
+      ]
+    },
+    {
+      "label": "Kohandamine",
+      "fields": [
+        {
+          "label": "Kaardi pööramise tekst",
+          "default": "Kaart pöörab"
+        },
+        {
+          "label": "Aega kulunud tekst",
+          "default": "Aega kulunud"
+        },
+        {
+          "label": "Tagasiside tekst",
+          "default": "Hea töö!"
+        },
+        {
+          "label": "Proovi uuesti nupu tekst",
+          "default": "Proovida uuesti?"
+        },
+        {
+          "label": "Sulge nupu tekst",
+          "default": "Sulge"
+        },
+        {
+          "label": "Mängu pealkiri",
+          "default": "Mälumäng. Leida sobituvad kaardid."
+        },
+        {
+          "label": "Mäng on lõppenud silt",
+          "default": "Kõik kaardid on leitud."
+        },
+        {
+          "label": "Kaardi indeksi silt",
+          "default": "Kaart %num:"
+        },
+        {
+          "label": "Kaart pööramata silt",
+          "default": "Pööramata."
+        },
+        {
+          "label": "Kaart sobitub silt",
+          "default": "Vaste leitud."
+        }
+      ]
+    }
+  ]
+}

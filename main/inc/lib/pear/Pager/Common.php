@@ -837,7 +837,7 @@ class Pager_Common
      */
     function _renderLink($altText, $linkText)
     {
-        if ($this->_httpMethod == 'GET') {
+        if ($this->_httpMethod === 'GET') {
             if ($this->_append) {
                 $href = '?' . $this->_http_build_query_wrapper($this->_linkData);
             } else {
@@ -1020,6 +1020,7 @@ class Pager_Common
                 $qs = $_GET;
             }
         }
+
         foreach ($this->_excludeVars as $exclude) {
             $use_preg = $this->_isRegexp($exclude);
             foreach (array_keys($qs) as $qs_item) {
@@ -1039,6 +1040,7 @@ class Pager_Common
             $this->_recursive_urldecode($this->_extraVars);
             $qs = array_merge($qs, $this->_extraVars);
         }
+
         if (count($qs)
             && function_exists('get_magic_quotes_gpc')
             && -1 == version_compare(PHP_VERSION, '5.2.99')
@@ -1120,16 +1122,16 @@ class Pager_Common
         if ($this->_currentPage > 1) {
             $this->_linkData[$this->_urlVar] = $this->getPreviousPageID();
             $back = $this->_renderLink($this->_altPrev, $this->_prevImg)
-                  . $this->_spacesBefore . $this->_spacesAfter;
-        } else if ($this->_prevImgEmpty !== null && $this->_totalPages > 1) {
-            $back = $this->_prevImgEmpty
-                  . $this->_spacesBefore . $this->_spacesAfter;
+                .$this->_spacesBefore.$this->_spacesAfter;
+        } else {
+            if ($this->_prevImgEmpty !== null && $this->_totalPages > 1) {
+                $back = $this->_prevImgEmpty
+                    .$this->_spacesBefore.$this->_spacesAfter;
+            }
         }
+
         return $back;
     }
-
-    // }}}
-    // {{{ _getPageLinks()
 
     /**
      * Returns pages link
@@ -1144,9 +1146,6 @@ class Pager_Common
         $msg = 'function "_getPageLinks()" not implemented.';
         return $this->raiseError($msg, ERROR_PAGER_NOT_IMPLEMENTED);
     }
-
-    // }}}
-    // {{{ _getNextLink()
 
     /**
      * Returns next link
@@ -1171,18 +1170,18 @@ class Pager_Common
         if ($this->_currentPage < $this->_totalPages) {
             $this->_linkData[$this->_urlVar] = $this->getNextPageID();
             $next = $this->_spacesAfter
-                  . $this->_renderLink($this->_altNext, $this->_nextImg)
-                  . $this->_spacesBefore . $this->_spacesAfter;
-        } else if ($this->_nextImgEmpty !== null && $this->_totalPages > 1) {
-            $next = $this->_spacesAfter
-                  . $this->_nextImgEmpty
-                  . $this->_spacesBefore . $this->_spacesAfter;
+                .$this->_renderLink($this->_altNext, $this->_nextImg)
+                .$this->_spacesBefore.$this->_spacesAfter;
+        } else {
+            if ($this->_nextImgEmpty !== null && $this->_totalPages > 1) {
+                $next = $this->_spacesAfter
+                    .$this->_nextImgEmpty
+                    .$this->_spacesBefore.$this->_spacesAfter;
+            }
         }
+
         return $next;
     }
-
-    // }}}
-    // {{{ _getFirstLinkTag()
 
     /**
      * Returns first link tag
@@ -1208,9 +1207,6 @@ class Pager_Common
             $this->_firstLinkTitle
         );
     }
-
-    // }}}
-    // {{{ _getPrevLinkTag()
 
     /**
      * Returns previous link tag
@@ -1439,9 +1435,6 @@ class Pager_Common
         }
     }
 
-    // }}}
-    // {{{ _http_build_query_wrapper()
-
     /**
      * This is a slightly modified version of the http_build_query() function;
      * it heavily borrows code from PHP_Compat's http_build_query().
@@ -1455,20 +1448,20 @@ class Pager_Common
      */
     function _http_build_query_wrapper($data)
     {
-        $data = (array)$data;
+        $data = (array) $data;
         if (empty($data)) {
             return '';
         }
         $separator = ini_get('arg_separator.output');
-        if ($separator == '&amp;') {
+        if ($separator === '&amp;') {
             $separator = '&'; //the string is escaped by htmlentities anyway...
         }
-        $tmp = array ();
+        $tmp = [];
         foreach ($data as $key => $val) {
             if (is_scalar($val)) {
                 //array_push($tmp, $key.'='.$val);
                 $val = urlencode($val);
-                array_push($tmp, $key .'='. str_replace('%2F', '/', $val));
+                array_push($tmp, $key.'='.str_replace('%2F', '/', $val));
                 continue;
             }
             // If the value is an array, recursively parse it
@@ -1477,11 +1470,9 @@ class Pager_Common
                 continue;
             }
         }
+
         return implode($separator, $tmp);
     }
-
-    // }}}
-    // {{{ __http_build_query()
 
     /**
      * Helper function

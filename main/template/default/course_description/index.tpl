@@ -26,10 +26,10 @@
                         {% endif %}
                     </div>
                 {% endif %}
-                {{ description.title }}
+                {{ description.title | remove_xss }}
             </div>
             <div class="panel-body">
-                {{ description.content }}
+                {{ description.content | remove_xss }}
             </div>
         </div>
     {% endif %}

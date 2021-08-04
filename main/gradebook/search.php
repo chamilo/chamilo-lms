@@ -5,8 +5,6 @@
  * Search user certificates if them are publics.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.gradebook
  */
 $cidReset = true;
 

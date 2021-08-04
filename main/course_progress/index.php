@@ -114,6 +114,11 @@ $(function() {
 </script>';
 
 $htmlHeadXtra[] = '<script>
+$(function() {
+    if ($("#div_result").html() !== undefined && $("#div_result").html().length == 0) {
+        $("#div_result").html("0");
+    }
+})
 function datetime_by_attendance(attendance_id, thematic_advance_id) {
 	$.ajax({
 		contentType: "application/x-www-form-urlencoded",
@@ -248,13 +253,13 @@ if ($action == 'thematic_plan_list') {
             $(function () {
                 $('.btn-delete').on('click', function (e) {
                     e.preventDefault();
-                    
+
                     var id = $(this).data('id') || 0;
-                    
+
                     if (!id) {
                         return;
                     }
-                    
+
                     //$('[name=\"title[' + id + ']\"]').val('');
                     CKEDITOR.instances['description[' + id + ']'].setData('');
                 });

@@ -4,7 +4,7 @@
     <div class="col-xs-12 col-md-12">
     {% if infoExercise|length > 0 %}
     	<input type="hidden" id="course_id" value="{{course_id}}" />
-        <table id="courses_table" class="data_table table">
+        <table id="courses_table" class="table table-hover table-striped data_table table">
             <tr class="row_odd">
                 <th class="th-header">{{ 'Exercise'|get_plugin_lang('Test2pdfPlugin') }}</th>
                 <th class="th-header text-center">{{ 'DownloadOnlyQuestion'|get_plugin_lang('Test2pdfPlugin') }}</th>

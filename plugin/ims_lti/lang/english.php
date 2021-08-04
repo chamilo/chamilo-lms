@@ -66,3 +66,7 @@ $strings['TokenUrl'] = 'OAuth2 Access Token URL';
 $strings['KeySetUrl'] = 'Keyset URL';
 $strings['NamesAndRoleProvisioningService'] = 'Names and Role Provisioning Service';
 $strings['YouNeedCreateTheGradebokInCourseFirst'] = 'You must first create the course gradebook to use this service by following this link %s';
+$strings['ReplacementUserId'] = 'Replacement for user_id (sub)';
+$strings['ReplacementUserIdHelp'] = 'The current user_id (sub) in launch params will be formed from platform settings and user ID.<br>You can set a replacement for it using some variables like <code>$User.id</code> or <code>$User.username</code>.';
+$strings['AddInCourses'] = 'Add in courses';
+$strings['AddInAllCourses'] = 'Add in all courses';

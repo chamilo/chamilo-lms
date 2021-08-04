@@ -32,10 +32,11 @@ class AddCourseToSession
             // xajax send utf8 datas... datas in db can be non-utf8 datas
             $charset = api_get_system_encoding();
             $needle = api_convert_encoding($needle, $charset, 'utf-8');
+            $needle = Database::escape_string($needle);
 
             $cond_course_code = '';
             if (!empty($id_session)) {
-                $id_session = intval($id_session);
+                $id_session = (int) $id_session;
                 // check course_code from session_rel_course table
                 $sql = 'SELECT c_id FROM '.$tbl_session_rel_course.'
                         WHERE session_id = '.$id_session;
@@ -50,7 +51,7 @@ class AddCourseToSession
                 }
             }
 
-            if ($type == 'single') {
+            if ('single' == $type) {
                 // search users where username or firstname or lastname begins likes $needle
                 $sql = 'SELECT
                             course.id,
@@ -75,8 +76,8 @@ class AddCourseToSession
             if (api_is_multiple_url_enabled()) {
                 $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
                 $access_url_id = api_get_current_access_url_id();
-                if ($access_url_id != -1) {
-                    if ($type == 'single') {
+                if (-1 != $access_url_id) {
+                    if ('single' == $type) {
                         $sql = 'SELECT
                                     course.id,
                                     course.visual_code,
@@ -106,7 +107,7 @@ class AddCourseToSession
 
             $rs = Database::query($sql);
             $course_list = [];
-            if ($type == 'single') {
+            if ('single' == $type) {
                 while ($course = Database::fetch_array($rs)) {
                     $course_list[] = $course['id'];
                     $course_title = str_replace("'", "\'", $course_title);

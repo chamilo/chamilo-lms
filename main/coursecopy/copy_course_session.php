@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
@@ -11,14 +12,12 @@ use ChamiloSession as Session;
  *
  * @author Christian Fasanando
  * @author Julio Montoya <gugli100@gmail.com> Lots of bug fixes/improvements
- *
- * @package chamilo.backup
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 
-api_protect_global_admin_script();
+api_protect_admin_script();
 api_protect_limit_for_session_admin();
 api_set_more_memory_and_time_limits();
 
@@ -39,9 +38,6 @@ $interbreadcrumb[] = [
 ];
 
 // Database Table Definitions
-$tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
@@ -131,8 +127,8 @@ function display_form()
 
     $options = '<div class="radio"><label><input type="radio" id="copy_option_1" name="copy_option" value="full_copy" checked="checked"/>';
     $options .= get_lang('FullCopy').'</label></div>';
-    $options .= '<div class="radio"><label><input type="radio" id="copy_option_2" name="copy_option" value="select_items" disabled="disabled"/>';
-    $options .= ' '.get_lang('LetMeSelectItems').'</label></div>';
+    /*$options .= '<div class="radio"><label><input type="radio" id="copy_option_2" name="copy_option" value="select_items" disabled="disabled"/>';
+    $options .= ' '.get_lang('LetMeSelectItems').'</label></div>';*/
 
     $options .= '<div class="checkbox"><label><input type="checkbox" id="copy_base_content_id" name="copy_only_session_items" />'.get_lang('CopyOnlySessionItems').'</label></div>';
 

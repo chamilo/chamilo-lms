@@ -1,7 +1,7 @@
 IMS/LTI plugin
 ===
 
-Version 1.7.0
+Version 1.8.0
 
 > This plugin is meant to be later integrated into Chamilo (in a major version
 release).
@@ -10,8 +10,9 @@ IMS/LTI defines the possibility to integrate tools or content into Chamilo.
 This plugin allows the integration of a new tool into courses, obtaining 
 data back from those tools and recording them as gradebook "external" activities.
 
-This plugin allow certified support for LTI 1.0, 1.1, 1.1.1, Deep Linking 1.x, Outcome Services 1.x.
+This plugin allows certified support for LTI 1.0, 1.1, 1.1.1, Deep Linking 1.x, Outcome Services 1.x.
 You can get information about the LTI Certification on [this page][certification link].
+The LTI 1.3 is being developed.
 
 As a platform admin, you can register external tools available for all courses.
 You need set the tools settings in the IMS/LTI administration page.
@@ -24,31 +25,42 @@ external tool.
 
 # Changelog
 
+## v1.8
+> Requires DB changes to upgrade, see [v1.8](#to-v180).
+* Add option to add replacements for launch params
+
 ## v1.7
+> Requires DB changes to upgrade, see [v1.8](#to-v170).
 * Fix auth params
 * Add option to show LTI tool in iframe or new window.
 
 ## v1.6
+> Requires DB changes to upgrade, see [v1.8](#to-v160).
 * Add support to LTI 1.3 and Advantage Services
 
 ## v1.5
+> Requires DB changes to upgrade, see [v1.8](#to-v151).
 * Plugin has passed the tests from the LTI Certification suite.
 * Add support for substitution of variable.
   See `ImsLti::getSubstitutableParams()`.
 * Outcome services has a unique URL and sourced ID.
 
 ## v1.4
+> Requires DB changes to upgrade, see [v1.8](#to-v140).
 * Allow create external tools when there is no key/secret available for launch
 
 ## v1.3
+> Requires DB changes to upgrade, see [v1.8](#to-v130).
 * Privacy settings added. Allow to indicate id the launcher's data
   should be sent in request.
 
 ## v1.2
+> Requires DB changes to upgrade, see [v1.8](#to-v120).
 * Register course in which the tool was added.
 * Register parent tool from which the new tool comes from.
 
 ## v1.1
+> Requires DB changes to upgrade, see [v1.8](#to-v110).
 * Support for Deep-Linking added.
 * Support for outcomes services. And register score on course gradebook.
 
@@ -61,6 +73,11 @@ external tool.
 # Upgrading
 
 Run this changes on database:
+
+## To v1.8.0
+```sql
+ALTER TABLE plugin_ims_lti_tool ADD replacement_params LONGTEXT NOT NULL COMMENT '(DC2Type:json)';
+```
 
 ## To v1.7.0
 ```sql

@@ -1,0 +1,7 @@
+{
+  "libraryStrings": {
+    "distributeButtonLabel": "Ισοκατανομή",
+    "distributeButtonWarning": "Θα μεταβληθούν οι τιμές για όλες τις κλίμακες. Είστε σίγουρος ότι θέλετε να συνεχίσετε;",
+    "rangeOutOfSequenceWarning": "Οι κλίμακες βαθμολογίας είναι ασυνεχείς"
+  }
+}

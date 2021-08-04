@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * This class handles the SCORM export of fill-in-the-blanks questions.
- *
- * @package chamilo.exercise.scorm
  */
 class ScormAnswerFillInBlanks extends Answer
 {

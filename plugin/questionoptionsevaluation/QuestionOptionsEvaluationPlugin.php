@@ -10,7 +10,6 @@ class QuestionOptionsEvaluationPlugin extends Plugin
 {
     const SETTING_ENABLE = 'enable';
     const SETTING_MAX_SCORE = 'exercise_max_score';
-
     const EXTRAFIELD_FORMULA = 'quiz_evaluation_formula';
 
     /**
@@ -232,7 +231,6 @@ class QuestionOptionsEvaluationPlugin extends Plugin
                     $questionPonderation += $ponderation;
                 }
 
-                //error_log("question: $questionId -- i: $i -- w: $ponderation");
                 Database::query("UPDATE $tblAnswer SET ponderation = $ponderation WHERE iid = $iid");
             }
 

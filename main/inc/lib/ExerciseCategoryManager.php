@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
@@ -7,8 +8,6 @@ use Chamilo\CourseBundle\Entity\CExerciseCategory;
  * Class ExtraFieldValue
  * Declaration for the ExtraFieldValue class, managing the values in extra
  * fields for any data type.
- *
- * @package chamilo.library
  */
 class ExerciseCategoryManager extends Model
 {
@@ -24,9 +23,6 @@ class ExerciseCategoryManager extends Model
 
     /**
      * Formats the necessary elements for the given datatype.
-     *
-     * @param string $type The type of data to which this extra field
-     *                     applies (user, course, session, ...)
      *
      * @assert (-1) === false
      */
@@ -108,7 +104,7 @@ class ExerciseCategoryManager extends Model
             $table = Database::get_course_table(TABLE_QUIZ_TEST);
             $id = (int) $id;
 
-            $sql = "UPDATE $table SET exercise_category_id = 0 
+            $sql = "UPDATE $table SET exercise_category_id = 0
                     WHERE c_id = $courseId AND exercise_category_id = $id";
             Database::query($sql);
         }
@@ -122,7 +118,6 @@ class ExerciseCategoryManager extends Model
      */
     public function save($params, $showQuery = false)
     {
-        $courseId = api_get_course_int_id();
         $em = Database::getManager();
         $category = new CExerciseCategory();
         $category
@@ -181,7 +176,7 @@ JAVASCRIPT;
             </a>
 JAVASCRIPT;
 
-        return "function action_formatter(cellvalue, options, rowObject) {        
+        return "function action_formatter(cellvalue, options, rowObject) {
             return '$editButton $deleteButton';
         }";
     }

@@ -1,0 +1,49 @@
+{
+  "semantics": [
+    {
+      "label": "الملفات المبدئية"
+    },
+    {
+      "label": "وضع مشغل الصوت",
+      "description": "اختيار نوع مشغل الصوت",
+      "options": [
+        {
+          "label": "مصغر"
+        },
+        {
+          "label": "مكبر"
+        },
+        {
+          "label": "Transparent"
+        }
+      ]
+    },
+    {
+      "label": "ملء الحاوية"
+    },
+    {
+      "label": "تفعيل ادوات التحكم",
+      "description": "ادوات التحكم تسمح للمستخدم على سبيل المثال وقف الصوت"
+    },
+    {
+      "label": "تفعيل التشغيل التلقائي",
+      "description": "مع التشغيل التلقائي يبدأ الصوت للعب على الفور. إذا تم تعطيل التشغيل التلقائي يقوم المستخدم بالضغط على زر التشغيل لبدء الصوت"
+    },
+    {
+      "label": "Play audio (Readspeaker)",
+      "default": "Play audio"
+    },
+    {
+      "label": "Pause audio (Readspeaker)",
+      "default": "Pause audio"
+    },
+    {
+      "label": "اسم ملف الصوت",
+      "default": "Audio"
+    },
+    {
+      "label": "Audio not supported message",
+      "default": "Your browser does not support this audio"
+    }
+  ]
+}

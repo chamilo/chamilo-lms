@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
@@ -7,8 +8,6 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 
 /**
  * @todo rework file in order to use addFlash
- *
- * @package chamilo.backup
  */
 
 // Setting the global file that gets the general configuration, the databases, the languages, ...
@@ -78,34 +77,37 @@ if (Security::check_token('post') && (
     $hiddenFields['sec_token'] = Security::get_token();
     CourseSelectForm::display_form($course, $hiddenFields, true);
 } else {
-    $table_c = Database::get_main_table(TABLE_MAIN_COURSE);
-    $table_cu = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $user_info = api_get_user_info();
     $course_info = api_get_course_info();
-
-    $courseList = CourseManager::get_courses_list_by_user_id(
-        $user_info['user_id'],
+    $courseList = CourseManager::getCoursesFollowedByUser(
+        api_get_user_id(),
+        COURSEMANAGER,
+        null,
+        null,
+        null,
+        null,
         false,
+        null,
+        null,
         false,
-        false,
-        [$course_info['real_id']]
+        'ORDER BY c.title'
     );
+    $courses = [];
+    foreach ($courseList as $courseItem) {
+        if ($courseItem['real_id'] == $course_info['real_id']) {
+            continue;
+        }
+        $courses[$courseItem['code']] = $courseItem['title'].' ('.$courseItem['code'].')';
+    }
 
-    if (empty($courseList)) {
+    if (empty($courses)) {
         echo Display::return_message(get_lang('NoDestinationCoursesAvailable'), 'normal');
     } else {
-        $options = [];
-        foreach ($courseList as $courseItem) {
-            $courseInfo = api_get_course_info_by_id($courseItem['real_id']);
-            $options[$courseInfo['code']] = $courseInfo['title'].' ('.$courseInfo['code'].')';
-        }
-
         $form = new FormValidator(
             'copy_course',
             'post',
             api_get_path(WEB_CODE_PATH).'coursecopy/copy_course.php?'.api_get_cidreq()
         );
-        $form->addElement('select', 'destination_course', get_lang('SelectDestinationCourse'), $options);
+        $form->addElement('select', 'destination_course', get_lang('SelectDestinationCourse'), $courses);
 
         $group = [];
         $group[] = $form->createElement('radio', 'copy_option', null, get_lang('FullCopy'), 'full_copy');

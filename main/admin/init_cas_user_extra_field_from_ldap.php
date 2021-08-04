@@ -45,7 +45,7 @@ If this script is run after all user accounts were CASified, it just stops after
 This can be used to check whether no work is left to do.
 */
 if (php_sapi_name() !== 'cli') {
-    die("this script is supposed to be run from the command-line\n");
+    exit("this script is supposed to be run from the command-line\n");
 }
 require __DIR__.'/../../cli-config.php';
 require_once __DIR__.'/../../app/config/auth.conf.php';
@@ -66,7 +66,7 @@ foreach ($extldap_config['host'] as $ldapHost) {
     }
 }
 if (false === $ldap) {
-    die("ldap_connect() failed\n");
+    exit("ldap_connect() failed\n");
 }
 echo "Connected to LDAP server $ldapHost.\n";
 
@@ -83,21 +83,21 @@ ldap_set_option(
 );
 
 ldap_bind($ldap, $extldap_config['admin_dn'], $extldap_config['admin_password'])
-or die('ldap_bind() failed: '.ldap_error($ldap)."\n");
+or exit('ldap_bind() failed: '.ldap_error($ldap)."\n");
 echo "Bound to LDAP server as ${extldap_config['admin_dn']}.\n";
 
 // set a few variables for LDAP search
 
 $baseDn = $extldap_config['base_dn']
-or die("cannot read the LDAP directory base DN where to search for user entries\n");
+or exit("cannot read the LDAP directory base DN where to search for user entries\n");
 echo "Base DN is '$baseDn'.\n";
 
 $ldapCASUserAttribute = $extldap_user_correspondance['extra']['cas_user']
-or die("cannot read the name of the LDAP attribute where to find the CAS user code\n");
+or exit("cannot read the name of the LDAP attribute where to find the CAS user code\n");
 echo "LDAP CAS user code attribute is '$ldapCASUserAttribute'.\n";
 
 $ldapUsernameAttribute = $extldap_user_correspondance['username']
-or die("cannot read the name of the LDAP attribute where to find the username\n");
+or exit("cannot read the name of the LDAP attribute where to find the username\n");
 echo "LDAP username attribute is '$ldapUsernameAttribute'.\n";
 
 $filters = [
@@ -124,10 +124,10 @@ if (empty($extraFieldData)) {
             ]
         );
         if (false === $fieldId) {
-            die("failed to create extra field\n");
+            exit("failed to create extra field\n");
         }
     } else {
-        die("Required extra field is missing\n");
+        exit("Required extra field is missing\n");
     }
 } else {
     $fieldId = $extraFieldData['id'];
@@ -175,7 +175,7 @@ foreach ($databaseUsers as $user) {
         .'))';
     $searchResult = ldap_search($ldap, $baseDn, $filter, [$ldapCASUserAttribute, $ldapUsernameAttribute]);
     if (false === $searchResult) {
-        die('ldap_search() failed: '.ldap_error($ldap)."\n");
+        exit('ldap_search() failed: '.ldap_error($ldap)."\n");
     }
     $userId = $user->getId();
     echo "$username ($userId): ";
@@ -186,20 +186,20 @@ foreach ($databaseUsers as $user) {
         case 1:
             $entry = ldap_first_entry($ldap, $searchResult);
             if (false === $entry) {
-                die('ldap_first_entry() failed: '.ldap_error($ldap)."\n");
+                exit('ldap_first_entry() failed: '.ldap_error($ldap)."\n");
             }
             $ldapCASUser = ldap_get_values($ldap, $entry, $ldapCASUserAttribute)[0];
             if (false === $ldapCASUser) {
-                die('cannot read CAS user code from LDAP entry: '.ldap_error($ldap)."\n");
+                exit('cannot read CAS user code from LDAP entry: '.ldap_error($ldap)."\n");
             }
             $ldapUsername = ldap_get_values($ldap, $entry, $ldapUsernameAttribute)[0];
             if (false === $ldapUsername) {
-                die('cannot read username from LDAP entry: '.ldap_error($ldap)."\n");
+                exit('cannot read username from LDAP entry: '.ldap_error($ldap)."\n");
             }
             echo "\033[2K\r$ldapUsernameAttribute: $ldapUsername, $ldapCASUserAttribute: $ldapCASUser, ";
             $problems = [];
             if ($username === $ldapUsername) {
-                true; // fine
+                //true;
             } elseif (in_array(
                 strtolower(trim($username)),
                 [strtolower(trim($ldapUsername)), strtolower(trim($ldapCASUser))]
@@ -213,7 +213,7 @@ foreach ($databaseUsers as $user) {
                     $userNamesInUse[$ldapUsername] = $userId;
                 }
             } else {
-                die("LDAP search result does not match username; our filter is wrong: $filter\n");
+                exit("LDAP search result does not match username; our filter is wrong: $filter\n");
             }
             if (array_key_exists($userId, $existingCasUserValues)) {
                 $currentValue = $existingCasUserValues[$userId];
@@ -308,7 +308,7 @@ if ($fixUsernames || $fixWrongAuthSources || $fixWrongCASCodes || $fixMissingCAS
                 UserManager::getManager()->save($user);
             } catch (Exception $exception) {
                 echo $exception->getMessage()."\n";
-                die("Script stopped before the end.\n");
+                exit("Script stopped before the end.\n");
             }
         }
         if ($fixMissingCASCodes && array_key_exists($userId, $missingCASCodes)) {

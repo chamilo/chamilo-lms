@@ -1,0 +1,147 @@
+{
+  "semantics": [
+    {
+      "label": "メディア",
+      "fields": [
+        {
+          "label": "タイプ",
+          "description": "設問の上に表示するオプションのメディア。"
+        },
+        {
+          "label": "画像のズーム機能を無効化"
+        }
+      ]
+    },
+    {
+      "label": "設問"
+    },
+    {
+      "label": "正解 !",
+      "options": [
+        {
+          "label": "○"
+        },
+        {
+          "label": "×"
+        }
+      ]
+    },
+    {
+      "label": "○/×問題のためのユーザーインターフェイスの翻訳",
+      "fields": [
+        {
+          "label": "○ボタンのラベル",
+          "default": "○"
+        },
+        {
+          "label": "×ボタンのラベル",
+          "default": "×"
+        },
+        {
+          "label": "フィードバックテキスト",
+          "default": "@score / @total 獲得",
+          "description": "フィードバック テキスト、利用可能な変数: @score と @total 。 例: ' @score / @total 獲得。 '"
+        },
+        {
+          "label": "「チェック」ボタンのテキスト",
+          "default": "チェック"
+        },
+        {
+          "label": "「解を表示」ボタンのテキスト",
+          "default": "解を表示"
+        },
+        {
+          "label": "「リトライ」ボタンのテキスト",
+          "default": "リトライ"
+        },
+        {
+          "label": "まちがえた答え:",
+          "default": "まちがえた答え:"
+        },
+        {
+          "label": "正解",
+          "default": "正解 !"
+        },
+        {
+          "label": "Textual representation of the score bar for those using a readspeaker",
+          "default": "You got :num out of :total points"
+        }
+      ]
+    },
+    {
+      "label": "動作設定",
+      "description": "これらのオプションでタスクがどのように動作するかを制御できます。",
+      "fields": [
+        {
+          "label": "「リトライ」ボタンを有効化"
+        },
+        {
+          "label": "「解を表示」ボタンを有効化"
+        },
+        {
+          "label": "Enable \"Check\" button"
+        },
+        {
+          "label": "「チェック」の確認ダイアログを表示"
+        },
+        {
+          "label": "「リトライ」の確認ダイアログを表示"
+        },
+        {
+          "label": "自動的に答えをチェック",
+          "description": "このオプションを有効にするとアクセシビリティが損なわれることに注意してください。"
+        },
+        {
+          "label": "正解に対するフィードバック",
+          "description": "これはフィードバックの既定のテキストを上書きします。利用可能な変数: @score と @total"
+        },
+        {
+          "label": "不正解に対するフィードバック",
+          "description": "これはフィードバックの既定のテキストを上書きします。利用可能な変数: @score と @total"
+        }
+      ]
+    },
+    {
+      "label": "チェック確認ダイアログ",
+      "fields": [
+        {
+          "label": "ヘッダーテキスト",
+          "default": "完了 ?"
+        },
+        {
+          "label": "本文テキスト",
+          "default": "本当に終了しますか ?"
+        },
+        {
+          "label": "キャンセルボタンのラベル",
+          "default": "キャンセル"
+        },
+        {
+          "label": "確認ボタンのラベル",
+          "default": "完了"
+        }
+      ]
+    },
+    {
+      "label": "リトライ確認ダイアログ",
+      "fields": [
+        {
+          "label": "ヘッダーテキスト",
+          "default": "リトライ ?"
+        },
+        {
+          "label": "本文テキスト",
+          "default": "本当にリトライしますか ?"
+        },
+        {
+          "label": "キャンセルボタンのラベル",
+          "default": "キャンセル"
+        },
+        {
+          "label": "確認ボタンのラベル",
+          "default": "確認"
+        }
+      ]
+    }
+  ]
+}

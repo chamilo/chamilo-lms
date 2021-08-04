@@ -33,7 +33,7 @@
 </div>
 <script>
     RecordWebcam.init({
-        urlReceiver: '{{ _p.web_main }}document/webcam_receiver.php?webcamname='
+        urlReceiver: '{{ _p.web_main }}document/webcam_receiver.php?{{ _p.web_cid_query }}&webcamname='
             + escape('{{ filename }}') + '&webcamdir={{ webcam_dir }}&webcamuserid={{ user_id }}'
     });
 </script>

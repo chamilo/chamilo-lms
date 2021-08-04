@@ -1,0 +1,116 @@
+{
+  "semantics": [
+    {
+      "label": "Descrizione del compito",
+      "description": "Descrivi come l'apprendente deve risolvere il compito",
+      "placeholder": "Clicca su tutti i verbi nel testo che segue"
+    },
+    {
+      "label": "Campo di testo",
+      "placeholder": "Questa è una risposta: *answer*",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Le parole marcate vengono aggiunte mediante un asterisco (*).</li><li>Gli asterischi possono essere aggiunti all'interno di parole marcate attraverso un ulteriore asterisco. Es. *parola-corretta*** => parola-corretta*.</li></ul>",
+        "example": "Le parole corrette sono marcate in questo modo: *parola-corretta*. Un asterisco è scritto così: *parola-corretta***"
+      }
+    },
+    {
+      "label": "Feedback generale",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Predefinito"
+            }
+          ],
+          "label": "Specifica un feedback per ogni intervallo di punteggio",
+          "description": "Clicca sul pulsante \"Aggiungi intervallo\" per aggiungere gli intervalli che ti servono. Per esempio: 0-20%, Punteggio scarso; 21-90%, Punteggio medio; 91-100% Punteggio ottimo!",
+          "entity": "intervallo",
+          "field": {
+            "fields": [
+              {
+                "label": "Intervallo di punteggio"
+              },
+              {},
+              {
+                "label": "Feedback per un intervallo definito",
+                "placeholder": "Compila il feedback"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Testo per il pulsante \"Verifica\"",
+      "default": "Verifica"
+    },
+    {
+      "label": "Testo per il pulsante \"Riprova\"",
+      "default": "Riprova"
+    },
+    {
+      "label": "Testo per il pulsante \"Mostra Soluzione\"",
+      "default": "Mostra soluzione"
+    },
+    {
+      "label": "Impostazioni di esecuzione",
+      "description": "Queste opzioni permettono di controllare il comportamento del compito",
+      "fields": [
+        {
+          "label": "Attiva \"Riprova\""
+        },
+        {
+          "label": "Attiva il pulsante \"Mostra soluzioni\""
+        },
+        {
+          "label": "Attiva pulsante \"Verifica\""
+        },
+        {
+          "label": "Visualizza punteggio",
+          "description": "Visualizza i punti guadagnati per ogni risposta"
+        }
+      ]
+    },
+    {
+      "label": "Testo della risposta corretta",
+      "default": "Giusto!",
+      "description": "Testo usato per indicare che una risposta è giusta"
+    },
+    {
+      "label": "Testo della risposta non corretta",
+      "default": "Sbagliato!",
+      "description": "Testo usato per indicare che una risposta è sbagliata"
+    },
+    {
+      "label": "Testo per risposta mancante",
+      "default": "Risposta non trovata!",
+      "description": "Testo usato per indicare che manca la risposta"
+    },
+    {
+      "label": "Descrizione della schermata delle soluzioni",
+      "default": "L'attività viene aggiornata per contenere la soluzione",
+      "description": "Questo messaggio dice all'apprendente che l'attività è stata aggiornata con la soluzione"
+    },
+    {
+      "label": "Rappresentazione testuale sulla barra del punteggio per chi usa un lettore vocale",
+      "default": "Il tuo punteggio è :num su :total"
+    },
+    {
+      "label": "Etichetta per il testo completo leggibile per le tecnologie assistive",
+      "default": "Testo completo leggibile"
+    },
+    {
+      "label": "Etichetta per il testo in cui le parole possono essere marcate per le tecnologie assistive",
+      "default": "Testo completo in cui le parole possono essere marcate"
+    },
+    {
+      "label": "Intestazione della modalità di soluzione per tecnologie assistive",
+      "default": "Modalità di soluzione"
+    },
+    {
+      "label": "Intestazione della modalità di verifica per tecnologie assistive",
+      "default": "Modalità di verifica"
+    }
+  ]
+}

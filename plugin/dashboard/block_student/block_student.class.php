@@ -95,7 +95,7 @@ class BlockStudent extends Block
         $content = '<h4>'.get_lang('YourStudents').'</h4>';
         $students_table = null;
         if (count($students) > 0) {
-            $students_table .= '<table class="data_table">';
+            $students_table .= '<table class="table table-hover table-striped data_table">';
             $students_table .= '<tr>
                                     <th width="10%" rowspan="2">'.get_lang('FirstName').'</th>
                                     <th width="10%" rowspan="2">'.get_lang('LastName').'</th>
@@ -168,7 +168,7 @@ class BlockStudent extends Block
         $content = '<h4>'.get_lang('YourStudents').'</h4>';
         $students_table = null;
         if (count($students) > 0) {
-            $students_table .= '<table class="data_table">';
+            $students_table .= '<table class="table table-hover table-striped data_table">';
             $students_table .= '<tr>
                                     <th>'.get_lang('User').'</th>
                                     <th>'.get_lang('AttendancesFaults').'</th>

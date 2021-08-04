@@ -7,8 +7,6 @@
  *
  *  @todo the table constants have all to start with TABLE_
  *  This is because of the analogy with the tool constants TOOL_
- *
- *	@package chamilo.library
  */
 
 //See #3910 defines the default prefix for the single course database
@@ -45,7 +43,7 @@ define('TABLE_MAIN_SYSTEM_TEMPLATE', 'system_template');
 define('TABLE_MAIN_OPENID_ASSOCIATION', 'openid_association');
 define('TABLE_MAIN_COURSE_REQUEST', 'course_request');
 
-// Gradebook
+// Gradebook.
 define('TABLE_MAIN_GRADEBOOK_CATEGORY', 'gradebook_category');
 define('TABLE_MAIN_GRADEBOOK_EVALUATION', 'gradebook_evaluation');
 define('TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG', 'gradebook_linkeval_log');
@@ -56,8 +54,9 @@ define('TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY', 'gradebook_score_display');
 define('TABLE_MAIN_GRADEBOOK_CERTIFICATE', 'gradebook_certificate');
 define('TABLE_MAIN_GRADEBOOK_SCORE_LOG', 'gradebook_score_log');
 define('TABLE_MAIN_GRADEBOOK_RESULT_ATTEMPT', 'gradebook_result_attempt');
+define('TABLE_MAIN_GRADEBOOK_COMMENT', 'gradebook_comment');
 
-// Profiling
+// Extra fields.
 define('TABLE_EXTRA_FIELD', 'extra_field');
 define('TABLE_EXTRA_FIELD_OPTIONS', 'extra_field_options');
 define('TABLE_EXTRA_FIELD_VALUES', 'extra_field_values');
@@ -197,8 +196,6 @@ define('TABLE_QUIZ_QUESTION_OPTION', 'quiz_question_option');
 define('TABLE_QUIZ_QUESTION_CATEGORY', 'quiz_question_category');
 define('TABLE_QUIZ_QUESTION_REL_CATEGORY', 'quiz_question_rel_category');
 define('TABLE_QUIZ_REL_CATEGORY', 'quiz_rel_category');
-
-// New SCORM tables
 define('TABLE_LP_MAIN', 'lp');
 define('TABLE_LP_ITEM', 'lp_item');
 define('TABLE_LP_VIEW', 'lp_view');
@@ -206,6 +203,8 @@ define('TABLE_LP_ITEM_VIEW', 'lp_item_view');
 define('TABLE_LP_IV_INTERACTION', 'lp_iv_interaction'); // IV = Item View
 define('TABLE_LP_IV_OBJECTIVE', 'lp_iv_objective'); // IV = Item View
 define('TABLE_LP_CATEGORY', 'lp_category');
+define('TABLE_LP_REL_USERGROUP', 'lp_rel_usergroup');
+define('TABLE_LP_CATEGORY_REL_USERGROUP', 'lp_category_rel_usergroup');
 
 // Smartblogs (Kevin Van Den Haute::kevin@develop-it.be)
 // Permission tables

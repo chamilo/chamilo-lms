@@ -58,45 +58,61 @@ $(function() {
         if ($(this).hasClass('no-close-button')) {
             globalModal.find('.close').hide();
         }
-        var contentUrl = this.href;
-        var loadModalContent = $.get(contentUrl);
-        var self = $(this);
+
+        if ($(this).hasClass('no-header')) {
+            globalModal.find('.modal-header').hide();
+        }
 
         var blockDiv = $(this).attr('data-block-closing');
         if (blockDiv != '') {
-            /*globalModal.on('hidden.bs.modal', function () {
-                $('#' + blockDiv + ' :input').attr('disabled', 'true');
-            });*/
             globalModal.attr('data-backdrop', 'static');
             globalModal.attr('data-keyboard', 'false');
         }
+        var contentUrl = this.href;
+        var self = $(this);
 
-        $.when(loadModalContent).done(function(modalContent) {
-            var modalDialog = globalModal.find('.modal-dialog'),
-                    modalSize = self.data('size') || get_url_params(contentUrl, 'modal_size'),
-                    modalWidth = self.data('width') || get_url_params(contentUrl, 'width'),
-                    modalTitle = self.data('title') || ' ';
-
-            modalDialog.removeClass('modal-lg modal-sm').css('width', '');
-
-
-            if (modalSize && modalSize.length != 0) {
-                switch (modalSize) {
-                    case 'lg':
-                        modalDialog.addClass('modal-lg');
-                        break;
-                    case 'sm':
-                        modalDialog.addClass('modal-sm');
-                        break;
-                }
-            } else if (modalWidth) {
-                modalDialog.css('width', modalWidth + 'px');
-            }
+        if (contentUrl == 'javascript:void(0);') {
+            var
+                modalSize = self.data('size'),
+                modalWidth = self.data('width'),
+                modalTitle = self.data('title');
+                modalContent = self.data('content');
 
             globalModal.find('.modal-title').text(modalTitle);
             globalModal.find('.modal-body').html(modalContent);
             globalModal.modal('show');
-        });
+
+            return true;
+        }
+
+        if (contentUrl) {
+            var loadModalContent = $.get(contentUrl);
+
+            $.when(loadModalContent).done(function (modalContent) {
+                var modalDialog = globalModal.find('.modal-dialog'),
+                    modalSize = self.data('size') || get_url_params(contentUrl, 'modal_size'),
+                    modalWidth = self.data('width') || get_url_params(contentUrl, 'width'),
+                    modalTitle = self.data('title') || ' ';
+
+                modalDialog.removeClass('modal-lg modal-sm').css('width', '');
+                if (modalSize && modalSize.length != 0) {
+                    switch (modalSize) {
+                        case 'lg':
+                            modalDialog.addClass('modal-lg');
+                            break;
+                        case 'sm':
+                            modalDialog.addClass('modal-sm');
+                            break;
+                    }
+                } else if (modalWidth) {
+                    modalDialog.css('width', modalWidth + 'px');
+                }
+
+                globalModal.find('.modal-title').text(modalTitle);
+                globalModal.find('.modal-body').html(modalContent);
+                globalModal.modal('show');
+            });
+        }
     });
 
     // Expands an image modal
@@ -122,7 +138,7 @@ $(function() {
     // Delete modal
     $('#confirm-delete').on('show.bs.modal', function(e) {
         $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-        var message = '{{ 'AreYouSureToDeleteJS' | get_lang | escape('js')}}: <strong>' + $(e.relatedTarget).data('item-title') + '</strong>';
+        var message = '{{ 'AreYouSureToDeleteJS' | get_lang | escape('js')}} <strong>' + $(e.relatedTarget).data('item-title') + '</strong>';
 
         if ($(e.relatedTarget).data('item-question')) {
             message = $(e.relatedTarget).data('item-question');
@@ -178,12 +194,6 @@ $(function() {
             });
         });
     };
-
-    $(".black-shadow").mouseenter(function() {
-        $(this).addClass('hovered-course');
-    }).mouseleave(function() {
-         $(this).removeClass('hovered-course');
-    });
 
     $("[data-toggle=popover]").each(function(i, obj) {
         $(this).popover({
@@ -278,7 +288,7 @@ $(function() {
     // Mediaelement
     if ( {{ show_media_element }} == 1) {
         $('video:not(.skip), audio:not(.skip)').mediaelementplayer({
-            pluginPath: _p.web + 'web/assets/mediaelement/build/',
+            pluginPath: _p.web_lib + 'javascript/mediaelement/',
             //renderers: ['html5', 'flash_video', 'native_flv'],
             features: ['{{ video_features }}'],
             success: function(mediaElement, originalNode, instance) {
@@ -498,7 +508,7 @@ function setCheckbox(value, table_id) {
 }
 
 function action_click(element, table_id) {
-    d = $("#"+table_id);
+    var d = $("#"+table_id);
     if (!confirm('{{ "ConfirmYourChoice"|get_lang | escape('js')}}')) {
         return false;
     } else {
@@ -569,6 +579,7 @@ if (typeof CKEDITOR !== 'undefined') {
         'asciimath',
         'asciisvg',
         'audio',
+        'blockimagepaste',
         'ckeditor_wiris',
         'dialogui',
         'glossary',
@@ -586,6 +597,7 @@ if (typeof CKEDITOR !== 'undefined') {
         'flash',
         'inserthtml',
         'qmarkersrolls',
+        'ckeditor_vimeo_embed',
         'image2_chamilo'
     ];
 

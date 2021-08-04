@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -38,28 +39,43 @@ $logInfo = [
     'tool' => SECTION_COURSES,
     'tool_id' => 0,
     'tool_id_detail' => 0,
-    'action' => '',
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 
 $userId = api_get_user_id();
 
-$collapsable = api_get_configuration_value('allow_user_session_collapsable');
-if ($collapsable) {
-    $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
-    $sessionId = isset($_REQUEST['session_id']) ? $_REQUEST['session_id'] : '';
-    $value = isset($_REQUEST['value']) ? (int) $_REQUEST['value'] : '';
-    switch ($action) {
+if (array_key_exists('action', $_REQUEST)) {
+    switch ($_REQUEST['action']) {
         case 'collapse_session':
-            if (!empty($sessionId)) {
-                $userRelSession = SessionManager::getUserSession($userId, $sessionId);
+            if (api_get_configuration_value('allow_user_session_collapsable')
+                && array_key_exists('session_id', $_REQUEST)
+            ) {
+                $userRelSession = SessionManager::getUserSession($userId, $_REQUEST['session_id']);
                 if ($userRelSession) {
+                    $value = isset($_REQUEST['value']) ? (int) $_REQUEST['value'] : '';
                     $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
                     $sql = "UPDATE $table SET collapsed = $value WHERE id = ".$userRelSession['id'];
                     Database::query($sql);
                     Display::addFlash(Display::return_message(get_lang('Updated')));
                 }
+                header('Location: user_portal.php');
+                exit;
+            }
+            break;
+        case 'unsubscribe':
+            if (\Security::check_token('get')) {
+                $auth = new Auth();
+                $sessionId = isset($_REQUEST['sid']) ? $_REQUEST['sid'] : 0;
+                $courseCode = isset($_REQUEST['course_code']) ? $_REQUEST['course_code'] : '';
+
+                if (empty($courseCode)) {
+                    api_location(api_get_self());
+                }
+
+                if ($auth->remove_user_from_course($courseCode, $sessionId)) {
+                    Display::addFlash(Display::return_message(get_lang('YouAreNowUnsubscribed')));
+                }
+
                 header('Location: user_portal.php');
                 exit;
             }
@@ -234,11 +250,14 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
             if (isset($sessionInfo['courses']) &&
                 count($sessionInfo['courses']) == 1
             ) {
-                $courseCode = $sessionInfo['courses'][0]['code'];
-                $courseInfo = api_get_course_info_by_id($sessionInfo['courses'][0]['real_id']);
-                $courseUrl = $courseInfo['course_public_url'].'?id_session='.$sessionInfo['session_id'];
-                header('Location:'.$courseUrl);
-                exit;
+                foreach ($sessionInfo['courses'] as $courseItem) {
+                    $courseInfo = api_get_course_info_by_id($courseItem['real_id']);
+                    if (!empty($courseInfo)) {
+                        $courseUrl = $courseInfo['course_public_url'].'?id_session='.$sessionInfo['session_id'];
+                        header('Location:'.$courseUrl);
+                        exit;
+                    }
+                }
             }
 
             // Session has many courses.
@@ -256,14 +275,9 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
         $count_of_sessions == 0 &&
         $count_of_courses_no_sessions == 1
     ) {
-        $courses = CourseManager::get_courses_list_by_user_id($userId);
-        if (!empty($courses) && isset($courses[0]) && isset($courses[0]['code'])) {
-            $courseInfo = api_get_course_info_by_id($courses[0]['real_id']);
-            if (!empty($courseInfo)) {
-                $courseUrl = $courseInfo['course_public_url'];
-                header('Location:'.$courseUrl);
-                exit;
-            }
+        if (!empty($courseAndSessions['courses']) && isset($courseAndSessions['courses'][0]) && !empty($courseAndSessions['courses'][0]['link'])) {
+            header("Location: {$courseAndSessions['courses'][0]['link']}");
+            exit;
         }
     }
 }
@@ -316,6 +330,7 @@ $controller->tpl->assign('search_block', $controller->return_search_block());
 $controller->tpl->assign('notice_block', $controller->return_notice());
 $controller->tpl->assign('classes_block', $controller->returnClassesBlock());
 $controller->tpl->assign('skills_block', $controller->returnSkillLinks());
+$controller->tpl->assign('student_publication_block', $controller->studentPublicationBlock());
 
 $historyClass = '';
 if (!empty($_GET['history'])) {

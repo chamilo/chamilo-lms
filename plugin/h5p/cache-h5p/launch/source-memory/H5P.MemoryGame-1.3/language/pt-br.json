@@ -1,0 +1,121 @@
+{
+  "semantics": [
+    {
+      "widgets": [
+        {
+          "label": "Padrão"
+        }
+      ],
+      "label": "Cartões",
+      "entity": "card",
+      "field": {
+        "label": "Cartão",
+        "fields": [
+          {
+            "label": "Imagem"
+          },
+          {
+            "label": "Texto alternativo para a imagem",
+            "description": "Descreva o que pode ser visto na foto. O texto será lido para os usuários que necessitam utilizar leitores de tela."
+          },
+          {
+            "label": "Audio Track",
+            "description": "An optional sound that plays when the card is turned."
+          },
+          {
+            "label": "Imagem-par",
+            "description": "Uma imagem opcional para ser combinada ao invés de utilizar dois cartões com a mesma imagem."
+          },
+          {
+            "label": "Texto alternativo para a Imagem-par",
+            "description": "Descreva o que pode ser visto na foto. O texto será lido para os usuários que necessitam utilizar leitores de tela."
+          },
+          {
+            "label": "Matching Audio Track",
+            "description": "An optional sound that plays when the second card is turned."
+          },
+          {
+            "label": "Descrição",
+            "description": "Um texto curto opcional que aparecerá quando duas cartas forem combinadas corretamente."
+          }
+        ]
+      }
+    },
+    {
+      "label": "Configurações comportamentais",
+      "description": "Estas opções permitirão que você controle como o jogo funciona.",
+      "fields": [
+        {
+          "label": "Posicionar os cartões em um quadrado",
+          "description": "Tentará coincidir o número de linhas e colunas quando distribuir os cartões. Após, os cartões serão dimensionados para preencher o espaço."
+        },
+        {
+          "label": "Número de cartas para serem usadas",
+          "description": "Colocando um número maior que 2 fara com que o jogo escolha cartões aleatórios da lista de cartões."
+        },
+        {
+          "label": "Adicionar botão para tentar novamente quando o jogo acabar"
+        }
+      ]
+    },
+    {
+      "label": "Aparência e percepção",
+      "description": "Controla o visual do jogo.",
+      "fields": [
+        {
+          "label": "Cor tema",
+          "description": "Escolha uma cor para criar um tema para seu jogo."
+        },
+        {
+          "label": "Verso do cartão",
+          "description": "Use um verso customizado para seus cartões."
+        }
+      ]
+    },
+    {
+      "label": "Localização",
+      "fields": [
+        {
+          "label": "Texto de virada de cartão",
+          "default": "Cartão virou"
+        },
+        {
+          "label": "Texto de tempo gasto",
+          "default": "Tempo gasto"
+        },
+        {
+          "label": "Texto de feedback",
+          "default": "Bom trabalho!"
+        },
+        {
+          "label": "Texto do botão Tentar Novamente",
+          "default": "Tentar novamente?"
+        },
+        {
+          "label": "Rótulo do botão Fechar",
+          "default": "Fechar"
+        },
+        {
+          "label": "Rótulo do jogo",
+          "default": "Jogo da memória. Forme pares de cartões."
+        },
+        {
+          "label": "Rótulo de fim de jogo",
+          "default": "Todas os cartões foram encontrados."
+        },
+        {
+          "label": "Rótulo de índice de cartão",
+          "default": "Cartão %num:"
+        },
+        {
+          "label": "Rótulo de cartão não virado",
+          "default": "Não virado."
+        },
+        {
+          "label": "Rótulo de combinação",
+          "default": "Combinação encontrada."
+        }
+      ]
+    }
+  ]
+}

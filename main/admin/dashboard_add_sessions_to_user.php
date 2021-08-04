@@ -3,8 +3,6 @@
 
 /**
  *  Interface for assigning sessions to Human Resources Manager.
- *
- *  @package chamilo.admin
  */
 // resetting the course id
 $cidReset = true;
@@ -245,7 +243,7 @@ $result = Database::query($sql);
                 <p><?php echo get_lang('FirstLetterSession'); ?> :</p>
                 <select class="selectpicker form-control" name="firstLetterSession" onchange = "xajax_search_sessions(this.value, 'multiple')">
                     <option value="%">--</option>
-                        <?php  echo Display :: get_alphabet_options($firstLetterSession); ?>
+                        <?php echo Display :: get_alphabet_options($firstLetterSession); ?>
                 </select>
                 <?php
                     } ?>

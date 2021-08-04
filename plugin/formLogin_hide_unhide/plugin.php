@@ -27,7 +27,10 @@ $form->addElement('text', 'label', 'Text label', '');
 //get default value
 $tab_default_formLogin_hide_unhide_label = api_get_setting('formLogin_hide_unhide_label');
 $defaults = [];
-$defaults['label'] = $tab_default_formLogin_hide_unhide_label['formLogin_hide_unhide'];
+if ($tab_default_formLogin_hide_unhide_label) {
+    $defaults['label'] = $tab_default_formLogin_hide_unhide_label['formLogin_hide_unhide'];
+}
+
 $form->setDefaults($defaults);
 //display form
 $plugin_info['settings_form'] = $form;

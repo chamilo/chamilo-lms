@@ -100,7 +100,7 @@ class BlockGlobalInfo extends Block
         $content = '<h4>'.get_lang('GlobalPlatformInformation').'</h4>';
         $data_table = null;
         if (!empty($global_data)) {
-            $data_table = '<table class="table table-bordered">';
+            $data_table = '<table class="table table-hover table-striped table-bordered">';
             $i = 1;
             foreach ($global_data as $data) {
                 if ($i % 2 == 0) {

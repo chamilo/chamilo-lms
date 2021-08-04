@@ -1,0 +1,49 @@
+{
+  "semantics": [
+    {
+      "label": "Lähdetiedostot"
+    },
+    {
+      "label": "Soittimen teema",
+      "description": "Valitse soittimelle ulkoasu.",
+      "options": [
+        {
+          "label": "Minimalistinen"
+        },
+        {
+          "label": "Täysi"
+        },
+        {
+          "label": "Läpinäkyvä"
+        }
+      ]
+    },
+    {
+      "label": "Sovita kehykseen"
+    },
+    {
+      "label": "Salli säätimet",
+      "description": "Säätimillä käyttäjä voi esimerkiksi pysäyttää äänen toiston."
+    },
+    {
+      "label": "Salli automaattinen toisto",
+      "description": "Toisto alkaa välittömästi. Muussa tapauksessa käyttäjä aloittaa toiston."
+    },
+    {
+      "label": "Toista audio (Readspeakerilla)",
+      "default": "Toista audio"
+    },
+    {
+      "label": "Keskeytä audio (Readspeakerilla)",
+      "default": "Keskeytä audio"
+    },
+    {
+      "label": "Äänisisällön nimi",
+      "default": "Ääni"
+    },
+    {
+      "label": "Ääntä ei tueta -viesti",
+      "default": "Selaimesi ei tue tätä ääntä."
+    }
+  ]
+}

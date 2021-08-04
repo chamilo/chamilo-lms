@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -10,21 +11,16 @@ use ChamiloSession as Session;
  * @author Denes Nagy
  * @author Roan Embrechts, refactoring and code cleaning
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
- *
- * @package chamilo.learnpath
  */
 $this_section = SECTION_COURSES;
 
 api_protect_course_script();
 
-/* Constants and variables */
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-
 $isStudentView = isset($_REQUEST['isStudentView']) ? (int) $_REQUEST['isStudentView'] : null;
 $learnpath_id = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : null;
 $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 
-/* MAIN CODE */
 if (!$is_allowed_to_edit || $isStudentView) {
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
     exit;
@@ -79,7 +75,6 @@ $suredel = trim(get_lang('AreYouSureToDeleteJS'));
 </script>
 <?php
 
-/* DISPLAY SECTION */
 echo $lp->build_action_menu();
 echo '<div class="row">';
 echo '<div class="col-md-3">';

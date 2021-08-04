@@ -1,0 +1,147 @@
+{
+  "semantics": [
+    {
+      "label": "Pilt või video",
+      "fields": [
+        {
+          "label": "Tüüp",
+          "description": "Pilt või video, mida kuvatakse küsimuse juures (mittekohustuslik element)."
+        },
+        {
+          "label": "Keela pildi suumimine"
+        }
+      ]
+    },
+    {
+      "label": "Küsimus"
+    },
+    {
+      "label": "Õige vastus",
+      "options": [
+        {
+          "label": "Õige"
+        },
+        {
+          "label": "Vale"
+        }
+      ]
+    },
+    {
+      "label": "Kasutajaliidese tõlge õige/vale küsimustele",
+      "fields": [
+        {
+          "label": "Õige nupu silt",
+          "default": "Õige"
+        },
+        {
+          "label": "Vale nupu silt",
+          "default": "Vale"
+        },
+        {
+          "label": "Tagasiside tekst",
+          "default": "Said @score punkti @total võimalikust",
+          "description": "Tagasiside tekst, kasutatavad muutujad on: @score ja @total. Näiteks: 'Said @score punkti @total võimalikust'"
+        },
+        {
+          "label": "\"Check\" nupu tekst",
+          "default": "Kontrolli"
+        },
+        {
+          "label": "\"Näita lahendust\" nupu tekst",
+          "default": "Näita lahendust"
+        },
+        {
+          "label": "\"Proovi uuesti\" nupu tekst",
+          "default": "Proovi uuesti"
+        },
+        {
+          "label": "Vale vastus",
+          "default": "Vale vastus"
+        },
+        {
+          "label": "Õige vastus",
+          "default": "Õige vastus"
+        },
+        {
+          "label": "Tekstilugeri kasutajale punktisummariba tekstiline esitus",
+          "default": "Sa said :num punkti :total punktist"
+        }
+      ]
+    },
+    {
+      "label": "Käitumisseaded",
+      "description": "Need valikud määravad, kuidas ülesanne käitub.",
+      "fields": [
+        {
+          "label": "Luba \"Proovi uuesti\" nupp"
+        },
+        {
+          "label": "Luba \"Näita lahendust\" nupp"
+        },
+        {
+          "label": "Luba \"Kontrolli\" nupp"
+        },
+        {
+          "label": "Näita kinnitusdialoogi nupule \"Kontrolli\" vajutamisel"
+        },
+        {
+          "label": "Näita kinnitusdialoogi nupule \"Proovi uuesti\" vajutamisel"
+        },
+        {
+          "label": "Kontrolli vastust automaatselt",
+          "description": "Pane tähele, et puudega inimeste kasutajakogemus kanntab selle valiku lubamisel"
+        },
+        {
+          "label": "Õige vastuse tagasiside",
+          "description": "See asendab vaikimisi tagasiside teksti. Kasutatavad muutujad on: @score ja @total"
+        },
+        {
+          "label": "Vale vastuse tagasiside",
+          "description": "See asendab vaikimisi tagasiside teksti. Kasutatavad muutujad on: @score ja @total"
+        }
+      ]
+    },
+    {
+      "label": "Kontrolli kinnitusdialoog",
+      "fields": [
+        {
+          "label": "Pealkirja tekst",
+          "default": "Lõpetada?"
+        },
+        {
+          "label": "Sisu tekst",
+          "default": "Kas oled kindel, et soovid lõpetada?"
+        },
+        {
+          "label": "Katkesta nupu silt",
+          "default": "Ei"
+        },
+        {
+          "label": "Kinnita nupu silt",
+          "default": "Jah"
+        }
+      ]
+    },
+    {
+      "label": "Proovi uuesti kinnitusdialoog",
+      "fields": [
+        {
+          "label": "Pealkirja tekst",
+          "default": "Proovida uuesti?"
+        },
+        {
+          "label": "Sisu tekst",
+          "default": "Kas oled kindel, et soovid uuesti proovida?"
+        },
+        {
+          "label": "Katkesta nupu silt",
+          "default": "Ei"
+        },
+        {
+          "label": "Kinnita nupu silt",
+          "default": "Jah"
+        }
+      ]
+    }
+  ]
+}

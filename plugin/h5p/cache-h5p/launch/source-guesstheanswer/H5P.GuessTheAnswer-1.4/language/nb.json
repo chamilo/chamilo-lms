@@ -1,0 +1,26 @@
+{
+  "semantics": [
+    {
+      "label": "Beskrivelse av oppgaven",
+      "description": "Beskriv hva brukeren må gjøre for å løse oppgaven."
+    },
+    {
+      "label": "Media",
+      "fields": [
+        {
+          "label": "Type",
+          "description": "Valgfrit media-element som vises over spørsmålet."
+        }
+      ]
+    },
+    {
+      "label": "Etikett for løsningsknapp",
+      "default": "Klikk for å se svar",
+      "description": "Knapp som vil vise løsningen."
+    },
+    {
+      "label": "Løsningstekst",
+      "description": "Løsningen på oppgaven gitt av beskrivelse og bildet."
+    }
+  ]
+}

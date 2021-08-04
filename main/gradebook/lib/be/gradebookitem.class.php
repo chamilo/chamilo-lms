@@ -5,8 +5,6 @@
  * Interface for all displayable items in the gradebook.
  *
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 interface GradebookItem
 {

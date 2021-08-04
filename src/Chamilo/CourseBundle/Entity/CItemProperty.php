@@ -31,13 +31,13 @@ class CItemProperty
      */
     protected $id;
 
-    /** //, inversedBy="users",
+    /** //, inversedBy="users",.
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
     protected $course;
 
-    /** //, inversedBy="users",
+    /** //, inversedBy="users",.
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo", cascade={"persist"})
      * @ORM\JoinColumn(name="to_group_id", referencedColumnName="iid")
      */
@@ -55,7 +55,7 @@ class CItemProperty
      */
     protected $insertUser;
 
-    /** //, inversedBy="users",
+    /** //, inversedBy="users",.
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */

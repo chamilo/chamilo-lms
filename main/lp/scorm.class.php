@@ -1,12 +1,9 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-use Symfony\Component\DomCrawler\Crawler;
+/* For licensing terms, see /license.txt */
 
 /**
  * Defines the scorm class, which is meant to contain the scorm items (nuclear elements).
- *
- * @package chamilo.learnpath
  *
  * @author    Yannick Warnier <ywarnier@beeznest.org>
  */
@@ -97,8 +94,7 @@ class scorm extends learnpath
             // UTF-8 is supported by DOMDocument class, this is for sure.
             $xml = api_utf8_encode_xml($xml, $this->manifest_encoding);
 
-            $crawler = new Crawler();
-            $crawler->addXmlContent($xml);
+            $crawler = Import::xmlFromString($xml);
 
             $xmlErrors = libxml_get_errors();
 
@@ -118,7 +114,7 @@ class scorm extends learnpath
 
             if ($root->hasAttributes()) {
                 $attributes = $root->attributes;
-                if ($attributes->length !== 0) {
+                if (0 !== $attributes->length) {
                     foreach ($attributes as $attrib) {
                         // <manifest> element attributes
                         $this->manifest[$attrib->name] = $attrib->value;
@@ -128,10 +124,10 @@ class scorm extends learnpath
             $this->manifest['name'] = $root->tagName;
             if ($root->hasChildNodes()) {
                 $children = $root->childNodes;
-                if ($children->length !== 0) {
+                if (0 !== $children->length) {
                     foreach ($children as $child) {
                         // <manifest> element children (can be <metadata>, <organizations> or <resources> )
-                        if ($child->nodeType == XML_ELEMENT_NODE) {
+                        if (XML_ELEMENT_NODE == $child->nodeType) {
                             switch ($child->tagName) {
                                 case 'metadata':
                                     // Parse items from inside the <metadata> element.
@@ -143,7 +139,7 @@ class scorm extends learnpath
                                     $orgs_attribs = $child->attributes;
                                     foreach ($orgs_attribs as $orgs_attrib) {
                                         // Attributes of the <organizations> element.
-                                        if ($orgs_attrib->nodeType == XML_ATTRIBUTE_NODE) {
+                                        if (XML_ATTRIBUTE_NODE == $orgs_attrib->nodeType) {
                                             $this->manifest['organizations'][$orgs_attrib->name] = $orgs_attrib->value;
                                         }
                                     }

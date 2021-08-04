@@ -11,8 +11,8 @@ require_once 'work.lib.php';
 
 $this_section = SECTION_COURSES;
 
-$work_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
-$documentId = isset($_REQUEST['document_id']) ? intval($_REQUEST['document_id']) : null;
+$work_id = isset($_REQUEST['id']) ? (int) ($_REQUEST['id']) : null;
+$documentId = isset($_REQUEST['document_id']) ? (int) ($_REQUEST['document_id']) : null;
 
 $is_allowed_to_edit = api_is_allowed_to_edit();
 $course_id = api_get_course_int_id();

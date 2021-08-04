@@ -1,0 +1,29 @@
+{
+  "title": "H5PEditor.ColorSelector",
+  "majorVersion": 1,
+  "minorVersion": 2,
+  "patchVersion": 6,
+  "runnable": 0,
+  "machineName": "H5PEditor.ColorSelector",
+  "coreApi": {
+    "majorVersion": 1,
+    "minorVersion": 24
+  },
+  "author": "Joubel",
+  "preloadedJs": [
+    {
+      "path": "scripts/spectrum.js"
+    },
+    {
+      "path": "scripts/color-selector.js"
+    }
+  ],
+  "preloadedCss": [
+    {
+      "path": "styles/spectrum.css"
+    },
+    {
+      "path": "styles/color-selector.css"
+    }
+  ]
+}

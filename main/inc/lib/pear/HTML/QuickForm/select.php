@@ -114,6 +114,11 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
         }
     }
 
+    public function setOptions($options)
+    {
+        $this->load($options);
+    }
+
      /**
      * Loads options from different types of data sources
      *
@@ -241,10 +246,10 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
     public function getPrivateName()
     {
         if ($this->getAttribute('multiple')) {
-            return $this->getName() . '[]';
-        } else {
-            return $this->getName();
+            return $this->getName().'[]';
         }
+
+        return $this->getName();
     }
 
     /**
@@ -323,7 +328,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
      */
     public function getMultiple()
     {
-        return (bool)$this->getAttribute('multiple');
+        return (bool) $this->getAttribute('multiple');
     }
 
     /**
@@ -608,9 +613,10 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                             {element}
                         </div>';
                 break;
+            case FormValidator::LAYOUT_GRID:
             case FormValidator::LAYOUT_BOX:
                 return '
-                        <div class="input-group">
+                        <div class="form-group">
                             <label>{label}</label>
                             {icon}
                             {element}

@@ -30,9 +30,17 @@ $form->addButtonSave(get_lang('Save'), 'submit_button');
 $tab_default_add_cas_logout_button_cas_logout_label = api_get_setting('add_cas_logout_button_cas_logout_label');
 $tab_default_add_cas_logout_button_cas_logout_comment = api_get_setting('add_cas_logout_button_cas_logout_comment');
 $tab_default_add_cas_logout_button_cas_logout_image_url = api_get_setting('add_cas_logout_button_cas_logout_image_url');
-$defaults['cas_logout_label'] = $tab_default_add_cas_logout_button_cas_logout_label['add_cas_logout_button'];
-$defaults['cas_logout_comment'] = $tab_default_add_cas_logout_button_cas_logout_comment['add_cas_logout_button'];
-$defaults['cas_logout_image_url'] = $tab_default_add_cas_logout_button_cas_logout_image_url['add_cas_logout_button'];
+if ($tab_default_add_cas_logout_button_cas_logout_label) {
+    $defaults['cas_logout_label'] = $tab_default_add_cas_logout_button_cas_logout_label['add_cas_logout_button'];
+}
+if ($tab_default_add_cas_logout_button_cas_logout_comment) {
+    $defaults['cas_logout_comment'] = $tab_default_add_cas_logout_button_cas_logout_comment['add_cas_logout_button'];
+}
+
+if ($tab_default_add_cas_logout_button_cas_logout_image_url) {
+    $defaults['cas_logout_image_url'] = $tab_default_add_cas_logout_button_cas_logout_image_url['add_cas_logout_button'];
+}
+
 $form->setDefaults($defaults);
 //display form
 $plugin_info['settings_form'] = $form;

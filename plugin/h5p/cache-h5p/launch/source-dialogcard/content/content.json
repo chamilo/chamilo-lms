@@ -1,0 +1,17 @@
+{"mode":"normal","description":"",
+"dialogs":["@base_cards@"]
+,"behaviour":{"enableRetry":true,"disableBackwardsNavigation":false,"scaleTextNotCard":false,"randomCards":false,
+"maxProficiency":5,"quickProgression":false},
+"answer":"Turn","next":"Next","prev":"Previous","retry":"Retry",
+"correctAnswer":"I got it right!","incorrectAnswer":"I got it wrong","round":"Round @round",
+"cardsLeft":"Cards left: @number","nextRound":"Proceed to round @round","startOver":"Start over",
+"showSummary":"Next","summary":"Summary","summaryCardsRight":"Cards you got right:",
+"summaryCardsWrong":"Cards you got wrong:","summaryCardsNotShown":"Cards in pool not shown:",
+"summaryOverallScore":"Overall Score","summaryCardsCompleted":"Cards you have completed learning:",
+"summaryCompletedRounds":"Completed rounds:",
+"summaryAllDone":"Well done! You got all @cards cards correct @max times in a row!",
+"progressText":"Card @card of @total","cardFrontLabel":"Card front","cardBackLabel":"Card back",
+"tipButtonLabel":"Show tip","audioNotSupported":"Your browser does not support this audio",
+"confirmStartingOver":{"header":"Start over?",
+"body":"All progress will be lost. Are you sure you want to start over?",
+"cancelLabel":"Cancel","confirmLabel":"Start over"},"title":""}

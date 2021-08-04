@@ -1,15 +1,12 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * View (MVC patter) for editing an attendance.
  *
  * @author Christian Fasanando <christian1827@gmail.com>
- *
- * @package chamilo.attendance
  */
-
-// protect a course script
 api_protect_course_script(true);
 
 // error messages
@@ -22,7 +19,7 @@ if (!isset($error)) {
 }
 
 $attendance_weight = api_float_val($attendance_weight);
-// display form
+
 $form = new FormValidator(
     'attendance_edit',
     'POST',
@@ -31,7 +28,6 @@ $form = new FormValidator(
 $form->addElement('header', '', get_lang('Edit'));
 $form->addElement('hidden', 'sec_token', $token);
 $form->addElement('hidden', 'attendance_id', $attendance_id);
-
 $form->addText('title', get_lang('Title'), true);
 $form->applyFilter('title', 'html_filter');
 $form->addHtmlEditor(
@@ -86,9 +82,7 @@ if (Gradebook::is_active()) {
     );
     $form->applyFilter('attendance_weight', 'html_filter');
     $form->addElement('html', '</div>');
-
     $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_ATTENDANCE, $attendance_id);
-
     $form->addElement('html', '</div>');
 }
 $form->addButtonUpdate(get_lang('Save'));
@@ -100,12 +94,17 @@ $default['attendance_qualify_title'] = $attendance_qualify_title;
 $default['attendance_weight'] = $attendance_weight;
 $default['skills'] = array_keys($skillList);
 
-$link_info = GradebookUtils::isResourceInCourseGradebook(
+$linkInfo = GradebookUtils::isResourceInCourseGradebook(
     api_get_course_id(),
     7,
     $attendance_id,
     api_get_session_id()
 );
-$default['category_id'] = $link_info['category_id'];
+
+$default['category_id'] = null;
+if ($linkInfo) {
+    $default['category_id'] = $linkInfo['category_id'];
+}
+
 $form->setDefaults($default);
 $form->display();

@@ -1,0 +1,116 @@
+{
+  "semantics": [
+    {
+      "label": "Uppgiftsbeskrivning",
+      "description": "Beskriv hur användaren ska utföra uppgiften.",
+      "placeholder": "Klicka på alla verb i följande text."
+    },
+    {
+      "label": "Textfält",
+      "placeholder": "Det här är ett svar: *svar*.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Markerade ord lägg till med asterisk (*).</li><li>Asterisker kan skrivas inne i markerade ord genom att man lägger till en extra asterisk, *rättord*** => rättord*.</li></ul>",
+        "example": "De rätta orden markeras så här: *rättord*, en asterisk skrivs så här: *rättord***."
+      }
+    },
+    {
+      "label": "Allmän Feedback",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Standard"
+            }
+          ],
+          "label": "Definiera anpassad feedback för varje poängnivå",
+          "description": "Klicka på \"Lägg till nivå\" knappen för att lägga till så många nivåer du behöver. Exampel: 0-20% Låg nivå, 21-91% Mellannivå, 91-100% Hög nivå!",
+          "entity": "nivå",
+          "field": {
+            "fields": [
+              {
+                "label": "Poängnivå"
+              },
+              {},
+              {
+                "label": "Feedback för definierad poängnivå",
+                "placeholder": "Fyll i feedback"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Text för \"Kontroll\" knapp",
+      "default": "Kontroll"
+    },
+    {
+      "label": "Text for \"Försök igen\" knapp",
+      "default": "Försök igen"
+    },
+    {
+      "label": "Text för \"Visa lösning\" knapp",
+      "default": "Visa lösning"
+    },
+    {
+      "label": "Funktionsinställningar.",
+      "description": "De här alternativen låter dig styra hur uppgiften fungerar.",
+      "fields": [
+        {
+          "label": "Tillåt \"Försök igen\""
+        },
+        {
+          "label": "Tillåt \"Visa lösning\" knapp"
+        },
+        {
+          "label": "Tillåt \"Kontroll\" knapp"
+        },
+        {
+          "label": "Visa poäng",
+          "description": "Visa poäng per svar."
+        }
+      ]
+    },
+    {
+      "label": "Text för rätt svar",
+      "default": "Rätt!",
+      "description": "Text som visar att ett svar är rätt"
+    },
+    {
+      "label": "Text för fel svar",
+      "default": "Fel",
+      "description": "Text som visar att ett svar är fel"
+    },
+    {
+      "label": "Text för missat svar",
+      "default": "Svar saknas",
+      "description": "Text som visar att ett svar saknas"
+    },
+    {
+      "label": "Beskrivning för Visa lösning",
+      "default": "Uppgiften har uppdaterats så att lösningen ingår.",
+      "description": "Den här texten berättar för användaren att uppgiften har uppdaterats med lösningen."
+    },
+    {
+      "label": "Poängfältet i textform för dem som använder textuppläsning",
+      "default": "Du fick :num av :total poäng"
+    },
+    {
+      "label": "Etikett för den fullständiga läsbara texten för tillgänglighetshjälpmedel",
+      "default": "Fullständigt läsbar text"
+    },
+    {
+      "label": "Etikett för texten där ord kan markeras, för tillgänglighetshjälpmedel",
+      "default": "Fullständig text där ord kan markeras"
+    },
+    {
+      "label": "Rubrik för lösningsläge, för tillgänglighetshjälpmedel",
+      "default": "Lösningsläge"
+    },
+    {
+      "label": "Rubrik för kontrolläge for assistive technologies",
+      "default": "Kontrolläge"
+    }
+  ]
+}

@@ -31,7 +31,7 @@ class DashboardManager
         $table_cols = ['name', 'version', 'description'];
         echo Display::page_subheader(get_lang('DashboardPlugins'));
         echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).$tokenCondition.'">';
-        echo '<table class="data_table">';
+        echo '<table class="table table-hover table-striped data_table">';
         echo '<tr>';
         echo '<th width="50px">'.get_lang('Enabled').'</th>';
         echo '<th width="250px">'.get_lang('Name').'</th>';
@@ -190,7 +190,7 @@ class DashboardManager
             }
             // clean from block data
             if (!empty($not_selected_blocks_id)) {
-                $sql_check = "SELECT id FROM $tbl_block 
+                $sql_check = "SELECT id FROM $tbl_block
                               WHERE id IN(".implode(',', $not_selected_blocks_id).")";
                 $rs_check = Database::query($sql_check);
                 if (Database::num_rows($rs_check) > 0) {
@@ -355,7 +355,7 @@ class DashboardManager
             $html .= '<div style="margin-top:20px">';
             $html .= '<div><strong>'.get_lang('SelectBlockForDisplayingInsideBlocksDashboardView').'</strong></div><br />';
             $html .= '<form name="dashboard_list" method="post" action="index.php?action=store_user_block">';
-            $html .= '<table class="data_table">';
+            $html .= '<table class="table table-hover table-striped data_table">';
             $html .= '<tr>';
             $html .= '<th width="5%">';
             $html .= get_lang('Enabled');

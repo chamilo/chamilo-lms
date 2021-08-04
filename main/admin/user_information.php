@@ -40,13 +40,10 @@ if (!api_is_student_boss()) {
     }
 }
 
-$interbreadcrumb[] = ["url" => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ["url" => 'user_list.php', 'name' => get_lang('UserList')];
-
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('UserList')];
 $userId = $user['user_id'];
-
 $currentUrl = api_get_self().'?user_id='.$userId;
-
 $tool_name = UserManager::formatUserFullName($userEntity);
 $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -131,7 +128,7 @@ $userInfo = null;
 $studentBossList = UserManager::getStudentBossList($userId);
 $studentBossListToString = '';
 if (!empty($studentBossList)) {
-    $table = new HTML_Table(['class' => 'data_table']);
+    $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
     $table->setHeaderContents(0, 0, get_lang('User'));
     $csvContent[] = [get_lang('StudentBoss')];
 
@@ -147,7 +144,7 @@ if (!empty($studentBossList)) {
 
 $registrationDate = $user['registration_date'];
 
-$table = new HTML_Table(['class' => 'data_table']);
+$table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
 $table->setHeaderContents(0, 0, get_lang('Information'));
 
 $csvContent[] = [get_lang('Information')];
@@ -192,14 +189,19 @@ foreach ($data as $label => $item) {
     $row++;
 }
 
-$table = new HTML_Table(['class' => 'data_table']);
+$table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
 $table->setHeaderContents(0, 0, get_lang('Tracking'));
 $csvContent[] = [get_lang('Tracking')];
 $userInfo['first_connection'] = Tracking::get_first_connection_date($userId);
 $userInfo['last_connection'] = Tracking::get_last_connection_date($userId, true);
+$userInfo['last_connection_in_course'] = api_format_date(
+    Tracking::getLastConnectionInAnyCourse($userId),
+    DATE_FORMAT_SHORT
+);
 $data = [
     get_lang('FirstLogin') => $userInfo['first_connection'],
     get_lang('LatestLogin') => $userInfo['last_connection'],
+    get_lang('LatestLoginInAnyCourse') => $userInfo['last_connection_in_course'],
 ];
 
 if (api_get_setting('allow_terms_conditions') === 'true') {
@@ -284,7 +286,6 @@ if (api_get_setting('allow_social_tool') === 'true') {
  */
 $sessions = SessionManager::get_sessions_by_user($userId, true);
 $personal_course_list = [];
-$courseToolInformationTotal = null;
 $sessionInformation = '';
 if (count($sessions) > 0) {
     $header = [
@@ -308,9 +309,9 @@ if (count($sessions) > 0) {
         $data = [];
         $personal_course_list = [];
         $id_session = $session_item['session_id'];
-
         $csvContent[] = [$session_item['session_name']];
         $csvContent[] = $headerList;
+        $courseToolInformationTotal = '';
         foreach ($session_item['courses'] as $my_course) {
             $courseInfo = api_get_course_info_by_id($my_course['real_id']);
             $sessionStatus = SessionManager::get_user_status_in_course_session(
@@ -339,7 +340,8 @@ if (count($sessions) > 0) {
                 Display::return_icon('course_home.png', get_lang('CourseHomepage')).'</a>';
 
             if (!empty($my_course['status']) && $my_course['status'] == STUDENT) {
-                $tools .= '<a href="user_information.php?action=unsubscribe_session_course&course_id='.$courseInfo['real_id'].'&user_id='.$userId.'&id_session='.$id_session.'">'.
+                $tools .= '<a
+                    href="user_information.php?action=unsubscribe_session_course&course_id='.$courseInfo['real_id'].'&user_id='.$userId.'&id_session='.$id_session.'">'.
                     Display::return_icon('delete.png', get_lang('Delete')).'</a>';
             }
 
@@ -387,13 +389,24 @@ if (count($sessions) > 0) {
         $dates = array_filter(
             [$session_item['access_start_date'], $session_item['access_end_date']]
         );
-
+        $certificateLink = Display::url(
+            Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_SMALL),
+            api_get_path(WEB_CODE_PATH).'mySpace/session.php?'
+            .http_build_query(
+                [
+                    'action' => 'export_to_pdf',
+                    'type' => 'achievement',
+                    'session_to_export' => $id_session,
+                    'student' => $userId,
+                ]
+            ),
+            ['target' => '_blank']
+        );
         $sessionInformation .= Display::page_subheader(
             '<a href="'.api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$id_session.'">'.
             $session_item['session_name'].'</a>',
-            ' '.implode(' - ', $dates)
+            $certificateLink.' '.implode(' - ', $dates)
         );
-
         $sessionInformation .= Display::return_sortable_table(
             $header,
             $data,
@@ -406,7 +419,6 @@ if (count($sessions) > 0) {
 } else {
     $sessionInformation = '<p>'.get_lang('NoSessionsForThisUser').'</p>';
 }
-$courseToolInformationTotal = '';
 
 /**
  * Show the courses in which this user is subscribed.
@@ -436,7 +448,7 @@ if (Database::num_rows($res) > 0) {
     $csvContent[] = $headerList;
 
     $data = [];
-    $courseToolInformationTotal = null;
+    $courseToolInformationTotal = '';
     while ($course = Database::fetch_object($res)) {
         $courseInfo = api_get_course_info_by_id($course->c_id);
         $courseCode = $courseInfo['code'];
@@ -653,7 +665,7 @@ if ($hrmList) {
     echo '</div>';
 }
 
-if ($user['status'] == DRH) {
+if (DRH == $user['status']) {
     $usersAssigned = UserManager::get_users_followed_by_drh($userId);
 
     if ($usersAssigned) {
@@ -680,11 +692,17 @@ if ($user['status'] == DRH) {
 }
 $socialTool = api_get_setting('allow_social_tool');
 $tpl->assign('social_tool', $socialTool);
-
 $tpl->assign('user', $userInfo);
 $layoutTemplate = $tpl->get_template('admin/user_information.tpl');
 $content = $tpl->fetch($layoutTemplate);
 echo $content;
+if (api_get_configuration_value('allow_career_users')) {
+    if (!empty($sessions)) {
+        $sessions = array_column($sessions, 'session_id');
+        echo SessionManager::getCareerDiagramPerSessionList($sessions, $userId);
+    }
+    echo MyStudents::userCareersTable($userId);
+}
 
 echo Display::page_subheader(get_lang('SessionList'), null, 'h3', ['class' => 'section-title']);
 echo $sessionInformation;
@@ -698,20 +716,5 @@ echo Tracking::displayUserSkills(
     0,
     0
 );
-if (api_get_configuration_value('allow_career_users')) {
-    $careers = UserManager::getUserCareers($userId);
-
-    if (!empty($careers)) {
-        echo Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
-        $table = new HTML_Table(['class' => 'data_table']);
-        $table->setHeaderContents(0, 0, get_lang('Career'));
-        $row = 1;
-        foreach ($careers as $carerData) {
-            $table->setCellContents($row, 0, $carerData['name']);
-            $row++;
-        }
-        echo $table->toHtml();
-    }
-}
 
 Display::display_footer();

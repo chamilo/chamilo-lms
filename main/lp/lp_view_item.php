@@ -10,8 +10,6 @@ use ChamiloSession as Session;
  * @author Denes Nagy
  * @author Roan Embrechts, refactoring and code cleaning
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
- *
- * @package chamilo.learnpath
  */
 
 // Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP
@@ -49,7 +47,7 @@ if (empty($lp)) {
 
 $mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : 'fullpage';
 if (isset($_SESSION['oLP']) && isset($_GET['id'])) {
-    $_SESSION['oLP']->current = intval($_GET['id']);
+    $_SESSION['oLP']->current = (int) $_GET['id'];
 }
 $this_section = SECTION_COURSES;
 /* Header and action code */
@@ -89,7 +87,7 @@ $interbreadcrumb[] = [
 $show_learn_path = true;
 $lp_theme_css = $lp->get_theme();
 
-if ($mode == 'fullpage') {
+if ('fullpage' === $mode) {
     Display::display_header(get_lang('Item'), 'Path');
 }
 

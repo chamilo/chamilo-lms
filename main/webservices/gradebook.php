@@ -1,9 +1,12 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Skill as SkillManager;
 
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_webservices();
 
 ini_set('memory_limit', -1);
 
@@ -180,6 +183,17 @@ function WSGetGradebookUserItemScore($params)
                         $link->set_session_id($link->getCategory()->get_session_id());
                         $score = $link->calc_score($userInfo['user_id']);
                         break;
+                    }
+
+                    if (empty($score)) {
+                        // If no score found then try exercises from base course.
+                        /** @var ExerciseLink $link */
+                        foreach ($links as $link) {
+                            $link->checkBaseExercises = true;
+                            $link->set_session_id($link->getCategory()->get_session_id());
+                            $score = $link->calc_score($userInfo['user_id']);
+                            break;
+                        }
                     }
                     break;
                 case LINK_STUDENTPUBLICATION:

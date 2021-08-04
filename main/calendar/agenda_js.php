@@ -1,9 +1,6 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.calendar
- */
+/* For licensing terms, see /license.txt */
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
@@ -12,10 +9,11 @@ $typeList = ['personal', 'course', 'admin', 'platform'];
 $type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], $typeList) ? $_REQUEST['type'] : 'personal';
 $userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
 
-if ($type == 'personal' || $type == 'admin') {
+if ('personal' == $type || 'admin' == $type) {
     $cidReset = true; // fixes #5162
 }
 require_once __DIR__.'/../inc/global.inc.php';
+api_block_inactive_user();
 
 $current_course_tool = TOOL_CALENDAR_EVENT;
 $this_section = SECTION_MYAGENDA;
@@ -115,7 +113,7 @@ switch ($type) {
 $tpl->assign('js_format_date', 'll');
 $region_value = api_get_language_isocode();
 
-if ($region_value == 'en') {
+if ('en' == $region_value) {
     $region_value = 'en-GB';
 }
 $tpl->assign('region_value', $region_value);
@@ -225,13 +223,15 @@ if (!empty($userId)) {
     $agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?type='.$type;
 }
 
-if ($type == 'course' && !empty($courseId)) {
+if ('course' === $type && !empty($courseId)) {
     $agenda_ajax_url .= '&'.api_get_cidreq();
 }
 
 if (isset($_GET['session_id'])) {
     $agenda_ajax_url .= '&session_id='.intval($_GET['session_id']);
 }
+
+$agenda_ajax_url .= '&sec_token='.Security::get_token();
 
 $tpl->assign('web_agenda_ajax_url', $agenda_ajax_url);
 
@@ -274,7 +274,7 @@ $form->addHtmlEditor(
     ]
 );
 
-if ($agenda->type === 'course') {
+if ('course' === $agenda->type) {
     $form->addHtml('<div id="add_as_announcement_div" style="display: none">');
     $form->addElement('checkbox', 'add_as_annonuncement', null, get_lang('AddAsAnnouncement'));
     $form->addHtml('</div>');
@@ -298,6 +298,14 @@ if (!empty($onHoverInfo)) {
     ];
 }
 $tpl->assign('on_hover_info', $options);
+
+$settings = api_get_configuration_value('fullcalendar_settings');
+$extraSettings = '';
+if (!empty($settings) && isset($settings['settings']) && !empty($settings['settings'])) {
+    $encoded = json_encode($settings['settings']);
+    $extraSettings = substr($encoded, 1, -1).',';
+}
+$tpl->assign('fullcalendar_settings', $extraSettings);
 
 $templateName = $tpl->get_template('agenda/month.tpl');
 $content = $tpl->fetch($templateName);

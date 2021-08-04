@@ -53,13 +53,13 @@ try {
         throw new Exception('Content items are missing');
     }
 
-    foreach ($decodedJwt->{'https://purl.imsglobal.org/spec/lti-dl/claim/content_items'} as $contentItem) {
+    foreach ($decodedJwt->{'https://purl.imsglobal.org/spec/lti-dl/claim/content_items'} as $contentItemClaim) {
         /** @var LtiContentItemType|null $contentItem */
         $contentItem = null;
 
-        switch ($contentItem->type) {
+        switch ($contentItemClaim->type) {
             case 'ltiResourceLink':
-                $contentItem = new LtiResourceLink($contentItem);
+                $contentItem = new LtiResourceLink($contentItemClaim);
             default:
                 continue;
         }

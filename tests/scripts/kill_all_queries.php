@@ -1,4 +1,7 @@
 <?php
+
+/* For licensing terms, see /license.txt */
+
 /**
  * This script kills all queries to which the Chamilo database user has access
  * through processlist.

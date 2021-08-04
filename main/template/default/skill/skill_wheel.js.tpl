@@ -47,7 +47,10 @@ var SkillWheel = {
                 formSkill.find('ul#gradebook').empty().parent().parent().show();
 
                 $.each(skillInfo.gradebooks, function(index, gradebook) {
-                    $('<li>').text(gradebook.name).appendTo(formSkill.find('ul#gradebook'));
+                    var $gradebookCourse = $('<a>',{href: _p.web_main + 'auth/courses.php'})
+                        .text(gradebook.course_code);
+
+                    $('<li>').html($gradebookCourse).appendTo(formSkill.find('ul#gradebook'));
                 });
             } else {
                 formSkill.find('ul#gradebook').parent().parent().hide();
@@ -451,8 +454,9 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
     /* Append an element "svg" to the #vis section */
     var vis = div.append("svg")
     //.attr("class", "Blues")
-    .attr("width", w + padding * 2)
-    .attr("height", h + padding * 2)
+    .attr("width", '100%')
+    .attr("height", '100%')
+    .attr('viewBox', '0 0 ' + (w + padding * 2) + ' ' + (h + padding * 2))
     .append("g")
     .attr("transform", "translate(" + (r + padding) + "," + (r/reduce_top + padding) + ")");
 

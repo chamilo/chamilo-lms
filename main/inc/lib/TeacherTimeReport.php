@@ -5,8 +5,6 @@
  * Library for generate a teacher time report.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.admin
  */
 class TeacherTimeReport
 {

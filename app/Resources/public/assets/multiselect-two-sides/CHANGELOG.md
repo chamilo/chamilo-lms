@@ -1,16 +1,21 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.5.7](https://github.com/crlcu/multiselect/compare/v2.5.6...v2.5.7) (2020-05-06)
+
+### [2.5.6](https://github.com/crlcu/multiselect/compare/v2.5.5...v2.5.6) (2020-05-06)
+
+* Upgrade dev dependencies
+
 <a name="2.5.5"></a>
-## [2.5.5](https://github.com/crlcu/multiselect/compare/v2.5.2...v2.5.5) (2018-07-25)
+## [2.5.5](https://github.com/crlcu/multiselect/compare/v2.5.4...v2.5.5) (2018-07-25)
 
 
 ### Bug Fixes
 
 * :visible selector is not working on safari, use :not(.hidden) ([beebfe0](https://github.com/crlcu/multiselect/commit/beebfe0))
 * [#152](https://github.com/crlcu/multiselect/issues/152) - ignoreDisabled: true does not work with optgroups ([afc5d8c](https://github.com/crlcu/multiselect/commit/afc5d8c))
-* [#166](https://github.com/crlcu/multiselect/issues/166) - Searching and Adding elements cause the already selected elements to get added as a hidden element ([ddefce3](https://github.com/crlcu/multiselect/commit/ddefce3))
 
 
 

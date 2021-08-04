@@ -99,6 +99,7 @@ $form = new FormValidator(
     api_get_self().'?user_id='.$user_id,
     ''
 );
+$form->protect();
 $form->addElement('header', $tool_name);
 $form->addElement('hidden', 'user_id', $user_id);
 
@@ -171,9 +172,19 @@ if (strlen($user_data['picture_uri']) > 0) {
 
 // Username
 if (api_get_setting('login_is_email') != 'true') {
-    $form->addElement('text', 'username', get_lang('LoginName'), ['autocomplete' => 'off', 'maxlength' => USERNAME_MAX_LENGTH]);
+    $form->addElement(
+        'text',
+        'username',
+        get_lang('LoginName'),
+        ['autocomplete' => 'off', 'maxlength' => USERNAME_MAX_LENGTH]
+    );
     $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+    $form->addRule(
+        'username',
+        sprintf(get_lang('UsernameMaxXCharacters'), (string) USERNAME_MAX_LENGTH),
+        'maxlength',
+        USERNAME_MAX_LENGTH
+    );
     $form->addRule('username', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
     $form->addRule('username', get_lang('UserTaken'), 'username_available', $user_data['username']);
 }
@@ -267,7 +278,12 @@ $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), null, false);
 
 // Registration User and Date
 $creatorInfo = api_get_user_info($user_data['creator_id']);
-$date = sprintf(get_lang('CreatedByXYOnZ'), 'user_information.php?user_id='.$user_data['creator_id'], $creatorInfo['username'], $user_data['registration_date']);
+$date = sprintf(
+    get_lang('CreatedByXYOnZ'),
+    'user_information.php?user_id='.$user_data['creator_id'],
+    $creatorInfo['username'],
+    $user_data['registration_date']
+);
 $form->addElement('label', get_lang('RegistrationDate'), $date);
 
 if (!$user_data['platform_admin']) {
@@ -369,7 +385,7 @@ $error_drh = false;
 // Validate form
 if ($form->validate()) {
     $user = $form->getSubmitValues(1);
-    $reset_password = intval($user['reset_password']);
+    $reset_password = (int) $user['reset_password'];
     if ($reset_password == 2 && empty($user['password'])) {
         Display::addFlash(Display::return_message(get_lang('PasswordIsTooShort')));
         header('Location: '.api_get_self().'?user_id='.$user_id);
@@ -404,10 +420,10 @@ if ($form->validate()) {
         $email = $user['email'];
         $phone = $user['phone'];
         $username = isset($user['username']) ? $user['username'] : $userInfo['username'];
-        $status = intval($user['status']);
-        $platform_admin = intval($user['platform_admin']);
-        $send_mail = intval($user['send_mail']);
-        $reset_password = intval($user['reset_password']);
+        $status = (int) $user['status'];
+        $platform_admin = (int) $user['platform_admin'];
+        $send_mail = (int) $user['send_mail'];
+        $reset_password = (int) $user['reset_password'];
         $hr_dept_id = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : null;
         $language = $user['language'];
         $address = isset($user['address']) ? $user['address'] : null;
@@ -424,7 +440,7 @@ if ($form->validate()) {
             $status = COURSEMANAGER;
         }
 
-        if (api_get_setting('login_is_email') == 'true') {
+        if (api_get_setting('login_is_email') === 'true') {
             $username = $email;
         }
 

@@ -9,6 +9,7 @@ $strings['MeetingOpened'] = "Sala abierta";
 $strings['MeetingClosed'] = "Sala cerrada";
 $strings['MeetingClosedComment'] = "Si ha pedido grabar la sesión de videoconferencia en los parámetros del curso, esta grabación aparecerá en la lista siguiente una vez generada.";
 $strings['CloseMeeting'] = "Cerrar sala";
+$strings['RoomExit'] = "Ha salido de la sesión de Videoconferencia";
 
 $strings['VideoConferenceXCourseX'] = "Videoconferencia #%s, curso %s";
 $strings['VideoConferenceAddedToTheCalendar'] = "Videoconferencia añadida al calendario";
@@ -43,7 +44,7 @@ $strings['big_blue_button_welcome_message'] = 'Mensaje de bienvenida de BigBlueB
 $strings['enable_global_conference'] = 'Activar la conferencia global';
 $strings['enable_global_conference_per_user'] = 'Activar la conferencia global por usuario';
 $strings['enable_conference_in_course_groups'] = 'Activar las conferencias en grupos';
-$strings['enable_global_conference_link'] = 'Actvivar el enlace hacia la conferencia global desde la página principal';
+$strings['enable_global_conference_link'] = 'Activar el enlace hacia la conferencia global desde la página principal';
 
 $strings['big_blue_button_record_and_store'] = 'Grabar las sesiones de videoconferencia.';
 $strings['bbb_enable_conference_in_groups'] = 'Activar la creación de videoconferencia en los grupos.';
@@ -72,3 +73,6 @@ $strings['ParticipantsWillUseSameInterface'] = 'Los participantes usarán la mis
 $strings['SetByDefault'] = 'Lanzamiento con la interfaz por defecto';
 $strings['SetByTeacher'] = 'Elegido por el profesor';
 $strings['SetByStudent'] = 'Elegido por el alumno';
+$strings['ThereIsNoVideoConferenceActive'] = "No hay una videoconferencia actualmente activa";
+$strings['meeting_duration'] = 'Duración de la reunión (en minutos)';
+$strings['big_blue_button_students_start_conference_in_groups'] = 'Permitir a los estudiantes iniciar una videoconferencia en sus grupos.';

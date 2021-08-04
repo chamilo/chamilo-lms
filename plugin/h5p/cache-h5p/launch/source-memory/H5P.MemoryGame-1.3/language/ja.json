@@ -1,0 +1,121 @@
+{
+  "semantics": [
+    {
+      "widgets": [
+        {
+          "label": "デフォルト"
+        }
+      ],
+      "label": "カード",
+      "entity": "card",
+      "field": {
+        "label": "カード",
+        "fields": [
+          {
+            "label": "画像"
+          },
+          {
+            "label": "Alternative text for Image",
+            "description": "Describe what can be seen in the photo. The text is read by text-to-speech tools needed by visually impaired users."
+          },
+          {
+            "label": "Audio Track",
+            "description": "An optional sound that plays when the card is turned."
+          },
+          {
+            "label": "一致させる画像",
+            "description": "同じ画像の2枚のカードを使用する代わりに、別に一致させるためのオプション画像"
+          },
+          {
+            "label": "Alternative text for Matching Image",
+            "description": "Describe what can be seen in the photo. The text is read by text-to-speech tools needed by visually impaired users."
+          },
+          {
+            "label": "Matching Audio Track",
+            "description": "An optional sound that plays when the second card is turned."
+          },
+          {
+            "label": "説明",
+            "description": "一致する2つのカードが見つかるとポップアップするオプションの短文テキスト。"
+          }
+        ]
+      }
+    },
+    {
+      "label": "動作設定",
+      "description": "これらのオプションを使用して、ゲームの動作を制御できます。",
+      "fields": [
+        {
+          "label": "カードを正方形に配置",
+          "description": "カードをレイアウトするときに、列と行の数を一致させてみてください。そうすると、カードは、コンテナに合わせてスケーリングされます。"
+        },
+        {
+          "label": "使用するカードの数",
+          "description": "これを2よりも大きい数値に設定すると、カードのリストからランダムなカードが選ばれるようになります。"
+        },
+        {
+          "label": "ゲームが終了したときに、リトライのためのボタンを追加"
+        }
+      ]
+    },
+    {
+      "label": "ルック＆フィール",
+      "description": "ゲームの外観を制御します。",
+      "fields": [
+        {
+          "label": "テーマ色",
+          "description": "カードゲームのテーマとなる色を選択してください。"
+        },
+        {
+          "label": "カード裏",
+          "description": "カードに独自の裏を使います。"
+        }
+      ]
+    },
+    {
+      "label": "ローカリゼーション",
+      "fields": [
+        {
+          "label": "カードターン のテキスト",
+          "default": "カードターン"
+        },
+        {
+          "label": "経過時間のテキスト",
+          "default": "経過時間"
+        },
+        {
+          "label": "フィードバックテキスト",
+          "default": "よくできました！"
+        },
+        {
+          "label": "リトライボタンのテキスト",
+          "default": "もう一度トライしますか ?"
+        },
+        {
+          "label": "閉じるボタンのテキスト",
+          "default": "閉じる"
+        },
+        {
+          "label": "Game label",
+          "default": "Memory Game. Find the matching cards."
+        },
+        {
+          "label": "Game finished label",
+          "default": "All of the cards have been found."
+        },
+        {
+          "label": "Card indexing label",
+          "default": "Card %num:"
+        },
+        {
+          "label": "Card unturned label",
+          "default": "Unturned."
+        },
+        {
+          "label": "Card matched label",
+          "default": "Match found."
+        }
+      ]
+    }
+  ]
+}

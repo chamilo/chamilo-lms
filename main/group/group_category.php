@@ -1,19 +1,12 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.group
- */
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GROUP;
 
-// Notice for unauthorized people.
 api_protect_course_script(true);
-
-if (api_get_setting('allow_group_categories') == 'false') {
-    api_not_allowed(true);
-}
 
 $sessionId = api_get_session_id();
 
@@ -306,6 +299,7 @@ $group = [
     $form->createElement('radio', 'announcements_state', get_lang('GroupAnnouncements'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
     $form->createElement('radio', 'announcements_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
     $form->createElement('radio', 'announcements_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE),
+    $form->createElement('radio', 'announcements_state', null, get_lang('PrivateBetweenUsers'), GroupManager::TOOL_PRIVATE_BETWEEN_USERS),
 ];
 $form->addGroup(
     $group,

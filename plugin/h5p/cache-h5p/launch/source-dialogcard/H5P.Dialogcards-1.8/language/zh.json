@@ -1,0 +1,220 @@
+{
+  "semantics": [
+    {
+      "label": "標語"
+    },
+    {
+      "label": "Mode",
+      "description": "Mode of presenting the dialog cards",
+      "options": [
+        {
+          "label": "Normal"
+        },
+        {
+          "label": "Repetition"
+        }
+      ]
+    },
+    {
+      "label": "描述",
+      "default": ""
+    },
+    {
+      "widgets": [
+        {
+          "label": "預設"
+        }
+      ],
+      "label": "卡片",
+      "entity": "dialog",
+      "field": {
+        "label": "題目",
+        "fields": [
+          {
+            "label": "問題",
+            "description": "卡片的正面"
+          },
+          {
+            "label": "答案",
+            "description": "卡片的背面"
+          },
+          {
+            "label": "圖像",
+            "description": "卡片上額外顯示的圖片（卡片可以只有文字或圖片，或兩個都有）"
+          },
+          {
+            "label": "替代文字"
+          },
+          {
+            "label": "音樂"
+          },
+          {
+            "label": "提示與註解",
+            "fields": [
+              {
+                "label": "問題提示",
+                "description": "在卡片正面顯示的提示文字"
+              },
+              {
+                "label": "答案註解",
+                "description": "在卡片背面顯示的註解文字"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "行為設定",
+      "description": "透過設定來控制行為",
+      "fields": [
+        {
+          "label": "啟用「重新開始」按鈕"
+        },
+        {
+          "label": "停用「返回」按鈕",
+          "description": "在進行中禁止使用者回到上一張卡片。"
+        },
+        {
+          "label": "依卡片調整字體尺寸",
+          "description": "若不勾選，會改以文字內容來決定卡片尺寸。"
+        },
+        {
+          "label": "隨機出卡",
+          "description": "啟用後，卡片顯示的順序會隨機。"
+        },
+        {
+          "label": "Maximum proficiency level"
+        },
+        {
+          "label": "Allow quick progression",
+          "description": "If activated, learners can decide to indicate that they know a card without turning it"
+        }
+      ]
+    },
+    {
+      "label": "翻面按鈕文字",
+      "default": "翻面"
+    },
+    {
+      "label": "下一張卡片按鈕文字",
+      "default": "下一張"
+    },
+    {
+      "label": "上一張卡片按鈕文字",
+      "default": "上一張"
+    },
+    {
+      "label": "重新開始按鈕文字",
+      "default": "重新開始"
+    },
+    {
+      "label": "Text for the \"correct answer\" button",
+      "default": "I got it right!"
+    },
+    {
+      "label": "Text for the \"incorrect answer\" button",
+      "default": "I got it wrong"
+    },
+    {
+      "label": "Text for \"Round\" message below cards and on the summary screen",
+      "description": "@round will be replaced by the number of the current round",
+      "default": "Round @round"
+    },
+    {
+      "label": "Text for \"Cards left\" message",
+      "description": "@number will be replaced by the number of cards left in this round",
+      "default": "Cards left: @number"
+    },
+    {
+      "label": "Text for the \"next round\" button",
+      "description": "@round will be replaced by the round number",
+      "default": "Proceed to round @round"
+    },
+    {
+      "label": "Text for the \"Start over\" button",
+      "default": "Start over"
+    },
+    {
+      "label": "Text for the \"show summary\" button",
+      "default": "Next"
+    },
+    {
+      "label": "Title text for the summary page",
+      "default": "Summary"
+    },
+    {
+      "label": "Text for \"Cards you got right:\"",
+      "default": "Cards you got right:"
+    },
+    {
+      "label": "Text for \"Cards you got wrong:\"",
+      "default": "Cards you got wrong:"
+    },
+    {
+      "label": "Text for \"Cards not shown:\"",
+      "default": "Cards in pool not shown:"
+    },
+    {
+      "label": "Text for \"Overall Score\"",
+      "default": "Overall Score"
+    },
+    {
+      "label": "Text for \"Cards completed\"",
+      "default": "Cards you have completed learning:"
+    },
+    {
+      "label": "Text for \"Completed rounds:\"",
+      "default": "Completed rounds:"
+    },
+    {
+      "label": "Message when all cards have been learned proficiently",
+      "description": "@cards will be replaced by the number of all cards in the pool. @max will be replaced by the maximum proficiency level - 1.",
+      "default": "Well done! You got all @cards cards correct @max times in a row!"
+    },
+    {
+      "label": "進度訊息文字",
+      "description": "可用的變數為 @card 與 @total。",
+      "default": "目前在第 @card 張，共 @total 張。"
+    },
+    {
+      "label": "卡片正面文本",
+      "description": "此設定為報讀器使用",
+      "default": "卡片正面"
+    },
+    {
+      "label": "卡片反面文本",
+      "description": "此設定為報讀器使用",
+      "default": "卡片反面"
+    },
+    {
+      "label": "顯示提示或註解按鈕",
+      "default": "提示或註解"
+    },
+    {
+      "label": "音訊無法支援說明文字",
+      "default": "目前使用的瀏覽器不支援播放這個音訊。"
+    },
+    {
+      "label": "Confirm starting over dialog",
+      "fields": [
+        {
+          "label": "Header text",
+          "default": "Start over?"
+        },
+        {
+          "label": "Body text",
+          "default": "All progress will be lost. Are you sure you want to start over?"
+        },
+        {
+          "label": "Cancel button label",
+          "default": "Cancel"
+        },
+        {
+          "label": "Confirm button label",
+          "default": "Start over"
+        }
+      ]
+    }
+  ]
+}

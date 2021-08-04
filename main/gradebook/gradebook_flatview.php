@@ -1,11 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * Script.
- *
- * @package chamilo.gradebook
- */
 require_once __DIR__.'/../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/fe/exportgradebook.php';
 
@@ -55,7 +51,7 @@ if ($showlink) {
     $alllinks = $cat[0]->get_links($userId, true);
 }
 
-if (isset($export_flatview_form) && !$file_type === 'pdf') {
+if (isset($export_flatview_form) && 'pdf' === !$file_type) {
     Display::addFlash(
         Display::return_message(
             $export_flatview_form->toHtml(),
@@ -127,7 +123,7 @@ $parameters = ['selectcat' => $categoryId];
 $flatViewTable->set_additional_parameters($parameters);
 
 $params = [];
-if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {
+if (isset($_GET['export_pdf']) && 'category' === $_GET['export_pdf']) {
     $params['only_total_category'] = true;
     $params['join_firstname_lastname'] = true;
     $params['show_official_code'] = true;
@@ -211,33 +207,35 @@ if (isset($_GET['print'])) {
 }
 
 if (!empty($_GET['export_report']) &&
-    $_GET['export_report'] === 'export_report'
+    'export_report' === $_GET['export_report']
 ) {
     if (api_is_platform_admin() || api_is_course_admin() || api_is_session_general_coach() || $isDrhOfCourse) {
         $user_id = null;
-
         if (empty($_SESSION['export_user_fields'])) {
             $_SESSION['export_user_fields'] = false;
         }
-        if (!api_is_allowed_to_edit(false, false) && !api_is_course_tutor()) {
+        if (!api_is_allowed_to_edit() && !api_is_course_tutor()) {
             $user_id = api_get_user_id();
         }
 
         $params['show_official_code'] = true;
-        $printable_data = GradebookUtils::get_printable_data(
+        $onlyScore = isset($_GET['only_score']) && 1 === (int) $_GET['only_score'];
+
+        $printableData = GradebookUtils::get_printable_data(
             $cat[0],
             $users,
             $alleval,
             $alllinks,
             $params,
-            $mainCourseCategory[0]
+            $mainCourseCategory[0],
+            $onlyScore
         );
 
         switch ($_GET['export_format']) {
             case 'xls':
                 ob_start();
                 $export = new GradeBookResult();
-                $export->exportCompleteReportXLS($printable_data);
+                $export->exportCompleteReportXLS($printableData);
                 $content = ob_get_contents();
                 ob_end_clean();
                 echo $content;
@@ -245,7 +243,7 @@ if (!empty($_GET['export_report']) &&
             case 'doc':
                 ob_start();
                 $export = new GradeBookResult();
-                $export->exportCompleteReportDOC($printable_data);
+                $export->exportCompleteReportDOC($printableData);
                 $content = ob_get_contents();
                 ob_end_clean();
                 echo $content;
@@ -254,7 +252,7 @@ if (!empty($_GET['export_report']) &&
             default:
                 ob_start();
                 $export = new GradeBookResult();
-                $export->exportCompleteReportCSV($printable_data);
+                $export->exportCompleteReportCSV($printableData);
                 $content = ob_get_contents();
                 ob_end_clean();
                 echo $content;
@@ -267,14 +265,44 @@ if (!empty($_GET['export_report']) &&
 }
 
 $this_section = SECTION_COURSES;
+if (isset($_GET['selectcat']) && ($_SESSION['studentview'] === 'teacherview')) {
+    $htmlHeadXtra[] = '<script>
+        $(function() {
+            $("#dialog:ui-dialog").dialog("destroy");
+            $("#dialog-confirm").dialog({
+                autoOpen: false,
+                show: "blind",
+                resizable: false,
+                height:300,
+                modal: true
+            });
+
+            $(".export_opener").click(function() {
+                var targetUrl = $(this).attr("href");
+                $("#dialog-confirm").dialog({
+                    width:400,
+                    height:300,
+                    buttons: {
+                        "'.addslashes(get_lang('Download')).'": function() {
+                            let onlyScore = $("input[name=only_score]").prop("checked") ? 1 : 0;
+                            location.href = targetUrl+"&only_score="+onlyScore;
+                            $(this).dialog("close");
+                        }
+                   }
+                });
+                $("#dialog-confirm").dialog("open");
+                return false;
+            });
+        });
+        </script>';
+}
 
 if (isset($_GET['exportpdf'])) {
     $export_pdf_form->display();
 } else {
     Display::display_header(get_lang('FlatView'));
 }
-
-if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') {
+if (isset($_GET['isStudentView']) && 'false' === $_GET['isStudentView']) {
     DisplayGradebook::display_header_reduce_flatview(
         $cat[0],
         $showeval,
@@ -282,7 +310,7 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') {
         $simple_search_form
     );
     $flatViewTable->display();
-} elseif (isset($_GET['selectcat']) && ($_SESSION['studentview'] == 'teacherview')) {
+} elseif (isset($_GET['selectcat']) && ($_SESSION['studentview'] === 'teacherview')) {
     DisplayGradebook::display_header_reduce_flatview(
         $cat[0],
         $showeval,

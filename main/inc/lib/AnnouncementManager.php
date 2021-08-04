@@ -72,10 +72,12 @@ class AnnouncementManager
         $courseCode,
         $sessionId = 0
     ) {
-        $readerInfo = api_get_user_info($userId, false, false, true, true);
+        $readerInfo = api_get_user_info($userId, false, false, true, true, false, true);
         $courseInfo = api_get_course_info($courseCode);
-        $teacherList = CourseManager::getTeacherListFromCourseCodeToString($courseInfo['code']);
-
+        $teacherList = '';
+        if ($courseInfo) {
+            $teacherList = CourseManager::getTeacherListFromCourseCodeToString($courseInfo['code']);
+        }
         $generalCoachName = '';
         $generalCoachEmail = '';
         $coaches = '';
@@ -105,7 +107,7 @@ class AnnouncementManager
             $data['user_official_code'] = $readerInfo['official_code'];
         }
 
-        $data['course_title'] = $courseInfo['name'];
+        $data['course_title'] = $courseInfo['name'] ?? '';
         $courseLink = api_get_course_url($courseCode, $sessionId);
         $data['course_link'] = Display::url($courseLink, $courseLink);
         $data['teachers'] = $teacherList;
@@ -411,7 +413,7 @@ class AnnouncementManager
     /**
      * Displays one specific announcement.
      *
-     * @param int $id, the id of the announcement you want to display
+     * @param int $id the id of the announcement you want to display
      *
      * @return string
      */
@@ -446,10 +448,10 @@ class AnnouncementManager
             return '';
         }
 
-        $title = $announcement->getTitle();
+        $title = Security::remove_XSS($announcement->getTitle());
         $content = $announcement->getContent();
 
-        $html .= "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" class=\"data_table\">";
+        $html .= "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" class=\"table table-hover table-striped data_table\">";
         $html .= "<tr><td><h2>".$title."</h2></td></tr>";
 
         if (api_is_allowed_to_edit(false, true) ||
@@ -469,7 +471,9 @@ class AnnouncementManager
                 Display::return_icon($image_visibility.'.png', $alt_visibility, '', ICON_SIZE_SMALL)."</a>";
 
             if (api_is_allowed_to_edit(false, true)) {
-                $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$id."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."')) return false;\">".
+                $modify_icons .= "<a 
+                    href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$id."&sec_token=".$stok."\" 
+                    onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."')) return false;\">".
                     Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).
                     "</a>";
             }
@@ -512,7 +516,7 @@ class AnnouncementManager
             $html .= '<br/>';
             $html .= Display::return_icon('attachment.gif', get_lang('Attachment'));
             $html .= '<a href="'.$full_file_name.' "> '.$user_filename.' </a>';
-            $html .= ' - <span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
+            $html .= ' - <span class="forum_attach_comment" >'.Security::remove_XSS($attachment_list['comment']).'</span>';
             if (api_is_allowed_to_edit(false, true)) {
                 $url = api_get_self()."?".api_get_cidreq().
                     "&action=delete_attachment&id_attach=".$attachment_list['id']."&sec_token=".$stok;
@@ -1412,7 +1416,7 @@ class AnnouncementManager
                     'comment' => $file_comment,
                     'path' => $new_file_name,
                     'announcement_id' => $announcement_id,
-                    'size' => intval($file['size']),
+                    'size' => (int) $file['size'],
                 ];
 
                 $insertId = Database::insert($table, $params);
@@ -1647,7 +1651,8 @@ class AnnouncementManager
 
         if (api_is_allowed_to_edit(false, true) ||
             ($allowUserEditSetting && !api_is_anonymous()) ||
-            ($allowDrhAccess && api_is_drh())
+            ($allowDrhAccess && api_is_drh()) ||
+            ($session_id && api_is_coach() && api_get_configuration_value('allow_coach_to_edit_announcements'))
         ) {
             // A.1. you are a course admin with a USER filter
             // => see only the messages of this specific user + the messages of the group (s)he is member of.
@@ -1865,7 +1870,6 @@ class AnnouncementManager
         $results = [];
         $emailIcon = '<i class="fa fa-envelope-o" title="'.get_lang('AnnounceSentByEmail').'"></i>';
         $attachmentIcon = '<i class="fa fa-paperclip" title="'.get_lang('Attachment').'"></i>';
-
         $editIcon = Display::return_icon(
             'edit.png',
             get_lang('Edit'),
@@ -1907,7 +1911,6 @@ class AnnouncementManager
             if (!in_array($row['id'], $displayed)) {
                 $actionUrl = api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'
                     .api_get_cidreq_params($courseInfo['code'], $session_id, $row['to_group_id']);
-
                 $sent_to_icon = '';
                 // the email icon
                 if ($row['email_sent'] == '1') {
@@ -1955,10 +1958,8 @@ class AnnouncementManager
                     $attachment_icon = ' '.$attachmentIcon;
                 }
 
-                /* TITLE */
                 $user_info = api_get_user_info($row['insert_user_id']);
                 $username = sprintf(get_lang('LoginX'), $user_info['username']);
-
                 $username_span = Display::tag(
                     'span',
                     $user_info['complete_name'],
@@ -1975,7 +1976,8 @@ class AnnouncementManager
                 if (api_is_allowed_to_edit(false, true) ||
                     (api_is_session_general_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $row['id'])) ||
                     (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()) ||
-                    ($row['to_group_id'] == $group_id && $isTutor)
+                    ($row['to_group_id'] == $group_id && $isTutor) ||
+                    ($session_id && api_is_coach() && api_get_configuration_value('allow_coach_to_edit_announcements'))
                 ) {
                     if ($disableEdit === true) {
                         $modify_icons = "<a href='#'>".$editIconDisable."</a>";
@@ -1983,16 +1985,17 @@ class AnnouncementManager
                         $modify_icons = "<a href=\"".$actionUrl."&action=modify&id=".$row['id']."\">".$editIcon."</a>";
                     }
 
+                    $image_visibility = 'invisible';
+                    $alt_visibility = get_lang('Visible');
                     if ($row['visibility'] == 1) {
-                        $image_visibility = "visible";
+                        $image_visibility = 'visible';
                         $alt_visibility = get_lang('Hide');
-                    } else {
-                        $image_visibility = "invisible";
-                        $alt_visibility = get_lang('Visible');
                     }
 
-                    $modify_icons .= "<a href=\"".$actionUrl."&action=showhide&id=".$row['id']."&sec_token=".$stok."\">".
-                        Display::return_icon($image_visibility.'.png', $alt_visibility, '', ICON_SIZE_SMALL)."</a>";
+                    $modify_icons .= "<a
+                        href=\"".$actionUrl."&action=showhide&id=".$row['id']."&sec_token=".$stok."\">".
+                        Display::return_icon($image_visibility.'.png', $alt_visibility, '', ICON_SIZE_SMALL).
+                        "</a>";
 
                     // DISPLAY MOVE UP COMMAND only if it is not the top announcement
                     if ($iterator != 1) {
@@ -2001,12 +2004,14 @@ class AnnouncementManager
                     } else {
                         $modify_icons .= Display::return_icon('up_na.gif', get_lang('Up'));
                     }
+
                     if ($iterator < $bottomAnnouncement) {
                         $modify_icons .= "<a href=\"".$actionUrl."&action=move&down=".$row["id"]."&sec_token=".$stok."\">".
                             Display::return_icon('down.gif', get_lang('Down'))."</a>";
                     } else {
                         $modify_icons .= Display::return_icon('down_na.gif', get_lang('Down'));
                     }
+
                     if (api_is_allowed_to_edit(false, true)) {
                         if ($disableEdit === true) {
                             $modify_icons .= Display::url($deleteIconDisable, '#');

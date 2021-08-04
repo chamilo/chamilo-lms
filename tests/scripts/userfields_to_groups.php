@@ -1,8 +1,12 @@
 <?php
+
+/* For licensing terms, see /license.txt */
+
 /**
  * Move user fields "ruc" and "razon_social" to (social) groups (create groups)
  * and assign the related users to those groups.
  */
+exit;
 if (PHP_SAPI != 'cli') {
     die('This script can only be launched from the command line');
 }

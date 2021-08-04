@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -25,8 +26,6 @@ use ChamiloSession as Session;
  * 2) Define the directory to display
  * 3) Read files and directories from the directory defined in part 2
  * 4) Display all of that on an HTML page
- *
- * @package chamilo.document
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -38,11 +37,14 @@ $parent_id = null;
 $lib_path = api_get_path(LIBRARY_PATH);
 $actionsRight = '';
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+if (isset($_POST['currentFile']) && !empty($_POST['currentFile']) && empty($action)) {
+    $action = 'replace';
+}
 $allowUseTool = false;
 
 if ($allowDownloadDocumentsByApiKey) {
     try {
-        if ($action != 'download') {
+        if ($action !== 'download') {
             throw new Exception(get_lang('SelectAnAction'));
         }
 
@@ -71,7 +73,7 @@ $_user = api_get_user_info();
 $courseInfo = api_get_course_info();
 $courseId = $courseInfo['real_id'];
 $course_dir = $courseInfo['directory'].'/document';
-$usePpt2lp = api_get_setting('service_ppt2lp', 'active') == 'true';
+$usePpt2lp = api_get_setting('service_ppt2lp', 'active') === 'true';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$course_dir;
 $http_www = api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/document';
@@ -83,7 +85,7 @@ $is_certificate_mode = false;
 if (isset($_GET['curdirpath'])) {
     $is_certificate_mode = DocumentManager::is_certificate_mode($_GET['curdirpath']);
 }
-if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
+if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] === 'true') {
     $is_certificate_mode = true;
 }
 
@@ -214,6 +216,81 @@ $currentUrl = api_get_self().'?'.api_get_cidreq().'&id='.$document_id;
 $curdirpath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
 
 switch ($action) {
+    case 'replace':
+        if (($isAllowedToEdit ||
+                $groupMemberWithUploadRights ||
+                DocumentManager::isBasicCourseFolder($curdirpath, $sessionId) ||
+                DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) ||
+                DocumentManager::is_my_shared_folder(api_get_user_id(), $moveTo, $sessionId)) &&
+            isset($_POST['currentFile'])
+        ) {
+            $fileTarget = $_POST['currentFile'];
+            if (isset($_FILES) && isset($_FILES['file_'.$fileTarget])) {
+                $fileId = (int) $_POST['id_'.$fileTarget];
+                if (!$isAllowedToEdit) {
+                    if (api_is_coach()) {
+                        if (!DocumentManager::is_visible_by_id(
+                            $fileId,
+                            $courseInfo,
+                            $sessionId,
+                            api_get_user_id()
+                        )
+                        ) {
+                            api_not_allowed();
+                        }
+                    }
+
+                    if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), '', $fileId, true)) {
+                        api_not_allowed();
+                    }
+                }
+
+                $documentInfo = DocumentManager::get_document_data_by_id(
+                    $fileId,
+                    $courseInfo['code'],
+                    false,
+                    $sessionId
+                );
+                GroupManager::allowUploadEditDocument(
+                    $userId,
+                    $courseId,
+                    $group_properties,
+                    $documentInfo,
+                    true
+                );
+                // Check whether the document is in the database.
+                if (!empty($documentInfo)) {
+                    $file = $_FILES['file_'.$fileTarget];
+                    if ($documentInfo['filetype'] == 'file') {
+                        $updateDocument = DocumentManager::writeContentIntoDocument(
+                            $courseInfo,
+                            null,
+                            $base_work_dir,
+                            $sessionId,
+                            $fileId,
+                            $groupIid,
+                            $file
+                        );
+                        if ($updateDocument) {
+                            Display::addFlash(
+                                Display::return_message(
+                                    get_lang('OverwritenFile').': '.$documentInfo['title'],
+                                    'success'
+                                )
+                            );
+                        } else {
+                            Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
+                        }
+                    }
+                } else {
+                    Display::addFlash(Display::return_message(get_lang('FileNotFound'), 'warning'));
+                }
+
+                header("Location: $currentUrl");
+                exit;
+            }
+        }
+        break;
     case 'delete_item':
         if ($isAllowedToEdit ||
             $groupMemberWithUploadRights ||
@@ -796,7 +873,7 @@ function convertModal (id, format) {
         var formatTarget = $(this).val();
         window.location.href = "'
             .api_get_self().'?'.api_get_cidreq()
-            .'&curdirpath='.$curdirpath
+            .'&curdirpath='.$curdirpathurl
             .'&action=convertToPdf&formatTarget='
             .'" + formatTarget + "&id=" + id + "&'
             .api_get_cidreq().'&formatType=" + format;
@@ -850,17 +927,21 @@ if ($is_certificate_mode) {
 // Interbreadcrumb for the current directory root path
 if (empty($document_data['parents'])) {
     if (isset($_GET['createdir'])) {
-        $interbreadcrumb[] = [
-            'url' => $document_data['document_url'],
-            'name' => $document_data['title'],
-        ];
-    } else {
-        // Hack in order to not add the document to the breadcrumb in case it is a link
-        if ($document_data['filetype'] != 'link') {
+        if ($document_data) {
             $interbreadcrumb[] = [
-                'url' => '#',
+                'url' => $document_data['document_url'],
                 'name' => $document_data['title'],
             ];
+        }
+    } else {
+        if ($document_data) {
+            // Hack in order to not add the document to the breadcrumb in case it is a link
+            if ($document_data['filetype'] != 'link') {
+                $interbreadcrumb[] = [
+                    'url' => '#',
+                    'name' => $document_data['title'],
+                ];
+            }
         }
     }
 } else {
@@ -1009,7 +1090,7 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
                 false,
                 $curdirpath
             );
-            $moveForm .= '<legend>'.get_lang('Move').': '.$document_to_move['title'].'</legend>';
+            $moveForm .= '<legend>'.get_lang('Move').': '.Security::remove_XSS($document_to_move['title']).'</legend>';
 
             // filter if is my shared folder. TODO: move this code to build_move_to_selector function
             if (DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) &&
@@ -1083,8 +1164,10 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
                     DocumentManager::updateDbInfo(
                         'update',
                         $document_to_move['path'],
-                        $moveTo.'/'.basename($document_to_move['path'])
+                        $moveTo.'/',
+                        $doc_id
                     );
+                    // $moveTo.'/' .basename($document_to_move['path'])
 
                     // Update database item property
                     api_item_property_update(
@@ -1459,53 +1542,34 @@ if ($isAllowedToEdit ||
     $groupMemberWithUploadRights ||
     DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
 ) {
-    if (isset($_GET['add_as_template']) && !isset($_POST['create_template'])) {
-        $document_id_for_template = intval($_GET['add_as_template']);
-        // Create the form that asks for the directory name
-        $templateForm .= '
-            <form name="set_document_as_new_template" class="form-horizontal" enctype="multipart/form-data"
-                action="'.api_get_self().'?add_as_template='.$document_id_for_template.'" method="post">
-                <fieldset>
-                    <legend>'.get_lang('AddAsTemplate').'</legend>
-                    <div class="form-group">
-                        <label for="template_title" class="col-sm-2 control-label">'.get_lang('TemplateName').'</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="template_title" name="template_title">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="template_image" class="col-sm-2 control-label">'.get_lang('TemplateImage').'</label>
-                        <div class="col-sm-10">
-                            <input type="file" name="template_image" id="template_image">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" name="create_template" class="btn btn-primary">'
-                                .get_lang('CreateTemplate').'
-                            </button>
-                        </div>
-                    </div>
-                    <input type="hidden" name="curdirpath" value="'.$curdirpath.'" />
-                </fieldset>
-            </form>
-            <hr>
-        ';
-    } elseif (isset($_GET['add_as_template']) && isset($_POST['create_template'])) {
-        $document_id_for_template = intval($_GET['add_as_template']);
-        $title = Security::remove_XSS($_POST['template_title']);
-        $user_id = api_get_user_id();
+    if (isset($_GET['add_as_template'])) {
+        $document_id_for_template = (int) $_GET['add_as_template'];
 
-        // Create the template_thumbnails folder in the upload folder (if needed)
-        if (!is_dir(api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/upload/template_thumbnails/')) {
-            @mkdir(
-                api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/upload/template_thumbnails/',
-                api_get_permissions_for_new_directories()
-            );
-        }
+        $frmAddTemplate = new FormValidator(
+            'set_document_as_new_template',
+            'post',
+            api_get_self()."?add_as_template=$document_id_for_template"
+        );
+        $frmAddTemplate->addHeader(get_lang('AddAsTemplate'));
+        $frmAddTemplate->addText('template_title', get_lang('TemplateName'), true);
+        $frmAddTemplate->addFile('template_image', get_lang('TemplateImage'), ['id' => 'template_image']);
+        $frmAddTemplate->addButtonSave(get_lang('CreateTemplate'), 'create_template');
+        $frmAddTemplate->applyFilter('template_title', 'trim');
+        $frmAddTemplate->addRule('template_image', get_lang('ThisFieldIsRequired'), 'required');
 
-        // Upload the file
-        if (!empty($_FILES['template_image']['name'])) {
+        $templateForm .= $frmAddTemplate->returnForm().PHP_EOL;
+        $templateForm .= '<hr>'.PHP_EOL;
+
+        if ($frmAddTemplate->validate()) {
+            $formValues = $frmAddTemplate->exportValues();
+
+            if (!is_dir(api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/upload/template_thumbnails/')) {
+                @mkdir(
+                    api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/upload/template_thumbnails/',
+                    api_get_permissions_for_new_directories()
+                );
+            }
+
             $upload_ok = process_uploaded_file($_FILES['template_image']);
 
             if ($upload_ok) {
@@ -1528,28 +1592,28 @@ if ($isAllowedToEdit ||
                 }
                 $temp->send_image($upload_dir.$new_file_name);
             }
-        }
 
-        DocumentManager::set_document_as_template(
-            $title,
-            '',
-            $document_id_for_template,
-            $course_code,
-            $user_id,
-            $new_file_name
-        );
-        Display::addFlash(
-            Display::return_message(get_lang('DocumentSetAsTemplate'), 'confirmation')
-        );
+            DocumentManager::set_document_as_template(
+                $formValues['template_title'],
+                '',
+                $document_id_for_template,
+                $course_code,
+                $userId,
+                $new_file_name
+            );
+            Display::addFlash(
+                Display::return_message(get_lang('DocumentSetAsTemplate'), 'confirmation')
+            );
+        }
     }
 
     if (isset($_GET['remove_as_template'])) {
         $document_id_for_template = intval($_GET['remove_as_template']);
-        $user_id = api_get_user_id();
+
         DocumentManager::unset_document_as_template(
             $document_id_for_template,
             $course_code,
-            $user_id
+            $userId
         );
 
         Display::addFlash(
@@ -1576,8 +1640,9 @@ if (isset($_GET['curdirpath']) &&
     }
 }
 
+$disableSearch = api_get_configuration_value('disable_search_documents');
 /* GET ALL DOCUMENT DATA FOR CURDIRPATH */
-if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
+if (isset($_GET['keyword']) && !empty($_GET['keyword']) && false === $disableSearch) {
     $documentAndFolders = DocumentManager::getAllDocumentData(
         $courseInfo,
         $curdirpath,
@@ -1774,12 +1839,26 @@ if ($isAllowedToEdit ||
             api_get_path(WEB_CODE_PATH).'document/add_link.php?'.api_get_cidreq().'&id='.$documentIdFromGet
         );
     }
+
+    $hook = HookDocumentAction::create();
+    if (!empty($hook)) {
+        $data = $hook->notifyDocumentAction(HOOK_EVENT_TYPE_PRE);
+        if (isset($data['actions'])) {
+            foreach ($data['actions'] as $action) {
+                $actionsLeft .= $action;
+            }
+        }
+    }
 }
+
 if (!isset($_GET['keyword']) && !$is_certificate_mode) {
-    $actionsLeft .= Display::url(
-        Display::return_icon('slideshow.png', get_lang('ViewSlideshow'), '', ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH).'document/slideshow.php?'.api_get_cidreq().'&curdirpath='.$curdirpathurl.'&id='.$document_id
-    );
+    $disable = api_get_configuration_value('disable_slideshow_documents');
+    if (false === $disable) {
+        $actionsLeft .= Display::url(
+            Display::return_icon('slideshow.png', get_lang('ViewSlideshow'), '', ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'document/slideshow.php?'.api_get_cidreq().'&curdirpath='.$curdirpathurl.'&id='.$document_id
+        );
+    }
 }
 
 if ($isAllowedToEdit && !$is_certificate_mode) {
@@ -1789,8 +1868,7 @@ if ($isAllowedToEdit && !$is_certificate_mode) {
     );
 }
 
-if (!$is_certificate_mode) {
-    /* BUILD SEARCH FORM */
+if (!$is_certificate_mode && false === $disableSearch) {
     $form = new FormValidator(
         'search_document',
         'get',
@@ -1799,7 +1877,7 @@ if (!$is_certificate_mode) {
         [],
         FormValidator::LAYOUT_INLINE
     );
-    $form->addText('keyword', '', false, ['class' => 'col-md-2']);
+    $form->addText('keyword', get_lang('SearchTerm'), false, ['class' => 'col-md-2']);
     $form->addHidden('cidReq', api_get_course_id());
     $form->addHidden('id_session', api_get_session_id());
     $form->addHidden('gidReq', $groupId);
@@ -1884,7 +1962,7 @@ if (!empty($documentAndFolders)) {
             }
 
             // Icons (clickable)
-            $row[] = DocumentManager::create_document_link(
+            $row[] = Security::remove_XSS(DocumentManager::create_document_link(
                 $http_www,
                 $document_data,
                 true,
@@ -1893,7 +1971,7 @@ if (!empty($documentAndFolders)) {
                 $size,
                 $isAllowedToEdit,
                 $is_certificate_mode
-            );
+            ));
 
             $path_info = pathinfo($document_data['path']);
             if (isset($path_info['extension']) &&
@@ -1916,12 +1994,16 @@ if (!empty($documentAndFolders)) {
                 $is_certificate_mode
             );
 
-            // Document title with link
-            $row[] = $link.$session_img.'<br />'.$invisibility_span_open.'<i>'
-                .nl2br(htmlspecialchars($document_data['comment'], ENT_QUOTES, $charset))
-                .'</i>'.$invisibility_span_close.$user_link;
+            // Document title with link and comment
+            $titleWithLink = Security::remove_XSS($link.$session_img.'<br />'.$invisibility_span_open);
+            $commentText = nl2br(htmlspecialchars($document_data['comment'], ENT_QUOTES, $charset));
+            if (!empty($commentText)) {
+                $titleWithLink .= '<em>'.$commentText.'</em>';
+            }
+            $titleWithLink .= $invisibility_span_close.$user_link;
+            $row[] = $titleWithLink;
 
-            if ($document_data['filetype'] == 'folder') {
+            if ($document_data['filetype'] === 'folder') {
                 $displaySize = '<span id="document_size_'.$document_data['id']
                     .'" data-path= "'.$document_data['path']
                     .'" class="document_size"></span>';
@@ -1939,7 +2021,11 @@ if (!empty($documentAndFolders)) {
             $display_date = date_to_str_ago($document_data['lastedit_date']).
                 ' <div class="muted"><small>'.$last_edit_date."</small></div>";
 
-            $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
+            /* add last edit date at begin to short by date*/
+            $row[] = "<span style='display: none;'>".$last_edit_date."</span>".
+                $invisibility_span_open.
+                $display_date.
+                $invisibility_span_close;
 
             $groupMemberWithEditRightsCheckDocument = GroupManager::allowUploadEditDocument(
                 $userId,
@@ -1987,7 +2073,7 @@ if (!empty($documentAndFolders)) {
                 $countedPaths[$document_data['path']] = true;
             }
 
-            if ((isset($_GET['keyword']) && DocumentManager::search_keyword($document_name, $_GET['keyword'])) ||
+            if ((isset($_GET['keyword']) && DocumentManager::searchKeyword($document_name, $_GET['keyword'])) ||
                 !isset($_GET['keyword']) ||
                 empty($_GET['keyword'])
             ) {
@@ -2079,8 +2165,8 @@ $column_order = [];
 if (count($row) == 12) {
     //teacher
     $column_order[2] = 8; //name
-    $column_order[3] = 7;
-    $column_order[4] = 6;
+    $column_order[3] = 7; //size
+    $column_order[4] = 6; //lastedit_date
 } elseif (count($row) == 10) {
     //student
     $column_order[1] = 6;
@@ -2149,7 +2235,6 @@ if (count($documentAndFolders) > 1) {
 
 Display::display_header('', 'Doc');
 
-/* Introduction section (editable by course admins) */
 if (!empty($groupId)) {
     Display::display_introduction_section(TOOL_DOCUMENT.$groupId);
 } else {
@@ -2165,10 +2250,13 @@ echo $templateForm;
 echo $moveForm;
 echo $dirForm;
 echo $selector;
-
 $table->display();
 
-if (count($documentAndFolders) > 1) {
+$disableQuotaMessage = api_get_configuration_value('disable_document_quota_message_for_students');
+if ($isAllowedToEdit) {
+    $disableQuotaMessage = false;
+}
+if (false === $disableQuotaMessage && count($documentAndFolders) > 1) {
     $ajaxURL = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=get_document_quota&'.api_get_cidreq();
     if ($isAllowedToEdit) {
         echo '<script>
@@ -2197,10 +2285,24 @@ if (count($documentAndFolders) > 1) {
         });
     });
     </script>';
-
     echo '<span id="course_quota"></span>';
 }
-
+echo '<script>
+        $(function() {
+            $(".removeHiddenFile").click(function(){
+               $.each($(".replaceIndividualFile"),function(a,b){
+                   $(b).addClass("hidden");
+               });
+               data = $(this).data("id");
+               $(".upload_element_"+data).removeClass("hidden");
+               $.each($("[name=\'currentFile\']"),function(a,b){
+                   $(b).val(data);
+               });
+            });
+            $("form[name=form_teacher_table]").prop("enctype","multipart/form-data")
+        });
+        </script>
+    ';
 if (!empty($table_footer)) {
     echo Display::return_message($table_footer, 'warning');
 }

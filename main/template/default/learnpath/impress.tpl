@@ -6,6 +6,7 @@
 <div id="impress">
     {{ html }}
 </div>
+<div id="impress-toolbar"></div>
 
 <div class="hint">
     <p>Use a spacebar or arrow keys to navigate</p>

@@ -1,0 +1,26 @@
+{
+  "semantics": [
+    {
+      "label": "Aufgabenbeschreibung",
+      "description": "Beschreibung, wie die Lernenden die Aufgabe lösen sollten. Wird über dem Medium angezeigt."
+    },
+    {
+      "label": "Medium",
+      "fields": [
+        {
+          "label": "Medienart",
+          "description": "Medium, das wahlweise oberhalb der Aufgabe angezeigt wird."
+        }
+      ]
+    },
+    {
+      "label": "Beschriftung des \"Lösung anzeigen\"-Buttons",
+      "default": "Klicken, um die Antwort zu sehen.",
+      "description": "Klickbarer Text, an dessen Stelle die Lösung erscheinen wird."
+    },
+    {
+      "label": "Lösungstext",
+      "description": "Die Lösung für die Aufgabe bzw. das Medium."
+    }
+  ]
+}

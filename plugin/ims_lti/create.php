@@ -38,6 +38,10 @@ if ($form->validate()) {
             isset($formValues['share_picture'])
         );
 
+    if (!empty($formValues['replacement_user_id'])) {
+        $externalTool->setReplacementForUserId($formValues['replacement_user_id']);
+    }
+
     if (ImsLti::V_1P3 === $formValues['version']) {
         $externalTool
             ->setVersion(ImsLti::V_1P3)

@@ -1,0 +1,15 @@
+{
+  "title": "Timer",
+  "machineName": "H5P.Timer",
+  "majorVersion": 0,
+  "minorVersion": 4,
+  "patchVersion": 2,
+  "contentType": "Utility",
+  "runnable": 0,
+  "author": "Oliver Tacke",
+  "license": "pd",
+  "description": "General purpose timer that can be used by other H5P libraries.",
+  "preloadedJs": [
+    {"path": "scripts/timer.js"}
+  ]
+}

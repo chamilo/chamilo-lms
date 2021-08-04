@@ -85,14 +85,14 @@ class OutcomeForm extends EvalForm
                         if (empty($grade_model_id)) {
                             if ($my_cat->get_parent_id() == 0) {
                                 $default_weight = $my_cat->get_weight();
-                                $select_gradebook->addoption(get_lang('Default'), $my_cat->get_id());
+                                $select_gradebook->addOption(get_lang('Default'), $my_cat->get_id());
                                 $cats_added[] = $my_cat->get_id();
                             } else {
-                                $select_gradebook->addoption($my_cat->get_name(), $my_cat->get_id());
+                                $select_gradebook->addOption($my_cat->get_name(), $my_cat->get_id());
                                 $cats_added[] = $my_cat->get_id();
                             }
                         } else {
-                            $select_gradebook->addoption(get_lang('Select'), 0);
+                            $select_gradebook->addOption(get_lang('Select'), 0);
                         }
                         if ($this->evaluation_object->get_category_id() == $my_cat->get_id()) {
                             $default_weight = $my_cat->get_weight();

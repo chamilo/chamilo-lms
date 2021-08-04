@@ -1,0 +1,31 @@
+{
+  "machineName": "H5PEditor.RangeList",
+  "title": "H5P Editor Range List",
+  "license": "MIT",
+  "author": "Joubel",
+  "majorVersion": 1,
+  "minorVersion": 0,
+  "patchVersion": 8,
+  "runnable": 0,
+  "coreApi": {
+    "majorVersion": 1,
+    "minorVersion": 14
+  },
+  "preloadedJs": [
+    {
+      "path": "h5p-editor-range-list.js"
+    }
+  ],
+  "preloadedCss": [
+    {
+      "path": "h5p-editor-range-list.css"
+    }
+  ],
+  "preloadedDependencies": [
+    {
+      "machineName": "H5PEditor.TableList",
+      "majorVersion": 1,
+      "minorVersion": 0
+    }
+  ]
+}

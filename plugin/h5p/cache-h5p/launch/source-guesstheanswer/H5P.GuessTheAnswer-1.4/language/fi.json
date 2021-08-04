@@ -1,0 +1,26 @@
+{
+  "semantics": [
+    {
+      "label": "Tehtävänkuvaus",
+      "description": "Kirjoita miten opiskelijoiden tulisi ratkaista tehtävä"
+    },
+    {
+      "label": "Media",
+      "fields": [
+        {
+          "label": "Tyyppi",
+          "description": "Vapaaehtoinen media joka näytetään kysymyksen yläpuolella"
+        }
+      ]
+    },
+    {
+      "label": "Kuvailevan vastauksen teksti",
+      "default": "Klikkaa nähdäksesi vastauksen",
+      "description": "Klikattava tekstialue joka näyttää vastauksen."
+    },
+    {
+      "label": "Ratkaisuteksti",
+      "description": "Kuvan ratkaisu"
+    }
+  ]
+}

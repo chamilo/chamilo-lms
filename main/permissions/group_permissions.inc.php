@@ -59,7 +59,7 @@ if (api_get_setting('group_roles') == 'true') {
 }
 
 // 		DISPLAYING THE MATRIX (group permissions)
-echo "<table class=\"data_table\">\n";
+echo "<table class=\"table table-hover table-striped data_table\">\n";
 
 // the header
 echo "\t<tr>\n";

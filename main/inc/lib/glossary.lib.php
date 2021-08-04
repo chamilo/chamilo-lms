@@ -11,8 +11,6 @@ use ChamiloSession as Session;
  * @author Julio Montoya
  * @author Christian Fasanando
  * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium januari 2009, dokeos 1.8.6
- *
- * @package chamilo.library
  */
 class GlossaryManager
 {
@@ -214,7 +212,7 @@ class GlossaryManager
 					    c_id = $course_id AND
 					    glossary_id = ".intval($values['glossary_id']);
             $result = Database::query($sql);
-            if ($result === false) {
+            if (false === $result) {
                 return false;
             }
 
@@ -486,7 +484,6 @@ class GlossaryManager
             }
             $content .= $table->return_table();
         }
-
         if ($view === 'list') {
             $content .= self::displayGlossaryList();
         }
@@ -506,7 +503,9 @@ class GlossaryManager
         foreach ($glossaryList as $key => $glossary_item) {
             $actions = '';
             if (api_is_allowed_to_edit(null, true)) {
-                $actions = '<div class="pull-right">'.self::actions_filter($glossary_item[2], '', $glossary_item).'</div>';
+                $actions = '<div class="pull-right">'.
+                    self::actions_filter($glossary_item[2], '', $glossary_item).
+                    '</div>';
             }
             $content .= Display::panel($glossary_item[1], $glossary_item[0].' '.$actions);
         }
@@ -527,6 +526,9 @@ class GlossaryManager
         $t_glossary = Database::get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
         $session_id = (int) $session_id;
+        if (empty($session_id)) {
+            $session_id = api_get_session_id();
+        }
         $sql_filter = api_get_session_condition($session_id, true, true);
 
         $keyword = isset($_GET['keyword']) ? Database::escape_string($_GET['keyword']) : '';
@@ -539,10 +541,12 @@ class GlossaryManager
                 FROM $t_glossary
                 WHERE c_id = $course_id $sql_filter
                 $keywordCondition ";
+
         $res = Database::query($sql);
         if ($res === false) {
             return 0;
         }
+
         $obj = Database::fetch_object($res);
 
         return $obj->total;
@@ -566,15 +570,12 @@ class GlossaryManager
     ) {
         $_user = api_get_user_info();
         $view = self::getGlossaryView();
-
-        // Database table definition
         $t_glossary = Database::get_course_table(TABLE_GLOSSARY);
         $t_item_propery = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
+        $col2 = ' ';
         if (api_is_allowed_to_edit(null, true)) {
             $col2 = ' glossary.glossary_id	as col2, ';
-        } else {
-            $col2 = ' ';
         }
 
         // Condition for the session
@@ -615,6 +616,7 @@ class GlossaryManager
 					$keywordCondition
 		        ORDER BY col$column $direction
 		        LIMIT $from, $number_of_items";
+
         $res = Database::query($sql);
 
         $return = [];
@@ -622,10 +624,10 @@ class GlossaryManager
         while ($data = Database::fetch_array($res)) {
             // Validation when belongs to a session
             $session_img = api_get_session_image($data['session_id'], $_user['status']);
-            $array[0] = $data[0].$session_img;
+            $array[0] = Security::remove_XSS($data[0]).$session_img;
 
             if (!$view || $view === 'table') {
-                $array[1] = str_replace(['<p>', '</p>'], ['', '<br />'], $data[1]);
+                $array[1] = Security::remove_XSS(str_replace(['<p>', '</p>'], ['', '<br />'], $data[1]));
             } else {
                 $array[1] = $data[1];
             }

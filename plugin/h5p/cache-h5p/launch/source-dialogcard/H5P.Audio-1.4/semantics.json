@@ -1,0 +1,86 @@
+[
+  {
+    "name": "files",
+    "type": "audio",
+    "importance": "high",
+    "label": "Source files",
+    "disableCopyright": true
+  },
+  {
+    "name": "playerMode",
+    "type": "select",
+    "importance": "low",
+    "label": "Player mode",
+    "description": "Select the layout of the player.",
+    "options": [
+      {
+        "value": "minimalistic",
+        "label": "Minimalistic"
+      },
+      {
+        "value": "full",
+        "label": "Full"
+      },
+      {
+        "value": "transparent",
+        "label": "Transparent"
+      }
+    ],
+    "default": "minimalistic"
+  },
+  {
+    "name": "fitToWrapper",
+    "type": "boolean",
+    "importance": "low",
+    "label": "Fit to wrapper",
+    "default": false,
+    "descriptions": "Adjust audioplayer size to use available space"
+  },
+  {
+    "name": "controls",
+    "type": "boolean",
+    "importance": "low",
+    "label": "Enable controls",
+    "default": true,
+    "description": "Controls allow the user to for instance pause the audio"
+  },
+  {
+    "name": "autoplay",
+    "type": "boolean",
+    "importance": "low",
+    "label": "Enable autoplay",
+    "description": "With autoplay the audio starts to play immediately. If autoplay is disabled the user presses a play button to start the audio."
+  },
+  {
+    "name": "playAudio",
+    "type": "text",
+    "importance": "low",
+    "label": "Play audio (Readspeaker)",
+    "common": true,
+    "default": "Play audio"
+  },
+  {
+    "name": "pauseAudio",
+    "type": "text",
+    "importance": "low",
+    "label": "Pause audio (Readspeaker)",
+    "common": true,
+    "default": "Pause audio"
+  },
+  {
+    "name": "contentName",
+    "type": "text",
+    "importance": "low",
+    "label": "Audio content name",
+    "common": true,
+    "default": "Audio"
+  },
+  {
+    "name": "audioNotSupported",
+    "type": "text",
+    "label": "Audio not supported message",
+    "importance": "low",
+    "common": true,
+    "default": "Your browser does not support this audio"
+  }
+]

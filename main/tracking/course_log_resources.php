@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.tracking
- */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 
@@ -15,7 +12,7 @@ $exportXls = isset($_GET['export']) && $_GET['export'] == 'xls' ? true : false;
 $session_id = intval($_REQUEST['id_session']);
 
 $this_section = SECTION_COURSES;
-if ($from == 'myspace') {
+if ('myspace' === $from) {
     $from_myspace = true;
     $this_section = 'session_my_space';
 }
@@ -68,7 +65,7 @@ if ($export_csv || $exportXls) {
     if ($exportXls) {
         Export::arrayToXls($csvData);
     }
-    die;
+    exit;
 }
 
 if (empty($session_id)) {

@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Report for current courses followed by the user.
- *
- * @package chamilo.reporting
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -249,7 +247,7 @@ if (isset($_GET['export'])) {
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('MySpace')];
 Display::display_header(get_lang('CurrentCourses'));
 
-$table = new HTML_Table(['class' => 'data_table']);
+$table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
 $row = 0;
 $column = 0;
 foreach ($headers as $header) {

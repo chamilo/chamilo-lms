@@ -1,10 +1,6 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-/*
- * Coaches reporting
- * @package chamilo.reporting
- */
+/* For licensing terms, see /license.txt */
 
 ob_start();
 $cidReset = true;
@@ -22,11 +18,10 @@ if (isset($_GET["id_student"])) {
     $interbreadcrumb[] = ["url" => "student.php", "name" => get_lang('Students')];
 }
 
-Display :: display_header($nameTools);
+Display::display_header($nameTools);
 
 api_display_tool_title($nameTools);
 
-// Database Table Definitions
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -79,7 +74,7 @@ if (isset($_GET["id_student"])) {
 $result_coachs = Database::query($sql_coachs);
 
 if (api_is_western_name_order()) {
-    echo '<table class="data_table">
+    echo '<table class="table table-hover table-striped data_table">
 	    <tr>
             <th>'.get_lang('FirstName').'</th>
             <th>'.get_lang('LastName').'</th>
@@ -88,7 +83,7 @@ if (api_is_western_name_order()) {
             <th>'.get_lang('Students').'</th>
         </tr>';
 } else {
-    echo '<table class="data_table">
+    echo '<table class="table table-hover table-striped data_table">
 	        <tr>
                 <th>'.get_lang('LastName').'</th>
                 <th>'.get_lang('FirstName').'</th>

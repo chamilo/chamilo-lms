@@ -4,8 +4,6 @@
 /**
  * Script to draw the results from a query.
  *
- * @package chamilo.learnpath
- *
  * @author Diego Escalante Urrelo <diegoe@gmail.com>
  * @author Marco Antonio Villegas Vega <marvil07@gmail.com>
  * @author Julio Montoya <gugli100@gmail.com> bug fixing
@@ -179,7 +177,7 @@ if (count($blocks) > 0) {
     $additional_parameters['operator'] = $op;
     $s->additional_parameters = $additional_parameters;
 
-    if ($mode == 'default') {
+    if ('default' == $mode) {
         $s->set_header(0, get_lang(ucfirst(TOOL_SEARCH)), false);
     }
 

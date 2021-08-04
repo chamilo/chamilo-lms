@@ -14,12 +14,13 @@ fi
 sudo touch /var/log/php-fpm.log && sudo chmod 777 /var/log/php-fpm.log
 sudo sed -e "s?;error_log = log/php-fpm.log?error_log = /var/log/php-fpm.log?g" --in-place ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
 
-# Additionnal configuration
+# Additional configuration
 echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 echo "always_populate_raw_post_data = -1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 echo "error_log = /var/log/php-fpm.log" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 echo "memory_limit = 4G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 echo "max_execution_time = 3600" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+echo "extension = zip.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 
 # Starting PHP FPM
 ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm

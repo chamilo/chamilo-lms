@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Class DisplayGradebook.
- *
- * @package chamilo.gradebook
  */
 class DisplayGradebook
 {
@@ -12,16 +11,15 @@ class DisplayGradebook
      * Displays the header for the result page containing the navigation tree and links.
      *
      * @param Evaluation $evalobj
-     * @param $selectcat
-     * @param $shownavbar 1=show navigation bar
-     * @param $forpdf only output for pdf file
+     * @param int        $selectcat
+     * @param string     $page
      */
     public static function display_header_result($evalobj, $selectcat, $page)
     {
         $header = null;
         if (api_is_allowed_to_edit(null, true)) {
             $header = '<div class="actions">';
-            if ($page !== 'statistics') {
+            if ('statistics' !== $page) {
                 $header .= '<a href="'.Category::getUrl().'selectcat='.$selectcat.'">'.
                     Display::return_icon('back.png', get_lang('FolderView'), '', ICON_SIZE_MEDIUM)
                     .'</a>';
@@ -61,7 +59,7 @@ class DisplayGradebook
         if ($evalobj->has_results()) {
             // TODO this check needed ?
             $score = $evalobj->calc_score();
-            if ($score != null) {
+            if (null != $score) {
                 $model = ExerciseLib::getCourseScoreModel();
                 if (empty($model)) {
                     $average = get_lang('Average').' :<b> '.$scoredisplay->display_score($score, SCORE_AVERAGE).'</b>';
@@ -86,8 +84,8 @@ class DisplayGradebook
         }
 
         $description = '';
-        if (!$evalobj->get_description() == '') {
-            $description = get_lang('Description').' :<b> '.$evalobj->get_description().'</b><br>';
+        if ('' == !$evalobj->get_description()) {
+            $description = get_lang('Description').' :<b> '.Security::remove_XSS($evalobj->get_description()).'</b><br>';
         }
 
         if ($evalobj->get_course_code() == null) {
@@ -97,7 +95,7 @@ class DisplayGradebook
         }
 
         $evalinfo = '<table width="100%" border="0"><tr><td>';
-        $evalinfo .= '<h2>'.$evalobj->get_name().'</h2><hr>';
+        $evalinfo .= '<h2>'.Security::remove_XSS($evalobj->get_name()).'</h2><hr>';
         $evalinfo .= $description;
         $evalinfo .= get_lang('Course').' :<b> '.$course.'</b><br />';
         if (empty($model)) {
@@ -154,8 +152,8 @@ class DisplayGradebook
         $header .= '<a href="'.$url.'?'.api_get_cidreq().'&selectcat='.$select_cat.'">'.
             Display::return_icon('back.png', get_lang('FolderView'), '', ICON_SIZE_MEDIUM).'</a>';
 
-        $pageNum = isset($_GET['flatviewlist_page_nr']) ? intval($_GET['flatviewlist_page_nr']) : null;
-        $perPage = isset($_GET['flatviewlist_per_page']) ? intval($_GET['flatviewlist_per_page']) : null;
+        $pageNum = isset($_GET['flatviewlist_page_nr']) ? (int) $_GET['flatviewlist_page_nr'] : null;
+        $perPage = isset($_GET['flatviewlist_per_page']) ? (int) $_GET['flatviewlist_per_page'] : null;
         $offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
 
         $exportCsvUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
@@ -164,6 +162,12 @@ class DisplayGradebook
             'selectcat' => $catobj->get_id(),
         ]);
 
+        $scoreRanking = ScoreDisplay::instance()->get_custom_score_display_settings();
+        $attributes = [];
+        if (!empty($scoreRanking)) {
+            $attributes = ['class' => 'export_opener'];
+        }
+
         $header .= Display::url(
             Display::return_icon(
                 'export_csv.png',
@@ -171,7 +175,8 @@ class DisplayGradebook
                 '',
                 ICON_SIZE_MEDIUM
             ),
-            $exportCsvUrl
+            $exportCsvUrl,
+            $attributes
         );
 
         $exportXlsUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
@@ -187,7 +192,8 @@ class DisplayGradebook
                 '',
                 ICON_SIZE_MEDIUM
             ),
-            $exportXlsUrl
+            $exportXlsUrl,
+            $attributes
         );
 
         $exportDocUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
@@ -203,7 +209,8 @@ class DisplayGradebook
                 '',
                 ICON_SIZE_MEDIUM
             ),
-            $exportDocUrl
+            $exportDocUrl,
+            $attributes
         );
 
         $exportPrintUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
@@ -241,7 +248,27 @@ class DisplayGradebook
         );
 
         $header .= '</div>';
-        echo $header;
+
+        $dialog = '';
+        if (!empty($scoreRanking)) {
+            $dialog = '<div id="dialog-confirm" style="display:none" title="'.get_lang('ConfirmYourChoice').'">';
+            $form = new FormValidator(
+                'report',
+                'post',
+                null,
+                null,
+                ['class' => 'form-vertical']
+            );
+            $form->addCheckBox(
+                'only_score',
+                null,
+                get_lang('OnlyNumbers')
+            );
+            $dialog .= $form->returnForm();
+            $dialog .= '</div>';
+        }
+
+        echo $header.$dialog;
     }
 
     /**
@@ -486,7 +513,7 @@ class DisplayGradebook
                             ).'&cidReq='.$catobj->get_course_code().'&id_session='.$catobj->get_session_id().'">'.
                             Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_MEDIUM).'</a>';
 
-                        if (api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') == 'true' &&
+                        if (api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') === 'true' &&
                             api_get_course_setting('customcertificate_course_enable') == 1
                         ) {
                             $actionsRight .= '<a href="'.api_get_path(
@@ -632,12 +659,16 @@ class DisplayGradebook
         $header = '<div class="actions">';
 
         if ($is_course_admin) {
-            $header .= '<a href="gradebook_flatview.php?'.api_get_cidreq().'&selectcat='.$catobj->get_id().'">'.Display::return_icon('statistics.png', get_lang('FlatView'), '', ICON_SIZE_MEDIUM).'</a>';
-            $header .= '<a href="gradebook_scoring_system.php?'.api_get_cidreq().'&selectcat='.$catobj->get_id().'">'.Display::return_icon('settings.png', get_lang('ScoreEdit'), '', ICON_SIZE_MEDIUM).'</a>';
+            $header .= '<a href="gradebook_flatview.php?'.api_get_cidreq().'&selectcat='.$catobj->get_id().'">'.
+                Display::return_icon('statistics.png', get_lang('FlatView'), '', ICON_SIZE_MEDIUM).'</a>';
+            $header .= '<a href="gradebook_scoring_system.php?'.api_get_cidreq().'&selectcat='.$catobj->get_id().'">'.
+                Display::return_icon('settings.png', get_lang('ScoreEdit'), '', ICON_SIZE_MEDIUM).'</a>';
         } elseif (!(isset($_GET['studentoverview']))) {
-            $header .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&studentoverview=&selectcat='.$catobj->get_id().'">'.Display::return_icon('view_list.gif', get_lang('FlatView')).' '.get_lang('FlatView').'</a>';
+            $header .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&studentoverview=&selectcat='.$catobj->get_id().'">'.
+                Display::return_icon('view_list.gif', get_lang('FlatView')).' '.get_lang('FlatView').'</a>';
         } else {
-            $header .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&studentoverview=&exportpdf=&selectcat='.$catobj->get_id().'" target="_blank">'.Display::return_icon('pdf.png', get_lang('ExportPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+            $header .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&studentoverview=&exportpdf=&selectcat='.$catobj->get_id().'" target="_blank">'.
+                Display::return_icon('pdf.png', get_lang('ExportPDF'), '', ICON_SIZE_MEDIUM).'</a>';
         }
         $header .= '</div>';
         echo $header;
@@ -676,8 +707,10 @@ class DisplayGradebook
         for ($count = 0; $count < count($evals_links); $count++) {
             $item = $evals_links[$count];
             $score = $item->calc_score($userId);
-            $my_score_denom = ($score[1] == 0) ? 1 : $score[1];
-            $item_value += $score[0] / $my_score_denom * $item->get_weight();
+            if ($score) {
+                $my_score_denom = ($score[1] == 0) ? 1 : $score[1];
+                $item_value += $score[0] / $my_score_denom * $item->get_weight();
+            }
             $item_total += $item->get_weight();
         }
         $item_value = api_number_format($item_value, 2);
@@ -690,7 +723,7 @@ class DisplayGradebook
         $info .= '<div class="col-md-6">';
         $info .= get_lang('Name').' :  '.$user['complete_name_with_message_link'].'<br />';
 
-        if (api_get_setting('show_email_addresses') == 'true') {
+        if (api_get_setting('show_email_addresses') === 'true') {
             $info .= get_lang('Email').' : <a href="mailto:'.$user['email'].'">'.$user['email'].'</a><br />';
         }
 

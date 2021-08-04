@@ -7,8 +7,8 @@ use ChamiloSession as Session;
  * Chamilo installation.
  *
  * As seen from the user, the installation proceeds in 6 steps.
- * The user is presented with several webpages where he/she has to make choices
- * and/or fill in data.
+ * The user is presented with several web pages where he/she has to make
+ * choices and/or fill in data.
  *
  * The aim is, as always, to have good default settings and suggestions.
  *
@@ -216,6 +216,7 @@ if ($installType == 'update' && in_array($my_old_version, $update_from_version_8
 }
 
 $session_lifetime = 360000;
+$institutionUrlForm = 'http://www.chamilo.org';
 
 if (!isset($_GET['running'])) {
     $dbHostForm = 'localhost';
@@ -278,6 +279,7 @@ if (!isset($_GET['running'])) {
         $GLOBALS[$key] = $_POST[$key];
     }
 }
+$dbPortForm = (int) $dbPortForm;
 
 /* NEXT STEPS IMPLEMENTATION */
 
@@ -315,6 +317,12 @@ if ($encryptPassForm == '1') {
         @import "../../web/assets/fontawesome/css/font-awesome.min.css";
         @import "../../web/css/base.css";
         @import "../../web/css/themes/chamilo/default.css";
+        .inputShowPwd > input
+        {
+            width: 90%;
+            display: initial;
+        }
+
     </style>
     <script type="text/javascript" src="../../web/assets/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="../../web/assets/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -429,6 +437,14 @@ if (empty($installationProfile)) {
         $installationProfile = api_htmlentities($_POST['installationProfile']);
     }
 }
+
+$institutionUrlFormResult = '';
+if (api_stristr($institutionUrlForm, 'http://') || api_stristr($institutionUrlForm, 'https://')) {
+    $institutionUrlFormResult = api_htmlentities($institutionUrlForm, ENT_QUOTES);
+} else {
+    $institutionUrlFormResult = api_htmlentities($institutionUrlForm, ENT_QUOTES);
+}
+
     ?>
     <input type="hidden" name="updatePath"         value="<?php if (!$badUpdatePath) {
         echo api_htmlentities($proposedUpdatePath, ENT_QUOTES);
@@ -453,7 +469,7 @@ if (empty($installationProfile)) {
     <input type="hidden" name="campusForm"         value="<?php echo api_htmlentities($campusForm, ENT_QUOTES); ?>" />
     <input type="hidden" name="educationForm"      value="<?php echo api_htmlentities($educationForm, ENT_QUOTES); ?>" />
     <input type="hidden" name="institutionForm"    value="<?php echo api_htmlentities($institutionForm, ENT_QUOTES); ?>" />
-    <input type="hidden" name="institutionUrlForm" value="<?php echo api_stristr($institutionUrlForm, 'http://', false) ? api_htmlentities($institutionUrlForm, ENT_QUOTES) : api_stristr($institutionUrlForm, 'https://', false) ? api_htmlentities($institutionUrlForm, ENT_QUOTES) : 'http://'.api_htmlentities($institutionUrlForm, ENT_QUOTES); ?>" />
+    <input type="hidden" name="institutionUrlForm" value="<?php echo $institutionUrlFormResult; ?>" />
     <input type="hidden" name="checkEmailByHashSent" value="<?php echo api_htmlentities($checkEmailByHashSent, ENT_QUOTES); ?>" />
     <input type="hidden" name="ShowEmailNotCheckedToStudent" value="<?php echo api_htmlentities($ShowEmailNotCheckedToStudent, ENT_QUOTES); ?>" />
     <input type="hidden" name="userMailCanBeEmpty" value="<?php echo api_htmlentities($userMailCanBeEmpty, ENT_QUOTES); ?>" />
@@ -962,5 +978,17 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
         </div>
     </div>
   </div>
+    <script type="text/javascript">
+        $('#showPassword').on('change',function(){
+            if($(this).prop('checked')){
+                $('.form-control[name="passForm"]').attr('type','text');
+                $('.showPasswordEye').removeClass('fa-eye').addClass('fa-eye-slash');
+
+            }else{
+                $('.form-control[name="passForm"]').attr('type','password');
+                $('.showPasswordEye').addClass('fa-eye').removeClass('fa-eye-slash');
+            }
+        });
+    </script>
 </body>
 </html>

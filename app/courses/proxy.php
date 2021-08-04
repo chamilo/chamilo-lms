@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -12,6 +13,14 @@
  */
 
 require_once '../config/configuration.php';
+
+if (!isset($_configuration['lp_fix_embed_content'])) {
+    exit;
+}
+
+if (true !== $_configuration['lp_fix_embed_content']) {
+    exit;
+}
 
 /**
  * Returns "%" or "px"
@@ -119,7 +128,7 @@ switch ($type) {
         break;
     case 'flash':
         $result =  '
-        <object 
+        <object
             id="'.$id.'" width="'.$width.'" height="'.$height.'" align="center"
             codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0">
             <param name="id" value="'.$id.'">
@@ -133,11 +142,11 @@ switch ($type) {
             <param name="wmode" value="transparent">
             <param name="flashvars" value="'.$vars.'">
             <param name="src" value="'.$src.'">
-            <embed 
-                id="'.$id.'" width="'.$width.'" height="'.$height.'" bgcolor="#ffffff" align="center" 
-                allowfullscreen="true" allowscriptaccess="always" quality="high" wmode="transparent" 
+            <embed
+                id="'.$id.'" width="'.$width.'" height="'.$height.'" bgcolor="#ffffff" align="center"
+                allowfullscreen="true" allowscriptaccess="always" quality="high" wmode="transparent"
                 flashvars="'.$vars.'" src="'.$src.'"
-                type="application/x-shockwave-flash" 
+                type="application/x-shockwave-flash"
             >
         </object>';
 }

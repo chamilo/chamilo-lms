@@ -1,0 +1,7 @@
+{
+  "libraryStrings": {
+    "distributeButtonLabel": "Distribuir igualmente",
+    "distributeButtonWarning": "Valores serão alterados para todas as amplitudes. Deseja continuar?",
+    "rangeOutOfSequenceWarning": "AS amplitudes dos valores estão fora de sequência"
+  }
+}

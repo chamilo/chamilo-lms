@@ -248,6 +248,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
                             {element}
                         </div>';
                 break;
+            case FormValidator::LAYOUT_GRID:
             case FormValidator::LAYOUT_BOX:
                 return '
                         <label {label-for}>{label}</label>

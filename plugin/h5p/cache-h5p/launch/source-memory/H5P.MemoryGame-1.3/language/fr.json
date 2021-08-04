@@ -1,0 +1,121 @@
+{
+  "semantics": [
+    {
+      "widgets": [
+        {
+          "label": "Par défaut"
+        }
+      ],
+      "label": "Cartes",
+      "entity": "carte",
+      "field": {
+        "label": "Carte",
+        "fields": [
+          {
+            "label": "Image"
+          },
+          {
+            "label": "Texte alternatif pour l'image",
+            "description": "Décrivez ce que représente l'image. Le texte est lu par la synthèse vocale."
+          },
+          {
+            "label": "Audio Track",
+            "description": "An optional sound that plays when the card is turned."
+          },
+          {
+            "label": "Image correspondante",
+            "description": "Une image facultative à comparer au lieu d'utiliser deux cartes avec la même image."
+          },
+          {
+            "label": "Texte alternatif pour l'image correspondante",
+            "description": "Décrivez ce que représente l'image correspondante. Le texte est lu par la synthèse vocale."
+          },
+          {
+            "label": "Matching Audio Track",
+            "description": "An optional sound that plays when the second card is turned."
+          },
+          {
+            "label": "Description",
+            "description": "Un texte court optionnel qui apparaîtra une fois que les deux cartes correspondantes auront été trouvées."
+          }
+        ]
+      }
+    },
+    {
+      "label": "Paramètres comportementaux",
+      "description": "Ces options vous permettent de définir le \"comportement\" du jeu de mémoire.",
+      "fields": [
+        {
+          "label": "Positionnez les cartes en carré",
+          "description": "Essaiera de faire correspondre le nombre de colonnes et de rangées lors de la disposition des cartes. Ensuite, les cartes seront mises à l'échelle pour s'adapter au conteneur."
+        },
+        {
+          "label": "Nombre de cartes à utiliser",
+          "description": "Régler ce nombre sur un nombre supérieur à 2 fera que le jeu choisira des cartes aléatoires dans la liste des cartes."
+        },
+        {
+          "label": "Ajoutez un bouton pour essayer à nouveau quand le jeu est terminé"
+        }
+      ]
+    },
+    {
+      "label": "Apparence",
+      "description": "Définissez l'apparence visuelle des éléments dans le jeu.",
+      "fields": [
+        {
+          "label": "Couleur du thème",
+          "description": "Choisissez une couleur pour créer un thème pour votre jeu de cartes."
+        },
+        {
+          "label": "Dos des cartes",
+          "description": "Utilisez un dos personnalisé pour vos cartes."
+        }
+      ]
+    },
+    {
+      "label": "Interface",
+      "fields": [
+        {
+          "label": "Texte pour le nombre de cartes retournées",
+          "default": "Cartes retournées :"
+        },
+        {
+          "label": "Texte pour le temps passé",
+          "default": "Temps écoulé :"
+        },
+        {
+          "label": "Texte de l'appréciation finale",
+          "default": "Bien joué !"
+        },
+        {
+          "label": "Texte pour le bouton Réessayez",
+          "default": "Réessayer"
+        },
+        {
+          "label": "Texte du bouton Fermer",
+          "default": "Fermer"
+        },
+        {
+          "label": "Le nom du jeu",
+          "default": "Jeu de mémoire. Trouver les cartes qui se correspondent."
+        },
+        {
+          "label": "Texte pour Le jeu est terminé",
+          "default": "Toutes les cartes ont été trouvées."
+        },
+        {
+          "label": "Texte de numérotation des cartes",
+          "default": "Carte %num:"
+        },
+        {
+          "label": "Texte pour les cartes non retournées",
+          "default": "Non retournées."
+        },
+        {
+          "label": "Texte quand les cartes correspondent",
+          "default": "Correspondance trouvée."
+        }
+      ]
+    }
+  ]
+}

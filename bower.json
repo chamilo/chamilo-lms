@@ -16,7 +16,7 @@
     "bootstrap-daterangepicker": "2.1.*",
     "ckeditor": "4.6.2",
     "jquery-timeago": "1.4.*",
-    "mediaelement": "4.*",
+    "mediaelement": "^4.2.16",
     "modernizr": "2.8.*",
     "jqueryui-timepicker-addon": "1.5.*",
     "image-map-resizer": "0.5.*",

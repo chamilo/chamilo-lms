@@ -1,0 +1,26 @@
+{
+  "semantics": [
+    {
+      "label": "Popis úlohy",
+      "description": "Popište, jak by měl uživatel úlohu vyřešit."
+    },
+    {
+      "label": "Média",
+      "fields": [
+        {
+          "label": "Typ",
+          "description": "Volitelná média k zobrazení nad otázkou."
+        }
+      ]
+    },
+    {
+      "label": "Popisek popisu řešení",
+      "default": "Kliknutím zobrazte odpověď.",
+      "description": "Klikatelná textová oblast, kde se zobrazí řešení."
+    },
+    {
+      "label": "Text řešení",
+      "description": "Řešení pro obrázek."
+    }
+  ]
+}

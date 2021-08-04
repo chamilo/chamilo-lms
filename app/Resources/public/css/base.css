@@ -45,8 +45,15 @@ body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
 }
-.footer {
+
+body > main footer.footer {
+    bottom: 0;
+    left: 0;
     position: absolute;
+    right: 0;
+}
+
+.footer {
     bottom: 0;
     width: 100%;
     /* Set the fixed height of the footer here */
@@ -166,17 +173,26 @@ select {
     margin: 10px 0;
 }
 
-#form-login .input-group {
+#formLogin .input-group {
     margin-top: 10px;
     margin-bottom: 10px;
 }
 
-#form-login .form-group small,  #form-login .form-group .form_required {
+#formLogin .form-group small,  #formLogin .form-group .form_required {
     display: none;
 }
 
-#form-login label {
+#formLogin label {
     display: none;
+}
+
+#formLogin #QF_CAPTCHA_captcha_question {
+    max-width: 100%;
+    height: auto;
+}
+
+#login-block .alert {
+    margin: 15px 0 5px;
 }
 
 #login-block #formLogin .form-group {
@@ -212,13 +228,10 @@ select {
 #login-block .btn-language.open .dropdown-menu {
     display: block;
 }
-
-#toolbar-admin.navbar {
+#toolbar-admin {
     margin-bottom: 0;
     border-radius: 0;
-    border: none;
 }
-
 .blackboard_show {
     float: left;
     position: absolute;
@@ -508,6 +521,14 @@ input[type=checkbox], input[type=radio] {
     margin: 3px 0 0;
 }
 
+thead input[type=checkbox], thead input[type=radio] {
+    margin: 0px 0 0;
+}
+
+.ui-jqgrid-btable input[type=checkbox] {
+    margin-top: 4px;
+}
+
 .prerequisites input[type=radio] {
     height: 12px;
 }
@@ -589,7 +610,7 @@ input[type=checkbox], input[type=radio] {
 .impress-content {
     position: relative;
     width: 100%;
-    height: 600px;
+    height: 618px;
 }
 
 .impress-title {
@@ -598,6 +619,11 @@ input[type=checkbox], input[type=radio] {
     left: 0;
     text-align: center;
     width: 100%;
+}
+
+.impress-content iframe {
+    width: 100%;
+    height: 582px;
 }
 
 .impress-title h1 {
@@ -1321,18 +1347,13 @@ a.personal_agenda:hover, a.personal_agenda:hover {
     padding-bottom: 3px;
 }
 
+.production-no-padding > .files-production > ul {
+    padding-left: 0px;
+}
+
 #sn-extra-information .list-group-item {
     padding: 5px 10px;
     border: none;
-}
-
-/** BUTTONS **/
-.left {
-    float: left !important;
-}
-
-.right {
-    text-align: right;
 }
 
 /* Breadcrumb */
@@ -2414,7 +2435,8 @@ div.admin_section h4 {
 }
 
 .ui-search-table .ui-search-input input {
-    height: 25px;
+    border: 1px solid #CCC;
+    margin: 2px auto;
 }
 
 .exercise_overview_options {
@@ -2644,12 +2666,12 @@ div.admin_section h4 {
 
 .ribbon .rib-gray {
     background: #cccccc;
-    background-image: -ms-linear-gradient(top, #bbbbbb, #cccccc);
+    background-image: -ms-linear-gradient(to top, #bbbbbb, #cccccc);
     background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#bbbbbb), to(#cccccc));
-    background-image: -webkit-linear-gradient(top, #bbbbbb, #cccccc);
-    background-image: -o-linear-gradient(top, #bbbbbb, #cccccc);
-    background-image: -moz-linear-gradient(top, #bbbbbb, #cccccc);
-    background-image: linear-gradient(top, #bbbbbb, #cccccc);
+    background-image: -webkit-linear-gradient(to top, #bbbbbb, #cccccc);
+    background-image: -o-linear-gradient(to top, #bbbbbb, #cccccc);
+    background-image: -moz-linear-gradient(to top, #bbbbbb, #cccccc);
+    background-image: linear-gradient(to top, #bbbbbb, #cccccc);
     border-top: 1px solid #bbbbbb;
     border-bottom: 1px solid #bbbbbb;
     float: left;
@@ -2773,8 +2795,6 @@ div.admin_section h4 {
 }
 
 .exercise_save_now_button img {
-    position: relative;
-    top: 4px;
 }
 
 .exercise_save_now_button {
@@ -2986,19 +3006,19 @@ table.certaintyTable td.globalChart {
     padding: 5px;
     text-align: center;
     margin-bottom: 10px;
-    background: url(../../main/img/clock-exercise.png) no-repeat center center #FFF;
+    background: no-repeat center center #FFF;
     border: 1px solid #DDD;
     border-radius: 5px;
 }
 
 .time_warning_two {
-    background: url(../../main/img/clock-exercise.png) no-repeat center center #FFD700;
+    background: no-repeat center center #FFD700;
     border: 1px solid #FFCC00;
     color: #C00;
 }
 
 .time_warning_one {
-    background: url(../../main/img/clock-exercise.png) no-repeat center center #FB3A35;
+    background: no-repeat center center #FB3A35;
     border: 1px solid #FB3A35;
     color: #FFF;
 }
@@ -3244,6 +3264,10 @@ form .formw .freeze {
     font-weight: normal;
     font-size: 90%;
 }
+.label.origin-style {
+    font-weight: bold;
+    font-size: 75%;
+}
 
 .requirements td {
     padding: 5px;
@@ -3264,7 +3288,13 @@ form .formw .freeze {
 }
 
 .data_table tr.row_even {
-    background-color: #fff;
+    background-color: #fdfdfd;
+}
+
+.data_table tr.highlight {
+    font-style: italic;
+    font-weight: bolder;
+    color: #777;
 }
 
 .attendance-calendar-table .data_table tr.row_odd {
@@ -3281,20 +3311,22 @@ form .formw .freeze {
 
 .data_table_pagination {
     width: 100%;
-    margin-top: 5px;
-    margin-bottom: 5px;
+}
+
+.data_table_pagination .btn-toolbar {
+    margin-bottom: 0;
+    margin-top: 0;
 }
 
 .table-well {
     background: #ffffff;
     border: 1px solid #dddddd;
-    padding: 10px 20px;
+    padding: 10px;
     border-radius: 4px;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
     margin-bottom: 20px;
-    margin-top: 10px;
 }
 
 .tabs-margin, .btn-toolbar {
@@ -3681,11 +3713,11 @@ input.liteoption {
     border-color: #478ced #1f6fe2 #1f6fe2;
     background-color: #FFFFCC;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#FFFFCC), to(#FFFFCC));
-    background-image: -webkit-linear-gradient(top, #FFFFCC, #FFFFCC);
-    background-image: -moz-linear-gradient(top, #FFFFCC, #FFFFCC);
-    background-image: -ms-linear-gradient(top, #FFFFCC, #FFFFCC);
-    background-image: -o-linear-gradient(top, #FFFFCC, #FFFFCC);
-    background-image: linear-gradient(top, #FFFFCC, #FFFFCC);
+    background-image: -webkit-linear-gradient(to top, #FFFFCC, #FFFFCC);
+    background-image: -moz-linear-gradient(to top, #FFFFCC, #FFFFCC);
+    background-image: -ms-linear-gradient(to top, #FFFFCC, #FFFFCC);
+    background-image: -o-linear-gradient(to top, #FFFFCC, #FFFFCC);
+    background-image: linear-gradient(to top, #FFFFCC, #FFFFCC);
     box-shadow: 0 1px 0 transparent;
 }
 
@@ -5426,17 +5458,22 @@ ul.holder li.bit-box {
     margin-bottom: 20px;
     min-height: 2em;
     min-width: 100%;
+    border: 3px dashed #CCC;
+    padding: 20px 20px 0 20px;
 }
 
 ul.exercise-draggable-answer.list-inline li {
-    float: left;
+    margin-right: 20px;
+    min-width: auto;
 }
 
 ul.exercise-draggable-answer li {
+    float: left;
     cursor: move;
-    margin: 0 20px 20px 0;
+    margin-bottom: 20px;
     padding: 5px 20px;
     text-align: center;
+    min-width: 100%;
 }
 
 ul.exercise-draggable-answer .touch-items {
@@ -5448,10 +5485,8 @@ ul.exercise-draggable-answer .touch-items {
     background-image: linear-gradient(to bottom, #ffffff, #cfcfcf);
     border-radius: 4px;
     color: #2e2e2e;
-    font-size: 13px;
     padding: 5px 10px;
     border: solid #b0b0b0 1px;
-    text-decoration: none;
     z-index: 100;
 }
 
@@ -5470,47 +5505,43 @@ ul.exercise-draggable-answer .touch-items:hover {
 }
 
 .question_options .droppable {
-    padding: 5px;
+    padding: 5px 10px;
     text-align: center;
     background-color: #ECF0F1;
     border: dotted #dddddd 2px;
     border-radius: 4px;
     color: #666666;
-
-    /* Extra */
-    display: inline-block;
-    width: 85%;
+    height: 2em;
+    width: 95%;
     margin-bottom: 0;
 }
 
 .question_options .droppable-item {
-    background-color: #84bd00;
-    color: #FFF;
-    /* padding: 10px;*/
-    padding: 3px 0 3px 5px;
+    background-color: #096EAA4A;
+    color: #333;
+    display: table;
+    padding: 5px;
+    width: 100%;
+}
+
+.question_options .droppable-item .number,
+.question_options .droppable-item .droppable {
+    display: table-cell;
 }
 
 .question_options .droppable-item .number {
-    font-size: 16px;
     font-weight: bold;
-    /*width: 30px;*/
-    display: inline-block;
+    text-align: right;
+    padding-right: 5px;
 }
 
-.question_options .ui-helper-reset {
-    margin-top: -25px;
+.question_options .droppable-item .droppable .gallery {
+    margin-bottom: 0;
 }
 
-.question_options .droppable .gallery .btn-default {
-    background: #D9534F;
-    color: #ffffff;
-    border-color: #D43F3A;
-}
-
-.question_options .droppable .gallery .btn-default:hover {
-    background: #C9302C;
-    color: #ffffff;
-    border-color: #AC2925;
+.question_options .droppable-item .droppable .gallery .touch-items {
+    min-width: 100%;
+    margin: 5px 0;
 }
 
 .question_options .droppable .gallery .exercise-draggable-answer-option {
@@ -5523,8 +5554,15 @@ ul.exercise-draggable-answer .touch-items:hover {
     border: 1px solid #DDDDDD;
     padding: 5px;
     border-radius: 5px;
-    font-size: 12px;
     cursor: pointer;
+}
+
+.question_options .col-xs-12.col-sm-4.col-md-3.col-lg-2 {
+    clear: right;
+}
+
+.question_options .col-xs-12.col-sm-4.col-md-3.col-lg-2 .droppable-item {
+    margin-bottom: 20px;
 }
 
 /***    Matching Draggable answer ***/
@@ -6071,6 +6109,10 @@ div#chat-remote-video video {
     border-color: #0077b5;
 }
 
+.txt-linkedin {
+    color: #0a66c2;
+}
+
 /**** END SOCIAL MEDIA ****/
 
 /**** ABOUT SESSION ****/
@@ -6445,13 +6487,6 @@ div#chat-remote-video video {
     border-bottom: 1px solid #ECF0F1;
 }
 
-.grid-courses .items .course-student-info {
-    background-color: #d9edf7;
-    border: 1px solid #bce8f1;
-    padding: 5px;
-    border-radius: 5px;
-}
-
 .grid-courses .items .code-title {
     font-size: 10px;
     font-weight: bold;
@@ -6487,12 +6522,19 @@ div#chat-remote-video video {
     transition: box-shadow .3s ease, border .3s ease;
 }
 
-.grid-courses .items.my-courses .course-student-info {
-    font-size: 10px;
-    text-align: center;
-    background: none;
-    border: none;
-    padding: 0;
+.grid-courses .items .course-student-info {
+    padding-bottom: 10px;
+    font-size: 11px;
+}
+.grid-courses .items .course-student-info hr {
+    margin: 15px 0 10px;
+}
+.grid-courses .items .course-student-info .progress {
+    margin-bottom: 10px;
+}
+.course-student-info .progress-bar {
+    line-height: 15px;
+    vertical-align: middle;
 }
 
 .grid-courses .items.my-courses .title {
@@ -6534,23 +6576,6 @@ div#chat-remote-video video {
 
 .grid-courses .items .toolbar > div {
     text-align: center;
-}
-
-.grid-courses .items .image .black-shadow {
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    box-sizing: border-box;
-    position: absolute;
-    background: rgba(0, 0, 0, 0.7) none repeat scroll 0 0;
-    padding: 40px 10px 10px;
-}
-
-.grid-courses .items .image .hovered-course {
-    opacity: 1;
-    transition: all 0.3s ease 0s;
 }
 
 .grid-courses .items .toolbar .info {
@@ -6640,6 +6665,10 @@ div#chat-remote-video video {
     text-overflow: ellipsis;
 }
 
+.grid-courses .items .category a {
+    color: #fff;
+}
+
 .grid-courses .items .cribbon {
     width: 0;
     height: 0;
@@ -6652,7 +6681,6 @@ div#chat-remote-video video {
 
 .grid-courses .items .description {
     padding: 5px 10px 5px;
-    min-height: 125px;
 }
 
 .grid-courses .items .description .text {
@@ -6720,6 +6748,9 @@ div#chat-remote-video video {
 .grid-courses {
     margin-top: 15px;
     margin-bottom: 15px;
+}
+.grid-courses .alert:last-child {
+    margin-bottom: 0;
 }
 
 .title-session,
@@ -6918,10 +6949,6 @@ div#chat-remote-video video {
 }
 
 #registration .progress {
-    width: 100%;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    height: 10px;
 }
 
 #registration input[name='status'] {
@@ -7467,7 +7494,6 @@ div#chat-remote-video video {
     border-radius: 5px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
-    min-height: 330px;
     margin-bottom: 10px;
 }
 
@@ -7877,7 +7903,7 @@ a.sessionView {
 
 #dates {
     width: 800px;
-    height: 60px;
+    height: 70px;
     overflow: hidden;
 }
 
@@ -8014,9 +8040,15 @@ a.sessionView {
 }
 
 .progress {
-    border: 1px solid #c5c5c5;
     background: #E9E9E9;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
+}
+
+.radio + .input-group,
+.input-group + .progress,
+input + .progress {
+    margin-top: 5px;
+    margin-bottom: 0;
 }
 
 .wami-container {
@@ -8323,10 +8355,6 @@ ul#toolnavbox-two li a.btn {
     border-top: none !important;
 }
 
-.page-blank {
-    padding: 20px 30px;
-}
-
 /* groups social */
 .group-tool {
     padding: 10px;
@@ -8516,12 +8544,13 @@ ul#toolnavbox-two li a.btn {
 }
 
 #lp-accordion .panel-default .panel-heading {
-    background: url(../../../../main/img/icons/svg/arrow-down.svg) #FFF right center no-repeat;
+    background: #FFF;
     border-radius: 10px;
+    padding-right: 0;
 }
 
 #lp-accordion .panel-default .panel-heading .tools-actions {
-    padding-right: 20px;
+    margin-right: 32px;
 }
 
 #lp-accordion .panel {
@@ -8532,13 +8561,19 @@ ul#toolnavbox-two li a.btn {
     font-weight: bold;
     width: 100%;
     display: block;
-    padding-top: 5px;
-    padding-bottom: 5px;
 }
 
 #lp-accordion .panel .panel-title a {
     width: 100%;
     display: block;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-image: url(../../../../main/img/icons/svg/arrow-down.svg);
+}
+#lp-accordion .panel .panel-title a[aria-expanded="true"] {
+    background-image: url(../../../../main/img/icons/svg/arrow-top.svg);
 }
 
 #lp-accordion .lp-item {
@@ -8562,7 +8597,6 @@ ul#toolnavbox-two li a.btn {
 }
 
 #lp-accordion .lp-item .progress {
-    border: none;
     background: #D7E3E6;
     margin-bottom: 10px;
 }
@@ -8917,9 +8951,14 @@ ul.dropdown-menu.inner > li > a {
     white-space: initial;
 }
 
+
 /* start document mp3 preview */
 .preview .mejs__container {
     background: #aaa;
+    border-radius: 50%;
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
 }
 
 .preview .mejs__controls {
@@ -8928,7 +8967,7 @@ ul.dropdown-menu.inner > li > a {
 }
 
 .preview .mejs__button > button {
-    margin: 16px 6px;
+    margin: 20px 2px;
 }
 
 /* end document mp3 preview */
@@ -9319,7 +9358,6 @@ ul.dropdown-menu.inner > li > a {
 
 #question_admin_form .bootstrap-select .dropdown-menu li a span.text,
 .exercise_reminder_item label {
-    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 100%;
@@ -9358,11 +9396,11 @@ ul.dropdown-menu.inner > li > a {
 .summary-course .list-donut .easy-donut{
     text-align: center;
 }
-.summary-course .state{
+.summary-course .state {
     margin-bottom: 10px;
     margin-top: 10px;
 }
-.summary-course .state .stat-heading{
+.summary-course .state .stat-heading {
     text-align: center;
     font-size: 12px;
 }
@@ -9370,14 +9408,14 @@ ul.dropdown-menu.inner > li > a {
     font-size: 22px;
     text-align: center;
 }
-.summary-course .state .stat-icon{
+.summary-course .state .stat-icon {
     font-size: 30px;
     text-align: center;
 }
 .summary-course .easypiechart-legend {
     font-size: 12px;
 }
-.summary-course .list-info{
+.summary-course .list-info {
     margin-bottom: 0;
 }
 .summary-course .list-info dt,
@@ -9386,35 +9424,35 @@ ul.dropdown-menu.inner > li > a {
     padding-top: 7px;
     padding-bottom: 7px;
 }
-.summary-course .list-info .text-color{
+.summary-course .list-info .text-color {
     color: #0A649F;
 }
-.question-result h3{
+.question-result h3 {
     margin-top: 0;
     margin-bottom: 10px;
     font-size: 20px;
     font-weight: bold;
 }
 .question-result .user-avatar,
-.question-result .user-info{
+.question-result .user-info {
     text-align: center;
 }
-.question-result .user-avatar img{
+.question-result .user-avatar img {
     border-radius: 10px;
 }
-.group-data .list-data .item{
+.group-data .list-data .item {
     width: 150px;
     display: inline-block;
     font-weight: bold;
 }
-.badge-username{
+.badge-username {
     font-weight: bold;
 }
-.badge-item{
+.badge-item {
     padding-top: 10px;
     padding-bottom: 10px;
 }
-.badge-item .msg{
+.badge-item .msg {
     border: 1px solid #cdcdcd;
     padding: 10px;
     border-radius: 5px;
@@ -9426,8 +9464,48 @@ ul.dropdown-menu.inner > li > a {
 }
 
 .compilation_block .progress {
-    margin:0px;
+    margin:0;
     width:120px
+}
+#registration .form_list {
+    display: grid;
+    grid-template-columns:  repeat(auto-fit, minmax(300px, 1fr));;
+}
+#registration .form_list .form-group {
+    margin: 10px;
+}
+#registration .form_list > *:nth-child(3n-2):nth-last-of-type(2) {
+    border-color: red;
+    grid-column: span 2;
+}
+#registration .form_list > *:nth-child(3n-1):nth-last-of-type(1) {
+    border-color: red;
+    grid-column: span 2;
+}
+
+.portfolio-items.row .thumbnail .caption h3,
+.portfolio-item.thumbnail .caption .h3 {
+    margin-top: 0;
+}
+
+.portfolio-items .thumbnail .portfolio-actions a > img,
+.portfolio-item.thumbnail .portfolio-actions a > img {
+    display: inline;
+}
+
+.fa-ul.list-inline {
+    margin-left: -15px;
+}
+.fa-ul.list-inline li {
+    margin-left: 45px;
+    padding: 0;
+}
+
+.embed-responsive-9by16 {
+    padding-bottom: 177.77%;
+}
+.embed-responsive-4by3 {
+    padding-bottom: 133.33%;
 }
 
 /* CSS Responsive */
@@ -9511,7 +9589,7 @@ ul.dropdown-menu.inner > li > a {
 }
 
 /* Landscape phones and down */
-@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+@media only screen and (min-width: 320px) and (max-width: 480px) {
     #notification-menu{
         width: 250px !important;
         min-width : 250px !important;
@@ -9601,6 +9679,13 @@ ul.dropdown-menu.inner > li > a {
     #show_graph {
         text-align: center;
     }
+
+    #my_timeline {
+        width: 320px;
+        overflow: scroll;
+
+    }
+
 }
 
 @media (min-width: 480px) and (max-width: 767px) {
@@ -9652,7 +9737,7 @@ ul.dropdown-menu.inner > li > a {
     }
 
     .navbar-nav .open .dropdown-menu {
-        background-color: #FFF;
+        background-color: #ffffff;
     }
 
     .navbar-nav {
@@ -9661,6 +9746,12 @@ ul.dropdown-menu.inner > li > a {
 
     .grid-courses .items.my-courses {
         width: 310px;
+    }
+
+    #my_timeline {
+        width: 480px;
+        overflow: scroll;
+
     }
 }
 
@@ -9675,7 +9766,6 @@ ul.dropdown-menu.inner > li > a {
 
     .items-course {
         padding: 5px;
-        min-height: 300px;
     }
 
     .gallery .canvas-two {
@@ -10104,9 +10194,9 @@ ul.dropdown-menu.inner > li > a {
         width: 100%;
     }
 
-    .form-inline .survey_question .form-group label {
+    /*.form-inline .survey_question .form-group label {
         display: none;
-    }
+    }*/
 
     .form-inline .survey_question .input-group .bootstrap-select {
         width: 300px;
@@ -10119,6 +10209,7 @@ ul.dropdown-menu.inner > li > a {
         clear: none;
     }
 
+    .portfolio-items.row .col-md-6:nth-child(2n+1),
     .col-md-3.course-tool:nth-child(4n+1) {
         clear: left;
     }
@@ -10434,4 +10525,37 @@ ul.dropdown-menu.inner > li > a {
     .clear-rows-6-4-3 .col-sm-6:nth-child(4n+1) {
         clear: left;
     }
+}
+
+/* Only adjust class radio to student or profesor into /main/auth/inscription.php*/
+#registration > fieldset > #status-group .radio {
+    min-height: 145px;
+    min-width: 145px;
+}
+#registration input.register-profile[value='5']:after,
+#registration input.register-profile[value='1']:after
+{
+    top: -5px;
+    left: -2px;
+}
+
+.bootstrap-select {
+    width: 220px;
+    /*IE9 and below*/
+    vertical-align: middle;
+}
+.form-inline .bootstrap-select,
+.form-inline .bootstrap-select.form-control:not([class*="col-"]) {
+    width: 100%;
+}
+
+.youtube-embed-wrapper {
+    position: relative;
+}
+.youtube-embed-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }

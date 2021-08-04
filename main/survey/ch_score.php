@@ -13,9 +13,7 @@ class ch_score extends survey_question
     public function createForm($survey_data, $formData)
     {
         parent::createForm($survey_data, $formData);
-
         $this->getForm()->addText('maximum_score', get_lang('MaximumScore'));
-
         $config = ['ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120'];
         if (is_array($formData['answers'])) {
             foreach ($formData['answers'] as $key => $value) {
@@ -26,6 +24,12 @@ class ch_score extends survey_question
                     false,
                     $config
                 );
+            }
+        }
+
+        if (isset($formData['answersid']) && !empty($formData['answersid'])) {
+            foreach ($formData['answersid'] as $value) {
+                $this->getForm()->addHidden('answersid[]', $value);
             }
         }
 
@@ -49,6 +53,7 @@ class ch_score extends survey_question
 
             $name = 'question'.$questionData['question_id'].'['.$key.']';
 
+            $form->addHidden('question_id', $questionData['question_id']);
             $form->addSelect(
                 $name,
                 $value,

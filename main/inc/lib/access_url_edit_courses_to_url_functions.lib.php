@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Definition of the Accessurleditcoursestourl class.
- *
- * @package chamilo.library
  */
 
 /**

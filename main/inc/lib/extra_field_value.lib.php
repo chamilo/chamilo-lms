@@ -77,7 +77,7 @@ class ExtraFieldValue extends Model
      * In order to save this function needs a item_id (user id, course id, etc)
      * This function is used with $extraField->addElements().
      *
-     * @param array $params              array for the insertion into the *_field_values table
+     * @param array $params              array for the insertion into the *_field_values table (each label must be prefixed by 'extra_')
      * @param bool  $onlySubmittedFields Only save parameters in the $param array
      * @param bool  $showQuery
      * @param array $saveOnlyThisFields
@@ -98,7 +98,7 @@ class ExtraFieldValue extends Model
         foreach ($params as $key => $value) {
             $found = strpos($key, '__persist__');
 
-            if ($found === false) {
+            if (false === $found) {
                 continue;
             }
 
@@ -119,9 +119,9 @@ class ExtraFieldValue extends Model
 
         // Parse params.
         foreach ($extraFields as $fieldDetails) {
-            if ($forceSave === false) {
-                // if the field is not visible to the user in the end, we need to apply special rules
-                if ($fieldDetails['visible_to_self'] != 1) {
+            if (false === $forceSave) {
+                // if the field is not visible to the user in the end, we need to apply special rules.
+                if (1 != $fieldDetails['visible_to_self']) {
                     //only admins should be able to add those values
                     if (!api_is_platform_admin(true, true)) {
                         // although if not admin but sent through a CLI script, we should accept it as well
@@ -181,7 +181,7 @@ class ExtraFieldValue extends Model
                     }
                     break;
                 case ExtraField::FIELD_TYPE_TAG:
-                    if ($type == EntityExtraField::USER_FIELD_TYPE) {
+                    if (EntityExtraField::USER_FIELD_TYPE == $type) {
                         UserManager::delete_user_tags(
                             $params['item_id'],
                             $extraFieldInfo['id']
@@ -344,7 +344,7 @@ class ExtraFieldValue extends Model
                             'value' => $fileDirStored.$fileName,
                         ];
 
-                        if ($this->type !== 'session' && $this->type !== 'course') {
+                        if ('session' !== $this->type && 'course' !== $this->type) {
                             $new_params['comment'] = $comment;
                         }
 
@@ -486,7 +486,7 @@ class ExtraFieldValue extends Model
                     break;
             }
 
-            if ($extraFieldInfo['field_type'] == ExtraField::FIELD_TYPE_TAG) {
+            if (ExtraField::FIELD_TYPE_TAG == $extraFieldInfo['field_type']) {
                 $field_values = self::getAllValuesByItemAndFieldAndValue(
                     $params['item_id'],
                     $params['field_id'],
@@ -771,7 +771,7 @@ class ExtraFieldValue extends Model
                 ON (s.field_id = sf.id)
                 WHERE
                     item_id = '$item_id'  AND
-                    variable = '".$field_variable."' AND
+                    variable = '$field_variable' AND
                     sf.extra_field_type = $extraFieldType
                 ";
         if ($filterByVisibility) {
@@ -799,14 +799,10 @@ class ExtraFieldValue extends Model
                 if ($result['field_type'] == ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD) {
                     if (!empty($result['value'])) {
                         $options = explode('::', $result['value']);
-
                         $field_option = new ExtraFieldOption($this->type);
                         $result = $field_option->get($options[0]);
-
                         if (!empty($result)) {
-                            $result['value'] = $result['display_text']
-                                .'&rarr;'
-                                .$options[1];
+                            $result['value'] = $result['display_text'].'&rarr;'.$options[1];
                         }
                     }
                 }
@@ -818,7 +814,6 @@ class ExtraFieldValue extends Model
                         foreach ($optionIds as $optionId) {
                             $objEfOption = new ExtraFieldOption('user');
                             $optionInfo = $objEfOption->get($optionId);
-
                             $optionValues[] = $optionInfo['display_text'];
                         }
 
@@ -1186,5 +1181,29 @@ class ExtraFieldValue extends Model
         }
 
         return $valueList;
+    }
+
+    public function copy($sourceId, $destinationId)
+    {
+        if (empty($sourceId) || empty($destinationId)) {
+            return false;
+        }
+
+        $extraField = new ExtraField($this->type);
+        $allFields = $extraField->get_all();
+        $extraFieldValue = new ExtraFieldValue($this->type);
+        foreach ($allFields as $field) {
+            $variable = $field['variable'];
+            $sourceValues = $extraFieldValue->get_values_by_handler_and_field_variable($sourceId, $variable);
+            if (!empty($sourceValues) && isset($sourceValues['value']) && $sourceValues['value'] != '') {
+                $params = [
+                    'extra_'.$variable => $sourceValues['value'],
+                    'item_id' => $destinationId,
+                ];
+                $extraFieldValue->saveFieldValues($params, true);
+            }
+        }
+
+        return true;
     }
 }

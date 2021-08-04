@@ -341,6 +341,11 @@ class Course
         }
     }
 
+    public function setToolList($list)
+    {
+        $this->tools = $list;
+    }
+
     public function addTools(CTool $tool)
     {
         $tool->setCourse($this);

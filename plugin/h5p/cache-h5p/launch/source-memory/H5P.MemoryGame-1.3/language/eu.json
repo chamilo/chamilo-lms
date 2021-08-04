@@ -1,0 +1,121 @@
+{
+  "semantics": [
+    {
+      "widgets": [
+        {
+          "label": "Lehenetsia"
+        }
+      ],
+      "label": "Txartelak",
+      "entity": "karta",
+      "field": {
+        "label": "Karta",
+        "fields": [
+          {
+            "label": "Irudia"
+          },
+          {
+            "label": "Irudiaren ordezko testua",
+            "description": "Deskribatu irudian ikusi daitekeena. Testua irakurketa tresna automatikoek irakurriko dute ikusmen urritasunak dituztenentzat."
+          },
+          {
+            "label": "Audio Pista",
+            "description": "Karta itzultzen denean erreproduzitzeko aukerazko soinua."
+          },
+          {
+            "label": "Pareko irudia",
+            "description": "Irudi bera duten bi karta ez erabiltzeko parekatzeko aukeran eskainiko den irudia."
+          },
+          {
+            "label": "Pareko irudiaren ordezko irudia",
+            "description": "Deskribatu argazkian ikusi daitekeena. Testua irakurketa tresna automatikoek irakurriko dute ikusmen urritasunak dituztenentzat."
+          },
+          {
+            "label": "Pareko Audio Pista",
+            "description": "Bigarren karta itzultzen denean erreproduzitzeko aukerazko soinua."
+          },
+          {
+            "label": "Deskribapena",
+            "description": "Bi karta parekatzen direnean bat-batean agertu den aukerako testu laburra."
+          }
+        ]
+      }
+    },
+    {
+      "label": "Portaera-ezarpenak",
+      "description": "Aukera hauen bidez kontrolatu ahal izango duzu zereginaren portaera.",
+      "fields": [
+        {
+          "label": "Kokatu karta karratuan",
+          "description": "Txartelak banatzean lerro eta zutabe kopurua betetzen saiatuko da. Gero, kartak eskalatuko dira."
+        },
+        {
+          "label": "Erabiliko den karta kopurua",
+          "description": "2 baino altuagoa den zenbaki bat ezarriz gero jokoak hausazko karta hartuko du karta-zerrendatik."
+        },
+        {
+          "label": "Saiakera berria egiteko botoia txertatu jokoa amaitzerakoan"
+        }
+      ]
+    },
+    {
+      "label": "Itxura",
+      "description": "Jokoaren itxura kontrolatu",
+      "fields": [
+        {
+          "label": "Estiloaren kolorea",
+          "description": "Aukeratu kolorea zure karta jokoarentzat estiloa sortzeko."
+        },
+        {
+          "label": "Kartaren atzeko aldea",
+          "description": "Erabili karta-atzeko alde pertsonalizatua."
+        }
+      ]
+    },
+    {
+      "label": "Lokalizazioa",
+      "fields": [
+        {
+          "label": "Txartelak buelta ematen du testua",
+          "default": "Txartelak buelta ematen du"
+        },
+        {
+          "label": "Igarotako denboraren testua",
+          "default": "Igarotako denbora"
+        },
+        {
+          "label": "Feedback testua",
+          "default": "Lan bikaina!"
+        },
+        {
+          "label": "Saiatu berriro botoiaren",
+          "default": "Saiatu berriro?"
+        },
+        {
+          "label": "Itxi botoiaren etiketa",
+          "default": "Itxi"
+        },
+        {
+          "label": "Jokoaren etiketa",
+          "default": "Memoria jokoa. Aurkitu pareko kartak."
+        },
+        {
+          "label": "Amaitutako jokoaren etiketa",
+          "default": "Karta guztiak aurkitu dira."
+        },
+        {
+          "label": "Txartela zenbakiaren etiketa",
+          "default": "%num. txartela:"
+        },
+        {
+          "label": "buelta eman gabeko txartela",
+          "default": "Itzuli gabe"
+        },
+        {
+          "label": "Parekatutako txartelaren etiketa",
+          "default": "Parekoa topatuta."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "semantics": [
+    {
+      "label": "Iturri-fitxategiak"
+    },
+    {
+      "label": "Erreprodukzio modua",
+      "description": "Hautatu erreproduktorearen itxura.",
+      "options": [
+        {
+          "label": "Minimalista"
+        },
+        {
+          "label": "Osoa"
+        },
+        {
+          "label": "Gardena"
+        }
+      ]
+    },
+    {
+      "label": "Markora egokitu"
+    },
+    {
+      "label": "Gaitu kontrolak",
+      "description": "Kontrolek aukera ematen diote erabiltzaileari, adibidez, audioa gelditzeko"
+    },
+    {
+      "label": "Gaitu erreprodukzio automatikoa",
+      "description": "Erreprodukzio automatikoarekin audioa instantean hasiko da. Erreprodukzio automatikoa ez ba dago aktibatua erabiltzaileak erreproduzitzeko botoia sakatu behar du audio hasteko."
+    },
+    {
+      "label": "Erreproduzitu audioa (irakugailuetarako)",
+      "default": "Erreproduzitu audioa"
+    },
+    {
+      "label": "Pausatu audioa (irakugailuetarako)",
+      "default": "Pausatu audioa"
+    },
+    {
+      "label": "Audio edukiaren izena",
+      "default": "Audioa"
+    },
+    {
+      "label": "Audioa ez da onartzen mezua",
+      "default": "Zure nabigatzaileak ez du onartzen audio hau."
+    }
+  ]
+}

@@ -73,8 +73,8 @@ if ($action == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
     $defaults['anonymous'] = $survey_data['anonymous'];
 
     if ($allowSurveyAvailabilityDatetime) {
-        $defaults['avail_from'] = api_get_local_time($defaults['avail_from'], null, 'UTC');
-        $defaults['avail_till'] = api_get_local_time($defaults['avail_till'], null, 'UTC');
+        $defaults['avail_from'] = api_get_local_time($defaults['avail_from']);
+        $defaults['avail_till'] = api_get_local_time($defaults['avail_till']);
         $defaults['start_date'] = $defaults['avail_from'];
         $defaults['end_date'] = $defaults['avail_till'];
     }
@@ -122,7 +122,7 @@ $form = new FormValidator(
 $form->addElement('header', $tool_name);
 
 // Setting the form elements
-if ($action == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
+if ('edit' == $action && isset($survey_id) && is_numeric($survey_id)) {
     $form->addElement('hidden', 'survey_id');
 }
 
@@ -133,7 +133,7 @@ $survey_code = $form->addElement(
     ['size' => '20', 'maxlength' => '20', 'autofocus' => 'autofocus']
 );
 
-if ($action == 'edit') {
+if ('edit' == $action) {
     $survey_code->freeze();
     $form->applyFilter('survey_code', 'api_strtoupper');
 }
@@ -267,7 +267,7 @@ if (Gradebook::is_active()) {
 $surveytypes[0] = get_lang('Normal');
 $surveytypes[1] = get_lang('Conditional');
 
-if ($action == 'add') {
+if ($action === 'add') {
     $form->addElement('hidden', 'survey_type', 0);
     $survey_tree = new SurveyTree();
     $list_surveys = $survey_tree->createList($survey_tree->surveylist);
@@ -281,7 +281,7 @@ $form->addElement('checkbox', 'shuffle', null, get_lang('ActivateShuffle'));
 
 $input_name_list = null;
 
-if ($action == 'edit' && !empty($survey_id)) {
+if ($action === 'edit' && !empty($survey_id)) {
     if ($survey_data['anonymous'] == 0) {
         $form->addElement(
             'checkbox',

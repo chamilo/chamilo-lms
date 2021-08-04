@@ -1,8 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * Temporary fix to set user.user_id to the same as user.id
  */
+exit;
 if (PHP_SAPI != 'cli') {
     die('This script can only be executed from the command line');
 }

@@ -70,14 +70,14 @@ $SocialWallWhatAreYouThinkingAbout = "ما الذي تفكر فيه؟";
 $SocialMessageDelete = "حذف التعليق";
 $SocialWall = "المنشورات الشخصية";
 $BuyCourses = "شراء المقررات";
-$MySessions = "مواسمي";
+$MySessions = "دوراتي";
 $ActivateAudioRecorder = "تفعيل مسجل الصوت";
 $StartSpeaking = "ابدأ الكلام";
 $AssignedCourses = "المقررات المكلف بها";
 $QuestionEditionNotAvailableBecauseItIsAlreadyAnsweredHoweverYouCanCopyItAndModifyTheCopy = "تحرير السؤال غير متوفر بسبب ان السؤال قد تمت الاجابة عنه مسبقا، الا انه يمكنك نسخه ثم تعديله";
-$SessionDurationDescription = "تسمح مدة الموسم في تحديد عدد ايام الدخول للموسم بدلا من تاريخ محدد، فمثلا يمكنك تحديد مدة 15 يوم للموسم بدون تحديد تاريخ ليوم البداية لكافة الطلبة";
+$SessionDurationDescription = "تسمح مدة الدورة في تحديد عدد ايام الدخول للدورة بدلا من تاريخ محدد، فمثلا يمكنك تحديد مدة 15 يوم للدورة بدون تحديد تاريخ ليوم البداية لكافة الطلبة";
 $HyperbolicArctangentArctanh = "Hyperbolic arctangent:\t\tarctanh(x)";
-$SessionDurationTitle = "مدة الموسم";
+$SessionDurationTitle = "مدة الدورة";
 $ArctangentArctan = "Arctangent:\t\t\tarctan(x)";
 $HyperbolicTangentTanh = "Hyperbolic tangent:\t\ttanh(x)";
 $TangentTan = "Tangent:\t\t\ttan(x)";
@@ -106,8 +106,8 @@ $SubstractionMinus = "\t\t\t- الطرح";
 $SummationPlus = "\t\t\t+ الجمع";
 $NotationList = "تدوين الصيغة";
 $SubscribeToSessionRequest = "طلب التسجيل";
-$PleaseSubscribeMeToSession = "يرجى تسجيلي في الموسم";
-$SearchActiveSessions = "البحث عن المواسم النشطة";
+$PleaseSubscribeMeToSession = "يرجى تسجيلي في الدورة";
+$SearchActiveSessions = "البحث عن الدورات النشطة";
 $UserNameHasDash = "'-' لا يمكن لاسم المستخدم ان يتضمن رموز";
 $IfYouWantOnlyIntegerValuesWriteBothLimitsWithoutDecimals = "اذا اردت قيم ذات اعداد صحيحة فقط فاكتب كلا الحدود من دون اعداد عشرية";
 $GiveAnswerVariations = "يرجى، كتابة عدد انماط السؤال الذي تريده";
@@ -122,7 +122,7 @@ $UserIsCurrentlySubscribed = "المستخدم مسجل حاليا";
 $OnlyBestAttempts = "فقط افضل المحاولات";
 $IncludeAllUsers = "تضمين كافة المستخدمين";
 $HostingWarningReached = "تحذير الاستضافة";
-$SessionName = "اسم الموسم";
+$SessionName = "اسم الدورة";
 $MobilePhoneNumberWrong = "رقم الموبايل غير مكتمل او يحتوي على رموز غير صالحة";
 $CountryDialCode = "تضمين رمز الاتصال للبلد";
 $FieldTypeMobilePhoneNumber = "رقم الموبايل";
@@ -135,14 +135,14 @@ $ExerciseProgressInfo = "تقدم اداء التمارين من قبل الطا
 $CourseTimeInfo = "الوقت المبذول في المقرر";
 $ExerciseAverageInfo = "معدل افضل الدرجات لكل محاولة تمرين";
 $ExtraDurationForUser = "ايام الدخول الاضافية لهذا المستخدم";
-$UserXSessionY = "المستخدم: %s - الموسم: %s";
-$DurationIsSameAsDefault = "ان مدة الموسم مطابقة للمدة الافتراضية للموسم. تجاهل";
-$FirstAccessWasXSessionDurationYEndDateWasZ = "كان اول دخول للمستخدم في الموسم في %s. مع مدة موسم قدرها %s يوم, وقد انتهى الموسم في %s";
-$FirstAccessWasXSessionDurationYEndDateInZDays = "كان اول دخول للمستخدم في الموسم في %s. مع مدة موسم قدرها %s يوم, تاريخ النهاية في %s يوم";
-$UserNeverAccessedSessionDefaultDurationIsX = "لم يقم المستخدم بالولوج الى الموسم من قبل. المدة محددة بـ %s يوم - من اول يوم دخول";
-$SessionDurationEdit = "تحرير مدة الموسم";
-$EditUserSessionDuration = "تحرير مدة المستخدم في الموسم";
-$SessionDurationXDaysLeft = "هذا الموسم فيه مدة قصوى. فقط %s يوم قد بقي.";
+$UserXSessionY = "المستخدم: %s - الدورة: %s";
+$DurationIsSameAsDefault = "ان مدة الدورة مطابقة للمدة الافتراضية للدورة. تجاهل";
+$FirstAccessWasXSessionDurationYEndDateWasZ = "كان اول دخول للمستخدم في الدورة في %s. مع مدة دورة قدرها %s يوم, وقد انتهت الدورة في %s";
+$FirstAccessWasXSessionDurationYEndDateInZDays = "كان اول دخول للمستخدم في الدورة في %s. مع مدة دورة قدرها %s يوم, تاريخ النهاية في %s يوم";
+$UserNeverAccessedSessionDefaultDurationIsX = "لم يقم المستخدم بالولوج الى الدورة من قبل. المدة محددة بـ %s يوم - من اول يوم دخول";
+$SessionDurationEdit = "تحرير مدة الدورة";
+$EditUserSessionDuration = "تحرير مدة المستخدم في الدورة";
+$SessionDurationXDaysLeft = "هذا الدورة فيه مدة قصوى. فقط %s يوم قد بقي.";
 $NextTopic = "الموضوع القادم";
 $CurrentTopic = "الموضوع الحالي";
 $ShowFullCourseAdvance = "عرض تخطيط المقرر";
@@ -170,12 +170,12 @@ $CompanyReportResumed = "تقرير المنظمة، النسخة المختصر
 $CompanyReport = "تقرير المنظمة";
 $Report = "التقرير";
 $TraceIP = "IP تتبع";
-$NoSessionProvided = "لا يوجد موسم متوفر";
+$NoSessionProvided = "لا يوجد دورة متوفرة";
 $UserMustHaveTheDrhRole = "يجب ان يكون للمستخدمين دور مدير الموارد البشرية";
 $NothingToAdd = "لا يوجد شيء لاضافته";
-$NoStudentsFoundForSession = "لم يتم العثور على طالب في الموسم";
-$NoDestinationSessionProvided = "لا توجد وجهة موسم";
-$SessionXSkipped = "الموسم %s تم تخطيه";
+$NoStudentsFoundForSession = "لم يتم العثور على طالب في الدورة";
+$NoDestinationSessionProvided = "لا توجد وجهة دورة محددة";
+$SessionXSkipped = "الدورة %s تم تخطيها";
 $CheckDates = "التحقق من التواريخ";
 $CreateACategory = "انشاء فئة";
 $PriorityOfMessage = "نوع الرسالة";
@@ -184,7 +184,7 @@ $Weep = "يبكي";
 $LatestChanges = "التغييرات الاخيرة";
 $FinalScore = "الدرجة النهائية";
 $ErrorWritingXMLFile = "يرجى مراسلة مدير النظام للتحقق من الخطأ XML يوجد خطأ في  ملف";
-$TeacherXInSession = "المدرس في موسم: %s";
+$TeacherXInSession = "المدرس في دورة: %s";
 $DeleteAttachment = "حذف المرفق";
 $EditingThisEventWillRemoveItFromTheSerie = "ان تحرير هذا الحدث سوف يزيله من بقية سلسلة الاحداث التي هي جزء منه";
 $EnterTheCharactersYouReadInTheImage = "ادخل الرموز التي تراها في الصورة";
@@ -201,8 +201,8 @@ $PDFsMustLookLike = ":يجب ان تبدو ملفات البي دي اف هكذ�
 $ImportZipFileLocation = "موقع الملف المصغوط المستورد";
 $YouMustImportAZipFile = "zip يجب عليك استيراد ملف مضغوط بصيغة";
 $ImportPDFIntroToCourses = "استيراد مقدمات ملفات البي دي اف في المقررات";
-$SubscribeTeachersToSession = "تسجيل المدرسين الى الموسم او المواسم";
-$SubscribeStudentsToSession = "تسجيل الطلبة الى الموسم او المواسم";
+$SubscribeTeachersToSession = "تسجيل المدرسين الى الدورة او الدورات";
+$SubscribeStudentsToSession = "تسجيل الطلبة الى الدورة او الدورات";
 $ManageCourseCategories = "ادارة فئات المقرر";
 $CourseCategoryListInX = "فئات المقرر في %s موقع:";
 $CourseCategoryInPlatform = "فئات المقرر المتوفرة";
@@ -212,7 +212,7 @@ $AgendaList = "قائمة التقويم";
 $Calendar = "التقويم";
 $CustomRange = "مدى مخصص";
 $ThisWeek = "هذا الاسبوع";
-$SendToUsersInSessions = "ارسال المستخدمين الى كافة المواسم لهذا المقرر";
+$SendToUsersInSessions = "ارسال المستخدمين الى كافة الدورات لهذا المقرر";
 $ParametersNotFound = "لا توجد معلمات";
 $UsersToAdd = "المستخدمين للاضافة";
 $DocumentsAdded = "تم اضافة المستندات";
@@ -245,7 +245,7 @@ $InactiveDays = "الايام غير النشطة";
 $FollowedHumanResources = "مديرو الموارد البشرية الذين اتابعهم";
 $TheTextYouEnteredDoesNotMatchThePicture = "النص الذي ادخلته لا يطابق الصورة";
 $RemoveOldRelationships = "ازالة العلاقة السابقة";
-$ImportSessionDrhList = "استيراد قائمة مدراء الموارد البشرية الى المواسم";
+$ImportSessionDrhList = "استيراد قائمة مدراء الموارد البشرية الى الدورات";
 $FollowedStudents = "الطلبة الذين اتابعهم";
 $FollowedTeachers = "المدرسون الذين اتابعهم";
 $AllowOnlyFiles = "السماح بالملفات فقط";
@@ -259,7 +259,7 @@ $RegisteredClasses = "الصفوف المسجلة";
 $DeleteItemsNotInFile = "حذف الفقرات غير الموجودة في الملف";
 $ImportGroups = "استيراد المجاميع";
 $HereIsYourFeedback = "هنا معلوماتك المرتجعة";
-$SearchSessions = "بحث الموسم";
+$SearchSessions = "بحث الدورة";
 $ShowSystemFolders = "عرض مجلدات النظام";
 $SelectADateOnTheCalendar = "قم باختيار التاريخ من التقويم";
 $AreYouSureDeleteTestResultBeforeDateD = "هل انت متأكد من حذف نتائج الاختبار قبل التاريخ المحدد؟";
@@ -314,8 +314,8 @@ $SurveyCopied = "تم نسخ الاستبيان";
 $NoSurveysAvailable = "لا توجد استبيانات متوفرة";
 $DescriptionCopySurvey = "تكرار نسخة فارغة من الاستبيان في المقرر. تحتاج الى وجود مقررين لاستخدام هذه الخاصية: المقرر الاصلي والمقرر المستهدف";
 $CopySurvey = "نسخ الاستبيان";
-$ChooseSession = "يرجى اختيار موسم";
-$SearchSession = "البحث عن المواسم";
+$ChooseSession = "يرجى اختيار دورة";
+$SearchSession = "البحث عن الدورات";
 $ChooseStudent = "يرجى اختيار طالب";
 $SearchStudent = "البحث عن المستخدمين";
 $ChooseCourse = "يرجى اختيار مقرر";
@@ -327,14 +327,14 @@ $DisplayAccessOverview = "الوصول بواسطة النظرة العامة ل
 $AllowMemberLeaveGroup = "السماح للاعضاء بمغادرة المجموعة";
 $WorkFileNotUploadedDirXDoesNotExist = "لم يتمكن من رفع الواجب بسبب ان مجلد %s غير موجود";
 $DeleteUsersNotInList = "قم بالغاء تسجيل الطلبة غير الموجودين في القائمة المستوردة";
-$IfSessionExistsUpdate = "في حالة وجود موسم، قم بتحديثه";
+$IfSessionExistsUpdate = "في حالة وجود دورة، قم بتحديثها";
 $CreatedByXYOnZ = "تم الانشاء من قبل %s على %s";
 $LoginWithExternalAccount = "تسجيل الدخول بدون حساب مؤسسي";
 $ImportAikenQuizExplanationExample = "This is the text for question 1 A. Answer 1 B. Answer 2 C. Answer 3 ANSWER: B This is the text for question 2 A. Answer 1 B. Answer 2 C. Answer 3 D. Answer 4 ANSWER: D ANSWER_EXPLANATION: this is an optional feedback comment that will appear next to the correct answer.";
 $ImportAikenQuizExplanation = "ANSWER: هذه الصيغة تتضمن ملف نصي بسيط ذو عدة اقسام للاسئلة مفصولة بخط فارغ، الخط الاول  هو السؤال في حين ان الاجابة مسبوقة بحرف ونقطة، اما الاجابة الصحيحة تكون مسبوقة بـ";
 $ExerciseAikenErrorNoAnswerOptionGiven = "A. answer one الملف المستورد يتضمن على الاقل سؤال واحد بدون اجابة  (او ان الاجابات لا تتضمن حرف البادئة المطلوب). يرجى التاكد من توفر اجابة كل سؤال والمسبوق ببادئة حرف ونقطة مثل";
 $ExerciseAikenErrorNoCorrectAnswerDefined = "ANSWER: [Letter] line. الملف المستورد يتضمن على الاقل سؤال واحد بدون اجابة صحيحة محددة، يرجى التأكد من ان جميع الاسئلة تتضمن اجابة";
-$SearchCourseBySession = "البحث عن المقرر وفقا للموسم";
+$SearchCourseBySession = "البحث عن المقرر وفقا للدورة";
 $ThereWasAProblemWithYourFile = "كانت هنالك مشكلة غير معروفة في الملف، يرجى مراجعة الصيغة قم المحاولة مرة ثانية";
 $YouMustUploadAZipOrTxtFile = ".txt or .zip يجب عليك رفع ملف نصي او ملف مضغوط بصيغة";
 $NoTxtFileFoundInTheZip = "لم يتم العثور على ملف نصي في الملف المضغوط";
@@ -342,9 +342,9 @@ $ImportAikenQuiz = "Aiken استيراد اختبار بصيغة";
 $GlobalLinkUseDoubleColumnPrivateToShowPrivately = "استخدم ::خاص في نهاية الرابط لاظهاره بانه حصري للمستخدمين المسجلين";
 $NumberOfGroupsToCreate = "عدد المجاميع المزمع انشاءها";
 $CoachesSubscribedAsATeacherInCourseX = "المعلمين المسجلين كمدرسين في مقرر %s";
-$EnrollStudentsFromExistingSessions = "تسجيل الطلبة من المواسم الحالية";
-$EnrollTrainersFromExistingSessions = "تسجيل المعلمين من المواسم الحالية";
-$AddingStudentsFromSessionXToSessionY = "اضافة طلبة من موسم %s الى موسم %s";
+$EnrollStudentsFromExistingSessions = "تسجيل الطلبة من الدورات الحالية";
+$EnrollTrainersFromExistingSessions = "تسجيل المعلمين من الدورات الحالية";
+$AddingStudentsFromSessionXToSessionY = "اضافة طلبة من دورة %s الى دورة %s";
 $AddUserGroupToThatURL = "URL اضافة مجموعة مستخدم الى هذا الرابط";
 $FirstLetter = "اول حرف";
 $UserGroupList = "قائمة مجاميع المستخدم";
@@ -356,7 +356,7 @@ $ManageUserGroup = "ادارة مجاميع المستخدم";
 $FolderDoesntExistsInFileSystem = "المجلد المستهدف غير موجود في الخادم";
 $RegistrationDisabled = "للاسف، انت تحاول التسجيل في النظام، الا ان التسجيل حاليا معطل، يرجى مراسلة المدير - معلومات المراسلة في ذيل الصفحة";
 $CasDirectCourseAccess = "CAS الولوج الى المقرر من خلال توثيق";
-$TeachersWillBeAddedAsCoachInAllCourseSessions = "سيتم اضافة المدرسين كمعلميين في كافة مواسم المقرر";
+$TeachersWillBeAddedAsCoachInAllCourseSessions = "سيتم اضافة المدرسين كمعلميين في كافة دورات المقرر";
 $DateTimezoneSettingNotSet = "والا سوف تحدث مشاكل php.ini لا يحدد اعدادات منطقة التوقيت، وهو مطلوب في نظام كاميلو، يرجى التاكد من الاعدادات PHP لقد تم الاكتشاف بان تنصيبك لـ";
 $YesImSure = "نعم، انا متأكد";
 $NoIWantToTurnBack = "كلا، اريد العودة";
@@ -387,8 +387,8 @@ $SelectRole = "اختر الدور";
 $SelectAnOption = "يرجى اختيار خيار";
 $CurrentStatus = "المكانة الحالية";
 $MyCourseCategories = "فئات مقرراتي";
-$SessionsCategories = "فئات المواسم";
-$CourseSessionBlock = "المقررات والمواسم";
+$SessionsCategories = "فئات الدورات";
+$CourseSessionBlock = "المقررات والدورات";
 $Committee = "اللجنة";
 $ModelType = "نوع انموذج التمرين";
 $AudioFile = "ملف صوتي";
@@ -628,7 +628,7 @@ $ExpirationDate = "تاريخ انتهاء الصلاحية";
 $LastEdit = "آخر تحرير";
 $LastVisit = "آخر زيارة";
 $Subscription = " تسجيل";
-$CourseAccess = "  الوصول إلى المقر";
+$CourseAccess = "الوصول الى المقرر";
 $ConfirmBackup = "هل تريد فعلاً حفظ نسخة احتياطية";
 $CreateSite = "انشاء مقرر جديد";
 $RestoreDescription = "المقرر في ملف الأرشيف مما يمكنك من اختيار أدناه .عند النقر على زر استعادة سوف يفك ضغط الأرشيف غير مضغوط والمقرر ستعاد صياغته.";
@@ -687,11 +687,13 @@ $CreatedSize = "تم إنشاءها , الحجم";
 $AuthorTip = "بتنسيق VCARD";
 $Format = "التنسيق";
 $FormatTip = "اختر من القائمة";
-$Statuses = ":draft:draft,,      final:final,,      revised:revised,,      unavailable:unavailable";
-$Costs = ":no:free, no cost,, yes:not free, cost";
+$Statuses = ":مسودة:مسودة,,      نهائي
+:نهائي
+,,      مراجع:مراجع,,      غير متوفر:غير متوفر";
+$Costs = ":غير مجاني, لا كلفة,, نعم:غير مجاني, كلفة";
 $Copyrights = ":yes:copyright,, no:no copyright";
 $Formats = ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
-$LngResTypes = ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture";
+$LngResTypes = "غير مترجم:exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture";
 $SelectOptionForBackup = " فضلا حدد خيارات النسخ الاحتياطي";
 $LetMeSelectItems = " دعني احدد محتويات المقرر";
 $CreateFullBackup = " عمل نسخة احتياطية كاملة لهذا المقرر";
@@ -720,7 +722,7 @@ $NoResourcesToBackup = " لا يوجد أي مصادر لإجراء عملية �
 $NoResourcesInBackupFile = " لا يوجد أي مصادر في ملف النسخ الإحتياطي";
 $SelectResources = " اختر مصادر";
 $NoResourcesToRecycles = " لا يوجد أي مصادر لإعادة استخدامها";
-$IncludeQuestionPool = " Include questions pool";
+$IncludeQuestionPool = "تضمين مجموعة الاسئلة";
 $LocalFile = " الملف المحلي";
 $ServerFile = " الملف على الخادم";
 $NoBackupsAvailable = " لا يتوفر أي نسخ احتياطي";
@@ -823,8 +825,8 @@ $ThickStroke = "سميكة";
 $ShowHotCoursesComment = "الدروس المهمة ـ الساخنة - ستوضع في الصفحة الرئيسية";
 $ShowHotCoursesTitle = "اعرض الدروس المهمة ـ الساخنة ـ";
 $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "متاح للمعلم فقط";
-$PreventSessionAdminsToManageAllUsersTitle = "منع مدراء الموسم من ادارة كافة المستخدمين";
-$IsOpenSession = "موسم مفتوح";
+$PreventSessionAdminsToManageAllUsersTitle = "منع مدراء الدورة من ادارة كافة المستخدمين";
+$IsOpenSession = "دورة مفتوحة";
 $AllowVisitors = "السماح للزائرين";
 $EnableIframeInclusionComment = "ان السماح بذكل سوف يحسن امكانيات التحرير للمستخدمين، الا ان ذلك قد بمثل خطر امني، لذا لا تفعلها حتى تكون واثقا من المستخدمين";
 $AddedToLPCannotBeAccessed = "هذا التمرين سوف يتم تضمينه في مسار التعلم، ولذا لا يمكن الوصول اليه من قبل الطلبة بشكل مباشر، واذا اردت ان تضع نفس التمرين متوفرا في اداة التمارين فعليك ان تعمل نسخة من التمرين الحالي عبر ايقونة النسخ";
@@ -833,17 +835,17 @@ $MailTemplateRegistrationMessage = "عزيري ((firstname)) ((lastname)),\n\nا
 $Explanation = "بمجرد نفرك على زر \"انشاء مقرر\"، فانه سوف يتم انشاء مقرر مع قسم للاختبارات والواجبات والمقررات ومشاركة الملفات والتقويم والمزيد، ان تسجيل الدخول كمدرس سوف يمنحك صلاحيات التحرير في المقرر";
 $CodeTaken = "  رمز المقرر هذا تم استخدامه مسبقا. <br/ > استخدم  <b> زر الرجوع </b> في المتصفح وحاول مرة أخرى";
 $ExerciceEx = " نموذج اختبار";
-$Antique = " Irony";
-$SocraticIrony = " Socratic irony is...";
+$Antique = "سخرية";
+$SocraticIrony = "غير مترجم Socratic irony is...";
 $ManyAnswers = " يمكن أن تكون أكثر من إجابة صحيحة";
-$Ridiculise = " Ridiculise one's interlocutor in order to have him concede he is wrong.";
-$NoPsychology = " No. Socratic irony is not a matter of psychology, it concerns argumentation.";
-$AdmitError = " Admit one's own errors to invite one's interlocutor to do the same.";
-$NoSeduction = " No. Socratic irony is not a seduction strategy or a method based on the example.";
-$Force = " Compell one's interlocutor, by a series of questions and sub-questions, to admit he doesn't know what he claims to know.";
-$Indeed = " Indeed. Socratic irony is an interrogative method. The Greek \"eirotao\" means \" ask questions\"";
-$Contradiction = " Use the Principle of Non Contradiction to force one's interlocutor into a dead end.";
-$NotFalse = " This answer is not false. It is true that the revelation of the interlocutor's ignorance means showing the contradictory conclusions where lead his premisses.";
+$Ridiculise = "غير مترجم Ridiculise one's interlocutor in order to have him concede he is wrong.";
+$NoPsychology = "غير مترجم No. Socratic irony is not a matter of psychology, it concerns argumentation.";
+$AdmitError = "تقبل المرء لاخطائه سيدعو الاخرين لتقبل اخطائهم";
+$NoSeduction = "غير مترجم No. Socratic irony is not a seduction strategy or a method based on the example.";
+$Force = "غير مترجم Compell one's interlocutor, by a series of questions and sub-questions, to admit he doesn't know what he claims to know.";
+$Indeed = "غير مترجم Indeed. Socratic irony is an interrogative method. The Greek \"eirotao\" means \" ask questions\"";
+$Contradiction = "تطبيق مبدأ عدم التناقض للوصول الى نهاية";
+$NotFalse = "غير مترجم This answer is not false. It is true that the revelation of the interlocutor's ignorance means showing the contradictory conclusions where lead his premisses.";
 $AddPageHome = " تحميل صفحة ورابط للصفحة الرئيسية";
 $ModifyInfo = " إعدادت المقرر";
 $CourseDesc = " وصف المقرر";
@@ -880,7 +882,7 @@ $OtherProperties = " تم العثور على خيارات أخرى في الأ�
 $SysId = " هوية النظام - System ID";
 $ScoreShow = " أظهر النقاط";
 $Visibility = " خاصية الظهور";
-$VersionDb = " Database version used at archive time";
+$VersionDb = "اصدار قاعدة البيانات المستخدم في وقت الارشيف";
 $Expire = " انتهاء الصلاحية";
 $ChoseFile = " حدد ملف";
 $FtpFileTips = " الملف على خادم FTP";
@@ -919,7 +921,7 @@ $NotebookAdded = "تم اضافة ملاحظة";
 $NotebookUpdated = "تم تحديث الملاحظة";
 $NotebookDeleted = "تم حذف الملاحظة";
 $DeleteAllAttendances = "الغاء كل الحضور";
-$AssignSessionsTo = "تخصيص موسم لـ";
+$AssignSessionsTo = "تخصيص دورة لـ";
 $Upload = "رفع الملف";
 $MailTemplateRegistrationTitle = "مستخدم جديد على
 ((اسم الموقع))";
@@ -1140,7 +1142,7 @@ $DbPrefixCom = "Leave empty if not requested";
 $EncryptUserPass = "Encrypt user passwords in database";
 $SingleDb = "Use one or several DB for Chamilo";
 $AllowSelfReg = "Allow self-registration";
-$Recommended = "(recommended)";
+$Recommended = "(موصى به)";
 $ScormDB = "Scorm DB";
 $AdminLastName = "Administrator last name";
 $AdminPhone = "Administrator telephone";
@@ -1187,13 +1189,13 @@ $CourseCategoryStored = " لقد تم إضافة التصنيف بنجاح";
 $WithoutTimeLimits = " من غير حدود زمنية";
 $Added = " أضيف";
 $Deleted = "تم الحذف";
-$Keeped = " Kept";
+$Keeped = "أبقى";
 $HideAndSubscribeClosed = " مخفي / مغلق";
 $HideAndSubscribeOpen = " مخفي / مفتوح";
 $ShowAndSubscribeOpen = " ظاهر / مفتوح";
 $ShowAndSubscribeClosed = " ظاهر / مغلق";
 $AdminThisUser = "الرجوع للمستخدم";
-$Manage = " Portal ادارة الـ";
+$Manage = "ادارة النظام";
 $EnrollToCourseSuccessful = " لقد تم تسجيلك في المقرر";
 $SubCat = " التصانيف الفرعية";
 $UnsubscribeNotAllowed = " إلغاء التسجيل غير متاح في هذا المقرر";
@@ -1258,12 +1260,12 @@ $DirMv = "تم نقل العنصر";
 $ComMod = "تم تعديل التعليق";
 $Rename = "إعادة تسمية";
 $NameDir = "اسم المجلد الجديد (بالإنجليزي)";
-$DownloadFile = "تحميل الملف إلى الجهاز الخادم";
+$DownloadFile = "تحميل الملف";
 $Builder = "مولد مسار التّعلم";
 $MailMarkSelectedAsUnread = "التحديد كغير مقروء";
 $ViewModeImpress = "نمط العرض الحالي: انبهار";
-$AllowTeachersToCreateSessionsComment = "يمكن للمدرسين من انشاء وتحرير وحذف مواسمهم";
-$AllowTeachersToCreateSessionsTitle = "السماح للمدرسين في انشاء مواسم";
+$AllowTeachersToCreateSessionsComment = "يمكن للمدرسين من انشاء وتحرير وحذف دوراتهم";
+$AllowTeachersToCreateSessionsTitle = "السماح للمدرسين في انشاء دورات";
 $SelectACategory = " اختار الفئة";
 $MailMarkSelectedAsRead = "التحديد كمقروء";
 $MailSubjectReplyShort = "رد";
@@ -1303,9 +1305,9 @@ $CreateUser = "إنشاء مستخدم";
 $ModifyUser = "تعديل المستخدم";
 $buttonEditUserField = "تعديل معلومات المستخدم";
 $ModifyCoach = "تحرير المعلم";
-$ModifyThisSession = "تعديل هذه الموسم";
-$ExportSession = "تصدير الموسم او المواسم";
-$ImportSession = "استيراد الموسم او المواسم";
+$ModifyThisSession = "تعديل هذه الدورة";
+$ExportSession = "تصدير الدورة او الدورات";
+$ImportSession = "استيراد الدورة او الدورات";
 $CourseBackup = " نسخ احتياطي لهذا المقرر";
 $CourseTitular = " المدرس";
 $CourseFaculty = " صنف المقرر";
@@ -1434,8 +1436,8 @@ $LogIdentLogout = " قائمة التسجيل";
 $ServerStatus = " : MySQL حالة الخادم";
 $DataBase = "قاعدة البيانات";
 $Run = " تعمل";
-$Client = " MySql عميل";
-$Server = " MySql خادم";
+$Client = "MySql عميل";
+$Server = "MySql خادم";
 $titulary = "مدير";
 $UpgradeBase = "تحديث قاعدة البيانات";
 $ErrorsFound = " وجود أخطاء";
@@ -1560,7 +1562,7 @@ $Exercises = " تمارين";
 $AllowPersonalAgendaTitle = "التقويم الشخصي";
 $AllowPersonalAgendaComment = "هل يمكن للطالب اضافة احداث شخصية الى التقويم؟";
 $CurrentValue = " القيمة الحالية";
-$AlreadyRegisteredToSession = "مسجل مسبقا في الموسم";
+$AlreadyRegisteredToSession = "مسجل مسبقا في الدورة";
 $MyCoursesDefaultView = "العرض الافتراضي لمقرراتي";
 $UserPassword = " كلمة المرور";
 $SubscriptionAllowed = " مسموح بالتسجيل";
@@ -1595,7 +1597,7 @@ $DropboxAllowMailingComment = "مع خاصية البريد فانك يمكنك 
 $PermissionsForNewDirs = "السماحية لأدلة جديدة";
 $PermissionsForNewDirsComment = "إن القدرة على تعريف الرخص المسموحة المسندة لكل دليل جديد سوف تحسن المستوي الأمني مقابل أي هجوم من القراصنة (الهكر) الذين يحملونها بمحتويات خطره علي بوابتك بالانترنت. الإعداد الافتراضي (0770) يجب أن يكون بما فيه الكفاية حتى  يؤمن  مستوى حمايةِ معقولِ لخادم (السيرفر). تَستعملُ الصيغة المعطاة المصطلح يونيكسَ من مالك المجموعة الآخرين لإعطاء تصاريح بالكتابة والقراءة.";
 $UserListHasBeenExported = " .لقد تم تصدير قائمة المستخدمين";
-$ClickHereToDownloadTheFile = " .أنقر هنا لتحميل الملف";
+$ClickHereToDownloadTheFile = "تحميل الملف";
 $administratorTelephoneTitle = " رقم هاتف مدير النظام";
 $administratorTelephoneComment = "  رقم هاتف مدير النظام";
 $SendMailToNewUser = " أرسل بريدا إلى مستخدم جديد";
@@ -1634,12 +1636,12 @@ $ShowIconsInNavigationsMenuTitle = " عرض الأيقونات على قائمة
 $SeeAllRightsAllRolesForSpecificLocation = " تركيز على الموقع";
 $MetaTwitterCreatorTitle = "حساب تويتر الشخصي";
 $ClassesSubscribed = " لقد تم تسجيل الفصول المختارة في المقررات المختارة";
-$RoleId = " (ID) مهمة المعرّف";
+$RoleId = "ID معرّف الدور";
 $RoleName = " اسم المهمة";
 $RoleType = " النوع";
 $MakeAvailable = " جعله متاح";
 $MakeUnavailable = " جعله غير متاح";
-$Stylesheets = " أسلوب الأوراق";
+$Stylesheets = "المظاهر التصميمية";
 $ShowIconsInNavigationsMenuComment = " هل ستظهر قائمة التصفح أيقونات الأدوات المختلفة؟";
 $Plugin = " ادخال";
 $MainMenu = " القائمة الرئيسية";
@@ -1659,7 +1661,7 @@ $ShowEmailAddressesComment = " أعرض عنوان البريد الالكترو
 $ActiveExtensions = " قم بتفعيل هذه الخدمة";
 $Visioconf = " محاضرة مرئية";
 $VisioconfDescription = "تقدم اداة كاميلو للمؤتمر الفيديوي: مشاركة الشرائح، سبورة الكتابة على الشرائح، دردشة مع صوت وفيديو، الا انه يتطلب فلاش";
-$Ppt2lp = " oogie أوجي";
+$Ppt2lp = "كاميلو RAPID";
 $Ppt2lpDescription = " .بتحويل عروض الباور بوينت إلى مسار تعليمي من خلال بعض النقرات (PowerPoint2LearningPath) -تسمح الأداة - باور بوينت إلى مسار تعليمي";
 $BandWidthStatistics = " إحصائيات عرض النطاق";
 $BandWidthStatisticsDescription = " بملاحظة إحصائيات متقدمة حول حالة  الخادم خلال الـ 24 ساعة الماضية MRTG تسمح الـ";
@@ -1667,15 +1669,15 @@ $ServerStatistics = " خادم الإحصائيات";
 $ServerStatisticsDescription = "  ...بمعاينة إحصائيات القاعدة الإرتكازية  الخاصة بك: زوّار، معاينات الصفحة، المشرفين: AWStats تسمح الـ";
 $SearchEngine = " محرك بحث لنص كامل";
 $SearchEngineDescription = " .إنّ محرك البحث عن نص كامل يسمح لك بالبحث عن كلمة خلال النظام كلّه. إنّ الفهرسة اليومية للمحتويات تضمن لك جودة نتائج البحث";
-$ListSession = "قائمة المواسم";
-$AddSession = "اضافة موسم";
-$ImportSessionListXMLCSV = "استيراد قائمة المواسم";
-$ExportSessionListXMLCSV = "تصدير قائمة المواسم";
+$ListSession = "قائمة الدورات";
+$AddSession = "اضافة دورة";
+$ImportSessionListXMLCSV = "استيراد قائمة الدورات";
+$ExportSessionListXMLCSV = "تصدير قائمة الدورات";
 $NbCourses = "المقررات";
 $DateStart = " تاريخ البداية";
 $DateEnd = " تاريخ النهاية";
 $CoachName = "اسم المعلم";
-$SessionNameIsRequired = "يجب كتابة اسم للموسم";
+$SessionNameIsRequired = "يجب كتابة اسم للدورة";
 $NextStep = " الخطوة التالية";
 $Confirm = " تأكيد";
 $UnsubscribeUsersFromCourse = " إلغاء تسجيل المستخدمين من المقرر";
@@ -1697,8 +1699,8 @@ $ExampleMaterialCourseCreationTitle = " مثال على المادة عند إن
 $ExampleMaterialCourseCreationComment = " إنشاء مثال عاى المادة تلقائيا عند إنشاء مقرر جديد";
 $AccountValidDurationTitle = " صلاحية الحساب";
 $AccountValidDurationComment = " بعد إنشاء حساب مستخدم يبقى صالحا خلال هذا العدد من الأيام";
-$UseSessionModeTitle = "استخدام المواسم";
-$UseSessionModeComment = " *تمنح المواسم طرق مختلفة للتعامل مع المقررات و هذا عندما يكون هناك للمقرر ناشئ و مشرف و طلاب. يقوم كل مشرف بإعطاء المقرر لمجموعة من الطلاب لفترة من الزمن تعرف بـ *الموسم";
+$UseSessionModeTitle = "استخدام الدورات";
+$UseSessionModeComment = " *تمنح الدورات طرق مختلفة للتعامل مع المقررات و هذا عندما يكون هناك للمقرر ناشئ و مشرف و طلاب. يقوم كل مشرف بإعطاء المقرر لمجموعة من الطلاب لفترة من الزمن تعرف بـ *الدورة";
 $HomepageViewActivity = " عرض الأنشطة";
 $HomepageView2column = " عرض عمودين";
 $HomepageView3column = " عرض ثلاثة أعمدة مختلفة";
@@ -1722,26 +1724,26 @@ $Footer = " تذييل";
 $PublicPagesComplyToWAITitle = " ( WAI ) التزام الصفحات العامة بالمبادرة للوصول إلى الويب";
 $PublicPagesComplyToWAIComment = " عند اختيارهذا الخيار تصبح الصفحات العامة للنظام أكثر وصولا، هذا يعني أيضا أنه من الممكن أن يظهر بعض من محتوى الصفحات العامة للنظام بأشكال مختلفة،المبادرة  للوصول إلى الويب هي مبادرة لجعل الويب أكثر وصولا";
 $VersionCheck = " التحقق من إصدار";
-$SessionOverview = "نظرة عامة حول الموسم";
+$SessionOverview = "نظرة عامة حول الدورة";
 $SubscribeUserIfNotAllreadySubscribed = " تسجيل مستخدم إذا لم يقم بالتسجيل من قبل";
 $UnsubscribeUserIfSubscriptionIsNotInFile = " إلغاء تسجيل مستخدم في حالة عدم وجود التسجيل في ملف";
-$DeleteSelectedSessions = "حذف المواسم المحددة";
-$CourseListInSession = "المقررات في هذا الموسم";
-$UnsubscribeCoursesFromSession = "إلغاء تسجيل المقررات المحددة من هذا الموسم";
+$DeleteSelectedSessions = "حذف الدورات المحددة";
+$CourseListInSession = "المقررات في هذه الدورة";
+$UnsubscribeCoursesFromSession = "إلغاء تسجيل المقررات المحددة من هذه الدورة";
 $NbUsers = " مستخدمين";
-$SubscribeUsersToSession = "تسجيل مستخدمين في هذا الموسم";
+$SubscribeUsersToSession = "تسجيل مستخدمين في هذه الدورة";
 $UserListInPlatform = " قائمة المستخدمين  في النظام";
-$UserListInSession = "قائمة المستخدمين المسجلين في هذا الموسم";
+$UserListInSession = "قائمة المستخدمين المسجلين في هذه الدورة";
 $CourseListInPlatform = " قائمة مقررات في النظام";
 $Host = " مضيف";
 $UserOnHost = " اسم مستخدم";
 $FtpPassword = " FTP كلمة مرور لـ";
 $PathToLzx = "  LZX مسار إلى ملفات";
 $WCAGContent = " نص";
-$SubscribeCoursesToSession = "اضافة مقررات الى هذا الموسم";
+$SubscribeCoursesToSession = "اضافة مقررات الى هذه الدورة";
 $DateStartSession = "تاريخ البدأ - متوفر من الوقت 00:00:00 لهذا التاريخ";
 $DateEndSession = "تاريخ الانتهاء";
-$EditSession = "تحرير هذا الموسم";
+$EditSession = "تحرير هذه الدورة";
 $VideoConferenceUrl = " مسار إلى محاضرة على المباشر";
 $VideoClassroomUrl = " مسار إلى فصل محاضرة على المباشر";
 $ReconfigureExtension = " إعادة تشكيل إمتداد";
@@ -1749,9 +1751,9 @@ $ServiceReconfigured = " تم إعادة تشكيل خدمة";
 $ChooseNewsLanguage = " إختر لغة الأخبار";
 $Ajax_course_tracking_refresh = " مجموع الأوقات التي قضيت في مقرر";
 $Ajax_course_tracking_refresh_comment = " الخيار لحساب في الزمن الحقيقي الوقت الذي يقضيه مستخدم ما في مقرر. القيمة الموجودة في الحقل هي فترة التحديث بالثانية. لتعطيل هذا الخيار يتم وضع 0 للقيمة الإفتراضية في الحقل  يستخدم هذا";
-$FinishSessionCreation = "الانتهاء من انشاء الموسم";
+$FinishSessionCreation = "الانتهاء من انشاء الدورة";
 $VisioRTMPPort = "منفذ بروتوكول الاتصال المرئيRTMP";
-$SessionNameAlreadyExists = "يوجد اسم للموسم مسبقا";
+$SessionNameAlreadyExists = "يوجد اسم للدورة مسبقا";
 $NoClassesHaveBeenCreated = " لم يتم إنشاء أية صفوف";
 $ThisFieldShouldBeNumeric = " يجب أن يكون هذا الحقل رقما";
 $UserLocked = " مستخدم مغلق";
@@ -1764,8 +1766,8 @@ $RegistrationDate = " تاريخ التسجيل";
 $UserUpdated = " تم تحديث المستخدم";
 $HomePageFilesNotReadable = " يتعذر قراءة ملفات صفحة البدء";
 $Choose = " اختر";
-$ModifySessionCourse = "تحرير مقرر الموسم";
-$CourseSessionList = "قائمة المقررات في هذا الموسم";
+$ModifySessionCourse = "تحرير مقرر الدورة";
+$CourseSessionList = "قائمة المقررات في هذه الدورة";
 $SelectACoach = "اختر معلم";
 $UserNameUsedTwice = " اسم مستخدم مكرر";
 $UserNameNotAvailable = " اسم المستخدم هذا غير متوفر";
@@ -1773,12 +1775,12 @@ $UserNameTooLong = " اسم المستخدم هذا طويل جدا";
 $WrongStatus = " هذه الحالة غير موجودة";
 $ClassNameNotAvailable = " اسم هذا الصف غير متوفر";
 $FileImported = " تم استيراد الملف";
-$WhichSessionToExport = "اختر الموسم الذي تود تصديره";
-$AllSessions = "كافة المواسم";
+$WhichSessionToExport = "اختر الدورة الذي تود تصديرها";
+$AllSessions = "كافة الدورات";
 $CodeDoesNotExists = " هذا الرمز غير موجود";
 $UnknownUser = " مستخدم غير معروف";
 $UnknownStatus = " حالة غير معروفة";
-$SessionDeleted = "تم خذف الموسم";
+$SessionDeleted = "تم خذف الدورة";
 $CourseDoesNotExist = " هذا المقرر غير موجود";
 $UserDoesNotExist = " هذا المستخدم غير موجود";
 $ButProblemsOccured = " غير أنه ظهرت مشاكل";
@@ -1792,7 +1794,7 @@ $EphorusPlagiarismPrevention = " Ephorus الوقاية من الإنتحال";
 $CourseTeachers = " مدرسي مقرر";
 $UnknownTeacher = "معلم /مدرب غير معروف";
 $HideDLTTMarkup = "أخف علامة DLTT";
-$ListOfCoursesOfSession = "قائمة المقررات للموسم";
+$ListOfCoursesOfSession = "قائمة المقررات للدورة";
 $UnsubscribeSelectedUsersFromSession = "إلغاء اشتراك المستخدمين المختارين من الدورة";
 $ShowDifferentCourseLanguageComment = "انظر إلي اللغة في كل مقرر( موجودة مقابل اسم المقرر) علي صفحه المقرر الرئيسية";
 $ShowEmptyCourseCategoriesComment = "عرض فصول المقرر على الصفحة الرئيسية ، وحتى لو كانت فارغة .";
@@ -1948,16 +1950,16 @@ $LDAPFilledTutorFieldTitle = "الحقل التعريفي الخاص بالمع�
 $LDAPFilledTutorFieldComment = "سوف يتم التحقق من الاتصال بالخادم عند ادخال المستخدمين الجدد، في حال عدم كون الحقل فارغا فان المستخدم سوف يعد معلما عند تسجيله بالنظام، فاذا اردت اني يكون كافة المستخدمين المسجلين كطلبة فانه يجب عليك ترك هذا الحقل فارغا. كذلك يمكن تغيير هذا الاجراء من خلال الرجوع الى دليل التنصيب";
 $LDAPAuthenticationLoginTitle = "توثيق تسجيل الدخول";
 $LDAPAuthenticationLoginComment = "LDAP في حال كونك تستخدم خادم من نوع
-والذي لا يدعم او يقبل الوصول المجهول، فان عليك ملئ الحقل التالي مع رمز الدخول لتسجيل المستخدمين";
+والذي لا يدعم او يقبل الوصول المجهول، فان عليك ملأ الحقل التالي مع رمز الدخول لتسجيل المستخدمين";
 $LDAPAuthenticationPasswordTitle = "توثيق رمز المرور";
 $LDAPAuthenticationPasswordComment = "LDAP في حال كونك تستخدم خادم
-والذي لا يدعم الوصول المجهول، فان عليك ملئ الحقل التالي مع رمز المرور الخاص بالمستخدم";
+والذي لا يدعم الوصول المجهول، فان عليك ملأ الحقل التالي مع رمز المرور الخاص بالمستخدم";
 $LDAPImport = "LDAP استيراد";
 $EmailNotifySubscription = "اخطار المستخدمين المسجلين عبر البريد";
 $DontUncheck = "لا تقم بالالغاء";
 $AllSlashNone = "الجميع / لا احد";
 $LDAPImportUsersSteps = "LDAP استيراد: المستخدميمن / الخطوات";
-$EnterStepToAddToYourSession = "ادخال خطوة لاضافتها الى الموسم";
+$EnterStepToAddToYourSession = "ادخال خطوة لاضافتها الى الدورة";
 $ToDoThisYouMustEnterYearDepartmentAndStep = "لكي يتم ذلك فانه يجب عليك ادخال السنة والقسم الى الخطوة";
 $FollowEachOfTheseStepsStepByStep = "اتبع كل من هذه الخطوات";
 $RegistrationYearExample = "سنة التسجيل. مثل: %s للسنة الاكاديمية %s-%s";
@@ -1968,12 +1970,12 @@ $ErrorExistingStep = "خطأ، هذه الخطوة موجودة مسبقا";
 $ErrorStepNotFoundOnLDAP = "LDAP توقف، لم يتم ايجاد ذلك في الخادم";
 $StepDeletedSuccessfully = "تم حذف الخطوة بنجاح";
 $StepUsersDeletedSuccessfully = "خطوة المستخدمين تم ازالتها بنجاح";
-$NoStepForThisSession = "LOs في الموسم لا يوجد";
+$NoStepForThisSession = "LOs في الدورة لا يوجد";
 $DeleteStepUsers = "ازالة المستخدمين من هذه الخطوة";
 $ImportStudentsOfAllSteps = "استيراد الطلبة من جميع الخطوات";
 $ImportLDAPUsersIntoPlatform = "LDAP استيراد المستخدمين للنظام من خادم";
-$NoUserInThisSession = "لا يوجد مستخدم في هذا الموسم";
-$SubscribeSomeUsersToThisSession = "تسجيل بعض المستخدمين في هذا الموسم";
+$NoUserInThisSession = "لا يوجد مستخدم في هذه الدورة";
+$SubscribeSomeUsersToThisSession = "تسجيل بعض المستخدمين في هذه الدورة";
 $EnterStudentsToSubscribeToCourse = "ادخال الطلبة الذين تود تسجيلهم في هذا المقرر";
 $ToDoThisYouMustEnterYearComponentAndComponentStep = "من اجل اجراء ذلك فان عليك ادخال السنة والمكون";
 $SelectComponent = "اختر المكون";
@@ -1982,16 +1984,16 @@ $SelectStudents = "اختر الطلبة";
 $LDAPUsersAdded = "LDAP تم اضافة المستخدمين";
 $NoUserAdded = "لم يضاف أي مستخدم";
 $ImportLDAPUsersIntoCourse = "LDAP استيراد المستخدمين للمقرر عبر";
-$ImportLDAPUsersAndStepIntoSession = "LDAP استيراد المستخدمين للموسم عبر";
-$LDAPSynchroImportUsersAndStepsInSessions = "LDAP synchro استيراد الطلبة في مقرر الموسم عبر";
+$ImportLDAPUsersAndStepIntoSession = "LDAP استيراد المستخدمين للدورة عبر";
+$LDAPSynchroImportUsersAndStepsInSessions = "LDAP synchro استيراد الطلبة في مقرر الدورة عبر";
 $TabsMyGradebook = "تبويب التقييمات";
 $LDAPUsersAddedOrUpdated = "LDAP تم اضافة او تحديث المستخدمين عبر";
 $SearchLDAPUsers = "LDAP البحث عن المستخدمين";
 $SelectCourseToImportUsersTo = "اختر الدرس الذي ترغب في تسجيل المستخدمين فيه والذين ستختارهم لاحقا";
-$ImportLDAPUsersIntoSession = "LDAP استيراد المستخدمين للموسم من خلال";
+$ImportLDAPUsersIntoSession = "LDAP استيراد المستخدمين للدورة من خلال";
 $LDAPSelectFilterOnUsersOU = "اختيار التصفية من اجل البحث عن مطابقة";
 $LDAPOUAttributeFilter = "OU تصفية السمات";
-$SelectSessionToImportUsersTo = "اختيار الموسم الذي تود استيراد المستخدمين فيه";
+$SelectSessionToImportUsersTo = "اختيار الدورة التي تود استيراد المستخدمين اليها";
 $VisioUseRtmptTitle = "RTMPT استخدام بروتوكول";
 $VisioUseRtmptComment = "RTMPT يسمح هذا البروتوكول
 بالوصول الى خاصية مؤتمر الفيديو خلف الجدار الناري، من خلال اعادة توجيه الاتصالات عبر المنفذ 80، الا ان ذلك سوف يبطئ تدفق البث ولذا ينصح بتجنبه ما لم يكن ذلك مطلوب";
@@ -2011,23 +2013,23 @@ $MetaTitleComment = "هذا العنوان سوف يظهر في رأس الصف�
 $FieldDeleted = "تم حذف الحقل";
 $CannotDeleteField = "لا يستطيع حذف الحقل";
 $AddUsersByCoachTitle = "تسجيل المستخدمين من قبل المعلم";
-$AddUsersByCoachComment = "يمكن للمعلم انشاء مستخدمين في النظام وتسجيل مستخدمين في الموسم";
+$AddUsersByCoachComment = "يمكن للمعلم انشاء مستخدمين في النظام وتسجيل مستخدمين في الدورة";
 $UserFieldsSortOptions = "فرز الخيارات لحقول الحساب";
 $FieldOptionMovedUp = "تم رفع الخيار الى الاعلى";
 $CannotMoveFieldOption = "لا يمكن نقل هذا الخيار";
 $FieldOptionMovedDown = "تم نقل هذا الخيار الى الاسفل";
 $DefineSessionOptions = "تعريف حدود الوصول للمعلم";
-$DaysBefore = "الايام فبل بداية الموسم";
+$DaysBefore = "الايام فبل بداية الدورة";
 $DaysAfter = "الايام بعد";
 $SessionAddTypeUnique = "التسجيل المنفرد";
 $SessionAddTypeMultiple = "التسجيل المتعدد";
 $EnableSearchTitle = "خاصية البحث الكامل للنص";
 $EnableSearchComment = "Xapian اختر \"نعم\" لتمكين هذه الخاصية مع ملاحظة بان هذه الخاصية تعتمد على وجود الاضافة";
-$SearchASession = "البحث عن موسم";
-$ActiveSession = "الموسم الموسم";
+$SearchASession = "البحث عن دورة";
+$ActiveSession = "الدورة الدورة";
 $AddUrl = "URL اضافة رابط";
-$ShowSessionCoachTitle = "اظهار اسم معلم الموسم";
-$ShowSessionCoachComment = "اظهار اسم معلم الموسم الخاص بالنظام في عنوان الموسم في قائمة المقررات";
+$ShowSessionCoachTitle = "اظهار اسم معلم الدورة";
+$ShowSessionCoachComment = "اظهار اسم معلم الدورة الخاص بالنظام في عنوان الدورة في قائمة المقررات";
 $ExtendRightsForCoachTitle = "توسيع صلاحيات المعلم";
 $ExtendRightsForCoachComment = "ان تفعيل هذا الخيار سوف يمنح المعلم نفس صلاحيات المدرس في ادوات التعليم";
 $ExtendRightsForCoachOnSurveyComment = "ان تفعيل هذا الخيار سوف يسمح للمعلمين من انشاء وتعديل الاستبيانات";
@@ -2094,12 +2096,12 @@ $URLNotConfiguredPleaseChangedTo = "URL لم يتم تهيئة الرابط، ي
 $AdminUserRegisteredToThisURL = "URL تم تخصيص المدير الى الرابط التالي";
 $CoursesWereEdited = "تم تحديث المقررات بنجاح";
 $URLEdited = "URL تم تعديل الرابط";
-$AddSessionToURL = "URL تم اضافة موسم الى الرابط";
-$FirstLetterSession = "الحرف الاول من عنوان الموسم";
-$EditSessionToURL = "تعديل الموسم";
-$AddSessionsToThatURL = "URL اضافة مواسم الى الرابط";
-$SessionBelongURL = "تم تعديل المواسم";
-$ManageSessions = "ادارة المواسم";
+$AddSessionToURL = "URL تم اضافة دورة الى الرابط";
+$FirstLetterSession = "الحرف الاول من عنوان الدورة";
+$EditSessionToURL = "تعديل الدورة";
+$AddSessionsToThatURL = "URL اضافة دورات الى الرابط";
+$SessionBelongURL = "تم تعديل الدورات";
+$ManageSessions = "ادارة الدورات";
 $AllowMessageToolComment = "تمكين اداة المراسلة الداخلية للسماح للمستخدمين من ارسال الرسائل بينهم والوصول الى بريد المراسلة";
 $AllowSocialToolTitle = "اداة الشبكة الاجتماعية والتي تشبه الفيسبوك";
 $AllowSocialToolComment = "تسمح اداة الشبكة الاجتماعية للمستخدمين من تحديد العلاقات بينهم، وبالتالي تحديد الاصدقاء بالاضافة الى اداة المراسلة الداخلية التي تسمح بالتواصل الوثيق مع الاصدقاء ضمن بيئة النظام";
@@ -2115,7 +2117,7 @@ $TheFollowingCoursesAlreadyUseThisVisualCode = "المقررات التالية 
 $UsersSubscribedToBecauseVisualCode = "تم تسجيل المستخدمين الى المقررات التالية بسبب ان عدة مقررات تشترك في نفس الرمز";
 $UsersUnsubscribedFromBecauseVisualCode = "تم الغاء تسجيل المستخدمين من المقررات التالية بسبب ان عدة مقررات تشترك في نفس الرمز";
 $FilterUsers = "تصفية المستخدمين";
-$SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode = "تم تسجيل عدة مقررات الى الموسم بسبب ان عدة مقررات لها نفس الرمز";
+$SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode = "تم تسجيل عدة مقررات الى الدورة بسبب ان عدة مقررات لها نفس الرمز";
 $CoachIsRequired = "يجب ان تختار معلم";
 $EncryptMethodUserPass = "اسلوب التشفير";
 $AddTemplate = "اضافة قالب";
@@ -2171,8 +2173,8 @@ $ShowGlossaryInDocumentsIsManual = "يدوي: اظهار ايقونة قاموس
 $ShowGlossaryInDocumentsIsNone = "لا شيء: لا تضف اي من مصطلحات القاموس الى المستندات";
 $LanguageVariable = "متغير اللغة";
 $ToExportDocumentsWithGlossaryYouHaveToSelectGlossary = "لغرض تصدير مستند يتضمن مصطلحات قاموس فانه يجب عليك التأكد من اضافة اداة القاموس عند التصدير";
-$ShowTutorDataTitle = "اظهار بيانات معلم الموسم في تذييل النظام";
-$ShowTutorDataComment = "اظهار اسم وبريد معلم الموسم في تذييل النظام؟";
+$ShowTutorDataTitle = "اظهار بيانات معلم الدورة في تذييل النظام";
+$ShowTutorDataComment = "اظهار اسم وبريد معلم الدورة في تذييل النظام؟";
 $ShowTeacherDataTitle = "اظهار معلومات المدرس في تذييل النظام";
 $ShowTeacherDataComment = "اظهار اسم وبريد المدرس في تذييل النظام";
 $HTMLText = "HTML";
@@ -2188,55 +2190,55 @@ $TermAndConditionNotSaved = "لم يتم حفظ الشروط والاحكام";
 $TheSubLanguageHasBeenRemoved = "تم ازالة اللغة الفرعية";
 $AddTermsAndConditions = "اضافة الاحكام والشروط";
 $TermAndConditionSaved = "تم حفظ الاحكام والشروط";
-$ListSessionCategory = "قائمة فئات المواسم";
+$ListSessionCategory = "قائمة فئات الدورات";
 $AddSessionCategory = "اضافة فئة";
 $SessionCategoryName = "اسم الفئة";
-$EditSessionCategory = "تعديل قائمة المواسم";
+$EditSessionCategory = "تعديل قائمة الدورات";
 $SessionCategoryAdded = "تم اضافة هذه الفئة";
 $SessionCategoryUpdate = "تحديث الفئة";
 $SessionCategoryDelete = "تم حذف الفئات المحددة";
-$SessionCategoryNameIsRequired = "يرجى اعطاء اسم لفئة المواسم";
-$ThereIsNotStillASession = "لا يوجد مواسم متوفرة";
-$SelectASession = "قم باختيار موسم";
-$OriginCoursesFromSession = "مقررات من الموسم الاصلي";
-$DestinationCoursesFromSession = "مقررات من الموسم المقصود";
-$CopyCourseFromSessionToSessionExplanation = "المساعدة في نسخ المقررات من موسم الى اخر";
+$SessionCategoryNameIsRequired = "يرجى اعطاء اسم لفئة الدورات";
+$ThereIsNotStillASession = "لا يوجد دورات متاحة";
+$SelectASession = "قم باختيار دورة";
+$OriginCoursesFromSession = "مقررات من الدورة الاصلية";
+$DestinationCoursesFromSession = "مقررات من الدورة المقصودة";
+$CopyCourseFromSessionToSessionExplanation = "المساعدة في نسخ المقررات من دورة الى دورة";
 $TypeOfCopy = "نوع النسخ";
-$CopyFromCourseInSessionToAnotherSession = "النسخ من المقرر موجود في موسم الى موسم اخر";
-$YouMustSelectACourseFromOriginalSession = "يجب عليك اختيار مقرر من الموسم الاصلي";
+$CopyFromCourseInSessionToAnotherSession = "النسخ من مقرر موجود داخل دورة الى دورة اخرى";
+$YouMustSelectACourseFromOriginalSession = "يجب عليك اختيار مقرر من الدورة الاصلية";
 $MaybeYouWantToDeleteThisUserFromSession = "ربما تود حذف المستخدم بدلا من الغاء تسجيله من كافة المقررات؟";
-$EditSessionCoursesByUser = "تعديل مقررات الموسم وفقا للمستخدم";
+$EditSessionCoursesByUser = "تعديل مقررات الدورة وفقا للمستخدم";
 $CoursesUpdated = "تم تحديث المقررات";
 $CurrentCourses = "المقررات الحالية";
 $CoursesToAvoid = "مقررات لا يمكن الوصول اليها";
-$EditSessionCourses = "تعديل مقررات الموسم";
+$EditSessionCourses = "تعديل مقررات الدورة";
 $SessionVisibility = "امكانية الزيارة بعد نهاية التاريخ";
-$BlockCoursesForThisUser = "حظر المستخدم من المقررات في هذا الموسم";
+$BlockCoursesForThisUser = "حظر المستخدم من المقررات في هذه الدورة";
 $LanguageFile = "ملف اللغة";
 $ShowCoursesDescriptionsInCatalogTitle = "عرض وصف المقررات في دليل المقررات";
 $ShowCoursesDescriptionsInCatalogComment = "عرض وصف المقررات بشكل نافذة منبثقة عند النقر على ايقونة المعلومات في دليل المقررات";
 $StylesheetNotHasBeenAdded = "لا يمكن اضافة الورقة التصميمية";
-$AddSessionsInCategories = "اضافة المواسم في الفئات";
+$AddSessionsInCategories = "اضافة الدورات في الفئات";
 $ItIsRecommendedInstallImagickExtension = "imagick من اجل اداء افضل في عرض الصور المصغرة ينصح بتنصيب ملحقة";
 $EditSpecificSearchField = "تعديل حقل بحث محدد";
 $FieldName = "اسم الحقل";
 $SpecialExports = "تصديرات خاصة";
 $SpecialCreateFullBackup = "خاص: انشاء نسخة احتياطية كاملة";
 $SpecialLetMeSelectItems = "خاص: دعني اختار البنود";
-$AllowCoachsToEditInsideTrainingSessions = "السماح بالمعلمين بالتعديل داخل المقرر في المواسم";
-$AllowCoachsToEditInsideTrainingSessionsComment = "السماح بالمعلمين بالتعديل داخل المقرر في المواسم";
-$ShowSessionDataTitle = "اظهار بيانات عنوان الموسم";
-$ShowSessionDataComment = "اظهار بيانات تعليق الموسم";
-$SubscribeSessionsToCategory = "تسجيل المواسم في الفئة";
-$SessionListInPlatform = "اظهار قائمة الموسم في النظام";
-$SessionListInCategory = "اظهار قائمة المواسم في الفئات";
-$ToExportSpecialSelect = "اذا اردت تصدير المواسم المتضمنة للمقررات، فعليك تضمينها عند التصدير";
-$ErrorMsgSpecialExport = "لا توجد مقررات لستجيلها او لم يتم ربطها في المواسم";
+$AllowCoachsToEditInsideTrainingSessions = "السماح بالمعلمين بالتعديل داخل المقرر في الدورات";
+$AllowCoachsToEditInsideTrainingSessionsComment = "السماح بالمعلمين بالتعديل داخل المقرر في الدورات";
+$ShowSessionDataTitle = "اظهار بيانات عنوان الدورة";
+$ShowSessionDataComment = "اظهار بيانات تعليق الدورة";
+$SubscribeSessionsToCategory = "تسجيل الدورات في الفئة";
+$SessionListInPlatform = "اظهار قائمة الدورة في النظام";
+$SessionListInCategory = "اظهار قائمة الدورات في الفئات";
+$ToExportSpecialSelect = "اذا اردت تصدير الدورات المتضمنة للمقررات، فعليك تضمينها عند التصدير";
+$ErrorMsgSpecialExport = "لا توجد مقررات لستجيلها او لم يتم ربطها في الدورات";
 $ConfigureInscription = "تهيئة صفحة التسجيل";
-$MsgErrorSessionCategory = "اختيار الفئة والمواسم";
-$NumberOfSession = "عدد المواسم";
-$DeleteSelectedSessionCategory = "حذف الفئات فقط من دون المواسم";
-$DeleteSelectedFullSessionCategory = "حذف الفئات المحددة للمواسم";
+$MsgErrorSessionCategory = "اختيار الفئة والدورات";
+$NumberOfSession = "عدد الدورات";
+$DeleteSelectedSessionCategory = "حذف الفئات فقط من دون الدورات";
+$DeleteSelectedFullSessionCategory = "حذف الفئات المحددة للدورات";
 $EditTopRegister = "تعديل الملاحظة";
 $InsertTabs = "اضف التبويبات";
 $EditTabs = "تعديل التبويبات";
@@ -2300,7 +2302,7 @@ $Unreg = "إلغاء التسجيل";
 $GroupUserManagement = "إدارة المجموعة";
 $AddAUser = "أضف مستخدم";
 $UsersUnsubscribed = "تم إلغاء اشتراك المستخدمين المختارين من المقرر";
-$ThisStudentIsSubscribeThroughASession = "هذا الطالب مسجل في هذا المقرر من خلال الموسم، ولذا لا يمكنك تعديل المعلومات";
+$ThisStudentIsSubscribeThroughASession = "هذا الطالب مسجل في هذا المقرر من خلال الدورة، ولذا لا يمكنك تعديل المعلومات";
 $AddToFriends = "هل انت متاكد انك تريد اضافة هذا الشخص الي قائمة اتصلاتك";
 $AddPersonalMessage = "اضف رسالة شخصية";
 $Friends = "الاصدقاء";
@@ -2648,7 +2650,7 @@ $ExerciseAndLearningPath = "التمرين ومسار التعلم";
 $LearningPathGradebookWarning = "تحذير: من الممكن ان يتم في دفتر الدرجات استخدام الاختبارات التي هي جزء من مسارات التعلم. واذا كان مسار التعلم قد تم تضمينه فان الاختبار يكون موجود مسبقا في دفتر الدرجات. ان تقييم مسار التعلم يستند على نسبة التقدم، في حين ان تقييم الاختبار يكون على اساس الدرجة، اما الاستبيان فيعتمد على الاجابة عن الاستبيان.";
 $ChooseEitherDurationOrTimeLimit = "اختر اما المدة او حد الوقت";
 $ClearList = "حذف القائمة";
-$SessionBanner = "لافتة الموسم";
+$SessionBanner = "لافتة الدورة";
 $ShortDescription = "وصف مختصر";
 $TargetAudience = "الجمهور المستهدف";
 $OpenBadgesActionCall = "تحويل النظام الى تجربة تعلم مستندة الى المهارات";
@@ -2850,7 +2852,7 @@ $TestAttempted = "لقد تم محاولة إجراء الاختبار";
 $StudentName = " اسم الطالب";
 $StudentEmail = " عنوان البريد الالكتروني للطالب";
 $OpenQuestionsAttemptedAre = "السؤال المفتوح الذي تم المحاولة لحله هو";
-$UploadJpgPicture = " JPG حمل صورة من النوع";
+$UploadJpgPicture = "رفع صورة لاضافة المناطق الساخنة";
 $HotspotDescription = "وصف ملخص";
 $ExamSheetVCC = "تم الإطلاع على / تصحيح / التعليق على ورقة الإختبار بواسطة الأستاذ";
 $AttemptVCC = "تم الإطلاع على / تصحيح / التعليق على محاولتك التالية بواسطة الأستاذ";
@@ -3003,7 +3005,7 @@ $TooShort = "قصيرة جدا";
 $CourseCreate = " إنشاء مقرر";
 $Todo = "مهام";
 $UserName = "اسم المستخدم";
-$TimeReportIncludingAllCoursesAndSessionsByTeacher = "تقرير الوقت لكافة المقررات والمواسم وفقا للمدرس";
+$TimeReportIncludingAllCoursesAndSessionsByTeacher = "تقرير الوقت لكافة المقررات والدورات وفقا للمدرس";
 $CategoryMod = "تعديل التصنيف";
 $Hide = "إخفاء";
 $Dear = "عزيزي";
@@ -3016,7 +3018,7 @@ $LastName = "اللقب";
 $Status = "الحالة";
 $Email = "البريد الإلكتروني";
 $SlideshowConversion = "محول شرائح العرض";
-$UploadFile = "تحميل الملف";
+$UploadFile = "رفع الملف";
 $AvailableFrom = "متوفر من";
 $AvailableTill = "متوفر حتى";
 $Preview = "معاينة";
@@ -3134,7 +3136,7 @@ $Statistics = "احصائيات";
 $GroupList = "قائمة المجموعات";
 $Previous = "السابق";
 $DestDirectoryDoesntExist = "المجلد المقصود غير موجود";
-$Courses = "مقررات";
+$Courses = "المقررات";
 $In = "في";
 $ShowAll = "أظهر الجميع";
 $Page = "الصفحة";
@@ -3173,7 +3175,7 @@ $Denied = "غير متاح";
 $Today = "اليوم";
 $CourseHomepageLink = "صفحة المقرر";
 $Attachment = "مرفق";
-$User = "اسم المستخدم";
+$User = "مستخدم";
 $MondayInit = "M";
 $TuesdayInit = "T";
 $WednesdayInit = "W";
@@ -3238,10 +3240,10 @@ $MyTeach = "المقررات التي استطيع تدريسها";
 $Agenda = "التقويم";
 $HourShort = "h";
 $PleaseTryAgain = "فضلا كرر المحاولة";
-$UplNoFileUploaded = "لم يتم تحميل الملف.";
+$UplNoFileUploaded = "لم يتم رفع ملف";
 $UplSelectFileFirst = "فضلا حدد الملف قبل النقر على زر التحميل";
 $UplNotAZip = "الملف الذي اخترته ليس ملف مضغوط zip";
-$UplUploadSucceeded = "تم تحميل الملف بنجاح";
+$UplUploadSucceeded = "تم رفع الملف بنجاح";
 $ExportAsCSV = "تصدير كملف CSV";
 $ExportAsXLS = " تصدير كملف  XLS";
 $Openarea = "المنطقة الشخصية المفتوحة";
@@ -3327,11 +3329,11 @@ $Other = "اخر";
 $AddRight = "أضف";
 $CampusHomepage = "الصفحة الرئيسية";
 $YouHaveNewMessage = "لديك رسالة جديدة";
-$myActiveSessions = "مواسمي النشطة";
-$myInactiveSessions = "مواسمي غير النشطة";
+$myActiveSessions = "دوراتي النشطة";
+$myInactiveSessions = "دوراتي غير النشطة";
 $FileUpload = "تحميل ملف";
-$MyActiveSessions = "مواسمي النشطة";
-$MyInActiveSessions = "مواسمي غير النشطة";
+$MyActiveSessions = "دوراتي النشطة";
+$MyInActiveSessions = "دوراتي غير النشطة";
 $MySpace = "التقرير";
 $ExtensionActivedButNotYetOperational = "لقد تم تنشيط الإمتداد لكن لا يمكن تشغيله حاليا";
 $MyStudents = "طلابي";
@@ -3348,9 +3350,9 @@ $TempsFrequentation = "Frequentation time";
 $Progression = "التقدم";
 $NoCourse = "لم يتم العثور على المقرر";
 $Teachers = "المدرسين";
-$Session = "موسم";
-$Sessions = "مقرر المواسم";
-$NoSession = "لم يتم العثور على الموسم";
+$Session = "دورة";
+$Sessions = "الدورات";
+$NoSession = "لم يتم العثور على الدورة";
 $NoStudent = "لم يتم العثور على الطالب";
 $Students = "الطلبة";
 $NoResults = "لم يتم العثور على نتائج";
@@ -3363,7 +3365,7 @@ $VideoConf = "الإجتماع المرئي";
 $MyProgress = "التقدم";
 $NoOnlineStudents = "لا يوجد طلبة على متصلين";
 $InCourse = "في المقرر";
-$UserOnlineListSession = "قائمة المستخدمين المتصلين في مواسمي";
+$UserOnlineListSession = "قائمة المستخدمين المتصلين في دوراتي";
 $From = "من";
 $To = "إلى";
 $Content = "المحتوى";
@@ -3405,7 +3407,7 @@ $SessionActive = "نشط";
 $SessionFuture = "لم يبدأ بعد";
 $DateFormatLongWithoutDay = "%B %d, %Y";
 $InvalidDirectoryPleaseCreateAnImagesFolder = "مجلد غير صالح : فضلا قم بإنشاء مجلد باسم images في أداة المستندات حتى يتم تحميل الصور إلى هذا المجلد";
-$UsersConnectedToMySessions = "المتصلين في مواسمي";
+$UsersConnectedToMySessions = "المتصلين في دوراتي";
 $Category = "الفئة";
 $DearUser = "عزيزي المستخدم";
 $YourRegistrationData = "بيانات التسجيل الخاصة بك";
@@ -3426,7 +3428,7 @@ $UploadMaxSize = "تحميل اكبر حجم";
 $Unknown = "غير معروف";
 $MoveUp = "تحرك لأعلى";
 $MoveDown = "تحرك لأسفل";
-$UplUnableToSaveFileFilteredExtension = "فشل تحميل الملف : إن تمديد هذا الملف أو نوعه ممنوع";
+$UplUnableToSaveFileFilteredExtension = "فشل رفع الملف: نوع الملف او امتداده ممنوع";
 $OpenIDURL = "رابط الهوية المفتوحة";
 $UplFileTooBig = "حجم الملف كبير جدا من أجل التحميل";
 $UplGenericError = "إن الملف الذي حمّلته لم يستلم بنجاح . يرجى إعادة المحاولة لاحقًا أو الاتصال بمدير إدارة البوابة .";
@@ -3473,7 +3475,7 @@ $UserResidenceCountry = "بلد الاقامة";
 $AddAnAttachment = "اضافة مرفق";
 $FileComment = "تعليق الملف";
 $FileName = "اسم الملف";
-$SessionsAdmin = "مدير المواسم";
+$SessionsAdmin = "مدير الدورات";
 $MakeChangeable = "جعله قابلا للتغير";
 $MakeUnchangeable = "جعله غير قابل للتغير";
 $UserFields = "سمات الحساب";
@@ -3481,9 +3483,9 @@ $FieldShown = "الحقل اصبح مرئيا للمستخدم";
 $CannotShowField = "لا يمكن جعل الحقل مرئيا";
 $FieldHidden = "اصبح الحقل الان مخفيا للمستخدم";
 $CannotHideField = "لا يمكن جعل الحقل مخفيا";
-$FieldMadeChangeable = "الحقل الان قابل للتغير من قبل المستخدم، اذ يمكن للمستخدم من ملئ او تعديل الحقل";
+$FieldMadeChangeable = "الحقل الان قابل للتغير من قبل المستخدم، اذ يمكن للمستخدم من ملأ او تعديل الحقل";
 $CannotMakeFieldChangeable = "لا يمكن جعل الحقل غير قابل للتعديل";
-$FieldMadeUnchangeable = "هذا الحقل اصبح غير قابل للتعديل، وبالتالي فان المستخدم غير قادر على ملئه او تعديله";
+$FieldMadeUnchangeable = "هذا الحقل اصبح غير قابل للتعديل، وبالتالي فان المستخدم غير قادر على ملأه او تعديله";
 $CannotMakeFieldUnchangeable = "لا يمكن جعل الحقل غير قابل للتغيير";
 $Folder = "مجلد";
 $CloseOtherSession = "الدردشة غير متوفرة بسبب ان هنالك مقرر اخر مفتوح في صفحة اخرى، لتجنب ذلك يرجى البقاء في داخل نفس المقرر خلال مدة الدردشة، من اجل الانضمام الى الدردشة مرة اخرى";
@@ -3576,7 +3578,7 @@ $ScormUnknownPackageFormat = "صيغة الحزمة غير معروفة";
 $ResourceDeleted = "تم حذف المورد";
 $AdvancedParameters = "اعدادات متقدمة";
 $GoTo = "الذهاب الى";
-$SessionNameAndCourseTitle = "اسم المقرر والموسم";
+$SessionNameAndCourseTitle = "اسم المقرر والدورة";
 $CreationDate = "تاريخ الانشاء";
 $LastUpdateDate = "التحديث الاحدث";
 $ViewHistoryChange = "عرض تاريخ التغييرات";
@@ -3859,7 +3861,7 @@ $Area = "المنطقة";
 $InProcess = "تحت المعالجة";
 $CourseDescriptionUpdated = "  تم تحديث وصف المقرر";
 $CourseDescriptionDeleted = "  تم حذف وصف المقرر";
-$PreventSessionAdminsToManageAllUsersComment = "من خلال تمكين هذا الاختيار فان مدراء الموسم سوف يستعرضون المستخدمين الذين قاموا بانشاءهم فقط";
+$PreventSessionAdminsToManageAllUsersComment = "من خلال تمكين هذا الاختيار فان مدراء الدورة سوف يستعرضون المستخدمين الذين قاموا بانشاءهم فقط";
 $InvalidId = "فشلت عملية تسجيل الدخول - اسم المستخدم أو كلمة المرور غير صحيحة";
 $Pass = "كلمة المرور";
 $Advises = "نصائح";
@@ -3895,7 +3897,7 @@ $Productions = "المنتجات";
 $SendChatRequest = "أرسل طلب محادثة إلى هذا الشخص";
 $RequestDenied = "لقد تم حظر  المكالمة";
 $UsageDatacreated = "Usage data created";
-$SessionView = "عرض المقررات وفقا للمواسم";
+$SessionView = "عرض المقررات وفقا للدورات";
 $CourseView = "عرض قائمة بجميع المقررات";
 $DropboxFileAdded = "تم اضافة ملف الى اداة مشاركة الملفات";
 $NewMessageInForum = "نشر رسالة جديدة في المنتدى";
@@ -4009,9 +4011,9 @@ $ProductionUploaded = "لقد أرسل الملف من إنتاجك";
 $UsersRegistered = "تم تسجيل المستخدمين في المقرر";
 $UserAlreadyRegisterByOtherCreator = "تم تسجيل المستخدم مسبقا من قبل معلم اخر";
 $UserCreatedPlatform = "تم انشاء المستخدم في النظام";
-$UserInSession = "تم اضافة المستخدم الى الموسم";
+$UserInSession = "تم اضافة المستخدم الى الدورة";
 $UserNotAdded = "لم يتم اضافة المستخدم";
-$NoSessionId = "لم يتم تحديد الموسم";
+$NoSessionId = "لم يتم تحديد الدورة";
 $NoUsersRead = "XML/CVS يرجى التحقق من ملف";
 $UserImportFileMessage = "في حالة عدم وجود رمز الدخول، فان الاسم الاول والاسم الاخير سوف يندمجان من اجل انشاء رمز دخول مثل
 ulio Montoya into jmontoya";
@@ -4037,15 +4039,15 @@ $ToolIsNowHidden = " الأداة الأن مخفية";
 $GreyIcons = " علبة الأدوات";
 $Interaction = " التفاعل";
 $Authoring = "تصميم المحتوى";
-$SessionIdentifier = "محدد الموسم";
-$SessionCategory = "فئات المواسم";
+$SessionIdentifier = "معرف الدورة";
+$SessionCategory = "فئات الدورات";
 $ConvertToUniqueAnswer = "تحويل الى اجابة واحدة";
 $ReportsRequiresNoSetting = "هذا النوع من التقرير لا يحتاج الى اعدادات";
 $ShowWizard = "عرض المساعد";
 $ReportFormat = "صيغة التقرير";
 $ReportType = "نوع التقرير";
 $PleaseChooseReportType = "يرجى اختيار نوع التقرير";
-$PleaseFillFormToBuildReport = "يرجى ملئ الاستمارة لانشاء التقرير";
+$PleaseFillFormToBuildReport = "يرجى ملأ الاستمارة لانشاء التقرير";
 $UnknownFormat = "صيغة غير معروفة";
 $ErrorWhileBuildingReport = "حدث خطأ عند انشاء التقرير";
 $WikiSearchResults = "نتائج البحث في الويكي";
@@ -4219,12 +4221,12 @@ $AverageCoursePerStudent = "متوسط  المقررات لكل مستخدم";
 $AverageProgressInLearnpath = "التقدم في المقررات";
 $AverageResultsToTheExercices = "متوسط نقاط الإختبارات";
 $SeeStudentList = "مشاهدة قائمة المستخدمين";
-$NbActiveSessions = "المواسم النشطة";
-$NbPastSessions = "المواسم الماضية";
-$NbFutureSessions = "المواسم المستقبلية";
-$NbStudentPerSession = "عدد الطلبة وفقا للموسم";
-$NbCoursesPerSession = "عدد المقررات لكل موسم";
-$SeeSessionList = "مشاهدة قائمة المواسم";
+$NbActiveSessions = "الدورات النشطة";
+$NbPastSessions = "الدورات الماضية";
+$NbFutureSessions = "الدورات المستقبلية";
+$NbStudentPerSession = "عدد الطلبة وفقا للدورة";
+$NbCoursesPerSession = "عدد المقررات لكل دورة";
+$SeeSessionList = "مشاهدة قائمة الدورات";
 $CourseStats = "حالة المقرر";
 $ToolsAccess = "الوصول إلى الأدوات";
 $LinksAccess = "الروابط";
@@ -4273,7 +4275,7 @@ $Last31days = " في ال 31 يوم الأخيرة";
 $Last7days = " في ال 7 أيام الأخيرة";
 $ThisDay = "هذا اليوم";
 $Logins = "مرات الدخول";
-$LoginsExplaination = "هنا قائمة باخر تسجيلات الدخول لك مع الادوات التي استخدمتها اثناء هذه المواسم";
+$LoginsExplaination = "هنا قائمة باخر تسجيلات الدخول لك مع الادوات التي استخدمتها اثناء هذه الدورات";
 $ExercicesResults = "نقاط الإختبارات التي تمت";
 $At = "في";
 $LoginTitleDateColumn = "التاريخ";
@@ -4347,8 +4349,8 @@ $Probationers = "المتعلمين";
 $MoyenneTest = "متوسط الإختبار";
 $MoyCourse = "متوسط المقررات";
 $MoyenneExamen = "متوسط الإختبار";
-$MoySession = "متوسط الموسم";
-$TakenSessions = "المواسم المسجل فيها";
+$MoySession = "متوسط الدورة";
+$TakenSessions = "الدورات المسجل فيها";
 $FollowUp = "متابعة";
 $Trainers = "المعلمين";
 $Administrators = "الإداريين";
@@ -4360,7 +4362,7 @@ $LastConnexion = "احدث اتصال";
 $ConnectionTime = "اخر اتصال";
 $ConnectionsToThisCourse = "اتصالات لهذا المقرر";
 $StudentTutors = "Student's coaches";
-$StudentSessions = "مواسم الطالب";
+$StudentSessions = "دورات الطالب";
 $StudentCourses = "مقررات الطالب";
 $NoLearnpath = "لا مسار تعلم";
 $Correction = "التصحيح";
@@ -4396,13 +4398,13 @@ $NoConnexion = "لا اتصال";
 $TeacherInterface = "واجهة المدرس";
 $CoachInterface = "Coach interface";
 $AdminInterface = "واجهة الإدارة";
-$NumberOfSessions = "عدد المواسم";
+$NumberOfSessions = "عدد الدورات";
 $YourCourseList = "قائمة مقرراتك";
 $YourStatistics = "احصائياتك";
 $CoachList = "Coaches list";
 $CoachStudents = "Students for this coach";
 $NoLearningPath = "No SCORM courses";
-$SessionCourses = "مواسم المقررات";
+$SessionCourses = "دورات المقررات";
 $NoUsersInCourseTracking = "هنا يمكنك تتبع حركة الطلاب المسجلين في هذا المقرر";
 $AvgTimeSpentInTheCourse = "معدل الوقت المستهلك في الدرس";
 $RemindInactiveUser = "اذكر المستخدم الغير نشط";
@@ -4432,7 +4434,7 @@ $AvgExercisesScore = "درجات الاختبارات";
 $TrainingTime = "الوقت";
 $CourseProgress = "التقدم";
 $ViewMinus = "عرض اشارة طرح";
-$ResourcesTracking = "الابلاغ عن المورد";
+$ResourcesTracking = "تقرير عن المورد";
 $MdCallingTool = "المستندات";
 $NotInDB = "لا يوجد تصنيف راوابط بهذا الإسم";
 $ManifestSyntax = "(syntax error in manifest file...)";
@@ -4454,7 +4456,7 @@ $Play = "تشغيل index.php";
 $NonePossible = "لا يوجد عمليات MD ممكنة";
 $OrElse = "حدد تصنيف روابط";
 $WorkWith = "استخدم ملجد سكورم";
-$SDI = "... Scorm Directory with SD-id (and split manifest - or leave empty)";
+$SDI = "... مسار السكورم with SD-id (and split manifest - or leave empty)";
 $Root = "الجذر";
 $SplitData = "Split manifests, and #MDe, if any:";
 $MffNotOk = "Manifest file replace has failed";
@@ -4494,7 +4496,7 @@ $UplUploadDocument = "تحميل مستند";
 $UplPartialUpload = "الملفات المرفوعة تم رفعها جزئيا فقط";
 $UplExceedMaxPostSize = " لقد تعدى حجم هذا الملف الحجم المسموح به :";
 $UplExceedMaxServerUpload = " لقد  تعدى حجم الملف  المرفوع الحجم المسموح به من قبل الخادم :";
-$UplUploadFailed = "لقد فشلت عملية تحميل الملف";
+$UplUploadFailed = "فشل رفع الملف";
 $UplNotEnoughSpace = "لا توجد مساحة كافية لتحميل هذا الملف";
 $UplNoSCORMContent = "لم يتم العثور على اي محتويات - SCORM";
 $UplZipExtractSuccess = "لقد تم  فك ضغط الملف بنجاح";
@@ -4695,7 +4697,7 @@ $CategoryModified = ".لقد تم تعديل الصنف";
 $AuthorFieldCannotBeEmpty = "لا يمكن لحقل المؤلف ان يكون فارغا";
 $YouMustSelectAtLeastOneDestinee = "لا بد أن تختار على الأقل مستقبل واحد";
 $DropboxFileTooBig = "حجم الملف كبير جدا";
-$TheFileIsNotUploaded = ". لم يتم تحميل الملف";
+$TheFileIsNotUploaded = "هذا الملف لم يتم رفعه";
 $MailingNonMailingError = "لا يمكن استبدال الإرسال بعدم الإرسال و العكس بالعكس";
 $MailingSelectNoOther = "لا يمكن دمج الإرسال مع مستلمات أخرى";
 $MailingJustUploadSelectNoOther = "هكذا، لا يمكن دمج التحميل مع مستلمات أخرى";
@@ -4725,7 +4727,7 @@ $KwNote = "اذا قمت بتغيير لغة الشرح, لا تقم بتغيي�
 $Location = "URL/URI";
 $LocationTip = "انقر لفتح الكائن";
 $Store = "خزن";
-$DeleteAll = " metadata حذف جميع الـ";
+$DeleteAll = "حذف الجميع";
 $ConfirmDelete = "هل تريد حقا حذف الـ metadata?";
 $WorkOn = "on";
 $Continue = "أكمل مع";
@@ -4774,7 +4776,7 @@ $HAnnouncements = "Help Announcements";
 $HChat = "Help Chat";
 $HWork = "Help for Student Publications";
 $HTracking = "Help Tracking";
-$IsInductionSession = "موسم من نوع الاستقراء";
+$IsInductionSession = "دورة من نوع الاستقراء";
 $PublishSurvey = "نشر الاستبيان";
 $CompareQuestions = "مقارنة الاسئلة";
 $InformationUpdated = "تم تحديث المعلومات";
@@ -4957,7 +4959,7 @@ $CreateQuestionSurvey = "انشاء سؤال";
 $ModifyQuestionSurvey = "تحرير سؤال";
 $BackToSurvey = "الرجوع الى الاستبيان";
 $UpdateInformation = "تحديث المعلومات";
-$PleaseFillSurvey = "يرجى ملئ الاستبيان";
+$PleaseFillSurvey = "يرجى ملأ الاستبيان";
 $ReportingOverview = "نظرة عامة على التقرير";
 $GeneralDescription = "نبذة عامة";
 $GeneralDescriptionQuestions = "ما هي أهمية هذا المقرر؟  هل هناك متطلبات مسبقة ؟ كيف هو حال هذا المقرر  مع المقررات الأخرى؟";
@@ -4974,7 +4976,7 @@ $MethodologyInformation = "عرض لانشطه المؤتمر ، ومذكرات,
 $CourseMaterial = "مواد المقرر";
 $CourseMaterialQuestions = "هل هناك كتاب للمقرر، مذكرة ملزمة،  روابط   على الانترنت؟";
 $CourseMaterialInformation = "نبذة عن المواد الدراسيه.";
-$HumanAndTechnicalResources = "الموارد البشرة والتقنية";
+$HumanAndTechnicalResources = "الموارد";
 $HumanAndTechnicalResourcesQuestions = "هل هناك اساتذة و معلمين ودعم فني ومساعدين اجتماعيين وقاعات حاسب؟";
 $HumanAndTechnicalResourcesInformation = "نبذة مختصرة عن هوية مختلف الأطراف وكذلك الخدمات التقنية المتوفرة.";
 $Assessment = "الواجبات";
@@ -5320,7 +5322,7 @@ $NameOfLang['swahili'] = "السواحلية";
 $NameOfLang['trad_chinese'] = "الصينية التقليدية";
 $ChamiloInstallation = "تنصيب كاميلو";
 $PendingInvitations = "الدعوات قيد الانتظار";
-$SessionData = "بيانات الموسم";
+$SessionData = "بيانات الدورة";
 $SelectFieldToAdd = "اختر حقل حساب المستخدم لغرض الاضافة";
 $MoveElement = "أنقل العنصر";
 $ShowGlossaryInExtraToolsTitle = "اعرض مفردات المصطلحات في أدوات إضافية";
@@ -5354,12 +5356,12 @@ $IsAdministrator = "هو مدير";
 $IsNotAdministrator = "ليس مدير";
 $AddTimeLimit = "اضافة سقف زمني";
 $EditTimeLimit = "تحرير السقف الزمني";
-$TheTimeLimitsAreReferential = "ان السقف الزمني للفئة لن يؤثر على الحدود الزمنية للموسم";
+$TheTimeLimitsAreReferential = "ان السقف الزمني للفئة لن يؤثر على الحدود الزمنية للدورة";
 $FieldTypeTag = "وسم المستخدم";
 $SendEmailToAdminTitle = "الاشعار بالبريد حول انشاء المقرر";
 $SendEmailToAdminComment = "ارسال بريد الى مدير النظام في كل مرة يقوم فيها المدرس بانشاء مقرر جديد";
 $UserTag = "وسم المستحدم";
-$SelectSession = "اختيار موسم";
+$SelectSession = "اختر دورة";
 $SpecialCourse = "مقرر خاص";
 $DurationInWords = "المدة بالكلمات";
 $UploadCorrection = "رفع التصحيح";
@@ -5567,7 +5569,7 @@ $Attendances = "الحضور";
 $CountDoneAttendance = "# حضور";
 $AssignUsers = "تخصيص مستخدمين";
 $AssignCourses = "تخصيص مقررات";
-$AssignSessions = "تخصيص مواسم";
+$AssignSessions = "تخصيص دورات";
 $CoursesListInPlatform = "قائمة المقررات في النظام";
 $AssignedCoursesListToHumanResourceManager = "المقررات التي تم تخصيصها لمدير الموارد البشرية";
 $AssignedCoursesTo = "المقررات التي تم تخصيصها لـ";
@@ -5578,18 +5580,18 @@ $UseUsersTimezoneTitle = "تمكين المناطق الزمنية للمستخ�
 $UseUsersTimezoneComment = "يمنح هذا الخيار للمستخدمين امكانية اختيار منطقة التوقيت الخاصة بهم، اذ يجب ان يتم جعل حقل منطقة التوقيت مرئي وقابل للتعديل من خلال قائمة الحسابات الشخصية في قسم ادارة النظام. وتكمن فائدة هذه الخاصية في جعل اوقات تسليم الواجبات وغيرها من الانشطة تعرض بالتوقيت الخاص بالمستخدم مما يقل الاخطاء التي تحدث في وقت التسليم";
 $FieldTypeTimezone = "المنطقة الزمنية";
 $Timezone = "المنطقة الزمنية";
-$AssignedSessionsHaveBeenUpdatedSuccessfully = "تم تحديث المواسم المخصصة";
+$AssignedSessionsHaveBeenUpdatedSuccessfully = "تم تحديث الدورات المخصصة";
 $AssignedCoursesHaveBeenUpdatedSuccessfully = "تم تحديث المقررات المخصصة";
 $AssignedUsersHaveBeenUpdatedSuccessfully = "تم تحديث المستخدمين الذين تم تخصيصهم";
 $AssignUsersToX = "تخصيص المستخدمين الى %s";
 $AssignUsersToHumanResourcesManager = "تخصيص المستخدمين الى مدير الموارد البشرية";
 $AssignedUsersListToHumanResourcesManager = "قائمة المستخدمين الذين تم تخصيصهم الى مدير الموارد البشرية";
 $AssignCoursesToX = "تخصيص المقررات الى %s";
-$SessionsListInPlatform = "قائمة المواسم في النظام";
-$AssignSessionsToHumanResourcesManager = "تخصيص المواسم الى مدير الموارد البشرية";
-$AssignedSessionsListToHumanResourcesManager = "قائمة المواسم المخصصة الى مدير الموارد البشرية";
-$SessionsInformation = "تقرير المواسم";
-$YourSessionsList = "المواسم الخاصة بك";
+$SessionsListInPlatform = "قائمة الدورات في النظام";
+$AssignSessionsToHumanResourcesManager = "تخصيص الدورات الى مدير الموارد البشرية";
+$AssignedSessionsListToHumanResourcesManager = "قائمة الدورات المخصصة الى مدير الموارد البشرية";
+$SessionsInformation = "تقرير الدورات";
+$YourSessionsList = "الدورات الخاصة بك";
 $TeachersInformationsList = "تقرير المدرسين";
 $YourTeachers = "مدرسيك";
 $StudentsInformationsList = "تقرير الطلبة";
@@ -5604,7 +5606,7 @@ $AttendanceSheetReport = "تقرير اوراق الحضور";
 $YouDoNotHaveDoneAttendances = "ليس لديك حضور";
 $DashboardPluginsHaveBeenUpdatedSuccessfully = "تم تحديث المكونات الاضافية للوحة المتابعة بنجاح";
 $ThereIsNoInformationAboutYourCourses = "لا توجد معلومات متوفرة حول مقرراتك";
-$ThereIsNoInformationAboutYourSessions = "لا توجد معلومات متوفرة حول المواسم لديك";
+$ThereIsNoInformationAboutYourSessions = "لا توجد معلومات متوفرة حول الدورات لديك";
 $ThereIsNoInformationAboutYourTeachers = "لا توجد معلومات متوفرة حول مدرسيك";
 $ThereIsNoInformationAboutYourStudents = "لا توجد معلومات متوفرة حول طلبتك";
 $TimeSpentLastWeek = "الوقت المبذول خلال اخر اسبوع";
@@ -5617,7 +5619,7 @@ $Section = "قسم";
 $Expected = "متوقع";
 $Setting = "اعدادات";
 $Current = "الحالي";
-$SessionGCMaxLifetimeInfo = "الحد الاقصى لعمر اداة جمع مخلفات الموسم، والذي يشير الى مدة الوقت القصوى المتاحة بين دورتين لاداة جمع مخلفات الموسم";
+$SessionGCMaxLifetimeInfo = "الحد الاقصى لعمر اداة جمع مخلفات الدورة، والذي يشير الى مدة الوقت القصوى المتاحة بين دورتين لاداة جمع مخلفات الدورة";
 $PHPVersionInfo = "PHP اصدار";
 $FileUploadsInfo = "رفع الملفات يشير الى مدى توفر صلاحية الرفع";
 $UploadMaxFilesizeInfo = "الحد الاقصى لحجم الملف المرفوع، هذا الحجم يجب ان يتسق مع الحجم الاقصى للمنشور";
@@ -5681,20 +5683,20 @@ $YouCanAccessTheExercise = "الذهاب للاختبار";
 $YouHaveBeenRegisteredToCourseX = "تم تسجيلك في مقرر %s";
 $DashboardPluginsUpdatedSuccessfully = "تم تحديث المكونات الاضافية للوحة المتابعة";
 $LoginEnter = "تسجيل الدخول";
-$AssignSessionsToX = "تخصيص المواسم لـ %s";
+$AssignSessionsToX = "تخصيص الدورات لـ %s";
 $CopyExercise = "نسخ هذا التمرين كتمرين جديد";
 $CleanStudentResults = "حذف نتائج كافة الطلبة لهذا التمرين";
 $AttendanceSheetDescription = "تسمح ورقة الغيابات بتحديد قوائم التاريخ لتقارير الحضور لمقرراتك";
 $ThereAreNoRegisteredLearnersInsidetheCourse = "لا يوجد طلبة مسجلين داخل المقرر";
 $GoToAttendanceCalendarList = "الذهاب الى قائمة تقويم تواريخ الحضور";
-$AssignCoursesToSessionsAdministrator = "تخصيص المقررات لمدير الموسم";
+$AssignCoursesToSessionsAdministrator = "تخصيص المقررات لمدير الدورة";
 $AssignCoursesToPlatformAdministrator = "تخصيص المقررات لمدير النظام";
 $AssignedCoursesListToPlatformAdministrator = "تخصيص قائمة المقررات لمدير النظام";
-$AssignedCoursesListToSessionsAdministrator = "تخصيص قائمة المقررات الى مدير الموسم";
-$AssignSessionsToPlatformAdministrator = "تخصيص المواسم الى مدير النظام";
-$AssignSessionsToSessionsAdministrator = "تخصيص مواسم الى مدير المواسم";
-$AssignedSessionsListToPlatformAdministrator = "تخصيص قائمة المواسم الى مدير النظام";
-$AssignedSessionsListToSessionsAdministrator = "تخصيص قائمة المواسم الى مدير المواسم";
+$AssignedCoursesListToSessionsAdministrator = "تخصيص قائمة المقررات الى مدير الدورة";
+$AssignSessionsToPlatformAdministrator = "تخصيص الدورات الى مدير النظام";
+$AssignSessionsToSessionsAdministrator = "تخصيص دورات الى مدير الدورات";
+$AssignedSessionsListToPlatformAdministrator = "تخصيص قائمة الدورات الى مدير النظام";
+$AssignedSessionsListToSessionsAdministrator = "تخصيص قائمة الدورات الى مدير الدورات";
 $EvaluationsGraph = "رسم بياني للتقييمات";
 $Url = "URL";
 $ToolCourseDescription = "وصف المقرر";
@@ -5726,7 +5728,7 @@ $ISOCode = "ISO رمز";
 $TheSubLanguageForThisLanguageHasBeenAdded = "تم اضافة لغة فرعية من هذه اللغة";
 $ReturnToLanguagesList = "العودة الى قائمة اللغات";
 $AddADateTime = "اضافة وقت التاريخ";
-$ActivityCoach = "لدى معلم الموسم كافة الصلاحيات على كافة المقررات التابعة لهذا الموسم";
+$ActivityCoach = "لدى معلم الدورة كافة الصلاحيات على كافة المقررات التابعة لهذه الدورة";
 $AllowUserViewUserList = "السماح للمستخدم بعرض قائمة المستخدمين";
 $AllowUserViewUserListActivate = "تمكين قائمة المستخدمين";
 $AllowUserViewUserListDeactivate = "تعطيل قائمة المستخدمين";
@@ -5849,14 +5851,14 @@ $ConfigureDashboardPlugin = "تهيئة المكون الاضافي للوحة �
 $EditBlocks = "تحرير الاقسام";
 $Never = "ابدا";
 $YourAccountIsActiveYouCanLoginAndCheckYourCourses = "عزيزي الطالب تم تفعيل الحساب الخاص بك فضلا ادخل علي حسابك واسنمتع يالمقررات المتاحة";
-$SessionFields = "حقول الموسم";
+$SessionFields = "حقول الدورة";
 $CopyLabelSuffix = "نسخ";
-$SessionCoachEndDateComment = "التاريخ الذي سيكون فيه الموسم مغلقا للمعلمين، التاخير الاضافي هو للسماح لهم في تصدير معلومات التتبع ذات الصلة";
-$SessionCoachStartDateComment = "التاريخ الذي سيكون فيه الموسم متوفرا للمعلمين، حتى يستعدوا له قبل ان يتواجد فيه الطلبة";
-$SessionEndDateComment = "التاريخ الذي يكون فيه اغلاق الموسم";
-$SessionStartDateComment = "التاريخ الذي عنده يكون الموسم متوفر للجميع";
-$SessionDisplayEndDateComment = "التاريخ الذي سيعرض في معلومات الموسم هو التاريخ الذي ينتهي فيه الموسم";
-$SessionDisplayStartDateComment = "التاريخ الذي سيعرض في معلومات الموسم هو التاريخ الذي بدأ به الموسم";
+$SessionCoachEndDateComment = "التاريخ الذي ستكون فيه الدورة مغلقة للمعلمين، التاخير الاضافي هو للسماح لهم في تصدير معلومات التتبع ذات الصلة";
+$SessionCoachStartDateComment = "التاريخ الذي ستكون فيه الدورة متاحة للمعلمين، حتى يستعدوا لها قبل ان يتواجد فيها الطلبة";
+$SessionEndDateComment = "التاريخ الذي يكون فيه اغلاق الدورة";
+$SessionStartDateComment = "التاريخ الذي عنده تكون الدورة متوفرة للجميع";
+$SessionDisplayEndDateComment = "التاريخ الذي سيعرض في معلومات الدورة هو التاريخ الذي تنتهي فيها الدورة";
+$SessionDisplayStartDateComment = "التاريخ الذي سيعرض فيه معلومات الدورة هو التاريخ الذي بدأت فيه الدورة";
 $SessionCoachEndDate = "تاريخ الانتهاء للوصول للمعلمين";
 $SessionCoachStartDate = "تاريخ البدأ للوصول للمعلمين";
 $SessionEndDate = "تاريخ انتهاء الوصول";
@@ -5886,8 +5888,8 @@ $PrerequisitesOptions = "خيارات المتطلبات السابقة";
 $ClearAllPrerequisites = "حذف كافة المتطلبات السابقة";
 $SetPrerequisiteForEachItem = "جعل الخطوة السابقة كمتطلب سابق لكل خطوة";
 $StartDateMustBeBeforeTheEndDate = "تاريخ البدأ يجب ان يكون قبل تاريخ النهاية";
-$SessionPageEnabledComment = "عند تفعيل هذا الخيار، فان عنوان الموسم سيكون رابطا الى صفحة الموسم الخاصة، وعند تعطيلها فان العنوان سيكون مجرد نص بدون رابط. ان تفعيل هذه الخاصية قد يكون مربكا لبعض المستخدمين";
-$SessionPageEnabledTitle = "تفعيل رابط الموسم في قائمة المقررات";
+$SessionPageEnabledComment = "عند تفعيل هذا الخيار، فان عنوان الدورة سيكون مرتبطا بصفحة الدورة، وعند تعطيلها فان العنوان سيكون مجرد نص بدون رابط. ان تفعيل هذه الخاصية قد يكون مربكا لبعض المستخدمين";
+$SessionPageEnabledTitle = "تفعيل رابط الدورة في قائمة المقررات";
 $SkillRoot = "الاساس";
 $SkillInfo = "معلومات المهارة";
 $GetNewSkills = "الحصول على مهارات جديدة";
@@ -5947,16 +5949,16 @@ $dateFormatOnlyDayName = "%A";
 $ReturnToCourseList = "العودة الى قائمة المقررات";
 $dateFormatShortNumberNoYear = "%d/%m";
 $CourseTutor = "معلم المقرر";
-$StudentInSessionCourse = "طالب في مقرر الموسم";
+$StudentInSessionCourse = "طالب في مقرر الدورة";
 $StudentInCourse = "طالب في مقرر";
-$SessionGeneralCoach = "المدير العام للموسم";
-$SessionCourseCoach = "معلم مقرر الموسم";
+$SessionGeneralCoach = "المدير العام للدورة";
+$SessionCourseCoach = "معلم مقرر الدورة";
 $Admin = "المدير";
-$SessionTutorsCanSeeExpiredSessionsResultsComment = "هل يمكن لمعلمي الموسم مشاهدة تقارير مواسمهم بعد انتهائها؟";
-$SessionTutorsCanSeeExpiredSessionsResultsTitle = "تقارير مرئية معلمي الموسم";
+$SessionTutorsCanSeeExpiredSessionsResultsComment = "هل يمكن لمعلمي الدورة مشاهدة تقارير دوراتهم بعد انتهائها؟";
+$SessionTutorsCanSeeExpiredSessionsResultsTitle = "تقارير مرئية معلمي الدورة";
 $UserNotAttendedSymbol = "غ";
 $UserAttendedSymbol = "ح";
-$SessionCalendar = "تقويم الموسم";
+$SessionCalendar = "تقويم الدورة";
 $Order = "ترتيب";
 $GlobalPlatformInformation = "معلومات النظام الشاملة";
 $TheXMLImportLetYouAddMoreInfoAndCreateResources = "يسمح لك هذا الاستيراد باضافة المعلومات وانشاء الموراد: المقررات والمستخدمين XML";
@@ -5997,22 +5999,22 @@ $ContactInformationDescription = "عزيزي المستخدم
 \n
 انت على وشك البدأ باستخدام احد افضل منصات التعليم الالكترونية المفتوحة المصدر في السوق، ومثل الكثير من المشاريع المفتوحة المصدر، فان المشروع مدعوم من قبل مجتمع كبير من الطلبة والمدرسين والمطورين ومطوري المحتوى الذين يسعوون للترويج عن المشروع
 \n
-\n من خلال ملئك لهذه الاستمارة فانك توافق على ان جمعية كاميلو او احد اعضاءها قد يرسل لك المعلومات عبر البريد حول الاحداث المهمة والتحديثات الخاصة بالنظام والمجتمع. وهذا ما سيساعد المجتمع من النمو كوحدة منظمة تجري فيها المعلومات مع الحفاظ على وقتك وخصوصيتك
+\n من خلال ملأك لهذه الاستمارة فانك توافق على ان جمعية كاميلو او احد اعضاءها قد يرسل لك المعلومات عبر البريد حول الاحداث المهمة والتحديثات الخاصة بالنظام والمجتمع. وهذا ما سيساعد المجتمع من النمو كوحدة منظمة تجري فيها المعلومات مع الحفاظ على وقتك وخصوصيتك
 \n
 \n يرجى ملاحظة بانك غير ملزم بملأ هذه الاستمارة في حالة كونك تفضل ان تبقى مجهولا، الا اننا سنفقد الفرصة في منحك مزايا التسجيل كمدير للنظام، الا اننا سنحترم رأيك، ولذا يمكنك ترك هذه الاستمارة فارغة";
 $CompanyActivity = "نشاطات منظمتك";
 $PleaseAllowUsALittleTimeToSubscribeYouToOneOfOurCourses = "يرجى منحنا بعض الوقت لغرض تسجيلك في احدى المقررات، اذا كنت تعتقد باننا قد نسيناك، فيرجى الاتصال بمدير النظام، والذي توجد معلومات الاتصال به عادة في اسفل الصفحة";
-$ManageSessionFields = "ادارة حقول الموسم";
+$ManageSessionFields = "ادارة حقول الدورة";
 $DateUnLock = "تاريخ الفتح";
 $DateLock = "تاريخ الاغلاق";
-$EditSessionsToURL = "URL تعديل المواسم للرابط";
-$AddSessionsToURL = "URL اضافة مواسم الى رابط";
-$SessionListIn = "قائمة المواسم في";
+$EditSessionsToURL = "URL تعديل الدورات للرابط";
+$AddSessionsToURL = "URL اضافة دورات الى رابط";
+$SessionListIn = "قائمة الدورات في";
 $GoToStudentDetails = "الذهاب الى تفاصيل الطالب";
 $DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "عرض اخر خطوة تم تنفيذها، والخطوة القادمة غير المكتملة";
 $FillUsers = "ملأ المستخدمين";
-$ThisSectionIsOnlyVisibleOnSourceInstalls = "هذا القسم مرئي فقط في التنصيبات من الشفرة البرمجية، وليس في حزم الاصدارات الخاصة بالنظام، اذ تسمح لك بملئ النظام ببيانات تجريبية بسرعة. استخدم هذا النظام بحذر فقط في وضع تطوير او اختبار النظام";
-$UsersFillingReport = "تقرير ملئ المستخدمين";
+$ThisSectionIsOnlyVisibleOnSourceInstalls = "هذا القسم مرئي فقط في التنصيبات من الشفرة البرمجية، وليس في حزم الاصدارات الخاصة بالنظام، اذ تسمح لك بملأ النظام ببيانات تجريبية بسرعة. استخدم هذا النظام بحذر فقط في وضع تطوير او اختبار النظام";
+$UsersFillingReport = "تقرير ملأ المستخدمين";
 $RepeatDate = "تكرار التاريخ";
 $EndDateMustBeMoreThanStartDate = "تاريخ الانتهاء يجب ان يكون اكثر من تاريخ البدأ";
 $ToAttend = "للحضور";
@@ -6044,7 +6046,7 @@ $ErrorReadingZip = "ZIP حدث خطأ عند قراءة الملف المضغو�
 $ErrorStylesheetFilesExtensionsInsideZip = "jp(e)g, .png, .gif and .css. الامتدادات المسموح بها فقط في الملف المضغوط هي";
 $ClearSearchResults = "ازالة نتائج البحث";
 $DisplayCourseOverview = "نظرة عامة للمقررات";
-$DisplaySessionOverview = "نظرة عامة للمواسم";
+$DisplaySessionOverview = "نظرة عامة للدورات";
 $TotalNumberOfMessages = "مجموع الرسائل";
 $TotalNumberOfAssignments = "العد الكلي للواجبات";
 $TestServerMode = "وضع اختبار الخادم";
@@ -6056,9 +6058,9 @@ $QualifyInGradebook = "الدرجة في اداة التقييم";
 $TheTutorOnlyCanKeepTrackOfStudentsRegisteredInTheCourse = "يمكن للمساعد فقط متابعة التقدم للطلبة المسجلين في المقرر";
 $TheTeacherCanQualifyEvaluateAndKeepTrackOfAllStudentsEnrolledInTheCourse = "يمكن للمدرس وضع الدرجة والتقييم ومتابعة كافة الطلبة المسجلين في المقرر";
 $IncludedInEvaluation = "متضمن في التقييم";
-$ExerciseEditionNotAvailableInSession = "لا يمكنك تحرير تمرين المقرر من داخل الموسم";
-$SessionSpecificResource = "مورد خاص بالموسم";
-$EditionNotAvailableFromSession = "الاصدار غير متوفر من داخل الموسم، يرجة التحرير من داخل المقرر الاساس";
+$ExerciseEditionNotAvailableInSession = "لا يمكنك تحرير تمرين المقرر من داخل الدورة";
+$SessionSpecificResource = "مورد خاص بالدورة";
+$EditionNotAvailableFromSession = "التحرير غير متوفر من داخل الدورة، يرجى التحرير من داخل المقرر الاساس";
 $FieldTypeSocialProfile = "رابط الشبكة الاجتماعية";
 $HandingOverOfTaskX = "تسليم المهمة %s";
 $CopyToMyFiles = "انسخ الى منطقة الملفات خاصتي";
@@ -6127,7 +6129,7 @@ $CourseRequestPageForApproval = "يمكن الموافقة على هذا الط�
 $PleaseActivateCourseValidationFeature = "ان خاصية \"التحقق من المقرر\" غير مفعلة حاليا، يرجى تفعيلها من خلال %s الاعدادات";
 $CourseRequestLegalNote = "ان المعلومات حول طلب انشاء المقرر محمية، وستستخدم فقط لغرض انشاء المقرر الجديد ولا يتم مشاركتها مع اطراف خارجية";
 $EnableCourseValidation = "التحقق من المقرر";
-$EnableCourseValidationComment = "عندما يتم تفعيل خاصية \"التحقق من المقرر\"، فان المدرس سوف لن يكون له الحق في انشاء المقررات بشكل منفرد، وانما يقوم بملئ استمارة والتي سوف يراجعها مدير النظام وتتم الاجابة عليها بالرفض او القبول، وتعتمد هذه الخاصية على رسائل البريد التلقائية، ولذا يجب عليك السماح للنظام بالولوج الى خادم البريد واستخدام حساب خاص للبريد";
+$EnableCourseValidationComment = "عندما يتم تفعيل خاصية \"التحقق من المقرر\"، فان المدرس سوف لن يكون له الحق في انشاء المقررات بشكل منفرد، وانما يقوم بملأ استمارة والتي سوف يراجعها مدير النظام وتتم الاجابة عليها بالرفض او القبول، وتعتمد هذه الخاصية على رسائل البريد التلقائية، ولذا يجب عليك السماح للنظام بالولوج الى خادم البريد واستخدام حساب خاص للبريد";
 $CourseRequestAskInfoEmailSubject = "%s طلب لمعلومات اضافية حول طلب انشاء المقرر %s";
 $CourseRequestAskInfoEmailText = "لقد قمنا باستلام طلبك لانشاء مقرر جديد مع الرمز %s. قبل ان نوافق عليه فاننا بحاجة الى معلومات اضافية\n\nيرجى تقديم معلومات موجزة حول محتوى المقرر واهدافه والطلبة الذين سيشملهم المقرر، مع ذكر اسم المؤسسة او القسم الذي تنوب عنه في تقديم هذا الطالب في حال توفره";
 $CourseRequestAcceptedEmailSubject = "%s ان طلب انشاء المقرر %s قم تمت الموافقة عليه";
@@ -6175,7 +6177,7 @@ $EnabledImageMapsComment = "يقوم بتفعيل الزر الخاص بادرا
 $RemoveSearchResults = "حذف نتائج البحث";
 $ExerciseCantBeEditedAfterAddingToTheLP = "لا يمكن تعديل التمرين بعد ان تم اضافته الى مسار التعلم";
 $CourseTool = "اداة المقرر";
-$LPExerciseResultsBySession = "نتائج تمارين مسارات التعلم وفقا للموسم";
+$LPExerciseResultsBySession = "نتائج تمارين مسارات التعلم وفقا للدورة";
 $LPQuestionListResults = "قائمة نتائج تمارين مسارات التعلم";
 $PleaseSelectACourse = "يرجى اختيار مقرر";
 $StudentScoreAverageIsCalculatedBaseInAllLPsAndAllAttempts = "يتم حساب معدل درجة الطالب بالاستناد الى جميع مسارات التعلم وكافة المحاولات";
@@ -6196,7 +6198,7 @@ $UserFolders = "مجلدات المستخدمين";
 $UserFolder = "مجلد المستخدم";
 $HelpUsersFolder = "هذه المعلومات مرئية للمدرس فقط:\n يتضمن مجلد المستخدمين مجلد لكل مستخدم قام بالدخول اليه من خلال اداة المستند او اي ملف تم ارساله الى المقرر من خلال محرر النصوص
 ويوجد تفاصيل اخرى لهذا المجلد";
-$HelpFolderChat = "هذه المعلومات تظهر للمدرس فقط :\n هذا المجلد يتضمن كافة المواسم التي فتحت في الدردشة، ويفضل ان تجعل الملف مرئيا للجميع";
+$HelpFolderChat = "هذه المعلومات تظهر للمدرس فقط :\n هذا المجلد يتضمن كافة الدورات التي فتحت في الدردشة، ويفضل ان تجعل الملف مرئيا للجميع";
 $HelpFolderCertificates = "هذه المعلومات تظهر للمدرس فقط:\n هذا المجلد يتضمن مختلف النماذج للشهادات التي تم انشاءها لاداة التقييم، ولا ينصح بجعل هذه الاداة مرئية للجميع";
 $DestinationDirectory = "مجلد الوجهة";
 $CertificatesFiles = "الشهادات";
@@ -6242,8 +6244,8 @@ $SlowDown = "ابطئ";
 $Pediaphon = "Pediaphon استخدام الخدمات الصوتية";
 $HelpPediaphon = "دعم النص المكون من الالاف الحروف، وفي مختلف الاصوات سواء ذكر او انثى، ويتم توليد وحفظ الملفات تلقائيا في النظام وفي نفس المسار الحالي";
 $FirstSelectALanguage = "يرجى اختيار لغة";
-$MoveUserStats = "نقل نتائج المستخدمين من/الى موسم";
-$CompareUserResultsBetweenCoursesAndCoursesInASession = "هذه الاداة المتقدمة تسمح لك في تحسين تتبع نتائج المستخدمين من نهج المقررات الى نهج المواسم";
+$MoveUserStats = "نقل نتائج المستخدمين من/الى الدورة";
+$CompareUserResultsBetweenCoursesAndCoursesInASession = "هذه الاداة المتقدمة تسمح لك في تحسين تتبع نتائج المستخدمين من نهج المقررات الى نهج الدورات";
 $PDFExportWatermarkEnableTitle = "PDF تفعيل العلامة المائية في الملفات المصدرة بصيغة";
 $PDFExportWatermarkEnableComment = "PDF من خلال تفعيل هذا الخيار، فانه يمكنك رفع صورة او نص والذي يتم اضافته بشكل تلقائي كعلامة مائية الى جميع الملفات المصدرة بصيغة";
 $AddWaterMark = "رفع صورة علامة مائية";
@@ -6276,16 +6278,16 @@ $Careers = "الوظائف";
 $Promotions = "الترقيات";
 $Updated = "تم التحديث بنجاح";
 $Career = "الوظيفة";
-$SubscribeSessionsToPromotions = "تسجيل المواسم الى الترقيات";
-$SessionsInPlatform = "المواسم غير المسجلة";
-$FirstLetterSessions = "اول حرف من اسم الموسم";
-$SessionsInPromotion = "المواسم في هذه الترقية";
-$SubscribeSessionsToPromotion = "تسجيل المواسم الى الترقية";
+$SubscribeSessionsToPromotions = "تسجيل الدورات الى الترقيات";
+$SessionsInPlatform = "الدورات غير المسجلة";
+$FirstLetterSessions = "اول حرف من اسم الدورة";
+$SessionsInPromotion = "الدورات في هذه الترقية";
+$SubscribeSessionsToPromotion = "تسجيل الدورات الى الترقية";
 $NoEndTime = "لا يوجد وقت النهاية";
 $SubscribeUsersToClass = "تسجيل المستخدمين الى الصف";
 $SubscribeClassToCourses = "تسجيل الصف الى المقررات";
-$SubscribeClassToSessions = "تسجيل الصف الى المواسم";
-$SessionsInGroup = "المواسم في المجموعة";
+$SubscribeClassToSessions = "تسجيل الصف الى الدورات";
+$SessionsInGroup = "الدورات في المجموعة";
 $CoursesInGroup = "المقررات في المجموعة";
 $UsersInGroup = "المستخدمين في المجموعة";
 $UsersInPlatform = "المستخدمين في النظام";
@@ -6306,17 +6308,17 @@ $OutputBufferingInfo = "اعدادات التخزين المؤقت، يمكن ت
 $LoadedExtension = "تم تحميل الاضافة";
 $AddACourse = "اضافة مقرر";
 $PerWeek = "لكل اسبوع";
-$SubscribeGroupToSessions = "تسجيل المجموعة الى المواسم";
+$SubscribeGroupToSessions = "تسجيل المجموعة الى الدورات";
 $SubscribeGroupToCourses = "تسجيل المجموعة الى المقررات";
 $CompareStats = "مقارنة الاحصائيات";
 $RenameAndComment = "اعادة التسمية والتعليق";
 $PhotoRetouching = "تنقيح الصورة";
 $EnabledPixlrTitle = "Pixlr تمكين الخدمات الخارجية";
 $EnabledPixlrComment = "تسمح لك اداة بكسلر في تعديل وتنقيح الصور مع خصائ مشابهة للفوتوشوب، فهو البرنامج النموذجي لتعديل الصور";
-$PromotionXArchived = "%s تم ارشفة الترقية، هذا الاجراء سوف يؤدي الى اخفاء كافة المواسم المرتبطة بهذه الترقية، ويمكن التراجع عن عملية الارشفة من خلال ازالة ارشفة الترويج";
-$PromotionXUnarchived = "%s تم الغاء ارشفة الترقية، هذا الاجراء سوف يؤدي الى جعل كافة المواسم  المسجلة في الترقية مرئية، ويمكنك التراجع عن هذا الاجراء من خلال ارشفة الترقية";
-$CareerXArchived = "%s تم ارشفة الوظيفة، هذا الاجراء سوف يؤدي الى اخفاء كافة الترقيات والمواسم المرتبطة بها";
-$CareerXUnarchived = "%s تم الغاء ارشفة الوظيفة، وهذا الاجراء سوف يؤدي الى اظهار كافة الترقيات والمواسم المرتبطة بها";
+$PromotionXArchived = "%s تم ارشفة الترقية، هذا الاجراء سوف يؤدي الى اخفاء كافة الدورات المرتبطة بهذه الترقية، ويمكن التراجع عن عملية الارشفة من خلال ازالة ارشفة الترويج";
+$PromotionXUnarchived = "%s تم الغاء ارشفة الترقية، هذا الاجراء سوف يؤدي الى جعل كافة الدورات المسجلة في الترقية مرئية، ويمكنك التراجع عن هذا الاجراء من خلال ارشفة الترقية";
+$CareerXArchived = "%s تم ارشفة الوظيفة، هذا الاجراء سوف يؤدي الى اخفاء كافة الترقيات والدورات المرتبطة بها";
+$CareerXUnarchived = "%s تم الغاء ارشفة الوظيفة، وهذا الاجراء سوف يؤدي الى اظهار كافة الترقيات والدورات المرتبطة بها";
 $SeeAll = "مشاهدة الجميع";
 $SeeOnlyArchived = "مشاهدة الارشيف فقط";
 $SeeOnlyUnarchived = "مشاهدة غير الارشيف فقط";
@@ -6326,8 +6328,8 @@ $False = "خطأ";
 $DoubtScore = "لا اعرف";
 $RegistrationByUsersGroups = "التسجيل وفقا للصفوف";
 $ContactInformationHasNotBeenSent = "لم تتم عملية ارسال معلومات الاتصال، وهذا محتمل ان يكون بسبب مشكلة مؤقتة في الشبكة. يرجى المحاولة لاحقا في بضعة ثواني، واذا استمرت المشكلة فعليك ترك عملية التسجيل والنقر على الخطوة القادمة";
-$FillCourses = "ملئ المقررات";
-$FillSessions = "ملئ المواسم";
+$FillCourses = "ملأ المقررات";
+$FillSessions = "ملأ الدورات";
 $FileDeleted = "تم حذف الملف";
 $MyClasses = "صفوفي";
 $Archived = "تمت ارشفته";
@@ -6397,10 +6399,10 @@ $Settings = "الاعدادات";
 $ProgramsNeededToConvertFiles = "البرامج التي يحتاج اليها من اجل تحويل الملفات";
 $YouAreUsingChamiloInAWindowsPlatformSadlyYouCantConvertDocumentsInOrderToSearchTheContentUsingThisTool = "انت تستخدم كاميلو في نظام وندوز، للاسف لا يمكنك تحويل الملفات لاجل البحث عن المحتوى باستخدام هذه الاداة";
 $OnlyLettersAndNumbers = "(a-z) (0-9) يسمح بالاحرف والارقام فقط";
-$HideCoursesInSessionsTitle = "اخفاء كافة المقررات في المواسم";
-$HideCoursesInSessionsComment = "عند عرض قسم المقرر في صفحة المقررات، فانه يتم اخفاء قائمة المقررات في داخل ذلك الموسم";
+$HideCoursesInSessionsTitle = "اخفاء كافة المقررات في الدورات";
+$HideCoursesInSessionsComment = "عند عرض قسم المقرر في صفحة المقررات، فانه يتم اخفاء قائمة المقررات في داخل تلك الدورة";
 $ShowGroupsToUsersTitle = "عرض الصفوف للمستخدمين";
-$ShowGroupsToUsersComment = "عرض الصفوف للمستخدمين، اذ تسمح اداة الصفوف في تسجيل او الغاء تسجيل مجموعة من المستخدمين في موسم او مقرر، مما يقلل من الجهد الاداري، ويمكن للمستخدمين ان يشاهدوا في اي صف هم من خلال واجهة الشبكة الاجتماعية";
+$ShowGroupsToUsersComment = "عرض الصفوف للمستخدمين، اذ تسمح اداة الصفوف في تسجيل او الغاء تسجيل مجموعة من المستخدمين في دورة او مقرر، مما يقلل من الجهد الاداري، ويمكن للمستخدمين ان يشاهدوا في اي صف هم من خلال واجهة الشبكة الاجتماعية";
 $ExerciseWillBeActivatedFromXToY = "التمارين سوف يتم تفعيلها من %s الى %s";
 $ExerciseAvailableFromX = "تتوفر التمارين من %s";
 $ExerciseAvailableUntilX = "تتوفر التمارين حتى %s";
@@ -6439,9 +6441,9 @@ $YouMustChooseARelationType = "لقد قم باختيار نوع العلاقة"
 $SelectARelationType = "اختيار نوع العلاقة";
 $AddUserToURL = "URL اضافة مستخدم الى هذا الرابط";
 $CourseBelongURL = "URL المقرر مسجل في هذا الرابط";
-$AtLeastOneSessionAndOneURL = "URL يجب عليك اختيار موسم واحد على الاقل ورابط واحد";
+$AtLeastOneSessionAndOneURL = "URL يجب عليك اختيار دورة واحدة على الاقل ورابط واحد";
 $SelectURL = "URL قم باختيار رابط";
-$SessionsWereEdited = "تم تحديث المواسم";
+$SessionsWereEdited = "تم تحديث الدورات";
 $URLDeleted = "تم حذف الرابط";
 $CannotDeleteURL = "URL لم يتمكن من حذف هذا الرابط";
 $CoursesInPlatform = "المقررات في النظام";
@@ -6455,17 +6457,17 @@ $CodeExists = "هذا الرمز موجود مسبقا";
 $UnkownCategoryCourseCode = "لم يتم العثور على الفئة";
 $LinkedCourseTitle = "عنوان المقرر ذو العلاقة";
 $LinkedCourseCode = "رمز المقرر المرتبط";
-$AssignUsersToSessionsAdministrator = "تخصيص المستخدمين الى مدير المواسم";
-$AssignedUsersListToSessionsAdministrator = "تخصيص المستخدمين الى مدير المواسم";
+$AssignUsersToSessionsAdministrator = "تخصيص المستخدمين الى مدير الدورات";
+$AssignedUsersListToSessionsAdministrator = "تخصيص المستخدمين الى مدير الدورات";
 $GroupUpdated = "تم تحديث الصف";
 $GroupDeleted = "تم حذف الصف";
 $CannotDeleteGroup = "لم يتم حذف الصف";
 $SomeGroupsNotDeleted = "بعض الصفوف لم يتمكن من حذفها";
 $DontUnchek = "لا تقم بازالة التحديد";
 $Modified = "معدل";
-$SessionsList = "قائمة المواسم";
+$SessionsList = "قائمة الدورات";
 $Promotion = "الترقية";
-$UpdateSession = "تحديث الموسم";
+$UpdateSession = "تحديث الدورة";
 $Path = "المسار";
 $Over100 = "اكثر من 100";
 $UnderMin = "تحت الحد الادنى";
@@ -6483,14 +6485,14 @@ $ExtraData = "البيانات الاضافية";
 $ExercisesInLp = "التمارين في مسارات التعلم";
 $Id = "الهوية الشخصية";
 $ThereWasAnError = "كان هنالك خطأ";
-$CantMoveToTheSameSession = "لا يمكن نقله في نفس الموسم";
+$CantMoveToTheSameSession = "لا يمكن نقله في نفس الدورة";
 $StatsMoved = "تم نقل الاحصائيات";
 $UserInformationOfThisCourse = "معلومات المستخدم في هذا المقرر";
 $OriginCourse = "المقرر الاصلي";
-$OriginSession = "الموسم الاصلي";
+$OriginSession = "دورة الاصلية";
 $DestinyCourse = "المقرر المستهدف";
-$DestinySession = "الموسم المستهدف";
-$CourseDoesNotExistInThisSession = "المقرر غير موجود في الموسم. هذه النسخة سوف تعمل فقط في مقرر واحد في موسم واحد ولنفس المقرر في موسم اخر";
+$DestinySession = "الدورة المستهدفة";
+$CourseDoesNotExistInThisSession = "المقرر غير موجود في الدورة. هذه النسخة سوف تعمل فقط في مقرر واحد في دورة واحدة ولنفس المقرر في دورة اخرى";
 $UserNotRegistered = "المستخدم غير مسجل";
 $ViewStats = "عرض الاحصائيات";
 $Responsable = "مسؤول";
@@ -6500,7 +6502,7 @@ $ACourseCategoryWithThisNameAlreadyExists = "توجد فئة مقرر بهذا �
 $OpenIDRedirect = "OpenID اعادة توجيه";
 $Blogs = "المدونات";
 $SelectACourse = "اختيار مقرر";
-$PleaseSelectACourseOrASessionInTheLeftColumn = "يرجى اختيار مقرر او موسم من الشريط الجانبي";
+$PleaseSelectACourseOrASessionInTheLeftColumn = "يرجى اختيار مقرر او دورة من الشريط الجانبي";
 $Others = "الاخرين";
 $BackToCourseDesriptionList = "العودة الى وصف المقرر";
 $Postpone = "تأجيل";
@@ -6587,13 +6589,13 @@ $ProtectFolder = "المجلد محمي";
 $SomeHTMLNotAllowed = "HTML بعض السمات غير مسموحة الخاصة بـ";
 $MyOtherGroups = "صفوفي الاخرى";
 $XLSFileNotValid = "الملف الذي تم تقديمه غير صالح XLS";
-$YouAreRegisterToSessionX = "انت مسجل في الموسم: %s.";
+$YouAreRegisterToSessionX = "انت مسجل في الدورة: %s.";
 $NextBis = "القادم";
 $Prev = "السابق";
 $Configuration = "التهيئة";
 $WelcomeToTheChamiloInstaller = "مرحبا في اداة تنصيب كاميلو";
 $PHPVersionError = "غير متوافق مع متطلبات النظامـ يرجى التحقق من حصولك على احدث اصدار ثم حاول مرة ثانية PHP ان اصدار";
-$ExtensionSessionsNotAvailable = "اضافات الموسم غير متوفرة";
+$ExtensionSessionsNotAvailable = "اضافات الدورة غير متوفرة";
 $ExtensionZlibNotAvailable = "Zlib لا تتوفر اضافة";
 $ExtensionPCRENotAvailable = "PCRE لا تتوفر اضافة";
 $ToGroup = "الذهاب الى المجموعة الاجتماعية";
@@ -6644,7 +6646,7 @@ $SumOfActivitiesWeightMustBeEqualToTotalWeight = "مجموع اوزان كافة
 $TotalSumOfWeights = "مجموع اوزان الانشطة في هذا التقييم يجب ان تكون مساوية لهذا العدد";
 $ShowScoreAndRightAnswer = "نمط التقييم الذاتي: عرض الدرجة والاجابات المتوقعة";
 $DoNotShowScoreNorRightAnswer = "النمط الاضافي: لا تعرض الدرجة او الاجابات";
-$YouNeedToAddASessionCategoryFirst = "يجب عليك اضافة فئة موسم اولا";
+$YouNeedToAddASessionCategoryFirst = "يجب عليك اضافة فئة دورة اولا";
 $YouHaveANewInvitationFromX = "لديك دعوة جديدة من %s";
 $YouHaveANewMessageFromGroupX = "لديك رسالة جديدة من مجموعة %s";
 $YouHaveANewMessageFromX = "لديك رسالة جديدة من %s";
@@ -6708,7 +6710,7 @@ $NoQuicktime = "يستخدم هذا المكون في تشغيل العديد م
 $NoJavaSun = "يرجى تنصيبه والا سوف تفقد بعض وظائف النظامSun Java متصفحك لا يحتوي على المكون الاضافي";
 $NoJava = "متصفحك لا يدعم جافا";
 $JavaSun24 = "ان اصدار الجافا الخاص بمتصفحك قديم، يرجى تنصيل اصدار اعلى من من 24";
-$NoMessageAnywere = "اذا لم تود مشاهدة هذه الرسالة مرة اخرى اثناء الموسم، انقر هنا";
+$NoMessageAnywere = "اذا لم تود مشاهدة هذه الرسالة مرة اخرى اثناء الدورة، انقر هنا";
 $IncludeAllVersions = "البحث ايضا في الاصدارات الاقدم لكل صفحة";
 $TotalHiddenPages = "مجموع الصفحات المخفية";
 $TotalPagesEditedAtThisTime = "مجموع الصفحات المحررة في هذا الوقت";
@@ -6849,7 +6851,7 @@ $CasUserAddFirstnameAttributeComment = "CAS اضافة الاسم الاول ل�
 $CasUserAddLastnameAttributeTitle = "CAS اضافة الاسم الاخير للمستخدم";
 $CasUserAddLastnameAttributeComment = "CAS اضافة الاسم الاخير للمستخدم عند اضافة مستخدم جديد";
 $UserList = "قائمة المستخدمين";
-$SearchUsers = "البحث عن المستخدمبن";
+$SearchUsers = "البحث عن المستخدمين";
 $Administration = "الادارة";
 $AddAsAnnouncement = "اضف كتبليغ";
 $SkillsAndGradebooks = "المهارات والتقييمات";
@@ -6911,7 +6913,7 @@ $WhoAndWhere = "من واين";
 $CantUploadDeleteYourPaperFirst = "لا يمكنك رفع هذا الواجب، يرجى حذف الملف السابق اولا";
 $MB = "MB";
 $ShowAdminToolbarComment = "يعرض لك شريط اعلى الصفحة لبعض المستخدمين، يهدف الى سرعة الوصول الى الاجراءات المعقدة وتحسين المساحة المتاحة لك للتعلم، الا انه قد يكون معقدا لبعض المستخدمين";
-$SessionList = "قائمة المواسم";
+$SessionList = "قائمة الدورات";
 $StudentList = "قائمة الطلبة";
 $StudentsWhoAreTakingTheExerciseRightNow = "الطلبة الذي يؤدون الاختبار حاليا";
 $GroupReply = "الرد";
@@ -6961,7 +6963,7 @@ $DatabaseXWillBeCreated = "قاعدة البيانات %s سوف يتم انشا
 $ADatabaseWithTheSameNameAlreadyExists = "توجد قاعدة بيانات بنفس الاسم مسبقا";
 $UserXCantHaveAccessInTheDatabaseX = "المستخدم %s ليس له وصول الى قاعدة البيانات %s";
 $DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions = "قاعدة البيانات %s لا يمكن انشاءها، المستخدم %s ليس له صلاحيات كافية";
-$CopyOnlySessionItems = "انسخ فقط عناصر الموسم";
+$CopyOnlySessionItems = "انسخ فقط عناصر الدورة";
 $FirstLetterCourseTitle = "اول حرف من عنوان المقرر";
 $NumberOfPublishedExercises = "# من التمارين المنشورة";
 $NumberOfPublishedLps = "# من مسارات التعلم المنشورة";
@@ -7110,8 +7112,8 @@ $GradebookEnableGradeModelTitle = "تفعيل انموذج دفتر الدرجا
 $GradebookEnableGradeModelComment = "تفعيل الانشاء التلقائي لفئات دفتر الدرجات داخل المقرر بالاستناد الى نماذج دفتر الدرجات";
 $ConfirmToLockElement = "هل انت متأكد بانك تريد قفل هذا العنصر؟ بعد ذلك لن تتمكن من تعديل نتائج المستخدمين. لازالة القفل يتوجب عليك الاتصال بمدير النظام";
 $ConfirmToUnlockElement = "هل انت متأكد بانك تريد ازالة قفل هذا العنصر؟";
-$AllowSessionAdminsToSeeAllSessionsTitle = "السماح لمدراء الموسم في مشاهدة جميع المواسم";
-$AllowSessionAdminsToSeeAllSessionsComment = "عندما لا يتم تفعيل هذا الخيار، فان مدراء الموسم سوف يستطيعون مشاهدة المواسم التي قاموا بانشاءها فقط، وهذا مربك في البيئة المفتوحة التي يحتاج فيها مدراء المواسم في مشاركة الدعم بين موسمين";
+$AllowSessionAdminsToSeeAllSessionsTitle = "السماح لمدراء الدورة في مشاهدة جميع الدورات";
+$AllowSessionAdminsToSeeAllSessionsComment = "عندما لا يتم تفعيل هذا الخيار، فان مدراء الدورة سوف يستطيعون مشاهدة الدورات التي قاموا بانشاءها فقط، وهذا مربك في البيئة المفتوحة التي يحتاج فيها مدراء الدورات في مشاركة الدعم بين دورتين";
 $PassPercentage = "نسبة الاجتياز";
 $AllowSkillsToolTitle = "السماح باداة المهارات";
 $AllowSkillsToolComment = "يمكن للمستخدمين مشاهدة مهاراتهم في الشبكة الاجتماعية وفي قسم ضمن الصفحة الرئيسية";
@@ -7161,9 +7163,9 @@ $Zombies = "المستخدمين الوهميين";
 $ActiveOnly = "النشط فقط";
 $AuthenticationSource = "مصدر التوثيق";
 $RegisteredDate = "تاريخ التسجيل";
-$NbInactiveSessions = "عدد المواسم غير النشطة";
+$NbInactiveSessions = "عدد الدورات غير النشطة";
 $AllQuestionsShort = "الكل";
-$FollowedSessions = "المواسم التي اتابعها";
+$FollowedSessions = "الدورات التي اتابعها";
 $FollowedCourses = "المقررات التي اتابعها";
 $FollowedUsers = "المستخدمون الذين اتابعهم";
 $Timeline = "الخط الزمني";
@@ -7190,12 +7192,12 @@ $TeacherAutosubscribeTitle = "التسجيل التلقائي للمدرس";
 $TeacherAutosubscribeComment = "التسجيل التلقائي للمدرس - غير متوفر حتى الان";
 $DRHAutosubscribeTitle = "التسجيل التلقائي لمدير الموارد البشرية";
 $DRHAutosubscribeComment = "التسجيل التلقائي لمدير الموارد البشرية - غير متوفرة حتى الان";
-$ScormCumulativeSessionTimeTitle = "وقت الموسم التراكمي للسكورم";
-$ScormCumulativeSessionTimeComment = "عند تفعيل ذلك فان وقت الموسم للسكورم في مسارات التعلم سوف يكون تراكميا، سوف يحتسب فقط من اخر وقت للتحديث. هذه اعدادات شاملة للنظام وسوف تستخدم عند انشاء مسار تعلم جديد لكن يمكن تعيين بشكل منفرد في كل مرة";
-$SessionAdminPageAfterLoginTitle = "صفحة مدير الموسم بعد تسجيل الدخول";
-$SessionAdminPageAfterLoginComment = "الصحفة التي تعرض لمدراء المواسم بعد تسجيل الدخول";
-$SessionadminAutosubscribeTitle = "التسجيل التلقائي لمدير الموسم";
-$SessionadminAutosubscribeComment = "التسجيل التلقائي لمدير الموسم - غير متوفر حاليا";
+$ScormCumulativeSessionTimeTitle = "وقت الدورة التراكمي للسكورم";
+$ScormCumulativeSessionTimeComment = "عند تفعيل ذلك فان وقت الدورة للسكورم في مسارات التعلم سوف يكون تراكميا، سوف يحتسب فقط من اخر وقت للتحديث. هذه اعدادات شاملة للنظام وسوف تستخدم عند انشاء مسار تعلم جديد لكن يمكن التعيين بشكل منفرد في كل مرة";
+$SessionAdminPageAfterLoginTitle = "صفحة مدير الدورة بعد تسجيل الدخول";
+$SessionAdminPageAfterLoginComment = "الصحفة التي تعرض لمدراء الدورات بعد تسجيل الدخول";
+$SessionadminAutosubscribeTitle = "التسجيل التلقائي لمدير الدورة";
+$SessionadminAutosubscribeComment = "التسجيل التلقائي لمدير الدورة - غير متوفر حاليا";
 $ToolVisibleByDefaultAtCreationTitle = "الاداة المرئية عند انشاء مقرر";
 $ToolVisibleByDefaultAtCreationComment = "اختيار الادوات التي ستكون مرئية عند انشاء المقررات - غير متوفرة حاليا";
 $casAddUserActivatePlatform = "CAS الاعدادات الداخلية لـ";
@@ -7211,7 +7213,7 @@ $NeedContactAdmin = "انقر هنا لمراسلة المدير";
 $ShowAllUsers = "اظهار كافة المستخدمين";
 $ShowUsersNotAddedInTheURL = "URL اظهار المستخدمين الذين لم تتم اضافتهم الى الرابط";
 $UserNotAddedInURL = "URL المستخدمين الذين لم يتم اضافتهم الى الرابط";
-$UsersRegisteredInNoSession = "المستخدمين الذي لم يتم تسجيلهم الى اي موسم";
+$UsersRegisteredInNoSession = "المستخدمين الذي لم يتم تسجيلهم الى اي دورة";
 $CommandLineInterpreter = "CLI مفسر خط الامر";
 $PleaseVisitOurWebsite = "http://www.chamilo.org يرجى زيارة موقعنا الالكتروني";
 $SpaceUsedOnSystemCannotBeMeasuredOnWindows = "Windows لا يمكن قياس المساحة المستخدمة بشكل جيد في منصة";
@@ -7232,8 +7234,8 @@ $AddItems = "اضافة عناصر";
 $NotFound = "لم يتم العثور";
 $SentSuccessfully = "تم الارسال بنجاح";
 $SentFailed = "فشل الارسال";
-$PortalSessionsLimitReached = "لقد بلغت الحد الاقصى لعدد المواسم في هذا النظام";
-$ANewSessionWasCreated = "تم انشاء موسم جديد";
+$PortalSessionsLimitReached = "لقد بلغت الحد الاقصى لعدد الدورات في هذا النظام";
+$ANewSessionWasCreated = "تم انشاء دورة جديدة";
 $Online = "متصل";
 $Offline = "غير متصل";
 $TimelineItemText = "النص";
@@ -7332,12 +7334,12 @@ $CaptchaNumberOfMistakesBeforeBlockingAccountText = "اخطاء رموز الت�
 $CaptchaNumberOfMistakesBeforeBlockingAccountComment = "عدد الاخطاء المسموح بها للمستخدم عند ادخال رموز التحقق قبل ان يتم قفل الحساب";
 $CaptchaTimeAccountIsLockedText = "مدة قفل الحساب عند الفشل في رموز التحقق";
 $CaptchaTimeAccountIsLockedComment = "اذا وصل المستخدم للعدد الاقصى المسموح به من اخطاء تسجبل الدخول عبر رموز التحقق، فان حسابه سوف يتم قفله لعدد من الدقائق";
-$DRHAccessToAllSessionContentText = "السماح لمدراء  الموارد البشرية من الوصول الى محتوى كافة المواسم";
+$DRHAccessToAllSessionContentText = "السماح لمدراء الموارد البشرية من الوصول الى محتوى كافة الدورات";
 $DRHAccessToAllSessionContentComment = "اذا تم تفعيل ذلك، فان مدراء الموارد البشرية سوف يكونون قادرين للوصول الى جميع المحتوى والمستخدمين في المقررات التي بتتبعونها";
 $ShowGroupForaInGeneralToolText = "عرض منتديات المجموعة في المنتدى العام";
 $ShowGroupForaInGeneralToolComment = "عرض منتديات المجموعة في اداة المنتدى في مستوى المقرر، هذا الخيار يتم تفعيله بشكل افتراضي، اذا تم تعطيله فان منتديات المجموعة سوف تعرض فقط في اداة المجاميع سواء كانت عامة او لا";
-$TutorsCanAssignStudentsToSessionsText = "يمكن للمعلمين تعيين الطلبة في المواسم";
-$TutorsCanAssignStudentsToSessionsComment = "عند تفعيل ذلك فان المعلمين في  الموسم يمكنهم تسجيل مستخدمين جدد في موسمهم. والا فان هذا الخيار سوف يكون متاحا فقط لمدير النظام ومدراء المواسم";
+$TutorsCanAssignStudentsToSessionsText = "يمكن للمعلمين تعيين الطلبة في الدورات";
+$TutorsCanAssignStudentsToSessionsComment = "عند تفعيل ذلك فان المعلمين في الدورة يمكنهم تسجيل مستخدمين جدد في دوراتهم. والا فان هذا الخيار سوف يكون متاحا فقط لمدير النظام ومدراء الدورات";
 $UniqueAnswerImagePreferredSize200x150 = "سوف يتم اعادة تعيين حجم الصورة الى 200×150 بكسل لاجل عرض افضل للسؤال. ننصح برفع الصور بهذا الحجم فقط";
 $AllowLearningPathReturnLinkTitle = "عرض رابط العودة في مسارات التعلم";
 $AllowLearningPathReturnLinkComment = "تعطيل هذا الخيار سوف يؤدي الى اخفاء زر العودة الى الصفحة الرئيسية في مسارات التعلم";
@@ -7347,10 +7349,10 @@ $HideScormCopyLinkTitle = "اخفاء نسخ السكورم";
 $HideScormCopyLinkComment = "اخفاء ايقونة نسخ مسار التعلم من قائمة مسارات التعلم";
 $HideScormPdfLinkTitle = "اخفاء تصدير مسار التعلم الى ملف بي دي اف";
 $HideScormPdfLinkComment = "اخفاء ايقونة تصدير مسار التعلم من قائمة مسارات التعلم";
-$SessionDaysBeforeCoachAccessTitle = "عدد الايام الافتراضية لدخول المعلم الى الموسم قبل بداية الموسم";
-$SessionDaysBeforeCoachAccessComment = "عدد الايام الافتراضية التي يمكن فيها للمعلم من دخول الموسم قبل تاريخ البدأ الرسمي للموسم";
-$SessionDaysAfterCoachAccessTitle = "عدد الايام الافتراضية لدخول المعلم بعد نهاية الموسم";
-$SessionDaysAfterCoachAccessComment = "عدد الايام الافتراضية التي يمكن فيها للمعلم من دخول الموسم بعد تاريخ الانتهاء الرسمي للموسم";
+$SessionDaysBeforeCoachAccessTitle = "عدد الايام الافتراضية لدخول المعلم الى الدورة قبل بداية الدورة";
+$SessionDaysBeforeCoachAccessComment = "عدد الايام الافتراضية التي يمكن فيها للمعلم من دخول الدورة قبل تاريخ البدأ الرسمي للدورة";
+$SessionDaysAfterCoachAccessTitle = "عدد الايام الافتراضية لدخول المعلم بعد نهاية الدورة";
+$SessionDaysAfterCoachAccessComment = "عدد الايام الافتراضية التي يمكن فيها للمعلم من دخول الدورة بعد تاريخ الانتهاء الرسمي للدورة";
 $PdfLogoHeaderTitle = "الشعار في رأس الصفحة في ملفات بي دي اف";
 $PdfLogoHeaderComment = "يتيح فيما اذا يمكن استخدام الشعار في راس الصفحة لملفات البي دي اف التي يتم تصديرها، بدلا من الشعار الاعتيادي للنظام، ملاحظة مسار الصورة هو
 css/themes/[your-css]/images/pdf_logo_header.png";
@@ -7362,14 +7364,14 @@ $ShowOfficialCodeInExerciseResultListTitle = "عرض الرمز الرسمي ف�
 $ShowOfficialCodeInExerciseResultListComment = "تستخدم لعرض الرمز الرسمي للطلبة في تقارير نتائج التمارين";
 $HidePrivateCoursesFromCourseCatalogTitle = "اخفاء المقررات الخاصة من دليل المقررات";
 $HidePrivateCoursesFromCourseCatalogComment = "تستخدم لاخفاء المقررات الخاصة من دليل الطلبة، وهذا يكون مفيد عندما تستخدم الدليل لغرض السماح للطلبة بالتسجيل التلقائي في المقررات";
-$CoursesCatalogueShowSessionsTitle = "دليل المقررات والمواسم";
-$CoursesCatalogueShowSessionsComment = "فيما لو اردت عرض المقررات فقطـ او المواسم فقط او كلا المقرات والمواسم في الدليل";
+$CoursesCatalogueShowSessionsTitle = "دليل المقررات والدورات";
+$CoursesCatalogueShowSessionsComment = "فيما لو اردت عرض المقررات فقطـ او الدورات فقط او كلا المقرات والدورات في الدليل";
 $AutoDetectLanguageCustomPagesTitle = "تفعيل الاكتشاف التلقائي للغة في الصفحات المخصصة";
 $AutoDetectLanguageCustomPagesComment = "اذا كنت تستخدم صفحات مخصصة، فيمكنك تفعيل هذه الخاصية او يمكنك فرض لغة النظام الافتراضية";
 $LearningPathShowReducedReportTitle = "مسارات التعلم: عرض التقرير المختصر";
 $LearningPathShowReducedReportComment = "في داخل اداة مسار التعلم، وعندما يراجع الطالب تقدمه عبر ايقونة الاحصائيات، فان سوف يعرض له تقرير مختصر لتقدمه";
-$AllowSessionCourseCopyForTeachersTitle = "السماح بالنسخ من موسم الى اخر للمدرسين";
-$AllowSessionCourseCopyForTeachersComment = "ان تفعيل هذا الخيار سوف يسمح للمدرسين بنسخ المحتوى من احد مقررات الموسم الى موسم اخر، بشكل افتراضي فان هذا الخيار متاح لمدير النظام فقط";
+$AllowSessionCourseCopyForTeachersTitle = "السماح بالنسخ من دورة الى اخرى للمدرسين";
+$AllowSessionCourseCopyForTeachersComment = "ان تفعيل هذا الخيار سوف يسمح للمدرسين بنسخ المحتوى من احد مقررات الدورة الى دورة اخرى، بشكل افتراضي فان هذا الخيار متاح لمدير النظام فقط";
 $HideLogoutButtonTitle = "اخفاء زر تسجيل الخروج";
 $HideLogoutButtonComment = "يفيد اخفاء تسجيل الخروج فقط عندما تستخدم نظام اخر لغرض تسجيل الدخول والخروج مثل استخدام تسجيل الدخول المنفرد";
 $RedirectAdminToCoursesListTitle = "اعادة توجيه المدير الى قائمة المقررات";
@@ -7390,10 +7392,10 @@ $OpenBadgesBackpackUrlTitle = "OpenBadges رابط حقيبة الاوسمة م�
 $OpenBadgesBackpackUrlComment = "رابط خادم حقيبة الاوسمة والتي سوف تستخدم بشكل افتراضي لكافة المستخدمين الذي يودون تصدير الاوسمة. وهذا هو الافتراضي لخدمة مؤسسة موزيلا لمستودع حقيبة الاوسمة";
 $CookieWarningTitle = "Cookie اشعار الخصوصية لـ";
 $CookieWarningComment = "عند تفعيل هذا الخيار فانه سوف يظهر شريط في اعلى النظام يهدف الى اعلام المستخدمين بان النظام يستخدم الكوكيز لتحسين تجربة المستخدم. ويمكن للمستخدم اخفاء  الشريط، ان الهدف من هذا الشريط هو ان يخضع النظام لتشريعات الاتحاد الاوربي في ما يخص خصوصية المستخدم";
-$CatalogueAllowSessionAutoSubscriptionComment = "عند تفعيل هذا وتفعيل دليل المواسم، فان المستخدمين سيكونون قادرين على التسجيل في المواسم النشطة بانفسهم من خلال استخدام زر \"التسجيل\" من دون اي قيود";
+$CatalogueAllowSessionAutoSubscriptionComment = "عند تفعيل هذا وتفعيل دليل الدورات، فان المستخدمين سيكونون قادرين على التسجيل في الدورات النشطة بانفسهم من خلال استخدام زر \"التسجيل\" من دون اي قيود";
 $HideCourseGroupIfNoToolAvailableTitle = "اخفاء مجموعة المقرر اذا لم توجد اداة";
 $HideCourseGroupIfNoToolAvailableComment = "عندما لا توجد اداة في المجموعة والمستخدم غير مسجل في المجموعة، فقم باخفاء المجموعة بشكل كامل من قائمة المجاميع";
-$CatalogueAllowSessionAutoSubscriptionTitle = "التسجيل التلقائي في دليل المواسم";
+$CatalogueAllowSessionAutoSubscriptionTitle = "التسجيل التلقائي في دليل الدورات";
 $SoapRegistrationDecodeUtf8Title = "UTF-8 خدمات الويب: ازالة ترميز";
 $SoapRegistrationDecodeUtf8Comment = "ازالة هذا الترميز من اتصالات خدمات الويب، قم بتفعيل هذا الخيار اذا واجهت مشكلة في ترميز العناوين والاسماء عند ادراجها من خلال خدمات الويب";
 $AttendanceDeletionEnableTitle = "الحضور: تمكين الحذف";
@@ -7404,20 +7406,20 @@ http://en.gravatar.com";
 $GravatarPicturesTypeTitle = "نوع الصورة المستعارة";
 $GravatarPicturesTypeComment = "اذا تم تفعيل خاصية الصور المستعارة فان هذا الخيار يسمح باختيار صورة مستعارة للمستخدمين الذين لم يحددوا صورة شخصية لهم، للاطلاع على انواع الصور المستعارة، يمكنكم زيارة الموقع التالي
 http://en.gravatar.com/site/implement/images#default-image";
-$SessionAdminPermissionsLimitTitle = "تقييد صلاحيات مدراء الموسم";
-$SessionAdminPermissionsLimitComment = "عند تفعيل هذا الخيار فان مدراء الموسم سوف يشاهدون قسم اضافة مستخدم وقسم المواسم مع خيارات قائمة المواسم";
-$ShowSessionDescriptionTitle = "عرض وصف الموسم";
-$ShowSessionDescriptionComment = "عرض وصف الموسم متى كانت الحاجة الى ذلك";
+$SessionAdminPermissionsLimitTitle = "تقييد صلاحيات مدراء الدورة";
+$SessionAdminPermissionsLimitComment = "عند تفعيل هذا الخيار فان مدراء الدورة سوف يشاهدون فقط قسم المستخدم مع خيار اضافة مستخدم، بالاضافة الى قسم الدورات مع خيار قائمة الدورات";
+$ShowSessionDescriptionTitle = "عرض وصف الدورة";
+$ShowSessionDescriptionComment = "عرض وصف الدورة متى كانت الحاجة الى ذلك";
 $CertificateHideExportLinkStudentTitle = "الشهادات: اخفاء رابط التصدير من الطلبة";
 $CertificateHideExportLinkStudentComment = "عند تفعيل ذلك فان الطلبة لن يتمكنوا من تصدير شهاداتهم الى ملف بي دي اف. السبب في ذلك لان HTML ملف البي دي اف قد يكون ذو جودة منخفضة مقارنة بعرض الشهادة في الموقع";
 $CertificateHideExportLinkTitle = "الشهادات: اخفاء رابط التصدير الى ملف بي دي اف عن الجميع";
 $CertificateHideExportLinkComment = "تفعيل هذا الخيار سوف يؤدي الى الغاء امكانية تصدير الشهادات الى ملف بي دي اف لجميع المستخدمين بضمنهم الطلبة";
 $DropboxHideCourseCoachTitle = "مشاركة الملفات: اخفاء معلم المقرر";
-$DropboxHideCourseCoachComment = "اخفاء معلم المقرر للموسم في اداة مشاركة الملفات عندما يتم ارسال مستند من قبل المعلم للطلبة";
+$DropboxHideCourseCoachComment = "اخفاء معلم المقرر للدورة في اداة مشاركة الملفات عندما يتم ارسال مستند من قبل المعلم للطلبة";
 $SSOForceRedirectTitle = "تسجيل الدخول المنفرد: فرض اعادة التوجيه";
 $SSOForceRedirectComment = "ان تفعيل هذا الخيار سوف يفرض على المستخدمين ان يتم توثيق معلوماتهم عبر المنصة الرئيسية، قم بتفعيل ذلك فقط اذا قد قمت فعلا بتهيئة اعدادات تسجيل الدخول المنفرد بشكل صحيح، والا فسوف تمنع نفسك من تسجيل الدخول الى النظام مرة ثانية، وعند SSO حدوث ذلك عليك الولوج الى قاعدة البيانات وتغيير اعدادات";
-$SessionCourseOrderingTitle = "الترتيب اليدوي لمقررات الموسم";
-$SessionCourseOrderingComment = "ان تفعيل هذا الخيار سوف يسمح لمدراء الموسم من ترتيب المقررات في داخل الموسم بشكل يدوي. وعند تعطيل ذلك فان المقررات سوف يتم ترتيبها بشكل ابجدي وفقا لعنوان المقرر";
+$SessionCourseOrderingTitle = "الترتيب اليدوي لمقررات الدورة";
+$SessionCourseOrderingComment = "ان تفعيل هذا الخيار سوف يسمح لمدراء الدورة من ترتيب المقررات في داخل الدورة بشكل يدوي. وعند تعطيل ذلك فان المقررات سوف يتم ترتيبها بشكل ابجدي وفقا لعنوان المقرر";
 $AddLPCategory = "اضاف فئة مسار التعلم";
 $WithOutCategory = "من دون فئة";
 $ItemsTheReferenceDependsOn = "العناصر التي يعتمد المصدر عليها";
@@ -7437,13 +7439,13 @@ $SubscribeGroupsToLp = "تسجيل المجاميع في مسار التعلم";
 $CreateForumForThisLearningPath = "انشاء منتدى لمسار التعلم هذا";
 $ByDate = "وفقا للتاريخ";
 $ByTag = "وفقا للوسم";
-$GoToCourseInsideSession = "الذهاب الى المقرر داخل الموسم";
+$GoToCourseInsideSession = "الذهاب الى المقرر داخل الدورة";
 $EnableGamificationMode = "تفعيل وضع التلعيب";
-$MyCoursesSessionView = "عرض مقررات موسمي";
+$MyCoursesSessionView = "عرض مقررات دورتي";
 $DisableGamificationMode = "تعطيل وضع التلعيب";
 $CatalogueShowOnlyCourses = "عرض المقررات فقط في الدليل";
-$CatalogueShowOnlySessions = "عرض المواسم فقط في الدليل";
-$CatalogueShowCoursesAndSessions = "عرض كلا المقررات والمواسم في الدليل";
+$CatalogueShowOnlySessions = "عرض الدورات فقط في الدليل";
+$CatalogueShowCoursesAndSessions = "عرض كلا المقررات والدورات في الدليل";
 $SequenceSelection = "اختيار التتابع";
 $SequenceConfiguration = "تهيئة التتابع";
 $SequencePreview = "معاينة التتابع";
@@ -7471,8 +7473,8 @@ $ExerciseIsActivatedFromXToY = "تم تفعيل التمرين من %s الى %s
 $SelectSomeOptions = "اختر بعض الخيارات";
 $AddCustomCourseIntro = "يمكنك اضافة مقدمة لهذا المقرر هنا من خلال النقر على ايقونة التحرير";
 $SocialGroup = "مجموعة اجتماعية";
-$RequiredSessions = "المواسم المطلوبة";
-$DependentSessions = "المواسم التابعة";
+$RequiredSessions = "الدورات المطلوبة";
+$DependentSessions = "الدورات التابعة";
 $ByDuration = "وفقا للمدة";
 $ByDates = "وفقا للتواريخ";
 $SendAnnouncementCopyToDRH = "ارسال نسخة الى مدراء الموارد البشرية للطلبة الذين تم تحديدهم";
@@ -7507,9 +7509,9 @@ $CheckRequirements = "التحقق من المتطلبات";
 $ParentLanguageX = "اللغة الرئيسية: %s";
 $RegisterTermsOfSubLanguageForX = "تحديد مصطلحات جديدة للغة الفرعية %s من خلال البحث عن المصطلح وحفظ الترجمة الجديدة، ثم يمكنك تغيير لغتك الى اللغة الفرعية لترى ظهور المصطلحات الجديدة المترجمة";
 $SeeSequences = "مشاهدة التتابع";
-$SessionRequirements = "متطلبات الموسم";
+$SessionRequirements = "متطلبات الدورة";
 $IsRequirement = "مطلوب";
-$ConsiderThisGradebookAsRequirementForASessionSequence = "يمكنك الاخذ بنظر الاعتبار دفتر الدرجات كمتطلب لغرض انهاء المقرر، وهذا ما سيؤثر على تتابع الموسم";
+$ConsiderThisGradebookAsRequirementForASessionSequence = "يمكنك الاخذ بنظر الاعتبار دفتر الدرجات كمتطلب لغرض انهاء المقرر، وهذا ما سيؤثر على تتابع الدورة";
 $DistinctUsersLogins = "تسجيلات الدخول المميزة للمستخدمين";
 $AreYouSureToSubscribe = "هل انت متأكد من القيام بالتسجيل؟";
 $CheckYourEmailAndFollowInstructions = "تحقق من البريد واتبع الارشادات";
@@ -7547,14 +7549,14 @@ $DateFormatLongNoDayJS = "MM dd, yy";
 $TimeFormatNoSecJS = "HH:mm";
 $AtTime = "في";
 $SendSubscriptionNotification = "ارسال اشعار بريد الى الطلبة لاعلامهم بالتسجيل";
-$SendAnEmailWhenAUserBeingSubscribed = "ارسال بريد عندما يقوم مستخدم بالتسجيل في الموسم";
+$SendAnEmailWhenAUserBeingSubscribed = "ارسال بريد عندما يقوم مستخدم بالتسجيل في الدورة";
 $SelectDate = "اختيار تاريخ";
 $OnlyLettersAndSpaces = "فقط حروف وفراغات";
 $OnlyLettersAndNumbersAndSpaces = "فقط حروف وارقام وفراغات";
 $FieldTypeLettersSpaces = "نص ذو حروف وفراغات";
 $CronRemindCourseFinishedActivateTitle = "ارسال اشعار بانهاء المقرر";
 $FieldTypeAlphanumericSpaces = "نص ذو حروف وارقام وفراغات";
-$CronRemindCourseFinishedActivateComment = "فيما لو يتم ارسال بريد الى الطلبة عندما ينتهي المقرر (او الموسم). وهذا يتطلب تهيئة جدولة المهام، انظر مسار
+$CronRemindCourseFinishedActivateComment = "فيما لو يتم ارسال بريد الى الطلبة عندما ينتهي المقرر (او الدورة). وهذا يتطلب تهيئة جدولة المهام، انظر مسار
 main/cron/ directory";
 $ThanksForRegisteringToSite = "شكرا لتسجيلك في %s.";
 $AllowCoachFeedbackExercisesTitle = "السماح للمعلمين في التعليق عند مراجعة التمارين";
@@ -7569,8 +7571,8 @@ $ResetPasswordTokenTitle = "تفعيل طلب اعادة تعيين كلمة ا�
 $ResetPasswordTokenComment = "هذا الخيار يسمح بارسال بريد للمستخدم لغرض اعادة تعيين رمز المرور";
 $ResetPasswordTokenLimitTitle = "حدود الوقت لطلب اعادة تعيين كلمة المرور";
 $ResetPasswordTokenLimitComment = "عدد الثواني قبل انتهاء صلاحية طلب اعادة تعيين كلمة المرور";
-$ViewMyCoursesListBySessionTitle = "عرض مقرراتي وفقا للموسم";
-$ViewMyCoursesListBySessionComment = "تفعيل صفحة اضافية لـ \"مقرراتي\" والي تعرض فيها المواسم كجزء من المقررات بدلا من العكس";
+$ViewMyCoursesListBySessionTitle = "عرض مقرراتي وفقا للدورة";
+$ViewMyCoursesListBySessionComment = "تفعيل صفحة اضافية لـ \"مقرراتي\" والي تعرض فيها الدوراتم كجزء من المقررات بدلا من العكس";
 $DownloadCertificatePdf = "PDF تحميل الشهادة كملف بي دي اف";
 $EnterPassword = "اكتب رمز المرور";
 $DownloadReportPdf = "PDF تحميل التقرير كملف بي دي اف";
@@ -7786,11 +7788,11 @@ $YouCanAssignATutorInThisLinkX = "يمكنك تعيين معلم في هذا ا�
 $UpdateExistingGlossaryTerms = "تحديث المصطلحات الموجودة";
 $TermsUpdated = "تم تحديث المصطلحات";
 $TermsAdded = "تم اضافة مصطلحات";
-$TeacherTimeReportBySession = "تقرير وقت المدرسين وفقا للموسم";
+$TeacherTimeReportBySession = "تقرير وقت المدرسين وفقا للدورة";
 $NumberOfWorks = "عدد الاعمال";
 $LastWork = "اخر عمل";
 $WaitingModeration = "بانتظار الاشراف";
-$WorksInSessionReport = "الاعمال في تقرير الموسم";
+$WorksInSessionReport = "الاعمال في تقرير الدورة";
 $Files = "الملفات";
 $AssignedTo = "مخصص لـ";
 $UpdatedByX = "تم التحديث بواسطة %s";
@@ -7844,8 +7846,8 @@ Drupal ففي الحقل قم بوضع";
 $CourseCreationSplashScreenTitle = "انشاء شاشة البداية للمقرر";
 $CourseCreationSplashScreenComment = "شاشة البداية للمقرر  تعرض مجموعة من الخيارات المقترحة الى المدرس عند انشاء مقرر جديد، قم بتعطيلها لجعل المدرس يصل بشكل مباشر  الى الصفحة الرئيسية للمقرر";
 $WorksReport = "تقرير الواجبات";
-$AccumulateScormTime = "جعل وقت السكورم تراكميا في الموسم";
-$AccumulateScormTimeInfo = "عند تفعيل ذلك، فان وقت الموسم بالنسبة لمسارات التعلم بصيغة سكورم ستكون تراكمية، والا فانه سوف يتم الحساب من اخر وقت للتحديث";
+$AccumulateScormTime = "جعل وقت السكورم تراكميا في الدورة";
+$AccumulateScormTimeInfo = "عند تفعيل ذلك، فان وقت الدورة بالنسبة لمسارات التعلم بصيغة سكورم ستكون تراكمية، والا فانه سوف يتم الحساب من اخر وقت للتحديث";
 $CalendarStartDate = "تاريخ البداية";
 $DownloadTasksPackage = "تحميل حزمة الواجبات";
 $UploadCorrectionsPackage = "رفع حزمة التصحيحات";
@@ -7928,7 +7930,7 @@ $UserTestingEMailConf = "اختبار المستخدم لتهيئة البريد
 $CMS = "CMS";
 $SendLegalSubject = "الشروط القانونية";
 $SendLegalDescriptionToUrlX = "يرجى قبول الاحكام القانونية هنا: %s";
-$ExerciseInvisibleInSession = "التمرين مخفي في المواسم";
+$ExerciseInvisibleInSession = "التمرين مخفي في الدورات";
 $YouNeedToConfirmYourAgreementCheckYourEmail = "يجب عليك تأكيد الموافقة على الاحكام اولا، يرجى التحقق من بريدك";
 $ErrorImportingFile = "خطأ عند استيراد الملف";
 $Hidden = "مخفي";
@@ -7990,7 +7992,7 @@ $AllowDownloadDocumentsByApiKeyTitle = "API السماح بتحميل مستند
 $AllowDownloadDocumentsByApiKeyComment = "REST API تحميل المستندات بالتحقق من مفتاح";
 $UploadCorrectionsExplanationWithDownloadLinkX = "اولا يجب عليك تحميل التصحيحات هنا. ثم عليك ازالة ضغط هذا الملف وتحرير الملفات من دون تغيير اسماء الملف، ثم قم بانشاء ملف مضغوط مع الملفات المعدلة ثم ارفعها الى هذه الاستمارة";
 $PostsPendingModeration = "المنشورات قيد انتظار الاشراف";
-$OnlyUsersFromCourseSession = "فقط المستخدمين من مقرر واحد في موسم";
+$OnlyUsersFromCourseSession = "فقط المستخدمين من مقرر واحد في الدورة";
 $ServerXForwardedForInfo = "remote user IP لعرض X_FORWARDED_FOR HTTP اذا كان الخادم وراء جدار ناري، فانه قد يستخدم";
 $GeolocalizationCoordinates = "تحديد الموقع الجغراقي وفقا للاحداثيات";
 $ExportUsersOfACourse = "تصدير المستخدمين لمقرر";
@@ -8009,13 +8011,13 @@ $SaveAndAddNewItem = "الحفظ واضافة عنصر جديد";
 $AnnouncementChooseRecipientsDescription = "افتراضيا، فان التبليغ سوف يتم ارساله الى جميع المستخدمين، لكن يمكنك ايضا تحديد المستلمين المستهدفين";
 $ChooseRecipients = "اختيار المستلمين المستهدفين";
 $StudentCourseProgressX = "التقدم: %s %%";
-$SessionDurationNotStartedMaxX = "هذا الموسم فيه مدى قصوى قدرها %s يوم.";
+$SessionDurationNotStartedMaxX = "هذه الدورة فيه مدة قصوى قدرها %s يوم.";
 $StudentCourseScoreX = "الدرجة: %s %%";
 $StudentCourseCertificateX = "الشهادة: %s";
-$ConfigureExerciseVisibilityInCourseTitle = "تفعيل هذا من اجل تجاوز تهيئة التمرين كمخفي في الموسم في مستوى المقرر الاساس";
+$ConfigureExerciseVisibilityInCourseTitle = "تفعيل هذا من اجل تجاوز تهيئة التمرين كمخفي في الدورة في مستوى المقرر الاساس";
 $ConfigureExerciseVisibilityInCourseComment = "تفعيل هذه التهيئة لمدى اخفاء التمرين في المقرر الاساس من خلال تجاوز التهيئة الشاملة للنظام. اذا لم يتم تحديد خيار فانه سوف تستخدم تهيئة النظام الشامل";
-$ExerciseInvisibleInSessionTitle = "التمرين مخفي في الموسم";
-$ExerciseInvisibleInSessionComment = "اذا كان التمرين مرئي في المقرر الاساس، فانه سيكون مخفيا في الموسم. واذا كان التمرين مخفيا في المقرر الاساس فانه سيكون مخفيا في الموسم";
+$ExerciseInvisibleInSessionTitle = "التمرين مخفي في الدورة";
+$ExerciseInvisibleInSessionComment = "اذا كان التمرين مرئي في المقرر الاساس، فانه سيكون مخفيا في الدورة. واذا كان التمرين مخفيا في المقرر الاساس فانه لن يظهر في الدورة";
 $Ongoing = "مستمر";
 $Unclosed = "غير مغلق";
 $AttemptStillOngoingPleaseWait = "المحاولة مستمرة، يرجى الانتظار";
@@ -8051,10 +8053,10 @@ $TeacherPicture = "صورة المدرس";
 $FeedbackIfNotCorrect = "المعلومات المرتجعة في حال كون الاجابة خاطئة";
 $ScheduledAnnouncements = "التبليغات المجدولة";
 $SpecificDate = "تاريخ الارسال المحدد";
-$BaseDate = "الارسال مستند الى تواريخ البداية والنهاية للموسم";
+$BaseDate = "الارسال مستند الى تواريخ البداية والنهاية للدورة";
 $AfterOrBefore = "بعد او قبل";
 $Before = "قبل";
-$ScheduleAnnouncementDescription = "هذه الاستمارة تسمح بجدولة التبليغات المرسلة تلقائيا للطلبة المسجلين في هذا المقرر في الموسم. يوجد نوعين من التبليغات التي يمكن ارسالها: الاول يتم فيه تحديد تاريخ معين بالاستناد الى تاريخ البداية والنهاية للموسم، اما الثاني فهو يحدد عدد من الايام التي يجب ان تمضي قبل ارسال التبليغ، وهذه الايام يمكن ان ترتبط قبل او بعد بداية او نهاية الموسم، مثلا ثلاثة ايام بعد تأريخ البدأ";
+$ScheduleAnnouncementDescription = "هذه الاستمارة تسمح بجدولة التبليغات المرسلة تلقائيا للطلبة المسجلين في هذا المقرر في الدورة. يوجد نوعين من التبليغات التي يمكن ارسالها: الاول يتم فيه تحديد تاريخ معين بالاستناد الى تاريخ البداية والنهاية للدورة، اما الثاني فهو يحدد عدد من الايام التي يجب ان تمضي قبل ارسال التبليغ، وهذه الايام يمكن ان ترتبط قبل او بعد بداية او نهاية الدورة، مثلا ثلاثة ايام بعد تأريخ البدأ";
 $MandatorySurveyNoAnswered = "يوجد استبيان اجباري بانتظار اجابتك، للدخول الى المقرر يجب عليك اولا اكمال الاستبيان";
 $ShowPreviousButton = "عرض زر السابق";
 $AllTickets = "كافة البطاقات";
@@ -8100,10 +8102,10 @@ $EmailToTeachersWhenNewWorkFeedback = "ارسال بريد الى المدرسي
 $YourSessionTimeIsExpired = "لقد انتهى وقت جلستك";
 $StudentXHadEnoughSkillsToGetSkillXToAssignClickHereX = "الطالب %s لديه مهارات فرعية تكفي للحصول على مهارى %s. لمنح هذه المهارة فيمكنك الذهاب هنا: %s";
 $ThisEmailWasSentViaCourseX = "تم ارسال البريد عبر المقرر %s";
-$ThisEmailWasSentViaCourseXInSessionX = "هذا البريد تم ارساله عبر المقرر %s في الموسم %s";
+$ThisEmailWasSentViaCourseXInSessionX = "هذا البريد تم ارساله عبر المقرر %s في الدورة %s";
 $Diagram = "مخطط";
 $CareerXDoesntHaveADiagram = "الوظيفة %s لا تحتوي على مخطط";
-$ExerciseCategoryAllSessionsReport = "تقرير التمرين وفقا للفئة لكافة المواسم";
+$ExerciseCategoryAllSessionsReport = "تقرير التمرين وفقا للفئة لكافة الدورات";
 $MailConfirmation = "يتطلب تأكيد عبر البريد";
 $RegistrationConfirmation = "تأكيد التسجيل";
 $AccountNotConfirmed = "حسابك معطل بسبب انك لم تقم بتأكيده، تحقق من بريدك واتبع التعليمات او انقر على الرابط التالي لاعادة ارسال البريد";
@@ -8133,7 +8135,7 @@ $RequestLinkToStudent = "طلب الربط مع الطالب";
 $SendManuallyPendingAnnouncements = "ارسال التبليغات قيد الانتظار يدويا";
 $UserLinkingRequestRejected = "تم رفض طلب ربط الطالب";
 $UserLinkRemoved = "تم ازالة ربط الطالب";
-$SessionTemplate = "قالب الموسم";
+$SessionTemplate = "قالب الدورة";
 $CloudFileLink = "رابط ملف السحابة";
 $ResetFieldX = "اعادة تعيين %s";
 $MyGeneralCertificate = "شهادتي الشاملة";
@@ -8153,7 +8155,7 @@ $NewDocumentAddedToCourseX = "تم اضافة مستند جديد الى مقر�
 $DocumentXHasBeenAddedToDocumentInYourCourseXByUserX = "مستند جديد %s تم اضافته الى اداة المستندات في مقررك %s بواسطة %s.";
 $PendingSurveys = "الاستبيانات قيد الانتظار";
 $NoPendingSurveys = "لا توجد استبيانات قيد الانتظار";
-$HottestSessions = "المواسم الاكثر شيوعا";
+$HottestSessions = "الدورات الاكثر شيوعا";
 $LPItemCanBeAccessed = "يمكن عرض العنصر - تم اكمال المتطلبات السابقة";
 $ItemXBlocksThisElement = "عنصر %s يمنع هذه الخطوة";
 $YourResultAtXBlocksThisElement = "نتيجتك في %s تمنع هذه الخطوة";
@@ -8172,10 +8174,10 @@ $DocumentGroupCollaborationMode = "وضع التعاون";
 $DocumentGroupReadOnlyMode = "وضع القراءة فقط";
 $GroupDocumentAccess = "الوصول الى المستند";
 $DocumentGroupShareMode = "وضع المشاركة";
-$SessionDurationXDaysTotal = "هذا الموسم فيه مدة محدودة تبلغ %s يوم";
+$SessionDurationXDaysTotal = "هذه الدورة فيه مدة محدودة تبلغ %s يوم";
 $LastMonth = "اخر شهر";
 $ThisMonth = "هذا الشهر";
-$PortalUserSessionStats = "احصائيات الموسم للمستخدم";
+$PortalUserSessionStats = "احصائيات الدورة للمستخدم";
 $AddCustomToolsIntro = "يمكنك اضافة مقدمة لصفحة هذه الاداة كنص مساعد لطلبتك، يمكنك النقر على ايقونة التحرير من اجل اضافة نص. المعلومات المختصرة هنا مخفية للطلبة ويمكنك ترك القسم فارغا، لكن اذا كتب شيء فسوف يكون مرئيا للطلبة";
 $TheDocumentAutoLaunchSettingIsOnStudentsWillBeRedirectToTheDocumentTool = "خاصية التشغيل التلقائي للمستندات مفعلة، وبالتالي فان الطلبة سوف يتم توجيههم تلقائيا الى اداة المستند";
 $DocumentAutoLaunch = "التشغيل التلقائي للمستندات";
@@ -8280,8 +8282,8 @@ $UserPermissions = "صلاحيات المستخدم";
 $ExportToPdf = "التصدير  الى ملف بي دي اف";
 $GoToThread = "الذهاب الى المنشور";
 $TimeDifference = "فروق الوقت";
-$SessionAdministrator = "مدير الموسم";
-$ThereIsASequenceResourceLinkedToThisSessionYouNeedToDeleteItFirst = "يوجد مورد تتابع مرتبط بهذا الموسم، يتوجد عليك حذف الارتباط اولا";
+$SessionAdministrator = "مدير الدورة";
+$ThereIsASequenceResourceLinkedToThisSessionYouNeedToDeleteItFirst = "يوجد مورد تتابع مرتبط بهذه الدورة، يتوجب عليك حذف الارتباط اولا";
 $AddAnnotationText = "اضافة نص الملاحظة";
 $AddAnnotationPath = "اضافة مسار الملاحظة";
 $Driver = "السواقة";
@@ -8298,7 +8300,7 @@ $MessageQuestionCertainty = "يرجى تتبع الارشادات ادناه ل�
 
 1. الاتصال بالنظام عبر اسم المستخدم/رمز المرور في: %s
 2.النقر لى الرابط التالي: %s";
-$SessionMinDuration = "الحد الادنى لمدة الموسم";
+$SessionMinDuration = "الحد الادنى لمدة الدورة";
 $CanNotTranslate = "لم يتمكن من الترجمة";
 $AddSkills = "اضافة مهارات";
 $Dictionary = "القاموس";
@@ -8308,7 +8310,7 @@ $NumberOfGradebookToValidateInDependence = "عدد دفاتر الدرجات ل�
 $DependsOnGradebook = "تعتمد على دفتر الدرجات";
 $ThisGradebookDoesntHaveDependencies = "دفتر الدرجات لا يحتوي على اي تابع";
 $CourseIntroductionsAllImportedSuccessfully = "تم استيراد كافة مقدمات المقرر بنجاح";
-$FilterSessions = "تصفية المواسم";
+$FilterSessions = "تصفية الدورات";
 $ScoreModel = "انموذج الدرجة";
 $SyncDatabaseWithSchema = "مزامنة قاعدة البيانات مع المخطط";
 $SkillRelCourses = "ارتباطات المقررات-المهارات";
@@ -8368,7 +8370,7 @@ $TheStudentXHasFinishedTheCourseYLearningPaths = "الطالب %s قد اكمل 
 $ThisQuestionExistsInAnotherExercisesWarning = "السؤال يستخدم في اختبارات اخرى. اذا استمريت في التحرير فان الغييرات سوف تؤثر على كافة الاختبارات المتضمن لهذا السؤال";
 $TimeSpentTimeRequired = "الوقت المبذول / الوقت المطلوب";
 $ProgressSpentInLp = "التقدم";
-$InSessionXYouHadTheFollowingResults = "في الموسم %s, لديك النتائج التالية";
+$InSessionXYouHadTheFollowingResults = "في الدورة %s, لديك النتائج التالية";
 $TimeSpent = "الوقت المبذول";
 $NumberOfVisits = "عدد الزيارات";
 $FormationUnit = "وحدة التكوين";
@@ -8412,7 +8414,7 @@ $FromTimeX = "من %s";
 $ToTimeX = "الى %s";
 $SurveyInviteLink = "رابط الدعوة للاستبيان";
 $RevisionProposed = "تم تقديم مراجعة";
-$SessionsPlanCalendar = "عرض تقويم المواسم";
+$SessionsPlanCalendar = "عرض تقويم الدورات";
 $QuizQuestionsLimitPerDay = "حدود الاسئلة في اليوم";
 $QuizQuestionsLimitPerDayComment = "اذا تم تحديد قيمة اكبر من صفر، فان ذلك سوف يمنع الطالب من الدخول  الى الاختبار الذي فيه من الاسئلة اكثر مما هو متبقي للحد المسموح يوميا. فمثلا لو كان الحد اليومي 50 سؤال والطالب قد اجاب على اختبارين ذات 20 سؤال للاختبار، بالتالي فانه سوف يتم منع الطالب من الدخول الى اختبار اخر ذو 20 سؤال، لكن يمكنه دخول  اختبار ذو 10 اسئلة";
 $QuizQuestionsLimitPerDayXReached = "للاسف، لقد وصلت للحد الاقصى من عدد الاسئلة (%s) لهذا اليوم. يرجى اعادة المحاولة غدا.";
@@ -8428,11 +8430,11 @@ $LegalTermsAgreementStatus = "حالة الموافقة على احكام الا
 $HideSurveyInvitationLink = "اخفاء رابط الدعوة الخاص بالاستبيان";
 $LeaveAMessage = "اترك رسالة";
 $OrphanQuestion = "سؤال غير متصل";
-$WelcomeToPortalXInCourseSessionX = "مرحبا بك في منصة %s مقرر الموسم: %s";
+$WelcomeToPortalXInCourseSessionX = "مرحبا بك في منصة %s مقرر الدورة: %s";
 $WelcomeToPortalXInCourseSessionXCoursePartOfCareerX = "مرحبا بك في منصة %s في مقرر %s, جزء من وظيفة %s";
 $YourNextModule = "درسك التالي";
 $FirstLesson = "الدرس الاول";
-$ImportCourseTeachersAsCourseCoach = "استيراد مدرسي المقرر كمدرسين للمقرر في الموسم";
+$ImportCourseTeachersAsCourseCoach = "استيراد مدرسي المقرر كمدرسين للمقرر في الدورة";
 $ResumeImport = "استئناف الاستيراد";
 $Candidate = "مرشح";
 $GeneralTotal = "المجموع العام";
@@ -8452,7 +8454,7 @@ $HideExpectedAnswer = "اخفاء عمود الاجابات المتوقعة";
 $HideTotalScore = "اخفاء مجموع الدرجات";
 $HideQuestionScore = "اخفاء درجة السؤال";
 $SaveAnswers = "حفظ الاجابات";
-$SaveAllAnswers = "ملئ مسبق للاجوبة من المحاولة السابقة";
+$SaveAllAnswers = "ملأ مسبق للاجوبة من المحاولة السابقة";
 $SubscribeUsersToAllForumNotifications = "التسجيل التلقائي لكافة المستخدمين في جميع اشعارات المنتدى";
 $ExerciseDirectPopUp = "المعلومات المرتجعة المباشرة بشكل منبثق";
 $MinStartDate = "اول اتصال";
@@ -8463,7 +8465,7 @@ $SurveysReport = "تقرير الاستبيانات";
 $EnterYourNewPassword = "قم بادخال رمز المرور الجديد هنا";
 $RepeatYourNewPassword = "اكتب رمز المرور الجديد هنا، لتلافي احتمالية حدوث  الاخطاء";
 $ExtractionFromX = "الاستخلاص من %s";
-$Compilatio = "Compilatio";
+$Compilatio = "Compilatio اداة";
 $CompilatioDocumentTextNotImage = "يرجى التحقق من وجود نص وليس فقط صور";
 $CompilatioDocumentNotCorrupt = "وانه ليس تالف";
 $CompilatioAnalysis = "تحليل";
@@ -8487,8 +8489,8 @@ $Planned = "مخطط";
 $InProgress = "قيد التقدم";
 $Cancelled = "ملغي";
 $Finished = "منتهي";
-$SessionStatus = "حالة الموسم";
-$UpdateSessionStatus = "تحديث حالة الموسم";
+$SessionStatus = "حالة الدورة";
+$UpdateSessionStatus = "تحديث حالة الدورة";
 $SessionListCustom = "قائمة مخصصة";
 $NoStatus = "لا توجد حالة";
 $CAS3Text = "CAS 3";
@@ -8510,9 +8512,219 @@ $AllSessionsShort = "الجميع";
 $ActiveSessionsShort = "مفعل";
 $ClosedSessionsShort = "مغلق";
 $FirstnameLastnameCourses = "مقررات من %s %s";
-$CanNotSubscribeToCourseUserSessionExpired = "لا يمكنك الاستمرار بالتسجيل في المقرر لان الموسم قد انتهى";
+$CanNotSubscribeToCourseUserSessionExpired = "لا يمكنك الاستمرار بالتسجيل في المقرر لان الدورة قد انتهت";
 $CertificateOfAchievement = "شهادة الانجاز";
 $CertificateOfAchievementByDay = "شهادة الانجاز وفقا لليوم";
 $ReducedReport = "تقرير مختصر";
 $NotInCourse = "مقررات خارجية";
+$LearnpathCategory = "فئة مسارات التعلم";
+$MailTemplates = "قوالب البريد";
+$AnEmailToResetYourPasswordHasBeenSent = "تم ارسال ايميل لاعادة تعيين كلمة المرور";
+$TotalNumberOfAvailableCourses = "العدد الاجمالي للمقررات المتوفرة";
+$NumberOfMatchingCourses = "عدد المقررات المطابقة";
+$SessionsByDate = "الدورات وفقا للتاريخ";
+$GeneralStats = "الاحصاءات الاجمالية";
+$Weeks = "اسابيع";
+$SessionCount = "عدد الدورات";
+$SessionsPerWeek = "الدورات في الاسبوع";
+$AverageUserPerSession = "متوسط عدد المستخدمين لكل دورة";
+$AverageSessionPerGeneralCoach = "متوسط عدد الدورات لكل مدير دورة";
+$SessionsPerCategory = "الدورات لكل فئة";
+$SessionsPerLanguage = "الدورات لكل لغة";
+$CountOfSessions = "عدد الدورات";
+$CourseInSession = "المقررات في الدورات";
+$UserStats = "احصاءات المستخدمين";
+$TotalNumberOfStudents = "العدد الكلي للطلبة";
+$UsersCreatedInTheSelectedPeriod = "المستخدمين الذين تم انشائهم خلال الفترة المحددة";
+$UsersByLanguage = "المستخدمين لكل لغة";
+$Count = "احصاء";
+$SortKeys = "توزيع وفقاً";
+$SubscriptionCount = "احصاء الاشتراك";
+$VoteCount = "احصاء التصويت";
+$ExportAsCompactCSV = "CSV التصدير بشكل مدمج بصيغة";
+$PromotedMessages = "الرسائل المعززة";
+$SendToGroupTutors = "النشر لمجموعة المعلمين";
+$GroupSurveyX = "استطلاع المجموعة لـ %s";
+$HelloXGroupX = "مرحبا %s
+
+بصفتي معلم لمجموعة %s ادعوك للمشاركة في الاستطلاع الاتي:";
+$SurveyXMultiplicated = "الاستطلاع %s مضاعف";
+$SurveyXNotMultiplicated = "الاستطلاع %s غير مضاعف";
+$ExportSurveyResults = "تصدير نتائج الاستطلاع";
+$PointAverage = "معدل الدرجة";
+$TotalScore = "مجموع الدرجة";
+$ExportResults = "تصدير النتائج";
+$QuizBrowserCheckOK = "تم التحقق من متصفح الانترنت. يمكنك الاستمرار بآمان";
+$QuizBrowserCheckKO = "لم يتم التحقق من متصفح الانترنت. يرجى المحاولة مرة اخرى، او يمكنك المحاولة مع متصفح او جهاز اخر قبل بدء الاختبار";
+$PartialCorrect = "صحيح نسبياً";
+$XAnswersSavedByUsersFromXTotal = "%d / %d الاجابات التي تم حفظها في التمرين";
+$TestYourBrowser = "اختبر متصفح الانترنت";
+$DraggableQuestionIntro = "قم بتوزيع الخيارات الاتية من القائمة كما تراه مناسبا، من خلال سحب الخيارات نحو المناطق الادنى. يمكنك اعادة وضع الخيارات لتعديل الاجابة";
+$AverageTrainingTime = "متوسط الوقت في المقرر";
+$UsersActiveInATest = "المستخدمين النشطين في الاختبار";
+$SurveyQuestionSelectiveDisplay = "عرض انتقائي";
+$SurveyQuestionSelectiveDisplayComment = "هذا السؤال عندما يتم استخدامه في صفحة استبيان منفردة وفي سؤال اختيارات متعددة، فانه سوف يظهر فقط عندما يتم اختيار الخيار الاول من السؤال الاول. فمثلا السؤال الاتي: هل ذهبت في عطلة؟ اذا تمت الاجابة بالخيار الاول \"نعم\"، فان العرض الانتقائي سوف يعرض قائمة من وجهات العطلة المحتملة ليتم الاختيار بينها";
+$SurveyQuestionMultipleChoiceWithOther = "اختيارات متعددة مع نص مفتوح";
+$SurveyQuestionMultipleChoiceWithOtherComment = "عرض من مجموعة من الخيارات المعدة مسبقا، مع اتاحة امكانية ان يجيب المستخدم بكتابة نص في حال عدم وجود خيار مطابق لما يريده";
+$Multiplechoiceother = "اختيارات متعددة مع خيار: اخرى";
+$SurveyOtherAnswerSpecify = "اخرى";
+$SurveyOtherAnswer = "يرجى التوضيح";
+$UserXPostedADocumentInCourseX = "المستخدم %s قام بنشر مستند في اداة الواجبات في مقرر %s";
+$DownloadDocumentsFirst = "تحميل المستندات اولا";
+$FileXHasNoData = "الملف %s فارغ او يحتوي على سطور فارغة";
+$FileXHasYNonEmptyLines = "الملف %s يحتوي على %d اسطر غير فارغة";
+$DuplicatesOnlyXUniqueUserNames = "توجد تكرارات: فقط %d اسماء المستخدمين الفريدة تم استخلاصها";
+$NoLineMatchedAnyActualUserName = "لا يوجد سطر يتطابق مع اي اسم مستخدم فعلي";
+$OnlyXLinesMatchedActualUsers = "فقط %d اسطر تطابقت مع مستخدمين فعليين";
+$TheFollowingXLinesDoNotMatchAnyActualUser = "%d اسطر التالية لم تتطابق مع اي مستخدم فعلي";
+$XUsersAreAboutToBeAnonymized = "%d مستخدمين سوف يتم اخفاء هويتهم";
+$LoadingXUsers = "تحميل %d مستخدم";
+$AnonymizingXUsers = "اخفاء هوية %d مستخدمين";
+$AllXUsersWereAnonymized = "كافة %d مستخدمين تم اخفاء هويتهم";
+$OnlyXUsersWereAnonymized = "فقط %d مستخدمين تم اخفاء هويتهم";
+$AttemptedAnonymizationOfTheseXUsersFailed = "محاولة اخفاء هوية %d مستخدمين فشلت";
+$PleaseUploadListOfUsers = "يرجى رفع ملف نصي يتضمن قائمة المستخدمين الذين سيتم اخفاء هويتهم، اسم مستخدم واحد لكل سطر";
+$InternalInconsistencyXUsersFoundForYUserNames = "عدم اتساق داخلي %d مستخدمين عثر عليهم من %d اسماء المستخدمين الذين تم رفعهم، يرجى المحاولة من جديد";
+$BulkAnonymizeUsers = "اخفاء هوية قائمة من المستخدمين";
+$UsernameList = "قائمة اسماء المستخدمين";
+$UsersAboutToBeAnonymized = "المستخدمين الذين سيتم اخفاء هويتهم";
+$CouldNotReadFile = "لم يتمكن من قراءة الملف";
+$CouldNotReadFileLines = "لم يتمكن من قراءة سطور الملف";
+$CertificatesSessions = "الشهادات في الدورات";
+$SessionFilterReport = "تصفية الشهادات في الدورات";
+$UpdateUserListXMLCSV = "تحديث قائمة المستخدم";
+$DonateToTheProject = "كاميلو هو مشروع مفتوح المصدر مقدم مجانا من قبل مؤسسة كاميلو التي تسعى لتحسين توفر التعليم بجودة عالية حول العالم
+ومع ذلك فان تطوير كاميلو وتقديم هذه الخدمة مكلف جدا، لذا فان الحصول على مساعدة بسيطة منك سوف يسعاعدنا في ضمان تحسين هذه الخدمة بشكل اسرع
+تعد عملية انشاء مقرر في هذه المنصة بانها الاكثر كلفة، لذا نرجو من حضرتكم تقديم مساهمة لمؤسسة كاميلو قبل انشاء المقرر للمساعدة في الحفاظ على كون هذه الخدمة مجانية للجميع";
+$MyStudentPublications = "واجباتي";
+$AddToEditor = "اضافة الى المحرر";
+$ImageURL = "رابط الصورة";
+$PixelWidth = "العرض";
+$AddImageWithZoom = "اضافة صورة مع تقريب";
+$DeleteInAllLanguages = "حذف في كافة اللغات";
+$MyStudentsSchedule = "جدول تلاميذي";
+$QuizConfirmSavedAnswers = "اوافق على عدد الاجابات المحفوظة في هذا القسم";
+$QuizConfirmSavedAnswersHelp = "اذا لم تكن مقتنعا فلا تؤشر على مربع القبول وقم باستشارة مدير المقرر او مدير النظام";
+$TCReport = "متابعة مسؤول الطالب";
+$TIReport = "تخطيط المعلمين العام";
+$StudentPublicationsSent = "الواجبات المرسلة او السابقة";
+$PendingStudentPublications = "الواجبات قيد الانتظار";
+$MyStudentPublicationsTitle = "كافة الواجبات";
+$MyStudentPublicationsExplanation = "ستجد في الاسفل كافة واجباتك من جميع المقررات والدورات التي سجلت فيها";
+$RequiredCourses = "المقررات المطلوبة";
+$SimpleCourseList = "القائمة المعيارية";
+$AdminCourseList = "قائمة الادارة";
+$AnonymizeUserSessions = "جلسات المستخدم المجهول";
+$ContinueLastImport = "اكمال اخر توريد";
+$Notifications = "اشعارات";
+$Justification = "تبرير";
+$PeriodicExport = "تصدير دوري";
+$Dates = "تواريخ";
+$ErrorPluginFilesExtensionsInsideZip = "خطأ، تحتوي بعض الملفات في الحزمة على امتدادات غير مسموحة";
+$UsersByStatus = "المستخدمين وفقا للحالة";
+$SessionsPerStatus = "الدورات لكل حالة";
+$UsersByTargetLanguage = "المستخدمين وفقا للغة المستهدفة";
+$UsersByCareer = "المستخدمين وفقا للوظيفة";
+$UsersByContract = "المستخدمين وفقا للعقد";
+$UsersByCertificate = "المستخدمين وفقا للشهادة";
+$UsersByAge = "المستخدمين وفقا للعمر";
+$ContinueImport = "اكمال الاستيراد";
+$LDAPConnectFailed = "LDAP فشل الاتصال بـ";
+$LDAPBindFailed = "ldap_bind() فشل";
+$LDAPSearchFailed = "ldap_search() فشل";
+$LDAPFirstEntryFailed = "ldap_first_entry() فشل";
+$LDAPGetValuesFailed = "ldap_get_values() فشل";
+$MoreThanOneAttributeValueFound = "تم ايجاد اكثر من سمة للقيمة";
+$MoreThanOneUserMatched = "تم مطابقة اكثر من مستخدم";
+$CourseCodeConfirmation = "تأكيد كود المقرر";
+$UnsupportedQtiVersion = "IMS/QTI نسخة غير مدعومة من";
+$ExportAllCertificatesToZIP = "نتصدير كافة الشهادات الى ملف مضغوط";
+$CurrentScore = "الدرجة الحالية";
+$AddAttempt = "اضافة محاولة";
+$SurveysWordInASCII = "استبيان";
+$PrivateBetweenUsers = "خاص بين المستخدمين";
+$Nothing = "لا شيء";
+$CompilatioAnalysisInProgress = "جاري التحليل";
+$AccountExpiration = "انتهاء صلاحية الحساب";
+$JustificationExpiration = "انتهاء صلاحية التبرير";
+$JustificationType = "نوع التبرير";
+$Persistent = "مستمر";
+$LogoutWithYourAccountFromX = "تسجيل الخروج من %s حسابك";
+$DaysDifference = "فرق الايام";
+$Graduated = "متخرج";
+$Absent = "غائب";
+$InternalDatabaseError = "خطأ في قاعدة البيانات الداخلية";
+$WrongNumberOfDays = "خطأ في عدد الايام";
+$SubscriptionNotAllowed = "التسجيل غير مسموح";
+$YouPassedTheLimitOfXMinutesToSeeTheResults = "لقد تجاوت حد %s دقائق لمشاهدة النتائج";
+$LastUpdated = "اخر تحديث";
+$Age = "العمر";
+$ExportToXls = "XLS التصدير الى ملف  اكسل";
+$CourseLearningPathsGenericStats = "احصاءات عامة لمسارات التعلم";
+$FailedToCreateExtraFieldCasUser = "فشلت محاولة انشاء حقل اضافي cas_user.";
+$FailedUserCreation = "فشلت عملية انشاء مستخدم";
+$NoSuchUserInLDAP = "LDAP لا يوجد هكذا مستخدم في الخادم";
+$NoSuchUserInInternalDatabase = "لا يوجد هكذا مستخدم في قاعدة البيانات";
+$CouldNotUpdateUser = "لم يكن ممكنا تحديث المستخدم";
+$ModelSessionDoesNotExist = "قالب الدورة غير موجود";
+$SessionNotRegistered = "الدورة غير مسجلة";
+$CoursesNotAddedToSession = "المقررات ليست مضافة الى الدورة";
+$SessionNotFound = "لم يتم العثور على الدورة";
+$UserNotFound = "لم يتم ايجاد المستخدم";
+$UserNotSubscribed = "المستخدم غير مسجل";
+$NoSessionMatched = "لا توجد دورة مطابقة";
+$MoreThanOneSessionMatched = "يوجد اكثر من دورة مطابقة";
+$CouldNotLoadUser = "لم يكن ممكنا تحميل المستخدم";
+$LanguageUnavailable = "اللغة غير متوفرة";
+$CouldNotUpdateExtraFieldValue = "لم يتمكن من تحديث قيمة الحقل الاضافي";
+$UnsupportedUpdate = "تحديث غير مدعوم";
+$NoUserMatched = "لا يوجد مستخدم مطابق";
+$Resume = "استئناف";
+$AttendanceFromXToY = "الحضور من %s الى %s";
+$AddTime = "اضافة وقت";
+$AddUser = "اضافة مستخدم";
+$TimeSpentOnAssignment = "الوقت المستغرق في الواجب";
+$UserXSignedTheAgreementTheDateY = "المستخدم %s وافق على الاتفاقية في %s";
+$Available = "متوفر";
+$SurveyMultipleChoiceWithOther = "اختيارات متعددة مع خيار اخرى";
+$CompilatioDescription = "Compilatio اداة الكشف عن السرقة العلمية";
+$CompilatioQuota = "الكوتا / الحصص";
+$CompilatioCreditXOnY = "تنسيب: %s على %s";
+$CompilatioConnectionTestSoap = "SOAP اختبار الاتصال";
+$CompilatioServerConnection = "SOAP الاتصال بالخادم";
+$CompilatioConnectionSuccessful = "نجح الاتصال";
+$CompilatioSendTextToServer = "Compilatio ارسال النص الى خادم اداة كشف السرقة العلمية";
+$CompilatioTextSendingTestKeyX = "هذا النص سيتم ارساله الى خادم اداة كشف السرقة العلمية من خلال API.\nCompilatio key used: %s";
+$CompilatioSuccessfulTransfer = "نجح النقل";
+$CompilatioFailedTransfer = "فشل النقل";
+$CompilatioNoConnection = "SOAP لم يتمكن من الاتصال بخادم اداة كشف السرقة العلمية";
+$CompilatioParamVerification = "تحقق من المفتاح ومنافذ الخادم كذلك اعدادات البروكسي";
+$LastVisitedCourse = "اخر مقرر تم زيارته";
+$YouDidNotVisitACourseHereTheCourseList = "لم تقم بزيارة اي مقرر، هذه قائمة مقرراتك";
+$NoEntity = "لا توجد منظمة";
+$UserByEntityReport = "المستخدمين وفقا للمنظمة";
+$LpByAuthor = "مسار التعلم وفقا للمؤلف";
+$SessionImportAssignments = "استيراد الواجبات من المقرر الاساس";
+$RedirectToPortalHome = "التوجيه تحو الصفحة الرئيسية";
+$MyLps = "مساراتي التعليمية";
+$LastVisitedLp = "اخر مسار تعلم قمت بزيارته";
+$YouDidNotVisitALpHereTheLpList = "لم تقم بزيارة اي مسار تعلم حتى الان، هنا قائمة مسارات التعلم";
+$CourseUsedInOtherURL = "هذا المقرر مستخدم في منصة اخرى";
+$SubscribeUserGroupsToLp = "اضافة صفوف الى مسار التعلم";
+$ReplaceFile = "استبدال ملف";
+$SubscribeClassesToLpCategory = "تسجيل صفوف الى فئة";
+$ExportResponseReport = "تصدير تقرير الاستجابة";
+$ResponseReport = "تقرير الاستجابة";
+$ResultsOnlyAvailableOnline = "النتائج متوفرة عبر الانترنت فقط";
+$QuestionStats = "احصائيات السؤال";
+$WrongAnswer = "اجابة خاطئة";
+$WrongAttemptXInCourseX = "فشل في المحاولة %s في %s";
+$ExerciseValidationInCourseX = "التحقق من التمرين في %s";
+$BlockCategoryExplanation = "لقد انهيت الاسئلة الخاصة بهذه الفئة، هذه فرصتك الاخيرة لمراجعة هذه الاسئلة. في حال تقدمك الى الفئة التالية من الاسئلة فانك لن تستطيع الرجوع الى هذا الجزء من الاختبار";
+$RemainingTimeToFinishExercise = "الوقت المتبقي لانهاء الاختبار";
+$RemainingTimeToFinishQuestion = "الوقت المتبقي لانهاء السؤال";
+$QuestionStatsDetailedReport = "تفاصيل احصاءات الاسئلة";
+$MyPersonalOpenAreaHelp = "مقدمة تعريفية مختصرة عن تجاربك المهنية او الشخصية";
+$MyCompetencesHelp = "المهارات التي اكتسبتها رسميا او غير رسميا، اجتماعية كانت او مهنية";
+$MyDiplomasHelp = "الشهادات التي اكتسبتها وتفتخر بها، يجب ان تذكر على الاقل اللقب الذي يظهر على الوثيقة مع ذكر المنظمة والسنة";
 ?>

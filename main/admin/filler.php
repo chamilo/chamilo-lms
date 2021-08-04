@@ -3,8 +3,6 @@
 
 /**
  * Index of the admin tools.
- *
- * @package chamilo.admin
  */
 
 // resetting the course id

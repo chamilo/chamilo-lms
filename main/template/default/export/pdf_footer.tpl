@@ -1,9 +1,9 @@
-<table border="0" class="full-width border-top page-footer">
+<table border="0"  width="100%" class="full-width border-top page-footer">
     <tr>
-        <td class="text-left">
+        <td width="80%" class="text-left">
             <strong>{{ _s.institution }}</strong>
         </td>
-        <td class="text-right">
+        <td width="30%" class="text-right" style="text-align: right;">
             <strong>{PAGENO} / {nb}</strong>
         </td>
     </tr>

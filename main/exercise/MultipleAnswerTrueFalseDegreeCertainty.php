@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -7,8 +8,6 @@ use ChamiloSession as Session;
  * Class MultipleAnswerTrueFalseDegreeCertainty
  * This class allows to instantiate an object of type MULTIPLE_ANSWER
  * (MULTIPLE CHOICE, MULTIPLE ANSWER), extending the class question.
- *
- * @package chamilo.exercise
  */
 class MultipleAnswerTrueFalseDegreeCertainty extends Question
 {
@@ -66,27 +65,26 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $renderer = &$form->defaultRenderer();
         $defaults = [];
 
-        $html = '<table class="data_table"><tr style="text-align: center;"><th>'
-            .get_lang('Number')
-            .'</th><th>'
-            .get_lang('True')
-            .'</th><th>'
-            .get_lang('False')
-            .'</th><th>'
-            .get_lang('Answer')
-            .'</th>';
+        $form->addHeader(get_lang('Answers'));
+        $html = '<table class="table table-striped table-hover">
+            <tr>
+                <th width="10px">'.get_lang('Number').'</th>
+                <th width="10px">'.get_lang('True').'</th>
+                <th width="10px">'.get_lang('False').'</th>
+                <th width="50%">'.get_lang('Answer').'</th>';
 
         // show column comment when feedback is enable
         if ($objEx->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
-            $html .= '<th>'.get_lang('Comment').'</th>';
+            $html .= '<th width="50%">'.get_lang('Comment').'</th>';
         }
         $html .= '</tr>';
-        $form->addElement('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
+
+        $form->addHtml($html);
 
         $correct = 0;
         $answer = null;
-        if (!empty($this->id)) {
-            $answer = new Answer($this->id);
+        if (!empty($this->iid)) {
+            $answer = new Answer($this->iid);
             $answer->read();
             if ($answer->nbrAnswers > 0 && !$form->isSubmitted()) {
                 $nbAnswers = $answer->nbrAnswers;
@@ -102,7 +100,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         }
 
         // Can be more options
-        $optionData = Question::readQuestionOption($this->id, $courseId);
+        $optionData = Question::readQuestionOption($this->iid, $courseId);
 
         for ($i = 1; $i <= $nbAnswers; $i++) {
             $renderer->setElementTemplate(
@@ -131,26 +129,20 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
 
             if (is_object($answer)) {
                 $defaults['answer['.$i.']'] = isset($answer->answer[$i]) ? $answer->answer[$i] : '';
-                if (isset($_POST['answer']) && isset($_POST['answer'][$i])) {
-                    $defaults['answer['.$i.']'] = Security::remove_XSS($_POST['answer'][$i]);
-                }
-
                 $defaults['comment['.$i.']'] = isset($answer->comment[$i]) ? $answer->comment[$i] : '';
-                if (isset($_POST['comment']) && isset($_POST['comment'][$i])) {
-                    $defaults['comment['.$i.']'] = Security::remove_XSS($_POST['comment'][$i]);
-                }
-
                 $defaults['weighting['.$i.']'] = isset($answer->weighting[$i]) ? float_format($answer->weighting[$i], 1) : '';
                 $correct = isset($answer->correct[$i]) ? $answer->correct[$i] : '';
                 $defaults['correct['.$i.']'] = $correct;
-                if (isset($_POST['correct']) && isset($_POST['correct'][$i])) {
-                    $defaults['correct['.$i.']'] = Security::remove_XSS($_POST['correct'][$i]);
-                }
 
                 $j = 1;
                 if (!empty($optionData)) {
                     foreach ($optionData as $id => $data) {
-                        $form->addElement('radio', 'correct['.$i.']', null, null, $id);
+                        $rdoCorrect = $form->addElement('radio', 'correct['.$i.']', null, null, $id);
+
+                        if (isset($_POST['correct']) && isset($_POST['correct'][$i]) && $id == $_POST['correct'][$i]) {
+                            $rdoCorrect->setValue(Security::remove_XSS($_POST['correct'][$i]));
+                        }
+
                         $j++;
                         if ($j == 3) {
                             break;
@@ -163,7 +155,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             }
 
             $boxesNames[] = 'correct['.$i.']';
-            $form->addElement(
+            $txtAnswer = $form->addElement(
                 'html_editor',
                 'answer['.$i.']',
                 null,
@@ -172,15 +164,23 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             );
             $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
+            if (isset($_POST['answer']) && isset($_POST['answer'][$i])) {
+                $txtAnswer->setValue(Security::remove_XSS($_POST['answer'][$i]));
+            }
+
             // show comment when feedback is enable
             if ($objEx->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
-                $form->addElement(
+                $txtComment = $form->addElement(
                     'html_editor',
                     'comment['.$i.']',
                     null,
                     ['style' => 'vertical-align:middle;'],
                     ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']
                 );
+
+                if (isset($_POST['comment']) && isset($_POST['comment'][$i])) {
+                    $txtComment->setValue(Security::remove_XSS($_POST['comment'][$i]));
+                }
             }
             $form->addElement('html', '</tr>');
         }
@@ -189,8 +189,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $form->addElement('html', '<br />');
 
         // 3 scores
-        $form->addElement('text', 'option[1]', get_lang('Correct'), ['class' => 'span1', 'value' => '1']);
-        $form->addElement('text', 'option[2]', get_lang('Wrong'), ['class' => 'span1', 'value' => '-0.5']);
+        $txtOption1 = $form->addElement('text', 'option[1]', get_lang('Correct'), ['value' => '1']);
+        $txtOption2 = $form->addElement('text', 'option[2]', get_lang('Wrong'), ['value' => '-0.5']);
 
         $form->addElement('hidden', 'option[3]', 0);
 
@@ -201,35 +201,31 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $form->addElement('hidden', 'options_count', 3);
         $form->addElement('html', '</table><br /><br />');
 
-        //Extra values True, false,  Dont known
+        //Extra values True, false, Don't known
         if (!empty($this->extra)) {
             $scores = explode(':', $this->extra);
             if (!empty($scores)) {
-                for ($i = 1; $i <= 3; $i++) {
-                    $defaults['option['.$i.']'] = $scores[$i - 1];
-                }
+                $txtOption1->setValue($scores[0]);
+                $txtOption2->setValue($scores[1]);
             }
         }
 
         if ($objEx->edit_exercise_in_lp === true ||
-            (empty($this->exerciseList) && empty($objEx->id))
+            (empty($this->exerciseList) && empty($objEx->iid))
         ) {
             $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'), 'class="btn btn-danger minus"');
             $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn btn-primary plus"');
-            //$text and $class defined in calling script
             $form->addElement('submit', 'submitQuestion', $text, 'class = "btn btn-primary"');
         }
         $renderer->setElementTemplate('{element}&nbsp;', 'lessAnswers');
         $renderer->setElementTemplate('{element}&nbsp;', 'submitQuestion');
         $renderer->setElementTemplate('{element}&nbsp;', 'moreAnswers');
         $form->addElement('html', '</div></div>');
-        $defaults['correct'] = $correct;
 
-        if (!empty($this->id)) {
-            $form->setDefaults($defaults);
-        } else {
+        if (!empty($this->iid) && !$form->isSubmitted()) {
             $form->setDefaults($defaults);
         }
+
         $form->setConstants(['nb_answers' => $nbAnswers]);
     }
 
@@ -242,28 +238,28 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     public function processAnswersCreation($form, $exercise)
     {
         $questionWeighting = 0;
-        $objAnswer = new Answer($this->id);
+        $objAnswer = new Answer($this->iid);
         $nbAnswers = $form->getSubmitValue('nb_answers');
         $courseId = api_get_course_int_id();
         $correct = [];
-        $options = Question::readQuestionOption($this->id, $courseId);
+        $options = Question::readQuestionOption($this->iid, $courseId);
 
         if (!empty($options)) {
             foreach ($options as $optionData) {
-                $id = $optionData['id'];
-                unset($optionData['id']);
+                $id = $optionData['iid'];
+                unset($optionData['iid']);
                 Question::updateQuestionOption($id, $optionData, $courseId);
             }
         } else {
             for ($i = 1; $i <= 8; $i++) {
-                $lastId = Question::saveQuestionOption($this->id, $this->options[$i], $courseId, $i);
+                $lastId = Question::saveQuestionOption($this->iid, $this->options[$i], $courseId, $i);
                 $correct[$i] = $lastId;
             }
         }
 
         /* Getting quiz_question_options (true, false, doubt) because
           it's possible that there are more options in the future */
-        $newOptions = Question::readQuestionOption($this->id, $courseId);
+        $newOptions = Question::readQuestionOption($this->iid, $courseId);
         $sortedByPosition = [];
         foreach ($newOptions as $item) {
             $sortedByPosition[$item['position']] = $item;
@@ -286,7 +282,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             if (empty($options)) {
                 // If this is the first time that the question is created then change
                 // the default values from the form 1 and 2 by the correct "option id" registered
-                $goodAnswer = $sortedByPosition[$goodAnswer]['id'];
+                $goodAnswer = $sortedByPosition[$goodAnswer]['iid'];
             }
             $questionWeighting += $extraValues[0]; //By default 0 has the correct answers
             $objAnswer->createAnswer($answer, $goodAnswer, $comment, '', $i);
@@ -319,10 +315,11 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             .get_lang('YourDegreeOfCertainty')
             .'</th>'
         ;
-        if ($exercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
-            $header .= '<th>'.get_lang('Comment').'</th>';
-        } else {
-            $header .= '<th>&nbsp;</th>';
+
+        if (false === $exercise->hideComment) {
+            if ($exercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+                $header .= '<th>'.get_lang('Comment').'</th>';
+            }
         }
         $header .= '</tr>';
 
@@ -832,17 +829,17 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $colWidth = $widthTable / 5;
 
         $html .= '<tr>
-                <td class="firstLine borderRight '.$classGlobalChart.'" 
-                    colspan="2" 
+                <td class="firstLine borderRight '.$classGlobalChart.'"
+                    colspan="2"
                     style="width:'.($colWidth * 2).'px; line-height: 15px; font-size:'.$textSize.'%;">'.
             sprintf(get_lang('IncorrectAnswersX'), $nbResponsesInc).'
                 </td>
-                <td class="firstLine borderRight '.$classGlobalChart.'" 
+                <td class="firstLine borderRight '.$classGlobalChart.'"
                     style="width:'.$colWidth.'px; line-height: 15px; font-size :'.$textSize.'%;">'.
             sprintf(get_lang('IgnoranceAnswersX'), $nbResponsesIng).'
                 </td>
-                <td class="firstLine '.$classGlobalChart.'" 
-                    colspan="2" 
+                <td class="firstLine '.$classGlobalChart.'"
+                    colspan="2"
                     style="width:'.($colWidth * 2).'px; line-height: 15px; font-size:'.$textSize.'%;">'.
             sprintf(get_lang('CorrectAnswersX'), $nbResponsesCor).'
                 </td>
@@ -1146,11 +1143,10 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     public static function getPercentagePosition($optionId)
     {
         $tblAnswerOption = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
-        $courseId = api_get_course_int_id();
         $optionId = (int) $optionId;
-        $sql = "SELECT position 
-                FROM $tblAnswerOption 
-                WHERE c_id = $courseId AND id = $optionId";
+        $sql = "SELECT position
+                FROM $tblAnswerOption
+                WHERE iid = $optionId";
         $res = Database::query($sql);
 
         if (Database::num_rows($res) == 0) {
@@ -1172,10 +1168,9 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     public static function getCorrectAnswerOptionId($idAuto)
     {
         $tblAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
-        $courseId = api_get_course_int_id();
         $idAuto = (int) $idAuto;
         $sql = "SELECT correct FROM $tblAnswer
-                WHERE c_id = $courseId AND id_auto = $idAuto";
+                WHERE id_auto = $idAuto";
 
         $res = Database::query($sql);
         $data = Database::fetch_assoc($res);
@@ -1233,9 +1228,9 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $tableTrackEExercise = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $exeId = (int) $exeId;
 
-        $sql = "SELECT exe_exo_id 
+        $sql = "SELECT exe_exo_id
                 FROM $tableTrackEExercise
-                WHERE exe_id=".$exeId;
+                WHERE exe_id = ".$exeId;
         $res = Database::query($sql);
         $data = Database::fetch_assoc($res);
         if ($data) {

@@ -5,17 +5,18 @@
     "dist/js/select2.js",
     "src/scss/core.scss"
   ],
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git@github.com:select2/select2.git"
   },
   "homepage": "https://github.com/ivaynberg/select2",
-  "version": "4.0.3",
-  "_release": "4.0.3",
+  "version": "4.0.13",
+  "_release": "4.0.13",
   "_resolution": {
     "type": "version",
-    "tag": "4.0.3",
-    "commit": "566c7846fbf8c3b7674346f26d0ee872c0a77629"
+    "tag": "4.0.13",
+    "commit": "45f2b83ceed5231afa7b3d5b12b58ad335edd82e"
   },
   "_source": "https://github.com/ivaynberg/select2.git",
   "_target": "4.*",

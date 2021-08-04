@@ -1,0 +1,23 @@
+{
+  "libraryStrings":{
+    "title":"Audio Recorder",
+    "recordAnswer":"Record",
+    "pause":"Pause",
+    "continue":"Continue",
+    "done":"Finish",
+    "retry":"Reset",
+    "microphoneNotSupported":"Microphone not supported. Make sure you are using a browser that allows microphone recording.",
+    "microphoneInaccessible":"Microphone is not accessible. Make sure that the browser microphone is enabled.",
+    "insecureNotAllowed":"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS",
+    "statusReadyToRecord":"Press the button below to start recording.",
+    "statusRecording":"Recording...",
+    "statusPaused":"Recording paused.",
+    "statusFinishedRecording":"Listen to the recording below.",
+    "downloadRecording":"Press the button labelled \"Insert\" to use this recording.",
+    "retryDialogHeaderText":"Retry recording?",
+    "retryDialogBodyText":"By pressing \"Retry\" you will loose your current recording.",
+    "retryDialogConfirmText":"Retry",
+    "retryDialogCancelText":"Cancel",
+    "statusCantCreateTheAudioFile":"Can't create the audio file."
+  }
+}

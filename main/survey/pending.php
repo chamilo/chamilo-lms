@@ -36,7 +36,7 @@ foreach ($pending as $i => $item) {
 
     $course = $course ? ['id' => $course->getId(), 'title' => $course->getTitle(), 'code' => $course->getCode()] : null;
     $session = $session ? ['id' => $session->getId(), 'name' => $session->getName()] : null;
-    $courseInfo = api_get_course_info_by_id($course->getId());
+
     $surveysData[$survey->getSurveyId()] = [
         'title' => $survey->getTitle(),
         'avail_from' => $survey->getAvailFrom(),
@@ -45,7 +45,7 @@ foreach ($pending as $i => $item) {
         'session' => $session,
         'link' => SurveyUtil::generateFillSurveyLink(
             $invitation->getInvitationCode(),
-            $courseInfo,
+            api_get_course_info_by_id($course['id']),
             $survey->getSessionId()
         ),
     ];

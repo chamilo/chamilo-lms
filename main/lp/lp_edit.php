@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 /**
  * Script allowing simple edition of learnpath information (title, description, etc).
- *
- * @package chamilo.learnpath
  *
  * @author  Yannick Warnier <ywarnier@beeznest.org>
  */
@@ -270,6 +269,21 @@ $extra = $extraField->addElements(
     $lpId,
     ['lp_icon', 'use_score_as_progress']
 );
+
+if ($form->hasElement('extra_authors')) {
+    /** @var HTML_QuickForm_select $author */
+    $author = $form->getElement('extra_authors');
+    $conditions = [
+        'enabled' => 1,
+        'status' => COURSEMANAGER,
+    ];
+    $teachers = UserManager::get_user_list($conditions);
+    $options = [];
+    foreach ($teachers as $teacher) {
+        $options[$teacher['id']] = $teacher['complete_name'];
+    }
+    $author->setOptions($options);
+}
 
 $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, $lpId);
 

@@ -1,0 +1,220 @@
+{
+  "semantics": [
+    {
+      "label": "Phần đầu"
+    },
+    {
+      "label": "Phương thức",
+      "description": "Phương thức trình bày thẻ thoại",
+      "options": [
+        {
+          "label": "Thông thường"
+        },
+        {
+          "label": "Lặp lại"
+        }
+      ]
+    },
+    {
+      "label": "Mô tả nhiệm vụ",
+      "default": ""
+    },
+    {
+      "widgets": [
+        {
+          "label": "Mặc định"
+        }
+      ],
+      "label": "Hội thoại",
+      "entity": "Hội thoại",
+      "field": {
+        "label": "Câu hỏi",
+        "fields": [
+          {
+            "label": "Văn bản",
+            "description": "Gợi ý cho phần đầu của hội thoại"
+          },
+          {
+            "label": "Trả lời",
+            "description": "Gợi ý cho phần thứ 2 của hội thoại"
+          },
+          {
+            "label": "Hình ảnh",
+            "description": "Hình ảnh tùy chọn cho thẻ. (Thẻ có thể sử dụng chỉ hình ảnh, chỉ văn bản, hoặc cả hai)"
+          },
+          {
+            "label": "Văn bản thay thế cho hình ảnh"
+          },
+          {
+            "label": "File audion"
+          },
+          {
+            "label": "Gợi ý",
+            "fields": [
+              {
+                "label": "Gợi ý cho văn bản",
+                "description": "Gợi ý cho phần đầu hội thoại"
+              },
+              {
+                "label": "Tip for answer",
+                "description": "Gợi ý cho phần thứ 2 hội thoại"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "Cài đặt hành vi.",
+      "description": "Các tùy chọn này sẽ cho bạn điều khiển nhiệm cụ được thể hiện như thế nào.",
+      "fields": [
+        {
+          "label": "Bật \"Thử lại\" nút"
+        },
+        {
+          "label": "Tắt điều hướng ngược",
+          "description": "Tùy chọn này sẽ chỉ cho phép bạn di chuyển về phía trước với Thẻ thoại"
+        },
+        {
+          "label": "Chia tỷ lệ văn bản cho vừa trong thẻ",
+          "description": "Bỏ chọn tùy chọn này sẽ làm cho thẻ thích ứng kích thước của nó với kích thước của văn bản"
+        },
+        {
+          "label": "Ngẫu nhiên hóa thẻ",
+          "description": "Kích hoạt để ngẫu nhiên hóa thứ tự các thẻ được hiển thị."
+        },
+        {
+          "label": "Mức độ thành thạo tối đa"
+        },
+        {
+          "label": "Cho phép tiến bộ nhanh chóng",
+          "description": "Nếu được kích hoạt, người học có thể quyết định cho biết rằng họ biết thẻ mà không cần xoay thẻ"
+        }
+      ]
+    },
+    {
+      "label": "Văn bản cho nút xoay",
+      "default": "Xoay"
+    },
+    {
+      "label": "Văn bản cho nút tiếp theo",
+      "default": "Tiếp theo"
+    },
+    {
+      "label": "Văn bản cho nút trước",
+      "default": "Trước"
+    },
+    {
+      "label": "Văn bản cho nút thử lại",
+      "default": "Thử lại"
+    },
+    {
+      "label": "Văn bản cho nút \"câu trả lời đúng\"",
+      "default": "Tôi làm đúng"
+    },
+    {
+      "label": "Văn bản cho nút \"câu trả lời không chính xác\"",
+      "default": "Tôi làm sai"
+    },
+    {
+      "label": "Văn bản cho thông điệp \"Vòng\" bên dưới thẻ và trên màn hình tóm tắt",
+      "description": "@round sẽ được thay thế bằng số vòng hiện tại",
+      "default": "Vòng @round"
+    },
+    {
+      "label": "Văn bản cho thông điệp \"Thẻ còn lại\"",
+      "description": "@number sẽ được thay thế bằng số lượng thẻ còn lại trong vòng này",
+      "default": "Thẻ còn lại: @number"
+    },
+    {
+      "label": "Văn bản cho nút \"vòng tiếp theo\"",
+      "description": "@round sẽ được thay thế bằng số vòng",
+      "default": "Tiếp tục vòng @round"
+    },
+    {
+      "label": "Text for the \"Start over\" button",
+      "default": "Start over"
+    },
+    {
+      "label": "Văn bản cho nút \"hiển thị tóm tắt\"",
+      "default": "Tiếp theo"
+    },
+    {
+      "label": "Văn bản tiêu đề cho trang tóm tắt",
+      "default": "Tóm tắt"
+    },
+    {
+      "label": "Văn bản cho \"Thẻ bạn làm đúng:\"",
+      "default": "Thẻ bạn làm đúng:"
+    },
+    {
+      "label": "Văn bản cho \"Thẻ bạn đã sai:\"",
+      "default": "Thẻ bạn đã sai:"
+    },
+    {
+      "label": "Văn bản cho \"Thẻ không được hiển thị:\"",
+      "default": "Thẻ trong nhóm không được hiển thị:"
+    },
+    {
+      "label": "Văn bản cho \"Điểm tổng\"",
+      "default": "Điểm tổng"
+    },
+    {
+      "label": "Văn bản cho \"Thẻ đã hoàn thành\"",
+      "default": "Thẻ bạn đã học xong:"
+    },
+    {
+      "label": "Văn bản cho \"Vòng hoàn thành:\"",
+      "default": "Vòng hoàn thành:"
+    },
+    {
+      "label": "Thông báo khi tất cả các thẻ đã được học thành thạo",
+      "description": "@cards sẽ được thay thế bằng số lượng tất cả các thẻ trong nhóm. @max sẽ được thay thế bằng mức độ thành thạo tối đa - 1.",
+      "default": "Làm tốt! Bạn có tất cả các thẻ @cards đúng lần @max liên tiếp!"
+    },
+    {
+      "label": "Văn bản tiến độ",
+      "description": "Các biến có sẵn là @card và @total.",
+      "default": "Thẻ @card của @total"
+    },
+    {
+      "label": "Nhãn cho văn bản thẻ",
+      "description": "Được sử dụng để tiếp cận bởi các công nghệ hỗ trợ",
+      "default": "Mặt trước thẻ"
+    },
+    {
+      "label": "Dán nhãn cho mặt sau thẻ",
+      "description": "Được sử dụng để tiếp cận bởi các công nghệ hỗ trợ",
+      "default": "Mặt sau thẻ"
+    },
+    {
+      "label": "Nhãn cho nút hiển thị gợi ý",
+      "default": "Hiển thị gợi ý"
+    },
+    {
+      "label": "Thông điệp audio không được hỗ trợ",
+      "default": "Trình duyệt của bạn không hỗ trợ audio này"
+    },
+    {
+      "label": "Confirm starting over dialog",
+      "fields": [
+        {
+          "label": "Header text",
+          "default": "Start over?"
+        },
+        {
+          "label": "Body text",
+          "default": "All progress will be lost. Are you sure you want to start over?"
+        },
+        {
+          "label": "Cancel button label",
+          "default": "Cancel"
+        },
+        {
+          "label": "Confirm button label",
+          "default": "Start over"
+        }
+      ]
+    }
+  ]
+}

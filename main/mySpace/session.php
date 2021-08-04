@@ -1,11 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * Sessions reporting.
- *
- * @package chamilo.reporting
- */
 ob_start();
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -14,12 +10,13 @@ api_block_anonymous_users();
 
 $this_section = SECTION_TRACKING;
 $export_csv = false;
-if (isset($_REQUEST['export']) && $_REQUEST['export'] == 'csv') {
+if (isset($_REQUEST['export']) && 'csv' == $_REQUEST['export']) {
     $export_csv = true;
 }
+$action = isset($_GET['action']) ? $_GET['action'] : '';
 
 $id_coach = api_get_user_id();
-if (isset($_REQUEST['id_coach']) && $_REQUEST['id_coach'] != '') {
+if (isset($_REQUEST['id_coach']) && '' != $_REQUEST['id_coach']) {
     $id_coach = (int) $_REQUEST['id_coach'];
 }
 
@@ -27,6 +24,278 @@ $allowToTrack = api_is_platform_admin(true, true) || api_is_teacher();
 
 if (!$allowToTrack) {
     api_not_allowed(true);
+}
+
+$studentId = isset($_GET['student']) ? (int) $_GET['student'] : 0;
+$sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : 0;
+$currentUrl = api_get_self().'?student='.$studentId.'&sid='.$sessionId;
+
+switch ($action) {
+    case 'export_to_pdf':
+        $allStudents = isset($_GET['all_students']) && 1 === (int) $_GET['all_students'] ? true : false;
+        $sessionToExport = isset($_GET['session_to_export']) ? (int) $_GET['session_to_export'] : 0;
+        $type = isset($_GET['type']) ? $_GET['type'] : 'attendance';
+        $sessionInfo = api_get_session_info($sessionToExport);
+        if (empty($sessionInfo)) {
+            api_not_allowed(true);
+        }
+        $courses = Tracking::get_courses_list_from_session($sessionToExport);
+        $studentList = [$studentId];
+        if ($allStudents) {
+            $users = SessionManager::get_users_by_session($sessionToExport, 0);
+            $studentList = array_column($users, 'user_id');
+        }
+
+        $totalCourses = count($courses);
+        $scoreDisplay = ScoreDisplay::instance();
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $pdfList = [];
+        foreach ($studentList as $studentId) {
+            $studentInfo = api_get_user_info($studentId);
+            $timeSpent = 0;
+            $numberVisits = 0;
+            $progress = 0;
+            $timeSpentPerCourse = [];
+            $progressPerCourse = [];
+
+            foreach ($courses as $course) {
+                $courseId = $course['c_id'];
+                $courseTimeSpent = Tracking::get_time_spent_on_the_course($studentId, $courseId, $sessionToExport);
+                $timeSpentPerCourse[$courseId] = $courseTimeSpent;
+                $timeSpent += $courseTimeSpent;
+                $sql = "SELECT DISTINCT count(course_access_id) as count
+                        FROM $table
+                        WHERE
+                            c_id = $courseId AND
+                            session_id = $sessionToExport AND
+                            user_id = $studentId";
+                $result = Database::query($sql);
+                $row = Database::fetch_array($result);
+                $numberVisits += $row['count'];
+                $courseProgress = Tracking::get_avg_student_progress(
+                    $studentId,
+                    $course['code'],
+                    [],
+                    $sessionToExport
+                );
+                $progressPerCourse[$courseId] = $courseProgress;
+                $progress += $courseProgress;
+            }
+
+            $average = round($progress / $totalCourses, 1);
+            $average = empty($average) ? '0%' : $average.'%';
+            $first = Tracking::get_first_connection_date($studentId);
+            $last = Tracking::get_last_connection_date($studentId);
+            $timeSpentContent = '';
+            $pdfTitle = get_lang('AttestationOfAttendance');
+            if ('attendance' === $type) {
+                $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
+                $column = 0;
+                $row = 0;
+                $headers = [
+                    get_lang('TimeSpent'),
+                    get_lang('NumberOfVisits'),
+                    get_lang('GlobalProgress'),
+                    get_lang('FirstLogin'),
+                    get_lang('LastConnexionDate'),
+                ];
+                foreach ($headers as $header) {
+                    $table->setHeaderContents($row, $column, $header);
+                    $column++;
+                }
+                $table->setCellContents(1, 0, api_time_to_hms($timeSpent));
+                $table->setCellContents(1, 1, $numberVisits);
+                $table->setCellContents(1, 2, $average);
+                $table->setCellContents(1, 3, $first);
+                $table->setCellContents(1, 4, $last);
+                $timeSpentContent = $table->toHtml();
+            } else {
+                $pdfTitle = get_lang('CertificateOfAchievement');
+            }
+
+            $courseTable = '';
+            if (!empty($courses)) {
+                $courseTable .= '<table class="table table-hover table-striped data_table">';
+                $courseTable .= '<thead>';
+                $courseTable .= '<tr>
+                    <th>'.get_lang('FormationUnit').'</th>
+                    <th>'.get_lang('ConnectionTime').'</th>
+                    <th>'.get_lang('Progress').'</th>';
+
+                if ('attendance' === $type) {
+                    $courseTable .= '<th>'.get_lang('Score').'</th>';
+                }
+                $courseTable .= '</tr>';
+                $courseTable .= '</thead>';
+                $courseTable .= '<tbody>';
+
+                $totalCourseTime = 0;
+                $totalAttendance = [0, 0];
+                $totalScore = 0;
+                $totalProgress = 0;
+                $gradeBookTotal = [0, 0];
+                $totalEvaluations = '0/0 (0%)';
+
+                foreach ($courses as $course) {
+                    $courseId = $course['c_id'];
+                    $courseInfoItem = api_get_course_info_by_id($courseId);
+                    $courseId = $courseInfoItem['real_id'];
+                    $courseCodeItem = $courseInfoItem['code'];
+
+                    $isSubscribed = CourseManager::is_user_subscribed_in_course(
+                        $studentId,
+                        $courseCodeItem,
+                        true,
+                        $sessionToExport
+                    );
+
+                    if ($isSubscribed) {
+                        $timeInSeconds = $timeSpentPerCourse[$courseId];
+                        $totalCourseTime += $timeInSeconds;
+                        $time_spent_on_course = api_time_to_hms($timeInSeconds);
+                        $progress = $progressPerCourse[$courseId];
+                        $totalProgress += $progress;
+
+                        $bestScore = Tracking::get_avg_student_score(
+                            $studentId,
+                            $courseCodeItem,
+                            [],
+                            $sessionToExport,
+                            false,
+                            false,
+                            true
+                        );
+
+                        if (is_numeric($bestScore)) {
+                            $totalScore += $bestScore;
+                        }
+
+                        $progress = empty($progress) ? '0%' : $progress.'%';
+                        $score = empty($bestScore) ? '0%' : $bestScore.'%';
+
+                        $courseTable .= '<tr>
+                        <td>
+                            <a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sessionToExport.'">'.
+                            $courseInfoItem['title'].'</a>
+                        </td>
+                        <td >'.$time_spent_on_course.'</td>
+                        <td >'.$progress.'</td>';
+                        if ('attendance' === $type) {
+                            $courseTable .= '<td >'.$score.'</td>';
+                        }
+                        $courseTable .= '</tr>';
+                    }
+                }
+
+                $totalAttendanceFormatted = $scoreDisplay->display_score($totalAttendance);
+                $totalScoreFormatted = $scoreDisplay->display_score([$totalScore / $totalCourses, 100], SCORE_AVERAGE);
+                $totalProgressFormatted = $scoreDisplay->display_score(
+                    [$totalProgress / $totalCourses, 100],
+                    SCORE_AVERAGE
+                );
+                $totalEvaluations = $scoreDisplay->display_score($gradeBookTotal);
+                $totalTimeFormatted = api_time_to_hms($totalCourseTime);
+                $courseTable .= '
+                    <tr>
+                        <th>'.get_lang('Total').'</th>
+                        <th>'.$totalTimeFormatted.'</th>
+                        <th>'.$totalProgressFormatted.'</th>
+                    ';
+                if ('attendance' === $type) {
+                    $courseTable .= '<th>'.$totalScoreFormatted.'</th>';
+                }
+                $courseTable .= '</tr>';
+                $courseTable .= '</tbody></table>';
+            }
+
+            $tpl = new Template('', false, false, false, true, false, false);
+            $tpl->assign('title', $pdfTitle);
+            $tpl->assign('session_title', $sessionInfo['name']);
+            $tpl->assign('session_info', $sessionInfo);
+            $sessionCategoryTitle = '';
+            if (isset($sessionInfo['session_category_id'])) {
+                $sessionCategory = SessionManager::get_session_category($sessionInfo['session_category_id']);
+                if ($sessionCategory) {
+                    $sessionCategoryTitle = $sessionCategory['name'];
+                }
+            }
+            $dateData = SessionManager::parseSessionDates($sessionInfo, false);
+            $dateToString = $dateData['access'];
+            $tpl->assign('session_display_dates', $dateToString);
+            $tpl->assign('session_category_title', $sessionCategoryTitle);
+            $tpl->assign('student', $studentInfo['complete_name']);
+            $tpl->assign('student_info', $studentInfo);
+            $tpl->assign('student_info_extra_fields', UserManager::get_extra_user_data($studentInfo['user_id']));
+            $tpl->assign('table_progress', $timeSpentContent);
+            $tpl->assign(
+                'subtitle',
+                sprintf(
+                    get_lang('InSessionXYouHadTheFollowingResults'),
+                    $sessionInfo['name']
+                )
+            );
+            $tpl->assign('table_course', $courseTable);
+            $template = 'pdf_export_student.tpl';
+            if ('achievement' === $type) {
+                $template = 'certificate_achievement.tpl';
+            }
+            $content = $tpl->fetch($tpl->get_template('my_space/'.$template));
+
+            $params = [
+                'pdf_title' => get_lang('Resume'),
+                'session_info' => $sessionInfo,
+                'course_info' => '',
+                'pdf_date' => '',
+                'student_info' => $studentInfo,
+                'show_grade_generated_date' => true,
+                'show_real_course_teachers' => false,
+                'show_teacher_as_myself' => false,
+                'orientation' => 'P',
+            ];
+            @$pdf = new PDF('A4', $params['orientation'], $params);
+            $pdf->setBackground($tpl->theme);
+            $mode = 'D';
+
+            $pdfName = $sessionInfo['name'].'_'.$studentInfo['complete_name'];
+            if ($allStudents) {
+                $mode = 'F';
+                $pdfName = $studentInfo['complete_name'];
+            }
+            $pdf->set_footer();
+            $result = @$pdf->content_to_pdf(
+                $content,
+                '',
+                $pdfName,
+                null,
+                $mode,
+                false,
+                null,
+                false,
+                true,
+                false
+            );
+            $pdfList[] = $result;
+        }
+
+        if (empty($pdfList)) {
+            api_not_allowed(true);
+        }
+
+        // Creating a ZIP file.
+        $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).uniqid('report_session_'.$sessionToExport, true).'.zip';
+
+        $zip = new PclZip($tempZipFile);
+        foreach ($pdfList as $file) {
+            $zip->add(
+                $file,
+                PCLZIP_OPT_REMOVE_PATH,
+                api_get_path(SYS_ARCHIVE_PATH)
+            );
+        }
+        $name = $sessionInfo['name'].'_'.api_get_utc_datetime().'.zip';
+        DocumentManager::file_send_for_download($tempZipFile, true, $name);
+        exit;
+        break;
 }
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -57,6 +326,11 @@ if (api_is_platform_admin(true, true)) {
             Display::return_icon('session_na.png', get_lang('Sessions'), [], ICON_SIZE_MEDIUM),
             '#'
         );
+    } else {
+        $menu_items[] = Display::url(
+            Display::return_icon('teacher.png', get_lang('Trainers'), [], ICON_SIZE_MEDIUM),
+            'session_admin_teachers.php'
+        );
     }
 
     $menu_items[] = Display::url(
@@ -72,6 +346,13 @@ if (api_is_platform_admin(true, true)) {
         $menu_items[] = Display::url(
             Display::return_icon('1day.png', get_lang('SessionsPlanCalendar'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH)."calendar/planification.php"
+        );
+    }
+
+    if (api_is_drh()) {
+        $menu_items[] = Display::url(
+            Display::return_icon('session.png', get_lang('SessionFilterReport'), [], ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'mySpace/session_filter.php'
         );
     }
 
@@ -130,7 +411,7 @@ $extraFieldSession = new ExtraField('session');
 $extraFieldSession->addElements(
     $form,
     null,
-    [], //exclude
+    [],
     true
 );
 
@@ -203,7 +484,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             // Cleaning
             for (key in added_cols) {
                 grid.hideCol(key);
-            };
+            }
             grid.showCol('name');
             grid.showCol('display_start_date');
             grid.showCol('display_end_date');
@@ -214,7 +495,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             grid.showCol('name').trigger('reloadGrid');
             for (key in added_cols) {
                 grid.showCol(key);
-            };
+            }
         }
 
         var second_filters = [];
@@ -342,7 +623,5 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 <?php
 
 $form->display();
-
 echo Display::grid_html('sessions');
-
 Display::display_footer();

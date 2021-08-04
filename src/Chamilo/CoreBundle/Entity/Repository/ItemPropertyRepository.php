@@ -44,6 +44,46 @@ class ItemPropertyRepository extends EntityRepository
         return $this->findBy($criteria);
     }
 
+    public function findByUserSuscribedToItem(
+        $tool,
+        $itemId,
+        int $userId,
+        int $courseId,
+        int $sessionId = null
+    ): ?CItemProperty {
+        $criteria = [
+            'tool' => $tool,
+            'lasteditType' => 'LearnpathSubscription',
+            'ref' => $itemId,
+            'toUser' => $userId,
+            'course' => $courseId,
+            'session' => $sessionId ?: null,
+            'group' => null,
+        ];
+
+        return $this->findOneBy($criteria);
+    }
+
+    public function findByGroupSuscribedToLp(
+        $tool,
+        $lpId,
+        int $groupId,
+        int $courseId,
+        int $sessionId = 0
+    ): ?CItemProperty {
+        $criteria = [
+            'tool' => $tool,
+            'lasteditType' => 'LearnpathSubscription',
+            'ref' => $lpId,
+            'toUser' => null,
+            'course' => $courseId,
+            'session' => $sessionId ?: null,
+            'group' => $groupId,
+        ];
+
+        return $this->findOneBy($criteria);
+    }
+
     /**
      * Get Groups subscribed to a item: LP, Doc, etc.
      *
@@ -100,7 +140,10 @@ class ItemPropertyRepository extends EntityRepository
         if ($groupsSubscribedToItem) {
             /** @var CItemProperty $itemProperty */
             foreach ($groupsSubscribedToItem as $itemProperty) {
-                $alreadyAdded[] = $itemProperty->getGroup()->getId();
+                $getGroup = $itemProperty->getGroup();
+                if (!empty($getGroup)) {
+                    $alreadyAdded[] = $getGroup->getId();
+                }
             }
         }
 
@@ -203,6 +246,7 @@ class ItemPropertyRepository extends EntityRepository
      * @param Session $session
      * @param int     $itemId
      * @param array   $newUserList
+     * @param bool    $deleteUsers
      */
     public function subscribeUsersToItem(
         $currentUser,
@@ -210,7 +254,8 @@ class ItemPropertyRepository extends EntityRepository
         Course $course,
         Session $session = null,
         $itemId,
-        $newUserList = []
+        $newUserList = [],
+        $deleteUsers = true
     ) {
         $em = $this->getEntityManager();
         $user = $em->getRepository('ChamiloUserBundle:User');
@@ -226,24 +271,28 @@ class ItemPropertyRepository extends EntityRepository
         if ($usersSubscribedToItem) {
             /** @var CItemProperty $itemProperty */
             foreach ($usersSubscribedToItem as $itemProperty) {
-                $alreadyAddedUsers[] = $itemProperty->getToUser()->getId();
+                $getToUser = $itemProperty->getToUser();
+                if (!empty($getToUser)) {
+                    $alreadyAddedUsers[] = $itemProperty->getToUser()->getId();
+                }
             }
         }
 
-        $usersToDelete = $alreadyAddedUsers;
+        if ($deleteUsers) {
+            $usersToDelete = $alreadyAddedUsers;
+            if (!empty($newUserList)) {
+                $usersToDelete = array_diff($alreadyAddedUsers, $newUserList);
+            }
 
-        if (!empty($newUserList)) {
-            $usersToDelete = array_diff($alreadyAddedUsers, $newUserList);
-        }
-
-        if ($usersToDelete) {
-            $this->unsubcribeUsersToItem(
-                $tool,
-                $course,
-                $session,
-                $itemId,
-                $usersToDelete
-            );
+            if ($usersToDelete) {
+                $this->unsubcribeUsersToItem(
+                    $tool,
+                    $course,
+                    $session,
+                    $itemId,
+                    $usersToDelete
+                );
+            }
         }
 
         foreach ($newUserList as $userId) {

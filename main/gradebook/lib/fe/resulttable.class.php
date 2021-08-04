@@ -7,8 +7,6 @@
  *
  * @author Stijn Konings
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 class ResultTable extends SortableTable
 {
@@ -28,7 +26,7 @@ class ResultTable extends SortableTable
      */
     public function __construct(
         $evaluation,
-        $results = [],
+        $results,
         $iscourse,
         $addparams = [],
         $forprint = false
@@ -51,7 +49,7 @@ class ResultTable extends SortableTable
         }
         $scoredisplay = ScoreDisplay::instance();
         $column = 0;
-        if ($this->iscourse == '1') {
+        if ('1' == $this->iscourse) {
             $this->set_header($column++, '', false);
             $this->set_form_actions([
                     'delete' => get_lang('Delete'),
@@ -142,7 +140,7 @@ class ResultTable extends SortableTable
         $sortable_data = [];
         foreach ($data_array as $item) {
             $row = [];
-            if ($this->iscourse == '1') {
+            if ('1' == $this->iscourse) {
                 $row[] = $item['result_id'];
             }
             if ($isWesternNameOrder) {
@@ -191,7 +189,7 @@ class ResultTable extends SortableTable
         $resultQuery = Database::query($sql);
         $list = Database::store_result($resultQuery);
 
-        $htmlTable = new HTML_Table(['class' => 'data_table']);
+        $htmlTable = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
         $htmlTable->setHeaderContents(0, 0, get_lang('Score'));
         $htmlTable->setHeaderContents(0, 1, get_lang('Comment'));
         $htmlTable->setHeaderContents(0, 2, get_lang('CreatedAt'));

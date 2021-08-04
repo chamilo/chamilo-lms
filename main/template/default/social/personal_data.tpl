@@ -16,7 +16,7 @@
 
     <div class="col-md-{{ columns }}">
         {{ display.panel('PersonalDataIntroductionTitle' | get_lang , 'PersonalDataIntroductionText' | get_lang) }}
-        {{ display.collapse('', 'PersonalDataKeptOnYou' | get_lang, personal_data.data, false, 'false') }}
+        {{ display.collapse('pnl-personal-data', 'PersonalDataKeptOnYou' | get_lang, personal_data.data, false, 'false') }}
 
         {% if personal_data.responsible %}
             {{ display.panel('PersonalDataResponsibleOrganizationTitle' | get_lang , personal_data.responsible ) }}

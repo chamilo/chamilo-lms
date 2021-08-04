@@ -10,6 +10,7 @@
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
+api_block_inactive_user();
 
 $logInfo = [
     'tool' => 'MyCertificates',
@@ -19,7 +20,6 @@ Event::registerLog($logInfo);
 if (api_is_anonymous()) {
     api_not_allowed(true);
 }
-
 $userId = api_get_user_id();
 
 $courseList = GradebookUtils::getUserCertificatesInCourses($userId);
@@ -47,7 +47,7 @@ $template->assign('allow_export', $allowExport);
 $templateName = $template->get_template('gradebook/my_certificates.tpl');
 $content = $template->fetch($templateName);
 
-if (api_get_setting('allow_public_certificates') === 'true') {
+if ('true' === api_get_setting('allow_public_certificates')) {
     $template->assign(
         'actions',
         Display::toolbarButton(

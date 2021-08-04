@@ -1,0 +1,57 @@
+{
+  "title": "Dialog Cards",
+  "description": "Makes it possible to create learning tasks for your site visitors.",
+  "majorVersion": 1,
+  "minorVersion": 8,
+  "patchVersion": 4,
+  "runnable": 1,
+  "author": "Joubel",
+  "license": "MIT",
+  "machineName": "H5P.Dialogcards",
+  "coreApi": {
+    "majorVersion": 1,
+    "minorVersion": 15
+  },
+  "embedTypes": [
+    "iframe"
+  ],
+  "preloadedCss": [
+    {
+      "path": "dist/h5p-dialogcards.css"
+    }
+  ],
+  "preloadedJs": [
+    {
+      "path": "dist/h5p-dialogcards.js"
+    }
+  ],
+  "preloadedDependencies": [
+    {
+      "machineName": "FontAwesome",
+      "majorVersion": 4,
+      "minorVersion": 5
+    },
+    {
+      "machineName": "H5P.JoubelUI",
+      "majorVersion": 1,
+      "minorVersion": 3
+    },
+    {
+      "machineName": "H5P.Audio",
+      "majorVersion": 1,
+      "minorVersion": 4
+    }
+  ],
+  "editorDependencies": [
+    {
+      "machineName": "H5PEditor.VerticalTabs",
+      "majorVersion": 1,
+      "minorVersion": 3
+    },
+    {
+      "machineName": "H5PEditor.ShowWhen",
+      "majorVersion": 1,
+      "minorVersion": 0
+    }
+  ]
+}

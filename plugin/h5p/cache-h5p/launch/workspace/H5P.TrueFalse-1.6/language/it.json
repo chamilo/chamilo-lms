@@ -1,0 +1,147 @@
+{
+  "semantics": [
+    {
+      "label": "Media",
+      "fields": [
+        {
+          "label": "Tipo",
+          "description": "Media facoltativo da mostrare sopra la domanda."
+        },
+        {
+          "label": "Disabilita lo zoom dell'immagine"
+        }
+      ]
+    },
+    {
+      "label": "Domanda"
+    },
+    {
+      "label": "Risposta corretta",
+      "options": [
+        {
+          "label": "Vero"
+        },
+        {
+          "label": "Falso"
+        }
+      ]
+    },
+    {
+      "label": "Traduzioni dell'interfaccia utente per domande vero/falso",
+      "fields": [
+        {
+          "label": "Etichetta del pulsante \"Vero\"",
+          "default": "Vero"
+        },
+        {
+          "label": "Etichetta del pulsante \"Falso\"",
+          "default": "Falso"
+        },
+        {
+          "label": "Testo di feedback",
+          "default": "Hai @score di @total punti totali",
+          "description": "Testo di feedback, variabili disponibili: @score e @total. Esempio: 'Hai @score di @total punti possibili'"
+        },
+        {
+          "label": "Testo per il pulsante \"Verifica\"",
+          "default": "Verifica"
+        },
+        {
+          "label": "Testo per il pulsante \"Mostra la soluzione\"",
+          "default": "Mostra la soluzione"
+        },
+        {
+          "label": "Testo per il pulsante \"Riprova\"",
+          "default": "Riprova"
+        },
+        {
+          "label": "Risposta sbagliata",
+          "default": "Risposta sbagliata"
+        },
+        {
+          "label": "Risposta corretta",
+          "default": "Risposta corretta"
+        },
+        {
+          "label": "Rappresentazione testuale sulla barra del punteggio per chi usa un lettore vocale",
+          "default": "Il tuo punteggio è :num su :total"
+        }
+      ]
+    },
+    {
+      "label": "Impostazioni di esecuzione",
+      "description": "Queste opzioni consentono di controllare l'andamento del compito.",
+      "fields": [
+        {
+          "label": "Attiva pulsante \"Riprova\""
+        },
+        {
+          "label": "Attiva pulsante \"Mostra soluzione\""
+        },
+        {
+          "label": "Attiva pulsante \"Verifica\""
+        },
+        {
+          "label": "Mostra la finestra di dialogo di conferma su \"Verifica\""
+        },
+        {
+          "label": "Mostra la finestra di dialogo di conferma su \"Riprova\""
+        },
+        {
+          "label": "Controlla automaticamente la risposta",
+          "description": "Nota che l'accessibilità ne risentirà se si attiva questa opzione"
+        },
+        {
+          "label": "Feedback sulla risposta corretta",
+          "description": "Sostituirà il testo di feedback predefinito. Variabili disponibili: @score e @total"
+        },
+        {
+          "label": "Feedback sulla risposta sbagliata",
+          "description": "Sostituirà il testo di feedback predefinito. Variabili disponibili: @score e @total"
+        }
+      ]
+    },
+    {
+      "label": "Finestra di conferma per la verifica",
+      "fields": [
+        {
+          "label": "Etichetta di intestazione",
+          "default": "Finito?"
+        },
+        {
+          "label": "Testo del corpo",
+          "default": "Sei sicuro di voler concludere?"
+        },
+        {
+          "label": "Etichetta del pulsante di annullamento",
+          "default": "Annulla"
+        },
+        {
+          "label": "Etichetta del pulsante di conferma",
+          "default": "Finito"
+        }
+      ]
+    },
+    {
+      "label": "Finestra di conferma per \"Riprova\"",
+      "fields": [
+        {
+          "label": "Testo dell'intestazione",
+          "default": "Vuoi riprovare?"
+        },
+        {
+          "label": "Testo del corpo",
+          "default": "Sei sicuro di voler riprovare?"
+        },
+        {
+          "label": "Etichetta del pulsante di annullamento",
+          "default": "Annulla"
+        },
+        {
+          "label": "Etichetta del pulsante di conferma",
+          "default": "Conferma"
+        }
+      ]
+    }
+  ]
+}

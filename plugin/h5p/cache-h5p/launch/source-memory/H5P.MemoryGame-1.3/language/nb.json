@@ -1,0 +1,121 @@
+{
+  "semantics": [
+    {
+      "widgets": [
+        {
+          "label": "Default"
+        }
+      ],
+      "label": "Kort",
+      "entity": "kort",
+      "field": {
+        "label": "Kort",
+        "fields": [
+          {
+            "label": "Bilde"
+          },
+          {
+            "label": "Alternative text for Image",
+            "description": "Describe what can be seen in the photo. The text is read by text-to-speech tools needed by visually impaired users."
+          },
+          {
+            "label": "Audio Track",
+            "description": "An optional sound that plays when the card is turned."
+          },
+          {
+            "label": "Tilhørende bilde",
+            "description": "Et valgfritt bilde som brukes av kort nummer to istedenfor å bruke to kort med samme bilde."
+          },
+          {
+            "label": "Alternative text for Matching Image",
+            "description": "Describe what can be seen in the photo. The text is read by text-to-speech tools needed by visually impaired users."
+          },
+          {
+            "label": "Matching Audio Track",
+            "description": "An optional sound that plays when the second card is turned."
+          },
+          {
+            "label": "Beskrivelse",
+            "description": "En valgfri kort tekst som spretter opp når kort-paret er funnet."
+          }
+        ]
+      }
+    },
+    {
+      "label": "Innstillinger for oppførsel",
+      "description": "Disse instillingene lar deg bestemme hvordan spillet skal oppføre seg.",
+      "fields": [
+        {
+          "label": "Plasser kortene i en firkant",
+          "description": "Vil forsøk å samsvare antall kolonner og rader når kortene legges ut. Etterpå vil kortene bli skalert til å passe beholderen."
+        },
+        {
+          "label": "Antall kort som skal brukes",
+          "description": "Ved å sette antallet høyere enn 2 vil spillet plukke tilfeldige kort fra listen over kort."
+        },
+        {
+          "label": "Legg til knapp for å prøve på nytt når spillet er over"
+        }
+      ]
+    },
+    {
+      "label": "Tilpass utseende",
+      "description": "Kontroller de visuelle aspektene ved spillet.",
+      "fields": [
+        {
+          "label": "Temafarge",
+          "description": "Velg en farge for å skape et tema over kortspillet ditt."
+        },
+        {
+          "label": "Kortbaksiden",
+          "description": "Bruk en tilpasset kortbakside for kortene dine."
+        }
+      ]
+    },
+    {
+      "label": "Oversettelser",
+      "fields": [
+        {
+          "label": "Etikett for antall vendte kort",
+          "default": "Kort vendt"
+        },
+        {
+          "label": "Etikett for tid brukt",
+          "default": "Tid brukt"
+        },
+        {
+          "label": "Tilbakemeldingstekst",
+          "default": "Godt jobbet!"
+        },
+        {
+          "label": "Prøv på nytt-tekst",
+          "default": "Prøv på nytt?"
+        },
+        {
+          "label": "Lukk knapp-merkelapp",
+          "default": "Lukk"
+        },
+        {
+          "label": "Game label",
+          "default": "Memory Game. Find the matching cards."
+        },
+        {
+          "label": "Game finished label",
+          "default": "All of the cards have been found."
+        },
+        {
+          "label": "Card indexing label",
+          "default": "Card %num:"
+        },
+        {
+          "label": "Card unturned label",
+          "default": "Unturned."
+        },
+        {
+          "label": "Card matched label",
+          "default": "Match found."
+        }
+      ]
+    }
+  ]
+}

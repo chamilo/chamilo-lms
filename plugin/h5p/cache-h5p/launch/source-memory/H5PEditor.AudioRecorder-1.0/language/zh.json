@@ -1,0 +1,23 @@
+{
+  "libraryStrings":{
+    "title":"錄音器",
+    "recordAnswer":"錄製",
+    "pause":"暫停",
+    "continue":"繼續",
+    "done":"完成",
+    "retry":"重設",
+    "microphoneNotSupported":"麥克風不支援，請檢查你的瀏覽器是否允許存取麥克風裝置。",
+    "microphoneInaccessible":"麥克風無法存取，請檢查瀏覽器上是否啟用麥克風。",
+    "insecureNotAllowed":"瀏覽器不允許存取麥克風裝置，因為這個頁面未使用 HTTPS。請聯絡該網頁的管理者，請他改用 HTTPS",
+    "statusReadyToRecord":"點擊下方按鈕開始錄製。",
+    "statusRecording":"正在錄音…",
+    "statusPaused":"已暫停錄音",
+    "statusFinishedRecording":"聽聽下面的錄音。",
+    "downloadRecording":"點擊「插入」以使用這段錄音。",
+    "retryDialogHeaderText":"要重新錄音嗎？",
+    "retryDialogBodyText":"點擊「重試」後，目前錄製的聲音將不會儲存。",
+    "retryDialogConfirmText":"重試",
+    "retryDialogCancelText":"取消",
+    "statusCantCreateTheAudioFile":"無法創建錄音檔案。"
+  }
+}

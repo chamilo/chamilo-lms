@@ -1,4 +1,6 @@
+
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -6,8 +8,6 @@
  *
  * This class allows to instantiate an object of type READING_COMPREHENSION
  * extending the class question
- *
- * @package chamilo.exercise
  */
 class ReadingComprehension extends UniqueAnswer
 {
@@ -180,15 +180,13 @@ class ReadingComprehension extends UniqueAnswer
      */
     public static function get_default_levels()
     {
-        $select_level = [
+        return [
             1 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[1]),
             2 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[2]),
             3 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[3]),
             4 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[4]),
             5 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[5]),
         ];
-
-        return $select_level;
     }
 
     /**
@@ -214,7 +212,7 @@ class ReadingComprehension extends UniqueAnswer
 
         $template = $view->get_template('exercise/reading_comprehension.tpl');
 
-        $view->assign('id', $this->id);
+        $view->assign('id', $this->iid);
         $view->assign('text', nl2br($text));
         $view->assign('words_count', $wordsCount);
         $view->assign('turns', $turns);

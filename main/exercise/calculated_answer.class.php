@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Webit\Util\EvalMath\EvalMath;
@@ -8,8 +9,6 @@ use Webit\Util\EvalMath\EvalMath;
  *  This class contains calculated answer form and answer processing functions.
  *
  *  @author Imanol Losada
- *
- *  @package chamilo.exercise
  */
 class CalculatedAnswer extends Question
 {
@@ -33,8 +32,8 @@ class CalculatedAnswer extends Question
     {
         $defaults = [];
         $defaults['answer'] = get_lang('DefaultTextInBlanks');
-        if (!empty($this->id)) {
-            $objAnswer = new Answer($this->id);
+        if (!empty($this->iid)) {
+            $objAnswer = new Answer($this->iid);
             $preArray = explode('@@', $objAnswer->selectAnswer(1));
             $defaults['formula'] = array_pop($preArray);
             $defaults['answer'] = array_shift($preArray);
@@ -171,7 +170,7 @@ class CalculatedAnswer extends Question
         // setting the save button here and not in the question class.php
         $form->addButtonSave($text, 'submitQuestion');
 
-        if (!empty($this->id)) {
+        if (!empty($this->iid)) {
             $form->setDefaults($defaults);
         } else {
             if ($this->isContent == 1) {
@@ -190,9 +189,8 @@ class CalculatedAnswer extends Question
             Database::delete(
                 $table,
                 [
-                    'c_id = ? AND question_id = ?' => [
-                        $this->course['real_id'],
-                        $this->id,
+                    'question_id = ?' => [
+                        $this->iid,
                     ],
                 ]
             );
@@ -234,7 +232,7 @@ class CalculatedAnswer extends Question
                     $auxAnswer .= " [".$result."]@@".$formula;
                 }
                 $this->save($exercise);
-                $objAnswer = new Answer($this->id);
+                $objAnswer = new Answer($this->iid);
                 $objAnswer->createAnswer($auxAnswer, 1, '', $this->weighting, '');
                 $objAnswer->position = [];
                 $objAnswer->save();
@@ -276,7 +274,7 @@ class CalculatedAnswer extends Question
             [
                 'where' => [
                     'question_id = ? AND c_id = ?' => [
-                        $this->id,
+                        $this->iid,
                         $this->course['real_id'],
                     ],
                 ],

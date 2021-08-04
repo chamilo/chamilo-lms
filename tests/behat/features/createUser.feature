@@ -27,6 +27,30 @@ Feature: Users management as admin
     And I press "submit"
     Then I should see "The user has been added"
 
+  Scenario: Create a user with wrong username
+    And I am on "/main/admin/user_add.php"
+    And I fill in the following:
+      | firstname | NIÑO                  |
+      | lastname  | NIÑO                  |
+      | email     | example@example.com |
+      | username  | NIÑO                  |
+      | password  | smarshall             |
+    And I check the "#send_mail_no" radio button selector
+    And I press "submit"
+    Then I should see "Only letters and numbers allowed"
+
+  Scenario: Create a user with wrong email
+    And I am on "/main/admin/user_add.php"
+    And I fill in the following:
+      | firstname | Juls                  |
+      | lastname  | Juls                  |
+      | email     | NI -ÑO@example.com      |
+      | username  | Juls                  |
+      | password  | Juls                  |
+    And I check the "#send_mail_no" radio button selector
+    And I press "submit"
+    Then I should see "The email address is not complete or contains some invalid characters"
+
   Scenario: Search and delete a user
     And Admin top bar is disabled
     And I am on "/main/admin/user_list.php"

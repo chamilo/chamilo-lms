@@ -1,9 +1,6 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.messages
- */
+/* For licensing terms, see /license.txt */
 
 /**
  * This script shows a compose area (wysiwyg editor if supported, otherwise
@@ -65,9 +62,8 @@ $tpl = new Template(get_lang('ComposeMessage'));
 function show_compose_to_any($tpl)
 {
     $default['user_list'] = 0;
-    $html = manageForm($default, null, null, $tpl);
 
-    return $html;
+    return manageForm($default, null, null, $tpl);
 }
 
 function show_compose_reply_to_message($message_id, $receiver_id, $tpl)
@@ -118,6 +114,11 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
     $group_id = isset($_REQUEST['group_id']) ? (int) $_REQUEST['group_id'] : null;
     $message_id = isset($_GET['message_id']) ? (int) $_GET['message_id'] : null;
 
+    $onlyTeachers = false;
+    if (api_get_configuration_value('send_only_messages_to_teachers') && api_is_student()) {
+        $onlyTeachers = true;
+    }
+
     $form = new FormValidator(
         'compose_message',
         null,
@@ -139,24 +140,50 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
                 ]
             );
             $form->addRule('id_text_name', get_lang('ThisFieldIsRequired'), 'required');
-            $form->addElement('html', '<div id="id_div_search" style="padding:0px" class="message-select-box" >&nbsp;</div>');
+            $form->addElement(
+                'html',
+                '<div id="id_div_search" style="padding:0px" class="message-select-box" >&nbsp;</div>'
+            );
             $form->addElement('hidden', 'user_list', 0, ['id' => 'user_list']);
         } else {
             if (!empty($sent_to)) {
                 $form->addLabel(get_lang('SendMessageTo'), $sent_to);
             }
             if (empty($default['users'])) {
-                //fb select
-                $form->addElement(
-                    'select_ajax',
-                    'users',
-                    get_lang('SendMessageTo'),
-                    [],
-                    [
-                        'multiple' => 'multiple',
-                        'url' => api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users',
-                    ]
-                );
+                if ($onlyTeachers) {
+                    $courses = CourseManager::get_courses_list_by_user_id(api_get_user_id());
+                    $teachers = [];
+                    foreach ($courses as $course) {
+                        $courseTeachers = CourseManager::getTeachersFromCourse($course['real_id']);
+                        if ($courseTeachers) {
+                            foreach ($courseTeachers as $teacher) {
+                                $teachers[$teacher['id']] = $teacher['fullname'];
+                            }
+                        }
+                    }
+                    if (!empty($teachers)) {
+                        asort($teachers);
+                    }
+                    $form->addSelect(
+                        'users',
+                        get_lang('SendMessageTo'),
+                        $teachers,
+                        [
+                            'multiple' => 'multiple',
+                        ]
+                    );
+                } else {
+                    $form->addElement(
+                        'select_ajax',
+                        'users',
+                        get_lang('SendMessageTo'),
+                        [],
+                        [
+                            'multiple' => 'multiple',
+                            'url' => api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users',
+                        ]
+                    );
+                }
             } else {
                 $form->addElement('hidden', 'hidden_user', $default['users'][0], ['id' => 'hidden_user']);
             }
@@ -236,7 +263,8 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
 
         $form->addLabel(
             '',
-            '<span id="link-more-attach"><a class="btn btn-default" href="javascript://" onclick="return add_image_form()">'.
+            '<span id="link-more-attach">
+              <a class="btn btn-default" href="javascript://" onclick="return add_image_form()">'.
             get_lang('AddOneMoreFile').'</a></span>&nbsp;('.
             sprintf(
                 get_lang('MaximunFileSizeX'),
@@ -247,8 +275,8 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
 
     $form->addLabel(
         '',
-        '<iframe 
-            frameborder="0" height="200" width="100%" scrolling="no" 
+        '<iframe
+            frameborder="0" height="200" width="100%" scrolling="no"
             src="'.api_get_path(WEB_CODE_PATH).'messages/record_audio.php"></iframe>'
     );
 

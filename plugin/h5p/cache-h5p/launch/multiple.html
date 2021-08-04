@@ -1,0 +1,34 @@
+<html>
+
+<head>
+  <link type="text/css" rel="stylesheet" media="all" href="/dist/styles/h5p.css" />
+  <meta charset="utf-8" />
+  <script type="text/javascript" src="/dist/main.bundle.js"></script>
+</head>
+
+<body>
+  <div id="h5p-container-1"></div>
+  <div id="h5p-container-2"></div>
+
+  <script type="text/javascript">
+    const {
+      H5P
+    } = H5PStandalone;
+
+    async function setup() {
+      await new H5P(document.getElementById('h5p-container-1'), 'workspace', {
+        frameJs: '/dist/frame.bundle.js',
+        frameCss: '/dist/styles/h5p.css'
+      });
+
+      await new H5P(document.getElementById('h5p-container-2'), 'workspace', {
+        frameJs: '/dist/frame.bundle.js',
+        frameCss: '/dist/styles/h5p.css'
+      });
+    };
+
+    setup();
+  </script>
+</body>
+
+</html>

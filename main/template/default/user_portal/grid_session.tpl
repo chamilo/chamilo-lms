@@ -4,9 +4,19 @@
     <div class="col-xs-12 col-sm-6 col-md-4">
         <div class="items items-sessions">
             <div class="image">
-                <a title="{{ course.name }}" href="{{ course.link }}">
-                    <img src="{{ course.image }}" class="img-responsive">
-                </a>
+                {% set title %}
+                    {% if course.visibility == constant('COURSE_VISIBILITY_CLOSED') or course.requirements %}
+                        <span title="{{ course.name }}" >
+                            <img src="{{ course.image }}" class="img-responsive">
+                        </span>
+                    {% else %}
+                        <a title="{{ course.name }}" href="{{ course.link }}">
+                            <img src="{{ course.image }}" class="img-responsive">
+                        </a>
+                    {% endif %}
+                {% endset %}
+                {{ title |  remove_xss }}
+
                 {% if course.category != '' and show_category %}
                     <span class="category">{{ course.category }}</span>
                     <div class="cribbon"></div>
@@ -31,18 +41,22 @@
             <div class="description">
                 <div class="block-title">
                   <h4 class="title">
-                      {% if course.visibility == constant('COURSE_VISIBILITY_CLOSED') %}
-                          {{ course.title }}
-                          <span class="code-title">{{ course.visual_code }}</span>
-                      {% else %}
-                          <a href="{{ course.link }}">{{ course.title }}</a>
-                      {% endif %}
+                      {% set title %}
+                          {% if course.visibility == constant('COURSE_VISIBILITY_CLOSED') or course.requirements %}
+                              {{ course.name }}
+                              <span class="code-title">{{ course.visual_code }}</span>
+                          {% else %}
+                              {{ course.title }}
+                          {% endif %}
+                      {% endset %}
+                      {{ title |  remove_xss }}
                   </h4>
                 </div>
                 <div class="block-author">
-                    {% if course.teachers | length > 2 %}
+                    {{ course.requirements }}
+                    {% if course.coaches | length > 2 %}
                         <a
-                            id="plist"
+                            id="plist-{{ course.real_id }}"
                             data-trigger="focus"
                             tabindex="0" role="button"
                             class="btn btn-default panel_popover"
@@ -52,11 +66,11 @@
                         >
                             <i class="fa fa-graduation-cap" aria-hidden="true"></i>
                         </a>
-                        <div id="popover-content-plist" class="hide">
+                        <div id="popover-content-plist-{{ course.real_id }}" class="hide">
                     {% endif %}
 
-                    {% for teacher in course.teachers %}
-                        {% if course.teachers | length > 2 %}
+                    {% for teacher in course.coaches %}
+                        {% if course.coaches | length > 2 %}
                               <div class="popover-teacher">
                               <a href="{{ teacher.url }}" class="ajax">
                                   <img src="{{ teacher.avatar }}"/>
@@ -84,32 +98,15 @@
                         {% endif %}
                     {% endfor %}
 
-                    {% if course.teachers | length > 2 %}
+                    {% if course.coaches | length > 2 %}
                         </div>
                     {% endif %}
                 </div>
                 <div class="notifications">
                     {{ course.notifications }}
                 </div>
-                {% if item.student_info %}
-                    <div class="black-student">
-                        {% if item.student_info.progress is not null or item.student_info.score is not null or item.student_info.certificate is not null %}
-                        <div class="course-student-info">
-                            <div class="student-info">
-                                {% if (item.student_info.progress is not null) %}
-                                    {{ "StudentCourseProgressX" | get_lang | format(item.student_info.progress) }}
-                                {% endif %}
-                                {% if (item.student_info.score is not null) %}
-                                    {{ "StudentCourseScoreX" | get_lang | format(item.student_info.score) }}
-                                {% endif %}
-                                {% if (item.student_info.certificate is not null) %}
-                                    {{ "StudentCourseCertificateX" | get_lang | format(item.student_info.certificate) }}
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% endif %}
-                  </div>
-              {% endif %}
+
+                {% include 'user_portal/grid_course_student_info.tpl'|get_template with { 'student_info':course.student_info } %}
             </div>
         </div>
     </div>
@@ -125,6 +122,7 @@
         {% if row.course_list_session_style %}
             {# If not style then no show header #}
             <div class="panel-heading">
+
                 {% if row.course_list_session_style == 1 or row.course_list_session_style == 2 %}
                     {# Session link #}
                     {% if remove_session_url == true %}
@@ -164,6 +162,8 @@
                        {{ row.collapsable_link }}
                     </div>
                 {% endif %}
+
+
             </div>
         {% endif %}
 
@@ -186,10 +186,15 @@
                 {% endif %}
 
                 {% if hide_session_dates_in_user_portal == false %}
-                    <li>
-                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                        {{ row.date ? row.date : row.duration }}
-                    </li>
+                    {% if row.date %}
+                        <li>
+                            <i class="fa fa-calendar" aria-hidden="true"></i> {{ row.date }}
+                        </li>
+                    {% elseif row.duration %}
+                        <li>
+                            <i class="fa fa-calendar" aria-hidden="true"></i> {{ row.duration }}
+                        </li>
+                    {% endif %}
                 {% endif %}
             </ul>
             <div class="grid-courses">
@@ -201,10 +206,8 @@
                     </div>
                 {% else %}
                     {% for category_code in row.course_categories %}
+                        <h4>{{ category_code }}</h4>
                         <div class="row">
-                            <div class="col-xs-12">
-                                <h4>{{ category_code }}</h4>
-                            </div>
                             {% for course in row.courses %}
                                 {% if course.category == category_code %}
                                     {{ blocks.course_block(course, false) }}

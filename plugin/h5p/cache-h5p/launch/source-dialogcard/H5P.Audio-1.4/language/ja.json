@@ -1,0 +1,49 @@
+{
+  "semantics": [
+    {
+      "label": "ソースファイル"
+    },
+    {
+      "label": "プレーヤーモード",
+      "description": "プレーヤーのレイアウトを選択してください。",
+      "options": [
+        {
+          "label": "最小限"
+        },
+        {
+          "label": "最大"
+        },
+        {
+          "label": "透明"
+        }
+      ]
+    },
+    {
+      "label": "ラッパーに合わせる"
+    },
+    {
+      "label": "コントロールを有効にします",
+      "description": "コントロールを使用すると、たとえば、オーディオを一時停止することができます"
+    },
+    {
+      "label": "自動再生を有効にします",
+      "description": "自動再生では、オーディオはすぐに再生を開始します。 自動再生が無効になっている場合、ユーザーは再生ボタンを押して音声を開始します。"
+    },
+    {
+      "label": "Play audio (Readspeaker)",
+      "default": "Play audio"
+    },
+    {
+      "label": "Pause audio (Readspeaker)",
+      "default": "Pause audio"
+    },
+    {
+      "label": "オーディオコンテンツ名",
+      "default": "オーディオ"
+    },
+    {
+      "label": "Audio not supported message",
+      "default": "Your browser does not support this audio"
+    }
+  ]
+}

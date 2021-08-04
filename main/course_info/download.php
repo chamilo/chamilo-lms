@@ -5,8 +5,6 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 
 /**
  * Download script for course info.
- *
- * @package chamilo.course_info
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
@@ -32,7 +30,7 @@ if (in_array($extension, ['xml', 'csv']) &&
     (api_is_platform_admin(true) || api_is_drh())
 ) {
     $content_type = 'application/force-download';
-} elseif ($extension === 'zip' && $_cid && (api_is_platform_admin(true) || api_is_course_admin())) {
+} elseif ('zip' === $extension && $_cid && (api_is_platform_admin(true) || api_is_course_admin())) {
     $content_type = 'application/force-download';
 }
 

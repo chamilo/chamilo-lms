@@ -58,8 +58,7 @@ $courseList = $plugin->getCatalogCourseList($first, $pageSize, $nameFilter, $min
 $totalItems = $plugin->getCatalogCourseList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, 'count');
 $pagesCount = ceil($totalItems / $pageSize);
 
-$url = api_get_self().'?';
-$pagination = Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
+$pagination = BuyCoursesPlugin::returnPagination(api_get_self(), $currentPage, $pagesCount, $totalItems);
 
 // View
 if (api_is_platform_admin()) {
@@ -78,6 +77,8 @@ if (api_is_platform_admin()) {
     ];
 }
 
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'buycourses/resources/css/style.css');
+
 $templateName = $plugin->get_lang('CourseListOnSale');
 $tpl = new Template($templateName);
 $tpl->assign('search_filter_form', $form->returnForm());
@@ -86,6 +87,16 @@ $tpl->assign('courses', $courseList);
 $tpl->assign('sessions_are_included', $includeSessions);
 $tpl->assign('services_are_included', $includeServices);
 $tpl->assign('pagination', $pagination);
+
+$sessionList = $plugin->getCatalogSessionList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, 'all', 0);
+$coursesExist = true;
+$sessionExist = true;
+if (count($sessionList) <= 0) {
+    $sessionExist = false;
+}
+
+$tpl->assign('coursesExist', $coursesExist);
+$tpl->assign('sessionExist', $sessionExist);
 
 $content = $tpl->fetch('buycourses/view/catalog.tpl');
 

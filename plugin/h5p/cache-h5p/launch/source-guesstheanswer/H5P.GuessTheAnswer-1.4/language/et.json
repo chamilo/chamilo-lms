@@ -1,0 +1,26 @@
+{
+  "semantics": [
+    {
+      "label": "Ülesande kirjeldus",
+      "description": "Kirjelda, kuidas kasutaja peaks ülesande lahendama."
+    },
+    {
+      "label": "Meedia",
+      "fields": [
+        {
+          "label": "Tüüp",
+          "description": "Valikuline meedia küsimusest üleval näitamiseks."
+        }
+      ]
+    },
+    {
+      "label": "Lahendust kirjeldav silt",
+      "default": "Vastuse nägemiseks kliki siin.",
+      "description": "Klikitav tekstiala, kus näidatakse lahendust."
+    },
+    {
+      "label": "Lahenduse tekst",
+      "description": "Lahendus pildile."
+    }
+  ]
+}

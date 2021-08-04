@@ -5,8 +5,6 @@
  * Extends FormValidator with import and export forms.
  *
  * @author Stijn Konings
- *
- * @package chamilo.gradebook
  */
 class DataForm extends FormValidator
 {

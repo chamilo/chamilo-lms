@@ -1,0 +1,121 @@
+{
+  "semantics": [
+    {
+      "widgets": [
+        {
+          "label": "Eingabemaske"
+        }
+      ],
+      "label": "Karten",
+      "entity": "Karte",
+      "field": {
+        "label": "Karte",
+        "fields": [
+          {
+            "label": "Bild"
+          },
+          {
+            "label": "Alternativtext für das Bild",
+            "description": "Beschreibt, was im Bild zu sehen ist. Dieser Text wird von Vorlesewerkzeugen für Sehbehinderte genutzt."
+          },
+          {
+            "label": "Ton",
+            "description": "Optionaler Ton, der abgespielt wird, wenn die Karte umgedreht wird."
+          },
+          {
+            "label": "Zugehöriges Bild",
+            "description": "Ein optionales zweites Bild, das mit dem ersten ein Paar bildet, anstatt zweimal das selbe Bild zu verwenden."
+          },
+          {
+            "label": "Alternativtext für das zweite Bild",
+            "description": "Beschreibt, was im Bild zu sehen ist. Dieser Text wird von Vorlesewerkzeugen für Sehbehinderte genutzt."
+          },
+          {
+            "label": "Ton zum zweiten Bild",
+            "description": "Optionaler Ton, der abgespielt wird, wenn die zweite Karte umgedreht wird."
+          },
+          {
+            "label": "Beschreibung",
+            "description": "Ein kurzer optionaler Text, der angezeigt wird, wenn das Kartenpaar gefunden wurde."
+          }
+        ]
+      }
+    },
+    {
+      "label": "Verhaltenseinstellungen",
+      "description": "Diese Optionen legen fest, wie das Spiel im Detail funktioniert.",
+      "fields": [
+        {
+          "label": "Karten in einem Quadrat anordnen",
+          "description": "Versucht die Karten in der gleichen Zahl von Reihen und Spalten zu anzuordnen. Danach wird die Kartengröße an den verfügbaren Platz angepasst."
+        },
+        {
+          "label": "Anzahl der zu verwendenden Karten",
+          "description": "Wenn die Anzahl größer als 2 ist, werden zufällige Karten aus der Liste ausgewählt."
+        },
+        {
+          "label": "\"Wiederholen\"-Button anzeigen"
+        }
+      ]
+    },
+    {
+      "label": "Erscheinungsbild",
+      "description": "Legt fest, wie das Spiel aussieht.",
+      "fields": [
+        {
+          "label": "Themenfarbe",
+          "description": "Wähle eine Farbe, um das Spiel zu individualisieren."
+        },
+        {
+          "label": "Kartenrückseite",
+          "description": "Verwende eine benutzerdefinierte Rückseite für die Karten."
+        }
+      ]
+    },
+    {
+      "label": "Bezeichnungen und Beschriftungen",
+      "fields": [
+        {
+          "label": "Text mit der Anzahl der Züge",
+          "default": "Züge"
+        },
+        {
+          "label": "Text mit der bisher benötigten Zeit",
+          "default": "Benötigte Zeit"
+        },
+        {
+          "label": "Rückmeldungstext",
+          "default": "Gut gemacht!"
+        },
+        {
+          "label": "Beschriftung des \"Wiederholen\"-Buttons",
+          "default": "Nochmal spielen"
+        },
+        {
+          "label": "Beschriftung des \"Schließen\"-Buttons",
+          "default": "Schließen"
+        },
+        {
+          "label": "Bezeichnung des Spiels",
+          "default": "Memory - Finde die Kartenpaare!"
+        },
+        {
+          "label": "Meldung, wenn das Spiel abgeschlossen wurde",
+          "default": "Du hast alle Kartenpaare gefunden!"
+        },
+        {
+          "label": "Beschriftung der Kartennummer",
+          "default": "Karte %num:"
+        },
+        {
+          "label": "Text, wenn eine Karte wieder zugedeckt wurde",
+          "default": "Zugedeckt."
+        },
+        {
+          "label": "Text, wenn ein Paar gefunden wurde",
+          "default": "Paar gefunden."
+        }
+      ]
+    }
+  ]
+}

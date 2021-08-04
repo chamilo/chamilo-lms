@@ -11,7 +11,7 @@
  */
 //remove the next line to enable the script (this can harm your database so
 // don't enable unless you know what you're doing and you have a backup)
-die();
+exit();
 // update this ID after you create the corresponding field through the Chamilo
 // profile fields manager (admin page, users section) as text field.
 // Give this field a name you will later use in original_field_id_name, while

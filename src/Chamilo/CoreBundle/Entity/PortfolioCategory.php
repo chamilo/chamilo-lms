@@ -204,7 +204,9 @@ class PortfolioCategory
     /**
      * Get items.
      *
-     * @param bool $onlyVisibles
+     * @param \Chamilo\CoreBundle\Entity\Course|null  $course
+     * @param \Chamilo\CoreBundle\Entity\Session|null $session
+     * @param bool                                    $onlyVisibles
      *
      * @return ArrayCollection
      */
@@ -227,6 +229,8 @@ class PortfolioCategory
                     Criteria::expr()->eq('session', $session)
                 );
         }
+
+        $criteria->orderBy(['creationDate' => 'DESC']);
 
         return $this->items->matching($criteria);
     }

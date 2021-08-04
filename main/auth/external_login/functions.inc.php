@@ -1,8 +1,7 @@
 <?php
 
-//define('USERINFO_TABLE', 'danone_userinfo');
-//define('DEFAULT_PASSWORD', 'danonelearning');
 //TODO : Please implements this function for this module to work.
+
 /**
  * Gets user info from external source.
  *
@@ -192,7 +191,7 @@ function external_update_user($new_user)
 {
     $old_user = api_get_user_info($new_user['user_id']);
     $u = array_merge($old_user, $new_user);
-    $updated = UserManager::update_user(
+    UserManager::update_user(
         $u['user_id'],
         $u['firstname'],
         $u['lastname'],
@@ -220,12 +219,4 @@ function external_update_user($new_user)
             }
         }
     }
-    // Is User Admin ?
-    //TODO decomments and check that user_is is not already in admin table
-    /*
-      if (isset($u['admin']) && $u['admin']){
-
-      $table = Database::get_main_table(TABLE_MAIN_ADMIN);
-      $res = Database::query("SELECT * from $table WHERE user_id = ".$u['user_id']);
-      } */
 }

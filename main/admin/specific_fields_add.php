@@ -3,8 +3,6 @@
 
 /**
  * Add form.
- *
- * @package chamilo.admin
  */
 
 // Resetting the course id.

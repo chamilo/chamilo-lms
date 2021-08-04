@@ -1,0 +1,136 @@
+{
+  "semantics": [
+    {
+      "label": "任務描述",
+      "description": "請描述使用者如何進行此任務.",
+      "default": "請將答案拖曳至正確的作答框中"
+    },
+    {
+      "label": "文字",
+      "placeholder": "*奧斯陸* 是挪威的首都, *斯德哥爾摩* 是瑞典的首都, *哥本哈根* 是丹麥的首都.所有的城市都位於 *斯堪地那維亞:歐洲的北部* 半島.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>請在填空單字前後註記星號(*).</li><li>若需新增文字提示時請使用冒號(:)表示.</li><li>每一個作答框中只有一組正確答案.</li><li>您可添加任務完成時的即時回饋. 正確回饋使用 '\\+' ,錯誤回饋使用 '\\-' .</li></ul>",
+        "example": "H5P content may be edited using a *browser:What type of program is Chrome?*. </br> H5P content is *interactive\\+Correct! \\-Incorrect, try again!*"
+      }
+    },
+    {
+      "label": "整體回饋",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "預設"
+            }
+          ],
+          "label": "定義任意分數範圍的回饋",
+          "description": "點擊＂新增範圍＂功能鈕以添加您所需要的範圍. 例如: 0-20% 低分, 21-91% 平均得分, 91-100% 高分!",
+          "entity": "範圍",
+          "field": {
+            "fields": [
+              {
+                "label": "得分範圍"
+              },
+              {},
+              {
+                "label": "回饋定義的得分範圍",
+                "placeholder": "填寫回饋"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "檢查功能鈕名稱",
+      "default": "檢查"
+    },
+    {
+      "label": "重試功能鈕名稱",
+      "default": "重試"
+    },
+    {
+      "label": "查看解法功能鈕名稱",
+      "default": "查看解法"
+    },
+    {
+      "label": "拖曳作答區編號名稱",
+      "default": "拖曳作答區 @index.",
+      "description": "輔助功能使用資訊，供閱讀器導讀各拖曳作答區索引名稱: @index"
+    },
+    {
+      "label": "空的拖曳作答區顯示名稱",
+      "default": "拖曳作答區 @index 是空的.",
+      "description": "輔助功能使用資訊，供閱讀器導讀此拖曳作答區是空的"
+    },
+    {
+      "label": "包含拖曳元素的名稱",
+      "default": "拖曳作答區 @index 包含可拖曳的 @draggable.",
+      "description": "輔助功能使用資訊，供閱讀器導讀此拖曳作答區中包含可拖曳的元素名稱"
+    },
+    {
+      "label": "可拖曳的元素",
+      "default": "@count draggables 的 @index.",
+      "description": "輔助功能使用資訊，供閱讀器導讀此為一個可拖曳的元素。可用變數： @index, @count"
+    },
+    {
+      "label": "顯示提示功能鈕名稱",
+      "default": "顯示提示",
+      "description": "輔助功能使用資訊，當顯示提示前供閱讀器導讀此段文字"
+    },
+    {
+      "label": "閱讀器導讀文字-正確答案",
+      "default": "正確答案!"
+    },
+    {
+      "label": "閱讀器導讀文字-錯誤答案",
+      "default": "不正確!"
+    },
+    {
+      "label": "當使用者想重置作答時顯示的對話視窗標題",
+      "default": "重置拖曳"
+    },
+    {
+      "label": "當使用者想重置作答時顯示的對話視窗內容",
+      "default": "您確定要重置目前的拖曳作答區域嗎?"
+    },
+    {
+      "label": "閱讀器導讀文字-拖曳時",
+      "default": "正在拖曳."
+    },
+    {
+      "label": "閱讀器導讀文字-拖曳取消",
+      "default": "取消拖曳."
+    },
+    {
+      "label": "閱讀器導讀文字-正確答案",
+      "default": "正確答案:"
+    },
+    {
+      "label": "正確或錯誤回饋訊息之標題名稱",
+      "default": "回饋"
+    },
+    {
+      "label": "行為設定.",
+      "description": "這些選項將可讓您控制任務的行為.",
+      "fields": [
+        {
+          "label": "啟用＂重試＂功能"
+        },
+        {
+          "label": "啟用＂查看解法＂功能鈕"
+        },
+        {
+          "label": "啟用 ＂檢查＂功能鈕"
+        },
+        {
+          "label": "即時回饋"
+        }
+      ]
+    },
+    {
+      "label": "閱讀器導讀文字-評分欄",
+      "default": "您得到了:num 分，總分 :total "
+    }
+  ]
+}

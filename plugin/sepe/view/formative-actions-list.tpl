@@ -20,7 +20,7 @@
         <div class="report_section">
             {% if course_action_list|length > 0 %}
                 <input type="hidden" id="confirmDeleteUnlinkAction" value="{{ 'confirmDeleteAction' | get_plugin_lang('SepePlugin') }}" />
-                <table class="table table-bordered sepe-box-center" style="width:auto"> 
+                <table class="table table-hover table-striped table-bordered sepe-box-center" style="width:auto">
                 {% for course in course_action_list %}
                     <tr>
                         <td class="sepe-vertical-align-middle">{{ 'Course' | get_lang }}: <strong>{{ course.title }}</strong> -> {{ 'ActionId' | get_plugin_lang('SepePlugin') | upper }}: <strong>{{ course.action_origin }} {{ course.action_code }}</strong></td>

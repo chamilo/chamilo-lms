@@ -1,0 +1,23 @@
+{
+  "libraryStrings":{
+    "title":"Lydopptaker",
+    "recordAnswer":"Ta opp",
+    "pause":"Pause",
+    "continue":"Fortsett",
+    "done":"Ferdig",
+    "retry":"Prøv igjen",
+    "microphoneNotSupported":"Mikrofon støttes ikke. Pass på at du bruker en nettleser som tillater mikrofoninnspilling.",
+    "microphoneInaccessible":"Mikrofonen er ikke tilgjengelig. Kontroller at nettlesermikrofonen er aktivert.",
+    "insecureNotAllowed":"Tilgang til mikrofon er ikke tillatt i nettleseren din siden denne siden ikke vises ved hjelp av HTTPS. Ta kontakt med forfatteren, og be ham om å gjøre dette tilgjengelig ved hjelp av HTTPS",
+    "statusReadyToRecord":"Trykk på knappen under for å ta opp.",
+    "statusRecording":"Tar opp...",
+    "statusPaused":"Opptak pauset.",
+    "statusFinishedRecording":"Lytt til opptaket nedenfor.",
+    "downloadRecording":"Trykk på knappen merket \"Sett inn\" for å bruke opptaket.",
+    "retryDialogHeaderText":"Prøv på nytt?",
+    "retryDialogBodyText":"Ved å trykke på \"Prøv igjen\" vil du miste din nåværende innspilling.",
+    "retryDialogConfirmText":"Prøv igjen",
+    "retryDialogCancelText":"Avbryt",
+    "statusCantCreateTheAudioFile":"Kan ikke opprette lydfilen."
+  }
+}

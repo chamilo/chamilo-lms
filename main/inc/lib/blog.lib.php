@@ -1,13 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Class Blog.
  *
- * Contains several functions dealing with displaying,
- * editing,... of a blog
- *
- * @package chamilo.blogs
+ * Contains several functions dealing with displaying editing of a blog
  *
  * @author Toon Keppens <toon@vi-host.net>
  * @author Julio Montoya - Cleaning code
@@ -37,7 +35,7 @@ class Blog
             $result = Database::query($sql);
             $blog = Database::fetch_array($result);
 
-            return stripslashes($blog['blog_name']);
+            return Security::remove_XSS(stripslashes($blog['blog_name']));
         }
     }
 
@@ -59,7 +57,7 @@ class Blog
         $result = Database::query($sql);
         $blog = Database::fetch_array($result);
 
-        return stripslashes($blog['blog_subtitle']);
+        return Security::remove_XSS(stripslashes($blog['blog_subtitle']));
     }
 
     /**
@@ -127,7 +125,7 @@ class Blog
         $res = Database::query($sql);
         $info_count = Database::result($res, 0, 0);
 
-        if ($info_count == 0) {
+        if (0 == $info_count) {
             // Create the blog
             $params = [
                 'blog_id' => 0,
@@ -280,7 +278,7 @@ class Blog
         // Update course homepage link
         $sql = "UPDATE $tbl_tool SET
                 name = '$title'
-                WHERE c_id = $course_id AND link = 'blog/blog.php?blog_id=$blog_id' 
+                WHERE c_id = $course_id AND link = 'blog/blog.php?blog_id=$blog_id'
                 LIMIT 1";
         Database::query($sql);
     }
@@ -689,7 +687,7 @@ class Blog
 
         $tool = 'BLOG_'.$blog_id;
 
-        if ($articleDelete == 'on') {
+        if ('on' == $articleDelete) {
             $sql = "INSERT INTO $tbl_tasks_permissions ( c_id,  task_id, tool, action)
                     VALUES ($course_id, $task_id, '$tool', 'article_delete')";
             Database::query($sql);
@@ -702,9 +700,9 @@ class Blog
             }
         }
 
-        if ($articleEdit == 'on') {
+        if ('on' == $articleEdit) {
             $sql = "
-                INSERT INTO $tbl_tasks_permissions (c_id, task_id, tool, action ) 
+                INSERT INTO $tbl_tasks_permissions (c_id, task_id, tool, action )
                 VALUES ($course_id, $task_id, '$tool', 'article_edit')";
             Database::query($sql);
             $id = Database::insert_id();
@@ -715,7 +713,7 @@ class Blog
             }
         }
 
-        if ($commentsDelete == 'on') {
+        if ('on' == $commentsDelete) {
             $sql = "
                 INSERT INTO $tbl_tasks_permissions (c_id, task_id, tool, action )
                 VALUES ($course_id, $task_id, '$tool', 'article_comments_delete')";
@@ -789,7 +787,7 @@ class Blog
         }
 
         if ($articleEdit == 'on') {
-            $sql = "INSERT INTO $tbl_tasks_permissions (c_id, task_id, tool, action) 
+            $sql = "INSERT INTO $tbl_tasks_permissions (c_id, task_id, tool, action)
                     VALUES ($course_id, $task_id, '$tool', 'article_edit')";
             Database::query($sql);
             $id = Database::insert_id();
@@ -874,6 +872,7 @@ class Blog
 
         $course_id = api_get_course_int_id();
         $blog_id = intval($_GET['blog_id']);
+        $cidReq = api_get_cidreq();
 
         if ($_user['user_id']) {
             $sql = "SELECT task_rel_user.*, task.title, blog.blog_name
@@ -889,14 +888,16 @@ class Blog
                         task_rel_user.c_id = $course_id AND
                         task_rel_user.user_id = ".$_user['user_id']."
                     ORDER BY target_date ASC";
-
             $result = Database::query($sql);
-
+            $url = api_get_path(WEB_CODE_PATH).'blog/blog.php?'.$cidReq.'&action=execute_task';
             if (Database::num_rows($result) > 0) {
                 $html .= '<ul>';
                 while ($mytask = Database::fetch_array($result)) {
                     $html .= '<li>
-                            <a href="blog.php?action=execute_task&blog_id='.$mytask['blog_id'].'&task_id='.intval($mytask['task_id']).'" title="[Blog: '.stripslashes($mytask['blog_name']).'] '.get_lang('ExecuteThisTask').'">'.
+                            <a
+                            href="'.$url.'&blog_id='.$mytask['blog_id'].'&task_id='.intval($mytask['task_id']).'"
+                            title="[Blog: '.stripslashes($mytask['blog_name']).'] '.
+                        get_lang('ExecuteThisTask').'">'.
                         stripslashes($mytask['title']).'</a></li>';
                 }
                 $html .= '<ul>';
@@ -938,7 +939,7 @@ class Blog
             Database::query($sql);
 
             $sql = "DELETE FROM $tbl_tool
-                    WHERE c_id = $course_id AND name = '".Database::escape_string($title)."' 
+                    WHERE c_id = $course_id AND name = '".Database::escape_string($title)."'
                     LIMIT 1";
             Database::query($sql);
         } else {
@@ -1006,11 +1007,11 @@ class Blog
                 FROM $tbl_blogs_posts post
                 INNER JOIN $tbl_users user
                 ON post.author_id = user.user_id
-                WHERE 	
+                WHERE
                     post.blog_id = $blog_id AND
                     post.c_id = $course_id AND
                     $filter
-                ORDER BY post_id DESC 
+                ORDER BY post_id DESC
                 LIMIT 0, $max_number_of_posts";
         $result = Database::query($sql);
 
@@ -1044,9 +1045,9 @@ class Blog
                     'id_autor' => $blog_post['author_id'],
                     'autor' => $blog_post['firstname'].' '.$blog_post['lastname'],
                     'username' => $blog_post['username'],
-                    'title' => stripslashes($blog_post['title']),
+                    'title' => Security::remove_XSS($blog_post['title']),
                     'extract' => self::getPostExtract($blog_post['full_text'], BLOG_MAX_PREVIEW_CHARS),
-                    'content' => stripslashes($blog_post['full_text']),
+                    'content' => Security::remove_XSS($blog_post['full_text']),
                     'post_date' => Display::dateToStringAgoAndLongDate($blog_post['date_creation']),
                     'n_comments' => $blog_post_comments['number_of_comments'],
                     'files' => $fileArray,
@@ -1077,9 +1078,9 @@ class Blog
     public static function getDailyResults($blog_id, $query_string)
     {
         $date = explode('-', $query_string);
-        $query_string = ' 
-            DAYOFMONTH(date_creation) ='.intval($date[2]).' AND 
-            MONTH(date_creation) ='.intval($date[1]).' AND 
+        $query_string = '
+            DAYOFMONTH(date_creation) ='.intval($date[2]).' AND
+            MONTH(date_creation) ='.intval($date[1]).' AND
             YEAR(date_creation) ='.intval($date[0]);
         $list = self::getPosts($blog_id, $query_string);
 
@@ -1143,14 +1144,23 @@ class Blog
         $post_text = make_clickable(stripslashes($blog_post['full_text']));
         $post_text = stripslashes($post_text);
 
+        $blogUrl = api_get_path(WEB_CODE_PATH).'blog/blog.php?blog_id='.$blog_id.
+            '&post_id='.$post_id.'&article_id='.$blog_post['post_id'].'&task_id='.$task_id.'&'.api_get_cidreq();
+
         if (api_is_allowed('BLOG_'.$blog_id, 'article_edit', $task_id)) {
-            $blogActions .= '<a class="btn btn-default" href="blog.php?action=edit_post&blog_id='.$blog_id.'&post_id='.$post_id.'&article_id='.$blog_post['post_id'].'&task_id='.$task_id.'" title="'.get_lang('EditThisPost').'">';
+            $blogActions .= '<a
+                class="btn btn-default"
+                href="'.$blogUrl.'&action=edit_post"
+                title="'.get_lang('EditThisPost').'">';
             $blogActions .= Display::return_icon('edit.png', get_lang('Edit'), null, ICON_SIZE_TINY);
             $blogActions .= '</a>';
         }
 
         if (api_is_allowed('BLOG_'.$blog_id, 'article_delete', $task_id)) {
-            $blogActions .= '<a class="btn btn-default" href="blog.php?action=view_post&blog_id='.$blog_id.'&post_id='.$post_id.'&do=delete_article&article_id='.$blog_post['post_id'].'&task_id='.$task_id.'" title="'.get_lang(
+            $blogActions .= '<a
+                class="btn btn-default"
+                href="'.$blogUrl.'&action=view_post&do=delete_article"
+                title="'.get_lang(
                     'DeleteThisArticle'
                 ).'" onclick="javascript:if(!confirm(\''.addslashes(
                     api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)
@@ -1171,9 +1181,9 @@ class Blog
             'id_author' => $blog_post['author_id'],
             'author' => $blog_post['firstname'].' '.$blog_post['lastname'],
             'username' => $blog_post['username'],
-            'title' => stripslashes($blog_post['title']),
+            'title' => Security::remove_XSS($blog_post['title']),
             'extract' => api_get_short_text_from_html(
-                stripslashes($blog_post['full_text']),
+                Security::remove_XSS($blog_post['full_text']),
                 400
             ),
             'content' => $post_text,
@@ -1205,8 +1215,8 @@ class Blog
      * @return array
      */
     public static function getThreadedComments(
-        $current = 0,
-        $current_level = 0,
+        $current,
+        $current_level,
         $blog_id,
         $post_id,
         $task_id = 0
@@ -1215,12 +1225,10 @@ class Blog
         $tbl_users = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
         $charset = api_get_system_encoding();
-
         $course_id = api_get_course_int_id();
         $blog_id = intval($blog_id);
         $post_id = intval($post_id);
         $task_id = intval($task_id);
-
         $listComments = [];
         // Select top level comments
         $next_level = $current_level + 1;
@@ -1238,12 +1246,12 @@ class Blog
 
         $result = Database::query($sql);
         $html = null;
+        $cidReq = api_get_cidreq();
         while ($comment = Database::fetch_array($result)) {
             $commentActions = null;
             $ratingSelect = null;
             $comment_text = make_clickable(stripslashes($comment['comment']));
-            $comment_text = stripslashes($comment_text);
-
+            $comment_text = Security::remove_XSS($comment_text);
             $commentActions .= Display::toolbarButton(
                 get_lang('ReplyToThisComment'),
                 '#',
@@ -1254,7 +1262,10 @@ class Blog
             );
 
             if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_delete', $task_id)) {
-                $commentActions .= ' <a class="btn btn-default" href="blog.php?action=view_post&blog_id='.$blog_id.'&post_id='.$post_id.'&do=delete_comment&comment_id='.$comment['comment_id'].'&task_id='.$task_id.'" title="'.get_lang(
+                $commentActions .= ' <a
+                class="btn btn-default"
+                href="blog.php?'.$cidReq.'&action=view_post&blog_id='.$blog_id.'&post_id='.$post_id.'&do=delete_comment&comment_id='.$comment['comment_id'].'&task_id='.$task_id.'"
+                title="'.get_lang(
                         'DeleteThisComment'
                     ).'" onclick="javascript:if(!confirm(\''.addslashes(
                         api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)
@@ -1288,7 +1299,7 @@ class Blog
                 'iid' => $comment['iid'],
                 'id_comment' => $comment['comment_id'],
                 'id_curso' => $comment['c_id'],
-                'title' => $comment['title'],
+                'title' => Security::remove_XSS($comment['title']),
                 'content' => $comment_text,
                 'id_author' => $comment['author_id'],
                 'comment_date' => Display::dateToStringAgoAndLongDate($comment['date_creation']),
@@ -1339,7 +1350,7 @@ class Blog
         $type = Database::escape_string($type);
         $html = null;
 
-        if ($type == 'post') {
+        if ($type === 'post') {
             // Check if the user has already rated this post
             $sql = "SELECT rating_id FROM $tbl_blogs_rating
                     WHERE c_id = $course_id AND
@@ -1349,12 +1360,38 @@ class Blog
                     AND user_id = ".$_user['user_id'];
             $result = Database::query($sql);
             // Add rating
+            $url = api_get_path(WEB_CODE_PATH).'blog/blog.php?'.api_get_cidreq();
             if (Database::num_rows($result) == 0) {
-                $html .= '<form class="form-horizontal" method="get" action="blog.php" id="frm_rating_'.$type.'_'.$post_id.'" name="frm_rating_'.$type.'_'.$post_id.'">';
+                $html .= '<form
+                    class="form-horizontal"
+                    method="get"
+                    action="'.$url.'"
+                    id="frm_rating_'.$type.'_'.$post_id.'"
+                    name="frm_rating_'.$type.'_'.$post_id.'">';
                 $html .= '<div class="form-group">';
                 $html .= '<label class="col-sm-3 control-label">'.get_lang('RateThis').'</label>';
                 $html .= '<div class="col-sm-9">';
-                $html .= '<select class="selectpicker" name="rating" onchange="document.forms[\'frm_rating_'.$type.'_'.$post_id.'\'].submit()"><option value="">-</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><input type="hidden" name="action" value="view_post" /><input type="hidden" name="type" value="'.$type.'" /><input type="hidden" name="do" value="rate" /><input type="hidden" name="blog_id" value="'.$blog_id.'" /><input type="hidden" name="post_id" value="'.$post_id.'" />';
+                $html .= '<select
+                    class="selectpicker"
+                    name="rating"
+                    onchange="document.forms[\'frm_rating_'.$type.'_'.$post_id.'\'].submit()">
+                        <option value="">-</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                    <input type="hidden" name="action" value="view_post" />
+                    <input type="hidden" name="type" value="'.$type.'" />
+                    <input type="hidden" name="do" value="rate" />
+                    <input type="hidden" name="blog_id" value="'.$blog_id.'" />
+                    <input type="hidden" name="post_id" value="'.$post_id.'" />';
                 $html .= '</div>';
                 $html .= '</div>';
                 $html .= '</form>';
@@ -1373,13 +1410,31 @@ class Blog
                     AND rating_type = '$type'
                     AND user_id = ".$_user['user_id'];
             $result = Database::query($sql);
+            $url = api_get_path(WEB_CODE_PATH).'blog/blog.php?'.api_get_cidreq();
             if (Database::num_rows($result) == 0) {
-                $html .= '<form class="form-horizontal" method="get" action="blog.php" id="frm_rating_'.$type.'_'.$comment_id.'" name="frm_rating_'.$type.'_'.$comment_id.'">';
+                $html .= '<form
+                    class="form-horizontal"
+                    method="get"
+                    action="'.$url.'"
+                    id="frm_rating_'.$type.'_'.$comment_id.'" name="frm_rating_'.$type.'_'.$comment_id.'">';
                 $html .= '<div class="form-group">';
                 $html .= '<label class="col-sm-3 control-label">'.get_lang('RateThis').'</label>';
                 $html .= '<div class="col-sm-9">';
-                $html .= '<select  class="selectpicker" name="rating" onchange="document.forms[\'frm_rating_'.$type.'_'.$comment_id.'\'].submit()">';
-                $html .= '<option value="">-</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
+                $html .= '<select
+                        class="selectpicker"
+                        name="rating"
+                        onchange="document.forms[\'frm_rating_'.$type.'_'.$comment_id.'\'].submit()">';
+                $html .= '<option value="">-</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
                          </select>
                          <input type="hidden" name="action" value="view_post" />
                         <input type="hidden" name="type" value="'.$type.'" />
@@ -1659,11 +1714,12 @@ class Blog
         $result = Database::query($sql);
         $blog_post = Database::fetch_array($result);
 
-        // Form
         $form = new FormValidator(
             'edit_post',
             'post',
-            api_get_path(WEB_CODE_PATH).'blog/blog.php?action=edit_post&post_id='.intval($_GET['post_id']).'&blog_id='.intval($blog_id).'&article_id='.intval($_GET['article_id']).'&task_id='.intval($_GET['task_id'])
+            api_get_path(WEB_CODE_PATH).
+            'blog/blog.php?action=edit_post&post_id='.intval($_GET['post_id']).'&blog_id='.intval($blog_id).
+            '&article_id='.intval($_GET['article_id']).'&task_id='.intval($_GET['task_id']).'&'.api_get_cidreq()
         );
 
         $form->addHeader(get_lang('EditPost'));
@@ -1724,7 +1780,7 @@ class Blog
             $html .= '</div>';
 
             $html .= '<span class="blogpost_title">'.get_lang('TaskList').'</span><br />';
-            $html .= "<table class=\"data_table\">";
+            $html .= "<table class=\"table table-hover table-striped data_table\">";
             $html .= "<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">"
                 ."<th width='240'><b>".get_lang('Title')."</b></th>"
                 ."<th><b>".get_lang('Description')."</b></th>"
@@ -1794,7 +1850,7 @@ class Blog
         global $charset, $color2;
 
         $return = '<span class="blogpost_title">'.get_lang('AssignedTasks').'</span><br />';
-        $return .= "<table class=\"data_table\">";
+        $return .= "<table class=\"table table-hover table-striped data_table\">";
         $return .= "<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">"
             ."<th width='240'><b>".get_lang('Member')."</b></th>"
             ."<th><b>".get_lang('Task')."</b></th>"
@@ -1808,7 +1864,7 @@ class Blog
 
         $sql = "SELECT task_rel_user.*, task.title, user.firstname, user.lastname, user.username, task.description, task.system_task, task.blog_id, task.task_id
                 FROM $tbl_blogs_tasks_rel_user task_rel_user
-                INNER JOIN $tbl_blogs_tasks task 
+                INNER JOIN $tbl_blogs_tasks task
                 ON task_rel_user.task_id = task.task_id
                 INNER JOIN $tbl_users user
                 ON task_rel_user.user_id = user.user_id
@@ -1824,11 +1880,6 @@ class Blog
             $css_class = (($counter % 2) == 0) ? "row_odd" : "row_even";
             $delete_icon = ($assignment['system_task'] == '1') ? "delete_na.png" : "delete.png";
             $delete_title = ($assignment['system_task'] == '1') ? get_lang('DeleteSystemTask') : get_lang('DeleteTask');
-            $delete_link = ($assignment['system_task'] == '1') ? '#' : api_get_self().'?action=manage_tasks&blog_id='.$assignment['blog_id'].'&do=delete&task_id='.$assignment['task_id'].'&'.api_get_cidreq();
-            $delete_confirm = ($assignment['system_task'] == '1') ? '' : 'onclick="javascript:if(!confirm(\''.addslashes(
-                    api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)
-                ).'\')) return false;"';
-
             $username = api_htmlentities(sprintf(get_lang('LoginX'), $assignment['username']), ENT_QUOTES);
 
             $return .= '<tr class="'.$css_class.'" valign="top">';
@@ -1837,14 +1888,16 @@ class Blog
                 api_get_person_name($assignment['firstname'], $assignment['lastname']),
                 ['title' => $username]
             ).'</td>';
-            $return .= '<td>'.stripslashes($assignment['title']).'</td>';
-            $return .= '<td>'.stripslashes($assignment['description']).'</td>';
+            $return .= '<td>'.Security::remove_XSS($assignment['title']).'</td>';
+            $return .= '<td>'.Security::remove_XSS($assignment['description']).'</td>';
             $return .= '<td>'.$assignment['target_date'].'</td>';
             $return .= '<td width="50">';
-            $return .= '<a href="'.api_get_self().'?action=manage_tasks&blog_id='.$assignment['blog_id'].'&do=edit_assignment&task_id='.$assignment['task_id'].'&user_id='.$assignment['user_id'].'&'.api_get_cidreq().'">';
+            $return .= '<a
+                href="'.api_get_self().'?action=manage_tasks&blog_id='.$assignment['blog_id'].'&do=edit_assignment&task_id='.$assignment['task_id'].'&user_id='.$assignment['user_id'].'&'.api_get_cidreq().'">';
             $return .= Display::return_icon('edit.png', get_lang('EditTask'));
             $return .= "</a>";
-            $return .= '<a href="'.api_get_self().'?action=manage_tasks&blog_id='.$assignment['blog_id'].'&do=delete_assignment&task_id='.$assignment['task_id'].'&user_id='.$assignment['user_id'].'&'.api_get_cidreq().'" ';
+            $return .= '<a
+                href="'.api_get_self().'?action=manage_tasks&blog_id='.$assignment['blog_id'].'&do=delete_assignment&task_id='.$assignment['task_id'].'&user_id='.$assignment['user_id'].'&'.api_get_cidreq().'" ';
             $return .= 'onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)).'\')) return false;"';
             $return .= Display::return_icon($delete_icon, $delete_title);
             $return .= "</a>";
@@ -1870,7 +1923,7 @@ class Blog
     public static function displayTaskCreateForm($blog_id)
     {
         $blog_id = intval($blog_id);
-        // Init
+
         $colors = [
             'FFFFFF',
             'FFFF99',
@@ -1889,13 +1942,9 @@ class Blog
             '000000',
         ];
 
-        // form
-        $return = '<form name="add_task" method="post" action="blog.php?action=manage_tasks&blog_id='.$blog_id.'">';
-
-        // form title
+        $url = api_get_path(WEB_CODE_PATH).'blog/blog.php?'.api_get_cidreq().'&action=manage_tasks';
+        $return = '<form name="add_task" method="post" action="'.$url.'&blog_id='.$blog_id.'">';
         $return .= '<legend>'.get_lang('AddTask').'</legend>';
-
-        // task title
         $return .= '	<div class="control-group">
                     <label class="control-label">
                         <span class="form_required">*</span>'.get_lang('Title').'
@@ -1921,7 +1970,7 @@ class Blog
                         '.get_lang('TaskManager').'
                     </label>
                     <div class="controls">';
-        $return .= '<table class="data_table" cellspacing="0" style="border-collapse:collapse; width:446px;">';
+        $return .= '<table class="table table-hover table-striped data_table" cellspacing="0" style="border-collapse:collapse; width:446px;">';
         $return .= '<tr>';
         $return .= '<th colspan="2" style="width:223px;">'.get_lang('ArticleManager').'</th>';
         $return .= '<th width:223px;>'.get_lang('CommentManager').'</th>';
@@ -2005,22 +2054,28 @@ class Blog
             '000000',
         ];
 
-        $sql = "SELECT blog_id, task_id, title, description, color FROM $tbl_blogs_tasks 
+        $sql = "SELECT blog_id, task_id, title, description, color FROM $tbl_blogs_tasks
                 WHERE c_id = $course_id AND task_id = $task_id";
         $result = Database::query($sql);
         $task = Database::fetch_array($result);
 
-        // Display
-        $return = '<form name="edit_task" method="post" action="blog.php?action=manage_tasks&blog_id='.$blog_id.'">
+        $url = api_get_path(WEB_CODE_PATH).'blog/blog.php?'.api_get_cidreq().'&action=manage_tasks';
+        $return = '<form name="edit_task" method="post" action="'.$url.'&blog_id='.$blog_id.'">
                     <legend>'.get_lang('EditTask').'</legend>
                     <table width="100%" border="0" cellspacing="2">
                         <tr>
                        <td align="right">'.get_lang('Title').':&nbsp;&nbsp;</td>
-                       <td><input name="task_name" type="text" size="70" value="'.Security::remove_XSS($task['title']).'" /></td>
+                       <td>
+                        <input name="task_name" type="text" size="70" value="'.Security::remove_XSS($task['title']).'" />
+                        </td>
                         </tr>
                         <tr>
                        <td align="right">'.get_lang('Description').':&nbsp;&nbsp;</td>
-                       <td><textarea name="task_description" cols="45">'.Security::remove_XSS($task['description']).'</textarea></td>
+                       <td>
+                        <textarea name="task_description" cols="45">'.
+                            Security::remove_XSS($task['description']).'
+                        </textarea>
+                        </td>
                         </tr>';
 
         /* edit by Kevin Van Den Haute (kevin@develop-it.be) */
@@ -2039,7 +2094,7 @@ class Blog
         $return .= '<tr>';
         $return .= '<td style="text-align:right; vertical-align:top;">'.get_lang('TaskManager').':&nbsp;&nbsp;</td>';
         $return .= '<td>';
-        $return .= '<table  class="data_table" cellspacing="0" style="border-collapse:collapse; width:446px;">';
+        $return .= '<table  class="table table-hover table-striped data_table" cellspacing="0" style="border-collapse:collapse; width:446px;">';
         $return .= '<tr>';
         $return .= '<th colspan="2" style="width:223px;">'.get_lang('ArticleManager').'</th>';
         $return .= '<th width:223px;>'.get_lang('CommentManager').'</th>';
@@ -2159,9 +2214,8 @@ class Blog
         $form = new FormValidator(
             'assign_task',
             'post',
-            api_get_path(
-                WEB_CODE_PATH
-            ).'blog/blog.php?action=manage_tasks&blog_id='.$blog_id
+            api_get_path(WEB_CODE_PATH).
+            'blog/blog.php?action=manage_tasks&blog_id='.$blog_id.'&'.api_get_cidreq()
         );
 
         $form->addHeader(get_lang('AssignTask'));
@@ -2243,9 +2297,9 @@ class Blog
         $sql = "
             SELECT COUNT(*) as 'number'
             FROM $table
-            WHERE c_id = $course_id 
-            AND blog_id = $blog_id 
-            AND	user_id = $user_id 
+            WHERE c_id = $course_id
+            AND blog_id = $blog_id
+            AND	user_id = $user_id
             AND	task_id = $task_id";
 
         $result = Database::query($sql);
@@ -2354,6 +2408,7 @@ class Blog
                 AND c_id = $course_id";
         $result = Database::query($sql);
         $row = Database::fetch_assoc($result);
+
         // Get posts and authors
         $sql = "SELECT post.*, user.lastname, user.firstname, user.username
                 FROM $tbl_blogs_posts post
@@ -2364,20 +2419,21 @@ class Blog
         $result = Database::query($sql);
 
         // Display
-        $return = '<span class="blogpost_title">'.get_lang('SelectTaskArticle').' "'.stripslashes($row['title']).'"</span>';
-        $return .= '<span style="font-style: italic;"">'.stripslashes($row['description']).'</span><br><br>';
+        $return = '<span class="blogpost_title">'.
+                    get_lang('SelectTaskArticle').' "'.Security::remove_XSS($row['title']).'"</span>';
+        $return .= '<span style="font-style: italic;"">'.Security::remove_XSS($row['description']).'</span><br><br>';
 
         if (Database::num_rows($result) == 0) {
             $return .= get_lang('NoArticles');
 
             return $return;
         }
-
+        $url = api_get_path(WEB_CODE_PATH).'blog/blog.php?'.api_get_cidreq().'&action=execute_task';
         while ($blog_post = Database::fetch_array($result)) {
             $username = api_htmlentities(sprintf(get_lang('LoginX'), $blog_post['username']), ENT_QUOTES);
-            $return .= '<a href="blog.php?action=execute_task&blog_id='.$blog_id.'&task_id='.$task_id.'&post_id='.$blog_post['post_id'].'#add_comment">'.stripslashes(
-                    $blog_post['title']
-                ).'</a>, '.get_lang('WrittenBy').' '.stripslashes(
+            $return .= '<a href="'.$url.'&blog_id='.$blog_id.'&task_id='.$task_id.'&post_id='.$blog_post['post_id'].'#add_comment">'.
+                Security::remove_XSS($blog_post['title']).'</a>, '.
+                get_lang('WrittenBy').' '.stripslashes(
                     Display::tag(
                         'span',
                         api_get_person_name($blog_post['firstname'], $blog_post['lastname']),
@@ -2439,8 +2495,6 @@ class Blog
         $html = null;
 
         $html .= '<legend>'.get_lang('SubscribeMembers').'</legend>';
-
-        $properties['width'] = '100%';
 
         // Get blog members' id.
         $sql = "SELECT user.user_id FROM $tbl_users user
@@ -2517,13 +2571,18 @@ class Blog
         // Display
         $query_vars['action'] = 'manage_members';
         $query_vars['blog_id'] = $blog_id;
-        $html .= '<form class="form-inline" method="post" action="blog.php?action=manage_members&blog_id='.$blog_id.'&'.api_get_cidreq().'">';
+        $html .= '<form
+                class="form-inline"
+                method="post"
+                action="blog.php?action=manage_members&blog_id='.$blog_id.'&'.api_get_cidreq().'">';
         $html .= Display::return_sortable_table($column_header, $user_data, null, null, $query_vars);
 
         $link = isset($_GET['action']) ? 'action='.Security::remove_XSS($_GET['action']).'&' : '';
         $link .= "blog_id=$blog_id&".api_get_cidreq();
 
-        $html .= '<a class="btn btn-default" href="blog.php?'.$link.'selectall=subscribe">'.get_lang('SelectAll').'</a> - ';
+        $html .= '<a
+                class="btn btn-default" href="blog.php?'.$link.'selectall=subscribe">'.
+            get_lang('SelectAll').'</a> - ';
         $html .= '<a class="btn btn-default" href="blog.php?'.$link.'">'.get_lang('UnSelectAll').'</a> ';
         $html .= '<div class="form-group">';
         $html .= '<label>';
@@ -2563,7 +2622,6 @@ class Blog
 
         $html .= '<legend>'.get_lang('UnsubscribeMembers').'</legend>';
 
-        $properties["width"] = "100%";
         //table column titles
         $column_header[] = ['', false, ''];
         if ($is_western_name_order) {
@@ -2580,7 +2638,7 @@ class Blog
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT user.user_id, user.lastname, user.firstname, user.email, user.username
-                FROM $tbl_users user 
+                FROM $tbl_users user
                 INNER JOIN $tbl_blogs_rel_user blogs_rel_user
                 ON user.user_id = blogs_rel_user.user_id
                 WHERE blogs_rel_user.c_id = $course_id AND  blogs_rel_user.blog_id = $blog_id";
@@ -2592,7 +2650,10 @@ class Blog
         $user_data = [];
         while ($myrow = Database::fetch_array($sql_result)) {
             $row = [];
-            $row[] = '<input type="checkbox" name="user[]" value="'.$myrow['user_id'].'" '.((isset($_GET['selectall']) && $_GET['selectall'] == "unsubscribe") ? ' checked="checked" ' : '').'/>';
+            $row[] = '<input
+                type="checkbox"
+                name="user[]"
+                value="'.$myrow['user_id'].'" '.((isset($_GET['selectall']) && $_GET['selectall'] == "unsubscribe") ? ' checked="checked" ' : '').'/>';
             $username = api_htmlentities(sprintf(get_lang('LoginX'), $myrow["username"]), ENT_QUOTES);
             if ($is_western_name_order) {
                 $row[] = $myrow["firstname"];
@@ -2620,13 +2681,10 @@ class Blog
                             btu.blog_id = $blog_id AND
                             btu.user_id = ".$myrow['user_id'];
             $sql_res = Database::query($sql);
-
             $task = '';
-
             while ($r = Database::fetch_array($sql_res)) {
                 $task .= stripslashes($r['task']).', ';
             }
-            //echo $task;
             $task = (api_strlen(trim($task)) != 0) ? api_substr($task, 0, api_strlen($task) - 2) : get_lang('Reader');
             $row[] = $task;
             //Link to register users
@@ -2645,7 +2703,10 @@ class Blog
 
         $query_vars['action'] = 'manage_members';
         $query_vars['blog_id'] = $blog_id;
-        $html .= '<form class="form-inline" method="post" action="blog.php?action=manage_members&blog_id='.$blog_id.'&'.api_get_cidreq().'">';
+        $html .= '<form
+            class="form-inline"
+            method="post"
+            action="blog.php?action=manage_members&blog_id='.$blog_id.'&'.api_get_cidreq().'">';
         $html .= Display::return_sortable_table($column_header, $user_data, null, null, $query_vars);
 
         $link = isset($_GET['action']) ? 'action='.Security::remove_XSS($_GET['action']).'&' : '';
@@ -2704,7 +2765,6 @@ class Blog
      */
     public static function displayMiniMonthCalendar($month, $year, $blog_id)
     {
-        // Init
         $_user = api_get_user_info();
         global $DaysShort;
         global $MonthsLong;
@@ -2734,15 +2794,13 @@ class Blog
         //Get the first day of the month
         $dayone = getdate(mktime(0, 0, 0, $month, 1, $year));
         $monthName = $MonthsLong[$month - 1];
-
+        $url = api_get_path(WEB_CODE_PATH).'blog/blog.php?'.api_get_cidreq();
         //Start the week on monday
         $startdayofweek = $dayone['wday'] != 0 ? ($dayone['wday'] - 1) : 6;
         $blogId = isset($_GET['blog_id']) ? intval($_GET['blog_id']) : null;
         $filter = isset($_GET['filter']) ? Security::remove_XSS($_GET['filter']) : null;
-        $backwardsURL = api_get_self(
-            )."?blog_id=".$blogId."&filter=".$filter."&month=".($month == 1 ? 12 : $month - 1)."&year=".($month == 1 ? $year - 1 : $year);
-        $forewardsURL = api_get_self(
-            )."?blog_id=".$blogId."&filter=".$filter."&month=".($month == 12 ? 1 : $month + 1)."&year=".($month == 12 ? $year + 1 : $year);
+        $backwardsURL = $url."&blog_id=".$blogId."&filter=".$filter."&month=".($month == 1 ? 12 : $month - 1)."&year=".($month == 1 ? $year - 1 : $year);
+        $forewardsURL = $url."&blog_id=".$blogId."&filter=".$filter."&month=".($month == 12 ? 1 : $month + 1)."&year=".($month == 12 ? $year + 1 : $year);
 
         // Get posts for this month
         $sql = "SELECT post.*, DAYOFMONTH(date_creation) as post_day, user.lastname, user.firstname
@@ -2756,7 +2814,6 @@ class Blog
                     YEAR(date_creation) = '$year'
                 ORDER BY date_creation";
         $result = Database::query($sql);
-
         // We will create an array of days on which there are posts.
         if (Database::num_rows($result) > 0) {
             while ($blog_post = Database::fetch_array($result)) {
@@ -2769,15 +2826,15 @@ class Blog
 
         // Get tasks for this month
         if ($_user['user_id']) {
-            $sql = "SELECT 
-                        task_rel_user.*,  
-                        DAYOFMONTH(target_date) as task_day, 
-                        task.title, 
+            $sql = "SELECT
+                        task_rel_user.*,
+                        DAYOFMONTH(target_date) as task_day,
+                        task.title,
                         blog.blog_name
                     FROM $tbl_blogs_tasks_rel_user task_rel_user
-                    INNER JOIN $tbl_blogs_tasks task 
+                    INNER JOIN $tbl_blogs_tasks task
                     ON task_rel_user.task_id = task.task_id
-                    INNER JOIN $tbl_blogs blog 
+                    INNER JOIN $tbl_blogs blog
                     ON task_rel_user.blog_id = blog.blog_id
                     WHERE
                         task_rel_user.c_id = $course_id AND
@@ -2788,7 +2845,6 @@ class Blog
                         YEAR(target_date) = '$year'
                     ORDER BY target_date ASC";
             $result = Database::query($sql);
-
             if (Database::num_rows($result) > 0) {
                 while ($mytask = Database::fetch_array($result)) {
                     $tasks[$mytask['task_day']][$mytask['task_id']]['task_id'] = $mytask['task_id'];
@@ -2807,13 +2863,10 @@ class Blog
                 <th width="10%" align="right"><a href="'.$forewardsURL.'">&raquo;</a></th></tr>';
 
         $html .= '<tr>';
-
         for ($ii = 1; $ii < 8; $ii++) {
             $html .= '<td class="weekdays">'.$DaysShort[$ii % 7].'</td>';
         }
-
         $html .= '</tr>';
-
         $curday = -1;
         $today = getdate();
 
@@ -2834,12 +2887,11 @@ class Blog
                     }
 
                     $html .= '<td '.$class.'>';
-
                     // If there are posts on this day, create a filter link.
                     if (in_array($curday, $posts)) {
-                        $html .= '<a href="blog.php?blog_id='.$blog_id.'&filter='.$year.'-'.$month.'-'.$curday.'&month='.$month.'&year='.$year.'" title="'.get_lang(
-                                'ViewPostsOfThisDay'
-                            ).'">'.$curday.'</a>';
+                        $html .= '<a
+                        href="'.$url.'&blog_id='.$blog_id.'&filter='.$year.'-'.$month.'-'.$curday.'&month='.$month.'&year='.$year.'"
+                        title="'.get_lang('ViewPostsOfThisDay').'">'.$curday.'</a>';
                     } else {
                         $html .= $dayheader;
                     }
@@ -2848,7 +2900,8 @@ class Blog
                         if (isset($tasks[$curday]) && is_array($tasks[$curday])) {
                             // Add tasks to calendar
                             foreach ($tasks[$curday] as $task) {
-                                $html .= '<a href="blog.php?action=execute_task&blog_id='.$task['blog_id'].'&task_id='.stripslashes($task['task_id']).'" title="'.$task['title'].' : '.get_lang('InBlog').' : '.$task['blog_name'].' - '.get_lang('ExecuteThisTask').'">';
+                                $html .= '<a
+                                    href="blog.php?action=execute_task&blog_id='.$task['blog_id'].'&task_id='.stripslashes($task['task_id']).'" title="'.$task['title'].' : '.get_lang('InBlog').' : '.$task['blog_name'].' - '.get_lang('ExecuteThisTask').'">';
                                 $html .= Display::return_icon('blog_task.gif', get_lang('ExecuteThisTask'));
                                 $html .= '</a>';
                             }
@@ -2876,7 +2929,7 @@ class Blog
         $form = new FormValidator(
             'add_blog',
             'post',
-            'blog_admin.php?action=add'
+            'blog_admin.php?action=add&'.api_get_cidreq()
         );
         $form->addElement('header', get_lang('AddBlog'));
         $form->addElement('text', 'blog_name', get_lang('Title'));
@@ -2967,12 +3020,12 @@ class Blog
                 $session_img = api_get_session_image($info_log[4], $_user['status']);
 
                 $url_start_blog = 'blog.php'."?"."blog_id=".$info_log[3]."&".api_get_cidreq();
-                $title = $info_log[0];
+                $title = Security::remove_XSS($info_log[0]);
                 $image = Display::return_icon('blog.png', $title);
                 $list_name = '<div style="float: left; width: 35px; height: 22px;"><a href="'.$url_start_blog.'">'.$image.'</a></div><a href="'.$url_start_blog.'">'.$title.'</a>'.$session_img;
 
                 $list_body_blog[] = $list_name;
-                $list_body_blog[] = $info_log[1];
+                $list_body_blog[] = Security::remove_XSS($info_log[1]);
 
                 $visibility_icon = ($info_log[2] == 0) ? 'invisible' : 'visible';
                 $visibility_info = ($info_log[2] == 0) ? 'Visible' : 'Invisible';
@@ -3045,9 +3098,9 @@ class Blog
 
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT path, filename, comment 
+        $sql = "SELECT path, filename, comment
                 FROM $blog_table_attachment
-	            WHERE c_id = $course_id AND blog_id = $blog_id  
+	            WHERE c_id = $course_id AND blog_id = $blog_id
 	            $where";
 
         $result = Database::query($sql);
@@ -3138,7 +3191,7 @@ class Blog
                 WHERE
                     blog.c_id = $courseId AND
                     post.c_id = $courseId AND
-                    author_id =  $userId AND 
+                    author_id =  $userId AND
                     visibility = 1
                 ORDER BY post.date_creation DESC ";
         $result = Database::query($sql);
@@ -3152,7 +3205,9 @@ class Blog
                         'blog_article.png',
                         get_lang('BlogPosts')
                     ).' '.
-                    $row['title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../blog/blog.php?blog_id='.$row['blog_id'].'&gidReq=&cidReq='.$courseCode.' " >'.
+                    $row['title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <div style="float:right;margin-top:-18px">
+                    <a href="../blog/blog.php?blog_id='.$row['blog_id'].'&gidReq=&cidReq='.$courseCode.' " >'.
                     get_lang('SeeBlog').'</a></div></div>';
                 $return_data .= '<br / >';
                 $return_data .= $row['full_text'];
@@ -3181,7 +3236,7 @@ class Blog
         $courseId = intval($courseId);
 
         $sql = "SELECT DISTINCT blog.blog_id, comment_id, title, comment, comment.date_creation
-                FROM $tbl_blogs blog 
+                FROM $tbl_blogs blog
                 INNER JOIN  $tbl_blog_comment comment
                 ON (blog.blog_id = comment.blog_id AND blog.c_id = comment.c_id)
                 WHERE 	blog.c_id = $courseId AND
@@ -3195,7 +3250,9 @@ class Blog
             while ($row = Database::fetch_array($result)) {
                 $return_data .= '<div class="clear"></div><br />';
                 $return_data .= '<div class="actions" style="margin-left:5px;margin-right:5px;">'.
-                    $row['title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../blog/blog.php?blog_id='.$row['blog_id'].'&gidReq=&cidReq='.Security::remove_XSS($courseCode).' " >'.
+                    $row['title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <div style="float:right;margin-top:-18px">
+                        <a href="../blog/blog.php?blog_id='.$row['blog_id'].'&gidReq=&cidReq='.Security::remove_XSS($courseCode).' " >'.
                     get_lang('SeeBlog').'</a></div></div>';
                 $return_data .= '<br / >';
                 $return_data .= $row['comment'];

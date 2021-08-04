@@ -14,8 +14,6 @@ use Fhaculty\Graph\Vertex;
  * Class SkillProfile.
  *
  * @todo break the file in different classes
- *
- * @package chamilo.library
  */
 class SkillProfile extends Model
 {
@@ -259,7 +257,7 @@ class SkillRelSkill extends Model
     public function getDirectParents($skillId)
     {
         $skillId = (int) $skillId;
-        $sql = 'SELECT parent_id as skill_id 
+        $sql = 'SELECT parent_id as skill_id
                 FROM '.$this->table.'
                 WHERE skill_id = '.$skillId;
         $result = Database::query($sql);
@@ -1431,6 +1429,8 @@ class Skill extends Model
                     $courseInfo = api_get_course_info_by_id($courseId);
                     $courseTempList[$courseId] = $courseInfo;
                 }
+            } else {
+                $courseInfo = [];
             }
             $tableRow = [
                 'skill_badge' => $resultData['img_small'],
@@ -1458,9 +1458,8 @@ class Skill extends Model
         }
 
         if ($addTitle) {
-            $tableResult .= '<h3 class="section-title">'.get_lang('AchievedSkills').'</h3>
-                    <div class="skills-badges">
-                   ';
+            $tableResult .= Display::page_subheader(get_lang('AchievedSkills'));
+            $tableResult .= '<div class="skills-badges">';
         }
 
         if (!empty($skillParents)) {
@@ -1823,7 +1822,7 @@ class Skill extends Model
     public function getUserSkillRanking($user_id)
     {
         $user_id = (int) $user_id;
-        $sql = "SELECT count(skill_id) count 
+        $sql = "SELECT count(skill_id) count
                 FROM {$this->table} s
                 INNER JOIN {$this->table_skill_rel_user} su
                 ON (s.id = su.skill_id)
@@ -2480,9 +2479,9 @@ class Skill extends Model
     }
 
     /**
-     * @param \Chamilo\SkillBundle\Entity\SkillRelItem        $skillRelItem
-     * @param \Chamilo\SkillBundle\Entity\SkillRelItemRelUser $skillRelItemRelUser
-     * @param bool                                            $addHeader
+     * @param SkillRelItem        $skillRelItem
+     * @param SkillRelItemRelUser $skillRelItemRelUser
+     * @param bool                $addHeader
      *
      * @return string
      */
@@ -2569,8 +2568,8 @@ class Skill extends Model
                                 success: function(result) {
                                     $("#" +skillId+ ".user_skill").html(result);
                                 }
-                            });                            
-                        });                        
+                            });
+                        });
                     });
                 </script>
                 ';
@@ -2981,7 +2980,7 @@ class Skill extends Model
      */
     public function addSkillToUserBadge($user, $skill, $levelId, $argumentation, $authorId)
     {
-        $showLevels = api_get_configuration_value('hide_skill_levels') === false;
+        $showLevels = false === api_get_configuration_value('hide_skill_levels');
 
         $entityManager = Database::getManager();
 

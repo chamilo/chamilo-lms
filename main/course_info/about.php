@@ -13,8 +13,6 @@ use Chamilo\CourseBundle\Entity\CCourseDescription;
  * Show information about a course.
  *
  * @author Alex Aragon Calixto <alex.aragon@beeznest.com>
- *
- * @package chamilo.course
  */
 $cidReset = true;
 
@@ -92,7 +90,7 @@ $courseCustom = [];
 foreach ($courseDescriptionTools as $descriptionTool) {
     switch ($descriptionTool->getDescriptionType()) {
         case CCourseDescription::TYPE_DESCRIPTION:
-            $courseDescription = $descriptionTool->getContent();
+            $courseDescription = Security::remove_XSS($descriptionTool->getContent());
             break;
         case CCourseDescription::TYPE_OBJECTIVES:
             $courseObjectives = $descriptionTool;
@@ -146,6 +144,7 @@ if ($checker) {
 
 $courseItem = [
     'code' => $course->getCode(),
+    'visibility' => $course->getVisibility(),
     'title' => $course->getTitle(),
     'description' => $courseDescription,
     'image' => CourseManager::getPicturePath($course, true),
@@ -185,6 +184,7 @@ foreach ($requirements as $sequence) {
 }
 
 $template = new Template($course->getTitle(), true, true, false, true, false);
+
 $template->assign('course', $courseItem);
 $essence = Essence\Essence::instance();
 $template->assign('essence', $essence);

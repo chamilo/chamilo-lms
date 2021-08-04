@@ -6,9 +6,6 @@ use Chamilo\CoreBundle\Entity\CourseCategory;
 use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
 use Chamilo\UserBundle\Entity\User;
 
-/**
- * @package chamilo.admin
- */
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -30,6 +27,7 @@ if (empty($courseId)) {
 }
 
 $courseInfo = api_get_course_info_by_id($courseId);
+$courseCode = $courseInfo['code'];
 
 if (empty($courseInfo)) {
     api_not_allowed(true);
@@ -47,13 +45,13 @@ $courseId = $courseInfo['real_id'];
 // Get course teachers
 $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
-$sql = "SELECT user.user_id,lastname,firstname
+$sql = "SELECT user.id as user_id,lastname,firstname
         FROM
             $table_user as user,
             $table_course_user as course_user
         WHERE
             course_user.status='1' AND
-            course_user.user_id=user.user_id AND
+            course_user.user_id=user.id AND
             course_user.c_id ='".$courseId."'".
             $order_clause;
 $res = Database::query($sql);
@@ -65,15 +63,15 @@ while ($obj = Database::fetch_object($res)) {
 // Get all possible teachers without the course teachers
 if (api_is_multiple_url_enabled()) {
     $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-    $sql = "SELECT u.user_id,lastname,firstname
+    $sql = "SELECT u.id as user_id,lastname,firstname
             FROM $table_user as u
             INNER JOIN $access_url_rel_user_table url_rel_user
-            ON (u.user_id=url_rel_user.user_id)
+            ON (u.id=url_rel_user.user_id)
             WHERE
                 url_rel_user.access_url_id = $urlId AND
                 status = 1".$order_clause;
 } else {
-    $sql = "SELECT user_id, lastname, firstname
+    $sql = "SELECT id as user_id, lastname, firstname
             FROM $table_user WHERE status='1'".$order_clause;
 }
 $courseInfo['tutor_name'] = null;
@@ -190,7 +188,7 @@ $courseTeacherNames = [];
 foreach ($course_teachers as $courseTeacherId) {
     /** @var User $courseTeacher */
     $courseTeacher = UserManager::getRepository()->find($courseTeacherId);
-    $courseTeacherNames[$courseTeacher->getUserId()] = UserManager::formatUserFullName($courseTeacher, true);
+    $courseTeacherNames[$courseTeacher->getId()] = UserManager::formatUserFullName($courseTeacher, true);
 }
 
 $form->addSelectAjax(
@@ -322,6 +320,15 @@ $extra = $extra_field->addElements(
     true
 );
 
+if (api_get_configuration_value('multiple_access_url_show_shared_course_marker')) {
+    $urls = UrlManager::get_access_url_from_course($courseId);
+    $urlToString = '';
+    foreach ($urls as $url) {
+        $urlToString .= $url['url'].'<br />';
+    }
+    $form->addLabel('URLs', $urlToString);
+}
+
 $htmlHeadXtra[] = '
 <script>
 $(function() {
@@ -402,6 +409,7 @@ if ($form->validate()) {
 
     Database::query($sql);
 
+    $courseInfoBeforeUpdate = api_get_course_info_by_id($courseId);
     $title = str_replace('&amp;', '&', $title);
     $params = [
         'course_language' => $course_language,
@@ -416,6 +424,7 @@ if ($form->validate()) {
         'unsubscribe' => $unsubscribe,
     ];
     Database::update($course_table, $params, ['id = ?' => $courseId]);
+    CourseManager::saveSettingChanges($courseInfoBeforeUpdate, $params);
 
     // update the extra fields
     $courseFieldValue = new ExtraFieldValue('course');
@@ -481,10 +490,8 @@ if ($form->validate()) {
     Display::addFlash(Display::return_message(get_lang('ItemUpdated').': '.$message, 'info', false));
     if ($visual_code_is_used) {
         Display::addFlash(Display::return_message($warn));
-        header('Location: course_list.php');
-    } else {
-        header('Location: course_list.php');
     }
+    header('Location: course_list.php');
     exit;
 }
 
@@ -500,6 +507,12 @@ echo Display::url(
     $courseInfo['course_public_url'],
     ['target' => '_blank']
 );
+
+echo Display::url(
+    Display::return_icon('info2.png', get_lang('Info')),
+    api_get_path(WEB_CODE_PATH)."admin/course_information.php?code=$courseCode"
+);
+
 echo '</div>';
 
 echo "<script>
@@ -550,7 +563,6 @@ function valide() {
 }
 </script>";
 
-// Display the form
 $form->display();
 
-Display:: display_footer();
+Display::display_footer();

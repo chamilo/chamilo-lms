@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.survey
- *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
  *
  * @version $Id: survey_invite.php 10680 2007-01-11 21:26:23Z pcool $
@@ -112,7 +110,7 @@ echo '</a></li>';
 echo '</ul>';
 
 // Table header
-echo '<table class="data_table" style="margin-top: 5px;">';
+echo '<table class="table table-hover table-striped data_table" style="margin-top: 5px;">';
 echo '	<tr>';
 echo '		<th>'.get_lang('User').'</th>';
 echo '		<th>'.get_lang('InvitationDate').'</th>';

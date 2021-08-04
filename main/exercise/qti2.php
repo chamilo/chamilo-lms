@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Code for Qti2 import integration.
- *
- * @package chamilo.exercise
  *
  * @author Ronny Velasquez
  *

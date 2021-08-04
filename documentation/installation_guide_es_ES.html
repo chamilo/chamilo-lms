@@ -54,7 +54,7 @@
 <p>Esta guía explica como instalar Chamilo LMS. Por favor, léala completamente antes de proceder con la instalación.</p>
 <p>English: Get back to the <a href="installation_guide.html">English version of the installation guide</a>.</p>
 <p>French: Vous pouvez aussi lire <a href="installation_guide_fr_FR.html">ce guide d'installation en français</a>.</p>
-<p>Italian: You can also read <a href="installation_guide_it_IT.html">this guide in Italian</a>.</p>
+  <p>Italiano: puoi leggere <a href="installation_guide_it_IT.html">questa guida anche in italiano</a>.</p>
 
 <h2><b>Contenidos</b></h2>
 <ol>
@@ -88,7 +88,8 @@
 <ul>
   <li><span style="font-weight: bold;">Apache 2.2+</span></li>
   <li><span style="font-weight: bold;">MySQL 5.6+ o MariaDB 5+</span></li>
-  <li><span style="font-weight: bold;">PHP 5.6, 7.1, 7.2 o 7.3</span></li></ul>
+  <li><span style="font-weight: bold;">PHP 7.2, 7.3 or 7.4</span></li>
+</ul>
 <p>
   Todo este software es software de código abierto y está disponible libremente.
 </p>
@@ -359,7 +360,6 @@ date.timezone = 'America/New_York'
   <li>php5-pcre La extensión compartida de pcre para php</li>
   <li>php5-xml</li>
   <li>php5-json</li>
-  <li>php5-mcrypt</li>
   <li>php5-iconv o php5-mbstring (cualquiera de los dos)</li>
   <li>php5-gd la extensión de generación de gráficos de PHP</li>
   <li>php5-intl la extensión de reglas de representación internacionales</li>
@@ -665,16 +665,11 @@ dominio LDAP: "dc=xx, dc=yy, dc=zz"; //dominio<br />
 </ul>
 <hr style="width: 100%; height: 2px;" />
 
-<h2><a id="9._WIRIS_mathematical_formulas"></a>7. Fórmulas matemáticas con WIRIS</h2>
+<h2><a id="9._WIRIS_mathematical_formulas"></a>7. Fórmulas matemáticas con Wiris MathType</h2>
 <p>
-  Instalando este plugin obtendrá WIRIS editor y WIRIS CAS. <br/>
-  La activación no se realiza completamente si previamente no ha descargado el
-  <a href="http://www.wiris.com/plugins/ckeditor/download" target="_blank">PHP plugin for CKeditor de WIRIS</a>
-  y descomprimido su contenido en el directorio de Chamilo main/inc/lib/ckeditor/editor/plugins/ckeditor_wiris/ <br/>
-  Esto es necesario debido a que Wiris es un software propietario y los servicios de Wiris son
-  <a href="http://www.wiris.com/store/who-pays" target="_blank">comerciales</a>.
-  Para realizar ajustes en el plugin edite el archivo configuration.ini o sustituya su contenido por el de
-  configuration.ini.default que acompaña a Chamilo.
+  Instalando este plugin obtendrá Wiris MathType.<br />
+  La activación no se realiza completamente si previamente no ha descargado el <a href="http://www.wiris.com/plugins/ckeditor/download" target="_blank">plugin PHP para CKeditor de WIRIS</a> y descomprimido su contenido en el directorio de Chamilo /main/inc/lib/javascript/ckeditor/plugins/ckeditor_wiris.<br /><br />
+  Esto es necesario debido a que WIRIS es un software propietario y los servicios de WIRIS son <a href="http://www.wiris.com/store/who-pays" target="_blank">comerciales</a>. Para realizar ajustes en el plugin edite el archivo configuration.ini o sustituya su contenido por el de configuration.ini.default que acompaña a Chamilo.
 </p>
 <hr style="width: 100%; height: 2px;" />
 

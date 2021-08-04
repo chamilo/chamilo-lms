@@ -5,8 +5,6 @@
  * Show information about a new assertion.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.badge
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -15,7 +13,7 @@ $skillId = isset($_GET['skill']) ? (int) $_GET['skill'] : 0;
 $courseId = isset($_GET['course']) ? (int) $_GET['course'] : 0;
 $sessionId = isset($_GET['session']) ? (int) $_GET['session'] : 0;
 
-if ($userId === 0 || $skillId === 0) {
+if (0 === $userId || 0 === $skillId) {
     exit;
 }
 
@@ -32,7 +30,7 @@ $userSkill = $objSkillRelUser->getByUserAndSkill(
     $sessionId
 );
 
-if ($userSkill == false) {
+if (false == $userSkill) {
     exit;
 }
 

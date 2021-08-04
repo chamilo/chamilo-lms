@@ -1,5 +1,3 @@
-<link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
-
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">{{ 'GlobalConfig'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
@@ -35,6 +33,21 @@
                 </div>
                 <div class="col-md-7">
                     {{ paypal_form }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% if tpv_redsys_enable == "true" %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ 'TpvRedsysConfig'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    {{ tpv_redsys_form }}
                 </div>
             </div>
         </div>
@@ -97,6 +110,9 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+                <div class="col-md-12">
+                    {{ transfer_info_form }}
                 </div>
             </div>
         </div>

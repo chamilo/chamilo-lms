@@ -50,7 +50,6 @@ class CreateSessionFromModelTest extends V2TestCase
                 'endDate' => $endDate,
             ]
         );
-        //var_dump($newSessionId);exit;
 
         // assert the session was created and given the returned session id
         $entityManager = Database::getManager();
@@ -70,7 +69,6 @@ class CreateSessionFromModelTest extends V2TestCase
         // clean up
         SessionManager::delete($modelSessionId);
         SessionManager::delete($newSessionId);
-        //var_dump($modelSessionId);exit;
     }
 
     /**

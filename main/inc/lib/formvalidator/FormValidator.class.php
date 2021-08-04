@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -11,6 +12,7 @@ class FormValidator extends HTML_QuickForm
     const LAYOUT_INLINE = 'inline';
     const LAYOUT_BOX = 'box';
     const LAYOUT_BOX_NO_LABEL = 'box-no-label';
+    const LAYOUT_GRID = 'grid';
 
     public $with_progress_bar = false;
     private $layout;
@@ -47,6 +49,9 @@ class FormValidator extends HTML_QuickForm
 
         $this->setLayout($layout);
 
+        // Form template
+        $formTemplate = $this->getFormTemplate();
+
         switch ($layout) {
             case self::LAYOUT_HORIZONTAL:
                 $attributes['class'] = 'form-horizontal';
@@ -57,6 +62,10 @@ class FormValidator extends HTML_QuickForm
             case self::LAYOUT_BOX:
                 $attributes['class'] = 'form-inline-box';
                 break;
+            case self::LAYOUT_GRID:
+                $attributes['class'] = 'form-grid';
+                $formTemplate = $this->getGridFormTemplate();
+                break;
         }
 
         parent::__construct($name, $method, $action, $target, $attributes, $trackSubmit);
@@ -64,8 +73,6 @@ class FormValidator extends HTML_QuickForm
         // Modify the default templates
         $renderer = &$this->defaultRenderer();
 
-        // Form template
-        $formTemplate = $this->getFormTemplate();
         $renderer->setFormTemplate($formTemplate);
 
         // Element template
@@ -85,13 +92,6 @@ class FormValidator extends HTML_QuickForm
             //Display a gray div in the buttons + makes the button available when scrolling
             $templateBottom = '<div class="form-actions bottom_actions bg-form">{label} {element}</div>';
             $renderer->setElementTemplate($templateBottom, 'submit_fixed_in_bottom');
-
-            //When you want to group buttons use something like this
-            /* $group = array();
-              $group[] = $form->createElement('button', 'mark_all', get_lang('MarkAll'));
-              $group[] = $form->createElement('button', 'unmark_all', get_lang('UnmarkAll'));
-              $form->addGroup($group, 'buttons_in_action');
-             */
             $renderer->setElementTemplate($templateSimple, 'buttons_in_action');
 
             $templateSimpleRight = '<div class="form-actions"> <div class="pull-right">{label} {element}</div></div>';
@@ -123,6 +123,23 @@ EOT;
         <fieldset>
             {content}
         </fieldset>
+        {hidden}
+        </form>';
+    }
+
+    /**
+     * @return string
+     */
+    public function getGridFormTemplate()
+    {
+        return '
+        <style>
+
+        </style>
+        <form{attributes}>
+            <div class="form_list">
+                {content}
+            </div>
         {hidden}
         </form>';
     }
@@ -529,18 +546,26 @@ EOT;
      * @param string $name          Element name (for form treatment purposes)
      * @param bool   $createElement Whether to use the create or add method
      * @param array  $attributes
+     * @param string $size
+     * @param string $class
      *
      * @return HTML_QuickForm_button
      */
-    public function addButtonSend($label, $name = 'submit', $createElement = false, $attributes = [])
-    {
+    public function addButtonSend(
+        $label,
+        $name = 'submit',
+        $createElement = false,
+        $attributes = [],
+        $size = 'default',
+        $class = ''
+    ) {
         return $this->addButton(
             $name,
             $label,
             'paper-plane',
             'primary',
-            null,
-            null,
+            $size,
+            $class,
             $attributes,
             $createElement
         );
@@ -837,8 +862,11 @@ EOT;
     public function addRadio($name, $label, $options = [], $attributes = [])
     {
         $group = [];
+        $counter = 1;
         foreach ($options as $key => $value) {
+            $attributes['data-order'] = $counter;
             $group[] = $this->createElement('radio', null, null, $value, $key, $attributes);
+            $counter++;
         }
 
         return $this->addGroup($group, $name, $label);
@@ -846,7 +874,7 @@ EOT;
 
     /**
      * @param string $name
-     * @param string $label
+     * @param mixed  $label      String, or array if form element with a comment
      * @param array  $options
      * @param array  $attributes
      *
@@ -966,7 +994,12 @@ EOT;
      */
     public function addHtml($snippet)
     {
+        if (empty($snippet)) {
+            return false;
+        }
         $this->addElement('html', $snippet);
+
+        return true;
     }
 
     /**
@@ -1614,6 +1647,51 @@ EOT;
     public function addUserAvatar($name, $label, $imageSize = 'small', $subtitle = '')
     {
         return $this->addElement('UserAvatar', $name, $label, ['image_size' => $imageSize, 'sub_title' => $subtitle]);
+    }
+
+    public function addCaptcha()
+    {
+        $ajax = api_get_path(WEB_AJAX_PATH).'form.ajax.php?a=get_captcha';
+        $options = [
+            'width' => 220,
+            'height' => 90,
+            'callback' => $ajax.'&var='.basename(__FILE__, '.php'),
+            'sessionVar' => basename(__FILE__, '.php'),
+            'imageOptions' => [
+                'font_size' => 20,
+                'font_path' => api_get_path(SYS_FONTS_PATH).'opensans/',
+                'font_file' => 'OpenSans-Regular.ttf',
+                //'output' => 'gif'
+            ],
+        ];
+
+        $captcha_question = $this->addElement(
+            'CAPTCHA_Image',
+            'captcha_question',
+            '',
+            $options
+        );
+        $this->addElement('static', null, null, get_lang('ClickOnTheImageForANewOne'));
+
+        $this->addElement(
+            'text',
+            'captcha',
+            get_lang('EnterTheLettersYouSee'),
+            ['size' => 40]
+        );
+        $this->addRule(
+            'captcha',
+            get_lang('EnterTheCharactersYouReadInTheImage'),
+            'required',
+            null,
+            'client'
+        );
+        $this->addRule(
+            'captcha',
+            get_lang('TheTextYouEnteredDoesNotMatchThePicture'),
+            'CAPTCHA',
+            $captcha_question
+        );
     }
 
     /**

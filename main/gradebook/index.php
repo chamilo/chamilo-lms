@@ -1,11 +1,6 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-/**
- * Gradebook controller.
- *
- * @package chamilo.gradebook
- */
+/* For licensing terms, see /license.txt */
 
 // $cidReset : This is the main difference with gradebook.php, here we say,
 // basically, that we are inside a course, and many things depend from that
@@ -231,7 +226,7 @@ if ($selectCat > 0 && $isStudentView) {
 if (isset($_GET['createallcategories'])) {
     GradebookUtils::block_students();
     $coursecat = Category::get_not_created_course_categories($stud_id);
-    if (!count($coursecat) == 0) {
+    if (0 == !count($coursecat)) {
         foreach ($coursecat as $row) {
             $cat = new Category();
             $cat->set_name($row[1]);
@@ -487,7 +482,7 @@ if (isset($_GET['deletelink'])) {
 if (!empty($course_to_crsind) && !isset($_GET['confirm'])) {
     GradebookUtils::block_students();
     if (!isset($_GET['movecat']) && !isset($_GET['moveeval'])) {
-        die('Error: movecat or moveeval not defined');
+        exit('Error: movecat or moveeval not defined');
     }
     $button = '<form name="confirm" method="post" action="'.api_get_self().'?confirm='
         .(isset($_GET['movecat']) ? '&movecat='.$moveCategoryId
@@ -814,7 +809,7 @@ if (!empty($selectCat)) {
     $cat = new Category();
     $course_id = CourseManager::get_course_by_category($selectCat);
     $show_message = $cat->show_message_resource_delete($course_id);
-    if ($show_message == '') {
+    if ('' == $show_message) {
         // Student
         if (!api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
             $certificate = Category::generateUserCertificate(
@@ -854,7 +849,6 @@ if (!api_is_allowed_to_edit(null, true)) {
 if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)) {
     echo '<meta http-equiv="refresh" content="0;url='.api_get_self().'?'.api_get_cidreq().'" />';
 } else {
-    // Tool introduction
     Display::display_introduction_section(
         TOOL_GRADEBOOK,
         ['ToolbarSet' => 'AssessmentsIntroduction']
@@ -912,7 +906,6 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                         foreach ($components as $component) {
                             $gradebook = new Gradebook();
                             $params = [];
-
                             $params['name'] = $component['acronym'];
                             $params['description'] = $component['title'];
                             $params['user_id'] = api_get_user_id();
@@ -924,8 +917,9 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
 
                             $gradebook->save($params);
                         }
+
                         // Reloading cats
-                        $cats = Category:: load(
+                        $cats = Category::load(
                             null,
                             null,
                             $course_code,
@@ -946,6 +940,13 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
         $model = ExerciseLib::getCourseScoreModel();
         $allowGraph = api_get_configuration_value('gradebook_hide_graph') === false;
         $isAllow = api_is_allowed_to_edit(null, true);
+        $settings = api_get_configuration_value('gradebook_pdf_export_settings');
+        $showFeedBack = true;
+        if (isset($settings['hide_feedback_textarea']) && $settings['hide_feedback_textarea']) {
+            $showFeedBack = false;
+        }
+
+        $allowTable = api_get_configuration_value('gradebook_hide_table') === false;
 
         /** @var Category $cat */
         foreach ($cats as $cat) {
@@ -1003,7 +1004,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $addparams,
                     $exportToPdf,
                     null,
-                    null,
+                    api_get_user_id(),
                     [],
                     $loadStats
                 );
@@ -1014,7 +1015,14 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     ];
                 }
 
-                $table = $gradebookTable->return_table();
+                $table = '';
+                if ($isAllow) {
+                    $table = $gradebookTable->return_table();
+                } else {
+                    if ($allowTable) {
+                        $table = $gradebookTable->return_table();
+                    }
+                }
 
                 $graph = '';
                 if ($allowGraph && empty($model)) {
@@ -1035,14 +1043,13 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                         'show_teacher_as_myself' => false,
                         'orientation' => 'P',
                     ];
-
+                    $feedback = '';
+                    if ($showFeedBack) {
+                        $feedback = '<br />'.get_lang('Feedback').'<br />
+                                      <textarea rows="5" cols="100" >&nbsp;</textarea>';
+                    }
                     $pdf = new PDF('A4', $params['orientation'], $params);
-                    $pdf->html_to_pdf_with_template(
-                        $table.
-                        $graph.
-                        '<br />'.get_lang('Feedback').'<br />
-                        <textarea rows="5" cols="100" >&nbsp;</textarea>'
-                    );
+                    $pdf->html_to_pdf_with_template($table.$graph.$feedback);
                 } else {
                     echo $table;
                     echo $graph;
@@ -1053,9 +1060,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
 }
 
 api_set_in_gradebook();
-
 $contents = ob_get_contents();
-
 ob_end_clean();
 
 $view = new Template($viewTitle);

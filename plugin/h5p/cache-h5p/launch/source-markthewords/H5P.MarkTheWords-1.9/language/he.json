@@ -1,0 +1,116 @@
+{
+  "semantics": [
+    {
+      "label": "תיאור משימה",
+      "description": "יש לתאר כיצד על המשתמש לפתור את המשימה",
+      "placeholder": "יש ללחוץ על כל הפעלים בקטע התוכן הבא."
+    },
+    {
+      "label": "אזור תוכן",
+      "placeholder": "זו תשובה: *תשובה*",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Marked words are added with an asterisk (*).</li><li>Asterisks can be added within marked words by adding another asterisk, *correctword*** => correctword*.</li></ul>",
+        "example": "The correct words are marked like this: *correctword*, an asterisk is written like this: *correctword***."
+      }
+    },
+    {
+      "label": "משוב כולל",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "ברירת מחדל"
+            }
+          ],
+          "label": "יש להגדיר משוב מותאם אישית לכל טווח ניקוד",
+          "description": "יש להקיש על כפתור \"הוספת טווח\" כדי להוסיף טווחים רבים ככל הנדרש.לדוגמה: 0-20% ציון רע, 21-91% ציון ממוצע, 91-100% ציון נהדר! ",
+          "entity": "טווח",
+          "field": {
+            "fields": [
+              {
+                "label": "טווח נקודות"
+              },
+              {},
+              {
+                "label": "משוב עבור טווח ניקוד מוגדר",
+                "placeholder": "יש למלא את המשוב"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "תיאור עבור כפתור \"סמן\"",
+      "default": "סמנו"
+    },
+    {
+      "label": "תיאור עבור כפתור \"נסו שנית\"",
+      "default": "נסו שנית"
+    },
+    {
+      "label": "תיאור עבור כפתור \"הציגו פתרון\"",
+      "default": "הציגו פתרון"
+    },
+    {
+      "label": "הגדרות אופן פעולת הרכיב",
+      "description": "אפשרויות אלה יאפשרו לך לשלוט באופן הפעולה של המשימה.",
+      "fields": [
+        {
+          "label": "הפעלת כפתור \"נסו בשנית\""
+        },
+        {
+          "label": "הפעלת כפתור \"הציגו פתרון\""
+        },
+        {
+          "label": "הפעלת כפתור \"סמן\""
+        },
+        {
+          "label": "הציגו נקודות ניקוד",
+          "description": "הציגו נקודות שהתקבלו עבור כל תשובה"
+        }
+      ]
+    },
+    {
+      "label": "תוכן תשובה נכונה",
+      "default": "נכון!",
+      "description": "תיאור המשמש לציון תשובה נכונה"
+    },
+    {
+      "label": "תוכן תשובה שאינה נכונה",
+      "default": "אינו נכון!",
+      "description": "תיאור המשמש לציון תשובה שאינה נכונה"
+    },
+    {
+      "label": "תוכן תשובה חסרה",
+      "default": "חסר!",
+      "description": "תיאור המשמש לציון תשובה שאינה נענתה"
+    },
+    {
+      "label": "תיאור עבור תצוגת פתרון",
+      "default": "המשימה מתעדכנת כדי להכיל את הפתרון.",
+      "description": "תוכן  זה אומר למשתמש שהמשימות עודכנו עם הפתרון."
+    },
+    {
+      "label": "תצוגה מילולית של סרגל הניקוד עבור אלה המשתמשים ב- readspeaker",
+      "default": "קיבלתם: נקודות מתוך סהכ: הנקודות "
+    },
+    {
+      "label": "Label for the full readable text for assistive technologies",
+      "default": "Full readable text"
+    },
+    {
+      "label": "Label for the text where words can be marked for assistive technologies",
+      "default": "Full text where words can be marked"
+    },
+    {
+      "label": "Solution mode header for assistive technologies",
+      "default": "Solution mode"
+    },
+    {
+      "label": "Checking mode header for assistive technologies",
+      "default": "Checking mode"
+    }
+  ]
+}

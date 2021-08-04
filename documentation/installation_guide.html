@@ -42,7 +42,7 @@
 <p>This guide explains how to install Chamilo FREE. Please read this fully before proceeding with the installation.</p>
 <p>Spanish: También puede leer <a href="installation_guide_es_ES.html">esta guía de instalación en español</a>.</p>
 <p>French: Vous pouvez aussi lire <a href="installation_guide_fr_FR.html">ce guide d'installation en français</a>.</p>
-<p>Italian: You can also read <a href="installation_guide_it_IT.html">this guide in Italian</a>.</p>
+<p>Italiano: puoi leggere <a href="installation_guide_it_IT.html">questa guida anche in italiano</a>.</p>
 
 <h2><b>Contents</b></h2>
 <ol>
@@ -52,7 +52,7 @@
   <li><a href="#4._Troubleshooting">Troubleshooting</a></li>
   <li><a href="#5._Administration_section">Administration section</a></li>
   <li><a href="#6._LDAP">LDAP&nbsp;</a></li>
-  <li><a href="#9._WIRIS_mathematical_formulas">Mathematical formulas with WIRIS</a></li>
+  <li><a href="#9._WIRIS_mathematical_formulas">Mathematical formulas with WIRIS MathType</a></li>
   <li><a href="#10._Xapian_fulltext_indexing">Full-text indexation with Xapian</a></li>
   <li><a href="#11._Chamilo_rapid_ppt_conversion">Chamilo Rapid - PPT conversion system</a></li>
   <li><a href="#12._Setting_cron_up">Setting chronological tasks</a></li>
@@ -78,9 +78,8 @@ Chamilo is mainly a LMS running (the so called <span style="font-weight: bold;">
 <ul>
 <li><span style="font-weight: bold;">Apache 2.2+</span></li>
 <li><span style="font-weight: bold;">MySQL 5.6+ or MariaDB 5+</span></li>
-<li><span style="font-weight: bold;">PHP 5.6, 7.1, 7.2 or 7.3</span></li>
+<li><span style="font-weight: bold;">PHP 7.2, 7.3 or 7.4</span></li>
 </ul>
-<br />
 All these pieces of software are free software and freely available. <br /><br />
 To run Chamilo <span style="font-weight: bold;">LMS</span> on your server, you need to install WAMP, LAMP or MAMP:
 <ul>
@@ -255,48 +254,48 @@ To get the best out of Chamilo, you need to finetune your PHP settings. Consider
 </ul>
 
 <pre>
-    max_execution_time = 300; Maximum execution time of each script, in seconds
-    max_input_time = 600; Maximum amount of time each script may spend parsing request data
-    memory_limit = 256M; Maximum amount of memory a script may consume (128MB)
+    max_execution_time = 300 ;Maximum execution time of each script, in seconds
+    max_input_time = 600 ;Maximum amount of time each script may spend parsing request data
+    memory_limit = 256M ;Maximum amount of memory a script may consume (128MB)
     post_max_size = 100M
-    upload_max_filesize = 100M;
-    short_open_tag       = Off
-    safe_mode            = Off
-    magic_quotes_gpc     = Off
-    magic_quotes_runtime = Off</pre>
+    upload_max_filesize = 100M
+    short_open_tag       = 0
+    safe_mode            = 0
+    magic_quotes_gpc     = 0
+    magic_quotes_runtime = 0</pre>
 
-<p><strong>Important:</strong> You need to set
-your <em>date.timezone</em> setting to whatever your server's timezone is. For example, if your server is in the 'America/New_York' timezone,
-    set the date.timezone parameter to this value in your php.ini:</p>
+<p><strong>Important:</strong> You need to set your <em>date.timezone</em> setting to whatever your server's timezone
+    is. For example, if your server is in the 'America/New_York' timezone, set the date.timezone parameter to this
+    value in your php.ini:</p>
 
 <pre>
-date.timezone = 'America/New_York'
+date.timezone = 'America/New_York';
 </pre>
 <br />
-<p><strong>Note:</strong> <span class="text-muted">PHP 5.3.9 introduces a new setting "max_input_vars", which limits the number of elements you can send in one single form. If you are dealing with numerous users or very long learning paths (many items), make sure you set this setting higher than its default value of 1000.</span></p>
+<p><strong>Note:</strong> <span class="text-muted">PHP 5.3.9 introduced the "max_input_vars" setting, which limits the number of elements you can send in one single form. If you are dealing with numerous users or very long learning paths (many items), make sure you set this setting higher than its default value of 1000.</span></p>
 
-<p><strong>BSD and CentOS users:</strong> these php libraries have to be included during the PHP installation (php5 might have to be replaced by php in some instances):</p>
+<p><strong>BSD and CentOS users:</strong> these php libraries have to be included during the PHP installation (php might have to be replaced by php{version} in some instances):</p>
 
 <ul>
-    <li>php5-session: The session shared extension for php</li>
-    <li>php5-mysqlnd (or php5-mysqli): The mysql shared extension for php</li>
-    <li>php5-zlib: The zlib shared extension for php</li>
-    <li>php5-pcre: The pcre shared extension for php</li>
-    <li>php5-xml</li>
-    <li>php5-json</li>
-    <li>php5-mcrypt</li>
-    <li>php5-iconv or php5-mbstring (either one of them)</li>
-    <li>php5-gd The graphics-generation extension for PHP</li>
-    <li>php5-intl The international behaviours extension for PHP</li>
+    <li>php-session: The session shared extension for php</li>
+    <li>php-mysql (or php-mysqlnd): The mysql shared extension for php</li>
+    <li>php-zlib: The zlib shared extension for php</li>
+    <li>php-pcre: The pcre shared extension for php</li>
+    <li>php-xml</li>
+    <li>php-json</li>
+    <li>php-iconv or php5-mbstring (either one of them)</li>
+    <li>php-gd, the graphics-generation extension for PHP</li>
+    <li>php-intl, the international behaviours extension for PHP</li>
+    <li>php-fileinfo, the extension to properly deal with file types - used in assignments tool</li>
+    <li>php-curl, the extension to deal with external calls. Used in the links tool</li>
 </ul>
 
 <p>You might also add the following php modules and packages:</p>
 <ul>
-    <li>php5-ctype</li>
-    <li>php5-ldap</li>
-    <li>php5-xapian</li>
-    <li>php5-curl</li>
-    <li>php5-xsl</li>
+    <li>php-ctype</li>
+    <li>php-ldap</li>
+    <li>php-xapian</li>
+    <li>php-xsl</li>
 </ul>
 
 
@@ -329,7 +328,7 @@ As this is only a minor version change from previous 1.11.* versions of Chamilo,
     older version's directory).</li>
   <li> clean your app/cache/twig directory: delete all the contents *in* this directory (do NOT remove the directory itself, only its contents!).
        It will all be re-generated.
-      You can also delete the contents of this directory through the "Archive directory cleanup" option in the "System" box of the Administration page.</li>
+      You can also delete the contents of this directory through the "Cleanup of cache and temporary files " option in the "System" box of the Administration page.</li>
   <li> you're done! No other upgrade procedure is required</li>
 </ul>
 <h3>3.2 Upgrading from Chamilo 1.10.x</h3>
@@ -561,9 +560,15 @@ that criteria</li>
 </ul>
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="9._WIRIS_mathematical_formulas"></a>7. Mathematical formulas with WIRIS</h2>
-<p>Installing this plugin you get WIRIS editor and WIRIS CAS. <br/>
-This activation will not be completed unless you have previously downloaded the <a href="http://www.wiris.com/plugins/ckeditor/download" target="_blank">PHP plugin for CKeditor WIRIS</a> and unzipped its contents into the main/inc/lib/ckeditor/editor/plugins/ckeditor_wiris/ directory. <br/>This is necessary because Wiris is proprietary software and its services are <a href="http://www.wiris.com/store/who-pays" target="_blank">commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by configuration.ini.default Chamilo file.</p>
+<h2><a name="9._WIRIS_mathematical_formulas"></a>7. Mathematical formulas with WIRIS MathType</h2>
+<p>Installing this plugin you get WIRIS MathType. <br/>
+This activation will not be completed unless you have previously downloaded
+    the <a href="http://www.wiris.com/plugins/ckeditor/download" target="_blank">PHP plugin for CKeditor WIRIS</a>
+    and unzipped its contents into the main/inc/lib/ckeditor/editor/plugins/ckeditor_wiris/ directory.<br/><br />
+    This is necessary because Wiris is proprietary software and its services are
+    <a href="http://www.wiris.com/store/who-pays" target="_blank">commercial</a>.
+    To make adjustments to the plugin, edit configuration.ini file or replace his content by
+    configuration.ini.default Chamilo file.</p>
 
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="10._Xapian_fulltext_indexing"></a>8. Full-text indexation with Xapian</h2>

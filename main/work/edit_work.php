@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -26,12 +27,12 @@ if ($blockEdition && !api_is_platform_admin()) {
 $courseInfo = api_get_course_info();
 $sessionId = api_get_session_id();
 $groupId = api_get_group_id();
-$workId = isset($_GET['id']) ? intval($_GET['id']) : null;
+$workId = isset($_GET['id']) ? (int) ($_GET['id']) : null;
 $workData = get_work_data_by_id($workId);
 $homework = get_work_assignment_by_id($workId);
 $locked = api_resource_is_locked_by_gradebook($workId, LINK_STUDENTPUBLICATION);
 
-if (api_is_platform_admin() == false && $locked == true) {
+if (false == api_is_platform_admin() && true == $locked) {
     api_not_allowed(true);
 }
 

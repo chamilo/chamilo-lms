@@ -37,17 +37,17 @@ $course_id = api_get_course_int_id();
 
 // Query db for answers
 if ($answer_type == HOT_SPOT_DELINEATION) {
-    $sql = "SELECT iid, id, answer, hotspot_coordinates, hotspot_type, ponderation 
+    $sql = "SELECT iid, answer, hotspot_coordinates, hotspot_type, ponderation
 	        FROM $TBL_ANSWERS
-	        WHERE 
-	            c_id = $course_id AND 
-	            question_id = $questionId AND 
-	            hotspot_type = 'delineation' 
+	        WHERE
+	            c_id = $course_id AND
+	            question_id = $questionId AND
+	            hotspot_type = 'delineation'
             ORDER BY iid";
 } else {
-    $sql = "SELECT iid, id, answer, hotspot_coordinates, hotspot_type, ponderation 
+    $sql = "SELECT iid, answer, hotspot_coordinates, hotspot_type, ponderation
 	        FROM $TBL_ANSWERS
-	        WHERE c_id = $course_id AND question_id = $questionId 
+	        WHERE c_id = $course_id AND question_id = $questionId
 	        ORDER BY position";
 }
 $result = Database::query($sql);
@@ -84,7 +84,6 @@ $nmbrTries = 0;
 
 while ($hotspot = Database::fetch_assoc($result)) {
     $hotSpot = [];
-    $hotSpot['id'] = $hotspot['id'];
     $hotSpot['iid'] = $hotspot['iid'];
     $hotSpot['answer'] = $hotspot['answer'];
 
@@ -118,7 +117,29 @@ while ($hotspot = Database::fetch_assoc($result)) {
     $data['hotspots'][] = $hotSpot;
 }
 
-$attemptList = Event::getAllExerciseEventByExeId($exerciseId);
+$attemptInfo = Database::select(
+    'exe_id',
+    Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES),
+    [
+        'where' => [
+            'exe_exo_id = ? AND c_id = ? AND exe_user_id = ? AND status = ?' => [
+                (int) $exerciseId,
+                $course_id,
+                api_get_user_id(),
+                'incomplete',
+            ],
+        ],
+        'order' => 'exe_id DESC',
+        'limit' => 1,
+    ],
+    'first'
+);
+
+if (empty($attemptInfo)) {
+    exit(0);
+}
+
+$attemptList = Event::getAllExerciseEventByExeId($attemptInfo['exe_id']);
 
 if (!empty($attemptList)) {
     if (isset($attemptList[$questionId])) {
@@ -142,7 +163,7 @@ if (Session::has("hotspot_ordered$questionId")) {
 
     foreach ($hotspotOrdered as $hotspotOrder) {
         foreach ($data['hotspots'] as $hotspot) {
-            if ($hotspot['id'] != $hotspotOrder) {
+            if ($hotspot['iid'] != $hotspotOrder) {
                 continue;
             }
 

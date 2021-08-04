@@ -1,22 +1,15 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
+/* For licensing terms, see /license.txt */
 
 /**
  * Exercise preview.
  *
- * @package chamilo.exercise
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 require_once __DIR__.'/../inc/global.inc.php';
-
 $current_course_tool = TOOL_QUIZ;
-
-// Clear the exercise session just in case
 Exercise::cleanSessionVariables();
-
 $this_section = SECTION_COURSES;
 
 $js = '<script>'.api_get_language_translate_html().'</script>';
@@ -35,6 +28,13 @@ if (!$result) {
     api_not_allowed(true);
 }
 
+if ('true' === api_get_plugin_setting('positioning', 'tool_enable')) {
+    $plugin = Positioning::create();
+    if ($plugin->blockFinalExercise(api_get_user_id(), $exercise_id, api_get_course_int_id(), $sessionId)) {
+        api_not_allowed(true);
+    }
+}
+
 $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : null;
 $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : null;
 $learnpathItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : null;
@@ -43,7 +43,6 @@ $origin = api_get_origin();
 $logInfo = [
     'tool' => TOOL_QUIZ,
     'tool_id' => $exercise_id,
-    'tool_id_detail' => 0,
     'action' => isset($_REQUEST['learnpath_id']) ? 'learnpath_id' : '',
     'action_details' => isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : '',
 ];
@@ -53,14 +52,21 @@ $interbreadcrumb[] = [
     'url' => 'exercise.php?'.api_get_cidreq(),
     'name' => get_lang('Exercises'),
 ];
-$interbreadcrumb[] = ['url' => '#', 'name' => $objExercise->selectTitle(true)];
+$interbreadcrumb[] = ['url' => '#', 'name' => Security::remove_XSS($objExercise->selectTitle(true))];
 
 $time_control = false;
-$clock_expired_time = ExerciseLib::get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
+$clock_expired_time = ExerciseLib::get_session_time_control_key($objExercise->iid, $learnpath_id, $learnpath_item_id);
 
 if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
     $time_control = true;
 }
+
+$extra_params = '';
+if (isset($_GET['preview'])) {
+    $extra_params = '&preview=1';
+}
+$exercise_url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.
+    api_get_cidreq().'&exerciseId='.$objExercise->iid.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpathItemViewId.$extra_params;
 
 if ($time_control) {
     // Get time left for expiring time
@@ -70,10 +76,11 @@ if ($time_control) {
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
     $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
-    $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left);
+    $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left, $exercise_url);
 }
 
-if (!in_array($origin, ['learnpath', 'embeddable'])) {
+if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
+    SessionManager::addFlashSessionReadOnly();
     Display::display_header();
 } else {
     $htmlHeadXtra[] = "
@@ -82,6 +89,13 @@ if (!in_array($origin, ['learnpath', 'embeddable'])) {
     </style>
     ";
     Display::display_reduced_header();
+}
+
+if ($origin === 'mobileapp') {
+    echo '<div class="actions">';
+    echo '<a href="javascript:window.history.go(-1);">'.
+        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
+    echo '</div>';
 }
 
 $html = '';
@@ -93,12 +107,12 @@ if ($is_allowed_to_edit) {
     if ($objExercise->sessionId == $sessionId) {
         $editLink = Display::url(
             Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
-            api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
+            api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->iid
         );
     }
     $editLink .= Display::url(
         Display::return_icon('test_results.png', get_lang('Results'), [], ICON_SIZE_SMALL),
-        api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id,
+        api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->iid,
         ['title' => get_lang('Results')]
     );
 }
@@ -108,22 +122,17 @@ $iconExercise = Display::return_icon('test-quiz.png', null, [], ICON_SIZE_MEDIUM
 // Exercise name.
 if (api_get_configuration_value('save_titles_as_html')) {
     $html .= Display::div(
-        $objExercise->get_formated_title().PHP_EOL.$editLink
+        Security::remove_XSS($objExercise->get_formated_title()).PHP_EOL.$editLink
     );
 } else {
     $html .= Display::page_header(
-        $iconExercise.PHP_EOL.$objExercise->selectTitle().PHP_EOL.$editLink
+        $iconExercise.PHP_EOL.Security::remove_XSS($objExercise->selectTitle()).PHP_EOL.$editLink
     );
 }
 
-// Exercise description
+// Exercise description.
 if (!empty($objExercise->description)) {
-    $html .= Display::div($objExercise->description, ['class' => 'exercise_description']);
-}
-
-$extra_params = '';
-if (isset($_GET['preview'])) {
-    $extra_params = '&preview=1';
+    $html .= Display::div(Security::remove_XSS($objExercise->description), ['class' => 'exercise_description']);
 }
 
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info(
@@ -144,34 +153,85 @@ if (isset($exercise_stat_info['exe_id'])) {
 
 // 2. Exercise button
 // Notice we not add there the lp_item_view_id because is not already generated
-$exercise_url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpathItemViewId.$extra_params;
 $exercise_url_button = Display::url(
     $label,
     $exercise_url,
     ['class' => 'btn btn-success btn-large']
 );
 
-//3. Checking visibility of the exercise (overwrites the exercise button)
+$btnCheck = '';
+$quizCheckButtonEnabled = api_get_configuration_value('quiz_check_button_enable');
+if ($quizCheckButtonEnabled) {
+    $btnCheck = Display::button(
+            'quiz_check_request_button',
+            Display::returnFontAwesomeIcon('spinner', '', true, 'fa-spin hidden').' '.get_lang('TestYourBrowser'),
+            [
+                'type' => 'button',
+                'role' => 'button',
+                'id' => 'quiz-check-request-button',
+                'class' => 'btn btn-default',
+                'data-loading-text' => get_lang('Loading'),
+                'autocomplete' => 'off',
+            ]
+        ).PHP_EOL.'<strong id="quiz-check-request-text"></strong>';
+}
+
+// 3. Checking visibility of the exercise (overwrites the exercise button).
 $visible_return = $objExercise->is_visible(
     $learnpath_id,
     $learnpath_item_id,
     null,
-    true
+    true,
+    $sessionId
 );
 
 // Exercise is not visible remove the button
 if ($visible_return['value'] == false) {
     if ($is_allowed_to_edit) {
-        $message = Display::return_message(get_lang('ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher'), 'warning');
+        $message = Display::return_message(
+            get_lang('ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher'),
+            'warning'
+        );
     } else {
         $message = $visible_return['message'];
         $exercise_url_button = null;
     }
 }
+$advancedMessage = RemedialCoursePlugin::create()->getAdvancedCourseList(
+    $objExercise,
+    api_get_user_id(),
+    api_get_session_id(),
+    $learnpath_id ?: 0,
+    $learnpath_item_id ?: 0
+);
+if (!empty($advancedMessage)) {
+    $message .= Display::return_message(
+        $advancedMessage,
+        'info',
+        false
+    );
+}
+
+$remedialMessage = RemedialCoursePlugin::create()->getRemedialCourseList(
+    $objExercise,
+    api_get_user_id(),
+    api_get_session_id(),
+    false,
+    $learnpath_id ?: 0,
+    $learnpath_item_id ?: 0
+);
+
+if (null != $remedialMessage) {
+    $message .= Display::return_message($remedialMessage, 'warning', false);
+}
+
+if (!api_is_allowed_to_session_edit()) {
+    $exercise_url_button = null;
+}
 
 $attempts = Event::getExerciseResultsByUser(
     api_get_user_id(),
-    $objExercise->id,
+    $objExercise->iid,
     api_get_course_int_id(),
     api_get_session_id(),
     $learnpath_id,
@@ -179,7 +239,6 @@ $attempts = Event::getExerciseResultsByUser(
     'desc'
 );
 $counter = count($attempts);
-
 $my_attempt_array = [];
 $table_content = '';
 
@@ -200,6 +259,7 @@ if (in_array(
     $objExercise->results_disabled,
     [
         RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
+        //RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK,
         RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
     ])
 ) {
@@ -209,7 +269,6 @@ if (in_array(
 }
 
 $certificateBlock = '';
-
 if (!empty($attempts)) {
     $i = $counter;
     foreach ($attempts as $attempt_result) {
@@ -246,10 +305,7 @@ if (!empty($attempts)) {
         }
         $row = [
             'count' => $i,
-            'date' => api_convert_and_format_date(
-                $attempt_result['start_date'],
-                DATE_TIME_FORMAT_LONG
-            ),
+            'date' => api_convert_and_format_date($attempt_result['start_date'], DATE_TIME_FORMAT_LONG),
             'userIp' => $attempt_result['user_ip'],
         ];
         $attempt_link .= PHP_EOL.$teacher_revised;
@@ -262,6 +318,7 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_SHOW_SCORE_ONLY,
                 RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
                 RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
+                RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK,
                 RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
                 RESULT_DISABLE_RANKING,
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
@@ -277,6 +334,7 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
                 RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
                 RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
+                RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK,
                 RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
                 RESULT_DISABLE_RANKING,
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
@@ -312,8 +370,7 @@ if (!empty($attempts)) {
 
     $header_names = [];
     $table = new HTML_Table(['class' => 'table table-striped table-hover']);
-
-    // Hiding score and answer
+    // Hiding score and answer.
     switch ($objExercise->results_disabled) {
         case RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK:
             if ($blockShowAnswers) {
@@ -328,6 +385,7 @@ if (!empty($attempts)) {
                 ];
             }
             break;
+        case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK:
         case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
             if ($blockShowAnswers) {
                 $header_names = [get_lang('Attempt'), get_lang('StartDate'), get_lang('IP'), get_lang('Score')];
@@ -392,7 +450,6 @@ if (!empty($attempts)) {
 $selectAttempts = $objExercise->selectAttempts();
 if ($selectAttempts) {
     $attempt_message = get_lang('Attempts').' '.$counter.' / '.$selectAttempts;
-
     if ($counter == $selectAttempts) {
         $attempt_message = Display::return_message($attempt_message, 'error');
     } else {
@@ -410,7 +467,6 @@ if ($time_control) {
 $html .= $message;
 
 $disable = api_get_configuration_value('exercises_disable_new_attempts');
-
 if ($disable && empty($exercise_stat_info)) {
     $exercise_url_button = Display::return_message(get_lang('NewExerciseAttemptDisabled'));
 }
@@ -423,6 +479,14 @@ $isLimitReached = ExerciseLib::isQuestionsLimitPerDayReached(
 );
 
 if (!empty($exercise_url_button) && !$isLimitReached) {
+    if ($quizCheckButtonEnabled) {
+        $html .= Display::div(
+            $btnCheck,
+            ['class' => 'exercise_overview_options']
+        );
+        $html .= '<br>';
+    }
+
     $html .= Display::div(
         Display::div(
             $exercise_url_button,
@@ -451,6 +515,75 @@ $html .= '</div>';
 
 if ($certificateBlock) {
     $html .= PHP_EOL.$certificateBlock;
+}
+
+if ($quizCheckButtonEnabled) {
+    $quizCheckRequestUrl = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=browser_test';
+    $params = http_build_query(
+        [
+            'exe_id' => 1,
+            'exerciseId' => $exercise_id,
+            'learnpath_id' => $learnpath_id,
+            'learnpath_item_id' => $learnpath_item_id,
+            'learnpath_item_view_id' => $learnpathItemViewId,
+            'reminder' => '0',
+            'type' => 'simple',
+            'question_id' => 23,
+            'choice[23]' => 45,
+        ]
+    ).'&'.api_get_cidreq();
+
+    $html .= "<script>
+        $(function () {
+            var btnTest = $('#quiz-check-request-button'),
+                iconBtnTest = btnTest.children('.fa.fa-spin');
+
+            btnTest.on('click', function (e) {
+                e.preventDefault();
+
+                btnTest.prop('disabled', true).removeClass('btn-success btn-danger').addClass('btn-default');
+                iconBtnTest.removeClass('hidden');
+
+                var txtResult = $('#quiz-check-request-text').removeClass('text-success text-danger').hide();
+
+                $
+                    .when(
+                        $.ajax({
+                            url: '$quizCheckRequestUrl',
+                            type: 'post',
+                            data: '$params'
+                        }),
+                        $.ajax({
+                            url: '$quizCheckRequestUrl',
+                            type: 'post',
+                            data: '$params&sleep=1'
+                        })
+                    )
+                    .then(
+                        function (xhr1, xhr2) {
+                            var xhr1IsOk = !!xhr1 && xhr1[1] === 'success' && !!xhr1[0] && 'ok' === xhr1[0];
+                            var xhr2IsOk = !!xhr2 && xhr2[1] === 'success' && !!xhr2[0] && 'ok' === xhr2[0];
+
+                            if (xhr1IsOk && xhr2IsOk) {
+                                btnTest.removeClass('btn-default btn-danger').addClass('btn-success');
+                                txtResult.text(\"".get_lang('QuizBrowserCheckOK')."\").addClass('text-success').show();
+                            } else {
+                                btnTest.removeClass('btn-default btn-success').addClass('btn-danger');
+                                txtResult.text(\"".get_lang('QuizBrowserCheckKO')."\").addClass('text-danger').show();
+                            }
+                        },
+                        function () {
+                            txtResult.text(\"".get_lang('QuizBrowserCheckKO')."\").addClass('text-danger').show();
+                            btnTest.removeClass('btn-default btn-success').addClass('btn-danger');
+                        }
+                    )
+                    .always(function () {
+                        btnTest.prop('disabled', false);
+                        iconBtnTest.addClass('hidden');
+                    });
+            });
+        });
+        </script>";
 }
 
 echo $html;

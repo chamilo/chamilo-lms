@@ -1,12 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\CourseCategory;
 use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
 
-/**
- * @package chamilo.admin
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -40,23 +38,32 @@ $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
 // Code
-$form->addText(
-    'visual_code',
-    [
-        get_lang('CourseCode'),
-        get_lang('OnlyLettersAndNumbers'),
-    ],
-    false,
-    [
-        'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
-        'pattern' => '[a-zA-Z0-9]+',
-        'title' => get_lang('OnlyLettersAndNumbers'),
-        'id' => 'visual_code',
-    ]
-);
+if (!api_get_configuration_value('course_creation_form_hide_course_code')) {
+    $form->addText(
+        'visual_code',
+        [
+            get_lang('CourseCode'),
+            get_lang('OnlyLettersAndNumbers'),
+        ],
+        false,
+        [
+            'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
+            'pattern' => '[a-zA-Z0-9]+',
+            'title' => get_lang('OnlyLettersAndNumbers'),
+            'id' => 'visual_code',
+        ]
+    );
 
-$form->applyFilter('visual_code', 'api_strtoupper');
-$form->applyFilter('visual_code', 'html_filter');
+    $form->applyFilter('visual_code', 'api_strtoupper');
+    $form->applyFilter('visual_code', 'html_filter');
+
+    $form->addRule(
+        'visual_code',
+        get_lang('Max'),
+        'maxlength',
+        CourseManager::MAX_COURSE_LENGTH_CODE
+    );
+}
 
 $countCategories = $courseCategoriesRepo->countAllInAccessUrl(
     $accessUrlId,
@@ -91,12 +98,9 @@ if ($countCategories >= 100) {
     );
 }
 
-$form->addRule(
-    'visual_code',
-    get_lang('Max'),
-    'maxlength',
-    CourseManager::MAX_COURSE_LENGTH_CODE
-);
+if (api_get_configuration_value('course_creation_form_set_course_category_mandatory')) {
+    $form->addRule('category_code', get_lang('ThisFieldIsRequired'), 'required');
+}
 
 $currentTeacher = api_get_user_entity(api_get_user_id());
 
@@ -227,7 +231,7 @@ if ($form->validate()) {
     $course['disk_quota'] = $course['disk_quota'] * 1024 * 1024;
     $course['exemplary_content'] = empty($course['exemplary_content']) ? false : true;
     $course['teachers'] = $course_teachers;
-    $course['wanted_code'] = $course['visual_code'];
+    $course['wanted_code'] = isset($course['visual_code']) ? $course['visual_code'] : '';
     $course['gradebook_model_id'] = isset($course['gradebook_model_id']) ? $course['gradebook_model_id'] : null;
     // Fixing category code
     $course['course_category'] = isset($course['category_code']) ? $course['category_code'] : '';

@@ -56,7 +56,7 @@
   <li class="li2"><span class="s1">LDAP </span></li>
   <li class="li2"><span class="s1">Formule matematiche con LaTeX</span></li>
   <li class="li2"><span class="s1">Formule matematiche con ASCIIMathML</span></li>
-  <li class="li2"><span class="s1">Formule matematiche con WIRIS</span></li>
+  <li class="li2"><span class="s1">Formule matematiche con Wiris MathType</span></li>
   <li class="li2"><span class="s1">Indicizzazione Full-Text con Xapian</span></li>
   <li class="li2"><span class="s1">Chamilo Rapid - sistema di conversione PPT</span></li>
   <li class="li2"><span class="s1">Impostare attività temporizzate</span></li>
@@ -73,8 +73,9 @@
 <p class="p8"><span class="s1"></span><br></p>
 <p class="p2"><span class="s1"><b>Chamilo</b> può essere installato indifferentemente su server Windows, Linux, Mac OS X e Unix. Tuttavia raccomandiamo l’utilizzo di server Linux per sfruttarne al meglio le caratteristiche di flessibilità, controllo remoto e scalabilità.</span></p>
 <p class="p3"><span class="s1"></span><br></p>
-<p class="p2"><span class="s1"><b>Chamilo</b> è principalmente un <b>LMS (Learning Management System)</b> che gira sulla piattaforma composta da <b>Apache (1.3,2.0 or 2.2)</b>, <b>MySQL 5.6+ (o MariaDB</b>) e <b>PHP 5.6, 7.1, 7.2 o 7.3</b>, meglio nota come piattaforma <b>AMP</b>.</span></p>
-<p class="p3"><span class="s1"></span><br></p>
+<p class="p2"><span class="s1"><b>Chamilo</b> è principalmente un <b>LMS (Learning Management System)</b> che gira sulla piattaforma composta da <b>Apache (1.3,2.0 or 2.2)</b>, <b>MySQL 5.6+ (o MariaDB</b>) e <b>PHP 7.2, 7.3 o 7.4</b>, meglio nota come piattaforma <b>AMP</b>.</span></p>
+
+  <p class="p3"><span class="s1"></span><br></p>
 <p class="p2"><span class="s1">Tutti questi software sono gratuiti e liberamente scaricabili.</span></p>
 <p class="p3"><span class="s1"></span><br></p>
 <p class="p2"><span class="s1">Per eseguire <b>Chamilo LMS</b> sul tuo server, devi installare WAMP, LAMP o MAMP:</span></p>
@@ -125,7 +126,7 @@
   <li class="li2"><span class="s1">[chamilo]/main/lang/</span></li>
 </ul>
 <p class="p3"><span class="s1"></span><br></p>
-<p class="p2"><span class="s1">Dalla versione 1.8.8 di Chamilo puoi anche abilitare la funzione di indicizzazione full-text che richiede l’installazione del modulo di estensione PHP chiamato php5-xapian. Se lo vuoi utilizzare devi pertanto consentire al tuo sistema di scrivere nella cartella searchdb:</span></p>
+<p class="p2"><span class="s1">Dalla versione 1.8.8 di Chamilo puoi anche abilitare la funzione di indicizzazione full-text che richiede l’installazione del modulo di estensione PHP chiamato php-xapian. Se lo vuoi utilizzare devi pertanto consentire al tuo sistema di scrivere nella cartella searchdb:</span></p>
 <ul>
   <li class="li2"><span class="s1">[chamilo]/searchdb/</span></li>
 </ul>
@@ -185,26 +186,26 @@
 <p class="p3"><span class="s1"></span><br></p>
 <p class="p1"><span class="s1"><b>Per utenti BSD:</b> le seguenti librerie php devono essere incluse durante l’installazione php:</span></p>
 <ul>
-  <li class="li2"><span class="s1">php5-mysql, l’estensione mysql shared per php</span></li>
-  <li class="li2"><span class="s1">php5-pcre, l’estensione pcre shared per php</span></li>
-  <li class="li2"><span class="s1">php5-session, l’estensione session shared per php</span></li>
-  <li class="li2"><span class="s1">php5-zlib, l’estensione zlib shared per php</span></li>
-  <li class="li2"><span class="s1">(opzionale) php5-ldap, se vuoi poter utilizzare l’autenticazione LDAP</span></li>
+  <li class="li2"><span class="s1">php-mysql, l’estensione mysql shared per php</span></li>
+  <li class="li2"><span class="s1">php-pcre, l’estensione pcre shared per php</span></li>
+  <li class="li2"><span class="s1">php-session, l’estensione session shared per php</span></li>
+  <li class="li2"><span class="s1">php-zlib, l’estensione zlib shared per php</span></li>
+  <li class="li2"><span class="s1">(opzionale) php-ldap, se vuoi poter utilizzare l’autenticazione LDAP</span></li>
 </ul>
 <p class="p3"><span class="s1"></span><br></p>
 <p class="p1"><span class="s1">Potresti altresì aggiungere i seguenti moduli e packages PHP:</span></p>
 <ul>
-  <li class="li2"><span class="s1">php5-ctype</span></li>
-  <li class="li2"><span class="s1">php5-gd</span></li>
-  <li class="li2"><span class="s1">php5-iconv</span></li>
-  <li class="li2"><span class="s1">php5-json</span></li>
-  <li class="li2"><span class="s1">php5-mbstring</span></li>
-  <li class="li2"><span class="s1">php5-intl</span></li>
-  <li class="li2"><span class="s1">php5-curl</span></li>
-  <li class="li2"><span class="s1">php5-iconv</span></li>
-  <li class="li2"><span class="s1">php5-xsl</span></li>
-  <li class="li2"><span class="s1">php5-ldap</span></li>
-  <li class="li2"><span class="s1">php5-xapian</span></li>
+  <li class="li2"><span class="s1">php-ctype</span></li>
+  <li class="li2"><span class="s1">php-gd</span></li>
+  <li class="li2"><span class="s1">php-iconv</span></li>
+  <li class="li2"><span class="s1">php-json</span></li>
+  <li class="li2"><span class="s1">php-mbstring</span></li>
+  <li class="li2"><span class="s1">php-intl</span></li>
+  <li class="li2"><span class="s1">php-curl</span></li>
+  <li class="li2"><span class="s1">php-iconv</span></li>
+  <li class="li2"><span class="s1">php-xsl</span></li>
+  <li class="li2"><span class="s1">php-ldap</span></li>
+  <li class="li2"><span class="s1">php-xapian</span></li>
 </ul>
 <p class="p11"><span class="s1"></span><br></p>
 <p class="p11"><span class="s1"></span><br></p>
@@ -490,15 +491,17 @@
 <p class="p8"><span class="s1"></span><br></p>
 <p class="p8"><span class="s1"></span><br></p>
 <ol class="ol1">
-  <li class="li6"><span class="s1">9. Formule matematiche con WIRIS</span></li>
+  <li class="li6"><span class="s1">9. Formule matematiche con Wiris MathType</span></li>
 </ol>
-<p class="p14"><span class="s1">Installare il plugin <a href="http://www.wiris.com/plugins/ckeditor/download"><span class="s2">PHP plugin for CKeditor WIRIS</span></a>, decompattarlo nella cartella main/inc/lib/ckeditor/editor/plugins/ckeditor_wiris.</span></p>
-<p class="p14"><span class="s1">A seguito dell’installazione si ottiene un editor WIRIS ed il WIRIS CAS.</span></p>
-<p class="p14"><span class="s1">Si segnala che Wiris è un software proprietario ed i suoi servizi sono servizi<span class="Apple-converted-space"> </span></span></p>
-<p class="p15"><span class="s5"><a href="http://www.wiris.com/store/who-pays">commerciali</a></span><span class="s4">.</span></p>
-<p class="p14"><span class="s1">Per qualsiasi modifica o configurazione ulteriore del plugin modificare il file configuration.ini o sostituirlo con il file configuration.ini di default di Chamilo.</span></p>
-<p class="p8"><span class="s1"></span><br></p>
-<p class="p8"><span class="s1"></span><br></p>
+<p>
+  Installare il plugin <a href="http://www.wiris.com/plugins/ckeditor/download" target="_blank">PHP plugin for CKeditor WIRIS</a>, decompattarlo nella cartella /main/inc/lib/javascript/ckeditor/plugins/ckeditor_wiris.
+  A seguito dell’installazione si ottiene un editor Wiris MathType.
+  Si segnala che WIRIS è un software proprietario ed i suoi servizi sono servizi
+  <a href="http://www.wiris.com/store/who-pays" target="_blank">commerciali</a>.
+  Per qualsiasi modifica o configurazione ulteriore del plugin modificare il file configuration.ini o sostituirlo con il file configuration.ini di default di Chamilo.
+
+</p>
+
 <p class="p6"><span class="s1">10. Indicizzazione Full-text con Xapian</span></p>
 <p class="p14"><span class="s1">Nota: questo passaggio richiede un server dedicato o un virtual server perchè il pacchetto tipicamente non è disponibile nella maggior parte delle soluzioni di hosting condivise presenti sul mercato.</span></p>
 <p class="p14"><span class="s1">Su un sistema Debian o Ubuntu 10.04 o superiori devi semplicemente istallare il pacchetto php5-xapian e riavviare il web server:</span></p>

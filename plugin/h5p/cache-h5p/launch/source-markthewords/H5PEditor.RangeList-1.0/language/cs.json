@@ -1,0 +1,7 @@
+{
+  "libraryStrings": {
+    "distributeButtonLabel": "Rozložte rovnoměrně",
+    "distributeButtonWarning": "Hodnoty se změní pro všechny rozsahy. Přejete si pokračovat?",
+    "rangeOutOfSequenceWarning": "Rozsahy skóre jsou mimo posloupnost"
+  }
+}

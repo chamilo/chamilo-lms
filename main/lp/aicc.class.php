@@ -5,12 +5,8 @@
  * Class aicc
  * Defines the AICC class, which is meant to contain the aicc items (nuclear elements).
  *
- * @package chamilo.learnpath
- *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  * @license GNU/GPL
- *
- * @package chamilo.learnpath
  */
 class aicc extends learnpath
 {
@@ -341,7 +337,7 @@ class aicc extends learnpath
             }
 
             // Now update previous item to change next_item_id.
-            if ($previous != 0) {
+            if (0 != $previous) {
                 $upd = "UPDATE $new_lp_item SET next_item_id = $item_id WHERE c_id = $course_id AND id = $previous";
                 Database::query($upd);
                 // Update the previous item id.
@@ -1017,7 +1013,7 @@ class aicc extends learnpath
                     break;
                 case "\r":
                     if (!$enclosed && $data[$i + 1] == "\n") {
-                        continue;
+                        break;
                     }
                     // no break
                 case "\n":
@@ -1031,7 +1027,7 @@ class aicc extends learnpath
                     break;
                 case "\\r":
                     if (!$enclosed && $data[$i + 1] == "\\n") {
-                        continue;
+                        break;
                     }
                     // no break
                 case "\\n":

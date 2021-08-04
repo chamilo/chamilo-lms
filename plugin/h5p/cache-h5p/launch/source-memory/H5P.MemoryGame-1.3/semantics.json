@@ -1,0 +1,228 @@
+[
+  {
+    "name": "cards",
+    "type": "list",
+    "widgets": [
+      {
+        "name": "VerticalTabs",
+        "label": "Default"
+      }
+    ],
+    "label": "Cards",
+    "importance": "high",
+    "entity": "card",
+    "min": 2,
+    "max": 100,
+    "field": {
+      "type": "group",
+      "name": "card",
+      "label": "Card",
+      "importance": "high",
+      "fields": [
+        {
+          "name": "image",
+          "type": "image",
+          "label": "Image",
+          "importance": "high",
+          "ratio": 1
+        },
+        {
+          "name": "imageAlt",
+          "type": "text",
+          "label": "Alternative text for Image",
+          "importance": "high",
+          "description": "Describe what can be seen in the photo. The text is read by text-to-speech tools needed by visually impaired users."
+        },
+        {
+          "name": "audio",
+          "type": "audio",
+          "importance": "high",
+          "label": "Audio Track",
+          "description": "An optional sound that plays when the card is turned.",
+          "optional": true,
+          "widgetExtensions": ["AudioRecorder"]
+        },
+        {
+          "name": "match",
+          "type": "image",
+          "label": "Matching Image",
+          "importance": "low",
+          "optional": true,
+          "description": "An optional image to match against instead of using two cards with the same image.",
+          "ratio": 1
+        },
+        {
+          "name": "matchAlt",
+          "type": "text",
+          "label": "Alternative text for Matching Image",
+          "importance": "low",
+          "optional": true,
+          "description": "Describe what can be seen in the photo. The text is read by text-to-speech tools needed by visually impaired users."
+        },
+        {
+          "name": "matchAudio",
+          "type": "audio",
+          "importance": "low",
+          "label": "Matching Audio Track",
+          "description": "An optional sound that plays when the second card is turned.",
+          "optional": true,
+          "widgetExtensions": ["AudioRecorder"]
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "label": "Description",
+          "importance": "low",
+          "maxLength": 150,
+          "optional": true,
+          "description": "An optional short text that will pop up once the two matching cards are found."
+        }
+      ]
+    }
+  },
+  {
+    "name": "behaviour",
+    "type": "group",
+    "label": "Behavioural settings",
+    "importance": "low",
+    "description": "These options will let you control how the game behaves.",
+    "optional": true,
+    "fields": [
+      {
+        "name": "useGrid",
+        "type": "boolean",
+        "label": "Position the cards in a square",
+        "description": "Will try to match the number of columns and rows when laying out the cards. Afterward, the cards will be scaled to fit the container.",
+        "importance": "low",
+        "default": true
+      },
+      {
+        "name": "numCardsToUse",
+        "type": "number",
+        "label": "Number of cards to use",
+        "description": "Setting this to a number greater than 2 will make the game pick random cards from the list of cards.",
+        "importance": "low",
+        "optional": true,
+        "min": 2
+      },
+      {
+        "name": "allowRetry",
+        "type": "boolean",
+        "label": "Add button for retrying when the game is over",
+        "importance": "low",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "lookNFeel",
+    "type": "group",
+    "label": "Look and feel",
+    "importance": "low",
+    "description": "Control the visuals of the game.",
+    "optional": true,
+    "fields": [
+      {
+        "name": "themeColor",
+        "type": "text",
+        "label": "Theme Color",
+        "importance": "low",
+        "description": "Choose a color to create a theme for your card game.",
+        "optional": true,
+        "default": "#909090",
+        "widget": "colorSelector",
+        "spectrum": {
+          "showInput": true
+        }
+      },
+      {
+        "name": "cardBack",
+        "type": "image",
+        "label": "Card Back",
+        "importance": "low",
+        "optional": true,
+        "description": "Use a custom back for your cards.",
+        "ratio": 1
+      }
+    ]
+  },
+  {
+    "label": "Localization",
+    "importance": "low",
+    "name": "l10n",
+    "type": "group",
+    "common": true,
+    "fields": [
+      {
+        "label": "Card turns text",
+        "importance": "low",
+        "name": "cardTurns",
+        "type": "text",
+        "default": "Card turns"
+      },
+      {
+        "label": "Time spent text",
+        "importance": "low",
+        "name": "timeSpent",
+        "type": "text",
+        "default": "Time spent"
+      },
+      {
+        "label": "Feedback text",
+        "importance": "low",
+        "name": "feedback",
+        "type": "text",
+        "default": "Good work!"
+      },
+      {
+        "label": "Try again button text",
+        "importance": "low",
+        "name": "tryAgain",
+        "type": "text",
+        "default": "Reset"
+      },
+      {
+        "label": "Close button label",
+        "importance": "low",
+        "name": "closeLabel",
+        "type": "text",
+        "default": "Close"
+      },
+      {
+        "label": "Game label",
+        "importance": "low",
+        "name": "label",
+        "type": "text",
+        "default": "Memory Game. Find the matching cards."
+      },
+      {
+        "label": "Game finished label",
+        "importance": "low",
+        "name": "done",
+        "type": "text",
+        "default": "All of the cards have been found."
+      },
+      {
+        "label": "Card indexing label",
+        "importance": "low",
+        "name": "cardPrefix",
+        "type": "text",
+        "default": "Card %num:"
+      },
+      {
+        "label": "Card unturned label",
+        "importance": "low",
+        "name": "cardUnturned",
+        "type": "text",
+        "default": "Unturned."
+      },
+      {
+        "label": "Card matched label",
+        "importance": "low",
+        "name": "cardMatched",
+        "type": "text",
+        "default": "Match found."
+      }
+    ]
+  }
+]

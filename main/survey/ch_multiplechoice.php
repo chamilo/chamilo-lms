@@ -27,21 +27,19 @@ class ch_multiplechoice extends survey_question
 
         $config = ['ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120'];
         $total = count($formData['answers']);
+
         if (is_array($formData['answers'])) {
             foreach ($formData['answers'] as $key => $value) {
                 $this->getForm()->addHtmlEditor('answers['.$key.']', null, false, false, $config);
-
-                if ($key < $total - 1) {
-                    //$this->getForm()->addButton("move_down[$key]", get_lang('Down'));
-                }
-
-                if ($key > 0) {
-                    //$this->getForm()->addButton("move_up[$key]", get_lang('Up'));
-                }
-
                 if ($total > 2) {
                     $this->getForm()->addButton("delete_answer[$key]", get_lang('Delete'), 'trash', 'danger');
                 }
+            }
+        }
+
+        if (isset($formData['answersid']) && !empty($formData['answersid'])) {
+            foreach ($formData['answersid'] as $value) {
+                $this->getForm()->addHidden('answersid[]', $value);
             }
         }
 

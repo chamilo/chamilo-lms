@@ -124,8 +124,8 @@ if ($editFile && $isPlatformAdmin) {
 
     $default = '
 RewriteCond %{REQUEST_URI} !'.$append.'/maintenance.html$
-RewriteCond %{REMOTE_HOST} !^'.$implode.'
-RewriteRule \.*$ '.$append.'/maintenance.html [R=302,L]
+RewriteCond %{REMOTE_ADDR} !^'.$implode.'
+RewriteRule ^\.*$ '.$append.'/maintenance.html [R=302,L]
 ';
     if (empty($block)) {
         $block = $default;

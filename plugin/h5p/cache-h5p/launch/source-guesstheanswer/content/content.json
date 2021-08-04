@@ -1,0 +1,12 @@
+{"media":{"params":
+    {"contentName":"Image","file":{"path":"@terms_b@",
+    "mime":"image\/jpeg","copyright":{"license":"U"},
+    "width":100,"height":100},
+    "alt":"@terms_a@",
+    "title":"@terms_a@"},
+    "library":"H5P.Image 1.1",
+    "metadata":{"contentType":"Image","license":"U","title":"Untitled Image"},
+    "subContentId":"8b023be6-1463-431f-8950-41efcb1c7960"},
+    "solutionLabel":"solution label",
+    "taskDescription":"@terms_a@",
+    "solutionText":"@terms_c@"}

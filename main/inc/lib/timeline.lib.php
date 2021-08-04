@@ -4,8 +4,6 @@
 /**
  * Class Timeline
  * Timeline model class definition.
- *
- * @package chamilo.library
  */
 class Timeline extends Model
 {

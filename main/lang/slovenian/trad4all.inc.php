@@ -6985,7 +6985,7 @@ V skladu v danimi Shibboleth atributi, spremenite vrednosti objektov &#36;result
 </ul>
 Nato v področju <a href=\"settings.php?category=Plugins\">Vtičniki</a> omogočite in nastavite gumb Shibboleth login (logout) za vašo Chamilo platformo.";
 $LdapDescriptionTitle = "<h3>LDAP avtentifikacija</h3>";
-$FacebookMainActivateTitle = "<h3>Facebook avtentifikacija</h3>";
+$FacebookMainActivateTitle = "Facebook avtentifikacija";
 $FacebookMainActivateComment = "Najprej morate ustvariti Facebook Aplikacijo ( glej <a href=\"https://developers.facebook.com/apps\">https://developers.facebook.com/apps</a> ) s svojim Facebook računom. Izmed Facebook Apps parametrom, site URL vrednost mora biti vsebovati GET parameter 'action=fbconnect' (npr.: http://mychamilo.com/?action=fbconnect).<br />
 
 Nato spremenite datoteko
@@ -8011,7 +8011,7 @@ $TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToTheExerciseList = "Mož
 $PostedExpirationDate = "Objavljen je bil rok za oddajo naloge (vidno učečemu)";
 $BossAlertMsgSentToUserXTitle = "Nadaljne sporočilo o učeči/učečem %s";
 $BossAlertUserXSentMessageToUserYWithLinkZ = "Pozdravljen,<br /><br />
-uporabnik $s je poslal sledeče sporočilo o učečem %s.<br /><br />
+uporabnik %s je poslal sledeče sporočilo o učečem %s.<br /><br />
 Sporočilo je vidno tule %s";
 $include_services = "Vključi storitve";
 $culqi_enable = "Omogoči Culqi";
@@ -8117,6 +8117,7 @@ $DependsOnGradebook = "Odvisno od redovalnice";
 $ThisGradebookDoesntHaveDependencies = "Ta redovalnica nima odvisnosti";
 $CourseIntroductionsAllImportedSuccessfully = "Vsi opisi tečajev se bili uspešno uvoženi.";
 $FilterSessions = "Filtriraj seje";
+$ScoreModel = "Model ocenjevanja";
 $SyncDatabaseWithSchema = "Sinhroniziraj podatkovno zbirko s shemo";
 $UserRequestWaitingForAction = "Uporabnik čaka na aktivnost v zvezi z zahtevo glede svojih osebnih podatkov";
 $TheUserXIsWaitingForAnActionGoHereX = "Uporabnik %s čaka na aktivnost v zvezi z njegovim zahtevkom o osebnih podatkih. \n\n. Za upravljanje zahevkov, ki se tičejo osebnih podatkov uporabnikov, uporabite naslednjo povezavo: %s";
@@ -8227,6 +8228,7 @@ $WelcomeToPortalXInCourseSessionX = "Dobrodošli v portal %s k tečaju seje: %s"
 $WelcomeToPortalXInCourseSessionXCoursePartOfCareerX = "Dobrodošli v portal %s k tečaju %s, delu kariernega izobraževanja %s";
 $YourNextModule = "Vaš naslednji modul";
 $FirstLesson = "Prva lekcija";
+$ImportCourseTeachersAsCourseCoach = "Uvozi učitelje tečaja kot coach-e  v sejo";
 $ScormStartAttemptDate = "Datum";
 $LoginsByDate = "Prijave po datumih";
 $AllowHtaccessScormImport = "Dovoli htaccess pri uvozih SCORM paketov";
@@ -8288,4 +8290,26 @@ $CertificateOfAchievement = "Certifikat dosežkov";
 $CertificateOfAchievementByDay = "Certifikat dosežkov za dan";
 $ReducedReport = "Skrajšano poročilo";
 $NotInCourse = "Zunanji tečaji";
+$MailTemplates = "Predloge e-poštnih sporočil";
+$AnEmailToResetYourPasswordHasBeenSent = "Sporočilo za ponastavitev gesla je bilo doposlano.";
+$TotalNumberOfAvailableCourses = "Skupno število razpoložljivih tečajev";
+$NumberOfMatchingCourses = "Število ujemajočih se tečajev";
+$GeneralStats = "Generalna statistika";
+$SessionCount = "Število sej";
+$SessionsPerWeek = "Sej na teden";
+$AverageUserPerSession = "Povprečno število uporabnikov na sejo";
+$SessionsPerLanguage = "Seje po jezikih";
+$CountOfSessions = "Število sej";
+$TotalNumberOfStudents = "Skupno število učečih se";
+$UsersCreatedInTheSelectedPeriod = "Novih uporabnikov v izbranem obdobju";
+$UsersByLanguage = "Uporabnikov glede na jezik";
+$Count = "Število";
+$SortKeys = "Razvrščeno po";
+$ExportAsCompactCSV = "Izvozi kot kompakten CSV";
+$ExportSurveyResults = "Izvozi rezultate vprašalnika";
+$PointAverage = "Povprečen rezultat";
+$TotalScore = "Skupna vsota";
+$ExportResults = "Izvozi rezultate";
+$QuizBrowserCheckOK = "Vaš brskalnik je bil preverjen. Sedaj lahko varno nadaljujete.";
+$QuizBrowserCheckKO = "Vašega brskalnika ne moremo preveriti. Prosimo, da poskusite znova, ali pa poskusite z drugim brskalnikom /napravo predenj pričnete s svojim testom.";
 ?>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services
+        http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="xapi_lrs.statement.serializer" class="Xabbuh\XApi\Serializer\StatementSerializerInterface" public="false">
+            <factory service="xapi_lrs.serializer.factory" method="createStatementSerializer"/>
+        </service>
+
+        <service id="xapi_lrs.statement_result.serializer" class="Xabbuh\XApi\Serializer\StatementResultSerializerInterface" public="false">
+            <factory service="xapi_lrs.serializer.factory" method="createStatementResultSerializer"/>
+        </service>
+
+        <service id="xapi_lrs.actor.serializer" class="Xabbuh\XApi\Serializer\ActorSerializerInterface" public="false">
+            <factory service="xapi_lrs.serializer.factory" method="createActorSerializer"/>
+        </service>
+
+        <service id="xapi_lrs.document_data.serializer" class="Xabbuh\XApi\Serializer\DocumentDataSerializerInterface" public="false">
+            <factory service="xapi_lrs.serializer.factory" method="createDocumentDataSerializer"/>
+        </service>
+
+        <service id="xapi_lrs.serializer_factory" class="Xabbuh\XApi\Serializer\Symfony\SerializerFactory" public="false">
+            <argument type="service" id="xapi_lrs.serializer"/>
+        </service>
+
+        <service id="xapi_lrs.serializer" class="Symfony\Component\Serializer\SerializerInterface" public="false">
+            <factory class="Xabbuh\XApi\Serializer\Symfony\Serializer" method="createSerializer"/>
+        </service>
+    </services>
+</container>

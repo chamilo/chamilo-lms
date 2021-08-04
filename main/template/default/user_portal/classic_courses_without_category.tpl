@@ -26,8 +26,9 @@
                         {% endif %}
                     </div>
                     <div class="col-md-10">
-                        {% if item.edit_actions != '' %}
-                            <div class="pull-right">
+                        <div class="pull-right">
+                            {{ item.unregister_button }}
+                            {% if item.edit_actions != '' %}
                                 {% if item.document == '' %}
                                     <a class="btn btn-default btn-sm" href="{{ item.edit_actions }}">
                                         <i class="fa fa-pencil" aria-hidden="true"></i>
@@ -40,15 +41,16 @@
                                         {{ item.document }}
                                     </div>
                                 {% endif %}
-                            </div>
-                        {% endif %}
+                            {% endif %}
+                        </div>
                         <h4 class="course-items-title">
                             {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
-                                {{ item.title }} {{ item.code_course }}
+                                {{ item.title }} {{ item.code_course }} {{ item.url_marker }}
                             {% else %}
                                 <a href="{{ item.link }}">
                                     {{ item.title }} {{ item.code_course }}
                                 </a>
+                                {{ item.url_marker }}
                                 {{ item.notifications }}
                                 {% if item.is_special_course %}
                                     {{ 'klipper.png' | img(22, 'CourseAutoRegister'|get_lang ) }}
@@ -69,25 +71,8 @@
                                     {% endfor %}
                                 {% endif %}
                             </div>
-                            {% if item.student_info %}
-                                {% if item.student_info.progress is not null or item.student_info.score is not null or item.student_info.certificate is not null %}
-                                    <div class="course-student-info">
-                                        <div class="student-info">
-                                            {% if (item.student_info.progress is not null) %}
-                                                {{ "StudentCourseProgressX" | get_lang | format(item.student_info.progress) }}
-                                            {% endif %}
 
-                                            {% if (item.student_info.score is not null) %}
-                                                {{ "StudentCourseScoreX" | get_lang | format(item.student_info.score) }}
-                                            {% endif %}
-
-                                            {% if (item.student_info.certificate is not null) %}
-                                                {{ "StudentCourseCertificateX" | get_lang | format(item.student_info.certificate) }}
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                {% endif %}
-                            {% endif %}
+                            {% include 'user_portal/course_student_info.tpl'|get_template with { 'student_info': item.student_info } %}
                         </div>
                         <div class="category">
                             {{ item.category }}

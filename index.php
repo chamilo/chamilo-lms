@@ -56,7 +56,7 @@ if (isset($_GET['submitAuth']) && $_GET['submitAuth'] == 1) {
     );
     echo 'Attempted breakin - sysadmins notified.';
     session_destroy();
-    die();
+    exit();
 }
 // Delete session item necessary to check for legal terms
 if (api_get_setting('allow_terms_conditions') === 'true') {
@@ -140,7 +140,13 @@ if ($useCookieValidation === 'true') {
 // When loading a chamilo page do not include the hot courses and news
 if (!isset($_REQUEST['include'])) {
     if (api_get_setting('show_hot_courses') == 'true') {
-        $hotCourses = $controller->return_hot_courses();
+        if (api_get_configuration_value('popular_courses_handpicked')) {
+            // If the option has been set correctly, use the courses manually
+            // marked as popular rather than the ones marked by users
+            $hotCourses = $controller->returnPopularCoursesHandPicked();
+        } else {
+            $hotCourses = $controller->return_hot_courses();
+        }
     }
     $announcements_block = $controller->return_announcements();
 }
@@ -175,8 +181,8 @@ if ($includeFile) {
 }
 $controller->tpl->assign('navigation_links', $controller->return_navigation_links());
 $controller->tpl->assign('notice_block', $controller->return_notice());
-//$controller->tpl->assign('main_navigation_block', $controller->return_navigation_links());
 $controller->tpl->assign('help_block', $controller->return_help());
+$controller->tpl->assign('student_publication_block', $controller->studentPublicationBlock());
 if (api_is_platform_admin() || api_is_drh()) {
     $controller->tpl->assign('skills_block', $controller->returnSkillLinks());
 }

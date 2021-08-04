@@ -96,7 +96,7 @@ class BlockSession extends Block
         $sessions = $this->sessions;
         $content .= '<h4>'.get_lang('YourSessionsList').'</h4>';
         if (count($sessions) > 0) {
-            $sessions_table = '<table class="data_table" width:"95%">';
+            $sessions_table = '<table class="table table-hover table-striped data_table" width:"95%">';
             $sessions_table .= '<tr>
                                     <th >'.get_lang('Title').'</th>
                                     <th >'.get_lang('Date').'</th>

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -6,11 +7,11 @@
  * Defines a gradebook ExerciseLink object.
  *
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 class ExerciseLink extends AbstractLink
 {
+    // This variable is used in the WSGetGradebookUserItemScore service, to check base course tests.
+    public $checkBaseExercises = false;
     private $course_info;
     private $exercise_table;
     private $exercise_data = [];
@@ -24,7 +25,7 @@ class ExerciseLink extends AbstractLink
         parent::__construct();
         $this->set_type(LINK_EXERCISE);
         $this->is_hp = $hp;
-        if ($this->is_hp == 1) {
+        if (1 == $this->is_hp) {
             $this->set_type(LINK_HOTPOTATOES);
         }
     }
@@ -42,6 +43,7 @@ class ExerciseLink extends AbstractLink
         $tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $exerciseTable = $this->get_exercise_table();
         $lpItemTable = Database::get_course_table(TABLE_LP_ITEM);
+        $lpTable = Database::get_course_table(TABLE_LP_MAIN);
 
         $documentPath = api_get_path(SYS_COURSE_PATH).$this->course_code.'/document';
         if (empty($this->course_code)) {
@@ -49,36 +51,42 @@ class ExerciseLink extends AbstractLink
         }
         $sessionId = $this->get_session_id();
         if (empty($sessionId)) {
-            $session_condition = api_get_session_condition(0, true);
+            $session_condition = api_get_session_condition(0, true, false, 'e.session_id');
         } else {
-            $session_condition = api_get_session_condition($sessionId, true, true);
+            $session_condition = api_get_session_condition($sessionId, true, true, 'e.session_id');
         }
 
         // @todo
         $uploadPath = null;
+        $courseId = $this->course_id;
 
-        $sql = 'SELECT iid, title FROM '.$exerciseTable.'
-				WHERE c_id = '.$this->course_id.' AND active=1  '.$session_condition;
+        $sql = "SELECT iid, title FROM $exerciseTable e
+				WHERE
+				    c_id = $courseId AND
+				    active = 1
+				    $session_condition ";
 
-        $sqlLp = "SELECT e.iid, e.title 
-                  FROM $exerciseTable e 
+        $sqlLp = "SELECT e.iid, e.title, lp.name lp_name
+                  FROM $exerciseTable e
                   INNER JOIN $lpItemTable i
-                  ON (e.c_id = i.c_id AND e.id = i.path)
-				  WHERE 
-				    e.c_id = $this->course_id AND 
-				    active = 0 AND 
+                  ON (e.c_id = i.c_id AND e.iid = i.path)
+                  INNER JOIN $lpTable lp
+                  ON (lp.c_id = e.c_id AND lp.id = i.lp_id)
+				  WHERE
+				    e.c_id = $courseId AND
+				    active = 0 AND
 				    item_type = 'quiz'
-				  $session_condition";
+				    $session_condition";
 
         $sql2 = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility, d.id
-                FROM $TBL_DOCUMENT d 
+                FROM $TBL_DOCUMENT d
                 INNER JOIN $tableItemProperty ip
                 ON (d.id = ip.ref AND d.c_id = ip.c_id)
                 WHERE
-                    d.c_id = $this->course_id AND
-                    ip.c_id = $this->course_id AND                
+                    d.c_id = $courseId AND
+                    ip.c_id = $courseId AND
                     ip.tool = '".TOOL_DOCUMENT."' AND
-                    (d.path LIKE '%htm%') AND 
+                    (d.path LIKE '%htm%') AND
                     (d.path LIKE '%HotPotatoes_files%') AND
                     d.path  LIKE '".Database::escape_string($uploadPath.'/%/%')."' AND
                     ip.visibility = '1'
@@ -96,10 +104,12 @@ class ExerciseLink extends AbstractLink
         }
 
         $cats = [];
+        $exerciseList = [];
         if (isset($result)) {
             if (Database::num_rows($result) > 0) {
                 while ($data = Database::fetch_array($result)) {
                     $cats[] = [$data['iid'], $data['title']];
+                    $exerciseList[] = $data;
                 }
             }
         }
@@ -132,10 +142,22 @@ class ExerciseLink extends AbstractLink
         }
 
         if (!empty($exerciseInLP)) {
+            $allExercises = array_column($exerciseList, 'iid');
+
             foreach ($exerciseInLP as $exercise) {
+                if (in_array($exercise['iid'], $allExercises)) {
+                    continue;
+                }
+                $allExercises[] = $exercise['iid'];
+                //$lpName = strip_tags($exercise['lp_name']);
+                /*$cats[] = [
+                    $exercise['iid'],
+                    strip_tags(Exercise::get_formated_title_variable($exercise['title'])).
+                    ' ('.get_lang('ToolLearnpath').' - '.$lpName.')',
+                ];*/
                 $cats[] = [
                     $exercise['iid'],
-                    strip_tags(Exercise::get_formated_title_variable($exercise['title'])).' ('.get_lang('ToolLearnpath').')',
+                    strip_tags(Exercise::get_formated_title_variable($exercise['title'])),
                 ];
             }
         }
@@ -151,7 +173,7 @@ class ExerciseLink extends AbstractLink
         $tbl_stats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $sessionId = $this->get_session_id();
         $course_id = api_get_course_int_id($this->get_course_code());
-        $sql = "SELECT count(exe_id) AS number 
+        $sql = "SELECT count(exe_id) AS number
                 FROM $tbl_stats
                 WHERE
                     session_id = $sessionId AND
@@ -177,7 +199,6 @@ class ExerciseLink extends AbstractLink
     public function calc_score($stud_id = null, $type = null)
     {
         $allowStats = api_get_configuration_value('allow_gradebook_stats');
-
         if ($allowStats) {
             $link = $this->entity;
             if (!empty($link)) {
@@ -186,21 +207,20 @@ class ExerciseLink extends AbstractLink
                 switch ($type) {
                     case 'best':
                         $bestResult = $link->getBestScore();
-                        $result = [$bestResult, $weight];
 
-                        return $result;
+                        return [$bestResult, $weight];
+
                         break;
                     case 'average':
-                        $count = count($this->getStudentList());
+                        $count = count($link->getUserScoreList());
+                        //$count = count($this->getStudentList());
                         if (empty($count)) {
-                            $result = [0, $weight];
-
-                            return $result;
+                            return [0, $weight];
                         }
                         $sumResult = array_sum($link->getUserScoreList());
-                        $result = [$sumResult / $count, $weight];
 
-                        return $result;
+                        return [$sumResult / $count, $weight];
+
                         break;
                     case 'ranking':
                         return [null, null];
@@ -235,7 +255,6 @@ class ExerciseLink extends AbstractLink
         $sessionId = $this->get_session_id();
         $courseId = $this->getCourseId();
         $exerciseData = $this->get_exercise_data();
-
         $exerciseId = isset($exerciseData['id']) ? (int) $exerciseData['id'] : 0;
         $stud_id = (int) $stud_id;
 
@@ -261,7 +280,7 @@ class ExerciseLink extends AbstractLink
         $exercise->read($exerciseId);
 
         if (!$this->is_hp) {
-            if ($exercise->exercise_was_added_in_lp == false) {
+            if (false == $exercise->exercise_was_added_in_lp) {
                 $sql = "SELECT * FROM $tblStats
                         WHERE
                             exe_exo_id = $exerciseId AND
@@ -272,33 +291,54 @@ class ExerciseLink extends AbstractLink
                             c_id = $courseId
                         ";
             } else {
-                $lpId = null;
+                $lpCondition = null;
                 if (!empty($exercise->lpList)) {
-                    // Taking only the first LP
-                    $lpId = current($exercise->lpList);
-                    $lpId = $lpId['lp_id'];
+                    //$lpId = $exercise->getLpBySession($sessionId);
+                    $lpList = [];
+                    foreach ($exercise->lpList as $lpData) {
+                        if ($this->checkBaseExercises) {
+                            if ((int) $lpData['session_id'] == 0) {
+                                $lpList[] = $lpData['lp_id'];
+                            }
+                        } else {
+                            if ((int) $lpData['session_id'] == $sessionId) {
+                                $lpList[] = $lpData['lp_id'];
+                            }
+                        }
+                    }
+
+                    if (empty($lpList) && !empty($sessionId)) {
+                        // Check also if an LP was added in the base course.
+                        foreach ($exercise->lpList as $lpData) {
+                            if ((int) $lpData['session_id'] == 0) {
+                                $lpList[] = $lpData['lp_id'];
+                            }
+                        }
+                    }
+
+                    $lpCondition = ' (orig_lp_id = 0 OR (orig_lp_id IN ("'.implode('", "', $lpList).'"))) AND ';
                 }
 
-                $sql = "SELECT * 
+                $sql = "SELECT *
                         FROM $tblStats
                         WHERE
                             exe_exo_id = $exerciseId AND
-                            orig_lp_id = $lpId AND
+                            $lpCondition
                             status <> 'incomplete' AND
                             session_id = $sessionId AND
                             c_id = $courseId ";
             }
 
-            if (!empty($stud_id) && $type != 'ranking') {
+            if (!empty($stud_id) && 'ranking' !== $type) {
                 $sql .= " AND exe_user_id = $stud_id ";
             }
-            $sql .= ' ORDER BY exe_id DESC';
+            $sql .= ' ORDER BY exe_id DESC ';
         } else {
-            $sql = "SELECT * FROM $tblHp hp 
+            $sql = "SELECT * FROM $tblHp hp
                     INNER JOIN $tblDoc doc
                     ON (hp.exe_name = doc.path AND doc.c_id = hp.c_id)
                     WHERE
-                        hp.c_id = $courseId AND                        
+                        hp.c_id = $courseId AND
                         doc.id = $exerciseId";
 
             if (!empty($stud_id)) {
@@ -310,7 +350,7 @@ class ExerciseLink extends AbstractLink
 
         if (isset($stud_id) && empty($type)) {
             // for 1 student
-            if ($data = Database::fetch_array($scores)) {
+            if ($data = Database::fetch_array($scores, 'ASSOC')) {
                 $attempts = Database::query($sql);
                 $counter = 0;
                 while ($attempt = Database::fetch_array($attempts)) {
@@ -339,7 +379,6 @@ class ExerciseLink extends AbstractLink
             $bestResult = 0;
             $weight = 0;
             $sumResult = 0;
-
             $studentList = $this->getStudentList();
             $studentIdList = [];
             if (!empty($studentList)) {
@@ -436,7 +475,7 @@ class ExerciseLink extends AbstractLink
         $exerciseId = $data['id'];
         $path = isset($data['path']) ? $data['path'] : '';
 
-        $url = api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?'
+        return api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?'
             .http_build_query(
                 [
                     'path' => $path,
@@ -447,8 +486,6 @@ class ExerciseLink extends AbstractLink
                     'type' => $this->get_type(),
                 ]
             );
-
-        return $url;
     }
 
     /**
@@ -471,9 +508,22 @@ class ExerciseLink extends AbstractLink
             }
         }
 
-        $title = strip_tags(Exercise::get_formated_title_variable($data['title']));
+        return strip_tags(Exercise::get_formated_title_variable($data['title']));
+    }
 
-        return $title;
+    public function getLpListToString()
+    {
+        $data = $this->get_exercise_data();
+        $lpList = Exercise::getLpListFromExercise($data['id'], $this->getCourseId());
+        $lpListToString = '';
+        if (!empty($lpList)) {
+            foreach ($lpList as &$list) {
+                $list['name'] = Display::label($list['name'], 'warning');
+            }
+            $lpListToString = implode('&nbsp;', array_column($lpList, 'name'));
+        }
+
+        return $lpListToString;
     }
 
     /**
@@ -588,10 +638,9 @@ class ExerciseLink extends AbstractLink
                 $this->exercise_data = Database::fetch_array($result);
             } else {
                 // Try with iid
-                $sql = 'SELECT * FROM '.$table.'
+                $sql = "SELECT * FROM $table
                     WHERE
-                        c_id = '.$this->course_id.' AND
-                        iid = '.$exerciseId;
+                        iid = $exerciseId";
                 $result = Database::query($sql);
                 $rows = Database::num_rows($result);
 
@@ -599,10 +648,9 @@ class ExerciseLink extends AbstractLink
                     $this->exercise_data = Database::fetch_array($result);
                 } else {
                     // Try wit id
-                    $sql = 'SELECT * FROM '.$table.'
+                    $sql = "SELECT * FROM $table
                         WHERE
-                            c_id = '.$this->course_id.' AND
-                            id = '.$exerciseId;
+                            iid = $exerciseId";
                     $result = Database::query($sql);
                     $this->exercise_data = Database::fetch_array($result);
                 }

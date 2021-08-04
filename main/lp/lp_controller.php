@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -8,8 +9,6 @@ use ChamiloSession as Session;
  * the requested action.
  *
  * @todo remove repeated if $lp_found redirect
- *
- * @package chamilo.learnpath
  *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
@@ -28,8 +27,8 @@ $_course = api_get_course_info();
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
 $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
 if ($showGlossary) {
-    if (api_get_setting('show_glossary_in_documents') === 'ismanual' ||
-        api_get_setting('show_glossary_in_documents') === 'isautomatic'
+    if ('ismanual' === api_get_setting('show_glossary_in_documents') ||
+        'isautomatic' === api_get_setting('show_glossary_in_documents')
     ) {
         $htmlHeadXtra[] = '<script>
     <!--
@@ -119,12 +118,9 @@ $htmlHeadXtra[] = '
 
                         // We are brothers!
                         if (parentId == myParentId) {
-                            console.log("Brothers");
-                            console.log(subItems.length);
                             if (subItems.length > 0) {
                                 var lastItem = $(jItems[index - 1]).find("li.sub_item");
                                 parentIndex = jItems.index(lastItem);
-                                console.log(parentIndex);
                                 jItem.detach().insertAfter(lastItem);
                                 //console.log("not classic");
                             } else {
@@ -277,7 +273,6 @@ $htmlHeadXtra[] = '
                             type: "GET",
                             url: "'.$ajax_url.'",
                             data: params,
-                            async: false,
                             success: function(data) {
                                 $("#lp_item_list").html(data);
                             }
@@ -291,30 +286,21 @@ $htmlHeadXtra[] = '
 </script>';
 
 $session_id = api_get_session_id();
-
 $lpfound = false;
 $myrefresh = 0;
 $myrefresh_id = 0;
 $refresh = Session::read('refresh');
-if ($refresh == 1) {
+if (1 == $refresh) {
     // Check if we should do a refresh of the oLP object (for example after editing the LP).
     // If refresh is set, we regenerate the oLP object from the database (kind of flush).
     Session::erase('refresh');
     $myrefresh = 1;
 }
 
-if ($debug > 0) {
-    error_log(' $refresh: '.$refresh);
-    error_log(' $myrefresh: '.$myrefresh);
-}
-
 $lp_controller_touched = 1;
 $lp_found = false;
 $lpObject = Session::read('lpobject');
 if (!empty($lpObject)) {
-    if ($debug) {
-        error_log(' SESSION[lpobject] is defined');
-    }
     /** @var learnpath $oLP */
     $oLP = UnserializeApi::unserialize('lp', $lpObject);
     if (isset($oLP) && is_object($oLP)) {
@@ -489,7 +475,7 @@ if (isset($_POST['title'])) {
     $post_title = Security::remove_XSS($_POST['title']);
     if (isset($_POST['type']) &&
         isset($_POST['title']) &&
-        $_POST['type'] == TOOL_QUIZ &&
+        TOOL_QUIZ == $_POST['type'] &&
         !empty($_POST['title'])
     ) {
         $post_title = Exercise::format_title_variable($_POST['title']);
@@ -504,7 +490,41 @@ if ($debug > 0) {
     error_log('action "'.$action.'" triggered');
 }
 
+$lpListUrl = api_get_self().'?action=list&'.api_get_cidreq();
+
 switch ($action) {
+    case 'author_view':
+        $teachers = [];
+        $field = new ExtraField('user');
+        $authorLp = $field->get_handler_field_info_by_field_variable('authorlp');
+        $idExtraField = isset($authorLp['id']) ? (int) $authorLp['id'] : 0;
+        if ($idExtraField != 0) {
+            $extraFieldValueUser = new ExtraFieldValue('user');
+            $arrayExtraFieldValueUser = $extraFieldValueUser->get_item_id_from_field_variable_and_field_value(
+                'authorlp',
+                1,
+                true,
+                false,
+                true
+            );
+            if (!empty($arrayExtraFieldValueUser)) {
+                foreach ($arrayExtraFieldValueUser as $item) {
+                    $teacher = api_get_user_info($item['item_id']);
+                    $teachers[] = $teacher;
+                }
+            }
+        }
+        Session::write('oLP', $_SESSION['oLP']);
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+        if (!$lp_found) {
+            // Check if the learnpath ID was defined, otherwise send back to list
+            require 'lp_list.php';
+        } else {
+            require 'lp_add_author.php';
+        }
+        break;
     case 'send_notify_teacher':
         // Send notification to the teacher
         $studentInfo = api_get_user_info();
@@ -538,14 +558,11 @@ switch ($action) {
             $layoutContent = $tplContent->get_template('mail/content_ending_learnpath.tpl');
             $emailBody = $tplContent->fetch($layoutContent);
 
-            api_mail_html(
-                $recipientName,
-                $email,
+            MessageManager::send_message_simple(
+                $coachInfo['user_id'],
                 sprintf(get_lang('StudentXFinishedLp'), $studentInfo['complete_name']),
                 $emailBody,
-                $studentInfo['complete_name'],
-                $studentInfo['email'],
-                true
+                $studentInfo['user_id']
             );
         }
         Display::addFlash(Display::return_message(get_lang('MessageSent')));
@@ -677,7 +694,8 @@ switch ($action) {
 
                 // Remove audio
                 if (isset($_GET['delete_file']) && $_GET['delete_file'] == 1) {
-                    $lp_item_obj->remove_audio();
+                    $lp_item_obj->removeAudio();
+                    Display::addFlash(Display::return_message(get_lang('FileDeleted')));
 
                     $url = api_get_self().'?action=add_audio&lp_id='.intval($_SESSION['oLP']->lp_id).'&id='.$lp_item_obj->get_id().'&'.api_get_cidreq();
                     header('Location: '.$url);
@@ -688,16 +706,17 @@ switch ($action) {
                 if (isset($_FILES['file']) && !empty($_FILES['file'])) {
                     // Updating the lp.modified_on
                     $_SESSION['oLP']->set_modified_on();
-                    $lp_item_obj->add_audio();
+                    $lp_item_obj->addAudio();
+                    Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
                 }
 
                 //Add audio file from documents
                 if (isset($_REQUEST['document_id']) && !empty($_REQUEST['document_id'])) {
                     $_SESSION['oLP']->set_modified_on();
                     $lp_item_obj->add_audio_from_documents($_REQUEST['document_id']);
+                    Display::addFlash(Display::return_message(get_lang('Updated')));
                 }
 
-                // Display.
                 require 'lp_add_audio.php';
             } else {
                 require 'lp_add_audio.php';
@@ -796,6 +815,9 @@ switch ($action) {
                         api_get_user_id()
                     );
 
+                    $subscribeUsers = isset($_REQUEST['subscribe_users']) ? 1 : 0;
+                    $_SESSION['oLP']->setSubscribeUsers($subscribeUsers);
+
                     $accumulateScormTime = isset($_REQUEST['accumulate_scorm_time']) ? $_REQUEST['accumulate_scorm_time'] : 'true';
                     $_SESSION['oLP']->setAccumulateScormTime($accumulateScormTime);
 
@@ -855,7 +877,7 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
-            if (isset($_POST['submit_button']) && !empty($post_title)) {
+            if (isset($_POST) && !empty($post_title)) {
                 // Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
 
@@ -885,6 +907,10 @@ switch ($action) {
                 if (isset($_POST['content_lp'])) {
                     $_SESSION['oLP']->edit_document($_course);
                 }
+                $is_success = true;
+                $extraFieldValues = new ExtraFieldValue('lp_item');
+                $extraFieldValues->saveFieldValues($_POST, true);
+
                 Display::addFlash(Display::return_message(get_lang('Updated')));
                 $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
                 header('Location: '.$url);
@@ -995,20 +1021,22 @@ switch ($action) {
         }
 
         if (!$lp_found) {
-            require 'lp_list.php';
-        } else {
-            $_SESSION['oLP']->copy();
+            api_location($lpListUrl);
         }
-        require 'lp_list.php';
+
+        $_SESSION['oLP']->copy();
+        Display::addFlash(Display::return_message(get_lang('ItemCopied')));
+        api_location($lpListUrl);
         break;
     case 'export':
-        if (!$is_allowed_to_edit) {
-            api_not_allowed(true);
-        }
         $hideScormExportLink = api_get_setting('hide_scorm_export_link');
-        if ($hideScormExportLink === 'true') {
+
+        if ($hideScormExportLink === 'true'
+            || (false === api_get_configuration_value('lp_allow_export_to_students') && !$is_allowed_to_edit)
+        ) {
             api_not_allowed(true);
         }
+
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
@@ -1066,7 +1094,7 @@ switch ($action) {
             Skill::deleteSkillsFromItem($_GET['lp_id'], ITEM_TYPE_LEARNPATH);
             Display::addFlash(Display::return_message(get_lang('Deleted')));
             Session::erase('oLP');
-            require 'lp_list.php';
+            api_location($lpListUrl);
         }
         break;
     case 'toggle_category_visibility':
@@ -1076,21 +1104,18 @@ switch ($action) {
 
         learnpath::toggleCategoryVisibility($_REQUEST['id'], $_REQUEST['new_status']);
         Display::addFlash(Display::return_message(get_lang('Updated')));
-        header('Location: '.api_get_self().'?'.api_get_cidreq());
-        exit;
+        api_location($lpListUrl);
+        break;
     case 'toggle_visible':
         // Change lp visibility (inside lp tool).
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
 
-        if (!$lp_found) {
-            require 'lp_list.php';
-        } else {
-            learnpath::toggle_visibility($_REQUEST['lp_id'], $_REQUEST['new_status']);
-            Display::addFlash(Display::return_message(get_lang('Updated')));
-            require 'lp_list.php';
-        }
+        learnpath::toggle_visibility($_REQUEST['lp_id'], $_REQUEST['new_status']);
+        Display::addFlash(Display::return_message(get_lang('Updated')));
+        api_location($lpListUrl);
+
         break;
     case 'toggle_category_publish':
         if (!$is_allowed_to_edit) {
@@ -1099,20 +1124,18 @@ switch ($action) {
 
         learnpath::toggleCategoryPublish($_REQUEST['id'], $_REQUEST['new_status']);
         Display::addFlash(Display::return_message(get_lang('Updated')));
-        require 'lp_list.php';
+        api_location($lpListUrl);
         break;
     case 'toggle_publish':
         // Change lp published status (visibility on homepage).
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
-        if (!$lp_found) {
-            require 'lp_list.php';
-        } else {
-            learnpath::toggle_publish($_REQUEST['lp_id'], $_REQUEST['new_status']);
-            Display::addFlash(Display::return_message(get_lang('Updated')));
-            require 'lp_list.php';
-        }
+
+        learnpath::toggle_publish($_REQUEST['lp_id'], $_REQUEST['new_status']);
+        Display::addFlash(Display::return_message(get_lang('Updated')));
+        api_location($lpListUrl);
+
         break;
     case 'move_lp_up':
         // Change lp published status (visibility on homepage)
@@ -1162,18 +1185,6 @@ switch ($action) {
             Session::write('refresh', 1);
             $_SESSION['oLP']->set_name($_REQUEST['lp_name']);
             $author = $_REQUEST['lp_author'];
-            // Fixing the author name (no body or html tags).
-            /*$auth_init = stripos($author, '<p>');
-            if ($auth_init === false) {
-                $auth_init = stripos($author, '<body>');
-                $auth_end = $auth_init + stripos(substr($author, $auth_init + 6), '</body>') + 7;
-                $len = $auth_end - $auth_init + 6;
-            } else {
-                $auth_end = strripos($author, '</p>');
-                $len = $auth_end - $auth_init + 4;
-            }
-
-            $author_fixed = substr($author, $auth_init, $len);*/
             $_SESSION['oLP']->set_author($author);
             // TODO (as of Chamilo 1.8.8): Check in the future whether this field is needed.
             $_SESSION['oLP']->set_encoding($_REQUEST['lp_encoding']);
@@ -1456,6 +1467,9 @@ switch ($action) {
                 case 'my_courses':
                     $url = api_get_path(WEB_PATH).'user_portal.php';
                     break;
+                case 'portal_home':
+                    $url = api_get_path(WEB_PATH);
+                    break;
             }
             header('location: '.$url);
             exit;
@@ -1471,9 +1485,6 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            if ($debug > 0) {
-                error_log('Trying to impress this LP item to '.$_REQUEST['item_id'], 0);
-            }
             if (!empty($_REQUEST['item_id'])) {
                 $_SESSION['oLP']->set_current_item($_REQUEST['item_id']);
             }

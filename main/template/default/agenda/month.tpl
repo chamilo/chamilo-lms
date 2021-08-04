@@ -17,15 +17,11 @@ function checkLength( o, n, min, max ) {
 function clean_user_select() {
     //Cleans the selected attr
     $("#users_to_send").val('').trigger("chosen:updated");
-    /*$('#users_to_send')
-        .find('option')
-        .removeAttr('selected')
-        .end();*/
 }
 
 var region_value = '{{ region_value }}';
 
-$(document).ready(function() {
+$(function() {
     var cookieData = Cookies.getJSON('agenda_cookies');
     var defaultView = (cookieData && cookieData.view) || '{{ default_view }}';
     var defaultStartDate = (cookieData && cookieData.start) || moment.now();
@@ -243,7 +239,10 @@ $(document).ready(function() {
         defaultDate: defaultStartDate,
         firstHour: 8,
         firstDay: 1,
-		selectable	: true,
+        {% if fullcalendar_settings %}
+            {{ fullcalendar_settings  }}
+        {% endif %}
+        selectable	: true,
 		selectHelper: true,
         viewDisplay: function(view) {
             /* When changing the view update the qtips */
@@ -470,7 +469,6 @@ $(document).ready(function() {
 			if (calEvent.editable) {
 				$('#visible_to_input').hide();
                 $('#add_as_announcement_div').hide();
-
                 {% if type != 'admin' %}
                     $('#visible_to_read_only').show();
                     $("#visible_to_read_only_users").html(calEvent.sent_to);

@@ -1,0 +1,220 @@
+{
+  "semantics": [
+    {
+      "label": "Encabezado"
+    },
+    {
+      "label": "Modo",
+      "description": "Modo de presentar las tarjetas de diálogo",
+      "options": [
+        {
+          "label": "Normal"
+        },
+        {
+          "label": "Repetición"
+        }
+      ]
+    },
+    {
+      "label": "Descripción del trabajo",
+      "default": ""
+    },
+    {
+      "widgets": [
+        {
+          "label": "Predterminado"
+        }
+      ],
+      "label": "Diálogos",
+      "entity": "diálogo",
+      "field": {
+        "label": "Pregunta",
+        "fields": [
+          {
+            "label": "Texto",
+            "description": "Pista para la primera parte del diálogo"
+          },
+          {
+            "label": "Respuesta",
+            "description": "Pista para la segunda parte del diálogo"
+          },
+          {
+            "label": "Imagen",
+            "description": "Imagen opcional para la tarjeta. (La tarjeta puede usar solo una imagen, solo un texto, o ambos)"
+          },
+          {
+            "label": "Texto alternativo par ala imagen"
+          },
+          {
+            "label": "Archivos de audio"
+          },
+          {
+            "label": "Pistas",
+            "fields": [
+              {
+                "label": "Pista para texto",
+                "description": "Pista para la primera parte del diálogo"
+              },
+              {
+                "label": "Pista para respuesta",
+                "description": "Pista para la segunda parte del diálogo"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "Configuraciones de comportamiento.",
+      "description": "Estas opciones le permitirán controla como se comporta el trabajo.",
+      "fields": [
+        {
+          "label": "Habilitar botón \"Reintentar\" "
+        },
+        {
+          "label": "Deshabilitar navegación hacia atrás",
+          "description": "Esta opción permitirá que solamente se mueva hacia adelante con las Tarjetas de Diálogo"
+        },
+        {
+          "label": "Escalar el texto para que quepa dentro de la tarjeta",
+          "description": "Desactivar esta opción hará que la tarjeta adapte su tamaño al tamaño del texto"
+        },
+        {
+          "label": "Barajear tarjetas",
+          "description": "Habilitar aleatorizar el orden de las tarjetas al mostrarlas."
+        },
+        {
+          "label": "Nivel de máxima eficiencia"
+        },
+        {
+          "label": "Permitir progresión raápida",
+          "description": "Si se activa, los estudiantes pueden decidir indicar que conocen una tarjeta sin voltearla"
+        }
+      ]
+    },
+    {
+      "label": "Texto para botón para Voltear",
+      "default": "Voltear"
+    },
+    {
+      "label": "Texto para botón para Siguiente",
+      "default": "Siguiente"
+    },
+    {
+      "label": "Texto para botón para Anterior",
+      "default": "Anterior"
+    },
+    {
+      "label": "Texto para botón para Reintentar",
+      "default": "Reintentar"
+    },
+    {
+      "label": "Texto para botón de \"respuesta correcta\" ",
+      "default": "¡La tuve buena!"
+    },
+    {
+      "label": "Texto para el botón de \"respuesta incorrecta\" ",
+      "default": "La tuve mala"
+    },
+    {
+      "label": "Texto para mensaje \"Ronda\" debajo de tarjetas y en la pantalla de resumen",
+      "description": "@round será remplazado por el número de la ronda actual",
+      "default": "Ronda @round"
+    },
+    {
+      "label": "Texto para mensaje de \"Cartas faltantes\" ",
+      "description": "@number será remplazado por el número de cartas restantes en esta ronda",
+      "default": "Cartas restantes: @number"
+    },
+    {
+      "label": "Texto para botón de \"siguiente ronda\" ",
+      "description": "@round será remplazado por el número de ronda",
+      "default": "Avanzar a ronda @round"
+    },
+    {
+      "label": "Texto para botón de \"Comenzar de nuevo\" ",
+      "default": "Comenzar de nuevo"
+    },
+    {
+      "label": "Texto para botón de \"mostrar resumen\" ",
+      "default": "Siguiente"
+    },
+    {
+      "label": "Texto del título para la página de resumen",
+      "default": "Resumen"
+    },
+    {
+      "label": "Texto para \"Cartas que tuvo correctas:\"",
+      "default": "Cartas que tuvoi correctas:"
+    },
+    {
+      "label": "Texto para \"Cartas que tuvo incorrectas:\"",
+      "default": "Cartas que tuvo incorrectas:"
+    },
+    {
+      "label": "Texto para \"Cartas no mostradas:\"",
+      "default": "Cartas en el mazo no mostradas:"
+    },
+    {
+      "label": "Texto para \"Puntaje Global\"",
+      "default": "Puntaje Global"
+    },
+    {
+      "label": "Texto para \"Cartas completadas\"",
+      "default": "Cartas que ha completado el aprendizaje:"
+    },
+    {
+      "label": "Texto para \"Rondas completadas:\"",
+      "default": "Rondas completadas:"
+    },
+    {
+      "label": "Mensaje cuando todas las cartas han sido aprendidas eficientemente",
+      "description": "@cards será remplazado por el número de todas las cartas en el mazo. @max será remplazado por el número máximo del nivel de competencia - 1.",
+      "default": "¡Bien Hechoe! ¡Usted tuvo todas las @cards cartas correctas @max veces seguidas!"
+    },
+    {
+      "label": "Texto del Progreso",
+      "description": "Las variables disponibles son @card y @total.",
+      "default": "Carta @card de @total"
+    },
+    {
+      "label": "Etiqueta para texto de carta",
+      "description": "Usado para accesibilidad por tecnologías asistivas",
+      "default": "Frente de la Carta"
+    },
+    {
+      "label": "Etiqueta para revés de la carta",
+      "description": "Usado para accesibilidad por tecnologías asistivas",
+      "default": "Revés de la Carta"
+    },
+    {
+      "label": "etiqueta para botón de Mostrar pista",
+      "default": "Mostrar pista"
+    },
+    {
+      "label": "Mensaje para Audio no soportado",
+      "default": "Su navegador no soporta este audio"
+    },
+    {
+      "label": "Diálogo para confirmar Comenzar de neuvo",
+      "fields": [
+        {
+          "label": "Texto del encabezado",
+          "default": "¿Comenzar de nuevo?"
+        },
+        {
+          "label": "Texto del cuerpo",
+          "default": "Se perderá todo el progreso. ¿Está seguro de querer comenzar de nuevo?"
+        },
+        {
+          "label": "Etiqueta para botón Cancelar",
+          "default": "Cancelar"
+        },
+        {
+          "label": "Etiqueta para botón Confirmar",
+          "default": "Comenzar de nuevo"
+        }
+      ]
+    }
+  ]
+}

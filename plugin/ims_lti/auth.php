@@ -78,7 +78,7 @@ try {
 
     $user = api_get_user_entity(api_get_user_id());
 
-    if ($user->getId() != $loginHint) {
+    if (ImsLtiPlugin::getLaunchUserIdClaim($tool, $user) != $loginHint) {
         throw LtiAuthException::accessDenied();
     }
 
@@ -97,7 +97,7 @@ try {
 
     $jwtContent = [];
     $jwtContent['iss'] = ImsLtiPlugin::getIssuerUrl();
-    $jwtContent['sub'] = (string) $user->getId();
+    $jwtContent['sub'] = ImsLtiPlugin::getLaunchUserIdClaim($tool, $user);
     $jwtContent['aud'] = $tool->getClientId();
     $jwtContent['iat'] = time();
     $jwtContent['exp'] = time() + 60;
@@ -115,7 +115,7 @@ try {
     }
 
     if (DRH === $user->getStatus()) {
-        $roleScopeMentor = ImsLtiPlugin::getRoleScopeMentor($user);
+        $roleScopeMentor = ImsLtiPlugin::getRoleScopeMentor($user, $tool);
 
         $jwtContent['https://purl.imsglobal.org/spec/lti/claim/role_scope_mentor'] = $roleScopeMentor;
     }

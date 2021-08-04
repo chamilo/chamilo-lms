@@ -279,57 +279,78 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         // load the CAS system to authenticate the user
         require_once __DIR__.'/../auth/cas/cas_var.inc.php';
 
-        // redirect to CAS server if not authenticated yet and so configured
-        if (
-            is_array($cas) && array_key_exists('force_redirect', $cas) && $cas['force_redirect']
-            ||
-            array_key_exists('forceCASAuthentication', $_POST)
-            ||
-            array_key_exists('ticket', $_GET)
-        ) {
-            phpCAS::forceAuthentication();
-        }
-
-        // check whether we are authenticated
-        if (phpCAS::isAuthenticated()) {
-            // the user was successfully authenticated by the CAS server, read its CAS user identification
-            $casUser = phpCAS::getUser();
-
-            // make sure the user exists in the database
-            $login = UserManager::casUserLoginName($casUser);
-            if (false === $login) {
-                // the CAS-authenticated user does not yet exist in internal database
-
-                // see whether we are supposed to create it
-                switch (api_get_setting("cas_add_user_activate")) {
-                    case PLATFORM_AUTH_SOURCE:
-                        // create the new user from its CAS user identifier
-                        $login = UserManager::createCASAuthenticatedUserFromScratch($casUser);
-                        break;
-
-                    case LDAP_AUTH_SOURCE:
-                        // find the new user's LDAP record from its CAS user identifier and copy information
-                        $login = UserManager::createCASAuthenticatedUserFromLDAP($casUser);
-                        break;
-
-                    default:
-                        // no automatic user creation is configured, just complain about it
-                        throw new Exception(get_lang('NoUserMatched'));
+        $load = true;
+        if (isset($cas['skip_force_redirect_in'])) {
+            $skipCas = [
+                '/main/webservices/',
+            ];
+            foreach ($skipCas as $folder) {
+                if (false !== strpos($_SERVER['REQUEST_URI'], $folder)) {
+                    $load = false;
+                    break;
                 }
             }
+        }
 
-            // $login is set and the user exists in the database
-
-            // update the user record from LDAP if so required by settings
-            if ('true' === api_get_setting("update_user_info_cas_with_ldap")) {
-                UserManager::updateUserFromLDAP($login);
+        if ($load) {
+            // redirect to CAS server if not authenticated yet and so configured
+            if (is_array($cas) && array_key_exists('force_redirect', $cas) && $cas['force_redirect']
+                || array_key_exists('forceCASAuthentication', $_POST)
+                || array_key_exists('checkLoginCas', $_GET)
+                || array_key_exists('ticket', $_GET)
+            ) {
+                phpCAS::forceAuthentication();
             }
+            // check whether we are authenticated
+            if (phpCAS::isAuthenticated()) {
+                // the user was successfully authenticated by the CAS server, read its CAS user identification
+                $casUser = phpCAS::getUser();
 
-            $_user = api_get_user_info_from_username($login);
-            Session::write('_user', $_user);
-            $doNotRedirectToCourse = true; // we should already be on the right page, no need to redirect
-        } else {
-            // not CAS authenticated
+                // make sure the user exists in the database
+                $login = UserManager::casUserLoginName($casUser);
+                $_user = null;
+                if (false === $login) {
+                    // the CAS-authenticated user does not yet exist in internal database
+                    // see whether we are supposed to create it
+                    switch (api_get_setting('cas_add_user_activate')) {
+                        case PLATFORM_AUTH_SOURCE:
+                            // create the new user from its CAS user identifier
+                            $login = UserManager::createCASAuthenticatedUserFromScratch($casUser);
+                            $_user = api_get_user_info_from_username($login);
+                            UserManager::updateCasUser($_user);
+
+                            break;
+
+                        case LDAP_AUTH_SOURCE:
+                            // find the new user's LDAP record from its CAS user identifier and copy information
+                            $login = UserManager::createCASAuthenticatedUserFromLDAP($casUser);
+                            $_user = api_get_user_info_from_username($login);
+                            break;
+
+                        default:
+                            // no automatic user creation is configured, just complain about it
+                            throw new Exception(get_lang('NoUserMatched'));
+                    }
+                } else {
+                    $_user = api_get_user_info_from_username($login);
+                    switch (api_get_setting('cas_add_user_activate')) {
+                        case PLATFORM_AUTH_SOURCE:
+                            UserManager::updateCasUser($_user);
+
+                            break;
+                    }
+                }
+
+                // $login is set and the user exists in the database
+
+                // update the user record from LDAP if so required by settings
+                if ('true' === api_get_setting("update_user_info_cas_with_ldap")) {
+                    UserManager::updateUserFromLDAP($login);
+                }
+
+                Session::write('_user', $_user);
+                $doNotRedirectToCourse = true; // we should already be on the right page, no need to redirect
+            }
         }
     } elseif (isset($_POST['login']) && isset($_POST['password'])) {
         // $login && $password are given to log in
@@ -495,6 +516,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                     if (is_array($my_url_list) &&
                                         in_array($current_access_url_id, $my_url_list)
                                     ) {
+                                        UserManager::redirectToResetPassword($uData['user_id']);
                                         ConditionalLogin::check_conditions($uData);
 
                                         $_user['user_id'] = $uData['user_id'];
@@ -515,9 +537,9 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                         exit;
                                     }
                                 } else {
-                                    //Only admins of the "main" (first) Chamilo portal can login wherever they want
+                                    // Only admins of the "main" (first) Chamilo portal can login wherever they want
                                     if (in_array(1, $my_url_list)) {
-                                        //Check if this admin have the access_url_id = 1 which means the principal
+                                        // Check if this admin have the access_url_id = 1 which means the principal
                                         ConditionalLogin::check_conditions($uData);
                                         $_user['user_id'] = $uData['user_id'];
                                         $_user['status'] = $uData['status'];
@@ -527,6 +549,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                     } else {
                                         //This means a secondary admin wants to login so we check as he's a normal user
                                         if (in_array($current_access_url_id, $my_url_list)) {
+                                            UserManager::redirectToResetPassword($uData['user_id']);
                                             $_user['user_id'] = $uData['user_id'];
                                             $_user['status'] = $uData['status'];
                                             Session::write('_user', $_user);
@@ -545,6 +568,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                     }
                                 }
                             } else {
+                                UserManager::redirectToResetPassword($uData['user_id']);
                                 ConditionalLogin::check_conditions($uData);
                                 $_user['user_id'] = $uData['user_id'];
                                 $_user['status'] = $uData['status'];
@@ -818,7 +842,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             include api_get_path(SYS_CODE_PATH).'auth/openid/login.php';
             openid_begin(trim($_POST['openid_url']), api_get_path(WEB_PATH).'index.php');
             //this last function should trigger a redirect, so we can die here safely
-            die('Openid login redirection should be in progress');
+            exit('Openid login redirection should be in progress');
         } elseif (!empty($_GET['openid_identity'])) { //it's usual for PHP to replace '.' (dot) by '_' (underscore) in URL parameters
             include api_get_path(SYS_CODE_PATH).'auth/openid/login.php';
             $res = openid_complete($_GET);
@@ -948,14 +972,6 @@ if (isset($uidReset) && $uidReset) {
         $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
         $track_e_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
-        /*$sql = "SELECT user.*, a.user_id is_admin, login.login_date
-                FROM $user_table
-                LEFT JOIN $admin_table a
-                ON user.id = a.user_id
-                LEFT JOIN $track_e_login login
-                ON user.id  = login.login_user_id
-                WHERE user.id = ".$_user['user_id']."
-                ORDER BY login.login_date DESC LIMIT 1";*/
         $sql = "SELECT * FROM $user_table WHERE id = ".$_user['user_id'];
         $result = Database::query($sql);
 
@@ -1174,7 +1190,7 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
         $variable = 'accept_legal_'.$my_user_id.'_'.$_course['real_id'].'_'.$session_id;
 
         $user_pass_open_course = false;
-        if (api_check_user_access_to_legal($_course['visibility']) && Session::read($variable)) {
+        if (api_check_user_access_to_legal($_course) && Session::read($variable)) {
             $user_pass_open_course = true;
         }
 
@@ -1284,8 +1300,22 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
 
         // We are in a session course? Check session permissions
         if (!empty($session_id)) {
-            if (!empty($session_id) && !empty($_course)) {
+            if (!empty($_course)) {
                 if (!SessionManager::relation_session_course_exist($session_id, $_course['real_id'])) {
+                    // Deleting all access.
+                    Session::erase('session_name');
+                    Session::erase('id_session');
+                    Session::erase('_real_cid');
+                    Session::erase('_cid');
+                    Session::erase('_course');
+                    Session::erase('_gid');
+                    Session::erase('is_courseAdmin');
+                    Session::erase('is_courseMember');
+                    Session::erase('is_courseTutor');
+                    Session::erase('is_session_general_coach');
+                    Session::erase('is_allowed_in_course');
+                    Session::erase('is_sessionAdmin');
+
                     api_not_allowed(true);
                 }
             }
@@ -1364,7 +1394,6 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
                                     }
                                     break;
                                 case '0': //Student
-
                                     $is_courseMember = true;
                                     $is_courseTutor = false;
                                     $is_courseAdmin = false;
@@ -1378,7 +1407,7 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
                                     $sequences = $repo->getRequirements($_real_cid, SequenceResource::COURSE_TYPE);
 
                                     if ($sequences) {
-                                        $sequenceList = $repo->checkRequirementsForUser($sequences, SequenceResource::COURSE_TYPE, $user_id);
+                                        $sequenceList = $repo->checkRequirementsForUser($sequences, SequenceResource::COURSE_TYPE, $user_id, $session_id);
                                         $completed = $repo->checkSequenceAreCompleted($sequenceList);
 
                                         if (false === $completed) {

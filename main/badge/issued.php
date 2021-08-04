@@ -10,8 +10,6 @@ use SkillRelUser as SkillRelUserManager;
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @author José Loguercio Silva <jose.loguercio@beeznest.com>
- *
- * @package chamilo.badge
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -90,10 +88,18 @@ if ($skillIssue->getAcquiredLevel()) {
 }
 
 $author = api_get_user_info($skillIssue->getArgumentationAuthorId());
+$tempDate = DateTime::createFromFormat('Y-m-d H:i:s', $skillIssueDate);
+$linkedinOrganizationId = api_get_configuration_value('linkedin_organization_id');
+if (($linkedinOrganizationId === false)) {
+    $linkedinOrganizationId = null;
+}
 
 $skillIssueInfo = [
     'id' => $skillIssue->getId(),
     'datetime' => api_format_date($skillIssueDate, DATE_TIME_FORMAT_SHORT),
+    'year' => $tempDate->format('Y'),
+    'month' => $tempDate->format('m'),
+    'linkedin_organization_id' => $linkedinOrganizationId,
     'acquired_level' => $currentSkillLevel,
     'argumentation_author_id' => $skillIssue->getArgumentationAuthorId(),
     'argumentation_author_name' => $author['complete_name'],
@@ -233,7 +239,7 @@ if ($allowExport) {
     $backpack = 'https://backpack.openbadges.org/';
     $configBackpack = api_get_setting('openbadges_backpack');
 
-    if (strcmp($backpack, $configBackpack) !== 0) {
+    if (0 !== strcmp($backpack, $configBackpack)) {
         $backpack = $configBackpack;
         if (substr($backpack, -1) !== '/') {
             $backpack .= '/';

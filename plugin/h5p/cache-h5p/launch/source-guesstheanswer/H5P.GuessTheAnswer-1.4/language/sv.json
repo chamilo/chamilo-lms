@@ -1,0 +1,26 @@
+  {
+  "semantics": [
+    {
+      "label": "Beskrivning av uppgift",
+      "description": "Beskriv hur användaren ska lösa uppgiften."
+    },
+    {
+      "label": "Media",
+      "fields": [
+        {
+          "label": "Typ",
+          "description": "Valfri media att visa ovanför frågan."
+        }
+      ]
+    },
+    {
+      "label": "Etrikett för lösningsbeskrivning",
+      "default": "Klicka för att se svaret.",
+      "description": "Klickbart textområde där lösningen visas."
+    },
+    {
+      "label": "Löstningtext",
+      "description": "Lösningen för bilden."
+    }
+  ]
+}

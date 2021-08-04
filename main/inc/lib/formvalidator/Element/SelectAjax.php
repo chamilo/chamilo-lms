@@ -75,6 +75,9 @@ class SelectAjax extends HTML_QuickForm_select
         $max = $this->getAttribute('maximumSelectionLength');
         $max = !empty($max) ? "maximumSelectionLength: $max, " : '';
 
+        // wait XX milliseconds before triggering the request
+        $delay = ((int) $this->getAttribute('delay')) ?: 1000;
+
         $html = <<<JS
             <script>
                 $(function(){
@@ -87,6 +90,7 @@ class SelectAjax extends HTML_QuickForm_select
                         tags: $tags,
                         ajax: {
                             url: $url,
+                            delay: $delay,
                             dataType: 'json',
                             data: function(params) {
                                 return {

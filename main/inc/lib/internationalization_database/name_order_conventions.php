@@ -1,8 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
-/**
- * @package chamilo.include.internationalization
- */
+
 /**
  * The following table contains two types of conventions concerning person names:
  *
@@ -30,7 +29,7 @@ return array(
 	'brazilian' =>        array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
 	'breton' =>           array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
 	'bulgarian' =>        array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
-	'catalan' =>          array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
+    'catalan' =>          array('format' => 'title last_name, first_name',  'sort_by' => 'last_name'),
 	'croatian' =>         array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
 	'czech' =>            array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
 	'danish' =>           array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
@@ -39,7 +38,7 @@ return array(
 	'english' =>          array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
 	'esperanto' =>        array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
 	'estonian' =>         array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
-	'basque'  =>          array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
+    'basque' =>           array('format' => 'title last_name, first_name',  'sort_by' => 'last_name'),
 	'finnish' =>          array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
 	'french' =>           array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
 	'frisian' =>          array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),

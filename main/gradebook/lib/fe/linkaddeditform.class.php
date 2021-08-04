@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -6,8 +7,6 @@
  *
  * @author Stijn Konings
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 class LinkAddEditForm extends FormValidator
 {
@@ -38,7 +37,7 @@ class LinkAddEditForm extends FormValidator
             $link->set_session_id(api_get_session_id());
             $link->set_category_id($category_object[0]->get_id());
         } else {
-            die('LinkAddEditForm error: define link_type/category_object or link_object');
+            exit('LinkAddEditForm error: define link_type/category_object or link_object');
         }
 
         $defaults = [];
@@ -54,7 +53,7 @@ class LinkAddEditForm extends FormValidator
                 $select = $this->addElement('select', 'select_link', get_lang('ChooseItem'));
                 foreach ($link->get_all_links() as $newlink) {
                     $name = strip_tags(Exercise::get_formated_title_variable($newlink[1]));
-                    $select->addoption($name, $newlink[0]);
+                    $select->addOption($name, $newlink[0]);
                 }
             }
         } else {
@@ -72,7 +71,7 @@ class LinkAddEditForm extends FormValidator
             );
         }
 
-        if (count($category_object) == 1) {
+        if (1 == count($category_object)) {
             $this->addElement('hidden', 'select_gradebook', $category_object[0]->get_id());
         } else {
             $select_gradebook = $this->addElement(
@@ -89,14 +88,14 @@ class LinkAddEditForm extends FormValidator
                     if ($my_cat->get_course_code() == api_get_course_id()) {
                         $grade_model_id = $my_cat->get_grade_model_id();
                         if (empty($grade_model_id)) {
-                            if ($my_cat->get_parent_id() == 0) {
+                            if (0 == $my_cat->get_parent_id()) {
                                 $default_weight = $my_cat->get_weight();
-                                $select_gradebook->addoption(get_lang('Default'), $my_cat->get_id());
+                                $select_gradebook->addOption(get_lang('Default'), $my_cat->get_id());
                             } else {
-                                $select_gradebook->addoption($my_cat->get_name(), $my_cat->get_id());
+                                $select_gradebook->addOption(Security::remove_XSS($my_cat->get_name()), $my_cat->get_id());
                             }
                         } else {
-                            $select_gradebook->addoption(get_lang('Select'), 0);
+                            $select_gradebook->addOption(get_lang('Select'), 0);
                         }
                         if ($link->get_category_id() == $my_cat->get_id()) {
                             $default_weight = $my_cat->get_weight();
@@ -123,17 +122,12 @@ class LinkAddEditForm extends FormValidator
 
         $this->addElement('hidden', 'weight');
 
-        if ($form_type == self::TYPE_EDIT) {
+        if (self::TYPE_EDIT == $form_type) {
             $parent_cat = Category::load($link->get_category_id());
-            if ($parent_cat[0]->get_parent_id() == 0) {
+            if (0 == $parent_cat[0]->get_parent_id()) {
                 $values['weight'] = $link->get_weight();
             } else {
                 $cat = Category::load($parent_cat[0]->get_parent_id());
-                //$global_weight = $cat[0]->get_weight();
-                //$values['weight'] = $link->get_weight()/$parent_cat[0]->get_weight()*$global_weight;
-                //var_dump($global_weight, $link->get_weight(), $parent_cat[0]->get_weight());
-                //$weight = $parent_cat[0]->get_weight()* $link->get_weight() / $global_weight;
-                //$values['weight'] = $weight;
                 $values['weight'] = $link->get_weight();
             }
             $defaults['weight_mask'] = $values['weight'];
@@ -205,7 +199,7 @@ class LinkAddEditForm extends FormValidator
         if ($form_type == self::TYPE_ADD) {
             $setting = api_get_setting('tool_visible_by_default_at_creation');
             $visibility_default = 1;
-            if (isset($setting['gradebook']) && $setting['gradebook'] == 'false') {
+            if (isset($setting['gradebook']) && $setting['gradebook'] === 'false') {
                 $visibility_default = 0;
             }
             $defaults['visible'] = $visibility_default;

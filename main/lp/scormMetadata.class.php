@@ -3,8 +3,6 @@
 
 /**
  * Container for the scormMetadata class, setup to hold information about the <metadata> element in imsmanifest files.
- *
- * @package chamilo.learnpath.scorm
  */
 
 /**
@@ -29,7 +27,7 @@ class scormMetadata
      * @param	mixed	Depending on the type, can be the DB ID of the learnpath item or
      * the pointer to the <metadata> element in the imsmanifest.xml file
      */
-    public function __construct($type = 'manifest', &$element)
+    public function __construct($type, &$element)
     {
         if (isset($element)) {
             // Parsing using PHP5 DOMXML methods.
@@ -75,8 +73,8 @@ class scormMetadata
                                 }
                                 break;
                             case XML_TEXT_NODE:
-                                if (trim($child->textContent) != '') {
-                                    if (count($children == 1)) {
+                                if ('' != trim($child->textContent)) {
+                                    if (count(1 == $children)) {
                                         // If this is the only child at this level and it is a content... save differently.
                                         $this->text = $child->textContent;
                                     } else {
@@ -90,7 +88,7 @@ class scormMetadata
                     //$keep_href = '';
                     if (is_array($attributes)) {
                         foreach ($attributes as $attrib) {
-                            if (trim($attrib->value) != '') {
+                            if ('' != trim($attrib->value)) {
                                 $this->attribs[$attrib->name] = $attrib->value;
                             }
                         }

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
@@ -13,8 +14,6 @@ use Symfony\Component\Filesystem\Filesystem;
  * @author Guillaume Viguier <guillaume@viguierjust.com>
  *
  * @since Chamilo 1.8.7
- *
- * @package chamilo.admin
  */
 define('CSS_UPLOAD_PATH', api_get_path(SYS_APP_PATH).'Resources/public/css/themes/');
 
@@ -44,7 +43,7 @@ function handleRegions()
     $installed_plugins = $plugin_obj->getInstalledPlugins();
 
     echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
-    echo '<table class="data_table">';
+    echo '<table class="table table-hover table-striped data_table">';
     echo '<tr>';
     echo '<th width="400px">';
     echo get_lang('Plugin');
@@ -182,31 +181,29 @@ function handlePluginUpload()
         'required'
     );
     $form->addButtonUpload(get_lang('Upload'), 'plugin_upload');
+    $form->protect();
 
     // Plugin upload.
-    if (isset($_POST['plugin_upload'])) {
-        if ($form->validate()) {
-            $values = $form->exportValues();
-            $fileElement = $form->getElement('new_plugin');
-            $file = $fileElement->getValue();
-            $result = uploadPlugin($values, $file);
+    if ($form->validate()) {
+        $fileElement = $form->getElement('new_plugin');
+        $file = $fileElement->getValue();
+        $result = uploadPlugin($file);
 
-            // Add event to the system log.
-            $user_id = api_get_user_id();
-            $category = $_GET['category'];
-            Event::addEvent(
-                LOG_PLUGIN_CHANGE,
-                LOG_PLUGIN_UPLOAD,
-                $file['filename'],
-                api_get_utc_datetime(),
-                $user_id
-            );
+        // Add event to the system log.
+        $user_id = api_get_user_id();
+        $category = $_GET['category'];
+        Event::addEvent(
+            LOG_PLUGIN_CHANGE,
+            LOG_PLUGIN_UPLOAD,
+            $file['name'],
+            api_get_utc_datetime(),
+            $user_id
+        );
 
-            if ($result) {
-                Display::addFlash(Display::return_message(get_lang('PluginUploaded'), 'success', false));
-                header('Location: ?category=Plugins#');
-                exit;
-            }
+        if ($result) {
+            Display::addFlash(Display::return_message(get_lang('PluginUploaded'), 'success', false));
+            header('Location: ?category=Plugins#');
+            exit;
         }
     }
     echo $form->returnForm();
@@ -224,12 +221,11 @@ function handlePlugins()
 {
     Session::erase('plugin_data');
     $plugin_obj = new AppPlugin();
-    $token = Security::get_token();
+    $token = Security::get_existing_token();
     if (isset($_POST['submit_plugins'])) {
         storePlugins();
         // Add event to the system log.
         $user_id = api_get_user_id();
-        $category = $_GET['category'];
         $installed = $plugin_obj->getInstalledPlugins();
         Event::addEvent(
             LOG_PLUGIN_CHANGE,
@@ -247,7 +243,12 @@ function handlePlugins()
 
     // Plugins NOT installed
     echo Display::page_subheader(get_lang('Plugins'));
-    echo '<form class="form-horizontal" name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'&sec_token='.$token.'">';
+    echo '<form
+        class="form-horizontal"
+        name="plugins"
+        method="post"
+        action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'&sec_token='.$token.'"
+    >';
     echo '<table class="table table-hover table-striped table-bordered">';
     echo '<tr>';
     echo '<th width="20px">';
@@ -257,39 +258,58 @@ function handlePlugins()
     echo '</th>';
     echo '</tr>';
 
-    /*$plugin_list = array();
-    $my_plugin_list = $plugin_obj->get_plugin_regions();
-    foreach($my_plugin_list as $plugin_item) {
-        $plugin_list[$plugin_item] = $plugin_item;
-    }*/
     $installed = '';
     $notInstalled = '';
+    $isMainPortal = true;
+    if (api_is_multiple_url_enabled()) {
+        $isMainPortal = 1 === api_get_current_access_url_id();
+    }
+
+    $unknownLabel = get_lang('Unknown');
     foreach ($all_plugins as $pluginName) {
         $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
         if (file_exists($plugin_info_file)) {
-            $plugin_info = [];
+            $plugin_info = [
+                'title' => $pluginName,
+                'version' => '',
+                'comment' => '',
+                'author' => $unknownLabel,
+            ];
             require $plugin_info_file;
 
-            $officialRibbon = '';
             if (in_array($pluginName, $officialPlugins)) {
-                $officialRibbon = '<div class="ribbon-diagonal ribbon-diagonal-top-right ribbon-diagonal-official"><span>'.get_lang('PluginOfficial').'</span></div>';
+                $officialRibbon = '<div class="ribbon-diagonal ribbon-diagonal-top-right ribbon-diagonal-official">
+                    <span>'.get_lang('PluginOfficial').'</span></div>';
             } else {
-                $officialRibbon = '<div class="ribbon-diagonal ribbon-diagonal-top-right ribbon-diagonal-thirdparty"><span>'.get_lang('PluginThirdParty').'</span></div>';
+                $officialRibbon = '<div class="ribbon-diagonal ribbon-diagonal-top-right ribbon-diagonal-thirdparty">
+                    <span>'.get_lang('PluginThirdParty').'</span></div>';
             }
             $pluginRow = '';
 
-            if (in_array($pluginName, $installed_plugins)) {
+            $isInstalled = in_array($pluginName, $installed_plugins);
+
+            if ($isInstalled) {
                 $pluginRow .= '<tr class="row_selected">';
             } else {
                 $pluginRow .= '<tr>';
             }
+
             $pluginRow .= '<td>';
-            // Checkbox
-            if (in_array($pluginName, $installed_plugins)) {
-                $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]" checked="checked">';
+
+            if ($isMainPortal) {
+                if ($isInstalled) {
+                    $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]" checked="checked">';
+                } else {
+                    $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]">';
+                }
             } else {
-                $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]">';
+                if ($isInstalled) {
+                    $pluginRow .= Display::return_icon('check.png');
+                } else {
+                    $pluginRow .= Display::return_icon('checkbox_off.gif');
+                }
             }
+
             $pluginRow .= '</td><td>';
             $pluginRow .= $officialRibbon;
             $pluginRow .= '<h4>'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h4>';
@@ -297,7 +317,7 @@ function handlePlugins()
             $pluginRow .= '<p>'.get_lang('Author').': '.$plugin_info['author'].'</p>';
 
             $pluginRow .= '<div class="btn-group">';
-            if (in_array($pluginName, $installed_plugins)) {
+            if ($isInstalled) {
                 $pluginRow .= Display::url(
                     '<em class="fa fa-cogs"></em> '.get_lang('Configure'),
                     'configure_plugin.php?name='.$pluginName,
@@ -340,7 +360,7 @@ function handlePlugins()
             $pluginRow .= '</div>';
             $pluginRow .= '</td></tr>';
 
-            if (in_array($pluginName, $installed_plugins)) {
+            if ($isInstalled) {
                 $installed .= $pluginRow;
             } else {
                 $notInstalled .= $pluginRow;
@@ -352,11 +372,14 @@ function handlePlugins()
     echo $notInstalled;
     echo '</table>';
 
-    echo '<div class="form-actions bottom_actions">';
-    echo '<button class="btn btn-primary" type="submit" name="submit_plugins">';
-    echo '<i class="fa fa-check" aria-hidden="true"></i> ';
-    echo  get_lang('EnablePlugins').'</button>';
-    echo '</div>';
+    if ($isMainPortal) {
+        echo '<div class="form-actions bottom_actions">';
+        echo '<button class="btn btn-primary" type="submit" name="submit_plugins">';
+        echo '<i class="fa fa-check" aria-hidden="true"></i> ';
+        echo get_lang('EnablePlugins').'</button>';
+        echo '</div>';
+    }
+
     echo '</form>';
 }
 
@@ -746,13 +769,11 @@ function uploadStylesheet($values, $picture)
  * Creates the folder (if needed) and uploads the plugin in it. If the plugin
  * is already there and the folder is writeable, overwrite.
  *
- * @param array $values          the values of the form
- * @param array $file            the file passed to the upload form
- * @param array $officialPlugins A list of official plugins that cannot be uploaded
+ * @param array $file the file passed to the upload form
  *
  * @return bool
  */
-function uploadPlugin($values, $file, $officialPlugins)
+function uploadPlugin($file)
 {
     $result = false;
     $pluginPath = api_get_path(SYS_PLUGIN_PATH);
@@ -770,6 +791,7 @@ function uploadPlugin($values, $file, $officialPlugins)
             $allowedFiles = getAllowedFileTypes();
             $allowedFiles[] = 'php';
             $allowedFiles[] = 'js';
+            $allowedFiles[] = 'tpl';
             $pluginObject = new AppPlugin();
             $officialPlugins = $pluginObject->getOfficialPlugins();
 
@@ -1256,6 +1278,11 @@ function getTemplateData($from, $number_of_items, $column, $direction)
     // Database table definition.
     $table_system_template = Database::get_main_table('system_template');
 
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+    $column = (int) $column;
+    $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
+
     // The sql statement.
     $sql = "SELECT image as col0, title as col1, id as col2 FROM $table_system_template";
     $sql .= " ORDER BY col$column $direction ";
@@ -1307,9 +1334,9 @@ function actionsFilter($id)
 function searchImageFilter($image)
 {
     if (!empty($image)) {
-        return '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/'.$image.'" alt="'.get_lang('TemplatePreview').'"/>';
+        return '<img src="'.api_get_path(WEB_HOME_PATH).'default_platform_document/template_thumb/'.$image.'" alt="'.get_lang('TemplatePreview').'"/>';
     } else {
-        return '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>';
+        return '<img src="'.api_get_path(WEB_HOME_PATH).'default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>';
     }
 }
 
@@ -1368,7 +1395,7 @@ function addEditTemplate()
     $form->addElement('static', 'file_comment', '', get_lang('TemplateImageComment100x70'));
 
     // Getting all the information of the template when editing a template.
-    if ($_GET['action'] == 'edit') {
+    if ($_GET['action'] === 'edit') {
         $defaults['template_id'] = $id;
         $defaults['template_text'] = $template->getContent();
         // Forcing get_lang().
@@ -1379,14 +1406,13 @@ function addEditTemplate()
         $form->addElement('hidden', 'template_id');
 
         // Adding an extra field: a preview of the image that is currently used.
-
         if (!empty($template->getImage())) {
             $form->addElement(
                 'static',
                 'template_image_preview',
                 '',
-                '<img src="'.api_get_path(WEB_APP_PATH)
-                    .'home/default_platform_document/template_thumb/'.$template->getImage()
+                '<img src="'.api_get_path(WEB_HOME_PATH).
+                'default_platform_document/template_thumb/'.$template->getImage()
                     .'" alt="'.get_lang('TemplatePreview')
                     .'"/>'
             );
@@ -1396,7 +1422,7 @@ function addEditTemplate()
                 'static',
                 'template_image_preview',
                 '',
-                '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>'
+                '<img src="'.api_get_path(WEB_HOME_PATH).'default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>'
             );
         }
 
@@ -1435,10 +1461,13 @@ function addEditTemplate()
 
                 if ($upload_ok) {
                     // Try to add an extension to the file if it hasn't one.
-                    $new_file_name = add_ext_on_mime(stripslashes($_FILES['template_image']['name']), $_FILES['template_image']['type']);
+                    $new_file_name = add_ext_on_mime(
+                        stripslashes($_FILES['template_image']['name']),
+                        $_FILES['template_image']['type']
+                    );
 
                     // The upload directory.
-                    $upload_dir = api_get_path(SYS_APP_PATH).'home/default_platform_document/template_thumb/';
+                    $upload_dir = api_get_path(SYS_HOME_PATH).'default_platform_document/template_thumb/';
 
                     // Create the directory if it does not exist.
                     if (!is_dir($upload_dir)) {
@@ -1488,7 +1517,7 @@ function addEditTemplate()
                     ->setContent(Security::remove_XSS($templateContent, COURSEMANAGERLOWSECURITY));
 
                 if ($isDelete) {
-                    $filePath = api_get_path(SYS_APP_PATH).'home/default_platform_document/template_thumb/'.$template->getImage();
+                    $filePath = api_get_path(SYS_HOME_PATH).'default_platform_document/template_thumb/'.$template->getImage();
                     if (file_exists($filePath)) {
                         unlink($filePath);
                     }
@@ -1537,7 +1566,7 @@ function deleteTemplate($id)
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     if (!empty($row['image'])) {
-        @unlink(api_get_path(SYS_APP_PATH).'home/default_platform_document/template_thumb/'.$row['image']);
+        @unlink(api_get_path(SYS_HOME_PATH).'default_platform_document/template_thumb/'.$row['image']);
     }
 
     // Now we remove it from the database.
@@ -1601,16 +1630,11 @@ function select_gradebook_default_grade_model_id()
  * @param array $settings
  * @param array $settings_by_access_list
  *
- * @throws \Doctrine\ORM\ORMException
- * @throws \Doctrine\ORM\OptimisticLockException
- * @throws \Doctrine\ORM\TransactionRequiredException
- *
  * @return FormValidator
  */
 function generateSettingsForm($settings, $settings_by_access_list)
 {
     global $_configuration, $settings_to_avoid, $convert_byte_to_mega_list;
-    $em = Database::getManager();
     $table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
     $form = new FormValidator(
@@ -1905,7 +1929,8 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 break;
             case 'select':
                 /*
-                * To populate the list of options, the select type dynamically calls a function that must be called select_ + the name of the variable being displayed.
+                * To populate the list of options, the select type dynamically calls a
+                * function that must be called select_ + the name of the variable being displayed.
                 * The functions being called must be added to the file settings.lib.php.
                 */
                 $form->addElement(
@@ -1921,11 +1946,11 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 break;
             case 'select_course':
                 $courseSelectOptions = [];
-
                 if (!empty($row['selected_value'])) {
-                    $course = $em->find('ChamiloCoreBundle:Course', $row['selected_value']);
-
-                    $courseSelectOptions[$course->getId()] = $course->getTitle();
+                    $course = api_get_course_entity($row['selected_value']);
+                    if ($course) {
+                        $courseSelectOptions[$course->getId()] = $course->getTitle();
+                    }
                 }
 
                 $form->addElement(
@@ -2036,7 +2061,7 @@ function searchSetting($search)
  *
  * @return array
  */
-function formGenerateElementsGroup($form, $values = [], $elementName)
+function formGenerateElementsGroup($form, $values, $elementName)
 {
     $group = [];
     if (is_array($values)) {
@@ -2070,6 +2095,10 @@ function getAllowedFileTypes()
         'woff',
         'woff2',
         'md',
+        'html',
+        'xml',
+        'markdown',
+        'txt',
     ];
 
     return $allowedFiles;

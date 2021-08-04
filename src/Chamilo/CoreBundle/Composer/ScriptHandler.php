@@ -15,10 +15,15 @@ class ScriptHandler
      */
     public static function dumpCssFiles()
     {
-        $appCss = __DIR__.'/../../../../app/Resources/public';
-        $newPath = __DIR__.'/../../../../web';
         $fs = new Filesystem();
-        $fs->mirror($appCss, $newPath, null, ['override' => true]);
+
+        $sysAssets = __DIR__.'/../../../../app/Resources/public/assets';
+        $webAssets = __DIR__.'/../../../../web/assets';
+        $fs->mirror($sysAssets, $webAssets, null, ['override' => true, 'delete' => true]);
+
+        $sysCss = __DIR__.'/../../../../app/Resources/public/css';
+        $webCss = __DIR__.'/../../../../web/css';
+        $fs->mirror($sysCss, $webCss, null, ['override' => true]);
 
         if ($fs->exists(__DIR__.'/../../../../web/build')) {
             $fs->remove(__DIR__.'/../../../../web/build');
@@ -62,6 +67,10 @@ class ScriptHandler
     public static function getFoldersToDelete()
     {
         $paths = [
+            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/docs',
+            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/nuget',
+            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/grunt',
+            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/test-infra',
             __DIR__.'/../../../../archive/',
             __DIR__.'/../../../../main/announcements/resources',
             __DIR__.'/../../../../main/conference/',
@@ -83,6 +92,7 @@ class ScriptHandler
             __DIR__.'/../../../../main/inc/lib/javascript/jquery-ui',
             __DIR__.'/../../../../main/inc/lib/fckeditor',
             __DIR__.'/../../../../main/inc/lib/mpdf/',
+            __DIR__.'/../../../../main/inc/lib/phpmailer',
             __DIR__.'/../../../../main/inc/lib/nanogong/',
             __DIR__.'/../../../../main/inc/lib/symfony/',
             __DIR__.'/../../../../main/inc/lib/system/media/renderer',
@@ -97,16 +107,11 @@ class ScriptHandler
             __DIR__.'/../../../../main/inc/lib/htmlpurifier',
             __DIR__.'/../../../../main/pear/excelreader/',
             __DIR__.'/../../../../main/resourcelinker',
-            // Remove from 1.10
-            __DIR__.'/../../../../plugin/ticket',
-            __DIR__.'/../../../../plugin/skype',
             __DIR__.'/../../../../main/newscorm',
             __DIR__.'/../../../../main/exercice',
-            // js files
-            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/docs',
-            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/nuget',
-            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/grunt',
-            __DIR__.'/../../../../app/Resources/public/assets/bootstrap/test-infra',
+            __DIR__.'/../../../../plugin/ticket',
+            __DIR__.'/../../../../plugin/skype',
+            __DIR__.'/../../../../vendor/pclzip',
             __DIR__.'/../../../../web/assets/bootstrap/grunt',
             __DIR__.'/../../../../web/assets/bootstrap/nuget',
             __DIR__.'/../../../../web/assets/bootstrap/docs',
@@ -159,7 +164,6 @@ class ScriptHandler
             __DIR__.'/../../../../main/inc/autoload.inc.php',
             __DIR__.'/../../../../main/inc/lib/uri.class.php',
             __DIR__.'/../../../../main/inc/lib/db.class.php',
-            __DIR__.'/../../../../main/inc/lib/phpmailer/test/phpmailerTest.php',
             __DIR__.'/../../../../main/inc/lib/xht.lib.php',
             __DIR__.'/../../../../main/inc/lib/xmd.lib.php',
             __DIR__.'/../../../../main/inc/lib/entity.class.php',

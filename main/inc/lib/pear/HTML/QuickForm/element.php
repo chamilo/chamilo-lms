@@ -322,14 +322,12 @@ class HTML_QuickForm_element extends HTML_Common
                    'name'  => $this->getName(),
                    'value' => $this->getValue()
                ) + (isset($id)? array('id' => $id): array())) . ' />';
-
     }
 
     /**
      * Returns whether or not the element is frozen
      *
      * @since     1.3
-     * @access    public
      * @return    bool
      */
     public function isFrozen()
@@ -343,10 +341,8 @@ class HTML_QuickForm_element extends HTML_Common
      *
      * @param     bool    $persistant   True if persistant value
      * @since     2.0
-     * @access    public
-     * @return    void
      */
-    function setPersistantFreeze($persistant=false)
+    public function setPersistantFreeze($persistant=false)
     {
         $this->_persistantFreeze = $persistant;
     }
@@ -357,8 +353,6 @@ class HTML_QuickForm_element extends HTML_Common
      * @param     string    $label  Display text for the element
      * @param     string    $label_for Optionally add a "for" attribute
      * @since     1.3
-     * @access    public
-     * @return    void
      */
     public function setLabel($label, $labelFor = null)
     {
@@ -372,7 +366,6 @@ class HTML_QuickForm_element extends HTML_Common
      * Returns display text for the element
      *
      * @since     1.3
-     * @access    public
      * @return    string
      */
     public function getLabel()
@@ -383,10 +376,9 @@ class HTML_QuickForm_element extends HTML_Common
     /**
      * Returns "for" attribute for the element
      *
-     * @access    public
      * @return    string
      */
-    function getLabelFor()
+    public function getLabelFor()
     {
         return $this->_label_for;
     }

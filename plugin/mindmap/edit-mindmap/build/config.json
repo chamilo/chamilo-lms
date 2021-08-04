@@ -1,0 +1,8 @@
+{
+    "name" : "kampfer",
+    "jsDir" : "client/js/",
+    "combine" : {
+        "source" : "",
+        "export" : ""
+    }
+}

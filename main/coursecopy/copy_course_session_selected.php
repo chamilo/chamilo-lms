@@ -52,13 +52,6 @@ $interbreadcrumb[] = [
     'name' => get_lang('Maintenance'),
 ];
 
-// Database Table Definitions
-$tbl_session_rel_course_rel_user = Database::get_main_table(
-    TABLE_MAIN_SESSION_COURSE_USER
-);
-$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-
 /**
  * @param string $name
  */
@@ -179,8 +172,8 @@ function displayForm()
     $html .= '<legend>'.get_lang('TypeOfCopy').' <small>('.get_lang('CopyOnlySessionItems').')</small></legend>';
     $html .= '<label class="radio"><input type="radio" id="copy_option_1" name="copy_option" value="full_copy" checked="checked"/>';
     $html .= get_lang('FullCopy').'</label>';
-    $html .= '<label class="radio"><input type="radio" id="copy_option_2" name="copy_option" value="select_items"/>';
-    $html .= ' '.get_lang('LetMeSelectItems').'</label><br/>';
+    /*$html .= '<label class="radio"><input type="radio" id="copy_option_2" name="copy_option" value="select_items"/>';
+    $html .= ' '.get_lang('LetMeSelectItems').'</label><br/>';*/
 
     $html .= "</fieldset>";
 

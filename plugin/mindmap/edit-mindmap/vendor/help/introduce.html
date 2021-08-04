@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>MindMap帮助文档</title>
+        <link rel="stylesheet" type="text/css" href="../css/help.css">
+    </head>
+    <body>
+        <script type="text/javascript" src="../js/help.js"></script>
+        <script type="text/javascript">
+            SetupBodyBringToViewAnimation("whirlIn");
+        </script>
+        <div class="contentWrapper">
+            <h1>MindMap帮助文档</h1>
+
+            <h2>简介</h2>
+
+            <p>
+                MindMap是一款web版的思维导图应用，整个项目使用html+css+javascript开发。MindMap利用了许多html5特性:<a href="http://www.html5rocks.com/en/features/storage">Storage</a>、 <a href="http://www.html5rocks.com/en/features/file_access">File Access</a>、 <a href="http://www.html5rocks.com/en/features/graphics">Graphics</a>、 <a href="http://www.html5rocks.com/en/features/presentation">Presentation</a>。
+            </p>
+
+            <h2>技术实现</h2>
+
+            <p>
+                MindMap以<a href="http://twitter.github.com/bootstrap/">bootstrap</a>为基础开发css+html。
+            </p>
+            <p>
+                MindMap采用OOP的开发方式，使用类似<a href="http://backbonejs.org/">backbone</a>的<a href="https://github.com/documentcloud/backbone/blob/master/backbone.js#LC1454">extend</a>方法实现继承。许多设计模式被应用到MindMap中：使用Command模式实现操作的Undo和Redo功能，使用Compositon模式组织map和node对象等等。
+            </p>
+            <p>
+                MindMap的js组织方式，变量命名方式受到<a href="https://developers.google.com/closure/library/">google closure</a>的影响。 MindMap实现了一个类似closure的js加载器，配合一个nodejs脚本（用于生成js文件依赖记录）来管理组件之间的依赖关系。
+            </p>
+
+            <h2>兼容性</h2>
+
+            <p>
+                目前mindMap支持：Firefox19、Chrome25。我没有条件测试Safari；而Opera最近宣布将加入webkit的大家庭，所以我也没有再花时间测试；MindMap不支持IE。
+            </p>
+
+            <h2>功能特性</h2>
+
+            <ol>
+                <li>
+                    可以将map保存为本地的文本文件，也能打开本地文本格式的map
+                </li>
+                <li>
+                    可以将map保存在浏览器的storage中，也能打开在storage中的map
+                </li>
+                <li>
+                    创建新的map，为map添加节点，为节点添加子节点，删除节点。
+                </li>
+                <li>
+                    改变节点的内容、位置
+                </li>
+                <li>
+                    保存操作，实现了简单的redo和undo功能
+                </li>
+                <li>
+                    节点的copy、cut、paste功能
+                </li>
+            </ol>
+            <div class="nav">
+                <a href="javascript:void(0);" class="next-page" onclick="TriggerBodyRemoveFromViewAnimation('whirlOut','map.html');">下一节：map操作</a>
+            </div>
+        </div>
+    </body>
+</html>

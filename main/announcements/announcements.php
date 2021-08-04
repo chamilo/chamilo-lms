@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -8,17 +9,12 @@
  *
  * @abstract The task of the internship was to integrate the 'send messages to specific users' with the
  *             Announcements tool and also add the resource linker here. The database also needed refactoring
- *             as there was no title field (the title was merged into the content field)
- *
- * @package chamilo.announcements
- * multiple functions
+ *             as there was no title field (the title was merged into the content field) multiple functions
  */
-
-// use anonymous mode when accessing this course tool
 $use_anonymous = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
-
+$current_course_tool = TOOL_ANNOUNCEMENT;
 api_protect_course_script(true);
 api_protect_course_group(GroupManager::GROUP_TOOL_ANNOUNCEMENT);
 
@@ -27,17 +23,18 @@ $token = Security::get_existing_token();
 $courseId = api_get_course_int_id();
 $_course = api_get_course_info_by_id($courseId);
 $group_id = api_get_group_id();
+$sessionId = api_get_session_id();
 $current_course_tool = TOOL_ANNOUNCEMENT;
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('ToolAnnouncement');
 
 $allowToEdit = (
     api_is_allowed_to_edit(false, true) ||
-    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
+    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()) ||
+    ($sessionId && api_is_coach() && api_get_configuration_value('allow_coach_to_edit_announcements'))
 );
 $allowStudentInGroupToSend = false;
 
-$sessionId = api_get_session_id();
 $drhHasAccessToSessionContent = api_drh_can_access_all_session_content();
 if (!empty($sessionId) && $drhHasAccessToSessionContent) {
     $allowToEdit = $allowToEdit || api_is_drh();
@@ -99,13 +96,13 @@ switch ($action) {
 
         /* Move announcement up/down */
         if (!empty($_GET['down'])) {
-            $thisAnnouncementId = intval($_GET['down']);
-            $sortDirection = "DESC";
+            $thisAnnouncementId = (int) ($_GET['down']);
+            $sortDirection = 'DESC';
         }
 
         if (!empty($_GET['up'])) {
-            $thisAnnouncementId = intval($_GET['up']);
-            $sortDirection = "ASC";
+            $thisAnnouncementId = (int) ($_GET['up']);
+            $sortDirection = 'ASC';
         }
 
         if (!empty($sortDirection)) {
@@ -329,7 +326,7 @@ switch ($action) {
     case 'delete_all':
         if (api_is_allowed_to_edit()) {
             $allow = api_get_configuration_value('disable_delete_all_announcements');
-            if ($allow === false) {
+            if (false === $allow) {
                 AnnouncementManager::delete_all_announcements($_course);
                 Display::addFlash(Display::return_message(get_lang('AnnouncementDeletedAll')));
             }
@@ -348,12 +345,18 @@ switch ($action) {
         exit;
         break;
     case 'showhide':
-        if (!isset($_GET['isStudentView']) || $_GET['isStudentView'] != 'false') {
+        if (!isset($_GET['isStudentView']) || $_GET['isStudentView'] !== 'false') {
             if (isset($_GET['id']) && $_GET['id']) {
                 if ($sessionId != 0 &&
                     api_is_allowed_to_session_edit(false, true) == false
                 ) {
-                    api_not_allowed();
+                    $block = true;
+                    if (api_get_configuration_value('allow_coach_to_edit_announcements') && api_is_coach()) {
+                        $block = false;
+                    }
+                    if ($block) {
+                        api_not_allowed();
+                    }
                 }
 
                 if (!$allowToEdit) {
@@ -376,10 +379,14 @@ switch ($action) {
         break;
     case 'add':
     case 'modify':
-        if ($sessionId != 0 &&
-            api_is_allowed_to_session_edit(false, true) == false
-        ) {
-            api_not_allowed(true);
+        if ($sessionId != 0 && api_is_allowed_to_session_edit(false, true) === false) {
+            $block = true;
+            if (api_get_configuration_value('allow_coach_to_edit_announcements') && api_is_coach()) {
+                $block = false;
+            }
+            if ($block) {
+                api_not_allowed();
+            }
         }
 
         if ($allowStudentInGroupToSend === false) {
@@ -616,7 +623,7 @@ switch ($action) {
 
         $config = api_get_configuration_value('announcements_hide_send_to_hrm_users');
 
-        if ($config === false) {
+        if (false === $config) {
             $form->addCheckBox(
                 'send_to_hrm_users',
                 null,
@@ -736,7 +743,8 @@ switch ($action) {
                                 api_get_course_info(),
                                 api_get_session_id(),
                                 $insert_id,
-                                $sendToUsersInSession
+                                $sendToUsersInSession,
+                                isset($data['send_to_hrm_users'])
                             );
                         }
 

@@ -121,6 +121,7 @@ class Login
             null,
             PERSON_NAME_EMAIL_ADDRESS
         );
+        $email_body = nl2br($email_body);
 
         $email_admin = api_get_setting('emailAdministrator');
         $result = api_mail_html('', $email_to, $email_subject, $email_body, $sender_name, $email_admin);
@@ -317,16 +318,12 @@ class Login
                 // a uid is given (log in succeeded)
                 $user_table = Database::get_main_table(TABLE_MAIN_USER);
                 $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
-                $track_e_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
-                $sql = "SELECT user.*, a.user_id is_admin, UNIX_TIMESTAMP(login.login_date) login_date
+                $sql = "SELECT user.*, a.user_id is_admin
                         FROM $user_table
                         LEFT JOIN $admin_table a
                         ON user.user_id = a.user_id
-                        LEFT JOIN $track_e_login login
-                        ON user.user_id  = login.login_user_id
-                        WHERE user.user_id = '".$_user['user_id']."'
-                        ORDER BY login.login_date DESC LIMIT 1";
+                        WHERE user.user_id = ".$_user['user_id'];
 
                 $result = Database::query($sql);
 

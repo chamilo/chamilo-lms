@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Script.
- *
- * @package chamilo.gradebook
  */
 
 /**
@@ -130,12 +128,7 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
     $footer .= '<div align="right" style="font-weight: bold;">{PAGENO}/{nb}</div>';
 
     // preparing content pdf
-    $css_file = api_get_path(SYS_CSS_PATH).'themes/'.api_get_setting('stylesheets').'/print.css';
-    if (file_exists($css_file)) {
-        $css = @file_get_contents($css_file);
-    } else {
-        $css = '';
-    }
+    $css = api_get_print_css();
     $items_per_page = 30;
     $count_pages = ceil(count($data_table) / $items_per_page);
     for ($x = 0; $x < $count_pages; $x++) {
@@ -205,7 +198,7 @@ function export_pdf($pdf, $newarray, $header_names, $format)
     $pdf->ezSetCmMargins(0, 0, 0, 0);
     $pdf->ezSetY(($format == 'portrait') ? '820' : '570');
     $pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
-    if ($format == 'portrait') {
+    if ('portrait' == $format) {
         $pdf->line(40, 790, 540, 790);
         $pdf->line(40, 40, 540, 40);
     } else {

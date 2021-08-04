@@ -610,15 +610,7 @@ function ldap_add_user_by_array($data, $update_if_exists = true)
 function ldap_add_user_to_session($UserList, $id_session)
 {
     // Database Table Definitions
-    $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-    $tbl_session_rel_class = Database::get_main_table(TABLE_MAIN_SESSION_CLASS);
     $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-    $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-    $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-    $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-    $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-    $tbl_class = Database::get_main_table(TABLE_MAIN_CLASS);
-    $tbl_class_user = Database::get_main_table(TABLE_MAIN_CLASS_USER);
 
     $id_session = (int) $id_session;
     // Once users are imported in the users base, we can assign them to the session
@@ -627,39 +619,8 @@ function ldap_add_user_to_session($UserList, $id_session)
     while ($row = Database::fetch_array($result)) {
         $CourseList[] = $row['c_id'];
     }
-    foreach ($CourseList as $enreg_course) {
-        foreach ($UserList as $enreg_user) {
-            $enreg_user = (int) $enreg_user;
-            Database::query("INSERT IGNORE ".
-              " INTO $tbl_session_rel_course_rel_user ".
-              "(session_id,c_id,user_id) VALUES ".
-              "('$id_session','$enreg_course','$enreg_user')");
-        }
-        $sql = "SELECT COUNT(user_id) as nbUsers ".
-               " FROM $tbl_session_rel_course_rel_user ".
-               " WHERE session_id='$id_session' ".
-               " AND c_id='$enreg_course'";
-        $rs = Database::query($sql);
-        list($nbr_users) = Database::fetch_array($rs);
-        Database::query("UPDATE $tbl_session_rel_course  ".
-               " SET nbr_users=$nbr_users ".
-               " WHERE session_id='$id_session' ".
-               " AND c_id='$enreg_course'");
-    }
-    foreach ($UserList as $enreg_user) {
-        $enreg_user = (int) $enreg_user;
-        Database::query("INSERT IGNORE INTO $tbl_session_rel_user ".
-               " (session_id, user_id, registered_at) ".
-               " VALUES('$id_session','$enreg_user', '".api_get_utc_datetime()."')");
-    }
-    // We update the number of users in the session
-    $sql = "SELECT COUNT(user_id) as nbUsers FROM $tbl_session_rel_user ".
-           " WHERE session_id='$id_session' ".
-           " AND relation_type<>".SESSION_RELATION_TYPE_RRHH." ";
-    $rs = Database::query($sql);
-    list($nbr_users) = Database::fetch_array($rs);
-    Database::query("UPDATE $tbl_session SET nbr_users=$nbr_users ".
-           " WHERE id='$id_session'");
+
+    SessionManager::insertUsersInCourses($UserList, $CourseList, $id_session);
 }
 
 /**

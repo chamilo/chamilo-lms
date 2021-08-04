@@ -84,6 +84,7 @@ class CourseCategory
         }
 
         $sql = "SELECT
+                t1.id,
                 t1.name,
                 t1.code,
                 t1.parent_id,
@@ -461,7 +462,7 @@ class CourseCategory
         $categorySource = Security::remove_XSS($categorySource);
 
         if (count($categories) > 0) {
-            $table = new HTML_Table(['class' => 'data_table']);
+            $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
             $column = 0;
             $row = 0;
             $headers = [
@@ -476,13 +477,15 @@ class CourseCategory
             }
             $row++;
             $mainUrl = api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.$categorySource;
-
+            $ajaxUrl = api_get_path(WEB_AJAX_PATH).'course_category.ajax.php';
             $editIcon = Display::return_icon(
                 'edit.png',
                 get_lang('EditNode'),
                 null,
                 ICON_SIZE_SMALL
             );
+            $exportIcon = Display::return_icon('export_csv.png', get_lang('ExportAsCSV'));
+
             $deleteIcon = Display::return_icon(
                 'delete.png',
                 get_lang('DeleteNode'),
@@ -496,18 +499,37 @@ class CourseCategory
                 ICON_SIZE_SMALL
             );
 
+            $showCoursesIcon = Display::return_icon(
+                'course.png',
+                get_lang('Courses'),
+                null,
+                ICON_SIZE_SMALL
+            );
+
             $urlId = api_get_current_access_url_id();
             foreach ($categories as $category) {
+                $categoryId = $category['id'];
                 $editUrl = $mainUrl.'&id='.$category['code'].'&action=edit';
                 $moveUrl = $mainUrl.'&id='.$category['code'].'&action=moveUp&tree_pos='.$category['tree_pos'];
                 $deleteUrl = $mainUrl.'&id='.$category['code'].'&action=delete';
+                $exportUrl = $mainUrl.'&id='.$categoryId.'&action=export';
+                $showCoursesUrl = $ajaxUrl.'?id='.$categoryId.'&a=show_courses';
 
                 $actions = [];
-
                 if ($urlId == $category['access_url_id']) {
+                    $actions[] = Display::url(
+                        $showCoursesIcon,
+                        $showCoursesUrl,
+                        ['onclick' => 'showCourses(this, '.$categoryId.')']
+                    );
                     $actions[] = Display::url($editIcon, $editUrl);
                     $actions[] = Display::url($moveIcon, $moveUrl);
-                    $actions[] = Display::url($deleteIcon, $deleteUrl);
+                    $actions[] = Display::url($exportIcon, $exportUrl);
+                    $actions[] = Display::url(
+                        $deleteIcon,
+                        $deleteUrl,
+                        ['onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('ConfirmYourChoice')), ENT_QUOTES)).'\')) return false;']
+                    );
                 }
 
                 $url = api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.$category['code'];
@@ -521,7 +543,7 @@ class CourseCategory
                     $url
                 );
 
-                $countCourses = self::countCoursesInCategory($category['code'], null, false);
+                $countCourses = self::countCoursesInCategory($category['code'], null, false, false);
 
                 $content = [
                     $title,
@@ -576,9 +598,18 @@ class CourseCategory
                 ORDER BY tree_pos";
         $res = Database::query($sql);
 
+        $categoryToAvoid = '';
+        if (!api_is_platform_admin()) {
+            $categoryToAvoid = api_get_configuration_value('course_category_code_to_use_as_model');
+        }
+
         $categories[''] = '-';
         while ($cat = Database::fetch_array($res)) {
-            $categories[$cat['code']] = '('.$cat['code'].') '.$cat['name'];
+            $categoryCode = $cat['code'];
+            if (!empty($categoryToAvoid) && $categoryToAvoid == $categoryCode) {
+                continue;
+            }
+            $categories[$categoryCode] = '('.$categoryCode.') '.$cat['name'];
             ksort($categories);
         }
 
@@ -587,13 +618,31 @@ class CourseCategory
 
     /**
      * @param string $category_code
-     * @param string $searchTerm
-     * @paran bool  $avoidCourses
-     * @paran array $conditions
+     * @param string $keyword
+     * @param bool   $avoidCourses
+     * @param bool   $checkHidePrivate
+     * @param array  $conditions
      *
      * @return int
      */
-    public static function countCoursesInCategory($category_code = '', $keyword = '', $avoidCourses = true, $conditions = [])
+    public static function countCoursesInCategory(
+        $category_code = '',
+        $keyword = '',
+        $avoidCourses = true,
+        $checkHidePrivate = true,
+        $conditions = []
+    ) {
+        return self::getCoursesInCategory(
+            $category_code,
+            $keyword,
+            $avoidCourses,
+            $checkHidePrivate,
+            $conditions,
+            true
+        );
+    }
+
+    public static function getCoursesInCategory($category_code = '', $keyword = '', $avoidCourses = true, $checkHidePrivate = true, $conditions = [], $getCount = false)
     {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $categoryCode = Database::escape_string($category_code);
@@ -603,8 +652,7 @@ class CourseCategory
         if ($avoidCourses) {
             $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
         }
-
-        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
+        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true, $checkHidePrivate);
 
         $sqlInjectJoins = '';
         $where = ' AND 1 = 1 ';
@@ -616,7 +664,7 @@ class CourseCategory
         }
 
         $categoryFilter = '';
-        if ($categoryCode === 'ALL') {
+        if ($categoryCode === 'ALL' || empty($categoryCode)) {
             // Nothing to do
         } elseif ($categoryCode === 'NONE') {
             $categoryFilter = ' AND category_code = "" ';
@@ -635,7 +683,11 @@ class CourseCategory
 
         $urlCondition = ' access_url_id = '.api_get_current_access_url_id().' AND';
         $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql = "SELECT count(DISTINCT course.id) as count
+        $select = " DISTINCT course.id, course.code, course.title, course.category_code ";
+        if ($getCount) {
+            $select = "count(DISTINCT course.id) as count";
+        }
+        $sql = "SELECT $select
                 FROM $tbl_course as course
                 INNER JOIN $tbl_url_rel_course as url_rel_course
                 ON (url_rel_course.c_id = course.id)
@@ -653,9 +705,14 @@ class CourseCategory
             ";
 
         $result = Database::query($sql);
-        $row = Database::fetch_array($result);
 
-        return (int) $row['count'];
+        if ($getCount) {
+            $row = Database::fetch_array($result);
+
+            return (int) $row['count'];
+        }
+
+        return Database::store_result($result, 'ASSOC');
     }
 
     /**

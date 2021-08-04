@@ -1,0 +1,116 @@
+{
+  "semantics": [
+    {
+      "label": "Opis zadatka",
+      "description": "Describe how the user should solve the task.",
+      "placeholder": "Klikni na sve glagole u tekstu koji slijedi."
+    },
+    {
+      "label": "Textfield",
+      "placeholder": "Ovo je odgovor: *answer*.",
+      "description": "",
+      "important": {
+        "description": "<ul><li> Označene riječi su dadate sa znakom (*).</li><li>Znakovi mogu biti dodati unutar označenih riječi dodavanjem novog znaka, *tačnariječ*** => tačnariječ*.</li></ul>",
+        "example": "Tačne riječi su označene ovako: *tačnariječ*, znak je napisan ovako: *tačnariječ***."
+      }
+    },
+    {
+      "label": "Pozadinska zamućenost za elemente za uzimanje",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Standard"
+            }
+          ],
+          "label": "Define custom feedback for any score range",
+          "description": "Kliknite na dugme \"Dodaj raspon\" da dodate onoliko raspona koliko vam je potrebno.Primjer: 0-20% loš rezultat, 21-91% srednji rezultat, 91-100% Sjajan rezultat!",
+          "entity": "raspon",
+          "field": {
+            "fields": [
+              {
+                "label": "Raspon rezultata"
+              },
+              {},
+              {
+                "label": "Feedback za definirani raspon rezultata",
+                "placeholder": "Fill in the feedback"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Oznaka za dugme \"Provjeri\"",
+      "default": "Provjeri"
+    },
+    {
+      "label": "Oznaka za dugme \"Ponovi\"",
+      "default": "Ponovi"
+    },
+    {
+      "label": "Text for \"Show solution\" button",
+      "default": "Prikaži rješenje"
+    },
+    {
+      "label": "Podešavanje ponašanja.",
+      "description": "Diese Optionen kontrollieren, wie sich die Aufgabe verhält.",
+      "fields": [
+        {
+          "label": "Omogući \"Ponovi\" dugme"
+        },
+        {
+          "label": "Omogući \"Prikaži rješenje\" dugme"
+        },
+        {
+          "label": "Omogući \"Provjeri\" dugme"
+        },
+        {
+          "label": "Prikaži poene",
+          "description": "Prikaži zarađene poene za svaki odgovor."
+        }
+      ]
+    },
+    {
+      "label": "Tekst za tačan odgovor",
+      "default": "Tačno!!",
+      "description": "Text used to indicate that an answer is correct"
+    },
+    {
+      "label": "Incorrect answer text",
+      "default": "Netačno!!",
+      "description": "Text used to indicate that an answer is incorrect"
+    },
+    {
+      "label": "Missed answer text",
+      "default": "Odgovor nije pronađen!",
+      "description": "Text used to indicate that an answer is missing"
+    },
+    {
+      "label": "Description for Display Solution",
+      "default": "Zadatak je ažuriran kako bi imao rješenje.",
+      "description": "This text tells the user that the tasks has been updated with the solution."
+    },
+    {
+      "label": "Textual representation of the score bar for those using a readspeaker",
+      "default": "Osvojili ste :num od :total poena"
+    },
+    {
+      "label": "Label for the full readable text for assistive technologies",
+      "default": "Cijeli čitljiv tekst"
+    },
+    {
+      "label": "Label for the text where words can be marked for assistive technologies",
+      "default": "Cijeli teskt gdje se mogu riječi označiti."
+    },
+    {
+      "label": "Solution mode header for assistive technologies",
+      "default": "Mod za rješenje"
+    },
+    {
+      "label": "Checking mode header for assistive technologies",
+      "default": "Mod provjere"
+    }
+  ]
+}

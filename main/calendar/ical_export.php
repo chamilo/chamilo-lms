@@ -161,7 +161,7 @@ if (!empty($event)) {
             break;
         default:
             header('location:'.Security::remove_XSS($_SERVER['HTTP_REFERER']));
-            die();
+            exit();
     }
 } else {
     header('location:'.Security::remove_XSS($_SERVER['HTTP_REFERER']));

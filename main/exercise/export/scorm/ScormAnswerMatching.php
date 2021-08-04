@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * This class handles the SCORM export of matching questions.
- *
- * @package chamilo.exercise.scorm
  */
 class ScormAnswerMatching extends Answer
 {
@@ -56,7 +55,7 @@ class ScormAnswerMatching extends Answer
 
             if ($answerCorrect) {
                 $html[] = '<tr class="option_row">';
-                $html[] = '<td width="40%" valign="top">&nbsp;'.$answer."</td>";
+                $html[] = '<td width="40%" valign="top">&nbsp;'.$answer.'</td>';
                 $html[] = '<td width="20%" align="center">&nbsp;&nbsp;';
                 $html[] = '<select name="'.$identifier.$counter.'" id="'.$identifier.$counter.'">';
                 $html[] = ' <option value="0">--</option>';
@@ -75,7 +74,7 @@ class ScormAnswerMatching extends Answer
                 $jstmpc .= '['.$answerCorrect.','.$counter.'],';
 
                 $myWeight = explode('@', $weight);
-                if (count($myWeight) == 2) {
+                if (2 == count($myWeight)) {
                     $weight = $myWeight[0];
                 } else {
                     $weight = $myWeight[0];

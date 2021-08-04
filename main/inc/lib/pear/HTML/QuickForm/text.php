@@ -110,6 +110,7 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
                         </div>';
 
         switch ($layout) {
+            case FormValidator::LAYOUT_GRID:
             case FormValidator::LAYOUT_INLINE:
                 $template = '
                 <div class="form-group {error_class}">
@@ -118,6 +119,9 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
                         {label}
                     </label>
                     {element}
+                     <!-- BEGIN label_2 -->
+                        <p class="help-block">{label_2}</p>
+                     <!-- END label_2 -->
                 </div>';
                 break;
             case FormValidator::LAYOUT_HORIZONTAL:

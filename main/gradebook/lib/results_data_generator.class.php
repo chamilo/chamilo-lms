@@ -7,8 +7,6 @@
  * used for the teacher's evaluation results view.
  *
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 class ResultsDataGenerator
 {
@@ -106,7 +104,7 @@ class ResultsDataGenerator
                 true
             );
 
-            if ($pdf && $number_decimals == null) {
+            if ($pdf && null == $number_decimals) {
                 $user['scoreletter'] = $result->get_score();
             }
             if ($scoreDisplay->is_custom()) {
@@ -213,10 +211,10 @@ class ResultsDataGenerator
         $realscore,
         $ignore_score_color = false
     ) {
-        if ($score != null) {
+        if (null != $score) {
             $scoreDisplay = ScoreDisplay::instance();
             $type = SCORE_CUSTOM;
-            if ($realscore === true) {
+            if (true === $realscore) {
                 $type = SCORE_DIV_PERCENT;
             }
 

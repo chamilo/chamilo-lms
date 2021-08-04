@@ -1,0 +1,49 @@
+{
+  "semantics": [
+    {
+      "label": "Izvorni fajlovi"
+    },
+    {
+      "label": "Izgled playera",
+      "description": "Odaberi izgled playera.",
+      "options": [
+        {
+          "label": "Minimalno"
+        },
+        {
+          "label": "Potpuno"
+        },
+        {
+          "label": "Transparentno"
+        }
+      ]
+    },
+    {
+      "label": "Fit to wrapper"
+    },
+    {
+      "label": "Omogući kontrolu",
+      "description": "Kontrole omogućavaju korisniku da pauzira audio."
+    },
+    {
+      "label": "Omogući autoplay",
+      "description": "Sa autoplay audio počinje automatski. Ako je autoplay onemogućen korisnik pritiskom na play pusta audio."
+    },
+    {
+      "label": "Play audio (Readspeaker)",
+      "default": "Pusti audio"
+    },
+    {
+      "label": "Pause audio (Readspeaker)",
+      "default": "Pauziraj audio"
+    },
+    {
+      "label": "Naziv audio sadržaja",
+      "default": "Audio"
+    },
+    {
+      "label": "Poruka za audio koji nije podržan.",
+      "default": "Vaš pretraživač ne podržava ovaj audio"
+    }
+  ]
+}

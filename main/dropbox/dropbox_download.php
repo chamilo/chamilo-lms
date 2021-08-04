@@ -19,9 +19,6 @@ if (isset($_GET['cat_id']) &&
     isset($_GET['sent_received'])
 ) {
     /** step 1: constructing the sql statement.
-    Due to the nature off the classes of the dropbox the categories for sent files are stored in the table
-    dropbox_file while the categories for the received files are stored in dropbox_post.
-    It would have been more elegant if these could be stored in dropbox_person (which stores the link file-person)
     Therefore we have to create to separate sql statements to find which files are in the category
     (depending if we zip-download a sent category or a received category)*/
     if ($_GET['sent_received'] == 'sent') {

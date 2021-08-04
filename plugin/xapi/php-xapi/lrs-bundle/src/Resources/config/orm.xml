@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services
+        http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="xapi_lrs.doctrine.class_metadata" class="Doctrine\ORM\Mapping\ClassMetadata" public="false">
+            <argument>XApi\Repository\Api\Mapping\MappedStatement</argument>
+            <factory service="xapi_lrs.doctrine.object_manager" method="getClassMetadata" />
+        </service>
+
+        <service id="xapi_lrs.repository.mapped_statement" class="XApi\Repository\ORM\MappedStatementRepository" public="false">
+            <argument type="service" id="xapi_lrs.doctrine.object_manager" />
+            <argument type="service" id="xapi_lrs.doctrine.class_metadata" />
+        </service>
+    </services>
+</container>

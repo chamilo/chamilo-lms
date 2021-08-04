@@ -1,11 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * Report.
- *
- * @package chamilo.tracking
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -125,7 +120,7 @@ $total_average_score = 0;
 $total_average_score_count = 0;
 $html_result = '';
 if (!empty($users) && is_array($users)) {
-    $html_result .= '<table  class="data_table">';
+    $html_result .= '<table  class="table table-hover table-striped data_table">';
     $html_result .= '<tr><th>'.get_lang('User').'</th>';
     foreach ($course_list as $item) {
         $html_result .= '<th>'.$item['title'].'<br /> '.get_lang('AverageScore').' %</th>';

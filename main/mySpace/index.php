@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Homepage for the MySpace directory.
- *
- * @package chamilo.reporting
  */
 
 // resetting the course id
@@ -12,17 +11,16 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-// Access control
 api_block_anonymous_users();
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
-$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
 
 $this_section = SECTION_TRACKING;
 
 ob_start();
 $nameTools = get_lang('MySpace');
-$export_csv = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
+$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false;
 $display = isset($_GET['display']) ? Security::remove_XSS($_GET['display']) : null;
 $csv_content = [];
 $user_id = api_get_user_id();
@@ -35,8 +33,6 @@ $skipData = api_get_configuration_value('tracking_skip_generic_data');
 
 $logInfo = [
     'tool' => SECTION_TRACKING,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
 ];
 Event::registerLog($logInfo);
 
@@ -63,7 +59,7 @@ $pluginCalendar = api_get_plugin_setting('learning_calendar', 'enabled') === 'tr
 $calendarMenuAdded = false;
 
 if ($is_platform_admin) {
-    if ($view == 'admin') {
+    if ($view === 'admin') {
         $menu_items[] = Display::url(
             Display::return_icon('teacher.png', get_lang('TeacherInterface'), [], ICON_SIZE_MEDIUM),
             api_get_self().'?view=teacher'
@@ -80,6 +76,10 @@ if ($is_platform_admin) {
             Display::return_icon('statistics.png', get_lang('CurrentCoursesReport'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php'
         );
+        $menu_items[] = Display::url(
+            Display::return_icon('session.png', get_lang('SessionFilterReport'), [], ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'mySpace/session_filter.php'
+        );
     } else {
         $menu_items[] = Display::url(
             Display::return_icon(
@@ -92,7 +92,6 @@ if ($is_platform_admin) {
         );
         $menu_items[] = Display::url(
             Display::return_icon('star.png', get_lang('AdminInterface'), [], ICON_SIZE_MEDIUM),
-            //api_get_path(WEB_CODE_PATH).'tracking/course_session_report.php?view=admin'
             api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php'
         );
         $menu_items[] = Display::url(
@@ -102,6 +101,10 @@ if ($is_platform_admin) {
         $menu_items[] = Display::url(
             Display::return_icon('statistics.png', get_lang('CurrentCoursesReport'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php'
+        );
+        $menu_items[] = Display::url(
+            Display::return_icon('session.png', get_lang('SessionFilterReport'), [], ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'mySpace/session_filter.php'
         );
 
         if ($pluginCalendar) {
@@ -145,7 +148,7 @@ if ($is_drh) {
 
 $actionsRight = '';
 $actionsLeft = '';
-if ($display == 'useroverview' || $display == 'sessionoverview' || $display == 'courseoverview') {
+if ($display === 'useroverview' || $display === 'sessionoverview' || $display === 'courseoverview') {
     $actionsRight .= Display::url(
         Display::return_icon(
             'export_csv.png',
@@ -184,7 +187,7 @@ if (!empty($session_id) &&
         'index.php'
     );
     if (!api_is_platform_admin()) {
-        if (api_get_setting('add_users_by_coach') == 'true') {
+        if (api_get_setting('add_users_by_coach') === 'true') {
             if ($is_coach) {
                 $actionsLeft .= Display::url(
                     Display::return_icon(

@@ -190,8 +190,8 @@ function delete_category($action, $id, $user_id = null)
 function display_move_form(
     $part,
     $id,
-    $target = [],
-    $extra_params = [],
+    $target,
+    $extra_params,
     $viewReceivedCategory,
     $viewSentCategory,
     $view
@@ -816,7 +816,7 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
     $result = Database::query($sql);
 
     if (!($res = Database::fetch_array($result))) {
-        die(get_lang('GeneralError').' (code 901)');
+        exit(get_lang('GeneralError').' (code 901)');
     }
     if ($owner == 0) {
         return $res['uploader_id'];
@@ -824,7 +824,7 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
     if ($res['uploader_id'] == $owner) {
         return true;
     }
-    die(get_lang('GeneralError').' (code '.$or_die.')');
+    exit(get_lang('GeneralError').' (code '.$or_die.')');
 }
 
 /**
@@ -1071,32 +1071,24 @@ function store_add_dropbox($file = [], $work = null)
                 'courseTitle' => $_course['title'],
                 'userUsername' => $recipent_temp['username'],
             ];
-            api_mail_html(
-                api_get_person_name(
-                    $recipent_temp['firstname'].' '.$recipent_temp['lastname'],
-                    null,
-                    PERSON_NAME_EMAIL_ADDRESS
-                ),
-                $recipent_temp['email'],
+
+            $message = get_lang('NewDropboxFileUploadedContent').
+                ' <a href="'.api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq().'">'.get_lang('SeeFile').'</a>'.
+            "\n\n".
+            api_get_person_name(
+                $_user['firstName'],
+                $_user['lastName'],
+                null,
+                PERSON_NAME_EMAIL_ADDRESS
+            )."\n".get_lang('Email')." : ".$_user['mail'];
+
+            MessageManager::send_message_simple(
+                $recipient_id,
                 get_lang('NewDropboxFileUploaded'),
-                get_lang('NewDropboxFileUploadedContent').' <a href="'.api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq().'">'.get_lang('SeeFile').'</a>'.
-                "\n\n".
-                api_get_person_name(
-                    $_user['firstName'],
-                    $_user['lastName'],
-                    null,
-                    PERSON_NAME_EMAIL_ADDRESS
-                )."\n".get_lang('Email')." : ".$_user['mail'],
-                api_get_person_name(
-                    $_user['firstName'],
-                    $_user['lastName'],
-                    null,
-                    PERSON_NAME_EMAIL_ADDRESS
-                ),
-                $_user['mail'],
-                null,
-                null,
-                null,
+                $message,
+                $_user['user_id'],
+                false,
+                false,
                 $additionalParameters
             );
         }
@@ -1155,7 +1147,7 @@ function feedback($array, $url)
 /**
  * This function returns the html code to display the feedback messages on a given dropbox file.
  *
- * @param $feedback_array an array that contains all the feedback messages about the given document
+ * @param array $feedback an array that contains all the feedback messages about the given document
  *
  * @return string code
  *

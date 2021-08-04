@@ -1,0 +1,116 @@
+{
+  "semantics": [
+    {
+      "label": "Zereginaren deskribapena",
+      "description": "Deskribatu zereginaren irtenbidea aurkitzeko modua.",
+      "placeholder": "Klik egin ondoko testuaren aditz guztietan."
+    },
+    {
+      "label": "Testu eremua",
+      "placeholder": "Hau erantzun bat da: *erantzuna*.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Markatutako hitzak izartxo batekin (*) eransten dira.</li><li>Markatutako hitzetan izartxo bat erantsi nahi bada bigarren izartxo bat erantsi behar da, *correctword*** => correctword*.</li></ul>",
+        "example": "Hitz zuzenak honela markatu behar dira: *hitz-zuzena*, izartxo bat honela \" behar da: *hitz-zuzena***."
+      }
+    },
+    {
+      "label": "Feedback orokorra",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Lehenetsia"
+            }
+          ],
+          "label": "Definitu puntuaketa tarte jakin baterako feedbacka",
+          "description": "Klik egin \"Erantsi tartea\" botoian behar dituzun tarteak eransteko. Adibidez: %0-20 Puntuazio kaskarra, %21-91 Puntuazio normala, %91-100 Puntuazio bikaina!",
+          "entity": "tartea",
+          "field": {
+            "fields": [
+              {
+                "label": "Puntuazio tartea"
+              },
+              {},
+              {
+                "label": "Definitutako puntuazio tarterako feedbacka",
+                "placeholder": "Bete feedbacka"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "\"Egiaztatu\" botoiarentzako testua",
+      "default": "Egiaztatu"
+    },
+    {
+      "label": "\"Saiatu berriro\" botoiarentzako testua",
+      "default": "Saiatu berriro"
+    },
+    {
+      "label": "\"Erakutsi soluzioa\" botoiarentzako testua",
+      "default": "Erakutsi soluzioa"
+    },
+    {
+      "label": "Portaera-ezarpenak.",
+      "description": "Aukera hauen bidez kontrolatu ahal izango duzu zereginaren portaera.",
+      "fields": [
+        {
+          "label": "Gaitu \"Saiatu berriro\""
+        },
+        {
+          "label": "Gaitu \"Erakutsi soluzioa\" botoia"
+        },
+        {
+          "label": "Gaitu \"Egiaztatu\" botoia"
+        },
+        {
+          "label": "Erakutsi puntuazioa",
+          "description": "Erakutsi erantzun bakoitzean lortutako puntuazioa."
+        }
+      ]
+    },
+    {
+      "label": "Erantzun zuzenaren testua",
+      "default": "Zuzena!",
+      "description": "Erantzuna zuzena dela adierazteko testua"
+    },
+    {
+      "label": "Erantzun okerraren testua",
+      "default": "Erantzun okerra!",
+      "description": "Erantzuna okerra dela adierazteko testua"
+    },
+    {
+      "label": "Falta diren erantzunentzako testua",
+      "default": "Falta da!",
+      "description": "Erantzuna falta dela adierazteko testua"
+    },
+    {
+      "label": "Erakutsi soluzioarentzako deskribapena",
+      "default": "Zeregina eguneratzen da soluzioa adierazteko.",
+      "description": "Testu honek erabiltzaileari informatzen dio zeregina eguneratu dela soluzioa adierazteko."
+    },
+    {
+      "label": "Puntuazio barraren testu adierazpena irakurgailua erabiltzen dutenentzat",
+      "default": ":total puntutik :num puntu lortu dituzu"
+    },
+    {
+      "label": "Testu irakurgarri osorako etiketa laguntzarako teknologietan",
+      "default": "Testu irakurgarri osoa"
+    },
+    {
+      "label": "Markatu daitezkeen hitzentzako testurako etiketa laguntzarako teknologietan",
+      "default": "Hitzak markatu daitezkeen testu osoa"
+    },
+    {
+      "label": "Ebazpen-modurako goiburua laguntzarako teknologietan",
+      "default": "Ebazpen-modua"
+    },
+    {
+      "label": "Egiaztapen-modurako goiburua laguntzarako teknologietan",
+      "default": "Egiaztapen-modua"
+    }
+  ]
+}

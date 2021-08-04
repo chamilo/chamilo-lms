@@ -1,0 +1,6 @@
+html,body{margin:0;padding:0;}
+html{background-color: rgb(0,135,255);height:100%;}
+body{background-color: white;min-height:100%;}
+.contentWrapper{width:940px;margin:0 auto;overflow: hidden;}
+.nav{padding:30px 0;}
+.next-page{float:right;}

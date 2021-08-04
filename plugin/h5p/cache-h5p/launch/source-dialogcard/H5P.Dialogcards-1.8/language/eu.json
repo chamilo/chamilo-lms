@@ -1,0 +1,220 @@
+{
+  "semantics": [
+    {
+      "label": "Titulua"
+    },
+    {
+      "label": "Modua",
+      "description": "Elkarrizketa-txartelak erakusteko modua",
+      "options": [
+        {
+          "label": "Normala"
+        },
+        {
+          "label": "Errepikapena"
+        }
+      ]
+    },
+    {
+      "label": "Zereginaren deskribapena",
+      "default": ""
+    },
+    {
+      "widgets": [
+        {
+          "label": "Lehenetsia"
+        }
+      ],
+      "label": "Elkarrizketak",
+      "entity": "elkarrizketa",
+      "field": {
+        "label": "Ariketa",
+        "fields": [
+          {
+            "label": "Testua",
+            "description": "Elkarrizketaren lehenengo zatirako laguntza"
+          },
+          {
+            "label": "Erantzuna",
+            "description": "Elkarrizketaren bigarren zatirako laguntza"
+          },
+          {
+            "label": "Irudia",
+            "description": "Aukerazko irudia txartelerako. (Txartelak izan dezake irudi bat, testu bat edo biak)"
+          },
+          {
+            "label": "Irudiaren ordezko testua"
+          },
+          {
+            "label": "Audio fitxategiak"
+          },
+          {
+            "label": "Argibideak",
+            "fields": [
+              {
+                "label": "Testurako aholkua",
+                "description": "Elkarrizketaren lehenengo zatirako argibidea"
+              },
+              {
+                "label": "Erantzuteko argibidea",
+                "description": "Elkarrizketaren bigarren parterako argibidea"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "Portaera ezarpenak.",
+      "description": "Aukera hauen bidez kontrolatu ahal izango duzu zereginaren portaera.",
+      "fields": [
+        {
+          "label": "Aktibatu \"Saiatu berriro\" botoia"
+        },
+        {
+          "label": "Desgaitu atzeranzko nabigazioa",
+          "description": "Aukera hau aktibatuta soilik aurreruntz mugitu ahal izango da elkarrizketa-txarteletan"
+        },
+        {
+          "label": "Eskalatu testua txartelera doitzeko",
+          "description": "Aukera hau desmarkatuta txartela egokituko da testuaren tamainara"
+        },
+        {
+          "label": "Ausazko txartelak",
+          "description": "Gaitu pantailako txartelen ordena ausazkoa izatea."
+        },
+        {
+          "label": "Gehienezko gaitasun maila"
+        },
+        {
+          "label": "Baimendu aurrerapen azkarra",
+          "description": "Gaituz gero, ikasleek erabaki dezakete txartel bat dakitela buelta eman gabe"
+        }
+      ]
+    },
+    {
+      "label": "Buelta emateko botoiaren testua",
+      "default": "Eman buelta"
+    },
+    {
+      "label": "Hurrengoa botoiaren testua",
+      "default": "Hurrengoa"
+    },
+    {
+      "label": "Aurrekoa botoiaren testua",
+      "default": "Aurrekoa"
+    },
+    {
+      "label": "Saiatu berriro botoiaren testua",
+      "default": "Saiatu berriro"
+    },
+    {
+      "label": "\"erantzun zuzena\" botoiarentzako testua",
+      "default": "Asmatu duzu!"
+    },
+    {
+      "label": "\"erantzun okerra\" botoiarentzako testua",
+      "default": "Ez duzu asmatu"
+    },
+    {
+      "label": "\"Erronda\" mezuarentzako testua txartelen azpian laburpen-pantailan",
+      "description": "@round unean uneko errondaren zenbakiarekin ordezkatuko da",
+      "default": "@round. erronda"
+    },
+    {
+      "label": "\"Geratzen diren txartelak\" mezuarentzako testua",
+      "description": "@number erronda horretan geratzen den txartel kopuruarekin ordezkatuko da",
+      "default": "Geratzen diren txartelak: @number"
+    },
+    {
+      "label": "\"hurrengo erronda\" botoiarentzako testua",
+      "description": "@round errondaren zenbakiarekin ordezkatuko da",
+      "default": "Jarraitu @round. errondara"
+    },
+    {
+      "label": "\"Berriz hasi\" botoiarentzako testua",
+      "default": "Berriz hasi"
+    },
+    {
+      "label": "\"Erakutsi laburpena\" botoiarentzako testua",
+      "default": "Hurrengoa"
+    },
+    {
+      "label": "Laburpen-orriaren izenburuaren testua",
+      "default": "Laburpena"
+    },
+    {
+      "label": "\"Asmatutako txartel kopurua:\"-rentzako testua",
+      "default": "Asmatutako txartel kopurua:"
+    },
+    {
+      "label": "\"Asmatu ez duzun txartel kopurua:\"-rentzako testua",
+      "default": "Asmatu ez duzun txartel kopurua:"
+    },
+    {
+      "label": "\"Erakutsi gabeko txartelak:\"-rentzako testua",
+      "default": "Erakutsi gabeko txartelak:"
+    },
+    {
+      "label": "\"Kalifikazioa guztira\"-rentzako testua",
+      "default": "Kalifikazioa guztira"
+    },
+    {
+      "label": "\"Osatutako txartelak\"-rentzako testua",
+      "default": "Ikasten osatutako txartelak:"
+    },
+    {
+      "label": "\"Osatutako errondak:\"-rentzako testua",
+      "default": "Osatutako errondak:"
+    },
+    {
+      "label": "Txartel guztiak ondo ikasiz gero erakutsi beharreko mezua",
+      "description": "@cards bankuan dagoen txartel kopuruarekin ordezkatuko da. @max gehienezko gaitasun mailari 1 kenduta lortzen den emaitzarekin ordezkatuko da.",
+      "default": "Oso ondo! @cards txartel guztiak @max aldiz jarraian asmatu dituzu!"
+    },
+    {
+      "label": "Aurrerapena testua",
+      "description": "Erabiltzen dituen aldagaiak dira @card eta @total.",
+      "default": "@total -tik @card . txartela"
+    },
+    {
+      "label": "Txartelaren testuaren etiketa",
+      "description": "Laguntza teknologiko bidezko erabilerraztasunerako erabiltzen da",
+      "default": "Txartelaren aurreko aldea"
+    },
+    {
+      "label": "Txartelaren atzeko aldeko etiketa",
+      "description": "Laguntza teknologiko bidezko erabilerraztasunerako erabiltzen da",
+      "default": "Txartelaren atzeko aldea"
+    },
+    {
+      "label": "Erakutsi argibidea botoiaren etiketa",
+      "default": "Erakutsi argibidea"
+    },
+    {
+      "label": "Audioa ez da onartzen mezua",
+      "default": "Zure nabigatzaileak ez du onartzen audio hau"
+    },
+    {
+      "label": "Berriz hasteko konfirmatzeko mezua",
+      "fields": [
+        {
+          "label": "Goiburuko testua",
+          "default": "Berriz hasi?"
+        },
+        {
+          "label": "Gorputzaren testua",
+          "default": "Aurrerapen guztiak galduko dira. Ziur zaude berriz hasi nahi duzula?"
+        },
+        {
+          "label": "Utzi botoiaren etiketa",
+          "default": "Utzi"
+        },
+        {
+          "label": "Baieztatu botoiaren etiketa",
+          "default": "Berriz hasi"
+        }
+      ]
+    }
+  ]
+}

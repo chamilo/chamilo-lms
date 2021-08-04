@@ -10,6 +10,9 @@
  * https://opensource.org/licenses/MIT
  */
 
+/* eslint-disable strict */
+/* eslint-disable no-console */
+
 ;(function () {
   'use strict'
   var path = require('path')
@@ -18,10 +21,11 @@
   // Retrieve the content of the minimal runtime:
   var runtime = fs.readFileSync(path.join(__dirname, 'runtime.js'), 'utf8')
   // A regular expression to parse templates from script tags in a HTML page:
-  var regexp = /<script( id="([\w\-]+)")? type="text\/x-tmpl"( id="([\w\-]+)")?>([\s\S]+?)<\/script>/gi
+  var regexp = /<script( id="([\w-]+)")? type="text\/x-tmpl"( id="([\w-]+)")?>([\s\S]+?)<\/script>/gi
   // A regular expression to match the helper function names:
   var helperRegexp = new RegExp(
-    tmpl.helper.match(/\w+(?=\s*=\s*function\s*\()/g).join('\\s*\\(|') + '\\s*\\('
+    tmpl.helper.match(/\w+(?=\s*=\s*function\s*\()/g).join('\\s*\\(|') +
+      '\\s*\\('
   )
   // A list to store the function bodies:
   var list = []
@@ -31,12 +35,18 @@
     // Only add helper functions if they are used inside of the template:
     var helper = helperRegexp.test(str) ? tmpl.helper : ''
     var body = str.replace(tmpl.regexp, tmpl.func)
-    if (helper || (/_e\s*\(/.test(body))) {
+    if (helper || /_e\s*\(/.test(body)) {
       helper = '_e=tmpl.encode' + helper + ','
     }
-    return 'function(' + tmpl.arg + ',tmpl){' +
-    ('var ' + helper + "_s='" + body + "';return _s;")
-      .split("_s+='';").join('') + '}'
+    return (
+      'function(' +
+      tmpl.arg +
+      ',tmpl){' +
+      ('var ' + helper + "_s='" + body + "';return _s;")
+        .split("_s+='';")
+        .join('') +
+      '}'
+    )
   }
   // Loop through the command line arguments:
   process.argv.forEach(function (file, index) {
@@ -53,6 +63,7 @@
         return
       }
       content = fs.readFileSync(file, 'utf8')
+      // eslint-disable-next-line no-constant-condition
       while (true) {
         // Find templates in script tags:
         result = regexp.exec(content)
@@ -77,4 +88,4 @@
   code = runtime.replace('{}', '{' + list.join(',') + '}')
   // Print the resulting code to the console output:
   console.log(code)
-}())
+})()

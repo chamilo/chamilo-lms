@@ -1,12 +1,14 @@
 <?php
-// For licensing terms, see /license.txt
+
+/* For licensing terms, see /license.txt */
+
 /**
  * This script takes a single-URL portal and changes the database so the
  * original portal becomes a secondary URL (not the main admin URL).
  * This means creating a new URL of ID 1 and moving all previous records
  * referencing ID 1 to ID 2.
  */
-die();
+exit;
 require __DIR__.'/../../main/inc/global.inc.php';
 
 $tableAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL);

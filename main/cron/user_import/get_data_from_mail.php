@@ -14,7 +14,7 @@ sam@example.com
 Matthew@example.com
 HERMAN@example.com
 */
-die();
+exit();
 //change filename depending on file containing mails list
 $list = file('input.txt');
 require_once '../../inc/global.inc.php';

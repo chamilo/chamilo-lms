@@ -1,0 +1,32 @@
+{
+  "machineName": "H5PEditor.AudioRecorder",
+  "title": "H5P Editor Audio Recorder",
+  "description": "Record and upload audio directly in the H5P Editor",
+  "license": "MIT",
+  "author": "Joubel",
+  "majorVersion": 1,
+  "minorVersion": 0,
+  "patchVersion": 4,
+  "runnable": 0,
+  "coreApi": {
+    "majorVersion": 1,
+    "minorVersion": 20
+  },
+  "preloadedJs": [
+    {
+      "path": "dist/h5p-editor-audio-recorder.js"
+    }
+  ],
+  "preloadedDependencies": [
+    {
+      "machineName": "FontAwesome",
+      "majorVersion": 4,
+      "minorVersion": 5
+    },
+    {
+      "machineName": "H5P.FontIcons",
+      "majorVersion": 1,
+      "minorVersion": 0
+    }
+  ]
+}

@@ -1,11 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
-/**
- * @package chamilo.gradebook
- */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
 
@@ -147,6 +145,47 @@ switch ($action) {
         $cats = Category::load($cat_id, null, null, null, null, null, false);
         GradebookUtils::generateTable($courseInfo, $userId, $cats, false, false, $userList);
         break;
+    case 'add_comment':
+        if (!api_is_allowed_to_edit()) {
+            exit;
+        }
+        $userId = isset($_GET['user_id']) ? (int) $_GET['user_id'] : 0;
+        $gradeBookId = isset($_GET['gradebook_id']) ? (int) $_GET['gradebook_id'] : 0;
+        $comment = '';
+        $commentInfo = GradebookUtils::getComment($gradeBookId, $userId);
+        if ($commentInfo) {
+            $comment = $commentInfo['comment'];
+        }
+        $ajaxPath = api_get_path(WEB_AJAX_PATH).'gradebook.ajax.php?a=add_gradebook_comment';
+        $save = Display::return_message(get_lang('Saved'));
+        echo '<script>
+            $(function() {
+                $("form").on("submit", function(e) {
+                   e.preventDefault();
+                   $.ajax({
+                        url: "'.$ajaxPath.'",
+                        data: {
+                            gradebook_id: "'.$gradeBookId.'",
+                            user_id: "'.$userId.'",
+                            comment: $("#comment").val()
+                        },
+                        success: function(data) {
+                            $(".result").html("'.addslashes($save).'");
+                        }
+                    });
+                });
+            });
+        </script>';
+        $student = api_get_user_info($userId);
+        $form = new FormValidator('add_comment');
+        $form->addLabel(get_lang('User'), $student['complete_name']);
+        $form->addTextarea('comment', get_lang('Comment'), ['id' => 'comment']);
+        $form->addHtml('<div class="result"></div>');
+        $form->addButtonSave(get_lang('Save'));
+        $form->setDefaults(['comment' => $comment]);
+        $form->display();
+        exit;
+        break;
 }
 
 $course_code = api_get_course_id();
@@ -177,21 +216,24 @@ $allowSkillRelItem = api_get_configuration_value('allow_skill_rel_items');
 if (count($userList) == 0) {
     echo Display::return_message(get_lang('NoResultsAvailable'), 'warning');
 } else {
-    echo '<br /><br /><table class="data_table">';
+    echo '<br /><br /><div class="table-responsive">
+            <table class="table table-hover table-striped table-bordered data_table">';
     echo '<tr><th>';
     echo get_lang('Student');
     echo '</th>';
     echo '<th>';
     echo get_lang('Action');
     echo '</th></tr>';
+    $allowComments = api_get_configuration_value('allow_gradebook_comments');
     foreach ($userList as $index => $value) {
+        $userData = api_get_person_name($value['firstname'], $value['lastname']).' ('.$value['username'].')';
         echo '<tr>
-                <td width="70%">'
-                .api_get_person_name($value['firstname'], $value['lastname']).' ('.$value['username'].') </td>';
+                <td width="70%">'.$userData.'</td>';
         echo '<td>';
         $link = '';
         if ($allowSkillRelItem) {
-            $url = api_get_path(WEB_CODE_PATH).'gradebook/skill_rel_user.php?'.api_get_cidreq().'&user_id='.$value['user_id'].'&selectcat='.$cat_id;
+            $url = api_get_path(WEB_CODE_PATH).
+                'gradebook/skill_rel_user.php?'.api_get_cidreq().'&user_id='.$value['user_id'].'&selectcat='.$cat_id;
             $link = Display::url(
                 get_lang('Skills'),
                 $url,
@@ -205,10 +247,21 @@ if (count($userList) == 0) {
             $url,
             ['target' => '_blank', 'class' => 'btn btn-default']
         );
+
+        if ($allowComments) {
+            $url = api_get_self().'?'.api_get_cidreq().'&action=add_comment&user_id='.$value['user_id'].'&gradebook_id='.$cat_id;
+            $link .= '&nbsp;'.Display::url(
+                get_lang('AddGradebookComment'),
+                $url,
+                ['target' => '_blank', 'class' => 'ajax btn btn-default']
+            );
+        }
+
         echo $link;
+
         echo '</td></tr>';
     }
-    echo '</table>';
+    echo '</table></div>';
 }
 
 Display::display_footer();

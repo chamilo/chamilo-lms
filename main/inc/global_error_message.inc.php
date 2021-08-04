@@ -78,6 +78,8 @@ if (is_int($global_error_code) && $global_error_code > 0) {
         }
     }
 
+    $css_def = str_replace("themes/$theme/", $css_web_path."themes/$theme/", $css_def);
+
     $global_error_message = [];
 
     switch ($global_error_code) {
@@ -160,12 +162,12 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 <html>
 		<head>
 			<title>{TITLE}</title>
-            <meta charset="{ENCODING}" />            
-                        
+            <meta charset="{ENCODING}" />
+
             <style>
-                $css_def                
+                $css_def
                 html, body {min-height:100%; padding:0; margin:0;}
-            
+
                 #wrapper {padding:0; position:absolute; top:0; bottom:0; left:0; right:0;}
                 @keyframes animatedBackground {
                     from { background-position: 0 0; }
@@ -260,7 +262,7 @@ EOM;
             <meta charset="{ENCODING}" />
             <style>
             $css_def
-            </style>  
+            </style>
         </head>
         <body>
         <div id="page-error">
@@ -278,7 +280,7 @@ EOM;
                 </header>
                 <section id="menu-bar">
                 <nav class="navbar navbar-default">
-                    <div class="container">        
+                    <div class="container">
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menuone" aria-expanded="false">
                             <span class="sr-only">Toggle navigation</span>
@@ -286,7 +288,7 @@ EOM;
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                    </div>  
+                    </div>
                     <div class="collapse navbar-collapse" id="menuone">
                         <ul class="nav navbar-nav">
                             <li id="current" class="active tab-homepage"><a href="#" target="_self">Homepage</a></li>
@@ -295,7 +297,7 @@ EOM;
                     </div>
                 </nav>
                 </section>
-                
+
                 <section id="content-error">
                     <div class="container">
                         <div class="panel panel-default">
@@ -318,5 +320,5 @@ EOM;
         $global_error_message_page = str_replace('{'.strtoupper($key).'}', $value, $global_error_message_page);
     }
     header('Content-Type: text/html; charset='.$global_error_message['encoding']);
-    die($global_error_message_page);
+    exit($global_error_message_page);
 }

@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLpCategory;
@@ -464,17 +465,22 @@ switch ($action) {
     case 'send_message':
         if (true === $allowMessages) {
             $subject = $_POST['subject'] ?? '';
-            $message = $_POST['message'] ?? '';
-            $userInfo = api_get_user_info($studentId);
+            $content = $_POST['message'] ?? '';
+            $currentUser = api_get_user_entity();
+            $student = api_get_user_entity($studentId);
 
-            if (!empty($subject) && !empty($message)) {
-                $currentUserInfo = api_get_user_info();
-                MessageManager::sendMessageAboutUser(
-                    $userInfo,
-                    $currentUserInfo,
-                    $subject,
-                    $message
-                );
+            // @todo move in a repo
+            if (!empty($subject) && !empty($content)) {
+                $em = Database::getManager();
+                $message = (new Message())
+                    ->setTitle($subject)
+                    ->setContent($content)
+                    ->setSender(api_get_user_entity())
+                    ->addReceiver($student)
+                    ->setMsgType(Message::MESSAGE_TYPE_CONVERSATION)
+                ;
+                $em->persist($message);
+                $em->flush();
 
                 // Send also message to all student bosses
                 $bossList = UserManager::getStudentBossList($studentId);
@@ -484,17 +490,24 @@ switch ($action) {
                     $link = Display::url($url, $url);
 
                     foreach ($bossList as $boss) {
-                        MessageManager::send_message_simple(
-                            $boss['boss_id'],
-                            sprintf(get_lang('Follow up message about student %s'), $userInfo['complete_name']),
-                            sprintf(
-                                get_lang('Hi,<br/><br/>'),
-                                $currentUserInfo['complete_name'],
-                                $userInfo['complete_name'],
-                                $link
-                            )
+                        $studentFullName = UserManager::formatUserFullName($student);
+                        $content = sprintf(
+                            get_lang('Hi,<br/><br/>'),
+                            UserManager::formatUserFullName($currentUser),
+                            $studentFullName,
+                            $link
                         );
+                        $message = (new Message())
+                            ->setTitle(sprintf(get_lang('Follow up message about student %s'), $studentFullName))
+                            ->setContent($content)
+                            ->setSender(api_get_user_entity())
+                            ->addReceiver(api_get_user_entity($boss['boss_id']))
+                            ->setMsgType(Message::MESSAGE_TYPE_CONVERSATION)
+                        ;
+                        $em->persist($message);
                     }
+
+                    $em->flush();
                 }
 
                 Display::addFlash(Display::return_message(get_lang('Message Sent')));

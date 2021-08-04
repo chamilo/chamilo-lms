@@ -49,6 +49,13 @@ class MessageAttachment extends AbstractResource implements ResourceInterface
      */
     protected string $filename;
 
+    public function __construct()
+    {
+        $this->size = 0;
+        $this->comment = '';
+        $this->path = '';
+    }
+
     public function __toString(): string
     {
         return $this->getFilename();
@@ -95,12 +102,7 @@ class MessageAttachment extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get size.
-     *
-     * @return int
-     */
-    public function getSize()
+    public function getSize(): int
     {
         return $this->size;
     }

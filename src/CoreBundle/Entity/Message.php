@@ -234,7 +234,7 @@ class Message
     /**
      * @var Collection|MessageAttachment[]
      *
-     * @ORM\OneToMany(targetEntity="MessageAttachment", mappedBy="message")
+     * @ORM\OneToMany(targetEntity="MessageAttachment", mappedBy="message", cascade={"remove"})
      */
     protected Collection $attachments;
 
@@ -292,6 +292,7 @@ class Message
         }
 
         /*
+        For some reason this doesn't work, api platform returns an obj instead a collection.
         $result = $this->receivers->filter(function (MessageRelUser $messageRelUser) {
             error_log((string)$messageRelUser->getId());
             return MessageRelUser::TYPE_CC === $messageRelUser->getReceiverType();

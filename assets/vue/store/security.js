@@ -41,6 +41,12 @@ export default {
 
             return getters.hasRole('ROLE_CURRENT_COURSE_TEACHER');
         },
+        isBoss(state, getters) {
+            return getters.hasRole('ROLE_STUDENT_BOSS');
+        },
+        isStudent(state, getters) {
+            return getters.hasRole('ROLE_STUDENT');
+        },
         getUser(state) {
             return state.user;
         },

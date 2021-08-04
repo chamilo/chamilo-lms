@@ -800,6 +800,21 @@ switch ($action) {
         break;
     case 'get_sessions':
         $listType = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : SessionManager::getDefaultSessionTab();
+        $language = isset($_REQUEST['lang']) ? $_REQUEST['lang'] : '';
+
+        $sessionColumns = SessionManager::getGridColumns($listType);
+        $columns = $sessionColumns['simple_column_name'];
+
+        $loadExtraFields = isset($_REQUEST['load_extra_field']) ? $_REQUEST['load_extra_field'] : '';
+        $extraFieldsToLoad = [];
+        if (!empty($loadExtraFields)) {
+            $loadExtraFields = explode(',', $loadExtraFields);
+            foreach ($loadExtraFields as $fieldId) {
+                $extraField = new ExtraField('session');
+                $fieldData = $extraField->get($fieldId);
+                $extraFieldsToLoad[] = $fieldData;
+            }
+        }
 
         if ('custom' === $listType && api_get_configuration_value('allow_session_status')) {
             $whereCondition .= ' AND (s.status IN ("'.SessionManager::STATUS_PLANNED.'", "'.SessionManager::STATUS_PROGRESS.'") ) ';
@@ -812,6 +827,15 @@ switch ($action) {
                 );
                 break;
             case 'custom':
+            case 'simple':
+                $count = SessionManager::getSessionsForAdmin(
+                    ['where' => $whereCondition, 'extra' => $extra_fields],
+                    true,
+                    [],
+                    $extraFieldsToLoad,
+                    $language
+                );
+                break;
             case 'active':
             case 'close':
             case 'all':
@@ -1906,8 +1930,24 @@ switch ($action) {
         }
         break;
     case 'get_sessions':
+        $listType = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
+        $language = isset($_REQUEST['lang']) ? $_REQUEST['lang'] : '';
+        $order = isset($_REQUEST['order']) ? $_REQUEST['order'] : '';
+
         $sessionColumns = SessionManager::getGridColumns($listType);
         $columns = $sessionColumns['simple_column_name'];
+
+        $loadExtraFields = isset($_REQUEST['load_extra_field']) ? $_REQUEST['load_extra_field'] : '';
+        $extraFieldsToLoad = [];
+        if (!empty($loadExtraFields)) {
+            $loadExtraFields = explode(',', $loadExtraFields);
+            foreach ($loadExtraFields as $fieldId) {
+                $extraField = new ExtraField('session');
+                $fieldData = $extraField->get($fieldId);
+                $extraFieldsToLoad[] = $fieldData;
+            }
+        }
+
 
         $sidx = in_array($sidx, $columns) ? $sidx : 'name';
         switch ($listType) {
@@ -1921,9 +1961,23 @@ switch ($action) {
                     ]
                 );
                 break;
+            case 'custom':
+            case 'simple':
+                $result = SessionManager::getSessionsForAdmin(
+                    [
+                        'where' => $whereCondition,
+                        'order' => "$sidx $sord, s.name",
+                        'extra' => $extra_fields,
+                        'limit' => "$start , $limit",
+                    ],
+                    false,
+                    $sessionColumns,
+                    $extraFieldsToLoad,
+                    $language,
+                );
+                break;
             case 'active':
             case 'close':
-            case 'custom':
             case 'all':
                 $result = SessionManager::formatSessionsAdminForGrid(
                     [

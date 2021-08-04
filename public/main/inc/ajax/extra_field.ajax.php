@@ -49,13 +49,10 @@ switch ($action) {
 
         $tags = Database::getManager()
             ->getRepository(Tag::class)
-            ->createQueryBuilder('t')
-            ->where("t.tag LIKE :tag")
-            ->andWhere('t.fieldId = :field')
-            ->setParameter('field', $fieldId)
-            ->setParameter('tag', "$tag%")
-            ->getQuery()
-            ->getResult();
+            ->findBy([
+                'tag' => $tag,
+                'field' => $fieldId,
+            ]);
 
         /** @var Tag $tag */
         foreach ($tags as $tag) {

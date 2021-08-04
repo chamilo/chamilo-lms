@@ -266,7 +266,8 @@ if (isset($_POST['comment'])) {
 /* WYSIWYG HTML EDITOR - Program Logic */
 if ($is_allowed_to_edit) {
     if (isset($_POST['formSent']) && $_POST['formSent'] == 1 && !empty($document_id)) {
-        $content = isset($_POST['content']) ? trim(str_replace(["\r", "\n"], '', stripslashes($_POST['content']))) : null;
+        //$content = isset($_POST['content']) ? trim(str_replace(["\r", "\n"], '', stripslashes($_POST['content']))) : null;
+        $content = isset($_POST['content']) ? trim(stripslashes($_POST['content'])) : null;
         $content = Security::remove_XSS($content, COURSEMANAGERLOWSECURITY);
         if ($dir == '/') {
             $dir = '';

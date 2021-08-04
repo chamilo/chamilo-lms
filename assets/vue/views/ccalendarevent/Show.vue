@@ -22,15 +22,13 @@ import Loading from '../../components/Loading.vue';
 import ShowMixin from '../../mixins/ShowMixin';
 import Toolbar from '../../components/Toolbar.vue';
 
-import ShowLinks from "../../components/resource_links/ShowLinks.vue";
 const servicePrefix = 'CCalendarEvent';
 
 export default {
   name: 'CCalendarEventShow',
   components: {
       Loading,
-      Toolbar,
-      ShowLinks
+      Toolbar
   },
   mixins: [ShowMixin],
   computed: {

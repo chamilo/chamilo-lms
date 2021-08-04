@@ -1,5 +1,5 @@
 <template>
-  <ShowLinks :item="item" :edit-status="true" />
+  <ShowLinks :item="item" :edit-status="editStatus" :show-status="showStatus" />
 
   <VueMultiselect
       placeholder="Share with User"
@@ -39,6 +39,11 @@ export default {
     item: {
       type: Object,
       required: true
+    },
+    editStatus: {
+      type: Boolean,
+      required: false,
+      default: true
     },
     showStatus: {
       type: Boolean,

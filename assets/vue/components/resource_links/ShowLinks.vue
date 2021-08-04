@@ -65,9 +65,6 @@ export default {
 
     const { editStatus } = toRefs(props);
 
-    console.log('aa');
-    console.log(editStatus);
-
     return {
       visibilityList,
     };

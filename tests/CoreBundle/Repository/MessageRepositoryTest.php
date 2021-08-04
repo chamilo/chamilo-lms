@@ -239,6 +239,9 @@ class MessageRepositoryTest extends AbstractApiTest
         $em->flush();
         $em->clear();
 
+        $url = $messageAttachmentRepo->getResourceFileUrl($attachment);
+        $this->assertNotEmpty($url);
+
         // Create tag.
         /** @var User $testUser */
         $testUser = $userRepo->find($testUser->getId());

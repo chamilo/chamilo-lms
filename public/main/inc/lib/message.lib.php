@@ -555,8 +555,7 @@ class MessageManager
         $em = Database::getManager();
         $attachmentRepo = Container::getMessageAttachmentRepository();
 
-        $attachment = new MessageAttachment();
-        $attachment
+        $attachment = (new MessageAttachment())
             ->setSize($file['size'])
             ->setPath($fileName)
             ->setFilename($fileName)

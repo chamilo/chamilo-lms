@@ -51,28 +51,25 @@
     </v-card>
   </div>
 </template>
-
 <script>
 
-import {computed, ref, toRefs} from "vue";
-import isEmpty from "lodash/isEmpty";
-import axios from "axios";
-import {ENTRYPOINT} from "../../config/entrypoint";
-import useVuelidate from "@vuelidate/core";
+import {toRefs} from "vue";
 
 export default {
   name: 'ShowLinks',
   setup (props) {
-
     const visibilityList = [
       {value: 2, label: 'Published'},
       {value: 0, label: 'Draft'},
     ];
 
+    const { editStatus } = toRefs(props);
+
+    console.log('aa');
+    console.log(editStatus);
 
     return {
       visibilityList,
-
     };
   },
   props: {

@@ -1,6 +1,5 @@
 <template>
-  <Toolbar
-  >
+  <Toolbar  >
     <template v-slot:right>
         <v-btn
             tile
@@ -411,6 +410,7 @@ export default {
 
     function deleteMultipleItems() {
       let items = [];
+
       selectedItems.value.forEach(message => {
         let myReceiver = {};
         message.receivers.forEach(receiver => {
@@ -420,11 +420,11 @@ export default {
           }
         });
       });
+
       let promise = store.dispatch('messagereluser/delMultiple', items);
 
       deleteMultipleDialog.value = false;
       selectedItems.value = [];
-
       promise.then(() => {
         goToInbox();
       });

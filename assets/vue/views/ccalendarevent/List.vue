@@ -6,15 +6,12 @@
 
     <!-- Add form-->
     <q-dialog v-model="dialog" persistent>
-      <q-card style="min-width: 700px">
+      <q-card style="min-width: 800px">
         <q-card-section>
-          <div class="text-h6">{{ item['@id'] ? 'Edit event' : 'Add event' }}</div>
+          <div class="text-h6">{{ item['@id'] ? $t('Edit event') : $t('Add event') }}</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          <!--          <q-input dense v-model="address" autofocus @keyup.enter="dialog = false" />-->
-
-          <!--              :errors="violations"-->
           <CCalendarEventForm
               v-if="dialog"
               ref="createForm"
@@ -25,7 +22,7 @@
 
         <q-card-actions align="right" class="text-primary">
           <q-btn v-close-popup flat label="Cancel"/>
-          <q-btn :label="item['@id'] ? 'Edit' : 'Add'" flat @click="onCreateEventForm"/>
+          <q-btn :label="item['@id'] ? $t('Edit') : $t('Add') " flat @click="onCreateEventForm"/>
         </q-card-actions>
       </q-card>
     </q-dialog>

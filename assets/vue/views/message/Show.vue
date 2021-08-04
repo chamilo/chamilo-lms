@@ -9,7 +9,6 @@
 <!--            `${$options.servicePrefix} ${item['@id']}`-->
 <!--          }}-->
 <!--        </v-toolbar-title>-->
-
         <v-btn
             :loading="isLoading"
             tile
@@ -35,7 +34,6 @@
         >
           <v-icon icon="mdi-calendar-plus" />
         </v-btn>
-
       </template>
     </Toolbar>
 
@@ -59,28 +57,51 @@
         track-by="id"
     />
 
-    <p class="text-lg">
-      From:
-      <q-avatar size="32px">
-        <img :src="item['sender']['illustrationUrl'] + '?w=80&h=80&fit=crop'" />
-        <!--              <q-icon name="person" ></q-icon>-->
-      </q-avatar>
-      {{ item['sender']['username'] }}
-    </p>
+    <v-card
+        elevation="2"
+    >
+      <v-card-header>
+        <v-card-header-text>
+          <v-card-title>
+            {{ item.title }}
+          </v-card-title>
+        </v-card-header-text>
+      </v-card-header>
 
-    <p class="text-lg">
-      {{ $luxonDateTime.fromISO(item['sendDate']).toRelative() }}
-    </p>
+      <v-card-subtitle>
+        <p class="text-base" v-if="item.sender">
+          <q-avatar size="32px">
+            <img :src="item.sender['illustrationUrl'] + '?w=80&h=80&fit=crop'" />
+          </q-avatar>
+          {{ item.sender['username'] }}
+          {{ $luxonDateTime.fromISO(item['sendDate']).toRelative() }}
+        </p>
+      </v-card-subtitle>
 
-    <p class="text-lg">
-      <h3>{{ item.title }}</h3>
-    </p>
+      <v-card-text>
+        <div v-if="item.receiversTo">
+          {{ $t('To') }} :
+          <v-chip v-for="receiver in item.receiversTo ">
+            {{ receiver.receiver['username'] }}
+          </v-chip>
+        </div>
 
-    <div class="flex flex-row">
-      <div class="w-full">
-        <p v-html="item.content" />
-      </div>
-    </div>
+        <div v-if="item.receiversCc">
+          {{ $t('Cc') }} :
+          <v-chip v-for="receiver in item.receiversCc ">
+            {{ receiver.receiver['username'] }}
+          </v-chip>
+        </div>
+
+        <div class="flex flex-row">
+          <div class="w-full">
+            <p v-html="item.content" />
+          </div>
+        </div>
+
+      </v-card-text>
+
+    </v-card>
     <Loading :visible="isLoading" />
   </div>
 </template>
@@ -94,7 +115,7 @@ import Loading from '../../components/Loading.vue';
 import ShowMixin from '../../mixins/ShowMixin';
 import Toolbar from '../../components/Toolbar.vue';
 import VueMultiselect from 'vue-multiselect'
-import {computed, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import isEmpty from "lodash/isEmpty";
 import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
@@ -114,6 +135,7 @@ export default {
   },
   mixins: [ShowMixin, NotificationMixin],
   setup () {
+    const item = ref({});
     const tags = ref([]);
     const isLoadingSelect = ref(false);
     const store = useStore();
@@ -122,24 +144,23 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const {showNotification} = useNotification();
+    const myReceiver = ref([]);
 
     let id = route.params.id;
     if (isEmpty(id)) {
       id = route.query.id;
     }
 
-    console.log(id);
-    console.log(decodeURIComponent(id));
+    onMounted(async () => {
+      const response = await store.dispatch('message/load', id);
 
-    let item = find(decodeURIComponent(id));
-    /*let item = store.dispatch('message/load', id);
-    console.log(item);*/
+      item.value = await response;
 
-    const myReceiver = ref([]);
-    item.receivers.forEach(receiver => {
-      if (receiver.receiver['@id'] === user['@id']) {
-        myReceiver.value = receiver;
-      }
+      item.value.receivers.forEach(receiver => {
+        if (receiver.receiver['@id'] === user['@id']) {
+          myReceiver.value = receiver;
+        }
+      });
     });
 
     // Change to read

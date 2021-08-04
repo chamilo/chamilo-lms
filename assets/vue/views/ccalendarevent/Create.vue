@@ -6,8 +6,7 @@
       ref="createForm"
       :values="item"
       :errors="violations"
-    >
-    </CCalendarEventForm>
+    />
     <Loading :visible="isLoading" />
 </template>
 
@@ -55,7 +54,6 @@ export default {
 
     onMounted(async () => {
       const response = await store.dispatch('message/load', id);
-
       const currentUser = computed(() => store.getters['security/getUser']);
       item.value = await response;
 
@@ -73,13 +71,13 @@ export default {
       item.value['parentResourceNodeId'] = currentUser.value.resourceNode['id'];
       //item.value['startDate'] = date.now();
       //item.value['endDate'] = new Date();
-
       //item.value['originalSender'] = item.value['sender'];
       // New sender.
       //item.value['sender'] = currentUser.value['@id'];
 
       // Set new receivers, will be loaded by onSendMessageForm()
       item.value['resourceLinkListFromEntity'] = [];
+
       item.value['receivers'].forEach(receiver => {
         item.value['resourceLinkListFromEntity'].push(
             {

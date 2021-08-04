@@ -110,12 +110,10 @@ export default {
     }
 
     let replyAll = '1' === route.query['all'];
-
-    console.log(replyAll);
+    //console.log(replyAll);
 
     onMounted(async () => {
       const currentUser = computed(() => store.getters['security/getUser']);
-
       const response = await store.dispatch('message/load', id);
 
       item.value = await response;
@@ -131,8 +129,10 @@ export default {
       item.value['sender'] = currentUser.value['@id'];
 
       // Set new receivers, will be loaded by onSendMessageForm()
-      if (!replyAll) {
-        item.value['receivers'] = null;
+      if (replyAll) {
+        item.value['receiversCc'].push(...item.value['receiversTo']);
+      } else {
+        item.value['receivers'] = [];
         item.value['receiversTo'] = null;
         item.value['receiversCc'] = null;
         item.value['receivers'][0] = item.value['originalSender'];
@@ -151,9 +151,7 @@ export default {
       // Set reply content.
       item.value.content = `<br /><blockquote>${item.value.content}</blockquote>`;
     });
-    console.log('---------------------------');
-    console.log(replyAll);
-    console.log(item.value['receiversCc'] );
+
     return {v$: useVuelidate(), isLoadingSelect, usersCc, item};
   },
   computed: {

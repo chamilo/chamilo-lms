@@ -6,7 +6,7 @@
 
     <!-- Add form-->
     <q-dialog v-model="dialog" persistent>
-      <q-card style="min-width: 500px">
+      <q-card style="min-width: 700px">
         <q-card-section>
           <div class="text-h6">{{ item['@id'] ? 'Edit event' : 'Add event' }}</div>
         </q-card-section>

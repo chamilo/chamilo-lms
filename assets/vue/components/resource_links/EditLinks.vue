@@ -1,51 +1,5 @@
 <template>
-  <div v-if="item && item['resourceLinkListFromEntity']">
-    <v-card>
-      <v-list-item
-          v-for="link in item['resourceLinkListFromEntity']"
-      >
-        <v-list-item-content>
-          <div v-if="link['course']">
-            <v-icon icon="mdi-book"/>
-            {{ $t('Course') }}: {{ link.course.resourceNode.title }}
-          </div>
-
-          <div v-if="link['session']">
-            <v-icon icon="mdi-book-open"/>
-            {{ $t('Session') }}: {{ link.session.name }}
-          </div>
-
-          <div v-if="link['group']">
-            <v-icon icon="mdi-people"/>
-            {{ $t('Group') }}: {{ link.group.resourceNode.title }}
-          </div>
-
-          <div v-if="link['userGroup']">
-            {{ $t('Class') }}: {{ link.userGroup.resourceNode.title }}
-          </div>
-
-          <div v-if="link['user']">
-            <v-icon icon="mdi-account"/>
-            {{ $t('User') }}:
-            <!--          <q-avatar size="32px">-->
-            <!--            <img :src="link.user.illustrationUrl + '?w=80&h=80&fit=crop'" />-->
-            <!--          </q-avatar>-->
-            {{ link.user.username }}
-          </div>
-
-          <q-select
-              filled
-              v-model="link.visibility"
-              :options="visibilityList"
-              label="Status"
-              emit-value
-              map-options
-              v-if="showStatus"
-          />
-        </v-list-item-content>
-      </v-list-item>
-    </v-card>
-  </div>
+  <ShowLinks :item="item" :edit-status="true" />
 
   <VueMultiselect
       placeholder="Share with User"
@@ -62,13 +16,13 @@
       label="username"
       track-by="id"
   />
-
 </template>
 
 <style src="vue-multiselect/dist/vue-multiselect.css"></style>
 
 <script>
 
+import ShowLinks from "../../components/resource_links/ShowLinks.vue";
 import {computed, ref, toRefs} from "vue";
 import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
@@ -79,6 +33,7 @@ export default {
   name: 'EditLinks',
   components: {
     VueMultiselect,
+    ShowLinks
   },
   props: {
     item: {
@@ -92,11 +47,6 @@ export default {
     }
   },
   setup (props) {
-    const visibilityList = [
-      {value: 2, label: 'Published'},
-      {value: 0, label: 'Draft'},
-    ];
-
     const users = ref([]);
     const selectedUsers = ref([]);
     const isLoading = ref(false);
@@ -135,7 +85,7 @@ export default {
       });
     }
 
-    return {v$: useVuelidate(), visibilityList, users, selectedUsers, asyncFind, addUser, isLoading};
+    return {v$: useVuelidate(), users, selectedUsers, asyncFind, addUser, isLoading};
   },
 };
 </script>

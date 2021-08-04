@@ -1,5 +1,9 @@
 <template>
-  <ShowLinks :item="item" :edit-status="editStatus" :show-status="showStatus" />
+  <ShowLinks
+      :item="item"
+      :edit-status="editStatus"
+      :show-status="showStatus"
+  />
 
   <VueMultiselect
       placeholder="Share with User"

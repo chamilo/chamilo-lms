@@ -8,7 +8,11 @@
   <div class="text-base mb-3" v-html="event.content" />
 
   <h6 class="text-xl"> {{ $t('Invitees') }}</h6>
-  <ShowLinks :item="event" :show-status="false" />
+
+  <ShowLinks
+      :item="event"
+      :show-status="false"
+  />
 </template>
 
 <script>

@@ -1,6 +1,6 @@
 <template>
     <q-form>
-      <v-container class="grey lighten-5">
+      <v-container>
         <v-row>
           <v-col>
             <v-card
@@ -82,22 +82,21 @@
                   v-model="item.content"
                   required
                   :init="{
-                skin_url: '/build/libs/tinymce/skins/ui/oxide',
-                content_css: '/build/libs/tinymce/skins/content/default/content.css',
-                branding: false,
-                relative_urls: false,
-                height: 500,
-                toolbar_mode: 'sliding',
-                file_picker_callback : browser,
-                autosave_ask_before_unload: true,
-                plugins: [
-                  'advlist autolink lists link image charmap print preview anchor',
-                  'searchreplace visualblocks code fullscreen',
-                  'insertdatetime media table paste wordcount emoticons'
-                ],
-                toolbar: 'undo redo | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl',
-              }
-              "
+                    skin_url: '/build/libs/tinymce/skins/ui/oxide',
+                    content_css: '/build/libs/tinymce/skins/content/default/content.css',
+                    branding: false,
+                    relative_urls: false,
+                    height: 500,
+                    toolbar_mode: 'sliding',
+                    file_picker_callback : browser,
+                    autosave_ask_before_unload: true,
+                    plugins: [
+                      'advlist autolink lists link image charmap print preview anchor',
+                      'searchreplace visualblocks code fullscreen',
+                      'insertdatetime media table paste wordcount emoticons'
+                    ],
+                    toolbar: 'undo redo | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl',
+                  }"
               />
 
             </v-card>
@@ -113,8 +112,15 @@
                 </v-card-header-text>
               </v-card-header>
 
-              <EditLinks :item="item" :show-status="false" :edit-status="false" />
-              <q-checkbox v-model="item.collective" :label="$t('Is it editable by the invitees?') "/>
+              <EditLinks
+                  :item="item"
+                  :show-status="false"
+                  :edit-status="false"
+              />
+              <q-checkbox
+                  v-model="item.collective"
+                  :label="$t('Is it editable by the invitees?')"
+              />
             </v-card>
           </v-col>
 

@@ -14,18 +14,18 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class MessageManager
 {
-    public static function getMessagesAboutUserToString(User $user): string
+    public static function getMessagesAboutUserToString(User $user, string $url): string
     {
         $messages = Container::getMessageRepository()->getMessageByUser($user, Message::MESSAGE_TYPE_CONVERSATION);
         $html = '';
         if (!empty($messages)) {
             foreach ($messages as $message) {
-                $tag = 'message_'.$message->getId();
-                $tagAccordion = 'accordion_'.$message->getId();
-                $tagCollapse = 'collapse_'.$message->getId();
-                $date = Display::dateToStringAgoAndLongDate(
-                    $message->getSendDate()
-                );
+                $messageId = $message->getId();
+                $tag = 'message_'.$messageId;
+                $tagAccordion = 'accordion_'.$messageId;
+                $tagCollapse = 'collapse_'.$messageId;
+
+                $date = Display::dateToStringAgoAndLongDate($message->getSendDate());
                 $localTime = api_get_local_time(
                     $message->getSendDate(),
                     null,
@@ -34,11 +34,16 @@ class MessageManager
                     false
                 );
                 $sender = $message->getSender();
+
+                $content = $message->getContent().'<br />'.$date.'<br />'.
+                    get_lang('Author').': '.$sender->getUsername().
+                    '<br />'.
+                    Display::url(get_lang('Delete'), $url.'&action=delete_message&message_id='.$messageId, ['class' => 'btn btn-danger']);
+                ;
+
                 $html .= Display::panelCollapse(
                     $localTime.' '.UserManager::formatUserFullName($sender).' '.$message->getTitle(),
-                    $message->getContent().'<br />'.$date.'<br />'.get_lang(
-                        'Author'
-                    ).': '.$sender->getUsername(),
+                    $content,
                     $tag,
                     null,
                     $tagAccordion,

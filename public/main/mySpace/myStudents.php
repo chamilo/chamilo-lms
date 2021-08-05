@@ -462,8 +462,29 @@ switch ($action) {
             api_not_allowed(true);
         }
         break;
+    case 'delete_message':
+        $messageId = $_REQUEST['message_id'] ?? 0;
+        $currentUser = api_get_current_user();
+        if (!empty($messageId)) {
+            $messageRepo = Container::getMessageRepository();
+            $message = $messageRepo->find($messageId);
+            // Only delete a message I created.
+            if (null !== $message && $message->getSender()->getId() === $currentUser->getId()) {
+                Event::addEvent(
+                    LOG_MESSAGE_DELETE,
+                    LOG_MESSAGE_DATA,
+                    $messageId.' - '.$message->getTitle(),
+                );
+                $messageRepo->delete($message);
+                Display::addFlash(Display::return_message(get_lang('Message deleted')));
+            }
+        }
+
+        api_location($currentUrl);
+
+        break;
     case 'send_message':
-        if (true === $allowMessages) {
+        if ($allowMessages) {
             $subject = $_POST['subject'] ?? '';
             $content = $_POST['message'] ?? '';
             $currentUser = api_get_user_entity();
@@ -2215,7 +2236,7 @@ if (empty($details)) {
 if ($allowMessages) {
     // Messages
     echo Display::page_subheader2(get_lang('Messages'));
-    echo MessageManager::getMessagesAboutUserToString($user);
+    echo MessageManager::getMessagesAboutUserToString($user, $currentUrl);
     echo Display::url(
         get_lang('New message'),
         'javascript: void(0);',

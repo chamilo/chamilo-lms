@@ -280,7 +280,7 @@ if (api_is_platform_admin()) {
         ];
         $items[] = [
             'url' => 'skill.php',
-            'label' => get_lang('Manage skillsLevels'),
+            'label' => get_lang('Manage skills levels'),
         ];
 
         $items[] = [

@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class MessageManager
 {
-    public static function getMessagesAboutUserToString(User $user, string $url): string
+    public static function getMessagesAboutUserToString(User $user, string $url = ''): string
     {
         $messages = Container::getMessageRepository()->getMessageByUser($user, Message::MESSAGE_TYPE_CONVERSATION);
         $html = '';
@@ -35,10 +35,15 @@ class MessageManager
                 );
                 $sender = $message->getSender();
 
+                $deleteButton = '';
+                if (!empty($url)) {
+                    $deleteButton = Display::url(get_lang('Delete'), $url.'&action=delete_message&message_id='.$messageId, ['class' => 'btn btn-danger']);
+                }
+
                 $content = $message->getContent().'<br />'.$date.'<br />'.
                     get_lang('Author').': '.$sender->getUsername().
                     '<br />'.
-                    Display::url(get_lang('Delete'), $url.'&action=delete_message&message_id='.$messageId, ['class' => 'btn btn-danger']);
+                    $deleteButton
                 ;
 
                 $html .= Display::panelCollapse(

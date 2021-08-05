@@ -588,7 +588,7 @@ $newLinks .= Display::url(
         } ?>" <?php if ($ajax_search) {
             echo ' onsubmit="valide();"';
         } ?>>
-        <?php echo '<legend>'.$tool_name.' ('.$session_info['name'].') </legend>'; ?>
+        <?php echo '<legend>'.$tool_name.' ('.Security::remove_XSS($session_info['name']).') </legend>'; ?>
         <?php
         if ($add_type == 'multiple') {
             if (is_array($extra_field_list)) {

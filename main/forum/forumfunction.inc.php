@@ -4690,12 +4690,13 @@ function move_thread_form()
         </div>
         <div class="formw">';
     $htmlcontent .= '<select name="forum">';
-    foreach ($forum_categories as $key => $category) {
+    foreach ($forum_categories as $category) {
         $htmlcontent .= '<optgroup label="'.$category['cat_title'].'">';
         foreach ($forums as $key => $forum) {
             if (isset($forum['forum_category'])) {
                 if ($forum['forum_category'] == $category['cat_id']) {
-                    $htmlcontent .= '<option value="'.$forum['forum_id'].'">'.$forum['forum_title'].'</option>';
+                    $htmlcontent .= '<option value="'.$forum['forum_id'].'">'.
+                        Security::remove_XSS($forum['forum_title']).'</option>';
                 }
             }
         }

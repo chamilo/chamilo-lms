@@ -73,6 +73,12 @@ export default {
         props.item.resourceLinkListFromEntity = [];
       }
 
+      const someLink = props.item.resourceLinkListFromEntity.some(link => link.user.username === userResult.username);
+
+      if (someLink) {
+        return;
+      }
+
       props.item.resourceLinkListFromEntity.push(
           {
             uid: userResult.id,

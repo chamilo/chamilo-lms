@@ -282,7 +282,7 @@ class ExerciseShowFunctions
             if (EXERCISE_FEEDBACK_TYPE_EXAM != $feedback_type) {
                 $content .= '<td class="text-left" width="60%">';
                 if ($studentChoice) {
-                    $content .= '<span style="font-weight: bold; color: #008000;">'.nl2br($answerComment).'</span>';
+                    $content .= '<span style="font-weight: bold; color: #008000;">'.Security::remove_XSS(nl2br($answerComment)).'</span>';
                 } else {
                     $content .= '&nbsp;';
                 }
@@ -575,7 +575,7 @@ class ExerciseShowFunctions
                     if ($hide_expected_answer) {
                         $color = '';
                     }
-                    $content .= '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
+                    $content .= '<span style="font-weight: bold; color: '.$color.';">'.Security::remove_XSS(nl2br($answerComment)).'</span>';
                 }
                 $content .= '</td>';
             }

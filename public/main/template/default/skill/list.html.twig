@@ -15,72 +15,71 @@
     </div>
     <br />
 {% endif %}
-<div class="table table-responsive">
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>{{ "Badges" | trans }}</th>
-                <th>{{ "Name" | trans }}</th>
-                <th class="text-center">{{ "ShortCode" | trans }}</th>
-                <th class="text-center">{{ "Description" | trans }}</th>
-                <th class="text-center">{{ "Options" | trans }}</th>
-            </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <th>{{ "Badges" | trans }}</th>
-                <th>{{ "Name" | trans }}</th>
-                <th class="text-center">{{ "ShortCode" | trans }}</th>
-                <th class="text-center">{{ "Description" | trans }}</th>
-                <th class="text-center">{{ "Options" | trans }}</th>
-            </tr>
-        </tfoot>
-        <tbody>
-        {% for skill in skills %}
-            <tr>
-                <td width="50">
-                    {{ skill.img_small }}
-                </td>
-                <td width="200">{{ skill.name }}</td>
-                <td class="text-center">{{ skill.short_code }}</td>
-                <td width="500">{{ skill.description }}</td>
-                <td class="text-right">
-                    <div class="btn-group btn-group-sm" role="group" aria-label="">
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>{{ "Badges" | trans }}</th>
+            <th>{{ "Name" | trans }}</th>
+            <th class="text-center">{{ "Short code" | trans }}</th>
+            <th class="text-center">{{ "Description" | trans }}</th>
+            <th class="text-center">{{ "Options" | trans }}</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>{{ "Badges" | trans }}</th>
+            <th>{{ "Name" | trans }}</th>
+            <th class="text-center">{{ "Short code" | trans }}</th>
+            <th class="text-center">{{ "Description" | trans }}</th>
+            <th class="text-center">{{ "Options" | trans }}</th>
+        </tr>
+    </tfoot>
+    <tbody>
+    {% for skill in skills %}
+        <tr>
+            <td width="50">
+                {{ skill.img_small }}
+            </td>
+            <td width="200">{{ skill.name }}</td>
+            <td class="text-center">{{ skill.short_code }}</td>
+            <td width="500">{{ skill.description }}</td>
+            <td class="text-right">
+                <div class="btn-group btn-group-sm" role="group" aria-label="">
+                    <a
+                        href="{{ url('legacy_main', { 'name' : 'admin/skill_edit.php', 'id' : skill.id }) }}"
+                       class="btn btn-primary btn-sm" title="{{ "Edit" | trans }}">
+                        <i class="fas fa-pencil-alt"></i>
+                    </a>
+                    <a
+                        href="{{ url('legacy_main', { 'name' : 'admin/skill_create.php', 'parent' : skill.id }) }}"
+                       class="btn btn-default btn-sm" title="{{ "Create child skill" | trans }}">
+                        <i class="fas fa-plus"></i>
+                    </a>
+                    <a
+                        href="{{ url('legacy_main', { 'name' : 'admin/skill_badge_create.php', 'id' : skill.id }) }}"
+                        class="btn btn-light btn-sm" title="{{ "Create badge" | trans }}">
+                        <i class="fas fa-shield-alt"></i>
+                    </a>
+                    {% if skill.status == 0 %}
                         <a
-                            href="{{ url('legacy_main', { 'name' : 'admin/skill_edit.php', 'id' : skill.id }) }}"
-                           class="btn btn-light btn-sm" title="{{ "Edit" | trans }}">
-                            <i class="fas fa-pencil-alt"></i>
+                            href="{{ url('legacy_main', { 'name' : 'admin/skill_list.php', 'id' : skill.id, 'action': 'enable' }) }}"
+                           class="btn btn-success btn-sm" title="{{ 'Enable' }}">
+                            <i class="fas fa-check-circle"></i>
                         </a>
+                    {% else %}
                         <a
-                            href="{{ url('legacy_main', { 'name' : 'admin/skill_create.php', 'parent' : skill.id }) }}"
-                           class="btn btn-light btn-sm" title="{{ "Create child skill" | trans }}">
-                            <i class="fas fa-plus"></i>
+                            href="{{ url('legacy_main', { 'name' : 'admin/skill_list.php', 'id' : skill.id, 'action': 'disable' }) }}"
+                           class="btn btn-danger btn-sm" title="{{ 'Disable' }}">
+                            <i class="fas fa-ban"></i>
                         </a>
-                        <a
-                            href="{{ url('legacy_main', { 'name' : 'admin/skill_badge_create.php', 'id' : skill.id }) }}"
-                            class="btn btn-light btn-sm" title="{{ "Create badge" | trans }}">
-                            <i class="fas fa-shield-alt"></i>
-                        </a>
-                        {% if skill.status == 0 %}
-                            <a
-                                href="{{ url('legacy_main', { 'name' : 'admin/skill_list.php', 'id' : skill.id, 'action': 'enable' }) }}"
-                               class="btn btn-success btn-sm" title="{{ 'Enable' }}">
-                                <i class="fas fa-check-circle"></i>
-                            </a>
-                        {% else %}
-                            <a
-                                href="{{ url('legacy_main', { 'name' : 'admin/skill_list.php', 'id' : skill.id, 'action': 'disable' }) }}"
-                               class="btn btn-danger btn-sm" title="{{ 'Disable' }}">
-                                <i class="fas fa-ban"></i>
-                            </a>
-                        {% endif %}
-                    </div>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+                    {% endif %}
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
 
 <script>
     $(function() {

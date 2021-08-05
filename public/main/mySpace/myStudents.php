@@ -1494,7 +1494,7 @@ if (empty($details)) {
                     )
                 );
             }
-            echo $sessionAction;
+            echo Display::toolbarAction('sessions', [$sessionAction]);
         } else {
             echo "<tr><td colspan='5'>".get_lang('This course could not be found')."</td></tr>";
         }
@@ -2212,7 +2212,7 @@ if (empty($details)) {
     ];
 }
 
-if (true === $allowMessages) {
+if ($allowMessages) {
     // Messages
     echo Display::page_subheader2(get_lang('Messages'));
     echo MessageManager::getMessagesAboutUserToString($user);

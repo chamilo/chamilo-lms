@@ -4858,7 +4858,7 @@ class Tracking
                             }
                             $bestScoreAverageNotInLP += $best;
                         }
-                        $bestScoreAverageNotInLP = round($bestScoreAverageNotInLP / count($exerciseList) * 100, 2);
+                        $bestScoreAverageNotInLP = round($bestScoreAverageNotInLP / count($exercises) * 100, 2);
                     }
 
                     $last_connection = self::get_last_connection_date_on_the_course(
@@ -5845,7 +5845,7 @@ class Tracking
     {
         //$html = api_get_js('chartjs/Chart.js');
         $canvas = Display::tag('canvas', '', ['id' => 'session_graph_chart']);
-        $html .= Display::tag('div', $canvas, ['style' => 'width:100%']);
+        $html = Display::tag('div', $canvas, ['style' => 'width:100%']);
         $jsStr = " var data = {
                        labels:".json_encode($names).",
                        datasets: [

@@ -482,12 +482,12 @@ class AnnouncementManager
 
         // The user id is always the current one.
         $toUserId = api_get_user_id();
-        $content = self::parseContent(
+        $content = Security::remove_XSS(self::parseContent(
             $toUserId,
             $content,
             api_get_course_id(),
             api_get_session_id()
-        );
+        ));
 
         $html .= "<tr><td>$content</td></tr>";
         $html .= "<tr>";

@@ -147,7 +147,7 @@ switch ($action) {
             $title = '';
             if (!empty($sessionToExport)) {
                 $sessionInfo = api_get_session_info($sessionToExport);
-                $title .= '_'.$sessionInfo['name'];
+                $title .= '_'.Security::remove_XSS($sessionInfo['name']);
             }
 
             $fileName = 'report'.$title.'_'.$user_info['complete_name'];
@@ -1013,7 +1013,7 @@ if (empty($details)) {
 
         $session_info = api_get_session_info($sId);
         if ($session_info) {
-            $session_name = $session_info['name'];
+            $session_name = Security::remove_XSS($session_info['name']);
             if (!empty($session_info['access_start_date'])) {
                 $access_start_date = api_format_date($session_info['access_start_date'], DATE_FORMAT_SHORT);
             }

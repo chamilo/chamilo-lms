@@ -282,7 +282,7 @@ if ($sessionId) {
             get_lang('Session'),
             [],
             ICON_SIZE_SMALL
-        ).' '.api_get_session_name($sessionId);
+        ).' '.Security::remove_XSS(api_get_session_name($sessionId));
     $titleCourse = Display::return_icon(
             'course.png',
             get_lang('Course'),
@@ -356,7 +356,7 @@ if ($showReporting) {
                 }
             }
             $url = $urlWebCode.'mySpace/course.php?session_id='.$session['id'].'&cidReq='.$courseInfo['code'];
-            $html .= Display::tag('li', $icon.' '.Display::url($session['name'], $url));
+            $html .= Display::tag('li', $icon.' '.Display::url(Security::remove_XSS($session['name']), $url));
         }
         $html .= '</ul>';
     }
@@ -1086,7 +1086,7 @@ if ($export_csv) {
         $sessionDates = SessionManager::parseSessionDates($sessionInfo);
 
         array_unshift($csvContentInSession, [get_lang('Date'), $sessionDates['access']]);
-        array_unshift($csvContentInSession, [get_lang('SessionName'), $sessionInfo['name']]);
+        array_unshift($csvContentInSession, [get_lang('SessionName'), Security::remove_XSS($sessionInfo['name'])]);
     }
 
     Export::arrayToCsv($csvContentInSession, 'reporting_student_list');

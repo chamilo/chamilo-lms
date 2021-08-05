@@ -149,10 +149,10 @@ if (isset($_GET['show'])) {
                 $sort = $row['sort'];
                 $questions[$sort]['question_id'] = $row['question_id'];
                 $questions[$sort]['survey_id'] = $row['survey_id'];
-                $questions[$sort]['survey_question'] = $row['survey_question'];
+                $questions[$sort]['survey_question'] = Security::remove_XSS($row['survey_question']);
                 $questions[$sort]['display'] = $row['display'];
                 $questions[$sort]['type'] = $row['type'];
-                $questions[$sort]['options'][$row['question_option_id']] = $row['option_text'];
+                $questions[$sort]['options'][$row['question_option_id']] = Security::remove_XSS($row['option_text']);
                 $questions[$sort]['maximum_score'] = $row['max_value'];
                 $questions[$sort]['parent_id'] = isset($row['parent_id']) ? $row['parent_id'] : 0;
                 $questions[$sort]['parent_option_id'] = isset($row['parent_option_id']) ? $row['parent_option_id'] : 0;

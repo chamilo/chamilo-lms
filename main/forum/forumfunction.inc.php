@@ -291,8 +291,8 @@ function show_add_forum_form($inputvalues = [], $lp_id = 0)
 
     // Dropdown list: Forum categories
     $forum_categories = get_forum_categories();
-    foreach ($forum_categories as $key => $value) {
-        $forum_categories_titles[$value['cat_id']] = $value['cat_title'];
+    foreach ($forum_categories as $value) {
+        $forum_categories_titles[$value['cat_id']] = Security::remove_XSS($value['cat_title']);
     }
     $form->addElement(
         'select',

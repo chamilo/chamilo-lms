@@ -113,7 +113,7 @@
                 </v-card-header-text>
               </v-card-header>
 
-              <EditLinks :item="item" :show-status="false" />
+              <EditLinks :item="item" :show-status="false" :edit-status="false" />
               <q-checkbox v-model="item.collective" :label="$t('Is it editable by the invitees?') "/>
             </v-card>
           </v-col>

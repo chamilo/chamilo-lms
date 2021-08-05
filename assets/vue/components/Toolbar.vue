@@ -20,6 +20,7 @@
         @click="editItem"
         tile
         icon
+        :title="$t('Edit')"
       >
         <v-icon icon="mdi-pencil"/>
       </v-btn>
@@ -42,6 +43,7 @@
           tile
           icon
           @click="submitItem"
+          :title="$t('Submit')"
       >
         <v-icon icon="mdi-content-save" />
       </v-btn>
@@ -52,6 +54,7 @@
           tile
           icon
           @click="sendItem"
+          :title="$t('Send')"
       >
         <v-icon icon="mdi-send" />
       </v-btn>
@@ -70,6 +73,7 @@
           tile
           icon
           @click="confirmDeleteClick = true"
+          :title="$t('Delete')"
       >
         <v-icon icon="mdi-delete" />
       </v-btn>

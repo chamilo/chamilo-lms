@@ -37,13 +37,13 @@
           </div>
 
           <q-select
-              filled
+              v-if="editStatus"
               v-model="link.visibility"
               :options="visibilityList"
-              label="Status"
               emit-value
+              filled
+              label="Status"
               map-options
-              v-if="editStatus"
           />
 
         </v-list-item-content>
@@ -57,7 +57,7 @@ import {toRefs} from "vue";
 
 export default {
   name: 'ShowLinks',
-  setup (props) {
+  setup(props) {
     const visibilityList = [
       {value: 2, label: 'Published'},
       {value: 0, label: 'Draft'},

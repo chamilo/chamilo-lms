@@ -1,24 +1,24 @@
 <template>
   <ShowLinks
-      :item="item"
       :edit-status="editStatus"
+      :item="item"
       :show-status="showStatus"
   />
 
   <VueMultiselect
-      placeholder="Share with User"
       v-model="selectedUsers"
-      :loading="isLoading"
-      :options="users"
-      :multiple="true"
-      :searchable="true"
       :internal-search="false"
-      @search-change="asyncFind"
-      @select="addUser"
-      limit-text="3"
-      limit="3"
+      :loading="isLoading"
+      :multiple="true"
+      :options="users"
+      :searchable="true"
       label="username"
+      limit="3"
+      limit-text="3"
+      placeholder="Share with User"
       track-by="id"
+      @select="addUser"
+      @search-change="asyncFind"
   />
 </template>
 
@@ -33,6 +33,7 @@ import {ENTRYPOINT} from "../../config/entrypoint";
 import useVuelidate from "@vuelidate/core";
 import VueMultiselect from 'vue-multiselect'
 import isEmpty from 'lodash/isEmpty';
+
 export default {
   name: 'EditLinks',
   components: {
@@ -55,7 +56,7 @@ export default {
       default: true
     }
   },
-  setup (props) {
+  setup(props) {
     const users = ref([]);
     const selectedUsers = ref([]);
     const isLoading = ref(false);
@@ -68,7 +69,7 @@ export default {
       props.item.resourceLinkListFromEntity.push(
           {
             uid: userResult.id,
-            user: { username: userResult.username},
+            user: {username: userResult.username},
             visibility: 2
           }
       );
@@ -80,18 +81,22 @@ export default {
       }
 
       isLoading.value = true;
-      axios.get(ENTRYPOINT + 'users', {
-        params: {
-          username: query
-        }
-      }).then(response => {
-        isLoading.value = false;
-        let data = response.data;
-        users.value = data['hydra:member'];
-      }).catch(function (error) {
-        isLoading.value = false;
-        console.log(error);
-      });
+
+      axios
+          .get(ENTRYPOINT + 'users', {
+            params: {
+              username: query
+            }
+          })
+          .then(response => {
+            isLoading.value = false;
+            let data = response.data;
+            users.value = data['hydra:member'];
+          })
+          .catch(function (error) {
+            isLoading.value = false;
+            console.log(error);
+          });
     }
 
     return {v$: useVuelidate(), users, selectedUsers, asyncFind, addUser, isLoading};

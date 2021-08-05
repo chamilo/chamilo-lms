@@ -136,6 +136,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      */
     #[Groups([
         'message:read',
+        'user_rel_user:read',
     ])]
     protected ?int $id = null;
 

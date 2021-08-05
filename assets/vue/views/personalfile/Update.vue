@@ -11,7 +11,7 @@
       :errors="violations"
     >
 
-    <EditLinks :item="item" />
+    <EditLinks :item="item" links-type="users" />
 
     </DocumentsForm>
     <Loading :visible="isLoading || deleteLoading" />

@@ -116,6 +116,7 @@
                   :item="item"
                   :show-status="false"
                   :edit-status="false"
+                  links-type="user_rel_users"
               />
               <q-checkbox
                   v-model="item.collective"

@@ -33,6 +33,7 @@ import {ENTRYPOINT} from "../../config/entrypoint";
 import useVuelidate from "@vuelidate/core";
 import VueMultiselect from 'vue-multiselect'
 import isEmpty from 'lodash/isEmpty';
+import {mapGetters, useStore} from "vuex";
 
 export default {
   name: 'EditLinks',
@@ -54,12 +55,18 @@ export default {
       type: Boolean,
       required: false,
       default: true
+    },
+    linksType: {
+      type: String,
+      required: true,
+      default: 'user'
     }
   },
   setup(props) {
     const users = ref([]);
     const selectedUsers = ref([]);
     const isLoading = ref(false);
+    const store = useStore();
 
     function addUser(userResult) {
       if (isEmpty(props.item.resourceLinkListFromEntity)) {
@@ -75,13 +82,7 @@ export default {
       );
     }
 
-    function asyncFind(query) {
-      if (query.toString().length < 3) {
-        return;
-      }
-
-      isLoading.value = true;
-
+    function findUsers(query) {
       axios
           .get(ENTRYPOINT + 'users', {
             params: {
@@ -99,7 +100,51 @@ export default {
           });
     }
 
+    function findUserRelUsers(query) {
+      const currentUser = computed(() => store.getters['security/getUser']);
+
+      axios
+          .get(ENTRYPOINT + 'user_rel_users', {
+            params: {
+              user: currentUser.value['id'],
+              'friend.username': query
+            }
+          })
+          .then(response => {
+            isLoading.value = false;
+
+            users.value = response.data['hydra:member'].map(member => member.friend);
+          })
+          .catch(function (error) {
+            isLoading.value = false;
+          });
+    }
+
+    function asyncFind(query) {
+      if (query.toString().length < 3) {
+        return;
+      }
+
+      isLoading.value = true;
+
+      switch (props.linksType) {
+        case 'users':
+          findUsers(query);
+          break;
+
+        case 'user_rel_users':
+          findUserRelUsers(query);
+          break;
+      }
+    }
+
     return {v$: useVuelidate(), users, selectedUsers, asyncFind, addUser, isLoading};
   },
+  computed: {
+    ...mapGetters({
+      'isAuthenticated': 'security/isAuthenticated',
+      'currentUser': 'security/getUser',
+    })
+  }
 };
 </script>

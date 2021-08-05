@@ -69,6 +69,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     'user' => 'exact',
     'friend' => 'exact',
     'relationType' => 'exact',
+    'friend.username' => 'partial',
 ])]
 #[UniqueEntity(
     fields: ['user', 'friend', 'relationType'],

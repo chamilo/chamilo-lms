@@ -37,7 +37,11 @@ class MessageManager
 
                 $deleteButton = '';
                 if (!empty($url)) {
-                    $deleteButton = Display::url(get_lang('Delete'), $url.'&action=delete_message&message_id='.$messageId, ['class' => 'btn btn-danger']);
+                    $deleteButton = Display::url(
+                        get_lang('Delete'),
+                        $url.'&action=delete_message&message_id='.$messageId,
+                        ['class' => 'btn btn-danger']
+                    );
                 }
 
                 $content = $message->getContent().'<br />'.$date.'<br />'.

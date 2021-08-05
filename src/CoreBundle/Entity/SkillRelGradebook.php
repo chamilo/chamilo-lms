@@ -9,8 +9,6 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SkillRelGradebook.
- *
  * @ORM\Table(name="skill_rel_gradebook")
  * @ORM\Entity
  */
@@ -39,6 +37,11 @@ class SkillRelGradebook
      * @ORM\Column(name="type", type="string", length=10, nullable=false)
      */
     protected string $type;
+
+    public function __construct()
+    {
+        $this->type = '';
+    }
 
     public function setType(string $type): self
     {

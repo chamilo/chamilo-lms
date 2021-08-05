@@ -1689,7 +1689,10 @@ class Event
             if (Database::num_rows($res_revised) > 0) {
                 $row['attempt_revised'] = 1;
             }
-            $row['total_percentage'] = ($row['exe_result'] / $row['exe_weighting']) * 100;
+            $row['total_percentage'] = 0;
+            if (!empty($row['exe_weighting'])) {
+                $row['total_percentage'] = ($row['exe_result'] / $row['exe_weighting']) * 100;
+            }
 
             $list[$row['exe_id']] = $row;
             $sql = "SELECT * FROM $table_track_attempt

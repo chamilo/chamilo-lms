@@ -415,7 +415,7 @@ class ExerciseShowFunctions
         }
 
         echo '<td width="40%">';
-        echo $answer;
+        echo Security::remove_XSS($answer);
         echo '</td>';
 
         if ($exercise->showExpectedChoice()) {
@@ -541,7 +541,7 @@ class ExerciseShowFunctions
         }
 
         $content .= '<td width="40%">';
-        $content .= $answer;
+        $content .= Security::remove_XSS($answer);
         $content .= '</td>';
 
         if ($exercise->showExpectedChoice()) {
@@ -643,7 +643,7 @@ class ExerciseShowFunctions
         }
 
         echo '<td width="20%">';
-        echo $answer;
+        echo Security::remove_XSS($answer);
         echo '</td><td width="5%" style="text-align:center;">';
         if (isset($newOptions[$studentChoiceDegree])) {
             echo $newOptions[$studentChoiceDegree]['name'];
@@ -768,7 +768,7 @@ class ExerciseShowFunctions
         }
 
         echo '<td width="40%">';
-        echo $answer;
+        echo Security::remove_XSS($answer);
         echo '</td>';
 
         if ($exercise->showExpectedChoice()) {

@@ -3880,17 +3880,8 @@ class Exercise
         $userAnsweredQuestion = false;
         $correctAnswerId = [];
 
-        $userStatus = STUDENT;
-        // Allows to do a remove_XSS in question of exercise with user status COURSEMANAGER
-        // see BT#18242
-        if (api_get_configuration_value('question_exercise_html_strict_filtering')) {
-            $userStatus = COURSEMANAGERLOWSECURITY;
-        }
-
         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
             $answer = $objAnswerTmp->selectAnswer($answerId);
-            $answer = Security::remove_XSS($answer, $userStatus);
-
             $answerComment = $objAnswerTmp->selectComment($answerId);
             $answerCorrect = $objAnswerTmp->isCorrect($answerId);
             $answerWeighting = (float) $objAnswerTmp->selectWeighting($answerId);

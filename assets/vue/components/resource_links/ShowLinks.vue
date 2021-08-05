@@ -63,8 +63,6 @@ export default {
       {value: 0, label: 'Draft'},
     ];
 
-    const { editStatus } = toRefs(props);
-
     return {
       visibilityList,
     };

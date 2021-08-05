@@ -193,6 +193,9 @@ define('LOG_GROUP_PORTAL_USER_SUBSCRIBED', 'soc_gr_u_subs');
 define('LOG_GROUP_PORTAL_USER_UNSUBSCRIBED', 'soc_gr_u_unsubs');
 define('LOG_GROUP_PORTAL_USER_UPDATE_ROLE', 'soc_gr_update_role');
 
+define('LOG_MESSAGE_DATA', 'message_data');
+define('LOG_MESSAGE_DELETE', 'msg_deleted');
+
 define('LOG_USER_DELETE', 'user_deleted');
 define('LOG_USER_CREATE', 'user_created');
 define('LOG_USER_UPDATE', 'user_updated');

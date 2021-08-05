@@ -16,7 +16,7 @@ SkillModel::isAllowed();
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$skillId = intval($_GET['id']);
+$skillId = (int) ($_GET['id'] ?? 0);
 $objSkill = new SkillModel();
 $skill = $objSkill->get($skillId);
 
@@ -106,6 +106,7 @@ $tpl = new Template(get_lang('Create badge'));
 $tpl->assign('platformAdminEmail', api_get_setting('emailAdministrator'));
 $tpl->assign('skill', $skill);
 $tpl->assign('badge_studio', $badgeStudio);
+$tpl->assign('current_url', api_get_self().'?id='.$skillId);
 $templateName = $tpl->get_template('skill/badge_create.tpl');
 $contentTemplate = $tpl->fetch($templateName);
 $tpl->assign('content', $toolbar.$contentTemplate);

@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\SysAnnouncement;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Traits\Repository\RepositoryQueryBuilderTrait;
 use Datetime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Types\Types;
@@ -21,6 +22,8 @@ use Symfony\Component\Security\Core\Security;
 
 class SysAnnouncementRepository extends ServiceEntityRepository
 {
+    use RepositoryQueryBuilderTrait;
+
     protected ParameterBagInterface $parameterBag;
     protected Security $security;
 
@@ -197,10 +200,5 @@ class SysAnnouncementRepository extends ServiceEntityRepository
             $em->remove($announcement);
             $em->flush();
         }
-    }
-
-    protected function getOrCreateQueryBuilder(QueryBuilder $qb = null, string $alias = 's'): QueryBuilder
-    {
-        return $qb ?: $this->createQueryBuilder($alias);
     }
 }

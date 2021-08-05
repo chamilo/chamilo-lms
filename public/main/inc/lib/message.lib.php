@@ -14,86 +14,18 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class MessageManager
 {
-    /**
-     * @param array  $aboutUserInfo
-     * @param array  $fromUserInfo
-     * @param string $subject
-     * @param string $content
-     *
-     * @return bool
-     */
-    public static function sendMessageAboutUser(
-        $aboutUserInfo,
-        $fromUserInfo,
-        $subject,
-        $content
-    ) {
-        if (empty($aboutUserInfo) || empty($fromUserInfo)) {
-            return false;
-        }
-
-        if (empty($fromUserInfo['id']) || empty($aboutUserInfo['id'])) {
-            return false;
-        }
-
-        $table = Database::get_main_table(TABLE_MESSAGE);
-        $now = api_get_utc_datetime();
-        $params = [
-            'user_sender_id' => $fromUserInfo['id'],
-            'user_receiver_id' => $aboutUserInfo['id'],
-            'msg_type' => Message::MESSAGE_TYPE_CONVERSATION,
-            'send_date' => $now,
-            'title' => $subject,
-            'content' => $content,
-            'group_id' => 0,
-            'parent_id' => 0,
-            'update_date' => $now,
-        ];
-        $id = Database::insert($table, $params);
-
-        if ($id) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public static function getMessagesAboutUser(User $user): array
+    public static function getMessagesAboutUserToString(User $user, string $url = ''): string
     {
-        if (!empty($user)) {
-            $table = Database::get_main_table(TABLE_MESSAGE);
-            $sql = 'SELECT id FROM '.$table.'
-                    WHERE
-                      user_receiver_id = '.$user->getId().' AND
-                      msg_type = '.Message::MESSAGE_TYPE_CONVERSATION.'
-                    ';
-            $result = Database::query($sql);
-            $messages = [];
-            $repo = Database::getManager()->getRepository(Message::class);
-            while ($row = Database::fetch_array($result)) {
-                $message = $repo->find($row['id']);
-                $messages[] = $message;
-            }
-
-            return $messages;
-        }
-
-        return [];
-    }
-
-    public static function getMessagesAboutUserToString(User $user): string
-    {
-        $messages = self::getMessagesAboutUser($user);
+        $messages = Container::getMessageRepository()->getMessageByUser($user, Message::MESSAGE_TYPE_CONVERSATION);
         $html = '';
         if (!empty($messages)) {
-            /** @var Message $message */
             foreach ($messages as $message) {
-                $tag = 'message_'.$message->getId();
-                $tagAccordion = 'accordion_'.$message->getId();
-                $tagCollapse = 'collapse_'.$message->getId();
-                $date = Display::dateToStringAgoAndLongDate(
-                    $message->getSendDate()
-                );
+                $messageId = $message->getId();
+                $tag = 'message_'.$messageId;
+                $tagAccordion = 'accordion_'.$messageId;
+                $tagCollapse = 'collapse_'.$messageId;
+
+                $date = Display::dateToStringAgoAndLongDate($message->getSendDate());
                 $localTime = api_get_local_time(
                     $message->getSendDate(),
                     null,
@@ -102,11 +34,25 @@ class MessageManager
                     false
                 );
                 $sender = $message->getSender();
+
+                $deleteButton = '';
+                if (!empty($url)) {
+                    $deleteButton = Display::url(
+                        get_lang('Delete'),
+                        $url.'&action=delete_message&message_id='.$messageId,
+                        ['class' => 'btn btn-danger']
+                    );
+                }
+
+                $content = $message->getContent().'<br />'.$date.'<br />'.
+                    get_lang('Author').': '.$sender->getUsername().
+                    '<br />'.
+                    $deleteButton
+                ;
+
                 $html .= Display::panelCollapse(
                     $localTime.' '.UserManager::formatUserFullName($sender).' '.$message->getTitle(),
-                    $message->getContent().'<br />'.$date.'<br />'.get_lang(
-                        'Author'
-                    ).': '.$sender->getUsername(),
+                    $content,
                     $tag,
                     null,
                     $tagAccordion,

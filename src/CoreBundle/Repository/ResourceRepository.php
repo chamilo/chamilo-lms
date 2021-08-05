@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Traits\NonResourceRepository;
+use Chamilo\CoreBundle\Traits\Repository\RepositoryQueryBuilderTrait;
 use Chamilo\CourseBundle\Entity\CGroup;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -41,6 +42,7 @@ use Throwable;
 abstract class ResourceRepository extends ServiceEntityRepository
 {
     use NonResourceRepository;
+    use RepositoryQueryBuilderTrait;
 
     protected Settings $settings;
     protected Template $templates;
@@ -815,11 +817,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
     public function getResourceFormType(): string
     {
         throw new Exception('Implement getResourceFormType');
-    }
-
-    protected function getOrCreateQueryBuilder(QueryBuilder $qb = null, string $alias = 'resource'): QueryBuilder
-    {
-        return $qb ?: $this->createQueryBuilder($alias);
     }
 
     protected function addTitleQueryBuilder(?string $title, QueryBuilder $qb = null): QueryBuilder

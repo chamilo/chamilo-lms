@@ -97,9 +97,9 @@ if (!empty($dates)) {
     $content .= '</div></div>';
 }
 
-if (true === api_get_configuration_value('private_messages_about_user_visible_to_user')) {
+if (api_get_configuration_value('private_messages_about_user_visible_to_user')) {
     $allowMessages = api_get_configuration_value('private_messages_about_user');
-    if (true === $allowMessages) {
+    if ($allowMessages) {
         // Messages
         $content .= Display::page_subheader2(get_lang('Messages'));
         $content .= MessageManager::getMessagesAboutUserToString(api_get_user_info());

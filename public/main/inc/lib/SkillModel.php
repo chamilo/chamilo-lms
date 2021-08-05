@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\Level;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\SkillRelCourse;
+use Chamilo\CoreBundle\Entity\SkillRelGradebook;
 use Chamilo\CoreBundle\Entity\SkillRelItem;
 use Chamilo\CoreBundle\Entity\SkillRelItemRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelSkill;
@@ -467,7 +468,6 @@ class SkillModel extends Model
         }
 
         $skillRelSkill = new SkillRelSkillModel();
-        $skillRelGradebook = new SkillRelGradebookModel();
 
         // Saving name, description
         $params['access_url_id'] = api_get_current_access_url_id();
@@ -476,20 +476,21 @@ class SkillModel extends Model
         $skill_id = $this->save($params);
         $em = Database::getManager();
         $repo = $em->getRepository(Skill::class);
+        $repoGradebook = $em->getRepository(GradebookCategory::class);
 
         if ($skill_id) {
+            $skill = $repo->find($skill_id);
             // Saving skill_rel_skill (parent_id, relation_type)
             foreach ($params['parent_id'] as $parent_id) {
                 $relation_exists = $skillRelSkill->relationExists($skill_id, $parent_id);
                 if (!$relation_exists) {
                     $skillRelSkill =
                         (new SkillRelSkill())
-                            ->setSkill($repo->find($skill_id))
+                            ->setSkill($skill)
                             ->setParent($repo->find($parent_id))
                             ->setLevel($params['level'] ?? 0)
                             ->setRelationType($params['relation_type'] ?? 0)
                     ;
-                    //$skillRelSkill->save($attributes);
                     $em->persist($skillRelSkill);
                     $em->flush();
                 }
@@ -497,10 +498,12 @@ class SkillModel extends Model
 
             if (!empty($params['gradebook_id'])) {
                 foreach ($params['gradebook_id'] as $gradebook_id) {
-                    $attributes = [];
-                    $attributes['gradebook_id'] = $gradebook_id;
-                    $attributes['skill_id'] = $skill_id;
-                    $skillRelGradebook->save($attributes);
+                    $skillRelGradebook = (new SkillRelGradebook())
+                        ->setGradeBookCategory($repoGradebook->find($gradebook_id))
+                        ->setSkill($skill)
+                    ;
+                    $em->persist($skillRelGradebook);
+                    $em->flush();
                 }
             }
 

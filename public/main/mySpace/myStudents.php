@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLpCategory;
@@ -461,20 +462,46 @@ switch ($action) {
             api_not_allowed(true);
         }
         break;
-    case 'send_message':
-        if (true === $allowMessages) {
-            $subject = $_POST['subject'] ?? '';
-            $message = $_POST['message'] ?? '';
-            $userInfo = api_get_user_info($studentId);
-
-            if (!empty($subject) && !empty($message)) {
-                $currentUserInfo = api_get_user_info();
-                MessageManager::sendMessageAboutUser(
-                    $userInfo,
-                    $currentUserInfo,
-                    $subject,
-                    $message
+    case 'delete_message':
+        $messageId = $_REQUEST['message_id'] ?? 0;
+        $currentUser = api_get_current_user();
+        if (!empty($messageId)) {
+            $messageRepo = Container::getMessageRepository();
+            $message = $messageRepo->find($messageId);
+            // Only delete a message I created.
+            if (null !== $message && $message->getSender()->getId() === $currentUser->getId()) {
+                Event::addEvent(
+                    LOG_MESSAGE_DELETE,
+                    LOG_MESSAGE_DATA,
+                    $messageId.' - '.$message->getTitle(),
                 );
+                $messageRepo->delete($message);
+                Display::addFlash(Display::return_message(get_lang('Message deleted')));
+            }
+        }
+
+        api_location($currentUrl);
+
+        break;
+    case 'send_message':
+        if ($allowMessages) {
+            $subject = $_POST['subject'] ?? '';
+            $content = $_POST['message'] ?? '';
+            $currentUser = api_get_user_entity();
+            $student = api_get_user_entity($studentId);
+
+            // @todo move in a repo
+            if (!empty($subject) && !empty($content)) {
+                $em = Database::getManager();
+                $message = (new Message())
+                    ->setTitle($subject)
+                    ->setContent($content)
+                    ->setSender(api_get_user_entity())
+                    ->addReceiver($student)
+                    ->setMsgType(Message::MESSAGE_TYPE_CONVERSATION)
+                ;
+                $em->persist($message);
+                $em->flush();
 
                 // Send also message to all student bosses
                 $bossList = UserManager::getStudentBossList($studentId);
@@ -484,17 +511,24 @@ switch ($action) {
                     $link = Display::url($url, $url);
 
                     foreach ($bossList as $boss) {
-                        MessageManager::send_message_simple(
-                            $boss['boss_id'],
-                            sprintf(get_lang('Follow up message about student %s'), $userInfo['complete_name']),
-                            sprintf(
-                                get_lang('Hi,<br/><br/>'),
-                                $currentUserInfo['complete_name'],
-                                $userInfo['complete_name'],
-                                $link
-                            )
+                        $studentFullName = UserManager::formatUserFullName($student);
+                        $content = sprintf(
+                            get_lang('Hi,<br/><br/>'),
+                            UserManager::formatUserFullName($currentUser),
+                            $studentFullName,
+                            $link
                         );
+                        $message = (new Message())
+                            ->setTitle(sprintf(get_lang('Follow up message about student %s'), $studentFullName))
+                            ->setContent($content)
+                            ->setSender(api_get_user_entity())
+                            ->addReceiver(api_get_user_entity($boss['boss_id']))
+                            ->setMsgType(Message::MESSAGE_TYPE_CONVERSATION)
+                        ;
+                        $em->persist($message);
                     }
+
+                    $em->flush();
                 }
 
                 Display::addFlash(Display::return_message(get_lang('Message Sent')));
@@ -1481,7 +1515,7 @@ if (empty($details)) {
                     )
                 );
             }
-            echo $sessionAction;
+            echo Display::toolbarAction('sessions', [$sessionAction]);
         } else {
             echo "<tr><td colspan='5'>".get_lang('This course could not be found')."</td></tr>";
         }
@@ -2199,10 +2233,10 @@ if (empty($details)) {
     ];
 }
 
-if (true === $allowMessages) {
+if ($allowMessages) {
     // Messages
     echo Display::page_subheader2(get_lang('Messages'));
-    echo MessageManager::getMessagesAboutUserToString($user);
+    echo MessageManager::getMessagesAboutUserToString($user, $currentUrl);
     echo Display::url(
         get_lang('New message'),
         'javascript: void(0);',

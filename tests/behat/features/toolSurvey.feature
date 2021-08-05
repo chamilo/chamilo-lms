@@ -30,7 +30,9 @@ Feature: Survey tool
     When I fill in the following:
       | survey_code | Survey 1 |
     And I fill in ckeditor field "survey_title" with "Survey description"
+    And I focus "start_date"
     And I fill in "start_date" with "2021-08-04"
+    And I focus "end_date"
     And I fill in "end_date" with "2021-08-14"
     And I press "submit_survey"
     Then I should see "The survey has been created succesfully"

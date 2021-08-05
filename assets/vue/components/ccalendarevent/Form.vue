@@ -3,126 +3,117 @@
       <v-container>
         <v-row>
           <v-col>
-            <v-card
-                elevation="2"
-            >
-                <q-input
-                    id="item_title"
-                    v-model="item.title"
-                    :error="v$.item.title.$error"
-                    :error-message="titleErrors"
-                    :placeholder="$t('Title')"
-                    @blur="v$.item.title.$touch()"
-                    @input="v$.item.title.$touch()"
-                />
+            <q-input
+                id="item_title"
+                v-model="item.title"
+                :error="v$.item.title.$error"
+                :error-message="titleErrors"
+                :placeholder="$t('Title')"
+                @blur="v$.item.title.$touch()"
+                @input="v$.item.title.$touch()"
+            />
 
-                <q-input v-model="item.startDate" filled>
-                  <template v-slot:prepend>
-                    <q-icon class="cursor-pointer" name="event">
-                      <q-popup-proxy transition-hide="scale" transition-show="scale">
-                        <q-date v-model="item.startDate" mask="YYYY-MM-DD HH:mm">
-                          <div class="row items-center justify-end">
-                            <q-btn v-close-popup color="primary" flat label="Close"/>
-                          </div>
-                        </q-date>
-                      </q-popup-proxy>
-                    </q-icon>
-                  </template>
+            <q-input v-model="item.startDate" filled>
+              <template v-slot:prepend>
+                <q-icon class="cursor-pointer" name="event">
+                  <q-popup-proxy transition-hide="scale" transition-show="scale">
+                    <q-date v-model="item.startDate" mask="YYYY-MM-DD HH:mm">
+                      <div class="row items-center justify-end">
+                        <q-btn v-close-popup color="primary" flat label="Close"/>
+                      </div>
+                    </q-date>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
 
-                  <template v-slot:append>
-                    <q-icon class="cursor-pointer" name="access_time">
-                      <q-popup-proxy transition-hide="scale" transition-show="scale">
-                        <q-time v-model="item.startDate" format24h mask="YYYY-MM-DD HH:mm">
-                          <div class="row items-center justify-end">
-                            <q-btn v-close-popup color="primary" flat label="Close"/>
-                          </div>
-                        </q-time>
-                      </q-popup-proxy>
-                    </q-icon>
-                  </template>
-                </q-input>
+              <template v-slot:append>
+                <q-icon class="cursor-pointer" name="access_time">
+                  <q-popup-proxy transition-hide="scale" transition-show="scale">
+                    <q-time v-model="item.startDate" format24h mask="YYYY-MM-DD HH:mm">
+                      <div class="row items-center justify-end">
+                        <q-btn v-close-popup color="primary" flat label="Close"/>
+                      </div>
+                    </q-time>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
 
-                <q-input v-model="item.endDate" filled>
-                  <template v-slot:prepend>
-                    <q-icon class="cursor-pointer" name="event">
-                      <q-popup-proxy transition-hide="scale" transition-show="scale">
-                        <q-date v-model="item.endDate" mask="YYYY-MM-DD HH:mm">
-                          <div class="row items-center justify-end">
-                            <q-btn v-close-popup color="primary" flat label="Close"/>
-                          </div>
-                        </q-date>
-                      </q-popup-proxy>
-                    </q-icon>
-                  </template>
+            <q-input v-model="item.endDate" filled>
+              <template v-slot:prepend>
+                <q-icon class="cursor-pointer" name="event">
+                  <q-popup-proxy transition-hide="scale" transition-show="scale">
+                    <q-date v-model="item.endDate" mask="YYYY-MM-DD HH:mm">
+                      <div class="row items-center justify-end">
+                        <q-btn v-close-popup color="primary" flat label="Close"/>
+                      </div>
+                    </q-date>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
 
-                  <template v-slot:append>
-                    <q-icon class="cursor-pointer" name="access_time">
-                      <q-popup-proxy transition-hide="scale" transition-show="scale">
-                        <q-time v-model="item.endDate" format24h mask="YYYY-MM-DD HH:mm">
-                          <div class="row items-center justify-end">
-                            <q-btn v-close-popup color="primary" flat label="Close"/>
-                          </div>
-                        </q-time>
-                      </q-popup-proxy>
-                    </q-icon>
-                  </template>
-                </q-input>
+              <template v-slot:append>
+                <q-icon class="cursor-pointer" name="access_time">
+                  <q-popup-proxy transition-hide="scale" transition-show="scale">
+                    <q-time v-model="item.endDate" format24h mask="YYYY-MM-DD HH:mm">
+                      <div class="row items-center justify-end">
+                        <q-btn v-close-popup color="primary" flat label="Close"/>
+                      </div>
+                    </q-time>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
 
-<!--                <q-input-->
-<!--                    v-model="item.content"-->
-<!--                    :error="v$.item.content.$error"-->
-<!--                    :error-message="contentErrors"-->
-<!--                    :placeholder="$t('Content')"-->
-<!--                    type="textarea"-->
-<!--                    @blur="v$.item.content.$touch()"-->
-<!--                    @input="v$.item.content.$touch()"-->
-<!--                />-->
+            <!--                <q-input-->
+            <!--                    v-model="item.content"-->
+            <!--                    :error="v$.item.content.$error"-->
+            <!--                    :error-message="contentErrors"-->
+            <!--                    :placeholder="$t('Content')"-->
+            <!--                    type="textarea"-->
+            <!--                    @blur="v$.item.content.$touch()"-->
+            <!--                    @input="v$.item.content.$touch()"-->
+            <!--                />-->
 
-              <TinyEditor
-                  v-model="item.content"
-                  required
-                  :init="{
-                    skin_url: '/build/libs/tinymce/skins/ui/oxide',
-                    content_css: '/build/libs/tinymce/skins/content/default/content.css',
-                    branding: false,
-                    relative_urls: false,
-                    height: 500,
-                    toolbar_mode: 'sliding',
-                    file_picker_callback : browser,
-                    autosave_ask_before_unload: true,
-                    plugins: [
-                      'advlist autolink lists link image charmap print preview anchor',
-                      'searchreplace visualblocks code fullscreen',
-                      'insertdatetime media table paste wordcount emoticons'
-                    ],
-                    toolbar: 'undo redo | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl',
-                  }"
-              />
-
-            </v-card>
+            <TinyEditor
+                v-model="item.content"
+                required
+                :init="{
+                  skin_url: '/build/libs/tinymce/skins/ui/oxide',
+                  content_css: '/build/libs/tinymce/skins/content/default/content.css',
+                  branding: false,
+                  relative_urls: false,
+                  height: 250,
+                  toolbar_mode: 'sliding',
+                  file_picker_callback : browser,
+                  autosave_ask_before_unload: true,
+                  plugins: [
+                    'advlist autolink lists link image charmap print preview anchor',
+                    'searchreplace visualblocks code fullscreen',
+                    'insertdatetime media table paste wordcount emoticons'
+                  ],
+                  toolbar: 'undo redo | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl',
+                }"
+            />
           </v-col>
 
           <v-col>
-            <v-card>
-              <v-card-header>
-                <v-card-header-text>
-                  <v-card-title>
-                    {{ $t('Invitees') }}
-                  </v-card-title>
-                </v-card-header-text>
-              </v-card-header>
+            <div
+                v-text="$t('Invitees')"
+                class="text-h6"
+            >
+            </div>
 
-              <EditLinks
-                  :item="item"
-                  :show-status="false"
-                  :edit-status="false"
-                  links-type="user_rel_users"
-              />
-              <q-checkbox
-                  v-model="item.collective"
-                  :label="$t('Is it editable by the invitees?')"
-              />
-            </v-card>
+            <EditLinks
+                :item="item"
+                :show-status="false"
+                :edit-status="false"
+                links-type="user_rel_users"
+            />
+            <q-checkbox
+                v-model="item.collective"
+                :label="$t('Is it editable by the invitees?')"
+            />
           </v-col>
 
           <slot></slot>

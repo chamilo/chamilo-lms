@@ -63,7 +63,7 @@
                 </div>
                 <div class="col-sm-7">
                     <div class="course-description">
-                        {{ course.description }}
+                        {{ course.description | remove_xss }}
                     </div>
                 </div>
             </div>
@@ -73,7 +73,7 @@
                         <li>{{ 'Tags'|get_lang }} :</li>
                         {% for tag in course.tags %}
                             <li class="tag-value">
-                                <span>{{ tag.getTag }}</span>
+                                <span>{{ tag.getTag | remove_xss }}</span>
                             </li>
                         {% endfor %}
                     </ul>
@@ -92,10 +92,10 @@
                                 {% if topic.content != '' %}
                                     <div class="topics">
                                         <h4 class="title-info">
-                                            <em class="fa fa-book"></em> {{ topic.title }}
+                                            <em class="fa fa-book"></em> {{ topic.title | remove_xss }}
                                         </h4>
                                         <div class="content-info">
-                                            {{ topic.content }}
+                                            {{ topic.content | remove_xss }}
                                         </div>
                                     </div>
                                 {% endif %}
@@ -165,7 +165,7 @@
                                             {{ sequence.name }} :
                                             {% for requirement in sequence.requirements %}
                                                 <a href="{{ _p.web ~ 'course/' ~ requirement.getId ~ '/about/' }}">
-                                                    {{ requirement.title }}
+                                                    {{ requirement.title | remove_xss }}
                                                 </a>
                                             {% endfor %}
                                         </p>
@@ -186,15 +186,18 @@
                             <div class="coach-information">
                                 <div class="coach-header">
                                     <div class="coach-avatar">
-                                        <img class="img-circle img-responsive" src="{{ teacher.image }}" alt="{{ teacher.complete_name }}">
+                                        <img class="img-circle img-responsive"
+                                             src="{{ teacher.image }}"
+                                             alt="{{ teacher.complete_name }}"
+                                        >
                                     </div>
                                     <div class="coach-title">
                                         <h4>{{ teacher.complete_name }}</h4>
-                                        <p> {{ teacher.diploma }}</p>
+                                        <p> {{ teacher.diploma | remove_xss }}</p>
                                     </div>
                                 </div>
                                 <div class="open-area  {{ course.teachers | length >= 2 ? 'open-more' : ' ' }}">
-                                    {{ teacher.openarea }}
+                                    {{ teacher.openarea | remove_xss }}
                                 </div>
                             </div>
                             {% endfor %}

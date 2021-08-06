@@ -54,13 +54,13 @@
           <div v-if="sessionAsEvent.start">
             <q-icon name="event"/>
             {{ $t('From:') }}
-            {{ $luxonDateTime.fromISO(sessionAsEvent.startStr).toLocaleString($luxonDateTime.DATETIME_MED) }}
+            {{ $luxonDateTime.fromISO(sessionAsEvent.start).toLocaleString($luxonDateTime.DATETIME_MED) }}
           </div>
 
           <div v-if="sessionAsEvent.end">
             <q-icon name="event"/>
             {{ $t('Until:') }}
-            {{ $luxonDateTime.fromISO(sessionAsEvent.endStr).toLocaleString($luxonDateTime.DATETIME_MED) }}
+            {{ $luxonDateTime.fromISO(sessionAsEvent.end).toLocaleString($luxonDateTime.DATETIME_MED) }}
           </div>
         </q-card-section>
       </q-card>
@@ -73,7 +73,7 @@ import {mapActions, mapGetters, useStore} from 'vuex';
 import {mapFields} from 'vuex-map-fields';
 import Loading from '../../components/Loading.vue';
 import Toolbar from '../../components/Toolbar.vue';
-import {computed, ref} from "vue";
+import {computed, reactive, ref, toRefs} from "vue";
 
 //import '@fullcalendar/core/vdom' // solve problem with Vite
 import FullCalendar from '@fullcalendar/vue3';
@@ -117,8 +117,14 @@ export default {
 
     let currentEvent = null;
 
-    const sessionAsEvent = ref(null);
-    const showSessionDialog = ref(false);
+    const sessionState = reactive({
+      sessionAsEvent: {
+        tiltle: '',
+        start: '',
+        end: '',
+      },
+      showSessionDialog: false
+    });
 
     async function getCalendarEvents({startStr, endStr}) {
       const calendarEvents = await axios.get('/api/c_calendar_events', {
@@ -174,8 +180,8 @@ export default {
         let event = EventClickArg.event;
 
         if (event.extendedProps.type && event.extendedProps.type === 'session') {
-          sessionAsEvent.value = event;
-          showSessionDialog.value = true;
+          sessionState.sessionAsEvent = event.toPlainObject({collapseExtendedProps: true});
+          sessionState.showSessionDialog = true;
 
           EventClickArg.jsEvent.preventDefault();
 
@@ -291,8 +297,7 @@ export default {
       reFetch,
       isEventEditable,
       confirmDelete,
-      sessionAsEvent,
-      showSessionDialog
+      ...toRefs(sessionState),
     };
   },
   computed: {

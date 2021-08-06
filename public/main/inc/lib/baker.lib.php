@@ -50,7 +50,7 @@ class PNGImageBaker
     {
         if (array_key_exists($type, $this->_chunks)) {
             foreach (array_keys($this->_chunks[$type]) as $typekey) {
-                list($key, $data) = explode("\0", $this->_chunks[$type][$typekey]);
+                [$key, $data] = explode("\0", $this->_chunks[$type][$typekey]);
                 if (0 == strcmp($key, $check)) {
                     echo 'Key "'.$check.'" already exists in "'.$type.'" chunk.';
 
@@ -78,11 +78,10 @@ class PNGImageBaker
         $len = pack("N", strlen($chunkData));
 
         $newChunk = $len.$chunkType.$chunkData.$crc;
-        $result = substr($this->_contents, 0, $this->_size - 12)
-                .$newChunk
-                .substr($this->_contents, $this->_size - 12, 12);
 
-        return $result;
+        return substr($this->_contents, 0, $this->_size - 12)
+            .$newChunk
+            .substr($this->_contents, $this->_size - 12, 12);
     }
 
     /**

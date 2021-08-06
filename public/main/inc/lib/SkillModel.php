@@ -2300,27 +2300,14 @@ class SkillModel extends Model
 
     /**
      * Get the icon (badge image) URL.
-     *
-     * @param bool $getSmall Optional. Allow get the small image
-     *
-     * @return string
      */
-    public static function getWebIconPath(Skill $skill, $getSmall = false)
+    public static function getWebIconPath(Skill $skill): string
     {
-        throw new Exception('fix WEB_UPLOAD_PATH');
-        if ($getSmall) {
-            if (empty($skill->getIcon())) {
-                return \Display::return_icon('badges-default.png', null, null, ICON_SIZE_BIG, null, true);
-            }
-
-            //return api_get_path(WEB_UPLOAD_PATH).'badges/'.sha1($skill->getName()).'-small.png';
-        }
-
-        if (empty($skill->getIcon())) {
+        if (!$skill->hasAsset()) {
             return \Display::return_icon('badges-default.png', null, null, ICON_SIZE_HUGE, null, true);
         }
 
-        //return api_get_path(WEB_UPLOAD_PATH)."badges/{$skill->getIcon()}";
+        return Container::getAssetRepository()->getAssetUrl($skill->getAsset());
     }
 
     /**

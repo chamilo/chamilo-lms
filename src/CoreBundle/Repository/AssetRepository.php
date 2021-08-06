@@ -70,6 +70,22 @@ class AssetRepository extends ServiceEntityRepository
         }
     }
 
+    public function getAssetContent(Asset $asset): string
+    {
+        if (!$asset->hasFile()) {
+            return '';
+        }
+
+        $fs = $this->getFileSystem();
+        $file = $this->getStorage()->resolveUri($asset);
+
+        if ($fs->fileExists($file)) {
+            return $this->getFileSystem()->read($file);
+        }
+
+        return '';
+    }
+
     public function getFolder(Asset $asset): ?string
     {
         if ($asset->hasFile()) {

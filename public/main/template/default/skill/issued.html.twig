@@ -2,7 +2,10 @@
     <div class="col-md-5">
         <div class="thumbnail">
             <figure class="text-center">
-                <img class="img-fluid center-block" src="{{ issue_info.skill_badge_image }}" alt="{{ issue_info.skill_name }}">
+                <img class="img-fluid center-block"
+                     src="{{ issue_info.skill_badge_image }}"
+                     alt="{{ issue_info.skill_name }}"
+                >
                 <figcaption>
                     <p class="lead">{{ issue_info.skill_name }}</p>
                     {% if issue_info.skill_short_code %}
@@ -23,10 +26,12 @@
 
         {% if badge_error %}
             <hr>
-            <div class="alert alert-danger"> {{ 'There was a problem embedding the badge assertion info into the badge image, but you can still use this page as a valid proof.'|trans }}</div>
+            <div class="alert alert-danger">
+                {{ 'There was a problem embedding the badge assertion info into the badge image, but you can still use this page as a valid proof.'|trans }}
+            </div>
         {% elseif not personal_badge is empty %}
             <p class="text-center">
-                <a href="{{ personal_badge }}" class="btn btn-primary" target="_new" download="badge">
+                <a href="{{ personal_badge }}" class="btn btn-primary" target="_blank" >
                     <em class="fa fa-download fa-fw"></em> {{ 'Download badges'|trans }}
                 </a>
             </p>
@@ -44,7 +49,7 @@
                 <a href="http://www.facebook.com/sharer.php?u={{ url('badge_issued', { 'id': issue_info.id }) }}" target="_blank">
                     <em class='fa fa-facebook-square fa-3x text-info' aria-hidden='true'></em>
                 </a>
-                <a href="https://twitter.com/home?status={{ 'IHaveObtainedSkillXOnY'|trans|format(
+                <a href="https://twitter.com/home?status={{ 'I have achieved skill %s on %s'|trans|format(
                     issue_info.skill_name, chamilo_settings_get('platform.site_name')
                 ) }} - {{ url('badge_issued', { 'id': issue_info.id }) }}"
                    target="_new">
@@ -56,7 +61,7 @@
                     'isFromA2p':'true',
                     'issueMonth':issue_info.month,
                     'issueYear': issue_info.year,
-                    'name':'BadgeXTitle'|trans|format(issue_info.skill_name),
+                    'name':'Badge: %s'|trans|format(issue_info.skill_name),
                     'organizationId':issue_info.linkedin_organization_id
                 }|url_encode }}" target="_new">
                     <em class='fa fa-linkedin-square fa-3x txt-linkedin' aria-hidden='true'></em>
@@ -72,7 +77,7 @@
             <li>
                 {% if issue_info.source_name %}
                     <em class="fa-li fa fa-clock-o fa-fw"></em>
-                    {{ 'TimeXThroughCourseY'|trans|format(issue_info.datetime, issue_info.source_name) }}
+                    {{ '%s through %s'|trans|format(issue_info.datetime, issue_info.source_name) }}
                 {% else %}
                     <em class="fa-li fa fa-clock-o fa-fw"></em>
                     {{ issue_info.datetime }}
@@ -116,10 +121,10 @@
             <div class="panel panel-info">
                 <div class="panel-heading">
                     <em class="fa fa-comment-o fa-fw" aria-hidden="true"></em>
-                    {{ 'XComments'|trans|format(issue_info.comments|length) }}
+                    {{ '%s comments'|trans|format(issue_info.comments|length) }}
                     /
                     <em class="fa fa-thumbs-o-up fa-fw" aria-hidden="true"></em>
-                    {{ 'AverageRatingX'|trans|format(issue_info.feedback_average) }}
+                    {{ 'Average rating %s'|trans|format(issue_info.feedback_average) }}
                 </div>
                 <div class="panel-body">
                     {% autoescape false %}{{ comment_form }}{% endautoescape %}
@@ -146,13 +151,13 @@
                 </div>
             </div>
         {% else %}
-            <hr>
+            <hr />
             <p class="lead">
                 <em class="fa fa-comment-o fa-fw" aria-hidden="true"></em>
-                {{ 'XComments'|trans|format(issue_info.comments|length) }}
+                {{ '%s comments'|trans|format(issue_info.comments|length) }}
                 /
                 <em class="fa fa-thumbs-o-up fa-fw" aria-hidden="true"></em>
-                {{ 'AverageRatingX'|trans|format(issue_info.feedback_average) }}
+                {{ 'Average rating %s'|trans|format(issue_info.feedback_average) }}
             </p>
         {% endif %}
     </div>

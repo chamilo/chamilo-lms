@@ -46,19 +46,19 @@
       <q-card>
         <q-card-section class="row items-center q-pb-none" icon="mdi-book-open">
           <div class="text-h6">{{ sessionAsEvent.title }}</div>
-          <q-space />
-          <q-btn icon="close" flat round dense v-close-popup />
+          <q-space/>
+          <q-btn v-close-popup dense flat icon="close" round/>
         </q-card-section>
 
         <q-card-section>
           <div v-if="sessionAsEvent.start">
-            <q-icon name="event" />
+            <q-icon name="event"/>
             {{ $t('From:') }}
             {{ $luxonDateTime.fromISO(sessionAsEvent.startStr).toLocaleString($luxonDateTime.DATETIME_MED) }}
           </div>
 
           <div v-if="sessionAsEvent.end">
-            <q-icon name="event" />
+            <q-icon name="event"/>
             {{ $('Until:') }}
             {{ $luxonDateTime.fromISO(sessionAsEvent.endStr).toLocaleString($luxonDateTime.DATETIME_MED) }}
           </div>
@@ -283,7 +283,17 @@ export default {
           });
     }
 
-    return {calendarOptions, dialog, item, dialogShow, reFetch, isEventEditable, confirmDelete, sessionAsEvent, showSessionDialog};
+    return {
+      calendarOptions,
+      dialog,
+      item,
+      dialogShow,
+      reFetch,
+      isEventEditable,
+      confirmDelete,
+      sessionAsEvent,
+      showSessionDialog
+    };
   },
   computed: {
     ...mapFields('ccalendarevent', {

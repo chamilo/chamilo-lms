@@ -85,8 +85,10 @@ class SessionVoter extends Voter
         switch ($attribute) {
             case self::VIEW:
                 $userIsGeneralCoach = $session->isUserGeneralCoach($user);
-                $userIsCourseCoach = $session->hasCoachInCourseWithStatus($user, $currentCourse);
-                $userIsStudent = $session->hasUserInCourse($user, $currentCourse, Session::STUDENT);
+                $userIsCourseCoach = $currentCourse && $session->hasCoachInCourseWithStatus($user, $currentCourse);
+                $userIsStudent = $currentCourse
+                    ? $session->hasUserInCourse($user, $currentCourse, Session::STUDENT)
+                    : $session->getSessionRelCourseByUser($user, Session::STUDENT)->count() > 0;
 
                 if (empty($session->getDuration())) {
                     // General coach.

@@ -46,7 +46,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     itemOperations: [
         'get' => [
-            'security' => "is_granted('ROLE_ADMIN')",
+            'security' => "is_granted('ROLE_ADMIN') or is_granted('VIEW', object)",
         ],
         'put' => [
             'security' => "is_granted('ROLE_ADMIN')",
@@ -147,7 +147,7 @@ class Session implements ResourceWithAccessUrlInterface
 
     protected AccessUrl $currentUrl;
 
-    protected Course $currentCourse;
+    protected ?Course $currentCourse = null;
 
     /**
      * @Groups({"session:read", "session:write", "session_rel_course_rel_user:read", "document:read", "session_rel_user:read"})
@@ -919,10 +919,8 @@ class Session implements ResourceWithAccessUrlInterface
 
     /**
      * currentCourse is set in CourseListener.
-     *
-     * @return Course
      */
-    public function getCurrentCourse()
+    public function getCurrentCourse(): ?Course
     {
         return $this->currentCourse;
     }

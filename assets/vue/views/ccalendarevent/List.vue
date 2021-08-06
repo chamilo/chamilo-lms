@@ -59,7 +59,7 @@
 
           <div v-if="sessionAsEvent.end">
             <q-icon name="event"/>
-            {{ $('Until:') }}
+            {{ $t('Until:') }}
             {{ $luxonDateTime.fromISO(sessionAsEvent.endStr).toLocaleString($luxonDateTime.DATETIME_MED) }}
           </div>
         </q-card-section>

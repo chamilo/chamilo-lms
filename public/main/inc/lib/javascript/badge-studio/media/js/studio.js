@@ -469,7 +469,9 @@ function setCustomColors() {
     for (var i = 0, l = colors.length; i < l; i++) {
         var colorName = colors[i];
         var colorValue = palette.color(colorName);
-        $custom.setAttribute('data-color-' + colorName, colorValue);
+        if ($custom) {
+            $custom.setAttribute('data-color-' + colorName, colorValue);
+        }
         var $input = document.getElementById('custom-color-picker-' + colorName);
         if ($input) {
             $input.value = colorValue;

@@ -6327,7 +6327,7 @@ __metadata:
     pretty-bytes: ^5.6.0
     primeflex: ^3.0.1
     primeicons: ^4.1.0
-    primevue: ^3.6.0
+    primevue: ^3.6.1
     purgecss-webpack-plugin: ^4.0.3
     pwstrength-bootstrap: ^3.1.0
     qtip2: ^3.0.3
@@ -15874,10 +15874,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"primevue@npm:^3.6.0":
-  version: 3.6.0
-  resolution: "primevue@npm:3.6.0"
-  checksum: a87d6599cd61f2caf18af5404e3c34937c717fa4afc0bf0fcd4b01a922a39c8929149ad3c2d80c4d5ee2c4f762586cfb7e2a38055c62e529e21658e871f569a4
+"primevue@npm:^3.6.1":
+  version: 3.6.1
+  resolution: "primevue@npm:3.6.1"
+  checksum: b236b2b1c32d3b751c1b2f9079045c929bdaf3b5ac02479d91035850b1cd52d3373fc4c3e8c111a085290e19ca75320921ff7b171d7dddf8bd68c28cd7414c01
   languageName: node
   linkType: hard
 

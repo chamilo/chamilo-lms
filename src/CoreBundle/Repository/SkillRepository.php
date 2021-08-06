@@ -16,8 +16,6 @@ use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * SkillRepository class.
- *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
 class SkillRepository extends ServiceEntityRepository
@@ -25,6 +23,30 @@ class SkillRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Skill::class);
+    }
+
+    public function deleteAsset(Skill $skill): void
+    {
+        if ($skill->hasAsset()) {
+            $asset = $skill->getAsset();
+            $skill->setAsset(null);
+
+            $this->getEntityManager()->persist($skill);
+            $this->getEntityManager()->remove($asset);
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function update(Skill $skill): void
+    {
+        $this->getEntityManager()->persist($skill);
+        $this->getEntityManager()->flush();
+    }
+
+    public function delete(Skill $skill): void
+    {
+        $this->getEntityManager()->remove($skill);
+        $this->getEntityManager()->flush();
     }
 
     /**

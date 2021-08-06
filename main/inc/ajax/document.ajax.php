@@ -85,13 +85,18 @@ switch ($action) {
         }
 
         if (!empty($_FILES)) {
-            $files = $_FILES['files'];
+            $isCkUploadImage = ($_COOKIE['ckCsrfToken'] == $_POST['ckCsrfToken']); // it comes from uploaimage drag and drop ckeditor
             $fileList = [];
-            foreach ($files as $name => $array) {
-                $counter = 0;
-                foreach ($array as $data) {
-                    $fileList[$counter][$name] = $data;
-                    $counter++;
+            if ($isCkUploadImage) {
+                $fileList[0] = $_FILES['upload'];
+            } else {
+                $files = $_FILES['files'];
+                foreach ($files as $name => $array) {
+                    $counter = 0;
+                    foreach ($array as $data) {
+                        $fileList[$counter][$name] = $data;
+                        $counter++;
+                    }
                 }
             }
 
@@ -134,7 +139,17 @@ switch ($action) {
                 $resultList[] = $json;
             }
 
-            echo json_encode(['files' => $resultList]);
+            if ($isCkUploadImage) {
+                $ckResult = $resultList[0];
+                $courseInfo = api_get_course_info();
+                $courseDir = $courseInfo['path'].'/document';
+                $webCoursePath = api_get_path(WEB_COURSE_PATH);
+                $url = $webCoursePath.$courseDir.$currentDirectory.$ckResult['name'];
+                $data = ['uploaded' => 1, 'fileName' => $ckResult['name'], 'url' => $url];
+                echo json_encode($data);
+            } else {
+                echo json_encode(['files' => $resultList]);
+            }
         }
         exit;
         break;

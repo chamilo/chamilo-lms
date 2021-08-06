@@ -1974,6 +1974,9 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 // and showing them in the SCORM upload form
 //$_configuration['scorm_upload_from_cache'] = false;
 
+// Enable image upload as file when doing a copy in the content or a drag and drop.
+//$_configuration['enable_uploadimage_editor'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

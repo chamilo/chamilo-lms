@@ -150,6 +150,11 @@ class Basic extends Toolbar
             $plugins[] = 'blockimagepaste';
         }
 
+        // it should be disabled first the option ck_editor_block_image_copy_paste to allow copy and drag in editor content
+        if (api_get_configuration_value('enable_uploadimage_editor')) {
+            $plugins[] = 'uploadimage';
+        }
+
         $this->defaultPlugins = array_unique(array_merge($this->defaultPlugins, $plugins));
 
         parent::__construct($toolbar, $config, $prefix);
@@ -171,6 +176,9 @@ class Basic extends Toolbar
         $config['customConfig'] = api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/config_js.php?'.api_get_cidreq();
         $config['flash_flvPlayer'] = api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/plugins/flash/swf/player.swf';
 
+        if (api_get_configuration_value('enable_uploadimage_editor')) {
+            $config['imageUploadUrl'] = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file&curdirpath=/';
+        }
         /*filebrowserFlashBrowseUrl
         filebrowserFlashUploadUrl
         filebrowserImageBrowseLinkUrl

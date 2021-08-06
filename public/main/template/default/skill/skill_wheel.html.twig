@@ -1,3 +1,5 @@
+{% import '@ChamiloCore/Macros/box.html.twig' as display %}
+
 {% autoescape false %}
 <script>
     /* Skill search input in the left menu */
@@ -12,7 +14,7 @@
                     async: false,
                     success: function (return_value) {
                         if (return_value == 0) {
-                            alert("{{ 'SkillDoesNotExist'|trans }}");
+                            alert("{{ 'There is no such skill'|trans }}");
 
                             //Deleting select option tag
                             //$("#skill_id option[value="+skill_id+"]").remove();
@@ -62,11 +64,11 @@
                 <td>' + skill_name + '</td>\n\
                 <td class="text-right">\n\
                     <div class="btn-group btn-group-sm" data-toggle="buttons">\n\
-                        <label class="btn btn-default ' + activeCondition + '" aria-label="{{ 'Select'|trans }}" title="{{ 'SelectToSearch'|trans }}">\n\
+                        <label class="btn btn-default ' + activeCondition + '" aria-label="{{ 'Select'|trans }}" title="{{ 'Select to search'|trans }}">\n\
                             <input id="skill_to_select_id_' + skill_id + '" data-id="' + skill_id + '" name="' + skill_name + '" class="skill_to_select" type="checkbox" autocomplete="off" ' + checked_condition + '>\n\
                             <span class="' + iconClassCondition + '" aria-hidden="true"></span>\n\
                         </label>\n\
-                        <button class="btn btn-default load_wheel" aria-label="{{ 'Search'|trans }}" title="{{ 'PlaceOnTheWheel'|trans }}" data-id="' + skill_id + '">\n\
+                        <button class="btn btn-default load_wheel" aria-label="{{ 'Search'|trans }}" title="{{ 'Place on the wheel'|trans }}" data-id="' + skill_id + '">\n\
                             <span class="fa fa-crosshairs fa-fw" aria-hidden="true"></span>\n\
                         </button>\n\
                     </div>\n\
@@ -377,7 +379,7 @@
                 }
             },
             cache: false,
-            placeholder: '{{ 'EnterTheSkillNameToSearch'|trans }}'
+            placeholder: '{{ 'Enter the skill name to search'|trans }}'
         }).on('change', function () {
             check_skills_sidebar();
         });
@@ -532,7 +534,8 @@
                     <div class="card">
                         <div class="card-header" role="tab" id="wheel-legend-heading">
                             <h4 class="card-title">
-                                <a role="button" data-toggle="collapse" data-parent="#wheel-second-accordion" href="#wheel-legend-collapse" aria-expanded="true" aria-controls="wheel-legend-collapse">
+                                <a role="button" data-toggle="collapse" data-parent="#wheel-second-accordion"
+                                   href="#wheel-legend-collapse" aria-expanded="true" aria-controls="wheel-legend-collapse">
                                     {{ "Legend"|trans }}
                                 </a>
                             </h4>
@@ -556,8 +559,9 @@
                     <div class="card">
                         <div class="card-header" role="tab" id="wheel-display-heading">
                             <h4 class="card-title">
-                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#wheel-second-accordion" href="#wheel-display-collapse" aria-expanded="false" aria-controls="wheel-display-collapse">
-                                    {{ 'Display Options' | trans }}
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#wheel-second-accordion"
+                                   href="#wheel-display-collapse" aria-expanded="false" aria-controls="wheel-display-collapse">
+                                    {{ 'Display options' | trans }}
                                 </a>
                             </h4>
                         </div>
@@ -567,7 +571,7 @@
                                 <ul class="list-unstyled" id="skill-change-background-options">
                                     <li><a href="#" data-color="#FFFFFF">{{ 'White' | trans }}</a></li>
                                     <li><a href="#" data-color="#000000">{{ 'Black' | trans }}</a></li>
-                                    <li><a href="#" data-color="#A9E2F3">{{ 'LightBlue' }}</a></li>
+                                    <li><a href="#" data-color="#A9E2F3">{{ 'Light blue' }}</a></li>
                                     <li><a href="#" data-color="#848484">{{ 'Gray' | trans }}</a></li>
                                     <li><a href="#" data-color="#F7F8E0">{{ 'Corn' | trans }}</a></li>
                                 </ul>
@@ -602,10 +606,10 @@
                     <em class="fa fa-edit"></em> {{ "Edit" | trans }}
                 </button>
                 <button id="form-button-create-child" class="btn btn-primary">
-                    <em class="fa fa-plus"></em> {{ "CreateChildSkill" | trans }}
+                    <em class="fa fa-plus"></em> {{ "Create child skill" | trans }}
                 </button>
                 <button id="form-button-add-to-profile" class="btn btn-primary">
-                    <em class="fa fa-check"></em> {{ "AddSkillToProfileSearch" | trans }}
+                    <em class="fa fa-check"></em> {{ "Add skill to profile search" | trans }}
                 </button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">
                     <em class="fa fa-close"></em> {{ "Close" | trans }}
@@ -622,7 +626,9 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="{{ "Close" | trans }}">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="form-save-profile-title">{{ "SkillProfile" | trans }}</h4>
+                <h4 class="modal-title" id="form-save-profile-title">
+                    {{ "Skill profile" | trans }}
+                </h4>
             </div>
             <div class="modal-body">
                 {{ save_profile_form }}

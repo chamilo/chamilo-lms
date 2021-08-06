@@ -12,8 +12,6 @@ use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * ExtraFieldValuesRepository class.
- *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
 class ExtraFieldValuesRepository extends ServiceEntityRepository

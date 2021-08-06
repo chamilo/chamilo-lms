@@ -23,6 +23,7 @@ use Chamilo\CoreBundle\Repository\PromotionRepository;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
+use Chamilo\CoreBundle\Repository\SkillRepository;
 use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -491,6 +492,11 @@ class Container
     public static function getSessionRepository(): SessionRepository
     {
         return self::$container->get(SessionRepository::class);
+    }
+
+    public static function getSkillRepository(): SkillRepository
+    {
+        return self::$container->get(SkillRepository::class);
     }
 
     public static function getSurveyRepository(): CSurveyRepository

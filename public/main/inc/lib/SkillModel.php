@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\SkillRelItemRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelSkill;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CLink;
@@ -80,7 +81,7 @@ class SkillModel extends Model
         // @todo fix badges icons
         //$path = api_get_path(WEB_UPLOAD_PATH).'badges/';
         $path = '';
-        if (!empty($result['icon'])) {
+        /*if (!empty($result['icon'])) {
             $iconSmall = sprintf(
                 '%s-small.png',
                 sha1($result['name'])
@@ -98,15 +99,15 @@ class SkillModel extends Model
             $iconMini = Display::returnIconPath('badges-default.png', ICON_SIZE_MEDIUM);
             $iconSmall = Display::returnIconPath('badges-default.png', ICON_SIZE_BIG);
             $iconBig = Display::returnIconPath('badges-default.png', ICON_SIZE_HUGE);
-        }
+        }*/
 
-        $result['icon_mini'] = $iconMini;
+        /*$result['icon_mini'] = $iconMini;
         $result['icon_small'] = $iconSmall;
         $result['icon_big'] = $iconBig;
 
         $result['img_mini'] = Display::img($iconBig, $result['name'], ['width' => ICON_SIZE_MEDIUM]);
         $result['img_big'] = Display::img($iconBig, $result['name']);
-        $result['img_small'] = Display::img($iconSmall, $result['name']);
+        $result['img_small'] = Display::img($iconSmall, $result['name']);*/
         $result['name'] = self::translateName($result['name']);
         $result['short_code'] = self::translateCode($result['short_code']);
 
@@ -297,6 +298,9 @@ class SkillModel extends Model
             }
         }
 
+        $skillRepo = Container::getSkillRepository();
+        $assetRepo = Container::getAssetRepository();
+
         $sql = "SELECT
                     s.id,
                     s.name,
@@ -313,21 +317,22 @@ class SkillModel extends Model
 
         $result = Database::query($sql);
         $skills = [];
-        //$webPath = api_get_path(WEB_UPLOAD_PATH);
         if (Database::num_rows($result)) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                $skillInfo = self::get($row['id']);
+                $skillId = $row['id'];
+                $skill = $skillRepo->find($skillId);
 
-                $row['img_mini'] = $skillInfo['img_mini'];
-                $row['img_big'] = $skillInfo['img_big'];
-                $row['img_small'] = $skillInfo['img_small'];
+                $row['asset'] = '';
+                if ($skill->getAsset()) {
+                    $row['asset'] = $assetRepo->getAssetUrl($skill->getAsset());
+                }
 
-                $row['name'] = self::translateName($row['name']);
-                $row['short_code'] = self::translateCode($row['short_code']);
+                $row['name'] = self::translateName($skill->getName());
+                $row['short_code'] = self::translateCode($skill->getShortCode());
                 $skillRelSkill = new SkillRelSkillModel();
-                $parents = $skillRelSkill->getSkillParents($row['id']);
+                $parents = $skillRelSkill->getSkillParents($skillId);
                 $row['level'] = count($parents) - 1;
-                $row['gradebooks'] = $this->getGradebooksBySkill($row['id']);
+                $row['gradebooks'] = $this->getGradebooksBySkill($skillId);
                 $skills[$row['id']] = $row;
             }
         }

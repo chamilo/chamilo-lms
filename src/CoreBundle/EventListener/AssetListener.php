@@ -28,7 +28,7 @@ class AssetListener
             $folder = $mapping->getFile($asset)->getFilename();
 
             // Deletes scorm folder: example: assets/scorm/myABC .
-            if (Asset::SCORM === $asset->getCategory() && !empty($folder)) {
+            if (!empty($folder) && Asset::SCORM === $asset->getCategory()) {
                 $folder = Asset::SCORM.'/'.$folder;
                 $this->assetRepository->getFileSystem()->deleteDirectory($folder);
             }

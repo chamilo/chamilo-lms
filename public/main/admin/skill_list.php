@@ -158,10 +158,9 @@ switch ($action) {
             }
         }
 
-        /* View */
         $skill = new SkillModel();
         $skillList = $skill->getAllSkills();
-        $extraFieldSearchTagId = isset($_REQUEST['tag_id']) ? $_REQUEST['tag_id'] : 0;
+        $extraFieldSearchTagId = $_REQUEST['tag_id'] ?? 0;
 
         if ($extraFieldSearchTagId) {
             $skills = [];

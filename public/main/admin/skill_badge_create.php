@@ -2,11 +2,16 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Asset;
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * Show information about Mozilla OpenBadges.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ * @author Julio Montoya
  */
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -17,10 +22,10 @@ SkillModel::isAllowed();
 $this_section = SECTION_PLATFORM_ADMIN;
 
 $skillId = (int) ($_GET['id'] ?? 0);
-$objSkill = new SkillModel();
-$skill = $objSkill->get($skillId);
+$skillRepo = Container::getSkillRepository();
+$skill = $skillRepo->find($skillId);
 
-$htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_JS_PATH).'badge-studio/media/css/core.css" rel="stylesheet">';
+$htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_JS_PATH).'badge-studio/media/css/core.css" rel="stylesheet">';
 
 // Add badge studio paths
 $badgeStudio = [
@@ -32,66 +37,36 @@ $badgeStudio = [
 ];
 
 if ('POST' === $_SERVER['REQUEST_METHOD']) {
-    $params = [
-        'id' => $skillId,
-    ];
-    throw new Exception('implement skill badge');
     if ((isset($_FILES['image']) && 0 == $_FILES['image']['error']) ||
-        !empty($_POST['badge_studio_image'])
+        (isset($_POST['badge_studio_image']) && !empty($_POST['badge_studio_image']))
     ) {
-        /*
-        $dirPermissions = api_get_permissions_for_new_directories();
-        $fileName = sha1($skill['name']);
-        $badgePath = api_get_path(SYS_UPLOAD_PATH).'badges/';
-        $existsBadgesDirectory = is_dir($badgePath);
+        $assetRepo = Container::getAssetRepository();
+        $skillRepo->deleteAsset($skill);
+        $title = sprintf("%s.png", $skill->getName());
 
-        if (!$existsBadgesDirectory) {
-            //$existsBadgesDirectory = api_create_protected_dir('badges', api_get_path(SYS_UPLOAD_PATH));
+        $asset = (new Asset())
+            ->setCategory(Asset::SKILL)
+            ->setTitle($title)
+        ;
+
+        if (isset($_POST['badge_studio_image']) && !empty($_POST['badge_studio_image'])) {
+            $badgeImage = base64_decode(
+                preg_replace('#^data:image/\w+;base64,#i', '', $_POST['badge_studio_image'])
+            );
+            $asset = $assetRepo->createFromString($asset, 'image/png', $badgeImage);
         }
 
-        if ($existsBadgesDirectory) {
-            if (!empty($skill['icon'])) {
-                $iconFileAbsolutePath = $badgePath.$skill['icon'];
+        if (isset($_FILES['image'])) {
+            $asset = $assetRepo->createFromRequest($asset, $_FILES['image']);
+        }
 
-                if (Security::check_abs_path($iconFileAbsolutePath, $badgePath)) {
-                    unlink($badgePath.$skill['icon']);
-                }
-            }
+        $skill->setAsset($asset);
+        $skillRepo->update($skill);
 
-            $skillImagePath = sprintf("%s%s.png", $badgePath, $fileName);
-            if (!empty($_POST['badge_studio_image'])) {
-                $badgeImage = base64_decode(
-                    preg_replace('#^data:image/\w+;base64,#i', '', $_POST['badge_studio_image'])
-                );
-                file_put_contents($skillImagePath, $badgeImage);
-                $skillImage = new Image($skillImagePath);
-            } else {
-                $skillImage = new Image($_FILES['image']['tmp_name']);
-            }
-
-            $skillImage->send_image($skillImagePath, -1, 'png');
-
-            $skillThumbPath = sprintf("%s%s-small.png", $badgePath, $fileName);
-
-            $skillImageThumb = new Image($skillImagePath);
-            $skillImageThumb->resize(ICON_SIZE_BIG);
-            $skillImageThumb->send_image($skillThumbPath);
-
-            $params['icon'] = sprintf("%s.png", $fileName);
-        } else {
-            Display::addFlash(
-                Display::return_message(
-                    get_lang('The uploaded file could not be saved (perhaps a permission problem?)')
-                ),
-                'warning'
-            );
-        }*/
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
     }
 
-    Display::addFlash(Display::return_message(get_lang('Update successful')));
-    $objSkill->update($params);
-    header('Location: '.api_get_path(WEB_CODE_PATH).'admin/skill_list.php');
-    exit;
+    api_location(api_get_path(WEB_CODE_PATH).'admin/skill_list.php');
 }
 
 $interbreadcrumb[] = [
@@ -100,6 +75,7 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = ['url' => 'skill_list.php', 'name' => get_lang('Manage skills')];
 
+$objSkill = new SkillModel();
 $toolbar = $objSkill->getToolBar();
 
 $tpl = new Template(get_lang('Create badge'));

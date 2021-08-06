@@ -1,16 +1,16 @@
 {% autoescape false %}
 {% if tags %}
     <div class="row">
-        <div class="col-md-3" >
+        <div class="col-md-3">
             <select id="tag-filter" class="chzn-select form-control">
-                <option value="0">{{ 'PleaseSelectAChoice' | trans }}</option>
+                <option value="0">{{ 'Please make a choice' | trans }}</option>
                 {% for tag in tags %}
                     <option value="{{ tag.id }}">{{ tag.tag }}</option>
                 {% endfor %}
             </select>
         </div>
         <div class="col-md-3">
-            <a id="filter-button" class="btn btn-default">{{ 'FilterByTags' | trans }}</a>
+            <a id="filter-button" class="btn btn-default">{{ 'Filter by tags' | trans }}</a>
         </div>
     </div>
     <br />
@@ -39,7 +39,9 @@
     {% for skill in skills %}
         <tr>
             <td width="50">
-                {{ skill.img_small }}
+                {% if skill.asset %}
+                    <img src="{{ skill.asset }}?w=50" />
+                {% endif %}
             </td>
             <td width="200">{{ skill.name }}</td>
             <td class="text-center">{{ skill.short_code }}</td>
@@ -70,7 +72,7 @@
                     {% else %}
                         <a
                             href="{{ url('legacy_main', { 'name' : 'admin/skill_list.php', 'id' : skill.id, 'action': 'disable' }) }}"
-                           class="btn btn-danger btn-sm" title="{{ 'Disable' }}">
+                           class="btn btn-sm" title="{{ 'Disable' }}">
                             <i class="fas fa-ban"></i>
                         </a>
                     {% endif %}

@@ -157,6 +157,7 @@ jobs:
                   cd ..
                   sed -i "s/APP_ENV='dev'/APP_ENV='prod'/g" .env.local
                   sed -i "s/APP_DEBUG='1'/APP_DEBUG='0'/g" .env.local
+                  sed -i "s/MAILER_DSN=sendmail:\/\/default//g" .env.local
                   sudo php bin/console cache:clear
                   sudo chmod -R 777 var public
 

@@ -112,6 +112,12 @@ class Skill
     protected string $icon;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Asset", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="asset_id", referencedColumnName="id")
+     */
+    protected ?Asset $asset = null;
+
+    /**
      * @ORM\Column(name="criteria", type="text", nullable=true)
      */
     protected ?string $criteria = null;
@@ -362,6 +368,23 @@ class Skill
     public function setCourses(ArrayCollection $courses): self
     {
         $this->courses = $courses;
+
+        return $this;
+    }
+
+    public function hasAsset(): bool
+    {
+        return null !== $this->asset;
+    }
+
+    public function getAsset(): ?Asset
+    {
+        return $this->asset;
+    }
+
+    public function setAsset(?Asset $asset): self
+    {
+        $this->asset = $asset;
 
         return $this;
     }

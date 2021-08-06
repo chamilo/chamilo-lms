@@ -18,6 +18,15 @@ final class Version20201205102020 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        $table = $schema->getTable('skill');
+
+        if (!$table->hasColumn('asset_id')) {
+            $this->addSql('ALTER TABLE skill ADD asset_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE skill ADD CONSTRAINT FK_5E3DE4775DA1941 FOREIGN KEY (asset_id) REFERENCES asset (id)');
+            $this->addSql('CREATE INDEX IDX_5E3DE4775DA1941 ON skill (asset_id)');
+            // @todo migrate old badges to new format.
+        }
+
         if (!$schema->hasTable('skill_rel_item_rel_user')) {
             $this->addSql(
                 'CREATE TABLE skill_rel_item_rel_user (id INT AUTO_INCREMENT NOT NULL, skill_rel_item_id INT NOT NULL, user_id INT NOT NULL, result_id INT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, created_by INT NOT NULL, updated_by INT NOT NULL, INDEX IDX_D1133E0DFD4B12DC (skill_rel_item_id), INDEX IDX_D1133E0DA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;'

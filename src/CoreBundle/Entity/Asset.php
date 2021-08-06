@@ -32,6 +32,7 @@ class Asset
     //public const CSS = 'css';
     public const EXTRA_FIELD = 'ef';
     public const COURSE_CATEGORY = 'course_category';
+    public const SKILL = 'skill';
 
     /**
      * @ORM\Id
@@ -48,12 +49,15 @@ class Asset
     protected ?string $title = null;
 
     /**
+     * @todo use attributes
+     *
      * @Assert\NotBlank()
      *
      * @Assert\Choice({
      *     Asset::SCORM,
      *     Asset::WATERMARK,
-     *     Asset::EXTRA_FIELD
+     *     Asset::EXTRA_FIELD,
+     *     Asset::SKILL,
      * },
      * message="Choose a valid category."
      * )
@@ -130,6 +134,7 @@ class Asset
         $this->dimensions = [];
         $this->size = 0;
         $this->compressed = false;
+        $this->crop = '';
     }
 
     public function __toString(): string

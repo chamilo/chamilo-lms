@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
+use Chamilo\CoreBundle\Component\Utils\CreateUploadedFile;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
@@ -239,7 +240,7 @@ class BaseResourceFileAction
 
                 // Get data in content and create a HTML file.
                 if (!$fileParsed && $content) {
-                    $uploadedFile = $resourceRepository->createTempUploadedFile($title.'.html', 'text/html', $content);
+                    $uploadedFile = CreateUploadedFile::fromString($title.'.html', 'text/html', $content);
                     $resource->setUploadFile($uploadedFile);
                     $fileParsed = true;
                 }

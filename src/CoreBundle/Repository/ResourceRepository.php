@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Component\Resource\Settings;
 use Chamilo\CoreBundle\Component\Resource\Template;
+use Chamilo\CoreBundle\Component\Utils\CreateUploadedFile;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
@@ -220,21 +221,9 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return null;
     }
 
-    public function createTempUploadedFile(string $fileName, string $mimeType, string $content): UploadedFile
-    {
-        /*$handle = tmpfile();
-        fwrite($handle, $content);
-        $meta = stream_get_meta_data($handle);*/
-
-        $tmpFilename = tempnam(sys_get_temp_dir(), 'resource_file_');
-        file_put_contents($tmpFilename, $content);
-
-        return new UploadedFile($tmpFilename, $fileName, $mimeType, null, true);
-    }
-
     public function addFileFromString(ResourceInterface $resource, string $fileName, string $mimeType, string $content, bool $flush = true): ?ResourceFile
     {
-        $file = $this->createTempUploadedFile($fileName, $mimeType, $content);
+        $file = CreateUploadedFile::fromString($fileName, $mimeType, $content);
 
         return $this->addFile($resource, $file, '', $flush);
     }

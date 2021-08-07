@@ -63,6 +63,9 @@
             {{ $luxonDateTime.fromISO(sessionAsEvent.end).toLocaleString($luxonDateTime.DATETIME_MED) }}
           </div>
         </q-card-section>
+        <q-card-actions align="right" class="text-primary">
+          <q-btn color="primary" flat :label="$t('Go to session')" :to="`/sessions/${sessionAsEvent.id}/about`" />
+        </q-card-actions>
       </q-card>
     </q-dialog>
   </div>
@@ -119,9 +122,11 @@ export default {
 
     const sessionState = reactive({
       sessionAsEvent: {
-        tiltle: '',
+        id: '',
+        title: '',
         start: '',
         end: '',
+        extendedProps: {},
       },
       showSessionDialog: false
     });
@@ -177,10 +182,10 @@ export default {
       endParam: 'endDate[before]',
       selectable: true,
       eventClick(EventClickArg) {
-        let event = EventClickArg.event;
+        let event = EventClickArg.event.toPlainObject();
 
-        if (event.extendedProps.type && event.extendedProps.type === 'session') {
-          sessionState.sessionAsEvent = event.toPlainObject({collapseExtendedProps: true});
+        if (event.extendedProps['@type'] && event.extendedProps['@type'] === 'Session') {
+          sessionState.sessionAsEvent = event;
           sessionState.showSessionDialog = true;
 
           EventClickArg.jsEvent.preventDefault();
@@ -245,10 +250,10 @@ export default {
 
               const sessionEvents = values[1].map(sessionRelUser => (
                   {
+                    ...sessionRelUser.session,
                     title: sessionRelUser.session.name,
                     start: sessionRelUser.session.displayStartDate,
                     end: sessionRelUser.session.displayEndDate,
-                    type: 'session'
                   }
               ));
 

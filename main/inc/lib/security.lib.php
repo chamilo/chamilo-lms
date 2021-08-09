@@ -146,11 +146,11 @@ class Security
      *
      * @return bool True if it's the right token, false otherwise
      */
-    public static function check_token($request_type = 'post', FormValidator $form = null, string $prefix = '')
+    public static function check_token($requestType = 'post', FormValidator $form = null, string $prefix = '')
     {
         $secTokenVariable = self::generateSecTokenVariable($prefix);
         $sessionToken = Session::read($secTokenVariable);
-        switch ($request_type) {
+        switch ($requestType) {
             case 'request':
                 if (!empty($sessionToken) && isset($_REQUEST[$secTokenVariable]) && $sessionToken === $_REQUEST[$secTokenVariable]) {
                     return true;
@@ -178,7 +178,7 @@ class Security
 
                 return false;
             default:
-                if (!empty($sessionToken) && isset($request_type) && $sessionToken === $request_type) {
+                if (!empty($sessionToken) && isset($requestType) && $sessionToken === $requestType) {
                     return true;
                 }
 

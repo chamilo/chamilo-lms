@@ -202,9 +202,8 @@ switch ($action) {
         echo json_encode($result);
         break;
     case 'show_conditional_to_export_pdf':
-
-        $studentId = (int) $_REQUEST['student'];
-        $sId = (int) $_REQUEST['session_to_export'];
+        $studentId = isset($_REQUEST['student']) ? (int) $_REQUEST['student'] : 0;
+        $sId = isset($_REQUEST['session_to_export']) ? (int) $_REQUEST['session_to_export']: 0;
 
         $form = new FormValidator(
             'conditional_to_export_pdf',
@@ -220,10 +219,10 @@ switch ($action) {
             )
         );
 
-        $message = get_lang('HideConnectionTime', true);
+        $message = get_lang('HideConnectionTime');
         $form->addCheckBox('hide_connection_time', null, $message);
 
-        $messageBtn = get_lang('GenerateCertificate', true);
+        $messageBtn = get_lang('GenerateCertificate');
         $form->addButtonSave($messageBtn, 'submitLink');
         $content = $form->returnForm();
         echo $content;

@@ -1284,7 +1284,7 @@ if (empty($details)) {
                 );
                 $sessionAction .= Display::url(
                     Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_MEDIUM),
-                    api_get_path(WEB_CODE_PATH).'inc/ajax/myspace.ajax.php?'
+                    api_get_path(WEB_AJAX_PATH).'myspace.ajax.php?'
                     .http_build_query(
                         [
                             'a' => 'show_conditional_to_export_pdf',

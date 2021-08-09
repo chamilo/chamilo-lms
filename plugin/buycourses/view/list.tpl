@@ -1,5 +1,3 @@
-<link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
-
 {% if sessions_are_included or services_are_included %}
     <ul class="nav nav-tabs buy-courses-tabs" role="tablist">
         <li role="presentation" class="{{ courses ? 'active' : '' }}">

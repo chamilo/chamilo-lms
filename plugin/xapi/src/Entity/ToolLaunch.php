@@ -6,6 +6,7 @@ namespace Chamilo\PluginBundle\Entity\XApi;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -14,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package Chamilo\PluginBundle\Entity\XApi
  *
  * @ORM\Table(name="xapi_tool_launch")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Chamilo\PluginBundle\Entity\XApi\Repository\ToolLaunchRepository")
  */
 class ToolLaunch
 {
@@ -100,6 +101,13 @@ class ToolLaunch
      * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\Entity\XApi\Cmi5Item", mappedBy="tool", orphanRemoval=true,
+     *                                                                          cascade="ALL")
+     */
+    private $items;
 
     /**
      * ToolLaunch constructor.
@@ -107,6 +115,7 @@ class ToolLaunch
     public function __construct()
     {
         $this->allowMultipleAttempts = true;
+        $this->items = new ArrayCollection();
     }
 
     public function getId(): int
@@ -261,6 +270,25 @@ class ToolLaunch
     public function setLrsAuthPassword(?string $lrsAuthPassword): ToolLaunch
     {
         $this->lrsAuthPassword = $lrsAuthPassword;
+
+        return $this;
+    }
+
+    public function getItems(): ArrayCollection
+    {
+        return $this->items;
+    }
+
+    /**
+     * @param \Chamilo\PluginBundle\Entity\XApi\Cmi5Item $cmi5Item
+     *
+     * @return $this
+     */
+    public function addItem(Cmi5Item $cmi5Item)
+    {
+        $cmi5Item->setTool($this);
+
+        $this->items->add($cmi5Item);
 
         return $this;
     }

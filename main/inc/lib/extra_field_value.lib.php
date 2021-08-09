@@ -77,7 +77,7 @@ class ExtraFieldValue extends Model
      * In order to save this function needs a item_id (user id, course id, etc)
      * This function is used with $extraField->addElements().
      *
-     * @param array $params              array for the insertion into the *_field_values table
+     * @param array $params              array for the insertion into the *_field_values table (each label must be prefixed by 'extra_')
      * @param bool  $onlySubmittedFields Only save parameters in the $param array
      * @param bool  $showQuery
      * @param array $saveOnlyThisFields
@@ -157,20 +157,6 @@ class ExtraFieldValue extends Model
             $extraFieldInfo = $this->getExtraField()->get_handler_field_info_by_field_variable($field_variable);
 
             if (!$extraFieldInfo) {
-                continue;
-            }
-
-            // see  BT#17943
-            $authors = false;
-            if (
-                $extraFieldInfo['variable'] == 'authors'
-                || $extraFieldInfo['variable'] == 'authorlp'
-                || $extraFieldInfo['variable'] == 'authorlpitem'
-                || $extraFieldInfo['variable'] == 'price'
-            ) {
-                $authors = true;
-            }
-            if (!api_is_platform_admin() && $authors == true) {
                 continue;
             }
 
@@ -785,7 +771,7 @@ class ExtraFieldValue extends Model
                 ON (s.field_id = sf.id)
                 WHERE
                     item_id = '$item_id'  AND
-                    variable = '".$field_variable."' AND
+                    variable = '$field_variable' AND
                     sf.extra_field_type = $extraFieldType
                 ";
         if ($filterByVisibility) {
@@ -813,14 +799,10 @@ class ExtraFieldValue extends Model
                 if ($result['field_type'] == ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD) {
                     if (!empty($result['value'])) {
                         $options = explode('::', $result['value']);
-
                         $field_option = new ExtraFieldOption($this->type);
                         $result = $field_option->get($options[0]);
-
                         if (!empty($result)) {
-                            $result['value'] = $result['display_text']
-                                .'&rarr;'
-                                .$options[1];
+                            $result['value'] = $result['display_text'].'&rarr;'.$options[1];
                         }
                     }
                 }
@@ -832,7 +814,6 @@ class ExtraFieldValue extends Model
                         foreach ($optionIds as $optionId) {
                             $objEfOption = new ExtraFieldOption('user');
                             $optionInfo = $objEfOption->get($optionId);
-
                             $optionValues[] = $optionInfo['display_text'];
                         }
 
@@ -850,20 +831,6 @@ class ExtraFieldValue extends Model
     /**
      * Gets the ID from the item (course, session, etc) for which
      * the given field is defined with the given value.
-     *
-     * Example:
-     * <code>
-     * <?php
-     * $extraFieldValueUser = new ExtraFieldValue('user');
-     * $arrayExtraFieldValueUser =  $extraFieldValueUser->get_item_id_from_field_variable_and_field_value(
-     * 'variable',
-     * 1,
-     * true,
-     * false,
-     * true);
-     * echo "<pre>".var_export($arrayExtraFieldValueUser,true)."</pre>";
-     * ?>
-     * </code>
      *
      * @param string $variable  Field (type of data) we want to check
      * @param string $value     Data we are looking for in the given field

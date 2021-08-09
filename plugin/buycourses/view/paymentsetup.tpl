@@ -1,5 +1,3 @@
-<link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
-
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">{{ 'GlobalConfig'|get_plugin_lang('BuyCoursesPlugin') }}</h3>

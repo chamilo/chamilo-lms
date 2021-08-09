@@ -101,7 +101,7 @@ $sql = "
     WHERE
         s.session_id = $id_session AND
         url.access_url_id = $urlId
-    ORDER BY $sort $direction
+    ORDER BY `$sort` $direction
     LIMIT $from,".($limit + 1);
 
 if ($direction === 'desc') {

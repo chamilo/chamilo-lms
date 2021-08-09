@@ -89,6 +89,7 @@ class PDF
      * @param bool|false $saveToFile
      * @param bool|false $returnHtml
      * @param bool       $addDefaultCss (bootstrap/default/base.css)
+     * @param array
      *
      * @return string
      */
@@ -96,7 +97,8 @@ class PDF
         $content,
         $saveToFile = false,
         $returnHtml = false,
-        $addDefaultCss = false
+        $addDefaultCss = false,
+        $extraRows = []
     ) {
         if (empty($this->template)) {
             $tpl = new Template('', false, false, false, false, true, false);
@@ -141,6 +143,7 @@ class PDF
         $tpl->assign('pdf_student_info', $this->params['student_info']);
         $tpl->assign('show_grade_generated_date', $this->params['show_grade_generated_date']);
         $tpl->assign('add_signatures', $this->params['add_signatures']);
+        $tpl->assign('extra_rows', $extraRows);
 
         // Getting template
         $tableTemplate = $tpl->get_template('export/table_pdf.tpl');
@@ -151,11 +154,7 @@ class PDF
             return $html;
         }
 
-        $css_file = api_get_path(SYS_CSS_PATH).'themes/'.$tpl->theme.'/print.css';
-        if (!file_exists($css_file)) {
-            $css_file = api_get_path(SYS_CSS_PATH).'/print.css';
-        }
-        $css = file_get_contents($css_file);
+        $css = api_get_print_css();
 
         self::content_to_pdf(
             $html,
@@ -183,12 +182,15 @@ class PDF
      *                                1 => array('title'=>'Bye','path'=>'file2.html')
      *                                );
      * @param string $pdf_name        pdf name
-     * @param string $course_code     (if you are using html that are located
+     * @param null   $course_code     (if you are using html that are located
      *                                in the document tool you must provide this)
      * @param bool   $print_title     add title
      * @param bool   $complete_style  show header and footer if true
      * @param bool   $addStyle
      * @param string $mainTitle
+     * @param bool   $generateToFile  Optional. When it is TRUE, then the output file is move to app/cache
+     *
+     * @throws \MpdfException
      *
      * @return false|null
      */
@@ -199,7 +201,8 @@ class PDF
         $print_title = false,
         $complete_style = true,
         $addStyle = true,
-        $mainTitle = ''
+        $mainTitle = '',
+        $generateToFile = false
     ) {
         if (empty($html_file_array)) {
             return false;
@@ -282,7 +285,7 @@ class PDF
                     api_get_path(SYS_PATH).'web/assets/bootstrap/dist/css/bootstrap.min.css',
                     api_get_path(SYS_PATH).'web/css/base.css',
                     api_get_path(SYS_PATH).'web/css/themes/'.api_get_visual_theme().'/default.css',
-                    api_get_path(SYS_PATH).'web/css/themes/'.api_get_visual_theme().'/print.css',
+                    api_get_print_css(false),
                 ];
                 foreach ($basicStyles as $style) {
                     if (file_exists($style)) {
@@ -362,7 +365,15 @@ class PDF
             $output_file = $pdf_name.'.pdf';
         }
         // F to save the pdf in a file
-        @$this->pdf->Output($output_file, 'D');
+        if ($generateToFile) {
+            @$this->pdf->Output(
+                api_get_path(SYS_ARCHIVE_PATH).$output_file,
+                'F'
+            );
+        } else {
+            @$this->pdf->Output($output_file, 'D');
+        }
+
         exit;
     }
 
@@ -487,6 +498,7 @@ class PDF
             $document_html
         );
 
+        $document_html = str_replace(api_get_path(WEB_UPLOAD_PATH), api_get_path(SYS_UPLOAD_PATH), $document_html);
         $document_html = str_replace(api_get_path(WEB_ARCHIVE_PATH), api_get_path(SYS_ARCHIVE_PATH), $document_html);
 
         // The library mPDF expects UTF-8 encoded input data.
@@ -506,11 +518,7 @@ class PDF
 
         $cssBootstrap = file_get_contents(api_get_path(SYS_PATH).'web/assets/bootstrap/dist/css/bootstrap.min.css');
         if ($addDefaultCss) {
-            $css_file = api_get_path(SYS_CSS_PATH).'themes/'.$theme.'/print.css';
-            if (!file_exists($css_file)) {
-                $css_file = api_get_path(SYS_CSS_PATH).'/print.css';
-            }
-            $cssContent = file_get_contents($css_file);
+            $cssContent = api_get_print_css();
             try {
                 @$this->pdf->WriteHTML($cssBootstrap, 1);
                 @$this->pdf->WriteHTML($cssContent, 1);
@@ -677,6 +685,20 @@ class PDF
         $this->pdf->SetHTMLFooter($footerHTML, 'O'); //Odd pages
     }
 
+    public function setCertificateFooter()
+    {
+        $this->pdf->defaultfooterfontsize = 12; // in pts
+        $this->pdf->defaultfooterfontstyle = 'B'; // blank, B, I, or BI
+        $this->pdf->defaultfooterline = 1; // 1 to include line below header/above footer
+
+        $view = new Template('', false, false, false, true, false, false);
+        $template = $view->get_template('export/pdf_certificate_footer.tpl');
+        $footerHTML = $view->fetch($template);
+
+        $this->pdf->SetHTMLFooter($footerHTML, 'E'); //Even pages
+        $this->pdf->SetHTMLFooter($footerHTML, 'O'); //Odd pages
+    }
+
     /**
      * Sets the PDF header.
      *
@@ -830,15 +852,9 @@ class PDF
     {
         $this->template = $this->template ?: new Template('', false, false, false, false, false, false);
 
-        $cssFile = api_get_path(SYS_CSS_PATH).'themes/'.$this->template->theme.'/print.css';
-
-        if (!file_exists($cssFile)) {
-            $cssFile = api_get_path(SYS_CSS_PATH).'print.css';
-        }
-
         $pdfPath = self::content_to_pdf(
             $html,
-            file_get_contents($cssFile),
+            api_get_print_css(),
             $fileName,
             $this->params['course_code'],
             'F'

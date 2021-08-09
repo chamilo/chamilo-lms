@@ -13,6 +13,7 @@ $strings['max_attempts'] = 'Tentatives maximum';
 $strings['max_attempts_help'] = '(Optionnel) Si l\'authentification Whispeak échoue x fois, alors abandonner et demander le mot de passe de l\'utilisateur';
 $strings['2fa'] = 'Authentification à 2 facteurs (2FA)';
 $strings['2fa_help'] = 'Autoriser l\'extension du formulaire de login par une page d\'authentification forte. Après le login classique, l\'utilisateur/trice devra aussi s\'authentifier au travers de Whispeak.';
+$strings['ActionRegistryPerUser'] = 'Registre d\'actions par utilisateur';
 
 $strings['EnrollmentSampleText'] = 'Le fameux chef-d\'oeuvre Mona Lisa a été peint par Léonardo da Vinci.';
 $strings['AuthentifySampleText1'] = 'Tomber comme des mouches.';
@@ -41,3 +42,7 @@ $strings['ActivityId'] = "Activity ID";
 $strings['Success'] = "Success";
 $strings['MarkForSpeechAuthentication'] = 'Cocher pour l\'authentification par la voix';
 $strings['EnrollmentTitle'] = "Enrôlement pour générer l'empreinte vocale avec Whispeak";
+$strings['Revocation'] = "Révocation";
+$strings['DeleteEnrollments'] = "Supprimer les inscriptions";
+$strings['NoEnrollment'] = "Aucune inscription";
+$strings['EnrollmentDeleted'] = "Inscription supprimée.";

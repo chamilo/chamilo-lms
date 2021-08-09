@@ -3,7 +3,7 @@
 {% block content %}
 
 {{ session_header }}
-{{ title }}
+{{ title | remove_xss }}
 
 <table id="session-properties" class="table table-hover table-striped data_table">
     <tr>
@@ -44,7 +44,7 @@
     <tr>
         <td>{{ 'Description' | get_lang}} </td>
         <td>
-            {{ session.description }}
+            {{ session.description | remove_xss }}
         </td>
     </tr>
     <tr>

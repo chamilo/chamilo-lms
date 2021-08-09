@@ -25,7 +25,7 @@ $auth = new Auth($settingsInfo);
 $settings = new Settings($settingsInfo);
 $authRequest = new AuthnRequest($settings);
 
-$samlRequest = $authRequest->getRequest();
+$samlRequest = $authRequest->getRequest(true);
 $idpData = $settings->getIdPData();
 
 if (isset($_GET['email']) || isset($_GET['email_bis'])) {

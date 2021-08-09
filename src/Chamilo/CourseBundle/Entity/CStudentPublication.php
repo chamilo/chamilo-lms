@@ -21,6 +21,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CStudentPublication
 {
+    /** @var int 255 chars from url column - 5 chars from 'work/' - 32 chars from filename hash - 1 char */
+    const WORK_TITLE_MAX_LENGTH = 217;
+
     /**
      * @var int
      *

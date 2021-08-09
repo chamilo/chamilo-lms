@@ -18,8 +18,8 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-$allowSocial = api_get_setting('allow_social_tool') == 'true';
-$allowMessage = api_get_setting('allow_message_tool') == 'true';
+$allowSocial = api_get_setting('allow_social_tool') === 'true';
+$allowMessage = api_get_setting('allow_message_tool') === 'true';
 
 if ($allowSocial) {
     $this_section = SECTION_SOCIAL;

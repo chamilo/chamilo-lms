@@ -44,7 +44,7 @@ if ($form->validate()) {
 $form->addHeader($plugin->get_lang('SearchFilter'));
 
 $categoriesOptions = [
-    '0' => get_lang('None'),
+    '0' => get_lang('AllCategories'),
 ];
 $categoriesList = SessionManager::get_all_session_category();
 if ($categoriesList != false) {
@@ -89,8 +89,7 @@ $first = $pageSize * ($currentPage - 1);
 $sessionList = $plugin->getCatalogSessionList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, 'all', $sessionCategory);
 $totalItems = $plugin->getCatalogSessionList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, 'count', $sessionCategory);
 $pagesCount = ceil($totalItems / $pageSize);
-$url = api_get_self().'?';
-$pagination = Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
+$pagination = BuyCoursesPlugin::returnPagination(api_get_self(), $currentPage, $pagesCount, $totalItems);
 
 // View
 if (api_is_platform_admin()) {
@@ -105,6 +104,8 @@ if (api_is_platform_admin()) {
 }
 
 $templateName = $plugin->get_lang('CourseListOnSale');
+
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'buycourses/resources/css/style.css');
 
 $template = new Template($templateName);
 $template->assign('search_filter_form', $form->returnForm());

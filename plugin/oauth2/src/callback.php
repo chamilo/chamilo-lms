@@ -35,9 +35,10 @@ try {
     /**
      * @var $accessToken AccessToken
      */
-    $accessToken = $provider->getAccessToken('authorization_code', [
-        'code' => $_GET['code'],
-    ]);
+    $accessToken = $provider->getAccessToken(
+        'authorization_code',
+        ['code' => $_GET['code']]
+    );
     ChamiloSession::write('oauth2AccessToken', $accessToken->jsonSerialize());
     $userInfo = $plugin->getUserInfo($provider, $accessToken);
     if ($userInfo['active'] != '1') {
@@ -48,7 +49,9 @@ try {
         $urlIdsTheUserCanAccess = api_get_access_url_from_user($userId);
         $userCanAccessTheFirstURL = in_array(1, $urlIdsTheUserCanAccess);
         $userCanAccessTheCurrentURL = in_array(api_get_current_access_url_id(), $urlIdsTheUserCanAccess)
-        or UserManager::is_admin($userId) and $userCanAccessTheFirstURL;
+            || UserManager::is_admin($userId)
+            && $userCanAccessTheFirstURL;
+
         if (!$userCanAccessTheCurrentURL) {
             throw new Exception($plugin->get_lang('UserNotAllowedOnThisPortal'));
         }

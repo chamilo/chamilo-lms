@@ -3,6 +3,7 @@
 /* For license terms, see /license.txt */
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Types;
 
 /**
  * Plugin database installation script. Can only be executed if included
@@ -11,7 +12,7 @@ use Doctrine\DBAL\Schema\Schema;
  * Check if script can be called.
  */
 if (!function_exists('api_get_path')) {
-    die('This script must be loaded through the Chamilo plugin installer sequence');
+    exit('This script must be loaded through the Chamilo plugin installer sequence');
 }
 
 $entityManager = Database::getManager();
@@ -25,13 +26,13 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_PAYPAL)) {
     $paypalTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_PAYPAL);
     $paypalTable->addColumn(
         'id',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['autoincrement' => true, 'unsigned' => true]
     );
-    $paypalTable->addColumn('username', \Doctrine\DBAL\Types\Type::STRING);
-    $paypalTable->addColumn('password', \Doctrine\DBAL\Types\Type::STRING);
-    $paypalTable->addColumn('signature', \Doctrine\DBAL\Types\Type::STRING);
-    $paypalTable->addColumn('sandbox', \Doctrine\DBAL\Types\Type::BOOLEAN);
+    $paypalTable->addColumn('username', Types::STRING);
+    $paypalTable->addColumn('password', Types::STRING);
+    $paypalTable->addColumn('signature', Types::STRING);
+    $paypalTable->addColumn('sandbox', Types::BOOLEAN);
     $paypalTable->setPrimaryKey(['id']);
 }
 
@@ -39,12 +40,12 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_TRANSFER)) {
     $transferTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_TRANSFER);
     $transferTable->addColumn(
         'id',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['autoincrement' => true, 'unsigned' => true]
     );
-    $transferTable->addColumn('name', \Doctrine\DBAL\Types\Type::STRING);
-    $transferTable->addColumn('account', \Doctrine\DBAL\Types\Type::STRING);
-    $transferTable->addColumn('swift', \Doctrine\DBAL\Types\Type::STRING);
+    $transferTable->addColumn('name', Types::STRING);
+    $transferTable->addColumn('account', Types::STRING);
+    $transferTable->addColumn('swift', Types::STRING);
     $transferTable->setPrimaryKey(['id']);
 }
 
@@ -52,16 +53,16 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_TPV_REDSYS)) {
     $tpvRedsysTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_TPV_REDSYS);
     $tpvRedsysTable->addColumn(
         'id',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['autoincrement' => true, 'unsigned' => true]
     );
-    $tpvRedsysTable->addColumn('merchantcode', \Doctrine\DBAL\Types\Type::STRING);
-    $tpvRedsysTable->addColumn('terminal', \Doctrine\DBAL\Types\Type::STRING);
-    $tpvRedsysTable->addColumn('currency', \Doctrine\DBAL\Types\Type::STRING);
-    $tpvRedsysTable->addColumn('kc', \Doctrine\DBAL\Types\Type::STRING);
-    $tpvRedsysTable->addColumn('url_redsys', \Doctrine\DBAL\Types\Type::STRING);
-    $tpvRedsysTable->addColumn('url_redsys_sandbox', \Doctrine\DBAL\Types\Type::STRING);
-    $tpvRedsysTable->addColumn('sandbox', \Doctrine\DBAL\Types\Type::BOOLEAN);
+    $tpvRedsysTable->addColumn('merchantcode', Types::STRING);
+    $tpvRedsysTable->addColumn('terminal', Types::STRING);
+    $tpvRedsysTable->addColumn('currency', Types::STRING);
+    $tpvRedsysTable->addColumn('kc', Types::STRING);
+    $tpvRedsysTable->addColumn('url_redsys', Types::STRING);
+    $tpvRedsysTable->addColumn('url_redsys_sandbox', Types::STRING);
+    $tpvRedsysTable->addColumn('sandbox', Types::BOOLEAN);
     $tpvRedsysTable->setPrimaryKey(['id']);
 }
 
@@ -69,25 +70,25 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_CURRENCY)) {
     $currencyTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_CURRENCY);
     $currencyTable->addColumn(
         'id',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['autoincrement' => true, 'unsigned' => true]
     );
     $currencyTable->addColumn(
         'country_code',
-        \Doctrine\DBAL\Types\Type::STRING,
+        Types::STRING,
         ['length' => 2]
     );
     $currencyTable->addColumn(
         'country_name',
-        \Doctrine\DBAL\Types\Type::STRING,
+        Types::STRING,
         ['length' => 255]
     );
     $currencyTable->addColumn(
         'iso_code',
-        \Doctrine\DBAL\Types\Type::STRING,
+        Types::STRING,
         ['length' => 3]
     );
-    $currencyTable->addColumn('status', \Doctrine\DBAL\Types\Type::BOOLEAN);
+    $currencyTable->addColumn('status', Types::BOOLEAN);
     $currencyTable->addUniqueIndex(['country_code']);
     $currencyTable->addIndex(['iso_code']);
     $currencyTable->setPrimaryKey(['id']);
@@ -97,28 +98,28 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_ITEM)) {
     $itemTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_ITEM);
     $itemTable->addColumn(
         'id',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['autoincrement' => true, 'unsigned' => true]
     );
-    $itemTable->addColumn('product_type', \Doctrine\DBAL\Types\Type::INTEGER);
+    $itemTable->addColumn('product_type', Types::INTEGER);
     $itemTable->addColumn(
         'product_id',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['unsigned' => true]
     );
     $itemTable->addColumn(
         'price',
-        \Doctrine\DBAL\Types\Type::DECIMAL,
+        Types::DECIMAL,
         ['scale' => 2]
     );
     $itemTable->addColumn(
         'currency_id',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['unsigned' => true]
     );
     $itemTable->addColumn(
         'tax_perc',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['unsigned' => true, 'notnull' => false]
     );
     $itemTable->setPrimaryKey(['id']);
@@ -134,22 +135,22 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_ITEM_BENEFICIARY)) {
     $itemBeneficiary = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_ITEM_BENEFICIARY);
     $itemBeneficiary->addColumn(
         'id',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['autoincrement' => true, 'unsigned' => true]
     );
     $itemBeneficiary->addColumn(
         'item_id',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['unsigned' => true]
     );
     $itemBeneficiary->addColumn(
         'user_id',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['unsigned' => true]
     );
     $itemBeneficiary->addColumn(
         'commissions',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['unsigned' => true]
     );
     $itemBeneficiary->setPrimaryKey(['id']);
@@ -164,12 +165,12 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COMMISSION)) {
     $commissions = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_COMMISSION);
     $commissions->addColumn(
         'id',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['autoincrement' => true, 'unsigned' => true]
     );
     $commissions->addColumn(
         'commission',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['unsigned' => true]
     );
     $commissions->setPrimaryKey(['id']);
@@ -179,29 +180,29 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_PAYPAL_PAYOUTS)) {
     $saleCommissions = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_PAYPAL_PAYOUTS);
     $saleCommissions->addColumn(
         'id',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['autoincrement' => true, 'unsigned' => true]
     );
-    $saleCommissions->addColumn('date', \Doctrine\DBAL\Types\Type::DATETIME);
-    $saleCommissions->addColumn('payout_date', \Doctrine\DBAL\Types\Type::DATETIME);
+    $saleCommissions->addColumn('date', Types::DATETIME_MUTABLE);
+    $saleCommissions->addColumn('payout_date', Types::DATETIME_MUTABLE);
     $saleCommissions->addColumn(
         'sale_id',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['unsigned' => true]
     );
     $saleCommissions->addColumn(
         'user_id',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['unsigned' => true]
     );
     $saleCommissions->addColumn(
         'commission',
-        \Doctrine\DBAL\Types\Type::DECIMAL,
+        Types::DECIMAL,
         ['scale' => 2]
     );
     $saleCommissions->addColumn(
         'status',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['unsigned' => true]
     );
     $saleCommissions->setPrimaryKey(['id']);
@@ -211,51 +212,51 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SALE)) {
     $saleTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_SALE);
     $saleTable->addColumn(
         'id',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['autoincrement' => true, 'unsigned' => true]
     );
-    $saleTable->addColumn('reference', \Doctrine\DBAL\Types\Type::STRING);
-    $saleTable->addColumn('date', \Doctrine\DBAL\Types\Type::DATETIME);
+    $saleTable->addColumn('reference', Types::STRING);
+    $saleTable->addColumn('date', Types::DATETIME_MUTABLE);
     $saleTable->addColumn(
         'user_id',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['unsigned' => true]
     );
-    $saleTable->addColumn('product_type', \Doctrine\DBAL\Types\Type::INTEGER);
-    $saleTable->addColumn('product_name', \Doctrine\DBAL\Types\Type::STRING);
+    $saleTable->addColumn('product_type', Types::INTEGER);
+    $saleTable->addColumn('product_name', Types::STRING);
     $saleTable->addColumn(
         'product_id',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['unsigned' => true]
     );
     $saleTable->addColumn(
         'price',
-        \Doctrine\DBAL\Types\Type::DECIMAL,
+        Types::DECIMAL,
         ['scale' => 2]
     );
     $saleTable->addColumn(
         'price_without_tax',
-        \Doctrine\DBAL\Types\Type::DECIMAL,
+        Types::DECIMAL,
         ['scale' => 2, 'notnull' => false]
     );
     $saleTable->addColumn(
         'tax_perc',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['unsigned' => true, 'notnull' => false]
     );
     $saleTable->addColumn(
         'tax_amount',
-        \Doctrine\DBAL\Types\Type::DECIMAL,
+        Types::DECIMAL,
         ['scale' => 2, 'notnull' => false]
     );
     $saleTable->addColumn(
         'currency_id',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['unsigned' => true]
     );
-    $saleTable->addColumn('status', \Doctrine\DBAL\Types\Type::INTEGER);
-    $saleTable->addColumn('payment_type', \Doctrine\DBAL\Types\Type::INTEGER);
-    $saleTable->addColumn('invoice', \Doctrine\DBAL\Types\Type::INTEGER);
+    $saleTable->addColumn('status', Types::INTEGER);
+    $saleTable->addColumn('payment_type', Types::INTEGER);
+    $saleTable->addColumn('invoice', Types::INTEGER);
     $saleTable->setPrimaryKey(['id']);
     $saleTable->addForeignKeyConstraint(
         $currencyTable,
@@ -269,23 +270,23 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SERVICES)) {
     $servicesTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_SERVICES);
     $servicesTable->addColumn(
         'id',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['autoincrement' => true, 'unsigned' => true]
     );
-    $servicesTable->addColumn('name', \Doctrine\DBAL\Types\Type::STRING);
-    $servicesTable->addColumn('description', \Doctrine\DBAL\Types\Type::TEXT);
+    $servicesTable->addColumn('name', Types::STRING);
+    $servicesTable->addColumn('description', Types::TEXT);
     $servicesTable->addColumn(
         'price',
-        \Doctrine\DBAL\Types\Type::DECIMAL,
+        Types::DECIMAL,
         ['scale' => 2]
     );
-    $servicesTable->addColumn('duration_days', \Doctrine\DBAL\Types\Type::INTEGER);
-    $servicesTable->addColumn('applies_to', \Doctrine\DBAL\Types\Type::INTEGER);
-    $servicesTable->addColumn('owner_id', \Doctrine\DBAL\Types\Type::INTEGER);
-    $servicesTable->addColumn('visibility', \Doctrine\DBAL\Types\Type::INTEGER);
-    $servicesTable->addColumn('video_url', \Doctrine\DBAL\Types\Type::STRING);
-    $servicesTable->addColumn('image', \Doctrine\DBAL\Types\Type::STRING);
-    $servicesTable->addColumn('service_information', \Doctrine\DBAL\Types\Type::TEXT);
+    $servicesTable->addColumn('duration_days', Types::INTEGER);
+    $servicesTable->addColumn('applies_to', Types::INTEGER);
+    $servicesTable->addColumn('owner_id', Types::INTEGER);
+    $servicesTable->addColumn('visibility', Types::INTEGER);
+    $servicesTable->addColumn('video_url', Types::STRING);
+    $servicesTable->addColumn('image', Types::STRING);
+    $servicesTable->addColumn('service_information', Types::TEXT);
     $servicesTable->setPrimaryKey(['id']);
 }
 
@@ -293,52 +294,52 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SERVICES_SALE)) {
     $servicesNodeTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_SERVICES_SALE);
     $servicesNodeTable->addColumn(
         'id',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['autoincrement' => true, 'unsigned' => true]
     );
     $servicesNodeTable->addColumn(
         'service_id',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['unsigned' => true]
     );
-    $servicesNodeTable->addColumn('reference', \Doctrine\DBAL\Types\Type::STRING);
-    $servicesNodeTable->addColumn('currency_id', \Doctrine\DBAL\Types\Type::INTEGER);
+    $servicesNodeTable->addColumn('reference', Types::STRING);
+    $servicesNodeTable->addColumn('currency_id', Types::INTEGER);
     $servicesNodeTable->addColumn(
         'price',
-        \Doctrine\DBAL\Types\Type::DECIMAL,
+        Types::DECIMAL,
         ['scale' => 2]
     );
     $servicesNodeTable->addColumn(
         'price_without_tax',
-        \Doctrine\DBAL\Types\Type::DECIMAL,
+        Types::DECIMAL,
         ['scale' => 2, 'notnull' => false]
     );
     $servicesNodeTable->addColumn(
         'tax_perc',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['unsigned' => true, 'notnull' => false]
     );
     $servicesNodeTable->addColumn(
         'tax_amount',
-        \Doctrine\DBAL\Types\Type::DECIMAL,
+        Types::DECIMAL,
         ['scale' => 2, 'notnull' => false]
     );
-    $servicesNodeTable->addColumn('node_type', \Doctrine\DBAL\Types\Type::INTEGER);
-    $servicesNodeTable->addColumn('node_id', \Doctrine\DBAL\Types\Type::INTEGER);
-    $servicesNodeTable->addColumn('buyer_id', \Doctrine\DBAL\Types\Type::INTEGER);
-    $servicesNodeTable->addColumn('buy_date', \Doctrine\DBAL\Types\Type::DATETIME);
+    $servicesNodeTable->addColumn('node_type', Types::INTEGER);
+    $servicesNodeTable->addColumn('node_id', Types::INTEGER);
+    $servicesNodeTable->addColumn('buyer_id', Types::INTEGER);
+    $servicesNodeTable->addColumn('buy_date', Types::DATETIME_MUTABLE);
     $servicesNodeTable->addColumn(
         'date_start',
-        \Doctrine\DBAL\Types\Type::DATETIME,
+        Types::DATETIME_MUTABLE,
         ['notnull' => false]
     );
     $servicesNodeTable->addColumn(
         'date_end',
-        \Doctrine\DBAL\Types\Type::DATETIME
+        Types::DATETIME_MUTABLE
     );
-    $servicesNodeTable->addColumn('status', \Doctrine\DBAL\Types\Type::INTEGER);
-    $servicesNodeTable->addColumn('payment_type', \Doctrine\DBAL\Types\Type::INTEGER);
-    $servicesNodeTable->addColumn('invoice', \Doctrine\DBAL\Types\Type::INTEGER);
+    $servicesNodeTable->addColumn('status', Types::INTEGER);
+    $servicesNodeTable->addColumn('payment_type', Types::INTEGER);
+    $servicesNodeTable->addColumn('invoice', Types::INTEGER);
     $servicesNodeTable->setPrimaryKey(['id']);
     $servicesNodeTable->addForeignKeyConstraint(
         $servicesTable,
@@ -352,12 +353,12 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_CULQI)) {
     $culqiTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_CULQI);
     $culqiTable->addColumn(
         'id',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['autoincrement' => true, 'unsigned' => true]
     );
-    $culqiTable->addColumn('commerce_code', \Doctrine\DBAL\Types\Type::STRING);
-    $culqiTable->addColumn('api_key', \Doctrine\DBAL\Types\Type::STRING);
-    $culqiTable->addColumn('integration', \Doctrine\DBAL\Types\Type::INTEGER);
+    $culqiTable->addColumn('commerce_code', Types::STRING);
+    $culqiTable->addColumn('api_key', Types::STRING);
+    $culqiTable->addColumn('integration', Types::INTEGER);
     $culqiTable->setPrimaryKey(['id']);
 }
 
@@ -365,32 +366,27 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG)) {
     $globalTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG);
     $globalTable->addColumn(
         'id',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['autoincrement' => true, 'unsigned' => true]
     );
-    $globalTable->addColumn('terms_and_conditions', \Doctrine\DBAL\Types\Type::TEXT);
-    $globalTable->addColumn('global_tax_perc', \Doctrine\DBAL\Types\Type::INTEGER);
-    $globalTable->addColumn('tax_applies_to', \Doctrine\DBAL\Types\Type::INTEGER);
-    $globalTable->addColumn('tax_name', \Doctrine\DBAL\Types\Type::STRING);
-    $globalTable->addColumn('seller_name', \Doctrine\DBAL\Types\Type::STRING);
-    $globalTable->addColumn('seller_id', \Doctrine\DBAL\Types\Type::STRING);
-    $globalTable->addColumn('seller_address', \Doctrine\DBAL\Types\Type::STRING);
-    $globalTable->addColumn('seller_email', \Doctrine\DBAL\Types\Type::STRING);
-    $globalTable->addColumn('next_number_invoice', \Doctrine\DBAL\Types\Type::INTEGER);
-    $globalTable->addColumn('invoice_series', \Doctrine\DBAL\Types\Type::STRING);
-    $globalTable->addColumn('sale_email', \Doctrine\DBAL\Types\Type::STRING);
-    $globalTable->addColumn('info_email_extra', \Doctrine\DBAL\Types\Type::TEXT);
+    $globalTable->addColumn('terms_and_conditions', Types::TEXT);
+    $globalTable->addColumn('global_tax_perc', Types::INTEGER);
+    $globalTable->addColumn('tax_applies_to', Types::INTEGER);
+    $globalTable->addColumn('tax_name', Types::STRING);
+    $globalTable->addColumn('seller_name', Types::STRING);
+    $globalTable->addColumn('seller_id', Types::STRING);
+    $globalTable->addColumn('seller_address', Types::STRING);
+    $globalTable->addColumn('seller_email', Types::STRING);
+    $globalTable->addColumn('next_number_invoice', Types::INTEGER);
+    $globalTable->addColumn('invoice_series', Types::STRING);
+    $globalTable->addColumn('sale_email', Types::STRING);
+    $globalTable->addColumn('info_email_extra', Types::TEXT);
     $globalTable->setPrimaryKey(['id']);
-}
+} else {
+    $globalTable = $pluginSchema->getTable(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG);
 
-$settingsTable = BuyCoursesPlugin::TABLE_GLOBAL_CONFIG;
-$sql = "SHOW COLUMNS FROM $settingsTable WHERE Field = 'info_email_extra'";
-$res = Database::query($sql);
-if (Database::num_rows($res) === 0) {
-    $sql = "ALTER TABLE $settingsTable ADD (info_email_extra TEXT NOT NULL)";
-    $res = Database::query($sql);
-    if (!$res) {
-        echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+    if (!$globalTable->hasColumn('info_email_extra')) {
+        $globalTable->addColumn('info_email_extra', Types::TEXT);
     }
 }
 
@@ -398,23 +394,23 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_INVOICE)) {
     $invoiceTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_INVOICE);
     $invoiceTable->addColumn(
         'id',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['autoincrement' => true, 'unsigned' => true]
     );
-    $invoiceTable->addColumn('sale_id', \Doctrine\DBAL\Types\Type::INTEGER);
-    $invoiceTable->addColumn('is_service', \Doctrine\DBAL\Types\Type::INTEGER);
+    $invoiceTable->addColumn('sale_id', Types::INTEGER);
+    $invoiceTable->addColumn('is_service', Types::INTEGER);
     $invoiceTable->addColumn(
         'num_invoice',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['unsigned' => true, 'notnull' => false]
     );
     $invoiceTable->addColumn(
         'year',
-        \Doctrine\DBAL\Types\Type::INTEGER,
+        Types::INTEGER,
         ['unsigned' => true, 'notnull' => false]
     );
-    $invoiceTable->addColumn('serie', \Doctrine\DBAL\Types\Type::STRING);
-    $invoiceTable->addColumn('date_invoice', \Doctrine\DBAL\Types\Type::DATETIME);
+    $invoiceTable->addColumn('serie', Types::STRING);
+    $invoiceTable->addColumn('date_invoice', Types::DATETIME_MUTABLE);
     $invoiceTable->setPrimaryKey(['id']);
 }
 

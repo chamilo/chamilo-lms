@@ -66,8 +66,7 @@ $first = $pageSize * ($currentPage - 1);
 $serviceList = $plugin->getCatalogServiceList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, $appliesToFilter);
 $totalItems = $plugin->getCatalogServiceList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, $appliesToFilter, 'count');
 $pagesCount = ceil($totalItems / $pageSize);
-$url = api_get_self().'?';
-$pagination = Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
+$pagination = BuyCoursesPlugin::returnPagination(api_get_self(), $currentPage, $pagesCount, $totalItems);
 
 // View
 if (api_is_platform_admin()) {

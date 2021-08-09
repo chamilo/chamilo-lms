@@ -39,6 +39,8 @@ $interbreadcrumb[] = [
     'name' => $plugin->get_lang('plugin_title'),
 ];
 
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'buycourses/resources/css/style.css');
+
 $templateName = $plugin->get_lang('AvailableCourses');
 
 $tpl = new Template($templateName);
@@ -62,8 +64,13 @@ foreach ($sessions as $session) {
 $totalItems = count($sessions);
 $pagesCount = ceil($totalItems / $pageSize);
 
-$url = api_get_self().'?type='.BuyCoursesPlugin::PRODUCT_TYPE_SESSION;
-$pagination = Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
+$pagination = BuyCoursesPlugin::returnPagination(
+    api_get_self(),
+    $currentPage,
+    $pagesCount,
+    $totalItems,
+    ['type' => BuyCoursesPlugin::PRODUCT_TYPE_SESSION]
+);
 
 $tpl->assign('sessions', $sessions);
 $tpl->assign('session_pagination', $pagination);

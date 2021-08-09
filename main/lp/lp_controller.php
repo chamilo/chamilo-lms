@@ -286,7 +286,6 @@ $htmlHeadXtra[] = '
 </script>';
 
 $session_id = api_get_session_id();
-
 $lpfound = false;
 $myrefresh = 0;
 $myrefresh_id = 0;
@@ -491,31 +490,30 @@ if ($debug > 0) {
     error_log('action "'.$action.'" triggered');
 }
 
+$lpListUrl = api_get_self().'?action=list&'.api_get_cidreq();
+
 switch ($action) {
     case 'author_view':
-        /* Authors*/
         $teachers = [];
         $field = new ExtraField('user');
         $authorLp = $field->get_handler_field_info_by_field_variable('authorlp');
-
-        $idExtraField = (int) (isset($authorLp['id']) ? $authorLp['id'] : 0);
+        $idExtraField = isset($authorLp['id']) ? (int) $authorLp['id'] : 0;
         if ($idExtraField != 0) {
             $extraFieldValueUser = new ExtraFieldValue('user');
             $arrayExtraFieldValueUser = $extraFieldValueUser->get_item_id_from_field_variable_and_field_value(
-                $authorLp['variable'],
+                'authorlp',
                 1,
                 true,
                 false,
                 true
             );
-
-            foreach ($arrayExtraFieldValueUser as $item) {
-                $teacher = api_get_user_info($item['item_id']);
-                $teachers[] = $teacher;
+            if (!empty($arrayExtraFieldValueUser)) {
+                foreach ($arrayExtraFieldValueUser as $item) {
+                    $teacher = api_get_user_info($item['item_id']);
+                    $teachers[] = $teacher;
+                }
             }
         }
-        /* Authors*/
-        $_SESSION['oLP']->authorsAvaible = $teachers;
         Session::write('oLP', $_SESSION['oLP']);
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
@@ -879,7 +877,7 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
-            if (isset($_POST['submit_button']) && !empty($post_title)) {
+            if (isset($_POST) && !empty($post_title)) {
                 // Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
 
@@ -910,9 +908,8 @@ switch ($action) {
                     $_SESSION['oLP']->edit_document($_course);
                 }
                 $is_success = true;
-
                 $extraFieldValues = new ExtraFieldValue('lp_item');
-                $extraFieldValues->saveFieldValues($_POST);
+                $extraFieldValues->saveFieldValues($_POST, true);
 
                 Display::addFlash(Display::return_message(get_lang('Updated')));
                 $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
@@ -1024,20 +1021,22 @@ switch ($action) {
         }
 
         if (!$lp_found) {
-            require 'lp_list.php';
-        } else {
-            $_SESSION['oLP']->copy();
+            api_location($lpListUrl);
         }
-        require 'lp_list.php';
+
+        $_SESSION['oLP']->copy();
+        Display::addFlash(Display::return_message(get_lang('ItemCopied')));
+        api_location($lpListUrl);
         break;
     case 'export':
-        if (!$is_allowed_to_edit) {
-            api_not_allowed(true);
-        }
         $hideScormExportLink = api_get_setting('hide_scorm_export_link');
-        if ($hideScormExportLink === 'true') {
+
+        if ($hideScormExportLink === 'true'
+            || (false === api_get_configuration_value('lp_allow_export_to_students') && !$is_allowed_to_edit)
+        ) {
             api_not_allowed(true);
         }
+
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
@@ -1095,7 +1094,7 @@ switch ($action) {
             Skill::deleteSkillsFromItem($_GET['lp_id'], ITEM_TYPE_LEARNPATH);
             Display::addFlash(Display::return_message(get_lang('Deleted')));
             Session::erase('oLP');
-            require 'lp_list.php';
+            api_location($lpListUrl);
         }
         break;
     case 'toggle_category_visibility':
@@ -1105,21 +1104,18 @@ switch ($action) {
 
         learnpath::toggleCategoryVisibility($_REQUEST['id'], $_REQUEST['new_status']);
         Display::addFlash(Display::return_message(get_lang('Updated')));
-        header('Location: '.api_get_self().'?'.api_get_cidreq());
-        exit;
+        api_location($lpListUrl);
+        break;
     case 'toggle_visible':
         // Change lp visibility (inside lp tool).
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
 
-        if (!$lp_found) {
-            require 'lp_list.php';
-        } else {
-            learnpath::toggle_visibility($_REQUEST['lp_id'], $_REQUEST['new_status']);
-            Display::addFlash(Display::return_message(get_lang('Updated')));
-            require 'lp_list.php';
-        }
+        learnpath::toggle_visibility($_REQUEST['lp_id'], $_REQUEST['new_status']);
+        Display::addFlash(Display::return_message(get_lang('Updated')));
+        api_location($lpListUrl);
+
         break;
     case 'toggle_category_publish':
         if (!$is_allowed_to_edit) {
@@ -1128,20 +1124,18 @@ switch ($action) {
 
         learnpath::toggleCategoryPublish($_REQUEST['id'], $_REQUEST['new_status']);
         Display::addFlash(Display::return_message(get_lang('Updated')));
-        require 'lp_list.php';
+        api_location($lpListUrl);
         break;
     case 'toggle_publish':
         // Change lp published status (visibility on homepage).
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
-        if (!$lp_found) {
-            require 'lp_list.php';
-        } else {
-            learnpath::toggle_publish($_REQUEST['lp_id'], $_REQUEST['new_status']);
-            Display::addFlash(Display::return_message(get_lang('Updated')));
-            require 'lp_list.php';
-        }
+
+        learnpath::toggle_publish($_REQUEST['lp_id'], $_REQUEST['new_status']);
+        Display::addFlash(Display::return_message(get_lang('Updated')));
+        api_location($lpListUrl);
+
         break;
     case 'move_lp_up':
         // Change lp published status (visibility on homepage)

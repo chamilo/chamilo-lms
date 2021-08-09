@@ -314,9 +314,9 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
 
     if ($survey_data['survey_type'] != 3) {
         if (api_strlen($row['survey_question']) > 100) {
-            echo api_substr(strip_tags($row['survey_question']), 0, 100).' ... ';
+            echo Security::remove_XSS(api_substr(strip_tags($row['survey_question']), 0, 100)).' ... ';
         } else {
-            echo $row['survey_question'];
+            echo Security::remove_XSS($row['survey_question']);
         }
     } else {
         $parts = explode('@@', $row['survey_question']);

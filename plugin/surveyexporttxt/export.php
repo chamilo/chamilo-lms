@@ -114,7 +114,7 @@ foreach ($surveyAnswers as $answer) {
 
         /** @var CSurveyQuestionOption $option */
         foreach ($options as $option) {
-            $surveyLine .= $option->getSort();
+            $surveyLine .= '('.str_pad($option->getSort(), 2, '0', STR_PAD_LEFT).')';
         }
     }
 
@@ -148,14 +148,14 @@ foreach ($surveyAnswers as $answer) {
         continue;
     }
 
-    $content[] = '"'.$i.'","'.$surveyLine;
+    $content[] = '"","'.$surveyLine.',"'.str_pad($i, 4, '0', STR_PAD_LEFT).'"';
     $i++;
 }
 
 // Add EOL to lines
 $fileContent = array_map(
     function ($line) {
-        return html_entity_decode($line).PHP_EOL.PHP_EOL;
+        return html_entity_decode($line).PHP_EOL;
     },
     $content
 );

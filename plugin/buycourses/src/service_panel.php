@@ -48,6 +48,10 @@ $toolbar = Display::toolbarButton(
     ['title' => $plugin->get_lang('CourseListOnSale')]
 );
 
+$webPluginPath = api_get_path(WEB_PLUGIN_PATH);
+$htmlHeadXtra[] = api_get_css($webPluginPath.'buycourses/resources/css/style.css');
+$htmlHeadXtra[] = api_get_js_simple($webPluginPath.'buycourses/resources/js/modals.js');
+
 $templateName = $plugin->get_lang('TabsDashboard');
 $tpl = new Template($templateName);
 $tpl->assign('showing_courses', true);

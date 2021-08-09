@@ -1,65 +1,109 @@
-{% macro display(items, category_id, allow_edit, _c) %}
+{% macro display(items, category_id, _c, _u, _p) %}
     {% set edit_img = 'edit.png'|img(22, 'Edit'|get_lang) %}
     {% set visible_img = 'visible.png'|img(22, 'Invisible'|get_lang) %}
     {% set invisible_img = 'invisible.png'|img(22, 'Visible'|get_lang) %}
     {% set delete_img = 'delete.png'|img(22, 'Delete'|get_lang) %}
     {% set baseurl = _p.web_self ~ '?' ~ (_p.web_cid_query ? _p.web_cid_query ~ '&' : '') %}
 
-    <div class="panel-group" id="accordion-list-{{ category_id }}" role="tablist" aria-multiselectable="true">
+    <div class="row portfolio-items">
         {% for item in items %}
-            <div class="panel panel-default">
-                <div class="panel-heading" role="tab" id="heading-item-{{ item.id }}">
-                    {% if allow_edit %}
-                        <div class="pull-right">
-                            <a href="{{ baseurl ~ {'action':'edit_item', 'id':item.id}|url_encode }}">
-                                {{ edit_img }}
-                            </a>
-                            {% if item.isVisible %}
-                                <a href="{{ baseurl ~ {'action':'hide_item', 'id':item.id}|url_encode }}">
-                                    {{ visible_img }}
+            {% set item_url = baseurl ~ {'action':'view', 'id':item.id}|url_encode %}
+            {% set comments = item.lastComments %}
+
+            <div class="col-md-12" id="portfolio-item-{{ item.id }}">
+                <div class="thumbnail">
+                    <div class="caption">
+                        {% if _u.id == item.user.id %}
+                            <div class="portfolio-actions pull-right">
+                                <a href="{{ baseurl ~ {'action':'edit_item', 'id':item.id}|url_encode }}">
+                                    {{ 'edit.png'|img(22, 'Edit'|get_lang) }}
                                 </a>
-                            {% else %}
-                                <a href="{{ baseurl ~ {'action':'show_item', 'id':item.id}|url_encode }}">
-                                    {{ invisible_img }}
+                                {% if item.isVisible %}
+                                    <a href="{{ baseurl ~ {'action':'hide_item', 'id':item.id}|url_encode }}">
+                                        {{ 'visible.png'|img(22, 'Invisible'|get_lang) }}
+                                    </a>
+                                {% else %}
+                                    <a href="{{ baseurl ~ {'action':'show_item', 'id':item.id}|url_encode }}">
+                                        {{ 'invisible.png'|img(22, 'Visible'|get_lang) }}
+                                    </a>
+                                {% endif %}
+                                <a href="{{ baseurl ~ {'action':'delete_item', 'id':item.id}|url_encode }}" class="btn-delete">
+                                    {{ 'delete.png'|img(22, 'Delete'|get_lang) }}
                                 </a>
-                            {% endif %}
-                            <a href="{{ baseurl ~ {'action':'delete_item', 'id':item.id}|url_encode }}"
-                               class="btn-delete">
-                                {{ delete_img }}
-                            </a>
-                        </div>
-                    {% endif %}
-                    <h5 class="panel-title">
-                        <a href="#collapse-{{ item.id }}" class="collapsed" role="button"
-                           data-parent="#accordion-list-{{ category_id }}"
-                           data-toggle="collapse" aria-expanded="false" aria-controls="collapse-{{ item.id }}">
-                            {{ item.title }}
-                        </a>
-                    </h5>
-                    {% if _c is empty %}
-                        {% if item.session %}
-                            <div class="clearfix">
-                                {{ 'Course'|get_lang ~ ': ' ~ item.session.name ~ ' (' ~ item.course.title ~ ')' }}
-                            </div>
-                        {% elseif not item.session and item.course %}
-                            <div class="clearfix">
-                                {{ 'Course'|get_lang ~ ': ' ~ item.course.title }}<br>
                             </div>
                         {% endif %}
-                    {% endif %}
-                </div>
-                <div id="collapse-{{ item.id }}" class="panel-collapse collapse" role="tabpanel"
-                     aria-labelledby="heading-item-{{ item.id }}">
-                    <div class="panel-body">
-                        {{ item.content }}
+
+                        <h3>
+                            <a href="{{ item_url }}">{{ item.title|remove_xss }}</a>
+                        </h3>
+
+                        <ul class="fa-ul list-inline">
+                            {% if _c is empty %}
+                                {% if item.session %}
+                                    <li>
+                                        <span class="fa-li fa fa-book" aria-hidden="true"></span>
+                                        {{ 'Course'|get_lang ~ ': ' ~ item.session.name ~ ' (' ~ item.course.title ~ ')' }}
+                                    </li>
+                                {% elseif not item.session and item.course %}
+                                    <li>
+                                        <span class="fa-li fa fa-book" aria-hidden="true"></span>
+                                        {{ 'Course'|get_lang ~ ': ' ~ item.course.title }}
+                                    </li>
+                                {% endif %}
+                            {% else %}
+                                <li>
+                                    <span class="fa-li fa fa-user" aria-hidden="true"></span>
+                                    {{ item.user.completeName }}
+                                </li>
+                            {% endif %}
+
+                            <li>
+                                <span class="fa-li fa fa-clock-o" aria-hidden="true"></span>
+                                {{ 'CreationDate'|get_lang ~ ': ' ~ item.creationDate|date_to_time_ago }}
+                            </li>
+
+                            {% if _u.id == item.user.id and item.creationDate != item.updateDate %}
+                                <li>
+                                    <span class="fa-li fa fa-clock-o" aria-hidden="true"></span>
+                                    {{ 'UpdateDate'|get_lang ~ ': ' ~ item.updateDate|date_to_time_ago }}
+                                </li>
+                            {% endif %}
+                        </ul>
+
+                        <hr>
+
+                        <p>{{ item.excerpt }}</p>
+
+                        <hr>
+
+                        {% if comments|length > 0 %}
+                            <h4>
+                                <a href="{{ item_url }}#portfolio-item-comments">
+                                    {{ 'XComments'|get_lang|format(item.comments.count) }}
+                                </a>
+                                &centerdot;
+                                <a href="{{ item_url }}#frm_comment">{{ 'AddNewComment'|get_lang }}</a>
+                            </h4>
+                            <ul class="fa-ul">
+                                {% for comment in comments %}
+                                    <li>
+                                        <span class="fa-li fa fa-commenting-o" aria-hidden="true"></span>
+                                        <div>
+                                            <strong>{{ comment.author.completeName }}</strong>
+                                            <small class="fa fa-clock-o fa-fw text-muted" aria-hidden="true"></small>
+                                            <small class="text-muted">{{ comment.date|date_to_time_ago }}</small>
+                                        </div>
+                                        <p>{{ comment.excerpt }}</p>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <a href="{{ item_url }}#portfolio-item-comments">
+                                <span class="fa fa-commenting-o fa-fw" aria-hidden="true"></span>
+                                {{ 'AddNewComment'|get_lang }}
+                            </a>
+                        {% endif %}
                     </div>
-                </div>
-                <div class="panel-footer">
-                    {{ 'CreationDate'|get_lang ~ ': ' ~ item.creationDate|date_to_time_ago }}
-                    {% if item.creationDate != item.updateDate %}
-                        &centerdot;
-                        {{ 'UpdateDate'|get_lang ~ ': ' ~ item.updateDate|date_to_time_ago }}
-                    {% endif %}
                 </div>
             </div>
         {% endfor %}

@@ -195,8 +195,10 @@ var en = {
   video360: 'Enable 360° video player',
   video360stereo: 'Stereo video (1:1 aspect ratio)',
   responsive: 'Resposive size (mobile-optimized)',
-  ratio16by9: '16:9 aspect ratio',
-  ratio4by3: '4:3 aspect ratio'
+  ratio16by9: '16:9 aspect ratio (horizontal)',
+  ratio9by16: '9:16 aspect ratio (vertical)',
+  ratio4by3: '4:3 aspect ratio (horizontal)',
+  ratio3by4: '3:4 aspect ratio (vertical)'
 };
 
 var es = {
@@ -216,8 +218,10 @@ var es = {
   video360: 'Habilitar reproductor de vídeo 360°',
   video360stereo: 'Vídeo estéreo (relación de aspecto 1:1)',
   responsive: 'Tamaño adaptable (tamaño optimizado para móviles)',
-  ratio16by9: 'Relación de aspecto 16:9',
-  ratio4by3: 'Relación de aspecto 4:3'
+  ratio16by9: 'Relación de aspecto 16:9 (horizontal)',
+  ratio9by16: 'Relación de aspecto 9:16 (vertical)',
+  ratio4by3: 'Relación de aspecto 4:3 (horizontal)',
+  ratio3by4: 'Relación de aspecto 3:4 (vertical)'
 };
 
 var fr = {
@@ -237,8 +241,10 @@ var fr = {
 	video360: 'Activer la visualisation 360°',
 	video360stereo: 'Vidéo stéréo (proportions 1:1 / apparence de 2 vidéos superposées)',
 	responsive: 'Resposive',
-	ratio16by9: '16:9 aspect ratio',
-	ratio4by3: '4:3 aspect ratio'
+	ratio16by9: '16:9 aspect ratio (horizontal)',
+	ratio9by16: '9:16 aspect ratio (vertical)',
+	ratio4by3: '4:3 aspect ratio (horizontal)',
+	ratio3by4: '3:4 aspect ratio (vertical)'
 };
 
 // v3

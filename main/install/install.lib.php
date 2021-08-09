@@ -778,7 +778,7 @@ function display_requirements(
     if (!$properlyAccessUrl) {
         echo '
             <div class="alert alert-danger">
-                '.Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_MEDIUM, true, false, true).
+                '.Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_MEDIUM, true, false, false).
             ' '.
             sprintf(get_lang('InstallMultiURLDetectedNotMainURL'), api_get_configuration_value('root_web')).'
             </div>
@@ -1590,19 +1590,19 @@ function display_database_settings_form(
         $database_exists_text = $e->getMessage();
     }
 
-    if ($manager && $manager->getConnection()->isConnected()): ?>
+    if ($manager && $manager->getConnection()->isConnected()) { ?>
         <?php echo $database_exists_text; ?>
         <div id="db_status" class="alert alert-success">
             Database host: <strong><?php echo $manager->getConnection()->getHost(); ?></strong><br/>
             Database port: <strong><?php echo $manager->getConnection()->getPort(); ?></strong><br/>
             Database driver: <strong><?php echo $manager->getConnection()->getDriver()->getName(); ?></strong><br/>
         </div>
-    <?php else: ?>
+    <?php } else { ?>
         <div id="db_status" class="alert alert-danger">
             <p><?php echo get_lang('FailedConectionDatabase'); ?></strong></p>
             <code><?php echo $database_exists_text; ?></code>
         </div>
-    <?php endif; ?>
+    <?php } ?>
    <div class="form-group">
        <div class="col-sm-6">
            <button type="submit" name="step2" class="btn btn-default pull-right" value="&lt; <?php echo get_lang('Previous'); ?>" >

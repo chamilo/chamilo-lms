@@ -58,7 +58,7 @@ class SearchCourseWidget
         $url = self::server('REQUEST_URI');
         $url = explode('?', $url);
         $url = reset($url);
-        $url = self::server('SERVER_NAME').$url;
+        $url = self::server('HTTP_HOST').$url;
 
         $root = api_get_path('WEB_PATH');
         $root = str_replace('https://', '', $root);

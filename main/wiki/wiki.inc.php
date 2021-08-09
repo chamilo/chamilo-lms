@@ -2509,12 +2509,7 @@ class Wiki
 
         mpdf-->'.$content_pdf;
 
-        $css_file = api_get_path(SYS_CSS_PATH).'themes/'.api_get_setting('stylesheets').'/print.css';
-        if (file_exists($css_file)) {
-            $css = @file_get_contents($css_file);
-        } else {
-            $css = '';
-        }
+        $css = api_get_print_css();
 
         $pdf = new PDF();
         $pdf->content_to_pdf($html, $css, $title_pdf, $course_code);
@@ -4336,57 +4331,57 @@ class Wiki
                     // stars
                     $p_score = $row['p_score'];
                     switch ($p_score) {
-                        case  0:
+                        case 0:
                             $imagerating = Display::return_icon(
                                 'rating/stars_0.gif'
                             );
                             break;
-                        case  1:
+                        case 1:
                             $imagerating = Display::return_icon(
                                 'rating/stars_5.gif'
                             );
                             break;
-                        case  2:
+                        case 2:
                             $imagerating = Display::return_icon(
                                 'rating/stars_10.gif'
                             );
                             break;
-                        case  3:
+                        case 3:
                             $imagerating = Display::return_icon(
                                 'rating/stars_15.gif'
                             );
                             break;
-                        case  4:
+                        case 4:
                             $imagerating = Display::return_icon(
                                 'rating/stars_20.gif'
                             );
                             break;
-                        case  5:
+                        case 5:
                             $imagerating = Display::return_icon(
                                 'rating/stars_25.gif'
                             );
                             break;
-                        case  6:
+                        case 6:
                             $imagerating = Display::return_icon(
                                 'rating/stars_30.gif'
                             );
                             break;
-                        case  7:
+                        case 7:
                             $imagerating = Display::return_icon(
                                 'rating/stars_35.gif'
                             );
                             break;
-                        case  8:
+                        case 8:
                             $imagerating = Display::return_icon(
                                 'rating/stars_40.gif'
                             );
                             break;
-                        case  9:
+                        case 9:
                             $imagerating = Display::return_icon(
                                 'rating/stars_45.gif'
                             );
                             break;
-                        case  10:
+                        case 10:
                             $imagerating = Display::return_icon(
                                 'rating/stars_50.gif'
                             );

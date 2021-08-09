@@ -29,6 +29,17 @@ $learnpath_id = (int) $_REQUEST['lp_id'];
 $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 $_course = api_get_course_info();
 
+$excludeExtraFields = [
+    'authors',
+    'authorlp',
+    'authorlpitem',
+    'price',
+];
+if (api_is_platform_admin()) {
+    // Only admins can edit this items
+    $excludeExtraFields = [];
+}
+
 if (!$is_allowed_to_edit || $isStudentView) {
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
     exit;
@@ -271,7 +282,10 @@ switch ($_GET['action']) {
                 'confirm'
             );
         } else {
-            echo $learnPath->display_edit_item($_GET['id']);
+            echo $learnPath->display_edit_item(
+                $_GET['id'],
+                $excludeExtraFields
+            );
         }
         break;
     case 'delete_item':

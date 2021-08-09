@@ -42,6 +42,14 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
     $addTeacherColumn = true;
     $table = Database::get_main_table(TABLE_MAIN_COURSE);
 
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+    $column = (int) $column;
+
+    if (!in_array(strtolower($direction), ['asc', 'desc'])) {
+        $direction = 'desc';
+    }
+
     $teachers = '';
     if ($addTeacherColumn) {
         $teachers = " GROUP_CONCAT(cu.user_id SEPARATOR ',') as col4, ";
@@ -148,6 +156,8 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
     $path = api_get_path(WEB_CODE_PATH);
     $coursePath = api_get_path(WEB_COURSE_PATH);
 
+    $icon = Display::return_icon('teacher.png', get_lang('Teacher'), [], ICON_SIZE_TINY);
+
     while ($course = Database::fetch_array($res)) {
         $courseId = $course['id'];
         $courseCode = $course['code'];
@@ -215,7 +225,9 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
                     }
                 }
             }
-            $courseItem[] = implode(', ', $teacherList);
+            $courseItem[] = '<ul class="list-inline"><li>'
+                ."$icon ".implode("</li><li>$icon ", $teacherList)
+                .'</li></ul>';
         }
         $courseItem[] = implode(PHP_EOL, $actions);
         $courses[] = $courseItem;
@@ -480,14 +492,14 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     //$table->set_header($column++, get_lang('SubscriptionAllowed'), true, 'width="60px"');
     //$table->set_header($column++, get_lang('UnsubscriptionAllowed'), false, 'width="50px"');
     if ($addTeacherColumn) {
-        $table->set_header($column++, get_lang('Teachers'), true);
+        $table->set_header($column++, get_lang('Teachers'), true, ['style' => 'width:350px;']);
     }
     $table->set_header(
         $column++,
         get_lang('Action'),
         false,
         null,
-        ['class' => 'td_actions']
+        ['class' => 'td_actions', 'style' => 'width:145px;']
     );
     $table->set_form_actions(
         ['delete_courses' => get_lang('DeleteCourse')],

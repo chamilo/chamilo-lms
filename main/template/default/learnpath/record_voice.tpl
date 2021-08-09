@@ -71,7 +71,7 @@
             clearInterval(window.timerInterval);
         }
 
-        function useRecordRTC(){
+        function useRecordRTC() {
             $('#record-audio-recordrtc').show();
 
             var audioTitle = $('#audio-title-rtc');
@@ -87,23 +87,14 @@
                     return false;
                 }
 
-                navigator.getUserMedia = navigator.getUserMedia ||
-                        navigator.mozGetUserMedia ||
-                        navigator.webkitGetUserMedia;
-
-                if (navigator.getUserMedia) {
-                    navigator.getUserMedia(mediaConstraints, successCallback, errorCallback);
-                } else if (navigator.mediaDevices.getUserMedia) {
-                    navigator.mediaDevices.getUserMedia(mediaConstraints)
-                            .then(successCallback).error(errorCallback);
-                }
-
                 function successCallback(stream) {
                     stopTimer();
                     startTimer();
                     recordRTC = RecordRTC(stream, {
-                        numberOfAudioChannels: 1,
-                        type: 'audio'
+                        recorderType: RecordRTC.StereoAudioRecorder,
+                        type: 'audio',
+                        mimeType: 'audio/wav',
+                        numberOfAudioChannels: 2
                     });
                     recordRTC.startRecording();
 
@@ -113,8 +104,18 @@
 
                 function errorCallback(error) {
                     stopTimer();
-                    alert(error.message);
+                    alert(error);
                 }
+
+                if(!!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia)) {
+                    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+                    navigator.getUserMedia(mediaConstraints, successCallback, errorCallback);
+                    return;
+                }
+
+                navigator.mediaDevices.getUserMedia(mediaConstraints)
+                    .then(successCallback)
+                    .catch(errorCallback);
             });
 
             btnStop.on('click', function () {

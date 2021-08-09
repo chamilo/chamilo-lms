@@ -145,6 +145,47 @@ switch ($action) {
         $cats = Category::load($cat_id, null, null, null, null, null, false);
         GradebookUtils::generateTable($courseInfo, $userId, $cats, false, false, $userList);
         break;
+    case 'add_comment':
+        if (!api_is_allowed_to_edit()) {
+            exit;
+        }
+        $userId = isset($_GET['user_id']) ? (int) $_GET['user_id'] : 0;
+        $gradeBookId = isset($_GET['gradebook_id']) ? (int) $_GET['gradebook_id'] : 0;
+        $comment = '';
+        $commentInfo = GradebookUtils::getComment($gradeBookId, $userId);
+        if ($commentInfo) {
+            $comment = $commentInfo['comment'];
+        }
+        $ajaxPath = api_get_path(WEB_AJAX_PATH).'gradebook.ajax.php?a=add_gradebook_comment';
+        $save = Display::return_message(get_lang('Saved'));
+        echo '<script>
+            $(function() {
+                $("form").on("submit", function(e) {
+                   e.preventDefault();
+                   $.ajax({
+                        url: "'.$ajaxPath.'",
+                        data: {
+                            gradebook_id: "'.$gradeBookId.'",
+                            user_id: "'.$userId.'",
+                            comment: $("#comment").val()
+                        },
+                        success: function(data) {
+                            $(".result").html("'.addslashes($save).'");
+                        }
+                    });
+                });
+            });
+        </script>';
+        $student = api_get_user_info($userId);
+        $form = new FormValidator('add_comment');
+        $form->addLabel(get_lang('User'), $student['complete_name']);
+        $form->addTextarea('comment', get_lang('Comment'), ['id' => 'comment']);
+        $form->addHtml('<div class="result"></div>');
+        $form->addButtonSave(get_lang('Save'));
+        $form->setDefaults(['comment' => $comment]);
+        $form->display();
+        exit;
+        break;
 }
 
 $course_code = api_get_course_id();
@@ -183,6 +224,7 @@ if (count($userList) == 0) {
     echo '<th>';
     echo get_lang('Action');
     echo '</th></tr>';
+    $allowComments = api_get_configuration_value('allow_gradebook_comments');
     foreach ($userList as $index => $value) {
         $userData = api_get_person_name($value['firstname'], $value['lastname']).' ('.$value['username'].')';
         echo '<tr>
@@ -205,7 +247,18 @@ if (count($userList) == 0) {
             $url,
             ['target' => '_blank', 'class' => 'btn btn-default']
         );
+
+        if ($allowComments) {
+            $url = api_get_self().'?'.api_get_cidreq().'&action=add_comment&user_id='.$value['user_id'].'&gradebook_id='.$cat_id;
+            $link .= '&nbsp;'.Display::url(
+                get_lang('AddGradebookComment'),
+                $url,
+                ['target' => '_blank', 'class' => 'ajax btn btn-default']
+            );
+        }
+
         echo $link;
+
         echo '</td></tr>';
     }
     echo '</table></div>';

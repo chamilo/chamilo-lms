@@ -114,6 +114,11 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
         }
     }
 
+    public function setOptions($options)
+    {
+        $this->load($options);
+    }
+
      /**
      * Loads options from different types of data sources
      *

@@ -4,8 +4,6 @@
 
 namespace Chamilo\PluginBundle\XApi\Parser;
 
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -14,20 +12,12 @@ use Symfony\Component\DomCrawler\Crawler;
  *
  * @package Chamilo\PluginBundle\XApi\Parser
  */
-class TinCanParser extends AbstractParser
+class TinCanParser extends PackageParser
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public static function create($filePath, Course $course, Session $session = null)
-    {
-        return new self($filePath, $course, $session);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function parse()
+    public function parse(): ToolLaunch
     {
         $content = file_get_contents($this->filePath);
 
@@ -58,10 +48,7 @@ class TinCanParser extends AbstractParser
         return $toolLaunch;
     }
 
-    /**
-     * @return string
-     */
-    private function parseLaunchUrl(Crawler $launchNode)
+    private function parseLaunchUrl(Crawler $launchNode): string
     {
         $launchUrl = $launchNode->text();
 

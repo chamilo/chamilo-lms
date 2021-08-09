@@ -6,53 +6,75 @@
 
 {% import 'portfolio/items.html.twig'|get_template as items %}
 
-{% if not allow_edit %}
-    <h3>{{ user.completeName }} <small>{{ user.username }}</small></h3>
-{% endif %}
+<div class="row">
+    {% if course %}
+        <div class="col-md-3">
+            {{ frm_student_list }}
 
-{{ items.display(uncategorized_items, 0, allow_edit, _c) }}
+            <hr>
 
-{% for category in portfolio %}
-    <div class="panel panel-info">
-        <div class="panel-body">
-            <h4 class="page-header">
-                <a href="#collapse-category-{{ category.id }}" role="button" data-toggle="collapse"
-                   aria-expanded="false" aria-controls="collapse-category-{{ category.id }}">
-                    {{ category.title }}
-                </a>
-
-                {% if allow_edit %}
-                    <div class="pull-right">
-                        <a href="{{ baseurl ~ {'action':'edit_category', 'id':category.id}|url_encode }}">
-                            {{ edit_img }}
-                        </a>
-                        {% if category.isVisible %}
-                            <a href="{{ baseurl ~ {'action':'hide_category', 'id':category.id}|url_encode }}">
-                                {{ visible_img }}
-                            </a>
-                        {% else %}
-                            <a href="{{ baseurl ~ {'action':'show_category', 'id':category.id}|url_encode }}">
-                                {{ invisible_img }}
-                            </a>
-                        {% endif %}
-                        <a href="{{ baseurl ~ {'action':'delete_category', 'id':category.id}|url_encode }}"
-                           class="btn-delete">
-                            {{ delete_img }}
-                        </a>
-                    </div>
-                {% endif %}
-            </h4>
-
-            <div>
-                {{ category.description }}
-            </div>
-
-            <div class="collapse" id="collapse-category-{{ category.id }}">
-                {{ items.display(category.items(course, session, not allow_edit), category.id, allow_edit, _c) }}
-            </div>
+            {{ frm_tag_list }}
         </div>
+    {% endif %}
+
+    <div class="{{ course ? 'col-md-9' : 'col-xs-12'  }}">
+        {% if _u.id != user.id %}
+            <h3>{{ user.completeName }} <small>{{ user.username }}</small></h3>
+        {% endif %}
+
+        {{ items.display(uncategorized_items, 0, _c, _u, _p) }}
+
+        {% for category in portfolio %}
+            <div class="panel panel-info">
+                <div class="panel-body">
+                    <h4 class="page-header">
+                        <a href="#collapse-category-{{ category.id }}" role="button" data-toggle="collapse"
+                           aria-expanded="false" aria-controls="collapse-category-{{ category.id }}">
+                            {{ category.title }}
+                        </a>
+
+                        {% if _u.id == category.user.id %}
+                            <div class="pull-right">
+                                <a href="{{ baseurl ~ {'action':'edit_category', 'id':category.id}|url_encode }}">
+                                    {{ edit_img }}
+                                </a>
+                                {% if category.isVisible %}
+                                    <a href="{{ baseurl ~ {'action':'hide_category', 'id':category.id}|url_encode }}">
+                                        {{ visible_img }}
+                                    </a>
+                                {% else %}
+                                    <a href="{{ baseurl ~ {'action':'show_category', 'id':category.id}|url_encode }}">
+                                        {{ invisible_img }}
+                                    </a>
+                                {% endif %}
+                                <a href="{{ baseurl ~ {'action':'delete_category', 'id':category.id}|url_encode }}"
+                                   class="btn-delete">
+                                    {{ delete_img }}
+                                </a>
+                            </div>
+                        {% endif %}
+                    </h4>
+
+                    <div>
+                        {{ category.description }}
+                    </div>
+
+                    <div class="collapse" id="collapse-category-{{ category.id }}">
+                        {{
+                            items.display(
+                                category.items(course, session, _u.id != category.user.id),
+                                category.id,
+                                _c,
+                                _u,
+                                _p
+                            )
+                        }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     </div>
-{% endfor %}
+</div>
 
 <script>
     $(document).on('ready', function () {
@@ -61,5 +83,19 @@
                 e.preventDefault();
             }
         });
+
+        {% if course %}
+            $('form#frm_student_list select[name="user"]').on('change', function (e) {
+                var newLocation = '{{ _p.web_self ~ '?' ~ _p.web_cid_query }}';
+
+                if (this.value) {
+                    newLocation += '&user=' + this.value;
+                }
+
+                location.href = newLocation;
+
+                this.disabled = true;
+            });
+        {% endif %}
     });
 </script>

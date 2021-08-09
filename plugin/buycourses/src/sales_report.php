@@ -148,6 +148,9 @@ foreach ($sales as &$sale) {
 }
 
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => $plugin->get_lang('plugin_title')];
+
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'buycourses/resources/css/style.css');
+
 $templateName = $plugin->get_lang('SalesReport');
 $template = new Template($templateName);
 

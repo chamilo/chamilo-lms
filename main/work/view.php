@@ -14,7 +14,8 @@ if (empty($work)) {
     api_not_allowed(true);
 }
 
-protectWork(api_get_course_info(), $work['parent_id']);
+$courseInfo = api_get_course_info();
+protectWork($courseInfo, $work['parent_id']);
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : null;
@@ -29,9 +30,16 @@ $interbreadcrumb[] = [
 ];
 
 $folderData = get_work_data_by_id($work['parent_id']);
-$courseInfo = api_get_course_info();
-
+$currentUserId = api_get_user_id();
 $isCourseManager = api_is_platform_admin() || api_is_coach() || api_is_allowed_to_edit(false, false, true);
+
+$allowBaseCourseTeacher = api_get_configuration_value('assignment_base_course_teacher_access_to_all_session');
+if (false === $isCourseManager && $allowBaseCourseTeacher) {
+    // Check if user is base course teacher.
+    if (CourseManager::is_course_teacher($currentUserId, $courseInfo['code'])) {
+        $isCourseManager = true;
+    }
+}
 
 $allowEdition = false;
 if ($isCourseManager) {
@@ -46,13 +54,12 @@ if (api_is_platform_admin()) {
 }
 
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
-    api_get_user_id(),
+    $currentUserId,
     $courseInfo
 );
 
-$isDrhOfSession = !empty(SessionManager::getSessionFollowedByDrh(api_get_user_id(), $work['session_id']));
-
-if ((user_is_author($id) || $isDrhOfCourse || $allowEdition || $isDrhOfSession) ||
+$isDrhOfSession = !empty(SessionManager::getSessionFollowedByDrh($currentUserId, $work['session_id']));
+if (($isDrhOfCourse || $allowEdition || $isDrhOfSession || user_is_author($id)) ||
     (
         0 == $courseInfo['show_score'] &&
         1 == $work['active'] &&
@@ -75,7 +82,7 @@ if ((user_is_author($id) || $isDrhOfCourse || $allowEdition || $isDrhOfSession) 
         1 == $work['active'] &&
         1 == $work['accepted']
         ) ||
-        $isCourseManager || user_is_author($id) || $isDrhOfCourse || $isDrhOfSession
+        $isCourseManager || $isDrhOfCourse || $isDrhOfSession || user_is_author($id)
     ) {
         if ($page === 'edit') {
             $url = api_get_path(WEB_CODE_PATH).'work/edit.php?id='.$folderData['id'].'&item_id='.$work['id'].'&'.api_get_cidreq();

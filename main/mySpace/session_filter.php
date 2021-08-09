@@ -151,7 +151,10 @@ if ($form->validate()) {
         }
 
         $selectCat = (int) $cats[0]->get_id();
-        $certificateListAux = GradebookUtils::get_list_users_certificates($selectCat);
+        $certificateListAux = [];
+        if (!empty($selectCat)) {
+            $certificateListAux = GradebookUtils::get_list_users_certificates($selectCat);
+        }
 
         foreach ($certificateListAux as $value) {
             $createdAt = strtotime(api_get_local_time($value['created_at']));

@@ -28,7 +28,7 @@ if ($isEnrollment) {
             ]
         );
     }
-    die;
+    exit;
 }
 
 if ($isAuthentify) {

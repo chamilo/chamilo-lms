@@ -1,5 +1,3 @@
-<link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
-
 <div id="buy-courses-tabs">
     {% if sessions_are_included %}
         <ul class="nav nav-tabs buy-courses-tabs" role="tablist">
@@ -29,14 +27,17 @@
                     {{ search_filter_form }}
                 </div>
                 <div class="col-md-9">
-                    <div class="row">
+                    <div class="row grid-courses">
                         {% if showing_courses %}
                             {% for course in courses %}
                                 <div class="col-md-4 col-sm-6">
                                     <article class="items-course">
                                         <div class="items-course-image">
-                                            <img alt="{{ course.title }}" class="img-responsive"
-                                                 src="{{ course.course_img ? course.course_img : 'session_default.png'|icon() }}">
+                                            <figure  class="img-responsive">
+                                                <img alt="{{ course.title }}"
+                                                     class="img-responsive"
+                                                     src="{{ course.course_img ? course.course_img : 'session_default.png'|icon() }}">
+                                            </figure>
                                         </div>
                                         <div class="items-course-info">
                                             {% set course_description_url = _p.web_ajax ~ 'course_home.ajax.php?' ~ {'code': course.code, 'a': 'show_course_information'}|url_encode() %}
@@ -84,8 +85,10 @@
                                 <div class="col-md-4 col-sm-6">
                                     <article class="items-course">
                                         <div class="items-course-image">
-                                            <img alt="{{ session.name }}" class="img-responsive"
-                                                 src="{{ session.image ? session.image : 'session_default.png'|icon() }}">
+                                            <figure  class="img-responsive">
+                                                <img alt="{{ session.name }}" class="img-responsive"
+                                                     src="{{ session.image ? session.image : 'session_default.png'|icon() }}">
+                                            </figure>
                                         </div>
                                         <div class="items-course-info">
                                             <h4 class="title">
@@ -94,7 +97,14 @@
                                             {% if 'show_session_coach'|api_get_setting == 'true' %}
                                                 <p><em class="fa fa-user fa-fw"></em> {{ session.coach }}</p>
                                             {% endif %}
-                                            <p><em class="fa fa-calendar fa-fw"></em> {{ session.dates.display }}</p>
+                                            <p>
+                                                <em class="fa fa-calendar fa-fw"></em>
+                                                {% if session.duration %}
+                                                    {{ 'SessionDurationXDaysTotal'|get_lang|format(session.duration) }}
+                                                {% else %}
+                                                    {{ session.dates.display }}
+                                                {% endif %}
+                                            </p>
                                             <p class="text-right">
                                                 <span class="label label-primary">
                                                     {{ session.item.total_price_formatted }}
@@ -142,9 +152,12 @@
                                     <div class="items-course">
                                         <div class="items-course-image">
                                             <a href="{{ _p.web }}service/{{ service.id }}">
-                                                <img alt="{{ service.name }}"
-                                                    class="img-responsive"
-                                                    src="{{ service.image ? service.image : 'session_default.png'|icon() }}"></a>
+                                                <figure class="img-responsive">
+                                                    <img alt="{{ service.name }}"
+                                                         class="img-responsive"
+                                                         src="{{ service.image ? service.image : 'session_default.png'|icon() }}">
+                                                </figure>
+                                            </a>
                                         </div>
                                         <div class="items-course-info">
                                             <h4 class="title">

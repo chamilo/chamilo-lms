@@ -145,6 +145,7 @@ if ('auto' === $invitationcode && isset($_GET['scode'])) {
         }
         // From here we use the new invitationcode auto-userid-surveycode string
         $_GET['invitationcode'] = $autoInvitationcode;
+        Session::write('auto_invitation_code_'.$surveyCode, $autoInvitationcode);
         $invitationcode = $autoInvitationcode;
     }
 }
@@ -574,6 +575,7 @@ if (
     // The first thing we do is delete the session
     Session::erase('paged_questions');
     Session::erase('page_questions_sec');
+
     $paged_questions_sec = [];
     if (!empty($survey_data['survey_introduction'])) {
         echo '<div class="survey_content">'.Security::remove_XSS($survey_data['survey_introduction']).'</div>';
@@ -667,6 +669,7 @@ if (isset($_POST['finish_survey'])) {
 
     Session::erase('paged_questions');
     Session::erase('page_questions_sec');
+    Session::erase('auto_invitation_code_'.$survey_data['code']);
     Display::display_footer();
     exit();
 }
@@ -804,7 +807,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                     $questions[$sort]['survey_question'] = $row['survey_question'];
                     $questions[$sort]['display'] = $row['display'];
                     $questions[$sort]['type'] = $row['type'];
-                    $questions[$sort]['options'][$row['question_option_id']] = $row['option_text'];
+                    $questions[$sort]['options'][$row['question_option_id']] = Security::remove_XSS($row['option_text']);
                     $questions[$sort]['maximum_score'] = $row['max_value'];
                     $questions[$sort]['sort'] = $sort;
                     $questions[$sort]['is_required'] = $allowRequiredSurveyQuestions && $row['is_required'];

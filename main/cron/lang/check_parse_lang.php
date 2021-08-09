@@ -1,4 +1,5 @@
-<?php /* For licensing terms, see /license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Script to check that no language file has parse errors.
  *

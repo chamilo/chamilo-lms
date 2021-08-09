@@ -7,7 +7,7 @@
  * Check no direct access to file using a constant defined in the calling script.
  */
 if (!defined('WS_ERROR_SECRET_KEY')) {
-    die();
+    exit();
 }
 /**
  * Define here the IPs or ranges that will be authorized to access the

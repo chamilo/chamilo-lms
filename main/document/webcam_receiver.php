@@ -19,12 +19,12 @@ if (isset($params['webcamname']) && isset($params['webcamdir']) && isset($params
     $webcamuserid = $params['webcamuserid'];
 } else {
     api_not_allowed();
-    die();
+    exit();
 }
 
 if ($webcamuserid != api_get_user_id() || api_get_user_id() == 0 || $webcamuserid == 0) {
     api_not_allowed();
-    die();
+    exit();
 }
 
 //clean

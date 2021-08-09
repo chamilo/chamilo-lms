@@ -94,7 +94,7 @@ switch ($action) {
     case 'unsubscribe':
         // We are unsubscribing from a course (=Unsubscribe from course).
         if (!empty($_GET['sec_token']) && $ctok == $_GET['sec_token']) {
-            $result = $auth->remove_user_from_course($_GET['course_code']);
+            $result = $auth->remove_user_from_course($_GET['unsubscribe']);
             if ($result) {
                 Display::addFlash(
                     Display::return_message(get_lang('YouAreNowUnsubscribed'))
@@ -106,11 +106,11 @@ switch ($action) {
         exit;
         break;
     case 'subscribe_course':
+        $courseCodeToSubscribe = isset($_GET['course_code']) ? Security::remove_XSS($_GET['course_code']) : '';
         if (api_is_anonymous()) {
             header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php?c='.$courseCodeToSubscribe);
             exit;
         }
-        $courseCodeToSubscribe = isset($_GET['course_code']) ? Security::remove_XSS($_GET['course_code']) : '';
         if (Security::check_token('get')) {
             $courseInfo = api_get_course_info($courseCodeToSubscribe);
             CourseManager::autoSubscribeToCourse($courseCodeToSubscribe);
@@ -283,6 +283,7 @@ switch ($action) {
             $countCoursesInCategory = CourseCategory::countCoursesInCategory(
                 $categoryCode,
                 $searchTerm,
+                true,
                 true,
                 $conditions
             );

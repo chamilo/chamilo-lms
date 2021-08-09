@@ -209,9 +209,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
     if (!in_array($direction, ['ASC', 'DESC'])) {
         $direction = 'ASC';
     }
-    $column = intval($column);
-    $from = intval($from);
-    $number_of_items = intval($number_of_items);
+    $column = (int) $column;
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
 
     $sql .= " ORDER BY col$column $direction ";
     $sql .= " LIMIT $from, $number_of_items";

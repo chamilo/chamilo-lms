@@ -78,10 +78,8 @@ Chamilo is mainly a LMS running (the so called <span style="font-weight: bold;">
 <ul>
 <li><span style="font-weight: bold;">Apache 2.2+</span></li>
 <li><span style="font-weight: bold;">MySQL 5.6+ or MariaDB 5+</span></li>
-<li><span style="font-weight: bold;">PHP 5.6 (not recommended), 7.2 (recommended) or 7.3</span></li>
+<li><span style="font-weight: bold;">PHP 7.2, 7.3 or 7.4</span></li>
 </ul>
-    Note: with PHP 7.3, you need to disable PHP warnings or the display_errors setting, as otherwise one of the libraries we use will send warning messages pretty much constantly. This will be fixed in our next versions, which will remove compatibility with PHP 5.6.
-<br /><br />
 All these pieces of software are free software and freely available. <br /><br />
 To run Chamilo <span style="font-weight: bold;">LMS</span> on your server, you need to install WAMP, LAMP or MAMP:
 <ul>
@@ -285,7 +283,6 @@ date.timezone = 'America/New_York';
     <li>php-pcre: The pcre shared extension for php</li>
     <li>php-xml</li>
     <li>php-json</li>
-    <li>php-mcrypt (only for PHP 5.*)</li>
     <li>php-iconv or php5-mbstring (either one of them)</li>
     <li>php-gd, the graphics-generation extension for PHP</li>
     <li>php-intl, the international behaviours extension for PHP</li>

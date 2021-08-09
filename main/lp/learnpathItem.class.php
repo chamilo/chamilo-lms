@@ -2493,7 +2493,10 @@ class learnpathItem
 
                                         return $returnstatus;
                                     } else {
-                                        $status = $itemToCheck->get_status(false);
+                                        $status = $itemToCheck->get_status(true);
+                                        if (self::DEBUG) {
+                                            error_log('Status:'.$status);
+                                        }
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
 
                                         // Check results from another sessions.
@@ -2571,7 +2574,7 @@ class learnpathItem
                 }
                 $orstatus = false;
                 foreach ($list as $condition) {
-                    if (self::DEBUG > 1) {
+                    if (self::DEBUG) {
                         error_log(
                             'New LP - Found OR, adding it ('.$condition.')',
                             0
@@ -4532,5 +4535,22 @@ class learnpathItem
 
             return $resultFromOtherSessions;
         }
+    }
+
+    public static function isLpItemAutoComplete($lpItemId): bool
+    {
+        $extraFieldValue = new ExtraFieldValue('lp_item');
+        $saveAutomatic = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $lpItemId,
+            'no_automatic_validation'
+        );
+
+        if (false !== $saveAutomatic && is_array($saveAutomatic) && isset($saveAutomatic['value'])) {
+            if (1 === (int) $saveAutomatic['value']) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

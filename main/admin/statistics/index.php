@@ -231,7 +231,7 @@ in_array(
                     $dateEnd = Security::remove_XSS($_REQUEST['range_end']);
                 }
 
-                $statusId = (int) $_REQUEST['status_id'];
+                $statusId = isset($_REQUEST['status_id']) ? (int) $_REQUEST['status_id'] : 0;
 
                 $conditions = "&date_start=$dateStart&date_end=$dateEnd&status=$statusId";
 

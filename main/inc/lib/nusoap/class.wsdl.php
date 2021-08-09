@@ -762,6 +762,9 @@ class wsdl extends nusoap_base
 			$this->setError("Neither _SERVER nor HTTP_SERVER_VARS is available");
 		}
 
+		$url = '<a href="'.$PHP_SELF.'?wsdl">WSDL</a>';
+        $url = Security::remove_XSS($url);
+
 		$b = '
 		<html><head><title>NuSOAP: '.$this->serviceName.'</title>
 		<style type="text/css">
@@ -842,7 +845,7 @@ class wsdl extends nusoap_base
 			<br><br>
 			<div class=title>'.$this->serviceName.'</div>
 			<div class=nav>
-				<p>View the <a href="'.$PHP_SELF.'?wsdl">WSDL</a> for the service.
+				<p>View the '.$url.' for the service.
 				Click on an operation name to view it&apos;s details.</p>
 				<ul>';
 				foreach($this->getOperations() as $op => $data){
@@ -852,13 +855,13 @@ class wsdl extends nusoap_base
 				    <a href='#' onclick='popout()'><font color='#ffffff'>Close</font></a><br><br>";
 				    foreach($data as $donnie => $marie){ // loop through opdata
 						if($donnie == 'input' || $donnie == 'output'){ // show input/output data
-						    $b .= "<font color='white'>".ucfirst($donnie).':</font><br>';
+						    $b .= Security::remove_XSS("<font color='white'>".ucfirst($donnie).':</font><br>');
 						    foreach($marie as $captain => $tenille){ // loop through data
 								if($captain == 'parts'){ // loop thru parts
 								    $b .= "&nbsp;&nbsp;$captain:<br>";
 					                //if(is_array($tenille)){
 								    	foreach($tenille as $joanie => $chachi){
-											$b .= "&nbsp;&nbsp;&nbsp;&nbsp;$joanie: $chachi<br>";
+											$b .= Security::remove_XSS("&nbsp;&nbsp;&nbsp;&nbsp;$joanie: $chachi<br>");
 								    	}
 					        		//}
 								} else {
@@ -866,7 +869,7 @@ class wsdl extends nusoap_base
 								}
 						    }
 						} else {
-						    $b .= "<font color='white'>".ucfirst($donnie).":</font> $marie<br>";
+						    $b .= Security::remove_XSS("<font color='white'>".ucfirst($donnie).":</font> $marie<br>");
 						}
 				    }
 					$b .= '</div>';

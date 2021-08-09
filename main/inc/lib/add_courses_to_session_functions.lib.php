@@ -32,10 +32,11 @@ class AddCourseToSession
             // xajax send utf8 datas... datas in db can be non-utf8 datas
             $charset = api_get_system_encoding();
             $needle = api_convert_encoding($needle, $charset, 'utf-8');
+            $needle = Database::escape_string($needle);
 
             $cond_course_code = '';
             if (!empty($id_session)) {
-                $id_session = intval($id_session);
+                $id_session = (int) $id_session;
                 // check course_code from session_rel_course table
                 $sql = 'SELECT c_id FROM '.$tbl_session_rel_course.'
                         WHERE session_id = '.$id_session;

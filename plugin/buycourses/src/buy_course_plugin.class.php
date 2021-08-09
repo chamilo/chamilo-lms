@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\ORM\Query\Expr\Join;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
  * Plugin class for the BuyCourses plugin.
@@ -760,7 +761,7 @@ class BuyCoursesPlugin extends Plugin
      * @param int    $min  Optional. The minimum price filter
      * @param int    $max  Optional. The maximum price filter
      *
-     * @return array
+     * @return array|int
      */
     public function getCatalogCourseList($first, $pageSize, $name = null, $min = 0, $max = 0, $typeResult = 'all')
     {
@@ -956,6 +957,7 @@ class BuyCoursesPlugin extends Plugin
             'nbrCourses' => $session->getNbrCourses(),
             'nbrUsers' => $session->getNbrUsers(),
             'item' => $item,
+            'duration' => $session->getDuration(),
         ];
 
         $fieldValue = new ExtraFieldValue('session');
@@ -2140,7 +2142,7 @@ class BuyCoursesPlugin extends Plugin
                 $payoutsTable,
                 [
                     'date' => $sale['date'],
-                    'payout_date' => getdate(),
+                    'payout_date' => api_get_utc_datetime(),
                     'sale_id' => (int) $saleId,
                     'user_id' => $beneficiary['user_id'],
                     'commission' => number_format(
@@ -2399,7 +2401,11 @@ class BuyCoursesPlugin extends Plugin
     /**
      * List additional services.
      *
-     * @return array
+     * @param int    $start
+     * @param int    $end
+     * @param string $typeResult
+     *
+     * @return array|int
      */
     public function getServices($start, $end, $typeResult = 'all')
     {
@@ -2625,7 +2631,7 @@ class BuyCoursesPlugin extends Plugin
      * @param int    $max       Optional. The maximum price filter
      * @param mixed  $appliesTo optional
      *
-     * @return array
+     * @return array|int
      */
     public function getCatalogServiceList($start, $end, $name = null, $min = 0, $max = 0, $appliesTo = '', $typeResult = 'all')
     {
@@ -2938,6 +2944,32 @@ class BuyCoursesPlugin extends Plugin
             'success',
             false
         );
+    }
+
+    /**
+     * @param string $baseUrl
+     * @param string $currentPage
+     * @param string $pagesCount
+     * @param string $totalItems
+     *
+     * @return string
+     */
+    public static function returnPagination(
+        $baseUrl,
+        $currentPage,
+        $pagesCount,
+        $totalItems,
+        array $extraQueryParams = []
+    ) {
+        $queryParams = HttpRequest::createFromGlobals()->query->all();
+
+        unset($queryParams['page']);
+
+        $url = $baseUrl.'?'.http_build_query(
+            array_merge($queryParams, $extraQueryParams)
+        );
+
+        return Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
     }
 
     /**

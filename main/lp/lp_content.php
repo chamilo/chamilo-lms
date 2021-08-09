@@ -57,6 +57,11 @@ if ($dir) {
             $prerequisiteCheck = $learnPath->prerequisites_match($lpItemId);
             if ($prerequisiteCheck === true) {
                 $src = $learnPath->get_link('http', $lpItemId);
+                if (empty($src)) {
+                    $src = 'blank.php?'.api_get_cidreq().'&error=document_protected';
+                    break;
+                }
+
                 $learnPath->start_current_item(); // starts time counter manually if asset
                 $src = $learnPath->fixBlockedLinks($src);
 
@@ -70,7 +75,7 @@ if ($dir) {
                 }
                 break;
             }
-            $src = 'blank.php?error=prerequisites&prerequisite_message='.Security::remove_XSS($learnPath->error);
+            $src = 'blank.php?'.api_get_cidreq().'&error=prerequisites&prerequisite_message='.Security::remove_XSS($learnPath->error);
             break;
         case 2:
             $learnPath->stop_previous_item();
@@ -80,7 +85,7 @@ if ($dir) {
                 $src = $learnPath->get_link('http', $lpItemId);
                 $learnPath->start_current_item(); // starts time counter manually if asset
             } else {
-                $src = 'blank.php?error=prerequisites&prerequisite_message='.Security::remove_XSS($learnPath->error);
+                $src = 'blank.php?'.api_get_cidreq().'&error=prerequisites&prerequisite_message='.Security::remove_XSS($learnPath->error);
             }
             break;
         case 3:

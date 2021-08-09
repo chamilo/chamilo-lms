@@ -210,6 +210,7 @@ $courseSettingsDisableIcon = Display::return_icon(
 
 $enableAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
 $gameMode = api_get_setting('gamification_mode');
+$allowDatesForStudent = api_get_configuration_value('lp_start_and_end_date_visible_in_student_view');
 
 $data = [];
 $tableCategory = Database::get_course_table(TABLE_LP_CATEGORY);
@@ -235,7 +236,6 @@ foreach ($categories as $item) {
                 continue;
             }
         }
-
         if ($allowCategory && !empty($sessionId)) {
             // Check base course
             if (0 === $item->getSessionId()) {
@@ -316,14 +316,14 @@ foreach ($categories as $item) {
             }
 
             $start_time = $end_time = '';
-            if ($is_allowed_to_edit) {
-                if (!empty($details['publicated_on'])) {
-                    $start_time = api_convert_and_format_date($details['publicated_on'], DATE_TIME_FORMAT_LONG_24H);
-                }
-                if (!empty($details['expired_on'])) {
-                    $end_time = api_convert_and_format_date($details['expired_on'], DATE_TIME_FORMAT_LONG_24H);
-                }
-            } else {
+            if (!empty($details['publicated_on'])) {
+                $start_time = api_convert_and_format_date($details['publicated_on'], DATE_TIME_FORMAT_LONG_24H);
+            }
+            if (!empty($details['expired_on'])) {
+                $end_time = api_convert_and_format_date($details['expired_on'], DATE_TIME_FORMAT_LONG_24H);
+            }
+
+            if (!$is_allowed_to_edit) {
                 $time_limits = false;
                 // This is an old LP (from a migration 1.8.7) so we do nothing
                 if (empty($details['created_on']) && empty($details['modified_on'])) {
@@ -414,7 +414,6 @@ foreach ($categories as $item) {
             $dsp_default_view = '';
             $dsp_debug = '';
             $dsp_order = '';
-
             $progress = 0;
             if (!$isInvitee) {
                 $progress = isset($progressList[$id]) && !empty($progressList[$id]) ? $progressList[$id] : 0;
@@ -734,25 +733,6 @@ foreach ($categories as $item) {
                     }
                 }
 
-                /* Export */
-                if ($details['lp_type'] == 1) {
-                    $dsp_disk = Display::url(
-                        Display::return_icon('cd.png', get_lang('ExportShort')),
-                        api_get_self()."?$cidReq&action=export&lp_id=$id"
-                    );
-                } elseif ($details['lp_type'] == 2) {
-                    $dsp_disk = Display::url(
-                        Display::return_icon('cd.png', get_lang('ExportShort')),
-                        api_get_self()."?$cidReq&action=export&lp_id=$id&export_name="
-                            .api_replace_dangerous_char($name).'.zip'
-                    );
-                } else {
-                    $dsp_disk = Display::return_icon(
-                        'cd_na.png',
-                        get_lang('ExportShort')
-                    );
-                }
-
                 // Copy
                 $copy = Display::url(
                     Display::return_icon('cd_copy.png', get_lang('Copy')),
@@ -905,7 +885,28 @@ foreach ($categories as $item) {
                 );
             }
 
-            if ($hideScormExportLink === 'true') {
+            /* Export */
+            if ($details['lp_type'] == 1) {
+                $dsp_disk = Display::url(
+                    Display::return_icon('cd.png', get_lang('ExportShort')),
+                    api_get_self()."?$cidReq&action=export&lp_id=$id"
+                );
+            } elseif ($details['lp_type'] == 2) {
+                $dsp_disk = Display::url(
+                    Display::return_icon('cd.png', get_lang('ExportShort')),
+                    api_get_self()."?$cidReq&action=export&lp_id=$id&export_name="
+                    .api_replace_dangerous_char($name).'.zip'
+                );
+            } else {
+                $dsp_disk = Display::return_icon(
+                    'cd_na.png',
+                    get_lang('ExportShort')
+                );
+            }
+
+            if ($hideScormExportLink === 'true'
+                || (false === api_get_configuration_value('lp_allow_export_to_students') && !$is_allowed_to_edit)
+            ) {
                 $dsp_disk = null;
             }
 
@@ -1028,6 +1029,8 @@ $template->assign('data', $data);
 $template->assign('lp_is_shown', $lpIsShown);
 $template->assign('filtered_category', $filteredCategoryId);
 $template->assign('allow_min_time', $allowMinTime);
+$template->assign('allow_dates_for_student', $allowDatesForStudent);
+
 $templateName = $template->get_template('learnpath/list.tpl');
 $content = $template->fetch($templateName);
 $template->assign('content', $content);

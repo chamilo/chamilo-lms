@@ -162,30 +162,11 @@ if (isset($_GET['details'])) {
 }
 
 // Database Table Definitions
-//$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-//$tbl_stats_exercices = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-$tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
-$tbl_session_user = Database:: get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_session = Database:: get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_course = Database:: get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session_course_user = Database:: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_course = Database:: get_main_table(TABLE_MAIN_COURSE);
 $tbl_course_user = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_stats_access = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 $tbl_stats_exercices = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-$tbl_stats_exercices_attempts = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 $tbl_personal_agenda = Database:: get_main_table(TABLE_PERSONAL_AGENDA);
-$tbl_course_lp_item = Database:: get_course_table(TABLE_LP_ITEM);
 
-$tbl_course_lp_view = 'lp_view';
-$tbl_course_lp_view_item = 'lp_item_view';
-$tbl_course_lp_item = 'lp_item';
-$tbl_course_lp = 'lp';
-$tbl_course_quiz = 'quiz';
-$course_quiz_question = 'quiz_question';
-$course_quiz_rel_question = 'quiz_rel_question';
-$course_quiz_answer = 'quiz_answer';
-$course_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 $TABLECALHORAIRE = Database:: get_course_table(TABLE_CAL_HORAIRE);
 
 if (isset($_GET['user_id']) && $_GET['user_id'] != '') {
@@ -1117,9 +1098,9 @@ if (!empty($studentId)) {
                 'quiz.session_id'
             );
 
-            $sql = "SELECT quiz.title, id FROM $t_quiz AS quiz
+            $sql = "SELECT quiz.title, iid FROM $t_quiz AS quiz
                             WHERE
-                                quiz.c_id = ".$courseInfo['real_id']." AND
+                                quiz.c_id = {$courseInfo['real_id']} AND
                                 active IN (0, 1)
                                 $sessionCondition
                             ORDER BY quiz.title ASC ";
@@ -1128,7 +1109,7 @@ if (!empty($studentId)) {
             $i = 0;
             if (Database:: num_rows($result_exercices) > 0) {
                 while ($exercices = Database:: fetch_array($result_exercices)) {
-                    $exercise_id = intval($exercices['id']);
+                    $exercise_id = intval($exercices['iid']);
                     $count_attempts = Tracking::count_student_exercise_attempts(
                                 $studentId,
                                 $courseInfo['real_id'],
@@ -2231,7 +2212,7 @@ if (empty($_GET['details'])) {
         ];
 
     $t_quiz = Database:: get_course_table(TABLE_QUIZ_TEST);
-    $sql = "SELECT quiz.title, id FROM ".$t_quiz." AS quiz
+    $sql = "SELECT quiz.title, iid FROM $t_quiz AS quiz
                 WHERE
                     quiz.c_id = $c_id AND
                     (quiz.session_id = $session_id OR quiz.session_id = 0) AND
@@ -2241,7 +2222,7 @@ if (empty($_GET['details'])) {
     $i = 0;
     if (Database:: num_rows($result_exercices) > 0) {
         while ($exercices = Database:: fetch_array($result_exercices)) {
-            $exercise_id = intval($exercices['id']);
+            $exercise_id = intval($exercices['iid']);
             $count_attempts = Tracking::count_student_exercise_attempts(
                     $studentId,
                     $course_code,

@@ -159,6 +159,11 @@ class ExtraField extends Model
             case 'track_exercise':
                 $this->extraFieldType = EntityExtraField::TRACK_EXERCISE_FIELD_TYPE;
                 break;
+            case 'portfolio':
+                $this->extraFieldType = EntityExtraField::PORTFOLIO_TYPE;
+                break;
+            case 'lp_view':
+                $this->extraFieldType = EntityExtraField::LP_VIEW_TYPE;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
@@ -189,11 +194,17 @@ class ExtraField extends Model
             'forum_post',
             'exercise',
             'track_exercise',
+            'lp_view',
         ];
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {
             $result[] = 'scheduled_announcement';
         }
+
+        if (api_get_configuration_value('allow_portfolio_tool')) {
+            $result[] = 'portfolio';
+        }
+        sort($result);
 
         return $result;
     }
@@ -869,7 +880,7 @@ class ExtraField extends Model
                             $extra_data['extra_'.$field['variable']]['extra_'.$field['variable']] = $field_value;
                             break;
                         case self::FIELD_TYPE_TRIPLE_SELECT:
-                            list($level1, $level2, $level3) = explode(';', $field_value);
+                            [$level1, $level2, $level3] = explode(';', $field_value);
 
                             $extra_data["extra_$variable"]["extra_$variable"] = $level1;
                             $extra_data["extra_$variable"]["extra_{$variable}_second"] = $level2;
@@ -993,19 +1004,6 @@ class ExtraField extends Model
                     if (!in_array($field_details['variable'], $showOnlyTheseFields)) {
                         continue;
                     }
-                }
-                // see  BT#17943
-                $authors = false;
-                if (
-                    $field_details['variable'] == 'authors'
-                    || $field_details['variable'] == 'authorlp'
-                    || $field_details['variable'] == 'authorlpitem'
-                    || $field_details['variable'] == 'price'
-                ) {
-                    $authors = true;
-                }
-                if (!api_is_platform_admin() && $authors == true) {
-                    continue;
                 }
 
                 // Getting default value id if is set
@@ -1168,7 +1166,6 @@ class ExtraField extends Model
                                 'checkbox',
                                 'extra_'.$field_details['variable'],
                                 null,
-                                //$field_details['display_text'].'<br />',
                                 get_lang('Yes'),
                                 $checkboxAttributes
                             );
@@ -1191,50 +1188,13 @@ class ExtraField extends Model
                         if (empty($defaultValueId)) {
                             $options[''] = get_lang('SelectAnOption');
                         }
-                        // When a variable is 'authors', this will be a
-                        // select element of teachers (see BT#17648)
-                        $variable = $field_details['variable'];
-                        $authors = ($variable == 'authors' || $variable == 'authorlpitem') ? true : false;
-                        if ($authors == false) {
+
+                        if (isset($field_details['options']) && !empty($field_details['options'])) {
                             foreach ($field_details['options'] as $optionDetails) {
                                 $options[$optionDetails['option_value']] = $optionDetails['display_text'];
                             }
-                        } else {
-                            if ($variable == 'authors') {
-                                $conditions = [
-                                    'enabled' => 1,
-                                    'status' => COURSEMANAGER,
-                                ];
-                                $teachers = UserManager::get_user_list($conditions);
-                                foreach ($teachers as $teacher) {
-                                    $options[$teacher['id']] = $teacher['complete_name'];
-                                }
-                            } elseif ($variable == 'authorlpitem') {
-                                /* Authors*/
-                                $options = [];
-                                $field = new ExtraField('user');
-                                $authorLp = $field->get_handler_field_info_by_field_variable('authorlp');
-
-                                $idExtraField = (int) (isset($authorLp['id']) ? $authorLp['id'] : 0);
-                                if ($idExtraField != 0) {
-                                    $extraFieldValueUser = new ExtraFieldValue('user');
-                                    $arrayExtraFieldValueUser = $extraFieldValueUser->get_item_id_from_field_variable_and_field_value(
-                                        $authorLp['variable'],
-                                        1,
-                                        true,
-                                        false,
-                                        true
-                                    );
-
-                                    foreach ($arrayExtraFieldValueUser as $item) {
-                                        $teacher = api_get_user_info($item['item_id']);
-                                        // $teachers[] = $teacher;
-                                        $options[$teacher['id']] = $teacher['complete_name'];
-                                    }
-                                }
-                                /* Authors*/
-                            }
                         }
+
                         $form->addElement(
                             'select',
                             'extra_'.$field_details['variable'],
@@ -1986,10 +1946,7 @@ class ExtraField extends Model
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
             if ($row) {
-                $row['display_text'] = $this->translateDisplayName(
-                    $row['variable'],
-                    $row['display_text']
-                );
+                $row['display_text'] = self::translateDisplayName($row['variable'], $row['display_text']);
 
                 // All the options of the field
                 $sql = "SELECT * FROM $this->table_field_options
@@ -2663,6 +2620,7 @@ JAVASCRIPT;
                     }
                 } else {
                     // Extra fields
+                    $ruleField = Database::escapeField($rule->field);
                     if (false === strpos($rule->field, '_second')) {
                         // No _second
                         $original_field = str_replace($stringToSearch, '', $rule->field);
@@ -2685,7 +2643,7 @@ JAVASCRIPT;
                                     $conditionArray[] = ' ('
                                         .$this->get_where_clause($rule->field, $rule->op, $rule->data)
                                         .') ';
-                                    $extraFields[] = ['field' => $rule->field, 'id' => $field_option['id']];
+                                    $extraFields[] = ['field' => $ruleField, 'id' => $field_option['id']];
                                 }
                                 break;
                             case self::FIELD_TYPE_TAG:
@@ -2697,7 +2655,7 @@ JAVASCRIPT;
                                     //$where = $this->get_where_clause($rule->field, $rule->op, $rule->data, 'OR');
                                     //$conditionArray[] = " ( $where ) ";
                                     $extraFields[] = [
-                                        'field' => $rule->field,
+                                        'field' => $ruleField,
                                         'id' => $field_option['id'],
                                         'data' => $rule->data,
                                     ];
@@ -2711,7 +2669,7 @@ JAVASCRIPT;
                                     $where = $this->get_where_clause($rule->field, $rule->op, $rule->data, 'OR');
                                     $conditionArray[] = " ( $where ) ";
                                     $extraFields[] = [
-                                        'field' => $rule->field,
+                                        'field' => $ruleField,
                                         'id' => $field_option['id'],
                                         'data' => $rule->data,
                                     ];
@@ -2723,7 +2681,7 @@ JAVASCRIPT;
                         $original_field = str_replace($stringToSearch, '', $my_field);
                         $field_option = $this->get_handler_field_info_by_field_variable($original_field);
                         $extraFields[] = [
-                            'field' => $rule->field,
+                            'field' => $ruleField,
                             'id' => $field_option['id'],
                         ];
                     }
@@ -2744,9 +2702,12 @@ JAVASCRIPT;
      */
     public function get_where_clause($col, $oper, $val, $conditionBetweenOptions = 'OR')
     {
+        $col = Database::escapeField($col);
+
         if (empty($col)) {
             return '';
         }
+
         $conditionBetweenOptions = in_array($conditionBetweenOptions, ['OR', 'AND']) ? $conditionBetweenOptions : 'OR';
         if ('bw' === $oper || 'bn' === $oper) {
             $val .= '%';
@@ -2927,11 +2888,10 @@ JAVASCRIPT;
         if (!empty($options['where'])) {
             $where .= ' AND '.$options['where'];
         }
-        //}
 
         $order = '';
         if (!empty($options['order'])) {
-            $order = ' ORDER BY '.$options['order'];
+            $order = " ORDER BY ".$options['order']." ";
         }
         $limit = '';
         if (!empty($options['limit'])) {
@@ -3160,6 +3120,7 @@ JAVASCRIPT;
         $tagRelExtraTable = Database::get_main_table(TABLE_MAIN_EXTRA_FIELD_REL_TAG);
         $tagTable = Database::get_main_table(TABLE_MAIN_TAG);
         $optionsTable = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
+        $value = Database::escape_string(implode("','", $options));
 
         $sql = "SELECT DISTINCT t.*, v.value, o.display_text
                 FROM $tagRelExtraTable te
@@ -3169,7 +3130,7 @@ JAVASCRIPT;
                 ON (te.item_id = v.item_id AND v.field_id = $id)
                 INNER JOIN $optionsTable o
                 ON (o.option_value = v.value)
-                WHERE v.value IN ('".implode("','", $options)."')
+                WHERE v.value IN ('".$value."')
                 ORDER BY o.option_order, t.tag
                ";
 

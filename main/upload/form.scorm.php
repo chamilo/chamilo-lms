@@ -92,6 +92,40 @@ if (api_get_configuration_value('allow_htaccess_import_from_scorm')) {
 
 $form->addButtonUpload(get_lang('Upload'));
 
+if (api_get_configuration_value('scorm_upload_from_cache')) {
+    $list = get_zip_files_in_garbage();
+    $select_file_name = &$form->addElement(
+        'select',
+        'file_name',
+        get_lang('Or').' '.api_strtolower(get_lang('UploadLocalFileFromGarbageDir'))
+    );
+    if (count($list) > 0) {
+        foreach ($list as $file) {
+            $select_file_name->addOption($file, $file);
+        }
+        $form->addButtonUpload(get_lang('Upload'));
+    } else {
+        $select_file_name->addOption(get_lang('ImportNoFile'), get_lang('ImportNoFile'));
+    }
+}
+
+if (api_get_setting('status', 'pens') == 'installed') {
+    require_once api_get_path(SYS_PLUGIN_PATH)."/pens/chamilo_pens.php";
+    $list = ChamiloPens::findAll();
+    $select_pens = $form->addElement(
+        'select',
+        'pens_package',
+        'Or select an existing PENS package'
+    );
+    if (count($list) > 0) {
+        foreach ($list as $package) {
+            $select_pens->addOption($package->getPackageName(), $package->getPackageName());
+        }
+    } else {
+        $select_pens->addOption(get_lang('ImportNoFile'), get_lang('ImportNoFile'));
+    }
+}
+
 // the default values for the form
 $defaults = ['index_document' => 'checked="checked"', 'use_max_score' => 1];
 $form->setDefaults($defaults);

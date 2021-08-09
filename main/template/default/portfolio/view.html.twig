@@ -1,0 +1,129 @@
+<article class="thumbnail portfolio-item">
+    <div class="caption">
+        <div class="portfolio-actions pull-right">
+            {% if _u.id == item.user.id %}
+                <a href="{{ baseurl ~ {'action':'edit_item', 'id':item.id}|url_encode }}">
+                    {{ 'edit.png'|img(22, 'Edit'|get_lang) }}
+                </a>
+                {% if item.isVisible %}
+                    <a href="{{ baseurl ~ {'action':'hide_item', 'id':item.id}|url_encode }}">
+                        {{ 'visible.png'|img(22, 'Invisible'|get_lang) }}
+                    </a>
+                {% else %}
+                    <a href="{{ baseurl ~ {'action':'show_item', 'id':item.id}|url_encode }}">
+                        {{ 'invisible.png'|img(22, 'Visible'|get_lang) }}
+                    </a>
+                {% endif %}
+                <a href="{{ baseurl ~ {'action':'delete_item', 'id':item.id}|url_encode }}" class="btn-delete">
+                    {{ 'delete.png'|img(22, 'Delete'|get_lang) }}
+                </a>
+            {% endif %}
+
+            {% if _u.id != item.user.id %}
+                <a href="{{ baseurl ~ {'action':'copy', 'copy':'item', 'id':item.id}|url_encode }}">
+                    {{ 'copy.png'|img(22, 'CopyToMyPortfolio'|get_lang) }}
+                </a>
+            {% endif %}
+
+            {% if false|api_is_allowed_to_edit %}
+                <a href="{{ baseurl ~ {'action':'teacher_copy', 'copy':'item', 'id':item.id}|url_encode }}">
+                    {{ 'copy.png'|img(22, 'CopyToStudentPortfolio'|get_lang) }}
+                </a>
+
+                {% if item.course and '1' == 'qualify_portfolio_item'|api_get_course_setting %}
+                    <a href="{{ baseurl ~ {'action':'qualify', 'item':item.id}|url_encode }}">
+                        {{ 'quiz.png'|img(22, 'QualifyThisPortfolioItem'|get_lang) }}
+                    </a>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <h4 class="h3">{{ item.title|remove_xss }}</h4>
+
+        <ul class="fa-ul list-inline">
+            {% if _c is empty %}
+                {% if item.session %}
+                    <li>
+                        <span class="fa-li fa fa-book" aria-hidden="true"></span>
+                        {{ 'Course'|get_lang ~ ': ' ~ item.session.name ~ ' (' ~ item.course.title ~ ')' }}
+                    </li>
+                {% elseif not item.session and item.course %}
+                    <li>
+                        <span class="fa-li fa fa-book" aria-hidden="true"></span>
+                        {{ 'Course'|get_lang ~ ': ' ~ item.course.title }}
+                    </li>
+                {% endif %}
+            {% else %}
+                <li>
+                    <span class="fa-li fa fa-user" aria-hidden="true"></span>
+                    {{ item.user.completeName }}
+                </li>
+            {% endif %}
+
+            <li>
+                <span class="fa-li fa fa-clock-o" aria-hidden="true"></span>
+                {{ 'CreationDate'|get_lang ~ ': ' ~ item.creationDate|date_to_time_ago }}
+            </li>
+
+            {% if _u.id == item.user.id and item.creationDate != item.updateDate %}
+                <li>
+                    <span class="fa-li fa fa-clock-o" aria-hidden="true"></span>
+                    {{ 'UpdateDate'|get_lang ~ ': ' ~ item.updateDate|date_to_time_ago }}
+                </li>
+            {% endif %}
+
+            <li>
+                <span class="fa-li fa fa-comment-o" aria-hidden="true"></span>
+                {{ 'XComments'|get_lang|format(item.comments.count) }}
+            </li>
+        </ul>
+
+        <hr>
+
+        {{ item_content|remove_xss }}
+
+        {% if attachment_list %}
+            <hr>
+
+            {{ attachment_list }}
+        {% endif %}
+    </div>
+</article>
+
+<hr>
+
+<div id="portfolio-item-comments">
+    <h5 class="h4">{{ 'XComments'|get_lang|format(item.comments.count) }}</h5>
+
+    {{ comments }}
+
+    {{ form }}
+</div>
+
+<script>
+    $(function () {
+        var frmCommentTop = $("#frm_comment").offset().top;
+
+        $('.btn-reply-to').on('click', function (e) {
+            e.preventDefault();
+
+            var comment = $.extend(
+                {},
+                {'id': 0},
+                $(this).data('comment')
+            );
+
+            if (!comment.id) {
+                return;
+            }
+
+            var $frm = $('form#frm_comment');
+
+            $frm.find('#frm_comment_parent').val(comment.id);
+
+            CKEDITOR.instances.content.setData('');
+
+            $('html, body').animate({scrollTop: frmCommentTop});
+        });
+    });
+</script>

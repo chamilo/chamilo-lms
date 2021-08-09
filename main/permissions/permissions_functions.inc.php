@@ -567,7 +567,7 @@ function assign_role($content, $action, $id, $role_id, $scope = 'course')
         $table = Database::get_course_table(TABLE_ROLE_GROUP);
         $id_field = 'group_id';
     } else {
-        return  get_lang('Error');
+        return get_lang('Error');
     }
 
     // grating a right

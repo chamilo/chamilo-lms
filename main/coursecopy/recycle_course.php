@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
@@ -9,8 +10,6 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
  * Delete resources from a course.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
- *
- * @package chamilo.backup
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
@@ -70,20 +69,18 @@ if (Security::check_token('post') && (
         $recycle_type = 'select_items';
     }
     $cr = new CourseRecycler($course);
-
-    if ($recycle_type == 'full_backup') {
+    if ($recycle_type === 'full_backup') {
         /* to delete, course code confirmation must be equal that current course code */
         if ($current_course_code == $courseCodeConfirmation) {
             $cr->recycle($recycle_type);
             echo Display::return_message(get_lang('RecycleFinished'), 'confirm');
         } else {
-            $messageFailCourseCode = '<p>'.get_lang('CourseRegistrationCodeIncorrect').'</p>';
-            $messageFailCourseCode .= '<p><a class="btn btn-primary" href="'.api_get_self().'?'.api_get_cidreq().'">'.
+            echo Display::return_message(get_lang('CourseRegistrationCodeIncorrect'), 'error', false);
+            echo '<p><a class="btn btn-primary" href="'.api_get_self().'?'.api_get_cidreq().'">'.
                 get_lang('BackToPreviousPage').
                 '</a></p>';
-            echo Display::return_message($messageFailCourseCode, 'error', false);
         }
-    } elseif ($recycle_type == 'select_items') {
+    } elseif ($recycle_type === 'select_items') {
         $cr->recycle($recycle_type);
         echo Display::return_message(get_lang('RecycleFinished'), 'confirm');
     }
@@ -108,25 +105,13 @@ if (Security::check_token('post') && (
     } else {
         echo Display::return_message(get_lang('RecycleWarning'), 'warning', false);
         $form = new FormValidator('recycle_course', 'post', api_get_self().'?'.api_get_cidreq());
-        $form->addElement('header', get_lang('SelectOptionForBackup'));
+        $form->addHeader(get_lang('SelectOptionForBackup'));
         $form->addElement('radio', 'recycle_option', null, get_lang('FullRecycle'), 'full_backup');
         $form->addElement('radio', 'recycle_option', null, get_lang('LetMeSelectItems'), 'select_items');
 
-        //Confirmation input code
-        $form->addElement(
-            'label',
-            '',
-            '<span class="hidden course-full-delete">'.get_lang('CourseCodeConfirmation').'</span>',
-            null,
-            null
-        );
-        $form->addElement(
-            'input',
-            'course_code_confirmation',
-            null,
-            'class="hidden course-full-delete"',
-            'course_code'
-        );
+        $form->addHtml('<div class="course-full-delete hidden">');
+        $form->addText('course_code_confirmation', get_lang('CourseCodeConfirmation'));
+        $form->addHtml('</div>');
 
         $form->addButtonSave(get_lang('RecycleCourse'));
         $form->setDefaults(['recycle_option' => 'select_items']);
@@ -137,20 +122,19 @@ if (Security::check_token('post') && (
         $form->display();
         /* make recycle_course_course_code_confirmation required to put code course */
         echo '
-<script>
-$(function(){
-    $ (`[type="radio"]`).on (`change`, function (e) {
-        if ($ (this).val () === `full_backup`) {
-            $ (`#recycle_course_course_code_confirmation`).prop (`required`, `required`);
-            $ (`.course-full-delete`).removeClass(`hidden`);
-        } else {
-            $ (`#recycle_course_course_code_confirmation`).prop (`required`, ``);
-            $ (`.course-full-delete`).addClass(`hidden`);
-
-        }
-    });
-})
-</script>';
+            <script>
+            $(function(){
+                $(`[type="radio"]`).on(`change`, function (e) {
+                    if ($(this).val() === `full_backup`) {
+                        $(`#recycle_course_course_code_confirmation`).prop(`required`, `required`);
+                        $(`.course-full-delete`).removeClass(`hidden`);
+                    } else {
+                        $(`#recycle_course_course_code_confirmation`).prop(`required`, ``);
+                        $(`.course-full-delete`).addClass(`hidden`);
+                    }
+                });
+            })
+            </script>';
     }
 }
 

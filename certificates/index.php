@@ -1,22 +1,15 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Show specified user certificate.
- *
- * @package chamilo.certificate
  */
 require_once '../main/inc/global.inc.php';
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 $userId = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
 $certificateId = isset($_GET['id']) ? $_GET['id'] : 0;
-
-$certificate = new Certificate($certificateId, $userId);
-$certificateData = $certificate->get($certificateId);
-if (empty($certificateData)) {
-    api_not_allowed(false, Display::return_message(get_lang('NoCertificateAvailable'), 'warning'));
-}
 
 $category = Category::findByCertificate($certificateId);
 
@@ -33,6 +26,12 @@ if (!empty($category) && !empty($category->get_course_code())) {
     // Overwrite the interface language with the course language
     $language_interface = $language;
     $language_interface_initial_value = $language_interface;
+}
+
+$certificate = new Certificate($certificateId, $userId);
+$certificateData = $certificate->get($certificateId);
+if (empty($certificateData)) {
+    api_not_allowed(false, Display::return_message(get_lang('NoCertificateAvailable'), 'warning'));
 }
 
 CustomCertificatePlugin::redirectCheck($certificate, $certificateId, $userId);
@@ -72,6 +71,11 @@ switch ($action) {
             );
 
             $pdf = new PDF($pageFormat, $pdfParams['orientation'], $pdfParams);
+
+            if (api_get_configuration_value('add_certificate_pdf_footer')) {
+                $pdf->setCertificateFooter();
+            }
+
             $pdf->html_to_pdf(
                 $certificatePathList,
                 $pdfName,

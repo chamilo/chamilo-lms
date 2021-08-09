@@ -24,7 +24,6 @@ $interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('UserList')];
 
 // Database Table Definitions
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
 // initializing variables
@@ -248,7 +247,7 @@ if (!empty($msg)) {
         <p><?php echo get_lang('FirstLetterCourse'); ?> :</p>
         <select name="firstLetterCourse" class="selectpicker form-control" onchange = "xajax_search_courses(this.value,'multiple')">
             <option value="%">--</option>
-            <?php  echo Display :: get_alphabet_options($firstLetter); ?>
+            <?php echo Display :: get_alphabet_options($firstLetter); ?>
         </select>
         <?php
     } ?>

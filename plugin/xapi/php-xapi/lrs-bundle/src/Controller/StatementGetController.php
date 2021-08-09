@@ -103,7 +103,7 @@ final class StatementGetController
      *
      * @return JsonResponse|MultipartResponse
      */
-    protected function buildSingleStatementResponse(Statement $statement, $includeAttachments = false)
+    private function buildSingleStatementResponse(Statement $statement, $includeAttachments = false)
     {
         $json = $this->statementSerializer->serializeStatement($statement);
 
@@ -124,7 +124,7 @@ final class StatementGetController
      *
      * @return JsonResponse|MultipartResponse
      */
-    protected function buildMultiStatementsResponse(array $statements, $includeAttachments = false)
+    private function buildMultiStatementsResponse(array $statements, $includeAttachments = false)
     {
         $json = $this->statementResultSerializer->serializeStatementResult(new StatementResult($statements));
 
@@ -142,7 +142,7 @@ final class StatementGetController
      *
      * @return MultipartResponse
      */
-    protected function buildMultipartResponse(JsonResponse $statementResponse, array $statements)
+    private function buildMultipartResponse(JsonResponse $statementResponse, array $statements)
     {
         $attachmentsParts = [];
 

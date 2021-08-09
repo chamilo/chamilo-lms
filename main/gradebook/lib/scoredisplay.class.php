@@ -336,6 +336,11 @@ class ScoreDisplay
         $ignoreDecimals = false,
         $removeEmptyDecimals = false
     ) {
+        // No score available.
+        if (!is_array($score)) {
+            return '-';
+        }
+
         $my_score = $score == 0 ? [] : $score;
         switch ($type) {
             case SCORE_BAR:
@@ -348,22 +353,16 @@ class ScoreDisplay
 
                 return round($percentage);
                 break;
-            case SCORE_SIMPLE:
-                if (!isset($my_score[0])) {
-                    $my_score[0] = 0;
-                }
-
-                return $this->format_score($my_score[0], $ignoreDecimals);
-                break;
         }
 
-        if ($this->custom_enabled && isset($this->custom_display_conv)) {
-            $display = $this->displayDefault($my_score, $type, $ignoreDecimals, $removeEmptyDecimals);
+        if (false === $disableColor && $this->custom_enabled && isset($this->custom_display_conv)) {
+            $display = $this->displayDefault($my_score, $type, $ignoreDecimals, $removeEmptyDecimals, true);
         } else {
             // if no custom display set, use default display
             $display = $this->displayDefault($my_score, $type, $ignoreDecimals, $removeEmptyDecimals);
         }
-        if ($this->coloring_enabled && $disableColor == false) {
+
+        if ($this->coloring_enabled && false === $disableColor) {
             $denom = isset($score[1]) && !empty($score[1]) && $score[1] > 0 ? $score[1] : 1;
             $scoreCleaned = isset($score[0]) ? $score[0] : 0;
             if (($scoreCleaned / $denom) < ($this->color_split_value / 100)) {
@@ -440,53 +439,45 @@ class ScoreDisplay
      * @param int   $type
      * @param bool  $ignoreDecimals
      * @param bool  $removeEmptyDecimals
+     * @param bool  $addScoreLabel
      *
      * @return string
      */
-    private function displayDefault($score, $type, $ignoreDecimals = false, $removeEmptyDecimals = false)
+    private function displayDefault($score, $type, $ignoreDecimals = false, $removeEmptyDecimals = false, $addScoreLabel = false)
     {
+        $scoreLabel = '';
+        if ($addScoreLabel) {
+            $scoreLabel = $this->display_custom($score);
+            if (!empty($scoreLabel)) {
+                $scoreLabel = ' - '.$scoreLabel;
+            }
+        }
+
         switch ($type) {
             case SCORE_DIV:                            // X / Y
-                return $this->display_as_div($score, $ignoreDecimals, $removeEmptyDecimals);
+                return $this->display_as_div($score, $ignoreDecimals, $removeEmptyDecimals).$scoreLabel;
             case SCORE_PERCENT:                        // XX %
-                return $this->display_as_percent($score);
+                return $this->display_as_percent($score).$scoreLabel;
             case SCORE_DIV_PERCENT:                    // X / Y (XX %)
                 //return $this->display_as_div($score).' ('.$this->display_as_percent($score).')';
                 // 2020-10 Changed to XX % (X / Y)
-                return $this->display_as_percent($score).' ('.$this->display_as_div($score).')';
+                return $this->display_as_percent($score).' ('.$this->display_as_div($score).')'.$scoreLabel;
             case SCORE_AVERAGE:                        // XX %
-                return $this->display_as_percent($score);
+                return $this->display_as_percent($score).$scoreLabel;
             case SCORE_DECIMAL:                        // 0.50  (X/Y)
-                return $this->display_as_decimal($score);
+                return $this->display_as_decimal($score).$scoreLabel;
             case SCORE_DIV_PERCENT_WITH_CUSTOM:        // X / Y (XX %) - Good!
-                $custom = $this->display_custom($score);
-                if (!empty($custom)) {
-                    $custom = ' - '.$custom;
-                }
                 $div = $this->display_as_div($score, false, $removeEmptyDecimals);
-                /*return
-                    $div.
-                    ' ('.$this->display_as_percent($score).')'.$custom;*/
+
                 return
                     $this->display_as_percent($score).
-                    ' ('.$div.')'.$custom;
+                    ' ('.$div.')'.$scoreLabel;
             case SCORE_DIV_SIMPLE_WITH_CUSTOM:         // X - Good!
-                $custom = $this->display_custom($score);
-
-                if (!empty($custom)) {
-                    $custom = ' - '.$custom;
-                }
-
-                return $this->display_simple_score($score).$custom;
+                return $this->display_simple_score($score).$scoreLabel;
                 break;
             case SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS:
-                $custom = $this->display_custom($score);
-                if (!empty($custom)) {
-                    $custom = ' - '.$custom;
-                }
                 $score = $this->display_simple_score($score);
-
-                //needs sudo apt-get install php5-intl
+                // Needs sudo apt-get install php5-intl
                 if (class_exists('NumberFormatter')) {
                     $iso = api_get_language_isocode();
                     $f = new NumberFormatter($iso, NumberFormatter::SPELLOUT);
@@ -495,10 +486,15 @@ class ScoreDisplay
                     $letters = " ($letters) ";
                 }
 
-                return $score.$letters.$custom;
-                break;
-            case SCORE_CUSTOM:                          // Good!
+                return $score.$letters.$scoreLabel;
+            case SCORE_CUSTOM: // Good!
                 return $this->display_custom($score);
+            case SCORE_SIMPLE:
+                if (!isset($score[0])) {
+                    $score[0] = 0;
+                }
+
+                return $this->format_score($score[0], $ignoreDecimals).$scoreLabel;
         }
     }
 

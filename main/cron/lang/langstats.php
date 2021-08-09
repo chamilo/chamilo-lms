@@ -11,7 +11,7 @@
 /**
  * Requires.
  */
-die();
+exit();
 require_once '../../inc/global.inc.php';
 require_once 'langstats.class.php';
 /**

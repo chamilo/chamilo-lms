@@ -4,7 +4,7 @@
 $table = Database::get_main_table('vchamilo');
 
 if (!defined('CHAMILO_INTERNAL')) {
-    die('You cannot use this script this way');
+    exit('You cannot use this script this way');
 }
 
 $vidlist = isset($_REQUEST['vids']) ? implode("','", array_map('intval', $_REQUEST['vids'])) : '';
@@ -231,7 +231,7 @@ switch ($action) {
                     $tpl->assign('content', $content);
                     $tpl->display_one_col_template();
 
-                    die;
+                    exit;
                 }
             }
 

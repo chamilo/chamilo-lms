@@ -8,7 +8,7 @@
 /**
  * Includes and declarations.
  */
-die();
+exit();
 require_once __DIR__.'/../../inc/global.inc.php';
 $path = api_get_path(SYS_LANG_PATH).'english';
 ini_set('memory_limit', '128M');

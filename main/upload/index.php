@@ -20,6 +20,8 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $_course = api_get_course_info();
 
+api_protect_course_script(true);
+
 $htmlHeadXtra[] = "<script>
 function check_unzip() {
 	if (document.upload.unzip.checked) {

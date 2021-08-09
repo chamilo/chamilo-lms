@@ -65,6 +65,7 @@ class GradebookDataGenerator
         $this->items = array_merge($allcats, $allevals, $tabLinkToDisplay);
         $this->evals_links = array_merge($allevals, $tabLinkToDisplay);
         $this->userId = api_get_user_id();
+        $this->hidePercentage = api_get_configuration_value('hide_gradebook_percentage_user_result');
     }
 
     /**
@@ -108,11 +109,9 @@ class GradebookDataGenerator
 
         $allitems = $this->items;
         usort($allitems, ['GradebookDataGenerator', 'sort_by_name']);
-
         $userId = $this->userId;
         $visibleItems = array_slice($allitems, $start, $count);
         $userCount = !empty($studentList) ? count($studentList) : 0;
-
         // Generate the data to display
         $data = [];
         $allowStats = api_get_configuration_value('allow_gradebook_stats');
@@ -125,7 +124,7 @@ class GradebookDataGenerator
         foreach ($visibleItems as $item) {
             $row = [];
             $row[] = $item;
-            $row[] = $item->get_name();
+            $row[] = Security::remove_XSS($item->get_name());
             // display the 2 first line of description and all description
             // on mouseover (https://support.chamilo.org/issues/6588)
             $row[] = '<span title="'.api_remove_tags_with_space($item->get_description()).'">'.
@@ -141,7 +140,8 @@ class GradebookDataGenerator
                         $userId,
                         $item,
                         $ignore_score_color,
-                        false
+                        false,
+                        $useExerciseScoreInTotal
                     );
                     $row[] = $resultColumn['display'];
                     $row['result_score'] = $resultColumn['score'];
@@ -151,7 +151,7 @@ class GradebookDataGenerator
                     if (isset($defaultData[$item->get_id()]) && isset($defaultData[$item->get_id()]['best'])) {
                         $best = $defaultData[$item->get_id()]['best'];
                     } else {
-                        $best = $this->buildBestResultColumn($item);
+                        $best = $this->buildBestResultColumn($item, $useExerciseScoreInTotal);
                     }
 
                     if (empty($model)) {
@@ -161,7 +161,7 @@ class GradebookDataGenerator
                         if (isset($defaultData[$item->get_id()]) && isset($defaultData[$item->get_id()]['average'])) {
                             $average = $defaultData[$item->get_id()]['average'];
                         } else {
-                            $average = $this->buildBestResultColumn($item);
+                            $average = $this->buildBestResultColumn($item, $useExerciseScoreInTotal);
                         }
 
                         $row['average'] = $average['display'];
@@ -181,7 +181,8 @@ class GradebookDataGenerator
                         $userId,
                         $item,
                         $ignore_score_color,
-                        true
+                        true,
+                        $useExerciseScoreInTotal
                     );
                     $row[] = $result['display'];
                     $row['result_score'] = $result['score'];
@@ -210,7 +211,7 @@ class GradebookDataGenerator
                         $row['average'] = $average['display'];
                         $row['average_score'] = $average['score'];
 
-                        // Ranking
+                        // Ranking.
                         if ($allowStats) {
                             // Ranking
                             if (isset($defaultData[$item->get_id()]) &&
@@ -247,69 +248,87 @@ class GradebookDataGenerator
                                 if ('C' === $item->get_item_type()) {
                                     $evals = $item->get_evaluations(null);
                                     $links = $item->get_links(null);
-                                }
-                                foreach ($studentList as $user) {
-                                    $ressum = 0;
-                                    $weightsum = 0;
-                                    $bestResult = 0;
 
-                                    if (!empty($evals)) {
-                                        foreach ($evals as $eval) {
-                                            $evalres = $eval->calc_score($user['user_id'], null);
-                                            $eval->setStudentList($studentList);
+                                    foreach ($studentList as $user) {
+                                        $ressum = 0;
+                                        $weightsum = 0;
+                                        $bestResult = 0;
+                                        if (!empty($evals)) {
+                                            foreach ($evals as $eval) {
+                                                $evalres = $eval->calc_score($user['user_id'], null);
+                                                $eval->setStudentList($studentList);
 
-                                            if (isset($evalres) && 0 != $eval->get_weight()) {
-                                                $evalweight = $eval->get_weight();
-                                                $weightsum += $evalweight;
-                                                if (!empty($evalres[1])) {
-                                                    $ressum += $evalres[0] / $evalres[1] * $evalweight;
-                                                }
-
-                                                if ($ressum > $bestResult) {
-                                                    $bestResult = $ressum;
-                                                }
-                                            } else {
-                                                if (0 != $eval->get_weight()) {
+                                                if (isset($evalres) && 0 != $eval->get_weight()) {
                                                     $evalweight = $eval->get_weight();
                                                     $weightsum += $evalweight;
+                                                    if (!empty($evalres[1])) {
+                                                        $ressum += $evalres[0] / $evalres[1] * $evalweight;
+                                                    }
+
+                                                    if ($ressum > $bestResult) {
+                                                        $bestResult = $ressum;
+                                                    }
+                                                } else {
+                                                    if (0 != $eval->get_weight()) {
+                                                        $evalweight = $eval->get_weight();
+                                                        $weightsum += $evalweight;
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
-
-                                    if (!empty($links)) {
-                                        foreach ($links as $link) {
-                                            $link->setStudentList($studentList);
-                                            if ($session_id) {
-                                                $link->set_session_id($session_id);
-                                            }
-                                            $linkres = $link->calc_score($user['user_id'], null);
-                                            if (!empty($linkres) && 0 != $link->get_weight()) {
-                                                $linkweight = $link->get_weight();
-                                                $link_res_denom = 0 == $linkres[1] ? 1 : $linkres[1];
-
-                                                $weightsum += $linkweight;
-                                                $ressum += $linkres[0] / $link_res_denom * $linkweight;
-                                                if ($ressum > $bestResult) {
-                                                    $bestResult = $ressum;
+                                        if (!empty($links)) {
+                                            foreach ($links as $link) {
+                                                $link->setStudentList($studentList);
+                                                if ($session_id) {
+                                                    $link->set_session_id($session_id);
                                                 }
-                                            } else {
-                                                // Adding if result does not exists
-                                                if (0 != $link->get_weight()) {
+                                                $linkres = $link->calc_score($user['user_id'], null);
+                                                if (!empty($linkres) && 0 != $link->get_weight()) {
                                                     $linkweight = $link->get_weight();
+                                                    $link_res_denom = 0 == $linkres[1] ? 1 : $linkres[1];
+
                                                     $weightsum += $linkweight;
+                                                    $ressum += $linkres[0] / $link_res_denom * $linkweight;
+                                                    if ($ressum > $bestResult) {
+                                                        $bestResult = $ressum;
+                                                    }
+                                                } else {
+                                                    // Adding if result does not exists
+                                                    if (0 != $link->get_weight()) {
+                                                        $linkweight = $link->get_weight();
+                                                        $weightsum += $linkweight;
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
 
-                                    if (!empty($ressum)) {
-                                        $invalidateResults = false;
+                                        if (!empty($ressum)) {
+                                            $invalidateResults = false;
+                                        }
+                                        $rankingStudentList[$user['user_id']] = $ressum;
                                     }
+                                }
 
-                                    $rankingStudentList[$user['user_id']] = $ressum;
+                                if (empty($rankingStudentList)) {
+                                    foreach ($studentList as $user) {
+                                        $score = $this->build_result_column(
+                                            $user['user_id'],
+                                            $item,
+                                            $ignore_score_color,
+                                            true
+                                        );
+                                        if (!empty($score['score'][0])) {
+                                            $invalidateResults = false;
+                                        }
+
+                                        $rankingStudentList[$user['user_id']] = 0;
+                                        if ($score['score']) {
+                                            $rankingStudentList[$user['user_id']] = $score['score'][0];
+                                        }
+                                    }
                                 }
                             }
+
                             $score = AbstractLink::getCurrentUserRanking($userId, $rankingStudentList);
                         }
 
@@ -559,10 +578,11 @@ class GradebookDataGenerator
         }
 
         $scoreMode = SCORE_DIV_PERCENT_WITH_CUSTOM;
+        $showPercentage = true;
         if ($this->hidePercentage) {
             $scoreMode = SCORE_DIV;
+            $showPercentage = false;
         }
-
         $scoreDisplay = ScoreDisplay::instance();
         $display = $scoreDisplay->display_score(
             $score,
@@ -577,7 +597,7 @@ class GradebookDataGenerator
             $display = ExerciseLib::show_score(
                 $score[0],
                 $score[1],
-                false
+                $showPercentage
             );
         }
 
@@ -585,7 +605,7 @@ class GradebookDataGenerator
             $display = ExerciseLib::show_score(
                 $score[0],
                 $score[1],
-                true
+                $showPercentage
             );
         }
 
@@ -612,8 +632,10 @@ class GradebookDataGenerator
         $scoreDisplay = ScoreDisplay::instance();
 
         $scoreMode = SCORE_DIV_PERCENT_WITH_CUSTOM;
+        $showPercentage = true;
         if ($this->hidePercentage) {
             $scoreMode = SCORE_DIV;
+            $showPercentage = false;
         }
 
         $display = $scoreDisplay->display_score(
@@ -627,7 +649,7 @@ class GradebookDataGenerator
         $type = $item->get_item_type();
 
         if ('L' === $type && 'ExerciseLink' === get_class($item)) {
-            $display = ExerciseLib::show_score($score[0], $score[1], false);
+            $display = ExerciseLib::show_score($score[0], $score[1], $showPercentage);
             $result = ExerciseLib::convertScoreToPlatformSetting($score[0], $score[1]);
             $score[0] = $result['score'];
             $score[1] = $result['weight'];
@@ -636,7 +658,7 @@ class GradebookDataGenerator
                 $display = ExerciseLib::show_score(
                     $score[0],
                     $score[1],
-                    true
+                    $showPercentage
                 );
             }
         }
@@ -664,7 +686,7 @@ class GradebookDataGenerator
                 $score,
                 SCORE_DIV,
                 SCORE_BOTH,
-                false,
+                true,
                 true,
                 true
             );
@@ -746,16 +768,19 @@ class GradebookDataGenerator
                     ];
 
                     if (empty($model)) {
-                        $display = $scoreDisplay->display_score(
-                            $score,
-                            SCORE_DIV_PERCENT_WITH_CUSTOM,
-                            null,
-                            false,
-                            false,
-                            true
-                        );
-
-                        $type = $item->get_item_type();
+                        if ($useExerciseScoreInTotal) {
+                            $display = ExerciseLib::show_score($score[0], $score[1], false);
+                        } else {
+                            $display = $scoreDisplay->display_score(
+                                $score,
+                                SCORE_DIV_PERCENT_WITH_CUSTOM,
+                                null,
+                                false,
+                                false,
+                                true
+                            );
+                        }
+                        /*$type = $item->get_item_type();
                         if ('L' === $type && 'ExerciseLink' === get_class($item)) {
                             $display = ExerciseLib::show_score(
                                 $score[0],
@@ -769,7 +794,7 @@ class GradebookDataGenerator
                                 false,
                                 true
                             );
-                        }
+                        }*/
                     } else {
                         $display = ExerciseLib::show_score(
                             $score[0],

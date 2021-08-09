@@ -55,8 +55,8 @@ class PENSPlugin extends Plugin implements HookPluginInterface
      */
     public function uninstall()
     {
-        $setting = api_get_setting('plugin_pens');
-        if (!empty($setting)) {
+        $setting = api_get_setting('status', 'pens');
+        if ($setting === 'installed') {
             $this->uninstallHook();
             // Note: Keeping area field data is intended so it will not be removed
             $this->uninstallDatabase();
@@ -85,7 +85,7 @@ class PENSPlugin extends Plugin implements HookPluginInterface
 	        updated_at datetime NULL,
 	        PRIMARY KEY (id),
 	        UNIQUE KEY package_id (package_id)
-	        ";
+	        )";
         Database::query($sql);
     }
 

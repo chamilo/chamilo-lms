@@ -320,5 +320,5 @@ EOM;
         $global_error_message_page = str_replace('{'.strtoupper($key).'}', $value, $global_error_message_page);
     }
     header('Content-Type: text/html; charset='.$global_error_message['encoding']);
-    die($global_error_message_page);
+    exit($global_error_message_page);
 }

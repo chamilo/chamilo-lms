@@ -4,8 +4,6 @@
 
 namespace Chamilo\PluginBundle\XApi\Parser;
 
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\PluginBundle\Entity\XApi\Cmi5Item;
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
 use Symfony\Component\DomCrawler\Crawler;
@@ -15,25 +13,12 @@ use Symfony\Component\DomCrawler\Crawler;
  *
  * @package Chamilo\PluginBundle\XApi\Parser
  */
-class Cmi5Parser extends AbstractParser
+class Cmi5Parser extends PackageParser
 {
     /**
-     * @var array|\Chamilo\PluginBundle\Entity\XApi\Cmi5Item[]
+     * {@inheritDoc}
      */
-    private $toc;
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function create($filePath, Course $course, Session $session = null)
-    {
-        return new self($filePath, $course, $session);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function parse()
+    public function parse(): ToolLaunch
     {
         $content = file_get_contents($this->filePath);
         $xml = new Crawler($content);
@@ -64,17 +49,13 @@ class Cmi5Parser extends AbstractParser
             ->setCourse($this->course)
             ->setSession($this->session);
 
-        $this->toc = $this->generateToC($xml);
+        $toc = $this->generateToC($xml);
+
+        foreach ($toc as $cmi5Item) {
+            $toolLaunch->addItem($cmi5Item);
+        }
 
         return $toolLaunch;
-    }
-
-    /**
-     * @return array|\Chamilo\PluginBundle\Entity\XApi\Cmi5Item[]
-     */
-    public function getToc()
-    {
-        return $this->toc;
     }
 
     /**
@@ -133,9 +114,8 @@ class Cmi5Parser extends AbstractParser
                     if ('au' === $node->nodeName()) {
                         $launchParametersNode = $node->filterXPath('//launchParameters');
                         $entitlementKeyNode = $node->filterXPath('//entitlementKey');
-                        $url =
-
-                        $item
+                        $url
+                            = $item
                             ->setUrl(
                                 $this->parseLaunchUrl(
                                     trim($node->filterXPath('//url')->text())

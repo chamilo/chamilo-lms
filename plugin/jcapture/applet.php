@@ -17,7 +17,7 @@ session_write_close();
 header('Content-Type: text/html; charset=utf-8');
 $hostName = "http".($_SERVER['HTTPS'] ? 's' : null).'://'.$_SERVER['HTTP_HOST'];
 $imageFormat = "PNG";
-$cookies;
+$cookies = '';
 foreach (array_keys($_COOKIE) as $cookieName) {
     $cookies .= bin2hex($cookieName)."=".bin2hex($_COOKIE[$cookieName]).";";
 }
@@ -73,7 +73,7 @@ $edid = $_GET["edid"];
     <PARAM NAME = "host" VALUE="<?php echo $hostName; ?>">
     <PARAM NAME = "pageName" VALUE="<?php echo $pageName; ?>">
     <PARAM NAME = "edid" VALUE="<?php echo $edid; ?>">
-    <PARAM NAME = CODEBASE VALUE = "/somenonexistingcodebase" >    
+    <PARAM NAME = CODEBASE VALUE = "/somenonexistingcodebase" >
     <PARAM NAME = "authtok" VALUE="<?php echo auth_createToken(); ?>">
 
 Java 2 Standard Edition v 1.7 or above is required for this applet.<br/>

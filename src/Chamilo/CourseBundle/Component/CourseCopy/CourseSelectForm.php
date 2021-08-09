@@ -397,6 +397,15 @@ class CourseSelectForm
                             }
                         }
 
+                        if ($type == RESOURCE_QUIZ) {
+                            echo Display::return_message(
+                                get_lang(
+                                    'IfYourQuizHaveHotspotQuestionsIncludedYouShouldSelectTheImagesFromTheDocuments'
+                                ),
+                                'warning'
+                            );
+                        }
+
                         if ($showItems) {
                             echo '<div class="well">';
                             echo '<div class="btn-group">';

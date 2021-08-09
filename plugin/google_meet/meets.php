@@ -30,7 +30,6 @@ if ($enable) {
         if ($action) {
             switch ($action) {
                 case 'delete':
-
                     $idMeet = isset($_GET['id_meet']) ? $_GET['id_meet'] : null;
                     $res = $plugin->deleteMeet($idMeet);
                     if ($res) {

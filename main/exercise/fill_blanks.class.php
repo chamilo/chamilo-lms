@@ -36,8 +36,8 @@ class FillBlanks extends Question
         $defaults['answer'] = get_lang('DefaultTextInBlanks');
         $defaults['select_separator'] = 0;
         $blankSeparatorNumber = 0;
-        if (!empty($this->id)) {
-            $objectAnswer = new Answer($this->id);
+        if (!empty($this->iid)) {
+            $objectAnswer = new Answer($this->iid);
             $answer = $objectAnswer->selectAnswer(1);
             $listAnswersInfo = self::getAnswerInfo($answer);
             $defaults['multiple_answer'] = 0;
@@ -359,7 +359,7 @@ class FillBlanks extends Question
         $form->addHtml('<div id="defineoneblank" style="color:#D04A66; margin-left:160px">'.get_lang('DefineBlanks').'</div>');
         $form->addButtonSave($text, 'submitQuestion');
 
-        if (!empty($this->id)) {
+        if (!empty($this->iid)) {
             $form->setDefaults($defaults);
         } else {
             if ($this->isContent == 1) {
@@ -480,7 +480,7 @@ class FillBlanks extends Question
         $answer .= '@'.$is_multiple;
 
         $this->save($exercise);
-        $objAnswer = new Answer($this->id);
+        $objAnswer = new Answer($this->iid);
         $objAnswer->createAnswer($answer, 0, '', 0, 1);
         $objAnswer->save();
     }
@@ -1135,18 +1135,6 @@ class FillBlanks extends Question
         $result = '';
         $listStudentAnswerInfo = self::getAnswerInfo($answer, true);
 
-        /*if (in_array($resultsDisabled, [
-            RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
-            RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
-            ]
-        )
-        ) {
-            $resultsDisabled = true;
-            if ($showTotalScoreAndUserChoices) {
-                $resultsDisabled = false;
-            }
-        }*/
-
         // rebuild the answer with good HTML style
         // this is the student answer, right or wrong
         for ($i = 0; $i < count($listStudentAnswerInfo['student_answer']); $i++) {
@@ -1171,6 +1159,11 @@ class FillBlanks extends Question
 
         // rebuild the sentence with student answer inserted
         for ($i = 0; $i < count($listStudentAnswerInfo['common_words']); $i++) {
+            if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK) {
+                if (empty($listStudentAnswerInfo['student_answer'][$i])) {
+                    continue;
+                }
+            }
             $result .= isset($listStudentAnswerInfo['common_words'][$i]) ? $listStudentAnswerInfo['common_words'][$i] : '';
             $studentLabel = isset($listStudentAnswerInfo['student_answer'][$i]) ? $listStudentAnswerInfo['student_answer'][$i] : '';
             $result .= $studentLabel;
@@ -1215,6 +1208,7 @@ class FillBlanks extends Question
                 }
                 break;
             case RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK:
+            case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK:
             case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
                 $hideExpectedAnswer = true;
                 if ($showTotalScoreAndUserChoices) {
@@ -1321,6 +1315,10 @@ class FillBlanks extends Question
         $resultsDisabled = false,
         $showTotalScoreAndUserChoices = false
     ) {
+        if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK) {
+            return '';
+        }
+
         return self::getHtmlAnswer(
             $answer,
             $correct,

@@ -143,8 +143,16 @@ $htmlHeadXtra[] = api_get_js('dimple.v2.1.2.min.js');
 $htmlHeadXtra[] = '<script>
 
 async function exportToPdf() {
-    window.jsPDF = window.jspdf.jsPDF;
+    $("#dialog-confirm").dialog({
+        autoOpen: false,
+        show: "blind",
+        resizable: false,
+        height: 100,
+        modal: true
+    });
+    $("#dialog-confirm").dialog("open");
 
+    window.jsPDF = window.jspdf.jsPDF;
     $(".question-item img, #pdf_table img").hide();
     $(".question-item video, #pdf_table video").hide();
     $(".question-item audio, #pdf_table audio").hide();
@@ -162,7 +170,7 @@ async function exportToPdf() {
     await html2canvas(table).then(function(canvas) {
         var pageData = canvas.toDataURL("image/jpeg", 1);
         headerY = 530.28/canvas.width * canvas.height;
-        pdf.addImage(pageData, "JPEG", 40, 60, 530, headerY);
+        pdf.addImage(pageData, "JPEG", 35, 60, 530, headerY);
     });
 
     var divs = doc.getElementsByClassName("question-item");
@@ -175,35 +183,48 @@ async function exportToPdf() {
             pages[page] = 0;
         }
 
-        var positionY = 180;
-        pages[page] += 1;
+        var positionY = 150;
         var diff = 250;
+        pages[page] += 1;
         if (page > 1) {
             headerY = 0;
             positionY = 60;
             diff = 220;
         }
         if (pages[page] > 1) {
-            positionY = pages[page] * diff + 10;
+            positionY = pages[page] * diff + 5;
         }
 
         const title = $(divs[i]).find(".title-question");
-        pdf.setFontSize(12);
+        pdf.setFontSize(10);
         pdf.text(40, positionY, title.text());
 
         var svg = divs[i].querySelector("svg");
-        svg2pdf(svg, pdf, {
-              xOffset: 10,
-              yOffset: positionY +  10,
-              scale: 0.45
-        });
-
+        if (svg) {
+            svg2pdf(svg, pdf, {
+                  xOffset: 150,
+                  yOffset: positionY,
+                  scale: 0.45,
+            });
+        }
         var tables = divs[i].getElementsByClassName("display-survey");
         var config= {};
         for (var j = 0; j < tables.length; j += 1) {
             await html2canvas(tables[j], config).then(function(canvas) {
-                var pageData = canvas.toDataURL("image/jpeg", 0.8);
-                pdf.addImage(pageData, "JPEG", 40, positionY + 200, 500, 500/canvas.width * canvas.height);
+                var pageData = canvas.toDataURL("image/jpeg", 0.7);
+                if (pageData) {
+                    pdf.addImage(pageData, "JPEG", 40, positionY + 180, 500, 500/canvas.width * canvas.height);
+                }
+            });
+        }
+
+        var tables = divs[i].getElementsByClassName("open-question");
+        for (var j = 0; j < tables.length; j += 1) {
+            await html2canvas(tables[j], config).then(function(canvas) {
+                var pageData = canvas.toDataURL("image/jpeg", 0.7);
+                if (pageData) {
+                    pdf.addImage(pageData, "JPEG", 40, positionY + 10, 500, 500/canvas.width * canvas.height);
+                }
             });
         }
 
@@ -217,11 +238,17 @@ async function exportToPdf() {
     $(".question-item video, #pdf_table video").show();
     $(".question-item audio, #pdf_table audio").show();
 
-    pdf.save("reporting.pdf");
+    pdf.save("reporting.pdf", {returnPromise: true}).then(function (response) {
+        $( "#dialog-confirm" ).dialog("close");
+    });
 }
 </script>';
 
 Display::display_header($tool_name, 'Survey');
+echo '<div id="dialog-confirm" style="display: none;"> '.
+    Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin').
+    get_lang('PleaseWait').
+    '</div>';
 SurveyUtil::handle_reporting_actions($survey_data, $people_filled);
 
 // Content

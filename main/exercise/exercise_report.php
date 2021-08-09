@@ -18,7 +18,7 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 
 $filter_user = isset($_REQUEST['filter_by_user']) ? (int) $_REQUEST['filter_by_user'] : null;
 $isBossOfStudent = false;
-if (api_is_student_boss() && !empty($filter_user)) {
+if (!empty($filter_user) && api_is_student_boss()) {
     // Check if boss has access to user info.
     if (UserManager::userIsBossOfStudent(api_get_user_id(), $filter_user)) {
         $isBossOfStudent = true;
@@ -157,65 +157,83 @@ if (isset($_REQUEST['comments']) &&
     // Filtered by post-condition
     $id = (int) $_GET['exeid'];
     $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
-
     if (empty($track_exercise_info)) {
         api_not_allowed();
     }
-    $student_id = $track_exercise_info['exe_user_id'];
+    $student_id = (int) $track_exercise_info['exe_user_id'];
     $session_id = $track_exercise_info['session_id'];
     $lp_id = $track_exercise_info['orig_lp_id'];
     $lpItemId = $track_exercise_info['orig_lp_item_id'];
     $lp_item_view_id = (int) $track_exercise_info['orig_lp_item_view_id'];
     $exerciseId = $track_exercise_info['exe_exo_id'];
     $exeWeighting = $track_exercise_info['exe_weighting'];
+
+    $attemptData = Event::get_exercise_results_by_attempt($id);
+    $questionListData = [];
+    if ($attemptData && $attemptData[$id] && $attemptData[$id]['question_list']) {
+        $questionListData = $attemptData[$id]['question_list'];
+    }
+
     $post_content_id = [];
     $comments_exist = false;
-
+    $questionListInPost = [];
     foreach ($_POST as $key_index => $key_value) {
         $my_post_info = explode('_', $key_index);
         $post_content_id[] = isset($my_post_info[1]) ? $my_post_info[1] : null;
-
         if ($my_post_info[0] === 'comments') {
             $comments_exist = true;
+            $questionListInPost[] = $my_post_info[1];
         }
     }
 
-    $loop_in_track = $comments_exist === true ? (count($_POST) / 2) : count($_POST);
-    if ($comments_exist === true) {
-        $array_content_id_exe = array_slice($post_content_id, $loop_in_track);
-    } else {
-        $array_content_id_exe = $post_content_id;
-    }
-
-    for ($i = 0; $i < $loop_in_track; $i++) {
-        $my_marks = isset($_POST['marks_'.$array_content_id_exe[$i]]) ? $_POST['marks_'.$array_content_id_exe[$i]] : '';
-        $my_comments = '';
-        if (isset($_POST['comments_'.$array_content_id_exe[$i]])) {
-            $my_comments = $_POST['comments_'.$array_content_id_exe[$i]];
-        }
-        $my_questionid = (int) $array_content_id_exe[$i];
-
+    foreach ($questionListInPost as $questionId) {
+        $marks = $_POST['marks_'.$questionId] ?? 0;
+        $my_comments = $_POST['comments_'.$questionId] ?? '';
         $params = [
-            'marks' => $my_marks,
             'teacher_comment' => $my_comments,
         ];
+        $question = Question::read($questionId);
+        if (false === $question) {
+            continue;
+        }
+
+        // From the database.
+        $marksFromDatabase = $questionListData[$questionId]['marks'];
+        if (in_array($question->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
+            // From the form.
+            $params['marks'] = $marks;
+            if ($marksFromDatabase != $marks) {
+                Event::addEvent(
+                    LOG_QUESTION_SCORE_UPDATE,
+                    LOG_EXERCISE_ATTEMPT_QUESTION_ID,
+                    [
+                        'exe_id' => $id,
+                        'question_id' => $questionId,
+                        'old_marks' => $marksFromDatabase,
+                        'new_marks' => $marks,
+                    ]
+                );
+            }
+        } else {
+            $marks = $marksFromDatabase;
+        }
+
         Database::update(
             $TBL_TRACK_ATTEMPT,
             $params,
-            ['question_id = ? AND exe_id = ?' => [$my_questionid, $id]]
+            ['question_id = ? AND exe_id = ?' => [$questionId, $id]]
         );
 
         $params = [
             'exe_id' => $id,
-            'question_id' => $my_questionid,
-            'marks' => $my_marks,
+            'question_id' => $questionId,
+            'marks' => $marks,
             'insert_date' => api_get_utc_datetime(),
             'author' => api_get_user_id(),
             'teacher_comment' => $my_comments,
         ];
         Database::insert($TBL_TRACK_ATTEMPT_RECORDING, $params);
     }
-
     $useEvaluationPlugin = false;
     $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
 
@@ -234,7 +252,11 @@ if (isset($_REQUEST['comments']) &&
         $res = Database::query($qry);
         $tot = 0;
         while ($row = Database :: fetch_array($res, 'ASSOC')) {
-            $tot += $row['marks'];
+            $marks = $row['marks'];
+            if (!$objExerciseTmp->propagate_neg && $marks < 0) {
+                continue;
+            }
+            $tot += $marks;
         }
     } else {
         $tot = $pluginEvaluation->getResultWithFormula($id, $formula);
@@ -247,18 +269,44 @@ if (isset($_REQUEST['comments']) &&
             WHERE exe_id = ".$id;
     Database::query($sql);
 
+    // See BT#18165
+    $remedialMessage = RemedialCoursePlugin::create()->getRemedialCourseList(
+        $objExerciseTmp,
+        $student_id,
+        api_get_session_id(),
+        true,
+        $lp_id ?: 0,
+        $lpItemId ?: 0
+    );
+    if (null != $remedialMessage) {
+        Display::addFlash(
+            Display::return_message($remedialMessage, 'warning', false)
+        );
+    }
+    $advancedMessage = RemedialCoursePlugin::create()->getAdvancedCourseList(
+        $objExerciseTmp,
+        $student_id,
+        api_get_session_id(),
+        $lp_id ?: 0,
+        $lpItemId ?: 0
+    );
+    if (!empty($advancedMessage)) {
+        $message = Display::return_message(
+            $advancedMessage,
+            'info',
+            false
+        );
+    }
     if (isset($_POST['send_notification'])) {
         //@todo move this somewhere else
         $subject = get_lang('ExamSheetVCC');
         $message = isset($_POST['notification_content']) ? $_POST['notification_content'] : '';
-
         MessageManager::send_message_simple(
             $student_id,
             $subject,
             $message,
             api_get_user_id()
         );
-
         if ($allowCoachFeedbackExercises) {
             Display::addFlash(
                 Display::return_message(get_lang('MessageSent'))
@@ -268,6 +316,9 @@ if (isset($_REQUEST['comments']) &&
 
     $notifications = api_get_configuration_value('exercise_finished_notification_settings');
     if ($notifications) {
+        $oldResultDisabled = $objExerciseTmp->results_disabled;
+        $objExerciseTmp->results_disabled = RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS;
+
         ob_start();
         $stats = ExerciseLib::displayQuestionListByAttempt(
             $objExerciseTmp,
@@ -278,12 +329,32 @@ if (isset($_REQUEST['comments']) &&
             api_get_configuration_value('quiz_results_answers_report'),
             false
         );
+        $objExerciseTmp->results_disabled = $oldResultDisabled;
+
         ob_end_clean();
+
+        // Show all for teachers.
+        $oldResultDisabled = $objExerciseTmp->results_disabled;
+        $objExerciseTmp->results_disabled = RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS;
+        $objExerciseTmp->forceShowExpectedChoiceColumn = true;
+        ob_start();
+        $statsTeacher = ExerciseLib::displayQuestionListByAttempt(
+            $objExerciseTmp,
+            $track_exercise_info['exe_id'],
+            false,
+            false,
+            false,
+            api_get_configuration_value('quiz_results_answers_report'),
+            false
+        );
+        ob_end_clean();
+        $objExerciseTmp->forceShowExpectedChoiceColumn = false;
+        $objExerciseTmp->results_disabled = $oldResultDisabled;
 
         $attemptCount = Event::getAttemptPosition(
             $track_exercise_info['exe_id'],
             $student_id,
-            $objExerciseTmp->id,
+            $objExerciseTmp->iid,
             $lp_id,
             $lpItemId,
             $lp_item_view_id
@@ -295,7 +366,8 @@ if (isset($_REQUEST['comments']) &&
             $track_exercise_info,
             api_get_course_info(),
             $attemptCount,
-            $stats
+            $stats,
+            $statsTeacher
         );
     }
 
@@ -336,7 +408,7 @@ if (isset($_REQUEST['comments']) &&
         $sql = "UPDATE $TBL_LP_ITEM_VIEW
                 SET score = '".(float) $tot."'
                 $statusCondition
-                WHERE c_id = $course_id AND id = $lp_item_view_id";
+                WHERE iid = $lp_item_view_id";
         Database::query($sql);
 
         header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise_show.php?id='.$id.'&student='.$student_id.'&'.api_get_cidreq());
@@ -397,8 +469,17 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
             );
         }
 
-        $actions .= '<a class="btn btn-default" href="question_stats.php?'.api_get_cidreq().'&id='.$exercise_id.'">'.
-            get_lang('QuestionStats').'</a>';
+        $actions .= Display::url(
+            get_lang('QuestionStats'),
+            'question_stats.php?'.api_get_cidreq().'&id='.$exercise_id,
+            ['class' => 'btn btn-default']
+        );
+
+        $actions .= Display::url(
+            get_lang('ComparativeGroupReport'),
+            'comparative_group_report.php?'.api_get_cidreq().'&id='.$exercise_id,
+            ['class' => 'btn btn-default']
+        );
     }
 } else {
     $actions .= '<a href="exercise.php">'.

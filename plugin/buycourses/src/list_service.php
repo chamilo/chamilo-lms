@@ -35,8 +35,7 @@ $services = $plugin->getServices($first, $pageSize);
 $totalItems = $plugin->getServices(null, null, 'count');
 $pagesCount = ceil($totalItems / $pageSize);
 
-$url = api_get_self().'?';
-$pagination = Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
+$pagination = BuyCoursesPlugin::returnPagination(api_get_self(), $currentPage, $pagesCount, $totalItems);
 
 // breadcrumbs
 $interbreadcrumb[] = [
@@ -45,6 +44,8 @@ $interbreadcrumb[] = [
 ];
 
 $templateName = $plugin->get_lang('AvailableCourses');
+
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'buycourses/resources/css/style.css');
 
 $tpl = new Template($templateName);
 

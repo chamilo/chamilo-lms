@@ -30,6 +30,7 @@
                     <div class="col-md-4">
                         {{ display.card_widget('FirstLoginInPlatform'|get_lang, user.first_connection, 'calendar') }}
                         {{ display.card_widget('LatestLoginInPlatform'|get_lang, user.last_connection, 'calendar') }}
+                        {{ display.card_widget('LatestLoginInAnyCourse'|get_lang, user.last_connection_in_course, 'calendar') }}
 
                         {% if user.legal %}
                             {{ display.card_widget('LegalAccepted'|get_lang, user.legal.datetime, 'gavel', user.legal.icon) }}
@@ -51,7 +52,6 @@
             <div class="col-md-8">
                 <div class="row">
                     <div class="col-md-8">
-
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="easy-donut">
@@ -95,7 +95,6 @@
 
                         <div class="row">
                             <div class="col-md-6">
-
                                 <div class="card box-widget">
                                     <div class="card-body">
                                         <div class="stat-widget-five">
@@ -131,10 +130,8 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                             <div class="col-md-6">
-
                                 <div class="card box-widget">
                                     <div class="card-body">
                                         <div class="stat-widget-five">
@@ -176,7 +173,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
 
@@ -192,12 +188,13 @@
                             {{ display.card_widget('LatestLoginInCourse'|get_lang, user.tools.course_last_access, 'calendar-o', user.legal.icon) }}
                         {% endif %}
 
-                        {% if(user.time_spent_course) %}
+                        {% if user.time_spent_course %}
                             {{ display.card_widget('TimeSpentInTheCourse'|get_lang, user.time_spent_course, 'clock-o') }}
                         {% endif %}
 
                         {{ display.card_widget('FirstLoginInPlatform'|get_lang, user.first_connection, 'calendar') }}
                         {{ display.card_widget('LatestLoginInPlatform'|get_lang, user.last_connection, 'calendar') }}
+                        {{ display.card_widget('LatestLoginInAnyCourse'|get_lang, user.last_connection_in_course, 'calendar') }}
 
                         {% if user.legal %}
                             {{ display.card_widget('LegalAccepted'|get_lang, user.legal.datetime, 'gavel', user.legal.icon) }}

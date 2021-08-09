@@ -114,6 +114,11 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
     $group_id = isset($_REQUEST['group_id']) ? (int) $_REQUEST['group_id'] : null;
     $message_id = isset($_GET['message_id']) ? (int) $_GET['message_id'] : null;
 
+    $onlyTeachers = false;
+    if (api_get_configuration_value('send_only_messages_to_teachers') && api_is_student()) {
+        $onlyTeachers = true;
+    }
+
     $form = new FormValidator(
         'compose_message',
         null,
@@ -145,18 +150,40 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
                 $form->addLabel(get_lang('SendMessageTo'), $sent_to);
             }
             if (empty($default['users'])) {
-                //fb select
-                $form->addElement(
-                    'select_ajax',
-                    'users',
-                    get_lang('SendMessageTo'),
-                    [],
-                    [
-                        'multiple' => 'multiple',
-                        'delay' => 1000,
-                        'url' => api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users',
-                    ]
-                );
+                if ($onlyTeachers) {
+                    $courses = CourseManager::get_courses_list_by_user_id(api_get_user_id());
+                    $teachers = [];
+                    foreach ($courses as $course) {
+                        $courseTeachers = CourseManager::getTeachersFromCourse($course['real_id']);
+                        if ($courseTeachers) {
+                            foreach ($courseTeachers as $teacher) {
+                                $teachers[$teacher['id']] = $teacher['fullname'];
+                            }
+                        }
+                    }
+                    if (!empty($teachers)) {
+                        asort($teachers);
+                    }
+                    $form->addSelect(
+                        'users',
+                        get_lang('SendMessageTo'),
+                        $teachers,
+                        [
+                            'multiple' => 'multiple',
+                        ]
+                    );
+                } else {
+                    $form->addElement(
+                        'select_ajax',
+                        'users',
+                        get_lang('SendMessageTo'),
+                        [],
+                        [
+                            'multiple' => 'multiple',
+                            'url' => api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users',
+                        ]
+                    );
+                }
             } else {
                 $form->addElement('hidden', 'hidden_user', $default['users'][0], ['id' => 'hidden_user']);
             }

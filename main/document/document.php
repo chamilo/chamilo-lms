@@ -873,7 +873,7 @@ function convertModal (id, format) {
         var formatTarget = $(this).val();
         window.location.href = "'
             .api_get_self().'?'.api_get_cidreq()
-            .'&curdirpath='.$curdirpath
+            .'&curdirpath='.$curdirpathurl
             .'&action=convertToPdf&formatTarget='
             .'" + formatTarget + "&id=" + id + "&'
             .api_get_cidreq().'&formatType=" + format;
@@ -1090,7 +1090,7 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
                 false,
                 $curdirpath
             );
-            $moveForm .= '<legend>'.get_lang('Move').': '.$document_to_move['title'].'</legend>';
+            $moveForm .= '<legend>'.get_lang('Move').': '.Security::remove_XSS($document_to_move['title']).'</legend>';
 
             // filter if is my shared folder. TODO: move this code to build_move_to_selector function
             if (DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) &&
@@ -1962,7 +1962,7 @@ if (!empty($documentAndFolders)) {
             }
 
             // Icons (clickable)
-            $row[] = DocumentManager::create_document_link(
+            $row[] = Security::remove_XSS(DocumentManager::create_document_link(
                 $http_www,
                 $document_data,
                 true,
@@ -1971,7 +1971,7 @@ if (!empty($documentAndFolders)) {
                 $size,
                 $isAllowedToEdit,
                 $is_certificate_mode
-            );
+            ));
 
             $path_info = pathinfo($document_data['path']);
             if (isset($path_info['extension']) &&
@@ -1995,7 +1995,7 @@ if (!empty($documentAndFolders)) {
             );
 
             // Document title with link and comment
-            $titleWithLink = $link.$session_img.'<br />'.$invisibility_span_open;
+            $titleWithLink = Security::remove_XSS($link.$session_img.'<br />'.$invisibility_span_open);
             $commentText = nl2br(htmlspecialchars($document_data['comment'], ENT_QUOTES, $charset));
             if (!empty($commentText)) {
                 $titleWithLink .= '<em>'.$commentText.'</em>';
@@ -2003,7 +2003,7 @@ if (!empty($documentAndFolders)) {
             $titleWithLink .= $invisibility_span_close.$user_link;
             $row[] = $titleWithLink;
 
-            if ($document_data['filetype'] == 'folder') {
+            if ($document_data['filetype'] === 'folder') {
                 $displaySize = '<span id="document_size_'.$document_data['id']
                     .'" data-path= "'.$document_data['path']
                     .'" class="document_size"></span>';

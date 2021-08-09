@@ -199,7 +199,6 @@ class Plugin
     public function getSettingsForm()
     {
         $result = new FormValidator($this->get_name());
-
         $defaults = [];
         $checkboxGroup = [];
         $checkboxCollection = [];
@@ -213,6 +212,8 @@ class Plugin
             }
         }
 
+        $disableSettings = $this->disableSettings();
+
         foreach ($this->fields as $name => $type) {
             $options = null;
             if (is_array($type) && isset($type['type']) && $type['type'] === 'select') {
@@ -224,6 +225,12 @@ class Plugin
                 }
                 $options = $type['options'];
                 $type = $type['type'];
+            }
+
+            if (!empty($disableSettings)) {
+                if (in_array($name, $disableSettings)) {
+                    continue;
+                }
             }
 
             $value = $this->get($name);
@@ -330,12 +337,22 @@ class Plugin
     /**
      * Returns the value of a given plugin global setting.
      *
-     * @param string $name of the plugin
+     * @param string $name of the plugin setting
      *
-     * @return string Value of the plugin
+     * @return string Value of the plugin setting
      */
     public function get($name)
     {
+        $settings = api_get_configuration_value('plugin_settings');
+        if (!empty($settings) && isset($settings[$this->get_name()])) {
+            $prioritySettings = $settings[$this->get_name()];
+            if (!empty($prioritySettings)) {
+                if (isset($prioritySettings[$name])) {
+                    return $prioritySettings[$name];
+                }
+            }
+        }
+
         $settings = $this->get_settings();
         foreach ($settings as $setting) {
             if ($setting['variable'] == $this->get_name().'_'.$name) {
@@ -1038,6 +1055,19 @@ class Plugin
      */
     public function doWhenDeletingSession($sessionId)
     {
+    }
+
+    /**
+     * Disable the settings configured in configuration.php ($configuration[plugin_settings]).
+     */
+    public function disableSettings()
+    {
+        $settings = api_get_configuration_value('plugin_settings');
+        if (!empty($settings) && isset($settings[$this->get_name()])) {
+            return array_keys($settings[$this->get_name()]);
+        }
+
+        return [];
     }
 
     /**

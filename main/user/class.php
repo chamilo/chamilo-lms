@@ -103,20 +103,9 @@ if (api_is_allowed_to_edit()) {
             if (!empty($id)) {
                 $usergroup->unsubscribe_courses_from_usergroup(
                     $id,
-                    [api_get_course_int_id()],
-                    $sessionId
+                    [api_get_course_int_id()]
                 );
                 Display::addFlash(Display::return_message(get_lang('Deleted')));
-                $user_list = $usergroup->get_users_by_usergroup($id);
-                if (!empty($user_list)) {
-                    foreach ($user_list as $user_id) {
-                        SessionManager::unsubscribe_user_from_session($id, $user_id);
-                    }
-                }
-                Database::delete(
-                    $usergroup->usergroup_rel_session_table,
-                    ['usergroup_id = ? AND session_id = ?' => [$id, $sessionId]]
-                );
             }
             break;
     }

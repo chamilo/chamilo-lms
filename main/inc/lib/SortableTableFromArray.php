@@ -38,8 +38,7 @@ class SortableTableFromArray extends SortableTable
             $default_column,
             $default_items_per_page,
             null,
-            $tableId,
-            null
+            $tableId
         );
         $this->table_data = $table_data;
         $this->handlePagination = false;

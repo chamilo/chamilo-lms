@@ -89,7 +89,7 @@ foreach ($headers as $header) {
     $column++;
 }
 $row++;
-foreach ($sessionColorName as  $color => $name) {
+foreach ($sessionColorName as $color => $name) {
     $table->setCellContents($row, 0, $name);
     $table->setCellContents($row, 1, "<div style='background:$color '>&nbsp;</div>");
     $row++;

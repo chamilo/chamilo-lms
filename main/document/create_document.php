@@ -395,7 +395,7 @@ if (!$is_certificate_mode &&
         $res = Database::query($sql);
         $folder_titles = [];
         while ($obj = Database::fetch_object($res)) {
-            $folder_titles[$obj->path] = $obj->title;
+            $folder_titles[$obj->path] = Security::remove_XSS($obj->title);
         }
     }
 

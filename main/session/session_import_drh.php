@@ -1,9 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.admin
- */
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -14,24 +12,11 @@ api_protect_limit_for_session_admin();
 
 $form_sent = 0;
 $tool_name = get_lang('ImportSessionDrhList');
-
 $interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
 
 set_time_limit(0);
 
 $inserted_in_course = [];
-
-// Display the header.
-Display::display_header($tool_name);
-
-echo '<div class="actions">';
-echo '<a href="../session/session_list.php">'.
-    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
-
-if (!empty($error_message)) {
-    echo Display::return_message($error_message, 'normal', false);
-}
 
 $form = new FormValidator(
     'import_sessions',
@@ -43,7 +28,6 @@ $form = new FormValidator(
 
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
 $form->addElement('checkbox', 'remove_old_relationships', null, get_lang('RemoveOldRelationships'));
-//$form->addElement('checkbox', 'send_email', null, get_lang('SendMailToUsers'));
 $form->addButtonImport(get_lang('ImportSession'));
 
 if ($form->validate()) {
@@ -65,6 +49,14 @@ if ($form->validate()) {
     }
 }
 
+Display::display_header($tool_name);
+echo '<div class="actions">';
+echo '<a href="../session/session_list.php">'.
+    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).'</a>';
+echo '</div>';
+if (!empty($error_message)) {
+    echo Display::return_message($error_message, 'normal', false);
+}
 $form->display();
 
 ?>
@@ -77,7 +69,17 @@ drh1;Session 1;
 drh2;Session 2;
 </pre>
 </blockquote>
+
+<p><?php echo get_lang('Or'); ?> </p>
+
+<blockquote>
+<pre>
+Username;SessionId;
+drh1,drh2;100;
+drh3;102;
+</pre>
+</blockquote>
+
 <?php
 
-/* FOOTER */
 Display::display_footer();

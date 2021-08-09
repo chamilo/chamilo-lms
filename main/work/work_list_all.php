@@ -381,7 +381,8 @@ if (!empty($work_data['enable_qualification']) &&
 $extra_params = [
     'autowidth' => 'true',
     'height' => 'auto',
-    'sortname' => $orderName,
+    //'sortname' => $orderName,
+    'sortname' => 'sent_date',
     'sortable' => 'false',
     'multiselect' => 'true',
 ];

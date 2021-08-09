@@ -32,6 +32,7 @@ if ($deleteQuestion) {
     unset($objQuestionTmp);
 }
 $ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&exercise_id='.intval($exerciseId);
+$addImageUrl = api_get_path(WEB_CODE_PATH).'inc/lib/elfinder/filemanager.php?add_image=1&'.api_get_cidreq();
 ?>
 <div id="dialog-confirm"
      title="<?php echo get_lang('ConfirmYourChoice'); ?>"
@@ -41,6 +42,33 @@ $ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&
     </p>
 </div>
 <script>
+    function addImageToQuestion(image, questionId) {
+        let url = '<?php echo $ajax_url; ?>' + '&a=save_question_description&question_id=' + questionId;
+        let params = {
+            image: image
+        }
+        $.ajax({
+            url: url,
+            data: params,
+            success: function (data) {
+                window.alert('<?php echo addslashes(get_lang('Updated')); ?>');
+            }
+        });
+    }
+
+    function loadEditor(button, questionId) {
+        event.preventDefault();
+        let url = '<?php echo $addImageUrl; ?>' + '&question_id=' + questionId;
+        let w = 850;
+        let h = 500;
+        let left = (screen.width / 2) - (w / 2);
+        let top = (screen.height / 2) - (h / 2);
+        let params = 'height=' + h + ',width=' + w + ',resizable=0,top=' + top + ',left=' + left;
+
+        setTimeout(() => window.open(url, 'editor', params), 1000);
+        return;
+    }
+
     $(function () {
         $("#dialog:ui-dialog").dialog("destroy");
         $("#dialog-confirm").dialog({
@@ -191,8 +219,9 @@ if (!$inATest) {
             };
             echo $pagination;
         } else {
-            // Classic order
-            $questionList = $objExercise->selectQuestionList(true, true);
+            // Teacher view, see all questions.
+            //$questionList = $objExercise->selectQuestionList(true, true);
+            $questionList = $objExercise->getQuestionOrderedList(true);
         }
 
         // Restore original value
@@ -210,7 +239,7 @@ if (!$inATest) {
             <div id="question_list">
         ';
 
-        $category_list = TestCategory::getListOfCategoriesNameForTest($objExercise->id, false);
+        $category_list = TestCategory::getListOfCategoriesNameForTest($objExercise->iid, false);
 
         if (is_array($questionList)) {
             foreach ($questionList as $id) {
@@ -223,6 +252,20 @@ if (!$inATest) {
 
                 if (empty($objQuestionTmp)) {
                     continue;
+                }
+
+                $addImageLink = '';
+                if (api_get_configuration_value('allow_quick_question_description_popup')) {
+                    $addImageLink = Display::url(
+                        Display::return_icon(
+                            'image.png',
+                            get_lang('AddImage'),
+                            [],
+                            ICON_SIZE_TINY
+                        ),
+                        'javascript:void(0);',
+                        ['class' => 'btn btn-default btn-sm ajax', 'onclick' => 'loadEditor(this, '.$id.')']
+                    );
                 }
 
                 $clone_link = Display::url(
@@ -240,7 +283,9 @@ if (!$inATest) {
                     ? Display::span(
                         Display::return_icon(
                             'edit_na.png',
-                            get_lang('QuestionEditionNotAvailableBecauseItIsAlreadyAnsweredHoweverYouCanCopyItAndModifyTheCopy'),
+                            get_lang(
+                                'QuestionEditionNotAvailableBecauseItIsAlreadyAnsweredHoweverYouCanCopyItAndModifyTheCopy'
+                            ),
                             [],
                             ICON_SIZE_TINY
                         ),
@@ -289,11 +334,10 @@ if (!$inATest) {
 
                 $btnActions = implode(
                     PHP_EOL,
-                    [$edit_link, $clone_link, $delete_link]
+                    [$edit_link, $clone_link, $addImageLink, $delete_link]
                 );
 
-                $title = Security::remove_XSS($objQuestionTmp->selectTitle());
-                $title = strip_tags($title);
+                $title = Security::remove_XSS(strip_tags($objQuestionTmp->selectTitle()));
                 $move = '&nbsp;';
                 if ($allowQuestionOrdering) {
                     $move = Display::returnFontAwesomeIcon('arrows moved', 1, true);
@@ -301,19 +345,18 @@ if (!$inATest) {
 
                 // Question name
                 $questionName =
-                    '<a href="#" title = "'.Security::remove_XSS($title).'">
+                    '<a href="#" title = "'.$title.'">
                         '.$move.' '.cut($title, 42).'
                     </a>';
 
                 // Question type
                 $typeImg = $objQuestionTmp->getTypePicture();
                 $typeExpl = $objQuestionTmp->getExplanation();
-
                 $questionType = Display::return_icon($typeImg, $typeExpl);
 
                 // Question category
                 $txtQuestionCat = Security::remove_XSS(
-                    TestCategory::getCategoryNameForQuestion($objQuestionTmp->id)
+                    TestCategory::getCategoryNameForQuestion($objQuestionTmp->iid)
                 );
                 if (empty($txtQuestionCat)) {
                     $txtQuestionCat = '-';

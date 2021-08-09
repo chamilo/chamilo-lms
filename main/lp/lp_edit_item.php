@@ -125,7 +125,8 @@ $authorLpField = $field->get_handler_field_info_by_field_variable('authorlpitem'
 if ($authorLpField != null) {
     $extraField['authorlp'] = $authorLpField;
 }
-echo $learnPath->build_action_menu(false,
+echo $learnPath->build_action_menu(
+    false,
     true,
     false,
     true,
@@ -150,7 +151,7 @@ if (empty($documentInfo)) {
 
 $path_parts = pathinfo($path_file);
 
-if (!empty($path_file) && isset($path_parts['extension']) && $path_parts['extension'] == 'html') {
+if (!empty($path_file) && isset($path_parts['extension']) && $path_parts['extension'] === 'html') {
     echo $learnPath->return_new_tree();
     // Show the template list
     echo '<div id="frmModel" class="scrollbar-inner lp-add-item"></div>';
@@ -160,6 +161,17 @@ if (!empty($path_file) && isset($path_parts['extension']) && $path_parts['extens
 echo '</div>';
 echo '<div id="doc_form" class="col-md-8">';
 
+$excludeExtraFields = [
+    'authors',
+    'authorlp',
+    'authorlpitem',
+    'price',
+];
+
+if (api_is_platform_admin()) {
+    // Only admins can edit this items
+    $excludeExtraFields = [];
+}
 if (isset($is_success) && $is_success === true) {
     $msg = '<div class="lp_message" style="margin-bottom:10px;">';
     $msg .= 'The item has been edited.';
@@ -167,7 +179,10 @@ if (isset($is_success) && $is_success === true) {
     echo $learnPath->display_item($_GET['id'], $msg);
 } else {
     $item = $learnPath->getItem($_GET['id']);
-    echo $learnPath->display_edit_item($item->getIid());
+    if ('document' !== $item->get_type()) {
+        $excludeExtraFields[] = 'no_automatic_validation';
+    }
+    echo $learnPath->display_edit_item($item->getIid(), $excludeExtraFields);
     $finalItem = Session::read('finalItem');
     if ($finalItem) {
         echo '<script>$("#frmModel").remove()</script>';

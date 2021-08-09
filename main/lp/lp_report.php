@@ -45,12 +45,13 @@ if (empty($lp)) {
 $urlBase = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=report&lp_id='.$lpId;
 $url = $urlBase.'&group_filter='.$groupFilter;
 $allowUserGroups = api_get_configuration_value('allow_lp_subscription_to_usergroups');
+
+$course = api_get_course_entity($courseId);
+$session = api_get_session_entity($sessionId);
+
 $em = Database::getManager();
 // Check LP subscribers
 if ('1' === $lp->getSubscribeUsers()) {
-    $course = api_get_course_entity($courseId);
-    $session = api_get_session_entity($sessionId);
-
     /** @var ItemPropertyRepository $itemRepo */
     $itemRepo = $em->getRepository('ChamiloCourseBundle:CItemProperty');
     $subscribedUsersInLp = $itemRepo->getUsersSubscribedToItem(
@@ -104,7 +105,11 @@ if ('1' === $lp->getSubscribeUsers()) {
 } else {
     $categoryId = $lp->getCategoryId();
     $users = [];
+    /** @var ItemPropertyRepository $itemRepo */
+    $itemRepo = $em->getRepository('ChamiloCourseBundle:CItemProperty');
+
     if (!empty($categoryId)) {
+        // Check users subscribed in category.
         /** @var CLpCategory $category */
         $category = $em->getRepository('ChamiloCourseBundle:CLpCategory')->find($categoryId);
         $subscribedUsersInCategory = $category->getUsers();
@@ -113,6 +118,51 @@ if ('1' === $lp->getSubscribeUsers()) {
                 $user = $item->getUser();
                 if ($user) {
                     $users[]['user_id'] = $item->getUser()->getId();
+                }
+            }
+        }
+
+        // Check groups subscribed to category.
+        $subscribedGroupsInLpCategory = $itemRepo->getGroupsSubscribedToItem(
+            'learnpath_category',
+            $categoryId,
+            $course,
+            $session
+        );
+
+        $groups = [];
+        if (!empty($subscribedGroupsInLpCategory)) {
+            foreach ($subscribedGroupsInLpCategory as $itemProperty) {
+                if ($itemProperty->getGroup()) {
+                    $groups[] = $itemProperty->getGroup()->getId();
+                }
+            }
+        }
+
+        if (!empty($groups)) {
+            foreach ($groups as $groupId) {
+                $students = GroupManager::getStudents($groupId);
+                if (!empty($students)) {
+                    foreach ($students as $studentInfo) {
+                        $users[]['user_id'] = $studentInfo['user_id'];
+                    }
+                }
+            }
+        }
+
+        if ($allowUserGroups) {
+            $userGroup = new UserGroup();
+            $items = $userGroup->getGroupsByLpCategory($categoryId, $courseId, $sessionId);
+
+            $selectedUserGroupChoices = [];
+            if (!empty($items)) {
+                foreach ($items as $data) {
+                    $userList = $userGroup->get_users_by_usergroup($data['usergroup_id']);
+                    if (!empty($userList)) {
+                        foreach ($userList as $userId) {
+                            $users[]['user_id'] = $userId;
+                        }
+                    }
                 }
             }
         }
@@ -342,7 +392,7 @@ if (!empty($users)) {
                 }
             }
         }
-        $trackingUrl = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true'.
+        $trackingUrl = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true&'.
         api_get_cidreq().'&course='.$courseCode.'&origin=tracking_course&student='.$userId;
         $row = [];
         $row[] = Display::url($userInfo['firstname'], $trackingUrl);

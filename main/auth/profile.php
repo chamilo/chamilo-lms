@@ -697,7 +697,20 @@ if ($form->validate()) {
 
                 $emails = explode(',', $notificationSettings['email']);
                 foreach ($emails as $email) {
-                    api_mail_html('', $email, $subject, $content);
+                    api_mail_html(
+                        '',
+                        $email,
+                        $subject,
+                        $content,
+                        $userInfo['complete_name'],
+                        $notificationSettings['sender_email'],
+                        [
+                            'reply_to' => [
+                                'mail' => $userInfo['mail'],
+                                'name' => $userInfo['complete_name'],
+                            ],
+                        ]
+                    );
                 }
             }
         }

@@ -57,7 +57,7 @@ $from = $page * $limit;
 $sql = "SELECT c.id, c.code, c.title, nbr_users
 		FROM $tbl_session_rel_course, $tbl_course c
 		WHERE c_id = c.id AND session_id='$id_session'
-		ORDER BY $sort
+		ORDER BY `$sort`
 		LIMIT $from,".($limit + 1);
 $result = Database::query($sql);
 $Courses = Database::store_result($result);

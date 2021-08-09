@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 /**
  * BLOG HOMEPAGE
@@ -28,11 +29,6 @@ $DaysLong = api_get_week_days_long();
 $MonthsLong = api_get_months_long();
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
-
-/*
-    PROCESSING
-*/
-
 $safe_post_file_comment = isset($_POST['post_file_comment']) ? Security::remove_XSS($_POST['post_file_comment']) : null;
 $safe_comment_text = isset($_POST['comment_text']) ? Security::remove_XSS($_POST['comment_text']) : null;
 $safe_comment_title = isset($_POST['comment_title']) ? Security::remove_XSS($_POST['comment_title']) : null;
@@ -134,15 +130,15 @@ if (!empty($_GET['unregister'])) {
     Blog::unsubscribeUser($_GET['blog_id'], $_GET['user_id']);
 }
 
-if (isset($_GET['action']) && $_GET['action'] == 'manage_tasks') {
-    if (isset($_GET['do']) && $_GET['do'] == 'delete') {
+if (isset($_GET['action']) && $_GET['action'] === 'manage_tasks') {
+    if (isset($_GET['do']) && $_GET['do'] === 'delete') {
         Blog::deleteTask($blog_id, (int) $_GET['task_id']);
         Display::addFlash(
             Display::return_message(get_lang('TaskDeleted'), 'success')
         );
     }
 
-    if (isset($_GET['do']) && $_GET['do'] == 'delete_assignment') {
+    if (isset($_GET['do']) && $_GET['do'] === 'delete_assignment') {
         Blog::deleteAssignedTask($blog_id, intval($_GET['task_id']), intval($_GET['user_id']));
         Display::addFlash(
             Display::return_message(get_lang('TaskAssignmentDeleted'), 'success')
@@ -150,10 +146,10 @@ if (isset($_GET['action']) && $_GET['action'] == 'manage_tasks') {
     }
 }
 
-if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
+if (isset($_GET['action']) && $_GET['action'] === 'view_post') {
     $task_id = (isset($_GET['task_id']) && is_numeric($_GET['task_id'])) ? $_GET['task_id'] : 0;
 
-    if (isset($_GET['do']) && $_GET['do'] == 'delete_comment') {
+    if (isset($_GET['do']) && $_GET['do'] === 'delete_comment') {
         if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_delete', $task_id)) {
             Blog::deleteComment($blog_id, (int) $_GET['post_id'], (int) $_GET['comment_id']);
             Display::addFlash(
@@ -166,7 +162,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
         }
     }
 
-    if (isset($_GET['do']) && $_GET['do'] == 'delete_article') {
+    if (isset($_GET['do']) && $_GET['do'] === 'delete_article') {
         if (api_is_allowed('BLOG_'.$blog_id, 'article_delete', $task_id)) {
             Blog::deletePost($blog_id, (int) $_GET['article_id']);
             $action = ''; // Article is gone, go to blog home
@@ -179,8 +175,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
             );
         }
     }
-    if (isset($_GET['do']) && $_GET['do'] == 'rate') {
-        if (isset($_GET['type']) && $_GET['type'] == 'post') {
+    if (isset($_GET['do']) && $_GET['do'] === 'rate') {
+        if (isset($_GET['type']) && $_GET['type'] === 'post') {
             if (api_is_allowed('BLOG_'.$blog_id, 'article_rate')) {
                 Blog::addRating('post', $blog_id, (int) $_GET['post_id'], (int) $_GET['rating']);
                 Display::addFlash(
@@ -188,7 +184,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
                 );
             }
         }
-        if (isset($_GET['type']) && $_GET['type'] == 'comment') {
+        if (isset($_GET['type']) && $_GET['type'] === 'comment') {
             if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_add')) {
                 Blog::addRating('comment', $blog_id, (int) $_GET['comment_id'], (int) $_GET['rating']);
                 Display::addFlash(
@@ -259,13 +255,11 @@ if (api_is_allowed('BLOG_'.$blog_id, 'member_management')) {
 $titleBlog = Blog::getBlogTitle($blog_id);
 $descriptionBlog = Blog::getBlogSubtitle($blog_id);
 $idBlog = $blog_id;
-
 $searchBlog = isset($_GET['q']) ? Security::remove_XSS($_GET['q']) : '';
 //calendar blog
 $month = isset($_GET['month']) ? (int) $_GET['month'] : (int) date('m');
 $year = isset($_GET['year']) ? (int) $_GET['year'] : date('Y');
 $calendarBlog = Blog::displayMiniMonthCalendar($month, $year, $blog_id);
-//task blogs
 $taskBlog = Blog::getPersonalTasksList();
 
 if (isset($flag) && $flag == '1') {
@@ -274,7 +268,6 @@ if (isset($flag) && $flag == '1') {
 }
 
 $user_task = false;
-
 $course_id = api_get_course_int_id();
 
 if (isset($_GET['task_id']) && is_numeric($_GET['task_id'])) {
@@ -307,6 +300,7 @@ $tpl->assign('id_blog', $idBlog);
 $tpl->assign('calendar', $calendarBlog);
 $tpl->assign('search', $searchBlog);
 $tpl->assign('task', $taskBlog);
+$tpl->assign('blog_url', $taskBlog);
 $blogLayout = null;
 
 switch ($action) {
@@ -321,7 +315,7 @@ switch ($action) {
         }
         break;
     case 'view_post':
-        $postArticle = Blog::getSinglePost($blog_id, intval($_GET['post_id']));
+        $postArticle = Blog::getSinglePost($blog_id, $_GET['post_id']);
         $tpl->assign('post', $postArticle);
         $blogLayout = $tpl->get_template('blog/post.tpl');
         break;
@@ -367,19 +361,19 @@ switch ($action) {
     case 'manage_tasks':
         if (api_is_allowed('BLOG_'.$blog_id, 'task_management')) {
             $task = null;
-            if (isset($_GET['do']) && $_GET['do'] == 'add') {
+            if (isset($_GET['do']) && $_GET['do'] === 'add') {
                 $task .= Blog::displayTaskCreateForm($blog_id);
             }
-            if (isset($_GET['do']) && $_GET['do'] == 'assign') {
+            if (isset($_GET['do']) && $_GET['do'] === 'assign') {
                 $task .= Blog::displayTaskAssignmentForm($blog_id);
             }
-            if (isset($_GET['do']) && $_GET['do'] == 'edit') {
+            if (isset($_GET['do']) && $_GET['do'] === 'edit') {
                 $task .= Blog::displayTaskEditForm(
                     $blog_id,
                     intval($_GET['task_id'])
                 );
             }
-            if (isset($_GET['do']) && $_GET['do'] == 'edit_assignment') {
+            if (isset($_GET['do']) && $_GET['do'] === 'edit_assignment') {
                 $task .= Blog::displayAssignedTaskEditForm(
                     $blog_id,
                     intval($_GET['task_id']),
@@ -396,7 +390,7 @@ switch ($action) {
         break;
     case 'execute_task':
         if (isset($_GET['post_id'])) {
-            $post = Blog::getSinglePost($blog_id, intval($_GET['post_id']));
+            $post = Blog::getSinglePost($blog_id, $_GET['post_id']);
             $tpl->assign('post', $post);
             $blogLayout = $tpl->get_template('blog/post.tpl');
         } else {
@@ -430,7 +424,8 @@ switch ($action) {
 }
 
 $content = $tpl->fetch($blogLayout);
-
+$tpl->assign('course_code', api_get_course_id());
+$tpl->assign('session_id', api_get_session_id());
 if ($actionsLeft) {
     $tpl->assign(
         'actions',

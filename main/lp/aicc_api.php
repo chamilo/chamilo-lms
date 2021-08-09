@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -594,19 +595,7 @@ function update_progress_bar(nbr_complete, nbr_total, mode)
     }
     return true;
 }
-function update_stats_page()
-{
-    var myframe = document.getElementById('content_id');
-    var mysrc = myframe.location.href;
-    if(mysrc == 'lp_controller.php?action=stats'){
-        if(myframe && myframe.src){
-            var mysrc = myframe.src;
-            myframe.src = mysrc;
-        }
-        // = mysrc; //refresh page
-    }
-    return true;
-}
+
 /**
  * Updates the message frame with the given string
  */

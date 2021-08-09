@@ -29,7 +29,7 @@ Feature: Survey tool
     And I press advanced settings
     When I fill in the following:
       | survey_code | Survey 1 |
-    And I fill in ckeditor field "survey_title" with "Survey description"
+    And I fill in ckeditor field "survey_title" with "Survey 1"
     And I press "submit_survey"
     Then I should see "The survey has been created succesfully"
 

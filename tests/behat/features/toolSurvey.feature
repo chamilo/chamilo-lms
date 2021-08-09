@@ -44,8 +44,7 @@ Feature: Survey tool
     Given I am on "/main/survey/survey_list.php?cidReq=TEMP"
     And I follow "Survey 1"
     And I follow "Yes / No"
-    When I fill in the following:
-      | question | Yes or No |
+    And I fill in ckeditor field "question" with "Yes / No"
     And I press "buttons[save]"
     Then I should see "The question has been added."
 

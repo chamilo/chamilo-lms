@@ -45,7 +45,7 @@ Feature: Survey tool
     And I follow "Survey 1"
     And I follow "Yes / No"
     When I fill in the following:
-      | question | Yes / No |
+      | question | Yes or No |
     And I press "buttons[save]"
     Then I should see "The question has been added."
 

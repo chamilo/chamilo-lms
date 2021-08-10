@@ -90,8 +90,8 @@ export default {
         itemsAdded.push(receiver.receiver['username']);
       });
 
-      // If it's already added then skip.
-      if (!itemsAdded.includes(item.value['sender']['username'])) {
+      // Sender is not added to the list.
+      /*if (!itemsAdded.includes(item.value['sender']['username'])) {
         // Set the sender too.
         item.value['resourceLinkListFromEntity'].push(
             {
@@ -100,7 +100,7 @@ export default {
               visibility: RESOURCE_LINK_PUBLISHED
             }
         );
-      }
+      }*/
 
       delete item.value['sender'];
     });

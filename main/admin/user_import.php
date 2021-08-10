@@ -285,7 +285,7 @@ function save_data(
                 $userError[] = $user;
                 continue;
             }
-                          
+
             $user = complete_missing_data($user);
             $user['Status'] = api_status_key($user['Status']);
             $redirection = isset($user['Redirection']) ? $user['Redirection'] : '';

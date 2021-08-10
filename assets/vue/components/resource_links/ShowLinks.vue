@@ -26,10 +26,11 @@
 
           <div v-if="link['user']">
             <v-icon icon="mdi-account"/>
-            <!--          <q-avatar size="32px">-->
+            <!--  @todo add avatar        -->
+            <!--  <q-avatar size="32px">-->
             <!--            <img :src="link.user.illustrationUrl + '?w=80&h=80&fit=crop'" />-->
             <!--          </q-avatar>-->
-            {{ $t('User') }}: {{ link.user.username }}
+            {{ link.user.username }}
           </div>
 
           <div v-if="showStatus">

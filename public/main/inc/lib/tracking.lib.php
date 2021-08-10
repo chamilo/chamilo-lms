@@ -6591,9 +6591,8 @@ class Tracking
             return '';
         }
         $skillManager = new SkillModel();
-        $html = $skillManager->getUserSkillsTable($userId, $courseId, $sessionId)['table'];
 
-        return $html;
+        return $skillManager->getUserSkillsTable($userId, $courseId, $sessionId)['table'];
     }
 
     /**

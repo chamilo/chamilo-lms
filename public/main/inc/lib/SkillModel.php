@@ -172,20 +172,27 @@ class SkillModel extends Model
      *
      * @return string
      */
-    public function processSkillListSimple($skills, $imageSize = '', $style = '', $showBadge = true, $showTitle = true)
+    public function processSkillListSimple($skills, $imageSize = 'mini', $style = '', $showBadge = true, $showTitle = true)
     {
         if (empty($skills)) {
             return '';
         }
 
-        $isHierarchicalTable = api_get_configuration_value('table_of_hierarchical_skill_presentation');
-
-        if (empty($imageSize)) {
-            $imageSize = 'img_small';
-        } else {
-            $imageSize = "img_$imageSize";
+        $imageParams = '';
+        switch ($imageSize) {
+            case 'mini':
+                $imageParams = '?w='.ICON_SIZE_MEDIUM;
+                break;
+            case 'small':
+                $imageParams = '?w='.ICON_SIZE_BIG;
+                break;
+            case 'big':
+                $imageParams = '?w='.ICON_SIZE_HUGE;
+                break;
         }
 
+        $isHierarchicalTable = api_get_configuration_value('table_of_hierarchical_skill_presentation');
+        $skillRepo = Container::getSkillRepository();
         $html = '';
         foreach ($skills as $skill) {
             if (isset($skill['data'])) {
@@ -194,7 +201,10 @@ class SkillModel extends Model
 
             $item = '';
             if ($showBadge) {
-                $item = '<div class="item">'.$skill[$imageSize].'</div>';
+                $skillEntity = $skillRepo->find($skill['id']);
+                $url = $this->getWebIconPath($skillEntity);
+
+                $item = '<div class="item"><img src="'.$url.$imageParams.'" /></div>';
             }
 
             $name = '<div class="caption">'.$skill['name'].'</div>';
@@ -664,6 +674,7 @@ class SkillModel extends Model
                     s.id,
                     s.name,
                     s.icon,
+                    s.asset_id,
                     u.id as issue,
                     u.acquired_skill_at,
                     u.course_id
@@ -789,7 +800,8 @@ class SkillModel extends Model
                 $courseInfo = [];
             }
             $tableRow = [
-                'skill_badge' => $resultData['img_small'],
+                'skill_id' => $resultData['id'],
+                'asset_id' => $resultData['asset_id'],
                 'skill_name' => self::translateName($resultData['name']),
                 'short_code' => $resultData['short_code'],
                 'skill_url' => $resultData['url'],
@@ -824,7 +836,7 @@ class SkillModel extends Model
             } else {
                 $graph = new Graph();
                 $graph->setAttribute('graphviz.graph.rankdir', 'LR');
-                foreach ($skillParents as $skillId => $parentList) {
+                foreach ($skillParents as $parentList) {
                     $old = null;
                     foreach ($parentList as $parent) {
                         if ($graph->hasVertex($parent['id'])) {
@@ -2301,10 +2313,16 @@ class SkillModel extends Model
     /**
      * Get the icon (badge image) URL.
      */
-    public static function getWebIconPath(Skill $skill): string
+    public static function getWebIconPath(?Skill $skill): string
     {
+        $default = \Display::return_icon('badges-default.png', null, null, ICON_SIZE_HUGE, null, true);
+
+        if (null === $skill) {
+            return $default;
+        }
+
         if (!$skill->hasAsset()) {
-            return \Display::return_icon('badges-default.png', null, null, ICON_SIZE_HUGE, null, true);
+            return $default;
         }
 
         return Container::getAssetRepository()->getAssetUrl($skill->getAsset());

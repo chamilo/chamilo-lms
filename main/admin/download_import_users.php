@@ -54,6 +54,7 @@ function readImportedUsersArchives(string $path = '', string $parentFile = null,
         }
     }
 
+    krsort($data);
     return $data;
 }
 

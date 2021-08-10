@@ -11,6 +11,7 @@ import {ref, computed} from "vue";
 import {useStore} from 'vuex';
 import gql from "graphql-tag";
 import {useQuery, useResult} from '@vue/apollo-composable'
+import {GET_SESSION_REL_USER} from "../../../graphql/queries/SessionRelUser.js";
 
 export default {
   name: 'SessionList',
@@ -25,46 +26,7 @@ export default {
     if (user.value) {
       let userId = user.value.id;
 
-      /*axios.get(ENTRYPOINT + 'users/' + userId + '/sessions_rel_users.json').then(response => {
-        if (Array.isArray(response.data)) {
-          sessions.value = response.data;
-        }
-      }).catch(function (error) {
-        status.value = error;
-        console.log(error);
-      }).finally(() =>
-          status.value = ''
-      );*/
-
-      const GET_SESSION_REL_USER = gql`
-          query getSessions($user: String!) {
-            sessionRelUsers(user: $user) {
-              edges {
-                node {
-                  session {
-                    _id
-                    name
-                    displayStartDate
-                    displayEndDate,
-                    sessionRelCourseRelUsers(user: $user) {
-                      edges {
-                        node {
-                          course {
-                            _id
-                            title
-                            illustrationUrl
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-      `;
-
-      const {result, loading, error} = useQuery(GET_SESSION_REL_USER, {
+      const {result, loading} = useQuery(GET_SESSION_REL_USER, {
         user: "/api/users/" + userId
       }, );
 

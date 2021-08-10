@@ -14,7 +14,6 @@
               size="72px"
               class="font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-green-600"
           />
-
         </div>
 
         <div class="mt-2 font-bold">
@@ -33,8 +32,8 @@
 import CourseCardList from '../../../components/course/CourseCardList.vue';
 import {ref, computed} from "vue";
 import {useStore} from 'vuex';
-import gql from "graphql-tag";
 import {useQuery, useResult} from '@vue/apollo-composable'
+import {GET_COURSE_REL_USER} from "../../../graphql/queries/CourseRelUser.js";
 
 export default {
   name: 'CourseList',
@@ -48,36 +47,6 @@ export default {
     if (user.value) {
       let userId = user.value.id;
 
-      const GET_COURSE_REL_USER = gql`
-          query getCourses($user: String!) {
-            courseRelUsers(user: $user) {
-              edges {
-                node {
-                  course {
-                    _id,
-                    title,
-                    illustrationUrl
-                     users(status: 1, first: 4) {
-                      edges {
-                        node {
-                          id
-                          status
-                          user {
-                            illustrationUrl,
-                            username,
-                            firstname,
-                            lastname
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-        }
-      `;
-
       const {result, loading, error} = useQuery(GET_COURSE_REL_USER, {
         user: "/api/users/" + userId
       }, );
@@ -87,8 +56,6 @@ export default {
           return edge.node.course;
         });
       });
-
-      console.log(courses);
 
       return {
         courses,

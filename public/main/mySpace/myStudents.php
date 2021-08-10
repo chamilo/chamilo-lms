@@ -468,6 +468,7 @@ switch ($action) {
         if (!empty($messageId)) {
             $messageRepo = Container::getMessageRepository();
             $message = $messageRepo->find($messageId);
+
             // Only delete a message I created.
             if (null !== $message && $message->getSender()->getId() === $currentUser->getId()) {
                 Event::addEvent(

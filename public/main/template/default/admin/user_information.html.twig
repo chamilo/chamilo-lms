@@ -7,10 +7,10 @@
         </div>
         <div class="col-md-8">
             <div class="list-card">
-                {{ display.card_widget('FirstLoginInPlatform'|get_lang, params.first_connection, 'calendar') }}
-                {{ display.card_widget('LatestLoginInPlatform'|get_lang, params.last_connection, 'calendar') }}
+                {{ display.card_widget('First login in platform'|get_lang, params.first_connection, 'calendar') }}
+                {{ display.card_widget('Latest login in platform'|get_lang, params.last_connection, 'calendar') }}
                 {% if params.legal is defined %}
-                    {{ display.card_widget('LegalAccepted'|get_lang, params.legal.datetime, 'gavel', user.legal.icon) }}
+                    {{ display.card_widget('Legal accepted'|get_lang, params.legal.datetime, 'gavel', user.legal.icon) }}
                 {% endif %}
             </div>
             {% if social_tool %}

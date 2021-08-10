@@ -2130,6 +2130,18 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     }
 
     /**
+     * @param int $relationType Example: UserRelUser::USER_RELATION_TYPE_BOSS
+     *
+     * @return UserRelUser[]|Collection
+     */
+    public function getFriendsByRelationType(int $relationType)
+    {
+        return $this->friends->filter(function (UserRelUser $userRelUser) use ($relationType) {
+            return $relationType === $userRelUser->getRelationType();
+        });
+    }
+
+    /**
      * @return UserRelUser[]|Collection
      */
     public function getFriendsWithMe()

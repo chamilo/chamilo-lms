@@ -24,12 +24,7 @@
             </div>
         </div>
 
-        {% if badge_error %}
-            <hr>
-            <div class="alert alert-danger">
-                {{ 'There was a problem embedding the badge assertion info into the badge image, but you can still use this page as a valid proof.'|trans }}
-            </div>
-        {% elseif not personal_badge is empty %}
+        {% if not personal_badge is empty %}
             <p class="text-center">
                 <a href="{{ personal_badge }}" class="btn btn-primary" target="_blank" >
                     <em class="fa fa-download fa-fw"></em> {{ 'Download badges'|trans }}
@@ -83,13 +78,11 @@
                     {{ issue_info.datetime }}
                 {% endif %}
                 {% if issue_info.argumentation %}
-                    {% if issue_info.argumentation %}
-                        <strong>
-                            <p style="font-style: italic;">
-                                {{ 'User %s indicated:'|trans|format(issue_info.argumentation_author_name) }}
-                            </p>
-                        </strong>
-                    {% endif %}
+                    <strong>
+                        <p style="font-style: italic;">
+                            {{ 'User %s indicated:'|trans|format(issue_info.argumentation_author_name) }}
+                        </p>
+                    </strong>
                     <p>{{ issue_info.argumentation }}</p>
                 {% endif %}
             </li>

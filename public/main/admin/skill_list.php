@@ -3,11 +3,13 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Skill;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Skill list for management.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ * @author Julio Montoya
  */
 $cidReset = true;
 
@@ -24,9 +26,11 @@ $skillId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 $entityManager = Database::getManager();
 
+$skillRepo = Container::getSkillRepository();
+
 switch ($action) {
     case 'enable':
-        $skill = $entityManager->find(Skill::class, $skillId);
+        $skill = $skillRepo->find($skillId);
 
         if (is_null($skill)) {
             Display::addFlash(
@@ -60,7 +64,7 @@ switch ($action) {
         break;
     case 'disable':
         /** @var Skill $skill */
-        $skill = $entityManager->find(Skill::class, $skillId);
+        $skill = $skillRepo->find($skillId);
 
         if (is_null($skill)) {
             Display::addFlash(
@@ -84,12 +88,9 @@ switch ($action) {
             $children = $skillObj->getChildren($skill->getId());
 
             foreach ($children as $child) {
-                $skill = $entityManager->find(
-                    Skill::class,
-                    $child['id']
-                );
+                $skill = $skillRepo->find($child['id']);
 
-                if (empty($skill)) {
+                if (null === $skill) {
                     continue;
                 }
 
@@ -177,13 +178,10 @@ switch ($action) {
         $tpl->assign('skills', $skillList);
         $tpl->assign('current_tag_id', $extraFieldSearchTagId);
         $tpl->assign('tags', $tags);
-        $templateName = $tpl->get_template('skill/list.tpl');
+        $templateName = $tpl->get_template('skill/list.html.twig');
         $content = $tpl->fetch($templateName);
 
-        $tpl->assign(
-            'actions',
-            Display::toolbarAction('toolbar', [$toolbar])
-        );
+        $tpl->assign('actions', Display::toolbarAction('toolbar', [$toolbar]));
         $tpl->assign('content', $content);
         $tpl->display_one_col_template();
         break;

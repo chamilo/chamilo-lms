@@ -3,7 +3,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Level;
-use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Chamilo\CoreBundle\Framework\Container;
@@ -25,10 +24,11 @@ if (empty($issue)) {
 }
 
 $entityManager = Database::getManager();
-/** @var SkillRelUser $skillIssue */
-$skillIssue = $entityManager->find(SkillRelUser::class, $issue);
+/** @var SkillRelUser $skillRelUser */
+$skillRelUser = $entityManager->find(SkillRelUser::class, $issue);
+$currentUrl = api_get_self().'?issue='.$issue;
 
-if (null === $skillIssue) {
+if (null === $skillRelUser) {
     Display::addFlash(
         Display::return_message(
             get_lang('Skill not found'),
@@ -42,8 +42,8 @@ if (null === $skillIssue) {
 $skillRepo = Container::getSkillRepository();
 $skillLevelRepo = $entityManager->getRepository(Level::class);
 
-$user = $skillIssue->getUser();
-$skill = $skillIssue->getSkill();
+$user = $skillRelUser->getUser();
+$skill = $skillRelUser->getSkill();
 
 if (null === $user || null === $skill) {
     Display::addFlash(
@@ -73,7 +73,7 @@ $skillInfo = [
         ICON_SIZE_BIG,
         null,
         true
-    ), // SkillModel::getWebIconPath($skill),
+    ),
     'courses' => [],
 ];
 
@@ -88,57 +88,60 @@ $htmlHeadXtra[] = "
     <meta property='og:image' content='".$skillInfo['badge_image']."' />
 ";
 
-$currentUserId = api_get_user_id();
-$currentUser = api_get_user_entity($currentUserId);
-$allowExport = $currentUser ? $currentUser->getId() === $user->getId() : false;
-$allowComment = $currentUser ? SkillModel::userCanAddFeedbackToUser($currentUser, $user) : false;
-
-$skillIssueDate = api_get_local_time($skillIssue->getAcquiredSkillAt());
-$currentSkillLevel = get_lang('No level acquired yet');
-if ($skillIssue->getAcquiredLevel()) {
-    $currentSkillLevel = $skillLevelRepo->find(['id' => $skillIssue->getAcquiredLevel()])->getName();
+$currentUser = api_get_user_entity();
+$allowExport = false;
+$allowComment = false;
+if (null !== $currentUser) {
+    $allowExport = $currentUser->getId() === $user->getId() || api_is_platform_admin();
+    $allowComment = SkillModel::userCanAddFeedbackToUser($currentUser, $user);
 }
 
-$author = api_get_user_info($skillIssue->getArgumentationAuthorId());
-$tempDate = DateTime::createFromFormat('Y-m-d H:i:s', $skillIssueDate);
+$skillRelUserDate = api_get_local_time($skillRelUser->getAcquiredSkillAt());
+$currentSkillLevel = get_lang('No level acquired yet');
+if ($skillRelUser->getAcquiredLevel()) {
+    $currentSkillLevel = $skillLevelRepo->find(['id' => $skillRelUser->getAcquiredLevel()])->getName();
+}
+
+$author = api_get_user_info($skillRelUser->getArgumentationAuthorId());
+$tempDate = DateTime::createFromFormat('Y-m-d H:i:s', $skillRelUserDate);
 $linkedinOrganizationId = api_get_configuration_value('linkedin_organization_id');
 if ((false === $linkedinOrganizationId)) {
     $linkedinOrganizationId = null;
 }
 
-$skillIssueInfo = [
-    'id' => $skillIssue->getId(),
-    'datetime' => api_format_date($skillIssueDate, DATE_TIME_FORMAT_SHORT),
+$skillRelUserInfo = [
+    'id' => $skillRelUser->getId(),
+    'datetime' => api_format_date($skillRelUserDate, DATE_TIME_FORMAT_SHORT),
     'year' => $tempDate->format('Y'),
     'month' => $tempDate->format('m'),
     'linkedin_organization_id' => $linkedinOrganizationId,
     'acquired_level' => $currentSkillLevel,
-    'argumentation_author_id' => $skillIssue->getArgumentationAuthorId(),
+    'argumentation_author_id' => $skillRelUser->getArgumentationAuthorId(),
     'argumentation_author_name' => $author['complete_name'],
-    'argumentation' => $skillIssue->getArgumentation(),
-    'source_name' => $skillIssue->getSourceName(),
-    'user_id' => $skillIssue->getUser()->getId(),
-    'user_complete_name' => UserManager::formatUserFullName($skillIssue->getUser()),
-    'skill_id' => $skillIssue->getSkill()->getId(),
-    'skill_badge_image' => SkillModel::getWebIconPath($skillIssue->getSkill()),
-    'skill_name' => $skillIssue->getSkill()->getName(),
-    'skill_short_code' => $skillIssue->getSkill()->getShortCode(),
-    'skill_description' => $skillIssue->getSkill()->getDescription(),
-    'skill_criteria' => $skillIssue->getSkill()->getCriteria(),
-    'badge_assertion' => SkillRelUserModel::getAssertionUrl($skillIssue),
+    'argumentation' => $skillRelUser->getArgumentation(),
+    'source_name' => $skillRelUser->getSourceName(),
+    'user_id' => $skillRelUser->getUser()->getId(),
+    'user_complete_name' => UserManager::formatUserFullName($skillRelUser->getUser()),
+    'skill_id' => $skillRelUser->getSkill()->getId(),
+    'skill_badge_image' => SkillModel::getWebIconPath($skillRelUser->getSkill()),
+    'skill_name' => $skillRelUser->getSkill()->getName(),
+    'skill_short_code' => $skillRelUser->getSkill()->getShortCode(),
+    'skill_description' => $skillRelUser->getSkill()->getDescription(),
+    'skill_criteria' => $skillRelUser->getSkill()->getCriteria(),
+    'badge_assertion' => SkillRelUserModel::getAssertionUrl($skillRelUser),
     'comments' => [],
-    'feedback_average' => $skillIssue->getAverage(),
+    'feedback_average' => $skillRelUser->getAverage(),
 ];
 
-$skillIssueComments = $skillIssue->getComments(true);
+$skillRelUserComments = $skillRelUser->getComments(true);
 
-$userId = $skillIssueInfo['user_id'];
-$skillId = $skillIssueInfo['skill_id'];
+$userId = $skillRelUserInfo['user_id'];
+$skillId = $skillRelUserInfo['skill_id'];
 
 /** @var SkillRelUserComment $comment */
-foreach ($skillIssueComments as $comment) {
+foreach ($skillRelUserComments as $comment) {
     $commentDate = api_get_local_time($comment->getFeedbackDateTime());
-    $skillIssueInfo['comments'][] = [
+    $skillRelUserInfo['comments'][] = [
         'text' => $comment->getFeedbackText(),
         'value' => $comment->getFeedbackValue(),
         'giver_complete_name' => UserManager::formatUserFullName($comment->getFeedbackGiver()),
@@ -195,20 +198,20 @@ $allowToEdit = SkillModel::isAllowed($user->getId(), false);
 if ($showLevels && $allowToEdit) {
     $formAcquiredLevel = new FormValidator('acquired_level');
     $formAcquiredLevel->addSelect('acquired_level', get_lang('Level acquired'), $acquiredLevel);
-    $formAcquiredLevel->addHidden('user', (string) $skillIssue->getUser()->getId());
-    $formAcquiredLevel->addHidden('issue', (string) $skillIssue->getId());
+    $formAcquiredLevel->addHidden('user', (string) $skillRelUser->getUser()->getId());
+    $formAcquiredLevel->addHidden('issue', (string) $skillRelUser->getId());
     $formAcquiredLevel->addButtonSave(get_lang('Save'));
 
     if ($formAcquiredLevel->validate() && $allowComment) {
         $values = $formAcquiredLevel->exportValues();
         $level = $skillLevelRepo->find($values['acquired_level']);
-        $skillIssue->setAcquiredLevel($level);
+        $skillRelUser->setAcquiredLevel($level);
 
-        $entityManager->persist($skillIssue);
+        $entityManager->persist($skillRelUser);
         $entityManager->flush();
         Display::addFlash(Display::return_message(get_lang('Saved')));
 
-        header('Location: '.SkillRelUserModel::getIssueUrl($skillIssue));
+        header('Location: '.SkillRelUserModel::getIssueUrl($skillRelUser));
         exit;
     }
 }
@@ -225,8 +228,8 @@ $form->addSelect(
     ],
     ['-', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 );
-$form->addHidden('user', (string) $skillIssue->getUser()->getId());
-$form->addHidden('issue', (string) $skillIssue->getId());
+$form->addHidden('user', (string) $skillRelUser->getUser()->getId());
+$form->addHidden('issue', (string) $skillRelUser->getId());
 $form->addButtonSend(get_lang('Send message'));
 
 if ($form->validate() && $allowComment && $allowToEdit) {
@@ -237,69 +240,28 @@ if ($form->validate() && $allowComment && $allowToEdit) {
         ->setFeedbackGiver($currentUser)
         ->setFeedbackText($values['comment'])
         ->setFeedbackValue($values['value'] ? $values['value'] : null)
-        ->setSkillRelUser($skillIssue)
+        ->setSkillRelUser($skillRelUser)
     ;
 
     $entityManager->persist($skillUserComment);
     $entityManager->flush();
     Display::addFlash(Display::return_message(get_lang('Added')));
 
-    header('Location: '.SkillRelUserModel::getIssueUrl($skillIssue));
+    header('Location: '.SkillRelUserModel::getIssueUrl($skillRelUser));
     exit;
 }
 
-$badgeInfoError = '';
 $personalBadge = '';
-$allowExport = true;
-
 if ($allowExport) {
-    $backpack = 'https://backpack.openbadges.org/';
-    $configBackpack = api_get_setting('openbadges_backpack');
-
-    if (0 !== strcmp($backpack, $configBackpack)) {
-        $backpack = $configBackpack;
-        if ('/' !== substr($backpack, -1)) {
-            $backpack .= '/';
-        }
-    }
-
-    $htmlHeadXtra[] = '<script src="'.$backpack.'issuer.js"></script>';
-
-    if ($skill->hasAsset()) {
-        $assetRepo = Container::getAssetRepository();
-        $unbakedBadge = $assetRepo->getAssetContent($skill->getAsset());
-    } else {
-        $unbakedBadge = api_get_path(SYS_PUBLIC_PATH).'img/icons/128/badges-default.png';
-        $unbakedBadge = file_get_contents($unbakedBadge);
-    }
-
-    $badgeInfoError = false;
-    $personalBadge = '';
-    $png = new PNGImageBaker($unbakedBadge);
-
-    if ($png->checkChunks("tEXt", "openbadges")) {
-        $bakedInfo = $png->addChunk('tEXt', 'openbadges', $skillIssueInfo['badge_assertion']);
-
-        $skillRelUserId = $skillIssueInfo['id'];
-        $verifyBakedBadge = $png->extractBadgeInfo($bakedInfo);
-
-        if (!is_array($verifyBakedBadge)) {
-            $badgeInfoError = true;
-        }
-
-        if (!$badgeInfoError) {
-            $personalBadge = api_get_self().'?issue='.$issue.'&export=1';
-            if ($export) {
-                header('Content-type: image/png');
-                echo $bakedInfo;
-                exit;
-            }
-        }
+    SkillModel::setBackPackJs($htmlHeadXtra);
+    $personalBadge = api_get_self().'?issue='.$issue.'&export=1';
+    if ($export) {
+        SkillModel::exportBadge($skill, $skillRelUser, $currentUrl);
     }
 }
 
 $template = new Template(get_lang('Issued badge information'));
-$template->assign('issue_info', $skillIssueInfo);
+$template->assign('issue_info', $skillRelUserInfo);
 $template->assign('allow_comment', $allowComment);
 $template->assign('allow_export', $allowExport);
 
@@ -314,7 +276,6 @@ if ($showLevels && $allowToEdit && $formAcquiredLevel) {
     $levelForm = $formAcquiredLevel->returnForm();
 }
 $template->assign('acquired_level_form', $levelForm);
-$template->assign('badge_error', $badgeInfoError);
 $template->assign('personal_badge', $personalBadge);
 $template->assign('show_level', $showLevels);
 $content = $template->fetch($template->get_template('skill/issued.tpl'));

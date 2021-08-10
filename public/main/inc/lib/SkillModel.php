@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\SkillRelItemRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelSkill;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CForumThread;
@@ -1547,9 +1548,10 @@ class SkillModel extends Model
                 }
                 break;
             case STUDENT_BOSS:
-                $studentBosses = $userRepo->getStudentBosses($toUser);
+                $studentBosses = $toUser->getFriendsByRelationType(UserRelUser::USER_RELATION_TYPE_BOSS);
+                //$studentBosses = $userRepo->getStudentBosses($toUser);
                 foreach ($studentBosses as $studentBoss) {
-                    if ($studentBoss->getId() !== $fromUser->getId()) {
+                    if ($studentBoss->getFriend()->getId() !== $fromUser->getId()) {
                         continue;
                     }
 
@@ -2372,4 +2374,58 @@ class SkillModel extends Model
 
         return $skillUser;
     }
+
+    public static function setBackPackJs(&$htmlHeadXtra)
+    {
+        $backpack = 'https://backpack.openbadges.org/';
+        $configBackpack = api_get_setting('openbadges_backpack');
+
+        if (0 !== strcmp($backpack, $configBackpack)) {
+            $backpack = $configBackpack;
+            if ('/' !== substr($backpack, -1)) {
+                $backpack .= '/';
+            }
+        }
+        $htmlHeadXtra[] = '<script src="'.$backpack.'issuer.js"></script>';
+    }
+
+    public static function exportBadge(Skill $skill, SkillRelUser $skillRelUser, string $urlToRedirect)
+    {
+        if ($skill->hasAsset()) {
+            $assetRepo = Container::getAssetRepository();
+            $imageContent = $assetRepo->getAssetContent($skill->getAsset());
+        } else {
+            $defaultBadge = api_get_path(SYS_PUBLIC_PATH).'img/icons/128/badges-default.png';
+            $imageContent = file_get_contents($defaultBadge);
+        }
+
+        $png = new PNGImageBaker($imageContent);
+
+        if ($png->checkChunks('tEXt', 'openbadges')) {
+            $result = $png->addChunk('tEXt', 'openbadges', SkillRelUserModel::getAssertionUrl($skillRelUser));
+            $verifyBadge = $png->extractBadgeInfo($result);
+
+            $error = true;
+            if (is_array($verifyBadge)) {
+                $error = false;
+            }
+
+            if (!$error) {
+                header('Content-type: image/png');
+                echo $result;
+                exit;
+            }
+        }
+
+        Display::addFlash(
+            Display::return_message(
+                get_lang(
+                    'There was a problem embedding the badge assertion info into the badge image, but you can still use this page as a valid proof.'
+                ),
+                'warning'
+            )
+        );
+        api_location($urlToRedirect);
+    }
+
 }

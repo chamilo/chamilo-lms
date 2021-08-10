@@ -412,33 +412,6 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     }
 
     /**
-     * Get the student bosses for a user.
-     *
-     * @return array
-     */
-    public function getStudentBosses(User $user)
-    {
-        $qb = $this->createQueryBuilder('u');
-        $qb
-            ->distinct()
-            ->innerJoin(
-                'ChamiloCoreBundle:UserRelUser',
-                'uu',
-                Join::WITH,
-                'u.id = uu.friendUserId'
-            )
-            ->where(
-                $qb->expr()->eq('uu.relationType', UserRelUser::USER_RELATION_TYPE_BOSS)
-            )
-            ->andWhere(
-                $qb->expr()->eq('uu.userId', $user->getId())
-            )
-        ;
-
-        return $qb->getQuery()->getResult();
-    }
-
-    /**
      * Get number of users in URL.
      *
      * @return int

@@ -10,8 +10,6 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SkillRelUserComment class.
- *
  * @ORM\Table(
  *     name="skill_rel_user_comment",
  *     indexes={
@@ -49,7 +47,7 @@ class SkillRelUserComment
     /**
      * @ORM\Column(name="feedback_value", type="integer", nullable=true, options={"default":1})
      */
-    protected int $feedbackValue;
+    protected ?int $feedbackValue;
 
     /**
      * @ORM\Column(name="feedback_datetime", type="datetime", nullable=false)
@@ -86,22 +84,12 @@ class SkillRelUserComment
         return $this->feedbackGiver;
     }
 
-    /**
-     * Get feedbackText.
-     *
-     * @return string
-     */
-    public function getFeedbackText()
+    public function getFeedbackText(): string
     {
         return $this->feedbackText;
     }
 
-    /**
-     * Get feedbackValue.
-     *
-     * @return int
-     */
-    public function getFeedbackValue()
+    public function getFeedbackValue(): ?int
     {
         return $this->feedbackValue;
     }
@@ -116,60 +104,35 @@ class SkillRelUserComment
         return $this->feedbackDateTime;
     }
 
-    /**
-     * Set skillRelUser.
-     *
-     * @return SkillRelUserComment
-     */
-    public function setSkillRelUser(SkillRelUser $skillRelUser)
+    public function setSkillRelUser(SkillRelUser $skillRelUser): self
     {
         $this->skillRelUser = $skillRelUser;
 
         return $this;
     }
 
-    /**
-     * Set feedbackGiver.
-     *
-     * @return SkillRelUserComment
-     */
-    public function setFeedbackGiver(User $feedbackGiver)
+    public function setFeedbackGiver(User $feedbackGiver): self
     {
         $this->feedbackGiver = $feedbackGiver;
 
         return $this;
     }
 
-    /**
-     * Set feedbackText.
-     *
-     * @return SkillRelUserComment
-     */
-    public function setFeedbackText(string $feedbackText)
+    public function setFeedbackText(string $feedbackText): self
     {
         $this->feedbackText = $feedbackText;
 
         return $this;
     }
 
-    /**
-     * Set feebackValue.
-     *
-     * @return SkillRelUserComment
-     */
-    public function setFeedbackValue(int $feedbackValue)
+    public function setFeedbackValue(?int $feedbackValue): self
     {
         $this->feedbackValue = $feedbackValue;
 
         return $this;
     }
 
-    /**
-     * Set feedbackDateTime.
-     *
-     * @return SkillRelUserComment
-     */
-    public function setFeedbackDateTime(DateTime $feedbackDateTime)
+    public function setFeedbackDateTime(DateTime $feedbackDateTime): self
     {
         $this->feedbackDateTime = $feedbackDateTime;
 

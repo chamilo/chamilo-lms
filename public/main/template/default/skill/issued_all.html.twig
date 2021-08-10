@@ -1,11 +1,14 @@
+{% import '@ChamiloCore/Macros/box.html.twig' as display %}
+
 {% for badge in user_badges %}
     <div class="row issued">
         <div class="col-md-5">
             <div class="thumbnail">
                 <figure class="text-center">
                     <img class="img-fluid center-block"
-                         src="{{ badge.issue_info.skill_badge_image }}"
-                         alt="{{ badge.issue_info.skill_name }}">
+                         src="{{ badge.issue_info.skill_badge_image }}?w=120"
+                         alt="{{ badge.issue_info.skill_name }}"
+                    />
                     <figcaption>
                         <p class="lead">{{ badge.issue_info.skill_name }}</p>
                         {% if badge.issue_info.skill_short_code %}
@@ -24,18 +27,11 @@
                 </div>
             </div>
             {% if badge.allow_download_export %}
-                {% if badge.badge_error %}
-                    <hr>
-                    <div class="alert alert-danger">
-                        {{ 'There was a problem embedding the badge assertion info into the badge image, but you can still use this page as a valid proof.'|trans }}
-                    </div>
-                {% else %}
-                    <p class="text-center">
-                        <a href="{{ badge.personal_badge }}" class="btn btn-primary" target="_new" download="badge">
-                            <em class="fa fa-download fa-fw"></em> {{ 'Download badges'|trans }}
-                        </a>
-                    </p>
-                {% endif %}
+                <p class="text-center">
+                    <a href="{{ badge.personal_badge }}" class="btn btn-primary">
+                        <em class="fa fa-download fa-fw"></em> {{ 'Download badges'|trans }}
+                    </a>
+                </p>
                 <hr>
                 <p class="text-center">
                     <a href="#" class="btn btn-success" id="badge-export-button-{{ badge.issue_info.id }}">
@@ -45,11 +41,14 @@
                 {% if "display.hide_social_media_links" | api_get_setting == 'false' %}
                 <div class='col-md-12 text-center'>
                     <h5><b> {{ 'Share with your friends' | trans }} </b></h5>
-                    <a href="http://www.facebook.com/sharer.php?u={{ _p.web }}badge/{{ badge.issue_info.id }}" target="_new">
+                    <a
+                        href="http://www.facebook.com/sharer.php?u={{ url('index') }}badge/{{ badge.issue_info.id }}"
+                        target="_new"
+                    >
                         <em class='fa fa-facebook-square fa-3x text-info' aria-hidden='true'></em>
                     </a>
                     <a
-                        href="https://twitter.com/home?status={{ 'I have achieved skill %s on %s' | trans |format(skill_info.name, _s.site_name)}} - {{ _p.web }}badge/{{ badge.issue_info.id }}"
+                        href="https://twitter.com/home?status={{ 'I have achieved skill %s on %s' | trans |format(badge.issue_info.skill_name, chamilo_settings_get('platform.site_name'))}} - {{ url('index')}}badge/{{ badge.issue_info.id }}"
                         target="_new">
                         <em class='fa fa-twitter-square fa-3x text-light' aria-hidden='true'></em>
                     </a>
@@ -92,19 +91,10 @@
             {% endif %}
 
             {% if badge.allow_comment %}
+                <hr />
+                {{ display.panel('Change acquired level'|trans, badge.acquired_level_form) }}
                 <hr>
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <em class="fa fa-check-circle-o fa-fw" aria-hidden="true"></em>
-                        {{ 'Change acquired level'|trans }}
-                    </div>
-                    <div class="panel-body">
-                        {% autoescape false %}
-                        {{ badge.acquired_level_form }}
-                        {% endautoescape %}
-                    </div>
-                </div>
-                <hr>
+
                 <div class="panel panel-info">
                     <div class="panel-heading">
                         <em class="fa fa-comment-o fa-fw" aria-hidden="true"></em>
@@ -113,13 +103,14 @@
                         <em class="fa fa-thumbs-o-up fa-fw" aria-hidden="true"></em>
                         {{ 'Average rating %s'|trans|format(badge.issue_info.feedback_average) }}
                     </div>
+
                     <div class="panel-body">
                         {% autoescape false %}
                             {{ badge.comment_form }}
                         {% endautoescape %}
                         <hr />
                         {% for comment in badge.issue_info.comments %}
-                            <article class="media">
+                            <article>
                                 <div class="media-body">
                                     <h4 class="media-heading">{{ comment.giver_complete_name }}</h4>
                                     <p><small>{{ comment.datetime }}</small></p>
@@ -129,7 +120,8 @@
                                     <div style="width: 80px;">
                                         {% if comment.value %}
                                             <em class="fa fa-certificate fa-fw" aria-label="{{ 'Average rating' }}"></em>
-                                            <span class="sr-only">{{ 'Average rating' }}</span> {{ comment.value }}
+                                            <span class="sr-only">{{ 'Average rating' }}</span>
+                                            {{ comment.value }}
                                         {% endif %}
                                     </div>
                                 </div>

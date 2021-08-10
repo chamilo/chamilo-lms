@@ -267,6 +267,7 @@ import useState from "../../hooks/useState";
 import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
 import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility";
+import {MESSAGE_TYPE_INBOX, MESSAGE_TYPE_OUTBOX} from "../../components/message/msgType";
 
 export default {
   name: 'UserGroupList',
@@ -289,13 +290,13 @@ export default {
     const title = ref('Inbox');
 
     filtersSent.value = {
-      msgType: 2,
+      msgType: MESSAGE_TYPE_OUTBOX,
       sender: user.id
     }
 
     // inbox
     filters.value = {
-      msgType: 1,
+      msgType: MESSAGE_TYPE_INBOX,
       userReceiver: user.id
     };
 
@@ -312,7 +313,7 @@ export default {
     function goToInbox() {
       title.value = 'Inbox';
       filters.value = {
-        msgType: 1,
+        msgType: MESSAGE_TYPE_INBOX,
         userReceiver: user.id,
       };
       store.dispatch('message/resetList');
@@ -322,7 +323,7 @@ export default {
     function goToUnread() {
       title.value = 'Unread';
       filters.value = {
-        msgType: 1,
+        msgType: MESSAGE_TYPE_INBOX,
         userReceiver: user.id,
         read: false
       };
@@ -333,7 +334,7 @@ export default {
     function goToSent() {
       title.value = 'Sent';
       filters.value = {
-        msgType: 2,
+        msgType: MESSAGE_TYPE_OUTBOX,
         sender: user.id
       };
       store.dispatch('message/resetList');
@@ -343,7 +344,7 @@ export default {
     function goToTag(tag) {
       title.value = tag.tag;
       filters.value = {
-        msgType: 1,
+        msgType: MESSAGE_TYPE_INBOX,
         userReceiver: user.id,
         tags: [tag]
       };

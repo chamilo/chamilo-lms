@@ -1,6 +1,7 @@
 import NotificationMixin from './NotificationMixin';
 import { formatDateTime } from '../utils/dates';
 import isEmpty from 'lodash/isEmpty';
+import {MESSAGE_TYPE_INBOX} from "../components/message/msgType";
 export default {
   mixins: [NotificationMixin],
   methods: {
@@ -57,7 +58,7 @@ export default {
 
         createForm.v$.item.$model.sender = '/api/users/' + this.currentUser.id;
         createForm.v$.item.$model.receivers = users;
-        createForm.v$.item.$model.msgType = 1;
+        createForm.v$.item.$model.msgType = MESSAGE_TYPE_INBOX;
         this.create(createForm.v$.item.$model);
       }
     },
@@ -81,7 +82,7 @@ export default {
         createForm.v$.item.$model.receiversTo = null;
         createForm.v$.item.$model.receiversCc = null;
         createForm.v$.item.$model.receivers = users;
-        createForm.v$.item.$model.msgType = 1;
+        createForm.v$.item.$model.msgType = MESSAGE_TYPE_INBOX;
         this.create(createForm.v$.item.$model);
       }
     },

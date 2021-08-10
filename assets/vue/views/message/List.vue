@@ -269,6 +269,7 @@ import useState from "../../hooks/useState";
 import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
 import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility";
+import {MESSAGE_TYPE_INBOX} from "../../components/message/msgType";
 
 export default {
   name: 'MessageList',
@@ -294,7 +295,7 @@ export default {
 
     // Inbox
     const inBoxFilter = {
-      msgType: 1,
+      msgType: MESSAGE_TYPE_INBOX,
       'receivers.receiver': user.id,
       'order[sendDate]': 'desc',
     };
@@ -321,7 +322,7 @@ export default {
       title.value = 'Unread';
       index.value = 'unread';
       const unReadFilter = {
-        msgType: 1,
+        msgType: MESSAGE_TYPE_INBOX,
         'receivers.receiver': user.id,
         read: false
       };
@@ -345,7 +346,7 @@ export default {
       title.value = tag.tag;
       index.value = 'tag';
       const tagFilter = {
-        msgType: 1,
+        msgType: MESSAGE_TYPE_INBOX,
         'receivers.receiver': user.id,
         'receivers.tags.tag': [tag.tag]
       };

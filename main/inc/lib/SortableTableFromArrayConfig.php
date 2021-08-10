@@ -116,3 +116,4 @@ class SortableTableFromArrayConfig extends SortableTable
         }
     }
 }
+

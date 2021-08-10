@@ -7170,11 +7170,11 @@ class CourseManager
      * If withSession is 1, only the sessions will be taken.
      * If withSession is different from 0 and 1, the whole set will be take.
      *
-     * @param int  $courseId
-     * @param int  $withSession
-     * @param int  $userId
-     * @param null $startDate
-     * @param null $endDate
+     * @param int             $courseId
+     * @param int             $withSession
+     * @param int             $userId
+     * @param string|int|null $startDate
+     * @param string|int|null $endDate
      */
     public static function getAccessCourse(
         $courseId = 0,

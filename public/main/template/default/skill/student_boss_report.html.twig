@@ -2,12 +2,12 @@
 {% if allow_skill_tool %}
     <div class="btn-group">
         <a class="btn btn-default" href="{{ _p.web_main }}social/skills_wheel.php">
-            {{ 'SkillsWheel' | trans }}
+            {{ 'Skills wheel' | trans }}
         </a>
     </div>
 {% endif %}
 
-<h1 class="page-header">{{ 'SkillsAcquired' | trans }}</h1>
+<h1 class="page-header">{{ 'Skills acquired' | trans }}</h1>
 
 <form class="form-inline" method="post" action="{{ _p.web_self }}">
     <label>{{ 'Students' | trans }}</label>
@@ -27,7 +27,7 @@
         <thead>
             <tr>
                 <th>{{ 'Student' | trans }}</th>
-                <th>{{ 'SkillsAcquired' | trans }}</th>
+                <th>{{ 'Skills acquired' | trans }}</th>
                 <th>{{ 'Date' | trans }}</th>
                 <th>{{ 'Course' | trans }}</th>
             </tr>
@@ -38,7 +38,10 @@
                 <td>{{ row.complete_name }}</td>
                 <td>{{ row.skill_name }}</td>
                 <td>{{ row.achieved_at }}</td>
-                <td><img src="{{ row.course_image }}" alt="{{ row.course_name }}"> {{ row.course_name }}</td>
+                <td>
+                    <img src="{{ row.course_image }}" alt="{{ row.course_name }}">
+                    {{ row.course_name }}
+                </td>
             </tr>
         {% endfor %}
         </tbody>

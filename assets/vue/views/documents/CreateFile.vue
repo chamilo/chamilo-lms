@@ -19,6 +19,7 @@ import DocumentsForm from '../../components/documents/FormNewDocument.vue';
 import Loading from '../../components/Loading.vue';
 import Toolbar from '../../components/Toolbar.vue';
 import CreateMixin from '../../mixins/CreateMixin';
+import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility";
 
 const servicePrefix = 'Documents';
 
@@ -56,7 +57,7 @@ export default {
       gid: this.$route.query.gid,
       sid: this.$route.query.sid,
       cid: this.$route.query.cid,
-      visibility: 2,
+      visibility: RESOURCE_LINK_PUBLISHED,
     }]);
   },
   methods: {

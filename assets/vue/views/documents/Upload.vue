@@ -37,6 +37,7 @@ import Webcam from '@uppy/webcam'
 const XHRUpload = require('@uppy/xhr-upload');
 import { Dashboard } from '@uppy/vue'
 import {useRoute} from "vue-router";
+import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility";
 const ImageEditor = require('@uppy/image-editor');
 
 export default {
@@ -60,7 +61,7 @@ export default {
       gid: route.query.gid,
       sid: route.query.sid,
       cid: route.query.cid,
-      visibility: 2,
+      visibility: RESOURCE_LINK_PUBLISHED,
     }]);
 
     let uppy = ref();
@@ -122,7 +123,7 @@ export default {
       gid: this.$route.query.gid,
       sid: this.$route.query.sid,
       cid: this.$route.query.cid,
-      visibility: 2,
+      visibility: RESOURCE_LINK_PUBLISHED,
     }]);
     this.files = [];
   },

@@ -34,6 +34,7 @@ import useVuelidate from "@vuelidate/core";
 import VueMultiselect from 'vue-multiselect'
 import isEmpty from 'lodash/isEmpty';
 import {mapGetters, useStore} from "vuex";
+import {RESOURCE_LINK_PUBLISHED} from "./visibility.js";
 
 export default {
   name: 'EditLinks',
@@ -83,7 +84,7 @@ export default {
           {
             uid: userResult.id,
             user: {username: userResult.username},
-            visibility: 2
+            visibility: RESOURCE_LINK_PUBLISHED
           }
       );
     }

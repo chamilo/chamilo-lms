@@ -23,6 +23,7 @@ import {computed, onMounted, ref} from "vue";
 import useVuelidate from "@vuelidate/core";
 import {useRoute, useRouter} from "vue-router";
 import isEmpty from "lodash/isEmpty";
+import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility.js";
 const servicePrefix = 'Message';
 
 const { mapFields } = createHelpers({
@@ -83,7 +84,7 @@ export default {
             {
               uid: receiver.receiver['id'],
               user: { username: receiver.receiver['username']},
-              visibility: 2
+              visibility: RESOURCE_LINK_PUBLISHED
             }
         );
       });
@@ -93,7 +94,7 @@ export default {
           {
             uid: item.value['sender']['id'],
             user: { username: item.value['sender']['username']},
-            visibility: 2
+            visibility: RESOURCE_LINK_PUBLISHED
           }
       );
 

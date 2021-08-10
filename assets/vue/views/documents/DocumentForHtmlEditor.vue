@@ -113,6 +113,7 @@ import { ref, reactive, onMounted, computed } from 'vue';
 import { useStore } from 'vuex';
 import isEmpty from 'lodash/isEmpty';
 import moment from "moment";
+import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility";
 
 export default {
   name: 'DocumentForHtmlEditor',
@@ -218,7 +219,7 @@ export default {
             gid: this.$route.query.gid,
             sid: this.$route.query.sid,
             cid: this.$route.query.cid,
-            visibility: 2, // visible by default
+            visibility: RESOURCE_LINK_PUBLISHED, // visible by default
           }]);
 
           this.create(this.item);

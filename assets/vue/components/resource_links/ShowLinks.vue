@@ -54,13 +54,14 @@
 <script>
 
 import {toRefs} from "vue";
+import {RESOURCE_LINK_PUBLISHED, RESOURCE_LINK_DRAFT} from "./visibility";
 
 export default {
   name: 'ShowLinks',
   setup(props) {
     const visibilityList = [
-      {value: 2, label: 'Published'},
-      {value: 0, label: 'Draft'},
+      {value: RESOURCE_LINK_PUBLISHED, label: 'Published'},
+      {value: RESOURCE_LINK_DRAFT, label: 'Draft'},
     ];
 
     return {

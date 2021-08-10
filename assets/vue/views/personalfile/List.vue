@@ -141,6 +141,7 @@ import DataFilter from '../../components/DataFilter';
 import { ref, reactive, onMounted, computed } from 'vue';
 import { useStore } from 'vuex';
 import isEmpty from 'lodash/isEmpty';
+import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility";
 
 export default {
   name: 'PersonalFileList',
@@ -270,7 +271,7 @@ export default {
             gid: 0,
             sid: 0,
             cid: 0,
-            visibility: 2, // visible by default
+            visibility: RESOURCE_LINK_PUBLISHED, // visible by default
           }]);
 
           this.createWithFormData(this.item);

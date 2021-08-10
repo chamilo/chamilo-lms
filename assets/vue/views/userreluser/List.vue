@@ -182,6 +182,7 @@ import { ref, reactive, onMounted, computed } from 'vue';
 import { useStore } from 'vuex';
 import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
+import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility";
 
 export default {
   name: 'UserRelUserList',
@@ -339,7 +340,7 @@ export default {
             gid: this.$route.query.gid,
             sid: this.$route.query.sid,
             cid: this.$route.query.cid,
-            visibility: 2, // visible by default
+            visibility: RESOURCE_LINK_PUBLISHED, // visible by default
           }]);
 
           this.create(this.item);

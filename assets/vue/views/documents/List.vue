@@ -306,6 +306,7 @@ import { useStore } from 'vuex';
 import isEmpty from 'lodash/isEmpty';
 import moment from "moment";
 import toInteger from "lodash/toInteger";
+import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility";
 
 export default {
   name: 'DocumentsList',
@@ -454,7 +455,7 @@ export default {
             gid: this.$route.query.gid,
             sid: this.$route.query.sid,
             cid: this.$route.query.cid,
-            visibility: 2, // visible by default
+            visibility: RESOURCE_LINK_PUBLISHED, // visible by default
           }]);
 
           this.createWithFormData(this.item);

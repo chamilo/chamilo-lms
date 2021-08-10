@@ -3,7 +3,9 @@
 
   {{ $luxonDateTime.fromISO(event.startDate).toRelative() }} ({{ $luxonDateTime.fromISO(event.startDate).toLocaleString($luxonDateTime.DATETIME_MED) }})
     
-  <p>{{ event.endDate }}</p>
+  <p v-if="event.endDate">
+    {{ event.endDate }}
+  </p>
 
   <hr class="my-2">
 

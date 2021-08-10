@@ -316,6 +316,13 @@
 
                     e.preventDefault();
                 })
+                .on('keypress', function (e) {
+                    if (13 === e.keyCode) {
+                        e.preventDefault();
+
+                        elementModel.set('text', this.value);
+                    }
+                })
                 .val(elementModel.get('text'))
                 .appendTo('#annotation-toolbar-' + this.questionId + ' ul')
                 .wrap('<li class="form-group"></li>')

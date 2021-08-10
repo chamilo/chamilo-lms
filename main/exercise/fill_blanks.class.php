@@ -36,8 +36,8 @@ class FillBlanks extends Question
         $defaults['answer'] = get_lang('DefaultTextInBlanks');
         $defaults['select_separator'] = 0;
         $blankSeparatorNumber = 0;
-        if (!empty($this->id)) {
-            $objectAnswer = new Answer($this->id);
+        if (!empty($this->iid)) {
+            $objectAnswer = new Answer($this->iid);
             $answer = $objectAnswer->selectAnswer(1);
             $listAnswersInfo = self::getAnswerInfo($answer);
             $defaults['multiple_answer'] = 0;
@@ -359,7 +359,7 @@ class FillBlanks extends Question
         $form->addHtml('<div id="defineoneblank" style="color:#D04A66; margin-left:160px">'.get_lang('DefineBlanks').'</div>');
         $form->addButtonSave($text, 'submitQuestion');
 
-        if (!empty($this->id)) {
+        if (!empty($this->iid)) {
             $form->setDefaults($defaults);
         } else {
             if ($this->isContent == 1) {
@@ -480,7 +480,7 @@ class FillBlanks extends Question
         $answer .= '@'.$is_multiple;
 
         $this->save($exercise);
-        $objAnswer = new Answer($this->id);
+        $objAnswer = new Answer($this->iid);
         $objAnswer->createAnswer($answer, 0, '', 0, 1);
         $objAnswer->save();
     }

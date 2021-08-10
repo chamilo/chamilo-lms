@@ -157,6 +157,9 @@ switch ($action) {
         }
         break;
     case 'get_all_user_skills':
+        if (strpos($_SERVER['HTTP_REFERER'], "/main/admin/skills_wheel.php") !== false) {
+            $userId = 0;
+        }
         $skills = $skill->getUserSkills($userId, true);
         echo json_encode($skills);
         break;

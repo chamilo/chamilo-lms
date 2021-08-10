@@ -214,7 +214,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                     $hotPotatoesDocumentId = $row['iid'];
                     // Update the record with the 'comment' (HP title)
                     $query = "UPDATE $dbTable
-                          SET comment='".Database::escape_string($title)."'
+                          SET comment = '".Database::escape_string($title)."'
                           WHERE iid = $hotPotatoesDocumentId";
                     Database::query($query);
                     // Mark the addition of the HP quiz in the item_property table

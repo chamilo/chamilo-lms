@@ -32,8 +32,8 @@ class MatchingDraggable extends Question
         $matches = [];
         $answer = null;
         $counter = 1;
-        if (isset($this->id)) {
-            $answer = new Answer($this->id);
+        if (!empty($this->iid)) {
+            $answer = new Answer($this->iid);
             $answer->read();
 
             if ($answer->nbrAnswers > 0) {
@@ -58,7 +58,7 @@ class MatchingDraggable extends Question
                 $nb_matches++;
                 $nb_options++;
             }
-        } elseif (!empty($this->id)) {
+        } elseif (!empty($this->iid)) {
             if ($answer->nbrAnswers > 0) {
                 $nb_matches = $nb_options = 0;
                 for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
@@ -204,7 +204,7 @@ class MatchingDraggable extends Question
         $group[] = $form->addButtonSave($text, 'submitQuestion', true);
         $form->addGroup($group);
 
-        if (!empty($this->id)) {
+        if (!empty($this->iid)) {
             $form->setDefaults($defaults);
         } else {
             if ($this->isContent == 1) {
@@ -229,7 +229,7 @@ class MatchingDraggable extends Question
         $nb_options = $form->getSubmitValue('nb_options');
         $this->weighting = 0;
         $position = 0;
-        $objAnswer = new Answer($this->id);
+        $objAnswer = new Answer($this->iid);
 
         // Insert the options
         for ($i = 1; $i <= $nb_options; $i++) {

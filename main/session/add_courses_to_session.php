@@ -216,7 +216,7 @@ unset($Courses);
 } ?>" style="margin:0px;" <?php if ($ajax_search) {
     echo ' onsubmit="valide();"';
 }?>>
-    <legend><?php echo $tool_name.' ('.$session_info['name'].')'; ?></legend>
+    <legend><?php echo $tool_name.' ('.Security::remove_XSS($session_info['name']).')'; ?></legend>
     <input type="hidden" name="formSent" value="1" />
     <div id="multiple-add-session" class="row">
         <div class="col-md-4">

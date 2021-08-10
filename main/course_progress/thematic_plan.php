@@ -30,8 +30,8 @@ if (!empty($thematic_simple_list)) {
     }
 }
 
-echo Display::tag('h2', $thematic_data['title']);
-echo $thematic_data['content'];
+echo Display::tag('h2', Security::remove_XSS($thematic_data['title']));
+echo Security::remove_XSS($thematic_data['content']);
 
 if (isset($message) && $message == 'ok') {
     echo Display::return_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull'), 'normal');

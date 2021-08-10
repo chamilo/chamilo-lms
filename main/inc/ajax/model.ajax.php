@@ -2321,7 +2321,7 @@ switch ($action) {
         $result = $new_result;
         break;
     case 'get_careers':
-        $columns = ['name', 'description', 'actions'];
+        $columns = ['name', 'description', 'actions', 'external_career_id'];
         if (!in_array($sidx, $columns)) {
             $sidx = 'name';
         }
@@ -2331,9 +2331,15 @@ switch ($action) {
             ['order' => "$sidx $sord", 'LIMIT' => "$start , $limit"]
         );
         $new_result = [];
+        $loadExternalCareer = api_get_configuration_value('use_career_external_id_as_identifier_in_diagrams');
+
         foreach ($result as $item) {
             if (!$item['status']) {
                 $item['name'] = '<font style="color:#AAA">'.$item['name'].'</font>';
+            }
+
+            if ($loadExternalCareer) {
+                $item['external_career_id'] = $obj->getCareerIdFromInternalToExternal($item['id']);
             }
             $new_result[] = $item;
         }
@@ -2494,7 +2500,7 @@ switch ($action) {
         $quizIds = [];
         if (!empty($exercises)) {
             foreach ($exercises as $exercise) {
-                $quizIds[] = $exercise['id'];
+                $quizIds[] = $exercise['iid'];
             }
         }
 

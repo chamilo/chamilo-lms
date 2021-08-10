@@ -1297,7 +1297,8 @@ class SurveyManager
                     $params = [
                         'survey_question' => $form_content['question'],
                         'survey_question_comment' => $questionComment,
-                        'display' => $form_content['horizontalvertical'],
+                        'display' => $form_content['horizontalvertical'] ?? '',
+                        'max_value' => $maxScore,
                     ];
 
                     if (api_get_configuration_value('allow_required_survey_questions')) {

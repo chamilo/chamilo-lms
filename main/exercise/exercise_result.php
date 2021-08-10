@@ -101,11 +101,11 @@ if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
         [
             Display::url(
                 Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32),
-                'admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
+                'admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->iid
             )
             .Display::url(
                 Display::return_icon('settings.png', get_lang('ModifyExercise'), [], 32),
-                'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id
+                'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->iid
             ),
         ]
     );
@@ -119,7 +119,7 @@ $exerciseId = isset($exercise_stat_info['exe_exo_id']) ? $exercise_stat_info['ex
 
 $logInfo = [
     'tool' => TOOL_QUIZ,
-    'tool_id' => $objExercise->iId,
+    'tool_id' => $objExercise->iid,
     'action' => $learnpath_id,
     'action_details' => $learnpath_id,
 ];
@@ -148,7 +148,7 @@ if ($origin !== 'embeddable') {
         get_lang('AnotherAttempt'),
         api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&'.http_build_query(
             [
-                'exerciseId' => $objExercise->id,
+                'exerciseId' => $objExercise->iid,
                 'learnpath_id' => $learnpath_id,
                 'learnpath_item_id' => $learnpath_item_id,
                 'learnpath_item_view_id' => $learnpath_item_view_id,
@@ -162,7 +162,7 @@ if ($origin !== 'embeddable') {
 // We check if the user attempts before sending to the exercise_result.php
 $attempt_count = Event::get_attempt_count(
     $currentUserId,
-    $objExercise->id,
+    $objExercise->iid,
     $learnpath_id,
     $learnpath_item_id,
     $learnpath_item_view_id
@@ -300,7 +300,7 @@ if (null != $remedialMessage) {
 }
 // Unset session for clock time
 ExerciseLib::exercise_time_control_delete(
-    $objExercise->id,
+    $objExercise->iid,
     $learnpath_id,
     $learnpath_item_id
 );

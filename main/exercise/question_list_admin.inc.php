@@ -239,7 +239,7 @@ if (!$inATest) {
             <div id="question_list">
         ';
 
-        $category_list = TestCategory::getListOfCategoriesNameForTest($objExercise->id, false);
+        $category_list = TestCategory::getListOfCategoriesNameForTest($objExercise->iid, false);
 
         if (is_array($questionList)) {
             foreach ($questionList as $id) {
@@ -337,8 +337,7 @@ if (!$inATest) {
                     [$edit_link, $clone_link, $addImageLink, $delete_link]
                 );
 
-                $title = Security::remove_XSS($objQuestionTmp->selectTitle());
-                $title = strip_tags($title);
+                $title = Security::remove_XSS(strip_tags($objQuestionTmp->selectTitle()));
                 $move = '&nbsp;';
                 if ($allowQuestionOrdering) {
                     $move = Display::returnFontAwesomeIcon('arrows moved', 1, true);
@@ -346,19 +345,18 @@ if (!$inATest) {
 
                 // Question name
                 $questionName =
-                    '<a href="#" title = "'.Security::remove_XSS($title).'">
+                    '<a href="#" title = "'.$title.'">
                         '.$move.' '.cut($title, 42).'
                     </a>';
 
                 // Question type
                 $typeImg = $objQuestionTmp->getTypePicture();
                 $typeExpl = $objQuestionTmp->getExplanation();
-
                 $questionType = Display::return_icon($typeImg, $typeExpl);
 
                 // Question category
                 $txtQuestionCat = Security::remove_XSS(
-                    TestCategory::getCategoryNameForQuestion($objQuestionTmp->id)
+                    TestCategory::getCategoryNameForQuestion($objQuestionTmp->iid)
                 );
                 if (empty($txtQuestionCat)) {
                     $txtQuestionCat = '-';

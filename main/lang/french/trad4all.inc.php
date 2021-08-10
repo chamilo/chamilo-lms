@@ -8713,4 +8713,13 @@ $QuizDhrRemindBody = "Bonjour %s,<br /><br />Comme parent, vous recevez ce messa
 $QuizRemindDuration = "Durée de l'exercice : %s <br />";
 $QuizRemindStartDate = "Date de début de l'exercice : %s <br />";
 $QuizRemindEndDate = "Date de fin de l'exercice : %s <br />";
+$CareerDiagramLegend = "Légende du diagramme de carrière";
+$CareerDiagramDisclaimer = "Clause de non-responsabilité concernant le diagramme de carrière";
+$SuccessfulAttempt = "Tentative réussie";
+$FailedAttempt = "Tentative échouée";
+$StudentWithSuccessfulAttempt = "Apprenants avec une tentative réussie";
+$StudentWithFailedAttempt = "Apprenants avec une tentative échouée";
+$ExerciseAttemptStatsReport = "Rapport de tentatives d'exercice";
+$ComparativeGroupReport = "Rapport comparatif par groupe";
+$CoursesUsage = "Utilisation des cours";
 ?>

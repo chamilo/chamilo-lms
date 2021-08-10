@@ -1,3 +1,4 @@
+
 <?php
 
 /* For licensing terms, see /license.txt */
@@ -211,7 +212,7 @@ class ReadingComprehension extends UniqueAnswer
 
         $template = $view->get_template('exercise/reading_comprehension.tpl');
 
-        $view->assign('id', $this->id);
+        $view->assign('id', $this->iid);
         $view->assign('text', nl2br($text));
         $view->assign('words_count', $wordsCount);
         $view->assign('turns', $turns);

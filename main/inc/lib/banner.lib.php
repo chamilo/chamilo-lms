@@ -656,7 +656,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         if (!empty($sessionId)) {
             /** @var \Chamilo\CoreBundle\Entity\Session $session */
             $session = Database::getManager()->find('ChamiloCoreBundle:Session', $sessionId);
-            $sessionName = $session ? ' ('.cut($session->getName(), MAX_LENGTH_BREADCRUMB).')' : '';
+            $sessionName = $session ? ' ('.cut(Security::remove_XSS($session->getName()), MAX_LENGTH_BREADCRUMB).')' : '';
         }
 
         $courseInfo['name'] = api_htmlentities($courseInfo['name']);

@@ -181,30 +181,29 @@ function handlePluginUpload()
         'required'
     );
     $form->addButtonUpload(get_lang('Upload'), 'plugin_upload');
+    $form->protect();
 
     // Plugin upload.
-    if (isset($_POST['plugin_upload'])) {
-        if ($form->validate()) {
-            $fileElement = $form->getElement('new_plugin');
-            $file = $fileElement->getValue();
-            $result = uploadPlugin($file);
+    if ($form->validate()) {
+        $fileElement = $form->getElement('new_plugin');
+        $file = $fileElement->getValue();
+        $result = uploadPlugin($file);
 
-            // Add event to the system log.
-            $user_id = api_get_user_id();
-            $category = $_GET['category'];
-            Event::addEvent(
-                LOG_PLUGIN_CHANGE,
-                LOG_PLUGIN_UPLOAD,
-                $file['name'],
-                api_get_utc_datetime(),
-                $user_id
-            );
+        // Add event to the system log.
+        $user_id = api_get_user_id();
+        $category = $_GET['category'];
+        Event::addEvent(
+            LOG_PLUGIN_CHANGE,
+            LOG_PLUGIN_UPLOAD,
+            $file['name'],
+            api_get_utc_datetime(),
+            $user_id
+        );
 
-            if ($result) {
-                Display::addFlash(Display::return_message(get_lang('PluginUploaded'), 'success', false));
-                header('Location: ?category=Plugins#');
-                exit;
-            }
+        if ($result) {
+            Display::addFlash(Display::return_message(get_lang('PluginUploaded'), 'success', false));
+            header('Location: ?category=Plugins#');
+            exit;
         }
     }
     echo $form->returnForm();
@@ -222,7 +221,7 @@ function handlePlugins()
 {
     Session::erase('plugin_data');
     $plugin_obj = new AppPlugin();
-    $token = Security::get_token();
+    $token = Security::get_existing_token();
     if (isset($_POST['submit_plugins'])) {
         storePlugins();
         // Add event to the system log.

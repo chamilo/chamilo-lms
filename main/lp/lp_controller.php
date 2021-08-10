@@ -1029,13 +1029,14 @@ switch ($action) {
         api_location($lpListUrl);
         break;
     case 'export':
-        if (!$is_allowed_to_edit) {
-            api_not_allowed(true);
-        }
         $hideScormExportLink = api_get_setting('hide_scorm_export_link');
-        if ($hideScormExportLink === 'true') {
+
+        if ($hideScormExportLink === 'true'
+            || (false === api_get_configuration_value('lp_allow_export_to_students') && !$is_allowed_to_edit)
+        ) {
             api_not_allowed(true);
         }
+
         if (!$lp_found) {
             require 'lp_list.php';
         } else {

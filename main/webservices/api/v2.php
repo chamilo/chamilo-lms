@@ -16,6 +16,8 @@
  */
 require_once __DIR__.'/../../inc/global.inc.php';
 
+api_protect_webservices();
+
 $hash = isset($_REQUEST['hash']) ? $_REQUEST['hash'] : null;
 
 if ($hash) {
@@ -202,6 +204,10 @@ try {
             break;
         case Rest::SAVE_SESSION:
             $data = $restApi->addSession($_POST);
+            $restResponse->setData($data);
+            break;
+        case Rest::UPDATE_SESSION:
+            $data = $restApi->updateSession($_POST);
             $restResponse->setData($data);
             break;
         case Rest::GET_USERS:

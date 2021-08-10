@@ -304,9 +304,11 @@ class NotebookManager
                 Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
 
             echo Display::panel(
-                $row['description'],
-                $row['title'].$session_img.' <div class="pull-right">'.$actions.'</div>',
-                get_lang('CreationDate').': '.Display::dateToStringAgoAndLongDate($row['creation_date']).$updateValue
+                Security::remove_XSS($row['description']),
+                Security::remove_XSS($row['title']).$session_img.
+                ' <div class="pull-right">'.$actions.'</div>',
+                get_lang('CreationDate').': '.Display::dateToStringAgoAndLongDate($row['creation_date']).
+                $updateValue
             );
         }
     }

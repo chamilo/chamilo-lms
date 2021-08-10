@@ -270,6 +270,7 @@ import axios from "axios";
 import {ENTRYPOINT} from "../../config/entrypoint";
 import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility";
 import {MESSAGE_TYPE_INBOX} from "../../components/message/msgType";
+import useNotification from "../../components/Notification";
 
 export default {
   name: 'MessageList',
@@ -292,6 +293,8 @@ export default {
     const tags = ref([]);
     const title = ref('Inbox');
     const index = ref('inbox');
+
+    const {showNotification} = useNotification();
 
     // Inbox
     const inBoxFilter = {
@@ -356,7 +359,6 @@ export default {
     }
 
     function deleteItemButton() {
-      console.log('deleteItemButton');
       let myReceiver = {};
       itemToDelete.value.receivers.forEach(receiver => {
         if (receiver.receiver['@id'] === user['@id']) {
@@ -367,6 +369,8 @@ export default {
       console.log('deleteItem');
       store.dispatch('messagereluser/del', myReceiver);
       deleteItemDialog.value = false;
+
+      showNotification('Deleted');
 
       goToInbox();
     }
@@ -428,6 +432,7 @@ export default {
       deleteMultipleDialog.value = false;
       selectedItems.value = [];
       promise.then(() => {
+        showNotification('Deleted');
         goToInbox();
       });
     }

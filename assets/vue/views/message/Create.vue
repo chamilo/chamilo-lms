@@ -134,8 +134,6 @@ export default {
       }).then(response => {
         isLoadingSelect.value = false;
         let data = response.data;
-        console.log('data');
-        console.log(data);
 
         return data['hydra:member'];
       }).catch(function (error) {
@@ -147,7 +145,6 @@ export default {
     function asyncFindTo(query) {
       try {
         asyncFind(query).then(users => {
-          console.log(users);
           usersTo.value = users;
         });
       } catch (e) {

@@ -51,10 +51,12 @@ export default {
           users.push({receiver: user['@id'], receiverType: 1});
         });
 
-        createForm.v$.item.$model.receiversCc.forEach(user => {
-          // Send to inbox
-          users.push({receiver: user['@id'], receiverType: 2});
-        });
+        if (createForm.v$.item.$model.receiversCc) {
+          createForm.v$.item.$model.receiversCc.forEach(user => {
+            // Send to inbox
+            users.push({receiver: user['@id'], receiverType: 2});
+          });
+        }
 
         createForm.v$.item.$model.sender = '/api/users/' + this.currentUser.id;
         createForm.v$.item.$model.receivers = users;
@@ -73,10 +75,12 @@ export default {
         users.push({receiver: createForm.v$.item.$model.originalSender['@id'], receiverType: 1});
 
         // Check Ccs
-        createForm.v$.item.$model.receiversCc.forEach(user => {
-          // Send to inbox
-          users.push({receiver: user.receiver['@id'], receiverType: 2});
-        });
+        if (createForm.v$.item.$model.receiversCc) {
+          createForm.v$.item.$model.receiversCc.forEach(user => {
+            // Send to inbox
+            users.push({receiver: user.receiver['@id'], receiverType: 2});
+          });
+        }
 
         createForm.v$.item.$model.sender = '/api/users/' + this.currentUser.id;
         createForm.v$.item.$model.receiversTo = null;

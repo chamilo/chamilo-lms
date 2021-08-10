@@ -80,6 +80,10 @@ export default {
       item.value['resourceLinkListFromEntity'] = [];
       let itemsAdded = [];
       item.value['receivers'].forEach(receiver => {
+        // Skip current user.
+        if (currentUser.value['@id'] === receiver.receiver['@id']) {
+          return;
+        }
         item.value.resourceLinkListFromEntity.push(
             {
               uid: receiver.receiver['id'],
@@ -91,7 +95,7 @@ export default {
       });
 
       // Sender is not added to the list.
-      /*if (!itemsAdded.includes(item.value['sender']['username'])) {
+      if (!itemsAdded.includes(item.value['sender']['username'])) {
         // Set the sender too.
         item.value['resourceLinkListFromEntity'].push(
             {
@@ -100,7 +104,7 @@ export default {
               visibility: RESOURCE_LINK_PUBLISHED
             }
         );
-      }*/
+      }
 
       delete item.value['sender'];
     });

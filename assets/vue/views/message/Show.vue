@@ -181,7 +181,6 @@ export default {
       }).then(response => {
         addTagToMessage(response.data);
         myReceiver.value.tags.push(response.data);
-        console.log(response);
         isLoadingSelect.value = false;
       }).catch(function (error) {
         isLoadingSelect.value = false;
@@ -190,7 +189,6 @@ export default {
     }
 
     function addTagToMessage(newTag) {
-      console.log('addTagToMessage');
       let tagsToUpdate = [];
       myReceiver.value.tags.forEach(tagItem => {
         tagsToUpdate.push(tagItem['@id']);

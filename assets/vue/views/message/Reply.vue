@@ -145,6 +145,13 @@ export default {
             obj.splice(index, 1);
           }
         });
+
+        /*item.value.receiversTo.forEach(function (user, index, obj) {
+          if (currentUser.value['@id'] === user.receiver['@id']) {
+            obj.splice(index, 1);
+          }
+        });*/
+
       } else {
         item.value['receivers'] = [];
         item.value['receiversTo'] = null;

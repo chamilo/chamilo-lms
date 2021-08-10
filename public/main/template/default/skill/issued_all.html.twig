@@ -114,8 +114,10 @@
                         {{ 'Average rating %s'|trans|format(badge.issue_info.feedback_average) }}
                     </div>
                     <div class="panel-body">
-                        {{ badge.comment_form }}
-                        <hr>
+                        {% autoescape false %}
+                            {{ badge.comment_form }}
+                        {% endautoescape %}
+                        <hr />
                         {% for comment in badge.issue_info.comments %}
                             <article class="media">
                                 <div class="media-body">

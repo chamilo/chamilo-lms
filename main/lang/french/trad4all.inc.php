@@ -8721,4 +8721,5 @@ $StudentWithSuccessfulAttempt = "Apprenants avec une tentative réussie";
 $StudentWithFailedAttempt = "Apprenants avec une tentative échouée";
 $ExerciseAttemptStatsReport = "Rapport de tentatives d'exercice";
 $ComparativeGroupReport = "Rapport comparatif par groupe";
+$CoursesUsage = "Utilisation des cours";
 ?>

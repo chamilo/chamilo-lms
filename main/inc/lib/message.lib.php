@@ -2880,11 +2880,13 @@ class MessageManager
     }
 
     /**
-     * @param int $userId
+     * @param int      $userId
+     * @param datetime $startDate
+     * @param datetime $endDate
      *
      * @return array
      */
-    public static function getUsersThatHadConversationWithUser($userId)
+    public static function getUsersThatHadConversationWithUser($userId, $startDate = null, $endDate = null)
     {
         $messagesTable = Database::get_main_table(TABLE_MESSAGE);
         $userId = (int) $userId;
@@ -2894,6 +2896,17 @@ class MessageManager
                 FROM $messagesTable
                 WHERE
                     user_receiver_id = ".$userId;
+
+        if ($startDate != null) {
+            $startDate = Database::escape_string($startDate);
+            $sql .= " AND send_date >= '".$startDate."'";
+        }
+
+        if ($endDate != null) {
+            $endDate = Database::escape_string($endDate);
+            $sql .= " AND send_date <= '".$endDate."'";
+        }
+
         $result = Database::query($sql);
         $users = Database::store_result($result);
         $userList = [];
@@ -2912,12 +2925,14 @@ class MessageManager
     }
 
     /**
-     * @param int $userId
-     * @param int $otherUserId
+     * @param int      $userId
+     * @param int      $otherUserId
+     * @param datetime $startDate
+     * @param datetime $endDate
      *
      * @return array
      */
-    public static function getAllMessagesBetweenStudents($userId, $otherUserId)
+    public static function getAllMessagesBetweenStudents($userId, $otherUserId, $startDate = null, $endDate = null)
     {
         $messagesTable = Database::get_main_table(TABLE_MESSAGE);
         $userId = (int) $userId;
@@ -2930,10 +2945,18 @@ class MessageManager
         $sql = "SELECT DISTINCT *
                 FROM $messagesTable
                 WHERE
-                    (user_receiver_id = $userId AND user_sender_id = $otherUserId) OR
-                    (user_receiver_id = $otherUserId AND user_sender_id = $userId)
-                ORDER BY send_date DESC
+                    ((user_receiver_id = $userId AND user_sender_id = $otherUserId) OR
+                    (user_receiver_id = $otherUserId AND user_sender_id = $userId))
             ";
+        if ($startDate != null) {
+            $startDate = Database::escape_string($startDate);
+            $sql .= " AND send_date >= '".$startDate."'";
+        }
+        if ($endDate != null) {
+            $endDate = Database::escape_string($endDate);
+            $sql .= " AND send_date <= '".$endDate."'";
+        }
+        $sql .= " ORDER BY send_date DESC";
         $result = Database::query($sql);
         $messages = Database::store_result($result);
         $list = [];

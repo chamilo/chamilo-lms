@@ -121,14 +121,12 @@ switch ($action) {
 
         // The validation or display
         if ($form->validate()) {
-            if ($check) {
-                $values = $form->exportValues();
-                $res = $career->save($values);
-                if ($res) {
-                    Display::addFlash(
-                        Display::return_message(get_lang('ItemAdded'), 'confirmation')
-                    );
-                }
+            $values = $form->exportValues();
+            $res = $career->save($values);
+            if ($res) {
+                Display::addFlash(
+                    Display::return_message(get_lang('ItemAdded'), 'confirmation')
+                );
             }
             header('Location: '.$listUrl);
             exit;
@@ -137,8 +135,7 @@ switch ($action) {
             $content .= '<a href="'.api_get_self().'">'.
                 Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
             $content .= '</div>';
-            $form->addElement('hidden', 'sec_token');
-            $form->setConstants(['sec_token' => $token]);
+            $form->protect();
             $content .= $form->returnForm();
         }
         break;
@@ -155,37 +152,35 @@ switch ($action) {
 
         // The validation or display
         if ($form->validate()) {
-            if ($check) {
-                $values = $form->exportValues();
-                $career->update_all_promotion_status_by_career_id($values['id'], $values['status']);
-                $old_status = $career->get_status($values['id']);
-                $res = $career->update($values);
+            $values = $form->exportValues();
+            $career->update_all_promotion_status_by_career_id($values['id'], $values['status']);
+            $old_status = $career->get_status($values['id']);
+            $res = $career->update($values);
 
-                $values['item_id'] = $values['id'];
-                $sessionFieldValue = new ExtraFieldValue('career');
-                $sessionFieldValue->saveFieldValues($values);
+            $values['item_id'] = $values['id'];
+            $sessionFieldValue = new ExtraFieldValue('career');
+            $sessionFieldValue->saveFieldValues($values);
 
-                if ($res) {
+            if ($res) {
+                Display::addFlash(
+                    Display::return_message(get_lang('CareerUpdated'), 'confirmation')
+                );
+                if ($values['status'] && !$old_status) {
                     Display::addFlash(
-                        Display::return_message(get_lang('CareerUpdated'), 'confirmation')
+                        Display::return_message(
+                            sprintf(get_lang('CareerXUnarchived'), $values['name']),
+                            'confirmation',
+                            false
+                        )
                     );
-                    if ($values['status'] && !$old_status) {
-                        Display::addFlash(
-                            Display::return_message(
-                                sprintf(get_lang('CareerXUnarchived'), $values['name']),
-                                'confirmation',
-                                false
-                            )
-                        );
-                    } elseif (!$values['status'] && $old_status) {
-                        Display::addFlash(
-                            Display::return_message(
-                                sprintf(get_lang('CareerXArchived'), $values['name']),
-                                'confirmation',
-                                false
-                            )
-                        );
-                    }
+                } elseif (!$values['status'] && $old_status) {
+                    Display::addFlash(
+                        Display::return_message(
+                            sprintf(get_lang('CareerXArchived'), $values['name']),
+                            'confirmation',
+                            false
+                        )
+                    );
                 }
             }
             header('Location: '.$listUrl);
@@ -194,8 +189,7 @@ switch ($action) {
             $content .= '<div class="actions">';
             $content .= '<a href="'.api_get_self().'">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
             $content .= '</div>';
-            $form->addElement('hidden', 'sec_token');
-            $form->setConstants(['sec_token' => $token]);
+            $form->protect();
             $content .= $form->returnForm();
         }
         break;

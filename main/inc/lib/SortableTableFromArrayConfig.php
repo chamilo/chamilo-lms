@@ -92,8 +92,9 @@ class SortableTableFromArrayConfig extends SortableTable
         );
         
         if ($this->handlePagination) {
-            return array_slice($table, $from, $this->per_page); 
+            return array_slice($table, $from, $this->per_page);
         }
+
         return $table;
     }
 
@@ -115,3 +116,4 @@ class SortableTableFromArrayConfig extends SortableTable
         }
     }
 }
+

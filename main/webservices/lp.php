@@ -6,6 +6,8 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_webservices();
+
 ini_set('memory_limit', -1);
 /*
 ini_set('upload_max_filesize', '4000M');

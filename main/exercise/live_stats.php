@@ -37,7 +37,7 @@ Display::display_header(get_lang('StudentsWhoAreTakingTheExerciseRightNow'));
 //jqgrid will use this URL to do the selects
 $minutes = 60;
 $url = api_get_path(WEB_AJAX_PATH).
-    'exercise.ajax.php?'.api_get_cidreq().'&a=get_live_stats&exercise_id='.$objExercise->id.'&minutes='.$minutes;
+    'exercise.ajax.php?'.api_get_cidreq().'&a=get_live_stats&exercise_id='.$objExercise->iid.'&minutes='.$minutes;
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = [

@@ -2,9 +2,9 @@
     <div class="panel panel-default">
         <div class="panel-body">
             {% if 'save_titles_as_html'|api_get_configuration_value %}
-                {{ data.title }}
+                {{ data.title | remove_xss }}
             {% else %}
-                <h3>{{ data.title }}</h3>
+                <h3>{{ data.title | remove_xss  }}</h3>
             {% endif %}
 
             <div class="row">

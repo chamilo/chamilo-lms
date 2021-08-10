@@ -155,7 +155,7 @@ class FlatViewDataGenerator
                 $add_weight = " $sub_cat_weight %";
 
                 $mainHeader = Display::url(
-                    $sub_cat->get_name(),
+                    Security::remove_XSS($sub_cat->get_name()),
                     api_get_self().'?selectcat='.$sub_cat->get_id().'&'.api_get_cidreq()
                 ).$add_weight;
 

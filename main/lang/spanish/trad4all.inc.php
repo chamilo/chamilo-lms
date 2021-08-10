@@ -8809,4 +8809,13 @@ $QuizDhrRemindBody = "Hola %s,<br /><br />Como padre, estan recibiendo este corr
 $QuizRemindDuration = "Duration del ejercicio: %s <br />";
 $QuizRemindStartDate = "Fecha de inicio del ejercicio: %s <br />";
 $QuizRemindEndDate = "Fecha de fin del ejercicio: %s <br />";
+$CareerDiagramLegend = "Leyenda del diagrama de carrera";
+$CareerDiagramDisclaimer = "Descargo de responsabilidad del diagrama de carrera";
+$SuccessfulAttempt = "Intento exitoso";
+$FailedAttempt = "Intento fallido";
+$StudentWithSuccessfulAttempt = "Estudiantes con intento exitoso";
+$StudentWithFailedAttempt = "Estudiantes con intento fallido";
+$ExerciseAttemptStatsReport = "Reporte de intentos de ejercicio";
+$ComparativeGroupReport = "Reporte comparativo por grupo";
+$CoursesUsage = "Uso de cursos";
 ?>

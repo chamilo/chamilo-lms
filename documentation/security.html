@@ -25,6 +25,9 @@
   <li><a href="#5.Files-permissions">Restricting files permissions</a></li>
   <li><a href="#6.HSTS">HTTP Headers Security</a></li>
   <li><a href="#7.Direct-web-access">Direct web access to files</a></li>
+  <li><a href="#8.Disable-webservices">Disable webservices</a></li>
+  <li><a href="#9.Change-password-first-login">Change password on first login</a></li>
+  <li><a href="#10.Hide-breadcrumb">Hide breadcrumb on unauthorized page load</a></li>
 </ol>
 
 <h2><a name="1.Disclosing-server-info"></a>1. Disclosing server info</h2>
@@ -195,7 +198,33 @@ This will prevent direct access to your settings and make it seem totally the sa
     information in images, CSS or JavaScript files, you will need to update
     these rules to suit your needs.
     </p>
-<h2>Authors</h2>
+
+<h2><a name="8.Disable-webservices">Disable webservices</a></h2>
+    <p>
+        In order to disable webservices add the configuration below:
+    <pre>
+    $_configuration['disable_webservices'] = true;
+    </pre>
+    </p>
+
+<h2><a name="9.Change-password-first-login">Change password on first login</a></h2>
+    <p>
+        To force users to change their password on their first login, add the configuration below:
+    <pre>
+    $_configuration['force_renew_password_at_first_login'] = true;
+    </pre>
+    and add the 'ask_new_password' checkbox extra field to users.
+    </p>
+
+<h2><a name="10.Hide-breadcrumb">Hide breadcrumb on unauthorized page load</a></h2>
+    <p>
+        To hide the breadcrumb on pages with the "not allowed" error message, add the configuration below:
+    <pre>
+    $_configuration['hide_breadcrumb_if_not_allowed'] = true;
+    </pre>
+    </p>
+
+    <h2>Authors</h2>
 <ul>
 <li>Yannick Warnier, Zend Certified PHP Engineer, BeezNest Belgium SPRL,
     <a href="mailto:yannick.warnier@beeznest.com">yannick.warnier@beeznest.com</a></li>

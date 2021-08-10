@@ -20,7 +20,7 @@ class Aiken2Question extends Question
     {
         switch ($this->type) {
             case MCUA:
-                $answer = new AikenAnswerMultipleChoice($this->id);
+                $answer = new AikenAnswerMultipleChoice($this->iid);
 
                 return $answer;
             default:

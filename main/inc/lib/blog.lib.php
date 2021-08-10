@@ -35,7 +35,7 @@ class Blog
             $result = Database::query($sql);
             $blog = Database::fetch_array($result);
 
-            return stripslashes($blog['blog_name']);
+            return Security::remove_XSS(stripslashes($blog['blog_name']));
         }
     }
 
@@ -57,7 +57,7 @@ class Blog
         $result = Database::query($sql);
         $blog = Database::fetch_array($result);
 
-        return stripslashes($blog['blog_subtitle']);
+        return Security::remove_XSS(stripslashes($blog['blog_subtitle']));
     }
 
     /**
@@ -1045,9 +1045,9 @@ class Blog
                     'id_autor' => $blog_post['author_id'],
                     'autor' => $blog_post['firstname'].' '.$blog_post['lastname'],
                     'username' => $blog_post['username'],
-                    'title' => stripslashes($blog_post['title']),
+                    'title' => Security::remove_XSS($blog_post['title']),
                     'extract' => self::getPostExtract($blog_post['full_text'], BLOG_MAX_PREVIEW_CHARS),
-                    'content' => stripslashes($blog_post['full_text']),
+                    'content' => Security::remove_XSS($blog_post['full_text']),
                     'post_date' => Display::dateToStringAgoAndLongDate($blog_post['date_creation']),
                     'n_comments' => $blog_post_comments['number_of_comments'],
                     'files' => $fileArray,
@@ -1104,7 +1104,6 @@ class Blog
         global $charset;
 
         $course_id = api_get_course_int_id();
-        $courseParams = api_get_cidreq();
         $blog_id = intval($blog_id);
         $post_id = intval($post_id);
 
@@ -1182,9 +1181,9 @@ class Blog
             'id_author' => $blog_post['author_id'],
             'author' => $blog_post['firstname'].' '.$blog_post['lastname'],
             'username' => $blog_post['username'],
-            'title' => stripslashes($blog_post['title']),
+            'title' => Security::remove_XSS($blog_post['title']),
             'extract' => api_get_short_text_from_html(
-                stripslashes($blog_post['full_text']),
+                Security::remove_XSS($blog_post['full_text']),
                 400
             ),
             'content' => $post_text,
@@ -1252,7 +1251,7 @@ class Blog
             $commentActions = null;
             $ratingSelect = null;
             $comment_text = make_clickable(stripslashes($comment['comment']));
-            $comment_text = stripslashes($comment_text);
+            $comment_text = Security::remove_XSS($comment_text);
             $commentActions .= Display::toolbarButton(
                 get_lang('ReplyToThisComment'),
                 '#',
@@ -1300,7 +1299,7 @@ class Blog
                 'iid' => $comment['iid'],
                 'id_comment' => $comment['comment_id'],
                 'id_curso' => $comment['c_id'],
-                'title' => $comment['title'],
+                'title' => Security::remove_XSS($comment['title']),
                 'content' => $comment_text,
                 'id_author' => $comment['author_id'],
                 'comment_date' => Display::dateToStringAgoAndLongDate($comment['date_creation']),
@@ -1881,11 +1880,6 @@ class Blog
             $css_class = (($counter % 2) == 0) ? "row_odd" : "row_even";
             $delete_icon = ($assignment['system_task'] == '1') ? "delete_na.png" : "delete.png";
             $delete_title = ($assignment['system_task'] == '1') ? get_lang('DeleteSystemTask') : get_lang('DeleteTask');
-            $delete_link = ($assignment['system_task'] == '1') ? '#' : api_get_self().'?action=manage_tasks&blog_id='.$assignment['blog_id'].'&do=delete&task_id='.$assignment['task_id'].'&'.api_get_cidreq();
-            $delete_confirm = ($assignment['system_task'] == '1') ? '' : 'onclick="javascript:if(!confirm(\''.addslashes(
-                    api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)
-                ).'\')) return false;"';
-
             $username = api_htmlentities(sprintf(get_lang('LoginX'), $assignment['username']), ENT_QUOTES);
 
             $return .= '<tr class="'.$css_class.'" valign="top">';
@@ -1894,8 +1888,8 @@ class Blog
                 api_get_person_name($assignment['firstname'], $assignment['lastname']),
                 ['title' => $username]
             ).'</td>';
-            $return .= '<td>'.stripslashes($assignment['title']).'</td>';
-            $return .= '<td>'.stripslashes($assignment['description']).'</td>';
+            $return .= '<td>'.Security::remove_XSS($assignment['title']).'</td>';
+            $return .= '<td>'.Security::remove_XSS($assignment['description']).'</td>';
             $return .= '<td>'.$assignment['target_date'].'</td>';
             $return .= '<td width="50">';
             $return .= '<a
@@ -2414,6 +2408,7 @@ class Blog
                 AND c_id = $course_id";
         $result = Database::query($sql);
         $row = Database::fetch_assoc($result);
+
         // Get posts and authors
         $sql = "SELECT post.*, user.lastname, user.firstname, user.username
                 FROM $tbl_blogs_posts post
@@ -2425,8 +2420,8 @@ class Blog
 
         // Display
         $return = '<span class="blogpost_title">'.
-                    get_lang('SelectTaskArticle').' "'.stripslashes($row['title']).'"</span>';
-        $return .= '<span style="font-style: italic;"">'.stripslashes($row['description']).'</span><br><br>';
+                    get_lang('SelectTaskArticle').' "'.Security::remove_XSS($row['title']).'"</span>';
+        $return .= '<span style="font-style: italic;"">'.Security::remove_XSS($row['description']).'</span><br><br>';
 
         if (Database::num_rows($result) == 0) {
             $return .= get_lang('NoArticles');
@@ -2437,9 +2432,8 @@ class Blog
         while ($blog_post = Database::fetch_array($result)) {
             $username = api_htmlentities(sprintf(get_lang('LoginX'), $blog_post['username']), ENT_QUOTES);
             $return .= '<a href="'.$url.'&blog_id='.$blog_id.'&task_id='.$task_id.'&post_id='.$blog_post['post_id'].'#add_comment">'.
-                stripslashes(
-                    $blog_post['title']
-                ).'</a>, '.get_lang('WrittenBy').' '.stripslashes(
+                Security::remove_XSS($blog_post['title']).'</a>, '.
+                get_lang('WrittenBy').' '.stripslashes(
                     Display::tag(
                         'span',
                         api_get_person_name($blog_post['firstname'], $blog_post['lastname']),
@@ -2501,8 +2495,6 @@ class Blog
         $html = null;
 
         $html .= '<legend>'.get_lang('SubscribeMembers').'</legend>';
-
-        $properties['width'] = '100%';
 
         // Get blog members' id.
         $sql = "SELECT user.user_id FROM $tbl_users user
@@ -2630,7 +2622,6 @@ class Blog
 
         $html .= '<legend>'.get_lang('UnsubscribeMembers').'</legend>';
 
-        $properties["width"] = "100%";
         //table column titles
         $column_header[] = ['', false, ''];
         if ($is_western_name_order) {
@@ -3029,12 +3020,12 @@ class Blog
                 $session_img = api_get_session_image($info_log[4], $_user['status']);
 
                 $url_start_blog = 'blog.php'."?"."blog_id=".$info_log[3]."&".api_get_cidreq();
-                $title = $info_log[0];
+                $title = Security::remove_XSS($info_log[0]);
                 $image = Display::return_icon('blog.png', $title);
                 $list_name = '<div style="float: left; width: 35px; height: 22px;"><a href="'.$url_start_blog.'">'.$image.'</a></div><a href="'.$url_start_blog.'">'.$title.'</a>'.$session_img;
 
                 $list_body_blog[] = $list_name;
-                $list_body_blog[] = $info_log[1];
+                $list_body_blog[] = Security::remove_XSS($info_log[1]);
 
                 $visibility_icon = ($info_log[2] == 0) ? 'invisible' : 'visible';
                 $visibility_info = ($info_log[2] == 0) ? 'Visible' : 'Invisible';

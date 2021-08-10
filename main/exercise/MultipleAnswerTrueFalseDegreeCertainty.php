@@ -83,8 +83,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
 
         $correct = 0;
         $answer = null;
-        if (!empty($this->id)) {
-            $answer = new Answer($this->id);
+        if (!empty($this->iid)) {
+            $answer = new Answer($this->iid);
             $answer->read();
             if ($answer->nbrAnswers > 0 && !$form->isSubmitted()) {
                 $nbAnswers = $answer->nbrAnswers;
@@ -100,7 +100,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         }
 
         // Can be more options
-        $optionData = Question::readQuestionOption($this->id, $courseId);
+        $optionData = Question::readQuestionOption($this->iid, $courseId);
 
         for ($i = 1; $i <= $nbAnswers; $i++) {
             $renderer->setElementTemplate(
@@ -201,7 +201,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $form->addElement('hidden', 'options_count', 3);
         $form->addElement('html', '</table><br /><br />');
 
-        //Extra values True, false,  Dont known
+        //Extra values True, false, Don't known
         if (!empty($this->extra)) {
             $scores = explode(':', $this->extra);
             if (!empty($scores)) {
@@ -211,7 +211,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         }
 
         if ($objEx->edit_exercise_in_lp === true ||
-            (empty($this->exerciseList) && empty($objEx->id))
+            (empty($this->exerciseList) && empty($objEx->iid))
         ) {
             $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'), 'class="btn btn-danger minus"');
             $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn btn-primary plus"');
@@ -222,7 +222,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $renderer->setElementTemplate('{element}&nbsp;', 'moreAnswers');
         $form->addElement('html', '</div></div>');
 
-        if (!empty($this->id) && !$form->isSubmitted()) {
+        if (!empty($this->iid) && !$form->isSubmitted()) {
             $form->setDefaults($defaults);
         }
 
@@ -238,28 +238,28 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     public function processAnswersCreation($form, $exercise)
     {
         $questionWeighting = 0;
-        $objAnswer = new Answer($this->id);
+        $objAnswer = new Answer($this->iid);
         $nbAnswers = $form->getSubmitValue('nb_answers');
         $courseId = api_get_course_int_id();
         $correct = [];
-        $options = Question::readQuestionOption($this->id, $courseId);
+        $options = Question::readQuestionOption($this->iid, $courseId);
 
         if (!empty($options)) {
             foreach ($options as $optionData) {
-                $id = $optionData['id'];
-                unset($optionData['id']);
+                $id = $optionData['iid'];
+                unset($optionData['iid']);
                 Question::updateQuestionOption($id, $optionData, $courseId);
             }
         } else {
             for ($i = 1; $i <= 8; $i++) {
-                $lastId = Question::saveQuestionOption($this->id, $this->options[$i], $courseId, $i);
+                $lastId = Question::saveQuestionOption($this->iid, $this->options[$i], $courseId, $i);
                 $correct[$i] = $lastId;
             }
         }
 
         /* Getting quiz_question_options (true, false, doubt) because
           it's possible that there are more options in the future */
-        $newOptions = Question::readQuestionOption($this->id, $courseId);
+        $newOptions = Question::readQuestionOption($this->iid, $courseId);
         $sortedByPosition = [];
         foreach ($newOptions as $item) {
             $sortedByPosition[$item['position']] = $item;
@@ -282,7 +282,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             if (empty($options)) {
                 // If this is the first time that the question is created then change
                 // the default values from the form 1 and 2 by the correct "option id" registered
-                $goodAnswer = $sortedByPosition[$goodAnswer]['id'];
+                $goodAnswer = $sortedByPosition[$goodAnswer]['iid'];
             }
             $questionWeighting += $extraValues[0]; //By default 0 has the correct answers
             $objAnswer->createAnswer($answer, $goodAnswer, $comment, '', $i);
@@ -1143,11 +1143,10 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     public static function getPercentagePosition($optionId)
     {
         $tblAnswerOption = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
-        $courseId = api_get_course_int_id();
         $optionId = (int) $optionId;
         $sql = "SELECT position
                 FROM $tblAnswerOption
-                WHERE c_id = $courseId AND id = $optionId";
+                WHERE iid = $optionId";
         $res = Database::query($sql);
 
         if (Database::num_rows($res) == 0) {
@@ -1169,10 +1168,9 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     public static function getCorrectAnswerOptionId($idAuto)
     {
         $tblAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
-        $courseId = api_get_course_int_id();
         $idAuto = (int) $idAuto;
         $sql = "SELECT correct FROM $tblAnswer
-                WHERE c_id = $courseId AND id_auto = $idAuto";
+                WHERE id_auto = $idAuto";
 
         $res = Database::query($sql);
         $data = Database::fetch_assoc($res);
@@ -1232,7 +1230,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
 
         $sql = "SELECT exe_exo_id
                 FROM $tableTrackEExercise
-                WHERE exe_id=".$exeId;
+                WHERE exe_id = ".$exeId;
         $res = Database::query($sql);
         $data = Database::fetch_assoc($res);
         if ($data) {

@@ -142,7 +142,7 @@ function edit_category_form($action)
 
         // setting the defaults
         $defaults = [];
-        $defaults['category_id'] = $objcat->id;
+        $defaults['category_id'] = $objcat->iid;
         $defaults['category_name'] = $objcat->name;
         $defaults['category_description'] = $objcat->description;
         $form->setDefaults($defaults);

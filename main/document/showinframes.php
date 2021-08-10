@@ -105,7 +105,7 @@ if (!$is_allowed_to_edit && !$is_visible) {
 }
 
 $pathinfo = pathinfo($header_file);
-$playerSupportedFiles = ['mp3', 'mp4', 'ogv', 'ogg', 'flv', 'm4v', 'webm'];
+$playerSupportedFiles = ['mp3', 'mp4', 'ogv', 'ogg', 'flv', 'm4v', 'webm', 'wav'];
 $playerSupported = false;
 if (in_array(strtolower($pathinfo['extension']), $playerSupportedFiles)) {
     $playerSupported = true;
@@ -166,7 +166,6 @@ $nameTools = get_lang('Documents');
  * Main code section.
  */
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
-//header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
 header('Last-Modified: Wed, 01 Jan 2100 00:00:00 GMT');
 header('Cache-Control: no-cache, must-revalidate');
 header('Pragma: no-cache');
@@ -232,7 +231,7 @@ if (!$playerSupported && $execute_iframe) {
         var jQueryFrameReadyConfigPath = \''.api_get_jquery_web_path().'\';
     -->
     </script>';
-    $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
     $htmlHeadXtra[] = '<script>
         // Fixes the content height of the frame
         $(function() {

@@ -835,7 +835,8 @@ class DocumentManager
                 }
 
                 if (!empty($document_folders)) {
-                    natsort($document_folders);
+                    // natsort($document_folders);
+                    natcasesort($document_folders);
                 }
 
                 return $document_folders;
@@ -924,11 +925,13 @@ class DocumentManager
             // If both results are arrays -> //calculate the difference between the 2 arrays -> only visible folders are left :)
             if (is_array($visibleFolders) && is_array($invisibleFolders)) {
                 $document_folders = array_diff($visibleFolders, $invisibleFolders);
-                natsort($document_folders);
+                // natsort($document_folders);
+                natcasesort($document_folders);
 
                 return $document_folders;
             } elseif (is_array($visibleFolders)) {
-                natsort($visibleFolders);
+                natcasesort($visibleFolders);
+                // natsort($visibleFolders);
 
                 return $visibleFolders;
             } else {
@@ -3001,7 +3004,7 @@ class DocumentManager
      * @param array  $courseInfo              Optional. Course info
      * @param int    $sessionId               Optional. Session ID
      * @param int    $groupId                 Optional. Group ID
-     * @param bool   $recordAudio
+     * @param bool   $recordAudioExercise
      *
      * @return array|bool
      */
@@ -3020,7 +3023,7 @@ class DocumentManager
         array $courseInfo = [],
         $sessionId = 0,
         $groupId = 0,
-        $recordAudio = false
+        $recordAudioExercise = false
     ) {
         $course_info = $courseInfo ?: api_get_course_info();
         $sessionId = $sessionId ?: api_get_session_id();
@@ -3030,7 +3033,7 @@ class DocumentManager
         $userId = $userId ?: api_get_user_id();
         $groupId = $groupId ?: api_get_group_id();
 
-        if ($recordAudio) {
+        if ($recordAudioExercise) {
             $base_work_dir = $sys_course_path.$course_info['path'].'/exercises';
             $path = str_replace('/../exercises/', '/', $path);
         }
@@ -3346,9 +3349,9 @@ class DocumentManager
     {
         $id = api_get_unique_id();
         switch ($extension) {
+            case 'wav':
             case 'ogg':
             case 'mp3':
-                $document_data['file_extension'] = $extension;
                 $html = '<div style="margin: 0; position: absolute; top: 50%; left: 35%;">';
                 $html .= '<audio id="'.$id.'" controls="controls" src="'.$file.'" type="audio/mp3" ></audio></div>';
                 break;
@@ -5049,7 +5052,7 @@ class DocumentManager
 
         if (is_array($folders)) {
             $escaped_folders = [];
-            foreach ($folders as $key => &$val) {
+            foreach ($folders as $key => $val) {
                 $escaped_folders[$key] = Database::escape_string($val);
             }
             $folder_sql = implode("','", $escaped_folders);
@@ -5065,6 +5068,7 @@ class DocumentManager
             while ($obj = Database::fetch_object($res)) {
                 $folder_titles[$obj->path] = $obj->title;
             }
+            natcasesort($folder_titles);
         }
 
         if (empty($form)) {
@@ -5087,6 +5091,7 @@ class DocumentManager
             $parent_select->addOption(get_lang('Documents'), '/');
 
             if (is_array($folders)) {
+                $foldersSortedByTitles = [];
                 foreach ($folders as $folder_id => &$folder) {
                     $selected = ($document_id == $folder_id) ? ' selected="selected"' : '';
                     $path_parts = explode('/', $folder);
@@ -5097,14 +5102,26 @@ class DocumentManager
                     } else {
                         $label = ' &mdash; '.$folder_titles[$folder];
                     }
-                    $parent_select->addOption($label, $folder_id);
-                    if ($selected != '') {
-                        $parent_select->setSelected($folder_id);
+                    $label = Security::remove_XSS($label);
+                    $foldersSortedByTitles[$folder_titles[$folder]] = [
+                        'id' => $folder_id,
+                        'selected' => $selected,
+                        'label' => $label,
+                    ];
+                }
+                foreach ($folder_titles as $title) {
+                    $parent_select->addOption(
+                        $foldersSortedByTitles[$title]['label'],
+                        $foldersSortedByTitles[$title]['id']
+                    );
+                    if ($foldersSortedByTitles[$title]['selected'] != '') {
+                        $parent_select->setSelected($foldersSortedByTitles[$title]['id']);
                     }
                 }
             }
         } else {
             if (!empty($folders)) {
+                $foldersSortedByTitles = [];
                 foreach ($folders as $folder_id => &$folder) {
                     $selected = ($document_id == $folder_id) ? ' selected="selected"' : '';
                     $label = $folder_titles[$folder];
@@ -5115,9 +5132,19 @@ class DocumentManager
                         $label = cut($label, 80);
                         $label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2).' &mdash; '.$label;
                     }
-                    $parent_select->addOption($label, $folder_id);
-                    if ($selected != '') {
-                        $parent_select->setSelected($folder_id);
+                    $foldersSortedByTitles[$folder_titles[$folder]] = [
+                        'id' => $folder_id,
+                        'selected' => $selected,
+                        'label' => $label,
+                    ];
+                }
+                foreach ($folder_titles as $title) {
+                    $parent_select->addOption(
+                        $foldersSortedByTitles[$title]['label'],
+                        $foldersSortedByTitles[$title]['id']
+                    );
+                    if ($foldersSortedByTitles[$title]['selected'] != '') {
+                        $parent_select->setSelected($foldersSortedByTitles[$title]['id']);
                     }
                 }
             }
@@ -6961,7 +6988,7 @@ class DocumentManager
         $icon = choose_image($path);
         $position = strrpos($icon, '.');
         $icon = substr($icon, 0, $position).'_small.gif';
-        $my_file_title = $resource['title'];
+        $my_file_title = Security::remove_XSS($resource['title']);
         $visibility = $resource['visibility'];
 
         // If title is empty we try to use the path
@@ -7082,7 +7109,6 @@ class DocumentManager
             return null;
         }
 
-        //$onclick = '';
         // if in LP, hidden folder are displayed in grey
         $folder_class_hidden = '';
         if ($lp_id) {
@@ -7097,15 +7123,27 @@ class DocumentManager
             $return = '<ul class="lp_resource">';
         }
 
-        $return .= '<li class="doc_folder'.$folder_class_hidden.'" id="doc_id_'.$resource['id'].'"  style="margin-left:'.($num * 18).'px; ">';
+        $return .= '<li
+            class="doc_folder'.$folder_class_hidden.'"
+            id="doc_id_'.$resource['id'].'"
+            style="margin-left:'.($num * 18).'px;"
+            >';
 
         $image = Display::returnIconPath('nolines_plus.gif');
         if (empty($path)) {
             $image = Display::returnIconPath('nolines_minus.gif');
         }
-        $return .= '<img style="cursor: pointer;" src="'.$image.'" align="absmiddle" id="img_'.$resource['id'].'" '.$onclick.'>';
+        $return .= '<img
+            style="cursor: pointer;"
+            src="'.$image.'"
+            align="absmiddle"
+            id="img_'.$resource['id'].'" '.$onclick.'
+        >';
+
         $return .= Display::return_icon('lp_folder.gif').'&nbsp;';
-        $return .= '<span '.$onclick.' style="cursor: pointer;" >'.$title.'</span>';
+        $return .= '<span '.$onclick.' style="cursor: pointer;" >'.
+            Security::remove_XSS($title).
+            '</span>';
         $return .= '</li>';
 
         if (empty($path)) {

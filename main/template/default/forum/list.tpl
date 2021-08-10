@@ -47,7 +47,7 @@
 
             {% if fold_forum_categories %}
                 {% set panel_icon %}
-                    <a href="{{ item.url }}" title="{{ item.title }}">
+                    <a href="{{ item.url }}" title="{{ item.title | remove_xss }}">
                         <span class="open">{{ 'forum_blue.png'|img(32) }}</span>
                     </a>
                 {% endset %}
@@ -62,7 +62,8 @@
                 {% set panel_title %}
                     <a href="{{ item.url }}" title="{{ item.title }}">
                         <span class="open">{{ 'forum_blue.png'|img(32) }}</span>
-                        {{ item.title }}{{ item.icon_session }}
+                        {{ item.title | remove_xss }}
+                        {{ item.icon_session }}
                     </a>
                     {% for category_language_item in category_language_array %}
                         <span class="flag-icon flag-icon-{{ languages[category_language_item | lower] }}"></span>
@@ -106,7 +107,13 @@
                                         </div>
                                         <h3 class="title">
                                             {{ 'forum_yellow.png'|img(32) }}
-                                            <a href="{{ subitem.url }}" title="{{ subitem.title }}" class="{{ subitem.visibility != '1' ? 'text-muted': '' }}">{{ subitem.title }}</a>
+                                            <a
+                                                href="{{ subitem.url }}"
+                                                title="{{ subitem.title | remove_xss }}"
+                                                class="{{ subitem.visibility != '1' ? 'text-muted': '' }}"
+                                            >
+                                                {{ subitem.title | remove_xss }}
+                                            </a>
                                             {% if subitem.forum_of_group != 0 %}
                                                 <a class="forum-goto" href="../group/group_space.php?{{ _p.web_cid_query }}&gidReq={{ subitem.forum_of_group }}">
                                                     {{ "forum.png"|img(22) }} {{ "GoTo"|get_lang }} {{ subitem.forum_group_title }}
@@ -124,16 +131,16 @@
                                             </div>
                                         {% endif %}
                                         <div class="description">
-                                            {{ subitem.description }}
+                                            {{ subitem.description | remove_xss }}
                                         </div>
 
                                         {{ subitem.last_post_text }}
-
                                         {{ subitem.alert }}
+
                                         {% if subitem.moderation is not empty %}
                                             <span class="label label-warning">
-                                        {{ "PostsPendingModeration"|get_lang }}: {{ subitem.moderation }}
-                                    </span>
+                                                {{ "PostsPendingModeration"|get_lang }}: {{ subitem.moderation }}
+                                            </span>
                                         {% endif %}
                                     </div>
                                 </div>

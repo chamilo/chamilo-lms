@@ -51,7 +51,7 @@ class ScormAnswerMultipleChoice extends Answer
             $js[] = 'questions_types['.$questionId.'] = \'mcma\';'."\n";
             $js[] = $jstmpw;
         } elseif (MULTIPLE_ANSWER_COMBINATION == $type) {
-            $js = '';
+            $js = [];
             $id = 1;
             $jstmp = '';
             $jstmpc = '';

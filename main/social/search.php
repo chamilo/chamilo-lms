@@ -23,9 +23,9 @@ $interbreadcrumb[] = [
     'name' => get_lang('SocialNetwork'),
 ];
 
-$query = isset($_GET['q']) ? Security::remove_XSS($_GET['q']) : null;
+$query = isset($_GET['q']) ? htmlentities($_GET['q']) : null;
 
-$queryNoFilter = isset($_GET['q']) ? $_GET['q'] : null;
+$queryNoTags = isset($_GET['q']) ? strip_tags($_GET['q']) : null;
 $query_search_type = isset($_GET['search_type']) && in_array($_GET['search_type'], ['0', '1', '2']) ? $_GET['search_type'] : null;
 $extra_fields = UserManager::getExtraFilterableFields();
 $query_vars = ['q' => $query, 'search_type' => $query_search_type];
@@ -41,7 +41,7 @@ if (!empty($extra_fields)) {
 //Block Social Menu
 $social_menu_block = SocialManager::show_social_menu('search');
 $block_search = '';
-$searchForm = UserManager::get_search_form($queryNoFilter);
+$searchForm = UserManager::get_search_form($queryNoTags);
 
 $groups = [];
 $totalGroups = [];
@@ -201,7 +201,7 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
                         </div>
                         <div class="user-info">
                             '.$item_1.'
-                            <p>'.$members.'</p>    
+                            <p>'.$members.'</p>
                             <p>'.$group['description'].'</p>
                             <p>'.$tags.'</p>
                             <p>'.$url_open.get_lang('SeeMore').$url_close.'</p>

@@ -270,13 +270,13 @@ if (is_array($forumCategories)) {
         if (empty($forumCategory['cat_title'])) {
             $forumCategoryInfo['title'] = get_lang('WithoutCategory');
         } else {
-            $forumCategoryInfo['title'] = $forumCategory['cat_title'];
+            $forumCategoryInfo['title'] = Security::remove_XSS($forumCategory['cat_title']);
         }
         $forumCategoryInfo['extra_fields'] = isset($forumCategory['extra_fields']) ? $forumCategory['extra_fields'] : [];
         $forumCategoryInfo['icon_session'] = api_get_session_image($forumCategory['session_id'], $_user['status']);
 
         // Validation when belongs to a session
-        $forumCategoryInfo['description'] = $forumCategory['cat_comment'];
+        $forumCategoryInfo['description'] = Security::remove_XSS($forumCategory['cat_comment']);
         $forumCategory['session_display'] = null;
         if (empty($sessionId) && !empty($forumCategory['session_name'])) {
             $forumCategory['session_display'] = ' ('.Security::remove_XSS($forumCategory['session_name']).')';

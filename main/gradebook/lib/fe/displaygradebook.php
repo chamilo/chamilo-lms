@@ -85,7 +85,7 @@ class DisplayGradebook
 
         $description = '';
         if ('' == !$evalobj->get_description()) {
-            $description = get_lang('Description').' :<b> '.$evalobj->get_description().'</b><br>';
+            $description = get_lang('Description').' :<b> '.Security::remove_XSS($evalobj->get_description()).'</b><br>';
         }
 
         if ($evalobj->get_course_code() == null) {
@@ -95,7 +95,7 @@ class DisplayGradebook
         }
 
         $evalinfo = '<table width="100%" border="0"><tr><td>';
-        $evalinfo .= '<h2>'.$evalobj->get_name().'</h2><hr>';
+        $evalinfo .= '<h2>'.Security::remove_XSS($evalobj->get_name()).'</h2><hr>';
         $evalinfo .= $description;
         $evalinfo .= get_lang('Course').' :<b> '.$course.'</b><br />';
         if (empty($model)) {

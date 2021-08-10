@@ -16,6 +16,7 @@ class MessageManager
 {
     public static function getMessagesAboutUserToString(User $user, string $url = ''): string
     {
+        $currentUserId = api_get_user_id();
         $messages = Container::getMessageRepository()->getMessageByUser($user, Message::MESSAGE_TYPE_CONVERSATION);
         $html = '';
         if (!empty($messages)) {
@@ -36,7 +37,7 @@ class MessageManager
                 $sender = $message->getSender();
 
                 $deleteButton = '';
-                if (!empty($url)) {
+                if (!empty($url) && $currentUserId === $sender->getId()) {
                     $deleteButton = Display::url(
                         get_lang('Delete'),
                         $url.'&action=delete_message&message_id='.$messageId,

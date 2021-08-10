@@ -28,6 +28,7 @@ if (!$allowToTrack) {
 
 $studentId = isset($_GET['student']) ? (int) $_GET['student'] : 0;
 $sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : 0;
+$hideConnectionTime = isset($_REQUEST['hide_connection_time']) ? (int) $_REQUEST['hide_connection_time'] : 0;
 $currentUrl = api_get_self().'?student='.$studentId.'&sid='.$sessionId;
 
 switch ($action) {
@@ -118,9 +119,13 @@ switch ($action) {
                 $courseTable .= '<table class="table table-hover table-striped data_table">';
                 $courseTable .= '<thead>';
                 $courseTable .= '<tr>
-                    <th>'.get_lang('FormationUnit').'</th>
-                    <th>'.get_lang('ConnectionTime').'</th>
-                    <th>'.get_lang('Progress').'</th>';
+                    <th>'.get_lang('FormationUnit').'</th>';
+
+                if (!$hideConnectionTime) {
+                    $courseTable .= '<th>'.get_lang('ConnectionTime').'</th>';
+                }
+
+                $courseTable .= '<th>'.get_lang('Progress').'</th>';
 
                 if ('attendance' === $type) {
                     $courseTable .= '<th>'.get_lang('Score').'</th>';
@@ -177,9 +182,11 @@ switch ($action) {
                         <td>
                             <a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sessionToExport.'">'.
                             $courseInfoItem['title'].'</a>
-                        </td>
-                        <td >'.$time_spent_on_course.'</td>
-                        <td >'.$progress.'</td>';
+                        </td>';
+                        if (!$hideConnectionTime) {
+                            $courseTable .= '<td >'.$time_spent_on_course.'</td>';
+                        }
+                        $courseTable .= '<td >'.$progress.'</td>';
                         if ('attendance' === $type) {
                             $courseTable .= '<td >'.$score.'</td>';
                         }
@@ -197,10 +204,11 @@ switch ($action) {
                 $totalTimeFormatted = api_time_to_hms($totalCourseTime);
                 $courseTable .= '
                     <tr>
-                        <th>'.get_lang('Total').'</th>
-                        <th>'.$totalTimeFormatted.'</th>
-                        <th>'.$totalProgressFormatted.'</th>
-                    ';
+                        <th>'.get_lang('Total').'</th>';
+                if (!$hideConnectionTime) {
+                    $courseTable .= '<th>'.$totalTimeFormatted.'</th>';
+                }
+                $courseTable .= '<th>'.$totalProgressFormatted.'</th>';
                 if ('attendance' === $type) {
                     $courseTable .= '<th>'.$totalScoreFormatted.'</th>';
                 }

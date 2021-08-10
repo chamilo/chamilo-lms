@@ -5106,7 +5106,7 @@ class DocumentManager
                     $foldersSortedByTitles[$folder_titles[$folder]] = [
                         'id' => $folder_id,
                         'selected' => $selected,
-                        'label' => $label
+                        'label' => $label,
                     ];
                 }
                 foreach ($folder_titles as $title) {
@@ -5135,7 +5135,7 @@ class DocumentManager
                     $foldersSortedByTitles[$folder_titles[$folder]] = [
                         'id' => $folder_id,
                         'selected' => $selected,
-                        'label' => $label
+                        'label' => $label,
                     ];
                 }
                 foreach ($folder_titles as $title) {

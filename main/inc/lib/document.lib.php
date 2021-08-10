@@ -5068,6 +5068,7 @@ class DocumentManager
             while ($obj = Database::fetch_object($res)) {
                 $folder_titles[$obj->path] = $obj->title;
             }
+            natcasesort($folder_titles);
         }
 
         if (empty($form)) {
@@ -5090,6 +5091,7 @@ class DocumentManager
             $parent_select->addOption(get_lang('Documents'), '/');
 
             if (is_array($folders)) {
+                $foldersSortedByTitles = [];
                 foreach ($folders as $folder_id => &$folder) {
                     $selected = ($document_id == $folder_id) ? ' selected="selected"' : '';
                     $path_parts = explode('/', $folder);
@@ -5101,14 +5103,25 @@ class DocumentManager
                         $label = ' &mdash; '.$folder_titles[$folder];
                     }
                     $label = Security::remove_XSS($label);
-                    $parent_select->addOption($label, $folder_id);
-                    if ($selected != '') {
-                        $parent_select->setSelected($folder_id);
+                    $foldersSortedByTitles[$folder_titles[$folder]] = [
+                        'id' => $folder_id,
+                        'selected' => $selected,
+                        'label' => $label
+                    ];
+                }
+                foreach ($folder_titles as $title) {
+                    $parent_select->addOption(
+                        $foldersSortedByTitles[$title]['label'],
+                        $foldersSortedByTitles[$title]['id']
+                    );
+                    if ($foldersSortedByTitles[$title]['selected'] != '') {
+                        $parent_select->setSelected($foldersSortedByTitles[$title]['id']);
                     }
                 }
             }
         } else {
             if (!empty($folders)) {
+                $foldersSortedByTitles = [];
                 foreach ($folders as $folder_id => &$folder) {
                     $selected = ($document_id == $folder_id) ? ' selected="selected"' : '';
                     $label = $folder_titles[$folder];
@@ -5119,9 +5132,19 @@ class DocumentManager
                         $label = cut($label, 80);
                         $label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2).' &mdash; '.$label;
                     }
-                    $parent_select->addOption($label, $folder_id);
-                    if ($selected != '') {
-                        $parent_select->setSelected($folder_id);
+                    $foldersSortedByTitles[$folder_titles[$folder]] = [
+                        'id' => $folder_id,
+                        'selected' => $selected,
+                        'label' => $label
+                    ];
+                }
+                foreach ($folder_titles as $title) {
+                    $parent_select->addOption(
+                        $foldersSortedByTitles[$title]['label'],
+                        $foldersSortedByTitles[$title]['id']
+                    );
+                    if ($foldersSortedByTitles[$title]['selected'] != '') {
+                        $parent_select->setSelected($foldersSortedByTitles[$title]['id']);
                     }
                 }
             }
@@ -7100,20 +7123,20 @@ class DocumentManager
             $return = '<ul class="lp_resource">';
         }
 
-        $return .= '<li 
-            class="doc_folder'.$folder_class_hidden.'" 
-            id="doc_id_'.$resource['id'].'"  
-            style="margin-left:'.($num * 18).'px;" 
+        $return .= '<li
+            class="doc_folder'.$folder_class_hidden.'"
+            id="doc_id_'.$resource['id'].'"
+            style="margin-left:'.($num * 18).'px;"
             >';
 
         $image = Display::returnIconPath('nolines_plus.gif');
         if (empty($path)) {
             $image = Display::returnIconPath('nolines_minus.gif');
         }
-        $return .= '<img 
-            style="cursor: pointer;" 
-            src="'.$image.'" 
-            align="absmiddle" 
+        $return .= '<img
+            style="cursor: pointer;"
+            src="'.$image.'"
+            align="absmiddle"
             id="img_'.$resource['id'].'" '.$onclick.'
         >';
 

@@ -20,7 +20,7 @@
                             <input type="hidden" name="id_session" value="{{ session_id }}"/>
                             <input type="hidden" name="blog_id" value="{{ id_blog }}"/>
                             <input type="hidden" name="action" value="view_search_result"/>
-                            <input type="text" class="form-control" size="20" name="q" value="{{ search }}"/>
+                            <input type="text" class="form-control" size="20" name="q" value="{{ search | remove_xss }}"/>
                         </div>
                         <button class="btn btn-default btn-block" type="submit">
                             <em class="fa fa-search"></em> {{ 'Search'|get_lang }}
@@ -62,7 +62,9 @@
                             <div class="panel-body">
                                 <h3 class="title-post">
                                     <a href="{{ _p.web_self ~ '?' ~ _p.web_cid_query ~ '&' ~ {'action':'view_post', 'blog_id':item.id_blog, 'post_id':item.id_post}|url_encode }}#add_comment"
-                                       title="{{ item.title }}">{{ item.title }}</a>
+                                       title="{{ item.title }}">
+                                        {{ item.title | remove_xss }}
+                                    </a>
                                 </h3>
                                 <div class="info-post">
                                     <span class="date"><i class="fa fa-clock-o"></i> {{ item.post_date }}</span>
@@ -85,13 +87,15 @@
                                 {% endif %}
 
                                 <div id="post-content-{{ item.id_post }}" class="{{ item.extract ? 'hidden' : '' }}">
-                                    {{ item.content }}
+                                    {{ item.content | remove_xss }}
                                 </div>
 
                                 {% if item.files %}
                                     <div class="well well-sm files">
                                         <i class="fa fa-paperclip" aria-hidden="true"></i>
-                                        <a href="download.php?file={{ item.files.path }}">{{ item.files.filename }}</a>
+                                        <a href="download.php?file={{ item.files.path }}">
+                                            {{ item.files.filename | remove_xss }}
+                                        </a>
                                     </div>
                                 {% endif %}
                             </div>

@@ -45,7 +45,7 @@ class ScormQuestion extends Question
         if (!$question) {
             return '';
         }
-        $this->id = $question->id;
+        $this->iid = $question->iid;
         $this->js_id = $jsId;
         $this->type = $question->type;
         $this->question = $question->question;
@@ -65,47 +65,47 @@ class ScormQuestion extends Question
     {
         switch ($this->type) {
             case MCUA:
-                $this->answer = new ScormAnswerMultipleChoice($this->id);
+                $this->answer = new ScormAnswerMultipleChoice($this->iid);
                 $this->answer->questionJSId = $this->js_id;
                 break;
             case MCMA:
             case GLOBAL_MULTIPLE_ANSWER:
-                $this->answer = new ScormAnswerMultipleChoice($this->id);
+                $this->answer = new ScormAnswerMultipleChoice($this->iid);
                 $this->answer->questionJSId = $this->js_id;
                 break;
             case TF:
-                $this->answer = new ScormAnswerTrueFalse($this->id);
+                $this->answer = new ScormAnswerTrueFalse($this->iid);
                 $this->answer->questionJSId = $this->js_id;
                 break;
             case FIB:
-                $this->answer = new ScormAnswerFillInBlanks($this->id);
+                $this->answer = new ScormAnswerFillInBlanks($this->iid);
                 $this->answer->questionJSId = $this->js_id;
                 break;
             case MATCHING:
             case MATCHING_DRAGGABLE:
             case DRAGGABLE:
-                $this->answer = new ScormAnswerMatching($this->id);
+                $this->answer = new ScormAnswerMatching($this->iid);
                 $this->answer->questionJSId = $this->js_id;
                 break;
             case ORAL_EXPRESSION:
             case FREE_ANSWER:
-                $this->answer = new ScormAnswerFree($this->id);
+                $this->answer = new ScormAnswerFree($this->iid);
                 $this->answer->questionJSId = $this->js_id;
                 break;
             case HOT_SPOT:
-                $this->answer = new ScormAnswerHotspot($this->id);
+                $this->answer = new ScormAnswerHotspot($this->iid);
                 $this->answer->questionJSId = $this->js_id;
                 break;
             case MULTIPLE_ANSWER_COMBINATION:
-                $this->answer = new ScormAnswerMultipleChoice($this->id);
+                $this->answer = new ScormAnswerMultipleChoice($this->iid);
                 $this->answer->questionJSId = $this->js_id;
                 break;
             case HOT_SPOT_ORDER:
-                $this->answer = new ScormAnswerHotspot($this->id);
+                $this->answer = new ScormAnswerHotspot($this->iid);
                 $this->answer->questionJSId = $this->js_id;
                 break;
             case HOT_SPOT_DELINEATION:
-                $this->answer = new ScormAnswerHotspot($this->id);
+                $this->answer = new ScormAnswerHotspot($this->iid);
                 $this->answer->questionJSId = $this->js_id;
                 break;
             // not supported
@@ -114,7 +114,7 @@ class ScormQuestion extends Question
             case MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE:
             case UNIQUE_ANSWER_IMAGE:
             case CALCULATED_ANSWER:
-                $this->answer = new ScormAnswerMultipleChoice($this->id);
+                $this->answer = new ScormAnswerMultipleChoice($this->iid);
                 $this->answer->questionJSId = $this->js_id;
                 break;
             default:
@@ -173,7 +173,7 @@ class ScormQuestion extends Question
         $cols = 2;
 
         return '<tr>
-            <td colspan="'.$cols.'" id="question_'.$this->id.'_title" valign="middle" style="background-color:#d6d6d6;">
+            <td colspan="'.$cols.'" id="question_'.$this->iid.'_title" valign="middle" style="background-color:#d6d6d6;">
             '.$title.'
             </td>
             </tr>
@@ -192,10 +192,10 @@ class ScormQuestion extends Question
         $weight = $this->selectWeighting();
         $js = '
             questions.push('.$this->js_id.');
-            $(function() {     
+            $(function() {
                 if (exerciseInfo.randomAnswers == true) {
-                    $("#question_'.$this->js_id.'").shuffleRows();                    
-                } 
+                    $("#question_'.$this->js_id.'").shuffleRows();
+                }
             });';
         $js .= "\n";
 

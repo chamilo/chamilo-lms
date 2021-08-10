@@ -206,6 +206,36 @@ if (isset($_GET['additional_profile_field'])) {
 Session::write('additional_user_profile_info', $userProfileInfo);
 Session::write('extra_field_info', $extra_info);
 
+$defaultExtraFields = [];
+$defaultExtraFieldsFromSettings = [];
+$defaultExtraFieldsFromSettings = api_get_configuration_value('course_log_default_extra_fields');
+if (!empty($defaultExtraFieldsFromSettings) && isset($defaultExtraFieldsFromSettings['extra_fields'])) {
+    $defaultExtraFields = $defaultExtraFieldsFromSettings['extra_fields'];
+    $defaultExtraInfo = [];
+    $defaultUserProfileInfo = [];
+
+    $userArray = [];
+    foreach ($studentList as $key => $item) {
+        $userArray[] = $key;
+    }
+
+    foreach ($defaultExtraFields as $fieldName) {
+        $extraFieldInfo = UserManager::get_extra_field_information_by_name($fieldName);
+
+        if (!empty($extraFieldInfo)) {
+            // Fetching only the user that are loaded NOT ALL user in the portal.
+            $defaultUserProfileInfo[$extraFieldInfo['id']] = TrackingCourseLog::getAdditionalProfileInformationOfFieldByUser(
+                $extraFieldInfo['id'],
+                $userArray
+            );
+            $defaultExtraInfo[$extraFieldInfo['id']] = $extraFieldInfo;
+        }
+    }
+
+    Session::write('default_additional_user_profile_info', $defaultUserProfileInfo);
+    Session::write('default_extra_field_info', $defaultExtraInfo);
+}
+
 Display::display_header($nameTools, 'Tracking');
 
 $actionsLeft = TrackingCourseLog::actionsLeft('users', $sessionId);
@@ -252,7 +282,7 @@ if ($sessionId) {
             get_lang('Session'),
             [],
             ICON_SIZE_SMALL
-        ).' '.api_get_session_name($sessionId);
+        ).' '.Security::remove_XSS(api_get_session_name($sessionId));
     $titleCourse = Display::return_icon(
             'course.png',
             get_lang('Course'),
@@ -326,7 +356,7 @@ if ($showReporting) {
                 }
             }
             $url = $urlWebCode.'mySpace/course.php?session_id='.$session['id'].'&cidReq='.$courseInfo['code'];
-            $html .= Display::tag('li', $icon.' '.Display::url($session['name'], $url));
+            $html .= Display::tag('li', $icon.' '.Display::url(Security::remove_XSS($session['name']), $url));
         }
         $html .= '</ul>';
     }
@@ -589,7 +619,7 @@ if ($nbStudents > 0) {
         Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_SMALL).
         get_lang('ExportAsCSV')
     .' </a>');
-    $extraFieldSelect = TrackingCourseLog::display_additional_profile_fields();
+    $extraFieldSelect = TrackingCourseLog::display_additional_profile_fields($defaultExtraFields);
     if (!empty($extraFieldSelect)) {
         $html .= $extraFieldSelect;
     }
@@ -745,6 +775,13 @@ if ($nbStudents > 0) {
             $parameters['additional_profile_field'] = $fieldId;
         }
     }
+    if (isset($defaultExtraFields)) {
+        foreach ($defaultExtraInfo as $field) {
+            $table->set_header($counter, $field['display_text'], false);
+            $headers[$field['variable']] = $field['display_text'];
+            $counter++;
+        }
+    }
     $table->set_header($counter, get_lang('Details'), false);
     $headers['Details'] = get_lang('Details');
 
@@ -860,7 +897,7 @@ if (!empty($groupList)) {
                 foreach ($exerciseList as $exerciseData) {
                     foreach ($usersInGroup as $userId) {
                         $results = Event::get_best_exercise_results_by_user(
-                            $exerciseData['id'],
+                            $exerciseData['iid'],
                             $courseInfo['real_id'],
                             0,
                             $userId
@@ -956,7 +993,7 @@ if (!empty($groupList)) {
         foreach ($exerciseList as $exerciseData) {
             foreach ($studentIdList as $userId) {
                 $results = Event::get_best_exercise_results_by_user(
-                    $exerciseData['id'],
+                    $exerciseData['iid'],
                     $courseInfo['real_id'],
                     $sessionId,
                     $userId
@@ -1049,7 +1086,7 @@ if ($export_csv) {
         $sessionDates = SessionManager::parseSessionDates($sessionInfo);
 
         array_unshift($csvContentInSession, [get_lang('Date'), $sessionDates['access']]);
-        array_unshift($csvContentInSession, [get_lang('SessionName'), $sessionInfo['name']]);
+        array_unshift($csvContentInSession, [get_lang('SessionName'), Security::remove_XSS($sessionInfo['name'])]);
     }
 
     Export::arrayToCsv($csvContentInSession, 'reporting_student_list');

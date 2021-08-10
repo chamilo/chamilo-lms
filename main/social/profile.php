@@ -141,7 +141,7 @@ $sessionList = [];
 
 // My friends
 $friend_html = SocialManager::listMyFriendsBlock($user_id, $link_shared);
-$addPostForm = SocialManager::getWallForm(api_get_self());
+$addPostForm = SocialManager::displayWallForm(api_get_self());
 $addPostFormPortfolio = SocialManager::getWallFormPortfolio(api_get_self());
 
 $posts = SocialManager::getWallMessagesByUser($friendId);

@@ -4,10 +4,10 @@
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\UserBundle\Entity\User;
 
-/**
- * @package chamilo.webservices
- */
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_webservices();
+
 $debug = true;
 
 define('WS_ERROR_SECRET_KEY', 1);

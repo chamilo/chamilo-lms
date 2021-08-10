@@ -44,7 +44,7 @@ $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
 $table_evaluated[LINK_EXERCISE] = [
     TABLE_QUIZ_TEST,
     'title',
-    'id',
+    'iid',
     get_lang('Exercise'),
 ];
 $table_evaluated[LINK_DROPBOX] = [

@@ -291,8 +291,8 @@ function show_add_forum_form($inputvalues = [], $lp_id = 0)
 
     // Dropdown list: Forum categories
     $forum_categories = get_forum_categories();
-    foreach ($forum_categories as $key => $value) {
-        $forum_categories_titles[$value['cat_id']] = $value['cat_title'];
+    foreach ($forum_categories as $value) {
+        $forum_categories_titles[$value['cat_id']] = Security::remove_XSS($value['cat_title']);
     }
     $form->addElement(
         'select',
@@ -4690,12 +4690,13 @@ function move_thread_form()
         </div>
         <div class="formw">';
     $htmlcontent .= '<select name="forum">';
-    foreach ($forum_categories as $key => $category) {
+    foreach ($forum_categories as $category) {
         $htmlcontent .= '<optgroup label="'.$category['cat_title'].'">';
         foreach ($forums as $key => $forum) {
             if (isset($forum['forum_category'])) {
                 if ($forum['forum_category'] == $category['cat_id']) {
-                    $htmlcontent .= '<option value="'.$forum['forum_id'].'">'.$forum['forum_title'].'</option>';
+                    $htmlcontent .= '<option value="'.$forum['forum_id'].'">'.
+                        Security::remove_XSS($forum['forum_title']).'</option>';
                 }
             }
         }

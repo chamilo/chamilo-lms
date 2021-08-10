@@ -181,10 +181,10 @@ if ($is_allowedToEdit) {
                 $quantity_results_deleted = 0;
                 foreach ($exerciseList as $exeItem) {
                     // delete result for test, if not in a gradebook
-                    $exercise_action_locked = api_resource_is_locked_by_gradebook($exeItem['id'], LINK_EXERCISE);
+                    $exercise_action_locked = api_resource_is_locked_by_gradebook($exeItem['iid'], LINK_EXERCISE);
                     if ($exercise_action_locked == false) {
                         $objExerciseTmp = new Exercise();
-                        if ($objExerciseTmp->read($exeItem['id'])) {
+                        if ($objExerciseTmp->read($exeItem['iid'])) {
                             $quantity_results_deleted += $objExerciseTmp->cleanResults(true);
                         }
                     }
@@ -301,7 +301,7 @@ if (!empty($action) && $is_allowedToEdit) {
                     api_item_property_update(
                         $courseInfo,
                         TOOL_QUIZ,
-                        $objExerciseTmp->id,
+                        $objExerciseTmp->iid,
                         'visible',
                         $userId
                     );
@@ -327,7 +327,7 @@ if (!empty($action) && $is_allowedToEdit) {
                     api_item_property_update(
                         $courseInfo,
                         TOOL_QUIZ,
-                        $objExerciseTmp->id,
+                        $objExerciseTmp->iid,
                         'visible',
                         $userId
                     );
@@ -403,7 +403,7 @@ if ($is_allowedToEdit) {
                         api_item_property_update(
                             $courseInfo,
                             TOOL_QUIZ,
-                            $objExerciseTmp->id,
+                            $objExerciseTmp->iid,
                             'visible',
                             $userId
                         );
@@ -429,7 +429,7 @@ if ($is_allowedToEdit) {
                         api_item_property_update(
                             $courseInfo,
                             TOOL_QUIZ,
-                            $objExerciseTmp->id,
+                            $objExerciseTmp->iid,
                             'invisible',
                             $userId
                         );
@@ -580,14 +580,14 @@ if ($is_allowedToEdit) {
                 }
 
                 $newVisibilityStatus = '1'; //"visible"
-                $query = "SELECT id FROM $TBL_DOCUMENT
+                $query = "SELECT iid FROM $TBL_DOCUMENT
                           WHERE c_id = $courseId AND path='".Database::escape_string($file)."'";
                 $res = Database::query($query);
                 $row = Database :: fetch_array($res, 'ASSOC');
                 api_item_property_update(
                     $courseInfo,
                     TOOL_DOCUMENT,
-                    $row['id'],
+                    $row['iid'],
                     'visible',
                     $userId
                 );
@@ -601,14 +601,14 @@ if ($is_allowedToEdit) {
                     break;
                 }
                 $newVisibilityStatus = '0'; //"invisible"
-                $query = "SELECT id FROM $TBL_DOCUMENT
+                $query = "SELECT iid FROM $TBL_DOCUMENT
                           WHERE c_id = $courseId AND path='".Database::escape_string($file)."'";
                 $res = Database::query($query);
                 $row = Database :: fetch_array($res, 'ASSOC');
                 api_item_property_update(
                     $courseInfo,
                     TOOL_DOCUMENT,
-                    $row['id'],
+                    $row['iid'],
                     'invisible',
                     $userId
                 );
@@ -771,7 +771,7 @@ if (api_get_configuration_value('allow_exercise_categories') === false) {
         $manager = new ExerciseCategoryManager();
         $category = $manager->get($categoryId);
         echo Display::page_subheader($category['name']);
-        echo Exercise::exerciseGrid($category['id'], $keyword);
+        echo Exercise::exerciseGrid($category['iid'], $keyword);
     }
 }
 

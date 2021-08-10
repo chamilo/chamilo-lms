@@ -54,7 +54,7 @@ class HotpotatoesExerciseResult
             $sql = "SELECT '', exe_name, exe_result , exe_weighting, exe_date
                     FROM $TBL_TRACK_HOTPOTATOES
                     WHERE
-                        exe_user_id = '".$user_id."' AND
+                        exe_user_id = $user_id AND
                         c_id = $course_id AND
                         tth.exe_name = '$hotpotato_name'
                     ORDER BY c_id ASC, exe_date ASC";

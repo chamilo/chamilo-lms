@@ -1,9 +1,10 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$token = isset($_GET['token']) ? $_GET['token'] : '';
+$token = $_GET['token'] ?? '';
 
 if (!ctype_alnum($token)) {
     $token = '';
@@ -37,6 +38,7 @@ if ($form->validate()) {
 
     /** @var \Chamilo\UserBundle\Entity\User $user */
     $user = UserManager::getManager()->findUserByConfirmationToken($token);
+
     if ($user) {
         if (!$user->isPasswordRequestNonExpired($ttl)) {
             Display::addFlash(Display::return_message(get_lang('LinkExpired')), 'warning');
@@ -53,6 +55,14 @@ if ($form->validate()) {
 
         Database::getManager()->persist($user);
         Database::getManager()->flush();
+
+        if (api_get_configuration_value('force_renew_password_at_first_login')) {
+            $extraFieldValue = new ExtraFieldValue('user');
+            $value = $extraFieldValue->get_values_by_handler_and_field_variable($user->getId(), 'ask_new_password');
+            if (!empty($value) && isset($value['value']) && 1 === (int) $value['value']) {
+                $extraFieldValue->delete($value['id']);
+            }
+        }
 
         Display::addFlash(Display::return_message(get_lang('Updated')));
         header('Location: '.api_get_path(WEB_PATH));

@@ -423,10 +423,11 @@ class GradebookTable extends SortableTable
 
                 // Name.
                 if ('Category' === get_class($item)) {
-                    $row[] = $invisibility_span_open.'<strong>'.$item->get_name().'</strong>'.$invisibility_span_close;
+                    $row[] = $invisibility_span_open.
+                        '<strong>'.Security::remove_XSS($item->get_name()).'</strong>'.$invisibility_span_close;
                     $main_categories[$item->get_id()]['name'] = $item->get_name();
                 } else {
-                    $name = $this->build_name_link($item, $type);
+                    $name = Security::remove_XSS($this->build_name_link($item, $type));
                     $row[] = $invisibility_span_open.$name.$invisibility_span_close;
                     $main_categories[$item->get_id()]['name'] = $name;
                 }
@@ -622,7 +623,7 @@ class GradebookTable extends SortableTable
                             $row[] = $this->build_type_column($item, ['style' => 'padding-left:5px']);
                             // Name.
                             $row[] = $invisibility_span_open.'&nbsp;&nbsp;&nbsp; '.
-                                $this->build_name_link($item, $type, 4).$invisibility_span_close;
+                                Security::remove_XSS($this->build_name_link($item, $type, 4)).$invisibility_span_close;
 
                             // Description.
                             if (false == $this->exportToPdf) {

@@ -354,7 +354,7 @@ if (isset($_REQUEST['comments']) &&
         $attemptCount = Event::getAttemptPosition(
             $track_exercise_info['exe_id'],
             $student_id,
-            $objExerciseTmp->id,
+            $objExerciseTmp->iid,
             $lp_id,
             $lpItemId,
             $lp_item_view_id
@@ -408,7 +408,7 @@ if (isset($_REQUEST['comments']) &&
         $sql = "UPDATE $TBL_LP_ITEM_VIEW
                 SET score = '".(float) $tot."'
                 $statusCondition
-                WHERE c_id = $course_id AND id = $lp_item_view_id";
+                WHERE iid = $lp_item_view_id";
         Database::query($sql);
 
         header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise_show.php?id='.$id.'&student='.$student_id.'&'.api_get_cidreq());
@@ -469,8 +469,17 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
             );
         }
 
-        $actions .= '<a class="btn btn-default" href="question_stats.php?'.api_get_cidreq().'&id='.$exercise_id.'">'.
-            get_lang('QuestionStats').'</a>';
+        $actions .= Display::url(
+            get_lang('QuestionStats'),
+            'question_stats.php?'.api_get_cidreq().'&id='.$exercise_id,
+            ['class' => 'btn btn-default']
+        );
+
+        $actions .= Display::url(
+            get_lang('ComparativeGroupReport'),
+            'comparative_group_report.php?'.api_get_cidreq().'&id='.$exercise_id,
+            ['class' => 'btn btn-default']
+        );
     }
 } else {
     $actions .= '<a href="exercise.php">'.

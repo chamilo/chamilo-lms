@@ -114,7 +114,6 @@ if ($post) {
     $query = $qb->getQuery();
     $relatedPosts = $query->getResult();
 }
-//var_dump($post->getTitle());
 
 $tpl = new Template($plugin->get_lang('plugin_title'));
 $tpl->assign('post', $post);

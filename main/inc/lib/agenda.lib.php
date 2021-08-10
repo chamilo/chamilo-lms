@@ -2055,13 +2055,13 @@ class Agenda
                     $event['sent_to'] = '<div class="label_tag notice">'.get_lang('Everyone').'</div>';
                 }
 
-                $event['description'] = $row['content'];
+                $event['description'] = Security::remove_XSS($row['content']);
                 $event['visibility'] = $row['visibility'];
                 $event['real_id'] = $row['id'];
                 $event['allDay'] = isset($row['all_day']) && $row['all_day'] == 1 ? $row['all_day'] : 0;
                 $event['parent_event_id'] = $row['parent_event_id'];
                 $event['has_children'] = $this->hasChildren($row['id'], $courseId) ? 1 : 0;
-                $event['comment'] = $row['comment'];
+                $event['comment'] = Security::remove_XSS($row['comment']);
                 $this->events[] = $event;
             }
         }
@@ -3114,7 +3114,16 @@ class Agenda
         $calendar = Sabre\VObject\Reader::read($data);
         $currentTimeZone = api_get_timezone();
         if (!empty($calendar->VEVENT)) {
+            /** @var Sabre\VObject\Component\VEvent $event */
             foreach ($calendar->VEVENT as $event) {
+                $tempDate = $event->DTSTART->getValue();
+                if ('Z' == substr($tempDate, -1) && 'UTC' != date('e', strtotime($tempDate))) {
+                    $event->DTSTART->setValue(gmdate('Ymd\THis\Z', strtotime($tempDate)));
+                }
+                $tempDate = $event->DTEND->getValue();
+                if ('Z' == substr($tempDate, -1) && 'UTC' != date('e', strtotime($tempDate))) {
+                    $event->DTEND->setValue(gmdate('Ymd\THis\Z', strtotime($tempDate)));
+                }
                 $start = $event->DTSTART->getDateTime();
                 $end = $event->DTEND->getDateTime();
                 //Sabre\VObject\DateTimeParser::parseDateTime(string $dt, \Sabre\VObject\DateTimeZone $tz)

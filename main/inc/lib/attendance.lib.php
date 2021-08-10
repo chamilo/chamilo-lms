@@ -181,13 +181,26 @@ class Attendance
                 ) || api_is_drh();
                 if (api_is_allowed_to_edit(null, true) || $isDrhOfCourse) {
                     // Link to edit
-                    $attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$student_param.'">'.$attendance[1].'</a>'.$session_star;
+                    $attendance[1] = '<a 
+                        href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$student_param.'">'.
+                        Security::remove_XSS($attendance[1]).
+                        '</a>'.
+                        $session_star;
                 } else {
                     // Link to view
-                    $attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list_no_edit&attendance_id='.$attendance[0].$student_param.'">'.$attendance[1].'</a>'.$session_star;
+                    $attendance[1] = '<a 
+                        href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list_no_edit&attendance_id='.$attendance[0].$student_param.'">'.
+                        Security::remove_XSS($attendance[1]).
+                        '</a>'.
+                        $session_star;
                 }
             } else {
-                $attendance[1] = '<a class="muted" href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$student_param.'">'.$attendance[1].'</a>'.$session_star;
+                $attendance[1] = '<a 
+                    class="muted" 
+                    href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$student_param.'">'.
+                    Security::remove_XSS($attendance[1]).
+                    '</a>'.
+                    $session_star;
             }
 
             if ($attendance[5] == 1) {
@@ -198,9 +211,7 @@ class Attendance
 
             $attendance[3] = '<center>'.$attendance[3].'</center>';
             if (api_is_allowed_to_edit(null, true)) {
-                $actions = '';
-                $actions .= '<center>';
-
+                $actions = '<center>';
                 if (api_is_platform_admin()) {
                     $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].'">'.
                         Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>&nbsp;';
@@ -268,7 +279,7 @@ class Attendance
                 $attendances[] = [
                     $attendance[0],
                     $attendance[1],
-                    $attendance[2],
+                    Security::remove_XSS($attendance[2]),
                     $attendance[3],
                     $actions,
                 ];
@@ -277,7 +288,7 @@ class Attendance
                 $attendances[] = [
                     $attendance[0],
                     $attendance[1],
-                    $attendance[2],
+                    Security::remove_XSS($attendance[2]),
                     $attendance[3],
                 ];
             }
@@ -2326,7 +2337,7 @@ class Attendance
             false
         );
         /* Get course with (in_category) and without (not_category) category */
-        foreach ($courses as $coursesKey => $courseData) {
+        foreach ($courses as $courseData) {
             /*
              * $coursesKey can be in_category or not_category for courses
              * */

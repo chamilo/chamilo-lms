@@ -59,6 +59,7 @@ class Rest extends WebService
     const EDIT_CAMPUS = 'edit_campus';
     const DELETE_CAMPUS = 'delete_campus';
     const SAVE_SESSION = 'save_session';
+    const UPDATE_SESSION = 'update_session';
     const GET_USERS = 'get_users';
     const GET_COURSES = 'get_courses';
     const GET_COURSES_FROM_EXTRA_FIELD = 'get_courses_from_extra_field';
@@ -2089,6 +2090,153 @@ class Rest extends WebService
         );
 
         return [$json];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function updateSession(array $params): array
+    {
+        $id = $params['session_id'];
+        $reset = $params['reset'] ?? null;
+        $name = $params['name'] ?? null;
+        $coachId = isset($params['id_coach']) ? (int) $params['id_coach'] : null;
+        $sessionCategoryId = isset($params['session_category_id']) ? (int) $params['session_category_id'] : null;
+        $description = $params['description'] ?? null;
+        $showDescription = $params['show_description'] ?? null;
+        $duration = $params['duration'] ?? null;
+        $visibility = $params['visibility'] ?? null;
+        $promotionId = $params['promotion_id'] ?? null;
+        $displayStartDate = $params['display_start_date'] ?? null;
+        $displayEndDate = $params['display_end_date'] ?? null;
+        $accessStartDate = $params['access_start_date'] ?? null;
+        $accessEndDate = $params['access_end_date'] ?? null;
+        $coachStartDate = $params['coach_access_start_date'] ?? null;
+        $coachEndDate = $params['coach_access_end_date'] ?? null;
+        $sendSubscriptionNotification = $params['send_subscription_notification'] ?? null;
+        $extraFields = $params['extra'] ?? [];
+
+        $reset = (bool) $reset;
+        $visibility = (int) $visibility;
+        $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
+
+        if (!SessionManager::isValidId($id)) {
+            throw new Exception(get_lang('NoData'));
+        }
+
+        if (!empty($accessStartDate) && !api_is_valid_date($accessStartDate, 'Y-m-d H:i') &&
+            !api_is_valid_date($accessStartDate, 'Y-m-d H:i:s')
+        ) {
+            throw new Exception(get_lang('InvalidDate'));
+        }
+
+        if (!empty($accessEndDate) && !api_is_valid_date($accessEndDate, 'Y-m-d H:i') &&
+            !api_is_valid_date($accessEndDate, 'Y-m-d H:i:s')
+        ) {
+            throw new Exception(get_lang('InvalidDate'));
+        }
+
+        if (!empty($accessStartDate) && !empty($accessEndDate) && $accessStartDate >= $accessEndDate) {
+            throw new Exception(get_lang('InvalidDate'));
+        }
+
+        $values = [];
+
+        if ($reset) {
+            $values['name'] = $name;
+            $values['id_coach'] = $coachId;
+            $values['session_category_id'] = $sessionCategoryId;
+            $values['description'] = $description;
+            $values['show_description'] = $showDescription;
+            $values['duration'] = $duration;
+            $values['visibility'] = $visibility;
+            $values['promotion_id'] = $promotionId;
+            $values['display_start_date'] = !empty($displayStartDate) ? api_get_utc_datetime($displayStartDate) : null;
+            $values['display_end_date'] = !empty($displayEndDate) ? api_get_utc_datetime($displayEndDate) : null;
+            $values['access_start_date'] = !empty($accessStartDate) ? api_get_utc_datetime($accessStartDate) : null;
+            $values['access_end_date'] = !empty($accessEndDate) ? api_get_utc_datetime($accessEndDate) : null;
+            $values['coach_access_start_date'] = !empty($coachStartDate) ? api_get_utc_datetime($coachStartDate) : null;
+            $values['coach_access_end_date'] = !empty($coachEndDate) ? api_get_utc_datetime($coachEndDate) : null;
+            $values['send_subscription_notification'] = $sendSubscriptionNotification;
+        } else {
+            if (!empty($name)) {
+                $values['name'] = $name;
+            }
+
+            if (!empty($coachId)) {
+                $values['id_coach'] = $coachId;
+            }
+
+            if (!empty($sessionCategoryId)) {
+                $values['session_category_id'] = $sessionCategoryId;
+            }
+
+            if (!empty($description)) {
+                $values['description'] = $description;
+            }
+
+            if (!empty($showDescription)) {
+                $values['show_description'] = $showDescription;
+            }
+
+            if (!empty($duration)) {
+                $values['duration'] = $duration;
+            }
+
+            if (!empty($visibility)) {
+                $values['visibility'] = $visibility;
+            }
+
+            if (!empty($promotionId)) {
+                $values['promotion_id'] = $promotionId;
+            }
+
+            if (!empty($displayStartDate)) {
+                $values['display_start_date'] = api_get_utc_datetime($displayStartDate);
+            }
+
+            if (!empty($displayEndDate)) {
+                $values['display_end_date'] = api_get_utc_datetime($displayEndDate);
+            }
+
+            if (!empty($accessStartDate)) {
+                $values['access_start_date'] = api_get_utc_datetime($accessStartDate);
+            }
+
+            if (!empty($accessEndDate)) {
+                $values['access_end_date'] = api_get_utc_datetime($accessEndDate);
+            }
+
+            if (!empty($coachStartDate)) {
+                $values['coach_access_start_date'] = api_get_utc_datetime($coachStartDate);
+            }
+
+            if (!empty($coachEndDate)) {
+                $values['coach_access_end_date'] = api_get_utc_datetime($coachEndDate);
+            }
+
+            if (!empty($sendSubscriptionNotification)) {
+                $values['send_subscription_notification'] = $sendSubscriptionNotification;
+            }
+        }
+
+        Database::update(
+            $tblSession,
+            $values,
+            ['id = ?' => $id]
+        );
+
+        if (!empty($extraFields)) {
+            $extraFields['item_id'] = $id;
+            $sessionFieldValue = new ExtraFieldValue('session');
+            $sessionFieldValue->saveFieldValues($extraFields);
+        }
+
+        return [
+            'status' => true,
+            'message' => get_lang('Updated'),
+            'id_session' => $id,
+        ];
     }
 
     /**

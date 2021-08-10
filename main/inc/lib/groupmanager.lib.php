@@ -1211,12 +1211,11 @@ class GroupManager
         $group_user_table = Database::get_course_table(TABLE_GROUP_USER);
         $groupTable = Database::get_course_table(TABLE_GROUP);
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        $group_id = intval($group_id);
+        $group_id = (int) $group_id;
+        $courseId = (int) $courseId;
 
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
-        } else {
-            $courseId = intval($courseId);
         }
 
         $select = " SELECT u.id, firstname, lastname ";
@@ -1264,7 +1263,7 @@ class GroupManager
     }
 
     /**
-     * @param int $group_id id
+     * @param int $group_id
      *
      * @return array
      */
@@ -2352,12 +2351,14 @@ class GroupManager
                     $group_name .= ' ('.$this_group['session_name'].')';
                 }
                 $group_name .= $session_img;
-                $row[] = $group_name.$group_name2.'<br />'.stripslashes(trim($this_group['description']));
+                $row[] = Security::remove_XSS($group_name).
+                    $group_name2.'<br />'.Security::remove_XSS(stripslashes(trim($this_group['description'])));
             } else {
                 if ('true' === $hideGroup) {
                     continue;
                 }
-                $row[] = $this_group['name'].'<br />'.stripslashes(trim($this_group['description']));
+                $row[] = Security::remove_XSS($this_group['name']).'<br />'.
+                    Security::remove_XSS(stripslashes(trim($this_group['description'])));
             }
 
             // Tutor name

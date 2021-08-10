@@ -7,10 +7,7 @@
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-// Set this option to true to enforce strict purification for usernames.
-$purification_option_for_usernames = false;
 $userId = api_get_user_id();
-
 api_protect_admin_script(true, null);
 api_protect_limit_for_session_admin();
 set_time_limit(0);

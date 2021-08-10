@@ -224,7 +224,7 @@ switch ($action) {
 
         $form->addCheckBox('hide_connection_time', null, get_lang('HideConnectionTime'));
         $form->addHtml('<br><br>');
-        $form->addButtonSave(get_lang('GenerateCertificate'), 'submitLink');
+        $form->addButtonSave(get_lang('Generate'), 'submitLink');
         $content = $form->returnForm();
         echo $content;
         break;

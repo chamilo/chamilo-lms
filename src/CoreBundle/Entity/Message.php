@@ -274,9 +274,18 @@ class Message
      */
     public function getReceiversTo()
     {
-        return $this->getReceivers()->filter(function (MessageRelUser $messageRelUser) {
+        /*return $this->getReceivers()->filter(function (MessageRelUser $messageRelUser) {
             return MessageRelUser::TYPE_TO === $messageRelUser->getReceiverType();
-        });
+        });*/
+
+        $list = [];
+        foreach ($this->receivers as $receiver) {
+            if (MessageRelUser::TYPE_TO === $receiver->getReceiverType()) {
+                $list[] = $receiver;
+            }
+        }
+
+        return $list;
     }
 
     /**

@@ -34,8 +34,6 @@
           {{ messageRelUser.receiver.username }}
         </v-chip>
       </span>
-
-
     </div>
 
   <TinyEditor
@@ -110,7 +108,6 @@ export default {
     }
 
     let replyAll = '1' === route.query['all'];
-    //console.log(replyAll);
 
     onMounted(async () => {
       const currentUser = computed(() => store.getters['security/getUser']);
@@ -130,7 +127,20 @@ export default {
 
       // Set new receivers, will be loaded by onSendMessageForm()
       if (replyAll) {
-        item.value['receiversCc'].push(...item.value['receiversTo']);
+        // Add all in to Cc except the original sender.
+        item.value.receiversTo.forEach(user => {
+          if (item.value['originalSender']['@id'] === user.receiver['@id']) {
+              return;
+          }
+          item.value.receiversCc.push(user);
+        });
+
+        // Check that the original sender is not already in the Cc.
+        item.value.receiversCc.forEach(function (user, index, obj) {
+          if (item.value['originalSender']['@id'] === user.receiver['@id']) {
+            obj.splice(index, 1);
+          }
+        });
       } else {
         item.value['receivers'] = [];
         item.value['receiversTo'] = null;

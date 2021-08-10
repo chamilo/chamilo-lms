@@ -148,7 +148,7 @@
             $(function () {
                 $('#badge-export-button-{{ badge.issue_info.id }}').on('click', function (e) {
                     e.preventDefault();
-                    OpenBadges.issue({{ badge.issue_info.badge_assertion|json_encode() }});
+                    OpenBadges.issue('{{ badge.issue_info.badge_assertion|json_encode() }}');
                 });
             });
         </script>

@@ -2411,7 +2411,11 @@ class SkillModel extends Model
             }
 
             if (!$error) {
-                header('Content-type: image/png');
+                //header('Content-type: image/png');
+                header('Content-type: application/octet-stream');
+                header('Content-Type: application/force-download');
+                header('Content-Disposition: attachment; filename= '.api_get_unique_id());
+
                 echo $result;
                 exit;
             }

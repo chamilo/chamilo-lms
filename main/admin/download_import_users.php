@@ -15,7 +15,8 @@ set_time_limit(0);
 /**
  * Read all the archive files previously placed in app/cache/backup/import_users/[user]/
  * when users were imported through CSV (one can only see the users imported by
- * oneself)
+ * oneself).
+ *
  * @return array Array of archives found in the app/cache/backup
  */
 function readImportedUsersArchives(string $path = '', string $parentFile = null, int $userId = 0): array
@@ -52,11 +53,13 @@ function readImportedUsersArchives(string $path = '', string $parentFile = null,
     }
 
     krsort($data);
+
     return $data;
 }
 
 /**
- * Print an HTML table of archives of imported users
+ * Print an HTML table of archives of imported users.
+ *
  * @return string HTML table or empty string if no results
  */
 function getImportedUsersArchivesTable(): string

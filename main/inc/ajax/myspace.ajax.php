@@ -203,7 +203,7 @@ switch ($action) {
         break;
     case 'show_conditional_to_export_pdf':
         $studentId = isset($_REQUEST['student']) ? (int) $_REQUEST['student'] : 0;
-        $sId = isset($_REQUEST['session_to_export']) ? (int) $_REQUEST['session_to_export']: 0;
+        $sId = isset($_REQUEST['session_to_export']) ? (int) $_REQUEST['session_to_export'] : 0;
 
         $form = new FormValidator(
             'conditional_to_export_pdf',

@@ -3,7 +3,9 @@
         <div class="col-md-5">
             <div class="thumbnail">
                 <figure class="text-center">
-                    <img class="img-fluid center-block" src="{{ badge.issue_info.skill_badge_image }}" alt="{{ badge.issue_info.skill_name }}">
+                    <img class="img-fluid center-block"
+                         src="{{ badge.issue_info.skill_badge_image }}"
+                         alt="{{ badge.issue_info.skill_name }}">
                     <figcaption>
                         <p class="lead">{{ badge.issue_info.skill_name }}</p>
                         {% if badge.issue_info.skill_short_code %}
@@ -16,7 +18,7 @@
                         <p>{{ badge.issue_info.skill_description }}</p>
                     {% endif %}
                     {% if badge.issue_info.skill_criteria %}
-                        <h3>{{ 'CriteriaToEarnTheBadge'|trans }}</h3>
+                        <h3>{{ 'Criteria to earn the badge'|trans }}</h3>
                         <p>{{ badge.issue_info.skill_criteria }}</p>
                     {% endif %}
                 </div>
@@ -24,27 +26,31 @@
             {% if badge.allow_download_export %}
                 {% if badge.badge_error %}
                     <hr>
-                    <div class="alert alert-danger"> {{ 'BakedBadgeProblem'|trans }}</div>
+                    <div class="alert alert-danger">
+                        {{ 'There was a problem embedding the badge assertion info into the badge image, but you can still use this page as a valid proof.'|trans }}
+                    </div>
                 {% else %}
                     <p class="text-center">
                         <a href="{{ badge.personal_badge }}" class="btn btn-primary" target="_new" download="badge">
-                            <em class="fa fa-download fa-fw"></em> {{ 'DownloadBadge'|trans }}
+                            <em class="fa fa-download fa-fw"></em> {{ 'Download badges'|trans }}
                         </a>
                     </p>
                 {% endif %}
                 <hr>
                 <p class="text-center">
                     <a href="#" class="btn btn-success" id="badge-export-button-{{ badge.issue_info.id }}">
-                        <em class="fa fa-external-link-square fa-fw"></em> {{ 'ExportBadge'|trans }}
+                        <em class="fa fa-external-link-square fa-fw"></em> {{ 'Export badge'|trans }}
                     </a>
                 </p>
                 {% if "display.hide_social_media_links" | api_get_setting == 'false' %}
                 <div class='col-md-12 text-center'>
-                    <h5><b> {{ 'ShareWithYourFriends' | trans }} </b></h5>
+                    <h5><b> {{ 'Share with your friends' | trans }} </b></h5>
                     <a href="http://www.facebook.com/sharer.php?u={{ _p.web }}badge/{{ badge.issue_info.id }}" target="_new">
                         <em class='fa fa-facebook-square fa-3x text-info' aria-hidden='true'></em>
                     </a>
-                    <a href="https://twitter.com/home?status={{ 'IHaveObtainedSkillXOnY' | trans |format(skill_info.name, _s.site_name)}} - {{ _p.web }}badge/{{ badge.issue_info.id }}" target="_new">
+                    <a
+                        href="https://twitter.com/home?status={{ 'I have achieved skill %s on %s' | trans |format(skill_info.name, _s.site_name)}} - {{ _p.web }}badge/{{ badge.issue_info.id }}"
+                        target="_new">
                         <em class='fa fa-twitter-square fa-3x text-light' aria-hidden='true'></em>
                     </a>
                 </div>
@@ -52,19 +58,23 @@
             {% endif %}
         </div>
         <div class="col-md-7">
-            <h3>{{ 'RecipientDetails'|trans }}</h3>
+            <h3>{{ 'Recipient details'|trans }}</h3>
             <p class="lead">{{ badge.issue_info.user_complete_name }}</p>
-            <h4>{{ 'SkillAcquiredAt'|trans }}</h4>
+            <h4>{{ 'Skill acquired at'|trans }}</h4>
             <ul class="fa-ul">
                 <li>
                     {% if badge.issue_info.source_name %}
-                        <em class="fa-li fa fa-clock-o fa-fw"></em> {{ 'TimeXThroughCourseY'|trans|format(badge.issue_info.datetime, badge.issue_info.source_name) }}
+                        <em class="fa-li fa fa-clock-o fa-fw"></em>
+                        {{ '<strong>%s</strong> through <em>%s</em>'|trans|format(badge.issue_info.datetime, badge.issue_info.source_name) }}
                     {% else %}
-                        <em class="fa-li fa fa-clock-o fa-fw"></em> {{ badge.issue_info.datetime }}
+                        <em class="fa-li fa fa-clock-o fa-fw"></em>
+                        {{ badge.issue_info.datetime }}
                     {% endif %}
                     {% if badge.issue_info.argumentation %}
                         {% if badge.issue_info.argumentation %}
-                            <b><p style="font-style: italic;">{{ 'UserXIndicated'|trans|format(badge.issue_info.argumentation_author_name) }} </p></b>
+                            <b><p style="font-style: italic;">
+                                    {{ 'User %s indicated:'|trans|format(badge.issue_info.argumentation_author_name) }}
+                            </p></b>
                         {% endif %}
                         <p>{{ badge.issue_info.argumentation }}</p>
                     {% endif %}
@@ -72,10 +82,11 @@
             </ul>
 
             {% if show_level %}
-            <h4>{{ 'AcquiredLevel'|trans }}</h4>
+            <h4>{{ 'Level acquired'|trans }}</h4>
             <ul class="fa-ul">
                 <li>
-                    <em class="fa-li fa fa-check-circle-o fa-fw"></em> {{ badge.issue_info.acquired_level }}
+                    <em class="fa-li fa fa-check-circle-o fa-fw"></em>
+                    {{ badge.issue_info.acquired_level }}
                 </li>
             </ul>
             {% endif %}
@@ -84,18 +95,23 @@
                 <hr>
                 <div class="panel panel-info">
                     <div class="panel-heading">
-                        <em class="fa fa-check-circle-o fa-fw" aria-hidden="true"></em> {{ 'ChangeAcquiredLevel'|trans }}
+                        <em class="fa fa-check-circle-o fa-fw" aria-hidden="true"></em>
+                        {{ 'Change acquired level'|trans }}
                     </div>
                     <div class="panel-body">
+                        {% autoescape false %}
                         {{ badge.acquired_level_form }}
+                        {% endautoescape %}
                     </div>
                 </div>
                 <hr>
                 <div class="panel panel-info">
                     <div class="panel-heading">
-                        <em class="fa fa-comment-o fa-fw" aria-hidden="true"></em> {{ 'XComments'|trans|format(badge.issue_info.comments|length) }}
+                        <em class="fa fa-comment-o fa-fw" aria-hidden="true"></em>
+                        {{ '%s comments'|trans|format(badge.issue_info.comments|length) }}
                         /
-                        <em class="fa fa-thumbs-o-up fa-fw" aria-hidden="true"></em> {{ 'AverageRatingX'|trans|format(badge.issue_info.feedback_average) }}
+                        <em class="fa fa-thumbs-o-up fa-fw" aria-hidden="true"></em>
+                        {{ 'Average rating %s'|trans|format(badge.issue_info.feedback_average) }}
                     </div>
                     <div class="panel-body">
                         {{ badge.comment_form }}
@@ -110,23 +126,25 @@
                                 <div class="media-right text-right">
                                     <div style="width: 80px;">
                                         {% if comment.value %}
-                                            <em class="fa fa-certificate fa-fw" aria-label="{{ 'AverageRating' }}"></em>
-                                            <span class="sr-only">{{ 'AverageRating' }}</span> {{ comment.value }}
+                                            <em class="fa fa-certificate fa-fw" aria-label="{{ 'Average rating' }}"></em>
+                                            <span class="sr-only">{{ 'Average rating' }}</span> {{ comment.value }}
                                         {% endif %}
                                     </div>
                                 </div>
                             </article>
                         {% else %}
-                            <p>{{ 'WithoutComment'|trans }}</p>
+                            <p>{{ 'Without comment'|trans }}</p>
                         {% endfor %}
                     </div>
                 </div>
             {% else %}
                 <hr>
                 <p class="lead">
-                    <em class="fa fa-comment-o fa-fw" aria-hidden="true"></em> {{ 'XComments'|trans|format(badge.issue_info.comments|length) }}
+                    <em class="fa fa-comment-o fa-fw" aria-hidden="true"></em>
+                    {{ '%s comments'|trans|format(badge.issue_info.comments|length) }}
                     /
-                    <em class="fa fa-thumbs-o-up fa-fw" aria-hidden="true"></em> {{ 'AverageRatingX'|trans|format(badge.issue_info.feedback_average) }}
+                    <em class="fa fa-thumbs-o-up fa-fw" aria-hidden="true"></em>
+                    {{ 'Average rating %s'|trans|format(badge.issue_info.feedback_average) }}
                 </p>
             {% endif %}
         </div>

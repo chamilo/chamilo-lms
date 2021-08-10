@@ -1,9 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
-use SkillRelUser as SkillRelUserManager;
 
 /**
  * Show information about all issued badges with same skill by user.
@@ -156,7 +156,7 @@ foreach ($userSkills as $index => $skillIssue) {
     $formAcquiredLevel = new FormValidator(
         'acquired_level'.$skillIssue->getId(),
         'post',
-        SkillRelUserManager::getIssueUrlAll($skillIssue)
+        SkillRelUserModel::getIssueUrlAll($skillIssue)
     );
     $formAcquiredLevel->addSelect('acquired_level', get_lang('Level acquired'), $acquiredLevel);
     $formAcquiredLevel->addHidden('user', $skillIssue->getUser()->getId());
@@ -172,14 +172,14 @@ foreach ($userSkills as $index => $skillIssue) {
         $em->persist($skillIssue);
         $em->flush();
 
-        header('Location: '.SkillRelUserManager::getIssueUrlAll($skillIssue));
+        header('Location: '.SkillRelUserModel::getIssueUrlAll($skillIssue));
         exit;
     }
 
     $form = new FormValidator(
         'comment'.$skillIssue->getId(),
         'post',
-        SkillRelUserManager::getIssueUrlAll($skillIssue)
+        SkillRelUserModel::getIssueUrlAll($skillIssue)
     );
     $form->addTextarea('comment', get_lang('New comment'), ['rows' => 4]);
     $form->applyFilter('comment', 'trim');
@@ -212,7 +212,7 @@ foreach ($userSkills as $index => $skillIssue) {
         $em->persist($skillUserComment);
         $em->flush();
 
-        header('Location: '.SkillRelUserManager::getIssueUrlAll($skillIssue));
+        header('Location: '.SkillRelUserModel::getIssueUrlAll($skillIssue));
         exit;
     }
 

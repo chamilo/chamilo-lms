@@ -7,7 +7,6 @@ use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Chamilo\CoreBundle\Framework\Container;
-use SkillRelUserModel as SkillRelUserManager;
 
 /**
  * Show information about the issued badge.
@@ -126,7 +125,7 @@ $skillIssueInfo = [
     'skill_short_code' => $skillIssue->getSkill()->getShortCode(),
     'skill_description' => $skillIssue->getSkill()->getDescription(),
     'skill_criteria' => $skillIssue->getSkill()->getCriteria(),
-    'badge_assertion' => SkillRelUserManager::getAssertionUrl($skillIssue),
+    'badge_assertion' => SkillRelUserModel::getAssertionUrl($skillIssue),
     'comments' => [],
     'feedback_average' => $skillIssue->getAverage(),
 ];
@@ -209,7 +208,7 @@ if ($showLevels && $allowToEdit) {
         $entityManager->flush();
         Display::addFlash(Display::return_message(get_lang('Saved')));
 
-        header('Location: '.SkillRelUserManager::getIssueUrl($skillIssue));
+        header('Location: '.SkillRelUserModel::getIssueUrl($skillIssue));
         exit;
     }
 }
@@ -245,7 +244,7 @@ if ($form->validate() && $allowComment && $allowToEdit) {
     $entityManager->flush();
     Display::addFlash(Display::return_message(get_lang('Added')));
 
-    header('Location: '.SkillRelUserManager::getIssueUrl($skillIssue));
+    header('Location: '.SkillRelUserModel::getIssueUrl($skillIssue));
     exit;
 }
 

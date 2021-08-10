@@ -127,10 +127,14 @@ export default {
 
       // Set new receivers, will be loaded by onSendMessageForm()
       if (replyAll) {
-        // Add all in to Cc except the original sender.
         item.value.receiversTo.forEach(user => {
+          // Dont' add original sender.
           if (item.value['originalSender']['@id'] === user.receiver['@id']) {
               return;
+          }
+          // Dont' add the current user.
+          if (currentUser.value['@id'] === user.receiver['@id']) {
+            return;
           }
           item.value.receiversCc.push(user);
         });

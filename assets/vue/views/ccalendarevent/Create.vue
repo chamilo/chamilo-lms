@@ -78,30 +78,31 @@ export default {
 
       // Set new receivers, will be loaded by onSendMessageForm()
       item.value['resourceLinkListFromEntity'] = [];
-
+      let itemsAdded = [];
       item.value['receivers'].forEach(receiver => {
-        item.value['resourceLinkListFromEntity'].push(
+        item.value.resourceLinkListFromEntity.push(
             {
               uid: receiver.receiver['id'],
               user: { username: receiver.receiver['username']},
               visibility: RESOURCE_LINK_PUBLISHED
             }
         );
+        itemsAdded.push(receiver.receiver['username']);
       });
 
-      // Set the sender too.
-      item.value['resourceLinkListFromEntity'].push(
-          {
-            uid: item.value['sender']['id'],
-            user: { username: item.value['sender']['username']},
-            visibility: RESOURCE_LINK_PUBLISHED
-          }
-      );
+      // If it's already added then skip.
+      if (!itemsAdded.includes(item.value['sender']['username'])) {
+        // Set the sender too.
+        item.value['resourceLinkListFromEntity'].push(
+            {
+              uid: item.value['sender']['id'],
+              user: {username: item.value['sender']['username']},
+              visibility: RESOURCE_LINK_PUBLISHED
+            }
+        );
+      }
 
       delete item.value['sender'];
-
-      /*item.value['receivers'] = [];
-      item.value['receivers'][0] = item.value['originalSender'];*/
     });
 
     return {v$: useVuelidate(), users, isLoadingSelect, item};

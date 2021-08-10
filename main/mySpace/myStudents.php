@@ -1284,15 +1284,20 @@ if (empty($details)) {
                 );
                 $sessionAction .= Display::url(
                     Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_MEDIUM),
-                    api_get_path(WEB_CODE_PATH).'mySpace/session.php?'
+                    api_get_path(WEB_AJAX_PATH).'myspace.ajax.php?'
                     .http_build_query(
                         [
+                            'a' => 'show_conditional_to_export_pdf',
                             'student' => $student_id,
-                            'action' => 'export_to_pdf',
-                            'type' => 'achievement',
                             'session_to_export' => $sId,
+                            'type' => 'achievement',
                         ]
-                    )
+                    ),
+                    [
+                        'class' => "ajax",
+                        'data-size' => 'sm',
+                        'data-title' => get_lang('CertificateOfAchievement'),
+                    ]
                 );
             }
             echo $sessionAction;

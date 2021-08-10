@@ -270,7 +270,7 @@ class Message
     }
 
     /**
-     * @return null|Collection|MessageRelUser[]
+     * @return MessageRelUser[]
      */
     public function getReceiversTo()
     {

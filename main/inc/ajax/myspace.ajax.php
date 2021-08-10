@@ -209,21 +209,22 @@ switch ($action) {
             'conditional_to_export_pdf',
             'post',
             api_get_path(WEB_CODE_PATH).'mySpace/session.php?'
-            .http_build_query(
-                [
-                    'student' => $studentId,
-                    'action' => 'export_to_pdf',
-                    'type' => 'achievement',
-                    'session_to_export' => $sId,
-                ]
-            )
+                .http_build_query(
+                    [
+                        'student' => $studentId,
+                        'action' => 'export_to_pdf',
+                        'type' => 'achievement',
+                        'session_to_export' => $sId,
+                    ]
+                ),
+            '',
+            [],
+            FormValidator::LAYOUT_INLINE
         );
 
-        $message = get_lang('HideConnectionTime');
-        $form->addCheckBox('hide_connection_time', null, $message);
-
-        $messageBtn = get_lang('GenerateCertificate');
-        $form->addButtonSave($messageBtn, 'submitLink');
+        $form->addCheckBox('hide_connection_time', null, get_lang('HideConnectionTime'));
+        $form->addHtml('<br><br>');
+        $form->addButtonSave(get_lang('GenerateCertificate'), 'submitLink');
         $content = $form->returnForm();
         echo $content;
         break;

@@ -1293,7 +1293,11 @@ if (empty($details)) {
                             'type' => 'achievement',
                         ]
                     ),
-                    ['class' => "ajax", 'data-size' => 'sm']
+                    [
+                        'class' => "ajax",
+                        'data-size' => 'sm',
+                        'data-title' => get_lang('CertificateOfAchievement'),
+                    ]
                 );
             }
             echo $sessionAction;

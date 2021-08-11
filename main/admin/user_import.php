@@ -126,12 +126,12 @@ function validate_data($users, $checkUniqueEmail = false)
                 }
             }
         }
-        
+
         // When e-mail is not a required field, e-mail is left empty
         if (api_get_setting('registration', 'email') === 'false' && empty($user['Email'])) {
             $user['Email'] = '';
         }        
-        if (!empty($user['Email'])) {                        
+        if (!empty($user['Email'])) {
             $result = api_valid_email($user['Email']);
             if ($result === false) {
                 $user['message'] .= Display::return_message(get_lang('PleaseEnterValidEmail'), 'warning');

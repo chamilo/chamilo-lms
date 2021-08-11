@@ -75,22 +75,6 @@ class BBBPlugin extends Plugin
                     ],
                     'attributes' => ['multiple' => 'multiple'],
                 ],
-                'interface' => [
-                    'type' => 'select',
-                    'options' => [
-                        self::INTERFACE_HTML5 => 'HTML5',
-                        self::INTERFACE_FLASH => 'Flash',
-                    ],
-                ],
-                'launch_type' => [
-                    'type' => 'select',
-                    'options' => [
-                        self::LAUNCH_TYPE_DEFAULT => 'SetByDefault',
-                        self::LAUNCH_TYPE_SET_BY_TEACHER => 'SetByTeacher',
-                        self::LAUNCH_TYPE_SET_BY_STUDENT => 'SetByStudent',
-                    ],
-                    'translate_options' => true, // variables will be translated using the plugin->get_lang
-                ],
                 'allow_regenerate_recording' => 'boolean',
                 // Default course settings, must be the same as $course_settings
                 'big_blue_button_record_and_store' => 'checkbox',
@@ -299,9 +283,7 @@ class BBBPlugin extends Plugin
             'bbb_plugin_host',
             'bbb_plugin_salt',
             'max_users_limit',
-            'global_conference_allow_roles',
-            'interface',
-            'launch_type',
+            'global_conference_allow_roles'
         ];
 
         $urlId = api_get_current_access_url_id();
@@ -391,37 +373,6 @@ class BBBPlugin extends Plugin
                 ['close' => BBBPlugin::ROOM_CLOSE]
             );
         }
-    }
-
-    /**
-     * Return an array with URL
-     *
-     * @param string $conferenceUrl
-     *
-     * @return array
-     */
-    public function getUrlInterfaceLinks($conferenceUrl)
-    {
-        $urlList[] = $this->getFlashUrl($conferenceUrl);
-        $urlList[] = $this->getHtmlUrl($conferenceUrl);
-
-        return $urlList;
-    }
-
-    /**
-     * @param string $conferenceUrl
-     *
-     * @return array
-     */
-    public function getFlashUrl($conferenceUrl)
-    {
-        $data = [
-            'text' => $this->get_lang('EnterConferenceFlash'),
-            'url' => $conferenceUrl.'&interface='.self::INTERFACE_FLASH,
-            'icon' => 'resources/img/64/videoconference_flash.png',
-        ];
-
-        return $data;
     }
 
     /**

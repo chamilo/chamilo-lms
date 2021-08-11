@@ -446,6 +446,7 @@ class bbb
                     }
                     $meeting = $this->joinMeeting($meetingName, true);
 
+
                     return $meeting;
                 }
             }
@@ -538,6 +539,7 @@ class bbb
      */
     public function joinMeeting($meetingName)
     {
+
         if ($this->debug) {
             error_log("joinMeeting: $meetingName");
         }
@@ -635,8 +637,6 @@ class bbb
                 'userID' => api_get_user_id(),
                 //-- OPTIONAL - string
                 'webVoiceConf' => '',
-                //	-- OPTIONAL - string
-                'interface' => $this->checkInterface($meetingData),
             ];
             $url = $this->api->getJoinMeetingURL($joinParams);
             $url = $this->protocol.$url;
@@ -725,41 +725,6 @@ class bbb
         return false;
     }
 
-    /**
-     * @param $meetingInfo
-     *
-     * @return int
-     */
-    public function checkInterface($meetingInfo)
-    {
-        $interface = BBBPlugin::LAUNCH_TYPE_DEFAULT;
-
-        $type = $this->plugin->get('launch_type');
-        switch ($type) {
-            case BBBPlugin::LAUNCH_TYPE_DEFAULT:
-                $interface = $this->plugin->get('interface');
-                break;
-            case BBBPlugin::LAUNCH_TYPE_SET_BY_TEACHER:
-                if (isset($meetingInfo['interface'])) {
-                    $interface = $meetingInfo['interface'];
-                }
-                break;
-            case BBBPlugin::LAUNCH_TYPE_SET_BY_STUDENT:
-                if (isset($meetingInfo['id'])) {
-                    $roomInfo = $this->getMeetingParticipantInfo($meetingInfo['id'], api_get_user_id());
-                    if (!empty($roomInfo) && isset($roomInfo['interface'])) {
-                        $interface = $roomInfo['interface'];
-                    } else {
-                        if (isset($_REQUEST['interface'])) {
-                            $interface = isset($_REQUEST['interface']) ? (int) $_REQUEST['interface'] : 0;
-                        }
-                    }
-                }
-                break;
-        }
-
-        return $interface;
-    }
 
     /**
      * @param int $meetingId
@@ -1160,8 +1125,6 @@ class bbb
                     'userID' => '',
                     //	-- OPTIONAL - string
                     'webVoiceConf' => '',
-                    //	-- OPTIONAL - string
-                    'interface' => $this->checkInterface($meetingDB),
                 ];
                 $item['go_url'] = $this->protocol.$this->api->getJoinMeetingURL($joinParams);
             }

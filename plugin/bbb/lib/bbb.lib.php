@@ -385,14 +385,6 @@ class bbb
         $params['created_at'] = api_get_utc_datetime();
         $params['access_url'] = $this->accessUrl;
 
-        // Check interface feature is installed
-        $interfaceFeature = $this->plugin->get('interface');
-        if ($interfaceFeature === false) {
-            if (isset($params['interface'])) {
-                unset($params['interface']);
-            }
-        }
-
         $id = Database::insert($this->table, $params);
 
         if ($id) {
@@ -445,7 +437,6 @@ class bbb
                         Database::query($sql);
                     }
                     $meeting = $this->joinMeeting($meetingName, true);
-
 
                     return $meeting;
                 }
@@ -539,7 +530,6 @@ class bbb
      */
     public function joinMeeting($meetingName)
     {
-
         if ($this->debug) {
             error_log("joinMeeting: $meetingName");
         }
@@ -753,11 +743,10 @@ class bbb
      *
      * @param int $meetingId
      * @param int $participantId
-     * @param int $interface
      *
      * @return false|int The last inserted ID. Otherwise return false
      */
-    public function saveParticipant($meetingId, $participantId, $interface = 0)
+    public function saveParticipant($meetingId, $participantId)
     {
         $meetingData = Database::select(
             '*',
@@ -801,10 +790,6 @@ class bbb
             'out_at' => api_get_utc_datetime(),
             'close' => BBBPlugin::ROOM_OPEN,
         ];
-
-        if ($this->plugin->get('interface') !== false) {
-            $params['interface'] = $interface;
-        }
 
         return Database::insert(
             'plugin_bbb_room',

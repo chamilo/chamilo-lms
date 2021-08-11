@@ -9,18 +9,10 @@
 */
 
 /**
- * Class BBBPlugin
  * Videoconference plugin with BBB
  */
 class BBBPlugin extends Plugin
 {
-    const INTERFACE_FLASH = 0;
-    const INTERFACE_HTML5 = 1;
-
-    const LAUNCH_TYPE_DEFAULT = 0;
-    const LAUNCH_TYPE_SET_BY_TEACHER = 1;
-    const LAUNCH_TYPE_SET_BY_STUDENT = 2;
-
     const ROOM_OPEN = 0;
     const ROOM_CLOSE = 1;
     const ROOM_CHECK = 2;
@@ -53,7 +45,7 @@ class BBBPlugin extends Plugin
     protected function __construct()
     {
         parent::__construct(
-            '2.8.2',
+            '2.9',
             'Julio Montoya, Yannick Warnier, Angel Fernando Quiroz Campos, Jose Angel Ruiz',
             [
                 'tool_enable' => 'boolean',
@@ -184,8 +176,7 @@ class BBBPlugin extends Plugin
                 voice_bridge INT NOT NULL DEFAULT 1,
                 access_url INT NOT NULL DEFAULT 1,
                 video_url TEXT NULL,
-                has_video_m4v TINYINT NOT NULL DEFAULT 0,
-                interface INT NOT NULL DEFAULT 0
+                has_video_m4v TINYINT NOT NULL DEFAULT 0
                 )";
         Database::query($sql);
 
@@ -196,7 +187,6 @@ class BBBPlugin extends Plugin
                 participant_id int(11) NOT NULL,
                 in_at datetime,
                 out_at datetime,
-                interface int NOT NULL DEFAULT 0,
                 close INT NOT NULL DEFAULT 0
             );"
         );
@@ -373,22 +363,6 @@ class BBBPlugin extends Plugin
                 ['close' => BBBPlugin::ROOM_CLOSE]
             );
         }
-    }
-
-    /**
-     * @param string $conferenceUrl
-     *
-     * @return array
-     */
-    public function getHtmlUrl($conferenceUrl)
-    {
-        $data = [
-            'text' => $this->get_lang('EnterConferenceHTML5'),
-            'url' => $conferenceUrl.'&interface='.self::INTERFACE_HTML5,
-            'icon' => 'resources/img/64/videoconference_html5.png',
-        ];
-
-        return $data;
     }
 
     /**

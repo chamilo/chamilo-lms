@@ -109,6 +109,8 @@ class Platform
     public function setKid(string $kid)
     {
         $this->kid = $kid;
+
+        return $this;
     }
 
     /**
@@ -128,7 +130,9 @@ class Platform
      */
     public function setIssuer(string $issuer)
     {
-        $this->issuer = $issuer;
+        $this->issuer = $issuer; 
+
+        return $this;
     }
 
     /**
@@ -149,6 +153,8 @@ class Platform
     public function setClientId(string $clientId)
     {
         $this->clientId = $clientId;
+
+        return $this;
     }
 
     /**
@@ -169,6 +175,8 @@ class Platform
     public function setAuthLoginUrl(string $authLoginUrl)
     {
         $this->authLoginUrl = $authLoginUrl;
+
+        return $this;
     }
 
     /**
@@ -189,6 +197,8 @@ class Platform
     public function setAuthTokenUrl(string $authTokenUrl)
     {
         $this->authTokenUrl = $authTokenUrl;
+
+        return $this;
     }
 
     /**
@@ -209,6 +219,8 @@ class Platform
     public function setKeySetUrl(string $keySetUrl)
     {
         $this->keySetUrl = $keySetUrl;
+
+        return $this;
     }
 
     /**
@@ -229,5 +241,7 @@ class Platform
     public function setDeploymentId(string $deploymentId)
     {
         $this->deploymentId = $deploymentId;
+
+        return $this;
     }
 }

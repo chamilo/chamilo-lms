@@ -57,6 +57,7 @@ use UserManager;
             'security' => "is_granted('ROLE_ADMIN')",
         ],
     ],
+    iri: 'http://schema.org/Person',
     itemOperations: [
         'get' => [
             'security' => "is_granted('ROLE_ADMIN')",
@@ -68,7 +69,6 @@ use UserManager;
             'security' => "is_granted('ROLE_ADMIN')",
         ],
     ],
-    iri: 'http://schema.org/Person',
     attributes: [
         'security' => 'is_granted("ROLE_USER")',
     ],
@@ -85,7 +85,6 @@ use UserManager;
     'lastname' => 'partial',
 ])]
 #[ApiFilter(BooleanFilter::class, properties: ['isActive'])]
-
 class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface, LegacyPasswordAuthenticatedUserInterface
 {
     use TimestampableEntity;
@@ -1406,8 +1405,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function isPasswordRequestNonExpired(int $ttl): bool
     {
-        return $this->getPasswordRequestedAt() instanceof DateTime &&
-            $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
+        return $this->getPasswordRequestedAt() instanceof DateTime
+            && $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
     }
 
     public function getPasswordRequestedAt(): ?DateTime
@@ -2437,10 +2436,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * Reimplemented using the ORM cache.
      *
      * @param null|UserCourseCategory $userCourseCategory the user_course_category
-     *
-     * @return int|mixed
      */
-    public function getMaxSortValue(?UserCourseCategory $userCourseCategory = null)
+    public function getMaxSortValue(?UserCourseCategory $userCourseCategory = null): int
     {
         $categoryCourses = $this->courses->matching(
             Criteria::create()

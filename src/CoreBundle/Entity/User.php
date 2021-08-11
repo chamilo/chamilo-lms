@@ -2271,7 +2271,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     }
 
     /**
-     * Retreives this user's related sessions.
+     * Retrieves this user's related sessions.
      *
      * @param int $relationType \Chamilo\CoreBundle\Entity\SessionRelUser::relationTypeList key
      *

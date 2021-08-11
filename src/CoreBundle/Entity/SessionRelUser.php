@@ -55,14 +55,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'security' => "is_granted('ROLE_USER')",
     ],
     normalizationContext: [
-        'groups' => ['session_rel_user:read', 'session:read'],
+        'groups' => ['session_rel_user:read'],
     ],
 )]
-#[ApiFilter(SearchFilter::class, properties: [
-    'session' => 'exact',
-    'user' => 'exact',
-])]
-#[ApiFilter(DateFilter::class, properties: ['session.displayStartDate' => null, 'session.displayEndDate' => null])]
+#[ApiFilter(SearchFilter::class, properties: ['session' => 'exact', 'user' => 'exact'])]
+#[ApiFilter(
+    DateFilter::class,
+    properties: ['session.displayStartDate' => null, 'session.displayEndDate' => null]
+)]
 class SessionRelUser
 {
     use UserTrait;

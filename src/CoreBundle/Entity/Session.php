@@ -377,10 +377,11 @@ class Session implements ResourceWithAccessUrlInterface
 
     public function addUserInSession(int $status, User $user): self
     {
-        $sessionRelUser = new SessionRelUser();
-        $sessionRelUser->setSession($this);
-        $sessionRelUser->setUser($user);
-        $sessionRelUser->setRelationType($status);
+        $sessionRelUser = (new SessionRelUser())
+            ->setSession($this)
+            ->setUser($user)
+            ->setRelationType($status)
+        ;
 
         $this->addUser($sessionRelUser);
 
@@ -813,8 +814,9 @@ class Session implements ResourceWithAccessUrlInterface
 
     public function addCourse(Course $course): void
     {
-        $entity = new SessionRelCourse();
-        $entity->setCourse($course);
+        $entity = (new SessionRelCourse())
+            ->setCourse($course)
+        ;
         $this->addCourses($entity);
     }
 

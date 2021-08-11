@@ -27,6 +27,7 @@ import Webcam from '@uppy/webcam'
 const XHRUpload = require('@uppy/xhr-upload');
 import { Dashboard } from '@uppy/vue'
 import {useRoute} from "vue-router";
+import {ENTRYPOINT} from "../../config/entrypoint";
 const ImageEditor = require('@uppy/image-editor');
 
 const servicePrefix = 'PersonalFile';
@@ -79,7 +80,7 @@ export default {
         })
         .use(
             XHRUpload, {
-              endpoint: '/api/personal_files',
+              endpoint: ENTRYPOINT +'personal_files',
               formData: true,
               fieldName: 'uploadFile'
             }

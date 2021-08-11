@@ -38,6 +38,7 @@ const XHRUpload = require('@uppy/xhr-upload');
 import { Dashboard } from '@uppy/vue'
 import {useRoute} from "vue-router";
 import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility";
+import {ENTRYPOINT} from "../../config/entrypoint";
 const ImageEditor = require('@uppy/image-editor');
 
 export default {
@@ -88,7 +89,7 @@ export default {
         })
         .use(
             XHRUpload, {
-              endpoint: '/api/documents',
+              endpoint: ENTRYPOINT + 'documents',
               formData: true,
               fieldName: 'uploadFile'
             }

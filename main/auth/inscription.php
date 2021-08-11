@@ -460,9 +460,8 @@ $tool_name = get_lang('Registration');
 if (api_get_setting('allow_terms_conditions') === 'true') {
     $get = array_keys($_GET);
     if (isset($get)) {
-        if (isset($get[0]) && $get[0] == 'legal') {
-            $language = api_get_interface_language();
-            $language = api_get_language_id($language);
+        if (isset($get[0]) && $get[0] === 'legal') {
+            $language = api_get_language_id(api_get_interface_language());
             $term_preview = LegalManager::get_last_condition($language);
             if (!$term_preview) {
                 //look for the default language

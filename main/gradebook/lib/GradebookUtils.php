@@ -200,6 +200,9 @@ class GradebookUtils
             case LINK_DROPBOX:
                 $icon = 'dropbox.gif';
                 break;
+            case 'portfolio':
+                $icon = 'wiki_task.png';
+                break;
             default:
                 $icon = 'link.gif';
                 break;
@@ -604,6 +607,7 @@ class GradebookUtils
      * @param $alllinks
      * @param $params
      * @param null $mainCourseCategory
+     * @param bool $onlyScore
      *
      * @return array
      */
@@ -613,7 +617,8 @@ class GradebookUtils
         $alleval,
         $alllinks,
         $params,
-        $mainCourseCategory = null
+        $mainCourseCategory = null,
+        $onlyScore = false
     ) {
         $datagen = new FlatViewDataGenerator(
             $users,
@@ -624,29 +629,28 @@ class GradebookUtils
         );
 
         $offset = isset($_GET['offset']) ? (int) $_GET['offset'] : 0;
-
         // step 2: generate rows: students
         $datagen->category = $cat;
-
-        $count = (($offset + 10) > $datagen->get_total_items_count()) ? ($datagen->get_total_items_count() - $offset) : GRADEBOOK_ITEM_LIMIT;
-        $header_names = $datagen->get_header_names($offset, $count, true);
-        $data_array = $datagen->get_data(
+        $totalItems = $datagen->get_total_items_count();
+        $count = (($offset + 10) > $totalItems) ? ($totalItems - $offset) : GRADEBOOK_ITEM_LIMIT;
+        $headers = $datagen->get_header_names($offset, $count, true);
+        $list = $datagen->get_data(
             FlatViewDataGenerator::FVDG_SORT_LASTNAME,
             0,
             null,
             $offset,
             $count,
+            $onlyScore,
             true,
-            true
+            $onlyScore
         );
 
         $result = [];
-        foreach ($data_array as $data) {
+        foreach ($list as $data) {
             $result[] = array_slice($data, 1);
         }
-        $return = [$header_names, $result];
 
-        return $return;
+        return [$headers, $result];
     }
 
     /**
@@ -957,7 +961,7 @@ class GradebookUtils
                             $select_gradebook->addOption(get_lang('Default'), $my_cat->get_id());
                             $cats_added[] = $my_cat->get_id();
                         } else {
-                            $select_gradebook->addOption($my_cat->get_name(), $my_cat->get_id());
+                            $select_gradebook->addOption(Security::remove_XSS($my_cat->get_name()), $my_cat->get_id());
                             $cats_added[] = $my_cat->get_id();
                         }
                     } else {
@@ -1531,6 +1535,7 @@ class GradebookUtils
                     'score' => $certificateInfo['score_certificate'],
                     'date' => api_format_date($certificateInfo['created_at'], DATE_FORMAT_SHORT),
                     'link' => api_get_path(WEB_PATH)."certificates/index.php?id={$certificateInfo['id']}",
+                    'pdf' => api_get_path(WEB_PATH)."certificates/index.php?id={$certificateInfo['id']}&user_id={$userId}&action=export",
                 ];
             }
         }
@@ -1591,7 +1596,7 @@ class GradebookUtils
             $studentList,
             $loadStats
         );
-
+        $gradebooktable->hideNavigation = true;
         $gradebooktable->userId = $userId;
 
         if (api_is_allowed_to_edit(null, true)) {
@@ -1703,5 +1708,65 @@ class GradebookUtils
             ];
             Database::update($table, $params, ['id = ?' => $commentInfo['id']]);
         }
+    }
+
+    public static function returnJsExportAllCertificates(
+        $buttonSelector,
+        $categoryId,
+        $courseCode,
+        $sessionId = 0,
+        $filterOfficialCodeGet = null
+    ) {
+        $params = [
+            'a' => 'export_all_certificates',
+            'cat_id' => $categoryId,
+            'cidReq' => $courseCode,
+            'id_session' => $sessionId,
+            'filter' => $filterOfficialCodeGet,
+        ];
+        $urlExportAll = 'gradebook.ajax.php?'.http_build_query($params);
+
+        $params['a'] = 'verify_export_all_certificates';
+        $urlVerifyExportAll = 'gradebook.ajax.php?'.http_build_query($params);
+
+        $imgSrcLoading = api_get_path(WEB_LIBRARY_JS_PATH).'loading.gif';
+        $imgSrcPdf = Display::return_icon('pdf.png', '', [], ICON_SIZE_MEDIUM, false, true);
+
+        return "<script>
+            $(function () {
+                var \$btnExport = $('$buttonSelector'),
+                    interval = 0;
+
+                function verifyExportSuccess (response) {
+                    if (response.length > 0) {
+                        \$btnExport.find('img').prop('src', '$imgSrcPdf');
+                        window.clearInterval(interval);
+                        window.removeEventListener('beforeunload', onbeforeunloadListener);
+                        window.location.href = response;
+                    }
+                }
+
+                function exportAllSuccess () {
+                    interval = window.setInterval(
+                        function () {
+                            $.ajax(_p.web_ajax + '$urlVerifyExportAll').then(verifyExportSuccess);
+                        },
+                        15000
+                    );
+                }
+
+                function onbeforeunloadListener (e) {
+                    e.preventDefault();
+                    e.returnValue = '';
+                }
+
+                \$btnExport.on('click', function (e) {
+                    e.preventDefault();
+                    \$btnExport.find('img').prop({src: '$imgSrcLoading', width: 40, height: 40});
+                    window.addEventListener('beforeunload', onbeforeunloadListener);
+                    $.ajax(_p.web_ajax + '$urlExportAll').then(exportAllSuccess);
+                });
+            });
+            </script>";
     }
 }

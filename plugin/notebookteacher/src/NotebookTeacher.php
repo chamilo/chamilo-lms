@@ -301,9 +301,9 @@ class NotebookTeacher
         // Database table definition
         $tableNotebook = Database::get_main_table(NotebookTeacherPlugin::TABLE_NOTEBOOKTEACHER);
         if ($view == 'creation_date' || $view == 'update_date') {
-            $orderBy = " ORDER BY $view $sortDirection ";
+            $orderBy = " ORDER BY `$view` $sortDirection ";
         } else {
-            $orderBy = " ORDER BY $view $sortDirection ";
+            $orderBy = " ORDER BY `$view` $sortDirection ";
         }
 
         // condition for the session

@@ -38,8 +38,8 @@ class Matching extends Question
         $answer = null;
         $counter = 1;
 
-        if (isset($this->id)) {
-            $answer = new Answer($this->id);
+        if (!empty($this->iid)) {
+            $answer = new Answer($this->iid);
             $answer->read();
             if ($answer->nbrAnswers > 0) {
                 for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
@@ -63,14 +63,14 @@ class Matching extends Question
                 $nb_matches++;
                 $nb_options++;
             }
-        } elseif (!empty($this->id)) {
+        } elseif (!empty($this->iid)) {
             if ($answer->nbrAnswers > 0) {
                 $nb_matches = $nb_options = 0;
                 for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
                     if ($answer->isCorrect($i)) {
                         $nb_matches++;
                         $defaults['answer['.$nb_matches.']'] = $answer->selectAnswer($i);
-                        $defaults['weighting['.$nb_matches.']'] = float_format($answer->selectWeighting($i), 1);
+                        $defaults['weighting['.$nb_matches.']'] = float_format($answer->selectWeighting($i));
                         $defaults['matches['.$nb_matches.']'] = $answer->correct[$i];
                     } else {
                         $nb_options++;
@@ -221,7 +221,7 @@ class Matching extends Question
         $group[] = $form->addButtonSave($text, 'submitQuestion', true);
         $form->addGroup($group);
 
-        if (!empty($this->id)) {
+        if (!empty($this->iid)) {
             $form->setDefaults($defaults);
         } else {
             if ($this->isContent == 1) {
@@ -246,7 +246,7 @@ class Matching extends Question
         $nb_options = $form->getSubmitValue('nb_options');
         $this->weighting = 0;
         $position = 0;
-        $objAnswer = new Answer($this->id);
+        $objAnswer = new Answer($this->iid);
 
         // Insert the options
         for ($i = 1; $i <= $nb_options; $i++) {

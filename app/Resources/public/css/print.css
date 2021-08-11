@@ -193,3 +193,7 @@ table.table td {
     border-bottom: 2px solid #4F7849;
     color: #4F7849;
 }
+
+.generated_date {
+    font-size: 10px;
+}

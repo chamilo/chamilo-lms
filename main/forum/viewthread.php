@@ -624,6 +624,7 @@ foreach ($posts as $post) {
     $post['post_title'] .= Display::tag('div', $titlePost, ['class' => 'post-header']);
 
     // the post body
+    $post['post_text'] = Security::remove_XSS($post['post_text']);
     $post['post_data'] = Display::tag('div', $post['post_text'], ['class' => 'post-body']);
 
     // The check if there is an attachment

@@ -18,6 +18,7 @@ $strings['lrs_lp_item_viewed_active'] = 'Visualización de contenido de lección
 $strings['lrs_lp_end_active'] = 'Finalización de lección';
 $strings['lrs_quiz_active'] = 'Finalización de ejercicio';
 $strings['lrs_quiz_question_active'] = 'Resolución de pregunta en ejercicio';
+$strings['lrs_portfolio_active'] = 'Eventos en portafolio';
 
 $strings['NoActivities'] = 'No hay actividades aún';
 $strings['ActivityTitle'] = 'Actividad';
@@ -44,3 +45,4 @@ $strings['Terminated'] = 'Terminó';
 $strings['Completed'] = 'Completó';
 $strings['Answered'] = 'Respondió';
 $strings['Viewed'] = 'Visualizó';
+$strings['ActivityAddedToLPCannotBeAccessed'] = 'Esta actividad ha sido incluida en una secuencia de aprendizaje, por lo cual no podrá ser accesible directamente por los estudiantes desde aquí.';

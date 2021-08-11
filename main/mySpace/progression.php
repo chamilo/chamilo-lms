@@ -31,7 +31,9 @@ $tbl_track_exercice = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES
 /*
     MAIN CODE
 */
-$sql_course = "SELECT title, code, id FROM $tbl_course as course ORDER BY title ASC";
+$sql_course = "SELECT title, code, id
+               FROM $tbl_course as course
+               ORDER BY title ASC";
 $result_course = Database::query($sql_course);
 
 if (Database::num_rows($result_course) > 0) {

@@ -27,7 +27,7 @@ class scormMetadata
      * @param	mixed	Depending on the type, can be the DB ID of the learnpath item or
      * the pointer to the <metadata> element in the imsmanifest.xml file
      */
-    public function __construct($type = 'manifest', &$element)
+    public function __construct($type, &$element)
     {
         if (isset($element)) {
             // Parsing using PHP5 DOMXML methods.

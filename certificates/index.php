@@ -11,12 +11,6 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 $userId = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
 $certificateId = isset($_GET['id']) ? $_GET['id'] : 0;
 
-$certificate = new Certificate($certificateId, $userId);
-$certificateData = $certificate->get($certificateId);
-if (empty($certificateData)) {
-    api_not_allowed(false, Display::return_message(get_lang('NoCertificateAvailable'), 'warning'));
-}
-
 $category = Category::findByCertificate($certificateId);
 
 // Check if the certificate should use the course language
@@ -32,6 +26,12 @@ if (!empty($category) && !empty($category->get_course_code())) {
     // Overwrite the interface language with the course language
     $language_interface = $language;
     $language_interface_initial_value = $language_interface;
+}
+
+$certificate = new Certificate($certificateId, $userId);
+$certificateData = $certificate->get($certificateId);
+if (empty($certificateData)) {
+    api_not_allowed(false, Display::return_message(get_lang('NoCertificateAvailable'), 'warning'));
 }
 
 CustomCertificatePlugin::redirectCheck($certificate, $certificateId, $userId);

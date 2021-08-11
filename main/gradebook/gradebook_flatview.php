@@ -211,29 +211,31 @@ if (!empty($_GET['export_report']) &&
 ) {
     if (api_is_platform_admin() || api_is_course_admin() || api_is_session_general_coach() || $isDrhOfCourse) {
         $user_id = null;
-
         if (empty($_SESSION['export_user_fields'])) {
             $_SESSION['export_user_fields'] = false;
         }
-        if (!api_is_allowed_to_edit(false, false) && !api_is_course_tutor()) {
+        if (!api_is_allowed_to_edit() && !api_is_course_tutor()) {
             $user_id = api_get_user_id();
         }
 
         $params['show_official_code'] = true;
-        $printable_data = GradebookUtils::get_printable_data(
+        $onlyScore = isset($_GET['only_score']) && 1 === (int) $_GET['only_score'];
+
+        $printableData = GradebookUtils::get_printable_data(
             $cat[0],
             $users,
             $alleval,
             $alllinks,
             $params,
-            $mainCourseCategory[0]
+            $mainCourseCategory[0],
+            $onlyScore
         );
 
         switch ($_GET['export_format']) {
             case 'xls':
                 ob_start();
                 $export = new GradeBookResult();
-                $export->exportCompleteReportXLS($printable_data);
+                $export->exportCompleteReportXLS($printableData);
                 $content = ob_get_contents();
                 ob_end_clean();
                 echo $content;
@@ -241,7 +243,7 @@ if (!empty($_GET['export_report']) &&
             case 'doc':
                 ob_start();
                 $export = new GradeBookResult();
-                $export->exportCompleteReportDOC($printable_data);
+                $export->exportCompleteReportDOC($printableData);
                 $content = ob_get_contents();
                 ob_end_clean();
                 echo $content;
@@ -250,7 +252,7 @@ if (!empty($_GET['export_report']) &&
             default:
                 ob_start();
                 $export = new GradeBookResult();
-                $export->exportCompleteReportCSV($printable_data);
+                $export->exportCompleteReportCSV($printableData);
                 $content = ob_get_contents();
                 ob_end_clean();
                 echo $content;
@@ -263,6 +265,37 @@ if (!empty($_GET['export_report']) &&
 }
 
 $this_section = SECTION_COURSES;
+if (isset($_GET['selectcat']) && ($_SESSION['studentview'] === 'teacherview')) {
+    $htmlHeadXtra[] = '<script>
+        $(function() {
+            $("#dialog:ui-dialog").dialog("destroy");
+            $("#dialog-confirm").dialog({
+                autoOpen: false,
+                show: "blind",
+                resizable: false,
+                height:300,
+                modal: true
+            });
+
+            $(".export_opener").click(function() {
+                var targetUrl = $(this).attr("href");
+                $("#dialog-confirm").dialog({
+                    width:400,
+                    height:300,
+                    buttons: {
+                        "'.addslashes(get_lang('Download')).'": function() {
+                            let onlyScore = $("input[name=only_score]").prop("checked") ? 1 : 0;
+                            location.href = targetUrl+"&only_score="+onlyScore;
+                            $(this).dialog("close");
+                        }
+                   }
+                });
+                $("#dialog-confirm").dialog("open");
+                return false;
+            });
+        });
+        </script>';
+}
 
 if (isset($_GET['exportpdf'])) {
     $export_pdf_form->display();

@@ -35,11 +35,13 @@ Feature: LP tool
     Given I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list"
     And I follow "Edit learnpath"
     And I follow "Tests"
-    And I follow "Exercise 1"
-    Then I should see "Adding a test to the course"
+    And I follow "Exercise 1 - Copy"
+    And I should see "Adding a test to the course"
+    When I fill in the following:
+      | idTitle | Exercise 1 - Copy |
     And I press "submit_button"
     Then I should see "Click on the [Learner view] button to see your learning path"
-    And I should see "Exercise 1"
+    And I should see "Exercise 1 - Copy"
 
   Scenario: Enter LP
     Given I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list"
@@ -47,7 +49,7 @@ Feature: LP tool
     And wait for the page to be loaded
     Then I should see "LP 1"
     And I should see "Document 1"
-    And I should see "Exercise 1"
+    And I should see "Exercise 1 - Copy"
 
 #  Scenario: Check the PDF export in LP list if hide SCORM PDF link is false
 #    Given I am on "/main/admin/settings.php?category=Course"

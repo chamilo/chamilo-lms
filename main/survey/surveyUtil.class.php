@@ -259,7 +259,7 @@ class SurveyUtil
                 self::display_comparative_report();
                 break;
             case 'completereport':
-                echo self::displayCompleteReport($survey_data);
+                echo self::displayCompleteReport($survey_data, 0, true, true, !$survey_data['anonymous']);
                 break;
             case 'deleteuserreport':
                 self::delete_user_report($_GET['survey_id'], $_GET['user']);
@@ -418,11 +418,11 @@ class SurveyUtil
                 if ($row['type'] != 'pagebreak') {
                     $questions[$row['sort']]['question_id'] = $row['question_id'];
                     $questions[$row['sort']]['survey_id'] = $row['survey_id'];
-                    $questions[$row['sort']]['survey_question'] = $row['survey_question'];
+                    $questions[$row['sort']]['survey_question'] = Security::remove_XSS($row['survey_question']);
                     $questions[$row['sort']]['display'] = $row['display'];
                     $questions[$row['sort']]['type'] = $row['type'];
                     $questions[$row['sort']]['maximum_score'] = $row['max_value'];
-                    $questions[$row['sort']]['options'][$row['question_option_id']] = $row['option_text'];
+                    $questions[$row['sort']]['options'][$row['question_option_id']] = Security::remove_XSS($row['option_text']);
                 }
             }
 
@@ -615,7 +615,7 @@ class SurveyUtil
         $row = 0;
         foreach ($data as $label => $item) {
             $table->setCellContents($row, 0, $label);
-            $table->setCellContents($row, 1, $item);
+            $table->setCellContents($row, 1, Security::remove_XSS($item));
             $row++;
         }
 
@@ -670,7 +670,7 @@ class SurveyUtil
             $questionId = (int) $question['question_id'];
 
             echo '<div class="title-question">';
-            echo strip_tags(isset($question['survey_question']) ? $question['survey_question'] : null);
+            echo Security::remove_XSS(strip_tags(isset($question['survey_question']) ? $question['survey_question'] : null));
             echo '</div>';
 
             if ('score' === $question['type']) {
@@ -729,6 +729,8 @@ class SurveyUtil
                 foreach ($options as $option) {
                     $optionText = strip_tags($option['option_text']);
                     $optionText = html_entity_decode($optionText);
+                    $optionText = Security::remove_XSS($optionText);
+
                     $votes = 0;
                     if (isset($data[$option['question_option_id']]['total'])) {
                         $votes = $data[$option['question_option_id']]['total'];
@@ -752,7 +754,7 @@ class SurveyUtil
 
                 // Displaying the table: the content
                 if (is_array($options)) {
-                    foreach ($options as $key => &$value) {
+                    foreach ($options as &$value) {
                         if ('multiplechoiceother' === $question['type'] && 'other' === $value['option_text']) {
                             $value['option_text'] = get_lang('SurveyOtherAnswer');
                         }
@@ -773,7 +775,7 @@ class SurveyUtil
                             $answers_number = $absolute_number / $number_of_answers[$option['question_id']] * 100;
                         }
                         echo '<tr>';
-                        echo '<td>'.$value['option_text'].'</td>';
+                        echo '<td>'.Security::remove_XSS($value['option_text']).'</td>';
                         echo '<td>';
                         if ($absolute_number != 0) {
                             echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action
@@ -1120,9 +1122,9 @@ class SurveyUtil
                 in_array($row['question_id'], $_POST['questions_filter']))
             ) {
                 // We do not show comment and pagebreak question types
-                if ('pagebreak' != $row['type']) {
+                if ('pagebreak' !== $row['type']) {
                     $content .= ' <th';
-                    if ($row['number_of_options'] > 0 && 'percentage' != $row['type']) {
+                    if ($row['number_of_options'] > 0 && 'percentage' !== $row['type']) {
                         $content .= ' colspan="'.$row['number_of_options'].'"';
                     }
                     $content .= '>';
@@ -1132,7 +1134,7 @@ class SurveyUtil
                                 type="checkbox"
                                 name="questions_filter[]" value="'.$row['question_id'].'" checked="checked"/>';
                     }
-                    $content .= $row['survey_question'];
+                    $content .= Security::remove_XSS($row['survey_question']);
                     $content .= '</label>';
                     $content .= '</th>';
                 }
@@ -1189,7 +1191,7 @@ class SurveyUtil
                 (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter']))
             ) {
                 // we do not show comment and pagebreak question types
-                if ('open' == $row['type'] || 'comment' == $row['type']) {
+                if ('open' === $row['type'] || 'comment' === $row['type']) {
                     $content .= '<th>&nbsp;-&nbsp;</th>';
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
                     $display_percentage_header = 1;
@@ -1201,7 +1203,7 @@ class SurveyUtil
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
                 } elseif ($row['type'] !== 'pagebreak' && $row['type'] !== 'percentage') {
                     $content .= '<th>';
-                    $content .= $row['option_text'];
+                    $content .= Security::remove_XSS($row['option_text']);
                     $content .= '</th>';
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
                     $display_percentage_header = 1;
@@ -1440,7 +1442,9 @@ class SurveyUtil
         );
 
         $num = count($extra_user_fields);
-        $return .= str_repeat(';', $num);
+        if (!$survey_data['anonymous']) {
+            $return .= str_repeat(';', $num);
+        }
 
         $sql = "SELECT
                     questions.question_id,
@@ -1497,7 +1501,7 @@ class SurveyUtil
         // Getting all the questions and options
         $return .= ';';
         // Show the fields names for user fields
-        if (!empty($extra_user_fields)) {
+        if (!empty($extra_user_fields) && !$survey_data['anonymous']) {
             foreach ($extra_user_fields as &$field) {
                 if ($translate) {
                     $field[3] = api_get_filtered_multilingual_HTML_string($field[3], $course['language']);
@@ -1588,7 +1592,7 @@ class SurveyUtil
                     $possible_answers,
                     $answers_of_user,
                     $old_user,
-                    true,
+                    !$survey_data['anonymous'],
                     $compact
                 );
                 $answers_of_user = [];
@@ -1779,11 +1783,12 @@ class SurveyUtil
             true
         );
         $num = count($extra_user_fields);
-        for ($i = 0; $i < $num; $i++) {
-            $worksheet->setCellValueByColumnAndRow($column, $line, '');
-            $column++;
+        if (!$survey_data['anonymous']) {
+            for ($i = 0; $i < $num; $i++) {
+                $worksheet->setCellValueByColumnAndRow($column, $line, '');
+                $column++;
+            }
         }
-
         $display_extra_user_fields = true;
 
         // Database table definitions
@@ -1847,7 +1852,7 @@ class SurveyUtil
         $line++;
         $column = 1;
         // Show extra field values
-        if ($display_extra_user_fields) {
+        if ($display_extra_user_fields && !$survey_data['anonymous']) {
             // Show the fields names for user fields
             foreach ($extra_user_fields as &$field) {
                 $worksheet->setCellValueByColumnAndRow(
@@ -1927,7 +1932,7 @@ class SurveyUtil
                     $possible_answers,
                     $answers_of_user,
                     $old_user,
-                    true
+                    !$survey_data['anonymous']
                 );
                 foreach ($return as $elem) {
                     $worksheet->setCellValueByColumnAndRow($column, $line, $elem);
@@ -2113,7 +2118,7 @@ class SurveyUtil
         $optionsX = ['----'];
         $optionsY = ['----'];
         $defaults = [];
-        foreach ($questions as $key => &$question) {
+        foreach ($questions as &$question) {
             // Ignored tagged questions
             if ($question) {
                 if (strpos($question['question'], '{{') !== false) {
@@ -2130,6 +2135,7 @@ class SurveyUtil
                     if (isset($_GET['yaxis']) && $_GET['yaxis'] == $question['question_id']) {
                         $defaults['yaxis'] = $question['question_id'];
                     }
+                    $question['question'] = Security::remove_XSS($question['question']);
 
                     $optionsX[$question['question_id']] = api_substr(strip_tags($question['question']), 0, 90);
                     $optionsY[$question['question_id']] = api_substr(strip_tags($question['question']), 0, 90);
@@ -2168,16 +2174,17 @@ class SurveyUtil
                 if ($ii == 0) {
                     $tableHtml .= '<th>&nbsp;</th>';
                 } else {
-                    if ($question_x['type'] == 'score') {
+                    if ($question_x['type'] === 'score') {
                         for ($x = 1; $x <= $question_x['maximum_score']; $x++) {
-                            $tableHtml .= '<th>'.$question_x['answers'][($ii - 1)].'<br />'.$x.'</th>';
+                            $tableHtml .= '<th>'.Security::remove_XSS($question_x['answers'][($ii - 1)]).'<br />'.$x.'</th>';
                         }
                         $x = '';
                     } else {
-                        $tableHtml .= '<th>'.$question_x['answers'][($ii - 1)].'</th>';
+                        $tableHtml .= '<th>'.Security::remove_XSS($question_x['answers'][($ii - 1)]).'</th>';
                     }
                     $optionText = strip_tags($question_x['answers'][$ii - 1]);
                     $optionText = html_entity_decode($optionText);
+                    $optionText = Security::remove_XSS($optionText);
                     array_push($xOptions, trim($optionText));
                 }
             }
@@ -2195,7 +2202,7 @@ class SurveyUtil
                             if ($question_x['type'] == 'score') {
                                 for ($x = 1; $x <= $question_x['maximum_score']; $x++) {
                                     if ($ii == 0) {
-                                        $tableHtml .= '<th>'.$question_y['answers'][($ij)].' '.$y.'</th>';
+                                        $tableHtml .= '<th>'.Security::remove_XSS($question_y['answers'][($ij)]).' '.$y.'</th>';
                                         break;
                                     } else {
                                         $tableHtml .= '<td align="center">';
@@ -2221,7 +2228,7 @@ class SurveyUtil
                                 }
                             } else {
                                 if ($ii == 0) {
-                                    $tableHtml .= '<th>'.$question_y['answers'][$ij].' '.$y.'</th>';
+                                    $tableHtml .= '<th>'.Security::remove_XSS($question_y['answers'][$ij]).' '.$y.'</th>';
                                 } else {
                                     $tableHtml .= '<td align="center">';
                                     $votes = self::comparative_check(
@@ -2254,7 +2261,7 @@ class SurveyUtil
                         if ($question_x['type'] === 'score') {
                             for ($x = 1; $x <= $question_x['maximum_score']; $x++) {
                                 if ($ii == 0) {
-                                    $tableHtml .= '<th>'.$question_y['answers'][$ij].'</th>';
+                                    $tableHtml .= '<th>'.Security::remove_XSS($question_y['answers'][$ij]).'</th>';
                                     break;
                                 } else {
                                     $tableHtml .= '<td align="center">';
@@ -2280,7 +2287,7 @@ class SurveyUtil
                             }
                         } else {
                             if ($ii == 0) {
-                                $tableHtml .= '<th>'.$question_y['answers'][($ij)].'</th>';
+                                $tableHtml .= '<th>'.Security::remove_XSS($question_y['answers'][($ij)]).'</th>';
                             } else {
                                 $tableHtml .= '<td align="center">';
                                 $votes = self::comparative_check(
@@ -2983,10 +2990,39 @@ class SurveyUtil
             'export_all' => get_lang('ExportResults'),
             'export_by_class' => get_lang('ExportByClass'),
             'send_to_tutors' => get_lang('SendToGroupTutors'),
-            'multiplicate' => get_lang('MultiplicateQuestions'),
+            'multiplicate_by_class' => get_lang('MultiplicateQuestionsByClass'),
+            'multiplicate_by_user' => get_lang('MultiplicateQuestionsByUser'),
             'delete' => get_lang('DeleteSurvey'),
         ];
         $table->set_form_actions($actions);
+
+        $form = new FormValidator(
+            'survey',
+            'post',
+            null,
+            null,
+            ['class' => 'form-vertical']
+        );
+        $form->addElement(
+            'radio',
+            'type',
+            null,
+            get_lang('MultiplicateQuestionsByClass'),
+            'by_class',
+            ['id' => 'by_class']
+        );
+        $form->addElement(
+            'radio',
+            'type',
+            null,
+            get_lang('MultiplicateQuestionsByUser'),
+            'by_user',
+            ['id' => 'by_user']
+        );
+        $form->setDefaults(['type' => 'by_class']);
+        $formToString = $form->returnForm();
+
+        echo '<div id="dialog-confirm">'.$formToString.'</div>';
         $table->display();
     }
 
@@ -3147,7 +3183,8 @@ class SurveyUtil
                 $actions[] = Display::url(
                     Display::return_icon('multiplicate_survey.png', get_lang('MultiplicateQuestions')),
                     $codePath.'survey/survey_list.php?'
-                    .http_build_query($params + ['action' => 'multiplicate', 'survey_id' => $survey_id])
+                    .http_build_query($params + ['action' => 'multiplicate', 'survey_id' => $survey_id]),
+                    ['survey_id' => $survey_id, 'class' => 'multiplicate_popup']
                 );
 
                 $actions[] = Display::url(
@@ -3197,7 +3234,6 @@ class SurveyUtil
             api_is_element_in_the_session(TOOL_SURVEY, $survey_id)
         ) {
             $actions[] = self::getAdditionalTeacherActions($survey_id);
-
             $warning = addslashes(api_htmlentities(get_lang('DeleteSurvey').'?', ENT_QUOTES));
             $actions[] = Display::url(
                 Display::return_icon('delete.png', get_lang('Delete')),
@@ -3440,6 +3476,8 @@ class SurveyUtil
         $efv = new ExtraFieldValue('survey');
         while ($survey = Database::fetch_array($res)) {
             $array[0] = $survey[0];
+            $survey[1] = Security::remove_XSS($survey[1]);
+
             if (self::checkHideEditionToolsByCode($survey['col2'])) {
                 $array[1] = $survey[1];
             } else {
@@ -3679,6 +3717,8 @@ class SurveyUtil
                 continue;
             }
 
+            $title = Security::remove_XSS($row['title']);
+
             echo '<tr>';
             if ($row['answered'] == 0) {
                 echo '<td>';
@@ -3691,7 +3731,7 @@ class SurveyUtil
                 );
                 echo '<a href="'.$url.'">
                     '.$icon
-                    .$row['title']
+                    .$title
                     .'</a></td>';
             } else {
                 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
@@ -3716,7 +3756,7 @@ class SurveyUtil
                             'survey_id' => $row['survey_id'],
                         ])
                     )
-                    : $icon.PHP_EOL.$row['title'];
+                    : $icon.PHP_EOL.$title;
                 echo '</td>';
             }
             echo '<td class="text-center">';
@@ -3730,7 +3770,6 @@ class SurveyUtil
                 echo '<td class="text-center">'.($efvMandatory['value'] ? get_lang('Yes') : get_lang('No')).'</td>';
             }
             echo '</tr>';
-
             $surveyIds[] = $row['survey_id'];
         }
         echo '</tbody>';

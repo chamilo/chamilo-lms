@@ -2795,8 +2795,6 @@ div.admin_section h4 {
 }
 
 .exercise_save_now_button img {
-    position: relative;
-    top: 4px;
 }
 
 .exercise_save_now_button {
@@ -3265,6 +3263,10 @@ form .formw .freeze {
 .label {
     font-weight: normal;
     font-size: 90%;
+}
+.label.origin-style {
+    font-weight: bold;
+    font-size: 75%;
 }
 
 .requirements td {
@@ -6107,6 +6109,10 @@ div#chat-remote-video video {
     border-color: #0077b5;
 }
 
+.txt-linkedin {
+    color: #0a66c2;
+}
+
 /**** END SOCIAL MEDIA ****/
 
 /**** ABOUT SESSION ****/
@@ -6481,13 +6487,6 @@ div#chat-remote-video video {
     border-bottom: 1px solid #ECF0F1;
 }
 
-.grid-courses .items .course-student-info {
-    background-color: #d9edf7;
-    border: 1px solid #bce8f1;
-    padding: 5px;
-    border-radius: 5px;
-}
-
 .grid-courses .items .code-title {
     font-size: 10px;
     font-weight: bold;
@@ -6523,12 +6522,19 @@ div#chat-remote-video video {
     transition: box-shadow .3s ease, border .3s ease;
 }
 
-.grid-courses .items.my-courses .course-student-info {
-    font-size: 10px;
-    text-align: center;
-    background: none;
-    border: none;
-    padding: 0;
+.grid-courses .items .course-student-info {
+    padding-bottom: 10px;
+    font-size: 11px;
+}
+.grid-courses .items .course-student-info hr {
+    margin: 15px 0 10px;
+}
+.grid-courses .items .course-student-info .progress {
+    margin-bottom: 10px;
+}
+.course-student-info .progress-bar {
+    line-height: 15px;
+    vertical-align: middle;
 }
 
 .grid-courses .items.my-courses .title {
@@ -6570,23 +6576,6 @@ div#chat-remote-video video {
 
 .grid-courses .items .toolbar > div {
     text-align: center;
-}
-
-.grid-courses .items .image .black-shadow {
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    box-sizing: border-box;
-    position: absolute;
-    background: rgba(0, 0, 0, 0.7) none repeat scroll 0 0;
-    padding: 40px 10px 10px;
-}
-
-.grid-courses .items .image .hovered-course {
-    opacity: 1;
-    transition: all 0.3s ease 0s;
 }
 
 .grid-courses .items .toolbar .info {
@@ -6960,10 +6949,6 @@ div#chat-remote-video video {
 }
 
 #registration .progress {
-    width: 100%;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    height: 10px;
 }
 
 #registration input[name='status'] {
@@ -7918,7 +7903,7 @@ a.sessionView {
 
 #dates {
     width: 800px;
-    height: 60px;
+    height: 70px;
     overflow: hidden;
 }
 
@@ -8055,9 +8040,15 @@ a.sessionView {
 }
 
 .progress {
-    border: 1px solid #c5c5c5;
     background: #E9E9E9;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
+}
+
+.radio + .input-group,
+.input-group + .progress,
+input + .progress {
+    margin-top: 5px;
+    margin-bottom: 0;
 }
 
 .wami-container {
@@ -8553,12 +8544,13 @@ ul#toolnavbox-two li a.btn {
 }
 
 #lp-accordion .panel-default .panel-heading {
-    background: url(../../../../main/img/icons/svg/arrow-down.svg) #FFF right center no-repeat;
+    background: #FFF;
     border-radius: 10px;
+    padding-right: 0;
 }
 
 #lp-accordion .panel-default .panel-heading .tools-actions {
-    padding-right: 20px;
+    margin-right: 32px;
 }
 
 #lp-accordion .panel {
@@ -8569,13 +8561,19 @@ ul#toolnavbox-two li a.btn {
     font-weight: bold;
     width: 100%;
     display: block;
-    padding-top: 5px;
-    padding-bottom: 5px;
 }
 
 #lp-accordion .panel .panel-title a {
     width: 100%;
     display: block;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-image: url(../../../../main/img/icons/svg/arrow-down.svg);
+}
+#lp-accordion .panel .panel-title a[aria-expanded="true"] {
+    background-image: url(../../../../main/img/icons/svg/arrow-top.svg);
 }
 
 #lp-accordion .lp-item {
@@ -8599,7 +8597,6 @@ ul#toolnavbox-two li a.btn {
 }
 
 #lp-accordion .lp-item .progress {
-    border: none;
     background: #D7E3E6;
     margin-bottom: 10px;
 }
@@ -9485,6 +9482,32 @@ ul.dropdown-menu.inner > li > a {
     border-color: red;
     grid-column: span 2;
 }
+
+.portfolio-items.row .thumbnail .caption h3,
+.portfolio-item.thumbnail .caption .h3 {
+    margin-top: 0;
+}
+
+.portfolio-items .thumbnail .portfolio-actions a > img,
+.portfolio-item.thumbnail .portfolio-actions a > img {
+    display: inline;
+}
+
+.fa-ul.list-inline {
+    margin-left: -15px;
+}
+.fa-ul.list-inline li {
+    margin-left: 45px;
+    padding: 0;
+}
+
+.embed-responsive-9by16 {
+    padding-bottom: 177.77%;
+}
+.embed-responsive-4by3 {
+    padding-bottom: 133.33%;
+}
+
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {
     .sidebar-scorm {
@@ -10186,6 +10209,7 @@ ul.dropdown-menu.inner > li > a {
         clear: none;
     }
 
+    .portfolio-items.row .col-md-6:nth-child(2n+1),
     .col-md-3.course-tool:nth-child(4n+1) {
         clear: left;
     }
@@ -10511,7 +10535,7 @@ ul.dropdown-menu.inner > li > a {
 #registration input.register-profile[value='5']:after,
 #registration input.register-profile[value='1']:after
 {
-    top:-5px;
+    top: -5px;
     left: -2px;
 }
 
@@ -10525,3 +10549,13 @@ ul.dropdown-menu.inner > li > a {
     width: 100%;
 }
 
+.youtube-embed-wrapper {
+    position: relative;
+}
+.youtube-embed-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}

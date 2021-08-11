@@ -219,15 +219,10 @@ if (api_get_setting('allow_group_categories') === 'true') {
         'title' => get_lang('DefaultGroupCategory'),
     ];
     $group_cats = array_merge([$defaultCategory], $group_cats);
-
     foreach ($group_cats as $index => $category) {
         $categoryId = $category['id'];
         $group_list = GroupManager::get_group_list($categoryId);
         $groupToShow = GroupManager::process_groups($group_list, $categoryId);
-
-        if (empty($groupToShow)) {
-            continue;
-        }
 
         if (empty($categoryId) && empty($group_list)) {
             continue;
@@ -266,7 +261,7 @@ if (api_get_setting('allow_group_categories') === 'true') {
             false
         );
 
-        echo $category['description'];
+        echo Security::remove_XSS($category['description']);
         echo $groupToShow;
     }
 } else {

@@ -1,8 +1,12 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_admin_script(true);
+
 Display::display_header(null);
 
 $form = new FormValidator('export_certificate');

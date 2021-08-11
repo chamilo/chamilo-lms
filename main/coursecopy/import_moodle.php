@@ -6,6 +6,7 @@
  * Import a backup from moodle system.
  *
  * @author José Loguercio <jose.loguercio@beeznest.com>
+ * @author Julio Montoya
  */
 require_once __DIR__.'/../inc/global.inc.php';
 

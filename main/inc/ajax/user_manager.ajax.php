@@ -69,6 +69,10 @@ switch ($action) {
 
         $isAnonymous = api_is_anonymous();
 
+        if ($isAnonymous && empty($courseId)) {
+            break;
+        }
+
         if ($isAnonymous && $courseId) {
             if ('false' === api_get_setting('course_catalog_published')) {
                 break;

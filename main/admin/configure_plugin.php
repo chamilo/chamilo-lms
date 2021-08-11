@@ -86,8 +86,7 @@ if (isset($form)) {
             LOG_PLUGIN_CHANGE,
             LOG_PLUGIN_SETTINGS_CHANGE,
             $pluginName,
-            api_get_utc_datetime(),
-            $user_id
+            api_get_utc_datetime()
         );
 
         if (!empty($pluginInfo['plugin_class'])) {

@@ -181,30 +181,29 @@ function handlePluginUpload()
         'required'
     );
     $form->addButtonUpload(get_lang('Upload'), 'plugin_upload');
+    $form->protect();
 
     // Plugin upload.
-    if (isset($_POST['plugin_upload'])) {
-        if ($form->validate()) {
-            $fileElement = $form->getElement('new_plugin');
-            $file = $fileElement->getValue();
-            $result = uploadPlugin($file);
+    if ($form->validate()) {
+        $fileElement = $form->getElement('new_plugin');
+        $file = $fileElement->getValue();
+        $result = uploadPlugin($file);
 
-            // Add event to the system log.
-            $user_id = api_get_user_id();
-            $category = $_GET['category'];
-            Event::addEvent(
-                LOG_PLUGIN_CHANGE,
-                LOG_PLUGIN_UPLOAD,
-                $file['filename'],
-                api_get_utc_datetime(),
-                $user_id
-            );
+        // Add event to the system log.
+        $user_id = api_get_user_id();
+        $category = $_GET['category'];
+        Event::addEvent(
+            LOG_PLUGIN_CHANGE,
+            LOG_PLUGIN_UPLOAD,
+            $file['name'],
+            api_get_utc_datetime(),
+            $user_id
+        );
 
-            if ($result) {
-                Display::addFlash(Display::return_message(get_lang('PluginUploaded'), 'success', false));
-                header('Location: ?category=Plugins#');
-                exit;
-            }
+        if ($result) {
+            Display::addFlash(Display::return_message(get_lang('PluginUploaded'), 'success', false));
+            header('Location: ?category=Plugins#');
+            exit;
         }
     }
     echo $form->returnForm();
@@ -222,7 +221,7 @@ function handlePlugins()
 {
     Session::erase('plugin_data');
     $plugin_obj = new AppPlugin();
-    $token = Security::get_token();
+    $token = Security::get_existing_token();
     if (isset($_POST['submit_plugins'])) {
         storePlugins();
         // Add event to the system log.
@@ -266,10 +265,16 @@ function handlePlugins()
         $isMainPortal = 1 === api_get_current_access_url_id();
     }
 
+    $unknownLabel = get_lang('Unknown');
     foreach ($all_plugins as $pluginName) {
         $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
         if (file_exists($plugin_info_file)) {
-            $plugin_info = [];
+            $plugin_info = [
+                'title' => $pluginName,
+                'version' => '',
+                'comment' => '',
+                'author' => $unknownLabel,
+            ];
             require $plugin_info_file;
 
             if (in_array($pluginName, $officialPlugins)) {
@@ -786,7 +791,6 @@ function uploadPlugin($file)
             $allowedFiles = getAllowedFileTypes();
             $allowedFiles[] = 'php';
             $allowedFiles[] = 'js';
-            $allowedFiles[] = 'txt';
             $allowedFiles[] = 'tpl';
             $pluginObject = new AppPlugin();
             $officialPlugins = $pluginObject->getOfficialPlugins();
@@ -1273,6 +1277,11 @@ function getTemplateData($from, $number_of_items, $column, $direction)
 {
     // Database table definition.
     $table_system_template = Database::get_main_table('system_template');
+
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+    $column = (int) $column;
+    $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
 
     // The sql statement.
     $sql = "SELECT image as col0, title as col1, id as col2 FROM $table_system_template";
@@ -2052,7 +2061,7 @@ function searchSetting($search)
  *
  * @return array
  */
-function formGenerateElementsGroup($form, $values = [], $elementName)
+function formGenerateElementsGroup($form, $values, $elementName)
 {
     $group = [];
     if (is_array($values)) {
@@ -2086,6 +2095,10 @@ function getAllowedFileTypes()
         'woff',
         'woff2',
         'md',
+        'html',
+        'xml',
+        'markdown',
+        'txt',
     ];
 
     return $allowedFiles;

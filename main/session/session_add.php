@@ -13,7 +13,6 @@ $xajax->registerFunction('search_coachs');
 $this_section = SECTION_PLATFORM_ADMIN;
 
 SessionManager::protectSession(null, false);
-
 api_protect_limit_for_session_admin();
 
 $formSent = 0;
@@ -35,6 +34,7 @@ function search_coachs($needle)
     $return = '';
 
     if (!empty($needle)) {
+        $needle = Database::escape_string($needle);
         $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 
         // search users where username or firstname or lastname begins likes $needle
@@ -166,44 +166,44 @@ $(function() {
                     $('#access').val(0);
                     $('#access').selectpicker('render');
                     accessSwitcher(0);
-                    $('#duration').val(parseInt(data.duration));                    
-                } else {                    
+                    $('#duration').val(parseInt(data.duration));
+                } else {
                     $('#access').val(1);
                     $('#access').selectpicker('render');
                     accessSwitcher(1);
-                    
+
                     var variables = [
                         'display_start_date',
                         'access_start_date',
                         'coach_access_start_date',
                         'display_end_date',
                         'access_end_date',
-                        'coach_access_end_date'                        
-                    ];                    
+                        'coach_access_end_date'
+                    ];
                     variables.forEach(function(variable) {
-                        var variableName = variable + '_to_local_time';                        
-                        if (data[variableName]) {                        
+                        var variableName = variable + '_to_local_time';
+                        if (data[variableName]) {
                             var parsedDate = $.datepicker.parseDateTime(
-                                'yy-mm-dd', 
-                                'hh:mm:ss', 
+                                'yy-mm-dd',
+                                'hh:mm:ss',
                                 data[variableName]
-                            );         
+                            );
                             if (parsedDate) {
                                 $('#'+variable).datetimepicker('setDate', parsedDate);
-                            }           
+                            }
                         }
                     });
                 }
-                
+
                 $('[name=\'show_description\']').prop('checked', false);
                 if (data.show_description) {
                     $('[name=\'show_description\']').prop('checked', true);
                 }
-                
+
                 $('[name=\'send_subscription_notification\']').prop('checked', false);
                 if (data.send_subscription_notification) {
                     $('[name=\'send_subscription_notification\']').prop('checked', true);
-                } 
+                }
 
                 $.each(data.extra_fields, function(i, item) {
                     var fieldName = 'extra_'+item.variable;
@@ -250,7 +250,7 @@ $(function() {
                             break;
                         case '4': // simple select
                         case '5': // multiple select
-                            var options = item.value.split(';');                            
+                            var options = item.value.split(';');
                             $('#'+fieldName+'').val(options);
                             $('#'+fieldName+'').selectpicker('render');
                             break;
@@ -328,20 +328,20 @@ $(function() {
                             if (item.value) {
                                 //    $('input[name='+fieldName+']').val(item.value);
                                 var url = '".$urlUpload."';
-                                
+
                                 url = url + item.value;
-                                
+
                                 var divFormGroup = fieldName + '-form-group';
                                 var divWrapper = fieldName + '_crop_image';
                                 var divPreview = fieldName + '_preview_image';
                                 var divCropButton = fieldName + '_crop_button';
                                 var cropResult = fieldName + '_crop_result';
-                                                                
+
                                 $('[name=\''+cropResult+'\']').val('import_file_from_session::' + sessionId);
                                 $('#' + divFormGroup).show();
                                 $('#' + divWrapper).show();
                                 $('#' + divCropButton).hide();
-                                $('#' + divPreview).attr('src', url);                                
+                                $('#' + divPreview).attr('src', url);
                                 //$('[name=\''+fieldName+'\']')
                             }
                             break;

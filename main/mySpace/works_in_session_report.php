@@ -2,8 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\UserBundle\Entity\User;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -43,23 +43,22 @@ if (!empty($sessionId)) {
     $session = api_get_session_entity($sessionId);
 }
 
-$coursesInfo = [];
-$usersInfo = [];
-
+$courses = [];
+$users = [];
 if ($session) {
     $sessionCourses = $session->getCourses();
+    /** @var SessionRelCourse $sessionCourse */
     foreach ($sessionCourses as $sessionCourse) {
-        /** @var Course $course */
         $course = $sessionCourse->getCourse();
-        $coursesInfo[$course->getId()] = $course->getCode();
+        $courses[$course->getId()] = $course->getCode();
         $userCourseSubscriptions = $session->getUserCourseSubscriptionsByStatus($course, Session::STUDENT);
+        $usersInSession = $session->getUsers();
 
-        foreach ($userCourseSubscriptions as $userCourseSubscription) {
-            /** @var User $user */
-            $user = $userCourseSubscription->getUser();
-
-            if (!array_key_exists($user->getId(), $usersInfo)) {
-                $usersInfo[$user->getId()] = [
+        // Set defaults.
+        foreach ($usersInSession as $userInSession) {
+            $user = $userInSession->getUser();
+            if (!array_key_exists($user->getId(), $users)) {
+                $users[$user->getId()] = [
                     'code' => $user->getOfficialCode(),
                     'complete_name' => UserManager::formatUserFullName($user),
                     'time_in_platform' => api_time_to_hms(
@@ -69,16 +68,18 @@ if ($session) {
                     'last_connection' => Tracking::get_last_connection_date($user->getId()),
                 ];
             }
+            $users[$user->getId()][$course->getId().'_score'] = null;
+            $users[$user->getId()][$course->getId().'_progress'] = null;
+            $users[$user->getId()][$course->getId().'_last_sent_date'] = null;
+        }
 
-            $usersInfo[$user->getId()][$course->getId().'_score'] = null;
-            $usersInfo[$user->getId()][$course->getId().'_progress'] = null;
-            $usersInfo[$user->getId()][$course->getId().'_last_sent_date'] = null;
-
+        foreach ($userCourseSubscriptions as $userCourseSubscription) {
+            /** @var User $user */
+            $user = $userCourseSubscription->getUser();
             if (!$session->hasStudentInCourse($user, $course)) {
                 continue;
             }
-
-            $usersInfo[$user->getId()][$course->getId().'_score'] = Tracking::get_avg_student_score(
+            $users[$user->getId()][$course->getId().'_score'] = Tracking::get_avg_student_score(
                 $user->getId(),
                 $course->getCode(),
                 [],
@@ -87,7 +88,7 @@ if ($session) {
                 false,
                 true
             );
-            $usersInfo[$user->getId()][$course->getId().'_progress'] = Tracking::get_avg_student_progress(
+            $users[$user->getId()][$course->getId().'_progress'] = Tracking::get_avg_student_progress(
                 $user->getId(),
                 $course->getCode(),
                 [],
@@ -105,14 +106,14 @@ if ($session) {
                 continue;
             }
 
-            $usersInfo[$user->getId()][$course->getId().'_last_sent_date'] = api_get_local_time(
+            $users[$user->getId()][$course->getId().'_last_sent_date'] = api_get_local_time(
                 $lastPublication->getSentDate()->getTimestamp()
             );
         }
     }
 }
 
-if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
+if (isset($_GET['export']) && $session && $courses && $users) {
     $fileName = 'works_in_session_'.api_get_local_time();
 
     $dataToExport = [];
@@ -123,13 +124,13 @@ if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
     $dataToExport['headers'][] = get_lang('FirstLoginInPlatform');
     $dataToExport['headers'][] = get_lang('LatestLoginInPlatform');
 
-    foreach ($coursesInfo as $courseCode) {
+    foreach ($courses as $courseCode) {
         $dataToExport['headers'][] = $courseCode.' ('.get_lang('BestScore').')';
         $dataToExport['headers'][] = get_lang('Progress');
         $dataToExport['headers'][] = get_lang('LastSentWorkDate');
     }
 
-    foreach ($usersInfo as $user) {
+    foreach ($users as $user) {
         $dataToExport[] = $user;
     }
 
@@ -167,8 +168,8 @@ $view->assign('form', $form->returnForm());
 
 if ($session) {
     $view->assign('session', ['name' => $session->getName()]);
-    $view->assign('courses', $coursesInfo);
-    $view->assign('users', $usersInfo);
+    $view->assign('courses', $courses);
+    $view->assign('users', $users);
 }
 
 $template = $view->get_template('my_space/works_in_session_report.tpl');
@@ -177,10 +178,7 @@ $content = $view->fetch($template);
 $view->assign('header', $toolName);
 
 if ($actions) {
-    $view->assign(
-        'actions',
-        Display::toolbarAction('toolbar', [$actions])
-    );
+    $view->assign('actions', Display::toolbarAction('toolbar', [$actions]));
 }
 
 $view->assign('content', $content);

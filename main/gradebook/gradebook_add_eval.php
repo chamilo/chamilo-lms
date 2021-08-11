@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -43,13 +44,12 @@ if ($form->validate()) {
         $eval->set_course_code($values['hid_course_code']);
     }
 
-    //Always add the gradebook to the course
+    // Always add the gradebook to the course
     $eval->set_course_code(api_get_course_id());
     $eval->set_category_id($values['hid_category_id']);
 
     $parent_cat = Category::load($values['hid_category_id']);
     $global_weight = $cat[0]->get_weight();
-    //$values['weight'] = $values['weight_mask']/$global_weight*$parent_cat[0]->get_weight();
     $values['weight'] = $values['weight_mask'];
 
     $eval->set_weight($values['weight']);
@@ -63,8 +63,6 @@ if ($form->validate()) {
 
     $logInfo = [
         'tool' => TOOL_GRADEBOOK,
-        'tool_id' => 0,
-        'tool_id_detail' => 0,
         'action' => 'new-eval',
         'action_details' => 'selectcat='.$eval->get_category_id(),
     ];

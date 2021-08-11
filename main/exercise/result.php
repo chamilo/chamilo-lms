@@ -27,7 +27,7 @@ if (empty($id)) {
     api_not_allowed($show_headers);
 }
 
-$is_allowedToEdit = api_is_allowed_to_edit(null, true) || $is_courseTutor;
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_course_tutor();
 
 // Getting results from the exe_id. This variable also contain all the information about the exercise
 $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
@@ -157,10 +157,15 @@ switch ($action) {
         break;
 }
 
+$lpId = (int) $track_exercise_info['orig_lp_id'];
+$lpItemId = (int) $track_exercise_info['orig_lp_item_id'];
+$lpViewId = (int) $track_exercise_info['orig_lp_item_view_id'];
+
 $pageBottom = '<div class="question-return">';
 $pageBottom .= Display::url(
     get_lang('BackToAttemptList'),
-    api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$exercise_id.'&'.api_get_cidreq(),
+    api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$exercise_id.'&'.api_get_cidreq().
+    "&learnpath_id=$lpId&learnpath_item_id=$lpItemId&learnpath_item_view_id=$lpViewId",
     ['class' => 'btn btn-primary']
 );
 $pageBottom .= '</div>';

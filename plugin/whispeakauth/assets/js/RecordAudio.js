@@ -2,8 +2,7 @@
 
 window.RecordAudio = (function () {
     var timerInterval = 0,
-        $txtTimer = null,
-        isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        $txtTimer = null;
 
     function startTimer() {
         stopTimer();
@@ -123,8 +122,10 @@ window.RecordAudio = (function () {
                 localStream = stream;
 
                 recordRTC = RecordRTC(stream, {
-                    recorderType: isSafari ? RecordRTC.StereoAudioRecorder : RecordRTC.MediaStreamRecorder,
-                    type: 'audio'
+                    recorderType: RecordRTC.StereoAudioRecorder,
+                    type: 'audio',
+                    mimeType: 'audio/wav',
+                    numberOfAudioChannels: 2
                 });
                 recordRTC.startRecording();
 

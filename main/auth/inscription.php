@@ -394,7 +394,7 @@ if ($user_already_registered_show_terms === false &&
                 //'output' => 'gif'
             ],
         ];
-
+        $form->setLayout('inline');
         $captcha_question = $form->addElement(
             'CAPTCHA_Image',
             'captcha_question',
@@ -1035,9 +1035,10 @@ if ($form->validate()) {
     }
 
     if ($sessionPremiumChecker && $sessionId) {
+        $url = api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.$sessionId.'&t=2';
         Session::erase('SessionIsPremium');
         Session::erase('sessionId');
-        header('Location:'.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.$sessionId.'&t=2');
+        header('Location:'.$url);
         exit;
     }
 

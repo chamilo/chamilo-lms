@@ -180,7 +180,7 @@ if ($formSent) {
                         foreach ($exerciseList as $exercise) {
                             $question->questionData .= $exercise->getTitle();
                             if ($exercise->getActive() == -1) {
-                                $question->questionData .= '- ('.get_lang('ExerciseDeleted').' #'.$exercise->getIid().') ';
+                                $question->questionData .= '- ('.get_lang('ExerciseDeleted').' #'.$exercise->getId().') ';
                             }
                             $question->questionData .= '<br />';
                         }

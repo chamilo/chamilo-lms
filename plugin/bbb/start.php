@@ -1,4 +1,5 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 /**
@@ -8,7 +9,7 @@ require_once __DIR__.'/../../vendor/autoload.php';
 
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 
-$isGlobal = isset($_GET['global']) ? true : false;
+$isGlobal = isset($_GET['global']);
 $isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id'] : false;
 
 // If global setting is used then we delete the course sessions (cidReq/id_session)

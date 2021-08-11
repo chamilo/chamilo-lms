@@ -12,7 +12,8 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-$type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
+$typeList = ['personal', 'course', 'admin', 'platform'];
+$type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], $typeList, true) ? $_REQUEST['type'] : null;
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type='.Security::remove_XSS($type),

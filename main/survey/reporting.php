@@ -143,6 +143,15 @@ $htmlHeadXtra[] = api_get_js('dimple.v2.1.2.min.js');
 $htmlHeadXtra[] = '<script>
 
 async function exportToPdf() {
+    $("#dialog-confirm").dialog({
+        autoOpen: false,
+        show: "blind",
+        resizable: false,
+        height: 100,
+        modal: true
+    });
+    $("#dialog-confirm").dialog("open");
+
     window.jsPDF = window.jspdf.jsPDF;
     $(".question-item img, #pdf_table img").hide();
     $(".question-item video, #pdf_table video").hide();
@@ -229,11 +238,17 @@ async function exportToPdf() {
     $(".question-item video, #pdf_table video").show();
     $(".question-item audio, #pdf_table audio").show();
 
-    pdf.save("reporting.pdf");
+    pdf.save("reporting.pdf", {returnPromise: true}).then(function (response) {
+        $( "#dialog-confirm" ).dialog("close");
+    });
 }
 </script>';
 
 Display::display_header($tool_name, 'Survey');
+echo '<div id="dialog-confirm" style="display: none;"> '.
+    Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin').
+    get_lang('PleaseWait').
+    '</div>';
 SurveyUtil::handle_reporting_actions($survey_data, $people_filled);
 
 // Content

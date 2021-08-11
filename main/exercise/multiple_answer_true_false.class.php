@@ -64,8 +64,8 @@ class MultipleAnswerTrueFalse extends Question
 
         $answer = null;
 
-        if (!empty($this->id)) {
-            $answer = new Answer($this->id);
+        if (!empty($this->iid)) {
+            $answer = new Answer($this->iid);
             $answer->read();
 
             if ($answer->nbrAnswers > 0 && !$form->isSubmitted()) {
@@ -80,7 +80,7 @@ class MultipleAnswerTrueFalse extends Question
         }
 
         // Can be more options
-        $optionData = Question::readQuestionOption($this->id, $course_id);
+        $optionData = Question::readQuestionOption($this->iid, $course_id);
 
         for ($i = 1; $i <= $nb_answers; $i++) {
             $form->addHtml('<tr>');
@@ -226,7 +226,7 @@ class MultipleAnswerTrueFalse extends Question
 
         global $text;
         if ($obj_ex->edit_exercise_in_lp == true ||
-            (empty($this->exerciseList) && empty($obj_ex->id))
+            (empty($this->exerciseList) && empty($obj_ex->iid))
         ) {
             // setting the save button here and not in the question class.php
             $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
@@ -236,7 +236,7 @@ class MultipleAnswerTrueFalse extends Question
             $form->addGroup($buttonGroup);
         }
 
-        if (!empty($this->id) && !$form->isSubmitted()) {
+        if (!empty($this->iid) && !$form->isSubmitted()) {
             $form->setDefaults($defaults);
         }
         $form->setConstants(['nb_answers' => $nb_answers]);
@@ -248,23 +248,23 @@ class MultipleAnswerTrueFalse extends Question
     public function processAnswersCreation($form, $exercise)
     {
         $questionWeighting = 0;
-        $objAnswer = new Answer($this->id);
+        $objAnswer = new Answer($this->iid);
         $nb_answers = $form->getSubmitValue('nb_answers');
         $course_id = api_get_course_int_id();
 
         $correct = [];
-        $options = Question::readQuestionOption($this->id, $course_id);
+        $options = Question::readQuestionOption($this->iid, $course_id);
 
         if (!empty($options)) {
             foreach ($options as $optionData) {
-                $id = $optionData['id'];
-                unset($optionData['id']);
+                $id = $optionData['iid'];
+                unset($optionData['iid']);
                 Question::updateQuestionOption($id, $optionData, $course_id);
             }
         } else {
             for ($i = 1; $i <= 3; $i++) {
                 $last_id = Question::saveQuestionOption(
-                    $this->id,
+                    $this->iid,
                     $this->options[$i],
                     $course_id,
                     $i
@@ -275,7 +275,7 @@ class MultipleAnswerTrueFalse extends Question
 
         /* Getting quiz_question_options (true, false, doubt) because
         it's possible that there are more options in the future */
-        $new_options = Question::readQuestionOption($this->id, $course_id);
+        $new_options = Question::readQuestionOption($this->iid, $course_id);
         $sortedByPosition = [];
         foreach ($new_options as $item) {
             $sortedByPosition[$item['position']] = $item;
@@ -298,7 +298,7 @@ class MultipleAnswerTrueFalse extends Question
             if (empty($options)) {
                 //If this is the first time that the question is created when
                 // change the default values from the form 1 and 2 by the correct "option id" registered
-                $goodAnswer = isset($sortedByPosition[$goodAnswer]) ? $sortedByPosition[$goodAnswer]['id'] : '';
+                $goodAnswer = isset($sortedByPosition[$goodAnswer]) ? $sortedByPosition[$goodAnswer]['iid'] : '';
             }
             $questionWeighting += $extra_values[0]; //By default 0 has the correct answers
             $objAnswer->createAnswer($answer, $goodAnswer, $comment, '', $i);

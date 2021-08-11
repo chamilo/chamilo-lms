@@ -106,7 +106,7 @@ foreach ($session_list as $session_item) {
                     </td>
                     </tr>';
         }
-        $html .= '</tbody>s</table>';
+        $html .= '</tbody></table>';
     }
 }
 echo $html;

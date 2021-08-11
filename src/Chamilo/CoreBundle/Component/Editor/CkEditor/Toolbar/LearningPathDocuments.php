@@ -37,7 +37,7 @@ class LearningPathDocuments extends Basic
     protected function getMaximizedToolbar()
     {
         return [
-            ['NewPage', 'Templates', '-', 'Preview', 'Print'],
+            ['Save', 'NewPage', 'Templates', '-', 'Preview', 'Print'],
             ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
             ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
             ['Link', 'Unlink', 'Anchor', 'Glossary'],
@@ -76,7 +76,7 @@ class LearningPathDocuments extends Basic
     protected function getNormalToolbar()
     {
         return [
-            ['PasteFromWord', '-', 'Undo', 'Redo'],
+            ['Save', 'PasteFromWord', '-', 'Undo', 'Redo'],
             ['Link', 'Unlink', 'Anchor', 'Glossary'],
             [
                 'Image',
@@ -117,7 +117,7 @@ class LearningPathDocuments extends Basic
     protected function getMinimizedToolbar()
     {
         return [
-            $this->getNewPageBlock(),
+            array_merge(['Save'], $this->getNewPageBlock()),
             ['Undo', 'Redo'],
             ['Link', 'Image', 'Video', 'Youtube', 'VimeoEmbed', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],

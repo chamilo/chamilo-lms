@@ -84,8 +84,8 @@ class UniqueAnswer extends Question
         $defaults = [];
 
         $correct = 0;
-        if (!empty($this->id)) {
-            $answer = new Answer($this->id);
+        if (!empty($this->iid)) {
+            $answer = new Answer($this->iid);
             $answer->read();
             if ($answer->nbrAnswers > 0 && !$form->isSubmitted()) {
                 $nb_answers = $answer->nbrAnswers;
@@ -236,7 +236,7 @@ class UniqueAnswer extends Question
         global $text;
         $buttonGroup = [];
 
-        if (true === $obj_ex->edit_exercise_in_lp || (empty($this->exerciseList) && empty($obj_ex->id))) {
+        if (true === $obj_ex->edit_exercise_in_lp || (empty($this->exerciseList) && empty($obj_ex->iid))) {
             //setting the save button here and not in the question class.php
             $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
             $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);
@@ -264,7 +264,7 @@ class UniqueAnswer extends Question
 
         $defaults['correct'] = $correct;
 
-        if (!empty($this->id)) {
+        if (!empty($this->iid)) {
             $form->setDefaults($defaults);
         } else {
             if ($this->isContent == 1) {
@@ -342,7 +342,7 @@ class UniqueAnswer extends Question
     {
         $questionWeighting = $nbrGoodAnswers = 0;
         $correct = $form->getSubmitValue('correct');
-        $objAnswer = new Answer($this->id);
+        $objAnswer = new Answer($this->iid);
         $nb_answers = $form->getSubmitValue('nb_answers');
 
         for ($i = 1; $i <= $nb_answers; $i++) {
@@ -485,7 +485,7 @@ class UniqueAnswer extends Question
         $tbl_quiz_answer = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $course_id = api_get_course_int_id();
-        $question_id = intval($question_id);
+        $question_id = (int) $question_id;
         $score = floatval($score);
         $correct = intval($correct);
         $title = Database::escape_string($title);
@@ -494,7 +494,6 @@ class UniqueAnswer extends Question
         $sql = "SELECT max(position) as max_position
                 FROM $tbl_quiz_answer
                 WHERE
-                    c_id = $course_id AND
                     question_id = $question_id";
         $rs_max = Database::query($sql);
         $row_max = Database::fetch_object($rs_max);
@@ -516,7 +515,7 @@ class UniqueAnswer extends Question
         $em->persist($quizAnswer);
         $em->flush();
 
-        $id = $quizAnswer->getIid();
+        $id = $quizAnswer->getId();
 
         if ($id) {
             $quizAnswer
@@ -529,7 +528,7 @@ class UniqueAnswer extends Question
         if ($correct) {
             $sql = "UPDATE $tbl_quiz_question
                     SET ponderation = (ponderation + $score)
-                    WHERE c_id = $course_id AND id = ".$question_id;
+                    WHERE iid = $question_id";
             Database::query($sql);
         }
     }

@@ -52,14 +52,21 @@ $interbreadcrumb[] = [
     'url' => 'exercise.php?'.api_get_cidreq(),
     'name' => get_lang('Exercises'),
 ];
-$interbreadcrumb[] = ['url' => '#', 'name' => $objExercise->selectTitle(true)];
+$interbreadcrumb[] = ['url' => '#', 'name' => Security::remove_XSS($objExercise->selectTitle(true))];
 
 $time_control = false;
-$clock_expired_time = ExerciseLib::get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
+$clock_expired_time = ExerciseLib::get_session_time_control_key($objExercise->iid, $learnpath_id, $learnpath_item_id);
 
 if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
     $time_control = true;
 }
+
+$extra_params = '';
+if (isset($_GET['preview'])) {
+    $extra_params = '&preview=1';
+}
+$exercise_url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.
+    api_get_cidreq().'&exerciseId='.$objExercise->iid.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpathItemViewId.$extra_params;
 
 if ($time_control) {
     // Get time left for expiring time
@@ -69,7 +76,7 @@ if ($time_control) {
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
     $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
-    $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left);
+    $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left, $exercise_url);
 }
 
 if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
@@ -100,12 +107,12 @@ if ($is_allowed_to_edit) {
     if ($objExercise->sessionId == $sessionId) {
         $editLink = Display::url(
             Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
-            api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
+            api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->iid
         );
     }
     $editLink .= Display::url(
         Display::return_icon('test_results.png', get_lang('Results'), [], ICON_SIZE_SMALL),
-        api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id,
+        api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->iid,
         ['title' => get_lang('Results')]
     );
 }
@@ -115,22 +122,17 @@ $iconExercise = Display::return_icon('test-quiz.png', null, [], ICON_SIZE_MEDIUM
 // Exercise name.
 if (api_get_configuration_value('save_titles_as_html')) {
     $html .= Display::div(
-        $objExercise->get_formated_title().PHP_EOL.$editLink
+        Security::remove_XSS($objExercise->get_formated_title()).PHP_EOL.$editLink
     );
 } else {
     $html .= Display::page_header(
-        $iconExercise.PHP_EOL.$objExercise->selectTitle().PHP_EOL.$editLink
+        $iconExercise.PHP_EOL.Security::remove_XSS($objExercise->selectTitle()).PHP_EOL.$editLink
     );
 }
 
 // Exercise description.
 if (!empty($objExercise->description)) {
-    $html .= Display::div($objExercise->description, ['class' => 'exercise_description']);
-}
-
-$extra_params = '';
-if (isset($_GET['preview'])) {
-    $extra_params = '&preview=1';
+    $html .= Display::div(Security::remove_XSS($objExercise->description), ['class' => 'exercise_description']);
 }
 
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info(
@@ -151,8 +153,6 @@ if (isset($exercise_stat_info['exe_id'])) {
 
 // 2. Exercise button
 // Notice we not add there the lp_item_view_id because is not already generated
-$exercise_url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.
-    api_get_cidreq().'&exerciseId='.$objExercise->id.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpathItemViewId.$extra_params;
 $exercise_url_button = Display::url(
     $label,
     $exercise_url,
@@ -181,7 +181,8 @@ $visible_return = $objExercise->is_visible(
     $learnpath_id,
     $learnpath_item_id,
     null,
-    true
+    true,
+    $sessionId
 );
 
 // Exercise is not visible remove the button
@@ -196,6 +197,33 @@ if ($visible_return['value'] == false) {
         $exercise_url_button = null;
     }
 }
+$advancedMessage = RemedialCoursePlugin::create()->getAdvancedCourseList(
+    $objExercise,
+    api_get_user_id(),
+    api_get_session_id(),
+    $learnpath_id ?: 0,
+    $learnpath_item_id ?: 0
+);
+if (!empty($advancedMessage)) {
+    $message .= Display::return_message(
+        $advancedMessage,
+        'info',
+        false
+    );
+}
+
+$remedialMessage = RemedialCoursePlugin::create()->getRemedialCourseList(
+    $objExercise,
+    api_get_user_id(),
+    api_get_session_id(),
+    false,
+    $learnpath_id ?: 0,
+    $learnpath_item_id ?: 0
+);
+
+if (null != $remedialMessage) {
+    $message .= Display::return_message($remedialMessage, 'warning', false);
+}
 
 if (!api_is_allowed_to_session_edit()) {
     $exercise_url_button = null;
@@ -203,7 +231,7 @@ if (!api_is_allowed_to_session_edit()) {
 
 $attempts = Event::getExerciseResultsByUser(
     api_get_user_id(),
-    $objExercise->id,
+    $objExercise->iid,
     api_get_course_int_id(),
     api_get_session_id(),
     $learnpath_id,
@@ -231,7 +259,7 @@ if (in_array(
     $objExercise->results_disabled,
     [
         RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
-        RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK,
+        //RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK,
         RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
     ])
 ) {

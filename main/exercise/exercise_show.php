@@ -32,7 +32,7 @@ if (empty($track_exercise_info)) {
     api_not_allowed($printHeaders);
 }
 
-$exercise_id = $track_exercise_info['id'];
+$exercise_id = $track_exercise_info['iid'];
 $student_id = $track_exercise_info['exe_user_id'];
 $learnpath_id = $track_exercise_info['orig_lp_id'];
 $learnpath_item_id = $track_exercise_info['orig_lp_item_id'];
@@ -271,7 +271,7 @@ if (!empty($track_exercise_info)) {
         case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK:
             $attempts = Event::getExerciseResultsByUser(
                 $currentUserId,
-                $objExercise->id,
+                $objExercise->iid,
                 api_get_course_int_id(),
                 api_get_session_id(),
                 $track_exercise_info['orig_lp_id'],
@@ -330,7 +330,7 @@ if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLa
 $i = $totalScore = $totalWeighting = 0;
 $arrques = [];
 $arrans = [];
-$user_restriction = $is_allowedToEdit ? '' : " AND user_id= $student_id ";
+$user_restriction = $is_allowedToEdit ? '' : " AND user_id = $student_id ";
 $sql = "SELECT attempts.question_id, answer
         FROM $TBL_TRACK_ATTEMPT as attempts
         INNER JOIN $TBL_TRACK_EXERCISES AS stats_exercises
@@ -342,8 +342,7 @@ $sql = "SELECT attempts.question_id, answer
             quizz_rel_questions.c_id=".api_get_course_int_id()."
         INNER JOIN $TBL_QUESTIONS AS questions
         ON
-            questions.id = quizz_rel_questions.question_id AND
-            questions.c_id = ".api_get_course_int_id()."
+            questions.iid = quizz_rel_questions.question_id
         WHERE
             attempts.exe_id = $id $user_restriction
 		GROUP BY quizz_rel_questions.question_order, attempts.question_id";
@@ -402,6 +401,11 @@ $arrmarks = [];
 $strids = '';
 $marksid = '';
 $countPendingQuestions = 0;
+$audioTemplate = null;
+if ($allowRecordAudio && $allowTeacherCommentAudio) {
+    $audioTemplate = new Template('', false, false, false, false, false, false);
+}
+
 foreach ($questionList as $questionId) {
     $choice = isset($exerciseResult[$questionId]) ? $exerciseResult[$questionId] : '';
     // destruction of the Question object
@@ -506,7 +510,7 @@ foreach ($questionList as $questionId) {
                                     $(function() {
                                         new HotspotQuestion({
                                             questionId: $questionId,
-                                            exerciseId: {$objExercise->id},
+                                            exerciseId: {$objExercise->iid},
                                             exeId: $id,
                                             selector: '#hotspot-solution-$questionId-$id',
                                             for: 'solution',
@@ -635,8 +639,6 @@ foreach ($questionList as $questionId) {
             $renderer = &$feedback_form->defaultRenderer();
             $renderer->setFormTemplate('<form{attributes}><div>{content}</div></form>');
             $renderer->setCustomElementTemplate('<div>{element}</div>');
-            $comnt = Event::get_comments($id, $questionId);
-
             $textareaId = 'comments_'.$questionId;
             $default = [$textareaId => $comnt];
 
@@ -657,12 +659,11 @@ foreach ($questionList as $questionId) {
             }
             $feedback_form->setDefaults($default);
             $feedback_form->display();
-
             echo '</div>';
 
             if ($allowRecordAudio && $allowTeacherCommentAudio) {
                 echo '<div class="col-sm-5">';
-                echo ExerciseLib::getOralFeedbackForm($id, $questionId, $student_id);
+                echo ExerciseLib::getOralFeedbackForm($audioTemplate, $id, $questionId, $student_id);
                 echo '</div>';
             }
             echo '</div>';
@@ -951,6 +952,9 @@ if ('export' === $action) {
     if (ob_get_contents()) {
         ob_clean();
     }
+
+    $content = Security::remove_XSS($content);
+
     $params = [
         'filename' => api_replace_dangerous_char(
             $objExercise->name.' '.

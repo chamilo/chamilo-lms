@@ -659,6 +659,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
     }
 
     $sql .= " AND u.status != ".ANONYMOUS." ";
+    $column = (int) $column;
+    $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
     // Sorting and pagination (used by the sortable table)
     $sql .= " ORDER BY col$column $direction ";
     $from = (int) $from;

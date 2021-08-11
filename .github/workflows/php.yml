@@ -1,0 +1,193 @@
+name: Behat tests 1.11.x 🐞
+
+on: [push, pull_request]
+
+jobs:
+    build:
+        name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
+        runs-on: ubuntu-18.04
+
+        strategy:
+            fail-fast: false
+            matrix:
+                operating-system: [ubuntu-latest]
+                php-versions: ['7.1', '7.2', '7.3', '7.4']
+
+#        services:
+#            mysql:
+#                image: mysql:5.7
+#                env:
+#                    MYSQL_ALLOW_EMPTY_PASSWORD: false
+#                    MYSQL_ROOT_PASSWORD: chamilo
+#                    MYSQL_DATABASE: chamilo
+#                ports:
+#                    - 3306/tcp
+#                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+
+            - name: Setup apache
+              run: |
+                sudo apt-get install software-properties-common
+                sudo add-apt-repository ppa:ondrej/php
+                sudo apt-get update
+                sudo apt-get install apache2 php${{ matrix.php-versions }} php${{ matrix.php-versions }}-common php${{ matrix.php-versions }}-cli libapache2-mod-php${{ matrix.php-versions }}
+                sudo a2enmod rewrite actions
+                sudo cp -f tests/travis/gh-apache /etc/apache2/sites-available/000-default.conf
+                sudo chmod 777 -R $HOME
+                cat /etc/apache2/sites-available/000-default.conf
+                sudo service apache2 restart
+                sudo systemctl restart apache2
+
+            - name: Setup PHP, with composer and extensions
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php-versions }}
+                  extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, gd, json, soap, zip, bcmath
+                  ini-values: post_max_size=256M, max_execution_time=600, memory_limit=4096M
+
+            - name: Get composer cache directory
+              id: composer-cache-v1
+              run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+            - name: Cache composer dependencies
+              uses: actions/cache@v2
+              with:
+                  path: ${{ steps.composer-cache-v1.outputs.dir }}
+                  # Use composer.json for key, if composer.lock is not committed.
+                  # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+                  key: v1-${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: v1-${{ runner.os }}-composer-
+
+            - name: Install dependencies with composer
+              run: composer install --prefer-dist --no-progress
+
+#            - name: Install assets
+#              run: php bin/console assets:install
+#
+#            - name: Generate fos_js_routes.json
+#              run: php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
+
+#            - name: Get yarn cache directory
+#              id: yarn-cache
+#              run: echo "::set-output name=dir::$(yarn cache dir)"
+#
+#            - name: Cache yarn dependencies
+#              uses: actions/cache@v2
+#              with:
+#                  path: ${{ steps.yarn-cache.outputs.dir }}
+#                  # Use composer.json for key, if composer.lock is not committed.
+#                  # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+#                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+#                  restore-keys: ${{ runner.os }}-yarn-
+#
+#            - name: Yarn install
+#              uses: borales/actions-yarn@v2.3.0
+#              with:
+#                  cmd: install # will run `yarn install` command
+#
+#            - name: Yarn run encore dev
+#              uses: borales/actions-yarn@v2.3.0
+#              with:
+#                  cmd: run encore dev
+
+            - name: Start chrome
+              run: |
+                sudo apt-get install google-chrome-stable
+                google-chrome --version
+                google-chrome-stable --version
+                google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+                whereis google-chrome-stable
+
+            # https://github.com/marketplace/actions/setup-chromedriver
+            - name: Start chromedriver
+              uses: nanasess/setup-chromedriver@master
+              with:
+                  # Optional: do not specify to match Chrome's version
+                  chromedriver-version: '88.0.4324.96'
+
+            - run: |
+                export DISPLAY=:99
+                chromedriver --url-base=/wd/hub &
+                sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
+
+#                wget https://chromedriver.storage.googleapis.com/88.0.4324.96/chromedriver_linux64.zip --quiet && unzip chromedriver_linux64.zip
+#                sudo mv chromedriver /usr/bin
+#                sudo chmod +x /usr/bin/chromedriver
+#                chromedriver --version
+
+#            - run: |
+#                export DISPLAY=:99
+#                chromedriver --url-base=/wd/hub &
+#                sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
+#                chromedriver --version
+
+            - name: Set up JDK 1.8
+              uses: actions/setup-java@v1
+              with:
+                  java-version: 1.8
+
+            - name: Get Selenium
+              run: |
+                wget http://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar --quiet
+
+            - name: Run Selenium
+              run: |
+                java -version
+                export DISPLAY=:99.0
+                sudo xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+                java -Dwebdriver.chrome.driver=/usr/bin/chromedriver -jar selenium-server-standalone-3.141.59.jar  -log selenium.log > /dev/null &
+
+            - name: Start mysql service
+              run: |
+                sudo /etc/init.d/mysql start
+                sudo systemctl restart apache2
+#
+#            - name: Install database
+#              run: |
+#                  bin/console doctrine:database:create || echo "Error while creating the DB"
+#              env:
+#                  DATABASE_URL: mysql://root:root@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/chamilo
+#                  DATABASE_HOST: 127.0.0.1
+#                  DATABASE_PORT: ${{ job.services.mysql.ports['3306'] }}
+#                  DATABASE_NAME: chamilo
+#                  DATABASE_USER: root
+#                  DATABASE_PASSWORD: root
+#                  APP_INSTALLED: 1
+
+            - name: Check settings
+              run: |
+                  php -ini
+                  php -v
+                  php -m
+
+#            - name: Check chamilo
+#              run: |
+#                 sudo chmod 777 -R ${{ github.workspace }}
+#                 curl http://localhost/main/install/index.php
+
+            - name: Install chash
+              run: |
+                  git clone https://github.com/chamilo/chash
+                  cd chash
+                  git checkout 0.2.x
+                  composer install
+                  php -d phar.readonly=0 createPhar.php
+                  chmod +x chash.phar
+                  sudo mv chash.phar /usr/local/bin/chash
+
+            - name: Install chamilo
+              run: |
+                  php ${{ github.workspace }}/chash/chash.php chash:chamilo_install 1.11.x ${{ github.workspace }} --no-interaction --sitename="Chamilo" --site_url="http://localhost/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --driver="pdo_mysql" --host="localhost" --port="3306" --dbname="chamilo" --dbuser="root" --dbpassword="root" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --linux-user="www-data" --linux-group="www-data" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555"
+                  sudo chmod -R 777 app/cache app/logs app/courses app/upload web
+                  php ${{ github.workspace }}/chash/chash.php chash:chamilo_status
+                  ls -la
+                  bash tests/travis/post_installation.sh
+                  curl http://localhost/index.php
+                  ls -la web/build
+
+            - name: Behat tests
+              run: |
+                  cd ${{ github.workspace }}/tests/behat
+                  ../../vendor/behat/behat/bin/behat -vvv

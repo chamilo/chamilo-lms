@@ -231,6 +231,8 @@ if (isset($_GET['session_id'])) {
     $agenda_ajax_url .= '&session_id='.intval($_GET['session_id']);
 }
 
+$agenda_ajax_url .= '&sec_token='.Security::get_token();
+
 $tpl->assign('web_agenda_ajax_url', $agenda_ajax_url);
 
 $form = new FormValidator(
@@ -296,6 +298,14 @@ if (!empty($onHoverInfo)) {
     ];
 }
 $tpl->assign('on_hover_info', $options);
+
+$settings = api_get_configuration_value('fullcalendar_settings');
+$extraSettings = '';
+if (!empty($settings) && isset($settings['settings']) && !empty($settings['settings'])) {
+    $encoded = json_encode($settings['settings']);
+    $extraSettings = substr($encoded, 1, -1).',';
+}
+$tpl->assign('fullcalendar_settings', $extraSettings);
 
 $templateName = $tpl->get_template('agenda/month.tpl');
 $content = $tpl->fetch($templateName);

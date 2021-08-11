@@ -95,4 +95,36 @@ class HTML_QuickForm_password extends HTML_QuickForm_text
         return ('' != $value ? '**********' : '&nbsp;').
             $this->_getPersistantData();
     }
+
+    /**
+     * @return string
+     */
+    public function toHtml()
+    {
+        if (parent::isFrozen()) {
+            return parent::getFrozenHtml();
+        }
+
+        $input = '<input '.$this->_getAttrString($this->_attributes).' />';
+
+        if (empty($this->_attributes['show_hide'])) {
+            return $input;
+        }
+
+        $this->removeAttribute('show_hide');
+
+        $label = get_lang('ShowOrHide');
+        $pwdId = $this->_attributes['id'];
+        $id = $pwdId.'_toggle';
+
+        return '<div class="input-group" id="add-user__input-password">
+                '.$input.'
+                <span class="input-group-addon">
+                    <input type="checkbox" title="'.$label.'" aria-label="'.$label.'" id="'.$id.'">
+                </span>
+            </div>
+            <script>document.getElementById(\''.$id.'\').onchange = function () {
+                document.getElementById(\''.$pwdId.'\').setAttribute(\'type\', this.checked ? \'text\' : \'password\')
+            };</script>';
+    }
 }

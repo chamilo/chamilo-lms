@@ -906,7 +906,6 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                         foreach ($components as $component) {
                             $gradebook = new Gradebook();
                             $params = [];
-
                             $params['name'] = $component['acronym'];
                             $params['description'] = $component['title'];
                             $params['user_id'] = api_get_user_id();
@@ -918,8 +917,9 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
 
                             $gradebook->save($params);
                         }
+
                         // Reloading cats
-                        $cats = Category:: load(
+                        $cats = Category::load(
                             null,
                             null,
                             $course_code,
@@ -940,12 +940,13 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
         $model = ExerciseLib::getCourseScoreModel();
         $allowGraph = api_get_configuration_value('gradebook_hide_graph') === false;
         $isAllow = api_is_allowed_to_edit(null, true);
-
         $settings = api_get_configuration_value('gradebook_pdf_export_settings');
         $showFeedBack = true;
         if (isset($settings['hide_feedback_textarea']) && $settings['hide_feedback_textarea']) {
             $showFeedBack = false;
         }
+
+        $allowTable = api_get_configuration_value('gradebook_hide_table') === false;
 
         /** @var Category $cat */
         foreach ($cats as $cat) {
@@ -1003,7 +1004,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $addparams,
                     $exportToPdf,
                     null,
-                    null,
+                    api_get_user_id(),
                     [],
                     $loadStats
                 );
@@ -1014,7 +1015,14 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     ];
                 }
 
-                $table = $gradebookTable->return_table();
+                $table = '';
+                if ($isAllow) {
+                    $table = $gradebookTable->return_table();
+                } else {
+                    if ($allowTable) {
+                        $table = $gradebookTable->return_table();
+                    }
+                }
 
                 $graph = '';
                 if ($allowGraph && empty($model)) {
@@ -1052,9 +1060,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
 }
 
 api_set_in_gradebook();
-
 $contents = ob_get_contents();
-
 ob_end_clean();
 
 $view = new Template($viewTitle);

@@ -30,23 +30,15 @@ if (!$result) {
 
 $sessionId = api_get_session_id();
 $courseCode = api_get_course_id();
+$courseId = api_get_course_int_id();
 
 if (empty($sessionId)) {
-    $students = CourseManager:: get_student_list_from_course_code(
-        $courseCode,
-        false
-    );
+    $students = CourseManager::get_student_list_from_course_code($courseCode, false);
 } else {
-    $students = CourseManager:: get_student_list_from_course_code(
-        $courseCode,
-        true,
-        $sessionId
-    );
+    $students = CourseManager::get_student_list_from_course_code($courseCode, true, $sessionId);
 }
 $count_students = count($students);
-//$question_list = $objExercise->get_validated_question_list();
-$totalQuestions = $objExercise->getQuestionCount(); //Get total of questions
-$question_list = $objExercise->getQuestionForTeacher(0, $totalQuestions); // get questions from 0 to total
+$questionList = $objExercise->getQuestionForTeacher(0, $objExercise->getQuestionCount());
 
 $data = [];
 // Question title 	# of students who tool it 	Lowest score 	Average 	Highest score 	Maximum score
@@ -60,14 +52,13 @@ $headers = [
     get_lang('Weighting'),
 ];
 
-if (!empty($question_list)) {
-    foreach ($question_list as $question_id) {
+if (!empty($questionList)) {
+    foreach ($questionList as $question_id) {
         $questionObj = Question::read($question_id);
-
-        $exercise_stats = ExerciseLib::get_student_stats_by_question(
+        $exerciseStats = ExerciseLib::get_student_stats_by_question(
             $question_id,
             $exerciseId,
-            $courseCode,
+            $courseId,
             $sessionId,
             true
         );
@@ -92,14 +83,13 @@ if (!empty($question_list)) {
             false,
             $count_users.' / '.$count_students
         );
-        $data[$question_id]['lowest_score'] = round($exercise_stats['min'], 2);
-        $data[$question_id]['average_score'] = round($exercise_stats['average'], 2);
-        $data[$question_id]['highest_score'] = round($exercise_stats['max'], 2);
+        $data[$question_id]['lowest_score'] = round($exerciseStats['min'], 2);
+        $data[$question_id]['average_score'] = round($exerciseStats['average'], 2);
+        $data[$question_id]['highest_score'] = round($exerciseStats['max'], 2);
         $data[$question_id]['max_score'] = round($questionObj->weighting, 2);
     }
 }
 
-// Format A table
 $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
 $row = 0;
 $column = 0;
@@ -130,14 +120,14 @@ $headers = [
 
 $data = [];
 
-if (!empty($question_list)) {
+if (!empty($questionList)) {
     $id = 0;
-    foreach ($question_list as $question_id) {
+    foreach ($questionList as $question_id) {
         $questionObj = Question::read($question_id);
-        $exercise_stats = ExerciseLib::get_student_stats_by_question(
+        $exerciseStats = ExerciseLib::get_student_stats_by_question(
             $question_id,
             $exerciseId,
-            $courseCode,
+            $courseId,
             $sessionId,
             true
         );
@@ -212,7 +202,7 @@ if (!empty($question_list)) {
                             $answer_id,
                             $question_id,
                             $exerciseId,
-                            $courseCode,
+                            $courseId,
                             $sessionId,
                             MATCHING
                         );
@@ -266,7 +256,7 @@ if (!empty($question_list)) {
                         $real_answer_id,
                         $question_id,
                         $exerciseId,
-                        $courseCode,
+                        $courseId,
                         $sessionId
                     );
                     $percentage = 0;

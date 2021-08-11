@@ -14,39 +14,40 @@ $plugin = XApiPlugin::create();
 $isAllowedToEdit = api_is_allowed_to_edit();
 
 $em = Database::getManager();
+$toolLaunchRepo = $em->getRepository(ToolLaunch::class);
 
 $course = api_get_course_entity();
 $session = api_get_session_entity();
+$userInfo = api_get_user_info();
 
 $cidReq = api_get_cidreq();
 
 $table = new SortableTable(
     'tbl_xapi',
-    function () use ($em, $course) {
-        return $em
-            ->createQuery('SELECT COUNT(tl) FROM ChamiloPluginBundle:XApi\ToolLaunch tl WHERE tl.course = :course')
-            ->setParameter('course', $course)
-            ->getSingleScalarResult();
+    function () use ($em, $course, $session, $isAllowedToEdit) {
+        return $em->getRepository(ToolLaunch::class)
+            ->countByCourseAndSession($course, $session, !$isAllowedToEdit);
     },
-    function ($start, $limit, $orderBy, $orderDir) use ($em, $course, $isAllowedToEdit) {
-        $tools = $em->getRepository('ChamiloPluginBundle:XApi\ToolLaunch')
-            ->findBy(
-                ['course' => $course],
-                ['title' => $orderDir],
-                $limit,
-                $start
-            );
+    function ($start, $limit, $orderBy, $orderDir) use ($toolLaunchRepo, $course, $session, $isAllowedToEdit) {
+        $tools = $toolLaunchRepo->findByCourseAndSession($course, $session, ['title' => $orderDir], $limit, $start);
 
         $data = [];
 
         /** @var ToolLaunch $toolLaunch */
         foreach ($tools as $toolLaunch) {
+            $wasAddedInLp = $toolLaunchRepo->wasAddedInLp($toolLaunch);
+
+            if ($wasAddedInLp && !$isAllowedToEdit) {
+                continue;
+            }
+
             $datum = [];
             $datum[] = [
                 $toolLaunch->getId(),
                 $toolLaunch->getTitle(),
                 $toolLaunch->getDescription(),
                 $toolLaunch->getActivityType(),
+                $wasAddedInLp,
             ];
 
             if ($isAllowedToEdit) {
@@ -63,17 +64,29 @@ $table = new SortableTable(
 $table->set_header(0, $plugin->get_lang('ActivityTitle'), true);
 $table->set_column_filter(
     0,
-    function (array $toolInfo) use ($cidReq) {
-        list($id, $title, $description, $ativityType) = $toolInfo;
+    function (array $toolInfo) use ($cidReq, $session, $userInfo, $plugin) {
+        list($id, $title, $description, $activityType, $wasAddedInLp) = $toolInfo;
+
+        $sessionStar = api_get_session_image(
+            $session ? $session->getId() : 0,
+            $userInfo['status']
+        );
 
         $data = Display::url(
-            $title,
-            ('cmi5' === $ativityType ? 'cmi5/view.php' : 'tincan/view.php')."?id=$id&$cidReq",
+            $title.$sessionStar,
+            ('cmi5' === $activityType ? 'cmi5/view.php' : 'tincan/view.php')."?id=$id&$cidReq",
             ['class' => 'show']
         );
 
         if ($description) {
             $data .= PHP_EOL.Display::tag('small', $description, ['class' => 'text-muted']);
+        }
+
+        if ($wasAddedInLp) {
+            $data .= Display::div(
+                $plugin->get_lang('ActivityAddedToLPCannotBeAccessed'),
+                ['class' => 'lp_content_type_label']
+            );
         }
 
         return $data;

@@ -26,6 +26,7 @@ class SortableTableFromArrayConfig extends SortableTable
     private $column_order;
 
     private $doc_filter;
+    private $handlePagination = true;
 
     /**
      * Constructor.
@@ -53,6 +54,10 @@ class SortableTableFromArrayConfig extends SortableTable
         $this->column_order = $column_order;
         $this->doc_filter = $doc_filter;
 
+        // if data is empty the pagination is handled with query in database
+        if (empty($data)) {
+            $this->handlePagination = false;
+        }
         parent::__construct(
             $tableName,
             null,
@@ -86,7 +91,10 @@ class SortableTableFromArrayConfig extends SortableTable
             $this->doc_filter
         );
 
-//        return array_slice($table, $from, $this->per_page);
+        if ($this->handlePagination) {
+            return array_slice($table, $from, $this->per_page);
+        }
+
         return $table;
     }
 
@@ -97,7 +105,7 @@ class SortableTableFromArrayConfig extends SortableTable
      */
     public function get_total_number_of_items()
     {
-        if (isset($this->total_number_of_items) && !empty($this->total_number_of_items)) {
+        if (!empty($this->total_number_of_items) && $this->total_number_of_items !== -1) {
             return $this->total_number_of_items;
         } else {
             if (!empty($this->table_data)) {
@@ -108,3 +116,4 @@ class SortableTableFromArrayConfig extends SortableTable
         }
     }
 }
+

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
@@ -1885,9 +1886,9 @@ class Display
             $second_title = Security::remove_XSS($second_title);
             $title .= "<small> $second_title<small>";
         }
-        $subTitle = self::tag($size, Security::remove_XSS($title), $attributes);
+        $attributes['class'] = 'page-header';
 
-        return $subTitle;
+        return self::tag($size, Security::remove_XSS($title), $attributes);
     }
 
     public static function page_subheader2($title, $second_title = null)
@@ -2529,6 +2530,11 @@ class Display
         }
 
         $title = !empty($title) ? '<div class="panel-heading" '.$headerStyle.' ><h3 class="panel-title">'.$title.'</h3>'.$extra.'</div>' : '';
+
+        if (empty($title) && !empty($extra)) {
+            $title = '<div class="panel-heading" '.$headerStyle.' >'.$extra.'</div>';
+        }
+
         $footer = !empty($footer) ? '<div class="panel-footer">'.$footer.'</div>' : '';
         $typeList = ['primary', 'success', 'info', 'warning', 'danger'];
         $style = !in_array($type, $typeList) ? 'default' : $type;
@@ -2865,7 +2871,7 @@ HTML;
      *
      * @return string
      */
-    public static function getFrameReadyBlock($frameName)
+    public static function getFrameReadyBlock($frameName, $itemType = '')
     {
         $webPublicPath = api_get_path(WEB_PUBLIC_PATH);
         $webJsPath = api_get_path(WEB_LIBRARY_JS_PATH);
@@ -2932,9 +2938,24 @@ HTML;
             });
         },
         "'.$frameName.'",
-        [
-            {type:"script", src:"'.api_get_jquery_web_path().'", deps: [
+        ';
 
+        if ('quiz' === $itemType) {
+            $jquery = '
+                '.$fixLink.'
+                {type:"script", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+                {type:"script", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
+                {type:"script", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelement-and-player.min.js",
+                    deps: [
+                    {type:"script", src: "'.$webJsPath.'mediaelement/plugins/vrview/vrview.js"},
+                    {type:"script", src: "'.$webJsPath.'mediaelement/plugins/markersrolls/markersrolls.min.js"},
+                    '.$videoPluginFiles.'
+                ]},
+                '.$translateHtml.'
+            ';
+        } else {
+            $jquery = '
+                {type:"script", src:"'.api_get_jquery_web_path().'", deps: [
                 '.$fixLink.'
                 {type:"script", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
                 {type:"script", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
@@ -2946,7 +2967,12 @@ HTML;
                     '.$videoPluginFiles.'
                 ]},
                 '.$translateHtml.'
-            ]},
+            ]},';
+        }
+
+        $frameReady .= '
+        [
+            '.$jquery.'
             '.$videoPluginCssFiles.'
             {type:"script", src:"'.$webPublicPath.'assets/MathJax/MathJax.js?config=AM_HTMLorMML"},
             {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},

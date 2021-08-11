@@ -100,6 +100,8 @@ class SortableTable extends HTML_Table
      */
     public $table_data;
     public $hideItemSelector;
+    // Hide table navigation, better to be use when exporting table to PDF.
+    public $hideNavigation = false;
 
     /**
      * @var array Columns to hide
@@ -379,34 +381,41 @@ class SortableTable extends HTML_Table
             $this->setCellContents(1, 0, $message_empty);
             $empty_table = true;
         }
-        $html = '';
 
-        $params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
         if ($empty_table) {
             return '';
         }
+
+        $params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
         $table_id = 'form_'.$this->table_name.'_id';
-        $form = $this->get_page_select_form();
-        $nav = $this->get_navigation_html();
-        $html = '<div class="table-well">';
-        $html .= '<table class="data_table_pagination">';
-        $html .= '<tr>';
-        $html .= '<td style="width:25%;">';
-        $html .= $form;
-        $html .= '</td>';
-        $html .= '<td style="text-align:center;">';
-        $html .= $this->get_table_title();
-        $html .= '</td>';
-        $html .= '<td style="text-align:right;width:25%;">';
-        $html .= $nav;
-        $html .= '</td>';
-        $html .= '</tr>';
-        $html .= '</table>';
-        $html .= '</div>';
+        $html = '';
+        if (false === $this->hideNavigation) {
+            $form = $this->get_page_select_form();
+            $nav = $this->get_navigation_html();
+
+            $html .= '<div class="table-well">';
+            $html .= '<table class="data_table_pagination">';
+            $html .= '<tr>';
+            $html .= '<td style="width:25%;">';
+            $html .= $form;
+            $html .= '</td>';
+            $html .= '<td style="text-align:center;">';
+            $html .= $this->get_table_title();
+            $html .= '</td>';
+            $html .= '<td style="text-align:right;width:25%;">';
+            $html .= $nav;
+            $html .= '</td>';
+            $html .= '</tr>';
+            $html .= '</table>';
+            $html .= '</div>';
+        }
 
         if (count($this->form_actions) > 0) {
-            $html .= '<form id ="'.$table_id.'" name="form_'.$this->table_name
-                .'" class="form-search" method="post" action="'.api_get_self().'?'.$params.'" >';
+            $html .= '<form
+                id ="'.$table_id.'"
+                name="form_'.$this->table_name.'"
+                class="form-search"
+                method="post" action="'.api_get_self().'?'.$params.'" >';
         }
 
         $html .= '<div class="table-responsive">'.$content.'</div>';

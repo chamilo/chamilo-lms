@@ -65,7 +65,9 @@ if ($totalItems > 1) {
     $pagination .= '</ul>';
 }
 
-$tpl = new Template($plugin->get_lang('plugin_title'));
+$showFullPage = isset($_REQUEST['iframe']) && 1 === (int) $_REQUEST['iframe'] ? false : true;
+
+$tpl = new Template($plugin->get_lang('plugin_title'), $showFullPage, $showFullPage, !$showFullPage);
 $tpl->assign('posts', $posts);
 $tpl->assign('current_url', $url);
 

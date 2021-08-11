@@ -198,7 +198,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
     {
         $schedule = new ExtraField('lp_item');
         $data = [];
-        $data['visible_to_self'] = 0;
+        $data['visible_to_self'] = 1;
         $data['visible_to_others'] = 0;
         $data['changeable'] = 1;
         $data['filter'] = 0;

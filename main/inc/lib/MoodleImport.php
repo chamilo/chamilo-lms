@@ -267,14 +267,9 @@ class MoodleImport
                         $questionsValues = $this->readMainQuestionsXml($questionsXml, $question['questionid']);
                         $moduleValues['question_instances'][$index] = $questionsValues;
                         // Set Question Type from Moodle XML element <qtype>
-                        $qType = $moduleValues['question_instances'][$index]['qtype'];
-                        // Add the matched chamilo question type to the array
-                        $moduleValues['question_instances'][$index]['chamilo_qtype'] =
-                            $this->matchMoodleChamiloQuestionTypes($qType);
-                        $questionInstance = Question::getInstance(
-                            $moduleValues['question_instances'][$index]['chamilo_qtype']
-                        );
-
+                        $qType = $questionsValues['qtype'];
+                        $questionType = $this->matchMoodleChamiloQuestionTypes($questionsValues);
+                        $questionInstance = Question::getInstance($questionType);
                         if (empty($questionInstance)) {
                             continue;
                         }
@@ -282,10 +277,8 @@ class MoodleImport
                             error_log('question: '.$question['questionid']);
                         }
 
-                        $questionInstance->updateTitle(
-                            $moduleValues['question_instances'][$index]['name']
-                        );
-                        $questionText = $moduleValues['question_instances'][$index]['questiontext'];
+                        $questionInstance->updateTitle($questionsValues['name']);
+                        $questionText = $questionsValues['questiontext'];
 
                         // Replace the path from @@PLUGINFILE@@ to a correct chamilo path
                         $questionText = str_replace(
@@ -610,7 +603,7 @@ class MoodleImport
             $questionType = '';
             foreach ($question->childNodes as $item) {
                 $currentItem[$item->nodeName] = $item->nodeValue;
-                if ($item->nodeName == 'qtype') {
+                if ('qtype' === $item->nodeName) {
                     $questionType = $item->nodeValue;
                 }
 
@@ -621,11 +614,10 @@ class MoodleImport
                 $answer = $item->getElementsByTagName($this->getQuestionTypeAnswersTag($questionType));
                 $currentItem['plugin_qtype_'.$questionType.'_question'] = [];
                 for ($i = 0; $i <= $answer->length - 1; $i++) {
-                    $currentItem['plugin_qtype_'.$questionType.'_question'][$i]['answerid'] =
-                        $answer->item($i)->getAttribute('id');
+                    $label = 'plugin_qtype_'.$questionType.'_question';
+                    $currentItem[$label][$i]['answerid'] = $answer->item($i)->getAttribute('id');
                     foreach ($answer->item($i)->childNodes as $properties) {
-                        $currentItem['plugin_qtype_'.$questionType.'_question'][$i][$properties->nodeName] =
-                            $properties->nodeValue;
+                        $currentItem[$label][$i][$properties->nodeName] = $properties->nodeValue;
                     }
                 }
 
@@ -633,8 +625,7 @@ class MoodleImport
                 for ($i = 0; $i <= $typeValues->length - 1; $i++) {
                     foreach ($typeValues->item($i)->childNodes as $properties) {
                         $currentItem[$questionType.'_values'][$properties->nodeName] = $properties->nodeValue;
-
-                        if ($properties->nodeName != 'sequence') {
+                        if ($properties->nodeName !== 'sequence') {
                             continue;
                         }
 
@@ -691,15 +682,27 @@ class MoodleImport
     }
 
     /**
-     * @param string $moodleQuestionType
+     * @param array Result of readMainQuestionsXml
      *
      * @return int Chamilo question type
      */
-    public function matchMoodleChamiloQuestionTypes($moodleQuestionType)
+    public function matchMoodleChamiloQuestionTypes($questionsValues)
     {
+        $moodleQuestionType = $questionsValues['qtype'];
+        $questionOptions = $moodleQuestionType.'_values';
+        // Check <single> located in <plugin_qtype_multichoice_question><multichoice><single><single>
+        if (
+            'multichoice' === $moodleQuestionType &&
+            isset($questionsValues[$questionOptions]) &&
+            isset($questionsValues[$questionOptions]['single']) &&
+            1 === (int) $questionsValues[$questionOptions]['single']
+        ) {
+            return UNIQUE_ANSWER;
+        }
+
         switch ($moodleQuestionType) {
             case 'multichoice':
-                return UNIQUE_ANSWER;
+                return MULTIPLE_ANSWER;
             case 'multianswer':
             case 'shortanswer':
             case 'match':
@@ -707,7 +710,7 @@ class MoodleImport
             case 'essay':
                 return FREE_ANSWER;
             case 'truefalse':
-                return UNIQUE_ANSWER_NO_OPTION;
+                return UNIQUE_ANSWER;
         }
     }
 
@@ -759,7 +762,7 @@ class MoodleImport
                 $objAnswer = new Answer($questionInstance->id);
                 $questionWeighting = 0;
                 foreach ($questionList as $slot => $answer) {
-                    $this->processUniqueAnswer(
+                    $this->processMultipleAnswer(
                         $objAnswer,
                         $answer,
                         $slot + 1,
@@ -924,6 +927,36 @@ class MoodleImport
             $questionWeighting += $weighting;
         }
         $goodAnswer = $correct ? true : false;
+
+        $this->fixPathInText($importedFiles, $answer);
+
+        $objAnswer->createAnswer(
+            $answer,
+            $goodAnswer,
+            $comment,
+            $weighting,
+            $position,
+            null,
+            null,
+            ''
+        );
+    }
+
+    public function processMultipleAnswer(
+        Answer $objAnswer,
+        $answerValues,
+        $position,
+        &$questionWeighting,
+        $importedFiles
+    ) {
+        $answer = $answerValues['answertext'];
+        $comment = $answerValues['feedback'];
+        $weighting = $answerValues['fraction'];
+        //$weighting = abs($weighting);
+        if ($weighting > 0) {
+            $questionWeighting += $weighting;
+        }
+        $goodAnswer = $weighting > 0;
 
         $this->fixPathInText($importedFiles, $answer);
 

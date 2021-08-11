@@ -19,6 +19,15 @@ $platform_email['SMTP_UNIQUE_SENDER'] = 0; // to send all mails from the same us
 $platform_email['SMTP_DEBUG'] = 0; // change to 1 to enable smtp debug
 $platform_email['SMTP_SECURE'] = 'tls'; // if you're using SSL: ssl; or TLS: tls. (only used if SMTP_AUTH==1)
 $platform_email['SMTP_UNIQUE_REPLY_TO'] = 0; // to use AWS SMS service, SMTP_UNIQUE_SENDER and this have to be = 1
+// If you have certificate problems see:
+// https://github.com/PHPMailer/PHPMailer/wiki/Troubleshooting#updating-ca-certificates
+/*$platform_email['SMTPOptions'] = [
+    'ssl' => [
+        'verify_peer' => false,
+        'verify_peer_name' => false,
+        'allow_self_signed' => true,
+    ],
+];*/
 // DKIM requires the generation of a public/private keypair and the configuration of a TXT record in your DNS
 // The TXT record should look like this: chamilo._domainkey.yourdomain.ext IN TXT "v=1; k=rsa; s=chamilo; p=PubKey..."
 // to match the following selector

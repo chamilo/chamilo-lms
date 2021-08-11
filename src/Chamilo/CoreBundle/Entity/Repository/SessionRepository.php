@@ -23,7 +23,7 @@ class SessionRepository extends EntityRepository
      *
      * @param Session $session The session
      *
-     * @return array
+     * @return Course[]
      */
     public function getCoursesOrderedByPosition(Session $session)
     {

@@ -4,6 +4,9 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -21,10 +24,13 @@ use Doctrine\ORM\Mapping as ORM;
  *  }
  * )
  * Add @ to the next line if api_get_configuration_value('allow_portfolio_tool') is true
- * ORM\Entity()
+ * ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\PortfolioRepository")
  */
 class Portfolio
 {
+    public const TYPE_ITEM = 1;
+    public const TYPE_COMMENT = 2;
+
     /**
      * @var int
      *
@@ -101,11 +107,39 @@ class Portfolio
     protected $category;
 
     /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\PortfolioComment", mappedBy="item")
+     */
+    private $comments;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="origin", type="integer", nullable=true)
+     */
+    private $origin;
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="origin_type", type="integer", nullable=true)
+     */
+    private $originType;
+
+    /**
+     * @var float|null
+     *
+     * @ORM\Column(name="score", type="float", nullable=true)
+     */
+    private $score;
+
+    /**
      * Portfolio constructor.
      */
     public function __construct()
     {
-        $this->category = new PortfolioCategory();
+        $this->category = null;
+        $this->comments = new ArrayCollection();
     }
 
     /**
@@ -320,5 +354,65 @@ class Portfolio
         $this->category = $category;
 
         return $this;
+    }
+
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function getLastComments(int $number = 3): Collection
+    {
+        $criteria = Criteria::create();
+        $criteria
+            ->orderBy(['date' => 'DESC'])
+            ->setMaxResults($number);
+
+        return $this->comments->matching($criteria);
+    }
+
+    public function getOrigin(): ?int
+    {
+        return $this->origin;
+    }
+
+    /**
+     * @return \Chamilo\CoreBundle\Entity\Portfolio
+     */
+    public function setOrigin(?int $origin): Portfolio
+    {
+        $this->origin = $origin;
+
+        return $this;
+    }
+
+    public function getOriginType(): ?int
+    {
+        return $this->originType;
+    }
+
+    /**
+     * @return \Chamilo\CoreBundle\Entity\Portfolio
+     */
+    public function setOriginType(?int $originType): Portfolio
+    {
+        $this->originType = $originType;
+
+        return $this;
+    }
+
+    public function getExcerpt(int $count = 380): string
+    {
+        return api_get_short_text_from_html($this->content, $count);
+    }
+
+    public function getScore(): ?float
+    {
+        return $this->score;
+    }
+
+    public function setScore(?float $score): void
+    {
+        $this->score = $score;
     }
 }

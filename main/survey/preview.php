@@ -55,22 +55,22 @@ Display::display_header(get_lang('SurveyPreview'));
 SurveyUtil::check_first_last_question($surveyId, false);
 
 // Survey information
-echo '<div class="page-header"><h2>'.$survey_data['survey_title'].'</h2></div>';
+echo '<div class="page-header"><h2>'.Security::remove_XSS($survey_data['survey_title']).'</h2></div>';
 if (!empty($survey_data['survey_subtitle'])) {
-    echo '<div id="survey_subtitle">'.$survey_data['survey_subtitle'].'</div>';
+    echo '<div id="survey_subtitle">'.Security::remove_XSS($survey_data['survey_subtitle']).'</div>';
 }
 
 // Displaying the survey introduction
 if (!isset($_GET['show'])) {
     if (!empty($survey_data['survey_introduction'])) {
-        echo '<div class="survey_content">'.$survey_data['survey_introduction'].'</div>';
+        echo '<div class="survey_content">'.Security::remove_XSS($survey_data['survey_introduction']).'</div>';
     }
 }
 
 // Displaying the survey thanks message
 if (isset($_POST['finish_survey'])) {
     echo Display::return_message(get_lang('SurveyFinished'), 'confirm');
-    echo $survey_data['survey_thanks'];
+    echo Security::remove_XSS($survey_data['survey_thanks']);
     Display::display_footer();
     exit;
 }
@@ -149,10 +149,10 @@ if (isset($_GET['show'])) {
                 $sort = $row['sort'];
                 $questions[$sort]['question_id'] = $row['question_id'];
                 $questions[$sort]['survey_id'] = $row['survey_id'];
-                $questions[$sort]['survey_question'] = $row['survey_question'];
+                $questions[$sort]['survey_question'] = Security::remove_XSS($row['survey_question']);
                 $questions[$sort]['display'] = $row['display'];
                 $questions[$sort]['type'] = $row['type'];
-                $questions[$sort]['options'][$row['question_option_id']] = $row['option_text'];
+                $questions[$sort]['options'][$row['question_option_id']] = Security::remove_XSS($row['option_text']);
                 $questions[$sort]['maximum_score'] = $row['max_value'];
                 $questions[$sort]['parent_id'] = isset($row['parent_id']) ? $row['parent_id'] : 0;
                 $questions[$sort]['parent_option_id'] = isset($row['parent_option_id']) ? $row['parent_option_id'] : 0;

@@ -144,7 +144,6 @@
                             });
 
                             if (add == true) {
-                                console.log('adding new element');
                                 notifications.push(value);
                                 count++;
                             }

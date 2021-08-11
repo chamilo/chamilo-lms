@@ -128,12 +128,7 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
     $footer .= '<div align="right" style="font-weight: bold;">{PAGENO}/{nb}</div>';
 
     // preparing content pdf
-    $css_file = api_get_path(SYS_CSS_PATH).'themes/'.api_get_setting('stylesheets').'/print.css';
-    if (file_exists($css_file)) {
-        $css = @file_get_contents($css_file);
-    } else {
-        $css = '';
-    }
+    $css = api_get_print_css();
     $items_per_page = 30;
     $count_pages = ceil(count($data_table) / $items_per_page);
     for ($x = 0; $x < $count_pages; $x++) {

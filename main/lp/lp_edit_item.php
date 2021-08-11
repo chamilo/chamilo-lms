@@ -151,7 +151,7 @@ if (empty($documentInfo)) {
 
 $path_parts = pathinfo($path_file);
 
-if (!empty($path_file) && isset($path_parts['extension']) && $path_parts['extension'] == 'html') {
+if (!empty($path_file) && isset($path_parts['extension']) && $path_parts['extension'] === 'html') {
     echo $learnPath->return_new_tree();
     // Show the template list
     echo '<div id="frmModel" class="scrollbar-inner lp-add-item"></div>';
@@ -167,6 +167,7 @@ $excludeExtraFields = [
     'authorlpitem',
     'price',
 ];
+
 if (api_is_platform_admin()) {
     // Only admins can edit this items
     $excludeExtraFields = [];
@@ -178,6 +179,9 @@ if (isset($is_success) && $is_success === true) {
     echo $learnPath->display_item($_GET['id'], $msg);
 } else {
     $item = $learnPath->getItem($_GET['id']);
+    if ('document' !== $item->get_type()) {
+        $excludeExtraFields[] = 'no_automatic_validation';
+    }
     echo $learnPath->display_edit_item($item->getIid(), $excludeExtraFields);
     $finalItem = Session::read('finalItem');
     if ($finalItem) {

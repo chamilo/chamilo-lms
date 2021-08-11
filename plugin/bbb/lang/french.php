@@ -68,3 +68,4 @@ $strings['CreatedAt'] = "Créé à";
 $strings['bbb_force_record_generation'] = 'Forcer la génération de l\'enregistrement à la fin de la session';
 $strings['ThereIsNoVideoConferenceActive'] = "Il n'y a aucune vidéoconférence actuellement active";
 $strings['meeting_duration'] = 'Durée de la conférence (en minutes)';
+$strings['big_blue_button_students_start_conference_in_groups'] = 'Permettre aux apprenants de démarrer les vidéoconferénces de leurs groupes';

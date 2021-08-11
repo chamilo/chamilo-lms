@@ -42,6 +42,14 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
     $addTeacherColumn = true;
     $table = Database::get_main_table(TABLE_MAIN_COURSE);
 
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+    $column = (int) $column;
+
+    if (!in_array(strtolower($direction), ['asc', 'desc'])) {
+        $direction = 'desc';
+    }
+
     $teachers = '';
     if ($addTeacherColumn) {
         $teachers = " GROUP_CONCAT(cu.user_id SEPARATOR ',') as col4, ";

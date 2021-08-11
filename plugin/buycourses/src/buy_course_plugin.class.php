@@ -2981,15 +2981,15 @@ class BuyCoursesPlugin extends Plugin
     public static function getSalesReportScript($sales = [], $invoicingEnable = false)
     {
         $cols = "
-    '".get_plugin_lang('OrderReference', 'BuyCoursesPlugin')."',
-    '".get_plugin_lang('OrderStatus', 'BuyCoursesPlugin')."',
-    '".get_plugin_lang('OrderDate', 'BuyCoursesPlugin')."',
-    '".get_plugin_lang('PaymentMethod', 'BuyCoursesPlugin')."',
-    '".get_plugin_lang('Price', 'BuyCoursesPlugin')."',
-    '".get_plugin_lang('ProductType', 'BuyCoursesPlugin')."',
-    '".get_plugin_lang('Name', 'BuyCoursesPlugin')."',
-    '".get_lang('UserName')."',
-    '".get_lang('Email')."',";
+    '".preg_replace("/'/", "\\'", get_plugin_lang('OrderReference', 'BuyCoursesPlugin'))."',
+    '".preg_replace("/'/", "\\'", get_plugin_lang('OrderStatus', 'BuyCoursesPlugin'))."',
+    '".preg_replace("/'/", "\\'", get_plugin_lang('OrderDate', 'BuyCoursesPlugin'))."',
+    '".preg_replace("/'/", "\\'", get_plugin_lang('PaymentMethod', 'BuyCoursesPlugin'))."',
+    '".preg_replace("/'/", "\\'", get_plugin_lang('Price', 'BuyCoursesPlugin'))."',
+    '".preg_replace("/'/", "\\'", get_plugin_lang('ProductType', 'BuyCoursesPlugin'))."',
+    '".preg_replace("/'/", "\\'", get_plugin_lang('Name', 'BuyCoursesPlugin'))."',
+    '".preg_replace("/'/", "\\'", get_lang('UserName'))."',
+    '".preg_replace("/'/", "\\'", get_lang('Email'))."',";
         $model = "
         {name:'reference',index:'reference'  ,height: 'auto', width:70, sorttype:'string', align: 'center'},
         {name:'status',index:'status'  , height: 'auto',width:70, sorttype:'string', align: 'center'},

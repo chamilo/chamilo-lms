@@ -12,13 +12,17 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User subscriptions to a session course.
  *
  * @ApiResource(
- *     normalizationContext={"groups"={"session_rel_course_rel_user:read", "user:read"}}
+ *     normalizationContext={
+ *         "groups"={"session_rel_course_rel_user:read", "user:read"},
+ *         "enable_max_depth"=true
+ *     }
  * )
  * @ORM\Table(
  *     name="session_rel_course_rel_user",
@@ -33,7 +37,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity
  */
-#[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: [
+    'user' => 'exact',
+    'session' => 'exact',
+    'course' => 'exact',
+    'user.username' => 'partial',
+])]
 class SessionRelCourseRelUser
 {
     use UserTrait;
@@ -74,6 +83,7 @@ class SessionRelCourseRelUser
      * @ORM\ManyToOne(targetEntity="Course", inversedBy="sessionRelCourseRelUsers", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
+    #[MaxDepth(1)]
     protected Course $course;
 
     /**

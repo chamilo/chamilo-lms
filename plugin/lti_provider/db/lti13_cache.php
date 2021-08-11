@@ -36,7 +36,7 @@ class Lti13Cache implements Lti1p3Cache
 
     private function saveCache()
     {
-        file_put_contents(sys_get_temp_dir().'/lti_cache.txt', json_encode($this->cache));
+        file_put_contents(api_get_path(SYS_ARCHIVE_PATH).'lti_cache.txt', json_encode($this->cache));
     }
 
     public function cacheNonce($nonce): Lti13Cache

@@ -15,6 +15,22 @@ switch ($action) {
         $size = DocumentManager::getTotalFolderSize($path, $isAllowedToEdit);
         echo format_file_size($size);
         break;
+    case 'get_dirs_size':
+        api_protect_course_script(true);
+        $requests = isset($_GET['requests']) ? $_GET['requests'] : '';
+        $isAllowedToEdit = api_is_allowed_to_edit();
+        $response = [];
+        $requests = explode(',', $requests);
+        foreach ($requests as $request) {
+            $fileSize = DocumentManager::getTotalFolderSize($request, $isAllowedToEdit);
+            $data = [
+                'id' => $request,
+                'size' => format_file_size($fileSize),
+            ];
+            array_push($response, $data);
+        }
+        echo json_encode($response);
+        break;
     case 'get_document_quota':
         // Getting the course quota
         $courseQuota = DocumentManager::get_course_quota();

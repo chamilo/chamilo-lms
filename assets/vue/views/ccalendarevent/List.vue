@@ -89,6 +89,7 @@ import CreateMixin from "../../mixins/CreateMixin";
 import {useRoute, useRouter} from "vue-router";
 import {useQuasar} from 'quasar';
 import CCalendarEventInfo from "../../components/ccalendarevent/Info";
+import {ENTRYPOINT} from "../../config/entrypoint";
 
 const servicePrefix = 'CCalendarEvent';
 
@@ -132,7 +133,7 @@ export default {
     });
 
     async function getCalendarEvents({startStr, endStr}) {
-      const calendarEvents = await axios.get('/api/c_calendar_events', {
+      const calendarEvents = await axios.get(ENTRYPOINT + 'c_calendar_events', {
         params: {
           'startDate[after]': startStr,
           'endDate[before]': endStr
@@ -143,7 +144,7 @@ export default {
     }
 
     async function getSessions({startStr, endStr}) {
-      const sessions = await axios.get(`/api/users/${currentUser.value['id']}/sessions_rel_users`, {
+      const sessions = await axios.get(ENTRYPOINT + `users/${currentUser.value['id']}/sessions_rel_users`, {
         params: {
           'displayStartDate[after]': startStr,
           'displayEndDate[before]': endStr

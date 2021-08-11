@@ -15,7 +15,7 @@
 <script>
 import { mapActions } from 'vuex';
 import { createHelpers } from 'vuex-map-fields';
-import FormUpload from '../../components/documents/FormUpload.vue';
+//import FormUpload from '../../components/documents/FormUpload.vue';
 import Loading from '../../components/Loading.vue';
 import Toolbar from '../../components/Toolbar.vue';
 import UploadMixin from '../../mixins/UploadMixin';
@@ -47,7 +47,7 @@ export default {
   components: {
     Loading,
     Toolbar,
-    FormUpload,
+    //FormUpload,
     Dashboard
   },
   setup() {

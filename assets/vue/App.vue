@@ -12,7 +12,7 @@
 import {mapGetters} from 'vuex';
 import NotificationMixin from './mixins/NotificationMixin';
 import axios from "axios";
-import { onMounted, onUnmounted, ref, computed, watch, provide } from 'vue';
+import { computed, watch, provide } from 'vue';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter, useRoute } from 'vue-router'
 
@@ -26,9 +26,8 @@ import Button from './components/global/Button.vue'*/
 
 const defaultLayout = "Dashboard";
 
-import { DefaultApolloClient } from '@vue/apollo-composable'
-
-import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core'
+import { DefaultApolloClient } from '@vue/apollo-composable';
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core';
 
 // HTTP connection to the API
 const httpLink = createHttpLink({
@@ -75,13 +74,11 @@ export default {
       layout
     }
   },
-
   data: () => ({
     user: {},
     firstTime: false,
     legacyContent: '',
   }),
-
   watch: {
     $route() {
       //console.log('App.vue watch $route');
@@ -93,10 +90,10 @@ export default {
       var n = url.indexOf("main/");
       if (n > 0) {
         if (this.firstTime) {
-          console.log('App.vue: firstTime: 1.');
+          //console.log('App.vue: firstTime: 1.');
           let content = document.querySelector("#sectionMainContent");
           if (content) {
-            console.log('legacyContent updated');
+            //console.log('legacyContent updated');
             content.style.display = 'block';
             document.querySelector("#sectionMainContent").remove();
             this.legacyContent = content.outerHTML;
@@ -107,21 +104,21 @@ export default {
             //console.log('remove');
           }
 
-          console.log('Replace URL', url);
+          //console.log('Replace URL', url);
           window.location.replace(url);
         }
       } else {
         if (this.firstTime) {
-          console.log('App.vue: firstTime 2');
+          //console.log('App.vue: firstTime 2');
           let content = document.querySelector("#sectionMainContent");
           if (content) {
-            console.log('legacyContent updated');
+            //console.log('legacyContent updated');
             content.style.display = 'block';
             document.querySelector("#sectionMainContent").remove();
             this.legacyContent = content.outerHTML;
           }
         } else {
-          console.log('legacyContent cleaned');
+          //console.log('legacyContent cleaned');
           let content = document.querySelector("#sectionMainContent");
           if (content) {
             document.querySelector("#sectionMainContent").remove();
@@ -141,7 +138,7 @@ export default {
   created() {
     console.log('App.vue created');
     this.legacyContent = '';
-    console.log('App.vue legacyContent cleaned');
+    //console.log('App.vue legacyContent cleaned');
     let app = document.getElementById('app');
 
     let isAuthenticated = false;
@@ -187,7 +184,7 @@ export default {
     });
   },
   mounted() {
-    console.log('App.vue mounted');
+    //console.log('App.vue mounted');
     this.firstTime = true;
   },
   mixins: [NotificationMixin],

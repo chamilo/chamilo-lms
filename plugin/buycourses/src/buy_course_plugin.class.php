@@ -2473,7 +2473,10 @@ class BuyCoursesPlugin extends Plugin
         $nodeType = (int) $nodeType;
         $nodeId = (int) $nodeId;
 
-        $defaultOrder = 'ss.id ASC';
+        $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
+        $servicesSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
+
+        $defaultOrder = 'id ASC';
 
         if (!empty($buyerId)) {
             $conditions = ['WHERE' => ['ss.buyer_id = ?' => $buyerId], 'ORDER' => $defaultOrder];
@@ -2507,9 +2510,6 @@ class BuyCoursesPlugin extends Plugin
                 'ORDER' => 'ss.service_id ASC',
             ];
         }
-
-        $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
-        $servicesSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
 
         $innerJoins = "INNER JOIN $servicesTable s ON ss.service_id = s.id $groupBy";
         $return = Database::select(

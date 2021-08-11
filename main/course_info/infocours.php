@@ -288,7 +288,8 @@ $checkBoxActiveLegal = $form->createElement(
     [null, get_lang('ShowALegalNoticeWhenEnteringTheCourse')],
     get_lang('ActivateLegal')
 );
-$textAreaLegal = $form->createElement('textarea', 'legal', get_lang('CourseLegalAgreement'), ['rows' => 8]);
+
+$textAreaLegal = $form->createElement('html_editor', 'legal', get_lang('CourseLegalAgreement'), ['rows' => 8]);
 
 $elements = [
     $groupElement,

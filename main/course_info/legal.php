@@ -23,7 +23,7 @@ $enabled = api_get_plugin_setting('courselegal', 'tool_enable');
 $pluginExtra = null;
 $pluginLegal = false;
 
-if ('true' == $enabled) {
+if ('true' === $enabled) {
     $pluginLegal = true;
     require_once api_get_path(SYS_PLUGIN_PATH).'courselegal/config.php';
     $plugin = CourseLegalPlugin::create();
@@ -64,7 +64,7 @@ if ($pluginLegal && isset($userData) && !empty($userData)) {
     }
 }
 $form->addElement('header', get_lang('CourseLegalAgreement'));
-$form->addElement('label', null, $course_legal);
+$form->addLabel(null, Security::remove_XSS($course_legal));
 if ($pluginLegal && !empty($plugin)) {
     $form->addElement('label', null, $plugin->getCurrentFile($course_info['real_id'], $session_id));
 }

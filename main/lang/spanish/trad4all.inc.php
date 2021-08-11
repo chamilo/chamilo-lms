@@ -8818,4 +8818,5 @@ $StudentWithFailedAttempt = "Estudiantes con intento fallido";
 $ExerciseAttemptStatsReport = "Reporte de intentos de ejercicio";
 $ComparativeGroupReport = "Reporte comparativo por grupo";
 $CoursesUsage = "Uso de cursos";
+$HideConnectionTime = "Ocultar tiempo de conexión";
 ?>

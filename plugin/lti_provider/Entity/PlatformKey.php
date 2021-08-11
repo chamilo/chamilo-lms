@@ -81,6 +81,8 @@ class PlatformKey
     public function setKid(string $kid)
     {
         $this->kid = $kid;
+
+        return $this;
     }
 
     /**
@@ -121,5 +123,7 @@ class PlatformKey
     public function setPublicKey(string $publicKey)
     {
         $this->publicKey = $publicKey;
+
+        return $this;
     }
 }

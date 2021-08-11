@@ -6,7 +6,7 @@ namespace Chamilo\PluginBundle\Entity\LtiProvider;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class Platform
+ * Class PlatformKey.
  *
  * @package Chamilo\PluginBundle\Entity\LtiProvider
  *
@@ -44,8 +44,6 @@ class PlatformKey
 
     /**
      * Get id.
-     *
-     * @return int
      */
     public function getId(): int
     {
@@ -64,9 +62,7 @@ class PlatformKey
 
     /**
      *
-     * Get kid.
-     *
-     * @return string
+     * Get key id.
      */
     public function getKid(): string
     {
@@ -74,11 +70,9 @@ class PlatformKey
     }
 
     /**
-     * Set kid.
-     *
-     * @param string $kid
+     * Set key id.
      */
-    public function setKid(string $kid)
+    public function setKid(string $kid): PlatformKey
     {
         $this->kid = $kid;
 
@@ -87,8 +81,6 @@ class PlatformKey
 
     /**
      * Get privateKey.
-     *
-     * @return string
      */
     public function getPrivateKey(): string
     {
@@ -97,10 +89,6 @@ class PlatformKey
 
     /**
      * Set privateKey.
-     *
-     * @param string $privateKey
-     *
-     * @return PlatformKey
      */
     public function setPrivateKey(string $privateKey): PlatformKey
     {
@@ -110,7 +98,7 @@ class PlatformKey
     }
 
     /**
-     * @return string
+     * Get publicKey.
      */
     public function getPublicKey(): string
     {
@@ -118,9 +106,9 @@ class PlatformKey
     }
 
     /**
-     * @param string $publicKey
+     * Set publicKey.
      */
-    public function setPublicKey(string $publicKey)
+    public function setPublicKey(string $publicKey): PlatformKey
     {
         $this->publicKey = $publicKey;
 

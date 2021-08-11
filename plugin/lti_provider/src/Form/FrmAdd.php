@@ -15,14 +15,10 @@ class FrmAdd extends FormValidator
 
     /**
      * FrmAdd constructor.
-     *
-     * @param string        $name
-     * @param array         $attributes
-     * @param Platform|null $platform
      */
     public function __construct(
-        $name,
-        $attributes = [],
+        string $name,
+        array $attributes = [],
         Platform $platform = null
     ) {
         parent::__construct($name, 'POST', '', '', $attributes, self::LAYOUT_HORIZONTAL);
@@ -31,9 +27,9 @@ class FrmAdd extends FormValidator
     }
 
     /**
-     * Build the form
+     * Build the form.
      */
-    public function build()
+    public function build(): void
     {
         $plugin = LtiProviderPlugin::create();
 
@@ -52,7 +48,7 @@ class FrmAdd extends FormValidator
 
     }
 
-    public function setDefaultValues()
+    public function setDefaultValues(): void
     {
         $defaults = [];
 

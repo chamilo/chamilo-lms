@@ -6,7 +6,7 @@ namespace Chamilo\PluginBundle\Entity\LtiProvider;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class Platform
+ * Class Platform.
  *
  * @package Chamilo\PluginBundle\Entity\LtiProvider
  *
@@ -68,8 +68,6 @@ class Platform
 
     /**
      * Get id.
-     *
-     * @return int
      */
     public function getId(): int
     {
@@ -78,10 +76,6 @@ class Platform
 
     /**
      * Set id.
-     *
-     * @param int $id
-     *
-     * @return Platform
      */
     public function setId(int $id): Platform
     {
@@ -92,9 +86,7 @@ class Platform
 
     /**
      *
-     * Get kid.
-     *
-     * @return string
+     * Get key id.
      */
     public function getKid(): string
     {
@@ -102,11 +94,11 @@ class Platform
     }
 
     /**
-     * Set kid.
+     * Set key id.
      *
      * @param string $kid
      */
-    public function setKid(string $kid)
+    public function setKid(string $kid): Platform
     {
         $this->kid = $kid;
 
@@ -114,9 +106,7 @@ class Platform
     }
 
     /**
-     * Get Issuer
-     *
-     * @return string
+     * Get Issuer.
      */
     public function getIssuer(): string
     {
@@ -124,21 +114,17 @@ class Platform
     }
 
     /**
-     * Set issuer
-     *
-     * @param string $issuer
+     * Set issuer.
      */
-    public function setIssuer(string $issuer)
+    public function setIssuer(string $issuer): Platform
     {
-        $this->issuer = $issuer; 
+        $this->issuer = $issuer;
 
         return $this;
     }
 
     /**
-     * Get client ID
-     *
-     * @return string
+     * Get client ID.
      */
     public function getClientId(): string
     {
@@ -146,11 +132,9 @@ class Platform
     }
 
     /**
-     * Set client ID
-     *
-     * @param string $clientId
+     * Set client ID.
      */
-    public function setClientId(string $clientId)
+    public function setClientId(string $clientId): Platform
     {
         $this->clientId = $clientId;
 
@@ -158,9 +142,7 @@ class Platform
     }
 
     /**
-     * Get auth login URL
-     *
-     * @return string
+     * Get auth login URL.
      */
     public function getAuthLoginUrl(): string
     {
@@ -168,11 +150,9 @@ class Platform
     }
 
     /**
-     * Set auth login URL
-     *
-     * @param string $authLoginUrl
+     * Set auth login URL.
      */
-    public function setAuthLoginUrl(string $authLoginUrl)
+    public function setAuthLoginUrl(string $authLoginUrl): Platform
     {
         $this->authLoginUrl = $authLoginUrl;
 
@@ -180,9 +160,7 @@ class Platform
     }
 
     /**
-     * Get auth token URL
-     *
-     * @return string
+     * Get auth token URL.
      */
     public function getAuthTokenUrl(): string
     {
@@ -190,11 +168,9 @@ class Platform
     }
 
     /**
-     * Set auth token URL
-     *
-     * @param string $authTokenUrl
+     * Set auth token URL.
      */
-    public function setAuthTokenUrl(string $authTokenUrl)
+    public function setAuthTokenUrl(string $authTokenUrl): Platform
     {
         $this->authTokenUrl = $authTokenUrl;
 
@@ -202,9 +178,7 @@ class Platform
     }
 
     /**
-     * Get key set URL
-     *
-     * @return string
+     * Get key set URL.
      */
     public function getKeySetUrl(): string
     {
@@ -212,11 +186,9 @@ class Platform
     }
 
     /**
-     * Set key set URL
-     *
-     * @param string $keySetUrl
+     * Set key set URL.
      */
-    public function setKeySetUrl(string $keySetUrl)
+    public function setKeySetUrl(string $keySetUrl): Platform
     {
         $this->keySetUrl = $keySetUrl;
 
@@ -224,9 +196,7 @@ class Platform
     }
 
     /**
-     * Get Deployment ID
-     *
-     * @return string
+     * Get Deployment ID.
      */
     public function getDeploymentId(): string
     {
@@ -234,11 +204,9 @@ class Platform
     }
 
     /**
-     * Set Deployment ID
-     *
-     * @param string $deploymentId
+     * Set Deployment ID.
      */
-    public function setDeploymentId(string $deploymentId)
+    public function setDeploymentId(string $deploymentId): Platform
     {
         $this->deploymentId = $deploymentId;
 

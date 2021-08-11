@@ -31,7 +31,6 @@ try {
         throw new Exception(get_lang('Forbidden'));
     }
 
-
     $html = '<div class="row">'
         .'<div class="col-xs-2 text-right"><strong>'.$plugin->get_lang('Name').'</strong></div>'
         .'<div class="col-xs-10">'.$name.'</div>'

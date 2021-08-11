@@ -11,7 +11,7 @@ require_once __DIR__.'/../db/lti13_database.php';
 
 
 /**
- * Class LtiProvider
+ * Class LtiProvider.
  */
 class LtiProvider
 {
@@ -20,6 +20,7 @@ class LtiProvider
      * Get the class instance
      *
      * @staticvar LtiProvider $result
+     *
      * @return LtiProvider
      */
     public static function create()
@@ -30,33 +31,28 @@ class LtiProvider
     }
 
     /**
-     * Oidc login and register
+     * Oidc login and register.
      *
      * @throws Lti1p3\OidcException
      */
     public function login($request = null)
     {
-        LtiOidcLogin::new(new Lti13Database, new Lti13Cache(), new Lti13Cookie)
+        LtiOidcLogin::new(new Lti13Database(), new Lti13Cache(), new Lti13Cookie())
             ->doOidcLoginRedirect(api_get_path(WEB_PLUGIN_PATH)."lti_provider/web/game.php", $request)
             ->doRedirect();
     }
 
     /**
-     * Lti Message Launch
-     *
-     * @param bool $fromCache
-     * @param null $launchId
-     *
-     * @throws Lti1p3\LtiException
+     * Lti Message Launch.
      *
      * @return LtiMessageLaunch
      */
-    public function launch(bool $fromCache = false, $launchId = null): LtiMessageLaunch
+    public function launch(bool $fromCache = false, ?int $launchId = null): LtiMessageLaunch
     {
         if ($fromCache) {
             $launch = LtiMessageLaunch::fromCache($launchId, new Lti13Database(), new Lti13Cache());
         } else {
-            $launch = LtiMessageLaunch::new(new Lti13Database(), new Lti13Cache(), new Lti13Cookie)->validate();
+            $launch = LtiMessageLaunch::new(new Lti13Database(), new Lti13Cache(), new Lti13Cookie())->validate();
         }
 
         return $launch;

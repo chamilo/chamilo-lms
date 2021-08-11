@@ -7,7 +7,7 @@ use Doctrine\ORM\OptimisticLockException;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Description of LtiProvider
+ * Description of LtiProvider.
  *
  * @author Christian Beeznest <christian.fasanando@beeznest.com>
  */
@@ -54,9 +54,7 @@ class LtiProviderPlugin extends Plugin
     }
 
     /**
-     * Get the public key
-     *
-     * @return string
+     * Get the public key.
      */
     public function getPublicKey(): string
     {
@@ -73,10 +71,9 @@ class LtiProviderPlugin extends Plugin
     }
 
     /**
-     * Get the class instance
+     * Get the class instance.
      *
      * @staticvar LtiProviderPlugin $result
-     * @return LtiProviderPlugin
      */
     public static function create(): LtiProviderPlugin
     {
@@ -85,13 +82,16 @@ class LtiProviderPlugin extends Plugin
         return $result ?: $result = new self();
     }
 
+    /**
+     * Check whether the current user is a teacher in this context.
+     */
     public static function isInstructor()
     {
         api_is_allowed_to_edit(false, true);
     }
 
     /**
-     * Get the plugin directory name
+     * Get the plugin directory name.
      */
     public function get_name(): string
     {
@@ -99,7 +99,7 @@ class LtiProviderPlugin extends Plugin
     }
 
     /**
-     * Install the plugin. Setup the database
+     * Install the plugin. Set the database up.
      */
     public function install()
     {
@@ -123,7 +123,7 @@ class LtiProviderPlugin extends Plugin
     }
 
     /**
-     * @return string
+     * Get current entity sys path.
      */
     public function getEntityPath(): string
     {
@@ -221,7 +221,7 @@ class LtiProviderPlugin extends Plugin
     /**
      * Generate a key pair and key id for the platform.
      *
-     * Rerturn a associative array like ['kid' => '...', 'private' => '...', 'public' => '...'].
+     * Return a associative array like ['kid' => '...', 'private' => '...', 'public' => '...'].
      *
      * @return array
      */
@@ -294,9 +294,8 @@ class LtiProviderPlugin extends Plugin
     }
 
     /**
+     * Get a SimpleXMLElement object with the request received on php://input.
      * @throws Exception
-     *
-     * @return null|SimpleXMLElement
      */
     private function getRequestXmlElement(): ?SimpleXMLElement
     {

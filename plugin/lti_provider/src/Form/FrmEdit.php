@@ -15,14 +15,10 @@ class FrmEdit extends FormValidator
 
     /**
      * FrmAdd constructor.
-     *
-     * @param string        $name
-     * @param array         $attributes
-     * @param Platform|null $platform
      */
     public function __construct(
-        $name,
-        $attributes = [],
+        string $name,
+        array $attributes = [],
         Platform $platform = null
     ) {
         parent::__construct($name, 'POST', '', '', $attributes, self::LAYOUT_HORIZONTAL);
@@ -32,8 +28,6 @@ class FrmEdit extends FormValidator
 
     /**
      * Build the form.
-     *
-     * @param bool $globalMode
      *
      * @throws Exception
      */
@@ -59,7 +53,7 @@ class FrmEdit extends FormValidator
     /**
      * @throws Exception
      */
-    public function setDefaultValues()
+    public function setDefaultValues(): void
     {
         $defaults = [];
         $defaults['issuer'] = $this->platform->getIssuer();

@@ -67,7 +67,8 @@ class Lti13Database implements Interfaces\Database
 
     public function findDeployment($iss, $deploymentId, $clientId = null)
     {
-        if (!in_array($deploymentId, $_SESSION['iss'][$iss]['deployment'])) {
+        $issSession = Session::read('iss');
+        if (!in_array($deploymentId, $issSession[$iss]['deployment'])) {
             return false;
         }
 

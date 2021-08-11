@@ -2,11 +2,9 @@
 /* For license terms, see /license.txt */
 
 $strings['plugin_title'] = 'LTI 1.3 Advantage Provider';
-$strings['plugin_comment'] = 'Une application simple développée pour montrer comment créer un outil IMS LTI';
-$strings['Description'] = 'L\'application permet à un étudiant à l\'intérieur d\'un cours de la plate-forme avec des outils externes qui est noté (Services d\'affectation et de notes) et de générer des rapports de leurs membres (Services NRP).
-Voici les détails de votre connexion LTI pour essayer cette application :';
-$strings['LtiProviderDescription'] = 'La première chose dont vous aurez besoin est de configurer votre enregistrement et votre déploiement. Pour configurer votre inscription
-remplissez le formulaire les valeurs requises pour le déploiement dans votre plateforme';
+$strings['plugin_comment'] = 'Une application simple développée pour démontrer comment créer un outil IMS LTI';
+$strings['Description'] = 'L\'application permet à un étudiant à l\'intérieur d\'un cours de la plateforme d\'utiliser des outils externes notés (Services d\'affectation et de notes) et de générer des rapports de leurs membres (Services NRP). Voici vos détails de connexion LTI pour essayer cette application :';
+$strings['LtiProviderDescription'] = 'La première chose dont vous aurez besoin est de configurer votre enregistrement et votre déploiement. Pour configurer votre inscription remplissez le formulaire les valeurs requises pour le déploiement dans votre plateforme';
 $strings['ConnectionDetails'] = 'Détails de connexion LTI';
 $strings['AddPlatform'] = 'Ajouter une plateforme client';
 $strings['EditPlatform'] = 'Modifier la plateforme client';
@@ -24,7 +22,7 @@ $strings['DeploymentId'] = 'ID de déploiement';
 $strings['KeyId'] = 'Key Id';
 $strings['PublicKey'] = 'Clé publique';
 $strings['Name'] = 'Nom du fournisseur';
-$strings['Enabled'] = 'Enabled';
+$strings['Enabled'] = 'Activé';
 $strings['GenerateKeyPairInfo'] = 'Une nouvelle paire de clés privée et publique sera créée lors de l\'activation.';
-$strings['URLs'] = 'Endpoints Urls';
-$strings['PlatformConnectionAdded'] = 'Une connexion de plate-forme est ajoutée.';
+$strings['URLs'] = 'URLs Endpoints';
+$strings['PlatformConnectionAdded'] = 'La nouvelle connexion inter-plateforme a été ajoutée.';

@@ -199,9 +199,7 @@ class SessionRepositoryTest extends AbstractApiTest
                 'session' => [
                     '@id' => '/api/sessions/'.$session->getId(),
                 ],
-                'user' => [
-                    '@id' => '/api/users/'.$user->getId(),
-                ],
+                'user' => '/api/users/'.$user->getId(),
             ]
         );
 
@@ -220,7 +218,6 @@ class SessionRepositoryTest extends AbstractApiTest
                 ],
             ]
         );
-
         $this->assertResponseStatusCodeSame(422);
     }
 }

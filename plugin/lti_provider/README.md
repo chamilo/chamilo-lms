@@ -6,18 +6,21 @@ Version 1.0
 > This plugin is meant to be later integrated into Chamilo (in a major version
 release).
 
-Lti provider is compatible only for Lti 1.3 Advance, defines the possibility to integrate tools or content into Platforms LMS.
-In this case Chamilo is used as provider , this plugin allows a student inside a course to play in a breakout game with with certain difficulty options (Deep Linkings) which is scored (Assigment and Grade Services) and comparing with the members of the course (NRP Services).
+The LTI provider feature is only compatible with LTI 1.3 Advantage, and demonstrates the possibility to integrate tools or content from Chamilo into other LMS platforms.
+In this case, Chamilo is used as provider , and this plugin allows a student inside a course to play in a breakout game with certain difficulty options (Deep Linkings) which is scored (Assigment and Grade Services) and compared with the other members of the course (NRP Services).
 
 # Installation
 
 1. Install the plugin from the Plugins page
 2. Enable the plugin from the Lti Provider Plugin Settings page
-3. Assign to the Administrator region (in the regions management page)
-4. Add the LTI connection details to try out this app (Configure page)
-5. To configure the Platforms LMS for registration and deployment
+3. Assign to the Administrator region (will appear on the management page)
+4. Add the LTI connection details to try out the little demo app (Configuration page)
+5. Configure the LMS platforms for registration and deployment
 
 # DB tables
+
+These tables are normally created during the activation of the plugin. They are mentioned here for practical purposes. 
+Note: "kid" means "Key ID", not "child".
 
 ## v1.0
 ```sql

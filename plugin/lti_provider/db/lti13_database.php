@@ -8,7 +8,6 @@ use Packback\Lti1p3\LtiRegistration;
 
 class Lti13Database implements Interfaces\Database
 {
-
     public function findRegistrationByIssuer($iss, $clientId = null)
     {
         $ltiCustomers = $this->getLtiConnection();
@@ -28,6 +27,16 @@ class Lti13Database implements Interfaces\Database
             ->setKid($ltiCustomers[$iss]['kid'])
             ->setIssuer($iss)
             ->setToolPrivateKey($this->getPrivateKey());
+    }
+
+    public function findDeployment($iss, $deploymentId, $clientId = null)
+    {
+        $issSession = Session::read('iss');
+        if (!in_array($deploymentId, $issSession[$iss]['deployment'])) {
+            return false;
+        }
+
+        return LtiDeployment::new()->setDeploymentId($deploymentId);
     }
 
     private function getLtiConnection(): array
@@ -63,15 +72,5 @@ class Lti13Database implements Interfaces\Database
         }
 
         return $privateKey;
-    }
-
-    public function findDeployment($iss, $deploymentId, $clientId = null)
-    {
-        $issSession = Session::read('iss');
-        if (!in_array($deploymentId, $issSession[$iss]['deployment'])) {
-            return false;
-        }
-
-        return LtiDeployment::new()->setDeploymentId($deploymentId);
     }
 }

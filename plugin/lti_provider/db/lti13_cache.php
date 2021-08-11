@@ -16,27 +16,12 @@ class Lti13Cache implements Lti1p3Cache
         return $this->cache[$key];
     }
 
-    private function loadCache()
-    {
-        $cache = file_get_contents(api_get_path(SYS_ARCHIVE_PATH).'lti_cache.txt');
-        if (empty($cache)) {
-            file_put_contents(api_get_path(SYS_ARCHIVE_PATH).'lti_cache.txt', '{}');
-            $this->cache = [];
-        }
-        $this->cache = json_decode($cache, true);
-    }
-
     public function cacheLaunchData($key, $jwtBody): Lti13Cache
     {
         $this->cache[$key] = $jwtBody;
         $this->saveCache();
 
         return $this;
-    }
-
-    private function saveCache()
-    {
-        file_put_contents(api_get_path(SYS_ARCHIVE_PATH).'lti_cache.txt', json_encode($this->cache));
     }
 
     public function cacheNonce($nonce): Lti13Cache
@@ -55,5 +40,20 @@ class Lti13Cache implements Lti1p3Cache
         }
 
         return true;
+    }
+
+    private function loadCache()
+    {
+        $cache = file_get_contents(api_get_path(SYS_ARCHIVE_PATH).'lti_cache.txt');
+        if (empty($cache)) {
+            file_put_contents(api_get_path(SYS_ARCHIVE_PATH).'lti_cache.txt', '{}');
+            $this->cache = [];
+        }
+        $this->cache = json_decode($cache, true);
+    }
+
+    private function saveCache()
+    {
+        file_put_contents(api_get_path(SYS_ARCHIVE_PATH).'lti_cache.txt', json_encode($this->cache));
     }
 }

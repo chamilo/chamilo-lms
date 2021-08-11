@@ -85,7 +85,6 @@ class Platform
     }
 
     /**
-     *
      * Get key id.
      */
     public function getKid(): string
@@ -95,8 +94,6 @@ class Platform
 
     /**
      * Set key id.
-     *
-     * @param string $kid
      */
     public function setKid(string $kid): Platform
     {

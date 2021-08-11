@@ -9,15 +9,13 @@ require_once __DIR__.'/../db/lti13_cookie.php';
 require_once __DIR__.'/../db/lti13_cache.php';
 require_once __DIR__.'/../db/lti13_database.php';
 
-
 /**
  * Class LtiProvider.
  */
 class LtiProvider
 {
-
     /**
-     * Get the class instance
+     * Get the class instance.
      *
      * @staticvar LtiProvider $result
      *
@@ -44,8 +42,6 @@ class LtiProvider
 
     /**
      * Lti Message Launch.
-     *
-     * @return LtiMessageLaunch
      */
     public function launch(bool $fromCache = false, ?int $launchId = null): LtiMessageLaunch
     {
@@ -57,5 +53,4 @@ class LtiProvider
 
         return $launch;
     }
-
 }

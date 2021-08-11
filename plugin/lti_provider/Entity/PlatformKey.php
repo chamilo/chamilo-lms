@@ -61,7 +61,6 @@ class PlatformKey
     }
 
     /**
-     *
      * Get key id.
      */
     public function getKid(): string

@@ -13,7 +13,6 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class LtiProviderPlugin extends Plugin
 {
-
     const TABLE_PLATFORM = 'plugin_lti_provider_platform';
 
     public $isAdminPlugin = true;
@@ -50,7 +49,6 @@ class LtiProviderPlugin extends Plugin
             'enabled' => 'boolean',
         ];
         parent::__construct($version, $author, $settings);
-
     }
 
     /**
@@ -131,52 +129,6 @@ class LtiProviderPlugin extends Plugin
     }
 
     /**
-     * Creates the plugin tables on database
-     *
-     * @return void
-     */
-    private function createPluginTables(): void
-    {
-        if ($this->areTablesCreated()) {
-            return;
-        }
-
-        $queries = [
-            "CREATE TABLE plugin_lti_provider_platform (
-                id int NOT NULL AUTO_INCREMENT,
-                issuer varchar(255) NOT NULL,
-                client_id varchar(255) NOT NULL,
-                kid varchar(255) NOT NULL,
-                auth_login_url varchar(255) NOT NULL,
-                auth_token_url varchar(255) NOT NULL,
-                key_set_url varchar(255) NOT NULL,
-                deployment_id varchar(255) NOT NULL,
-                PRIMARY KEY(id)
-            ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
-            "CREATE TABLE plugin_lti_provider_platform_key (
-                    id INT AUTO_INCREMENT NOT NULL,
-                    kid VARCHAR(255) NOT NULL,
-                    public_key LONGTEXT NOT NULL,
-                    private_key LONGTEXT NOT NULL,
-                    PRIMARY KEY(id)
-                ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
-        ];
-
-        foreach ($queries as $query) {
-            Database::query($query);
-        }
-
-    }
-
-    private function areTablesCreated(): bool
-    {
-        $entityManager = Database::getManager();
-        $connection = $entityManager->getConnection();
-
-        return $connection->getSchemaManager()->tablesExist(self::TABLE_PLATFORM);
-    }
-
-    /**
      * Save configuration for plugin.
      *
      * Generate a new key pair for platform when enabling plugin.
@@ -219,11 +171,79 @@ class LtiProviderPlugin extends Plugin
     }
 
     /**
+     * Unistall plugin. Clear the database.
+     */
+    public function uninstall()
+    {
+        $pluginEntityPath = $this->getEntityPath();
+        $fs = new Filesystem();
+
+        if ($fs->exists($pluginEntityPath)) {
+            $fs->remove($pluginEntityPath);
+        }
+
+        try {
+            $this->dropPluginTables();
+        } catch (DBALException $e) {
+            error_log('Error while uninstalling IMS/LTI plugin: '.$e->getMessage());
+        }
+    }
+
+    public function trimParams(array &$params)
+    {
+        foreach ($params as $key => $value) {
+            $newValue = preg_replace('/\s+/', ' ', $value);
+            $params[$key] = trim($newValue);
+        }
+    }
+
+    /**
+     * Creates the plugin tables on database.
+     */
+    private function createPluginTables(): void
+    {
+        if ($this->areTablesCreated()) {
+            return;
+        }
+
+        $queries = [
+            "CREATE TABLE plugin_lti_provider_platform (
+                id int NOT NULL AUTO_INCREMENT,
+                issuer varchar(255) NOT NULL,
+                client_id varchar(255) NOT NULL,
+                kid varchar(255) NOT NULL,
+                auth_login_url varchar(255) NOT NULL,
+                auth_token_url varchar(255) NOT NULL,
+                key_set_url varchar(255) NOT NULL,
+                deployment_id varchar(255) NOT NULL,
+                PRIMARY KEY(id)
+            ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
+            "CREATE TABLE plugin_lti_provider_platform_key (
+                    id INT AUTO_INCREMENT NOT NULL,
+                    kid VARCHAR(255) NOT NULL,
+                    public_key LONGTEXT NOT NULL,
+                    private_key LONGTEXT NOT NULL,
+                    PRIMARY KEY(id)
+                ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
+        ];
+
+        foreach ($queries as $query) {
+            Database::query($query);
+        }
+    }
+
+    private function areTablesCreated(): bool
+    {
+        $entityManager = Database::getManager();
+        $connection = $entityManager->getConnection();
+
+        return $connection->getSchemaManager()->tablesExist(self::TABLE_PLATFORM);
+    }
+
+    /**
      * Generate a key pair and key id for the platform.
      *
      * Return a associative array like ['kid' => '...', 'private' => '...', 'public' => '...'].
-     *
-     * @return array
      */
     private static function generatePlatformKeys(): array
     {
@@ -251,28 +271,7 @@ class LtiProviderPlugin extends Plugin
     }
 
     /**
-     * Unistall plugin. Clear the database
-     */
-    public function uninstall()
-    {
-        $pluginEntityPath = $this->getEntityPath();
-        $fs = new Filesystem();
-
-        if ($fs->exists($pluginEntityPath)) {
-            $fs->remove($pluginEntityPath);
-        }
-
-        try {
-            $this->dropPluginTables();
-        } catch (DBALException $e) {
-            error_log('Error while uninstalling IMS/LTI plugin: '.$e->getMessage());
-        }
-    }
-
-    /**
-     * Drops the plugin tables on database
-     *
-     * @return boolean
+     * Drops the plugin tables on database.
      */
     private function dropPluginTables(): bool
     {
@@ -283,18 +282,8 @@ class LtiProviderPlugin extends Plugin
     }
 
     /**
-     * @param array $params
-     */
-    public function trimParams(array &$params)
-    {
-        foreach ($params as $key => $value) {
-            $newValue = preg_replace('/\s+/', ' ', $value);
-            $params[$key] = trim($newValue);
-        }
-    }
-
-    /**
      * Get a SimpleXMLElement object with the request received on php://input.
+     *
      * @throws Exception
      */
     private function getRequestXmlElement(): ?SimpleXMLElement
@@ -307,5 +296,4 @@ class LtiProviderPlugin extends Plugin
 
         return new SimpleXMLElement($request);
     }
-
 }

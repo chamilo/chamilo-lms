@@ -45,7 +45,6 @@ class FrmAdd extends FormValidator
 
         $this->addButtonCreate($plugin->get_lang('AddPlatform'));
         $this->applyFilter('__ALL__', 'trim');
-
     }
 
     public function setDefaultValues(): void

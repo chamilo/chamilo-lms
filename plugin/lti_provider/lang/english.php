@@ -28,4 +28,3 @@ $strings['Enabled'] = 'Enabled';
 $strings['GenerateKeyPairInfo'] = 'A new private and public key pair will be created when enabling.';
 $strings['URLs'] = 'Endpoints Urls';
 $strings['PlatformConnectionAdded'] = 'A platform connection is added.';
-

@@ -1,0 +1,56 @@
+body {
+    font-family: 'Gugi', cursive;
+}
+#scoreboard {
+    border: solid 1px #000;
+    border-left: none;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding-bottom: 12px;
+    background: linear-gradient(to bottom, rgb(0, 0, 0), rgb(0, 0, 50) 500px);
+    color: white;
+}
+th, td {
+    color: white;
+}
+.dl-config {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    display: block;
+    width: 400px;
+    position: absolute;
+    left:50%;
+    margin-left: -200px;
+}
+.dl-config h1 {
+    text-align: center;
+}
+.dl-config ul {
+    list-style: none;
+    padding: 0;
+}
+.dl-config ul li a {
+    display: block;
+    width: 200px;
+    height:50px;
+    text-align: center;
+    border: black solid 1px;
+    border-radius: 15px;
+    margin:auto;
+    text-decoration: none;
+    color: black;
+    margin-top:8px;
+    font-size: 30px;
+    line-height: 46px;
+}
+.dl-config ul li a:hover {
+    background-color: #dddddd;
+}
+#game-screen {
+    position: relative;
+    height: 550px;
+    width: 100%;
+}
+#btn-again {
+    right: 0px;
+    position: absolute;
+}

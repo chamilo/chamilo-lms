@@ -222,13 +222,13 @@ class Session implements ResourceWithAccessUrlInterface
     protected ?Promotion $promotion = null;
 
     /**
-     * @Groups({"session:read"})
+     * @Groups({"session:read", "session_rel_user:read"})
      * @ORM\Column(name="display_start_date", type="datetime", nullable=true, unique=false)
      */
     protected ?DateTime $displayStartDate;
 
     /**
-     * @Groups({"session:read"})
+     * @Groups({"session:read", "session_rel_user:read"})
      * @ORM\Column(name="display_end_date", type="datetime", nullable=true, unique=false)
      */
     protected ?DateTime $displayEndDate;

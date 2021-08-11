@@ -108,7 +108,7 @@
                 :item="item"
                 :show-status="false"
                 :edit-status="false"
-                links-type="user_rel_users"
+                :links-type="linksType"
             />
             <q-checkbox
                 v-model="item.collective"
@@ -127,6 +127,8 @@ import has from 'lodash/has';
 import useVuelidate from '@vuelidate/core';
 import {required} from '@vuelidate/validators';
 import EditLinks from "../resource_links/EditLinks.vue";
+import {computed, ref} from "vue";
+import {useStore} from "vuex";
 
 export default {
   name: 'CCalendarEventForm',
@@ -134,7 +136,25 @@ export default {
     EditLinks
   },
   setup() {
-    return {v$: useVuelidate()}
+    const store = useStore();
+
+    const linksType = ref('users');
+
+    const isCurrentTeacher = computed(() => store.getters['security/isCurrentTeacher']);
+    const isAdmin = computed(() => store.getters['security/isAdmin']);
+
+    if (!isAdmin.value) {
+      if (isCurrentTeacher.value) {
+        linksType.value = 'course_students';
+      } else {
+        linksType.value = 'user_rel_users';
+      }
+    }
+
+    return {
+      v$: useVuelidate(),
+      linksType
+    }
   },
   props: {
     values: {

@@ -127,6 +127,49 @@ export default {
           });
     }
 
+    function findStudentsInCourse(query) {
+      const searchParams = new URLSearchParams(window.location.search);
+      const cId = parseInt(searchParams.get('cid'));
+      const sId = parseInt(searchParams.get('sid'));
+
+      if (!cId && !sId) {
+        return;
+      }
+
+      let endpoint = ENTRYPOINT;
+      let params = {
+        'user.username': query,
+      };
+
+      if (sId) {
+        params.session = endpoint + `sessions/${sId}`;
+      }
+
+      if (cId) {
+        if (sId) {
+          endpoint += `session_rel_course_rel_users`;
+          params.course = endpoint + `courses/${cId}`;
+        } else {
+          endpoint += `courses/${cId}/users`;
+        }
+      } else {
+        endpoint += `session_rel_users`;
+      }
+
+      axios
+          .get(endpoint, {
+            params
+          })
+          .then(response => {
+            isLoading.value = false;
+
+            users.value = response.data['hydra:member'].map(member => member.user);
+          })
+          .catch(function (error) {
+            isLoading.value = false;
+          });
+    }
+
     function asyncFind(query) {
       if (query.toString().length < 3) {
         return;
@@ -141,6 +184,10 @@ export default {
 
         case 'user_rel_users':
           findUserRelUsers(query);
+          break;
+
+        case 'course_students':
+          findStudentsInCourse(query);
           break;
       }
     }

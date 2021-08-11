@@ -1900,7 +1900,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@quasar/extras@npm:latest":
+"@quasar/extras@npm:^1.10.10":
   version: 1.10.10
   resolution: "@quasar/extras@npm:1.10.10"
   checksum: 5688ee0ff9760380f1d647c2170aa2e713f2d0c5ef6bb147891a0e0a94e79616d6a6492b816a2fd6e689c23e63162abfd6ccce56081014af8f67b8f9f87c9dcc
@@ -1935,9 +1935,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@symfony/webpack-encore@npm:1.4.0":
-  version: 1.4.0
-  resolution: "@symfony/webpack-encore@npm:1.4.0"
+"@symfony/webpack-encore@npm:1.5.0":
+  version: 1.5.0
+  resolution: "@symfony/webpack-encore@npm:1.5.0"
   dependencies:
     "@babel/core": ^7.7.0
     "@babel/plugin-syntax-dynamic-import": ^7.0.0
@@ -1965,7 +1965,7 @@ __metadata:
     yargs-parser: ^20.2.4
   bin:
     encore: bin/encore.js
-  checksum: a740f0f5e47d65032a9334923daf8dcddb8facec4039339b0ae87a6403542bbb26192c54ae77d2af5d8568a07c35dc7359f8251ed25b02a92edbec9fe8b2411a
+  checksum: 0645d5055b3486457596d05da700d2904bb5804e157c380f042d5f95ffe8c87b6ee2c90d764db95365a76bef0d21ec219f77cb95edd468660b019e9e7e00ac95
   languageName: node
   linkType: hard
 
@@ -3410,7 +3410,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vuelidate/core@npm:^2.0.0-alpha.19":
+"@vuelidate/core@npm:^2.0.0-alpha.23":
   version: 2.0.0-alpha.23
   resolution: "@vuelidate/core@npm:2.0.0-alpha.23"
   dependencies:
@@ -3419,7 +3419,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vuelidate/validators@npm:^2.0.0-alpha.17":
+"@vuelidate/validators@npm:^2.0.0-alpha.20":
   version: 2.0.0-alpha.20
   resolution: "@vuelidate/validators@npm:2.0.0-alpha.20"
   dependencies:
@@ -6379,8 +6379,8 @@ __metadata:
     "@heroicons/vue": ^1.0.3
     "@mdi/font": ^5.9.55
     "@popperjs/core": 2.9.3
-    "@quasar/extras": latest
-    "@symfony/webpack-encore": 1.4.0
+    "@quasar/extras": ^1.10.10
+    "@symfony/webpack-encore": 1.5.0
     "@tailwindcss/forms": ^0.3.3
     "@tailwindcss/line-clamp": ^0.2.1
     "@tailwindcss/typography": ^0.4.1
@@ -6403,8 +6403,8 @@ __metadata:
     "@vue/cli-plugin-eslint": 4.5.13
     "@vue/cli-service": 4.5.13
     "@vue/compiler-sfc": 3.1.5
-    "@vuelidate/core": ^2.0.0-alpha.19
-    "@vuelidate/validators": ^2.0.0-alpha.17
+    "@vuelidate/core": ^2.0.0-alpha.23
+    "@vuelidate/validators": ^2.0.0-alpha.20
     autoprefixer: ^10.3.1
     axios: ^0.21.1
     babel-cli: 6.26.0
@@ -6426,7 +6426,7 @@ __metadata:
     easy-pie-chart: ^2.1.7
     easytimer.js: ^1.3.2
     eslint: ^7.32.0
-    eslint-plugin-vue: ^7.15.1
+    eslint-plugin-vue: 7.16.0
     file-loader: ^6.2.0
     filemanager-webpack-plugin: ^5.0.0
     flag-icon-css: ^3.5.0
@@ -6473,7 +6473,7 @@ __metadata:
     quasar: 2.0.3
     readmore-js: ^2.2.1
     sass: ^1.37.5
-    sass-loader: ^11.1.1
+    sass-loader: ^12.1.0
     select2: ^4.1.0-rc.0
     signature_pad: ^3.0.0-beta.4
     sortablejs: ^1.14.0
@@ -6485,25 +6485,25 @@ __metadata:
     timeago: ^1.6.7
     timepicker: ^1.13.18
     tinymce: ^5.8.2
-    ts-loader: ^8.3.0
-    typescript: ^3.9.10
+    ts-loader: ^9.2.5
+    typescript: ^4.3.5
     video.js: ^7.15.0
     vue: 3.1.5
-    vue-cli-plugin-quasar: 4.0.0
+    vue-cli-plugin-quasar: 4.0.1
     vue-eslint-parser: 7.10.0
     vue-flatpickr-component: ^9.0.4
     vue-i18n: 9.1.7
     vue-loader: 16.4.1
-    vue-multiselect: next
+    vue-multiselect: ^3.0.0-alpha.2
     vue-perfect-scrollbar: ^0.2.1
-    vue-router: 4.0.10
+    vue-router: 4.0.11
     vue-sidebar-menu: ^4.8.1
     vue-toastification: ^2.0.0-rc.1
     vuetify: 3.0.0-alpha.10
     vuex: ^4.0.2
-    vuex-composition-helpers: next
+    vuex-composition-helpers: ^2.0.0
     vuex-map-fields: ^1.4.1
-    vuex-persistedstate: 4.0.0-beta.3
+    vuex-persistedstate: 4.0.0
     webpack-jquery-ui: ^2.0.1
     webpack-notifier: ^1.13.0
   languageName: unknown
@@ -8689,7 +8689,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:^4.0.0, enhanced-resolve@npm:^4.5.0":
+"enhanced-resolve@npm:^4.5.0":
   version: 4.5.0
   resolution: "enhanced-resolve@npm:4.5.0"
   dependencies:
@@ -8700,7 +8700,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:^5.8.0":
+"enhanced-resolve@npm:^5.0.0, enhanced-resolve@npm:^5.8.0":
   version: 5.8.2
   resolution: "enhanced-resolve@npm:5.8.2"
   dependencies:
@@ -8897,7 +8897,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-vue@npm:^7.15.1":
+"eslint-plugin-vue@npm:7.16.0":
   version: 7.16.0
   resolution: "eslint-plugin-vue@npm:7.16.0"
   dependencies:
@@ -17467,9 +17467,9 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"sass-loader@npm:^11.1.1":
-  version: 11.1.1
-  resolution: "sass-loader@npm:11.1.1"
+"sass-loader@npm:^12.1.0":
+  version: 12.1.0
+  resolution: "sass-loader@npm:12.1.0"
   dependencies:
     klona: ^2.0.4
     neo-async: ^2.6.2
@@ -17485,7 +17485,7 @@ fsevents@~2.3.2:
       optional: true
     sass:
       optional: true
-  checksum: 6d8ded8e2a0742f6b62dddc577324b74a7a0781f5405574d3af4ee34c9a6189debff1b90e3acd65a62ebbf6dc52c47a9a2be6c1786ac2435bd39c91c2ebe7367
+  checksum: 75f523e64ce00f495d0a510ecd9719f8ea3be128a295e0c9b8fb33029a355b7842729c0900b4f05605fa97d8dfc87a9a627ae2ec9ff1b39c21612cdb00a967f2
   languageName: node
   linkType: hard
 
@@ -17845,7 +17845,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"shvl@npm:^2.0.2":
+"shvl@npm:^2.0.3":
   version: 2.0.3
   resolution: "shvl@npm:2.0.3"
   checksum: c7622136677eadea82df64aa7f1e86fb2658fcd4feaf5142096b59baab4741ba8a0ce54104fad639177cab780f22c4b5a22b0cdf17705ca3ace9f320b63d0f26
@@ -19296,19 +19296,18 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"ts-loader@npm:^8.3.0":
-  version: 8.3.0
-  resolution: "ts-loader@npm:8.3.0"
+"ts-loader@npm:^9.2.5":
+  version: 9.2.5
+  resolution: "ts-loader@npm:9.2.5"
   dependencies:
     chalk: ^4.1.0
-    enhanced-resolve: ^4.0.0
-    loader-utils: ^2.0.0
+    enhanced-resolve: ^5.0.0
     micromatch: ^4.0.0
     semver: ^7.3.4
   peerDependencies:
     typescript: "*"
-    webpack: "*"
-  checksum: 7915f4494b23889606696da0eaed509254bd8cbda23d52776f48f487f787c1b84edf197efffbf03582ba5e1f5cbfa84d31f144ce6357e8b33e552592b821e778
+    webpack: ^5.0.0
+  checksum: 4f43b27ef05c9b6d77bb44f6415f25f706d961c94b09be11173288ed2bb149c74d9e2879c88128e11a032cc775020d1cdf6cc26f6125da68701b4e0f9c7b962d
   languageName: node
   linkType: hard
 
@@ -19434,23 +19433,23 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-typescript@^3.9.10:
-  version: 3.9.10
-  resolution: "typescript@npm:3.9.10"
+typescript@^4.3.5:
+  version: 4.3.5
+  resolution: "typescript@npm:4.3.5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 544f3810ac3d3fcd141907e7f52f0b8c70af178adc83af47e2b8a48351e5a119919a4d3bfbe2f62d5165b5aa203e896fe0432024cfbda670dbd03a4f53ce7748
+  checksum: d9a8e78d72dd19896e6bfa73ab2a0fcea6eca2700d1d6e7c33f67a970af54a3e0fed8f715a8c4e6a0ff7fc0995067b394b2003518ab0aa84cd396377e54b760c
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^3.9.10#builtin<compat/typescript>":
-  version: 3.9.10
-  resolution: "typescript@patch:typescript@npm%3A3.9.10#builtin<compat/typescript>::version=3.9.10&hash=ddfc1b"
+"typescript@patch:typescript@^4.3.5#builtin<compat/typescript>":
+  version: 4.3.5
+  resolution: "typescript@patch:typescript@npm%3A4.3.5#builtin<compat/typescript>::version=4.3.5&hash=ddfc1b"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 744dab471ae59659b1618be636ab56b9c0afbca801e0640c3cdfad0a894315c87d30a290b7063c6a3f1860bf47fe44d9188cb85e46b2bdadda7f207d67e6b4e1
+  checksum: 7f0b8343f71ecac18095be1476b398aca420ab60dc207cc1efe078f381eef5527b80a518297720257114cdbda65612f8839e4b63e85dc95e67ac5cbbade8bdf0
   languageName: node
   linkType: hard
 
@@ -19939,12 +19938,12 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"vue-cli-plugin-quasar@npm:4.0.0":
-  version: 4.0.0
-  resolution: "vue-cli-plugin-quasar@npm:4.0.0"
+"vue-cli-plugin-quasar@npm:4.0.1":
+  version: 4.0.1
+  resolution: "vue-cli-plugin-quasar@npm:4.0.1"
   dependencies:
     webpack-merge: ^5.7.3
-  checksum: 71dcb2befa3233b381c264ac2e64415b4d7db6a246a3779d13fcd9cee910339621cfa2207d94c726a15d0ddf4eafa3bfff56374ecc6645c2c086bb8d3116e59a
+  checksum: 5473aed59d38ac1482d67d3cea3df18193707f1b54fa44caf3cc12ad62908ba8c0c3fd3e15561d6110b473006db86fb59c205d386fc53b6046da2ff849ed8467
   languageName: node
   linkType: hard
 
@@ -20091,7 +20090,7 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"vue-multiselect@npm:next":
+"vue-multiselect@npm:^3.0.0-alpha.2":
   version: 3.0.0-alpha.2
   resolution: "vue-multiselect@npm:3.0.0-alpha.2"
   checksum: 5b904e430660b32d3e019d7e1b66085c8ddd09de4e06bfab171251b0de6ea93cba96d1f8ce2ddcd6e7af0e369791148104b111920079f8af6e1d93b3db0e93a2
@@ -20105,14 +20104,14 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"vue-router@npm:4.0.10":
-  version: 4.0.10
-  resolution: "vue-router@npm:4.0.10"
+"vue-router@npm:4.0.11":
+  version: 4.0.11
+  resolution: "vue-router@npm:4.0.11"
   dependencies:
     "@vue/devtools-api": ^6.0.0-beta.14
   peerDependencies:
     vue: ^3.0.0
-  checksum: c6b43db0ef1fa5aa1f55d68fb675ab32fd48665fd96336bc136f900b4e525662a4f78f5f34c70ac912083322c7a173fac83e70db300a55d6dd8b4bbb17e753e1
+  checksum: 7927f99c124717d48954d543e2a4e4c401fedc57eafee963deaac53f54f8bb96af1c1aead2dd08232837ffeedb45a4715eff5be355a5e1d852cc63e350942aa3
   languageName: node
   linkType: hard
 
@@ -20179,7 +20178,7 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"vuex-composition-helpers@npm:next":
+"vuex-composition-helpers@npm:^2.0.0":
   version: 2.0.0
   resolution: "vuex-composition-helpers@npm:2.0.0"
   peerDependencies:
@@ -20196,15 +20195,15 @@ typescript@~4.1.5:
   languageName: node
   linkType: hard
 
-"vuex-persistedstate@npm:4.0.0-beta.3":
-  version: 4.0.0-beta.3
-  resolution: "vuex-persistedstate@npm:4.0.0-beta.3"
+"vuex-persistedstate@npm:4.0.0":
+  version: 4.0.0
+  resolution: "vuex-persistedstate@npm:4.0.0"
   dependencies:
     deepmerge: ^4.2.2
-    shvl: ^2.0.2
+    shvl: ^2.0.3
   peerDependencies:
     vuex: ^3.0 || ^4.0.0-rc
-  checksum: c39115949b6aaba54a388c90a2cd48c8cc1001211c70d45b6cf520593a6f6f31e951bba9ee1de58432a1fb0e7ddc2fb82ac15ac182d86543b97de7400c7ea11e
+  checksum: babe0b142e849631f3f0aa95e4ec38f53a9a275e44e108ba55eb7ac6bd4377b6fa31d8cac80b2df9400e6c7131e8ff9439997c6314c0802513070bac9b7efc1d
   languageName: node
   linkType: hard
 

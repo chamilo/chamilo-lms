@@ -78,9 +78,8 @@ abstract class AbstractResource
 
     /**
      * This property is used when using api platform.
-     *
-     * @Groups({"resource_node:read", "resource_node:write", "document:read", "document:write"})
      */
+    #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write'])]
     public ?int $parentResourceNode = 0;
 
     /**
@@ -454,6 +453,24 @@ abstract class AbstractResource
         }
 
         return null;
+    }
+
+    public function isUserSubscribedToResource(User $user): bool
+    {
+        $links = $this->getResourceNode()->getResourceLinks();
+
+        $result = false;
+        foreach ($links as $link) {
+            if ($link->hasUser()) {
+                if ($link->getUser()->getId() === $user->getId()) {
+                    $result = true;
+
+                    break;
+                }
+            }
+        }
+
+        return $result;
     }
 
     public function getUsersAndGroupSubscribedToResource(): array

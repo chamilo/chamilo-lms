@@ -70,17 +70,15 @@ class CCalendarEventVoter extends Voter
         // @todo check permissions
         switch ($attribute) {
             case self::CREATE:
-            case self::VIEW:
                 return true;
+            case self::VIEW:
             case self::EDIT:
-                if ($event->isCollective()) {
-                    $links = $event->getResourceLinkEntityList();
+                if ($event->getCreator() === $user) {
+                    return true;
+                }
 
-                    foreach ($links as $link) {
-                        if ($link->getUser() === $user) {
-                            return true;
-                        }
-                    }
+                if ($event->isCollective() && $event->isUserSubscribedToResource($user)) {
+                    return true;
                 }
                 // no break
             case self::DELETE:

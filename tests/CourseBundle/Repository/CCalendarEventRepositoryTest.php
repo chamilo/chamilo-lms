@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use Datetime;
 
 /**
  * @covers \Chamilo\CourseBundle\Repository\CCalendarEventRepository
@@ -51,9 +52,10 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
         $resourceNodeId = $user->getResourceNode()->getId();
 
         // Current server local time (check your php.ini).
-        $start = new \Datetime('2040-06-30 11:00');
-        $end = new \Datetime('2040-06-30 15:00');
+        $start = new Datetime('2040-06-30 11:00');
+        $end = new Datetime('2040-06-30 15:00');
 
+        // 1. Add event.
         $this->createClientWithCredentials($token)->request(
             'POST',
             '/api/c_calendar_events',
@@ -83,7 +85,7 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
             'parentResourceNode' => $resourceNodeId,
         ]);
 
-        // Get ALL events.
+        // 2. Check that event exists.
         $response = $this->createClientWithCredentials($token)->request('GET', '/api/c_calendar_events');
         $this->assertResponseIsSuccessful();
         $this->assertJsonContains([
@@ -92,10 +94,9 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
             '@type' => 'hydra:Collection',
             'hydra:totalItems' => 1,
         ]);
-
         $this->assertCount(1, $response->toArray()['hydra:member']);
 
-        // Get events filter by date search for a very old date.
+        // 3. Get events filter by date, search for a very old date. Result: no events.
         $response = $this->createClientWithCredentials($token)->request('GET', '/api/c_calendar_events', [
             'query' => [
                 'startDate[after]' => '2009-02-14T18:00:00+02:00',
@@ -104,7 +105,7 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
         ]);
         $this->assertCount(0, $response->toArray()['hydra:member']);
 
-        // Search for valid date.
+        // 4. Get events for valid date.
         $response = $this->createClientWithCredentials($token)->request('GET', '/api/c_calendar_events', [
             'query' => [
                 'startDate[after]' => '2040-06-01T09:00:00+02:00',
@@ -112,8 +113,19 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
             ],
         ]);
         $this->assertCount(1, $response->toArray()['hydra:member']);
+    }
 
-        // Create another user and check if he has some events.
+    public function testCreatePersonalEventAsAnotherUser(): void
+    {
+        // 1. Create user 'test'.
+        $user = $this->createUser('test');
+        $resourceNodeId = $user->getResourceNode()->getId();
+
+        // Current server local time (check your php.ini).
+        $start = new Datetime('2040-06-30 11:00');
+        $end = new Datetime('2040-06-30 15:00');
+
+        // 2. Create user "another"
         $this->createUser('another');
         $anotherToken = $this->getUserToken(
             [
@@ -123,6 +135,25 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
             true
         );
 
+        // 3. Add event to user 'test' but logged in as another user.
+        $this->createClientWithCredentials($anotherToken)->request(
+            'POST',
+            '/api/c_calendar_events',
+            [
+                'json' => [
+                    'allDay' => true,
+                    'collective' => false,
+                    'title' => 'hello',
+                    'content' => '<p>test event</p>',
+                    'startDate' => $start->format('Y-m-d H:i:s'),
+                    'endDate' => $end->format('Y-m-d H:i:s'),
+                    'parentResourceNodeId' => $resourceNodeId,
+                ],
+            ]
+        );
+        $this->assertResponseStatusCodeSame(500);
+
+        // Another user should have 0 events.
         $this->createClientWithCredentials($anotherToken)->request('GET', '/api/c_calendar_events');
         $this->assertResponseIsSuccessful();
         $this->assertJsonContains([
@@ -131,6 +162,71 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
             '@type' => 'hydra:Collection',
             'hydra:totalItems' => 0,
         ]);
+    }
+
+    public function testAccessPersonalEvent(): void
+    {
+        // 1. Create user 'test'.
+        $user = $this->createUser('test');
+        $token = $this->getUserToken(
+            [
+                'username' => 'test',
+                'password' => 'test',
+            ]
+        );
+        $resourceNodeId = $user->getResourceNode()->getId();
+
+        // Current server local time (check your php.ini).
+        $start = new Datetime('2040-06-30 11:00');
+        $end = new Datetime('2040-06-30 15:00');
+
+        // 2. Add event to user test
+        $response = $this->createClientWithCredentials($token)->request(
+            'POST',
+            '/api/c_calendar_events',
+            [
+                'json' => [
+                    'allDay' => true,
+                    'collective' => false,
+                    'title' => 'hello',
+                    'content' => '<p>test event</p>',
+                    'startDate' => $start->format('Y-m-d H:i:s'),
+                    'endDate' => $end->format('Y-m-d H:i:s'),
+                    'parentResourceNodeId' => $resourceNodeId,
+                ],
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(201);
+        $eventIri = $response->toArray()['@id'];
+        $eventId = $response->toArray()['id'];
+
+        $this->assertNotEmpty($eventIri);
+
+        // 3. Create user "another"
+        $this->createUser('another');
+        $anotherToken = $this->getUserToken(
+            [
+                'username' => 'another',
+                'password' => 'another',
+            ],
+            true
+        );
+
+        // 4. View as another user.
+        $this->createClientWithCredentials($anotherToken)->request('GET', $eventIri);
+        $this->assertResponseStatusCodeSame(403);
+
+        // 5. Edit
+        $this->createClientWithCredentials($anotherToken)->request('PUT', $eventIri, ['json' => ['title' => 'hehe']]);
+        $this->assertResponseStatusCodeSame(403);
+
+        // 6. Delete
+        $this->createClientWithCredentials($anotherToken)->request('DELETE', $eventIri);
+        $this->assertResponseStatusCodeSame(403);
+
+        // Now change to collective @todo
+        //$eventId
     }
 
     public function testCreateCourseEvent(): void
@@ -152,8 +248,8 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
         $resourceNodeId = $course->getResourceNode()->getId();
 
         // Current server local time (check your php.ini).
-        $start = new \Datetime('2040-06-30 11:00');
-        $end = new \Datetime('2040-06-30 15:00');
+        $start = new Datetime('2040-06-30 11:00');
+        $end = new Datetime('2040-06-30 15:00');
 
         $this->createClientWithCredentials($token)->request(
             'POST',

@@ -18,7 +18,7 @@ $dql = "SELECT a
             WHERE
                 (a.emailSent != 1 OR
                 a.emailSent IS NULL) AND
-                ip.tool = 'announcement' AND
+                ip.tool = '".TOOL_ANNOUNCEMENT."' AND
                 ip.visibility = 1
             ORDER BY a.displayOrder DESC";
 
@@ -43,15 +43,24 @@ foreach ($result as $announcement) {
         if ($today >= $dateToSend['value']) {
 
             $query = "SELECT ip FROM ChamiloCourseBundle:CItemProperty ip
-                        WHERE ip.ref = :announcementId AND ip.course = :courseId
-                        AND ip.tool = 'announcement'";
+                        WHERE ip.ref = :announcementId
+                        AND ip.course = :courseId
+                        AND ip.tool = '".TOOL_ANNOUNCEMENT."'
+                        ORDER BY iid DESC";
 
             $sql = Database::getManager()->createQuery($query);
             $itemProperty = $sql->execute(['announcementId' => $announcement->getId(), 'courseId' => $announcement->getCId()]);
-            $sessionName = $itemProperty[0]->getSession();
-
+            if (empty($itemProperty) or !isset($itemProperty[0])) {
+                continue;
+            }
+            // Check if the last record for this announcement was not a removal
+            if ($itemProperty[0]['lastedit_type'] == 'AnnouncementDeleted' or $itemProperty[0]['visibility'] == 2) {
+                continue;
+            }
+            /* @var \Chamilo\CoreBundle\Entity\Session $sessionObject */
+            $sessionObject = $itemProperty[0]->getSession();
+            $sessionId = $sessionObject->getId();
             $courseInfo = api_get_course_info_by_id($announcement->getCId());
-            $sessionId = (int) SessionManager::get_session_by_name($sessionName)['id'];
             $senderId = $itemProperty[0]->getInsertUser()->getId();
             $sendToUsersInSession = (int) $extraFieldValue->get_values_by_handler_and_field_variable($announcement->getId(), 'send_to_users_in_session')['value'];
 

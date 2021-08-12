@@ -37,10 +37,10 @@ security:
         ROLE_CURRENT_COURSE_SESSION_STUDENT: [ROLE_CURRENT_COURSE_SESSION_STUDENT]
         ROLE_CURRENT_COURSE_SESSION_TEACHER: [ROLE_CURRENT_COURSE_SESSION_STUDENT, ROLE_CURRENT_COURSE_SESSION_TEACHER]
         ROLE_ANONYMOUS: [ROLE_ANONYMOUS]
-    #access_decision_manager:
+    access_decision_manager:
         # strategy can be: affirmative, unanimous or consensus
         # only grant access if none of the voters has denied access
-        #strategy: unanimous
+        strategy: unanimous
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:

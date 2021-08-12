@@ -49,9 +49,7 @@ final class StatementPostController
                 $existingStatement = $this->repository->findStatementById($statement->getId());
 
                 if (!$existingStatement->equals($statement)) {
-                    throw new ConflictHttpException(
-                        'The new statement is not equal to an existing statement with the same id.'
-                    );
+                    throw new ConflictHttpException('The new statement is not equal to an existing statement with the same id.');
                 }
             } catch (NotFoundException $e) {
                 $statementsToStore[] = $statement;

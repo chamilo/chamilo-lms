@@ -43,19 +43,11 @@ class ActivityProfile
      */
     private $documentData;
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return ActivityProfile
-     */
     public function setId(int $id): ActivityProfile
     {
         $this->id = $id;
@@ -63,19 +55,11 @@ class ActivityProfile
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getProfileId(): string
     {
         return $this->profileId;
     }
 
-    /**
-     * @param string $profileId
-     *
-     * @return ActivityProfile
-     */
     public function setProfileId(string $profileId): ActivityProfile
     {
         $this->profileId = $profileId;
@@ -83,19 +67,11 @@ class ActivityProfile
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getActivityId(): string
     {
         return $this->activityId;
     }
 
-    /**
-     * @param string $activityId
-     *
-     * @return ActivityProfile
-     */
     public function setActivityId(string $activityId): ActivityProfile
     {
         $this->activityId = $activityId;
@@ -103,19 +79,11 @@ class ActivityProfile
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getDocumentData(): array
     {
         return $this->documentData;
     }
 
-    /**
-     * @param array $documentData
-     *
-     * @return ActivityProfile
-     */
     public function setDocumentData(array $documentData): ActivityProfile
     {
         $this->documentData = $documentData;

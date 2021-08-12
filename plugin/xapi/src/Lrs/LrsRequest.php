@@ -61,8 +61,6 @@ class LrsRequest
 
     /**
      * @throws \Xabbuh\XApi\Common\Exception\AccessDeniedException
-     *
-     * @return bool
      */
     private function validateAuth(): bool
     {
@@ -144,12 +142,7 @@ class LrsRequest
     }
 
     /**
-     * @param string $controllerName
-     * @param string $methodName
-     *
      * @throws \Xabbuh\XApi\Common\Exception\AccessDeniedException
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     private function generateResponse(string $controllerName, string $methodName): HttpResponse
     {

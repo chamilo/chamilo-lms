@@ -126,9 +126,8 @@ class StatementGetController
     }
 
     /**
-     * @param Statement[]                                    $statements
-     * @param \Symfony\Component\HttpFoundation\ParameterBag $query
-     * @param bool                                           $includeAttachments true to include the attachments in the response, false otherwise
+     * @param Statement[] $statements
+     * @param bool        $includeAttachments true to include the attachments in the response, false otherwise
      *
      * @return JsonResponse|MultipartResponse
      */

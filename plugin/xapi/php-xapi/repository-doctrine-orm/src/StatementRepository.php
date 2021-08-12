@@ -13,7 +13,6 @@ namespace XApi\Repository\ORM;
 
 use Doctrine\ORM\EntityRepository;
 use XApi\Repository\Doctrine\Mapping\Statement;
-use XApi\Repository\Doctrine\Mapping\Verb;
 use XApi\Repository\Doctrine\Repository\Mapping\StatementRepository as BaseStatementRepository;
 
 /**

@@ -15,7 +15,6 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class StatementHeadController extends StatementGetController
 {
-
     /**
      * @throws BadRequestHttpException if the query parameters does not comply with xAPI specification
      *

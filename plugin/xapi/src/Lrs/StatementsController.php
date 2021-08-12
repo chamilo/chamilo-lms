@@ -108,11 +108,6 @@ class StatementsController extends BaseController
         return $postStatementController->postStatements($this->httpRequest, $statements);
     }
 
-    /**
-     * @param string $content
-     *
-     * @return \Xabbuh\XApi\Model\Statement
-     */
     private function deserializeStatement(string $content = ''): Statement
     {
         $factory = new SerializerFactory(Serializer::createSerializer());

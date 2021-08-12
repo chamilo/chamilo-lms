@@ -177,7 +177,7 @@ class Basic extends Toolbar
         $config['flash_flvPlayer'] = api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/plugins/flash/swf/player.swf';
 
         if (api_get_configuration_value('enable_uploadimage_editor')) {
-            $config['imageUploadUrl'] = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file&curdirpath=/';
+            $config['imageUploadUrl'] = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=ck_uploadimage&curdirpath=/';
         }
         /*filebrowserFlashBrowseUrl
         filebrowserFlashUploadUrl

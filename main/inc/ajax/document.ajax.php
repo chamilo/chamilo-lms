@@ -85,18 +85,13 @@ switch ($action) {
         }
 
         if (!empty($_FILES)) {
-            $isCkUploadImage = ($_COOKIE['ckCsrfToken'] == $_POST['ckCsrfToken']); // it comes from uploaimage drag and drop ckeditor
+            $files = $_FILES['files'];
             $fileList = [];
-            if ($isCkUploadImage) {
-                $fileList[0] = $_FILES['upload'];
-            } else {
-                $files = $_FILES['files'];
-                foreach ($files as $name => $array) {
-                    $counter = 0;
-                    foreach ($array as $data) {
-                        $fileList[$counter][$name] = $data;
-                        $counter++;
-                    }
+            foreach ($files as $name => $array) {
+                $counter = 0;
+                foreach ($array as $data) {
+                    $fileList[$counter][$name] = $data;
+                    $counter++;
                 }
             }
 
@@ -139,19 +134,50 @@ switch ($action) {
                 $resultList[] = $json;
             }
 
-            if ($isCkUploadImage) {
-                $ckResult = $resultList[0];
-                $courseInfo = api_get_course_info();
-                $courseDir = $courseInfo['path'].'/document';
-                $webCoursePath = api_get_path(WEB_COURSE_PATH);
-                $url = $webCoursePath.$courseDir.$currentDirectory.$ckResult['name'];
-                $data = ['uploaded' => 1, 'fileName' => $ckResult['name'], 'url' => $url];
-                echo json_encode($data);
-            } else {
-                echo json_encode(['files' => $resultList]);
-            }
+            echo json_encode(['files' => $resultList]);
         }
         exit;
+        break;
+    case 'ck_uploadimage':
+        api_protect_course_script(true);
+        $isCkUploadImage = ($_COOKIE['ckCsrfToken'] == $_POST['ckCsrfToken']); // it comes from uploaimage drag and drop ckeditor
+        if ($isCkUploadImage) {
+            $data = [];
+            $fileUpload = $_FILES['upload'];
+            $currentDirectory = $_REQUEST['curdirpath'];
+            $isAllowedToEdit = api_is_allowed_to_edit(null, true);
+            if ($isAllowedToEdit) {
+                $globalFile['files'] = $fileUpload;
+                $result = DocumentManager::upload_document(
+                    $globalFile,
+                    $currentDirectory,
+                    '',
+                    '', // comment
+                    0,
+                    '',
+                    false,
+                    false,
+                    'files'
+                );
+                if ($result) {
+                    $courseInfo = api_get_course_info();
+                    $courseDir = $courseInfo['path'].'/document';
+                    $webCoursePath = api_get_path(WEB_COURSE_PATH);
+                    $url = $webCoursePath.$courseDir.$currentDirectory.$fileUpload['name'];
+                    $data = ['uploaded' => 1, 'fileName' => $fileUpload['name'], 'url' => $url];
+                }
+            } else {
+                $userId = api_get_user_id();
+                $syspath = UserManager::getUserPathById($userId, 'system').'my_files'.$currentDirectory;
+                $webpath = UserManager::getUserPathById($userId, 'web').'my_files'.$currentDirectory;
+                if (move_uploaded_file($fileUpload['tmp_name'], $syspath.$fileUpload['name'])) {
+                    $url = $webpath.$fileUpload['name'];
+                    $data = ['uploaded' => 1, 'fileName' => $fileUpload['name'], 'url' => $url];
+                }
+            }
+            echo json_encode($data);
+            exit;
+        }
         break;
     case 'document_preview':
         $courseInfo = api_get_course_info_by_id($_REQUEST['course_id']);

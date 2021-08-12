@@ -154,6 +154,47 @@ switch ($action) {
         }
         exit;
         break;
+    case 'ck_uploadimage':
+        api_protect_course_script(true);
+        $isCkUploadImage = ($_COOKIE['ckCsrfToken'] == $_POST['ckCsrfToken']); // it comes from uploaimage drag and drop ckeditor
+        if ($isCkUploadImage) {
+            $data = [];
+            $fileUpload = $_FILES['upload'];
+            $currentDirectory = $_REQUEST['curdirpath'];
+            $isAllowedToEdit = api_is_allowed_to_edit(null, true);
+            if ($isAllowedToEdit) {
+                $globalFile['files'] = $fileUpload;
+                $result = DocumentManager::upload_document(
+                    $globalFile,
+                    $currentDirectory,
+                    '',
+                    '', // comment
+                    0,
+                    '',
+                    false,
+                    false,
+                    'files'
+                );
+                if ($result) {
+                    $courseInfo = api_get_course_info();
+                    $courseDir = $courseInfo['path'].'/document';
+                    $webCoursePath = api_get_path(WEB_COURSE_PATH);
+                    $url = $webCoursePath.$courseDir.$currentDirectory.$fileUpload['name'];
+                    $data = ['uploaded' => 1, 'fileName' => $fileUpload['name'], 'url' => $url];
+                }
+            } else {
+                $userId = api_get_user_id();
+                $syspath = UserManager::getUserPathById($userId, 'system').'my_files'.$currentDirectory;
+                $webpath = UserManager::getUserPathById($userId, 'web').'my_files'.$currentDirectory;
+                if (move_uploaded_file($fileUpload['tmp_name'], $syspath.$fileUpload['name'])) {
+                    $url = $webpath.$fileUpload['name'];
+                    $data = ['uploaded' => 1, 'fileName' => $fileUpload['name'], 'url' => $url];
+                }
+            }
+            echo json_encode($data);
+            exit;
+        }
+        break;
     case 'document_preview':
         $courseInfo = api_get_course_info_by_id($_REQUEST['course_id']);
         if (!empty($courseInfo) && is_array($courseInfo)) {

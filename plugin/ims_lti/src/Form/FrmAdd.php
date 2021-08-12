@@ -1,7 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+namespace Chamilo\PluginBundle\ImsLti\Form;
+
+use Category;
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Display;
+use FormValidator;
+use ImsLti;
+use ImsLtiPlugin;
+use LtiAssignmentGradesService;
+use LtiNamesRoleProvisioningService;
 
 /**
  * Class FrmAdd.
@@ -15,7 +24,7 @@ class FrmAdd extends FormValidator
     /**
      * @var bool
      */
-    private $toolIsV1p3 = false;
+    private $toolIsV1p3;
 
     /**
      * FrmAdd constructor.
@@ -194,7 +203,7 @@ class FrmAdd extends FormValidator
         $this->setDefaults($defaults);
     }
 
-    public function returnForm()
+    public function returnForm(): string
     {
         $js = "<script>
                 \$(function () {

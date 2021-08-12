@@ -23,47 +23,43 @@ We use the default Symfony PHPUnit settings:
 
 https://symfony.com/doc/current/testing.html
 
-Install phpunit:
+### Setup a test database
 
-`vendor/bin/simple-phpunit --version`
+Create a new env file called **.env.test.local** with your MySQL credentials for your new test database.
 
-Setup a test database
-
-Create a new env file called **.env.test.local** with your mysql credentials for your new test database.
-
-<pre>
+```
 DATABASE_HOST='127.0.0.1'
 DATABASE_PORT='3306'
 DATABASE_NAME='chamilo_test'
 DATABASE_USER='root'
 DATABASE_PASSWORD='root'
-</pre>
+```
 
 After creating the .env.test.local file execute: 
 
-`php bin/console --env=test cache:clear
+```
+php bin/console --env=test cache:clear
 php bin/console --env=test doctrine:database:create
 php bin/console --env=test doctrine:schema:create
-php bin/console --env=test doctrine:fixtures:load --no-interaction`
-
-Those commands will install Chamilo in the chamilo_test database.
-You can call the PHPUnit tests with: 
-
-`php bin/phpunit`
+php bin/console --env=test doctrine:fixtures:load --no-interaction
+```
 
 If there are DB changes you can migrate your test installation with:
 
 `php bin/console --env=test doctrine:schema:update --force`
 
+Those commands will install Chamilo in the chamilo_test database.
+
+### Use 
+Execute the tests with: 
+
+`php bin/phpunit`
+
 
 ## Folders
 
 Although many scripts here are deprecated, the current structure can be
- described as follows;
-
-### behat
-
-Behat-specific folder
+ described as follows
 
 ### datafiller
 

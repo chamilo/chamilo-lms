@@ -8,6 +8,7 @@ namespace Chamilo\Tests\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
+use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use Datetime;
@@ -199,12 +200,12 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
 
         $this->assertResponseStatusCodeSame(201);
         $eventIri = $response->toArray()['@id'];
-        $eventId = $response->toArray()['id'];
+        $eventId = $response->toArray()['iid'];
 
         $this->assertNotEmpty($eventIri);
 
         // 3. Create user "another"
-        $this->createUser('another');
+        $another = $this->createUser('another');
         $anotherToken = $this->getUserToken(
             [
                 'username' => 'another',
@@ -225,8 +226,27 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
         $this->createClientWithCredentials($anotherToken)->request('DELETE', $eventIri);
         $this->assertResponseStatusCodeSame(403);
 
-        // Now change to collective @todo
-        //$eventId
+        // Now change to collective.
+        $calendarRepo = self::getContainer()->get(CCalendarEventRepository::class);
+        /** @var CCalendarEvent $event */
+        $event = $calendarRepo->find($eventId);
+        $event->setCollective(true);
+        $calendarRepo->update($event);
+
+        // view
+        $this->createClientWithCredentials($anotherToken)->request('GET', $eventIri);
+        $this->assertResponseStatusCodeSame(403);
+
+        // edit
+        $this->createClientWithCredentials($anotherToken)->request('PUT', $eventIri, ['json' => ['title' => 'hehe']]);
+        $this->assertResponseStatusCodeSame(403);
+
+        // Now also add "another" as shared. @todo
+        /*$event->addUserLink($another);
+        $calendarRepo->update($event);
+
+        $this->createClientWithCredentials($anotherToken)->request('GET', $eventIri);
+        $this->assertResponseStatusCodeSame(403);*/
     }
 
     public function testCreateCourseEvent(): void

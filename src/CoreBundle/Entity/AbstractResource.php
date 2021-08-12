@@ -223,8 +223,7 @@ abstract class AbstractResource
 
     public function addUserLink(User $user, Course $course = null, Session $session = null, CGroup $group = null)
     {
-        $resourceLink = new ResourceLink();
-        $resourceLink
+        $resourceLink = (new ResourceLink())
             ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED)
             ->setUser($user)
             ->setCourse($course)

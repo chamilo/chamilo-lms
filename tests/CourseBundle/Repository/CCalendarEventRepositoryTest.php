@@ -133,7 +133,6 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
     {
         $course = $this->createCourse('Test');
 
-        // Create folder.
         $resourceLinkList = [[
             'cid' => $course->getId(),
             'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
@@ -148,6 +147,10 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
         );
         $resourceNodeId = $course->getResourceNode()->getId();
 
+        // Current server local time (check your php.ini).
+        $start = new \Datetime('2040-06-30 11:00');
+        $end = new \Datetime('2040-06-30 15:00');
+
         $this->createClientWithCredentials($token)->request(
             'POST',
             '/api/c_calendar_events',
@@ -157,13 +160,17 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
                     'collective' => false,
                     'title' => 'hello',
                     'content' => '<p>test event</p>',
-                    'startDate' => '2040-06-30 11:00',
-                    'endDate' => '2040-06-30 15:00',
+                    'startDate' => $start->format('Y-m-d H:i:s'),
+                    'endDate' => $end->format('Y-m-d H:i:s'),
                     'parentResourceNodeId' => $resourceNodeId,
                     'resourceLinkListFromEntity' => $resourceLinkList,
                 ],
             ]
         );
+
+        // In UTC.
+        $start = $start->setTimezone(new \DateTimeZone('UTC'))->format('c');
+        $end = $end->setTimezone(new \DateTimeZone('UTC'))->format('c');
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(201);
@@ -172,8 +179,8 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
             '@context' => '/api/contexts/CCalendarEvent',
             '@type' => 'CCalendarEvent',
             'title' => 'hello',
-            'startDate' => '2040-06-30T11:00:00+00:00',
-            'endDate' => '2040-06-30T15:00:00+00:00',
+            'startDate' => $start,
+            'endDate' => $end,
             'content' => '<p>test event</p>',
             'parentResourceNode' => $resourceNodeId,
         ]);

@@ -166,7 +166,7 @@ switch ($action) {
 
         $data = [];
         $fileUpload = $_FILES['upload'];
-        $currentDirectory = $_REQUEST['curdirpath'];
+        $currentDirectory = Security::remove_XSS($_REQUEST['curdirpath']);
         $isAllowedToEdit = api_is_allowed_to_edit(null, true);
         if ($isAllowedToEdit) {
             $globalFile = ['files' => $fileUpload];
@@ -182,19 +182,16 @@ switch ($action) {
                 'files'
             );
             if ($result) {
-                $courseInfo = api_get_course_info();
-                $courseDir = $courseInfo['path'].'/document';
-                $webCoursePath = api_get_path(WEB_COURSE_PATH);
-                $url = $webCoursePath.$courseDir.$currentDirectory.$fileUpload['name'];
                 $data = [
                     'uploaded' => 1,
                     'fileName' => $fileUpload['name'],
-                    'url' => $url
+                    'url' => $result['direct_url']
                 ];
             }
         } else {
             $userId = api_get_user_id();
             $syspath = UserManager::getUserPathById($userId, 'system').'my_files'.$currentDirectory;
+            mkdir($syspath, api_get_permissions_for_new_directories(), true);
             $webpath = UserManager::getUserPathById($userId, 'web').'my_files'.$currentDirectory;
             if (move_uploaded_file($fileUpload['tmp_name'], $syspath.$fileUpload['name'])) {
                 $url = $webpath.$fileUpload['name'];

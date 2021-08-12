@@ -2,6 +2,7 @@
 /* For license terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\LtiProvider\Platform;
+use Chamilo\PluginBundle\LtiProvider\Form\FrmEdit;
 
 $cidReset = true;
 

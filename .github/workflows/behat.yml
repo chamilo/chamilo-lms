@@ -34,7 +34,7 @@ jobs:
               with:
                   php-version: ${{ matrix.php-versions }}
                   extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, gd, json, soap, zip, bcmath
-                  ini-values: post_max_size=256M, max_execution_time=600, memory_limit=4096M
+                  ini-values: post_max_size=256M, max_execution_time=600, memory_limit=4096M, date.timezone=Europe/Paris
 
             - name: Get composer cache directory
               id: composer-cache
@@ -55,8 +55,8 @@ jobs:
             - name: Install assets
               run: php bin/console assets:install
 
-            - name: Generate fos_js_routes.json
-              run: php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
+#            - name: Generate fos_js_routes.json
+#              run: php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
 
             - name: Install Yarn
               run: |

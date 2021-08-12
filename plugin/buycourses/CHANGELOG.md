@@ -1,3 +1,14 @@
+v7.0 - 2021-08-12
+====
+Added support for discount coupons.
+Added a better table view for the sales report.
+Multiple fixes to navigation-related issues.
+
+WARNING: Updating this plugin (or Chamilo) without going through the specific update procedure for this plugin will break your sales pages.
+
+The file [your-host]/plugin/buycourses/update.php *MUST* be executed to update the structure of the tables
+in the database.
+
 v6.0 - 2020-11-29
 ====
 Added support for purchase instructions e-mail customization (although this 

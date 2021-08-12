@@ -185,7 +185,7 @@ switch ($action) {
                 $data = [
                     'uploaded' => 1,
                     'fileName' => $fileUpload['name'],
-                    'url' => $result['direct_url']
+                    'url' => $result['direct_url'],
                 ];
             }
         } else {
@@ -198,7 +198,7 @@ switch ($action) {
                 $data = [
                     'uploaded' => 1,
                     'fileName' => $fileUpload['name'],
-                    'url' => $url
+                    'url' => $url,
                 ];
             }
         }

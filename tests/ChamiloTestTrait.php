@@ -131,4 +131,9 @@ trait ChamiloTestTrait
         /** @var ConstraintViolationList $errors */
         return $validator->validate($entity);
     }
+
+    public function convertToUTCAndFormat(\DateTime $localTime) : string
+    {
+        return $localTime->setTimezone(new \DateTimeZone('UTC'))->format('c');
+    }
 }

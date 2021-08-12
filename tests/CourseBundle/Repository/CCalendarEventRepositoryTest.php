@@ -50,6 +50,10 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
         );
         $resourceNodeId = $user->getResourceNode()->getId();
 
+        // Current server local time (check your php.ini).
+        $start = new \Datetime('2040-06-30 11:00');
+        $end = new \Datetime('2040-06-30 15:00');
+
         $this->createClientWithCredentials($token)->request(
             'POST',
             '/api/c_calendar_events',
@@ -59,8 +63,8 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
                     'collective' => false,
                     'title' => 'hello',
                     'content' => '<p>test event</p>',
-                    'startDate' => '2040-06-30 11:00',
-                    'endDate' => '2040-06-30 15:00',
+                    'startDate' => $start->format('Y-m-d H:i:s'),
+                    'endDate' => $end->format('Y-m-d H:i:s'),
                     'parentResourceNodeId' => $resourceNodeId,
                 ],
             ]
@@ -73,8 +77,8 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
             '@context' => '/api/contexts/CCalendarEvent',
             '@type' => 'CCalendarEvent',
             'title' => 'hello',
-            'startDate' => '2040-06-30T11:00:00+00:00',
-            'endDate' => '2040-06-30T15:00:00+00:00',
+            'startDate' => $this->convertToUTCAndFormat($start),
+            'endDate' => $this->convertToUTCAndFormat($end),
             'content' => '<p>test event</p>',
             'parentResourceNode' => $resourceNodeId,
         ]);
@@ -91,7 +95,7 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
 
         $this->assertCount(1, $response->toArray()['hydra:member']);
 
-        // Get events filter by date search for old date.
+        // Get events filter by date search for a very old date.
         $response = $this->createClientWithCredentials($token)->request('GET', '/api/c_calendar_events', [
             'query' => [
                 'startDate[after]' => '2009-02-14T18:00:00+02:00',
@@ -103,13 +107,13 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
         // Search for valid date.
         $response = $this->createClientWithCredentials($token)->request('GET', '/api/c_calendar_events', [
             'query' => [
-                'startDate[after]' => '2040-06-01T18:00:00+02:00',
+                'startDate[after]' => '2040-06-01T09:00:00+02:00',
                 'endDate[before]' => '2040-06-30T23:00:00+02:00',
             ],
         ]);
         $this->assertCount(1, $response->toArray()['hydra:member']);
 
-        // Create another user:
+        // Create another user and check if he has some events.
         $this->createUser('another');
         $anotherToken = $this->getUserToken(
             [
@@ -168,10 +172,6 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
             ]
         );
 
-        // In UTC.
-        $start = $start->setTimezone(new \DateTimeZone('UTC'))->format('c');
-        $end = $end->setTimezone(new \DateTimeZone('UTC'))->format('c');
-
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(201);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
@@ -179,8 +179,8 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
             '@context' => '/api/contexts/CCalendarEvent',
             '@type' => 'CCalendarEvent',
             'title' => 'hello',
-            'startDate' => $start,
-            'endDate' => $end,
+            'startDate' => $this->convertToUTCAndFormat($start),
+            'endDate' => $this->convertToUTCAndFormat($end),
             'content' => '<p>test event</p>',
             'parentResourceNode' => $resourceNodeId,
         ]);

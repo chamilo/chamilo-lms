@@ -3368,6 +3368,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vue/reactivity@npm:^3.0.2":
+  version: 3.2.2
+  resolution: "@vue/reactivity@npm:3.2.2"
+  dependencies:
+    "@vue/shared": 3.2.2
+  checksum: bb815216a2c8e3f4967ca763114942e12d3c8e80ff217ab71ec836cdbbb9340e4e3a4a905711a24f2ceb1759cdfa3c3506f56f24bd06f93d498275a145d442fe
+  languageName: node
+  linkType: hard
+
 "@vue/runtime-core@npm:3.1.5":
   version: 3.1.5
   resolution: "@vue/runtime-core@npm:3.1.5"
@@ -3400,6 +3409,13 @@ __metadata:
   version: 3.2.1
   resolution: "@vue/shared@npm:3.2.1"
   checksum: 17171611dd9aa1792cc1cccc998895d4c01eaaac0132073535e8cce0cd2647378b9de08bcc4dfb3c78386251c9ded2602a75d8908c9541854a7e61f7b426a577
+  languageName: node
+  linkType: hard
+
+"@vue/shared@npm:3.2.2":
+  version: 3.2.2
+  resolution: "@vue/shared@npm:3.2.2"
+  checksum: 0fc75c9e682c3242b025919ba43fbcaba601ddc69e73dcda3f3cd4497f991e4452044172bd623161798eafc7818a7cb4a07180df7ee5a3ebb22130d1a05d4788
   languageName: node
   linkType: hard
 
@@ -4035,6 +4051,15 @@ __metadata:
   version: 1.0.2
   resolution: "alphanum-sort@npm:1.0.2"
   checksum: 28bad91719e15959e36a791a3538924e07da356ebe3b5f992e7668e8018cfc417a7ba4a69512771e5ffa306c7e028435c7748546f66f72d4f7b0ad694cf55069
+  languageName: node
+  linkType: hard
+
+"alpinejs@npm:^3.2.3":
+  version: 3.2.3
+  resolution: "alpinejs@npm:3.2.3"
+  dependencies:
+    "@vue/reactivity": ^3.0.2
+  checksum: 14d1ac88841686c8c9aa9e6794aa22d1dffbc1a0568b4568e5c0f020e28db89fea3cef7778027bc9ea21f8bec1857aa5c68b679e8795205ce9890b9f5238a8a3
   languageName: node
   linkType: hard
 
@@ -6405,6 +6430,7 @@ __metadata:
     "@vue/compiler-sfc": 3.1.5
     "@vuelidate/core": ^2.0.0-alpha.23
     "@vuelidate/validators": ^2.0.0-alpha.20
+    alpinejs: ^3.2.3
     autoprefixer: ^10.3.1
     axios: ^0.21.1
     babel-cli: 6.26.0

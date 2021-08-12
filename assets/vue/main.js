@@ -212,6 +212,10 @@ app.config.globalProperties.$filters = {
     },
 }
 
+import Alpine from 'alpinejs'
+window.Alpine = Alpine
+Alpine.start();
+
 app
     .use(PrimeVue, {ripple: true})
     .use(Quasar, quasarUserOptions)

@@ -43,41 +43,15 @@ if ($learnPath->get_lp_session_id() != api_get_session_id()) {
 }
 
 $htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array()."
-function load_cbo(id, previousId) {
-    if (!id) {
-        return false;
-    }
-
-    previousId = previousId || 'previous';
-
-    var cbo = document.getElementById(previousId);
-
-    if (cbo) {
-        for (var i = cbo.length - 1; i > 0; i--) {
-            cbo.options[i] = null;
-        }
-        var k=0;
-        for (var i = 1; i <= child_name[id].length; i++){
-            var option = new Option(child_name[id][i - 1], child_value[id][i - 1]);
-            option.style.paddingLeft = '40px';
-            cbo.options[i] = option;
-            k = i;
-        }
-
-        cbo.options[k].selected = true;
-    }
-
-    //$('#' + previousId).selectpicker('refresh');
-}
-
-$(function() {
+$(function() {        
     if ($('#previous')) {
         if('parent is'+$('#idParent').val()) {
             load_cbo($('#idParent').val());
         }
     }
+    
     $('.lp_resource_element').click(function() {
-        window.location.href = $('a', this).attr('href');
+        //window.location.href = $('a', this).attr('href');
     });
     /*CKEDITOR.on('instanceReady', function (e) {
         showTemplates('content_lp');

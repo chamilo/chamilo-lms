@@ -315,13 +315,13 @@ $(function () {
   // });
 
   // Bootstrap tabs.
-  $('.tab_wrapper .nav a').on('click', function (e) {
+  /*$('.tab_wrapper .nav a').on('click', function (e) {
     e.preventDefault()
     $(this).tab('show')
-  });
+  });*/
 
   // Fixes bug when loading links inside a tab.
-  $('.tab_wrapper .tab-pane a').unbind();
+  //$('.tab_wrapper .tab-pane a').unbind();
 
   /**
      * Advanced options

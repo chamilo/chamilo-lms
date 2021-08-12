@@ -4557,7 +4557,6 @@ class learnpath
                         },
                     });
                 });
-
             });
         </script>';
 
@@ -4583,12 +4582,13 @@ class learnpath
 
             $(function () {
                 //$('.scrollbar-inner').scrollbar();
-                $('#subtab').on('click', 'a:first', function() {
+                /*$('#subtab').on('click', 'a:first', function() {
                     window.location.reload();
                 });
                 $('#subtab ').on('click', 'a:first', function () {
                     window.location.reload();
-                });
+                });*/
+                
                 expandColumnToggle('#hide_bar_template', {
                     selector: '#lp_sidebar'
                 }, {
@@ -4614,17 +4614,16 @@ class learnpath
             });
 
             // document template for new document tab handler
-            $(document).on('shown.bs.tab', 'a[data-toggle=\"tab\"]', function (e) {
+            /*$(document).on('shown.bs.tab', 'a[data-toggle=\"tab\"]', function (e) {
                 var id = e.target.id;
                 if (id == 'subtab2') {
                     $('#frmModel').show();
                 } else {
                     $('#frmModel').hide();
                 }
-            });
+            });*/
 
           function deleteItem(event) {
-          console.log($(event));
             var id = $(event).attr('data-id');
             var title = $(event).attr('data-title');
             var params = '&a=delete_item&id=' + id;
@@ -6139,19 +6138,20 @@ class learnpath
                 }
 
                 var cbo = document.getElementById('previous');
-                for(var i = cbo.length - 1; i > 0; i--) {
-                    cbo.options[i] = null;
+                if (cbo) {
+                    for(var i = cbo.length - 1; i > 0; i--) {
+                        cbo.options[i] = null;
+                    }                    
+                    var k=0;
+                    for (var i = 1; i <= child_name[id].length; i++){
+                        var option = new Option(child_name[id][i - 1], child_value[id][i - 1]);
+                        option.style.paddingLeft = '40px';
+                        cbo.options[i] = option;
+                        k = i;
+                    }    
+                    cbo.options[k].selected = true;
                 }
 
-                var k=0;
-                for(var i = 1; i <= child_name[id].length; i++){
-                    var option = new Option(child_name[id][i - 1], child_value[id][i - 1]);
-                    option.style.paddingLeft = '40px';
-                    cbo.options[i] = option;
-                    k = i;
-                }
-
-                cbo.options[k].selected = true;
                 //$('#previous').selectpicker('refresh');
             }";
 

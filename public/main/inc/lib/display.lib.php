@@ -1077,7 +1077,7 @@ class Display
         $ul_attributes = [],
         $selected = ''
     ) {
-        if (empty($headers) || 0 == count($headers)) {
+        if (empty($headers) || 0 === count($headers)) {
             return '';
         }
 
@@ -1100,8 +1100,9 @@ class Display
                 'a',
                 $item,
                 [
-                    'href' => '#'.$id.'-'.$i,
+                    //'href' => '#'.$id.'-'.$i,
                     'class' => 'nav-item nav-link '.$active,
+                    '@click' => "openTab =  $i",
                     'id' => $id.$i.'-tab',
                     'data-toggle' => 'tab',
                     'role' => 'tab',
@@ -1117,7 +1118,7 @@ class Display
             'nav',
             $lis,
             [
-                'id' => 'ul_'.$id,
+                'id' => 'nav_'.$id,
                 'class' => 'nav nav-tabs',
                 'role' => 'tablist',
             ]
@@ -1143,21 +1144,23 @@ class Display
                 $content,
                 [
                     'id' => $id.'-'.$i,
-                    'class' => 'tab-pane fade '.$active,
-                    'role' => 'tabpanel',
-                    'aria-labelledby' => $id.$i.'-tab',
+                    'x-show' => "openTab === $i"
+                    //'class' => 'tab-pane fade '.$active,
+                    //'role' => 'tabpanel',
+                    //'aria-labelledby' => $id.$i.'-tab',
                 ]
             );
             $i++;
         }
 
-        $attributes['id'] = $id;
-        $attributes['class'] = 'tab_wrapper';
+        $attributes['id'] = ''.$id;
+        $attributes['class'] = 'tab_wrapper ';
+        $attributes['x-data'] = ' { openTab: 1 } ';
 
         return self::tag(
             'div',
             $ul.
-            self::tag('div', $divs, ['class' => 'tab-content']),
+            $divs,
             $attributes
         );
     }

@@ -41,11 +41,11 @@ class FrmAdd extends FormValidator
         parent::__construct($name, 'POST', '', '', $attributes, self::LAYOUT_HORIZONTAL, true);
 
         $this->baseTool = $tool;
-        $this->toolIsV1p3 = $this->baseTool &&
-            !empty($this->baseTool->publicKey) &&
-            !empty($this->baseTool->getClientId()) &&
-            !empty($this->baseTool->getLoginUrl()) &&
-            !empty($this->baseTool->getRedirectUrl());
+        $this->toolIsV1p3 = $this->baseTool
+            && !empty($this->baseTool->publicKey)
+            && !empty($this->baseTool->getClientId())
+            && !empty($this->baseTool->getLoginUrl())
+            && !empty($this->baseTool->getRedirectUrl());
     }
 
     /**
@@ -96,8 +96,8 @@ class FrmAdd extends FormValidator
             ['iframe' => 'iframe', 'window' => 'window']
         );
 
-        if (null === $this->baseTool ||
-            ($this->baseTool && !$this->baseTool->isActiveDeepLinking())
+        if (null === $this->baseTool
+            || ($this->baseTool && !$this->baseTool->isActiveDeepLinking())
         ) {
             $this->addCheckBox(
                 'deep_linking',
@@ -157,7 +157,7 @@ class FrmAdd extends FormValidator
                 'replacement_user_id',
                 [
                     $plugin->get_lang('ReplacementUserId'),
-                    $plugin->get_lang('ReplacementUserIdHelp')
+                    $plugin->get_lang('ReplacementUserIdHelp'),
                 ],
                 false
             );

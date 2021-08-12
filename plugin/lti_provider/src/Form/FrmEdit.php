@@ -4,6 +4,7 @@
 namespace Chamilo\PluginBundle\LtiProvider\Form;
 
 use Chamilo\PluginBundle\Entity\LtiProvider\Platform;
+use Exception;
 use FormValidator;
 use LtiProviderPlugin;
 
@@ -32,10 +33,8 @@ class FrmEdit extends FormValidator
 
     /**
      * Build the form.
-     *
-     * @param bool $globalMode
      */
-    public function build(bool $globalMode = true)
+    public function build()
     {
         $plugin = LtiProviderPlugin::create();
         $this->addHeader($plugin->get_lang('ConnectionDetails'));
@@ -55,7 +54,7 @@ class FrmEdit extends FormValidator
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function setDefaultValues(): void
     {

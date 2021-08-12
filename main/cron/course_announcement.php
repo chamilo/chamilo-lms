@@ -33,15 +33,12 @@ $extraFieldValue = new ExtraFieldValue('course_announcement');
 $today = date('Y-m-d');
 
 foreach ($result as $announcement) {
-
     $sendNotification = $extraFieldValue->get_values_by_handler_and_field_variable($announcement->getId(), 'send_notification_at_a_specific_date');
 
     if ($sendNotification['value'] == 1) {
-
         $dateToSend = $extraFieldValue->get_values_by_handler_and_field_variable($announcement->getId(), 'date_to_send_notification');
 
         if ($today >= $dateToSend['value']) {
-
             $query = "SELECT ip FROM ChamiloCourseBundle:CItemProperty ip
                         WHERE ip.ref = :announcementId
                         AND ip.course = :courseId

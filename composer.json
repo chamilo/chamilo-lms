@@ -86,10 +86,11 @@
         "patchwork/utf8": "~1.2",
         "php-ffmpeg/php-ffmpeg": "0.5.1",
         "php-http/guzzle6-adapter": "^2.0",
-        "php-xapi/client": "0.7.x-dev",
+        "php-xapi/client": "dev-master",
+        "php-xapi/model": "dev-master as 1.2",
         "php-xapi/repository-api": "dev-master as 0.3.1",
         "php-xapi/repository-doctrine": "dev-master",
-        "php-xapi/symfony-serializer": "2.1.0 as 2.0",
+        "php-xapi/symfony-serializer": "dev-master",
         "phpmailer/phpmailer": "~6.1",
         "phpoffice/phpexcel": "~1.8",
         "phpoffice/phpword": "~0.14",
@@ -166,6 +167,21 @@
         {
             "type": "github",
             "url": "https://github.com/AngelFQC/vimeo.php.git",
+            "no-api": true
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/AngelFQC/xapi-symfony-serializer.git",
+            "no-api": true
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/AngelFQC/xapi-repository-doctrine.git",
+            "no-api": true
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/AngelFQC/xapi-model.git",
             "no-api": true
         }
     ],

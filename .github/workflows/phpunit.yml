@@ -43,6 +43,12 @@ jobs:
             - name: Install dependencies with composer
               run: composer install --prefer-dist --no-progress --optimize-autoloader
 
+            - name: Check PHP settings
+              run: |
+                  php -ini
+                  php -v
+                  php -m
+
             - name: Install PHPUnit
               run: vendor/bin/simple-phpunit --version
 

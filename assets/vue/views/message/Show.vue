@@ -86,7 +86,7 @@
           </v-chip>
         </div>
 
-        <div v-if="item.receiversCc">
+        <div v-if="item.receiversCc.length">
           {{ $t('Cc') }} :
           <v-chip v-for="receiver in item.receiversCc ">
             {{ receiver.receiver['username'] }}
@@ -140,7 +140,7 @@ export default {
     const isLoadingSelect = ref(false);
     const store = useStore();
     const user = store.getters["security/getUser"];
-    const find = store.getters["message/find"];
+    //const find = store.getters["message/find"];
     const route = useRoute();
     const router = useRouter();
     const {showNotification} = useNotification();
@@ -151,11 +151,13 @@ export default {
       id = route.query.id;
     }
 
+    // Set default empty.
+    item.value.receiversCc = [];
+
     onMounted(async () => {
       const response = await store.dispatch('message/load', id);
 
       item.value = await response;
-
       item.value.receivers.forEach(receiver => {
         if (receiver.receiver['@id'] === user['@id']) {
           myReceiver.value = receiver;
@@ -163,7 +165,7 @@ export default {
       });
     });
 
-    // Change to read
+    // Change to read.
     if (false === myReceiver.value.read) {
       axios.put(myReceiver.value['@id'], {
         read: true,

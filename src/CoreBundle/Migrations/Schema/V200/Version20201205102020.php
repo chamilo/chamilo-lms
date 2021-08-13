@@ -24,7 +24,6 @@ final class Version20201205102020 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE skill ADD asset_id INT DEFAULT NULL');
             $this->addSql('ALTER TABLE skill ADD CONSTRAINT FK_5E3DE4775DA1941 FOREIGN KEY (asset_id) REFERENCES asset (id)');
             $this->addSql('CREATE INDEX IDX_5E3DE4775DA1941 ON skill (asset_id)');
-            // @todo migrate old badges to new format.
         }
 
         if (!$schema->hasTable('skill_rel_item_rel_user')) {

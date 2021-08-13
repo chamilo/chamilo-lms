@@ -1101,6 +1101,7 @@ class Display
                 $item,
                 [
                     //'href' => '#'.$id.'-'.$i,
+                    'href' => 'javascript:void(0)',
                     'class' => 'nav-item nav-link '.$active,
                     '@click' => "openTab =  $i",
                     'id' => $id.$i.'-tab',

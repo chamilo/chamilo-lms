@@ -12,6 +12,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -50,6 +51,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     normalizationContext: [
         'groups' => ['course_rel_user:read', 'user:read'],
+        'enable_max_depth' => true
     ],
 )]
 #[ApiFilter(SearchFilter::class, properties: ['status' => 'exact', 'user' => 'exact'])]
@@ -70,6 +72,7 @@ class CourseRelUser
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="courses", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
+    #[MaxDepth(1)]
     protected User $user;
 
     /**

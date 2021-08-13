@@ -41,6 +41,8 @@ class Version20170625145000 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX session_id ON c_calendar_event');
         }
 
+        $this->addSql('ALTER TABLE c_calendar_event ADD collective TINYINT(1) NOT NULL');
+
         $table = $schema->getTable('c_calendar_event_attachment');
         if ($table->hasIndex('course')) {
             $this->addSql('DROP INDEX course ON c_calendar_event_attachment');

@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use Chamilo\Tests\AbstractApiTest;
@@ -118,6 +119,8 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
 
     public function testCreatePersonalEventAsAnotherUser(): void
     {
+        self::bootKernel();
+
         // 1. Create user 'test'.
         $user = $this->createUser('test');
         $resourceNodeId = $user->getResourceNode()->getId();
@@ -167,6 +170,8 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
 
     public function testAccessPersonalEvent(): void
     {
+        self::bootKernel();
+
         // 1. Create user 'test'.
         $user = $this->createUser('test');
         $token = $this->getUserToken(
@@ -233,20 +238,50 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
         $event->setCollective(true);
         $calendarRepo->update($event);
 
-        // view
+        // View.
         $this->createClientWithCredentials($anotherToken)->request('GET', $eventIri);
         $this->assertResponseStatusCodeSame(403);
 
-        // edit
-        $this->createClientWithCredentials($anotherToken)->request('PUT', $eventIri, ['json' => ['title' => 'hehe']]);
+        // Edit.
+        $this->createClientWithCredentials($anotherToken)->request(
+            'PUT',
+            $eventIri,
+            ['json' => ['title' => 'hehe', 'content' => 'modified']]
+        );
         $this->assertResponseStatusCodeSame(403);
 
-        // Now also add "another" as shared. @todo
-        /*$event->addUserLink($another);
+        // Delete
+        $this->createClientWithCredentials($anotherToken)->request('DELETE', $eventIri);
+        $this->assertResponseStatusCodeSame(403);
+
+        // Share event with "another" user.
+        $userRepo = self::getContainer()->get(UserRepository::class);
+        $calendarRepo = self::getContainer()->get(CCalendarEventRepository::class);
+
+        /** @var CCalendarEvent $event */
+        $event = $calendarRepo->find($eventId);
+        $another = $userRepo->find($another->getId());
+
+        // Add "another" as to the user.
+        $event
+            ->addUserLink($another)
+        ;
         $calendarRepo->update($event);
 
         $this->createClientWithCredentials($anotherToken)->request('GET', $eventIri);
-        $this->assertResponseStatusCodeSame(403);*/
+        $this->assertResponseStatusCodeSame(200);
+
+        // Edit.
+        $this->createClientWithCredentials($anotherToken)->request(
+            'PUT',
+            $eventIri,
+            ['json' => ['title' => 'hehe', 'content' => 'modified']]
+        );
+        $this->assertResponseStatusCodeSame(200);
+
+        // Delete
+        $this->createClientWithCredentials($anotherToken)->request('DELETE', $eventIri);
+        $this->assertResponseStatusCodeSame(403);
     }
 
     public function testCreateCourseEvent(): void

@@ -58,7 +58,7 @@ final class CCalendarEventRepository extends ResourceRepository
                 $event->addResourceToGroupList($sendTo['groups'], $course, $session);
             }
 
-            // Storing the selected users
+            // Storing the selected users.
             if (\is_array($sendTo['users'])) {
                 $sendTo['users'] = array_map(
                     fn ($userId) => $em->find(User::class, $userId),

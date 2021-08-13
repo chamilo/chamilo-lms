@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -135,5 +136,10 @@ trait ChamiloTestTrait
     public function convertToUTCAndFormat(\DateTime $localTime) : string
     {
         return $localTime->setTimezone(new \DateTimeZone('UTC'))->format('c');
+    }
+
+    public function getManager(): EntityManager
+    {
+        return self::getContainer()->get('doctrine')->getManager();
     }
 }

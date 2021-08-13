@@ -45,7 +45,7 @@ services:
         arguments:
             - 'agenda'
             - 'authoring'
-            - '/main/calendar/agenda.php'
+            - '/resources/ccalendarevent'
             - '@chamilo_course.settings.agenda'
             -   events:
                     repository: Chamilo\CourseBundle\Repository\CCalendarEventRepository

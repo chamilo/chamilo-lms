@@ -153,8 +153,7 @@ abstract class AbstractResource
             case ResourceLink::VISIBILITY_PENDING:
             case ResourceLink::VISIBILITY_DRAFT:
                 $editorMask = ResourceNodeVoter::getEditorMask();
-                $resourceRight = new ResourceRight();
-                $resourceRight
+                $resourceRight = (new ResourceRight())
                     ->setMask($editorMask)
                     ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
                 ;

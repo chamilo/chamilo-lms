@@ -54,7 +54,11 @@ use Symfony\Component\Validator\Constraints as Assert;
         'enable_max_depth' => true
     ],
 )]
-#[ApiFilter(SearchFilter::class, properties: ['status' => 'exact', 'user' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: [
+    'status' => 'exact',
+    'user' => 'exact',
+    'user.username' => 'partial',
+])]
 
 class CourseRelUser
 {

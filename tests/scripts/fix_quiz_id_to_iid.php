@@ -80,7 +80,7 @@ while ($row = Database::fetch_assoc($result)) {
     ];
 }
 //print_r($answers);
-
+echo "(".date('Y-m-d H:i:s').") Work arrays with quiz details prepared".PHP_EOL;
 // We have to treat each of the following tables, and replace the contents of
 // the field which contains the id by the corresponding iid
 // c_item_property, exercises, ref field
@@ -101,6 +101,7 @@ foreach ($questions as $key => $value) {
     //echo($sql.PHP_EOL);
     Database::query($sql);
 }
+echo "(".date('Y-m-d H:i:s').") Updated c_item_property".PHP_EOL;
 // track_e_exercises, exercises, exe_exo_id field
 $sqlTemplate = "UPDATE $tblTrackExercises SET exe_exo_id = %d WHERE c_id = %d AND exe_exo_id = %d";
 foreach ($exercises as $key => $value) {
@@ -108,6 +109,7 @@ foreach ($exercises as $key => $value) {
     //echo($sql.PHP_EOL);
     Database::query($sql);
 }
+echo "(".date('Y-m-d H:i:s').") Updated track_e_exercises".PHP_EOL;
 // track_e_attempt, question *AND* answer, question_id and answer fields
 $sqlTemplate = "UPDATE $tblTrackAttempt SET answer = '%s' WHERE c_id = %d AND question_id = %d AND answer = '%s'";
 foreach ($answers as $key => $value) {
@@ -121,6 +123,7 @@ foreach ($questions as $key => $value) {
     //echo($sql.PHP_EOL);
     Database::query($sql);
 }
+echo "(".date('Y-m-d H:i:s').") Updated track_e_attempt".PHP_EOL;
 // track_e_attempt_recording, question, question_id field
 // This cannot be done because this table does not contain a c_id field
 /*
@@ -138,6 +141,7 @@ foreach ($exercises as $key => $value) {
     //echo($sql.PHP_EOL);
     Database::query($sql);
 }
+echo "(".date('Y-m-d H:i:s').") Updated c_lp_item".PHP_EOL;
 // gradebook_link, exercises, ref_id
 $sqlTemplate = "UPDATE $tblGradebookLink SET ref_id = %d WHERE course_code = '%s' AND ref_id = %d";
 foreach ($exercises as $key => $value) {
@@ -145,6 +149,7 @@ foreach ($exercises as $key => $value) {
     //echo($sql.PHP_EOL);
     Database::query($sql);
 }
+echo "(".date('Y-m-d H:i:s').") Updated gradebook_link".PHP_EOL;
 // c_quiz_answer, question, question_id field
 $sqlTemplate = "UPDATE $tblCQuizAnswer SET question_id = %d WHERE c_id = %d AND question_id = %d";
 foreach ($questions as $key => $value) {
@@ -152,6 +157,7 @@ foreach ($questions as $key => $value) {
     //echo($sql.PHP_EOL);
     Database::query($sql);
 }
+echo "(".date('Y-m-d H:i:s').") Updated c_quiz_answer".PHP_EOL;
 // c_quiz_question_option, quiz_question, question_id field
 $sqlTemplate = "UPDATE $tblCQuizQuestionOption SET question_id = %d WHERE c_id = %d AND question_id = %d";
 foreach ($questions as $key => $value) {
@@ -159,6 +165,7 @@ foreach ($questions as $key => $value) {
     //echo($sql.PHP_EOL);
     Database::query($sql);
 }
+echo "(".date('Y-m-d H:i:s').") Updated c_quiz_question_option".PHP_EOL;
 // c_quiz_question_rel_category, question, question_id field
 $sqlTemplate = "UPDATE $tblCQuizQuestionRelCategory SET question_id = %d WHERE c_id = %d AND question_id = %d";
 foreach ($questions as $key => $value) {
@@ -166,6 +173,7 @@ foreach ($questions as $key => $value) {
     //echo($sql.PHP_EOL);
     Database::query($sql);
 }
+echo "(".date('Y-m-d H:i:s').") Updated c_quiz_question_rel_category".PHP_EOL;
 // c_quiz_rel_category, exercises, exercise_id field
 $sqlTemplate = "UPDATE $tblCQuizRelCategory SET exercise_id = %d WHERE c_id = %d AND exercise_id = %d";
 foreach ($exercises as $key => $value) {
@@ -173,6 +181,7 @@ foreach ($exercises as $key => $value) {
     //echo($sql.PHP_EOL);
     Database::query($sql);
 }
+echo "(".date('Y-m-d H:i:s').") Updated c_quiz_rel_category".PHP_EOL;
 // c_quiz_rel_question, exercises and question, exercice_id and question_id fields
 $sqlTemplate = "UPDATE $tblCQuizRelQuestion SET exercice_id = %d WHERE c_id = %d AND exercice_id = %d";
 foreach ($exercises as $key => $value) {
@@ -186,6 +195,7 @@ foreach ($questions as $key => $value) {
     //echo($sql.PHP_EOL);
     Database::query($sql);
 }
+echo "(".date('Y-m-d H:i:s').") Updated c_quiz_rel_question".PHP_EOL;
 
 echo 'Finished';
 error_log('Finished');

@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Framework\Container;
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @author Julio Montoya
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';

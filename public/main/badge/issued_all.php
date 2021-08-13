@@ -208,7 +208,7 @@ foreach ($userSkills as $index => $skillRelUser) {
         SkillModel::setBackPackJs($htmlHeadXtra);
         $personalBadge = $currentUrl.'&export=1';
         if ($export) {
-           SkillModel::exportBadge($skill, $skillRelUser, $currentUrl);
+            SkillModel::exportBadge($skill, $skillRelUser, $currentUrl);
         }
     }
 

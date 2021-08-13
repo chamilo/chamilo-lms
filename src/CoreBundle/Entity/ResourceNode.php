@@ -433,7 +433,7 @@ class ResourceNode
     public function addResourceLink(ResourceLink $link): self
     {
         $link->setResourceNode($this);
-        $this->resourceLinks[] = $link;
+        $this->resourceLinks->add($link);
 
         return $this;
     }

@@ -723,7 +723,6 @@ switch ($action) {
                     });
                 });
             </script>');
-
         }
 
         if ($showSubmitButton) {

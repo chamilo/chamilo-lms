@@ -1,7 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+namespace Chamilo\PluginBundle\LtiProvider\Form;
+
 use Chamilo\PluginBundle\Entity\LtiProvider\Platform;
+use FormValidator;
+use LtiProviderPlugin;
 
 /**
  * Class FrmAdd.

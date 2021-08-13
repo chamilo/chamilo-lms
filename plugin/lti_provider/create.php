@@ -2,11 +2,11 @@
 /* For license terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\LtiProvider\Platform;
+use Chamilo\PluginBundle\LtiProvider\Form\FrmAdd;
 
 $cidReset = true;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
-require_once __DIR__.'/src/Form/FrmAdd.php';
 require_once __DIR__.'/LtiProviderPlugin.php';
 
 api_protect_admin_script();

@@ -1,10 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+namespace Chamilo\PluginBundle\LtiProvider\Form;
+
 use Chamilo\PluginBundle\Entity\LtiProvider\Platform;
+use Exception;
+use FormValidator;
+use LtiProviderPlugin;
 
 /**
- * Class FrmAdd.
+ * Class FrmEdit.
  */
 class FrmEdit extends FormValidator
 {
@@ -14,7 +19,7 @@ class FrmEdit extends FormValidator
     private $platform;
 
     /**
-     * FrmAdd constructor.
+     * FrmEdit constructor.
      */
     public function __construct(
         string $name,
@@ -28,10 +33,8 @@ class FrmEdit extends FormValidator
 
     /**
      * Build the form.
-     *
-     * @throws Exception
      */
-    public function build(bool $globalMode = true)
+    public function build()
     {
         $plugin = LtiProviderPlugin::create();
         $this->addHeader($plugin->get_lang('ConnectionDetails'));

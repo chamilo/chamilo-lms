@@ -460,6 +460,12 @@ switch ($action) {
         header('Content-Type: application/json');
 
         $course_info = api_get_course_info_by_id($course_id);
+
+        if (empty($course_info)) {
+            echo json_encode(['error' => true]);
+            exit;
+        }
+
         $course_id = $course_info['real_id'];
 
         // Use have permissions to edit exercises results now?
@@ -528,11 +534,11 @@ switch ($action) {
         if (WhispeakAuthPlugin::questionRequireAuthentify($question_id)) {
             if ($objExercise->type == ONE_PER_PAGE) {
                 echo json_encode(['type' => 'one_per_page']);
-                break;
+                exit;
             }
 
             echo json_encode(['ok' => true]);
-            break;
+            exit;
         } else {
             ChamiloSession::erase(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION);
         }

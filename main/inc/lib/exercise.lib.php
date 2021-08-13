@@ -965,7 +965,7 @@ class ExerciseLib
                         }
 
                         [$answer] = explode('@@', $answer);
-                        // $correctAnswerList array of array with correct anwsers 0=> [0=>[\p] 1=>[plop]]
+                        // $correctAnswerList array of array with correct answers 0=> [0=>[\p] 1=>[plop]]
                         api_preg_match_all(
                             '/\[[^]]+\]/',
                             $answer,

@@ -181,17 +181,20 @@ jobs:
                   # ../../vendor/behat/behat/bin/behat features/registration.feature -vv
                   ../../vendor/behat/behat/bin/behat features/sessionAccess.feature -vv
                   ../../vendor/behat/behat/bin/behat features/sessionManagement.feature -vv
+                  ../../vendor/behat/behat/bin/behat features/skill.feature -vv
                   ../../vendor/behat/behat/bin/behat features/socialGroup.feature -vvv
                   ../../vendor/behat/behat/bin/behat features/systemAnnouncements.feature -vvv
                   ../../vendor/behat/behat/bin/behat features/ticket.feature -vvv
                   ../../vendor/behat/behat/bin/behat features/toolAgenda.feature -vvv
                   ../../vendor/behat/behat/bin/behat features/toolAnnouncement.feature -vvv
+                  ../../vendor/behat/behat/bin/behat features/toolAttendance.feature -vvv
                   ../../vendor/behat/behat/bin/behat features/toolDocument.feature -vvv
                   # ../../vendor/behat/behat/bin/behat features/toolExercise.feature -vvv
                   ../../vendor/behat/behat/bin/behat features/toolForum.feature -vvv
                   ../../vendor/behat/behat/bin/behat features/toolGroup.feature -vvv
                   ../../vendor/behat/behat/bin/behat features/toolLink.feature -vvv
                   ../../vendor/behat/behat/bin/behat features/toolLp.feature -vvv
+                  ../../vendor/behat/behat/bin/behat features/toolThematic.feature -vvv
                   ../../vendor/behat/behat/bin/behat features/toolWork.feature -vvv
 
             - name: The job has failed

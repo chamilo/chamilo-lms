@@ -1145,7 +1145,7 @@ class Display
                 $content,
                 [
                     'id' => $id.'-'.$i,
-                    'x-show' => "openTab === $i"
+                    'x-show' => "openTab === $i",
                     //'class' => 'tab-pane fade '.$active,
                     //'role' => 'tabpanel',
                     //'aria-labelledby' => $id.$i.'-tab',
@@ -2406,6 +2406,11 @@ class Display
         $html .= '</div>';
 
         return $html;
+    }
+
+    public static function getMdiIcon($name)
+    {
+        return '<i class="mdi-'.$name.' mdi v-icon notranslate v-icon--size-default" aria-hidden="true" medium=""></i>';
     }
 
     /**

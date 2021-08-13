@@ -51,29 +51,29 @@
                     <a
                         href="{{ url('legacy_main', { 'name' : 'admin/skill_edit.php', 'id' : skill.id }) }}"
                        class="btn btn-primary btn-sm" title="{{ "Edit" | trans }}">
-                        <i class="fas fa-pencil-alt"></i>
+                        {{ 'pencil' | mdi_icon }}
                     </a>
                     <a
                         href="{{ url('legacy_main', { 'name' : 'admin/skill_create.php', 'parent' : skill.id }) }}"
                        class="btn btn-default btn-sm" title="{{ "Create child skill" | trans }}">
-                        <i class="fas fa-plus"></i>
+                        {{ 'plus' | mdi_icon }}
                     </a>
                     <a
                         href="{{ url('legacy_main', { 'name' : 'admin/skill_badge_create.php', 'id' : skill.id }) }}"
                         class="btn btn-light btn-sm" title="{{ "Create badge" | trans }}">
-                        <i class="fas fa-shield-alt"></i>
+                        {{ 'shield-star-outline' | mdi_icon }}
                     </a>
                     {% if skill.status == 0 %}
                         <a
                             href="{{ url('legacy_main', { 'name' : 'admin/skill_list.php', 'id' : skill.id, 'action': 'enable' }) }}"
                            class="btn btn-success btn-sm" title="{{ 'Enable' }}">
-                            <i class="fas fa-check-circle"></i>
+                            {{ 'check-circle' | mdi_icon }}
                         </a>
                     {% else %}
                         <a
                             href="{{ url('legacy_main', { 'name' : 'admin/skill_list.php', 'id' : skill.id, 'action': 'disable' }) }}"
                            class="btn btn-sm" title="{{ 'Disable' }}">
-                            <i class="fas fa-ban"></i>
+                            {{ 'cancel' | mdi_icon }}
                         </a>
                     {% endif %}
                 </div>

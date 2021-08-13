@@ -37,9 +37,9 @@ class ChamiloExtension extends AbstractExtension
         return [
             new TwigFilter('var_dump', 'var_dump'),
             new TwigFilter('icon', 'Display::get_icon_path'),
+            new TwigFilter('mdi_icon', 'Display::getMdiIcon'),
             new TwigFilter('get_lang', 'get_lang'),
             new TwigFilter('get_plugin_lang', 'get_plugin_lang'),
-            new TwigFilter('icon', 'Display::get_icon_path'),
             new TwigFilter('img', 'Display::get_image'),
             new TwigFilter('api_get_local_time', 'api_get_local_time'),
             new TwigFilter('api_convert_and_format_date', 'api_convert_and_format_date'),
@@ -51,7 +51,6 @@ class ChamiloExtension extends AbstractExtension
             new TwigFilter('user_complete_name', 'UserManager::formatUserFullName'),
             new TwigFilter('user_complete_name_with_link', [$this, 'completeUserNameWithLink']),
             new TwigFilter('illustration', [$this, 'getIllustration']),
-
             new TwigFilter('api_get_setting', [$this, 'getSettingsParameter']),
         ];
     }

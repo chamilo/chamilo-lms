@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use \Chamilo\CourseBundle\Entity\CItemProperty;
+use \Chamilo\CoreBundle\Entity\Session;
+
 require __DIR__.'/../inc/global.inc.php';
 
 if (php_sapi_name() != 'cli') {
@@ -11,6 +14,7 @@ if (!api_get_configuration_value('course_announcement_scheduled_by_date')) {
     exit;
 }
 
+// Get all pending (visible) announcements where e-mail sent is empty
 $dql = "SELECT a
             FROM ChamiloCourseBundle:CAnnouncement a
             JOIN ChamiloCourseBundle:CItemProperty ip
@@ -32,6 +36,8 @@ if (!$result) {
 $extraFieldValue = new ExtraFieldValue('course_announcement');
 $today = date('Y-m-d');
 
+// For each announcement, check rules about sending the notification at a
+// specific date
 foreach ($result as $announcement) {
     $sendNotification = $extraFieldValue->get_values_by_handler_and_field_variable($announcement->getId(), 'send_notification_at_a_specific_date');
 
@@ -43,23 +49,34 @@ foreach ($result as $announcement) {
                         WHERE ip.ref = :announcementId
                         AND ip.course = :courseId
                         AND ip.tool = '".TOOL_ANNOUNCEMENT."'
-                        ORDER BY iid DESC";
+                        ORDER BY ip.iid DESC";
 
             $sql = Database::getManager()->createQuery($query);
             $itemProperty = $sql->execute(['announcementId' => $announcement->getId(), 'courseId' => $announcement->getCId()]);
             if (empty($itemProperty) or !isset($itemProperty[0])) {
                 continue;
             }
+            /* @var CItemProperty $itemPropertyObject */
+            $itemPropertyObject = $itemProperty[0];
             // Check if the last record for this announcement was not a removal
-            if ($itemProperty[0]['lastedit_type'] == 'AnnouncementDeleted' or $itemProperty[0]['visibility'] == 2) {
+            if ($itemPropertyObject->getLastEditType() == 'AnnouncementDeleted' or $itemPropertyObject->getVisibility() == 2) {
                 continue;
             }
-            /* @var \Chamilo\CoreBundle\Entity\Session $sessionObject */
-            $sessionObject = $itemProperty[0]->getSession();
-            $sessionId = $sessionObject->getId();
+            /* @var Session $sessionObject */
+            $sessionObject = $itemPropertyObject->getSession();
+            if (!empty($sessionObject)) {
+                $sessionId = $sessionObject->getId();
+            } else {
+                $sessionId = null;
+            }
             $courseInfo = api_get_course_info_by_id($announcement->getCId());
-            $senderId = $itemProperty[0]->getInsertUser()->getId();
-            $sendToUsersInSession = (int) $extraFieldValue->get_values_by_handler_and_field_variable($announcement->getId(), 'send_to_users_in_session')['value'];
+            $senderId = $itemPropertyObject->getInsertUser()->getId();
+            // Check if we need to send it to all users of all sessions that
+            // include this course.
+            $sendToUsersInSession = (int) $extraFieldValue->get_values_by_handler_and_field_variable(
+                $announcement->getId(),
+                'send_to_users_in_session'
+            )['value'];
 
             $messageSentTo = AnnouncementManager::sendEmail(
                 $courseInfo,

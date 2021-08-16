@@ -32,4 +32,4 @@ Feature: Attendance tool
     Given I am on "/main/attendance/index.php?cid=1&sid=0"
     Then I should see "Attendance 1 edited"
     Then I follow "Delete"
-    Then I should not see "Deleted"
+    Then I should not see "Attendance 1 edited"

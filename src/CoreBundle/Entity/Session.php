@@ -370,7 +370,7 @@ class Session implements ResourceWithAccessUrlInterface
         $user->setSession($this);
 
         if (!$this->hasUser($user)) {
-            $this->users[] = $user;
+            $this->users->add($user);
             $this->nbrUsers++;
         }
     }
@@ -427,7 +427,7 @@ class Session implements ResourceWithAccessUrlInterface
     public function addCourses(SessionRelCourse $course): void
     {
         $course->setSession($this);
-        $this->courses[] = $course;
+        $this->courses->add($course);
     }
 
     public function hasCourse(Course $course): bool
@@ -814,10 +814,10 @@ class Session implements ResourceWithAccessUrlInterface
 
     public function addCourse(Course $course): void
     {
-        $entity = (new SessionRelCourse())
+        $sessionRelCourse = (new SessionRelCourse())
             ->setCourse($course)
         ;
-        $this->addCourses($entity);
+        $this->addCourses($sessionRelCourse);
     }
 
     /**

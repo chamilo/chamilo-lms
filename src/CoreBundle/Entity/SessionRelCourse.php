@@ -63,7 +63,7 @@ class SessionRelCourse
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @Groups({"session_rel_course:read", "session_rel_course:write"})

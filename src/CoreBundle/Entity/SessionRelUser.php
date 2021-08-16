@@ -80,7 +80,7 @@ class SessionRelUser
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @Groups({"session_rel_user:read"})
@@ -147,7 +147,7 @@ class SessionRelUser
         return $this->session->getSessionRelCourseByUser($this->getUser());
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

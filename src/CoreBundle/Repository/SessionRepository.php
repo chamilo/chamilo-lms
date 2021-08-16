@@ -17,6 +17,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 
 /**
  * SessionRepository.
@@ -98,43 +99,56 @@ class SessionRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    protected function addUserInCourse(
-        int $status,
-        User $user,
-        Course $course,
-        Session $session
-    ): void {
-        if ($session->isActive() &&
-            $user->getIsActive() &&
-            $course->isActive() && $session->hasCourse($course)
-        ) {
-            switch ($status) {
-                case Session::DRH:
-                    if ($user->hasRole('ROLE_RRHH')) {
-                        $session->addUserInSession(Session::DRH, $user);
-                    }
+    public function addUserInCourse(int $status, User $user, Course $course, Session $session): void
+    {
+        if (!$session->isActive()) {
+            throw new Exception('Session not active');
+        }
 
-                    break;
-                case Session::STUDENT:
-                    $session->addUserInSession(Session::STUDENT, $user);
-                    $session->addUserInCourse(
+        if (!$user->isActive()) {
+            throw new Exception('User not active');
+        }
+
+        if (!$course->isActive()) {
+            throw new Exception('Course not active');
+        }
+
+        if (!$session->hasCourse($course)) {
+            $msg = sprintf('Course %s is not subscribed to the session %s', $course->getTitle(), $session->getName());
+
+            throw new Exception($msg);
+        }
+
+        switch ($status) {
+            case Session::DRH:
+                if ($user->hasRole('ROLE_RRHH')) {
+                    $session->addUserInSession(Session::DRH, $user);
+                }
+
+                break;
+            case Session::STUDENT:
+                $session
+                    ->addUserInSession(Session::STUDENT, $user)
+                    ->addUserInCourse(
                         Session::STUDENT,
                         $user,
                         $course
+                    )
+                ;
+
+                break;
+            case Session::COACH:
+                if ($user->hasRole('ROLE_TEACHER')) {
+                    $session->addUserInCourse(
+                        Session::COACH,
+                        $user,
+                        $course
                     );
+                }
 
-                    break;
-                case Session::COACH:
-                    if ($user->hasRole('ROLE_TEACHER')) {
-                        $session->addUserInCourse(
-                            Session::COACH,
-                            $user,
-                            $course
-                        );
-                    }
-
-                    break;
-            }
+                break;
+            default:
+                throw new Exception(sprintf('Cannot handle status %s', $status));
         }
     }
 

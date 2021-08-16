@@ -7,9 +7,13 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Repository\Node;
 
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use DateTime;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 /**
@@ -219,5 +223,44 @@ class SessionRepositoryTest extends AbstractApiTest
             ]
         );
         $this->assertResponseStatusCodeSame(422);
+    }
+
+    public function testGetSessionRelUser(): void
+    {
+        $em = self::getContainer()->get('doctrine')->getManager();
+        $sessionRepo = self::getContainer()->get(SessionRepository::class);
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $userRepo = self::getContainer()->get(UserRepository::class);
+
+        // 1. Add session + course + user.
+        $name = 'session';
+        $session = $this->createSession($name);
+        $course = $this->createCourse('new');
+        $user = $this->createUser('student');
+
+        $this->assertHasNoEntityViolations($session);
+
+        $session
+            ->setDisplayStartDate(new DateTime('2010-01-01 15:00'))
+            ->setDisplayEndDate(new DateTime('2010-01-01 18:00'))
+            ->addCourse($course)
+        ;
+        $sessionRepo->update($session);
+
+        $this->assertSame(1, $session->getCourses()->count());
+
+        $em->clear();
+        $course = $courseRepo->find($course->getId());
+        $user = $userRepo->find($user->getId());
+        $session = $sessionRepo->find($session->getId());
+
+        // Add student to session - course - course
+        $sessionRepo->addUserInCourse(Session::STUDENT, $user, $course, $session);
+        $sessionRepo->update($session);
+
+        /** @var User $user */
+        $user = $userRepo->find($user->getId());
+        $sessions = $user->getSessions(Session::STUDENT);
+        $this->assertSame(1, \count($sessions));
     }
 }

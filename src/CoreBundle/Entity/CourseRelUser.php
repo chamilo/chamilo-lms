@@ -51,7 +51,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     normalizationContext: [
         'groups' => ['course_rel_user:read', 'user:read'],
-        'enable_max_depth' => true
+        'enable_max_depth' => true,
     ],
 )]
 #[ApiFilter(SearchFilter::class, properties: [

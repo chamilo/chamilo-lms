@@ -103,6 +103,50 @@ class ExerciseShowFunctions
     }
 
     /**
+     * Shows the answer to an upload question
+     *
+     * @param string    Answer filepath
+     * @param int       Exercise ID
+     * @param int       Question ID
+     */
+    public static function displayUploadAnswer(
+        $feedbackType,
+        $answer,
+        $exeId,
+        $questionId,
+        $questionScore = null,
+        $resultsDisabled = 0
+    )
+    {
+        if (!empty($answer)) {
+            $exeInfo = Event::get_exercise_results_by_attempt($exeId);
+            if (empty($exeInfo)) {
+                global $exercise_stat_info;
+                $userId = $exercise_stat_info['exe_user_id'];
+            } else {
+                $userId = $exeInfo[$exeId]['exe_user_id'];
+            }
+            $userWebpath = UserManager::getUserPathById($userId, 'web').'my_files'.'/upload_answer/'.$exeId.'/'.$questionId.'/';
+            $filesNames = explode('|', $answer);
+            echo '<tr><td>';
+            foreach ($filesNames as $filename) {
+                $filename = Security::remove_XSS($filename);
+                echo '<p><a href="'.$userWebpath.$filename.'" target="_blank">'.$filename.'</a></p>';
+            }
+            echo '</td></tr>';
+        }
+
+        if (EXERCISE_FEEDBACK_TYPE_EXAM != $feedbackType) {
+            if ($questionScore > 0 || !empty($comments)) {
+            } else {
+                echo '<tr>';
+                echo Display::tag('td', ExerciseLib::getNotCorrectedYetText());
+                echo '</tr>';
+            }
+        }
+    }
+
+    /**
      * Shows the answer to a free-answer question, as HTML.
      *
      * @param string    Answer text

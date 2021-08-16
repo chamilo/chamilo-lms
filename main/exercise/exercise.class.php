@@ -3805,7 +3805,8 @@ class Exercise
         if ($answerType == FREE_ANSWER ||
             $answerType == ORAL_EXPRESSION ||
             $answerType == CALCULATED_ANSWER ||
-            $answerType == ANNOTATION
+            $answerType == ANNOTATION ||
+            $answerType == UPLOAD_ANSWER
         ) {
             $nbrAnswers = 1;
         }
@@ -4542,6 +4543,7 @@ class Exercise
                         }
                     }
                     break;
+                case UPLOAD_ANSWER:
                 case FREE_ANSWER:
                     if ($from_database) {
                         $sql = "SELECT answer, marks FROM $TBL_TRACK_ATTEMPT
@@ -5177,6 +5179,15 @@ class Exercise
                                 $questionScore,
                                 $results_disabled
                             );
+                        } elseif ($answerType == UPLOAD_ANSWER) {
+                            ExerciseShowFunctions::displayUploadAnswer(
+                                $feedback_type,
+                                $choice,
+                                $exeId,
+                                $questionId,
+                                $questionScore,
+                                $results_disabled
+                            );
                         } elseif ($answerType == ORAL_EXPRESSION) {
                             // to store the details of open questions in an array to be used in mail
                             /** @var OralExpression $objQuestionTmp */
@@ -5556,6 +5567,16 @@ class Exercise
                             break;
                         case FREE_ANSWER:
                             echo ExerciseShowFunctions::display_free_answer(
+                                $feedback_type,
+                                $choice,
+                                $exeId,
+                                $questionId,
+                                $questionScore,
+                                $results_disabled
+                            );
+                            break;
+                        case UPLOAD_ANSWER:
+                            echo ExerciseShowFunctions::displayUploadAnswer(
                                 $feedback_type,
                                 $choice,
                                 $exeId,
@@ -6144,7 +6165,20 @@ class Exercise
                     false,
                     $questionDuration
                 );
-            } elseif ($answerType == ORAL_EXPRESSION) {
+            } elseif ($answerType == UPLOAD_ANSWER) {
+                $answer = $choice;
+                Event::saveQuestionAttempt(
+                    $questionScore,
+                    $answer,
+                    $quesId,
+                    $exeId,
+                    0,
+                    $this->iid,
+                    false,
+                    $questionDuration
+                );
+            }
+            elseif ($answerType == ORAL_EXPRESSION) {
                 $answer = $choice;
                 Event::saveQuestionAttempt(
                     $questionScore,

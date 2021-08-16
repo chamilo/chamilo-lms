@@ -111,7 +111,7 @@ class ExerciseLib
                 }
             }
 
-            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION]) && $freeze) {
+            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, UPLOAD_ANSWER]) && $freeze) {
                 return '';
             }
 
@@ -203,6 +203,36 @@ class ExerciseLib
                     );
                     $form->setDefaults(["choice[".$questionId."]" => $fck_content]);
                     $s .= $form->returnForm();
+                    break;
+                case UPLOAD_ANSWER:
+                    global $exe_id;
+                    $path = '/upload_answer/'.$exe_id.'/'.$questionId.'/';
+                    $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=upload_answer&curdirpath='.$path;
+                    $multipleForm = new FormValidator(
+                        'drag_drop',
+                        'post',
+                        '#',
+                        ['enctype' => 'multipart/form-data']
+                    );
+                    $multipleForm->addMultipleUpload($url);
+                    $s.= '<script>
+                        $(function() {
+                            $("#input_file_upload").bind("fileuploaddone", function (e, data) {
+                                $.each(data.result.files, function (index, file) {
+                                  console.log(file);
+                                    if (file.name) {
+                                        var input = $("<input>", {
+                                            type: "hidden",
+                                            name: "uploadChoice['.$questionId.'][]",
+                                            value: file.name
+                                        })
+                                        $(data.context.children()[index]).parent().append(input);
+                                    }
+                                });
+                            });
+                        });
+                    </script>';
+                    $s .= $multipleForm->returnForm();
                     break;
                 case ORAL_EXPRESSION:
                     // Add nanog
@@ -5009,7 +5039,7 @@ EOT;
                 if ($show_results) {
                     $score = $calculatedScore;
                 }
-                if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
+                if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER])) {
                     $reviewScore = [
                         'score' => $my_total_score,
                         'comments' => Event::get_comments($exeId, $questionId),

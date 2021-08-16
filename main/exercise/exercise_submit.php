@@ -70,6 +70,7 @@ $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'annotation/js/annotation.js"></script>';
+$htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
 if (api_get_configuration_value('quiz_prevent_copy_paste')) {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.nocopypaste.js"></script>';
 }
@@ -741,6 +742,12 @@ if ($formSent && isset($_POST)) {
         $choice = [$hotspot_id => ''];
     }
 
+    // Only for upload answer
+    if (!isset($choice) && isset($_REQUEST['uploadChoice'])) {
+        $uploadAnswerFileNames = $_REQUEST['uploadChoice'];
+        $choice = implode('|', $uploadAnswerFileNames[$questionId]);
+    }
+
     // if the user has answered at least one question
     if (is_array($choice)) {
         if ($debug) {
@@ -1407,6 +1414,9 @@ echo '<script>
         // 4. choice for degree of certainty
         var my_choiceDc = $(\'*[name*="choiceDegreeCertainty[\'+question_id+\']"]\').serialize();
 
+        // 5. upload answer files
+        var uploadAnswerFiles = $(\'*[name*="uploadChoice[\'+question_id+\'][]"]\').serialize();
+
         // Checking CkEditor
         if (question_id) {
             if (CKEDITOR.instances["choice["+question_id+"]"]) {
@@ -1429,6 +1439,7 @@ echo '<script>
         dataparam += hotspot ? ("&" + hotspot) : "";
         dataparam += remind_list ? ("&" + remind_list) : "";
         dataparam += my_choiceDc ? ("&" + my_choiceDc) : "";
+        dataparam += uploadAnswerFiles ? ("&" + uploadAnswerFiles) : "";
 
         $("#save_for_now_"+question_id).html(\''.$loading.'\');
         $.ajax({
@@ -1535,11 +1546,17 @@ echo '<script>
         var question_list = ['.implode(',', $questionList).'];
         var free_answers = {};
         $.each(question_list, function(index, my_question_id) {
-            // Checking Ckeditor
+            // Checking Ckeditor and upload answer
             if (my_question_id) {
                 if (CKEDITOR.instances["choice["+my_question_id+"]"]) {
                     var ckContent = CKEDITOR.instances["choice["+my_question_id+"]"].getData();
                     free_answers["free_choice["+my_question_id+"]"] = ckContent;
+                }
+                if ($(\'*[name*="uploadChoice[\'+my_question_id+\']"]\').length) {
+                    var uploadChoice = $(\'*[name*="uploadChoice[\'+my_question_id+\']"]\').serializeArray();
+                    $.each(uploadChoice, function(i, obj) {
+                        free_answers["uploadChoice["+my_question_id+"]["+i+"]"] = uploadChoice[i].value;
+                    });
                 }
             }
         });

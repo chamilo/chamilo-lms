@@ -68,6 +68,7 @@ abstract class Question
         //MEDIA_QUESTION => array('media_question.class.php' , 'MediaQuestion')
         ANNOTATION => ['Annotation.php', 'Annotation'],
         READING_COMPREHENSION => ['ReadingComprehension.php', 'ReadingComprehension'],
+        UPLOAD_ANSWER => ['UploadAnswer.php', 'UploadAnswer'],
     ];
 
     /**
@@ -103,6 +104,7 @@ abstract class Question
             ORAL_EXPRESSION,
             CALCULATED_ANSWER,
             ANNOTATION,
+            UPLOAD_ANSWER,
         ];
     }
 
@@ -2204,6 +2206,7 @@ abstract class Question
 
         switch ($this->type) {
             case FREE_ANSWER:
+            case UPLOAD_ANSWER:
             case ORAL_EXPRESSION:
             case ANNOTATION:
                 $score['revised'] = isset($score['revised']) ? $score['revised'] : false;

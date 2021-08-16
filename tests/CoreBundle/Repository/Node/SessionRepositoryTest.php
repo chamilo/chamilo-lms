@@ -240,27 +240,45 @@ class SessionRepositoryTest extends AbstractApiTest
 
         $this->assertHasNoEntityViolations($session);
 
+        // 2. Add course to session.
         $session
             ->setDisplayStartDate(new DateTime('2010-01-01 15:00'))
             ->setDisplayEndDate(new DateTime('2010-01-01 18:00'))
             ->addCourse($course)
         ;
         $sessionRepo->update($session);
-
         $this->assertSame(1, $session->getCourses()->count());
 
-        $em->clear();
+        // 3. Add student to session - course - course
         $course = $courseRepo->find($course->getId());
         $user = $userRepo->find($user->getId());
+        /** @var Session $session */
         $session = $sessionRepo->find($session->getId());
+        $studentStatus = Session::STUDENT;
 
-        // Add student to session - course - course
-        $sessionRepo->addUserInCourse(Session::STUDENT, $user, $course, $session);
+        $sessionRepo->addUserInCourse($studentStatus, $user, $course, $session);
         $sessionRepo->update($session);
+
+        $em->clear();
 
         /** @var User $user */
         $user = $userRepo->find($user->getId());
-        $sessions = $user->getSessions(Session::STUDENT);
+        $session = $sessionRepo->find($session->getId());
+
+        $sessions = $user->getSessions($studentStatus);
         $this->assertSame(1, \count($sessions));
+
+        $hasUser = $session->hasUserInCourse($user, $course, $studentStatus);
+        $this->assertTrue($hasUser);
+
+        $this->assertSame(1, $session->getUsers()->count());
+
+        // 4. Delete user
+        $userRepo->delete($user);
+
+        /** @var Session $session */
+        $session = $sessionRepo->find($session->getId());
+        $this->assertSame(0, $session->getUsers()->count());
+        $this->assertSame(0, $session->getSessionRelCourseRelUsers()->count());
     }
 }

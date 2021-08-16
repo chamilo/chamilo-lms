@@ -24,7 +24,6 @@ class SkillRepositoryTest extends AbstractApiTest
     {
         self::bootKernel();
 
-        $em = self::getContainer()->get('doctrine')->getManager();
         $skillRepo = self::getContainer()->get(SkillRepository::class);
 
         $accessUrl = $this->getAccessUrl();

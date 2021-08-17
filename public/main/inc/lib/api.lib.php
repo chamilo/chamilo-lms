@@ -1290,6 +1290,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
         'username',
         'theme',
         'language',
+        'locale',
         'creator_id',
         'registration_date',
         'hr_dept_id',

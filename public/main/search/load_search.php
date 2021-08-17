@@ -171,7 +171,7 @@ $form->addHidden('user_id', $userToLoad);
 
 /** @var ExtraFieldSavedSearch $saved */
 $search = [
-    'user' => $userToLoad,
+    'user' => api_get_user_entity($userToLoad),
 ];
 
 $items = $em->getRepository(ExtraFieldSavedSearch::class)->findBy($search);
@@ -201,7 +201,8 @@ $theme = 'theme_fr';
 $lang = $defaultLangCible = api_get_language_isocode();
 
 if ($userToLoadInfo) {
-    $lang = $userToLoadInfo['language'];
+    $langInfo = api_get_language_from_iso($userToLoadInfo['locale']);
+    $lang = $langInfo->getEnglishName();
     $targetLanguageInfo = $extraFieldValueUser->get_values_by_handler_and_field_variable(
         $userToLoad,
         'langue_cible'

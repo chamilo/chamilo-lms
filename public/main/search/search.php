@@ -25,7 +25,7 @@ $adminPermissions = true;
 
 /** @var ExtraFieldSavedSearch $saved */
 $search = [
-    'user' => $userId,
+    'user' => api_get_user_entity($userId),
 ];
 $extraFieldSavedSearchRepo = $em->getRepository(ExtraFieldSavedSearch::class);
 $items = $extraFieldSavedSearchRepo->findBy($search);
@@ -229,7 +229,6 @@ if (!empty($items)) {
     /** @var ExtraFieldSavedSearch $item */
     foreach ($items as $item) {
         $variable = 'extra_'.$item->getField()->getVariable();
-
         if ($item->getField()->getFieldType() == Extrafield::FIELD_TYPE_TAG) {
             $tagsData[$variable] = $item->getValue();
         }

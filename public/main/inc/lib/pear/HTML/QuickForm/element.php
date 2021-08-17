@@ -386,10 +386,9 @@ class HTML_QuickForm_element extends HTML_Common
                 $elementName
             );
             $myVar = "['$replacedName']";
-
-            return isset($values[$myVar]) ? $values[$myVar] : null;
+            return eval("return (isset(\$values$myVar)) ? \$values$myVar : null;");
+            //return isset($values[$myVar]) ? $values[$myVar] : null;
         }
-
         return null;
     }
 
@@ -416,7 +415,6 @@ class HTML_QuickForm_element extends HTML_Common
                 // constant values override both default and submitted ones
                 // default values are overridden by submitted.
                 $value = $this->_findValue($caller->_constantValues);
-
                 if (null === $value) {
                     $value = $this->_findValue($caller->_submitValues);
                     if (null === $value) {

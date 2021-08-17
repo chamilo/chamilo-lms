@@ -43,7 +43,7 @@ class ExtraFieldSavedSearch
     /**
      * @ORM\Column(name="value", type="array", nullable=true, unique=false)
      */
-    protected ?array $value = [];
+    protected $value = '';
 
     /**
      * Get id.
@@ -75,7 +75,7 @@ class ExtraFieldSavedSearch
         return $this->value;
     }
 
-    public function setValue(array $value): self
+    public function setValue($value): self
     {
         $this->value = $value;
 

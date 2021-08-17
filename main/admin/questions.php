@@ -136,7 +136,7 @@ if ($formSent) {
         $criteria->orWhere($criteria->expr()->contains('question', "%$title%"));
     }
 
-    if (!empty($selectedCourse)) {
+    if (-1 !== $selectedCourse) {
         $criteria->andWhere($criteria->expr()->eq('cId', $selectedCourse));
     }
 

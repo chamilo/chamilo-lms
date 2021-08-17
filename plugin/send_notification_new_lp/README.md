@@ -1,8 +1,9 @@
 Mailing new LPs to students and their HR Managers
 ======
 
-This plugin allows you to enable the sending of emails to students and their human resources managers at the moment an
+This plugin allows you to enable sending of emails to students and their human resources managers at the moment an
 LP is published.
+When activating this plugin it adds a checkbox in the LP's configuration page to define is the LP should be notified to the learners
 
 For its operation, it is necessary that there is an extra field notify_student_and_hrm_when_available with default_value
 equal to 1, which will enable the possibility of executing the main/cron/learning_path_reminder.php cron to send

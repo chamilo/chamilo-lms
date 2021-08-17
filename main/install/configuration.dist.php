@@ -1971,7 +1971,7 @@ ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gr
 //$_configuration['course_creation_form_set_course_category_mandatory'] = false;
 
 // Show option to set course announcement date
-// Allow send notification at a especific Date. Require DB changes:
+// Allow sending notifications at a specific date. Requires DB changes:
 /*
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, field_order, visible_to_self, visible_to_others, changeable, filter, created_at)
 VALUES (21, 13, 'send_notification_at_a_specific_date', 'Send notification at a specific date', 0, 1, 0, 0, 0, NOW()),

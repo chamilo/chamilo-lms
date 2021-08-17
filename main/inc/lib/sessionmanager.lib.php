@@ -4806,6 +4806,7 @@ class SessionManager
      * @param int $courseId
      *
      * @return array
+     * @todo Add param to get only active sessions (not expires ones)
      */
     public static function get_session_by_course($courseId)
     {

@@ -1,17 +1,19 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-class CcConverterResource extends CcConverters 
+class CcConverterResource extends CcConverters
 {
 
-    public function __construct(CcIItem &$item, CcIManifest &$manifest, $rootpath, $path) {
+    public function __construct(CcIItem &$item, CcIManifest &$manifest, $rootpath, $path)
+    {
         $this->cc_type     = CcVersion13::webcontent;
         $this->defaultfile = 'resource.xml';
         parent::__construct($item, $manifest, $rootpath, $path);
     }
 
-    public function convert($outdir, $objResource) {
-        
+    public function convert($outdir, $objResource)
+    {
+
         $title = $objResource['title'];
         $contextid = $objResource['source_id'];
         $docfilepath = null;

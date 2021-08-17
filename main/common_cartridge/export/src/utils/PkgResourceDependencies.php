@@ -1,22 +1,17 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-class PkgResourceDependencies 
+class PkgResourceDependencies
 {
 
     private $values = array();
     private static $instance = null;
 
-    private function __clone() {
-    }
-    
-    private function __construct() {
-    }
-
     /**
      * @return PkgResourceDependencies
      */
-    public static function instance() {
+    public static function instance()
+    {
         if (empty(self::$instance)) {
             $c = __CLASS__;
             self::$instance = new $c();
@@ -27,20 +22,23 @@ class PkgResourceDependencies
     /**
      * @param array $deps
      */
-    public function add(array $deps) {
+    public function add(array $deps)
+    {
         $this->values = array_merge($this->values, $deps);
     }
 
-    public function reset() {
+    public function reset()
+    {
         $this->values = array();
     }
 
     /**
      * @return array
      */
-    public function get_deps() {
+    public function get_deps()
+    {
         return $this->values;
     }
-    
+
 }
 

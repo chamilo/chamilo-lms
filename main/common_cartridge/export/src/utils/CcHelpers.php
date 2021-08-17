@@ -1,15 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-abstract class CcHelpers 
+abstract class CcHelpers
 {
-    
+
     /**
      * Checks extension of the supplied filename
      *
      * @param string $filename
      */
-    public static function is_html($filename) {
+    public static function is_html($filename)
+    {
         $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
         return in_array($extension, array('htm', 'html'));
     }
@@ -20,7 +21,8 @@ abstract class CcHelpers
      * @param string $suffix
      * @return string
      */
-    public static function uuidgen($prefix = '', $suffix = '', $uppercase = true) {
+    public static function uuidgen($prefix = '', $suffix = '', $uppercase = true)
+    {
         $uuid = trim(sprintf('%s%04x%04x%s', $prefix, mt_rand(0, 65535), mt_rand(0, 65535), $suffix));
         $result = $uppercase ? strtoupper($uuid) : strtolower($uuid);
         return $result;
@@ -33,10 +35,11 @@ abstract class CcHelpers
      * @param string $suffix
      * @return mixed - directory short name or false in case of failure
      */
-    public static function randomdir($where, $prefix = '', $suffix = '') {
+    public static function randomdir($where, $prefix = '', $suffix = '')
+    {
 
         $permDirs = api_get_permissions_for_new_directories();
-        
+
         $dirname    = false;
         $randomname = self::uuidgen($prefix, $suffix, false);
         $newdirname = $where.DIRECTORY_SEPARATOR.$randomname;
@@ -47,7 +50,8 @@ abstract class CcHelpers
         return $dirname;
     }
 
-    public static function build_query($attributes, $search) {
+    public static function build_query($attributes, $search)
+    {
         $result = '';
         foreach ($attributes as $attribute) {
             if ($result != '') {
@@ -58,7 +62,8 @@ abstract class CcHelpers
         return $result;
     }
 
-    public static function process_embedded_files(&$doc, $attributes, $search, $customslash = null) {
+    public static function process_embedded_files(&$doc, $attributes, $search, $customslash = null)
+    {
         $result = array();
         $query = self::build_query($attributes, $search);
         $list = $doc->nodeList($query);
@@ -78,7 +83,8 @@ abstract class CcHelpers
      * @param string $html
      * @return multitype:mixed
      */
-    public static function embedded_files($html) {
+    public static function embedded_files($html)
+    {
         $result = array();
         $doc = new XMLGenericDocument();
         $doc->doc->validateOnParse = false;
@@ -92,14 +98,15 @@ abstract class CcHelpers
         return $result;
     }
 
-    public static function embedded_mapping($packageroot, $contextid = null, $folder = null, $docfilepath = null) {
-        
+    public static function embedded_mapping($packageroot, $contextid = null, $folder = null, $docfilepath = null)
+    {
+
         if (isset($folder)) {
             $files = array_diff(scandir($folder), array('.', '..'));
         } else {
             $folder = dirname($docfilepath);
-            $files[] = basename($docfilepath);            
-        }        
+            $files[] = basename($docfilepath);
+        }
 
         $depfiles = array();
         foreach ($files as $file) {
@@ -114,7 +121,7 @@ abstract class CcHelpers
 
             $location   = $folder.DIRECTORY_SEPARATOR.$file;
             $type       = mime_content_type($file);
-            
+
             $depfiles[$filepath.$filename] = array( $location,
                                                     ($mainfile == 1),
                                                     strtolower(str_replace(' ', '_', $filename)),
@@ -128,12 +135,13 @@ abstract class CcHelpers
         return $depfiles;
     }
 
-    public static function add_files(CcIManifest &$manifest, $packageroot, $outdir, $allinone = true, $folder = null, $docfilepath = null) {
+    public static function add_files(CcIManifest &$manifest, $packageroot, $outdir, $allinone = true, $folder = null, $docfilepath = null)
+    {
 
         $permDirs = api_get_permissions_for_new_directories();
-        
+
         $files = CcHelpers::embedded_mapping($packageroot, null, $folder, $docfilepath);
-        
+
         $rdir = $allinone ? new CcResourceLocation($outdir) : null;
         foreach ($files as $virtual => $values) {
             $clean_filename = $values[2];
@@ -161,9 +169,9 @@ abstract class CcHelpers
             $resource = new CcResources($rdir->rootdir(),
                                         $values[7].$clean_filename,
                                         $rdir->dirname(false));
-            
+
             $res = $manifest->add_resource($resource, null, CcVersion13::webcontent);
-            
+
             PkgStaticResources::instance()->add($virtual,
                                                   $res[0],
                                                   $rdir->dirname(false).$values[7].$clean_filename,
@@ -187,23 +195,25 @@ abstract class CcHelpers
      * @param boolean $allinone
      * @throws RuntimeException
      */
-    public static function handle_static_content(CcIManifest &$manifest, $packageroot, $contextid, $outdir, $allinone = true, $folder = null) {
+    public static function handle_static_content(CcIManifest &$manifest, $packageroot, $contextid, $outdir, $allinone = true, $folder = null)
+    {
         self::add_files($manifest, $packageroot, $outdir, $allinone, $folder);
         return PkgStaticResources::instance()->get_values();
     }
 
-    public static function handle_resource_content(CcIManifest &$manifest, $packageroot, $contextid, $outdir, $allinone = true, $docfilepath = null) {
+    public static function handle_resource_content(CcIManifest &$manifest, $packageroot, $contextid, $outdir, $allinone = true, $docfilepath = null)
+    {
         $result = array();
-        
+
         self::add_files($manifest, $packageroot, $outdir, $allinone, null, $docfilepath);
-        
+
         $files = self::embedded_mapping($packageroot, $contextid, null, $docfilepath);
         $rootnode = null;
         $rootvals = null;
         $depfiles = array();
         $depres = array();
         $flocation = null;
-        foreach ($files as $virtual => $values) {            
+        foreach ($files as $virtual => $values) {
             $vals = PkgStaticResources::instance()->get_identifier($virtual);
             $resource = $vals[3];
             $identifier = $resource->identifier;
@@ -227,7 +237,8 @@ abstract class CcHelpers
     }
 
     public static function process_linked_files($content, CcIManifest &$manifest, $packageroot,
-                                                $contextid, $outdir, $webcontent = false) {
+                                                $contextid, $outdir, $webcontent = false)
+    {
         // Detect all embedded files
         // copy all files in the cc package stripping any spaces and using only lowercase letters
         // add those files as resources of the type webcontent to the manifest
@@ -262,9 +273,5 @@ abstract class CcHelpers
         return array($text, $deps);
     }
 
-    public static function relative_location($originpath, $linkingpath) {
-        return false;
-    }
-    
 }
 

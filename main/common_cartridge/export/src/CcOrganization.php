@@ -19,7 +19,8 @@ class CcOrganization implements CcIOrganization
 
 
 
-    public function __construct($node=null, $doc=null) {
+    public function __construct($node=null, $doc=null)
+    {
         if (is_object($node) && is_object($doc)) {
             $this->process_organization($node,$doc);
         } else {
@@ -32,7 +33,8 @@ class CcOrganization implements CcIOrganization
      *
      * @param CcIItem $item
      */
-    public function add_item(CcIItem &$item) {
+    public function add_item(CcIItem &$item)
+    {
         if (is_null($this->itemlist)) {
             $this->itemlist = array();
         }
@@ -45,7 +47,8 @@ class CcOrganization implements CcIOrganization
      * @param string $title
      * @return CcIItem
      */
-    public function add_new_item($title='') {
+    public function add_new_item($title='')
+    {
         $nitem = new cc_item();
         $nitem->title = $title;
         $this->add_item($nitem);
@@ -53,18 +56,21 @@ class CcOrganization implements CcIOrganization
     }
 
 
-    public function has_items() {
+    public function has_items()
+    {
         return is_array($this->itemlist) && (count($this->itemlist) > 0);
     }
 
-    public function attr_value(&$nod, $name, $ns=null) {
+    public function attr_value(&$nod, $name, $ns=null)
+    {
       return is_null($ns) ?
              ($nod->hasAttribute($name) ? $nod->getAttribute($name) : null) :
              ($nod->hasAttributeNS($ns, $name) ? $nod->getAttributeNS($ns, $name) : null);
     }
 
 
-    public function process_organization(&$node,&$doc) {
+    public function process_organization(&$node,&$doc)
+    {
         $this->identifier   = $this->attr_value($node,"identifier");
         $this->structure    = $this->attr_value($node,"structure");
         $this->title        = '';
@@ -80,7 +86,8 @@ class CcOrganization implements CcIOrganization
         $this->isempty=false;
     }
 
-    public function init_new() {
+    public function init_new()
+    {
         $this->title        = null;
         $this->identifier   = CcHelpers::uuidgen('O_');
         $this->structure    = 'rooted-hierarchy';
@@ -90,11 +97,11 @@ class CcOrganization implements CcIOrganization
 
     }
 
-    public function uuidgen() {
+    public function uuidgen()
+    {
         $uuid = sprintf('%04x%04x', mt_rand(0, 65535), mt_rand(0, 65535));
         return strtoupper(trim($uuid));
     }
-
 
 }
 
@@ -103,7 +110,7 @@ class CcOrganization implements CcIOrganization
  * Item Class
  *
  */
-class cc_item  implements CcIItem 
+class cc_item  implements CcIItem
 {
 
     public  $identifier     = null;
@@ -115,9 +122,8 @@ class cc_item  implements CcIItem
     private $parentItem     = null;
     private $isempty        = true;
 
-
-
-    public function __construct($node=null,$doc=null) {
+    public function __construct($node=null,$doc=null)
+    {
         if (is_object($node)) {
             $clname = get_class($node);
             if ($clname =='CcResource') {
@@ -140,14 +146,16 @@ class cc_item  implements CcIItem
 
 
 
-    public function attr_value(&$nod, $name, $ns=null) {
+    public function attr_value(&$nod, $name, $ns=null)
+    {
       return is_null($ns) ?
              ($nod->hasAttribute($name) ? $nod->getAttribute($name) : null) :
              ($nod->hasAttributeNS($ns, $name) ? $nod->getAttributeNS($ns, $name) : null);
     }
 
 
-    public function process_item(&$node,&$doc) {
+    public function process_item(&$node,&$doc)
+    {
         $this->identifier       = $this->attr_value($node,"identifier");
         $this->structure        = $this->attr_value($node,"structure");
         $this->identifierref    = $this->attr_value($node,"identifierref");
@@ -173,7 +181,8 @@ class cc_item  implements CcIItem
      *
      * @param CcIItem $item
      */
-    public function add_child_item(CcIItem &$item) {
+    public function add_child_item(CcIItem &$item)
+    {
         if (is_null($this->childitems)) {
             $this->childitems = array();
         }
@@ -187,17 +196,16 @@ class cc_item  implements CcIItem
      * @param string $title
      * @return CcIItem
      */
-    public function add_new_child_item($title='') {
+    public function add_new_child_item($title='')
+    {
         $sc         = new cc_item();
         $sc->title  = $title;
         $this->add_child_item($sc);
         return $sc;
     }
 
-
-
-    public function attach_resource($resource) {
-
+    public function attach_resource($resource)
+    {
         if ($this->has_child_items()) {
             throw new Exception("Can not attach resource to item that contains other items!");
         }
@@ -221,16 +229,18 @@ class cc_item  implements CcIItem
         $this->identifierref = $resident;
     }
 
-    public function has_child_items() {
+    public function has_child_items()
+    {
         return is_array($this->childitems) && (count($this->childitems) > 0);
     }
 
-    public function child_item($identifier) {
+    public function child_item($identifier)
+    {
         return $this->has_child_items() ? $this->childitems[$identifier] : null;
     }
 
-
-    public function init_clean() {
+    public function init_clean()
+    {
             $this->identifier   = null;
             $this->isvisible    = null;
             $this->title        = null;
@@ -240,7 +250,8 @@ class cc_item  implements CcIItem
             $this->isempty      = true;
     }
 
-    public function init_new_item() {
+    public function init_new_item()
+    {
             $this->identifier   = CcHelpers::uuidgen('I_');
             $this->isvisible    = true; //default is true
             $this->title        = null;

@@ -3,7 +3,7 @@
 
 class CcManifest extends XMLGenericDocument implements CcIManifest
 {
-    
+
     private $ccversion              = null;
     private $ccobj                  = null;
     private $rootmanifest           = null;
@@ -14,7 +14,8 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
     private $mainidentifier         = null;
 
     public function __construct($ccver = 13, $activemanifest=null,
-                        $parentmanifest=null, $parentparentmanifest=null) {
+                        $parentmanifest=null, $parentparentmanifest=null)
+    {
 
         $this->ccversion = $ccver;
         $this->ccobj = new CcVersion13();
@@ -25,7 +26,8 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
      * Register Namespace for use XPATH
      *
      */
-    public function register_namespaces_for_xpath() {
+    public function register_namespaces_for_xpath()
+    {
         $scnam = $this->activemanifest->get_cc_namespaces();
         foreach ($scnam as $key => $value) {
             $this->registerNS($key, $value);
@@ -36,7 +38,8 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
      * TODO - implement this method - critical
      * Enter description here ...
      */
-    private function fill_manifest() {
+    private function fill_manifest()
+    {
 
     }
 
@@ -45,7 +48,8 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
      *
      * @param CcIMetadataManifest $met
      */
-    public function add_metadata_manifest(CcIMetadataManifest $met) {
+    public function add_metadata_manifest(CcIMetadataManifest $met)
+    {
         $metanode = $this->node("//imscc:manifest[@identifier='".
                                 $this->activemanifest->manifestID().
                                 "']/imscc:metadata");
@@ -60,7 +64,8 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
      * @param CcIMetadataResource $met
      * @param string $identifier
      */
-    public function add_metadata_resource(CcIMetadataResource $met, $identifier) {
+    public function add_metadata_resource(CcIMetadataResource $met, $identifier)
+    {
         $metanode  = $this->node("//imscc:resource".
             "[@identifier='".
             $identifier.
@@ -82,7 +87,8 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
      * @param string $identifier
      * @param string $filename
      */
-    public function add_metadata_file(CcIMetadataFile $met, $identifier, $filename) {
+    public function add_metadata_file(CcIMetadataFile $met, $identifier, $filename)
+    {
 
         if (empty($met) || empty($identifier) || empty($filename)) {
             throw new Exception('Try to add a metadata file with nulls values given!');
@@ -105,7 +111,8 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
     }
 
 
-    public function on_create() {
+    public function on_create()
+    {
         $this->activemanifest =  new CcVersion13();
         $this->rootmanifest = $this->activemanifest;
         $result = $this->activemanifest->create_manifest($this->doc);
@@ -113,23 +120,28 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
         return $result;
     }
 
-    public function get_relative_base_path() {
+    public function get_relative_base_path()
+    {
         return $this->activemanifest->base();
     }
 
-    public function parent_manifest() {
+    public function parent_manifest()
+    {
         return new CcManifest($this, $this->parentmanifest, $this->parentparentmanifest);
     }
 
-    public function root_manifest() {
+    public function root_manifest()
+    {
         return new CcManifest($this, $this->rootmanifest);
     }
 
-    public function manifestID() {
+    public function manifestID()
+    {
         return $this->activemanifest->manifestID();
     }
 
-    public function get_manifest_namespaces() {
+    public function get_manifest_namespaces()
+    {
         return $this->rootmanifest->get_cc_namespaces();
     }
 
@@ -138,7 +150,8 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
      *
      * @param CcIOrganization $org
      */
-    public function add_new_organization(CcIOrganization &$org) {
+    public function add_new_organization(CcIOrganization &$org)
+    {
         $norg    = $this->activemanifest->create_organization_node($org, $this->doc);
         $orgnode = $this->node("//imscc:manifest[@identifier='".
             $this->activemanifest->manifestID().
@@ -146,7 +159,8 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
         $orgnode->appendChild($norg);
     }
 
-    public function get_resources($searchspecific='') {
+    public function get_resources($searchspecific='')
+    {
         $reslist = $this->get_resource_list($searchspecific);
         $resourcelist = array();
         foreach ($reslist as $resourceitem) {
@@ -155,7 +169,8 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
         return $resourcelist;
     }
 
-    public function get_cc_namespace_path($nsname) {
+    public function get_cc_namespace_path($nsname)
+    {
         if (is_string($nsname) && (!empty($nsname))) {
             $scnam = $this->activemanifest->get_cc_namespaces();
             return $scnam[$nsname];
@@ -164,19 +179,22 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
     }
 
 
-    public function get_resource_list($searchspecific = '') {
+    public function get_resource_list($searchspecific = '')
+    {
         return $this->nodeList("//imscc:manifest[@identifier='".
                             $this->activemanifest->manifestID().
                             "']/imscc:resources/imscc:resource".$searchspecific);
     }
 
-    public function on_load() {
+    public function on_load()
+    {
         $this->register_namespaces_for_xpath();
         $this->fill_manifest();
         return true;
     }
 
-    public function on_save() {
+    public function on_save()
+    {
         return true;
     }
 
@@ -188,7 +206,8 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
      * @param string $type
      * @return array
      */
-    public function add_resource(CcIResource $res, $identifier = null, $type = 'webcontent') {
+    public function add_resource(CcIResource $res, $identifier = null, $type = 'webcontent')
+    {
 
         if (!$this->ccobj->valid($type)) {
             throw new Exception("Type invalid...");
@@ -229,7 +248,8 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
         return $tmparray;
     }
 
-    private function check_if_exist_in_other($name, $identifier) {
+    private function check_if_exist_in_other($name, $identifier)
+    {
         $status = array();
         foreach ($this->activemanifest->resources as $value) {
             if (($value->identifier != $identifier) && isset($value->files[$name])) {
@@ -239,7 +259,8 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
         return $status;
     }
 
-    private function replace_file_x_dependency($depen, $name) {
+    private function replace_file_x_dependency($depen, $name)
+    {
         foreach ($depen as $key => $value) {
             ($key);
             $ident                                          = $this->get_identifier_by_filename($name);
@@ -253,7 +274,8 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
         return true;
     }
 
-    private function get_identifier_by_filename($name) {
+    private function get_identifier_by_filename($name)
+    {
         $result = null;
         if (isset($this->activemanifest->resources_ind[$name])) {
             $result = $this->activemanifest->resources_ind[$name];
@@ -261,15 +283,18 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
         return $result;
     }
 
-    private function array_remove_by_value($arr, $value) {
+    private function array_remove_by_value($arr, $value)
+    {
         return array_values(array_diff($arr, array($value)));
     }
 
-    private function array_remove_by_key($arr, $key) {
+    private function array_remove_by_key($arr, $key)
+    {
         return array_values(array_diff_key($arr, array($key)));
     }
 
-    public function update_instructoronly($identifier, $value = false) {
+    public function update_instructoronly($identifier, $value = false)
+    {
         if (isset($this->activemanifest->resources[$identifier])) {
             $resource = $this->activemanifest->resources[$identifier];
             $resource->instructoronly = $value;
@@ -281,7 +306,8 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
      *
      * @return DOMNode
      */
-    public function put_nodes() {
+    public function put_nodes()
+    {
 
         $resnodestr = "//imscc:manifest[@identifier='".$this->activemanifest->manifestID().
             "']/imscc:resources";

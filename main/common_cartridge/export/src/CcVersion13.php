@@ -3,7 +3,7 @@
 
 class CcVersion13 extends CcVersion1
 {
-    
+
     const webcontent         = 'webcontent';
     const questionbank       = 'imsqti_xmlv1p3/imscc_xmlv1p3/question-bank';
     const assessment         = 'imsqti_xmlv1p3/imscc_xmlv1p3/assessment';
@@ -26,11 +26,13 @@ class CcVersion13 extends CcVersion1
      * @param string $type
      * @return bool
      */
-    public function valid($type) {
+    public function valid($type)
+    {
         return in_array($type, self::$checker);
     }
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->ccnamespaces = array('imscc'    => 'http://www.imsglobal.org/xsd/imsccv1p3/imscp_v1p1',
                                     'lomimscc' => 'http://ltsc.ieee.org/xsd/imsccv1p3/LOM/manifest'  ,
                                     'lom'      => 'http://ltsc.ieee.org/xsd/imsccv1p3/LOM/resource'  ,
@@ -46,10 +48,11 @@ class CcVersion13 extends CcVersion1
         $this->ccversion    = '1.3.0';
         $this->camversion   = '1.3.0';
         $this->_generator   = 'Chamilo Common Cartridge generator';
-        
+
     }
 
-    protected function update_items($items, DOMDocument &$doc, DOMElement &$xmlnode) {
+    protected function update_items($items, DOMDocument &$doc, DOMElement &$xmlnode)
+    {
         foreach ($items as $key => $item) {
             $itemnode = $doc->createElementNS($this->ccnamespaces['imscc'], 'item');
             $this->update_attribute($doc, 'identifier'   , $key                , $itemnode);
@@ -74,7 +77,8 @@ class CcVersion13 extends CcVersion1
      * @param object $xmlnode
      * @return DOMNode
      */
-    public function create_metadata_educational($met, DOMDocument  &$doc, $xmlnode) {
+    public function create_metadata_educational($met, DOMDocument  &$doc, $xmlnode)
+    {
         $metadata = $doc->createElementNS($this->ccnamespaces['imscc'], 'metadata');
         $xmlnode->insertBefore($metadata, $xmlnode->firstChild);
         $lom = $doc->createElementNS($this->ccnamespaces['lom'], 'lom');
@@ -95,5 +99,5 @@ class CcVersion13 extends CcVersion1
         }
         return $metadata;
     }
-    
+
 }

@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-abstract class CcConverters 
+abstract class CcConverters
 {
 
     protected $item     = null;
@@ -22,7 +22,8 @@ abstract class CcConverters
      * @param  string $path
      * @throws InvalidArgumentException
      */
-    public function __construct(CcIItem &$item, CcIManifest &$manifest, $rootpath, $path) {
+    public function __construct(CcIItem &$item, CcIManifest &$manifest, $rootpath, $path)
+    {
         $rpath = realpath($rootpath);
         if (empty($rpath)) {
             throw new InvalidArgumentException('Invalid path!');
@@ -54,7 +55,8 @@ abstract class CcConverters
      * @throws RuntimeException
      * @return bool
      */
-    protected function is_visible() {
+    protected function is_visible()
+    {
         $tdoc = new XMLGenericDocument();
         return true;
     }
@@ -63,7 +65,8 @@ abstract class CcConverters
      *
      * Stores any files that need to be stored
      */
-    protected function store(CcGeneralFile $doc, $outdir, $title, $deps = null) {
+    protected function store(CcGeneralFile $doc, $outdir, $title, $deps = null)
+    {
         $rdir = new CcResourceLocation($outdir);
         $rtp = $rdir->fullpath(true).$this->defaultname;
         if ( $doc->saveTo($rtp) ) {

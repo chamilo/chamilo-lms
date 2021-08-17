@@ -29,49 +29,46 @@ $form->addButtonImport(get_lang('Import'));
 
 if ($form->validate()) {
     $file = $_FILES['cc_file'];
-    
-    
+
+
     if (empty($file['tmp_name'])) {
-        $error_message = get_lang('UplUploadFailed');
-        echo Display::return_message($error_message, 'error', false);
+        $errorMessage = get_lang('UplUploadFailed');
+        echo Display::return_message($errorMessage, 'error', false);
     } else {
-        $allowed_file_mimetype = ['imscc'];
+        $allowedFileMimetype = ['imscc'];
 
-        $ext_import_file = substr($file['name'], (strrpos($file['name'], '.') + 1));
+        $extImportFile = substr($file['name'], (strrpos($file['name'], '.') + 1));
 
-        if (!in_array($ext_import_file, $allowed_file_mimetype)) {
+        if (!in_array($extImportFile, $allowedFileMimetype)) {
             echo Display::return_message(get_lang('YouMustImportAFileAccordingToSelectedOption'), 'error');
         } else {
-            
+
             $baseDir = api_get_path(SYS_ARCHIVE_PATH);
             $uploadPath = 'imsccImport/';
             $errors = [];
             if (!is_dir($baseDir.$uploadPath)) {
                 @mkdir($baseDir.$uploadPath);
             }
-            
+
             $filepath = $baseDir.$uploadPath;
-                        
+
             if (!Imscc13Import::unzip($file['tmp_name'], $filepath)) {
                 return false;
             }
-                        
+
             // We detect if it is cc v1.3
             $detected = Imscc13Import::detect_format($filepath);
-
-            if ($detected) {    
+            if ($detected) {
                 Imscc13Import::execute($filepath);
-                $infoMsg = Display::return_message(get_lang('CcFileImported'), 'normal', false);
+                Display::addFlash(Display::return_message(get_lang('CcFileImported'), 'normal', false));
             }
-            
         }
     }
 
 }
 
 $template = new Template(get_lang('ImportCcVersion13'));
-$infoMsg = Display::return_message(get_lang('ImportCcInstructions'), 'normal', false);
-$template->assign('info_msg', $infoMsg);
+Display::addFlash(Display::return_message(get_lang('ImportCcInstructions'), 'normal', false));
 $template->assign('form', $form->returnForm());
 $templateName = $template->get_template('common_cartridge/import_cc.tpl');
 $content = $template->fetch($templateName);

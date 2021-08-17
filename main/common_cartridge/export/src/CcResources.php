@@ -20,7 +20,8 @@ class CcResources implements CcIResource
 
     private $throwonerror   = true;
 
-    public function __construct($manifest, $file, $folder='', $throwonerror = true) {
+    public function __construct($manifest, $file, $folder='', $throwonerror = true)
+    {
         $this->throwonerror = $throwonerror;
         if (is_string($manifest)) {
             $this->folder = $folder;
@@ -37,7 +38,8 @@ class CcResources implements CcIResource
      * @param string $fname
      * @param string $location
      */
-    public function add_resource ($fname, $location ='') {
+    public function add_resource ($fname, $location ='')
+    {
         $this->process_resource($fname, $location, null);
     }
 
@@ -47,7 +49,8 @@ class CcResources implements CcIResource
      * @param DOMElement $node
      * @param CcIManifest $doc
      */
-    public function import_resource(DOMElement &$node, CcIManifest &$doc) {
+    public function import_resource(DOMElement &$node, CcIManifest &$doc)
+    {
 
         $searchstr = "//imscc:manifest[@identifier='".$doc->manifestID().
                      "']/imscc:resources/imscc:resource";
@@ -83,7 +86,8 @@ class CcResources implements CcIResource
      * @param string $ns
      * @return string
      */
-    public function get_attr_value(&$nod, $name, $ns=null) {
+    public function get_attr_value(&$nod, $name, $ns=null)
+    {
         if (is_null($ns)) {
             return ($nod->hasAttribute($name) ? $nod->getAttribute($name) : null);
         }
@@ -97,7 +101,8 @@ class CcResources implements CcIResource
      * @param string $fname
      * @param string $folder
      */
-    public function process_resource($manifestroot, &$fname, $folder) {
+    public function process_resource($manifestroot, &$fname, $folder)
+    {
         $file = empty($folder) ? $manifestroot.'/'.$fname : $manifestroot.'/'.$folder.'/'.$fname;
 
         if (!file_exists($file) && $this->throwonerror) {
@@ -114,7 +119,8 @@ class CcResources implements CcIResource
         $this->folder           = $folder;
     }
 
-    public function adjust_path($mroot, $fname) {
+    public function adjust_path($mroot, $fname)
+    {
         $result = null;
         if (file_exists($fname->filename)) {
             $result = pathDiff($fname->filename, $mroot);
@@ -127,7 +133,8 @@ class CcResources implements CcIResource
         return $result;
     }
 
-    public function init_clean() {
+    public function init_clean()
+    {
         $this->identifier    = null;
         $this->type          = null;
         $this->href          = null;
@@ -141,7 +148,8 @@ class CcResources implements CcIResource
         $this->isempty       = true;
     }
 
-    public function init_empty_new() {
+    public function init_empty_new()
+    {
         $this->identifier    = CcHelpers::uuidgen('I_', '_R');
         $this->type          = null;
         $this->href          = null;
@@ -151,7 +159,8 @@ class CcResources implements CcIResource
         $this->identifierref = null;
     }
 
-    public function get_manifestroot() {
+    public function get_manifestroot()
+    {
         return $this->manifestroot;
     }
 }

@@ -6,8 +6,6 @@
  */
 interface CcIMetadataResource
 {
-
     public function add_metadata_resource_educational($obj);
-
 }
 

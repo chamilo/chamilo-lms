@@ -4,10 +4,8 @@
 /**
  * CC Metadata File Interface
  */
-interface CcIMetadataFile 
+interface CcIMetadataFile
 {
-
     public function add_metadata_file_educational($obj);
-
 }
 

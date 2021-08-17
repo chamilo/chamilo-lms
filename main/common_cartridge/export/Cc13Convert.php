@@ -4,7 +4,8 @@
 class Cc13Convert
 {
 
-    public static function convert($packagedir, $outdir, $objCourse) {
+    public static function convert($packagedir, $outdir, $objCourse)
+    {
 
         $dir = realpath($packagedir);
         if (empty($dir)) {
@@ -94,7 +95,8 @@ class Cc13Convert
         return false;
     }
 
-    protected static function get_item_sections($itemData, $itemType, &$count, $courseCode, $itmesExtraData = null) {
+    protected static function get_item_sections($itemData, $itemType, &$count, $courseCode, $itmesExtraData = null)
+    {
 
         $sections = [];
         switch ($itemType) {
@@ -143,7 +145,8 @@ class Cc13Convert
         return $sections;
     }
 
-    protected static function get_sequence($objItems, $categoryId = null, $itemType = null, $coursecode = null, $itemQuestions = null) {
+    protected static function get_sequence($objItems, $categoryId = null, $itemType = null, $coursecode = null, $itemQuestions = null)
+    {
 
         $sequences = [];
         switch ($itemType) {
@@ -246,7 +249,8 @@ class Cc13Convert
         return $sequences;
     }
 
-    protected static function process_sequence(CcIItem &$item, CcIManifest &$manifest, array $sequence, $packageroot, $outdir) {
+    protected static function process_sequence(CcIItem &$item, CcIManifest &$manifest, array $sequence, $packageroot, $outdir)
+    {
         if (!empty($sequence)) {
             foreach ($sequence as $seq) {
                 $activity_type = ucfirst($seq['cc_type']);
@@ -264,7 +268,8 @@ class Cc13Convert
     }
 
 
-    protected static function item_indenter(CcIItem &$item, $level = 0) {
+    protected static function item_indenter(CcIItem &$item, $level = 0)
+    {
         $indent = (int)$level;
         $indent = ($indent) <= 0 ? 0 : $indent;
         $nprev = null;

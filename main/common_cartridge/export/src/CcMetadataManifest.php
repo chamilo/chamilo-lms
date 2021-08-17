@@ -3,14 +3,14 @@
 
 class CcMetadataManifest implements CcIMetadataManifest
 {
-    
+
     public  $arraygeneral   = array();
     public  $arraytech      = array();
     public  $arrayrights    = array();
     public  $arraylifecycle = array();
 
-
-    public function add_metadata_general($obj){
+    public function add_metadata_general($obj)
+    {
         if (empty($obj)){
             throw new Exception('Medatada Object given is invalid or null!');
         }
@@ -23,7 +23,8 @@ class CcMetadataManifest implements CcIMetadataManifest
         !is_null($obj->entry)? $this->arraygeneral['entry']=$obj->entry:null;
     }
 
-    public function add_metadata_technical($obj){
+    public function add_metadata_technical($obj)
+    {
         if (empty($obj)){
             throw new Exception('Medatada Object given is invalid or null!');
         }
@@ -31,7 +32,8 @@ class CcMetadataManifest implements CcIMetadataManifest
     }
 
 
-    public function add_metadata_rights($obj){
+    public function add_metadata_rights($obj)
+    {
         if (empty($obj)){
             throw new Exception('Medatada Object given is invalid or null!');
         }
@@ -42,7 +44,8 @@ class CcMetadataManifest implements CcIMetadataManifest
     }
 
 
-    public function add_metadata_lifecycle($obj){
+    public function add_metadata_lifecycle($obj)
+    {
         if (empty($obj)){
             throw new Exception('Medatada Object given is invalid or null!');
         }
@@ -51,14 +54,15 @@ class CcMetadataManifest implements CcIMetadataManifest
         !is_null($obj->date)? $this->arraylifecycle['date']=$obj->date:null;
 
     }
-    
+
 }
 
 /**
  * Metadata General Type
  *
  */
-class cc_metadata_general {
+class cc_metadata_general
+{
 
     public  $title          = array();
     public  $language       = array();
@@ -70,25 +74,38 @@ class cc_metadata_general {
 
 
 
-    public function set_coverage ($coverage,$language){
+    public function set_coverage ($coverage,$language)
+    {
         $this->coverage[] = array($language,$coverage);
     }
-    public function set_description ($description,$language){
+
+    public function set_description ($description,$language)
+    {
         $this->description[] = array($language,$description);
     }
-    public function set_keyword ($keyword,$language){
+
+    public function set_keyword ($keyword,$language)
+    {
         $this->keyword[] = array($language,$keyword);
     }
-    public function set_language ($language){
+
+    public function set_language ($language)
+    {
         $this->language[] = array($language);
     }
-    public function set_title ($title,$language){
+
+    public function set_title ($title,$language)
+    {
         $this->title[] = array($language,$title);
     }
-    public function set_catalog ($cat){
+
+    public function set_catalog ($cat)
+    {
         $this->catalog[] = array($cat);
     }
-    public function set_entry ($entry){
+
+    public function set_entry ($entry)
+    {
         $this->entry[] = array($entry);
     }
 

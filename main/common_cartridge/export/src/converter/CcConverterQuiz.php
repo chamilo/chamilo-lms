@@ -1,25 +1,24 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-class CcConverterQuiz extends CcConverters 
+class CcConverterQuiz extends CcConverters
 {
 
-    public function __construct(CcIItem &$item, CcIManifest &$manifest, $rootpath, $path) {
+    public function __construct(CcIItem &$item, CcIManifest &$manifest, $rootpath, $path)
+    {
         $this->cc_type     = CcVersion13::assessment;
         $this->defaultfile = 'quiz.xml';
         $this->defaultname = assesment13_resource_file::deafultname;
         parent::__construct($item, $manifest, $rootpath, $path);
     }
 
-    public function convert($outdir, $objQuizz) {
-        
-        $rt = new assesment13_resource_file();
+    public function convert($outdir, $objQuizz)
+    {
 
+        $rt = new assesment13_resource_file();
         $title = $objQuizz['title'];
-        
         $rt->set_title($title);
 
-        
         // Metadata.
         $metadata = new cc_assesment_metadata();
         $rt->set_metadata($metadata);
@@ -28,7 +27,7 @@ class CcConverterQuiz extends CcConverters
         $metadata->enable_solutions();
         // Attempts.
         $max_attempts = $objQuizz['max_attempt'];
-        
+
         if ($max_attempts > 0) {
             // Qti does not support number of specific attempts bigger than 5 (??)
             if ($max_attempts > 5) {
@@ -36,17 +35,17 @@ class CcConverterQuiz extends CcConverters
             }
             $metadata->set_maxattempts($max_attempts);
         }
-        
+
         // Time limit must be converted into minutes.
         $timelimit = $objQuizz['expired_time'];
-        
+
         if ($timelimit > 0) {
             $metadata->set_timelimit($timelimit);
             $metadata->enable_latesubmissions(false);
         }
 
         $contextid = $objQuizz['source_id'];
-        
+
         $result = CcHelpers::process_linked_files( $objQuizz['comment'],
                                                     $this->manifest,
                                                     $this->rootpath,
@@ -58,7 +57,6 @@ class CcConverterQuiz extends CcConverters
         // Section.
         $section = new cc_assesment_section();
         $rt->set_section($section);
-
         // Process the actual questions.
         $ndeps = cc_assesment_helper::process_questions($objQuizz,
                                                         $this->manifest,
@@ -67,7 +65,7 @@ class CcConverterQuiz extends CcConverters
                                                         $contextid,
                                                         $outdir
                                                     );
-        
+
         if ($ndeps === false) {
             // No exportable questions in quiz or quiz has no questions
             // so just skip it.

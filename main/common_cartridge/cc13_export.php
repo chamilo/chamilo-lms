@@ -41,28 +41,28 @@ $backupOption = 'select_items';
 if (Security::check_token('post') && ($action === 'course_select_form')) {
     // Clear token
     Security::clear_token();
-
-    if ($action === 'course_select_form') {
+    $resources = Security::remove_XSS($_POST['resource']);
+    if (!empty($resources)) {
         $cb = new CourseBuilder('partial');
-        $course = $cb->build(0, null, false, array_keys($_POST['resource']), $_POST['resource']);
+        $course = $cb->build(0, null, false, array_keys($resources), $resources);
         $course = CourseSelectForm::get_posted_course(null, 0, '', $course);
+        $imsccFile = Cc13ExportConvert::export($course);
+        if ($imsccFile !== false) {
+            echo Display::return_message(get_lang('ImsccCreated'), 'confirm');
+            echo '<br />';
+            echo Display::toolbarButton(
+                get_lang('Download'),
+                api_get_path(WEB_CODE_PATH).'course_info/download.php?archive='.$imsccFile.'&'.api_get_cidreq(),
+                'file-zip-o',
+                'primary',
+                [],
+            );
+        }
     }
-
-    $imsccFile = Cc13ExportConvert::export($course);
-    if ($imsccFile !== FALSE) {
-        echo Display::return_message(get_lang('ImsccCreated'), 'confirm');
-        echo '<br />';
-        echo Display::url(
-            get_lang('Download'),
-            api_get_path(WEB_CODE_PATH).'course_info/download.php?archive='.$imsccFile.'&'.api_get_cidreq(),
-            ['class' => 'btn btn-primary btn-large']
-        );
-    }
-
 } else {
     // Clear token
     Security::clear_token();
-    $cb = new CourseBuilder('partial');    
+    $cb = new CourseBuilder('partial');
     $tools_to_build = [
         RESOURCE_DOCUMENT,
         RESOURCE_FORUMCATEGORY,
@@ -71,9 +71,9 @@ if (Security::check_token('post') && ($action === 'course_select_form')) {
         RESOURCE_QUIZ,
         RESOURCE_TEST_CATEGORY,
         RESOURCE_LINK,
-        RESOURCE_WIKI
-    ];    
-    $course = $cb->build(0, null, false, $tools_to_build);            
+        RESOURCE_WIKI,
+    ];
+    $course = $cb->build(0, null, false, $tools_to_build);
     if ($course->has_resources()) {
         // Add token to Course select form
         $hiddenFields['sec_token'] = Security::get_token();

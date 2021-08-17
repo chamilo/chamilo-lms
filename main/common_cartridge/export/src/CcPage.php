@@ -1,7 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-class CcPage extends CcGeneralFile {
+class CcPage extends CcGeneralFile
+{
     protected $rootns = 'xmlns';
     protected $rootname = 'html';
     protected $ccnamespaces = array('xmlns' => 'http://www.w3.org/1999/xhtml');
@@ -10,20 +11,24 @@ class CcPage extends CcGeneralFile {
     protected $title = null;
     protected $intro = null;
 
-    public function set_content($value) {
+    public function set_content($value)
+    {
         // We are not cleaning up this one on purpose.
         $this->content = $value;
     }
 
-    public function set_title($value) {
+    public function set_title($value)
+    {
         $this->title = self::safexml($value);
     }
 
-    public function set_intro($value) {
+    public function set_intro($value)
+    {
         $this->intro = self::safexml(strip_tags($value));
     }
 
-    protected function on_create() {
+    protected function on_create()
+    {
         $impl = new DOMImplementation();
         $dtd  = $impl->createDocumentType( 'html',
                                            '-//W3C//DTD XHTML 1.0 Strict//EN',
@@ -35,8 +40,8 @@ class CcPage extends CcGeneralFile {
         parent::on_create();
     }
 
-    public function on_save() {
-
+    public function on_save()
+    {
         $rns = $this->ccnamespaces[$this->rootns];
         // Add the basic tags.
         $head = $this->append_new_element_ns($this->root, $rns, 'head');
@@ -75,7 +80,8 @@ class CcPage extends CcGeneralFile {
         return true;
     }
 
-    public function saveTo($fname) {
+    public function saveTo($fname)
+    {
         $result = $this->on_save();
         if ($result) {
             $dret = str_replace('<?xml version="1.0"?>'."\n", '', $this->viewXML());

@@ -6,7 +6,6 @@
  */
 interface CcIManifest
 {
-
     public function on_create ();
     public function on_load ();
     public function on_save ();
@@ -18,6 +17,5 @@ interface CcIManifest
     public function add_metadata_resource (CcIMetadataResource $met,$identifier);
     public function add_metadata_file (CcIMetadataFile $met,$identifier,$filename);
     public function put_nodes ();
-
 }
 

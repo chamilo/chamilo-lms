@@ -6,7 +6,8 @@
  *
  * @param string $path
  */
-function toUrlPath(&$path) {
+function toUrlPath(&$path)
+{
     for ($count = 0 ; $count < strlen($path); ++$count) {
         $chr = $path[$count];
         if (($chr == '\\')) {
@@ -22,7 +23,8 @@ function toUrlPath(&$path) {
  * @param string $path2
  * @return string
  */
-function pathDiff($path1, $path2) {
+function pathDiff($path1, $path2)
+{
     toUrlPath($path1);
     toUrlPath($path2);
     $result = "";
@@ -40,7 +42,8 @@ function pathDiff($path1, $path2) {
  *
  * @param string $path
  */
-function toNativePath(&$path) {
+function toNativePath(&$path)
+{
     for ($count = 0 ; $count < strlen($path); ++$count) {
         $chr = $path[$count];
         if (($chr == '\\') || ($chr == '/')) {
@@ -56,7 +59,8 @@ function toNativePath(&$path) {
  * @param string $rootDir
  * @return string
  */
-function stripUrl($path, $rootDir='') {
+function stripUrl($path, $rootDir='')
+{
     $result = $path;
     if ( is_string($path) && ($path != '') ) {
         $start=strpos($path,'(')+1;
@@ -67,7 +71,8 @@ function stripUrl($path, $rootDir='') {
     return $result;
 }
 
-function fullPath($path, $dirsep = DIRECTORY_SEPARATOR) {
+function fullPath($path, $dirsep = DIRECTORY_SEPARATOR)
+{
     $token = '$IMS-CC-FILEBASE$';
     $path = str_replace($token,'',$path);
     if (is_string($path) && ($path != '')) {
@@ -110,12 +115,14 @@ function fullPath($path, $dirsep = DIRECTORY_SEPARATOR) {
  * @param string $url
  * @return boolean
  */
-function isUrl($url) {
+function isUrl($url)
+{
     $result = filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED) !== false;
     return $result;
 }
 
-function getDepFiles($manifestroot, $fname, $folder, &$filenames) {
+function getDepFiles($manifestroot, $fname, $folder, &$filenames)
+{
     static $types = array('xhtml' => true, 'html' => true, 'htm' => true);
     $extension = strtolower(trim(pathinfo($fname, PATHINFO_EXTENSION)));
     $filenames = array();
@@ -134,7 +141,8 @@ function getDepFiles($manifestroot, $fname, $folder, &$filenames) {
     }
 }
 
-function getDepFilesHTML($manifestroot, $fname, &$filenames, &$dcx, $folder) {
+function getDepFilesHTML($manifestroot, $fname, &$filenames, &$dcx, $folder)
+{
     $dcx->resetXpath();
     $nlist         = $dcx->nodeList("//img/@src | //link/@href | //script/@src | //a[not(starts-with(@href,'#'))]/@href");
     $css_obj_array = array();

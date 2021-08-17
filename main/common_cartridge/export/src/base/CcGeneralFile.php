@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-class CcGeneralFile extends XMLGenericDocument 
+class CcGeneralFile extends XMLGenericDocument
 {
     /**
      *
@@ -14,7 +14,8 @@ class CcGeneralFile extends XMLGenericDocument
     protected $ccnamespaces = array();
     protected $ccnsnames = array();
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
 
         foreach ($this->ccnamespaces as $key => $value){
@@ -23,7 +24,8 @@ class CcGeneralFile extends XMLGenericDocument
     }
 
 
-    protected function on_create() {
+    protected function on_create()
+    {
         $rootel = $this->append_new_element_ns($this->doc,
                                                $this->ccnamespaces[$this->rootns],
                                                $this->rootname);

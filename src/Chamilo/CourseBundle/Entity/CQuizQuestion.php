@@ -336,6 +336,7 @@ class CQuizQuestion
      * @param int $iid
      *
      * @return CQuizQuestion
+     *
      * @deprecated Use setIid()
      */
     public function setId($iid)
@@ -349,6 +350,7 @@ class CQuizQuestion
      * Get id.
      *
      * @return int
+     *
      * @deprecated Use getIid()
      */
     public function getId()

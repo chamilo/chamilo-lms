@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \Chamilo\CourseBundle\Entity\CItemProperty;
-use \Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CourseBundle\Entity\CItemProperty;
 
 require __DIR__.'/../inc/global.inc.php';
 

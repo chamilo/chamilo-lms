@@ -8791,4 +8791,5 @@ $ExerciseAttemptStatsReport = "Exercise attempt stats report";
 $ComparativeGroupReport = "Comparative group report";
 $CoursesUsage = "Courses usage";
 $HideConnectionTime = "Hide connection time";
+$CourseInWhichTheQuestionWasInitiallyCreated = "Course in which the question was initially created.";
 ?>

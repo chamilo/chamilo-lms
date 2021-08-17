@@ -20,12 +20,89 @@ Session::erase('objAnswer');
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 
+// Prepare lists for form
+// Courses list
+$courseIdChanged = isset($_GET['course_id_changed']) ? (int) $_GET['course_id_changed'] : null;
+$selectedCourse = isset($_GET['selected_course']) ? (int) $_GET['selected_course'] : null;
+$courseList = CourseManager::get_courses_list(0, 0, 'title');
+$courseSelectionList = ['-1' => get_lang('Select')];
+foreach ($courseList as $item) {
+    $courseItemId = $item['real_id'];
+    $courseInfo = api_get_course_info_by_id($courseItemId);
+    $courseSelectionList[$courseItemId] = '';
+    if ($courseItemId == api_get_course_int_id()) {
+        $courseSelectionList[$courseItemId] = '>&nbsp;&nbsp;&nbsp;&nbsp;';
+    }
+    $courseSelectionList[$courseItemId] .= $courseInfo['title'];
+}
+
+// Difficulty list (only from 0 to 5)
+$questionLevel = isset($_REQUEST['question_level']) ? (int) $_REQUEST['question_level'] : -1;
+$levels = [
+    -1 => get_lang('All'),
+    0 => 0,
+    1 => 1,
+    2 => 2,
+    3 => 3,
+    4 => 4,
+    5 => 5,
+];
+// Answer type
+$answerType = isset($_REQUEST['answer_type']) ? (int) $_REQUEST['answer_type'] : null;
+$questionList = Question::getQuestionTypeList();
+$questionTypesList = [];
+$questionTypesList['-1'] = get_lang('All');
+foreach ($questionList as $key => $item) {
+    $questionTypesList[$key] = get_lang($item[1]);
+}
+
 $form = new FormValidator('admin_questions', 'get');
 $form->addHeader(get_lang('Questions'));
-$form->addText('id', get_lang('Id'), false);
-$form->addText('title', get_lang('Title'), false);
-$form->addText('description', get_lang('Description'), false);
+$form
+    ->addText(
+        'id',
+        get_lang('Id'),
+        false
+    );
+$form
+    ->addText(
+        'title',
+        get_lang('Title'),
+        false
+    );
+$form
+    ->addText(
+        'description',
+        get_lang('Description'),
+        false
+    );
+$form
+    ->addSelect(
+        'selected_course',
+        [get_lang('Course'), get_lang('CourseInWhichTheQuestionWasInitiallyCreated')],
+        $courseSelectionList,
+        ['onchange' => 'mark_course_id_changed(); submit_form(this);', 'id' => 'selected_course']
+    )
+    ->setSelected($selectedCourse);
+$form
+    ->addSelect(
+        'question_level',
+        get_lang('Difficulty'),
+        $levels,
+        ['onchange' => 'submit_form(this);', 'id' => 'question_level']
+    )
+    ->setSelected($questionLevel);
+$form
+    ->addSelect(
+        'answer_type',
+        get_lang('AnswerType'),
+        $questionTypesList,
+        ['onchange' => 'submit_form(this);', 'id' => 'answer_type']
+    )
+    ->setSelected($answerType);
+
 $form->addHidden('form_sent', 1);
+$form->addHidden('course_id_changed', '0');
 $form->addButtonSearch(get_lang('Search'));
 
 $questions = [];
@@ -38,8 +115,8 @@ $end = 0;
 
 if ($formSent) {
     $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : '';
-    $description = isset($_REQUEST['description']) ? $_REQUEST['description'] : '';
-    $title = isset($_REQUEST['title']) ? $_REQUEST['title'] : '';
+    $description = $_REQUEST['description'] ?? '';
+    $title = $_REQUEST['title'] ?? '';
     $page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
 
     $em = Database::getManager();
@@ -57,6 +134,17 @@ if ($formSent) {
 
     if (!empty($title)) {
         $criteria->orWhere($criteria->expr()->contains('question', "%$title%"));
+    }
+
+    if (-1 !== $selectedCourse) {
+        $criteria->andWhere($criteria->expr()->eq('cId', $selectedCourse));
+    }
+
+    if (-1 !== $questionLevel) {
+        $criteria->andWhere($criteria->expr()->eq('level', $questionLevel));
+    }
+    if (-1 !== $answerType) {
+        $criteria->andWhere($criteria->expr()->eq('type', $answerType));
     }
 
     $questions = $repo->matching($criteria);
@@ -121,12 +209,12 @@ if ($formSent) {
             $question->courseCode = $courseCode;
             // Creating empty exercise
             $exercise = new Exercise($courseId);
-            $questionObject = Question::read($question->getId(), $courseInfo);
+            $questionObject = Question::read($question->getIid(), $courseInfo);
 
             ob_start();
             ExerciseLib::showQuestion(
                 $exercise,
-                $question->getId(),
+                $question->getIid(),
                 false,
                 null,
                 null,
@@ -198,7 +286,7 @@ if ($formSent) {
                             'id_session' => 0, //$exercise->sessionId,
                             'exerciseId' => $exerciseId,
                             'type' => $question->getType(),
-                            'editQuestion' => $question->getId(),
+                            'editQuestion' => $question->getIid(),
                         ]
                     ),
                     ['target' => '_blank']
@@ -221,11 +309,11 @@ if ($formSent) {
 
 $formContent = $form->returnForm();
 
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+$action = $_REQUEST['action'] ?? '';
 switch ($action) {
     case 'delete':
-        $questionId = isset($_REQUEST['questionId']) ? $_REQUEST['questionId'] : '';
-        $courseId = isset($_REQUEST['courseId']) ? $_REQUEST['courseId'] : '';
+        $questionId = $_REQUEST['questionId'] ?? '';
+        $courseId = $_REQUEST['courseId'] ?? '';
         $courseInfo = api_get_course_info_by_id($courseId);
         if (!empty($courseInfo)) {
             $objQuestionTmp = Question::read($questionId, $courseInfo);
@@ -246,8 +334,37 @@ switch ($action) {
         break;
 }
 
+$actionsLeft = Display::url(
+    Display::return_icon('back.png', get_lang('PlatformAdmin'), [], ICON_SIZE_MEDIUM),
+    api_get_path(WEB_CODE_PATH).'admin/index.php'
+);
+$actionsRight = '';
+/*
+$actionsRight = Display::url(
+    Display::return_icon('pdf.png', get_lang('ExportToPDF'), [], ICON_SIZE_MEDIUM),
+    api_get_path(WEB_CODE_PATH).'admin/questions.php?action=exportpdf'
+);
+*/
+
+$toolbar = Display::toolbarAction(
+    'toolbar-admin-questions',
+    [$actionsLeft, $actionsRight]
+);
+
+$htmlHeadXtra[] = "
+<script>
+    function submit_form(obj) {
+        document.question_pool.submit();
+    }
+
+    function mark_course_id_changed() {
+        $('#course_id_changed').val('1');
+    }
+</script>";
+
 $tpl = new Template(get_lang('Questions'));
 $tpl->assign('form', $formContent);
+$tpl->assign('toolbar', $toolbar);
 $tpl->assign('pagination', $pagination);
 $tpl->assign('pagination_length', $length);
 $tpl->assign('start', $start);

@@ -336,6 +336,8 @@ class CQuizQuestion
      * @param int $iid
      *
      * @return CQuizQuestion
+     *
+     * @deprecated Use setIid()
      */
     public function setId($iid)
     {
@@ -348,8 +350,35 @@ class CQuizQuestion
      * Get id.
      *
      * @return int
+     *
+     * @deprecated Use getIid()
      */
     public function getId()
+    {
+        return $this->iid;
+    }
+
+    /**
+     * Set id.
+     *
+     * @param int $iid
+     *
+     * @return CQuizQuestion
+     */
+    public function setIid($iid)
+    {
+        $this->iid = $iid;
+
+        return $this;
+    }
+
+    /**
+     * Get id.
+     * This method is also used by Twig to get the iid property.
+     *
+     * @return int
+     */
+    public function getIid()
     {
         return $this->iid;
     }

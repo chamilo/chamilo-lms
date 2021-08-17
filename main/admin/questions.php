@@ -144,7 +144,6 @@ if ($formSent) {
         $criteria->andWhere($criteria->expr()->eq('level', $questionLevel));
     }
     if (-1 !== $answerType) {
-        error_log('AnswerType: '.$answerType);
         $criteria->andWhere($criteria->expr()->eq('type', $answerType));
     }
 

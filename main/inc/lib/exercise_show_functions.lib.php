@@ -116,8 +116,7 @@ class ExerciseShowFunctions
         $questionId,
         $questionScore = null,
         $resultsDisabled = 0
-    )
-    {
+    ) {
         if (!empty($answer)) {
             $exeInfo = Event::get_exercise_results_by_attempt($exeId);
             if (empty($exeInfo)) {
@@ -137,6 +136,7 @@ class ExerciseShowFunctions
         }
 
         if (EXERCISE_FEEDBACK_TYPE_EXAM != $feedbackType) {
+            $comments = Event::get_comments($exeId, $questionId);
             if ($questionScore > 0 || !empty($comments)) {
             } else {
                 echo '<tr>';

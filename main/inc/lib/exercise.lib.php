@@ -219,7 +219,6 @@ class ExerciseLib
                         $(function() {
                             $("#input_file_upload").bind("fileuploaddone", function (e, data) {
                                 $.each(data.result.files, function (index, file) {
-                                  console.log(file);
                                     if (file.name) {
                                         var input = $("<input>", {
                                             type: "hidden",

@@ -4,7 +4,7 @@
 class UploadAnswer extends Question
 {
 
-    public $typePicture = 'open_answer.png';
+    public $typePicture = 'file_upload_question.png';
     public $explanationLangVar = 'UploadAnswer';
 
     /**

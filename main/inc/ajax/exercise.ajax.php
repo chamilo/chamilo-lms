@@ -1082,7 +1082,7 @@ switch ($action) {
         echo 0;
         break;
     case 'upload_answer':
-        api_protect_course_script(true);
+        api_block_anonymous_users();
         if (!empty($_FILES)) {
             $currentDirectory = Security::remove_XSS($_REQUEST['curdirpath']);
             $userId = api_get_user_id();

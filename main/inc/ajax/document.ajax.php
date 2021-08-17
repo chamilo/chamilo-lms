@@ -176,7 +176,7 @@ switch ($action) {
                 '',
                 '',
                 0,
-                '',
+                'rename',
                 false,
                 false,
                 'files'
@@ -191,13 +191,22 @@ switch ($action) {
         } else {
             $userId = api_get_user_id();
             $syspath = UserManager::getUserPathById($userId, 'system').'my_files'.$currentDirectory;
-            mkdir($syspath, api_get_permissions_for_new_directories(), true);
+            if (!is_dir($syspath)) {
+                mkdir($syspath, api_get_permissions_for_new_directories(), true);
+            }
             $webpath = UserManager::getUserPathById($userId, 'web').'my_files'.$currentDirectory;
-            if (move_uploaded_file($fileUpload['tmp_name'], $syspath.$fileUpload['name'])) {
-                $url = $webpath.$fileUpload['name'];
+            $fileUploadName = $fileUpload['name'];
+            if (file_exists($syspath.$fileUploadName)) {
+                $extension = pathinfo($fileUploadName, PATHINFO_EXTENSION);
+                $fileName = pathinfo($fileUploadName, PATHINFO_FILENAME);
+                $suffix = '_'.uniqid();
+                $fileUploadName = $fileName.$suffix.'.'.$extension;
+            }
+            if (move_uploaded_file($fileUpload['tmp_name'], $syspath.$fileUploadName)) {
+                $url = $webpath.$fileUploadName;
                 $data = [
                     'uploaded' => 1,
-                    'fileName' => $fileUpload['name'],
+                    'fileName' => $fileUploadName,
                     'url' => $url,
                 ];
             }

@@ -167,6 +167,10 @@ switch ($action) {
         $sidx = $_REQUEST['sidx']; //index to filter
         $sord = $_REQUEST['sord']; //asc or desc
 
+        if (!in_array($sidx, ['firstname', 'lastname', 'start_date'])) {
+            $sidx = 1;
+        }
+
         if (!in_array($sord, ['asc', 'desc'])) {
             $sord = 'desc';
         }

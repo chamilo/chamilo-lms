@@ -3,6 +3,8 @@
 
 use ChamiloSession as Session;
 
+exit;
+
 /**
  * This file allows creating new svg and png documents with an online editor.
  *

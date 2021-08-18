@@ -3155,13 +3155,8 @@ JAVASCRIPT;
      */
     public function searchOptionsFromTags($from, $search, $options)
     {
-        $extraFieldInfo = $this->get_handler_field_info_by_field_variable(
-            str_replace('extra_', '', $from)
-        );
-        $extraFieldInfoTag = $this->get_handler_field_info_by_field_variable(
-            str_replace('extra_', '', $search)
-        );
-
+        $extraFieldInfo = $this->get_handler_field_info_by_field_variable(str_replace('extra_', '', $from));
+        $extraFieldInfoTag = $this->get_handler_field_info_by_field_variable(str_replace('extra_', '', $search));
         if (empty($extraFieldInfo) || empty($extraFieldInfoTag)) {
             return [];
         }
@@ -3173,7 +3168,17 @@ JAVASCRIPT;
         $tagRelExtraTable = Database::get_main_table(TABLE_MAIN_EXTRA_FIELD_REL_TAG);
         $tagTable = Database::get_main_table(TABLE_MAIN_TAG);
         $optionsTable = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
-        $value = Database::escape_string(implode("','", $options));
+        $cleanOptions = [];
+        foreach ($options as $option) {
+            $cleanOptions[] = Database::escape_string($option);
+        }
+        $cleanOptions = array_filter($cleanOptions);
+
+        if (empty($cleanOptions)) {
+            return [];
+        }
+
+        $value = implode("','", $cleanOptions);
 
         $sql = "SELECT DISTINCT t.*, v.value, o.display_text
                 FROM $tagRelExtraTable te
@@ -3186,11 +3191,9 @@ JAVASCRIPT;
                 WHERE v.value IN ('".$value."')
                 ORDER BY o.option_order, t.tag
                ";
-
         $result = Database::query($sql);
-        $result = Database::store_result($result);
 
-        return $result;
+        return Database::store_result($result);
     }
 
     public static function getExtraFieldTypesWithFiles(): array

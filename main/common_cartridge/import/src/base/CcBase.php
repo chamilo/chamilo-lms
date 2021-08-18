@@ -12,10 +12,10 @@ class CcBase
     const CC_TYPE_ASSOCIATED_CONTENT = 'associatedcontent/imscc_xmlv1p3/learning-application-resource';
     const CC_TYPE_EMPTY              = '';
 
-    public static $restypes = array('associatedcontent/imscc_xmlv1p0/learning-application-resource', 'webcontent');
-    public static $forumns  = array('dt' => 'http://www.imsglobal.org/xsd/imsdt_v1p0');
-    public static $quizns   = array('xmlns' => 'http://www.imsglobal.org/xsd/ims_qtiasiv1p2');
-    public static $resourcens = array('wl' => 'http://www.imsglobal.org/xsd/imswl_v1p0');
+    public static $restypes = ['associatedcontent/imscc_xmlv1p0/learning-application-resource', 'webcontent'];
+    public static $forumns  = ['dt' => 'http://www.imsglobal.org/xsd/imsdt_v1p0'];
+    public static $quizns   = ['xmlns' => 'http://www.imsglobal.org/xsd/ims_qtiasiv1p2'];
+    public static $resourcens = ['wl' => 'http://www.imsglobal.org/xsd/imswl_v1p0'];
     /**
      *
      * @return array
@@ -65,16 +65,16 @@ class CcBase
         return $result;
     }
 
-    public static $instances = array();
+    public static $instances = [];
     public static $manifest;
     public static $pathToManifestFolder;
 
-    public static $namespaces = array('imscc'    => 'http://www.imsglobal.org/xsd/imscc/imscp_v1p1',
+    public static $namespaces = ['imscc'    => 'http://www.imsglobal.org/xsd/imscc/imscp_v1p1',
                                       'lomimscc' => 'http://ltsc.ieee.org/xsd/imscc/LOM',
                                       'lom'      => 'http://ltsc.ieee.org/xsd/LOM',
                                       'voc'      => 'http://ltsc.ieee.org/xsd/LOM/vocab',
                                       'xsi'      => 'http://www.w3.org/2001/XMLSchema-instance',
-                                      'cc'       => 'http://www.imsglobal.org/xsd/imsccauth_v1p0');
+                                      'cc'       => 'http://www.imsglobal.org/xsd/imsccauth_v1p0'];
 
     function __construct ($path_to_manifest) {
 
@@ -145,7 +145,7 @@ class CcBase
 
     public function get_nodes_by_criteria ($key, $value) {
 
-        $response = array();
+        $response = [];
 
         if (array_key_exists('index', static::$instances)) {
             foreach (static::$instances['index'] as $item) {
@@ -215,11 +215,11 @@ class CcBase
                 static::$instances['index'][$array_index]['instance'] = $this->count_instances($tool_type);
                 static::$instances['index'][$array_index]['resource_indentifier'] = $identifierref;
 
-                static::$instances['instances'][$tool_type][] = array('title' => $title,
+                static::$instances['instances'][$tool_type][] = ['title' => $title,
                                                                         'instance' => static::$instances['index'][$array_index]['instance'],
                                                                         'common_cartriedge_type' => $cc_type,
                                                                         'resource_indentifier' => $identifierref,
-                                                                        'deep' => $level);
+                                                                        'deep' => $level];
 
                 $more_items = $xpath->query('imscc:item', $item);
 

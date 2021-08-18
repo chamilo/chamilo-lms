@@ -4,7 +4,7 @@
 class PkgResourceDependencies
 {
 
-    private $values = array();
+    private $values = [];
     private static $instance = null;
 
     /**
@@ -29,7 +29,7 @@ class PkgResourceDependencies
 
     public function reset()
     {
-        $this->values = array();
+        $this->values = [];
     }
 
     /**

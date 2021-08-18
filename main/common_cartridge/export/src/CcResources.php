@@ -5,14 +5,14 @@ class CcResources implements CcIResource
 {
     public $identifier     = null;
     public $type           = null;
-    public $dependency     = array();
+    public $dependency     = [];
     public $identifierref  = null;
     public $href           = null;
     public $base           = null;
     public $persiststate   = null;
-    public $metadata       = array();
+    public $metadata       = [];
     public $filename       = null;
-    public $files          = array();
+    public $files          = [];
     public $isempty        = null;
     public $manifestroot   = null;
     public $folder         = null;
@@ -65,13 +65,13 @@ class CcResources implements CcIResource
         $this->filename     = $this->href;
         $nlist              = $doc->nodeList($searchstr."[@identifier='".
                               $this->identifier."']/imscc:file/@href");
-        $this->files        = array();
+        $this->files        = [];
         foreach ($nlist as $file) {
             $this->files[]  = $file->nodeValue;
         }
         $nlist              = $doc->nodeList($searchstr."[@identifier='".
                               $this->identifier."']/imscc:dependency/@identifierref");
-        $this->dependency   = array();
+        $this->dependency   = [];
         foreach ($nlist as $dependency) {
             $this->dependency[]  = $dependency->nodeValue;
         }
@@ -139,12 +139,12 @@ class CcResources implements CcIResource
         $this->type          = null;
         $this->href          = null;
         $this->base          = null;
-        $this->metadata      = array();
-        $this->dependency    = array();
+        $this->metadata      = [];
+        $this->dependency    = [];
         $this->identifierref = null;
         $this->persiststate  = null;
         $this->filename      = '';
-        $this->files         = array();
+        $this->files         = [];
         $this->isempty       = true;
     }
 

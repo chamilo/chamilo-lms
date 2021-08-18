@@ -71,7 +71,7 @@ abstract class CcConverters
         $rtp = $rdir->fullpath(true).$this->defaultname;
         if ( $doc->saveTo($rtp) ) {
             $resource = new CcResources($rdir->rootdir(), $this->defaultname, $rdir->dirname(true));
-            $resource->dependency = empty($deps) ? array() : $deps;
+            $resource->dependency = empty($deps) ? [] : $deps;
             $resource->instructoronly = !$this->isVisible();
             $res = $this->manifest->addResource($resource, null, $this->ccType);
             $resitem = new CcItem();

@@ -42,13 +42,13 @@ abstract class cc_qti_profiletype
      * @return boolean
      */
     public static function valid($value) {
-        static $verification_values = array( self::essay,
-                                             self::field_entry,
-                                             self::multiple_choice,
-                                             self::multiple_response,
-                                             self::pattern_match,
-                                             self::true_false
-                                           );
+        static $verification_values =   [self::essay,
+                                         self::field_entry,
+                                         self::multiple_choice,
+                                         self::multiple_response,
+                                         self::pattern_match,
+                                         self::true_false
+                                        ];
         return in_array($value, $verification_values);
     }
 
@@ -172,7 +172,7 @@ abstract class cc_qti_tags
 class cc_question_metadata_base
 {
 
-    protected $metadata = array();
+    protected $metadata = [];
 
     /**
      * @param string $setting
@@ -200,7 +200,7 @@ class cc_question_metadata_base
      * @param string $value
      */
     protected function set_setting_wns($setting, $namespace, $value = null) {
-        $this->metadata[$setting] = array($namespace => $value);
+        $this->metadata[$setting] = [$namespace => $value];
     }
 
     /**
@@ -308,7 +308,7 @@ class CcAssesmentMetadata extends cc_question_metadata_base
     }
 
     public function setTimelimit($value) {
-        $ivalue = (int)$value;
+        $ivalue = (int) $value;
         if (($ivalue < 0) || ($ivalue > 527401)) {
             throw new OutOfRangeException('Time limit value out of permitted range!');
         }
@@ -317,7 +317,7 @@ class CcAssesmentMetadata extends cc_question_metadata_base
     }
 
     public function setMaxattempts($value) {
-        $valid_values = array(cc_qti_values::Examination, cc_qti_values::unlimited, 1, 2, 3, 4, 5);
+        $valid_values = [cc_qti_values::Examination, cc_qti_values::unlimited, 1, 2, 3, 4, 5];
         if (!in_array($value, $valid_values)) {
             throw new OutOfRangeException('Max attempts has invalid value');
         }
@@ -514,7 +514,7 @@ class cc_assesment_rubric_base extends cc_question_metadata_base
 
 class cc_assesment_presentation_material_base extends cc_question_metadata_base
 {
-    protected $flowmats = array();
+    protected $flowmats = [];
 
     public function add_flow_mat($object) {
         $this->flowmats[] = $object;
@@ -574,7 +574,7 @@ class CcAssesmentSection extends cc_question_metadata_base
     /**
      * @var array
      */
-    protected $items = array();
+    protected $items = [];
 
     public function __construct() {
         $this->set_setting(cc_qti_tags::ident, CcHelpers::uuidgen('I_'));
@@ -698,8 +698,8 @@ class cc_assignment_conditionvar_varsubstringtype extends cc_assignment_conditio
 
 class cc_assignment_conditionvar_andtype extends cc_question_metadata_base
 {
-    protected $nots = array();
-    protected $varequals = array();
+    protected $nots = [];
+    protected $varequals = [];
 
     public function set_not(cc_assignment_conditionvar_varequaltype $object) {
         $this->nots[] = $object;
@@ -731,7 +731,7 @@ class cc_assignment_conditionvar extends cc_question_metadata_base
 
     protected $and = null;
     protected $other = null;
-    protected $varequal = array();
+    protected $varequal = [];
     protected $varsubstring = null;
 
     public function set_and(cc_assignment_conditionvar_andtype $object) {
@@ -820,8 +820,8 @@ class cc_assesment_respconditiontype extends cc_question_metadata_base
 {
 
     protected $conditionvar = null;
-    protected $setvar = array();
-    protected $displayfeedback = array();
+    protected $setvar = [];
+    protected $displayfeedback = [];
 
     public function __construct() {
         $this->set_setting(cc_qti_tags::title);
@@ -875,7 +875,7 @@ class cc_assesment_resprocessingtype extends cc_question_metadata_base
 {
 
     protected $decvar = null;
-    protected $respconditions = array();
+    protected $respconditions = [];
 
     public function set_decvar(cc_assesment_decvartype $object) {
         $this->decvar = $object;
@@ -904,8 +904,8 @@ class cc_assesment_itemfeedback_shintmaterial_base extends cc_question_metadata_
 {
 
     protected $tagname = null;
-    protected $flow_mats = array();
-    protected $materials = array();
+    protected $flow_mats = [];
+    protected $materials = [];
 
     /**
      * @param cc_assesment_flow_mattype $object
@@ -956,7 +956,7 @@ class cc_assesment_itemfeedback_shintype_base extends cc_question_metadata_base
 {
 
     protected $tagname = null;
-    protected $items = array();
+    protected $items = [];
 
     public function __construct() {
         $this->set_setting(cc_qti_tags::feedbackstyle, cc_qti_values::Complete);
@@ -1083,8 +1083,8 @@ class cc_assesment_section_item extends CcAssesmentSection
 
     protected $itemmetadata = null;
     protected $presentation = null;
-    protected $resprocessing = array();
-    protected $itemfeedback = array();
+    protected $resprocessing = [];
+    protected $itemfeedback = [];
 
     public function set_itemmetadata(cc_assesment_itemmetadata $object) {
         $this->itemmetadata = $object;
@@ -1131,10 +1131,10 @@ class cc_assesment_section_item extends CcAssesmentSection
 class cc_assesment_render_choicetype extends cc_question_metadata_base
 {
 
-    protected $materials = array();
-    protected $material_refs = array();
-    protected $response_labels = array();
-    protected $flow_labels = array();
+    protected $materials = [];
+    protected $material_refs = [];
+    protected $response_labels = [];
+    protected $flow_labels = [];
 
     public function __construct() {
         $this->set_setting(cc_qti_tags::shuffle, cc_qti_values::No);
@@ -1664,9 +1664,9 @@ class assesment1_resource_file extends CcGeneralFile
 
     protected $rootns   = 'xmlns';
     protected $rootname = cc_qti_tags::questestinterop;
-    protected $ccnamespaces = array('xmlns' => 'http://www.imsglobal.org/xsd/ims_qtiasiv1p2',
-                                    'xsi'   => 'http://www.w3.org/2001/XMLSchema-instance');
-    protected $ccnsnames = array('xmlns' => 'http://www.imsglobal.org/profile/cc/ccv1p0/derived_schema/domainProfile_4/ims_qtiasiv1p2_localised.xsd');
+    protected $ccnamespaces = ['xmlns' => 'http://www.imsglobal.org/xsd/ims_qtiasiv1p2',
+                                    'xsi'   => 'http://www.w3.org/2001/XMLSchema-instance'];
+    protected $ccnsnames = ['xmlns' => 'http://www.imsglobal.org/profile/cc/ccv1p0/derived_schema/domainProfile_4/ims_qtiasiv1p2_localised.xsd'];
     protected $assessment_title = 'Untitled';
     protected $metadata = null;
     protected $rubric = null;
@@ -1727,7 +1727,7 @@ class assesment1_resource_file extends CcGeneralFile
 
 class Assesment13ResourceFile extends assesment1_resource_file
 {
-    protected $ccnsnames = array('xmlns' => 'http://www.imsglobal.org/profile/cc/ccv1p3/ccv1p3_qtiasiv1p2p1_v1p0.xsd');
+    protected $ccnsnames = ['xmlns' => 'http://www.imsglobal.org/profile/cc/ccv1p3/ccv1p3_qtiasiv1p2p1_v1p0.xsd'];
 }
 
 abstract class CcAssesmentHelper
@@ -1880,8 +1880,8 @@ class cc_assesment_question_proc_base
     protected $total_grade_value = null;
     protected $answerlist = null;
     protected $general_feedback = null;
-    protected $correct_feedbacks = array();
-    protected $incorrect_feedbacks = array();
+    protected $correct_feedbacks = [];
+    protected $incorrect_feedbacks = [];
 
     /**
      * @param XMLGenericDocument $questions
@@ -2049,7 +2049,7 @@ class cc_assesment_question_multichoice extends cc_assesment_question_proc_base
         $shuffle_answers = $this->quiz['random_answers'] > 0;
 
         $qresponse_choice->enable_shuffle($shuffle_answers);
-        $answerlist = array();
+        $answerlist = [];
 
         $qa_responses = $this->question_node->answers;
 
@@ -2114,7 +2114,7 @@ class cc_assesment_question_multichoice extends cc_assesment_question_proc_base
             $incorrect_question_fb = 'Better luck next time!';
         }
 
-        $proc = array('correct_fb' => $correct_question_fb, 'general_incorrect_fb' => $incorrect_question_fb);
+        $proc = ['correct_fb' => $correct_question_fb, 'general_incorrect_fb' => $incorrect_question_fb];
         foreach ($proc as $ident => $content) {
             if (empty($content)) {
                 continue;
@@ -2258,7 +2258,7 @@ class cc_assesment_question_multichoice_multiresponse extends cc_assesment_quest
 
         $shuffle_answers = $this->quiz['random_answers'] > 0;
         $qresponse_choice->enable_shuffle($shuffle_answers);
-        $answerlist = array();
+        $answerlist = [];
 
         $qa_responses = $this->question_node->answers;
         foreach ($qa_responses as $node) {
@@ -2296,7 +2296,7 @@ class cc_assesment_question_multichoice_multiresponse extends cc_assesment_quest
 
                 PkgResourceDependencies::instance()->add($result[1]);
             }
-            $answerlist[$answer_ident] = array($feedback_ident, ($answer_grade_fraction > 0));
+            $answerlist[$answer_ident] = [$feedback_ident, ($answer_grade_fraction > 0)];
         }
         $this->answerlist = $answerlist;
     }
@@ -2315,7 +2315,7 @@ class cc_assesment_question_multichoice_multiresponse extends cc_assesment_quest
             $incorrect_question_fb = 'Better luck next time!';
         }
 
-        $proc = array('correct_fb' => $correct_question_fb, 'incorrect_fb' => $incorrect_question_fb);
+        $proc = ['correct_fb' => $correct_question_fb, 'incorrect_fb' => $incorrect_question_fb];
         foreach ($proc as $ident => $content) {
             if (empty($content)) {
                 continue;

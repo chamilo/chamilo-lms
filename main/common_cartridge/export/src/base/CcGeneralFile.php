@@ -11,8 +11,8 @@ class CcGeneralFile extends XMLGenericDocument
     protected $root = null;
     protected $rootns = null;
     protected $rootname = null;
-    protected $ccnamespaces = array();
-    protected $ccnsnames = array();
+    protected $ccnamespaces = [];
+    protected $ccnsnames = [];
 
     public function __construct()
     {

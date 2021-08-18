@@ -38,7 +38,7 @@ class CcEntities
         }
 
         // See if we can strip off body tag and anything outside of it.
-        foreach (array('body', 'html') as $tagname) {
+        foreach (['body', 'html'] as $tagname) {
             $regex = str_replace('##', $tagname, "/<##[^>]*>(.+)<\/##>/is");
             if (preg_match($regex, $result, $matches)) {
                 $result = $matches[1];
@@ -65,7 +65,7 @@ class CcEntities
 
         $document = $this->loadHtml($html);
 
-        $tags = array('img' => 'src' , 'a' => 'href');
+        $tags = ['img' => 'src' , 'a' => 'href'];
 
         foreach ($tags as $tag => $attribute) {
 
@@ -202,7 +202,7 @@ class CcEntities
         $bodyitems = $domdocument->getElementsByTagName('body');
         if ($bodyitems->length > 0) {
             $body = $bodyitems->item(0);
-            $html = str_ireplace(array('<body>', '</body>'), '', $body->C14N());
+            $html = str_ireplace(['<body>', '</body>'], '', $body->C14N());
         }
 
         return $html;

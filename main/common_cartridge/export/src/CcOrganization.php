@@ -36,7 +36,7 @@ class CcOrganization implements CcIOrganization
     public function addItem(CcIItem &$item)
     {
         if (is_null($this->itemlist)) {
-            $this->itemlist = array();
+            $this->itemlist = [];
         }
         $this->itemlist[$item->identifier] = $item;
     }
@@ -79,7 +79,7 @@ class CcOrganization implements CcIOrganization
             $this->title = $nlist->item(0)->nodeValue;
         }
         $nlist = $doc->nodeList("//imscc:organization[@identifier='".$this->identifier."']/imscc:item");
-        $this->itemlist=array();
+        $this->itemlist = [];
         foreach ($nlist as $item) {
             $this->itemlist[$item->getAttribute("identifier")] = new CcItem($item,$doc);
         }
@@ -167,7 +167,7 @@ class CcItem  implements CcIItem
         }
         $nlist = $doc->nodeList("//imscc:item[@identifier='".$this->identifier."']/imscc:item");
         if ($nlist->length > 0) {
-            $this->childitems=array();
+            $this->childitems = [];
             foreach ($nlist as $item) {
                 $key=$this->attrValue($item,"identifier");
                 $this->childitems[$key] = new CcItem($item,$doc);
@@ -184,7 +184,7 @@ class CcItem  implements CcIItem
     public function addChildItem(CcIItem &$item)
     {
         if (is_null($this->childitems)) {
-            $this->childitems = array();
+            $this->childitems = [];
         }
         $this->childitems[$item->identifier] = $item;
     }

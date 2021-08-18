@@ -100,7 +100,7 @@ class Cc13Forum extends Cc13Entities
 
     public function getTopicData ($instance) {
 
-        $topic_data = array();
+        $topic_data = [];
 
         $topic_file = $this->getExternalXml($instance['resource_indentifier']);
 
@@ -150,7 +150,7 @@ class Cc13Forum extends Cc13Entities
 
     private function generateAttachmentHtml ($filename) {
 
-        $images_extensions = array('gif' , 'jpeg' , 'jpg' , 'jif' , 'jfif' , 'png' , 'bmp');
+        $images_extensions = ['gif' , 'jpeg' , 'jpg' , 'jif' , 'jfif' , 'png' , 'bmp'];
 
         $fileinfo = pathinfo($filename);
 

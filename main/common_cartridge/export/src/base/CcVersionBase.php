@@ -10,7 +10,7 @@ abstract class CcVersionBase
 {
 
     protected $_generator = null;
-    protected $ccnamespaces = array();
+    protected $ccnamespaces = [];
     protected $isrootmanifest = false;
     protected $manifestID = null;
     protected $organizationid = null;
@@ -94,7 +94,7 @@ abstract class CcVersionBase
     public function importResources(DOMElement &$node, CcIManifest &$doc)
     {
         if (is_null($this->resources)) {
-            $this->resources = array();
+            $this->resources = [];
         }
         $nlist = $node->getElementsByTagNameNS($this->ccnamespaces['imscc'], 'resource');
         if (is_object($nlist)) {
@@ -108,7 +108,7 @@ abstract class CcVersionBase
     public function importOrganizationItems(DOMElement &$node, CcIManifest &$doc)
     {
         if (is_null($this->organizations)) {
-            $this->organizations = array();
+            $this->organizations = [];
         }
         $nlist = $node->getElementsByTagNameNS($this->ccnamespaces['imscc'], 'organization');
         if (is_object($nlist)) {

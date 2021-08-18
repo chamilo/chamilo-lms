@@ -6,7 +6,7 @@ class CcConverterForum extends CcConverters
 
     public function __construct(CcIItem &$item, CcIManifest &$manifest, $rootpath, $path)
     {
-        $this->ccType     = CcVersion13::discussiontopic;
+        $this->ccType = CcVersion13::discussiontopic;
         $this->defaultfile = 'forum.xml';
         $this->defaultname = 'discussion.xml';
         parent::__construct($item, $manifest, $rootpath, $path);

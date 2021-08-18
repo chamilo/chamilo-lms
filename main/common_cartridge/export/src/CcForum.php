@@ -5,15 +5,15 @@ class CcForum extends CcGeneralFile
 {
     protected $rootns = 'dt';
     protected $rootname = 'topic';
-    protected $ccnamespaces = array('dt'  => 'http://www.imsglobal.org/xsd/imsccv1p3/imsdt_v1p3',
-                                    'xsi' => 'http://www.w3.org/2001/XMLSchema-instance');
-    protected $ccnsnames = array('dt' => 'http://www.imsglobal.org/profile/cc/ccv1p3/ccv1p3_imsdt_v1p3.xsd');
+    protected $ccnamespaces =   ['dt'  => 'http://www.imsglobal.org/xsd/imsccv1p3/imsdt_v1p3',
+                                    'xsi' => 'http://www.w3.org/2001/XMLSchema-instance'];
+    protected $ccnsnames = ['dt' => 'http://www.imsglobal.org/profile/cc/ccv1p3/ccv1p3_imsdt_v1p3.xsd'];
 
     const deafultname = 'discussion.xml';
     protected $title = null;
     protected $text_type = 'text/plain';
     protected $text = null;
-    protected $attachments = array();
+    protected $attachments = [];
 
     public function setTitle($title)
     {

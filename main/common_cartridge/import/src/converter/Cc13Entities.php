@@ -17,7 +17,7 @@ class Cc13Entities extends CcEntities
 
         $permDirs = api_get_permissions_for_new_directories();
 
-        $all_files = array();
+        $all_files = [];
         $xpath = Cc1p3Convert::newxPath(Cc1p3Convert::$manifest, Cc1p3Convert::$namespaces);
         foreach (Cc1p3Convert::$restypes as $type) {
             $files = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@type="' .
@@ -29,7 +29,7 @@ class Cc13Entities extends CcEntities
                 //omit html files
                 //this is a bit too simplistic
                 $ext = strtolower(pathinfo($file->nodeValue, PATHINFO_EXTENSION));
-                if (in_array($ext, array('html', 'htm', 'xhtml'))) {
+                if (in_array($ext, ['html', 'htm', 'xhtml'])) {
                     continue;
                 }
                 $all_files[] = $file->nodeValue;

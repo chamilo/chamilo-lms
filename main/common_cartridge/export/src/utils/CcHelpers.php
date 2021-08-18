@@ -12,7 +12,7 @@ abstract class CcHelpers
     public static function isHtml($filename)
     {
         $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-        return in_array($extension, array('htm', 'html'));
+        return in_array($extension, ['htm', 'html']);
     }
 
     /**
@@ -64,7 +64,7 @@ abstract class CcHelpers
 
     public static function processEmbeddedFiles(&$doc, $attributes, $search, $customslash = null)
     {
-        $result = array();
+        $result = [];
         $query = self::buildQuery($attributes, $search);
         $list = $doc->nodeList($query);
         foreach ($list as $filelink) {
@@ -85,12 +85,12 @@ abstract class CcHelpers
      */
     public static function embeddedFiles($html)
     {
-        $result = array();
+        $result = [];
         $doc = new XMLGenericDocument();
         $doc->doc->validateOnParse = false;
         $doc->doc->strictErrorChecking = false;
         if (!empty($html) && $doc->loadHTML($html)) {
-            $attributes = array('src', 'href');
+            $attributes = ['src', 'href'];
             $result1 = self::processEmbeddedFiles($doc, $attributes, '@@PLUGINFILE@@');
             $result2 = self::processEmbeddedFiles($doc, $attributes, '$@FILEPHP@$', '$@SLASH@$');
             $result = array_merge($result1, $result2);
@@ -102,13 +102,13 @@ abstract class CcHelpers
     {
 
         if (isset($folder)) {
-            $files = array_diff(scandir($folder), array('.', '..'));
+            $files = array_diff(scandir($folder), ['.', '..']);
         } else {
             $folder = dirname($docfilepath);
             $files[] = basename($docfilepath);
         }
 
-        $depfiles = array();
+        $depfiles = [];
         foreach ($files as $file) {
             $mainfile   = 1;
             $filename   = $file;
@@ -122,14 +122,14 @@ abstract class CcHelpers
             $location   = $folder.DIRECTORY_SEPARATOR.$file;
             $type       = mime_content_type($file);
 
-            $depfiles[$filepath.$filename] = array( $location,
+            $depfiles[$filepath.$filename] = [ $location,
                                                     ($mainfile == 1),
                                                     strtolower(str_replace(' ', '_', $filename)),
                                                     $type,
                                                     $source,
                                                     $author,
                                                     $license,
-                                                    strtolower(str_replace(' ', '_', $filepath)));
+                                                    strtolower(str_replace(' ', '_', $filepath))];
         }
 
         return $depfiles;
@@ -203,15 +203,15 @@ abstract class CcHelpers
 
     public static function handleResourceContent(CcIManifest &$manifest, $packageroot, $contextid, $outdir, $allinone = true, $docfilepath = null)
     {
-        $result = array();
+        $result = [];
 
         self::addFiles($manifest, $packageroot, $outdir, $allinone, null, $docfilepath);
 
         $files = self::embeddedMapping($packageroot, $contextid, null, $docfilepath);
         $rootnode = null;
         $rootvals = null;
-        $depfiles = array();
-        $depres = array();
+        $depfiles = [];
+        $depres = [];
         $flocation = null;
         foreach ($files as $virtual => $values) {
             $vals = PkgStaticResources::instance()->getIdentifier($virtual);
@@ -225,12 +225,12 @@ abstract class CcHelpers
             }
             $depres[] = $identifier;
             $depfiles[] = $vals[1];
-            $result[$virtual] = array($identifier, $flocation, false);
+            $result[$virtual] = [$identifier, $flocation, false];
         }
 
         if (!empty($rootnode)) {
             $rootnode->files = array_merge($rootnode->files, $depfiles);
-            $result[$virtual] = array($rootnode->identifier, $rootvals, true);
+            $result[$virtual] = [$rootnode->identifier, $rootvals, true];
         }
 
         return $result;
@@ -248,7 +248,7 @@ abstract class CcHelpers
         // attach them all as dependencies to the forum tag.
         $lfiles = self::embeddedFiles($content);
         $text = $content;
-        $deps = array();
+        $deps = [];
         if (!empty($lfiles)) {
             $files = self::handleStaticContent($manifest,
                                                  $packageroot,
@@ -270,7 +270,7 @@ abstract class CcHelpers
             }
             $text = $content;
         }
-        return array($text, $deps);
+        return [$text, $deps];
     }
 
 }

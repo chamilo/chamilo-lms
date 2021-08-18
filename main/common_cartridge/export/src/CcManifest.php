@@ -10,7 +10,7 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
     private $activemanifest         = null;
     private $parentmanifest         = null;
     private $parentparentmanifest   = null;
-    private $ares                   = array();
+    private $ares                   = [];
     private $mainidentifier         = null;
 
     public function __construct($ccver = 13, $activemanifest=null,
@@ -162,7 +162,7 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
     public function getResources($searchspecific='')
     {
         $reslist = $this->getResourceList($searchspecific);
-        $resourcelist = array();
+        $resourcelist = [];
         foreach ($reslist as $resourceitem) {
             $resourcelist[] = new CcResources($this, $resourceitem);
         }
@@ -244,13 +244,13 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
             }
         }
 
-        $tmparray = array($rst->identifier, $rst->files[0]);
+        $tmparray = [$rst->identifier, $rst->files[0]];
         return $tmparray;
     }
 
     private function checkIfExistInOther($name, $identifier)
     {
-        $status = array();
+        $status = [];
         foreach ($this->activemanifest->resources as $value) {
             if (($value->identifier != $identifier) && isset($value->files[$name])) {
                 $status[] = $value->identifier;
@@ -285,12 +285,12 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
 
     private function arrayRemoveByValue($arr, $value)
     {
-        return array_values(array_diff($arr, array($value)));
+        return array_values(array_diff($arr, [$value]));
     }
 
     private function arrayRemoveByKey($arr, $key)
     {
-        return array_values(array_diff_key($arr, array($key)));
+        return array_values(array_diff_key($arr, [$key]));
     }
 
     public function updateInstructoronly($identifier, $value = false)

@@ -199,9 +199,9 @@ class Cc13Quiz extends Cc13Entities
         $lastQuestionId = 0;
         $lastAnswerId = 0;
 
-        $instances = array();
+        $instances = [];
 
-        $types = array(TOOL_TYPE_QUIZ);
+        $types = [TOOL_TYPE_QUIZ];
 
         foreach ($types as $type) {
 
@@ -223,7 +223,7 @@ class Cc13Quiz extends Cc13Entities
 
                         if (!empty($assessment)) {
 
-                            $replace_values = array('unlimited' => 0);
+                            $replace_values = ['unlimited' => 0];
 
                             $questions = $this->getQuestions($assessment, $lastQuestionId, $lastAnswerId, dirname($assessmentFile), $is_question_bank);
                             $questionCount = count($questions);
@@ -278,7 +278,7 @@ class Cc13Quiz extends Cc13Entities
 
     private function getQuestions ($assessment, &$lastQuestionId, &$last_answer_id, $root_path, $is_question_bank) {
 
-        $questions = array();
+        $questions = [];
 
         $xpath = Cc1p3Convert::newxPath($assessment, Cc1p3Convert::getquizns());
 
@@ -344,7 +344,7 @@ class Cc13Quiz extends Cc13Entities
         $query .= '//xmlns:qtimetadatafield[xmlns:fieldlabel="cc_weighting"]/xmlns:fieldentry';
         $defgrade = $xpath->query($query);
         if (!empty($defgrade) && ($defgrade->length > 0)) {
-            $resp = (int)$defgrade->item(0)->nodeValue;
+            $resp = (int) $defgrade->item(0)->nodeValue;
             if ($resp >= 0 && $resp <= 99) {
                 $result = $resp;
             }
@@ -446,8 +446,8 @@ class Cc13Quiz extends Cc13Entities
 
         $xpath = Cc1p3Convert::newxPath($assessment, Cc1p3Convert::getquizns());
 
-        $correctanswersfib = array();
-        $incorrectanswersfib = array();
+        $correctanswersfib = [];
+        $incorrectanswersfib = [];
 
         $responseItems = $xpath->query('//xmlns:item[@ident="' . $question_identifier . '"]/xmlns:resprocessing/xmlns:respcondition');
 
@@ -463,12 +463,12 @@ class Cc13Quiz extends Cc13Entities
 
             $lastAnswerId++;
 
-            $correctanswersfib[$answertitle] = array(
+            $correctanswersfib[$answertitle] = [
                 'id' => $lastAnswerId,
                 'title' => $answertitle,
                 'score' => 1,
                 'feedback' => '',
-                'case' => 0);
+                'case' => 0];
         }
 
         // Handle incorrect answers and feedback for all items.
@@ -520,12 +520,12 @@ class Cc13Quiz extends Cc13Entities
             } else {
                 // Need to add an incorrect answer.
                 $lastAnswerId++;
-                $incorrectanswersfib[] = array(
+                $incorrectanswersfib[] = [
                     'id' => $lastAnswerId,
                     'title' => $answerTitle,
                     'score' => 0,
                     'feedback' => $feedback,
-                    'case' => 0);
+                    'case' => 0];
             }
         }
 
@@ -539,7 +539,7 @@ class Cc13Quiz extends Cc13Entities
 
         $xpath = Cc1p3Convert::newxPath($assessment, Cc1p3Convert::getquizns());
 
-        $answers_fib = array();
+        $answers_fib = [];
 
         $responseItems = $xpath->query('//xmlns:item[@ident="' . $question_identifier . '"]/xmlns:resprocessing/xmlns:respcondition');
 
@@ -597,11 +597,11 @@ class Cc13Quiz extends Cc13Entities
                     }
                 }
 
-                $answers_fib[] = array('id' => $lastAnswerId,
+                $answers_fib[] = ['id' => $lastAnswerId,
                                        'title' => $answerTitle,
                                        'score' => $setvar,
                                        'feedback' => $feedback,
-                                       'case' => $case);
+                                       'case' => $case];
             }
         }
 
@@ -615,7 +615,7 @@ class Cc13Quiz extends Cc13Entities
 
         $xpath = Cc1p3Convert::newxPath($assessment, Cc1p3Convert::getquizns());
 
-        $answers = array();
+        $answers = [];
 
         $question_cc_type = $this->getQuestionType($identifier, $assessment);
         $question_cc_type = $question_cc_type['cc'];
@@ -679,7 +679,7 @@ class Cc13Quiz extends Cc13Entities
                     $canswers = $xpath->query($canswers_query);
                     if ($canswers->length > 0) {
                         $correct_answer_score = round(1.0 / (float)$canswers->length, 7); //weird
-                        $correct_answers_ident = array();
+                        $correct_answers_ident = [];
                         foreach ($canswers as $cnode) {
                             $correct_answers_ident[$cnode->nodeValue] = true;
                         }
@@ -704,11 +704,11 @@ class Cc13Quiz extends Cc13Entities
                         $answer_score = $correct_answer_score;
                     }
 
-                    $answers[] = array('id' => $lastAnswerId,
+                    $answers[] = ['id' => $lastAnswerId,
                                        'title' => $answerTitle,
                                        'score' => $answer_score,
                                        'identifier' => $answerIdentifier,
-                                       'feedback' => $answer_feedback);
+                                       'feedback' => $answer_feedback];
                 }
             }
         }
@@ -764,7 +764,7 @@ class Cc13Quiz extends Cc13Entities
             }
         }
 
-        $return_type = array();
+        $return_type = [];
 
         $return_type['qtype'] = '';
         $return_type['cc'] = $type;

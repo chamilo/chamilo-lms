@@ -138,7 +138,7 @@ class Cc13Resource extends Cc13Entities
         //detected if we are dealing with html file
         if (!empty($link) && ($instance['common_cartriedge_type'] == Cc1p3Convert::CC_TYPE_WEBCONTENT)) {
             $ext = strtolower(pathinfo($link, PATHINFO_EXTENSION));
-            if (in_array($ext, array('html', 'htm', 'xhtml'))) {
+            if (in_array($ext, ['html', 'htm', 'xhtml'])) {
                 $mod_type = 'html';
                 //extract the content of the file
                 $rootpath = realpath(Cc1p3Convert::$pathToManifestFolder);
@@ -159,7 +159,7 @@ class Cc13Resource extends Cc13Entities
                     try {
                         $doc->loadHTML($mod_alltext);
                         $xpath = new DOMXPath($doc);
-                        $attributes = array('href', 'src', 'background', 'archive', 'code');
+                        $attributes = ['href', 'src', 'background', 'archive', 'code'];
                         $qtemplate = "//*[@##][not(contains(@##,'://'))]/@##";
                         $query = '';
                         foreach ($attributes as $attrname) {
@@ -169,8 +169,8 @@ class Cc13Resource extends Cc13Entities
                             $query .= str_replace('##', $attrname, $qtemplate);
                         }
                         $list = $xpath->query($query);
-                        $searches = array();
-                        $replaces = array();
+                        $searches = [];
+                        $replaces = [];
                         foreach ($list as $resrc) {
                             $rpath = $resrc->nodeValue;
                             $rtp = realpath($rpath);
@@ -192,13 +192,13 @@ class Cc13Resource extends Cc13Entities
             }
         }
 
-        $values = array($instance['instance'],
+        $values = [$instance['instance'],
                                 self::safexml($instance['title']),
                                 $mod_type,
                                 $mod_alltext,
                                 $mod_reference,
                                 $mod_options
-                );
+                ];
 
         return $values;
     }

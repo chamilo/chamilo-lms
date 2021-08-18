@@ -17,7 +17,7 @@ class CssParser
   public function clear()
   {
     unset($this->css);
-    $this->css = array();
+    $this->css = [];
     if ($this->html) {
       $this->add("ADDRESS", "");
       $this->add("APPLET", "");
@@ -100,7 +100,7 @@ class CssParser
     $key = strtolower($key);
     $codestr = strtolower($codestr);
     if (!isset($this->css[$key])) {
-      $this->css[$key] = array();
+      $this->css[$key] = [];
     }
     $codes = explode(";",$codestr);
     if (count($codes) > 0) {
@@ -173,7 +173,7 @@ class CssParser
     $this->assignValues(explode(":",$key),$tag,$subtag);
     $this->assignValues(explode(".",$tag),$tag,$class);
     $this->assignValues(explode("#",$tag),$tag,$id);
-    $result = array();
+    $result = [];
     foreach ($this->css as $_tag => $value) {
       $this->assignValues(explode(":",$_tag),$_tag,$_subtag);
       $this->assignValues(explode(".",$_tag),$_tag,$_class);

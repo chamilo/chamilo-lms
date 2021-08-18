@@ -6,9 +6,9 @@ class CcWebLink extends CcGeneralFile
 
     protected $rootns = 'wl';
     protected $rootname = 'webLink';
-    protected $ccnamespaces = array('wl'  => 'http://www.imsglobal.org/xsd/imsccv1p3/imswl_v1p3',
-                                    'xsi' => 'http://www.w3.org/2001/XMLSchema-instance');
-    protected $ccnsnames = array('wl' => 'http://www.imsglobal.org/profile/cc/ccv1p3/ccv1p3_imswl_v1p3.xsd');
+    protected $ccnamespaces = ['wl'  => 'http://www.imsglobal.org/xsd/imsccv1p3/imswl_v1p3',
+                                    'xsi' => 'http://www.w3.org/2001/XMLSchema-instance'];
+    protected $ccnsnames = ['wl' => 'http://www.imsglobal.org/profile/cc/ccv1p3/ccv1p3_imswl_v1p3.xsd'];
 
     const deafultname = 'weblink.xml';
 

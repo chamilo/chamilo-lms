@@ -15,12 +15,12 @@ class CcVersion1 extends CcVersionBase
     const   discussiontopic     = 'imsdt_xmlv1p0';
     const   weblink             = 'imswl_xmlv1p0';
 
-    public static $checker = array(self::webcontent,
+    public static $checker = [self::webcontent,
                                    self::assessment,
                                    self::associatedcontent,
                                    self::discussiontopic,
                                    self::questionbank,
-                                   self::weblink);
+                                   self::weblink];
 
     /**
     * Validate if the type are valid or not
@@ -35,19 +35,19 @@ class CcVersion1 extends CcVersionBase
 
     public function __construct()
     {
-        $this->ccnamespaces     = array('imscc'    => 'http://www.imsglobal.org/xsd/imscc/imscp_v1p1',
+        $this->ccnamespaces     = ['imscc'    => 'http://www.imsglobal.org/xsd/imscc/imscp_v1p1',
                                         'lomimscc' => 'http://ltsc.ieee.org/xsd/imscc/LOM',
                                         'lom'      => 'http://ltsc.ieee.org/xsd/LOM',
                                         'voc'      => 'http://ltsc.ieee.org/xsd/LOM/vocab',
                                         'xsi'      => 'http://www.w3.org/2001/XMLSchema-instance'
-                                        );
+                                        ];
 
-        $this->ccnsnames = array(
+        $this->ccnsnames = [
             'imscc'    => 'http://www.imsglobal.org/profile/cc/ccv1p0/derived_schema/imscp_v1p2_localised.xsd',
             'lom'      => 'http://www.imsglobal.org/profile/cc/ccv1p0/derived_schema/domainProfile_2/lomLoose_localised.xsd',
             'lomimscc' => 'http://www.imsglobal.org/profile/cc/ccv1p0/derived_schema/domainProfile_1/lomLoose_localised.xsd',
             'voc'      => 'http://www.imsglobal.org/profile/cc/ccv1p0/derived_schema/domainProfile_2/vocab/loose.xsd'
-        );
+        ];
 
         $this->ccversion        = '1.0.0';
         $this->camversion       = '1.0.0';
@@ -247,7 +247,7 @@ class CcVersion1 extends CcVersionBase
             $this->updateItems($org->itemlist, $doc, $itemfoldernode);
         }
         if (is_null($this->organizations)) {
-            $this->organizations = array();
+            $this->organizations = [];
         }
         $this->organizations[$org->identifier] = $org;
 
@@ -355,7 +355,7 @@ class CcVersion1 extends CcVersionBase
         $nd = $doc->createElementNS($this->ccnamespaces['lomimscc'], 'general');
 
         foreach ($met->arraygeneral as $name => $value) {
-            !is_array($value) ? $value = array($value) : null;
+            !is_array($value) ? $value = [$value] : null;
             foreach ($value as $v) {
                 if ($name != 'language' && $name != 'catalog' && $name != 'entry') {
                     $nd2 = $doc->createElementNS($this->ccnamespaces['lomimscc'], $name);
@@ -402,7 +402,7 @@ class CcVersion1 extends CcVersionBase
         $xmlnode->appendChild($nd);
 
         foreach ($met->arraytech as $name => $value) {
-            !is_array($value) ? $value = array($value) : null;
+            !is_array($value) ? $value = [$value] : null;
             foreach ($value as $v) {
                 $nd2 = $doc->createElementNS($this->ccnamespaces['lomimscc'], $name, $v[0]);
                 $nd->appendChild($nd2);
@@ -426,7 +426,7 @@ class CcVersion1 extends CcVersionBase
         $nd = $doc->createElementNS($this->ccnamespaces['lomimscc'], 'rights');
 
         foreach ($met->arrayrights as $name => $value) {
-            !is_array($value) ? $value = array($value) : null;
+            !is_array($value) ? $value = [$value] : null;
             foreach ($value as $v) {
                 if ($name == 'description') {
                     $nd2 = $doc->createElementNS($this->ccnamespaces['lomimscc'], $name);

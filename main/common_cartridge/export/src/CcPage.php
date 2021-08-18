@@ -5,7 +5,7 @@ class CcPage extends CcGeneralFile
 {
     protected $rootns = 'xmlns';
     protected $rootname = 'html';
-    protected $ccnamespaces = array('xmlns' => 'http://www.w3.org/1999/xhtml');
+    protected $ccnamespaces = ['xmlns' => 'http://www.w3.org/1999/xhtml'];
 
     protected $content = null;
     protected $title = null;

@@ -4,10 +4,10 @@
 class CcMetadataManifest implements CcIMetadataManifest
 {
 
-    public  $arraygeneral   = array();
-    public  $arraytech      = array();
-    public  $arrayrights    = array();
-    public  $arraylifecycle = array();
+    public  $arraygeneral   = [];
+    public  $arraytech      = [];
+    public  $arrayrights    = [];
+    public  $arraylifecycle = [];
 
     public function addMetadataGeneral($obj)
     {
@@ -64,49 +64,49 @@ class CcMetadataManifest implements CcIMetadataManifest
 class CcMetadataGeneral
 {
 
-    public  $title          = array();
-    public  $language       = array();
-    public  $description    = array();
-    public  $keyword        = array();
-    public  $coverage       = array();
-    public  $catalog        = array();
-    public  $entry          = array();
+    public  $title          = [];
+    public  $language       = [];
+    public  $description    = [];
+    public  $keyword        = [];
+    public  $coverage       = [];
+    public  $catalog        = [];
+    public  $entry          = [];
 
 
 
     public function setCoverage ($coverage,$language)
     {
-        $this->coverage[] = array($language,$coverage);
+        $this->coverage[] = [$language, $coverage];
     }
 
     public function setDescription ($description,$language)
     {
-        $this->description[] = array($language,$description);
+        $this->description[] = [$language, $description];
     }
 
     public function setKeyword ($keyword,$language)
     {
-        $this->keyword[] = array($language,$keyword);
+        $this->keyword[] = [$language, $keyword];
     }
 
     public function setLanguage ($language)
     {
-        $this->language[] = array($language);
+        $this->language[] = [$language];
     }
 
     public function setTitle ($title,$language)
     {
-        $this->title[] = array($language,$title);
+        $this->title[] = [$language,$title];
     }
 
     public function setCatalog ($cat)
     {
-        $this->catalog[] = array($cat);
+        $this->catalog[] = [$cat];
     }
 
     public function setEntry ($entry)
     {
-        $this->entry[] = array($entry);
+        $this->entry[] = [$entry];
     }
 
 

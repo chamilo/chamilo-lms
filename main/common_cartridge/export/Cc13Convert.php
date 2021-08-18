@@ -110,7 +110,7 @@ class Cc13Convert
                 $sectionid      = $count;
                 $sectiontitle   = ucfirst($itemType);
                 $sequence = self::getSequence($itemData, 0, $convertType, $courseCode, $itmesExtraData);
-                $sections[$sectionid] = array($sectiontitle, $sequence);
+                $sections[$sectionid] = [$sectiontitle, $sequence];
                 $count++;
                 break;
             case 'link':
@@ -123,7 +123,7 @@ class Cc13Convert
                     else {
                         $sectiontitle = 'General';
                     }
-                    $sections[$sectionid] = array($sectiontitle, $sequence);
+                    $sections[$sectionid] = [$sectiontitle, $sequence];
                     $count++;
                 }
                 break;
@@ -135,7 +135,7 @@ class Cc13Convert
                             $sectionid    = $count;
                             $sectiontitle = $objCategory->cat_title;
                             $sequence = self::getSequence($itemData, $objCategory->iid, $itemType);
-                            $sections[$sectionid] = array($sectiontitle, $sequence);
+                            $sections[$sectionid] = [$sectiontitle, $sequence];
                             $count++;
                         }
                     }
@@ -270,7 +270,7 @@ class Cc13Convert
 
     protected static function itemIndenter(CcIItem &$item, $level = 0)
     {
-        $indent = (int)$level;
+        $indent = (int) $level;
         $indent = ($indent) <= 0 ? 0 : $indent;
         $nprev = null;
         $nfirst = null;

@@ -8,10 +8,10 @@
 class CcMetadataResourceEducational
 {
 
-    public $value   = array();
+    public $value   = [];
 
     public function setValue ($value){
-        $arr = array($value);
+        $arr = [$value];
         $this->value[] = $arr;
     }
 }
@@ -23,7 +23,7 @@ class CcMetadataResourceEducational
 class CcMetadataResource implements CcIMetadataResource
 {
 
-    public $arrayeducational  = array();
+    public $arrayeducational  = [];
 
     public function addMetadataResourceEducational($obj)
     {

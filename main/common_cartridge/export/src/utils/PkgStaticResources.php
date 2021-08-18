@@ -4,7 +4,7 @@
 class PkgStaticResources
 {
 
-    private $values = array();
+    private $values = [];
     public $finished = false;
     private static $instance = null;
 
@@ -29,7 +29,7 @@ class PkgStaticResources
      */
     public function add($key, $identifier, $file, $main, $node = null)
     {
-        $this->values[$key] = array($identifier, $file, $main, $node);
+        $this->values[$key] = [$identifier, $file, $main, $node];
     }
 
     /**
@@ -47,7 +47,7 @@ class PkgStaticResources
 
     public function reset()
     {
-        $this->values   = array();
+        $this->values   = [];
         $this->finished = false;
     }
 }

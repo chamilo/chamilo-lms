@@ -23,7 +23,7 @@ class XMLGenericDocument
     protected $filename;
     private $filepath;
     private $isloaded = false;
-    private $arrayPrefixNS = array();
+    private $arrayPrefixNS = [];
     private $isHtml = false;
 
     public function __construct($ch = 'UTF-8', $validatenow = true)
@@ -103,7 +103,7 @@ class XMLGenericDocument
     {
         $this->documentInit();
         $this->isloaded = true;
-        $this->doc->loadXML( file_get_contents($url) );
+        $this->doc->loadXML(file_get_contents($url));
         $this->isHtml = false;
         return $this->onLoad();
     }
@@ -138,7 +138,7 @@ class XMLGenericDocument
         if ($this->isloaded) {
             $this->filename = $fname;
             $this->processPath();
-            $this->isHtml=true;
+            $this->isHtml = true;
         }
         return $this->onLoad();
     }
@@ -235,7 +235,7 @@ class XMLGenericDocument
         if (is_object($node)) {
             if ($node->hasChildNodes()) {
                 $chnodesList = $node->childNodes;
-                $types = array(XML_TEXT_NODE, XML_CDATA_SECTION_NODE);
+                $types = [XML_TEXT_NODE, XML_CDATA_SECTION_NODE];
                 foreach ($chnodesList as $chnode) {
                     if (in_array($chnode->nodeType, $types)) {
                         $result .= $chnode->wholeText;

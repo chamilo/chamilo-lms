@@ -23,7 +23,7 @@ final class ErrorMessages {
     /**
      * @var array
      */
-    private $items = array();
+    private $items = [];
 
     /**
      * @param string $msg
@@ -45,7 +45,7 @@ final class ErrorMessages {
      * Empties the error content
      */
     public function reset() {
-        $this->items = array();
+        $this->items = [];
     }
 
     /**
@@ -103,12 +103,12 @@ final class LibxmlErrorsMgr {
 
     private function collectErrors ($filename=''){
         $errors = libxml_get_errors();
-        static $error_types = array(
+        static $error_types = [
         LIBXML_ERR_ERROR => 'Error'
         ,LIBXML_ERR_FATAL => 'Fatal Error'
         ,LIBXML_ERR_WARNING => 'Warning'
-        );
-        $result = array();
+        ];
+        $result = [];
         foreach($errors as $error){
             $add = '';
             if (!empty($filename)) {
@@ -127,7 +127,8 @@ final class LibxmlErrorsMgr {
         return $result;
     }
 
-    public function __destruct(){
+    public function __destruct()
+    {
         $this->collectErrors();
         if (!$this->previous) {
             libxml_use_internal_errors($this->previous);

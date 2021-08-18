@@ -1,7 +1,8 @@
 <?php
 require_once __DIR__.'/../inc/global.inc.php';
 
-function loadExportRoot($class) {
+function loadExportRoot($class)
+{
     require_once api_get_path(SYS_CODE_PATH).'common_cartridge/export/src/lib/ccdependencyparser.php';
     require_once api_get_path(SYS_CODE_PATH).'common_cartridge/export/src/CcAssesment.php';
     $path = api_get_path(SYS_CODE_PATH).'common_cartridge/export/';
@@ -11,7 +12,8 @@ function loadExportRoot($class) {
     }
 }
 
-function loadExportBase($class) {
+function loadExportBase($class)
+{
     $path = api_get_path(SYS_CODE_PATH).'common_cartridge/export/src/base/';
     $file = $path.$class.'.php';
     if (file_exists($file)) {
@@ -19,7 +21,8 @@ function loadExportBase($class) {
     }
 }
 
-function loadExportConverter($class) {
+function loadExportConverter($class)
+{
     $path = api_get_path(SYS_CODE_PATH).'common_cartridge/export/src/converter/';
     $file = $path.$class.'.php';
     if (file_exists($file)) {
@@ -27,7 +30,8 @@ function loadExportConverter($class) {
     }
 }
 
-function loadExportInterfaces($class) {
+function loadExportInterfaces($class)
+{
     $path = api_get_path(SYS_CODE_PATH).'common_cartridge/export/src/interfaces/';
     $file = $path.$class.'.php';
     if (file_exists($file)) {
@@ -35,7 +39,8 @@ function loadExportInterfaces($class) {
     }
 }
 
-function loadExportUtils($class) {
+function loadExportUtils($class)
+{
     $path = api_get_path(SYS_CODE_PATH).'common_cartridge/export/src/utils/';
     $file = $path.$class.'.php';
     if (file_exists($file)) {
@@ -43,7 +48,8 @@ function loadExportUtils($class) {
     }
 }
 
-function loadExportSourceRoot($class) {
+function loadExportSourceRoot($class)
+{
     $path = api_get_path(SYS_CODE_PATH).'common_cartridge/export/src/';
     $file = $path.$class.'.php';
     if (file_exists($file)) {
@@ -58,11 +64,10 @@ spl_autoload_register('loadExportConverter');
 spl_autoload_register('loadExportInterfaces');
 spl_autoload_register('loadExportUtils');
 
-function loadImportRoot($class) {
-    
+function loadImportRoot($class)
+{
     require_once api_get_path(SYS_CODE_PATH).'common_cartridge/import/src/lib/validateurlsyntax.php';
     require_once api_get_path(SYS_CODE_PATH).'common_cartridge/import/src/inc/constants.php';
-    
     $path = api_get_path(SYS_CODE_PATH).'common_cartridge/import/';
     $file = $path.$class.'.php';
     if (file_exists($file)) {
@@ -70,7 +75,8 @@ function loadImportRoot($class) {
     }
 }
 
-function loadImportBase($class) {
+function loadImportBase($class)
+{
     require_once api_get_path(SYS_CODE_PATH).'common_cartridge/import/src/base/CcValidator.php';
     $path = api_get_path(SYS_CODE_PATH).'common_cartridge/import/src/base/';
     $file = $path.$class.'.php';
@@ -79,7 +85,8 @@ function loadImportBase($class) {
     }
 }
 
-function loadImportConverter($class) {
+function loadImportConverter($class)
+{
     $path = api_get_path(SYS_CODE_PATH).'common_cartridge/import/src/converter/';
     $file = $path.$class.'.php';
     if (file_exists($file)) {

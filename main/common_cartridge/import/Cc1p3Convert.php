@@ -11,22 +11,22 @@ class Cc1p3Convert extends CcBase
     const CC_TYPE_ASSOCIATED_CONTENT = 'associatedcontent/imscc_xmlv1p3/learning-application-resource';
     const CC_TYPE_BASICLTI           = 'imsbasiclti_xmlv1p3';
 
-    public static $namespaces = array('imscc'    => 'http://www.imsglobal.org/xsd/imsccv1p3/imscp_v1p1',
+    public static $namespaces = ['imscc'    => 'http://www.imsglobal.org/xsd/imsccv1p3/imscp_v1p1',
                                       'lomimscc' => 'http://ltsc.ieee.org/xsd/imsccv1p3/LOM/manifest',
                                       'lom'      => 'http://ltsc.ieee.org/xsd/imsccv1p3/LOM/resource',
                                       'xsi'      => 'http://www.w3.org/2001/XMLSchema-instance',
-                                      'cc'       => 'http://www.imsglobal.org/xsd/imsccv1p3/imsccauth_v1p1');
+                                      'cc'       => 'http://www.imsglobal.org/xsd/imsccv1p3/imsccauth_v1p1'];
 
-    public static $restypes = array('associatedcontent/imscc_xmlv1p3/learning-application-resource', 'webcontent');
-    public static $forumns  = array('dt' => 'http://www.imsglobal.org/xsd/imsccv1p3/imsdt_v1p3');
-    public static $quizns   = array('xmlns' => 'http://www.imsglobal.org/xsd/ims_qtiasiv1p2');
-    public static $resourcens = array('wl' => 'http://www.imsglobal.org/xsd/imsccv1p3/imswl_v1p3');
-    public static $basicltins = array(
+    public static $restypes = ['associatedcontent/imscc_xmlv1p3/learning-application-resource', 'webcontent'];
+    public static $forumns  = ['dt' => 'http://www.imsglobal.org/xsd/imsccv1p3/imsdt_v1p3'];
+    public static $quizns   = ['xmlns' => 'http://www.imsglobal.org/xsd/ims_qtiasiv1p2'];
+    public static $resourcens = ['wl' => 'http://www.imsglobal.org/xsd/imsccv1p3/imswl_v1p3'];
+    public static $basicltins = [
                                        'xmlns' => 'http://www.imsglobal.org/xsd/imslticc_v1p0',
                                        'blti'  => 'http://www.imsglobal.org/xsd/imsbasiclti_v1p0',
                                        'lticm' => 'http://www.imsglobal.org/xsd/imslticm_v1p0',
                                        'lticp' => 'http://www.imsglobal.org/xsd/imslticp_v1p0'
-                                      );
+                                      ];
 
     public function __construct($path_to_manifest) {
         parent::__construct($path_to_manifest);

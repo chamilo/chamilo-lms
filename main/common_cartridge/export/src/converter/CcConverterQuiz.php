@@ -46,7 +46,7 @@ class CcConverterQuiz extends CcConverters
 
         $contextid = $objQuizz['source_id'];
 
-        $result = CcHelpers::processLinkedFiles( $objQuizz['comment'],
+        $result = CcHelpers::processLinkedFiles($objQuizz['comment'],
                                                     $this->manifest,
                                                     $this->rootpath,
                                                     $contextid,

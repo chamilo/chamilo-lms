@@ -8,7 +8,7 @@
  */
 function toUrlPath(&$path)
 {
-    for ($count = 0 ; $count < strlen($path); ++$count) {
+    for ($count = 0 ; $count < strlen($path); $count++) {
         $chr = $path[$count];
         if (($chr == '\\')) {
             $path[$count] = '/';
@@ -44,7 +44,7 @@ function pathDiff($path1, $path2)
  */
 function toNativePath(&$path)
 {
-    for ($count = 0 ; $count < strlen($path); ++$count) {
+    for ($count = 0 ; $count < strlen($path); $count++) {
         $chr = $path[$count];
         if (($chr == '\\') || ($chr == '/')) {
             $path[$count] = '/';
@@ -59,7 +59,7 @@ function toNativePath(&$path)
  * @param string $rootDir
  * @return string
  */
-function stripUrl($path, $rootDir='')
+function stripUrl($path, $rootDir = '')
 {
     $result = $path;
     if ( is_string($path) && ($path != '') ) {
@@ -74,7 +74,7 @@ function stripUrl($path, $rootDir='')
 function fullPath($path, $dirsep = DIRECTORY_SEPARATOR)
 {
     $token = '$IMS-CC-FILEBASE$';
-    $path = str_replace($token,'',$path);
+    $path = str_replace($token,'', $path);
     if (is_string($path) && ($path != '')) {
         $sep   = $dirsep;
         $dotDir= '.';
@@ -123,9 +123,9 @@ function isUrl($url)
 
 function getDepFiles($manifestroot, $fname, $folder, &$filenames)
 {
-    static $types = array('xhtml' => true, 'html' => true, 'htm' => true);
+    static $types = ['xhtml' => true, 'html' => true, 'htm' => true];
     $extension = strtolower(trim(pathinfo($fname, PATHINFO_EXTENSION)));
-    $filenames = array();
+    $filenames = [];
     if (isset($types[$extension])) {
         $dcx = new XMLGenericDocument();
         $filename = $manifestroot.$folder.$fname;
@@ -145,7 +145,7 @@ function getDepFilesHTML($manifestroot, $fname, &$filenames, &$dcx, $folder)
 {
     $dcx->resetXpath();
     $nlist         = $dcx->nodeList("//img/@src | //link/@href | //script/@src | //a[not(starts-with(@href,'#'))]/@href");
-    $cssObjArray = array();
+    $cssObjArray = [];
     foreach ($nlist as $nl) {
         $item       = $folder.$nl->nodeValue;
         $path_parts = pathinfo($item);
@@ -181,8 +181,8 @@ function getDepFilesHTML($manifestroot, $fname, &$filenames, &$dcx, $folder)
             }
         }
     }
-    $elemsToCheck = array("body", "p", "ul", "h4", "a", "th");
-    $doWeHaveIt  = array();
+    $elemsToCheck = ["body", "p", "ul", "h4", "a", "th"];
+    $doWeHaveIt  = [];
     foreach ($elemsToCheck as $elem) {
         $doWeHaveIt[$elem] = ($dcx->nodeList("//".$elem)->length > 0);
     }

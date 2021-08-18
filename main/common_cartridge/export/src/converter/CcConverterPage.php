@@ -5,7 +5,7 @@ class CcConverterPage extends CcConverters
 {
     public function __construct(CcIItem &$item, CcIManifest &$manifest, $rootpath, $path)
     {
-        $this->cc_type     = CcVersion13::webcontent;
+        $this->cc_type = CcVersion13::webcontent;
         $this->defaultfile = 'page.xml';
         $this->defaultname = uniqid().'.html';
         parent::__construct($item, $manifest, $rootpath, $path);
@@ -26,7 +26,7 @@ class CcConverterPage extends CcConverters
             $this->defaultname = $rawname.".html";
         }
 
-        $result = CcHelpers::processLinkedFiles( $pagecontent,
+        $result = CcHelpers::processLinkedFiles($pagecontent,
                                                     $this->manifest,
                                                     $this->rootpath,
                                                     $contextid,

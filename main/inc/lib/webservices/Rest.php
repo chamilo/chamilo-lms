@@ -155,6 +155,10 @@ class Rest extends WebService
         if (!$id) {
             $this->course = null;
 
+            ChamiloSession::erase('_real_cid');
+            ChamiloSession::erase('_cid');
+            ChamiloSession::erase('_course');
+
             return;
         }
 
@@ -181,6 +185,9 @@ class Rest extends WebService
         if (!$id) {
             $this->session = null;
 
+            ChamiloSession::erase('session_name');
+            ChamiloSession::erase('id_session');
+
             return;
         }
 
@@ -193,6 +200,9 @@ class Rest extends WebService
         }
 
         $this->session = $session;
+
+        ChamiloSession::write('session_name', $session->getName());
+        ChamiloSession::write('id_session', $session->getId());
     }
 
     /**
@@ -255,6 +265,8 @@ class Rest extends WebService
         $lastMessages = MessageManager::getReceivedMessages($this->user->getId(), 0);
         $messages = [];
 
+        $webPath = api_get_path(WEB_PATH);
+
         foreach ($lastMessages as $message) {
             $hasAttachments = MessageManager::hasAttachments($message['id']);
             $attachmentList = [];
@@ -273,7 +285,7 @@ class Rest extends WebService
                     'pictureUri' => $message['pictureUri'],
                 ],
                 'sendDate' => $message['send_date'],
-                'content' => $message['content'],
+                'content' => str_replace('src="/"', $webPath, $message['content']),
                 'hasAttachments' => $hasAttachments,
                 'attachmentList' => $attachmentList,
                 'url' => '',
@@ -323,6 +335,14 @@ class Rest extends WebService
         if (empty($userId)) {
             $userId = $this->user->getId();
         }
+
+        Event::courseLogout(
+            [
+                'uid' => $userId,
+                'cid' => api_get_course_id(),
+                'sid' => api_get_session_id(),
+            ]
+        );
 
         $courses = CourseManager::get_courses_list_by_user_id($userId);
         $data = [];
@@ -387,15 +407,19 @@ class Rest extends WebService
      */
     public function getCourseDescriptions()
     {
+        Event::event_access_tool(TOOL_COURSE_DESCRIPTION);
+
         $descriptions = CourseDescription::get_descriptions($this->course->getId());
         $results = [];
+
+        $webPath = api_get_path(WEB_PATH);
 
         /** @var CourseDescription $description */
         foreach ($descriptions as $description) {
             $results[] = [
                 'id' => $description->get_description_type(),
                 'title' => $description->get_title(),
-                'content' => str_replace('src="/', 'src="'.api_get_path(WEB_PATH), $description->get_content()),
+                'content' => str_replace('src="/', 'src="'.$webPath, $description->get_content()),
             ];
         }
 
@@ -411,6 +435,8 @@ class Rest extends WebService
      */
     public function getCourseDocuments($directoryId = 0)
     {
+        Event::event_access_tool(TOOL_DOCUMENT);
+
         /** @var string $path */
         $path = '/';
         $sessionId = $this->session ? $this->session->getId() : 0;
@@ -489,6 +515,8 @@ class Rest extends WebService
      */
     public function getCourseAnnouncements()
     {
+        Event::event_access_tool(TOOL_ANNOUNCEMENT);
+
         $sessionId = $this->session ? $this->session->getId() : 0;
 
         $announcements = AnnouncementManager::getAnnouncements(
@@ -530,6 +558,8 @@ class Rest extends WebService
      */
     public function getCourseAnnouncement($announcementId)
     {
+        Event::event_access_tool(TOOL_ANNOUNCEMENT);
+
         $sessionId = $this->session ? $this->session->getId() : 0;
         $announcement = AnnouncementManager::getAnnouncementInfoById(
             $announcementId,
@@ -565,6 +595,8 @@ class Rest extends WebService
      */
     public function getCourseAgenda()
     {
+        Event::event_access_tool(TOOL_CALENDAR_EVENT);
+
         $sessionId = $this->session ? $this->session->getId() : 0;
 
         $agenda = new Agenda(
@@ -622,6 +654,8 @@ class Rest extends WebService
      */
     public function getCourseNotebooks()
     {
+        Event::event_access_tool(TOOL_NOTEBOOK);
+
         $em = Database::getManager();
         /** @var CNotebookRepository $notebooksRepo */
         $notebooksRepo = $em->getRepository('ChamiloCourseBundle:CNotebook');
@@ -652,6 +686,8 @@ class Rest extends WebService
      */
     public function getCourseForumCategories()
     {
+        Event::event_access_tool(TOOL_FORUM);
+
         $sessionId = $this->session ? $this->session->getId() : 0;
         $webCoursePath = api_get_path(WEB_COURSE_PATH).$this->course->getDirectory().'/upload/forum/images/';
 
@@ -725,6 +761,8 @@ class Rest extends WebService
      */
     public function getCourseForum($forumId)
     {
+        Event::event_access_tool(TOOL_FORUM);
+
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         $sessionId = $this->session ? $this->session->getId() : 0;
@@ -767,6 +805,8 @@ class Rest extends WebService
      */
     public function getCourseForumThread($forumId, $threadId)
     {
+        Event::event_access_tool(TOOL_FORUM);
+
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         $sessionId = $this->session ? $this->session->getId() : 0;
@@ -850,6 +890,8 @@ class Rest extends WebService
      */
     public function getCourseLearnPaths()
     {
+        Event::event_access_tool(TOOL_LEARNPATH);
+
         $sessionId = $this->session ? $this->session->getId() : 0;
         $categoriesTempList = learnpath::getCategories($this->course->getId());
 
@@ -997,6 +1039,8 @@ class Rest extends WebService
      */
     public function saveForumPost(array $postValues, $forumId)
     {
+        Event::event_access_tool(TOOL_FORUM);
+
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         $forum = get_forums($forumId, $this->course->getCode());
@@ -1135,6 +1179,8 @@ class Rest extends WebService
      */
     public function saveCourseNotebook($title, $text)
     {
+        Event::event_access_tool(TOOL_NOTEBOOK);
+
         $values = ['note_title' => $title, 'note_comment' => $text];
         $sessionId = $this->session ? $this->session->getId() : 0;
 
@@ -1157,6 +1203,8 @@ class Rest extends WebService
      */
     public function saveForumThread(array $values, $forumId)
     {
+        Event::event_access_tool(TOOL_FORUM);
+
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         $sessionId = $this->session ? $this->session->getId() : 0;

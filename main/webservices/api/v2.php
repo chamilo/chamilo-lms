@@ -42,8 +42,16 @@ try {
     $restApi = $apiKey ? Rest::validate($username, $apiKey) : null;
 
     if ($restApi) {
+        LoginCheck($restApi->getUser()->getId());
+        Tracking::updateUserLastLogin($restApi->getUser()->getId());
+
         $restApi->setCourse($course);
         $restApi->setSession($session);
+
+        if ($course) {
+            Event::accessCourse();
+            Event::eventCourseLoginUpdate(api_get_course_int_id(), api_get_user_id(), api_get_session_id());
+        }
     }
 
     switch ($action) {

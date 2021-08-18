@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\CareerRepository;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
+use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\GradeBookCategoryRepository;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
@@ -25,6 +26,7 @@ use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\Repository\SkillRepository;
 use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
+use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\ToolChain;
@@ -324,6 +326,16 @@ class Container
         return self::$container->get(CExerciseCategoryRepository::class);
     }
 
+    public static function getExternalToolRepository(): ExternalToolRepository
+    {
+        return self::$container->get(ExternalToolRepository::class);
+    }
+
+    public static function getExtraFieldRepository(): ExtraFieldRepository
+    {
+        return self::$container->get(ExtraFieldRepository::class);
+    }
+
     public static function getGlossaryRepository(): CGlossaryRepository
     {
         return self::$container->get(CGlossaryRepository::class);
@@ -514,6 +526,11 @@ class Container
         return self::$container->get(SysAnnouncementRepository::class);
     }
 
+    public static function getTagRepository(): TagRepository
+    {
+        return self::$container->get(TagRepository::class);
+    }
+
     public static function getThematicRepository(): CThematicRepository
     {
         return self::$container->get(CThematicRepository::class);
@@ -537,11 +554,6 @@ class Container
     public static function getFormFactory(): FormFactory
     {
         return self::$container->get('form.factory');
-    }
-
-    public static function getExternalToolRepository(): ExternalToolRepository
-    {
-        return self::$container->get(ExternalToolRepository::class);
     }
 
     /**

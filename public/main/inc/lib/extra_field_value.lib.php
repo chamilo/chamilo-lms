@@ -208,52 +208,52 @@ class ExtraFieldValue extends Model
                         $em->remove($extraFieldtag);
                     }
                     $em->flush();
-                    $fieldEntity = $em->getRepository(\Chamilo\CoreBundle\Entity\ExtraField::class)->find($extraFieldInfo['id']);
 
+                    /** @var \Chamilo\CoreBundle\Entity\ExtraField $fieldEntity */
+                    $fieldEntity = Container::getExtraFieldRepository()->find($extraFieldInfo['id']);
+                    $tagRepo = Container::getTagRepository();
                     $tagValues = is_array($value) ? $value : [$value];
+
                     $tags = [];
                     foreach ($tagValues as $tagValue) {
                         if (empty($tagValue)) {
                             continue;
                         }
 
-                        $tagsResult = $em->getRepository(Tag::class)
-                            ->findBy([
-                                'tag' => $tagValue,
-                                'field' => $extraFieldInfo['id'],
-                            ]);
-
-                        if (empty($tagsResult)) {
-                            $tag = new Tag();
-                            $tag->setField($fieldEntity);
-                            $tag->setTag($tagValue);
-
+                        $tagsResult = $tagRepo->findOneBy(['tag' => $tagValue, 'field' => $fieldEntity]);
+                        if (null === $tagsResult) {
+                            $tag = (new Tag())
+                                ->setField($fieldEntity)
+                                ->setTag($tagValue)
+                            ;
+                            $em->persist($tag);
                             $tags[] = $tag;
                         } else {
-                            $tags = array_merge($tags, $tagsResult);
+                            $tags[] = $tagsResult;
                         }
                     }
+                    $em->flush();
 
                     if (!empty($tags)) {
                         foreach ($tags as $tag) {
                             $tagUses = $em
                                 ->getRepository(ExtraFieldRelTag::class)
                                 ->findBy([
-                                    'tag' => $tag->getId(),
+                                    'tag' => $tag,
                                 ]);
 
                             $tag->setCount(count($tagUses) + 1);
                             $em->persist($tag);
                         }
                     }
-
                     $em->flush();
 
                     foreach ($tags as $tag) {
-                        $fieldRelTag = new ExtraFieldRelTag();
-                        $fieldRelTag->setField($fieldEntity);
-                        $fieldRelTag->setItemId($params['item_id']);
-                        $fieldRelTag->setTag($tag);
+                        $fieldRelTag = (new ExtraFieldRelTag())
+                            ->setField($fieldEntity)
+                            ->setItemId($params['item_id'])
+                            ->setTag($tag)
+                        ;
                         $em->persist($fieldRelTag);
                     }
 
@@ -281,7 +281,7 @@ class ExtraFieldValue extends Model
                             break;
                     }*/
                     $fileName = ExtraField::FIELD_TYPE_FILE_IMAGE."_{$params['item_id']}.png";
-                    if (!empty($value['tmp_name']) && isset($value['error']) && 0 == $value['error']) {
+                    if (!empty($value['tmp_name']) && isset($value['error']) && 0 === (int) $value['error']) {
                         $repo = Container::getAssetRepository();
                         $asset = new Asset();
                         $asset

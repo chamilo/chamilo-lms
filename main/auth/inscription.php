@@ -893,13 +893,7 @@ if ($form->validate()) {
         if (isset($values['legal_accept_type'])) {
             $cond_array = explode(':', $values['legal_accept_type']);
             if (!empty($cond_array[0]) && !empty($cond_array[1])) {
-                $time = time();
-                $conditionToSave = (int) $cond_array[0].':'.(int) $cond_array[1].':'.$time;
-                UserManager::update_extra_field_value(
-                    $user_id,
-                    'legal_accept',
-                    $conditionToSave
-                );
+                $conditionToSave = (int) $cond_array[0].':'.(int) $cond_array[1].':'.time();
 
                 Event::addEvent(
                     LOG_TERM_CONDITION_ACCEPTED,
@@ -908,29 +902,7 @@ if ($form->validate()) {
                     api_get_utc_datetime()
                 );
 
-                $bossList = UserManager::getStudentBossList($user_id);
-                if (!empty($bossList)) {
-                    $bossList = array_column($bossList, 'boss_id');
-                    $currentUserInfo = api_get_user_info($user_id);
-                    foreach ($bossList as $bossId) {
-                        $subjectEmail = sprintf(
-                            get_lang('UserXSignedTheAgreement'),
-                            $currentUserInfo['complete_name']
-                        );
-                        $contentEmail = sprintf(
-                            get_lang('UserXSignedTheAgreementTheY'),
-                            $currentUserInfo['complete_name'],
-                            api_get_local_time($time)
-                        );
-
-                        MessageManager::send_message_simple(
-                            $bossId,
-                            $subjectEmail,
-                            $contentEmail,
-                            $user_id
-                        );
-                    }
-                }
+                LegalManager::sendEmailToUserBoss($user_id, $conditionToSave);
             }
         }
         $values = api_get_user_info($user_id);

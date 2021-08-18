@@ -421,7 +421,12 @@ if ($form->validate()) {
         $phone = $user['phone'];
         $username = isset($user['username']) ? $user['username'] : $userInfo['username'];
         $status = (int) $user['status'];
-        $platform_admin = (int) $user['platform_admin'];
+        $platform_admin = 0;
+        // Only platform admin can change user status to admin.
+        if (api_is_platform_admin()) {
+            $platform_admin = (int) $user['platform_admin'];
+        }
+
         $send_mail = (int) $user['send_mail'];
         $reset_password = (int) $user['reset_password'];
         $hr_dept_id = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : null;

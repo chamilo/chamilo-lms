@@ -430,6 +430,22 @@ try {
             $data = $plugin->updateUserPauseTraining($_POST['user_id'], $_POST);
             $restResponse->setData([$data]);
             break;
+        case Rest::CHECK_CONDITIONAL_LOGIN:
+            $restResponse->setData(
+                [
+                    'check_conditional_login' => $restApi->checkConditionalLogin()
+                ]
+            );
+            break;
+        case Rest::GET_LEGAL_CONDITIONS:
+            $restResponse->setData(
+                $restApi->getLegalConditions()
+            );
+            break;
+        case Rest::UPDATE_CONDITION_ACCEPTED:
+            $restApi->updateConditionAccepted();
+            $restResponse->setData(['status' => true]);
+            break;
         default:
             throw new Exception(get_lang('InvalidAction'));
     }

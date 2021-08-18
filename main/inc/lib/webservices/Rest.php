@@ -73,6 +73,9 @@ class Rest extends WebService
     const GET_COURSE_QUIZ_MDL_COMPAT = 'get_course_quiz_mdl_compat';
     const UPDATE_USER_PAUSE_TRAINING = 'update_user_pause_training';
     const DELETE_COURSE = 'delete_course';
+    const CHECK_CONDITIONAL_LOGIN = 'check_conditional_login';
+    const GET_LEGAL_CONDITIONS = 'get_legal_conditions';
+    const UPDATE_CONDITION_ACCEPTED = 'update_condition_accepted';
 
     /**
      * @var Session
@@ -2285,6 +2288,83 @@ class Rest extends WebService
             'message' => get_lang('Updated'),
             'id_session' => $id,
         ];
+    }
+
+    public function checkConditionalLogin(): bool
+    {
+        $file = api_get_path(SYS_CODE_PATH).'auth/conditional_login/conditional_login.php';
+
+        if (!file_exists($file)) {
+            return true;
+        }
+
+        include_once $file;
+
+        if (!isset($login_conditions)) {
+            return true;
+        }
+
+        foreach ($login_conditions as $condition) {
+            //If condition fails we redirect to the URL defined by the condition
+            if (!isset($condition['conditional_function'])) {
+                continue;
+            }
+
+            $function = $condition['conditional_function'];
+            $result = $function(['user_id' => $this->user->getId()]);
+
+            if ($result == false) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function getLegalConditions(): array
+    {
+        $language = api_get_language_id(
+            api_get_interface_language()
+        );
+
+        $termPreview = LegalManager::get_last_condition($language);
+
+        if ($termPreview) {
+            return $termPreview;
+        }
+
+        $language = api_get_language_id(
+            api_get_setting('platformLanguage')
+        );
+
+        $termPreview = LegalManager::get_last_condition($language);
+
+        if ($termPreview) {
+            return $termPreview;
+        }
+
+        $language = api_get_language_id('english');
+
+        return LegalManager::get_last_condition($language);
+    }
+
+    public function updateConditionAccepted()
+    {
+        $legalAcceptType = $_POST['legal_accept_type'] ?? null;
+
+        $condArray = explode(':', $legalAcceptType);
+        $condArray = array_map('intval', $condArray);
+
+        if (empty($condArray[0]) || empty($condArray[1])) {
+            return;
+        }
+
+        $conditionToSave = intval($condArray[0]).':'.intval($condArray[1]).':'.time();
+
+        LegalManager::sendEmailToUserBoss(
+            $this->user->getId(),
+            $conditionToSave
+        );
     }
 
     /**

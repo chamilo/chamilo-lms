@@ -153,10 +153,7 @@ class ExtraField
         return $this->id;
     }
 
-    /**
-     * @return int
-     */
-    public function getExtraFieldType()
+    public function getExtraFieldType(): int
     {
         return $this->extraFieldType;
     }
@@ -168,10 +165,7 @@ class ExtraField
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getFieldType()
+    public function getFieldType(): int
     {
         return $this->fieldType;
     }
@@ -340,6 +334,17 @@ class ExtraField
         $this->tags = $tags;
 
         return $this;
+    }
+
+    public function hasTag(string $tagName): bool
+    {
+        if (0 === $this->tags->count()) {
+            return false;
+        }
+
+        return $this->tags->exists(function ($key, Tag $tag) use ($tagName) {
+            return $tagName === $tag->getTag();
+        });
     }
 
     public function getTypeToString(): string

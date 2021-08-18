@@ -377,17 +377,30 @@ class HTML_QuickForm_element extends HTML_Common
                     if (in_array($attributeValue, $values[$elementNameCheckBox])) {
                         return true;
                     }
+
                     return false;
                 }
             }
-            $replacedName = str_replace(
+            /*$replacedName = str_replace(
                 array('\\', '\'', ']', '['),
                 array('\\\\', '\\\'', '', "']['"),
                 $elementName
             );
             $myVar = "['$replacedName']";
+            $result =  eval("return (isset(\$values$myVar)) ? \$values$myVar : null;");*/
 
-            return isset($values[$myVar]) ? $values[$myVar] : null;
+            // $elementName = extra_statusocial[extra_statusocial] ;
+            preg_match('/\[(.*)\]/', $elementName, $matches);
+
+            // Getting extra_statusocial
+            $elementKey = '';
+            if (isset($matches[1])) {
+                $elementKey = $matches[1];
+            }
+
+            if (isset($values[$elementKey]) && isset($values[$elementKey][$elementKey])) {
+                return $values[$elementKey][$elementKey];
+            }
         }
 
         return null;
@@ -416,7 +429,6 @@ class HTML_QuickForm_element extends HTML_Common
                 // constant values override both default and submitted ones
                 // default values are overridden by submitted.
                 $value = $this->_findValue($caller->_constantValues);
-
                 if (null === $value) {
                     $value = $this->_findValue($caller->_submitValues);
                     if (null === $value) {

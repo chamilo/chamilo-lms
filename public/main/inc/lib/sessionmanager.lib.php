@@ -419,7 +419,7 @@ class SessionManager
                 SELECT DISTINCT
                  IF (
 					(s.access_start_date <= '$today' AND '$today' <= s.access_end_date) OR
-                    (s.access_start_date IS NULL AND s.access_end_date  = IS NULL ) OR
+                    (s.access_start_date IS NULL AND s.access_end_date IS NULL ) OR
 					(s.access_start_date <= '$today' AND s.access_end_date IS NULL) OR
 					('$today' <= s.access_end_date AND s.access_start_date IS NULL)
 				, 1, 0) as session_active,
@@ -7557,6 +7557,16 @@ class SessionManager
         }
 
         foreach ($sessionFieldValueList as $sessionFieldValue) {
+            // Match session field values to session
+            if ($sessionFieldValue['item_id'] != $sessionId) {
+                continue;
+            }
+
+            // Check if session field value is set in session field list
+            if (!isset($fields[$sessionFieldValue['field_id']])) {
+                continue;
+            }
+
             $extrafieldVariable = $fields[$sessionFieldValue['field_id']];
             $extrafieldValue = $sessionFieldValue['value'];
 
@@ -8260,6 +8270,109 @@ class SessionManager
                     ];
                 }
                 break;
+
+            case 'simple':
+                $columns = [
+                    '#',
+                    get_lang('Name'),
+                    get_lang('Category'),
+                    get_lang('Session Display Start Date'),
+                    get_lang('Session Display End Date'),
+                    get_lang('Visibility'),
+                ];
+
+                $columnModel = [
+                    [
+                        'name' => 'id',
+                        'index' => 's.id',
+                        'width' => '160',
+                        'hidden' => 'true',
+                    ],
+                    [
+                        'name' => 'name',
+                        'index' => 's.name',
+                        'width' => '160',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => ['sopt' => $operators],
+                    ],
+                    [
+                        'name' => 'category_name',
+                        'index' => 'category_name',
+                        'width' => '40',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => ['sopt' => $operators],
+                    ],
+                    [
+                        'name' => 'display_start_date',
+                        'index' => 'display_start_date',
+                        'width' => '50',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => [
+                            'dataInit' => 'date_pick_today',
+                            'sopt' => $date_operators,
+                        ],
+                    ],
+                    [
+                        'name' => 'display_end_date',
+                        'index' => 'display_end_date',
+                        'width' => '50',
+                        'align' => 'left',
+                        'search' => 'true',
+                        'searchoptions' => [
+                            'dataInit' => 'date_pick_one_month',
+                            'sopt' => $date_operators,
+                        ],
+                    ],
+                    [
+                        'name' => 'visibility',
+                        'index' => 'visibility',
+                        'width' => '40',
+                        'align' => 'left',
+                        'search' => 'false',
+                    ],
+                ];
+
+                if ($showCount) {
+                    $columns[] = get_lang('Users');
+                    $columnModel[] = [
+                        'name' => 'users',
+                        'index' => 'users',
+                        'width' => '20',
+                        'align' => 'left',
+                        'search' => 'false',
+                    ];
+
+                    // ofaj
+                    $columns[] = get_lang('Teachers');
+                    $columnModel[] = [
+                        'name' => 'teachers',
+                        'index' => 'teachers',
+                        'width' => '20',
+                        'align' => 'left',
+                        'search' => 'false',
+                    ];
+                }
+
+                if (api_get_configuration_value('allow_session_status')) {
+                    $columns[] = get_lang('SessionStatus');
+                    $list = self::getStatusList();
+                    $listToString = '';
+                    foreach ($list as $statusId => $status) {
+                        $listToString .= $statusId.':'.$status.';';
+                    }
+
+                    $columnModel[] = ['name' => 'status', 'index' => 'status', 'width' => '25', 'align' => 'left', 'search' => 'true', 'stype' => 'select',
+                        // for the bottom bar
+                        'searchoptions' => [
+                            'defaultValue' => '1',
+                            'value' => $listToString,
+                        ],
+                    ];
+                }
+                break;
             case 'complete':
                 $columns = [
                     get_lang('Name'),
@@ -8320,7 +8433,7 @@ class SessionManager
                             'value' => '" ":'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang(
                                     'Inactive'
                                 ),
-                    ],
+                        ],
                     ],
                     [
                         'name' => 'visibility',
@@ -8346,8 +8459,8 @@ class SessionManager
                     '#',
                     get_lang('Name'),
                     get_lang('Category'),
-                    get_lang('SessionDisplayStartDate'),
-                    get_lang('SessionDisplayEndDate'),
+                    get_lang('Start date to display'),
+                    get_lang('End date to display'),
                     get_lang('Visibility'),
                 ];
                 $columnModel = [
@@ -8481,7 +8594,7 @@ class SessionManager
                 'sortable' => 'false',
                 'search' => 'false',
             ];
-            $columns[] = get_lang('Detail');
+            $columns[] = get_lang('Actions');
         }
 
         $columnName = [];

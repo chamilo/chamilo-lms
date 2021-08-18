@@ -284,6 +284,24 @@ export default {
       ['Courses category', 'mdi-book', 'CourseCategoryList'],
     ],
   }),
+  updated() {
+    if (this.isAuthenticated) {
+      console.log(this.linksUser);
+      if (this.isBoss) {
+        if(!this.linksUser.some(data => data.id === 'load_search')) {
+          this.linksUser.push({icon: 'mdi-format-list-checks', url: '/main/search/load_search.php', text: 'Diagnosis Management', id: 'load_search'});
+        }
+        if(!this.linksUser.some(data => data.id === 'search')) {
+          this.linksUser.push({icon: 'mdi-account-search', url: '/main/search/search.php', text: 'Diagnostic Form', id: 'search'});
+        }
+      }
+      if (this.isStudent) {
+        if(!this.linksUser.some(data => data.id === 'search')) {
+          this.linksUser.push({icon: 'mdi-account-search', url: '/main/search/search.php', text: 'Diagnostic Form', id: 'search'});
+        }
+      }
+    }
+  },
   created() {
     //console.log('dashboard created');
     this.legacyContent = '';
@@ -314,6 +332,8 @@ export default {
     ...mapGetters({
       'isAuthenticated': 'security/isAuthenticated',
       'isAdmin': 'security/isAdmin',
+      'isBoss': 'security/isBoss',
+      'isStudent': 'security/isStudent',
       'currentUser': 'security/getUser',
     }),
   },

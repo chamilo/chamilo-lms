@@ -7,10 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Tag.
- *
  * @ORM\Table(name="tag")
  * @ORM\Entity
  */
@@ -24,6 +23,7 @@ class Tag
     protected int $id;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(name="tag", type="string", length=255, nullable=false)
      */
     protected string $tag;
@@ -39,6 +39,11 @@ class Tag
      */
     protected int $count;
 
+    public function __construct()
+    {
+        $this->count = 0;
+    }
+
     public function setTag(string $tag): self
     {
         $this->tag = $tag;
@@ -46,12 +51,7 @@ class Tag
         return $this;
     }
 
-    /**
-     * Get tag.
-     *
-     * @return string
-     */
-    public function getTag()
+    public function getTag(): string
     {
         return $this->tag;
     }
@@ -63,12 +63,7 @@ class Tag
         return $this;
     }
 
-    /**
-     * Get count.
-     *
-     * @return int
-     */
-    public function getCount()
+    public function getCount(): int
     {
         return $this->count;
     }

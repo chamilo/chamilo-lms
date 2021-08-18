@@ -11,8 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * Class ExtraFieldSavedSearch.
- *
  * @ORM\Entity
  * @ORM\Table(name="extra_field_saved_search")
  */
@@ -43,13 +41,13 @@ class ExtraFieldSavedSearch
     /**
      * @ORM\Column(name="value", type="array", nullable=true, unique=false)
      */
-    protected ?array $value = [];
+    protected ?array $value;
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
+    public function __construct()
+    {
+        $this->value = [];
+    }
+
     public function getId()
     {
         return $this->id;
@@ -67,10 +65,7 @@ class ExtraFieldSavedSearch
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    public function getValue()
+    public function getValue(): ?array
     {
         return $this->value;
     }

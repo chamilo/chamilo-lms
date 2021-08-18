@@ -1198,7 +1198,74 @@ class ExtraField extends Model
                                 $options[$optionDetails['option_value']] = $optionDetails['display_text'];
                             }
                         }
-                        $form->addSelect(
+
+                        if ($orderDependingDefaults) {
+                            if (isset($extraData['extra_'.$variable])) {
+                                $defaultOptions = $extraData['extra_'.$variable];
+                                $firstList = [];
+                                if ($addEmptyOptionSelects) {
+                                    $firstList[] = '';
+                                }
+                                foreach ($defaultOptions as $key) {
+                                    if (isset($options[$key])) {
+                                        $firstList[$key] = $options[$key];
+                                    }
+                                }
+                                if (!empty($firstList)) {
+                                    $options = array_merge($firstList, $options);
+                                }
+                            } else {
+                                $firstList = [];
+                                if ($addEmptyOptionSelects) {
+                                    $firstList[] = '&nbsp;';
+                                    $options = array_merge($firstList, $options);
+                                }
+                            }
+                        }
+                        // OFAJ
+                        $separateValue = 0;
+                        if (isset($separateExtraMultipleSelect[$variable])) {
+                            $separateValue = $separateExtraMultipleSelect[$variable];
+                        }
+
+                        if ($separateValue > 0) {
+                            for ($i = 0; $i < $separateValue; $i++) {
+                                $form->addSelect(
+                                    'extra_'.$variable.'['.$i.']',
+                                    $customLabelsExtraMultipleSelect[$variable][$i],
+                                    $options,
+                                    ['id' => 'extra_'.$variable.'_'.$i]
+                                );
+                            }
+                        } else {
+                            // Ofaj
+                            $attributes = ['multiple' => 'multiple', 'id' => 'extra_'.$variable];
+                            $chosenSelect = [
+                                'ecouter',
+                                'lire',
+                                'participer_a_une_conversation',
+                                's_exprimer_oralement_en_continu',
+                                'ecrire',
+                            ];
+
+                            if (in_array($variable, $chosenSelect)) {
+                                $attributes['select_chosen'] = true;
+                            }
+
+                            // default behaviour
+                            $form->addSelect(
+                                'extra_'.$variable,
+                                $field_details['display_text'],
+                                $options,
+                                $attributes,
+                            );
+
+                        }
+
+                        if ($freezeElement) {
+                            $form->freeze('extra_'.$variable);
+                        }
+                        /*$form->addSelect(
                             'extra_'.$variable,
                             $field_details['display_text'],
                             $options,
@@ -1209,7 +1276,7 @@ class ExtraField extends Model
                         );
                         if ($freezeElement) {
                             $form->freeze('extra_'.$variable);
-                        }
+                        }*/
                         break;
                     case self::FIELD_TYPE_DATE:
                         $form->addDatePicker('extra_'.$variable, $field_details['display_text']);
@@ -1275,7 +1342,7 @@ class ExtraField extends Model
                                 $tagsSelect = $form->addSelect(
                                     'extra_'.$variable.'['.$i.']',
                                     $customLabelsExtraMultipleSelect[$variable][$i], //$field_details['display_text'],
-                                    null,
+                                    [],
                                     ['id' => 'extra_'.$variable.'_'.$i]
                                 );
 
@@ -3088,13 +3155,8 @@ JAVASCRIPT;
      */
     public function searchOptionsFromTags($from, $search, $options)
     {
-        $extraFieldInfo = $this->get_handler_field_info_by_field_variable(
-            str_replace('extra_', '', $from)
-        );
-        $extraFieldInfoTag = $this->get_handler_field_info_by_field_variable(
-            str_replace('extra_', '', $search)
-        );
-
+        $extraFieldInfo = $this->get_handler_field_info_by_field_variable(str_replace('extra_', '', $from));
+        $extraFieldInfoTag = $this->get_handler_field_info_by_field_variable(str_replace('extra_', '', $search));
         if (empty($extraFieldInfo) || empty($extraFieldInfoTag)) {
             return [];
         }
@@ -3106,7 +3168,17 @@ JAVASCRIPT;
         $tagRelExtraTable = Database::get_main_table(TABLE_MAIN_EXTRA_FIELD_REL_TAG);
         $tagTable = Database::get_main_table(TABLE_MAIN_TAG);
         $optionsTable = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
-        $value = Database::escape_string(implode("','", $options));
+        $cleanOptions = [];
+        foreach ($options as $option) {
+            $cleanOptions[] = Database::escape_string($option);
+        }
+        $cleanOptions = array_filter($cleanOptions);
+
+        if (empty($cleanOptions)) {
+            return [];
+        }
+
+        $value = implode("','", $cleanOptions);
 
         $sql = "SELECT DISTINCT t.*, v.value, o.display_text
                 FROM $tagRelExtraTable te
@@ -3119,11 +3191,9 @@ JAVASCRIPT;
                 WHERE v.value IN ('".$value."')
                 ORDER BY o.option_order, t.tag
                ";
-
         $result = Database::query($sql);
-        $result = Database::store_result($result);
 
-        return $result;
+        return Database::store_result($result);
     }
 
     public static function getExtraFieldTypesWithFiles(): array

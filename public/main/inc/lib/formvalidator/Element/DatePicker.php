@@ -64,6 +64,10 @@ class DatePicker extends HTML_QuickForm_text
      */
     public function setValue($value)
     {
+        if (empty($value)) {
+            return;
+        }
+
         $value = substr($value, 0, 16);
         $this->updateAttributes(
             [

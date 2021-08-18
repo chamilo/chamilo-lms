@@ -4,12 +4,13 @@
 
 use Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch;
 use Chamilo\CoreBundle\Entity\Tag;
+use Chamilo\CoreBundle\Framework\Container;
 
 require_once __DIR__.'/../global.inc.php';
 
 $action = isset($_GET['a']) ? $_GET['a'] : '';
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
-$fieldId = isset($_REQUEST['field_id']) ? $_REQUEST['field_id'] : null;
+$fieldId = isset($_REQUEST['field_id']) ? (int) $_REQUEST['field_id'] : 0;
 
 switch ($action) {
     case 'delete_file':
@@ -37,27 +38,16 @@ switch ($action) {
         break;
     case 'search_tags':
         header('Content-Type: application/json');
-        $tag = isset($_REQUEST['q']) ? $_REQUEST['q'] : null;
-        $result = [];
+        $tag = isset($_REQUEST['q']) ? (string) $_REQUEST['q'] : '';
 
         if (empty($tag)) {
-            echo json_encode(['items' => $result]);
+            echo json_encode(['items' => []]);
             exit;
         }
 
-        $extraFieldOption = new ExtraFieldOption($type);
-
-        $tags = Database::getManager()
-            ->getRepository(Tag::class)
-            ->createQueryBuilder('t')
-            ->where("t.tag LIKE :tag")
-            ->andWhere('t.fieldId = :field')
-            ->setParameter('field', $fieldId)
-            ->setParameter('tag', "$tag%")
-            ->getQuery()
-            ->getResult();
-
-        /** @var Tag $tag */
+        $tagRepo = Container::getTagRepository();
+        $tags = $tagRepo->findTagsByField($tag, $fieldId);
+        $result = [];
         foreach ($tags as $tag) {
             $result[] = [
                 'id' => $tag->getTag(),
@@ -68,7 +58,6 @@ switch ($action) {
         echo json_encode(['items' => $result]);
         break;
     case 'search_options_from_tags':
-        exit;
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
         $fieldId = isset($_REQUEST['field_id']) ? $_REQUEST['field_id'] : null;
         $tag = isset($_REQUEST['tag']) ? $_REQUEST['tag'] : null;

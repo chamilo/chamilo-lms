@@ -28,7 +28,7 @@ if ($allowToSee === false) {
 $userId = api_get_user_id();
 $userInfo = api_get_user_info();
 
-$userToLoad = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
+$userToLoad = isset($_GET['user_id']) ? (int) $_GET['user_id'] : 0;
 
 $userToLoadInfo = [];
 if ($userToLoad) {
@@ -93,6 +93,11 @@ if (!empty($userInfo)) {
             break;
     }
 
+    // Allow access for admins.
+    if (empty($users) && api_is_platform_admin()) {
+        $users[] = $userToLoadInfo;
+    }
+
     if (!empty($users)) {
         $userList = [];
         foreach ($users as $user) {
@@ -128,6 +133,14 @@ if (!empty($items)) {
         }
         $defaults[$variable] = $item->getValue();
     }
+}
+
+if (isset($defaults['extra_access_start_date']) && isset($defaults['extra_access_start_date'][0])) {
+    $defaults['extra_access_start_date'] = $defaults['extra_access_start_date'][0];
+}
+
+if (isset($defaults['extra_access_end_date']) && isset($defaults['extra_access_end_date'][0])) {
+    $defaults['extra_access_end_date'] = $defaults['extra_access_end_date'][0];
 }
 
 $extraField = new ExtraField('session');
@@ -736,17 +749,27 @@ if ($form->validate()) {
             /** @var ExtraFieldSavedSearch $saved */
             $saved = $em->getRepository(ExtraFieldSavedSearch::class)->findOneBy($search);
 
+            if (empty($value)) {
+                $value = [];
+            }
+
+            if (is_string($value)) {
+                $value = [$value];
+            }
+
             if ($saved) {
                 $saved
                     ->setField($extraFieldObj)
                     ->setUser(api_get_user_entity($userToLoad))
-                    ->setValue($value);
+                    ->setValue($value)
+                ;
             } else {
                 $saved = new ExtraFieldSavedSearch();
                 $saved
                     ->setField($extraFieldObj)
                     ->setUser(api_get_user_entity($userToLoad))
-                    ->setValue($value);
+                    ->setValue($value)
+                ;
             }
             $em->persist($saved);
             $em->flush();

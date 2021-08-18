@@ -165,10 +165,7 @@ class ExtraField
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getFieldType()
+    public function getFieldType(): int
     {
         return $this->fieldType;
     }

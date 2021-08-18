@@ -44,7 +44,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     'hide_tab_list' => '',
                     'session_admins_edit_courses_content' => 'false',
                     'allow_session_admin_login_as_teacher' => 'false',
-                    'allow_search_diagnostic' => 'false'
+                    'allow_search_diagnostic' => 'false',
                 ]
             )
         ;

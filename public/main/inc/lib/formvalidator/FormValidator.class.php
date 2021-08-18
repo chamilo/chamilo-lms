@@ -1025,6 +1025,51 @@ EOT;
         return true;
     }
 
+    public function addStartPanel(string $id, string $title, bool $open = false)
+    {
+        $parent = null;
+        $html = '
+                <script>
+                 document.addEventListener("DOMContentLoaded", function() {
+                    const button = document.querySelector("#card_'.$id.'");
+                        button.addEventListener("click", (e) => {
+                        let menu = document.querySelector("#collapse_'.$id.'");
+                        if (menu.classList.contains("hidden")) {
+                            menu.classList.remove("hidden");
+                        } else {
+                            menu.classList.add("hidden");
+                        }
+                    });
+                });
+                </script>
+                <div class="mt-4 rounded-lg">    
+                    <div class="px-4 bg-gray-100 border border-gray-50" id="card_'.$id.'">   
+                        <h5>
+                            <a role="button" 
+                                class="'.(($open) ? 'collapse' : ' ').'"  
+                                data-toggle="collapse" 
+                                data-target="#collapse_'.$id.'" 
+                                aria-expanded="true" 
+                                aria-controls="collapse_'.$id.'"
+                            >
+                                '.$title.'
+                            </a>
+                        </h5>
+                    </div>
+                    <div 
+                        id="collapse_'.$id.'" 
+                        class="px-4 border border-gray-50 bg-white hidden collapse '.(($open) ? 'show' : ' ').'" 
+                        aria-labelledby="heading_'.$id.'" data-parent="#'.$parent.'">
+                    <div id="collapse_contant_'.$id.'"  class="card-body ">';
+
+        $this->addHtml($html);
+    }
+
+    public function addEndPanel()
+    {
+        $this->addHtml('</div></div></div>');
+    }
+
     /**
      * Draws a panel of options see the course_info/infocours.php page.
      *

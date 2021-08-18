@@ -22,18 +22,18 @@ class Cc13Convert
             $meta = new CcMetadataManifest();
 
             //Package metadata
-            $metageneral = new cc_metadata_general();
-            $metageneral->set_language($objCourse->info['language']);
-            $metageneral->set_title($objCourse->info['title'], $objCourse->info['language']);
-            $metageneral->set_description('', $objCourse->info['language']);
-            $metageneral->set_catalog('category');
-            $metageneral->set_entry($objCourse->info['categoryName']);
-            $meta->add_metadata_general($metageneral);
+            $metageneral = new CcMetadataGeneral();
+            $metageneral->setLanguage($objCourse->info['language']);
+            $metageneral->setTitle($objCourse->info['title'], $objCourse->info['language']);
+            $metageneral->setDescription('', $objCourse->info['language']);
+            $metageneral->setCatalog('category');
+            $metageneral->setEntry($objCourse->info['categoryName']);
+            $meta->addMetadataGeneral($metageneral);
 
             // Create the manifest
             $manifest = new CcManifest();
 
-            $manifest->add_metadata_manifest($meta);
+            $manifest->addMetadataManifest($meta);
 
             $organization = null;
 
@@ -46,46 +46,46 @@ class Cc13Convert
 
             // We check the quiz sections
             if (isset($resources['quiz'])) {
-                $quizSections = self::get_item_sections($resources['quiz'], 'quiz',$count, $objCourse->info['code'], $resources['Exercise_Question']);
+                $quizSections = self::getItemSections($resources['quiz'], 'quiz',$count, $objCourse->info['code'], $resources['Exercise_Question']);
                 $sections = array_merge($sections, $quizSections);
             }
 
             // We check the document sections
             if (isset($resources['document'])) {
-                $documentSections = self::get_item_sections($resources['document'], 'document', $count, $objCourse->info['code']);
+                $documentSections = self::getItemSections($resources['document'], 'document', $count, $objCourse->info['code']);
                 $sections = array_merge($sections, $documentSections);
             }
 
             // We check the wiki sections
             if (isset($resources['wiki'])) {
-                $wikiSections = self::get_item_sections($resources['wiki'], 'wiki', $count, $objCourse->info['code']);
+                $wikiSections = self::getItemSections($resources['wiki'], 'wiki', $count, $objCourse->info['code']);
                 $sections = array_merge($sections, $wikiSections);
             }
 
             // We check the forum sections
             if (isset($resources['forum'])) {
-                $forumSections = self::get_item_sections($resources['forum'], 'forum', $count, $objCourse->info['code'], $resources['Forum_Category']);
+                $forumSections = self::getItemSections($resources['forum'], 'forum', $count, $objCourse->info['code'], $resources['Forum_Category']);
                 $sections = array_merge($sections, $forumSections);
             }
 
             // We check the link sections
             if (isset($resources['link'])) {
-                $linkSections = self::get_item_sections($resources['link'], 'link',$count, $objCourse->info['code'], $resources['Link_Category']);
+                $linkSections = self::getItemSections($resources['link'], 'link',$count, $objCourse->info['code'], $resources['Link_Category']);
                 $sections = array_merge($sections, $linkSections);
             }
 
             //organization title
             $organization = new CcOrganization();
             foreach ($sections as $sectionid => $values) {
-                $item = new cc_item();
+                $item = new CcItem();
                 $item->title = $values[0];
-                self::process_sequence($item, $manifest, $values[1], $dir, $odir);
-                $organization->add_item($item);
+                self::processSequence($item, $manifest, $values[1], $dir, $odir);
+                $organization->addItem($item);
             }
-            $manifest->put_nodes();
+            $manifest->putNodes();
 
             if (!empty($organization)) {
-                $manifest->add_new_organization($organization);
+                $manifest->addNewOrganization($organization);
             }
 
             $manifestpath = $outdir.DIRECTORY_SEPARATOR.'imsmanifest.xml';
@@ -95,7 +95,7 @@ class Cc13Convert
         return false;
     }
 
-    protected static function get_item_sections($itemData, $itemType, &$count, $courseCode, $itmesExtraData = null)
+    protected static function getItemSections($itemData, $itemType, &$count, $courseCode, $itmesExtraData = null)
     {
 
         $sections = [];
@@ -109,12 +109,12 @@ class Cc13Convert
                 }
                 $sectionid      = $count;
                 $sectiontitle   = ucfirst($itemType);
-                $sequence = self::get_sequence($itemData, 0, $convertType, $courseCode, $itmesExtraData);
+                $sequence = self::getSequence($itemData, 0, $convertType, $courseCode, $itmesExtraData);
                 $sections[$sectionid] = array($sectiontitle, $sequence);
                 $count++;
                 break;
             case 'link':
-                $links = self::get_sequence($itemData, null, $itemType);
+                $links = self::getSequence($itemData, null, $itemType);
                 foreach($links as $categoryId => $sequence) {
                     $sectionid    = $count;
                     if (isset($itmesExtraData[$categoryId])) {
@@ -134,7 +134,7 @@ class Cc13Convert
                             $objCategory = $fcategory->obj;
                             $sectionid    = $count;
                             $sectiontitle = $objCategory->cat_title;
-                            $sequence = self::get_sequence($itemData, $objCategory->iid, $itemType);
+                            $sequence = self::getSequence($itemData, $objCategory->iid, $itemType);
                             $sections[$sectionid] = array($sectiontitle, $sequence);
                             $count++;
                         }
@@ -145,7 +145,7 @@ class Cc13Convert
         return $sections;
     }
 
-    protected static function get_sequence($objItems, $categoryId = null, $itemType = null, $coursecode = null, $itemQuestions = null)
+    protected static function getSequence($objItems, $categoryId = null, $itemType = null, $coursecode = null, $itemQuestions = null)
     {
 
         $sequences = [];
@@ -225,7 +225,7 @@ class Cc13Convert
                 if (!isset($categoryId)) {
                     $categories = [];
                     foreach($objItems as $objItem) {
-                        $categories[$objItem->category_id] = self::get_sequence($objItems, $objItem->category_id, $itemType);
+                        $categories[$objItem->category_id] = self::getSequence($objItems, $objItem->category_id, $itemType);
                     }
                     $sequences = $categories;
                 }
@@ -249,13 +249,13 @@ class Cc13Convert
         return $sequences;
     }
 
-    protected static function process_sequence(CcIItem &$item, CcIManifest &$manifest, array $sequence, $packageroot, $outdir)
+    protected static function processSequence(CcIItem &$item, CcIManifest &$manifest, array $sequence, $packageroot, $outdir)
     {
         if (!empty($sequence)) {
             foreach ($sequence as $seq) {
                 $activity_type = ucfirst($seq['cc_type']);
                 $activity_indentation = 0;
-                $aitem = self::item_indenter($item, $activity_indentation);
+                $aitem = self::itemIndenter($item, $activity_indentation);
                 $caller = "CcConverter{$activity_type}";
                 if (class_exists($caller)) {
                     $obj = new $caller($aitem, $manifest, $packageroot, $path);
@@ -268,26 +268,26 @@ class Cc13Convert
     }
 
 
-    protected static function item_indenter(CcIItem &$item, $level = 0)
+    protected static function itemIndenter(CcIItem &$item, $level = 0)
     {
         $indent = (int)$level;
         $indent = ($indent) <= 0 ? 0 : $indent;
         $nprev = null;
         $nfirst = null;
         for ($pos = 0, $size = $indent; $pos < $size; $pos++) {
-            $nitem = new cc_item();
+            $nitem = new CcItem();
             $nitem->title = '';
             if (empty($nfirst)) {
                 $nfirst = $nitem;
             }
             if (!empty($nprev)) {
-                $nprev->add_child_item($nitem);
+                $nprev->addChildItem($nitem);
             }
             $nprev = $nitem;
         }
         $result = $item;
         if (!empty($nfirst)) {
-            $item->add_child_item($nfirst);
+            $item->addChildItem($nfirst);
             $result = $nprev;
         }
         return $result;

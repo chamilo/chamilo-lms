@@ -10,7 +10,7 @@ abstract class CcConverters
     protected $path     = null;
     protected $defaultfile = null;
     protected $defaultname = null;
-    protected $cc_type = null;
+    protected $ccType = null;
     protected $doc = null;
 
     /**
@@ -55,7 +55,7 @@ abstract class CcConverters
      * @throws RuntimeException
      * @return bool
      */
-    protected function is_visible()
+    protected function isVisible()
     {
         $tdoc = new XMLGenericDocument();
         return true;
@@ -72,12 +72,12 @@ abstract class CcConverters
         if ( $doc->saveTo($rtp) ) {
             $resource = new CcResources($rdir->rootdir(), $this->defaultname, $rdir->dirname(true));
             $resource->dependency = empty($deps) ? array() : $deps;
-            $resource->instructoronly = !$this->is_visible();
-            $res = $this->manifest->add_resource($resource, null, $this->cc_type);
-            $resitem = new cc_item();
-            $resitem->attach_resource($res[0]);
+            $resource->instructoronly = !$this->isVisible();
+            $res = $this->manifest->addResource($resource, null, $this->ccType);
+            $resitem = new CcItem();
+            $resitem->attachResource($res[0]);
             $resitem->title = $title;
-            $this->item->add_child_item($resitem);
+            $this->item->addChildItem($resitem);
         } else {
             throw new RuntimeException("Unable to save file {$rtp}!");
         }

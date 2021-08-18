@@ -1,16 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-final class error_messages {
+final class ErrorMessages {
     /**
      *
-     * @static error_messages
+     * @static ErrorMessages
      */
     private static $instance = null;
     private function __construct(){}
     private function __clone(){}
     /**
-     * @return error_messages
+     * @return ErrorMessages
      */
     public static function instance() {
         if (empty(self::$instance)) {
@@ -52,7 +52,7 @@ final class error_messages {
      * @param boolean $web
      * @return string
      */
-    public function to_string($web = false) {
+    public function toString($web = false) {
         $result = '';
         if ($web) {
             $result .= '<ol>'.PHP_EOL;
@@ -79,12 +79,12 @@ final class error_messages {
      * @return string
      */
     public function __toString() {
-        return $this->to_string(false);
+        return $this->toString(false);
     }
 
 }
 
-final class libxml_errors_mgr {
+final class LibxmlErrorsMgr {
     /**
      * @var boolean
      */
@@ -95,13 +95,13 @@ final class libxml_errors_mgr {
      */
     public function __construct($reset=false){
         if ($reset) {
-            error_messages::instance()->reset();
+            ErrorMessages::instance()->reset();
         }
         $this->previous = libxml_use_internal_errors(true);
         libxml_clear_errors();
     }
 
-    private function collect_errors ($filename=''){
+    private function collectErrors ($filename=''){
         $errors = libxml_get_errors();
         static $error_types = array(
         LIBXML_ERR_ERROR => 'Error'
@@ -121,26 +121,26 @@ final class libxml_errors_mgr {
                 $line = " at line {$error->line}";
             }
             $err = "{$error_types[$error->level]}{$add}: {$error->message}{$line}";
-            error_messages::instance()->add($err);
+            ErrorMessages::instance()->add($err);
         }
         libxml_clear_errors();
         return $result;
     }
 
     public function __destruct(){
-        $this->collect_errors();
+        $this->collectErrors();
         if (!$this->previous) {
             libxml_use_internal_errors($this->previous);
         }
     }
 
     public function collect() {
-        $this->collect_errors();
+        $this->collectErrors();
     }
 }
 
 
-function validate_xml($xml, $schema) {
+function validateXml($xml, $schema) {
     $result = false;
     $manifest_file = realpath($xml);
     $schema_file = realpath($schema);
@@ -148,7 +148,7 @@ function validate_xml($xml, $schema) {
         return false;
     }
 
-    $xml_error = new libxml_errors_mgr();
+    $xml_error = new LibxmlErrorsMgr();
     $manifest = new DOMDocument();
     $doc->validateOnParse = false;
     $result = $manifest->load($manifest_file, LIBXML_NONET) &&
@@ -157,7 +157,7 @@ function validate_xml($xml, $schema) {
     return $result;
 }
 
-class cc_validate_type {
+class CcValidateType {
     const manifest_validator1   = 'cclibxml2validator.xsd'                       ;
     const assesment_validator1  = '/domainProfile_4/ims_qtiasiv1p2_localised.xsd';
     const discussion_validator1 = '/domainProfile_6/imsdt_v1p0_localised.xsd'    ;
@@ -168,7 +168,7 @@ class cc_validate_type {
     const assesment_validator11  = 'ccv1p1_qtiasiv1p2p1_v1p0.xsd';
     const discussion_validator11 = 'ccv1p1_imsdt_v1p1.xsd'       ;
     const weblink_validator11    = 'ccv1p1_imswl_v1p1.xsd'       ;
-    
+
     const manifest_validator13   = 'cc13libxml2validator.xsd'    ;
     const blti_validator13       = 'imslticc_v1p3.xsd'         ;
     const assesment_validator13  = 'ccv1p3_qtiasiv1p2p1_v1p0.xsd';
@@ -201,7 +201,7 @@ class cc_validate_type {
         $cvalidator = realpath($this->location.DIRECTORY_SEPARATOR.$this->type);
         $result = (empty($celement) || empty($cvalidator));
         if (!$result) {
-            $xml_error = new libxml_errors_mgr();
+            $xml_error = new LibxmlErrorsMgr();
             $doc = new DOMDocument();
             $doc->validateOnParse = false;
             $result = $doc->load($celement, LIBXML_NONET) &&
@@ -212,37 +212,37 @@ class cc_validate_type {
 
 }
 
-class manifest_validator extends cc_validate_type {
+class ManifestValidator extends CcValidateType {
     public function __construct($location){
         parent::__construct(self::manifest_validator13, $location);
     }
 }
 
-class manifest10_validator extends cc_validate_type {
+class Manifest10Validator extends CcValidateType {
     public function __construct($location){
         parent::__construct(self::manifest_validator1, $location);
     }
 }
 
-class blti_validator extends cc_validate_type {
+class BltiValidator extends CcValidateType {
     public function __construct($location){
         parent::__construct(self::blti_validator13, $location);
     }
 }
 
-class assesment_validator extends cc_validate_type {
+class AssesmentValidator extends CcValidateType {
     public function __construct($location){
         parent::__construct(self::assesment_validator13, $location);
     }
 }
 
-class discussion_validator extends cc_validate_type {
+class DiscussionValidator extends CcValidateType {
     public function __construct($location){
         parent::__construct(self::discussion_validator13, $location);
     }
 }
 
-class weblink_validator extends cc_validate_type {
+class WeblinkValidator extends CcValidateType {
     public function __construct($location){
         parent::__construct(self::weblink_validator13, $location);
     }

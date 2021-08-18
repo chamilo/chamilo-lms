@@ -16,14 +16,14 @@ class CcWebLink extends CcGeneralFile
     protected $title = null;
     protected $href = null;
     protected $target = '_self';
-    protected $window_features = null;
+    protected $windowFeatures = null;
 
     /**
      *
      * Set the url title
      * @param string $title
      */
-    public function set_title($title)
+    public function setTitle($title)
     {
         $this->title = self::safexml($title);
     }
@@ -33,26 +33,26 @@ class CcWebLink extends CcGeneralFile
      * Set the url specifics
      * @param string $url
      * @param string $target
-     * @param string $window_features
+     * @param string $windowFeatures
      */
-    public function set_url($url, $target = '_self', $window_features = null)
+    public function setUrl($url, $target = '_self', $windowFeatures = null)
     {
         $this->url = $url;
         $this->target = $target;
-        $this->window_features = $window_features;
+        $this->windowFeatures = $windowFeatures;
     }
 
-    protected function on_save()
+    protected function onSave()
     {
         $rns = $this->ccnamespaces[$this->rootns];
-        $this->append_new_element_ns($this->root, $rns, 'title', $this->title);
-        $url = $this->append_new_element_ns($this->root, $rns, 'url');
-        $this->append_new_attribute_ns($url, $rns, 'href', $this->url);
+        $this->appendNewElementNs($this->root, $rns, 'title', $this->title);
+        $url = $this->appendNewElementNs($this->root, $rns, 'url');
+        $this->appendNewAttributeNs($url, $rns, 'href', $this->url);
         if (!empty($this->target)) {
-            $this->append_new_attribute_ns($url, $rns, 'target', $this->target);
+            $this->appendNewAttributeNs($url, $rns, 'target', $this->target);
         }
-        if (!empty($this->window_features)) {
-            $this->append_new_attribute_ns($url, $rns, 'windowFeatures', $this->window_features);
+        if (!empty($this->windowFeatures)) {
+            $this->appendNewAttributeNs($url, $rns, 'windowFeatures', $this->windowFeatures);
         }
         return true;
     }

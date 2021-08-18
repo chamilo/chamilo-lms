@@ -57,7 +57,7 @@ if ($form->validate()) {
             }
 
             // We detect if it is cc v1.3
-            $detected = Imscc13Import::detect_format($filepath);
+            $detected = Imscc13Import::detectFormat($filepath);
             if ($detected) {
                 Imscc13Import::execute($filepath);
                 Display::addFlash(Display::return_message(get_lang('CcFileImported'), 'normal', false));

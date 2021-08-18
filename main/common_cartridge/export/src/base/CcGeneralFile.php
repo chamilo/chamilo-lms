@@ -24,9 +24,9 @@ class CcGeneralFile extends XMLGenericDocument
     }
 
 
-    protected function on_create()
+    protected function onCreate()
     {
-        $rootel = $this->append_new_element_ns($this->doc,
+        $rootel = $this->appendNewElementNs($this->doc,
                                                $this->ccnamespaces[$this->rootns],
                                                $this->rootname);
         //add all namespaces
@@ -43,7 +43,7 @@ class CcGeneralFile extends XMLGenericDocument
         }
 
         if (!empty($schemaLocation) && isset($this->ccnamespaces['xsi'])) {
-            $this->append_new_attribute_ns($rootel,
+            $this->appendNewAttributeNs($rootel,
                                            $this->ccnamespaces['xsi'],
                                            'xsi:schemaLocation',
                                             $schemaLocation);

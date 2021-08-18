@@ -6,25 +6,25 @@ class CcConverterQuiz extends CcConverters
 
     public function __construct(CcIItem &$item, CcIManifest &$manifest, $rootpath, $path)
     {
-        $this->cc_type     = CcVersion13::assessment;
+        $this->ccType     = CcVersion13::assessment;
         $this->defaultfile = 'quiz.xml';
-        $this->defaultname = assesment13_resource_file::deafultname;
+        $this->defaultname = Assesment13ResourceFile::deafultname;
         parent::__construct($item, $manifest, $rootpath, $path);
     }
 
     public function convert($outdir, $objQuizz)
     {
 
-        $rt = new assesment13_resource_file();
+        $rt = new Assesment13ResourceFile();
         $title = $objQuizz['title'];
-        $rt->set_title($title);
+        $rt->setTitle($title);
 
         // Metadata.
-        $metadata = new cc_assesment_metadata();
-        $rt->set_metadata($metadata);
-        $metadata->enable_feedback();
-        $metadata->enable_hints();
-        $metadata->enable_solutions();
+        $metadata = new CcAssesmentMetadata();
+        $rt->setMetadata($metadata);
+        $metadata->enableFeedback();
+        $metadata->enableHints();
+        $metadata->enableSolutions();
         // Attempts.
         $max_attempts = $objQuizz['max_attempt'];
 
@@ -33,32 +33,32 @@ class CcConverterQuiz extends CcConverters
             if ($max_attempts > 5) {
                 $max_attempts = cc_qti_values::unlimited;
             }
-            $metadata->set_maxattempts($max_attempts);
+            $metadata->setMaxattempts($max_attempts);
         }
 
         // Time limit must be converted into minutes.
         $timelimit = $objQuizz['expired_time'];
 
         if ($timelimit > 0) {
-            $metadata->set_timelimit($timelimit);
-            $metadata->enable_latesubmissions(false);
+            $metadata->setTimelimit($timelimit);
+            $metadata->enableLatesubmissions(false);
         }
 
         $contextid = $objQuizz['source_id'];
 
-        $result = CcHelpers::process_linked_files( $objQuizz['comment'],
+        $result = CcHelpers::processLinkedFiles( $objQuizz['comment'],
                                                     $this->manifest,
                                                     $this->rootpath,
                                                     $contextid,
                                                     $outdir);
 
-        cc_assesment_helper::add_assesment_description($rt, $result[0], cc_qti_values::htmltype);
+        CcAssesmentHelper::addAssesmentDescription($rt, $result[0], cc_qti_values::htmltype);
 
         // Section.
-        $section = new cc_assesment_section();
-        $rt->set_section($section);
+        $section = new CcAssesmentSection();
+        $rt->setSection($section);
         // Process the actual questions.
-        $ndeps = cc_assesment_helper::process_questions($objQuizz,
+        $ndeps = CcAssesmentHelper::processQuestions($objQuizz,
                                                         $this->manifest,
                                                         $section,
                                                         $this->rootpath,

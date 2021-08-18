@@ -6,6 +6,6 @@
  */
 interface CcIMetadataFile
 {
-    public function add_metadata_file_educational($obj);
+    public function addMetadataFileEducational($obj);
 }
 

@@ -51,19 +51,19 @@ class CcVersion13 extends CcVersion1
 
     }
 
-    protected function update_items($items, DOMDocument &$doc, DOMElement &$xmlnode)
+    protected function updateItems($items, DOMDocument &$doc, DOMElement &$xmlnode)
     {
         foreach ($items as $key => $item) {
             $itemnode = $doc->createElementNS($this->ccnamespaces['imscc'], 'item');
-            $this->update_attribute($doc, 'identifier'   , $key                , $itemnode);
-            $this->update_attribute($doc, 'identifierref', $item->identifierref, $itemnode);
+            $this->updateAttribute($doc, 'identifier'   , $key                , $itemnode);
+            $this->updateAttribute($doc, 'identifierref', $item->identifierref, $itemnode);
             if (!is_null($item->title)) {
                 $titlenode = $doc->createElementNS($this->ccnamespaces['imscc'], 'title');
                 $titlenode->appendChild(new DOMText($item->title));
                 $itemnode->appendChild($titlenode);
             }
-            if ($item->has_child_items()) {
-                $this->update_items($item->childitems, $doc, $itemnode);
+            if ($item->hasChildItems()) {
+                $this->updateItems($item->childitems, $doc, $itemnode);
             }
             $xmlnode->appendChild($itemnode);
         }
@@ -77,7 +77,7 @@ class CcVersion13 extends CcVersion1
      * @param object $xmlnode
      * @return DOMNode
      */
-    public function create_metadata_educational($met, DOMDocument  &$doc, $xmlnode)
+    public function createMetadataEducational($met, DOMDocument  &$doc, $xmlnode)
     {
         $metadata = $doc->createElementNS($this->ccnamespaces['imscc'], 'metadata');
         $xmlnode->insertBefore($metadata, $xmlnode->firstChild);

@@ -6,9 +6,9 @@
  */
 interface CcIMetadataManifest
 {
-    public function add_metadata_general($obj);
-    public function add_metadata_technical($obj);
-    public function add_metadata_rights($obj);
-    public function add_metadata_lifecycle($obj);
+    public function addMetadataGeneral($obj);
+    public function addMetadataTechnical($obj);
+    public function addMetadataRights($obj);
+    public function addMetadataLifecycle($obj);
 }
 

@@ -25,10 +25,10 @@ class CcResources implements CcIResource
         $this->throwonerror = $throwonerror;
         if (is_string($manifest)) {
             $this->folder = $folder;
-            $this->process_resource($manifest, $file, $folder);
+            $this->processResource($manifest, $file, $folder);
             $this->manifestroot = $manifest;
         } else if (is_object($manifest)) {
-            $this->import_resource($file, $manifest);
+            $this->importResource($file, $manifest);
         }
     }
 
@@ -38,9 +38,9 @@ class CcResources implements CcIResource
      * @param string $fname
      * @param string $location
      */
-    public function add_resource ($fname, $location ='')
+    public function addResource ($fname, $location ='')
     {
-        $this->process_resource($fname, $location, null);
+        $this->processResource($fname, $location, null);
     }
 
     /**
@@ -49,15 +49,15 @@ class CcResources implements CcIResource
      * @param DOMElement $node
      * @param CcIManifest $doc
      */
-    public function import_resource(DOMElement &$node, CcIManifest &$doc)
+    public function importResource(DOMElement &$node, CcIManifest &$doc)
     {
 
         $searchstr = "//imscc:manifest[@identifier='".$doc->manifestID().
                      "']/imscc:resources/imscc:resource";
-        $this->identifier   = $this->get_attr_value($node, "identifier");
-        $this->type         = $this->get_attr_value($node, "type");
-        $this->href         = $this->get_attr_value($node, "href");
-        $this->base         = $this->get_attr_value($node, "base");
+        $this->identifier   = $this->getAttrValue($node, "identifier");
+        $this->type         = $this->getAttrValue($node, "type");
+        $this->href         = $this->getAttrValue($node, "href");
+        $this->base         = $this->getAttrValue($node, "base");
         $this->persiststate = null;
         $nodo               = $doc->nodeList($searchstr."[@identifier='".
                               $this->identifier."']/metadata/@href");
@@ -86,7 +86,7 @@ class CcResources implements CcIResource
      * @param string $ns
      * @return string
      */
-    public function get_attr_value(&$nod, $name, $ns=null)
+    public function getAttrValue(&$nod, $name, $ns=null)
     {
         if (is_null($ns)) {
             return ($nod->hasAttribute($name) ? $nod->getAttribute($name) : null);
@@ -101,7 +101,7 @@ class CcResources implements CcIResource
      * @param string $fname
      * @param string $folder
      */
-    public function process_resource($manifestroot, &$fname, $folder)
+    public function processResource($manifestroot, &$fname, $folder)
     {
         $file = empty($folder) ? $manifestroot.'/'.$fname : $manifestroot.'/'.$folder.'/'.$fname;
 
@@ -111,7 +111,7 @@ class CcResources implements CcIResource
 
         getDepFiles($manifestroot, $fname, $this->folder, $this->files);
         array_unshift($this->files, $folder.$fname);
-        $this->init_empty_new();
+        $this->initEmptyNew();
         $this->href             = $folder.$fname;
         $this->identifierref    = $folder.$fname;
         $this->filename         = $fname;
@@ -119,7 +119,7 @@ class CcResources implements CcIResource
         $this->folder           = $folder;
     }
 
-    public function adjust_path($mroot, $fname)
+    public function adjustPath($mroot, $fname)
     {
         $result = null;
         if (file_exists($fname->filename)) {
@@ -133,7 +133,7 @@ class CcResources implements CcIResource
         return $result;
     }
 
-    public function init_clean()
+    public function initClean()
     {
         $this->identifier    = null;
         $this->type          = null;
@@ -148,7 +148,7 @@ class CcResources implements CcIResource
         $this->isempty       = true;
     }
 
-    public function init_empty_new()
+    public function initEmptyNew()
     {
         $this->identifier    = CcHelpers::uuidgen('I_', '_R');
         $this->type          = null;
@@ -159,7 +159,7 @@ class CcResources implements CcIResource
         $this->identifierref = null;
     }
 
-    public function get_manifestroot()
+    public function getManifestroot()
     {
         return $this->manifestroot;
     }

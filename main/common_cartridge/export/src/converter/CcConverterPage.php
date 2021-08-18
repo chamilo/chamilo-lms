@@ -19,21 +19,21 @@ class CcConverterPage extends CcConverters
         $intro = '';
         $contextid = $objPage['source_id'];
         $pagecontent = $objPage['comment'];
-        $rt->set_title($title);
+        $rt->setTitle($title);
         $rawname = str_replace(' ', '_', strtolower(trim(Security::filter_filename($title))));
 
         if (!empty($rawname)) {
             $this->defaultname = $rawname.".html";
         }
 
-        $result = CcHelpers::process_linked_files( $pagecontent,
+        $result = CcHelpers::processLinkedFiles( $pagecontent,
                                                     $this->manifest,
                                                     $this->rootpath,
                                                     $contextid,
                                                     $outdir,
                                                     true);
-        $rt->set_content($result[0]);
-        $rt->set_intro($intro);
+        $rt->setContent($result[0]);
+        $rt->setIntro($intro);
         //store everything
         $this->store($rt, $outdir, $title, $result[1]);
 

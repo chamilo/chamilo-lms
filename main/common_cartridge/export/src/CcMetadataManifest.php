@@ -9,7 +9,7 @@ class CcMetadataManifest implements CcIMetadataManifest
     public  $arrayrights    = array();
     public  $arraylifecycle = array();
 
-    public function add_metadata_general($obj)
+    public function addMetadataGeneral($obj)
     {
         if (empty($obj)){
             throw new Exception('Medatada Object given is invalid or null!');
@@ -23,7 +23,7 @@ class CcMetadataManifest implements CcIMetadataManifest
         !is_null($obj->entry)? $this->arraygeneral['entry']=$obj->entry:null;
     }
 
-    public function add_metadata_technical($obj)
+    public function addMetadataTechnical($obj)
     {
         if (empty($obj)){
             throw new Exception('Medatada Object given is invalid or null!');
@@ -32,7 +32,7 @@ class CcMetadataManifest implements CcIMetadataManifest
     }
 
 
-    public function add_metadata_rights($obj)
+    public function addMetadataRights($obj)
     {
         if (empty($obj)){
             throw new Exception('Medatada Object given is invalid or null!');
@@ -44,7 +44,7 @@ class CcMetadataManifest implements CcIMetadataManifest
     }
 
 
-    public function add_metadata_lifecycle($obj)
+    public function addMetadataLifecycle($obj)
     {
         if (empty($obj)){
             throw new Exception('Medatada Object given is invalid or null!');
@@ -61,7 +61,7 @@ class CcMetadataManifest implements CcIMetadataManifest
  * Metadata General Type
  *
  */
-class cc_metadata_general
+class CcMetadataGeneral
 {
 
     public  $title          = array();
@@ -74,37 +74,37 @@ class cc_metadata_general
 
 
 
-    public function set_coverage ($coverage,$language)
+    public function setCoverage ($coverage,$language)
     {
         $this->coverage[] = array($language,$coverage);
     }
 
-    public function set_description ($description,$language)
+    public function setDescription ($description,$language)
     {
         $this->description[] = array($language,$description);
     }
 
-    public function set_keyword ($keyword,$language)
+    public function setKeyword ($keyword,$language)
     {
         $this->keyword[] = array($language,$keyword);
     }
 
-    public function set_language ($language)
+    public function setLanguage ($language)
     {
         $this->language[] = array($language);
     }
 
-    public function set_title ($title,$language)
+    public function setTitle ($title,$language)
     {
         $this->title[] = array($language,$title);
     }
 
-    public function set_catalog ($cat)
+    public function setCatalog ($cat)
     {
         $this->catalog[] = array($cat);
     }
 
-    public function set_entry ($entry)
+    public function setEntry ($entry)
     {
         $this->entry[] = array($entry);
     }

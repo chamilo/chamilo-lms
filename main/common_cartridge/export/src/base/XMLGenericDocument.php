@@ -24,7 +24,7 @@ class XMLGenericDocument
     private $filepath;
     private $isloaded = false;
     private $arrayPrefixNS = array();
-    private $is_html = false;
+    private $isHtml = false;
 
     public function __construct($ch = 'UTF-8', $validatenow = true)
     {
@@ -72,7 +72,7 @@ class XMLGenericDocument
         $this->doc->formatOutput = true;
         $this->doc->preserveWhiteSpace = true;
         if ($withonCreate) {
-            $this->on_create();
+            $this->onCreate();
         }
     }
 
@@ -94,9 +94,9 @@ class XMLGenericDocument
         if ($this->isloaded) {
             $this->filename = $fname;
             $this->processPath();
-            $this->is_html = false;
+            $this->isHtml = false;
         }
-        return $this->on_load();
+        return $this->onLoad();
     }
 
     public function loadUrl($url)
@@ -104,8 +104,8 @@ class XMLGenericDocument
         $this->documentInit();
         $this->isloaded = true;
         $this->doc->loadXML( file_get_contents($url) );
-        $this->is_html = false;
-        return $this->on_load();
+        $this->isHtml = false;
+        return $this->onLoad();
     }
 
     public function loadHTML($content)
@@ -114,8 +114,8 @@ class XMLGenericDocument
         $this->doc->validateOnParse = false;
         $this->isloaded = true;
         $this->doc->loadHTML($content);
-        $this->is_html = true;
-        return $this->on_load();
+        $this->isHtml = true;
+        return $this->onLoad();
     }
 
     public function loadXML($content)
@@ -124,8 +124,8 @@ class XMLGenericDocument
         $this->doc->validateOnParse = false;
         $this->isloaded = true;
         $this->doc->load($content);
-        $this->is_html = true;
-        return $this->on_load();
+        $this->isHtml = true;
+        return $this->onLoad();
     }
 
     public function loadHTMLFile($fname)
@@ -138,9 +138,9 @@ class XMLGenericDocument
         if ($this->isloaded) {
             $this->filename = $fname;
             $this->processPath();
-            $this->is_html=true;
+            $this->isHtml=true;
         }
-        return $this->on_load();
+        return $this->onLoad();
     }
 
     public function loadXMLFile($fname)
@@ -153,9 +153,9 @@ class XMLGenericDocument
         if ($this->isloaded) {
             $this->filename = $fname;
             $this->processPath();
-            $this->is_html = true;
+            $this->isHtml = true;
         }
-        return $this->on_load();
+        return $this->onLoad();
     }
 
 
@@ -175,8 +175,8 @@ class XMLGenericDocument
     public function saveTo($fname)
     {
         $status = false;
-        if ($this->on_save()) {
-            if ($this->is_html) {
+        if ($this->onSave()) {
+            if ($this->isHtml) {
                 $this->doc->saveHTMLFile($fname);
             } else {
                 $this->doc->save($fname);
@@ -291,7 +291,7 @@ class XMLGenericDocument
      * @param string $value
      * @return DOMAttr
      */
-    public function create_attribute_ns($namespace, $name, $value = null)
+    public function createAttributeNs($namespace, $name, $value = null)
     {
         $result = $this->doc->createAttributeNS($namespace, $name);
         if (!is_null($value)) {
@@ -307,7 +307,7 @@ class XMLGenericDocument
      * @param string $value
      * @return DOMAttr
      */
-    public function create_attribute($name, $value = null)
+    public function createAttribute($name, $value = null)
     {
         $result = $this->doc->createAttribute($name);
         if (!is_null($value)) {
@@ -325,7 +325,7 @@ class XMLGenericDocument
      * @param string $value
      * @return DOMNode
      */
-    public function append_new_element_ns(DOMNode &$parentnode, $namespace, $name, $value = null)
+    public function appendNewElementNs(DOMNode &$parentnode, $namespace, $name, $value = null)
     {
         $newnode = null;
         if (is_null($value)) {
@@ -344,7 +344,7 @@ class XMLGenericDocument
      * @param string $name
      * @param string $value
      */
-    public function append_new_element_ns_cdata(DOMNode &$parentnode, $namespace, $name, $value = null)
+    public function appendNewElementNsCdata(DOMNode &$parentnode, $namespace, $name, $value = null)
     {
         $newnode = $this->doc->createElementNS($namespace, $name);
         if (!is_null($value)) {
@@ -362,7 +362,7 @@ class XMLGenericDocument
      * @param string $value
      * @return DOMNode
      */
-    public function append_new_element(DOMNode &$parentnode, $name, $value = null)
+    public function appendNewElement(DOMNode &$parentnode, $name, $value = null)
     {
         $newnode = null;
         if (is_null($value)) {
@@ -381,9 +381,9 @@ class XMLGenericDocument
      * @param string $value
      * @return DOMNode
      */
-    public function append_new_attribute(DOMNode &$node, $name, $value = null)
+    public function appendNewAttribute(DOMNode &$node, $name, $value = null)
     {
-        return $node->appendChild($this->create_attribute($name, $value));
+        return $node->appendChild($this->createAttribute($name, $value));
     }
 
     /**
@@ -395,9 +395,9 @@ class XMLGenericDocument
      * @param string $value
      * @return DOMNode
      */
-    public function append_new_attribute_ns(DOMNode &$node, $namespace, $name, $value = null)
+    public function appendNewAttributeNs(DOMNode &$node, $namespace, $name, $value = null)
     {
-        return $node->appendChild($this->create_attribute_ns($namespace, $name, $value));
+        return $node->appendChild($this->createAttributeNs($namespace, $name, $value));
     }
 
     public function fileName()
@@ -410,17 +410,17 @@ class XMLGenericDocument
         return $this->filepath;
     }
 
-    protected function on_load()
+    protected function onLoad()
     {
         return $this->isloaded;
     }
 
-    protected function on_save()
+    protected function onSave()
     {
         return true;
     }
 
-    protected function on_create()
+    protected function onCreate()
     {
         return true;
     }

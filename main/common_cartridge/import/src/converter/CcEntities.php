@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-class CcEntities 
+class CcEntities
 {
     /**
      * Prepares convert for inclusion into XML
@@ -17,13 +17,13 @@ class CcEntities
         return $result;
     }
 
-    protected function prepare_content($content) {
+    protected function prepareContent($content) {
         $result = $content;
         if (empty($result)) {
             return '';
         }
         $encoding = null;
-        $xml_error = new libxml_errors_mgr();
+        $xml_error = new LibxmlErrorsMgr();
         $dom = new DOMDocument();
         $dom->validateOnParse = false;
         $dom->strictErrorChecking = false;
@@ -48,22 +48,22 @@ class CcEntities
         return $result;
     }
 
-    public function load_xml_resource($path_to_file) {
+    public function loadXmlResource($path_to_file) {
 
         $resource = new DOMDocument();
 
-        Cc1p3Convert::log_action('Load the XML resource file: '.$path_to_file);
+        Cc1p3Convert::logAction('Load the XML resource file: '.$path_to_file);
 
         if (!$resource->load($path_to_file)) {
-            Cc1p3Convert::log_action('Cannot load the XML resource file: ' . $path_to_file, false);
+            Cc1p3Convert::logAction('Cannot load the XML resource file: ' . $path_to_file, false);
         }
 
         return $resource;
     }
 
-    public function update_sources($html, $root_path = '') {
+    public function updateSources($html, $root_path = '') {
 
-        $document = $this->load_html($html);
+        $document = $this->loadHtml($html);
 
         $tags = array('img' => 'src' , 'a' => 'href');
 
@@ -78,7 +78,7 @@ class CcEntities
 
                 if (empty($protocol)) {
                     $attribute_value = str_replace("\$IMS-CC-FILEBASE\$", "", $attribute_value);
-                    $attribute_value = $this->full_path($root_path . "/" . $attribute_value, "/");
+                    $attribute_value = $this->fullPath($root_path . "/" . $attribute_value, "/");
                     $attribute_value = "\$@FILEPHP@\$" . "/" . $attribute_value;
                 }
 
@@ -86,12 +86,12 @@ class CcEntities
             }
         }
 
-        $html = $this->html_insidebody($document);
+        $html = $this->htmlInsidebody($document);
 
         return $html;
     }
 
-    public function full_path($path, $dir_sep = DIRECTORY_SEPARATOR) {
+    public function fullPath($path, $dir_sep = DIRECTORY_SEPARATOR) {
 
         $token = '$IMS-CC-FILEBASE$';
         $path = str_replace($token, '', $path);
@@ -133,9 +133,9 @@ class CcEntities
         return $result;
     }
 
-    public function include_titles ($html) {
+    public function includeTitles ($html) {
 
-        $document = $this->load_html($html);
+        $document = $this->loadHtml($html);
 
         $images = $document->getElementsByTagName('img');
 
@@ -155,14 +155,14 @@ class CcEntities
             $image->setAttribute('title', $title);
         }
 
-        $html = $this->html_insidebody($document);
+        $html = $this->htmlInsidebody($document);
 
         return $html;
     }
 
-    public function get_external_xml ($identifier) {
+    public function getExternalXml ($identifier) {
 
-        $xpath = Cc1p3Convert::newx_path(Cc1p3Convert::$manifest, Cc1p3Convert::$namespaces);
+        $xpath = Cc1p3Convert::newxPath(Cc1p3Convert::$manifest, Cc1p3Convert::$namespaces);
 
         $files = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@identifier="'.
             $identifier.'"]/imscc:file/@href');
@@ -180,7 +180,7 @@ class CcEntities
      * @param string $html
      * @return DOMDocument
      */
-    private function load_html($html) {
+    private function loadHtml($html) {
         // Need to make sure that the html passed has charset meta tag.
         $metatag = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
         if (strpos($html, $metatag) === false) {
@@ -197,7 +197,7 @@ class CcEntities
      * @param DOMDocument $domdocument
      * @return string
      */
-    private function html_insidebody($domdocument) {
+    private function htmlInsidebody($domdocument) {
         $html = '';
         $bodyitems = $domdocument->getElementsByTagName('body');
         if ($bodyitems->length > 0) {
@@ -208,7 +208,7 @@ class CcEntities
         return $html;
     }
 
-    public function generate_random_string ($length = 6) {
+    public function generateRandomString ($length = 6) {
 
         $response = '';
         $source = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -227,7 +227,7 @@ class CcEntities
         return $response;
     }
 
-    public function truncate_text($text, $max, $remove_html) {
+    public function truncateText($text, $max, $remove_html) {
 
         if ($max > 10) {
             $text = substr($text, 0, ($max - 6)) . ' [...]';

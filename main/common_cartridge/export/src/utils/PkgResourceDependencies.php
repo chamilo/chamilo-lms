@@ -35,7 +35,7 @@ class PkgResourceDependencies
     /**
      * @return array
      */
-    public function get_deps()
+    public function getDeps()
     {
         return $this->values;
     }

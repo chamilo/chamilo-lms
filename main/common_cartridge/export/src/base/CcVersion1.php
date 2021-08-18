@@ -54,7 +54,7 @@ class CcVersion1 extends CcVersionBase
         $this->_generator       = 'Common Cartridge generator';
     }
 
-    protected function on_create(DOMDocument &$doc, $rootmanifestnode = null, $nmanifestID = null)
+    protected function onCreate(DOMDocument &$doc, $rootmanifestnode = null, $nmanifestID = null)
     {
         $doc->formatOutput       = true;
         $doc->preserveWhiteSpace = true;
@@ -116,7 +116,7 @@ class CcVersion1 extends CcVersionBase
         return true;
     }
 
-    protected function update_attribute(DOMDocument &$doc, $attrname, $attrvalue, DOMElement &$node)
+    protected function updateAttribute(DOMDocument &$doc, $attrname, $attrvalue, DOMElement &$node)
     {
         $busenew = (is_object($node) && $node->hasAttribute($attrname));
         $nResult = null;
@@ -132,7 +132,7 @@ class CcVersion1 extends CcVersionBase
         return $nResult;
     }
 
-    protected function update_attribute_ns(DOMDocument &$doc, $attrname, $attrnamespace,$attrvalue, DOMElement &$node)
+    protected function updateAttributeNs(DOMDocument &$doc, $attrname, $attrnamespace,$attrvalue, DOMElement &$node)
     {
         $busenew = (is_object($node) && $node->hasAttributeNS($attrnamespace, $attrname));
         $nResult = null;
@@ -149,21 +149,21 @@ class CcVersion1 extends CcVersionBase
         return $nResult;
     }
 
-    protected function get_child_node(DOMDocument &$doc, $itemname, DOMElement &$node)
+    protected function getChildNode(DOMDocument &$doc, $itemname, DOMElement &$node)
     {
         $nlist = $node->getElementsByTagName($itemname);
         $item = is_object($nlist) && ($nlist->length > 0) ? $nlist->item(0) : null;
         return $item;
     }
 
-    protected function update_child_item(DOMDocument &$doc, $itemname, $itemvalue, DOMElement &$node, $attrtostore=null)
+    protected function updateChildItem(DOMDocument &$doc, $itemname, $itemvalue, DOMElement &$node, $attrtostore=null)
     {
-        $tnode = $this->get_child_node($doc, 'title', $node);
+        $tnode = $this->getChildNode($doc, 'title', $node);
         $usenew = is_null($tnode);
         $tnode = $usenew ? $doc->createElementNS($this->ccnamespaces['imscc'], $itemname) : $tnode;
         if (!is_null($attrtostore)) {
             foreach ($attrtostore as $key => $value) {
-                $this->update_attribute($doc, $key, $value, $tnode);
+                $this->updateAttribute($doc, $key, $value, $tnode);
             }
         }
         $tnode->nodeValue = $itemvalue;
@@ -172,21 +172,21 @@ class CcVersion1 extends CcVersionBase
         }
     }
 
-    protected function update_items($items, DOMDocument &$doc, DOMElement &$xmlnode)
+    protected function updateItems($items, DOMDocument &$doc, DOMElement &$xmlnode)
     {
         foreach ($items as $key => $item) {
             $itemnode = $doc->createElementNS($this->ccnamespaces['imscc'], 'item');
-            $this->update_attribute($doc, 'identifier'   , $key                , $itemnode);
-            $this->update_attribute($doc, 'identifierref', $item->identifierref, $itemnode);
-            $this->update_attribute($doc, 'parameters'   , $item->parameters   , $itemnode);
+            $this->updateAttribute($doc, 'identifier'   , $key                , $itemnode);
+            $this->updateAttribute($doc, 'identifierref', $item->identifierref, $itemnode);
+            $this->updateAttribute($doc, 'parameters'   , $item->parameters   , $itemnode);
             if (!empty($item->title)) {
                 $titlenode = $doc->createElementNS($this->ccnamespaces['imscc'],
                                                    'title',
                                                    $item->title);
                 $itemnode->appendChild($titlenode);
             }
-            if ($item->has_child_items()) {
-                $this->update_items($item->childitems, $doc, $itemnode);
+            if ($item->hasChildItems()) {
+                $this->updateItems($item->childitems, $doc, $itemnode);
             }
             $xmlnode->appendChild($itemnode);
         }
@@ -200,14 +200,14 @@ class CcVersion1 extends CcVersionBase
      * @param object $xmlnode
      * @return DOMNode
      */
-    protected function create_resource(CcIResource &$res, DOMDocument &$doc, $xmlnode=null)
+    protected function createResource(CcIResource &$res, DOMDocument &$doc, $xmlnode=null)
     {
         $usenew = is_object($xmlnode);
         $dnode  = $usenew ? $xmlnode : $doc->createElementNS($this->ccnamespaces['imscc'], "resource");
-        $this->update_attribute($doc, 'identifier', $res->identifier, $dnode);
-        $this->update_attribute($doc, 'type', $res->type, $dnode);
-        !is_null($res->href) ? $this->update_attribute($doc, 'href', $res->href, $dnode) : null;
-        $this->update_attribute($doc, 'base', $res->base, $dnode);
+        $this->updateAttribute($doc, 'identifier', $res->identifier, $dnode);
+        $this->updateAttribute($doc, 'type', $res->type, $dnode);
+        !is_null($res->href) ? $this->updateAttribute($doc, 'href', $res->href, $dnode) : null;
+        $this->updateAttribute($doc, 'base', $res->base, $dnode);
 
         foreach ($res->files as $file) {
             $nd = $doc->createElementNS($this->ccnamespaces['imscc'], 'file');
@@ -237,14 +237,14 @@ class CcVersion1 extends CcVersionBase
      * @param DOMDocument $doc
      * @param DOMElement $xmlnode
      */
-    protected function create_item_folder(CcIOrganization &$org, DOMDocument &$doc, DOMElement &$xmlnode = null)
+    protected function createItemFolder(CcIOrganization &$org, DOMDocument &$doc, DOMElement &$xmlnode = null)
     {
 
         $itemfoldernode = $doc->createElementNS($this->ccnamespaces['imscc'], 'item');
-        $this->update_attribute($doc, 'identifier', "root", $itemfoldernode);
+        $this->updateAttribute($doc, 'identifier', "root", $itemfoldernode);
 
-        if ($org->has_items()) {
-            $this->update_items($org->itemlist, $doc, $itemfoldernode);
+        if ($org->hasItems()) {
+            $this->updateItems($org->itemlist, $doc, $itemfoldernode);
         }
         if (is_null($this->organizations)) {
             $this->organizations = array();
@@ -262,15 +262,15 @@ class CcVersion1 extends CcVersionBase
      * @param object $xmlnode
      * @return DOMNode
      */
-    protected function create_organization(CcIOrganization &$org, DOMDocument &$doc, $xmlnode = null)
+    protected function createOrganization(CcIOrganization &$org, DOMDocument &$doc, $xmlnode = null)
     {
 
         $usenew = is_object($xmlnode);
         $dnode  = $usenew ? $xmlnode : $doc->createElementNS($this->ccnamespaces['imscc'], "organization");
-        $this->update_attribute($doc, 'identifier', $org->identifier, $dnode);
-        $this->update_attribute($doc, 'structure', $org->structure, $dnode);
+        $this->updateAttribute($doc, 'identifier', $org->identifier, $dnode);
+        $this->updateAttribute($doc, 'structure', $org->structure, $dnode);
 
-        $this->create_item_folder($org, $doc, $dnode);
+        $this->createItemFolder($org, $doc, $dnode);
 
         return $dnode;
     }
@@ -283,17 +283,17 @@ class CcVersion1 extends CcVersionBase
      * @param object $xmlnode
      * @return DOMNode
      */
-    protected function create_metadata_manifest(CcIMetadataManifest $met, DOMDocument &$doc, $xmlnode = null)
+    protected function createMetadataManifest(CcIMetadataManifest $met, DOMDocument &$doc, $xmlnode = null)
     {
 
         $dnode = $doc->createElementNS($this->ccnamespaces['lomimscc'], "lom");
         if (!empty($xmlnode)) {
             $xmlnode->appendChild($dnode);
         }
-        $dnodegeneral   = empty($met->arraygeneral) ? null : $this->create_metadata_general($met, $doc, $xmlnode);
-        $dnodetechnical = empty($met->arraytech) ? null : $this->create_metadata_technical($met, $doc, $xmlnode);
-        $dnoderights    = empty($met->arrayrights) ? null : $this->create_metadata_rights($met, $doc, $xmlnode);
-        $dnodelifecycle = empty($met->arraylifecycle) ? null : $this->create_metadata_lifecycle($met, $doc, $xmlnode);
+        $dnodegeneral   = empty($met->arraygeneral) ? null : $this->createMetadataGeneral($met, $doc, $xmlnode);
+        $dnodetechnical = empty($met->arraytech) ? null : $this->createMetadataTechnical($met, $doc, $xmlnode);
+        $dnoderights    = empty($met->arrayrights) ? null : $this->createMetadataRights($met, $doc, $xmlnode);
+        $dnodelifecycle = empty($met->arraylifecycle) ? null : $this->createMetadataLifecycle($met, $doc, $xmlnode);
 
         !is_null($dnodegeneral) ? $dnode->appendChild($dnodegeneral) : null;
         !is_null($dnodetechnical) ? $dnode->appendChild($dnodetechnical) : null;
@@ -312,13 +312,13 @@ class CcVersion1 extends CcVersionBase
      * @param object $xmlnode
      * @return DOMNode
      */
-    protected function create_metadata_resource(CcIMetadataResource $met, DOMDocument &$doc, $xmlnode = null)
+    protected function createMetadataResource(CcIMetadataResource $met, DOMDocument &$doc, $xmlnode = null)
     {
 
         $dnode = $doc->createElementNS($this->ccnamespaces['lom'], "lom");
 
         !empty($xmlnode) ? $xmlnode->appendChild($dnode) : null;
-        !empty($met->arrayeducational) ? $this->create_metadata_educational($met, $doc, $dnode) : null;
+        !empty($met->arrayeducational) ? $this->createMetadataEducational($met, $doc, $dnode) : null;
 
         return $dnode;
     }
@@ -331,13 +331,13 @@ class CcVersion1 extends CcVersionBase
      * @param Object $xmlnode
      * @return DOMNode
      */
-    protected function create_metadata_file(CcIMetadataFile $met, DOMDocument &$doc, $xmlnode = null)
+    protected function createMetadataFile(CcIMetadataFile $met, DOMDocument &$doc, $xmlnode = null)
     {
 
         $dnode = $doc->createElementNS($this->ccnamespaces['lom'], "lom");
 
         !empty($xmlnode) ? $xmlnode->appendChild($dnode) : null;
-        !empty($met->arrayeducational) ? $this->create_metadata_educational($met, $doc, $dnode) : null;
+        !empty($met->arrayeducational) ? $this->createMetadataEducational($met, $doc, $dnode) : null;
 
         return $dnode;
     }
@@ -350,7 +350,7 @@ class CcVersion1 extends CcVersionBase
      * @param object $xmlnode
      * @return DOMNode
      */
-    protected function create_metadata_general($met, DOMDocument &$doc, $xmlnode)
+    protected function createMetadataGeneral($met, DOMDocument &$doc, $xmlnode)
     {
         $nd = $doc->createElementNS($this->ccnamespaces['lomimscc'], 'general');
 
@@ -396,7 +396,7 @@ class CcVersion1 extends CcVersionBase
      * @param object $xmlnode
      * @return DOMNode
      */
-    protected function create_metadata_technical($met, DOMDocument &$doc, $xmlnode)
+    protected function createMetadataTechnical($met, DOMDocument &$doc, $xmlnode)
     {
         $nd = $doc->createElementNS($this->ccnamespaces['lomimscc'], 'technical');
         $xmlnode->appendChild($nd);
@@ -420,7 +420,7 @@ class CcVersion1 extends CcVersionBase
      * @param object $xmlnode
      * @return DOMNode
      */
-    protected function create_metadata_rights($met, DOMDocument &$doc, $xmlnode)
+    protected function createMetadataRights($met, DOMDocument &$doc, $xmlnode)
     {
 
         $nd = $doc->createElementNS($this->ccnamespaces['lomimscc'], 'rights');
@@ -455,7 +455,7 @@ class CcVersion1 extends CcVersionBase
      * @param object $xmlnode
      * @return DOMNode
      */
-    protected function create_metadata_lifecycle($met, DOMDocument &$doc, $xmlnode)
+    protected function createMetadataLifecycle($met, DOMDocument &$doc, $xmlnode)
     {
 
         $nd  = $doc->createElementNS($this->ccnamespaces['lomimscc'], 'lifeCycle');
@@ -496,7 +496,7 @@ class CcVersion1 extends CcVersionBase
      * @param object $xmlnode
      * @return DOMNode
      */
-    public function create_metadata_educational($met, DOMDocument  &$doc, $xmlnode)
+    public function createMetadataEducational($met, DOMDocument  &$doc, $xmlnode)
     {
         $nd  = $doc->createElementNS($this->ccnamespaces['lom'], 'educational');
         $nd2 = $doc->createElementNS($this->ccnamespaces['lom'], 'intendedEndUserRole');

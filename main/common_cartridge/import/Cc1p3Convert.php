@@ -3,7 +3,7 @@
 
 class Cc1p3Convert extends CcBase
 {
- 
+
     const CC_TYPE_FORUM              = 'imsdt_xmlv1p3';
     const CC_TYPE_QUIZ               = 'imsqti_xmlv1p3/imscc_xmlv1p3/assessment';
     const CC_TYPE_QUESTION_BANK      = 'imsqti_xmlv1p3/imscc_xmlv1p3/question-bank';
@@ -32,39 +32,39 @@ class Cc1p3Convert extends CcBase
         parent::__construct($path_to_manifest);
     }
 
-    public function generate_import_data() {
-                
-        $xpath = static::newx_path(static::$manifest, static::$namespaces);
-        $items = $xpath->query('/imscc:manifest/imscc:organizations/imscc:organization/imscc:item | /imscc:manifest/imscc:resources/imscc:resource[@type="' . static::CC_TYPE_QUESTION_BANK . '"]');                
-        $this->create_instances($items);
+    public function generateImportData() {
+
+        $xpath = static::newxPath(static::$manifest, static::$namespaces);
+        $items = $xpath->query('/imscc:manifest/imscc:organizations/imscc:organization/imscc:item | /imscc:manifest/imscc:resources/imscc:resource[@type="' . static::CC_TYPE_QUESTION_BANK . '"]');
+        $this->createInstances($items);
 
         $resources = new Cc13Resource();
         $forums = new Cc13Forum();
         $quiz = new Cc13Quiz();
 
-        $documentValues = $resources->generate_data('document');
-        $linkValues = $resources->generate_data('link');
-        $forumValues =  $forums->generate_data();
-        $quizValues = $quiz->generate_data();
+        $documentValues = $resources->generateData('document');
+        $linkValues = $resources->generateData('link');
+        $forumValues =  $forums->generateData();
+        $quizValues = $quiz->generateData();
 
-        
+
         if (!empty($forums)) {
-            $saved = $forums->store_forums($forumValues);
+            $saved = $forums->storeForums($forumValues);
         }
-        
+
         if (!empty($quizValues)) {
-            $saved = $quiz->store_quizzes($quizValues);
+            $saved = $quiz->storeQuizzes($quizValues);
         }
-        
+
         if (!empty($documentValues)) {
-            $saved = $resources->store_documents($documentValues, static::$path_to_manifest_folder);
+            $saved = $resources->storeDocuments($documentValues, static::$pathToManifestFolder);
         }
-        
+
         if (!empty($linkValues)) {
-            $saved = $resources->store_links($linkValues);
+            $saved = $resources->storeLinks($linkValues);
         }
-        
+
     }
-    
+
 
 }

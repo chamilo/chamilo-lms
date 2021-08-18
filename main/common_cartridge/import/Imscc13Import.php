@@ -12,10 +12,10 @@ class Imscc13Import
     }
 
 
-    public static function detect_format($filepath)
+    public static function detectFormat($filepath)
     {
 
-        $manifest = Cc1p3Convert::get_manifest($filepath);
+        $manifest = Cc1p3Convert::getManifest($filepath);
 
         if (file_exists($manifest)) {
             // Looks promising, lets load some information.
@@ -41,16 +41,16 @@ class Imscc13Import
     public function execute($filepath)
     {
 
-        $manifest = Cc1p3Convert::get_manifest($filepath);
+        $manifest = Cc1p3Convert::getManifest($filepath);
 
         if (empty($manifest)) {
             throw new RuntimeException('No Manifest detected!');
         }
 
-        $validator = new manifest_validator('schemas13');
+        $validator = new ManifestValidator('schemas13');
 
         if (!$validator->validate($manifest)) {
-            throw new RuntimeException('validation error(s): '.PHP_EOL.error_messages::instance());
+            throw new RuntimeException('validation error(s): '.PHP_EOL.ErrorMessages::instance());
         }
 
         $cc113Convert = new Cc1p3Convert($manifest);
@@ -59,7 +59,7 @@ class Imscc13Import
             throw new RuntimeException('protected_cc_not_supported');
         }
 
-        $cc113Convert->generate_import_data();
+        $cc113Convert->generateImportData();
     }
 
     /**

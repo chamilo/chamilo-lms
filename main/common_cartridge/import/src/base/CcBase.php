@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-class CcBase 
+class CcBase
 {
-    
+
     const CC_TYPE_FORUM              = 'imsdt_xmlv1p3';
     const CC_TYPE_QUIZ               = 'imsqti_xmlv1p3/imscc_xmlv1p3/assessment';
     const CC_TYPE_QUESTION_BANK      = 'imsqti_xmlv1p3/imscc_xmlv1p3/question-bank';
@@ -40,7 +40,7 @@ class CcBase
         return static::$resourcens;
     }
 
-    public static function get_manifest($folder) {
+    public static function getManifest($folder) {
         if (!is_dir($folder)) {
             return false;
         }
@@ -67,33 +67,33 @@ class CcBase
 
     public static $instances = array();
     public static $manifest;
-    public static $path_to_manifest_folder;
+    public static $pathToManifestFolder;
 
     public static $namespaces = array('imscc'    => 'http://www.imsglobal.org/xsd/imscc/imscp_v1p1',
                                       'lomimscc' => 'http://ltsc.ieee.org/xsd/imscc/LOM',
                                       'lom'      => 'http://ltsc.ieee.org/xsd/LOM',
                                       'voc'      => 'http://ltsc.ieee.org/xsd/LOM/vocab',
                                       'xsi'      => 'http://www.w3.org/2001/XMLSchema-instance',
-                                      'cc'       => 'http://www.imsglobal.org/xsd/imsccauth_v1p0');    
- 
+                                      'cc'       => 'http://www.imsglobal.org/xsd/imsccauth_v1p0');
+
     function __construct ($path_to_manifest) {
 
         static::$manifest = new DOMDocument();
         static::$manifest->validateOnParse = false;
 
-        static::$path_to_manifest_folder = dirname($path_to_manifest);
+        static::$pathToManifestFolder = dirname($path_to_manifest);
 
-        static::log_action('Proccess start');
-        static::log_action('Load the manifest file: ' . $path_to_manifest);
+        static::logAction('Proccess start');
+        static::logAction('Load the manifest file: ' . $path_to_manifest);
 
         if (!static::$manifest->load($path_to_manifest, LIBXML_NONET)) {
-            static::log_action('Cannot load the manifest file: ' . $path_to_manifest, true);
+            static::logAction('Cannot load the manifest file: ' . $path_to_manifest, true);
         }
     }
 
     public function is_auth () {
 
-        $xpath = static::newx_path(static::$manifest, static::$namespaces);
+        $xpath = static::newxPath(static::$manifest, static::$namespaces);
 
         $count_auth = $xpath->evaluate('count(/imscc:manifest/cc:authorizations)');
 
@@ -108,15 +108,15 @@ class CcBase
 
     protected function get_metadata ($section, $key) {
 
-        $xpath = static::newx_path(static::$manifest, static::$namespaces);
+        $xpath = static::newxPath(static::$manifest, static::$namespaces);
 
         $metadata = $xpath->query('/imscc:manifest/imscc:metadata/lomimscc:lom/lomimscc:' . $section . '/lomimscc:' . $key . '/lomimscc:string');
         $value = !empty($metadata->item(0)->nodeValue) ? $metadata->item(0)->nodeValue : '';
 
         return $value;
     }
-    
-    
+
+
 
     /**
     *
@@ -128,7 +128,7 @@ class CcBase
         //Should item be hidden or not
         $mod_visible = 1;
         if (!empty($identifier)) {
-            $xpath = static::newx_path(static::$manifest, static::$namespaces);
+            $xpath = static::newxPath(static::$manifest, static::$namespaces);
             $query  = '/imscc:manifest/imscc:resources/imscc:resource[@identifier="' . $identifier . '"]';
             $query .= '//lom:intendedEndUserRole/voc:vocabulary/lom:value';
             $intendeduserrole = $xpath->query($query);
@@ -159,18 +159,18 @@ class CcBase
     }
 
 
-    protected function create_instances ($items, $level = 0, &$array_index = 0, $index_root = 0) {
+    protected function createInstances ($items, $level = 0, &$array_index = 0, $index_root = 0) {
 
         $level++;
         $i = 1;
 
         if ($items) {
 
-            $xpath = self::newx_path(static::$manifest, static::$namespaces);
+            $xpath = self::newxPath(static::$manifest, static::$namespaces);
 
             foreach ($items as $item) {
 
-                $array_index++;                                
+                $array_index++;
                 if ($item->nodeName == "item")  {
                     $identifierref = '';
                     if ($item->hasAttribute('identifierref')) {
@@ -182,9 +182,9 @@ class CcBase
                     if ($titles->length > 0) {
                         $title = $titles->item(0)->nodeValue;
                     }
-                    
-                    $cc_type = $this->get_item_cc_type($identifierref);                    
-                    $tool_type = $this->convert_to_tool_type($cc_type);
+
+                    $cc_type = $this->get_item_cc_type($identifierref);
+                    $tool_type = $this->convertToToolType($cc_type);
                     //Fix the label issue - MDL-33523
                     if (empty($identifierref) && empty($title)) {
                       $tool_type = TYPE_UNKNOWN;
@@ -196,7 +196,7 @@ class CcBase
                     $identifierref = !empty($identifierref->item(0)->nodeValue) ? $identifierref->item(0)->nodeValue : '';
 
                     $cc_type = $this->get_item_cc_type($identifierref);
-                    $tool_type = $this->convert_to_tool_type($cc_type);
+                    $tool_type = $this->convertToToolType($cc_type);
 
                     $title = 'Quiz Bank ' . ($this->count_instances($tool_type) + 1);
 
@@ -224,7 +224,7 @@ class CcBase
                 $more_items = $xpath->query('imscc:item', $item);
 
                 if ($more_items->length > 0) {
-                    $this->create_instances($more_items, $level, $array_index, $index_root);
+                    $this->createInstances($more_items, $level, $array_index, $index_root);
                 }
 
                 $i++;
@@ -256,7 +256,7 @@ class CcBase
 
     public function get_item_cc_type ($identifier) {
 
-        $xpath = static::newx_path(static::$manifest, static::$namespaces);
+        $xpath = static::newxPath(static::$manifest, static::$namespaces);
 
         $nodes = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@identifier="' . $identifier . '"]/@type');
 
@@ -267,14 +267,14 @@ class CcBase
         }
     }
 
-    public static function newx_path (DOMDocument $manifest, $namespaces = '') {
+    public static function newxPath (DOMDocument $manifest, $namespaces = '') {
 
         $xpath = new DOMXPath($manifest);
 
         if (!empty($namespaces)) {
             foreach ($namespaces as $prefix => $ns) {
                 if (!$xpath->registerNamespace($prefix, $ns)) {
-                    static::log_action('Cannot register the namespace: ' . $prefix . ':' . $ns, true);
+                    static::logAction('Cannot register the namespace: ' . $prefix . ':' . $ns, true);
                 }
             }
         }
@@ -283,24 +283,24 @@ class CcBase
     }
 
 
-    public static function log_file() {
-        return static::$path_to_manifest_folder . DIRECTORY_SEPARATOR . 'cc_import.log';
+    public static function logFile() {
+        return static::$pathToManifestFolder . DIRECTORY_SEPARATOR . 'cc_import.log';
     }
 
-    public static function log_action ($text, $critical_error = false) {
+    public static function logAction ($text, $criticalError = false) {
 
         $full_message = strtoupper(date("j/n/Y g:i:s a")) . " - " . $text . "\r";
 
-        file_put_contents(static::log_file(), $full_message, FILE_APPEND);
+        file_put_contents(static::logFile(), $full_message, FILE_APPEND);
 
-        if ($critical_error) {
-            static::critical_error($text);
+        if ($criticalError) {
+            static::criticalError($text);
         }
     }
 
-    protected static function critical_error ($text) {
+    protected static function criticalError ($text) {
 
-        $path_to_log = static::log_file();
+        $path_to_log = static::logFile();
 
         echo '
 
@@ -323,14 +323,14 @@ class CcBase
         die();
     }
 
-    protected function create_course_code ($title) {
+    protected function createCourseCode ($title) {
         //Making sure that text of the short name does not go over the DB limit.
         //and leaving the space to add additional characters by the platform
         $code = substr(strtoupper(str_replace(' ', '', trim($title))),0,94);
         return $code;
     }
-    
-        public function convert_to_tool_type ($cc_type) {
+
+    public function convertToToolType ($cc_type) {
         $type = TYPE_UNKNOWN;
 
         if ($cc_type == static::CC_TYPE_FORUM) {
@@ -351,5 +351,5 @@ class CcBase
 
         return $type;
     }
-    
+
 }

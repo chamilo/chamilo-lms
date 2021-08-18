@@ -14,7 +14,7 @@ class CcConverterFolder extends CcConverters
     {
         $contextid = $objDocument['source_id'];
         $folder = api_get_path(SYS_COURSE_PATH).api_get_course_path($objDocument['course_code']).'/'.$objDocument['path'];
-        $files = CcHelpers::handle_static_content($this->manifest,
+        $files = CcHelpers::handleStaticContent($this->manifest,
                                           $this->rootpath,
                                           $contextid,
                                           $outdir,
@@ -28,10 +28,10 @@ class CcConverterFolder extends CcConverters
                 break;
             }
         }
-        $resitem = new cc_item();
+        $resitem = new CcItem();
         $resitem->identifierref = $resvalue;
         $resitem->title = $objDocument['title'];
-        $this->item->add_child_item($resitem);
+        $this->item->addChildItem($resitem);
         return true;
     }
 

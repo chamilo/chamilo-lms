@@ -6,7 +6,7 @@ class CcConverterForum extends CcConverters
 
     public function __construct(CcIItem &$item, CcIManifest &$manifest, $rootpath, $path)
     {
-        $this->cc_type     = CcVersion13::discussiontopic;
+        $this->ccType     = CcVersion13::discussiontopic;
         $this->defaultfile = 'forum.xml';
         $this->defaultname = 'discussion.xml';
         parent::__construct($item, $manifest, $rootpath, $path);
@@ -16,18 +16,18 @@ class CcConverterForum extends CcConverters
     {
         $rt = new CcForum();
         $title = $item['title'];
-        $rt->set_title($title);
+        $rt->setTitle($title);
         $text = $item['comment'];
         $deps = null;
         if (!empty($text)) {
             $contextid = $item['source_id'];
-            $result = CcHelpers::process_linked_files($text,
+            $result = CcHelpers::processLinkedFiles($text,
                                                        $this->manifest,
                                                        $this->rootpath,
                                                        $contextid,
                                                        $outdir);
             $textformat = 'text/html';
-            $rt->set_text($result[0], $textformat);
+            $rt->setText($result[0], $textformat);
             $deps = $result[1];
         }
         $this->store($rt, $outdir, $title, $deps);

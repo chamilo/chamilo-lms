@@ -10,7 +10,7 @@ class CcMetadataResourceEducational
 
     public $value   = array();
 
-    public function set_value ($value){
+    public function setValue ($value){
         $arr = array($value);
         $this->value[] = $arr;
     }
@@ -25,7 +25,7 @@ class CcMetadataResource implements CcIMetadataResource
 
     public $arrayeducational  = array();
 
-    public function add_metadata_resource_educational($obj)
+    public function addMetadataResourceEducational($obj)
     {
         if (empty($obj)){
             throw new Exception('Medatada Object given is invalid or null!');

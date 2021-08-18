@@ -1,12 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-abstract class cc_xml_namespace 
+abstract class cc_xml_namespace
 {
     const xml = 'http://www.w3.org/XML/1998/namespace';
 }
 
-abstract class cc_qti_metadata 
+abstract class cc_qti_metadata
 {
     // Assessment.
     const qmd_assessmenttype       = 'qmd_assessmenttype';
@@ -26,7 +26,7 @@ abstract class cc_qti_metadata
     const cc_question_category = 'cc_question_category';
 }
 
-abstract class cc_qti_profiletype 
+abstract class cc_qti_profiletype
 {
     const multiple_choice   = 'cc.multiple_choice.v0p1';
     const multiple_response = 'cc.multiple_response.v0p1';
@@ -54,7 +54,7 @@ abstract class cc_qti_profiletype
 
 }
 
-abstract class cc_qti_values 
+abstract class cc_qti_values
 {
     const exam_profile = 'cc.exam.v0p1';
     const Yes          = 'Yes';
@@ -83,7 +83,7 @@ abstract class cc_qti_values
     const htmltype     = 'text/html';
 }
 
-abstract class cc_qti_tags 
+abstract class cc_qti_tags
 {
     const questestinterop = 'questestinterop';
     const assessment = 'assessment';
@@ -169,7 +169,7 @@ abstract class cc_qti_tags
     const hintmaterial = 'hintmaterial';
 }
 
-class cc_question_metadata_base 
+class cc_question_metadata_base
 {
 
     protected $metadata = array();
@@ -221,12 +221,12 @@ class cc_question_metadata_base
         foreach ($this->metadata as $attribute => $value) {
             if (!is_null($value)) {
                 if (!is_array($value)) {
-                    $doc->append_new_attribute_ns($item, $namespace, $attribute, $value);
+                    $doc->appendNewAttributeNs($item, $namespace, $attribute, $value);
                 } else {
                     $ns = key($value);
                     $nval = current($value);
                     if (!is_null($nval)) {
-                        $doc->append_new_attribute_ns($item, $ns, $attribute, $nval);
+                        $doc->appendNewAttributeNs($item, $ns, $attribute, $nval);
                     }
                 }
             }
@@ -239,18 +239,18 @@ class cc_question_metadata_base
      * @param string $namespace
      */
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $qtimetadata = $doc->append_new_element_ns($item, $namespace, cc_qti_tags::qtimetadata);
+        $qtimetadata = $doc->appendNewElementNs($item, $namespace, cc_qti_tags::qtimetadata);
         foreach ($this->metadata as $label => $entry) {
             if (!is_null($entry)) {
-                $qtimetadatafield = $doc->append_new_element_ns($qtimetadata, $namespace, cc_qti_tags::qtimetadatafield);
-                $doc->append_new_element_ns($qtimetadatafield, $namespace, cc_qti_tags::fieldlabel, $label);
-                $doc->append_new_element_ns($qtimetadatafield, $namespace, cc_qti_tags::fieldentry, $entry);
+                $qtimetadatafield = $doc->appendNewElementNs($qtimetadata, $namespace, cc_qti_tags::qtimetadatafield);
+                $doc->appendNewElementNs($qtimetadatafield, $namespace, cc_qti_tags::fieldlabel, $label);
+                $doc->appendNewElementNs($qtimetadatafield, $namespace, cc_qti_tags::fieldentry, $entry);
             }
         }
     }
 }
 
-class cc_question_metadata extends cc_question_metadata_base 
+class cc_question_metadata extends cc_question_metadata_base
 {
 
     public function set_category($value) {
@@ -288,26 +288,26 @@ class cc_question_metadata extends cc_question_metadata_base
 }
 
 
-class cc_assesment_metadata extends cc_question_metadata_base 
+class CcAssesmentMetadata extends cc_question_metadata_base
 {
 
-    public function enable_hints($value = true) {
+    public function enableHints($value = true) {
         $this->enable_setting_yesno(cc_qti_metadata::qmd_hintspermitted, $value);
     }
 
-    public function enable_solutions($value = true) {
+    public function enableSolutions($value = true) {
         $this->enable_setting_yesno(cc_qti_metadata::qmd_solutionspermitted, $value);
     }
 
-    public function enable_latesubmissions($value = true) {
+    public function enableLatesubmissions($value = true) {
         $this->enable_setting_yesno(cc_qti_metadata::cc_allow_late_submission, $value);
     }
 
-    public function enable_feedback($value = true) {
+    public function enableFeedback($value = true) {
         $this->enable_setting_yesno(cc_qti_metadata::qmd_feedbackpermitted, $value);
     }
 
-    public function set_timelimit($value) {
+    public function setTimelimit($value) {
         $ivalue = (int)$value;
         if (($ivalue < 0) || ($ivalue > 527401)) {
             throw new OutOfRangeException('Time limit value out of permitted range!');
@@ -316,7 +316,7 @@ class cc_assesment_metadata extends cc_question_metadata_base
         $this->set_setting(cc_qti_metadata::qmd_timelimit, $value);
     }
 
-    public function set_maxattempts($value) {
+    public function setMaxattempts($value) {
         $valid_values = array(cc_qti_values::Examination, cc_qti_values::unlimited, 1, 2, 3, 4, 5);
         if (!in_array($value, $valid_values)) {
             throw new OutOfRangeException('Max attempts has invalid value');
@@ -341,7 +341,7 @@ class cc_assesment_metadata extends cc_question_metadata_base
 
 }
 
-class cc_assesment_mattext extends cc_question_metadata_base 
+class cc_assesment_mattext extends cc_question_metadata_base
 {
     protected $value = null;
 
@@ -381,19 +381,19 @@ class cc_assesment_mattext extends cc_question_metadata_base
         $this->set_setting_wns(cc_qti_tags::xml_lang , cc_xml_namespace::xml, $lang);
     }
 
-    public function set_content($content, $type = cc_qti_values::texttype, $charset = null) {
+    public function setContent($content, $type = cc_qti_values::texttype, $charset = null) {
         $this->value = $content;
         $this->set_setting(cc_qti_tags::texttype, $type);
         $this->set_setting(cc_qti_tags::charset, $charset);
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $mattext = $doc->append_new_element_ns_cdata($item, $namespace, cc_qti_tags::mattext, $this->value);
+        $mattext = $doc->appendNewElementNsCdata($item, $namespace, cc_qti_tags::mattext, $this->value);
         $this->generate_attributes($doc, $mattext, $namespace);
     }
 }
 
-class cc_assesment_matref 
+class cc_assesment_matref
 {
     protected $linkref = null;
 
@@ -402,27 +402,27 @@ class cc_assesment_matref
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $doc->append_new_element_ns($item, $namespace, cc_qti_tags::matref, $this->linkref);
-        $doc->append_new_attribute_ns($node, $namespace, cc_qti_tags::linkrefid, $this->linkref);
+        $doc->appendNewElementNs($item, $namespace, cc_qti_tags::matref, $this->linkref);
+        $doc->appendNewAttributeNs($node, $namespace, cc_qti_tags::linkrefid, $this->linkref);
     }
 }
 
-class cc_assesment_response_matref extends cc_assesment_matref 
+class cc_assesment_response_matref extends cc_assesment_matref
 {
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, cc_qti_tags::material_ref);
-        $doc->append_new_attribute_ns($node, $namespace, cc_qti_tags::linkrefid, $this->linkref);
+        $node = $doc->appendNewElementNs($item, $namespace, cc_qti_tags::material_ref);
+        $doc->appendNewAttributeNs($node, $namespace, cc_qti_tags::linkrefid, $this->linkref);
     }
 }
 
-class cc_assesment_matbreak 
+class cc_assesment_matbreak
 {
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $doc->append_new_element_ns($item, $namespace, cc_qti_tags::matbreak);
+        $doc->appendNewElementNs($item, $namespace, cc_qti_tags::matbreak);
     }
 }
 
-abstract class cc_assesment_material_base extends cc_question_metadata_base 
+abstract class cc_assesment_material_base extends cc_question_metadata_base
 {
     /**
     * @var mixed
@@ -451,7 +451,7 @@ abstract class cc_assesment_material_base extends cc_question_metadata_base
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $material = $doc->append_new_element_ns($item, $namespace, $this->tagname);
+        $material = $doc->appendNewElementNs($item, $namespace, $this->tagname);
         $this->generate_attributes($doc, $material, $namespace);
         if (!empty($this->mattag)) {
             $this->mattag->generate($doc, $material, $namespace);
@@ -460,7 +460,7 @@ abstract class cc_assesment_material_base extends cc_question_metadata_base
     }
 }
 
-class cc_assesment_altmaterial extends cc_assesment_material_base 
+class cc_assesment_altmaterial extends cc_assesment_material_base
 {
     public function __construct($value = null) {
         $this->set_setting_wns(cc_qti_tags::xml_lang , cc_xml_namespace::xml);
@@ -468,7 +468,7 @@ class cc_assesment_altmaterial extends cc_assesment_material_base
     }
 }
 
-class cc_assesment_material extends cc_assesment_material_base 
+class cc_assesment_material extends cc_assesment_material_base
 {
 
     protected $altmaterial = null;
@@ -495,7 +495,7 @@ class cc_assesment_material extends cc_assesment_material_base
     }
 }
 
-class cc_assesment_rubric_base extends cc_question_metadata_base 
+class cc_assesment_rubric_base extends cc_question_metadata_base
 {
 
     protected $material = null;
@@ -505,14 +505,14 @@ class cc_assesment_rubric_base extends cc_question_metadata_base
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $rubric = $doc->append_new_element_ns($item, $namespace, cc_qti_tags::rubric);
+        $rubric = $doc->appendNewElementNs($item, $namespace, cc_qti_tags::rubric);
         if (!empty($this->material)) {
             $this->material->generate($doc, $rubric, $namespace);
         }
     }
 }
 
-class cc_assesment_presentation_material_base extends cc_question_metadata_base 
+class cc_assesment_presentation_material_base extends cc_question_metadata_base
 {
     protected $flowmats = array();
 
@@ -521,7 +521,7 @@ class cc_assesment_presentation_material_base extends cc_question_metadata_base
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, cc_qti_tags::presentation_material);
+        $node = $doc->appendNewElementNs($item, $namespace, cc_qti_tags::presentation_material);
         if (!empty($this->flowmats)) {
             foreach ($this->flowmats as $flow_mat) {
                 $flow_mat->generate($doc, $node, $namespace);
@@ -530,7 +530,7 @@ class cc_assesment_presentation_material_base extends cc_question_metadata_base
     }
 }
 
-class cc_assesment_flow_mat_base extends cc_question_metadata_base 
+class cc_assesment_flow_mat_base extends cc_question_metadata_base
 {
 
     protected $mattag = null;
@@ -560,7 +560,7 @@ class cc_assesment_flow_mat_base extends cc_question_metadata_base
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, cc_qti_tags::flow_mat);
+        $node = $doc->appendNewElementNs($item, $namespace, cc_qti_tags::flow_mat);
         $this->generate_attributes($doc, $node, $namespace);
         if (!empty($this->mattag)) {
             $this->mattag->generate($doc, $node, $namespace);
@@ -569,7 +569,7 @@ class cc_assesment_flow_mat_base extends cc_question_metadata_base
 
 }
 
-class cc_assesment_section extends cc_question_metadata_base 
+class CcAssesmentSection extends cc_question_metadata_base
 {
     /**
      * @var array
@@ -586,7 +586,7 @@ class cc_assesment_section extends cc_question_metadata_base
         $this->set_setting(cc_qti_tags::ident, $value);
     }
 
-    public function set_title($value) {
+    public function setTitle($value) {
         $this->set_setting(cc_qti_tags::title, $value);
     }
 
@@ -594,12 +594,12 @@ class cc_assesment_section extends cc_question_metadata_base
         $this->set_setting_wns(cc_qti_tags::xml_lang, cc_xml_namespace::xml, $value);
     }
 
-    public function add_item(cc_assesment_section_item $object) {
+    public function addItem(cc_assesment_section_item $object) {
         $this->items[] = $object;
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, cc_qti_tags::section);
+        $node = $doc->appendNewElementNs($item, $namespace, cc_qti_tags::section);
         $this->generate_attributes($doc, $node, $namespace);
         if (!empty($this->items)) {
             foreach ($this->items as $item) {
@@ -609,14 +609,14 @@ class cc_assesment_section extends cc_question_metadata_base
     }
 }
 
-class cc_assesment_itemmetadata extends cc_question_metadata_base 
+class cc_assesment_itemmetadata extends cc_question_metadata_base
 {
     public function add_metadata($object) {
         $this->metadata[] = $object;
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, cc_qti_tags::itemmetadata);
+        $node = $doc->appendNewElementNs($item, $namespace, cc_qti_tags::itemmetadata);
         if (!empty($this->metadata)) {
             foreach ($this->metadata as $metaitem) {
                 $metaitem->generate($doc, $node, $namespace);
@@ -625,7 +625,7 @@ class cc_assesment_itemmetadata extends cc_question_metadata_base
     }
 }
 
-class cc_assesment_decvartype extends cc_question_metadata_base 
+class cc_assesment_decvartype extends cc_question_metadata_base
 {
 
     public function __construct() {
@@ -645,20 +645,20 @@ class cc_assesment_decvartype extends cc_question_metadata_base
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, cc_qti_tags::decvar);
+        $node = $doc->appendNewElementNs($item, $namespace, cc_qti_tags::decvar);
         $this->generate_attributes($doc, $node, $namespace);
     }
 }
 
 
-class cc_assignment_conditionvar_othertype extends cc_question_metadata_base 
+class cc_assignment_conditionvar_othertype extends cc_question_metadata_base
 {
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $doc->append_new_element_ns($item, $namespace, cc_qti_tags::other);
+        $doc->appendNewElementNs($item, $namespace, cc_qti_tags::other);
     }
 }
 
-class cc_assignment_conditionvar_varequaltype extends cc_question_metadata_base 
+class cc_assignment_conditionvar_varequaltype extends cc_question_metadata_base
 {
     protected $tagname = null;
     protected $answerid = null;
@@ -682,12 +682,12 @@ class cc_assignment_conditionvar_varequaltype extends cc_question_metadata_base
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, $this->tagname, $this->answerid);
+        $node = $doc->appendNewElementNs($item, $namespace, $this->tagname, $this->answerid);
         $this->generate_attributes($doc, $node, $namespace);
     }
 }
 
-class cc_assignment_conditionvar_varsubstringtype extends cc_assignment_conditionvar_varequaltype 
+class cc_assignment_conditionvar_varsubstringtype extends cc_assignment_conditionvar_varequaltype
 {
     public function __construct($value) {
         parent::__construct($value);
@@ -696,7 +696,7 @@ class cc_assignment_conditionvar_varsubstringtype extends cc_assignment_conditio
 }
 
 
-class cc_assignment_conditionvar_andtype extends cc_question_metadata_base 
+class cc_assignment_conditionvar_andtype extends cc_question_metadata_base
 {
     protected $nots = array();
     protected $varequals = array();
@@ -710,10 +710,10 @@ class cc_assignment_conditionvar_andtype extends cc_question_metadata_base
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, cc_qti_tags::and_);
+        $node = $doc->appendNewElementNs($item, $namespace, cc_qti_tags::and_);
         if (!empty($this->nots)) {
             foreach ($this->nots as $notv) {
-                $not = $doc->append_new_element_ns($node, $namespace, cc_qti_tags::not_);
+                $not = $doc->appendNewElementNs($node, $namespace, cc_qti_tags::not_);
                 $notv->generate($doc, $not, $namespace);
             }
         }
@@ -726,7 +726,7 @@ class cc_assignment_conditionvar_andtype extends cc_question_metadata_base
     }
 }
 
-class cc_assignment_conditionvar extends cc_question_metadata_base 
+class cc_assignment_conditionvar extends cc_question_metadata_base
 {
 
     protected $and = null;
@@ -751,7 +751,7 @@ class cc_assignment_conditionvar extends cc_question_metadata_base
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, cc_qti_tags::conditionvar);
+        $node = $doc->appendNewElementNs($item, $namespace, cc_qti_tags::conditionvar);
 
         if (!empty($this->and)) {
             $this->and->generate($doc, $node, $namespace);
@@ -773,7 +773,7 @@ class cc_assignment_conditionvar extends cc_question_metadata_base
     }
 }
 
-class cc_assignment_displayfeedbacktype extends cc_question_metadata_base 
+class cc_assignment_displayfeedbacktype extends cc_question_metadata_base
 {
     public function __construct() {
         $this->set_setting(cc_qti_tags::feedbacktype);
@@ -789,13 +789,13 @@ class cc_assignment_displayfeedbacktype extends cc_question_metadata_base
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, cc_qti_tags::displayfeedback);
+        $node = $doc->appendNewElementNs($item, $namespace, cc_qti_tags::displayfeedback);
         $this->generate_attributes($doc, $node, $namespace);
     }
 }
 
 
-class cc_assignment_setvartype extends cc_question_metadata_base 
+class cc_assignment_setvartype extends cc_question_metadata_base
 {
 
     protected $tagvalue = null;
@@ -811,12 +811,12 @@ class cc_assignment_setvartype extends cc_question_metadata_base
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, cc_qti_tags::setvar, $this->tagvalue);
+        $node = $doc->appendNewElementNs($item, $namespace, cc_qti_tags::setvar, $this->tagvalue);
         $this->generate_attributes($doc, $node, $namespace);
     }
 }
 
-class cc_assesment_respconditiontype extends cc_question_metadata_base 
+class cc_assesment_respconditiontype extends cc_question_metadata_base
 {
 
     protected $conditionvar = null;
@@ -828,7 +828,7 @@ class cc_assesment_respconditiontype extends cc_question_metadata_base
         $this->set_setting(cc_qti_tags::continue_, cc_qti_values::No);
     }
 
-    public function set_title($value) {
+    public function setTitle($value) {
         $this->set_setting(cc_qti_tags::title, $value);
     }
 
@@ -849,7 +849,7 @@ class cc_assesment_respconditiontype extends cc_question_metadata_base
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, cc_qti_tags::respcondition);
+        $node = $doc->appendNewElementNs($item, $namespace, cc_qti_tags::respcondition);
         $this->generate_attributes($doc, $node, $namespace);
 
         if (!empty($this->conditionvar)) {
@@ -871,7 +871,7 @@ class cc_assesment_respconditiontype extends cc_question_metadata_base
 }
 
 
-class cc_assesment_resprocessingtype extends cc_question_metadata_base 
+class cc_assesment_resprocessingtype extends cc_question_metadata_base
 {
 
     protected $decvar = null;
@@ -886,8 +886,8 @@ class cc_assesment_resprocessingtype extends cc_question_metadata_base
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, cc_qti_tags::resprocessing);
-        $outcomes = $doc->append_new_element_ns($node, $namespace, cc_qti_tags::outcomes);
+        $node = $doc->appendNewElementNs($item, $namespace, cc_qti_tags::resprocessing);
+        $outcomes = $doc->appendNewElementNs($node, $namespace, cc_qti_tags::outcomes);
         if (!empty($this->decvar)) {
             $this->decvar->generate($doc, $outcomes, $namespace);
         }
@@ -900,7 +900,7 @@ class cc_assesment_resprocessingtype extends cc_question_metadata_base
 }
 
 
-class cc_assesment_itemfeedback_shintmaterial_base extends cc_question_metadata_base 
+class cc_assesment_itemfeedback_shintmaterial_base extends cc_question_metadata_base
 {
 
     protected $tagname = null;
@@ -922,7 +922,7 @@ class cc_assesment_itemfeedback_shintmaterial_base extends cc_question_metadata_
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, $this->tagname);
+        $node = $doc->appendNewElementNs($item, $namespace, $this->tagname);
 
         if (!empty($this->flow_mats)) {
             foreach ($this->flow_mats as $flow_mat) {
@@ -938,21 +938,21 @@ class cc_assesment_itemfeedback_shintmaterial_base extends cc_question_metadata_
     }
 }
 
-class cc_assesment_itemfeedback_hintmaterial extends cc_assesment_itemfeedback_shintmaterial_base 
+class cc_assesment_itemfeedback_hintmaterial extends cc_assesment_itemfeedback_shintmaterial_base
 {
     public function __construct() {
         $this->tagname = cc_qti_tags::hint;
     }
 }
 
-class cc_assesment_itemfeedback_solutionmaterial extends cc_assesment_itemfeedback_shintmaterial_base 
+class cc_assesment_itemfeedback_solutionmaterial extends cc_assesment_itemfeedback_shintmaterial_base
 {
     public function __construct() {
         $this->tagname = cc_qti_tags::solutionmaterial;
     }
 }
 
-class cc_assesment_itemfeedback_shintype_base extends cc_question_metadata_base 
+class cc_assesment_itemfeedback_shintype_base extends cc_question_metadata_base
 {
 
     protected $tagname = null;
@@ -963,7 +963,7 @@ class cc_assesment_itemfeedback_shintype_base extends cc_question_metadata_base
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, $this->tagname);
+        $node = $doc->appendNewElementNs($item, $namespace, $this->tagname);
         $this->generate_attributes($doc, $node, $namespace);
 
         if (!empty($this->items)) {
@@ -974,7 +974,7 @@ class cc_assesment_itemfeedback_shintype_base extends cc_question_metadata_base
     }
 }
 
-class cc_assesment_itemfeedback_solutiontype extends cc_assesment_itemfeedback_shintype_base 
+class cc_assesment_itemfeedback_solutiontype extends cc_assesment_itemfeedback_shintype_base
 {
     public function __construct() {
         parent::__construct();
@@ -989,7 +989,7 @@ class cc_assesment_itemfeedback_solutiontype extends cc_assesment_itemfeedback_s
     }
 }
 
-class cc_assesment_itemfeedbac_hinttype extends cc_assesment_itemfeedback_shintype_base 
+class cc_assesment_itemfeedbac_hinttype extends cc_assesment_itemfeedback_shintype_base
 {
     public function __construct() {
         parent::__construct();
@@ -1004,7 +1004,7 @@ class cc_assesment_itemfeedbac_hinttype extends cc_assesment_itemfeedback_shinty
     }
 }
 
-class cc_assesment_itemfeedbacktype extends cc_question_metadata_base 
+class cc_assesment_itemfeedbacktype extends cc_question_metadata_base
 {
 
     protected $flow_mat = null;
@@ -1027,7 +1027,7 @@ class cc_assesment_itemfeedbacktype extends cc_question_metadata_base
     /**
      * @param string $value
      */
-    public function set_title($value) {
+    public function setTitle($value) {
         $this->set_setting(cc_qti_tags::title, $value);
     }
 
@@ -1057,7 +1057,7 @@ class cc_assesment_itemfeedbacktype extends cc_question_metadata_base
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, cc_qti_tags::itemfeedback);
+        $node = $doc->appendNewElementNs($item, $namespace, cc_qti_tags::itemfeedback);
         $this->generate_attributes($doc, $node, $namespace);
 
         if (!empty($this->flow_mat) && empty($this->material)) {
@@ -1078,7 +1078,7 @@ class cc_assesment_itemfeedbacktype extends cc_question_metadata_base
     }
 }
 
-class cc_assesment_section_item extends cc_assesment_section 
+class cc_assesment_section_item extends CcAssesmentSection
 {
 
     protected $itemmetadata = null;
@@ -1103,7 +1103,7 @@ class cc_assesment_section_item extends cc_assesment_section
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, cc_qti_tags::item);
+        $node = $doc->appendNewElementNs($item, $namespace, cc_qti_tags::item);
         $this->generate_attributes($doc, $node, $namespace);
 
         if (!empty($this->itemmetadata)) {
@@ -1128,7 +1128,7 @@ class cc_assesment_section_item extends cc_assesment_section
     }
 }
 
-class cc_assesment_render_choicetype extends cc_question_metadata_base 
+class cc_assesment_render_choicetype extends cc_question_metadata_base
 {
 
     protected $materials = array();
@@ -1168,7 +1168,7 @@ class cc_assesment_render_choicetype extends cc_question_metadata_base
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, cc_qti_tags::render_choice);
+        $node = $doc->appendNewElementNs($item, $namespace, cc_qti_tags::render_choice);
         $this->generate_attributes($doc, $node, $namespace);
 
         if (!empty($this->materials)) {
@@ -1198,7 +1198,7 @@ class cc_assesment_render_choicetype extends cc_question_metadata_base
 
 }
 
-class cc_assesment_flow_mattype extends cc_question_metadata_base 
+class cc_assesment_flow_mattype extends cc_question_metadata_base
 {
 
     protected $material = null;
@@ -1226,7 +1226,7 @@ class cc_assesment_flow_mattype extends cc_question_metadata_base
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, cc_qti_tags::flow_mat);
+        $node = $doc->appendNewElementNs($item, $namespace, cc_qti_tags::flow_mat);
         $this->generate_attributes($doc, $node, $namespace);
 
         if (!empty($this->flow_mat)) {
@@ -1243,7 +1243,7 @@ class cc_assesment_flow_mattype extends cc_question_metadata_base
     }
 }
 
-class cc_assesment_response_labeltype extends cc_question_metadata_base 
+class cc_assesment_response_labeltype extends cc_question_metadata_base
 {
 
     protected $material = null;
@@ -1295,7 +1295,7 @@ class cc_assesment_response_labeltype extends cc_question_metadata_base
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, cc_qti_tags::response_label);
+        $node = $doc->appendNewElementNs($item, $namespace, cc_qti_tags::response_label);
         $this->generate_attributes($doc, $node, $namespace);
 
         if (!empty($this->material)) {
@@ -1312,7 +1312,7 @@ class cc_assesment_response_labeltype extends cc_question_metadata_base
     }
 }
 
-class cc_assesment_flow_labeltype extends cc_question_metadata_base 
+class cc_assesment_flow_labeltype extends cc_question_metadata_base
 {
 
     protected $flow_label = null;
@@ -1335,7 +1335,7 @@ class cc_assesment_flow_labeltype extends cc_question_metadata_base
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, cc_qti_tags::flow_label);
+        $node = $doc->appendNewElementNs($item, $namespace, cc_qti_tags::flow_label);
         $this->generate_attributes($doc, $node, $namespace);
 
         if (!empty($this->material)) {
@@ -1358,7 +1358,7 @@ class cc_assesment_flow_labeltype extends cc_question_metadata_base
 }
 
 
-class cc_assesment_render_fibtype extends cc_question_metadata_base 
+class cc_assesment_render_fibtype extends cc_question_metadata_base
 {
 
     protected $material = null;
@@ -1427,7 +1427,7 @@ class cc_assesment_render_fibtype extends cc_question_metadata_base
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, cc_qti_tags::render_fib);
+        $node = $doc->appendNewElementNs($item, $namespace, cc_qti_tags::render_fib);
         $this->generate_attributes($doc, $node, $namespace);
 
         if (!empty($this->material) && empty($this->material_ref)) {
@@ -1448,7 +1448,7 @@ class cc_assesment_render_fibtype extends cc_question_metadata_base
     }
 }
 
-class cc_response_lidtype extends cc_question_metadata_base 
+class cc_response_lidtype extends cc_question_metadata_base
 {
 
     protected $tagname = null;
@@ -1497,7 +1497,7 @@ class cc_response_lidtype extends cc_question_metadata_base
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, $this->tagname);
+        $node = $doc->appendNewElementNs($item, $namespace, $this->tagname);
         $this->generate_attributes($doc, $node, $namespace);
 
         if (!empty($this->material) && empty($this->material_ref)) {
@@ -1518,7 +1518,7 @@ class cc_response_lidtype extends cc_question_metadata_base
     }
 }
 
-class cc_assesment_response_strtype extends cc_response_lidtype 
+class cc_assesment_response_strtype extends cc_response_lidtype
 {
     public function __construct() {
         $rtt = parent::__construct();
@@ -1526,7 +1526,7 @@ class cc_assesment_response_strtype extends cc_response_lidtype
     }
 }
 
-class cc_assesment_flowtype extends cc_question_metadata_base 
+class cc_assesment_flowtype extends cc_question_metadata_base
 {
 
     protected $flow = null;
@@ -1564,7 +1564,7 @@ class cc_assesment_flowtype extends cc_question_metadata_base
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, cc_qti_tags::flow);
+        $node = $doc->appendNewElementNs($item, $namespace, cc_qti_tags::flow);
         $this->generate_attributes($doc, $node, $namespace);
 
         if (!empty($this->flow)) {
@@ -1585,7 +1585,7 @@ class cc_assesment_flowtype extends cc_question_metadata_base
     }
 }
 
-class cc_assesment_presentation extends cc_question_metadata_base 
+class cc_assesment_presentation extends cc_question_metadata_base
 {
 
     protected $flow         = null;
@@ -1637,7 +1637,7 @@ class cc_assesment_presentation extends cc_question_metadata_base
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace) {
-        $node = $doc->append_new_element_ns($item, $namespace, cc_qti_tags::presentation);
+        $node = $doc->appendNewElementNs($item, $namespace, cc_qti_tags::presentation);
         $this->generate_attributes($doc, $node, $namespace);
 
         if (!empty($this->flow)) {
@@ -1658,7 +1658,7 @@ class cc_assesment_presentation extends cc_question_metadata_base
     }
 }
 
-class assesment1_resource_file extends CcGeneralFile 
+class assesment1_resource_file extends CcGeneralFile
 {
     const deafultname = 'assesment.xml';
 
@@ -1673,7 +1673,7 @@ class assesment1_resource_file extends CcGeneralFile
     protected $presentation_material = null;
     protected $section = null;
 
-    public function set_metadata(cc_assesment_metadata $object) {
+    public function setMetadata(CcAssesmentMetadata $object) {
         $this->metadata = $object;
     }
 
@@ -1685,20 +1685,20 @@ class assesment1_resource_file extends CcGeneralFile
         $this->presentation_material = $object;
     }
 
-    public function set_section(cc_assesment_section $object) {
+    public function setSection(CcAssesmentSection $object) {
         $this->section = $object;
     }
 
-    public function set_title($value) {
+    public function setTitle($value) {
         $this->assessment_title = self::safexml($value);
     }
 
-    protected function on_save() {
+    protected function onSave() {
         $rns = $this->ccnamespaces[$this->rootns];
         //root assesment element - required
-        $assessment = $this->append_new_element_ns($this->root, $rns, cc_qti_tags::assessment);
-        $this->append_new_attribute_ns($assessment, $rns, cc_qti_tags::ident, CcHelpers::uuidgen('QDB_'));
-        $this->append_new_attribute_ns($assessment, $rns, cc_qti_tags::title, $this->assessment_title);
+        $assessment = $this->appendNewElementNs($this->root, $rns, cc_qti_tags::assessment);
+        $this->appendNewAttributeNs($assessment, $rns, cc_qti_tags::ident, CcHelpers::uuidgen('QDB_'));
+        $this->appendNewAttributeNs($assessment, $rns, cc_qti_tags::title, $this->assessment_title);
 
         //metadata - optional
         if (!empty($this->metadata)) {
@@ -1725,12 +1725,12 @@ class assesment1_resource_file extends CcGeneralFile
 }
 
 
-class assesment13_resource_file extends assesment1_resource_file 
+class Assesment13ResourceFile extends assesment1_resource_file
 {
     protected $ccnsnames = array('xmlns' => 'http://www.imsglobal.org/profile/cc/ccv1p3/ccv1p3_qtiasiv1p2p1_v1p0.xsd');
 }
 
-abstract class cc_assesment_helper 
+abstract class CcAssesmentHelper
 {
 
     public static $correct_fb = null;
@@ -1751,7 +1751,7 @@ abstract class cc_assesment_helper
         $qflowmat->set_material($qmaterialfb);
         $qmattext = new cc_assesment_mattext();
         $qmaterialfb->set_mattext($qmattext);
-        $qmattext->set_content($content, $content_type);
+        $qmattext->setContent($content, $content_type);
         return true;
     }
 
@@ -1762,7 +1762,7 @@ abstract class cc_assesment_helper
         $qresponse_label->set_material($qrespmaterial);
         $qrespmattext = new cc_assesment_mattext();
         $qrespmaterial->set_mattext($qrespmattext);
-        $qrespmattext->set_content($content, $content_type);
+        $qrespmattext->setContent($content, $content_type);
         return $qresponse_label;
     }
 
@@ -1782,7 +1782,7 @@ abstract class cc_assesment_helper
         $qdisplayfeedback->set_linkrefid($feedback_refid);
     }
 
-    public static function add_assesment_description($rt, $content, $contenttype) {
+    public static function addAssesmentDescription($rt, $content, $contenttype) {
         if (empty($rt) || empty($content)) {
             return;
         }
@@ -1792,13 +1792,13 @@ abstract class cc_assesment_helper
         $rubric_mattext = new cc_assesment_mattext();
         $rubric_material->set_label('Summary');
         $rubric_material->set_mattext($rubric_mattext);
-        $rubric_mattext->set_content($content, $contenttype);
+        $rubric_mattext->setContent($content, $contenttype);
         $rt->set_rubric($activity_rubric);
     }
 
     public static function add_respcondition($node, $title, $feedback_refid, $grade_value = null, $continue = false ) {
         $qrespcondition = new cc_assesment_respconditiontype();
-        $qrespcondition->set_title($title);
+        $qrespcondition->setTitle($title);
         $node->add_respcondition($qrespcondition);
         $qrespcondition->enable_continue($continue);
         //Add setvar if grade present
@@ -1827,16 +1827,16 @@ abstract class cc_assesment_helper
      * @param unknown_type $contextid
      * @param unknown_type $outdir
      */
-    public static function process_questions(&$objQuizz, &$manifest, cc_assesment_section &$section, $rootpath, $contextid, $outdir) {
-        
+    public static function processQuestions(&$objQuizz, &$manifest, CcAssesmentSection &$section, $rootpath, $contextid, $outdir) {
+
         PkgResourceDependencies::instance()->reset();
         $questioncount = 0;
         foreach ($objQuizz['questions'] as $question) {
-            $qtype = $question->quiz_type;   
+            $qtype = $question->quiz_type;
             /* Question type :
              * 1 : Unique Answer (Multiple choice, single response)
              * 2 : Multiple Answers (Multiple choice, multiple response)
-             * 
+             *
              */
             $question_processor = null;
             switch ($qtype) {
@@ -1853,11 +1853,11 @@ abstract class cc_assesment_helper
             }
         }
         //return dependencies
-        return ($questioncount == 0)?false: PkgResourceDependencies::instance()->get_deps();
+        return ($questioncount == 0)?false: PkgResourceDependencies::instance()->getDeps();
     }
 }
 
-class cc_assesment_question_proc_base 
+class cc_assesment_question_proc_base
 {
 
     protected $quiz = null;
@@ -1892,7 +1892,7 @@ class cc_assesment_question_proc_base
      * @param string $contextid
      * @param string $outdir
      */
-    public function __construct(&$quiz, &$questions, CcManifest &$manifest, cc_assesment_section &$section, &$question_node, $rootpath, $contextid, $outdir) {
+    public function __construct(&$quiz, &$questions, CcManifest &$manifest, CcAssesmentSection &$section, &$question_node, $rootpath, $contextid, $outdir) {
         $this->quiz = $quiz;
         $this->questions = $questions;
         $this->manifest = $manifest;
@@ -1902,25 +1902,25 @@ class cc_assesment_question_proc_base
         $this->contextid = $contextid;
         $this->outdir = $outdir;
         $qitem = new cc_assesment_section_item();
-        $this->section->add_item($qitem);        
-        $qitem->set_title($question_node->question);        
+        $this->section->addItem($qitem);
+        $qitem->setTitle($question_node->question);
         $this->qitem = $qitem;
     }
 
     public function on_generate_metadata() {
-        
+
         if (empty($this->qmetadata)) {
             $this->qmetadata = new cc_question_metadata($this->qtype);
             //Get weighting value
             $weighting_value = $this->question_node->ponderation;
-            
+
             if ($weighting_value > 1) {
                 $this->qmetadata->set_weighting($weighting_value);
             }
-            
+
             //Get category
             $question_category = $this->question_node->question_category;
-            
+
             if (!empty($question_category)) {
                 $this->qmetadata->set_category($question_category);
             }
@@ -1928,7 +1928,7 @@ class cc_assesment_question_proc_base
             $rts->add_metadata($this->qmetadata);
             $this->qitem->set_itemmetadata($rts);
         }
-        
+
     }
 
     public function on_generate_presentation() {
@@ -1938,15 +1938,15 @@ class cc_assesment_question_proc_base
             //add question text
             $qmaterial = new cc_assesment_material();
             $qmattext = new cc_assesment_mattext();
-            
-            $question_text = $this->question_node->question;            
-            $result = CcHelpers::process_linked_files( $question_text,
+
+            $question_text = $this->question_node->question;
+            $result = CcHelpers::processLinkedFiles( $question_text,
                                                         $this->manifest,
                                                         $this->rootpath,
                                                         $this->contextid,
                                                         $this->outdir);
-            
-            $qmattext->set_content($result[0], cc_qti_values::htmltype);
+
+            $qmattext->setContent($result[0], cc_qti_values::htmltype);
             $qmaterial->set_mattext($qmattext);
             $qpresentation->set_material($qmaterial);
             $this->qpresentation = $qpresentation;
@@ -1956,26 +1956,26 @@ class cc_assesment_question_proc_base
 
     public function on_generate_answers() {}
     public function on_generate_feedbacks() {
-        
+
         $general_question_feedback = '';
-        
+
         if (empty($general_question_feedback)) {
             return;
         }
-        
+
         $name = 'general_fb';
         //Add question general feedback - the one that should be always displayed
-        $result = CcHelpers::process_linked_files( $general_question_feedback,
+        $result = CcHelpers::processLinkedFiles( $general_question_feedback,
                                                     $this->manifest,
                                                     $this->rootpath,
                                                     $this->contextid,
                                                     $this->outdir);
 
-        cc_assesment_helper::add_feedback($this->qitem,
+        CcAssesmentHelper::add_feedback($this->qitem,
                                           $result[0],
                                           cc_qti_values::htmltype,
                                           $name);
-        
+
         PkgResourceDependencies::instance()->add($result[1]);
         $this->general_feedback = $name;
     }
@@ -2009,7 +2009,7 @@ class cc_assesment_question_proc_base
 
 }
 
-class cc_assesment_question_multichoice extends cc_assesment_question_proc_base 
+class cc_assesment_question_multichoice extends cc_assesment_question_proc_base
 {
     public function __construct($quiz, $questions, $manifest, $section, $question, $rootpath, $contextid, $outdir) {
         parent::__construct($quiz, $questions, $manifest, $section, $question, $rootpath, $contextid, $outdir);
@@ -2024,73 +2024,73 @@ class cc_assesment_question_multichoice extends cc_assesment_question_proc_base
                 $question_score = $answer['ponderation'];
                 break;
             }
-        }                
+        }
         if (empty($correct_answer_node)) {
             throw new RuntimeException('No correct answer!');
-        }              
+        }
         //$this->total_grade_value = ($question_score).'.0000000';
         $this->total_grade_value = $question_score;
     }
 
     public function on_generate_answers() {
-        
+
         //add responses holder
         $qresponse_lid = new cc_response_lidtype();
         $this->qresponse_lid = $qresponse_lid;
         $this->qpresentation->set_response_lid($qresponse_lid);
         $qresponse_choice = new cc_assesment_render_choicetype();
         $qresponse_lid->set_render_choice($qresponse_choice);
-        
+
         //Mark that question has only one correct answer -
         //which applies for multiple choice and yes/no questions
         $qresponse_lid->set_rcardinality(cc_qti_values::Single);
-        
-        //are we to shuffle the responses?        
+
+        //are we to shuffle the responses?
         $shuffle_answers = $this->quiz['random_answers'] > 0;
-        
+
         $qresponse_choice->enable_shuffle($shuffle_answers);
         $answerlist = array();
-        
+
         $qa_responses = $this->question_node->answers;
-        
+
         foreach ($qa_responses as $node) {
-            
-            $answer_content = $node['answer'];            
+
+            $answer_content = $node['answer'];
             $id = $node['id'];
-            
-            $result = CcHelpers::process_linked_files( $answer_content,
+
+            $result = CcHelpers::processLinkedFiles( $answer_content,
                                                         $this->manifest,
                                                         $this->rootpath,
                                                         $this->contextid,
                                                         $this->outdir);
-            
-            $qresponse_label = cc_assesment_helper::add_answer( $qresponse_choice,
+
+            $qresponse_label = CcAssesmentHelper::add_answer( $qresponse_choice,
                                                                 $result[0],
                                                                 cc_qti_values::htmltype);
-           
+
             PkgResourceDependencies::instance()->add($result[1]);
-            
+
             $answer_ident = $qresponse_label->get_ident();
             $feedback_ident = $answer_ident.'_fb';
             if (empty($this->correct_answer_ident) && $id) {
                 $this->correct_answer_ident = $answer_ident;
             }
-            
+
             //add answer specific feedbacks if not empty
             $content = $node['comment'];
-            
+
             if (!empty($content)) {
-                $result = CcHelpers::process_linked_files( $content,
+                $result = CcHelpers::processLinkedFiles( $content,
                                                             $this->manifest,
                                                             $this->rootpath,
                                                             $this->contextid,
                                                             $this->outdir);
 
-                cc_assesment_helper::add_feedback( $this->qitem,
+                CcAssesmentHelper::add_feedback( $this->qitem,
                                                    $result[0],
                                                    cc_qti_values::htmltype,
                                                    $feedback_ident);
-                
+
                 PkgResourceDependencies::instance()->add($result[1]);
                 $answerlist[$answer_ident] = $feedback_ident;
             }
@@ -2100,11 +2100,11 @@ class cc_assesment_question_multichoice extends cc_assesment_question_proc_base
 
     public function on_generate_feedbacks() {
         parent::on_generate_feedbacks();
-        
+
         //Question combined feedbacks
         $correct_question_fb = '';
         $incorrect_question_fb = '';
-        
+
         if (empty($correct_question_fb)) {
             //Hardcode some text for now
             $correct_question_fb = 'Well done!';
@@ -2113,18 +2113,18 @@ class cc_assesment_question_multichoice extends cc_assesment_question_proc_base
             //Hardcode some text for now
             $incorrect_question_fb = 'Better luck next time!';
         }
-        
+
         $proc = array('correct_fb' => $correct_question_fb, 'general_incorrect_fb' => $incorrect_question_fb);
         foreach ($proc as $ident => $content) {
             if (empty($content)) {
                 continue;
             }
-            $result = CcHelpers::process_linked_files( $content,
+            $result = CcHelpers::processLinkedFiles( $content,
                                                         $this->manifest,
                                                         $this->rootpath,
                                                         $this->contextid,
                                                         $this->outdir);
-            cc_assesment_helper::add_feedback( $this->qitem,
+            CcAssesmentHelper::add_feedback( $this->qitem,
                                                $result[0],
                                                cc_qti_values::htmltype,
                                                $ident);
@@ -2147,7 +2147,7 @@ class cc_assesment_question_multichoice extends cc_assesment_question_proc_base
          */
         if (!empty($this->general_feedback)) {
             $qrespcondition = new cc_assesment_respconditiontype();
-            $qrespcondition->set_title('General feedback');
+            $qrespcondition->setTitle('General feedback');
             $this->qresprocessing->add_respcondition($qrespcondition);
             $qrespcondition->enable_continue();
             //define the condition for success
@@ -2163,7 +2163,7 @@ class cc_assesment_question_multichoice extends cc_assesment_question_proc_base
 
         //success condition
         $qrespcondition = new cc_assesment_respconditiontype();
-        $qrespcondition->set_title('Correct');
+        $qrespcondition->setTitle('Correct');
         $this->qresprocessing->add_respcondition($qrespcondition);
         $qrespcondition->enable_continue(false);
         $qsetvar = new cc_assignment_setvartype(100);
@@ -2221,7 +2221,7 @@ class cc_assesment_question_multichoice extends cc_assesment_question_proc_base
     }
 }
 
-class cc_assesment_question_multichoice_multiresponse extends cc_assesment_question_proc_base 
+class cc_assesment_question_multichoice_multiresponse extends cc_assesment_question_proc_base
 {
 
     protected $correct_answers = null;
@@ -2237,7 +2237,7 @@ class cc_assesment_question_multichoice_multiresponse extends cc_assesment_quest
                 $correct_answer_nodes[] = $answer;
                 $question_score += $answer['ponderation'];
             }
-        }                
+        }
         if (count($correct_answer_nodes) == 0) {
             throw new RuntimeException('No correct answer!');
         }
@@ -2255,41 +2255,41 @@ class cc_assesment_question_multichoice_multiresponse extends cc_assesment_quest
         //Mark that question has more than one correct answer
         $qresponse_lid->set_rcardinality(cc_qti_values::Multiple);
         //are we to shuffle the responses?
-        
-        $shuffle_answers = $this->quiz['random_answers'] > 0;                
+
+        $shuffle_answers = $this->quiz['random_answers'] > 0;
         $qresponse_choice->enable_shuffle($shuffle_answers);
         $answerlist = array();
-        
-        $qa_responses = $this->question_node->answers;        
+
+        $qa_responses = $this->question_node->answers;
         foreach ($qa_responses as $node) {
-            
-            $answer_content = $node['answer'];            
+
+            $answer_content = $node['answer'];
             $answer_grade_fraction = $node['ponderation'];
-            
-            $result = CcHelpers::process_linked_files( $answer_content,
+
+            $result = CcHelpers::processLinkedFiles( $answer_content,
                                                         $this->manifest,
                                                         $this->rootpath,
                                                         $this->contextid,
                                                         $this->outdir);
-            
-            $qresponse_label = cc_assesment_helper::add_answer( $qresponse_choice,
+
+            $qresponse_label = CcAssesmentHelper::add_answer( $qresponse_choice,
                                                                 $result[0],
                                                                 cc_qti_values::htmltype);
-            
+
             PkgResourceDependencies::instance()->add($result[1]);
-            
+
             $answer_ident = $qresponse_label->get_ident();
-            $feedback_ident = $answer_ident.'_fb';            
-            //add answer specific feedbacks if not empty            
-            $content = $node['comment'];            
+            $feedback_ident = $answer_ident.'_fb';
+            //add answer specific feedbacks if not empty
+            $content = $node['comment'];
             if (!empty($content)) {
-                $result = CcHelpers::process_linked_files( $content,
+                $result = CcHelpers::processLinkedFiles( $content,
                                                             $this->manifest,
                                                             $this->rootpath,
                                                             $this->contextid,
                                                             $this->outdir);
 
-                cc_assesment_helper::add_feedback( $this->qitem,
+                CcAssesmentHelper::add_feedback( $this->qitem,
                                                     $result[0],
                                                     cc_qti_values::htmltype,
                                                     $feedback_ident);
@@ -2320,13 +2320,13 @@ class cc_assesment_question_multichoice_multiresponse extends cc_assesment_quest
             if (empty($content)) {
                 continue;
             }
-            $result = CcHelpers::process_linked_files( $content,
+            $result = CcHelpers::processLinkedFiles( $content,
                                                         $this->manifest,
                                                         $this->rootpath,
                                                         $this->contextid,
                                                         $this->outdir);
 
-            cc_assesment_helper::add_feedback( $this->qitem,
+            CcAssesmentHelper::add_feedback( $this->qitem,
                                                 $result[0],
                                                 cc_qti_values::htmltype,
                                                 $ident);
@@ -2349,15 +2349,15 @@ class cc_assesment_question_multichoice_multiresponse extends cc_assesment_quest
         * General unconditional feedback must be added as a first respcondition
         * without any condition and just displayfeedback (if exists)
         */
-        cc_assesment_helper::add_respcondition( $this->qresprocessing,
+        CcAssesmentHelper::add_respcondition( $this->qresprocessing,
                                                 'General feedback',
                                                 $this->general_feedback,
                                                 null,
                                                 true
                                                );
-        
+
         $qrespcondition = new cc_assesment_respconditiontype();
-        $qrespcondition->set_title('Correct');
+        $qrespcondition->setTitle('Correct');
         $this->qresprocessing->add_respcondition($qrespcondition);
         $qrespcondition->enable_continue(false);
         $qsetvar = new cc_assignment_setvartype(100);
@@ -2390,7 +2390,7 @@ class cc_assesment_question_multichoice_multiresponse extends cc_assesment_quest
 
         //rest of the conditions
         foreach ($this->answerlist as $ident => $refid) {
-            cc_assesment_helper::add_response_condition( $this->qresprocessing,
+            CcAssesmentHelper::add_response_condition( $this->qresprocessing,
                                                          'Incorrect feedback',
                                                          $refid[0],
                                                          $this->general_feedback,
@@ -2401,7 +2401,7 @@ class cc_assesment_question_multichoice_multiresponse extends cc_assesment_quest
         //Final element for incorrect feedback
         reset($this->incorrect_feedbacks);
         $ident = key($this->incorrect_feedbacks);
-        cc_assesment_helper::add_respcondition( $this->qresprocessing,
+        CcAssesmentHelper::add_respcondition( $this->qresprocessing,
                                                 'Incorrect feedback',
                                                 $ident,
                                                 0

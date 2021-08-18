@@ -21,7 +21,7 @@ class CcConverterResource extends CcConverters
             $docfilepath = api_get_path(SYS_COURSE_PATH).api_get_course_path($objResource['course_code']).DIRECTORY_SEPARATOR.$objResource['path'];
         }
 
-        $files = CcHelpers::handle_resource_content($this->manifest,
+        $files = CcHelpers::handleResourceContent($this->manifest,
                                                    $this->rootpath,
                                                    $contextid,
                                                    $outdir,
@@ -37,13 +37,13 @@ class CcConverterResource extends CcConverters
             }
         }
 
-        $resitem = new cc_item();
+        $resitem = new CcItem();
         $resitem->identifierref = $resvalue;
         $resitem->title = $title;
-        $this->item->add_child_item($resitem);
+        $this->item->addChildItem($resitem);
 
         // Checking the visibility.
-        $this->manifest->update_instructoronly($resvalue, !$this->is_visible());
+        $this->manifest->updateInstructoronly($resvalue, !$this->isVisible());
 
         return true;
     }

@@ -35,12 +35,12 @@ class PkgStaticResources
     /**
      * @return array
      */
-    public function get_values()
+    public function getValues()
     {
         return $this->values;
     }
 
-    public function get_identifier($location)
+    public function getIdentifier($location)
     {
         return isset($this->values[$location]) ? $this->values[$location] : false;
     }

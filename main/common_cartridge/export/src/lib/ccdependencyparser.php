@@ -145,7 +145,7 @@ function getDepFilesHTML($manifestroot, $fname, &$filenames, &$dcx, $folder)
 {
     $dcx->resetXpath();
     $nlist         = $dcx->nodeList("//img/@src | //link/@href | //script/@src | //a[not(starts-with(@href,'#'))]/@href");
-    $css_obj_array = array();
+    $cssObjArray = array();
     foreach ($nlist as $nl) {
         $item       = $folder.$nl->nodeValue;
         $path_parts = pathinfo($item);
@@ -162,13 +162,13 @@ function getDepFilesHTML($manifestroot, $fname, &$filenames, &$dcx, $folder)
         if ($ext == 'css') {
             $css = new CssParser();
             $css->parse($dcx->filePath().$nl->nodeValue);
-            $css_obj_array[$item] = $css;
+            $cssObjArray[$item] = $css;
         }
     }
     $nlist = $dcx->nodeList("//*/@class");
     foreach ($nlist as $nl) {
         $item = $folder.$nl->nodeValue;
-        foreach ($css_obj_array as $csskey => $cssobj) {
+        foreach ($cssObjArray as $csskey => $cssobj) {
             $bimg  = $cssobj->get($item, "background-image");
             $limg  = $cssobj->get($item, "list-style-image");
             $npath = pathinfo($csskey);
@@ -181,14 +181,14 @@ function getDepFilesHTML($manifestroot, $fname, &$filenames, &$dcx, $folder)
             }
         }
     }
-    $elems_to_check = array("body", "p", "ul", "h4", "a", "th");
-    $do_we_have_it  = array();
-    foreach ($elems_to_check as $elem) {
-        $do_we_have_it[$elem] = ($dcx->nodeList("//".$elem)->length > 0);
+    $elemsToCheck = array("body", "p", "ul", "h4", "a", "th");
+    $doWeHaveIt  = array();
+    foreach ($elemsToCheck as $elem) {
+        $doWeHaveIt[$elem] = ($dcx->nodeList("//".$elem)->length > 0);
     }
-    foreach ($elems_to_check as $elem) {
-        if ($do_we_have_it[$elem]) {
-            foreach ($css_obj_array as $csskey => $cssobj) {
+    foreach ($elemsToCheck as $elem) {
+        if ($doWeHaveIt[$elem]) {
+            foreach ($cssObjArray as $csskey => $cssobj) {
                 $sb    = $cssobj->get($elem, "background-image");
                 $sbl   = $cssobj->get($elem, "list-style-image");
                 $npath = pathinfo($csskey);

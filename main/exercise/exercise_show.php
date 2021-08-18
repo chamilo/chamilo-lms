@@ -79,6 +79,7 @@ if (empty($nbrQuestions)) {
 if (empty($questionList)) {
     $questionList = Session::read('questionList');
 }
+/* @var Exercise $objExercise */
 if (empty($objExercise)) {
     $objExercise = Session::read('objExercise');
 }

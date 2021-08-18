@@ -15,7 +15,7 @@ $xajax->registerFunction('search_users');
 $this_section = SECTION_PLATFORM_ADMIN;
 
 $id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
-$addProcess = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
+$addProcess = isset($_GET['add']) && 'true' === $_GET['add'] ? 'true' : null;
 
 SessionManager::protectSession($id_session);
 

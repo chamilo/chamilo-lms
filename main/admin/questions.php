@@ -19,6 +19,11 @@ Session::erase('objQuestion');
 Session::erase('objAnswer');
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$action = $_REQUEST['action'] ?? '';
+$id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : '';
+$description = $_REQUEST['description'] ?? '';
+$title = $_REQUEST['title'] ?? '';
+$page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
 
 // Prepare lists for form
 // Courses list
@@ -81,7 +86,7 @@ $form
         'selected_course',
         [get_lang('Course'), get_lang('CourseInWhichTheQuestionWasInitiallyCreated')],
         $courseSelectionList,
-        ['onchange' => 'mark_course_id_changed(); submit_form(this);', 'id' => 'selected_course']
+        ['id' => 'selected_course']
     )
     ->setSelected($selectedCourse);
 $form
@@ -89,7 +94,7 @@ $form
         'question_level',
         get_lang('Difficulty'),
         $levels,
-        ['onchange' => 'submit_form(this);', 'id' => 'question_level']
+        ['id' => 'question_level']
     )
     ->setSelected($questionLevel);
 $form
@@ -97,7 +102,7 @@ $form
         'answer_type',
         get_lang('AnswerType'),
         $questionTypesList,
-        ['onchange' => 'submit_form(this);', 'id' => 'answer_type']
+        ['id' => 'answer_type']
     )
     ->setSelected($answerType);
 
@@ -112,13 +117,18 @@ $length = 20;
 $questionCount = 0;
 $start = 0;
 $end = 0;
+$pdfContent = '';
 
+$params = [
+    'id' => $id,
+    'title' => Security::remove_XSS($title),
+    'description' => Security::remove_XSS($description),
+    'selected_course' => $selectedCourse,
+    'question_level' => $questionLevel,
+    'answer_type' => $answerType,
+];
 if ($formSent) {
-    $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : '';
-    $description = $_REQUEST['description'] ?? '';
-    $title = $_REQUEST['title'] ?? '';
-    $page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
-
+    $params['form_sent'] = 1;
     $em = Database::getManager();
     $repo = $em->getRepository('ChamiloCourseBundle:CQuizQuestion');
     $criteria = new Criteria();
@@ -149,18 +159,13 @@ if ($formSent) {
 
     $questions = $repo->matching($criteria);
 
-    if (empty($id)) {
-        $id = '';
-    }
-    $params = [
-        'id' => $id,
-        'title' => Security::remove_XSS($title),
-        'description' => Security::remove_XSS($description),
-        'form_sent' => 1,
-    ];
     $url = api_get_self().'?'.http_build_query($params);
     $form->setDefaults($params);
     $questionCount = count($questions);
+
+    if ('export_pdf' === $action) {
+        $length = $questionCount;
+    }
 
     $paginator = new Paginator();
     $pagination = $paginator->paginate($questions, $page, $length);
@@ -209,6 +214,7 @@ if ($formSent) {
             $question->courseCode = $courseCode;
             // Creating empty exercise
             $exercise = new Exercise($courseId);
+            /* @var Question $questionObject */
             $questionObject = Question::read($question->getIid(), $courseInfo);
 
             ob_start();
@@ -226,9 +232,17 @@ if ($formSent) {
             );
             $question->questionData = ob_get_contents();
 
+            if ('export_pdf' === $action) {
+                $pdfContent .= '<span style="color:#000; font-weight:bold; font-size:x-large;">#'.$question->getIid().'. '.$question->getQuestion().'</span><br />';
+                $pdfContent .= '<span style="color:#444;">('.$questionTypesList[$question->getType()].') ['.get_lang('Source').': '.$courseCode.']</span><br />';
+                $pdfContent .= $question->getDescription().'<br />';
+                $pdfContent .= $question->questionData;
+                continue;
+            }
+
             $deleteUrl = $url.'&'.http_build_query([
                 'courseId' => $question->getCId(),
-                'questionId' => $question->getId(),
+                'questionId' => $question->getIid(),
                 'action' => 'delete',
             ]);
 
@@ -250,7 +264,7 @@ if ($formSent) {
                                 'id_session' => $exercise->sessionId,
                                 'exerciseId' => $exerciseId,
                                 'type' => $question->getType(),
-                                'editQuestion' => $question->getId(),
+                                'editQuestion' => $question->getIid(),
                             ]
                         ),
                         ['target' => '_blank']
@@ -309,8 +323,17 @@ if ($formSent) {
 
 $formContent = $form->returnForm();
 
-$action = $_REQUEST['action'] ?? '';
 switch ($action) {
+    case 'export_pdf':
+        $pdfContent = Security::remove_XSS($pdfContent);
+        $pdfParams = [
+            'filename' => 'questions-export-'.api_get_local_time(),
+            'pdf_date' => api_get_local_time(),
+            'orientation' => 'P',
+        ];
+        $pdf = new PDF('A4', $pdfParams['orientation'], $pdfParams);
+        $pdf->html_to_pdf_with_template($pdfContent, false, false, true);
+        exit;
     case 'delete':
         $questionId = $_REQUEST['questionId'] ?? '';
         $courseId = $_REQUEST['courseId'] ?? '';
@@ -338,29 +361,20 @@ $actionsLeft = Display::url(
     Display::return_icon('back.png', get_lang('PlatformAdmin'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'admin/index.php'
 );
-$actionsRight = '';
-/*
+
+$exportUrl = api_get_path(WEB_CODE_PATH)
+    .'admin/questions.php?action=export_pdf&'
+    .http_build_query($params);
+
 $actionsRight = Display::url(
     Display::return_icon('pdf.png', get_lang('ExportToPDF'), [], ICON_SIZE_MEDIUM),
-    api_get_path(WEB_CODE_PATH).'admin/questions.php?action=exportpdf'
+    $exportUrl
 );
-*/
 
 $toolbar = Display::toolbarAction(
     'toolbar-admin-questions',
     [$actionsLeft, $actionsRight]
 );
-
-$htmlHeadXtra[] = "
-<script>
-    function submit_form(obj) {
-        document.question_pool.submit();
-    }
-
-    function mark_course_id_changed() {
-        $('#course_id_changed').val('1');
-    }
-</script>";
 
 $tpl = new Template(get_lang('Questions'));
 $tpl->assign('form', $formContent);

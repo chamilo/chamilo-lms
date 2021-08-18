@@ -739,7 +739,7 @@ if ($allowSocialTool) {
             $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
                 Display::return_icon('inbox.png', get_lang('Messages')).'</a>';
         }
-        $show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
+        $show = isset($_GET['show']) ? '&show='.(int) $_GET['show'] : '';
 
         if (isset($_GET['type']) && $_GET['type'] === 'extended') {
             $actions .= '<a href="profile.php?type=reduced'.$show.'">'.

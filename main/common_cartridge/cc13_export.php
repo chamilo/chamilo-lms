@@ -53,8 +53,8 @@ if (Security::check_token('post') && ($action === 'course_select_form')) {
             echo Display::toolbarButton(
                 get_lang('Download'),
                 api_get_path(WEB_CODE_PATH).'course_info/download.php?archive='.$imsccFile.'&'.api_get_cidreq(),
-                'file-o',
-                'success',
+                'file-zip-o',
+                'primary',
                 [],
             );
         }

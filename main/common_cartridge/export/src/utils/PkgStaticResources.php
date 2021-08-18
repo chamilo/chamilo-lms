@@ -1,23 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-class PkgStaticResources 
+class PkgStaticResources
 {
 
-    private $values = array();
+    private $values = [];
     public $finished = false;
     private static $instance = null;
-
-    private function __clone() {
-    }
-
-    private function __construct() {
-    }
 
     /**
      * @return PkgStaticResources
      */
-    public static function instance() {
+    public static function instance()
+    {
         if (empty(self::$instance)) {
             $c = __CLASS__;
             self::$instance = new $c();
@@ -32,23 +27,27 @@ class PkgStaticResources
      * @param string $file
      * @param boolean $main
      */
-    public function add($key, $identifier, $file, $main, $node = null) {
-        $this->values[$key] = array($identifier, $file, $main, $node);
+    public function add($key, $identifier, $file, $main, $node = null)
+    {
+        $this->values[$key] = [$identifier, $file, $main, $node];
     }
 
     /**
      * @return array
      */
-    public function get_values() {
+    public function getValues()
+    {
         return $this->values;
     }
 
-    public function get_identifier($location) {
+    public function getIdentifier($location)
+    {
         return isset($this->values[$location]) ? $this->values[$location] : false;
     }
 
-    public function reset() {
-        $this->values   = array();
+    public function reset()
+    {
+        $this->values   = [];
         $this->finished = false;
     }
 }

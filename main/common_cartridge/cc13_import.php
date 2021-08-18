@@ -57,27 +57,18 @@ if ($form->validate()) {
             }
 
             // We detect if it is cc v1.3
-            $detected = Imscc13Import::detect_format($filepath);
+            $detected = Imscc13Import::detectFormat($filepath);
             if ($detected) {
                 Imscc13Import::execute($filepath);
-                //$infoMsg = Display::return_message(get_lang('CcFileImported'), 'normal', false);
+                Display::addFlash(Display::return_message(get_lang('CcFileImported'), 'normal', false));
             }
-
         }
     }
 
 }
 
 $template = new Template(get_lang('ImportCcVersion13'));
-
-
-
-//$infoMsg = Display::return_message(get_lang('ImportCcInstructions'), 'normal', false);
-
 Display::addFlash(Display::return_message(get_lang('ImportCcInstructions'), 'normal', false));
-
-//$template->assign('info_msg', $infoMsg);
-
 $template->assign('form', $form->returnForm());
 $templateName = $template->get_template('common_cartridge/import_cc.tpl');
 $content = $template->fetch($templateName);

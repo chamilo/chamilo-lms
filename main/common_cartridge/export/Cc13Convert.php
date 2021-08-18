@@ -135,7 +135,7 @@ class Cc13Convert
                             $sectionid    = $count;
                             $sectiontitle = $objCategory->cat_title;
                             $sequence = self::getSequence($itemData, $objCategory->iid, $itemType);
-                            $sections[$sectionid] = array($sectiontitle, $sequence);
+                            $sections[$sectionid] = [$sectiontitle, $sequence];
                             $count++;
                         }
                     }

@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-class CcGeneralFile extends XMLGenericDocument 
+class CcGeneralFile extends XMLGenericDocument
 {
     /**
      *
@@ -11,10 +11,11 @@ class CcGeneralFile extends XMLGenericDocument
     protected $root = null;
     protected $rootns = null;
     protected $rootname = null;
-    protected $ccnamespaces = array();
-    protected $ccnsnames = array();
+    protected $ccnamespaces = [];
+    protected $ccnsnames = [];
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
 
         foreach ($this->ccnamespaces as $key => $value){
@@ -23,8 +24,9 @@ class CcGeneralFile extends XMLGenericDocument
     }
 
 
-    protected function on_create() {
-        $rootel = $this->append_new_element_ns($this->doc,
+    protected function onCreate()
+    {
+        $rootel = $this->appendNewElementNs($this->doc,
                                                $this->ccnamespaces[$this->rootns],
                                                $this->rootname);
         //add all namespaces
@@ -41,7 +43,7 @@ class CcGeneralFile extends XMLGenericDocument
         }
 
         if (!empty($schemaLocation) && isset($this->ccnamespaces['xsi'])) {
-            $this->append_new_attribute_ns($rootel,
+            $this->appendNewAttributeNs($rootel,
                                            $this->ccnamespaces['xsi'],
                                            'xsi:schemaLocation',
                                             $schemaLocation);

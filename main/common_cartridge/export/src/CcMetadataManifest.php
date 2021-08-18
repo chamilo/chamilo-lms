@@ -3,14 +3,14 @@
 
 class CcMetadataManifest implements CcIMetadataManifest
 {
-    
-    public  $arraygeneral   = array();
-    public  $arraytech      = array();
-    public  $arrayrights    = array();
-    public  $arraylifecycle = array();
 
+    public  $arraygeneral   = [];
+    public  $arraytech      = [];
+    public  $arrayrights    = [];
+    public  $arraylifecycle = [];
 
-    public function add_metadata_general($obj){
+    public function addMetadataGeneral($obj)
+    {
         if (empty($obj)){
             throw new Exception('Medatada Object given is invalid or null!');
         }
@@ -23,7 +23,8 @@ class CcMetadataManifest implements CcIMetadataManifest
         !is_null($obj->entry)? $this->arraygeneral['entry']=$obj->entry:null;
     }
 
-    public function add_metadata_technical($obj){
+    public function addMetadataTechnical($obj)
+    {
         if (empty($obj)){
             throw new Exception('Medatada Object given is invalid or null!');
         }
@@ -31,7 +32,8 @@ class CcMetadataManifest implements CcIMetadataManifest
     }
 
 
-    public function add_metadata_rights($obj){
+    public function addMetadataRights($obj)
+    {
         if (empty($obj)){
             throw new Exception('Medatada Object given is invalid or null!');
         }
@@ -42,7 +44,8 @@ class CcMetadataManifest implements CcIMetadataManifest
     }
 
 
-    public function add_metadata_lifecycle($obj){
+    public function addMetadataLifecycle($obj)
+    {
         if (empty($obj)){
             throw new Exception('Medatada Object given is invalid or null!');
         }
@@ -51,45 +54,59 @@ class CcMetadataManifest implements CcIMetadataManifest
         !is_null($obj->date)? $this->arraylifecycle['date']=$obj->date:null;
 
     }
-    
+
 }
 
 /**
  * Metadata General Type
  *
  */
-class cc_metadata_general {
+class CcMetadataGeneral
+{
 
-    public  $title          = array();
-    public  $language       = array();
-    public  $description    = array();
-    public  $keyword        = array();
-    public  $coverage       = array();
-    public  $catalog        = array();
-    public  $entry          = array();
+    public  $title          = [];
+    public  $language       = [];
+    public  $description    = [];
+    public  $keyword        = [];
+    public  $coverage       = [];
+    public  $catalog        = [];
+    public  $entry          = [];
 
 
 
-    public function set_coverage ($coverage,$language){
-        $this->coverage[] = array($language,$coverage);
+    public function setCoverage ($coverage,$language)
+    {
+        $this->coverage[] = [$language, $coverage];
     }
-    public function set_description ($description,$language){
-        $this->description[] = array($language,$description);
+
+    public function setDescription ($description,$language)
+    {
+        $this->description[] = [$language, $description];
     }
-    public function set_keyword ($keyword,$language){
-        $this->keyword[] = array($language,$keyword);
+
+    public function setKeyword ($keyword,$language)
+    {
+        $this->keyword[] = [$language, $keyword];
     }
-    public function set_language ($language){
-        $this->language[] = array($language);
+
+    public function setLanguage ($language)
+    {
+        $this->language[] = [$language];
     }
-    public function set_title ($title,$language){
-        $this->title[] = array($language,$title);
+
+    public function setTitle ($title,$language)
+    {
+        $this->title[] = [$language,$title];
     }
-    public function set_catalog ($cat){
-        $this->catalog[] = array($cat);
+
+    public function setCatalog ($cat)
+    {
+        $this->catalog[] = [$cat];
     }
-    public function set_entry ($entry){
-        $this->entry[] = array($entry);
+
+    public function setEntry ($entry)
+    {
+        $this->entry[] = [$entry];
     }
 
 

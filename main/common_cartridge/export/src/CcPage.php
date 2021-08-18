@@ -1,29 +1,34 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-class CcPage extends CcGeneralFile {
+class CcPage extends CcGeneralFile
+{
     protected $rootns = 'xmlns';
     protected $rootname = 'html';
-    protected $ccnamespaces = array('xmlns' => 'http://www.w3.org/1999/xhtml');
+    protected $ccnamespaces = ['xmlns' => 'http://www.w3.org/1999/xhtml'];
 
     protected $content = null;
     protected $title = null;
     protected $intro = null;
 
-    public function set_content($value) {
+    public function setContent($value)
+    {
         // We are not cleaning up this one on purpose.
         $this->content = $value;
     }
 
-    public function set_title($value) {
+    public function setTitle($value)
+    {
         $this->title = self::safexml($value);
     }
 
-    public function set_intro($value) {
+    public function setIntro($value)
+    {
         $this->intro = self::safexml(strip_tags($value));
     }
 
-    protected function on_create() {
+    protected function onCreate()
+    {
         $impl = new DOMImplementation();
         $dtd  = $impl->createDocumentType( 'html',
                                            '-//W3C//DTD XHTML 1.0 Strict//EN',
@@ -32,51 +37,52 @@ class CcPage extends CcGeneralFile {
         $doc->formatOutput = true;
         $doc->preserveWhiteSpace = true;
         $this->doc = $doc;
-        parent::on_create();
+        parent::onCreate();
     }
 
-    public function on_save() {
-
+    public function onSave()
+    {
         $rns = $this->ccnamespaces[$this->rootns];
         // Add the basic tags.
-        $head = $this->append_new_element_ns($this->root, $rns, 'head');
-        $this->append_new_attribute_ns($head, $rns, 'profile', 'http://dublincore.org/documents/dc-html/');
+        $head = $this->appendNewElementNs($this->root, $rns, 'head');
+        $this->appendNewAttributeNs($head, $rns, 'profile', 'http://dublincore.org/documents/dc-html/');
 
         // Linking Dublin Core Metadata 1.1.
-        $link_dc = $this->append_new_element_ns($head, $rns, 'link');
-        $this->append_new_attribute_ns($link_dc, $rns, 'rel', 'schema.DC');
-        $this->append_new_attribute_ns($link_dc, $rns, 'href', 'http://purl.org/dc/elements/1.1/');
-        $link_dcterms = $this->append_new_element_ns($head, $rns, 'link');
-        $this->append_new_attribute_ns($link_dcterms, $rns, 'rel', 'schema.DCTERMS');
-        $this->append_new_attribute_ns($link_dcterms, $rns, 'href', 'http://purl.org/dc/terms/');
+        $link_dc = $this->appendNewElementNs($head, $rns, 'link');
+        $this->appendNewAttributeNs($link_dc, $rns, 'rel', 'schema.DC');
+        $this->appendNewAttributeNs($link_dc, $rns, 'href', 'http://purl.org/dc/elements/1.1/');
+        $link_dcterms = $this->appendNewElementNs($head, $rns, 'link');
+        $this->appendNewAttributeNs($link_dcterms, $rns, 'rel', 'schema.DCTERMS');
+        $this->appendNewAttributeNs($link_dcterms, $rns, 'href', 'http://purl.org/dc/terms/');
         // Content type.
-        $meta_type = $this->append_new_element_ns($head, $rns, 'meta');
-        $this->append_new_attribute_ns($meta_type, $rns, 'name', 'DC.type');
-        $this->append_new_attribute_ns($meta_type, $rns, 'scheme', 'DCTERMS.DCMIType');
-        $this->append_new_attribute_ns($meta_type, $rns, 'content', 'Text');
+        $meta_type = $this->appendNewElementNs($head, $rns, 'meta');
+        $this->appendNewAttributeNs($meta_type, $rns, 'name', 'DC.type');
+        $this->appendNewAttributeNs($meta_type, $rns, 'scheme', 'DCTERMS.DCMIType');
+        $this->appendNewAttributeNs($meta_type, $rns, 'content', 'Text');
 
         // Content description.
         if (!empty($this->intro)) {
-            $meta_description = $this->append_new_element_ns($head, $rns, 'meta');
-            $this->append_new_attribute_ns($meta_description, $rns, 'name', 'DC.description');
-            $this->append_new_attribute_ns($meta_description, $rns, 'content', $this->intro);
+            $meta_description = $this->appendNewElementNs($head, $rns, 'meta');
+            $this->appendNewAttributeNs($meta_description, $rns, 'name', 'DC.description');
+            $this->appendNewAttributeNs($meta_description, $rns, 'content', $this->intro);
         }
 
-        $meta = $this->append_new_element_ns($head, $rns, 'meta');
-        $this->append_new_attribute_ns($meta, $rns, 'http-equiv', 'Content-type');
-        $this->append_new_attribute_ns($meta, $rns, 'content', 'text/html; charset=UTF-8');
+        $meta = $this->appendNewElementNs($head, $rns, 'meta');
+        $this->appendNewAttributeNs($meta, $rns, 'http-equiv', 'Content-type');
+        $this->appendNewAttributeNs($meta, $rns, 'content', 'text/html; charset=UTF-8');
         // Set the title.
-        $title = $this->append_new_element_ns($head, $rns, 'title', $this->title);
-        $body = $this->append_new_element_ns($this->root, $rns, 'body');
+        $title = $this->appendNewElementNs($head, $rns, 'title', $this->title);
+        $body = $this->appendNewElementNs($this->root, $rns, 'body');
         // We are unable to use DOM for embedding HTML due to numerous content errors.
         // Therefore we place a dummy tag that will be later replaced with the real content.
-        $this->append_new_element_ns($body, $rns, 'div', '##REPLACE##');
+        $this->appendNewElementNs($body, $rns, 'div', '##REPLACE##');
 
         return true;
     }
 
-    public function saveTo($fname) {
-        $result = $this->on_save();
+    public function saveTo($fname)
+    {
+        $result = $this->onSave();
         if ($result) {
             $dret = str_replace('<?xml version="1.0"?>'."\n", '', $this->viewXML());
             $dret = str_replace('<div>##REPLACE##</div>', $this->content, $dret);

@@ -3,18 +3,19 @@
 
 class CcManifest extends XMLGenericDocument implements CcIManifest
 {
-    
+
     private $ccversion              = null;
     private $ccobj                  = null;
     private $rootmanifest           = null;
     private $activemanifest         = null;
     private $parentmanifest         = null;
     private $parentparentmanifest   = null;
-    private $ares                   = array();
+    private $ares                   = [];
     private $mainidentifier         = null;
 
     public function __construct($ccver = 13, $activemanifest=null,
-                        $parentmanifest=null, $parentparentmanifest=null) {
+                        $parentmanifest=null, $parentparentmanifest=null)
+    {
 
         $this->ccversion = $ccver;
         $this->ccobj = new CcVersion13();
@@ -25,8 +26,9 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
      * Register Namespace for use XPATH
      *
      */
-    public function register_namespaces_for_xpath() {
-        $scnam = $this->activemanifest->get_cc_namespaces();
+    public function registerNamespacesForXpath()
+    {
+        $scnam = $this->activemanifest->getCcNamespaces();
         foreach ($scnam as $key => $value) {
             $this->registerNS($key, $value);
         }
@@ -36,7 +38,8 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
      * TODO - implement this method - critical
      * Enter description here ...
      */
-    private function fill_manifest() {
+    private function fillManifest()
+    {
 
     }
 
@@ -45,11 +48,12 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
      *
      * @param CcIMetadataManifest $met
      */
-    public function add_metadata_manifest(CcIMetadataManifest $met) {
+    public function addMetadataManifest(CcIMetadataManifest $met)
+    {
         $metanode = $this->node("//imscc:manifest[@identifier='".
                                 $this->activemanifest->manifestID().
                                 "']/imscc:metadata");
-        $nmeta = $this->activemanifest->create_metadata_node($met, $this->doc, $metanode);
+        $nmeta = $this->activemanifest->createMetadataNode($met, $this->doc, $metanode);
         $metanode->appendChild($nmeta);
     }
 
@@ -60,7 +64,8 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
      * @param CcIMetadataResource $met
      * @param string $identifier
      */
-    public function add_metadata_resource(CcIMetadataResource $met, $identifier) {
+    public function addMetadataResource(CcIMetadataResource $met, $identifier)
+    {
         $metanode  = $this->node("//imscc:resource".
             "[@identifier='".
             $identifier.
@@ -69,9 +74,9 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
             "[@identifier='".
             $identifier.
             "']/imscc:file");
-        $nspaces   = $this->activemanifest->get_cc_namespaces();
-        $dnode     = $this->append_new_element_ns($metanode2, $nspaces['imscc'], 'metadata');
-        $this->activemanifest->create_metadata_resource_node($met, $this->doc, $dnode);
+        $nspaces   = $this->activemanifest->getCcNamespaces();
+        $dnode     = $this->appendNewElementNs($metanode2, $nspaces['imscc'], 'metadata');
+        $this->activemanifest->createMetadataResourceNode($met, $this->doc, $dnode);
     }
 
 
@@ -82,7 +87,8 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
      * @param string $identifier
      * @param string $filename
      */
-    public function add_metadata_file(CcIMetadataFile $met, $identifier, $filename) {
+    public function addMetadataFile(CcIMetadataFile $met, $identifier, $filename)
+    {
 
         if (empty($met) || empty($identifier) || empty($filename)) {
             throw new Exception('Try to add a metadata file with nulls values given!');
@@ -96,41 +102,47 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
             $filename.
             "']");
 
-        $nspaces = $this->activemanifest->get_cc_namespaces();
+        $nspaces = $this->activemanifest->getCcNamespaces();
         $dnode   = $this->doc->createElementNS($nspaces['imscc'], "metadata");
 
         $metanode->appendChild($dnode);
 
-        $this->activemanifest->create_metadata_file_node($met, $this->doc, $dnode);
+        $this->activemanifest->createMetadataFileNode($met, $this->doc, $dnode);
     }
 
 
-    public function on_create() {
+    public function onCreate()
+    {
         $this->activemanifest =  new CcVersion13();
         $this->rootmanifest = $this->activemanifest;
-        $result = $this->activemanifest->create_manifest($this->doc);
-        $this->register_namespaces_for_xpath();
+        $result = $this->activemanifest->createManifest($this->doc);
+        $this->registerNamespacesForXpath();
         return $result;
     }
 
-    public function get_relative_base_path() {
+    public function getRelativeBasePath()
+    {
         return $this->activemanifest->base();
     }
 
-    public function parent_manifest() {
+    public function parentManifest()
+    {
         return new CcManifest($this, $this->parentmanifest, $this->parentparentmanifest);
     }
 
-    public function root_manifest() {
+    public function rootManifest()
+    {
         return new CcManifest($this, $this->rootmanifest);
     }
 
-    public function manifestID() {
+    public function manifestID()
+    {
         return $this->activemanifest->manifestID();
     }
 
-    public function get_manifest_namespaces() {
-        return $this->rootmanifest->get_cc_namespaces();
+    public function getManifestNamespaces()
+    {
+        return $this->rootmanifest->getCcNamespaces();
     }
 
     /**
@@ -138,45 +150,51 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
      *
      * @param CcIOrganization $org
      */
-    public function add_new_organization(CcIOrganization &$org) {
-        $norg    = $this->activemanifest->create_organization_node($org, $this->doc);
+    public function addNewOrganization(CcIOrganization &$org)
+    {
+        $norg    = $this->activemanifest->createOrganizationNode($org, $this->doc);
         $orgnode = $this->node("//imscc:manifest[@identifier='".
             $this->activemanifest->manifestID().
             "']/imscc:organizations");
         $orgnode->appendChild($norg);
     }
 
-    public function get_resources($searchspecific='') {
-        $reslist = $this->get_resource_list($searchspecific);
-        $resourcelist = array();
+    public function getResources($searchspecific='')
+    {
+        $reslist = $this->getResourceList($searchspecific);
+        $resourcelist = [];
         foreach ($reslist as $resourceitem) {
             $resourcelist[] = new CcResources($this, $resourceitem);
         }
         return $resourcelist;
     }
 
-    public function get_cc_namespace_path($nsname) {
+    public function getCcNamespacePath($nsname)
+    {
         if (is_string($nsname) && (!empty($nsname))) {
-            $scnam = $this->activemanifest->get_cc_namespaces();
+            $scnam = $this->activemanifest->getCcNamespaces();
             return $scnam[$nsname];
         }
         return null;
     }
 
 
-    public function get_resource_list($searchspecific = '') {
+    public function getResourceList($searchspecific = '')
+    {
         return $this->nodeList("//imscc:manifest[@identifier='".
                             $this->activemanifest->manifestID().
                             "']/imscc:resources/imscc:resource".$searchspecific);
     }
 
-    public function on_load() {
-        $this->register_namespaces_for_xpath();
-        $this->fill_manifest();
+    public function onLoad()
+    {
+        $this->registerNamespacesForXpath();
+        $this->fillManifest();
         return true;
     }
 
-    public function on_save() {
+    public function onSave()
+    {
         return true;
     }
 
@@ -188,7 +206,8 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
      * @param string $type
      * @return array
      */
-    public function add_resource(CcIResource $res, $identifier = null, $type = 'webcontent') {
+    public function addResource(CcIResource $res, $identifier = null, $type = 'webcontent')
+    {
 
         if (!$this->ccobj->valid($type)) {
             throw new Exception("Type invalid...");
@@ -202,35 +221,36 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
         // TODO: This has to be reviewed since it does not handle multiple files properly.
         // Dependencies.
         if (is_object($identifier)) {
-            $this->activemanifest->create_resource_node($rst, $this->doc, $identifier);
+            $this->activemanifest->createResourceNode($rst, $this->doc, $identifier);
         } else {
             $nresnode   = null;
 
             $rst->type = $type;
-            if (!CcHelpers::is_html($rst->filename)) {
+            if (!CcHelpers::isHtml($rst->filename)) {
                 $rst->href = null;
             }
 
-            $this->activemanifest->create_resource_node($rst, $this->doc, $nresnode);
+            $this->activemanifest->createResourceNode($rst, $this->doc, $nresnode);
             foreach ($rst->files as $file) {
-                $ident = $this->get_identifier_by_filename($file);
+                $ident = $this->getIdentifierByFilename($file);
                 if ($ident == null) {
                     $newres = new CcResources($rst->manifestroot, $file);
-                    if (!CcHelpers::is_html($file)) {
+                    if (!CcHelpers::isHtml($file)) {
                          $newres->href = null;
                     }
                     $newres->type = 'webcontent';
-                    $this->activemanifest->create_resource_node($newres, $this->doc, $nresnode);
+                    $this->activemanifest->createResourceNode($newres, $this->doc, $nresnode);
                 }
             }
         }
 
-        $tmparray = array($rst->identifier, $rst->files[0]);
+        $tmparray = [$rst->identifier, $rst->files[0]];
         return $tmparray;
     }
 
-    private function check_if_exist_in_other($name, $identifier) {
-        $status = array();
+    private function checkIfExistInOther($name, $identifier)
+    {
+        $status = [];
         foreach ($this->activemanifest->resources as $value) {
             if (($value->identifier != $identifier) && isset($value->files[$name])) {
                 $status[] = $value->identifier;
@@ -239,12 +259,13 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
         return $status;
     }
 
-    private function replace_file_x_dependency($depen, $name) {
+    private function replaceFileXDependency($depen, $name)
+    {
         foreach ($depen as $key => $value) {
             ($key);
-            $ident                                          = $this->get_identifier_by_filename($name);
+            $ident                                          = $this->getIdentifierByFilename($name);
             $this->activemanifest->resources[$value]->files =
-                $this->array_remove_by_value($this->activemanifest->resources[$value]->files, $name);
+                $this->arrayRemoveByValue($this->activemanifest->resources[$value]->files, $name);
             if (!in_array($ident, $this->activemanifest->resources[$value]->dependency)) {
                 array_push($this->activemanifest->resources[$value]->dependency, $ident);
             }
@@ -253,7 +274,8 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
         return true;
     }
 
-    private function get_identifier_by_filename($name) {
+    private function getIdentifierByFilename($name)
+    {
         $result = null;
         if (isset($this->activemanifest->resources_ind[$name])) {
             $result = $this->activemanifest->resources_ind[$name];
@@ -261,15 +283,18 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
         return $result;
     }
 
-    private function array_remove_by_value($arr, $value) {
-        return array_values(array_diff($arr, array($value)));
+    private function arrayRemoveByValue($arr, $value)
+    {
+        return array_values(array_diff($arr, [$value]));
     }
 
-    private function array_remove_by_key($arr, $key) {
-        return array_values(array_diff_key($arr, array($key)));
+    private function arrayRemoveByKey($arr, $key)
+    {
+        return array_values(array_diff_key($arr, [$key]));
     }
 
-    public function update_instructoronly($identifier, $value = false) {
+    public function updateInstructoronly($identifier, $value = false)
+    {
         if (isset($this->activemanifest->resources[$identifier])) {
             $resource = $this->activemanifest->resources[$identifier];
             $resource->instructoronly = $value;
@@ -281,7 +306,8 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
      *
      * @return DOMNode
      */
-    public function put_nodes() {
+    public function putNodes()
+    {
 
         $resnodestr = "//imscc:manifest[@identifier='".$this->activemanifest->manifestID().
             "']/imscc:resources";
@@ -289,22 +315,22 @@ class CcManifest extends XMLGenericDocument implements CcIManifest
 
         foreach ($this->activemanifest->resources as $k => $v) {
             ($k);
-            $depen = $this->check_if_exist_in_other($v->files[0], $v->identifier);
+            $depen = $this->checkIfExistInOther($v->files[0], $v->identifier);
             if (!empty($depen)) {
-                $this->replace_file_x_dependency($depen, $v->files[0]);
+                $this->replaceFileXDependency($depen, $v->files[0]);
                 $v->type = 'webcontent';
             }
         }
 
         foreach ($this->activemanifest->resources as $node) {
-            $rnode = $this->activemanifest->create_resource_node($node, $this->doc, null);
+            $rnode = $this->activemanifest->createResourceNode($node, $this->doc, null);
             $resnode->appendChild($rnode);
             if ($node->instructoronly) {
                 $metafileceduc = new CcMetadataResourceEducational();
-                $metafileceduc->set_value(intended_user_role::INSTRUCTOR);
+                $metafileceduc->setValue(intended_user_role::INSTRUCTOR);
                 $metafile = new CcMetadataResource();
-                $metafile->add_metadata_resource_educational($metafileceduc);
-                $this->activemanifest->create_metadata_educational($metafile, $this->doc, $rnode);
+                $metafile->addMetadataResourceEducational($metafileceduc);
+                $this->activemanifest->createMetadataEducational($metafile, $this->doc, $rnode);
             }
         }
 

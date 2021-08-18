@@ -3,10 +3,10 @@
 
 require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
-class Cc13Forum extends Cc13Entities 
+class Cc13Forum extends Cc13Entities
 {
 
-    public function full_path ($path, $dir_sep = DIRECTORY_SEPARATOR) {
+    public function fullPath ($path, $dir_sep = DIRECTORY_SEPARATOR) {
 
         $token = '$IMS-CC-FILEBASE$';
         $path = str_replace($token, '', $path);
@@ -50,32 +50,35 @@ class Cc13Forum extends Cc13Entities
     }
 
 
-    public function generate_data() {
+    public function generateData()
+    {
         $data = [];
         if (!empty(Cc1p3Convert::$instances['instances']['forum'])) {
             foreach (Cc1p3Convert::$instances['instances']['forum'] as $instance) {
-                $data[] = $this->get_forum_data($instance);
+                $data[] = $this->getForumData($instance);
             }
         }
         return $data;
     }
-    
-    public function get_forum_data($instance) {
-        $topic_data = $this->get_topic_data($instance);
-        
+
+    public function getForumData($instance)
+    {
+        $topic_data = $this->getTopicData($instance);
+
         $values = [];
-        if (!empty($topic_data)) {            
+        if (!empty($topic_data)) {
             $values = [
                 'instance' => $instance['instance'],
                 'title' => self::safexml($topic_data['title']),
                 'description' => self::safexml($topic_data['description'])
-            ];            
+            ];
         }
         return $values;
     }
-    
-    public function store_forums($forums) {
-        
+
+    public function storeForums($forums)
+    {
+
         // Create a Forum category for the import CC 1.3.
         $courseInfo = api_get_course_info();
         $catForumValues['forum_category_title'] = 'CC1p3';
@@ -85,7 +88,7 @@ class Cc13Forum extends Cc13Entities
             $courseInfo,
             false
         );
-        
+
         foreach ($forums as $forum) {
             $forumValues = [];
             $forumValues['forum_title'] = $forum['title'];
@@ -93,26 +96,27 @@ class Cc13Forum extends Cc13Entities
             $forumValues['forum_comment'] = strip_tags($forum['description']);
             $forumValues['forum_category'] = $catId;
             $forumValues['moderated'] = 0;
-            store_forum($forumValues, $courseInfo);            
+            store_forum($forumValues, $courseInfo);
         }
         return true;
     }
 
-    public function get_topic_data ($instance) {
+    public function getTopicData ($instance)
+    {
 
-        $topic_data = array();
+        $topic_data = [];
 
-        $topic_file = $this->get_external_xml($instance['resource_indentifier']);
+        $topic_file = $this->getExternalXml($instance['resource_indentifier']);
 
         if (!empty($topic_file)) {
 
-            $topic_file_path = Cc1p3Convert::$path_to_manifest_folder . DIRECTORY_SEPARATOR . $topic_file;
+            $topic_file_path = Cc1p3Convert::$pathToManifestFolder . DIRECTORY_SEPARATOR . $topic_file;
             $topic_file_dir = dirname($topic_file_path);
-            $topic = $this->load_xml_resource($topic_file_path);
+            $topic = $this->loadXmlResource($topic_file_path);
 
             if (!empty($topic)) {
 
-                $xpath = Cc1p3Convert::newx_path($topic, Cc1p3Convert::$forumns);
+                $xpath = Cc1p3Convert::newxPath($topic, Cc1p3Convert::$forumns);
 
                 $topic_title = $xpath->query('/dt:topic/dt:title');
                 if ($topic_title->length > 0 && !empty($topic_title->item(0)->nodeValue)) {
@@ -122,8 +126,8 @@ class Cc13Forum extends Cc13Entities
                 }
 
                 $topic_text = $xpath->query('/dt:topic/dt:text');
-                $topic_text = !empty($topic_text->item(0)->nodeValue) ? $this->update_sources($topic_text->item(0)->nodeValue, dirname($topic_file)) : '';
-                $topic_text = !empty($topic_text) ? str_replace("%24", "\$", $this->include_titles($topic_text)) : '';
+                $topic_text = !empty($topic_text->item(0)->nodeValue) ? $this->updateSources($topic_text->item(0)->nodeValue, dirname($topic_file)) : '';
+                $topic_text = !empty($topic_text) ? str_replace("%24", "\$", $this->includeTitles($topic_text)) : '';
 
                 if (!empty($topic_title)) {
                     $topic_data['title'] = $topic_title;
@@ -138,7 +142,7 @@ class Cc13Forum extends Cc13Entities
                 $attachment_html = '';
 
                 foreach ($topic_attachments as $file) {
-                    $attachment_html .= $this->generate_attachment_html($this->full_path($file->nodeValue,'/'));
+                    $attachment_html .= $this->generateAttachmentHtml($this->fullPath($file->nodeValue,'/'));
                 }
 
                 $topic_data['description'] = !empty($attachment_html) ? $topic_text . '<p>Attachments:</p>' . $attachment_html : $topic_text;
@@ -148,9 +152,10 @@ class Cc13Forum extends Cc13Entities
         return $topic_data;
     }
 
-    private function generate_attachment_html ($filename) {
+    private function generateAttachmentHtml ($filename)
+    {
 
-        $images_extensions = array('gif' , 'jpeg' , 'jpg' , 'jif' , 'jfif' , 'png' , 'bmp');
+        $images_extensions = ['gif' , 'jpeg' , 'jpg' , 'jif' , 'jfif' , 'png' , 'bmp'];
 
         $fileinfo = pathinfo($filename);
 

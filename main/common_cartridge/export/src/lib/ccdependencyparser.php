@@ -6,8 +6,9 @@
  *
  * @param string $path
  */
-function toUrlPath(&$path) {
-    for ($count = 0 ; $count < strlen($path); ++$count) {
+function toUrlPath(&$path)
+{
+    for ($count = 0 ; $count < strlen($path); $count++) {
         $chr = $path[$count];
         if (($chr == '\\')) {
             $path[$count] = '/';
@@ -22,7 +23,8 @@ function toUrlPath(&$path) {
  * @param string $path2
  * @return string
  */
-function pathDiff($path1, $path2) {
+function pathDiff($path1, $path2)
+{
     toUrlPath($path1);
     toUrlPath($path2);
     $result = "";
@@ -40,8 +42,9 @@ function pathDiff($path1, $path2) {
  *
  * @param string $path
  */
-function toNativePath(&$path) {
-    for ($count = 0 ; $count < strlen($path); ++$count) {
+function toNativePath(&$path)
+{
+    for ($count = 0 ; $count < strlen($path); $count++) {
         $chr = $path[$count];
         if (($chr == '\\') || ($chr == '/')) {
             $path[$count] = '/';
@@ -56,7 +59,8 @@ function toNativePath(&$path) {
  * @param string $rootDir
  * @return string
  */
-function stripUrl($path, $rootDir='') {
+function stripUrl($path, $rootDir = '')
+{
     $result = $path;
     if ( is_string($path) && ($path != '') ) {
         $start=strpos($path,'(')+1;
@@ -67,9 +71,10 @@ function stripUrl($path, $rootDir='') {
     return $result;
 }
 
-function fullPath($path, $dirsep = DIRECTORY_SEPARATOR) {
+function fullPath($path, $dirsep = DIRECTORY_SEPARATOR)
+{
     $token = '$IMS-CC-FILEBASE$';
-    $path = str_replace($token,'',$path);
+    $path = str_replace($token, '', $path);
     if (is_string($path) && ($path != '')) {
         $sep   = $dirsep;
         $dotDir= '.';
@@ -110,15 +115,17 @@ function fullPath($path, $dirsep = DIRECTORY_SEPARATOR) {
  * @param string $url
  * @return boolean
  */
-function isUrl($url) {
+function isUrl($url)
+{
     $result = filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED) !== false;
     return $result;
 }
 
-function getDepFiles($manifestroot, $fname, $folder, &$filenames) {
-    static $types = array('xhtml' => true, 'html' => true, 'htm' => true);
+function getDepFiles($manifestroot, $fname, $folder, &$filenames)
+{
+    static $types = ['xhtml' => true, 'html' => true, 'htm' => true];
     $extension = strtolower(trim(pathinfo($fname, PATHINFO_EXTENSION)));
-    $filenames = array();
+    $filenames = [];
     if (isset($types[$extension])) {
         $dcx = new XMLGenericDocument();
         $filename = $manifestroot.$folder.$fname;
@@ -134,10 +141,11 @@ function getDepFiles($manifestroot, $fname, $folder, &$filenames) {
     }
 }
 
-function getDepFilesHTML($manifestroot, $fname, &$filenames, &$dcx, $folder) {
+function getDepFilesHTML($manifestroot, $fname, &$filenames, &$dcx, $folder)
+{
     $dcx->resetXpath();
     $nlist         = $dcx->nodeList("//img/@src | //link/@href | //script/@src | //a[not(starts-with(@href,'#'))]/@href");
-    $css_obj_array = array();
+    $cssObjArray = [];
     foreach ($nlist as $nl) {
         $item       = $folder.$nl->nodeValue;
         $path_parts = pathinfo($item);
@@ -154,13 +162,13 @@ function getDepFilesHTML($manifestroot, $fname, &$filenames, &$dcx, $folder) {
         if ($ext == 'css') {
             $css = new CssParser();
             $css->parse($dcx->filePath().$nl->nodeValue);
-            $css_obj_array[$item] = $css;
+            $cssObjArray[$item] = $css;
         }
     }
     $nlist = $dcx->nodeList("//*/@class");
     foreach ($nlist as $nl) {
         $item = $folder.$nl->nodeValue;
-        foreach ($css_obj_array as $csskey => $cssobj) {
+        foreach ($cssObjArray as $csskey => $cssobj) {
             $bimg  = $cssobj->get($item, "background-image");
             $limg  = $cssobj->get($item, "list-style-image");
             $npath = pathinfo($csskey);
@@ -173,14 +181,14 @@ function getDepFilesHTML($manifestroot, $fname, &$filenames, &$dcx, $folder) {
             }
         }
     }
-    $elems_to_check = array("body", "p", "ul", "h4", "a", "th");
-    $do_we_have_it  = array();
-    foreach ($elems_to_check as $elem) {
-        $do_we_have_it[$elem] = ($dcx->nodeList("//".$elem)->length > 0);
+    $elemsToCheck = ["body", "p", "ul", "h4", "a", "th"];
+    $doWeHaveIt  = [];
+    foreach ($elemsToCheck as $elem) {
+        $doWeHaveIt[$elem] = ($dcx->nodeList("//".$elem)->length > 0);
     }
-    foreach ($elems_to_check as $elem) {
-        if ($do_we_have_it[$elem]) {
-            foreach ($css_obj_array as $csskey => $cssobj) {
+    foreach ($elemsToCheck as $elem) {
+        if ($doWeHaveIt[$elem]) {
+            foreach ($cssObjArray as $csskey => $cssobj) {
                 $sb    = $cssobj->get($elem, "background-image");
                 $sbl   = $cssobj->get($elem, "list-style-image");
                 $npath = pathinfo($csskey);

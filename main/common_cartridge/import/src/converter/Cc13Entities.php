@@ -2,23 +2,23 @@
 /* For licensing terms, see /license.txt */
 
 
-class Cc13Entities extends CcEntities 
+class Cc13Entities extends CcEntities
 {
 
-    public function get_external_xml($identifier) {
-        $xpath = Cc1p3Convert::newx_path(Cc1p3Convert::$manifest, Cc1p3Convert::$namespaces);
+    public function getExternalXml($identifier) {
+        $xpath = Cc1p3Convert::newxPath(Cc1p3Convert::$manifest, Cc1p3Convert::$namespaces);
         $files = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@identifier="' .
                  $identifier . '"]/imscc:file/@href');
         $response = empty($files) || ($files->length == 0) ? '' : $files->item(0)->nodeValue;
         return $response;
     }
 
-    protected function get_all_files () {
-        
+    protected function getAllFiles () {
+
         $permDirs = api_get_permissions_for_new_directories();
-        
-        $all_files = array();
-        $xpath = Cc1p3Convert::newx_path(Cc1p3Convert::$manifest, Cc1p3Convert::$namespaces);
+
+        $all_files = [];
+        $xpath = Cc1p3Convert::newxPath(Cc1p3Convert::$manifest, Cc1p3Convert::$namespaces);
         foreach (Cc1p3Convert::$restypes as $type) {
             $files = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@type="' .
                                     $type . '"]/imscc:file/@href');
@@ -29,7 +29,7 @@ class Cc13Entities extends CcEntities
                 //omit html files
                 //this is a bit too simplistic
                 $ext = strtolower(pathinfo($file->nodeValue, PATHINFO_EXTENSION));
-                if (in_array($ext, array('html', 'htm', 'xhtml'))) {
+                if (in_array($ext, ['html', 'htm', 'xhtml'])) {
                     continue;
                 }
                 $all_files[] = $file->nodeValue;
@@ -42,7 +42,7 @@ class Cc13Entities extends CcEntities
         $labels = $xpath->query($xquery);
         if (!empty($labels) && ($labels->length > 0)) {
             $tname = 'course_files';
-            $dpath = Cc1p3Convert::$path_to_manifest_folder . DIRECTORY_SEPARATOR . $tname;
+            $dpath = Cc1p3Convert::$pathToManifestFolder . DIRECTORY_SEPARATOR . $tname;
             $rfpath = 'files.gif';
             $fpath = $dpath . DIRECTORY_SEPARATOR . 'files.gif';
             if (!file_exists($dpath)) {

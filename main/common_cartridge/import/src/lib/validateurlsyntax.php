@@ -4,7 +4,8 @@
 /**
  *  BEGINNING OF validateUrlSyntax() function
  */
-function validateUrlSyntax( $urladdr, $options="" ){
+function validateUrlSyntax( $urladdr, $options="" )
+{
 
     // Force Options parameter to be lower case
     // DISABLED PERMAMENTLY - OK to remove from code
@@ -114,7 +115,7 @@ function validateUrlSyntax( $urladdr, $options="" ){
                        // Tertiary Domain(s) - Optional - Multi - Although some sites may use other characters, the RFC says tertiary domains have the same naming restrictions as second level domains
     $domain_tertiary   = '(' . $alphanum . '(([a-zA-Z0-9-]{0,62})' . $alphanum . ')?\.)*';
     $domain_toplevel   = '([a-zA-Z](([a-zA-Z0-9-]*)[a-zA-Z0-9])?)';
-    
+
     if ($aOptions['I'] === '{0}') {       // IP Address Not Allowed
         $address       = '(' . $domain_tertiary . /* MDL-9295 $domain_secondary . */ $domain_toplevel . ')';
     } elseif ($aOptions['I'] === '') {  // IP Address Required
@@ -167,7 +168,8 @@ function validateUrlSyntax( $urladdr, $options="" ){
  *  Released under same license as validateUrlSyntax()
  */
 
-function validateEmailSyntax( $emailaddr, $options="" ){
+function validateEmailSyntax( $emailaddr, $options="" )
+{
 
     // Check Options Parameter
     if (!preg_match( '/^([sHSEFuPaIpfqr][+?-])*$/', $options ))
@@ -275,11 +277,11 @@ function validateEmailSyntax( $emailaddr, $options="" ){
  *  Released under same license as validateUrlSyntax(). For details, contact me.
  */
 
-function validateFtpSyntax( $ftpaddr, $options="" ){
+function validateFtpSyntax( $ftpaddr, $options="" )
+{
 
     // Check Options Parameter
-    if (!preg_match( '/^([sHSEFuPaIpfqr][+?-])*$/', $options ))
-    {
+    if (!preg_match( '/^([sHSEFuPaIpfqr][+?-])*$/', $options )) {
         trigger_error("Options attribute malformed", E_USER_ERROR);
     }
 

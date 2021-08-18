@@ -6,7 +6,8 @@
  * Base XML class
  *
  */
-class XMLGenericDocument {
+class XMLGenericDocument
+{
     private $charset;
     /**
      * Document
@@ -22,14 +23,22 @@ class XMLGenericDocument {
     protected $filename;
     private $filepath;
     private $isloaded = false;
-    private $arrayPrefixNS = array();
-    private $is_html = false;
+    private $arrayPrefixNS = [];
+    private $isHtml = false;
+
+    public function __construct($ch = 'UTF-8', $validatenow = true)
+    {
+        $this->charset = $ch;
+        $this->documentInit();
+        $this->doc->validateOnParse = $validatenow;
+    }
 
     /**
      * @param string $value
      * @return string
      */
-    public static function safexml($value) {
+    public static function safexml($value)
+    {
         $result = htmlspecialchars(html_entity_decode($value, ENT_QUOTES, 'UTF-8'),
                                    ENT_NOQUOTES,
                                    'UTF-8',
@@ -37,18 +46,16 @@ class XMLGenericDocument {
         return $result;
     }
 
-    function __construct($ch = 'UTF-8', $validatenow = true) {
-        $this->charset = $ch;
-        $this->documentInit();
-        $this->doc->validateOnParse = $validatenow;
-    }
 
-    function __destruct() {
+
+    public function __destruct()
+    {
         $this->dxpath = null;
         $this->doc    = null;
     }
 
-    private function documentInit($withonCreate = true) {
+    private function documentInit($withonCreate = true)
+    {
         $hg = false;
         if ($this->isloaded) {
             $guardstate = $this->doc->validateOnParse;
@@ -56,7 +63,7 @@ class XMLGenericDocument {
             unset($this->dxpath);
             unset($this->doc);
             $this->isloaded = false;
-          }
+        }
         $this->doc = new DOMDocument("1.0", $this->charset);
         $this->doc->strictErrorChecking = true;
         if ($hg) {
@@ -65,57 +72,64 @@ class XMLGenericDocument {
         $this->doc->formatOutput = true;
         $this->doc->preserveWhiteSpace = true;
         if ($withonCreate) {
-            $this->on_create();
+            $this->onCreate();
         }
     }
 
-    public function viewXML() {
+    public function viewXML()
+    {
         return $this->doc->saveXML();
     }
 
-    public function registerNS($prefix, $nsuri) {
+    public function registerNS($prefix, $nsuri)
+    {
         $this->arrayPrefixNS[$prefix] = $nsuri;
     }
 
-    public function load($fname) {
+    public function load($fname)
+    {
         // Sine xml will remain loaded should the repeated load fail we should recreate document to be empty.
         $this->documentInit(false);
         $this->isloaded = $this->doc->load($fname);
         if ($this->isloaded) {
             $this->filename = $fname;
             $this->processPath();
-            $this->is_html = false;
+            $this->isHtml = false;
         }
-        return $this->on_load();
+        return $this->onLoad();
     }
 
-    public function loadUrl($url) {
+    public function loadUrl($url)
+    {
         $this->documentInit();
         $this->isloaded = true;
-        $this->doc->loadXML( file_get_contents($url) );
-        $this->is_html = false;
-        return $this->on_load();
+        $this->doc->loadXML(file_get_contents($url));
+        $this->isHtml = false;
+        return $this->onLoad();
     }
 
-    public function loadHTML($content) {
+    public function loadHTML($content)
+    {
         $this->documentInit();
         $this->doc->validateOnParse = false;
         $this->isloaded = true;
         $this->doc->loadHTML($content);
-        $this->is_html = true;
-        return $this->on_load();
+        $this->isHtml = true;
+        return $this->onLoad();
     }
 
-    public function loadXML($content) {
+    public function loadXML($content)
+    {
         $this->documentInit();
         $this->doc->validateOnParse = false;
         $this->isloaded = true;
         $this->doc->load($content);
-        $this->is_html = true;
-        return $this->on_load();
+        $this->isHtml = true;
+        return $this->onLoad();
     }
 
-    public function loadHTMLFile($fname) {
+    public function loadHTMLFile($fname)
+    {
         // Sine xml will remain loaded should the repeated load fail
         // we should recreate document to be empty.
         $this->documentInit();
@@ -124,12 +138,13 @@ class XMLGenericDocument {
         if ($this->isloaded) {
             $this->filename = $fname;
             $this->processPath();
-            $this->is_html=true;
+            $this->isHtml = true;
         }
-        return $this->on_load();
+        return $this->onLoad();
     }
 
-    public function loadXMLFile($fname) {
+    public function loadXMLFile($fname)
+    {
         // Sine xml will remain loaded should the repeated load fail
         // we should recreate document to be empty.
         $this->documentInit();
@@ -138,29 +153,30 @@ class XMLGenericDocument {
         if ($this->isloaded) {
             $this->filename = $fname;
             $this->processPath();
-            $this->is_html = true;
+            $this->isHtml = true;
         }
-        return $this->on_load();
+        return $this->onLoad();
     }
 
 
-    public function loadString($content) {
-
+    public function loadString($content)
+    {
         $this->doc = new DOMDocument("1.0", $this->charset);
         $content = '<virtualtag>'.$content.'</virtualtag>';
         $this->doc->loadXML($content);
-
         return true;
     }
 
-    public function save() {
+    public function save()
+    {
         $this->saveTo($this->filename);
     }
 
-    public function saveTo($fname) {
+    public function saveTo($fname)
+    {
         $status = false;
-        if ($this->on_save()) {
-            if ($this->is_html) {
+        if ($this->onSave()) {
+            if ($this->isHtml) {
                 $this->doc->saveHTMLFile($fname);
             } else {
                 $this->doc->save($fname);
@@ -172,11 +188,13 @@ class XMLGenericDocument {
         return $status;
     }
 
-    public function validate() {
+    public function validate()
+    {
         return $this->doc->validate();
     }
 
-    public function attributeValue($path, $attrname, $node = null) {
+    public function attributeValue($path, $attrname, $node = null)
+    {
         $this->chkxpath();
         $result = null;
         $resultlist = null;
@@ -199,7 +217,8 @@ class XMLGenericDocument {
      * @param int $count
      * @return string
      */
-    public function nodeValue($path, $node = null, $count = 1) {
+    public function nodeValue($path, $node = null, $count = 1)
+    {
         $nd = $this->node($path, $node, $count);
         return $this->nodeTextValue($nd);
     }
@@ -210,12 +229,13 @@ class XMLGenericDocument {
      * @param DOMNode $node
      * @return string
      */
-    public function nodeTextValue($node) {
+    public function nodeTextValue($node)
+    {
         $result = '';
         if (is_object($node)) {
             if ($node->hasChildNodes()) {
                 $chnodesList = $node->childNodes;
-                $types = array(XML_TEXT_NODE, XML_CDATA_SECTION_NODE);
+                $types = [XML_TEXT_NODE, XML_CDATA_SECTION_NODE];
                 foreach ($chnodesList as $chnode) {
                     if (in_array($chnode->nodeType, $types)) {
                         $result .= $chnode->wholeText;
@@ -234,7 +254,8 @@ class XMLGenericDocument {
      * @param int $count
      * @return DOMNode
      */
-    public function node($path, $nd = null, $count = 1) {
+    public function node($path, $nd = null, $count = 1)
+    {
         $result = null;
         $resultlist = $this->nodeList($path,$nd);
         if (is_object($resultlist) && ($resultlist->length > 0)) {
@@ -250,10 +271,9 @@ class XMLGenericDocument {
      * @param DOMNode $node
      * @return DOMNodeList
      */
-    public function nodeList($path, $node = null) {
-
+    public function nodeList($path, $node = null)
+    {
         $this->chkxpath();
-
         $resultlist = null;
         if (is_null($node)) {
             $resultlist = $this->dxpath->query($path);
@@ -271,7 +291,8 @@ class XMLGenericDocument {
      * @param string $value
      * @return DOMAttr
      */
-    public function create_attribute_ns($namespace, $name, $value = null) {
+    public function createAttributeNs($namespace, $name, $value = null)
+    {
         $result = $this->doc->createAttributeNS($namespace, $name);
         if (!is_null($value)) {
             $result->nodeValue = $value;
@@ -286,7 +307,8 @@ class XMLGenericDocument {
      * @param string $value
      * @return DOMAttr
      */
-    public function create_attribute($name, $value = null) {
+    public function createAttribute($name, $value = null)
+    {
         $result = $this->doc->createAttribute($name);
         if (!is_null($value)) {
             $result->nodeValue = $value;
@@ -303,7 +325,8 @@ class XMLGenericDocument {
      * @param string $value
      * @return DOMNode
      */
-    public function append_new_element_ns(DOMNode &$parentnode, $namespace, $name, $value = null) {
+    public function appendNewElementNs(DOMNode &$parentnode, $namespace, $name, $value = null)
+    {
         $newnode = null;
         if (is_null($value)) {
             $newnode = $this->doc->createElementNS($namespace, $name);
@@ -321,7 +344,8 @@ class XMLGenericDocument {
      * @param string $name
      * @param string $value
      */
-    public function append_new_element_ns_cdata(DOMNode &$parentnode, $namespace, $name, $value = null) {
+    public function appendNewElementNsCdata(DOMNode &$parentnode, $namespace, $name, $value = null)
+    {
         $newnode = $this->doc->createElementNS($namespace, $name);
         if (!is_null($value)) {
             $cdata = $this->doc->createCDATASection($value);
@@ -338,7 +362,8 @@ class XMLGenericDocument {
      * @param string $value
      * @return DOMNode
      */
-    public function append_new_element(DOMNode &$parentnode, $name, $value = null) {
+    public function appendNewElement(DOMNode &$parentnode, $name, $value = null)
+    {
         $newnode = null;
         if (is_null($value)) {
             $newnode = $this->doc->createElement($name);
@@ -356,8 +381,9 @@ class XMLGenericDocument {
      * @param string $value
      * @return DOMNode
      */
-    public function append_new_attribute(DOMNode &$node, $name, $value = null) {
-        return $node->appendChild($this->create_attribute($name, $value));
+    public function appendNewAttribute(DOMNode &$node, $name, $value = null)
+    {
+        return $node->appendChild($this->createAttribute($name, $value));
     }
 
     /**
@@ -369,36 +395,44 @@ class XMLGenericDocument {
      * @param string $value
      * @return DOMNode
      */
-    public function append_new_attribute_ns(DOMNode &$node, $namespace, $name, $value = null) {
-        return $node->appendChild($this->create_attribute_ns($namespace, $name, $value));
+    public function appendNewAttributeNs(DOMNode &$node, $namespace, $name, $value = null)
+    {
+        return $node->appendChild($this->createAttributeNs($namespace, $name, $value));
     }
 
-    public function fileName() {
+    public function fileName()
+    {
         return $this->filename;
     }
 
-    public function filePath() {
+    public function filePath()
+    {
         return $this->filepath;
     }
 
-    protected function on_load() {
+    protected function onLoad()
+    {
         return $this->isloaded;
     }
 
-    protected function on_save() {
+    protected function onSave()
+    {
         return true;
     }
 
-    protected function on_create() {
+    protected function onCreate()
+    {
         return true;
     }
 
-    public function resetXpath() {
+    public function resetXpath()
+    {
         $this->dxpath = null;
         $this->chkxpath();
     }
 
-    private function chkxpath() {
+    private function chkxpath()
+    {
         if (!isset($this->dxpath) || is_null($this->dxpath)) {
             $this->dxpath = new DOMXPath($this->doc);
             foreach ($this->arrayPrefixNS as $nskey => $nsuri) {
@@ -407,7 +441,8 @@ class XMLGenericDocument {
         }
     }
 
-    protected function processPath() {
+    protected function processPath()
+    {
         $path_parts     = pathinfo($this->filename);
         $this->filepath = array_key_exists('dirname', $path_parts) ? $path_parts['dirname']."/" : '';
     }

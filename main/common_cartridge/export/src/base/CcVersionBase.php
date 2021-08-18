@@ -6,11 +6,11 @@
  * Abstract Version Base class
  *
  */
-abstract class CcVersionBase 
+abstract class CcVersionBase
 {
-    
+
     protected $_generator = null;
-    protected $ccnamespaces = array();
+    protected $ccnamespaces = [];
     protected $isrootmanifest = false;
     protected $manifestID = null;
     protected $organizationid = null;
@@ -23,66 +23,78 @@ abstract class CcVersionBase
     public $camversion = null;
 
 
-    abstract protected function on_create(DOMDocument &$doc, $rootmanifestnode = null, $nmanifestID = null);
+    abstract protected function onCreate(DOMDocument &$doc, $rootmanifestnode = null, $nmanifestID = null);
 
-    abstract protected function create_metadata_manifest(CcIMetadataManifest $met, DOMDocument &$doc, $xmlnode = null);
+    abstract protected function createMetadataManifest(CcIMetadataManifest $met, DOMDocument &$doc, $xmlnode = null);
 
-    abstract protected function create_metadata_resource(CcIMetadataResource $met, DOMDocument &$doc, $xmlnode = null);
+    abstract protected function createMetadataResource(CcIMetadataResource $met, DOMDocument &$doc, $xmlnode = null);
 
-    abstract protected function create_metadata_file(CcIMetadataFile $met, DOMDocument &$doc, $xmlnode = null);
+    abstract protected function createMetadataFile(CcIMetadataFile $met, DOMDocument &$doc, $xmlnode = null);
 
-    abstract protected function create_resource(CcIResource &$res, DOMDocument &$doc, $xmlnode=null);
+    abstract protected function createResource(CcIResource &$res, DOMDocument &$doc, $xmlnode=null);
 
-    abstract protected function create_organization(CcIOrganization &$org, DOMDocument &$doc, $xmlnode=null);
+    abstract protected function createOrganization(CcIOrganization &$org, DOMDocument &$doc, $xmlnode=null);
 
-    public function get_cc_namespaces() {
+    public function getCcNamespaces()
+    {
         return $this->ccnamespaces;
     }
 
-    public function create_manifest(DOMDocument &$doc, $rootmanifestnode = null) {
-        return $this->on_create($doc, $rootmanifestnode);
+    public function createManifest(DOMDocument &$doc, $rootmanifestnode = null)
+    {
+        return $this->onCreate($doc, $rootmanifestnode);
     }
 
-    public function create_resource_node(CcIResource &$res, DOMDocument &$doc, $xmlnode = null) {
-        return $this->create_resource($res, $doc, $xmlnode);
+    public function createResourceNode(CcIResource &$res, DOMDocument &$doc, $xmlnode = null)
+    {
+        return $this->createResource($res, $doc, $xmlnode);
     }
 
 
-    public function create_metadata_node(&$met, DOMDocument &$doc, $xmlnode = null) {
-        return $this->create_metadata_manifest($met, $doc, $xmlnode);
+    public function createMetadataNode(&$met, DOMDocument &$doc, $xmlnode = null)
+    {
+        return $this->createMetadataManifest($met, $doc, $xmlnode);
     }
 
-    public function create_metadata_resource_node(&$met, DOMDocument &$doc, $xmlnode = null) {
-        return $this->create_metadata_resource($met, $doc, $xmlnode);
+    public function createMetadataResourceNode(&$met, DOMDocument &$doc, $xmlnode = null)
+    {
+        return $this->createMetadataResource($met, $doc, $xmlnode);
     }
 
-    public function create_metadata_file_node(&$met, DOMDocument &$doc, $xmlnode = null) {
-        return $this->create_metadata_file($met, $doc, $xmlnode);
+    public function createMetadataFileNode(&$met, DOMDocument &$doc, $xmlnode = null)
+    {
+        return $this->createMetadataFile($met, $doc, $xmlnode);
     }
 
-    public function create_organization_node(CcIOrganization &$org, DOMDocument &$doc, $xmlnode = null) {
-        return $this->create_organization($org, $doc, $xmlnode);
+    public function createOrganizationNode(CcIOrganization &$org, DOMDocument &$doc, $xmlnode = null)
+    {
+        return $this->createOrganization($org, $doc, $xmlnode);
     }
 
-    public function manifestID() {
+    public function manifestID()
+    {
         return $this->manifestID;
     }
 
-    public function set_manifestID($id) {
+    public function setManifestID($id)
+    {
         $this->manifestID = $id;
     }
 
-    public function get_base() {
+    public function getBase()
+    {
         return $this->base;
     }
 
-    public function set_base($baseval) {
+    public function setBase($baseval)
+    {
         $this->base = $baseval;
     }
 
-    public function import_resources(DOMElement &$node, CcIManifest &$doc) {
+    public function importResources(DOMElement &$node, CcIManifest &$doc)
+    {
         if (is_null($this->resources)) {
-            $this->resources = array();
+            $this->resources = [];
         }
         $nlist = $node->getElementsByTagNameNS($this->ccnamespaces['imscc'], 'resource');
         if (is_object($nlist)) {
@@ -93,9 +105,10 @@ abstract class CcVersionBase
         }
     }
 
-    public function import_organization_items(DOMElement &$node, CcIManifest &$doc) {
+    public function importOrganizationItems(DOMElement &$node, CcIManifest &$doc)
+    {
         if (is_null($this->organizations)) {
-            $this->organizations = array();
+            $this->organizations = [];
         }
         $nlist = $node->getElementsByTagNameNS($this->ccnamespaces['imscc'], 'organization');
         if (is_object($nlist)) {
@@ -106,7 +119,8 @@ abstract class CcVersionBase
         }
     }
 
-    public function set_generator($value) {
+    public function setGenerator($value)
+    {
         $this->_generator = $value;
     }
 }

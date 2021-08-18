@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch;
 use Chamilo\CoreBundle\Entity\User;
-//use Chamilo\CoreBundle\Entity\ExtraField;
-use ChamiloSession as Session;
 
 $cidReset = true;
 
@@ -22,13 +21,8 @@ $userInfo = api_get_user_info();
 $em = Database::getManager();
 
 $adminPermissions = true;
-
-/** @var ExtraFieldSavedSearch $saved */
-$search = [
-    'user' => api_get_user_entity($userId),
-];
 $extraFieldSavedSearchRepo = $em->getRepository(ExtraFieldSavedSearch::class);
-$items = $extraFieldSavedSearchRepo->findBy($search);
+$items = $extraFieldSavedSearchRepo->findBy(['user' => api_get_user_entity($userId)]);
 
 $extraFieldSession = new ExtraField('session');
 $extraFieldValueSession = new ExtraFieldValue('session');
@@ -210,7 +204,7 @@ $(function() {
                     $(themeId).empty();
                     $(themeId).html(selectToString);
                     $(themeId).val(beforeValue);
-                    $(themeId).selectpicker("refresh");
+                    //$(themeId).selectpicker("refresh");
                 }
             }
          });
@@ -679,8 +673,6 @@ $(function () {
 </script>';
 
 $userForm->addButtonSave(get_lang('Send'));
-
-
 $userForm->setDefaults($defaults);
 
 $domaine1 = $userForm->getElementByName('extra_domaine[0]');
@@ -815,21 +807,25 @@ if ($userForm->validate()) {
 
         /** @var ExtraFieldSavedSearch $saved */
         $saved = $extraFieldSavedSearchRepo->findOneBy($search);
+
+        if (empty($value)) {
+            $value = [];
+        }
+
         if ($saved) {
             $saved
                 ->setField($extraFieldObj)
                 ->setUser($user)
                 ->setValue($value)
             ;
-            $em->merge($saved);
         } else {
-            $saved = new ExtraFieldSavedSearch();
-            $saved
+            $saved = (new ExtraFieldSavedSearch())
                 ->setField($extraFieldObj)
                 ->setUser($user)
-                ->setValue($value);
-            $em->persist($saved);
+                ->setValue($value)
+            ;
         }
+        $em->persist($saved);
         $em->flush();
     }
 

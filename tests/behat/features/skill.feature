@@ -109,14 +109,19 @@ Feature: Skills
     Then I should see "The user John Doe has already achieved the skill skill11"
 
 # The following scenario need to be completed once the funcionality is ready
-#  Scenario: View assign skill
-#    Given I am a platform administrator
-#    And I am on "/badge/3/user/1"
-#    Then I should see "..."
-#
+  Scenario: View assigned skill skill11 to user 1
+    Given I am a platform administrator
+    And I am on "/badge/3/user/1"
+    Then I should see "Skill acquired"
+    And I should see "John Doe"
+
 # The following scenario need to be completed once the funcionality is ready
 #  Scenario: Set a badge to a skill
 #    Given I am a platform administrator
 #    And I am on "main/admin/skill_list.php"
 #    Then I should see "skill11"
 #    Then I follow "Create badge"
+#    Then I follow "Browse"
+#    Then I select my badge image
+#    Then I follow "Save badge"
+#    Then I should see "Update successful"

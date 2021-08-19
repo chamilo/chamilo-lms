@@ -385,44 +385,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @deprecated Use Vue + api platform
-     *
-     * Route("/{tool}/{type}/{id}/delete_mass", methods={"DELETE"}, name="chamilo_core_resource_delete_mass")
-     */
-    /*public function deleteMassAction($primaryKeys, $allPrimaryKeys, Request $request): Response
-    {
-        $em = $this->getDoctrine()->getManager();
-        $repo = $this->getRepositoryFromRequest($request);
-
-        $parentId = 0;
-        foreach ($primaryKeys as $id) {
-            $resource = $repo->find($id);
-            $resourceNode = $resource->getResourceNode();
-
-            if (null === $resourceNode) {
-                continue;
-            }
-
-            $this->denyAccessUnlessGranted(
-                ResourceNodeVoter::DELETE,
-                $resourceNode,
-                $this->trans('Unauthorised access to resource')
-            );
-
-            $parentId = $resourceNode->getParent()->getId();
-            $em->remove($resource);
-        }
-
-        $this->addFlash('success', $this->trans('Deleted'));
-        $em->flush();
-
-        $routeParams = $this->getResourceParams($request);
-        $routeParams['id'] = $parentId;
-
-        return $this->redirectToRoute('chamilo_core_resource_list', $routeParams);
-    }*/
-
-    /**
      * Shows the associated resource file.
      *
      * @deprecated use vue
@@ -591,35 +553,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         return $response;
     }
-
-    /**
-     * Upload form.
-     *
-     * @deprecated use vue + api platform
-     *
-     * @Route("/{tool}/{type}/{id}/upload", name="chamilo_core_resource_upload", methods={"GET", "POST"},
-     *     options={"expose"=true})
-     */
-    /*public function uploadAction(Request $request, $tool, $type, $id): Response
-    {
-        $repository = $this->getRepositoryFromRequest($request);
-        $resourceNode = $repository->getResourceNodeRepository()->find($id);
-
-        $this->denyAccessUnlessGranted(
-            ResourceNodeVoter::EDIT,
-            $resourceNode,
-            $this->trans('Unauthorised access to resource')
-        );
-
-        $this->setBreadCrumb($request, $resourceNode);
-
-        $routeParams = $this->getResourceParams($request);
-        $routeParams['tool'] = $tool;
-        $routeParams['type'] = $type;
-        $routeParams['id'] = $id;
-
-        return $this->render($repository->getTemplates()->getFromAction(__FUNCTION__), $routeParams);
-    }*/
 
     /**
      * @return mixed|StreamedResponse

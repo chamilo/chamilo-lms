@@ -207,7 +207,7 @@ class Basic extends Toolbar
             $list = [];
             foreach ($languageList as $isocode => $name) {
                 // Example format language list : ['ar:Arabic:rtl', 'fr:French', 'es:Spanish'];
-                $rtl = (in_array($isocode, $rtlIsocodes)?':rtl':'');
+                $rtl = (\in_array($isocode, $rtlIsocodes, true) ? ':rtl' : '');
                 $list[] = $isocode.':'.$name.$rtl;
             }
             $config['translatehtml_lenguage_list'] = $list;
@@ -255,8 +255,6 @@ class Basic extends Toolbar
             $config['language'] = $iso;
             $config['language_url'] = "$url/libs/editor/langs/$iso.js";
         }
-
-
 
         /*if (isset($this->config)) {
             $this->config = array_merge($config, $this->config);

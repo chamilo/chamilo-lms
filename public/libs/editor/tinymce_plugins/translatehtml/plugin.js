@@ -6,14 +6,13 @@
     var translatedSelector = 'span[class="mce-translatehtml"]';
 
     var cleanTranslated = function (newElement) {
-     var nodes = $(newElement).find(".mce-translatehtml");
-     if (nodes.length > 0) {
-       $(newElement).find(".mce-translatehtml").each(function() {
-         $(this).replaceWith($(this).html());
-       });
-     }
+        var nodes = $(newElement).find(".mce-translatehtml");
+        if (nodes.length > 0) {
+            $(newElement).find(".mce-translatehtml").each(function () {
+                $(this).replaceWith($(this).html());
+            });
+        }
     };
-
 
     var tinyWrap = function (open_tag, close_tag) {
       var ed = (tinymce.activeEditor || opener.tinymce.activeEditor); /* get editor instance */
@@ -36,50 +35,44 @@
       return; /* taa-daa! all done! */
     }
 
-
-  var register = function (editor) {
+    var register = function (editor) {
         var languagesConfigStrings = editor.getParam("translatehtml_lenguage_list");
         editor.ui.registry.addSplitButton('translatehtml', {
             tooltip: 'Translate html',
             icon: 'translate',
             onAction: function () {},
             onItemAction: function (api, value) {
-
-              if (value[0] != 'remove') {
-                tinyWrap('<span class="mce-translatehtml hidden" dir="'+value[0]+'" lang="'+value[1]+'">', '</span>');
-              }
-              else {
-                tinyWrap('', '');
-              }
-
+                if (value[0] != 'remove') {
+                    tinyWrap('<span class="mce-translatehtml hidden" dir="' + value[0] + '" lang="' + value[1] + '">', '</span>');
+                } else {
+                    tinyWrap('', '');
+                }
             },
             fetch: function (callback) {
               var items = [], parts, curLanguageId, dir, i;
-              for ( i = 0; i < languagesConfigStrings.length; i++ ) {
+                for (i = 0; i < languagesConfigStrings.length; i++) {
                     parts = languagesConfigStrings[i].split(':');
                     curLanguageId = parts[0];
                     dir = 'rtl';
-                    if ((''+parts[2]).toLowerCase() != 'rtl') {
+                    if (('' + parts[2]).toLowerCase() != 'rtl') {
                         dir = 'ltr';
                     }
                     items.push({
-                            type: 'choiceitem',
-                            text: parts[1],
-                            value: [dir , curLanguageId]
+                        type: 'choiceitem',
+                        text: parts[1],
+                        value: [dir, curLanguageId]
                     });
                 }
                 items.push({
-                            type: 'choiceitem',
-                            icon: 'remove',
-                            text: 'Remove translation',
-                            value: ['remove']
+                    type: 'choiceitem',
+                    icon: 'remove',
+                    text: 'Remove translation',
+                    value: ['remove']
                 });
                 callback(items);
             }                              
-        });             
-      
-    } // end register
-
+        });
+    }
 
     function Plugin () {
       global.add('translatehtml', function (editor) {
@@ -89,5 +82,4 @@
     }
 
     Plugin();
-
 }());

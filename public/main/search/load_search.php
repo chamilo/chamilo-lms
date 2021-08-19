@@ -1175,7 +1175,7 @@ $userReportButton = Display::url(
 
 $tpl->assign('grid', $grid.$button.$table->toHtml().$userReportButton);
 $tpl->assign('grid_js', $griJs);
-$templateName = $tpl->get_template('search/search_extra_field.tpl');
+$templateName = $tpl->get_template('search/search_extra_field.html.twig');
 $contentTemplate = $tpl->fetch($templateName);
 $tpl->assign('content', $contentTemplate);
 $tpl->display_one_col_template();

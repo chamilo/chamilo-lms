@@ -7399,12 +7399,9 @@ function api_create_zip(string $name): ZipStream
     return new ZipStream($name, $zipStreamOptions);
 }
 
-/**
- * @return string
- */
-function api_get_language_translate_html()
+function api_get_language_translate_html(): string
 {
-    $translate = ('true' === api_get_setting('editor.translate_html'));
+    $translate = 'true' === api_get_setting('editor.translate_html');
 
     if (!$translate) {
         return '';
@@ -7429,15 +7426,17 @@ function api_get_language_translate_html()
     $userInfo = api_get_user_info();
     if (!empty($userInfo['language'])) {
         $isoCode = $userInfo['language'];
-    }
 
-    return '
+        return '
             $(function() {
                 $(".mce-translatehtml").hide();
                 var defaultLanguageFromUser = "'.$isoCode.'";
                 $("span:lang('.$isoCode.')").show();
             });
-    ';
+        ';
+    }
+
+    return '';
 }
 
 function api_protect_webservices()

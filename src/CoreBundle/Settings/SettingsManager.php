@@ -45,11 +45,12 @@ class SettingsManager implements SettingsManagerInterface
      * @var Settings[]
      */
     protected array $resolvedSettings = [];
-    //protected $settings;
+
     /**
      * @var null|array<string, Settings>|mixed[]
      */
     protected ?array $schemaList;
+
     protected RequestStack $request;
 
     public function __construct(
@@ -100,10 +101,7 @@ class SettingsManager implements SettingsManagerInterface
         }
     }
 
-    /**
-     * @return array
-     */
-    public function getSchemas()
+    public function getSchemas(): array
     {
         return $this->schemaRegistry->all();
     }
@@ -119,13 +117,11 @@ class SettingsManager implements SettingsManagerInterface
     }
 
     /**
-     * @param string $name
-     *
      * @throws InvalidArgumentException
      */
-    public function getSetting($name)
+    public function getSetting(string $name)
     {
-        if (false === strpos($name, '.')) {
+        if (!str_contains($name, '.')) {
             //throw new \InvalidArgumentException(sprintf('Parameter must be in format "namespace.name", "%s" given.', $name));
 
             // This code allows the possibility of calling

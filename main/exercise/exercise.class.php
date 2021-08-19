@@ -6177,8 +6177,7 @@ class Exercise
                     false,
                     $questionDuration
                 );
-            }
-            elseif ($answerType == ORAL_EXPRESSION) {
+            } elseif ($answerType == ORAL_EXPRESSION) {
                 $answer = $choice;
                 Event::saveQuestionAttempt(
                     $questionScore,

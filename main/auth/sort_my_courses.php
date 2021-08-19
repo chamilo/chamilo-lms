@@ -207,6 +207,28 @@ switch ($action) {
         break;
 }
 
+function generateUnsubscribeForm(string $courseCode, string $secToken): string
+{
+    $alertMessage = api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES);
+
+    $form = new FormValidator(
+        'frm_unsubscribe',
+        'get',
+        api_get_path(WEB_CODE_PATH).'auth/courses.php',
+        '',
+        [
+            'onsubmit' => 'javascript: if (!confirm(\''.addslashes($alertMessage).'\')) return false;',
+        ],
+        FormValidator::LAYOUT_INLINE
+    );
+    $form->addHidden('action', 'unsubscribe');
+    $form->addHidden('sec_token', $secToken);
+    $form->addHidden('unsubscribe', $courseCode);
+    $form->addButton('unsub', get_lang('Unsubscribe'));
+
+    return $form->returnForm();
+}
+
 Display::display_header();
 
 $stok = Security::get_token();
@@ -352,16 +374,8 @@ if (!empty($user_course_categories)) {
                 <?php
                     if ($course['status'] != 1) {
                         if ($course['unsubscr'] == 1) {
+                            echo generateUnsubscribeForm($course['code'], $stok);
                             ?>
-
-                <form action="<?php echo api_get_path(WEB_CODE_PATH).'auth/courses.php'; ?>" method="get" onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES, api_get_system_encoding())); ?>')) return false">
-                    <input type="hidden" name="action" value="unsubscribe">
-                    <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
-                    <input type="hidden" name="unsubscribe" value="<?php echo $course['code']; ?>" />
-                     <button class="btn btn-default" value="<?php echo get_lang('Unsubscribe'); ?>" name="unsub">
-                    <?php echo get_lang('Unsubscribe'); ?>
-                    </button>
-                </form>
               </div>
                   <?php
                         }
@@ -441,18 +455,9 @@ if (!empty($courses_without_category)) {
             <?php
                 if ($course['status'] != 1) {
                     if ($course['unsubscr'] == 1) {
+                        echo generateUnsubscribeForm($course['code'], $stok);
                         ?>
                 <!-- changed link to submit to avoid action by the search tool indexer -->
-                <form action="<?php echo api_get_path(WEB_CODE_PATH).'auth/courses.php'; ?>"
-                      method="get"
-                      onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES, api_get_system_encoding())); ?>')) return false;">
-                    <input type="hidden" name="action" value="unsubscribe">
-                    <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
-                    <input type="hidden" name="unsubscribe" value="<?php echo $course['code']; ?>" />
-                    <button class="btn btn-default" value="<?php echo get_lang('Unsubscribe'); ?>" name="unsub">
-                        <?php echo get_lang('Unsubscribe'); ?>
-                    </button>
-                </form>
                 </div>
               <?php
                     }

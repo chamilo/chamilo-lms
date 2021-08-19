@@ -142,12 +142,18 @@ export default {
     let app = document.getElementById('app');
 
     let isAuthenticated = false;
+
     if (!isEmpty(window.user)) {
       console.log('APP.vue: is logged in as ' + window.user.username);
       this.user = window.user;
       isAuthenticated = true;
     }
-    console.log(this.user);
+
+    if (!isEmpty(window.config)) {
+      console.log('Config: ', window.config);
+      this.config = window.config;
+    }
+
     let payload = {isAuthenticated: isAuthenticated, user: this.user};
     this.$store.dispatch("security/onRefresh", payload);
 

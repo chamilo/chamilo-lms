@@ -188,7 +188,13 @@
 
           <div class="q-mt-md">
             <div class="flex flex-center q-gutter-xs">
-              <a class="GNL__drawer-footer-link" href="javascript:void(0)" aria-label="About">Chamilo</a>
+              <a
+                  class="GNL__drawer-footer-link"
+                 href="javascript:void(0)"
+              >
+                {{ config['platform.site_name'] }}
+                {{ config['platform.institution'] }}
+              </a>
             </div>
           </div>
         </q-list>
@@ -197,17 +203,13 @@
     <!--    <q-drawer show-if-above v-model="rightDrawerOpen" side="right" elevated>-->
     <!--      &lt;!&ndash; drawer content &ndash;&gt;-->
     <!--    </q-drawer>-->
-
     <q-page-container>
       <q-page
           class="q-layout-padding"
       >
-
         <Breadcrumb v-if="this.showBreadcrumb" :legacy="this.breadcrumb"/>
-
         <router-view />
         <slot></slot>
-
       </q-page>
     </q-page-container>
   </q-layout>
@@ -218,7 +220,6 @@ import {mapGetters, useStore} from "vuex";
 import isEmpty from "lodash/isEmpty";
 import useState from "../../hooks/useState";
 import {computed, ref, toRefs} from "vue";
-
 import Breadcrumb from '../../components/Breadcrumb.vue';
 
 export default {
@@ -230,11 +231,14 @@ export default {
     const { isSidebarOpen, isSettingsPanelOpen, isSearchPanelOpen, isNotificationsPanelOpen } = useState();
     const rightDrawerOpen = ref(false);
     const { showBreadcrumb } = toRefs(props);
+    const config = ref([]);
 
-    /*const store = useStore();
-    const currentUser = store.getters["security/getUser"];*/
+    if (!isEmpty(window.config)) {
+      config.value = window.config;
+    }
 
     return {
+      config,
       //currentUser,
       showBreadcrumb,
       isSettingsPanelOpen,
@@ -251,7 +255,6 @@ export default {
   data: () => ({
     user: {},
     moved: true,
-    showBreadcrumb: true,
     linksUser: [
        //{ icon: 'home', url: '/', text: 'Home' },
        //{ icon: 'star_border', url: '/', text: 'News' },

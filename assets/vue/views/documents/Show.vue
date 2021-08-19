@@ -26,13 +26,13 @@
               </video>
             </span>
             <span v-else>
-                <q-btn
-                    class="btn btn-primary"
-                    :to="item['downloadUrl']"
-                >
-                  <v-icon icon="mdi-file-download"/>
-                  {{ $t('Download file') }}
-                </q-btn>
+<!--                <q-btn-->
+<!--                    class="btn btn-primary"-->
+<!--                    :to="item['downloadUrl']"-->
+<!--                >-->
+<!--                  <v-icon icon="mdi-file-download"/>-->
+<!--                  {{ $t('Download file') }}-->
+<!--                </q-btn>-->
               </span>
           </div>
         </div>

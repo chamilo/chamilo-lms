@@ -143,8 +143,10 @@ class Basic extends Toolbar
 
     /**
      * Get the toolbar config.
+     *
+     * @return array
      */
-    public function getConfig(): array
+    public function getConfig()
     {
         $config = [];
         $customPlugins = '';

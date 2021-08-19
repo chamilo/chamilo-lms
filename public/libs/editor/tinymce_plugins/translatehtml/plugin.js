@@ -14,7 +14,7 @@
     };
 
     var tinyWrap = function (open_tag, close_tag) {
-      var ed = (tinymce.activeEditor || opener.tinymce.activeEditor); /* get editor instance */
+      var ed = tinymce.activeEditor || opener.tinymce.activeEditor; /* get editor instance */
       var selection = ed.selection.getContent(); /* get user selection, if any */
       var temp_name  = new Date().getTime().toString(36).toLowerCase(); /* generate a unique string */
       var span_open  = '<span id="' + temp_name + '">'; /* generate '<span id="unique">' */

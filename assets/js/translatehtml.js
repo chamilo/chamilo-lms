@@ -1,7 +1,6 @@
 /* For licensing terms, see /license.txt */
 
-document.addEventListener('DOMContentLoaded', function (){
-
+document.addEventListener('DOMContentLoaded', function () {
   if (window.user) {
     const isoCode = window.user.locale;
     const translateElement = document.querySelector('.mce-translatehtml');
@@ -16,5 +15,4 @@ document.addEventListener('DOMContentLoaded', function (){
       });
     }
   }
-
 });

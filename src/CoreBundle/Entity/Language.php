@@ -30,24 +30,21 @@ class Language
     protected int $id;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="original_name", type="string", length=255, nullable=true)
      */
+    #[Assert\NotBlank]
     protected ?string $originalName = null;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="english_name", type="string", length=255)
      */
+    #[Assert\NotBlank]
     protected string $englishName;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @ORM\Column(name="isocode", type="string", length=10)
      */
+    #[Assert\NotBlank]
     protected string $isocode;
 
     /**
@@ -69,6 +66,7 @@ class Language
     public function __construct()
     {
         $this->subLanguages = new ArrayCollection();
+        $this->direction = 'rtl';
     }
 
     public function setOriginalName(string $originalName): self
@@ -78,12 +76,7 @@ class Language
         return $this;
     }
 
-    /**
-     * Get originalName.
-     *
-     * @return string
-     */
-    public function getOriginalName()
+    public function getOriginalName(): string
     {
         return $this->originalName;
     }
@@ -95,12 +88,7 @@ class Language
         return $this;
     }
 
-    /**
-     * Get englishName.
-     *
-     * @return string
-     */
-    public function getEnglishName()
+    public function getEnglishName(): string
     {
         return $this->englishName;
     }
@@ -112,12 +100,7 @@ class Language
         return $this;
     }
 
-    /**
-     * Get isocode.
-     *
-     * @return string
-     */
-    public function getIsocode()
+    public function getIsocode(): string
     {
         return $this->isocode;
     }
@@ -129,12 +112,7 @@ class Language
         return $this;
     }
 
-    /**
-     * Get available.
-     *
-     * @return bool
-     */
-    public function getAvailable()
+    public function getAvailable(): bool
     {
         return $this->available;
     }

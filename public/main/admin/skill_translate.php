@@ -55,7 +55,7 @@ $languageId = isset($_GET['sub_language']) ? intval($_GET['sub_language']) : 0;
 
 $languages = $em
     ->getRepository(Language::class)
-    ->findAllPlatformSubLanguages();
+    ->findAllSubLanguages();
 
 $languagesOptions = [0 => get_lang('none')];
 

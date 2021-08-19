@@ -1,7 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\Language;
 
 $cidReset = true;
 
@@ -33,10 +35,7 @@ if (!$extraField || empty($variableLanguage) || empty($originalName)) {
 
 $languageId = isset($_GET['sub_language']) ? (int) $_GET['sub_language'] : 0;
 
-$languages = $em
-    ->getRepository('ChamiloCoreBundle:Language')
-    ->findAllPlatformSubLanguages();
-
+$languages = $em->getRepository(Language::class)->findAllSubLanguages();
 $languagesOptions = [0 => get_lang('none')];
 
 foreach ($languages as $language) {

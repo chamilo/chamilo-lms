@@ -14,18 +14,29 @@
     <div v-if="item" class="flex flex-row">
       <div class="w-1/2">
         <div class ="flex justify-center" v-if="item['resourceNode']['resourceFile']">
+
           <div class="w-64">
             <q-img
                 spinner-color="primary"
                 v-if="item['resourceNode']['resourceFile']['image']"
                 :src="item['contentUrl'] + '&w=300'"
             />
+
             <span v-else-if="item['resourceNode']['resourceFile']['video']">
               <video controls>
                 <source :src="item['contentUrl']" />
               </video>
             </span>
-            <span v-else>
+
+            <span v-if="'text/html' === item['resourceNode']['resourceFile']['mimeType']">
+                <iframe
+                    border="0"
+                    width="100%"
+                    :src="item['contentUrl']"
+                />
+            </span>
+
+<!--            <span v-else>-->
 <!--                <q-btn-->
 <!--                    class="btn btn-primary"-->
 <!--                    :to="item['downloadUrl']"-->
@@ -33,7 +44,7 @@
 <!--                  <v-icon icon="mdi-file-download"/>-->
 <!--                  {{ $t('Download file') }}-->
 <!--                </q-btn>-->
-              </span>
+<!--              </span>-->
           </div>
         </div>
         <div class ="flex justify-center" v-else>

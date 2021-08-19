@@ -1372,7 +1372,7 @@ class SurveyUtil
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
         $translate = false;
-        if (true == api_get_configuration_value('translate_html')) {
+        if ('true' === api_get_setting('editor.translate_html')) {
             $translate = true;
         }
 

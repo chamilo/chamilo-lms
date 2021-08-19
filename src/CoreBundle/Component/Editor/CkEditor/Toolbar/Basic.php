@@ -66,6 +66,7 @@ class Basic extends Toolbar
      * Plugins this toolbar.
      */
     public array $plugins = [];
+    private string $toolbarSet;
 
     public function __construct(
         $router,
@@ -136,6 +137,7 @@ class Basic extends Toolbar
             $plugins[] = 'blockimagepaste';
         }
         $this->defaultPlugins = array_unique(array_merge($this->defaultPlugins, $plugins));
+        $this->toolbarSet = $toolbar;
         parent::__construct($router, $toolbar, $config, $prefix);
     }
 
@@ -194,10 +196,27 @@ class Basic extends Toolbar
         ];
         $config['startupOutlineBlocks'] = true === api_get_configuration_value('ckeditor_startup_outline_blocks');*/
 
+        $customPlugins = '';
+        $customPluginsPath = [];
+        if ('true' === api_get_setting('editor.translate_html')) {
+            $customPlugins .= ' translatehtml';
+            $customPluginsPath['translatehtml'] = api_get_path(WEB_PUBLIC_PATH).'libs/editor/tinymce_plugins/translatehtml/plugin.js';
+
+            $languageList = api_get_languages();
+            $rtlIsocodes = ['ps', 'ar', 'he', 'fa'];
+            $list = [];
+            foreach ($languageList as $isocode => $name) {
+                // Example format language list : ['ar:Arabic:rtl', 'fr:French', 'es:Spanish'];
+                $rtl = (in_array($isocode, $rtlIsocodes)?':rtl':'');
+                $list[] = $isocode.':'.$name.$rtl;
+            }
+            $config['translatehtml_lenguage_list'] = $list;
+        }
+
         $plugins = [
             'advlist autolink lists link image charmap print preview anchor',
             'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table paste wordcount ',
+            'insertdatetime media table paste wordcount'.$customPlugins,
         ];
 
         /*plugins: [
@@ -211,7 +230,11 @@ class Basic extends Toolbar
         }
 
         $config['plugins'] = implode(' ', $plugins);
-        $config['toolbar'] = 'undo redo | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl';
+        $config['toolbar'] = 'undo redo directionality | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl'.$customPlugins;
+
+        if (!empty($customPluginsPath)) {
+            $config['external_plugins'] = $customPluginsPath;
+        }
 
         //$config['skin'] = 'oxide';
         $config['skin_url'] = '/build/libs/tinymce/skins/ui/oxide';
@@ -232,6 +255,8 @@ class Basic extends Toolbar
             $config['language'] = $iso;
             $config['language_url'] = "$url/libs/editor/langs/$iso.js";
         }
+
+
 
         /*if (isset($this->config)) {
             $this->config = array_merge($config, $this->config);

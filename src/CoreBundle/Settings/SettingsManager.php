@@ -857,6 +857,7 @@ class SettingsManager implements SettingsManagerInterface
             'donotlistcampus' => 'platform',
             'gradebook_show_percentage_in_reports' => 'gradebook',
             'course_creation_splash_screen' => 'Course',
+            'translate_html' => 'Editor',
         ];
     }
 

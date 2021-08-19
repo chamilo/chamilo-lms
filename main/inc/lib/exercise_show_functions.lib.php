@@ -105,7 +105,7 @@ class ExerciseShowFunctions
     /**
      * Shows the answer to an upload question.
      *
-     * @param float|null $questionScore (only used to check if > 0
+     * @param float|null $questionScore   Only used to check if > 0
      * @param int        $resultsDisabled Unused
      */
     public static function displayUploadAnswer(

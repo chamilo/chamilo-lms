@@ -103,17 +103,16 @@ class ExerciseShowFunctions
     }
 
     /**
-     * Shows the answer to an upload question
+     * Shows the answer to an upload question.
      *
-     * @param string    Answer filepath
-     * @param int       Exercise ID
-     * @param int       Question ID
+     * @param float|null $questionScore (only used to check if > 0
+     * @param int        $resultsDisabled Unused
      */
     public static function displayUploadAnswer(
-        $feedbackType,
-        $answer,
-        $exeId,
-        $questionId,
+        string $feedbackType,
+        string $answer,
+        int $exeId,
+        int $questionId,
         $questionScore = null,
         $resultsDisabled = 0
     ) {

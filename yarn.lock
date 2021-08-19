@@ -1628,12 +1628,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@heroicons/vue@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "@heroicons/vue@npm:1.0.3"
+"@heroicons/vue@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "@heroicons/vue@npm:1.0.4"
   peerDependencies:
     vue: ">= 3"
-  checksum: 8c2bb5b56e9334b5d433bfd93389bcc0cd57a044a454d82556d369964d4bece92e5de0293ac4dc7c079c7a1a38643c5bb269d229a383681281d29ecf8ac76554
+  checksum: e448568522fdaaa15024e5b1599ddbb90a6528a2243b94e140bd8608d35b8a30102f62335321d9778650091eda393f110467a90802f43ea6fdb6fea67e5b714f
   languageName: node
   linkType: hard
 
@@ -5559,6 +5559,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"base64-arraybuffer@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "base64-arraybuffer@npm:1.0.1"
+  checksum: 6a6b0ace8e158824e280528acada2ab87e2a29b4e05a07613c81f0fe965fae78ca2d717eb545c82a05b89b8c57e3b6f06bd194182f258ffe29f06d336e2722f2
+  languageName: node
+  linkType: hard
+
 "base64-js@npm:^1.0.2, base64-js@npm:^1.3.1":
   version: 1.5.1
   resolution: "base64-js@npm:1.5.1"
@@ -6401,7 +6408,7 @@ __metadata:
     "@fullcalendar/timegrid": ^5.9.0
     "@fullcalendar/vue3": ^5.9.0
     "@headlessui/vue": ^1.4.0
-    "@heroicons/vue": ^1.0.3
+    "@heroicons/vue": ^1.0.4
     "@mdi/font": ^5.9.55
     "@popperjs/core": 2.9.3
     "@quasar/extras": ^1.10.10
@@ -6441,9 +6448,9 @@ __metadata:
     blueimp-load-image: ^5.14.0
     bootstrap-daterangepicker: ^3.1
     bootstrap-select: ^1.13.18
-    chart.js: ^3.5.0
+    chart.js: ^3.5.1
     copy-webpack-plugin: 9.0.1
-    core-js: 3.16.1
+    core-js: 3.16.2
     cropper: ^4.1.0
     datepair.js: ^0.4.17
     deepmerge: ^4.2.2
@@ -6463,7 +6470,7 @@ __metadata:
     graphql-tag: ^2.12.5
     highlight.js: ^11.2.0
     hljs: ^6.2.3
-    html2canvas: ^1.2.2
+    html2canvas: ^1.3.2
     image-map-resizer: ^1.0.10
     jquery: ^3.6.0
     jquery-ui: ^1.12.1
@@ -6498,12 +6505,12 @@ __metadata:
     qtip2: 3.0.3
     quasar: 2.0.3
     readmore-js: ^2.2.1
-    sass: ^1.37.5
+    sass: ^1.38.0
     sass-loader: ^12.1.0
     select2: ^4.1.0-rc.0
     signature_pad: ^3.0.0-beta.4
     sortablejs: ^1.14.0
-    sweetalert2: ^11.1.2
+    sweetalert2: ^11.1.3
     tailwindcss: ^2.2.7
     tempusdominus-bootstrap-4: ^5.39.0
     tempusdominus-core: ^5.19.0
@@ -6542,10 +6549,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chart.js@npm:^3.5.0":
-  version: 3.5.0
-  resolution: "chart.js@npm:3.5.0"
-  checksum: 0c9b9cbd6d57a17cc0b3af948891abd7569d1763660970251dfdf320c29babe2bcf785fd2d2c0321ee160fc4bf5e18ba85119cd6ca48c52c2f7e1a0e86e5bb8e
+"chart.js@npm:^3.5.1":
+  version: 3.5.1
+  resolution: "chart.js@npm:3.5.1"
+  checksum: 54bc3c9c373303c3bbc41bbb2e05df621634df41c91e0ce75245323ecd184be460b5341f9ad388f1ee0840f9e6dd2fc5f2d5132802ca22bdaa030711f5a16993
   languageName: node
   linkType: hard
 
@@ -7285,10 +7292,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.16.1, core-js@npm:^3.6.0, core-js@npm:^3.6.5":
-  version: 3.16.1
-  resolution: "core-js@npm:3.16.1"
-  checksum: d54dfe6518910ab10f9e0d561b51c00474ba4cca5a0502bd798c4de5abc68e6c9a84d119add374e2c06d493841f80b0934919ef64610df0cf80d1a7a0751b0c0
+"core-js@npm:3.16.2":
+  version: 3.16.2
+  resolution: "core-js@npm:3.16.2"
+  checksum: a6785c7b2f0170a0edc3a5ed98d6700a36d1e7ccc3e1a972419cb6bba6363f0119d884cf2e5dd496f11e2b0a45095643050b9567d328fb7e02cf9295fb4d87df
   languageName: node
   linkType: hard
 
@@ -7296,6 +7303,13 @@ __metadata:
   version: 2.6.12
   resolution: "core-js@npm:2.6.12"
   checksum: b865823ce9cb5bc63336856440f6525e4996bb91af30660081e82bf447d177f36104f0986906a34ea0c9c03cb8b3d960380848a478e2621dac30c9b8198d28da
+  languageName: node
+  linkType: hard
+
+"core-js@npm:^3.6.0, core-js@npm:^3.6.5":
+  version: 3.16.1
+  resolution: "core-js@npm:3.16.1"
+  checksum: d54dfe6518910ab10f9e0d561b51c00474ba4cca5a0502bd798c4de5abc68e6c9a84d119add374e2c06d493841f80b0934919ef64610df0cf80d1a7a0751b0c0
   languageName: node
   linkType: hard
 
@@ -11039,12 +11053,22 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"html2canvas@npm:^1.0.0-rc.5, html2canvas@npm:^1.2.2":
+"html2canvas@npm:^1.0.0-rc.5":
   version: 1.2.2
   resolution: "html2canvas@npm:1.2.2"
   dependencies:
     css-line-break: 2.0.1
   checksum: 3b34fc03e13805a8eafb3aa75be27eef8724935bc4eead7be2e1d129243eb9f8c4731fe487aa58551213d32a1912259d1cdea0144f5c9d0faf85fb3a95969e90
+  languageName: node
+  linkType: hard
+
+"html2canvas@npm:^1.3.2":
+  version: 1.3.2
+  resolution: "html2canvas@npm:1.3.2"
+  dependencies:
+    css-line-break: 2.0.1
+    text-segmentation: ^1.0.2
+  checksum: 717d2ea52801f029199e2b75e6d0862b2341d6a4a795e98ee6c82f7e5159e90c94fe0ae54512496c6676c430b6661a06278dd7b7a0e21a3512d8d812c0e1962c
   languageName: node
   linkType: hard
 
@@ -17515,14 +17539,14 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.37.5":
-  version: 1.37.5
-  resolution: "sass@npm:1.37.5"
+"sass@npm:^1.38.0":
+  version: 1.38.0
+  resolution: "sass@npm:1.38.0"
   dependencies:
     chokidar: ">=3.0.0 <4.0.0"
   bin:
     sass: sass.js
-  checksum: f7751f481cee57b075b49d5e992bcda66f353098a2fc6e6a906e7732fd5dc4544ce7cba0efdbd3d6c5734ebff792026a462f6fa36e99359b475e9094418a2373
+  checksum: ce6da83497f56daab29bc9ed316cbfd18111c1c0afa466912e8c7815c8f006620595b8d3c5db632e9f09366691c2d8fc5f8faa8eb9532ae3bd0364c2ae7c6a93
   languageName: node
   linkType: hard
 
@@ -18744,10 +18768,10 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"sweetalert2@npm:^11.1.2":
-  version: 11.1.2
-  resolution: "sweetalert2@npm:11.1.2"
-  checksum: ee0007e9f0ea96bc1f8be5f1079055667d66dff13f3251ffcc043859579c19b6a0dd8eef38e4f7c2ba068f93a4eea9efef8f311efe1befc1d1d33d5f113755c2
+"sweetalert2@npm:^11.1.3":
+  version: 11.1.3
+  resolution: "sweetalert2@npm:11.1.3"
+  checksum: a5a6a5c18d873aa55fe63c00a6fbb560457f808d23b6f31d979b739e153a00433ee03ab78a0f876630bace0a9f53e52136088effe928d6025cddd5dc02b11b9d
   languageName: node
   linkType: hard
 
@@ -19010,6 +19034,15 @@ fsevents@~2.3.2:
   bin:
     terser: bin/terser
   checksum: 0a1ad5f9be4a2a815f14e85d16437dd73116f5d1b5c0623a292c5bcbdf7dc73c93a966063344678a04891d9433dfda055c1e2ad542e1295ad58837526e9fe848
+  languageName: node
+  linkType: hard
+
+"text-segmentation@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "text-segmentation@npm:1.0.2"
+  dependencies:
+    utrie: ^1.0.1
+  checksum: df20dfe149a1b1bd040f499523fc036ab30f43958bae5f9475afe0d299b8cbb40650a6f85575175fb0b8d02898f70454d97470048493ca2925c2e71bf65d526f
   languageName: node
   linkType: hard
 
@@ -19839,6 +19872,15 @@ typescript@~4.1.5:
   version: 1.0.1
   resolution: "utils-merge@npm:1.0.1"
   checksum: a457956ebc09efbda05da8bf213ab89140bb9dffa3c42b3315dd8fc3c45d67a1b802741f58b7bba4872113201fc275fc86470289d8bd32b74297b5e5b5980705
+  languageName: node
+  linkType: hard
+
+"utrie@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "utrie@npm:1.0.1"
+  dependencies:
+    base64-arraybuffer: ^1.0.1
+  checksum: 0658565acd2bac3e819d3ce94c8883c1167a2c29e09a613bb734fd1e80832de2a1b24fd86c8c62e2995088432cc86091d38c800e365cede72a4a155b1fd185ea
   languageName: node
   linkType: hard
 

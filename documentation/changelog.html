@@ -112,7 +112,7 @@
         <h3>Release notes - summary</h3>
         <p>Chamilo 1.11.16 is a minor security and bug fix release on top of 1.11.14.</p>
         <h3>Release name</h3>
-        <p><a href="https://fr.wikipedia.org/wiki/Calci">Calci</a> is a small, quiet and rustical municipality in the neighborhood of Pisa, Tuscany, Italy. A nice place to rest before visiting the city of Pisa, Calci, just as Chamilo 1.11.16 is a nice and quiet rest before 2.0, with a few happy surprises.
+        <p><a href="https://fr.wikipedia.org/wiki/Calci">Calci</a> is a small, quiet and rustical municipality in the neighborhood of Pisa, Tuscany, Italy. A nice place to rest before visiting the city of Pisa, Calci, just as Chamilo 1.11.16 is a nice and quiet rest before 2.0 (with a few surprises), just looking at the building of one of human's great construction projects.
         </p>
         <h3>Security fixes</h3>
         Many vulnerabilities (more than in any previous version) have been reported to us (see <a href="https://support.chamilo.org/projects/1/wiki/Security_issues">our security page</a>) and swiflty and safely fixed. Thanks to all white hat hackers for helping us out (see their nicknames on the page).
@@ -204,16 +204,20 @@
             <li>[2021-01-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/e4781a7d15aa4df1564be4bae5d5db554d2941c8">e4781a7d</a>) Agenda: Add sec_token param in agenda events #security</li>
         </ul>
         <h3>Possibly breaking changes</h3>
-        An important change has been made in the way Chamilo 1.11.16 processes exercises, questions and answers in the
+        <ul>
+            <li>An important change has been made in the way Chamilo 1.11.16 processes exercises, questions and answers in the
         exercises tool. We now use the iid field as a unique identifier for everything related to exercises. Although
         the corresponding code has been well tested, an issue has appeared which only affects portals that were
         initially installed with a version prior to year 2016. If you are in this case, you will need to
         run the tests/scripts/fix_quiz_id_to_iid.php script (available <a href="https://raw.githubusercontent.com/chamilo/chamilo-lms/5e0fc76649a7377c12cd0220ad1c0eae3f5eeaeb/tests/scripts/fix_quiz_id_to_iid.php">here</a>).
         This script must be edited and line "exit;" on line 15 must be removed, then the script can be loaded and could
         last a considerable time to execute. It should be failsafe, so if it fails once, reloading it should just
-        continue executing the process.
-        We re sorry for the extra effort to deal with this issue. We believe you will appreciate the advantages of
-        a faster exercises tool in Chamilo 1.11.16 and the possibility to re-use (*or* copy) questions between courses.
+        continue executing the process. Despite the possible extra effort, we believe you will appreciate the advantages of
+        a faster exercises tool in Chamilo 1.11.16 and the possibility to re-use (*or* copy) questions between courses.</li>
+            <li>A new change in behaviour in the upload of images in the WYSIWYG editor mean new files that have names
+            that already exist on the system will be renamed automatically. The previous behaviour was to warn the user,
+            but this didn't appear on screen due to the WYSIWYG editor.</li>
+        </ul>
 
         <h3>Notable new Features</h3>
         <h4>For end-users, teachers and Chamilo admins</h4>
@@ -999,6 +1003,7 @@
         </ul>
         <h3>Removals</h3>
         <ul aria-live="off">
+            <li>Pixlr (image edition from the documents tool) service has been disabled due to introducing security issues in Chamilo. We hope to provide a suitable replacement in future versions.</li>
             <li>[2021-03-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/d87d35290a018444418c0e98e17019e152aa4569">d87d3529</a> - <a href="https://task.beeznest.com/issues/18443">BT#18443</a>) Tracking: Remove configuration setting 'use_new_tracking_in_lp_item'. The new tracking system depends on the course/session, not on the learning path.</li>
         </ul>
         <h3>Known issues</h3>

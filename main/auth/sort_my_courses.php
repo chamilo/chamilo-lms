@@ -331,8 +331,7 @@ if (!empty($user_course_categories)) {
                 if (api_get_setting('display_teacher_in_courselist') === 'true') {
                     echo $course['tutor'];
                 }
-                echo '</td><td valign="top">';
-                echo '<div style="float:left;width:110px;">';
+                echo '</td><td class="text-right">';
                 if (api_get_setting('show_courses_descriptions_in_catalog') === 'true') {
                     $icon_title = get_lang('CourseDetails').' - '.$course['title'];
                     $url = api_get_path(
@@ -368,19 +367,12 @@ if (!empty($user_course_categories)) {
                 <?php
                 } else {
                     echo Display::return_icon('down_na.png', get_lang('Down'), '', 22);
-                } ?>
-              </div>
-              <div style="float:left; margin-right:10px;">
-                <?php
-                    if ($course['status'] != 1) {
-                        if ($course['unsubscr'] == 1) {
-                            echo generateUnsubscribeForm($course['code'], $stok);
-                            ?>
-              </div>
-                  <?php
-                        }
-                    }
+                }
+                if ($course['status'] != 1 && $course['unsubscr'] == 1) {
+                    echo generateUnsubscribeForm($course['code'], $stok);
+                }
                 $key++;
+                echo '</td></tr>';
             }
             echo '</table>';
         }
@@ -408,7 +400,6 @@ if (!empty($courses_without_category)) {
             echo $course['tutor'];
         }
         echo '</td><td class="text-right">';
-        echo '<div>';
         if (api_get_setting('show_courses_descriptions_in_catalog') === 'true') {
             $icon_title = get_lang('CourseDetails').' - '.$course['title'];
             $url = api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'];
@@ -449,23 +440,15 @@ if (!empty($courses_without_category)) {
             <?php
         } else {
             echo Display::return_icon('down_na.png', get_lang('Down'), '', 22);
-        } ?>
-                </div>
-                 <div style="margin-right:10px;">
-            <?php
-                if ($course['status'] != 1) {
-                    if ($course['unsubscr'] == 1) {
-                        echo generateUnsubscribeForm($course['code'], $stok);
-                        ?>
-                <!-- changed link to submit to avoid action by the search tool indexer -->
-                </div>
-              <?php
-                    }
-                } ?>
-            </td>
-            </tr>
-            <?php
-            $key++;
+        }
+        if ($course['status'] != 1) {
+            if ($course['unsubscr'] == 1) {
+                echo generateUnsubscribeForm($course['code'], $stok);
+            }
+        }
+        echo '</td></tr>';
+
+        $key++;
     }
 }
 ?>

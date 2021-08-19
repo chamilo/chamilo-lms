@@ -1,9 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+/**
+ * Question with file upload, where the file is the answer.
+ * Acts as an open question: requires teacher's review for a score.
+ */
 class UploadAnswer extends Question
 {
-
     public $typePicture = 'file_upload_question.png';
     public $explanationLangVar = 'UploadAnswer';
 

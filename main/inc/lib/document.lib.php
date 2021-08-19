@@ -6072,6 +6072,7 @@ class DocumentManager
     public static function is_my_shared_folder($user_id, $path, $sessionId)
     {
         $clean_path = Security::remove_XSS($path).'/';
+        $user_id = (int) $user_id;
         //for security does not remove the last slash
         $main_user_shared_folder = '/shared_folder\/sf_user_'.$user_id.'\//';
         //for security does not remove the last slash

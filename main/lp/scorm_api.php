@@ -2564,8 +2564,8 @@ function update_chronometer(text_hour, text_minute, text_second)
 }
 
 /**
- * get_local_suspend_data()
- * see suspend_data case in function LMSGetValue correction bn
+ * Get the locally stored suspend data
+ * See suspend_data case in LMSGetValue()
  */
 function get_local_suspend_data()
 {
@@ -2574,7 +2574,7 @@ function get_local_suspend_data()
     try{
         if (localStorage) {
             mem_suspend_data = window.localStorage.getItem(idSuspendData);
-            if (mem_suspend_data === null||mem_suspend_data == "null"){
+            if (mem_suspend_data === null || mem_suspend_data == "null"){
                 mem_suspend_data = "";
             }
             if (mem_suspend_data === undefined) {
@@ -2583,32 +2583,43 @@ function get_local_suspend_data()
             if (typeof mem_suspend_data == 'undefined') {
                 mem_suspend_data = "";
             }
-            if(mem_suspend_data!=""){
-                if (olms.suspend_data.indexOf("ICPLAYER_")!=-1||mem_suspend_data.indexOf("ICPLAYER_")!=-1) {
-                    final_suspend_data = "";
+            if (mem_suspend_data != ""){
+                if (olms.suspend_data.indexOf("ICPLAYER_") != -1 || mem_suspend_data.indexOf("ICPLAYER_") != -1) {
                     final_suspend_data = mem_suspend_data;
-                    //console.log('recovery suspend_data' + mem_suspend_data);
                 }
             }
         }
-    }catch(err){}
+    } catch(err) {
+
+    }
     return final_suspend_data;
 }
 
 /**
  * Save suspend_data in localStorage
- * see suspend_data case in function LMSSetValue
+ * See suspend_data case in LMSSetValue()
  */
 function save_suspend_data_in_local()
 {
     if (localStorage) {
         if (olms.suspend_data) {
             var suspend_data_local = olms.suspend_data;
-            var idSuspendData = olms.lms_item_id + 'suspenddata' +  olms.lms_view_id + 'u' + olms.lms_user_id;
-            try {
-                window.localStorage.setItem(idSuspendData,suspend_data_local);
-            } catch(err) {
+            if (suspend_data_local === null||suspend_data_local == "null"){
+                suspend_data_local = "";
+            }
+            if (suspend_data_local === undefined) {
+                suspend_data_local = "";
+            }
+            if (typeof suspend_data_local == 'undefined') {
+                suspend_data_local = "";
+            }
+            if (suspend_data_local.indexOf("ICPLAYER_")!=-1) {
+                var idSuspendData = olms.lms_item_id + 'suspenddata' +  olms.lms_view_id + 'u' + olms.lms_user_id;
+                try {
+                    window.localStorage.setItem(idSuspendData,suspend_data_local);
+                } catch(err) {
 
+                }
             }
         }
     }

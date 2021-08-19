@@ -215,7 +215,7 @@ class ExerciseLib
                         ['enctype' => 'multipart/form-data']
                     );
                     $multipleForm->addMultipleUpload($url);
-                    $s.= '<script>
+                    $s .= '<script>
                         $(function() {
                             $("#input_file_upload").bind("fileuploaddone", function (e, data) {
                                 $.each(data.result.files, function (index, file) {

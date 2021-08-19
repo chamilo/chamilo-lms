@@ -446,6 +446,10 @@ try {
             $restApi->updateConditionAccepted();
             $restResponse->setData(['status' => true]);
             break;
+        case Rest::LOGOUT:
+            $restApi->logout();
+            $restResponse->setData(['status' => true]);
+            break;
         default:
             throw new Exception(get_lang('InvalidAction'));
     }

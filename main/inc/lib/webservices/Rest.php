@@ -76,6 +76,7 @@ class Rest extends WebService
     const CHECK_CONDITIONAL_LOGIN = 'check_conditional_login';
     const GET_LEGAL_CONDITIONS = 'get_legal_conditions';
     const UPDATE_CONDITION_ACCEPTED = 'update_condition_accepted';
+    const LOGOUT = 'logout';
 
     /**
      * @var Session
@@ -2368,6 +2369,19 @@ class Rest extends WebService
         LegalManager::sendEmailToUserBoss(
             $this->user->getId(),
             $conditionToSave
+        );
+    }
+
+    public function logout()
+    {
+        online_logout($this->user->getId());
+
+        Event::courseLogout(
+            [
+                'uid' => $this->user->getId(),
+                'cid' => $this->course ? $this->course->getId() : 0,
+                'sid' => $this->session ? $this->session->getId() : 0,
+            ]
         );
     }
 

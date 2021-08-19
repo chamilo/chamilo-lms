@@ -97,7 +97,7 @@ switch ($action) {
             $result = $auth->remove_user_from_course($_GET['unsubscribe']);
             if ($result) {
                 Display::addFlash(
-                    Display::return_message(get_lang('YouAreNowUnsubscribed'))
+                    Display::return_message(get_lang('YouAreNowUnsubscribed'), 'success')
                 );
             }
         }

@@ -286,7 +286,6 @@ export default {
   }),
   updated() {
     if (this.isAuthenticated) {
-      console.log(this.linksUser);
       if (this.isBoss) {
         if(!this.linksUser.some(data => data.id === 'load_search')) {
           this.linksUser.push({icon: 'mdi-format-list-checks', url: '/main/search/load_search.php', text: 'Diagnosis Management', id: 'load_search'});
@@ -303,10 +302,7 @@ export default {
     }
   },
   created() {
-    //console.log('dashboard created');
     this.legacyContent = '';
-    //console.log('updated empty created');
-
     let isAuthenticated = false;
     if (!isEmpty(window.user)) {
       //console.log('is logged in as ' + window.user.username);

@@ -7404,73 +7404,38 @@ function api_create_zip(string $name): ZipStream
  */
 function api_get_language_translate_html()
 {
-    $translate = api_get_configuration_value('translate_html');
+    $translate = ('true' === api_get_setting('editor.translate_html'));
 
     if (!$translate) {
         return '';
     }
 
-    $languageList = api_get_languages();
+    /*$languageList = api_get_languages();
     $hideAll = '';
-    foreach ($languageList['all'] as $language) {
+    foreach ($languageList as $isocode => $name) {
         $hideAll .= '
-        $("span:lang('.$language['isocode'].')").filter(
+        $(".mce-translatehtml").hide();
+        $("span:lang('.$isocode.')").filter(
             function(e, val) {
                 // Only find the spans if they have set the lang
                 if ($(this).attr("lang") == null) {
                     return false;
                 }
-
                 // Ignore ckeditor classes
                 return !this.className.match(/cke(.*)/);
         }).hide();'."\n";
-    }
+    }*/
 
     $userInfo = api_get_user_info();
-    $languageId = api_get_language_id($userInfo['language']);
-    $languageInfo = api_get_language_info($languageId);
-    $isoCode = 'en';
-
-    if (!empty($languageInfo)) {
-        $isoCode = $languageInfo['isocode'];
+    if (!empty($userInfo['language'])) {
+        $isoCode = $userInfo['language'];
     }
 
     return '
             $(function() {
-                '.$hideAll.'
+                $(".mce-translatehtml").hide();
                 var defaultLanguageFromUser = "'.$isoCode.'";
-
-                $("span:lang('.$isoCode.')").filter(
-                    function() {
-                        // Ignore ckeditor classes
-                        return !this.className.match(/cke(.*)/);
-                }).show();
-
-                var defaultLanguage = "";
-                var langFromUserFound = false;
-
-                $(this).find("span").filter(
-                    function() {
-                        // Ignore ckeditor classes
-                        return !this.className.match(/cke(.*)/);
-                }).each(function() {
-                    defaultLanguage = $(this).attr("lang");
-                    if (defaultLanguage) {
-                        $(this).before().next("br").remove();
-                        if (defaultLanguageFromUser == defaultLanguage) {
-                            langFromUserFound = true;
-                        }
-                    }
-                });
-
-                // Show default language
-                if (langFromUserFound == false && defaultLanguage) {
-                    $("span:lang("+defaultLanguage+")").filter(
-                    function() {
-                            // Ignore ckeditor classes
-                            return !this.className.match(/cke(.*)/);
-                    }).show();
-                }
+                $("span:lang('.$isoCode.')").show();
             });
     ';
 }

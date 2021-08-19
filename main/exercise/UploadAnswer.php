@@ -61,5 +61,4 @@ class UploadAnswer extends Question
 
         return $header;
     }
-
 }

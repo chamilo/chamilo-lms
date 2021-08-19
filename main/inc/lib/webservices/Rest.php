@@ -174,6 +174,10 @@ class Rest extends WebService
         }
 
         $this->course = $course;
+
+        ChamiloSession::write('_real_cid', $course->getId());
+        ChamiloSession::write('_cid', $course->getCode());
+        ChamiloSession::write('_course', api_get_course_info($course->getCode()));
     }
 
     /**

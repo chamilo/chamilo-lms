@@ -66,7 +66,6 @@ class Language
     public function __construct()
     {
         $this->subLanguages = new ArrayCollection();
-        $this->direction = 'rtl';
     }
 
     public function setOriginalName(string $originalName): self

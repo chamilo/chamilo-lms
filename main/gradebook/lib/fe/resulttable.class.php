@@ -26,7 +26,7 @@ class ResultTable extends SortableTable
      */
     public function __construct(
         $evaluation,
-        $results = [],
+        $results,
         $iscourse,
         $addparams = [],
         $forprint = false

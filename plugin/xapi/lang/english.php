@@ -45,3 +45,4 @@ $strings['Terminated'] = 'Terminated';
 $strings['Completed'] = 'Completed';
 $strings['Answered'] = 'Answered';
 $strings['Viewed'] = 'Viewed';
+$strings['ActivityAddedToLPCannotBeAccessed'] = 'This activity has been included in a learning path, so it cannot be accessed by students directly from here.';

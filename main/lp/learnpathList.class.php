@@ -44,7 +44,8 @@ class LearnpathList
         $check_publication_dates = false,
         $categoryId = null,
         $ignoreCategoryFilter = false,
-        $ignoreLpVisibility = false
+        $ignoreLpVisibility = false,
+        bool $includeSubscribedLp = true
     ) {
         if (empty($courseInfo)) {
             $courseInfo = api_get_course_info();
@@ -66,8 +67,9 @@ class LearnpathList
         $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
 
         $order = ' ORDER BY lp.displayOrder ASC, lp.name ASC';
-        if (isset($order_by)) {
-            $order = Database::parse_conditions(['order' => $order_by]);
+        if (!empty($order_by)) {
+            // @todo Replace with criteria order by
+            $order = ' ORDER BY '.Database::escape_string($order_by);
         }
 
         $now = api_get_utc_datetime();
@@ -166,11 +168,26 @@ class LearnpathList
                     $lpVisibility = learnpath::is_lp_visible_for_student(
                         $row->getId(),
                         $user_id,
-                        $courseInfo
+                        $courseInfo,
+                        $session_id,
+                        $includeSubscribedLp
                     );
                     if ($lpVisibility === false) {
                         continue;
                     }
+                }
+            }
+
+            if (!$includeSubscribedLp && $row->getSubscribeUsers() && $isAllowToEdit) {
+                $isSubscribedToLp = learnpath::isUserSubscribedToLp(
+                    ['subscribe_users' => $row->getSubscribeUsers(), 'id' => $row->getIid()],
+                    (int) $this->user_id,
+                    $courseInfo,
+                    (int) $session_id
+                );
+
+                if (!$isSubscribedToLp) {
+                    continue;
                 }
             }
 
@@ -203,6 +220,7 @@ class LearnpathList
                 'lp_old_id' => $row->getId(),
                 'iid' => $row->getIid(),
                 'prerequisite' => $row->getPrerequisite(),
+                'category_id' => $row->getCategoryId(),
             ];
             $names[$row->getName()] = $row->getIid();
         }

@@ -15,7 +15,7 @@ use ChamiloSession as Session;
  */
 class TestCategory
 {
-    public $id;
+    public $iid;
     public $name;
     public $description;
 
@@ -29,7 +29,7 @@ class TestCategory
     }
 
     /**
-     * return the TestCategory object with id=in_id.
+     * return the TestCategory object with iid=$id.
      *
      * @param int $id
      * @param int $courseId
@@ -42,13 +42,13 @@ class TestCategory
         $id = (int) $id;
         $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
         $sql = "SELECT * FROM $table
-                WHERE id = $id AND c_id = ".$courseId;
+                WHERE iid = ".$id;
         $res = Database::query($sql);
 
         if (Database::num_rows($res)) {
             $row = Database::fetch_array($res);
 
-            $this->id = $row['id'];
+            $this->iid = $row['iid'];
             $this->name = $row['title'];
             $this->description = $row['description'];
 
@@ -90,9 +90,6 @@ class TestCategory
             $newId = Database::insert($table, $params);
 
             if ($newId) {
-                $sql = "UPDATE $table SET id = iid WHERE iid = $newId";
-                Database::query($sql);
-
                 api_item_property_update(
                     $courseInfo,
                     TOOL_TEST_CATEGORY,
@@ -126,19 +123,19 @@ class TestCategory
 
         if ($category) {
             $sql = "DELETE FROM $table
-                    WHERE id= $id AND c_id=".$course_id;
+                    WHERE iid = ".$id;
             Database::query($sql);
 
             // remove link between question and category
             $sql = "DELETE FROM $tbl_question_rel_cat
-                    WHERE category_id = $id AND c_id=".$course_id;
+                    WHERE category_id = ".$id;
             Database::query($sql);
             // item_property update
             $courseInfo = api_get_course_info_by_id($course_id);
             api_item_property_update(
                 $courseInfo,
                 TOOL_TEST_CATEGORY,
-                $this->id,
+                $this->iid,
                 'TestCategoryDeleted',
                 api_get_user_id()
             );
@@ -159,7 +156,7 @@ class TestCategory
     public function modifyCategory($courseId = 0)
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $id = (int) $this->id;
+        $id = (int) $this->iid;
         $name = Database::escape_string($this->name);
         $description = Database::escape_string($this->description);
         $cat = $this->getCategory($id, $courseId);
@@ -173,13 +170,13 @@ class TestCategory
             $sql = "UPDATE $table SET
                         title = '$name',
                         description = '$description'
-                    WHERE id = $id AND c_id = ".$courseId;
+                    WHERE iid = $id";
             Database::query($sql);
 
             api_item_property_update(
                 $courseInfo,
                 TOOL_TEST_CATEGORY,
-                $this->id,
+                $this->iid,
                 'TestCategoryModified',
                 api_get_user_id()
             );
@@ -196,10 +193,10 @@ class TestCategory
     public function getCategoryQuestionsNumber()
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-        $id = (int) $this->id;
+        $id = (int) $this->iid;
         $sql = "SELECT count(*) AS nb
                 FROM $table
-                WHERE category_id = $id AND c_id=".api_get_course_int_id();
+                WHERE category_id = $id AND c_id = ".api_get_course_int_id();
         $res = Database::query($sql);
         $row = Database::fetch_array($res);
 
@@ -224,19 +221,19 @@ class TestCategory
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $categories = [];
         if (empty($field)) {
-            $sql = "SELECT id FROM $table
+            $sql = "SELECT iid FROM $table
                     WHERE c_id = $courseId
                     ORDER BY title ASC";
             $res = Database::query($sql);
             while ($row = Database::fetch_array($res)) {
                 $category = new TestCategory();
-                $categories[] = $category->getCategory($row['id'], $courseId);
+                $categories[] = $category->getCategory($row['iid'], $courseId);
             }
         } else {
             $field = Database::escape_string($field);
             $sql = "SELECT $field FROM $table
                     WHERE c_id = $courseId
-                    ORDER BY $field ASC";
+                    ORDER BY `$field` ASC";
             $res = Database::query($sql);
             while ($row = Database::fetch_array($res)) {
                 $categories[] = $row[$field];
@@ -311,7 +308,7 @@ class TestCategory
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $sql = "SELECT title
                 FROM $table
-                WHERE id = $categoryId AND c_id = $courseId";
+                WHERE iid = $categoryId";
         $res = Database::query($sql);
         $data = Database::fetch_array($res);
         $result = '';
@@ -341,7 +338,7 @@ class TestCategory
         $categories = [];
         if (!empty($categoriesInExercise)) {
             foreach ($categoriesInExercise as $category) {
-                $categories[$category['id']] = $category;
+                $categories[$category['iid']] = $category;
             }
         }
 
@@ -392,10 +389,10 @@ class TestCategory
         $categories = self::getListOfCategoriesIDForTest($exerciseId);
 
         foreach ($categories as $catInfo) {
-            $categoryId = $catInfo['id'];
+            $categoryId = $catInfo['iid'];
             if (!empty($categoryId)) {
                 $result[$categoryId] = [
-                    'id' => $categoryId,
+                    'iid' => $categoryId,
                     'title' => $catInfo['title'],
                     //'parent_id' =>  $catInfo['parent_id'],
                     'parent_id' => '',
@@ -416,10 +413,10 @@ class TestCategory
         $categories = self::getListOfCategoriesIDForTestObject($exercise);
         foreach ($categories as $cat_id) {
             $cat = new TestCategory();
+            //Todo remove this weird array casting
             $cat = (array) $cat->getCategory($cat_id);
-            $cat['iid'] = $cat['id'];
             $cat['title'] = $cat['name'];
-            $result[$cat['id']] = $cat;
+            $result[$cat['iid']] = $cat;
         }
 
         return $result;
@@ -467,13 +464,13 @@ class TestCategory
         $count = 0;
         $categories = self::getListOfCategoriesIDForTest($exerciseId);
         foreach ($categories as $category) {
-            if (empty($category['id'])) {
+            if (empty($category['iid'])) {
                 continue;
             }
 
             $nbQuestionInThisCat = self::getNumberOfQuestionsInCategoryForTest(
                 $exerciseId,
-                $category['id']
+                $category['iid']
             );
 
             if ($nbQuestionInThisCat > $random) {
@@ -502,7 +499,7 @@ class TestCategory
         $categories = self::getCategoryListInfo('', $courseId);
         $result = ['0' => get_lang('NoCategorySelected')];
         for ($i = 0; $i < count($categories); $i++) {
-            $result[$categories[$i]->id] = $categories[$i]->name;
+            $result[$categories[$i]->iid] = Security::remove_XSS($categories[$i]->name);
         }
 
         return $result;
@@ -540,11 +537,11 @@ class TestCategory
         $sql = "SELECT DISTINCT qrc.question_id, qrc.category_id
                 FROM $TBL_QUESTION_REL_CATEGORY qrc
                 INNER JOIN $TBL_EXERCICE_QUESTION eq
-                ON (eq.question_id = qrc.question_id AND qrc.c_id = eq.c_id)
+                ON (eq.question_id = qrc.question_id)
                 INNER JOIN $categoryTable c
-                ON (c.id = qrc.category_id AND c.c_id = eq.c_id)
+                ON (c.iid = qrc.category_id AND c.c_id = eq.c_id)
                 INNER JOIN $tableQuestion q
-                ON (q.id = qrc.question_id AND q.c_id = eq.c_id)
+                ON q.iid = qrc.question_id
                 WHERE
                     exercice_id = $exerciseId AND
                     qrc.c_id = $courseId
@@ -680,7 +677,7 @@ class TestCategory
             ($in_display_category_name == 1 || !$is_student)
         ) {
             $content .= '<div class="page-header">';
-            $content .= '<h4>'.get_lang('Category').": ".self::getCategoryNameForQuestion($questionId).'</h4>';
+            $content .= '<h4>'.get_lang('Category').": ".Security::remove_XSS(self::getCategoryNameForQuestion($questionId)).'</h4>';
             $content .= "</div>";
         }
 
@@ -729,13 +726,13 @@ class TestCategory
         // foreach question
         $categories = self::getListOfCategoriesIDForTest($exerciseId);
         foreach ($categories as $category) {
-            if (empty($category['id'])) {
+            if (empty($category['iid'])) {
                 continue;
             }
 
             $nbQuestionInThisCat = self::getNumberOfQuestionsInCategoryForTest(
                 $exerciseId,
-                $category['id']
+                $category['iid']
             );
 
             if ($nbQuestionInThisCat > $res_num_max) {
@@ -767,7 +764,7 @@ class TestCategory
             return '';
         }
 
-        $exerciseId = $exercise->iId;
+        $exerciseId = $exercise->iid;
         $categoryNameList = self::getListOfCategoriesNameForTest($exerciseId);
 
         $table = new HTML_Table(
@@ -798,7 +795,7 @@ class TestCategory
         if ($countCategories > 1) {
             $tempResult = [];
             $labels = [];
-            $labelsWithId = array_column($categoryNameList, 'title', 'id');
+            $labelsWithId = array_column($categoryNameList, 'title', 'iid');
             asort($labelsWithId);
             foreach ($labelsWithId as $category_id => $title) {
                 if (!isset($category_list[$category_id])) {
@@ -922,12 +919,12 @@ class TestCategory
         $courseId = (int) $courseId;
         $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         $categoryTable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $exercise->id = (int) $exercise->id;
+        $exercise->iid = (int) $exercise->iid;
 
         $sql = "SELECT * FROM $table qc
                 LEFT JOIN $categoryTable c
-                ON (qc.c_id = c.c_id AND c.id = qc.category_id)
-                WHERE qc.c_id = $courseId AND exercise_id = {$exercise->id} ";
+                ON (c.iid = qc.category_id)
+                WHERE qc.c_id = $courseId AND exercise_id = {$exercise->iid} ";
 
         if (!empty($order)) {
             $order = Database::escape_string($order);
@@ -1010,8 +1007,8 @@ class TestCategory
         if (!empty($this->parent_id)) {
             $parent_cat = new TestCategory();
             $parent_cat = $parent_cat->getCategory($this->parent_id);
-            $category_parent_list = [$parent_cat->id => $parent_cat->name];
-            $script .= '<script>$(function() { $("#parent_id").trigger("addItem",[{"title": "'.$parent_cat->name.'", "value": "'.$parent_cat->id.'"}]); });</script>';
+            $category_parent_list = [$parent_cat->iid => $parent_cat->name];
+            $script .= '<script>$(function() { $("#parent_id").trigger("addItem",[{"title": "'.$parent_cat->name.'", "value": "'.$parent_cat->iid.'"}]); });</script>';
         }
         $form->addElement('html', $script);
 
@@ -1020,7 +1017,7 @@ class TestCategory
 
         // setting the defaults
         $defaults = [];
-        $defaults["category_id"] = $this->id;
+        $defaults["category_id"] = $this->iid;
         $defaults["category_name"] = $this->name;
         $defaults["category_description"] = $this->description;
         $defaults["parent_id"] = $this->parent_id;
@@ -1137,12 +1134,12 @@ class TestCategory
         }
         $courseId = (int) $courseId;
         $tbl_cat = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $sql = "SELECT id FROM $tbl_cat
+        $sql = "SELECT iid FROM $tbl_cat
                 WHERE c_id = $courseId AND title = '".Database::escape_string($title)."'";
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $data = Database::fetch_array($res);
-            $out_res = $data['id'];
+            $out_res = $data['iid'];
         }
 
         return $out_res;
@@ -1210,11 +1207,11 @@ class TestCategory
             return [];
         }
 
-        $sql = "SELECT c.* FROM $table c
+        $sql = "SELECT cat.* FROM $table cat
                 INNER JOIN $itemProperty i
-                ON c.c_id = i.c_id AND i.ref = c.id
+                ON cat.c_id = i.c_id AND i.ref = cat.iid
                 WHERE
-                    c.c_id = $courseId AND
+                    cat.c_id = $courseId AND
                     i.tool = '".TOOL_TEST_CATEGORY."'
                     $sessionCondition
                 ORDER BY title ASC";
@@ -1236,25 +1233,25 @@ class TestCategory
         $html = '';
         foreach ($categories as $category) {
             $tmpobj = new TestCategory();
-            $tmpobj = $tmpobj->getCategory($category['id']);
+            $tmpobj = $tmpobj->getCategory($category['iid']);
             $nb_question = $tmpobj->getCategoryQuestionsNumber();
             $rowname = self::protectJSDialogQuote($category['title']);
             $nb_question_label = $nb_question == 1 ? $nb_question.' '.get_lang('Question') : $nb_question.' '.get_lang('Questions');
             $content = "<span style='float:right'>".$nb_question_label."</span>";
             $content .= '<div class="sectioncomment">';
-            $content .= $category['description'];
+            $content .= Security::remove_XSS($category['description']);
             $content .= '</div>';
             $links = '';
 
             if (!$sessionId) {
-                $links .= '<a href="'.api_get_self().'?action=editcategory&category_id='.$category['id'].'&'.api_get_cidreq().'">'.
+                $links .= '<a href="'.api_get_self().'?action=editcategory&category_id='.$category['iid'].'&'.api_get_cidreq().'">'.
                     Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
-                $links .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=deletecategory&category_id='.$category['id'].'" ';
-                $links .= 'onclick="return confirmDelete(\''.self::protectJSDialogQuote(get_lang('DeleteCategoryAreYouSure').'['.$rowname).'] ?\', \'id_cat'.$category['id'].'\');">';
+                $links .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=deletecategory&category_id='.$category['iid'].'" ';
+                $links .= 'onclick="return confirmDelete(\''.self::protectJSDialogQuote(get_lang('DeleteCategoryAreYouSure').'['.$rowname).'] ?\', \'id_cat'.$category['iid'].'\');">';
                 $links .= Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
             }
 
-            $html .= Display::panel($content, $category['title'].$links);
+            $html .= Display::panel($content, Security::remove_XSS($category['title']).$links);
         }
 
         return $html;

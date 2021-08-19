@@ -1,15 +1,18 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * This script provides the caller service with user details.
  * It is set to work with the Chamilo module for Drupal:
  * http://drupal.org/project/chamilo.
  *
  * @author Yannick Warnier <yannick.warnier@dokeos.com>
- *
- * @package chamilo.webservices
  */
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_webservices();
+
 // Create the server instance
 $server = new soap_server();
 // Initialize WSDL support

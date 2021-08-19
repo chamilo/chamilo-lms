@@ -45,6 +45,7 @@ class CQuizAnswer
     /**
      * @var int
      *
+     * @deprecated Now using iid
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     protected $id;
@@ -121,7 +122,7 @@ class CQuizAnswer
 
     public function __construct()
     {
-        $this->id = null;
+        $this->iid = null;
         $this->idAuto = 0;
         $this->correct = null;
         $this->comment = null;
@@ -133,15 +134,15 @@ class CQuizAnswer
     }
 
     /**
-     * Set id.
+     * Set iid.
      *
-     * @param int $id
+     * @param int $iid
      *
      * @return CQuizAnswer
      */
-    public function setId($id)
+    public function setId($iid)
     {
-        $this->id = $id;
+        $this->iid = $iid;
 
         return $this;
     }
@@ -153,7 +154,7 @@ class CQuizAnswer
      */
     public function getId()
     {
-        return $this->id;
+        return $this->iid;
     }
 
     /**
@@ -442,15 +443,5 @@ class CQuizAnswer
     public function getCId()
     {
         return $this->cId;
-    }
-
-    /**
-     * Get iid.
-     *
-     * @return int
-     */
-    public function getIid()
-    {
-        return $this->iid;
     }
 }

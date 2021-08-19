@@ -160,7 +160,7 @@ if (isset($_REQUEST['comments']) &&
     if (empty($track_exercise_info)) {
         api_not_allowed();
     }
-    $student_id = $track_exercise_info['exe_user_id'];
+    $student_id = (int) $track_exercise_info['exe_user_id'];
     $session_id = $track_exercise_info['session_id'];
     $lp_id = $track_exercise_info['orig_lp_id'];
     $lpItemId = $track_exercise_info['orig_lp_item_id'];
@@ -199,7 +199,7 @@ if (isset($_REQUEST['comments']) &&
 
         // From the database.
         $marksFromDatabase = $questionListData[$questionId]['marks'];
-        if (in_array($question->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
+        if (in_array($question->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER])) {
             // From the form.
             $params['marks'] = $marks;
             if ($marksFromDatabase != $marks) {
@@ -252,7 +252,11 @@ if (isset($_REQUEST['comments']) &&
         $res = Database::query($qry);
         $tot = 0;
         while ($row = Database :: fetch_array($res, 'ASSOC')) {
-            $tot += $row['marks'];
+            $marks = $row['marks'];
+            if (!$objExerciseTmp->propagate_neg && $marks < 0) {
+                continue;
+            }
+            $tot += $marks;
         }
     } else {
         $tot = $pluginEvaluation->getResultWithFormula($id, $formula);
@@ -265,6 +269,34 @@ if (isset($_REQUEST['comments']) &&
             WHERE exe_id = ".$id;
     Database::query($sql);
 
+    // See BT#18165
+    $remedialMessage = RemedialCoursePlugin::create()->getRemedialCourseList(
+        $objExerciseTmp,
+        $student_id,
+        api_get_session_id(),
+        true,
+        $lp_id ?: 0,
+        $lpItemId ?: 0
+    );
+    if (null != $remedialMessage) {
+        Display::addFlash(
+            Display::return_message($remedialMessage, 'warning', false)
+        );
+    }
+    $advancedMessage = RemedialCoursePlugin::create()->getAdvancedCourseList(
+        $objExerciseTmp,
+        $student_id,
+        api_get_session_id(),
+        $lp_id ?: 0,
+        $lpItemId ?: 0
+    );
+    if (!empty($advancedMessage)) {
+        $message = Display::return_message(
+            $advancedMessage,
+            'info',
+            false
+        );
+    }
     if (isset($_POST['send_notification'])) {
         //@todo move this somewhere else
         $subject = get_lang('ExamSheetVCC');
@@ -322,7 +354,7 @@ if (isset($_REQUEST['comments']) &&
         $attemptCount = Event::getAttemptPosition(
             $track_exercise_info['exe_id'],
             $student_id,
-            $objExerciseTmp->id,
+            $objExerciseTmp->iid,
             $lp_id,
             $lpItemId,
             $lp_item_view_id
@@ -376,7 +408,7 @@ if (isset($_REQUEST['comments']) &&
         $sql = "UPDATE $TBL_LP_ITEM_VIEW
                 SET score = '".(float) $tot."'
                 $statusCondition
-                WHERE c_id = $course_id AND id = $lp_item_view_id";
+                WHERE iid = $lp_item_view_id";
         Database::query($sql);
 
         header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise_show.php?id='.$id.'&student='.$student_id.'&'.api_get_cidreq());
@@ -437,8 +469,17 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
             );
         }
 
-        $actions .= '<a class="btn btn-default" href="question_stats.php?'.api_get_cidreq().'&id='.$exercise_id.'">'.
-            get_lang('QuestionStats').'</a>';
+        $actions .= Display::url(
+            get_lang('QuestionStats'),
+            'question_stats.php?'.api_get_cidreq().'&id='.$exercise_id,
+            ['class' => 'btn btn-default']
+        );
+
+        $actions .= Display::url(
+            get_lang('ComparativeGroupReport'),
+            'comparative_group_report.php?'.api_get_cidreq().'&id='.$exercise_id,
+            ['class' => 'btn btn-default']
+        );
     }
 } else {
     $actions .= '<a href="exercise.php">'.

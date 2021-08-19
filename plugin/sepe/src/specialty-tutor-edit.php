@@ -35,7 +35,7 @@ if (!empty($_POST)) {
             $tmp = Database::fetch_assoc($rs);
 
             $sql = "INSERT INTO $tableSepeSpecialtyTutors (
-                        specialty_id, 
+                        specialty_id,
                         tutor_id,
                         tutor_accreditation,
                         professional_experience,
@@ -53,22 +53,22 @@ if (!empty($_POST)) {
                     );";
             $res = Database::query($sql);
         } else {
-            $sql = "SELECT id 
-                    FROM $tableSepeTutors 
-                    WHERE 
+            $sql = "SELECT id
+                    FROM $tableSepeTutors
+                    WHERE
                         document_type = '".$documentType."'
-                        AND document_number = '".$documentNumber."' 
+                        AND document_number = '".$documentNumber."'
                         AND document_letter = '".$documentLetter."';";
             $rs = Database::query($sql);
             if (Database::num_rows($rs) > 0) {
                 $aux = Database::fetch_assoc($rs);
-                $sql = "UPDATE $tableSepeTutors SET 
-                        platform_user_id = $platformUserId, 
-                        tutor_accreditation = '".$tutorAccreditation."', 
-                        professional_experience = $professionalExperience, 
-                        teaching_competence = '".$teachingCompetence."', 
-                        experience_teleforming = $experienceTeleforming, 
-                        training_teleforming = '".$trainingTeleforming."' 
+                $sql = "UPDATE $tableSepeTutors SET
+                        platform_user_id = $platformUserId,
+                        tutor_accreditation = '".$tutorAccreditation."',
+                        professional_experience = $professionalExperience,
+                        teaching_competence = '".$teachingCompetence."',
+                        experience_teleforming = $experienceTeleforming,
+                        training_teleforming = '".$trainingTeleforming."'
                         WHERE id = '".$aux['id']."';";
                 $res = Database::query($sql);
                 if (!$res) {
@@ -78,8 +78,8 @@ if (!empty($_POST)) {
                 $tutorId = $aux['id'];
                 $specialtyTutorId = getSpecialtyTutorId($specialtyId, $tutorId);
             } else {
-                $sql = "UPDATE $tableSepeTutors 
-                        SET platform_user_id='' 
+                $sql = "UPDATE $tableSepeTutors
+                        SET platform_user_id=''
                         WHERE platform_user_id='".$platformUserId."'";
                 Database::query($sql);
                 $sql = "INSERT INTO $tableSepeTutors (
@@ -112,13 +112,13 @@ if (!empty($_POST)) {
             }
 
             if (isset($newTutor) && $newTutor != 1) {
-                $sql = "UPDATE $tableSepeSpecialtyTutors SET 
-                        tutor_id = $tutorId, 
-                        tutor_accreditation = '".$tutorAccreditation."', 
-                        professional_experience = $professionalExperience, 
-                        teaching_competence = '".$teachingCompetence."', 
-                        experience_teleforming = $experienceTeleforming, 
-                        training_teleforming='".$trainingTeleforming."' 
+                $sql = "UPDATE $tableSepeSpecialtyTutors SET
+                        tutor_id = $tutorId,
+                        tutor_accreditation = '".$tutorAccreditation."',
+                        professional_experience = $professionalExperience,
+                        teaching_competence = '".$teachingCompetence."',
+                        experience_teleforming = $experienceTeleforming,
+                        training_teleforming='".$trainingTeleforming."'
                         WHERE id = $specialtyTutorId;";
             } else {
                 $sql = "INSERT INTO $tableSepeSpecialtyTutors (
@@ -169,16 +169,28 @@ if (!empty($_POST)) {
 }
 
 if (api_is_platform_admin()) {
-    $courseId = getCourse(intval($_GET['action_id']));
-    $interbreadcrumb[] = ["url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe')];
+    $actionId = (int) $_GET['action_id'];
+    $specialtyId = (int) $_GET['specialty_id'];
+
+    $courseId = getCourse($actionId);
+    $interbreadcrumb[] = [
+        "url" => "/plugin/sepe/src/sepe-administration-menu.php",
+        "name" => $plugin->get_lang('MenuSepe'),
+    ];
     $interbreadcrumb[] = ["url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList')];
-    $interbreadcrumb[] = ["url" => "formative-action.php?cid=".$courseId, "name" => $plugin->get_lang('FormativeAction')];
-    $interbreadcrumb[] = ["url" => "specialty-action-edit.php?new_specialty=0&specialty_id=".intval($_GET['specialty_id'])."&action_id=".$_GET['action_id'], "name" => $plugin->get_lang('SpecialtyFormativeAction')];
+    $interbreadcrumb[] = [
+        "url" => "formative-action.php?cid=".$courseId,
+        "name" => $plugin->get_lang('FormativeAction'),
+    ];
+    $interbreadcrumb[] = [
+        "url" => "specialty-action-edit.php?new_specialty=0&specialty_id=".$specialtyId."&action_id=".$actionId,
+        "name" => $plugin->get_lang('SpecialtyFormativeAction'),
+    ];
     if (isset($_GET['new_tutor']) && intval($_GET['new_tutor']) == 1) {
         $templateName = $plugin->get_lang('NewSpecialtyTutor');
         $tpl = new Template($templateName);
-        $tpl->assign('action_id', intval($_GET['action_id']));
-        $tpl->assign('specialty_id', intval($_GET['specialty_id']));
+        $tpl->assign('action_id', $actionId);
+        $tpl->assign('specialty_id', $specialtyId);
         $info = [];
         $tpl->assign('info', $info);
         $tpl->assign('new_tutor', '1');
@@ -186,8 +198,8 @@ if (api_is_platform_admin()) {
     } else {
         $templateName = $plugin->get_lang('EditSpecialtyTutor');
         $tpl = new Template($templateName);
-        $tpl->assign('action_id', intval($_GET['action_id']));
-        $tpl->assign('specialty_id', intval($_GET['specialty_id']));
+        $tpl->assign('action_id', $actionId);
+        $tpl->assign('specialty_id', $specialtyId);
         $tpl->assign('tutor_id', intval($_GET['tutor_id']));
         $info = getInfoSpecialtyTutor($_GET['tutor_id']);
         $tpl->assign('info', $info);

@@ -1,8 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use ChamiloSession as Session;
+use Ddeboer\DataImport\Writer\CsvWriter;
 
 /**
  * This tool allows platform admins to add users by uploading a CSV or XML file.
@@ -13,10 +15,48 @@ require_once __DIR__.'/../inc/global.inc.php';
 // Set this option to true to enforce strict purification for usenames.
 $purification_option_for_usernames = false;
 $userId = api_get_user_id();
-
 api_protect_admin_script(true, null);
 api_protect_limit_for_session_admin();
 set_time_limit(0);
+
+/**
+ * Create directories and subdirectories for backup import csv data.
+ *
+ * @param null $path
+ *
+ * @return string|null
+ */
+function createDirectory($path = null)
+{
+    if ($path == null) {
+        return $path;
+    }
+    $path = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
+    $realPath = explode(DIRECTORY_SEPARATOR, $path);
+    $data = '';
+    foreach ($realPath as $pth) {
+        if (strlen($pth) > 0) {
+            $data .= DIRECTORY_SEPARATOR.$pth;
+            if (!is_dir($data)) {
+                mkdir($data, api_get_permissions_for_new_directories());
+                $block =
+                    '<FilesMatch "\.(csv|xml)$">
+Order allow,deny
+Deny from all
+</FilesMatch>
+Options -Indexes';
+
+                $fp = fopen($data.'/.htaccess', 'w');
+                if ($fp) {
+                    fwrite($fp, $block);
+                }
+                fclose($fp);
+            }
+        }
+    }
+
+    return $data;
+}
 
 /**
  * @param array $users
@@ -87,7 +127,11 @@ function validate_data($users, $checkUniqueEmail = false)
             }
         }
 
-        if (isset($user['Email'])) {
+        // When e-mail is not a required field, e-mail is left empty
+        if (api_get_setting('registration', 'email') === 'false' && empty($user['Email'])) {
+            $user['Email'] = '';
+        }
+        if (!empty($user['Email'])) {
             $result = api_valid_email($user['Email']);
             if ($result === false) {
                 $user['message'] .= Display::return_message(get_lang('PleaseEnterValidEmail'), 'warning');
@@ -96,7 +140,7 @@ function validate_data($users, $checkUniqueEmail = false)
         }
 
         if ($checkUniqueEmail) {
-            if (isset($user['Email'])) {
+            if (!empty($user['Email'])) {
                 $userFromEmail = api_get_user_info_from_email($user['Email']);
                 if (!empty($userFromEmail)) {
                     $user['message'] .= Display::return_message(get_lang('EmailUsedTwice'), 'warning');
@@ -212,13 +256,22 @@ function complete_missing_data($user)
  * @uses \global variable $inserted_in_course, which returns the list of
  * courses the user was inserted in
  */
-function save_data($users, $sendMail = false)
-{
+function save_data(
+    $users,
+    $sendMail = false,
+    $targetFolder = null
+) {
     global $inserted_in_course, $extra_fields;
 
     // Not all scripts declare the $inserted_in_course array (although they should).
     if (!isset($inserted_in_course)) {
         $inserted_in_course = [];
+    }
+
+    if (!empty($targetFolder)) {
+        $userSaved = [];
+        $userError = [];
+        $userWarning = [];
     }
 
     $usergroup = new UserGroup();
@@ -229,6 +282,7 @@ function save_data($users, $sendMail = false)
 
         foreach ($users as &$user) {
             if ($user['has_error']) {
+                $userError[] = $user;
                 continue;
             }
 
@@ -321,14 +375,111 @@ function save_data($users, $sendMail = false)
 
                     UserManager::update_extra_field_value($user_id, $key, $value);
                 }
+                $userSaved[] = $user;
             } else {
                 $returnMessage = Display::return_message(get_lang('Error'), 'warning');
+                $userWarning[] = $user;
             }
             $user['message'] = $returnMessage;
         }
     }
 
+    // Save with success, error and warning users
+    if (!empty($targetFolder)) {
+        $header = [
+            'id',
+            'FirstName',
+            'LastName',
+            'Status',
+            'Email',
+            'UserName',
+            'message',
+        ];
+        // Save user with success
+        if (count($userSaved) != 0) {
+            $csv_content = [];
+            $csv_row = $header;
+            $csv_content[] = $csv_row;
+            foreach ($userSaved as $user) {
+                $csv_row = [];
+                $csv_row[] = isset($user['id']) ? $user['id'] : '';
+                $csv_row[] = isset($user['FirstName']) ? $user['FirstName'] : '';
+                $csv_row[] = isset($user['LastName']) ? $user['LastName'] : '';
+                $csv_row[] = isset($user['Status']) ? $user['Status'] : '';
+                $csv_row[] = isset($user['Email']) ? $user['Email'] : '';
+                $csv_row[] = isset($user['UserName']) ? $user['UserName'] : '';
+                $csv_row[] = isset($user['message']) ? strip_tags($user['message']) : '';
+                $csv_content[] = $csv_row;
+            }
+            saveCsvFile($csv_content, $targetFolder.'user_success_'.count($userSaved));
+        }
+        if (count($userError) != 0) {
+            // Save user with error
+            $csv_content = [];
+            $csv_row = $header;
+            $csv_content[] = $csv_row;
+            foreach ($userError as $user) {
+                $csv_row = [];
+                $csv_row[] = isset($user['id']) ? $user['id'] : '';
+                $csv_row[] = isset($user['FirstName']) ? $user['FirstName'] : '';
+                $csv_row[] = isset($user['LastName']) ? $user['LastName'] : '';
+                $csv_row[] = isset($user['Status']) ? $user['Status'] : '-';
+                $csv_row[] = isset($user['Email']) ? $user['Email'] : '';
+                $csv_row[] = isset($user['UserName']) ? $user['UserName'] : '';
+                $csv_row[] = isset($user['message']) ? strip_tags($user['message']) : '';
+                $csv_content[] = $csv_row;
+                error_log(print_r($csv_row, 1));
+            }
+            saveCsvFile($csv_content, $targetFolder.'user_error_'.count($userError));
+        }
+        if (count($userWarning) != 0) {
+            // Save user with warning
+            $csv_content = [];
+            $csv_row = $header;
+            $csv_content[] = $csv_row;
+            foreach ($userWarning as $user) {
+                $csv_row = [];
+                $csv_row[] = isset($user['id']) ? $user['id'] : '';
+                $csv_row[] = isset($user['FirstName']) ? $user['FirstName'] : '';
+                $csv_row[] = isset($user['LastName']) ? $user['LastName'] : '';
+                $csv_row[] = isset($user['Status']) ? $user['Status'] : '';
+                $csv_row[] = isset($user['Email']) ? $user['Email'] : '';
+                $csv_row[] = isset($user['UserName']) ? $user['UserName'] : '';
+                $csv_row[] = isset($user['message']) ? strip_tags($user['message']) : '';
+                $csv_content[] = $csv_row;
+            }
+            saveCsvFile($csv_content, $targetFolder.'user_warning_'.count($userWarning));
+        }
+    }
+
     return $users;
+}
+
+/**
+ * Save array to a specific file.
+ *
+ * @param array $data
+ * @param $file
+ * @param string $enclosure
+ */
+function saveCsvFile($data = [], $file = 'example', $enclosure = '"')
+{
+    $filePath = $file.'.csv';
+    $stream = fopen($filePath, 'w');
+    $writer = new CsvWriter(';', $enclosure, $stream, true);
+    $writer->prepare();
+
+    foreach ($data as $item) {
+        if (empty($item)) {
+            $writer->writeItem([]);
+            continue;
+        }
+        $item = array_map('trim', $item);
+        $writer->writeItem($item);
+    }
+    $writer->finish();
+
+    return null;
 }
 
 /**
@@ -433,10 +584,9 @@ function parse_csv_data($users, $fileName, $sendEmail = 0, $checkUniqueEmail = t
  *
  * @return array All user information read from the file
  */
-function parse_xml_data($file)
+function parse_xml_data($file, $sendEmail = 0, $checkUniqueEmail = true)
 {
-    $crawler = new \Symfony\Component\DomCrawler\Crawler();
-    $crawler->addXmlContent(file_get_contents($file));
+    $crawler = Import::xml($file);
     $crawler = $crawler->filter('Contacts > Contact ');
     $array = [];
     foreach ($crawler as $domElement) {
@@ -451,16 +601,27 @@ function parse_xml_data($file)
         }
     }
 
+    Session::write(
+        'user_import_data_'.api_get_user_id(),
+        [
+            'check_unique_email' => $checkUniqueEmail,
+            'send_email' => $sendEmail,
+            'date' => api_get_utc_datetime(),
+            'log_messages' => '',
+        ]
+    );
+
     return $array;
 }
 
 /**
- * @param array $users
- * @param bool  $sendMail
+ * @param array  $users
+ * @param bool   $sendMail
+ * @param string $targetFolder
  */
-function processUsers(&$users, $sendMail)
+function processUsers(&$users, $sendMail, $targetFolder = null)
 {
-    $users = save_data($users, $sendMail);
+    $users = save_data($users, $sendMail, $targetFolder);
 
     $warningMessage = '';
     if (!empty($users)) {
@@ -530,12 +691,26 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
     $resume = isset($_POST['resume_import']) ? true : false;
     $uploadInfo = pathinfo($_FILES['import_file']['name']);
     $ext_import_file = $uploadInfo['extension'];
-
+    $targetFolder = null;
     $users = [];
     if (in_array($ext_import_file, $allowed_file_mimetype)) {
         if (strcmp($file_type, 'csv') === 0 &&
             $ext_import_file == $allowed_file_mimetype[0]
         ) {
+            $user = api_get_user_info();
+            $userId = (int) $user['id'];
+            $today = new DateTime();
+            $today = $today->format('YmdHis');
+            $targetFolder = api_get_configuration_value('root_sys').'app/cache/backup/import_users';
+            $targetFolder .= DIRECTORY_SEPARATOR.$userId.DIRECTORY_SEPARATOR.$today;
+            $targetFolder = createDirectory($targetFolder).DIRECTORY_SEPARATOR;
+            $originalFile = $targetFolder.$_FILES['import_file']['name'];
+            // save original file
+            if (!file_exists($originalFile)) {
+                touch($originalFile);
+                file_put_contents($originalFile, file_get_contents($_FILES['import_file']['tmp_name']));
+            }
+
             Session::erase('user_import_data_'.$userId);
             $users = Import::csvToArray($_FILES['import_file']['tmp_name']);
             $users = parse_csv_data(
@@ -548,12 +723,16 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
             $users = validate_data($users, $checkUniqueEmail);
             $error_kind_file = false;
         } elseif (strcmp($file_type, 'xml') === 0 && $ext_import_file == $allowed_file_mimetype[1]) {
-            $users = parse_xml_data($_FILES['import_file']['tmp_name']);
+            $users = parse_xml_data(
+                $_FILES['import_file']['tmp_name'],
+                $sendMail,
+                $checkUniqueEmail
+            );
             $users = validate_data($users, $checkUniqueEmail);
             $error_kind_file = false;
         }
 
-        processUsers($users, $sendMail);
+        processUsers($users, $sendMail, $targetFolder);
 
         if ($error_kind_file) {
             Display::addFlash(
@@ -590,7 +769,7 @@ $importData = Session::read('user_import_data_'.$userId);
 $formContinue = false;
 $resumeStop = true;
 if (!empty($importData)) {
-    $isResume = $importData['resume'];
+    $isResume = $importData['resume'] ?? false;
 
     $formContinue = new FormValidator('user_import_continue', 'post', api_get_self());
     $label = get_lang('Results');
@@ -598,7 +777,9 @@ if (!empty($importData)) {
         $label = get_lang('ContinueLastImport');
     }
     $formContinue->addHeader($label);
-    $formContinue->addLabel(get_lang('File'), $importData['filename']);
+    if (isset($importData['filename'])) {
+        $formContinue->addLabel(get_lang('File'), $importData['filename'] ?? '');
+    }
 
     $resumeStop = true;
     if ($isResume) {
@@ -614,10 +795,12 @@ if (!empty($importData)) {
             $importData['counter'].' / '.count($importData['complete_list'])
         );
     } else {
-        $formContinue->addLabel(
-            get_lang('Users'),
-            count($importData['complete_list'])
-        );
+        if (!empty($importData['complete_list'])) {
+            $formContinue->addLabel(
+                get_lang('Users'),
+                count($importData['complete_list'])
+            );
+        }
     }
 
     $formContinue->addLabel(
@@ -717,6 +900,10 @@ if (!empty($extraSettings) && isset($extraSettings['options']) &&
 }
 
 $form->setDefaults($defaults);
+if (is_dir(api_get_path(SYS_ARCHIVE_PATH).'backup/import_users')) {
+    // only show if backup exist
+    $form->addHtml("<a href='./download_import_users.php'>".get_lang('ViewHistoryChange')."</a>");
+}
 $form->display();
 
 if ($formContinue) {
@@ -725,7 +912,6 @@ if ($formContinue) {
 
 if ($reloadImport) {
     echo '<script>
-
         $(function() {
             function reload() {
                 $("#user_import_continue").submit();

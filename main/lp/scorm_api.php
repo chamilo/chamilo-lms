@@ -280,7 +280,6 @@ function LMSInitialize() {
 
     olms.G_LastError = G_NoError ;
     olms.G_LastErrorMessage = 'No error';
-
     olms.lms_initialized = 0;
     olms.finishSignalReceived = 0;
     olms.statusSignalReceived = 0;
@@ -874,13 +873,17 @@ function SetValue(param, val) {
 /**
  * Saves the current data from JS memory to the LMS database
  */
-function savedata(item_id) {
+function savedata(item_id, forceIframeSave = 0) {
     // Origin can be 'commit', 'finish' or 'terminate' (depending on the calling function)
     logit_lms('function savedata(' + item_id + ')', 3);
 
     // Status is NOT modified here see the lp_ajax_save_item.php file
     if (olms.lesson_status != '') {
         //olms.updatable_vars_list['cmi.core.lesson_status'] = true;
+    }
+
+    if (typeof(forceIframeSave) == 'undefined') {
+        forceIframeSave = 0;
     }
 
     old_item_id = olms.info_lms_item[0];
@@ -890,7 +893,7 @@ function savedata(item_id) {
     // If saving session_time value, we assume that all the new info is about
     // the old item, not the current one
     // if (olms.session_time != '' && olms.session_time != '0') {
-    if (olms.switch_finished == 0) {
+    if (olms.switch_finished == 0 && forceIframeSave == 0) {
         logit_lms('item_to_save (changed to): ' + old_item_id, 3);
         item_to_save = old_item_id;
     }
@@ -904,7 +907,9 @@ function savedata(item_id) {
         olms.lms_course_id,
         olms.finishSignalReceived,
         olms.userNavigatesAway,
-        olms.statusSignalReceived
+        olms.statusSignalReceived,
+        false,
+        forceIframeSave
     );
 
     olms.info_lms_item[1] = olms.lms_item_id;
@@ -935,7 +940,13 @@ function LMSCommit(val) {
 
     olms.G_LastError = G_NoError ;
     olms.G_LastErrorMessage = 'No error';
-    savedata(olms.lms_item_id);
+    let forceIframeSave = 0;
+    if (val && 'iframe' == val) {
+        forceIframeSave = 1;
+    }
+
+    console.log(forceIframeSave);
+    savedata(olms.lms_item_id, forceIframeSave);
 
     //reinit_updatable_vars_list();
     logit_scorm('LMSCommit() end ', 0);
@@ -1927,7 +1938,8 @@ function xajax_save_item_scorm(
     finishSignalReceived,
     userNavigatesAway,
     statusSignalReceived,
-    useSendBeacon
+    useSendBeacon,
+    forceIframeSave
 ) {
     if (typeof(finishSignalReceived) == 'undefined') {
         finishSignalReceived = 0;
@@ -1940,6 +1952,10 @@ function xajax_save_item_scorm(
         statusSignalReceived = 0;
     }
 
+    if (typeof(forceIframeSave) == 'undefined') {
+        forceIframeSave = 0;
+    }
+
     var is_interactions='false';
     var params = 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id+'&iid='+lms_item_id;
     // The missing arguments will be ignored by lp_ajax_save_item.php
@@ -1949,6 +1965,8 @@ function xajax_save_item_scorm(
     params += '&finishSignalReceived='+finishSignalReceived;
     params += '&userNavigatesAway='+userNavigatesAway;
     params += '&statusSignalReceived='+statusSignalReceived;
+    params += '&forceIframeSave='+forceIframeSave;
+
     var my_scorm_values = new Array();
     my_scorm_values = process_scorm_values();
     for (k=0; k < my_scorm_values.length; k++) {
@@ -2546,8 +2564,8 @@ function update_chronometer(text_hour, text_minute, text_second)
 }
 
 /**
- * get_local_suspend_data()
- * see suspend_data case in function LMSGetValue correction bn
+ * Get the locally stored suspend data
+ * See suspend_data case in LMSGetValue()
  */
 function get_local_suspend_data()
 {
@@ -2556,7 +2574,7 @@ function get_local_suspend_data()
     try{
         if (localStorage) {
             mem_suspend_data = window.localStorage.getItem(idSuspendData);
-            if (mem_suspend_data === null||mem_suspend_data == "null"){
+            if (mem_suspend_data === null || mem_suspend_data == "null"){
                 mem_suspend_data = "";
             }
             if (mem_suspend_data === undefined) {
@@ -2565,20 +2583,21 @@ function get_local_suspend_data()
             if (typeof mem_suspend_data == 'undefined') {
                 mem_suspend_data = "";
             }
-            if(mem_suspend_data!=""){
-                if (olms.suspend_data.indexOf("ICPLAYER_")!=-1||mem_suspend_data.indexOf("ICPLAYER_")!=-1) {
+            if (mem_suspend_data != ""){
+                if (olms.suspend_data.indexOf("ICPLAYER_") != -1 || mem_suspend_data.indexOf("ICPLAYER_") != -1) {
                     final_suspend_data = mem_suspend_data;
-                    //console.log('recovery suspend_data' + mem_suspend_data);
                 }
             }
         }
-    }catch(err){}
+    } catch(err) {
+
+    }
     return final_suspend_data;
 }
 
 /**
  * Save suspend_data in localStorage
- * see suspend_data case in function LMSSetValue
+ * See suspend_data case in LMSSetValue()
  */
 function save_suspend_data_in_local()
 {

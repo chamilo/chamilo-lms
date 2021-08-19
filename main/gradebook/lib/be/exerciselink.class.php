@@ -69,7 +69,7 @@ class ExerciseLink extends AbstractLink
         $sqlLp = "SELECT e.iid, e.title, lp.name lp_name
                   FROM $exerciseTable e
                   INNER JOIN $lpItemTable i
-                  ON (e.c_id = i.c_id AND e.id = i.path)
+                  ON (e.c_id = i.c_id AND e.iid = i.path)
                   INNER JOIN $lpTable lp
                   ON (lp.c_id = e.c_id AND lp.id = i.lp_id)
 				  WHERE
@@ -255,7 +255,7 @@ class ExerciseLink extends AbstractLink
         $sessionId = $this->get_session_id();
         $courseId = $this->getCourseId();
         $exerciseData = $this->get_exercise_data();
-        $exerciseId = isset($exerciseData['id']) ? (int) $exerciseData['id'] : 0;
+        $exerciseId = isset($exerciseData['iid']) ? (int) $exerciseData['iid'] : 0;
         $stud_id = (int) $stud_id;
 
         if (empty($exerciseId)) {
@@ -472,7 +472,7 @@ class ExerciseLink extends AbstractLink
     {
         $sessionId = $this->get_session_id();
         $data = $this->get_exercise_data();
-        $exerciseId = $data['id'];
+        $exerciseId = $data['iid'];
         $path = isset($data['path']) ? $data['path'] : '';
 
         return api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?'
@@ -514,7 +514,7 @@ class ExerciseLink extends AbstractLink
     public function getLpListToString()
     {
         $data = $this->get_exercise_data();
-        $lpList = Exercise::getLpListFromExercise($data['id'], $this->getCourseId());
+        $lpList = Exercise::getLpListFromExercise($data['iid'], $this->getCourseId());
         $lpListToString = '';
         if (!empty($lpList)) {
             foreach ($lpList as &$list) {
@@ -638,10 +638,9 @@ class ExerciseLink extends AbstractLink
                 $this->exercise_data = Database::fetch_array($result);
             } else {
                 // Try with iid
-                $sql = 'SELECT * FROM '.$table.'
-                        WHERE
-                            c_id = '.$this->course_id.' AND
-                            iid = '.$exerciseId;
+                $sql = "SELECT * FROM $table
+                    WHERE
+                        iid = $exerciseId";
                 $result = Database::query($sql);
                 $rows = Database::num_rows($result);
 
@@ -649,10 +648,9 @@ class ExerciseLink extends AbstractLink
                     $this->exercise_data = Database::fetch_array($result);
                 } else {
                     // Try wit id
-                    $sql = 'SELECT * FROM '.$table.'
-                            WHERE
-                                c_id = '.$this->course_id.' AND
-                                id = '.$exerciseId;
+                    $sql = "SELECT * FROM $table
+                        WHERE
+                            iid = $exerciseId";
                     $result = Database::query($sql);
                     $this->exercise_data = Database::fetch_array($result);
                 }

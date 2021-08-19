@@ -14,6 +14,7 @@ use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
@@ -483,7 +484,7 @@ class learnpath
     public function add_item(
         $parent,
         $previous,
-        $type = 'dir',
+        $type,
         $id,
         $title,
         $description,
@@ -563,11 +564,9 @@ class learnpath
                     FROM '.Database::get_course_table(TABLE_QUIZ_QUESTION).' as quiz_question
                     INNER JOIN '.Database::get_course_table(TABLE_QUIZ_TEST_QUESTION).' as quiz_rel_question
                     ON
-                        quiz_question.id = quiz_rel_question.question_id AND
-                        quiz_question.c_id = quiz_rel_question.c_id
+                        quiz_question.iid = quiz_rel_question.question_id
                     WHERE
                         quiz_rel_question.exercice_id = '.$id." AND
-                        quiz_question.c_id = $course_id AND
                         quiz_rel_question.c_id = $course_id ";
             $rsQuiz = Database::query($sql);
             $max_score = Database::result($rsQuiz, 0, 0);
@@ -2298,6 +2297,7 @@ class learnpath
      * @param int   $student_id
      * @param array $courseInfo
      * @param int   $sessionId
+     * @param bool  $checkSubscription Optional. Allow don't check if user is subscribed to the LP.
      *
      * @return bool
      */
@@ -2305,7 +2305,8 @@ class learnpath
         $lp_id,
         $student_id,
         $courseInfo = [],
-        $sessionId = 0
+        $sessionId = 0,
+        bool $checkSubscription = true
     ) {
         $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
         $lp_id = (int) $lp_id;
@@ -2389,56 +2390,72 @@ class learnpath
                 }
             }
 
-            if ($is_visible) {
-                $subscriptionSettings = self::getSubscriptionSettings();
-
-                // Check if the subscription users/group to a LP is ON
-                if (isset($row['subscribe_users']) && $row['subscribe_users'] == 1 &&
-                    $subscriptionSettings['allow_add_users_to_lp'] === true
-                ) {
-                    // Try group
-                    $is_visible = false;
-                    // Checking only the user visibility
-                    $userVisibility = api_get_item_visibility(
-                        $courseInfo,
-                        'learnpath',
-                        $row['id'],
-                        $sessionId,
-                        $student_id,
-                        'LearnpathSubscription'
-                    );
-
-                    if ($userVisibility == 1) {
-                        $is_visible = true;
-                    } else {
-                        $userGroups = GroupManager::getAllGroupPerUserSubscription($student_id, $courseId);
-                        if (!empty($userGroups)) {
-                            foreach ($userGroups as $groupInfo) {
-                                $groupId = $groupInfo['iid'];
-                                $userVisibility = api_get_item_visibility(
-                                    $courseInfo,
-                                    'learnpath',
-                                    $row['id'],
-                                    $sessionId,
-                                    null,
-                                    'LearnpathSubscription',
-                                    $groupId
-                                );
-
-                                if ($userVisibility == 1) {
-                                    $is_visible = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
+            if ($is_visible && $checkSubscription) {
+                $is_visible = self::isUserSubscribedToLp(
+                    $row,
+                    (int) $student_id,
+                    $courseInfo,
+                    (int) $sessionId
+                );
             }
 
             return $is_visible;
         }
 
         return false;
+    }
+
+    public static function isUserSubscribedToLp(
+        array $lpInfo,
+        int $studentId,
+        array $courseInfo,
+        int $sessionId = 0
+    ): bool {
+        $subscriptionSettings = self::getSubscriptionSettings();
+
+        // Check if the subscription users/group to a LP is ON
+        if (isset($lpInfo['subscribe_users']) && $lpInfo['subscribe_users'] == 1 &&
+            $subscriptionSettings['allow_add_users_to_lp'] === true
+        ) {
+            // Checking only the user visibility
+            $userVisibility = api_get_item_visibility(
+                $courseInfo,
+                'learnpath',
+                $lpInfo['id'],
+                $sessionId,
+                $studentId,
+                'LearnpathSubscription'
+            );
+
+            if (1 == $userVisibility) {
+                return true;
+            }
+
+            // Try group
+            $userGroups = GroupManager::getAllGroupPerUserSubscription($studentId, $courseInfo['real_id']);
+
+            if (!empty($userGroups)) {
+                foreach ($userGroups as $groupInfo) {
+                    $userVisibility = api_get_item_visibility(
+                        $courseInfo,
+                        'learnpath',
+                        $lpInfo['id'],
+                        $sessionId,
+                        null,
+                        'LearnpathSubscription',
+                        $groupInfo['iid']
+                    );
+
+                    if (1 == $userVisibility) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -2573,6 +2590,7 @@ class learnpath
         // path, then the rules are completely different: we assume only one
         // item exists and the progress of the LP depends on the score
         $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
+
         if ($scoreAsProgressSetting === true) {
             $scoreAsProgress = $this->getUseScoreAsProgress();
             if ($scoreAsProgress) {
@@ -2604,6 +2622,7 @@ class learnpath
         if ($completeItems > $total_items) {
             $completeItems = $total_items;
         }
+
         if ($mode == '%') {
             if ($total_items > 0) {
                 $percentage = ((float) $completeItems / (float) $total_items) * 100;
@@ -2828,23 +2847,23 @@ class learnpath
     /**
      * Returns the XML DOM document's node.
      *
-     * @param resource $children Reference to a list of objects to search for the given ITEM_*
-     * @param string   $id       The identifier to look for
+     * @param DOMNodeList $children Reference to a list of objects to search for the given ITEM_*
+     * @param string      $id       The identifier to look for
      *
      * @return mixed The reference to the element found with that identifier. False if not found
      */
-    public function get_scorm_xml_node(&$children, $id)
+    public function get_scorm_xml_node(DOMNodeList &$children, string $id, $nodeName = 'item', $attributeName = 'identifier')
     {
         for ($i = 0; $i < $children->length; $i++) {
             $item_temp = $children->item($i);
-            if ($item_temp->nodeName == 'item') {
-                if ($item_temp->getAttribute('identifier') == $id) {
+            if ($item_temp->nodeName == $nodeName) {
+                if ($item_temp instanceof DOMElement && $item_temp->getAttribute($attributeName) == $id) {
                     return $item_temp;
                 }
             }
             $subchildren = $item_temp->childNodes;
             if ($subchildren && $subchildren->length > 0) {
-                $val = $this->get_scorm_xml_node($subchildren, $id);
+                $val = $this->get_scorm_xml_node($subchildren, $id, $nodeName, $attributeName);
                 if (is_object($val)) {
                     return $val;
                 }
@@ -3520,7 +3539,7 @@ class learnpath
      */
     public function getNameNoTags()
     {
-        return strip_tags($this->get_name());
+        return Security::remove_XSS(strip_tags($this->get_name()));
     }
 
     /**
@@ -3590,7 +3609,7 @@ class learnpath
             // then change the lp type to thread it as a normal Chamilo LP not a SCO.
             if (in_array(
                 $lp_item_type,
-                ['quiz', 'document', 'final_item', 'link', 'forum', 'thread', 'student_publication']
+                ['quiz', 'document', 'final_item', 'link', 'forum', 'thread', 'student_publication', 'xapi']
             )
             ) {
                 $lp_type = 1;
@@ -5595,10 +5614,14 @@ class learnpath
                 if ($debug) {
                     error_log('start_current_item will save item with prereq: '.$prereq_check);
                 }
-                $this->items[$this->current]->save(false, $prereq_check);
+
+                $saveStatus = learnpathItem::isLpItemAutoComplete($this->current);
+                if ($saveStatus) {
+                    $this->items[$this->current]->save(false, $prereq_check);
+                }
             }
             // If sco, then it is supposed to have been updated by some other call.
-            if ($item_type == 'sco') {
+            if ($item_type === 'sco') {
                 $this->items[$this->current]->restart();
             }
         }
@@ -6217,6 +6240,8 @@ class learnpath
                 } else {
                     if ($arrLP[$i]['item_type'] === TOOL_LP_FINAL_ITEM) {
                         $icon = Display::return_icon('certificate.png');
+                    } elseif (TOOL_XAPI === $arrLP[$i]['item_type']) {
+                        $icon = Display::return_icon('import_scorm.png');
                     } else {
                         $icon = Display::return_icon('folder_document.gif');
                     }
@@ -6617,7 +6642,7 @@ class learnpath
         $list .= '</ul>';
 
         $return = Display::panelCollapse(
-            $this->name,
+            $this->getNameNoTags(),
             $list,
             'scorm-list',
             null,
@@ -7536,6 +7561,8 @@ class learnpath
         // Get all the forums.
         $forums = $this->get_forums(null, $course_code);
 
+        $dir = $this->display_item_form('dir', get_lang('EnterDataNewChapter'), 'add_item');
+
         // Get the final item form (see BT#11048) .
         $finish = $this->getFinalItemForm();
 
@@ -7546,25 +7573,38 @@ class learnpath
             Display::return_icon('works.png', get_lang('Works'), [], ICON_SIZE_BIG),
             Display::return_icon('forum.png', get_lang('Forums'), [], ICON_SIZE_BIG),
             Display::return_icon('add_learnpath_section.png', get_lang('NewChapter'), [], ICON_SIZE_BIG),
-            Display::return_icon('certificate.png', get_lang('Certificate'), [], ICON_SIZE_BIG),
         ];
 
+        $items = [
+            $documents,
+            $exercises,
+            $links,
+            $works,
+            $forums,
+            $dir,
+        ];
+
+        $xApiPlugin = XApiPlugin::create();
+        if ($xApiPlugin->isEnabled()) {
+            $headers[] = Display::return_icon(
+                'import_scorm.png',
+                get_lang($xApiPlugin->get_lang('ToolTinCan')),
+                [],
+                ICON_SIZE_BIG
+            );
+            $items[] = $xApiPlugin->getLpResourceBlock($this->lp_id);
+        }
+
+        $headers[] = Display::return_icon('certificate.png', get_lang('Certificate'), [], ICON_SIZE_BIG);
+        $items[] = $finish;
+
         echo Display::return_message(get_lang('ClickOnTheLearnerViewToSeeYourLearningPath'), 'normal');
-        $dir = $this->display_item_form('dir', get_lang('EnterDataNewChapter'), 'add_item');
 
         $selected = isset($_REQUEST['lp_build_selected']) ? (int) $_REQUEST['lp_build_selected'] : 0;
 
         echo Display::tabs(
             $headers,
-            [
-                $documents,
-                $exercises,
-                $links,
-                $works,
-                $forums,
-                $dir,
-                $finish,
-            ],
+            $items,
             'resource_tab',
             [],
             [],
@@ -7647,7 +7687,7 @@ class learnpath
         } elseif (is_numeric($extra_info)) {
             $sql = "SELECT title, description
                     FROM $tbl_quiz
-                    WHERE c_id = $course_id AND iid = ".$extra_info;
+                    WHERE iid = $extra_info";
 
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
@@ -10582,10 +10622,10 @@ class learnpath
 
             $link = Display::url(
                 $previewIcon,
-                $exerciseUrl.'&exerciseId='.$row_quiz['id'],
+                $exerciseUrl.'&exerciseId='.$row_quiz['iid'],
                 ['target' => '_blank']
             );
-            $return .= '<li class="lp_resource_element" data_id="'.$row_quiz['id'].'" data_type="quiz" title="'.$title.'" >';
+            $return .= '<li class="lp_resource_element" data_id="'.$row_quiz['iid'].'" data_type="quiz" title="'.$title.'" >';
             $return .= Display::url($moveIcon, '#', ['class' => 'moved']);
             $return .= $quizIcon;
             $sessionStar = api_get_session_image(
@@ -10594,7 +10634,7 @@ class learnpath
             );
             $return .= Display::url(
                 Security::remove_XSS(cut($title, 80)).$link.$sessionStar,
-                api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_QUIZ.'&file='.$row_quiz['id'].'&lp_id='.$this->lp_id,
+                api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_QUIZ.'&file='.$row_quiz['iid'].'&lp_id='.$this->lp_id,
                 [
                     'class' => $visibility == 0 ? 'moved text-muted' : 'moved',
                 ]
@@ -11163,9 +11203,14 @@ class learnpath
                                                     substr($file_path, $pos, strlen($file_path))
                                                 );
                                             }
-                                            $replace = $onlyDirectory;
+                                            $replace = './'.$onlyDirectory;
                                             $destinationFile = $replace;
                                         }
+
+                                        if (strpos($file_path, '/web') === 0) {
+                                            $replace = str_replace('/web', 'web', $file_path);
+                                        }
+
                                         $zip_files_abs[] = $file_path;
                                         $link_updates[$my_file_path][] = [
                                             'orig' => $doc_info[0],
@@ -11252,16 +11297,14 @@ class learnpath
                                         $abs_path = api_get_path(SYS_PATH).str_replace(api_get_path(WEB_PATH), '', $doc_info[0]);
 
                                         if (file_exists($file_path)) {
-                                            if (strstr($file_path, 'main/default_course_document') !== false) {
+                                            $pos = strpos($file_path, 'main/default_course_document/');
+                                            if ($pos !== false) {
                                                 // We get the relative path.
-                                                $pos = strpos($file_path, 'main/default_course_document/');
-                                                if ($pos !== false) {
-                                                    $onlyDirectory = str_replace(
-                                                        'main/default_course_document/',
-                                                        '',
-                                                        substr($file_path, $pos, strlen($file_path))
-                                                    );
-                                                }
+                                                $onlyDirectory = str_replace(
+                                                    'main/default_course_document/',
+                                                    '',
+                                                    substr($file_path, $pos, strlen($file_path))
+                                                );
 
                                                 $destinationFile = 'default_course_document/'.$onlyDirectory;
                                                 $fileAbs = substr($file_path, strlen(api_get_path(SYS_PATH)));
@@ -11270,7 +11313,7 @@ class learnpath
                                                     'orig' => $doc_info[0],
                                                     'dest' => $destinationFile,
                                                 ];
-                                                $my_dep_file->setAttribute('href', 'document/'.$file_path);
+                                                $my_dep_file->setAttribute('href', 'document/'.$destinationFile);
                                                 $my_dep->setAttribute('xml:base', '');
                                             }
                                         }
@@ -11861,6 +11904,14 @@ EOD;
         $manifest = @$xmldoc->saveXML();
         $manifest = api_utf8_decode_xml($manifest); // The manifest gets the system encoding now.
         file_put_contents($archivePath.'/'.$temp_dir_short.'/imsmanifest.xml', $manifest);
+
+        $htmlIndex = new LpIndexGenerator($this);
+
+        file_put_contents(
+            $archivePath.'/'.$temp_dir_short.'/index.html',
+            $htmlIndex->generate()
+        );
+
         $zip_folder->add(
             $archivePath.'/'.$temp_dir_short,
             PCLZIP_OPT_REMOVE_PATH,
@@ -12389,9 +12440,9 @@ EOD;
     /**
      * @param int $courseId
      *
-     * @return CLpCategory[]
+     * @return array|CLpCategory[]
      */
-    public static function getCategories($courseId)
+    public static function getCategories($courseId, $withNoneCategory = false)
     {
         $em = Database::getManager();
 
@@ -12399,7 +12450,18 @@ EOD;
         /** @var SortableRepository $repo */
         $repo = $em->getRepository('ChamiloCourseBundle:CLpCategory');
 
-        return $repo->getBySortableGroupsQuery(['cId' => $courseId])->getResult();
+        $categories = $repo->getBySortableGroupsQuery(['cId' => $courseId])->getResult();
+
+        if ($withNoneCategory) {
+            $categoryTest = new CLpCategory();
+            $categoryTest->setId(0)
+                ->setName(get_lang('WithOutCategory'))
+                ->setPosition(0);
+
+            array_unshift($categories, $categoryTest);
+        }
+
+        return $categories;
     }
 
     public static function getCategorySessionId($id)
@@ -13108,9 +13170,7 @@ EOD;
         $form->addHidden('action', 'add_final_item');
         $form->addHidden('path', Session::read('pathItem'));
         $form->addHidden('previous', $this->get_last());
-        $form->setDefaults(
-            ['title' => $title, 'content_lp_certificate' => $content]
-        );
+        $form->setDefaults(['title' => $title, 'content_lp_certificate' => $content]);
 
         if ($form->validate()) {
             $values = $form->exportValues();
@@ -13370,7 +13430,7 @@ EOD;
                 }
 
                 $documentPathInfo = pathinfo($document->getPath());
-                $mediaSupportedFiles = ['mp3', 'mp4', 'ogv', 'ogg', 'flv', 'm4v'];
+                $mediaSupportedFiles = ['mp3', 'mp4', 'ogv', 'ogg', 'flv', 'm4v', 'wav'];
                 $extension = isset($documentPathInfo['extension']) ? $documentPathInfo['extension'] : '';
                 $showDirectUrl = !in_array($extension, $mediaSupportedFiles);
 
@@ -13446,6 +13506,16 @@ EOD;
                 }
 
                 return $main_dir_path.'work/work.php?'.api_get_cidreq().'&id='.$rowItem->getPath().'&'.$extraParams;
+            case TOOL_XAPI:
+                $toolLaunch = $em->find(ToolLaunch::class, $id);
+
+                if (empty($toolLaunch)) {
+                    break;
+                }
+
+                return api_get_path(WEB_PLUGIN_PATH).'xapi/'
+                    .('cmi5' === $toolLaunch->getActivityType() ? 'cmi5/view.php' : 'tincan/view.php')
+                    ."?id=$id&$extraParams";
         }
 
         return $link;
@@ -13508,7 +13578,7 @@ EOD;
                 break;
             case TOOL_QUIZ:
                 $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-                $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id = $id");
+                $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE iid = $id");
                 $myrow = Database::fetch_array($result);
                 $output = $myrow['title'];
                 break;
@@ -14135,6 +14205,20 @@ EOD;
                 ]
             );
         }
+    }
+
+    public static function findLastView(int $lpId, int $studentId, int $courseId, int $sessionId = 0)
+    {
+        $tblLpView = Database::get_course_table(TABLE_LP_VIEW);
+
+        $sessionCondition = api_get_session_condition($sessionId);
+
+        $sql = "SELECT iid FROM $tblLpView
+            WHERE c_id = $courseId AND lp_id = $lpId AND user_id = $studentId $sessionCondition
+            ORDER BY view_count DESC";
+        $result = Database::query($sql);
+
+        return Database::fetch_assoc($result);
     }
 
     /**

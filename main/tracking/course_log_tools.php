@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -7,12 +8,16 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 
 $course_info = api_get_course_info();
-$groupId = isset($_REQUEST['gidReq']) ? intval($_REQUEST['gidReq']) : 0;
+$groupId = api_get_group_id();
+$session_id = api_get_session_id();
+$course_code = api_get_course_id();
+$course_id = api_get_course_int_id();
+
 $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
 
 $this_section = SECTION_COURSES;
-if ($from == 'myspace') {
+if ('myspace' === $from) {
     $from_myspace = true;
     $this_section = 'session_my_space';
 }
@@ -44,7 +49,7 @@ if (!empty($groupId)) {
 $TABLEQUIZ = Database::get_course_table(TABLE_QUIZ_TEST);
 
 // Starting the output buffering when we are exporting the information.
-$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+$export_csv = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
 $session_id = intval($_REQUEST['id_session']);
 
 if ($export_csv) {
@@ -56,7 +61,7 @@ if ($export_csv) {
 $csv_content = [];
 
 // Breadcrumbs.
-if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
+if (isset($_GET['origin']) && $_GET['origin'] === 'resume_session') {
     $interbreadcrumb[] = ['url' => '../admin/index.php', 'name' => get_lang('PlatformAdmin')];
     $interbreadcrumb[] = ['url' => '../session/session_list.php', 'name' => get_lang('SessionList')];
     $interbreadcrumb[] = [
@@ -68,13 +73,12 @@ if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
 $view = isset($_REQUEST['view']) ? $_REQUEST['view'] : '';
 $nameTools = get_lang('Tracking');
 
-// Display the header.
 Display::display_header($nameTools, 'Tracking');
 
 // getting all the students of the course
 if (empty($session_id)) {
     // Registered students in a course outside session.
-    $a_students = CourseManager:: get_student_list_from_course_code(
+    $students = CourseManager:: get_student_list_from_course_code(
         api_get_course_id(),
         false,
         0,
@@ -85,17 +89,15 @@ if (empty($session_id)) {
     );
 } else {
     // Registered students in session.
-    $a_students = CourseManager:: get_student_list_from_course_code(
+    $students = CourseManager:: get_student_list_from_course_code(
         api_get_course_id(),
         true,
         api_get_session_id()
     );
 }
-$nbStudents = count($a_students);
-$student_ids = array_keys($a_students);
+$nbStudents = count($students);
+$student_ids = array_keys($students);
 $studentCount = count($student_ids);
-
-/* MAIN CODE */
 
 echo '<div class="actions">';
 echo TrackingCourseLog::actionsLeft('courses', api_get_session_id());
@@ -108,9 +110,6 @@ echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&id_session='.api_get_sess
 
 echo '</span>';
 echo '</div>';
-
-$course_code = api_get_course_id();
-$course_id = api_get_course_int_id();
 
 if ($lpReporting) {
     $list = new LearnpathList(null, $course_info, $session_id);
@@ -134,8 +133,8 @@ if ($lpReporting) {
 
         foreach ($flat_list as $lp_id => $lp) {
             $lp_avg_progress = 0;
-            foreach ($a_students as $student_id => $student) {
-                // get the progress in learning pathes
+            foreach ($students as $student_id => $student) {
+                // get the progress in learning paths.
                 $lp_avg_progress += Tracking::get_avg_student_progress(
                     $student_id,
                     $course_code,
@@ -144,7 +143,6 @@ if ($lpReporting) {
                 );
             }
 
-            $lp_avg_progress = null;
             if ($studentCount > 0) {
                 $lp_avg_progress = $lp_avg_progress / $studentCount;
             }
@@ -181,7 +179,7 @@ if ($exerciseReporting) {
     );
     echo '<table class="table table-hover table-striped data_table">';
     $course_id = api_get_course_int_id();
-    $sql = "SELECT id, title FROM $TABLEQUIZ
+    $sql = "SELECT iid, title FROM $TABLEQUIZ
             WHERE c_id = $course_id AND active <> -1 AND session_id = $session_id";
     $rs = Database::query($sql);
 
@@ -201,7 +199,7 @@ if ($exerciseReporting) {
                     $avg_student_score = Tracking::get_avg_student_exercise_score(
                         $student_id,
                         $course_code,
-                        $quiz['id'],
+                        $quiz['iid'],
                         $session_id
                     );
                     $quiz_avg_score += $avg_student_score;
@@ -209,7 +207,7 @@ if ($exerciseReporting) {
             }
             $studentCount = ($studentCount == 0 || is_null($studentCount) || $studentCount == '') ? 1 : $studentCount;
             $quiz_avg_score = round(($quiz_avg_score / $studentCount), 2).'%';
-            $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$quiz['id'].$course_path_params;
+            $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$quiz['iid'].$course_path_params;
 
             echo '<tr><td>';
             echo Display::url(
@@ -238,19 +236,19 @@ if (!empty($groupId)) {
     $filterByUsers = $student_ids;
 }
 
-$count_number_of_forums_by_course = Tracking:: count_number_of_forums_by_course(
+$count_number_of_forums_by_course = Tracking::count_number_of_forums_by_course(
     $course_code,
     $session_id,
     $groupId
 );
 
-$count_number_of_threads_by_course = Tracking:: count_number_of_threads_by_course(
+$count_number_of_threads_by_course = Tracking::count_number_of_threads_by_course(
     $course_code,
     $session_id,
     $groupId
 );
 
-$count_number_of_posts_by_course = Tracking:: count_number_of_posts_by_course(
+$count_number_of_posts_by_course = Tracking::count_number_of_posts_by_course(
     $course_code,
     $session_id,
     $groupId

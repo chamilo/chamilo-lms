@@ -288,6 +288,7 @@ if (!isset($src)) {
                     break;
                 }
 
+                // This change the status to complete in Chamilo LP.
                 $lp->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php?error=prerequisites';

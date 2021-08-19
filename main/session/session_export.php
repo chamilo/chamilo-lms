@@ -1,9 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.admin
- */
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -13,7 +11,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script(true);
 
-$session_id = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
+$session_id = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
 
 $formSent = 0;
 $errorMsg = '';
@@ -82,6 +80,7 @@ if (isset($_POST['formSent'])) {
             $archiveFile = 'export_sessions_'.$session_id.'_'.api_get_local_time();
             $cvs = true;
             $sessionListToExport[] = [
+                'SessionId',
                 'SessionName',
                 'Coach',
                 'DateStart',
@@ -225,6 +224,7 @@ if (isset($_POST['formSent'])) {
 
             if (in_array($file_type, ['csv', 'xls'])) {
                 $sessionListToExport[] = [
+                    $row['id'],
                     $row['name'],
                     $row['username'],
                     $row['access_start_date'],
@@ -236,6 +236,7 @@ if (isset($_POST['formSent'])) {
                 ];
             } else {
                 $add = "\t<Session>\n"
+                         ."\t\t<SessionId>$row[id]</SessionId>\n"
                          ."\t\t<SessionName>$row[name]</SessionName>\n"
                          ."\t\t<Coach>$row[username]</Coach>\n"
                          ."\t\t<DateStart>$row[access_start_date]</DateStart>\n"
@@ -268,7 +269,6 @@ if (isset($_POST['formSent'])) {
     }
 }
 
-// display the header
 Display::display_header($tool_name);
 
 //select of sessions

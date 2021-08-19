@@ -16,6 +16,8 @@
  */
 require_once __DIR__.'/../../inc/global.inc.php';
 
+api_protect_webservices();
+
 $hash = isset($_REQUEST['hash']) ? $_REQUEST['hash'] : null;
 
 if ($hash) {
@@ -40,8 +42,16 @@ try {
     $restApi = $apiKey ? Rest::validate($username, $apiKey) : null;
 
     if ($restApi) {
+        LoginCheck($restApi->getUser()->getId());
+        Tracking::updateUserLastLogin($restApi->getUser()->getId());
+
         $restApi->setCourse($course);
         $restApi->setSession($session);
+
+        if ($course) {
+            Event::accessCourse();
+            Event::eventCourseLoginUpdate(api_get_course_int_id(), api_get_user_id(), api_get_session_id());
+        }
     }
 
     switch ($action) {
@@ -84,7 +94,6 @@ try {
             }
 
             $messageStatus = $action === Rest::POST_USER_MESSAGE_READ ? MESSAGE_STATUS_NEW : MESSAGE_STATUS_UNREAD;
-
             $data = array_flip($messagesId);
 
             foreach ($messagesId as $messageId) {
@@ -98,7 +107,8 @@ try {
             $restResponse->setData($data);
             break;
         case Rest::GET_USER_COURSES:
-            $courses = $restApi->getUserCourses();
+            $userId = isset($_REQUEST['user_id']) ? (int) $_REQUEST['user_id'] : 0;
+            $courses = $restApi->getUserCourses($userId);
             $restResponse->setData($courses);
             break;
         case Rest::GET_COURSE_INFO:
@@ -184,6 +194,10 @@ try {
             $data = $restApi->subscribeUserToCourse($_POST);
             $restResponse->setData($data);
             break;
+        case Rest::UNSUBSCRIBE_USER_FROM_COURSE:
+            $data = $restApi->unSubscribeUserToCourse($_POST);
+            $restResponse->setData($data);
+            break;
         case Rest::CREATE_CAMPUS:
             $data = $restApi->createCampusURL($_POST);
             $restResponse->setData($data);
@@ -200,6 +214,10 @@ try {
             $data = $restApi->addSession($_POST);
             $restResponse->setData($data);
             break;
+        case Rest::UPDATE_SESSION:
+            $data = $restApi->updateSession($_POST);
+            $restResponse->setData($data);
+            break;
         case Rest::GET_USERS:
             $data = $restApi->getUsersCampus($_POST);
             $restResponse->setData($data);
@@ -207,6 +225,56 @@ try {
         case Rest::GET_COURSES:
             $data = $restApi->getCoursesCampus($_POST);
             $restResponse->setData($data);
+            break;
+        case Rest::GET_COURSES_FROM_EXTRA_FIELD:
+            $variable = $_REQUEST['extra_field_variable'] ?? '';
+            $value = $_REQUEST['extra_field_value'] ?? '';
+            $urlId = $_REQUEST['id_campus'] ?? '';
+            $extraField = new ExtraField('course');
+            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($variable);
+
+            if (empty($extraFieldInfo)) {
+                throw new Exception("$variable not found");
+            }
+
+            $extraFieldValue = new ExtraFieldValue('course');
+            $items = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+                $variable,
+                $value,
+                false,
+                false,
+                true
+            );
+
+            $courseList = [];
+            foreach ($items as $item) {
+                $courseId = $item['item_id'];
+                if (UrlManager::relation_url_course_exist($courseId, $urlId)) {
+                    $courseList[] = api_get_course_info_by_id($courseId);
+                }
+            }
+
+            $restResponse->setData($courseList);
+            break;
+        case Rest::DELETE_COURSE:
+            $courseCode = $_REQUEST['course_code'] ?? '';
+            $courseId = $_REQUEST['course_id'] ?? 0;
+
+            $course = [];
+            if (!empty($courseCode)) {
+                $course = api_get_course_info($courseCode);
+            }
+
+            if (empty($course) && !empty($courseId)) {
+                $course = api_get_course_info_by_id($courseId);
+            }
+
+            if (empty($course)) {
+                throw new Exception("Course doesn't exists");
+            }
+
+            $result = CourseManager::delete_course($course['code']);
+            $restResponse->setData(['status' => $result]);
             break;
         case Rest::ADD_COURSES_SESSION:
             $data = $restApi->addCoursesSession($_POST);
@@ -242,6 +310,10 @@ try {
         case Rest::GET_USER_SESSIONS:
             $courses = $restApi->getUserSessions();
             $restResponse->setData($courses);
+            break;
+        case Rest::GET_USERS_SUBSCRIBED_TO_COURSE:
+            $users = $restApi->getUsersSubscribedToCourse();
+            $restResponse->setData($users);
             break;
         case Rest::SAVE_USER_MESSAGE:
             $receivers = isset($_POST['receivers']) ? $_POST['receivers'] : [];
@@ -357,6 +429,22 @@ try {
             $plugin = PauseTraining::create();
             $data = $plugin->updateUserPauseTraining($_POST['user_id'], $_POST);
             $restResponse->setData([$data]);
+            break;
+        case Rest::CHECK_CONDITIONAL_LOGIN:
+            $restResponse->setData(
+                [
+                    'check_conditional_login' => $restApi->checkConditionalLogin()
+                ]
+            );
+            break;
+        case Rest::GET_LEGAL_CONDITIONS:
+            $restResponse->setData(
+                $restApi->getLegalConditions()
+            );
+            break;
+        case Rest::UPDATE_CONDITION_ACCEPTED:
+            $restApi->updateConditionAccepted();
+            $restResponse->setData(['status' => true]);
             break;
         default:
             throw new Exception(get_lang('InvalidAction'));

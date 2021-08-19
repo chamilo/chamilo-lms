@@ -656,7 +656,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         if (!empty($sessionId)) {
             /** @var \Chamilo\CoreBundle\Entity\Session $session */
             $session = Database::getManager()->find('ChamiloCoreBundle:Session', $sessionId);
-            $sessionName = $session ? ' ('.cut($session->getName(), MAX_LENGTH_BREADCRUMB).')' : '';
+            $sessionName = $session ? ' ('.cut(Security::remove_XSS($session->getName()), MAX_LENGTH_BREADCRUMB).')' : '';
         }
 
         $courseInfo['name'] = api_htmlentities($courseInfo['name']);
@@ -864,7 +864,10 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         }
 
         if ($sessionId &&
-            (api_is_platform_admin() || CourseManager::is_course_teacher($user_id, $courseInfo['code']))
+            (
+                api_is_platform_admin()
+                || ($courseInfo && CourseManager::is_course_teacher($user_id, $courseInfo['code']))
+            )
         ) {
             $url = Display::url(
                 Display::return_icon('course.png', get_lang('Course')),

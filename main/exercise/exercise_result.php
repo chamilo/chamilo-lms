@@ -101,11 +101,11 @@ if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
         [
             Display::url(
                 Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32),
-                'admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
+                'admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->iid
             )
             .Display::url(
                 Display::return_icon('settings.png', get_lang('ModifyExercise'), [], 32),
-                'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id
+                'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->iid
             ),
         ]
     );
@@ -115,10 +115,11 @@ $learnpath_id = isset($exercise_stat_info['orig_lp_id']) ? $exercise_stat_info['
 $learnpath_item_id = isset($exercise_stat_info['orig_lp_item_id']) ? $exercise_stat_info['orig_lp_item_id'] : 0;
 $learnpath_item_view_id = isset($exercise_stat_info['orig_lp_item_view_id'])
     ? $exercise_stat_info['orig_lp_item_view_id'] : 0;
+$exerciseId = isset($exercise_stat_info['exe_exo_id']) ? $exercise_stat_info['exe_exo_id'] : 0;
 
 $logInfo = [
     'tool' => TOOL_QUIZ,
-    'tool_id' => $objExercise->iId,
+    'tool_id' => $objExercise->iid,
     'action' => $learnpath_id,
     'action_details' => $learnpath_id,
 ];
@@ -147,7 +148,7 @@ if ($origin !== 'embeddable') {
         get_lang('AnotherAttempt'),
         api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&'.http_build_query(
             [
-                'exerciseId' => $objExercise->id,
+                'exerciseId' => $objExercise->iid,
                 'learnpath_id' => $learnpath_id,
                 'learnpath_item_id' => $learnpath_item_id,
                 'learnpath_item_view_id' => $learnpath_item_view_id,
@@ -161,7 +162,7 @@ if ($origin !== 'embeddable') {
 // We check if the user attempts before sending to the exercise_result.php
 $attempt_count = Event::get_attempt_count(
     $currentUserId,
-    $objExercise->id,
+    $objExercise->iid,
     $learnpath_id,
     $learnpath_item_id,
     $learnpath_item_view_id
@@ -270,12 +271,40 @@ $hookQuizEnd = HookQuizEnd::create();
 $hookQuizEnd->setEventData(['exe_id' => $exeId]);
 $hookQuizEnd->notifyQuizEnd();
 
+$advancedCourseMessage = RemedialCoursePlugin::create()->getAdvancedCourseList(
+    $objExercise,
+    api_get_user_id(),
+    api_get_session_id(),
+    $learnpath_id ?: 0,
+    $learnpath_item_id ?: 0
+);
+if (null != $advancedCourseMessage) {
+    Display::addFlash(
+        Display::return_message($advancedCourseMessage, 'info', false)
+    );
+}
+
+$remedialMessage = RemedialCoursePlugin::create()->getRemedialCourseList(
+    $objExercise,
+    api_get_user_id(),
+    api_get_session_id(),
+    false,
+    $learnpath_id ?: 0,
+    $learnpath_item_id ?: 0
+);
+
+if (null != $remedialMessage) {
+    Display::addFlash(
+        Display::return_message($remedialMessage, 'warning', false)
+    );
+}
 // Unset session for clock time
 ExerciseLib::exercise_time_control_delete(
-    $objExercise->id,
+    $objExercise->iid,
     $learnpath_id,
     $learnpath_item_id
 );
+
 ExerciseLib::delete_chat_exercise_session($exeId);
 
 if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {

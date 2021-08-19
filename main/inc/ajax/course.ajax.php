@@ -158,7 +158,7 @@ switch ($action) {
                     $courseList = CourseManager::get_courses_list(
                         0,
                         0,
-                        1,
+                        'title',
                         'ASC',
                         -1,
                         $_GET['q'],
@@ -323,7 +323,7 @@ switch ($action) {
             );
 
             foreach ($exercises as $exercise) {
-                $data[] = ['id' => $exercise['id'], 'text' => html_entity_decode($exercise['title'])];
+                $data[] = ['id' => $exercise['iid'], 'text' => html_entity_decode($exercise['title'])];
             }
             if (!empty($data)) {
                 $data[] = ['id' => 'T', 'text' => 'TODOS'];

@@ -92,7 +92,7 @@ class LinkAddEditForm extends FormValidator
                                 $default_weight = $my_cat->get_weight();
                                 $select_gradebook->addOption(get_lang('Default'), $my_cat->get_id());
                             } else {
-                                $select_gradebook->addOption($my_cat->get_name(), $my_cat->get_id());
+                                $select_gradebook->addOption(Security::remove_XSS($my_cat->get_name()), $my_cat->get_id());
                             }
                         } else {
                             $select_gradebook->addOption(get_lang('Select'), 0);

@@ -1240,9 +1240,7 @@ class Agenda
                         if (!empty($sessionList)) {
                             foreach ($sessionList as $sessionItem) {
                                 $sessionId = $sessionItem['id'];
-                                $courses = SessionManager::get_course_list_by_session_id(
-                                    $sessionId
-                                );
+                                $courses = SessionManager::get_course_list_by_session_id($sessionId);
                                 $sessionInfo = [
                                     'session_id' => $sessionId,
                                     'courses' => $courses,
@@ -2057,13 +2055,13 @@ class Agenda
                     $event['sent_to'] = '<div class="label_tag notice">'.get_lang('Everyone').'</div>';
                 }
 
-                $event['description'] = $row['content'];
+                $event['description'] = Security::remove_XSS($row['content']);
                 $event['visibility'] = $row['visibility'];
                 $event['real_id'] = $row['id'];
                 $event['allDay'] = isset($row['all_day']) && $row['all_day'] == 1 ? $row['all_day'] : 0;
                 $event['parent_event_id'] = $row['parent_event_id'];
                 $event['has_children'] = $this->hasChildren($row['id'], $courseId) ? 1 : 0;
-                $event['comment'] = $row['comment'];
+                $event['comment'] = Security::remove_XSS($row['comment']);
                 $this->events[] = $event;
             }
         }
@@ -3116,7 +3114,16 @@ class Agenda
         $calendar = Sabre\VObject\Reader::read($data);
         $currentTimeZone = api_get_timezone();
         if (!empty($calendar->VEVENT)) {
+            /** @var Sabre\VObject\Component\VEvent $event */
             foreach ($calendar->VEVENT as $event) {
+                $tempDate = $event->DTSTART->getValue();
+                if ('Z' == substr($tempDate, -1) && 'UTC' != date('e', strtotime($tempDate))) {
+                    $event->DTSTART->setValue(gmdate('Ymd\THis\Z', strtotime($tempDate)));
+                }
+                $tempDate = $event->DTEND->getValue();
+                if ('Z' == substr($tempDate, -1) && 'UTC' != date('e', strtotime($tempDate))) {
+                    $event->DTEND->setValue(gmdate('Ymd\THis\Z', strtotime($tempDate)));
+                }
                 $start = $event->DTSTART->getDateTime();
                 $end = $event->DTEND->getDateTime();
                 //Sabre\VObject\DateTimeParser::parseDateTime(string $dt, \Sabre\VObject\DateTimeZone $tz)
@@ -3387,10 +3394,10 @@ class Agenda
      */
     public static function get_global_agenda_items(
         $agendaitems,
-        $day = "",
-        $month = "",
-        $year = "",
-        $week = "",
+        $day,
+        $month,
+        $year,
+        $week,
         $type
     ) {
         $tbl_global_agenda = Database::get_main_table(
@@ -3404,9 +3411,14 @@ class Agenda
 
         $current_access_url_id = api_get_current_access_url_id();
 
-        if ($type == "month_view" or $type == "") {
+        if ($type == "month_view" || $type == "") {
             // We are in month view
-            $sql = "SELECT * FROM ".$tbl_global_agenda." WHERE MONTH(start_date) = ".$month." AND YEAR(start_date) = ".$year."  AND access_url_id = $current_access_url_id ORDER BY start_date ASC";
+            $sql = "SELECT * FROM ".$tbl_global_agenda."
+                    WHERE
+                        MONTH(start_date) = ".$month." AND
+                        YEAR(start_date) = ".$year."  AND
+                        access_url_id = $current_access_url_id
+                    ORDER BY start_date ASC";
         }
         // 2. creating the SQL statement for getting the personal agenda items in WEEK view
         if ($type == "week_view") { // we are in week view
@@ -3527,19 +3539,24 @@ class Agenda
     public static function get_personal_agenda_items(
         $user_id,
         $agendaitems,
-        $day = "",
-        $month = "",
-        $year = "",
-        $week = "",
+        $day,
+        $month,
+        $year,
+        $week,
         $type
     ) {
         $tbl_personal_agenda = Database::get_main_table(TABLE_PERSONAL_AGENDA);
         $user_id = intval($user_id);
 
         // 1. creating the SQL statement for getting the personal agenda items in MONTH view
-        if ($type == "month_view" or $type == "") {
+        if ($type === "month_view" || $type === "") {
             // we are in month view
-            $sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$user_id."' and MONTH(date)='".$month."' AND YEAR(date) = '".$year."'  ORDER BY date ASC";
+            $sql = "SELECT * FROM $tbl_personal_agenda
+                    WHERE
+                        user='".$user_id."' AND
+                        MONTH(date)='".$month."' AND
+                        YEAR(date) = '".$year."'
+                     ORDER BY date ASC";
         }
 
         // 2. creating the SQL statement for getting the personal agenda items in WEEK view
@@ -3654,7 +3671,7 @@ class Agenda
         $agendaitems,
         $month,
         $year,
-        $weekdaynames = [],
+        $weekdaynames,
         $monthName,
         $show_content = true
     ) {

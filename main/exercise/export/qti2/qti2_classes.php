@@ -40,32 +40,32 @@ class Ims2Question extends Question
     {
         switch ($this->type) {
             case MCUA:
-                $answer = new ImsAnswerMultipleChoice($this->id);
+                $answer = new ImsAnswerMultipleChoice($this->iid);
 
                 return $answer;
             case MCMA:
-                $answer = new ImsAnswerMultipleChoice($this->id);
+                $answer = new ImsAnswerMultipleChoice($this->iid);
 
                 return $answer;
             case TF:
-                $answer = new ImsAnswerMultipleChoice($this->id);
+                $answer = new ImsAnswerMultipleChoice($this->iid);
 
                 return $answer;
             case FIB:
-                $answer = new ImsAnswerFillInBlanks($this->id);
+                $answer = new ImsAnswerFillInBlanks($this->iid);
 
                 return $answer;
             case MATCHING:
             case MATCHING_DRAGGABLE:
-                $answer = new ImsAnswerMatching($this->id);
+                $answer = new ImsAnswerMatching($this->iid);
 
                 return $answer;
             case FREE_ANSWER:
-                $answer = new ImsAnswerFree($this->id);
+                $answer = new ImsAnswerFree($this->iid);
 
                 return $answer;
             case HOT_SPOT:
-                $answer = new ImsAnswerHotspot($this->id);
+                $answer = new ImsAnswerHotspot($this->iid);
 
                 return $answer;
             default:
@@ -110,10 +110,10 @@ class ImsAnswerMultipleChoice extends Answer implements ImsAnswerInterface
         $out .= '      <prompt><![CDATA['.formatExerciseQtiText($questionDesc).']]></prompt>'."\n";
         if (is_array($this->answerList)) {
             foreach ($this->answerList as $current_answer) {
-                $out .= '<simpleChoice identifier="answer_'.$current_answer['id'].'" fixed="false">
+                $out .= '<simpleChoice identifier="answer_'.$current_answer['iid'].'" fixed="false">
                          <![CDATA['.formatExerciseQtiText($current_answer['answer']).']]>';
                 if (isset($current_answer['comment']) && $current_answer['comment'] != '') {
-                    $out .= '<feedbackInline identifier="answer_'.$current_answer['id'].'">
+                    $out .= '<feedbackInline identifier="answer_'.$current_answer['iid'].'">
                              <![CDATA['.formatExerciseQtiText($current_answer['comment']).']]>
                              </feedbackInline>';
                 }
@@ -145,7 +145,7 @@ class ImsAnswerMultipleChoice extends Answer implements ImsAnswerInterface
             $out .= '    <correctResponse>'."\n";
             foreach ($this->answerList as $current_answer) {
                 if ($current_answer['correct']) {
-                    $out .= '      <value>answer_'.$current_answer['id'].'</value>'."\n";
+                    $out .= '      <value>answer_'.$current_answer['iid'].'</value>'."\n";
                 }
             }
             $out .= '    </correctResponse>'."\n";
@@ -156,7 +156,7 @@ class ImsAnswerMultipleChoice extends Answer implements ImsAnswerInterface
             $out .= '    <mapping>'."\n";
             foreach ($this->answerList as $current_answer) {
                 if (isset($current_answer['grade'])) {
-                    $out .= ' <mapEntry mapKey="answer_'.$current_answer['id'].'" mappedValue="'.$current_answer['grade'].'" />'."\n";
+                    $out .= ' <mapEntry mapKey="answer_'.$current_answer['iid'].'" mappedValue="'.$current_answer['grade'].'" />'."\n";
                 }
             }
             $out .= '    </mapping>'."\n";
@@ -194,7 +194,7 @@ class ImsAnswerFillInBlanks extends Answer implements ImsAnswerInterface
         $text = isset($this->answerText) ? $this->answerText : '';
         if (is_array($this->answerList)) {
             foreach ($this->answerList as $key => $answer) {
-                $key = $answer['id'];
+                $key = $answer['iid'];
                 $answer = $answer['answer'];
                 $len = api_strlen($answer);
                 $text = str_replace('['.$answer.']', '<textEntryInteraction responseIdentifier="fill_'.$key.'" expectedLength="'.api_strlen($answer).'"/>', $text);
@@ -211,7 +211,7 @@ class ImsAnswerFillInBlanks extends Answer implements ImsAnswerInterface
         $out = '';
         if (is_array($this->answerList)) {
             foreach ($this->answerList as $answer) {
-                $answerKey = $answer['id'];
+                $answerKey = $answer['iid'];
                 $answer = $answer['answer'];
                 $out .= '  <responseDeclaration identifier="fill_'.$answerKey.'" cardinality="single" baseType="identifier">'."\n";
                 $out .= '    <correctResponse>'."\n";
@@ -364,7 +364,7 @@ class ImsAnswerHotspot extends Answer implements ImsAnswerInterface
         $text .= '        <object type="'.$mimetype.'" width="250" height="230" data="'.$questionMedia.'">-</object>'."\n";
         if (is_array($this->answerList)) {
             foreach ($this->answerList as $key => $answer) {
-                $key = $answer['id'];
+                $key = $answer['iid'];
                 $answerTxt = $answer['answer'];
                 $len = api_strlen($answerTxt);
                 //coords are transformed according to QTIv2 rules here: http://www.imsproject.org/question/qtiv2p1pd/imsqti_infov2p1pd.html#element10663
@@ -408,7 +408,7 @@ class ImsAnswerHotspot extends Answer implements ImsAnswerInterface
         if (is_array($this->answerList)) {
             $out .= '    <correctResponse>'."\n";
             foreach ($this->answerList as $answerKey => $answer) {
-                $answerKey = $answer['id'];
+                $answerKey = $answer['iid'];
                 $answer = $answer['answer'];
                 $out .= '<value><![CDATA['.formatExerciseQtiText($answerKey).']]></value>';
             }

@@ -77,7 +77,7 @@ class ExtraFieldValue extends Model
      * In order to save this function needs a item_id (user id, course id, etc)
      * This function is used with $extraField->addElements().
      *
-     * @param array $params              array for the insertion into the *_field_values table
+     * @param array $params              array for the insertion into the *_field_values table (each label must be prefixed by 'extra_')
      * @param bool  $onlySubmittedFields Only save parameters in the $param array
      * @param bool  $showQuery
      * @param array $saveOnlyThisFields
@@ -640,8 +640,8 @@ class ExtraFieldValue extends Model
         $sql = "SELECT s.*, field_type FROM {$this->table} s
                 INNER JOIN {$this->table_handler_field} sf ON (s.field_id = sf.id)
                 WHERE
-                    item_id = '$item_id' AND
-                    field_id = '".$field_id."' AND
+                    item_id = $item_id AND
+                    field_id = $field_id AND
                     sf.extra_field_type = ".$this->getExtraField()->getExtraFieldType()."
                 ORDER BY id";
         $result = Database::query($sql);
@@ -726,9 +726,9 @@ class ExtraFieldValue extends Model
                 INNER JOIN {$this->table_handler_field} sf
                 ON (s.field_id = sf.id)
                 WHERE
-                    field_id = '".$field_id."' AND
+                    field_id = $field_id AND
                     value LIKE '%$tag%' AND
-                    sf.extra_field_type = ".$extraFieldType."
+                    sf.extra_field_type = $extraFieldType
                 ORDER BY value
                 LIMIT 0, $limit
                 ";
@@ -770,7 +770,7 @@ class ExtraFieldValue extends Model
                 INNER JOIN {$this->table_handler_field} sf
                 ON (s.field_id = sf.id)
                 WHERE
-                    item_id = '$item_id'  AND
+                    item_id = $item_id  AND
                     variable = '$field_variable' AND
                     sf.extra_field_type = $extraFieldType
                 ";
@@ -831,20 +831,6 @@ class ExtraFieldValue extends Model
     /**
      * Gets the ID from the item (course, session, etc) for which
      * the given field is defined with the given value.
-     *
-     * Example:
-     * <code>
-     * <?php
-     * $extraFieldValueUser = new ExtraFieldValue('user');
-     * $arrayExtraFieldValueUser =  $extraFieldValueUser->get_item_id_from_field_variable_and_field_value(
-     * 'variable',
-     * 1,
-     * true,
-     * false,
-     * true);
-     * echo "<pre>".var_export($arrayExtraFieldValueUser,true)."</pre>";
-     * ?>
-     * </code>
      *
      * @param string $variable  Field (type of data) we want to check
      * @param string $value     Data we are looking for in the given field
@@ -918,7 +904,7 @@ class ExtraFieldValue extends Model
                 INNER JOIN {$this->table_handler_field} sf
                 ON (s.field_id = sf.id)
                 WHERE
-                    field_id = '".$fieldId."' AND
+                    field_id = $fieldId AND
                     sf.extra_field_type = $extraFieldType
                 ORDER BY s.value";
         $result = Database::query($sql);
@@ -974,7 +960,7 @@ class ExtraFieldValue extends Model
                 INNER JOIN {$this->table_handler_field} sf
                 ON (s.field_id = sf.id)
                 WHERE
-                    item_id = '$itemId' AND
+                    item_id = $itemId AND
                     sf.extra_field_type = $extraFieldType
                 ORDER BY s.value";
 
@@ -1049,8 +1035,8 @@ class ExtraFieldValue extends Model
                 INNER JOIN {$this->table_handler_field} sf
                 ON (s.field_id = sf.id)
                 WHERE
-                    field_id = '$fieldId' AND
-                    item_id = '$itemId' AND
+                    field_id = $fieldId AND
+                    item_id = $itemId AND
                     value = '$fieldValue' AND
                     sf.extra_field_type = $extraFieldType
                 ORDER BY value";
@@ -1092,10 +1078,10 @@ class ExtraFieldValue extends Model
 
         $sql = "DELETE FROM {$this->table}
                 WHERE
-                    item_id = '$itemId' AND
+                    item_id = $itemId AND
                     field_id IN (
                         SELECT id FROM {$this->table_handler_field}
-                        WHERE extra_field_type = ".$extraFieldType."
+                        WHERE extra_field_type = $extraFieldType
                     )
                 ";
         Database::query($sql);
@@ -1119,8 +1105,8 @@ class ExtraFieldValue extends Model
 
             $sql = "DELETE FROM {$this->table}
                 WHERE
-                    item_id = '$itemId' AND
-                    field_id = '$fieldId' AND
+                    item_id = $itemId AND
+                    field_id = $fieldId AND
                     value = '$fieldValue'
                 ";
             Database::query($sql);

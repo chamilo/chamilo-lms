@@ -7,7 +7,7 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-$blog_id = isset($_GET['blog_id']) ? $_GET['blog_id'] : 0;
+$blog_id = isset($_GET['blog_id']) ? (int) $_GET['blog_id'] : 0;
 
 if (empty($blog_id)) {
     api_not_allowed(true);
@@ -315,7 +315,7 @@ switch ($action) {
         }
         break;
     case 'view_post':
-        $postArticle = Blog::getSinglePost($blog_id, intval($_GET['post_id']));
+        $postArticle = Blog::getSinglePost($blog_id, $_GET['post_id']);
         $tpl->assign('post', $postArticle);
         $blogLayout = $tpl->get_template('blog/post.tpl');
         break;
@@ -390,7 +390,7 @@ switch ($action) {
         break;
     case 'execute_task':
         if (isset($_GET['post_id'])) {
-            $post = Blog::getSinglePost($blog_id, intval($_GET['post_id']));
+            $post = Blog::getSinglePost($blog_id, $_GET['post_id']);
             $tpl->assign('post', $post);
             $blogLayout = $tpl->get_template('blog/post.tpl');
         } else {

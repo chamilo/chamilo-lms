@@ -1,7 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+namespace Chamilo\PluginBundle\ImsLti\Form;
+
+use Category;
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Display;
+use FormValidator;
+use ImsLti;
+use ImsLtiPlugin;
+use LtiAssignmentGradesService;
+use LtiNamesRoleProvisioningService;
 
 /**
  * Class FrmAdd.
@@ -15,7 +24,7 @@ class FrmAdd extends FormValidator
     /**
      * @var bool
      */
-    private $toolIsV1p3 = false;
+    private $toolIsV1p3;
 
     /**
      * FrmAdd constructor.
@@ -32,11 +41,11 @@ class FrmAdd extends FormValidator
         parent::__construct($name, 'POST', '', '', $attributes, self::LAYOUT_HORIZONTAL, true);
 
         $this->baseTool = $tool;
-        $this->toolIsV1p3 = $this->baseTool &&
-            !empty($this->baseTool->publicKey) &&
-            !empty($this->baseTool->getClientId()) &&
-            !empty($this->baseTool->getLoginUrl()) &&
-            !empty($this->baseTool->getRedirectUrl());
+        $this->toolIsV1p3 = $this->baseTool
+            && !empty($this->baseTool->publicKey)
+            && !empty($this->baseTool->getClientId())
+            && !empty($this->baseTool->getLoginUrl())
+            && !empty($this->baseTool->getRedirectUrl());
     }
 
     /**
@@ -87,8 +96,8 @@ class FrmAdd extends FormValidator
             ['iframe' => 'iframe', 'window' => 'window']
         );
 
-        if (null === $this->baseTool ||
-            ($this->baseTool && !$this->baseTool->isActiveDeepLinking())
+        if (null === $this->baseTool
+            || ($this->baseTool && !$this->baseTool->isActiveDeepLinking())
         ) {
             $this->addCheckBox(
                 'deep_linking',
@@ -148,7 +157,7 @@ class FrmAdd extends FormValidator
                 'replacement_user_id',
                 [
                     $plugin->get_lang('ReplacementUserId'),
-                    $plugin->get_lang('ReplacementUserIdHelp')
+                    $plugin->get_lang('ReplacementUserIdHelp'),
                 ],
                 false
             );
@@ -194,7 +203,7 @@ class FrmAdd extends FormValidator
         $this->setDefaults($defaults);
     }
 
-    public function returnForm()
+    public function returnForm(): string
     {
         $js = "<script>
                 \$(function () {

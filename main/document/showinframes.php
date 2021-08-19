@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -104,16 +105,15 @@ if (!$is_allowed_to_edit && !$is_visible) {
 }
 
 $pathinfo = pathinfo($header_file);
-$playerSupportedFiles = ['mp3', 'mp4', 'ogv', 'ogg', 'flv', 'm4v', 'webm'];
+$playerSupportedFiles = ['mp3', 'mp4', 'ogv', 'ogg', 'flv', 'm4v', 'webm', 'wav'];
 $playerSupported = false;
 if (in_array(strtolower($pathinfo['extension']), $playerSupportedFiles)) {
     $playerSupported = true;
 }
 
 $group_id = api_get_group_id();
-$current_group = GroupManager::get_group_properties($group_id);
-
-if (isset($group_id) && $group_id != '') {
+if (!empty($group_id)) {
+    $current_group = GroupManager::get_group_properties($group_id);
     if ($current_group) {
         $current_group_name = $current_group['name'];
     }
@@ -166,7 +166,6 @@ $nameTools = get_lang('Documents');
  * Main code section.
  */
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
-//header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
 header('Last-Modified: Wed, 01 Jan 2100 00:00:00 GMT');
 header('Cache-Control: no-cache, must-revalidate');
 header('Pragma: no-cache');
@@ -232,12 +231,17 @@ if (!$playerSupported && $execute_iframe) {
         var jQueryFrameReadyConfigPath = \''.api_get_jquery_web_path().'\';
     -->
     </script>';
-    $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
     $htmlHeadXtra[] = '<script>
         // Fixes the content height of the frame
         $(function() {
             $(\'#mainFrame\').on(\'load\', function () {
-                this.style.height = (this.contentWindow.document.body.scrollHeight + 50) + \'px\';
+                let currentHeight = this.style.height;
+                currentHeight = parseInt(currentHeight, 10);
+                let frameHeight = parseInt(this.contentWindow.document.body.scrollHeight) + 50;
+                if (frameHeight > currentHeight) {
+                    this.style.height = frameHeight + \'px\';
+                }
             });
 
             '.$frameReady.'
@@ -419,10 +423,12 @@ if ($execute_iframe) {
             name="mainFrame"
             border="0"
             frameborder="0"
+            marginheight="0"
+            marginwidth="0"
             scrolling="no"
-            style="width:100%;" height="600"
+            style="width:100%; height:600px"
             src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'"
-            height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
+            allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
     }
 }
 Display::display_footer();

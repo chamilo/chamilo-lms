@@ -176,7 +176,7 @@ class UserManager
      * @param string        $expirationDate          Account expiration date (optional, defaults to null)
      * @param int           $active                  Whether the account is enabled or disabled by default
      * @param int           $hr_dept_id              The department of HR in which the user is registered (defaults to 0)
-     * @param array         $extra                   Extra fields
+     * @param array         $extra                   Extra fields (prefix labels with "extra_")
      * @param string        $encrypt_method          Used if password is given encrypted. Set to an empty string by default
      * @param bool          $send_mail
      * @param bool          $isAdmin
@@ -436,8 +436,18 @@ class UserManager
             $extra['item_id'] = $userId;
 
             if (is_array($extra) && count($extra) > 0) {
-                $courseFieldValue = new ExtraFieldValue('user');
-                $courseFieldValue->saveFieldValues($extra);
+                $userFieldValue = new ExtraFieldValue('user');
+                // Force saving of extra fields (otherwise, if the current
+                // user is not admin, fields not visible to the user - most
+                // of them - are just ignored)
+                $userFieldValue->saveFieldValues(
+                    $extra,
+                    true,
+                    null,
+                    null,
+                    null,
+                    true
+                );
             } else {
                 // Create notify settings by default
                 self::update_extra_field_value(
@@ -557,7 +567,7 @@ class UserManager
                         $layoutContent = $tplContent->get_template('mail/new_user_first_email_confirmation.tpl');
                         $emailBody = $tplContent->fetch($layoutContent);
 
-                        if (!empty($emailBodyTemplate) &&
+                        if (!empty($emailTemplate) &&
                             isset($emailTemplate['new_user_first_email_confirmation.tpl']) &&
                             !empty($emailTemplate['new_user_first_email_confirmation.tpl'])
                         ) {
@@ -584,7 +594,7 @@ class UserManager
                         $layoutContent = $tplContent->get_template('mail/new_user_second_email_confirmation.tpl');
                         $emailBody = $tplContent->fetch($layoutContent);
 
-                        if (!empty($emailBodyTemplate) &&
+                        if (!empty($emailTemplate) &&
                             isset($emailTemplate['new_user_second_email_confirmation.tpl']) &&
                             !empty($emailTemplate['new_user_second_email_confirmation.tpl'])
                         ) {
@@ -681,7 +691,7 @@ class UserManager
                     $layoutContent = $tplContent->get_template('mail/content_registration_platform_to_admin.tpl');
                     $emailBody = $tplContent->fetch($layoutContent);
 
-                    if (!empty($emailBodyTemplate) &&
+                    if (!empty($emailTemplate) &&
                         isset($emailTemplate['content_registration_platform_to_admin.tpl']) &&
                         !empty($emailTemplate['content_registration_platform_to_admin.tpl'])
                     ) {
@@ -692,7 +702,6 @@ class UserManager
                     }
 
                     $subject = get_lang('UserAdded');
-
                     foreach ($adminList as $adminId => $data) {
                         MessageManager::send_message_simple(
                             $adminId,
@@ -2589,6 +2598,15 @@ class UserManager
             $filename = $user_id.'_'.$filename;
         }
 
+        if (!file_exists($source_file)) {
+            return false;
+        }
+
+        $mimeContentType = mime_content_type($source_file);
+        if (false === strpos($mimeContentType, 'image')) {
+            return false;
+        }
+
         //Crop the image to adjust 1:1 ratio
         $image = new Image($source_file);
         $image->crop($cropParameters);
@@ -2865,7 +2883,7 @@ class UserManager
             $field_filter = (int) $field_filter;
             $sqlf .= " AND filter = $field_filter ";
         }
-        $sqlf .= " ORDER BY ".$columns[$column]." $sort_direction ";
+        $sqlf .= " ORDER BY `".$columns[$column]."` $sort_direction ";
         if ($number_of_items != 0) {
             $sqlf .= " LIMIT ".intval($from).','.intval($number_of_items);
         }
@@ -4459,7 +4477,9 @@ class UserManager
 
         // all the information of the field
         $sql = "SELECT DISTINCT id, tag from $table_user_tag
-                WHERE field_id = $field_id AND tag LIKE '$tag%' ORDER BY tag LIMIT $limit";
+                WHERE field_id = $field_id AND tag LIKE '$tag%'
+                ORDER BY tag
+                LIMIT $limit";
         $result = Database::query($sql);
         $return = [];
         if (Database::num_rows($result) > 0) {
@@ -5299,7 +5319,7 @@ class UserManager
      * Get users followed by human resource manager.
      *
      * @param int    $userId
-     * @param int    $userStatus         Filter users by status (STUDENT, COURSEMANAGER, etc)
+     * @param int    $userStatus             Filter users by status (STUDENT, COURSEMANAGER, etc)
      * @param bool   $getOnlyUserId
      * @param bool   $getSql
      * @param bool   $getCount
@@ -5309,8 +5329,9 @@ class UserManager
      * @param string $direction
      * @param int    $active
      * @param string $lastConnectionDate
-     * @param int    $status             the function is called by who? COURSEMANAGER, DRH?
+     * @param int    $status                 the function is called by who? COURSEMANAGER, DRH?
      * @param string $keyword
+     * @param bool   $checkSessionVisibility
      *
      * @return mixed Users list (array) or the SQL query if $getSQL was set to true
      */
@@ -5327,7 +5348,8 @@ class UserManager
         $active = null,
         $lastConnectionDate = null,
         $status = null,
-        $keyword = null
+        $keyword = null,
+        $checkSessionVisibility = false
     ) {
         // Database Table Definitions
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -5374,13 +5396,27 @@ class UserManager
         }
 
         if (!empty($keyword)) {
-            $keyword = Database::escape_string($keyword);
+            $keyword = trim(Database::escape_string($keyword));
+            $keywordParts = array_filter(explode(' ', $keyword));
+            $extraKeyword = '';
+            if (!empty($keywordParts)) {
+                $keywordPartsFixed = Database::escape_string(implode('%', $keywordParts));
+                if (!empty($keywordPartsFixed)) {
+                    $extraKeyword .= " OR
+                        CONCAT(u.firstname, ' ', u.lastname) LIKE '%$keywordPartsFixed%' OR
+                        CONCAT(u.lastname, ' ', u.firstname) LIKE '%$keywordPartsFixed%' ";
+                }
+            }
+
             $userConditions .= " AND (
                 u.username LIKE '%$keyword%' OR
                 u.firstname LIKE '%$keyword%' OR
                 u.lastname LIKE '%$keyword%' OR
                 u.official_code LIKE '%$keyword%' OR
-                u.email LIKE '%$keyword%'
+                u.email LIKE '%$keyword%' OR
+                CONCAT(u.firstname, ' ', u.lastname) LIKE '%$keyword%' OR
+                CONCAT(u.lastname, ' ', u.firstname) LIKE '%$keyword%'
+                $extraKeyword
             )";
         }
 
@@ -5390,9 +5426,11 @@ class UserManager
         }
 
         $sessionConditionsCoach = null;
-        $sessionConditionsTeacher = null;
+        $dateCondition = '';
         $drhConditions = null;
         $teacherSelect = null;
+
+        $urlId = api_get_current_access_url_id();
 
         switch ($status) {
             case DRH:
@@ -5411,10 +5449,30 @@ class UserManager
                     (s.id_coach = '$userId')
                 ";
 
-                $sessionConditionsTeacher .= " AND
+                $sessionConditionsTeacher = " AND
                     (scu.status = 2 AND scu.user_id = '$userId')
                 ";
 
+                if ($checkSessionVisibility) {
+                    $today = api_strtotime('now', 'UTC');
+                    $today = date('Y-m-d', $today);
+                    $dateCondition = "
+                        AND
+                        (
+                            (s.access_start_date <= '$today' AND '$today' <= s.access_end_date) OR
+                            (s.access_start_date IS NULL AND s.access_end_date IS NULL) OR
+                            (s.access_start_date <= '$today' AND s.access_end_date IS NULL) OR
+                            ('$today' <= s.access_end_date AND s.access_start_date IS NULL)
+                        )
+					";
+                }
+
+                // Use $tbl_session_rel_course_rel_user instead of $tbl_session_rel_user
+                /*
+                INNER JOIN $tbl_session_rel_user sru
+                ON (sru.user_id = u.id)
+                INNER JOIN $tbl_session_rel_course_rel_user scu
+                ON (scu.user_id = u.id AND scu.c_id IS NOT NULL AND visibility = 1)*/
                 $teacherSelect =
                 "UNION ALL (
                         $select
@@ -5426,7 +5484,7 @@ class UserManager
                                     SELECT DISTINCT(s.id) FROM $tbl_session s INNER JOIN
                                     $tbl_session_rel_access_url session_rel_access_rel_user
                                     ON session_rel_access_rel_user.session_id = s.id
-                                    WHERE access_url_id = ".api_get_current_access_url_id()."
+                                    WHERE access_url_id = ".$urlId."
                                     $sessionConditionsCoach
                                 ) OR sru.session_id IN (
                                     SELECT DISTINCT(s.id) FROM $tbl_session s
@@ -5434,8 +5492,9 @@ class UserManager
                                     ON (url.session_id = s.id)
                                     INNER JOIN $tbl_session_rel_course_rel_user scu
                                     ON (scu.session_id = s.id)
-                                    WHERE access_url_id = ".api_get_current_access_url_id()."
+                                    WHERE access_url_id = ".$urlId."
                                     $sessionConditionsTeacher
+                                    $dateCondition
                                 )
                             )
                             $userConditions
@@ -5473,17 +5532,17 @@ class UserManager
                         LEFT JOIN $tbl_user_rel_access_url a ON (a.user_id = u.id)
                         $join
                         WHERE
-                            access_url_id = ".api_get_current_access_url_id()."
+                            access_url_id = ".$urlId."
                             $drhConditions
                             $userConditions
                     )
                     $teacherSelect
-
                 ) as t1";
 
         if ($getSql) {
             return $sql;
         }
+
         if ($getCount) {
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
@@ -5502,7 +5561,7 @@ class UserManager
             if (!empty($column) && !empty($direction)) {
                 // Fixing order due the UNIONs
                 $column = str_replace('u.', '', $column);
-                $orderBy = " ORDER BY $column $direction ";
+                $orderBy = " ORDER BY `$column` $direction ";
             }
         }
 
@@ -7082,7 +7141,12 @@ SQL;
         }
 
         if (self::userHasCareer($userId, $careerId) === false) {
-            $params = ['user_id' => $userId, 'career_id' => $careerId, 'created_at' => api_get_utc_datetime(), 'updated_at' => api_get_utc_datetime()];
+            $params = [
+                'user_id' => $userId,
+                'career_id' => $careerId,
+                'created_at' => api_get_utc_datetime(),
+                'updated_at' => api_get_utc_datetime(),
+            ];
             $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
             Database::insert($table, $params);
         }
@@ -7160,6 +7224,34 @@ SQL;
 
         $fs = new Filesystem();
         $fs->remove($path);
+    }
+
+    public static function redirectToResetPassword($userId)
+    {
+        if (!api_get_configuration_value('force_renew_password_at_first_login')) {
+            return;
+        }
+
+        $askPassword = self::get_extra_user_data_by_field(
+            $userId,
+            'ask_new_password'
+        );
+
+        if (!empty($askPassword) && isset($askPassword['ask_new_password']) &&
+            1 === (int) $askPassword['ask_new_password']
+        ) {
+            $uniqueId = api_get_unique_id();
+            $userObj = api_get_user_entity($userId);
+
+            $userObj->setConfirmationToken($uniqueId);
+            $userObj->setPasswordRequestedAt(new \DateTime());
+
+            Database::getManager()->persist($userObj);
+            Database::getManager()->flush();
+
+            $url = api_get_path(WEB_CODE_PATH).'auth/reset.php?token='.$uniqueId;
+            api_location($url);
+        }
     }
 
     /**

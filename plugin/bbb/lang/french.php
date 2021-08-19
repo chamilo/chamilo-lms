@@ -65,14 +65,7 @@ $strings['MaxUsersInConferenceRoom'] = 'Nombre max d\'utilisateurs simultanés d
 $strings['global_conference_allow_roles'] = "Visibilité du lien de vidéo conférence global pour les profils suivant";
 $strings['CreatedAt'] = "Créé à";
 
-$strings['interface'] = 'Interface par défaut';
-$strings['launch_type'] = 'Type d\'interface au lancement';
-$strings['EnterConferenceFlash'] = 'Entrer dans la salle de conférence (Flash)';
-$strings['EnterConferenceHTML5'] = 'Entrer dans la salle de conférence (HTML5)';
-$strings['ParticipantsWillUseSameInterface'] = 'Les apprenants utiliseront la même interface que vous';
-$strings['SetByDefault'] = 'Lancement de l\'interface par défaut';
-$strings['SetByTeacher'] = 'Choisi par le professeur';
-$strings['SetByStudent'] = 'Choisi par l\'apprenant';
 $strings['bbb_force_record_generation'] = 'Forcer la génération de l\'enregistrement à la fin de la session';
 $strings['ThereIsNoVideoConferenceActive'] = "Il n'y a aucune vidéoconférence actuellement active";
 $strings['meeting_duration'] = 'Durée de la conférence (en minutes)';
+$strings['big_blue_button_students_start_conference_in_groups'] = 'Permettre aux apprenants de démarrer les vidéoconferénces de leurs groupes';

@@ -13,7 +13,9 @@ $isAllowedToEdit = api_is_allowed_to_edit();
 switch ($action) {
     case 'get_class_by_keyword':
         $keyword = isset($_REQUEST['q']) ? $_REQUEST['q'] : '';
-        if (api_is_platform_admin() && !empty($keyword)) {
+        $allow = api_is_platform_admin() || api_is_session_admin();
+
+        if ($allow && !empty($keyword)) {
             $userGroup = new UserGroup();
             $where = ['where' => ['name like ?' => "%$keyword%"], 'order' => 'name '];
             $items = [];

@@ -299,6 +299,14 @@ if (!empty($onHoverInfo)) {
 }
 $tpl->assign('on_hover_info', $options);
 
+$settings = api_get_configuration_value('fullcalendar_settings');
+$extraSettings = '';
+if (!empty($settings) && isset($settings['settings']) && !empty($settings['settings'])) {
+    $encoded = json_encode($settings['settings']);
+    $extraSettings = substr($encoded, 1, -1).',';
+}
+$tpl->assign('fullcalendar_settings', $extraSettings);
+
 $templateName = $tpl->get_template('agenda/month.tpl');
 $content = $tpl->fetch($templateName);
 $tpl->assign('content', $content);

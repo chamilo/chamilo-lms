@@ -38,7 +38,7 @@ if (!$objExercise) {
 
 $time_control = false;
 $clock_expired_time = ExerciseLib::get_session_time_control_key(
-    $objExercise->id,
+    $objExercise->iid,
     $learnpath_id,
     $learnpath_item_id
 );
@@ -90,9 +90,9 @@ if (!$hideHeaderAndFooter) {
 // I'm in a preview mode as course admin. Display the action menu.
 if (!$hideHeaderAndFooter && api_is_course_admin()) {
     echo '<div class="actions">';
-    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
+    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->iid.'">'.
         Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
-    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
+    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->iid.'">'.
         Display::return_icon('edit.png', get_lang('ModifyExercise'), [], 32).'</a>';
     echo '</div>';
 }
@@ -108,7 +108,7 @@ if (api_get_configuration_value('block_category_questions') &&
     EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM == $selectionType
 ) {
     $extraFieldValue = new ExtraFieldValue('exercise');
-    $extraFieldData = $extraFieldValue->get_values_by_handler_and_field_variable($objExercise->iId, 'block_category');
+    $extraFieldData = $extraFieldValue->get_values_by_handler_and_field_variable($objExercise->iid, 'block_category');
     if ($extraFieldData && isset($extraFieldData['value']) && 1 === (int) $extraFieldData['value']) {
         // get last category question list
         $categoryList = Session::read('categoryList');

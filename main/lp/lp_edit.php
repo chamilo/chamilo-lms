@@ -278,6 +278,7 @@ if ($form->hasElement('extra_authors')) {
         'status' => COURSEMANAGER,
     ];
     $teachers = UserManager::get_user_list($conditions);
+    $options = [];
     foreach ($teachers as $teacher) {
         $options[$teacher['id']] = $teacher['complete_name'];
     }

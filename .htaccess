@@ -8,11 +8,14 @@
 
 RewriteEngine on
 
+# Disables access to myfile.php/something
+AcceptPathInfo Off
+
 # Prevent execution of PHP from directories used for different types of uploads
 RedirectMatch 403 ^/app/(?!courses/proxy)(cache|courses|home|logs|upload|Resources/public/css)/.*\.ph(p[3457]?|t|tml|ar)$
 RedirectMatch 403 ^/main/default_course_document/images/.*\.ph(p[3457]?|t|tml|ar)$
 RedirectMatch 403 ^/main/lang/.*\.ph(p[3457]?|t|tml|ar)$
-RedirectMatch 403 ^/web/css/.*\.ph(p[3457]?|t|tml|ar)$
+RedirectMatch 403 ^/web/.*\.ph(p[3457]?|t|tml|ar)$
 
 # http://my.chamilo.net/certificates/?id=123 to http://my.chamilo.net/certificates/index.php?id=123
 RewriteCond %{QUERY_STRING} ^id=(.*)$
@@ -88,4 +91,3 @@ AddType application/font-woff .woff .woff2
   ExpiresActive On
   ExpiresByType application/font-woff "access plus 1 month"
 </IfModule>
-

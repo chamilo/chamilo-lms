@@ -170,7 +170,7 @@ class UserGroup extends Model
                         }
                     }
 
-                    $courseAndSessionList = Tracking::show_user_progress(
+                    $courseAndSessionList = Tracking::showUserProgress(
                         $userId,
                         0,
                         '',
@@ -495,7 +495,7 @@ class UserGroup extends Model
                        ";
             } else {
                 $sql = "SELECT $select
-                        FROM {$this->usergroup_rel_course_table} usergroup
+                        FROM {$this->usergroup_rel_session_table} usergroup
                         INNER JOIN {$this->table} u
                         ON (u.id = usergroup.usergroup_id)
                         INNER JOIN {$this->session_table} s
@@ -1032,13 +1032,11 @@ class UserGroup extends Model
      * @param int   $usergroup_id
      * @param array $delete_items
      */
-    public function unsubscribe_courses_from_usergroup($usergroup_id, $delete_items, $sessionId = 0)
+    public function unsubscribe_courses_from_usergroup($usergroup_id, $delete_items)
     {
-        $sessionId = (int) $sessionId;
         // Deleting items.
         if (!empty($delete_items)) {
             $user_list = $this->get_users_by_usergroup($usergroup_id);
-            $groupId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
             foreach ($delete_items as $course_id) {
                 $course_info = api_get_course_info_by_id($course_id);
                 if ($course_info) {
@@ -1046,26 +1044,20 @@ class UserGroup extends Model
                         foreach ($user_list as $user_id) {
                             CourseManager::unsubscribe_user(
                                 $user_id,
-                                $course_info['code'],
-                                $sessionId
+                                $course_info['code']
                             );
                         }
                     }
 
                     Database::delete(
-                            $this->usergroup_rel_course_table,
-                            [
-                                'usergroup_id = ? AND course_id = ?' => [
-                                    $usergroup_id,
-                                    $course_id,
-                                ],
-                            ]
-                        );
-                }
-                if ($sessionId != 0 && $groupId != 0) {
-                    $this->subscribe_sessions_to_usergroup($groupId, [0]);
-                } else {
-                    $s = $sessionId;
+                        $this->usergroup_rel_course_table,
+                        [
+                            'usergroup_id = ? AND course_id = ?' => [
+                                $usergroup_id,
+                                $course_id,
+                            ],
+                        ]
+                    );
                 }
             }
         }
@@ -1306,7 +1298,7 @@ class UserGroup extends Model
             if ($this->allowTeachers()) {
                 $options['where'] = [' author_id = ? ' => api_get_user_id()];
             }
-            $classes = Database::select('a.id, name, description', $from, $options);
+            $classes = Database::select('u.id, name, description', $from, $options);
         } else {
             if ($this->allowTeachers()) {
                 $options['where'] = [' author_id = ? ' => api_get_user_id()];
@@ -1326,7 +1318,26 @@ class UserGroup extends Model
                     }
                     $userToString = implode(',', $userNameList);
                 }
+
+                $courses = $this->get_courses_by_usergroup($data['id'], true);
+                $coursesToString = '';
+                if (!empty($courses)) {
+                    $coursesToString = implode(', ', array_column($courses, 'code'));
+                }
+
+                $sessions = $this->get_sessions_by_usergroup($data['id']);
+                $sessionsToString = '';
+                if (!empty($sessions)) {
+                    $sessionList = [];
+                    foreach ($sessions as $sessionId) {
+                        $sessionList[] = api_get_session_info($sessionId)['name'];
+                    }
+                    $sessionsToString = implode(', ', $sessionList);
+                }
+
                 $data['users'] = $userToString;
+                $data['courses'] = $coursesToString;
+                $data['sessions'] = $sessionsToString;
                 $result[] = $data;
             }
         }
@@ -1870,7 +1881,6 @@ class UserGroup extends Model
         $style = ''
     ) {
         $picture = [];
-        //$picture['style'] = $style;
         if ($picture_file === 'unknown.jpg') {
             $picture['file'] = Display::returnIconPath($picture_file);
 
@@ -1899,7 +1909,6 @@ class UserGroup extends Model
         $file = $image_array_sys['dir'].$size_picture.$picture_file;
         if (file_exists($file)) {
             $picture['file'] = $image_array['dir'].$size_picture.$picture_file;
-            //$picture['style'] = '';
             if ($height > 0) {
                 $dimension = api_getimagesize($picture['file']);
                 $margin = ($height - $dimension['width']) / 2;

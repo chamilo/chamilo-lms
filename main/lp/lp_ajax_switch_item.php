@@ -44,6 +44,8 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
      */
     $mylp = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
     $new_item_id = 0;
+    $saveStatus = learnpathItem::isLpItemAutoComplete($current_item);
+
     switch ($next_item) {
         case 'next':
             $mylp->set_current_item($current_item);
@@ -93,8 +95,11 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
     }
 
     $mylp->start_current_item(true);
-    if ($mylp->force_commit) {
-        $mylp->save_current();
+
+    if ($saveStatus) {
+        if ($mylp->force_commit) {
+            $mylp->save_current();
+        }
     }
 
     if (is_object($mylp->items[$new_item_id])) {
@@ -106,6 +111,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
         $mylpi = new learnpathItem($new_item_id, $user_id);
         $mylpi->set_lp_view($view_id);
     }
+
     /*
      * now get what's needed by the SCORM API:
      * -score
@@ -263,7 +269,6 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
         "update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');".
         $updateMinTime
     ;
-
     $return .= 'updateGamificationValues(); ';
     $mylp->set_error_msg('');
     $mylp->prerequisites_match(); // Check the prerequisites are all complete.

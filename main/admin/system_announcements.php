@@ -4,8 +4,6 @@
 
 /**
  * This page allows the administrator to manage the system announcements.
- *
- * @package chamilo.admin.announcement
  */
 
 // Resetting the course id.
@@ -166,7 +164,9 @@ switch ($action) {
         $values['lang'] = $announcement->lang;
         $values['action'] = 'edit';
         $groups = SystemAnnouncementManager::get_announcement_groups($announcement->id);
-        $values['group'] = isset($groups['group_id']) ? $groups['group_id'] : 0;
+        if (!empty($groups)) {
+            $values['groups'] = array_column($groups, 'group_id');
+        }
         $action_todo = true;
         break;
 }
@@ -261,23 +261,23 @@ if ($action_todo) {
     if (!empty($group_list)) {
         $group_list = array_column($group_list, 'name', 'id');
         $group_list[0] = get_lang('All');
-        $form->addElement(
-            'select',
-            'group',
+        $form->addSelect(
+            'groups',
             get_lang('AnnouncementForGroup'),
-            $group_list
+            $group_list,
+            ['multiple' => 'multiple']
         );
     }
 
-    $values['group'] = isset($values['group']) ? $values['group'] : '0';
+    $values['groups'] = isset($values['groups']) ? $values['groups'] : [];
     $form->addElement('checkbox', 'send_mail', null, get_lang('SendMail'));
 
-    if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'add') {
+    if (isset($_REQUEST['action']) && $_REQUEST['action'] === 'add') {
         $form->addElement('checkbox', 'add_to_calendar', null, get_lang('AddToCalendar'));
         $text = get_lang('AddNews');
         $class = 'add';
         $form->addElement('hidden', 'action', 'add');
-    } elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit') {
+    } elseif (isset($_REQUEST['action']) && $_REQUEST['action'] === 'edit') {
         $text = get_lang('EditNews');
         $class = 'save';
         $form->addElement('hidden', 'action', 'edit');
@@ -296,11 +296,12 @@ if ($action_todo) {
             $visibilityResult[$key] = $values[$key];
         }
 
-        if ($values['lang'] == 'all') {
+        if ($values['lang'] === 'all') {
             $values['lang'] = null;
         }
 
         $sendMail = isset($values['send_mail']) ? $values['send_mail'] : null;
+        $groupsToSend = $values['groups'] ?? [];
 
         switch ($values['action']) {
             case 'add':
@@ -315,20 +316,16 @@ if ($action_todo) {
                     empty($values['add_to_calendar']) ? false : true,
                     empty($values['send_email_test']) ? false : true,
                     isset($values['career_id']) ? $values['career_id'] : 0,
-                    isset($values['promotion_id']) ? $values['promotion_id'] : 0
+                    isset($values['promotion_id']) ? $values['promotion_id'] : 0,
+                    $groupsToSend
                 );
 
                 if ($announcement_id !== false) {
-                    if (isset($values['group'])) {
-                        SystemAnnouncementManager::announcement_for_groups(
-                            $announcement_id,
-                            [$values['group']]
-                        );
-                        echo Display::return_message(
-                            get_lang('AnnouncementAdded'),
-                            'confirmation'
-                        );
+                    if (!empty($groupsToSend)) {
+                        SystemAnnouncementManager::announcement_for_groups($announcement_id, $groupsToSend);
                     }
+
+                    echo Display::return_message(get_lang('AnnouncementAdded'), 'confirmation');
                 } else {
                     $show_announcement_list = false;
                     $form->display();
@@ -348,17 +345,18 @@ if ($action_todo) {
                     $sendMail,
                     $sendMailTest,
                     isset($values['career_id']) ? $values['career_id'] : 0,
-                    isset($values['promotion_id']) ? $values['promotion_id'] : 0
+                    isset($values['promotion_id']) ? $values['promotion_id'] : 0,
+                    $groupsToSend
                 )) {
-                    if (isset($values['group'])) {
-                        SystemAnnouncementManager::announcement_for_groups(
-                            $values['id'],
-                            [$values['group']]
-                        );
+                    if (!empty($groupsToSend)) {
+                        SystemAnnouncementManager::announcement_for_groups($values['id'], $groupsToSend);
                         echo Display::return_message(
                             get_lang('AnnouncementUpdated'),
                             'confirmation'
                         );
+                    } else {
+                        // Delete groups
+                        SystemAnnouncementManager::announcement_for_groups($values['id'], []);
                     }
                 } else {
                     $show_announcement_list = false;

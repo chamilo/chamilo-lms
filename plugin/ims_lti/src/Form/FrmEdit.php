@@ -1,7 +1,17 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+namespace Chamilo\PluginBundle\Form;
+
+use Category;
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Display;
+use Exception;
+use FormValidator;
+use ImsLti;
+use ImsLtiPlugin;
+use LtiAssignmentGradesService;
+use LtiNamesRoleProvisioningService;
 
 /**
  * Class FrmAdd.
@@ -34,8 +44,6 @@ class FrmEdit extends FormValidator
      * Build the form.
      *
      * @param bool $globalMode
-     *
-     * @throws Exception
      */
     public function build($globalMode = true)
     {
@@ -98,8 +106,8 @@ class FrmEdit extends FormValidator
             ['iframe' => 'iframe', 'window' => 'window']
         );
 
-        if (null === $parent ||
-            (null !== $parent && !$parent->isActiveDeepLinking())
+        if (null === $parent
+            || (null !== $parent && !$parent->isActiveDeepLinking())
         ) {
             $this->addCheckBox(
                 'deep_linking',
@@ -158,7 +166,7 @@ class FrmEdit extends FormValidator
                 'replacement_user_id',
                 [
                     $plugin->get_lang('ReplacementUserId'),
-                    $plugin->get_lang('ReplacementUserIdHelp')
+                    $plugin->get_lang('ReplacementUserIdHelp'),
                 ],
                 false
             );

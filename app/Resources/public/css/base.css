@@ -6487,13 +6487,6 @@ div#chat-remote-video video {
     border-bottom: 1px solid #ECF0F1;
 }
 
-.grid-courses .items .course-student-info {
-    background-color: #d9edf7;
-    border: 1px solid #bce8f1;
-    padding: 5px;
-    border-radius: 5px;
-}
-
 .grid-courses .items .code-title {
     font-size: 10px;
     font-weight: bold;
@@ -6529,12 +6522,19 @@ div#chat-remote-video video {
     transition: box-shadow .3s ease, border .3s ease;
 }
 
-.grid-courses .items.my-courses .course-student-info {
-    font-size: 10px;
-    text-align: center;
-    background: none;
-    border: none;
-    padding: 0;
+.grid-courses .items .course-student-info {
+    padding-bottom: 10px;
+    font-size: 11px;
+}
+.grid-courses .items .course-student-info hr {
+    margin: 15px 0 10px;
+}
+.grid-courses .items .course-student-info .progress {
+    margin-bottom: 10px;
+}
+.course-student-info .progress-bar {
+    line-height: 15px;
+    vertical-align: middle;
 }
 
 .grid-courses .items.my-courses .title {
@@ -6949,10 +6949,6 @@ div#chat-remote-video video {
 }
 
 #registration .progress {
-    width: 100%;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    height: 10px;
 }
 
 #registration input[name='status'] {
@@ -8044,9 +8040,15 @@ a.sessionView {
 }
 
 .progress {
-    border: 1px solid #c5c5c5;
     background: #E9E9E9;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
+}
+
+.radio + .input-group,
+.input-group + .progress,
+input + .progress {
+    margin-top: 5px;
+    margin-bottom: 0;
 }
 
 .wami-container {
@@ -8542,12 +8544,13 @@ ul#toolnavbox-two li a.btn {
 }
 
 #lp-accordion .panel-default .panel-heading {
-    background: url(../../../../main/img/icons/svg/arrow-down.svg) #FFF right center no-repeat;
+    background: #FFF;
     border-radius: 10px;
+    padding-right: 0;
 }
 
 #lp-accordion .panel-default .panel-heading .tools-actions {
-    padding-right: 20px;
+    margin-right: 32px;
 }
 
 #lp-accordion .panel {
@@ -8558,13 +8561,19 @@ ul#toolnavbox-two li a.btn {
     font-weight: bold;
     width: 100%;
     display: block;
-    padding-top: 5px;
-    padding-bottom: 5px;
 }
 
 #lp-accordion .panel .panel-title a {
     width: 100%;
     display: block;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-image: url(../../../../main/img/icons/svg/arrow-down.svg);
+}
+#lp-accordion .panel .panel-title a[aria-expanded="true"] {
+    background-image: url(../../../../main/img/icons/svg/arrow-top.svg);
 }
 
 #lp-accordion .lp-item {
@@ -8588,7 +8597,6 @@ ul#toolnavbox-two li a.btn {
 }
 
 #lp-accordion .lp-item .progress {
-    border: none;
     background: #D7E3E6;
     margin-bottom: 10px;
 }
@@ -10539,4 +10547,15 @@ ul.dropdown-menu.inner > li > a {
 .form-inline .bootstrap-select,
 .form-inline .bootstrap-select.form-control:not([class*="col-"]) {
     width: 100%;
+}
+
+.youtube-embed-wrapper {
+    position: relative;
+}
+.youtube-embed-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }

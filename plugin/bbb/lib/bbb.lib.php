@@ -385,14 +385,6 @@ class bbb
         $params['created_at'] = api_get_utc_datetime();
         $params['access_url'] = $this->accessUrl;
 
-        // Check interface feature is installed
-        $interfaceFeature = $this->plugin->get('interface');
-        if ($interfaceFeature === false) {
-            if (isset($params['interface'])) {
-                unset($params['interface']);
-            }
-        }
-
         $id = Database::insert($this->table, $params);
 
         if ($id) {
@@ -635,8 +627,6 @@ class bbb
                 'userID' => api_get_user_id(),
                 //-- OPTIONAL - string
                 'webVoiceConf' => '',
-                //	-- OPTIONAL - string
-                'interface' => $this->checkInterface($meetingData),
             ];
             $url = $this->api->getJoinMeetingURL($joinParams);
             $url = $this->protocol.$url;
@@ -669,6 +659,26 @@ class bbb
         }
 
         $courseInfo = api_get_course_info();
+        $groupId = api_get_group_id();
+        if (!empty($groupId) && !empty($courseInfo)) {
+            $groupEnabled = api_get_course_plugin_setting('bbb', 'bbb_enable_conference_in_groups') === '1';
+            if ($groupEnabled) {
+                $studentCanStartConference = api_get_course_plugin_setting(
+                        'bbb',
+                        'big_blue_button_students_start_conference_in_groups'
+                    ) === '1';
+
+                if ($studentCanStartConference) {
+                    $isSubscribed = GroupManager::is_user_in_group(
+                        api_get_user_id(),
+                        GroupManager::get_group_properties($groupId)
+                    );
+                    if ($isSubscribed) {
+                        return true;
+                    }
+                }
+            }
+        }
 
         if (!empty($courseInfo)) {
             return api_is_course_admin();
@@ -705,41 +715,6 @@ class bbb
         return false;
     }
 
-    /**
-     * @param $meetingInfo
-     *
-     * @return int
-     */
-    public function checkInterface($meetingInfo)
-    {
-        $interface = BBBPlugin::LAUNCH_TYPE_DEFAULT;
-
-        $type = $this->plugin->get('launch_type');
-        switch ($type) {
-            case BBBPlugin::LAUNCH_TYPE_DEFAULT:
-                $interface = $this->plugin->get('interface');
-                break;
-            case BBBPlugin::LAUNCH_TYPE_SET_BY_TEACHER:
-                if (isset($meetingInfo['interface'])) {
-                    $interface = $meetingInfo['interface'];
-                }
-                break;
-            case BBBPlugin::LAUNCH_TYPE_SET_BY_STUDENT:
-                if (isset($meetingInfo['id'])) {
-                    $roomInfo = $this->getMeetingParticipantInfo($meetingInfo['id'], api_get_user_id());
-                    if (!empty($roomInfo) && isset($roomInfo['interface'])) {
-                        $interface = $roomInfo['interface'];
-                    } else {
-                        if (isset($_REQUEST['interface'])) {
-                            $interface = isset($_REQUEST['interface']) ? (int) $_REQUEST['interface'] : 0;
-                        }
-                    }
-                }
-                break;
-        }
-
-        return $interface;
-    }
 
     /**
      * @param int $meetingId
@@ -768,11 +743,10 @@ class bbb
      *
      * @param int $meetingId
      * @param int $participantId
-     * @param int $interface
      *
      * @return false|int The last inserted ID. Otherwise return false
      */
-    public function saveParticipant($meetingId, $participantId, $interface = 0)
+    public function saveParticipant($meetingId, $participantId)
     {
         $meetingData = Database::select(
             '*',
@@ -816,10 +790,6 @@ class bbb
             'out_at' => api_get_utc_datetime(),
             'close' => BBBPlugin::ROOM_OPEN,
         ];
-
-        if ($this->plugin->get('interface') !== false) {
-            $params['interface'] = $interface;
-        }
 
         return Database::insert(
             'plugin_bbb_room',
@@ -1140,8 +1110,6 @@ class bbb
                     'userID' => '',
                     //	-- OPTIONAL - string
                     'webVoiceConf' => '',
-                    //	-- OPTIONAL - string
-                    'interface' => $this->checkInterface($meetingDB),
                 ];
                 $item['go_url'] = $this->protocol.$this->api->getJoinMeetingURL($joinParams);
             }

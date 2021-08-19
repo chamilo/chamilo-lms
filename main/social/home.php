@@ -99,7 +99,7 @@ $social_group_block = SocialManager::getGroupBlock($user_id);
 $friend_html = SocialManager::listMyFriendsBlock($user_id);
 
 // Block Social Sessions
-$wallSocialAddPost = SocialManager::getWallForm(api_get_self());
+$wallSocialAddPost = SocialManager::displayWallForm(api_get_self());
 $socialAutoExtendLink = SocialManager::getAutoExtendLink($user_id, $countPost);
 
 $formSearch = new FormValidator(

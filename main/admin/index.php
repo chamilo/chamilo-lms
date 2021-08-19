@@ -181,6 +181,17 @@ if (api_is_platform_admin()) {
             });
         }
     }
+
+    if (api_get_configuration_value('allow_session_admin_extra_access')) {
+        $items[] = [
+            'url' => 'user_update_import.php',
+            'label' => get_lang('EditUserListCSV'),
+        ];
+        $items[] = [
+            'url' => 'user_export.php',
+            'label' => get_lang('ExportUserListXMLCSV'),
+        ];
+    }
 }
 
 $blocks['users']['items'] = $items;

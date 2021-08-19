@@ -330,41 +330,7 @@ require $includePath.'/local.inc.php';
 
 // Update of the logout_date field in the table track_e_login
 // (needed for the calculation of the total connection time)
-if (!isset($_SESSION['login_as']) && isset($_user)) {
+if (!isset($_SESSION['login_as']) && isset($_user) && isset($_user["user_id"])) {
     // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
-    $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-    $sql = "SELECT login_id, login_date
-            FROM $tbl_track_login
-            WHERE
-                login_user_id='".$_user["user_id"]."'
-            ORDER BY login_date DESC
-            LIMIT 0,1";
-
-    $q_last_connection = Database::query($sql);
-    if (Database::num_rows($q_last_connection) > 0) {
-        $now = api_get_utc_datetime();
-        $i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
-
-        // is the latest logout_date still relevant?
-        $sql = "SELECT logout_date FROM $tbl_track_login
-                WHERE login_id = $i_id_last_connection";
-        $q_logout_date = Database::query($sql);
-        $res_logout_date = convert_sql_date(Database::result($q_logout_date, 0, 'logout_date'));
-        $lifeTime = api_get_configuration_value('session_lifetime');
-
-        if ($res_logout_date < time() - $lifeTime) {
-            // it isn't, we should create a fresh entry
-            Event::eventLogin($_user['user_id']);
-        // now that it's created, we can get its ID and carry on
-        } else {
-            $sql = "UPDATE $tbl_track_login SET logout_date = '$now'
-                    WHERE login_id = '$i_id_last_connection'";
-            Database::query($sql);
-        }
-
-        $tableUser = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "UPDATE $tableUser SET last_login = '$now'
-                WHERE user_id = ".$_user["user_id"];
-        Database::query($sql);
-    }
+    Tracking::updateUserLastLogin($_user["user_id"]);
 }

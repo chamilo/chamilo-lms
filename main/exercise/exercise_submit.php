@@ -70,6 +70,7 @@ $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'annotation/js/annotation.js"></script>';
+$htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
 if (api_get_configuration_value('quiz_prevent_copy_paste')) {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.nocopypaste.js"></script>';
 }
@@ -152,8 +153,9 @@ if (api_is_allowed_to_edit(null, true) &&
 // 1. Loading the $objExercise variable
 /** @var \Exercise $exerciseInSession */
 $exerciseInSession = Session::read('objExercise');
-if (empty($exerciseInSession) || (!empty($exerciseInSession) && $exerciseInSession->id != $_GET['exerciseId'])) {
+if (empty($exerciseInSession) || (!empty($exerciseInSession) && $exerciseInSession->iid != $_GET['exerciseId'])) {
     // Construction of Exercise
+    /** @var |Exercise $objExercise */
     $objExercise = new Exercise($courseId);
     Session::write('firstTime', true);
     if ($debug) {
@@ -193,21 +195,22 @@ if (!is_object($objExercise)) {
 
 if ('true' === api_get_plugin_setting('positioning', 'tool_enable')) {
     $plugin = Positioning::create();
-    if ($plugin->blockFinalExercise(api_get_user_id(), $objExercise->iId, api_get_course_int_id(), $sessionId)) {
+    if ($plugin->blockFinalExercise(api_get_user_id(), $objExercise->iid, api_get_course_int_id(), $sessionId)) {
         api_not_allowed(true);
     }
 }
 
 // if the user has submitted the form.
-$exercise_title = $objExercise->selectTitle();
+$exercise_title = Security::remove_XSS($objExercise->selectTitle());
 $exercise_sound = $objExercise->selectSound();
 
 // If reminder ends we jump to the exercise_reminder
 if ($objExercise->review_answers) {
     if (-1 == $remind_question_id) {
-        header('Location: '.api_get_path(WEB_CODE_PATH).
-            'exercise/exercise_reminder.php?exerciseId='.$exerciseId.'&'.api_get_cidreq());
-        exit;
+        $extraParams = "&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id";
+        $url = api_get_path(WEB_CODE_PATH).
+            'exercise/exercise_reminder.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().$extraParams;
+        api_location($url);
     }
 }
 
@@ -224,7 +227,7 @@ if (0 != $objExercise->expired_time) {
 
 // Generating the time control key for the user
 $current_expired_time_key = ExerciseLib::get_time_control_key(
-    $objExercise->id,
+    $objExercise->iid,
     $learnpath_id,
     $learnpath_item_id
 );
@@ -432,28 +435,15 @@ if (empty($exercise_stat_info)) {
     $exe_id = $exercise_stat_info['exe_id'];
     // Remember last question id position.
     $isFirstTime = Session::read('firstTime');
-    //$isFirstTime = true;
     if ($isFirstTime && ONE_PER_PAGE == $objExercise->type) {
         $resolvedQuestions = Event::getAllExerciseEventByExeId($exe_id);
         if (!empty($resolvedQuestions) &&
             !empty($exercise_stat_info['data_tracking'])
         ) {
-            /*$last = current(end($resolvedQuestions));
-            $attemptQuestionList = explode(',', $exercise_stat_info['data_tracking']);
-            $count = 1;
-            foreach ($attemptQuestionList as $question) {
-                if ($last['question_id'] == $question) {
-                    break;
-                }
-                $count++;
-            }
-            $current_question = $count;
-            */
             // Get current question based in data_tracking question list, instead of track_e_attempt order BT#17789.
             $resolvedQuestionsQuestionIds = array_keys($resolvedQuestions);
             $count = 0;
             $attemptQuestionList = explode(',', $exercise_stat_info['data_tracking']);
-            //var_dump($attemptQuestionList, $resolvedQuestionsQuestionIds);
             foreach ($attemptQuestionList as $index => $question) {
                 if (in_array($question, $resolvedQuestionsQuestionIds)) {
                     $count = $index;
@@ -475,7 +465,7 @@ $selectionType = $objExercise->getQuestionSelectionType();
 $allowBlockCategory = false;
 if (api_get_configuration_value('block_category_questions')) {
     $extraFieldValue = new ExtraFieldValue('exercise');
-    $extraFieldData = $extraFieldValue->get_values_by_handler_and_field_variable($objExercise->iId, 'block_category');
+    $extraFieldData = $extraFieldValue->get_values_by_handler_and_field_variable($objExercise->iid, 'block_category');
     if ($extraFieldData && isset($extraFieldData['value']) && 1 === (int) $extraFieldData['value']) {
         $allowBlockCategory = true;
     }
@@ -484,7 +474,6 @@ if (api_get_configuration_value('block_category_questions')) {
 if (!isset($questionListInSession)) {
     // Selects the list of question ID
     $questionList = $objExercise->getQuestionList();
-
     // Media questions.
     $media_is_activated = $objExercise->mediaIsActivated();
     // Getting order from random
@@ -671,12 +660,6 @@ if ($allowBlockCategory &&
         }
         $count++;
     }
-    //var_dump($questionCheck);exit;
-    // Use reminder list to get the current question.
-    /*if (2 === $reminder && !empty($myRemindList)) {
-        $remindQuestionId = current($myRemindList);
-        $questionCheck = Question::read($remindQuestionId);
-    }*/
 
     $categoryId = 0;
     if (null !== $questionCheck) {
@@ -686,12 +669,12 @@ if ($allowBlockCategory &&
     if ($objExercise->review_answers && isset($_GET['category_id'])) {
         $categoryId = $_GET['category_id'] ?? 0;
     }
-    //var_dump($categoryId, $categoryList);
+
     if (!empty($categoryId)) {
         $categoryInfo = $categoryList[$categoryId];
         $count = 1;
         $total = count($categoryList[$categoryId]);
-        //var_dump($questionCheck);
+
         foreach ($categoryList[$categoryId] as $checkQuestionId) {
             if ((int) $checkQuestionId === (int) $questionCheck->iid) {
                 break;
@@ -699,7 +682,6 @@ if ($allowBlockCategory &&
             $count++;
         }
 
-        //var_dump($count , $total);
         if ($count === $total) {
             $isLastQuestionInCategory = $categoryId;
             if ($isLastQuestionInCategory) {
@@ -729,8 +711,7 @@ if ($allowBlockCategory &&
         api_location($url);
     }
 }
-//exit;
-//var_dump($isLastQuestionInCategory);
+
 if ($debug) {
     error_log('8. Question list loaded '.print_r($questionList, 1));
 }
@@ -740,7 +721,7 @@ $question_count = 0;
 if (!empty($questionList)) {
     $question_count = count($questionList);
 }
-//var_dump($current_question);
+
 if ($current_question > $question_count) {
     // If time control then don't change the current question, otherwise there will be a loop.
     // @todo
@@ -750,10 +731,6 @@ if ($current_question > $question_count) {
 }
 
 if ($formSent && isset($_POST)) {
-    if ($debug) {
-        error_log('9. $formSent was set');
-    }
-
     if (!is_array($exerciseResult)) {
         $exerciseResult = [];
         $exerciseResultCoordinates = [];
@@ -763,6 +740,12 @@ if ($formSent && isset($_POST)) {
     if (!isset($choice) && isset($_REQUEST['hidden_hotspot_id'])) {
         $hotspot_id = (int) $_REQUEST['hidden_hotspot_id'];
         $choice = [$hotspot_id => ''];
+    }
+
+    // Only for upload answer
+    if (!isset($choice) && isset($_REQUEST['uploadChoice'])) {
+        $uploadAnswerFileNames = $_REQUEST['uploadChoice'];
+        $choice = implode('|', $uploadAnswerFileNames[$questionId]);
     }
 
     // if the user has answered at least one question
@@ -1041,7 +1024,7 @@ $show_quiz_edition = $objExercise->added_in_lp();
 if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
     echo '<div class="actions">';
     if ($show_quiz_edition == false) {
-        echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
+        echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->iid.'">'.
             Display::return_icon('settings.png', get_lang('ModifyExercise'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
         echo '<a href="#">'.
@@ -1053,7 +1036,9 @@ if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
 $is_visible_return = $objExercise->is_visible(
     $learnpath_id,
     $learnpath_item_id,
-    $learnpath_item_view_id
+    $learnpath_item_view_id,
+    true,
+    $sessionId
 );
 
 if ($is_visible_return['value'] == false) {
@@ -1429,6 +1414,9 @@ echo '<script>
         // 4. choice for degree of certainty
         var my_choiceDc = $(\'*[name*="choiceDegreeCertainty[\'+question_id+\']"]\').serialize();
 
+        // 5. upload answer files
+        var uploadAnswerFiles = $(\'*[name*="uploadChoice[\'+question_id+\'][]"]\').serialize();
+
         // Checking CkEditor
         if (question_id) {
             if (CKEDITOR.instances["choice["+question_id+"]"]) {
@@ -1451,6 +1439,7 @@ echo '<script>
         dataparam += hotspot ? ("&" + hotspot) : "";
         dataparam += remind_list ? ("&" + remind_list) : "";
         dataparam += my_choiceDc ? ("&" + my_choiceDc) : "";
+        dataparam += uploadAnswerFiles ? ("&" + uploadAnswerFiles) : "";
 
         $("#save_for_now_"+question_id).html(\''.$loading.'\');
         $.ajax({
@@ -1557,11 +1546,17 @@ echo '<script>
         var question_list = ['.implode(',', $questionList).'];
         var free_answers = {};
         $.each(question_list, function(index, my_question_id) {
-            // Checking Ckeditor
+            // Checking Ckeditor and upload answer
             if (my_question_id) {
                 if (CKEDITOR.instances["choice["+my_question_id+"]"]) {
                     var ckContent = CKEDITOR.instances["choice["+my_question_id+"]"].getData();
                     free_answers["free_choice["+my_question_id+"]"] = ckContent;
+                }
+                if ($(\'*[name*="uploadChoice[\'+my_question_id+\']"]\').length) {
+                    var uploadChoice = $(\'*[name*="uploadChoice[\'+my_question_id+\']"]\').serializeArray();
+                    $.each(uploadChoice, function(i, obj) {
+                        free_answers["uploadChoice["+my_question_id+"]["+i+"]"] = uploadChoice[i].value;
+                    });
                 }
             }
         });
@@ -1711,7 +1706,7 @@ foreach ($questionList as $questionId) {
         if ($objExercise->type == ONE_PER_PAGE || ($objExercise->type != ONE_PER_PAGE && $i == 1)) {
             echo Display::panelCollapse(
                 '<span>'.get_lang('ExerciseDescriptionLabel').'</span>',
-                $objExercise->description,
+                Security::remove_XSS($objExercise->description),
                 'exercise-description',
                 [],
                 'description',

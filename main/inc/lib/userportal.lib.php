@@ -1007,11 +1007,13 @@ class IndexManager
         // Tabs that are deactivated are added here.
         if (!empty($this->tpl->menu_navigation)) {
             foreach ($this->tpl->menu_navigation as $section => $navigation_info) {
-                $items[] = [
-                    'icon' => null,
-                    'link' => $navigation_info['url'],
-                    'title' => $navigation_info['title'],
-                ];
+                if (!empty($navigation_info)) {
+                    $items[] = [
+                        'icon' => null,
+                        'link' => $navigation_info['url'],
+                        'title' => $navigation_info['title'],
+                    ];
+                }
             }
         }
 
@@ -1698,28 +1700,16 @@ class IndexManager
                                     $courses['in_category'][$key1]['student_info']['certificate'] = null;
                                     $isCertificateAvailable = $category[0]->is_certificate_available($user_id);
                                     if (isset($category[0])) {
-                                        if ($viewGridCourses) {
-                                            if ($isCertificateAvailable) {
-                                                $courses['in_category'][$key1]['student_info']['certificate'] = get_lang(
-                                                    'Yes'
-                                                );
-                                            } else {
-                                                $courses['in_category'][$key1]['student_info']['certificate'] = get_lang(
-                                                    'No'
-                                                );
-                                            }
+                                        if ($isCertificateAvailable) {
+                                            $courses['in_category'][$key1]['student_info']['certificate'] = Display::label(
+                                                get_lang('Yes'),
+                                                'success'
+                                            );
                                         } else {
-                                            if ($isCertificateAvailable) {
-                                                $courses['in_category'][$key1]['student_info']['certificate'] = Display::label(
-                                                    get_lang('Yes'),
-                                                    'success'
-                                                );
-                                            } else {
-                                                $courses['in_category'][$key1]['student_info']['certificate'] = Display::label(
-                                                    get_lang('No'),
-                                                    'danger'
-                                                );
-                                            }
+                                            $courses['in_category'][$key1]['student_info']['certificate'] = Display::label(
+                                                get_lang('No'),
+                                                'danger'
+                                            );
                                         }
                                     }
                                 }
@@ -1761,24 +1751,16 @@ class IndexManager
 
                             if (isset($category[0])) {
                                 $certificateAvailable = $category[0]->is_certificate_available($user_id);
-                                if ($viewGridCourses) {
-                                    if ($certificateAvailable) {
-                                        $courses['not_category'][$key]['student_info']['certificate'] = get_lang('Yes');
-                                    } else {
-                                        $courses['not_category'][$key]['student_info']['certificate'] = get_lang('No');
-                                    }
+                                if ($certificateAvailable) {
+                                    $courses['not_category'][$key]['student_info']['certificate'] = Display::label(
+                                        get_lang('Yes'),
+                                        'success'
+                                    );
                                 } else {
-                                    if ($certificateAvailable) {
-                                        $courses['not_category'][$key]['student_info']['certificate'] = Display::label(
-                                            get_lang('Yes'),
-                                            'success'
-                                        );
-                                    } else {
-                                        $courses['not_category'][$key]['student_info']['certificate'] = Display::label(
-                                            get_lang('No'),
-                                            'danger'
-                                        );
-                                    }
+                                    $courses['not_category'][$key]['student_info']['certificate'] = Display::label(
+                                        get_lang('No'),
+                                        'danger'
+                                    );
                                 }
                             }
                         }
@@ -1989,7 +1971,8 @@ class IndexManager
                                                             );
                                                         } else {
                                                             $course_session['student_info']['certificate'] = Display::label(
-                                                                get_lang('No')
+                                                                get_lang('No'),
+                                                                'danger'
                                                             );
                                                         }
                                                     }
@@ -2177,7 +2160,71 @@ class IndexManager
                                                 'session_course_item'
                                             );
                                             if (isset($c[1])) {
-                                                $html_courses_session[] = $c[1];
+                                                $course_session = $c[1];
+                                                $course_session['skill'] = isset($c['skill']) ? $c['skill'] : '';
+
+                                                // Course option (show student progress)
+                                                // This code will add new variables (Progress, Score, Certificate)
+                                                if ($studentInfoProgress || $studentInfoScore || $studentInfoCertificate) {
+                                                    if ($studentInfoProgress) {
+                                                        $progress = Tracking::get_avg_student_progress(
+                                                            $user_id,
+                                                            $course['course_code'],
+                                                            [],
+                                                            $session_id
+                                                        );
+                                                        $course_session['student_info']['progress'] = $progress === false ? null : $progress;
+                                                    }
+
+                                                    if ($studentInfoScore) {
+                                                        $percentage_score = Tracking::get_avg_student_score(
+                                                            $user_id,
+                                                            $course['course_code'],
+                                                            [],
+                                                            $session_id
+                                                        );
+                                                        $course_session['student_info']['score'] = $percentage_score;
+                                                    }
+
+                                                    if ($studentInfoCertificate) {
+                                                        $category = Category::load(
+                                                            null,
+                                                            null,
+                                                            $course['course_code'],
+                                                            null,
+                                                            null,
+                                                            $session_id
+                                                        );
+                                                        $course_session['student_info']['certificate'] = null;
+                                                        if (isset($category[0])) {
+                                                            if ($category[0]->is_certificate_available($user_id)) {
+                                                                $course_session['student_info']['certificate'] = Display::label(
+                                                                    get_lang('Yes'),
+                                                                    'success'
+                                                                );
+                                                            } else {
+                                                                $course_session['student_info']['certificate'] = Display::label(
+                                                                    get_lang('No'),
+                                                                    'danger'
+                                                                );
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                                $course_session['extrafields'] = CourseManager::getExtraFieldsToBePresented($course['real_id']);
+                                                if (false === $is_coach_course && $allowUnsubscribe && '1' === $course['unsubscribe']) {
+                                                    $course_session['unregister_button'] =
+                                                        CoursesAndSessionsCatalog::return_unregister_button(
+                                                            ['code' => $course['course_code']],
+                                                            Security::get_existing_token(),
+                                                            '',
+                                                            '',
+                                                            $session_id
+                                                        );
+                                                }
+
+                                                $html_courses_session[] = $course_session;
                                             }
                                         }
                                         $count_courses_session++;

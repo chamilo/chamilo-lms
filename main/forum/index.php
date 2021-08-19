@@ -217,7 +217,7 @@ if ($value && isset($value['value']) && !empty($value['value'])) {
 
 // Create a search-box
 $searchFilter = '';
-$translate = api_get_configuration_value('translate_html');
+$translate = api_get_configuration_value('allow_forum_category_language_filter');
 if ($translate) {
     $form = new FormValidator('search_simple', 'get', api_get_self().'?'.api_get_cidreq(), null, null, 'inline');
     $form->addHidden('cidReq', api_get_course_id());
@@ -270,13 +270,13 @@ if (is_array($forumCategories)) {
         if (empty($forumCategory['cat_title'])) {
             $forumCategoryInfo['title'] = get_lang('WithoutCategory');
         } else {
-            $forumCategoryInfo['title'] = $forumCategory['cat_title'];
+            $forumCategoryInfo['title'] = Security::remove_XSS($forumCategory['cat_title']);
         }
         $forumCategoryInfo['extra_fields'] = isset($forumCategory['extra_fields']) ? $forumCategory['extra_fields'] : [];
         $forumCategoryInfo['icon_session'] = api_get_session_image($forumCategory['session_id'], $_user['status']);
 
         // Validation when belongs to a session
-        $forumCategoryInfo['description'] = $forumCategory['cat_comment'];
+        $forumCategoryInfo['description'] = Security::remove_XSS($forumCategory['cat_comment']);
         $forumCategory['session_display'] = null;
         if (empty($sessionId) && !empty($forumCategory['session_name'])) {
             $forumCategory['session_display'] = ' ('.Security::remove_XSS($forumCategory['session_name']).')';

@@ -45,6 +45,7 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
     if ($debug) {
         error_log('In initialize_item() - new item is '.$next_item);
     }
+
     $mylp->start_current_item(true);
 
     if (is_object($mylp->items[$next_item])) {
@@ -111,7 +112,6 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
         }
     }
     $myobjectives = json_encode($phpobjectives);
-
     $return .=
             "olms.score=".$myscore.";".
             "olms.max=".$mymax.";".

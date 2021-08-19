@@ -6,10 +6,11 @@
  */
 require_once __DIR__.'/../global.inc.php';
 
-$action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
+$action = $_REQUEST['a'] ?? null;
 
 $isAllowedToEdit = api_is_allowed_to_edit();
 $courseInfo = api_get_course_info();
+$courseCode = api_get_course_id();
 $courseId = api_get_course_int_id();
 $groupId = api_get_group_id();
 $sessionId = api_get_session_id();

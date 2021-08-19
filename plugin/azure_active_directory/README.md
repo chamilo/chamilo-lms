@@ -23,8 +23,8 @@ Make sure your portal is in HTTPS before you configure this plugin.
 
 ### To configure this plugin
 * _Enable_: You can enable the plugin once everything is configured correctly. Disabling it will return to the normal Chamilo login procedure.
-* _Application ID_: Enter the Application ID assigned to your app when you created it in your Azure Active Directory interface, under _App registrations_.
-* _Application secret_: Enter the client secret created in _Certificate & secrets_ above.
+* _Application ID_: Enter the _Application (client) ID_ assigned to your app when you created it in your Azure Active Directory interface, under _App registrations_.
+* _Application secret_: Enter the client secret _value_ created in _Certificate & secrets_ above.
 * _Block name_: (Optional) The name to show above the login button.
 * _Force logout button_: (Optional) Add a button to force logout from Azure.
 * _Management login_: (Optional) Disable the chamilo login and enable an alternative login page for users.   

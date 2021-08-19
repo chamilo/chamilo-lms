@@ -1430,6 +1430,11 @@ class HTML_QuickForm extends HTML_Common
             $check = Security::check_token('form', $this);
             Security::clear_token();
             if (false === $check) {
+                // Redirect to the same URL + show token not validated message.
+                $url = $this->getAttribute('action');
+                Display::addFlash(Display::return_message(get_lang('NotValidated'), 'warning'));
+                api_location($url);
+
                 return false;
             }
         }

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -10,11 +11,6 @@ use ChamiloSession as Session;
  * @author Denes Nagy, principal author
  * @author Bart Mollet
  * @author Roan Embrechts, cleaning and bugfixing
- *
- * @package chamilo.whoisonline
- */
-
-/**
  * Insert a login reference for the current user into the track_e_online stats
  * table. This table keeps trace of the last login. Nothing else matters (we
  * don't keep traces of anything older).
@@ -80,10 +76,17 @@ function LoginCheck($uid)
 function preventMultipleLogin($userId)
 {
     $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-    $userId = intval($userId);
+    $userId = (int) $userId;
     if (api_get_setting('prevent_multiple_simultaneous_login') === 'true') {
         if (!empty($userId) && !api_is_anonymous()) {
             $isFirstLogin = Session::read('first_user_login');
+            $currentIp = Session::read('current_ip');
+            $differentIp = false;
+            if (!empty($currentIp) && api_get_real_ip() !== $currentIp) {
+                $isFirstLogin = null;
+                $differentIp = true;
+            }
+
             if (empty($isFirstLogin)) {
                 $sql = "SELECT login_id FROM $table
                         WHERE login_user_id = $userId
@@ -98,7 +101,7 @@ function preventMultipleLogin($userId)
                 $userIsReallyOnline = user_is_online($userId);
 
                 // Trying double login.
-                if (!empty($loginData) && $userIsReallyOnline == true) {
+                if ((!empty($loginData) && $userIsReallyOnline) || $differentIp) {
                     session_regenerate_id();
                     Session::destroy();
                     header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=multiple_connection_not_allowed');
@@ -106,6 +109,7 @@ function preventMultipleLogin($userId)
                 } else {
                     // First time
                     Session::write('first_user_login', 1);
+                    Session::write('current_ip', api_get_real_ip());
                 }
             }
         }
@@ -334,14 +338,14 @@ function who_is_online(
                     friend_user_id <> '".api_get_user_id()."' AND
                     relation_type='".USER_RELATION_TYPE_FRIEND."' AND
                     user_id = '".api_get_user_id()."'
-                  ORDER BY $column $direction
+                  ORDER BY `$column` $direction
                   LIMIT $from, $number_of_items";
     } else {
         $query = "SELECT DISTINCT login_user_id, login_date
                     FROM ".$track_online_table." e
                     INNER JOIN ".$table_user." u ON (u.id = e.login_user_id)
                   WHERE u.status != ".ANONYMOUS." AND login_date >= '".$current_date."'
-                  ORDER BY $column $direction
+                  ORDER BY `$column` $direction
                   LIMIT $from, $number_of_items";
     }
 
@@ -357,7 +361,7 @@ function who_is_online(
                                     login_date >= '".$current_date."' AND
                                     friend_user_id <> '".api_get_user_id()."' AND
                                     relation_type='".USER_RELATION_TYPE_FRIEND."'
-                            ORDER BY $column $direction
+                            ORDER BY `$column` $direction
                             LIMIT $from, $number_of_items";
             } else {
                 // all users online
@@ -367,7 +371,7 @@ function who_is_online(
                           ON (u.id=track.login_user_id)
                           WHERE u.status != ".ANONYMOUS." AND track.access_url_id =  $access_url_id AND
                                 login_date >= '".$current_date."'
-                          ORDER BY $column $direction
+                          ORDER BY `$column` $direction
                           LIMIT $from, $number_of_items";
             }
         }

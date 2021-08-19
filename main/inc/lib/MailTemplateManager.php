@@ -173,7 +173,7 @@ class MailTemplateManager extends Model
         }
         $type = $template['type'];
         $urlId = api_get_current_access_url_id();
-        $sql = "UPDATE {$this->table} SET default_template = 0 
+        $sql = "UPDATE {$this->table} SET default_template = 0
                 WHERE type = '$type' AND url_id = $urlId";
         Database::query($sql);
 
@@ -194,7 +194,7 @@ class MailTemplateManager extends Model
     {
         $templateInfo = $this->get($templateId);
         if (!empty($templateInfo)) {
-            $emailTemplate = $templateInfo['template'];
+            $emailTemplate = nl2br($templateInfo['template']);
 
             $keys = array_keys($userInfo);
             foreach ($keys as $key) {

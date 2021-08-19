@@ -42,6 +42,13 @@ if ('myspace' === $from) {
     $this_section = 'session_my_space';
 }
 
+$additionalParams = '';
+if (isset($_GET['additional_profile_field'])) {
+    foreach ($_GET['additional_profile_field'] as $fieldId) {
+        $additionalParams .= '&additional_profile_field[]='.(int) $fieldId;
+    }
+}
+
 // If the user is a HR director (drh)
 if (api_is_drh()) {
     // Blocking course for drh
@@ -76,7 +83,7 @@ if (api_is_drh()) {
     }
 }
 
-if ($export_csv) {
+if ($export_csv || isset($_GET['csv'])) {
     if (!empty($sessionId)) {
         Session::write('id_session', $sessionId);
     }
@@ -89,6 +96,15 @@ if (!empty($columnsToHideFromSetting) && isset($columnsToHideFromSetting['column
 }
 $columnsToHide = json_encode($columnsToHide);
 $csv_content = [];
+
+$visibleIcon = Display::return_icon(
+    'visible.png',
+    get_lang('HideColumn'),
+    ['align' => 'absmiddle', 'hspace' => '3px'],
+    ICON_SIZE_SMALL
+);
+
+$exportInactiveUsers = api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq().'&'.$additionalParams;
 
 // Scripts for reporting array hide/show columns
 $js = "<script>
@@ -104,12 +120,7 @@ $js = "<script>
         $('#reporting_table .data_table tr th').each(
             function(index) {
                 $(this).prepend(
-                    '<div style=\"cursor:pointer\" onclick=\"foldup(' + index + ')\">".Display::return_icon(
-        'visible.png',
-        get_lang('HideColumn'),
-        ['align' => 'absmiddle', 'hspace' => '3px'],
-        ICON_SIZE_SMALL
-    )."</div>'
+                    '<div style=\"cursor:pointer\" onclick=\"foldup(' + index + ')\">".$visibleIcon."</div>'
                 );
             }
         );
@@ -127,6 +138,10 @@ $js = "<script>
                 foldup(id);
             });
         }
+        $('#download-csv').on('click', function (e) {
+            e.preventDefault();
+            location.href = '".$exportInactiveUsers.'&csv=1&since='."'+$('#reminder_form_since').val();
+        });
     })
 </script>";
 $htmlHeadXtra[] = $js;
@@ -134,7 +149,6 @@ $htmlHeadXtra[] = $js;
 // Database table definitions.
 //@todo remove this calls
 $TABLETRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-$TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLECOURSE = Database::get_main_table(TABLE_MAIN_COURSE);
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $TABLEQUIZ = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -192,6 +206,36 @@ if (isset($_GET['additional_profile_field'])) {
 Session::write('additional_user_profile_info', $userProfileInfo);
 Session::write('extra_field_info', $extra_info);
 
+$defaultExtraFields = [];
+$defaultExtraFieldsFromSettings = [];
+$defaultExtraFieldsFromSettings = api_get_configuration_value('course_log_default_extra_fields');
+if (!empty($defaultExtraFieldsFromSettings) && isset($defaultExtraFieldsFromSettings['extra_fields'])) {
+    $defaultExtraFields = $defaultExtraFieldsFromSettings['extra_fields'];
+    $defaultExtraInfo = [];
+    $defaultUserProfileInfo = [];
+
+    $userArray = [];
+    foreach ($studentList as $key => $item) {
+        $userArray[] = $key;
+    }
+
+    foreach ($defaultExtraFields as $fieldName) {
+        $extraFieldInfo = UserManager::get_extra_field_information_by_name($fieldName);
+
+        if (!empty($extraFieldInfo)) {
+            // Fetching only the user that are loaded NOT ALL user in the portal.
+            $defaultUserProfileInfo[$extraFieldInfo['id']] = TrackingCourseLog::getAdditionalProfileInformationOfFieldByUser(
+                $extraFieldInfo['id'],
+                $userArray
+            );
+            $defaultExtraInfo[$extraFieldInfo['id']] = $extraFieldInfo;
+        }
+    }
+
+    Session::write('default_additional_user_profile_info', $defaultUserProfileInfo);
+    Session::write('default_extra_field_info', $defaultExtraInfo);
+}
+
 Display::display_header($nameTools, 'Tracking');
 
 $actionsLeft = TrackingCourseLog::actionsLeft('users', $sessionId);
@@ -200,20 +244,13 @@ $actionsRight = '<div class="pull-right">';
 $actionsRight .= '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
     Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
 
-$additionalParams = '';
-if (isset($_GET['additional_profile_field'])) {
-    foreach ($_GET['additional_profile_field'] as $fieldId) {
-        $additionalParams .= '&additional_profile_field[]='.(int) $fieldId;
-    }
-}
-
 $users_tracking_per_page = '';
 if (isset($_GET['users_tracking_per_page'])) {
     $users_tracking_per_page = '&users_tracking_per_page='.intval($_GET['users_tracking_per_page']);
 }
 
-$actionsRight .= '<a href="'.api_get_self().'?'.api_get_cidreq(
-    ).'&export=csv&'.$additionalParams.$users_tracking_per_page.'">
+$actionsRight .= '<a
+    href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$additionalParams.$users_tracking_per_page.'">
      '.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
 $actionsRight .= '</div>';
 // Create a search-box.
@@ -226,7 +263,6 @@ $form_search = new FormValidator(
     FormValidator::LAYOUT_INLINE
 );
 $renderer = $form_search->defaultRenderer();
-$renderer->setCustomElementTemplate('<span>{element}</span>');
 $form_search->addHidden('from', Security::remove_XSS($from));
 $form_search->addHidden('session_id', $sessionId);
 $form_search->addHidden('id_session', $sessionId);
@@ -246,7 +282,7 @@ if ($sessionId) {
             get_lang('Session'),
             [],
             ICON_SIZE_SMALL
-        ).' '.api_get_session_name($sessionId);
+        ).' '.Security::remove_XSS(api_get_session_name($sessionId));
     $titleCourse = Display::return_icon(
             'course.png',
             get_lang('Course'),
@@ -320,7 +356,7 @@ if ($showReporting) {
                 }
             }
             $url = $urlWebCode.'mySpace/course.php?session_id='.$session['id'].'&cidReq='.$courseInfo['code'];
-            $html .= Display::tag('li', $icon.' '.Display::url($session['name'], $url));
+            $html .= Display::tag('li', $icon.' '.Display::url(Security::remove_XSS($session['name']), $url));
         }
         $html .= '</ul>';
     }
@@ -334,8 +370,6 @@ $conditions = [];
 $groupList = GroupManager::get_group_list(null, $courseInfo, 1, $sessionId);
 
 $class = new UserGroup();
-//$options['where'] = [' usergroup.course_id = ? ' => $courseId];
-//$classes = $class->getUserGroupInCourse($options);
 $classes = $class->get_all();
 
 // Show the charts part only if there are students subscribed to this course/session
@@ -352,7 +386,6 @@ if ($nbStudents > 0) {
     $select = $formClass->addSelect('class_id', get_lang('Class').'/'.get_lang('Group'), $groupIdList);
     $groupIdList = [];
     foreach ($classes as $class) {
-        //$groupIdList['class_'.$class['id']] = $class['name'];
         $groupIdList[] = ['text' => $class['name'], 'value' => 'class_'.$class['id']];
     }
     $select->addOptGroup($groupIdList, get_lang('Class'));
@@ -390,7 +423,6 @@ if ($nbStudents > 0) {
         foreach ($_GET['additional_profile_field'] as $fieldId) {
             $fieldId = Security::remove_XSS($fieldId);
             $formExtraField->addHidden('additional_profile_field[]', $fieldId);
-            //$formGroup->addHidden('additional_profile_field[]', $fieldId);
             $formClass->addHidden('additional_profile_field[]', $fieldId);
         }
     }
@@ -558,8 +590,7 @@ if ($nbStudents > 0) {
         'get',
         api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
         null,
-        ['style' => 'margin-bottom: 10px'],
-        FormValidator::LAYOUT_INLINE
+        ['style' => 'margin-bottom: 10px']
     );
     $options = [
         2 => sprintf($getLangXDays, 2),
@@ -584,8 +615,11 @@ if ($nbStudents > 0) {
     $form->addElement('hidden', 'cidReq', $courseInfo['code']);
     $form->addElement('hidden', 'id_session', api_get_session_id());
     $form->addButtonSend(get_lang('SendNotification'));
-
-    $extraFieldSelect = TrackingCourseLog::display_additional_profile_fields();
+    $form->addLabel(get_lang('Export'), '<a id="download-csv" href="#!" class=" btn btn-default " > '.
+        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_SMALL).
+        get_lang('ExportAsCSV')
+    .' </a>');
+    $extraFieldSelect = TrackingCourseLog::display_additional_profile_fields($defaultExtraFields);
     if (!empty($extraFieldSelect)) {
         $html .= $extraFieldSelect;
     }
@@ -741,6 +775,13 @@ if ($nbStudents > 0) {
             $parameters['additional_profile_field'] = $fieldId;
         }
     }
+    if (isset($defaultExtraFields)) {
+        foreach ($defaultExtraInfo as $field) {
+            $table->set_header($counter, $field['display_text'], false);
+            $headers[$field['variable']] = $field['display_text'];
+            $counter++;
+        }
+    }
     $table->set_header($counter, get_lang('Details'), false);
     $headers['Details'] = get_lang('Details');
 
@@ -856,7 +897,7 @@ if (!empty($groupList)) {
                 foreach ($exerciseList as $exerciseData) {
                     foreach ($usersInGroup as $userId) {
                         $results = Event::get_best_exercise_results_by_user(
-                            $exerciseData['id'],
+                            $exerciseData['iid'],
                             $courseInfo['real_id'],
                             0,
                             $userId
@@ -952,7 +993,7 @@ if (!empty($groupList)) {
         foreach ($exerciseList as $exerciseData) {
             foreach ($studentIdList as $userId) {
                 $results = Event::get_best_exercise_results_by_user(
-                    $exerciseData['id'],
+                    $exerciseData['iid'],
                     $courseInfo['real_id'],
                     $sessionId,
                     $userId
@@ -1017,6 +1058,8 @@ if ($export_csv) {
     }
     $csv_headers[] = get_lang('Student_publication');
     $csv_headers[] = get_lang('Messages');
+    $csv_headers[] = get_lang('Classes');
+
     if (empty($sessionId)) {
         $csv_headers[] = get_lang('Survey');
     } else {
@@ -1043,11 +1086,74 @@ if ($export_csv) {
         $sessionDates = SessionManager::parseSessionDates($sessionInfo);
 
         array_unshift($csvContentInSession, [get_lang('Date'), $sessionDates['access']]);
-        array_unshift($csvContentInSession, [get_lang('SessionName'), $sessionInfo['name']]);
+        array_unshift($csvContentInSession, [get_lang('SessionName'), Security::remove_XSS($sessionInfo['name'])]);
     }
 
     Export::arrayToCsv($csvContentInSession, 'reporting_student_list');
     exit;
+}
+if (isset($_GET['csv']) && $_GET['csv'] == 1) {
+    $since = 6;
+    if (isset($_GET['since'])) {
+        if ($_GET['since'] === 'never') {
+            $since = 'never';
+        } else {
+            $since = (int) $_GET['since'];
+        }
+    }
+    $users = Tracking::getInactiveStudentsInCourse(
+        api_get_course_int_id(),
+        $since,
+        $sessionId
+    );
+
+    if (count($users) != 0) {
+        $csv_content = [];
+        $csv_headers = [get_lang('NamesAndLastNames'), get_lang('Classes')];
+
+        $userProfileInfo = [];
+        if (isset($_GET['additional_profile_field'])) {
+            foreach ($_GET['additional_profile_field'] as $fieldId) {
+                $csv_headers[] = $extra_info[$fieldId]['display_text'];
+                $userProfileInfo[$fieldId] = TrackingCourseLog::getAdditionalProfileInformationOfFieldByUser(
+                    $fieldId,
+                    $users
+                );
+                $extra_info[$fieldId] = UserManager::get_extra_field_information($fieldId);
+            }
+        }
+        $csv_content[] = $csv_headers;
+        $userGroupManager = new UserGroup();
+
+        foreach ($users as $userId) {
+            $user = api_get_user_info($userId);
+            $classes = implode(
+                ', ',
+                $userGroupManager->getNameListByUser($userId, UserGroup::NORMAL_CLASS)
+            );
+            $row = [$user['complete_name'], $classes];
+
+            foreach ($_GET['additional_profile_field'] as $fieldId) {
+                $extraFieldInfo = $extra_info[$fieldId];
+                if (isset($userProfileInfo[$fieldId]) && isset($userProfileInfo[$fieldId][$userId])) {
+                    if (is_array($userProfileInfo[$fieldId][$userId])) {
+                        $row[] = implode(
+                            ', ',
+                            $userProfileInfo[$fieldId][$userId]
+                        );
+                    } else {
+                        $row[] = $userProfileInfo[$fieldId][$userId];
+                    }
+                } else {
+                    $row[] = '';
+                }
+            }
+            $csv_content[] = $row;
+        }
+        ob_end_clean();
+        Export::arrayToCsv($csv_content, 'reporting_inactive_users');
+        exit;
+    }
 }
 Display::display_footer();
 

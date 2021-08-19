@@ -68,23 +68,23 @@ if (!empty($groupId)) {
         $interbreadcrumb[] = ['url' => $url_dir, 'name' => $my_folder_data['title']];
     }
 
-    if ($action == 'upload_form') {
+    if ($action === 'upload_form') {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
             'name' => get_lang('UploadADocument'),
         ];
     }
 
-    if ($action == 'create_dir') {
+    if ($action === 'create_dir') {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
             'name' => get_lang('CreateAssignment'),
         ];
     }
 } else {
-    if ($origin != 'learnpath') {
+    if ($origin !== 'learnpath') {
         if (isset($_GET['id']) &&
-            !empty($_GET['id']) || $display_upload_form || $action == 'create_dir'
+            !empty($_GET['id']) || $display_upload_form || $action === 'create_dir'
         ) {
             $interbreadcrumb[] = [
                 'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),

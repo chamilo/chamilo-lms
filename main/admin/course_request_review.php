@@ -129,6 +129,11 @@ function get_request_data($from, $number_of_items, $column, $direction)
     global $keyword;
     $course_request_table = Database::get_main_table(TABLE_MAIN_COURSE_REQUEST);
 
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+    $column = (int) $column;
+    $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
+
     if (DELETE_ACTION_ENABLED) {
         $sql = "SELECT id AS col0,
                    code AS col1,
@@ -177,7 +182,7 @@ function get_request_data($from, $number_of_items, $column, $direction)
 function email_filter($teacher)
 {
     $teacher = Database::escape_string($teacher);
-    $sql = "SELECT user_id FROM ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)." 
+    $sql = "SELECT user_id FROM ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)."
             WHERE tutor_name LIKE '".$teacher."'";
     $res = Database::query($sql);
     $info = Database::fetch_array($res);

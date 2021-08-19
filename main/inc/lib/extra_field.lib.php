@@ -162,6 +162,11 @@ class ExtraField extends Model
             case 'portfolio':
                 $this->extraFieldType = EntityExtraField::PORTFOLIO_TYPE;
                 break;
+            case 'lp_view':
+                $this->extraFieldType = EntityExtraField::LP_VIEW_TYPE;
+                break;
+            case 'course_announcement':
+                $this->extraFieldType = EntityExtraField::COURSE_ANNOUNCEMENT;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
@@ -192,6 +197,8 @@ class ExtraField extends Model
             'forum_post',
             'exercise',
             'track_exercise',
+            'lp_view',
+            'course_announcement',
         ];
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {
@@ -1943,10 +1950,7 @@ class ExtraField extends Model
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
             if ($row) {
-                $row['display_text'] = $this->translateDisplayName(
-                    $row['variable'],
-                    $row['display_text']
-                );
+                $row['display_text'] = self::translateDisplayName($row['variable'], $row['display_text']);
 
                 // All the options of the field
                 $sql = "SELECT * FROM $this->table_field_options
@@ -2620,6 +2624,7 @@ JAVASCRIPT;
                     }
                 } else {
                     // Extra fields
+                    $ruleField = Database::escapeField($rule->field);
                     if (false === strpos($rule->field, '_second')) {
                         // No _second
                         $original_field = str_replace($stringToSearch, '', $rule->field);
@@ -2642,7 +2647,7 @@ JAVASCRIPT;
                                     $conditionArray[] = ' ('
                                         .$this->get_where_clause($rule->field, $rule->op, $rule->data)
                                         .') ';
-                                    $extraFields[] = ['field' => $rule->field, 'id' => $field_option['id']];
+                                    $extraFields[] = ['field' => $ruleField, 'id' => $field_option['id']];
                                 }
                                 break;
                             case self::FIELD_TYPE_TAG:
@@ -2654,7 +2659,7 @@ JAVASCRIPT;
                                     //$where = $this->get_where_clause($rule->field, $rule->op, $rule->data, 'OR');
                                     //$conditionArray[] = " ( $where ) ";
                                     $extraFields[] = [
-                                        'field' => $rule->field,
+                                        'field' => $ruleField,
                                         'id' => $field_option['id'],
                                         'data' => $rule->data,
                                     ];
@@ -2668,7 +2673,7 @@ JAVASCRIPT;
                                     $where = $this->get_where_clause($rule->field, $rule->op, $rule->data, 'OR');
                                     $conditionArray[] = " ( $where ) ";
                                     $extraFields[] = [
-                                        'field' => $rule->field,
+                                        'field' => $ruleField,
                                         'id' => $field_option['id'],
                                         'data' => $rule->data,
                                     ];
@@ -2680,7 +2685,7 @@ JAVASCRIPT;
                         $original_field = str_replace($stringToSearch, '', $my_field);
                         $field_option = $this->get_handler_field_info_by_field_variable($original_field);
                         $extraFields[] = [
-                            'field' => $rule->field,
+                            'field' => $ruleField,
                             'id' => $field_option['id'],
                         ];
                     }
@@ -2701,9 +2706,12 @@ JAVASCRIPT;
      */
     public function get_where_clause($col, $oper, $val, $conditionBetweenOptions = 'OR')
     {
+        $col = Database::escapeField($col);
+
         if (empty($col)) {
             return '';
         }
+
         $conditionBetweenOptions = in_array($conditionBetweenOptions, ['OR', 'AND']) ? $conditionBetweenOptions : 'OR';
         if ('bw' === $oper || 'bn' === $oper) {
             $val .= '%';
@@ -2884,11 +2892,10 @@ JAVASCRIPT;
         if (!empty($options['where'])) {
             $where .= ' AND '.$options['where'];
         }
-        //}
 
         $order = '';
         if (!empty($options['order'])) {
-            $order = ' ORDER BY '.$options['order'];
+            $order = " ORDER BY ".$options['order']." ";
         }
         $limit = '';
         if (!empty($options['limit'])) {
@@ -3117,7 +3124,18 @@ JAVASCRIPT;
         $tagRelExtraTable = Database::get_main_table(TABLE_MAIN_EXTRA_FIELD_REL_TAG);
         $tagTable = Database::get_main_table(TABLE_MAIN_TAG);
         $optionsTable = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
-        $value = Database::escape_string(implode("','", $options));
+
+        $cleanOptions = [];
+        foreach ($options as $option) {
+            $cleanOptions[] = Database::escape_string($option);
+        }
+        $cleanOptions = array_filter($cleanOptions);
+
+        if (empty($cleanOptions)) {
+            return [];
+        }
+
+        $value = implode("','", $cleanOptions);
 
         $sql = "SELECT DISTINCT t.*, v.value, o.display_text
                 FROM $tagRelExtraTable te

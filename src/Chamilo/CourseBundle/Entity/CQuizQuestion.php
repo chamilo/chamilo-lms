@@ -38,6 +38,7 @@ class CQuizQuestion
     /**
      * @var int
      *
+     * @deprecated Now using iid
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     protected $id;
@@ -332,13 +333,15 @@ class CQuizQuestion
     /**
      * Set id.
      *
-     * @param int $id
+     * @param int $iid
      *
      * @return CQuizQuestion
+     *
+     * @deprecated Use setIid()
      */
-    public function setId($id)
+    public function setId($iid)
     {
-        $this->id = $id;
+        $this->iid = $iid;
 
         return $this;
     }
@@ -347,10 +350,37 @@ class CQuizQuestion
      * Get id.
      *
      * @return int
+     *
+     * @deprecated Use getIid()
      */
     public function getId()
     {
-        return $this->id;
+        return $this->iid;
+    }
+
+    /**
+     * Set id.
+     *
+     * @param int $iid
+     *
+     * @return CQuizQuestion
+     */
+    public function setIid($iid)
+    {
+        $this->iid = $iid;
+
+        return $this;
+    }
+
+    /**
+     * Get id.
+     * This method is also used by Twig to get the iid property.
+     *
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
     }
 
     /**
@@ -375,15 +405,5 @@ class CQuizQuestion
     public function getCId()
     {
         return $this->cId;
-    }
-
-    /**
-     * Get iid.
-     *
-     * @return int
-     */
-    public function getIid()
-    {
-        return $this->iid;
     }
 }

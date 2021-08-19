@@ -55,6 +55,7 @@ class LearningPathDocuments extends Basic
                 'SpecialChar',
                 'Asciimath',
                 'Asciisvg',
+                'CodeSnippet',
             ],
             '/',
             ['Table', '-', 'CreateDiv'],
@@ -90,6 +91,7 @@ class LearningPathDocuments extends Basic
                 'Asciisvg',
                 'Table',
                 'SpecialChar',
+                'CodeSnippet',
             ],
             [
                 'Outdent',
@@ -120,6 +122,7 @@ class LearningPathDocuments extends Basic
             array_merge(['Save'], $this->getNewPageBlock()),
             ['Undo', 'Redo'],
             ['Link', 'Image', 'Video', 'Youtube', 'VimeoEmbed', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['CodeSnippet'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Toolbarswitch'],

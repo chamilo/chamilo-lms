@@ -961,7 +961,7 @@ class GradebookUtils
                             $select_gradebook->addOption(get_lang('Default'), $my_cat->get_id());
                             $cats_added[] = $my_cat->get_id();
                         } else {
-                            $select_gradebook->addOption($my_cat->get_name(), $my_cat->get_id());
+                            $select_gradebook->addOption(Security::remove_XSS($my_cat->get_name()), $my_cat->get_id());
                             $cats_added[] = $my_cat->get_id();
                         }
                     } else {
@@ -1535,6 +1535,7 @@ class GradebookUtils
                     'score' => $certificateInfo['score_certificate'],
                     'date' => api_format_date($certificateInfo['created_at'], DATE_FORMAT_SHORT),
                     'link' => api_get_path(WEB_PATH)."certificates/index.php?id={$certificateInfo['id']}",
+                    'pdf' => api_get_path(WEB_PATH)."certificates/index.php?id={$certificateInfo['id']}&user_id={$userId}&action=export",
                 ];
             }
         }

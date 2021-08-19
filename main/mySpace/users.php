@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -19,7 +20,7 @@ if (!$allowToTrack) {
 }
 
 $nameTools = get_lang('Users');
-$export_csv = isset($_GET['export']) && 'csv' == $_GET['export'] ? true : false;
+$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false;
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 $active = isset($_GET['active']) ? intval($_GET['active']) : 1;
 $sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
@@ -41,7 +42,7 @@ if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) 
     ];
 }
 
-if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && isset($_GET["type"]) && $_GET["type"] == "coach") {
+if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && isset($_GET["type"]) && $_GET["type"] === "coach") {
     $interbreadcrumb[] = ["url" => "coaches.php", "name" => get_lang('Tutors')];
 }
 
@@ -105,6 +106,7 @@ function get_users($from, $limit, $column, $direction)
     }
 
     if (false === $drhLoaded) {
+        $checkSessionVisibility = api_get_configuration_value('show_users_in_active_sessions_in_tracking');
         $students = UserManager::getUsersFollowedByUser(
             api_get_user_id(),
             $status,
@@ -118,7 +120,8 @@ function get_users($from, $limit, $column, $direction)
             $active,
             $lastConnectionDate,
             COURSEMANAGER,
-            $keyword
+            $keyword,
+            $checkSessionVisibility
         );
     }
 
@@ -244,7 +247,7 @@ if (api_is_drh()) {
         Display::return_icon('user_na.png', get_lang('Students'), [], ICON_SIZE_MEDIUM),
         '#'
     );
-    $actions .= Display::url(
+    $actionsLeft .= Display::url(
         Display::return_icon('skills.png', get_lang('Skills'), [], ICON_SIZE_MEDIUM),
         $webCodePath.'social/my_skills_report.php'
     );

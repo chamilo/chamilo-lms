@@ -67,7 +67,7 @@ $nbrAnswers = count($answers['answer']);
 
 for ($i = 1; $i <= $nbrAnswers; $i++) {
     $hotSpot = [];
-    $hotSpot['id'] = null;
+    $hotSpot['iid'] = null;
     $hotSpot['answer'] = $answers['answer'][$i];
 
     if ($answer_type == HOT_SPOT_DELINEATION) {

@@ -7338,6 +7338,45 @@ class Tracking
         }
     }
 
+    public static function updateUserLastLogin($userId)
+    {
+        $tblTrackLogin = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $sql = "SELECT login_id, login_date
+            FROM $tblTrackLogin
+            WHERE
+                login_user_id='".$userId."'
+            ORDER BY login_date DESC
+            LIMIT 0,1";
+
+        $qLastConnection = Database::query($sql);
+        if (Database::num_rows($qLastConnection) > 0) {
+            $now = api_get_utc_datetime();
+            $iIdLastConnection = Database::result($qLastConnection, 0, 'login_id');
+
+            // is the latest logout_date still relevant?
+            $sql = "SELECT logout_date FROM $tblTrackLogin
+                WHERE login_id = $iIdLastConnection";
+            $qLogoutDate = Database::query($sql);
+            $resLogoutDate = convert_sql_date(Database::result($qLogoutDate, 0, 'logout_date'));
+            $lifeTime = api_get_configuration_value('session_lifetime');
+
+            if ($resLogoutDate < time() - $lifeTime) {
+                // it isn't, we should create a fresh entry
+                Event::eventLogin($userId);
+            // now that it's created, we can get its ID and carry on
+            } else {
+                $sql = "UPDATE $tblTrackLogin SET logout_date = '$now'
+                    WHERE login_id = '$iIdLastConnection'";
+                Database::query($sql);
+            }
+
+            $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+            $sql = "UPDATE $tableUser SET last_login = '$now'
+                WHERE user_id = ".$userId;
+            Database::query($sql);
+        }
+    }
+
     private static function generateQuizzesTable(array $courseInfo, int $sessionId = 0): string
     {
         if (empty($sessionId)) {
@@ -7728,45 +7767,6 @@ class Tracking
         }
 
         return implode(PHP_EOL, $html);
-    }
-
-    public static function updateUserLastLogin($userId)
-    {
-        $tblTrackLogin = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-        $sql = "SELECT login_id, login_date
-            FROM $tblTrackLogin
-            WHERE
-                login_user_id='".$userId."'
-            ORDER BY login_date DESC
-            LIMIT 0,1";
-
-        $qLastConnection = Database::query($sql);
-        if (Database::num_rows($qLastConnection) > 0) {
-            $now = api_get_utc_datetime();
-            $iIdLastConnection = Database::result($qLastConnection, 0, 'login_id');
-
-            // is the latest logout_date still relevant?
-            $sql = "SELECT logout_date FROM $tblTrackLogin
-                WHERE login_id = $iIdLastConnection";
-            $qLogoutDate = Database::query($sql);
-            $resLogoutDate = convert_sql_date(Database::result($qLogoutDate, 0, 'logout_date'));
-            $lifeTime = api_get_configuration_value('session_lifetime');
-
-            if ($resLogoutDate < time() - $lifeTime) {
-                // it isn't, we should create a fresh entry
-                Event::eventLogin($userId);
-                // now that it's created, we can get its ID and carry on
-            } else {
-                $sql = "UPDATE $tblTrackLogin SET logout_date = '$now'
-                    WHERE login_id = '$iIdLastConnection'";
-                Database::query($sql);
-            }
-
-            $tableUser = Database::get_main_table(TABLE_MAIN_USER);
-            $sql = "UPDATE $tableUser SET last_login = '$now'
-                WHERE user_id = ".$userId;
-            Database::query($sql);
-        }
     }
 }
 

@@ -433,7 +433,7 @@ try {
         case Rest::CHECK_CONDITIONAL_LOGIN:
             $restResponse->setData(
                 [
-                    'check_conditional_login' => $restApi->checkConditionalLogin()
+                    'check_conditional_login' => $restApi->checkConditionalLogin(),
                 ]
             );
             break;

@@ -354,7 +354,8 @@ if (!empty($user_course_categories)) {
                         if ($course['unsubscr'] == 1) {
                             ?>
 
-                <form action="<?php echo api_get_self(); ?>" method="post" onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES, api_get_system_encoding())); ?>')) return false">
+                <form action="<?php echo api_get_path(WEB_CODE_PATH).'auth/courses.php'; ?>" method="get" onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES, api_get_system_encoding())); ?>')) return false">
+                    <input type="hidden" name="action" value="unsubscribe">
                     <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
                     <input type="hidden" name="unsubscribe" value="<?php echo $course['code']; ?>" />
                      <button class="btn btn-default" value="<?php echo get_lang('Unsubscribe'); ?>" name="unsub">
@@ -442,9 +443,10 @@ if (!empty($courses_without_category)) {
                     if ($course['unsubscr'] == 1) {
                         ?>
                 <!-- changed link to submit to avoid action by the search tool indexer -->
-                <form action="<?php echo api_get_self(); ?>"
-                      method="post"
+                <form action="<?php echo api_get_path(WEB_CODE_PATH).'auth/courses.php'; ?>"
+                      method="get"
                       onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES, api_get_system_encoding())); ?>')) return false;">
+                    <input type="hidden" name="action" value="unsubscribe">
                     <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
                     <input type="hidden" name="unsubscribe" value="<?php echo $course['code']; ?>" />
                     <button class="btn btn-default" value="<?php echo get_lang('Unsubscribe'); ?>" name="unsub">

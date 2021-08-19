@@ -8,6 +8,8 @@ namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Language;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 class LanguageRepository extends ServiceEntityRepository
@@ -17,12 +19,27 @@ class LanguageRepository extends ServiceEntityRepository
         parent::__construct($registry, Language::class);
     }
 
+    public function getAllAvailable(): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('l');
+        $qb
+            ->where(
+                $qb->expr()->eq('l.available', true)
+            )
+            ->andWhere(
+                $qb->expr()->isNull('l.parent')
+            )
+        ;
+
+        return $qb;
+    }
+
     /**
      * Get all the sub languages that are made available by the admin.
      *
-     * @return array
+     * @return Collection|Language[]
      */
-    public function findAllPlatformSubLanguages()
+    public function findAllSubLanguages()
     {
         $qb = $this->createQueryBuilder('l');
         $qb->select('l')

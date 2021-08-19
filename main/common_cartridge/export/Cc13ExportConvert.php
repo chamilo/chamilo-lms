@@ -3,13 +3,10 @@
 
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 
-
 class Cc13ExportConvert
 {
-
     public static function export($objCourse)
     {
-
         $permDirs = api_get_permissions_for_new_directories();
         $backupDirectory = CourseArchiver::getBackupDir();
 
@@ -19,16 +16,17 @@ class Cc13ExportConvert
         if (mkdir($backupDir, $permDirs, true)) {
             $converted = Cc13Convert::convert($backupDirectory, $backupDir, $objCourse);
             if ($converted) {
-                $imsccFileName=  self::createImscc($backupDir, $objCourse);
+                $imsccFileName = self::createImscc($backupDir, $objCourse);
+
                 return $imsccFileName;
             }
         }
+
         return false;
     }
 
     public static function createImscc($backupDir, $objCourse)
     {
-
         $backupDirectory = CourseArchiver::getBackupDir();
 
         $date = new \DateTime(api_get_local_time());
@@ -44,7 +42,5 @@ class Cc13ExportConvert
         rmdirr($backupDir);
 
         return $imsccFileName;
-
     }
-
 }

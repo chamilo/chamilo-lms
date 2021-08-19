@@ -3,14 +3,13 @@
 
 class CcWebLink extends CcGeneralFile
 {
+    const deafultname = 'weblink.xml';
 
     protected $rootns = 'wl';
     protected $rootname = 'webLink';
-    protected $ccnamespaces = ['wl'  => 'http://www.imsglobal.org/xsd/imsccv1p3/imswl_v1p3',
-                                    'xsi' => 'http://www.w3.org/2001/XMLSchema-instance'];
+    protected $ccnamespaces = ['wl' => 'http://www.imsglobal.org/xsd/imsccv1p3/imswl_v1p3',
+                                    'xsi' => 'http://www.w3.org/2001/XMLSchema-instance', ];
     protected $ccnsnames = ['wl' => 'http://www.imsglobal.org/profile/cc/ccv1p3/ccv1p3_imswl_v1p3.xsd'];
-
-    const deafultname = 'weblink.xml';
 
     protected $url = null;
     protected $title = null;
@@ -19,8 +18,8 @@ class CcWebLink extends CcGeneralFile
     protected $windowFeatures = null;
 
     /**
+     * Set the url title.
      *
-     * Set the url title
      * @param string $title
      */
     public function setTitle($title)
@@ -29,8 +28,8 @@ class CcWebLink extends CcGeneralFile
     }
 
     /**
+     * Set the url specifics.
      *
-     * Set the url specifics
      * @param string $url
      * @param string $target
      * @param string $windowFeatures
@@ -54,7 +53,7 @@ class CcWebLink extends CcGeneralFile
         if (!empty($this->windowFeatures)) {
             $this->appendNewAttributeNs($url, $rns, 'windowFeatures', $this->windowFeatures);
         }
+
         return true;
     }
 }
-

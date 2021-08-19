@@ -3,13 +3,12 @@
 
 class CcForum extends CcGeneralFile
 {
+    const deafultname = 'discussion.xml';
     protected $rootns = 'dt';
     protected $rootname = 'topic';
-    protected $ccnamespaces =   ['dt'  => 'http://www.imsglobal.org/xsd/imsccv1p3/imsdt_v1p3',
-                                    'xsi' => 'http://www.w3.org/2001/XMLSchema-instance'];
+    protected $ccnamespaces = ['dt' => 'http://www.imsglobal.org/xsd/imsccv1p3/imsdt_v1p3',
+                                    'xsi' => 'http://www.w3.org/2001/XMLSchema-instance', ];
     protected $ccnsnames = ['dt' => 'http://www.imsglobal.org/profile/cc/ccv1p3/ccv1p3_imsdt_v1p3.xsd'];
-
-    const deafultname = 'discussion.xml';
     protected $title = null;
     protected $text_type = 'text/plain';
     protected $text = null;
@@ -20,7 +19,7 @@ class CcForum extends CcGeneralFile
         $this->title = self::safexml($title);
     }
 
-    public function setText($text, $type='text/plain')
+    public function setText($text, $type = 'text/plain')
     {
         $this->text = self::safexml($text);
         $this->text_type = $type;
@@ -44,9 +43,7 @@ class CcForum extends CcGeneralFile
                 $this->appendNewAttributeNs($att, $rns, 'href', $value);
             }
         }
+
         return true;
     }
-
 }
-
-

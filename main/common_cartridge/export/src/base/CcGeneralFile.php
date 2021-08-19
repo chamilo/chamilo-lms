@@ -4,8 +4,8 @@
 class CcGeneralFile extends XMLGenericDocument
 {
     /**
+     * Root element.
      *
-     * Root element
      * @var DOMElement
      */
     protected $root = null;
@@ -18,11 +18,10 @@ class CcGeneralFile extends XMLGenericDocument
     {
         parent::__construct();
 
-        foreach ($this->ccnamespaces as $key => $value){
-            $this->registerNS($key,$value);
+        foreach ($this->ccnamespaces as $key => $value) {
+            $this->registerNS($key, $value);
         }
     }
-
 
     protected function onCreate()
     {
@@ -32,11 +31,11 @@ class CcGeneralFile extends XMLGenericDocument
         //add all namespaces
         foreach ($this->ccnamespaces as $key => $value) {
             $dummy_attr = "{$key}:dummy";
-            $this->doc->createAttributeNS($value,$dummy_attr);
+            $this->doc->createAttributeNS($value, $dummy_attr);
         }
 
         // add location of schemas
-        $schemaLocation='';
+        $schemaLocation = '';
         foreach ($this->ccnsnames as $key => $value) {
             $vt = empty($schemaLocation) ? '' : ' ';
             $schemaLocation .= $vt.$this->ccnamespaces[$key].' '.$value;
@@ -51,5 +50,4 @@ class CcGeneralFile extends XMLGenericDocument
 
         $this->root = $rootel;
     }
-
 }

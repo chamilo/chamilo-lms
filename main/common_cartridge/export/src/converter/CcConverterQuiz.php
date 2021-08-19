@@ -3,10 +3,9 @@
 
 class CcConverterQuiz extends CcConverters
 {
-
     public function __construct(CcIItem &$item, CcIManifest &$manifest, $rootpath, $path)
     {
-        $this->ccType     = CcVersion13::assessment;
+        $this->ccType = CcVersion13::assessment;
         $this->defaultfile = 'quiz.xml';
         $this->defaultname = Assesment13ResourceFile::deafultname;
         parent::__construct($item, $manifest, $rootpath, $path);
@@ -14,7 +13,6 @@ class CcConverterQuiz extends CcConverters
 
     public function convert($outdir, $objQuizz)
     {
-
         $rt = new Assesment13ResourceFile();
         $title = $objQuizz['title'];
         $rt->setTitle($title);
@@ -76,6 +74,7 @@ class CcConverterQuiz extends CcConverters
 
         // Store everything.
         $this->store($rt, $outdir, $title, $deps);
+
         return true;
     }
 }

@@ -13,7 +13,6 @@ class CcConverterPage extends CcConverters
 
     public function convert($outdir, $objPage)
     {
-
         $rt = new CcPage();
         $title = $objPage['title'];
         $intro = '';

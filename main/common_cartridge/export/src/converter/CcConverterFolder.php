@@ -3,7 +3,6 @@
 
 class CcConverterFolder extends CcConverters
 {
-
     public function __construct(CcIItem &$item, CcIManifest &$manifest, $rootpath, $path)
     {
         $this->defaultfile = 'folder.xml';
@@ -32,8 +31,7 @@ class CcConverterFolder extends CcConverters
         $resitem->identifierref = $resvalue;
         $resitem->title = $objDocument['title'];
         $this->item->addChildItem($resitem);
+
         return true;
     }
-
 }
-

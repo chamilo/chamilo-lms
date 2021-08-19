@@ -3,14 +3,13 @@
 
 class CcVersion13 extends CcVersion1
 {
-
-    const webcontent         = 'webcontent';
-    const questionbank       = 'imsqti_xmlv1p3/imscc_xmlv1p3/question-bank';
-    const assessment         = 'imsqti_xmlv1p3/imscc_xmlv1p3/assessment';
-    const associatedcontent  = 'associatedcontent/imscc_xmlv1p3/learning-application-resource';
-    const discussiontopic    = 'imsdt_xmlv1p3';
-    const weblink            = 'imswl_xmlv1p3';
-    const basiclti           = 'imsbasiclti_xmlv1p3';
+    const webcontent = 'webcontent';
+    const questionbank = 'imsqti_xmlv1p3/imscc_xmlv1p3/question-bank';
+    const assessment = 'imsqti_xmlv1p3/imscc_xmlv1p3/assessment';
+    const associatedcontent = 'associatedcontent/imscc_xmlv1p3/learning-application-resource';
+    const discussiontopic = 'imsdt_xmlv1p3';
+    const weblink = 'imswl_xmlv1p3';
+    const basiclti = 'imsbasiclti_xmlv1p3';
 
     public static $checker = [self::webcontent,
                                    self::assessment,
@@ -18,12 +17,32 @@ class CcVersion13 extends CcVersion1
                                    self::discussiontopic,
                                    self::questionbank,
                                    self::weblink,
-                                   self::basiclti];
+                                   self::basiclti, ];
+
+    public function __construct()
+    {
+        $this->ccnamespaces = ['imscc' => 'http://www.imsglobal.org/xsd/imsccv1p3/imscp_v1p1',
+                                    'lomimscc' => 'http://ltsc.ieee.org/xsd/imsccv1p3/LOM/manifest',
+                                    'lom' => 'http://ltsc.ieee.org/xsd/imsccv1p3/LOM/resource',
+                                    'xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+                                    'cc' => 'http://www.imsglobal.org/xsd/imsccv1p3/imsccauth_v1p1',
+                                   ];
+
+        $this->ccnsnames = ['imscc' => 'http://www.imsglobal.org/profile/cc/ccv1p3/ccv1p3_imscp_v1p2_v1p0.xsd',
+                                    'lomimscc' => 'http://www.imsglobal.org/profile/cc/ccv1p3/LOM/ccv1p3_lommanifest_v1p0.xsd',
+                                    'lom' => 'http://www.imsglobal.org/profile/cc/ccv1p3/LOM/ccv1p3_lomresource_v1p0.xsd',
+                                ];
+
+        $this->ccversion = '1.3.0';
+        $this->camversion = '1.3.0';
+        $this->_generator = 'Chamilo Common Cartridge generator';
+    }
 
     /**
-     * Validate if the type are valid or not
+     * Validate if the type are valid or not.
      *
      * @param string $type
+     *
      * @return bool
      */
     public function valid($type)
@@ -31,53 +50,15 @@ class CcVersion13 extends CcVersion1
         return in_array($type, self::$checker);
     }
 
-    public function __construct()
-    {
-        $this->ccnamespaces = ['imscc'    => 'http://www.imsglobal.org/xsd/imsccv1p3/imscp_v1p1',
-                                    'lomimscc' => 'http://ltsc.ieee.org/xsd/imsccv1p3/LOM/manifest'  ,
-                                    'lom'      => 'http://ltsc.ieee.org/xsd/imsccv1p3/LOM/resource'  ,
-                                    'xsi'      => 'http://www.w3.org/2001/XMLSchema-instance',
-                                    'cc'       => 'http://www.imsglobal.org/xsd/imsccv1p3/imsccauth_v1p1'
-                                   ];
-
-        $this->ccnsnames    = ['imscc'    => 'http://www.imsglobal.org/profile/cc/ccv1p3/ccv1p3_imscp_v1p2_v1p0.xsd'     ,
-                                    'lomimscc' => 'http://www.imsglobal.org/profile/cc/ccv1p3/LOM/ccv1p3_lommanifest_v1p0.xsd',
-                                    'lom'      => 'http://www.imsglobal.org/profile/cc/ccv1p3/LOM/ccv1p3_lomresource_v1p0.xsd'
-                                ];
-
-        $this->ccversion    = '1.3.0';
-        $this->camversion   = '1.3.0';
-        $this->_generator   = 'Chamilo Common Cartridge generator';
-
-    }
-
-    protected function updateItems($items, DOMDocument &$doc, DOMElement &$xmlnode)
-    {
-        foreach ($items as $key => $item) {
-            $itemnode = $doc->createElementNS($this->ccnamespaces['imscc'], 'item');
-            $this->updateAttribute($doc, 'identifier'   , $key                , $itemnode);
-            $this->updateAttribute($doc, 'identifierref', $item->identifierref, $itemnode);
-            if (!is_null($item->title)) {
-                $titlenode = $doc->createElementNS($this->ccnamespaces['imscc'], 'title');
-                $titlenode->appendChild(new DOMText($item->title));
-                $itemnode->appendChild($titlenode);
-            }
-            if ($item->hasChildItems()) {
-                $this->updateItems($item->childitems, $doc, $itemnode);
-            }
-            $xmlnode->appendChild($itemnode);
-        }
-    }
-
     /**
-     * Create Education Metadata (How To)
+     * Create Education Metadata (How To).
      *
      * @param object $met
-     * @param DOMDocument $doc
      * @param object $xmlnode
+     *
      * @return DOMNode
      */
-    public function createMetadataEducational($met, DOMDocument  &$doc, $xmlnode)
+    public function createMetadataEducational($met, DOMDocument &$doc, $xmlnode)
     {
         $metadata = $doc->createElementNS($this->ccnamespaces['imscc'], 'metadata');
         $xmlnode->insertBefore($metadata, $xmlnode->firstChild);
@@ -97,7 +78,25 @@ class CcVersion13 extends CcVersion1
                 $userrole->appendChild($nd5);
             }
         }
+
         return $metadata;
     }
 
+    protected function updateItems($items, DOMDocument &$doc, DOMElement &$xmlnode)
+    {
+        foreach ($items as $key => $item) {
+            $itemnode = $doc->createElementNS($this->ccnamespaces['imscc'], 'item');
+            $this->updateAttribute($doc, 'identifier', $key, $itemnode);
+            $this->updateAttribute($doc, 'identifierref', $item->identifierref, $itemnode);
+            if (!is_null($item->title)) {
+                $titlenode = $doc->createElementNS($this->ccnamespaces['imscc'], 'title');
+                $titlenode->appendChild(new DOMText($item->title));
+                $itemnode->appendChild($titlenode);
+            }
+            if ($item->hasChildItems()) {
+                $this->updateItems($item->childitems, $doc, $itemnode);
+            }
+            $xmlnode->appendChild($itemnode);
+        }
+    }
 }

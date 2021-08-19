@@ -3,7 +3,6 @@
 
 class Cc13Resource extends Cc13Entities
 {
-
     public function generateData($resource_type)
     {
         $data = [];
@@ -12,6 +11,7 @@ class Cc13Resource extends Cc13Entities
                 $data[] = $this->getResourceData($instance);
             }
         }
+
         return $data;
     }
 
@@ -25,12 +25,12 @@ class Cc13Resource extends Cc13Entities
             $_POST['target'] = '_blank';
             Link::addlinkcategory('link');
         }
+
         return true;
     }
 
     public function storeDocuments($documents, $path)
     {
-
         $courseInfo = api_get_course_info();
         $sessionId = api_get_session_id();
         $groupId = api_get_group_id();
@@ -74,20 +74,19 @@ class Cc13Resource extends Cc13Entities
                 );
             }
         }
-        return true;
 
+        return true;
     }
 
     public function getResourceData($instance)
     {
-
         //var_dump($instance);
 
         $xpath = Cc1p3Convert::newxPath(Cc1p3Convert::$manifest, Cc1p3Convert::$namespaces);
         $link = '';
 
         if ($instance['common_cartriedge_type'] == Cc1p3Convert::CC_TYPE_WEBCONTENT || $instance['common_cartriedge_type'] == Cc1p3Convert::CC_TYPE_ASSOCIATED_CONTENT) {
-            $resource = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@identifier="' . $instance['resource_indentifier'] . '"]/@href');
+            $resource = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@identifier="'.$instance['resource_indentifier'].'"]/@href');
             if ($resource->length > 0) {
                 $resource = !empty($resource->item(0)->nodeValue) ? $resource->item(0)->nodeValue : '';
             } else {
@@ -96,7 +95,7 @@ class Cc13Resource extends Cc13Entities
 
             if (empty($resource)) {
                 unset($resource);
-                $resource = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@identifier="' . $instance['resource_indentifier'] . '"]/imscc:file/@href');
+                $resource = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@identifier="'.$instance['resource_indentifier'].'"]/imscc:file/@href');
                 if ($resource->length > 0) {
                     $resource = !empty($resource->item(0)->nodeValue) ? $resource->item(0)->nodeValue : '';
                 } else {
@@ -109,12 +108,10 @@ class Cc13Resource extends Cc13Entities
         }
 
         if ($instance['common_cartriedge_type'] == Cc1p3Convert::CC_TYPE_WEBLINK) {
-
-            $external_resource = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@identifier="' . $instance['resource_indentifier'] . '"]/imscc:file/@href')->item(0)->nodeValue;
+            $external_resource = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@identifier="'.$instance['resource_indentifier'].'"]/imscc:file/@href')->item(0)->nodeValue;
 
             if ($external_resource) {
-
-                $resource = $this->loadXmlResource(Cc1p3Convert::$pathToManifestFolder . DIRECTORY_SEPARATOR . $external_resource);
+                $resource = $this->loadXmlResource(Cc1p3Convert::$pathToManifestFolder.DIRECTORY_SEPARATOR.$external_resource);
 
                 if (!empty($resource)) {
                     $xpath = Cc1p3Convert::newxPath($resource, Cc1p3Convert::$resourcens);
@@ -136,8 +133,8 @@ class Cc13Resource extends Cc13Entities
             }
         }
 
-        $mod_type      = 'file';
-        $mod_options   = 'objectframe';
+        $mod_type = 'file';
+        $mod_options = 'objectframe';
         $mod_reference = $link;
         //detected if we are dealing with html file
         if (!empty($link) && ($instance['common_cartriedge_type'] == Cc1p3Convert::CC_TYPE_WEBCONTENT)) {
@@ -146,8 +143,8 @@ class Cc13Resource extends Cc13Entities
                 $mod_type = 'html';
                 //extract the content of the file
                 $rootpath = realpath(Cc1p3Convert::$pathToManifestFolder);
-                $htmlpath = realpath($rootpath . DIRECTORY_SEPARATOR . $link);
-                $dirpath  = dirname($htmlpath);
+                $htmlpath = realpath($rootpath.DIRECTORY_SEPARATOR.$link);
+                $dirpath = dirname($htmlpath);
                 if (file_exists($htmlpath)) {
                     $fcontent = file_get_contents($htmlpath);
                     $mod_alltext = $this->prepareContent($fcontent);
@@ -155,7 +152,7 @@ class Cc13Resource extends Cc13Entities
                     $mod_options = '';
                     /**
                      * try to handle embedded resources
-                     * images, linked static resources, applets, videos
+                     * images, linked static resources, applets, videos.
                      */
                     $doc = new DOMDocument();
                     $cdir = getcwd();
@@ -201,11 +198,9 @@ class Cc13Resource extends Cc13Entities
                                 $mod_type,
                                 $mod_alltext,
                                 $mod_reference,
-                                $mod_options
+                                $mod_options,
                 ];
 
         return $values;
     }
-
-
 }

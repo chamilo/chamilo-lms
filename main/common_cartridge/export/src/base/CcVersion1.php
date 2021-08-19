@@ -1,69 +1,95 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-
 /**
- * Version 1 class of Common Cartridge
- *
+ * Version 1 class of Common Cartridge.
  */
 class CcVersion1 extends CcVersionBase
 {
-    const   webcontent          = 'webcontent';
-    const   questionbank        = 'imsqti_xmlv1p2/imscc_xmlv1p0/question-bank';
-    const   assessment          = 'imsqti_xmlv1p2/imscc_xmlv1p0/assessment';
-    const   associatedcontent   = 'associatedcontent/imscc_xmlv1p0/learning-application-resource';
-    const   discussiontopic     = 'imsdt_xmlv1p0';
-    const   weblink             = 'imswl_xmlv1p0';
+    const webcontent = 'webcontent';
+    const questionbank = 'imsqti_xmlv1p2/imscc_xmlv1p0/question-bank';
+    const assessment = 'imsqti_xmlv1p2/imscc_xmlv1p0/assessment';
+    const associatedcontent = 'associatedcontent/imscc_xmlv1p0/learning-application-resource';
+    const discussiontopic = 'imsdt_xmlv1p0';
+    const weblink = 'imswl_xmlv1p0';
 
     public static $checker = [self::webcontent,
                                    self::assessment,
                                    self::associatedcontent,
                                    self::discussiontopic,
                                    self::questionbank,
-                                   self::weblink];
+                                   self::weblink, ];
+
+    public function __construct()
+    {
+        $this->ccnamespaces = ['imscc' => 'http://www.imsglobal.org/xsd/imscc/imscp_v1p1',
+                                        'lomimscc' => 'http://ltsc.ieee.org/xsd/imscc/LOM',
+                                        'lom' => 'http://ltsc.ieee.org/xsd/LOM',
+                                        'voc' => 'http://ltsc.ieee.org/xsd/LOM/vocab',
+                                        'xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+                                        ];
+
+        $this->ccnsnames = [
+            'imscc' => 'http://www.imsglobal.org/profile/cc/ccv1p0/derived_schema/imscp_v1p2_localised.xsd',
+            'lom' => 'http://www.imsglobal.org/profile/cc/ccv1p0/derived_schema/domainProfile_2/lomLoose_localised.xsd',
+            'lomimscc' => 'http://www.imsglobal.org/profile/cc/ccv1p0/derived_schema/domainProfile_1/lomLoose_localised.xsd',
+            'voc' => 'http://www.imsglobal.org/profile/cc/ccv1p0/derived_schema/domainProfile_2/vocab/loose.xsd',
+        ];
+
+        $this->ccversion = '1.0.0';
+        $this->camversion = '1.0.0';
+        $this->_generator = 'Common Cartridge generator';
+    }
 
     /**
-    * Validate if the type are valid or not
-    *
-    * @param string $type
-    * @return bool
-    */
+     * Validate if the type are valid or not.
+     *
+     * @param string $type
+     *
+     * @return bool
+     */
     public function valid($type)
     {
         return in_array($type, self::$checker);
     }
 
-    public function __construct()
+    /**
+     * Create Education Metadata (How To).
+     *
+     * @param object $met
+     * @param object $xmlnode
+     *
+     * @return DOMNode
+     */
+    public function createMetadataEducational($met, DOMDocument &$doc, $xmlnode)
     {
-        $this->ccnamespaces     = ['imscc'    => 'http://www.imsglobal.org/xsd/imscc/imscp_v1p1',
-                                        'lomimscc' => 'http://ltsc.ieee.org/xsd/imscc/LOM',
-                                        'lom'      => 'http://ltsc.ieee.org/xsd/LOM',
-                                        'voc'      => 'http://ltsc.ieee.org/xsd/LOM/vocab',
-                                        'xsi'      => 'http://www.w3.org/2001/XMLSchema-instance'
-                                        ];
+        $nd = $doc->createElementNS($this->ccnamespaces['lom'], 'educational');
+        $nd2 = $doc->createElementNS($this->ccnamespaces['lom'], 'intendedEndUserRole');
+        $nd3 = $doc->createElementNS($this->ccnamespaces['voc'], 'vocabulary');
 
-        $this->ccnsnames = [
-            'imscc'    => 'http://www.imsglobal.org/profile/cc/ccv1p0/derived_schema/imscp_v1p2_localised.xsd',
-            'lom'      => 'http://www.imsglobal.org/profile/cc/ccv1p0/derived_schema/domainProfile_2/lomLoose_localised.xsd',
-            'lomimscc' => 'http://www.imsglobal.org/profile/cc/ccv1p0/derived_schema/domainProfile_1/lomLoose_localised.xsd',
-            'voc'      => 'http://www.imsglobal.org/profile/cc/ccv1p0/derived_schema/domainProfile_2/vocab/loose.xsd'
-        ];
+        $xmlnode->appendChild($nd);
+        $nd->appendChild($nd2);
+        $nd2->appendChild($nd3);
 
-        $this->ccversion        = '1.0.0';
-        $this->camversion       = '1.0.0';
-        $this->_generator       = 'Common Cartridge generator';
+        foreach ($met->arrayeducational as $name => $value) {
+            !is_array($value) ? $value = [$value] : null;
+            foreach ($value as $v) {
+                $nd4 = $doc->createElementNS($this->ccnamespaces['voc'], $name, $v[0]);
+                $nd3->appendChild($nd4);
+            }
+        }
+
+        return $nd;
     }
 
     protected function onCreate(DOMDocument &$doc, $rootmanifestnode = null, $nmanifestID = null)
     {
-        $doc->formatOutput       = true;
+        $doc->formatOutput = true;
         $doc->preserveWhiteSpace = true;
 
-
         $this->manifestID = is_null($nmanifestID) ? CcHelpers::uuidgen('M_') : $nmanifestID;
-        $mUUID            = $doc->createAttribute('identifier');
+        $mUUID = $doc->createAttribute('identifier');
         $mUUID->nodeValue = $this->manifestID;
-
 
         if (is_null($rootmanifestnode)) {
             if (!empty($this->_generator)) {
@@ -87,17 +113,16 @@ class CcVersion1 extends CcVersionBase
                 $vt = empty($schemaLocation) ? '' : ' ';
                 $schemaLocation .= $vt.$this->ccnamespaces[$key].' '.$value;
             }
-            $aSchemaLoc            = $doc->createAttributeNS($this->ccnamespaces['xsi'], 'xsi:schemaLocation');
+            $aSchemaLoc = $doc->createAttributeNS($this->ccnamespaces['xsi'], 'xsi:schemaLocation');
             $aSchemaLoc->nodeValue = $schemaLocation;
             $rootel->appendChild($aSchemaLoc);
-
         } else {
             $rootel = $doc->createElementNS($this->ccnamespaces['imscc'], 'imscc:manifest');
             $rootel->appendChild($mUUID);
         }
 
-        $metadata      = $doc->createElementNS($this->ccnamespaces['imscc'], 'metadata');
-        $schema        = $doc->createElementNS($this->ccnamespaces['imscc'], 'schema', 'IMS Common Cartridge');
+        $metadata = $doc->createElementNS($this->ccnamespaces['imscc'], 'metadata');
+        $schema = $doc->createElementNS($this->ccnamespaces['imscc'], 'schema', 'IMS Common Cartridge');
         $schemaversion = $doc->createElementNS($this->ccnamespaces['imscc'], 'schemaversion', $this->ccversion);
 
         $metadata->appendChild($schema);
@@ -129,10 +154,11 @@ class CcVersion1 extends CcVersionBase
                 $node->appendChild($nResult);
             }
         }
+
         return $nResult;
     }
 
-    protected function updateAttributeNs(DOMDocument &$doc, $attrname, $attrnamespace,$attrvalue, DOMElement &$node)
+    protected function updateAttributeNs(DOMDocument &$doc, $attrname, $attrnamespace, $attrvalue, DOMElement &$node)
     {
         $busenew = (is_object($node) && $node->hasAttributeNS($attrnamespace, $attrname));
         $nResult = null;
@@ -146,6 +172,7 @@ class CcVersion1 extends CcVersionBase
                 $node->appendChild($nResult);
             }
         }
+
         return $nResult;
     }
 
@@ -153,10 +180,11 @@ class CcVersion1 extends CcVersionBase
     {
         $nlist = $node->getElementsByTagName($itemname);
         $item = is_object($nlist) && ($nlist->length > 0) ? $nlist->item(0) : null;
+
         return $item;
     }
 
-    protected function updateChildItem(DOMDocument &$doc, $itemname, $itemvalue, DOMElement &$node, $attrtostore=null)
+    protected function updateChildItem(DOMDocument &$doc, $itemname, $itemvalue, DOMElement &$node, $attrtostore = null)
     {
         $tnode = $this->getChildNode($doc, 'title', $node);
         $usenew = is_null($tnode);
@@ -176,9 +204,9 @@ class CcVersion1 extends CcVersionBase
     {
         foreach ($items as $key => $item) {
             $itemnode = $doc->createElementNS($this->ccnamespaces['imscc'], 'item');
-            $this->updateAttribute($doc, 'identifier'   , $key                , $itemnode);
+            $this->updateAttribute($doc, 'identifier', $key, $itemnode);
             $this->updateAttribute($doc, 'identifierref', $item->identifierref, $itemnode);
-            $this->updateAttribute($doc, 'parameters'   , $item->parameters   , $itemnode);
+            $this->updateAttribute($doc, 'parameters', $item->parameters, $itemnode);
             if (!empty($item->title)) {
                 $titlenode = $doc->createElementNS($this->ccnamespaces['imscc'],
                                                    'title',
@@ -193,17 +221,18 @@ class CcVersion1 extends CcVersionBase
     }
 
     /**
-     * Create a Resource (How to)
+     * Create a Resource (How to).
      *
      * @param CcIResource $res
      * @param DOMDocument $doc
      * @param object $xmlnode
+     *
      * @return DOMNode
      */
-    protected function createResource(CcIResource &$res, DOMDocument &$doc, $xmlnode=null)
+    protected function createResource(CcIResource &$res, DOMDocument &$doc, $xmlnode = null)
     {
         $usenew = is_object($xmlnode);
-        $dnode  = $usenew ? $xmlnode : $doc->createElementNS($this->ccnamespaces['imscc'], "resource");
+        $dnode = $usenew ? $xmlnode : $doc->createElementNS($this->ccnamespaces['imscc'], "resource");
         $this->updateAttribute($doc, 'identifier', $res->identifier, $dnode);
         $this->updateAttribute($doc, 'type', $res->type, $dnode);
         !is_null($res->href) ? $this->updateAttribute($doc, 'href', $res->href, $dnode) : null;
@@ -216,7 +245,7 @@ class CcVersion1 extends CcVersionBase
             $nd->appendChild($ndatt);
             $dnode->appendChild($nd);
         }
-        $this->resources[$res->identifier]   = $res;
+        $this->resources[$res->identifier] = $res;
         $this->resources_ind[$res->files[0]] = $res->identifier;
 
         foreach ($res->dependency as $dependency) {
@@ -231,7 +260,7 @@ class CcVersion1 extends CcVersionBase
     }
 
     /**
-     * Create an Item Folder (How To)
+     * Create an Item Folder (How To).
      *
      * @param CcIOrganization $org
      * @param DOMDocument $doc
@@ -239,7 +268,6 @@ class CcVersion1 extends CcVersionBase
      */
     protected function createItemFolder(CcIOrganization &$org, DOMDocument &$doc, DOMElement &$xmlnode = null)
     {
-
         $itemfoldernode = $doc->createElementNS($this->ccnamespaces['imscc'], 'item');
         $this->updateAttribute($doc, 'identifier', "root", $itemfoldernode);
 
@@ -255,18 +283,18 @@ class CcVersion1 extends CcVersionBase
     }
 
     /**
-     * Create an Organization (How To)
+     * Create an Organization (How To).
      *
      * @param CcIOrganization $org
      * @param DOMDocument $doc
      * @param object $xmlnode
+     *
      * @return DOMNode
      */
     protected function createOrganization(CcIOrganization &$org, DOMDocument &$doc, $xmlnode = null)
     {
-
         $usenew = is_object($xmlnode);
-        $dnode  = $usenew ? $xmlnode : $doc->createElementNS($this->ccnamespaces['imscc'], "organization");
+        $dnode = $usenew ? $xmlnode : $doc->createElementNS($this->ccnamespaces['imscc'], "organization");
         $this->updateAttribute($doc, 'identifier', $org->identifier, $dnode);
         $this->updateAttribute($doc, 'structure', $org->structure, $dnode);
 
@@ -276,23 +304,23 @@ class CcVersion1 extends CcVersionBase
     }
 
     /**
-     * Create Metadata For Manifest (How To)
+     * Create Metadata For Manifest (How To).
      *
      * @param CcIMetadataManifest $met
      * @param DOMDocument $doc
      * @param object $xmlnode
+     *
      * @return DOMNode
      */
     protected function createMetadataManifest(CcIMetadataManifest $met, DOMDocument &$doc, $xmlnode = null)
     {
-
         $dnode = $doc->createElementNS($this->ccnamespaces['lomimscc'], "lom");
         if (!empty($xmlnode)) {
             $xmlnode->appendChild($dnode);
         }
-        $dnodegeneral   = empty($met->arraygeneral) ? null : $this->createMetadataGeneral($met, $doc, $xmlnode);
+        $dnodegeneral = empty($met->arraygeneral) ? null : $this->createMetadataGeneral($met, $doc, $xmlnode);
         $dnodetechnical = empty($met->arraytech) ? null : $this->createMetadataTechnical($met, $doc, $xmlnode);
-        $dnoderights    = empty($met->arrayrights) ? null : $this->createMetadataRights($met, $doc, $xmlnode);
+        $dnoderights = empty($met->arrayrights) ? null : $this->createMetadataRights($met, $doc, $xmlnode);
         $dnodelifecycle = empty($met->arraylifecycle) ? null : $this->createMetadataLifecycle($met, $doc, $xmlnode);
 
         !is_null($dnodegeneral) ? $dnode->appendChild($dnodegeneral) : null;
@@ -301,20 +329,19 @@ class CcVersion1 extends CcVersionBase
         !is_null($dnodelifecycle) ? $dnode->appendChild($dnodelifecycle) : null;
 
         return $dnode;
-
     }
 
     /**
-     * Create Metadata For Resource (How To)
+     * Create Metadata For Resource (How To).
      *
      * @param CcIMetadataResource $met
      * @param DOMDocument $doc
      * @param object $xmlnode
+     *
      * @return DOMNode
      */
     protected function createMetadataResource(CcIMetadataResource $met, DOMDocument &$doc, $xmlnode = null)
     {
-
         $dnode = $doc->createElementNS($this->ccnamespaces['lom'], "lom");
 
         !empty($xmlnode) ? $xmlnode->appendChild($dnode) : null;
@@ -324,16 +351,16 @@ class CcVersion1 extends CcVersionBase
     }
 
     /**
-     * Create Metadata For File (How To)
+     * Create Metadata For File (How To).
      *
      * @param CcIMetadataFile $met
      * @param DOMDocument $doc
-     * @param Object $xmlnode
+     * @param object $xmlnode
+     *
      * @return DOMNode
      */
     protected function createMetadataFile(CcIMetadataFile $met, DOMDocument &$doc, $xmlnode = null)
     {
-
         $dnode = $doc->createElementNS($this->ccnamespaces['lom'], "lom");
 
         !empty($xmlnode) ? $xmlnode->appendChild($dnode) : null;
@@ -343,11 +370,11 @@ class CcVersion1 extends CcVersionBase
     }
 
     /**
-     * Create General Metadata (How To)
+     * Create General Metadata (How To).
      *
      * @param object $met
-     * @param DOMDocument $doc
      * @param object $xmlnode
+     *
      * @return DOMNode
      */
     protected function createMetadataGeneral($met, DOMDocument &$doc, $xmlnode)
@@ -385,15 +412,16 @@ class CcVersion1 extends CcVersionBase
                 $nd2->appendChild($nd4);
             }
         }
+
         return $nd;
     }
 
     /**
-     * Create Technical Metadata (How To)
+     * Create Technical Metadata (How To).
      *
      * @param object $met
-     * @param DOMDocument $doc
      * @param object $xmlnode
+     *
      * @return DOMNode
      */
     protected function createMetadataTechnical($met, DOMDocument &$doc, $xmlnode)
@@ -408,21 +436,20 @@ class CcVersion1 extends CcVersionBase
                 $nd->appendChild($nd2);
             }
         }
+
         return $nd;
     }
 
-
     /**
-     * Create Rights Metadata (How To)
+     * Create Rights Metadata (How To).
      *
      * @param object $met
-     * @param DOMDocument $doc
      * @param object $xmlnode
+     *
      * @return DOMNode
      */
     protected function createMetadataRights($met, DOMDocument &$doc, $xmlnode)
     {
-
         $nd = $doc->createElementNS($this->ccnamespaces['lomimscc'], 'rights');
 
         foreach ($met->arrayrights as $name => $value) {
@@ -436,7 +463,7 @@ class CcVersion1 extends CcVersionBase
                     $nd3->appendChild($ndatt);
                     $nd2->appendChild($nd3);
                     $nd->appendChild($nd2);
-                } else if ($name == 'copyrightAndOtherRestrictions' || $name == 'cost') {
+                } elseif ($name == 'copyrightAndOtherRestrictions' || $name == 'cost') {
                     $nd2 = $doc->createElementNS($this->ccnamespaces['lomimscc'], $name);
                     $nd3 = $doc->createElementNS($this->ccnamespaces['lomimscc'], 'value', $v[0]);
                     $nd2->appendChild($nd3);
@@ -444,28 +471,30 @@ class CcVersion1 extends CcVersionBase
                 }
             }
         }
+
         return $nd;
     }
 
     /**
-     * Create Lifecycle Metadata (How To)
+     * Create Lifecycle Metadata (How To).
      *
      * @param object $met
      * @param DOMDocument $doc
+     * @param object $met
      * @param object $xmlnode
+     *
      * @return DOMNode
      */
     protected function createMetadataLifecycle($met, DOMDocument &$doc, $xmlnode)
     {
-
-        $nd  = $doc->createElementNS($this->ccnamespaces['lomimscc'], 'lifeCycle');
+        $nd = $doc->createElementNS($this->ccnamespaces['lomimscc'], 'lifeCycle');
         $nd2 = $doc->createElementNS($this->ccnamespaces['lomimscc'], 'contribute');
 
         $nd->appendChild($nd2);
         $xmlnode->appendChild($nd);
 
         foreach ($met->arraylifecycle as $name => $value) {
-            !is_array($value) ? $value = array($value) : null;
+            !is_array($value) ? $value = [$value] : null;
             foreach ($value as $v) {
                 if ($name == 'role') {
                     $nd3 = $doc->createElementNS($this->ccnamespaces['lomimscc'], $name);
@@ -485,34 +514,7 @@ class CcVersion1 extends CcVersionBase
                 }
             }
         }
-        return $nd;
-    }
 
-    /**
-     * Create Education Metadata (How To)
-     *
-     * @param object $met
-     * @param DOMDocument $doc
-     * @param object $xmlnode
-     * @return DOMNode
-     */
-    public function createMetadataEducational($met, DOMDocument  &$doc, $xmlnode)
-    {
-        $nd  = $doc->createElementNS($this->ccnamespaces['lom'], 'educational');
-        $nd2 = $doc->createElementNS($this->ccnamespaces['lom'], 'intendedEndUserRole');
-        $nd3 = $doc->createElementNS($this->ccnamespaces['voc'], 'vocabulary');
-
-        $xmlnode->appendChild($nd);
-        $nd->appendChild($nd2);
-        $nd2->appendChild($nd3);
-
-        foreach ($met->arrayeducational as $name => $value) {
-            !is_array($value) ? $value = array($value) : null;
-            foreach ($value as $v) {
-                $nd4 = $doc->createElementNS($this->ccnamespaces['voc'], $name, $v[0]);
-                $nd3->appendChild($nd4);
-            }
-        }
         return $nd;
     }
 }

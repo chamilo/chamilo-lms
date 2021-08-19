@@ -3,7 +3,6 @@
 
 class Imscc13Import
 {
-
     const FORMAT_IMSCC13 = 'imscc13';
 
     public function log($message, $level, $a = null, $depth = null, $display = false)
@@ -11,10 +10,8 @@ class Imscc13Import
         error_log("(imscc1) $message , level : $level , extra info: $a, message depth : $depth");
     }
 
-
     public static function detectFormat($filepath)
     {
-
         $manifest = Cc1p3Convert::getManifest($filepath);
 
         if (file_exists($manifest)) {
@@ -40,7 +37,6 @@ class Imscc13Import
 
     public function execute($filepath)
     {
-
         $manifest = Cc1p3Convert::getManifest($filepath);
 
         if (empty($manifest)) {
@@ -63,34 +59,34 @@ class Imscc13Import
     }
 
     /**
-    * Unzip a file into the specified directory. Throws a RuntimeException
-    * if the extraction failed.
-    */
-   public static function unzip($file, $to = 'cache/zip')
-   {
-       @ini_set('memory_limit', '256M');
-       if (!is_dir($to)) {
-           mkdir($to);
-           chmod($to, 0777);
-       }
-       if (class_exists('ZipArchive')) {
-           // use ZipArchive
-           $zip = new ZipArchive();
-           $res = $zip->open($file);
-           if ($res === true) {
-               $zip->extractTo($to);
-               $zip->close();
-           } else {
-               throw new RuntimeException('Could not open zip file [ZipArchive].');
-           }
-       } else {
-           // use PclZip
-           $zip = new PclZip($file);
-           if ($zip->extract(PCLZIP_OPT_PATH, $to) === 0) {
-               throw new RuntimeException('Could not extract zip file [PclZip].');
-           }
-       }
-       return true;
-   }
+     * Unzip a file into the specified directory. Throws a RuntimeException
+     * if the extraction failed.
+     */
+    public static function unzip($file, $to = 'cache/zip')
+    {
+        @ini_set('memory_limit', '256M');
+        if (!is_dir($to)) {
+            mkdir($to);
+            chmod($to, 0777);
+        }
+        if (class_exists('ZipArchive')) {
+            // use ZipArchive
+            $zip = new ZipArchive();
+            $res = $zip->open($file);
+            if ($res === true) {
+                $zip->extractTo($to);
+                $zip->close();
+            } else {
+                throw new RuntimeException('Could not open zip file [ZipArchive].');
+            }
+        } else {
+            // use PclZip
+            $zip = new PclZip($file);
+            if ($zip->extract(PCLZIP_OPT_PATH, $to) === 0) {
+                throw new RuntimeException('Could not extract zip file [PclZip].');
+            }
+        }
 
+        return true;
+    }
 }

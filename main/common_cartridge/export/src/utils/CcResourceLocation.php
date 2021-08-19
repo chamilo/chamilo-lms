@@ -4,28 +4,29 @@
 final class CcResourceLocation
 {
     /**
+     * Root directory.
      *
-     * Root directory
      * @var string
      */
     private $rootdir = null;
     /**
+     * new directory.
      *
-     * new directory
      * @var string
      */
     private $dir = null;
     /**
+     * Full precalculated path.
      *
-     * Full precalculated path
      * @var string
      */
     private $fullpath = null;
 
     /**
+     * ctor.
      *
-     * ctor
      * @param string $rootdir - path to the containing directory
+     *
      * @throws InvalidArgumentException
      * @throws RuntimeException
      */
@@ -39,36 +40,37 @@ final class CcResourceLocation
         if ($dir === false) {
             throw new RuntimeException('Unable to create directory!');
         }
-        $this->rootdir  = $rdir;
-        $this->dir      = $dir;
+        $this->rootdir = $rdir;
+        $this->dir = $dir;
         $this->fullpath = $rdir.DIRECTORY_SEPARATOR.$dir;
     }
 
     /**
+     * Newly created directory.
      *
-     * Newly created directory
      * @return string
      */
-    public function dirname($endseparator=false)
+    public function dirname($endseparator = false)
     {
         return $this->dir.($endseparator ? '/' : '');
     }
 
     /**
+     * Full path to the new directory.
      *
-     * Full path to the new directory
      * @return string
      */
-    public function fullpath($endseparator=false)
+    public function fullpath($endseparator = false)
     {
         return $this->fullpath.($endseparator ? DIRECTORY_SEPARATOR : '');
     }
 
     /**
-     * Returns containing dir
+     * Returns containing dir.
+     *
      * @return string
      */
-    public function rootdir($endseparator=false)
+    public function rootdir($endseparator = false)
     {
         return $this->rootdir.($endseparator ? DIRECTORY_SEPARATOR : '');
     }

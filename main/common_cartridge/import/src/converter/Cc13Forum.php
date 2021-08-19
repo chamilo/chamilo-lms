@@ -5,14 +5,12 @@ require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
 class Cc13Forum extends Cc13Entities
 {
-
-    public function fullPath ($path, $dir_sep = DIRECTORY_SEPARATOR) {
-
+    public function fullPath($path, $dir_sep = DIRECTORY_SEPARATOR)
+    {
         $token = '$IMS-CC-FILEBASE$';
         $path = str_replace($token, '', $path);
 
         if (is_string($path) && ($path != '')) {
-            $dir_sep;
             $dot_dir = '.';
             $up_dir = '..';
             $length = strlen($path);
@@ -23,7 +21,6 @@ class Cc13Forum extends Cc13Entities
             $rcount = 0;
 
             while ($can_continue) {
-
                 $dir_part = ($start !== false) ? substr($rtemp, $start + 1, $length - $start) : $rtemp;
                 $can_continue = ($dir_part !== false);
 
@@ -33,9 +30,9 @@ class Cc13Forum extends Cc13Entities
                             $rcount++;
                         } else {
                             if ($rcount > 0) {
-                                $rcount --;
+                                $rcount--;
                             } else {
-                                $result = ($result == '') ? $dir_part : $dir_part . $dir_sep . $result;
+                                $result = ($result == '') ? $dir_part : $dir_part.$dir_sep.$result;
                             }
                         }
                     }
@@ -49,7 +46,6 @@ class Cc13Forum extends Cc13Entities
         return $result;
     }
 
-
     public function generateData()
     {
         $data = [];
@@ -58,6 +54,7 @@ class Cc13Forum extends Cc13Entities
                 $data[] = $this->getForumData($instance);
             }
         }
+
         return $data;
     }
 
@@ -70,15 +67,15 @@ class Cc13Forum extends Cc13Entities
             $values = [
                 'instance' => $instance['instance'],
                 'title' => self::safexml($topic_data['title']),
-                'description' => self::safexml($topic_data['description'])
+                'description' => self::safexml($topic_data['description']),
             ];
         }
+
         return $values;
     }
 
     public function storeForums($forums)
     {
-
         // Create a Forum category for the import CC 1.3.
         $courseInfo = api_get_course_info();
         $catForumValues['forum_category_title'] = 'CC1p3';
@@ -98,24 +95,22 @@ class Cc13Forum extends Cc13Entities
             $forumValues['moderated'] = 0;
             store_forum($forumValues, $courseInfo);
         }
+
         return true;
     }
 
-    public function getTopicData ($instance)
+    public function getTopicData($instance)
     {
-
         $topic_data = [];
 
         $topic_file = $this->getExternalXml($instance['resource_indentifier']);
 
         if (!empty($topic_file)) {
-
-            $topic_file_path = Cc1p3Convert::$pathToManifestFolder . DIRECTORY_SEPARATOR . $topic_file;
+            $topic_file_path = Cc1p3Convert::$pathToManifestFolder.DIRECTORY_SEPARATOR.$topic_file;
             $topic_file_dir = dirname($topic_file_path);
             $topic = $this->loadXmlResource($topic_file_path);
 
             if (!empty($topic)) {
-
                 $xpath = Cc1p3Convert::newxPath($topic, Cc1p3Convert::$forumns);
 
                 $topic_title = $xpath->query('/dt:topic/dt:title');
@@ -138,34 +133,31 @@ class Cc13Forum extends Cc13Entities
             $topic_attachments = $xpath->query('/dt:topic/dt:attachments/dt:attachment/@href');
 
             if ($topic_attachments->length > 0) {
-
                 $attachment_html = '';
 
                 foreach ($topic_attachments as $file) {
-                    $attachment_html .= $this->generateAttachmentHtml($this->fullPath($file->nodeValue,'/'));
+                    $attachment_html .= $this->generateAttachmentHtml($this->fullPath($file->nodeValue, '/'));
                 }
 
-                $topic_data['description'] = !empty($attachment_html) ? $topic_text . '<p>Attachments:</p>' . $attachment_html : $topic_text;
+                $topic_data['description'] = !empty($attachment_html) ? $topic_text.'<p>Attachments:</p>'.$attachment_html : $topic_text;
             }
         }
 
         return $topic_data;
     }
 
-    private function generateAttachmentHtml ($filename)
+    private function generateAttachmentHtml($filename)
     {
-
-        $images_extensions = ['gif' , 'jpeg' , 'jpg' , 'jif' , 'jfif' , 'png' , 'bmp'];
+        $images_extensions = ['gif', 'jpeg', 'jpg', 'jif', 'jfif', 'png', 'bmp'];
 
         $fileinfo = pathinfo($filename);
 
         if (in_array($fileinfo['extension'], $images_extensions)) {
-            return '<img src="$@FILEPHP@$/' . $filename . '" title="' . $fileinfo['basename'] . '" alt="' . $fileinfo['basename'] . '" /><br />';
+            return '<img src="$@FILEPHP@$/'.$filename.'" title="'.$fileinfo['basename'].'" alt="'.$fileinfo['basename'].'" /><br />';
         } else {
-            return '<a href="$@FILEPHP@$/' . $filename . '" title="' . $fileinfo['basename'] . '" alt="' . $fileinfo['basename'] . '">' . $fileinfo['basename'] . '</a><br />';
+            return '<a href="$@FILEPHP@$/'.$filename.'" title="'.$fileinfo['basename'].'" alt="'.$fileinfo['basename'].'">'.$fileinfo['basename'].'</a><br />';
         }
 
         return '';
     }
 }
-

@@ -27,19 +27,6 @@ class CcPage extends CcGeneralFile
         $this->intro = self::safexml(strip_tags($value));
     }
 
-    protected function onCreate()
-    {
-        $impl = new DOMImplementation();
-        $dtd  = $impl->createDocumentType( 'html',
-                                           '-//W3C//DTD XHTML 1.0 Strict//EN',
-                                           'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd');
-        $doc = $impl->createDocument($this->ccnamespaces[$this->rootns], null, $dtd);
-        $doc->formatOutput = true;
-        $doc->preserveWhiteSpace = true;
-        $this->doc = $doc;
-        parent::onCreate();
-    }
-
     public function onSave()
     {
         $rns = $this->ccnamespaces[$this->rootns];
@@ -92,6 +79,20 @@ class CcPage extends CcGeneralFile
                 $this->processPath();
             }
         }
+
         return $result;
+    }
+
+    protected function onCreate()
+    {
+        $impl = new DOMImplementation();
+        $dtd = $impl->createDocumentType('html',
+                                           '-//W3C//DTD XHTML 1.0 Strict//EN',
+                                           'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd');
+        $doc = $impl->createDocument($this->ccnamespaces[$this->rootns], null, $dtd);
+        $doc->formatOutput = true;
+        $doc->preserveWhiteSpace = true;
+        $this->doc = $doc;
+        parent::onCreate();
     }
 }

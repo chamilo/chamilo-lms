@@ -3,99 +3,97 @@
 
 class CcResources implements CcIResource
 {
-    public $identifier     = null;
-    public $type           = null;
-    public $dependency     = [];
-    public $identifierref  = null;
-    public $href           = null;
-    public $base           = null;
-    public $persiststate   = null;
-    public $metadata       = [];
-    public $filename       = null;
-    public $files          = [];
-    public $isempty        = null;
-    public $manifestroot   = null;
-    public $folder         = null;
+    public $identifier = null;
+    public $type = null;
+    public $dependency = [];
+    public $identifierref = null;
+    public $href = null;
+    public $base = null;
+    public $persiststate = null;
+    public $metadata = [];
+    public $filename = null;
+    public $files = [];
+    public $isempty = null;
+    public $manifestroot = null;
+    public $folder = null;
     public $instructoronly = false;
 
-    private $throwonerror   = true;
+    private $throwonerror = true;
 
-    public function __construct($manifest, $file, $folder='', $throwonerror = true)
+    public function __construct($manifest, $file, $folder = '', $throwonerror = true)
     {
         $this->throwonerror = $throwonerror;
         if (is_string($manifest)) {
             $this->folder = $folder;
             $this->processResource($manifest, $file, $folder);
             $this->manifestroot = $manifest;
-        } else if (is_object($manifest)) {
+        } elseif (is_object($manifest)) {
             $this->importResource($file, $manifest);
         }
     }
 
     /**
-     * Add resource
+     * Add resource.
      *
      * @param string $fname
      * @param string $location
      */
-    public function addResource ($fname, $location ='')
+    public function addResource($fname, $location = '')
     {
         $this->processResource($fname, $location, null);
     }
 
     /**
-     * Import a resource
-     *
-     * @param DOMElement $node
-     * @param CcIManifest $doc
+     * Import a resource.
      */
     public function importResource(DOMElement &$node, CcIManifest &$doc)
     {
-
         $searchstr = "//imscc:manifest[@identifier='".$doc->manifestID().
                      "']/imscc:resources/imscc:resource";
-        $this->identifier   = $this->getAttrValue($node, "identifier");
-        $this->type         = $this->getAttrValue($node, "type");
-        $this->href         = $this->getAttrValue($node, "href");
-        $this->base         = $this->getAttrValue($node, "base");
+        $this->identifier = $this->getAttrValue($node, "identifier");
+        $this->type = $this->getAttrValue($node, "type");
+        $this->href = $this->getAttrValue($node, "href");
+        $this->base = $this->getAttrValue($node, "base");
         $this->persiststate = null;
-        $nodo               = $doc->nodeList($searchstr."[@identifier='".
+        $nodo = $doc->nodeList($searchstr."[@identifier='".
                               $this->identifier."']/metadata/@href");
-        $this->metadata     = $nodo->nodeValue;
-        $this->filename     = $this->href;
-        $nlist              = $doc->nodeList($searchstr."[@identifier='".
+        $this->metadata = $nodo->nodeValue;
+        $this->filename = $this->href;
+        $nlist = $doc->nodeList($searchstr."[@identifier='".
                               $this->identifier."']/imscc:file/@href");
-        $this->files        = [];
+        $this->files = [];
         foreach ($nlist as $file) {
-            $this->files[]  = $file->nodeValue;
+            $this->files[] = $file->nodeValue;
         }
-        $nlist              = $doc->nodeList($searchstr."[@identifier='".
+        $nlist = $doc->nodeList($searchstr."[@identifier='".
                               $this->identifier."']/imscc:dependency/@identifierref");
-        $this->dependency   = [];
+        $this->dependency = [];
         foreach ($nlist as $dependency) {
-            $this->dependency[]  = $dependency->nodeValue;
+            $this->dependency[] = $dependency->nodeValue;
         }
-        $this->isempty      = false;
+        $this->isempty = false;
     }
 
     /**
-     * Get a attribute value
+     * Get a attribute value.
      *
      * @param DOMElement $nod
-     * @param string $name
-     * @param string $ns
+     * @param string     $name
+     * @param string     $ns
+     *
      * @return string
      */
-    public function getAttrValue(&$nod, $name, $ns=null)
+    public function getAttrValue(&$nod, $name, $ns = null)
     {
         if (is_null($ns)) {
-            return ($nod->hasAttribute($name) ? $nod->getAttribute($name) : null);
+            return $nod->hasAttribute($name) ? $nod->getAttribute($name) : null;
         }
-        return ($nod->hasAttributeNS($ns, $name) ? $nod->getAttributeNS($ns, $name) : null);
+
+        return $nod->hasAttributeNS($ns, $name) ? $nod->getAttributeNS($ns, $name) : null;
     }
 
     /**
-     * Process a resource
+     * Process a resource.
      *
      * @param string $manifestroot
      * @param string $fname
@@ -112,11 +110,11 @@ class CcResources implements CcIResource
         getDepFiles($manifestroot, $fname, $this->folder, $this->files);
         array_unshift($this->files, $folder.$fname);
         $this->initEmptyNew();
-        $this->href             = $folder.$fname;
-        $this->identifierref    = $folder.$fname;
-        $this->filename         = $fname;
-        $this->isempty          = false;
-        $this->folder           = $folder;
+        $this->href = $folder.$fname;
+        $this->identifierref = $folder.$fname;
+        $this->filename = $fname;
+        $this->isempty = false;
+        $this->folder = $folder;
     }
 
     public function adjustPath($mroot, $fname)
@@ -124,38 +122,38 @@ class CcResources implements CcIResource
         $result = null;
         if (file_exists($fname->filename)) {
             $result = pathDiff($fname->filename, $mroot);
-
-        } else if (file_exists($mroot.$fname->filename) || file_exists($mroot.DIRECTORY_SEPARATOR.$fname->filename)) {
+        } elseif (file_exists($mroot.$fname->filename) || file_exists($mroot.DIRECTORY_SEPARATOR.$fname->filename)) {
             $result = $fname->filename;
             toUrlPath($result);
             $result = trim($result, "/");
         }
+
         return $result;
     }
 
     public function initClean()
     {
-        $this->identifier    = null;
-        $this->type          = null;
-        $this->href          = null;
-        $this->base          = null;
-        $this->metadata      = [];
-        $this->dependency    = [];
+        $this->identifier = null;
+        $this->type = null;
+        $this->href = null;
+        $this->base = null;
+        $this->metadata = [];
+        $this->dependency = [];
         $this->identifierref = null;
-        $this->persiststate  = null;
-        $this->filename      = '';
-        $this->files         = [];
-        $this->isempty       = true;
+        $this->persiststate = null;
+        $this->filename = '';
+        $this->files = [];
+        $this->isempty = true;
     }
 
     public function initEmptyNew()
     {
-        $this->identifier    = CcHelpers::uuidgen('I_', '_R');
-        $this->type          = null;
-        $this->href          = null;
-        $this->persiststate  = null;
-        $this->filename      = null;
-        $this->isempty       = false;
+        $this->identifier = CcHelpers::uuidgen('I_', '_R');
+        $this->type = null;
+        $this->href = null;
+        $this->persiststate = null;
+        $this->filename = null;
+        $this->isempty = false;
         $this->identifierref = null;
     }
 
@@ -164,4 +162,3 @@ class CcResources implements CcIResource
         return $this->manifestroot;
     }
 }
-

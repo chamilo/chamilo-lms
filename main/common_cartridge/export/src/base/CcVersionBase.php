@@ -1,39 +1,24 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-
 /**
- * Abstract Version Base class
- *
+ * Abstract Version Base class.
  */
 abstract class CcVersionBase
 {
+    public $resources = null;
+    public $resources_ind = null;
+    public $organizations = null;
+    public $ccversion = null;
+    public $camversion = null;
 
     protected $_generator = null;
     protected $ccnamespaces = [];
     protected $isrootmanifest = false;
     protected $manifestID = null;
     protected $organizationid = null;
-    public $resources = null;
-    public $resources_ind = null;
     protected $metadata = null;
-    public $organizations = null;
     protected $base = null;
-    public $ccversion = null;
-    public $camversion = null;
-
-
-    abstract protected function onCreate(DOMDocument &$doc, $rootmanifestnode = null, $nmanifestID = null);
-
-    abstract protected function createMetadataManifest(CcIMetadataManifest $met, DOMDocument &$doc, $xmlnode = null);
-
-    abstract protected function createMetadataResource(CcIMetadataResource $met, DOMDocument &$doc, $xmlnode = null);
-
-    abstract protected function createMetadataFile(CcIMetadataFile $met, DOMDocument &$doc, $xmlnode = null);
-
-    abstract protected function createResource(CcIResource &$res, DOMDocument &$doc, $xmlnode=null);
-
-    abstract protected function createOrganization(CcIOrganization &$org, DOMDocument &$doc, $xmlnode=null);
 
     public function getCcNamespaces()
     {
@@ -49,7 +34,6 @@ abstract class CcVersionBase
     {
         return $this->createResource($res, $doc, $xmlnode);
     }
-
 
     public function createMetadataNode(&$met, DOMDocument &$doc, $xmlnode = null)
     {
@@ -123,4 +107,16 @@ abstract class CcVersionBase
     {
         $this->_generator = $value;
     }
+
+    abstract protected function onCreate(DOMDocument &$doc, $rootmanifestnode = null, $nmanifestID = null);
+
+    abstract protected function createMetadataManifest(CcIMetadataManifest $met, DOMDocument &$doc, $xmlnode = null);
+
+    abstract protected function createMetadataResource(CcIMetadataResource $met, DOMDocument &$doc, $xmlnode = null);
+
+    abstract protected function createMetadataFile(CcIMetadataFile $met, DOMDocument &$doc, $xmlnode = null);
+
+    abstract protected function createResource(CcIResource &$res, DOMDocument &$doc, $xmlnode = null);
+
+    abstract protected function createOrganization(CcIOrganization &$org, DOMDocument &$doc, $xmlnode = null);
 }

@@ -3,9 +3,9 @@
 
 class PkgStaticResources
 {
+    public $finished = false;
 
     private $values = [];
-    public $finished = false;
     private static $instance = null;
 
     /**
@@ -17,15 +17,16 @@ class PkgStaticResources
             $c = __CLASS__;
             self::$instance = new $c();
         }
+
         return self::$instance;
     }
 
     /**
+     * add new element.
      *
-     * add new element
      * @param string $identifier
      * @param string $file
-     * @param boolean $main
+     * @param bool   $main
      */
     public function add($key, $identifier, $file, $main, $node = null)
     {
@@ -47,8 +48,7 @@ class PkgStaticResources
 
     public function reset()
     {
-        $this->values   = [];
+        $this->values = [];
         $this->finished = false;
     }
 }
-

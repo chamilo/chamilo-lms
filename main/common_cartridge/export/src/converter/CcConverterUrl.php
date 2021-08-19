@@ -3,10 +3,9 @@
 
 class CcConverterUrl extends CcConverters
 {
-
     public function __construct(CcIItem &$item, CcIManifest &$manifest, $rootpath, $path)
     {
-        $this->ccType     = CcVersion13::weblink;
+        $this->ccType = CcVersion13::weblink;
         $this->defaultfile = 'url.xml';
         $this->defaultname = 'weblink.xml';
         parent::__construct($item, $manifest, $rootpath, $path);
@@ -22,8 +21,7 @@ class CcConverterUrl extends CcConverters
             $rt->setUrl($url, $objLink['target']);
         }
         $this->store($rt, $outdir, $title);
+
         return true;
     }
-
 }
-

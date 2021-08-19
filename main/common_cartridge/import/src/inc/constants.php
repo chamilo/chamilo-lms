@@ -44,4 +44,3 @@ define('CC_QUIZ_ESSAY', 'cc.essay.v0p1');
 define('TOOL_QUIZ_MULTIPLE_CHOICE', 'multichoice');
 define('TOOL_QUIZ_MULTIANSWER', 'multianswer');
 define('TOOL_QUIZ_MULTIPLE_RESPONSE', 'multichoice');
-

@@ -3,7 +3,6 @@
 
 class CcConverterForum extends CcConverters
 {
-
     public function __construct(CcIItem &$item, CcIManifest &$manifest, $rootpath, $path)
     {
         $this->ccType = CcVersion13::discussiontopic;
@@ -31,8 +30,7 @@ class CcConverterForum extends CcConverters
             $deps = $result[1];
         }
         $this->store($rt, $outdir, $title, $deps);
+
         return true;
     }
-
 }
-

@@ -3,112 +3,99 @@
 
 class CcMetadataManifest implements CcIMetadataManifest
 {
-
-    public  $arraygeneral   = [];
-    public  $arraytech      = [];
-    public  $arrayrights    = [];
-    public  $arraylifecycle = [];
+    public $arraygeneral = [];
+    public $arraytech = [];
+    public $arrayrights = [];
+    public $arraylifecycle = [];
 
     public function addMetadataGeneral($obj)
     {
-        if (empty($obj)){
+        if (empty($obj)) {
             throw new Exception('Medatada Object given is invalid or null!');
         }
-        !is_null($obj->title)? $this->arraygeneral['title']=$obj->title:null;
-        !is_null($obj->language)? $this->arraygeneral['language']=$obj->language:null;
-        !is_null($obj->description)? $this->arraygeneral['description']=$obj->description:null;
-        !is_null($obj->keyword)? $this->arraygeneral['keyword']=$obj->keyword:null;
-        !is_null($obj->coverage)? $this->arraygeneral['coverage']=$obj->coverage:null;
-        !is_null($obj->catalog)? $this->arraygeneral['catalog']=$obj->catalog:null;
-        !is_null($obj->entry)? $this->arraygeneral['entry']=$obj->entry:null;
+        !is_null($obj->title) ? $this->arraygeneral['title'] = $obj->title : null;
+        !is_null($obj->language) ? $this->arraygeneral['language'] = $obj->language : null;
+        !is_null($obj->description) ? $this->arraygeneral['description'] = $obj->description : null;
+        !is_null($obj->keyword) ? $this->arraygeneral['keyword'] = $obj->keyword : null;
+        !is_null($obj->coverage) ? $this->arraygeneral['coverage'] = $obj->coverage : null;
+        !is_null($obj->catalog) ? $this->arraygeneral['catalog'] = $obj->catalog : null;
+        !is_null($obj->entry) ? $this->arraygeneral['entry'] = $obj->entry : null;
     }
 
     public function addMetadataTechnical($obj)
     {
-        if (empty($obj)){
+        if (empty($obj)) {
             throw new Exception('Medatada Object given is invalid or null!');
         }
-        !is_null($obj->format)? $this->arraytech['format']=$obj->format:null;
+        !is_null($obj->format) ? $this->arraytech['format'] = $obj->format : null;
     }
-
 
     public function addMetadataRights($obj)
     {
-        if (empty($obj)){
+        if (empty($obj)) {
             throw new Exception('Medatada Object given is invalid or null!');
         }
-        !is_null($obj->copyright)? $this->arrayrights['copyrightAndOtherRestrictions']=$obj->copyright:null;
-        !is_null($obj->description)? $this->arrayrights['description']=$obj->description:null;
-        !is_null($obj->cost)? $this->arrayrights['cost']=$obj->cost:null;
-
+        !is_null($obj->copyright) ? $this->arrayrights['copyrightAndOtherRestrictions'] = $obj->copyright : null;
+        !is_null($obj->description) ? $this->arrayrights['description'] = $obj->description : null;
+        !is_null($obj->cost) ? $this->arrayrights['cost'] = $obj->cost : null;
     }
-
 
     public function addMetadataLifecycle($obj)
     {
-        if (empty($obj)){
+        if (empty($obj)) {
             throw new Exception('Medatada Object given is invalid or null!');
         }
-        !is_null($obj->role)? $this->arraylifecycle['role']=$obj->role:null;
-        !is_null($obj->entity)? $this->arraylifecycle['entity']=$obj->entity:null;
-        !is_null($obj->date)? $this->arraylifecycle['date']=$obj->date:null;
-
+        !is_null($obj->role) ? $this->arraylifecycle['role'] = $obj->role : null;
+        !is_null($obj->entity) ? $this->arraylifecycle['entity'] = $obj->entity : null;
+        !is_null($obj->date) ? $this->arraylifecycle['date'] = $obj->date : null;
     }
-
 }
 
 /**
- * Metadata General Type
- *
+ * Metadata General Type.
  */
 class CcMetadataGeneral
 {
+    public $title = [];
+    public $language = [];
+    public $description = [];
+    public $keyword = [];
+    public $coverage = [];
+    public $catalog = [];
+    public $entry = [];
 
-    public  $title          = [];
-    public  $language       = [];
-    public  $description    = [];
-    public  $keyword        = [];
-    public  $coverage       = [];
-    public  $catalog        = [];
-    public  $entry          = [];
-
-
-
-    public function setCoverage ($coverage,$language)
+    public function setCoverage($coverage, $language)
     {
         $this->coverage[] = [$language, $coverage];
     }
 
-    public function setDescription ($description,$language)
+    public function setDescription($description, $language)
     {
         $this->description[] = [$language, $description];
     }
 
-    public function setKeyword ($keyword,$language)
+    public function setKeyword($keyword, $language)
     {
         $this->keyword[] = [$language, $keyword];
     }
 
-    public function setLanguage ($language)
+    public function setLanguage($language)
     {
         $this->language[] = [$language];
     }
 
-    public function setTitle ($title,$language)
+    public function setTitle($title, $language)
     {
-        $this->title[] = [$language,$title];
+        $this->title[] = [$language, $title];
     }
 
-    public function setCatalog ($cat)
+    public function setCatalog($cat)
     {
         $this->catalog[] = [$cat];
     }
 
-    public function setEntry ($entry)
+    public function setEntry($entry)
     {
         $this->entry[] = [$entry];
     }
-
-
 }
-

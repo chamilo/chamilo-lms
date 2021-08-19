@@ -2,36 +2,28 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Organization Class
- *
+ * Organization Class.
  */
-
 class CcOrganization implements CcIOrganization
 {
+    public $title = null;
+    public $identifier = null;
+    public $structure = null;
+    public $itemlist = null;
+    private $metadata = null;
+    private $sequencing = null;
 
-
-    public   $title         = null;
-    public   $identifier    = null;
-    public   $structure     = null;
-    public   $itemlist      = null;
-    private  $metadata      = null;
-    private  $sequencing    = null;
-
-
-
-    public function __construct($node=null, $doc=null)
+    public function __construct($node = null, $doc = null)
     {
         if (is_object($node) && is_object($doc)) {
-            $this->processOrganization($node,$doc);
+            $this->processOrganization($node, $doc);
         } else {
             $this->initNew();
         }
     }
 
     /**
-     * Add one Item into the Organization
-     *
-     * @param CcIItem $item
+     * Add one Item into the Organization.
      */
     public function addItem(CcIItem &$item)
     {
@@ -42,100 +34,96 @@ class CcOrganization implements CcIOrganization
     }
 
     /**
-     * Add new Item into the Organization
+     * Add new Item into the Organization.
      *
      * @param string $title
+     *
      * @return CcIItem
      */
-    public function addNewItem($title='')
+    public function addNewItem($title = '')
     {
         $nitem = new CcItem();
         $nitem->title = $title;
         $this->addItem($nitem);
+
         return $nitem;
     }
-
 
     public function hasItems()
     {
         return is_array($this->itemlist) && (count($this->itemlist) > 0);
     }
 
-    public function attrValue(&$nod, $name, $ns=null)
+    public function attrValue(&$nod, $name, $ns = null)
     {
-      return is_null($ns) ?
+        return is_null($ns) ?
              ($nod->hasAttribute($name) ? $nod->getAttribute($name) : null) :
              ($nod->hasAttributeNS($ns, $name) ? $nod->getAttributeNS($ns, $name) : null);
     }
 
-
-    public function processOrganization(&$node,&$doc)
+    public function processOrganization(&$node, &$doc)
     {
-        $this->identifier   = $this->attrValue($node,"identifier");
-        $this->structure    = $this->attrValue($node,"structure");
-        $this->title        = '';
-        $nlist              = $node->getElementsByTagName('title');
-        if (is_object($nlist) && ($nlist->length > 0) ) {
+        $this->identifier = $this->attrValue($node, "identifier");
+        $this->structure = $this->attrValue($node, "structure");
+        $this->title = '';
+        $nlist = $node->getElementsByTagName('title');
+        if (is_object($nlist) && ($nlist->length > 0)) {
             $this->title = $nlist->item(0)->nodeValue;
         }
         $nlist = $doc->nodeList("//imscc:organization[@identifier='".$this->identifier."']/imscc:item");
         $this->itemlist = [];
         foreach ($nlist as $item) {
-            $this->itemlist[$item->getAttribute("identifier")] = new CcItem($item,$doc);
+            $this->itemlist[$item->getAttribute("identifier")] = new CcItem($item, $doc);
         }
-        $this->isempty=false;
+        $this->isempty = false;
     }
 
     public function initNew()
     {
-        $this->title        = null;
-        $this->identifier   = CcHelpers::uuidgen('O_');
-        $this->structure    = 'rooted-hierarchy';
-        $this->itemlist     = null;
-        $this->metadata     = null;
-        $this->sequencing   = null;
-
+        $this->title = null;
+        $this->identifier = CcHelpers::uuidgen('O_');
+        $this->structure = 'rooted-hierarchy';
+        $this->itemlist = null;
+        $this->metadata = null;
+        $this->sequencing = null;
     }
 
     public function uuidgen()
     {
         $uuid = sprintf('%04x%04x', mt_rand(0, 65535), mt_rand(0, 65535));
+
         return strtoupper(trim($uuid));
     }
-
 }
 
-
 /**
- * Item Class
- *
+ * Item Class.
  */
-class CcItem  implements CcIItem
+class CcItem implements CcIItem
 {
+    public $identifier = null;
+    public $identifierref = null;
+    public $isvisible = null;
+    public $title = null;
+    public $parameters = null;
+    public $childitems = null;
+    private $parentItem = null;
+    private $isempty = true;
 
-    public  $identifier     = null;
-    public  $identifierref  = null;
-    public  $isvisible      = null;
-    public  $title          = null;
-    public  $parameters     = null;
-    public  $childitems     = null;
-    private $parentItem     = null;
-    private $isempty        = true;
-
-    public function __construct($node=null,$doc=null)
+    public function __construct($node = null, $doc = null)
     {
         if (is_object($node)) {
             $clname = get_class($node);
-            if ($clname =='CcResource') {
+            if ($clname == 'CcResource') {
                 $this->initNewItem();
                 $this->identifierref = $node->identifier;
                 $this->title = is_string($doc) && (!empty($doc)) ? $doc : 'item';
-            } else if ($clname =='CcManifest') {
+            } elseif ($clname == 'CcManifest') {
                 $this->initNewItem();
                 $this->identifierref = $node->manifestID();
                 $this->title = is_string($doc) && (!empty($doc)) ? $doc : 'item';
-            } else if ( is_object($doc)){
-                $this->processItem($node,$doc);
+            } elseif (is_object($doc)) {
+                $this->processItem($node, $doc);
             } else {
                 $this->initNewItem();
             }
@@ -144,42 +132,37 @@ class CcItem  implements CcIItem
         }
     }
 
-
-
-    public function attrValue(&$nod, $name, $ns=null)
+    public function attrValue(&$nod, $name, $ns = null)
     {
-      return is_null($ns) ?
+        return is_null($ns) ?
              ($nod->hasAttribute($name) ? $nod->getAttribute($name) : null) :
              ($nod->hasAttributeNS($ns, $name) ? $nod->getAttributeNS($ns, $name) : null);
     }
 
-
-    public function processItem(&$node,&$doc)
+    public function processItem(&$node, &$doc)
     {
-        $this->identifier       = $this->attrValue($node,"identifier");
-        $this->structure        = $this->attrValue($node,"structure");
-        $this->identifierref    = $this->attrValue($node,"identifierref");
-        $atr = $this->attrValue($node,"isvisible");
+        $this->identifier = $this->attrValue($node, "identifier");
+        $this->structure = $this->attrValue($node, "structure");
+        $this->identifierref = $this->attrValue($node, "identifierref");
+        $atr = $this->attrValue($node, "isvisible");
         $this->isvisible = is_null($atr) ? true : $atr;
         $nlist = $node->getElementsByTagName('title');
-        if (is_object($nlist) && ($nlist->length > 0) ) {
+        if (is_object($nlist) && ($nlist->length > 0)) {
             $this->title = $nlist->item(0)->nodeValue;
         }
         $nlist = $doc->nodeList("//imscc:item[@identifier='".$this->identifier."']/imscc:item");
         if ($nlist->length > 0) {
             $this->childitems = [];
             foreach ($nlist as $item) {
-                $key=$this->attrValue($item,"identifier");
-                $this->childitems[$key] = new CcItem($item,$doc);
+                $key = $this->attrValue($item, "identifier");
+                $this->childitems[$key] = new CcItem($item, $doc);
             }
         }
         $this->isempty = false;
     }
 
     /**
-     * Add one Child Item
-     *
-     * @param CcIItem $item
+     * Add one Child Item.
      */
     public function addChildItem(CcIItem &$item)
     {
@@ -189,18 +172,19 @@ class CcItem  implements CcIItem
         $this->childitems[$item->identifier] = $item;
     }
 
-
     /**
-     * Add new child Item
+     * Add new child Item.
      *
      * @param string $title
+     *
      * @return CcIItem
      */
-    public function add_new_child_item($title='')
+    public function add_new_child_item($title = '')
     {
-        $sc         = new CcItem();
-        $sc->title  = $title;
+        $sc = new CcItem();
+        $sc->title = $title;
         $this->addChildItem($sc);
+
         return $sc;
     }
 
@@ -212,12 +196,11 @@ class CcItem  implements CcIItem
         $resident = null;
         if (is_string($resource)) {
             $resident = $resource;
-        } else if (is_object($resource)) {
+        } elseif (is_object($resource)) {
             $clname = get_class($resource);
             if ($clname == 'CcResource') {
                 $resident = $resource->identifier;
-            } else
-            if ($clname == 'CcManifest') {
+            } elseif ($clname == 'CcManifest') {
                 $resident = $resource->manifestID();
             } else {
                 throw new Exception("Unable to attach resource. Invalid object.");
@@ -241,24 +224,23 @@ class CcItem  implements CcIItem
 
     public function initClean()
     {
-            $this->identifier   = null;
-            $this->isvisible    = null;
-            $this->title        = null;
-            $this->parameters   = null;
-            $this->childitems   = null;
-            $this->parentItem   = null;
-            $this->isempty      = true;
+        $this->identifier = null;
+        $this->isvisible = null;
+        $this->title = null;
+        $this->parameters = null;
+        $this->childitems = null;
+        $this->parentItem = null;
+        $this->isempty = true;
     }
 
     public function initNewItem()
     {
-            $this->identifier   = CcHelpers::uuidgen('I_');
-            $this->isvisible    = true; //default is true
-            $this->title        = null;
-            $this->parameters   = null;
-            $this->childitems   = null;
-            $this->parentItem   = null;
-            $this->isempty      = false;
+        $this->identifier = CcHelpers::uuidgen('I_');
+        $this->isvisible = true; //default is true
+        $this->title = null;
+        $this->parameters = null;
+        $this->childitems = null;
+        $this->parentItem = null;
+        $this->isempty = false;
     }
-
 }

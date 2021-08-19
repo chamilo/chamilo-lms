@@ -3,50 +3,55 @@
 
 abstract class CcHelpers
 {
-
     /**
-     * Checks extension of the supplied filename
+     * Checks extension of the supplied filename.
      *
      * @param string $filename
      */
     public static function isHtml($filename)
     {
         $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
         return in_array($extension, ['htm', 'html']);
     }
 
     /**
-     * Generates unique identifier
+     * Generates unique identifier.
+     *
      * @param string $prefix
      * @param string $suffix
+     *
      * @return string
      */
     public static function uuidgen($prefix = '', $suffix = '', $uppercase = true)
     {
         $uuid = trim(sprintf('%s%04x%04x%s', $prefix, mt_rand(0, 65535), mt_rand(0, 65535), $suffix));
         $result = $uppercase ? strtoupper($uuid) : strtolower($uuid);
+
         return $result;
     }
 
     /**
-     * Creates new folder with random name
+     * Creates new folder with random name.
+     *
      * @param string $where
      * @param string $prefix
      * @param string $suffix
+     *
      * @return mixed - directory short name or false in case of failure
      */
     public static function randomdir($where, $prefix = '', $suffix = '')
     {
-
         $permDirs = api_get_permissions_for_new_directories();
 
-        $dirname    = false;
+        $dirname = false;
         $randomname = self::uuidgen($prefix, $suffix, false);
         $newdirname = $where.DIRECTORY_SEPARATOR.$randomname;
         if (mkdir($newdirname)) {
             chmod($newdirname, $permDirs);
             $dirname = $randomname;
         }
+
         return $dirname;
     }
 
@@ -59,6 +64,7 @@ abstract class CcHelpers
             }
             $result .= "//*[starts-with(@{$attribute},'{$search}')]/@{$attribute}";
         }
+
         return $result;
     }
 
@@ -74,13 +80,15 @@ abstract class CcHelpers
             }
             $result[] = rawurldecode($rvalue);
         }
+
         return $result;
     }
 
     /**
+     * Get list of embedded files.
      *
-     * Get list of embedded files
      * @param string $html
+     *
      * @return multitype:mixed
      */
     public static function embeddedFiles($html)
@@ -95,12 +103,12 @@ abstract class CcHelpers
             $result2 = self::processEmbeddedFiles($doc, $attributes, '$@FILEPHP@$', '$@SLASH@$');
             $result = array_merge($result1, $result2);
         }
+
         return $result;
     }
 
     public static function embeddedMapping($packageroot, $contextid = null, $folder = null, $docfilepath = null)
     {
-
         if (isset($folder)) {
             $files = array_diff(scandir($folder), ['.', '..']);
         } else {
@@ -110,26 +118,26 @@ abstract class CcHelpers
 
         $depfiles = [];
         foreach ($files as $file) {
-            $mainfile   = 1;
-            $filename   = $file;
-            $filepath   = DIRECTORY_SEPARATOR;
-            $source     = '';
-            $author     = '';
-            $license    = '';
+            $mainfile = 1;
+            $filename = $file;
+            $filepath = DIRECTORY_SEPARATOR;
+            $source = '';
+            $author = '';
+            $license = '';
             $hashedname = '';
-            $hashpart   = '';
+            $hashpart = '';
 
-            $location   = $folder.DIRECTORY_SEPARATOR.$file;
-            $type       = mime_content_type($file);
+            $location = $folder.DIRECTORY_SEPARATOR.$file;
+            $type = mime_content_type($file);
 
-            $depfiles[$filepath.$filename] = [ $location,
+            $depfiles[$filepath.$filename] = [$location,
                                                     ($mainfile == 1),
                                                     strtolower(str_replace(' ', '_', $filename)),
                                                     $type,
                                                     $source,
                                                     $author,
                                                     $license,
-                                                    strtolower(str_replace(' ', '_', $filepath))];
+                                                    strtolower(str_replace(' ', '_', $filepath)), ];
         }
 
         return $depfiles;
@@ -137,7 +145,6 @@ abstract class CcHelpers
 
     public static function addFiles(CcIManifest &$manifest, $packageroot, $outdir, $allinone = true, $folder = null, $docfilepath = null)
     {
-
         $permDirs = api_get_permissions_for_new_directories();
 
         $files = CcHelpers::embeddedMapping($packageroot, null, $folder, $docfilepath);
@@ -183,21 +190,21 @@ abstract class CcHelpers
     }
 
     /**
-     *
      * Excerpt from IMS CC 1.1 overview :
      * No spaces in filenames, directory and file references should
-     * employ all lowercase or all uppercase - no mixed case
+     * employ all lowercase or all uppercase - no mixed case.
      *
-     * @param CcIManifest $manifest
      * @param string $packageroot
-     * @param integer $contextid
+     * @param int    $contextid
      * @param string $outdir
-     * @param boolean $allinone
+     * @param bool   $allinone
+     *
      * @throws RuntimeException
      */
     public static function handleStaticContent(CcIManifest &$manifest, $packageroot, $contextid, $outdir, $allinone = true, $folder = null)
     {
         self::addFiles($manifest, $packageroot, $outdir, $allinone, $folder);
+
         return PkgStaticResources::instance()->getValues();
     }
 
@@ -270,8 +277,7 @@ abstract class CcHelpers
             }
             $text = $content;
         }
+
         return [$text, $deps];
     }
-
 }
-

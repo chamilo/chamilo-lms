@@ -3,7 +3,6 @@
 
 class PkgResourceDependencies
 {
-
     private $values = [];
     private static $instance = null;
 
@@ -16,12 +15,10 @@ class PkgResourceDependencies
             $c = __CLASS__;
             self::$instance = new $c();
         }
+
         return self::$instance;
     }
 
-    /**
-     * @param array $deps
-     */
     public function add(array $deps)
     {
         $this->values = array_merge($this->values, $deps);
@@ -39,6 +36,4 @@ class PkgResourceDependencies
     {
         return $this->values;
     }
-
 }
-

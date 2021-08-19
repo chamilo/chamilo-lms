@@ -4,12 +4,33 @@
 final class ErrorMessages
 {
     /**
-     *
      * @static ErrorMessages
      */
     private static $instance = null;
-    private function __construct(){}
-    private function __clone(){}
+
+    /**
+     * @var array
+     */
+    private $items = [];
+
+    private function __construct()
+    {
+    }
+
+    private function __clone()
+    {
+    }
+
+    /**
+     * Casting to string method.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->toString(false);
+    }
+
     /**
      * @return ErrorMessages
      */
@@ -19,13 +40,9 @@ final class ErrorMessages
             $c = __CLASS__;
             self::$instance = new $c();
         }
+
         return self::$instance;
     }
-
-    /**
-     * @var array
-     */
-    private $items = [];
 
     /**
      * @param string $msg
@@ -46,7 +63,7 @@ final class ErrorMessages
     }
 
     /**
-     * Empties the error content
+     * Empties the error content.
      */
     public function reset()
     {
@@ -54,7 +71,8 @@ final class ErrorMessages
     }
 
     /**
-     * @param boolean $web
+     * @param bool $web
+     *
      * @return string
      */
     public function toString($web = false)
@@ -77,64 +95,28 @@ final class ErrorMessages
         if ($web) {
             $result .= '</ol>'.PHP_EOL;
         }
+
         return $result;
     }
-
-    /**
-     * Casting to string method
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->toString(false);
-    }
-
 }
 
 final class LibxmlErrorsMgr
 {
     /**
-     * @var boolean
+     * @var bool
      */
     private $previous = false;
 
     /**
-     * @param boolean $reset
+     * @param bool $reset
      */
-    public function __construct($reset=false)
+    public function __construct($reset = false)
     {
         if ($reset) {
             ErrorMessages::instance()->reset();
         }
         $this->previous = libxml_use_internal_errors(true);
         libxml_clear_errors();
-    }
-
-    private function collectErrors ($filename='')
-    {
-        $errors = libxml_get_errors();
-        static $error_types = [
-        LIBXML_ERR_ERROR => 'Error'
-        ,LIBXML_ERR_FATAL => 'Fatal Error'
-        ,LIBXML_ERR_WARNING => 'Warning'
-        ];
-        $result = [];
-        foreach($errors as $error){
-            $add = '';
-            if (!empty($filename)) {
-                $add = " in {$filename}";
-            } elseif (!empty($error->file)) {
-                $add = " in {$error->file}";
-            }
-            $line = '';
-            if (!empty($error->line)) {
-                $line = " at line {$error->line}";
-            }
-            $err = "{$error_types[$error->level]}{$add}: {$error->message}{$line}";
-            ErrorMessages::instance()->add($err);
-        }
-        libxml_clear_errors();
-        return $result;
     }
 
     public function __destruct()
@@ -149,8 +131,33 @@ final class LibxmlErrorsMgr
     {
         $this->collectErrors();
     }
-}
 
+    private function collectErrors($filename = '')
+    {
+        $errors = libxml_get_errors();
+        static $error_types = [
+        LIBXML_ERR_ERROR => 'Error', LIBXML_ERR_FATAL => 'Fatal Error', LIBXML_ERR_WARNING => 'Warning',
+        ];
+        $result = [];
+        foreach ($errors as $error) {
+            $add = '';
+            if (!empty($filename)) {
+                $add = " in {$filename}";
+            } elseif (!empty($error->file)) {
+                $add = " in {$error->file}";
+            }
+            $line = '';
+            if (!empty($error->line)) {
+                $line = " at line {$error->line}";
+            }
+            $err = "{$error_types[$error->level]}{$add}: {$error->message}{$line}";
+            ErrorMessages::instance()->add($err);
+        }
+        libxml_clear_errors();
+
+        return $result;
+    }
+}
 
 function validateXml($xml, $schema)
 {
@@ -172,22 +179,22 @@ function validateXml($xml, $schema)
 
 class CcValidateType
 {
-    const manifest_validator1   = 'cclibxml2validator.xsd'                       ;
-    const assesment_validator1  = '/domainProfile_4/ims_qtiasiv1p2_localised.xsd';
-    const discussion_validator1 = '/domainProfile_6/imsdt_v1p0_localised.xsd'    ;
-    const weblink_validator1    = '/domainProfile_5/imswl_v1p0_localised.xsd'    ;
+    const manifest_validator1 = 'cclibxml2validator.xsd';
+    const assesment_validator1 = '/domainProfile_4/ims_qtiasiv1p2_localised.xsd';
+    const discussion_validator1 = '/domainProfile_6/imsdt_v1p0_localised.xsd';
+    const weblink_validator1 = '/domainProfile_5/imswl_v1p0_localised.xsd';
 
-    const manifest_validator11   = 'cc11libxml2validator.xsd'    ;
-    const blti_validator11       = 'imslticc_v1p0p1.xsd'         ;
-    const assesment_validator11  = 'ccv1p1_qtiasiv1p2p1_v1p0.xsd';
-    const discussion_validator11 = 'ccv1p1_imsdt_v1p1.xsd'       ;
-    const weblink_validator11    = 'ccv1p1_imswl_v1p1.xsd'       ;
+    const manifest_validator11 = 'cc11libxml2validator.xsd';
+    const blti_validator11 = 'imslticc_v1p0p1.xsd';
+    const assesment_validator11 = 'ccv1p1_qtiasiv1p2p1_v1p0.xsd';
+    const discussion_validator11 = 'ccv1p1_imsdt_v1p1.xsd';
+    const weblink_validator11 = 'ccv1p1_imswl_v1p1.xsd';
 
-    const manifest_validator13   = 'cc13libxml2validator.xsd'    ;
-    const blti_validator13       = 'imslticc_v1p3.xsd'         ;
-    const assesment_validator13  = 'ccv1p3_qtiasiv1p2p1_v1p0.xsd';
-    const discussion_validator13 = 'ccv1p3_imsdt_v1p3.xsd'       ;
-    const weblink_validator13    = 'ccv1p3_imswl_v1p3.xsd'       ;
+    const manifest_validator13 = 'cc13libxml2validator.xsd';
+    const blti_validator13 = 'imslticc_v1p3.xsd';
+    const assesment_validator13 = 'ccv1p3_qtiasiv1p2p1_v1p0.xsd';
+    const discussion_validator13 = 'ccv1p3_imsdt_v1p3.xsd';
+    const weblink_validator13 = 'ccv1p3_imswl_v1p3.xsd';
 
     /**
      * @var string
@@ -206,14 +213,16 @@ class CcValidateType
     }
 
     /**
-     * Validates the item
-     * @param  string $element - File path for the xml
-     * @return boolean
+     * Validates the item.
+     *
+     * @param string $element - File path for the xml
+     *
+     * @return bool
      */
     public function validate($element)
     {
         $this->last_error = null;
-        $celement   = realpath($element);
+        $celement = realpath($element);
         $cvalidator = realpath($this->location.DIRECTORY_SEPARATOR.$this->type);
         $result = (empty($celement) || empty($cvalidator));
         if (!$result) {
@@ -223,9 +232,9 @@ class CcValidateType
             $result = $doc->load($celement, LIBXML_NONET) &&
                       $doc->schemaValidate($cvalidator);
         }
+
         return $result;
     }
-
 }
 
 class ManifestValidator extends CcValidateType

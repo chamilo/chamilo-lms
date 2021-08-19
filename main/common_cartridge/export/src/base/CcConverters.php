@@ -3,23 +3,23 @@
 
 abstract class CcConverters
 {
-
-    protected $item     = null;
+    protected $item = null;
     protected $manifest = null;
     protected $rootpath = null;
-    protected $path     = null;
+    protected $path = null;
     protected $defaultfile = null;
     protected $defaultname = null;
     protected $ccType = null;
     protected $doc = null;
 
     /**
+     * ctor.
      *
-     * ctor
-     * @param  CcIItem $item
-     * @param  CcIManifest $manifest
-     * @param  string $rootpath
-     * @param  string $path
+     * @param CcIItem $item
+     * @param CcIManifest $manifest
+     * @param string $rootpath
+     * @param string $path
+     *
      * @throws InvalidArgumentException
      */
     public function __construct(CcIItem &$item, CcIManifest &$manifest, $rootpath, $path)
@@ -34,42 +34,45 @@ abstract class CcConverters
         }
         $doc = new XMLGenericDocument();
 
-        $this->doc      = $doc;
-        $this->item     = $item;
+        $this->doc = $doc;
+        $this->item = $item;
         $this->manifest = $manifest;
         $this->rootpath = $rpath;
-        $this->path     = $rpath2;
+        $this->path = $rpath2;
     }
 
     /**
+     * performs conversion.
      *
-     * performs conversion
      * @param string $outdir - root directory of common cartridge
-     * @return boolean
+     * @param object $objCourse
+     *
+     * @return bool
      */
     abstract public function convert($outdir, $objCourse);
 
     /**
-     *
      * Is the element visible in the course?
+     *
      * @throws RuntimeException
+     *
      * @return bool
      */
     protected function isVisible()
     {
         $tdoc = new XMLGenericDocument();
+
         return true;
     }
 
     /**
-     *
-     * Stores any files that need to be stored
+     * Stores any files that need to be stored.
      */
     protected function store(CcGeneralFile $doc, $outdir, $title, $deps = null)
     {
         $rdir = new CcResourceLocation($outdir);
         $rtp = $rdir->fullpath(true).$this->defaultname;
-        if ( $doc->saveTo($rtp) ) {
+        if ($doc->saveTo($rtp)) {
             $resource = new CcResources($rdir->rootdir(), $this->defaultname, $rdir->dirname(true));
             $resource->dependency = empty($deps) ? [] : $deps;
             $resource->instructoronly = !$this->isVisible();

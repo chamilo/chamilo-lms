@@ -3,10 +3,8 @@
 
 class Cc13Convert
 {
-
     public static function convert($packagedir, $outdir, $objCourse)
     {
-
         $dir = realpath($packagedir);
         if (empty($dir)) {
             throw new InvalidArgumentException('Directory does not exist!');
@@ -17,7 +15,6 @@ class Cc13Convert
         }
 
         if (!empty($objCourse)) {
-
             //Initialize the manifest metadata class
             $meta = new CcMetadataManifest();
 
@@ -46,7 +43,7 @@ class Cc13Convert
 
             // We check the quiz sections
             if (isset($resources['quiz'])) {
-                $quizSections = self::getItemSections($resources['quiz'], 'quiz',$count, $objCourse->info['code'], $resources['Exercise_Question']);
+                $quizSections = self::getItemSections($resources['quiz'], 'quiz', $count, $objCourse->info['code'], $resources['Exercise_Question']);
                 $sections = array_merge($sections, $quizSections);
             }
 
@@ -70,7 +67,7 @@ class Cc13Convert
 
             // We check the link sections
             if (isset($resources['link'])) {
-                $linkSections = self::getItemSections($resources['link'], 'link',$count, $objCourse->info['code'], $resources['Link_Category']);
+                $linkSections = self::getItemSections($resources['link'], 'link', $count, $objCourse->info['code'], $resources['Link_Category']);
                 $sections = array_merge($sections, $linkSections);
             }
 
@@ -90,14 +87,15 @@ class Cc13Convert
 
             $manifestpath = $outdir.DIRECTORY_SEPARATOR.'imsmanifest.xml';
             $saved = $manifest->saveTo($manifestpath);
+
             return $saved;
         }
+
         return false;
     }
 
     protected static function getItemSections($itemData, $itemType, &$count, $courseCode, $itmesExtraData = null)
     {
-
         $sections = [];
         switch ($itemType) {
             case 'quiz':
@@ -107,20 +105,19 @@ class Cc13Convert
                 if ($itemType == 'wiki') {
                     $convertType = 'Page';
                 }
-                $sectionid      = $count;
-                $sectiontitle   = ucfirst($itemType);
+                $sectionid = $count;
+                $sectiontitle = ucfirst($itemType);
                 $sequence = self::getSequence($itemData, 0, $convertType, $courseCode, $itmesExtraData);
                 $sections[$sectionid] = [$sectiontitle, $sequence];
                 $count++;
                 break;
             case 'link':
                 $links = self::getSequence($itemData, null, $itemType);
-                foreach($links as $categoryId => $sequence) {
-                    $sectionid    = $count;
+                foreach ($links as $categoryId => $sequence) {
+                    $sectionid = $count;
                     if (isset($itmesExtraData[$categoryId])) {
                         $sectiontitle = $itmesExtraData[$categoryId]->title;
-                    }
-                    else {
+                    } else {
                         $sectiontitle = 'General';
                     }
                     $sections[$sectionid] = [$sectiontitle, $sequence];
@@ -132,7 +129,7 @@ class Cc13Convert
                     foreach ($itmesExtraData as $fcategory) {
                         if (isset($fcategory->obj)) {
                             $objCategory = $fcategory->obj;
-                            $sectionid    = $count;
+                            $sectionid = $count;
                             $sectiontitle = $objCategory->cat_title;
                             $sequence = self::getSequence($itemData, $objCategory->iid, $itemType);
                             $sections[$sectionid] = [$sectiontitle, $sequence];
@@ -142,17 +139,17 @@ class Cc13Convert
                 }
                 break;
         }
+
         return $sections;
     }
 
     protected static function getSequence($objItems, $categoryId = null, $itemType = null, $coursecode = null, $itemQuestions = null)
     {
-
         $sequences = [];
         switch ($itemType) {
             case 'quiz':
                 $sequence = [];
-                foreach($objItems as $objItem) {
+                foreach ($objItems as $objItem) {
                     if ($categoryId === 0) {
                         $questions = [];
                         foreach ($objItem->obj->question_ids as $questionId) {
@@ -170,7 +167,7 @@ class Cc13Convert
                             'expired_time' => $objItem->obj->expired_time,
                             'pass_percentage' => $objItem->obj->pass_percentage,
                             'random_answers' => $objItem->obj->random_answers,
-                            'course_code' => $coursecode
+                            'course_code' => $coursecode,
                         ];
                     }
                 }
@@ -178,59 +175,57 @@ class Cc13Convert
                 break;
             case 'document':
                 $sequence = [];
-                foreach($objItems as $objItem) {
+                foreach ($objItems as $objItem) {
                     if ($categoryId === 0) {
                         $sequence[$categoryId][$objItem->source_id] = [
                             'title' => $objItem->title,
                             'comment' => $objItem->comment,
-                            'cc_type' => ($objItem->file_type == 'folder'?'folder':'resource'),
+                            'cc_type' => ($objItem->file_type == 'folder' ? 'folder' : 'resource'),
                             'source_id' => $objItem->source_id,
                             'path' => $objItem->path,
                             'file_type' => $objItem->file_type,
-                            'course_code' => $coursecode
+                            'course_code' => $coursecode,
                         ];
-
                     }
                 }
                 $sequences = $sequence[$categoryId];
                 break;
             case 'forum':
-                foreach($objItems as $objItem) {
+                foreach ($objItems as $objItem) {
                     if ($categoryId == $objItem->obj->forum_category) {
                         $sequence[$categoryId][$objItem->obj->forum_id] = [
                             'title' => $objItem->obj->forum_title,
                             'comment' => $objItem->obj->forum_comment,
                             'cc_type' => 'forum',
-                            'source_id' => $objItem->obj->iid
+                            'source_id' => $objItem->obj->iid,
                         ];
                     }
                 }
-                $sequences =  $sequence[$categoryId];
+                $sequences = $sequence[$categoryId];
                 break;
             case 'page':
-                foreach($objItems as $objItem) {
+                foreach ($objItems as $objItem) {
                     if ($categoryId === 0) {
                         $sequence[$categoryId][$objItem->page_id] = [
                             'title' => $objItem->title,
                             'comment' => $objItem->content,
                             'cc_type' => 'page',
                             'source_id' => $objItem->page_id,
-                            'reflink' => $objItem->reflink
+                            'reflink' => $objItem->reflink,
                         ];
                     }
                 }
-                $sequences =  $sequence[$categoryId];
+                $sequences = $sequence[$categoryId];
                 break;
             case 'link':
                 if (!isset($categoryId)) {
                     $categories = [];
-                    foreach($objItems as $objItem) {
+                    foreach ($objItems as $objItem) {
                         $categories[$objItem->category_id] = self::getSequence($objItems, $objItem->category_id, $itemType);
                     }
                     $sequences = $categories;
-                }
-                else {
-                    foreach($objItems as $objItem) {
+                } else {
+                    foreach ($objItems as $objItem) {
                         if ($categoryId == $objItem->category_id) {
                             $sequence[$categoryId][$objItem->source_id] = [
                                 'title' => $objItem->title,
@@ -238,7 +233,7 @@ class Cc13Convert
                                 'cc_type' => 'url',
                                 'source_id' => $objItem->source_id,
                                 'url' => $objItem->url,
-                                'target' => $objItem->target
+                                'target' => $objItem->target,
                             ];
                         }
                     }
@@ -246,6 +241,7 @@ class Cc13Convert
                 }
                 break;
         }
+
         return $sequences;
     }
 
@@ -266,7 +262,6 @@ class Cc13Convert
             }
         }
     }
-
 
     protected static function itemIndenter(CcIItem &$item, $level = 0)
     {
@@ -290,8 +285,7 @@ class Cc13Convert
             $item->addChildItem($nfirst);
             $result = $nprev;
         }
+
         return $result;
     }
-
 }
-

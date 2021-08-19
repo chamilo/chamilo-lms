@@ -1,27 +1,27 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-
 class Cc13Entities extends CcEntities
 {
-
-    public function getExternalXml($identifier) {
+    public function getExternalXml($identifier)
+    {
         $xpath = Cc1p3Convert::newxPath(Cc1p3Convert::$manifest, Cc1p3Convert::$namespaces);
-        $files = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@identifier="' .
-                 $identifier . '"]/imscc:file/@href');
+        $files = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@identifier="'.
+                 $identifier.'"]/imscc:file/@href');
         $response = empty($files) || ($files->length == 0) ? '' : $files->item(0)->nodeValue;
+
         return $response;
     }
 
-    protected function getAllFiles () {
-
+    protected function getAllFiles()
+    {
         $permDirs = api_get_permissions_for_new_directories();
 
         $all_files = [];
         $xpath = Cc1p3Convert::newxPath(Cc1p3Convert::$manifest, Cc1p3Convert::$namespaces);
         foreach (Cc1p3Convert::$restypes as $type) {
-            $files = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@type="' .
-                                    $type . '"]/imscc:file/@href');
+            $files = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@type="'.
+                                    $type.'"]/imscc:file/@href');
             if (empty($files) || ($files->length == 0)) {
                 continue;
             }
@@ -42,9 +42,9 @@ class Cc13Entities extends CcEntities
         $labels = $xpath->query($xquery);
         if (!empty($labels) && ($labels->length > 0)) {
             $tname = 'course_files';
-            $dpath = Cc1p3Convert::$pathToManifestFolder . DIRECTORY_SEPARATOR . $tname;
+            $dpath = Cc1p3Convert::$pathToManifestFolder.DIRECTORY_SEPARATOR.$tname;
             $rfpath = 'files.gif';
-            $fpath = $dpath . DIRECTORY_SEPARATOR . 'files.gif';
+            $fpath = $dpath.DIRECTORY_SEPARATOR.'files.gif';
             if (!file_exists($dpath)) {
                 mkdir($dpath, $permDirs, true);
             }
@@ -54,6 +54,4 @@ class Cc13Entities extends CcEntities
 
         return $all_files;
     }
-
 }
-

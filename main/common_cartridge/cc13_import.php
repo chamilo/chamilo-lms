@@ -3,7 +3,6 @@
 
 require_once 'autoload.php';
 
-
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 api_protect_course_script(true);
 
@@ -30,7 +29,6 @@ $form->addButtonImport(get_lang('Import'));
 if ($form->validate()) {
     $file = $_FILES['cc_file'];
 
-
     if (empty($file['tmp_name'])) {
         $errorMessage = get_lang('UplUploadFailed');
         echo Display::return_message($errorMessage, 'error', false);
@@ -42,7 +40,6 @@ if ($form->validate()) {
         if (!in_array($extImportFile, $allowedFileMimetype)) {
             echo Display::return_message(get_lang('YouMustImportAFileAccordingToSelectedOption'), 'error');
         } else {
-
             $baseDir = api_get_path(SYS_ARCHIVE_PATH);
             $uploadPath = 'imsccImport/';
             $errors = [];
@@ -64,7 +61,6 @@ if ($form->validate()) {
             }
         }
     }
-
 }
 
 $template = new Template(get_lang('ImportCcVersion13'));
